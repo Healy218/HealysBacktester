@@ -1,0 +1,1 @@
+# This directory contains the implementations of different trading strategies.

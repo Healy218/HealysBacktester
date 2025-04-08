@@ -1,0 +1,1 @@
+# This directory could contain any utility functions or helper classes used throughout the project.

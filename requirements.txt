@@ -1,0 +1,7 @@
+finnhub-python
+pandas
+numpy
+matplotlib
+tensorflow  # Or pytorch, scikit-learn, depending on your NN library
+scikit-learn
+vectorbt # Assuming you meant the free version of vectorbt
