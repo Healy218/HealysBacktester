@@ -2,7 +2,7 @@
 from data.data_loader import load_stock_data, load_crypto_data
 from data.data_preprocessing import clean_data, feature_engineer
 from strategies.moving_average_crossover import MovingAverageCrossover
-from backtesting_engine.backtester import Backtester
+from backtesting_engine.backteseter import Backtester
 from analysis.performance_metrics import calculate_sharpe_ratio, calculate_max_drawdown
 from analysis.visualizations import plot_equity_curve
 from config.backtesting_config import INITIAL_CAPITAL, COMMISSION_PER_TRADE, START_DATE, END_DATE, STOCK_SYMBOLS, CRYPTO_SYMBOLS
