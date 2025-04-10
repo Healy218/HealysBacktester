@@ -1,32 +1,32 @@
-# Purpose: Calculate specific technical indicators. Functions should be simple and reusable.
+# indicators/rsi.py
 
+import vectorbt as vbt
 import pandas as pd
-import talib # Or other indicator libraries
 
-function calculate_sma(prices_series, window):
-  # INPUT: pandas Series (e.g., 'Close' prices), window period (int)
-  # OUTPUT: pandas Series containing SMA values
+# Ensure you have the necessary libraries
+# pip install vectorbt talib-binary (or follow TA-Lib installation steps)
 
-  if length(prices_series) < window:
-    print("Warning: Not enough data for SMA window:", window)
-    return create_series_with_nans_like(prices_series)
+def calculate_rsi(close_prices_series: pd.Series, window: int = 14) -> pd.Series:
+    """
+    Calculates the Relative Strength Index (RSI) using vectorbt's RSI indicator.
 
-  sma_series = talib.SMA(prices_series, timeperiod=window)
-  return sma_series
+    Args:
+        close_prices_series: pandas Series of close prices.
+        window: The window period for the RSI (default 14).
 
-end function
+    Returns:
+        pandas Series containing RSI values.
+    """
+    # Use vectorbt's RSI indicator class
+    rsi = vbt.RSI.run(close_prices_series, window=window, short_name='rsi')
+    # .rsi returns the calculated RSI series
+    return rsi.rsi
 
-function calculate_ema(prices_series, window):
-  # INPUT: pandas Series (e.g., 'Close' prices), window period (int)
-  # OUTPUT: pandas Series containing EMA values
-
-  if length(prices_series) < window:
-    print("Warning: Not enough data for EMA window:", window)
-    return create_series_with_nans_like(prices_series)
-
-  ema_series = talib.EMA(prices_series, timeperiod=window)
-  return ema_series
-
-end function
-
-# --- Add other indicator functions (RSI, MACD, etc.) in their respective files ---
+# Example using the TALib wrapper within vectorbt (alternative)
+def calculate_rsi_talib(close_prices_series: pd.Series, window: int = 14) -> pd.Series:
+    """
+    Calculates RSI using vectorbt's TA-Lib wrapper.
+    """
+    # Access TA-Lib functions via the .vbt accessor
+    rsi_series = close_prices_series.vbt.talib('RSI', timeperiod=window)
+    return rsi_series

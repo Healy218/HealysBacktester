@@ -1,3 +1,5 @@
+
+'''
 # Purpose: Clean raw price data into a format suitable for backtesting.
 
 function clean_ohlcv_data(raw_df):
@@ -37,3 +39,4 @@ function clean_ohlcv_data(raw_df):
   return df
 
 end function
+'''

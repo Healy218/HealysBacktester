@@ -1,3 +1,5 @@
+'''
+
 # Purpose: Fetch raw price data from a source (e.g., API, local files) and potentially cache it.
 
 function load_price_data(symbol, start_date, end_date, interval, api_key=None, cache_dir="data/cache"):
@@ -36,3 +38,4 @@ function load_price_data(symbol, start_date, end_date, interval, api_key=None, c
     return empty_dataframe # Or raise an error
 
 end function
+'''

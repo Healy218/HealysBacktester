@@ -1,26 +1,46 @@
-# Purpose: Generate vectorbt-compatible entry and exit signals based on price/indicator data.
+# signals/rsi_threshold.py
 
 import pandas as pd
-from indicators import moving_averages # Import necessary indicator functions
+import vectorbt as vbt
+from indicators import rsi # Import your indicator calculation functions
 
-function generate_ma_signals(close_prices_series, short_window, long_window):
-  # INPUT: pandas Series of close prices, short/long window periods
-  # OUTPUT: pandas Series for entries (True/False), pandas Series for exits (True/False)
+def generate_rsi_signals(
+    close_prices_series: pd.Series,
+    window: int = 14,
+    entry_threshold: float = 30, # RSI level to enter (e.g., cross above oversold)
+    exit_threshold: float = 70   # RSI level to exit (e.g., cross below overbought)
+    ) -> tuple[pd.Series, pd.Series]:
+    """
+    Generates entry and exit signals based on RSI crossing thresholds.
 
-  # Calculate indicators
-  short_ma = moving_averages.calculate_sma(close_prices_series, short_window)
-  long_ma = moving_averages.calculate_sma(close_prices_series, long_window)
+    Enters when RSI crosses *above* the entry_threshold (oversold level).
+    Exits when RSI crosses *below* the exit_threshold (overbought level).
 
-  # Generate crossover signals (vectorized)
-  entries = (short_ma > long_ma) & (short_ma.shift(1) <= long_ma.shift(1))
-  exits = (short_ma < long_ma) & (short_ma.shift(1) >= long_ma.shift(1))
+    Args:
+        close_prices_series: pandas Series of close prices.
+        window: The window period for the RSI calculation (default: 14).
+        entry_threshold: The RSI level to trigger an entry signal upon crossing above.
+        exit_threshold: The RSI level to trigger an exit signal upon crossing below.
 
-  # Clean signals (optional but recommended by vectorbt docs)
-  # entries, exits = clean_signals(entries, exits) # (e.g., ensure exit doesn't happen same bar as entry)
+    Returns:
+        A tuple containing:
+            - entries (pd.Series): Boolean series indicating entry signals (True).
+            - exits (pd.Series): Boolean series indicating exit signals (True).
+    """
 
-  print("MA Crossover signals generated.")
-  return entries, exits
+    # 1. Calculate RSI indicator
+    rsi_series = rsi.calculate_rsi(close_prices_series, window=window)
 
-end function
+    # 2. Generate signals using vectorbt's threshold crossing functions
+    # entries: True when RSI crosses above the entry_threshold (oversold level)
+    entries = rsi_series.vbt.crossed_above(entry_threshold)
 
-# --- Add other signal generation functions (RSI thresholds, etc.) in their respective files ---
+    # exits: True when RSI crosses below the exit_threshold (overbought level)
+    exits = rsi_series.vbt.crossed_below(exit_threshold)
+
+    # Optional: Apply signal cleaning/constraints
+    # clean_entries, clean_exits = entries.vbt.signals.clean(exits)
+    # return clean_entries, clean_exits
+
+    print(f"RSI Threshold ({window}, {entry_threshold}/{exit_threshold}) signals generated.")
+    return entries, exits
