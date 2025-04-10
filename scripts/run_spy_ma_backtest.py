@@ -1,13 +1,27 @@
 # scripts/run_spy_ma_backtest.py
 
-import vectorbt as vbt
+# --- Standard Imports ---
 import pandas as pd
 import numpy as np
 import sys
 import os
+import itertools
+import vectorbt as vbt
+from collections import defaultdict # To store results
+
+# --- Print Versions ---
+try:
+    print(f"--- Library Versions ---")
+    print(f"vectorbt: {vbt.__version__}")
+    print(f"pandas: {pd.__version__}")
+    print(f"numpy: {np.__version__}")
+    print(f"------------------------")
+except Exception as e:
+    print(f"Warning: Could not print library versions - {e}")
+# --- End Print Versions ---
+
 
 # --- Add Project Root to Python Path ---
-# (Assuming this part is correct and needed for your structure)
 try:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
@@ -15,172 +29,195 @@ try:
         sys.path.insert(0, str(project_root))
 except NameError:
     print("Warning: Could not determine script directory automatically.")
-    # Add fallback or handle appropriately if running interactively/differently
-    project_root = '.' # Example fallback
+    project_root = '.'
     if project_root not in sys.path:
        sys.path.insert(0, str(project_root))
 # --- End Path Modification ---
 
-# Use absolute imports relative to the project root (HealysBacktester)
-from indicators import moving_averages
-from signals import ma_crossover
-from portfolio import simulator # simulator.py should contain the latest fix (normalize/reindex)
+# --- Import necessary modules ---
+from portfolio import simulator
 from analysis import metrics, plotting
-# from config import settings # Import your settings if using config file
+from utils import config_parser
 
-# --- Configuration ---
-SYMBOL = 'SPY'
-START_DATE = '2020-01-01'
-END_DATE = '2023-12-31'
-INTERVAL = '1D' # Ensure this matches data frequency
+# --- Load Configuration ---
+try:
+    config = config_parser.load_config('config/settings.py')
+    DATA_CONFIG = config.get('DATA_CONFIG', {})
+    BACKTEST_CONFIG = config.get('BACKTEST_CONFIG', {})
+except FileNotFoundError:
+    print("FATAL ERROR: Configuration file 'config/settings.py' not found.")
+    exit()
+except Exception as e:
+    print(f"FATAL ERROR: Could not load configuration: {e}")
+    exit()
 
-# Strategy Parameters
-SHORT_WINDOW = 20
-LONG_WINDOW = 50
+# --- Extract Parameters from Config (Base Settings) ---
+SYMBOL = DATA_CONFIG.get('SYMBOL', 'SPY')
+START_DATE = DATA_CONFIG.get('START_DATE', '2020-01-01')
+END_DATE = DATA_CONFIG.get('END_DATE', '2023-12-31')
+INTERVAL = DATA_CONFIG.get('INTERVAL', '1D')
 
-# Backtest Settings
-INITIAL_CAPITAL = 100000.0
-FEES = 0.001      # 0.1% fee per trade value
-SLIPPAGE = 0.0005 # 0.05% slippage per trade execution price
-# Note: Default size/size_type are now handled within simulator.py
-# Default is size=0.99, size_type='percent' in the cleaned simulator
-DEFAULT_SIZE = 0.99
-DEFAULT_SIZE_TYPE = 'percent'
-DEFAULT_FREQ = 'D' # Frequency for portfolio simulation stats (usually 'D' for daily)
+INITIAL_CAPITAL = BACKTEST_CONFIG.get('INITIAL_CAPITAL', 100000.0)
+FEES = BACKTEST_CONFIG.get('FEES_PERCENT', 0.001)
+SLIPPAGE = BACKTEST_CONFIG.get('SLIPPAGE_PERCENT', 0.0005)
+DEFAULT_SIZE = BACKTEST_CONFIG.get('DEFAULT_SIZE', 0.99)
+DEFAULT_SIZE_TYPE = BACKTEST_CONFIG.get('DEFAULT_SIZE_TYPE', 'percent')
+DEFAULT_FREQ = BACKTEST_CONFIG.get('DEFAULT_FREQ', 'D')
+SL_STOP = BACKTEST_CONFIG.get('STOP_LOSS_PERCENT', None) if BACKTEST_CONFIG.get('USE_STOP_LOSS', False) else None
+TP_STOP = BACKTEST_CONFIG.get('TAKE_PROFIT_PERCENT', None) if BACKTEST_CONFIG.get('USE_TAKE_PROFIT', False) else None
 
-print(f"Starting backtest for {SYMBOL} MA({SHORT_WINDOW}/{LONG_WINDOW})...")
-print(f"Period: {START_DATE} to {END_DATE}")
-print(f"Settings: Initial Capital=${INITIAL_CAPITAL:,.2f}, Fees={FEES*100:.3f}%, Slippage={SLIPPAGE*100:.3f}%")
-print(f"Sizing: Default Size={DEFAULT_SIZE}, Default Size Type='{DEFAULT_SIZE_TYPE}' (can be overridden)")
+# --- Parameter Optimization Ranges ---
+short_windows = np.arange(10, 51, 10)
+long_windows = np.arange(30, 101, 10)
+
+# --- Print Run Info ---
+print(f"--- Starting MA Crossover Parameter Optimization (Manual Loop Workaround) ---")
+print(f"Symbol: {SYMBOL}")
+print(f"Period: {START_DATE} to {END_DATE} ({INTERVAL})")
+print(f"Short Window Range: {short_windows}")
+print(f"Long Window Range: {long_windows}")
+# ... (rest of print info) ...
+print("-" * 35)
 
 # --- Initialize Variables ---
 price_data = pd.DataFrame()
-entries = pd.Series(dtype=bool)
-exits = pd.Series(dtype=bool)
-portfolio = None
+all_portfolios = {}
+all_stats_list = []
 
 # --- Workflow ---
 
-# 1. Load Data using vectorbt
-print(f"\n[1/4] Downloading data for {SYMBOL}...")
+# 1. Load Data
+print(f"\n[1/X] Loading data for {SYMBOL}...")
 try:
-    # Using YFData as before
     price_data_raw = vbt.YFData.download(
-        SYMBOL,
-        start=START_DATE,
-        end=END_DATE,
-        interval=INTERVAL,
-        missing_index='drop' # Drop rows where index is missing (e.g., market holidays)
+        SYMBOL, start=START_DATE, end=END_DATE, interval=INTERVAL, missing_index='drop'
     )
     price_data = price_data_raw.get(['Open', 'High', 'Low', 'Close', 'Volume'])
-
-    # Remove timezone information immediately after download
-    # This caused issues before if not done consistently
     if price_data.index.tz is not None:
-         print("Removing timezone info from price data index...")
          price_data.index = price_data.index.tz_localize(None)
-         print("Timezone info removed.")
-
-    print(f"Data downloaded successfully. Shape: {price_data.shape}")
-
+    print(f"Data loaded successfully. Shape: {price_data.shape}")
     if price_data.isnull().values.any():
-        print("Warning: NaNs found in downloaded data. Applying ffill/bfill.")
-        price_data = price_data.ffill().bfill() # Forward fill then backward fill
-    if price_data.empty:
-         raise ValueError("Downloaded data is empty after cleaning.")
-    if price_data.isnull().values.any(): # Check again after fill
-        raise ValueError("Data still contains NaNs after ffill/bfill.")
-
-
+        print("Warning: NaNs found. Applying ffill/bfill.")
+        price_data = price_data.ffill().bfill()
+    if price_data.empty or price_data.isnull().values.any() or 'Close' not in price_data.columns or price_data['Close'].isnull().any():
+         raise ValueError("Data invalid after loading/cleaning.")
+    print(f"Data check complete.")
 except Exception as e:
-    print(f"FATAL ERROR downloading or processing data for {SYMBOL}: {e}")
+    print(f"FATAL ERROR loading or verifying data: {e}")
     exit()
 
-# 2. Generate Signals
-print(f"\n[2/4] Generating signals for MA({SHORT_WINDOW}/{LONG_WINDOW})...")
-try:
-    # Ensure close prices passed are clean and have the correct index
-    entries, exits = ma_crossover.generate_ma_signals(
-        close_prices_series=price_data['Close'], # Pass the potentially cleaned Close prices
-        short_window=SHORT_WINDOW,
-        long_window=LONG_WINDOW
-    )
-    print("Signals generated.")
-    # Print sums immediately after generation to verify signal counts
-    print(f"Total Entries Generated: {entries.sum()}, Total Exits Generated: {exits.sum()}")
-    if not entries.any():
-        print("Warning: No entry signals were generated.")
 
-except ImportError:
-     print("FATAL ERROR: Could not import signal generation module.")
-     exit()
-except Exception as e:
-    print(f"FATAL ERROR generating signals: {e}")
-    exit()
+# 2. Iterate Through Parameters, Generate Signals, and Simulate
+print(f"\n[2/X] Iterating through parameter combinations...")
+param_combinations = list(itertools.product(short_windows, long_windows))
+valid_combinations = [(sw, lw) for sw, lw in param_combinations if sw < lw]
+print(f"Total combinations to test: {len(valid_combinations)}")
 
-# 3. Run Simulation
-print(f"\n[3/4] Running backtest simulation...")
-portfolio = None
-if entries.sum() > 0: # Proceed only if there are entry signals
+combination_count = 0
+for short_w, long_w in valid_combinations:
+    combination_count += 1
+    param_label = f"({short_w}, {long_w})"
+    print(f"\n-- Testing Combination {combination_count}/{len(valid_combinations)}: {param_label} --")
+
     try:
-        # --- CLEANED CALL TO SIMULATOR ---
-        # Pass parameters; simulator uses its internal defaults (e.g., size=0.99, type='percent')
-        # unless overridden here.
-        portfolio = simulator.run_backtest(
-            price_df=price_data,       # Pass the original price data (simulator handles normalization)
-            entries_series=entries,
-            exits_series=exits,
-            initial_capital=INITIAL_CAPITAL,
-            fees=FEES,                 # Pass the fee rate
-            slippage=SLIPPAGE,         # Pass the slippage rate
-            frequency=DEFAULT_FREQ,    # Pass the desired frequency for results
-            size=DEFAULT_SIZE,             # Explicitly pass the intended size
-            size_type=DEFAULT_SIZE_TYPE    # Explicitly pass the intended size type
-            # Add other parameters like sl_stop=0.10 if needed
-        )
-        # --- END CLEANED CALL ---
-        print("Simulation complete.")
+        # 2a. Calculate SMAs using pandas
+        short_sma = price_data['Close'].rolling(window=short_w).mean()
+        long_sma = price_data['Close'].rolling(window=long_w).mean()
 
-    except ImportError:
-        print("FATAL ERROR: Could not import portfolio simulator module.")
-        exit()
-    except Exception as e:
-        print(f"Error during simulation: {e}")
-        # Allow script to continue to analysis if possible, or exit if preferred
-else:
-    print("Skipping simulation because no entry signals were generated.")
+        # 2b. Generate signals for this pair using the .vbt accessor
+        print("Generating signals...") # Moved print here
+        if short_sma.notna().any() and long_sma.notna().any():
+            # --- CORRECTED: Use .vbt accessor ---
+            entries = short_sma.vbt.crossed_above(long_sma)
+            exits = short_sma.vbt.crossed_below(long_sma)
+            # --- END CORRECTION ---
 
-# 4. Analyze and Plot Results
-print(f"\n[4/4] Analyzing results...")
-if portfolio is not None:
-    try:
-        metrics.display_summary_stats(portfolio)
-        trades_df = metrics.get_trade_records(portfolio)
-        if not trades_df.empty:
-            print("\n--- Trade Records (First 5) ---")
-            # Ensure 'trades_df' is a DataFrame before calling .head()
-            if isinstance(trades_df, pd.DataFrame):
-                print(trades_df.head())
-            else:
-                print("Trade records are not in expected DataFrame format.")
-                print(trades_df) # Print whatever it is for debugging
+            # Ensure boolean type (accessor methods should already return bool)
+            entries = entries.astype(bool)
+            exits = exits.astype(bool)
+            # Assign names for clarity if needed later (optional)
+            entries.name = f'entries_{short_w}_{long_w}'
+            exits.name = f'exits_{short_w}_{long_w}'
+
+            print(f"Signal sums: Entries={entries.sum()}, Exits={exits.sum()}")
+
+            if not entries.any():
+                print("Warning: No entry signals generated for this combination.")
         else:
-            print("\nNo trades were executed according to portfolio object.") # Should not happen if simulation ran
+            print(f"Warning: NaN in SMA for {param_label}, skipping signals.")
+            entries = pd.Series(False, index=price_data.index)
+            exits = pd.Series(False, index=price_data.index)
 
-        # Generate plots
-        print("Generating portfolio summary plot...")
-        plotting.plot_portfolio_summary(portfolio)
-        print("Generating trades plot...")
-        # Pass the original price_data for plotting context
-        plotting.plot_trades(portfolio, price_data)
+        # 2c. Run simulation for this pair
+        if entries.any():
+            print("Running simulation...")
+            portfolio = simulator.run_backtest(
+                price_df=price_data,
+                entries_series=entries,
+                exits_series=exits,
+                initial_capital=INITIAL_CAPITAL,
+                fees=FEES,
+                slippage=SLIPPAGE,
+                frequency=DEFAULT_FREQ,
+                size=DEFAULT_SIZE,
+                size_type=DEFAULT_SIZE_TYPE,
+                sl_stop=SL_STOP,
+                tp_stop=TP_STOP
+            )
+            # Store results
+            all_portfolios[(short_w, long_w)] = portfolio
+            stats = metrics.get_summary_stats(portfolio)
+            if stats is not None:
+                 stats.name = (short_w, long_w)
+                 all_stats_list.append(stats)
+            print(f"Simulation successful for {param_label}. Trades: {portfolio.trades.count()}")
+        else:
+            print(f"Skipping simulation for {param_label} (no entry signals).")
+
+    except Exception as e:
+        print(f"ERROR processing combination {param_label}: {e}")
+        # Continue to next combination
+
+# 3. Analyze Aggregate Results (Same as before)
+print(f"\n[3/X] Analyzing aggregate results...")
+if not all_stats_list:
+    print("No simulations completed successfully. Cannot analyze results.")
+else:
+    try:
+        all_stats_df = pd.concat(all_stats_list, axis=1)
+
+        print("\n--- Performance Summary (All Combinations) ---")
+        key_stats = ['Total Return [%]', 'Win Rate [%]', 'Sharpe Ratio', 'Max Drawdown [%]']
+        stats_to_print = all_stats_df.loc[all_stats_df.index.intersection(key_stats)]
+        print(stats_to_print)
+
+        if 'Total Return [%]' in all_stats_df.index:
+            best_col_idx = all_stats_df.loc['Total Return [%]'].idxmax()
+            best_params = best_col_idx
+            best_stats = all_stats_df[best_col_idx]
+            print(f"\n--- Best Performing Parameters (based on Total Return) ---")
+            if isinstance(best_params, tuple) and len(best_params) >= 2:
+                 print(f"Short Window: {best_params[0]}, Long Window: {best_params[1]}")
+            else:
+                 print(f"Best Column Index: {best_params} (Unexpected format)")
+            print("Stats for Best Combination:")
+            print(best_stats)
+
+            if best_params in all_portfolios:
+                print("\nGenerating plots for the best performing combination...")
+                best_portfolio_obj = all_portfolios[best_params]
+                plotting.plot_portfolio_summary(best_portfolio_obj)
+                plotting.plot_trades(best_portfolio_obj, price_data)
+                print("Plots generated.")
+            else:
+                print("Could not find portfolio object for the best parameters to plot.")
+        else:
+            print("Could not determine best parameters - 'Total Return [%]' missing from stats.")
 
     except ImportError:
         print("ERROR: Could not import analysis or plotting modules.")
     except Exception as e:
-        print(f"ERROR during analysis or plotting: {e}")
-
-else:
-    print("Skipping analysis because simulation did not run or failed.")
+        print(f"ERROR during aggregate analysis or plotting: {e}")
 
 
-print(f"\nBacktest script for {SYMBOL} finished.")
+print(f"\n--- Backtest Finished ---")
