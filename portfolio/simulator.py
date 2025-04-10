@@ -2,7 +2,7 @@
 
 import vectorbt as vbt
 import pandas as pd
-import numpy as np # Keep numpy import
+import numpy as np
 from typing import Optional, Dict, Any
 
 def run_backtest(
@@ -13,8 +13,8 @@ def run_backtest(
     initial_capital: float = 100000.0,
     fees: float = 0.001,
     slippage: float = 0.0005,
-    size: float = 1.0, # <--- REVERTED: Use 1.0 (interpreted based on size_type)
-    size_type: str = 'percent', # <--- REVERTED: Use 'percent' (of equity)
+    size: float = 0.99, # Default back to 0.99 or your preferred default
+    size_type: str = 'percent',
     sl_stop: Optional[float] = None,
     tp_stop: Optional[float] = None,
     signal_kwargs: Optional[Dict[str, Any]] = None,
@@ -22,70 +22,94 @@ def run_backtest(
     ) -> vbt.Portfolio:
     """
     Runs a vectorbt backtest simulation based on entry and exit signals.
+    Handles index normalization and uses reindex for robust signal alignment.
 
-    Args:
-        price_df: DataFrame with OHLCV data. Must include 'Close'.
-                  'Open' is recommended for more realistic execution.
-        entries_series: Boolean Series indicating entry signals (True).
-        exits_series: Boolean Series indicating exit signals (True).
-        frequency: Data frequency string (e.g., 'D', 'H', '5T'). Crucial for stats.
-        initial_capital: Starting cash for the portfolio.
-        fees: Proportional fees applied to each trade value.
-        slippage: Proportional slippage applied to the execution price.
-        size: Order size. Interpretation depends on size_type. Default 1.0.
-        size_type: How the 'size' argument is interpreted (string). Default 'percent'.
-        sl_stop: Optional stop loss percentage (e.g., 0.10 for 10%).
-        tp_stop: Optional take profit percentage (e.g., 0.20 for 20%).
-        signal_kwargs: Optional dict passed directly to from_signals for signal handling.
-        portfolio_kwargs: Optional dict passed directly to from_signals for portfolio config.
-
-    Returns:
-        A vectorbt Portfolio object containing the backtest results.
-
-    Raises:
-        ValueError: If 'Close' column is missing from price_df.
+    (Keep your original detailed Args/Returns/Raises docstring here)
     """
     if 'Close' not in price_df.columns:
         raise ValueError("Price DataFrame must contain a 'Close' column.")
 
-    # Use Open price for execution if available, otherwise defaults to Close
-    exec_price_col = price_df['Open'] if 'Open' in price_df.columns else price_df['Close']
+    # --- NORMALIZE INDICES ---
+    # print("\n--- Normalizing indices (removing time component) ---") # Optional: Keep if you want this message
+    try:
+        price_df_normalized = price_df.copy()
+        price_df_normalized.index = price_df_normalized.index.normalize()
 
-    # Ensure signal indices align with price data
-    entries_series, exits_series = entries_series.align(price_df['Close'], join='right', fill_value=False)
+        entries_series_normalized = entries_series.copy()
+        entries_series_normalized.index = entries_series_normalized.index.normalize()
 
-    # Prepare signal kwargs (stop loss, take profit)
-    default_signal_kwargs = {
+        exits_series_normalized = exits_series.copy()
+        exits_series_normalized.index = exits_series_normalized.index.normalize()
+        # print("Normalization complete.") # Optional: Keep if you want this message
+
+        price_df_to_use = price_df_normalized
+        entries_series_to_use = entries_series_normalized
+        exits_series_to_use = exits_series_normalized
+    except Exception as e:
+        print(f"WARNING: Index normalization failed: {e}. Using original indices.")
+        price_df_to_use = price_df
+        entries_series_to_use = entries_series
+        exits_series_to_use = exits_series
+
+    # --- REINDEX SIGNALS ---
+    target_index = price_df_to_use.index
+    # print(f"Reindexing signals to target index (Length: {len(target_index)}, dtype: {target_index.dtype})...") # Optional: Keep if you want this message
+    try:
+        reindexed_entries = entries_series_to_use.reindex(target_index, fill_value=False).astype(bool)
+        reindexed_exits = exits_series_to_use.reindex(target_index, fill_value=False).astype(bool)
+        # print("Reindexing complete.") # Optional: Keep if you want this message
+    except Exception as e:
+        print(f"ERROR during reindexing: {e}")
+        raise
+
+    # --- Prepare kwargs for vbt.Portfolio.from_signals ---
+    # Signal-related arguments (stops)
+    final_signal_kwargs = {
         'sl_stop': sl_stop,
         'tp_stop': tp_stop,
     }
     if signal_kwargs:
-        default_signal_kwargs.update(signal_kwargs)
+        final_signal_kwargs.update(signal_kwargs) # Allow user overrides/additions
 
-    # Prepare portfolio kwargs (size, fees, etc.)
-    default_portfolio_kwargs = {
-        'size': size,
-        'size_type': size_type, # Use the string directly
-        'fees': fees,
-        'slippage': slippage,
+    # Portfolio-related arguments (sizing, costs, etc.)
+    final_portfolio_kwargs = {
+        'size': size,               # Use function arg/default
+        'size_type': size_type,     # Use function arg/default
+        'fees': fees,               # Use function arg/default
+        'slippage': slippage,         # Use function arg/default
         'freq': frequency,
         'init_cash': initial_capital,
+        # Add any other standard params you want to control via run_backtest args
     }
     if portfolio_kwargs:
-        default_portfolio_kwargs.update(portfolio_kwargs)
+        # Allow user overrides/additions for any other portfolio param
+        final_portfolio_kwargs.update(portfolio_kwargs)
 
     print("Running vectorbt Portfolio.from_signals simulation...")
     try:
+        # Use the normalized price data and reindexed signals
+        sim_price_df = price_df_to_use
+        sim_open_col = sim_price_df['Open'] if 'Open' in sim_price_df.columns else sim_price_df['Close']
+        sim_high_col = sim_price_df['High'] if 'High' in sim_price_df.columns else None
+        sim_low_col = sim_price_df['Low'] if 'Low' in sim_price_df.columns else None
+
         portfolio = vbt.Portfolio.from_signals(
-            close=price_df['Close'],
-            open=exec_price_col,
-            entries=entries_series,
-            exits=exits_series,
-            **default_signal_kwargs,
-            **default_portfolio_kwargs
+            close=sim_price_df['Close'],
+            open=sim_open_col,
+            high=sim_high_col,
+            low=sim_low_col,
+            entries=reindexed_entries,    # Use reindexed
+            exits=reindexed_exits,        # Use reindexed
+            **final_signal_kwargs,      # Unpack signal kwargs
+            **final_portfolio_kwargs    # Unpack portfolio kwargs
         )
+
         print("Simulation complete.")
         return portfolio
     except Exception as e:
+        # Check specifically for the 'shares' error if it occurs again
+        if "'shares'" in str(e):
+             print("\n*** NOTE: Encountered known issue with size_type='shares'.")
+             print("*** Consider using size_type='percent' or 'value', or investigate compatibility with your vectorbt version.\n")
         print(f"Error during vectorbt simulation: {e}")
         raise # Re-raise the exception
