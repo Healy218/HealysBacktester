@@ -4,7 +4,7 @@
 DATA_CONFIG = {
     "SYMBOL": "SPY",
     "START_DATE": "2020-01-01",
-    "END_DATE": "2023-12-31",
+    "END_DATE": "2025-04-09",
     "INTERVAL": "1D",  # e.g., '1m', '5m', '1h', '1D'
     "DATA_PROVIDER": "YahooFinance" # Or 'AlphaVantage', 'CSV', etc. (for future use)
 }
@@ -18,26 +18,35 @@ STRATEGY_MA_CROSSOVER = {
 
 # Example for RSI Threshold (add if you create an RSI script)
 STRATEGY_RSI = {
-    "RSI_WINDOW": 14,
-    "ENTRY_THRESHOLD": 30,
-    "EXIT_THRESHOLD": 70
+    "RSI_WINDOW": [10, 14, 21, 28], 
+    "ENTRY_THRESHOLD": [25, 30, 35, 40, 45, 50],
+    "EXIT_THRESHOLD": [50, 55, 60, 65, 70, 75],
+    "SHORT_ENTRY_THRESHOLD": [50, 55, 60, 65, 70, 75],
+    "SHORT_EXIT_THRESHOLD": [25, 30, 35, 40, 45, 50],
 }
 
 # Add more strategy sections as needed...
 
 
-# --- Backtest Configuration ---
 BACKTEST_CONFIG = {
-    "INITIAL_CAPITAL": 100000.0,
-    "FEES_PERCENT": 0.001,      # 0.1% fee per trade value
-    "SLIPPAGE_PERCENT": 0.0005, # 0.05% slippage per trade execution price
-    "DEFAULT_SIZE": 0.99,       # Default order size if not overridden
-    "DEFAULT_SIZE_TYPE": 'percent', # 'percent' or 'shares'
-    "DEFAULT_FREQ": 'D',        # Frequency for portfolio simulation stats ('D' for daily)
-    "USE_STOP_LOSS": False,      # Enable/disable SL
-    "STOP_LOSS_PERCENT": 0.10,  # e.g., 0.10 for 10% stop loss
-    "USE_TAKE_PROFIT": False,    # Enable/disable TP
-    "TAKE_PROFIT_PERCENT": 0.20 # e.g., 0.20 for 20% take profit
+    'INITIAL_CAPITAL': 100000.0,
+    'FEES_PERCENT': 0.001,     # 0.1%
+    'SLIPPAGE_PERCENT': 0.0005, # 0.05%
+    'ENABLE_SHORTING': False,
+    # --- Position Sizing ---
+    'DEFAULT_SIZE': .9,      # 10,000 per trade
+    'DEFAULT_SIZE_TYPE': 'percent', # Options: 'percent', 'amount', 'value' (check vbt docs)
+
+    # --- Stop Loss ---
+    'USE_STOP_LOSS': True,     # Set to True to enable stop-loss
+    'STOP_LOSS_PERCENT': 0.05, # Example: 5% stop-loss (relative to entry price)
+
+    # --- Take Profit ---
+    'USE_TAKE_PROFIT': False,    # Set to True to enable take-profit
+    'TAKE_PROFIT_PERCENT': 0.10, # Example: 10% take-profit (relative to entry price)
+
+    # --- Simulation Frequency ---
+    'DEFAULT_FREQ': 'D'       # Matches data interval usually ('D', 'H', 'T', etc.)
 }
 
 # --- Environment/API Keys (Optional - Better in .env file) ---
