@@ -27,6 +27,7 @@ from signals import rsi_threshold  # Import the RSI signal generator
 from portfolio import simulator
 from analysis import metrics, plotting
 from utils import config_parser
+from data import data_loader, data_cleaner
 
 # --- Load Configuration ---
 try:
@@ -123,31 +124,42 @@ print(f"Shorting Enabled: {ENABLE_SHORTING}")
 print("-" * 35)
 
 # --- Initialize Variables ---
-price_data = pd.DataFrame()
+# price_data = pd.DataFrame()
 entries, exits, short_entries, short_exits = None, None, None, None # Expect 4 signals
 portfolio = None
 
 # --- Workflow ---
 
-# 1. Load Data
-print(f"\n[1/4] Loading data for {SYMBOL}...")
+# 1. Load and Clean Data using Modules <<< MODIFIED STEP 1
+print(f"\n[1/4] Loading and cleaning data for {SYMBOL}...")
+price_data = None # Initialize price_data to None
 try:
-    price_data_raw = vbt.YFData.download(
-        SYMBOL, start=START_DATE, end=END_DATE, interval=INTERVAL, missing_index='drop'
+    # Call the data loader
+    raw_data = data_loader.load_price_data(
+        symbol=SYMBOL,
+        start_date=START_DATE,
+        end_date=END_DATE,
+        interval=INTERVAL
+        # cache_dir can be omitted to use default 'data/cache'
     )
-    price_data = price_data_raw.get(['Open', 'High', 'Low', 'Close', 'Volume'])
-    price_data.index = pd.to_datetime(price_data.index)
-    if price_data.index.tz is not None: price_data.index = price_data.index.tz_localize(None)
-    print(f"Data loaded successfully. Shape: {price_data.shape}")
-    if price_data.isnull().values.any():
-        print("Warning: NaNs found. Applying ffill/bfill.")
-        price_data = price_data.ffill().bfill()
-    if price_data.empty or price_data.isnull().values.any(): raise ValueError("Data invalid after loading/cleaning.")
-    print(f"Data check complete.")
+
+    # Check if data loading was successful
+    if raw_data is None or raw_data.empty:
+        raise ValueError(f"Data loading failed for symbol {SYMBOL}.")
+
+    # Call the data cleaner
+    price_data = data_cleaner.clean_ohlcv_data(raw_data)
+
+    # Check if data cleaning was successful
+    if price_data is None or price_data.empty:
+        raise ValueError(f"Data cleaning failed for symbol {SYMBOL}.")
+
+    print(f"Data loading and cleaning successful. Final shape: {price_data.shape}")
+
 except Exception as e:
-    print(f"FATAL ERROR loading or verifying data: {e}")
+    print(f"FATAL ERROR during data loading/cleaning: {e}")
     traceback.print_exc()
-    exit()
+    exit() # Exit if data is not available/valid
 
 # 2. Generate Signals (Using updated RSI logic)
 print(f"\n[2/4] Generating signals (Shorting: {ENABLE_SHORTING})...")

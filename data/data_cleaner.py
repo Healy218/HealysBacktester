@@ -1,42 +1,93 @@
+# data/data_cleaner.py
 
-'''
-# Purpose: Clean raw price data into a format suitable for backtesting.
+import pandas as pd
+import numpy as np
 
-function clean_ohlcv_data(raw_df):
-  # INPUT: Raw pandas DataFrame from data_loader
-  # OUTPUT: Cleaned pandas DataFrame with standard column names ('Open', 'High', 'Low', 'Close', 'Volume') and clean data.
+def clean_ohlcv_data(raw_df: pd.DataFrame) -> pd.DataFrame | None:
+    """
+    Cleans raw OHLCV data: ensures DatetimeIndex, standard columns,
+    numeric types, and handles NaNs.
 
-  # Make a copy to avoid modifying the original DataFrame
-  df = copy_dataframe(raw_df)
+    Args:
+        raw_df: Raw pandas DataFrame, expects DatetimeIndex and
+                columns like 'Open', 'High', 'Low', 'Close', 'Volume'.
 
-  # Rename columns to standard names (adjust based on your source)
-  # Example: '1. open' -> 'Open', '4. close' -> 'Close'
-  df = rename_columns(df, {'old_open': 'Open', 'old_high': 'High', ...})
+    Returns:
+        Cleaned pandas DataFrame, or None if cleaning fails validation.
+    """
+    if raw_df is None or raw_df.empty:
+        print("Error: Cannot clean None or empty DataFrame.")
+        return None
 
-  # Ensure required columns exist
-  required_cols = ['Open', 'High', 'Low', 'Close', 'Volume']
-  if not all_columns_exist(df, required_cols):
-    raise ValueError("Missing required OHLCV columns")
+    print("Starting data cleaning...")
+    df = raw_df.copy()
 
-  # Convert columns to numeric, coercing errors
-  for col in required_cols:
-    df[col] = convert_to_numeric(df[col], errors='coerce')
+    # --- Index Cleaning ---
+    # Ensure index is DatetimeIndex (should be from loader, but double-check)
+    try:
+        df.index = pd.to_datetime(df.index)
+    except Exception as e:
+        print(f"Error converting index to datetime: {e}. Returning None.")
+        return None
+    # Remove timezone if present
+    if df.index.tz is not None:
+        print("Removing timezone information from index.")
+        df.index = df.index.tz_localize(None)
+    # Sort by index
+    if not df.index.is_monotonic_increasing:
+        print("Sorting DataFrame by index.")
+        df = df.sort_index()
 
-  # Ensure index is DatetimeIndex
-  df.index = convert_to_datetime(df.index)
-  df = sort_dataframe_by_index(df)
+    # --- Column Cleaning ---
+    required_cols = ['Open', 'High', 'Low', 'Close', 'Volume']
+    # Check if required columns exist
+    if not all(col in df.columns for col in required_cols):
+        missing = [col for col in required_cols if col not in df.columns]
+        print(f"Error: Missing required columns: {missing}. Returning None.")
+        return None
+    # Optional: Select only required columns if extra ones exist
+    # df = df[required_cols]
 
-  # Handle missing values (choose a strategy: ffill, interpolation, drop)
-  # Example: Forward fill first, then backfill any remaining NaNs
-  df = forward_fill_missing_values(df)
-  df = backward_fill_missing_values(df)
-  # Optional: Drop any rows still containing NaNs if necessary
-  # df = drop_rows_with_missing_values(df)
+    # --- Data Type and Value Cleaning ---
+    for col in required_cols:
+        # Convert to numeric, coercing errors (turns non-numeric into NaN)
+        df[col] = pd.to_numeric(df[col], errors='coerce')
+        # Optional: Check for non-positive values (except maybe volume?)
+        if col != 'Volume':
+            if (df[col] <= 0).any():
+                print(f"Warning: Column {col} contains non-positive values.")
+                # Decide how to handle: set to NaN, remove row, etc.
+                # Example: df.loc[df[col] <= 0, col] = np.nan
 
-  # Optional: Check for and handle outliers or zero values if needed
+    # --- Handle Missing Values (NaNs) ---
+    if df.isnull().values.any():
+        print("Warning: NaNs found before filling. Applying ffill/bfill.")
+        nan_counts_before = df.isnull().sum()
+        df = df.ffill().bfill()
+        nan_counts_after = df.isnull().sum()
+        if nan_counts_after.sum() < nan_counts_before.sum():
+             print("NaNs filled.")
+        # Check if any NaNs remain after filling
+        if df.isnull().values.any():
+            print("Error: NaNs still present after ffill/bfill. Data quality issue.")
+            # Decide: return None, raise error, or return partial data? Returning None for safety.
+            return None
 
-  print("Data cleaning complete.")
-  return df
+    print(f"Data cleaning complete. Final shape: {df.shape}")
+    return df
 
-end function
-'''
+# Example usage (optional - for testing the cleaner directly)
+# if __name__ == '__main__':
+#     # Create a dummy raw DataFrame for testing
+#     test_data = {'Open': [10, 11, np.nan, 13], 'High': [11, 12, 11.5, 14],
+#                  'Low': [9.5, 10.5, 10, 12.5], 'Close': ['10.5', 11.5, 11, 13.5], # Test string
+#                  'Volume': [100, 110, 90, 120]}
+#     test_index = pd.to_datetime(['2023-01-01', '2023-01-02', '2023-01-03', '2023-01-04'])
+#     raw_test_df = pd.DataFrame(test_data, index=test_index)
+#     print("Raw Test DataFrame:\n", raw_test_df)
+#     cleaned_df = clean_ohlcv_data(raw_test_df)
+#     if cleaned_df is not None:
+#         print("\nCleaned DataFrame head:")
+#         print(cleaned_df.head())
+#         print("\nCleaned DataFrame info:")
+#         cleaned_df.info()

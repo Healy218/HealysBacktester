@@ -7,6 +7,7 @@ import sys
 import os
 import itertools
 import vectorbt as vbt
+
 # Removed defaultdict as all_portfolios is a regular dict and all_stats_list handles stats
 # from collections import defaultdict
 
@@ -39,6 +40,8 @@ except NameError:
 from portfolio import simulator
 from analysis import metrics, plotting
 from utils import config_parser
+from data import data_loader, data_cleaner
+import traceback
 # Removed signal imports as they are generated manually below
 
 # --- Load Configuration --- <<< MOVED UP
@@ -109,27 +112,36 @@ all_stats_list = []
 
 # --- Workflow ---
 
-# 1. Load Data (Keep your existing robust loading block)
-print(f"\n[1/X] Loading data for {SYMBOL}...")
-# ... (Your data loading code here) ...
+# 1. Load and Clean Data using Modules <<< MODIFIED STEP 1
+print(f"\n[1/X] Loading and cleaning data for {SYMBOL}...")
+price_data = None # Initialize price_data to None
 try:
-    price_data_raw = vbt.YFData.download(
-        SYMBOL, start=START_DATE, end=END_DATE, interval=INTERVAL, missing_index='drop'
+    # Call the data loader
+    raw_data = data_loader.load_price_data(
+        symbol=SYMBOL,
+        start_date=START_DATE,
+        end_date=END_DATE,
+        interval=INTERVAL
+        # cache_dir can be omitted to use default 'data/cache'
     )
-    # Select only OHLCV columns - vbt usually handles this, but explicit is okay
-    price_data = price_data_raw.get(['Open', 'High', 'Low', 'Close', 'Volume'])
-    if price_data.index.tz is not None:
-         price_data.index = price_data.index.tz_localize(None) # Good practice
-    print(f"Data loaded successfully. Shape: {price_data.shape}")
-    if price_data.isnull().values.any():
-        print("Warning: NaNs found. Applying ffill/bfill.")
-        price_data = price_data.ffill().bfill() # Good practice
-    if price_data.empty or price_data.isnull().values.any() or 'Close' not in price_data.columns or price_data['Close'].isnull().any():
-         raise ValueError("Data invalid after loading/cleaning.")
-    print(f"Data check complete.")
+
+    # Check if data loading was successful
+    if raw_data is None or raw_data.empty:
+        raise ValueError(f"Data loading failed for symbol {SYMBOL}.")
+
+    # Call the data cleaner
+    price_data = data_cleaner.clean_ohlcv_data(raw_data)
+
+    # Check if data cleaning was successful
+    if price_data is None or price_data.empty:
+        raise ValueError(f"Data cleaning failed for symbol {SYMBOL}.")
+
+    print(f"Data loading and cleaning successful. Final shape: {price_data.shape}")
+
 except Exception as e:
-    print(f"FATAL ERROR loading or verifying data: {e}")
-    exit()
+    print(f"FATAL ERROR during data loading/cleaning: {e}")
+    traceback.print_exc() # Optional: Print detailed error
+    exit() # Exit if data is not available/valid
 
 
 # 2. Iterate Through Parameters, Generate Signals, and Simulate - CORRECTED LOOP
