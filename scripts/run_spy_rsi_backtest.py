@@ -292,15 +292,15 @@ if portfolio is not None:
 
         # --- Analyze and Plot BEST Combination ---
         if best_col_name is not None:
+            # Ensure best_col_name is valid before proceeding
             if best_col_name not in portfolio.wrapper.columns:
-                 print(f"Error: Determined best combo name '{best_col_name}' not valid. Aborting.")
+                 print(f"Error: Determined best combination name '{best_col_name}' is not valid in portfolio columns. Aborting analysis.")
             else:
-                 # Format the tuple name for printing - Adjust indices based on MultiIndex structure
+                # Format the tuple name for printing - Adjust indices based on MultiIndex structure
                 if isinstance(best_col_name, tuple) and len(best_col_name) >= 3: # Check length >= 3
-                    # Assuming standard naming from generate_rsi_signals MultiIndex
                     best_col_name_str = f"Window={best_col_name[0]}, Entry={best_col_name[1]}, Exit={best_col_name[2]}"
                 else:
-                    best_col_name_str = str(best_col_name) # Fallback if not the expected tuple
+                    best_col_name_str = str(best_col_name)
 
                 print(f"\n--- Detailed Analysis for Best Combination ({best_col_name_str}) ---")
 
@@ -318,26 +318,40 @@ if portfolio is not None:
                     print("\n--- Trade Records (Best Combination - First 5) ---")
                     print(best_trades_df.head())
                     print(f"Total trades for best combination ({best_col_name_str}): {len(best_trades_df)}")
-                    # You might want to separate Long/Short trades here later
-                    # print(best_trades_df['Direction'].value_counts())
                 else:
                      if portfolio[best_col_name].trades.count() > 0:
                           print(f"\nPortfolio object indicates trades for combo {best_col_name_str}, but fetching failed.")
                      else:
                           print(f"\nNo trades were executed for the best combination ({best_col_name_str}).")
 
-                # Plot summary and trades for the single best combination
-                print(f"\nGenerating plots for best combination ({best_col_name_str})...")
-                plotting.plot_portfolio_summary(portfolio, column=best_col_name)
-                plotting.plot_trades(portfolio, price_data, column=best_col_name) # plot_trades needs the column arg handled
-                print("Plots for best combination generated.")
+                # --- REMOVED DIRECT PLOTTING CALLS ---
+                # print(f"\nGenerating plots for best combination ({best_col_name_str})...")
+                # plotting.plot_portfolio_summary(portfolio, column=best_col_name) # REMOVED
+                # plotting.plot_trades(portfolio, price_data, column=best_col_name) # REMOVED
+                # print("Plots for best combination generated.")
+                # --- END REMOVED CALLS ---
+
         else:
              print("\nSkipping detailed analysis and plotting as no best combination could be determined.")
 
     except Exception as e:
-        print(f"ERROR during analysis or plotting: {e}")
-        traceback.print_exc() # Print detailed traceback
-else:
-    print("Skipping analysis because simulation did not run or failed.")
+        print(f"ERROR during analysis: {e}") # Changed error message scope
+        traceback.print_exc()
+
+# --- SAVE RESULTS --- (This part remains the same and WILL generate/save plots)
+if portfolio is not None and best_col_name is not None: # Added check for best_col_name
+    metrics.save_run_results(
+        portfolio=portfolio,
+        aggregate_stats=None,
+        best_params=best_col_name,
+        config_path='config/settings.py',
+        strategy_name='rsi_threshold',
+        symbol=SYMBOL,
+        price_data_for_plots=price_data
+    )
+elif portfolio is not None:
+     print("Warning: Portfolio exists but best combination not determined. Skipping saving results.")
+
+# ... (rest of script) ...
 
 print(f"\n--- Backtest Finished ---")

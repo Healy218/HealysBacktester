@@ -278,5 +278,34 @@ else:
         # import traceback
         # print(traceback.format_exc())
 
+# --- SAVE RESULTS --- CORRECTED BLOCK ---
+# Check if any stats were generated AND if best_params was successfully found in Step 3
+# Note: best_params is defined inside the try block of Step 3, ensure it's accessible
+# It might be better to initialize best_params = None before the Step 3 try block
+best_params_from_analysis = None # Initialize
+if 'best_params' in locals() and best_params is not None: # Check if variable exists from analysis step
+    best_params_from_analysis = best_params
+
+if all_stats_list and best_params_from_analysis is not None: # Check if stats list is not empty AND best params were found
+    if best_params_from_analysis in all_portfolios:
+        best_portfolio_obj = all_portfolios[best_params_from_analysis]
+
+        print("\n--- Saving Run Results ---") # Moved print statement here
+        metrics.save_run_results(
+            portfolio=best_portfolio_obj,          # Pass the BEST portfolio object
+            aggregate_stats=all_stats_df,          # Pass the aggregate stats DataFrame
+            best_params=best_params_from_analysis, # Pass the BEST parameters tuple
+            config_path='config/settings.py',      # Path to the config file used
+            strategy_name='ma_crossover',          # Strategy name
+            symbol=SYMBOL,
+            price_data_for_plots=price_data        # Pass price data for trade plot saving
+        )
+    else:
+        print(f"Warning: Best parameters {best_params_from_analysis} found, but corresponding portfolio not in dictionary. Skipping save.")
+elif not all_stats_list:
+     print("Warning: No successful simulations to analyze or save.")
+else: # Handles case where analysis failed to find best_params
+     print("Warning: Best parameters could not be determined. Skipping saving detailed results.")
+# --- END SAVE RESULTS ---
 
 print(f"\n--- Backtest Finished ---")
