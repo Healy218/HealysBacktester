@@ -154,21 +154,21 @@ combination_count = 0
 for short_w, long_w in valid_combinations:
     combination_count += 1
     param_label = f"({short_w}, {long_w})"
-    print(f"\n-- Testing Combination {combination_count}/{len(valid_combinations)}: {param_label} --")
+    # print(f"\n-- Testing Combination {combination_count}/{len(valid_combinations)}: {param_label} --")
 
     try:
         # --- Generate Signals ---
-        print("Generating signals...")
+        # print("Generating signals...")
         short_sma = price_data['Close'].rolling(window=short_w, min_periods=short_w).mean()
         long_sma = price_data['Close'].rolling(window=long_w, min_periods=long_w).mean()
         entries = short_sma.vbt.crossed_above(long_sma).astype(bool)
         exits = short_sma.vbt.crossed_below(long_sma).astype(bool)
-        print(f"Signal sums: Entries={entries.sum()}, Exits={exits.sum()}")
+        # print(f"Signal sums: Entries={entries.sum()}, Exits={exits.sum()}")
 
         # --- Run Simulation (Only if Entries Exist) ---
         portfolio = None # Reset portfolio for each combo
         if entries.any():
-            print("Running simulation...")
+            # print("Running simulation...")
             # *** SINGLE CORRECT CALL inside the TRY block ***
             portfolio = simulator.run_backtest(
                 price_data,                 # 1st arg: positional
@@ -193,7 +193,7 @@ for short_w, long_w in valid_combinations:
                 if stats is not None:
                     stats.name = (short_w, long_w) # Use tuple directly as name for column indexing later
                     all_stats_list.append(stats)
-                    print(f"Simulation successful for {param_label}. Trades: {portfolio.trades.count()}")
+                    # print(f"Simulation successful for {param_label}. Trades: {portfolio.trades.count()}")
                 else:
                     print(f"Warning: get_summary_stats returned None for {param_label}.")
             else:

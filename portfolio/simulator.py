@@ -113,7 +113,7 @@ def run_backtest(
     if portfolio_kwargs:
         final_portfolio_kwargs.update(portfolio_kwargs)
 
-    print("Running vectorbt Portfolio.from_signals simulation...")
+    # print("Running vectorbt Portfolio.from_signals simulation...")
     try:
         # Use the processed price data and reindexed signals
         sim_price_df = price_df_to_use
@@ -135,7 +135,7 @@ def run_backtest(
             **final_portfolio_kwargs
         )
 
-        print("Simulation complete.")
+        # print("Simulation complete.")
         return portfolio
     except Exception as e:
         if "'shares'" in str(e) and size_type == 'shares': # Example specific error check
