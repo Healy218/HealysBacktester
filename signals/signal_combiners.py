@@ -5,7 +5,13 @@ import numpy as np
 import vectorbt as vbt # Still useful for type hints or other functions if needed
 import warnings
 from itertools import product as iter_product # Use alias to avoid confusion
+from utils.logging_utils import setup_logging
+from utils.error_handling import handle_errors, BacktesterError # Import the decorator and any custom errors if needed
 
+# Setup logger
+logger = setup_logging(log_file="logs/backtester.log")
+
+@handle_errors
 def _get_combined_index(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.MultiIndex:
     """Helper function to create the combined MultiIndex."""
     if not isinstance(df1.columns, pd.MultiIndex):

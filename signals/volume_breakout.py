@@ -5,7 +5,13 @@ import numpy as np
 import vectorbt as vbt
 import traceback
 from itertools import product as iter_product
+from utils.logging_utils import setup_logging
+from utils.error_handling import handle_errors, BacktesterError # Import the decorator and any custom errors if needed
 
+# Setup logger
+logger = setup_logging(log_file="logs/backtester.log")
+
+@handle_errors
 def generate_volume_signals(
     ohlcv_df: pd.DataFrame,            # Needs 'Open', 'High', 'Low', 'Close', 'Volume'
     volume_window_range: np.ndarray,   # Rolling window range for average volume
@@ -51,7 +57,7 @@ def generate_volume_signals(
     n_combinations = len(param_product)
     n_rows = len(ohlcv_df)
 
-    print(f"Calculating Volume/MA signals for {n_combinations} combinations (vectorized)...")
+    logger.info(f"Calculating Volume/MA signals for {n_combinations} combinations (vectorized)...")
 
     # --- Vectorized Calculation ---
     try:
@@ -109,9 +115,9 @@ def generate_volume_signals(
         exits_df = exits_df.fillna(False)
 
     except Exception as e:
-        print(f"Error during vectorized signal calculation: {e}")
+        logger.error(f"Error during vectorized signal calculation: {e}")
         traceback.print_exc()
         raise
 
-    print(f"Volume Breakout/MA Exit signals generated. Shape: {entries_df.shape}")
+    logger.info(f"Volume Breakout/MA Exit signals generated. Shape: {entries_df.shape}")
     return entries_df, exits_df, None, None # No short signals

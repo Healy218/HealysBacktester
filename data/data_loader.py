@@ -4,7 +4,13 @@ import pandas as pd
 import vectorbt as vbt
 import os
 import traceback # For detailed error logging
+from utils.logging_utils import setup_logging
+from utils.error_handling import handle_errors, BacktesterError # Import the decorator and any custom errors if needed
 
+# Setup logger
+logger = setup_logging(log_file="logs/backtester.log")
+
+@handle_errors
 def load_price_data(symbol: str,
                     start_date: str,
                     end_date: str,
@@ -31,20 +37,20 @@ def load_price_data(symbol: str,
 
     # Check cache
     if os.path.exists(cache_filepath):
-        print(f"Loading data for {symbol} from cache: {cache_filepath}")
+        logger.info(f"Loading data for {symbol} from cache: {cache_filepath}")
         try:
             cached_df = pd.read_csv(cache_filepath, index_col=0, parse_dates=True)
             # Basic validation of cached data
             if not cached_df.empty and isinstance(cached_df.index, pd.DatetimeIndex):
-                 print("Cache loaded successfully.")
+                 logger.info("Cache loaded successfully.")
                  return cached_df
             else:
-                 print("Warning: Cached file seems invalid. Will attempt download.")
+                 logger.warning("Warning: Cached file seems invalid. Will attempt download.")
         except Exception as e:
-            print(f"Warning: Error reading cache file {cache_filepath}: {e}. Will attempt download.")
+            logger.warning(f"Warning: Error reading cache file {cache_filepath}: {e}. Will attempt download.")
 
     # If not cached or cache invalid, download
-    print(f"Cache not found or invalid. Downloading data for {symbol} ({interval}) from {start_date} to {end_date}...")
+    logger.warning(f"Cache not found or invalid. Downloading data for {symbol} ({interval}) from {start_date} to {end_date}...")
     try:
         price_data_raw = vbt.YFData.download(
             symbols=symbol, # Use symbols plural
@@ -59,23 +65,23 @@ def load_price_data(symbol: str,
         raw_df = price_data_raw.get()
 
         if raw_df is None or raw_df.empty:
-             print(f"Warning: No data downloaded for {symbol}.")
+             logger.warning(f"Warning: No data downloaded for {symbol}.")
              return None
 
-        print(f"Data downloaded successfully. Shape: {raw_df.shape}")
+        logger.info(f"Data downloaded successfully. Shape: {raw_df.shape}")
 
         # Save to cache
         try:
             os.makedirs(cache_dir, exist_ok=True) # Ensure cache directory exists
             raw_df.to_csv(cache_filepath)
-            print(f"Saved downloaded data to cache: {cache_filepath}")
+            logger.info(f"Saved downloaded data to cache: {cache_filepath}")
         except Exception as e:
-            print(f"Warning: Could not save data to cache {cache_filepath}: {e}")
+            logger.warning(f"Warning: Could not save data to cache {cache_filepath}: {e}")
 
         return raw_df
 
     except Exception as e:
-        print(f"FATAL ERROR downloading data for {symbol}: {e}")
+        logger.error(f"FATAL ERROR downloading data for {symbol}: {e}")
         # traceback.print_exc() # Uncomment for detailed debug info
         return None
 

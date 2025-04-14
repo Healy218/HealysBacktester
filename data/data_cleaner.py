@@ -2,7 +2,13 @@
 
 import pandas as pd
 import numpy as np
+from utils.logging_utils import setup_logging
+from utils.error_handling import handle_errors, BacktesterError # Import the decorator and any custom errors if needed
 
+# Setup logger
+logger = setup_logging(log_file="logs/backtester.log")
+
+@handle_errors
 def clean_ohlcv_data(raw_df: pd.DataFrame) -> pd.DataFrame | None:
     """
     Cleans raw OHLCV data: ensures DatetimeIndex, standard columns,
@@ -16,10 +22,10 @@ def clean_ohlcv_data(raw_df: pd.DataFrame) -> pd.DataFrame | None:
         Cleaned pandas DataFrame, or None if cleaning fails validation.
     """
     if raw_df is None or raw_df.empty:
-        print("Error: Cannot clean None or empty DataFrame.")
+        logger.error("Error: Cannot clean None or empty DataFrame.")
         return None
 
-    print("Starting data cleaning...")
+    logger.info("Starting data cleaning...")
     df = raw_df.copy()
 
     # --- Index Cleaning ---
@@ -27,15 +33,15 @@ def clean_ohlcv_data(raw_df: pd.DataFrame) -> pd.DataFrame | None:
     try:
         df.index = pd.to_datetime(df.index)
     except Exception as e:
-        print(f"Error converting index to datetime: {e}. Returning None.")
+        logger.error(f"Error converting index to datetime: {e}. Returning None.")
         return None
     # Remove timezone if present
     if df.index.tz is not None:
-        print("Removing timezone information from index.")
+        logger.info("Removing timezone information from index.")
         df.index = df.index.tz_localize(None)
     # Sort by index
     if not df.index.is_monotonic_increasing:
-        print("Sorting DataFrame by index.")
+        logger.info("Sorting DataFrame by index.")
         df = df.sort_index()
 
     # --- Column Cleaning ---
@@ -43,7 +49,7 @@ def clean_ohlcv_data(raw_df: pd.DataFrame) -> pd.DataFrame | None:
     # Check if required columns exist
     if not all(col in df.columns for col in required_cols):
         missing = [col for col in required_cols if col not in df.columns]
-        print(f"Error: Missing required columns: {missing}. Returning None.")
+        logger.error(f"Error: Missing required columns: {missing}. Returning None.")
         return None
     # Optional: Select only required columns if extra ones exist
     # df = df[required_cols]
@@ -55,25 +61,25 @@ def clean_ohlcv_data(raw_df: pd.DataFrame) -> pd.DataFrame | None:
         # Optional: Check for non-positive values (except maybe volume?)
         if col != 'Volume':
             if (df[col] <= 0).any():
-                print(f"Warning: Column {col} contains non-positive values.")
+                logger.warning(f"Warning: Column {col} contains non-positive values.")
                 # Decide how to handle: set to NaN, remove row, etc.
                 # Example: df.loc[df[col] <= 0, col] = np.nan
 
     # --- Handle Missing Values (NaNs) ---
     if df.isnull().values.any():
-        print("Warning: NaNs found before filling. Applying ffill/bfill.")
+        logger.warning("Warning: NaNs found before filling. Applying ffill/bfill.")
         nan_counts_before = df.isnull().sum()
         df = df.ffill().bfill()
         nan_counts_after = df.isnull().sum()
         if nan_counts_after.sum() < nan_counts_before.sum():
-             print("NaNs filled.")
+             logger.debug("NaNs filled.")
         # Check if any NaNs remain after filling
         if df.isnull().values.any():
-            print("Error: NaNs still present after ffill/bfill. Data quality issue.")
+            logger.error("Error: NaNs still present after ffill/bfill. Data quality issue.")
             # Decide: return None, raise error, or return partial data? Returning None for safety.
             return None
 
-    print(f"Data cleaning complete. Final shape: {df.shape}")
+    logger.info(f"Data cleaning complete. Final shape: {df.shape}")
     return df
 
 # Example usage (optional - for testing the cleaner directly)

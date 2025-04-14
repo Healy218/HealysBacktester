@@ -4,7 +4,13 @@ import numpy as np
 import traceback
 import vectorbt as vbt
 from typing import Optional, Union, Tuple, List, Dict # Added List, Dict
+from utils.logging_utils import setup_logging
+from utils.error_handling import handle_errors, BacktesterError # Import the decorator and any custom errors if needed
 
+# Setup logger
+logger = setup_logging(log_file="logs/backtester.log")
+
+@handle_errors
 def generate_rsi_signals(
     close_prices_series: pd.Series,
     window: np.ndarray,                 # Expect numpy array of RSI window periods
@@ -38,7 +44,7 @@ def generate_rsi_signals(
     if not isinstance(close_prices_series, pd.Series):
         raise TypeError("Input 'close_prices_series' must be a pandas Series.")
     if close_prices_series.empty:
-        print("Warning: Input 'close_prices_series' is empty.")
+        logger.debug("Warning: Input 'close_prices_series' is empty.")
         empty_df = pd.DataFrame()
         return empty_df, empty_df, None, None
 
@@ -47,18 +53,18 @@ def generate_rsi_signals(
     entry_threshold = np.asarray(entry_threshold)
     exit_threshold = np.asarray(exit_threshold)
 
-    print("Calculating RSI using vectorbt...")
+    logger.info("Calculating RSI using vectorbt...")
     try:
         rsi = vbt.RSI.run(close_prices_series, window=window, short_name='rsi')
         rsi_values = rsi.rsi # DataFrame: Index=time, Columns=window values
-        print(f"RSI calculated. Shape: {rsi_values.shape}")
+        logger.info(f"RSI calculated. Shape: {rsi_values.shape}")
     except Exception as e:
-        print(f"Error calculating RSI with vectorbt: {e}")
+        logger.error(f"Error calculating RSI with vectorbt: {e}")
         traceback.print_exc()
         raise
 
     # --- Iterate through thresholds, vectorize across windows ---
-    print("Generating signals by iterating through thresholds...")
+    logger.info("Generating signals by iterating through thresholds...")
     entries_list: List[pd.DataFrame] = []
     exits_list: List[pd.DataFrame] = []
     short_entries_list: List[pd.DataFrame] = []
@@ -71,7 +77,7 @@ def generate_rsi_signals(
     short_exit_keys: List[Tuple[float]] = []
 
     # Generate Long Signals
-    print(f" Processing {len(entry_threshold)} long entry thresholds...")
+    logger.info(f" Processing {len(entry_threshold)} long entry thresholds...")
     for et in entry_threshold:
         try:
             # Compare all window columns against the current single entry threshold
@@ -79,51 +85,51 @@ def generate_rsi_signals(
             entries_list.append(entries_for_thresh)
             entry_keys.append((et,)) # Tuple key for MultiIndex later
         except Exception as e:
-            print(f"Error processing entry threshold {et}: {e}")
+            logger.error(f"Error processing entry threshold {et}: {e}")
             # Optional: Append empty DataFrame or handle error differently
             entries_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
             entry_keys.append((et,))
 
-    print(f" Processing {len(exit_threshold)} long exit thresholds...")
+    logger.info(f" Processing {len(exit_threshold)} long exit thresholds...")
     for xt in exit_threshold:
          try:
              exits_for_thresh = rsi_values.vbt.crossed_below(xt)
              exits_list.append(exits_for_thresh)
              exit_keys.append((xt,))
          except Exception as e:
-             print(f"Error processing exit threshold {xt}: {e}")
+             logger.error(f"Error processing exit threshold {xt}: {e}")
              exits_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
              exit_keys.append((xt,))
 
     # Generate Short Signals (if enabled)
     if enable_shorting:
         if short_entry_threshold is None or short_exit_threshold is None:
-            print("Warning: Shorting enabled but short entry or exit thresholds are None. Skipping short signals.")
+            logger.debug("Warning: Shorting enabled but short entry or exit thresholds are None. Skipping short signals.")
             short_entries_df = None
             short_exits_df = None
         else:
             short_entry_threshold = np.asarray(short_entry_threshold)
             short_exit_threshold = np.asarray(short_exit_threshold)
 
-            print(f" Processing {len(short_entry_threshold)} short entry thresholds...")
+            logger.info(f" Processing {len(short_entry_threshold)} short entry thresholds...")
             for set_ in short_entry_threshold:
                 try:
                     short_entries_for_thresh = rsi_values.vbt.crossed_below(set_)
                     short_entries_list.append(short_entries_for_thresh)
                     short_entry_keys.append((set_,))
                 except Exception as e:
-                    print(f"Error processing short entry threshold {set_}: {e}")
+                    logger.error(f"Error processing short entry threshold {set_}: {e}")
                     short_entries_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
                     short_entry_keys.append((set_,))
 
-            print(f" Processing {len(short_exit_threshold)} short exit thresholds...")
+            logger.info(f" Processing {len(short_exit_threshold)} short exit thresholds...")
             for sxt in short_exit_threshold:
                 try:
                     short_exits_for_thresh = rsi_values.vbt.crossed_above(sxt)
                     short_exits_list.append(short_exits_for_thresh)
                     short_exit_keys.append((sxt,))
                 except Exception as e:
-                    print(f"Error processing short exit threshold {sxt}: {e}")
+                    logger.error(f"Error processing short exit threshold {sxt}: {e}")
                     short_exits_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
                     short_exit_keys.append((sxt,))
     else:
@@ -131,7 +137,7 @@ def generate_rsi_signals(
         short_exits_df = None
 
     # --- Combine results into DataFrames with MultiIndex ---
-    print("Combining signal results...")
+    logger.info("Combining signal results...")
     try:
         # Combine Long Signals
         if not entries_list or not exits_list:
@@ -163,11 +169,11 @@ def generate_rsi_signals(
             short_exits_df = short_exits_df.sort_index(axis=1)
 
 
-        print(f"Combined signals. Final shapes - Entries: {entries_df.shape}, Exits: {exits_df.shape}")
-        if short_entries_df is not None: print(f" Short Entries: {short_entries_df.shape}, Short Exits: {short_exits_df.shape}")
+        logger.info(f"Combined signals. Final shapes - Entries: {entries_df.shape}, Exits: {exits_df.shape}")
+        if short_entries_df is not None: logger.info(f" Short Entries: {short_entries_df.shape}, Short Exits: {short_exits_df.shape}")
 
     except Exception as e:
-        print(f"Error combining signal DataFrames: {e}")
+        logger.error(f"Error combining signal DataFrames: {e}")
         traceback.print_exc()
         # Return empty DataFrames on error during combination
         empty_df = pd.DataFrame(index=close_prices_series.index)
@@ -175,7 +181,7 @@ def generate_rsi_signals(
 
 
     # Basic cleaning can be skipped or done here, but Portfolio simulation is often better place.
-    print("Signal generation complete (combination stage).")
+    logger.info("Signal generation complete (combination stage).")
     # The Portfolio simulation should handle aligning these separate signal DataFrames
     # based on the common 'rsi_window' level in their MultiIndex columns.
     return entries_df, exits_df, short_entries_df, short_exits_df

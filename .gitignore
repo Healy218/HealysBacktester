@@ -1,1 +1,33 @@
-.env
+# .gitignore
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore virtual environment folders (adjust name if needed)
+venv/
+env/
+.venv/
+.env/
+
+# Ignore IDE/Editor specific files
+.idea/
+.vscode/
+*.swp
+*~
+
+# Ignore generated output folders
+logs/
+results/
+
+# Ignore OS-specific files (optional)
+.DS_Store
+Thumbs.db
+
+# Ignore dependency folders (if not using virtual environments properly)
+# node_modules/ # Example for Node.js
+
+# Ignore sensitive files (if any - better handled outside repo)
+# secrets.yaml
+# .env # If it contains secrets and isn't managed by environment variables

@@ -3,13 +3,21 @@ import numpy as np
 import vectorbt as vbt
 import pandas as pd
 import plotly.io as pio
-import os # Import os
-import plotly.io as pio
-import traceback # Import traceback
-from typing import Optional, Dict, Any, Union, Tuple # Import needed types
+import os
+import traceback
+from typing import Optional, Dict, Any, Union, Tuple, List # Added List for type hint
+
+# Local application imports
 from utils import file_utils
 from analysis import plotting
+from utils.logging_utils import setup_logging
+from utils.error_handling import handle_errors # Assuming decorator is here
 
+# Setup logger
+logger = setup_logging(log_file="logs/backtester.log")
+
+
+@handle_errors # Corrected: Removed parentheses
 def get_summary_stats(portfolio: vbt.Portfolio, column: Optional[Union[str, Tuple]] = None) -> Optional[Union[pd.Series, pd.DataFrame]]:
     """
     Retrieves the summary statistics Series or DataFrame from a vectorbt Portfolio object.
@@ -23,20 +31,30 @@ def get_summary_stats(portfolio: vbt.Portfolio, column: Optional[Union[str, Tupl
         pandas Series/DataFrame containing performance metrics, or None on error.
     """
     if portfolio is None:
-        print("Error: Portfolio object is None in get_summary_stats.")
-        return None
+        logger.error("Error: Portfolio object is None in get_summary_stats.")
+        return None # Explicit return None if portfolio is None
+
     try:
-        # Pass column argument to portfolio.stats()
         stats_output = portfolio.stats(column=column)
+        if stats_output is None or (isinstance(stats_output, pd.DataFrame) and stats_output.empty) or (isinstance(stats_output, pd.Series) and stats_output.empty):
+             logger.warning(f"No stats generated for portfolio (column={column}).")
+             # Return empty structure consistent with expected type if possible
+             # Check the type of the portfolio's stats attribute to return a matching empty type
+             if isinstance(portfolio.stats(), pd.Series):
+                 return pd.Series(dtype=float)
+             else:
+                 return pd.DataFrame()
         return stats_output
     except Exception as e:
-        print(f"Error getting portfolio stats (column={column}): {e}")
-        # traceback.print_exc() # Optional for debugging
-        return None # Return None on error
+        logger.error(f"Error getting portfolio stats (column={column}): {e}")
+        traceback.print_exc() # Log traceback for debugging
+        return None
 
+
+@handle_errors # Corrected: Removed parentheses
 def display_summary_stats(portfolio: vbt.Portfolio,
                           column: Optional[Union[str, Tuple]] = None,
-                          metrics_to_display: Optional[list] = None):
+                          metrics_to_display: Optional[List[str]] = None): # Added List type hint
     """
     Prints selected or all summary statistics for a specific portfolio column
     or the aggregated stats if column is None. DEPRECATED for saving, use get_summary_stats.
@@ -46,28 +64,32 @@ def display_summary_stats(portfolio: vbt.Portfolio,
         column: Optional specific column (e.g., parameter tuple) to display stats for.
         metrics_to_display: Optional list of metric names (strings) to display.
     """
-    print(f"--- Displaying Summary Stats (Column: {column if column else 'Aggregated/Default'}) ---")
+    logger.info(f"--- Displaying Summary Stats (Column: {column if column else 'Aggregated/Default'}) ---")
+
     try:
         stats = get_summary_stats(portfolio, column=column)
 
         if stats is None or stats.empty:
-            print("No stats available to display.")
+            logger.info("No stats available to display.")
             return
 
+        stats_to_print = None
         if isinstance(stats, pd.DataFrame):
-            print("Warning: Received DataFrame for stats. Displaying aggregated mean or first column if available.")
-            # Try to display the mean or the first column as a fallback representation
+            logger.info("Warning: Received DataFrame for stats. Displaying aggregated mean or first column if available.")
             if not stats.empty:
                 stats_to_print = stats.mean(axis=1) if stats.shape[1] > 1 else stats.iloc[:, 0]
             else:
-                print("Empty DataFrame received.")
+                logger.error("Empty DataFrame received.")
                 return
         elif isinstance(stats, pd.Series):
-             stats_to_print = stats
+            stats_to_print = stats
         else:
-             print(f"Unexpected stats type: {type(stats)}. Cannot display.")
-             return
+            logger.error(f"Unexpected stats type: {type(stats)}. Cannot display.")
+            return
 
+        if stats_to_print is None or stats_to_print.empty:
+            logger.info("No valid stats data to print after processing.")
+            return
 
         if metrics_to_display is None:
             metrics_to_display = [ # Default set
@@ -79,23 +101,30 @@ def display_summary_stats(portfolio: vbt.Portfolio,
                 'Expectancy', 'Sharpe Ratio', 'Sortino Ratio', 'Calmar Ratio'
             ]
 
-        print("\n--- Performance Summary ---")
+        logger.info("\n--- Performance Summary ---")
         for metric in metrics_to_display:
             if metric in stats_to_print.index:
                 value = stats_to_print[metric]
-                # Basic formatting
-                if isinstance(value, (float, np.floating)):
-                    if '%' in metric: print(f"{metric:<25}: {value:,.2f}%")
-                    elif 'Ratio' in metric or 'Factor' in metric or 'Expectancy' in metric: print(f"{metric:<25}: {value:,.3f}")
-                    else: print(f"{metric:<25}: {value:,.2f}")
-                else: print(f"{metric:<25}: {value}") # Handle Timestamps, Timedeltas etc.
+                try:
+                    if isinstance(value, (float, np.floating)):
+                        if '%' in metric: print(f"{metric:<25}: {value:,.2f}%")
+                        elif 'Ratio' in metric or 'Factor' in metric or 'Expectancy' in metric: print(f"{metric:<25}: {value:,.3f}")
+                        else: print(f"{metric:<25}: {value:,.2f}")
+                    elif isinstance(value, (pd.Timestamp, pd.Timedelta)):
+                         print(f"{metric:<25}: {value}")
+                    else: print(f"{metric:<25}: {value}")
+                except (TypeError, ValueError) as fmt_err:
+                     logger.warning(f"Could not format metric '{metric}' with value '{value}': {fmt_err}")
+                     print(f"{metric:<25}: {value} (format error)")
             else: print(f"{metric:<25}: N/A")
-        print("------------------------------------")
+        logger.info("------------------------------------")
 
     except Exception as e:
-        print(f"Error displaying portfolio stats: {e}")
+        logger.error(f"Error occurred during display_summary_stats execution: {e}")
+        traceback.print_exc()
 
 
+@handle_errors # Corrected: Removed parentheses
 def get_trade_records(portfolio: vbt.Portfolio, column: Optional[Union[str, Tuple]] = None) -> Optional[pd.DataFrame]:
     """
     Retrieves the trade records for a specific column or all columns.
@@ -105,42 +134,59 @@ def get_trade_records(portfolio: vbt.Portfolio, column: Optional[Union[str, Tupl
         column: Optional specific column (e.g., parameter tuple) to get trades for.
 
     Returns:
-        pandas DataFrame containing detailed trade info, or None on error.
+        pandas DataFrame containing detailed trade info, or None on error. Returns
+        an empty DataFrame if no trades exist for the column.
     """
     if portfolio is None:
-        print("Error: Portfolio object is None in get_trade_records.")
-        return None
-    try:
-        # Access trades for the specific column if provided
-        trades_accessor = portfolio.trades if column is None else portfolio[column].trades
-        if trades_accessor.count() > 0:
-             return trades_accessor.records_readable
-        else:
-             # print(f"No trades found for column {column if column else 'all'}.")
-             return pd.DataFrame() # Return empty DataFrame if no trades
-    except KeyError:
-         print(f"Error: Column '{column}' not found in portfolio for trade records.")
-         return None
-    except Exception as e:
-        print(f"Error getting trade records (column={column}): {e}")
-        # traceback.print_exc() # Optional for debugging
+        logger.error("Error: Portfolio object is None in get_trade_records.")
         return None
 
-# --- NEW FUNCTION TO SAVE RESULTS ---
+    try:
+        if column is not None:
+            if column not in portfolio.wrapper.columns:
+                 logger.error(f"Error: Column '{column}' not found in portfolio for trade records.")
+                 return None
+            portfolio_accessor = portfolio[column]
+        else:
+            portfolio_accessor = portfolio
+
+        trades_accessor = portfolio_accessor.trades
+
+        if trades_accessor.count() > 0:
+            records = trades_accessor.records_readable
+            if isinstance(records, pd.DataFrame):
+                return records
+            else:
+                logger.error(f"Unexpected type returned by trades.records_readable: {type(records)}")
+                return None
+        else:
+            logger.info(f"No trades found for column '{column if column else 'all'}'. Returning empty DataFrame.")
+            return pd.DataFrame()
+
+    except KeyError:
+         logger.error(f"Error: Column '{column}' not found in portfolio for trade records (KeyError).")
+         return None
+    except Exception as e:
+        logger.error(f"Error getting trade records (column={column}): {e}")
+        traceback.print_exc()
+        return None
+
+
+@handle_errors # Corrected: Removed parentheses
 def save_run_results(
-    portfolio: vbt.Portfolio, # Portfolio object. Can be multi-column OR the single best one.
-    aggregate_stats: Optional[pd.DataFrame], # e.g., all_stats_df from MA script
-    best_params: Optional[Union[str, Tuple]], # Identifier for the best run/column
+    portfolio: vbt.Portfolio,
+    aggregate_stats: Optional[pd.DataFrame],
+    best_params: Optional[Union[str, Tuple]],
     config_path: str,
     base_results_dir: str = "results",
     strategy_name: str = "strategy",
     symbol: str = "SYM",
-    price_data_for_plots: Optional[pd.DataFrame] = None # Needed for plot_trades
-    ):
+    price_data_for_plots: Optional[pd.DataFrame] = None
+    ) -> Optional[str]: # Added return type hint
     """
     Orchestrates saving all relevant results from a backtest run to a unique directory.
-    Handles both multi-column portfolio objects (like from RSI) and single-column
-    portfolio objects (like the best one passed from MA).
+    Handles both multi-column portfolio objects (like from param search) and single-column
+    portfolio objects (like the best one passed after selection).
 
     Args:
         portfolio: The vectorbt Portfolio object.
@@ -151,97 +197,126 @@ def save_run_results(
         base_results_dir: Root directory where run-specific subdirectories will be created.
         strategy_name: Name for this strategy run (used in directory name).
         symbol: Symbol tested (used in directory name).
-        price_data_for_plots: The price DataFrame needed for plotting trades.
+        price_data_for_plots: The price DataFrame needed for plotting trades (usually close prices).
+
+    Returns:
+        Optional[str]: The path to the created results directory if successful, otherwise None.
     """
-    print("\n--- Saving Run Results ---")
-    if portfolio is None:
-        print("Portfolio object is None. Cannot save results.")
-        return
+    logger.info("\n--- Saving Run Results ---")
+    run_dir: Optional[str] = None # Initialize run_dir to None
+    try:
+        if portfolio is None:
+            logger.error("Portfolio object is None. Cannot save results.")
+            return None # Return None explicitly
 
-    # 1. Create the results directory for this run
-    run_dir = file_utils.create_results_directory(
-        base_results_dir=base_results_dir,
-        strategy_name=strategy_name,
-        symbol=symbol
-    )
-    if run_dir is None:
-        print("Failed to create results directory. Aborting save.")
-        return
+        # 1. Create the results directory for this run
+        run_dir = file_utils.create_results_directory(
+            base_results_dir=base_results_dir,
+            strategy_name=strategy_name,
+            symbol=symbol
+        )
+        if not run_dir: # Check if directory creation failed (returned None or False)
+            logger.error("Failed to create results directory. Aborting save.")
+            return None # Return None explicitly
 
-    # 2. Save Configuration
-    file_utils.save_config_file(config_path, run_dir)
+        logger.info(f"Results will be saved to: {run_dir}")
 
-    # 3. Save Aggregate Stats (if provided)
-    if aggregate_stats is not None and isinstance(aggregate_stats, pd.DataFrame) and not aggregate_stats.empty:
-        file_utils.save_dataframe_to_csv(aggregate_stats, run_dir, "aggregate_stats.csv")
+        # 2. Save Configuration
+        file_utils.save_config_file(config_path, run_dir)
 
-    # 4. Save Best Combination Results (if best_params identifier is provided)
-    if best_params is not None:
-        print(f"Attempting to save results for best combination: {best_params}")
+        # 3. Save Aggregate Stats (if provided and valid)
+        if aggregate_stats is not None and isinstance(aggregate_stats, pd.DataFrame) and not aggregate_stats.empty:
+            logger.info("Saving aggregate performance statistics...")
+            file_utils.save_dataframe_to_csv(aggregate_stats, run_dir, "aggregate_stats.csv")
+        elif aggregate_stats is not None:
+             logger.warning("Aggregate stats provided but are not a non-empty DataFrame. Skipping save.")
 
-        # Determine if the passed portfolio object IS the best one (single column)
-        # or if we need to select the column from a multi-column portfolio.
-        portfolio_to_analyze = None
-        is_multi_column = isinstance(portfolio.wrapper.columns, pd.MultiIndex) or len(portfolio.wrapper.columns) > 1
+        # 4. Save Best Combination Results (if best_params identifier is provided)
+        if best_params is not None:
+            logger.info(f"Attempting to save detailed results for best combination: {best_params}")
 
-        if is_multi_column:
-            # Portfolio has multiple columns, select the best one
-            if best_params in portfolio.wrapper.columns:
-                 portfolio_to_analyze = portfolio[best_params]
-                 print(f"Extracted best column {best_params} from multi-column portfolio.")
-            else:
-                 print(f"Error: Best parameters {best_params} not found in multi-column portfolio columns. Cannot save detailed results.")
-        else:
-             # Portfolio is likely already the single best one (passed from MA script)
-             # Basic check: does the portfolio name match best_params if available?
-             if hasattr(portfolio, 'column_name') and portfolio.column_name == best_params:
-                  portfolio_to_analyze = portfolio
-                  print("Using provided single-column portfolio as the best one.")
-             elif len(portfolio.wrapper.columns) == 1: # If it's single column, assume it's the best one passed
-                  portfolio_to_analyze = portfolio
-                  print("Using provided single-column portfolio as the best one (name match check failed or name unavailable).")
-             else:
-                  print(f"Error: Cannot determine how to handle provided portfolio and best_params {best_params}. Cannot save detailed results.")
-
-
-        # Proceed only if we have identified the correct portfolio object to analyze
-        if portfolio_to_analyze is not None:
-            # Save Best Stats Series (call get_summary_stats on the single-column object)
-            best_stats_series = get_summary_stats(portfolio_to_analyze, column=None) # Get stats for this specific portfolio
-            if best_stats_series is not None:
-                file_utils.save_dataframe_to_csv(best_stats_series, run_dir, "best_params_stats.csv")
-
-            # Save Best Trades DataFrame
-            best_trades_df = get_trade_records(portfolio_to_analyze, column=None) # Get trades for this specific portfolio
-            if best_trades_df is not None:
-                file_utils.save_dataframe_to_csv(best_trades_df, run_dir, "best_params_trades.csv")
-
-            # 5. Save Plots for Best Combination (as JSON for interactivity)
-            default_renderer = pio.renderers.default # Store original renderer
+            portfolio_to_analyze = None
             try:
-                print("Generating and saving plots for best combination...")
-                pio.renderers.default = "json" # Use JSON renderer for non-interactive saving
+                is_single_column = len(portfolio.wrapper.columns) == 1
 
-                # Call plotting functions on the specific best portfolio object, no column needed
-                summary_fig = plotting.plot_portfolio_summary(portfolio_to_analyze, column=None)
-                if summary_fig:
-                     file_utils.save_figure_to_json(summary_fig, run_dir, "plot_portfolio_summary.json")
-
-                if price_data_for_plots is not None:
-                     trades_fig = plotting.plot_trades(portfolio_to_analyze, price_data_for_plots, column=None)
-                     if trades_fig:
-                          file_utils.save_figure_to_json(trades_fig, run_dir, "plot_trades.json")
+                if is_single_column:
+                     portfolio_to_analyze = portfolio
+                     current_col_name = portfolio.wrapper.columns[0]
+                     if current_col_name == best_params:
+                         logger.info(f"Using provided single-column portfolio (column '{best_params}') as the best one.")
+                     else:
+                         logger.warning(f"Provided portfolio is single-column, but its name ('{current_col_name}') doesn't match best_params ('{best_params}'). Proceeding anyway.")
                 else:
-                     print("Warning: Price data not provided, cannot save trades plot.")
+                     if best_params in portfolio.wrapper.columns:
+                         portfolio_to_analyze = portfolio[best_params]
+                         logger.info(f"Extracted best column '{best_params}' from multi-column portfolio.")
+                     else:
+                         logger.error(f"Error: Best parameters '{best_params}' not found in multi-column portfolio columns. Cannot save detailed results.")
+                         # portfolio_to_analyze remains None
 
-            except Exception as plot_err:
-                print(f"Error generating or saving plots: {plot_err}")
-                traceback.print_exc()
-            finally:
-                pio.renderers.default = default_renderer # Restore renderer
-        # else block handled by checks above
+            except Exception as e:
+                 logger.error(f"Error determining portfolio structure or selecting best column '{best_params}': {e}")
+                 traceback.print_exc()
+                 portfolio_to_analyze = None
 
-    else:
-        print("Warning: Best parameters not provided. Cannot save detailed best results or plots.")
 
-    print("--- Results Saving Complete ---")
+            if portfolio_to_analyze is not None:
+                # --- Save Best Stats ---
+                logger.info(f"Fetching stats for best parameters: {best_params}")
+                best_stats_series = get_summary_stats(portfolio_to_analyze, column=None)
+                if best_stats_series is not None and not best_stats_series.empty:
+                    file_utils.save_dataframe_to_csv(best_stats_series.to_frame(name='Value'), run_dir, "best_params_stats.csv")
+                else:
+                     logger.warning(f"Could not retrieve or empty stats for best parameters '{best_params}'. Stats file not saved.")
+
+                # --- Save Best Trades ---
+                logger.info(f"Fetching trade records for best parameters: {best_params}")
+                best_trades_df = get_trade_records(portfolio_to_analyze, column=None)
+                if best_trades_df is not None and not best_trades_df.empty:
+                    file_utils.save_dataframe_to_csv(best_trades_df, run_dir, "best_params_trades.csv")
+                elif best_trades_df is not None:
+                     logger.info(f"No trades found for best parameters '{best_params}'. Saving empty trades file.")
+                     file_utils.save_dataframe_to_csv(best_trades_df, run_dir, "best_params_trades.csv")
+                else:
+                     logger.warning(f"Could not retrieve trade records for best parameters '{best_params}'. Trades file not saved.")
+
+                # --- Save Plots ---
+                if price_data_for_plots is not None and isinstance(price_data_for_plots, pd.DataFrame) and not price_data_for_plots.empty:
+                    default_renderer = pio.renderers.default
+                    try:
+                        logger.info("Generating and saving plots for best combination...")
+                        pio.renderers.default = "json"
+
+                        summary_fig = plotting.plot_portfolio_summary(portfolio_to_analyze, column=None)
+                        if summary_fig:
+                            file_utils.save_figure_to_json(summary_fig, run_dir, "plot_portfolio_summary.json")
+                        else:
+                            logger.warning("Portfolio summary plot could not be generated.")
+
+                        trades_fig = plotting.plot_trades(portfolio_to_analyze, price_data_for_plots, column=None)
+                        if trades_fig:
+                            file_utils.save_figure_to_json(trades_fig, run_dir, "plot_trades.json")
+                        else:
+                            logger.warning("Trades plot could not be generated.")
+
+                    except Exception as plot_err:
+                        logger.error(f"Error generating or saving plots: {plot_err}")
+                        traceback.print_exc()
+                    finally:
+                        pio.renderers.default = default_renderer
+                else:
+                    logger.warning("Price data for plots is missing or invalid. Skipping plot generation.")
+            # else: portfolio_to_analyze is None - error already logged
+
+        else: # best_params is None
+            logger.info("Warning: Best parameters identifier not provided. Cannot save detailed best results or plots.")
+
+        # --- Success ---
+        logger.info("--- Results Saving Complete ---")
+        return run_dir # <-- Return the directory path on successful completion
+
+    except Exception as e:
+        # Log context, decorator handles re-raising
+        logger.error(f"An unexpected error occurred during the save_run_results execution: {e}")
+        traceback.print_exc()
+        return None # Return None if an exception occurs within the main try block

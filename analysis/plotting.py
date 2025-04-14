@@ -4,6 +4,9 @@ import vectorbt as vbt
 import pandas as pd
 import plotly.graph_objects as go
 from typing import Optional, Union, Tuple # Import needed types
+from utils.logging_utils import setup_logging
+import logging
+logger = setup_logging(log_file="logs/backtester.log")
 
 # Ensure plotting libraries are installed: pip install plotly kaleido nbformat
 # 'kaleido' is needed for saving static images (optional)
@@ -22,9 +25,9 @@ def plot_portfolio_summary(portfolio: vbt.Portfolio, column: Optional[Union[str,
     Returns:
         A plotly Figure object, or None if an error occurs.
     """
-    print(f"Generating portfolio summary plot figure for column: {column if column is not None else 'Default'}...")
+    logger.info(f"Generating portfolio summary plot figure for column: {column if column is not None else 'Default'}...")
     if portfolio is None:
-        print("Error: Portfolio object is None.")
+        logger.error("Error: Portfolio object is None.")
         return None
     try:
         # portfolio.plot() returns a plotly Figure object
@@ -32,7 +35,7 @@ def plot_portfolio_summary(portfolio: vbt.Portfolio, column: Optional[Union[str,
         # DO NOT call fig.show() here
         return fig # Return the figure object
     except Exception as e:
-        print(f"Error generating portfolio summary plot figure: {e}")
+        logger.error(f"Error generating portfolio summary plot figure: {e}")
         return None
 
 def plot_cumulative_returns(portfolio: vbt.Portfolio, benchmark_rets: Optional[pd.Series] = None, column: Optional[Union[str, Tuple]] = None, **kwargs) -> Optional[go.Figure]:
@@ -48,16 +51,16 @@ def plot_cumulative_returns(portfolio: vbt.Portfolio, benchmark_rets: Optional[p
     Returns:
         A plotly Figure object, or None if an error occurs.
     """
-    print("Generating cumulative returns plot figure...")
+    logger.info("Generating cumulative returns plot figure...")
     if portfolio is None:
-        print("Error: Portfolio object is None.")
+        logger.error("Error: Portfolio object is None.")
         return None
     try:
         fig = portfolio.plot_cum_returns(benchmark_rets=benchmark_rets, column=column, **kwargs)
         # DO NOT call fig.show() here
         return fig
     except Exception as e:
-        print(f"Error generating cumulative returns plot figure: {e}")
+        logger.error(f"Error generating cumulative returns plot figure: {e}")
         return None
 
 def plot_drawdowns(portfolio: vbt.Portfolio, column: Optional[Union[str, Tuple]] = None, **kwargs) -> Optional[go.Figure]:
@@ -72,16 +75,16 @@ def plot_drawdowns(portfolio: vbt.Portfolio, column: Optional[Union[str, Tuple]]
     Returns:
         A plotly Figure object, or None if an error occurs.
     """
-    print("Generating drawdowns plot figure...")
+    logger.info("Generating drawdowns plot figure...")
     if portfolio is None:
-        print("Error: Portfolio object is None.")
+        logger.error("Error: Portfolio object is None.")
         return None
     try:
         fig = portfolio.plot_drawdowns(column=column, **kwargs)
         # DO NOT call fig.show() here
         return fig
     except Exception as e:
-        print(f"Error generating drawdowns plot figure: {e}")
+        logger.error(f"Error generating drawdowns plot figure: {e}")
         return None
 
 def plot_trades(portfolio: vbt.Portfolio, price_df: pd.DataFrame, column: Optional[Union[str, Tuple]] = None, **kwargs) -> Optional[go.Figure]:
@@ -97,12 +100,12 @@ def plot_trades(portfolio: vbt.Portfolio, price_df: pd.DataFrame, column: Option
     Returns:
         A plotly Figure object, or None if an error occurs.
     """
-    print(f"Generating trades plot figure for column: {column if column is not None else 'Default'}...")
+    logger.info(f"Generating trades plot figure for column: {column if column is not None else 'Default'}...")
     if portfolio is None:
-        print("Error: Portfolio object is None.")
+        logger.error("Error: Portfolio object is None.")
         return None
     if price_df is None or 'Close' not in price_df.columns:
-        print("Error: 'Close' column required in price_df to plot trades.")
+        logger.error("Error: 'Close' column required in price_df to plot trades.")
         return None
 
     try:
@@ -114,15 +117,15 @@ def plot_trades(portfolio: vbt.Portfolio, price_df: pd.DataFrame, column: Option
         if portfolio_to_plot.trades.count() > 0:
             fig = portfolio_to_plot.trades.plot(fig=fig, **kwargs) # Add trades to the figure
         else:
-            print(f"Note: No trades to plot for column {column if column is not None else 'Default'}.")
+            logger.info(f"Note: No trades to plot for column {column if column is not None else 'Default'}.")
             # Return the figure with just the price plot
         # DO NOT call fig.show() here
         return fig
     except KeyError:
-        print(f"Error: Column '{column}' not found in portfolio for plotting trades.")
+        logger.error(f"Error: Column '{column}' not found in portfolio for plotting trades.")
         return None
     except Exception as e:
-        print(f"Error generating trades plot figure: {e}")
+        logger.error(f"Error generating trades plot figure: {e}")
         return None
 
 # You can add more specific plotting functions as needed.
