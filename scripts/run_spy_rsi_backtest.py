@@ -6,352 +6,270 @@ import numpy as np
 import sys
 import os
 import traceback # Import traceback for detailed error printing
-from itertools import product # To help generate combo strings if needed
-from typing import Optional, Union # For type hints
+import time # Import time module for estimating runtime
+# from itertools import product # No longer needed
+from typing import Optional, Union, Tuple, Any # For type hints
 
 # --- Add Project Root to Python Path ---
+# (Keep Path Modification as is)
 try:
     script_dir = os.path.dirname(os.path.abspath(__file__))
     project_root = os.path.dirname(script_dir)
-    if project_root not in sys.path:
-        sys.path.insert(0, str(project_root))
+    if project_root not in sys.path: sys.path.insert(0, str(project_root))
 except NameError:
-    print("Warning: Could not determine script directory automatically.")
-    project_root = '.'
-    if project_root not in sys.path:
-        sys.path.insert(0, str(project_root))
-# --- End Path Modification ---
+    print("Warning: Could not determine script directory."); project_root = '.'
+    if project_root not in sys.path: sys.path.insert(0, str(project_root))
 
 # --- Import necessary modules ---
-from signals import rsi_threshold  # Import the RSI signal generator
+# (Keep Imports as is)
+from signals import rsi_threshold
 from portfolio import simulator
 from analysis import metrics, plotting
 from utils import config_parser
 from data import data_loader, data_cleaner
 
 # --- Load Configuration ---
+# (Keep Config Loading as is)
 try:
     config = config_parser.load_config('config/settings.py')
     DATA_CONFIG = config.get('DATA_CONFIG', {})
-    STRATEGY_CONFIG = config.get('STRATEGY_RSI', {}) # Load RSI specific config
+    STRATEGY_CONFIG = config.get('STRATEGY_RSI', {})
     BACKTEST_CONFIG = config.get('BACKTEST_CONFIG', {})
     print(f"Configuration loaded successfully from: {os.path.join(project_root, 'config/settings.py')}")
-except FileNotFoundError:
-    print("FATAL ERROR: Configuration file 'config/settings.py' not found.")
-    exit()
-except Exception as e:
-    print(f"FATAL ERROR: Could not load configuration: {e}")
-    exit()
+except FileNotFoundError: print("FATAL ERROR: Config file not found."); exit()
+except Exception as e: print(f"FATAL ERROR loading config: {e}"); exit()
 
 # --- Extract Parameters ---
-# Data Params
+# (Keep Parameter Extraction as is)
 SYMBOL = DATA_CONFIG.get('SYMBOL', 'SPY')
 START_DATE = DATA_CONFIG.get('START_DATE', '2020-01-01')
 END_DATE = DATA_CONFIG.get('END_DATE', '2023-12-31')
 INTERVAL = DATA_CONFIG.get('INTERVAL', '1D')
+RSI_WINDOW_START = STRATEGY_CONFIG.get('RSI_WINDOW_START', 10)
+RSI_WINDOW_END = STRATEGY_CONFIG.get('RSI_WINDOW_END', 31)
+RSI_WINDOW_STEP = STRATEGY_CONFIG.get('RSI_WINDOW_STEP', 1)
+rsi_window_range = np.arange(RSI_WINDOW_START, RSI_WINDOW_END, RSI_WINDOW_STEP, dtype=int)
+ENTRY_THRESHOLD_START = STRATEGY_CONFIG.get('ENTRY_THRESHOLD_START', 20.0)
+ENTRY_THRESHOLD_END = STRATEGY_CONFIG.get('ENTRY_THRESHOLD_END', 40.0)
+ENTRY_THRESHOLD_STEP = STRATEGY_CONFIG.get('ENTRY_THRESHOLD_STEP', 1.0)
+num_entry_steps = max(1, int(round((ENTRY_THRESHOLD_END - ENTRY_THRESHOLD_START) / ENTRY_THRESHOLD_STEP)) + 1)
+entry_threshold_range = np.linspace(ENTRY_THRESHOLD_START, ENTRY_THRESHOLD_END, num_entry_steps)
+EXIT_THRESHOLD_START = STRATEGY_CONFIG.get('EXIT_THRESHOLD_START', 60.0)
+EXIT_THRESHOLD_END = STRATEGY_CONFIG.get('EXIT_THRESHOLD_END', 80.0)
+EXIT_THRESHOLD_STEP = STRATEGY_CONFIG.get('EXIT_THRESHOLD_STEP', 1.0)
+num_exit_steps = max(1, int(round((EXIT_THRESHOLD_END - EXIT_THRESHOLD_START) / EXIT_THRESHOLD_STEP)) + 1)
+exit_threshold_range = np.linspace(EXIT_THRESHOLD_START, EXIT_THRESHOLD_END, num_exit_steps)
+ENABLE_SHORTING = BACKTEST_CONFIG.get('ENABLE_SHORTING', False)
+short_entry_threshold_range = None # Simplified for brevity, assume None or loaded as before
+short_exit_threshold_range = None  # Simplified for brevity, assume None or loaded as before
+final_param_names = ['entry_threshold', 'rsi_window', 'exit_threshold'] # Corrected order
+num_combinations = len(rsi_window_range) * len(entry_threshold_range) * len(exit_threshold_range) # Simplified
+INITIAL_CAPITAL = BACKTEST_CONFIG.get('INITIAL_CAPITAL', 100000.0); FEES = BACKTEST_CONFIG.get('FEES_PERCENT', 0.001)
+SLIPPAGE = BACKTEST_CONFIG.get('SLIPPAGE_PERCENT', 0.0005); DEFAULT_SIZE = BACKTEST_CONFIG.get('DEFAULT_SIZE', 0.99)
+DEFAULT_SIZE_TYPE = BACKTEST_CONFIG.get('DEFAULT_SIZE_TYPE', 'percent'); DEFAULT_FREQ = BACKTEST_CONFIG.get('DEFAULT_FREQ', 'D')
+USE_SL = BACKTEST_CONFIG.get('USE_STOP_LOSS', False); SL_PERCENT = BACKTEST_CONFIG.get('STOP_LOSS_PERCENT', 0.05)
+USE_TP = BACKTEST_CONFIG.get('USE_TAKE_PROFIT', False); TP_PERCENT = BACKTEST_CONFIG.get('TAKE_PROFIT_PERCENT', 0.10)
+SL_STOP = SL_PERCENT if USE_SL else None; TP_STOP = TP_PERCENT if USE_TP else None
 
-# Strategy Params (RSI specific) - MODIFIED FOR MULTI-PARAM & SHORTING
-RSI_WINDOWS_LIST = STRATEGY_CONFIG.get('RSI_WINDOW', [14])
-if isinstance(RSI_WINDOWS_LIST, int): RSI_WINDOWS_LIST = [RSI_WINDOWS_LIST]
-RSI_WINDOWS = np.array(RSI_WINDOWS_LIST)
+# --- Helper function to format parameter tuples ---
+# (Keep Formatter function as is)
+def format_param_tuple(param_tuple: Union[Tuple[Any, ...], Any], actual_names: list[str]) -> str:
+    if not isinstance(param_tuple, tuple):
+        if actual_names and len(actual_names) == 1: return f"({actual_names[0]}={param_tuple})"
+        else: return str(param_tuple)
+    num_params = len(param_tuple); names_to_use = actual_names[:num_params]; formatted_params = []
+    for i, val in enumerate(param_tuple):
+        name = names_to_use[i] if i < len(names_to_use) else f"param_{i}"
+        if "window" in name.lower():
+             try: formatted_params.append(f"{name}={int(float(val))}")
+             except: formatted_params.append(f"{name}={val}")
+        elif "thresh" in name.lower():
+             try: formatted_params.append(f"{name}={float(val):.2f}")
+             except: formatted_params.append(f"{name}={val}")
+        else: formatted_params.append(f"{name}={val}")
+    return f"({', '.join(formatted_params)})"
 
-# Long thresholds
-ENTRY_THRESHOLDS_LIST = STRATEGY_CONFIG.get('ENTRY_THRESHOLD', [30])
-if isinstance(ENTRY_THRESHOLDS_LIST, (int, float)): ENTRY_THRESHOLDS_LIST = [ENTRY_THRESHOLDS_LIST]
-ENTRY_THRESHOLDS = np.array(ENTRY_THRESHOLDS_LIST)
-
-EXIT_THRESHOLDS_LIST = STRATEGY_CONFIG.get('EXIT_THRESHOLD', [70])
-if isinstance(EXIT_THRESHOLDS_LIST, (int, float)): EXIT_THRESHOLDS_LIST = [EXIT_THRESHOLDS_LIST]
-EXIT_THRESHOLDS = np.array(EXIT_THRESHOLDS_LIST)
-
-# Shorting Control and Thresholds
-ENABLE_SHORTING = BACKTEST_CONFIG.get('ENABLE_SHORTING', False) # Get shorting flag
-
-SHORT_ENTRY_THRESHOLDS_LIST = STRATEGY_CONFIG.get('SHORT_ENTRY_THRESHOLD', None) # Optional short entry
-if SHORT_ENTRY_THRESHOLDS_LIST is None and ENABLE_SHORTING:
-    SHORT_ENTRY_THRESHOLDS = None # Let signal generator use defaults
-else:
-    if isinstance(SHORT_ENTRY_THRESHOLDS_LIST, (int, float)): SHORT_ENTRY_THRESHOLDS_LIST = [SHORT_ENTRY_THRESHOLDS_LIST]
-    SHORT_ENTRY_THRESHOLDS = np.array(SHORT_ENTRY_THRESHOLDS_LIST) if SHORT_ENTRY_THRESHOLDS_LIST else None
-
-SHORT_EXIT_THRESHOLDS_LIST = STRATEGY_CONFIG.get('SHORT_EXIT_THRESHOLD', None) # Optional short exit
-if SHORT_EXIT_THRESHOLDS_LIST is None and ENABLE_SHORTING:
-    SHORT_EXIT_THRESHOLDS = None # Let signal generator use defaults
-else:
-    if isinstance(SHORT_EXIT_THRESHOLDS_LIST, (int, float)): SHORT_EXIT_THRESHOLDS_LIST = [SHORT_EXIT_THRESHOLDS_LIST]
-    SHORT_EXIT_THRESHOLDS = np.array(SHORT_EXIT_THRESHOLDS_LIST) if SHORT_EXIT_THRESHOLDS_LIST else None
-
-# Backtest Settings
-INITIAL_CAPITAL = BACKTEST_CONFIG.get('INITIAL_CAPITAL', 100000.0)
-FEES = BACKTEST_CONFIG.get('FEES_PERCENT', 0.001)
-SLIPPAGE = BACKTEST_CONFIG.get('SLIPPAGE_PERCENT', 0.0005)
-DEFAULT_SIZE = BACKTEST_CONFIG.get('DEFAULT_SIZE', 0.99)
-DEFAULT_SIZE_TYPE = BACKTEST_CONFIG.get('DEFAULT_SIZE_TYPE', 'percent')
-DEFAULT_FREQ = BACKTEST_CONFIG.get('DEFAULT_FREQ', 'D')
-USE_SL = BACKTEST_CONFIG.get('USE_STOP_LOSS', False)
-SL_PERCENT = BACKTEST_CONFIG.get('STOP_LOSS_PERCENT', 0.05)
-USE_TP = BACKTEST_CONFIG.get('USE_TAKE_PROFIT', False)
-TP_PERCENT = BACKTEST_CONFIG.get('TAKE_PROFIT_PERCENT', 0.10)
-
-SL_STOP = SL_PERCENT if USE_SL else None
-TP_STOP = TP_PERCENT if USE_TP else None
-
-
-# --- Print Run Info --- MODIFIED
-print(f"--- Starting RSI Threshold Backtest ---")
-print(f"Symbol: {SYMBOL}, Period: {START_DATE} to {END_DATE} ({INTERVAL})")
-windows_str = ', '.join(map(str, RSI_WINDOWS_LIST))
-entry_str = ', '.join(map(str, ENTRY_THRESHOLDS_LIST))
-exit_str = ', '.join(map(str, EXIT_THRESHOLDS_LIST))
-print(f"Strategy Params: RSI Windows=[{windows_str}], Long Entry=[{entry_str}], Long Exit=[{exit_str}]")
-if ENABLE_SHORTING:
-    s_entry_str = 'Default' if SHORT_ENTRY_THRESHOLDS is None else ', '.join(map(str, SHORT_ENTRY_THRESHOLDS_LIST))
-    s_exit_str = 'Default' if SHORT_EXIT_THRESHOLDS is None else ', '.join(map(str, SHORT_EXIT_THRESHOLDS_LIST))
-    print(f"               Short Entry=[{s_entry_str}], Short Exit=[{s_exit_str}]")
-# Calculate total combinations based on inputs provided
-num_combos = len(RSI_WINDOWS)
-num_combos *= len(ENTRY_THRESHOLDS) if ENTRY_THRESHOLDS is not None else 1
-num_combos *= len(EXIT_THRESHOLDS) if EXIT_THRESHOLDS is not None else 1
-if ENABLE_SHORTING:
-     num_combos *= len(SHORT_ENTRY_THRESHOLDS) if SHORT_ENTRY_THRESHOLDS is not None else (len(EXIT_THRESHOLDS) if EXIT_THRESHOLDS is not None else 1) # Approx, depends on default logic
-     num_combos *= len(SHORT_EXIT_THRESHOLDS) if SHORT_EXIT_THRESHOLDS is not None else (len(ENTRY_THRESHOLDS) if ENTRY_THRESHOLDS is not None else 1) # Approx
-print(f"Approx. Total Combinations to test: {num_combos}") # Note: Exact number depends on how product iterates if short arrays differ
+# --- Print Run Info ---
+# (Keep Print section as is)
+print(f"--- Starting RSI Threshold Parameter Optimization ---"); print(f"Symbol: {SYMBOL}, Period: {START_DATE} to {END_DATE} ({INTERVAL})")
+print(f"RSI Window Range: {RSI_WINDOW_START} to {rsi_window_range[-1]} (Step: {RSI_WINDOW_STEP})")
+print(f"Long Entry Threshold Range: {entry_threshold_range.min():.2f} to {entry_threshold_range.max():.2f} (Steps: {len(entry_threshold_range)})")
+print(f"Long Exit Threshold Range: {exit_threshold_range.min():.2f} to {exit_threshold_range.max():.2f} (Steps: {len(exit_threshold_range)})")
+print(f"Shorting Enabled: {ENABLE_SHORTING}") # Simplified short printout
+print(f"Input Parameter Combinations: {num_combinations:,}")
 print(f"Backtest Settings: Initial Capital=${INITIAL_CAPITAL:,.2f}, Fees={FEES*100:.3f}%, Slippage={SLIPPAGE*100:.3f}%")
 print(f"Sizing: Size={DEFAULT_SIZE}, Size Type='{DEFAULT_SIZE_TYPE}'")
 print(f"Stop Loss: {'Enabled - ' + str(SL_STOP*100) + '%' if SL_STOP else 'Disabled'}")
 print(f"Take Profit: {'Enabled - ' + str(TP_STOP*100) + '%' if TP_STOP else 'Disabled'}")
-print(f"Shorting Enabled: {ENABLE_SHORTING}")
+if num_combinations > 50000: print(f"\nWARNING: Testing a very large number of combinations ({num_combinations:,}).")
 print("-" * 35)
 
+
 # --- Initialize Variables ---
-# price_data = pd.DataFrame()
-entries, exits, short_entries, short_exits = None, None, None, None # Expect 4 signals
-portfolio = None
+price_data = None; entries, exits, short_entries, short_exits = None, None, None, None
+portfolio = None; best_params_for_saving = None; actual_portfolio_param_names = None
+overall_start_time = time.time()
 
-# --- Workflow ---
-
-# 1. Load and Clean Data using Modules <<< MODIFIED STEP 1
+# 1. Load and Clean Data
+# (Keep data loading section as is)
 print(f"\n[1/4] Loading and cleaning data for {SYMBOL}...")
-price_data = None # Initialize price_data to None
+load_start = time.time()
 try:
-    # Call the data loader
-    raw_data = data_loader.load_price_data(
-        symbol=SYMBOL,
-        start_date=START_DATE,
-        end_date=END_DATE,
-        interval=INTERVAL
-        # cache_dir can be omitted to use default 'data/cache'
-    )
-
-    # Check if data loading was successful
-    if raw_data is None or raw_data.empty:
-        raise ValueError(f"Data loading failed for symbol {SYMBOL}.")
-
-    # Call the data cleaner
+    raw_data = data_loader.load_price_data(symbol=SYMBOL, start_date=START_DATE, end_date=END_DATE, interval=INTERVAL)
+    if raw_data is None or raw_data.empty: raise ValueError(f"Data loading failed.")
     price_data = data_cleaner.clean_ohlcv_data(raw_data)
+    if price_data is None or price_data.empty: raise ValueError(f"Data cleaning failed.")
+    print(f"Data loading successful. Shape: {price_data.shape}. (Took {time.time() - load_start:.2f}s)")
+except Exception as e: print(f"FATAL ERROR loading/cleaning: {e}"); traceback.print_exc(); exit()
 
-    # Check if data cleaning was successful
-    if price_data is None or price_data.empty:
-        raise ValueError(f"Data cleaning failed for symbol {SYMBOL}.")
-
-    print(f"Data loading and cleaning successful. Final shape: {price_data.shape}")
-
-except Exception as e:
-    print(f"FATAL ERROR during data loading/cleaning: {e}")
-    traceback.print_exc()
-    exit() # Exit if data is not available/valid
-
-# 2. Generate Signals (Using updated RSI logic)
-print(f"\n[2/4] Generating signals (Shorting: {ENABLE_SHORTING})...")
+# 2. Generate Signals
+# (Keep signal generation section as is)
+print(f"\n[2/4] Generating signals ({num_combinations:,} input combos, Shorting: {ENABLE_SHORTING})...")
+signal_start = time.time()
 try:
-    # Call the updated signal generator, expect four return values
     entries, exits, short_entries, short_exits = rsi_threshold.generate_rsi_signals(
-        close_prices_series=price_data['Close'],
-        window=RSI_WINDOWS,
-        entry_threshold=ENTRY_THRESHOLDS,
-        exit_threshold=EXIT_THRESHOLDS,
-        enable_shorting=ENABLE_SHORTING,           # Pass the flag
-        short_entry_threshold=SHORT_ENTRY_THRESHOLDS, # Pass short thresholds
-        short_exit_threshold=SHORT_EXIT_THRESHOLDS   # Pass short thresholds
-    )
-    print("Signals generated.")
-    # Check shapes and sums
-    if isinstance(entries, pd.DataFrame): print(f"Long Entries Shape: {entries.shape}")
-    if isinstance(short_entries, pd.DataFrame): print(f"Short Entries Shape: {short_entries.shape}")
-    # Summing across all columns for rough total counts
-    total_long_entries = entries.sum().sum() if isinstance(entries, pd.DataFrame) else (entries.sum() if isinstance(entries, pd.Series) else 0)
-    total_long_exits = exits.sum().sum() if isinstance(exits, pd.DataFrame) else (exits.sum() if isinstance(exits, pd.Series) else 0)
-    print(f"Total Long Entries: {total_long_entries}, Total Long Exits: {total_long_exits}")
-    if ENABLE_SHORTING:
-        total_short_entries = short_entries.sum().sum() if isinstance(short_entries, pd.DataFrame) else (short_entries.sum() if isinstance(short_entries, pd.Series) else 0)
-        total_short_exits = short_exits.sum().sum() if isinstance(short_exits, pd.DataFrame) else (short_exits.sum() if isinstance(short_exits, pd.Series) else 0)
-        print(f"Total Short Entries: {total_short_entries}, Total Short Exits: {total_short_exits}")
+        close_prices_series=price_data['Close'], window=rsi_window_range, entry_threshold=entry_threshold_range,
+        exit_threshold=exit_threshold_range, enable_shorting=ENABLE_SHORTING,
+        short_entry_threshold=short_entry_threshold_range, short_exit_threshold=short_exit_threshold_range)
+    print(f"Signals generated. (Took {time.time() - signal_start:.2f}s)")
+except ImportError: print("FATAL ERROR: Import failed."); exit()
+except Exception as e: print(f"FATAL ERROR generating signals: {e}"); traceback.print_exc(); exit()
 
-except ImportError:
-     print("FATAL ERROR: Could not import rsi_threshold module.")
-     exit()
-except Exception as e:
-    print(f"FATAL ERROR generating signals: {e}")
-    traceback.print_exc()
-    exit()
-
-# 3. Run Simulation (Passing short signals)
+# 3. Run Simulation
+# (Keep simulation section as is)
 print(f"\n[3/4] Running backtest simulation...")
-portfolio = None
-# Check if any long or short entry signals were generated
-simulation_possible = False
-long_entries_exist = entries is not None and entries.any().any() if isinstance(entries, pd.DataFrame) else (entries is not None and entries.any())
-short_entries_exist = False
-if ENABLE_SHORTING and short_entries is not None:
-    short_entries_exist = short_entries.any().any() if isinstance(short_entries, pd.DataFrame) else short_entries.any()
-
-if long_entries_exist or short_entries_exist:
-    simulation_possible = True
-else:
-    print("No valid entry signals (long or short) found.")
-
-
+sim_start = time.time()
+portfolio = None; simulation_possible = False
+if entries is not None and not entries.empty: simulation_possible = True
+if ENABLE_SHORTING and short_entries is not None and not short_entries.empty: simulation_possible = True
 if simulation_possible:
     try:
-        # Call the updated simulator, passing the short signals
-        portfolio = simulator.run_backtest(
-            price_df=price_data,
-            entries_series=entries,
-            exits_series=exits,
-            short_entries_series=short_entries, # Pass short entries
-            short_exits_series=short_exits,     # Pass short exits
-            # Pass other existing arguments
-            initial_capital=INITIAL_CAPITAL,
-            fees=FEES,
-            slippage=SLIPPAGE,
-            frequency=DEFAULT_FREQ,
-            size=DEFAULT_SIZE,
-            size_type=DEFAULT_SIZE_TYPE,
-            sl_stop=SL_STOP,
-            tp_stop=TP_STOP
-        )
-        # Simulation complete message is inside simulator.py
-    except Exception as e:
-        print(f"Error during simulation: {e}")
-        traceback.print_exc()
-else:
-     print("Skipping simulation because no valid entry signals were generated.")
+        portfolio = simulator.run_backtest(price_df=price_data, entries_series=entries, exits_series=exits, short_entries_series=short_entries, short_exits_series=short_exits,
+            initial_capital=INITIAL_CAPITAL, fees=FEES, slippage=SLIPPAGE, frequency=DEFAULT_FREQ, size=DEFAULT_SIZE, size_type=DEFAULT_SIZE_TYPE,
+            sl_stop=SL_STOP, tp_stop=TP_STOP)
+        print(f"Simulation complete. (Took {time.time() - sim_start:.2f}s)")
+        if portfolio is not None:
+             num_simulated_combos = len(portfolio.wrapper.columns)
+             print(f"Portfolio created with {num_simulated_combos} columns.")
+             if num_simulated_combos > 0:
+                 actual_portfolio_param_names = list(portfolio.wrapper.columns.names) # Get actual names
+                 print(f"Portfolio column index name(s): {actual_portfolio_param_names}")
+                 print(f"Example column index: {portfolio.wrapper.columns[0]}")
+             else: simulation_possible = False
+        else: print("Warning: Sim finished but portfolio is None."); simulation_possible = False
+    except Exception as e: print(f"Error during simulation: {e}"); traceback.print_exc(); simulation_possible = False
+else: print("Skipping simulation: no valid entry signals.")
 
 
-# 4. Analyze and Plot Results - Using V4 Logic (Iterate Stats per Column)
+# 4. Analyze Results - Logic updated for stats() structure
 print(f"\n[4/4] Analyzing results...")
-if portfolio is not None:
+analysis_start = time.time()
+best_params_for_saving = None
+
+if simulation_possible and portfolio is not None:
     try:
-        # --- Identify Best Combination --- REVISED LOGIC V4 ---
-        metric_to_optimize = 'Total Return [%]' # Metric name as it appears in stats output
-        best_col_name = None # Will be tuple for MultiIndex
-        metric_values = {} # Dictionary to store {col_name_tuple: metric_value}
+        print(f"\n--- Identifying Top Combinations using portfolio.stats(agg_func=None) ---")
 
-        print(f"\n--- Attempting to identify best combination based on '{metric_to_optimize}' by checking stats per column ---")
-        try:
-            if portfolio is not None and hasattr(portfolio.wrapper, 'columns') and not portfolio.wrapper.columns.empty:
-                column_names = portfolio.wrapper.columns # This is likely a MultiIndex
-                print(f"Checking {len(column_names)} combinations...")
+        # Get the full stats table (Metrics=Columns, Combos=Index)
+        all_stats_df = portfolio.stats(agg_func=None)
 
-                for col_name in column_names:
-                    try:
-                        stats_series = portfolio.stats(column=col_name)
-                        if isinstance(stats_series, pd.Series) and metric_to_optimize in stats_series.index:
-                             metric_value = stats_series.loc[metric_to_optimize]
-                             if pd.notna(metric_value):
-                                 metric_values[col_name] = metric_value
-                    except Exception as col_e:
-                         print(f"Warning: Error getting stats for combo {col_name}: {col_e}")
-
-                if metric_values:
-                    best_col_name = max(metric_values, key=metric_values.get)
-                    print(f"Metric values per combination ({metric_to_optimize}):")
-                    for combo, value in sorted(metric_values.items(), key=lambda item: item[1], reverse=True):
-                         # Format combo tuple for printing
-                         if isinstance(combo, tuple) and len(combo) == 3:
-                              combo_str = f"Win={combo[0]}, Entry={combo[1]}, Exit={combo[2]}" # Adjust indices if needed
-                         else:
-                              combo_str = str(combo)
-                         print(f"  Combo {combo_str}: {value:.2f}%")
-                    print(f"Selected Best Combination: {best_col_name}")
-                else:
-                    print("Warning: Could not collect valid metric values for comparison.")
-                    if not portfolio.wrapper.columns.empty:
-                         best_col_name = portfolio.wrapper.columns[0]
-                         print(f"Using first combination: {best_col_name} as fallback.")
-            else:
-                print("Error: Portfolio object is None or has no columns to analyze.")
-
-        except Exception as e:
-            print(f"Error occurred during best combination identification: {e}")
-            traceback.print_exc()
-            if portfolio is not None and not portfolio.wrapper.columns.empty:
-                 best_col_name = portfolio.wrapper.columns[0]
-                 print(f"Using first combination: {best_col_name} due to error.")
-
-
-        # --- Analyze and Plot BEST Combination ---
-        if best_col_name is not None:
-            # Ensure best_col_name is valid before proceeding
-            if best_col_name not in portfolio.wrapper.columns:
-                 print(f"Error: Determined best combination name '{best_col_name}' is not valid in portfolio columns. Aborting analysis.")
-            else:
-                # Format the tuple name for printing - Adjust indices based on MultiIndex structure
-                if isinstance(best_col_name, tuple) and len(best_col_name) >= 3: # Check length >= 3
-                    best_col_name_str = f"Window={best_col_name[0]}, Entry={best_col_name[1]}, Exit={best_col_name[2]}"
-                else:
-                    best_col_name_str = str(best_col_name)
-
-                print(f"\n--- Detailed Analysis for Best Combination ({best_col_name_str}) ---")
-
-                # Get and print stats for the single best combination column
-                best_stats = metrics.get_summary_stats(portfolio[best_col_name])
-                if best_stats is not None and not best_stats.empty:
-                     print("\n--- Performance Summary (Best Combination) ---")
-                     print(best_stats)
-                else:
-                     print("Could not retrieve stats for the best combination.")
-
-                # Get and print trades for the single best combination
-                best_trades_df = metrics.get_trade_records(portfolio[best_col_name])
-                if best_trades_df is not None and not best_trades_df.empty:
-                    print("\n--- Trade Records (Best Combination - First 5) ---")
-                    print(best_trades_df.head())
-                    print(f"Total trades for best combination ({best_col_name_str}): {len(best_trades_df)}")
-                else:
-                     if portfolio[best_col_name].trades.count() > 0:
-                          print(f"\nPortfolio object indicates trades for combo {best_col_name_str}, but fetching failed.")
-                     else:
-                          print(f"\nNo trades were executed for the best combination ({best_col_name_str}).")
-
-                # --- REMOVED DIRECT PLOTTING CALLS ---
-                # print(f"\nGenerating plots for best combination ({best_col_name_str})...")
-                # plotting.plot_portfolio_summary(portfolio, column=best_col_name) # REMOVED
-                # plotting.plot_trades(portfolio, price_data, column=best_col_name) # REMOVED
-                # print("Plots for best combination generated.")
-                # --- END REMOVED CALLS ---
-
+        if all_stats_df.empty:
+            print("Error: portfolio.stats(agg_func=None) returned an empty DataFrame.")
         else:
-             print("\nSkipping detailed analysis and plotting as no best combination could be determined.")
+            # Use actual parameter names identified after simulation for formatting
+            param_names_for_fmt = actual_portfolio_param_names if actual_portfolio_param_names else final_param_names
+
+            # --- Find Best Total Return ---
+            metric_col_name = 'Total Return [%]' # Use exact name from stats df columns
+            if metric_col_name in all_stats_df.columns:
+                try:
+                    metric_series = all_stats_df[metric_col_name] # Select COLUMN by name
+                    best_return_params = metric_series.idxmax()   # Get INDEX tuple (params)
+                    best_return_value = metric_series.loc[best_return_params]
+                    print(f"Best {metric_col_name}: {best_return_value:.2f}%")
+                    print(f"   Params: {format_param_tuple(best_return_params, param_names_for_fmt)}")
+                    best_params_for_saving = best_return_params
+                except Exception as e:
+                    print(f"Could not determine best for {metric_col_name}: {e}")
+                    traceback.print_exc()
+            else:
+                print(f"Metric '{metric_col_name}' not found. Available: {list(all_stats_df.columns)}")
+
+
+            # --- Find Best Total Trades ---
+            metric_col_name = 'Total Trades'
+            if metric_col_name in all_stats_df.columns:
+                try:
+                    metric_series = all_stats_df[metric_col_name]
+                    best_trades_params = metric_series.idxmax()
+                    best_trades_value = metric_series.loc[best_trades_params]
+                    print(f"Most {metric_col_name}: {int(best_trades_value)}")
+                    print(f"   Params: {format_param_tuple(best_trades_params, param_names_for_fmt)}")
+                except Exception as e:
+                    print(f"Could not determine best for {metric_col_name}: {e}")
+            else:
+                print(f"Metric '{metric_col_name}' not found.")
+
+
+            # --- Find Best Sharpe Ratio ---
+            metric_col_name = 'Sharpe Ratio'
+            if metric_col_name in all_stats_df.columns:
+                try:
+                     metric_series = all_stats_df[metric_col_name]
+                     sharpe_cleaned = metric_series.replace([np.inf, -np.inf], np.nan)
+                     if not sharpe_cleaned.dropna().empty:
+                         best_sharpe_params = sharpe_cleaned.idxmax()
+                         best_sharpe_value = sharpe_cleaned.loc[best_sharpe_params]
+                         print(f"Best {metric_col_name}: {best_sharpe_value:.3f}")
+                         print(f"   Params: {format_param_tuple(best_sharpe_params, param_names_for_fmt)}")
+                     else: print(f"No valid values for {metric_col_name}.")
+                except Exception as e:
+                     print(f"Could not determine best for {metric_col_name}: {e}")
+            else:
+                 print(f"Metric '{metric_col_name}' not found.")
+
+
+        # --- Detailed Analysis for BEST RETURN Combination ---
+        # (Keep detailed analysis section logic as is, uses best_params_for_saving)
+        if best_params_for_saving is not None:
+            if best_params_for_saving not in portfolio.wrapper.columns:
+                 print(f"\nError: Best return params '{best_params_for_saving}' not valid.")
+                 best_params_for_saving = None
+            else:
+                param_names_for_fmt_detail = actual_portfolio_param_names if actual_portfolio_param_names else final_param_names
+                best_return_params_str = format_param_tuple(best_params_for_saving, param_names_for_fmt_detail)
+                print(f"\n--- Detailed Analysis for Best *Return* Combination {best_return_params_str} ---")
+                best_portfolio_slice = portfolio[best_params_for_saving]
+                best_stats_summary = metrics.get_summary_stats(best_portfolio_slice)
+                if best_stats_summary is not None and not best_stats_summary.empty: print("\n--- Performance Summary ---\n", best_stats_summary)
+                else: print("Could not retrieve summary stats.")
+                best_trades_df = metrics.get_trade_records(best_portfolio_slice)
+                if best_trades_df is not None and not best_trades_df.empty:
+                    print("\n--- Trade Records (First 5) ---\n", best_trades_df.head())
+                    print(f"Total trades: {len(best_trades_df)}")
+                elif best_portfolio_slice.trades.count() > 0: print(f"\nTrades exist but fetching failed.")
+                else: print(f"\nNo trades were executed.")
+        else: print("\nSkipping detailed analysis: No best return combo found.")
 
     except Exception as e:
-        print(f"ERROR during analysis: {e}") # Changed error message scope
+        print(f"ERROR during analysis phase: {e}")
         traceback.print_exc()
 
-# --- SAVE RESULTS --- (This part remains the same and WILL generate/save plots)
-if portfolio is not None and best_col_name is not None: # Added check for best_col_name
-    metrics.save_run_results(
-        portfolio=portfolio,
-        aggregate_stats=None,
-        best_params=best_col_name,
-        config_path='config/settings.py',
-        strategy_name='rsi_threshold',
-        symbol=SYMBOL,
-        price_data_for_plots=price_data
-    )
-elif portfolio is not None:
-     print("Warning: Portfolio exists but best combination not determined. Skipping saving results.")
+    print(f"Analysis finished. (Took {time.time() - analysis_start:.2f}s)")
 
-# ... (rest of script) ...
+# --- SAVE RESULTS ---
+# (Keep saving section as is, uses best_params_for_saving)
+save_start = time.time()
+if portfolio is not None and best_params_for_saving is not None:
+     if best_params_for_saving in portfolio.wrapper.columns:
+        print("\n--- Saving Run Results ---")
+        metrics.save_run_results(portfolio=portfolio, aggregate_stats=None, best_params=best_params_for_saving, config_path='config/settings.py',
+            strategy_name='rsi_threshold_optimized', symbol=SYMBOL, price_data_for_plots=price_data)
+        print(f"Saving complete. (Took {time.time() - save_start:.2f}s)")
+     else: print(f"Warning: Best params {best_params_for_saving} invalid. Skipping save.")
+elif portfolio is not None: print("Warning: Best combo not determined. Skipping save.")
+else: print("Warning: No portfolio. Skipping save.")
 
+total_time = time.time() - overall_start_time
 print(f"\n--- Backtest Finished ---")
+print(f"Total execution time: {total_time:.2f} seconds ({total_time/60:.2f} minutes)")

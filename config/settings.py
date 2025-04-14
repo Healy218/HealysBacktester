@@ -27,14 +27,29 @@ STRATEGY_MA_CROSSOVER = {
 }
 
 # Example for RSI Threshold (add if you create an RSI script)
+# Example config/settings.py section
 STRATEGY_RSI = {
-    "RSI_WINDOW": [10, 14, 21, 28],
-    "ENTRY_THRESHOLD": [25, 30, 35, 40, 45, 50],
-    "EXIT_THRESHOLD": [50, 55, 60, 65, 70, 75],
-    "SHORT_ENTRY_THRESHOLD": [50, 55, 60, 65, 70, 75],
-    "SHORT_EXIT_THRESHOLD": [25, 30, 35, 40, 45, 50],
-}
+    'RSI_WINDOW_START': 5,
+    'RSI_WINDOW_END': 35,  # Test windows 10 through 30
+    'RSI_WINDOW_STEP': 1,
 
+    'ENTRY_THRESHOLD_START': 10.0,
+    'ENTRY_THRESHOLD_END': 49.0, # Test thresholds 20.0 through 35.0
+    'ENTRY_THRESHOLD_STEP': 0.5,
+
+    'EXIT_THRESHOLD_START': 51.0,
+    'EXIT_THRESHOLD_END': 90.0, # Test thresholds 65.0 through 80.0
+    'EXIT_THRESHOLD_STEP': 0.5,
+
+    # Only needed if ENABLE_SHORTING is True in BACKTEST_CONFIG
+    'SHORT_ENTRY_THRESHOLD_START': 65.0,
+    'SHORT_ENTRY_THRESHOLD_END': 80.0,
+    'SHORT_ENTRY_THRESHOLD_STEP': 1.0,
+
+    'SHORT_EXIT_THRESHOLD_START': 20.0,
+    'SHORT_EXIT_THRESHOLD_END': 35.0,
+    'SHORT_EXIT_THRESHOLD_STEP': 1.0,
+}
 
 BACKTEST_CONFIG = {
     'INITIAL_CAPITAL': 100000.0,
@@ -57,24 +72,49 @@ BACKTEST_CONFIG = {
     'DEFAULT_FREQ': 'D'       # Matches data interval usually ('D', 'H', 'T', etc.)
 }
 
-# Configuration for MACD Strategy
+# Configuration for MACD Strategy - UPDATED FOR RANGES
 STRATEGY_MACD = {
-    "FAST_WINDOW": [12, 8, 19, 5],       # Standard default: 12 periods
-    "SLOW_WINDOW": [26, 17, 39, 13, 34],       # Standard default: 26 periods
-    "SIGNAL_WINDOW": [9, 5],      # Standard default: 9 periods
-    # Add more values to the lists above to test multiple parameters, e.g., [12, 15]
+    # Fast EMA Window Range
+    "FAST_WINDOW_START": 3,
+    "FAST_WINDOW_END": 34,  # Tests windows 5 through 20
+    "FAST_WINDOW_STEP": 1,
+
+    # Slow EMA Window Range (Must be > Fast Window)
+    "SLOW_WINDOW_START": 13,
+    "SLOW_WINDOW_END": 55,  # Tests windows 15 through 50
+    "SLOW_WINDOW_STEP": 1,
+
+    # Signal Line EMA Window Range
+    "SIGNAL_WINDOW_START": 3,
+    "SIGNAL_WINDOW_END": 34,  # Tests windows 5 through 20
+    "SIGNAL_WINDOW_STEP": 1,
+
+    # Old list-based settings (keep commented or remove)
+    # "FAST_WINDOW": [12, 8, 19, 5],
+    # "SLOW_WINDOW": [26, 17, 39, 13, 34],
+    # "SIGNAL_WINDOW": [9, 5],
+
+    # Shorting control (specific to this strategy)
     "SHORT_ENTRIES_ENABLED": False, # Set to True to enable shorting based on MACD<Signal cross
     "SHORT_EXITS_ENABLED": False  # Set to True if enabling shorts
 }
 
-# Configuration for Volume Breakout Strategy
+# Configuration for Volume Breakout Strategy - UPDATED EXIT MA WINDOW
 STRATEGY_VOLUME_BREAKOUT = {
-    "VOLUME_WINDOW": [5, 10, 15, 20, 25, 30, 50, 60, 120, 150, 180],          # Lookback period for average volume
-    "VOLUME_MULTIPLIER": [1.25, 1.33, 1.5, 1.75, 2.0, 2.5], # How much higher volume needs to be than average
+    # Define range for volume window
+    "VOLUME_WINDOW_START": 30,
+    "VOLUME_WINDOW_END": 151,  # Test windows up to 150
+    "VOLUME_WINDOW_STEP": 2,
+    # Keep volume multiplier as list
+    "VOLUME_MULTIPLIER_START": 1.05, # How much higher volume needs to be than average
+    "VOLUME_MULTIPLIER_END": 2.00,
+    "VOLUME_MULTIPLIER_STEP": 0.05,
+    # Define range for exit MA window
+    "EXIT_MA_WINDOW_START": 45,
+    "EXIT_MA_WINDOW_END": 151,  # Test windows up to 150
+    "EXIT_MA_WINDOW_STEP": 1,
+    # Other settings
     "CONFIRM_PRICE_INCREASE": False,     # Require close > previous close on breakout day?
-    # ****** ADDED Exit Parameter ******
-    "EXIT_MA_WINDOW": [10, 20, 30, 50, 60, 120, 150, 180]             # Exit when close crosses below this SMA window
-                                        # Add more values like [10, 15] to test multiple exits
 }
 
 # --- Environment/API Keys (Optional - Better in .env file) ---

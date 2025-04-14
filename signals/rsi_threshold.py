@@ -3,197 +3,179 @@ import pandas as pd
 import numpy as np
 import traceback
 import vectorbt as vbt
-from indicators import rsi # Assuming this correctly calculates RSI
-from itertools import product # For generating combinations
-from typing import Optional, Union # Add Optional here (and Union if used elsewhere)
-
+from typing import Optional, Union, Tuple, List, Dict # Added List, Dict
 
 def generate_rsi_signals(
     close_prices_series: pd.Series,
-    window: np.ndarray,                 # Expect numpy array of long windows
-    entry_threshold: np.ndarray,        # Expect numpy array of long entry thresholds
-    exit_threshold: np.ndarray,         # Expect numpy array of long exit thresholds
+    window: np.ndarray,                 # Expect numpy array of RSI window periods
+    entry_threshold: np.ndarray,        # Expect numpy array of LONG entry thresholds
+    exit_threshold: np.ndarray,         # Expect numpy array of LONG exit thresholds
     enable_shorting: bool = False,      # Flag to enable shorting
-    short_entry_threshold: Optional[np.ndarray] = None, # Optional short entry thresholds
-    short_exit_threshold: Optional[np.ndarray] = None   # Optional short exit thresholds
-    ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.DataFrame]: # Return 4 DataFrames
+    short_entry_threshold: Optional[np.ndarray] = None, # Optional SHORT entry thresholds
+    short_exit_threshold: Optional[np.ndarray] = None   # Optional SHORT exit thresholds
+    ) -> Tuple[pd.DataFrame, pd.DataFrame, Optional[pd.DataFrame], Optional[pd.DataFrame]]:
     """
     Generates long and optionally short signals based on RSI crossing thresholds
-    for MULTIPLE parameter combinations.
+    using vectorbt, iterating through thresholds but vectorizing across windows.
 
     Args:
         close_prices_series: pandas Series of close prices.
         window: 1D numpy array of RSI window periods.
-        entry_threshold: 1D numpy array of RSI levels to trigger a LONG entry upon crossing above.
-        exit_threshold: 1D numpy array of RSI levels to trigger a LONG exit upon crossing below.
+        entry_threshold: 1D numpy array of RSI levels to trigger a LONG entry.
+        exit_threshold: 1D numpy array of RSI levels to trigger a LONG exit.
         enable_shorting: If True, generate short entry/exit signals.
-        short_entry_threshold: 1D numpy array of RSI levels to trigger a SHORT entry upon crossing below.
-                               Defaults to exit_threshold if None and enable_shorting is True.
-        short_exit_threshold: 1D numpy array of RSI levels to trigger a SHORT exit upon crossing above.
-                              Defaults to entry_threshold if None and enable_shorting is True.
+        short_entry_threshold: 1D numpy array of RSI levels for SHORT entry.
+        short_exit_threshold: 1D numpy array of RSI levels for SHORT exit.
 
     Returns:
-        A tuple containing four DataFrames:
-            - long_entries_df: Columns are MultiIndex named ('window', 'entry_thresh', 'exit_thresh').
-            - long_exits_df: Columns are MultiIndex named ('window', 'entry_thresh', 'exit_thresh').
-            - short_entries_df: Columns are MultiIndex named ('window', 'entry_thresh', 'exit_thresh'). (All False if shorting disabled)
-            - short_exits_df: Columns are MultiIndex named ('window', 'entry_thresh', 'exit_thresh'). (All False if shorting disabled)
+        A tuple containing four DataFrames, potentially with MultiIndex columns
+        representing parameter combinations (e.g., ('rsi_window', 'entry_threshold')).
+            - entries_df: Long entry signals (True).
+            - exits_df: Long exit signals (True).
+            - short_entries_df: Short entry signals (True) or None.
+            - short_exits_df: Short exit signals (True) or None.
     """
+    if not isinstance(close_prices_series, pd.Series):
+        raise TypeError("Input 'close_prices_series' must be a pandas Series.")
+    if close_prices_series.empty:
+        print("Warning: Input 'close_prices_series' is empty.")
+        empty_df = pd.DataFrame()
+        return empty_df, empty_df, None, None
+
     # Ensure inputs are numpy arrays
-    if not isinstance(window, np.ndarray): window = np.array(window)
-    if not isinstance(entry_threshold, np.ndarray): entry_threshold = np.array(entry_threshold)
-    if not isinstance(exit_threshold, np.ndarray): exit_threshold = np.array(exit_threshold)
+    window = np.asarray(window)
+    entry_threshold = np.asarray(entry_threshold)
+    exit_threshold = np.asarray(exit_threshold)
 
-    # Default short thresholds if enabling shorting and they aren't provided
-    if enable_shorting:
-        if short_entry_threshold is None:
-            print("Warning: short_entry_threshold not provided for shorting, using exit_threshold.")
-            short_entry_threshold = exit_threshold
-        if short_exit_threshold is None:
-            print("Warning: short_exit_threshold not provided for shorting, using entry_threshold.")
-            short_exit_threshold = entry_threshold
-        # Ensure short thresholds are numpy arrays
-        if not isinstance(short_entry_threshold, np.ndarray): short_entry_threshold = np.array(short_entry_threshold)
-        if not isinstance(short_exit_threshold, np.ndarray): short_exit_threshold = np.array(short_exit_threshold)
-        # Basic validation
-        if len(short_entry_threshold) != len(entry_threshold) or len(short_exit_threshold) != len(entry_threshold):
-             print("Warning: Short threshold array lengths don't match long entry threshold array length. Broadcasting might be unpredictable.")
-
-
-    # 1. Calculate RSI for all windows first
-    print("Calculating RSI for all windows...")
+    print("Calculating RSI using vectorbt...")
     try:
-        rsi_df = rsi.calculate_rsi(close_prices_series, window=window)
-        if not isinstance(rsi_df, pd.DataFrame) or list(rsi_df.columns) != list(window):
-             print("Warning: indicators.rsi.calculate_rsi did not return DataFrame with expected window columns.")
-             if len(rsi_df.columns) == len(window):
-                 rsi_df.columns = window
-             else:
-                 raise ValueError("Mismatch between number of windows and columns in RSI DataFrame.")
-        print(f"RSI calculated. Shape: {rsi_df.shape}")
+        rsi = vbt.RSI.run(close_prices_series, window=window, short_name='rsi')
+        rsi_values = rsi.rsi # DataFrame: Index=time, Columns=window values
+        print(f"RSI calculated. Shape: {rsi_values.shape}")
     except Exception as e:
-        print(f"Error calculating RSI: {e}")
+        print(f"Error calculating RSI with vectorbt: {e}")
+        traceback.print_exc()
         raise
 
-    long_entries_dict = {}
-    long_exits_dict = {}
-    short_entries_dict = {}
-    short_exits_dict = {}
+    # --- Iterate through thresholds, vectorize across windows ---
+    print("Generating signals by iterating through thresholds...")
+    entries_list: List[pd.DataFrame] = []
+    exits_list: List[pd.DataFrame] = []
+    short_entries_list: List[pd.DataFrame] = []
+    short_exits_list: List[pd.DataFrame] = []
 
-    # 2. Iterate through parameter combinations
-    print("Generating signals for parameter combinations...")
-    # Use product to create all combinations, including short thresholds if enabled
-    if enable_shorting:
-         param_combinations = list(product(window, entry_threshold, exit_threshold, short_entry_threshold, short_exit_threshold))
-         print(f"Generating long & short signals for {len(param_combinations)} combinations.")
-    else:
-         # Only generate long combinations if shorting is disabled
-         param_combinations = list(product(window, entry_threshold, exit_threshold))
-         print(f"Generating long-only signals for {len(param_combinations)} combinations.")
+    # Store keys for final concatenation
+    entry_keys: List[Tuple[float]] = []
+    exit_keys: List[Tuple[float]] = []
+    short_entry_keys: List[Tuple[float]] = []
+    short_exit_keys: List[Tuple[float]] = []
 
-
-    for i, params in enumerate(param_combinations):
-        # Unpack parameters based on whether shorting is enabled
-        if enable_shorting:
-            w, long_entry_thresh, long_exit_thresh, short_entry_thresh, short_exit_thresh = params
-        else:
-            w, long_entry_thresh, long_exit_thresh = params
-            # Define dummy short thresholds if needed later, though they won't be used
-            short_entry_thresh, short_exit_thresh = np.nan, np.nan
-
-        # Use a consistent key tuple based on long parameters for structure
-        combo_key = (w, long_entry_thresh, long_exit_thresh)
-
-        # Optional: print progress
-        # if (i + 1) % 10 == 0: print(f"  Processed combo {i+1}/{len(param_combinations)}")
-
+    # Generate Long Signals
+    print(f" Processing {len(entry_threshold)} long entry thresholds...")
+    for et in entry_threshold:
         try:
-             if w not in rsi_df.columns:
-                 print(f"Error: Window {w} not found in pre-calculated RSI columns. Skipping combo {combo_key}")
-                 continue
-             current_rsi_series = rsi_df[w]
-
-             # --- Generate Long Signals ---
-             long_entries_col = current_rsi_series.vbt.crossed_above(long_entry_thresh)
-             long_exits_col = current_rsi_series.vbt.crossed_below(long_exit_thresh)
-
-             # Store long results
-             long_entries_dict[combo_key] = long_entries_col
-             long_exits_dict[combo_key] = long_exits_col
-
-             # --- Generate Short Signals (if enabled) ---
-             if enable_shorting:
-                 short_entries_col = current_rsi_series.vbt.crossed_below(short_entry_thresh) # Below upper threshold
-                 short_exits_col = current_rsi_series.vbt.crossed_above(short_exit_thresh)   # Above lower threshold
-                 short_entries_dict[combo_key] = short_entries_col
-                 short_exits_dict[combo_key] = short_exits_col
-             else:
-                 # Store dummy False signals if shorting disabled, to maintain structure
-                 short_entries_dict[combo_key] = pd.Series(False, index=current_rsi_series.index)
-                 short_exits_dict[combo_key] = pd.Series(False, index=current_rsi_series.index)
-
+            # Compare all window columns against the current single entry threshold
+            entries_for_thresh = rsi_values.vbt.crossed_above(et)
+            entries_list.append(entries_for_thresh)
+            entry_keys.append((et,)) # Tuple key for MultiIndex later
         except Exception as e:
-            print(f"Error processing combination {combo_key}: {e}")
-            # Handle errors, e.g., by adding placeholder columns
-            placeholder = pd.Series(False, index=close_prices_series.index)
-            long_entries_dict[combo_key] = placeholder
-            long_exits_dict[combo_key] = placeholder
-            short_entries_dict[combo_key] = placeholder
-            short_exits_dict[combo_key] = placeholder
+            print(f"Error processing entry threshold {et}: {e}")
+            # Optional: Append empty DataFrame or handle error differently
+            entries_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
+            entry_keys.append((et,))
 
+    print(f" Processing {len(exit_threshold)} long exit thresholds...")
+    for xt in exit_threshold:
+         try:
+             exits_for_thresh = rsi_values.vbt.crossed_below(xt)
+             exits_list.append(exits_for_thresh)
+             exit_keys.append((xt,))
+         except Exception as e:
+             print(f"Error processing exit threshold {xt}: {e}")
+             exits_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
+             exit_keys.append((xt,))
 
-    # 3. Combine results into DataFrames
-    print("Combining signal results...")
-    if not long_entries_dict: # Check if any combos were processed
-         print("Error: No signal combinations were successfully processed.")
-         empty_df = pd.DataFrame(index=close_prices_series.index)
-         # Return None for all short signals if long signals failed
-         return empty_df, empty_df, None, None
+    # Generate Short Signals (if enabled)
+    if enable_shorting:
+        if short_entry_threshold is None or short_exit_threshold is None:
+            print("Warning: Shorting enabled but short entry or exit thresholds are None. Skipping short signals.")
+            short_entries_df = None
+            short_exits_df = None
+        else:
+            short_entry_threshold = np.asarray(short_entry_threshold)
+            short_exit_threshold = np.asarray(short_exit_threshold)
 
-    try:
-        # Always combine long signals
-        long_entries_df = pd.concat(long_entries_dict, axis=1)
-        long_exits_df = pd.concat(long_exits_dict, axis=1)
-        index_names = ['window', 'entry_thresh', 'exit_thresh']
-        long_entries_df.columns.names = index_names
-        long_exits_df.columns.names = index_names
+            print(f" Processing {len(short_entry_threshold)} short entry thresholds...")
+            for set_ in short_entry_threshold:
+                try:
+                    short_entries_for_thresh = rsi_values.vbt.crossed_below(set_)
+                    short_entries_list.append(short_entries_for_thresh)
+                    short_entry_keys.append((set_,))
+                except Exception as e:
+                    print(f"Error processing short entry threshold {set_}: {e}")
+                    short_entries_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
+                    short_entry_keys.append((set_,))
 
-        # Initialize short signals to None
+            print(f" Processing {len(short_exit_threshold)} short exit thresholds...")
+            for sxt in short_exit_threshold:
+                try:
+                    short_exits_for_thresh = rsi_values.vbt.crossed_above(sxt)
+                    short_exits_list.append(short_exits_for_thresh)
+                    short_exit_keys.append((sxt,))
+                except Exception as e:
+                    print(f"Error processing short exit threshold {sxt}: {e}")
+                    short_exits_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
+                    short_exit_keys.append((sxt,))
+    else:
         short_entries_df = None
         short_exits_df = None
 
-        # Only combine short signals if shorting was enabled AND signals were generated
-        if enable_shorting and short_entries_dict: # Check short_entries_dict specifically
-            try:
-                short_entries_df = pd.concat(short_entries_dict, axis=1)
-                short_exits_df = pd.concat(short_exits_dict, axis=1)
-                short_entries_df.columns.names = index_names
-                short_exits_df.columns.names = index_names
-            except Exception as concat_err:
-                print(f"Warning: Error concatenating short signals, setting to None: {concat_err}")
-                short_entries_df = None
-                short_exits_df = None
-        # --- Add Signal Cleaning Logic ---
-        # Apply cleaning only if signals exist (especially short ones)
-        print("Cleaning signals to prevent conflicts...")
-        if short_entries_df is not None:
-             short_entries_df = short_entries_df & ~long_entries_df
-        if short_exits_df is not None:
-             short_exits_df = short_exits_df & ~long_exits_df
-        # Clean long signals relative to each other
-        long_exits_df = long_exits_df & ~long_entries_df
-        # Clean short signals relative to each other (only if they exist)
-        if short_entries_df is not None and short_exits_df is not None:
-             short_exits_df = short_exits_df & ~short_entries_df
-        print("Signal cleaning complete.")
+    # --- Combine results into DataFrames with MultiIndex ---
+    print("Combining signal results...")
+    try:
+        # Combine Long Signals
+        if not entries_list or not exits_list:
+             raise ValueError("No valid long entry or exit signals were generated.")
 
-        print("Signal combination complete.")
-        # Return long signals, and short signals (which will be None if shorting disabled)
-        return long_entries_df, long_exits_df, short_entries_df, short_exits_df
+        # Entries: Concat results for each threshold. Result has columns = window values.
+        # Add a level for the threshold parameter.
+        entries_df = pd.concat(entries_list, axis=1, keys=pd.MultiIndex.from_tuples(entry_keys, names=['entry_threshold']))
+        # Reorder levels to (window, threshold) - matches RSI columns first, then threshold keys
+        entries_df = entries_df.reorder_levels(['rsi_window', 'entry_threshold'], axis=1)
+        # Sort columns for consistency
+        entries_df = entries_df.sort_index(axis=1)
+
+
+        exits_df = pd.concat(exits_list, axis=1, keys=pd.MultiIndex.from_tuples(exit_keys, names=['exit_threshold']))
+        exits_df = exits_df.reorder_levels(['rsi_window', 'exit_threshold'], axis=1)
+        exits_df = exits_df.sort_index(axis=1)
+
+
+        # Combine Short Signals (if generated)
+        if enable_shorting and short_entries_list and short_exits_list:
+            short_entries_df = pd.concat(short_entries_list, axis=1, keys=pd.MultiIndex.from_tuples(short_entry_keys, names=['short_entry_threshold']))
+            short_entries_df = short_entries_df.reorder_levels(['rsi_window', 'short_entry_threshold'], axis=1)
+            short_entries_df = short_entries_df.sort_index(axis=1)
+
+
+            short_exits_df = pd.concat(short_exits_list, axis=1, keys=pd.MultiIndex.from_tuples(short_exit_keys, names=['short_exit_threshold']))
+            short_exits_df = short_exits_df.reorder_levels(['rsi_window', 'short_exit_threshold'], axis=1)
+            short_exits_df = short_exits_df.sort_index(axis=1)
+
+
+        print(f"Combined signals. Final shapes - Entries: {entries_df.shape}, Exits: {exits_df.shape}")
+        if short_entries_df is not None: print(f" Short Entries: {short_entries_df.shape}, Short Exits: {short_exits_df.shape}")
 
     except Exception as e:
-         print(f"Error combining or cleaning signal results: {e}")
-         traceback.print_exc() # Print full traceback
-         empty_df = pd.DataFrame(index=close_prices_series.index)
-         # Return None for shorts on error
-         return empty_df, empty_df, None, None
+        print(f"Error combining signal DataFrames: {e}")
+        traceback.print_exc()
+        # Return empty DataFrames on error during combination
+        empty_df = pd.DataFrame(index=close_prices_series.index)
+        return empty_df, empty_df, None, None
+
+
+    # Basic cleaning can be skipped or done here, but Portfolio simulation is often better place.
+    print("Signal generation complete (combination stage).")
+    # The Portfolio simulation should handle aligning these separate signal DataFrames
+    # based on the common 'rsi_window' level in their MultiIndex columns.
+    return entries_df, exits_df, short_entries_df, short_exits_df
