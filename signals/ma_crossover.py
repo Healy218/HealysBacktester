@@ -4,7 +4,13 @@ import pandas as pd
 import numpy as np
 import vectorbt as vbt
 import warnings
+from utils.logging_utils import setup_logging
+from utils.error_handling import handle_errors, BacktesterError # Import the decorator and any custom errors if needed
 
+# Setup logger
+logger = setup_logging(log_file="logs/backtester.log")
+
+@handle_errors
 def generate_ma_signals(
     close_prices_series: pd.Series,
     windows_range: np.ndarray, # Expect a single 1D numpy array defining the range, e.g., np.arange(2, 101)
@@ -35,7 +41,7 @@ def generate_ma_signals(
     if windows_range.ndim != 1 or windows_range.size < 2:
         raise ValueError("Input 'windows_range' must be a 1D numpy array with at least 2 elements.")
 
-    print(f"Calculating MA combinations for windows ranging from {windows_range.min()} to {windows_range.max()}...")
+    logger.info(f"Calculating MA combinations for windows ranging from {windows_range.min()} to {windows_range.max()}...")
 
     # Use MA.run_combs to calculate all valid fast/slow combinations efficiently
     try:
@@ -48,7 +54,7 @@ def generate_ma_signals(
         # fast_ma_obj and slow_ma_obj are vectorbt indicator objects.
 
     except Exception as e:
-        print(f"Error calculating MA combinations using vectorbt: {e}")
+        logger.error(f"Error calculating MA combinations using vectorbt: {e}")
         raise
 
     # Access the calculated MA DataFrames using the .ma attribute
@@ -61,15 +67,15 @@ def generate_ma_signals(
 
 
     # Generate entry and exit signals using the .vbt accessor on the MA value DataFrames
-    print(f"Generating crossover signals...")
+    logger.info(f"Generating crossover signals...")
     try:
         entries = fast_ma_values.vbt.crossed_above(slow_ma_values)
         exits = fast_ma_values.vbt.crossed_below(slow_ma_values)
     except Exception as e:
-        print(f"Error generating crossover signals: {e}")
+        logger.info(f"Error generating crossover signals: {e}")
         # You might want to inspect fast_ma_values and slow_ma_values here if errors persist
-        print("Fast MA Values Head:\n", fast_ma_values.head())
-        print("Slow MA Values Head:\n", slow_ma_values.head())
+        logger.info("Fast MA Values Head:\n", fast_ma_values.head())
+        logger.info("Slow MA Values Head:\n", slow_ma_values.head())
         raise
 
 
@@ -92,5 +98,5 @@ def generate_ma_signals(
 
 
     # Print the number of combinations based on the shape of the resulting 'entries' DataFrame
-    print(f"MA Crossover signals generated successfully for {entries.shape[1]} combinations.")
+    logger.info(f"MA Crossover signals generated successfully for {entries.shape[1]} combinations.")
     return entries, exits

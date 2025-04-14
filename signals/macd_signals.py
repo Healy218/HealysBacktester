@@ -5,7 +5,13 @@ import numpy as np
 import vectorbt as vbt
 import warnings
 from itertools import product as iter_product
+from utils.logging_utils import setup_logging
+from utils.error_handling import handle_errors, BacktesterError # Import the decorator and any custom errors if needed
 
+# Setup logger
+logger = setup_logging(log_file="logs/backtester.log")
+
+@handle_errors
 def generate_macd_signals(
     close_prices_series: pd.Series,
     fast_window: np.ndarray,     # Expect numpy array (range)
@@ -53,13 +59,13 @@ def generate_macd_signals(
         raise ValueError("Input window range arrays cannot be empty.")
 
     # --- Manually Create and Filter Parameter Combinations ---
-    print("Generating parameter combinations...")
+    logger.info("Generating parameter combinations...")
     param_product = list(iter_product(fast_window, slow_window, signal_window))
-    print(f"  Total combinations generated: {len(param_product)}")
+    logger.info(f"  Total combinations generated: {len(param_product)}")
 
     # Filter for valid combinations where fast < slow
     valid_params = [(int(f), int(s), int(g)) for f, s, g in param_product if int(f) < int(s)]
-    print(f"  Valid combinations (fast < slow): {len(valid_params)}")
+    logger.info(f"  Valid combinations (fast < slow): {len(valid_params)}")
 
     if not valid_params:
         raise ValueError("No valid parameter combinations found where fast_window < slow_window.")
@@ -69,7 +75,7 @@ def generate_macd_signals(
     valid_slow_windows = np.array([p[1] for p in valid_params], dtype=int)
     valid_signal_windows = np.array([p[2] for p in valid_params], dtype=int)
 
-    print(f"Calculating MACD using vectorbt for {len(valid_params)} valid combinations...")
+    logger.info(f"Calculating MACD using vectorbt for {len(valid_params)} valid combinations...")
 
     # 1. Calculate MACD indicator using vectorbt with the ALIGNED parameter lists
     try:
@@ -89,7 +95,7 @@ def generate_macd_signals(
         signal_df = macd_indicator.signal
 
     except Exception as e:
-        print(f"Error calculating MACD using vectorbt: {e}")
+        logger.error(f"Error calculating MACD using vectorbt: {e}")
         import traceback
         traceback.print_exc()
         raise
@@ -117,8 +123,8 @@ def generate_macd_signals(
         except Exception as name_e:
              warnings.warn(f"Could not rename MACD column levels: {name_e}")
 
-    print(f"MACD indicator calculated. Shape: {macd_df.shape}")
-    print("Generating MACD crossover signals...")
+    logger.info(f"MACD indicator calculated. Shape: {macd_df.shape}")
+    logger.info("Generating MACD crossover signals...")
 
     # 2. Generate Long Signals based on crossover
     entries_df = macd_df.vbt.crossed_above(signal_df)
@@ -128,11 +134,11 @@ def generate_macd_signals(
     short_entries_df = None
     short_exits_df = None
     if short_entries:
-         print("Generating Short Entry signals (MACD crosses below Signal)...")
+         logger.info("Generating Short Entry signals (MACD crosses below Signal)...")
          short_entries_df = macd_df.vbt.crossed_below(signal_df)
     if short_exits:
-         print("Generating Short Exit signals (MACD crosses above Signal)...")
+         logger.info("Generating Short Exit signals (MACD crosses above Signal)...")
          short_exits_df = macd_df.vbt.crossed_above(signal_df)
 
-    print(f"MACD signals generated. Entries shape: {entries_df.shape}")
+    logger.info(f"MACD signals generated. Entries shape: {entries_df.shape}")
     return entries_df, exits_df, short_entries_df, short_exits_df
