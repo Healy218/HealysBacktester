@@ -1,15 +1,12 @@
-# scripts/run_spy_ma_backtest.py
+# filename: HealysBacktester/scripts/run_spy_ma_backtest.py
 
 # --- Standard Imports ---
 import pandas as pd
 import numpy as np
 import sys
 import os
-import itertools
+import traceback
 import vectorbt as vbt
-
-# Removed defaultdict as all_portfolios is a regular dict and all_stats_list handles stats
-# from collections import defaultdict
 
 # --- Print Versions ---
 try:
@@ -35,23 +32,22 @@ except NameError:
        sys.path.insert(0, str(project_root))
 # --- End Path Modification ---
 
-# --- Import necessary modules ---
-# Make sure these are the correct paths based on your project structure
+# --- Import project modules ---
+from signals import ma_crossover # Import the updated MA signal generator
 from portfolio import simulator
 from analysis import metrics, plotting
 from utils import config_parser
 from data import data_loader, data_cleaner
-import traceback
-# Removed signal imports as they are generated manually below
 
-# --- Load Configuration --- <<< MOVED UP
+
+# --- Load Configuration ---
 try:
     config = config_parser.load_config('config/settings.py') # Ensure path is correct
     DATA_CONFIG = config.get('DATA_CONFIG', {})
-    # STRATEGY_MA_CONFIG might still be needed if other MA params exist
-    STRATEGY_MA_CONFIG = config.get('STRATEGY_MA_CROSSOVER', {})
+    # Load MA Crossover specific config
+    STRATEGY_CONFIG = config.get('STRATEGY_MA_CROSSOVER', {})
     BACKTEST_CONFIG = config.get('BACKTEST_CONFIG', {})
-    print("Configuration loaded successfully.") # Added confirmation
+    print(f"Configuration loaded successfully from: {os.path.join(project_root, 'config/settings.py')}")
 except FileNotFoundError:
     print("FATAL ERROR: Configuration file 'config/settings.py' not found.")
     exit()
@@ -73,7 +69,7 @@ SLIPPAGE = BACKTEST_CONFIG.get('SLIPPAGE_PERCENT', 0.0005)
 DEFAULT_FREQ = BACKTEST_CONFIG.get('DEFAULT_FREQ', 'D')
 
 # Sizing Settings
-DEFAULT_SIZE = BACKTEST_CONFIG.get('DEFAULT_SIZE', 0.99) # Provide a default if None is not desired
+DEFAULT_SIZE = BACKTEST_CONFIG.get('DEFAULT_SIZE', 0.99)
 DEFAULT_SIZE_TYPE = BACKTEST_CONFIG.get('DEFAULT_SIZE_TYPE', 'percent')
 
 # Stop Loss / Take Profit Settings
@@ -82,230 +78,220 @@ SL_PERCENT = BACKTEST_CONFIG.get('STOP_LOSS_PERCENT', None)
 USE_TP = BACKTEST_CONFIG.get('USE_TAKE_PROFIT', False)
 TP_PERCENT = BACKTEST_CONFIG.get('TAKE_PROFIT_PERCENT', None)
 
-# --- Determine SL/TP values to pass --- <<< MOVED HERE
+# Determine SL/TP values to pass
 sl_stop_value = SL_PERCENT if USE_SL and SL_PERCENT is not None else None
 tp_stop_value = TP_PERCENT if USE_TP and TP_PERCENT is not None else None
 
-# --- Parameter Optimization Ranges ---
-# These could also potentially come from config if desired
-short_windows = np.arange(10, 51, 10)
-long_windows = np.arange(30, 101, 10)
+# MA Crossover Strategy Parameters (from STRATEGY_MA_CROSSOVER section)
+MA_WINDOW_START = STRATEGY_CONFIG.get('MA_WINDOW_START', 2)
+MA_WINDOW_END = STRATEGY_CONFIG.get('MA_WINDOW_END', 101) # Default to 100 if not set
+MA_WINDOW_STEP = STRATEGY_CONFIG.get('MA_WINDOW_STEP', 1)
+
+# Create the window range array
+windows_range = np.arange(MA_WINDOW_START, MA_WINDOW_END, MA_WINDOW_STEP)
+if windows_range.size < 2:
+    print(f"FATAL ERROR: Window range defined in settings ({MA_WINDOW_START} to {MA_WINDOW_END-1}) is too small for dual MA combinations.")
+    exit()
+
+num_combinations = windows_range.size * (windows_range.size - 1) // 2
+
 
 # --- Print Run Info ---
-print(f"\n--- Starting MA Crossover Parameter Optimization (Manual Loop) ---") # Clarified title
+print(f"\n--- Starting MA Crossover Parameter Optimization (vectorbt) ---")
 print(f"Symbol: {SYMBOL}, Period: {START_DATE} to {END_DATE} ({INTERVAL})")
-print(f"Short Window Range: {short_windows}")
-print(f"Long Window Range: {long_windows}")
+print(f"MA Window Range for Combinations: {MA_WINDOW_START} to {MA_WINDOW_END - 1}")
+print(f"Estimated Number of Combinations (short < long): {num_combinations}")
 print(f"Backtest Settings: Initial Capital=${INITIAL_CAPITAL:,.2f}, Fees={FEES:.3%}, Slippage={SLIPPAGE:.3%}")
-# Use the loaded config values directly here for sizing
 print(f"Sizing: Size={DEFAULT_SIZE}, Size Type='{DEFAULT_SIZE_TYPE}'")
-# Use the calculated sl_stop_value and tp_stop_value for printing
 print(f"Stop Loss: {'Enabled' if sl_stop_value else 'Disabled'}{f' ({SL_PERCENT:.1%})' if sl_stop_value else ''}")
 print(f"Take Profit: {'Enabled' if tp_stop_value else 'Disabled'}{f' ({TP_PERCENT:.1%})' if tp_stop_value else ''}")
 print("-" * 35)
 
-
 # --- Initialize Variables ---
-price_data = pd.DataFrame()
-all_portfolios = {} # Regular dictionary is fine
-all_stats_list = []
+price_data = None
+entries, exits = None, None
+portfolio = None
+best_params = None # Use tuple (fast_window, slow_window)
 
 # --- Workflow ---
 
-# 1. Load and Clean Data using Modules <<< MODIFIED STEP 1
-print(f"\n[1/X] Loading and cleaning data for {SYMBOL}...")
-price_data = None # Initialize price_data to None
+# 1. Load and Clean Data using Modules
+print(f"\n[1/4] Loading and cleaning data for {SYMBOL}...")
 try:
-    # Call the data loader
     raw_data = data_loader.load_price_data(
-        symbol=SYMBOL,
-        start_date=START_DATE,
-        end_date=END_DATE,
-        interval=INTERVAL
-        # cache_dir can be omitted to use default 'data/cache'
+        symbol=SYMBOL, start_date=START_DATE, end_date=END_DATE, interval=INTERVAL
     )
-
-    # Check if data loading was successful
-    if raw_data is None or raw_data.empty:
-        raise ValueError(f"Data loading failed for symbol {SYMBOL}.")
-
-    # Call the data cleaner
+    if raw_data is None or raw_data.empty: raise ValueError(f"Data loading failed for {SYMBOL}.")
     price_data = data_cleaner.clean_ohlcv_data(raw_data)
-
-    # Check if data cleaning was successful
-    if price_data is None or price_data.empty:
-        raise ValueError(f"Data cleaning failed for symbol {SYMBOL}.")
-
+    if price_data is None or price_data.empty: raise ValueError(f"Data cleaning failed for {SYMBOL}.")
     print(f"Data loading and cleaning successful. Final shape: {price_data.shape}")
-
 except Exception as e:
     print(f"FATAL ERROR during data loading/cleaning: {e}")
-    traceback.print_exc() # Optional: Print detailed error
-    exit() # Exit if data is not available/valid
+    traceback.print_exc()
+    exit()
 
+# 2. Generate MA Crossover Signals using the updated module
+print(f"\n[2/4] Generating MA Crossover signals using vectorbt combinations...")
+try:
+    # Call the updated signal generator
+    entries, exits = ma_crossover.generate_ma_signals(
+        close_prices_series=price_data['Close'],
+        windows_range=windows_range
+    )
+    print("MA Crossover signals generated.")
+    if isinstance(entries, pd.DataFrame): print(f"Entries/Exits Shape: {entries.shape}")
 
-# 2. Iterate Through Parameters, Generate Signals, and Simulate - CORRECTED LOOP
-print(f"\n[2/X] Iterating through parameter combinations...")
-param_combinations = list(itertools.product(short_windows, long_windows))
-valid_combinations = [(sw, lw) for sw, lw in param_combinations if sw < lw]
-print(f"Total combinations to test: {len(valid_combinations)}")
+except ImportError:
+     print("FATAL ERROR: Could not import ma_crossover module from signals.")
+     exit()
+except Exception as e:
+    print(f"FATAL ERROR generating signals: {e}")
+    traceback.print_exc()
+    exit()
 
-combination_count = 0
-for short_w, long_w in valid_combinations:
-    combination_count += 1
-    param_label = f"({short_w}, {long_w})"
-    # print(f"\n-- Testing Combination {combination_count}/{len(valid_combinations)}: {param_label} --")
+# 3. Run Simulation
+print(f"\n[3/4] Running backtest simulation...")
+portfolio = None
+# Check if any entry signals were generated
+simulation_possible = entries is not None and not entries.empty and entries.any().any()
 
+if simulation_possible:
     try:
-        # --- Generate Signals ---
-        # print("Generating signals...")
-        short_sma = price_data['Close'].rolling(window=short_w, min_periods=short_w).mean()
-        long_sma = price_data['Close'].rolling(window=long_w, min_periods=long_w).mean()
-        entries = short_sma.vbt.crossed_above(long_sma).astype(bool)
-        exits = short_sma.vbt.crossed_below(long_sma).astype(bool)
-        # print(f"Signal sums: Entries={entries.sum()}, Exits={exits.sum()}")
-
-        # --- Run Simulation (Only if Entries Exist) ---
-        portfolio = None # Reset portfolio for each combo
-        if entries.any():
-            # print("Running simulation...")
-            # *** SINGLE CORRECT CALL inside the TRY block ***
-            portfolio = simulator.run_backtest(
-                price_data,                 # 1st arg: positional
-                entries,                    # 2nd arg: positional
-                exits,                      # 3rd arg: positional
-                DEFAULT_FREQ,               # 4th arg: positional
-                # --- Remaining args by keyword ---
-                initial_capital=INITIAL_CAPITAL,
-                fees=FEES,
-                slippage=SLIPPAGE,
-                size=DEFAULT_SIZE,
-                size_type=DEFAULT_SIZE_TYPE,
-                sl_stop=sl_stop_value,
-                tp_stop=tp_stop_value
-                # No short signals passed for MA crossover
-            )
-
-            # --- Store Results (Only if simulation succeeded) ---
-            if portfolio is not None:
-                all_portfolios[(short_w, long_w)] = portfolio
-                stats = metrics.get_summary_stats(portfolio)
-                if stats is not None:
-                    stats.name = (short_w, long_w) # Use tuple directly as name for column indexing later
-                    all_stats_list.append(stats)
-                    # print(f"Simulation successful for {param_label}. Trades: {portfolio.trades.count()}")
-                else:
-                    print(f"Warning: get_summary_stats returned None for {param_label}.")
-            else:
-                 print(f"Warning: Simulation returned None for {param_label}.")
-        else:
-            print(f"Skipping simulation for {param_label} (no entry signals generated).")
-
-    # --- Catch errors for this specific combination ---
-    except Exception as e:
-        print(f"ERROR processing combination {param_label}: {e}")
-        # Optionally print traceback for debugging
-        # import traceback
-        # print(traceback.format_exc())
-        # Continue to the next combination in the loop
-
-# 3. Analyze Aggregate Results (Keep your existing analysis block)
-print(f"\n[3/X] Analyzing aggregate results...")
-# ... (Your analysis code here - seems generally okay) ...
-if not all_stats_list:
-    print("No simulations completed successfully. Cannot analyze results.")
-else:
-    try:
-        # Concatenate stats into a DataFrame - index should be metric names, columns should be param tuples
-        all_stats_df = pd.concat(all_stats_list, axis=1)
-        # Ensure column names are tuples if needed (depends on how concat handles Series names)
-        # all_stats_df.columns = pd.MultiIndex.from_tuples(all_stats_df.columns) # Might be needed
-
-        print("\n--- Performance Summary (All Combinations) ---")
-        # Ensure the stats you want exist in the index
-        key_stats = ['Total Return [%]', 'Win Rate [%]', 'Sharpe Ratio', 'Max Drawdown [%]']
-        stats_to_print_idx = all_stats_df.index.intersection(key_stats)
-        if not stats_to_print_idx.empty:
-            stats_to_print = all_stats_df.loc[stats_to_print_idx]
-            print(stats_to_print)
-        else:
-             print(f"Warning: None of the key stats ({key_stats}) found in results.")
-             print("Available stats:", all_stats_df.index.tolist())
-
-
-        if 'Total Return [%]' in all_stats_df.index:
-            # Find the column (parameter tuple) with the max Total Return
-            best_col_idx = all_stats_df.loc['Total Return [%]'].idxmax()
-            # Ensure best_col_idx is indeed the parameter tuple
-            best_params = best_col_idx
-            best_stats = all_stats_df[best_col_idx] # Select the column with the best stats
-
-            print(f"\n--- Best Performing Parameters (based on Total Return) ---")
-            if isinstance(best_params, tuple) and len(best_params) >= 2:
-                 print(f"Short Window: {best_params[0]}, Long Window: {best_params[1]}")
-            else:
-                 # Handle cases where idxmax might not return tuple as expected
-                 print(f"Best Column Index: {best_params} (Column name in DataFrame)")
-                 # You might need to re-fetch the tuple if column names aren't tuples:
-                 # best_params = tuple(map(int, best_params.strip('()').split(','))) # Example conversion
-
-            print("Stats for Best Combination:")
-            print(best_stats)
-
-            # Ensure the best_params tuple matches the keys in all_portfolios dict
-            if best_params in all_portfolios:
-                 print("\nGenerating plots for the best performing combination...")
-                 best_portfolio_obj = all_portfolios[best_params]
-                 # Check if plotting functions exist and handle potential errors
-                 try:
-                     plotting.plot_portfolio_summary(best_portfolio_obj)
-                     plotting.plot_trades(best_portfolio_obj, price_data)
-                     print("Plots generated.")
-                 except AttributeError:
-                      print("ERROR: Plotting functions not found or incorrect.")
-                 except Exception as plot_err:
-                      print(f"ERROR generating plots: {plot_err}")
-            else:
-                 print(f"Could not find portfolio object for the best parameters {best_params} to plot.")
-                 print(f"Available keys: {list(all_portfolios.keys())}")
-        else:
-            print("Could not determine best parameters - 'Total Return [%]' missing from stats.")
-
-    except ImportError:
-        print("ERROR: Could not import analysis or plotting modules.")
-    except Exception as e:
-        print(f"ERROR during aggregate analysis or plotting: {e}")
-        # import traceback
-        # print(traceback.format_exc())
-
-# --- SAVE RESULTS --- CORRECTED BLOCK ---
-# Check if any stats were generated AND if best_params was successfully found in Step 3
-# Note: best_params is defined inside the try block of Step 3, ensure it's accessible
-# It might be better to initialize best_params = None before the Step 3 try block
-best_params_from_analysis = None # Initialize
-if 'best_params' in locals() and best_params is not None: # Check if variable exists from analysis step
-    best_params_from_analysis = best_params
-
-if all_stats_list and best_params_from_analysis is not None: # Check if stats list is not empty AND best params were found
-    if best_params_from_analysis in all_portfolios:
-        best_portfolio_obj = all_portfolios[best_params_from_analysis]
-
-        print("\n--- Saving Run Results ---") # Moved print statement here
-        metrics.save_run_results(
-            portfolio=best_portfolio_obj,          # Pass the BEST portfolio object
-            aggregate_stats=all_stats_df,          # Pass the aggregate stats DataFrame
-            best_params=best_params_from_analysis, # Pass the BEST parameters tuple
-            config_path='config/settings.py',      # Path to the config file used
-            strategy_name='ma_crossover',          # Strategy name
-            symbol=SYMBOL,
-            price_data_for_plots=price_data        # Pass price data for trade plot saving
+        portfolio = simulator.run_backtest(
+            price_df=price_data,
+            entries_series=entries,
+            exits_series=exits,
+            # No short signals for this strategy currently
+            short_entries_series=None,
+            short_exits_series=None,
+            # Pass other backtest settings
+            initial_capital=INITIAL_CAPITAL,
+            fees=FEES,
+            slippage=SLIPPAGE,
+            frequency=DEFAULT_FREQ,
+            size=DEFAULT_SIZE,
+            size_type=DEFAULT_SIZE_TYPE,
+            sl_stop=sl_stop_value,
+            tp_stop=tp_stop_value
         )
-    else:
-        print(f"Warning: Best parameters {best_params_from_analysis} found, but corresponding portfolio not in dictionary. Skipping save.")
-elif not all_stats_list:
-     print("Warning: No successful simulations to analyze or save.")
-else: # Handles case where analysis failed to find best_params
-     print("Warning: Best parameters could not be determined. Skipping saving detailed results.")
-# --- END SAVE RESULTS ---
+        print("Simulation complete.")
+        if portfolio is not None:
+            print(f"Portfolio object created with {len(portfolio.wrapper.columns)} columns (combinations).")
+        else:
+            print("Warning: Simulation finished but portfolio object is None.")
+            simulation_possible = False # Prevent further analysis if portfolio is None
+
+    except Exception as e:
+        print(f"Error during simulation: {e}")
+        traceback.print_exc()
+        simulation_possible = False # Prevent further analysis
+else:
+     print("Skipping simulation because no valid entry signals were generated.")
+
+
+# 4. Analyze Results (Find best combination) and Plot
+print(f"\n[4/4] Analyzing results...")
+best_params = None
+# Removed aggregate_stats_df initialization here, as we calculate it differently now
+
+if simulation_possible and portfolio is not None:
+    try:
+        # --- Identify Best Combination using portfolio.total_return() ---
+        metric_to_optimize = 'Total Return' # Use the metric name as returned by portfolio.total_return()
+        best_params = None
+        best_return_value = None
+
+        print(f"\n--- Identifying best combination based on '{metric_to_optimize}' ---")
+        try:
+            # Calculate total return for ALL combinations
+            total_returns_series = portfolio.total_return() # Returns a Series indexed by the columns (param combinations)
+
+            if not total_returns_series.empty:
+                best_params = total_returns_series.idxmax() # Get the index (column name tuple) of the max value
+                best_return_value = total_returns_series.max() # Get the max value itself
+
+                print(f"Selected Best Combination Parameters: {best_params}")
+                # Note: total_return is decimal, multiply by 100 for percentage
+                print(f"   Best {metric_to_optimize}: {best_return_value * 100:.2f}%")
+            else:
+                print("Warning: portfolio.total_return() returned an empty Series.")
+
+        except Exception as best_e:
+            print(f"Error finding best parameters using total_return(): {best_e}")
+            best_params = None # Ensure best_params is None if error occurs
+
+        # --- Fallback if best parameters couldn't be found ---
+        if best_params is None:
+             print(f"Warning: Could not determine best parameters based on '{metric_to_optimize}'.")
+             if not portfolio.wrapper.columns.empty:
+                  best_params = portfolio.wrapper.columns[0]
+                  print(f"Using first available combination as fallback: {best_params}")
+             else:
+                  print("Error: Portfolio has no columns to analyze.")
+
+
+        # --- Analyze and Plot details for BEST Combination ---
+        if best_params is not None and best_params in portfolio.wrapper.columns:
+            print(f"\n--- Detailed Analysis for Best Combination {best_params} ---")
+            best_portfolio_slice = portfolio[best_params] # Select the best column
+            best_stats = metrics.get_summary_stats(best_portfolio_slice) # Get stats for the single best slice
+
+            if best_stats is not None and not best_stats.empty:
+                 print("\n--- Performance Summary (Best Combination) ---")
+                 print(best_stats) # Print the detailed stats Series
+
+                 # Plotting for the best combination
+                 print("\nGenerating plots for the best performing combination...")
+                 try:
+                     # Pass the single-column portfolio slice to plotting functions
+                     plotting.plot_portfolio_summary(best_portfolio_slice)
+                     plotting.plot_trades(best_portfolio_slice, price_data)
+                     print("Plots generated for best combination.")
+                 except AttributeError:
+                      print("ERROR: Plotting functions not found or incorrect in analysis.plotting.")
+                 except Exception as plot_err:
+                      print(f"ERROR generating plots for best combination: {plot_err}")
+            else:
+                 print("Could not retrieve detailed stats for the best combination.")
+
+            best_trades_df = metrics.get_trade_records(best_portfolio_slice)
+            if best_trades_df is not None and not best_trades_df.empty:
+                print("\n--- Trade Records (Best Combination - First 5) ---")
+                print(best_trades_df.head())
+                print(f"Total trades for best combination: {len(best_trades_df)}")
+            elif best_portfolio_slice.trades.count() > 0:
+                 print("\nPortfolio object indicates trades for best combo, but fetching failed.")
+            else:
+                 print("\nNo trades were executed for the best combination.")
+        else:
+            print(f"\nSkipping detailed analysis as no valid best parameters ({best_params}) could be determined or found in portfolio.")
+
+    except Exception as e:
+        print(f"ERROR during analysis: {e}")
+        traceback.print_exc()
+
+# --- Save Results ---
+# We don't have the aggregate_stats_df calculated in the same way anymore.
+# We will pass aggregate_stats=None to the save function.
+# The save function should already be saving the stats and trades for the 'best_params' slice separately.
+if portfolio is not None and best_params is not None:
+     if best_params in portfolio.wrapper.columns:
+        print("\n--- Saving Run Results ---")
+        metrics.save_run_results(
+            portfolio=portfolio,                # Pass full portfolio object (contains all combos)
+            aggregate_stats=None,               # Pass None for aggregate stats
+            best_params=best_params,            # Pass the best combination identifier (tuple)
+            config_path='config/settings.py',
+            strategy_name='ma_crossover',       # Strategy name
+            symbol=SYMBOL,
+            price_data_for_plots=price_data     # Pass price data for saving trade plot
+        )
+     else:
+          print(f"Warning: Best parameters {best_params} determined but not found in portfolio columns. Skipping saving results.")
+elif portfolio is not None:
+     print("Warning: Portfolio exists but best combination not determined. Skipping saving results.")
+else:
+    print("Warning: No portfolio object generated or simulation failed. Skipping saving results.")
+
 
 print(f"\n--- Backtest Finished ---")

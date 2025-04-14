@@ -49,6 +49,26 @@ BACKTEST_CONFIG = {
     'DEFAULT_FREQ': 'D'       # Matches data interval usually ('D', 'H', 'T', etc.)
 }
 
+# Configuration for MACD Strategy
+STRATEGY_MACD = {
+    "FAST_WINDOW": [12, 8, 19, 5],       # Standard default: 12 periods
+    "SLOW_WINDOW": [26, 17, 39, 13, 34],       # Standard default: 26 periods
+    "SIGNAL_WINDOW": [9, 5],      # Standard default: 9 periods
+    # Add more values to the lists above to test multiple parameters, e.g., [12, 15]
+    "SHORT_ENTRIES_ENABLED": False, # Set to True to enable shorting based on MACD<Signal cross
+    "SHORT_EXITS_ENABLED": False  # Set to True if enabling shorts
+}
+
+# Configuration for Volume Breakout Strategy
+STRATEGY_VOLUME_BREAKOUT = {
+    "VOLUME_WINDOW": [30, 50, 60, 120, 150, 180],          # Lookback period for average volume
+    "VOLUME_MULTIPLIER": [1.25, 1.33, 1.5, 1.75, 2.0, 2.5], # How much higher volume needs to be than average
+    "CONFIRM_PRICE_INCREASE": False,     # Require close > previous close on breakout day?
+    # ****** ADDED Exit Parameter ******
+    "EXIT_MA_WINDOW": [30, 50, 60, 120, 150, 180]             # Exit when close crosses below this SMA window
+                                        # Add more values like [10, 15] to test multiple exits
+}
+
 # --- Environment/API Keys (Optional - Better in .env file) ---
 # If not using .env, you could put placeholders here, but it's not recommended for secrets
 API_KEYS = {

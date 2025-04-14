@@ -1,48 +1,96 @@
-# signals/ma_crossover.py
+# filename: HealysBacktester/signals/ma_crossover.py
 
 import pandas as pd
+import numpy as np
 import vectorbt as vbt
-from indicators import moving_averages # Import your indicator calculation functions
+import warnings
 
 def generate_ma_signals(
     close_prices_series: pd.Series,
-    short_window: int,
-    long_window: int,
-    short_ma_func=moving_averages.calculate_sma, # Allow specifying MA type
-    long_ma_func=moving_averages.calculate_sma
-    ) -> tuple[pd.Series, pd.Series]:
+    windows_range: np.ndarray, # Expect a single 1D numpy array defining the range, e.g., np.arange(2, 101)
+    # ma_type: str = 'SMA' # Optional: Add parameter for different MA types if needed
+    ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
-    Generates entry and exit signals based on a moving average crossover strategy.
+    Generates entry and exit signal DataFrames based on MA crossover
+    using vectorbt's run_combs for efficiency with large parameter spaces.
 
     Args:
         close_prices_series: pandas Series of close prices.
-        short_window: The window period for the short MA.
-        long_window: The window period for the long MA.
-        short_ma_func: Function to calculate the short MA (default: SMA).
-        long_ma_func: Function to calculate the long MA (default: SMA).
+        windows_range: 1D numpy array defining the range of window lengths
+                       from which fast and slow combinations will be generated.
 
     Returns:
-        A tuple containing:
-            - entries (pd.Series): Boolean series indicating entry signals (True).
-            - exits (pd.Series): Boolean series indicating exit signals (True).
+        A tuple containing two boolean DataFrames:
+            - entries: Entry signals (True). Columns are MultiIndex ('fast_window', 'slow_window').
+            - exits: Exit signals (True). Columns are MultiIndex ('fast_window', 'slow_window').
+
+    Raises:
+        ValueError: If windows_range is empty or too small to form pairs.
+        TypeError: If the input series is not a pandas Series.
     """
-    if short_window >= long_window:
-        raise ValueError("Short window must be less than long window")
+    if not isinstance(close_prices_series, pd.Series):
+        raise TypeError("Input 'close_prices_series' must be a pandas Series.")
+    if not isinstance(windows_range, np.ndarray):
+        windows_range = np.array(windows_range)
+    if windows_range.ndim != 1 or windows_range.size < 2:
+        raise ValueError("Input 'windows_range' must be a 1D numpy array with at least 2 elements.")
 
-    # 1. Calculate indicators using functions from the indicators module
-    short_ma = short_ma_func(close_prices_series, window=short_window)
-    long_ma = long_ma_func(close_prices_series, window=long_window)
+    print(f"Calculating MA combinations for windows ranging from {windows_range.min()} to {windows_range.max()}...")
 
-    # 2. Generate signals using vectorbt's crossover functions
-    # entries: True when short_ma crosses above long_ma
-    entries = short_ma.vbt.crossed_above(long_ma)
+    # Use MA.run_combs to calculate all valid fast/slow combinations efficiently
+    try:
+        fast_ma_obj, slow_ma_obj = vbt.MA.run_combs(
+            close_prices_series,
+            window=windows_range,
+            r=2,
+            short_names=['fast', 'slow']
+        )
+        # fast_ma_obj and slow_ma_obj are vectorbt indicator objects.
 
-    # exits: True when short_ma crosses below long_ma
-    exits = short_ma.vbt.crossed_below(long_ma)
+    except Exception as e:
+        print(f"Error calculating MA combinations using vectorbt: {e}")
+        raise
 
-    # Optional: Apply signal cleaning/constraints if needed (e.g., prevent entry/exit on same bar)
-    # clean_entries, clean_exits = entries.vbt.signals.clean(exits)
-    # return clean_entries, clean_exits
+    # Access the calculated MA DataFrames using the .ma attribute
+    fast_ma_values = fast_ma_obj.ma
+    slow_ma_values = slow_ma_obj.ma
 
-    print(f"MA Crossover ({short_window}/{long_window}) signals generated.")
+    # Check if the MA calculation resulted in valid DataFrames
+    if not isinstance(fast_ma_values, pd.DataFrame) or not isinstance(slow_ma_values, pd.DataFrame):
+        raise TypeError(f"MA calculation did not produce DataFrames (got {type(fast_ma_values)}, {type(slow_ma_values)})")
+
+
+    # Generate entry and exit signals using the .vbt accessor on the MA value DataFrames
+    print(f"Generating crossover signals...")
+    try:
+        entries = fast_ma_values.vbt.crossed_above(slow_ma_values)
+        exits = fast_ma_values.vbt.crossed_below(slow_ma_values)
+    except Exception as e:
+        print(f"Error generating crossover signals: {e}")
+        # You might want to inspect fast_ma_values and slow_ma_values here if errors persist
+        print("Fast MA Values Head:\n", fast_ma_values.head())
+        print("Slow MA Values Head:\n", slow_ma_values.head())
+        raise
+
+
+    # Basic check on the actual signal DataFrame output
+    if entries is None or exits is None:
+         raise TypeError("Signal generation failed, entries or exits are None.")
+
+    if entries.empty or exits.empty:
+        if close_prices_series.empty:
+             warnings.warn("Input price series is empty, resulting signal DataFrames are empty.")
+        else:
+             warnings.warn("Signal generation resulted in empty DataFrames, although price data exists. No crossovers occurred?")
+        return entries, exits
+
+
+    if not isinstance(entries, pd.DataFrame) or not isinstance(exits, pd.DataFrame):
+        raise TypeError(f"Signal generation did not produce DataFrames (got {type(entries)}, {type(exits)})")
+    if not isinstance(entries.columns, pd.MultiIndex) or not isinstance(exits.columns, pd.MultiIndex):
+         warnings.warn("Signal output columns are not MultiIndex as expected.")
+
+
+    # Print the number of combinations based on the shape of the resulting 'entries' DataFrame
+    print(f"MA Crossover signals generated successfully for {entries.shape[1]} combinations.")
     return entries, exits

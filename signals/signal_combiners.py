@@ -1,67 +1,198 @@
 # signals/signal_combiners.py
 
 import pandas as pd
+import numpy as np
+import vectorbt as vbt # Still useful for type hints or other functions if needed
+import warnings
+from itertools import product as iter_product # Use alias to avoid confusion
 
-def combine_signals_and(entries1: pd.Series, exits1: pd.Series,
-                        entries2: pd.Series, exits2: pd.Series) -> tuple[pd.Series, pd.Series]:
+def _get_combined_index(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.MultiIndex:
+    """Helper function to create the combined MultiIndex."""
+    if not isinstance(df1.columns, pd.MultiIndex):
+        levels1 = [df1.columns.tolist()] if not isinstance(df1.columns, pd.MultiIndex) else df1.columns.levels
+        names1 = list(df1.columns.names)
+        if all(n is None for n in names1): names1 = [f'param1_{i}' for i in range(len(levels1))]
+    else:
+        levels1 = df1.columns.levels
+        names1 = list(df1.columns.names)
+
+    if not isinstance(df2.columns, pd.MultiIndex):
+        levels2 = [df2.columns.tolist()] if not isinstance(df2.columns, pd.MultiIndex) else df2.columns.levels
+        names2 = list(df2.columns.names)
+        if all(n is None for n in names2): names2 = [f'param2_{i}' for i in range(len(levels2))]
+    else:
+        levels2 = df2.columns.levels
+        names2 = list(df2.columns.names)
+
+    combined_levels = list(levels1) + list(levels2)
+    combined_names = names1 + names2
+
+    # Simple deduplication of names if needed
+    seen = set()
+    unique_combined_names = [n for n in combined_names if not (n in seen or seen.add(n))]
+
+    # Create all combinations of level values
+    combined_product = list(iter_product(*combined_levels))
+
+    # Create the new MultiIndex
+    new_index = pd.MultiIndex.from_tuples(combined_product, names=unique_combined_names)
+    return new_index
+
+
+def combine_signals_and(
+    entries1_df: pd.DataFrame, exits1_df: pd.DataFrame,
+    entries2_df: pd.DataFrame, exits2_df: pd.DataFrame
+    ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
-    Combines two sets of signals using logical AND for entries.
-    Exits if *either* original exit signal is True.
+    Combines two sets of signal DataFrames using logical AND for entries
+    and OR for exits (exit if EITHER original exit is True).
+    Uses NumPy broadcasting for the logical operations.
 
     Args:
-        entries1: Boolean Series for first entry signal.
-        exits1: Boolean Series for first exit signal.
-        entries2: Boolean Series for second entry signal.
-        exits2: Boolean Series for second exit signal.
+        entries1_df, exits1_df: DataFrames for the first strategy.
+        entries2_df, exits2_df: DataFrames for the second strategy.
 
     Returns:
-        A tuple containing combined entries and exits Series.
+        A tuple containing combined entry and exit DataFrames.
     """
-    # Align indices if necessary (should be automatic if generated from same price data)
-    entries1, entries2 = entries1.align(entries2, fill_value=False)
-    exits1, exits2 = exits1.align(exits2, fill_value=False)
+    if not isinstance(entries1_df, pd.DataFrame) or not isinstance(entries2_df, pd.DataFrame):
+        raise TypeError("Inputs must be pandas DataFrames.")
+    if not entries1_df.columns.equals(exits1_df.columns):
+        raise ValueError("Columns of entries1_df and exits1_df must match.")
+    if not entries2_df.columns.equals(exits2_df.columns):
+        raise ValueError("Columns of entries2_df and exits2_df must match.")
 
-    # Combine entries with AND
-    combined_entries = entries1 & entries2
+    print("Combining signals using AND logic for entries (NumPy broadcasting)...")
 
-    # Combine exits with OR (exit if either strategy signals exit)
-    combined_exits = exits1 | exits2
+    try:
+        # --- Prepare for NumPy Operation ---
+        entries1_np = entries1_df.astype(bool).values
+        exits1_np = exits1_df.astype(bool).values
+        entries2_np = entries2_df.astype(bool).values
+        exits2_np = exits2_df.astype(bool).values
 
-    # Optional: Clean combined signals
-    # combined_entries, combined_exits = combined_entries.vbt.signals.clean(combined_exits)
+        n_rows = entries1_np.shape[0]
+        n_cols1 = entries1_np.shape[1]
+        n_cols2 = entries2_np.shape[1]
 
-    print("Signals combined using AND logic for entries.")
-    return combined_entries, combined_exits
+        # --- Perform Logical Operations using NumPy ---
+        # Repeat/tile arrays to match the shape of the cross-product (n_rows, n_cols1 * n_cols2)
+
+        # Entries: entries1 AND entries2
+        op1_entries = entries1_np.repeat(n_cols2, axis=1)
+        op2_entries = np.tile(entries2_np, n_cols1)
+        combined_entries_np = op1_entries & op2_entries
+
+        # Exits: exits1 OR exits2
+        op1_exits = exits1_np.repeat(n_cols2, axis=1)
+        op2_exits = np.tile(exits2_np, n_cols1)
+        combined_exits_np = op1_exits | op2_exits
+
+        # --- Create Combined Index and Final DataFrames ---
+        combined_index = _get_combined_index(entries1_df, entries2_df)
+
+        if combined_entries_np.shape[1] != len(combined_index):
+             raise ValueError(f"Shape mismatch: NumPy result columns ({combined_entries_np.shape[1]}) != Combined Index length ({len(combined_index)})")
+
+        combined_entries_df = pd.DataFrame(
+            combined_entries_np,
+            index=entries1_df.index,
+            columns=combined_index
+        )
+        combined_exits_df = pd.DataFrame(
+            combined_exits_np,
+            index=exits1_df.index, # or entries1_df.index, should be same
+            columns=combined_index
+        )
+
+    except Exception as e:
+        print(f"Error during NumPy signal combination: {e}")
+        raise # Re-raise the exception
+
+    # Optional cleaning can go here if desired
+    # print("Cleaning combined signals...")
+    # combined_entries_df, combined_exits_df = combined_entries_df.vbt.signals.clean(combined_exits_df)
+
+    print(f"Signal 'AND' combination complete. Result shape: {combined_entries_df.shape}")
+
+    return combined_entries_df, combined_exits_df
 
 
-def combine_signals_or(entries1: pd.Series, exits1: pd.Series,
-                       entries2: pd.Series, exits2: pd.Series) -> tuple[pd.Series, pd.Series]:
+def combine_signals_or(
+    entries1_df: pd.DataFrame, exits1_df: pd.DataFrame,
+    entries2_df: pd.DataFrame, exits2_df: pd.DataFrame
+    ) -> tuple[pd.DataFrame, pd.DataFrame]:
     """
-    Combines two sets of signals using logical OR for entries.
-    Exits if *both* original exit signals are True (or adjust logic as needed).
+    Combines two sets of signal DataFrames using logical OR for entries.
+    Exit logic: Exits if BOTH original exit signals are True (can be adjusted).
+    Uses NumPy broadcasting for the logical operations.
 
     Args:
-        entries1: Boolean Series for first entry signal.
-        exits1: Boolean Series for first exit signal.
-        entries2: Boolean Series for second entry signal.
-        exits2: Boolean Series for second exit signal.
+        entries1_df, exits1_df: DataFrames for the first strategy.
+        entries2_df, exits2_df: DataFrames for the second strategy.
 
     Returns:
-        A tuple containing combined entries and exits Series.
+        A tuple containing combined entry and exit DataFrames.
     """
-    # Align indices
-    entries1, entries2 = entries1.align(entries2, fill_value=False)
-    exits1, exits2 = exits1.align(exits2, fill_value=False)
+    if not isinstance(entries1_df, pd.DataFrame) or not isinstance(entries2_df, pd.DataFrame):
+        raise TypeError("Inputs must be pandas DataFrames.")
+    if not entries1_df.columns.equals(exits1_df.columns):
+        raise ValueError("Columns of entries1_df and exits1_df must match.")
+    if not entries2_df.columns.equals(exits2_df.columns):
+        raise ValueError("Columns of entries2_df and exits2_df must match.")
 
-    # Combine entries with OR
-    combined_entries = entries1 | entries2
+    print("Combining signals using OR logic for entries (NumPy broadcasting)...")
 
-    # Combine exits with AND (example: exit only if both strategies signal exit)
-    # Adjust this logic based on desired behavior (e.g., exit if EITHER exits -> exits1 | exits2)
-    combined_exits = exits1 & exits2
+    try:
+        # --- Prepare for NumPy Operation ---
+        entries1_np = entries1_df.astype(bool).values
+        exits1_np = exits1_df.astype(bool).values
+        entries2_np = entries2_df.astype(bool).values
+        exits2_np = exits2_df.astype(bool).values
 
-    # Optional: Clean combined signals
-    # combined_entries, combined_exits = combined_entries.vbt.signals.clean(combined_exits)
+        n_rows = entries1_np.shape[0]
+        n_cols1 = entries1_np.shape[1]
+        n_cols2 = entries2_np.shape[1]
 
-    print("Signals combined using OR logic for entries.")
-    return combined_entries, combined_exits
+        # --- Perform Logical Operations using NumPy ---
+        # Repeat/tile arrays to match the shape of the cross-product (n_rows, n_cols1 * n_cols2)
+
+        # Entries: entries1 OR entries2
+        op1_entries = entries1_np.repeat(n_cols2, axis=1)
+        op2_entries = np.tile(entries2_np, n_cols1)
+        combined_entries_np = op1_entries | op2_entries
+
+        # Exits: exits1 AND exits2 (Exit only if BOTH are true - adjust as needed)
+        print("Using AND logic for combined exits (Exit only if *both* strategies signal exit).")
+        op1_exits = exits1_np.repeat(n_cols2, axis=1)
+        op2_exits = np.tile(exits2_np, n_cols1)
+        combined_exits_np = op1_exits & op2_exits
+
+        # --- Create Combined Index and Final DataFrames ---
+        combined_index = _get_combined_index(entries1_df, entries2_df)
+
+        if combined_entries_np.shape[1] != len(combined_index):
+             raise ValueError(f"Shape mismatch: NumPy result columns ({combined_entries_np.shape[1]}) != Combined Index length ({len(combined_index)})")
+
+        combined_entries_df = pd.DataFrame(
+            combined_entries_np,
+            index=entries1_df.index,
+            columns=combined_index
+        )
+        combined_exits_df = pd.DataFrame(
+            combined_exits_np,
+            index=exits1_df.index, # or entries1_df.index, should be same
+            columns=combined_index
+        )
+
+    except Exception as e:
+        print(f"Error during NumPy signal combination: {e}")
+        raise # Re-raise the exception
+
+    # Optional cleaning can go here if desired
+    # print("Cleaning combined signals...")
+    # combined_entries_df, combined_exits_df = combined_entries_df.vbt.signals.clean(combined_exits_df)
+
+    print(f"Signal 'OR' combination complete. Result shape: {combined_entries_df.shape}")
+
+    return combined_entries_df, combined_exits_df
