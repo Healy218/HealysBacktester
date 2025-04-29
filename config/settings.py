@@ -4,10 +4,10 @@
 
 # --- Data Configuration ---
 DATA_CONFIG = {
-    "SYMBOL": "SPY",
-    "START_DATE": "2020-01-01",
-    "END_DATE": "2025-04-09",
-    "INTERVAL": "1D",  # e.g., '1m', '5m', '1h', '1D'
+    "SYMBOL": "FSLR",
+    "START_DATE": "2025-03-01",
+    "END_DATE": "2025-04-27",
+    "INTERVAL": "5m",  # e.g., '1m', '5m', '1h', '1D'
     "DATA_PROVIDER": "YahooFinance" # Or 'AlphaVantage', 'CSV', etc. (for future use)
 }
 
@@ -76,17 +76,17 @@ BACKTEST_CONFIG = {
 STRATEGY_MACD = {
     # Fast EMA Window Range
     "FAST_WINDOW_START": 3,
-    "FAST_WINDOW_END": 34,  # Tests windows 5 through 20
-    "FAST_WINDOW_STEP": 1,
+    "FAST_WINDOW_END": 27,  # Tests windows 5 through 20
+    "FAST_WINDOW_STEP": 3,
 
     # Slow EMA Window Range (Must be > Fast Window)
-    "SLOW_WINDOW_START": 13,
-    "SLOW_WINDOW_END": 55,  # Tests windows 15 through 50
-    "SLOW_WINDOW_STEP": 1,
+    "SLOW_WINDOW_START": 17,
+    "SLOW_WINDOW_END": 42,  # Tests windows 15 through 50
+    "SLOW_WINDOW_STEP": 3,
 
     # Signal Line EMA Window Range
     "SIGNAL_WINDOW_START": 3,
-    "SIGNAL_WINDOW_END": 34,  # Tests windows 5 through 20
+    "SIGNAL_WINDOW_END": 23,  # Tests windows 5 through 20
     "SIGNAL_WINDOW_STEP": 1,
 
     # Old list-based settings (keep commented or remove)
@@ -103,10 +103,10 @@ STRATEGY_MACD = {
 STRATEGY_VOLUME_BREAKOUT = {
     # Define range for volume window
     "VOLUME_WINDOW_START": 30,
-    "VOLUME_WINDOW_END": 151,  # Test windows up to 150
+    "VOLUME_WINDOW_END": 90,  # Test windows up to 150
     "VOLUME_WINDOW_STEP": 2,
     # Keep volume multiplier as list
-    "VOLUME_MULTIPLIER_START": 1.05, # How much higher volume needs to be than average
+    "VOLUME_MULTIPLIER_START": 1.5, # How much higher volume needs to be than average
     "VOLUME_MULTIPLIER_END": 2.00,
     "VOLUME_MULTIPLIER_STEP": 0.05,
     # Define range for exit MA window

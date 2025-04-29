@@ -109,7 +109,7 @@ def generate_macd_signals(
          raise ValueError("MACD calculation resulted in empty DataFrames.")
 
     # Check column names (should be inferred correctly from keywords)
-    expected_names = ['fast_window', 'slow_window', 'signal_window']
+    expected_names = ['macd_fast_window', 'macd_slow_window', 'macd_signal_window']
     if list(macd_df.columns.names) != expected_names:
         warnings.warn(f"MACD output columns have unexpected names: {macd_df.columns.names}. Expected: {expected_names}. Attempting to rename.")
         # Attempt to rename if necessary
