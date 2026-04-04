@@ -28,6 +28,7 @@ Thumbs.db
 # Ignore dependency folders (if not using virtual environments properly)
 # node_modules/ # Example for Node.js
 
-# Ignore sensitive files (if any - better handled outside repo)
+# Ignore sensitive files
 # secrets.yaml
-# .env # If it contains secrets and isn't managed by environment variables
+.env          # Alpaca API keys — never commit this
+data/cache/   # Downloaded price data — regenerate on demand

@@ -71,7 +71,10 @@ def run_backtest(
         raise ValueError("Price DataFrame must contain a 'Close' column.")
 
     # --- NORMALIZE INDICES ---
-    # Make sure index is DatetimeIndex and TZ-naive
+    # vectorbt requires TZ-naive DatetimeIndex on both price data and signals.
+    # Yahoo Finance returns tz-aware timestamps (America/New_York for intraday),
+    # which causes alignment errors if not stripped. tz_localize(None) removes the
+    # timezone without converting the time values.
     try:
         price_df_to_use = price_df.copy()
         if not isinstance(price_df_to_use.index, pd.DatetimeIndex):
@@ -105,10 +108,13 @@ def run_backtest(
     short_exits_series_to_use = normalize_and_copy(short_exits_series, "short exits")
 
     # --- REINDEX SIGNALS to align with price data ---
+    # Signal DataFrames are generated from indicator calculations and may have a slightly
+    # different index than the price data (e.g., NaN rows dropped by the cleaner, or
+    # extra dates added during indicator warmup). reindex() aligns them to the exact
+    # price index, filling any gaps with False so no phantom signals are introduced.
     target_index = price_df_to_use.index
     logger.debug("Reindexing signals to price index...")
     try:
-        # Ensure entries/exits are not None before reindexing
         if entries_series_to_use is None:
              logger.error("Long entry signals are None, cannot proceed.")
              raise ValueError("Long entry signals cannot be None.")

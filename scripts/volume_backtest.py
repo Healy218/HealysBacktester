@@ -57,7 +57,7 @@ try:
     from signals import volume_breakout # Import the Volume Breakout signal generator
     from portfolio import simulator
     from analysis import metrics, plotting
-    from utils import config_parser
+    from utils import config_parser, freq_utils
     from data import data_loader, data_cleaner
     # Import custom error types
     from utils.error_handling import DataError, SignalError, PortfolioError, ConfigurationError
@@ -105,7 +105,7 @@ try:
     INITIAL_CAPITAL = BACKTEST_CONFIG.get('INITIAL_CAPITAL', 100000.0)
     FEES = BACKTEST_CONFIG.get('FEES_PERCENT', 0.001)
     SLIPPAGE = BACKTEST_CONFIG.get('SLIPPAGE_PERCENT', 0.0005)
-    DEFAULT_FREQ = BACKTEST_CONFIG.get('DEFAULT_FREQ', 'D')
+    DEFAULT_FREQ = freq_utils.resolve_freq(BACKTEST_CONFIG.get('DEFAULT_FREQ'), INTERVAL)
     DEFAULT_SIZE = BACKTEST_CONFIG.get('DEFAULT_SIZE', 0.99)
     DEFAULT_SIZE_TYPE = BACKTEST_CONFIG.get('DEFAULT_SIZE_TYPE', 'percent')
     USE_SL = BACKTEST_CONFIG.get('USE_STOP_LOSS', False)

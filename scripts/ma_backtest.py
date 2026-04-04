@@ -62,7 +62,7 @@ try:
     from signals import ma_crossover # Import the updated MA signal generator
     from portfolio import simulator
     from analysis import metrics, plotting
-    from utils import config_parser
+    from utils import config_parser, freq_utils
     from data import data_loader, data_cleaner
     # Import custom error types to potentially catch them specifically
     from utils.error_handling import DataError, SignalError, PortfolioError, ConfigurationError
@@ -102,7 +102,7 @@ try:
     INITIAL_CAPITAL = BACKTEST_CONFIG.get('INITIAL_CAPITAL', 100000.0)
     FEES = BACKTEST_CONFIG.get('FEES_PERCENT', 0.001)
     SLIPPAGE = BACKTEST_CONFIG.get('SLIPPAGE_PERCENT', 0.0005)
-    DEFAULT_FREQ = BACKTEST_CONFIG.get('DEFAULT_FREQ', 'D')
+    DEFAULT_FREQ = freq_utils.resolve_freq(BACKTEST_CONFIG.get('DEFAULT_FREQ'), INTERVAL)
 
     # Sizing Settings
     DEFAULT_SIZE = BACKTEST_CONFIG.get('DEFAULT_SIZE', 0.99)
@@ -229,7 +229,6 @@ if simulation_possible:
             sl_stop=sl_stop_value,
             tp_stop=tp_stop_value
         )
-        logger.info("Simulation complete.")
         if portfolio is not None:
             logger.info(f"Portfolio object created with {len(portfolio.wrapper.columns)} columns (combinations).")
         else:
@@ -350,7 +349,6 @@ if simulation_possible and portfolio is not None:
 # --- Save Results ---
 # Only proceed if simulation was possible, portfolio exists, and best params were found
 if simulation_possible and portfolio is not None and best_params is not None and best_params in portfolio.wrapper.columns:
-    logger.info("\n--- Saving Run Results ---")
     try:
         # Call save_run_results without the pre-calculated stats/trades
         # Assume save_run_results will extract the best slice, calculate stats/trades, and save plots internally

@@ -3,43 +3,50 @@ import logging
 import sys
 import os
 
+# Single shared logger name for the entire application.
+# Using a fixed name means every module gets the SAME logger object,
+# so handlers are only added once no matter how many modules call setup_logging().
+_LOGGER_NAME = 'backtester'
+
 def setup_logging(log_level=logging.INFO, log_file=None):
     """
-    Sets up logging for the application.
+    Sets up and returns the shared application logger.
+
+    Safe to call multiple times — handlers are only added on the first call.
+    Subsequent calls return the already-configured logger without adding duplicates.
 
     Args:
-        log_level (int, optional): The logging level. Defaults to logging.INFO.
-        log_file (str, optional): The name of the log file. If None, logs to console.
-    """
-    logger = logging.getLogger(__name__)  # Use __name__ for module-level logger
-    logger.setLevel(log_level)
+        log_level: Logging level (e.g., logging.INFO, logging.DEBUG).
+        log_file: Path to log file. If None, logs to console (stdout).
 
-    # Create a formatter
+    Returns:
+        logging.Logger: The configured shared logger.
+    """
+    logger = logging.getLogger(_LOGGER_NAME)
+
+    # If handlers are already attached, the logger is already configured.
+    # Return early to prevent duplicate log entries.
+    if logger.handlers:
+        return logger
+
+    logger.setLevel(log_level)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 
-    # Create handlers (either file or console)
     if log_file:
-        # Ensure the directory exists
         log_dir = os.path.dirname(log_file)
         if log_dir and not os.path.exists(log_dir):
             os.makedirs(log_dir)
-        file_handler = logging.FileHandler(log_file)
+        file_handler = logging.FileHandler(log_file, mode='a')
         file_handler.setFormatter(formatter)
         logger.addHandler(file_handler)
-    else:
-        console_handler = logging.StreamHandler(sys.stdout)
-        console_handler.setFormatter(formatter)
-        logger.addHandler(console_handler)
 
-    # Optional: Prevent duplicate log messages if the logger was already configured
+    # Always add a console handler so output appears in the terminal too.
+    console_handler = logging.StreamHandler(sys.stdout)
+    console_handler.setFormatter(formatter)
+    logger.addHandler(console_handler)
+
+    # Don't propagate to the root logger — avoids double-printing if the root
+    # logger has its own handlers (e.g., from basicConfig called elsewhere).
     logger.propagate = False
 
     return logger
-
-# Example usage (in other modules):
-# from utils.logging_utils import setup_logging
-# logger = setup_logging(log_level=logging.INFO, log_file="logs/backtester.log")
-# logger.info("Starting the backtest...")
-# ...
-# logger.error("An error occurred: %s", error_message)
-

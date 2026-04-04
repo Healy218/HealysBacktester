@@ -4,6 +4,9 @@ import importlib.util
 import os
 import sys
 from typing import Dict, Any
+from utils.logging_utils import setup_logging
+
+logger = setup_logging(log_file="logs/backtester.log")
 
 def load_config(config_path: str = 'config/settings.py') -> Dict[str, Any]:
     """
@@ -65,11 +68,11 @@ def load_config(config_path: str = 'config/settings.py') -> Dict[str, Any]:
         config_dict = {key: value for key, value in settings_module.__dict__.items()
                        if not key.startswith("__") and not isinstance(value, type(sys))} # Exclude built-ins/modules
 
-        print(f"Configuration loaded successfully from: {absolute_config_path}")
+        logger.info(f"Configuration loaded from: {absolute_config_path}")
         return config_dict
 
     except Exception as e:
-        print(f"Error loading configuration from {absolute_config_path}: {e}")
+        logger.error(f"Error loading configuration from {absolute_config_path}: {e}")
         raise
 
 # Example usage (if run directly)
