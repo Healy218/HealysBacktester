@@ -1,0 +1,29 @@
+/* Fix dcc.Dropdown text on dark themes (DARKLY sets white text globally,
+   but react-select renders on a white background — making text invisible) */
+
+.Select-option {
+    color: #000 !important;
+    background-color: #fff !important;
+}
+.Select-option.is-focused {
+    background-color: #e8e8e8 !important;
+}
+.Select-option.is-selected {
+    background-color: #375a7f !important;
+    color: #fff !important;
+}
+.Select-value-label {
+    color: #fff !important;   /* selected value shown in the control — keep white so it reads on dark bg */
+}
+.Select-menu-outer {
+    background-color: #fff !important;
+    color: #000 !important;
+}
+.Select-placeholder {
+    color: #aaa !important;
+}
+/* Dash 2.x / newer react-select classes */
+.dash-dropdown .Select .Select-control {
+    background-color: #303030 !important;
+    border-color: #444 !important;
+}

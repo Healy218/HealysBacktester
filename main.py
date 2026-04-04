@@ -239,45 +239,44 @@ def _results_tab():
         # Hidden stores — JSON-serialisable payload only
         dcc.Store(id="top5-store"),
 
+        # Error banner — outside Loading so it always renders immediately
+        dbc.Alert(id="error-alert", is_open=False, color="danger",
+                  className="mb-3"),
+
+        # Top-5 table — outside Loading so it isn't hidden while graphs render
+        html.Div(id="table-section", style={"display": "none"}, children=[
+            html.H5("Top 5 Parameter Combinations — ranked by Sharpe Ratio",
+                    className="mt-3"),
+            dash_table.DataTable(
+                id="top5-table",
+                row_selectable="single",
+                selected_rows=[0],
+                style_table={"overflowX": "auto"},
+                style_header={
+                    "backgroundColor": "#375a7f",
+                    "color": "white",
+                    "fontWeight": "bold",
+                },
+                style_data={
+                    "backgroundColor": "#303030",
+                    "color": "white",
+                },
+                style_data_conditional=[{
+                    "if": {"state": "selected"},
+                    "backgroundColor": "#00bc8c",
+                    "color": "black",
+                }],
+                style_cell={"textAlign": "left", "padding": "6px 12px"},
+                page_action="none",
+            ),
+        ]),
+
+        # Graphs wrapped in Loading so a spinner shows while they render
         dcc.Loading(
             id="loading",
             type="circle",
             color="#00bc8c",
             children=[
-
-                # Error banner
-                dbc.Alert(id="error-alert", is_open=False, color="danger",
-                          className="mb-3"),
-
-                # Top-5 table (hidden until a run completes)
-                html.Div(id="table-section", style={"display": "none"}, children=[
-                    html.H5("Top 5 Parameter Combinations — ranked by Sharpe Ratio",
-                            className="mt-3"),
-                    dash_table.DataTable(
-                        id="top5-table",
-                        row_selectable="single",
-                        selected_rows=[0],
-                        style_table={"overflowX": "auto"},
-                        style_header={
-                            "backgroundColor": "#375a7f",
-                            "color": "white",
-                            "fontWeight": "bold",
-                        },
-                        style_data={
-                            "backgroundColor": "#303030",
-                            "color": "white",
-                        },
-                        style_data_conditional=[{
-                            "if": {"state": "selected"},
-                            "backgroundColor": "#00bc8c",
-                            "color": "black",
-                        }],
-                        style_cell={"textAlign": "left", "padding": "6px 12px"},
-                        page_action="none",
-                    ),
-                ]),
-
-                # Graphs (hidden until a row is selected)
                 html.Div(id="graph-section", style={"display": "none"}, children=[
                     dbc.Row([
                         dbc.Col(dcc.Graph(id="equity-graph"), md=12),
@@ -286,7 +285,6 @@ def _results_tab():
                         dbc.Col(dcc.Graph(id="trades-graph"), md=12),
                     ], className="mt-3"),
                 ]),
-
             ],
         ),
     ]
