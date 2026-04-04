@@ -43,7 +43,10 @@ def generate_ma_signals(
 
     logger.info(f"Calculating MA combinations for windows ranging from {windows_range.min()} to {windows_range.max()}...")
 
-    # Use MA.run_combs to calculate all valid fast/slow combinations efficiently
+    # vbt.MA.run_combs generates all unique pairs (r=2) from windows_range where fast < slow.
+    # For windows_range = np.arange(2, 143), this produces C(141, 2) = 9,870 combinations.
+    # It returns two aligned indicator objects: fast_ma_obj (smaller window) and slow_ma_obj (larger window).
+    # This is far more efficient than looping — vectorbt computes all MAs in one pass.
     try:
         fast_ma_obj, slow_ma_obj = vbt.MA.run_combs(
             close_prices_series,
@@ -66,7 +69,10 @@ def generate_ma_signals(
         raise TypeError(f"MA calculation did not produce DataFrames (got {type(fast_ma_values)}, {type(slow_ma_values)})")
 
 
-    # Generate entry and exit signals using the .vbt accessor on the MA value DataFrames
+    # .vbt.crossed_above/below are vectorbt's vectorized crossover detectors.
+    # They compare element-wise across all combinations simultaneously — no loops needed.
+    # Result shape: (num_bars, num_combinations), dtype=bool.
+    # MultiIndex columns: (fast_window, slow_window) for each combination.
     logger.info(f"Generating crossover signals...")
     try:
         entries = fast_ma_values.vbt.crossed_above(slow_ma_values)

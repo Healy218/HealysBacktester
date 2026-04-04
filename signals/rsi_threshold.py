@@ -63,14 +63,17 @@ def generate_rsi_signals(
         traceback.print_exc()
         raise
 
-    # --- Iterate through thresholds, vectorize across windows ---
+    # Strategy: vectorbt computes RSI for ALL windows at once (rsi_values is a DataFrame
+    # with shape (num_bars, num_windows)). We then iterate over each threshold value and
+    # use crossed_above/below to get a boolean DataFrame per threshold.
+    # Final result is a MultiIndex DataFrame combining both dimensions (window x threshold).
     logger.info("Generating signals by iterating through thresholds...")
     entries_list: List[pd.DataFrame] = []
     exits_list: List[pd.DataFrame] = []
     short_entries_list: List[pd.DataFrame] = []
     short_exits_list: List[pd.DataFrame] = []
 
-    # Store keys for final concatenation
+    # Store keys for final concatenation — each key corresponds to one threshold value.
     entry_keys: List[Tuple[float]] = []
     exit_keys: List[Tuple[float]] = []
     short_entry_keys: List[Tuple[float]] = []
@@ -137,18 +140,20 @@ def generate_rsi_signals(
         short_exits_df = None
 
     # --- Combine results into DataFrames with MultiIndex ---
+    # After the loop, entries_list contains one DataFrame per threshold value.
+    # Each DataFrame has columns = RSI windows. We concat them along axis=1 using
+    # threshold values as a new outer key, producing a 2-level MultiIndex:
+    #   (entry_threshold, rsi_window)
+    # Then reorder_levels flips it to (rsi_window, entry_threshold) so both entries and
+    # exits share the same outer level, which is required for vectorbt broadcasting.
     logger.info("Combining signal results...")
     try:
         # Combine Long Signals
         if not entries_list or not exits_list:
              raise ValueError("No valid long entry or exit signals were generated.")
 
-        # Entries: Concat results for each threshold. Result has columns = window values.
-        # Add a level for the threshold parameter.
         entries_df = pd.concat(entries_list, axis=1, keys=pd.MultiIndex.from_tuples(entry_keys, names=['entry_threshold']))
-        # Reorder levels to (window, threshold) - matches RSI columns first, then threshold keys
         entries_df = entries_df.reorder_levels(['rsi_window', 'entry_threshold'], axis=1)
-        # Sort columns for consistency
         entries_df = entries_df.sort_index(axis=1)
 
 

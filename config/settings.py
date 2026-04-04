@@ -57,8 +57,8 @@ BACKTEST_CONFIG = {
     'SLIPPAGE_PERCENT': 0.0005, # 0.05%
     'ENABLE_SHORTING': False, # MA Crossover script currently doesn't support shorting
     # --- Position Sizing ---
-    'DEFAULT_SIZE': .9,      # Use 90% of equity per trade
-    'DEFAULT_SIZE_TYPE': 'percent', # Options: 'percent', 'amount', 'value' (check vbt docs)
+    'DEFAULT_SIZE': .9,      # Use 90% of equity per trade (leaves 10% as buffer for fees/slippage)
+    'DEFAULT_SIZE_TYPE': 'percent', # 'percent' = fraction of current equity; 'value' = dollar amount; 'amount' = number of shares
 
     # --- Stop Loss ---
     'USE_STOP_LOSS': True,     # Set to True to enable stop-loss
@@ -69,7 +69,11 @@ BACKTEST_CONFIG = {
     'TAKE_PROFIT_PERCENT': 0.10, # Example: 10% take-profit (relative to entry price)
 
     # --- Simulation Frequency ---
-    'DEFAULT_FREQ': 'D'       # Matches data interval usually ('D', 'H', 'T', etc.)
+    # IMPORTANT: DEFAULT_FREQ must match your data INTERVAL or vectorbt will produce
+    # incorrect annualized metrics (Sharpe, CAGR, etc.).
+    # Leave as None to auto-detect from DATA_CONFIG['INTERVAL'] via utils.freq_utils.
+    # Manual overrides: 'D' = daily, 'h' = hourly, '5min' = 5-minute, '1min' = 1-minute
+    'DEFAULT_FREQ': None      # None = auto-detect from INTERVAL (recommended)
 }
 
 # Configuration for MACD Strategy - UPDATED FOR RANGES
