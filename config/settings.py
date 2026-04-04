@@ -4,9 +4,9 @@
 
 # --- Data Configuration ---
 DATA_CONFIG = {
-    "SYMBOL": "FSLR",
-    "START_DATE": "2025-03-01",
-    "END_DATE": "2025-04-27",
+    "SYMBOL": "FUBO",
+    "START_DATE": "2025-03-03",
+    "END_DATE": "2025-04-30",
     "INTERVAL": "5m",  # e.g., '1m', '5m', '1h', '1D'
     "DATA_PROVIDER": "YahooFinance" # Or 'AlphaVantage', 'CSV', etc. (for future use)
 }
@@ -103,15 +103,15 @@ STRATEGY_MACD = {
 STRATEGY_VOLUME_BREAKOUT = {
     # Define range for volume window
     "VOLUME_WINDOW_START": 30,
-    "VOLUME_WINDOW_END": 90,  # Test windows up to 150
+    "VOLUME_WINDOW_END": 60,  # Test windows up to 150
     "VOLUME_WINDOW_STEP": 2,
     # Keep volume multiplier as list
     "VOLUME_MULTIPLIER_START": 1.5, # How much higher volume needs to be than average
     "VOLUME_MULTIPLIER_END": 2.00,
-    "VOLUME_MULTIPLIER_STEP": 0.05,
+    "VOLUME_MULTIPLIER_STEP": 0.1,
     # Define range for exit MA window
     "EXIT_MA_WINDOW_START": 45,
-    "EXIT_MA_WINDOW_END": 151,  # Test windows up to 150
+    "EXIT_MA_WINDOW_END": 90,  # Test windows up to 150
     "EXIT_MA_WINDOW_STEP": 1,
     # Other settings
     "CONFIRM_PRICE_INCREASE": False,     # Require close > previous close on breakout day?
