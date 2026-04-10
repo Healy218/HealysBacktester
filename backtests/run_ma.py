@@ -38,6 +38,7 @@ def run(
         freq = freq_utils.resolve_freq(backtest_config.get("DEFAULT_FREQ"), interval)
         sl_stop = _sl(backtest_config)
         tp_stop = _tp(backtest_config)
+        enable_shorting = backtest_config.get("ENABLE_SHORTING", False)
 
         # Build MA window range
         ma_start = strategy_config.get("MA_WINDOW_START", 2)
@@ -59,7 +60,9 @@ def run(
         # 2. Signals
         n_combos = windows.size * (windows.size - 1) // 2
         logger.info(f"[MA] Generating signals ({n_combos:,} combinations)…")
-        entries, exits = ma_crossover.generate_ma_signals(price_data["Close"], windows)
+        entries, exits, short_entries, short_exits = ma_crossover.generate_ma_signals(
+            price_data["Close"], windows, enable_shorting=enable_shorting
+        )
         if entries is None or entries.empty or not entries.any().any():
             return _err("No entry signals generated. Try a wider date range or different interval.")
 
@@ -69,8 +72,8 @@ def run(
             price_df=price_data,
             entries_series=entries,
             exits_series=exits,
-            short_entries_series=None,
-            short_exits_series=None,
+            short_entries_series=short_entries if enable_shorting else None,
+            short_exits_series=short_exits if enable_shorting else None,
             frequency=freq,
             **_sim_kwargs(backtest_config, sl_stop, tp_stop),
         )

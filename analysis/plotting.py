@@ -90,15 +90,13 @@ def plot_drawdowns(portfolio: vbt.Portfolio, column: Optional[Union[str, Tuple]]
 def plot_trades(portfolio: vbt.Portfolio, price_df: pd.DataFrame, column: Optional[Union[str, Tuple]] = None, **kwargs) -> Optional[go.Figure]:
     """
     Generates the trades plotted on the price chart and returns the figure object.
+    Long entries/exits and short entries/exits are drawn with distinct markers and
+    colors so it is visually clear which direction each trade is.
 
-    Args:
-        portfolio: A vectorbt Portfolio object.
-        price_df: DataFrame containing the 'Close' price series used in the backtest.
-        column: Optional column name/tuple to select a specific portfolio column.
-        **kwargs: Additional keyword arguments passed to portfolio.trades.plot().
-
-    Returns:
-        A plotly Figure object, or None if an error occurs.
+    Long Entry  — green  triangle-up
+    Long Exit   — green  triangle-down (win) / red triangle-down (loss)
+    Short Entry — red    triangle-down  (selling short)
+    Short Exit  — orange triangle-up    (covering)
     """
     logger.info(f"Generating trades plot figure for column: {column if column is not None else 'Default'}...")
     if portfolio is None:
@@ -109,18 +107,53 @@ def plot_trades(portfolio: vbt.Portfolio, price_df: pd.DataFrame, column: Option
         return None
 
     try:
-        # Plot trades using the portfolio's trade plotter, overlaying on the close price
-        fig = price_df['Close'].vbt.plot(trace_kwargs=dict(name='Close')) # Base price plot
-        # Select the portfolio column if provided
-        portfolio_to_plot = portfolio if column is None else portfolio[column]
-        # Check if trades exist for the selected portfolio/column
-        if portfolio_to_plot.trades.count() > 0:
-            fig = portfolio_to_plot.trades.plot(fig=fig, **kwargs) # Add trades to the figure
-        else:
-            logger.info(f"Note: No trades to plot for column {column if column is not None else 'Default'}.")
-            # Return the figure with just the price plot
-        # DO NOT call fig.show() here
+        fig = price_df['Close'].vbt.plot(trace_kwargs=dict(name='Close', line=dict(color='#aaaaaa')))
+
+        pf = portfolio if column is None else portfolio[column]
+        if pf.trades.count() == 0:
+            logger.info("No trades to plot.")
+            return fig
+
+        rr = pf.trades.records_readable
+
+        # Identify entry and exit timestamps — column name varies by vbt version
+        entry_ts_col = next((c for c in rr.columns if 'entry' in c.lower() and 'time' in c.lower()), None)
+        exit_ts_col  = next((c for c in rr.columns if 'exit'  in c.lower() and 'time' in c.lower()), None)
+        entry_px_col = next((c for c in rr.columns if 'entry' in c.lower() and 'price' in c.lower()), None)
+        exit_px_col  = next((c for c in rr.columns if 'exit'  in c.lower() and 'price' in c.lower()), None)
+
+        if not all([entry_ts_col, exit_ts_col, entry_px_col, exit_px_col]):
+            # Fall back to the default vectorbt plot if column names don't match
+            logger.warning("Could not locate entry/exit columns; falling back to default trades.plot()")
+            return pf.trades.plot(fig=fig)
+
+        long_trades  = rr[rr['Direction'] == 'Long']
+        short_trades = rr[rr['Direction'] == 'Short']
+        closed_exits = rr[rr['Status'] == 'Closed']
+        long_closed  = closed_exits[closed_exits['Direction'] == 'Long']
+        short_closed = closed_exits[closed_exits['Direction'] == 'Short']
+
+        def _add_scatter(df, ts_col, px_col, name, color, symbol, size=10):
+            if df.empty:
+                return
+            fig.add_trace(go.Scatter(
+                x=df[ts_col], y=df[px_col],
+                mode='markers',
+                marker=dict(symbol=symbol, color=color, size=size,
+                            line=dict(color='white', width=1)),
+                name=name,
+            ))
+
+        _add_scatter(long_trades,  entry_ts_col, entry_px_col, 'Long Entry',  '#00bc8c', 'triangle-up')
+        _add_scatter(long_closed,  exit_ts_col,  exit_px_col,  'Long Exit',   '#3498db', 'triangle-down')
+        _add_scatter(short_trades, entry_ts_col, entry_px_col, 'Short Entry', '#e74c3c', 'triangle-down')
+        _add_scatter(short_closed, exit_ts_col,  exit_px_col,  'Short Cover', '#f39c12', 'triangle-up')
+
+        fig.update_layout(
+            legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),
+        )
         return fig
+
     except KeyError:
         logger.error(f"Error: Column '{column}' not found in portfolio for plotting trades.")
         return None

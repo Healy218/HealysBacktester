@@ -70,14 +70,8 @@ def generate_rsi_signals(
     logger.info("Generating signals by iterating through thresholds...")
     entries_list: List[pd.DataFrame] = []
     exits_list: List[pd.DataFrame] = []
-    short_entries_list: List[pd.DataFrame] = []
-    short_exits_list: List[pd.DataFrame] = []
-
-    # Store keys for final concatenation — each key corresponds to one threshold value.
     entry_keys: List[Tuple[float]] = []
     exit_keys: List[Tuple[float]] = []
-    short_entry_keys: List[Tuple[float]] = []
-    short_exit_keys: List[Tuple[float]] = []
 
     # Generate Long Signals
     logger.info(f" Processing {len(entry_threshold)} long entry thresholds...")
@@ -104,40 +98,37 @@ def generate_rsi_signals(
              exits_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
              exit_keys.append((xt,))
 
-    # Generate Short Signals (if enabled)
+    # Short signals use the same thresholds as the long signals (symmetric approach).
+    # This ensures short_entries and short_exits share column structures with exits and
+    # entries respectively, which is required for vectorbt to align all four signals.
+    #
+    # short_entries: RSI crosses below exit_threshold (same event that closes longs)
+    # short_exits:   RSI crosses above entry_threshold (same event that opens longs)
+    short_entries_list: List[pd.DataFrame] = []
+    short_exits_list:   List[pd.DataFrame] = []
+    short_entry_keys:   List[Tuple[float]] = []
+    short_exit_keys:    List[Tuple[float]] = []
+
     if enable_shorting:
-        if short_entry_threshold is None or short_exit_threshold is None:
-            logger.debug("Warning: Shorting enabled but short entry or exit thresholds are None. Skipping short signals.")
-            short_entries_df = None
-            short_exits_df = None
-        else:
-            short_entry_threshold = np.asarray(short_entry_threshold)
-            short_exit_threshold = np.asarray(short_exit_threshold)
+        logger.info(f" Processing {len(exit_threshold)} short entry thresholds (reusing exit thresholds)...")
+        for xt in exit_threshold:
+            try:
+                short_entries_list.append(rsi_values.vbt.crossed_below(xt))
+                short_entry_keys.append((xt,))
+            except Exception as e:
+                logger.error(f"Error processing short entry threshold {xt}: {e}")
+                short_entries_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
+                short_entry_keys.append((xt,))
 
-            logger.info(f" Processing {len(short_entry_threshold)} short entry thresholds...")
-            for set_ in short_entry_threshold:
-                try:
-                    short_entries_for_thresh = rsi_values.vbt.crossed_below(set_)
-                    short_entries_list.append(short_entries_for_thresh)
-                    short_entry_keys.append((set_,))
-                except Exception as e:
-                    logger.error(f"Error processing short entry threshold {set_}: {e}")
-                    short_entries_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
-                    short_entry_keys.append((set_,))
-
-            logger.info(f" Processing {len(short_exit_threshold)} short exit thresholds...")
-            for sxt in short_exit_threshold:
-                try:
-                    short_exits_for_thresh = rsi_values.vbt.crossed_above(sxt)
-                    short_exits_list.append(short_exits_for_thresh)
-                    short_exit_keys.append((sxt,))
-                except Exception as e:
-                    logger.error(f"Error processing short exit threshold {sxt}: {e}")
-                    short_exits_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
-                    short_exit_keys.append((sxt,))
-    else:
-        short_entries_df = None
-        short_exits_df = None
+        logger.info(f" Processing {len(entry_threshold)} short exit thresholds (reusing entry thresholds)...")
+        for et in entry_threshold:
+            try:
+                short_exits_list.append(rsi_values.vbt.crossed_above(et))
+                short_exit_keys.append((et,))
+            except Exception as e:
+                logger.error(f"Error processing short exit threshold {et}: {e}")
+                short_exits_list.append(pd.DataFrame(False, index=rsi_values.index, columns=rsi_values.columns))
+                short_exit_keys.append((et,))
 
     # --- Combine results into DataFrames with MultiIndex ---
     # After the loop, entries_list contains one DataFrame per threshold value.
@@ -162,17 +153,18 @@ def generate_rsi_signals(
         exits_df = exits_df.sort_index(axis=1)
 
 
-        # Combine Short Signals (if generated)
+        # Combine Short Signals (if generated).
+        # Use the same level names as the long signals so vectorbt can align all four.
+        short_entries_df = None
+        short_exits_df = None
         if enable_shorting and short_entries_list and short_exits_list:
-            short_entries_df = pd.concat(short_entries_list, axis=1, keys=pd.MultiIndex.from_tuples(short_entry_keys, names=['short_entry_threshold']))
-            short_entries_df = short_entries_df.reorder_levels(['rsi_window', 'short_entry_threshold'], axis=1)
+            short_entries_df = pd.concat(short_entries_list, axis=1, keys=pd.MultiIndex.from_tuples(short_entry_keys, names=['exit_threshold']))
+            short_entries_df = short_entries_df.reorder_levels(['rsi_window', 'exit_threshold'], axis=1)
             short_entries_df = short_entries_df.sort_index(axis=1)
 
-
-            short_exits_df = pd.concat(short_exits_list, axis=1, keys=pd.MultiIndex.from_tuples(short_exit_keys, names=['short_exit_threshold']))
-            short_exits_df = short_exits_df.reorder_levels(['rsi_window', 'short_exit_threshold'], axis=1)
+            short_exits_df = pd.concat(short_exits_list, axis=1, keys=pd.MultiIndex.from_tuples(short_exit_keys, names=['entry_threshold']))
+            short_exits_df = short_exits_df.reorder_levels(['rsi_window', 'entry_threshold'], axis=1)
             short_exits_df = short_exits_df.sort_index(axis=1)
-
 
         logger.info(f"Combined signals. Final shapes - Entries: {entries_df.shape}, Exits: {exits_df.shape}")
         if short_entries_df is not None: logger.info(f" Short Entries: {short_entries_df.shape}, Short Exits: {short_exits_df.shape}")
