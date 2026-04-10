@@ -97,7 +97,7 @@ def load_alpaca_bars(
             "Set ALPACA_API_KEY and ALPACA_API_SECRET in your .env file."
         )
 
-    logger.info(f"Downloading {symbol} ({interval}) from Alpaca: {start_date} → {end_date}")
+    logger.info(f"Downloading {symbol} ({interval}) from Alpaca: {start_date} -> {end_date}")
 
     try:
         client = StockHistoricalDataClient(key, secret)

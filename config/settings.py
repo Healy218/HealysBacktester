@@ -55,10 +55,10 @@ BACKTEST_CONFIG = {
     'INITIAL_CAPITAL': 100000.0,
     'FEES_PERCENT': 0.001,     # 0.1%
     'SLIPPAGE_PERCENT': 0.0005, # 0.05%
-    'ENABLE_SHORTING': False, # MA Crossover script currently doesn't support shorting
+    'ENABLE_SHORTING': True, # Enables short trading for MA, RSI strategies
     # --- Position Sizing ---
     'DEFAULT_SIZE': .9,      # Use 90% of equity per trade (leaves 10% as buffer for fees/slippage)
-    'DEFAULT_SIZE_TYPE': 'percent', # 'percent' = fraction of current equity; 'value' = dollar amount; 'amount' = number of shares
+    'DEFAULT_SIZE_TYPE': 'percent', # 'percent' = % of available cash; when ENABLE_SHORTING=True the simulator auto-converts this to 'value' sizing
 
     # --- Stop Loss ---
     'USE_STOP_LOSS': True,     # Set to True to enable stop-loss
@@ -99,8 +99,8 @@ STRATEGY_MACD = {
     # "SIGNAL_WINDOW": [9, 5],
 
     # Shorting control (specific to this strategy)
-    "SHORT_ENTRIES_ENABLED": False, # Set to True to enable shorting based on MACD<Signal cross
-    "SHORT_EXITS_ENABLED": False  # Set to True if enabling shorts
+    "SHORT_ENTRIES_ENABLED": True, # Short entry when MACD crosses below Signal
+    "SHORT_EXITS_ENABLED": True   # Short exit when MACD crosses above Signal
 }
 
 # Configuration for Volume Breakout Strategy - UPDATED EXIT MA WINDOW

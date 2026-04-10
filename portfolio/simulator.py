@@ -165,6 +165,22 @@ def run_backtest(
     logger.debug(f"Final portfolio kwargs: {final_portfolio_kwargs}")
 
 
+    # SizeType.Percent doesn't support position reversal (long → short) in vectorbt.
+    # When short signals are present, convert 'percent' to 'value' sizing so the
+    # position size is computed as a fixed dollar amount (initial_cash × percent).
+    # 'value' does support reversal and keeps the same rough allocation intent.
+    if reindexed_short_entries is not None or reindexed_short_exits is not None:
+        st = str(final_portfolio_kwargs.get('size_type') or 'percent').lower()
+        if st == 'percent':
+            pct  = final_portfolio_kwargs.get('size') or 0.9
+            cash = final_portfolio_kwargs.get('init_cash') or 100_000.0
+            final_portfolio_kwargs['size_type'] = 'value'
+            final_portfolio_kwargs['size']      = float(pct) * float(cash)
+            logger.info(
+                f"Short signals detected: converted size_type 'percent' -> 'value' "
+                f"(size={final_portfolio_kwargs['size']:.2f})"
+            )
+
     logger.info("Running vectorbt Portfolio.from_signals simulation...")
     try:
         # Use the processed price data and reindexed signals

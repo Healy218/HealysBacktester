@@ -58,7 +58,8 @@ INTERVALS = [
 ]
 
 # ── In-memory state (not stored in dcc.Store — not JSON-serialisable) ───────
-_last_run: dict = {"portfolio": None, "price_data": None}
+# Keyed by symbol so basket runs can store each portfolio independently.
+_last_run: dict = {"by_symbol": {}}
 
 # ── App ─────────────────────────────────────────────────────────────────────
 app = dash.Dash(
@@ -184,8 +185,8 @@ def _control_row():
     return dbc.Card(dbc.CardBody(dbc.Row([
 
         dbc.Col([
-            dbc.Label("Ticker"),
-            dbc.Input(id="ticker-input", placeholder="e.g. SPY", type="text",
+            dbc.Label("Tickers (comma-separated)"),
+            dbc.Input(id="ticker-input", placeholder="e.g. SPY, QQQ, AAPL", type="text",
                       value="SPY", debounce=False),
         ], xs=12, sm=6, md=2),
 
@@ -245,7 +246,7 @@ def _results_tab():
 
         # Top-5 table — outside Loading so it isn't hidden while graphs render
         html.Div(id="table-section", style={"display": "none"}, children=[
-            html.H5("Top 5 Parameter Combinations — ranked by Sharpe Ratio",
+            html.H5("Best Parameters per Symbol — ranked by Sharpe Ratio",
                     className="mt-3"),
             dash_table.DataTable(
                 id="top5-table",
@@ -362,15 +363,20 @@ app.layout = dbc.Container([
     prevent_initial_call=True,
 )
 def run_backtest_callback(n_clicks, ticker, start, end, interval, strategy):
-    """Runs the selected strategy and populates the top-5 table."""
+    """Runs the selected strategy over one or more tickers and populates the results table."""
     HIDDEN = {"display": "none"}
     SHOW   = {"display": "block"}
 
     # ── Input validation ────────────────────────────────────────────────────
     if not ticker or not ticker.strip():
-        return no_update, [], [], HIDDEN, HIDDEN, "Please enter a ticker symbol.", True, [0]
+        return no_update, [], [], HIDDEN, HIDDEN, "Please enter at least one ticker symbol.", True, [0]
 
-    ticker = ticker.strip().upper()
+    # Parse comma-separated tickers; deduplicate while preserving order
+    tickers = list(dict.fromkeys(
+        t.strip().upper() for t in ticker.split(",") if t.strip()
+    ))
+    if not tickers:
+        return no_update, [], [], HIDDEN, HIDDEN, "Please enter at least one valid ticker symbol.", True, [0]
 
     if not start or not end:
         return no_update, [], [], HIDDEN, HIDDEN, "Please set both start and end dates.", True, [0]
@@ -390,44 +396,70 @@ def run_backtest_callback(n_clicks, ticker, start, end, interval, strategy):
         msg = f"Failed to load config/settings.py: {e}"
         return no_update, [], [], HIDDEN, HIDDEN, msg, True, [0]
 
-    # ── Run the backtest ────────────────────────────────────────────────────
+    # ── Run the backtest for each ticker ────────────────────────────────────
     runner = STRATEGIES[strategy]["runner"]
-    logger.info(f"Dashboard run: {strategy} | {ticker} | {interval} | {start}->{end}")
+    _last_run["by_symbol"] = {}
+    all_best_rows = []   # one best-param row per symbol
+    errors = []
 
-    result = runner.run(ticker, start, end, interval, backtest_config, strategy_config)
+    for sym in tickers:
+        logger.info(f"Dashboard run: {strategy} | {sym} | {interval} | {start}->{end}")
+        try:
+            result = runner.run(sym, start, end, interval, backtest_config, strategy_config)
+        except Exception as exc:
+            logger.exception(f"[{sym}] Unhandled exception in runner: {exc}")
+            errors.append(f"{sym}: {exc}")
+            _last_run["by_symbol"][sym] = {"portfolio": None, "price_data": None}
+            continue
 
-    # Stash non-serialisable objects in module-level cache
-    _last_run["portfolio"]   = result.pop("portfolio",   None)
-    _last_run["price_data"]  = result.pop("price_data",  None)
+        _last_run["by_symbol"][sym] = {
+            "portfolio":  result.pop("portfolio",  None),
+            "price_data": result.pop("price_data", None),
+        }
 
-    if result.get("error"):
-        return (
-            None, [], [], HIDDEN, HIDDEN,
-            f"Error: {result['error']}", True, [0],
-        )
+        if result.get("error"):
+            errors.append(f"{sym}: {result['error']}")
+            continue
 
-    top5 = result.get("top5", [])
-    if not top5:
-        return (
-            None, [], [], HIDDEN, HIDDEN,
-            "No results returned — try a different ticker, date range, or strategy.", True, [0],
-        )
+        top5 = result.get("top5", [])
+        if not top5:
+            errors.append(f"{sym}: no results returned")
+            continue
+
+        # Keep the single best combination for this symbol
+        best = top5[0].copy()
+        best["symbol"] = sym
+        all_best_rows.append(best)
+
+    if not all_best_rows:
+        err_msg = "No results for any ticker. " + " | ".join(errors)
+        return None, [], [], HIDDEN, HIDDEN, err_msg, True, [0]
+
+    # Sort combined results by Sharpe descending and re-rank
+    all_best_rows.sort(key=lambda r: r.get("sharpe_ratio") or float("-inf"), reverse=True)
+    for i, row in enumerate(all_best_rows, start=1):
+        row["rank"] = i
+
+    # Surface any partial errors as a non-blocking warning
+    warning_msg = ("Some tickers failed: " + " | ".join(errors)) if errors else ""
 
     # ── Format table ────────────────────────────────────────────────────────
     col_defs = [
-        {"name": "Rank",           "id": "rank"},
-        {"name": "Parameters",     "id": "param_label"},
-        {"name": "Return %",       "id": "total_return_pct"},
-        {"name": "Sharpe",         "id": "sharpe_ratio"},
-        {"name": "Max DD %",       "id": "max_drawdown_pct"},
-        {"name": "Win Rate %",     "id": "win_rate_pct"},
-        {"name": "# Trades",       "id": "total_trades"},
+        {"name": "Rank",       "id": "rank"},
+        {"name": "Symbol",     "id": "symbol"},
+        {"name": "Parameters", "id": "param_label"},
+        {"name": "Return %",   "id": "total_return_pct"},
+        {"name": "Sharpe",     "id": "sharpe_ratio"},
+        {"name": "Max DD %",   "id": "max_drawdown_pct"},
+        {"name": "Win Rate %", "id": "win_rate_pct"},
+        {"name": "# Trades",   "id": "total_trades"},
     ]
 
     table_rows = []
-    for row in top5:
+    for row in all_best_rows:
         table_rows.append({
             "rank":             row["rank"],
+            "symbol":           row["symbol"],
             "param_label":      row["param_label"],
             "total_return_pct": _fmt_pct(row.get("total_return_pct")),
             "sharpe_ratio":     _fmt_num(row.get("sharpe_ratio"), 3),
@@ -436,7 +468,11 @@ def run_backtest_callback(n_clicks, ticker, start, end, interval, strategy):
             "total_trades":     row.get("total_trades", 0),
         })
 
-    return top5, table_rows, col_defs, SHOW, SHOW, "", False, [0]
+    return (
+        all_best_rows, table_rows, col_defs,
+        SHOW, SHOW,
+        warning_msg, bool(warning_msg), [0],
+    )
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -451,26 +487,27 @@ def run_backtest_callback(n_clicks, ticker, start, end, interval, strategy):
     prevent_initial_call=True,
 )
 def update_graphs(selected_rows, top5_data):
-    """Generates equity + trades graphs for the selected top-5 row."""
+    """Generates equity + trades graphs for the selected row."""
     empty = go.Figure()
 
     if not selected_rows or top5_data is None:
         return empty, empty
 
-    portfolio  = _last_run.get("portfolio")
-    price_data = _last_run.get("price_data")
-
-    if portfolio is None or price_data is None:
-        return empty, empty
-
     try:
-        row_idx     = selected_rows[0]
-        row_data    = top5_data[row_idx]
-        col_int_idx = row_data["portfolio_col_int_idx"]
+        row_idx  = selected_rows[0]
+        row_data = top5_data[row_idx]
+        symbol   = row_data.get("symbol")
 
-        # Slice to the single chosen combination using integer position
-        col       = portfolio.wrapper.columns[col_int_idx]
-        single_pf = portfolio[col]
+        sym_cache  = _last_run["by_symbol"].get(symbol, {})
+        portfolio  = sym_cache.get("portfolio")
+        price_data = sym_cache.get("price_data")
+
+        if portfolio is None or price_data is None:
+            return empty, empty
+
+        col_int_idx = row_data["portfolio_col_int_idx"]
+        col         = portfolio.wrapper.columns[col_int_idx]
+        single_pf   = portfolio[col]
 
         fig_equity = plotting.plot_portfolio_summary(single_pf) or empty
         fig_trades = plotting.plot_trades(single_pf, price_data) or empty

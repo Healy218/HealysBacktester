@@ -14,8 +14,9 @@ logger = setup_logging(log_file="logs/backtester.log")
 def generate_ma_signals(
     close_prices_series: pd.Series,
     windows_range: np.ndarray, # Expect a single 1D numpy array defining the range, e.g., np.arange(2, 101)
+    enable_shorting: bool = False,
     # ma_type: str = 'SMA' # Optional: Add parameter for different MA types if needed
-    ) -> tuple[pd.DataFrame, pd.DataFrame]:
+    ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame | None, pd.DataFrame | None]:
     """
     Generates entry and exit signal DataFrames based on MA crossover
     using vectorbt's run_combs for efficiency with large parameter spaces.
@@ -77,6 +78,10 @@ def generate_ma_signals(
     try:
         entries = fast_ma_values.vbt.crossed_above(slow_ma_values)
         exits = fast_ma_values.vbt.crossed_below(slow_ma_values)
+        # Short signals are the inverse: enter short when fast crosses below slow,
+        # exit short when fast crosses back above slow.
+        short_entries = exits.copy() if enable_shorting else None
+        short_exits = entries.copy() if enable_shorting else None
     except Exception as e:
         logger.info(f"Error generating crossover signals: {e}")
         # You might want to inspect fast_ma_values and slow_ma_values here if errors persist
@@ -94,7 +99,7 @@ def generate_ma_signals(
              warnings.warn("Input price series is empty, resulting signal DataFrames are empty.")
         else:
              warnings.warn("Signal generation resulted in empty DataFrames, although price data exists. No crossovers occurred?")
-        return entries, exits
+        return entries, exits, None, None
 
 
     if not isinstance(entries, pd.DataFrame) or not isinstance(exits, pd.DataFrame):
@@ -105,4 +110,4 @@ def generate_ma_signals(
 
     # Print the number of combinations based on the shape of the resulting 'entries' DataFrame
     logger.info(f"MA Crossover signals generated successfully for {entries.shape[1]} combinations.")
-    return entries, exits
+    return entries, exits, short_entries, short_exits
