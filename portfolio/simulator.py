@@ -30,11 +30,12 @@ def run_backtest(
     size_type: str = 'percent',
     sl_stop : Optional[float] = None,
     tp_stop : Optional[float] = None,
-    short_entries_series: Optional[Union[pd.Series, pd.DataFrame]] = None, # New optional arg
-    short_exits_series: Optional[Union[pd.Series, pd.DataFrame]] = None,   # New optional arg
+    short_entries_series: Optional[Union[pd.Series, pd.DataFrame]] = None,
+    short_exits_series: Optional[Union[pd.Series, pd.DataFrame]] = None,
+    trend_filter_window: int = 0,
     signal_kwargs: Optional[Dict[str, Any]] = None,
     portfolio_kwargs: Optional[Dict[str, Any]] = None
-    ) -> PortfolioBase: # Use the type alias
+    ) -> PortfolioBase:
     """
     Runs a vectorbt backtest simulation based on entry/exit signals (long and optionally short).
     Handles index normalization and uses reindex for robust signal alignment.
@@ -138,6 +139,27 @@ def run_backtest(
         logger.error(f"ERROR during signal reindexing: {e}")
         raise # Re-raise for decorator
 
+    # --- TREND FILTER ---
+    # When trend_filter_window > 0, gate long entries to bars where close >= trend MA
+    # and short entries to bars where close <= trend MA.  Exit signals are NOT filtered
+    # so open positions still close when the strategy says to.
+    # This creates genuine diversity between long and short conditions and produces
+    # flat periods when price sits in a neutral zone relative to the trend MA.
+    if trend_filter_window and trend_filter_window > 0:
+        close_s = price_df_to_use['Close']
+        trend_ma = close_s.rolling(trend_filter_window, min_periods=1).mean()
+        long_ok  = (close_s >= trend_ma).reindex(target_index, fill_value=False)
+        short_ok = (close_s <= trend_ma).reindex(target_index, fill_value=False)
+        # .multiply(..., axis=0) broadcasts a Series over all DataFrame columns
+        reindexed_entries = reindexed_entries.multiply(long_ok.astype(int), axis=0).astype(bool)
+        if reindexed_short_entries is not None:
+            reindexed_short_entries = reindexed_short_entries.multiply(short_ok.astype(int), axis=0).astype(bool)
+        logger.info(
+            f"Trend filter ({trend_filter_window}-bar MA): "
+            f"{long_ok.mean():.1%} of bars allow longs, "
+            f"{short_ok.mean():.1%} allow shorts"
+        )
+
     # --- Prepare kwargs for vbt.Portfolio.from_signals ---
     logger.debug("Preparing simulation parameters...")
     # Signal-related arguments (stops are applied to both long and short if enabled)
@@ -165,20 +187,30 @@ def run_backtest(
     logger.debug(f"Final portfolio kwargs: {final_portfolio_kwargs}")
 
 
-    # SizeType.Percent doesn't support position reversal (long → short) in vectorbt.
-    # When short signals are present, convert 'percent' to 'value' sizing so the
-    # position size is computed as a fixed dollar amount (initial_cash × percent).
-    # 'value' does support reversal and keeps the same rough allocation intent.
+    # SizeType.Percent does not support position reversal (long → short in one step)
+    # in this version of vectorbt — it raises a hard ValueError.  The only size types
+    # that support reversal are Amount and Value.
+    #
+    # We use Value with a conservative cap so that fixed-dollar sizing doesn't create
+    # runaway leverage as the portfolio draws down.  The cap is the LOWER of:
+    #   • pct × init_cash  (user's configured fraction of starting capital), and
+    #   • 0.25 × init_cash (hard safety ceiling — 25% of starting capital max).
+    #
+    # Example: DEFAULT_SIZE=0.9, INITIAL_CAPITAL=$100k → size = min($90k, $25k) = $25k.
+    # At a 50 % drawdown ($50k equity) that is a 50 % allocation — acceptable leverage.
+    # Without the cap the original code used $90k, giving 180 % at the same drawdown.
     if reindexed_short_entries is not None or reindexed_short_exits is not None:
         st = str(final_portfolio_kwargs.get('size_type') or 'percent').lower()
         if st == 'percent':
-            pct  = final_portfolio_kwargs.get('size') or 0.9
-            cash = final_portfolio_kwargs.get('init_cash') or 100_000.0
+            pct  = float(final_portfolio_kwargs.get('size') or 0.9)
+            cash = float(final_portfolio_kwargs.get('init_cash') or 100_000.0)
+            capped_pct = min(pct, 0.25)          # hard ceiling: 25 % of initial capital
             final_portfolio_kwargs['size_type'] = 'value'
-            final_portfolio_kwargs['size']      = float(pct) * float(cash)
+            final_portfolio_kwargs['size']      = capped_pct * cash
             logger.info(
-                f"Short signals detected: converted size_type 'percent' -> 'value' "
-                f"(size={final_portfolio_kwargs['size']:.2f})"
+                f"Short signals detected: size_type 'percent' → 'value' "
+                f"(capped at 25 %: size={final_portfolio_kwargs['size']:,.2f}, "
+                f"configured pct={pct:.0%}, init_cash={cash:,.0f})"
             )
 
     logger.info("Running vectorbt Portfolio.from_signals simulation...")

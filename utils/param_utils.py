@@ -14,63 +14,92 @@ logger = setup_logging(log_file="logs/backtester.log")
 
 def top5_from_portfolio(portfolio, n: int = 5) -> list[dict]:
     """
-    Ranks all parameter combinations in a multi-column vectorbt Portfolio by
-    Sharpe Ratio and returns the top N as a list of dicts.
+    Returns the best parameter combination for each of three metrics:
+      - Best Sharpe Ratio
+      - Best Total Return %
+      - Best Win Rate %
 
-    Each dict contains only JSON-serializable values so it can be stored in
-    a Dash dcc.Store component.  The 'portfolio_col_int_idx' field is an
-    integer position into portfolio.wrapper.columns — use it to re-slice the
-    portfolio object without any tuple/type-conversion headaches.
+    Each result dict is tagged with a 'ranked_by' field so the UI can label
+    rows clearly.  The 'portfolio_col_int_idx' field is an integer position
+    into portfolio.wrapper.columns — use it to re-slice the portfolio object
+    without any tuple/type-conversion headaches.
 
     Args:
         portfolio: A multi-column vectorbt Portfolio object.
-        n: Number of top combinations to return.
+        n: Unused, kept for API compatibility.
 
     Returns:
-        List of dicts (length <= n), sorted best-first by Sharpe Ratio.
-        Returns [] if metrics cannot be computed.
+        List of up to 3 dicts (one per metric), each describing the best
+        combination for that metric.  Returns [] if metrics cannot be computed.
     """
     try:
-        # Pull individual metrics — faster than portfolio.stats(agg_func=None)
-        # which computes every metric for every combination.
         sharpe   = portfolio.sharpe_ratio().replace([np.inf, -np.inf], np.nan)
         ret      = portfolio.total_return()
         drawdown = portfolio.max_drawdown()
 
-        # Trades-level metrics — wrap in try/except, some combos have 0 trades
+        # Mask blown-up columns before ranking.
+        # A portfolio that lost ≥ 95 % of its value is effectively ruined regardless
+        # of what the Sharpe or win-rate look like (high Sharpe can arise when many
+        # small wins precede one catastrophic loss — the vectorbt Sharpe calculation
+        # doesn't account for terminal ruin).
+        BLOWUP_THRESHOLD = -0.95  # total return worse than -95 %
+        blown_up = ret <= BLOWUP_THRESHOLD
+        if blown_up.any():
+            n_blown = int(blown_up.sum())
+            logger.info(f"Excluding {n_blown} blown-up parameter combinations (return ≤ -95 %) from ranking.")
+            sharpe   = sharpe.where(~blown_up,   np.nan)
+            ret      = ret.where(~blown_up,      np.nan)
+
         try:
             win_rate = portfolio.trades.win_rate()
         except Exception:
             win_rate = pd.Series(np.nan, index=portfolio.wrapper.columns)
+
+        # Also mask win_rate for blown-up columns
+        win_rate = win_rate.where(~blown_up, np.nan)
 
         try:
             trade_count = portfolio.trades.count()
         except Exception:
             trade_count = pd.Series(0, index=portfolio.wrapper.columns)
 
-        # Sort by Sharpe descending, ignoring NaN
-        top_cols = sharpe.nlargest(n)
+        try:
+            best_trade = portfolio.trades.returns.max() * 100
+        except Exception:
+            best_trade = pd.Series(np.nan, index=portfolio.wrapper.columns)
+
+        def _make_row(col, ranked_by: str) -> dict:
+            col_int_idx = portfolio.wrapper.columns.get_loc(col)
+            return {
+                "ranked_by":             ranked_by,
+                "portfolio_col_int_idx": int(col_int_idx),
+                "param_label":           _format_col_label(col, portfolio.wrapper.columns),
+                "total_return_pct":      _safe_float(ret.get(col, np.nan) * 100),
+                "sharpe_ratio":          _safe_float(sharpe.get(col, np.nan)),
+                "max_drawdown_pct":      _safe_float(abs(drawdown.get(col, np.nan)) * 100),
+                "win_rate_pct":          _safe_float(win_rate.get(col, np.nan) * 100),
+                "best_trade_pct":        _safe_float(best_trade.get(col, np.nan)),
+                "total_trades":          int(trade_count.get(col, 0)),
+            }
 
         results = []
-        for rank, (col, sharpe_val) in enumerate(top_cols.items(), start=1):
-            # Integer position — type-safe way to re-slice later
-            col_int_idx = portfolio.wrapper.columns.get_loc(col)
 
-            results.append({
-                "rank":                 rank,
-                "portfolio_col_int_idx": int(col_int_idx),
-                "param_label":          _format_col_label(col, portfolio.wrapper.columns),
-                "total_return_pct":     _safe_float(ret.get(col, np.nan) * 100),
-                "sharpe_ratio":         _safe_float(sharpe_val),
-                "max_drawdown_pct":     _safe_float(abs(drawdown.get(col, np.nan)) * 100),
-                "win_rate_pct":         _safe_float(win_rate.get(col, np.nan) * 100),
-                "total_trades":         int(trade_count.get(col, 0)),
-            })
+        best_sharpe_col = sharpe.idxmax(skipna=True)
+        if best_sharpe_col is not None:
+            results.append(_make_row(best_sharpe_col, "Best Sharpe"))
+
+        best_ret_col = ret.idxmax(skipna=True)
+        if best_ret_col is not None:
+            results.append(_make_row(best_ret_col, "Best Return"))
+
+        best_wr_col = win_rate.idxmax(skipna=True)
+        if best_wr_col is not None:
+            results.append(_make_row(best_wr_col, "Best Win Rate"))
 
         return results
 
     except Exception as e:
-        logger.error(f"Error computing top-{n} results: {e}")
+        logger.error(f"Error computing best-by-metric results: {e}")
         return []
 
 

@@ -89,14 +89,24 @@ def plot_drawdowns(portfolio: vbt.Portfolio, column: Optional[Union[str, Tuple]]
 
 def plot_trades(portfolio: vbt.Portfolio, price_df: pd.DataFrame, column: Optional[Union[str, Tuple]] = None, **kwargs) -> Optional[go.Figure]:
     """
-    Generates the trades plotted on the price chart and returns the figure object.
-    Long entries/exits and short entries/exits are drawn with distinct markers and
-    colors so it is visually clear which direction each trade is.
+    Plots trades as entry-point markers on the price chart.
 
-    Long Entry  — green  triangle-up
-    Long Exit   — green  triangle-down (win) / red triangle-down (loss)
-    Short Entry — red    triangle-down  (selling short)
-    Short Exit  — orange triangle-up    (covering)
+    For reversal-based strategies (long → short → long), entry and exit events
+    happen at the same bar and price, so plotting both causes one marker to
+    cover the other entirely.  Showing only entry markers avoids this overlap:
+    the end of one trade is implied by the start of the next.
+
+    Marker key
+    ----------
+    Open markers  (at entry):
+      Long open   — gray   outline circle ●
+      Short open  — gray   x              ✕
+
+    Close markers (at exit, colored by outcome):
+      Long  (win)  — green  filled circle  ●
+      Long  (loss) — red    outline circle ●
+      Short (win)  — teal   filled x       ✕
+      Short (loss) — orange outline x      ✕
     """
     logger.info(f"Generating trades plot figure for column: {column if column is not None else 'Default'}...")
     if portfolio is None:
@@ -116,38 +126,51 @@ def plot_trades(portfolio: vbt.Portfolio, price_df: pd.DataFrame, column: Option
 
         rr = pf.trades.records_readable
 
-        # Identify entry and exit timestamps — column name varies by vbt version
-        entry_ts_col = next((c for c in rr.columns if 'entry' in c.lower() and 'time' in c.lower()), None)
-        exit_ts_col  = next((c for c in rr.columns if 'exit'  in c.lower() and 'time' in c.lower()), None)
+        # Locate timestamp and price columns (names vary slightly by vbt version)
+        entry_ts_col = next((c for c in rr.columns if 'entry' in c.lower() and 'time'  in c.lower()), None)
         entry_px_col = next((c for c in rr.columns if 'entry' in c.lower() and 'price' in c.lower()), None)
+        exit_ts_col  = next((c for c in rr.columns if 'exit'  in c.lower() and 'time'  in c.lower()), None)
         exit_px_col  = next((c for c in rr.columns if 'exit'  in c.lower() and 'price' in c.lower()), None)
 
-        if not all([entry_ts_col, exit_ts_col, entry_px_col, exit_px_col]):
-            # Fall back to the default vectorbt plot if column names don't match
-            logger.warning("Could not locate entry/exit columns; falling back to default trades.plot()")
+        if not all([entry_ts_col, entry_px_col]):
+            logger.warning("Could not locate entry columns; falling back to default trades.plot()")
             return pf.trades.plot(fig=fig)
 
-        long_trades  = rr[rr['Direction'] == 'Long']
-        short_trades = rr[rr['Direction'] == 'Short']
-        closed_exits = rr[rr['Status'] == 'Closed']
-        long_closed  = closed_exits[closed_exits['Direction'] == 'Long']
-        short_closed = closed_exits[closed_exits['Direction'] == 'Short']
+        # Determine win/loss for each trade
+        pnl_col = next((c for c in rr.columns if 'pnl' in c.lower()), None)
+        if pnl_col:
+            win = rr[pnl_col] >= 0
+        else:
+            ret_col = next((c for c in rr.columns if 'return' in c.lower()), None)
+            win = rr[ret_col] >= 0 if ret_col else pd.Series(True, index=rr.index)
 
-        def _add_scatter(df, ts_col, px_col, name, color, symbol, size=10):
+        longs  = rr['Direction'] == 'Long'
+        shorts = rr['Direction'] == 'Short'
+
+        def _add(df, name, color, symbol, x_col, y_col, filled=True):
             if df.empty:
                 return
+            marker = dict(symbol=symbol, color=color, size=9,
+                          line=dict(color=color, width=2))
+            if not filled:
+                marker['color'] = 'rgba(0,0,0,0)'
             fig.add_trace(go.Scatter(
-                x=df[ts_col], y=df[px_col],
-                mode='markers',
-                marker=dict(symbol=symbol, color=color, size=size,
-                            line=dict(color='white', width=1)),
-                name=name,
+                x=df[x_col], y=df[y_col],
+                mode='markers', marker=marker, name=name,
             ))
 
-        _add_scatter(long_trades,  entry_ts_col, entry_px_col, 'Long Entry',  '#00bc8c', 'triangle-up')
-        _add_scatter(long_closed,  exit_ts_col,  exit_px_col,  'Long Exit',   '#3498db', 'triangle-down')
-        _add_scatter(short_trades, entry_ts_col, entry_px_col, 'Short Entry', '#e74c3c', 'triangle-down')
-        _add_scatter(short_closed, exit_ts_col,  exit_px_col,  'Short Cover', '#f39c12', 'triangle-up')
+        # --- Open markers (neutral, at entry time) ---
+        _add(rr[longs],  'Long open',  '#888888', 'circle', entry_ts_col, entry_px_col, filled=False)
+        _add(rr[shorts], 'Short open', '#888888', 'x',      entry_ts_col, entry_px_col, filled=True)
+
+        # --- Close markers (colored by outcome, at exit time) ---
+        if exit_ts_col and exit_px_col:
+            _add(rr[longs  &  win],  'Long ● (win)',   '#00bc8c', 'circle', exit_ts_col, exit_px_col, filled=True)
+            _add(rr[longs  & ~win],  'Long ● (loss)',  '#e74c3c', 'circle', exit_ts_col, exit_px_col, filled=False)
+            _add(rr[shorts &  win],  'Short ✕ (win)',  '#3498db', 'x',      exit_ts_col, exit_px_col, filled=True)
+            _add(rr[shorts & ~win],  'Short ✕ (loss)', '#f39c12', 'x',      exit_ts_col, exit_px_col, filled=False)
+        else:
+            logger.warning("Could not locate exit columns; close markers skipped.")
 
         fig.update_layout(
             legend=dict(orientation='h', yanchor='bottom', y=1.02, xanchor='right', x=1),

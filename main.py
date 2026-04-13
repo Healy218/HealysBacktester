@@ -8,6 +8,7 @@
 
 import os
 import json
+import threading
 from datetime import date, timedelta
 from pathlib import Path
 
@@ -57,9 +58,103 @@ INTERVALS = [
     {"label": "1 Day",                                    "value": "1D"},
 ]
 
-# ── In-memory state (not stored in dcc.Store — not JSON-serialisable) ───────
-# Keyed by symbol so basket runs can store each portfolio independently.
+# ── In-memory state ──────────────────────────────────────────────────────────
+# _last_run: keyed by symbol, stores portfolio/price_data objects (not JSON-safe)
 _last_run: dict = {"by_symbol": {}}
+
+# _run_state: shared between the worker thread and the interval callback
+_run_state: dict = {
+    "running":  False,
+    "pct":      0,
+    "step":     "",
+    "result":   None,   # dict with all_best_rows + errors when worker finishes
+    "consumed": True,   # True once the interval has read and displayed the result
+}
+_run_lock = threading.Lock()
+
+
+def _set_progress(pct: int, step: str) -> None:
+    """Thread-safe progress update called from the worker thread."""
+    with _run_lock:
+        _run_state["pct"]  = pct
+        _run_state["step"] = step
+    logger.info(f"[Progress {pct:3d}%] {step}")
+
+
+def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_config):
+    """
+    Background thread: runs the full backtest for every ticker, writing progress
+    updates to _run_state so the Dash interval callback can display them.
+    """
+    try:
+        _set_progress(5, "Configuration loaded")
+        runner = STRATEGIES[strategy]["runner"]
+        _last_run["by_symbol"] = {}
+        all_best_rows = []
+        errors        = []
+        n             = len(tickers)
+
+        for i, sym in enumerate(tickers):
+            # Each ticker gets an equal slice of the 10 → 95 % range
+            base  = 10 + i * 85 // n
+            chunk = 85 // n
+
+            _set_progress(base, f"[{sym}] Loading data and generating signals…")
+            try:
+                result = runner.run(sym, start, end, interval, backtest_config, strategy_config)
+            except Exception as exc:
+                logger.exception(f"[{sym}] Unhandled exception in runner: {exc}")
+                errors.append(f"{sym}: {exc}")
+                _last_run["by_symbol"][sym] = {"portfolio": None, "price_data": None}
+                _set_progress(base + chunk, f"[{sym}] Failed")
+                continue
+
+            _set_progress(base + chunk * 9 // 10, f"[{sym}] Ranking results…")
+
+            _last_run["by_symbol"][sym] = {
+                "portfolio":  result.pop("portfolio",  None),
+                "price_data": result.pop("price_data", None),
+            }
+
+            if result.get("error"):
+                errors.append(f"{sym}: {result['error']}")
+                _set_progress(base + chunk, f"[{sym}] Error")
+                continue
+
+            top5 = result.get("top5", [])
+            if not top5:
+                errors.append(f"{sym}: no results returned")
+                _set_progress(base + chunk, f"[{sym}] No results")
+                continue
+
+            for row in top5:
+                r = row.copy()
+                r["symbol"] = sym
+                all_best_rows.append(r)
+
+            _set_progress(base + chunk, f"[{sym}] Done")
+
+        _set_progress(98, "Finalizing…")
+
+        for i, row in enumerate(all_best_rows, start=1):
+            row["rank"] = i
+
+        with _run_lock:
+            _run_state["result"]   = {"all_best_rows": all_best_rows, "errors": errors}
+            _run_state["pct"]      = 100
+            _run_state["step"]     = "Complete"
+            _run_state["running"]  = False
+            _run_state["consumed"] = False
+
+    except Exception as e:
+        logger.exception(f"Worker thread unexpected error: {e}")
+        with _run_lock:
+            _run_state["result"]   = {"all_best_rows": [], "errors": [str(e)]}
+            _run_state["pct"]      = 100
+            _run_state["step"]     = f"Error: {e}"
+            _run_state["running"]  = False
+            _run_state["consumed"] = False
+
 
 # ── App ─────────────────────────────────────────────────────────────────────
 app = dash.Dash(
@@ -68,7 +163,7 @@ app = dash.Dash(
     title="Healy's Backtester",
 )
 
-# ── Helper functions (defined here so layout functions can call them) ────────
+# ── Helper functions ─────────────────────────────────────────────────────────
 
 def _get_available_results(base_dir: str) -> list[dict]:
     runs = []
@@ -174,6 +269,35 @@ def _make_trades_table(data):
     )
 
 
+def _build_table_data(all_best_rows):
+    """Convert all_best_rows into the col_defs + table_rows the DataTable needs."""
+    col_defs = [
+        {"name": "Symbol",       "id": "symbol"},
+        {"name": "Ranked By",    "id": "ranked_by"},
+        {"name": "Parameters",   "id": "param_label"},
+        {"name": "Return %",     "id": "total_return_pct"},
+        {"name": "Sharpe",       "id": "sharpe_ratio"},
+        {"name": "Max DD %",     "id": "max_drawdown_pct"},
+        {"name": "Win Rate %",   "id": "win_rate_pct"},
+        {"name": "Best Trade %", "id": "best_trade_pct"},
+        {"name": "# Trades",     "id": "total_trades"},
+    ]
+    table_rows = []
+    for row in all_best_rows:
+        table_rows.append({
+            "symbol":           row["symbol"],
+            "ranked_by":        row.get("ranked_by", ""),
+            "param_label":      row["param_label"],
+            "total_return_pct": _fmt_pct(row.get("total_return_pct")),
+            "sharpe_ratio":     _fmt_num(row.get("sharpe_ratio"), 3),
+            "max_drawdown_pct": _fmt_pct(row.get("max_drawdown_pct")),
+            "win_rate_pct":     _fmt_pct(row.get("win_rate_pct")),
+            "best_trade_pct":   _fmt_pct(row.get("best_trade_pct")),
+            "total_trades":     row.get("total_trades", 0),
+        })
+    return col_defs, table_rows
+
+
 # ═══════════════════════════════════════════════════════════════════════════
 #  LAYOUT
 # ═══════════════════════════════════════════════════════════════════════════
@@ -237,14 +361,37 @@ def _results_tab():
     return [
         _control_row(),
 
-        # Hidden stores — JSON-serialisable payload only
+        # Interval fires every 500 ms to poll worker-thread progress
+        dcc.Interval(id="progress-interval", interval=500, n_intervals=0),
+
+        # Hidden stores
         dcc.Store(id="top5-store"),
 
-        # Error banner — outside Loading so it always renders immediately
-        dbc.Alert(id="error-alert", is_open=False, color="danger",
-                  className="mb-3"),
+        # Validation errors (owned by the run-btn callback)
+        dbc.Alert(id="validation-alert", is_open=False, color="danger", className="mb-2"),
 
-        # Top-5 table — outside Loading so it isn't hidden while graphs render
+        # Progress section — hidden until a run starts
+        html.Div(id="progress-section", style={"display": "none"}, children=[
+            html.Div(
+                id="progress-step",
+                className="mb-1",
+                style={"color": "#aaaaaa", "fontSize": "0.9rem", "fontFamily": "monospace"},
+            ),
+            dbc.Progress(
+                id="progress-bar",
+                value=0,
+                striped=True,
+                animated=True,
+                color="success",
+                style={"height": "22px", "borderRadius": "4px"},
+                className="mb-3",
+            ),
+        ]),
+
+        # Runtime errors / partial-failure warnings (owned by the interval callback)
+        dbc.Alert(id="run-alert", is_open=False, color="warning", className="mb-3"),
+
+        # Top-5 results table
         html.Div(id="table-section", style={"display": "none"}, children=[
             html.H5("Best Parameters per Symbol — ranked by Sharpe Ratio",
                     className="mt-3"),
@@ -272,27 +419,20 @@ def _results_tab():
             ),
         ]),
 
-        # Graphs wrapped in Loading so a spinner shows while they render
-        dcc.Loading(
-            id="loading",
-            type="circle",
-            color="#00bc8c",
-            children=[
-                html.Div(id="graph-section", style={"display": "none"}, children=[
-                    dbc.Row([
-                        dbc.Col(dcc.Graph(id="equity-graph"), md=12),
-                    ], className="mt-3"),
-                    dbc.Row([
-                        dbc.Col(dcc.Graph(id="trades-graph"), md=12),
-                    ], className="mt-3"),
-                ]),
-            ],
-        ),
+        # Graphs (no dcc.Loading wrapper — progress bar replaces the spinner)
+        html.Div(id="graph-section", style={"display": "none"}, children=[
+            dbc.Row([
+                dbc.Col(dcc.Graph(id="equity-graph"), md=12),
+            ], className="mt-3"),
+            dbc.Row([
+                dbc.Col(dcc.Graph(id="trades-graph"), md=12),
+            ], className="mt-3"),
+        ]),
     ]
 
 
 def _historical_tab():
-    """Existing results-browser UI, now in its own tab."""
+    """Existing results-browser UI."""
     options = _get_available_results(RESULTS_DIR)
     return [
         dbc.Row(dbc.Col([
@@ -342,18 +482,12 @@ app.layout = dbc.Container([
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-#  CALLBACK 1 — Run the backtest when the button is clicked
+#  CALLBACK 1 — Validate input and launch the worker thread
 # ═══════════════════════════════════════════════════════════════════════════
 
 @app.callback(
-    Output("top5-store",    "data"),
-    Output("top5-table",    "data"),
-    Output("top5-table",    "columns"),
-    Output("table-section", "style"),
-    Output("graph-section", "style"),
-    Output("error-alert",   "children"),
-    Output("error-alert",   "is_open"),
-    Output("top5-table",    "selected_rows"),
+    Output("validation-alert", "children"),
+    Output("validation-alert", "is_open"),
     Input("run-btn", "n_clicks"),
     State("ticker-input", "value"),
     State("start-date",   "value"),
@@ -362,30 +496,29 @@ app.layout = dbc.Container([
     State("strategy-dd",  "value"),
     prevent_initial_call=True,
 )
-def run_backtest_callback(n_clicks, ticker, start, end, interval, strategy):
-    """Runs the selected strategy over one or more tickers and populates the results table."""
-    HIDDEN = {"display": "none"}
-    SHOW   = {"display": "block"}
-
-    # ── Input validation ────────────────────────────────────────────────────
+def start_run(n_clicks, ticker, start, end, interval, strategy):
+    """
+    Validates the form, then starts a background worker thread and returns
+    immediately so the UI stays responsive.  Progress is polled by the interval.
+    """
+    # ── Validation ──────────────────────────────────────────────────────────
     if not ticker or not ticker.strip():
-        return no_update, [], [], HIDDEN, HIDDEN, "Please enter at least one ticker symbol.", True, [0]
+        return "Please enter at least one ticker symbol.", True
 
-    # Parse comma-separated tickers; deduplicate while preserving order
     tickers = list(dict.fromkeys(
         t.strip().upper() for t in ticker.split(",") if t.strip()
     ))
     if not tickers:
-        return no_update, [], [], HIDDEN, HIDDEN, "Please enter at least one valid ticker symbol.", True, [0]
+        return "Please enter at least one valid ticker symbol.", True
 
     if not start or not end:
-        return no_update, [], [], HIDDEN, HIDDEN, "Please set both start and end dates.", True, [0]
+        return "Please set both start and end dates.", True
 
     if start >= end:
-        return no_update, [], [], HIDDEN, HIDDEN, "Start date must be before end date.", True, [0]
+        return "Start date must be before end date.", True
 
     if strategy not in STRATEGIES:
-        return no_update, [], [], HIDDEN, HIDDEN, f"Unknown strategy: {strategy}", True, [0]
+        return f"Unknown strategy: {strategy}", True
 
     # ── Load config ─────────────────────────────────────────────────────────
     try:
@@ -393,90 +526,93 @@ def run_backtest_callback(n_clicks, ticker, start, end, interval, strategy):
         backtest_config = config.get("BACKTEST_CONFIG", {})
         strategy_config = config.get(STRATEGIES[strategy]["config_key"], {})
     except Exception as e:
-        msg = f"Failed to load config/settings.py: {e}"
-        return no_update, [], [], HIDDEN, HIDDEN, msg, True, [0]
+        return f"Failed to load config/settings.py: {e}", True
 
-    # ── Run the backtest for each ticker ────────────────────────────────────
-    runner = STRATEGIES[strategy]["runner"]
-    _last_run["by_symbol"] = {}
-    all_best_rows = []   # one best-param row per symbol
-    errors = []
+    # ── Start worker ─────────────────────────────────────────────────────────
+    with _run_lock:
+        _run_state["running"]  = True
+        _run_state["pct"]      = 0
+        _run_state["step"]     = "Starting…"
+        _run_state["result"]   = None
+        _run_state["consumed"] = True
 
-    for sym in tickers:
-        logger.info(f"Dashboard run: {strategy} | {sym} | {interval} | {start}->{end}")
-        try:
-            result = runner.run(sym, start, end, interval, backtest_config, strategy_config)
-        except Exception as exc:
-            logger.exception(f"[{sym}] Unhandled exception in runner: {exc}")
-            errors.append(f"{sym}: {exc}")
-            _last_run["by_symbol"][sym] = {"portfolio": None, "price_data": None}
-            continue
-
-        _last_run["by_symbol"][sym] = {
-            "portfolio":  result.pop("portfolio",  None),
-            "price_data": result.pop("price_data", None),
-        }
-
-        if result.get("error"):
-            errors.append(f"{sym}: {result['error']}")
-            continue
-
-        top5 = result.get("top5", [])
-        if not top5:
-            errors.append(f"{sym}: no results returned")
-            continue
-
-        # Keep the single best combination for this symbol
-        best = top5[0].copy()
-        best["symbol"] = sym
-        all_best_rows.append(best)
-
-    if not all_best_rows:
-        err_msg = "No results for any ticker. " + " | ".join(errors)
-        return None, [], [], HIDDEN, HIDDEN, err_msg, True, [0]
-
-    # Sort combined results by Sharpe descending and re-rank
-    all_best_rows.sort(key=lambda r: r.get("sharpe_ratio") or float("-inf"), reverse=True)
-    for i, row in enumerate(all_best_rows, start=1):
-        row["rank"] = i
-
-    # Surface any partial errors as a non-blocking warning
-    warning_msg = ("Some tickers failed: " + " | ".join(errors)) if errors else ""
-
-    # ── Format table ────────────────────────────────────────────────────────
-    col_defs = [
-        {"name": "Rank",       "id": "rank"},
-        {"name": "Symbol",     "id": "symbol"},
-        {"name": "Parameters", "id": "param_label"},
-        {"name": "Return %",   "id": "total_return_pct"},
-        {"name": "Sharpe",     "id": "sharpe_ratio"},
-        {"name": "Max DD %",   "id": "max_drawdown_pct"},
-        {"name": "Win Rate %", "id": "win_rate_pct"},
-        {"name": "# Trades",   "id": "total_trades"},
-    ]
-
-    table_rows = []
-    for row in all_best_rows:
-        table_rows.append({
-            "rank":             row["rank"],
-            "symbol":           row["symbol"],
-            "param_label":      row["param_label"],
-            "total_return_pct": _fmt_pct(row.get("total_return_pct")),
-            "sharpe_ratio":     _fmt_num(row.get("sharpe_ratio"), 3),
-            "max_drawdown_pct": _fmt_pct(row.get("max_drawdown_pct")),
-            "win_rate_pct":     _fmt_pct(row.get("win_rate_pct")),
-            "total_trades":     row.get("total_trades", 0),
-        })
-
-    return (
-        all_best_rows, table_rows, col_defs,
-        SHOW, SHOW,
-        warning_msg, bool(warning_msg), [0],
+    thread = threading.Thread(
+        target=_worker,
+        args=(tickers, start, end, interval, strategy, backtest_config, strategy_config),
+        daemon=True,
     )
+    thread.start()
+    logger.info(f"Worker thread started for {tickers} | {strategy}")
+
+    return "", False  # clear any previous validation error
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-#  CALLBACK 2 — Update graphs when a table row is clicked
+#  CALLBACK 2 — Poll worker progress every 500 ms and update the UI
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.callback(
+    Output("progress-bar",     "value"),
+    Output("progress-step",    "children"),
+    Output("progress-section", "style"),
+    Output("run-alert",        "children"),
+    Output("run-alert",        "is_open"),
+    Output("top5-store",       "data"),
+    Output("top5-table",       "data"),
+    Output("top5-table",       "columns"),
+    Output("top5-table",       "selected_rows"),
+    Output("table-section",    "style"),
+    Output("graph-section",    "style"),
+    Input("progress-interval", "n_intervals"),
+    prevent_initial_call=True,
+)
+def poll_progress(n_intervals):
+    """Reads shared _run_state and updates the progress bar and results."""
+    HIDDEN       = {"display": "none"}
+    SHOW         = {"display": "block"}
+    PROGRESS_VIS = {"display": "block"}
+    NU           = no_update
+
+    with _run_lock:
+        running  = _run_state["running"]
+        pct      = _run_state["pct"]
+        step     = _run_state["step"]
+        consumed = _run_state["consumed"]
+        result   = _run_state["result"]
+
+    # ── Still running — show progress, keep results hidden ──────────────────
+    if running:
+        label = f"{step}  ({pct}%)"
+        return pct, label, PROGRESS_VIS, NU, NU, NU, NU, NU, NU, HIDDEN, HIDDEN
+
+    # ── Worker finished and result not yet shown ────────────────────────────
+    if result is not None and not consumed:
+        with _run_lock:
+            _run_state["consumed"] = True
+
+        all_best_rows = result["all_best_rows"]
+        errors        = result["errors"]
+
+        if not all_best_rows:
+            err_msg = "No results for any ticker. " + " | ".join(errors)
+            return 100, "Complete", HIDDEN, err_msg, True, None, [], [], [0], HIDDEN, HIDDEN
+
+        col_defs, table_rows = _build_table_data(all_best_rows)
+        warning = ("Some tickers failed: " + " | ".join(errors)) if errors else ""
+
+        return (
+            100, "Complete", HIDDEN,
+            warning, bool(warning),
+            all_best_rows, table_rows, col_defs, [0],
+            SHOW, SHOW,
+        )
+
+    # ── Idle — nothing to update ────────────────────────────────────────────
+    return NU, NU, NU, NU, NU, NU, NU, NU, NU, NU, NU
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  CALLBACK 3 — Update graphs when a table row is clicked
 # ═══════════════════════════════════════════════════════════════════════════
 
 @app.callback(
@@ -520,7 +656,7 @@ def update_graphs(selected_rows, top5_data):
 
 
 # ═══════════════════════════════════════════════════════════════════════════
-#  CALLBACK 3 — Historical results browser (Tab 2, unchanged logic)
+#  CALLBACK 4 — Historical results browser (Tab 2, unchanged)
 # ═══════════════════════════════════════════════════════════════════════════
 
 @app.callback(
@@ -541,18 +677,18 @@ def update_historical(selected_run_id):
 
     run_dir = os.path.join(RESULTS_DIR, selected_run_id)
 
-    config_text   = _load_config_file(run_dir)
-    best_stats    = _load_csv(run_dir, BEST_STATS_FILENAME)
-    trades_data   = _load_csv(run_dir, TRADES_FILENAME)
-    summary_fig   = _load_fig(run_dir, SUMMARY_PLOT_FILE)  or go.Figure()
-    trades_fig    = _load_fig(run_dir, TRADES_PLOT_FILE)   or go.Figure()
+    config_text  = _load_config_file(run_dir)
+    best_stats   = _load_csv(run_dir, BEST_STATS_FILENAME)
+    trades_data  = _load_csv(run_dir, TRADES_FILENAME)
+    summary_fig  = _load_fig(run_dir, SUMMARY_PLOT_FILE) or go.Figure()
+    trades_fig   = _load_fig(run_dir, TRADES_PLOT_FILE)  or go.Figure()
 
-    config_md = f"```python\n{config_text}\n```"
-
-    stats_table = _make_stats_table(best_stats)
+    config_md    = f"```python\n{config_text}\n```"
+    stats_table  = _make_stats_table(best_stats)
     trades_table = _make_trades_table(trades_data)
 
     return SHOW, config_md, stats_table, summary_fig, trades_fig, trades_table
+
 
 # ═══════════════════════════════════════════════════════════════════════════
 if __name__ == "__main__":

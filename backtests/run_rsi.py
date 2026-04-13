@@ -155,6 +155,7 @@ def _sim_kwargs(cfg, sl_stop, tp_stop):
         size_type=cfg.get("DEFAULT_SIZE_TYPE", "percent"),
         sl_stop=sl_stop,
         tp_stop=tp_stop,
+        trend_filter_window=cfg.get("TREND_FILTER_WINDOW", 0),
     )
 
 

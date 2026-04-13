@@ -38,7 +38,7 @@ def run(
         if any(a.size == 0 for a in [fast_windows, slow_windows, signal_windows]):
             return _err("One or more MACD parameter ranges is empty. Check settings.")
 
-        enable_shorts = strategy_config.get("SHORT_ENTRIES_ENABLED", False)
+        enable_shorts = backtest_config.get("ENABLE_SHORTING", False)
 
         # 1. Data
         logger.info(f"[MACD] Loading data: {symbol} {interval} {start_date}->{end_date}")
@@ -110,6 +110,7 @@ def _sim_kwargs(cfg, sl_stop, tp_stop):
         size_type=cfg.get("DEFAULT_SIZE_TYPE", "percent"),
         sl_stop=sl_stop,
         tp_stop=tp_stop,
+        trend_filter_window=cfg.get("TREND_FILTER_WINDOW", 0),
     )
 
 

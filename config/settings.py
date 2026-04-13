@@ -15,37 +15,39 @@ DATA_CONFIG = {
 
 # MA Crossover - Updated for Optimization
 STRATEGY_MA_CROSSOVER = {
-    # Define the range for window parameters (short and long will be combinations from this range)
-    # np.arange(start, end) generates numbers up to end-1.
-    # Using 2 to 143 gives windows 2, 3, ..., 142.
-    # Combinations (r=2) where short < long: 141 * 140 / 2 = 9870 combinations
+    # Window ranges to sweep.  The right range depends on the data interval:
+    #   1m  data → use 20–200  (smaller windows fire hundreds of signals/day → fee drain)
+    #   5m  data → use 10–250
+    #   1h  data → use  5–100
+    #   1D  data → use  2–451  (~100k combos: n*(n-1)/2)
+    # Combinations (r=2) where fast < slow: n*(n-1)/2
+    # 449 windows → 449*448/2 = 100,576 combos
     "MA_WINDOW_START": 2,
-    "MA_WINDOW_END": 143, # Test windows up to 142
-    "MA_WINDOW_STEP": 1, # Optional, defaults to 1
-    # "SHORT_WINDOW": 20, # Keep old single values commented or remove
-    # "LONG_WINDOW": 50
+    "MA_WINDOW_END": 451,
+    "MA_WINDOW_STEP": 1,
 }
 
-# Example for RSI Threshold (add if you create an RSI script)
-# Example config/settings.py section
+# RSI Threshold
+# True cross-product: windows × entry_thresholds × exit_thresholds
+# 20 windows × 71 entry × 71 exit = 100,820 combos
 STRATEGY_RSI = {
     'RSI_WINDOW_START': 5,
-    'RSI_WINDOW_END': 35,  # Test windows 10 through 30
+    'RSI_WINDOW_END': 25,   # 20 windows (5–24)
     'RSI_WINDOW_STEP': 1,
 
     'ENTRY_THRESHOLD_START': 10.0,
-    'ENTRY_THRESHOLD_END': 49.0, # Test thresholds 20.0 through 35.0
+    'ENTRY_THRESHOLD_END': 45.0,  # 71 values (10.0–45.0 step 0.5)
     'ENTRY_THRESHOLD_STEP': 0.5,
 
-    'EXIT_THRESHOLD_START': 51.0,
-    'EXIT_THRESHOLD_END': 90.0, # Test thresholds 65.0 through 80.0
+    'EXIT_THRESHOLD_START': 55.0,
+    'EXIT_THRESHOLD_END': 90.0,   # 71 values (55.0–90.0 step 0.5)
     'EXIT_THRESHOLD_STEP': 0.5,
 
-    # Only needed if ENABLE_SHORTING is True in BACKTEST_CONFIG
+    # Unused — short thresholds are derived symmetrically from long thresholds
+    # so all signal DataFrames share identical column shapes (vectorbt requirement).
     'SHORT_ENTRY_THRESHOLD_START': 65.0,
     'SHORT_ENTRY_THRESHOLD_END': 80.0,
     'SHORT_ENTRY_THRESHOLD_STEP': 1.0,
-
     'SHORT_EXIT_THRESHOLD_START': 20.0,
     'SHORT_EXIT_THRESHOLD_END': 35.0,
     'SHORT_EXIT_THRESHOLD_STEP': 1.0,
@@ -55,10 +57,19 @@ BACKTEST_CONFIG = {
     'INITIAL_CAPITAL': 100000.0,
     'FEES_PERCENT': 0.001,     # 0.1%
     'SLIPPAGE_PERCENT': 0.0005, # 0.05%
-    'ENABLE_SHORTING': True, # Enables short trading for MA, RSI strategies
+    'ENABLE_SHORTING': True, # Enables short trading for MA, RSI, MACD strategies
+    # Trend filter: gates long entries to bars where close >= N-bar MA,
+    # and short entries to bars where close <= N-bar MA.  This creates genuine
+    # diversity between long and short conditions and produces flat periods when
+    # price is in a neutral zone.  Scale with your interval:
+    #   1m/5m data  → 50–200 bars    (50 bars = 50 min on 1m, 4 hrs on 5m)
+    #   1h data     → 50–100 bars
+    #   1D data     → 50 or 200 bars (classic 50/200-day MA filter)
+    #   0           → disabled (every crossover signal fires regardless of trend)
+    'TREND_FILTER_WINDOW': 50,
     # --- Position Sizing ---
     'DEFAULT_SIZE': .9,      # Use 90% of equity per trade (leaves 10% as buffer for fees/slippage)
-    'DEFAULT_SIZE_TYPE': 'percent', # 'percent' = % of available cash; when ENABLE_SHORTING=True the simulator auto-converts this to 'value' sizing
+    'DEFAULT_SIZE_TYPE': 'percent', # 'percent' is auto-converted to 'value' when shorting (vectorbt limitation); capped at 25% of INITIAL_CAPITAL to prevent leverage blowup
 
     # --- Stop Loss ---
     'USE_STOP_LOSS': True,     # Set to True to enable stop-loss
@@ -76,49 +87,46 @@ BACKTEST_CONFIG = {
     'DEFAULT_FREQ': None      # None = auto-detect from INTERVAL (recommended)
 }
 
-# Configuration for MACD Strategy - UPDATED FOR RANGES
+# Configuration for MACD Strategy
+# Valid combos (fast < slow) ≈ 120k from raw 38×115×27 = 117,990
 STRATEGY_MACD = {
     # Fast EMA Window Range
-    "FAST_WINDOW_START": 3,
-    "FAST_WINDOW_END": 27,  # Tests windows 5 through 20
-    "FAST_WINDOW_STEP": 3,
+    "FAST_WINDOW_START": 2,
+    "FAST_WINDOW_END": 40,   # 38 values (2–39)
+    "FAST_WINDOW_STEP": 1,
 
-    # Slow EMA Window Range (Must be > Fast Window)
-    "SLOW_WINDOW_START": 17,
-    "SLOW_WINDOW_END": 42,  # Tests windows 15 through 50
-    "SLOW_WINDOW_STEP": 3,
+    # Slow EMA Window Range (Must be > Fast Window; combos where fast>=slow are dropped)
+    "SLOW_WINDOW_START": 5,
+    "SLOW_WINDOW_END": 120,  # 115 values (5–119)
+    "SLOW_WINDOW_STEP": 1,
 
     # Signal Line EMA Window Range
     "SIGNAL_WINDOW_START": 3,
-    "SIGNAL_WINDOW_END": 23,  # Tests windows 5 through 20
+    "SIGNAL_WINDOW_END": 30,  # 27 values (3–29)
     "SIGNAL_WINDOW_STEP": 1,
 
-    # Old list-based settings (keep commented or remove)
-    # "FAST_WINDOW": [12, 8, 19, 5],
-    # "SLOW_WINDOW": [26, 17, 39, 13, 34],
-    # "SIGNAL_WINDOW": [9, 5],
-
     # Shorting control (specific to this strategy)
-    "SHORT_ENTRIES_ENABLED": True, # Short entry when MACD crosses below Signal
-    "SHORT_EXITS_ENABLED": True   # Short exit when MACD crosses above Signal
+    "SHORT_ENTRIES_ENABLED": True,
+    "SHORT_EXITS_ENABLED": True,
 }
 
-# Configuration for Volume Breakout Strategy - UPDATED EXIT MA WINDOW
+# Configuration for Volume Breakout Strategy
+# 70 vol_windows × 19 multipliers × 80 exit_ma = 106,400 combos
 STRATEGY_VOLUME_BREAKOUT = {
-    # Define range for volume window
-    "VOLUME_WINDOW_START": 30,
-    "VOLUME_WINDOW_END": 60,  # Test windows up to 150
-    "VOLUME_WINDOW_STEP": 2,
-    # Keep volume multiplier as list
-    "VOLUME_MULTIPLIER_START": 1.5, # How much higher volume needs to be than average
-    "VOLUME_MULTIPLIER_END": 2.00,
+    # Volume lookback window
+    "VOLUME_WINDOW_START": 10,
+    "VOLUME_WINDOW_END": 80,   # 70 values (10–79)
+    "VOLUME_WINDOW_STEP": 1,
+    # Volume spike multiplier
+    "VOLUME_MULTIPLIER_START": 1.2,
+    "VOLUME_MULTIPLIER_END": 3.0,   # 19 values (1.2–3.0 step 0.1)
     "VOLUME_MULTIPLIER_STEP": 0.1,
-    # Define range for exit MA window
-    "EXIT_MA_WINDOW_START": 45,
-    "EXIT_MA_WINDOW_END": 90,  # Test windows up to 150
+    # Exit MA window
+    "EXIT_MA_WINDOW_START": 10,
+    "EXIT_MA_WINDOW_END": 90,   # 80 values (10–89)
     "EXIT_MA_WINDOW_STEP": 1,
     # Other settings
-    "CONFIRM_PRICE_INCREASE": False,     # Require close > previous close on breakout day?
+    "CONFIRM_PRICE_INCREASE": False,
 }
 
 # --- Environment/API Keys (Optional - Better in .env file) ---
