@@ -49,11 +49,22 @@ def run(
         d_step = strategy_config.get("STOCH_D_STEP", 1)
         d_windows = np.arange(d_start, d_end, d_step)
 
+        # Threshold ranges (oversold/overbought zones)
+        os_start = strategy_config.get("STOCH_OVERSOLD_START", 20)
+        os_end = strategy_config.get("STOCH_OVERSOLD_END", 21)
+        os_step = strategy_config.get("STOCH_OVERSOLD_STEP", 1)
+        oversold_range = np.arange(os_start, os_end, os_step)
+
+        ob_start = strategy_config.get("STOCH_OVERBOUGHT_START", 80)
+        ob_end = strategy_config.get("STOCH_OVERBOUGHT_END", 81)
+        ob_step = strategy_config.get("STOCH_OVERBOUGHT_STEP", 1)
+        overbought_range = np.arange(ob_start, ob_end, ob_step)
+
         if k_windows.size < 1 or d_windows.size < 1:
             return _err("Stochastic parameter ranges are empty.")
 
-        n_combos = k_windows.size * d_windows.size
-        logger.info(f"[STOCH] {n_combos} parameter combinations")
+        n_combos = k_windows.size * d_windows.size * oversold_range.size * overbought_range.size
+        logger.info(f"[STOCH] {n_combos:,} parameter combinations")
 
         # 1. Data
         logger.info(f"[STOCH] Loading data: {symbol} {interval} {start_date}->{end_date}")
@@ -72,6 +83,8 @@ def run(
             price_data["Close"],
             k_windows,
             d_windows,
+            oversold_range=oversold_range,
+            overbought_range=overbought_range,
             enable_shorting=enable_shorting,
         )
         if entries is None or entries.empty or not entries.any().any():

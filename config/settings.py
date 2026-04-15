@@ -135,25 +135,47 @@ STRATEGY_VOLUME_BREAKOUT = {
 }
 
 # Configuration for Bollinger Bands Breakout Strategy
-# 21 windows × 9 stds = 189 combos (fast, lightweight sweep)
+# 300 windows × 336 stds ≈ 100,800 combos
 STRATEGY_BBANDS = {
-    "BBANDS_WINDOW_START": 10,
-    "BBANDS_WINDOW_END": 51,
-    "BBANDS_WINDOW_STEP": 2,
-    "BBANDS_STD_START": 1.0,
-    "BBANDS_STD_END": 3.25,
-    "BBANDS_STD_STEP": 0.25,
+    "BBANDS_WINDOW_START": 5,
+    "BBANDS_WINDOW_END": 305,       # 300 windows (5–304)
+    "BBANDS_WINDOW_STEP": 1,
+    "BBANDS_STD_START": 0.50,
+    "BBANDS_STD_END": 3.86,         # 336 values (0.50–3.85 step 0.01)
+    "BBANDS_STD_STEP": 0.01,
 }
 
 # Configuration for Stochastic Crossover Strategy
-# 16 k_windows × 7 d_windows = 112 combos
+# True cross-product: k_windows × d_windows × oversold × overbought
+# 30 × 10 × 20 × 17 = 102,000 combos
 STRATEGY_STOCH = {
     "STOCH_K_START": 5,
-    "STOCH_K_END": 21,
+    "STOCH_K_END": 35,              # 30 windows (5–34)
     "STOCH_K_STEP": 1,
-    "STOCH_D_START": 3,
-    "STOCH_D_END": 10,
+    "STOCH_D_START": 2,
+    "STOCH_D_END": 12,              # 10 windows (2–11)
     "STOCH_D_STEP": 1,
+    "STOCH_OVERSOLD_START": 10,
+    "STOCH_OVERSOLD_END": 30,       # 20 values (10–29)
+    "STOCH_OVERSOLD_STEP": 1,
+    "STOCH_OVERBOUGHT_START": 70,
+    "STOCH_OVERBOUGHT_END": 87,     # 17 values (70–86)
+    "STOCH_OVERBOUGHT_STEP": 1,
+}
+
+# Configuration for Elliott Wave / Fibonacci Retracement Strategy
+# Swing detection order × Fibonacci level × Fibonacci zone tolerance
+# 28 × 160 × 25 = 112,000 combos
+STRATEGY_ELLIOTT = {
+    "SWING_ORDER_START": 3,
+    "SWING_ORDER_END": 31,          # 28 values (3–30)
+    "SWING_ORDER_STEP": 1,
+    "FIB_LEVEL_START": 0.100,
+    "FIB_LEVEL_END": 0.900,         # 160 values (0.100–0.895 step 0.005)
+    "FIB_LEVEL_STEP": 0.005,
+    "FIB_TOLERANCE_START": 0.005,
+    "FIB_TOLERANCE_END": 0.030,     # 25 values (0.005–0.029 step 0.001)
+    "FIB_TOLERANCE_STEP": 0.001,
 }
 
 # --- Environment/API Keys (Optional - Better in .env file) ---

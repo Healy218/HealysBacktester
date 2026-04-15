@@ -31,7 +31,7 @@ except ImportError:
 from utils.logging_utils import setup_logging
 from utils import config_parser
 from analysis import plotting
-from backtests import run_ma, run_rsi, run_macd, run_volume, run_bbands, run_stoch
+from backtests import run_ma, run_rsi, run_macd, run_volume, run_bbands, run_stoch, run_elliott
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -49,15 +49,16 @@ STRATEGIES = {
     "MACD Crossover":       {"runner": run_macd,   "config_key": "STRATEGY_MACD"},
     "Volume Breakout":      {"runner": run_volume, "config_key": "STRATEGY_VOLUME_BREAKOUT"},
     "Bollinger Bands":      {"runner": run_bbands, "config_key": "STRATEGY_BBANDS"},
-    "Stochastic Crossover": {"runner": run_stoch,  "config_key": "STRATEGY_STOCH"},
+    "Stochastic Crossover": {"runner": run_stoch,   "config_key": "STRATEGY_STOCH"},
+    "Elliott Wave / Fib":   {"runner": run_elliott, "config_key": "STRATEGY_ELLIOTT"},
 }
 
 INTERVALS = [
-    {"label": "1 Minute  (≤7 days, yfinance / Alpaca)",  "value": "1m"},
-    {"label": "5 Minutes (≤60 days, yfinance / Alpaca)", "value": "5m"},
-    {"label": "15 Minutes",                               "value": "15m"},
-    {"label": "1 Hour",                                   "value": "1h"},
-    {"label": "1 Day",                                    "value": "1D"},
+    {"label": "1 Minute",  "value": "1m"},
+    {"label": "5 Minutes", "value": "5m"},
+    {"label": "15 Minutes", "value": "15m"},
+    {"label": "1 Hour", "value": "1h"},
+    {"label": "1 Day", "value": "1D"},
 ]
 
 # ── In-memory state ──────────────────────────────────────────────────────────

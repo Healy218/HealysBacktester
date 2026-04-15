@@ -63,6 +63,18 @@ def top5_from_portfolio(portfolio, n: int = 5) -> list[dict]:
         except Exception:
             trade_count = pd.Series(0, index=portfolio.wrapper.columns)
 
+        # Mask combos with too few trades — a single lucky trade can produce
+        # infinite Sharpe, 100% win rate, etc.  Require at least 3 trades
+        # for the ranking to be statistically meaningful.
+        MIN_TRADES = 3
+        too_few = trade_count < MIN_TRADES
+        if too_few.any():
+            n_few = int(too_few.sum())
+            logger.info(f"Excluding {n_few} combos with < {MIN_TRADES} trades from ranking.")
+            sharpe   = sharpe.where(~too_few,   np.nan)
+            ret      = ret.where(~too_few,      np.nan)
+            win_rate = win_rate.where(~too_few,  np.nan)
+
         try:
             best_trade = portfolio.trades.returns.max() * 100
         except Exception:

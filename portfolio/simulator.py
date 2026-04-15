@@ -228,12 +228,12 @@ def run_backtest(
         if st == 'percent':
             pct  = float(final_portfolio_kwargs.get('size') or 0.9)
             cash = float(final_portfolio_kwargs.get('init_cash') or 100_000.0)
-            capped_pct = min(pct, 0.25)          # hard ceiling: 25 % of initial capital
+            capped_pct = min(pct, 0.80)          # hard ceiling: 80 % of initial capital
             final_portfolio_kwargs['size_type'] = 'value'
             final_portfolio_kwargs['size']      = capped_pct * cash
             logger.info(
                 f"Short signals detected: size_type 'percent' → 'value' "
-                f"(capped at 25 %: size={final_portfolio_kwargs['size']:,.2f}, "
+                f"(capped at {capped_pct:.0%}: size={final_portfolio_kwargs['size']:,.2f}, "
                 f"configured pct={pct:.0%}, init_cash={cash:,.0f})"
             )
 
@@ -264,6 +264,13 @@ def run_backtest(
             exits=reindexed_exits,
             short_entries=reindexed_short_entries, # Pass reindexed short entries
             short_exits=reindexed_short_exits,     # Pass reindexed short exits
+            # Signal conflict resolution:
+            # - 'entry' = when entry+exit fire on same bar, favor the entry (keeps us trading)
+            # - 'reverse' = opposite entry reverses the position (long→short) instead of ignoring
+            upon_long_conflict='entry',
+            upon_short_conflict='entry',
+            upon_dir_conflict='opposite',
+            upon_opposite_entry='reverse',
             **final_signal_kwargs,
             **final_portfolio_kwargs
         )
