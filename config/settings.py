@@ -15,36 +15,30 @@ DATA_CONFIG = {
 
 # MA Crossover - Updated for Optimization
 STRATEGY_MA_CROSSOVER = {
-    # Window ranges to sweep.  The right range depends on the data interval:
-    #   1m  data → use 20–200  (smaller windows fire hundreds of signals/day → fee drain)
-    #   5m  data → use 10–250
-    #   1h  data → use  5–100
-    #   1D  data → use  2–451  (~100k combos: n*(n-1)/2)
     # Combinations (r=2) where fast < slow: n*(n-1)/2
-    # 449 windows → 449*448/2 = 100,576 combos
+    # 1001 windows → 1001*1000/2 = 500,500 combos
     "MA_WINDOW_START": 2,
-    "MA_WINDOW_END": 451,
+    "MA_WINDOW_END": 1003,
     "MA_WINDOW_STEP": 1,
 }
 
 # RSI Threshold
 # True cross-product: windows × entry_thresholds × exit_thresholds
-# 20 windows × 71 entry × 71 exit = 100,820 combos
+# 26 windows × 140 entry × 140 exit = 509,600 combos
 STRATEGY_RSI = {
     'RSI_WINDOW_START': 5,
-    'RSI_WINDOW_END': 25,   # 20 windows (5–24)
+    'RSI_WINDOW_END': 31,   # 26 windows (5–30)
     'RSI_WINDOW_STEP': 1,
 
     'ENTRY_THRESHOLD_START': 10.0,
-    'ENTRY_THRESHOLD_END': 45.0,  # 71 values (10.0–45.0 step 0.5)
-    'ENTRY_THRESHOLD_STEP': 0.5,
+    'ENTRY_THRESHOLD_END': 45.0,  # 140 values (10.0–45.0 step 0.25)
+    'ENTRY_THRESHOLD_STEP': 0.25,
 
     'EXIT_THRESHOLD_START': 55.0,
-    'EXIT_THRESHOLD_END': 90.0,   # 71 values (55.0–90.0 step 0.5)
-    'EXIT_THRESHOLD_STEP': 0.5,
+    'EXIT_THRESHOLD_END': 90.0,   # 140 values (55.0–90.0 step 0.25)
+    'EXIT_THRESHOLD_STEP': 0.25,
 
     # Unused — short thresholds are derived symmetrically from long thresholds
-    # so all signal DataFrames share identical column shapes (vectorbt requirement).
     'SHORT_ENTRY_THRESHOLD_START': 65.0,
     'SHORT_ENTRY_THRESHOLD_END': 80.0,
     'SHORT_ENTRY_THRESHOLD_STEP': 1.0,
@@ -93,21 +87,21 @@ BACKTEST_CONFIG = {
 }
 
 # Configuration for MACD Strategy
-# Valid combos (fast < slow) ≈ 120k from raw 38×115×27 = 117,990
+# Valid combos (fast < slow) ≈ 522k from 68 fast × 195 slow × 47 signal
 STRATEGY_MACD = {
     # Fast EMA Window Range
     "FAST_WINDOW_START": 2,
-    "FAST_WINDOW_END": 40,   # 38 values (2–39)
+    "FAST_WINDOW_END": 70,   # 68 values (2–69)
     "FAST_WINDOW_STEP": 1,
 
     # Slow EMA Window Range (Must be > Fast Window; combos where fast>=slow are dropped)
     "SLOW_WINDOW_START": 5,
-    "SLOW_WINDOW_END": 120,  # 115 values (5–119)
+    "SLOW_WINDOW_END": 200,  # 195 values (5–199)
     "SLOW_WINDOW_STEP": 1,
 
     # Signal Line EMA Window Range
     "SIGNAL_WINDOW_START": 3,
-    "SIGNAL_WINDOW_END": 30,  # 27 values (3–29)
+    "SIGNAL_WINDOW_END": 50,  # 47 values (3–49)
     "SIGNAL_WINDOW_STEP": 1,
 
     # Shorting control (specific to this strategy)
@@ -116,65 +110,65 @@ STRATEGY_MACD = {
 }
 
 # Configuration for Volume Breakout Strategy
-# 70 vol_windows × 19 multipliers × 80 exit_ma = 106,400 combos
+# 105 vol_windows × 51 multipliers × 95 exit_ma ≈ 508,725 combos
 STRATEGY_VOLUME_BREAKOUT = {
     # Volume lookback window
-    "VOLUME_WINDOW_START": 10,
-    "VOLUME_WINDOW_END": 80,   # 70 values (10–79)
+    "VOLUME_WINDOW_START": 5,
+    "VOLUME_WINDOW_END": 110,   # 105 values (5–109)
     "VOLUME_WINDOW_STEP": 1,
     # Volume spike multiplier
-    "VOLUME_MULTIPLIER_START": 1.2,
-    "VOLUME_MULTIPLIER_END": 3.0,   # 19 values (1.2–3.0 step 0.1)
-    "VOLUME_MULTIPLIER_STEP": 0.1,
+    "VOLUME_MULTIPLIER_START": 1.0,
+    "VOLUME_MULTIPLIER_END": 3.55,  # 51 values (1.0–3.5 step 0.05)
+    "VOLUME_MULTIPLIER_STEP": 0.05,
     # Exit MA window
-    "EXIT_MA_WINDOW_START": 10,
-    "EXIT_MA_WINDOW_END": 90,   # 80 values (10–89)
+    "EXIT_MA_WINDOW_START": 5,
+    "EXIT_MA_WINDOW_END": 100,  # 95 values (5–99)
     "EXIT_MA_WINDOW_STEP": 1,
     # Other settings
     "CONFIRM_PRICE_INCREASE": False,
 }
 
 # Configuration for Bollinger Bands Breakout Strategy
-# 300 windows × 336 stds ≈ 100,800 combos
+# 500 windows × 1000 stds = 500,000 combos
 STRATEGY_BBANDS = {
-    "BBANDS_WINDOW_START": 5,
-    "BBANDS_WINDOW_END": 305,       # 300 windows (5–304)
+    "BBANDS_WINDOW_START": 3,
+    "BBANDS_WINDOW_END": 503,       # 500 windows (3–502)
     "BBANDS_WINDOW_STEP": 1,
     "BBANDS_STD_START": 0.50,
-    "BBANDS_STD_END": 3.86,         # 336 values (0.50–3.85 step 0.01)
-    "BBANDS_STD_STEP": 0.01,
+    "BBANDS_STD_END": 4.50,         # 1000 values (0.50–4.496 step 0.004)
+    "BBANDS_STD_STEP": 0.004,
 }
 
 # Configuration for Stochastic Crossover Strategy
 # True cross-product: k_windows × d_windows × oversold × overbought
-# 30 × 10 × 20 × 17 = 102,000 combos
+# 47 × 13 × 30 × 27 ≈ 494,910 combos
 STRATEGY_STOCH = {
-    "STOCH_K_START": 5,
-    "STOCH_K_END": 35,              # 30 windows (5–34)
+    "STOCH_K_START": 3,
+    "STOCH_K_END": 50,              # 47 windows (3–49)
     "STOCH_K_STEP": 1,
     "STOCH_D_START": 2,
-    "STOCH_D_END": 12,              # 10 windows (2–11)
+    "STOCH_D_END": 15,              # 13 windows (2–14)
     "STOCH_D_STEP": 1,
-    "STOCH_OVERSOLD_START": 10,
-    "STOCH_OVERSOLD_END": 30,       # 20 values (10–29)
+    "STOCH_OVERSOLD_START": 5,
+    "STOCH_OVERSOLD_END": 35,       # 30 values (5–34)
     "STOCH_OVERSOLD_STEP": 1,
-    "STOCH_OVERBOUGHT_START": 70,
-    "STOCH_OVERBOUGHT_END": 87,     # 17 values (70–86)
+    "STOCH_OVERBOUGHT_START": 65,
+    "STOCH_OVERBOUGHT_END": 92,     # 27 values (65–91)
     "STOCH_OVERBOUGHT_STEP": 1,
 }
 
 # Configuration for Elliott Wave / Fibonacci Retracement Strategy
 # Swing detection order × Fibonacci level × Fibonacci zone tolerance
-# 28 × 160 × 25 = 112,000 combos
+# 34 × 450 × 33 ≈ 504,900 combos
 STRATEGY_ELLIOTT = {
-    "SWING_ORDER_START": 3,
-    "SWING_ORDER_END": 31,          # 28 values (3–30)
+    "SWING_ORDER_START": 2,
+    "SWING_ORDER_END": 36,          # 34 values (2–35)
     "SWING_ORDER_STEP": 1,
-    "FIB_LEVEL_START": 0.100,
-    "FIB_LEVEL_END": 0.900,         # 160 values (0.100–0.895 step 0.005)
-    "FIB_LEVEL_STEP": 0.005,
-    "FIB_TOLERANCE_START": 0.005,
-    "FIB_TOLERANCE_END": 0.030,     # 25 values (0.005–0.029 step 0.001)
+    "FIB_LEVEL_START": 0.050,
+    "FIB_LEVEL_END": 0.950,         # 450 values (0.050–0.948 step 0.002)
+    "FIB_LEVEL_STEP": 0.002,
+    "FIB_TOLERANCE_START": 0.001,
+    "FIB_TOLERANCE_END": 0.034,     # 33 values (0.001–0.033 step 0.001)
     "FIB_TOLERANCE_STEP": 0.001,
 }
 

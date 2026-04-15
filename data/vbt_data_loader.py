@@ -120,6 +120,7 @@ def _download_vbt_alpaca(
             start=start_date,
             end=end_date,
             timeframe=vbt_interval,
+            limit=10000,  # max bars per page (API default is 1000)
         )
         df = data.get()
         if df is None or df.empty:

@@ -7,7 +7,9 @@
 # Then open:  http://127.0.0.1:8050
 
 import os
+import glob
 import json
+import shutil
 import threading
 from datetime import date, timedelta
 from pathlib import Path
@@ -103,8 +105,22 @@ def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_c
             chunk = 85 // n
 
             _set_progress(base, f"[{sym}] Loading data and generating signals…")
+
+            # Build a progress callback so the chunked simulator can update the bar
+            def _make_chunk_cb(sym_name, pct_base, pct_range):
+                def _cb(chunk_idx, n_chunks):
+                    frac = (chunk_idx + 1) / max(n_chunks, 1)
+                    pct = pct_base + int(frac * pct_range)
+                    _set_progress(pct, f"[{sym_name}] Simulating chunk {chunk_idx + 1}/{n_chunks}…")
+                return _cb
+
+            chunk_cb = _make_chunk_cb(sym, base, chunk * 8 // 10)
+
             try:
-                result = runner.run(sym, start, end, interval, backtest_config, strategy_config)
+                result = runner.run(
+                    sym, start, end, interval, backtest_config, strategy_config,
+                    progress_callback=chunk_cb,
+                )
             except Exception as exc:
                 logger.exception(f"[{sym}] Unhandled exception in runner: {exc}")
                 errors.append(f"{sym}: {exc}")
@@ -163,10 +179,34 @@ def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_c
 app = dash.Dash(
     __name__,
     external_stylesheets=[dbc.themes.DARKLY],
-    title="Healy's Backtester",
+    title="Healy Labs BT",
 )
 
 # ── Helper functions ─────────────────────────────────────────────────────────
+
+CACHE_DIR = "data/cache"
+
+
+def _get_cache_info() -> tuple[int, str]:
+    """Returns (file_count, human_readable_size) for the data cache directory."""
+    try:
+        if not os.path.isdir(CACHE_DIR):
+            return 0, "0 B"
+        files = glob.glob(os.path.join(CACHE_DIR, "*.csv"))
+        total_bytes = sum(os.path.getsize(f) for f in files)
+        count = len(files)
+        if total_bytes < 1024:
+            size_str = f"{total_bytes} B"
+        elif total_bytes < 1024 ** 2:
+            size_str = f"{total_bytes / 1024:.1f} KB"
+        elif total_bytes < 1024 ** 3:
+            size_str = f"{total_bytes / 1024**2:.1f} MB"
+        else:
+            size_str = f"{total_bytes / 1024**3:.2f} GB"
+        return count, size_str
+    except Exception:
+        return 0, "?"
+
 
 def _get_available_results(base_dir: str) -> list[dict]:
     runs = []
@@ -360,9 +400,37 @@ def _control_row():
     ], align="end", className="g-3")), className="mb-3")
 
 
+def _cache_row():
+    """Cache management bar below the control row."""
+    count, size = _get_cache_info()
+    return dbc.Card(dbc.CardBody(dbc.Row([
+        dbc.Col([
+            html.Span(
+                f"Cache: {count} files ({size})",
+                id="cache-info",
+                style={"color": "#aaaaaa", "fontSize": "0.85rem", "fontFamily": "monospace"},
+            ),
+        ], xs=12, sm=6, md=4, className="d-flex align-items-center"),
+        dbc.Col([
+            dbc.Button(
+                "Clear Cache", id="clear-cache-btn", color="danger", outline=True,
+                size="sm",
+            ),
+        ], xs=12, sm=6, md=2),
+        dbc.Col([
+            dbc.Alert(
+                id="cache-alert", is_open=False, color="info",
+                className="mb-0 py-1 px-2",
+                style={"fontSize": "0.85rem"},
+            ),
+        ], xs=12, md=6, className="d-flex align-items-center"),
+    ], align="center", className="g-2")), className="mb-3")
+
+
 def _results_tab():
     return [
         _control_row(),
+        _cache_row(),
 
         # Interval fires every 500 ms to poll worker-thread progress
         dcc.Interval(id="progress-interval", interval=500, n_intervals=0),
@@ -478,7 +546,7 @@ def _historical_tab():
 
 
 app.layout = dbc.Container([
-    dbc.Row(dbc.Col(html.H2("⚡ Healy's Backtester", className="my-3"))),
+    dbc.Row(dbc.Col(html.H2("∞Healy Labs BT∞", className="my-3"))),
 
     dbc.Tabs([
         dbc.Tab(_results_tab(),    label="Run Backtest",      tab_id="tab-run"),
@@ -699,6 +767,43 @@ def update_historical(selected_run_id):
     trades_table = _make_trades_table(trades_data)
 
     return SHOW, config_md, stats_table, summary_fig, trades_fig, trades_table
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  CALLBACK 5 — Clear data cache
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.callback(
+    Output("cache-alert", "children"),
+    Output("cache-alert", "is_open"),
+    Output("cache-info",  "children"),
+    Input("clear-cache-btn", "n_clicks"),
+    prevent_initial_call=True,
+)
+def clear_cache(n_clicks):
+    """Deletes all CSV files in the data cache directory."""
+    try:
+        if not os.path.isdir(CACHE_DIR):
+            return "Cache directory not found.", True, "Cache: 0 files (0 B)"
+
+        files = glob.glob(os.path.join(CACHE_DIR, "*.csv"))
+        if not files:
+            return "Cache is already empty.", True, "Cache: 0 files (0 B)"
+
+        deleted = 0
+        for f in files:
+            try:
+                os.remove(f)
+                deleted += 1
+            except Exception:
+                pass
+
+        count, size = _get_cache_info()
+        msg = f"Cleared {deleted} cached file{'s' if deleted != 1 else ''}."
+        return msg, True, f"Cache: {count} files ({size})"
+
+    except Exception as e:
+        return f"Error clearing cache: {e}", True, "Cache: ? files"
 
 
 # ═══════════════════════════════════════════════════════════════════════════

@@ -107,6 +107,7 @@ def load_alpaca_bars(
             timeframe=_get_timeframe(interval),
             start=datetime.fromisoformat(start_date),
             end=datetime.fromisoformat(end_date),
+            limit=10000,        # max bars per page (API default is 1000)
             adjustment="all",   # split + dividend adjusted, same as yfinance auto_adjust=True
         )
 

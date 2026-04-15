@@ -44,6 +44,17 @@ def clean_ohlcv_data(raw_df: pd.DataFrame) -> pd.DataFrame | None:
         logger.info("Sorting DataFrame by index.")
         df = df.sort_index()
 
+    # --- Filter out non-trading days (weekends) ---
+    weekend_mask = df.index.dayofweek >= 5  # Saturday=5, Sunday=6
+    if weekend_mask.any():
+        n_weekend = int(weekend_mask.sum())
+        logger.info(f"Removing {n_weekend} weekend bars.")
+        df = df[~weekend_mask]
+
+    if df.empty:
+        logger.error("Error: DataFrame is empty after removing weekend bars.")
+        return None
+
     # --- Column Cleaning ---
     required_cols = ['Open', 'High', 'Low', 'Close', 'Volume']
     # Check if required columns exist

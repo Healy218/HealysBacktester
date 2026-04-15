@@ -6,10 +6,9 @@ MACD Crossover backtest runner.
 import numpy as np
 from utils.logging_utils import setup_logging
 from utils import freq_utils
-from utils.param_utils import top5_from_portfolio
+from utils.chunked_runner import simulate_and_rank
 from data import vbt_data_loader as data_loader, data_cleaner
 from signals import macd_signals
-from portfolio import simulator
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -21,6 +20,7 @@ def run(
     interval: str,
     backtest_config: dict,
     strategy_config: dict,
+    progress_callback=None,
 ) -> dict:
     """
     Runs the MACD Crossover parameter sweep and returns the top-5 combinations.
@@ -62,24 +62,19 @@ def run(
         if entries is None or entries.empty:
             return _err("No entry signals generated.")
 
-        # 3. Simulate
+        # 3. Simulate + Rank (chunked for large sweeps)
         logger.info("[MACD] Running simulation…")
-        portfolio = simulator.run_backtest(
-            price_df=price_data,
-            entries_series=entries,
-            exits_series=exits,
-            short_entries_series=short_entries if enable_shorts else None,
-            short_exits_series=short_exits if enable_shorts else None,
-            frequency=freq,
-            **_sim_kwargs(backtest_config, sl_stop, tp_stop),
+        return simulate_and_rank(
+            price_data=price_data,
+            entries=entries,
+            exits=exits,
+            short_entries=short_entries if enable_shorts else None,
+            short_exits=short_exits if enable_shorts else None,
+            freq=freq,
+            sim_kwargs=_sim_kwargs(backtest_config, sl_stop, tp_stop),
+            strategy_tag="MACD",
+            progress_callback=progress_callback,
         )
-        if portfolio is None:
-            return _err("Simulation returned no portfolio.")
-
-        # 4. Rank
-        logger.info("[MACD] Ranking combinations…")
-        top5 = top5_from_portfolio(portfolio, n=5)
-        return {"top5": top5, "error": None, "portfolio": portfolio, "price_data": price_data}
 
     except Exception as e:
         logger.exception(f"[MACD] Unexpected error: {e}")
