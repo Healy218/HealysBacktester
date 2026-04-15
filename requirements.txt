@@ -5,6 +5,8 @@ pandas
 numpy
 vectorbt
 yfinance
+pandas-ta
+quantstats
 scikit-learn
 alpaca-py
 python-dotenv

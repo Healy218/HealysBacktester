@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(python scripts/ma_backtest.py)"
+      "Bash(python scripts/ma_backtest.py)",
+      "WebFetch(domain:vectorbt.dev)"
     ]
   }
 }

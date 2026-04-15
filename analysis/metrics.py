@@ -124,6 +124,152 @@ def display_summary_stats(portfolio: vbt.Portfolio,
         traceback.print_exc()
 
 
+@handle_errors
+def get_extended_stats(
+    portfolio: vbt.Portfolio,
+    column: Optional[Union[str, Tuple]] = None,
+) -> Optional[pd.Series]:
+    """
+    Returns extended performance statistics including trade-level and drawdown
+    metrics beyond the default portfolio.stats().
+
+    Args:
+        portfolio: A vectorbt Portfolio object.
+        column: Optional column to select.
+
+    Returns:
+        pandas Series with extended metrics, or None on error.
+    """
+    if portfolio is None:
+        return None
+
+    try:
+        pf = portfolio if column is None else portfolio[column]
+
+        # Base stats
+        stats = pf.stats()
+        if stats is None:
+            return None
+
+        # Trade-level stats
+        try:
+            trades = pf.trades
+            if trades.count() > 0:
+                stats["Avg Trade Duration"] = trades.duration.mean()
+                stats["Max Consecutive Wins"] = _max_consecutive(trades, win=True)
+                stats["Max Consecutive Losses"] = _max_consecutive(trades, win=False)
+                stats["Avg Winning Trade Duration"] = _avg_duration_filtered(trades, win=True)
+                stats["Avg Losing Trade Duration"] = _avg_duration_filtered(trades, win=False)
+        except Exception as e:
+            logger.debug(f"Could not compute trade-level stats: {e}")
+
+        # Drawdown stats
+        try:
+            drawdowns = pf.drawdowns
+            if drawdowns.count() > 0:
+                stats["Avg Drawdown Duration"] = drawdowns.duration.mean()
+                stats["Avg Drawdown [%]"] = float(drawdowns.drawdown.mean() * 100)
+                stats["Max Drawdown Duration"] = drawdowns.duration.max()
+        except Exception as e:
+            logger.debug(f"Could not compute drawdown stats: {e}")
+
+        return stats
+
+    except Exception as e:
+        logger.error(f"Error getting extended stats: {e}")
+        return None
+
+
+def _max_consecutive(trades, win: bool) -> int:
+    """Counts max consecutive winning or losing trades."""
+    try:
+        pnl = trades.pnl.values
+        streak = 0
+        max_streak = 0
+        for p in pnl:
+            if (win and p >= 0) or (not win and p < 0):
+                streak += 1
+                max_streak = max(max_streak, streak)
+            else:
+                streak = 0
+        return max_streak
+    except Exception:
+        return 0
+
+
+def _avg_duration_filtered(trades, win: bool):
+    """Average duration for winning or losing trades only."""
+    try:
+        pnl = trades.pnl.values
+        durations = trades.duration.values
+        mask = pnl >= 0 if win else pnl < 0
+        if mask.any():
+            return np.mean(durations[mask])
+        return 0
+    except Exception:
+        return 0
+
+
+@handle_errors
+def get_optimization_heatmap_data(
+    portfolio: vbt.Portfolio,
+    metric: str = "total_return",
+) -> Optional[pd.DataFrame]:
+    """
+    Extracts a 2D DataFrame suitable for heatmap visualization from a
+    multi-column portfolio's parameter sweep results.
+
+    Works with portfolios that have 2-level MultiIndex columns (e.g., from
+    BBANDS, Stochastic, or MA crossover parameter sweeps).
+
+    Args:
+        portfolio: Multi-column vectorbt Portfolio.
+        metric: Which metric to extract. Options:
+                "total_return", "sharpe_ratio", "max_drawdown", "win_rate"
+
+    Returns:
+        2D DataFrame with first level as index, second as columns, values = metric.
+        Returns None if the portfolio doesn't have a 2-level MultiIndex.
+    """
+    if portfolio is None:
+        return None
+
+    try:
+        cols = portfolio.wrapper.columns
+        if not isinstance(cols, pd.MultiIndex) or cols.nlevels < 2:
+            logger.info("Portfolio columns are not a 2-level MultiIndex; cannot create heatmap.")
+            return None
+
+        # Extract the metric
+        metric_map = {
+            "total_return": lambda p: p.total_return(),
+            "sharpe_ratio": lambda p: p.sharpe_ratio(),
+            "max_drawdown": lambda p: p.max_drawdown(),
+            "win_rate": lambda p: p.trades.win_rate(),
+        }
+
+        extractor = metric_map.get(metric)
+        if extractor is None:
+            logger.error(f"Unknown metric: {metric}")
+            return None
+
+        values = extractor(portfolio)
+        if values is None:
+            return None
+
+        # Unstack the first two levels to create a 2D heatmap
+        if isinstance(values.index, pd.MultiIndex) and values.index.nlevels >= 2:
+            heatmap_df = values.unstack(level=1)
+        else:
+            heatmap_df = values.unstack()
+
+        return heatmap_df
+
+    except Exception as e:
+        logger.error(f"Error creating heatmap data: {e}")
+        return None
+
+
 @handle_errors # Corrected: Removed parentheses
 def get_trade_records(portfolio: vbt.Portfolio, column: Optional[Union[str, Tuple]] = None) -> Optional[pd.DataFrame]:
     """

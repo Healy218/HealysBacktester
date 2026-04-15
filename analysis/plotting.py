@@ -184,4 +184,150 @@ def plot_trades(portfolio: vbt.Portfolio, price_df: pd.DataFrame, column: Option
         logger.error(f"Error generating trades plot figure: {e}")
         return None
 
-# You can add more specific plotting functions as needed.
+def plot_parameter_heatmap(
+    heatmap_df: pd.DataFrame,
+    metric_name: str = "Total Return",
+    x_label: str = "Parameter 2",
+    y_label: str = "Parameter 1",
+) -> Optional[go.Figure]:
+    """
+    Creates a heatmap of a metric across two parameter dimensions.
+
+    Args:
+        heatmap_df: 2D DataFrame from get_optimization_heatmap_data().
+        metric_name: Label for the colorbar.
+        x_label: Label for the x-axis (columns).
+        y_label: Label for the y-axis (index).
+
+    Returns:
+        Plotly Figure, or None on error.
+    """
+    if heatmap_df is None or heatmap_df.empty:
+        return None
+
+    try:
+        fig = go.Figure(data=go.Heatmap(
+            z=heatmap_df.values,
+            x=[str(c) for c in heatmap_df.columns],
+            y=[str(i) for i in heatmap_df.index],
+            colorscale="RdYlGn",
+            colorbar=dict(title=metric_name),
+        ))
+        fig.update_layout(
+            title=f"Parameter Sweep: {metric_name}",
+            xaxis_title=x_label,
+            yaxis_title=y_label,
+        )
+        return fig
+    except Exception as e:
+        logger.error(f"Error generating parameter heatmap: {e}")
+        return None
+
+
+def plot_trade_pnl_distribution(
+    portfolio: vbt.Portfolio,
+    column: Optional[Union[str, Tuple]] = None,
+) -> Optional[go.Figure]:
+    """
+    Plots a histogram of trade P&L values.
+
+    Args:
+        portfolio: A vectorbt Portfolio object.
+        column: Optional column to select.
+
+    Returns:
+        Plotly Figure, or None on error.
+    """
+    if portfolio is None:
+        return None
+
+    try:
+        pf = portfolio if column is None else portfolio[column]
+        if pf.trades.count() == 0:
+            return None
+
+        pnl = pf.trades.pnl.values
+
+        fig = go.Figure()
+        fig.add_trace(go.Histogram(
+            x=pnl,
+            nbinsx=50,
+            marker_color=np.where(pnl >= 0, '#00bc8c', '#e74c3c'),
+            name="Trade P&L",
+        ))
+
+        # Add vertical line at zero
+        fig.add_vline(x=0, line_dash="dash", line_color="white", opacity=0.5)
+
+        fig.update_layout(
+            title="Trade P&L Distribution",
+            xaxis_title="P&L ($)",
+            yaxis_title="Count",
+            bargap=0.05,
+        )
+        return fig
+    except Exception as e:
+        logger.error(f"Error generating P&L distribution plot: {e}")
+        return None
+
+
+def plot_monthly_returns(
+    portfolio: vbt.Portfolio,
+    column: Optional[Union[str, Tuple]] = None,
+) -> Optional[go.Figure]:
+    """
+    Plots a monthly returns heatmap (year × month).
+
+    Args:
+        portfolio: A vectorbt Portfolio object.
+        column: Optional column to select.
+
+    Returns:
+        Plotly Figure, or None on error.
+    """
+    if portfolio is None:
+        return None
+
+    try:
+        pf = portfolio if column is None else portfolio[column]
+        returns = pf.returns()
+
+        if returns is None or returns.empty:
+            return None
+
+        # Resample to monthly returns
+        monthly = returns.resample("ME").apply(lambda x: (1 + x).prod() - 1)
+        monthly_df = pd.DataFrame({
+            "year": monthly.index.year,
+            "month": monthly.index.month,
+            "return": monthly.values,
+        })
+
+        if monthly_df.empty:
+            return None
+
+        pivot = monthly_df.pivot_table(index="year", columns="month", values="return")
+
+        month_labels = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+                        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+        # Map month numbers to labels
+        pivot.columns = [month_labels[m - 1] for m in pivot.columns]
+
+        fig = go.Figure(data=go.Heatmap(
+            z=pivot.values * 100,
+            x=list(pivot.columns),
+            y=[str(y) for y in pivot.index],
+            colorscale="RdYlGn",
+            colorbar=dict(title="Return %"),
+            text=np.round(pivot.values * 100, 1),
+            texttemplate="%{text}%",
+        ))
+        fig.update_layout(
+            title="Monthly Returns Heatmap",
+            xaxis_title="Month",
+            yaxis_title="Year",
+        )
+        return fig
+    except Exception as e:
+        logger.error(f"Error generating monthly returns heatmap: {e}")
+        return None

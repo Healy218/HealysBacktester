@@ -10,7 +10,7 @@ from utils.logging_utils import setup_logging
 from utils.error_handling import DataError, SignalError, PortfolioError
 from utils import freq_utils
 from utils.param_utils import top5_from_portfolio
-from data import data_loader, data_cleaner
+from data import vbt_data_loader as data_loader, data_cleaner
 from signals import ma_crossover
 from portfolio import simulator
 
@@ -114,6 +114,9 @@ def _sim_kwargs(cfg, sl_stop, tp_stop):
         sl_stop=sl_stop,
         tp_stop=tp_stop,
         trend_filter_window=cfg.get("TREND_FILTER_WINDOW", 0),
+        atr_sl_window=cfg.get("ATR_SL_WINDOW"),
+        atr_sl_multiplier=cfg.get("ATR_SL_MULTIPLIER", 2.0),
+        use_trailing_stop=cfg.get("USE_TRAILING_STOP", False),
     )
 
 

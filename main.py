@@ -31,7 +31,7 @@ except ImportError:
 from utils.logging_utils import setup_logging
 from utils import config_parser
 from analysis import plotting
-from backtests import run_ma, run_rsi, run_macd, run_volume
+from backtests import run_ma, run_rsi, run_macd, run_volume, run_bbands, run_stoch
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -44,10 +44,12 @@ SUMMARY_PLOT_FILE    = "plot_portfolio_summary.json"
 TRADES_PLOT_FILE     = "plot_trades.json"
 
 STRATEGIES = {
-    "MA Crossover":    {"runner": run_ma,     "config_key": "STRATEGY_MA_CROSSOVER"},
-    "RSI Threshold":   {"runner": run_rsi,    "config_key": "STRATEGY_RSI"},
-    "MACD Crossover":  {"runner": run_macd,   "config_key": "STRATEGY_MACD"},
-    "Volume Breakout": {"runner": run_volume, "config_key": "STRATEGY_VOLUME_BREAKOUT"},
+    "MA Crossover":         {"runner": run_ma,     "config_key": "STRATEGY_MA_CROSSOVER"},
+    "RSI Threshold":        {"runner": run_rsi,    "config_key": "STRATEGY_RSI"},
+    "MACD Crossover":       {"runner": run_macd,   "config_key": "STRATEGY_MACD"},
+    "Volume Breakout":      {"runner": run_volume, "config_key": "STRATEGY_VOLUME_BREAKOUT"},
+    "Bollinger Bands":      {"runner": run_bbands, "config_key": "STRATEGY_BBANDS"},
+    "Stochastic Crossover": {"runner": run_stoch,  "config_key": "STRATEGY_STOCH"},
 }
 
 INTERVALS = [
@@ -427,6 +429,10 @@ def _results_tab():
             dbc.Row([
                 dbc.Col(dcc.Graph(id="trades-graph"), md=12),
             ], className="mt-3"),
+            dbc.Row([
+                dbc.Col(dcc.Graph(id="pnl-dist-graph"), md=6),
+                dbc.Col(dcc.Graph(id="monthly-returns-graph"), md=6),
+            ], className="mt-3"),
         ]),
     ]
 
@@ -618,16 +624,18 @@ def poll_progress(n_intervals):
 @app.callback(
     Output("equity-graph", "figure"),
     Output("trades-graph", "figure"),
+    Output("pnl-dist-graph", "figure"),
+    Output("monthly-returns-graph", "figure"),
     Input("top5-table", "selected_rows"),
     State("top5-store",  "data"),
     prevent_initial_call=True,
 )
 def update_graphs(selected_rows, top5_data):
-    """Generates equity + trades graphs for the selected row."""
+    """Generates equity + trades + PnL distribution + monthly returns for the selected row."""
     empty = go.Figure()
 
     if not selected_rows or top5_data is None:
-        return empty, empty
+        return empty, empty, empty, empty
 
     try:
         row_idx  = selected_rows[0]
@@ -639,20 +647,22 @@ def update_graphs(selected_rows, top5_data):
         price_data = sym_cache.get("price_data")
 
         if portfolio is None or price_data is None:
-            return empty, empty
+            return empty, empty, empty, empty
 
         col_int_idx = row_data["portfolio_col_int_idx"]
         col         = portfolio.wrapper.columns[col_int_idx]
         single_pf   = portfolio[col]
 
-        fig_equity = plotting.plot_portfolio_summary(single_pf) or empty
-        fig_trades = plotting.plot_trades(single_pf, price_data) or empty
+        fig_equity   = plotting.plot_portfolio_summary(single_pf) or empty
+        fig_trades   = plotting.plot_trades(single_pf, price_data) or empty
+        fig_pnl_dist = plotting.plot_trade_pnl_distribution(single_pf) or empty
+        fig_monthly  = plotting.plot_monthly_returns(single_pf) or empty
 
-        return fig_equity, fig_trades
+        return fig_equity, fig_trades, fig_pnl_dist, fig_monthly
 
     except Exception as e:
         logger.error(f"Graph update error: {e}")
-        return empty, empty
+        return empty, empty, empty, empty
 
 
 # ═══════════════════════════════════════════════════════════════════════════

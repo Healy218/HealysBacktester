@@ -79,6 +79,11 @@ BACKTEST_CONFIG = {
     'USE_TAKE_PROFIT': False,    # Set to True to enable take-profit
     'TAKE_PROFIT_PERCENT': 0.10, # Example: 10% take-profit (relative to entry price)
 
+    # --- ATR-Based / Trailing Stops ---
+    'ATR_SL_WINDOW': None,       # None = use fixed %, set to e.g. 14 for ATR-based stops
+    'ATR_SL_MULTIPLIER': 2.0,    # ATR multiplier for stop distance (e.g., 2× ATR)
+    'USE_TRAILING_STOP': False,  # True = trailing stop instead of fixed
+
     # --- Simulation Frequency ---
     # IMPORTANT: DEFAULT_FREQ must match your data INTERVAL or vectorbt will produce
     # incorrect annualized metrics (Sharpe, CAGR, etc.).
@@ -127,6 +132,28 @@ STRATEGY_VOLUME_BREAKOUT = {
     "EXIT_MA_WINDOW_STEP": 1,
     # Other settings
     "CONFIRM_PRICE_INCREASE": False,
+}
+
+# Configuration for Bollinger Bands Breakout Strategy
+# 21 windows × 9 stds = 189 combos (fast, lightweight sweep)
+STRATEGY_BBANDS = {
+    "BBANDS_WINDOW_START": 10,
+    "BBANDS_WINDOW_END": 51,
+    "BBANDS_WINDOW_STEP": 2,
+    "BBANDS_STD_START": 1.0,
+    "BBANDS_STD_END": 3.25,
+    "BBANDS_STD_STEP": 0.25,
+}
+
+# Configuration for Stochastic Crossover Strategy
+# 16 k_windows × 7 d_windows = 112 combos
+STRATEGY_STOCH = {
+    "STOCH_K_START": 5,
+    "STOCH_K_END": 21,
+    "STOCH_K_STEP": 1,
+    "STOCH_D_START": 3,
+    "STOCH_D_END": 10,
+    "STOCH_D_STEP": 1,
 }
 
 # --- Environment/API Keys (Optional - Better in .env file) ---

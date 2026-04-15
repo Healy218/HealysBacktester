@@ -33,6 +33,9 @@ def run_backtest(
     short_entries_series: Optional[Union[pd.Series, pd.DataFrame]] = None,
     short_exits_series: Optional[Union[pd.Series, pd.DataFrame]] = None,
     trend_filter_window: int = 0,
+    atr_sl_window: Optional[int] = None,
+    atr_sl_multiplier: float = 2.0,
+    use_trailing_stop: bool = False,
     signal_kwargs: Optional[Dict[str, Any]] = None,
     portfolio_kwargs: Optional[Dict[str, Any]] = None
     ) -> PortfolioBase:
@@ -54,6 +57,10 @@ def run_backtest(
         tp_stop: Take profit percentage (e.g., 0.10 for 10%). Applied to long and short.
         short_entries_series: Optional Series/DataFrame of short entry signals.
         short_exits_series: Optional Series/DataFrame of short exit signals.
+        atr_sl_window: If set, compute ATR with this window and use it for stop-loss distance
+                       instead of the fixed sl_stop percentage.
+        atr_sl_multiplier: Multiplier for ATR-based stop distance (default 2.0).
+        use_trailing_stop: If True, stop-loss trails price upward (never moves down).
         signal_kwargs: Additional kwargs passed directly to from_signals (signal part).
         portfolio_kwargs: Additional kwargs passed directly to from_signals (portfolio part).
 
@@ -160,13 +167,30 @@ def run_backtest(
             f"{short_ok.mean():.1%} allow shorts"
         )
 
+    # --- ATR-Based Stop Loss ---
+    # When atr_sl_window is set, compute ATR and use it as the stop-loss distance
+    # instead of a fixed percentage. The stop distance per bar is ATR × multiplier.
+    if atr_sl_window and atr_sl_window > 0:
+        close_s = price_df_to_use['Close']
+        high_s = price_df_to_use['High'] if 'High' in price_df_to_use.columns else close_s
+        low_s = price_df_to_use['Low'] if 'Low' in price_df_to_use.columns else close_s
+        atr_indicator = vbt.ATR.run(high_s, low_s, close_s, window=atr_sl_window)
+        atr_values = atr_indicator.atr
+        # Convert ATR to percentage of close price for sl_stop
+        atr_pct = (atr_values * atr_sl_multiplier) / close_s
+        sl_stop = atr_pct
+        logger.info(
+            f"ATR-based stop loss: window={atr_sl_window}, multiplier={atr_sl_multiplier}, "
+            f"median stop={atr_pct.median():.4f} ({atr_pct.median()*100:.2f}%)"
+        )
+
     # --- Prepare kwargs for vbt.Portfolio.from_signals ---
     logger.debug("Preparing simulation parameters...")
     # Signal-related arguments (stops are applied to both long and short if enabled)
     final_signal_kwargs = {
         'sl_stop': sl_stop,
         'tp_stop': tp_stop,
-        # Add other signal-related defaults if necessary
+        'sl_trail': use_trailing_stop,
     }
     if signal_kwargs:
         final_signal_kwargs.update(signal_kwargs)
