@@ -1,0 +1,124 @@
+# scripts/nn_backtest.py
+
+import pandas as pd
+import numpy as np
+import sys
+import os
+import vectorbt as vbt
+import logging
+
+# --- Add Project Root to Python Path ---
+try:
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.dirname(script_dir)
+    if project_root not in sys.path:
+        sys.path.insert(0, str(project_root))
+except NameError:
+    project_root = '.'
+    if project_root not in sys.path:
+        sys.path.insert(0, str(project_root))
+
+# --- Setup Logging ---
+from utils.logging_utils import setup_logging
+log_file_path = os.path.join(project_root, "logs", "nn_backtest.log")
+logger = setup_logging(log_level=logging.INFO, log_file=log_file_path)
+
+# --- Import project modules ---
+from signals import nn_signals
+from portfolio import simulator
+from analysis import metrics, plotting
+from utils import config_parser, freq_utils
+from data import data_loader, data_cleaner
+from models import data_preprocessing, nn_model
+
+# --- Load Configuration ---
+config_file = os.path.join(project_root, 'config', 'settings.py')
+config = config_parser.load_config(config_file)
+DATA_CONFIG = config.get('DATA_CONFIG', {})
+STRATEGY_CONFIG = config.get('STRATEGY_NN', {})
+BACKTEST_CONFIG = config.get('BACKTEST_CONFIG', {})
+
+# --- Parameters ---
+SYMBOL = DATA_CONFIG.get('SYMBOL', 'FUBO')
+START_DATE = DATA_CONFIG.get('START_DATE', '2025-01-01')
+END_DATE = DATA_CONFIG.get('END_DATE', '2025-04-30')
+INTERVAL = DATA_CONFIG.get('INTERVAL', '5m')
+DEFAULT_FREQ = freq_utils.resolve_freq(BACKTEST_CONFIG.get('DEFAULT_FREQ'), INTERVAL)
+
+logger.info(f"--- Starting Neural Network Backtest ---")
+logger.info(f"Symbol: {SYMBOL}, Period: {START_DATE} to {END_DATE} ({INTERVAL})")
+
+# 1. Load Data
+logger.info("[1/5] Loading and cleaning data...")
+raw_data = data_loader.load_price_data(
+    symbol=SYMBOL, start_date=START_DATE, end_date=END_DATE, interval=INTERVAL
+)
+price_data = data_cleaner.clean_ohlcv_data(raw_data)
+
+# 2. Prepare NN Data
+logger.info("[2/5] Preprocessing data for Neural Network...")
+X_train, X_test, y_train, y_test, scaler, feature_cols = data_preprocessing.prepare_nn_data(
+    price_data, STRATEGY_CONFIG
+)
+logger.info(f"Training set size: {len(X_train)}, Test set size: {len(X_test)}")
+
+# 3. Train Model
+logger.info("[3/5] Training Neural Network...")
+model = nn_model.create_model(X_train.shape[1])
+model, history = nn_model.train_model(model, X_train, y_train, STRATEGY_CONFIG)
+
+# 4. Generate Signals on Test Set
+logger.info("[4/5] Generating signals on test set...")
+# We need the portion of price_data that corresponds to X_test
+# Since prepare_nn_data used a chronological split, X_test contains the last 20% of the available rows
+test_price_data = price_data.iloc[-len(X_test):]
+
+entries, exits, _, _ = nn_signals.generate_nn_signals(
+    test_price_data, model, scaler, STRATEGY_CONFIG
+)
+
+# 5. Run Simulation
+logger.info("[5/5] Running backtest simulation on test set...")
+portfolio = None
+if not entries.empty and entries.any().any():
+    portfolio = simulator.run_backtest(
+        price_df=test_price_data,
+        entries_series=entries,
+        exits_series=exits,
+        initial_capital=BACKTEST_CONFIG.get('INITIAL_CAPITAL', 100000.0),
+        fees=BACKTEST_CONFIG.get('FEES_PERCENT', 0.001),
+        slippage=BACKTEST_CONFIG.get('SLIPPAGE_PERCENT', 0.0005),
+        frequency=DEFAULT_FREQ,
+        size=BACKTEST_CONFIG.get('DEFAULT_SIZE', 0.9),
+        size_type=BACKTEST_CONFIG.get('DEFAULT_SIZE_TYPE', 'percent'),
+        sl_stop=BACKTEST_CONFIG.get('STOP_LOSS_PERCENT') if BACKTEST_CONFIG.get('USE_STOP_LOSS') else None,
+        tp_stop=BACKTEST_CONFIG.get('TAKE_PROFIT_PERCENT') if BACKTEST_CONFIG.get('USE_TAKE_PROFIT') else None
+    )
+
+    if portfolio is not None:
+        logger.info("Simulation complete. Saving results...")
+        # Since it's not an optimization, best_params is just our single signal column
+        best_params = entries.columns[0] 
+        
+        results_dir = metrics.save_run_results(
+            portfolio=portfolio,
+            aggregate_stats=None,
+            best_params=best_params,
+            config_path=config_file,
+            strategy_name='nn_strategy',
+            symbol=SYMBOL,
+            price_data_for_plots=test_price_data
+        )
+        logger.info(f"Results saved to: {results_dir}")
+        
+        # Log final stats
+        stats = metrics.get_summary_stats(portfolio[best_params])
+        logger.info("\n--- Performance Summary (Test Set) ---")
+        for index, value in stats.items():
+            logger.info(f"  {index}: {value}")
+    else:
+        logger.warning("Simulation failed to produce a portfolio object.")
+else:
+    logger.warning("No entry signals generated on the test set.")
+
+logger.info("--- Neural Network Backtest Finished ---")

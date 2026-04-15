@@ -172,6 +172,23 @@ STRATEGY_ELLIOTT = {
     "FIB_TOLERANCE_STEP": 0.001,
 }
 
+# Configuration for Neural Network Strategy
+STRATEGY_NN = {
+    # Label Generation
+    "FORWARD_RETURN_PERIODS": 12,  # Predict price movement 1 hour ahead (12 * 5m = 60m)
+    "RETURN_THRESHOLD": 0.002,     # 0.2% return required for a 'Buy' label
+
+    # Training Hyperparameters
+    "EPOCHS": 20,
+    "BATCH_SIZE": 32,
+    "TRAIN_TEST_SPLIT": 0.8,       # 80% train, 20% test
+    "VALIDATION_SPLIT": 0.1,       # 10% of training data for validation
+
+    # Signal Generation
+    "PROBABILITY_THRESHOLD": 0.55, # Minimum confidence to trigger entry
+    "EXIT_PROBABILITY_THRESHOLD": 0.45, # Exit if buy probability drops below this
+}
+
 # --- Environment/API Keys (Optional - Better in .env file) ---
 # If not using .env, you could put placeholders here, but it's not recommended for secrets
 API_KEYS = {
