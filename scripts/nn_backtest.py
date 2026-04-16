@@ -4,6 +4,14 @@ import pandas as pd
 import numpy as np
 import sys
 import os
+from dotenv import load_dotenv
+
+# Fix for macOS OpenMP/TensorFlow crash
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'TRUE'
+
+# Load .env variables (including ALPACA keys)
+load_dotenv()
+
 import vectorbt as vbt
 import logging
 
@@ -28,7 +36,7 @@ from signals import nn_signals
 from portfolio import simulator
 from analysis import metrics, plotting
 from utils import config_parser, freq_utils
-from data import data_loader, data_cleaner
+from data import data_loader, data_cleaner, alpaca_loader
 from models import data_preprocessing, nn_model
 
 # --- Load Configuration ---
@@ -39,9 +47,9 @@ STRATEGY_CONFIG = config.get('STRATEGY_NN', {})
 BACKTEST_CONFIG = config.get('BACKTEST_CONFIG', {})
 
 # --- Parameters ---
-SYMBOL = DATA_CONFIG.get('SYMBOL', 'FUBO')
-START_DATE = DATA_CONFIG.get('START_DATE', '2025-01-01')
-END_DATE = DATA_CONFIG.get('END_DATE', '2025-04-30')
+SYMBOL = DATA_CONFIG.get('SYMBOLS', ['SPY'])[0]
+START_DATE = DATA_CONFIG.get('START_DATE', '2025-04-15')
+END_DATE = DATA_CONFIG.get('END_DATE', '2026-04-15')
 INTERVAL = DATA_CONFIG.get('INTERVAL', '5m')
 DEFAULT_FREQ = freq_utils.resolve_freq(BACKTEST_CONFIG.get('DEFAULT_FREQ'), INTERVAL)
 
@@ -49,29 +57,45 @@ logger.info(f"--- Starting Neural Network Backtest ---")
 logger.info(f"Symbol: {SYMBOL}, Period: {START_DATE} to {END_DATE} ({INTERVAL})")
 
 # 1. Load Data
-logger.info("[1/5] Loading and cleaning data...")
-raw_data = data_loader.load_price_data(
-    symbol=SYMBOL, start_date=START_DATE, end_date=END_DATE, interval=INTERVAL
-)
-price_data = data_cleaner.clean_ohlcv_data(raw_data)
+logger.info("[1/5] Loading and cleaning data from Alpaca...")
+try:
+    # Use Alpaca Loader specifically for the 1-year 5m data
+    raw_data = alpaca_loader.load_alpaca_bars(
+        symbol=SYMBOL, start_date=START_DATE, end_date=END_DATE, interval=INTERVAL
+    )
+    price_data = data_cleaner.clean_ohlcv_data(raw_data)
+except Exception as e:
+    logger.error(f"Failed to load data from Alpaca: {e}")
+    sys.exit(1)
 
 # 2. Prepare NN Data
 logger.info("[2/5] Preprocessing data for Neural Network...")
+FORWARD_PERIODS = STRATEGY_CONFIG.get('HORIZONS', [24])[0]
 X_train, X_test, y_train, y_test, scaler, feature_cols = data_preprocessing.prepare_nn_data(
-    price_data, STRATEGY_CONFIG
+    price_data, STRATEGY_CONFIG, forward_periods=FORWARD_PERIODS
 )
 logger.info(f"Training set size: {len(X_train)}, Test set size: {len(X_test)}")
 
 # 3. Train Model
 logger.info("[3/5] Training Neural Network...")
-model = nn_model.create_model(X_train.shape[1])
+model = nn_model.create_model(X_train.shape[1:], mode='classification')
 model, history = nn_model.train_model(model, X_train, y_train, STRATEGY_CONFIG)
 
 # 4. Generate Signals on Test Set
 logger.info("[4/5] Generating signals on test set...")
-# We need the portion of price_data that corresponds to X_test
-# Since prepare_nn_data used a chronological split, X_test contains the last 20% of the available rows
-test_price_data = price_data.iloc[-len(X_test):]
+# Reconstruct the aligned test index.
+# prepare_nn_data drops NaN rows, splits chronologically, then creates sequences
+# which consume LOOKBACK_WINDOW rows from the front of each split.
+# The safest alignment: features + labels define the valid rows, then the test
+# split starts at (1 - TRAIN_TEST_SPLIT) of those, offset by LOOKBACK_WINDOW.
+LOOKBACK_WINDOW = STRATEGY_CONFIG.get('LOOKBACK_WINDOW', 24)
+features_tmp = data_preprocessing.create_features(price_data)
+labels_tmp = data_preprocessing.create_labels(price_data, FORWARD_PERIODS, STRATEGY_CONFIG['RETURN_THRESHOLD'])
+valid_index = pd.concat([features_tmp, labels_tmp.rename('target')], axis=1).dropna().index
+split_at = int(len(valid_index) * STRATEGY_CONFIG.get('TRAIN_TEST_SPLIT', 0.8))
+# After sequence creation, first LOOKBACK_WINDOW rows of test split are consumed
+test_index = valid_index[split_at + LOOKBACK_WINDOW:]
+test_price_data = price_data.loc[test_index]
 
 entries, exits, _, _ = nn_signals.generate_nn_signals(
     test_price_data, model, scaler, STRATEGY_CONFIG

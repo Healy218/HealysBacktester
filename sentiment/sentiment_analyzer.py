@@ -1,34 +1,73 @@
-# sentiment_analyzer.py
+# sentiment/sentiment_analyzer.py
+"""Score news headlines and aggregate into time-aligned sentiment signals."""
 
-# Pseudo-code for a simple sentiment analyzer function
-def analyze_sentiment(text_data):
-    """
-    Analyzes the sentiment of a list of text (e.g., news headlines, social media posts).
-    """
-    # Initialize a sentiment analysis model or library (e.g., VADER, TextBlob, or a more advanced model)
-    # Iterate through the text data
-    # For each piece of text, use the sentiment analysis model to get a sentiment score (e.g., positive, negative, neutral, or a numerical score)
-    # Return the sentiment scores or classifications, potentially aggregated or associated with timestamps
-    pass
+from typing import List, Tuple
+import numpy as np
+import pandas as pd
+from utils.logging_utils import setup_logging
 
-# Pseudo-code for a function that aggregates sentiment scores over a time period
-def aggregate_sentiment(sentiment_data, aggregation_period="daily"):
-    """
-    Aggregates sentiment data over a specified time period.
-    """
-    # If the sentiment data has timestamps, group it by the aggregation period (e.g., daily, hourly)
-    # Calculate an aggregate sentiment score for each period (e.g., average of scores)
-    # Return the aggregated sentiment data
-    pass
+logger = setup_logging(log_file="logs/backtester.log")
 
-# Pseudo-code for a function that converts raw sentiment data into a trading signal
-def generate_sentiment_signal(aggregated_sentiment):
+# Lazy-load VADER to avoid import overhead when not using sentiment
+_vader = None
+
+
+def _get_vader():
+    """Lazy-initialize VADER sentiment analyzer."""
+    global _vader
+    if _vader is None:
+        import nltk
+        try:
+            from nltk.sentiment.vader import SentimentIntensityAnalyzer
+        except LookupError:
+            nltk.download('vader_lexicon', quiet=True)
+            from nltk.sentiment.vader import SentimentIntensityAnalyzer
+        _vader = SentimentIntensityAnalyzer()
+    return _vader
+
+
+def analyze_sentiment(headlines: List[str]) -> np.ndarray:
     """
-    Generates a trading signal (e.g., positive, negative, neutral) based on aggregated sentiment.
+    Score a list of headlines using VADER.
+    Returns array of compound scores in [-1, 1].
     """
-    signal = None
-    # Define rules or thresholds based on the aggregated sentiment
-    # For example, if the average sentiment score is above a certain level, return "positive"
-    # If it's below a certain level, return "negative"
-    # Otherwise, return "neutral"
-    return signal
+    sia = _get_vader()
+    scores = np.array([sia.polarity_scores(h)["compound"] for h in headlines])
+    return scores
+
+
+def aggregate_sentiment(
+    news_df: pd.DataFrame,
+    freq: str = "1D",
+) -> pd.Series:
+    """
+    Score headlines in news_df and aggregate to a time-aligned sentiment Series.
+
+    Args:
+        news_df: DataFrame with 'datetime' and 'headline' columns
+                 (as returned by sentiment_data_loader).
+        freq: Resampling frequency to match price data ('1D', '1h', '5min', etc.).
+
+    Returns:
+        pd.Series with DatetimeIndex and mean compound sentiment per period.
+        Periods with no news get score 0.0 (neutral).
+    """
+    if news_df.empty:
+        logger.warning("[Sentiment] Empty news DataFrame — returning empty Series")
+        return pd.Series(dtype=float)
+
+    df = news_df.copy()
+    df["score"] = analyze_sentiment(df["headline"].tolist())
+    df = df.set_index("datetime")
+    df.index = pd.to_datetime(df.index)
+
+    # Resample: mean sentiment per period, fill gaps with 0 (neutral)
+    sentiment = df["score"].resample(freq).mean().fillna(0.0)
+    sentiment.name = "sentiment"
+
+    logger.info(
+        f"[Sentiment] Aggregated {len(news_df)} headlines -> "
+        f"{len(sentiment)} periods ({freq}), "
+        f"mean={sentiment.mean():.3f}"
+    )
+    return sentiment

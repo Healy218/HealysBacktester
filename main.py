@@ -33,7 +33,7 @@ except ImportError:
 from utils.logging_utils import setup_logging
 from utils import config_parser
 from analysis import plotting
-from backtests import run_ma, run_rsi, run_macd, run_volume, run_bbands, run_stoch, run_elliott
+from backtests import run_ma, run_rsi, run_macd, run_volume, run_bbands, run_stoch, run_elliott, run_sentiment
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -53,6 +53,7 @@ STRATEGIES = {
     "Bollinger Bands":      {"runner": run_bbands, "config_key": "STRATEGY_BBANDS"},
     "Stochastic Crossover": {"runner": run_stoch,   "config_key": "STRATEGY_STOCH"},
     "Elliott Wave / Fib":   {"runner": run_elliott, "config_key": "STRATEGY_ELLIOTT"},
+    "Sentiment":            {"runner": run_sentiment, "config_key": "STRATEGY_SENTIMENT"},
 }
 
 INTERVALS = [

@@ -107,7 +107,9 @@ def load_alpaca_bars(
             timeframe=_get_timeframe(interval),
             start=datetime.fromisoformat(start_date),
             end=datetime.fromisoformat(end_date),
-            limit=10000,        # max bars per page (API default is 1000)
+            # Do NOT set limit — alpaca-py treats it as total cap, not page size.
+            # Omitting it lets the SDK auto-paginate and return ALL bars in range.
+            # 1 year of 5-min data ≈ 20k bars; 3 years ≈ 60k bars.
             adjustment="all",   # split + dividend adjusted, same as yfinance auto_adjust=True
         )
 
@@ -137,8 +139,8 @@ def load_alpaca_bars(
     })
 
     # Strip timezone — simulator and cleaner both expect tz-naive DatetimeIndex
-    if df.index.tz is not None:
-        df.index = df.index.tz_localize(None)
+    from utils.date_utils import ensure_tz_naive
+    df = ensure_tz_naive(df)
 
     # Keep only OHLCV columns
     available = [c for c in ["Open", "High", "Low", "Close", "Volume"] if c in df.columns]

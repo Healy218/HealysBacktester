@@ -1,3 +1,4 @@
-# api_keys.py
-FINNHUB_API_KEY = "YOUR_FINNHUB_API_KEY"
-# Add other API keys here if needed
+# config/api_keys.py
+import os
+
+FINNHUB_API_KEY = os.environ.get("FINNHUB_API_KEY", "")

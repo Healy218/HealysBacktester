@@ -17,20 +17,22 @@ def create_results_directory(base_results_dir: str = "results",
                              symbol: str = "SYM") -> Optional[str]:
     """
     Creates a unique, timestamped directory for storing backtest results.
-
-    Returns the path to the created directory, or None on failure.
+    Ensures that the directory name doesn't exceed OS limits.
     """
     run_dir_path = None
     try:
+        # Safety: Ensure symbol is a clean string, not a DataFrame/object
+        clean_symbol = str(symbol).split('\n')[0][:20].strip() 
         timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-        run_dir_name = f"{strategy_name}_{symbol}_{timestamp}"
+        
+        run_dir_name = f"{strategy_name}_{clean_symbol}_{timestamp}"
         run_dir_path = os.path.join(base_results_dir, run_dir_name)
+        
         os.makedirs(run_dir_path, exist_ok=True)
         logger.info(f"Results directory created: {run_dir_path}")
         return run_dir_path
     except Exception as e:
-        logger.error(f"Error creating results directory '{run_dir_path}': {e}")
-        traceback.print_exc()
+        logger.error(f"Error creating results directory: {e}")
         return None
 
 

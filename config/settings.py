@@ -4,11 +4,11 @@
 
 # --- Data Configuration ---
 DATA_CONFIG = {
-    "SYMBOL": "FUBO",
-    "START_DATE": "2025-03-03",
-    "END_DATE": "2025-04-30",
-    "INTERVAL": "5m",  # e.g., '1m', '5m', '1h', '1D'
-    "DATA_PROVIDER": "YahooFinance" # Or 'AlphaVantage', 'CSV', etc. (for future use)
+    "SYMBOLS": ["SPY", "QQQ", "TSLA", "NVDA", "AAPL", "AMD"],
+    "START_DATE": "2023-04-15",
+    "END_DATE": "2026-04-15",
+    "INTERVAL": "5m",  # Noise-reduced interval
+    "DATA_PROVIDER": "Alpaca"
 }
 
 # --- Strategy Configuration ---
@@ -77,6 +77,11 @@ BACKTEST_CONFIG = {
     'ATR_SL_WINDOW': None,       # None = use fixed %, set to e.g. 14 for ATR-based stops
     'ATR_SL_MULTIPLIER': 2.0,    # ATR multiplier for stop distance (e.g., 2× ATR)
     'USE_TRAILING_STOP': False,  # True = trailing stop instead of fixed
+
+    # --- Sentiment Filter (overlay on any strategy) ---
+    'SENTIMENT_FILTER_ENABLED': False,     # Set True to gate entries by sentiment
+    'SENTIMENT_FILTER_THRESHOLD': 0.1,     # Min sentiment score to allow entries
+    'SENTIMENT_FILTER_PROVIDER': 'finnhub',
 
     # --- Simulation Frequency ---
     # IMPORTANT: DEFAULT_FREQ must match your data INTERVAL or vectorbt will produce
@@ -172,21 +177,47 @@ STRATEGY_ELLIOTT = {
     "FIB_TOLERANCE_STEP": 0.001,
 }
 
+# Configuration for Sentiment Strategy
+# Sweeps: smoothing_windows x entry_thresholds x exit_thresholds
+# 7 windows x 10 entry x 10 exit = 700 combos (lightweight — news data is sparse)
+STRATEGY_SENTIMENT = {
+    "PROVIDER": "finnhub",  # Data source (add more in sentiment_data_loader.py)
+
+    # Smoothing window (rolling mean over raw sentiment scores)
+    "SENTIMENT_WINDOW_START": 1,
+    "SENTIMENT_WINDOW_END": 8,   # 7 values (1-7 periods)
+    "SENTIMENT_WINDOW_STEP": 1,
+
+    # Bullish entry threshold (sentiment must cross above)
+    "ENTRY_THRESHOLD_START": 0.05,
+    "ENTRY_THRESHOLD_END": 0.50,  # 10 values
+    "ENTRY_THRESHOLD_STEP": 0.05,
+
+    # Bearish exit threshold (sentiment must cross below)
+    "EXIT_THRESHOLD_START": -0.50,
+    "EXIT_THRESHOLD_END": -0.05,  # 10 values
+    "EXIT_THRESHOLD_STEP": 0.05,
+}
+
 # Configuration for Neural Network Strategy
 STRATEGY_NN = {
-    # Label Generation
-    "FORWARD_RETURN_PERIODS": 12,  # Predict price movement 1 hour ahead (12 * 5m = 60m)
-    "RETURN_THRESHOLD": 0.002,     # 0.2% return required for a 'Buy' label
+    "LOOKBACK_WINDOW": 24, # 2 hours of history (24 * 5m)
 
-    # Training Hyperparameters
-    "EPOCHS": 20,
-    "BATCH_SIZE": 32,
-    "TRAIN_TEST_SPLIT": 0.8,       # 80% train, 20% test
-    "VALIDATION_SPLIT": 0.1,       # 10% of training data for validation
+    # Sweep Ranges (Target Returns for Triple Barrier)
+    "HORIZONS": [12, 24, 48], # 1h, 2h, 4h
+    "THRESHOLDS": [0.005, 0.0075, 0.01, 0.0125, 0.015, 0.02, 0.025],
 
-    # Signal Generation
-    "PROBABILITY_THRESHOLD": 0.55, # Minimum confidence to trigger entry
-    "EXIT_PROBABILITY_THRESHOLD": 0.45, # Exit if buy probability drops below this
+    # Dynamic Management
+    "STOP_LOSS_MULT": 0.5, # Stop loss is 0.5x the profit target
+    "PROBABILITY_THRESHOLD": 0.85,
+    "EXIT_PROBABILITY_THRESHOLD": 0.40,  # Exit when P(up) drops below this
+    "RETURN_THRESHOLD": 0.01,            # Min return for classification label
+
+    # Training
+    "EPOCHS": 15,
+    "BATCH_SIZE": 512,
+    "TRAIN_TEST_SPLIT": 0.8,
+    "VALIDATION_SPLIT": 0.1,
 }
 
 # --- Environment/API Keys (Optional - Better in .env file) ---

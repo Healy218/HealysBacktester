@@ -257,8 +257,8 @@ def scan_one(scan: dict) -> dict:
     bars_per_day    = _BARS_PER_DAY.get(interval, 1)
     trading_days    = max(min_bars / bars_per_day, 1)
     calendar_days   = int(trading_days * 1.5) + 10  # buffer for weekends/holidays
-    end_date        = date.today().isoformat()
-    start_date      = (date.today() - timedelta(days=calendar_days)).isoformat()
+    from utils.date_utils import generate_date_range
+    start_date, end_date = generate_date_range(days_back=calendar_days)
 
     # --- Download data ---
     logger.info(f"[scanner] {symbol} {strategy} — fetching {interval} data ({start_date} → {end_date})")

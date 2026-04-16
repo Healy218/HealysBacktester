@@ -20,6 +20,7 @@ env/
 # Ignore generated output folders
 logs/
 results/
+saved_models/
 
 # Ignore OS-specific files (optional)
 .DS_Store
