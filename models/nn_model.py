@@ -1,8 +1,8 @@
 # models/nn_model.py
 import tensorflow as tf
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Dropout, Input
-from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.models import Sequential  # type: ignore
+from tensorflow.keras.layers import Dense, Dropout, Input  # type: ignore
+from tensorflow.keras.callbacks import EarlyStopping  # type: ignore
 
 def create_model(input_shape):
     """
