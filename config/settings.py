@@ -13,30 +13,30 @@ DATA_CONFIG = {
 
 # --- Strategy Configuration ---
 
-# MA Crossover - Updated for Optimization
+# MA Crossover
 STRATEGY_MA_CROSSOVER = {
     # Combinations (r=2) where fast < slow: n*(n-1)/2
-    # 1001 windows → 1001*1000/2 = 500,500 combos
+    # 524 windows → 524*523/2 = 137,026 combos
     "MA_WINDOW_START": 2,
-    "MA_WINDOW_END": 1003,
-    "MA_WINDOW_STEP": 1,
+    "MA_WINDOW_END": 1050,
+    "MA_WINDOW_STEP": 2,
 }
 
 # RSI Threshold
 # True cross-product: windows × entry_thresholds × exit_thresholds
-# 26 windows × 140 entry × 140 exit = 509,600 combos
+# 26 windows × 72 entry × 72 exit = 134,784 combos
 STRATEGY_RSI = {
     'RSI_WINDOW_START': 5,
     'RSI_WINDOW_END': 31,   # 26 windows (5–30)
     'RSI_WINDOW_STEP': 1,
 
     'ENTRY_THRESHOLD_START': 10.0,
-    'ENTRY_THRESHOLD_END': 45.0,  # 140 values (10.0–45.0 step 0.25)
-    'ENTRY_THRESHOLD_STEP': 0.25,
+    'ENTRY_THRESHOLD_END': 45.5,  # 72 values (10.0–45.5 step 0.5)
+    'ENTRY_THRESHOLD_STEP': 0.5,
 
     'EXIT_THRESHOLD_START': 55.0,
-    'EXIT_THRESHOLD_END': 90.0,   # 140 values (55.0–90.0 step 0.25)
-    'EXIT_THRESHOLD_STEP': 0.25,
+    'EXIT_THRESHOLD_END': 90.5,   # 72 values (55.0–90.5 step 0.5)
+    'EXIT_THRESHOLD_STEP': 0.5,
 
     # Unused — short thresholds are derived symmetrically from long thresholds
     'SHORT_ENTRY_THRESHOLD_START': 65.0,
@@ -81,7 +81,7 @@ BACKTEST_CONFIG = {
     # --- Sentiment Filter (overlay on any strategy) ---
     'SENTIMENT_FILTER_ENABLED': False,     # Set True to gate entries by sentiment
     'SENTIMENT_FILTER_THRESHOLD': 0.1,     # Min sentiment score to allow entries
-    'SENTIMENT_FILTER_PROVIDER': 'finnhub',
+    'SENTIMENT_FILTER_PROVIDER': 'alphavantage',
 
     # --- Simulation Frequency ---
     # IMPORTANT: DEFAULT_FREQ must match your data INTERVAL or vectorbt will produce
@@ -92,21 +92,21 @@ BACKTEST_CONFIG = {
 }
 
 # Configuration for MACD Strategy
-# Valid combos (fast < slow) ≈ 522k from 68 fast × 195 slow × 47 signal
+# Valid combos (fast < slow) ≈ 137k from 49 fast × 121 slow × 26 signal
 STRATEGY_MACD = {
     # Fast EMA Window Range
     "FAST_WINDOW_START": 2,
-    "FAST_WINDOW_END": 70,   # 68 values (2–69)
+    "FAST_WINDOW_END": 51,   # 49 values (2–50)
     "FAST_WINDOW_STEP": 1,
 
     # Slow EMA Window Range (Must be > Fast Window; combos where fast>=slow are dropped)
-    "SLOW_WINDOW_START": 5,
-    "SLOW_WINDOW_END": 200,  # 195 values (5–199)
-    "SLOW_WINDOW_STEP": 1,
+    "SLOW_WINDOW_START": 10,
+    "SLOW_WINDOW_END": 251,  # 121 values (10–250 step 2)
+    "SLOW_WINDOW_STEP": 2,
 
     # Signal Line EMA Window Range
     "SIGNAL_WINDOW_START": 3,
-    "SIGNAL_WINDOW_END": 50,  # 47 values (3–49)
+    "SIGNAL_WINDOW_END": 29,  # 26 values (3–28)
     "SIGNAL_WINDOW_STEP": 1,
 
     # Shorting control (specific to this strategy)
@@ -115,88 +115,90 @@ STRATEGY_MACD = {
 }
 
 # Configuration for Volume Breakout Strategy
-# 105 vol_windows × 51 multipliers × 95 exit_ma ≈ 508,725 combos
+# 53 vol_windows × 26 multipliers × 100 exit_ma ≈ 137,800 combos
 STRATEGY_VOLUME_BREAKOUT = {
     # Volume lookback window
     "VOLUME_WINDOW_START": 5,
-    "VOLUME_WINDOW_END": 110,   # 105 values (5–109)
-    "VOLUME_WINDOW_STEP": 1,
+    "VOLUME_WINDOW_END": 111,   # 53 values (5–109 step 2)
+    "VOLUME_WINDOW_STEP": 2,
     # Volume spike multiplier
     "VOLUME_MULTIPLIER_START": 1.0,
-    "VOLUME_MULTIPLIER_END": 3.55,  # 51 values (1.0–3.5 step 0.05)
-    "VOLUME_MULTIPLIER_STEP": 0.05,
+    "VOLUME_MULTIPLIER_END": 3.55,  # 26 values (1.0–3.5 step 0.1)
+    "VOLUME_MULTIPLIER_STEP": 0.1,
     # Exit MA window
     "EXIT_MA_WINDOW_START": 5,
-    "EXIT_MA_WINDOW_END": 100,  # 95 values (5–99)
+    "EXIT_MA_WINDOW_END": 105,  # 100 values (5–104)
     "EXIT_MA_WINDOW_STEP": 1,
     # Other settings
     "CONFIRM_PRICE_INCREASE": False,
 }
 
 # Configuration for Bollinger Bands Breakout Strategy
-# 500 windows × 1000 stds = 500,000 combos
+# 250 windows × 550 stds = 137,500 combos
 STRATEGY_BBANDS = {
     "BBANDS_WINDOW_START": 3,
-    "BBANDS_WINDOW_END": 503,       # 500 windows (3–502)
-    "BBANDS_WINDOW_STEP": 1,
+    "BBANDS_WINDOW_END": 503,       # 250 windows (3–502 step 2)
+    "BBANDS_WINDOW_STEP": 2,
     "BBANDS_STD_START": 0.50,
-    "BBANDS_STD_END": 4.50,         # 1000 values (0.50–4.496 step 0.004)
-    "BBANDS_STD_STEP": 0.004,
+    "BBANDS_STD_END": 4.50,         # 550 values (0.50–4.496 step ~0.0073)
+    "BBANDS_STD_STEP": 0.0073,
 }
 
 # Configuration for Stochastic Crossover Strategy
 # True cross-product: k_windows × d_windows × oversold × overbought
-# 47 × 13 × 30 × 27 ≈ 494,910 combos
+# 24 × 13 × 20 × 22 ≈ 137,280 combos
 STRATEGY_STOCH = {
     "STOCH_K_START": 3,
-    "STOCH_K_END": 50,              # 47 windows (3–49)
-    "STOCH_K_STEP": 1,
+    "STOCH_K_END": 51,              # 24 windows (3–49 step 2)
+    "STOCH_K_STEP": 2,
     "STOCH_D_START": 2,
     "STOCH_D_END": 15,              # 13 windows (2–14)
     "STOCH_D_STEP": 1,
     "STOCH_OVERSOLD_START": 5,
-    "STOCH_OVERSOLD_END": 35,       # 30 values (5–34)
+    "STOCH_OVERSOLD_END": 25,       # 20 values (5–24)
     "STOCH_OVERSOLD_STEP": 1,
-    "STOCH_OVERBOUGHT_START": 65,
-    "STOCH_OVERBOUGHT_END": 92,     # 27 values (65–91)
+    "STOCH_OVERBOUGHT_START": 70,
+    "STOCH_OVERBOUGHT_END": 92,     # 22 values (70–91)
     "STOCH_OVERBOUGHT_STEP": 1,
 }
 
 # Configuration for Elliott Wave / Fibonacci Retracement Strategy
 # Swing detection order × Fibonacci level × Fibonacci zone tolerance
-# 34 × 450 × 33 ≈ 504,900 combos
+# 20 × 225 × 30 ≈ 135,000 combos
 STRATEGY_ELLIOTT = {
     "SWING_ORDER_START": 2,
-    "SWING_ORDER_END": 36,          # 34 values (2–35)
-    "SWING_ORDER_STEP": 1,
+    "SWING_ORDER_END": 42,          # 20 values (2–40 step 2)
+    "SWING_ORDER_STEP": 2,
     "FIB_LEVEL_START": 0.050,
-    "FIB_LEVEL_END": 0.950,         # 450 values (0.050–0.948 step 0.002)
-    "FIB_LEVEL_STEP": 0.002,
+    "FIB_LEVEL_END": 0.950,         # 225 values (0.050–0.948 step 0.004)
+    "FIB_LEVEL_STEP": 0.004,
     "FIB_TOLERANCE_START": 0.001,
-    "FIB_TOLERANCE_END": 0.034,     # 33 values (0.001–0.033 step 0.001)
+    "FIB_TOLERANCE_END": 0.031,     # 30 values (0.001–0.030 step 0.001)
     "FIB_TOLERANCE_STEP": 0.001,
 }
 
 # Configuration for Sentiment Strategy
 # Sweeps: smoothing_windows x entry_thresholds x exit_thresholds
-# 7 windows x 10 entry x 10 exit = 700 combos (lightweight — news data is sparse)
+# 3 windows x 10 entry x 10 exit = 300 combos (lightweight — news data is sparse)
+# NOTE: VADER compound scores range [-1, 1] but daily averages typically cluster
+# in [-0.15, 0.15].  Thresholds should be set accordingly.
 STRATEGY_SENTIMENT = {
-    "PROVIDER": "finnhub",  # Data source (add more in sentiment_data_loader.py)
+    "PROVIDER": "alphavantage",  # Data source: "alphavantage" or "finnhub"
 
     # Smoothing window (rolling mean over raw sentiment scores)
     "SENTIMENT_WINDOW_START": 1,
-    "SENTIMENT_WINDOW_END": 8,   # 7 values (1-7 periods)
+    "SENTIMENT_WINDOW_END": 4,   # 3 values (1-3 periods)
     "SENTIMENT_WINDOW_STEP": 1,
 
     # Bullish entry threshold (sentiment must cross above)
-    "ENTRY_THRESHOLD_START": 0.05,
-    "ENTRY_THRESHOLD_END": 0.50,  # 10 values
-    "ENTRY_THRESHOLD_STEP": 0.05,
+    "ENTRY_THRESHOLD_START": 0.01,
+    "ENTRY_THRESHOLD_END": 0.10,  # 10 values
+    "ENTRY_THRESHOLD_STEP": 0.01,
 
     # Bearish exit threshold (sentiment must cross below)
-    "EXIT_THRESHOLD_START": -0.50,
-    "EXIT_THRESHOLD_END": -0.05,  # 10 values
-    "EXIT_THRESHOLD_STEP": 0.05,
+    "EXIT_THRESHOLD_START": -0.10,
+    "EXIT_THRESHOLD_END": -0.01,  # 10 values
+    "EXIT_THRESHOLD_STEP": 0.01,
 }
 
 # Configuration for Neural Network Strategy

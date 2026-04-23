@@ -17,12 +17,12 @@ def _get_vader():
     global _vader
     if _vader is None:
         import nltk
+        from nltk.sentiment.vader import SentimentIntensityAnalyzer
         try:
-            from nltk.sentiment.vader import SentimentIntensityAnalyzer
+            _vader = SentimentIntensityAnalyzer()
         except LookupError:
             nltk.download('vader_lexicon', quiet=True)
-            from nltk.sentiment.vader import SentimentIntensityAnalyzer
-        _vader = SentimentIntensityAnalyzer()
+            _vader = SentimentIntensityAnalyzer()
     return _vader
 
 
@@ -57,7 +57,15 @@ def aggregate_sentiment(
         return pd.Series(dtype=float)
 
     df = news_df.copy()
-    df["score"] = analyze_sentiment(df["headline"].tolist())
+
+    # Use pre-computed scores from Alpha Vantage if available, otherwise VADER
+    if "sentiment_score" in df.columns:
+        df["score"] = df["sentiment_score"].astype(float)
+        logger.info("[Sentiment] Using provider-supplied sentiment scores")
+    else:
+        df["score"] = analyze_sentiment(df["headline"].tolist())
+        logger.info("[Sentiment] Scored headlines with VADER")
+
     df = df.set_index("datetime")
     df.index = pd.to_datetime(df.index)
 

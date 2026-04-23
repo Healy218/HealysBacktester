@@ -62,7 +62,7 @@ def run(
             return _err("Price data cleaning failed.")
 
         # 2. Load and score sentiment
-        provider = strategy_config.get("PROVIDER", "finnhub")
+        provider = strategy_config.get("PROVIDER", "alphavantage")
         logger.info(f"[Sentiment] Loading news from {provider} for {symbol}...")
         news_df = sentiment_data_loader.load_sentiment(
             ticker=symbol,
