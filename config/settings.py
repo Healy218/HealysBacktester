@@ -134,14 +134,16 @@ STRATEGY_VOLUME_BREAKOUT = {
 }
 
 # Configuration for Bollinger Bands Breakout Strategy
-# 250 windows × 550 stds = 137,500 combos
+# 250 windows × 81 stds = 20,250 combos
+# Note: std step 0.05 covers the practical range thoroughly — finer steps
+# (e.g., 0.0073) produce near-identical bands and waste memory/compute.
 STRATEGY_BBANDS = {
     "BBANDS_WINDOW_START": 3,
     "BBANDS_WINDOW_END": 503,       # 250 windows (3–502 step 2)
     "BBANDS_WINDOW_STEP": 2,
     "BBANDS_STD_START": 0.50,
-    "BBANDS_STD_END": 4.50,         # 550 values (0.50–4.496 step ~0.0073)
-    "BBANDS_STD_STEP": 0.0073,
+    "BBANDS_STD_END": 4.505,        # 81 values (0.50–4.50 step 0.05)
+    "BBANDS_STD_STEP": 0.05,
 }
 
 # Configuration for Stochastic Crossover Strategy

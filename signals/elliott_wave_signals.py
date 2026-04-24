@@ -7,14 +7,15 @@ Sweeps over:
   - fib_level: which Fibonacci retracement level to trade (0.236–0.786)
   - fib_tolerance: how wide the Fibonacci zone is (±% of the fib price)
 
-Uses Numba-compiled swing detection and signal computation from
-indicators/elliott_wave.py for performance.
+Uses Numba-compiled swing detection and batched signal computation from
+indicators/elliott_wave.py for performance.  All (fib_level × fib_tolerance)
+combos are processed in a single Numba call per swing order, eliminating
+135k individual Python→Numba dispatches.
 """
 
 import pandas as pd
 import numpy as np
-from itertools import product as iter_product
-from indicators.elliott_wave import _detect_swings, _compute_fib_signals
+from indicators.elliott_wave import _detect_swings, _compute_fib_signals_batch
 from utils.logging_utils import setup_logging
 from utils.error_handling import handle_errors
 
@@ -41,9 +42,9 @@ def generate_elliott_wave_signals(
         high: High price series.
         low: Low price series.
         close: Close price series.
-        swing_order_range: Array of swing detection orders (e.g., np.arange(3, 20)).
-        fib_level_range: Array of Fibonacci levels (e.g., np.arange(0.236, 0.80, 0.01)).
-        fib_tolerance_range: Array of zone tolerances (e.g., np.arange(0.005, 0.05, 0.005)).
+        swing_order_range: Array of swing detection orders.
+        fib_level_range: Array of Fibonacci levels.
+        fib_tolerance_range: Array of zone tolerances.
         enable_shorting: If True, generate short signals.
 
     Returns:
@@ -54,24 +55,24 @@ def generate_elliott_wave_signals(
         raise ValueError("Close price series is empty.")
 
     swing_order_range = np.asarray(swing_order_range, dtype=int)
-    fib_level_range = np.asarray(fib_level_range, dtype=float)
-    fib_tolerance_range = np.asarray(fib_tolerance_range, dtype=float)
+    fib_level_range = np.asarray(fib_level_range, dtype=np.float64)
+    fib_tolerance_range = np.asarray(fib_tolerance_range, dtype=np.float64)
 
-    total = swing_order_range.size * fib_level_range.size * fib_tolerance_range.size
+    n_fib_combos = fib_level_range.size * fib_tolerance_range.size
+    total = swing_order_range.size * n_fib_combos
     logger.info(f"[ELLIOTT] Generating signals for {total:,} combinations...")
 
     high_arr = high.values.astype(np.float64)
     low_arr = low.values.astype(np.float64)
     close_arr = close.values.astype(np.float64)
 
-    all_entries = []
-    all_exits = []
-    all_short_entries = []
-    all_short_exits = []
-    col_tuples = []
-
     # Cache swing detection per order (most expensive step)
     swing_cache = {}
+
+    all_le = []
+    all_lx = []
+    all_se = []
+    all_sx = []
 
     for order in swing_order_range:
         if order not in swing_cache:
@@ -79,46 +80,50 @@ def generate_elliott_wave_signals(
 
         sh, sl = swing_cache[order]
 
+        # Batch all (fib_level × fib_tolerance) combos in one Numba call
+        le, lx, se, sx = _compute_fib_signals_batch(
+            close_arr, sh, sl, fib_level_range, fib_tolerance_range,
+        )
+        # Each result is (n_bars, n_fib_combos) — append for later concat
+        all_le.append(le)
+        all_lx.append(lx)
+        if enable_shorting:
+            all_se.append(se)
+            all_sx.append(sx)
+
+    # Build column MultiIndex: (swing_order, fib_level, fib_tolerance)
+    col_tuples = []
+    for order in swing_order_range:
         for fib_level in fib_level_range:
             for fib_tol in fib_tolerance_range:
-                le, lx, se, sx = _compute_fib_signals(
-                    close_arr, sh, sl, float(fib_level), float(fib_tol)
-                )
-
-                all_entries.append(le)
-                all_exits.append(lx)
-                if enable_shorting:
-                    all_short_entries.append(se)
-                    all_short_exits.append(sx)
-
                 col_tuples.append((
                     int(order),
                     round(float(fib_level), 3),
                     round(float(fib_tol), 4),
                 ))
 
-    # Assemble DataFrames
-    logger.info("[ELLIOTT] Assembling signal DataFrames...")
     mi = pd.MultiIndex.from_tuples(
         col_tuples,
         names=["swing_order", "fib_level", "fib_tolerance"],
     )
 
+    # Assemble DataFrames
+    logger.info("[ELLIOTT] Assembling signal DataFrames...")
     entries_df = pd.DataFrame(
-        np.column_stack(all_entries), index=close.index, columns=mi,
+        np.concatenate(all_le, axis=1), index=close.index, columns=mi,
     )
     exits_df = pd.DataFrame(
-        np.column_stack(all_exits), index=close.index, columns=mi,
+        np.concatenate(all_lx, axis=1), index=close.index, columns=mi,
     )
 
     short_entries_df = None
     short_exits_df = None
-    if enable_shorting and all_short_entries:
+    if enable_shorting and all_se:
         short_entries_df = pd.DataFrame(
-            np.column_stack(all_short_entries), index=close.index, columns=mi,
+            np.concatenate(all_se, axis=1), index=close.index, columns=mi,
         )
         short_exits_df = pd.DataFrame(
-            np.column_stack(all_short_exits), index=close.index, columns=mi,
+            np.concatenate(all_sx, axis=1), index=close.index, columns=mi,
         )
 
     logger.info(f"[ELLIOTT] Signals generated. Shape: {entries_df.shape}")

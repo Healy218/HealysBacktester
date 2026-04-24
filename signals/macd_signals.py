@@ -1,15 +1,28 @@
 # signals/macd_signals.py
 
+import gc
 import pandas as pd
 import numpy as np
 import vectorbt as vbt
 import warnings
 from itertools import product as iter_product
 from utils.logging_utils import setup_logging
-from utils.error_handling import handle_errors, BacktesterError # Import the decorator and any custom errors if needed
+from utils.error_handling import handle_errors, BacktesterError
 
 # Setup logger
 logger = setup_logging(log_file="logs/backtester.log")
+
+# Memory budget for float64 arrays from vbt.MACD.run()
+# MACD produces macd, signal, histogram + internal EMAs (~8 float64 arrays)
+_SIGNAL_MEM_BUDGET = 2 * 1024**3
+_MACD_FLOAT_ARRAYS = 8
+
+
+def _max_macd_combos(n_rows: int) -> int:
+    """Max parameter combos per vbt.MACD.run() call to stay within memory budget."""
+    cols = _SIGNAL_MEM_BUDGET // (_MACD_FLOAT_ARRAYS * max(n_rows, 1) * 8)
+    return max(500, min(50_000, int(cols)))
+
 
 @handle_errors
 def generate_macd_signals(
@@ -28,13 +41,14 @@ def generate_macd_signals(
 
     Manually generates the cross-product of input parameter ranges and filters
     for valid combinations (fast < slow) before calling vbt.MACD.run
-    with aligned 1D arrays. Vectorbt infers parameter names from keywords.
+    with aligned 1D arrays. For large parameter spaces, internally chunks
+    the computation to stay within a ~2 GB memory budget per chunk.
 
     Args:
         close_prices_series: pandas Series of close prices.
-        fast_window: 1D numpy array of MACD fast EMA window periods (e.g., np.arange(5, 21)).
-        slow_window: 1D numpy array of MACD slow EMA window periods (e.g., np.arange(15, 51)).
-        signal_window: 1D numpy array of MACD signal line EMA window periods (e.g., np.arange(5, 21)).
+        fast_window: 1D numpy array of MACD fast EMA window periods.
+        slow_window: 1D numpy array of MACD slow EMA window periods.
+        signal_window: 1D numpy array of MACD signal line EMA window periods.
         macd_col_name, signal_col_name: Names of columns expected in vbt.MACD output.
         short_entries, short_exits: Flags to enable short signals.
 
@@ -75,70 +89,115 @@ def generate_macd_signals(
     valid_slow_windows = np.array([p[1] for p in valid_params], dtype=int)
     valid_signal_windows = np.array([p[2] for p in valid_params], dtype=int)
 
-    logger.info(f"Calculating MACD using vectorbt for {len(valid_params)} valid combinations...")
+    n_valid = len(valid_params)
+    n_rows = len(close_prices_series)
+    max_per_chunk = _max_macd_combos(n_rows)
 
-    # 1. Calculate MACD indicator using vectorbt with the ALIGNED parameter lists
-    try:
-        # Pass the aligned 1D arrays of valid parameters.
-        # Vectorbt infers parameter names from the keywords fast_window, slow_window, signal_window.
-        # REMOVED param_names argument from this call
-        macd_indicator = vbt.MACD.run(
+    # Single-pass: fits in memory
+    if n_valid <= max_per_chunk:
+        logger.info(f"Calculating MACD using vectorbt for {n_valid} valid combinations...")
+        entries_df, exits_df, se_df, sx_df = _macd_single_pass(
+            close_prices_series, valid_fast_windows, valid_slow_windows,
+            valid_signal_windows, short_entries, short_exits,
+        )
+        logger.info(f"MACD signals generated. Entries shape: {entries_df.shape}")
+        return entries_df, exits_df, se_df, sx_df
+
+    # Chunked signal generation
+    n_chunks = (n_valid + max_per_chunk - 1) // max_per_chunk
+    logger.info(
+        f"[MACD] Signal generation chunked: {n_valid:,} combos → "
+        f"{n_chunks} chunks of ≤{max_per_chunk:,} (n_rows={n_rows:,})"
+    )
+
+    all_entries = []
+    all_exits = []
+    all_se = []
+    all_sx = []
+
+    for chunk_idx, start in enumerate(range(0, n_valid, max_per_chunk)):
+        end = min(start + max_per_chunk, n_valid)
+        logger.info(f"[MACD]   Signal chunk {chunk_idx + 1}/{n_chunks}: combos {start:,}–{end:,}")
+
+        chunk_e, chunk_x, chunk_se, chunk_sx = _macd_single_pass(
             close_prices_series,
-            fast_window=valid_fast_windows,   # Pass the filtered 1D array
-            slow_window=valid_slow_windows,   # Pass the filtered 1D array
-            signal_window=valid_signal_windows, # Pass the filtered 1D array
-            # param_names=['fast_window', 'slow_window', 'signal_window'], # Removed this line
+            valid_fast_windows[start:end],
+            valid_slow_windows[start:end],
+            valid_signal_windows[start:end],
+            short_entries, short_exits,
+        )
+
+        all_entries.append(chunk_e)
+        all_exits.append(chunk_x)
+        if chunk_se is not None:
+            all_se.append(chunk_se)
+        if chunk_sx is not None:
+            all_sx.append(chunk_sx)
+
+        gc.collect()
+
+    entries_df = pd.concat(all_entries, axis=1)
+    exits_df = pd.concat(all_exits, axis=1)
+    short_entries_df = pd.concat(all_se, axis=1) if all_se else None
+    short_exits_df = pd.concat(all_sx, axis=1) if all_sx else None
+
+    logger.info(f"MACD signals generated. Entries shape: {entries_df.shape}")
+    return entries_df, exits_df, short_entries_df, short_exits_df
+
+
+def _macd_single_pass(
+    close: pd.Series,
+    fast_windows: np.ndarray,
+    slow_windows: np.ndarray,
+    signal_windows: np.ndarray,
+    gen_short_entries: bool,
+    gen_short_exits: bool,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame | None, pd.DataFrame | None]:
+    """Run vbt.MACD for one batch of parameter combos and compute crossover signals."""
+    try:
+        macd_indicator = vbt.MACD.run(
+            close,
+            fast_window=fast_windows,
+            slow_window=slow_windows,
+            signal_window=signal_windows,
             short_name='macd'
         )
-        # Extract MACD and Signal lines
         macd_df = macd_indicator.macd
         signal_df = macd_indicator.signal
-
     except Exception as e:
         logger.error(f"Error calculating MACD using vectorbt: {e}")
-        import traceback
-        traceback.print_exc()
         raise
 
-    # Check calculation results
     if macd_df is None or signal_df is None:
-         raise ValueError("MACD calculation failed to produce results (MACD or Signal DataFrame is None).")
+        raise ValueError("MACD calculation failed to produce results (MACD or Signal DataFrame is None).")
     if not isinstance(macd_df, pd.DataFrame) or not isinstance(signal_df, pd.DataFrame):
-         raise TypeError(f"MACD calculation did not return DataFrames. Got: {type(macd_df)}, {type(signal_df)}")
+        raise TypeError(f"MACD calculation did not return DataFrames. Got: {type(macd_df)}, {type(signal_df)}")
     if macd_df.empty or signal_df.empty:
-         raise ValueError("MACD calculation resulted in empty DataFrames.")
+        raise ValueError("MACD calculation resulted in empty DataFrames.")
 
-    # Check column names (should be inferred correctly from keywords)
+    # Fix column names if needed
     expected_names = ['macd_fast_window', 'macd_slow_window', 'macd_signal_window']
     if list(macd_df.columns.names) != expected_names:
-        warnings.warn(f"MACD output columns have unexpected names: {macd_df.columns.names}. Expected: {expected_names}. Attempting to rename.")
-        # Attempt to rename if necessary
         try:
-             # Make sure the number of levels matches before renaming
-             if macd_df.columns.nlevels == len(expected_names):
-                 macd_df.columns = macd_df.columns.set_names(expected_names)
-                 signal_df.columns = signal_df.columns.set_names(expected_names)
-             else:
-                 warnings.warn(f"Cannot rename levels automatically. Level count mismatch ({macd_df.columns.nlevels} vs {len(expected_names)}).")
-        except Exception as name_e:
-             warnings.warn(f"Could not rename MACD column levels: {name_e}")
+            if macd_df.columns.nlevels == len(expected_names):
+                macd_df.columns = macd_df.columns.set_names(expected_names)
+                signal_df.columns = signal_df.columns.set_names(expected_names)
+        except Exception:
+            pass
 
-    logger.info(f"MACD indicator calculated. Shape: {macd_df.shape}")
-    logger.info("Generating MACD crossover signals...")
-
-    # 2. Generate Long Signals based on crossover
     entries_df = macd_df.vbt.crossed_above(signal_df)
     exits_df = macd_df.vbt.crossed_below(signal_df)
 
-    # 3. Generate Short Signals (Optional)
     short_entries_df = None
     short_exits_df = None
-    if short_entries:
-         logger.info("Generating Short Entry signals (MACD crosses below Signal)...")
-         short_entries_df = macd_df.vbt.crossed_below(signal_df)
-    if short_exits:
-         logger.info("Generating Short Exit signals (MACD crosses above Signal)...")
-         short_exits_df = macd_df.vbt.crossed_above(signal_df)
+    if gen_short_entries:
+        logger.info("Generating Short Entry signals (MACD crosses below Signal)...")
+        short_entries_df = macd_df.vbt.crossed_below(signal_df)
+    if gen_short_exits:
+        logger.info("Generating Short Exit signals (MACD crosses above Signal)...")
+        short_exits_df = macd_df.vbt.crossed_above(signal_df)
 
-    logger.info(f"MACD signals generated. Entries shape: {entries_df.shape}")
+    # Free float64 intermediates
+    del macd_indicator, macd_df, signal_df
+
     return entries_df, exits_df, short_entries_df, short_exits_df

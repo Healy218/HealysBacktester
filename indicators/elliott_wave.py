@@ -167,6 +167,100 @@ def _compute_fib_signals(
     return long_entries, long_exits, short_entries, short_exits
 
 
+@njit
+def _compute_fib_signals_batch(
+    close: np.ndarray,
+    swing_high: np.ndarray,
+    swing_low: np.ndarray,
+    fib_levels: np.ndarray,
+    fib_tolerances: np.ndarray,
+):
+    """
+    Batched version of _compute_fib_signals: processes ALL (fib_level, fib_tolerance)
+    combinations in a single pass through the price data.
+
+    This replaces 6,750+ individual Numba calls per swing order with one call,
+    eliminating Python→Numba dispatch overhead and improving cache locality.
+
+    Column ordering: fib_level varies slowest, fib_tolerance varies fastest
+    (matching the iteration order of the original triple loop).
+
+    Returns:
+        4 arrays of shape (n_bars, n_levels * n_tolerances).
+    """
+    n = len(close)
+    n_levels = len(fib_levels)
+    n_tols = len(fib_tolerances)
+    n_combos = n_levels * n_tols
+
+    long_entries = np.zeros((n, n_combos), dtype=np.bool_)
+    long_exits = np.zeros((n, n_combos), dtype=np.bool_)
+    short_entries = np.zeros((n, n_combos), dtype=np.bool_)
+    short_exits = np.zeros((n, n_combos), dtype=np.bool_)
+
+    in_long = np.zeros(n_combos, dtype=np.bool_)
+    in_short = np.zeros(n_combos, dtype=np.bool_)
+
+    last_sh = np.nan
+    last_sl = np.nan
+    last_sh_newer = False
+
+    for i in range(n):
+        # Update swing tracking (once per bar, shared across all combos)
+        if not np.isnan(swing_high[i]):
+            last_sh = swing_high[i]
+            last_sh_newer = True
+        if not np.isnan(swing_low[i]):
+            last_sl = swing_low[i]
+            last_sh_newer = False
+
+        if np.isnan(last_sh) or np.isnan(last_sl):
+            continue
+
+        move = abs(last_sh - last_sl)
+        if move < 1e-10:
+            continue
+
+        close_i = close[i]
+        prev_close = close[i - 1] if i > 0 else close_i
+
+        for fl_idx in range(n_levels):
+            fib_level = fib_levels[fl_idx]
+            base = fl_idx * n_tols
+
+            if last_sh_newer:
+                fib_price = last_sh - fib_level * move
+            else:
+                fib_price = last_sl + fib_level * move
+
+            for ft_idx in range(n_tols):
+                c = base + ft_idx
+                fib_tol = fib_tolerances[ft_idx]
+                zone_upper = fib_price * (1.0 + fib_tol)
+                zone_lower = fib_price * (1.0 - fib_tol)
+
+                if last_sh_newer:
+                    if not in_long[c] and zone_lower <= close_i <= zone_upper:
+                        if close_i > prev_close:
+                            long_entries[i, c] = True
+                            in_long[c] = True
+                    if in_long[c]:
+                        if close_i >= last_sh or close_i <= last_sl:
+                            long_exits[i, c] = True
+                            in_long[c] = False
+                else:
+                    if not in_short[c] and zone_lower <= close_i <= zone_upper:
+                        if close_i < prev_close:
+                            short_entries[i, c] = True
+                            in_short[c] = True
+                    if in_short[c]:
+                        if close_i <= last_sl or close_i >= last_sh:
+                            short_exits[i, c] = True
+                            in_short[c] = False
+
+    return long_entries, long_exits, short_entries, short_exits
+
+
 def detect_swings(
     high: pd.Series,
     low: pd.Series,
