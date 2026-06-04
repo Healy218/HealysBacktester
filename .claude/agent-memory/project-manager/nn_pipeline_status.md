@@ -1,43 +1,40 @@
 ---
 name: NN Pipeline Status
-description: State of the Gemini-authored nn_model.py and the full NN pipeline integration as of April 2026
+description: State of the NN model and NN pipeline as of June 2026 review
 type: project
 ---
 
-## Summary
-The NN pipeline consists of four interconnected files:
-- `models/nn_model.py` — Gemini-authored. Model architecture is good but has a duplicate import.
-- `models/data_preprocessing.py` — Solid feature engineering. Triple-barrier labeling loop is slow.
-- `scripts/nn_backtest.py` — Has 3 critical bugs that will crash on first run.
-- `scripts/nn_multi_backtest.py` — Structurally sound. Missing early stopping. Newly added.
-- `signals/nn_signals.py` — Missing sequence creation — will crash against LSTM model.
+## Summary (June 2026)
+The NN pipeline has been PARTIALLY fixed since the April 2026 review. The major integration
+gaps in nn_signals.py and nn_backtest.py were addressed. However, a new critical issue was
+introduced: nn_model.py was reverted from LSTM to a plain Dense MLP, which is architecturally
+incompatible with the sequence-based data pipeline.
 
-## nn_model.py Assessment (Gemini-authored)
-The model architecture itself is reasonable:
-- LSTM(64, return_sequences=True) → BN → Dropout → LSTM(32) → BN → Dropout → Dense(16) → Dense(1)
-- Supports classification (sigmoid + binary_crossentropy + AUC) and regression (linear + MSE).
-- EarlyStopping with restore_best_weights in train_model is correct.
-- The model is NOT overfit-prone by design (Dropout + BN + EarlyStopping).
+## Current nn_model.py — DENSE MLP (NOT LSTM)
+- Input: Dense(64) → Dropout → Dense(32) → Dropout → Dense(16) → Dense(1, sigmoid)
+- NO LSTM layers. NO BatchNormalization.
+- `create_model(input_shape)` takes ONE arg — no `mode` parameter.
+- `save_model()` function does NOT exist (called by nn_multi_backtest.py).
 
-**What Gemini got wrong:**
-1. Duplicate import block (cosmetic, not a crash).
-2. `create_model` takes `input_shape` as a tuple but is called in `nn_backtest.py` with a scalar integer. The model itself is fine; the calling code is wrong.
-
-## Integration Gaps (the real problems)
-The pipeline was assembled in pieces and the contracts between components were never verified end-to-end:
-
-1. `nn_backtest.py` passes `X_train.shape[1]` (int) to `create_model` — needs `X_train.shape[1:]` (tuple).
-2. `nn_backtest.py` calls `prepare_nn_data` without `forward_periods` — needs it added.
-3. `nn_backtest.py` aligns test_price_data using `-len(X_test)` which is wrong after sequence windowing.
-4. `nn_signals.py` does not create sequences before calling predict — will pass 2D data to a 3D LSTM.
-5. `STRATEGY_NN` config is missing `RETURN_THRESHOLD` and `EXIT_PROBABILITY_THRESHOLD` keys.
+## Integration Status
+| Issue | Status |
+|---|---|
+| nn_backtest.py forward_periods crash | FIXED |
+| nn_backtest.py input_shape scalar bug | FIXED |
+| nn_backtest.py test index alignment | FIXED |
+| nn_signals.py missing sequence creation | FIXED |
+| STRATEGY_NN missing config keys | FIXED |
+| nn_model.py LSTM architecture | REGRESSED — now plain Dense |
+| nn_model.py `mode` parameter | BROKEN — crashes with TypeError |
+| nn_multi_backtest.py save_model call | BROKEN — function doesn't exist |
+| nn_multi_backtest.py class_weight usage | INCOMPLETE — computed but never used |
 
 ## Recommended Fix Order
-1. Fix config/settings.py (add missing keys) — 5 min.
-2. Fix nn_backtest.py (input_shape, forward_periods, test alignment) — 15 min.
-3. Fix nn_signals.py (add sequence creation at inference time) — 20 min.
-4. Add early stopping to nn_multi_backtest.py ensemble loop — 5 min.
-5. Vectorize triple_barrier labeling — 1-2 hrs (Numba or vectorized pandas).
+1. Add `mode='classification'` param to `create_model` (accepts and ignores for now) — 2 min.
+2. Add `save_model(model, path=None)` to nn_model.py — 5 min.
+3. Restore LSTM architecture (or switch to 1D CNN which also handles sequences) — 30 min.
+4. Wire computed class_weight into nn_model.train_model() via class_weight_dict param — 10 min.
 
-**Why:** Pipeline was built incrementally; Gemini wrote nn_model.py in isolation without seeing how it would be called.
-**How to apply:** Assign all 5 fixes to quant-backtesting-engineer in priority order above.
+**Why:** NN pipeline was rebuilt in pieces; Dense MLP appears to be a regression from the prior
+LSTM version. The sequence-generation pipeline (prepare_nn_data, create_sequences) is correct
+and produces 3D arrays — the model needs to match.

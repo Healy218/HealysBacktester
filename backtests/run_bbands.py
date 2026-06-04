@@ -118,6 +118,8 @@ def _sim_kwargs(cfg, sl_stop, tp_stop):
         atr_sl_window=cfg.get("ATR_SL_WINDOW"),
         atr_sl_multiplier=cfg.get("ATR_SL_MULTIPLIER", 2.0),
         use_trailing_stop=cfg.get("USE_TRAILING_STOP", False),
+        atr_position_sizing=cfg.get("ATR_POSITION_SIZING", False),
+        risk_per_trade=cfg.get("RISK_PER_TRADE", 0.01),
     )
 
 

@@ -36,6 +36,8 @@ def run_backtest(
     atr_sl_window: Optional[int] = None,
     atr_sl_multiplier: float = 2.0,
     use_trailing_stop: bool = False,
+    atr_position_sizing: bool = False,
+    risk_per_trade: float = 0.01,
     signal_kwargs: Optional[Dict[str, Any]] = None,
     portfolio_kwargs: Optional[Dict[str, Any]] = None
     ) -> PortfolioBase:
@@ -61,6 +63,10 @@ def run_backtest(
                        instead of the fixed sl_stop percentage.
         atr_sl_multiplier: Multiplier for ATR-based stop distance (default 2.0).
         use_trailing_stop: If True, stop-loss trails price upward (never moves down).
+        atr_position_sizing: If True AND atr_sl_window is set, size each position so that
+                             a stop-loss hit loses at most risk_per_trade of initial capital.
+        risk_per_trade: Fraction of initial capital risked per trade (default 0.01 = 1%).
+                        Only used when atr_position_sizing is True.
         signal_kwargs: Additional kwargs passed directly to from_signals (signal part).
         portfolio_kwargs: Additional kwargs passed directly to from_signals (portfolio part).
 
@@ -183,6 +189,27 @@ def run_backtest(
             f"ATR-based stop loss: window={atr_sl_window}, multiplier={atr_sl_multiplier}, "
             f"median stop={atr_pct.median():.4f} ({atr_pct.median()*100:.2f}%)"
         )
+
+        # --- ATR-Normalized Position Sizing ---
+        # Size each trade so that if the stop-loss is hit, the dollar loss equals
+        # risk_per_trade × initial_capital.
+        #   position_value = (risk_pct × init_cash) / atr_pct
+        # This replaces the fixed size/size_type with a per-bar value Series.
+        if atr_position_sizing:
+            risk_amount = risk_per_trade * initial_capital
+            # Avoid division by zero; clamp atr_pct to a minimum of 0.1%
+            safe_atr_pct = atr_pct.clip(lower=0.001)
+            atr_size = risk_amount / safe_atr_pct
+            # Cap at initial capital to prevent extreme sizing on low-volatility bars
+            atr_size = atr_size.clip(upper=initial_capital)
+            size = atr_size
+            size_type = 'value'
+            logger.info(
+                f"ATR position sizing: risk_per_trade={risk_per_trade:.1%}, "
+                f"risk_amount=${risk_amount:,.0f}, "
+                f"median position=${atr_size.median():,.0f}, "
+                f"min=${atr_size.min():,.0f}, max=${atr_size.max():,.0f}"
+            )
 
     # --- Prepare kwargs for vbt.Portfolio.from_signals ---
     logger.debug("Preparing simulation parameters...")

@@ -33,7 +33,7 @@ except ImportError:
 from utils.logging_utils import setup_logging
 from utils import config_parser
 from analysis import plotting
-from backtests import run_ma, run_rsi, run_macd, run_volume, run_bbands, run_stoch, run_elliott, run_sentiment
+from backtests import run_ma, run_rsi, run_macd, run_volume, run_bbands, run_stoch, run_elliott, run_sentiment, run_walkforward
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -87,7 +87,7 @@ def _set_progress(pct: int, step: str) -> None:
     logger.info(f"[Progress {pct:3d}%] {step}")
 
 
-def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_config):
+def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_config, use_walkforward=False):
     """
     Background thread: runs the full backtest for every ticker, writing progress
     updates to _run_state so the Dash interval callback can display them.
@@ -118,10 +118,18 @@ def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_c
             chunk_cb = _make_chunk_cb(sym, base, chunk * 8 // 10)
 
             try:
-                result = runner.run(
-                    sym, start, end, interval, backtest_config, strategy_config,
-                    progress_callback=chunk_cb,
-                )
+                if use_walkforward:
+                    result = run_walkforward.run(
+                        sym, start, end, interval, backtest_config, strategy_config,
+                        progress_callback=chunk_cb,
+                        inner_strategy=strategy,
+                        inner_strategy_config=strategy_config,
+                    )
+                else:
+                    result = runner.run(
+                        sym, start, end, interval, backtest_config, strategy_config,
+                        progress_callback=chunk_cb,
+                    )
             except Exception as exc:
                 logger.exception(f"[{sym}] Unhandled exception in runner: {exc}")
                 errors.append(f"{sym}: {exc}")
@@ -147,9 +155,18 @@ def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_c
                 _set_progress(base + chunk, f"[{sym}] No results")
                 continue
 
+            # Calculate buy-and-hold benchmark return for this ticker
+            sym_price = _last_run["by_symbol"][sym].get("price_data")
+            if sym_price is not None and not sym_price.empty:
+                bm_return = (sym_price["Close"].iloc[-1] / sym_price["Close"].iloc[0] - 1) * 100
+                bm_return = round(float(bm_return), 2)
+            else:
+                bm_return = None
+
             for row in top5:
                 r = row.copy()
                 r["symbol"] = sym
+                r["benchmark_return_pct"] = bm_return
                 all_best_rows.append(r)
 
             _set_progress(base + chunk, f"[{sym}] Done")
@@ -315,30 +332,45 @@ def _make_trades_table(data):
 
 def _build_table_data(all_best_rows):
     """Convert all_best_rows into the col_defs + table_rows the DataTable needs."""
+    # Detect walk-forward mode by checking for WF-specific fields
+    is_wf = any(row.get("is_sharpe") is not None for row in all_best_rows)
+
     col_defs = [
         {"name": "Symbol",       "id": "symbol"},
         {"name": "Ranked By",    "id": "ranked_by"},
         {"name": "Parameters",   "id": "param_label"},
         {"name": "Return %",     "id": "total_return_pct"},
+        {"name": "Benchmark %",  "id": "benchmark_return_pct"},
         {"name": "Sharpe",       "id": "sharpe_ratio"},
         {"name": "Max DD %",     "id": "max_drawdown_pct"},
         {"name": "Win Rate %",   "id": "win_rate_pct"},
         {"name": "Best Trade %", "id": "best_trade_pct"},
         {"name": "# Trades",     "id": "total_trades"},
     ]
+    if is_wf:
+        col_defs.extend([
+            {"name": "IS Sharpe",   "id": "is_sharpe"},
+            {"name": "IS Return %", "id": "is_return_pct"},
+        ])
+
     table_rows = []
     for row in all_best_rows:
-        table_rows.append({
-            "symbol":           row["symbol"],
-            "ranked_by":        row.get("ranked_by", ""),
-            "param_label":      row["param_label"],
-            "total_return_pct": _fmt_pct(row.get("total_return_pct")),
-            "sharpe_ratio":     _fmt_num(row.get("sharpe_ratio"), 3),
-            "max_drawdown_pct": _fmt_pct(row.get("max_drawdown_pct")),
-            "win_rate_pct":     _fmt_pct(row.get("win_rate_pct")),
-            "best_trade_pct":   _fmt_pct(row.get("best_trade_pct")),
-            "total_trades":     row.get("total_trades", 0),
-        })
+        tr = {
+            "symbol":               row["symbol"],
+            "ranked_by":            row.get("ranked_by", ""),
+            "param_label":          row["param_label"],
+            "total_return_pct":     _fmt_pct(row.get("total_return_pct")),
+            "benchmark_return_pct": _fmt_pct(row.get("benchmark_return_pct")),
+            "sharpe_ratio":         _fmt_num(row.get("sharpe_ratio"), 3),
+            "max_drawdown_pct":     _fmt_pct(row.get("max_drawdown_pct")),
+            "win_rate_pct":         _fmt_pct(row.get("win_rate_pct")),
+            "best_trade_pct":       _fmt_pct(row.get("best_trade_pct")),
+            "total_trades":         row.get("total_trades", 0),
+        }
+        if is_wf:
+            tr["is_sharpe"] = _fmt_num(row.get("is_sharpe"), 3)
+            tr["is_return_pct"] = _fmt_pct(row.get("is_return_pct"))
+        table_rows.append(tr)
     return col_defs, table_rows
 
 
@@ -396,7 +428,19 @@ def _control_row():
                 "▶  Run Backtest", id="run-btn", color="success",
                 className="w-100",
             ),
-        ], xs=12, sm=6, md=2),
+        ], xs=12, sm=6, md=1),
+
+        dbc.Col([
+            dbc.Label("\u00a0"),
+            dbc.Checklist(
+                id="wf-toggle",
+                options=[{"label": " Walk-Forward", "value": "wf"}],
+                value=[],
+                inline=True,
+                className="mt-2",
+                style={"fontSize": "0.85rem"},
+            ),
+        ], xs=12, sm=6, md=1),
 
     ], align="end", className="g-3")), className="mb-3")
 
@@ -489,6 +533,21 @@ def _results_tab():
                 style_cell={"textAlign": "left", "padding": "6px 12px"},
                 page_action="none",
             ),
+            dbc.Row([
+                dbc.Col(
+                    dbc.Button(
+                        "Save to Scanner", id="save-scanner-btn",
+                        color="info", outline=True, size="sm", className="mt-2",
+                    ), width="auto",
+                ),
+                dbc.Col(
+                    dbc.Alert(
+                        id="scanner-alert", is_open=False, duration=4000,
+                        className="mb-0 mt-2 py-1 px-2",
+                        style={"fontSize": "0.85rem"},
+                    ),
+                ),
+            ], align="center", className="g-2"),
         ]),
 
         # Graphs (no dcc.Loading wrapper — progress bar replaces the spinner)
@@ -570,9 +629,10 @@ app.layout = dbc.Container([
     State("end-date",     "value"),
     State("interval-dd",  "value"),
     State("strategy-dd",  "value"),
+    State("wf-toggle",    "value"),
     prevent_initial_call=True,
 )
-def start_run(n_clicks, ticker, start, end, interval, strategy):
+def start_run(n_clicks, ticker, start, end, interval, strategy, wf_toggle):
     """
     Validates the form, then starts a background worker thread and returns
     immediately so the UI stays responsive.  Progress is polled by the interval.
@@ -612,13 +672,15 @@ def start_run(n_clicks, ticker, start, end, interval, strategy):
         _run_state["result"]   = None
         _run_state["consumed"] = True
 
+    use_walkforward = "wf" in (wf_toggle or [])
     thread = threading.Thread(
         target=_worker,
-        args=(tickers, start, end, interval, strategy, backtest_config, strategy_config),
+        args=(tickers, start, end, interval, strategy, backtest_config, strategy_config, use_walkforward),
         daemon=True,
     )
     thread.start()
-    logger.info(f"Worker thread started for {tickers} | {strategy}")
+    mode_label = "walk-forward" if use_walkforward else "standard"
+    logger.info(f"Worker thread started for {tickers} | {strategy} ({mode_label})")
 
     return "", False  # clear any previous validation error
 
@@ -805,6 +867,120 @@ def clear_cache(n_clicks):
 
     except Exception as e:
         return f"Error clearing cache: {e}", True, "Cache: ? files"
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  CALLBACK 6 — Save selected row to scanner
+# ═══════════════════════════════════════════════════════════════════════════
+
+# Maps dashboard strategy names → scanner strategy keys + param name mapping.
+# Scanner param key ← short name used in param_label (from _shorten_level_name).
+_SCANNER_STRATEGY_MAP = {
+    "MA Crossover": {
+        "scanner_key": "ma",
+        "param_map": {"fast": "fast_window", "slow": "slow_window"},
+    },
+    "RSI Threshold": {
+        "scanner_key": "rsi",
+        "param_map": {"window": "rsi_window", "entry": "entry_threshold", "exit": "exit_threshold"},
+    },
+    "MACD Crossover": {
+        "scanner_key": "macd",
+        "param_map": {"fast": "fast_window", "slow": "slow_window", "signal": "signal_window"},
+    },
+    "Volume Breakout": {
+        "scanner_key": "volume",
+        "param_map": {"vol_window": "volume_window", "vol_mult": "volume_multiplier", "exit_ma": "exit_ma_window"},
+    },
+}
+
+def _parse_param_label(param_label: str) -> dict:
+    """Parse 'fast=10, slow=50' into {'fast': 10.0, 'slow': 50.0}."""
+    result = {}
+    for part in param_label.split(","):
+        part = part.strip()
+        if "=" not in part:
+            continue
+        key, val = part.split("=", 1)
+        try:
+            v = float(val.strip())
+            result[key.strip()] = int(v) if v == int(v) else v
+        except ValueError:
+            result[key.strip()] = val.strip()
+    return result
+
+
+@app.callback(
+    Output("scanner-alert", "children"),
+    Output("scanner-alert", "is_open"),
+    Output("scanner-alert", "color"),
+    Input("save-scanner-btn", "n_clicks"),
+    State("top5-table",  "selected_rows"),
+    State("top5-store",  "data"),
+    State("strategy-dd", "value"),
+    State("interval-dd", "value"),
+    prevent_initial_call=True,
+)
+def save_to_scanner(n_clicks, selected_rows, top5_data, strategy, interval):
+    """Saves the selected result row to scanner/saved_scans.json."""
+    if not selected_rows or top5_data is None:
+        return "No row selected.", True, "warning"
+
+    row = top5_data[selected_rows[0]]
+    symbol = row.get("symbol", "")
+    param_label = row.get("param_label", "")
+
+    # Check if the strategy is supported by the scanner
+    mapping = _SCANNER_STRATEGY_MAP.get(strategy)
+    if mapping is None:
+        return f"Scanner does not support '{strategy}' yet.", True, "warning"
+
+    # Parse param_label → scanner params
+    parsed = _parse_param_label(param_label)
+    scanner_params = {}
+    for short_name, scanner_key in mapping["param_map"].items():
+        if short_name in parsed:
+            scanner_params[scanner_key] = parsed[short_name]
+
+    if not scanner_params:
+        return f"Could not parse parameters from '{param_label}'.", True, "danger"
+
+    scan_entry = {
+        "strategy": mapping["scanner_key"],
+        "symbol": symbol,
+        "interval": interval,
+        "params": scanner_params,
+    }
+
+    # Read existing saved scans, append, write back
+    saved_path = os.path.join("scanner", "saved_scans.json")
+    try:
+        existing = []
+        if os.path.exists(saved_path):
+            with open(saved_path) as f:
+                existing = json.load(f)
+
+        # Check for duplicates
+        for entry in existing:
+            if (entry.get("strategy") == scan_entry["strategy"]
+                    and entry.get("symbol") == scan_entry["symbol"]
+                    and entry.get("interval") == scan_entry["interval"]
+                    and entry.get("params") == scan_entry["params"]):
+                return "Already saved to scanner.", True, "info"
+
+        existing.append(scan_entry)
+        with open(saved_path, "w") as f:
+            json.dump(existing, f, indent=2)
+
+    except Exception as e:
+        return f"Error saving: {e}", True, "danger"
+
+    param_str = ", ".join(f"{k}={v}" for k, v in scanner_params.items())
+    return (
+        f"Saved: {symbol} {mapping['scanner_key'].upper()} ({param_str})",
+        True,
+        "success",
+    )
 
 
 # ═══════════════════════════════════════════════════════════════════════════

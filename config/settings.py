@@ -78,6 +78,14 @@ BACKTEST_CONFIG = {
     'ATR_SL_MULTIPLIER': 2.0,    # ATR multiplier for stop distance (e.g., 2× ATR)
     'USE_TRAILING_STOP': False,  # True = trailing stop instead of fixed
 
+    # --- ATR-Normalized Position Sizing ---
+    # Requires ATR_SL_WINDOW to be set.  Sizes each position so that a stop-loss
+    # hit loses at most RISK_PER_TRADE of initial capital.
+    # Example: RISK_PER_TRADE=0.01, INITIAL_CAPITAL=$100k → max $1k loss per trade.
+    # On a volatile day (ATR=3%), position ≈ $33k. On a quiet day (ATR=0.5%), position ≈ $200k (capped at init_cash).
+    'ATR_POSITION_SIZING': False,  # True = size by ATR risk, False = use DEFAULT_SIZE
+    'RISK_PER_TRADE': 0.01,       # 1% of initial capital risked per trade
+
     # --- Sentiment Filter (overlay on any strategy) ---
     'SENTIMENT_FILTER_ENABLED': False,     # Set True to gate entries by sentiment
     'SENTIMENT_FILTER_THRESHOLD': 0.1,     # Min sentiment score to allow entries

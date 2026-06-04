@@ -119,7 +119,8 @@ for i in range(ENSEMBLE_SIZE):
     model = nn_model.create_model(X_train_combined.shape[1:], mode='classification')
 
     model, history = nn_model.train_model(
-        model, X_train_combined, y_train_combined, STRATEGY_CONFIG
+        model, X_train_combined, y_train_combined, STRATEGY_CONFIG,
+        class_weight=weight_dict
     )
 
     # Save each brain

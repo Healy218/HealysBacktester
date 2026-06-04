@@ -1,83 +1,83 @@
 ---
 name: Known Issues
-description: Active bugs, integration gaps, and code quality issues found during April 2026 comprehensive review
+description: Active bugs, integration gaps, and code quality issues — updated June 2026
 type: project
 ---
 
-## Critical Bugs
+## Critical Bugs (NEW as of June 2026 review)
 
-### 1. nn_backtest.py — Shape mismatch crash at train time
-`nn_model.create_model` is called with `X_train.shape[1]` (an integer) but the model expects a tuple `input_shape=(time_steps, features)` because the model is LSTM-based and `prepare_nn_data` returns 3D arrays when `use_sequences=True`. This will raise a Keras error at runtime.
-- File: `scripts/nn_backtest.py` line 80
-- Fix: Change to `nn_model.create_model(X_train.shape[1:], mode='classification')`
+### 1. nn_multi_backtest.py — calls nn_model.save_model() which does not exist
+`nn_multi_backtest.py` line 126 calls `nn_model.save_model(model)` but `models/nn_model.py`
+has no `save_model` function. This will crash with AttributeError on the first ensemble brain.
+- File: `scripts/nn_multi_backtest.py` line 126, `models/nn_model.py`
+- Fix: Either add `save_model(model, path=None)` to nn_model.py, or remove the save call.
 
-### 2. nn_backtest.py — Wrong `forward_periods` passed to prepare_nn_data
-`prepare_nn_data` is called without a `forward_periods` argument, but the function signature requires it explicitly after `config`. The default is missing from the function signature; it will crash with a TypeError.
-- File: `scripts/nn_backtest.py` line 73-75
-- Fix: Add `forward_periods=STRATEGY_CONFIG.get('HORIZONS', [24])[0]` or similar.
+### 2. nn_model.py — create_model() ignores mode parameter
+`nn_model.create_model(input_shape, mode='classification')` is called with a `mode` kwarg
+from both nn_backtest.py and nn_multi_backtest.py, but `create_model()` only accepts
+`input_shape` — no `mode` parameter. Will raise TypeError.
+- File: `models/nn_model.py` line 7
+- Fix: Add `mode='classification'` param to `create_model`. Currently the model is hardcoded
+  to binary classification (sigmoid + binary_crossentropy), so `mode` can be accepted and ignored
+  for now, or wired to actually switch output/loss.
 
-### 3. nn_backtest.py — Test set index misalignment
-`test_price_data = price_data.iloc[-len(X_test):]` is incorrect when `use_sequences=True`. The sequence creation shrinks the dataset by `window_size` rows from the train split AND from the test split, so `len(X_test)` does not correspond to the last N rows of the raw price data. The index will be wrong.
-- File: `scripts/nn_backtest.py` line 87
-- Fix: `prepare_nn_data` should return the original test index so the caller can align correctly.
+### 3. nn_model.py — still Dense not LSTM
+The current `nn_model.py` is a plain Dense MLP (no LSTM layers), but `nn_backtest.py` and
+`nn_multi_backtest.py` both call `prepare_nn_data(..., use_sequences=True)` which produces 3D
+arrays (samples, lookback, features). Passing 3D data to a Dense Input layer will crash.
+The original LSTM architecture from the prior review was apparently reverted/lost.
+- File: `models/nn_model.py`
+- Fix: Restore LSTM architecture or flatten sequences before passing to Dense model.
 
-### 4. nn_signals.py — Predict on 2D data, model expects 3D
-`generate_nn_signals` calls `scaler.transform(X_filled)` producing a 2D array, then passes it directly to `predict_probabilities`. But the LSTM model trained on 3D sequences `(samples, time_steps, features)` will crash on 2D input. Sequence creation is completely missing from the inference path.
-- File: `signals/nn_signals.py` lines 38-41
-- Fix: Add sequence creation (using the same `LOOKBACK_WINDOW` from config) before prediction.
+### 4. nn_multi_backtest.py — exits_series is all False (no exit logic)
+Line 151: `exits_series=pd.DataFrame(False, index=entries_df.index, columns=entries_df.columns)`
+The strategy has no exit signal at all — it relies entirely on `tp_stop` and `sl_stop`. If
+those are never hit, positions are held until the end of data. This is not a crash bug but is
+a serious strategy design gap for the ensemble path.
 
-### 5. nn_multi_backtest.py — No early stopping
-The ensemble training loop calls `model.fit(...)` directly without EarlyStopping, unlike `nn_model.train_model` which uses it. Long training runs risk overfitting.
-- File: `scripts/nn_multi_backtest.py` lines 111-118
-- Fix: Use `nn_model.train_model(model, X_train_combined, y_train_combined, STRATEGY_CONFIG)` to get consistent training.
+## Previously Identified Bugs (Status Updated)
+
+### 5. nn_backtest.py — fixed: forward_periods now passed correctly (line 75)
+### 6. nn_backtest.py — fixed: uses X_train.shape[1:] now (line 81)  
+### 7. nn_backtest.py — fixed: test index alignment rewritten (lines 92-98)
+### 8. nn_signals.py — FIXED: create_sequences is now called before prediction (lines 43-47)
+### 9. STRATEGY_NN — FIXED: EXIT_PROBABILITY_THRESHOLD and RETURN_THRESHOLD added to settings.py
 
 ## Moderate Issues
 
-### 6. config/settings.py — STRATEGY_NN missing RETURN_THRESHOLD key
-`data_preprocessing.prepare_nn_data` references `config['RETURN_THRESHOLD']` but `STRATEGY_NN` in settings.py only has `THRESHOLDS` (a list). This will raise a KeyError when `mode='classification'` (the default).
-- File: `config/settings.py`
-- Fix: Add `"RETURN_THRESHOLD": 0.01` to `STRATEGY_NN` or update `prepare_nn_data` to use `.get('RETURN_THRESHOLD', config.get('THRESHOLDS', [0.01])[0])`.
+### 10. config/settings.py — API_KEYS section has placeholder values
+`API_KEYS["ALPHAVANTAGE"]` is "YOUR_AV_KEY_HERE". These keys appear to be loaded from .env
+(run_sentiment.py uses os.environ.get), but the config dict contains dummies. Low risk since
+real lookups use the env; cosmetic concern.
 
-### 7. data_preprocessing.py — Triple barrier labeling uses a Python loop
-`create_triple_barrier_labels` contains a plain Python for-loop over every row. For 1 year of 5-minute data (~20,000 bars) with horizon=24, this runs ~20,000 iterations in Python — extremely slow. Should be vectorized or Numba-compiled.
-- File: `models/data_preprocessing.py` lines 75-86
-
-### 8. signals/signal_combiners.py — Uses print() not logger
-`combine_signals_and` and `combine_signals_or` use `print()` for all output instead of the established logger.
+### 11. signals/signal_combiners.py — uses print() not logger (unchanged from prior review)
 - File: `signals/signal_combiners.py` lines 71, 123, 173, 199
 
-### 9. ma_crossover.py — logger.info used for error branch
-In the except block for crossover generation, `logger.info` is used instead of `logger.error`, and the logger.info call incorrectly passes extra positional args (not the f-string pattern).
+### 12. ma_crossover.py — logger.info used in except block (unchanged from prior review)
 - File: `signals/ma_crossover.py` lines 86-89
 
-### 10. config/__init.py__ — Filename is wrong
-The file is named `__init.py__` instead of `__init__.py`. This means the config package cannot be imported as a package. Not fatal because config_parser uses `importlib.util` to load it directly, but it is a latent bug.
+### 13. config/__init.py__ — still misnamed (unchanged)
 - File: `config/__init.py__`
 
-### 11. scripts/ma_backtest.py and rsi_backtest.py — Return value mismatch
-`generate_ma_signals` returns a 4-tuple (entries, exits, short_entries, short_exits) but `ma_backtest.py` line 192 unpacks only 2 values (`entries, exits = ...`). This will raise a ValueError at runtime.
-- File: `scripts/ma_backtest.py` line 192
-
-### 12. STRATEGY_NN missing EXIT_PROBABILITY_THRESHOLD key
-`nn_signals.generate_nn_signals` accesses `config['EXIT_PROBABILITY_THRESHOLD']` but this key is absent from `STRATEGY_NN` in settings.py (only `PROBABILITY_THRESHOLD` is defined). Will raise KeyError.
-- File: `config/settings.py` + `signals/nn_signals.py` line 51
+### 14. scripts/ma_backtest.py and rsi_backtest.py — legacy scripts still broken
+These legacy scripts (not used by dashboard) still have the 2-value unpack bug and ENABLE_SHORTING
+config mismatch identified in the prior review. Not urgent since dashboard uses backtests/ runners.
 
 ## Minor / Code Quality Issues
 
-### 13. models/nn_model.py — Duplicate import
-`Dense, Dropout, Input` are imported twice (lines 3 and 7).
+### 15. models/nn_model.py — no LSTM, no regularization, no class weighting
+The MLP is undertrained for sequential data. It also has no class_weight support despite the
+ensemble script computing class weights (which are then never passed to the model fit call).
 
-### 14. utils/date_utils.py, math_utils.py, api_utils.py — Stub files
-These are placeholder docstring-only files with no implementation.
+### 16. utils/date_utils.py — now has real implementations (no longer a stub)
+- RESOLVED from prior review.
 
-### 15. sentiment/ — Completely unimplemented
-`sentiment_analyzer.py` and `sentiment_data_loader.py` are stubs. No real implementation.
+### 17. sentiment/ — now has real implementations
+- RESOLVED: sentiment_data_loader.py, sentiment_analyzer.py, sentiment_filter.py are all real.
+- sentiment strategy is exposed in dashboard via run_sentiment.py.
+- Limitation: requires ALPHAVANTAGE_KEY or FINNHUB_API_KEY in env.
 
-### 16. indicators/moving_averages.py, rsi.py — Not used by main pipeline
-These simple wrappers are effectively dead code; the main pipeline calls vbt indicators directly.
+### 18. indicators/moving_averages.py, rsi.py — still dead code (unchanged)
 
-### 17. scripts/rsi_backtest.py — ENABLE_SHORTING read from wrong config section
-Reads `STRATEGY_CONFIG.get('ENABLE_SHORTING')` but `ENABLE_SHORTING` is in `BACKTEST_CONFIG`, not `STRATEGY_RSI`.
-
-**Why recorded:** Found during April 16 2026 comprehensive review.
-**How to apply:** Use this as the fix checklist when coordinating with quant-backtesting-engineer.
+**Why recorded:** Updated during June 4 2026 comprehensive review.
+**How to apply:** Use as fix checklist when coordinating with quant-backtesting-engineer.

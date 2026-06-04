@@ -4,9 +4,8 @@
 #
 # HOW TO USE:
 #   1. Run a backtest in the dashboard.
-#   2. Note the "Parameters" column for your top result, e.g. "fast=10, slow=50".
-#   3. Add an entry below with those exact values.
-#   4. Run:  python -m scanner.signal_scanner
+#   2. Click "Save to Scanner" on a winning row — or manually add entries below.
+#   3. Run:  python -m scanner.signal_scanner
 #
 # STRATEGY OPTIONS:  "ma" | "rsi" | "macd" | "volume"
 #
@@ -44,3 +43,15 @@ SCANS = [
     #     "params": {"volume_window": 20, "volume_multiplier": 1.5, "exit_ma_window": 50},
     # },
 ]
+
+# Auto-load scans saved from the dashboard
+import json as _json
+import os as _os
+
+_saved_path = _os.path.join(_os.path.dirname(__file__), "saved_scans.json")
+if _os.path.exists(_saved_path):
+    try:
+        with open(_saved_path) as _f:
+            SCANS.extend(_json.load(_f))
+    except Exception:
+        pass  # corrupt file — ignore, manual SCANS still work
