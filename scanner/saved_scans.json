@@ -1,0 +1,11 @@
+[
+  {
+    "strategy": "ma",
+    "symbol": "SPY",
+    "interval": "15m",
+    "params": {
+      "fast_window": 58,
+      "slow_window": 172
+    }
+  }
+]

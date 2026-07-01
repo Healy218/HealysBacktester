@@ -235,7 +235,7 @@ def run(
             "top5": all_oos_results,
             "error": None,
             "portfolio": last_oos_pf,
-            "price_data": last_oos_price or price_data,
+            "price_data": last_oos_price if last_oos_price is not None else price_data,
         }
 
     except Exception as e:

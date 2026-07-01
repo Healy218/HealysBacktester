@@ -1,13 +1,15 @@
 dash
 dash-bootstrap-components
 plotly
-pandas
-numpy
-vectorbt
+# Core scientific stack — pinned; vectorbt/tensorflow are version-sensitive
+pandas==2.2.3
+numpy==1.26.4
+vectorbt==0.27.2
+numba==0.61.2
+tensorflow==2.16.2
 yfinance
 pandas-ta
 quantstats
 scikit-learn
 alpaca-py
 python-dotenv
-tensorflow
