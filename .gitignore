@@ -31,5 +31,7 @@ Thumbs.db
 
 # Ignore sensitive files
 # secrets.yaml
-.env          # Alpaca API keys — never commit this
-data/cache/   # Downloaded price data — regenerate on demand
+# Alpaca / AlphaVantage / Finnhub API keys — never commit this
+.env
+# Downloaded price data — regenerate on demand
+data/cache/
