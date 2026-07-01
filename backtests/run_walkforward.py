@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 from utils.logging_utils import setup_logging
 from utils.chunked_runner import simulate_and_rank
-from utils import freq_utils
+from utils import freq_utils, runner_utils
 from data import vbt_data_loader as data_loader, data_cleaner
 from portfolio import simulator
 
@@ -423,40 +423,13 @@ def _make_oos_row(oos_pf, fold_idx, n_folds, param_label, is_sharpe, is_return_p
     }
 
 
-def _arange_int(cfg, sk, ek, stk, default):
-    s, e, st = default
-    return np.arange(cfg.get(sk, s), cfg.get(ek, e), cfg.get(stk, st), dtype=int)
+_arange_int = runner_utils.arange_int
+_linspace = runner_utils.linspace
 
 
-def _linspace(cfg, sk, ek, stk, default):
-    s, e, st = default
-    start = cfg.get(sk, s)
-    end = cfg.get(ek, e)
-    step = cfg.get(stk, st)
-    n = max(1, int(round((end - start) / step)) + 1)
-    return np.linspace(start, end, n)
+def _sim_kwargs(cfg, sl_stop=None, tp_stop=None):
+    return runner_utils.sim_kwargs(cfg, sl_stop, tp_stop)
 
 
-def _sim_kwargs(cfg):
-    sl = cfg.get("STOP_LOSS_PERCENT") if cfg.get("USE_STOP_LOSS") else None
-    tp = cfg.get("TAKE_PROFIT_PERCENT") if cfg.get("USE_TAKE_PROFIT") else None
-    return dict(
-        initial_capital=cfg.get("INITIAL_CAPITAL", 100_000.0),
-        fees=cfg.get("FEES_PERCENT", 0.001),
-        slippage=cfg.get("SLIPPAGE_PERCENT", 0.0005),
-        size=cfg.get("DEFAULT_SIZE", 0.9),
-        size_type=cfg.get("DEFAULT_SIZE_TYPE", "percent"),
-        sl_stop=sl,
-        tp_stop=tp,
-        trend_filter_window=cfg.get("TREND_FILTER_WINDOW", 0),
-        atr_sl_window=cfg.get("ATR_SL_WINDOW"),
-        atr_sl_multiplier=cfg.get("ATR_SL_MULTIPLIER", 2.0),
-        use_trailing_stop=cfg.get("USE_TRAILING_STOP", False),
-        atr_position_sizing=cfg.get("ATR_POSITION_SIZING", False),
-        risk_per_trade=cfg.get("RISK_PER_TRADE", 0.01),
-    )
-
-
-def _err(msg: str) -> dict:
-    logger.warning(f"[WF] {msg}")
-    return {"top5": [], "error": msg, "portfolio": None, "price_data": None}
+def _err(msg):
+    return runner_utils.err(msg, "WF", logger)

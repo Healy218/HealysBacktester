@@ -5,7 +5,7 @@ MACD Crossover backtest runner.
 
 import numpy as np
 from utils.logging_utils import setup_logging
-from utils import freq_utils
+from utils import freq_utils, runner_utils
 from utils.chunked_runner import simulate_and_rank
 from data import vbt_data_loader as data_loader, data_cleaner
 from signals import macd_signals
@@ -81,39 +81,14 @@ def run(
         return _err(str(e))
 
 
-def _arange_int(cfg, sk, ek, stk, default):
-    s, e, st = default
-    return np.arange(cfg.get(sk, s), cfg.get(ek, e), cfg.get(stk, st), dtype=int)
+_arange_int = runner_utils.arange_int
+_sl = runner_utils.sl_stop
+_tp = runner_utils.tp_stop
 
 
-def _sl(cfg):
-    pct = cfg.get("STOP_LOSS_PERCENT")
-    return pct if cfg.get("USE_STOP_LOSS") and pct else None
-
-
-def _tp(cfg):
-    pct = cfg.get("TAKE_PROFIT_PERCENT")
-    return pct if cfg.get("USE_TAKE_PROFIT") and pct else None
-
-
-def _sim_kwargs(cfg, sl_stop, tp_stop):
-    return dict(
-        initial_capital=cfg.get("INITIAL_CAPITAL", 100_000.0),
-        fees=cfg.get("FEES_PERCENT", 0.001),
-        slippage=cfg.get("SLIPPAGE_PERCENT", 0.0005),
-        size=cfg.get("DEFAULT_SIZE", 0.9),
-        size_type=cfg.get("DEFAULT_SIZE_TYPE", "percent"),
-        sl_stop=sl_stop,
-        tp_stop=tp_stop,
-        trend_filter_window=cfg.get("TREND_FILTER_WINDOW", 0),
-        atr_sl_window=cfg.get("ATR_SL_WINDOW"),
-        atr_sl_multiplier=cfg.get("ATR_SL_MULTIPLIER", 2.0),
-        use_trailing_stop=cfg.get("USE_TRAILING_STOP", False),
-        atr_position_sizing=cfg.get("ATR_POSITION_SIZING", False),
-        risk_per_trade=cfg.get("RISK_PER_TRADE", 0.01),
-    )
+def _sim_kwargs(cfg, sl_stop=None, tp_stop=None):
+    return runner_utils.sim_kwargs(cfg, sl_stop, tp_stop)
 
 
 def _err(msg):
-    logger.warning(f"[MACD] {msg}")
-    return {"top5": [], "error": msg, "portfolio": None, "price_data": None}
+    return runner_utils.err(msg, "MACD", logger)
