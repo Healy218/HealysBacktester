@@ -68,7 +68,7 @@ def combine_signals_and(
     if not entries2_df.columns.equals(exits2_df.columns):
         raise ValueError("Columns of entries2_df and exits2_df must match.")
 
-    print("Combining signals using AND logic for entries (NumPy broadcasting)...")
+    logger.info("Combining signals using AND logic for entries (NumPy broadcasting)...")
 
     try:
         # --- Prepare for NumPy Operation ---
@@ -112,14 +112,14 @@ def combine_signals_and(
         )
 
     except Exception as e:
-        print(f"Error during NumPy signal combination: {e}")
+        logger.exception(f"Error during NumPy signal combination: {e}")
         raise # Re-raise the exception
 
     # Optional cleaning can go here if desired
     # print("Cleaning combined signals...")
     # combined_entries_df, combined_exits_df = combined_entries_df.vbt.signals.clean(combined_exits_df)
 
-    print(f"Signal 'AND' combination complete. Result shape: {combined_entries_df.shape}")
+    logger.info(f"Signal 'AND' combination complete. Result shape: {combined_entries_df.shape}")
 
     return combined_entries_df, combined_exits_df
 
@@ -147,7 +147,7 @@ def combine_signals_or(
     if not entries2_df.columns.equals(exits2_df.columns):
         raise ValueError("Columns of entries2_df and exits2_df must match.")
 
-    print("Combining signals using OR logic for entries (NumPy broadcasting)...")
+    logger.info("Combining signals using OR logic for entries (NumPy broadcasting)...")
 
     try:
         # --- Prepare for NumPy Operation ---
@@ -169,7 +169,7 @@ def combine_signals_or(
         combined_entries_np = op1_entries | op2_entries
 
         # Exits: exits1 AND exits2 (Exit only if BOTH are true - adjust as needed)
-        print("Using AND logic for combined exits (Exit only if *both* strategies signal exit).")
+        logger.info("Using AND logic for combined exits (Exit only if *both* strategies signal exit).")
         op1_exits = exits1_np.repeat(n_cols2, axis=1)
         op2_exits = np.tile(exits2_np, n_cols1)
         combined_exits_np = op1_exits & op2_exits
@@ -192,13 +192,13 @@ def combine_signals_or(
         )
 
     except Exception as e:
-        print(f"Error during NumPy signal combination: {e}")
+        logger.exception(f"Error during NumPy signal combination: {e}")
         raise # Re-raise the exception
 
     # Optional cleaning can go here if desired
     # print("Cleaning combined signals...")
     # combined_entries_df, combined_exits_df = combined_entries_df.vbt.signals.clean(combined_exits_df)
 
-    print(f"Signal 'OR' combination complete. Result shape: {combined_entries_df.shape}")
+    logger.info(f"Signal 'OR' combination complete. Result shape: {combined_entries_df.shape}")
 
     return combined_entries_df, combined_exits_df

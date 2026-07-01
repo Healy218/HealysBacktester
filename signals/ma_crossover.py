@@ -83,10 +83,10 @@ def generate_ma_signals(
         short_entries = exits.copy() if enable_shorting else None
         short_exits = entries.copy() if enable_shorting else None
     except Exception as e:
-        logger.info(f"Error generating crossover signals: {e}")
-        # You might want to inspect fast_ma_values and slow_ma_values here if errors persist
-        logger.info("Fast MA Values Head:\n", fast_ma_values.head())
-        logger.info("Slow MA Values Head:\n", slow_ma_values.head())
+        logger.exception(f"Error generating crossover signals: {e}")
+        # Inspect the MA outputs to help diagnose recurring failures.
+        logger.debug(f"Fast MA Values Head:\n{fast_ma_values.head()}")
+        logger.debug(f"Slow MA Values Head:\n{slow_ma_values.head()}")
         raise
 
 

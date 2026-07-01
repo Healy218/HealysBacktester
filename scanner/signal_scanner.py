@@ -22,7 +22,7 @@ try:
 except ImportError:
     pass
 
-from data.data_loader import load_price_data_smart
+from data.vbt_data_loader import load_price_data_smart
 from utils.logging_utils import setup_logging
 
 logger = setup_logging(log_file="logs/backtester.log")
