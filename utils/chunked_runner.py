@@ -19,7 +19,7 @@ import gc
 import pandas as pd
 import numpy as np
 from utils.logging_utils import setup_logging
-from utils.param_utils import top5_from_portfolio
+from utils.param_utils import top5_from_portfolio, TOP_N
 from portfolio import simulator
 
 logger = setup_logging(log_file="logs/backtester.log")
@@ -51,14 +51,16 @@ def simulate_and_rank(
     progress_callback=None,
 ) -> dict:
     """
-    Simulate a parameter sweep and return the top-3 results (best Sharpe,
-    best return, best win rate) plus a lightweight portfolio for graphing.
+    Simulate a parameter sweep and return up to TOP_N (5) ranked results —
+    the best-Sharpe / best-return / best-win-rate winners plus next-best-by-
+    Sharpe fillers — plus a lightweight portfolio for graphing.
 
     For small sweeps (≤ chunk_size columns) this is a thin wrapper around
     simulator.run_backtest + top5_from_portfolio.
 
-    For large sweeps it processes chunks independently, tracks winners,
-    and re-simulates only the winners at the end.
+    For large sweeps it processes chunks independently, tracks the per-metric
+    winners and a running top-Sharpe leaderboard, and re-simulates only those
+    winners at the end.
 
     Returns:
         dict with keys: top5, error, portfolio, price_data
@@ -103,6 +105,9 @@ def simulate_and_rank(
         "Best Return": None,
         "Best Win Rate": None,
     }
+    # Running top-Sharpe leaderboard (rows carry _saved_signals) used to fill
+    # the result up to TOP_N once the per-metric winners are chosen.
+    sharpe_pool: list[dict] = []
 
     for chunk_idx, start in enumerate(range(0, n_cols, chunk_size)):
         end = min(start + chunk_size, n_cols)
@@ -131,21 +136,29 @@ def simulate_and_rank(
                 logger.warning(f"{tag}   Chunk {chunk_idx + 1} returned no portfolio, skipping.")
                 continue
 
-            chunk_top = top5_from_portfolio(chunk_pf, n=5)
+            chunk_top = top5_from_portfolio(chunk_pf, n=TOP_N)
 
             for row in chunk_top:
-                metric = row.get("ranked_by", "")
-                if metric not in best:
-                    continue
+                # Save this column's signal data (tiny: 1 col × n_rows bools) so
+                # winners/fillers can be re-simulated without the full sweep.
+                col = chunk_pf.wrapper.columns[row["portfolio_col_int_idx"]]
+                row["_saved_signals"] = _save_col_signals(
+                    col, c_entries, c_exits, c_se, c_sx,
+                )
 
-                current = best[metric]
-                if current is None or _is_better(row, current, metric):
-                    # Save the winning column's signal data (tiny: 1 col × n_rows bools)
-                    col = chunk_pf.wrapper.columns[row["portfolio_col_int_idx"]]
-                    row["_saved_signals"] = _save_col_signals(
-                        col, c_entries, c_exits, c_se, c_sx,
-                    )
-                    best[metric] = row
+                # Per-metric winners
+                metric = row.get("ranked_by", "")
+                if metric in best:
+                    current = best[metric]
+                    if current is None or _is_better(row, current, metric):
+                        best[metric] = row
+
+                # Global Sharpe leaderboard (fillers to reach TOP_N)
+                if row.get("sharpe_ratio") is not None:
+                    sharpe_pool.append(row)
+
+            # Keep only the global top-N by Sharpe to bound memory
+            sharpe_pool = _prune_sharpe_pool(sharpe_pool, TOP_N)
 
             del chunk_pf
         except Exception as e:
@@ -157,6 +170,21 @@ def simulate_and_rank(
 
     # ── Collect winners and re-simulate ──────────────────────────────────
     winners = [(m, info) for m, info in best.items() if info is not None]
+
+    # Fill up to TOP_N with the next-best combos by Sharpe (deduped by column).
+    winner_keys = {_col_key(info["_saved_signals"]) for _, info in winners}
+    rank = 2
+    for row in sharpe_pool:
+        if len(winners) >= TOP_N:
+            break
+        key = _col_key(row["_saved_signals"])
+        if key in winner_keys:
+            continue
+        row["ranked_by"] = f"Top Sharpe #{rank}"   # relabel as a global filler
+        winners.append((row["ranked_by"], row))
+        winner_keys.add(key)
+        rank += 1
+
     if not winners:
         return _err("No valid results from any chunk.", price_data)
 
@@ -264,6 +292,28 @@ def _save_col_signals(
         "short_entry": short_entries[col].values.copy() if short_entries is not None else None,
         "short_exit": short_exits[col].values.copy() if short_exits is not None else None,
     }
+
+
+def _col_key(saved: dict):
+    """Hashable key for a saved column label (MultiIndex tuples or scalars)."""
+    col = saved["col_label"]
+    return tuple(col) if isinstance(col, list) else col
+
+
+def _prune_sharpe_pool(pool: list[dict], k: int) -> list[dict]:
+    """Keep the top-k rows by Sharpe, deduped by column label."""
+    pool.sort(key=lambda r: r.get("sharpe_ratio") or float("-inf"), reverse=True)
+    seen: set = set()
+    out: list[dict] = []
+    for row in pool:
+        key = _col_key(row["_saved_signals"])
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append(row)
+        if len(out) >= k:
+            break
+    return out
 
 
 def _is_better(candidate: dict, current: dict, metric: str) -> bool:

@@ -16,13 +16,18 @@ logger = setup_logging(log_file="logs/backtester.log")
 # Keeps peak memory bounded: 50k columns × ~250 bars ≈ 100 MB per metric.
 _CHUNK_SIZE = 50_000
 
+# Total rows returned to the dashboard: 3 per-metric winners (Best Sharpe /
+# Return / Win Rate) plus next-best-by-Sharpe fillers to reach this count.
+TOP_N = 5
 
-def top5_from_portfolio(portfolio, n: int = 5) -> list[dict]:
+
+def top5_from_portfolio(portfolio, n: int = TOP_N) -> list[dict]:
     """
-    Returns the best parameter combination for each of three metrics:
+    Returns up to ``n`` (default TOP_N=5) ranked parameter combinations:
       - Best Sharpe Ratio
       - Best Total Return %
       - Best Win Rate %
+      - then the next-best combinations by Sharpe to fill up to ``n`` rows.
 
     For large portfolios (>50k columns), metrics are extracted in chunks to
     avoid OOM kills.  Each chunk's best is tracked, then the overall best
@@ -30,11 +35,12 @@ def top5_from_portfolio(portfolio, n: int = 5) -> list[dict]:
 
     Args:
         portfolio: A multi-column vectorbt Portfolio object.
-        n: Unused, kept for API compatibility.
+        n: Total rows to return (per-metric winners + Sharpe fillers).
 
     Returns:
-        List of up to 3 dicts (one per metric), each describing the best
-        combination for that metric.  Returns [] if metrics cannot be computed.
+        List of up to ``n`` dicts. The first three are the per-metric winners
+        (deduped); any remainder are next-best by Sharpe. Returns [] if metrics
+        cannot be computed.
     """
     try:
         columns = portfolio.wrapper.columns
@@ -52,6 +58,8 @@ def top5_from_portfolio(portfolio, n: int = 5) -> list[dict]:
         best_sharpe = {"val": -np.inf, "col_idx": None}
         best_return = {"val": -np.inf, "col_idx": None}
         best_winrate = {"val": -np.inf, "col_idx": None}
+        # Running top-N by Sharpe (global col idx) for the leaderboard fillers
+        sharpe_top: list[tuple[float, int]] = []
 
         for start in range(0, n_cols, _CHUNK_SIZE):
             end = min(start + _CHUNK_SIZE, n_cols)
@@ -94,6 +102,11 @@ def top5_from_portfolio(portfolio, n: int = 5) -> list[dict]:
                             best_sharpe["val"] = sharpe[s_best]
                             best_sharpe["col_idx"] = columns.get_loc(s_best)
 
+                    # Merge this chunk's top-N Sharpe into the running leaderboard
+                    for lbl, val in sharpe.dropna().nlargest(TOP_N).items():
+                        sharpe_top.append((float(val), columns.get_loc(lbl)))
+                    sharpe_top = sorted(sharpe_top, key=lambda x: x[0], reverse=True)[:TOP_N]
+
                 if ret.notna().any():
                     r_best = ret.idxmax(skipna=True)
                     if r_best is not None and not np.isnan(ret[r_best]):
@@ -118,13 +131,27 @@ def top5_from_portfolio(portfolio, n: int = 5) -> list[dict]:
 
         # Build results from the winners
         results = []
+        used_idx: set = set()
         for label, best in [
             ("Best Sharpe", best_sharpe),
             ("Best Return", best_return),
             ("Best Win Rate", best_winrate),
         ]:
-            if best["col_idx"] is not None:
-                results.append(_make_row_from_index(portfolio, best["col_idx"], label))
+            idx = best["col_idx"]
+            if idx is not None and idx not in used_idx:
+                results.append(_make_row_from_index(portfolio, idx, label))
+                used_idx.add(idx)
+
+        # Fill up to TOP_N with the next-best combos by Sharpe (deduped).
+        rank = 2
+        for _, idx in sharpe_top:
+            if len(results) >= TOP_N:
+                break
+            if idx in used_idx:
+                continue
+            results.append(_make_row_from_index(portfolio, idx, f"Top Sharpe #{rank}"))
+            used_idx.add(idx)
+            rank += 1
 
         return results
 
@@ -186,21 +213,39 @@ def _rank_portfolio(portfolio) -> list[dict]:
         }
 
     results = []
+    used_cols: set = set()
+
+    def _add(col, ranked_by: str) -> None:
+        results.append(_make_row(col, ranked_by))
+        used_cols.add(col)
 
     if sharpe.notna().any():
         best_sharpe_col = sharpe.idxmax(skipna=True)
         if best_sharpe_col is not None:
-            results.append(_make_row(best_sharpe_col, "Best Sharpe"))
+            _add(best_sharpe_col, "Best Sharpe")
 
     if ret.notna().any():
         best_ret_col = ret.idxmax(skipna=True)
-        if best_ret_col is not None:
-            results.append(_make_row(best_ret_col, "Best Return"))
+        if best_ret_col is not None and best_ret_col not in used_cols:
+            _add(best_ret_col, "Best Return")
 
     if win_rate.notna().any():
         best_wr_col = win_rate.idxmax(skipna=True)
-        if best_wr_col is not None:
-            results.append(_make_row(best_wr_col, "Best Win Rate"))
+        if best_wr_col is not None and best_wr_col not in used_cols:
+            _add(best_wr_col, "Best Win Rate")
+
+    # Fill up to TOP_N rows with the next-best combos by Sharpe (deduped),
+    # so the dashboard shows a genuine leaderboard rather than only the
+    # three per-metric winners.
+    if sharpe.notna().any():
+        rank = 2
+        for col in sharpe.sort_values(ascending=False).index:
+            if len(results) >= TOP_N:
+                break
+            if col in used_cols:
+                continue
+            _add(col, f"Top Sharpe #{rank}")
+            rank += 1
 
     return results
 
