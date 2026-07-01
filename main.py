@@ -892,7 +892,18 @@ _SCANNER_STRATEGY_MAP = {
         "scanner_key": "volume",
         "param_map": {"vol_window": "volume_window", "vol_mult": "volume_multiplier", "exit_ma": "exit_ma_window"},
     },
+    "Bollinger Bands": {
+        "scanner_key": "bbands",
+        "param_map": {"window": "bb_window", "alpha": "bb_alpha"},
+    },
+    "Stochastic Crossover": {
+        "scanner_key": "stoch",
+        "param_map": {"k": "k_window", "d": "d_window", "oversold": "oversold", "overbought": "overbought"},
+    },
 }
+# Elliott Wave / Fib and Sentiment are intentionally omitted: the lightweight
+# scanner performs a single last-bar indicator check, which does not fit
+# Elliott's multi-bar swing detection or Sentiment's external news feed.
 
 def _parse_param_label(param_label: str) -> dict:
     """Parse 'fast=10, slow=50' into {'fast': 10.0, 'slow': 50.0}."""

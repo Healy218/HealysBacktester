@@ -13,6 +13,7 @@ import os
 import sys
 from datetime import date, timedelta
 
+import numpy as np
 import pandas as pd
 
 # Load .env so ALPACA_API_KEY is available
@@ -210,6 +211,91 @@ def _check_volume(close: pd.Series, volume: pd.Series, params: dict) -> dict:
     }
 
 
+def _check_bbands(close: pd.Series, params: dict) -> dict:
+    window = params["bb_window"]
+    alpha  = params["bb_alpha"]
+
+    middle = close.rolling(window).mean()
+    std    = close.rolling(window).std(ddof=0)   # ddof=0 to match vbt.BBANDS
+    upper  = middle + alpha * std
+    lower  = middle - alpha * std
+
+    valid = middle.dropna()
+    if len(valid) < 2:
+        return {"signal": "INSUFFICIENT_DATA", "upper": None, "middle": None, "lower": None}
+
+    prev_close, curr_close = close.iloc[-2], close.iloc[-1]
+    prev_upper, curr_upper = upper.iloc[-2], upper.iloc[-1]
+    prev_mid,   curr_mid   = middle.iloc[-2], middle.iloc[-1]
+
+    if pd.isna(prev_upper) or pd.isna(prev_mid):
+        return {"signal": "INSUFFICIENT_DATA", "upper": None, "middle": None, "lower": None}
+
+    # Backtest logic: enter long when price breaks above the upper band,
+    # exit when price falls back below the middle band.
+    crossed_above_upper = (prev_close <= prev_upper) and (curr_close > curr_upper)
+    crossed_below_mid   = (prev_close >= prev_mid)   and (curr_close < curr_mid)
+
+    if crossed_above_upper:
+        signal = "BUY"
+    elif crossed_below_mid:
+        signal = "SELL"
+    elif curr_close > curr_mid:
+        signal = "IN_TRADE"   # price still above the middle band — long open
+    else:
+        signal = "OUT"
+
+    return {
+        "signal": signal,
+        "upper":  round(curr_upper, 4),
+        "middle": round(curr_mid, 4),
+        "lower":  round(lower.iloc[-1], 4),
+    }
+
+
+def _check_stoch(high: pd.Series, low: pd.Series, close: pd.Series, params: dict) -> dict:
+    k_window   = params["k_window"]
+    d_window   = params["d_window"]
+    oversold   = params["oversold"]
+    overbought = params["overbought"]
+
+    lowest_low   = low.rolling(k_window).min()
+    highest_high = high.rolling(k_window).max()
+    rng          = (highest_high - lowest_low).replace(0, np.nan)
+    percent_k    = 100 * (close - lowest_low) / rng
+    percent_d    = percent_k.rolling(d_window).mean()
+
+    valid = percent_d.dropna()
+    if len(valid) < 2:
+        return {"signal": "INSUFFICIENT_DATA", "percent_k": None, "percent_d": None}
+
+    prev_k, curr_k = percent_k.iloc[-2], percent_k.iloc[-1]
+    prev_d, curr_d = percent_d.iloc[-2], percent_d.iloc[-1]
+
+    if pd.isna(prev_k) or pd.isna(prev_d):
+        return {"signal": "INSUFFICIENT_DATA", "percent_k": None, "percent_d": None}
+
+    crossed_above = (prev_k <= prev_d) and (curr_k > curr_d)
+    crossed_below = (prev_k >= prev_d) and (curr_k < curr_d)
+
+    # Backtest logic: long entry on %K crossing above %D while oversold;
+    # long exit on %K crossing below %D while overbought.
+    if crossed_above and curr_k < oversold:
+        signal = "BUY"
+    elif crossed_below and curr_k > overbought:
+        signal = "SELL"
+    elif curr_k > curr_d:
+        signal = "IN_TRADE"
+    else:
+        signal = "OUT"
+
+    return {
+        "signal":    signal,
+        "percent_k": round(curr_k, 2),
+        "percent_d": round(curr_d, 2),
+    }
+
+
 # ---------------------------------------------------------------------------
 # Core scan function
 # ---------------------------------------------------------------------------
@@ -250,6 +336,10 @@ def scan_one(scan: dict) -> dict:
         min_bars = params["slow_window"] * 3
     elif strategy == "volume":
         min_bars = max(params["volume_window"], params["exit_ma_window"]) * 3
+    elif strategy == "bbands":
+        min_bars = params["bb_window"] * 3
+    elif strategy == "stoch":
+        min_bars = (params["k_window"] + params["d_window"]) * 3
     else:
         result["error"] = f"Unknown strategy '{strategy}'"
         return result
@@ -287,6 +377,14 @@ def scan_one(scan: dict) -> dict:
             result["error"] = "Volume column missing from data."
             return result
         info = _check_volume(close, df["Volume"], params)
+    elif strategy == "bbands":
+        info = _check_bbands(close, params)
+    elif strategy == "stoch":
+        missing = [c for c in ("High", "Low") if c not in df.columns]
+        if missing:
+            result["error"] = f"{', '.join(missing)} column(s) missing from data (required for Stochastic)."
+            return result
+        info = _check_stoch(df["High"], df["Low"], close, params)
 
     result["signal"]           = info.pop("signal")
     result["indicator_values"] = info
