@@ -142,6 +142,7 @@ def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_c
             _last_run["by_symbol"][sym] = {
                 "portfolio":  result.pop("portfolio",  None),
                 "price_data": result.pop("price_data", None),
+                "wf_folds":   result.pop("wf_folds",   None),
             }
 
             if result.get("error"):
@@ -556,11 +557,21 @@ def _results_tab():
                 dbc.Col(dcc.Graph(id="equity-graph"), md=12),
             ], className="mt-3"),
             dbc.Row([
+                dbc.Col(dcc.Graph(id="benchmark-graph"), md=12),
+            ], className="mt-3"),
+            dbc.Row([
                 dbc.Col(dcc.Graph(id="trades-graph"), md=12),
             ], className="mt-3"),
             dbc.Row([
                 dbc.Col(dcc.Graph(id="pnl-dist-graph"), md=6),
                 dbc.Col(dcc.Graph(id="monthly-returns-graph"), md=6),
+            ], className="mt-3"),
+            dbc.Row([
+                dbc.Col(dcc.Graph(id="montecarlo-graph"), md=12),
+            ], className="mt-3"),
+            # Only meaningful for walk-forward runs; shows a hint otherwise.
+            dbc.Row([
+                dbc.Col(dcc.Graph(id="walkforward-graph"), md=12),
             ], className="mt-3"),
         ]),
     ]
@@ -753,21 +764,35 @@ def poll_progress(n_intervals):
 #  CALLBACK 3 — Update graphs when a table row is clicked
 # ═══════════════════════════════════════════════════════════════════════════
 
+def _placeholder_fig(message: str) -> go.Figure:
+    """An empty figure with a centered explanatory annotation."""
+    fig = go.Figure()
+    fig.add_annotation(text=message, xref="paper", yref="paper",
+                       x=0.5, y=0.5, showarrow=False,
+                       font=dict(size=13, color="gray"))
+    fig.update_layout(xaxis={"visible": False}, yaxis={"visible": False})
+    return fig
+
+
 @app.callback(
     Output("equity-graph", "figure"),
+    Output("benchmark-graph", "figure"),
     Output("trades-graph", "figure"),
     Output("pnl-dist-graph", "figure"),
     Output("monthly-returns-graph", "figure"),
+    Output("montecarlo-graph", "figure"),
+    Output("walkforward-graph", "figure"),
     Input("top5-table", "selected_rows"),
     State("top5-store",  "data"),
     prevent_initial_call=True,
 )
 def update_graphs(selected_rows, top5_data):
-    """Generates equity + trades + PnL distribution + monthly returns for the selected row."""
+    """Generates all per-row figures: equity, benchmark, trades, PnL, monthly,
+    Monte Carlo, and (for walk-forward runs) the per-fold OOS breakdown."""
     empty = go.Figure()
 
     if not selected_rows or top5_data is None:
-        return empty, empty, empty, empty
+        return empty, empty, empty, empty, empty, empty, empty
 
     try:
         row_idx  = selected_rows[0]
@@ -777,24 +802,36 @@ def update_graphs(selected_rows, top5_data):
         sym_cache  = _last_run["by_symbol"].get(symbol, {})
         portfolio  = sym_cache.get("portfolio")
         price_data = sym_cache.get("price_data")
+        wf_folds   = sym_cache.get("wf_folds")
 
         if portfolio is None or price_data is None:
-            return empty, empty, empty, empty
+            return empty, empty, empty, empty, empty, empty, empty
 
         col_int_idx = row_data["portfolio_col_int_idx"]
         col         = portfolio.wrapper.columns[col_int_idx]
         single_pf   = portfolio[col]
 
         fig_equity   = plotting.plot_portfolio_summary(single_pf) or empty
+        fig_bench    = plotting.plot_equity_vs_benchmark(single_pf, price_data) or empty
         fig_trades   = plotting.plot_trades(single_pf, price_data) or empty
         fig_pnl_dist = plotting.plot_trade_pnl_distribution(single_pf) or empty
         fig_monthly  = plotting.plot_monthly_returns(single_pf) or empty
+        fig_mc       = (plotting.plot_monte_carlo(single_pf)
+                        or _placeholder_fig("Monte Carlo needs at least 5 trades."))
 
-        return fig_equity, fig_trades, fig_pnl_dist, fig_monthly
+        if wf_folds:
+            fig_wf = (plotting.plot_walkforward_folds(wf_folds)
+                      or _placeholder_fig("No walk-forward fold data to plot."))
+        else:
+            fig_wf = _placeholder_fig(
+                "Per-fold breakdown appears here when 'Walk-Forward' is enabled.")
+
+        return (fig_equity, fig_bench, fig_trades, fig_pnl_dist,
+                fig_monthly, fig_mc, fig_wf)
 
     except Exception as e:
         logger.error(f"Graph update error: {e}")
-        return empty, empty, empty, empty
+        return empty, empty, empty, empty, empty, empty, empty
 
 
 # ═══════════════════════════════════════════════════════════════════════════

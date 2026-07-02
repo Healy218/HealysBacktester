@@ -94,6 +94,7 @@ def run(
 
         # ── 3. Walk-forward loop ────────────────────────────────────────────
         all_oos_results = []
+        wf_folds = []          # per-fold OOS returns for the fold-breakdown chart
         last_oos_pf = None
         last_oos_price = None
 
@@ -199,6 +200,15 @@ def run(
                 oos_data,
             )
             all_oos_results.append(fold_row)
+            try:
+                fold_returns = oos_pf.returns()
+            except Exception:
+                fold_returns = None
+            wf_folds.append({
+                "fold": fi + 1,
+                "param_label": is_best["param_label"],
+                "returns": fold_returns,
+            })
             last_oos_pf = oos_pf
             last_oos_price = oos_data
 
@@ -236,6 +246,7 @@ def run(
             "error": None,
             "portfolio": last_oos_pf,
             "price_data": last_oos_price if last_oos_price is not None else price_data,
+            "wf_folds": wf_folds,
         }
 
     except Exception as e:

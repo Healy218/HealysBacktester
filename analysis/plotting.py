@@ -331,3 +331,202 @@ def plot_monthly_returns(
     except Exception as e:
         logger.error(f"Error generating monthly returns heatmap: {e}")
         return None
+
+
+def plot_equity_vs_benchmark(
+    portfolio: vbt.Portfolio,
+    price_df: pd.DataFrame,
+    column: Optional[Union[str, Tuple]] = None,
+) -> Optional[go.Figure]:
+    """
+    Overlays the strategy equity curve against a buy-and-hold benchmark built
+    with vbt.Portfolio.from_holding, using the same starting capital so the two
+    curves are directly comparable.
+
+    Args:
+        portfolio: A vectorbt Portfolio object (strategy).
+        price_df:  Cleaned OHLCV DataFrame with a "Close" column.
+        column:    Optional column to select from a multi-column portfolio.
+
+    Returns:
+        Plotly Figure, or None on error.
+    """
+    if portfolio is None or price_df is None or "Close" not in price_df:
+        return None
+    try:
+        pf = portfolio if column is None else portfolio[column]
+        strat_val = pf.value()
+        if strat_val is None or len(strat_val) == 0:
+            return None
+
+        # Match the benchmark's starting capital to the strategy's.
+        init_cash = float(strat_val.iloc[0])
+        close = price_df["Close"].reindex(strat_val.index).ffill()
+
+        try:
+            bench_pf = vbt.Portfolio.from_holding(
+                close, init_cash=init_cash, freq=pf.wrapper.freq,
+            )
+            bench_val = bench_pf.value()
+        except Exception:
+            # Fallback: scale the raw price series to the same starting capital.
+            bench_val = close / close.iloc[0] * init_cash
+
+        strat_ret = (strat_val.iloc[-1] / init_cash - 1) * 100
+        bench_ret = (bench_val.iloc[-1] / init_cash - 1) * 100
+
+        fig = go.Figure()
+        fig.add_trace(go.Scatter(
+            x=strat_val.index, y=strat_val.values, mode="lines",
+            name=f"Strategy ({strat_ret:+.1f}%)", line=dict(color="#00bc8c", width=2),
+        ))
+        fig.add_trace(go.Scatter(
+            x=bench_val.index, y=bench_val.values, mode="lines",
+            name=f"Buy & Hold ({bench_ret:+.1f}%)",
+            line=dict(color="#3498db", width=2, dash="dash"),
+        ))
+        fig.update_layout(
+            title="Strategy vs Buy & Hold",
+            xaxis_title="Date",
+            yaxis_title="Portfolio Value ($)",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        )
+        return fig
+    except Exception as e:
+        logger.error(f"Error generating equity vs benchmark plot: {e}")
+        return None
+
+
+def plot_monte_carlo(
+    portfolio: vbt.Portfolio,
+    column: Optional[Union[str, Tuple]] = None,
+    n_sims: int = 1000,
+    seed: Optional[int] = 42,
+) -> Optional[go.Figure]:
+    """
+    Monte Carlo bootstrap on the strategy's trade returns: resample the realized
+    per-trade returns with replacement ``n_sims`` times, compound each resample
+    into a terminal return, and plot the resulting distribution with 5th/50th/95th
+    percentile confidence bands and the actually-realized return.
+
+    Args:
+        portfolio: A vectorbt Portfolio object.
+        column:    Optional column to select.
+        n_sims:    Number of bootstrap resamples.
+        seed:      RNG seed for reproducibility (None for random).
+
+    Returns:
+        Plotly Figure, or None if there are too few trades.
+    """
+    if portfolio is None:
+        return None
+    try:
+        pf = portfolio if column is None else portfolio[column]
+        if pf.trades.count() < 5:
+            return None  # not enough trades for a meaningful distribution
+
+        trade_rets = np.asarray(pf.trades.returns.values, dtype=float)
+        trade_rets = trade_rets[~np.isnan(trade_rets)]
+        n_trades = len(trade_rets)
+        if n_trades < 5:
+            return None
+
+        rng = np.random.default_rng(seed)
+        sims = rng.choice(trade_rets, size=(n_sims, n_trades), replace=True)
+        terminal = (np.prod(1.0 + sims, axis=1) - 1.0) * 100  # % terminal return
+
+        p5, p50, p95 = np.percentile(terminal, [5, 50, 95])
+        actual = (np.prod(1.0 + trade_rets) - 1.0) * 100
+
+        fig = go.Figure()
+        fig.add_trace(go.Histogram(
+            x=terminal, nbinsx=60, marker_color="#3498db",
+            opacity=0.75, name="Simulated outcomes",
+        ))
+        for val, color, label in [
+            (p5,  "#e74c3c", f"5th pct: {p5:+.1f}%"),
+            (p50, "#f39c12", f"Median: {p50:+.1f}%"),
+            (p95, "#00bc8c", f"95th pct: {p95:+.1f}%"),
+            (actual, "#ffffff", f"Realized: {actual:+.1f}%"),
+        ]:
+            fig.add_vline(
+                x=val, line_dash="dash", line_color=color,
+                annotation_text=label, annotation_position="top",
+            )
+        fig.update_layout(
+            title=(
+                f"Monte Carlo — {n_sims:,} resamples of {n_trades} trades "
+                f"(90% CI: {p5:+.1f}% to {p95:+.1f}%)"
+            ),
+            xaxis_title="Terminal Return (%)",
+            yaxis_title="Frequency",
+            bargap=0.02,
+            showlegend=False,
+        )
+        return fig
+    except Exception as e:
+        logger.error(f"Error generating Monte Carlo plot: {e}")
+        return None
+
+
+def plot_walkforward_folds(
+    folds: list,
+    init_cash: float = 100_000.0,
+) -> Optional[go.Figure]:
+    """
+    Stitches each walk-forward fold's out-of-sample returns into one continuous
+    equity curve, colouring each fold separately so the per-fold breakdown is
+    visible (rather than only the last fold's curve).
+
+    Args:
+        folds: list of dicts, each {"fold": int, "param_label": str,
+               "returns": pd.Series of OOS period returns}.
+        init_cash: Starting capital for the stitched curve.
+
+    Returns:
+        Plotly Figure, or None if there is nothing to plot.
+    """
+    if not folds:
+        return None
+    try:
+        palette = [
+            "#00bc8c", "#3498db", "#f39c12", "#e74c3c", "#9b59b6",
+            "#1abc9c", "#e67e22", "#2ecc71", "#e84393", "#00cec9",
+        ]
+        fig = go.Figure()
+        equity = float(init_cash)
+        plotted = False
+
+        for i, f in enumerate(folds):
+            rets = f.get("returns")
+            if rets is None or len(rets) == 0:
+                continue
+            curve = equity * (1.0 + rets).cumprod()
+            color = palette[i % len(palette)]
+            fold_ret = (curve.iloc[-1] / equity - 1) * 100
+            fig.add_trace(go.Scatter(
+                x=curve.index, y=curve.values, mode="lines",
+                name=f"Fold {f.get('fold', i + 1)} ({fold_ret:+.1f}%)",
+                line=dict(color=color, width=2),
+                hovertext=f"{f.get('param_label', '')}",
+            ))
+            # Mark the fold boundary.
+            fig.add_vline(x=curve.index[0], line_dash="dot",
+                          line_color="rgba(255,255,255,0.25)")
+            equity = float(curve.iloc[-1])
+            plotted = True
+
+        if not plotted:
+            return None
+
+        total_ret = (equity / init_cash - 1) * 100
+        fig.update_layout(
+            title=f"Walk-Forward OOS Equity by Fold (total {total_ret:+.1f}%)",
+            xaxis_title="Date",
+            yaxis_title="Stitched OOS Equity ($)",
+            legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
+        )
+        return fig
+    except Exception as e:
+        logger.error(f"Error generating walk-forward folds plot: {e}")
+        return None
