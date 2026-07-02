@@ -63,7 +63,7 @@ try:
     from portfolio import simulator
     from analysis import metrics, plotting
     from utils import config_parser, freq_utils
-    from data import data_loader, data_cleaner
+    from data import vbt_data_loader as data_loader, data_cleaner
     # Import custom error types to potentially catch them specifically
     from utils.error_handling import DataError, SignalError, PortfolioError, ConfigurationError
 except ImportError as import_err:
@@ -163,9 +163,9 @@ best_params = None # Use tuple (fast_window, slow_window)
 # 1. Load and Clean Data using Modules
 logger.info(f"\n[1/4] Loading and cleaning data for {SYMBOL}...")
 try:
-    # Assume load_price_data and clean_ohlcv_data might raise DataError or other exceptions
+    # Assume load_price_data_smart and clean_ohlcv_data might raise DataError or other exceptions
     # If they have the @handle_errors decorator, errors will be logged there too.
-    raw_data = data_loader.load_price_data(
+    raw_data = data_loader.load_price_data_smart(
         symbol=SYMBOL, start_date=START_DATE, end_date=END_DATE, interval=INTERVAL
     )
     # Add checks for None or empty dataframes after loading/cleaning

@@ -6,7 +6,7 @@ A Python backtesting framework for algorithmic trading strategies. Built on [vec
 
 ## What It Does
 
-1. Downloads OHLCV price data from Yahoo Finance (with local caching)
+1. Downloads OHLCV price data from Alpaca (with local caching)
 2. Generates trading signals for each parameter combination in a strategy
 3. Simulates all combinations simultaneously using vectorbt
 4. Finds the best-performing parameter set and saves stats, trades, and plots
@@ -22,7 +22,8 @@ HealysBacktester/
 │   └── settings.py          # All configuration: symbol, dates, strategy params, fees, etc.
 ├── data/
 │   ├── cache/               # Cached CSV downloads (auto-created)
-│   ├── data_loader.py       # Downloads data from Yahoo Finance; checks cache first
+│   ├── vbt_data_loader.py   # Downloads data from Alpaca (cache-first); Alpaca-only
+│   ├── alpaca_loader.py     # Lower-level Alpaca bar loader (used by NN scripts)
 │   └── data_cleaner.py      # Validates and normalizes OHLCV DataFrames
 ├── signals/
 │   ├── ma_crossover.py      # MA crossover signal generator
@@ -65,7 +66,7 @@ HealysBacktester/
 ### 1. Install dependencies
 
 ```bash
-pip install vectorbt pandas numpy plotly dash dash-bootstrap-components yfinance
+pip install vectorbt pandas numpy plotly dash dash-bootstrap-components alpaca-py
 ```
 
 > The full `requirements.txt` is a complete environment dump. The core dependencies above are what you actually need.
@@ -201,7 +202,7 @@ All strategy scripts follow the same 4-stage pipeline:
 
 ```
 [1/4] Load & Clean Data
-      data_loader.load_price_data()    → Download from Yahoo Finance (or load from cache)
+      vbt_data_loader.load_price_data_smart()  → Download from Alpaca (or load from cache)
       data_cleaner.clean_ohlcv_data()  → Validate columns, handle NaNs, ensure DatetimeIndex
 
 [2/4] Generate Signals
@@ -241,7 +242,7 @@ Downloaded data is cached as CSV in `data/cache/` using the filename pattern:
 
 To force a fresh download, delete the relevant file from `data/cache/`.
 
-> **Note on intraday data:** Yahoo Finance limits intraday history (e.g., 5m bars) to the past ~60 days. Plan date ranges accordingly.
+> **Note on data source:** Data comes exclusively from Alpaca (set `ALPACA_API_KEY` / `ALPACA_API_SECRET` in `.env`). There is no Yahoo fallback — if Alpaca lacks credentials, doesn't support the interval, or returns no data, the load fails with a clear error rather than silently using another source.
 
 ---
 
@@ -263,7 +264,7 @@ Change to `"DEBUG"` to see verbose output including index normalization and sign
 
 - **Optimization metric:** Best parameters are selected by **total return only**. High-return combos may have poor Sharpe ratios or deep drawdowns. Consider using Sharpe ratio instead.
 - **No walk-forward validation:** Results may be overfitted to the test period. Always validate on out-of-sample data.
-- **Intraday data limits:** Yahoo Finance restricts historical intraday data. Use daily bars for longer backtests.
+- **Intraday data limits:** Alpaca's free tier caps intraday history and bar counts per request. Use daily bars for longer backtests.
 - **RSI signal misalignment:** The RSI strategy uses separate DataFrames for entries/exits (different MultiIndex levels). vectorbt handles this via broadcasting, but results should be spot-checked.
 - **Models and sentiment folders:** The `models/` and `sentiment/` directories are experimental stubs and are not integrated into any backtest scripts.
 
@@ -279,5 +280,5 @@ Change to `"DEBUG"` to see verbose output including index normalization and sign
 | `plotly` | 5.24.x | Interactive charts |
 | `dash` | 3.0.x | Web dashboard |
 | `dash-bootstrap-components` | 2.0.x | Dashboard styling |
-| `yfinance` | 0.2.x | Yahoo Finance data (via vectorbt) |
+| `alpaca-py` | 0.x | Alpaca market data (sole data source) |
 | `ta-lib` | 0.6.x | Optional alternative indicator library |

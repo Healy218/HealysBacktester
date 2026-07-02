@@ -57,7 +57,7 @@ try:
     from portfolio import simulator
     from analysis import metrics, plotting
     from utils import config_parser, freq_utils
-    from data import data_loader, data_cleaner
+    from data import vbt_data_loader as data_loader, data_cleaner
     # Import custom error types
     from utils.error_handling import DataError, SignalError, PortfolioError, ConfigurationError
 except ImportError as import_err:
@@ -181,7 +181,7 @@ logger.info("-" * 35)
 logger.info(f"\n[1/4] Loading and cleaning data for {SYMBOL}...")
 load_start = time.time()
 try:
-    raw_data = data_loader.load_price_data(
+    raw_data = data_loader.load_price_data_smart(
         symbol=SYMBOL, start_date=START_DATE, end_date=END_DATE, interval=INTERVAL
     )
     if raw_data is None or raw_data.empty:

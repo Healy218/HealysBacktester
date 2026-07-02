@@ -36,7 +36,7 @@ from signals import nn_signals
 from portfolio import simulator
 from analysis import metrics, plotting
 from utils import config_parser, freq_utils
-from data import data_loader, data_cleaner, alpaca_loader
+from data import data_cleaner, alpaca_loader
 from models import data_preprocessing, nn_model
 
 # --- Load Configuration ---

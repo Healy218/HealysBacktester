@@ -26,7 +26,7 @@ from signals import rsi_threshold, ma_crossover, signal_combiners # [cite: Healy
 from portfolio import simulator # [cite: HealysBacktester/portfolio/simulator.py]
 from analysis import metrics, plotting # [cite: HealysBacktester/analysis/metrics.py, HealysBacktester/analysis/plotting.py]
 from utils import config_parser # [cite: HealysBacktester/utils/config_parser.py]
-from data import data_loader, data_cleaner # [cite: HealysBacktester/data/data_loader.py, HealysBacktester/data/data_cleaner.py]
+from data import vbt_data_loader as data_loader, data_cleaner
 
 # --- Load Configuration ---
 try:
@@ -145,9 +145,9 @@ best_col_name_or = None
 # 1. Load and Clean Data
 print(f"\n[1/6] Loading and cleaning data for {SYMBOL}...")
 try:
-    raw_data = data_loader.load_price_data(
+    raw_data = data_loader.load_price_data_smart(
         symbol=SYMBOL, start_date=START_DATE, end_date=END_DATE, interval=INTERVAL
-    ) # [cite: HealysBacktester/data/data_loader.py]
+    )
     if raw_data is None or raw_data.empty: raise ValueError(f"Data loading failed for {SYMBOL}.")
     price_data = data_cleaner.clean_ohlcv_data(raw_data) # [cite: HealysBacktester/data/data_cleaner.py]
     if price_data is None or price_data.empty: raise ValueError(f"Data cleaning failed for {SYMBOL}.")
