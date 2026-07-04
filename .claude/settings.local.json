@@ -2,7 +2,31 @@
   "permissions": {
     "allow": [
       "Bash(python scripts/ma_backtest.py)",
-      "WebFetch(domain:vectorbt.dev)"
+      "WebFetch(domain:vectorbt.dev)",
+      "WebFetch(domain:massive.com)",
+      "Bash(.venv/bin/python -c \"import requests, pandas, numpy, scipy, pyarrow; import tensorflow as tf; print\\('requests', requests.__version__\\); print\\('pandas', pandas.__version__\\); print\\('scipy OK'\\); print\\('pyarrow', pyarrow.__version__\\); print\\('tf', tf.__version__\\)\")",
+      "Bash(/opt/homebrew/Caskroom/miniforge/base/bin/python3 -c ' *)",
+      "Bash(/opt/homebrew/Caskroom/miniforge/base/bin/conda env *)",
+      "Read(//Users/healy218macbook/**)",
+      "Bash(/opt/homebrew/Caskroom/miniforge/base/envs/data-env/bin/python -c ' *)",
+      "Bash(/opt/homebrew/Caskroom/miniforge/base/envs/data-env/bin/python -m nn_options_signal.download_contracts)",
+      "Bash(/opt/homebrew/Caskroom/miniforge/base/envs/data-env/bin/python -m nn_options_signal.download_bars --universe-only)",
+      "Bash(/opt/homebrew/Caskroom/miniforge/base/envs/data-env/bin/python -m nn_options_signal.download_bars)",
+      "Bash(/opt/homebrew/Caskroom/miniforge/base/envs/data-env/bin/python -m nn_options_signal.build_dataset)",
+      "Bash(/opt/homebrew/Caskroom/miniforge/base/envs/data-env/bin/python -m nn_options_signal.select_and_evaluate)",
+      "Bash(/opt/homebrew/Caskroom/miniforge/base/envs/data-env/bin/pip install *)",
+      "Bash(sort -t= -k2 -rn)",
+      "Bash(xargs ls -la)",
+      "Bash(sort -k6,7)",
+      "Bash(ps -p 6027,87654,87659,6030 -o pid,lstart,etime,command)",
+      "Bash(lsof -iTCP -sTCP:LISTEN -n -P)",
+      "Bash(awk '{$6=\"\";$5=\"\";print}')",
+      "Bash(python3 -c ' *)",
+      "Bash(ps -p 79080 -o pid,command)",
+      "Bash(ps -p 79080 -ww -o command=)",
+      "Bash(venv/bin/python -c \"import vectorbt, pandas, requests, dash; print\\('venv OK: vectorbt', vectorbt.__version__\\)\")",
+      "Bash(venv/bin/python -c \"import main; print\\('main.py imports OK —', len\\(main.STRATEGIES\\), 'strategies registered'\\)\")",
+      "Bash(venv/bin/python -c \"import importlib, main; importlib.reload\\(main\\); print\\('main.py OK'\\)\")"
     ]
   }
 }

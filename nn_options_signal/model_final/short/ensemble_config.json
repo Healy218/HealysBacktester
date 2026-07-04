@@ -1,0 +1,39 @@
+{
+  "strategy": "short",
+  "run_ids": [
+    "h3-a64x32x16-lr0.0003-s0",
+    "h3-a64x32x16-lr0.0003-s1",
+    "h3-a64x32x16-lr0.0003-s2",
+    "h3-a64x32x16-lr0.0003-s3",
+    "h3-a64x32x16-lr0.0003-s4"
+  ],
+  "horizon": 3,
+  "arch": "64x32x16",
+  "lr": 0.0003,
+  "threshold": -0.1,
+  "features": [
+    "moneyness",
+    "dte_frac",
+    "iv",
+    "prem_spot",
+    "log_volume",
+    "log_transactions",
+    "vwap_dev",
+    "is_call",
+    "c_ret_1",
+    "c_ret_3",
+    "und_ret_1",
+    "und_ret_5",
+    "und_ret_21",
+    "rvol_5",
+    "rvol_21",
+    "gap",
+    "atm_iv_near",
+    "atm_iv_far",
+    "term_slope",
+    "iv_chg_5",
+    "pc_ratio",
+    "dow"
+  ],
+  "median_val_return": 0.005365399999999854
+}

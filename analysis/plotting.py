@@ -3,10 +3,21 @@ import numpy as np
 import vectorbt as vbt
 import pandas as pd
 import plotly.graph_objects as go
+import plotly.io as pio
 from typing import Optional, Union, Tuple # Import needed types
 from utils.logging_utils import setup_logging
 import logging
 logger = setup_logging(log_file="logs/backtester.log")
+
+# ── Light chart theme ────────────────────────────────────────────────────────
+# The dashboard renders on a white background, so charts must match. Set a light
+# Plotly template globally and switch vectorbt to its light theme (otherwise
+# portfolio.plot() defaults to a dark template and clashes with the UI).
+pio.templates.default = "plotly_white"
+try:
+    vbt.settings.set_theme("light")
+except Exception:
+    logger.warning("Could not apply vectorbt light theme; portfolio.plot() may render dark.")
 
 # Ensure plotting libraries are installed: pip install plotly kaleido nbformat
 # 'kaleido' is needed for saving static images (optional)
@@ -117,7 +128,7 @@ def plot_trades(portfolio: vbt.Portfolio, price_df: pd.DataFrame, column: Option
         return None
 
     try:
-        fig = price_df['Close'].vbt.plot(trace_kwargs=dict(name='Close', line=dict(color='#aaaaaa')))
+        fig = price_df['Close'].vbt.plot(trace_kwargs=dict(name='Close', line=dict(color='#94a3b8')))
 
         pf = portfolio if column is None else portfolio[column]
         if pf.trades.count() == 0:
@@ -160,15 +171,15 @@ def plot_trades(portfolio: vbt.Portfolio, price_df: pd.DataFrame, column: Option
             ))
 
         # --- Open markers (neutral, at entry time) ---
-        _add(rr[longs],  'Long open',  '#888888', 'circle', entry_ts_col, entry_px_col, filled=False)
-        _add(rr[shorts], 'Short open', '#888888', 'x',      entry_ts_col, entry_px_col, filled=True)
+        _add(rr[longs],  'Long open',  '#64748b', 'circle', entry_ts_col, entry_px_col, filled=False)
+        _add(rr[shorts], 'Short open', '#64748b', 'x',      entry_ts_col, entry_px_col, filled=True)
 
         # --- Close markers (colored by outcome, at exit time) ---
         if exit_ts_col and exit_px_col:
-            _add(rr[longs  &  win],  'Long ● (win)',   '#00bc8c', 'circle', exit_ts_col, exit_px_col, filled=True)
-            _add(rr[longs  & ~win],  'Long ● (loss)',  '#e74c3c', 'circle', exit_ts_col, exit_px_col, filled=False)
-            _add(rr[shorts &  win],  'Short ✕ (win)',  '#3498db', 'x',      exit_ts_col, exit_px_col, filled=True)
-            _add(rr[shorts & ~win],  'Short ✕ (loss)', '#f39c12', 'x',      exit_ts_col, exit_px_col, filled=False)
+            _add(rr[longs  &  win],  'Long ● (win)',   '#16a34a', 'circle', exit_ts_col, exit_px_col, filled=True)
+            _add(rr[longs  & ~win],  'Long ● (loss)',  '#dc2626', 'circle', exit_ts_col, exit_px_col, filled=False)
+            _add(rr[shorts &  win],  'Short ✕ (win)',  '#0d9488', 'x',      exit_ts_col, exit_px_col, filled=True)
+            _add(rr[shorts & ~win],  'Short ✕ (loss)', '#f59e0b', 'x',      exit_ts_col, exit_px_col, filled=False)
         else:
             logger.warning("Could not locate exit columns; close markers skipped.")
 
@@ -252,12 +263,12 @@ def plot_trade_pnl_distribution(
         fig.add_trace(go.Histogram(
             x=pnl,
             nbinsx=50,
-            marker_color=np.where(pnl >= 0, '#00bc8c', '#e74c3c'),
+            marker_color=np.where(pnl >= 0, '#16a34a', '#dc2626'),
             name="Trade P&L",
         ))
 
         # Add vertical line at zero
-        fig.add_vline(x=0, line_dash="dash", line_color="white", opacity=0.5)
+        fig.add_vline(x=0, line_dash="dash", line_color="#334155", opacity=0.5)
 
         fig.update_layout(
             title="Trade P&L Distribution",
@@ -378,12 +389,12 @@ def plot_equity_vs_benchmark(
         fig = go.Figure()
         fig.add_trace(go.Scatter(
             x=strat_val.index, y=strat_val.values, mode="lines",
-            name=f"Strategy ({strat_ret:+.1f}%)", line=dict(color="#00bc8c", width=2),
+            name=f"Strategy ({strat_ret:+.1f}%)", line=dict(color="#16a34a", width=2),
         ))
         fig.add_trace(go.Scatter(
             x=bench_val.index, y=bench_val.values, mode="lines",
             name=f"Buy & Hold ({bench_ret:+.1f}%)",
-            line=dict(color="#3498db", width=2, dash="dash"),
+            line=dict(color="#0d9488", width=2, dash="dash"),
         ))
         fig.update_layout(
             title="Strategy vs Buy & Hold",
@@ -440,14 +451,14 @@ def plot_monte_carlo(
 
         fig = go.Figure()
         fig.add_trace(go.Histogram(
-            x=terminal, nbinsx=60, marker_color="#3498db",
+            x=terminal, nbinsx=60, marker_color="#0d9488",
             opacity=0.75, name="Simulated outcomes",
         ))
         for val, color, label in [
-            (p5,  "#e74c3c", f"5th pct: {p5:+.1f}%"),
-            (p50, "#f39c12", f"Median: {p50:+.1f}%"),
-            (p95, "#00bc8c", f"95th pct: {p95:+.1f}%"),
-            (actual, "#ffffff", f"Realized: {actual:+.1f}%"),
+            (p5,  "#dc2626", f"5th pct: {p5:+.1f}%"),
+            (p50, "#f59e0b", f"Median: {p50:+.1f}%"),
+            (p95, "#16a34a", f"95th pct: {p95:+.1f}%"),
+            (actual, "#334155", f"Realized: {actual:+.1f}%"),
         ]:
             fig.add_vline(
                 x=val, line_dash="dash", line_color=color,
@@ -490,7 +501,7 @@ def plot_walkforward_folds(
         return None
     try:
         palette = [
-            "#00bc8c", "#3498db", "#f39c12", "#e74c3c", "#9b59b6",
+            "#16a34a", "#0d9488", "#f59e0b", "#dc2626", "#9b59b6",
             "#1abc9c", "#e67e22", "#2ecc71", "#e84393", "#00cec9",
         ]
         fig = go.Figure()
@@ -512,7 +523,7 @@ def plot_walkforward_folds(
             ))
             # Mark the fold boundary.
             fig.add_vline(x=curve.index[0], line_dash="dot",
-                          line_color="rgba(255,255,255,0.25)")
+                          line_color="rgba(51,65,85,0.25)")
             equity = float(curve.iloc[-1])
             plotted = True
 

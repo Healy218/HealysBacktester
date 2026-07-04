@@ -1,29 +1,211 @@
-/* Fix dcc.Dropdown text on dark themes (DARKLY sets white text globally,
-   but react-select renders on a white background — making text invisible) */
+/* ═══════════════════════════════════════════════════════════════════════════
+   Healy Labs BT — green / white theme
+   Base: dbc FLATLY (Bootstrap 5.3). Overrides below push the palette to a
+   fresh green primary with teal + amber accents on a soft-white surface.
+   ═══════════════════════════════════════════════════════════════════════════ */
 
-.Select-option {
-    color: #000 !important;
+:root {
+    --hl-green:      #16a34a;   /* primary — brand, positive, actions   */
+    --hl-green-dark: #15803d;   /* hover / pressed                       */
+    --hl-green-deep: #065f46;   /* headings & text accents on white      */
+    --hl-green-soft: #dcfce7;   /* selected-row / focus tint             */
+    --hl-teal:       #0d9488;   /* cool accent — benchmark / secondary   */
+    --hl-amber:      #f59e0b;   /* warm accent — highlights / warnings   */
+    --hl-red:        #dc2626;   /* losses / danger                       */
+    --hl-text:       #1e293b;
+    --hl-muted:      #64748b;
+    --hl-border:     #e2e8f0;
+    --hl-bg:         #f1f5f4;
+    --hl-surface:    #ffffff;
+
+    /* Nudge Bootstrap's own tokens so links / focus rings pick up green */
+    --bs-primary:            #16a34a;
+    --bs-primary-rgb:        22, 163, 74;
+    --bs-link-color:         #15803d;
+    --bs-link-hover-color:   #065f46;
+    --bs-body-color:         #1e293b;
+}
+
+body {
+    background-color: var(--hl-bg);
+    color: var(--hl-text);
+}
+
+.app-container {
+    max-width: 1440px;
+}
+
+/* ── Brand header ─────────────────────────────────────────────────────────── */
+.brand-bar {
+    border-bottom: 3px solid var(--hl-green);
+}
+.brand-title {
+    color: var(--hl-green-deep);
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    margin: 0;
+}
+.brand-subtitle {
+    color: var(--hl-muted);
+    font-size: 0.9rem;
+}
+
+/* ── Cards ─────────────────────────────────────────────────────────────────── */
+.card {
+    border: 1px solid var(--hl-border);
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(16, 24, 40, 0.06);
+    background: var(--hl-surface);
+}
+.card-title {
+    color: var(--hl-green-deep);
+    font-weight: 600;
+}
+
+/* ── Labels / section headers ──────────────────────────────────────────────── */
+.section-label {
+    color: var(--hl-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+.controls-toggle-btn {
+    color: var(--hl-green-dark) !important;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+/* ── Buttons (Bootstrap 5.3 component variables) ───────────────────────────── */
+.btn-success {
+    --bs-btn-bg:               var(--hl-green);
+    --bs-btn-border-color:     var(--hl-green);
+    --bs-btn-hover-bg:         var(--hl-green-dark);
+    --bs-btn-hover-border-color: var(--hl-green-dark);
+    --bs-btn-active-bg:        var(--hl-green-deep);
+    --bs-btn-active-border-color: var(--hl-green-deep);
+    --bs-btn-disabled-bg:      var(--hl-green);
+    --bs-btn-disabled-border-color: var(--hl-green);
+}
+.btn-outline-info {
+    --bs-btn-color:            var(--hl-teal);
+    --bs-btn-border-color:     var(--hl-teal);
+    --bs-btn-hover-bg:         var(--hl-teal);
+    --bs-btn-hover-border-color: var(--hl-teal);
+    --bs-btn-active-bg:        var(--hl-teal);
+    --bs-btn-active-border-color: var(--hl-teal);
+}
+.btn-outline-danger {
+    --bs-btn-color:            var(--hl-red);
+    --bs-btn-border-color:     var(--hl-red);
+    --bs-btn-hover-bg:         var(--hl-red);
+    --bs-btn-hover-border-color: var(--hl-red);
+}
+
+/* ── Tabs (main tabs + chart sub-tabs) ─────────────────────────────────────── */
+.nav-tabs {
+    border-bottom: 2px solid var(--hl-border);
+}
+.nav-tabs .nav-link {
+    color: var(--hl-muted);
+    border: none;
+    font-weight: 500;
+    padding: 0.5rem 1rem;
+    margin-bottom: -2px;
+}
+.nav-tabs .nav-link:hover {
+    color: var(--hl-green-dark);
+    border: none;
+    border-bottom: 3px solid var(--hl-green-soft);
+}
+.nav-tabs .nav-link.active {
+    color: var(--hl-green-deep);
+    background: transparent;
+    border: none;
+    border-bottom: 3px solid var(--hl-green);
+    font-weight: 600;
+}
+
+/* ── Progress bar ──────────────────────────────────────────────────────────── */
+.progress {
+    background-color: #e5e7eb;
+    border-radius: 6px;
+}
+.progress-bar {
+    background-color: var(--hl-green) !important;
+}
+
+/* ── Form controls ─────────────────────────────────────────────────────────── */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--hl-green);
+    box-shadow: 0 0 0 0.2rem rgba(22, 163, 74, 0.20);
+}
+
+/* ── KPI hero cards ────────────────────────────────────────────────────────── */
+.kpi-caption {
+    color: var(--hl-muted);
+    font-size: 0.9rem;
+    margin-bottom: 0.6rem;
+}
+.kpi-caption strong {
+    color: var(--hl-green-deep);
+    font-size: 1rem;
+}
+.kpi-card {
+    text-align: center;
+    border-top: 3px solid var(--hl-green);
+}
+.kpi-card .card-body {
+    padding: 0.85rem 0.5rem;
+}
+.kpi-label {
+    color: var(--hl-muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+.kpi-value {
+    font-size: 1.6rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 0.15rem;
+}
+.kpi-sub {
+    color: var(--hl-muted);
+    font-size: 0.72rem;
+}
+.kpi-pos     { color: var(--hl-green); }
+.kpi-neg     { color: var(--hl-red); }
+.kpi-warn    { color: var(--hl-amber); }
+.kpi-neutral { color: var(--hl-teal); }
+
+/* ── Chart cards ───────────────────────────────────────────────────────────── */
+.chart-card .card-body {
+    padding: 0.5rem;
+}
+
+/* ── dcc.Dropdown (react-select) on the light surface ──────────────────────── */
+.dash-dropdown .Select-control {
     background-color: #fff !important;
-}
-.Select-option.is-focused {
-    background-color: #e8e8e8 !important;
-}
-.Select-option.is-selected {
-    background-color: #375a7f !important;
-    color: #fff !important;
-}
-.Select-value-label {
-    color: #fff !important;   /* selected value shown in the control — keep white so it reads on dark bg */
+    border-color: var(--hl-border) !important;
 }
 .Select-menu-outer {
     background-color: #fff !important;
-    color: #000 !important;
+    color: var(--hl-text) !important;
+}
+.Select-value-label {
+    color: var(--hl-text) !important;
 }
 .Select-placeholder {
-    color: #aaa !important;
+    color: var(--hl-muted) !important;
 }
-/* Dash 2.x / newer react-select classes */
-.dash-dropdown .Select .Select-control {
-    background-color: #303030 !important;
-    border-color: #444 !important;
+.Select-option.is-focused {
+    background-color: var(--hl-green-soft) !important;
+    color: var(--hl-green-deep) !important;
+}
+.Select-option.is-selected {
+    background-color: var(--hl-green) !important;
+    color: #fff !important;
 }

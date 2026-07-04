@@ -34,6 +34,7 @@ from utils.logging_utils import setup_logging
 from utils import config_parser
 from analysis import plotting
 from backtests import run_ma, run_rsi, run_macd, run_volume, run_bbands, run_stoch, run_elliott, run_sentiment, run_walkforward
+from options.backtests import run_options_single, signal_overlay
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -54,7 +55,12 @@ STRATEGIES = {
     "Stochastic Crossover": {"runner": run_stoch,   "config_key": "STRATEGY_STOCH"},
     "Elliott Wave / Fib":   {"runner": run_elliott, "config_key": "STRATEGY_ELLIOTT"},
     "Sentiment":            {"runner": run_sentiment, "config_key": "STRATEGY_SENTIMENT"},
+    "Options (Single-Leg)": {"runner": run_options_single, "config_key": "STRATEGY_OPTIONS_SINGLE"},
 }
+
+# Strategies that trade a single instrument per signal (no parameter grid) and so
+# cannot be walk-forward optimized.
+NO_WALKFORWARD = {"Options (Single-Leg)"}
 
 INTERVALS = [
     {"label": "1 Minute",  "value": "1m"},
@@ -87,7 +93,8 @@ def _set_progress(pct: int, step: str) -> None:
     logger.info(f"[Progress {pct:3d}%] {step}")
 
 
-def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_config, use_walkforward=False):
+def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_config,
+            use_walkforward=False, asset_type="stock", options_exec_config=None):
     """
     Background thread: runs the full backtest for every ticker, writing progress
     updates to _run_state so the Dash interval callback can display them.
@@ -95,6 +102,11 @@ def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_c
     try:
         _set_progress(5, "Configuration loaded")
         runner = STRATEGIES[strategy]["runner"]
+        # Options asset type: execute the strategy's signals as option orders
+        # (calls on longs, puts on shorts). The single-leg strategy is already
+        # options-native, so it never gets wrapped.
+        if asset_type == "options" and runner is not run_options_single:
+            runner = signal_overlay.wrap(runner, options_exec_config or {})
         _last_run["by_symbol"] = {}
         all_best_rows = []
         errors        = []
@@ -140,10 +152,12 @@ def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_c
             _set_progress(base + chunk * 9 // 10, f"[{sym}] Ranking results…")
 
             _last_run["by_symbol"][sym] = {
-                "portfolio":  result.pop("portfolio",  None),
-                "price_data": result.pop("price_data", None),
-                "wf_folds":   result.pop("wf_folds",   None),
+                "portfolio":     result.pop("portfolio",     None),
+                "price_data":    result.pop("price_data",    None),
+                "wf_folds":      result.pop("wf_folds",      None),
+                "option_series": result.pop("option_series", None),
             }
+            result.pop("option_blotter", None)   # not JSON-needed by the table
 
             if result.get("error"):
                 errors.append(f"{sym}: {result['error']}")
@@ -197,7 +211,7 @@ def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_c
 # ── App ─────────────────────────────────────────────────────────────────────
 app = dash.Dash(
     __name__,
-    external_stylesheets=[dbc.themes.DARKLY],
+    external_stylesheets=[dbc.themes.FLATLY],
     title="Healy Labs BT",
 )
 
@@ -309,8 +323,9 @@ def _make_stats_table(data):
         columns=[{"name": c, "id": c} for c in df.columns],
         style_table={"overflowX": "auto"},
         style_cell={"textAlign": "left", "padding": "4px 8px",
-                    "backgroundColor": "#303030", "color": "white"},
-        style_header={"backgroundColor": "#375a7f", "color": "white", "fontWeight": "bold"},
+                    "backgroundColor": "#ffffff", "color": "#1e293b",
+                    "border": "1px solid #eef2f1"},
+        style_header={"backgroundColor": "#16a34a", "color": "white", "fontWeight": "bold"},
     )
 
 
@@ -326,8 +341,9 @@ def _make_trades_table(data):
         style_table={"overflowX": "auto"},
         style_cell={"minWidth": "80px", "maxWidth": "160px",
                     "overflow": "hidden", "textOverflow": "ellipsis",
-                    "backgroundColor": "#303030", "color": "white"},
-        style_header={"backgroundColor": "#375a7f", "color": "white", "fontWeight": "bold"},
+                    "backgroundColor": "#ffffff", "color": "#1e293b",
+                    "border": "1px solid #eef2f1"},
+        style_header={"backgroundColor": "#16a34a", "color": "white", "fontWeight": "bold"},
     )
 
 
@@ -379,6 +395,33 @@ def _build_table_data(all_best_rows):
 #  LAYOUT
 # ═══════════════════════════════════════════════════════════════════════════
 
+def _graph_card(graph_id: str, className: str = "mb-3"):
+    """Wrap a responsive dcc.Graph in a card for a consistent, tidy chart look.
+
+    ``responsive=True`` (plus the clientside resize on chart-tab switch) ensures
+    charts that first render inside a hidden sub-tab expand to full width once
+    their tab becomes visible.
+    """
+    return dbc.Card(
+        dbc.CardBody(
+            dcc.Graph(id=graph_id, responsive=True, config={"displaylogo": False}),
+        ),
+        className=f"chart-card {className}",
+    )
+
+
+def _kpi_card(label: str, value: str, tone: str = "neutral", sub: str | None = None):
+    """A single hero metric card. ``tone`` ∈ {pos, neg, warn, neutral} colors the value."""
+    return dbc.Col(
+        dbc.Card(dbc.CardBody([
+            html.Div(label, className="kpi-label"),
+            html.Div(value, className=f"kpi-value kpi-{tone}"),
+            html.Div(sub or " ", className="kpi-sub"),
+        ]), className="kpi-card h-100"),
+        xs=6, md=True,
+    )
+
+
 def _control_row():
     """The top input bar for Tab 1."""
     today      = date.today()
@@ -424,6 +467,19 @@ def _control_row():
         ], xs=12, sm=6, md=2),
 
         dbc.Col([
+            dbc.Label("Asset Type"),
+            dcc.Dropdown(
+                id="asset-type-dd",
+                options=[
+                    {"label": "Stocks", "value": "stock"},
+                    {"label": "Options (calls/puts)", "value": "options"},
+                ],
+                value="stock",
+                clearable=False,
+            ),
+        ], xs=12, sm=6, md=2),
+
+        dbc.Col([
             dbc.Label("\u00a0"),   # non-breaking space to align button
             dbc.Button(
                 "▶  Run Backtest", id="run-btn", color="success",
@@ -454,7 +510,7 @@ def _cache_row():
             html.Span(
                 f"Cache: {count} files ({size})",
                 id="cache-info",
-                style={"color": "#aaaaaa", "fontSize": "0.85rem", "fontFamily": "monospace"},
+                style={"color": "#64748b", "fontSize": "0.85rem", "fontFamily": "monospace"},
             ),
         ], xs=12, sm=6, md=4, className="d-flex align-items-center"),
         dbc.Col([
@@ -475,8 +531,20 @@ def _cache_row():
 
 def _results_tab():
     return [
-        _control_row(),
-        _cache_row(),
+        # ── Collapsible controls ──────────────────────────────────────────────
+        dbc.Row([
+            dbc.Col(html.Span("Backtest Controls", className="section-label"),
+                    width="auto"),
+            dbc.Col(
+                dbc.Button("Hide ▲", id="controls-toggle", color="link", size="sm",
+                           className="controls-toggle-btn p-0"),
+                width="auto"),
+        ], justify="between", align="center", className="g-0 mb-2 mt-2"),
+
+        dbc.Collapse([
+            _control_row(),
+            _cache_row(),
+        ], id="controls-collapse", is_open=True),
 
         # Interval fires every 500 ms to poll worker-thread progress
         dcc.Interval(id="progress-interval", interval=500, n_intervals=0),
@@ -492,7 +560,7 @@ def _results_tab():
             html.Div(
                 id="progress-step",
                 className="mb-1",
-                style={"color": "#aaaaaa", "fontSize": "0.9rem", "fontFamily": "monospace"},
+                style={"color": "#64748b", "fontSize": "0.9rem", "fontFamily": "monospace"},
             ),
             dbc.Progress(
                 id="progress-bar",
@@ -508,71 +576,78 @@ def _results_tab():
         # Runtime errors / partial-failure warnings (owned by the interval callback)
         dbc.Alert(id="run-alert", is_open=False, color="warning", className="mb-3"),
 
-        # Top-5 results table
+        # ── Results: hero KPIs + top-5 table ──────────────────────────────────
         html.Div(id="table-section", style={"display": "none"}, children=[
-            html.H5("Best Parameters per Symbol — ranked by Sharpe Ratio",
-                    className="mt-3"),
-            dash_table.DataTable(
-                id="top5-table",
-                row_selectable="single",
-                selected_rows=[0],
-                style_table={"overflowX": "auto"},
-                style_header={
-                    "backgroundColor": "#375a7f",
-                    "color": "white",
-                    "fontWeight": "bold",
-                },
-                style_data={
-                    "backgroundColor": "#303030",
-                    "color": "white",
-                },
-                style_data_conditional=[{
-                    "if": {"state": "selected"},
-                    "backgroundColor": "#00bc8c",
-                    "color": "black",
-                }],
-                style_cell={"textAlign": "left", "padding": "6px 12px"},
-                page_action="none",
-            ),
-            dbc.Row([
-                dbc.Col(
-                    dbc.Button(
-                        "Save to Scanner", id="save-scanner-btn",
-                        color="info", outline=True, size="sm", className="mt-2",
-                    ), width="auto",
+            # Hero metric cards for the selected row (filled by update_kpis)
+            html.Div(id="kpi-cards", className="mb-3"),
+
+            dbc.Card(dbc.CardBody([
+                html.H5("Best Parameters per Symbol — ranked by Sharpe Ratio",
+                        className="card-title mb-3"),
+                dash_table.DataTable(
+                    id="top5-table",
+                    row_selectable="single",
+                    selected_rows=[0],
+                    style_table={"overflowX": "auto"},
+                    style_header={
+                        "backgroundColor": "#16a34a",
+                        "color": "white",
+                        "fontWeight": "bold",
+                    },
+                    style_data={
+                        "backgroundColor": "#ffffff",
+                        "color": "#1e293b",
+                    },
+                    style_data_conditional=[{
+                        "if": {"state": "selected"},
+                        "backgroundColor": "#dcfce7",
+                        "color": "#065f46",
+                    }],
+                    style_cell={"textAlign": "left", "padding": "6px 12px",
+                                "border": "1px solid #eef2f1"},
+                    page_action="none",
                 ),
-                dbc.Col(
-                    dbc.Alert(
-                        id="scanner-alert", is_open=False, duration=4000,
-                        className="mb-0 mt-2 py-1 px-2",
-                        style={"fontSize": "0.85rem"},
+                dbc.Row([
+                    dbc.Col(
+                        dbc.Button(
+                            "Save to Scanner", id="save-scanner-btn",
+                            color="info", outline=True, size="sm", className="mt-2",
+                        ), width="auto",
                     ),
-                ),
-            ], align="center", className="g-2"),
+                    dbc.Col(
+                        dbc.Alert(
+                            id="scanner-alert", is_open=False, duration=4000,
+                            className="mb-0 mt-2 py-1 px-2",
+                            style={"fontSize": "0.85rem"},
+                        ),
+                    ),
+                ], align="center", className="g-2"),
+            ]), className="mb-3"),
         ]),
 
-        # Graphs (no dcc.Loading wrapper — progress bar replaces the spinner)
+        # ── Graphs, grouped into sub-tabs so the page stays scannable ─────────
         html.Div(id="graph-section", style={"display": "none"}, children=[
-            dbc.Row([
-                dbc.Col(dcc.Graph(id="equity-graph"), md=12),
-            ], className="mt-3"),
-            dbc.Row([
-                dbc.Col(dcc.Graph(id="benchmark-graph"), md=12),
-            ], className="mt-3"),
-            dbc.Row([
-                dbc.Col(dcc.Graph(id="trades-graph"), md=12),
-            ], className="mt-3"),
-            dbc.Row([
-                dbc.Col(dcc.Graph(id="pnl-dist-graph"), md=6),
-                dbc.Col(dcc.Graph(id="monthly-returns-graph"), md=6),
-            ], className="mt-3"),
-            dbc.Row([
-                dbc.Col(dcc.Graph(id="montecarlo-graph"), md=12),
-            ], className="mt-3"),
-            # Only meaningful for walk-forward runs; shows a hint otherwise.
-            dbc.Row([
-                dbc.Col(dcc.Graph(id="walkforward-graph"), md=12),
-            ], className="mt-3"),
+            dbc.Tabs([
+                dbc.Tab(label="Overview", tab_id="tab-overview", children=[
+                    _graph_card("equity-graph"),
+                    _graph_card("benchmark-graph"),
+                ]),
+                dbc.Tab(label="Trades", tab_id="tab-trades", children=[
+                    _graph_card("trades-graph"),
+                    dbc.Row([
+                        dbc.Col(_graph_card("pnl-dist-graph"), md=6),
+                        dbc.Col(_graph_card("monthly-returns-graph"), md=6),
+                    ], className="g-3"),
+                ]),
+                dbc.Tab(label="Robustness", tab_id="tab-robust", children=[
+                    _graph_card("montecarlo-graph"),
+                    # Walk-forward chart is meaningful only for WF runs; shows a hint otherwise.
+                    _graph_card("walkforward-graph"),
+                ]),
+            ], id="chart-tabs", active_tab="tab-overview", className="mt-2"),
+
+            # Dummy target for the clientside resize-on-tab-switch callback
+            html.Div(id="chart-tabs-resize-dummy", style={"display": "none"}),
         ]),
     ]
 
@@ -582,49 +657,55 @@ def _historical_tab():
     options = _get_available_results(RESULTS_DIR)
     return [
         dbc.Row(dbc.Col([
-            html.Label("Select Saved Run:"),
+            html.Label("Select Saved Run:", className="section-label d-block mb-1"),
             dcc.Dropdown(
                 id="run-selector-dd",
                 options=options,
                 placeholder="Select a run…",
                 clearable=False,
             ),
-        ]), className="mb-3"),
+        ]), className="mb-3 mt-2"),
 
         dbc.Spinner(dbc.Row([
-            dbc.Col([
-                html.H5("Configuration"),
+            dbc.Col(dbc.Card(dbc.CardBody([
+                html.H5("Configuration", className="card-title"),
                 dcc.Markdown(id="hist-config-display",
                              style={"whiteSpace": "pre", "overflowX": "auto",
-                                    "maxHeight": "300px",
-                                    "border": "1px solid #444", "padding": "6px"}),
-                html.H5("Best Params Summary", className="mt-3"),
+                                    "maxHeight": "300px", "backgroundColor": "#ffffff",
+                                    "border": "1px solid #e2e8f0", "borderRadius": "8px",
+                                    "padding": "10px", "fontSize": "0.8rem"}),
+                html.H5("Best Params Summary", className="card-title mt-3"),
                 html.Div(id="hist-stats-display"),
-            ], md=5),
-            dbc.Col([
-                html.H5("Portfolio Plot"),
-                dcc.Graph(id="hist-summary-graph"),
-                html.H5("Trades Plot", className="mt-3"),
-                dcc.Graph(id="hist-trades-graph"),
-            ], md=7),
-        ], id="hist-results-area", style={"display": "none"})),
+            ])), md=5),
+            dbc.Col(dbc.Card(dbc.CardBody([
+                html.H5("Portfolio Plot", className="card-title"),
+                dcc.Graph(id="hist-summary-graph", responsive=True,
+                          config={"displaylogo": False}),
+                html.H5("Trades Plot", className="card-title mt-3"),
+                dcc.Graph(id="hist-trades-graph", responsive=True,
+                          config={"displaylogo": False}),
+            ])), md=7),
+        ], id="hist-results-area", style={"display": "none"}, className="g-3")),
 
-        dbc.Row(dbc.Col([
-            html.H5("Trade Records", className="mt-3"),
+        dbc.Row(dbc.Col(dbc.Card(dbc.CardBody([
+            html.H5("Trade Records", className="card-title"),
             html.Div(id="hist-trades-table"),
-        ])),
+        ])), className="mt-3")),
     ]
 
 
 app.layout = dbc.Container([
-    dbc.Row(dbc.Col(html.H2("∞Healy Labs BT∞", className="my-3"))),
+    html.Div([
+        html.H2("Healy Labs BT", className="brand-title d-inline align-middle"),
+        html.Span("  vectorBT backtesting studio", className="brand-subtitle align-middle"),
+    ], className="brand-bar py-3 mb-4"),
 
     dbc.Tabs([
         dbc.Tab(_results_tab(),    label="Run Backtest",      tab_id="tab-run"),
         dbc.Tab(_historical_tab(), label="Historical Results", tab_id="tab-hist"),
     ], id="main-tabs", active_tab="tab-run"),
 
-], fluid=True)
+], fluid=True, className="app-container py-2")
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -641,9 +722,10 @@ app.layout = dbc.Container([
     State("interval-dd",  "value"),
     State("strategy-dd",  "value"),
     State("wf-toggle",    "value"),
+    State("asset-type-dd", "value"),
     prevent_initial_call=True,
 )
-def start_run(n_clicks, ticker, start, end, interval, strategy, wf_toggle):
+def start_run(n_clicks, ticker, start, end, interval, strategy, wf_toggle, asset_type):
     """
     Validates the form, then starts a background worker thread and returns
     immediately so the UI stays responsive.  Progress is polled by the interval.
@@ -667,11 +749,23 @@ def start_run(n_clicks, ticker, start, end, interval, strategy, wf_toggle):
     if strategy not in STRATEGIES:
         return f"Unknown strategy: {strategy}", True
 
+    if strategy in NO_WALKFORWARD and "wf" in (wf_toggle or []):
+        return (f"Walk-Forward doesn't apply to '{strategy}' — it trades a single "
+                f"contract per signal with no parameter grid to optimize. "
+                f"Please uncheck Walk-Forward."), True
+
+    asset_type = asset_type or "stock"
+    if asset_type == "options" and "wf" in (wf_toggle or []):
+        return ("Walk-Forward is stock-only for now — options execution replays "
+                "the best parameter set's signals as option orders, and per-fold "
+                "re-optimization isn't wired yet. Please uncheck Walk-Forward."), True
+
     # ── Load config ─────────────────────────────────────────────────────────
     try:
         config          = config_parser.load_config("config/settings.py")
         backtest_config = config.get("BACKTEST_CONFIG", {})
         strategy_config = config.get(STRATEGIES[strategy]["config_key"], {})
+        options_exec_config = config.get("STRATEGY_OPTIONS_SINGLE", {})
     except Exception as e:
         return f"Failed to load config/settings.py: {e}", True
 
@@ -686,11 +780,13 @@ def start_run(n_clicks, ticker, start, end, interval, strategy, wf_toggle):
     use_walkforward = "wf" in (wf_toggle or [])
     thread = threading.Thread(
         target=_worker,
-        args=(tickers, start, end, interval, strategy, backtest_config, strategy_config, use_walkforward),
+        args=(tickers, start, end, interval, strategy, backtest_config, strategy_config,
+              use_walkforward, asset_type, options_exec_config),
         daemon=True,
     )
     thread.start()
-    mode_label = "walk-forward" if use_walkforward else "standard"
+    mode_label = ("walk-forward" if use_walkforward else "standard") \
+        + (" · options exec" if asset_type == "options" else "")
     logger.info(f"Worker thread started for {tickers} | {strategy} ({mode_label})")
 
     return "", False  # clear any previous validation error
@@ -807,13 +903,28 @@ def update_graphs(selected_rows, top5_data):
         if portfolio is None or price_data is None:
             return empty, empty, empty, empty, empty, empty, empty
 
+        # Options runs sweep several target DTEs: the portfolio / premium series
+        # are dicts keyed by the row's variant (each a one-column portfolio).
+        option_series = sym_cache.get("option_series")
+        if isinstance(portfolio, dict):
+            variant   = row_data.get("variant")
+            portfolio = portfolio.get(variant)
+            if isinstance(option_series, dict):
+                option_series = option_series.get(variant)
+            if portfolio is None:
+                return empty, empty, empty, empty, empty, empty, empty
+
         col_int_idx = row_data["portfolio_col_int_idx"]
         col         = portfolio.wrapper.columns[col_int_idx]
         single_pf   = portfolio[col]
 
+        # Options runs carry the stitched premium series: draw trade markers on
+        # it (the traded instrument) while the benchmark stays the underlying.
+        trades_price  = option_series if option_series is not None else price_data
+
         fig_equity   = plotting.plot_portfolio_summary(single_pf) or empty
         fig_bench    = plotting.plot_equity_vs_benchmark(single_pf, price_data) or empty
-        fig_trades   = plotting.plot_trades(single_pf, price_data) or empty
+        fig_trades   = plotting.plot_trades(single_pf, trades_price) or empty
         fig_pnl_dist = plotting.plot_trade_pnl_distribution(single_pf) or empty
         fig_monthly  = plotting.plot_monthly_returns(single_pf) or empty
         fig_mc       = (plotting.plot_monte_carlo(single_pf)
@@ -1029,6 +1140,101 @@ def save_to_scanner(n_clicks, selected_rows, top5_data, strategy, interval):
         True,
         "success",
     )
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  CALLBACK 7 — Collapse / expand the controls panel
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.callback(
+    Output("controls-collapse", "is_open"),
+    Output("controls-toggle",   "children"),
+    Input("controls-toggle", "n_clicks"),
+    State("controls-collapse", "is_open"),
+    prevent_initial_call=True,
+)
+def toggle_controls(n_clicks, is_open):
+    """Show/hide the ticker/date/strategy inputs so results can take the screen."""
+    new_open = not is_open
+    return new_open, ("Hide ▲" if new_open else "Show ▼")
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  CALLBACK 8 — Hero KPI cards for the selected result row
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.callback(
+    Output("kpi-cards", "children"),
+    Input("top5-table", "selected_rows"),
+    State("top5-store", "data"),
+    prevent_initial_call=True,
+)
+def update_kpis(selected_rows, top5_data):
+    """Builds the row of big-number metric cards from the selected table row.
+
+    Reads the raw (unformatted) numbers straight from the top5 store, so this
+    works independently of whether the portfolio objects are still cached.
+    """
+    if not selected_rows or not top5_data:
+        return no_update
+    try:
+        row = top5_data[selected_rows[0]]
+    except (IndexError, TypeError, KeyError):
+        return no_update
+
+    ret    = row.get("total_return_pct")
+    bench  = row.get("benchmark_return_pct")
+    sharpe = row.get("sharpe_ratio")
+    maxdd  = row.get("max_drawdown_pct")
+    winr   = row.get("win_rate_pct")
+
+    # ── Tone (color) logic ────────────────────────────────────────────────────
+    ret_tone = "pos" if (ret is not None and ret >= 0) else "neg"
+    if sharpe is None:
+        sh_tone = "neutral"
+    elif sharpe >= 1:
+        sh_tone = "pos"
+    elif sharpe >= 0:
+        sh_tone = "neutral"
+    else:
+        sh_tone = "neg"
+    wr_tone = "pos" if (winr is not None and winr >= 50) else "warn"
+
+    # Excess return vs buy-and-hold, shown as a sub-line under Return
+    alpha_sub = None
+    if ret is not None and bench is not None:
+        alpha_sub = f"{ret - bench:+.1f}% vs B&H"
+
+    caption = html.Div([
+        html.Strong(row.get("symbol", "")),
+        f"  ·  {row.get('param_label', '')}  ·  ranked by {row.get('ranked_by', 'Sharpe')}",
+    ], className="kpi-caption")
+
+    cards = dbc.Row([
+        _kpi_card("Return",       _fmt_pct(ret),       ret_tone, alpha_sub),
+        _kpi_card("Benchmark",    _fmt_pct(bench),     "neutral"),
+        _kpi_card("Sharpe",       _fmt_num(sharpe, 2), sh_tone),
+        _kpi_card("Max Drawdown", _fmt_pct(maxdd),     "neg"),
+        _kpi_card("Win Rate",     _fmt_pct(winr),      wr_tone),
+    ], className="g-2")
+
+    return [caption, cards]
+
+
+# ── Clientside: resize charts when a chart sub-tab becomes visible ────────────
+# Plotly graphs first rendered inside a hidden tab come up collapsed; dispatching
+# a window resize once the tab is shown makes the responsive graphs fill their card.
+app.clientside_callback(
+    """
+    function(active_tab) {
+        setTimeout(function () { window.dispatchEvent(new Event('resize')); }, 60);
+        return "";
+    }
+    """,
+    Output("chart-tabs-resize-dummy", "children"),
+    Input("chart-tabs", "active_tab"),
+    prevent_initial_call=True,
+)
 
 
 # ═══════════════════════════════════════════════════════════════════════════

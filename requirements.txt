@@ -11,4 +11,5 @@ pandas-ta
 quantstats
 scikit-learn
 alpaca-py
+requests          # Massive (Polygon) options REST client
 python-dotenv

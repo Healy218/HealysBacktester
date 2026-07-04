@@ -211,6 +211,39 @@ STRATEGY_SENTIMENT = {
     "EXIT_THRESHOLD_STEP": 0.01,
 }
 
+# Configuration for Single-Leg Options Strategy (directional calls/puts)
+# Unlike the equity sweeps above, this runs ONE contract per signal — there is no
+# parameter grid. It signals on the underlying (MA crossover), selects a contract
+# by target DTE + delta/moneyness, then trades that contract's OWN historical
+# price series through the equity engine.
+# Requires historical options data — set MASSIVE_API_KEY (see options/README.md).
+STRATEGY_OPTIONS_SINGLE = {
+    "RIGHT": "auto",        # "C" calls, "P" puts, or "auto" (call on bullish crossover)
+    "TARGET_DTE": 30,       # target days-to-expiration when selecting the contract
+
+    # --- Options-execution DTE sweep (Asset Type: Options) ---
+    # Each target DTE runs as its own variant and the leaderboard ranks them by
+    # Sharpe. Short DTEs roll: a 1-DTE variant re-enters a fresh contract at
+    # every expiry while the signal stays on.
+    "TARGET_DTE_GRID": [1, 5, 10, 15, 30, 45],
+    "MAX_ROLLS_PER_TRADE": 60,     # 1-DTE rolling across long trades needs many hops
+    "MAX_FILLS_PER_VARIANT": 400,  # hard stop so intraday runs can't spam the API
+
+    "TARGET_DELTA": 0.50,   # target |delta| (used when the chain provides greeks)
+    "MONEYNESS": 0.0,       # fallback strike offset vs spot (0.0 = ATM) when no greeks
+    "MA_FAST": 10,          # fast MA window for the underlying entry signal
+    "MA_SLOW": 30,          # slow MA window for the underlying entry signal
+
+    # --- Options-specific position sizing / risk ---
+    # Long options are leveraged and can expire worthless, so size modestly.
+    "ALLOCATION": 0.10,     # fraction of equity per option position (10%)
+    # Optional premium-based stop / target (None = hold to exit signal or expiry).
+    # NOTE: option premia routinely swing >5%/day, so a tight % stop exits almost
+    # immediately — leave None unless you specifically want premium stops.
+    "STOP_LOSS_PERCENT": None,
+    "TAKE_PROFIT_PERCENT": None,
+}
+
 # Configuration for Neural Network Strategy
 STRATEGY_NN = {
     "LOOKBACK_WINDOW": 24, # 2 hours of history (24 * 5m)
