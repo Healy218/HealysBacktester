@@ -33,7 +33,7 @@ from nn_meta.providers import get_provider
 from nn_meta import config
 from nn_meta.baseline import (equity_metrics, execute_at_dte, load_spec,
                               load_underlying_15m, top_k_contribution)
-from nn_meta.select_meta import fmt, frozen_rows, spy_buy_hold
+from nn_meta.select_meta import basket_buy_hold, fmt, frozen_rows, spy_buy_hold
 from nn_meta.student.dataset import STUDENT_FEATURES
 from nn_meta.student.policy import states_from_probs, trades_from_states
 
@@ -83,11 +83,12 @@ def eval_policy(run_ids: list[str], panel: pd.DataFrame, split: str,
     return m
 
 
-def passes(m: dict, baseline_return: float) -> bool:
+def passes(m: dict, baseline_return: float, bh_return: float) -> bool:
     return (m["n"] >= config.MIN_KEPT_TRADES
             and m["total_return"] is not None
             and (m["max_drawdown"] or 0) <= config.MAX_DRAWDOWN_CAP
-            and m["total_return"] > baseline_return)
+            and m["total_return"] > baseline_return
+            and m["total_return"] > bh_return)
 
 
 def main() -> None:
@@ -102,8 +103,11 @@ def main() -> None:
     base_val = equity_metrics(frozen_rows(meta_ds, spec, "val")["net_return"].tolist())
     base_test_rows = frozen_rows(meta_ds, spec, "test")
     base_test = equity_metrics(base_test_rows["net_return"].tolist())
+    bh_val = basket_buy_hold(spec, config.VAL_START, config.VAL_END)
+    bh_test = basket_buy_hold(spec, config.TEST_START, config.TEST_END)
     print(f"baseline val {fmt(base_val['total_return'])} | "
-          f"test {fmt(base_test['total_return'])}")
+          f"test {fmt(base_test['total_return'])} | "
+          f"underlying B&H val {fmt(bh_val)} | test {fmt(bh_test)}")
 
     # ── 1) clone parity + 2) fine-tuned val, per run ──────────────────────────
     rows = []
@@ -114,7 +118,7 @@ def main() -> None:
                   and clone_m["total_return"] >=
                   (base_val["total_return"] or 0) - config.CLONE_PARITY_TOLERANCE)
         ft_m = eval_policy([r.run_id], panel, "val", spec, provider, bars_cache)
-        ok = parity and passes(ft_m, base_val["total_return"] or -np.inf)
+        ok = parity and passes(ft_m, base_val["total_return"] or -np.inf, bh_val)
         rows.append({"run_id": r.run_id, "lr": r.lr, "seed": int(r.seed),
                      "clone_val_return": clone_m["total_return"],
                      "clone_parity": parity,
@@ -176,6 +180,7 @@ def main() -> None:
         f"{base_test['n']} | {fmt(base_test['max_drawdown'])} | "
         f"{fmt(base_test['win_rate'])} | "
         f"{fmt(top_k_contribution(base_test_rows['net_return'].tolist())['total_ex_topk'])} |",
+        f"| Underlying B&H basket | {fmt(bh_test)} | — | — | — | — |",
         f"| SPY buy & hold | {fmt(spy_bh)} | — | — | — | — |", "",
         "Same conventions as the meta report: next-bar fills, pooled sequential "
         f"compounding @ {config.POSITION_FRACTION:.0%}, one macro regime.",

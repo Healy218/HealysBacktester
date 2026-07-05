@@ -6,7 +6,7 @@
     "a64x32-lr0.001-s3",
     "a64x32-lr0.001-s4"
   ],
-  "threshold": 0.6,
+  "threshold": 0.55,
   "features": [
     "ma_gap",
     "px_vs_fast",
@@ -34,6 +34,6 @@
   ],
   "arch": "64x32",
   "lr": 0.001,
-  "median_val_return": 8.48853073297705,
+  "median_val_return": 8.15759339048324,
   "baseline_config_hash": "20343f41af6e"
 }

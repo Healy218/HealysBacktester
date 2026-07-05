@@ -82,16 +82,29 @@ def evaluate_filter(rows: pd.DataFrame, pred: np.ndarray, threshold: float,
     return m
 
 
-def passes(m: dict, baseline_return: float) -> bool:
+def passes(m: dict, baseline_return: float, bh_return: float) -> bool:
+    """Gate: guardrails + beat the mechanical baseline AND the equal-weight
+    underlying buy-&-hold basket (the 'why not just hold the stocks?' bar)."""
     return (m["n_kept"] >= config.MIN_KEPT_TRADES
             and m["total_return"] is not None
             and (m["max_drawdown"] or 0) <= config.MAX_DRAWDOWN_CAP
-            and m["total_return"] > baseline_return)
+            and m["total_return"] > baseline_return
+            and m["total_return"] > bh_return)
 
 
 def spy_buy_hold(start: str, end: str) -> float:
     bars = load_underlying_15m("SPY").loc[start:end]
     return float(bars["Close"].iloc[-1] / bars["Close"].iloc[0] - 1)
+
+
+def basket_buy_hold(spec: dict, start: str, end: str) -> float:
+    """Equal-weight buy & hold of the SAME names the strategy trades."""
+    rets = []
+    for sym in spec["symbols"]:
+        bars = load_underlying_15m(sym).loc[start:end]
+        if len(bars) >= 2:
+            rets.append(float(bars["Close"].iloc[-1] / bars["Close"].iloc[0] - 1))
+    return float(np.mean(rets)) if rets else 0.0
 
 
 def fmt(x) -> str:
@@ -113,8 +126,12 @@ def main() -> None:
     base_test_2x = equity_metrics(
         stress_returns(test_rows["net_return"], test_rows["n_fills"],
                        config.COST_STRESS_MULT).tolist())
+    bh_val = basket_buy_hold(spec, config.VAL_START, config.VAL_END)
+    bh_test = basket_buy_hold(spec, config.TEST_START, config.TEST_END)
     print(f"baseline val: {fmt(base_val['total_return'])} ({base_val['n']} trades) | "
           f"test: {fmt(base_test['total_return'])} ({base_test['n']} trades)")
+    print(f"underlying B&H basket ({len(spec['symbols'])} names) "
+          f"val: {fmt(bh_val)} | test: {fmt(bh_test)}")
 
     # ── validation: every run × threshold ────────────────────────────────────
     results = []
@@ -127,7 +144,7 @@ def main() -> None:
                 "seed": int(r.seed), "threshold": thr,
                 "val_return": m["total_return"], "n_kept": m["n_kept"],
                 "max_dd": m["max_drawdown"], "win_rate": m["win_rate"],
-                "passes": passes(m, base_val["total_return"] or -np.inf)})
+                "passes": passes(m, base_val["total_return"] or -np.inf, bh_val)})
         best = max((x for x in results if x["run_id"] == r.run_id),
                    key=lambda x: x["val_return"] if x["val_return"] is not None else -np.inf)
         print(f"  val {r.run_id}: best thr={best['threshold']} "
@@ -155,16 +172,20 @@ def main() -> None:
         f"{fmt(base_val['max_drawdown'])} | {fmt(base_val['win_rate'])} |",
         f"| test | {fmt(base_test['total_return'])} | {base_test['n']} | "
         f"{fmt(base_test['max_drawdown'])} | {fmt(base_test['win_rate'])} |", "",
+        f"Underlying buy-&-hold basket (equal-weight, same "
+        f"{len(spec['symbols'])} names): val {fmt(bh_val)} | test {fmt(bh_test)}", "",
         f"Gate per run: kept >= {config.MIN_KEPT_TRADES}, "
-        f"maxDD <= {config.MAX_DRAWDOWN_CAP:.0%}, val return > baseline val; "
+        f"maxDD <= {config.MAX_DRAWDOWN_CAP:.0%}, val return > baseline val "
+        f"AND > underlying-basket B&H val; "
         f"config eligible if >= {config.MIN_PASSING_SEEDS}/{len(config.SEEDS)} seeds pass.", "",
         "## Validation leaderboard (median across seeds)", "",
         grp.head(6).to_markdown(index=False, floatfmt=".3f"), "",
     ]
 
     if eligible.empty:
-        lines += ["**Result: NO eligible config — the NN filter did not beat the "
-                  "frozen baseline on validation. Test not evaluated.**", ""]
+        lines += ["**Result: NO eligible config — the NN filter did not clear the "
+                  "gate (mechanical baseline + underlying-basket B&H) on "
+                  "validation. Test not evaluated.**", ""]
         (config.REPORTS_DIR / "meta_report.md").write_text("\n".join(lines))
         print("\nNO ELIGIBLE CONFIG — report written, test untouched")
         return
@@ -218,6 +239,8 @@ def main() -> None:
         f"| Frozen baseline ({config.COST_STRESS_MULT:.0f}x) | "
         f"{fmt(base_test_2x['total_return'])} | {base_test_2x['n']} | "
         f"{fmt(base_test_2x['max_drawdown'])} | {fmt(base_test_2x['win_rate'])} |",
+        f"| **Underlying B&H basket ({len(spec['symbols'])} names)** | "
+        f"**{fmt(bh_test)}** | — | — | — |",
         f"| SPY buy & hold | {fmt(spy_bh)} | — | — | — |", "",
         f"Per-seed test return: {', '.join(fmt(x) for x in sorted(per_seed, key=lambda v: v or 0))} "
         f"(median {fmt(float(np.median([x for x in per_seed if x is not None])) if any(x is not None for x in per_seed) else None)})", "",
@@ -231,6 +254,10 @@ def main() -> None:
         "the signal bar) — no lookahead on either side of the comparison.",
         "- Pooled sequential compounding ignores capital overlap across symbols;"
         " applied identically to baseline and NN.",
+        f"- Exposure differs vs buy & hold: the strategy risks "
+        f"{config.POSITION_FRACTION:.0%} of equity per position (often flat); "
+        "the B&H basket is 100% invested throughout. The B&H rows answer "
+        "'was this worth doing at all?', not 'same-risk alpha'.",
         f"- Costs: {_C1:.2%}/side proxy; {config.COST_STRESS_MULT:.0f}x stress "
         "restated exactly per fill.",
         "- One macro regime; val is a single ~58-day window. Walk-forward folds "

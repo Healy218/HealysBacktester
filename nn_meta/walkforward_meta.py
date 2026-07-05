@@ -38,7 +38,8 @@ from nn_meta.baseline import equity_metrics, freeze_symbol
 from nn_meta.build_meta_dataset import (META_FEATURES, build_symbol_rows,
                                         join_surface_asof, load_surface_features)
 from nn_meta.train_meta import run_one
-from nn_meta.select_meta import evaluate_filter, fmt, frozen_rows, predict_rows
+from nn_meta.select_meta import (basket_buy_hold, evaluate_filter, fmt,
+                                 frozen_rows, predict_rows)
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -137,22 +138,29 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
         seeds_used.append(seed)
         print(f"  seed {seed}: val_loss={r['val_loss']:.4f}", flush=True)
 
-    # 4) OOS: ensemble filter vs fold-frozen baseline
+    # 4) OOS: ensemble filter vs fold-frozen baseline AND underlying B&H
     ens = np.mean(preds, axis=0)
     nn = evaluate_filter(oos_rows, ens, winning["threshold"])
     base = equity_metrics(oos_rows["net_return"].tolist())
-    beat = (nn["total_return"] or -np.inf) > (base["total_return"] or -np.inf)
+    bh = basket_buy_hold(fold_spec, oos_start, oos_end)
+    nn_ret = nn["total_return"] if nn["total_return"] is not None else -np.inf
+    beat_base = nn_ret > (base["total_return"] or -np.inf)
+    beat_bh = nn_ret > bh
     print(f"  OOS: NN {fmt(nn['total_return'])} ({nn['n_kept']}/{nn['n_proposals']} kept, "
           f"ex-top3 {fmt(nn['total_ex_top3'])}) "
           f"vs baseline {fmt(base['total_return'])} ({base['n']}) "
-          f"→ {'NN WINS' if beat else 'baseline wins'}", flush=True)
+          f"vs B&H {fmt(bh)} "
+          f"→ {'beats both' if beat_base and beat_bh else 'beats baseline only' if beat_base else 'beats B&H only' if beat_bh else 'beats neither'}",
+          flush=True)
     return {"fold": fold_i, "train_end": train_end,
             "oos": f"{oos_start}→{oos_end}",
             "n_symbols": len(spec_symbols),
             "nn_return": nn["total_return"], "nn_kept": nn["n_kept"],
             "nn_ex_top3": nn["total_ex_top3"],
             "base_return": base["total_return"], "base_n": base["n"],
-            "nn_beats": bool(beat), "error": None}
+            "bh_return": bh,
+            "nn_beats": bool(beat_base), "nn_beats_bh": bool(beat_bh),
+            "error": None}
 
 
 def main() -> None:
@@ -174,22 +182,30 @@ def main() -> None:
 
     ok = [r for r in results if not r.get("error")]
     wins = sum(r["nn_beats"] for r in ok)
+    bh_wins = sum(r["nn_beats_bh"] for r in ok)
+    both = sum(r["nn_beats"] and r["nn_beats_bh"] for r in ok)
+    robust = bool(ok) and both > len(ok) / 2
     verdict = (f"NN filter beats the fold-frozen baseline in {wins}/{len(ok)} "
-               f"folds → {'ROBUST' if ok and wins > len(ok) / 2 else 'NOT robust'}")
+               f"folds and the underlying B&H basket in {bh_wins}/{len(ok)}; "
+               f"both in {both}/{len(ok)} → "
+               f"{'ROBUST' if robust else 'NOT robust'}")
 
     lines = ["", "## Walk-forward folds (everything re-frozen per fold)", "",
-             "| fold | train end | OOS | NN return (kept) | NN ex-top3 | baseline | NN wins |",
-             "|---|---|---|---|---|---|---|"]
+             "| fold | train end | OOS | NN return (kept) | NN ex-top3 | baseline | underlying B&H | NN wins |",
+             "|---|---|---|---|---|---|---|---|"]
     for r in results:
         if r.get("error"):
-            lines.append(f"| {r['fold']} | — | — | ERROR: {r['error']} | — | — | — |")
+            lines.append(f"| {r['fold']} | — | — | ERROR: {r['error']} | — | — | — | — |")
         else:
+            marks = ("✅✅" if r["nn_beats"] and r["nn_beats_bh"]
+                     else "✅❌" if r["nn_beats"] else "❌✅" if r["nn_beats_bh"]
+                     else "❌❌")
             lines.append(
                 f"| {r['fold']} | {r['train_end']} | {r['oos']} | "
                 f"{fmt(r['nn_return'])} ({r['nn_kept']}) | "
                 f"{fmt(r['nn_ex_top3'])} | "
                 f"{fmt(r['base_return'])} ({r['base_n']}) | "
-                f"{'✅' if r['nn_beats'] else '❌'} |")
+                f"{fmt(r['bh_return'])} | {marks} |")
     lines += ["", f"**{verdict}**",
               f"(OOS windows are thin — ~{len(_trading_days()) // (2 * args.folds)} "
               f"trading days each; treat single-fold results as noise-dominated)"]
