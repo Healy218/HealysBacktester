@@ -2,3 +2,4 @@ data_cache/
 runs/
 reports/
 artifacts/meta_dataset.parquet
+artifacts/student_dataset.parquet
