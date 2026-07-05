@@ -40,14 +40,18 @@ class TestSettlement:
 
 
 class TestUpdateCallback:
+    # table rows carry store_idx → store position (identity map in these tests)
+    def _table(self, top5):
+        return [{"store_idx": i, **r} for i, r in enumerate(top5)]
+
     def test_no_selection_returns_hint(self):
-        assert main.update_option_log([], None) is main._OPTLOG_HINT
+        assert main.update_option_log([], None, None) is main._OPTLOG_HINT
 
     def test_missing_blotter_returns_hint(self, monkeypatch):
         monkeypatch.setitem(main._last_run, "by_symbol",
                             {"SPY": {"option_blotter": None}})
         top5 = [{"symbol": "SPY", "variant": "5 DTE"}]
-        assert main.update_option_log([0], top5) is main._OPTLOG_HINT
+        assert main.update_option_log([0], top5, self._table(top5)) is main._OPTLOG_HINT
 
     def test_renders_variant_blotter(self, monkeypatch):
         blotter = {"5 DTE": [_fill(0, "2025-01-10 15:00", "2025-01-20 15:00",
@@ -55,5 +59,5 @@ class TestUpdateCallback:
         monkeypatch.setitem(main._last_run, "by_symbol",
                             {"SPY": {"option_blotter": blotter}})
         top5 = [{"symbol": "SPY", "variant": "5 DTE"}]
-        tbl = main.update_option_log([0], top5)
+        tbl = main.update_option_log([0], top5, self._table(top5))
         assert hasattr(tbl, "data") and len(tbl.data) == 1

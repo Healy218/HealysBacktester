@@ -372,8 +372,13 @@ def _build_table_data(all_best_rows):
         ])
 
     table_rows = []
-    for row in all_best_rows:
+    for i, row in enumerate(all_best_rows):
         tr = {
+            # store_idx points at the row's position in top5-store, so the graph
+            # / KPI / scanner callbacks map a selected TABLE row back to the raw
+            # store row even after the rank dropdown re-sorts the table. Kept out
+            # of col_defs so it is retained in the data but never displayed.
+            "store_idx":            row.get("_store_idx", i),
             "symbol":               row["symbol"],
             "ranked_by":            row.get("ranked_by", ""),
             "param_label":          row["param_label"],
@@ -390,6 +395,47 @@ def _build_table_data(all_best_rows):
             tr["is_return_pct"] = _fmt_pct(row.get("is_return_pct"))
         table_rows.append(tr)
     return col_defs, table_rows
+
+
+# ── Rank-metric dropdown ─────────────────────────────────────────────────────
+# NOTE (Layer 2 of the top-5 dropdown): this re-sorts whatever rows the runner
+# already returned. Showing the TRUE top-5 per metric needs utils/param_utils.py
+# to emit per-metric candidates — queued for after the training pipeline frees
+# that file. The #1 row per metric is already correct today.
+RANK_METRICS = [
+    {"label": "Sharpe Ratio",          "value": "sharpe_ratio"},
+    {"label": "Total Return % (P&L)",  "value": "total_return_pct"},
+    {"label": "Win Rate %",            "value": "win_rate_pct"},
+    {"label": "Max Drawdown (lowest)", "value": "max_drawdown_pct"},
+    {"label": "# Trades (most)",       "value": "total_trades"},
+]
+_RANK_LABELS = {m["value"]: m["label"] for m in RANK_METRICS}
+_RANK_ASCENDING = {"max_drawdown_pct"}   # lowest is best; everything else desc
+
+
+def _rank_rows(all_best_rows, metric):
+    """Sort rows WITHIN each symbol group by ``metric`` (Sharpe tie-break).
+
+    Symbol groups keep their first-appearance order; rows missing the metric
+    sort to the bottom of their group.
+    """
+    if metric not in _RANK_LABELS:
+        metric = "sharpe_ratio"
+    ascending = metric in _RANK_ASCENDING
+
+    def key(r):
+        v = r.get(metric)
+        s = r.get("sharpe_ratio")
+        primary = (v if v is not None else 0)
+        signed = primary if ascending else -primary
+        return (v is None, signed, -(s if s is not None else -1e9))
+
+    symbols = list(dict.fromkeys(r["symbol"] for r in all_best_rows))
+    out = []
+    for sym in symbols:
+        group = [r for r in all_best_rows if r["symbol"] == sym]
+        out.extend(sorted(group, key=key))
+    return out
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -583,8 +629,24 @@ def _results_tab():
             html.Div(id="kpi-cards", className="mb-3"),
 
             dbc.Card(dbc.CardBody([
-                html.H5("Best Parameters per Symbol — ranked by Sharpe Ratio",
-                        className="card-title mb-3"),
+                dbc.Row([
+                    dbc.Col(
+                        html.H5("Best Parameters per Symbol — top 5 by Sharpe Ratio",
+                                id="table-title", className="card-title mb-0"),
+                        xs=12, md=7),
+                    dbc.Col([
+                        dbc.Label("Rank by", className="mb-0 me-2 text-muted",
+                                  style={"fontSize": "0.8rem", "whiteSpace": "nowrap"}),
+                        html.Div(
+                            dcc.Dropdown(
+                                id="rank-metric-dd", options=RANK_METRICS,
+                                value="sharpe_ratio", clearable=False,
+                            ),
+                            style={"minWidth": "230px"},
+                        ),
+                    ], xs=12, md=5,
+                       className="d-flex align-items-center justify-content-md-end"),
+                ], align="center", className="mb-3 g-2"),
                 dash_table.DataTable(
                     id="top5-table",
                     row_selectable="single",
@@ -810,16 +872,16 @@ def start_run(n_clicks, ticker, start, end, interval, strategy, wf_toggle, asset
     Output("run-alert",        "children"),
     Output("run-alert",        "is_open"),
     Output("top5-store",       "data"),
-    Output("top5-table",       "data"),
-    Output("top5-table",       "columns"),
-    Output("top5-table",       "selected_rows"),
     Output("table-section",    "style"),
     Output("graph-section",    "style"),
     Input("progress-interval", "n_intervals"),
     prevent_initial_call=True,
 )
 def poll_progress(n_intervals):
-    """Reads shared _run_state and updates the progress bar and results."""
+    """Reads shared _run_state and updates the progress bar and the results
+    store. The table itself is rendered by ``rank_table`` (keyed off the store
+    + the rank dropdown), so this callback never writes the table directly —
+    that keeps a single writer and lets the dropdown re-sort freely."""
     HIDDEN       = {"display": "none"}
     SHOW         = {"display": "block"}
     PROGRESS_VIS = {"display": "block"}
@@ -835,7 +897,7 @@ def poll_progress(n_intervals):
     # ── Still running — show progress, keep results hidden ──────────────────
     if running:
         label = f"{step}  ({pct}%)"
-        return pct, label, PROGRESS_VIS, NU, NU, NU, NU, NU, NU, HIDDEN, HIDDEN
+        return pct, label, PROGRESS_VIS, NU, NU, NU, HIDDEN, HIDDEN
 
     # ── Worker finished and result not yet shown ────────────────────────────
     if result is not None and not consumed:
@@ -847,20 +909,49 @@ def poll_progress(n_intervals):
 
         if not all_best_rows:
             err_msg = "No results for any ticker. " + " | ".join(errors)
-            return 100, "Complete", HIDDEN, err_msg, True, None, [], [], [0], HIDDEN, HIDDEN
+            return 100, "Complete", HIDDEN, err_msg, True, None, HIDDEN, HIDDEN
 
-        col_defs, table_rows = _build_table_data(all_best_rows)
         warning = ("Some tickers failed: " + " | ".join(errors)) if errors else ""
 
         return (
             100, "Complete", HIDDEN,
             warning, bool(warning),
-            all_best_rows, table_rows, col_defs, [0],
+            all_best_rows,
             SHOW, SHOW,
         )
 
     # ── Idle — nothing to update ────────────────────────────────────────────
-    return NU, NU, NU, NU, NU, NU, NU, NU, NU, NU, NU
+    return NU, NU, NU, NU, NU, NU, NU, NU
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  CALLBACK 2b — Render / re-rank the results table (single table writer)
+# ═══════════════════════════════════════════════════════════════════════════
+
+@app.callback(
+    Output("top5-table",  "data"),
+    Output("top5-table",  "columns"),
+    Output("top5-table",  "selected_rows"),
+    Output("table-title", "children"),
+    Input("rank-metric-dd", "value"),
+    Input("top5-store",     "data"),
+    prevent_initial_call=True,
+)
+def rank_table(metric, store_data):
+    """Builds the table from the store, sorted within each symbol group by the
+    chosen metric. Fires both when a run completes (store changes) and when the
+    user picks a different metric. Resets the selection to the top row."""
+    metric = metric or "sharpe_ratio"
+    title = f"Best Parameters per Symbol — top 5 by {_RANK_LABELS.get(metric, 'Sharpe Ratio')}"
+    if not store_data:
+        return [], [], [0], title
+
+    # Tag each row with its ORIGINAL store position before sorting, so
+    # _build_table_data can stamp a store_idx the downstream callbacks trust.
+    indexed = [{**r, "_store_idx": i} for i, r in enumerate(store_data)]
+    ranked = _rank_rows(indexed, metric)
+    col_defs, table_rows = _build_table_data(ranked)
+    return table_rows, col_defs, [0], title
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -887,19 +978,22 @@ def _placeholder_fig(message: str) -> go.Figure:
     Output("walkforward-graph", "figure"),
     Input("top5-table", "selected_rows"),
     State("top5-store",  "data"),
+    State("top5-table",  "data"),
     prevent_initial_call=True,
 )
-def update_graphs(selected_rows, top5_data):
+def update_graphs(selected_rows, top5_data, table_data):
     """Generates all per-row figures: equity, benchmark, trades, PnL, monthly,
     Monte Carlo, and (for walk-forward runs) the per-fold OOS breakdown."""
     empty = go.Figure()
 
-    if not selected_rows or top5_data is None:
+    if not selected_rows or top5_data is None or not table_data:
         return empty, empty, empty, empty, empty, empty, empty
 
     try:
-        row_idx  = selected_rows[0]
-        row_data = top5_data[row_idx]
+        # Map the selected TABLE row back to its raw store row (the table may be
+        # re-sorted by the rank dropdown, so positions need not match).
+        store_idx = table_data[selected_rows[0]].get("store_idx", selected_rows[0])
+        row_data = top5_data[store_idx]
         symbol   = row_data.get("symbol")
 
         sym_cache  = _last_run["by_symbol"].get(symbol, {})
@@ -1038,14 +1132,16 @@ def _make_option_log_table(blotter: list) -> "html.Div | dash_table.DataTable":
     Output("option-trades-table", "children"),
     Input("top5-table", "selected_rows"),
     State("top5-store", "data"),
+    State("top5-table", "data"),
     prevent_initial_call=True,
 )
-def update_option_log(selected_rows, top5_data):
+def update_option_log(selected_rows, top5_data, table_data):
     """Renders the selected row's option blotter (options runs only)."""
-    if not selected_rows or not top5_data:
+    if not selected_rows or not top5_data or not table_data:
         return _OPTLOG_HINT
     try:
-        row_data = top5_data[selected_rows[0]]
+        store_idx = table_data[selected_rows[0]].get("store_idx", selected_rows[0])
+        row_data = top5_data[store_idx]
         sym_cache = _last_run["by_symbol"].get(row_data.get("symbol"), {})
         blotters = sym_cache.get("option_blotter")
         if not isinstance(blotters, dict):
@@ -1189,16 +1285,18 @@ def _parse_param_label(param_label: str) -> dict:
     Input("save-scanner-btn", "n_clicks"),
     State("top5-table",  "selected_rows"),
     State("top5-store",  "data"),
+    State("top5-table",  "data"),
     State("strategy-dd", "value"),
     State("interval-dd", "value"),
     prevent_initial_call=True,
 )
-def save_to_scanner(n_clicks, selected_rows, top5_data, strategy, interval):
+def save_to_scanner(n_clicks, selected_rows, top5_data, table_data, strategy, interval):
     """Saves the selected result row to scanner/saved_scans.json."""
-    if not selected_rows or top5_data is None:
+    if not selected_rows or top5_data is None or not table_data:
         return "No row selected.", True, "warning"
 
-    row = top5_data[selected_rows[0]]
+    store_idx = table_data[selected_rows[0]].get("store_idx", selected_rows[0])
+    row = top5_data[store_idx]
     symbol = row.get("symbol", "")
     param_label = row.get("param_label", "")
 
@@ -1280,18 +1378,20 @@ def toggle_controls(n_clicks, is_open):
     Output("kpi-cards", "children"),
     Input("top5-table", "selected_rows"),
     State("top5-store", "data"),
+    State("top5-table", "data"),
     prevent_initial_call=True,
 )
-def update_kpis(selected_rows, top5_data):
+def update_kpis(selected_rows, top5_data, table_data):
     """Builds the row of big-number metric cards from the selected table row.
 
     Reads the raw (unformatted) numbers straight from the top5 store, so this
     works independently of whether the portfolio objects are still cached.
     """
-    if not selected_rows or not top5_data:
+    if not selected_rows or not top5_data or not table_data:
         return no_update
     try:
-        row = top5_data[selected_rows[0]]
+        store_idx = table_data[selected_rows[0]].get("store_idx", selected_rows[0])
+        row = top5_data[store_idx]
     except (IndexError, TypeError, KeyError):
         return no_update
 
