@@ -1,0 +1,39 @@
+{
+  "run_ids": [
+    "a32x16-lr0.001-s0",
+    "a32x16-lr0.001-s1",
+    "a32x16-lr0.001-s2",
+    "a32x16-lr0.001-s3",
+    "a32x16-lr0.001-s4"
+  ],
+  "threshold": 0.55,
+  "features": [
+    "ma_gap",
+    "px_vs_fast",
+    "rsi14",
+    "macd_hist",
+    "bb_z",
+    "ret_1",
+    "ret_8",
+    "ret_26",
+    "session_gap",
+    "tod",
+    "dow",
+    "rvol_5",
+    "rvol_21",
+    "atm_iv_near",
+    "atm_iv_far",
+    "term_slope",
+    "iv_chg_5",
+    "pc_ratio",
+    "dir_short",
+    "dte_frac",
+    "prem_spot",
+    "moneyness",
+    "bars_since_signal"
+  ],
+  "arch": "32x16",
+  "lr": 0.001,
+  "median_val_return": 8.126189426049137,
+  "baseline_config_hash": "20343f41af6e"
+}

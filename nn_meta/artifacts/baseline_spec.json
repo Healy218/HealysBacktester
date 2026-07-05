@@ -1,0 +1,720 @@
+{
+  "created": "2026-07-05T01:04:24+00:00",
+  "interval": "15m",
+  "train_window": [
+    "2025-01-20",
+    "2025-12-19"
+  ],
+  "dte_grid": [
+    10,
+    30,
+    45
+  ],
+  "config_hash": "20343f41af6e",
+  "symbols": {
+    "SPY": {
+      "fast": 76,
+      "slow": 126,
+      "train_sharpe": 1.6562,
+      "train_return_pct": 8.17,
+      "train_trades": 33,
+      "train_win_rate_pct": 45.4545,
+      "trades_per_day": 0.143,
+      "met_activity_guards": true,
+      "dte": 10,
+      "train_option": {
+        "10": {
+          "n": 33,
+          "total_return": 0.14618213125160828,
+          "max_drawdown": 0.5420343496137349,
+          "win_rate": 0.36363636363636365,
+          "mean_return": 0.13198779202833918,
+          "per_trade_sharpe": 0.08311771219075494,
+          "fill_fail_rate": 0.0,
+          "n_rolls": 16
+        },
+        "30": {
+          "n": 18,
+          "total_return": -0.022110590244293404,
+          "max_drawdown": 0.0866331980985878,
+          "win_rate": 0.5,
+          "mean_return": -0.00804875130501934,
+          "per_trade_sharpe": -0.026438140939165015,
+          "fill_fail_rate": 0.4545454545454546,
+          "n_rolls": 9
+        },
+        "45": {
+          "n": 12,
+          "total_return": -0.06206018276935865,
+          "max_drawdown": 0.11482729089681919,
+          "win_rate": 0.4166666666666667,
+          "mean_return": -0.050375381695280746,
+          "per_trade_sharpe": -0.2010686033946252,
+          "fill_fail_rate": 0.6363636363636364,
+          "n_rolls": 8
+        }
+      },
+      "n_train_signals": 33
+    },
+    "QQQ": {
+      "fast": 50,
+      "slow": 142,
+      "train_sharpe": 3.0569,
+      "train_return_pct": 19.6611,
+      "train_trades": 33,
+      "train_win_rate_pct": 54.5455,
+      "trades_per_day": 0.143,
+      "met_activity_guards": true,
+      "dte": 30,
+      "train_option": {
+        "10": {
+          "n": 33,
+          "total_return": 0.30081349650053446,
+          "max_drawdown": 0.5099588769233303,
+          "win_rate": 0.2727272727272727,
+          "mean_return": 0.22481983670793995,
+          "per_trade_sharpe": 0.10505345435784556,
+          "fill_fail_rate": 0.0,
+          "n_rolls": 16
+        },
+        "30": {
+          "n": 21,
+          "total_return": 0.15920904248049372,
+          "max_drawdown": 0.15977536805694065,
+          "win_rate": 0.38095238095238093,
+          "mean_return": 0.09157860598989828,
+          "per_trade_sharpe": 0.13233075920583645,
+          "fill_fail_rate": 0.36363636363636365,
+          "n_rolls": 10
+        },
+        "45": {
+          "n": 12,
+          "total_return": -0.10445114631169339,
+          "max_drawdown": 0.09746409373032293,
+          "win_rate": 0.3333333333333333,
+          "mean_return": -0.08931676460332287,
+          "per_trade_sharpe": -0.4104172815225887,
+          "fill_fail_rate": 0.6363636363636364,
+          "n_rolls": 8
+        }
+      },
+      "n_train_signals": 33
+    },
+    "VOO": {
+      "fast": 78,
+      "slow": 126,
+      "train_sharpe": 1.7816,
+      "train_return_pct": 8.6941,
+      "train_trades": 31,
+      "train_win_rate_pct": 45.1613,
+      "trades_per_day": 0.135,
+      "met_activity_guards": true,
+      "dte": 30,
+      "train_option": {
+        "10": {
+          "n": 31,
+          "total_return": -0.4470361920200575,
+          "max_drawdown": 0.48861806009032877,
+          "win_rate": 0.2903225806451613,
+          "mean_return": -0.1753277840697292,
+          "per_trade_sharpe": -0.32602638483809543,
+          "fill_fail_rate": 0.0,
+          "n_rolls": 31
+        },
+        "30": {
+          "n": 23,
+          "total_return": 0.2243370288519031,
+          "max_drawdown": 0.10795447444888519,
+          "win_rate": 0.4782608695652174,
+          "mean_return": 0.10335541705550612,
+          "per_trade_sharpe": 0.17532290911669765,
+          "fill_fail_rate": 0.25806451612903225,
+          "n_rolls": 25
+        },
+        "45": {
+          "n": 9,
+          "total_return": -0.0006884700564910862,
+          "max_drawdown": 0.060939448719992656,
+          "win_rate": 0.5555555555555556,
+          "mean_return": 0.0021075775117004683,
+          "per_trade_sharpe": 0.008305881945500904,
+          "fill_fail_rate": 0.7096774193548387,
+          "n_rolls": 7
+        }
+      },
+      "n_train_signals": 31
+    },
+    "MSFT": {
+      "fast": 46,
+      "slow": 72,
+      "train_sharpe": 0.7114,
+      "train_return_pct": 4.0984,
+      "train_trades": 71,
+      "train_win_rate_pct": 38.0282,
+      "trades_per_day": 0.309,
+      "met_activity_guards": true,
+      "dte": 10,
+      "train_option": {
+        "10": {
+          "n": 71,
+          "total_return": -0.28341768151716995,
+          "max_drawdown": 0.5334706372179562,
+          "win_rate": 0.3380281690140845,
+          "mean_return": -0.02049025744672735,
+          "per_trade_sharpe": -0.026783049236290664,
+          "fill_fail_rate": 0.0,
+          "n_rolls": 9
+        },
+        "30": {
+          "n": 37,
+          "total_return": 0.1584923930003188,
+          "max_drawdown": 0.15596110756899295,
+          "win_rate": 0.40540540540540543,
+          "mean_return": 0.053457759750386094,
+          "per_trade_sharpe": 0.09527401999691339,
+          "fill_fail_rate": 0.47887323943661975,
+          "n_rolls": 8
+        },
+        "45": {
+          "n": 31,
+          "total_return": 0.1238112336754642,
+          "max_drawdown": 0.1304279808830726,
+          "win_rate": 0.3870967741935484,
+          "mean_return": 0.04462771613022199,
+          "per_trade_sharpe": 0.11495657100972555,
+          "fill_fail_rate": 0.5633802816901409,
+          "n_rolls": 17
+        }
+      },
+      "n_train_signals": 71
+    },
+    "META": {
+      "fast": 88,
+      "slow": 114,
+      "train_sharpe": 2.6928,
+      "train_return_pct": 24.2975,
+      "train_trades": 38,
+      "train_win_rate_pct": 39.4737,
+      "trades_per_day": 0.165,
+      "met_activity_guards": true,
+      "dte": 10,
+      "train_option": {
+        "10": {
+          "n": 38,
+          "total_return": -0.08038358848935712,
+          "max_drawdown": 0.5722716536606959,
+          "win_rate": 0.2894736842105263,
+          "mean_return": 0.01882879376909109,
+          "per_trade_sharpe": 0.01963076805379255,
+          "fill_fail_rate": 0.0,
+          "n_rolls": 9
+        },
+        "30": {
+          "n": 20,
+          "total_return": 0.2589763510373151,
+          "max_drawdown": 0.19257927786006424,
+          "win_rate": 0.45,
+          "mean_return": 0.1369207552030251,
+          "per_trade_sharpe": 0.20061048467023096,
+          "fill_fail_rate": 0.4736842105263158,
+          "n_rolls": 5
+        },
+        "45": {
+          "n": 16,
+          "total_return": 0.557817043668807,
+          "max_drawdown": 0.0695136759066417,
+          "win_rate": 0.5625,
+          "mean_return": 0.29830298038847947,
+          "per_trade_sharpe": 0.4764418903067568,
+          "fill_fail_rate": 0.5789473684210527,
+          "n_rolls": 9
+        }
+      },
+      "n_train_signals": 38
+    },
+    "AMZN": {
+      "fast": 88,
+      "slow": 130,
+      "train_sharpe": 1.8303,
+      "train_return_pct": 16.1254,
+      "train_trades": 38,
+      "train_win_rate_pct": 36.8421,
+      "trades_per_day": 0.165,
+      "met_activity_guards": true,
+      "dte": 30,
+      "train_option": {
+        "10": {
+          "n": 38,
+          "total_return": -0.6217374591367333,
+          "max_drawdown": 0.7074828898917035,
+          "win_rate": 0.21052631578947367,
+          "mean_return": -0.22901932138659498,
+          "per_trade_sharpe": -0.32011775079192833,
+          "fill_fail_rate": 0.0,
+          "n_rolls": 9
+        },
+        "30": {
+          "n": 24,
+          "total_return": -0.003460825724194594,
+          "max_drawdown": 0.24234593318694822,
+          "win_rate": 0.2916666666666667,
+          "mean_return": 0.01382727235576627,
+          "per_trade_sharpe": 0.02347492356374409,
+          "fill_fail_rate": 0.368421052631579,
+          "n_rolls": 4
+        },
+        "45": {
+          "n": 18,
+          "total_return": -0.03640417262420581,
+          "max_drawdown": 0.18331067094672596,
+          "win_rate": 0.2777777777777778,
+          "mean_return": -0.010666267431946394,
+          "per_trade_sharpe": -0.022284354273825538,
+          "fill_fail_rate": 0.5263157894736843,
+          "n_rolls": 2
+        }
+      },
+      "n_train_signals": 38
+    },
+    "AAPL": {
+      "fast": 88,
+      "slow": 122,
+      "train_sharpe": 3.1092,
+      "train_return_pct": 25.8433,
+      "train_trades": 32,
+      "train_win_rate_pct": 53.125,
+      "trades_per_day": 0.139,
+      "met_activity_guards": true,
+      "dte": 10,
+      "train_option": {
+        "10": {
+          "n": 32,
+          "total_return": -0.15072618739632748,
+          "max_drawdown": 0.3329196741318603,
+          "win_rate": 0.25,
+          "mean_return": 0.011323787151970029,
+          "per_trade_sharpe": 0.008950651086459427,
+          "fill_fail_rate": 0.0,
+          "n_rolls": 10
+        },
+        "30": {
+          "n": 15,
+          "total_return": 0.5124196484554071,
+          "max_drawdown": 0.03721409824544177,
+          "win_rate": 0.5333333333333333,
+          "mean_return": 0.30038571872188113,
+          "per_trade_sharpe": 0.42817549552288553,
+          "fill_fail_rate": 0.53125,
+          "n_rolls": 3
+        },
+        "45": {
+          "n": 10,
+          "total_return": 0.14372675440226423,
+          "max_drawdown": 0.04007989895160225,
+          "win_rate": 0.5,
+          "mean_return": 0.14253123677300153,
+          "per_trade_sharpe": 0.34110845995019023,
+          "fill_fail_rate": 0.6875,
+          "n_rolls": 2
+        }
+      },
+      "n_train_signals": 32
+    },
+    "GOOG": {
+      "fast": 60,
+      "slow": 88,
+      "train_sharpe": 1.6728,
+      "train_return_pct": 16.1147,
+      "train_trades": 51,
+      "train_win_rate_pct": 41.1765,
+      "trades_per_day": 0.222,
+      "met_activity_guards": true,
+      "dte": 10,
+      "train_option": {
+        "10": {
+          "n": 51,
+          "total_return": 0.9483534789749122,
+          "max_drawdown": 0.44700394946836364,
+          "win_rate": 0.29411764705882354,
+          "mean_return": 0.31811221331834993,
+          "per_trade_sharpe": 0.12048510053088751,
+          "fill_fail_rate": 0.0,
+          "n_rolls": 7
+        },
+        "30": {
+          "n": 34,
+          "total_return": -0.11709652327119369,
+          "max_drawdown": 0.251870564607167,
+          "win_rate": 0.38235294117647056,
+          "mean_return": -0.026373938866745408,
+          "per_trade_sharpe": -0.05655180270978084,
+          "fill_fail_rate": 0.33333333333333337,
+          "n_rolls": 10
+        },
+        "45": {
+          "n": 29,
+          "total_return": -0.13075738506244872,
+          "max_drawdown": 0.18763754359364096,
+          "win_rate": 0.3448275862068966,
+          "mean_return": -0.04175347379785359,
+          "per_trade_sharpe": -0.11286585942609269,
+          "fill_fail_rate": 0.43137254901960786,
+          "n_rolls": 13
+        }
+      },
+      "n_train_signals": 51
+    },
+    "NVDA": {
+      "fast": 58,
+      "slow": 110,
+      "train_sharpe": 3.1067,
+      "train_return_pct": 36.3253,
+      "train_trades": 42,
+      "train_win_rate_pct": 54.7619,
+      "trades_per_day": 0.183,
+      "met_activity_guards": true,
+      "dte": 30,
+      "train_option": {
+        "10": {
+          "n": 42,
+          "total_return": 0.027921542806794042,
+          "max_drawdown": 0.42621344742261175,
+          "win_rate": 0.35714285714285715,
+          "mean_return": 0.06265976664258548,
+          "per_trade_sharpe": 0.05347736373907302,
+          "fill_fail_rate": 0.0,
+          "n_rolls": 8
+        },
+        "30": {
+          "n": 30,
+          "total_return": 0.4437124358834583,
+          "max_drawdown": 0.09147227142084455,
+          "win_rate": 0.4666666666666667,
+          "mean_return": 0.1357940998333351,
+          "per_trade_sharpe": 0.2585749458467357,
+          "fill_fail_rate": 0.2857142857142857,
+          "n_rolls": 3
+        },
+        "45": {
+          "n": 25,
+          "total_return": 0.14832231304765675,
+          "max_drawdown": 0.15262469989687044,
+          "win_rate": 0.32,
+          "mean_return": 0.0649011756275319,
+          "per_trade_sharpe": 0.14204012113358763,
+          "fill_fail_rate": 0.40476190476190477,
+          "n_rolls": 5
+        }
+      },
+      "n_train_signals": 42
+    },
+    "TSM": {
+      "fast": 38,
+      "slow": 54,
+      "train_sharpe": 1.8144,
+      "train_return_pct": 18.4032,
+      "train_trades": 103,
+      "train_win_rate_pct": 37.8641,
+      "trades_per_day": 0.448,
+      "met_activity_guards": true,
+      "dte": 10,
+      "train_option": {
+        "10": {
+          "n": 102,
+          "total_return": 1.221175321927018,
+          "max_drawdown": 0.42688604293396054,
+          "win_rate": 0.3431372549019608,
+          "mean_return": 0.1170713880056117,
+          "per_trade_sharpe": 0.1214370680803377,
+          "fill_fail_rate": 0.009708737864077666,
+          "n_rolls": 11
+        },
+        "30": {
+          "n": 59,
+          "total_return": 0.5727676295940531,
+          "max_drawdown": 0.1870176016788195,
+          "win_rate": 0.3728813559322034,
+          "mean_return": 0.08913674961868723,
+          "per_trade_sharpe": 0.17176114843743087,
+          "fill_fail_rate": 0.4271844660194175,
+          "n_rolls": 20
+        },
+        "45": {
+          "n": 39,
+          "total_return": 0.37869584504582376,
+          "max_drawdown": 0.10531016698378673,
+          "win_rate": 0.48717948717948717,
+          "mean_return": 0.09454645499865078,
+          "per_trade_sharpe": 0.18121455158940525,
+          "fill_fail_rate": 0.6213592233009708,
+          "n_rolls": 24
+        }
+      },
+      "n_train_signals": 103
+    },
+    "RGTI": {
+      "fast": 8,
+      "slow": 76,
+      "train_sharpe": 5.3191,
+      "train_return_pct": 172.1,
+      "train_trades": 89,
+      "train_win_rate_pct": 35.9551,
+      "trades_per_day": 0.387,
+      "met_activity_guards": true,
+      "dte": 10,
+      "train_option": {
+        "10": {
+          "n": 88,
+          "total_return": 3.1228363039045126,
+          "max_drawdown": 0.261520995151515,
+          "win_rate": 0.3181818181818182,
+          "mean_return": 0.22429718962497824,
+          "per_trade_sharpe": 0.17007501879129158,
+          "fill_fail_rate": 0.011235955056179803,
+          "n_rolls": 13
+        },
+        "30": {
+          "n": 59,
+          "total_return": 1.4017508111079908,
+          "max_drawdown": 0.1457743580801157,
+          "win_rate": 0.3559322033898305,
+          "mean_return": 0.21548013606603844,
+          "per_trade_sharpe": 0.14480311203011229,
+          "fill_fail_rate": 0.3370786516853933,
+          "n_rolls": 22
+        },
+        "45": {
+          "n": 41,
+          "total_return": 1.318959194906407,
+          "max_drawdown": 0.05017971970995175,
+          "win_rate": 0.36585365853658536,
+          "mean_return": 0.2699847427215617,
+          "per_trade_sharpe": 0.19541880147592405,
+          "fill_fail_rate": 0.5393258426966292,
+          "n_rolls": 31
+        }
+      },
+      "n_train_signals": 89
+    },
+    "MU": {
+      "fast": 78,
+      "slow": 82,
+      "train_sharpe": 5.8725,
+      "train_return_pct": 89.3979,
+      "train_trades": 64,
+      "train_win_rate_pct": 53.125,
+      "trades_per_day": 0.278,
+      "met_activity_guards": true,
+      "dte": 30,
+      "train_option": {
+        "10": {
+          "n": 61,
+          "total_return": 11.436761324011204,
+          "max_drawdown": 0.19966066381765313,
+          "win_rate": 0.5245901639344263,
+          "mean_return": 0.5945041000887765,
+          "per_trade_sharpe": 0.24150248711335856,
+          "fill_fail_rate": 0.046875,
+          "n_rolls": 10
+        },
+        "30": {
+          "n": 50,
+          "total_return": 2.430052472002157,
+          "max_drawdown": 0.11168615601911763,
+          "win_rate": 0.5,
+          "mean_return": 0.29504902479359435,
+          "per_trade_sharpe": 0.2704492409636994,
+          "fill_fail_rate": 0.21875,
+          "n_rolls": 24
+        },
+        "45": {
+          "n": 36,
+          "total_return": 1.6121534463832536,
+          "max_drawdown": 0.0671341086620018,
+          "win_rate": 0.5555555555555556,
+          "mean_return": 0.3037198324209878,
+          "per_trade_sharpe": 0.32959821046442866,
+          "fill_fail_rate": 0.4375,
+          "n_rolls": 21
+        }
+      },
+      "n_train_signals": 64
+    },
+    "AXTI": {
+      "fast": 2,
+      "slow": 38,
+      "train_sharpe": 3.143,
+      "train_return_pct": -94.5841,
+      "train_trades": 225,
+      "train_win_rate_pct": 24.0,
+      "trades_per_day": 0.978,
+      "met_activity_guards": true,
+      "dte": 10,
+      "train_option": {
+        "10": {
+          "n": 26,
+          "total_return": 0.4118269386562923,
+          "max_drawdown": 0.08582049678851669,
+          "win_rate": 0.5769230769230769,
+          "mean_return": 0.1437684923195826,
+          "per_trade_sharpe": 0.30561351833087697,
+          "fill_fail_rate": 0.8844444444444445,
+          "n_rolls": 14
+        },
+        "30": {
+          "n": 16,
+          "total_return": 0.33325830055040573,
+          "max_drawdown": 0.044408875255099484,
+          "win_rate": 0.625,
+          "mean_return": 0.18771728056778314,
+          "per_trade_sharpe": 0.5007819273154048,
+          "fill_fail_rate": 0.9288888888888889,
+          "n_rolls": 9
+        },
+        "45": {
+          "n": 5,
+          "total_return": 0.11463217749056454,
+          "max_drawdown": 0.04176846495218421,
+          "win_rate": 0.6,
+          "mean_return": 0.22926336985677204,
+          "per_trade_sharpe": 0.4543729284569841,
+          "fill_fail_rate": 0.9777777777777777,
+          "n_rolls": 2
+        }
+      },
+      "n_train_signals": 225
+    },
+    "SNDK": {
+      "fast": 116,
+      "slow": 134,
+      "train_sharpe": 8.074,
+      "train_return_pct": 191.404,
+      "train_trades": 31,
+      "train_win_rate_pct": 48.3871,
+      "trades_per_day": 0.145,
+      "met_activity_guards": true,
+      "dte": 10,
+      "train_option": {
+        "10": {
+          "n": 25,
+          "total_return": 3.095718655783206,
+          "max_drawdown": 0.2642479703142511,
+          "win_rate": 0.4,
+          "mean_return": 1.0993507092126542,
+          "per_trade_sharpe": 0.224949578786694,
+          "fill_fail_rate": 0.19354838709677424,
+          "n_rolls": 19
+        },
+        "30": {
+          "n": 18,
+          "total_return": 2.991835021826371,
+          "max_drawdown": 0.04316603114625789,
+          "win_rate": 0.6666666666666666,
+          "mean_return": 0.9766646230524623,
+          "per_trade_sharpe": 0.42564742584359566,
+          "fill_fail_rate": 0.4193548387096774,
+          "n_rolls": 21
+        },
+        "45": {
+          "n": 16,
+          "total_return": 6.567018953619872,
+          "max_drawdown": 0.04334857807756032,
+          "win_rate": 0.6875,
+          "mean_return": 2.0468854329939834,
+          "per_trade_sharpe": 0.3549264494266598,
+          "fill_fail_rate": 0.4838709677419355,
+          "n_rolls": 18
+        }
+      },
+      "n_train_signals": 31
+    },
+    "SLS": {
+      "fast": 96,
+      "slow": 120,
+      "train_sharpe": 4.393,
+      "train_return_pct": 99.3258,
+      "train_trades": 34,
+      "train_win_rate_pct": 50.0,
+      "trades_per_day": 0.148,
+      "met_activity_guards": true,
+      "dte": 10,
+      "train_option": {
+        "10": {
+          "n": 13,
+          "total_return": 0.7541181141646407,
+          "max_drawdown": 0.07037124975752075,
+          "win_rate": 0.6153846153846154,
+          "mean_return": 0.46164856724937653,
+          "per_trade_sharpe": 0.6775913209126526,
+          "fill_fail_rate": 0.6176470588235294,
+          "n_rolls": 6
+        },
+        "30": {
+          "n": 7,
+          "total_return": 0.14665194030450612,
+          "max_drawdown": 0.08674157529903474,
+          "win_rate": 0.5714285714285714,
+          "mean_return": 0.21183248626391915,
+          "per_trade_sharpe": 0.3671784367738644,
+          "fill_fail_rate": 0.7941176470588236,
+          "n_rolls": 3
+        },
+        "45": {
+          "n": 6,
+          "total_return": 0.08754392530684996,
+          "max_drawdown": 0.08642645894142087,
+          "win_rate": 0.5,
+          "mean_return": 0.1590177234148776,
+          "per_trade_sharpe": 0.23984046165610248,
+          "fill_fail_rate": 0.8235294117647058,
+          "n_rolls": 4
+        }
+      },
+      "n_train_signals": 34
+    },
+    "NOK": {
+      "fast": 54,
+      "slow": 126,
+      "train_sharpe": 3.0827,
+      "train_return_pct": 35.3304,
+      "train_trades": 38,
+      "train_win_rate_pct": 47.3684,
+      "trades_per_day": 0.165,
+      "met_activity_guards": true,
+      "dte": 30,
+      "train_option": {
+        "10": {
+          "n": 37,
+          "total_return": 1.443101365214733,
+          "max_drawdown": 0.20950910860285565,
+          "win_rate": 0.40540540540540543,
+          "mean_return": 0.30585824306768844,
+          "per_trade_sharpe": 0.25659862271170486,
+          "fill_fail_rate": 0.02631578947368418,
+          "n_rolls": 31
+        },
+        "30": {
+          "n": 29,
+          "total_return": 1.631904094824879,
+          "max_drawdown": 0.1067048412262974,
+          "win_rate": 0.5172413793103449,
+          "mean_return": 0.3934783597063875,
+          "per_trade_sharpe": 0.3383025023051875,
+          "fill_fail_rate": 0.23684210526315785,
+          "n_rolls": 27
+        },
+        "45": {
+          "n": 16,
+          "total_return": 2.6072404573182126,
+          "max_drawdown": 0.03020968547179236,
+          "win_rate": 0.6875,
+          "mean_return": 1.0450510393373038,
+          "per_trade_sharpe": 0.3888941883778017,
+          "fill_fail_rate": 0.5789473684210527,
+          "n_rolls": 14
+        }
+      },
+      "n_train_signals": 38
+    }
+  }
+}
