@@ -33,7 +33,7 @@ except ImportError:
 from utils.logging_utils import setup_logging
 from utils import config_parser
 from analysis import plotting
-from backtests import run_ma, run_rsi, run_macd, run_volume, run_bbands, run_stoch, run_elliott, run_sentiment, run_walkforward
+from backtests import run_ma, run_rsi, run_macd, run_volume, run_bbands, run_stoch, run_elliott, run_sentiment, run_walkforward, run_nn_meta
 from options.backtests import run_options_single, signal_overlay
 
 logger = setup_logging(log_file="logs/backtester.log")
@@ -56,11 +56,12 @@ STRATEGIES = {
     "Elliott Wave / Fib":   {"runner": run_elliott, "config_key": "STRATEGY_ELLIOTT"},
     "Sentiment":            {"runner": run_sentiment, "config_key": "STRATEGY_SENTIMENT"},
     "Options (Single-Leg)": {"runner": run_options_single, "config_key": "STRATEGY_OPTIONS_SINGLE"},
+    "NN Meta Filter (MA)":  {"runner": run_nn_meta, "config_key": "STRATEGY_NN_META"},
 }
 
 # Strategies that trade a single instrument per signal (no parameter grid) and so
 # cannot be walk-forward optimized.
-NO_WALKFORWARD = {"Options (Single-Leg)"}
+NO_WALKFORWARD = {"Options (Single-Leg)", "NN Meta Filter (MA)"}
 
 INTERVALS = [
     {"label": "1 Minute",  "value": "1m"},
