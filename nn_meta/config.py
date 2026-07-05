@@ -107,6 +107,23 @@ MIN_KEPT_TRADES = 10
 MAX_DRAWDOWN_CAP = 0.40
 MIN_PASSING_SEEDS = 3
 
+# ── Student (Phase F: teacher→student standalone signal NN) ──────────────────
+STUDENT_DATASET_PARQUET = ARTIFACTS / "student_dataset.parquet"
+STUDENT_RUNS_CSV = RUNS_DIR / "runs_student.csv"
+STUDENT_ARCH = [64, 32]
+STUDENT_LRS = [1e-3, 3e-4]
+CLONE_EPOCHS = 40
+FINETUNE_EPOCHS = 80
+FINETUNE_LR_SCALE = 0.3                    # fine-tune at a fraction of the clone LR
+# Stage-2 counterfactual relabeling weights (per-bar sample weights):
+STUDENT_WIN_WEIGHT_CLIP = 1.0              # win bars: weight = clip(net_return, 0, this)
+STUDENT_LOSE_WEIGHT_CLIP = 1.0             # loss bars → FLAT label, weight = clip(|net|, 0, this)
+STUDENT_FLAT_WEIGHT = 0.10                 # bars outside any teacher trade
+STUDENT_MIN_STATE_BARS = 2                 # hysteresis: state must persist N bars
+# Clone-parity go/no-go: student val option return must be within this many
+# percentage points of the teacher's (or better) to proceed to fine-tuning.
+CLONE_PARITY_TOLERANCE = 0.15
+
 
 def ensure_dirs() -> None:
     for d in (DATA_CACHE, ARTIFACTS, RUNS_DIR, REPORTS_DIR, MODEL_FINAL_DIR):
