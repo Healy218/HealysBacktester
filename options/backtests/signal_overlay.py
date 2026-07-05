@@ -28,7 +28,6 @@ portfolio (single column, ``portfolio_col_int_idx`` = 0).
 """
 from __future__ import annotations
 
-from datetime import date, timedelta
 from typing import Optional
 
 import pandas as pd
@@ -37,8 +36,15 @@ from utils.logging_utils import setup_logging
 from utils import freq_utils, runner_utils, param_utils
 from portfolio import simulator
 from options.data.provider import OptionsDataProvider
-from options.selection import contract_selector
 from options.backtests.run_options_single import _default_provider, _options_sim_kwargs
+# Execution engine lives in options/execution.py (shared with nn_meta);
+# underscore aliases preserve this module's original internal names.
+from options.execution import (
+    Execution as _Execution,
+    execute_variant as _execute_variant,
+    extract_trades as _extract_trades,
+    to_naive_utc as _to_naive_utc,
+)
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -64,166 +70,6 @@ class _OverlayRunner:
             strategy_config, self._base, self._opts,
             progress_callback=progress_callback,
         )
-
-
-def _to_naive_utc(ts: pd.Timestamp) -> pd.Timestamp:
-    """Massive option bars are tz-naive UTC; align underlying timestamps."""
-    ts = pd.Timestamp(ts)
-    if ts.tzinfo is not None:
-        ts = ts.tz_convert("UTC").tz_localize(None)
-    return ts
-
-
-def _extract_trades(single_pf) -> list[tuple[pd.Timestamp, pd.Timestamp, int]]:
-    """(entry_ts, exit_ts, direction) per executed trade, chronological.
-    Open trades exit at the final bar (vectorbt already records them so).
-
-    vectorbt 0.27 exposes ``trades.records`` as a DataFrame and the structured
-    numpy array as ``records_arr``; older versions only have the array form.
-    """
-    trades = single_pf.trades
-    recs = trades.records if isinstance(trades.records, pd.DataFrame) \
-        else pd.DataFrame(trades.records_arr)
-    idx = single_pf.wrapper.index
-    out = []
-    for r in recs.itertuples():
-        out.append((pd.Timestamp(idx[int(r.entry_idx)]),
-                    pd.Timestamp(idx[int(r.exit_idx)]),
-                    int(r.direction)))
-    out.sort(key=lambda t: t[0])
-    return out
-
-
-class _Execution:
-    """Shared per-run state: provider, caches, and contract selection."""
-
-    def __init__(self, symbol, interval, end_date, provider, options_config):
-        self.symbol = symbol
-        self.interval = interval
-        self.end_d = pd.Timestamp(end_date).date()
-        self.provider = provider
-        self.target_delta = float(options_config.get("TARGET_DELTA", 0.50))
-        self.moneyness = float(options_config.get("MONEYNESS", 0.0))
-        self.max_rolls = int(options_config.get("MAX_ROLLS_PER_TRADE", 60))
-        self.max_fills = int(options_config.get("MAX_FILLS_PER_VARIANT", 400))
-        self._chain_cache: dict = {}
-        self._bars_cache: dict = {}
-
-    def bars(self, occ: str, frm: date, to: date) -> pd.DataFrame:
-        if occ not in self._bars_cache:
-            b = self.provider.get_contract_bars(occ, frm.isoformat(), to.isoformat(),
-                                                self.interval)
-            if (b is None or b.empty) and self.interval not in ("1d", "1D"):
-                logger.info(f"[{_TAG}] {occ}: no {self.interval} bars, falling back to 1D")
-                b = self.provider.get_contract_bars(occ, frm.isoformat(), to.isoformat(), "1D")
-            self._bars_cache[occ] = b if b is not None else pd.DataFrame()
-        return self._bars_cache[occ]
-
-    def select(self, as_of: date, right: str, spot: float, target_dte: int):
-        key = (as_of, right, target_dte)
-        if key not in self._chain_cache:
-            self._chain_cache[key] = self.provider.get_chain(
-                self.symbol, right=right,
-                expiration_gte=as_of + timedelta(days=max(1, target_dte - 10)),
-                expiration_lte=as_of + timedelta(days=target_dte + 20),
-                strike_gte=spot * 0.85, strike_lte=spot * 1.15,
-                as_of=as_of,
-            )
-        chain = self._chain_cache[key]
-        if not chain:
-            return None
-        return contract_selector.select_contract(
-            chain, right=right, spot=spot, target_dte=target_dte,
-            target_delta=self.target_delta, moneyness=self.moneyness, as_of=as_of,
-        )
-
-
-def _execute_variant(ex: _Execution, stock_trades, und_close, und_index_utc,
-                     target_dte: int, progress=None, daily: bool = False):
-    """Execute the trade timeline at one target DTE.
-
-    Returns (stitched OHLCV, entry timestamps, exit timestamps, blotter,
-    n_rolls, capped) or None when nothing could be executed.
-    """
-    slices: list[pd.DataFrame] = []
-    entry_ts_list: list[pd.Timestamp] = []
-    exit_ts_list: list[pd.Timestamp] = []
-    blotter: list[dict] = []
-    n_rolls = 0
-    capped = False
-    last_stitched: Optional[pd.Timestamp] = None
-
-    for t_i, (ent_ts, ext_ts, direction) in enumerate(stock_trades):
-        if progress:
-            progress(t_i)
-        if len(blotter) >= ex.max_fills:
-            capped = True
-            break
-        right = "C" if direction == 0 else "P"
-        cur = _to_naive_utc(ent_ts)
-        exit_target = _to_naive_utc(ext_ts)
-        if daily:
-            # Daily bars carry vendor-specific times-of-day (Alpaca ~04:00 UTC,
-            # Massive midnight): compare by calendar day or every entry lands
-            # one bar late — fatal for 1-DTE contracts with only two bars.
-            cur = cur.normalize()
-            exit_target = exit_target.normalize()
-        hops = 0
-
-        while cur is not None and hops <= ex.max_rolls and len(blotter) < ex.max_fills:
-            as_of = cur.date()
-            spot_hist = und_close[und_index_utc <= cur]
-            if spot_hist.empty:
-                break
-            spot = float(spot_hist.iloc[-1])
-            contract = ex.select(as_of, right, spot, target_dte)
-            if contract is None:
-                logger.warning(f"[{_TAG}] no contract for {ex.symbol} {right} "
-                               f"@ {as_of} ({target_dte} DTE)")
-                break
-            bars = ex.bars(contract.symbol, as_of,
-                           min(contract.expiration + timedelta(days=1), ex.end_d))
-            if bars.empty:
-                break
-
-            epos = int(bars.index.searchsorted(cur))
-            while epos < len(bars) and last_stitched is not None \
-                    and bars.index[epos] <= last_stitched:
-                epos += 1
-            if epos >= len(bars):
-                break
-            xpos = int(bars.index.searchsorted(exit_target, side="right")) - 1
-            xpos = min(max(xpos, epos), len(bars) - 1)
-            if xpos <= epos:
-                break   # nothing tradable between fill and exit
-
-            chunk = bars.iloc[epos:xpos + 1]
-            slices.append(chunk)
-            entry_ts_list.append(chunk.index[0])
-            exit_ts_list.append(chunk.index[-1])
-            last_stitched = chunk.index[-1]
-            blotter.append({
-                "contract": contract.symbol, "right": right,
-                "strike": contract.strike,
-                "expiration": contract.expiration.isoformat(),
-                "entry": str(chunk.index[0]), "exit": str(chunk.index[-1]),
-            })
-
-            # contract ran out before the stock trade exited -> roll
-            if chunk.index[-1] < exit_target and hops < ex.max_rolls:
-                nxt = int(und_index_utc.searchsorted(chunk.index[-1], side="right"))
-                if nxt < len(und_index_utc) and und_index_utc[nxt] < exit_target:
-                    cur = und_index_utc[nxt]
-                    hops += 1
-                    n_rolls += 1
-                    continue
-            cur = None
-
-    if not slices:
-        return None
-    stitched = pd.concat(slices)
-    stitched = stitched[~stitched.index.duplicated(keep="first")].sort_index()
-    return stitched, entry_ts_list, exit_ts_list, blotter, n_rolls, capped
 
 
 def run_overlay(
