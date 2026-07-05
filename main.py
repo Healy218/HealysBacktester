@@ -153,12 +153,12 @@ def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_c
             _set_progress(base + chunk * 9 // 10, f"[{sym}] Ranking results…")
 
             _last_run["by_symbol"][sym] = {
-                "portfolio":     result.pop("portfolio",     None),
-                "price_data":    result.pop("price_data",    None),
-                "wf_folds":      result.pop("wf_folds",      None),
-                "option_series": result.pop("option_series", None),
+                "portfolio":      result.pop("portfolio",      None),
+                "price_data":     result.pop("price_data",     None),
+                "wf_folds":       result.pop("wf_folds",       None),
+                "option_series":  result.pop("option_series",  None),
+                "option_blotter": result.pop("option_blotter", None),
             }
-            result.pop("option_blotter", None)   # not JSON-needed by the table
 
             if result.get("error"):
                 errors.append(f"{sym}: {result['error']}")
@@ -630,8 +630,8 @@ def _results_tab():
         html.Div(id="graph-section", style={"display": "none"}, children=[
             dbc.Tabs([
                 dbc.Tab(label="Overview", tab_id="tab-overview", children=[
-                    _graph_card("equity-graph"),
-                    _graph_card("benchmark-graph"),
+                    _graph_card("equity-graph", className="mb-4"),
+                    _graph_card("benchmark-graph", className="mb-4"),
                 ]),
                 dbc.Tab(label="Trades", tab_id="tab-trades", children=[
                     _graph_card("trades-graph"),
@@ -639,6 +639,12 @@ def _results_tab():
                         dbc.Col(_graph_card("pnl-dist-graph"), md=6),
                         dbc.Col(_graph_card("monthly-returns-graph"), md=6),
                     ], className="g-3"),
+                ]),
+                dbc.Tab(label="Option Trades", tab_id="tab-optlog", children=[
+                    dbc.Card(dbc.CardBody([
+                        html.H6("Option trade log", className="card-title"),
+                        html.Div(id="option-trades-table"),
+                    ]), className="mt-2"),
                 ]),
                 dbc.Tab(label="Robustness", tab_id="tab-robust", children=[
                     _graph_card("montecarlo-graph"),
@@ -944,6 +950,112 @@ def update_graphs(selected_rows, top5_data):
     except Exception as e:
         logger.error(f"Graph update error: {e}")
         return empty, empty, empty, empty, empty, empty, empty
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+#  CALLBACK 3b — Option trade log for the selected row
+# ═══════════════════════════════════════════════════════════════════════════
+
+_OPTLOG_HINT = html.P(
+    "Option trade log appears here for runs with Asset Type = Options "
+    "(calls/puts). The selected row's contracts, fills and how each settled "
+    "are listed once an options backtest completes.",
+    className="text-muted mb-0",
+)
+
+
+def _settlement(fill: dict, is_last_for_trade: bool) -> str:
+    """Classify how a fill ended, from the blotter fields alone.
+
+    A trade with more than one fill rolled at every fill but its last. The
+    last fill 'expired' if it ran to (or past) the contract's expiration,
+    otherwise the underlying signal closed it ('signal exit').
+    """
+    if not is_last_for_trade:
+        return "rolled"
+    try:
+        exit_d = pd.Timestamp(fill.get("exit")).normalize()
+        exp_d = pd.Timestamp(fill.get("expiration")).normalize()
+        if exit_d >= exp_d:
+            return "expired"
+    except Exception:
+        pass
+    return "signal exit"
+
+
+def _make_option_log_table(blotter: list) -> "html.Div | dash_table.DataTable":
+    if not blotter:
+        return _OPTLOG_HINT
+
+    # last fill per trade_idx (fills are appended in execution order)
+    last_pos: dict = {}
+    for i, f in enumerate(blotter):
+        last_pos[f.get("trade_idx")] = i
+
+    rows = []
+    for i, f in enumerate(blotter):
+        entry_px = f.get("entry_open")
+        exit_px = f.get("exit_close")
+        ret = ((exit_px / entry_px - 1) * 100
+               if entry_px and exit_px else None)
+        pnl = ((exit_px - entry_px) * 100
+               if entry_px is not None and exit_px is not None else None)
+        rows.append({
+            "Contract":   f.get("contract", ""),
+            "Right":      "Call" if f.get("right") == "C" else "Put",
+            "Strike":     _fmt_num(f.get("strike")),
+            "Expiration": f.get("expiration", ""),
+            "Entry":      str(f.get("entry", ""))[:16],
+            "Exit":       str(f.get("exit", ""))[:16],
+            "Entry Px":   _fmt_num(entry_px),
+            "Exit Px":    _fmt_num(exit_px),
+            "P&L $":      _fmt_num(pnl),
+            "Return %":   _fmt_pct(ret),
+            "Settlement": _settlement(f, i == last_pos.get(f.get("trade_idx"))),
+        })
+
+    return dash_table.DataTable(
+        data=rows,
+        columns=[{"name": c, "id": c} for c in rows[0]],
+        page_size=20,
+        sort_action="native",
+        style_table={"overflowX": "auto"},
+        style_cell={"textAlign": "left", "padding": "5px 10px",
+                    "backgroundColor": "#ffffff", "color": "#1e293b",
+                    "border": "1px solid #eef2f1", "fontSize": "0.85rem"},
+        style_header={"backgroundColor": "#16a34a", "color": "white",
+                      "fontWeight": "bold"},
+        style_data_conditional=[
+            {"if": {"filter_query": "{Settlement} = rolled",
+                    "column_id": "Settlement"}, "color": "#0d9488"},
+            {"if": {"filter_query": "{Settlement} = expired",
+                    "column_id": "Settlement"}, "color": "#dc2626"},
+        ],
+    )
+
+
+@app.callback(
+    Output("option-trades-table", "children"),
+    Input("top5-table", "selected_rows"),
+    State("top5-store", "data"),
+    prevent_initial_call=True,
+)
+def update_option_log(selected_rows, top5_data):
+    """Renders the selected row's option blotter (options runs only)."""
+    if not selected_rows or not top5_data:
+        return _OPTLOG_HINT
+    try:
+        row_data = top5_data[selected_rows[0]]
+        sym_cache = _last_run["by_symbol"].get(row_data.get("symbol"), {})
+        blotters = sym_cache.get("option_blotter")
+        if not isinstance(blotters, dict):
+            return _OPTLOG_HINT
+        # blotters is keyed by variant label (e.g. "5 DTE")
+        blotter = blotters.get(row_data.get("variant"))
+        return _make_option_log_table(blotter)
+    except Exception as e:
+        logger.error(f"Option log update error: {e}")
+        return _OPTLOG_HINT
 
 
 # ═══════════════════════════════════════════════════════════════════════════

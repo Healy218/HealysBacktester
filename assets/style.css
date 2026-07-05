@@ -182,8 +182,11 @@ body {
 .kpi-neutral { color: var(--hl-teal); }
 
 /* ── Chart cards ───────────────────────────────────────────────────────────── */
+.chart-card {
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+}
 .chart-card .card-body {
-    padding: 0.5rem;
+    padding: 0.75rem 0.9rem;
 }
 
 /* ── dcc.Dropdown (react-select) on the light surface ──────────────────────── */

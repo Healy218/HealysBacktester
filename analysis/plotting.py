@@ -43,6 +43,9 @@ def plot_portfolio_summary(portfolio: vbt.Portfolio, column: Optional[Union[str,
     try:
         # portfolio.plot() returns a plotly Figure object
         fig = portfolio.plot(column=column, **kwargs)
+        # This is a stacked multi-subplot figure (equity / drawdown / trades);
+        # give it room so the panels don't crowd each other or their titles.
+        fig.update_layout(height=620, margin=dict(t=60, b=40))
         # DO NOT call fig.show() here
         return fig # Return the figure object
     except Exception as e:
@@ -400,6 +403,8 @@ def plot_equity_vs_benchmark(
             title="Strategy vs Buy & Hold",
             xaxis_title="Date",
             yaxis_title="Portfolio Value ($)",
+            height=420,
+            margin=dict(t=60, b=40),
             legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="right", x=1),
         )
         return fig
@@ -452,27 +457,33 @@ def plot_monte_carlo(
         fig = go.Figure()
         fig.add_trace(go.Histogram(
             x=terminal, nbinsx=60, marker_color="#0d9488",
-            opacity=0.75, name="Simulated outcomes",
+            opacity=0.7, name="Simulated outcomes",
         ))
+        # Draw the marker lines WITHOUT annotations (they collide when the
+        # percentiles sit close together), and carry each value in the legend
+        # instead — one invisible scatter per line so the number stays readable
+        # regardless of how tightly the lines cluster.
         for val, color, label in [
-            (p5,  "#dc2626", f"5th pct: {p5:+.1f}%"),
-            (p50, "#f59e0b", f"Median: {p50:+.1f}%"),
-            (p95, "#16a34a", f"95th pct: {p95:+.1f}%"),
+            (p5,     "#dc2626", f"5th pct: {p5:+.1f}%"),
+            (p50,    "#f59e0b", f"Median: {p50:+.1f}%"),
+            (p95,    "#16a34a", f"95th pct: {p95:+.1f}%"),
             (actual, "#334155", f"Realized: {actual:+.1f}%"),
         ]:
-            fig.add_vline(
-                x=val, line_dash="dash", line_color=color,
-                annotation_text=label, annotation_position="top",
-            )
+            fig.add_vline(x=val, line_dash="dash", line_color=color)
+            fig.add_trace(go.Scatter(
+                x=[val], y=[None], mode="lines",
+                line=dict(color=color, dash="dash", width=2),
+                name=label,
+            ))
         fig.update_layout(
-            title=(
-                f"Monte Carlo — {n_sims:,} resamples of {n_trades} trades "
-                f"(90% CI: {p5:+.1f}% to {p95:+.1f}%)"
-            ),
+            title=f"Monte Carlo — {n_sims:,} resamples of {n_trades} trades",
             xaxis_title="Terminal Return (%)",
             yaxis_title="Frequency",
             bargap=0.02,
-            showlegend=False,
+            height=450,
+            showlegend=True,
+            legend=dict(orientation="h", yanchor="bottom", y=1.02,
+                        xanchor="right", x=1),
         )
         return fig
     except Exception as e:
