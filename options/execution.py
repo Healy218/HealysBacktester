@@ -66,6 +66,12 @@ class Execution:
         self.moneyness = float(options_config.get("MONEYNESS", 0.0))
         self.max_rolls = int(options_config.get("MAX_ROLLS_PER_TRADE", 60))
         self.max_fills = int(options_config.get("MAX_FILLS_PER_VARIANT", 400))
+        # Realistic fills (default): enter at the first option bar STRICTLY
+        # after the signal bar's start — its open is at/after the signal
+        # close, so the fill never uses a price from before the signal was
+        # knowable. FILL_SAME_BAR=True restores the legacy convention
+        # (entry at the signal bar's own open, ~one bar optimistic).
+        self.fill_same_bar = bool(options_config.get("FILL_SAME_BAR", False))
         self._chain_cache: dict = {}
         self._bars_cache: dict = {}
 
@@ -146,7 +152,10 @@ def execute_variant(ex: Execution, stock_trades, und_close, und_index_utc,
             if bars.empty:
                 break
 
-            epos = int(bars.index.searchsorted(cur))
+            # Roll re-entries (hops > 0) are already causal: cur is the first
+            # underlying bar strictly after the expired contract's last close.
+            entry_side = "left" if (ex.fill_same_bar or hops > 0) else "right"
+            epos = int(bars.index.searchsorted(cur, side=entry_side))
             while epos < len(bars) and last_stitched is not None \
                     and bars.index[epos] <= last_stitched:
                 epos += 1

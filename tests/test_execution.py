@@ -86,18 +86,29 @@ class TestExecuteTradeReturns:
         # Expiration well beyond the trade exit → one fill, no roll.
         prov = SyntheticProvider(DAYS, ["2025-06-13"])
         close, idx = _underlying()
-        # trade: enter first bar of 6/03 (life bar 26), exit last bar of 6/04 (bar 77)
+        # trade: signal at first bar of 6/03 (life bar 26). Honest fills enter
+        # at the NEXT bar (27, px 1.27); exit at last bar of 6/04 (bar 77).
         trades = [(idx[26], idx[26 * 3 - 1], 0)]
         recs, meta = execute_trade_returns(_ex(prov), trades, close, idx, 10,
                                            fees=0.0, slippage=0.0)
         assert meta == {"n_signals": 1, "n_executed": 1, "n_fills": 1,
                         "n_rolls": 0, "capped": False, "fill_fail_rate": 0.0}
         r = recs[0]
-        # bars for the 6/13 contract span all 10 days: entry at bar 26 of its
-        # life (px 1.26), exit at bar 77 (px 1.77)
-        assert r["entry_premium"] == pytest.approx(1.26)
-        assert r["net_return"] == pytest.approx(1.77 / 1.26 - 1)
-        assert r["right"] == "C" and r["executed"] and r["fill_lag_s"] == 0.0
+        assert r["entry_premium"] == pytest.approx(1.27)
+        assert r["net_return"] == pytest.approx(1.77 / 1.27 - 1)
+        assert r["right"] == "C" and r["executed"]
+        assert r["fill_lag_s"] == pytest.approx(15 * 60.0)   # next 15m bar
+
+    def test_legacy_same_bar_fill_via_config(self):
+        prov = SyntheticProvider(DAYS, ["2025-06-13"])
+        close, idx = _underlying()
+        trades = [(idx[26], idx[26 * 3 - 1], 0)]
+        ex = _ex(prov, cfg={"FILL_SAME_BAR": True})
+        recs, _ = execute_trade_returns(ex, trades, close, idx, 10,
+                                        fees=0.0, slippage=0.0)
+        r = recs[0]
+        assert r["entry_premium"] == pytest.approx(1.26)     # signal bar's open
+        assert r["fill_lag_s"] == 0.0
 
     def test_costs_haircut_both_sides(self):
         prov = SyntheticProvider(DAYS, ["2025-06-13"])
@@ -106,7 +117,7 @@ class TestExecuteTradeReturns:
         recs, _ = execute_trade_returns(_ex(prov), trades, close, idx, 10,
                                         fees=0.001, slippage=0.0005)
         c = 0.0015
-        expected = (1.77 * (1 - c)) / (1.26 * (1 + c)) - 1
+        expected = (1.77 * (1 - c)) / (1.27 * (1 + c)) - 1
         assert recs[0]["net_return"] == pytest.approx(expected)
 
     def test_short_trade_buys_put(self):

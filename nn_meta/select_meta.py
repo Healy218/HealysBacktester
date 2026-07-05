@@ -29,7 +29,8 @@ import pandas as pd
 import tensorflow as tf
 
 from nn_meta import config
-from nn_meta.baseline import equity_metrics, load_spec, load_underlying_15m
+from nn_meta.baseline import (equity_metrics, load_spec, load_underlying_15m,
+                              top_k_contribution)
 from nn_meta.build_meta_dataset import META_FEATURES
 from nn_meta.train_meta import prepare_matrix
 
@@ -77,6 +78,7 @@ def evaluate_filter(rows: pd.DataFrame, pred: np.ndarray, threshold: float,
     m = equity_metrics(net.tolist())
     m["n_kept"] = len(kept)
     m["n_proposals"] = len(rows)
+    m["total_ex_top3"] = top_k_contribution(net.tolist())["total_ex_topk"]
     return m
 
 
@@ -219,10 +221,14 @@ def main() -> None:
         f"| SPY buy & hold | {fmt(spy_bh)} | — | — | — |", "",
         f"Per-seed test return: {', '.join(fmt(x) for x in sorted(per_seed, key=lambda v: v or 0))} "
         f"(median {fmt(float(np.median([x for x in per_seed if x is not None])) if any(x is not None for x in per_seed) else None)})", "",
+        f"Outlier dependence (excluding each side's 3 largest trades): "
+        f"NN {fmt(res_1x['total_ex_top3'])} | baseline "
+        f"{fmt(top_k_contribution(test_rows['net_return'].tolist())['total_ex_topk'])} "
+        f"— if the NN number collapses here, the verdict rests on a few "
+        f"outlier trades.", "",
         "## Caveats", "",
-        "- Both sides share the engine's fill convention (entry at the signal "
-        "bar's option OPEN): optimistic vs live trading, identical for baseline "
-        "and NN — internal comparisons remain fair.",
+        "- Fills are next-bar (entry at the first option bar strictly after "
+        "the signal bar) — no lookahead on either side of the comparison.",
         "- Pooled sequential compounding ignores capital overlap across symbols;"
         " applied identically to baseline and NN.",
         f"- Costs: {_C1:.2%}/side proxy; {config.COST_STRESS_MULT:.0f}x stress "

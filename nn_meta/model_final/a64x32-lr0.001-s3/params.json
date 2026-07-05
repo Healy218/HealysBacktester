@@ -1,0 +1,1 @@
+{"arch": [64, 32], "lr": 0.001, "seed": 3, "features": ["ma_gap", "px_vs_fast", "rsi14", "macd_hist", "bb_z", "ret_1", "ret_8", "ret_26", "session_gap", "tod", "dow", "rvol_5", "rvol_21", "atm_iv_near", "atm_iv_far", "term_slope", "iv_chg_5", "pc_ratio", "dir_short", "dte_frac", "prem_spot", "moneyness", "bars_since_signal"]}

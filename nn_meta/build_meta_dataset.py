@@ -12,10 +12,10 @@ For every symbol in the frozen baseline spec:
      decision information set): 15m technicals, daily option-surface features
      as-of the PREVIOUS day's close, and trade context.
 
-Timeline note (disclosed, same for baseline and NN): the execution engine
-fills option entries at the first option bar >= the signal bar's start, at
-that bar's OPEN — the dashboard overlay convention. Labels inherit its
-~one-bar entry optimism; comparisons stay internally fair.
+Timeline note: the execution engine fills option entries at the first option
+bar STRICTLY AFTER the signal bar (its open is at/after the signal close) —
+honest fills, no lookahead. The legacy same-bar convention remains available
+via EXEC_CONFIG["FILL_SAME_BAR"].
 
 Unfilled proposals are kept with net_return = NaN (fill-failure analysis);
 training drops them.

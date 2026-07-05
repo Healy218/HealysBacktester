@@ -142,13 +142,15 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
     nn = evaluate_filter(oos_rows, ens, winning["threshold"])
     base = equity_metrics(oos_rows["net_return"].tolist())
     beat = (nn["total_return"] or -np.inf) > (base["total_return"] or -np.inf)
-    print(f"  OOS: NN {fmt(nn['total_return'])} ({nn['n_kept']}/{nn['n_proposals']} kept) "
+    print(f"  OOS: NN {fmt(nn['total_return'])} ({nn['n_kept']}/{nn['n_proposals']} kept, "
+          f"ex-top3 {fmt(nn['total_ex_top3'])}) "
           f"vs baseline {fmt(base['total_return'])} ({base['n']}) "
           f"→ {'NN WINS' if beat else 'baseline wins'}", flush=True)
     return {"fold": fold_i, "train_end": train_end,
             "oos": f"{oos_start}→{oos_end}",
             "n_symbols": len(spec_symbols),
             "nn_return": nn["total_return"], "nn_kept": nn["n_kept"],
+            "nn_ex_top3": nn["total_ex_top3"],
             "base_return": base["total_return"], "base_n": base["n"],
             "nn_beats": bool(beat), "error": None}
 
@@ -176,15 +178,16 @@ def main() -> None:
                f"folds → {'ROBUST' if ok and wins > len(ok) / 2 else 'NOT robust'}")
 
     lines = ["", "## Walk-forward folds (everything re-frozen per fold)", "",
-             "| fold | train end | OOS | NN return (kept) | baseline | NN wins |",
-             "|---|---|---|---|---|---|"]
+             "| fold | train end | OOS | NN return (kept) | NN ex-top3 | baseline | NN wins |",
+             "|---|---|---|---|---|---|---|"]
     for r in results:
         if r.get("error"):
-            lines.append(f"| {r['fold']} | — | — | ERROR: {r['error']} | — | — |")
+            lines.append(f"| {r['fold']} | — | — | ERROR: {r['error']} | — | — | — |")
         else:
             lines.append(
                 f"| {r['fold']} | {r['train_end']} | {r['oos']} | "
                 f"{fmt(r['nn_return'])} ({r['nn_kept']}) | "
+                f"{fmt(r['nn_ex_top3'])} | "
                 f"{fmt(r['base_return'])} ({r['base_n']}) | "
                 f"{'✅' if r['nn_beats'] else '❌'} |")
     lines += ["", f"**{verdict}**",

@@ -1,12 +1,12 @@
 {
   "run_ids": [
-    "a32x16-lr0.001-s0",
-    "a32x16-lr0.001-s1",
-    "a32x16-lr0.001-s2",
-    "a32x16-lr0.001-s3",
-    "a32x16-lr0.001-s4"
+    "a64x32-lr0.001-s0",
+    "a64x32-lr0.001-s1",
+    "a64x32-lr0.001-s2",
+    "a64x32-lr0.001-s3",
+    "a64x32-lr0.001-s4"
   ],
-  "threshold": 0.55,
+  "threshold": 0.6,
   "features": [
     "ma_gap",
     "px_vs_fast",
@@ -32,8 +32,8 @@
     "moneyness",
     "bars_since_signal"
   ],
-  "arch": "32x16",
+  "arch": "64x32",
   "lr": 0.001,
-  "median_val_return": 8.126189426049137,
+  "median_val_return": 8.48853073297705,
   "baseline_config_hash": "20343f41af6e"
 }

@@ -199,6 +199,22 @@ def equity_metrics(returns: list[float], f: float = config.POSITION_FRACTION) ->
     }
 
 
+def top_k_contribution(returns: list[float], k: int = 3,
+                       f: float = config.POSITION_FRACTION) -> dict:
+    """How much of the compounded return the k largest trades account for.
+
+    If ``total_ex_topk`` collapses relative to ``total``, the window's verdict
+    rests on a handful of outlier trades — treat it as noise-dominated.
+    """
+    r = np.asarray([x for x in returns if x is not None], dtype=float)
+    if r.size == 0:
+        return {"total": None, "total_ex_topk": None, "k": k}
+    total = float(np.prod(1.0 + f * r) - 1.0)
+    keep = np.sort(r)[:-k] if r.size > k else np.array([])
+    ex = float(np.prod(1.0 + f * keep) - 1.0) if keep.size else 0.0
+    return {"total": total, "total_ex_topk": ex, "k": k}
+
+
 def execute_at_dte(symbol: str, trades: list[tuple], bars: pd.DataFrame,
                    dte: int, provider, end_date: str,
                    ex: Optional[Execution] = None) -> tuple[list[dict], dict]:
