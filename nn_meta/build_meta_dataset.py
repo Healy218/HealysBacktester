@@ -50,12 +50,19 @@ _TAG = "NN-META-DS"
 META_FEATURES = [
     # 15m technicals at the signal bar close
     "ma_gap", "px_vs_fast", "rsi14", "macd_hist", "bb_z",
-    "ret_1", "ret_8", "ret_26", "session_gap", "tod", "dow",
+    "ret_1", "ret_8", "ret_26", "session_gap", "gap_abs_z", "tod", "dow",
+    "is_first_hour", "is_last_hour", "dow_tod",
     # daily option-surface state, as-of previous close
     "rvol_5", "rvol_21", "atm_iv_near", "atm_iv_far",
     "term_slope", "iv_chg_5", "pc_ratio",
+    # market/cross-sectional context (v2.1)
+    "market_iv", "rv_iv_spread", "beta_60d",
     # trade context
     "dir_short", "dte_frac", "prem_spot", "moneyness", "bars_since_signal",
+    # proposal-strategy one-hots
+    *[f"strat_{s}" for s in config.PROPOSAL_STRATEGIES],
+    # sector one-hots
+    *[f"sec_{g}" for g in config.SECTOR_GROUPS],
 ]
 
 
@@ -86,7 +93,16 @@ def technical_features(bars: pd.DataFrame, fast: int, slow: int) -> pd.DataFrame
     prev_last_close = close.groupby(day).last().shift(1)
     session_gap = first_open / day.map(prev_last_close) - 1
 
+    # |gap| z-score vs trailing 60 sessions: an earnings/shock-recency proxy
+    # (a true earnings calendar needs a data source we don't have offline).
+    daily_gap = session_gap.groupby(day).first()
+    gz = (daily_gap.abs() - daily_gap.abs().rolling(60).mean()) \
+        / daily_gap.abs().rolling(60).std().replace(0, np.nan)
+    gap_abs_z = day.map(gz)
+
     bar_of_day = pd.Series(bars.groupby(day).cumcount().values, index=bars.index)
+    tod = bar_of_day / 26.0
+    dow = pd.Series(bars.index.dayofweek, index=bars.index) / 4.0
 
     return pd.DataFrame({
         "ma_gap": (ma_f - ma_s) / close,
@@ -98,8 +114,12 @@ def technical_features(bars: pd.DataFrame, fast: int, slow: int) -> pd.DataFrame
         "ret_8": close.pct_change(8),
         "ret_26": close.pct_change(26),
         "session_gap": session_gap,
-        "tod": bar_of_day / 26.0,
-        "dow": pd.Series(bars.index.dayofweek, index=bars.index) / 4.0,
+        "gap_abs_z": gap_abs_z,
+        "tod": tod,
+        "dow": dow,
+        "is_first_hour": (bar_of_day <= 3).astype(float),
+        "is_last_hour": (bar_of_day >= 22).astype(float),
+        "dow_tod": dow * tod,
     })
 
 
@@ -140,6 +160,15 @@ def join_surface_asof(rows: pd.DataFrame, surface: pd.DataFrame) -> pd.DataFrame
 
 # ── per-symbol row construction ───────────────────────────────────────────────
 
+def _feature_windows(strategy: str, params: dict) -> tuple[int, int]:
+    """(fast, slow) for the ma_gap / px_vs_fast features. MA uses its own
+    frozen windows; other strategies use the dashboard's 10/30 convention so
+    trend context stays comparable across proposal streams."""
+    if strategy == "ma":
+        return int(params["fast_window"]), int(params["slow_window"])
+    return 10, 30
+
+
 def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                       window_start: str = config.WINDOW_START,
                       window_end: str = config.WINDOW_END) -> pd.DataFrame:
@@ -147,57 +176,120 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
     if bars.empty:
         logger.warning(f"[{_TAG}] {symbol}: no bars")
         return pd.DataFrame()
-
-    fast, slow = spec_entry["fast"], spec_entry["slow"]
-    trades = propose_trades(bars, fast, slow, window_start, window_end)
-    if len(trades) > config.MAX_SIGNALS_PER_NAME:
-        logger.warning(f"[{_TAG}] {symbol}: truncating {len(trades)} trades to cap")
-        trades = trades[:config.MAX_SIGNALS_PER_NAME]
-    if not trades:
-        return pd.DataFrame()
-
-    feats = technical_features(bars, fast, slow)
     close = bars["Close"]
 
-    # signal-gap feature: bars since the previous proposed entry
-    entry_ts = [to_naive_utc(t[0]) for t in trades]
-    entry_pos = bars.index.searchsorted(entry_ts)
-    gaps = np.diff(entry_pos, prepend=entry_pos[0])
+    frames = []
+    for strat, entry in spec_entry["strategies"].items():
+        trades = propose_trades(bars, strat, entry["params"],
+                                window_start, window_end)
+        if len(trades) > config.MAX_SIGNALS_PER_NAME:
+            logger.warning(f"[{_TAG}] {symbol}/{strat}: truncating "
+                           f"{len(trades)} trades to cap")
+            trades = trades[:config.MAX_SIGNALS_PER_NAME]
+        if not trades:
+            continue
 
-    ex = Execution(symbol, config.INTERVAL, window_end, provider,
-                   config.EXEC_CONFIG)
-    all_rows = []
-    for dte in config.DTE_GRID:
-        records, meta = execute_at_dte(symbol, trades, bars, dte, provider,
-                                       window_end, ex=ex)
-        logger.info(f"[{_TAG}] {symbol} {dte}DTE: {meta['n_executed']}/"
-                    f"{meta['n_signals']} executed, {meta['n_rolls']} rolls")
-        for i, r in enumerate(records):
-            ts = to_naive_utc(r["entry_ts"])
-            spot = float(close.loc[:ts].iloc[-1]) if len(close.loc[:ts]) else np.nan
-            f = feats.loc[:ts]
-            frow = f.iloc[-1] if len(f) else pd.Series(index=feats.columns, dtype=float)
-            prem = r["entry_premium"]
-            strike = r["strike"]
-            all_rows.append({
-                "symbol": symbol, "trade_idx": r["trade_idx"], "dte": dte,
-                "entry_ts": ts, "entry_date": ts.normalize(),
-                "exit_ts": to_naive_utc(r["exit_ts"]),
-                "direction": r["direction"], "right": r["right"],
-                "contract": r["contract"], "strike": strike,
-                "expiration": r["expiration"],
-                "entry_premium": prem, "fill_lag_s": r["fill_lag_s"],
-                "n_fills": r["n_fills"], "n_rolls": r["n_rolls"],
-                "executed": r["executed"], "net_return": r["net_return"],
-                # context features
-                "dir_short": float(r["direction"]),
-                "dte_frac": dte / max(config.DTE_GRID),
-                "prem_spot": (prem / spot) if (prem is not None and spot) else np.nan,
-                "moneyness": np.log(strike / spot) if (strike and spot) else np.nan,
-                "bars_since_signal": float(np.log1p(gaps[i])),
-                **{k: frow.get(k, np.nan) for k in feats.columns},
-            })
-    return pd.DataFrame(all_rows)
+        f_w, s_w = _feature_windows(strat, entry["params"])
+        feats = technical_features(bars, f_w, s_w)
+
+        entry_ts = [to_naive_utc(t[0]) for t in trades]
+        entry_pos = bars.index.searchsorted(entry_ts)
+        gaps = np.diff(entry_pos, prepend=entry_pos[0])
+
+        ex = Execution(symbol, config.INTERVAL, window_end, provider,
+                       config.EXEC_CONFIG)
+        rows = []
+        for dte in config.DTE_GRID:
+            records, meta = execute_at_dte(symbol, trades, bars, dte, provider,
+                                           window_end, ex=ex)
+            logger.info(f"[{_TAG}] {symbol}/{strat} {dte}DTE: "
+                        f"{meta['n_executed']}/{meta['n_signals']} executed, "
+                        f"{meta['n_rolls']} rolls")
+            for i, r in enumerate(records):
+                ts = to_naive_utc(r["entry_ts"])
+                xs = to_naive_utc(r["exit_ts"])
+                hist = close.loc[:ts]
+                spot = float(hist.iloc[-1]) if len(hist) else np.nan
+                exit_hist = close.loc[:xs]
+                und_ret = (float(exit_hist.iloc[-1]) / spot - 1) \
+                    if (len(exit_hist) and spot) else np.nan
+                f = feats.loc[:ts]
+                frow = f.iloc[-1] if len(f) else pd.Series(index=feats.columns,
+                                                           dtype=float)
+                prem, strike = r["entry_premium"], r["strike"]
+                rows.append({
+                    "symbol": symbol, "strategy": strat,
+                    "trade_idx": r["trade_idx"], "dte": dte,
+                    "entry_ts": ts, "entry_date": ts.normalize(),
+                    "exit_ts": xs,
+                    "direction": r["direction"], "right": r["right"],
+                    "contract": r["contract"], "strike": strike,
+                    "expiration": r["expiration"],
+                    "entry_premium": prem, "fill_lag_s": r["fill_lag_s"],
+                    "n_fills": r["n_fills"], "n_rolls": r["n_rolls"],
+                    "executed": r["executed"], "net_return": r["net_return"],
+                    "und_period_return": und_ret,
+                    # context features
+                    "dir_short": float(r["direction"]),
+                    "dte_frac": dte / max(config.DTE_GRID),
+                    "prem_spot": (prem / spot) if (prem is not None and spot) else np.nan,
+                    "moneyness": np.log(strike / spot) if (strike and spot) else np.nan,
+                    "bars_since_signal": float(np.log1p(gaps[i])),
+                    **{k: frow.get(k, np.nan) for k in feats.columns},
+                })
+        frames.append(pd.DataFrame(rows))
+    return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
+
+
+# ── cross-sectional context (v2.1) ───────────────────────────────────────────
+
+def rolling_beta_60d() -> pd.DataFrame:
+    """Per-(underlying, date) rolling 60d beta vs SPY from daily closes."""
+    und = pd.read_parquet(config.UNDERLYING_DAILY_PARQUET,
+                          columns=["underlying", "date", "close"])
+    px = und.pivot(index="date", columns="underlying", values="close").sort_index()
+    rets = px.pct_change()
+    spy = rets["SPY"]
+    cov = rets.rolling(60).cov(spy)
+    beta = cov.div(spy.rolling(60).var(), axis=0)
+    out = beta.stack().rename("beta_60d").reset_index()
+    out.columns = ["date", "underlying", "beta_60d"]
+    return out
+
+
+def add_context_features(ds: pd.DataFrame, surface: pd.DataFrame) -> pd.DataFrame:
+    """market_iv (SPY ATM IV as-of prev close), rv_iv_spread, beta_60d,
+    strategy + sector one-hots. Runs AFTER join_surface_asof."""
+    ds = ds.sort_values("entry_date").reset_index(drop=True)
+
+    spy_iv = surface[surface["underlying"] == "SPY"][["date", "atm_iv_near"]] \
+        .rename(columns={"atm_iv_near": "market_iv"}).sort_values("date")
+    ds = pd.merge_asof(ds, spy_iv, left_on="entry_date", right_on="date",
+                       allow_exact_matches=False).drop(columns=["date"])
+
+    ds["rv_iv_spread"] = ds["rvol_21"] - ds["atm_iv_near"]
+
+    beta = rolling_beta_60d().sort_values("date")
+    parts = []
+    for sym, grp in ds.groupby("symbol"):
+        b = beta[beta["underlying"] == sym].drop(columns=["underlying"])
+        if b.empty:
+            grp = grp.copy()
+            grp["beta_60d"] = np.nan
+            parts.append(grp)
+            continue
+        parts.append(pd.merge_asof(grp.sort_values("entry_date"), b,
+                                   left_on="entry_date", right_on="date",
+                                   allow_exact_matches=False)
+                     .drop(columns=["date"]))
+    ds = pd.concat(parts, ignore_index=True)
+
+    for s in config.PROPOSAL_STRATEGIES:
+        ds[f"strat_{s}"] = (ds["strategy"] == s).astype(float)
+    sector = ds["symbol"].map(config.SECTOR_MAP)
+    for g in config.SECTOR_GROUPS:
+        ds[f"sec_{g}"] = (sector == g).astype(float)
+    return ds
 
 
 # ── assembly ─────────────────────────────────────────────────────────────────
@@ -233,7 +325,7 @@ def main() -> None:
             print(f"[{sym}] no rows")
             continue
         ex_rate = df["executed"].mean()
-        print(f"[{sym}] {len(df)} rows ({df['trade_idx'].nunique()} trades × "
+        print(f"[{sym}] {len(df)} rows ({df['strategy'].nunique()} strategies, "
               f"{df['dte'].nunique()} DTEs), executed {ex_rate:.0%}", flush=True)
         frames.append(df)
 
@@ -243,9 +335,16 @@ def main() -> None:
 
     surface = load_surface_features()
     ds = join_surface_asof(ds, surface)
+    ds = add_context_features(ds, surface)
 
-    ds["label"] = np.where(ds["net_return"].notna(),
-                           (ds["net_return"].fillna(0) > 0).astype(float), np.nan)
+    labeled = ds["net_return"].notna()
+    ds["label"] = np.where(labeled, (ds["net_return"].fillna(0) > 0).astype(float),
+                           np.nan)
+    excess_ok = labeled & ds["und_period_return"].notna()
+    ds["label_excess"] = np.where(
+        excess_ok,
+        (ds["net_return"].fillna(0) > ds["und_period_return"].fillna(0)).astype(float),
+        np.nan)
     ds["split"] = assign_split(ds["entry_date"])
     ds = ds[ds["split"] != "purged"].reset_index(drop=True)
 
@@ -258,10 +357,15 @@ def main() -> None:
 
     print(f"\ndataset: {len(ds)} rows → {config.META_DATASET_PARQUET}")
     lab = ds["label"].dropna()
-    print(f"  labeled: {len(lab)} ({lab.mean():.1%} positive)")
+    lab_x = ds["label_excess"].dropna()
+    print(f"  label win:    {len(lab)} ({lab.mean():.1%} positive)")
+    print(f"  label excess: {len(lab_x)} ({lab_x.mean():.1%} positive)")
     r = ds["net_return"].dropna()
     print(f"  net_return: mean {r.mean():+.3f} | p5 {r.quantile(.05):+.2f} | "
           f"p95 {r.quantile(.95):+.2f}")
+    by_strat = ds[ds["executed"]].groupby("strategy").size()
+    print("  executed rows by strategy: "
+          + ", ".join(f"{s}={n}" for s, n in by_strat.items()))
     for s in ("train", "val", "test"):
         sub = ds[ds["split"] == s]
         n_lab = sub["label"].notna().sum()

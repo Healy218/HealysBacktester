@@ -1,15 +1,17 @@
 # nn_meta/baseline.py
 """Frozen mechanical baseline: the leak-free reference the NN must beat.
 
-Protocol (per underlying, ALL choices made on TRAIN data only):
-  1. MA-crossover parameter sweep on the TRAIN window's 15m bars — same signal
-     generator, simulator, and sim config as the dashboard. Best Sharpe wins,
-     subject to a trades-per-day ceiling and a minimum trade count.
-  2. The frozen param set's trades are executed as options at each DTE in
+Protocol (per underlying × proposal strategy, ALL choices on TRAIN data only):
+  1. Parameter sweep for EVERY strategy in config.PROPOSAL_STRATEGIES on the
+     TRAIN window's 15m bars — same signal generators, simulator, and sim
+     config as the dashboard. Best Sharpe wins per strategy, subject to a
+     trades-per-day ceiling and a minimum trade count.
+  2. Each strategy's frozen trades are executed as options at each DTE in
      config.DTE_GRID through options/execution.py (same engine as the
-     dashboard overlay). Best per-trade Sharpe picks the frozen DTE.
-  3. The frozen {fast, slow, dte} per symbol is written to
-     artifacts/baseline_spec.json — the ONLY baseline definition downstream.
+     dashboard overlay). Best per-trade Sharpe picks that strategy's DTE.
+  3. spec["symbols"][sym] = {"strategies": {strat: {params, dte, …}},
+     "best_strategy": …} written to artifacts/baseline_spec.json — the ONLY
+     baseline definition downstream.
 
 ``evaluate_baseline`` replays a frozen spec on any window (val / test /
 walk-forward folds): signals are generated over the full series so MA warmup
@@ -34,10 +36,9 @@ from utils.logging_utils import setup_logging
 from utils import freq_utils, runner_utils
 from utils.chunked_runner import simulate_and_rank
 from portfolio import simulator
-from signals import ma_crossover
 from options.execution import Execution, extract_trades, execute_trade_returns, to_naive_utc
 from nn_meta.providers import get_provider
-from nn_meta import config
+from nn_meta import config, proposals
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -62,32 +63,21 @@ def load_underlying_15m(symbol: str) -> pd.DataFrame:
 
 # ── signal generation for a single frozen param set ───────────────────────────
 
-def propose_trades(bars: pd.DataFrame, fast: int, slow: int,
+def propose_trades(bars: pd.DataFrame, strategy: str, params: dict,
                    sim_start: str, sim_end: str) -> list[tuple]:
-    """Simulated (entry_ts, exit_ts, direction) trades for one MA param pair.
+    """Simulated (entry_ts, exit_ts, direction) trades for one frozen
+    (strategy, params) pair.
 
-    Signals are computed on the FULL series (so MA warmup uses bars before
+    Signals are computed on the FULL series (indicator warmup uses bars before
     ``sim_start``), then simulation runs on the [sim_start, sim_end] slice with
     the frozen sim config — stops and the trend filter shape the timeline
     exactly as they would in the dashboard.
     """
-    close = bars["Close"]
-    fast, slow = int(fast), int(slow)
-    if fast >= slow:
-        raise ValueError(f"need fast < slow, got {fast}/{slow}")
-    # run_combs squeezes a 2-window input to Series (which the generator
-    # rejects), so add a dummy window and select the frozen pair's column —
-    # the generator runs verbatim, guaranteeing sweep-identical semantics.
-    dummy = slow + 1 if slow + 1 != fast else slow + 2
-    windows = np.array(sorted({fast, slow, dummy}))
-    entries, exits, s_ent, s_ext = ma_crossover.generate_ma_signals(
-        close, windows, enable_shorting=config.ENABLE_SHORTING)
-    col = next(c for c in entries.columns if c[0] == fast and c[1] == slow)
-
+    entries, exits, s_ent, s_ext = proposals.single_signals(strategy, bars, params)
     price = bars.loc[sim_start:sim_end]
 
     def _one(df):
-        return df[[col]].loc[sim_start:sim_end] if df is not None else None
+        return df.loc[sim_start:sim_end] if df is not None else None
 
     pf = simulator.run_backtest(
         price_df=price,
@@ -107,26 +97,13 @@ def propose_trades(bars: pd.DataFrame, fast: int, slow: int,
 
 # ── step 1: parameter sweep on TRAIN ─────────────────────────────────────────
 
-def _parse_ma_label(label: str) -> tuple[int, int]:
-    """'fast=10, slow=50' → (10, 50)."""
-    vals = {}
-    for part in label.split(","):
-        if "=" in part:
-            k, v = part.split("=", 1)
-            vals[k.strip()] = int(float(v.strip()))
-    return vals["fast"], vals["slow"]
-
-
-def sweep_train_params(symbol: str, bars: pd.DataFrame,
+def sweep_train_params(symbol: str, bars: pd.DataFrame, strategy: str,
                        train_start: str = config.TRAIN_START,
                        train_end: str = config.TRAIN_END) -> Optional[dict]:
-    """Best-Sharpe MA params on the train window, under the activity guards."""
-    close = bars.loc[:train_end, "Close"]
-    windows = np.arange(config.MA_WINDOW_START, config.MA_WINDOW_END,
-                        config.MA_WINDOW_STEP)
-    entries, exits, s_ent, s_ext = ma_crossover.generate_ma_signals(
-        close, windows, enable_shorting=config.ENABLE_SHORTING)
-
+    """Best-Sharpe params for one proposal strategy on the train window,
+    under the activity guards. Params come straight from the winning
+    portfolio column (no label parsing)."""
+    bars_hist = bars.loc[:train_end]
     price = bars.loc[train_start:train_end]
     assert price.index.max() <= pd.Timestamp(train_end) + pd.Timedelta(days=1), \
         "sweep touched data beyond train_end"
@@ -134,6 +111,7 @@ def sweep_train_params(symbol: str, bars: pd.DataFrame,
         logger.warning(f"[{_TAG}] {symbol}: only {len(price)} train bars — skipping")
         return None
 
+    entries, exits, s_ent, s_ext = proposals.sweep_signals(strategy, bars_hist)
     result = simulate_and_rank(
         price_data=price,
         entries=entries.loc[train_start:train_end],
@@ -142,11 +120,13 @@ def sweep_train_params(symbol: str, bars: pd.DataFrame,
         short_exits=s_ext.loc[train_start:train_end] if s_ext is not None else None,
         freq=_FREQ,
         sim_kwargs=_SIM_KWARGS,
-        strategy_tag=f"{_TAG}-{symbol}",
+        strategy_tag=f"{_TAG}-{symbol}-{strategy}",
     )
     rows = result.get("top5") or []
-    if result.get("error") or not rows:
-        logger.warning(f"[{_TAG}] {symbol}: sweep failed: {result.get('error')}")
+    pf = result.get("portfolio")
+    if result.get("error") or not rows or pf is None:
+        logger.warning(f"[{_TAG}] {symbol}/{strategy}: sweep failed: "
+                       f"{result.get('error')}")
         return None
 
     n_days = max(price.index.normalize().nunique(), 1)
@@ -162,14 +142,15 @@ def sweep_train_params(symbol: str, bars: pd.DataFrame,
             break
     if pick is None and candidates:      # nothing satisfies the guards — disclose
         pick, constrained = candidates[0], False
-        logger.warning(f"[{_TAG}] {symbol}: no sweep row met activity guards; "
-                       f"falling back to raw best Sharpe")
+        logger.warning(f"[{_TAG}] {symbol}/{strategy}: no sweep row met activity "
+                       f"guards; falling back to raw best Sharpe")
     if pick is None:
         return None
 
-    fast, slow = _parse_ma_label(pick["param_label"])
     return {
-        "fast": fast, "slow": slow,
+        "strategy": strategy,
+        "params": proposals.params_from_portfolio(pf, pick["portfolio_col_int_idx"]),
+        "param_label": pick.get("param_label"),
         "train_sharpe": pick.get("sharpe_ratio"),
         "train_return_pct": pick.get("total_return_pct"),
         "train_trades": pick.get("total_trades"),
@@ -242,25 +223,18 @@ def choose_dte(per_dte: dict[int, dict]) -> Optional[int]:
 
 # ── freeze + evaluate ─────────────────────────────────────────────────────────
 
-def freeze_symbol(symbol: str, provider,
-                  train_start: str = config.TRAIN_START,
-                  train_end: str = config.TRAIN_END) -> Optional[dict]:
-    bars = load_underlying_15m(symbol)
-    if bars.empty:
-        logger.warning(f"[{_TAG}] {symbol}: no 15m bars")
+def _freeze_one_strategy(symbol: str, strategy: str, bars: pd.DataFrame,
+                         provider, train_start: str, train_end: str
+                         ) -> Optional[dict]:
+    swp = sweep_train_params(symbol, bars, strategy, train_start, train_end)
+    if swp is None:
         return None
-
-    params = sweep_train_params(symbol, bars, train_start, train_end)
-    if params is None:
-        return None
-
-    trades = propose_trades(bars, params["fast"], params["slow"],
-                            train_start, train_end)
+    trades = propose_trades(bars, strategy, swp["params"], train_start, train_end)
     if len(trades) > config.MAX_SIGNALS_PER_NAME:
-        logger.warning(f"[{_TAG}] {symbol}: {len(trades)} trades exceeds cap, truncating")
+        logger.warning(f"[{_TAG}] {symbol}/{strategy}: {len(trades)} trades "
+                       f"exceeds cap, truncating")
         trades = trades[:config.MAX_SIGNALS_PER_NAME]
     if not trades:
-        logger.warning(f"[{_TAG}] {symbol}: frozen params produced no train trades")
         return None
     assert all(to_naive_utc(t[1]) <= pd.Timestamp(train_end) + pd.Timedelta(days=1)
                for t in trades), "train trade leaked beyond train_end"
@@ -279,35 +253,68 @@ def freeze_symbol(symbol: str, provider,
 
     best = choose_dte(per_dte)
     if best is None:
-        logger.warning(f"[{_TAG}] {symbol}: no DTE produced executed trades")
         return None
-
     return {
-        **params, "dte": best,
+        **swp, "dte": best,
         "train_option": {str(d): per_dte[d] for d in per_dte},
         "n_train_signals": len(trades),
     }
 
 
+def freeze_symbol(symbol: str, provider,
+                  train_start: str = config.TRAIN_START,
+                  train_end: str = config.TRAIN_END) -> Optional[dict]:
+    """Freeze every proposal strategy for one symbol; mark the train-best."""
+    bars = load_underlying_15m(symbol)
+    if bars.empty:
+        logger.warning(f"[{_TAG}] {symbol}: no 15m bars")
+        return None
+
+    strategies: dict[str, dict] = {}
+    for strat in config.PROPOSAL_STRATEGIES:
+        try:
+            entry = _freeze_one_strategy(symbol, strat, bars, provider,
+                                         train_start, train_end)
+        except Exception as e:
+            logger.exception(f"[{_TAG}] {symbol}/{strat}: freeze failed: {e}")
+            entry = None
+        if entry is not None:
+            strategies[strat] = entry
+    if not strategies:
+        return None
+
+    def _score(s):
+        st = strategies[s]["train_option"][str(strategies[s]["dte"])]
+        return st["per_trade_sharpe"] if st["per_trade_sharpe"] is not None else -np.inf
+
+    return {"strategies": strategies,
+            "best_strategy": max(strategies, key=_score)}
+
+
 def evaluate_baseline(symbol: str, spec_entry: dict, window: tuple[str, str],
                       provider, bars: Optional[pd.DataFrame] = None) -> dict:
-    """Frozen baseline P&L on an arbitrary window (val / test / WF folds)."""
+    """Frozen baseline P&L on an arbitrary window: every strategy's proposals
+    at its own frozen params/DTE, pooled chronologically."""
     if bars is None:
         bars = load_underlying_15m(symbol)
     start, end = window
-    all_trades = propose_trades(bars, spec_entry["fast"], spec_entry["slow"],
-                                config.WINDOW_START, config.WINDOW_END)
     lo, hi = pd.Timestamp(start), pd.Timestamp(end) + pd.Timedelta(days=1)
-    trades = [t for t in all_trades if lo <= to_naive_utc(t[0]) < hi]
-    if not trades:
-        return {"metrics": equity_metrics([]) | {"fill_fail_rate": None},
-                "records": []}
-    records, meta = execute_at_dte(symbol, trades, bars, spec_entry["dte"],
-                                   provider, config.WINDOW_END)
-    metrics = equity_metrics([r["net_return"] for r in records if r["executed"]])
-    metrics["fill_fail_rate"] = meta["fill_fail_rate"]
-    metrics["n_signals"] = meta["n_signals"]
-    return {"metrics": metrics, "records": records}
+    all_records: list[dict] = []
+    n_signals = 0
+    for strat, entry in spec_entry["strategies"].items():
+        all_trades = propose_trades(bars, strat, entry["params"],
+                                    config.WINDOW_START, config.WINDOW_END)
+        trades = [t for t in all_trades if lo <= to_naive_utc(t[0]) < hi]
+        if not trades:
+            continue
+        n_signals += len(trades)
+        records, _ = execute_at_dte(symbol, trades, bars, entry["dte"],
+                                    provider, config.WINDOW_END)
+        all_records.extend(r for r in records if r["executed"])
+    all_records.sort(key=lambda r: r["fill_entry_ts"])
+    metrics = equity_metrics([r["net_return"] for r in all_records])
+    metrics["n_signals"] = n_signals
+    return {"metrics": metrics, "records": all_records}
 
 
 # ── spec I/O ─────────────────────────────────────────────────────────────────
@@ -315,7 +322,8 @@ def evaluate_baseline(symbol: str, spec_entry: dict, window: tuple[str, str],
 def _config_hash() -> str:
     frozen = {
         "interval": config.INTERVAL, "dte_grid": config.DTE_GRID,
-        "ma": [config.MA_WINDOW_START, config.MA_WINDOW_END, config.MA_WINDOW_STEP],
+        "strategies": config.PROPOSAL_STRATEGIES,
+        "grids": config.SWEEP_GRIDS,
         "sim": config.SIM_CONFIG, "train": [config.TRAIN_START, config.TRAIN_END],
         "ceiling": config.TRADES_PER_DAY_CEILING,
         "min_trades": config.MIN_TRAIN_TRADES,
@@ -329,6 +337,10 @@ def load_spec() -> dict:
             f"{config.BASELINE_SPEC_JSON} missing — run "
             f"`python -m nn_meta.freeze_baseline` first.")
     spec = json.loads(config.BASELINE_SPEC_JSON.read_text())
+    first = next(iter(spec.get("symbols", {}).values()), None)
+    if first is not None and "strategies" not in first:
+        raise ValueError("baseline_spec.json is the v1 (MA-only) schema — "
+                         "re-run `python -m nn_meta.freeze_baseline`.")
     if spec.get("config_hash") != _config_hash():
         logger.warning(f"[{_TAG}] baseline_spec config hash mismatch — the spec was "
                        f"frozen under different settings; consider re-freezing")
@@ -357,12 +369,13 @@ def freeze_all(symbols: Optional[list[str]] = None) -> dict:
             print(f"[{sym}] SKIPPED (no freezable baseline)")
             continue
         out["symbols"][sym] = entry
-        t = entry["train_option"][str(entry["dte"])]
-        print(f"[{sym}] fast={entry['fast']} slow={entry['slow']} "
-              f"dte={entry['dte']} | train: {entry['train_trades']} stock trades, "
-              f"option n={t['n']} win={t['win_rate']:.0%} "
-              f"ret={t['total_return']:+.1%} (fills ok "
-              f"{1 - t['fill_fail_rate']:.0%})", flush=True)
+        for strat, e in entry["strategies"].items():
+            t = e["train_option"][str(e["dte"])]
+            star = "*" if strat == entry["best_strategy"] else " "
+            print(f"[{sym}] {star}{strat:8s} {e['param_label'][:38]:38s} "
+                  f"dte={e['dte']:>2d} | n={t['n']:3d} win={t['win_rate']:.0%} "
+                  f"ret={t['total_return']:+.1%} "
+                  f"(fills ok {1 - t['fill_fail_rate']:.0%})", flush=True)
 
     config.BASELINE_SPEC_JSON.write_text(json.dumps(out, indent=2))
     print(f"\nfroze {len(out['symbols'])} symbols → {config.BASELINE_SPEC_JSON}")

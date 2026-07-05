@@ -4,15 +4,7 @@ import numpy as np
 import pytest
 
 from nn_meta import config
-from nn_meta.baseline import _parse_ma_label, choose_dte, equity_metrics
-
-
-class TestParseLabel:
-    def test_standard_label(self):
-        assert _parse_ma_label("fast=10, slow=50") == (10, 50)
-
-    def test_float_formatting(self):
-        assert _parse_ma_label("fast=10.0, slow=50.0") == (10, 50)
+from nn_meta.baseline import choose_dte, equity_metrics
 
 
 class TestEquityMetrics:

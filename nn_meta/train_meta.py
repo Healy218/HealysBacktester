@@ -37,21 +37,22 @@ def sample_weights(net_return: pd.Series) -> np.ndarray:
 
 
 def run_one(panel: pd.DataFrame, arch: list[int], lr: float, seed: int,
-            max_epochs: int) -> dict:
-    tr = panel[(panel["split"] == "train") & panel["label"].notna()]
-    va = panel[(panel["split"] == "val") & panel["label"].notna()]
+            max_epochs: int, label_col: str = "label") -> dict:
+    tr = panel[(panel["split"] == "train") & panel[label_col].notna()]
+    va = panel[(panel["split"] == "val") & panel[label_col].notna()]
 
     mu = tr[META_FEATURES].mean()
     sd = tr[META_FEATURES].std().replace(0, 1.0)
-    Xtr, ytr = prepare_matrix(tr, mu, sd), tr["label"].values.astype("float32")
-    Xva, yva = prepare_matrix(va, mu, sd), va["label"].values.astype("float32")
+    Xtr, ytr = prepare_matrix(tr, mu, sd), tr[label_col].values.astype("float32")
+    Xva, yva = prepare_matrix(va, mu, sd), va[label_col].values.astype("float32")
     wtr = sample_weights(tr["net_return"])
     wva = sample_weights(va["net_return"])
 
     tf.keras.utils.set_random_seed(seed)
     model = build_meta_mlp(len(META_FEATURES), arch, lr)
 
-    run_id = f"a{'x'.join(map(str, arch))}-lr{lr:g}-s{seed}"
+    lab_tag = "win" if label_col == "label" else "xs"
+    run_id = f"a{'x'.join(map(str, arch))}-lr{lr:g}-{lab_tag}-s{seed}"
     run_dir = config.RUNS_DIR / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
 
@@ -71,10 +72,12 @@ def run_one(panel: pd.DataFrame, arch: list[int], lr: float, seed: int,
     (run_dir / "scaler.json").write_text(json.dumps(
         {"mean": mu.to_dict(), "std": sd.to_dict()}))
     (run_dir / "params.json").write_text(json.dumps(
-        {"arch": arch, "lr": lr, "seed": seed, "features": META_FEATURES}))
+        {"arch": arch, "lr": lr, "seed": seed, "label": label_col,
+         "features": META_FEATURES}))
 
     best_epoch = int(np.argmin(hist.history["val_loss"]))
     return {"run_id": run_id, "arch": "x".join(map(str, arch)), "lr": lr,
+            "label": label_col,
             "seed": seed, "epochs_ran": len(hist.history["loss"]),
             "best_epoch": best_epoch + 1,
             "train_loss": float(hist.history["loss"][-1]),
@@ -95,23 +98,27 @@ def main() -> None:
     archs = config.ARCHITECTURES[:1] if args.smoke else config.ARCHITECTURES
     lrs = config.LEARNING_RATES[:1] if args.smoke else config.LEARNING_RATES
     seeds = config.SEEDS[:2] if args.smoke else config.SEEDS
+    labels = ["label"] if args.smoke else \
+        ["label" if lt == "win" else "label_excess" for lt in config.LABEL_TYPES]
     max_epochs = 5 if args.smoke else config.MAX_EPOCHS
 
     n_lab = panel["label"].notna().sum()
-    total = len(archs) * len(lrs) * len(seeds)
+    total = len(archs) * len(lrs) * len(seeds) * len(labels)
     print(f"training {total} runs on {n_lab} labeled rows "
           f"({'SMOKE' if args.smoke else 'FULL'})", flush=True)
 
     rows, i = [], 0
-    for arch in archs:
-        for lr in lrs:
-            for seed in seeds:
-                i += 1
-                r = run_one(panel, arch, lr, seed, max_epochs)
-                rows.append(r)
-                print(f"  [{i}/{total}] {r['run_id']}: val_loss={r['val_loss']:.4f} "
-                      f"val_auc={r['val_auc']:.3f} ({r['seconds']}s)", flush=True)
-                pd.DataFrame(rows).to_csv(config.RUNS_CSV, index=False)
+    for label_col in labels:
+        for arch in archs:
+            for lr in lrs:
+                for seed in seeds:
+                    i += 1
+                    r = run_one(panel, arch, lr, seed, max_epochs, label_col)
+                    rows.append(r)
+                    print(f"  [{i}/{total}] {r['run_id']}: "
+                          f"val_loss={r['val_loss']:.4f} "
+                          f"val_auc={r['val_auc']:.3f} ({r['seconds']}s)", flush=True)
+                    pd.DataFrame(rows).to_csv(config.RUNS_CSV, index=False)
 
     print(f"done — registry at {config.RUNS_CSV}")
 

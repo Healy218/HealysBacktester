@@ -73,8 +73,11 @@ def run(symbol, start_date, end_date, interval, backtest_config, strategy_config
         # Heavy imports deferred so the dashboard boots without TensorFlow.
         from nn_meta import config as mcfg
         from nn_meta.baseline import load_spec, propose_trades, execute_at_dte
-        from nn_meta.build_meta_dataset import (META_FEATURES, technical_features,
-                                                load_surface_features, _SURFACE_COLS)
+        from nn_meta.build_meta_dataset import (META_FEATURES, _SURFACE_COLS,
+                                                _feature_windows,
+                                                load_surface_features,
+                                                rolling_beta_60d,
+                                                technical_features)
         from nn_meta.download_data import filter_rth
         from nn_meta.train_meta import prepare_matrix
         from nn_meta.select_meta import predict_rows
@@ -92,6 +95,11 @@ def run(symbol, start_date, end_date, interval, backtest_config, strategy_config
             return _err(f"'{symbol}' has no frozen baseline "
                         f"(available: {', '.join(sorted(spec['symbols']))}).")
         entry = spec["symbols"][symbol]
+        # Dashboard shows one symbol: use its train-best proposal strategy at
+        # its frozen DTE with filter semantics (the rank mode is
+        # cross-sectional and lives in select_meta / walkforward reports).
+        strat = entry["best_strategy"]
+        e = entry["strategies"][strat]
 
         cb(10, 100)
         raw = vbt_data_loader.load_price_data_smart(symbol, start_date, end_date,
@@ -100,20 +108,19 @@ def run(symbol, start_date, end_date, interval, backtest_config, strategy_config
             return _err(f"Could not load 15m data for '{symbol}'.")
         bars = filter_rth(raw[["Open", "High", "Low", "Close", "Volume"]])
 
-        trades = propose_trades(bars, entry["fast"], entry["slow"],
-                                start_date, end_date)
+        trades = propose_trades(bars, strat, e["params"], start_date, end_date)
         if not trades:
             return _err("Frozen baseline produced no trades in this window.")
         cb(30, 100)
 
         # ── execute at frozen DTE for context features ────────────────────────
         provider = get_provider()
-        records, meta = execute_at_dte(symbol, trades, bars, entry["dte"],
+        records, meta = execute_at_dte(symbol, trades, bars, e["dte"],
                                        provider, end_date)
         cb(55, 100)
 
         # ── feature rows (decision-time observables) ──────────────────────────
-        feats = technical_features(bars, entry["fast"], entry["slow"])
+        feats = technical_features(bars, *_feature_windows(strat, e["params"]))
         close = bars["Close"]
         entry_pos = bars.index.searchsorted([to_naive_utc(t[0]) for t in trades])
         gaps = np.diff(entry_pos, prepend=entry_pos[0])
@@ -128,7 +135,7 @@ def run(symbol, start_date, end_date, interval, backtest_config, strategy_config
                 "symbol": symbol, "entry_ts": ts,
                 "entry_date": ts.normalize(),
                 "dir_short": float(r["direction"]),
-                "dte_frac": entry["dte"] / max(mcfg.DTE_GRID),
+                "dte_frac": e["dte"] / max(mcfg.DTE_GRID),
                 "prem_spot": (prem / spot) if (prem and spot) else np.nan,
                 "moneyness": np.log(strike / spot) if (strike and spot) else np.nan,
                 "bars_since_signal": float(np.log1p(gaps[i])),
@@ -145,6 +152,28 @@ def run(symbol, start_date, end_date, interval, backtest_config, strategy_config
         else:
             for c in _SURFACE_COLS:
                 frows[c] = np.nan
+
+        # v2.1 context features (same construction as the dataset builder)
+        spy_iv = surface[surface["underlying"] == "SPY"][["date", "atm_iv_near"]] \
+            .rename(columns={"atm_iv_near": "market_iv"}).sort_values("date")
+        frows = pd.merge_asof(frows.sort_values("entry_date"), spy_iv,
+                              left_on="entry_date", right_on="date",
+                              allow_exact_matches=False).drop(columns=["date"])
+        frows["rv_iv_spread"] = frows["rvol_21"] - frows["atm_iv_near"]
+        beta = rolling_beta_60d()
+        b = beta[beta["underlying"] == symbol].drop(columns=["underlying"]) \
+            .sort_values("date")
+        if b.empty:
+            frows["beta_60d"] = np.nan
+        else:
+            frows = pd.merge_asof(frows.sort_values("entry_date"), b,
+                                  left_on="entry_date", right_on="date",
+                                  allow_exact_matches=False).drop(columns=["date"])
+        for s_name in mcfg.PROPOSAL_STRATEGIES:
+            frows[f"strat_{s_name}"] = float(s_name == strat)
+        sector = mcfg.SECTOR_MAP.get(symbol)
+        for g in mcfg.SECTOR_GROUPS:
+            frows[f"sec_{g}"] = float(g == sector)
         frows = frows.sort_values("entry_ts").reset_index(drop=True)
 
         # ── ensemble filter ───────────────────────────────────────────────────
@@ -172,8 +201,7 @@ def run(symbol, start_date, end_date, interval, backtest_config, strategy_config
             idx = list(pf.wrapper.columns).index(name)
             row = param_utils._make_row_from_index(pf, idx, name)
             row["param_label"] = (
-                f"{name} — fast={entry['fast']} slow={entry['slow']} "
-                f"dte={entry['dte']}"
+                f"{name} — {strat}: {e.get('param_label', '')} dte={e['dte']}"
                 + (f" | kept {sum(kept)}/{len(trades)}" if name == FILTERED_COL else ""))
             rows_out.append(row)
         rows_out.sort(key=lambda r: (r.get("sharpe_ratio") is None,

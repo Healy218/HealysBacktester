@@ -70,9 +70,26 @@ SURFACE_DATASET_PARQUET = DATA_CACHE / "surface_daily.parquet"
 
 # ── Interval / execution ─────────────────────────────────────────────────────
 INTERVAL = "15m"
-# DTE grid for label execution — the cached universe covers 7–45 DTE, so the
-# dashboard's 1/5-DTE variants are not available offline.
-DTE_GRID = [10, 30, 45]
+# Full dashboard DTE grid. 1/5-DTE selections pick the nearest available
+# expiration from the cached universe (near-expiry bars are the most liquid);
+# short DTEs roll while the proposal stays on, exactly like the overlay.
+DTE_GRID = [1, 5, 10, 30, 45]
+
+# ── Proposal engines (v2.1: every offline-backtestable built-in strategy) ────
+# Sentiment is excluded — it requires a live news feed. Sweep grids are
+# deliberately coarser than the dashboard's: the freeze runs 6 sweeps × 56
+# names (× again per walk-forward fold), so each grid is kept to ~10^2-10^4
+# combos. Signal semantics come from the same signals/* generators.
+PROPOSAL_STRATEGIES = ["ma", "rsi", "macd", "bbands", "stoch", "volume", "elliott"]
+SWEEP_GRIDS = {
+    "ma":      {"windows": (2, 143, 2)},
+    "rsi":     {"window": (7, 29, 7), "entry": (20.0, 41.0, 5.0), "exit": (60.0, 81.0, 5.0)},
+    "macd":    {"fast": (6, 27, 6), "slow": (18, 43, 6), "signal": (5, 20, 7)},
+    "bbands":  {"window": (10, 51, 10), "std": (1.5, 3.1, 0.5)},
+    "stoch":   {"k": (5, 21, 5), "d": (3, 10, 3), "oversold": (20, 21, 1), "overbought": (80, 81, 1)},
+    "volume":  {"vol_window": (30, 61, 10), "vol_mult": (1.5, 2.1, 0.25), "exit_ma": (45, 91, 15)},
+    "elliott": {"swing": (4, 17, 4), "fib": (0.382, 0.62, 0.118), "tol": (0.01, 0.021, 0.01)},
+}
 
 # Same cost constants the equity simulator applies (utils/runner_utils.py).
 FEES_PERCENT = 0.001
@@ -125,6 +142,35 @@ SIM_CONFIG = {
 # per-trade returns into an equity curve (same convention as nn_options_signal).
 POSITION_FRACTION = 0.10
 
+# ── Sector groups (static one-hot context; hand-maintained) ──────────────────
+SECTOR_GROUPS = ["idx_etf", "sec_etf", "tech", "semis", "fin", "crypto",
+                 "defensive", "cyclical", "spec"]
+SECTOR_MAP = {
+    "SPY": "idx_etf", "QQQ": "idx_etf", "VOO": "idx_etf", "IWM": "idx_etf",
+    "DIA": "idx_etf",
+    "SMH": "sec_etf", "XLE": "sec_etf", "XLF": "sec_etf", "ARKK": "sec_etf",
+    "GLD": "sec_etf", "TLT": "sec_etf",
+    "MSFT": "tech", "META": "tech", "AMZN": "tech", "AAPL": "tech",
+    "GOOG": "tech", "ORCL": "tech", "CRM": "tech", "NFLX": "tech",
+    "UBER": "tech", "PLTR": "tech", "TSLA": "tech",
+    "NVDA": "semis", "AVGO": "semis", "QCOM": "semis", "INTC": "semis",
+    "AMD": "semis", "TSM": "semis", "MU": "semis", "SNDK": "semis",
+    "SMCI": "semis", "AXTI": "semis",
+    "JPM": "fin", "BAC": "fin", "GS": "fin",
+    "COIN": "crypto", "MSTR": "crypto", "MARA": "crypto", "HOOD": "crypto",
+    "UNH": "defensive", "LLY": "defensive", "PFE": "defensive",
+    "WMT": "defensive", "COST": "defensive", "T": "defensive",
+    "NOK": "defensive",
+    "XOM": "cyclical", "CVX": "cyclical", "BA": "cyclical", "HD": "cyclical",
+    "F": "cyclical", "DIS": "cyclical",
+    "RGTI": "spec", "SLS": "spec", "SPCX": "spec", "GME": "spec",
+}
+
+# ── Labels (v2.1) ─────────────────────────────────────────────────────────────
+# win    : net option return > 0
+# excess : net option return > holding the underlying long over the same window
+LABEL_TYPES = ["win", "excess"]
+
 # ── Meta-model / training grid (Phase D) ─────────────────────────────────────
 ARCHITECTURES = [[64, 32], [32, 16]]
 LEARNING_RATES = [1e-3, 3e-4]
@@ -140,6 +186,18 @@ KEEP_THRESHOLDS = [0.50, 0.55, 0.60]       # P(win) needed to keep a proposal
 MIN_KEPT_TRADES = 10
 MAX_DRAWDOWN_CAP = 0.40
 MIN_PASSING_SEEDS = 3
+
+# ── Evaluation modes (v2.1) ───────────────────────────────────────────────────
+# filter : keep every proposal at its strategy-frozen DTE with score >= thr
+#          (v1 semantics), sequential compounding
+# rank   : cross-sectional top-K portfolio — candidates at the same bar
+#          compete on score (DTE variants of one trade dedupe to the
+#          best-scored); up to MAX_CONCURRENT slots, PORTFOLIO_FRACTION of
+#          equity each, P&L applied at each position's exit
+EVAL_MODES = ["filter", "rank"]
+MAX_CONCURRENT = 5
+PORTFOLIO_FRACTION = 0.10
+RANK_QUINTILES = 5                         # rank-calibration report buckets
 
 # ── Student (Phase F: teacher→student standalone signal NN) ──────────────────
 STUDENT_DATASET_PARQUET = ARTIFACTS / "student_dataset.parquet"

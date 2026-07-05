@@ -35,11 +35,12 @@ from utils.logging_utils import setup_logging
 from nn_meta.providers import get_provider
 from nn_meta import config
 from nn_meta.baseline import equity_metrics, freeze_symbol
-from nn_meta.build_meta_dataset import (META_FEATURES, build_symbol_rows,
-                                        join_surface_asof, load_surface_features)
+from nn_meta.build_meta_dataset import (META_FEATURES, add_context_features,
+                                        build_symbol_rows, join_surface_asof,
+                                        load_surface_features)
 from nn_meta.train_meta import run_one
-from nn_meta.select_meta import (basket_buy_hold, evaluate_filter, fmt,
-                                 frozen_rows, predict_rows)
+from nn_meta.select_meta import (_EVALUATORS, all_rows, basket_buy_hold, fmt,
+                                 frozen_mask, predict_rows)
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -86,8 +87,15 @@ def _fold_dataset(spec_symbols: dict, provider, window_end: str,
         return pd.DataFrame()
     ds = pd.concat(frames, ignore_index=True)
     ds = join_surface_asof(ds, surface)
-    ds["label"] = np.where(ds["net_return"].notna(),
-                           (ds["net_return"].fillna(0) > 0).astype(float), np.nan)
+    ds = add_context_features(ds, surface)
+    labeled = ds["net_return"].notna()
+    ds["label"] = np.where(labeled, (ds["net_return"].fillna(0) > 0).astype(float),
+                           np.nan)
+    excess_ok = labeled & ds["und_period_return"].notna()
+    ds["label_excess"] = np.where(
+        excess_ok,
+        (ds["net_return"].fillna(0) > ds["und_period_return"].fillna(0)).astype(float),
+        np.nan)
     return ds
 
 
@@ -125,23 +133,28 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
         ["train", "val", "test"], default="purged")
     ds = ds[ds["split"] != "purged"].reset_index(drop=True)
 
-    # 3) train the winning config only
+    # 3) train the winning config only (same mode/label/arch as the main run)
     arch = [int(x) for x in winning["arch"].split("x")]
+    mode = winning.get("mode", "filter")
+    label_col = winning.get("label", "label")
     fold_spec = {"symbols": spec_symbols}
-    preds, seeds_used = [], []
-    oos_rows = frozen_rows(ds, fold_spec, "test")
-    if oos_rows.empty:
+    rows_all = all_rows(ds, "test")
+    if rows_all.empty:
         return {"fold": fold_i, "error": "no OOS trades"}
+    fmask = frozen_mask(rows_all, fold_spec)
+    oos_rows = rows_all[fmask].reset_index(drop=True) if mode == "filter" \
+        else rows_all
+    preds = []
     for seed in config.SEEDS:
-        r = run_one(ds, arch, winning["lr"], seed, config.MAX_EPOCHS)
+        r = run_one(ds, arch, winning["lr"], seed, config.MAX_EPOCHS, label_col)
         preds.append(predict_rows(r["run_id"], oos_rows))
-        seeds_used.append(seed)
         print(f"  seed {seed}: val_loss={r['val_loss']:.4f}", flush=True)
 
-    # 4) OOS: ensemble filter vs fold-frozen baseline AND underlying B&H
+    # 4) OOS: ensemble (winner's mode) vs fold-frozen baseline AND B&H
     ens = np.mean(preds, axis=0)
-    nn = evaluate_filter(oos_rows, ens, winning["threshold"])
-    base = equity_metrics(oos_rows["net_return"].tolist())
+    nn = _EVALUATORS[mode](oos_rows, ens, winning["threshold"])
+    base_pool = rows_all[fmask]
+    base = equity_metrics(base_pool["net_return"].tolist())
     bh = basket_buy_hold(fold_spec, oos_start, oos_end)
     nn_ret = nn["total_return"] if nn["total_return"] is not None else -np.inf
     beat_base = nn_ret > (base["total_return"] or -np.inf)

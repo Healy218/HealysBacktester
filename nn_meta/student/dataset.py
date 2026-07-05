@@ -35,16 +35,18 @@ logger = setup_logging(log_file="logs/backtester.log")
 _TAG = "NN-STUDENT-DS"
 
 BAR_FEATURES = ["ma_gap", "px_vs_fast", "rsi14", "macd_hist", "bb_z",
-                "ret_1", "ret_8", "ret_26", "session_gap", "tod", "dow"]
+                "ret_1", "ret_8", "ret_26", "session_gap", "gap_abs_z",
+                "tod", "dow", "is_first_hour", "is_last_hour", "dow_tod"]
 STUDENT_FEATURES = BAR_FEATURES + _SURFACE_COLS
 
 FLAT, LONG, SHORT = 0, 1, 2
 
 
-def _trade_returns_lookup(meta_ds: pd.DataFrame, symbol: str, dte: int) -> pd.Series:
-    """entry_ts → realized net option return for the symbol's frozen DTE."""
+def _trade_returns_lookup(meta_ds: pd.DataFrame, symbol: str, strategy: str,
+                          dte: int) -> pd.Series:
+    """entry_ts → realized net option return for the teacher's frozen DTE."""
     m = (meta_ds["symbol"] == symbol) & (meta_ds["dte"] == dte) \
-        & meta_ds["net_return"].notna()
+        & (meta_ds["strategy"] == strategy) & meta_ds["net_return"].notna()
     sub = meta_ds[m]
     return pd.Series(sub["net_return"].values, index=pd.DatetimeIndex(sub["entry_ts"]))
 
@@ -55,14 +57,18 @@ def build_symbol_panel(symbol: str, spec_entry: dict,
     if bars.empty:
         return pd.DataFrame()
 
-    trades = propose_trades(bars, spec_entry["fast"], spec_entry["slow"],
+    # Teacher = the symbol's train-best proposal strategy (v2 spec).
+    strat = spec_entry["best_strategy"]
+    e = spec_entry["strategies"][strat]
+    trades = propose_trades(bars, strat, e["params"],
                             config.WINDOW_START, config.WINDOW_END)
-    feats = technical_features(bars, spec_entry["fast"], spec_entry["slow"])
+    from nn_meta.build_meta_dataset import _feature_windows
+    feats = technical_features(bars, *_feature_windows(strat, e["params"]))
     idx = bars.index
 
     state = np.full(len(idx), FLAT, dtype=np.int8)
     trade_ret = np.full(len(idx), np.nan)          # realized return of covering trade
-    ret_lookup = _trade_returns_lookup(meta_ds, symbol, spec_entry["dte"])
+    ret_lookup = _trade_returns_lookup(meta_ds, symbol, strat, e["dte"])
 
     for ent_ts, ext_ts, direction in trades:
         e, x = to_naive_utc(ent_ts), to_naive_utc(ext_ts)
