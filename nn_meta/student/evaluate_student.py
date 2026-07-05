@@ -29,7 +29,7 @@ import numpy as np
 import pandas as pd
 import tensorflow as tf
 
-from options.data.hybrid_provider import HybridCachedProvider
+from nn_meta.providers import get_provider
 from nn_meta import config
 from nn_meta.baseline import (equity_metrics, execute_at_dte, load_spec,
                               load_underlying_15m, top_k_contribution)
@@ -96,7 +96,7 @@ def main() -> None:
     panel = pd.read_parquet(config.STUDENT_DATASET_PARQUET)
     meta_ds = pd.read_parquet(config.META_DATASET_PARQUET)
     runs = pd.read_csv(config.STUDENT_RUNS_CSV)
-    provider = HybridCachedProvider()
+    provider = get_provider()
     bars_cache: dict = {}
 
     base_val = equity_metrics(frozen_rows(meta_ds, spec, "val")["net_return"].tolist())

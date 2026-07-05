@@ -23,16 +23,50 @@ BASELINE_SPEC_JSON = ARTIFACTS / "baseline_spec.json"
 META_DATASET_PARQUET = ARTIFACTS / "meta_dataset.parquet"
 RUNS_CSV = RUNS_DIR / "runs.csv"
 
-# ── Universe / window / splits (shared with nn_options_signal) ───────────────
-UNDERLYINGS = _nos.UNDERLYINGS
-HISTORY_START = _nos.SPY_HISTORY_START     # extra lookback for indicator warmup
-WINDOW_START, WINDOW_END = _nos.WINDOW_START, _nos.WINDOW_END
-TRAIN_START, TRAIN_END = _nos.TRAIN_START, _nos.TRAIN_END
-VAL_START, VAL_END = _nos.VAL_START, _nos.VAL_END
-TEST_START, TEST_END = _nos.TEST_START, _nos.TEST_END
+# ── Universe / window / splits (v2: nn_meta-owned, decoupled from the
+#    completed nn_options_signal experiment) ──────────────────────────────────
+# Window start is bounded by Massive's rolling 2-year aggregates entitlement
+# (verified 2026-07-05: data begins at today-2y exactly). One week of margin
+# because the boundary rolls forward while multi-day downloads run. Data
+# behind the boundary survives ONLY in our parquet caches — download early.
+HISTORY_START = "2024-04-01"               # underlying warmup (Alpaca, unbounded)
+WINDOW_START, WINDOW_END = "2024-07-14", "2026-07-02"
+TRAIN_START, TRAIN_END = "2024-07-14", "2025-12-19"
+# val/test identical to v1 so before/after comparisons stay clean:
+VAL_START, VAL_END = "2026-01-05", "2026-03-27"
+TEST_START, TEST_END = "2026-04-06", "2026-07-02"
 
-# Daily surface features come from the completed nn_options_signal panel.
-SURFACE_DATASET_PARQUET = _nos.DATASET_PARQUET
+# v1's 17 names + 39 liquid adds (thin names auto-skip at freeze time).
+UNDERLYINGS = [
+    # v1
+    "SPY", "QQQ", "VOO", "MSFT", "META", "AMZN", "AAPL", "GOOG", "NVDA",
+    "TSM", "RGTI", "MU", "AXTI", "SNDK", "SLS", "NOK", "SPCX",
+    # mega/large caps
+    "TSLA", "AMD", "NFLX", "AVGO", "INTC", "QCOM", "ORCL", "CRM", "COST",
+    "HD", "WMT", "DIS", "UNH", "LLY", "PFE", "JPM", "BAC", "GS", "XOM",
+    "CVX", "BA", "UBER", "F", "T",
+    # high-IV retail favorites
+    "PLTR", "COIN", "MSTR", "SMCI", "HOOD", "MARA", "GME",
+    # ETFs
+    "IWM", "DIA", "GLD", "TLT", "SMH", "XLE", "XLF", "ARKK",
+]
+
+# Contract crawl / universe filter (same criteria as nn_options_signal)
+EXPIRY_MIN, EXPIRY_MAX = "2024-07-21", "2026-08-15"
+DTE_MIN, DTE_MAX = _nos.DTE_MIN, _nos.DTE_MAX
+MONEYNESS_BAND = _nos.MONEYNESS_BAND
+MIN_VOLUME, MIN_PREMIUM = _nos.MIN_VOLUME, _nos.MIN_PREMIUM
+DOWNLOAD_WORKERS = 16                      # options tier ~120/s tolerates this
+REQUEST_TIMEOUT, MAX_RETRIES = _nos.REQUEST_TIMEOUT, _nos.MAX_RETRIES
+MASSIVE_BASE_URL = _nos.MASSIVE_BASE_URL
+
+# nn_meta-owned data cache (nn_options_signal's cache is no longer read)
+CONTRACTS_PARQUET = DATA_CACHE / "contracts.parquet"
+UNIVERSE_PARQUET = DATA_CACHE / "universe.parquet"
+UNDERLYING_DAILY_PARQUET = DATA_CACHE / "underlying_daily.parquet"
+BARS_DAILY_DIR = DATA_CACHE / "bars_daily"
+DONE_MANIFEST = DATA_CACHE / "bars_done.txt"
+SURFACE_DATASET_PARQUET = DATA_CACHE / "surface_daily.parquet"
 
 # ── Interval / execution ─────────────────────────────────────────────────────
 INTERVAL = "15m"
@@ -126,5 +160,6 @@ CLONE_PARITY_TOLERANCE = 0.15
 
 
 def ensure_dirs() -> None:
-    for d in (DATA_CACHE, ARTIFACTS, RUNS_DIR, REPORTS_DIR, MODEL_FINAL_DIR):
+    for d in (DATA_CACHE, BARS_DAILY_DIR, ARTIFACTS, RUNS_DIR, REPORTS_DIR,
+              MODEL_FINAL_DIR):
         d.mkdir(parents=True, exist_ok=True)

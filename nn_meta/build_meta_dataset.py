@@ -37,7 +37,7 @@ import pandas as pd
 
 from utils.logging_utils import setup_logging
 from options.execution import Execution, to_naive_utc
-from options.data.hybrid_provider import HybridCachedProvider
+from nn_meta.providers import get_provider
 from nn_meta import config
 from nn_meta.baseline import (load_underlying_15m, load_spec, propose_trades,
                               execute_at_dte)
@@ -221,7 +221,7 @@ def main() -> None:
     symbols = [s.strip().upper() for s in args.symbols.split(",")] \
         if args.symbols else list(spec["symbols"])
 
-    provider = HybridCachedProvider()
+    provider = get_provider()
     frames = []
     for sym in symbols:
         if sym not in spec["symbols"]:

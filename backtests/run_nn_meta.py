@@ -78,7 +78,7 @@ def run(symbol, start_date, end_date, interval, backtest_config, strategy_config
         from nn_meta.download_data import filter_rth
         from nn_meta.train_meta import prepare_matrix
         from nn_meta.select_meta import predict_rows
-        from options.data.hybrid_provider import HybridCachedProvider
+        from nn_meta.providers import get_provider
         from options.execution import to_naive_utc
 
         ens_path = mcfg.MODEL_FINAL_DIR / "ensemble_config.json"
@@ -107,7 +107,7 @@ def run(symbol, start_date, end_date, interval, backtest_config, strategy_config
         cb(30, 100)
 
         # ── execute at frozen DTE for context features ────────────────────────
-        provider = HybridCachedProvider()
+        provider = get_provider()
         records, meta = execute_at_dte(symbol, trades, bars, entry["dte"],
                                        provider, end_date)
         cb(55, 100)

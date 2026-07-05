@@ -32,7 +32,7 @@ import numpy as np
 import pandas as pd
 
 from utils.logging_utils import setup_logging
-from options.data.hybrid_provider import HybridCachedProvider
+from nn_meta.providers import get_provider
 from nn_meta import config
 from nn_meta.baseline import equity_metrics, freeze_symbol
 from nn_meta.build_meta_dataset import (META_FEATURES, build_symbol_rows,
@@ -167,7 +167,7 @@ def main() -> None:
                          "winning config only")
     winning = json.loads(ens_path.read_text())
 
-    provider = HybridCachedProvider()
+    provider = get_provider()
     surface = load_surface_features()
     results = [run_fold(i + 1, *b, winning, provider, surface)
                for i, b in enumerate(fold_boundaries(args.folds))]

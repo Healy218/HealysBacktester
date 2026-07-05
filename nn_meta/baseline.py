@@ -36,7 +36,7 @@ from utils.chunked_runner import simulate_and_rank
 from portfolio import simulator
 from signals import ma_crossover
 from options.execution import Execution, extract_trades, execute_trade_returns, to_naive_utc
-from options.data.hybrid_provider import HybridCachedProvider
+from nn_meta.providers import get_provider
 from nn_meta import config
 
 logger = setup_logging(log_file="logs/backtester.log")
@@ -337,7 +337,7 @@ def load_spec() -> dict:
 
 def freeze_all(symbols: Optional[list[str]] = None) -> dict:
     config.ensure_dirs()
-    provider = HybridCachedProvider()
+    provider = get_provider()
     out: dict = {
         "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "interval": config.INTERVAL,
