@@ -35,9 +35,13 @@ def _bars(start: str, periods: int, freq: str = "15min") -> pd.DataFrame:
 class FakeLive(OptionsDataProvider):
     """Counts calls; optionally raises 429 for the first N calls."""
 
-    def __init__(self, bars: pd.DataFrame, fail_429_times: int = 0):
+    def __init__(self, bars: pd.DataFrame, fail_429_times: int = 0,
+                 fail_msg: str = "Massive HTTP 429 for /v2/aggs: too many requests",
+                 always_fail: bool = False):
         self._bars = bars
         self._fail = fail_429_times
+        self._fail_msg = fail_msg
+        self._always_fail = always_fail
         self.calls = 0
 
     def get_underlying_bars(self, symbol, start, end, interval):
@@ -48,9 +52,9 @@ class FakeLive(OptionsDataProvider):
 
     def get_contract_bars(self, occ_symbol, start, end, interval):
         self.calls += 1
-        if self._fail > 0:
+        if self._always_fail or self._fail > 0:
             self._fail -= 1
-            raise DataError("Massive HTTP 429 for /v2/aggs: too many requests")
+            raise DataError(self._fail_msg)
         return self._bars.copy()
 
 
@@ -126,6 +130,35 @@ class TestContractBars:
         p = _provider(tmp_path, live)
         df = p.get_contract_bars(self.OCC, "2025-01-01", "2025-01-31", "15m")
         assert len(df) == 4 and live.calls == 3      # 2 failures + 1 success
+
+    def test_network_timeout_retries(self, tmp_path, monkeypatch):
+        import options.data.hybrid_provider as hp
+        monkeypatch.setattr(hp.time, "sleep", lambda s: None)
+        live = FakeLive(_bars("2025-01-02 14:30", 4), fail_429_times=2,
+                        fail_msg="Massive request failed (/v2/aggs): Read timed out.")
+        p = _provider(tmp_path, live)
+        df = p.get_contract_bars(self.OCC, "2025-01-01", "2025-01-31", "15m")
+        assert len(df) == 4 and live.calls == 3      # timeouts retried like 429
+
+    def test_persistent_timeout_returns_empty_uncached(self, tmp_path, monkeypatch):
+        import options.data.hybrid_provider as hp
+        monkeypatch.setattr(hp.time, "sleep", lambda s: None)
+        live = FakeLive(_bars("2025-01-02 14:30", 4), always_fail=True,
+                        fail_msg="Massive request failed: Read timed out.")
+        p = _provider(tmp_path, live)
+        df = p.get_contract_bars(self.OCC, "2025-01-01", "2025-01-31", "15m")
+        assert df.empty
+        # NOT cached — a later run must be free to retry this contract
+        assert not (tmp_path / "bars_15m" / f"{self.OCC}.parquet").exists()
+
+    def test_non_transient_error_raises(self, tmp_path, monkeypatch):
+        import options.data.hybrid_provider as hp
+        monkeypatch.setattr(hp.time, "sleep", lambda s: None)
+        live = FakeLive(_bars("2025-01-02 14:30", 4), always_fail=True,
+                        fail_msg="Massive HTTP 403 for /v2/aggs: forbidden")
+        p = _provider(tmp_path, live)
+        with pytest.raises(DataError, match="403"):
+            p.get_contract_bars(self.OCC, "2025-01-01", "2025-01-31", "15m")
 
     def test_no_fetch_when_disabled(self, tmp_path):
         live = FakeLive(_bars("2025-01-02 14:30", 4))

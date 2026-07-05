@@ -160,22 +160,36 @@ class HybridCachedProvider(OptionsDataProvider):
         _, exp, _, _ = parse_occ_symbol(occ)
         return exp - timedelta(days=_FALLBACK_LIFE_DAYS), exp
 
-    def _fetch_with_retry(self, occ: str, frm: date, to: date, interval: str) -> pd.DataFrame:
-        last_err: Optional[Exception] = None
+    def _fetch_with_retry(self, occ: str, frm: date, to: date,
+                          interval: str) -> "pd.DataFrame | None":
+        """Fetch with backoff on transient failures. Returns None (not raise)
+        when a TRANSIENT error persists past the retry budget, so a single flaky
+        contract degrades to 'no data this pass' instead of killing a multi-hour
+        build. Non-transient errors (auth, bad request) still raise."""
         for attempt in range(_MAX_RETRIES + 1):
             try:
                 self.fetch_count += 1
                 return self._get_live().get_contract_bars(
                     occ, frm.isoformat(), to.isoformat(), interval)
             except DataError as e:
-                last_err = e
-                if "429" in str(e) and attempt < _MAX_RETRIES:
-                    logger.warning(f"[{_TAG}] 429 for {occ}, sleeping {_RETRY_SLEEP_S}s "
-                                   f"(attempt {attempt + 1}/{_MAX_RETRIES})")
-                    time.sleep(_RETRY_SLEEP_S)
-                    continue
-                raise
-        raise last_err  # pragma: no cover — loop always returns or raises
+                msg = str(e)
+                is_429 = "429" in msg
+                # network blips surface as "request failed" (timeout / conn reset)
+                transient = is_429 or "request failed" in msg \
+                    or "timed out" in msg or "Connection" in msg
+                if not transient:
+                    raise                       # real error (e.g. 403) — surface it
+                if attempt >= _MAX_RETRIES:
+                    logger.warning(f"[{_TAG}] {occ}: transient fetch failure past "
+                                   f"{_MAX_RETRIES} retries, skipping (uncached): "
+                                   f"{msg[:100]}")
+                    return None
+                sleep_s = _RETRY_SLEEP_S if is_429 else min(2 ** attempt, 20)
+                logger.warning(f"[{_TAG}] {occ}: {'429' if is_429 else 'network'} "
+                               f"error, sleeping {sleep_s}s "
+                               f"(attempt {attempt + 1}/{_MAX_RETRIES})")
+                time.sleep(sleep_s)
+        return None  # pragma: no cover
 
     def get_contract_bars(self, occ_symbol, start, end, interval) -> pd.DataFrame:
         occ = occ_symbol[2:] if occ_symbol.startswith("O:") else occ_symbol
@@ -188,9 +202,11 @@ class HybridCachedProvider(OptionsDataProvider):
             to = min(exp + timedelta(days=1), date.today())
             df = self._fetch_with_retry(occ, frm, to, interval)
             if df is None:
-                df = pd.DataFrame(columns=_OHLCV)
+                # transient failure — return empty WITHOUT caching so the next
+                # run retries this contract rather than caching a false blank.
+                return pd.DataFrame(columns=_OHLCV)
             path.parent.mkdir(parents=True, exist_ok=True)
-            df.to_parquet(path)   # empty results cached too: fetch exactly once
+            df.to_parquet(path)   # genuine empty results cached too: fetch once
         else:
             logger.info(f"[{_TAG}] {occ} {interval}: not cached and fetch disabled")
             return pd.DataFrame(columns=_OHLCV)
