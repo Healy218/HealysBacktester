@@ -34,13 +34,13 @@ import pandas as pd
 from utils.logging_utils import setup_logging
 from nn_meta.providers import get_provider
 from nn_meta import config
-from nn_meta.baseline import equity_metrics, freeze_symbol
+from nn_meta.baseline import freeze_symbol
 from nn_meta.build_meta_dataset import (META_FEATURES, add_context_features,
                                         build_symbol_rows, join_surface_asof,
                                         load_surface_features)
 from nn_meta.train_meta import run_one
 from nn_meta.select_meta import (_EVALUATORS, all_rows, basket_buy_hold, fmt,
-                                 frozen_mask, predict_rows)
+                                 frozen_mask, portfolio_metrics, predict_rows)
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -154,7 +154,7 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
     ens = np.mean(preds, axis=0)
     nn = _EVALUATORS[mode](oos_rows, ens, winning["threshold"])
     base_pool = rows_all[fmask]
-    base = equity_metrics(base_pool["net_return"].tolist())
+    base = portfolio_metrics(base_pool)
     bh = basket_buy_hold(fold_spec, oos_start, oos_end)
     nn_ret = nn["total_return"] if nn["total_return"] is not None else -np.inf
     beat_base = nn_ret > (base["total_return"] or -np.inf)

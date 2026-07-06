@@ -32,8 +32,7 @@ import pandas as pd
 import tensorflow as tf
 
 from nn_meta import config
-from nn_meta.baseline import (equity_metrics, load_spec, load_underlying_15m,
-                              top_k_contribution)
+from nn_meta.baseline import load_spec, load_underlying_15m
 from nn_meta.build_meta_dataset import META_FEATURES
 from nn_meta.train_meta import prepare_matrix
 
@@ -89,93 +88,101 @@ def predict_rows(run_id: str, rows: pd.DataFrame) -> np.ndarray:
     return model.predict(X, batch_size=4096, verbose=0).flatten()
 
 
-# ── mode: filter (v1 semantics, frozen-DTE rows) ─────────────────────────────
+# ── slot-portfolio evaluation (baseline / filter / rank all share this) ──────
 
-def evaluate_filter(rows: pd.DataFrame, pred: np.ndarray, threshold: float,
-                    cost_mult: float = 1.0) -> dict:
-    kept = rows[pred >= threshold].sort_values("entry_ts")
-    net = kept["net_return"]
-    if cost_mult != 1.0 and not kept.empty:
-        net = stress_returns(net, kept["n_fills"], cost_mult)
-    m = equity_metrics(net.tolist())
-    m["n_kept"] = len(kept)
-    m["n_proposals"] = len(rows)
-    m["total_ex_top3"] = top_k_contribution(net.tolist())["total_ex_topk"]
-    return m
+def _portfolio_sim(cands: pd.DataFrame, k: int, f: float):
+    """Slot-based portfolio. Candidates sharing an entry bar compete on ``pred``
+    for up to ``k`` concurrent slots (one position per symbol), each sized
+    f × equity-at-entry; P&L is realized at each position's exit. This bounds
+    exposure to k·f of equity — the sane way to aggregate thousands of trades
+    across 55 names (naive sequential compounding of a pooled stream explodes).
 
-
-# ── mode: rank (cross-sectional top-K portfolio) ─────────────────────────────
-
-def _rank_sim(cands: pd.DataFrame, k: int, f: float) -> tuple[float, float, list]:
-    """Slot-based portfolio: candidates grouped by fill bar compete on score;
-    positions sized f × equity-at-entry; P&L applied at exit. Returns
-    (total_return, max_drawdown, entered_returns)."""
-    open_pos: list[tuple[pd.Timestamp, float, float]] = []   # (exit_ts, amount, ret)
+    Returns (total_return, max_drawdown, [(row_index, net_return), ...])."""
+    open_pos: list = []          # (exit_ts, amount, ret, symbol)
     open_syms: set = set()
     equity, peak, max_dd = 1.0, 1.0, 0.0
-    entered: list[float] = []
+    entered: list = []
 
     def _close_due(now):
         nonlocal equity, peak, max_dd
-        due = [p for p in open_pos if p[0] <= now]
-        for p in sorted(due, key=lambda x: x[0]):
+        for p in sorted([p for p in open_pos if p[0] <= now], key=lambda x: x[0]):
             open_pos.remove(p)
-            open_syms.discard(p[3] if len(p) > 3 else None)
+            open_syms.discard(p[3])
             equity += p[1] * p[2]
             peak = max(peak, equity)
             max_dd = max(max_dd, (peak - equity) / peak)
 
-    for ts, grp in cands.groupby("fill_entry_ts", sort=True):
+    for ts, grp in cands.groupby("entry_ts", sort=True):
         _close_due(ts)
         for r in grp.sort_values("pred", ascending=False).itertuples():
             if len(open_pos) >= k or r.symbol in open_syms:
                 continue
-            amount = f * equity
-            open_pos.append((pd.Timestamp(r.exit_ts), amount,
+            open_pos.append((pd.Timestamp(r.exit_ts), f * equity,
                              float(r.net_return), r.symbol))
             open_syms.add(r.symbol)
-            entered.append(float(r.net_return))
+            entered.append((r.Index, float(r.net_return)))
     _close_due(pd.Timestamp.max)
     return equity - 1.0, max_dd, entered
 
 
-def evaluate_rank(rows: pd.DataFrame, pred: np.ndarray, threshold: float,
-                  cost_mult: float = 1.0,
-                  k: int = config.MAX_CONCURRENT,
-                  f: float = config.PORTFOLIO_FRACTION) -> dict:
+def portfolio_metrics(cands: pd.DataFrame, n_proposals: int | None = None,
+                      k: int = config.MAX_CONCURRENT,
+                      f: float = config.PORTFOLIO_FRACTION) -> dict:
+    """Slot-portfolio metrics for a candidate set (used by baseline, filter and
+    rank alike so all three are directly comparable)."""
+    cands = cands.dropna(subset=["entry_ts", "exit_ts", "net_return"])
+    if "pred" not in cands.columns:
+        cands = cands.assign(pred=0.0)
+    empty = {"n": 0, "n_kept": 0, "n_proposals": n_proposals or len(cands),
+             "total_return": None, "max_drawdown": None, "win_rate": None,
+             "mean_return": None, "per_trade_sharpe": None, "total_ex_top3": None}
+    if cands.empty:
+        return empty
+    total, max_dd, entered = _portfolio_sim(cands, k, f)
+    if not entered:
+        return empty
+    rets = np.array([e[1] for e in entered])
+    if len(entered) > 3:
+        top_idx = [e[0] for e in sorted(entered, key=lambda x: -x[1])[:3]]
+        ex_total, _, _ = _portfolio_sim(cands.drop(index=top_idx), k, f)
+    else:
+        ex_total = 0.0
+    return {
+        "n": len(entered), "n_kept": len(entered),
+        "n_proposals": n_proposals if n_proposals is not None else len(cands),
+        "total_return": total, "max_drawdown": max_dd,
+        "win_rate": float((rets > 0).mean()),
+        "mean_return": float(rets.mean()),
+        "per_trade_sharpe": float(rets.mean() / rets.std(ddof=1))
+        if len(rets) > 1 and rets.std(ddof=1) > 0 else None,
+        "total_ex_top3": ex_total,
+    }
+
+
+def _apply_threshold_and_cost(rows, pred, threshold, cost_mult):
     cands = rows.assign(pred=pred)
     cands = cands[cands["pred"] >= threshold]
     if cost_mult != 1.0 and not cands.empty:
         cands = cands.assign(net_return=stress_returns(
             cands["net_return"], cands["n_fills"], cost_mult))
-    # DTE variants of the same proposal dedupe to the best-scored (DTE choice)
+    return cands
+
+
+def evaluate_rank(rows: pd.DataFrame, pred: np.ndarray, threshold: float,
+                  cost_mult: float = 1.0) -> dict:
+    """Cross-sectional: the model also picks the DTE — variants of one proposal
+    dedupe to the best-scored — then compete for slots."""
+    cands = _apply_threshold_and_cost(rows, pred, threshold, cost_mult)
     cands = cands.sort_values("pred", ascending=False) \
         .drop_duplicates(["symbol", "strategy", "trade_idx"])
-    cands = cands.dropna(subset=["fill_entry_ts"])
+    return portfolio_metrics(cands, n_proposals=len(rows))
 
-    if cands.empty:
-        m = equity_metrics([])
-        m.update(n_kept=0, n_proposals=len(rows), total_ex_top3=None)
-        return m
-    total, max_dd, entered = _rank_sim(cands, k, f)
-    r = np.asarray(entered)
-    # ex-top3: re-simulate without the 3 largest entered returns
-    if len(entered) > 3:
-        drop = set(np.argsort(r)[-3:])
-        keep_rows = cands.iloc[[i for i in range(len(cands)) if i not in drop]] \
-            if len(cands) == len(entered) else cands
-        ex_total, _, _ = _rank_sim(keep_rows, k, f)
-    else:
-        ex_total = 0.0
-    return {
-        "n": len(entered), "n_kept": len(entered), "n_proposals": len(rows),
-        "total_return": total, "max_drawdown": max_dd,
-        "win_rate": float((r > 0).mean()) if r.size else None,
-        "mean_return": float(r.mean()) if r.size else None,
-        "per_trade_sharpe": float(r.mean() / r.std(ddof=1))
-        if r.size > 1 and r.std(ddof=1) > 0 else None,
-        "total_ex_top3": ex_total,
-    }
+
+def evaluate_filter(rows: pd.DataFrame, pred: np.ndarray, threshold: float,
+                    cost_mult: float = 1.0) -> dict:
+    """Frozen-DTE rows kept at score >= threshold, run through the portfolio."""
+    cands = _apply_threshold_and_cost(rows, pred, threshold, cost_mult)
+    return portfolio_metrics(cands, n_proposals=len(rows))
 
 
 _EVALUATORS = {"filter": evaluate_filter, "rank": evaluate_rank}
@@ -237,8 +244,10 @@ def main() -> None:
     val_frozen_mask = frozen_mask(val_all, spec)
     test_frozen_mask = frozen_mask(test_all, spec)
 
-    base_val = equity_metrics(val_all[val_frozen_mask]["net_return"].tolist())
-    base_test = equity_metrics(test_all[test_frozen_mask]["net_return"].tolist())
+    # Baseline = take every frozen-DTE proposal into the SAME slot portfolio
+    # (no model), so it is directly comparable to the filtered/ranked NN.
+    base_val = portfolio_metrics(val_all[val_frozen_mask])
+    base_test = portfolio_metrics(test_all[test_frozen_mask])
     bh_val = basket_buy_hold(spec, config.VAL_START, config.VAL_END)
     bh_test = basket_buy_hold(spec, config.TEST_START, config.TEST_END)
     print(f"baseline (all proposals, frozen DTEs) val: "
@@ -363,7 +372,7 @@ def main() -> None:
         f"| Baseline (all frozen-DTE proposals) | "
         f"{fmt(base_test['total_return'])} | {base_test['n']} | "
         f"{fmt(base_test['max_drawdown'])} | {fmt(base_test['win_rate'])} | "
-        f"{fmt(top_k_contribution(test_all[test_frozen_mask]['net_return'].tolist())['total_ex_topk'])} |",
+        f"{fmt(base_test['total_ex_top3'])} |",
         f"| **Underlying B&H basket** | **{fmt(bh_test)}** | — | — | — | — |",
         f"| SPY buy & hold | {fmt(spy_bh)} | — | — | — | — |", "",
         f"Per-seed test return: "
@@ -377,10 +386,11 @@ def main() -> None:
         "## Caveats", "",
         "- Next-bar fills, no lookahead, identical on every side of the "
         "comparison.",
-        f"- filter mode compounds sequentially; rank mode holds up to "
-        f"{config.MAX_CONCURRENT} concurrent positions at "
-        f"{config.PORTFOLIO_FRACTION:.0%} each (max "
-        f"{config.MAX_CONCURRENT * config.PORTFOLIO_FRACTION:.0%} deployed).",
+        f"- All rows (baseline, filter, rank) run through ONE slot portfolio: "
+        f"up to {config.MAX_CONCURRENT} concurrent positions, one per symbol, "
+        f"at {config.PORTFOLIO_FRACTION:.0%} each (max "
+        f"{config.MAX_CONCURRENT * config.PORTFOLIO_FRACTION:.0%} deployed) — "
+        f"filter picks the frozen DTE, rank lets the model choose the DTE.",
         f"- Exposure differs vs buy & hold (often flat vs 100% invested) — "
         "B&H rows answer 'worth doing at all?', not 'same-risk alpha'.",
         f"- Costs: {_C1:.2%}/side proxy; {config.COST_STRESS_MULT:.0f}x "
