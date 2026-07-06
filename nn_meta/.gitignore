@@ -3,3 +3,4 @@ runs/
 reports/
 artifacts/meta_dataset.parquet
 artifacts/student_dataset.parquet
+live/.alert_state.json
