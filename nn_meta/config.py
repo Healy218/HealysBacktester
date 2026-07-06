@@ -80,7 +80,9 @@ DTE_GRID = [1, 5, 10, 30, 45]
 # deliberately coarser than the dashboard's: the freeze runs 6 sweeps × 56
 # names (× again per walk-forward fold), so each grid is kept to ~10^2-10^4
 # combos. Signal semantics come from the same signals/* generators.
-PROPOSAL_STRATEGIES = ["ma", "rsi", "macd", "bbands", "stoch", "volume", "elliott"]
+# v2.2: leaner pool — dropped bbands/stoch/elliott (mostly noise proposers that
+# diluted the model in v2.1's walk-forward); keep the four cleanest signals.
+PROPOSAL_STRATEGIES = ["ma", "macd", "rsi", "volume"]
 SWEEP_GRIDS = {
     "ma":      {"windows": (2, 143, 2)},
     "rsi":     {"window": (7, 29, 7), "entry": (20.0, 41.0, 5.0), "exit": (60.0, 81.0, 5.0)},
@@ -174,7 +176,9 @@ LABEL_TYPES = ["win", "excess"]
 # ── Meta-model / training grid (Phase D) ─────────────────────────────────────
 ARCHITECTURES = [[64, 32], [32, 16]]
 LEARNING_RATES = [1e-3, 3e-4]
-SEEDS = [0, 1, 2, 3, 4]
+# v2.2: 40 seeds (was 5) — a 40-model ensemble smooths the wide per-seed test
+# dispersion (-3% to +117%) that made v2.1 fragile in walk-forward.
+SEEDS = list(range(40))
 DROPOUT = _nos.DROPOUT
 L2_REG = _nos.L2_REG
 BATCH_SIZE = 256
@@ -185,7 +189,7 @@ SAMPLE_WEIGHT_CLIP = 1.0                   # weight = clip(|net_return|, 0, this
 KEEP_THRESHOLDS = [0.50, 0.55, 0.60]       # P(win) needed to keep a proposal
 MIN_KEPT_TRADES = 10
 MAX_DRAWDOWN_CAP = 0.40
-MIN_PASSING_SEEDS = 3
+MIN_PASSING_SEEDS = 20        # of 40 seeds: require a majority to clear the gate
 
 # ── Evaluation modes (v2.1) ───────────────────────────────────────────────────
 # filter : keep every proposal at its strategy-frozen DTE with score >= thr
