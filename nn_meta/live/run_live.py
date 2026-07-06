@@ -10,7 +10,9 @@ so a loose cron schedule is fine. Alerts go to Pushover (or the console with
     --once            single pass then exit (default; loop mode is TODO)
     --dry-run         print alerts instead of sending; force console notifier
     --symbols A,B     restrict to a subset (default: whole frozen universe)
-    --threshold F     NN keep threshold (only used once a scorer is wired)
+    --nn              filter with the model_final ensemble (recommended);
+                      without it, EVERY mechanical entry alerts (baseline)
+    --threshold F     override the NN keep threshold (default: bundle's own)
     --ignore-hours    scan even outside RTH (testing)
 """
 import argparse
@@ -50,7 +52,8 @@ def main() -> None:
     ap.add_argument("--once", action="store_true", default=True)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--symbols", type=str, default=None)
-    ap.add_argument("--threshold", type=float, default=0.5)
+    ap.add_argument("--nn", action="store_true", help="filter with the NN ensemble")
+    ap.add_argument("--threshold", type=float, default=None)
     ap.add_argument("--ignore-hours", action="store_true")
     args = ap.parse_args()
 
@@ -63,9 +66,17 @@ def main() -> None:
     symbols = [s.strip().upper() for s in args.symbols.split(",")] \
         if args.symbols else None
 
-    # scorer stays None for now → baseline mode (alerts every mechanical entry);
-    # the NN ensemble scorer wires in once the v2 model_final bundle is trained.
-    scanner = Scanner(_bar_loader, scorer=None, threshold=args.threshold)
+    scorer, threshold = None, (args.threshold or 0.5)
+    if args.nn:
+        from nn_meta.live.scorer import NNScorer     # lazy: pulls in TensorFlow
+        scorer = NNScorer()
+        threshold = args.threshold or scorer.threshold
+        logger.info(f"[live] NN filter enabled (threshold {threshold:.2f})")
+    else:
+        logger.warning("[live] NO NN filter — alerting every mechanical entry "
+                       "(baseline mode); pass --nn to filter")
+
+    scanner = Scanner(_bar_loader, scorer=scorer, threshold=threshold)
     notifier = get_notifier(force_console=args.dry_run)
 
     signals = scanner.scan_once(symbols=symbols, now=now)
