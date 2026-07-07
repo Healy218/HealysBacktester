@@ -60,6 +60,29 @@ can't move 1.9 GB.
 > The `bars_15m/` (1.5 GB) + `bars_daily/` (240 MB) folders ARE the option-bar
 > cache. Copying them (Option A) is what makes the run fast.
 
+## Resuming the interrupted 2026-07-07 run (checkpoints)
+
+`walkforward_meta.py` now checkpoints every long stage under
+`nn_meta/artifacts/wf/` (gitignored): per-symbol freeze spec, per-symbol
+dataset rows, per-seed OOS predictions, per-fold result JSONs. Rerunning the
+same command resumes where it stopped; delete `artifacts/wf/` to force a
+fresh run.
+
+The Mac run died mid-fold-1-freeze but fold 1's 40 trained models survived in
+`nn_meta/runs/` (gitignored). To resume on this box instead of retraining:
+
+1. Copy from the Mac, alongside `data_cache/`:
+   - `nn_meta/artifacts/wf/` (~44 KB — freeze progress)
+   - `nn_meta/runs/a64x32-lr0.0003-xs-s*` (~4 MB — fold-1's 40 models)
+2. Run with the reuse flag:
+   `nohup python -m nn_meta.walkforward_meta --reuse-runs 1 > wf.log 2>&1 &`
+
+`--reuse-runs 1` predicts fold 1's OOS from the existing runs/ dirs instead of
+retraining (~3.2 h saved). It is ONLY valid while resuming fold 1 — folds 2/3
+overwrite those run dirs when they train, which is fine (their per-seed
+predictions checkpoint as they go). If you skip copying `runs/`, drop the flag
+and fold 1 retrains normally.
+
 ## Gotchas
 - Run from the repo root; paths are pathlib-based (cross-platform).
 - `logs/` and `data/cache/` are created on demand.

@@ -14,7 +14,14 @@ symbol-pooled). Per fold, EVERYTHING re-derives from fold-train only:
 Verdict: the NN filter is robust if it beats the baseline in a MAJORITY of
 folds. Appends the per-fold table to reports/meta_report.md.
 
-Run:  python -m nn_meta.walkforward_meta [--folds 3]
+Every long stage checkpoints under artifacts/wf/ (per-symbol freeze, per-symbol
+dataset rows, per-seed OOS predictions, per-fold results) so an interrupted run
+resumes where it stopped. --reuse-runs accepts fold numbers whose runs/ model
+dirs are known-good from a previous interrupted run of the SAME fold (skips
+retraining and predicts from them); never list a fold whose runs/ dirs were
+overwritten by a different fold's training.
+
+Run:  python -m nn_meta.walkforward_meta [--folds 3] [--reuse-runs 1[,2]]
 """
 import argparse
 import json
@@ -49,6 +56,16 @@ _TAG = "NN-META-WF"
 MIN_TRAIN_PCT = 0.5
 VAL_FRACTION = 0.2          # tail of fold-train used as the fold's val slice
 
+WF_DIR = config.ARTIFACTS / "wf"           # resume checkpoints (delete to redo)
+
+
+def _json_default(o):
+    return o.item() if hasattr(o, "item") else float(o)
+
+
+def _save_json(path, obj) -> None:
+    path.write_text(json.dumps(obj, default=_json_default))
+
 
 def _trading_days() -> pd.DatetimeIndex:
     panel = pd.read_parquet(config.UNDERLYING_15M_PARQUET,
@@ -75,14 +92,25 @@ def fold_boundaries(n_folds: int) -> list[tuple[str, str, str]]:
 
 
 def _fold_dataset(spec_symbols: dict, provider, window_end: str,
-                  surface: pd.DataFrame) -> pd.DataFrame:
+                  surface: pd.DataFrame, rows_dir) -> pd.DataFrame:
+    rows_dir.mkdir(parents=True, exist_ok=True)
+    done_path = rows_dir / "done.json"
+    done = set(json.loads(done_path.read_text())) if done_path.exists() else set()
     frames = []
     for sym, entry in spec_symbols.items():
+        pq = rows_dir / f"{sym}.parquet"
+        if sym in done:
+            if pq.exists():
+                frames.append(pd.read_parquet(pq))
+            continue
         df = build_symbol_rows(sym, entry, provider,
                                window_start=config.WINDOW_START,
                                window_end=window_end)
         if not df.empty:
+            df.to_parquet(pq, index=False)
             frames.append(df)
+        done.add(sym)
+        _save_json(done_path, sorted(done))
     if not frames:
         return pd.DataFrame()
     ds = pd.concat(frames, ignore_index=True)
@@ -100,13 +128,19 @@ def _fold_dataset(spec_symbols: dict, provider, window_end: str,
 
 
 def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
-             winning: dict, provider, surface: pd.DataFrame) -> dict:
+             winning: dict, provider, surface: pd.DataFrame,
+             reuse_runs: bool = False) -> dict:
     print(f"\n─ fold {fold_i}: train →{train_end}, OOS {oos_start}→{oos_end}",
           flush=True)
 
-    # 1) re-freeze per symbol on fold-train
-    spec_symbols = {}
+    # 1) re-freeze per symbol on fold-train (checkpointed per symbol)
+    spec_path = WF_DIR / f"fold{fold_i}_spec.json"
+    state = json.loads(spec_path.read_text()) if spec_path.exists() \
+        else {"attempted": [], "symbols": {}}
+    spec_symbols = state["symbols"]
     for sym in config.UNDERLYINGS:
+        if sym in state["attempted"]:
+            continue
         try:
             entry = freeze_symbol(sym, provider,
                                   train_start=config.WINDOW_START,
@@ -116,22 +150,31 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
             entry = None
         if entry is not None:
             spec_symbols[sym] = entry
+        state["attempted"].append(sym)
+        _save_json(spec_path, state)
     print(f"  frozen {len(spec_symbols)} symbols", flush=True)
     if not spec_symbols:
         return {"fold": fold_i, "error": "no freezable symbols"}
 
     # 2) labels over fold-train AND the OOS window (one build; split below)
-    ds = _fold_dataset(spec_symbols, provider, oos_end, surface)
-    if ds.empty:
-        return {"fold": fold_i, "error": "no dataset rows"}
-    d = ds["entry_date"]
-    tr_days = d[d <= train_end].sort_values().unique()
-    val_cut = tr_days[int(len(tr_days) * (1 - VAL_FRACTION))] if len(tr_days) else None
-    ds["split"] = np.select(
-        [d < val_cut, (d >= val_cut) & (d <= train_end),
-         (d >= oos_start) & (d <= oos_end)],
-        ["train", "val", "test"], default="purged")
-    ds = ds[ds["split"] != "purged"].reset_index(drop=True)
+    ds_path = WF_DIR / f"fold{fold_i}_dataset.parquet"
+    if ds_path.exists():
+        ds = pd.read_parquet(ds_path)
+        print(f"  dataset: resumed {len(ds)} rows from checkpoint", flush=True)
+    else:
+        ds = _fold_dataset(spec_symbols, provider, oos_end, surface,
+                           WF_DIR / f"fold{fold_i}_rows")
+        if ds.empty:
+            return {"fold": fold_i, "error": "no dataset rows"}
+        d = ds["entry_date"]
+        tr_days = d[d <= train_end].sort_values().unique()
+        val_cut = tr_days[int(len(tr_days) * (1 - VAL_FRACTION))] if len(tr_days) else None
+        ds["split"] = np.select(
+            [d < val_cut, (d >= val_cut) & (d <= train_end),
+             (d >= oos_start) & (d <= oos_end)],
+            ["train", "val", "test"], default="purged")
+        ds = ds[ds["split"] != "purged"].reset_index(drop=True)
+        ds.to_parquet(ds_path, index=False)
 
     # 3) train the winning config only (same mode/label/arch as the main run)
     arch = [int(x) for x in winning["arch"].split("x")]
@@ -144,11 +187,26 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
     fmask = frozen_mask(rows_all, fold_spec)
     oos_rows = rows_all[fmask].reset_index(drop=True) if mode == "filter" \
         else rows_all
+    lab_tag = "win" if label_col == "label" else "xs"
     preds = []
     for seed in config.SEEDS:
-        r = run_one(ds, arch, winning["lr"], seed, config.MAX_EPOCHS, label_col)
-        preds.append(predict_rows(r["run_id"], oos_rows))
-        print(f"  seed {seed}: val_loss={r['val_loss']:.4f}", flush=True)
+        pred_path = WF_DIR / f"fold{fold_i}_preds_s{seed}.npy"
+        if pred_path.exists():
+            p = np.load(pred_path)
+            if len(p) == len(oos_rows):
+                preds.append(p)
+                print(f"  seed {seed}: checkpointed preds", flush=True)
+                continue
+        run_id = f"a{winning['arch']}-lr{winning['lr']:g}-{lab_tag}-s{seed}"
+        if reuse_runs and (config.RUNS_DIR / run_id / "model.keras").exists():
+            print(f"  seed {seed}: reusing existing run dir", flush=True)
+        else:
+            r = run_one(ds, arch, winning["lr"], seed, config.MAX_EPOCHS, label_col)
+            run_id = r["run_id"]
+            print(f"  seed {seed}: val_loss={r['val_loss']:.4f}", flush=True)
+        p = predict_rows(run_id, oos_rows)
+        np.save(pred_path, p)
+        preds.append(p)
 
     # 4) OOS: ensemble (winner's mode) vs fold-frozen baseline AND B&H
     ens = np.mean(preds, axis=0)
@@ -165,23 +223,31 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
           f"vs B&H {fmt(bh)} "
           f"→ {'beats both' if beat_base and beat_bh else 'beats baseline only' if beat_base else 'beats B&H only' if beat_bh else 'beats neither'}",
           flush=True)
-    return {"fold": fold_i, "train_end": train_end,
-            "oos": f"{oos_start}→{oos_end}",
-            "n_symbols": len(spec_symbols),
-            "nn_return": nn["total_return"], "nn_kept": nn["n_kept"],
-            "nn_ex_top3": nn["total_ex_top3"],
-            "base_return": base["total_return"], "base_n": base["n"],
-            "bh_return": bh,
-            "nn_beats": bool(beat_base), "nn_beats_bh": bool(beat_bh),
-            "error": None}
+    res = {"fold": fold_i, "train_end": train_end,
+           "oos": f"{oos_start}→{oos_end}",
+           "n_symbols": len(spec_symbols),
+           "nn_return": nn["total_return"], "nn_kept": nn["n_kept"],
+           "nn_ex_top3": nn["total_ex_top3"],
+           "base_return": base["total_return"], "base_n": base["n"],
+           "bh_return": bh,
+           "nn_beats": bool(beat_base), "nn_beats_bh": bool(beat_bh),
+           "error": None}
+    _save_json(WF_DIR / f"fold{fold_i}_result.json", res)
+    return res
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--folds", type=int, default=3)
+    ap.add_argument("--reuse-runs", default="",
+                    help="comma-separated fold numbers whose existing runs/ "
+                         "model dirs should be reused instead of retrained "
+                         "(only for resuming that same fold)")
     args = ap.parse_args()
+    reuse_folds = {int(x) for x in args.reuse_runs.split(",") if x.strip()}
 
     config.ensure_dirs()
+    WF_DIR.mkdir(parents=True, exist_ok=True)
     ens_path = config.MODEL_FINAL_DIR / "ensemble_config.json"
     if not ens_path.exists():
         raise SystemExit("run select_meta first — walk-forward retrains the "
@@ -190,8 +256,15 @@ def main() -> None:
 
     provider = get_provider()
     surface = load_surface_features()
-    results = [run_fold(i + 1, *b, winning, provider, surface)
-               for i, b in enumerate(fold_boundaries(args.folds))]
+    results = []
+    for i, b in enumerate(fold_boundaries(args.folds)):
+        res_path = WF_DIR / f"fold{i + 1}_result.json"
+        if res_path.exists():
+            print(f"\n─ fold {i + 1}: complete (checkpointed result)", flush=True)
+            results.append(json.loads(res_path.read_text()))
+            continue
+        results.append(run_fold(i + 1, *b, winning, provider, surface,
+                                reuse_runs=(i + 1) in reuse_folds))
 
     ok = [r for r in results if not r.get("error")]
     wins = sum(r["nn_beats"] for r in ok)
