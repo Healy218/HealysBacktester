@@ -13,42 +13,32 @@ DATA_CONFIG = {
 
 # --- Strategy Configuration ---
 
-# MA Crossover - Updated for Optimization
+# MA Crossover - Wide parameter sweep
+# np.arange(2, 252, 1) → 250 windows → C(250,2) = 31,125 fast/slow combinations
 STRATEGY_MA_CROSSOVER = {
-    # Define the range for window parameters (short and long will be combinations from this range)
-    # np.arange(start, end) generates numbers up to end-1.
-    # Using 2 to 143 gives windows 2, 3, ..., 142.
-    # Combinations (r=2) where short < long: 141 * 140 / 2 = 9870 combinations
     "MA_WINDOW_START": 2,
-    "MA_WINDOW_END": 143, # Test windows up to 142
-    "MA_WINDOW_STEP": 1, # Optional, defaults to 1
-    # "SHORT_WINDOW": 20, # Keep old single values commented or remove
-    # "LONG_WINDOW": 50
+    "MA_WINDOW_END":   252,  # windows 2..251
+    "MA_WINDOW_STEP":  1,
 }
 
-# Example for RSI Threshold (add if you create an RSI script)
-# Example config/settings.py section
+# RSI Threshold - Wide parameter sweep
+# Windows: 2..50 (49 values)
+# Entry thresholds: 5.0..49.5 step 0.5 (90 values)
+# Exit  thresholds: 50.0..94.5 step 0.5 (90 values)
+# Entry and exit counts MUST match — vectorbt aligns them positionally.
+# Total portfolio columns: 49 windows × 90 thresholds = 4,410
 STRATEGY_RSI = {
-    'RSI_WINDOW_START': 5,
-    'RSI_WINDOW_END': 35,  # Test windows 10 through 30
-    'RSI_WINDOW_STEP': 1,
+    'RSI_WINDOW_START': 2,
+    'RSI_WINDOW_END':   51,   # windows 2..50
+    'RSI_WINDOW_STEP':  1,
 
-    'ENTRY_THRESHOLD_START': 10.0,
-    'ENTRY_THRESHOLD_END': 49.0, # Test thresholds 20.0 through 35.0
-    'ENTRY_THRESHOLD_STEP': 0.5,
+    'ENTRY_THRESHOLD_START': 5.0,
+    'ENTRY_THRESHOLD_END':   50.0,  # 5.0..49.5, step 0.5 → 90 values
+    'ENTRY_THRESHOLD_STEP':  0.5,
 
-    'EXIT_THRESHOLD_START': 51.0,
-    'EXIT_THRESHOLD_END': 90.0, # Test thresholds 65.0 through 80.0
-    'EXIT_THRESHOLD_STEP': 0.5,
-
-    # Only needed if ENABLE_SHORTING is True in BACKTEST_CONFIG
-    'SHORT_ENTRY_THRESHOLD_START': 65.0,
-    'SHORT_ENTRY_THRESHOLD_END': 80.0,
-    'SHORT_ENTRY_THRESHOLD_STEP': 1.0,
-
-    'SHORT_EXIT_THRESHOLD_START': 20.0,
-    'SHORT_EXIT_THRESHOLD_END': 35.0,
-    'SHORT_EXIT_THRESHOLD_STEP': 1.0,
+    'EXIT_THRESHOLD_START': 50.0,
+    'EXIT_THRESHOLD_END':   95.0,   # 50.0..94.5, step 0.5 → 90 values
+    'EXIT_THRESHOLD_STEP':  0.5,
 }
 
 BACKTEST_CONFIG = {
@@ -76,49 +66,43 @@ BACKTEST_CONFIG = {
     'DEFAULT_FREQ': None      # None = auto-detect from INTERVAL (recommended)
 }
 
-# Configuration for MACD Strategy - UPDATED FOR RANGES
+# MACD Strategy - Wide parameter sweep
+# Fast: 2..29 (28 values), Slow: 10..59 (50 values), Signal: 2..19 (18 values)
+# Valid fast < slow pairs: ~1,190 → × 18 signal = ~21,420 combos
 STRATEGY_MACD = {
-    # Fast EMA Window Range
-    "FAST_WINDOW_START": 3,
-    "FAST_WINDOW_END": 27,  # Tests windows 5 through 20
-    "FAST_WINDOW_STEP": 3,
+    "FAST_WINDOW_START":   2,
+    "FAST_WINDOW_END":     30,  # fast windows 2..29
+    "FAST_WINDOW_STEP":    1,
 
-    # Slow EMA Window Range (Must be > Fast Window)
-    "SLOW_WINDOW_START": 17,
-    "SLOW_WINDOW_END": 42,  # Tests windows 15 through 50
-    "SLOW_WINDOW_STEP": 3,
+    "SLOW_WINDOW_START":   10,
+    "SLOW_WINDOW_END":     60,  # slow windows 10..59
+    "SLOW_WINDOW_STEP":    1,
 
-    # Signal Line EMA Window Range
-    "SIGNAL_WINDOW_START": 3,
-    "SIGNAL_WINDOW_END": 23,  # Tests windows 5 through 20
-    "SIGNAL_WINDOW_STEP": 1,
+    "SIGNAL_WINDOW_START": 2,
+    "SIGNAL_WINDOW_END":   20,  # signal windows 2..19
+    "SIGNAL_WINDOW_STEP":  1,
 
-    # Old list-based settings (keep commented or remove)
-    # "FAST_WINDOW": [12, 8, 19, 5],
-    # "SLOW_WINDOW": [26, 17, 39, 13, 34],
-    # "SIGNAL_WINDOW": [9, 5],
-
-    # Shorting control (specific to this strategy)
-    "SHORT_ENTRIES_ENABLED": True, # Short entry when MACD crosses below Signal
-    "SHORT_EXITS_ENABLED": True   # Short exit when MACD crosses above Signal
+    "SHORT_ENTRIES_ENABLED": True,
+    "SHORT_EXITS_ENABLED":   True,
 }
 
-# Configuration for Volume Breakout Strategy - UPDATED EXIT MA WINDOW
+# Volume Breakout Strategy - Wide parameter sweep
+# Vol window: 10..99 step 2 (45 values) × Multiplier: 1.1..2.9 step 0.1 (19 values)
+# × Exit MA: 10..99 step 2 (45 values) = ~38,475 combos
 STRATEGY_VOLUME_BREAKOUT = {
-    # Define range for volume window
-    "VOLUME_WINDOW_START": 30,
-    "VOLUME_WINDOW_END": 60,  # Test windows up to 150
-    "VOLUME_WINDOW_STEP": 2,
-    # Keep volume multiplier as list
-    "VOLUME_MULTIPLIER_START": 1.5, # How much higher volume needs to be than average
-    "VOLUME_MULTIPLIER_END": 2.00,
-    "VOLUME_MULTIPLIER_STEP": 0.1,
-    # Define range for exit MA window
-    "EXIT_MA_WINDOW_START": 45,
-    "EXIT_MA_WINDOW_END": 90,  # Test windows up to 150
-    "EXIT_MA_WINDOW_STEP": 1,
-    # Other settings
-    "CONFIRM_PRICE_INCREASE": False,     # Require close > previous close on breakout day?
+    "VOLUME_WINDOW_START":    10,
+    "VOLUME_WINDOW_END":      100,  # volume lookback 10..99, step 2
+    "VOLUME_WINDOW_STEP":     2,
+
+    "VOLUME_MULTIPLIER_START": 1.1,
+    "VOLUME_MULTIPLIER_END":   3.0,  # 1.1..2.9, step 0.1 → 19 values
+    "VOLUME_MULTIPLIER_STEP":  0.1,
+
+    "EXIT_MA_WINDOW_START":   10,
+    "EXIT_MA_WINDOW_END":     100,  # exit MA 10..99, step 2
+    "EXIT_MA_WINDOW_STEP":    2,
+
+    "CONFIRM_PRICE_INCREASE": False,
 }
 
 # --- Environment/API Keys (Optional - Better in .env file) ---
