@@ -7,9 +7,13 @@ numpy==1.26.4
 vectorbt==0.27.2
 numba==0.61.2
 tensorflow==2.16.2
-pandas-ta
+# pandas-ta: NOT installable as of 2026-07 — 0.3.x pulled from PyPI, 0.4.x needs numpy>=2.2
+# (conflicts with tensorflow 2.16's numpy<2). Only used by the unused
+# get_pandas_ta_indicator wrapper in indicators/common_indicators.py.
+# pandas-ta
 quantstats
 scikit-learn
 alpaca-py
 requests          # Massive (Polygon) options REST client
+pyarrow           # parquet engine for the data cache
 python-dotenv

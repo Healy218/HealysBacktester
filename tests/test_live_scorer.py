@@ -2,6 +2,7 @@
 """NNScorer: threshold from the bundle, ensemble averaging, graceful None.
 Featurization internals are mocked so these stay fast and offline; a real
 end-to-end score is exercised separately as a smoke check."""
+import itertools
 import json
 
 import pandas as pd
@@ -41,7 +42,8 @@ class TestNNScorer:
         s = _scorer(monkeypatch)
         monkeypatch.setattr(s, "_feature_row", lambda sig, bars: pd.DataFrame([{}]))
         # each run_id returns a constant; mean should be their average
-        vals = iter([0.6, 0.8, 0.4, 1.0, 0.2][:len(s.ens["run_ids"])] * 2)
+        # (cycle so the mock never runs dry regardless of ensemble size)
+        vals = itertools.cycle([0.6, 0.8, 0.4, 1.0, 0.2])
         monkeypatch.setattr(sc, "predict_rows", lambda rid, row: [next(vals)])
         out = s(_sig(), pd.DataFrame())
         assert 0.0 <= out <= 1.0
