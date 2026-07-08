@@ -1,0 +1,40 @@
+# v3 Stage 0 — data availability audit
+
+Probed SPY, AAPL, GME over 2017–2026. Per symbol-year: mid-year contract listing, 15m bars for one sampled contract's final 45 days, one June week of Alpaca 1m bars.
+
+| symbol   |   year |   n_contracts |   n_bars | first_bar   | last_bar   |   alpaca_1m_rows | sample                | error                                                                                                                    |
+|:---------|-------:|--------------:|---------:|:------------|:-----------|-----------------:|:----------------------|:-------------------------------------------------------------------------------------------------------------------------|
+| SPY      |   2017 |           100 |        0 |             |            |             3390 | O:SPY170602C00214000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"e6f12f11575f36479b92a91e10203265","message":"Your plan doesn't includ |
+| SPY      |   2018 |           100 |        0 |             |            |             3708 | O:SPY180601C00240000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"ab3cdfcdc380a2c75270c54fb0daf795","message":"Your plan doesn't includ |
+| SPY      |   2019 |           100 |        0 |             |            |             3895 | O:SPY190603C00278000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"83914222fa54576d04562e255d6f08b4","message":"Your plan doesn't includ |
+| SPY      |   2020 |           100 |        0 |             |            |             4506 | O:SPY200601C00282000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"2e1ab53644393bd3b93fb816cd99df40","message":"Your plan doesn't includ |
+| SPY      |   2021 |           100 |        0 |             |            |             3749 | O:SPY210601C00399000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"127a110acb0de89896f9cc6370e02712","message":"Your plan doesn't includ |
+| SPY      |   2022 |           100 |        0 |             |            |             4103 | O:SPY220601C00363000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"c999811d2dccad165c68955e1fbef34b","message":"Your plan doesn't includ |
+| SPY      |   2023 |           100 |        0 |             |            |             3885 | O:SPY230601C00399000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"554e7db96c5fc90d2bdcc06a38021681","message":"Your plan doesn't includ |
+| SPY      |   2024 |           100 |        0 |             |            |             3690 | O:SPY240603C00501000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"20894a4957786126aac54ba272a5c104","message":"Your plan doesn't includ |
+| SPY      |   2025 |           100 |       45 | 2025-05-19  | 2025-06-02 |             4196 | O:SPY250602C00550000  | nan                                                                                                                      |
+| SPY      |   2026 |           100 |       22 | 2026-06-24  | 2026-07-08 |             4611 | O:SPY260708C00710000  | nan                                                                                                                      |
+| AAPL     |   2017 |           100 |        0 |             |            |             2870 | O:AAPL170602C00136000 | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"95ad7bcf32e823884d515b6d7fef0cca","message":"Your plan doesn't includ |
+| AAPL     |   2018 |           100 |        0 |             |            |             3043 | O:AAPL180601C00162500 | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"21543ee8e888c5aa091b9b35e7d2686e","message":"Your plan doesn't includ |
+| AAPL     |   2019 |           100 |        0 |             |            |             3146 | O:AAPL190607C00175000 | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"5afbc2ec7bc401c58505a3bc38d47c98","message":"Your plan doesn't includ |
+| AAPL     |   2020 |           100 |        0 |             |            |             3587 | O:AAPL200605C00285000 | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"ffb8edd2711c870870295117eca20bd2","message":"Your plan doesn't includ |
+| AAPL     |   2021 |           100 |        0 |             |            |             3859 | O:AAPL210604C00130000 | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"ab04e9eec5e87fbde0e1a1c36da73424","message":"Your plan doesn't includ |
+| AAPL     |   2022 |           100 |        0 |             |            |             3835 | O:AAPL220603C00139000 | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"9f6b6e73daac5a29b5859b3d4a9d53e0","message":"Your plan doesn't includ |
+| AAPL     |   2023 |           100 |        0 |             |            |             3958 | O:AAPL230602C00162500 | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"338ef7e9a230f57ad46ecc7fefc8150a","message":"Your plan doesn't includ |
+| AAPL     |   2024 |           100 |        0 |             |            |             3939 | O:AAPL240607C00180000 | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"a71e6b791bc4250bd757bc379258ad3c","message":"Your plan doesn't includ |
+| AAPL     |   2025 |           100 |      357 | 2025-05-19  | 2025-06-06 |             4054 | O:AAPL250606C00212500 | nan                                                                                                                      |
+| AAPL     |   2026 |           100 |      135 | 2026-06-24  | 2026-07-08 |             4345 | O:AAPL260708C00297500 | nan                                                                                                                      |
+| GME      |   2017 |           100 |        0 |             |            |             1953 | O:GME170602C00023500  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"40130f616ec85faaaacb6799106b26ec","message":"Your plan doesn't includ |
+| GME      |   2018 |           100 |        0 |             |            |             2002 | O:GME180608C00013500  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"b5546068796a9a4dca37f840fe60b9b4","message":"Your plan doesn't includ |
+| GME      |   2019 |           100 |        0 |             |            |             2322 | O:GME190614C00007000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"05678ad97946d6b8f37a137206bb1b71","message":"Your plan doesn't includ |
+| GME      |   2020 |           100 |        0 |             |            |             2577 | O:GME200619C00005000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"42cbb1971599bf11f063829ddfd9615a","message":"Your plan doesn't includ |
+| GME      |   2021 |           100 |        0 |             |            |             3510 | O:GME210604C00210000  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"da78dcc73a117fb1b2af07237b8c728a","message":"Your plan doesn't includ |
+| GME      |   2022 |           100 |        0 |             |            |             2378 | O:GME220603C00097500  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"770240e52b1ea75e3515eba387c7b433","message":"Your plan doesn't includ |
+| GME      |   2023 |           100 |        0 |             |            |             3047 | O:GME230602C00021500  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"485c4970001d207d20b9c8e8daa06e24","message":"Your plan doesn't includ |
+| GME      |   2024 |           100 |        0 |             |            |             4616 | O:GME240607C00029500  | HTTP 403: {"status":"NOT_AUTHORIZED","request_id":"308cbbd9240fcd255b2e73bc2e8b37c4","message":"Your plan doesn't includ |
+| GME      |   2025 |           100 |      407 | 2025-04-25  | 2025-06-06 |             3424 | O:GME250606C00033000  | nan                                                                                                                      |
+| GME      |   2026 |           100 |      463 | 2026-05-28  | 2026-07-08 |             2747 | O:GME260710C00023000  | nan                                                                                                                      |
+
+- **SPY**: earliest fully-usable year = **NONE**
+- **AAPL**: earliest fully-usable year = **2025**
+- **GME**: earliest fully-usable year = **2025**
