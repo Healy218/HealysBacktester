@@ -6,17 +6,25 @@ config so both NN experiments share one data regime and one purge protocol.
 Everything nn_meta-specific (15m interval, DTE grid, baseline sweep, meta-model
 grid) lives here.
 """
+import os
 from pathlib import Path
 
 from nn_options_signal import config as _nos
 
+# ── Strategy-pool switch ─────────────────────────────────────────────────────
+# NN_META_POOL=v3 selects the extended TV-strategy pool AND suffixes every
+# artifact directory (_v3), so a v3 retrain can never clobber the deployed
+# v2 spec/models. Default (unset) is the live v2 behavior, bit-for-bit.
+POOL = os.environ.get("NN_META_POOL", "v2")
+_SUF = "" if POOL == "v2" else f"_{POOL}"
+
 # ── Paths ────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent
-DATA_CACHE = ROOT / "data_cache"           # 15m caches (underlying + option bars)
-ARTIFACTS = ROOT / "artifacts"             # baseline spec, meta dataset
-RUNS_DIR = ROOT / "runs"
-REPORTS_DIR = ROOT / "reports"
-MODEL_FINAL_DIR = ROOT / "model_final"
+DATA_CACHE = ROOT / "data_cache"           # shared: bars are pool-independent
+ARTIFACTS = ROOT / f"artifacts{_SUF}"      # baseline spec, meta dataset
+RUNS_DIR = ROOT / f"runs{_SUF}"
+REPORTS_DIR = ROOT / f"reports{_SUF}"
+MODEL_FINAL_DIR = ROOT / f"model_final{_SUF}"
 
 UNDERLYING_15M_PARQUET = DATA_CACHE / "underlying_15m.parquet"
 BASELINE_SPEC_JSON = ARTIFACTS / "baseline_spec.json"
@@ -82,7 +90,15 @@ DTE_GRID = [1, 5, 10, 30, 45]
 # combos. Signal semantics come from the same signals/* generators.
 # v2.2: leaner pool — dropped bbands/stoch/elliott (mostly noise proposers that
 # diluted the model in v2.1's walk-forward); keep the four cleanest signals.
-PROPOSAL_STRATEGIES = ["ma", "macd", "rsi", "volume"]
+# The deployed v2.2 ensemble's feature schema (strat_* one-hots, scaler) is
+# frozen to the V2 list; the V3 pool trains only under NN_META_POOL=v3 into
+# the _v3 artifact dirs. The scanner switches pools when a v3 walk-forward
+# earns it.
+PROPOSAL_STRATEGIES_V2 = ["ma", "macd", "rsi", "volume"]
+PROPOSAL_STRATEGIES_V3 = PROPOSAL_STRATEGIES_V2 + ["supertrend", "tv_rating",
+                                                   "squeeze"]
+PROPOSAL_STRATEGIES = (PROPOSAL_STRATEGIES_V3 if POOL == "v3"
+                       else PROPOSAL_STRATEGIES_V2)
 SWEEP_GRIDS = {
     "ma":      {"windows": (2, 143, 2)},
     "rsi":     {"window": (7, 29, 7), "entry": (20.0, 41.0, 5.0), "exit": (60.0, 81.0, 5.0)},
@@ -91,6 +107,9 @@ SWEEP_GRIDS = {
     "stoch":   {"k": (5, 21, 5), "d": (3, 10, 3), "oversold": (20, 21, 1), "overbought": (80, 81, 1)},
     "volume":  {"vol_window": (30, 61, 10), "vol_mult": (1.5, 2.1, 0.25), "exit_ma": (45, 91, 15)},
     "elliott": {"swing": (4, 17, 4), "fib": (0.382, 0.62, 0.118), "tol": (0.01, 0.021, 0.01)},
+    "supertrend": {"window": (7, 15, 3), "mult": (2.0, 4.1, 0.5)},
+    "tv_rating":  {"entry": (0.1, 0.51, 0.2), "exit": (-0.3, -0.09, 0.2)},
+    "squeeze":    {"bb_mult": (1.5, 2.6, 0.5), "kc_mult": (1.0, 2.1, 0.5)},
 }
 
 # Same cost constants the equity simulator applies (utils/runner_utils.py).

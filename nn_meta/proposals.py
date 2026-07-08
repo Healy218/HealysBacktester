@@ -22,7 +22,7 @@ import pandas as pd
 
 from signals import (bbands_breakout, elliott_wave_signals, ma_crossover,
                      macd_signals, rsi_threshold, stoch_crossover,
-                     volume_breakout)
+                     tv_signals, volume_breakout)
 from nn_meta import config
 
 
@@ -84,6 +84,18 @@ def sweep_signals(strategy: str, bars: pd.DataFrame):
         return elliott_wave_signals.generate_elliott_wave_signals(
             bars["High"], bars["Low"], close,
             _arange(g["swing"], int), _arange(g["fib"]), _arange(g["tol"]),
+            enable_shorting=short)
+    if strategy == "supertrend":
+        return tv_signals.generate_supertrend_signals(
+            bars, _arange(g["window"], int), _arange(g["mult"]),
+            enable_shorting=short)
+    if strategy == "tv_rating":
+        return tv_signals.generate_tv_rating_signals(
+            bars, _arange(g["entry"]), _arange(g["exit"]),
+            enable_shorting=short)
+    if strategy == "squeeze":
+        return tv_signals.generate_squeeze_signals(
+            bars, _arange(g["bb_mult"]), _arange(g["kc_mult"]),
             enable_shorting=short)
     raise ValueError(f"unknown proposal strategy: {strategy}")
 
@@ -163,6 +175,19 @@ def single_signals(strategy: str, bars: pd.DataFrame, params: dict):
             bars["High"], bars["Low"], close,
             _one(p["swing_order"], int), _one(p["fib_level"]),
             _pad(p["fib_tolerance"]), enable_shorting=short)
+    elif strategy == "supertrend":
+        # tv_signals generators build columns explicitly — no squeeze, no pad
+        frames = tv_signals.generate_supertrend_signals(
+            bars, _one(p["st_window"], int), _one(p["st_mult"]),
+            enable_shorting=short)
+    elif strategy == "tv_rating":
+        frames = tv_signals.generate_tv_rating_signals(
+            bars, _one(p["entry_rating"]), _one(p["exit_rating"]),
+            enable_shorting=short)
+    elif strategy == "squeeze":
+        frames = tv_signals.generate_squeeze_signals(
+            bars, _one(p["sq_bb_mult"]), _one(p["sq_kc_mult"]),
+            enable_shorting=short)
     else:
         raise ValueError(f"unknown proposal strategy: {strategy}")
     return _select_col(frames, params)

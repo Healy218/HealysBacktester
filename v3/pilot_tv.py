@@ -64,28 +64,25 @@ def run_window(close: pd.Series, entries: pd.Series, exits: pd.Series,
             "trades": pf.trades.count()}
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--symbol", default="SPY")
-    args = ap.parse_args()
-
-    df = load_alpaca_bars(args.symbol, config.WINDOW_START,
+def symbol_section(symbol: str) -> list[str]:
+    df = load_alpaca_bars(symbol, config.WINDOW_START,
                           date.today().isoformat(), "1D")
-    print(f"{args.symbol}: {len(df)} daily bars "
-          f"{df.index[0].date()} → {df.index[-1].date()}")
+    print(f"{symbol}: {len(df)} daily bars "
+          f"{df.index[0].date()} → {df.index[-1].date()}", flush=True)
     close = df["Close"]
 
     fmt = lambda v: f"{v:+.1%}"
-    lines = [f"# TV-strategy pilot — {args.symbol} daily, "
-             f"{df.index[0].date()} → {df.index[-1].date()}", "",
-             "Honest next-bar fills, 5 bps/side, TV default params, "
-             "long-only. Per-regime total return (max drawdown).", ""]
+    lines = [f"## {symbol} ({df.index[0].date()} → {df.index[-1].date()})", ""]
     header = "| strategy | " + " | ".join(n for n, *_ in REGIMES) + \
              " | full window | trades |"
     lines += [header, "|" + "---|" * (len(REGIMES) + 3)]
 
-    for name, (entries, exits) in build_signals(df).items():
-        en, ex = entries.shift(1, fill_value=False), exits.shift(1, fill_value=False)
+    strategies = list(build_signals(df).items()) + \
+        [("buy & hold", (pd.Series(True, close.index),
+                         pd.Series(False, close.index)))]
+    for name, (entries, exits) in strategies:
+        en = entries.shift(1, fill_value=False)
+        ex = exits.shift(1, fill_value=False)
         cells = []
         for _, s, e in REGIMES:
             r = run_window(close, en, ex, s, e)
@@ -94,21 +91,37 @@ def main() -> None:
         lines.append(f"| {name} | " + " | ".join(cells) +
                      f" | {fmt(full['return'])} ({fmt(full['maxdd'])}) "
                      f"| {full['trades']} |")
+    return lines + [""]
 
-    cells = []
-    for _, s, e in REGIMES:
-        r = run_window(close, pd.Series(True, close.index),
-                       pd.Series(False, close.index), s, e)
-        cells.append(f"{fmt(r['return'])} ({fmt(r['maxdd'])})")
-    full = run_window(close, pd.Series(True, close.index),
-                      pd.Series(False, close.index), config.WINDOW_START, None)
-    lines.append(f"| buy & hold | " + " | ".join(cells) +
-                 f" | {fmt(full['return'])} ({fmt(full['maxdd'])}) | 1 |")
+
+# V3_SPEC stage-5 diverse basket: indexes, mega-caps, high-IV retail,
+# rate-sensitive, sector. (PLTR/COIN listed mid-window; their tables start
+# at first data.)
+BASKET = ["SPY", "QQQ", "AAPL", "MSFT", "NVDA",
+          "GME", "PLTR", "COIN", "TLT", "XLE"]
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--symbols", default=",".join(BASKET))
+    args = ap.parse_args()
+    symbols = [s.strip().upper() for s in args.symbols.split(",")]
+
+    lines = [f"# TV-strategy pilot — daily bars, {config.WINDOW_START} → "
+             f"{date.today().isoformat()}", "",
+             "Honest next-bar fills, 5 bps/side, TV default params, "
+             "long-only. Cells: total return (max drawdown).", ""]
+    for symbol in symbols:
+        try:
+            lines += symbol_section(symbol)
+        except Exception as e:
+            lines += [f"## {symbol}", "", f"FAILED: {e}", ""]
+            print(f"{symbol}: FAILED {e}", flush=True)
 
     config.ARTIFACTS.mkdir(parents=True, exist_ok=True)
-    out = config.ARTIFACTS / f"tv_pilot_{args.symbol.lower()}.md"
+    tag = "basket" if len(symbols) > 1 else symbols[0].lower()
+    out = config.ARTIFACTS / f"tv_pilot_{tag}.md"
     out.write_text("\n".join(lines))
-    print("\n".join(lines[4:]))
     print(f"\nwrote {out}")
 
 
