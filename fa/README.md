@@ -14,4 +14,6 @@ server — archive-first, because social history can't be bought later.
 | 5 | `tracker.py` | Forward returns + graduation rule |
 
 Shared constants in `config.py`. Every collector writes append-only
-timestamped parquet to `archive/<source>/<yyyy-mm>.parquet` and never mutates.
+timestamped parquet to `archive/<source>/<yyyy-mm>.parquet` via `archive.py`
+and never mutates. `python -m fa.collect` runs every available collector once
+(cron/Task Scheduler hourly); reddit stays a stub until API creds exist.

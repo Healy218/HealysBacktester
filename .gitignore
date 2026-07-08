@@ -35,3 +35,6 @@ Thumbs.db
 .env
 # Downloaded price data — regenerate on demand
 data/cache/
+# FA discovery raw archive + frozen rankings — data lives out of git
+fa/archive/
+fa/artifacts/
