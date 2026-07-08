@@ -8,7 +8,10 @@ import pytest
 
 from nn_meta.live import scanner as sc
 from nn_meta.live.notifier import (ConsoleNotifier, PushoverNotifier,
-                                   get_notifier)
+                                   TelegramNotifier, get_notifier)
+
+_NOTIFY_VARS = ("TELEGRAM_BOT_TOKEN", "TELEGRAM_CHAT_ID",
+                "PUSHOVER_TOKEN", "PUSHOVER_USER")
 
 
 # ── fixtures ──────────────────────────────────────────────────────────────────
@@ -55,15 +58,31 @@ class TestNotifier:
     def test_pushover_http_error(self):
         assert PushoverNotifier("t", "u", session=_FakeSession(500)).send("m") is False
 
+    def test_telegram_success(self):
+        s = _FakeSession(200)
+        assert TelegramNotifier("tok", "42", session=s).send("m", "t") is True
+        assert s.calls[0]["chat_id"] == "42" and "m" in s.calls[0]["text"]
+
+    def test_telegram_http_error(self):
+        assert TelegramNotifier("t", "c", session=_FakeSession(500)).send("m") is False
+
     def test_factory_console_when_no_creds(self, monkeypatch):
-        monkeypatch.delenv("PUSHOVER_TOKEN", raising=False)
-        monkeypatch.delenv("PUSHOVER_USER", raising=False)
+        for v in _NOTIFY_VARS:
+            monkeypatch.delenv(v, raising=False)
         assert isinstance(get_notifier(), ConsoleNotifier)
 
     def test_factory_pushover_with_creds(self, monkeypatch):
+        for v in _NOTIFY_VARS:
+            monkeypatch.delenv(v, raising=False)
         monkeypatch.setenv("PUSHOVER_TOKEN", "x")
         monkeypatch.setenv("PUSHOVER_USER", "y")
         assert isinstance(get_notifier(), PushoverNotifier)
+        assert isinstance(get_notifier(force_console=True), ConsoleNotifier)
+
+    def test_factory_telegram_beats_pushover(self, monkeypatch):
+        for v in _NOTIFY_VARS:
+            monkeypatch.setenv(v, "x")
+        assert isinstance(get_notifier(), TelegramNotifier)
         assert isinstance(get_notifier(force_console=True), ConsoleNotifier)
 
 
