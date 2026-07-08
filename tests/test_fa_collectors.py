@@ -6,6 +6,7 @@ import pytest
 
 from fa import archive, config
 from fa.collectors.edgar import FORMS, parse_master_idx
+from fa.collectors.reddit import _post_rows
 
 
 @pytest.fixture
@@ -71,3 +72,23 @@ class TestEdgarParse:
     def test_headers_and_junk_ignored(self):
         assert parse_master_idx("no pipes here\n\n").empty
         assert "13F-HR" not in FORMS
+
+
+class TestRedditParse:
+    def test_flattens_listing(self):
+        ts = pd.Timestamp("2026-07-08 20:00", tz="UTC")
+        listing = {"data": {"children": [
+            {"data": {"name": "t3_abc", "created_utc": 1751925600,
+                      "title": "YOLO $GME", "selftext": "x" * 9000,
+                      "score": 42, "num_comments": 7,
+                      "permalink": "/r/wsb/abc"}},
+            {"data": {}},                       # malformed child ignored
+        ]}}
+        rows = _post_rows(ts, "wallstreetbets", listing)
+        assert len(rows) == 1
+        assert rows[0]["post_id"] == "t3_abc"
+        assert len(rows[0]["selftext"]) == 5000  # capped
+        assert rows[0]["subreddit"] == "wallstreetbets"
+
+    def test_empty_listing(self):
+        assert _post_rows(pd.Timestamp.now(tz="UTC"), "stocks", {}) == []
