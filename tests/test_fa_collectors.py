@@ -6,7 +6,7 @@ import pytest
 
 from fa import archive, config
 from fa.collectors.edgar import FORMS, parse_master_idx
-from fa.collectors.reddit import _post_rows
+from fa.collectors.reddit import _comment_rows, _post_rows
 
 
 @pytest.fixture
@@ -92,3 +92,16 @@ class TestRedditParse:
 
     def test_empty_listing(self):
         assert _post_rows(pd.Timestamp.now(tz="UTC"), "stocks", {}) == []
+
+    def test_flattens_comment_stream(self):
+        ts = pd.Timestamp("2026-07-08 21:00", tz="UTC")
+        listing = {"data": {"children": [
+            {"data": {"name": "t1_c1", "link_id": "t3_megathread",
+                      "created_utc": 1783540900, "body": "$NVDA calls",
+                      "score": 12}},
+            {"data": {"name": "t1_c2"}},          # deleted body → skipped
+        ]}}
+        rows = _comment_rows(ts, "wallstreetbets", listing)
+        assert len(rows) == 1
+        assert rows[0]["comment_id"] == "t1_c1"
+        assert rows[0]["link_id"] == "t3_megathread"

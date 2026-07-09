@@ -1,10 +1,15 @@
-# fa/collectors/reddit.py — Stage 0 collector: subreddit post stream.
-"""Poll each config.SUBREDDITS /new listing via Reddit's OAuth API (app-only
+# fa/collectors/reddit.py — Stage 0 collector: posts AND the comment stream.
+"""Poll each config.SUBREDDITS via Reddit's OAuth API (app-only
 client_credentials grant — read-only public data, ~100 req/min allowance).
-Archive one row per post, deduped on post_id (first sighting wins; attention
-velocity in Stage 2 counts posts, not score evolution). Cashtag extraction
-happens in Stage 1, NOT here — collectors never analyze.
 
+Two archives per run:
+- "reddit": one row per POST from /new, deduped on post_id.
+- "reddit_comments": newest COMMENTS from the subreddit comment stream
+  (/r/<sub>/comments, a few pages), deduped on comment_id. This is where
+  the real ticker chatter lives — WSB concentrates it inside daily-
+  discussion megathreads whose comments never appear as posts.
+
+Cashtag extraction happens in Stage 1, NOT here — collectors never analyze.
 Env: REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET (a "script" app's credentials).
 Raises NotImplementedError when unset so fa.collect reports it as skipped.
 """
@@ -63,18 +68,56 @@ def _post_rows(ts: pd.Timestamp, subreddit: str, listing: dict) -> list[dict]:
     return rows
 
 
+def _comment_rows(ts: pd.Timestamp, subreddit: str, listing: dict) -> list[dict]:
+    """Flatten one comment-stream listing response into archive rows."""
+    rows = []
+    for child in listing.get("data", {}).get("children", []):
+        d = child.get("data", {})
+        if not d.get("name") or not d.get("body"):
+            continue
+        rows.append({
+            "ts_utc": ts,
+            "subreddit": subreddit,
+            "comment_id": d["name"],
+            "link_id": d.get("link_id", ""),      # parent thread (megathread!)
+            "created_utc": pd.Timestamp(d.get("created_utc", 0),
+                                        unit="s", tz="UTC"),
+            "body": d["body"][:2000],
+            "score": d.get("score", 0),
+        })
+    return rows
+
+
+COMMENT_PAGES = 3          # × 100 newest comments per subreddit per run
+
+
 def collect() -> int:
     session = requests.Session()
     tok = _token(session)
+    headers = {"User-Agent": _UA, "Authorization": f"Bearer {tok}"}
     ts = pd.Timestamp.now(tz="UTC")
-    rows: list[dict] = []
+
+    posts: list[dict] = []
+    comments: list[dict] = []
     for sub in config.SUBREDDITS:
         r = session.get(f"https://oauth.reddit.com/r/{sub}/new",
-                        params={"limit": 100},
-                        headers={"User-Agent": _UA,
-                                 "Authorization": f"Bearer {tok}"},
+                        params={"limit": 100}, headers=headers,
                         timeout=_TIMEOUT)
         r.raise_for_status()
-        rows.extend(_post_rows(ts, sub, r.json()))
+        posts.extend(_post_rows(ts, sub, r.json()))
+        after = None
+        for _ in range(COMMENT_PAGES):
+            r = session.get(f"https://oauth.reddit.com/r/{sub}/comments",
+                            params={"limit": 100, "after": after},
+                            headers=headers, timeout=_TIMEOUT)
+            r.raise_for_status()
+            body = r.json()
+            comments.extend(_comment_rows(ts, sub, body))
+            after = body.get("data", {}).get("after")
+            if not after:
+                break
         time.sleep(1)          # 4 subs/run — nowhere near limits, stay polite
-    return archive.append("reddit", pd.DataFrame(rows), key=["post_id"])
+    n = archive.append("reddit", pd.DataFrame(posts), key=["post_id"])
+    n += archive.append("reddit_comments", pd.DataFrame(comments),
+                        key=["comment_id"])
+    return n
