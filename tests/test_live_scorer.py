@@ -31,6 +31,25 @@ def _scorer(monkeypatch):
     return sc.NNScorer()
 
 
+class TestRunDirResolution:
+    def test_falls_back_to_model_final(self, tmp_path, monkeypatch):
+        # deployed hosts have no runs/ — only the committed model_final/
+        monkeypatch.setattr(config, "RUNS_DIR", tmp_path / "runs")
+        monkeypatch.setattr(config, "MODEL_FINAL_DIR", tmp_path / "final")
+        (tmp_path / "final" / "rid").mkdir(parents=True)
+        (tmp_path / "final" / "rid" / "scaler.json").write_text("{}")
+        from nn_meta.select_meta import resolve_run_dir
+        assert resolve_run_dir("rid") == tmp_path / "final" / "rid"
+
+    def test_prefers_runs_dir_when_present(self, tmp_path, monkeypatch):
+        monkeypatch.setattr(config, "RUNS_DIR", tmp_path / "runs")
+        monkeypatch.setattr(config, "MODEL_FINAL_DIR", tmp_path / "final")
+        (tmp_path / "runs" / "rid").mkdir(parents=True)
+        (tmp_path / "runs" / "rid" / "scaler.json").write_text("{}")
+        from nn_meta.select_meta import resolve_run_dir
+        assert resolve_run_dir("rid") == tmp_path / "runs" / "rid"
+
+
 class TestNNScorer:
     def test_threshold_from_bundle(self, monkeypatch):
         s = _scorer(monkeypatch)

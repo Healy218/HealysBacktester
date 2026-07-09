@@ -24,6 +24,7 @@ Run:  python -m nn_meta.select_meta
 import json
 import os
 import shutil
+from pathlib import Path
 
 os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 
@@ -78,8 +79,17 @@ def stress_returns(net: pd.Series, n_fills: pd.Series, mult: float) -> pd.Series
 
 # ── model scoring ─────────────────────────────────────────────────────────────
 
-def predict_rows(run_id: str, rows: pd.DataFrame) -> np.ndarray:
+def resolve_run_dir(run_id: str) -> Path:
+    """runs/ when training artifacts exist, else the committed model_final/
+    copy — deployed hosts only carry the latter (live scanner hit this)."""
     run_dir = config.RUNS_DIR / run_id
+    if not (run_dir / "scaler.json").exists():
+        run_dir = config.MODEL_FINAL_DIR / run_id
+    return run_dir
+
+
+def predict_rows(run_id: str, rows: pd.DataFrame) -> np.ndarray:
+    run_dir = resolve_run_dir(run_id)
     scaler = json.loads((run_dir / "scaler.json").read_text())
     mu = pd.Series(scaler["mean"])[META_FEATURES]
     sd = pd.Series(scaler["std"])[META_FEATURES]
