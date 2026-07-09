@@ -40,3 +40,10 @@ fa/archive/
 fa/artifacts/
 # v3 1m underlying archive (5+ GB of parquet partitions) — never in git
 v3/data/
+# v3-pool retrain outputs (NN_META_POOL=v3 suffixed dirs) — bulky and
+# regenerable; on a winning verdict, force-add the keepers (spec, ensemble
+# config, final models) exactly like v2 did
+nn_meta/artifacts_v3/
+nn_meta/runs_v3/
+nn_meta/reports_v3/
+nn_meta/model_final_v3/
