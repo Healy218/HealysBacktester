@@ -38,3 +38,5 @@ data/cache/
 # FA discovery raw archive + frozen rankings — data lives out of git
 fa/archive/
 fa/artifacts/
+# v3 1m underlying archive (5+ GB of parquet partitions) — never in git
+v3/data/
