@@ -17,3 +17,6 @@ alpaca-py
 requests          # Massive (Polygon) options REST client
 pyarrow           # parquet engine for the data cache
 python-dotenv
+
+lightgbm           # v3 GBT baseline (boring-baseline gate)
+boto3              # Massive flat-files S3 ingestion
