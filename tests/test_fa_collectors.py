@@ -93,6 +93,36 @@ class TestRedditParse:
     def test_empty_listing(self):
         assert _post_rows(pd.Timestamp.now(tz="UTC"), "stocks", {}) == []
 
+
+class TestStockTwitsSentiment:
+    def test_counts_message_tags(self):
+        from fa.collectors import stocktwits
+
+        class _Sess:
+            def get(self, url, **kw):
+                class _R:
+                    ok = True
+                    def json(self):
+                        return {"messages": [
+                            {"entities": {"sentiment": {"basic": "Bullish"}}},
+                            {"entities": {"sentiment": {"basic": "Bullish"}}},
+                            {"entities": {"sentiment": {"basic": "Bearish"}}},
+                            {"entities": {"sentiment": None}},   # untagged
+                            {"entities": {}},                    # missing
+                        ]}
+                return _R()
+        s = stocktwits._sentiment(_Sess(), "NVDA")
+        assert s == {"bull": 2, "bear": 1, "n_msgs": 5}
+
+    def test_equity_filter(self):
+        from fa.collectors.stocktwits import _is_equity
+        assert _is_equity("NVDA") and _is_equity("HD")
+        assert not _is_equity("ETH.X")     # crypto
+        assert not _is_equity("GBPUSD")    # forex pair (6 chars)
+        assert not _is_equity("BRK.B")     # dotted class share
+
+
+class TestRedditComments:
     def test_flattens_comment_stream(self):
         ts = pd.Timestamp("2026-07-08 21:00", tz="UTC")
         listing = {"data": {"children": [

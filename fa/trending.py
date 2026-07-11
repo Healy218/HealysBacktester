@@ -101,6 +101,23 @@ def _reddit_signal(as_of):
     return per_day, lean, sample
 
 
+def _stocktwits_lean(as_of):
+    """Per-ticker net Bullish/Bearish from StockTwits message tags — the clean
+    directional signal (home box collects, pushes here). Returns {sym: (net,
+    n_msgs)} aggregated over the day's snapshots."""
+    d = _load("stocktwits_sentiment")
+    if d.empty:
+        return {}
+    d = d[d["day"] == as_of]
+    out = {}
+    for sym, g in d.groupby("symbol"):
+        bull, bear = g["bull"].sum(), g["bear"].sum()
+        tot = bull + bear
+        if tot:
+            out[str(sym).upper()] = ((bull - bear) / tot, int(tot))
+    return out
+
+
 def _news_sentiment(as_of):
     """Per-ticker mean AlphaVantage/Finnhub sentiment for the day + headline."""
     d = _load("news")
@@ -130,6 +147,7 @@ def build_report(as_of=None) -> tuple[str, dict]:
 
     per_day, lean, sample = _reddit_signal(as_of)
     news_sent, news_head = _news_sentiment(as_of)
+    st_lean = _stocktwits_lean(as_of)
     today = per_day.get(as_of, Counter())
 
     # attention velocity: today's mentions vs mean of prior collected days
@@ -140,15 +158,19 @@ def build_report(as_of=None) -> tuple[str, dict]:
         base = [per_day[d].get(t, 0) for d in prior]
         base_mean = sum(base) / len(base) if base else 0.0
         velocity = (n - base_mean) / (base_mean + 3)   # +3 damps tiny bases
-        # direction: the CROWD's voice leads (reddit bull/bear lean); news
-        # sentiment only fills in when reddit has no directional keywords.
-        # (news multi-tags tickers, so it's a weak per-name signal — overlay,
-        # not driver.)
+        # direction priority: StockTwits message tags (explicit Bull/Bear,
+        # the clean signal) > reddit keyword lean > news sentiment overlay.
         rl = lean.get(t, [0, 0])
         reddit_dir = (rl[0] - rl[1]) / (rl[0] + rl[1]) if sum(rl) else None
         ns = news_sent.get(t)
-        direction = reddit_dir if reddit_dir is not None else (ns or 0.0)
-        sources = 1 + (t in news_sent)
+        st = st_lean.get(t)
+        if st is not None:
+            direction = st[0]
+        elif reddit_dir is not None:
+            direction = reddit_dir
+        else:
+            direction = ns or 0.0
+        sources = 1 + (t in news_sent) + (st is not None)
         rows.append({"ticker": t, "mentions": n, "base": round(base_mean, 1),
                      "velocity": velocity, "direction": direction,
                      "sources": sources,
@@ -173,7 +195,8 @@ def build_report(as_of=None) -> tuple[str, dict]:
         return (f"{mood}{src} {r.ticker}  {r.mentions}x (was {r.base}){ctx}")
 
     L = [f"📊 FA trending — {as_of}",
-         f"reddit+news · {len(prior)+1}d archive · ⋈=2-source · 🐂/🐻=lean", "",
+         f"reddit·news·stocktwits · {len(prior)+1}d · ⋈=2-src · "
+         f"🐂/🐻=StockTwits lean", "",
          "📈 Heating up (rising chatter)"]
     L += [fmt(r) for r in up.itertuples()] or ["  (none)"]
     L += ["", "📉 Cooling off (fading chatter)"]
