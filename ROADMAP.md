@@ -39,15 +39,26 @@ Order matters; each answers a question the big run depends on.
    actually beat a tree, (b) which strategies/features earn their place — so
    the big run is pruned, not bloated.
 
-## ⏭ Big run — v3-at-scale
-Scope decided by prep #1 (depth) and #2 (which features/strategies survive):
-- **Path A** — options meta-labeling at 200+ symbols, ~2y labels (feasible now).
-- **Path B** — deep-history (2017→) signal research on underlying/equity
-  outcomes or a sequence model, if flat-files unlock depth or we accept
-  non-options labels.
-Universe is still survivorship-biased (present-day list); true point-in-time
-selection with annual reconstitution stays TODO pending a constituents source.
+## ▶ Big run — v3-at-scale (RUNNING, Path A)
+**Decided 2026-07-11: Path A.** 120 symbols (by $volume, all v2 included),
+pruned 5-pool (rsi/tv_rating/macd/squeeze/ma), flat-files ingestion.
+Confirmed: flat-files reads are entitlement-gated to a rolling ~2y (cutoff
+~Sept 2024) — NOT the 9y the underlying crawl has. So option **labels** run
+~2024-09→now; the 9y underlying feeds longer-window features only. Data cache
+= `nn_meta/data_cache_v3` (underlying parquets built; option day-frames
+downloading). Wiring + launch = task #5.
+Universe is survivorship-biased (present-day list); point-in-time selection
+stays TODO.
 **Exit:** at-scale walk-forward verdict + per-regime report.
+
+## ⏭ NEXT after this run — bigger bucket, longer span (user intent 2026-07-11)
+Once this v3-at-scale trains, expand the universe AND the history. Requires a
+**paid Massive/Polygon historical-options entitlement** (the only blocker —
+proven, not a code gap). Then it's purely data+compute: `v3/flatfiles.py`
+already handles the full 2017→2026 window, so a wider `--universe` + earlier
+`--start` re-download feeds the same freeze/train/walk-forward chain. Path B
+(9y underlying-only model) remains an alternative if the entitlement isn't
+bought.
 
 ## ⏭ FA — ticker discovery (`FA_SPEC.md`)
 Stage-0 collectors live. Remaining: entity resolution → velocity z-scores →
