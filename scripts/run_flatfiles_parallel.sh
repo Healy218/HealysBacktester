@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# Parallel flat-file day-frame download: 3 workers on disjoint date ranges.
+# Parallel flat-file day-frame download: 4 workers on disjoint date ranges.
 # Day-frames are idempotent (build_day_frame skips existing), so ranges may
 # overlap already-done days harmlessly and never collide with each other.
-# 3 workers ≈ 4GB RAM peak — safe alongside the 15-min scanner on this box.
+# The live scanner is on the CLOUD SERVER, not this box, so the only other
+# local load is the hourly StockTwits job — 4 workers (~4.4GB of 7.6) is safe.
 set -euo pipefail
 cd /home/mrhea/HealysBacktester
 
@@ -20,9 +21,10 @@ launch(){  # $1=start $2=end $3=tag
   echo "  worker $3: $1 → $2  (pid $!)"
 }
 
-launch 2025-02-01 2025-06-30 w1
-launch 2025-07-01 2025-12-31 w2
-launch 2026-01-01 2026-07-11 w3
+launch 2025-02-01 2025-05-15 w1
+launch 2025-05-16 2025-09-15 w2
+launch 2025-09-16 2026-01-15 w3
+launch 2026-01-16 2026-07-11 w4
 
 sleep 4
 echo "running workers: $(pgrep -fc 'v3.flatfiles')"
