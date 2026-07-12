@@ -17,10 +17,14 @@ from nn_options_signal import config as _nos
 # v2 spec/models. Default (unset) is the live v2 behavior, bit-for-bit.
 POOL = os.environ.get("NN_META_POOL", "v2")
 _SUF = "" if POOL == "v2" else f"_{POOL}"
+# Big-run pools (v3.1+): 120-universe, flat-file option bars, ~2y window.
+# They read a SEPARATE data cache (data_cache_v3) so the live 56-symbol data
+# is never touched, while still writing their own suffixed artifact dirs.
+_BIG_RUN = POOL in {"v31"}
 
 # ── Paths ────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent
-DATA_CACHE = ROOT / "data_cache"           # shared: bars are pool-independent
+DATA_CACHE = ROOT / ("data_cache_v3" if _BIG_RUN else "data_cache")
 ARTIFACTS = ROOT / f"artifacts{_SUF}"      # baseline spec, meta dataset
 RUNS_DIR = ROOT / f"runs{_SUF}"
 REPORTS_DIR = ROOT / f"reports{_SUF}"
@@ -38,14 +42,20 @@ RUNS_CSV = RUNS_DIR / "runs.csv"
 # because the boundary rolls forward while multi-day downloads run. Data
 # behind the boundary survives ONLY in our parquet caches — download early.
 HISTORY_START = "2024-04-01"               # underlying warmup (Alpaca, unbounded)
-WINDOW_START, WINDOW_END = "2024-07-14", "2026-07-02"
-TRAIN_START, TRAIN_END = "2024-07-14", "2025-12-19"
+if _BIG_RUN:
+    # option labels begin where the flat-file entitlement does (~2024-08);
+    # same val/test boundaries as v2/v3 so cross-version reads stay clean.
+    WINDOW_START, WINDOW_END = "2024-08-01", "2026-07-02"
+    TRAIN_START, TRAIN_END = "2024-08-01", "2025-12-19"
+else:
+    WINDOW_START, WINDOW_END = "2024-07-14", "2026-07-02"
+    TRAIN_START, TRAIN_END = "2024-07-14", "2025-12-19"
 # val/test identical to v1 so before/after comparisons stay clean:
 VAL_START, VAL_END = "2026-01-05", "2026-03-27"
 TEST_START, TEST_END = "2026-04-06", "2026-07-02"
 
 # v1's 17 names + 39 liquid adds (thin names auto-skip at freeze time).
-UNDERLYINGS = [
+_UNDERLYINGS_V2 = [
     # v1
     "SPY", "QQQ", "VOO", "MSFT", "META", "AMZN", "AAPL", "GOOG", "NVDA",
     "TSM", "RGTI", "MU", "AXTI", "SNDK", "SLS", "NOK", "SPCX",
@@ -58,6 +68,12 @@ UNDERLYINGS = [
     # ETFs
     "IWM", "DIA", "GLD", "TLT", "SMH", "XLE", "XLF", "ARKK",
 ]
+if _BIG_RUN:
+    import json as _json
+    UNDERLYINGS = _json.loads(
+        (ROOT.parent / "v3" / "artifacts" / "universe_120.json").read_text())
+else:
+    UNDERLYINGS = _UNDERLYINGS_V2
 
 # Contract crawl / universe filter (same criteria as nn_options_signal)
 EXPIRY_MIN, EXPIRY_MAX = "2024-07-21", "2026-08-15"
@@ -97,7 +113,11 @@ DTE_GRID = [1, 5, 10, 30, 45]
 PROPOSAL_STRATEGIES_V2 = ["ma", "macd", "rsi", "volume"]
 PROPOSAL_STRATEGIES_V3 = PROPOSAL_STRATEGIES_V2 + ["supertrend", "tv_rating",
                                                    "squeeze"]
-PROPOSAL_STRATEGIES = (PROPOSAL_STRATEGIES_V3 if POOL == "v3"
+# v3.1: GBT-pruned pool — dropped volume (0.28% gain) and supertrend (1.3%);
+# kept the five strategies that carried the model's signal.
+PROPOSAL_STRATEGIES_V31 = ["ma", "macd", "rsi", "squeeze", "tv_rating"]
+PROPOSAL_STRATEGIES = (PROPOSAL_STRATEGIES_V31 if POOL == "v31"
+                       else PROPOSAL_STRATEGIES_V3 if POOL == "v3"
                        else PROPOSAL_STRATEGIES_V2)
 SWEEP_GRIDS = {
     "ma":      {"windows": (2, 143, 2)},
