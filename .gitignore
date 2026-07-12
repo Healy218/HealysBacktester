@@ -40,6 +40,9 @@ fa/archive/
 fa/artifacts/
 # v3 1m underlying archive (5+ GB of parquet partitions) — never in git
 v3/data/
+# big-run data cache: flat-file option day-frames + 120-universe underlying
+# parquets (multi-GB, regenerable from the crawl + flat files)
+nn_meta/data_cache_v3/
 # v3-pool retrain outputs (NN_META_POOL=v3 suffixed dirs) — bulky and
 # regenerable; on a winning verdict, force-add the keepers (spec, ensemble
 # config, final models) exactly like v2 did
