@@ -347,18 +347,36 @@ def load_spec() -> dict:
     return spec
 
 
-def freeze_all(symbols: Optional[list[str]] = None) -> dict:
+def freeze_all(symbols: Optional[list[str]] = None, out_path=None) -> dict:
     config.ensure_dirs()
     provider = get_provider()
-    out: dict = {
-        "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "interval": config.INTERVAL,
-        "train_window": [config.TRAIN_START, config.TRAIN_END],
-        "dte_grid": config.DTE_GRID,
-        "config_hash": _config_hash(),
-        "symbols": {},
-    }
+    from pathlib import Path
+    dest = Path(out_path or config.BASELINE_SPEC_JSON)
+
+    # resume: reload a partial spec and skip already-frozen symbols. Combined
+    # with the per-symbol write below, a killed/rebooted freeze picks up where
+    # it stopped instead of losing everything.
+    if dest.exists():
+        out = json.loads(dest.read_text())
+        out.setdefault("symbols", {})
+        done = set(out["symbols"]) | set(out.get("skipped", []))
+        if done:
+            print(f"resuming: {len(done)} symbols already done in {dest.name}",
+                  flush=True)
+    else:
+        out = {
+            "created": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "interval": config.INTERVAL,
+            "train_window": [config.TRAIN_START, config.TRAIN_END],
+            "dte_grid": config.DTE_GRID,
+            "symbols": {}, "skipped": [],
+        }
+        out["config_hash"] = _config_hash()
+        done = set()
+
     for sym in (symbols or config.UNDERLYINGS):
+        if sym in done:
+            continue
         print(f"[{sym}] sweeping…", flush=True)
         try:
             entry = freeze_symbol(sym, provider)
@@ -367,16 +385,37 @@ def freeze_all(symbols: Optional[list[str]] = None) -> dict:
             entry = None
         if entry is None:
             print(f"[{sym}] SKIPPED (no freezable baseline)")
-            continue
-        out["symbols"][sym] = entry
-        for strat, e in entry["strategies"].items():
-            t = e["train_option"][str(e["dte"])]
-            star = "*" if strat == entry["best_strategy"] else " "
-            print(f"[{sym}] {star}{strat:8s} {e['param_label'][:38]:38s} "
-                  f"dte={e['dte']:>2d} | n={t['n']:3d} win={t['win_rate']:.0%} "
-                  f"ret={t['total_return']:+.1%} "
-                  f"(fills ok {1 - t['fill_fail_rate']:.0%})", flush=True)
+            out.setdefault("skipped", []).append(sym)
+        else:
+            out["symbols"][sym] = entry
+            for strat, e in entry["strategies"].items():
+                t = e["train_option"][str(e["dte"])]
+                star = "*" if strat == entry["best_strategy"] else " "
+                print(f"[{sym}] {star}{strat:8s} {e['param_label'][:38]:38s} "
+                      f"dte={e['dte']:>2d} | n={t['n']:3d} win={t['win_rate']:.0%} "
+                      f"ret={t['total_return']:+.1%} "
+                      f"(fills ok {1 - t['fill_fail_rate']:.0%})", flush=True)
+        dest.write_text(json.dumps(out, indent=2))   # checkpoint per symbol
 
-    config.BASELINE_SPEC_JSON.write_text(json.dumps(out, indent=2))
-    print(f"\nfroze {len(out['symbols'])} symbols → {config.BASELINE_SPEC_JSON}")
+    print(f"\nfroze {len(out['symbols'])} symbols → {dest}")
+    return out
+
+
+def merge_specs(shard_paths: list, out_path=None) -> dict:
+    """Combine sharded freeze specs' symbol dicts into one baseline_spec."""
+    from pathlib import Path
+    merged = None
+    for p in shard_paths:
+        s = json.loads(Path(p).read_text())
+        if merged is None:
+            merged = {k: v for k, v in s.items()
+                      if k not in ("symbols", "skipped")}
+            merged["symbols"], merged["skipped"] = {}, []
+        merged["symbols"].update(s.get("symbols", {}))
+        merged["skipped"].extend(s.get("skipped", []))
+    dest = out_path or config.BASELINE_SPEC_JSON
+    Path(dest).write_text(json.dumps(merged, indent=2))
+    print(f"merged {len(shard_paths)} shards → {len(merged['symbols'])} "
+          f"symbols → {dest}")
+    return merged
     return out
