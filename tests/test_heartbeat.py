@@ -59,6 +59,17 @@ class TestHeartbeat:
         monkeypatch.setattr(heartbeat, "is_rth", lambda: True)
         assert "2 NEW crash" in heartbeat.build_message()
 
+    def test_fa_collector_errors_excluded(self, logs, monkeypatch):
+        bl, cl, _ = logs
+        bl.write_text(_today(
+            "INFO - [live] NN filter enabled (threshold 0.60)",
+            "ERROR - [fa.collect] edgar failed: 503",   # collector, not scanner
+            "ERROR - [fa.collect] edgar failed: 503"))
+        cl.write_text("")
+        monkeypatch.setattr(heartbeat, "is_rth", lambda: True)
+        msg = heartbeat.build_message()
+        assert "0 errors" in msg          # fa.collect errors excluded
+
     def test_first_run_no_false_crash(self, logs, monkeypatch):
         bl, cl, st = logs
         bl.write_text(_today("INFO - [live] NN filter enabled (threshold 0.60)"))

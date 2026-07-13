@@ -57,7 +57,10 @@ def build_message() -> str:
     passes = sum("NN filter enabled" in ln for ln in lines)
     signals = sum("notify:telegram] sent:" in ln
                   and ("BUY CALL" in ln or "BUY PUT" in ln) for ln in lines)
-    errors_today = sum(" - ERROR - " in ln for ln in lines)
+    # scanner errors only — the FA collectors (edgar/news/reddit) share this
+    # log and have their own transient failures (e.g. EDGAR 503s); counting
+    # those here would cry wolf and train the reader to ignore the heartbeat.
+    errors_today = sum(" - ERROR - " in ln and "[fa." not in ln for ln in lines)
     new_crashes = _new_crashes()
     rth = is_rth()
     status = "market open" if rth else "market closed"
