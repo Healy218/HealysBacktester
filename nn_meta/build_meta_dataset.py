@@ -303,34 +303,45 @@ def assign_split(entry_date: pd.Series) -> pd.Series:
         ["train", "val", "test"], default="purged"), index=d.index)
 
 
-def main() -> None:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--symbols", type=str, default=None)
-    args = ap.parse_args()
+ROWS_DIR = config.ARTIFACTS / "meta_rows"     # per-symbol checkpoint dir
 
-    config.ensure_dirs()
-    spec = load_spec()
-    symbols = [s.strip().upper() for s in args.symbols.split(",")] \
-        if args.symbols else list(spec["symbols"])
 
-    provider = get_provider()
-    frames = []
+def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR) -> None:
+    """Build each symbol's raw rows into rows_dir/<sym>.parquet, skipping any
+    already present. Resumable AND shardable: parallel workers on disjoint
+    symbol subsets write to the same dir without collision (surface join,
+    labels and split are applied later in assemble()). Empty results write a
+    0-row marker so a re-run doesn't rebuild a genuinely empty symbol."""
+    rows_dir.mkdir(parents=True, exist_ok=True)
     for sym in symbols:
         if sym not in spec["symbols"]:
             print(f"[{sym}] not in baseline spec — skipped")
             continue
+        pq = rows_dir / f"{sym}.parquet"
+        if pq.exists():
+            print(f"[{sym}] cached — skip")
+            continue
         print(f"[{sym}] building…", flush=True)
         df = build_symbol_rows(sym, spec["symbols"][sym], provider)
+        tmp = pq.with_suffix(".tmp")               # atomic: no truncated checkpoints
+        df.to_parquet(tmp, index=False)             # 0-row df writes a marker
+        tmp.replace(pq)
         if df.empty:
             print(f"[{sym}] no rows")
-            continue
-        ex_rate = df["executed"].mean()
-        print(f"[{sym}] {len(df)} rows ({df['strategy'].nunique()} strategies, "
-              f"{df['dte'].nunique()} DTEs), executed {ex_rate:.0%}", flush=True)
-        frames.append(df)
+        else:
+            print(f"[{sym}] {len(df)} rows ({df['strategy'].nunique()} "
+                  f"strategies, {df['dte'].nunique()} DTEs), "
+                  f"executed {df['executed'].mean():.0%}", flush=True)
 
+
+def assemble(rows_dir=ROWS_DIR) -> None:
+    """Concat all per-symbol rows → surface join → labels → split → write."""
+    parts = sorted(rows_dir.glob("*.parquet"))
+    if not parts:
+        raise SystemExit(f"no per-symbol rows in {rows_dir} — build first")
+    frames = [d for d in (pd.read_parquet(p) for p in parts) if not d.empty]
     if not frames:
-        raise SystemExit("no rows built for any symbol")
+        raise SystemExit("all per-symbol frames are empty")
     ds = pd.concat(frames, ignore_index=True)
 
     surface = load_surface_features()
@@ -374,6 +385,25 @@ def main() -> None:
     nan_rates = ds[META_FEATURES].isna().mean()
     bad = nan_rates[nan_rates > 0.05]
     print(f"  feature NaN >5%: {'none' if bad.empty else bad.round(3).to_dict()}")
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--symbols", type=str, default=None,
+                    help="comma-separated subset (for sharded parallel builds)")
+    ap.add_argument("--assemble", action="store_true",
+                    help="concat the per-symbol rows into the final dataset")
+    args = ap.parse_args()
+    config.ensure_dirs()
+    if args.assemble:
+        assemble()
+        return
+    spec = load_spec()
+    symbols = [s.strip().upper() for s in args.symbols.split(",")] \
+        if args.symbols else list(spec["symbols"])
+    build_rows(symbols, spec, get_provider())
+    print(f"\nbuilt per-symbol rows for {len(symbols)} symbols → {ROWS_DIR}\n"
+          f"run `--assemble` to concat into the dataset")
 
 
 if __name__ == "__main__":

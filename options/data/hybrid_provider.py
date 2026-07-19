@@ -206,7 +206,9 @@ class HybridCachedProvider(OptionsDataProvider):
                 # run retries this contract rather than caching a false blank.
                 return pd.DataFrame(columns=_OHLCV)
             path.parent.mkdir(parents=True, exist_ok=True)
-            df.to_parquet(path)   # genuine empty results cached too: fetch once
+            tmp = path.with_suffix(".tmp")        # atomic: no truncated cache files
+            df.to_parquet(tmp)    # genuine empty results cached too: fetch once
+            tmp.replace(path)
         else:
             logger.info(f"[{_TAG}] {occ} {interval}: not cached and fetch disabled")
             return pd.DataFrame(columns=_OHLCV)
