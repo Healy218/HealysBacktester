@@ -240,15 +240,17 @@ def execute_trade_returns(ex: Execution, stock_trades, und_close, und_index_utc,
             "trade_idx": t_i, "entry_ts": pd.Timestamp(ent_ts),
             "exit_ts": pd.Timestamp(ext_ts), "direction": direction,
             "right": right, "target_dte": target_dte,
-            "executed": bool(fills), "net_return": None,
+            "executed": bool(fills), "net_return": None, "gross_return": None,
             "n_fills": len(fills), "n_rolls": max(len(fills) - 1, 0),
             "contract": None, "strike": None, "expiration": None,
-            "entry_premium": None, "fill_entry_ts": None, "fill_lag_s": None,
+            "entry_premium": None, "fill_entry_ts": None, "fill_exit_ts": None,
+            "fill_lag_s": None,
         }
         if fills:
-            growth = 1.0
+            growth, gross_growth = 1.0, 1.0
             for f in fills:
                 growth *= (f["exit_close"] * (1 - c)) / (f["entry_open"] * (1 + c))
+                gross_growth *= f["exit_close"] / f["entry_open"]
             first = fills[0]
             fill_ts = pd.Timestamp(first["entry"])
             signal_ts = to_naive_utc(ent_ts)
@@ -256,10 +258,12 @@ def execute_trade_returns(ex: Execution, stock_trades, und_close, und_index_utc,
                 signal_ts = signal_ts.normalize()
             rec.update({
                 "net_return": growth - 1.0,
+                "gross_return": gross_growth - 1.0,
                 "contract": first["contract"], "strike": first["strike"],
                 "expiration": first["expiration"],
                 "entry_premium": first["entry_open"],
                 "fill_entry_ts": fill_ts,
+                "fill_exit_ts": pd.Timestamp(fills[-1]["exit"]),
                 "fill_lag_s": float((fill_ts - signal_ts).total_seconds()),
             })
         records.append(rec)

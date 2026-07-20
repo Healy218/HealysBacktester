@@ -86,6 +86,21 @@ Define one evaluation contract for:
 - Mark-to-market option valuation.
 - Conservative cost and spread scenarios.
 
+Current implementation:
+
+- [x] `nn_meta/v4_accounting.py` defines a fail-closed execution schema,
+  explicit per-side cost scenarios, and an event-level cash/position ledger.
+  True V4 reports require observed entry and exit contract marks and use any
+  observed interim marks; the ledger never manufactures a mark from a final
+  trade return.
+- [x] The execution engine now retains gross return plus actual entry/exit fill
+  timestamps, and future meta-datasets retain those execution-provenance
+  fields.
+- [ ] Persist the per-contract 15-minute mark stream (including roll fills)
+  alongside future V4 labels, then route the v4 evaluator through this ledger.
+- [ ] Specify fill-failure reason codes and conservative behavior for missing
+  option bars/spreads before producing a live-readiness report.
+
 ### 3. Baseline bake-off
 
 Evaluate GBT, NN, mechanical baseline, and underlying basket using identical portfolio construction. Prefer the simplest model that survives the same corrected out-of-fold gates.

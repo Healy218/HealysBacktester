@@ -232,6 +232,12 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                     "contract": r["contract"], "strike": strike,
                     "expiration": r["expiration"],
                     "entry_premium": prem, "fill_lag_s": r["fill_lag_s"],
+                    # Execution provenance retained for V4 accounting.  The
+                    # current dataset has no intratrade marks, so it cannot
+                    # itself claim mark-to-market accounting.
+                    "fill_entry_ts": r.get("fill_entry_ts"),
+                    "fill_exit_ts": r.get("fill_exit_ts"),
+                    "gross_return": r.get("gross_return"),
                     "n_fills": r["n_fills"], "n_rolls": r["n_rolls"],
                     "executed": r["executed"], "net_return": r["net_return"],
                     "und_period_return": und_ret,
