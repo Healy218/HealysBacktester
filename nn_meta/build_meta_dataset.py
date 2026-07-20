@@ -41,6 +41,7 @@ from nn_meta.providers import get_provider
 from nn_meta import config
 from nn_meta.baseline import (load_underlying_15m, load_spec, propose_trades,
                               execute_at_dte)
+from nn_meta.feature_contract import v4_feature_names
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -64,6 +65,11 @@ META_FEATURES = [
     # sector one-hots
     *[f"sec_{g}" for g in config.SECTOR_GROUPS],
 ]
+
+# V4 model runs use only features available at the signal close.  Keep this
+# separate from META_FEATURES until v2/v3 deployed model bundles are retired:
+# their persisted scalers deliberately reference the legacy schema.
+V4_META_FEATURES = v4_feature_names(META_FEATURES)
 
 
 # ── 15m technical features ────────────────────────────────────────────────────
