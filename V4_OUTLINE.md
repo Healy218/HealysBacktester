@@ -124,6 +124,23 @@ Add:
 - Coverage and entitlement reports.
 - A small metadata bundle that can be transferred independently of multi-gigabyte raw data.
 
+Current implementation:
+
+- [x] `nn_meta/v4_artifacts.py` creates and validates fail-closed manifests
+  containing file hashes, code revision, config hash, coverage, feature
+  provenance, and provider metadata. The v4 evaluator writes one beside each
+  report and can create a small transfer-ready metadata ZIP.
+- [x] The manifest regression tests prove that changed dataset/spec inputs and
+  changed ordered feature schemas are rejected.
+- [ ] Add a pinned, platform-tested lockfile and CI matrix. `requirements.txt`
+  is version-pinned for the most brittle core packages, but it is not yet a
+  fully reproducible lockfile.
+- [x] `python -m nn_meta.v4_preflight --require-gbt` is a remote-safe
+  preflight command for the actual v31 runtime. It validates local files,
+  causal schema, baseline spec, and LightGBM availability before the ablation.
+  Provider entitlement and cache coverage remain run-specific operational
+  checks because this machine cannot inspect the separate remote environment.
+
 ### 5. Live parity
 
 Make the deployed scanner consume the same candidate batch and policy as the backtest:
@@ -133,6 +150,17 @@ Make the deployed scanner consume the same candidate batch and policy as the bac
 - Fresh data/cache controls.
 - Atomic alert state and acknowledged notification outbox.
 - Paper-trade ledger and drift/health metrics.
+
+Current implementation:
+
+- [x] `nn_meta.live.v4_parity.assert_feature_parity` makes the feature gate
+  executable: it rejects post-decision fields, missing columns, row-count
+  differences, and numerical mismatches (while handling matching NaNs).
+- [ ] Build the v4 live candidate-batch constructor, run it against archived
+  closed bars, and use this comparator against the matching offline row.
+  The current deployed scorer intentionally remains the legacy v3/v31 scorer
+  and still depends on `prem_spot`; it must not be relabeled as v4 parity.
+- [ ] Add atomic alert/outbox state, paper-trade ledger, and drift metrics.
 
 ### 6. FA-to-universe loop
 
@@ -144,6 +172,17 @@ After the corrected trading evaluation is stable:
 - Freeze monthly rankings.
 - Track forward returns.
 - Graduate names into future universes only using their historical ranking date.
+
+Current implementation:
+
+- [x] `fa/universe_loop.py` ranks only score rows observed by the ranking
+  timestamp, requires independent-source corroboration, freezes a dated JSON
+  ranking without overwrite, and allows graduation only after a point-in-time
+  probation/forward-return check.
+- [ ] Feed the existing raw collectors and entity-resolution fixtures into
+  the normalized score table, then begin accumulating enough dated rankings
+  to evaluate the discovery signal. Historic social/filing snapshots cannot
+  be reconstructed retroactively.
 
 ## First implementation gate
 
@@ -164,6 +203,7 @@ remote dependencies):
 
 ```bash
 NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate --ablation --smoke
+NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_preflight --require-gbt
 NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate --ablation \
   --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600 --embargo 1D
 NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate \

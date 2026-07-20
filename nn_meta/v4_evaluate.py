@@ -30,6 +30,8 @@ from nn_meta.select_meta import (_EVALUATORS, all_rows, frozen_mask,
                                  portfolio_metrics)
 from nn_meta.temporal_validation import (FoldWindow, assign_purged_splits,
                                          expanding_folds, split_summary)
+from nn_meta.v4_artifacts import (create_manifest, write_manifest,
+                                  write_metadata_bundle)
 
 
 @dataclass
@@ -283,6 +285,10 @@ def main() -> None:
     ap.add_argument("--ablation", action="store_true",
                     help="run legacy/v4 schemas with and without exit-time purging")
     ap.add_argument("--output", type=Path, default=None)
+    ap.add_argument("--manifest", type=Path, default=None,
+                    help="write a verifiable input manifest next to the report")
+    ap.add_argument("--metadata-bundle", type=Path, default=None,
+                    help="optional portable zip of manifest, baseline spec, and reports")
     ap.add_argument("--smoke", action="store_true")
     args = ap.parse_args()
     if args.folds and args.ablation:
@@ -319,7 +325,20 @@ def main() -> None:
                 gbt_estimators=args.gbt_estimators, embargo=args.embargo,
             ))
     _write_report(results, output)
-    print(f"wrote {output} and {output.with_suffix('.json')}")
+    manifest_path = args.manifest or output.with_suffix(".manifest.json")
+    manifest = create_manifest(
+        dataset_path=args.dataset, baseline_spec_path=config.BASELINE_SPEC_JSON,
+        feature_names=schema_features("v4" if not args.ablation else "legacy"),
+        provider_metadata={"pool": config.POOL, "interval": config.INTERVAL,
+                           "options_history_constraint": "15m; approximately two years"},
+        code_root=config.ROOT.parent,
+    )
+    write_manifest(manifest, manifest_path)
+    if args.metadata_bundle:
+        write_metadata_bundle(args.metadata_bundle, manifest_path=manifest_path,
+                              baseline_spec_path=config.BASELINE_SPEC_JSON,
+                              reports=[output, output.with_suffix(".json")])
+    print(f"wrote {output}, {output.with_suffix('.json')}, and {manifest_path}")
 
 
 if __name__ == "__main__":
