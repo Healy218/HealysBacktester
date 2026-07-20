@@ -1,6 +1,9 @@
 # v4 Outline — Causal Validation and Research Reproducibility
 
-Status: initial outline, created from commit `5474335` on 2026-07-20.
+Status: implementation in progress. Created from commit `5474335` on
+2026-07-20; causal-validation infrastructure was added on
+`codex/v4-causal-validation` the same day. Empirical results remain blocked
+until the remote v31 dataset/artifacts are available.
 
 ## Purpose
 
@@ -51,6 +54,24 @@ Implement shared utilities for:
 - Nested temporal model/threshold selection.
 - Regression tests that construct deliberately leaking rows and fail if they cross a split.
 
+Current implementation:
+
+- [x] `nn_meta/feature_contract.py` records feature availability; the v4
+  schema (`V4_META_FEATURES`) deliberately excludes `prem_spot` while the
+  legacy schema remains intact for existing v3/v31 artifacts.
+- [x] `nn_meta/temporal_validation.py` assigns splits using both `entry_ts`
+  and `exit_ts`, purges cross-boundary labels, applies an explicit embargo,
+  and records a split audit table.
+- [x] `nn_meta/v4_evaluate.py` makes architecture/model-family, evaluation
+  mode, and threshold selections inside each temporal fold. It can run both a
+  corrected expanding-fold evaluation and a four-way legacy/v4 × unpurged/purged
+  ablation against a completed v31 dataset.
+- [x] Regression tests cover the feature-time contract, cross-boundary
+  labels, embargo behavior, fold ordering, and shared policy selection.
+- [ ] Refit the selected fold-local model on train+validation before its OOS
+  test, if we choose that convention; the current conservative runner keeps
+  validation separate through testing.
+
 ### 2. Execution and accounting
 
 Define one evaluation contract for:
@@ -68,6 +89,15 @@ Define one evaluation contract for:
 ### 3. Baseline bake-off
 
 Evaluate GBT, NN, mechanical baseline, and underlying basket using identical portfolio construction. Prefer the simplest model that survives the same corrected out-of-fold gates.
+
+Current implementation:
+
+- [x] The v4 runner evaluates NN and LightGBM through the existing shared
+  slot-portfolio evaluator, with the same frozen baseline, policy candidates,
+  threshold set, and drawdown gate. A candidate must exceed its validation
+  baseline to be eligible.
+- [ ] Replace/extend that shared evaluator with the stage-2 mark-to-market,
+  cost, and capacity accounting contract before treating outputs as live-ready.
 
 ### 4. Reproducible artifacts
 
@@ -109,6 +139,28 @@ V4 is not considered validated until:
 - Walk-forward selection is nested.
 - GBT and NN are compared with the same costed portfolio simulator.
 - The live scorer passes an offline/online feature-parity test.
+
+## First remote v31 run
+
+Once v31 training has completed and its `meta_dataset.parquet` plus baseline
+specification are copied or made accessible to this branch's environment, run
+the following from the project root (start with the smoke run to confirm the
+remote dependencies):
+
+```bash
+NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate --ablation --smoke
+NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate --ablation \
+  --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600 --embargo 1D
+NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate \
+  --folds 3 --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600 --embargo 1D
+```
+
+The ablation writes `v4_ablation_report.md` and JSON beside the configured
+reports directory; the expanding-fold run writes `v4_walkforward_report.md`
+and JSON. The four ablation treatments distinguish schema leakage
+(`prem_spot`) from split leakage (entry-only assignment) without re-downloading
+raw options data. LightGBM must be installed in the remote environment for
+the GBT comparison; the local tests intentionally do not require it.
 
 ## Branch strategy
 
