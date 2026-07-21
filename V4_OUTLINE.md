@@ -96,11 +96,12 @@ Session conventions:
    reduces to uniform when EVs are equal and only de-risks low-EV names.
    Pure and tested; joins the policy grid once a magnitude/EV prediction
    column is trained on v31 data.
-7. [ ] **Track 1 — HAR-RV/GARCH baseline module.** Realized-vol targets
-   plus HAR-RV and GARCH(1,1) forecasters with OOS QLIKE/pinball
-   evaluation under the stage-1 fold utilities. Code + fixture tests
-   locally; smoke-run on the legacy local cache; full 9y run happens on
-   the machine that holds `v3/data/`.
+7. [x] **Track 1 — HAR-RV/GARCH baseline module.**
+   `nn_meta/vol_forecast.py` has realized-variance targets, HAR-RV (OLS) and
+   GARCH(1,1) (scipy MLE), QLIKE + pinball losses, and one-step-ahead OOS
+   evaluation under the stage-1 `expanding_folds`. Fixture tests pass; the
+   smoke run on local daily SPY shows HAR/GARCH beating the naive constant
+   variance. Full intraday-RV 9y run happens where `v3/data/` lives.
 8. [ ] **Stage 5 — live candidate-batch constructor.** Build the v4 batch
    constructor, run it against archived closed bars, and verify with
    `nn_meta.live.v4_parity.assert_feature_parity`.
@@ -337,9 +338,10 @@ sequences the work that must land before the V4 training run.
   vol forecasts price options, ranks DTE/strike candidates, and sizes
   positions.
 - Plan:
-  - [ ] Classical baselines first, from the 9y underlying: realized-vol
-    HAR-RV and GARCH(1,1) forecasters with OOS QLIKE/pinball loss under the
-    same fold boundaries as the trade evaluation.
+  - [x] Classical baselines first: realized-vol HAR-RV and GARCH(1,1)
+    forecasters with OOS QLIKE/pinball loss under the stage-1 folds, in
+    `nn_meta/vol_forecast.py`. Runs on the local daily cache; the full 9y
+    intraday-RV run happens where `v3/data/` lives.
   - [ ] One sequence model (GRU or temporal-conv; small) forecasting
     realized vol and return quantiles over option-holding horizons; it must
     beat HAR-RV/GARCH OOS per regime slice or it is dropped.
