@@ -25,11 +25,14 @@ from nn_meta import config
 from nn_meta.baseline import load_spec
 from nn_meta.build_meta_dataset import META_FEATURES, V4_META_FEATURES
 from nn_meta.feature_contract import assert_decision_safe
+from nn_meta.mark_stream import execution_frames, load_mark_stream
 from nn_meta.model import build_meta_mlp
-from nn_meta.select_meta import (_EVALUATORS, all_rows, frozen_mask,
-                                 portfolio_metrics)
+from nn_meta.select_meta import (_EVALUATORS, _portfolio_sim, all_rows,
+                                 frozen_mask, portfolio_metrics)
 from nn_meta.temporal_validation import (FoldWindow, assign_purged_splits,
                                          expanding_folds, split_summary)
+from nn_meta.v4_accounting import (BASE_COSTS, CostScenario,
+                                   mark_to_market_portfolio)
 from nn_meta.v4_artifacts import (create_manifest, write_manifest,
                                   write_metadata_bundle)
 
@@ -170,6 +173,49 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                if c["metrics"]["total_return"] is not None else -np.inf)
 
 
+def _candidate_rows(rows: pd.DataFrame, pred: np.ndarray, mode: str,
+                    threshold: float) -> pd.DataFrame:
+    """Thresholded (and, for rank, DTE-deduped) candidate pool for one policy,
+    matching the shared filter/rank evaluators."""
+    cands = rows.assign(pred=pred)
+    cands = cands[cands["pred"] >= threshold]
+    if mode == "rank":
+        cands = cands.sort_values("pred", ascending=False) \
+            .drop_duplicates(["symbol", "strategy", "trade_idx"])
+    return cands
+
+
+def _selected_rows(cands: pd.DataFrame) -> pd.DataFrame:
+    """Rows the shared slot portfolio actually enters (its own slot decision)."""
+    cands = cands.dropna(subset=["entry_ts", "exit_ts", "net_return"])
+    if cands.empty:
+        return cands
+    _, _, entered = _portfolio_sim(cands, config.MAX_CONCURRENT,
+                                   config.PORTFOLIO_FRACTION)
+    return cands.loc[[e[0] for e in entered]]
+
+
+def marked_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
+                   threshold: float, mark_stream: pd.DataFrame, *,
+                   costs: CostScenario = BASE_COSTS) -> dict | None:
+    """Mark-to-market metrics for the trades this policy enters.
+
+    The shared slot portfolio makes the entry/exit decisions (skip semantics);
+    only those entered trades and their observed marks are then routed through
+    the fail-closed ledger, which re-derives drawdown and exposure from the
+    per-contract mark path rather than the final ``net_return``.  Returns
+    ``None`` when the portfolio enters nothing.
+    """
+    selected = _selected_rows(_candidate_rows(rows, pred, mode, threshold))
+    if selected.empty:
+        return None
+    trades, marks = execution_frames(selected, mark_stream)
+    metrics, _ = mark_to_market_portfolio(
+        trades, marks, max_concurrent=config.MAX_CONCURRENT,
+        position_fraction=config.PORTFOLIO_FRACTION, costs=costs)
+    return metrics
+
+
 def _rows_for_split(ds: pd.DataFrame, split: str) -> pd.DataFrame:
     return all_rows(ds, split).reset_index(drop=True)
 
@@ -177,7 +223,8 @@ def _rows_for_split(ds: pd.DataFrame, split: str) -> pd.DataFrame:
 def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
                     schema: str, purged: bool, label: str,
                     models: Iterable[str], seeds: Iterable[int], epochs: int,
-                    gbt_estimators: int, embargo: str) -> dict:
+                    gbt_estimators: int, embargo: str,
+                    mark_stream: pd.DataFrame | None = None) -> dict:
     """Nested temporal evaluation for one fold or global ablation window."""
     ds = ds.copy()
     split = assign_purged_splits(
@@ -214,6 +261,9 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
     test_eval_pred = test_pred[fmask] if winner["mode"] == "filter" else test_pred
     winner_test = _EVALUATORS[winner["mode"]](test_eval_rows, test_eval_pred,
                                                 winner["threshold"])
+    winner_marked = (marked_metrics(test_eval_rows, test_eval_pred,
+                                    winner["mode"], winner["threshold"], mark_stream)
+                     if mark_stream is not None else None)
 
     by_model = {}
     for policy in selected:
@@ -232,7 +282,7 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         "split_summary": split_summary(ds, split).to_dict(orient="records"),
         "winner": {"family": winner["family"], "mode": winner["mode"],
                    "threshold": winner["threshold"], "validation": winner["metrics"],
-                   "test": winner_test},
+                   "test": winner_test, "marked": winner_marked},
         "models": by_model,
     }
 
@@ -256,17 +306,25 @@ def _window_from_config() -> FoldWindow:
 
 def _write_report(results: list[dict], output: Path) -> None:
     lines = ["# V4 causal evaluation", "",
-             "Each row uses fold-local model/policy selection and the shared slot portfolio.", "",
-             "| run | schema | purged | winner | mode / threshold | test return | maxDD |", "|---|---|---|---|---|---|---|"]
+             "Each row uses fold-local model/policy selection and the shared slot portfolio.",
+             "The marked column is the mark-to-market ledger result and is `pending` "
+             "until a per-contract mark stream is supplied via `--marks`.", "",
+             "| run | schema | purged | winner | mode / threshold | test return | maxDD | marked return / maxDD |",
+             "|---|---|---|---|---|---|---|---|"]
     for i, result in enumerate(results, 1):
         win, test = result["winner"], result["winner"]["test"]
         ret = test["total_return"]
         dd = test["max_drawdown"]
+        marked = win.get("marked")
+        if marked is None:
+            marked_cell = "pending"
+        else:
+            marked_cell = f"{marked['total_return']:+.1%} / {marked['max_drawdown']:.1%}"
         lines.append(
             f"| {i} | {result['schema']} | {result['purged']} | {win['family']} | "
             f"{win['mode']} / {win['threshold']:.2f} | "
             f"{'n/a' if ret is None else f'{ret:+.1%}'} | "
-            f"{'n/a' if dd is None else f'{dd:.1%}'} |"
+            f"{'n/a' if dd is None else f'{dd:.1%}'} | {marked_cell} |"
         )
     output.write_text("\n".join(lines) + "\n")
     output.with_suffix(".json").write_text(json.dumps(results, indent=2, default=_json_default))
@@ -282,6 +340,9 @@ def main() -> None:
     ap.add_argument("--gbt-estimators", type=int, default=600)
     ap.add_argument("--embargo", default="1D")
     ap.add_argument("--folds", type=int, default=0, help="expanding nested folds")
+    ap.add_argument("--marks", type=Path, default=None,
+                    help="per-contract 15m mark stream; enables mark-to-market "
+                         "accounting of the winning policy's trades")
     ap.add_argument("--ablation", action="store_true",
                     help="run legacy/v4 schemas with and without exit-time purging")
     ap.add_argument("--output", type=Path, default=None)
@@ -298,6 +359,7 @@ def main() -> None:
 
     ds = pd.read_parquet(args.dataset)
     spec = load_spec()
+    mark_stream = load_mark_stream(args.marks) if args.marks else None
     models = [m.strip() for m in args.models.split(",") if m.strip()]
     seeds = [int(seed) for seed in args.seeds.split(",") if seed.strip()]
     output = args.output or config.REPORTS_DIR / (
@@ -314,6 +376,7 @@ def main() -> None:
                 ds, window, spec=spec, schema=schema, purged=purged,
                 label=args.label, models=models, seeds=seeds, epochs=args.epochs,
                 gbt_estimators=args.gbt_estimators, embargo=args.embargo,
+                mark_stream=mark_stream,
             ))
     else:
         folds = expanding_folds(ds["entry_ts"], n_folds=args.folds or 3)
@@ -323,6 +386,7 @@ def main() -> None:
                 ds, window, spec=spec, schema="v4", purged=True,
                 label=args.label, models=models, seeds=seeds, epochs=args.epochs,
                 gbt_estimators=args.gbt_estimators, embargo=args.embargo,
+                mark_stream=mark_stream,
             ))
     _write_report(results, output)
     manifest_path = args.manifest or output.with_suffix(".manifest.json")

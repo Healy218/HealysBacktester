@@ -60,11 +60,13 @@ Session conventions:
 
 ### Queue
 
-1. [ ] **Stage 2 — mark-stream ledger plumbing.** Persist the per-contract
-   15-minute mark stream (including roll fills) alongside labels, and
-   route `nn_meta/v4_evaluate.py` through the `v4_accounting.py` ledger.
-   Build and test against synthetic mark fixtures; real streams attach
-   when v31 data lands.
+1. [x] **Stage 2 — mark-stream ledger plumbing.** `nn_meta/mark_stream.py`
+   defines the sidecar mark-stream schema, a deterministic per-row key
+   (`stable_trade_id`), IO, and the bridge into `v4_accounting`.
+   `nn_meta/v4_evaluate.py` routes the winning policy's entered trades
+   through the ledger when `--marks` is supplied (fail-closed / `pending`
+   otherwise). Tested against synthetic fixtures; real streams attach when
+   v31 data lands.
 2. [ ] **Stage 2 — fill-failure reason codes.** Enumerate reason codes and
    fail-closed behavior for missing option bars/spreads in
    `nn_meta/v4_accounting.py`; test every code path.
@@ -182,8 +184,11 @@ Current implementation:
 - [x] The execution engine now retains gross return plus actual entry/exit fill
   timestamps, and future meta-datasets retain those execution-provenance
   fields.
-- [ ] Persist the per-contract 15-minute mark stream (including roll fills)
-  alongside future V4 labels, then route the v4 evaluator through this ledger.
+- [x] The mark-stream format, deterministic keying, IO, and the ledger
+  bridge live in `nn_meta/mark_stream.py`; the v4 evaluator routes the
+  winning policy's entered trades through the ledger when a stream is
+  supplied. Emission of a real per-contract 15-minute stream (including roll
+  fills) from the label builder is still pending v31 data.
 - [ ] Specify fill-failure reason codes and conservative behavior for missing
   option bars/spreads before producing a live-readiness report.
 
