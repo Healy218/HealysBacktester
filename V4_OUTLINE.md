@@ -89,10 +89,13 @@ Session conventions:
    `top_decile_inverted` flag; `v4_evaluate` renders it (with a ⚠ marker)
    in every report. A test reproduces the v3.1 shape (win rate up, return
    down) and asserts the flag fires.
-6. [ ] **Backlog — magnitude head / EV sizing (code only).** Second
-   E[win size] head (or return-bucket labels) plus EV-based slot sizing
-   as a fold-selectable policy candidate. Synthetic-data tests now;
-   empirical evaluation when v31 data lands.
+6. [x] **Backlog — magnitude head / EV sizing (code only).**
+   `nn_meta/ev_sizing.py` provides the return-bucket magnitude labels and
+   `bucket_expected_value` (the no-second-head path), `predicted_ev` (the
+   two-head path), and an EV-weighted slot portfolio (`evaluate_ev`) that
+   reduces to uniform when EVs are equal and only de-risks low-EV names.
+   Pure and tested; joins the policy grid once a magnitude/EV prediction
+   column is trained on v31 data.
 7. [ ] **Track 1 — HAR-RV/GARCH baseline module.** Realized-vol targets
    plus HAR-RV and GARCH(1,1) forecasters with OOS QLIKE/pinball
    evaluation under the stage-1 fold utilities. Code + fixture tests
@@ -405,13 +408,14 @@ small, so ranking trades by score alone leaves magnitude on the table.
 Candidate fixes, selected inside temporal folds like every other design
 choice (they are not mutually exclusive):
 
-- [ ] Magnitude-aware labels: move beyond the binary win label — predict
-  E[net return] directly (regression head), or classify into return
-  buckets so the label itself carries size. The current |return|-weighted
-  BCE weights the loss by magnitude but still trains a pure P(win) target.
-- [ ] Score-scaled sizing: keep the P(win) head, add a second magnitude
-  head, and size positions by predicted EV = P(win) × E[win size] instead
-  of uniform slots.
+- [x] Magnitude-aware labels: the return-bucket labels and magnitude
+  regression target live in `nn_meta/ev_sizing.py`
+  (`return_bucket_labels`, `magnitude_target`, `bucket_expected_value`).
+  Training a head on them is the v31-data step; the labels are code-ready.
+- [x] Score-scaled sizing: `nn_meta/ev_sizing.py` sizes positions by
+  predicted EV (`predicted_ev`, `evaluate_ev`) instead of uniform slots,
+  as a fold-selectable candidate. Empirical comparison vs uniform slots is
+  pending the trained magnitude prediction on v31 data.
 - [x] The v3.1 calibration table (score deciles vs win rate AND mean return)
   is a standard diagnostic in every v4 report via `nn_meta/diagnostics.py`,
   with an explicit top-decile-inversion flag, so the inversion is tracked
