@@ -25,6 +25,7 @@ from nn_meta import config
 from nn_meta.baseline import load_spec
 from nn_meta.build_meta_dataset import META_FEATURES, V4_META_FEATURES
 from nn_meta.calibration import calibration_summary
+from nn_meta.diagnostics import decile_diagnostic
 from nn_meta.feature_contract import assert_decision_safe
 from nn_meta.mark_stream import execution_frames, load_mark_stream
 from nn_meta.model import build_meta_mlp
@@ -280,6 +281,9 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         test_eval_rows, test_eval_pred, winner["mode"], winner["threshold"]))
     deflated = deflated_sharpe_from_trials(
         entered_test["net_return"] if len(entered_test) else [], trial_sharpes)
+    # Track the v3.1 top-decile inversion (win rate up, mean return down) on
+    # the full test candidate pool for the winning family.
+    score_deciles = decile_diagnostic(test_pred, test_rows["net_return"])
 
     by_model = {}
     for policy in selected:
@@ -299,7 +303,8 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         "winner": {"family": winner["family"], "mode": winner["mode"],
                    "threshold": winner["threshold"], "validation": winner["metrics"],
                    "test": winner_test, "marked": winner_marked,
-                   "calibration": calibration, "deflated_sharpe": deflated},
+                   "calibration": calibration, "deflated_sharpe": deflated,
+                   "score_deciles": score_deciles},
         "models": by_model,
     }
 
@@ -361,6 +366,17 @@ def _write_report(results: list[dict], output: Path) -> None:
         for i, d in dsr_rows:
             lines.append(f"| {i} | {d['sharpe']:.3f} | {d['n_trials']} | "
                          f"{d['expected_max_sharpe']:.3f} | {d['deflated_sharpe']:.3f} |")
+    for i, result in enumerate(results, 1):
+        diag = result["winner"].get("score_deciles")
+        if not diag:
+            continue
+        flag = " ⚠ top-decile inversion" if diag["inverted"] else ""
+        lines += ["", f"## Score deciles (run {i}, winner test){flag}", "",
+                  "| decile | n | mean score | win rate | mean return |",
+                  "|---|---|---|---|---|"]
+        for d in diag["deciles"]:
+            lines.append(f"| {d['decile']} | {d['n']} | {d['mean_score']:.3f} | "
+                         f"{d['win_rate']:.3f} | {d['mean_return']:+.4f} |")
     output.write_text("\n".join(lines) + "\n")
     output.with_suffix(".json").write_text(json.dumps(results, indent=2, default=_json_default))
 

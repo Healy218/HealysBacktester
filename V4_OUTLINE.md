@@ -84,9 +84,11 @@ Session conventions:
    cases. `v4_evaluate` deflates the winner's test Sharpe by the full policy
    grid and reports it. (PBO utility is available; wiring it needs the
    per-fold candidate matrix — a follow-up.)
-5. [ ] **Backlog — score-decile diagnostic.** Emit score deciles vs win
-   rate AND mean return in every v4 report, so the v3.1 top-decile
-   inversion is tracked continuously.
+5. [x] **Backlog — score-decile diagnostic.** `nn_meta/diagnostics.py`
+   emits per-decile mean score, win rate, and mean return, with a
+   `top_decile_inverted` flag; `v4_evaluate` renders it (with a ⚠ marker)
+   in every report. A test reproduces the v3.1 shape (win rate up, return
+   down) and asserts the flag fires.
 6. [ ] **Backlog — magnitude head / EV sizing (code only).** Second
    E[win size] head (or return-bucket labels) plus EV-based slot sizing
    as a fold-selectable policy candidate. Synthetic-data tests now;
@@ -410,9 +412,10 @@ choice (they are not mutually exclusive):
 - [ ] Score-scaled sizing: keep the P(win) head, add a second magnitude
   head, and size positions by predicted EV = P(win) × E[win size] instead
   of uniform slots.
-- [ ] Make the v3.1 calibration table (score deciles vs win rate AND mean
-  return) a standard diagnostic in every v4 report, so the top-decile
-  inversion is tracked continuously rather than rediscovered.
+- [x] The v3.1 calibration table (score deciles vs win rate AND mean return)
+  is a standard diagnostic in every v4 report via `nn_meta/diagnostics.py`,
+  with an explicit top-decile-inversion flag, so the inversion is tracked
+  continuously rather than rediscovered.
 - Gate: mean return no longer inverts in the top score deciles
   out-of-fold, and EV-based sizing beats uniform-slot sizing through the
   same costed portfolio simulator; otherwise ship uniform slots and keep
