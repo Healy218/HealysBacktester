@@ -102,9 +102,13 @@ Session conventions:
    evaluation under the stage-1 `expanding_folds`. Fixture tests pass; the
    smoke run on local daily SPY shows HAR/GARCH beating the naive constant
    variance. Full intraday-RV 9y run happens where `v3/data/` lives.
-8. [ ] **Stage 5 — live candidate-batch constructor.** Build the v4 batch
-   constructor, run it against archived closed bars, and verify with
-   `nn_meta.live.v4_parity.assert_feature_parity`.
+8. [x] **Stage 5 — live candidate-batch constructor.**
+   `nn_meta/live/v4_candidates.py` builds a v4 causal candidate batch from
+   closed underlying bars — reusing the offline `technical_features`,
+   `join_surface_asof`, and one-hot maps — with no option fill (no
+   `prem_spot`), so parity holds by construction. `assert_candidate_parity`
+   wraps `v4_parity.assert_feature_parity`; tests cover schema, determinism,
+   parity pass, and drift-detected failure.
 9. [ ] **Stage 5 — alert/outbox/paper-ledger state.** Atomic alert state,
    acknowledged notification outbox, paper-trade ledger, drift/health
    metrics.
@@ -262,10 +266,12 @@ Current implementation:
 - [x] `nn_meta.live.v4_parity.assert_feature_parity` makes the feature gate
   executable: it rejects post-decision fields, missing columns, row-count
   differences, and numerical mismatches (while handling matching NaNs).
-- [ ] Build the v4 live candidate-batch constructor, run it against archived
-  closed bars, and use this comparator against the matching offline row.
-  The current deployed scorer intentionally remains the legacy v3/v31 scorer
-  and still depends on `prem_spot`; it must not be relabeled as v4 parity.
+- [x] The v4 live candidate-batch constructor is `nn_meta/live/v4_candidates.py`
+  (`build_candidate_batch` + `assert_candidate_parity`), reusing the offline
+  featurization so it is parity-correct by construction and needs no option
+  fill. The deployed scorer intentionally remains the legacy v3/v31 scorer and
+  still depends on `prem_spot`; it is not relabeled as v4 parity. Running it
+  against the live provider's archived bars is the on-server step.
 - [ ] Add atomic alert/outbox state, paper-trade ledger, and drift metrics.
 
 ### 6. FA-to-universe loop
