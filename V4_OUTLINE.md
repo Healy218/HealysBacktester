@@ -78,9 +78,12 @@ Session conventions:
    winner's calibrator on validation predictions only and scores test; the
    report gains a calibration section. A regression test proves the mapping
    is invariant to test labels (never sees test rows).
-4. [ ] **Track 2 — deflated Sharpe / PBO utilities.** New module
-   (`nn_meta/multiple_testing.py`), pure functions with tests against
-   known analytic cases; wire into the walk-forward report.
+4. [x] **Track 2 — deflated Sharpe / PBO utilities.**
+   `nn_meta/multiple_testing.py` adds Probabilistic/Deflated Sharpe (stdlib
+   `NormalDist`) and CSCV-based `combinatorial_pbo`, tested against analytic
+   cases. `v4_evaluate` deflates the winner's test Sharpe by the full policy
+   grid and reports it. (PBO utility is available; wiring it needs the
+   per-fold candidate matrix — a follow-up.)
 5. [ ] **Backlog — score-decile diagnostic.** Emit score deciles vs win
    rate AND mean return in every v4 report, so the v3.1 top-decile
    inversion is tracked continuously.
@@ -309,8 +312,10 @@ sequences the work that must land before the V4 training run.
     validation slice only); Brier score and reliability reported beside the
     portfolio metrics. Implemented in `nn_meta/calibration.py` and wired into
     `v4_evaluate`.
-  - [ ] Deflated Sharpe ratio / probability-of-backtest-overfitting (PBO)
-    across the policy grid, reported in `v4_walkforward_report.md`.
+  - [x] Deflated Sharpe ratio / probability-of-backtest-overfitting (PBO)
+    across the policy grid. `nn_meta/multiple_testing.py`; deflated Sharpe is
+    reported per winner. PBO utility is tested; report wiring for PBO needs
+    the per-fold candidate matrix (follow-up).
   - [ ] Skip CNN-on-chart-images deliberately: it discards exact numerical
     information for pixels and is not used seriously in industry. Record
     this as a considered-and-rejected decision.

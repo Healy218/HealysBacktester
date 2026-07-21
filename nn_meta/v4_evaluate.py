@@ -28,6 +28,7 @@ from nn_meta.calibration import calibration_summary
 from nn_meta.feature_contract import assert_decision_safe
 from nn_meta.mark_stream import execution_frames, load_mark_stream
 from nn_meta.model import build_meta_mlp
+from nn_meta.multiple_testing import deflated_sharpe_from_trials
 from nn_meta.select_meta import (_EVALUATORS, _portfolio_sim, all_rows,
                                  frozen_mask, portfolio_metrics)
 from nn_meta.temporal_validation import (FoldWindow, assign_purged_splits,
@@ -170,8 +171,11 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
             })
     eligible = [c for c in candidates if c["eligible"]]
     pool = eligible or candidates
-    return max(pool, key=lambda c: c["metrics"]["total_return"]
-               if c["metrics"]["total_return"] is not None else -np.inf)
+    winner = max(pool, key=lambda c: c["metrics"]["total_return"]
+                 if c["metrics"]["total_return"] is not None else -np.inf)
+    # Every candidate is a "trial"; its Sharpe feeds the deflation later.
+    winner["candidate_sharpes"] = [c["metrics"]["per_trade_sharpe"] for c in candidates]
+    return winner
 
 
 def _candidate_rows(rows: pd.DataFrame, pred: np.ndarray, mode: str,
@@ -270,6 +274,12 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
     winner_marked = (marked_metrics(test_eval_rows, test_eval_pred,
                                     winner["mode"], winner["threshold"], mark_stream)
                      if mark_stream is not None else None)
+    # Deflate the winner's test Sharpe by the whole grid of tried configurations.
+    trial_sharpes = [s for p in selected for s in p.get("candidate_sharpes", [])]
+    entered_test = _selected_rows(_candidate_rows(
+        test_eval_rows, test_eval_pred, winner["mode"], winner["threshold"]))
+    deflated = deflated_sharpe_from_trials(
+        entered_test["net_return"] if len(entered_test) else [], trial_sharpes)
 
     by_model = {}
     for policy in selected:
@@ -289,7 +299,7 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         "winner": {"family": winner["family"], "mode": winner["mode"],
                    "threshold": winner["threshold"], "validation": winner["metrics"],
                    "test": winner_test, "marked": winner_marked,
-                   "calibration": calibration},
+                   "calibration": calibration, "deflated_sharpe": deflated},
         "models": by_model,
     }
 
@@ -342,6 +352,15 @@ def _write_report(results: list[dict], output: Path) -> None:
         for i, cal in cal_rows:
             lines.append(f"| {i} | {cal['method']} | {cal['brier_raw']:.4f} | "
                          f"{cal['brier_calibrated']:.4f} |")
+    dsr_rows = [(i, r["winner"]["deflated_sharpe"]) for i, r in enumerate(results, 1)
+                if r["winner"].get("deflated_sharpe")]
+    if dsr_rows:
+        lines += ["", "## Deflated Sharpe (winner, test — deflated by the policy grid)", "",
+                  "| run | Sharpe | trials | E[max Sharpe] | deflated Sharpe |",
+                  "|---|---|---|---|---|"]
+        for i, d in dsr_rows:
+            lines.append(f"| {i} | {d['sharpe']:.3f} | {d['n_trials']} | "
+                         f"{d['expected_max_sharpe']:.3f} | {d['deflated_sharpe']:.3f} |")
     output.write_text("\n".join(lines) + "\n")
     output.with_suffix(".json").write_text(json.dumps(results, indent=2, default=_json_default))
 
