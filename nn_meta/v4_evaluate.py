@@ -24,6 +24,7 @@ import pandas as pd
 from nn_meta import config
 from nn_meta.baseline import load_spec
 from nn_meta.build_meta_dataset import META_FEATURES, V4_META_FEATURES
+from nn_meta.calibration import calibration_summary
 from nn_meta.feature_contract import assert_decision_safe
 from nn_meta.mark_stream import execution_frames, load_mark_stream
 from nn_meta.model import build_meta_mlp
@@ -256,6 +257,11 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
                  if p["metrics"]["total_return"] is not None else -np.inf)
     family = winner["family"]
     test_pred = fitted[family].predict(test_rows)
+    # Calibration is fit on the winner's validation predictions only, then
+    # scored on test — the test labels never inform the mapping.
+    calibration = calibration_summary(
+        val_rows[label], fitted[family].predict(val_rows),
+        test_rows[label], test_pred, method="isotonic")
     fmask = frozen_mask(test_rows, spec)
     test_eval_rows = test_rows[fmask].reset_index(drop=True) if winner["mode"] == "filter" else test_rows
     test_eval_pred = test_pred[fmask] if winner["mode"] == "filter" else test_pred
@@ -282,7 +288,8 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         "split_summary": split_summary(ds, split).to_dict(orient="records"),
         "winner": {"family": winner["family"], "mode": winner["mode"],
                    "threshold": winner["threshold"], "validation": winner["metrics"],
-                   "test": winner_test, "marked": winner_marked},
+                   "test": winner_test, "marked": winner_marked,
+                   "calibration": calibration},
         "models": by_model,
     }
 
@@ -326,6 +333,15 @@ def _write_report(results: list[dict], output: Path) -> None:
             f"{'n/a' if ret is None else f'{ret:+.1%}'} | "
             f"{'n/a' if dd is None else f'{dd:.1%}'} | {marked_cell} |"
         )
+    cal_rows = [(i, r["winner"]["calibration"]) for i, r in enumerate(results, 1)
+                if r["winner"].get("calibration")]
+    if cal_rows:
+        lines += ["", "## Calibration (winner, test — fit on validation only)", "",
+                  "| run | method | Brier raw | Brier calibrated |",
+                  "|---|---|---|---|"]
+        for i, cal in cal_rows:
+            lines.append(f"| {i} | {cal['method']} | {cal['brier_raw']:.4f} | "
+                         f"{cal['brier_calibrated']:.4f} |")
     output.write_text("\n".join(lines) + "\n")
     output.with_suffix(".json").write_text(json.dumps(results, indent=2, default=_json_default))
 

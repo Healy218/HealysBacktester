@@ -72,10 +72,12 @@ Session conventions:
    stale, wide spread), a conservative `FillPolicy`, `classify_quote`, and
    `resolve_fills` (entry failures reject the trade; exit failures book a
    conservative worst-case/intrinsic value). Every code path is tested.
-3. [ ] **Track 2 — fold-local probability calibration.** Isotonic or Platt
-   fit on the validation slice only, inside `nn_meta/v4_evaluate.py`;
-   Brier score + reliability table beside AUC in reports. Tests prove the
-   calibrator never sees test rows.
+3. [x] **Track 2 — fold-local probability calibration.**
+   `nn_meta/calibration.py` provides pure-numpy Platt and isotonic (PAV)
+   calibrators, Brier score, and a reliability table. `v4_evaluate` fits the
+   winner's calibrator on validation predictions only and scores test; the
+   report gains a calibration section. A regression test proves the mapping
+   is invariant to test labels (never sees test rows).
 4. [ ] **Track 2 — deflated Sharpe / PBO utilities.** New module
    (`nn_meta/multiple_testing.py`), pure functions with tests against
    known analytic cases; wire into the walk-forward report.
@@ -303,8 +305,10 @@ sequences the work that must land before the V4 training run.
 - Gaps: probabilities are used for thresholding but never calibrated;
   no explicit multiple-testing control across policy/threshold candidates.
 - Plan:
-  - [ ] Fold-local probability calibration (isotonic or Platt fit on the
-    validation slice only); report Brier score and reliability beside AUC.
+  - [x] Fold-local probability calibration (isotonic or Platt fit on the
+    validation slice only); Brier score and reliability reported beside the
+    portfolio metrics. Implemented in `nn_meta/calibration.py` and wired into
+    `v4_evaluate`.
   - [ ] Deflated Sharpe ratio / probability-of-backtest-overfitting (PBO)
     across the policy grid, reported in `v4_walkforward_report.md`.
   - [ ] Skip CNN-on-chart-images deliberately: it discards exact numerical
