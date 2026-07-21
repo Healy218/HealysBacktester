@@ -6,8 +6,10 @@ Reconciled 2026-07-11 to reflect what actually shipped.
 ```
 DONE ─► v2.2 ROBUST ─► live server + collectors ─► v3-small ROBUST & LIVE
                                                           │
+                                        big run (v3.1-at-scale, done, not a clear win)
+                                                          │
 NOW ──────────────────────────────────────────────────── ▼
-   weekend prep ─► big run (v3-at-scale) ─► FA ranker ─► v4 (loop closes)
+        v4 causal validation (smoke test ─► ablation ─► gates) ─► FA ranker ─► loop closes
 ```
 
 ## ✅ Done
@@ -39,17 +41,23 @@ Order matters; each answers a question the big run depends on.
    actually beat a tree, (b) which strategies/features earn their place — so
    the big run is pruned, not bloated.
 
-## ▶ Big run — v3-at-scale (RUNNING, Path A)
+## ✅ Big run — v3.1-at-scale (DONE 2026-07-21, Path A)
 **Decided 2026-07-11: Path A.** 120 symbols (by $volume, all v2 included),
-pruned 5-pool (rsi/tv_rating/macd/squeeze/ma), flat-files ingestion.
-Confirmed: flat-files reads are entitlement-gated to a rolling ~2y (cutoff
-~Sept 2024) — NOT the 9y the underlying crawl has. So option **labels** run
-~2024-09→now; the 9y underlying feeds longer-window features only. Data cache
-= `nn_meta/data_cache_v3` (underlying parquets built; option day-frames
-downloading). Wiring + launch = task #5.
-Universe is survivorship-biased (present-day list); point-in-time selection
-stays TODO.
-**Exit:** at-scale walk-forward verdict + per-regime report.
+pruned 5-pool (rsi/tv_rating/macd/squeeze/ma), flat-files ingestion. Confirmed:
+flat-files reads are entitlement-gated to a rolling ~2y (cutoff ~Sept 2024) —
+NOT the 9y the underlying crawl has. So option **labels** run ~2024-09→now;
+the 9y underlying feeds longer-window features only. Universe is
+survivorship-biased (present-day list); point-in-time selection stays TODO.
+**Verdict: technically ROBUST but not production-ready.** Walk-forward beats
+baseline 2/3 folds, B&H 2/3 (`nn_meta/reports_v31/meta_report.md`), one-shot
+test looks flashy (+499% vs baseline +280%) — but fold-level ex-top3 checks
+show the wins are outlier-concentrated (fold 2's +1136% collapses to +18%
+without its single best trade, a 31x overnight TQQQ position) in a way
+**v3-small's walk-forward is not** (ex-top3 barely moves vs its own headline
+in any fold). **Do not swap the live scanner (still `NN_META_POOL=v3`) over
+to v3.1 as-is.** `meta_dataset.parquet` + `baseline_spec.json` committed to
+main (needed by v4, see below) — the rest of `artifacts_v31/` stays
+out-of-git (regenerable / too large).
 
 ## ⏭ NEXT after this run — bigger bucket, longer span (user intent 2026-07-11)
 Once this v3-at-scale trains, expand the universe AND the history. Requires a
@@ -67,9 +75,28 @@ graduation into the training universe. Two queued, now-unblocked pieces:
 daily WSB-trending Telegram digest, and exit/roll alerts on the live scanner.
 **Exit:** ≥3 monthly top-10 artifacts frozen and tracking forward returns.
 
-## ⏭ v4 — the loop closes
-FA graduation feeds the training universe; retrain on the expanded set;
-discovery quality judged by realized forward returns, not vibes.
+## ▶ NOW — v4 causal validation (`codex/v4-causal-validation` branch, `V4_OUTLINE.md`)
+Started 2026-07-20, unblocked 2026-07-21 once v3.1's `meta_dataset.parquet` +
+`baseline_spec.json` landed on main. Purpose: v3.1's walk-forward "ROBUST"
+verdict above is outlier-fragile and possibly leakage-inflated (`prem_spot`
+is a suspected pre-decision-unsafe feature); v4 fixes the causal contract
+(feature timing, exit-time purging, embargoes, model/threshold selection
+**nested inside each fold** instead of reusing one globally-chosen config)
+and re-evaluates the same v3.1 data before trusting any of it as evidence of
+a real edge. Gate: `main` stays the operational v3 line until v4's own
+"first implementation gate" passes (`V4_OUTLINE.md`) — no premature swap.
+**Before the full nested-fold ablation (compute-heavy, likely hours):
+smoke-test the corrected pipeline on a tiny 10-symbol/~1y subset first** —
+see `V4_SMOKE_TEST.md`. Runs on the MacBook; the full `nn_meta/data_cache_v3`
+raw option-bar cache (5.6GB, Windows/WSL-only) is NOT needed — `v4_evaluate.py`
+and `v4_preflight.py` only ever read the already-committed
+`meta_dataset.parquet` + `baseline_spec.json`.
+
+## ⏭ v4 stage 6 — FA-to-universe loop closes
+Once v4's causal gates pass: FA graduation feeds the training universe;
+retrain on the expanded set; discovery quality judged by realized forward
+returns, not vibes. (Subsumed into `V4_OUTLINE.md` stage 6 — no longer a
+separate future phase.)
 
 ---
 **Standing rules across phases**
