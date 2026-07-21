@@ -7,7 +7,9 @@ available for historical comparison, but is not presented as V4 accounting.
 """
 from __future__ import annotations
 
+import math
 from dataclasses import dataclass
+from enum import Enum
 
 import numpy as np
 import pandas as pd
@@ -34,6 +36,121 @@ STRESSED_COSTS = CostScenario(name="stressed", fee=0.002, slippage=0.001,
 
 class AccountingDataError(ValueError):
     """Raised when a dataset cannot support the requested V4 accounting."""
+
+
+class FillFailure(str, Enum):
+    """Why a proposed option entry or exit could not be filled cleanly.
+
+    These are the conservative, fail-closed outcomes the real mark/label
+    builder must emit when raw option bars or quotes are absent or unusable.
+    Entry-side failures make a contract uninvestable; exit-side failures leave
+    an already-open position that must still be accounted for.
+    """
+
+    NO_ENTRY_BAR = "no_entry_bar"      # no option bar to fill the entry
+    NO_EXIT_BAR = "no_exit_bar"        # no option bar to fill the exit
+    ZERO_BID = "zero_bid"              # no bid: nothing to sell into
+    CROSSED_MARKET = "crossed_market"  # bid > ask: quote is not tradeable
+    STALE_QUOTE = "stale_quote"        # quote older than the staleness bound
+    WIDE_SPREAD = "wide_spread"        # half-spread beyond the conservative cap
+
+
+@dataclass(frozen=True)
+class FillPolicy:
+    """Conservative fillability thresholds and missing-exit handling.
+
+    Option markets are wide, so ``max_half_spread_bps`` defaults deliberately
+    loose; a value beyond it is treated as uninvestable rather than filled at a
+    fictitious mid.  ``missing_exit`` decides how to value a position whose exit
+    bar is unusable: ``worst_case`` books a total loss (the position could not
+    be sold), ``intrinsic`` books the supplied intrinsic value.
+    """
+
+    max_half_spread_bps: float = 500.0
+    max_staleness: pd.Timedelta = pd.Timedelta("15min")
+    require_positive_bid: bool = True
+    missing_exit: str = "worst_case"
+
+    def __post_init__(self) -> None:
+        if self.missing_exit not in {"worst_case", "intrinsic"}:
+            raise ValueError("missing_exit must be 'worst_case' or 'intrinsic'")
+        if self.max_half_spread_bps < 0:
+            raise ValueError("max_half_spread_bps must be non-negative")
+
+
+DEFAULT_FILL_POLICY = FillPolicy()
+
+
+def classify_quote(bid, ask, *, quote_age=None,
+                   missing: FillFailure = FillFailure.NO_EXIT_BAR,
+                   policy: FillPolicy = DEFAULT_FILL_POLICY) -> FillFailure | None:
+    """Return the fill-failure reason for one option quote, or None if fillable.
+
+    ``missing`` is the reason reported when the bar itself is absent
+    (``NO_ENTRY_BAR`` for an entry quote, ``NO_EXIT_BAR`` for an exit quote).
+    Checks run structural-first so the most fundamental defect is reported.
+    """
+    b = float(bid) if bid is not None else float("nan")
+    a = float(ask) if ask is not None else float("nan")
+    if math.isnan(b) or math.isnan(a):
+        return missing
+    if b > a:
+        return FillFailure.CROSSED_MARKET
+    if b <= 0 and policy.require_positive_bid:
+        return FillFailure.ZERO_BID
+    if quote_age is not None:
+        age = pd.Timedelta(quote_age)
+        if pd.notna(age) and age > policy.max_staleness:
+            return FillFailure.STALE_QUOTE
+    mid = (a + b) / 2
+    if mid > 0 and (a - b) / 2 / mid * 1e4 > policy.max_half_spread_bps:
+        return FillFailure.WIDE_SPREAD
+    return None
+
+
+_QUOTE_COLUMNS = ("entry_bid", "entry_ask", "exit_bid", "exit_ask")
+
+
+def resolve_fills(quotes: pd.DataFrame, *, policy: FillPolicy = DEFAULT_FILL_POLICY
+                  ) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Apply the conservative fill policy to candidate entry/exit quotes.
+
+    Entry-side failures reject the trade outright (an uninvestable contract is
+    never entered).  Exit-side failures keep the trade but book a conservative
+    value per ``policy.missing_exit``, because the position was already opened.
+    Entries fill at the ask, exits at the bid.  Optional ``entry_age``,
+    ``exit_age`` and ``intrinsic`` columns refine staleness and missing-exit
+    valuation.  Returns ``(fills, rejections)``.
+    """
+    missing = ({"trade_id", *_QUOTE_COLUMNS}) - set(quotes.columns)
+    if missing:
+        raise AccountingDataError(f"quote frame missing columns: {sorted(missing)}")
+    fills: list[dict] = []
+    rejections: list[dict] = []
+    for q in quotes.itertuples(index=False):
+        entry_reason = classify_quote(
+            q.entry_bid, q.entry_ask, quote_age=getattr(q, "entry_age", None),
+            missing=FillFailure.NO_ENTRY_BAR, policy=policy)
+        if entry_reason is not None:
+            rejections.append({"trade_id": q.trade_id, "side": "entry",
+                               "reason": entry_reason.value, "conservative": False})
+            continue
+        entry_fill = float(q.entry_ask)
+        exit_reason = classify_quote(
+            q.exit_bid, q.exit_ask, quote_age=getattr(q, "exit_age", None),
+            missing=FillFailure.NO_EXIT_BAR, policy=policy)
+        if exit_reason is not None:
+            exit_fill = (0.0 if policy.missing_exit == "worst_case"
+                         else float(getattr(q, "intrinsic", 0.0) or 0.0))
+            rejections.append({"trade_id": q.trade_id, "side": "exit",
+                               "reason": exit_reason.value, "conservative": True})
+        else:
+            exit_fill = float(q.exit_bid)
+        gross_return = exit_fill / entry_fill - 1.0 if entry_fill > 0 else -1.0
+        fills.append({"trade_id": q.trade_id, "entry_fill": entry_fill,
+                      "exit_fill": exit_fill, "gross_return": gross_return,
+                      "exit_reason": exit_reason.value if exit_reason else None})
+    return pd.DataFrame(fills), pd.DataFrame(rejections)
 
 
 def validate_execution_rows(trades: pd.DataFrame) -> pd.DataFrame:

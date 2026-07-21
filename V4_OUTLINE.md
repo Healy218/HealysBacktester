@@ -67,9 +67,11 @@ Session conventions:
    through the ledger when `--marks` is supplied (fail-closed / `pending`
    otherwise). Tested against synthetic fixtures; real streams attach when
    v31 data lands.
-2. [ ] **Stage 2 — fill-failure reason codes.** Enumerate reason codes and
-   fail-closed behavior for missing option bars/spreads in
-   `nn_meta/v4_accounting.py`; test every code path.
+2. [x] **Stage 2 — fill-failure reason codes.** `nn_meta/v4_accounting.py`
+   adds the `FillFailure` taxonomy (no entry/exit bar, zero bid, crossed,
+   stale, wide spread), a conservative `FillPolicy`, `classify_quote`, and
+   `resolve_fills` (entry failures reject the trade; exit failures book a
+   conservative worst-case/intrinsic value). Every code path is tested.
 3. [ ] **Track 2 — fold-local probability calibration.** Isotonic or Platt
    fit on the validation slice only, inside `nn_meta/v4_evaluate.py`;
    Brier score + reliability table beside AUC in reports. Tests prove the
@@ -189,8 +191,10 @@ Current implementation:
   winning policy's entered trades through the ledger when a stream is
   supplied. Emission of a real per-contract 15-minute stream (including roll
   fills) from the label builder is still pending v31 data.
-- [ ] Specify fill-failure reason codes and conservative behavior for missing
-  option bars/spreads before producing a live-readiness report.
+- [x] Fill-failure reason codes and conservative behavior for missing option
+  bars/spreads are specified in `nn_meta/v4_accounting.py` (`FillFailure`,
+  `FillPolicy`, `classify_quote`, `resolve_fills`). Wiring the real mark/label
+  builder to emit them waits on v31 raw bars.
 
 ### 3. Baseline bake-off
 
