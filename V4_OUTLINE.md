@@ -181,21 +181,30 @@ that depend on them.
    cross-family `max` still ignores `eligible` — deliberately deferred to
    item 3, which owns the finalize persistence gate (the flag it needs is now
    reliably on every `choose_policy` return).
-2. [ ] **`v4_finalize.py` operating point is unvalidated for the shipped
-   ensemble.** Family/mode/threshold and the recorded `val_return` were
-   selected with a 5-seed NN mean / single `random_state=0` GBT, but the
-   persisted artifact is a 40-seed ensemble whose mean-score distribution
-   differs — the deployed threshold was never evaluated with the model that
-   ships. Fix: after training the final seeds, re-predict the validation
-   tail with the full ensemble, re-run `choose_policy`, and persist the
-   final-ensemble metrics (and fail if the re-check flips eligibility).
-3. [ ] **`v4_finalize.py` destroys the previous bundle before the new one
-   exists and skips the baseline gate.** `shutil.rmtree(FINAL_DIR)` runs
-   before the ~40-seed training loop, and nothing mirrors
-   `select_meta.py`'s "NO ELIGIBLE CONFIG — test untouched" refusal. Fix:
-   train into a temp dir + atomic rename, gate persistence on eligibility
-   (item 1), and extend the manifest to cover the trained models and
-   ensemble_config, not just inputs.
+2. [x] **`v4_finalize.py` operating point is unvalidated for the shipped
+   ensemble.** (Done 2026-07-22, with item 3.) The finalize pass is now
+   explicitly two-stage: cheap seeds pick only the FAMILY (nn vs gbt), then
+   after the full ensemble is trained its mode/threshold is RE-CHOSEN by
+   `choose_policy` on the ensemble's own validation scores
+   (`_ensemble_predict` reproduces the deployed nn/gbt scoring). The
+   persisted `ensemble_config.json` records that ensemble's operating point,
+   metrics, `eligible`, and `operating_point_source`, and the run logs a ⚠
+   when cheap-seed→ensemble flips eligibility.
+3. [x] **`v4_finalize.py` destroys the previous bundle before the new one
+   exists and skips the baseline gate.** (Done 2026-07-22.) Training goes
+   into a `model_final_v4.staging` sibling; the bundle is persisted only if
+   the full ensemble clears the gate (item 1's `eligible`), else finalize
+   deletes staging, leaves any existing bundle untouched, and exits 1
+   (mirrors `select_meta.py`'s refusal). Persist is an `os.replace` atomic
+   swap (old bundle moved to `.prev`, new into place, `.prev` removed; rolls
+   back on failure), so a crash or gate-fail never leaves a half-written or
+   destroyed deployable model. The manifest now hashes the trained model
+   files + `ensemble_config.json` (`create_manifest(output_artifacts=…)`),
+   not just the inputs. Verified: unit tests for the swap/ensemble-scoring/
+   manifest helpers, an integration test driving `main()` through both the
+   eligible-persist and ineligible-refuse-leaving-existing-bundle-intact
+   branches, and a real GBT-only run on the full v31 dataset (correctly
+   refused a weak 2-seed ensemble, exit 1, no debris).
 4. [ ] **No loader can read `model_final_v4/`.** `select_meta.predict_rows`
    KeyErrors on a v4 scaler (indexes with legacy `META_FEATURES` incl.
    `prem_spot`), `resolve_run_dir` never looks in `model_final_v4/`, and

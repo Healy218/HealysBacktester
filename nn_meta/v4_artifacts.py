@@ -57,14 +57,22 @@ def dataset_coverage(dataset: pd.DataFrame) -> dict:
 
 def create_manifest(*, dataset_path: Path, baseline_spec_path: Path,
                     feature_names: Iterable[str], provider_metadata: dict,
-                    config_hash: str | None = None, code_root: Path | None = None) -> dict:
-    """Build a manifest from the exact input files used for an experiment."""
+                    config_hash: str | None = None, code_root: Path | None = None,
+                    output_artifacts: Iterable[Path] | None = None) -> dict:
+    """Build a manifest from the exact input files used for an experiment.
+
+    ``output_artifacts`` optionally extends the integrity envelope to files
+    the experiment PRODUCED (trained models, an ensemble config) — so a
+    persisted bundle's manifest covers what it ships, not only its inputs.
+    Paths are stored relative to their common parent when they share one
+    (a model bundle directory), else by name.
+    """
     dataset_path, baseline_spec_path = Path(dataset_path), Path(baseline_spec_path)
     if not dataset_path.exists() or not baseline_spec_path.exists():
         raise ArtifactValidationError("dataset and baseline spec must both exist")
     spec = json.loads(baseline_spec_path.read_text())
     ds = pd.read_parquet(dataset_path)
-    return {
+    manifest = {
         "manifest_version": 1,
         "code_revision": git_revision(code_root),
         "config_hash": config_hash or spec.get("config_hash"),
@@ -75,6 +83,28 @@ def create_manifest(*, dataset_path: Path, baseline_spec_path: Path,
         "feature_schema": feature_manifest(feature_names),
         "provider_metadata": provider_metadata,
     }
+    if output_artifacts is not None:
+        paths = [Path(p) for p in output_artifacts]
+        missing = [str(p) for p in paths if not p.is_file()]
+        if missing:
+            raise ArtifactValidationError(f"cannot hash missing artifacts: {missing}")
+        base = _common_base(paths)
+        manifest["output_artifacts"] = {
+            (str(p.relative_to(base)) if base else p.name): sha256_file(p)
+            for p in sorted(paths)
+        }
+    return manifest
+
+
+def _common_base(paths: list[Path]) -> Path | None:
+    """Deepest directory containing every path, or None if they don't share one."""
+    try:
+        import os
+        common = os.path.commonpath([str(p) for p in paths])
+    except ValueError:  # mixed drives / empty
+        return None
+    base = Path(common)
+    return base if base.is_dir() else base.parent
 
 
 def write_manifest(manifest: dict, path: Path) -> Path:

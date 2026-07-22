@@ -8,23 +8,35 @@ means each fold independently picked its own winning family/mode/threshold
 (fold 1: nn/filter/0.55, fold 2: gbt/filter/0.50, fold 3: nn/rank/0.50).
 There is no single "the config" to retrain and deploy from that alone.
 
-This script runs ONE more nested-selection pass — same methodology, but on
-a window that covers ALL available data as train, with a validation tail
-for early-stopping/threshold selection and NO held-out test partition
-(this pass isn't measuring OOS performance; the three-fold walk-forward
-already did that). Whichever family/mode/threshold wins on that validation
-tail gets trained as a full SEEDS-size ensemble and persisted to
-model_final_v4/, mirroring the legacy train_meta.py/select_meta.py
-persistence pattern (model.keras + scaler.json + params.json per NN seed,
-joblib dump per GBT seed) plus a v4 artifact manifest.
+This script runs ONE more selection pass — same methodology, but on a window
+that covers ALL available data as train, with a validation tail for
+early-stopping/threshold selection and NO held-out test partition (this pass
+isn't measuring OOS performance; the three-fold walk-forward already did
+that). The pass is two-stage to avoid deploying an operating point tuned on a
+model that isn't the one that ships:
+
+  1. FAMILY selection on cheap seeds (5-seed NN mean / 1 GBT) picks nn vs gbt.
+  2. The full SEEDS-size ensemble of that family is trained, then the
+     mode/threshold is RE-CHOSEN on the ensemble's own validation scores
+     (whose distribution differs from the cheap-seed proxy), and the bundle
+     is persisted only if that ensemble clears the eligibility gate.
+
+Persistence mirrors the legacy train_meta.py/select_meta.py layout
+(model.keras + scaler.json + params.json per NN seed, joblib per GBT seed)
+plus an ensemble_config.json (the ensemble's own operating point + metrics)
+and a v4 artifact manifest that hashes the trained files, not just the
+inputs. Training goes into a .staging sibling and is atomically swapped in
+last, so a crash or a gate failure never destroys a previously-validated
+model_final_v4/.
 
 Does NOT use v4_accounting.py's mark-to-market ledger — still the shared
 select_meta.py portfolio simulator, same as the walk-forward that validated
-this methodology tonight. Wiring the ledger in is a separate follow-up
-(Option B), not blocking this run.
+this methodology. Wiring the ledger in is a separate follow-up (Option B).
 
 Run: NN_META_POOL=v31 python -m nn_meta.v4_finalize [--val-fraction 0.15]
-     [--seeds 0,1,...,39] [--epochs 60] [--gbt-estimators 600]
+     [--select-seeds 0,1,2,3,4] [--final-seeds ...] [--epochs 60]
+     [--gbt-estimators 600]
+Exit status: 0 on a persisted bundle, 1 if nothing cleared the gate.
 """
 from __future__ import annotations
 
@@ -40,11 +52,12 @@ import pandas as pd
 
 from nn_meta import config
 from nn_meta.baseline import load_spec
-from nn_meta.build_meta_dataset import META_FEATURES, V4_META_FEATURES
-from nn_meta.select_meta import _EVALUATORS, all_rows, frozen_mask
+from nn_meta.build_meta_dataset import V4_META_FEATURES
+from nn_meta.select_meta import all_rows
 from nn_meta.temporal_validation import assign_purged_splits
 from nn_meta.v4_artifacts import create_manifest, write_manifest
-from nn_meta.v4_evaluate import choose_policy, fit_gbt, fit_nn, _labeled, _matrix
+from nn_meta.v4_evaluate import (choose_policy, fit_gbt, fit_nn, _labeled,
+                                 _matrix, _select_winner)
 
 FINAL_DIR = config.ROOT / "model_final_v4"
 
@@ -61,7 +74,11 @@ def _final_split(ds: pd.DataFrame, val_fraction: float, embargo: str) -> pd.Seri
         test_start=window_end, test_end=window_end, embargo=embargo)
 
 
-def _save_nn_seed(train, val, *, features, label, seed, epochs, run_id) -> dict:
+def _train_nn_seed(train, val, *, features, label, seed, epochs, run_id,
+                   out_dir: Path) -> tuple[dict, dict]:
+    """Train + persist one NN seed and return (info, member). ``member`` keeps
+    the fitted model and its scaler so the caller can score the val tail with
+    the ACTUAL persisted ensemble before locking the operating point."""
     import tensorflow as tf
     train_l, val_l = _labeled(train, label), _labeled(val, label)
     mean = train_l[features].mean()
@@ -81,7 +98,7 @@ def _save_nn_seed(train, val, *, features, label, seed, epochs, run_id) -> dict:
                      epochs=epochs, batch_size=config.BATCH_SIZE,
                      callbacks=[early], verbose=0)
 
-    run_dir = FINAL_DIR / run_id
+    run_dir = out_dir / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     model.save(run_dir / "model.keras")
     (run_dir / "scaler.json").write_text(json.dumps(
@@ -89,10 +106,13 @@ def _save_nn_seed(train, val, *, features, label, seed, epochs, run_id) -> dict:
     (run_dir / "params.json").write_text(json.dumps(
         {"family": "nn", "seed": seed, "label": label, "features": features,
          "arch": config.ARCHITECTURES[0], "lr": config.LEARNING_RATES[0]}))
-    return {"run_id": run_id, "val_loss": float(min(hist.history["val_loss"]))}
+    info = {"run_id": run_id, "val_loss": float(min(hist.history["val_loss"])),
+            "files": ["model.keras", "scaler.json", "params.json"]}
+    return info, {"model": model, "mean": mean, "std": std}
 
 
-def _save_gbt_seed(train, val, *, features, label, seed, n_estimators, run_id) -> dict:
+def _train_gbt_seed(train, val, *, features, label, seed, n_estimators, run_id,
+                    out_dir: Path) -> tuple[dict, dict]:
     from lightgbm import LGBMClassifier, early_stopping, log_evaluation
     train_l, val_l = _labeled(train, label), _labeled(val, label)
     model = LGBMClassifier(
@@ -104,13 +124,47 @@ def _save_gbt_seed(train, val, *, features, label, seed, n_estimators, run_id) -
              eval_metric="auc",
              callbacks=[early_stopping(max(10, n_estimators // 10)), log_evaluation(0)])
 
-    run_dir = FINAL_DIR / run_id
+    run_dir = out_dir / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, run_dir / "model.joblib")
     (run_dir / "params.json").write_text(json.dumps(
         {"family": "gbt", "seed": seed, "label": label, "features": features,
          "n_estimators": n_estimators}))
-    return {"run_id": run_id}
+    return {"run_id": run_id, "files": ["model.joblib", "params.json"]}, {"model": model}
+
+
+def _ensemble_predict(family: str, members: list[dict], rows: pd.DataFrame,
+                      features: list[str]) -> np.ndarray:
+    """Mean P(win) across the trained ensemble members — the exact score the
+    deployed bundle produces (nn: fillna+standardize per member's scaler; gbt:
+    raw-feature predict_proba)."""
+    if family == "nn":
+        preds = [m["model"].predict(_matrix(rows, features, m["mean"], m["std"]),
+                                    batch_size=4096, verbose=0).flatten()
+                 for m in members]
+    else:
+        preds = [m["model"].predict_proba(rows[features])[:, 1] for m in members]
+    return np.mean(preds, axis=0)
+
+
+def _atomic_swap(staging: Path, final: Path) -> None:
+    """Replace ``final`` with ``staging`` via renames only, so a crash never
+    leaves the deployable bundle half-written: the previous bundle survives
+    until the new one is fully in place."""
+    import os
+    if not final.exists():
+        os.replace(staging, final)
+        return
+    prev = final.with_name(final.name + ".prev")
+    if prev.exists():
+        shutil.rmtree(prev)
+    os.replace(final, prev)          # current bundle aside (atomic)
+    try:
+        os.replace(staging, final)   # new bundle into place (atomic)
+    except OSError:
+        os.replace(prev, final)      # roll back on failure
+        raise
+    shutil.rmtree(prev, ignore_errors=True)
 
 
 def main() -> None:
@@ -171,43 +225,81 @@ def main() -> None:
         print(f"  {family}: best {policy['mode']}@{policy['threshold']} "
               f"val_return={ret} ({time.time()-t0:.0f}s)", flush=True)
 
-    winner = max(candidates, key=lambda c: c["metrics"]["total_return"]
-                if c["metrics"]["total_return"] is not None else -np.inf)
-    family, mode, threshold = winner["family"], winner["mode"], winner["threshold"]
-    print(f"\nWINNER: {family} / {mode} / thr={threshold} "
-          f"(val_return={winner['metrics']['total_return']})", flush=True)
+    winner = _select_winner(candidates)
+    family = winner["family"]
+    sel_note = "eligible" if winner.get("eligible") else "INELIGIBLE (cheap-seed)"
+    print(f"\nSELECTED FAMILY: {family} "
+          f"(cheap-seed {winner['mode']}/thr={winner['threshold']}, "
+          f"val_return={winner['metrics']['total_return']}, {sel_note})", flush=True)
 
-    # ── 2) train + persist the full ensemble for the winning family ─────────
-    if FINAL_DIR.exists():
-        shutil.rmtree(FINAL_DIR)
-    FINAL_DIR.mkdir(parents=True)
+    # ── 2) train the full ensemble for the winning family INTO A STAGING DIR ──
+    # The existing model_final_v4/ is left untouched until the new bundle is
+    # trained, gate-checked, and atomically swapped in — a crash or a gate
+    # failure never destroys a previously-validated deployable model.
+    staging = FINAL_DIR.with_name(FINAL_DIR.name + ".staging")
+    if staging.exists():
+        shutil.rmtree(staging)
+    staging.mkdir(parents=True)
 
-    print(f"\n=== training final {family} ensemble, {len(final_seeds)} seeds ===",
-          flush=True)
-    run_ids = []
+    print(f"\n=== training final {family} ensemble, {len(final_seeds)} seeds "
+          f"(-> {staging.name}) ===", flush=True)
+    run_ids, members, artifact_files = [], [], []
     val_split_df = d[d["split"] == "val"]
     for seed in final_seeds:
         t0 = time.time()
         lab_tag = "win" if args.label == "label" else "xs"
         run_id = f"v4-{family}-{lab_tag}-s{seed}"
         if family == "nn":
-            info = _save_nn_seed(train, val_split_df, features=features,
-                                 label=args.label, seed=seed, epochs=args.epochs,
-                                 run_id=run_id)
+            info, member = _train_nn_seed(train, val_split_df, features=features,
+                                          label=args.label, seed=seed, epochs=args.epochs,
+                                          run_id=run_id, out_dir=staging)
         else:
-            info = _save_gbt_seed(train, val_split_df, features=features,
-                                  label=args.label, seed=seed,
-                                  n_estimators=args.gbt_estimators, run_id=run_id)
+            info, member = _train_gbt_seed(train, val_split_df, features=features,
+                                           label=args.label, seed=seed,
+                                           n_estimators=args.gbt_estimators,
+                                           run_id=run_id, out_dir=staging)
         run_ids.append(run_id)
+        members.append(member)
+        artifact_files += [staging / run_id / f for f in info["files"]]
         print(f"  seed {seed}: saved {run_id} ({time.time()-t0:.0f}s)", flush=True)
 
-    (FINAL_DIR / "ensemble_config.json").write_text(json.dumps({
+    # ── 3) RE-VALIDATE the operating point with the ACTUAL shipped ensemble ──
+    # The cheap-seed selection above only picks the family. The mode/threshold
+    # a 40-seed ensemble should deploy at is re-chosen on the ensemble's own
+    # val scores, whose distribution differs from the 5-seed proxy's.
+    print("\n=== re-validating operating point on the full ensemble ===", flush=True)
+    ens_val_pred = _ensemble_predict(family, members, val_rows, features)
+    final_policy = choose_policy(val_rows, ens_val_pred, spec)
+    mode, threshold = final_policy["mode"], final_policy["threshold"]
+    metrics = final_policy["metrics"]
+    flipped = bool(winner.get("eligible")) and not final_policy["eligible"]
+    print(f"  ensemble winner: {mode}/thr={threshold} "
+          f"val_return={metrics['total_return']} n_kept={metrics['n_kept']} "
+          f"eligible={final_policy['eligible']}"
+          f"{'  ⚠ FLIPPED from eligible→ineligible' if flipped else ''}", flush=True)
+
+    # ── 4) GATE: refuse to persist a bundle that cleared no gate ─────────────
+    if not final_policy["eligible"]:
+        shutil.rmtree(staging)
+        print("\nNO ELIGIBLE CONFIG — the full ensemble did not clear the gate "
+              "(kept >= {}, beat baseline, maxDD <= {:.0%}). Nothing persisted; "
+              "any existing {} is untouched.".format(
+                  config.MIN_KEPT_TRADES, config.MAX_DRAWDOWN_CAP, FINAL_DIR.name))
+        raise SystemExit(1)
+
+    # ── 5) write the ensemble config + a manifest covering the trained files ──
+    (staging / "ensemble_config.json").write_text(json.dumps({
         "run_ids": run_ids, "family": family, "mode": mode, "threshold": threshold,
         "label": args.label, "features": features,
-        "val_return": winner["metrics"]["total_return"],
+        "val_return": metrics["total_return"], "val_n_kept": metrics["n_kept"],
+        "val_max_drawdown": metrics["max_drawdown"], "eligible": True,
+        "baseline_return": final_policy.get("baseline_return"),
+        "operating_point_source": "full-ensemble revalidation",
+        "select_seeds": select_seeds, "final_seeds": final_seeds,
         "baseline_config_hash": spec["config_hash"],
         "schema": "v4", "purged": True, "embargo": args.embargo,
     }, indent=2))
+    artifact_files.append(staging / "ensemble_config.json")
 
     manifest = create_manifest(
         dataset_path=config.META_DATASET_PARQUET,
@@ -215,10 +307,15 @@ def main() -> None:
         feature_names=features,
         provider_metadata={"pool": config.POOL, "interval": config.INTERVAL,
                            "options_history_constraint": "15m; approximately two years"},
-        code_root=config.ROOT.parent)
-    write_manifest(manifest, FINAL_DIR / "manifest.json")
+        code_root=config.ROOT.parent,
+        output_artifacts=artifact_files)
+    write_manifest(manifest, staging / "manifest.json")
 
-    print(f"\nDONE. {family}/{mode}/thr={threshold}, {len(run_ids)} seeds -> {FINAL_DIR}")
+    # ── 6) atomic swap: the new bundle replaces the old only now ─────────────
+    _atomic_swap(staging, FINAL_DIR)
+
+    print(f"\nDONE. {family}/{mode}/thr={threshold} "
+          f"(val_return={metrics['total_return']}, {len(run_ids)} seeds) -> {FINAL_DIR}")
 
 
 if __name__ == "__main__":
