@@ -4,8 +4,9 @@
     */15 13-20 * * 1-5  cd <repo> && venv/bin/python -m nn_meta.live.run_live --once
 
 The script self-gates to regular trading hours and only acts on CLOSED bars,
-so a loose cron schedule is fine. Alerts go to Pushover (or the console with
---dry-run / when PUSHOVER_* is unset). It never places orders.
+so a loose cron schedule is fine. Alerts go to Telegram (or Pushover as the
+fallback transport, or the console with --dry-run / when neither TELEGRAM_*
+nor PUSHOVER_* is set). It never places orders.
 
     --once            single pass then exit (default; loop mode is TODO)
     --dry-run         print alerts instead of sending; force console notifier

@@ -9,13 +9,17 @@ the way the uncorrected v3.1 walk-forward was. A deployable candidate
 (`model_final_v4/`, GBT/filter/thr=0.5, 40-seed ensemble) is trained and
 persisted — Option A of the finalize plan. Option B (route evaluation
 through the stage-2 mark-to-market ledger before trusting this further) is
-scoped below and not yet started. Created from commit `5474335` on
-2026-07-20; causal-validation infrastructure was added on
-`codex/v4-causal-validation` the same day.
+partially wired: the reporting-side `--marks` ledger path shipped as queue
+item 1, but selection-side routing, the ledger re-runs, and a re-finalize
+are not started. Created from commit `5474335` on 2026-07-20;
+causal-validation infrastructure was added on `codex/v4-causal-validation`
+the same day.
 
-**Fresh coding session? Start at "Coding-session work queue" below.** It
-separates what is already built, what is blocked on the remote v31
-artifacts, and what can be coded and tested locally right now.
+2026-07-22: both machines' parallel work (MacBook queue items 1–11; Windows
+box stage-0 runs + `v4_finalize.py` + reboot job system) merged cleanly at
+`1189166` and an adversarial review of the merged state ran. **Fresh coding
+session? Start at "2026-07-22 session queue" below** — the original
+coding-session queue is complete (all 11 items [x]).
 
 ## Purpose
 
@@ -136,12 +140,15 @@ Session conventions:
     evidence_ref}` table `universe_loop.monthly_rank` consumes. Tested
     end-to-end through a corroborated ranking.
 
-### Blocked until remote v31 artifacts arrive — do not attempt
+### Blocked until remote v31 artifacts arrive — RESOLVED 2026-07-21 night
 
-- Stage 0 reconciliation runs, the "First remote v31 run" commands, and
-  every empirical result or report.
-- Real calibration / deflated-Sharpe numbers and the magnitude-head
-  evaluation (their *code* is queue items 3–6; their *numbers* wait).
+Historical note: this section gated the queue above while the v31 dataset
+lived only on the Windows box. The stage-0 reconciliation runs and the
+"First remote v31 run" commands are DONE (see stage 0), and
+`meta_dataset.parquet` + `baseline_spec.json` are now committed, so the
+MacBook can run the evaluator against real data too. Still genuinely
+pending: real mark-stream emission, and the magnitude-head *numbers*
+(training a head on v31 data — the labels are code-ready).
 
 ### Explicitly deferred — do not start
 
@@ -151,6 +158,95 @@ Session conventions:
   queue item 7 to exist and be beaten).
 - Track 4 sentiment scoring at scale (FA archive lives on the Hetzner
   server; only fixture-level plumbing belongs in a local session).
+
+## 2026-07-22 session queue — start here
+
+Source: the 2026-07-22 adversarial review of the merged overnight state
+(every item below was independently verified against the code, not just
+asserted). Ordered so correctness fixes land before the Option B re-runs
+that depend on them.
+
+1. [ ] **`choose_policy` eligibility fallback can crown gate-failers.**
+   `choose_policy` falls back to `pool = eligible or candidates`
+   (`nn_meta/v4_evaluate.py` ~line 173), so when every mode×threshold
+   candidate fails `MIN_KEPT_TRADES`, the drawdown cap, or loses to the
+   frozen baseline, a gate-failing policy is still returned as "winner" —
+   and the cross-family pick (fold winner in `evaluate_window`, and
+   `v4_finalize.py:174`) never reads `eligible`. This is the confirmed root
+   cause of the local smoke walk-forward's -26.3% "winner". Fix: propagate
+   an `eligible` flag through fold winners and reports, and make consumers
+   (fold selection, finalize) treat ineligible-everywhere as "no config
+   passed" rather than silently promoting the least-bad.
+2. [ ] **`v4_finalize.py` operating point is unvalidated for the shipped
+   ensemble.** Family/mode/threshold and the recorded `val_return` were
+   selected with a 5-seed NN mean / single `random_state=0` GBT, but the
+   persisted artifact is a 40-seed ensemble whose mean-score distribution
+   differs — the deployed threshold was never evaluated with the model that
+   ships. Fix: after training the final seeds, re-predict the validation
+   tail with the full ensemble, re-run `choose_policy`, and persist the
+   final-ensemble metrics (and fail if the re-check flips eligibility).
+3. [ ] **`v4_finalize.py` destroys the previous bundle before the new one
+   exists and skips the baseline gate.** `shutil.rmtree(FINAL_DIR)` runs
+   before the ~40-seed training loop, and nothing mirrors
+   `select_meta.py`'s "NO ELIGIBLE CONFIG — test untouched" refusal. Fix:
+   train into a temp dir + atomic rename, gate persistence on eligibility
+   (item 1), and extend the manifest to cover the trained models and
+   ensemble_config, not just inputs.
+4. [ ] **No loader can read `model_final_v4/`.** `select_meta.predict_rows`
+   KeyErrors on a v4 scaler (indexes with legacy `META_FEATURES` incl.
+   `prem_spot`), `resolve_run_dir` never looks in `model_final_v4/`, and
+   nothing in the repo loads `model.joblib` at all — the actual persisted
+   winner is GBT. The scoring convention (raw unscaled features +
+   `predict_proba` for gbt vs fillna+standardize for nn) lives only in
+   `v4_evaluate.py` source. Fix: a small v4 bundle loader
+   (`load_final_v4()` + `score_rows()`), which stage-5 parity needs anyway.
+5. [ ] **Reboot dispatcher hardening** (see "Reboot-recovery job system"
+   below for what happened this morning): (a) unconditional run-log line +
+   optional "dispatcher alive" heartbeat notification so a no-op boot is
+   distinguishable from a dead scheduled task; (b) per-run done-markers
+   (marker files tied to a run id, not `grep` of an append-only log — a
+   stale `V4-EXIT:` from a previous run permanently disables restart of any
+   re-run); (c) split success vs failure exit markers — today a job that
+   ran and FAILED matches `JOB_DONE_CHECK` and is never retried; (d) commit
+   the `schtasks` registration command as an in-repo artifact. Codeable
+   here; the actual re-registration + real reboot test happens at the box.
+6. [ ] **Calibration caveat before trusting reported calibrated numbers:**
+   on all five local smoke runs isotonic *degraded* test Brier and mapped
+   111 test trades to probability 1.0 (33% realized win rate) — small
+   validation tails overfit isotonic's step function. Consider selecting
+   the calibrator (Platt vs isotonic vs none) on validation Brier instead
+   of hardcoding isotonic.
+7. [ ] **Option B steps 1–3** (the selection-side ledger swap and re-runs)
+   — see the corrected Option B plan in stage 2, including the 2026-07-22
+   dataset constraint note. Runnable on either machine now that the v31
+   dataset is committed.
+8. [ ] **Windows-box evidence recovery (at the box):** the real stage-0
+   reports + manifests and `model_final_v4/` exist ONLY on the Windows box
+   — the outline's tables are currently the sole record of the headline
+   numbers. Pull the merged branch there, commit the stage-0
+   reports/manifests (small), and back up `model_final_v4/` before any
+   re-finalize overwrites it.
+
+## Reboot-recovery job system (added 2026-07-22)
+
+`scripts/boot_restart.sh` is a generic dispatcher that runs at Windows
+logon via the hand-registered "HealysBacktester WF AutoRestart" scheduled
+task and relaunches any job in `scripts/jobs.d/*.sh` that is neither
+running nor finished (see `scripts/jobs.d/README.md`; launchers:
+`scripts/run_v4_v31.sh`, `scripts/run_v4_finalize.sh`). It replaced the
+single-purpose `scripts/wf_boot_restart.sh` on 2026-07-21.
+
+**2026-07-22 morning reboot test, diagnosed the same day:** the "auto-restart
+did not fire" observation is most likely the dispatcher's designed no-op —
+all three registered jobs (v31 walk-forward, v4 full run, v4 finalize) had
+already written their done-markers before the reboot, so the correct
+behavior was to restart nothing and send nothing. But the dispatcher writes
+no log of its own invocations, so "ran and correctly did nothing" is
+indistinguishable from "scheduled task never fired" (the logon *trigger*
+path has still never been truly exercised — the task was only test-fired
+manually). Queue item 5 above fixes the observability and the related
+done-marker defects; until a logged real-reboot test passes, do not assume
+crash recovery works.
 
 ## Stages
 
@@ -266,13 +362,26 @@ Current implementation:
   `FillPolicy`, `classify_quote`, `resolve_fills`). Wiring the real mark/label
   builder to emit them waits on v31 raw bars.
 
-**Option B plan (scoped 2026-07-21 night, not started)** — `v4_accounting.py`
-was built the same night as `v4_evaluate.py`/`v4_finalize.py` but is not
-imported by either; every stage-0 result and `model_final_v4` above still
-went through the same shared `select_meta.py` portfolio simulator v3.1 used
-(the one a single TQQQ trade could dominate — stage 0's trade-level digs
-suggest v4's config isn't fragile to that in the same way, but it hasn't
-been re-checked through the stricter ledger). Sequencing:
+**Option B plan (scoped 2026-07-21 night; corrected 2026-07-22 after the
+merge)** — the original premise ("`v4_accounting.py` is not imported by
+either") was written before the MacBook's queue work landed: `v4_evaluate.py`
+does import the ledger (`mark_to_market_portfolio`, `BASE_COSTS`) and
+`marked_metrics()` routes the winning policy's entered trades through it when
+`--marks` is supplied (queue item 1). The narrower statement that IS true:
+fold/policy **selection** (`choose_policy` → `select_meta._portfolio_sim`)
+still uses the old shared simulator, the ledger result is only a
+supplementary "marked" metric on the winner, and every stage-0 result and
+`model_final_v4` above was selected under the same shared simulator v3.1
+used (the one a single TQQQ trade could dominate — stage 0's trade-level
+digs suggest v4's config isn't fragile to that in the same way, but it
+hasn't been re-checked through the stricter ledger). `v4_finalize.py`
+genuinely does not touch the ledger. Constraint discovered 2026-07-22: the
+committed v31 `meta_dataset.parquet` predates the execution-provenance
+fields (no `entry_fill_ts`/`exit_fill_ts`/`gross_return` columns and no
+per-contract mark stream), so a selection-side ledger can book only
+`entry_ts`/`exit_ts` endpoint fills from `entry_premium`/`net_return` until
+the dataset is rebuilt — decide explicitly how that squares with the
+"never manufacture a mark" rule before wiring. Sequencing:
 
 1. Wire `v4_accounting.py`'s event-level ledger into `evaluate_window()`
    (`nn_meta/v4_evaluate.py`) in place of `select_meta.portfolio_metrics`/
@@ -284,8 +393,11 @@ been re-checked through the stricter ledger). Sequencing:
 3. Only after that: re-run `v4_finalize.py` for a new `model_final_v4/`,
    since Option A's persisted ensemble was selected and trained under the
    old simulator.
-4. Then, and only then, stage 5's live candidate-batch constructor — no
-   point building live parity against a model likely to be superseded.
+4. Then, and only then, stage 5 live parity **runs**: the candidate-batch
+   constructor itself already exists (queue item 8,
+   `nn_meta/live/v4_candidates.py`) — what waits is re-validating candidate
+   parity against whichever model survives the ledger re-runs, not building
+   the constructor.
 
 ### 3. Baseline bake-off
 
@@ -397,8 +509,10 @@ sequences the work that must land before the V4 training run.
   track, and the stage-1 purged/nested contract puts it ahead of the
   tutorial version of this idea. LightGBM bake-off is wired into
   `nn_meta/v4_evaluate.py`.
-- Gaps: probabilities are used for thresholding but never calibrated;
-  no explicit multiple-testing control across policy/threshold candidates.
+- Gaps (pre-queue state; both closed by queue items 3–4): probabilities
+  were used for thresholding but never calibrated, and there was no
+  multiple-testing control across policy/threshold candidates. Remaining
+  real gap: PBO report wiring needs the per-fold candidate matrix.
 - Plan:
   - [x] Fold-local probability calibration (isotonic or Platt fit on the
     validation slice only); Brier score and reliability reported beside the
@@ -517,10 +631,11 @@ choice (they are not mutually exclusive):
 
 Dependencies, not dates. Each phase gates the next.
 
-1. **Reconciliation + accounting (stages 0 and 2).** Run the v31 ablation
-   when remote artifacts land; finish the per-contract mark stream and
-   route the evaluator through the ledger. Everything downstream scores
-   against this ledger.
+1. **Reconciliation + accounting (stages 0 and 2).** The v31 ablation ran
+   (stage 0 DONE) and the reporting-side ledger routing exists; what
+   remains is mark-stream emission from the label builder and the
+   selection-side ledger swap (Option B steps 1–3). Everything downstream
+   scores against this ledger.
 2. **Baselines.** Corrected LightGBM (track 2) and HAR-RV/GARCH (track 1).
    No new neural work starts before its baseline exists — standing rule.
 3. **Track 2 hardening.** Calibration + deflated Sharpe/PBO on the
@@ -577,8 +692,10 @@ NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate --ablation \
 NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate \
   --folds 3 --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600 --embargo 1D
 NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_finalize \
-  --select-seeds 0,1,2,3,4 --final-seeds 0,1,...,39 \
+  --select-seeds 0,1,2,3,4 \
   --epochs 60 --gbt-estimators 600 --embargo 1D
+# (--final-seeds omitted -> defaults to config.SEEDS, the same 40 seeds;
+#  the "0,1,...,39" shorthand originally recorded here isn't parseable)
 ```
 
 The ablation writes `v4_ablation_report.md` and JSON beside the configured

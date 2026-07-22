@@ -50,3 +50,8 @@ nn_meta/artifacts_v3/
 nn_meta/runs_v3/
 nn_meta/reports_v3/
 nn_meta/model_final_v3/
+# v31/v4 local outputs — same convention; meta_dataset.parquet and
+# baseline_spec.json stay tracked as keepers, everything else regenerates
+nn_meta/reports_v31/
+nn_meta/artifacts_v31/smoke_subset.parquet
+nn_meta/model_final_v4/

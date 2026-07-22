@@ -1,7 +1,13 @@
 # Reboot-recovery job descriptors
 
-`scripts/boot_restart.sh` runs at every Windows logon (auto-logon is on, so
-that means every reboot including BSODs). It globs every `scripts/jobs.d/*.sh`
+`scripts/boot_restart.sh` is meant to run at every Windows logon (auto-logon
+is on, so that means every reboot including BSODs) via the hand-registered
+"HealysBacktester WF AutoRestart" scheduled task. CAVEAT (2026-07-22): the
+logon-trigger path has never passed a logged real-reboot test — the task was
+only ever test-fired manually — and the dispatcher currently writes no log
+of its own runs, so a silent boot proves nothing either way. See
+"Reboot-recovery job system" in `V4_OUTLINE.md` for the diagnosis and the
+hardening queue. It globs every `scripts/jobs.d/*.sh`
 file, sources each one in an isolated subshell, and for each job: if it's
 already running, do nothing; if it already finished cleanly, do nothing;
 otherwise relaunch it and send one Telegram notification.
