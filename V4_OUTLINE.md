@@ -109,9 +109,12 @@ Session conventions:
    `prem_spot`), so parity holds by construction. `assert_candidate_parity`
    wraps `v4_parity.assert_feature_parity`; tests cover schema, determinism,
    parity pass, and drift-detected failure.
-9. [ ] **Stage 5 — alert/outbox/paper-ledger state.** Atomic alert state,
-   acknowledged notification outbox, paper-trade ledger, drift/health
-   metrics.
+9. [x] **Stage 5 — alert/outbox/paper-ledger state.**
+   `nn_meta/live/state.py`: atomic (temp + `os.replace`) `AlertState`
+   (idempotent dedupe), `Outbox` (at-least-once, key-deduped, ack lifecycle),
+   `PaperLedger` (realized/unrealized P&L, equity), plus
+   `population_stability_index` drift and `health_snapshot`. All rebuild from
+   disk on construction; tests cover crash-safe reload and each guard.
 10. [ ] **Stage 4 — lockfile + CI.** Pinned, platform-tested lockfile and
     a CI workflow running the test suite on macOS and Linux.
 11. [ ] **Stage 6 — FA score-table feed.** Wire the existing raw
@@ -272,7 +275,9 @@ Current implementation:
   fill. The deployed scorer intentionally remains the legacy v3/v31 scorer and
   still depends on `prem_spot`; it is not relabeled as v4 parity. Running it
   against the live provider's archived bars is the on-server step.
-- [ ] Add atomic alert/outbox state, paper-trade ledger, and drift metrics.
+- [x] Atomic alert/outbox state, paper-trade ledger, and drift/health metrics
+  are in `nn_meta/live/state.py`. Wiring them into the deployed scanner loop is
+  the on-server step.
 
 ### 6. FA-to-universe loop
 
