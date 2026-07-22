@@ -115,8 +115,11 @@ Session conventions:
    `PaperLedger` (realized/unrealized P&L, equity), plus
    `population_stability_index` drift and `health_snapshot`. All rebuild from
    disk on construction; tests cover crash-safe reload and each guard.
-10. [ ] **Stage 4 — lockfile + CI.** Pinned, platform-tested lockfile and
-    a CI workflow running the test suite on macOS and Linux.
+10. [x] **Stage 4 — lockfile + CI.** `requirements.lock.txt` is a full
+    `pip freeze` reproducibility snapshot; `scipy` is now explicit in
+    `requirements.txt`. `.github/workflows/ci.yml` runs `pytest tests/ -q`
+    on an ubuntu-latest + macos-latest / Python 3.12 matrix. (Locally the
+    suite is green and self-contained; the remote matrix runs on push/PR.)
 11. [ ] **Stage 6 — FA score-table feed.** Wire the existing raw
     collectors and entity-resolution fixtures into the normalized score
     table consumed by `fa/universe_loop.py`.
@@ -245,9 +248,10 @@ Current implementation:
   report and can create a small transfer-ready metadata ZIP.
 - [x] The manifest regression tests prove that changed dataset/spec inputs and
   changed ordered feature schemas are rejected.
-- [ ] Add a pinned, platform-tested lockfile and CI matrix. `requirements.txt`
-  is version-pinned for the most brittle core packages, but it is not yet a
-  fully reproducible lockfile.
+- [x] A reproducibility snapshot lockfile (`requirements.lock.txt`) and a CI
+  matrix (`.github/workflows/ci.yml`, ubuntu + macOS / Python 3.12) are in
+  place; `requirements.txt` gained an explicit `scipy` pin target. A single
+  fully-resolved cross-platform lockfile remains a future refinement.
 - [x] `python -m nn_meta.v4_preflight --require-gbt` is a remote-safe
   preflight command for the actual v31 runtime. It validates local files,
   causal schema, baseline spec, and LightGBM availability before the ablation.
