@@ -83,7 +83,17 @@
       "PowerShell(try { Get-WinEvent -FilterHashtable @{LogName='System'; Id=@\\(41,1074,6005,6006,6008\\)} -MaxEvents 40 -ErrorAction Stop | Select-Object TimeCreated, Id, ProviderName, @{n='Msg';e={ if \\($_.Message\\) { \\($_.Message -split \"`r?`n\"\\)[0] } else { '' } }} | Format-Table -Wrap | Out-String -Width 220 } catch { $_.Exception.Message })",
       "PowerShell(wsl -l -v)",
       "PowerShell(\"=== elevated? ===\"; \\([Security.Principal.WindowsPrincipal][Security.Principal.WindowsIdentity]::GetCurrent\\(\\)\\).IsInRole\\([Security.Principal.WindowsBuiltInRole]::Administrator\\); \"=== autologon config ===\"; Get-ItemProperty \"HKLM:\\\\SOFTWARE\\\\Microsoft\\\\Windows NT\\\\CurrentVersion\\\\Winlogon\" | Select-Object AutoAdminLogon, DefaultUserName, DefaultDomainName | Format-List | Out-String; \"=== claude CLI ===\"; try { \\(Get-Command claude -ErrorAction Stop\\).Source } catch { \"claude not on PATH\" }; try { claude --version } catch { \"version check failed\" }; \"=== code CLI ===\"; try { \\(Get-Command code -ErrorAction Stop\\).Source } catch { \"code not on PATH\" })",
-      "PowerShell($PSVersionTable.PSVersion.ToString\\(\\); $PSVersionTable.PSEdition)"
+      "PowerShell($PSVersionTable.PSVersion.ToString\\(\\); $PSVersionTable.PSEdition)",
+      "Bash(venv/bin/python /private/tmp/claude-501/-Users-healy218macbook-Coding-HealysBacktester/6440426a-58e3-4baf-bc98-4be4b7063f76/scratchpad/verify_15m.py)",
+      "Bash(venv/bin/python -c \"import vectorbt, pandas, tensorflow\")",
+      "Bash(venv/bin/python -m pytest tests/test_execution.py -q)",
+      "Bash(venv/bin/python -m nn_meta.train_meta --smoke)",
+      "Bash(venv/bin/python -m nn_meta.walkforward_meta)",
+      "Bash(venv/bin/python -c ' *)",
+      "Bash(awk '/^2026-07-07 09:0[5-9]|^2026-07-07 09:[1-5]|^2026-07-07 1[01]:|^2026-07-07 12:0/' /Users/healy218macbook/Coding/HealysBacktester/logs/backtester.log)",
+      "Bash(grep -oE '\\\\[OPT-EXEC\\\\] no contract for [A-Z]+|for symbol [A-Z]+|[A-Z]{2,5} [CP] @')",
+      "Bash(awk '{print $NF==\"@\"?$\\(NF-2\\):$NF}')",
+      "Bash(./venv/bin/python -c \"import pytest_subtests; print\\('subtests ok'\\)\")"
     ]
   }
 }

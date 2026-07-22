@@ -1,20 +1,51 @@
 # Healy's Backtester
 
-A Python backtesting framework for algorithmic trading strategies. Built on [vectorbt](https://vectorbt.dev/) for fast, vectorized simulation of thousands of parameter combinations at once.
+What started as a [vectorbt](https://vectorbt.dev/) parameter-sweep framework for equity strategies has grown into an **options meta-labeling research pipeline**: a neural network that scores strategy-proposed option trades (P(win)), trained and evaluated under a strict point-in-time, purged, walk-forward contract, and deployed as a live alert scanner.
+
+The repo therefore has two layers:
+
+- **Layer 1 — vectorbt strategy sweeps** (`scripts/`, `signals/`, `portfolio/`, `main.py`): the original framework — fast vectorized backtests of thousands of MA/RSI/MACD/volume parameter combinations on equities, browsed in a Dash dashboard. Still works; documented in full below.
+- **Layer 2 — the options meta-labeling pipeline** (`nn_meta/`, `nn_options_signal/`, `v3/`, `fa/`): the project's current center of gravity. Proposal strategies emit candidate option trades; a meta-classifier decides which to keep; everything is evaluated portfolio-level, out-of-fold, with costs, against a boring baseline.
+
+> **New here? Read [`ROADMAP.md`](ROADMAP.md) first** — it's the one-page map of how the phases fit together. The layer-2 specs are [`V3_SPEC.md`](V3_SPEC.md), [`V4_OUTLINE.md`](V4_OUTLINE.md) (+ [`V4_SMOKE_TEST.md`](V4_SMOKE_TEST.md)), and [`FA_SPEC.md`](FA_SPEC.md).
 
 ---
 
-## What It Does
+## Layer 2: The Research Pipeline (current focus)
 
-1. Downloads OHLCV price data from Alpaca (with local caching)
-2. Generates trading signals for each parameter combination in a strategy
-3. Simulates all combinations simultaneously using vectorbt
-4. Finds the best-performing parameter set and saves stats, trades, and plots
-5. Displays results in a Dash web dashboard
+The operational system does **not** parameter-sweep equities — it trades options via a two-stage design:
+
+1. **Proposal strategies** (RSI/MACD/MA/squeeze/TV-rating, per pool) each emit candidate option trades at frozen params/DTE — the "take everything" mechanical baseline.
+2. **A meta-classifier** (`nn_meta/`) scores each proposal's P(win) and keeps only those clearing a validation-selected threshold, run through a shared slot portfolio.
+
+Every generation must **beat the boring baseline** (a LightGBM tree and an underlying buy-&-hold basket) out-of-fold, ex-outliers, with costs — or it doesn't ship.
+
+| Subsystem | What it is |
+|---|---|
+| `nn_options_signal/` | Standalone options-signal NN (earlier experiment; feeds intuition for the meta approach). |
+| `nn_meta/` | **The meta-labeling pipeline.** Build dataset → freeze baseline → train ensemble → nested walk-forward select. Pools: v2 / v3 (7-strategy TV pool) / v31 (118-symbol at-scale). Live scoring in `nn_meta/live/`. |
+| `v3/` | At-scale data layer: 120-symbol universe, Massive/Polygon flat-files option bars, TV indicator library, GBT baseline. |
+| `fa/` | Fundamental/attention **discovery loop**: raw social/news/filing collectors → entity resolution → attention-velocity scores → frozen monthly rankings → forward-return-tracked graduation into the universe. |
+| `nn_meta/live/` | Live alert scanner (Telegram), point-in-time scorer, and the v4 parity/state infrastructure. |
+
+### v4 — causal validation (active research line)
+
+`codex/v4-causal-validation` (see [`V4_OUTLINE.md`](V4_OUTLINE.md)) hardens the evaluation contract before the next training generation: explicit `available_at` feature timing, exit-time purging + embargo, nested per-fold model/threshold selection, mark-to-market option accounting, fold-local probability **calibration**, **deflated Sharpe / PBO** multiple-testing control, a score-decile **inversion diagnostic**, HAR-RV/GARCH volatility baselines, and an offline↔online feature-parity gate. It is research-in-progress — its promotion gates are not yet passed.
+
+Typical layer-2 commands (options pipeline, not the equity scripts):
+
+```bash
+NN_META_POOL=v3  python -m nn_meta.build_meta_dataset   # assemble the labeled dataset
+NN_META_POOL=v3  python -m nn_meta.walkforward_meta      # purged walk-forward verdict
+NN_META_POOL=v31 python -m nn_meta.v4_evaluate --ablation --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600
+python -m pytest tests/ -q                               # full suite (self-contained fixtures)
+```
 
 ---
 
 ## Project Structure
+
+> Below is the **Layer 1** (vectorbt equity-sweep) structure. Layer-2 subsystems live in `nn_meta/`, `nn_options_signal/`, `v3/`, `fa/`, and `options/` (see the table above and the spec docs).
 
 ```
 HealysBacktester/
@@ -61,7 +92,9 @@ HealysBacktester/
 
 ---
 
-## Quick Start
+## Quick Start (Layer 1 — equity sweeps)
+
+> For the Layer-2 options pipeline, install the full `requirements.txt` (TensorFlow, LightGBM, etc.) and use the `nn_meta` / `v4_evaluate` commands shown above.
 
 ### 1. Install dependencies
 
@@ -69,7 +102,7 @@ HealysBacktester/
 pip install vectorbt pandas numpy plotly dash dash-bootstrap-components alpaca-py
 ```
 
-> The full `requirements.txt` is a complete environment dump. The core dependencies above are what you actually need.
+> The above is enough for the equity sweep scripts. The full `requirements.txt` adds the Layer-2 ML stack.
 
 ### 2. Configure your backtest
 
@@ -262,23 +295,32 @@ Change to `"DEBUG"` to see verbose output including index normalization and sign
 
 ## Known Limitations
 
-- **Optimization metric:** Best parameters are selected by **total return only**. High-return combos may have poor Sharpe ratios or deep drawdowns. Consider using Sharpe ratio instead.
-- **No walk-forward validation:** Results may be overfitted to the test period. Always validate on out-of-sample data.
-- **Intraday data limits:** Alpaca's free tier caps intraday history and bar counts per request. Use daily bars for longer backtests.
-- **RSI signal misalignment:** The RSI strategy uses separate DataFrames for entries/exits (different MultiIndex levels). vectorbt handles this via broadcasting, but results should be spot-checked.
-- **Models and sentiment folders:** The `models/` and `sentiment/` directories are experimental stubs and are not integrated into any backtest scripts.
+**Layer 1 (equity vectorbt sweeps):**
+- **Optimization metric:** Best parameters are selected by **total return only** — high-return combos may have poor Sharpe or deep drawdowns.
+- **No walk-forward validation *in this layer*:** the sweep scripts pick the best in-sample combo and may overfit the test period. (Layer 2's `nn_meta` pipeline *does* use purged, embargoed, nested walk-forward — that's the whole point of it.)
+- **RSI signal misalignment:** entries/exits use separate MultiIndex DataFrames; vectorbt broadcasts them, but spot-check results.
+
+**Layer 2 (options meta-labeling):**
+- **Options history:** ~2 years of 15-minute option bars (Massive/Polygon entitlement-gated). Longer underlying history feeds longer-window features only.
+- **Survivorship bias:** the universe is a present-day symbol list until a point-in-time constituent source exists.
+- **v4 not yet validated:** the causal-validation gates in `V4_OUTLINE.md` are not all passed; v3.1-at-scale is ROBUST-but-outlier-fragile, not a clear upgrade over live v3 (see `ROADMAP.md`).
+- **`models/` and `sentiment/`:** early experimental stubs, not wired into the meta pipeline (sentiment is lexicon-level; transformer scoring is a v4 backlog item).
 
 ---
 
 ## Dependencies (Core)
 
+Full pins are in `requirements.txt`; a `pip freeze` snapshot is `requirements.lock.txt`. Data sources: **Alpaca** (equities, Layer 1) and **Massive/Polygon** (options bars + flat-files, Layer 2).
+
 | Package | Version | Purpose |
 |---|---|---|
-| `vectorbt` | 0.27.x | Backtesting engine, portfolio simulation, indicators |
-| `pandas` | 2.2.x | Data manipulation |
-| `numpy` | 2.1.x | Numerical arrays |
-| `plotly` | 5.24.x | Interactive charts |
-| `dash` | 3.0.x | Web dashboard |
-| `dash-bootstrap-components` | 2.0.x | Dashboard styling |
-| `alpaca-py` | 0.x | Alpaca market data (sole data source) |
-| `ta-lib` | 0.6.x | Optional alternative indicator library |
+| `pandas` | 2.2.3 | Data manipulation |
+| `numpy` | 1.26.4 | Numerical arrays (pinned <2 for TF 2.16) |
+| `vectorbt` | 0.27.2 | Layer-1 backtesting engine + indicators |
+| `numba` | 0.61.2 | vectorbt JIT dependency |
+| `tensorflow` | 2.16.2 | Meta-classifier MLP ensemble (Layer 2) |
+| `lightgbm` | latest | GBT boring-baseline gate (Layer 2) |
+| `scikit-learn` / `scipy` | latest | Metrics + GARCH(1,1) MLE (v4 vol baselines) |
+| `alpaca-py` | 0.x | Alpaca market data |
+| `pyarrow` / `boto3` | latest | Parquet cache + Massive flat-files S3 ingestion |
+| `plotly` / `dash` / `dash-bootstrap-components` | — | Layer-1 dashboard |
