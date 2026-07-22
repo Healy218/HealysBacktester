@@ -82,7 +82,9 @@ def build_day_frame(c, day: str, cache_dir: Path, universe: set[str]) -> Path | 
     if frame.empty:
         return None
     out.parent.mkdir(parents=True, exist_ok=True)
-    frame.to_parquet(out, index=False)
+    tmp = out.with_suffix(".tmp")
+    frame.to_parquet(tmp, index=False)
+    tmp.replace(out)  # atomic: an interrupted write cannot leave a truncated day-file
     return out
 
 
