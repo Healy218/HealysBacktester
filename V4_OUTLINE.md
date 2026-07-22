@@ -1,9 +1,17 @@
 # v4 Outline — Causal Validation and Research Reproducibility
 
-Status: implementation in progress. Created from commit `5474335` on
+Status: Stage 0 empirical results are in (2026-07-21 night, see below) —
+v4's causal fixes (`prem_spot` removed, purged nested selection) confirmed
+real: the corrected ablation is still solidly positive (not zeroed out by
+the leakage fix), and the nested 3-fold walk-forward's winners are
+broadly-diversified across symbols/strategies rather than outlier-dependent
+the way the uncorrected v3.1 walk-forward was. A deployable candidate
+(`model_final_v4/`, GBT/filter/thr=0.5, 40-seed ensemble) is trained and
+persisted — Option A of the finalize plan. Option B (route evaluation
+through the stage-2 mark-to-market ledger before trusting this further) is
+scoped below and not yet started. Created from commit `5474335` on
 2026-07-20; causal-validation infrastructure was added on
-`codex/v4-causal-validation` the same day. Empirical results remain blocked
-until the remote v31 dataset/artifacts are available.
+`codex/v4-causal-validation` the same day.
 
 ## Purpose
 
@@ -31,18 +39,45 @@ The v31 run may finish under the existing contract. Its outputs are useful for s
 
 ## Stages
 
-### 0. V31 reconciliation
+### 0. V31 reconciliation — DONE 2026-07-21 night
 
-Use the completed remote v31 artifacts to run:
+Ran on the Windows/WSL box against the real 118-symbol `meta_dataset.parquet`
+(committed to `main` at `65c635c`, pulled via `codex/v4-causal-validation`).
 
-- Existing v31 configuration.
-- Existing data with `prem_spot` removed.
-- Existing data with exit-time purging.
-- Existing data with both corrections.
-- Corrected LightGBM baseline.
-- Corrected NN ensemble.
+**Ablation** (4 treatments, static window) — distinguishes schema leakage
+from split leakage:
 
-This stage should distinguish pipeline success from strategy validity without requiring a fresh raw-data download.
+| schema | purged | test return | maxDD |
+|---|---|---|---|
+| legacy (`prem_spot`) | no | +136.6% | 15.0% |
+| v4 (no `prem_spot`) | no | +45.2% | 25.5% |
+| legacy | yes | +90.9% | 27.2% |
+| v4 (fully corrected) | yes | **+72.6%** | 24.4% |
+
+Removing `prem_spot` alone roughly halves the return (136.6%→45.2%) —
+confirms it was genuinely leaking. The fully-corrected row is still solidly
+positive: real signal survives, smaller than the leakage made it look, which
+is the desired outcome (pipeline bug ruled out, strategy validity partially
+confirmed).
+
+**Nested 3-fold walk-forward** (v4 schema, purged, per-fold independent
+family/mode/threshold selection — no single reused config):
+
+| fold | winner | return | ex-top3 | % retained | maxDD |
+|---|---|---|---|---|---|
+| 1 | nn/filter/0.55 | +754.6% | +340.7% | 45% | 25.5% |
+| 2 | gbt/filter/0.50 | +354.3% | +287.3% | **81%** | 48.7% |
+| 3 | nn/rank/0.50 | +117.4% | +36.9% | 31% | 25.0% |
+
+Trade-level dig (retrained + reproduced exactly, matched official numbers to
+4 decimals) on all three folds' top trades: no repeat symbols within any
+fold's top 5–8, no leveraged ETFs, max single-trade return +754% (fold 1) vs.
+v3.1's uncorrected walk-forward where fold 2's +1136% was ~98% one 31x
+overnight TQQQ trade (ex-top3 collapsed to +18%, 1.6% retained). v4's
+worst-case retention (fold 3, 31%) is still far more broadly-based than
+v3.1 ever showed. **This stage distinguished pipeline success from strategy
+validity as intended: not a bug, and not just leakage — a real, smaller,
+more broadly-distributed edge.**
 
 ### 1. Causal feature and split contract
 
@@ -71,6 +106,16 @@ Current implementation:
 - [ ] Refit the selected fold-local model on train+validation before its OOS
   test, if we choose that convention; the current conservative runner keeps
   validation separate through testing.
+- [x] `nn_meta/v4_finalize.py` (Option A, 2026-07-21 night): the 3-fold
+  walk-forward's nested selection means each fold independently picks its
+  own winning family/mode/threshold (see stage 0 results — folds 1/2/3
+  didn't agree), so there's no single "the config" to just retrain. This
+  script runs one more nested-selection pass on the full dataset (all data
+  as train, a validation tail for early-stopping/threshold choice, no
+  held-out test — this pass exists to pick+train the deployable config, not
+  measure OOS performance) and persists a `config.SEEDS`-size ensemble of
+  the winner to `model_final_v4/`. Still uses the stage-2-pending shared
+  portfolio simulator, not the mark-to-market ledger — see Option B below.
 
 ### 2. Execution and accounting
 
@@ -100,6 +145,27 @@ Current implementation:
   alongside future V4 labels, then route the v4 evaluator through this ledger.
 - [ ] Specify fill-failure reason codes and conservative behavior for missing
   option bars/spreads before producing a live-readiness report.
+
+**Option B plan (scoped 2026-07-21 night, not started)** — `v4_accounting.py`
+was built the same night as `v4_evaluate.py`/`v4_finalize.py` but is not
+imported by either; every stage-0 result and `model_final_v4` above still
+went through the same shared `select_meta.py` portfolio simulator v3.1 used
+(the one a single TQQQ trade could dominate — stage 0's trade-level digs
+suggest v4's config isn't fragile to that in the same way, but it hasn't
+been re-checked through the stricter ledger). Sequencing:
+
+1. Wire `v4_accounting.py`'s event-level ledger into `evaluate_window()`
+   (`nn_meta/v4_evaluate.py`) in place of `select_meta.portfolio_metrics`/
+   `_portfolio_sim`, so fold/policy selection itself uses mark-to-market
+   accounting, not just the final reported number.
+2. Re-run the ablation (`--ablation`) and nested walk-forward (`--folds 3`)
+   through the new ledger. Numbers are expected to move — that's the point;
+   compare against the stage-0 table above rather than assuming it repeats.
+3. Only after that: re-run `v4_finalize.py` for a new `model_final_v4/`,
+   since Option A's persisted ensemble was selected and trained under the
+   old simulator.
+4. Then, and only then, stage 5's live candidate-batch constructor — no
+   point building live parity against a model likely to be superseded.
 
 ### 3. Baseline bake-off
 
@@ -188,18 +254,27 @@ Current implementation:
 
 V4 is not considered validated until:
 
-- `prem_spot` is removed or replaced with a truly pre-decision value.
-- Exit-time purging and embargoes are tested.
-- Walk-forward selection is nested.
-- GBT and NN are compared with the same costed portfolio simulator.
-- The live scorer passes an offline/online feature-parity test.
+- [x] `prem_spot` is removed or replaced with a truly pre-decision value.
+- [x] Exit-time purging and embargoes are tested.
+- [x] Walk-forward selection is nested.
+- [x] GBT and NN are compared with the same costed portfolio simulator.
+  (Same shared simulator as v3.1 — Option B above upgrades this to the
+  mark-to-market ledger; that's a strengthening, not a redo of this item.)
+- [ ] The live scorer passes an offline/online feature-parity test.
 
-## First remote v31 run
+4/5 as of 2026-07-21 night. The remaining gate item is the reason
+`model_final_v4/` (Option A) is a validated *candidate*, not a live
+deployment — do not swap the scanner over to it until stage 5 closes this
+out and Option B has been through at least one re-finalize pass.
 
-Once v31 training has completed and its `meta_dataset.parquet` plus baseline
-specification are copied or made accessible to this branch's environment, run
-the following from the project root (start with the smoke run to confirm the
-remote dependencies):
+## First remote v31 run — DONE 2026-07-21 night (results in stage 0 above)
+
+All four commands below were run on the Windows/WSL box in sequence
+(smoke test on a 10-symbol/~1y subset first, per `V4_SMOKE_TEST.md`, then
+the real thing against the full 118-symbol dataset). Total wall time for
+the ablation + nested walk-forward: ~17 minutes. `v4_finalize.py` (Option A,
+not part of the original plan when this section was first written) then
+trained + persisted `model_final_v4/` in another ~4.5 minutes.
 
 ```bash
 NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate --ablation --smoke
@@ -208,6 +283,9 @@ NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate --ablation \
   --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600 --embargo 1D
 NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_evaluate \
   --folds 3 --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600 --embargo 1D
+NN_META_POOL=v31 ./venv/bin/python -m nn_meta.v4_finalize \
+  --select-seeds 0,1,2,3,4 --final-seeds 0,1,...,39 \
+  --epochs 60 --gbt-estimators 600 --embargo 1D
 ```
 
 The ablation writes `v4_ablation_report.md` and JSON beside the configured
@@ -215,7 +293,8 @@ reports directory; the expanding-fold run writes `v4_walkforward_report.md`
 and JSON. The four ablation treatments distinguish schema leakage
 (`prem_spot`) from split leakage (entry-only assignment) without re-downloading
 raw options data. LightGBM must be installed in the remote environment for
-the GBT comparison; the local tests intentionally do not require it.
+the GBT comparison; the local tests intentionally do not require it — it was
+missing on the Windows/WSL box and had to be installed before the real run.
 
 ## Branch strategy
 
