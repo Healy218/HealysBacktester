@@ -4,7 +4,8 @@ import pandas as pd
 
 from nn_meta.build_meta_dataset import META_FEATURES, V4_META_FEATURES
 from nn_meta.mark_stream import stable_trade_id
-from nn_meta.v4_evaluate import choose_policy, marked_metrics, schema_features
+from nn_meta.v4_evaluate import (choose_policy, marked_metrics, schema_features,
+                                 _policy_rank, _select_winner)
 
 
 def _spec():
@@ -74,3 +75,39 @@ def test_marked_metrics_returns_none_when_nothing_is_entered():
     rows = _marked_rows()
     assert marked_metrics(rows, np.array([0.1, 0.1]), "rank", 0.5,
                           _marked_stream(rows)) is None
+
+
+def test_choose_policy_flags_gate_failures_as_ineligible():
+    # Only 3 rows -> n_kept < MIN_KEPT_TRADES, so no candidate can clear the
+    # gate. choose_policy must still return a winner (callers need something to
+    # report), but it has to be marked ineligible, not silently promoted.
+    rows = _rows()
+    policy = choose_policy(rows, np.array([0.8, 0.9, 0.1]), _spec(), thresholds=[0.5])
+    assert policy["eligible"] is False
+
+
+def _policy(family, total_return, eligible):
+    return {"family": family, "metrics": {"total_return": total_return},
+            "eligible": eligible}
+
+
+def test_select_winner_prefers_eligible_over_higher_return():
+    # An ineligible family with a much higher raw return must NOT beat an
+    # eligible one — this is the fold-selection half of the -26.3% "winner" bug.
+    eligible = _policy("gbt", 0.30, True)
+    flashy_but_failing = _policy("nn", 0.90, False)
+    assert _select_winner([flashy_but_failing, eligible]) is eligible
+
+
+def test_select_winner_falls_back_to_best_return_when_all_ineligible():
+    a = _policy("gbt", -0.26, False)
+    b = _policy("nn", -0.40, False)
+    winner = _select_winner([a, b])
+    assert winner is a and winner["eligible"] is False
+
+
+def test_policy_rank_orders_eligible_first_then_by_return():
+    assert _policy_rank(_policy("x", 0.1, True)) > _policy_rank(_policy("x", 9.9, False))
+    assert _policy_rank(_policy("x", 0.5, True)) > _policy_rank(_policy("x", 0.2, True))
+    # None return sorts to the very bottom, not crashes.
+    assert _policy_rank(_policy("x", None, False))[1] == float("-inf")

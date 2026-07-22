@@ -166,17 +166,21 @@ Source: the 2026-07-22 adversarial review of the merged overnight state
 asserted). Ordered so correctness fixes land before the Option B re-runs
 that depend on them.
 
-1. [ ] **`choose_policy` eligibility fallback can crown gate-failers.**
-   `choose_policy` falls back to `pool = eligible or candidates`
-   (`nn_meta/v4_evaluate.py` ~line 173), so when every mode×threshold
-   candidate fails `MIN_KEPT_TRADES`, the drawdown cap, or loses to the
-   frozen baseline, a gate-failing policy is still returned as "winner" —
-   and the cross-family pick (fold winner in `evaluate_window`, and
-   `v4_finalize.py:174`) never reads `eligible`. This is the confirmed root
-   cause of the local smoke walk-forward's -26.3% "winner". Fix: propagate
-   an `eligible` flag through fold winners and reports, and make consumers
-   (fold selection, finalize) treat ineligible-everywhere as "no config
-   passed" rather than silently promoting the least-bad.
+1. [x] **`choose_policy` eligibility fallback can crown gate-failers.**
+   (Done 2026-07-22.) The cross-family fold pick in `evaluate_window` and the
+   within-family pick in `choose_policy` now share one eligibility-aware sort
+   key (`_policy_rank` → `_select_winner`): any gate-passing policy outranks
+   every gate-failing one, ties break on validation return. When nothing
+   clears the gate a least-bad winner is still returned (callers need
+   something to report) but carries `eligible=False`. That flag plus
+   `baseline_return` now propagate into every fold's result JSON, and the
+   markdown report gained a **gate** column (✓ / "⚠ none cleared") with a
+   header note that a ⚠ winner's test numbers are diagnostic-only. Tests in
+   `tests/test_v4_evaluate.py` cover the flag and the
+   eligible-beats-higher-return preference. NOTE: `v4_finalize.py`'s own
+   cross-family `max` still ignores `eligible` — deliberately deferred to
+   item 3, which owns the finalize persistence gate (the flag it needs is now
+   reliably on every `choose_policy` return).
 2. [ ] **`v4_finalize.py` operating point is unvalidated for the shipped
    ensemble.** Family/mode/threshold and the recorded `val_return` were
    selected with a 5-seed NN mean / single `random_state=0` GBT, but the

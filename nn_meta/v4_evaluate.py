@@ -142,6 +142,24 @@ def fit_family(family: str, train: pd.DataFrame, val: pd.DataFrame, *,
     return Predictor("nn", lambda rows: np.mean([m.predict(rows) for m in models], axis=0))
 
 
+def _policy_rank(policy: dict) -> tuple[bool, float]:
+    """Sort key that ranks any gate-passing policy above every gate-failing one,
+    breaking ties on validation return. Shared by the within-family threshold/
+    mode choice and the cross-family pick so both honor the same gate — a policy
+    that cleared no gate is never crowned over one that did just for a higher
+    raw return."""
+    ret = policy["metrics"]["total_return"]
+    return (bool(policy.get("eligible")), ret if ret is not None else -np.inf)
+
+
+def _select_winner(selected: list[dict]) -> dict:
+    """Cross-family winner among per-family policies (each already the best
+    threshold/mode for its family). Eligibility dominates return, so a fold
+    where nothing cleared the gate yields an ineligible winner rather than a
+    silently-promoted least-bad family."""
+    return max(selected, key=_policy_rank)
+
+
 def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                   thresholds: Iterable[float] = config.KEEP_THRESHOLDS) -> dict:
     """Choose mode and threshold on validation only, using shared portfolio logic."""
@@ -170,10 +188,11 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                     and (metrics["max_drawdown"] or 0) <= config.MAX_DRAWDOWN_CAP
                 ),
             })
-    eligible = [c for c in candidates if c["eligible"]]
-    pool = eligible or candidates
-    winner = max(pool, key=lambda c: c["metrics"]["total_return"]
-                 if c["metrics"]["total_return"] is not None else -np.inf)
+    # An eligible policy always outranks an ineligible one; ties break on
+    # validation return. When nothing clears the gate the least-bad candidate
+    # is still returned (callers need something to report), but it carries
+    # eligible=False so consumers can refuse to promote it.
+    winner = max(candidates, key=_policy_rank)
     # Every candidate is a "trial"; its Sharpe feeds the deflation later.
     winner["candidate_sharpes"] = [c["metrics"]["per_trade_sharpe"] for c in candidates]
     return winner
@@ -258,8 +277,7 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         fitted[family] = predictor
         selected.append(policy)
 
-    winner = max(selected, key=lambda p: p["metrics"]["total_return"]
-                 if p["metrics"]["total_return"] is not None else -np.inf)
+    winner = _select_winner(selected)
     family = winner["family"]
     test_pred = fitted[family].predict(test_rows)
     # Calibration is fit on the winner's validation predictions only, then
@@ -302,6 +320,8 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         "split_summary": split_summary(ds, split).to_dict(orient="records"),
         "winner": {"family": winner["family"], "mode": winner["mode"],
                    "threshold": winner["threshold"], "validation": winner["metrics"],
+                   "eligible": bool(winner.get("eligible")),
+                   "baseline_return": winner.get("baseline_return"),
                    "test": winner_test, "marked": winner_marked,
                    "calibration": calibration, "deflated_sharpe": deflated,
                    "score_deciles": score_deciles},
@@ -330,13 +350,21 @@ def _write_report(results: list[dict], output: Path) -> None:
     lines = ["# V4 causal evaluation", "",
              "Each row uses fold-local model/policy selection and the shared slot portfolio.",
              "The marked column is the mark-to-market ledger result and is `pending` "
-             "until a per-contract mark stream is supplied via `--marks`.", "",
-             "| run | schema | purged | winner | mode / threshold | test return | maxDD | marked return / maxDD |",
-             "|---|---|---|---|---|---|---|---|"]
+             "until a per-contract mark stream is supplied via `--marks`.",
+             "",
+             "The **gate** column reports whether the winning policy cleared the "
+             "eligibility gate on validation (kept ≥ "
+             f"{config.MIN_KEPT_TRADES} trades, beat the frozen baseline, maxDD ≤ "
+             f"{config.MAX_DRAWDOWN_CAP:.0%}). A ⚠ row's winner is the least-bad "
+             "config, not a config that passed — its test numbers are diagnostic "
+             "only and must not be promoted.", "",
+             "| run | schema | purged | winner | gate | mode / threshold | test return | maxDD | marked return / maxDD |",
+             "|---|---|---|---|---|---|---|---|---|"]
     for i, result in enumerate(results, 1):
         win, test = result["winner"], result["winner"]["test"]
         ret = test["total_return"]
         dd = test["max_drawdown"]
+        gate_cell = "✓" if win.get("eligible") else "⚠ none cleared"
         marked = win.get("marked")
         if marked is None:
             marked_cell = "pending"
@@ -344,7 +372,7 @@ def _write_report(results: list[dict], output: Path) -> None:
             marked_cell = f"{marked['total_return']:+.1%} / {marked['max_drawdown']:.1%}"
         lines.append(
             f"| {i} | {result['schema']} | {result['purged']} | {win['family']} | "
-            f"{win['mode']} / {win['threshold']:.2f} | "
+            f"{gate_cell} | {win['mode']} / {win['threshold']:.2f} | "
             f"{'n/a' if ret is None else f'{ret:+.1%}'} | "
             f"{'n/a' if dd is None else f'{dd:.1%}'} | {marked_cell} |"
         )
