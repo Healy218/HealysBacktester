@@ -120,9 +120,13 @@ Session conventions:
     `requirements.txt`. `.github/workflows/ci.yml` runs `pytest tests/ -q`
     on an ubuntu-latest + macos-latest / Python 3.12 matrix. (Locally the
     suite is green and self-contained; the remote matrix runs on push/PR.)
-11. [ ] **Stage 6 — FA score-table feed.** Wire the existing raw
-    collectors and entity-resolution fixtures into the normalized score
-    table consumed by `fa/universe_loop.py`.
+11. [x] **Stage 6 — FA score-table feed.** `fa/entities.py` implements
+    precision-first entity resolution (cashtags + alias map, `valid_tickers`
+    filter); `fa/scores.py` adds `resolve_mentions`, attention-velocity
+    z-scoring vs each ticker's own trailing baseline, and `build_score_table`
+    producing exactly the `{ticker, observed_at, source_family, score,
+    evidence_ref}` table `universe_loop.monthly_rank` consumes. Tested
+    end-to-end through a corroborated ranking.
 
 ### Blocked until remote v31 artifacts arrive — do not attempt
 
@@ -300,10 +304,11 @@ Current implementation:
   timestamp, requires independent-source corroboration, freezes a dated JSON
   ranking without overwrite, and allows graduation only after a point-in-time
   probation/forward-return check.
-- [ ] Feed the existing raw collectors and entity-resolution fixtures into
-  the normalized score table, then begin accumulating enough dated rankings
-  to evaluate the discovery signal. Historic social/filing snapshots cannot
-  be reconstructed retroactively.
+- [x] The raw-collector → entity-resolution → normalized-score-table bridge
+  is built (`fa/entities.py`, `fa/scores.py`), feeding
+  `universe_loop.monthly_rank`. Accumulating enough dated rankings to evaluate
+  the discovery signal is the forward-time step; historic social/filing
+  snapshots cannot be reconstructed retroactively.
 
 ## Model-track roadmap — the four NN approaches at industry standard
 
