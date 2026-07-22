@@ -70,8 +70,21 @@ _UNDERLYINGS_V2 = [
 ]
 if _BIG_RUN:
     import json as _json
-    UNDERLYINGS = _json.loads(
-        (ROOT.parent / "v3" / "artifacts" / "universe_120.json").read_text())
+    _UNIVERSE_120_JSON = ROOT.parent / "v3" / "artifacts" / "universe_120.json"
+    if _UNIVERSE_120_JSON.exists():
+        UNDERLYINGS = _json.loads(_UNIVERSE_120_JSON.read_text())
+    else:
+        # Not committed to git (regenerable universe-selection output, only
+        # ever existed on the box that ran it) — the v4 dataset-only eval
+        # path (v4_evaluate/v4_preflight/feature_contract/temporal_validation)
+        # never touches UNDERLYINGS, so don't hard-crash on import for it.
+        # download_universe.py/download_data.py/baseline.py's freeze fallback/
+        # walkforward_meta.py DO need the real list — they'll get an obvious
+        # "0 names" failure instead of this warning being missed.
+        UNDERLYINGS = []
+        print(f"[nn_meta.config] WARNING: {_UNIVERSE_120_JSON} missing — "
+              f"UNDERLYINGS=[] (fine for v4 dataset-only evaluation; will "
+              f"break any v31 download/freeze/walk-forward re-run)")
 else:
     UNDERLYINGS = _UNDERLYINGS_V2
 
