@@ -30,4 +30,8 @@ jobs:
       - name: Run test suite
         # The suite is self-contained (synthetic fixtures / tmp dirs) and must
         # not require LightGBM, network access, or v31 artifacts.
-        run: pytest tests/ -q
+        # `python -m` (the repo-wide convention) is load-bearing: it puts the
+        # repo root on sys.path. Bare `pytest` walks past the vestigial root
+        # __init__.py and prepends the repo's PARENT dir instead, so every
+        # `import nn_meta` fails at collection on the runners.
+        run: python -m pytest tests/ -q
