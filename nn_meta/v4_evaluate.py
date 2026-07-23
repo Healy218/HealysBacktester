@@ -284,7 +284,7 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
     # scored on test — the test labels never inform the mapping.
     calibration = calibration_summary(
         val_rows[label], fitted[family].predict(val_rows),
-        test_rows[label], test_pred, method="isotonic")
+        test_rows[label], test_pred, method="auto")
     fmask = frozen_mask(test_rows, spec)
     test_eval_rows = test_rows[fmask].reset_index(drop=True) if winner["mode"] == "filter" else test_rows
     test_eval_pred = test_pred[fmask] if winner["mode"] == "filter" else test_pred

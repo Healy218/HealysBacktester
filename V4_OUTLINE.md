@@ -205,30 +205,38 @@ that depend on them.
    eligible-persist and ineligible-refuse-leaving-existing-bundle-intact
    branches, and a real GBT-only run on the full v31 dataset (correctly
    refused a weak 2-seed ensemble, exit 1, no debris).
-4. [ ] **No loader can read `model_final_v4/`.** `select_meta.predict_rows`
-   KeyErrors on a v4 scaler (indexes with legacy `META_FEATURES` incl.
-   `prem_spot`), `resolve_run_dir` never looks in `model_final_v4/`, and
-   nothing in the repo loads `model.joblib` at all — the actual persisted
-   winner is GBT. The scoring convention (raw unscaled features +
-   `predict_proba` for gbt vs fillna+standardize for nn) lives only in
-   `v4_evaluate.py` source. Fix: a small v4 bundle loader
-   (`load_final_v4()` + `score_rows()`), which stage-5 parity needs anyway.
-5. [ ] **Reboot dispatcher hardening** (see "Reboot-recovery job system"
-   below for what happened this morning): (a) unconditional run-log line +
-   optional "dispatcher alive" heartbeat notification so a no-op boot is
-   distinguishable from a dead scheduled task; (b) per-run done-markers
-   (marker files tied to a run id, not `grep` of an append-only log — a
-   stale `V4-EXIT:` from a previous run permanently disables restart of any
-   re-run); (c) split success vs failure exit markers — today a job that
-   ran and FAILED matches `JOB_DONE_CHECK` and is never retried; (d) commit
-   the `schtasks` registration command as an in-repo artifact. Codeable
-   here; the actual re-registration + real reboot test happens at the box.
-6. [ ] **Calibration caveat before trusting reported calibrated numbers:**
-   on all five local smoke runs isotonic *degraded* test Brier and mapped
-   111 test trades to probability 1.0 (33% realized win rate) — small
-   validation tails overfit isotonic's step function. Consider selecting
-   the calibrator (Platt vs isotonic vs none) on validation Brier instead
-   of hardcoding isotonic.
+4. [x] **No loader can read `model_final_v4/`.** (Done 2026-07-22.) New
+   `nn_meta/v4_loader.py`: `load_final_v4()` reads `ensemble_config.json` and
+   every seed's model (keras+scaler for nn, joblib for gbt) into a `V4Bundle`
+   with `.score()` / `.keep_mask()`. The scoring convention now lives in ONE
+   place — `ensemble_score()`, which `v4_finalize` also calls — so the
+   deployed score can't drift from the score the gate approved. `verify_bundle()`
+   recomputes the manifest's `output_artifacts` hashes and fails closed on a
+   tampered/truncated model file. Tests: gbt + nn disk round-trips, fail-closed
+   on missing member / absent bundle, and tamper detection. (This does NOT
+   repoint the live scanner — that's the stage-5 parity step.)
+5. [x] **Reboot dispatcher hardening.** (Done 2026-07-22; real reboot test
+   still owed at the box.) `scripts/boot_restart.sh`: (a) every run appends
+   `dispatcher START/END` to `logs/boot_restart.log` and sends one `🔄` Telegram
+   summary per boot (silence now means "task didn't fire", unambiguously); (b)
+   per-run exit markers `scripts/.jobstate/<JOB_ID>.exit`, emptied at launch
+   and written by the launch script on completion, replace the log-grep — a
+   stale marker no longer blocks a re-run; (c) done == marker `0` only, so a
+   failed run (non-zero) is retried, and a crash (empty marker) is retried;
+   (d) `scripts/register_boot_restart.ps1` commits the exact `schtasks`
+   registration. `run_v4_{finalize,v31}.sh` write the marker; the v4
+   descriptors carry `JOB_ID`; v31_walkforward's legacy grep tightened to
+   `WF-EXIT:0`. Sandbox-verified across all five marker states; the logon
+   trigger still needs one real logged reboot at the box.
+6. [x] **Calibration: isotonic overfit small validation tails.** (Done
+   2026-07-22.) `nn_meta/calibration.py` gains `select_calibrator()`, which
+   picks among none / Platt / isotonic by out-of-fold validation Brier
+   (deterministic interleaved k-fold, `none` = raw scores as a real
+   candidate), and `calibration_summary(method="auto")` (now the default,
+   wired into `v4_evaluate`) uses it — so a calibrator ships only when it
+   beats raw scores out-of-fold, and the report records which method won.
+   Tests cover none-on-tiny/single-class, never-worse-than-raw-OOF, real
+   calibration on clearly-miscalibrated data, and the identity passthrough.
 7. [ ] **Option B steps 1–3** (the selection-side ledger swap and re-runs)
    — see the corrected Option B plan in stage 2, including the 2026-07-22
    dataset constraint note. Runnable on either machine now that the v31

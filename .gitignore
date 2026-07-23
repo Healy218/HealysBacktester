@@ -55,3 +55,5 @@ nn_meta/model_final_v3/
 nn_meta/reports_v31/
 nn_meta/artifacts_v31/smoke_subset.parquet
 nn_meta/model_final_v4/
+# reboot dispatcher per-run exit markers (machine-local runtime state)
+scripts/.jobstate/

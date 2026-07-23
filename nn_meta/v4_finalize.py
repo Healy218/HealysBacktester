@@ -58,6 +58,7 @@ from nn_meta.temporal_validation import assign_purged_splits
 from nn_meta.v4_artifacts import create_manifest, write_manifest
 from nn_meta.v4_evaluate import (choose_policy, fit_gbt, fit_nn, _labeled,
                                  _matrix, _select_winner)
+from nn_meta.v4_loader import ensemble_score
 
 FINAL_DIR = config.ROOT / "model_final_v4"
 
@@ -135,16 +136,10 @@ def _train_gbt_seed(train, val, *, features, label, seed, n_estimators, run_id,
 
 def _ensemble_predict(family: str, members: list[dict], rows: pd.DataFrame,
                       features: list[str]) -> np.ndarray:
-    """Mean P(win) across the trained ensemble members — the exact score the
-    deployed bundle produces (nn: fillna+standardize per member's scaler; gbt:
-    raw-feature predict_proba)."""
-    if family == "nn":
-        preds = [m["model"].predict(_matrix(rows, features, m["mean"], m["std"]),
-                                    batch_size=4096, verbose=0).flatten()
-                 for m in members]
-    else:
-        preds = [m["model"].predict_proba(rows[features])[:, 1] for m in members]
-    return np.mean(preds, axis=0)
+    """Mean P(win) across the just-trained ensemble members — the exact score
+    the deployed bundle produces. Delegates to the shared ``ensemble_score`` so
+    the training-time and load-time scoring paths can never diverge."""
+    return ensemble_score(family, members, rows, features)
 
 
 def _atomic_swap(staging: Path, final: Path) -> None:

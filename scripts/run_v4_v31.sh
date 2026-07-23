@@ -21,10 +21,13 @@ WF_EXIT=$?
 echo "=== v4 nested walk-forward done: $(date), exit=$WF_EXIT ==="
 
 if [ "$ABLATION_EXIT" -eq 0 ] && [ "$WF_EXIT" -eq 0 ]; then
-  echo "V4-EXIT:0"
+  RUN_EXIT=0
 else
-  echo "V4-EXIT:1"
+  RUN_EXIT=1
 fi
+echo "V4-EXIT:$RUN_EXIT"
+# Per-run exit marker for scripts/boot_restart.sh (0 => done, else => retry).
+echo "$RUN_EXIT" > "${JOB_EXIT_MARKER:-scripts/.jobstate/v4_full_run.exit}" 2>/dev/null || true
 
 TOKEN=$(grep -m1 "^TELEGRAM_BOT_TOKEN=" .env | cut -d= -f2- | tr -d "\"'")
 CHAT=$(grep -m1 "^TELEGRAM_CHAT_ID=" .env | cut -d= -f2- | tr -d "\"'")

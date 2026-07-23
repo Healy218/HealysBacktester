@@ -101,13 +101,65 @@ def fit_isotonic(scores, labels) -> IsotonicCalibrator:
     return IsotonicCalibrator(xs, ys)
 
 
+@dataclass(frozen=True)
+class IdentityCalibrator:
+    """The 'no calibration' choice: raw scores pass through unchanged. A real
+    candidate in selection, so a calibrator only ships when it beats raw."""
+
+    def predict(self, scores) -> np.ndarray:
+        return np.asarray(scores, dtype=float)
+
+
 def fit_calibrator(method: str, scores, labels):
     """Return a fitted calibrator; only validation-slice data is passed in."""
+    if method == "none":
+        return IdentityCalibrator()
     if method == "isotonic":
         return fit_isotonic(scores, labels)
     if method == "platt":
         return fit_platt(scores, labels)
-    raise ValueError("method must be 'isotonic' or 'platt'")
+    raise ValueError("method must be 'none', 'isotonic', or 'platt'")
+
+
+def _cv_brier(method: str, s: np.ndarray, y: np.ndarray, n_splits: int) -> float:
+    """Mean out-of-fold Brier for ``method`` under k-fold CV on validation.
+
+    Interleaved (index % k) folds keep it deterministic — no RNG, which the
+    workflow environment forbids and which would break resume."""
+    folds = np.arange(len(s)) % n_splits
+    errs = []
+    for k in range(n_splits):
+        tr, te = folds != k, folds == k
+        if te.sum() == 0 or tr.sum() < 2 or len(np.unique(y[tr])) < 2:
+            continue
+        pred = fit_calibrator(method, s[tr], y[tr]).predict(s[te])
+        errs.append(brier_score(pred, y[te]))
+    return float(np.mean(errs)) if errs else float("nan")
+
+
+def select_calibrator(val_scores, val_labels, *,
+                      methods=("none", "platt", "isotonic"), n_splits: int = 3):
+    """Pick the calibrator with the best out-of-fold validation Brier.
+
+    Includes ``none`` (raw scores) as a candidate, so isotonic — which can
+    perfectly fit a small validation tail and then generalize badly (the v3.1
+    smoke runs mapped 100+ test trades to p=1.0) — is chosen only when it
+    actually beats raw scores out-of-fold. Returns ``(method_name, calibrator)``.
+    Fits solely on validation; test never enters here.
+    """
+    s = np.asarray(val_scores, dtype=float)
+    y = np.asarray(val_labels, dtype=float)
+    mask = ~(np.isnan(s) | np.isnan(y))
+    s, y = s[mask], y[mask]
+    # Too little data (or one class) to validate a calibrator — keep raw scores.
+    if len(s) < 2 * n_splits or len(np.unique(y)) < 2:
+        return "none", IdentityCalibrator()
+    scored = [(m, _cv_brier(m, s, y, n_splits)) for m in methods]
+    scored = [(m, b) for m, b in scored if not np.isnan(b)]
+    if not scored:
+        return "none", IdentityCalibrator()
+    best = min(scored, key=lambda mb: mb[1])[0]
+    return best, fit_calibrator(best, s, y)  # refit the winner on all validation
 
 
 def reliability_table(prob, label, n_bins: int = 10) -> pd.DataFrame:
@@ -128,11 +180,14 @@ def reliability_table(prob, label, n_bins: int = 10) -> pd.DataFrame:
 
 
 def calibration_summary(val_labels, val_scores, test_labels, test_scores, *,
-                        method: str = "isotonic", n_bins: int = 10) -> dict | None:
+                        method: str = "auto", n_bins: int = 10) -> dict | None:
     """Fit on validation, score test: Brier (raw vs calibrated) and reliability.
 
-    The calibrator is fit strictly from ``val_*``; ``test_*`` is only scored,
-    never fit, so the reported numbers stay out-of-fold.
+    ``method="auto"`` (default) selects among none/platt/isotonic by out-of-fold
+    validation Brier (:func:`select_calibrator`), so a calibrator ships only
+    when it beats raw scores — the fix for isotonic overfitting small validation
+    tails. A fixed ``method`` still forces that calibrator. Either way the
+    calibrator is fit strictly from ``val_*``; ``test_*`` is only scored.
     """
     v = pd.DataFrame({"y": np.asarray(val_labels, dtype=float),
                       "s": np.asarray(val_scores, dtype=float)}).dropna()
@@ -140,10 +195,14 @@ def calibration_summary(val_labels, val_scores, test_labels, test_scores, *,
                       "s": np.asarray(test_scores, dtype=float)}).dropna()
     if v.empty or t.empty:
         return None
-    cal = fit_calibrator(method, v["s"].to_numpy(), v["y"].to_numpy())
+    if method == "auto":
+        chosen, cal = select_calibrator(v["s"].to_numpy(), v["y"].to_numpy())
+    else:
+        chosen, cal = method, fit_calibrator(method, v["s"].to_numpy(), v["y"].to_numpy())
     test_calibrated = cal.predict(t["s"].to_numpy())
     return {
-        "method": method,
+        "method": chosen,
+        "selection": "auto (min OOF validation Brier)" if method == "auto" else "fixed",
         "brier_raw": brier_score(t["s"].to_numpy(), t["y"].to_numpy()),
         "brier_calibrated": brier_score(test_calibrated, t["y"].to_numpy()),
         "reliability": reliability_table(test_calibrated, t["y"].to_numpy(), n_bins)

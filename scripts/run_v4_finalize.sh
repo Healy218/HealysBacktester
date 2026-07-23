@@ -15,11 +15,10 @@ FINAL_SEEDS="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25
   --epochs 60 --gbt-estimators 600 --embargo 1D
 EXIT=$?
 echo "=== v4 finalize done: $(date), exit=$EXIT ==="
-if [ "$EXIT" -eq 0 ]; then
-  echo "V4-FINALIZE-EXIT:0"
-else
-  echo "V4-FINALIZE-EXIT:1"
-fi
+echo "V4-FINALIZE-EXIT:$EXIT"
+# Per-run exit marker for scripts/boot_restart.sh (0 => done, else => retry).
+# JOB_EXIT_MARKER is exported by the dispatcher; default the path for manual runs.
+echo "$EXIT" > "${JOB_EXIT_MARKER:-scripts/.jobstate/v4_finalize.exit}" 2>/dev/null || true
 
 TOKEN=$(grep -m1 "^TELEGRAM_BOT_TOKEN=" .env | cut -d= -f2- | tr -d "\"'")
 CHAT=$(grep -m1 "^TELEGRAM_CHAT_ID=" .env | cut -d= -f2- | tr -d "\"'")

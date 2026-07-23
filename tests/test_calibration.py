@@ -4,7 +4,7 @@ import pytest
 
 from nn_meta.calibration import (brier_score, calibration_summary,
                                  fit_calibrator, fit_isotonic, fit_platt,
-                                 reliability_table)
+                                 reliability_table, select_calibrator, _cv_brier)
 
 
 def test_brier_score_matches_hand_value():
@@ -75,3 +75,47 @@ def test_calibrator_never_sees_test_labels():
 
 def test_calibration_summary_returns_none_on_empty_slice():
     assert calibration_summary([], [], [1], [0.5]) is None
+
+
+# ── auto calibrator selection (item 6) ──────────────────────────────────────
+
+def test_select_calibrator_falls_back_to_none_on_tiny_val():
+    method, cal = select_calibrator([0.4, 0.6, 0.5], [0, 1, 1])
+    assert method == "none"
+    assert np.allclose(cal.predict([0.3, 0.7]), [0.3, 0.7])   # identity passthrough
+
+
+def test_select_calibrator_returns_none_when_val_is_single_class():
+    method, _ = select_calibrator(np.linspace(0.1, 0.9, 20), np.ones(20))
+    assert method == "none"
+
+
+def test_select_calibrator_never_worse_out_of_fold_than_raw():
+    # The winner is the argmin of OOF Brier over methods that include 'none',
+    # so it can never be beaten by raw scores out-of-fold — the whole point.
+    s, y = _miscalibrated(2000, 7)
+    method, _ = select_calibrator(s, y)
+    none_b = _cv_brier("none", np.asarray(s, float), np.asarray(y, float), 3)
+    chosen_b = _cv_brier(method, np.asarray(s, float), np.asarray(y, float), 3)
+    assert chosen_b <= none_b + 1e-12
+
+
+def test_select_calibrator_picks_real_calibration_when_clearly_miscalibrated():
+    s, y = _miscalibrated(4000, 8)
+    method, cal = select_calibrator(s, y)
+    assert method in ("platt", "isotonic")
+    assert brier_score(cal.predict(s), y) < brier_score(s, y)
+
+
+def test_calibration_summary_auto_reports_the_chosen_method():
+    s, y = _miscalibrated(3000, 9)
+    out = calibration_summary(y, s, y[:1500], s[:1500], method="auto")
+    assert out["method"] in ("none", "platt", "isotonic")
+    assert out["selection"].startswith("auto")
+
+
+def test_calibration_summary_none_method_is_identity():
+    s, y = _miscalibrated(500, 10)
+    out = calibration_summary(y, s, y, s, method="none")
+    assert out["method"] == "none"
+    assert out["brier_calibrated"] == pytest.approx(out["brier_raw"])
