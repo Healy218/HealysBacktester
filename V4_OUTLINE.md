@@ -237,16 +237,33 @@ that depend on them.
    beats raw scores out-of-fold, and the report records which method won.
    Tests cover none-on-tiny/single-class, never-worse-than-raw-OOF, real
    calibration on clearly-miscalibrated data, and the identity passthrough.
-7. [ ] **Option B steps 1–3** (the selection-side ledger swap and re-runs)
-   — see the corrected Option B plan in stage 2, including the 2026-07-22
-   dataset constraint note. Runnable on either machine now that the v31
-   dataset is committed.
-8. [ ] **Windows-box evidence recovery (at the box):** the real stage-0
-   reports + manifests and `model_final_v4/` exist ONLY on the Windows box
-   — the outline's tables are currently the sole record of the headline
-   numbers. Pull the merged branch there, commit the stage-0
+7. [~] **Option B steps 1–3 — BLOCKED on data, guard added 2026-07-22.**
+   The earlier "runnable now that the v31 dataset is committed" was wrong:
+   the ledger's `execution_frames` needs per-row provenance columns
+   (`fill_entry_ts`, `fill_exit_ts`, `gross_return`) AND a per-contract 15m
+   mark stream, and the committed `meta_dataset.parquet` has NEITHER. Both
+   require re-running the label builder over the raw option bars (not on this
+   machine), and the ledger rule forbids synthesizing marks from
+   `net_return` — so a selection-side ledger swap cannot be exercised or
+   validated on real data yet, and the re-runs (steps 2–3) can't produce new
+   numbers. What DID land 2026-07-22, so the blocker is loud instead of a
+   silent `pending`: `mark_stream.option_b_blockers()` names exactly what's
+   missing; `v4_evaluate --marks` now fails closed BEFORE training with that
+   message (was a cryptic KeyError / silent pending); and `v4_preflight`
+   reports an informational `option_b_ready` check. Remaining, gated on the
+   dataset rebuild: emit the provenance columns + mark stream from the label
+   builder, then wire `evaluate_window`'s selection to rank on the ledger and
+   re-run ablation/walk-forward/finalize through it (Option B plan, stage 2).
+8. [ ] **Windows-box evidence recovery — AT THE BOX (cannot be done from the
+   Mac).** The real stage-0 reports + manifests and `model_final_v4/` exist
+   ONLY on the powered-off Windows box; the Mac holds no SSH keys to it and
+   the outline's tables are the sole record of the headline numbers. When
+   next at the box: `git pull` the merged branch, commit the stage-0
    reports/manifests (small), and back up `model_final_v4/` before any
-   re-finalize overwrites it.
+   re-finalize overwrites it. NOTE: a re-finalize is now safe by
+   construction (item 3's atomic swap won't destroy the old bundle on a
+   crash/gate-fail), but a deliberate successful re-finalize still replaces
+   it — back up first.
 
 ## Reboot-recovery job system (added 2026-07-22)
 

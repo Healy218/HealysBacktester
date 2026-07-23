@@ -3,8 +3,9 @@ import pandas as pd
 import pytest
 
 from nn_meta.mark_stream import (execution_frames, load_mark_stream,
-                                 mark_stream_path, stable_trade_id,
-                                 validate_mark_stream, write_mark_stream)
+                                 mark_stream_path, option_b_blockers,
+                                 stable_trade_id, validate_mark_stream,
+                                 write_mark_stream)
 from nn_meta.v4_accounting import (AccountingDataError, CostScenario,
                                    mark_to_market_portfolio)
 
@@ -92,3 +93,23 @@ def test_execution_frames_requires_execution_columns():
     rows = _rows().drop(columns=["fill_exit_ts"])
     with pytest.raises(AccountingDataError, match="fill_exit_ts"):
         execution_frames(rows, _marks_for(_rows()))
+
+
+def test_option_b_blockers_lists_both_gaps_on_committed_dataset():
+    cols = ["symbol", "strategy", "trade_idx", "dte", "entry_ts", "exit_ts",
+            "net_return", "executed"]                       # no provenance cols
+    blockers = option_b_blockers(cols, mark_stream_exists=False)
+    assert len(blockers) == 2
+    assert any("execution-provenance" in b for b in blockers)
+    assert any("mark stream" in b for b in blockers)
+
+
+def test_option_b_blockers_empty_when_ready():
+    cols = ["fill_entry_ts", "fill_exit_ts", "gross_return", "entry_ts"]
+    assert option_b_blockers(cols, mark_stream_exists=True) == []
+
+
+def test_option_b_blockers_flags_only_missing_stream_when_cols_present():
+    cols = ["fill_entry_ts", "fill_exit_ts", "gross_return"]
+    blockers = option_b_blockers(cols, mark_stream_exists=False)
+    assert len(blockers) == 1 and "mark stream" in blockers[0]

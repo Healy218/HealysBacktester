@@ -27,7 +27,7 @@ from nn_meta.build_meta_dataset import META_FEATURES, V4_META_FEATURES
 from nn_meta.calibration import calibration_summary
 from nn_meta.diagnostics import decile_diagnostic
 from nn_meta.feature_contract import assert_decision_safe
-from nn_meta.mark_stream import execution_frames, load_mark_stream
+from nn_meta.mark_stream import execution_frames, load_mark_stream, option_b_blockers
 from nn_meta.model import build_meta_mlp
 from nn_meta.multiple_testing import deflated_sharpe_from_trials
 from nn_meta.select_meta import (_EVALUATORS, _portfolio_sim, all_rows,
@@ -438,6 +438,14 @@ def main() -> None:
 
     ds = pd.read_parquet(args.dataset)
     spec = load_spec()
+    if args.marks:
+        # Fail closed BEFORE training if the dataset can't support the ledger,
+        # rather than surfacing a silent `pending` in every row (which reads as
+        # "Option B ran" when it did not). See mark_stream.option_b_blockers.
+        blockers = option_b_blockers(ds.columns, mark_stream_exists=Path(args.marks).exists())
+        if blockers:
+            raise SystemExit("cannot run mark-to-market accounting (Option B):\n  - "
+                             + "\n  - ".join(blockers))
     mark_stream = load_mark_stream(args.marks) if args.marks else None
     models = [m.strip() for m in args.models.split(",") if m.strip()]
     seeds = [int(seed) for seed in args.seeds.split(",") if seed.strip()]

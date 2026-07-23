@@ -22,6 +22,34 @@ MARK_STREAM_COLUMNS = ("trade_id", "mark_ts", "gross_return")
 # Identity columns that make a meta-dataset row unique.  A mark stream keyed by
 # the hash of these can be joined to dataset rows regardless of row order.
 KEY_COLUMNS = ("symbol", "strategy", "trade_idx", "dte", "entry_ts")
+# Per-row execution-provenance columns the ledger needs (see execution_frames).
+# The v31 label builder does not yet emit these, which is one half of why
+# Option B (mark-to-market selection) cannot run on the committed dataset.
+EXECUTION_PROVENANCE_COLUMNS = ("fill_entry_ts", "fill_exit_ts", "gross_return")
+
+
+def option_b_blockers(dataset_columns, *, mark_stream_exists: bool) -> list[str]:
+    """Human-readable reasons Option B (mark-to-market accounting) cannot run.
+
+    Empty list == ready. Both halves must hold: the dataset rows must carry the
+    execution-provenance columns AND a per-contract mark stream must exist.
+    Neither is present on the committed v31 dataset — producing them requires
+    re-running the label builder over the raw 15-minute option bars, not a code
+    change here, and the ledger deliberately refuses to synthesize marks from
+    the final ``net_return``.
+    """
+    cols = set(dataset_columns)
+    blockers = []
+    missing = [c for c in EXECUTION_PROVENANCE_COLUMNS if c not in cols]
+    if missing:
+        blockers.append(
+            f"dataset lacks execution-provenance columns {missing} — rebuild the "
+            "meta dataset with fill timestamps + gross_return")
+    if not mark_stream_exists:
+        blockers.append(
+            "no per-contract 15m mark stream — emit one from the label builder "
+            "(raw option bars) and pass it via --marks")
+    return blockers
 
 
 def mark_stream_path(dataset_path: str | Path) -> Path:

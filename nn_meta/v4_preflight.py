@@ -16,6 +16,7 @@ import pandas as pd
 from nn_meta import config
 from nn_meta.build_meta_dataset import V4_META_FEATURES
 from nn_meta.feature_contract import assert_decision_safe
+from nn_meta.mark_stream import mark_stream_path, option_b_blockers
 
 
 def check_environment(dataset: Path, spec_path: Path, *, require_gbt: bool) -> dict:
@@ -44,6 +45,13 @@ def check_environment(dataset: Path, spec_path: Path, *, require_gbt: bool) -> d
             absent = required - cols
             add("dataset_execution_schema", not absent,
                 "entry/exit/execution fields present" if not absent else f"missing {sorted(absent)}")
+            # Option B (mark-to-market selection) readiness — informational, not
+            # a hard failure: the standard simulator run does not need it.
+            blockers = option_b_blockers(
+                cols, mark_stream_exists=mark_stream_path(dataset).exists())
+            checks["checks"].append({
+                "name": "option_b_ready", "ok": not blockers,
+                "detail": "ready for --marks" if not blockers else "; ".join(blockers)})
         except Exception as exc:
             add("dataset_readable", False, repr(exc))
     if spec_path.exists():
