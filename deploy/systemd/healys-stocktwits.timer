@@ -1,0 +1,12 @@
+[Unit]
+Description=Hourly StockTwits collection (home box, residential IP)
+
+[Timer]
+OnCalendar=hourly
+# Spread the load off the top of the hour and catch up after downtime — the
+# Windows task simply lost any hour the box was off.
+RandomizedDelaySec=5m
+Persistent=true
+
+[Install]
+WantedBy=timers.target

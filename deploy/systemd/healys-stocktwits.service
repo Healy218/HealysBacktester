@@ -1,0 +1,23 @@
+[Unit]
+# Replaces the Windows Scheduled Task "HealysBacktester StockTwits" (retired
+# with the WSL2 box on 2026-07-24). The home box is the sole StockTwits writer:
+# Cloudflare 403s the Hetzner server's datacenter IP, so collection needs this
+# residential connection, then rsyncs the archives to the server.
+Description=HealysBacktester StockTwits collect + push to Hetzner
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=healylabs
+Group=healylabs
+WorkingDirectory=/home/healylabs/Coding/HealysBacktester
+ExecStart=/home/healylabs/Coding/HealysBacktester/scripts/stocktwits_collect_push.sh
+# One attempt per hour is enough; the archive is append-only and dedupes, so a
+# missed hour self-heals on the next run.
+TimeoutStartSec=20m
+StandardOutput=append:/home/healylabs/Coding/HealysBacktester/logs/stocktwits.log
+StandardError=append:/home/healylabs/Coding/HealysBacktester/logs/stocktwits.log
+
+[Install]
+WantedBy=multi-user.target

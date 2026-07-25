@@ -3,9 +3,11 @@
 # blocked) and push the two StockTwits archives to the server, which merges
 # them (archive.append dedupes; the home box is the sole StockTwits writer).
 #
-# Runs from the WSL clone via Windows Task Scheduler, hourly.
+# Runs hourly from the home box (systemd timer on Pop!_OS; was Windows Task
+# Scheduler under WSL). Repo root is derived from this script's location so the
+# same file works from any checkout path.
 set -euo pipefail
-cd /home/mrhea/HealysBacktester
+cd "$(dirname "$(readlink -f "$0")")/.."
 
 # collect ONLY stocktwits here (edgar/news/reddit run on the server)
 FA_SKIP_COLLECTORS=edgar,news,reddit ./venv/bin/python -m fa.collect
