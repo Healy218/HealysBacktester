@@ -237,23 +237,41 @@ that depend on them.
    beats raw scores out-of-fold, and the report records which method won.
    Tests cover none-on-tiny/single-class, never-worse-than-raw-OOF, real
    calibration on clearly-miscalibrated data, and the identity passthrough.
-7. [~] **Option B steps 1–3 — BLOCKED on data, guard added 2026-07-22.**
-   The earlier "runnable now that the v31 dataset is committed" was wrong:
-   the ledger's `execution_frames` needs per-row provenance columns
+7. [~] **Option B steps 1–3 — code complete 2026-07-25, gated on a dataset
+   rebuild.** The ledger's `execution_frames` needs per-row provenance columns
    (`fill_entry_ts`, `fill_exit_ts`, `gross_return`) AND a per-contract 15m
-   mark stream, and the committed `meta_dataset.parquet` has NEITHER. Both
-   require re-running the label builder over the raw option bars (not on this
-   machine), and the ledger rule forbids synthesizing marks from
-   `net_return` — so a selection-side ledger swap cannot be exercised or
-   validated on real data yet, and the re-runs (steps 2–3) can't produce new
-   numbers. What DID land 2026-07-22, so the blocker is loud instead of a
-   silent `pending`: `mark_stream.option_b_blockers()` names exactly what's
-   missing; `v4_evaluate --marks` now fails closed BEFORE training with that
-   message (was a cryptic KeyError / silent pending); and `v4_preflight`
-   reports an informational `option_b_ready` check. Remaining, gated on the
-   dataset rebuild: emit the provenance columns + mark stream from the label
-   builder, then wire `evaluate_window`'s selection to rank on the ledger and
-   re-run ablation/walk-forward/finalize through it (Option B plan, stage 2).
+   mark stream, and the committed `meta_dataset.parquet` has NEITHER — but
+   that is now purely because the file is stale, not because the builder
+   can't produce them:
+   - **Provenance columns: never actually missing.** `build_meta_dataset.py`
+     already writes all three and `options/execution.py` already computes them
+     (`gross_growth` compounded across roll legs). That code postdates the
+     committed dataset. The earlier "requires a code change" note was wrong.
+   - **Mark stream: landed 2026-07-25.** `execute_variant(collect_marks=True)`
+     attaches each leg's intratrade bars to its blotter entry — the *same*
+     bars the leg's return is computed from, so marks and label cannot
+     disagree and the 30k raw contract parquets are never re-read.
+     `mark_stream.marks_from_legs()` chains those across rolls
+     (`Π_{j<k} exit_j/entry_j · close_t/entry_k − 1`) and
+     `marks_from_blotter()` keys them by `stable_trade_id`.
+     `build_meta_dataset --marks` shards per symbol and `--assemble` writes
+     the `.marks.parquet` sidecar. Tested to the invariant that a trade's
+     final mark equals the executor's `gross_return`. The ledger rule against
+     synthesizing marks from `net_return` is untouched.
+   - **Scale, measured against the committed dataset:** 489,255 trades × ~180
+     bars held ≈ **88M mark rows** (~1.7 GB sidecar). As one in-memory frame
+     with string ids that is ~9 GB, so `--assemble` streams shard-by-shard
+     through a `ParquetWriter` (`write_mark_stream_shards`, peak ~0.2 GB
+     measured) and `trade_id` is a lexically-pinned categorical, which takes a
+     loaded stream from 101 to 19 bytes/row (~1.6 GB). Pinning matters: parquet
+     returns dictionary categories in first-appearance order, so without it the
+     sort order depended on how the stream was assembled.
+   Guards from 2026-07-22 still stand: `option_b_blockers()` names what's
+   missing, `v4_evaluate --marks` fails closed BEFORE training, `v4_preflight`
+   reports `option_b_ready`. **Remaining:** run `build_meta_dataset --marks`
+   over the full universe (multi-hour compute, raw bars are on the Pop!_OS box
+   in `data_cache_v3`), then wire `evaluate_window`'s selection to rank on the
+   ledger and re-run ablation/walk-forward/finalize (Option B plan, stage 2).
 8. [ ] **Windows-box evidence recovery — AT THE BOX (cannot be done from the
    Mac).** The real stage-0 reports + manifests and `model_final_v4/` exist
    ONLY on the powered-off Windows box; the Mac holds no SSH keys to it and

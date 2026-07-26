@@ -3,9 +3,10 @@ import pandas as pd
 import pytest
 
 from nn_meta.mark_stream import (execution_frames, load_mark_stream,
+                                 marks_from_blotter, marks_from_legs,
                                  mark_stream_path, option_b_blockers,
                                  stable_trade_id, validate_mark_stream,
-                                 write_mark_stream)
+                                 write_mark_stream, write_mark_stream_shards)
 from nn_meta.v4_accounting import (AccountingDataError, CostScenario,
                                    mark_to_market_portfolio)
 
@@ -113,3 +114,177 @@ def test_option_b_blockers_flags_only_missing_stream_when_cols_present():
     cols = ["fill_entry_ts", "fill_exit_ts", "gross_return"]
     blockers = option_b_blockers(cols, mark_stream_exists=False)
     assert len(blockers) == 1 and "mark stream" in blockers[0]
+
+
+# ── emission from the executor blotter ───────────────────────────────────────
+
+def _leg(trade_idx, contract, entry_open, closes, start, exit_close=None):
+    """One blotter leg with the intratrade bars collect_marks attaches."""
+    ts = pd.date_range(start, periods=len(closes), freq="15min")
+    return {
+        "trade_idx": trade_idx, "contract": contract, "right": "C",
+        "strike": 500.0, "expiration": "2025-01-17",
+        "entry": str(ts[0]), "exit": str(ts[-1]),
+        "entry_open": entry_open,
+        "exit_close": exit_close if exit_close is not None else closes[-1],
+        "bar_ts": ts.to_numpy(), "bar_close": closes,
+    }
+
+
+def test_marks_from_legs_marks_at_close_against_entry_open():
+    leg = _leg(0, "SPY250117C00500000", 2.00, [2.20, 1.80, 2.50],
+               "2025-01-02 14:45")
+    m = marks_from_legs([leg])
+    assert list(m.columns) == ["mark_ts", "gross_return"]
+    # entry is at bar OPEN, marks at bar CLOSE — the first mark is not zero
+    assert m["gross_return"].tolist() == pytest.approx([0.10, -0.10, 0.25])
+
+
+def test_marks_from_legs_chains_across_rolls():
+    # leg 1: 2.00 -> 3.00 (+50%), leg 2 entered at 4.00, marked at 5.00 (+25%)
+    first = _leg(0, "SPY250110C00500000", 2.00, [2.50, 3.00], "2025-01-02 14:45")
+    second = _leg(0, "SPY250117C00500000", 4.00, [5.00], "2025-01-10 14:45")
+    m = marks_from_legs([first, second])
+    # final mark compounds both legs: 1.5 * 1.25 - 1 = 0.875
+    assert m["gross_return"].iloc[-1] == pytest.approx(0.875)
+    # and the pre-roll marks are the first leg's own growth
+    assert m["gross_return"].iloc[0] == pytest.approx(0.25)
+
+
+def test_final_mark_equals_the_executors_gross_return():
+    """The invariant that makes the ledger reconcilable against the label."""
+    first = _leg(0, "A", 2.00, [2.50, 3.00], "2025-01-02 14:45")
+    second = _leg(0, "B", 4.00, [5.00], "2025-01-10 14:45")
+    gross_growth = 1.0
+    for leg in (first, second):
+        gross_growth *= leg["exit_close"] / leg["entry_open"]
+    m = marks_from_legs([first, second])
+    assert m["gross_return"].iloc[-1] == pytest.approx(gross_growth - 1.0)
+
+
+def test_marks_from_legs_dedupes_roll_boundary_timestamp():
+    first = _leg(0, "A", 2.00, [2.00, 3.00], "2025-01-02 14:45")
+    # new leg's first bar shares the old leg's last timestamp
+    second = _leg(0, "B", 4.00, [4.40], "2025-01-02 15:00")
+    m = marks_from_legs([first, second])
+    assert not m["mark_ts"].duplicated().any()
+    # the open leg wins: 1.5 * 1.10 - 1
+    assert m["gross_return"].iloc[-1] == pytest.approx(0.65)
+
+
+def test_marks_from_legs_rejects_legs_without_bars():
+    leg = _leg(0, "A", 2.00, [2.20], "2025-01-02 14:45")
+    del leg["bar_close"]
+    with pytest.raises(AccountingDataError, match="collect_marks"):
+        marks_from_legs([leg])
+
+
+def test_marks_from_blotter_keys_and_skips_unknown_trades():
+    rows = _rows()
+    tid = stable_trade_id(rows).tolist()
+    blotter = {
+        1: [_leg(1, "A", 2.00, [2.20], "2025-01-02 14:45")],
+        2: [_leg(2, "B", 2.00, [1.80], "2025-01-03 14:45")],
+        7: [_leg(7, "C", 2.00, [9.90], "2025-01-05 14:45")],   # dropped row
+    }
+    marks = marks_from_blotter(blotter, {1: tid[0], 2: tid[1]})
+    assert set(marks["trade_id"]) == {tid[0], tid[1]}
+    assert len(marks) == 2
+
+
+def test_emitted_marks_flow_into_the_ledger():
+    """End to end: blotter → mark stream → execution_frames → ledger."""
+    rows = _rows()
+    tid = stable_trade_id(rows).tolist()
+    blotter = {
+        1: [_leg(1, "A", 2.00, [2.20, 2.40], "2025-01-02 14:45")],
+        2: [_leg(2, "B", 2.00, [1.90, 1.80], "2025-01-03 14:45")],
+    }
+    marks = marks_from_blotter(blotter, {1: tid[0], 2: tid[1]})
+    rows = rows.copy()
+    # point the rows at the emitted marks' own fill window
+    rows["fill_entry_ts"] = [pd.Timestamp("2025-01-02 14:45"),
+                             pd.Timestamp("2025-01-03 14:45")]
+    rows["fill_exit_ts"] = [pd.Timestamp("2025-01-02 15:00"),
+                            pd.Timestamp("2025-01-03 15:00")]
+    rows["gross_return"] = [0.20, -0.10]
+    trades, filtered = execution_frames(rows, marks)
+    assert len(trades) == 2 and len(filtered) == 4
+    assert option_b_blockers(rows.columns, mark_stream_exists=True) == []
+
+
+# ── sharded assembly (the full stream does not fit in memory) ────────────────
+
+def _shards(tmp_path, rows):
+    """One mark shard per symbol, as build_rows writes them."""
+    tid = stable_trade_id(rows).tolist()
+    paths = []
+    for i, sym in enumerate(rows["symbol"]):
+        p = tmp_path / f"{sym}.parquet"
+        pd.DataFrame({
+            "trade_id": [tid[i], tid[i]],
+            "mark_ts": pd.to_datetime([f"2025-01-0{2 + i} 14:45",
+                                       f"2025-01-0{3 + i} 14:30"]),
+            "gross_return": [0.0, 0.20 if i == 0 else -0.10],
+        }).to_parquet(p, index=False)
+        paths.append(p)
+    return paths, tid
+
+
+def test_trade_id_is_categorical_after_validation():
+    """The dictionary key is what keeps an 88M-row stream off the ~9 GB path."""
+    marks = validate_mark_stream(_marks_for(_rows()))
+    assert isinstance(marks["trade_id"].dtype, pd.CategoricalDtype)
+    # categories are pinned lexically, so the sort matches plain strings
+    assert marks["trade_id"].astype(str).is_monotonic_increasing
+    # …including when the categories arrive in first-appearance order, as they
+    # do from a parquet dictionary — otherwise the sort is assembly-dependent
+    shuffled = _marks_for(_rows()).iloc[::-1].copy()
+    shuffled["trade_id"] = pd.Categorical(
+        shuffled["trade_id"], categories=shuffled["trade_id"].unique())
+    assert validate_mark_stream(shuffled)["trade_id"].astype(str) \
+        .is_monotonic_increasing
+
+
+def test_write_shards_matches_a_single_frame_write(tmp_path):
+    rows = _rows()
+    paths, _ = _shards(tmp_path, rows)
+    dest, n_rows, n_trades = write_mark_stream_shards(
+        paths, mark_stream_path(tmp_path / "meta_dataset.parquet"))
+    assert (n_rows, n_trades) == (4, 2)
+    streamed = load_mark_stream(dest)
+    one_shot = validate_mark_stream(
+        pd.concat([pd.read_parquet(p) for p in paths], ignore_index=True))
+    pd.testing.assert_frame_equal(streamed, one_shot)
+
+
+def test_write_shards_drops_purged_trades(tmp_path):
+    rows = _rows()
+    paths, tid = _shards(tmp_path, rows)
+    dest, n_rows, n_trades = write_mark_stream_shards(
+        paths, mark_stream_path(tmp_path / "meta_dataset.parquet"),
+        keep_ids=[tid[0]])                       # second symbol purged by split
+    assert (n_rows, n_trades) == (2, 1)
+    assert set(load_mark_stream(dest)["trade_id"]) == {tid[0]}
+
+
+def test_write_shards_writes_an_empty_stream_when_nothing_survives(tmp_path):
+    rows = _rows()
+    paths, _ = _shards(tmp_path, rows)
+    dest, n_rows, n_trades = write_mark_stream_shards(
+        paths, mark_stream_path(tmp_path / "meta_dataset.parquet"),
+        keep_ids=["no-such-trade"])
+    assert (n_rows, n_trades) == (0, 0)
+    assert dest.exists() and load_mark_stream(dest).empty
+
+
+def test_write_shards_leaves_no_partial_sidecar_on_failure(tmp_path):
+    rows = _rows()
+    paths, _ = _shards(tmp_path, rows)
+    bad = tmp_path / "ZZZ.parquet"
+    pd.DataFrame({"trade_id": ["z"], "mark_ts": [pd.Timestamp("2025-01-02")],
+                  "gross_return": [float("inf")]}).to_parquet(bad, index=False)
+    dest = mark_stream_path(tmp_path / "meta_dataset.parquet")
+    with pytest.raises(AccountingDataError, match="finite"):
+        write_mark_stream_shards(paths + [bad], dest)
+    assert not dest.exists()                     # tmp is never promoted

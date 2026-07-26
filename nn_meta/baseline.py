@@ -198,15 +198,21 @@ def top_k_contribution(returns: list[float], k: int = 3,
 
 def execute_at_dte(symbol: str, trades: list[tuple], bars: pd.DataFrame,
                    dte: int, provider, end_date: str,
-                   ex: Optional[Execution] = None) -> tuple[list[dict], dict]:
-    """Run the shared executor for a trade timeline at one DTE."""
+                   ex: Optional[Execution] = None,
+                   collect_marks: bool = False) -> tuple[list[dict], dict]:
+    """Run the shared executor for a trade timeline at one DTE.
+
+    ``collect_marks`` surfaces the per-leg intratrade bars in ``meta["blotter"]``
+    for mark-stream emission (see :mod:`nn_meta.mark_stream`); off by default.
+    """
     if ex is None:
         ex = Execution(symbol, config.INTERVAL, end_date, provider, config.EXEC_CONFIG)
     und_close = bars["Close"]
     und_idx = pd.DatetimeIndex([to_naive_utc(t) for t in bars.index])
     return execute_trade_returns(
         ex, trades, und_close, und_idx, dte,
-        fees=config.FEES_PERCENT, slippage=config.SLIPPAGE_PERCENT)
+        fees=config.FEES_PERCENT, slippage=config.SLIPPAGE_PERCENT,
+        collect_marks=collect_marks)
 
 
 def choose_dte(per_dte: dict[int, dict]) -> Optional[int]:

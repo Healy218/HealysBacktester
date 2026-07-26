@@ -105,11 +105,19 @@ class Execution:
 
 
 def execute_variant(ex: Execution, stock_trades, und_close, und_index_utc,
-                    target_dte: int, progress=None, daily: bool = False):
+                    target_dte: int, progress=None, daily: bool = False,
+                    collect_marks: bool = False):
     """Execute the trade timeline at one target DTE.
 
     Returns (stitched OHLCV, entry timestamps, exit timestamps, blotter,
     n_rolls, capped) or None when nothing could be executed.
+
+    ``collect_marks`` additionally attaches each leg's intratrade bar closes
+    (``bar_ts`` / ``bar_close``) to its blotter entry.  These are the same bars
+    the leg's return is computed from, so a mark stream built from them is
+    consistent with the label by construction — no second pass over the raw
+    contract bars, and no way for the two to disagree.  Off by default: the
+    live scorer executes one trade at a time and has no use for the arrays.
     """
     slices: list[pd.DataFrame] = []
     entry_ts_list: list[pd.Timestamp] = []
@@ -171,14 +179,18 @@ def execute_variant(ex: Execution, stock_trades, und_close, und_index_utc,
             entry_ts_list.append(chunk.index[0])
             exit_ts_list.append(chunk.index[-1])
             last_stitched = chunk.index[-1]
-            blotter.append({
+            leg = {
                 "trade_idx": t_i, "contract": contract.symbol, "right": right,
                 "strike": contract.strike,
                 "expiration": contract.expiration.isoformat(),
                 "entry": str(chunk.index[0]), "exit": str(chunk.index[-1]),
                 "entry_open": float(chunk["Open"].iloc[0]),
                 "exit_close": float(chunk["Close"].iloc[-1]),
-            })
+            }
+            if collect_marks:
+                leg["bar_ts"] = chunk.index.to_numpy()
+                leg["bar_close"] = chunk["Close"].to_numpy(dtype=float)
+            blotter.append(leg)
 
             # contract ran out before the stock trade exited -> roll
             if chunk.index[-1] < exit_target and hops < ex.max_rolls:
@@ -200,7 +212,8 @@ def execute_variant(ex: Execution, stock_trades, und_close, und_index_utc,
 def execute_trade_returns(ex: Execution, stock_trades, und_close, und_index_utc,
                           target_dte: int, *, fees: float = 0.001,
                           slippage: float = 0.0005, daily: bool = False,
-                          progress=None) -> tuple[list[dict], dict]:
+                          progress=None, collect_marks: bool = False
+                          ) -> tuple[list[dict], dict]:
     """Per-trade net option returns for a proposed trade timeline at one DTE.
 
     Labels for meta-training: each proposed stock trade is executed through
@@ -223,7 +236,8 @@ def execute_trade_returns(ex: Execution, stock_trades, und_close, und_index_utc,
     """
     c = fees + slippage
     result = execute_variant(ex, stock_trades, und_close, und_index_utc,
-                             target_dte, progress=progress, daily=daily)
+                             target_dte, progress=progress, daily=daily,
+                             collect_marks=collect_marks)
     fills_by_trade: dict[int, list[dict]] = {}
     capped = False
     n_rolls = 0
@@ -275,4 +289,9 @@ def execute_trade_returns(ex: Execution, stock_trades, und_close, und_index_utc,
         "capped": capped,
         "fill_fail_rate": 1.0 - n_exec / len(stock_trades) if stock_trades else 0.0,
     }
+    if collect_marks:
+        # Per-trade legs in fill order — the caller (which knows symbol/strategy)
+        # turns these into a keyed mark stream.  Kept out of the record dicts so
+        # the dataset rows stay flat and parquet-writable.
+        meta["blotter"] = fills_by_trade
     return records, meta

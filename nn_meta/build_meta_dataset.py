@@ -42,6 +42,7 @@ from nn_meta import config
 from nn_meta.baseline import (load_underlying_15m, load_spec, propose_trades,
                               execute_at_dte)
 from nn_meta.feature_contract import v4_feature_names
+from nn_meta import mark_stream
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -177,7 +178,15 @@ def _feature_windows(strategy: str, params: dict) -> tuple[int, int]:
 
 def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                       window_start: str = config.WINDOW_START,
-                      window_end: str = config.WINDOW_END) -> pd.DataFrame:
+                      window_end: str = config.WINDOW_END,
+                      marks_sink: list | None = None) -> pd.DataFrame:
+    """Build one symbol's raw rows.
+
+    Passing ``marks_sink`` (a list) additionally collects per-contract 15m mark
+    frames into it — the Option B mark-to-market input.  It is a sink rather
+    than a second return value so the three existing callers keep working
+    unchanged.
+    """
     bars = load_underlying_15m(symbol)
     if bars.empty:
         logger.warning(f"[{_TAG}] {symbol}: no bars")
@@ -207,7 +216,23 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
         rows = []
         for dte in config.DTE_GRID:
             records, meta = execute_at_dte(symbol, trades, bars, dte, provider,
-                                           window_end, ex=ex)
+                                           window_end, ex=ex,
+                                           collect_marks=marks_sink is not None)
+            if marks_sink is not None and meta.get("blotter"):
+                # Key the marks exactly as the rows below will be keyed, so the
+                # sidecar joins back to the dataset without a trade_id column.
+                keyed = pd.DataFrame({
+                    "symbol": symbol, "strategy": strat,
+                    "trade_idx": [r["trade_idx"] for r in records],
+                    "dte": dte,
+                    "entry_ts": [to_naive_utc(r["entry_ts"]) for r in records],
+                })
+                tids = mark_stream.stable_trade_id(keyed)
+                m = mark_stream.marks_from_blotter(
+                    meta["blotter"],
+                    dict(zip(keyed["trade_idx"].astype(int), tids)))
+                if not m.empty:
+                    marks_sink.append(m)
             logger.info(f"[{_TAG}] {symbol}/{strat} {dte}DTE: "
                         f"{meta['n_executed']}/{meta['n_signals']} executed, "
                         f"{meta['n_rolls']} rolls")
@@ -232,9 +257,8 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                     "contract": r["contract"], "strike": strike,
                     "expiration": r["expiration"],
                     "entry_premium": prem, "fill_lag_s": r["fill_lag_s"],
-                    # Execution provenance retained for V4 accounting.  The
-                    # current dataset has no intratrade marks, so it cannot
-                    # itself claim mark-to-market accounting.
+                    # Execution provenance retained for V4 accounting; the
+                    # matching intratrade marks come from --marks.
                     "fill_entry_ts": r.get("fill_entry_ts"),
                     "fill_exit_ts": r.get("fill_exit_ts"),
                     "gross_return": r.get("gross_return"),
@@ -316,15 +340,19 @@ def assign_split(entry_date: pd.Series) -> pd.Series:
 
 
 ROWS_DIR = config.ARTIFACTS / "meta_rows"     # per-symbol checkpoint dir
+MARKS_DIR = config.ARTIFACTS / "meta_marks"   # per-symbol mark-stream shards
 
 
-def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR) -> None:
+def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
+               marks: bool = False, marks_dir=MARKS_DIR) -> None:
     """Build each symbol's raw rows into rows_dir/<sym>.parquet, skipping any
     already present. Resumable AND shardable: parallel workers on disjoint
     symbol subsets write to the same dir without collision (surface join,
     labels and split are applied later in assemble()). Empty results write a
     0-row marker so a re-run doesn't rebuild a genuinely empty symbol."""
     rows_dir.mkdir(parents=True, exist_ok=True)
+    if marks:
+        marks_dir.mkdir(parents=True, exist_ok=True)
     for sym in symbols:
         if sym not in spec["symbols"]:
             print(f"[{sym}] not in baseline spec — skipped")
@@ -334,7 +362,19 @@ def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR) -> None:
             print(f"[{sym}] cached — skip")
             continue
         print(f"[{sym}] building…", flush=True)
-        df = build_symbol_rows(sym, spec["symbols"][sym], provider)
+        sink = [] if marks else None
+        df = build_symbol_rows(sym, spec["symbols"][sym], provider,
+                               marks_sink=sink)
+        if marks:
+            # validate per symbol so a malformed shard surfaces here, not hours
+            # later at assemble; also restores the categorical key after concat
+            mdf = mark_stream.validate_mark_stream(
+                pd.concat(sink, ignore_index=True)) if sink else \
+                pd.DataFrame({c: [] for c in mark_stream.MARK_STREAM_COLUMNS})
+            mpq = marks_dir / f"{sym}.parquet"
+            mtmp = mpq.with_suffix(".tmp")
+            mdf.to_parquet(mtmp, index=False)
+            mtmp.replace(mpq)                       # marks land before the rows
         tmp = pq.with_suffix(".tmp")               # atomic: no truncated checkpoints
         df.to_parquet(tmp, index=False)             # 0-row df writes a marker
         tmp.replace(pq)
@@ -346,8 +386,12 @@ def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR) -> None:
                   f"executed {df['executed'].mean():.0%}", flush=True)
 
 
-def assemble(rows_dir=ROWS_DIR) -> None:
-    """Concat all per-symbol rows → surface join → labels → split → write."""
+def assemble(rows_dir=ROWS_DIR, marks_dir=MARKS_DIR) -> None:
+    """Concat all per-symbol rows → surface join → labels → split → write.
+
+    When per-symbol mark shards exist they are concatenated into the sidecar
+    beside the dataset, filtered to the rows that survived the split purge.
+    """
     parts = sorted(rows_dir.glob("*.parquet"))
     if not parts:
         raise SystemExit(f"no per-symbol rows in {rows_dir} — build first")
@@ -378,6 +422,15 @@ def assemble(rows_dir=ROWS_DIR) -> None:
 
     ds.to_parquet(config.META_DATASET_PARQUET, index=False)
 
+    mark_parts = sorted(marks_dir.glob("*.parquet")) if marks_dir.exists() else []
+    if mark_parts:
+        # streamed shard-by-shard on purpose — the full stream is ~88M rows and
+        # does not fit in memory as one frame (see write_mark_stream_shards)
+        dest, n_marks, n_traded = mark_stream.write_mark_stream_shards(
+            mark_parts, mark_stream.mark_stream_path(config.META_DATASET_PARQUET),
+            keep_ids=mark_stream.stable_trade_id(ds))
+        print(f"marks:   {n_marks} rows over {n_traded} trades → {dest}")
+
     print(f"\ndataset: {len(ds)} rows → {config.META_DATASET_PARQUET}")
     lab = ds["label"].dropna()
     lab_x = ds["label_excess"].dropna()
@@ -405,6 +458,8 @@ def main() -> None:
                     help="comma-separated subset (for sharded parallel builds)")
     ap.add_argument("--assemble", action="store_true",
                     help="concat the per-symbol rows into the final dataset")
+    ap.add_argument("--marks", action="store_true",
+                    help="also emit the per-contract 15m mark stream (Option B)")
     args = ap.parse_args()
     config.ensure_dirs()
     if args.assemble:
@@ -413,7 +468,7 @@ def main() -> None:
     spec = load_spec()
     symbols = [s.strip().upper() for s in args.symbols.split(",")] \
         if args.symbols else list(spec["symbols"])
-    build_rows(symbols, spec, get_provider())
+    build_rows(symbols, spec, get_provider(), marks=args.marks)
     print(f"\nbuilt per-symbol rows for {len(symbols)} symbols → {ROWS_DIR}\n"
           f"run `--assemble` to concat into the dataset")
 

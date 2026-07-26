@@ -1,13 +1,16 @@
 """Per-contract 15-minute mark stream: schema, IO, and the bridge into the
 v4 mark-to-market ledger.
 
-The v31 label builder does not yet persist intratrade option marks, so this
-module defines the canonical sidecar format and a deterministic key so a mark
-stream produced later can be attached to meta-dataset rows without a shared
-``trade_id`` column.  Until a real stream exists it is exercised with synthetic
-fixtures; the ledger in :mod:`nn_meta.v4_accounting` fails closed when marks are
-absent or incomplete, so a report is only marked-to-market when a stream is
-actually supplied.
+This module defines the canonical sidecar format and a deterministic key, so a
+mark stream attaches to meta-dataset rows without a shared ``trade_id`` column.
+:func:`marks_from_blotter` builds one from an executor run
+(``build_meta_dataset --marks``); the ledger in :mod:`nn_meta.v4_accounting`
+still fails closed when marks are absent or incomplete, so a report is only
+marked-to-market when a stream is actually supplied.
+
+Note the committed v31 ``meta_dataset.parquet`` predates both this and the
+execution-provenance columns, so Option B stays blocked until the dataset is
+rebuilt — that is a compute job now, not a code gap.
 """
 from __future__ import annotations
 
@@ -15,10 +18,18 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+import pyarrow as pa
+import pyarrow.parquet as pq
 
 from nn_meta.v4_accounting import AccountingDataError
 
 MARK_STREAM_COLUMNS = ("trade_id", "mark_ts", "gross_return")
+# On-disk schema.  ``trade_id`` is a plain string so any reader works; parquet
+# dictionary-encodes it per row group, and our own loader reads it back
+# dictionary-encoded (see load_mark_stream) to keep a full stream in memory.
+_ARROW_SCHEMA = pa.schema([("trade_id", pa.string()),
+                           ("mark_ts", pa.timestamp("ns")),
+                           ("gross_return", pa.float64())])
 # Identity columns that make a meta-dataset row unique.  A mark stream keyed by
 # the hash of these can be joined to dataset rows regardless of row order.
 KEY_COLUMNS = ("symbol", "strategy", "trade_idx", "dte", "entry_ts")
@@ -33,10 +44,10 @@ def option_b_blockers(dataset_columns, *, mark_stream_exists: bool) -> list[str]
 
     Empty list == ready. Both halves must hold: the dataset rows must carry the
     execution-provenance columns AND a per-contract mark stream must exist.
-    Neither is present on the committed v31 dataset — producing them requires
-    re-running the label builder over the raw 15-minute option bars, not a code
-    change here, and the ledger deliberately refuses to synthesize marks from
-    the final ``net_return``.
+    Neither is present on the committed v31 dataset, which predates both; both
+    are produced by ``build_meta_dataset --marks``, so clearing this is a
+    dataset rebuild.  The ledger still refuses to synthesize marks from the
+    final ``net_return``.
     """
     cols = set(dataset_columns)
     blockers = []
@@ -50,6 +61,74 @@ def option_b_blockers(dataset_columns, *, mark_stream_exists: bool) -> list[str]
             "no per-contract 15m mark stream — emit one from the label builder "
             "(raw option bars) and pass it via --marks")
     return blockers
+
+
+def marks_from_legs(legs: list[dict]) -> pd.DataFrame:
+    """Per-bar gross return for one trade, chained across its roll legs.
+
+    ``legs`` are one trade's blotter entries in fill order, each carrying the
+    ``bar_ts``/``bar_close`` arrays that :func:`options.execution.execute_variant`
+    attaches under ``collect_marks``.  A rolled trade holds one contract at a
+    time, so the position's growth at a bar in leg *k* is every completed leg's
+    growth times the open leg's mark against its own entry::
+
+        gross_return(t) = Π_{j<k} (exit_close_j / entry_open_j)
+                          · (close_t / entry_open_k) − 1
+
+    Marks are struck at bar CLOSE while entry is at bar OPEN, so the first mark
+    is not 0 — it already carries the entry bar's move.  Costs are deliberately
+    excluded: this is the gross series, and the ledger applies its own haircut.
+
+    Returns columns (mark_ts, gross_return); the caller attaches ``trade_id``.
+    """
+    ts_parts, ret_parts = [], []
+    completed_growth = 1.0
+    for leg in legs:
+        if "bar_close" not in leg or "bar_ts" not in leg:
+            raise AccountingDataError(
+                "blotter leg has no bars — execute with collect_marks=True")
+        entry_open = float(leg["entry_open"])
+        if not np.isfinite(entry_open) or entry_open <= 0:
+            raise AccountingDataError(
+                f"leg {leg.get('contract')} has non-positive entry_open {entry_open}")
+        closes = np.asarray(leg["bar_close"], dtype=float)
+        ts_parts.append(pd.to_datetime(pd.Series(leg["bar_ts"])).to_numpy())
+        ret_parts.append(completed_growth * (closes / entry_open) - 1.0)
+        completed_growth *= float(leg["exit_close"]) / entry_open
+    if not ts_parts:
+        return pd.DataFrame({"mark_ts": pd.to_datetime([]), "gross_return": []})
+    out = pd.DataFrame({
+        "mark_ts": np.concatenate(ts_parts),
+        "gross_return": np.concatenate(ret_parts),
+    })
+    # Roll boundaries can repeat a timestamp (old leg's last bar, new leg's
+    # first); the open leg's mark is the live one, so the later wins.
+    out = out.drop_duplicates("mark_ts", keep="last")
+    return out.sort_values("mark_ts").reset_index(drop=True)
+
+
+def marks_from_blotter(blotter: dict[int, list[dict]],
+                       trade_ids: dict[int, str]) -> pd.DataFrame:
+    """Assemble a full mark stream from one executor run.
+
+    ``blotter`` is ``meta["blotter"]`` (trade_idx → legs); ``trade_ids`` maps
+    trade_idx → the :func:`stable_trade_id` of the dataset row it produced.
+    Trades absent from ``trade_ids`` are skipped — an unlabeled or dropped row
+    has no ledger entry to reconcile against.
+    """
+    frames = []
+    for trade_idx, legs in blotter.items():
+        tid = trade_ids.get(int(trade_idx))
+        if tid is None:
+            continue
+        m = marks_from_legs(legs)
+        if m.empty:
+            continue
+        m.insert(0, "trade_id", tid)
+        frames.append(m)
+    if not frames:
+        return pd.DataFrame({c: [] for c in MARK_STREAM_COLUMNS})
+    return validate_mark_stream(pd.concat(frames, ignore_index=True))
 
 
 def mark_stream_path(dataset_path: str | Path) -> Path:
@@ -77,11 +156,25 @@ def stable_trade_id(rows: pd.DataFrame) -> pd.Series:
 
 
 def validate_mark_stream(marks: pd.DataFrame) -> pd.DataFrame:
-    """Normalize a mark stream and fail closed on a malformed one."""
+    """Normalize a mark stream and fail closed on a malformed one.
+
+    ``trade_id`` is held as a categorical: the stream has ~180 marks per trade,
+    so at v31 scale (~88M rows over ~490k trades) the string ids alone are ~7.5
+    GB as objects versus ~0.4 GB as dictionary codes.  Its categories are pinned
+    in lexical order, because a categorical sorts by category order and parquet
+    hands dictionaries back in first-appearance order — without this the sort
+    below would depend on how the stream happened to be assembled.
+    """
     missing = set(MARK_STREAM_COLUMNS) - set(marks.columns)
     if missing:
         raise AccountingDataError(f"mark stream missing columns: {sorted(missing)}")
     out = marks.loc[:, list(MARK_STREAM_COLUMNS)].copy()
+    tid = out["trade_id"]
+    if not isinstance(tid.dtype, pd.CategoricalDtype):
+        tid = tid.astype("category")
+    if not tid.cat.categories.is_monotonic_increasing:
+        tid = tid.cat.reorder_categories(sorted(tid.cat.categories))
+    out["trade_id"] = tid
     out["mark_ts"] = pd.to_datetime(out["mark_ts"])
     out["gross_return"] = out["gross_return"].astype(float)
     if not np.isfinite(out["gross_return"].to_numpy()).all():
@@ -92,17 +185,74 @@ def validate_mark_stream(marks: pd.DataFrame) -> pd.DataFrame:
 
 
 def load_mark_stream(path: str | Path) -> pd.DataFrame:
-    """Read and validate a persisted mark stream."""
-    return validate_mark_stream(pd.read_parquet(path))
+    """Read and validate a persisted mark stream.
+
+    ``trade_id`` is read back dictionary-encoded rather than as loose strings,
+    which is what keeps a full-stream load off the ~9 GB path.
+    """
+    table = pq.read_table(path, read_dictionary=["trade_id"])
+    return validate_mark_stream(table.to_pandas())
 
 
 def write_mark_stream(marks: pd.DataFrame, path: str | Path) -> Path:
-    """Validate and persist a mark stream to ``path``."""
+    """Validate and persist an in-memory mark stream to ``path``.
+
+    For a full-universe stream use :func:`write_mark_stream_shards` instead —
+    this one holds the whole frame at once.
+    """
     out = validate_mark_stream(marks)
     dest = Path(path)
     dest.parent.mkdir(parents=True, exist_ok=True)
     out.to_parquet(dest, index=False)
     return dest
+
+
+def write_mark_stream_shards(shard_paths, path: str | Path, *,
+                             keep_ids=None) -> tuple[Path, int, int]:
+    """Concatenate per-symbol mark shards into one sidecar, a shard at a time.
+
+    The full v31 stream is ~88M rows; concatenating every shard into one frame
+    before writing peaks near 9 GB — more than the build box has, and it would
+    fail at the very end of a multi-hour build.  Each shard is instead
+    validated, filtered to ``keep_ids`` and appended as its own parquet row
+    group, so peak memory is one symbol (~90 MB) and each row group carries its
+    own string dictionary.
+
+    ``keep_ids`` (typically :func:`stable_trade_id` over the assembled dataset)
+    drops marks for rows the split purge removed.  Returns
+    ``(dest, n_rows, n_trades)``.
+    """
+    dest = Path(path)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    tmp = dest.with_suffix(".tmp")
+    keep = None if keep_ids is None else set(keep_ids)
+    writer = None
+    n_rows, seen = 0, set()
+    try:
+        for shard in shard_paths:
+            df = pd.read_parquet(shard)
+            if df.empty:
+                continue
+            df = validate_mark_stream(df)
+            if keep is not None:
+                df = df[df["trade_id"].isin(keep)]
+                if df.empty:
+                    continue
+            seen.update(df["trade_id"].unique().tolist())
+            if writer is None:
+                writer = pq.ParquetWriter(tmp, _ARROW_SCHEMA)
+            writer.write_table(
+                pa.Table.from_pandas(df, preserve_index=False).cast(_ARROW_SCHEMA))
+            n_rows += len(df)
+    finally:
+        if writer is not None:
+            writer.close()
+    if writer is None:                    # no shard survived — still write a stream
+        tmp.unlink(missing_ok=True)
+        return write_mark_stream(
+            pd.DataFrame({c: [] for c in MARK_STREAM_COLUMNS}), dest), 0, 0
+    tmp.replace(dest)                     # atomic: no half-written sidecar
+    return dest, n_rows, len(seen)
 
 
 def execution_frames(selected: pd.DataFrame, mark_stream: pd.DataFrame, *,
