@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Telegram notifier + server dead-man pusher for v3.1 train_meta.
 # Launch with setsid nohup after scripts/run_train_v31.sh is up.
-cd /home/mrhea/HealysBacktester
+cd "$(dirname "$(readlink -f "$0")")/.."
 TELEGRAM_BOT_TOKEN=$(grep -m1 "^TELEGRAM_BOT_TOKEN=" .env | cut -d= -f2- | tr -d "\"'")
 TELEGRAM_CHAT_ID=$(grep -m1 "^TELEGRAM_CHAT_ID=" .env | cut -d= -f2- | tr -d "\"'")
 SERVER=mrhea@62.238.20.66

@@ -5,7 +5,7 @@
 # The live scanner is on the CLOUD SERVER, not this box, so the only other
 # local load is the hourly StockTwits job — 4 workers (~4.4GB of 7.6) is safe.
 set -euo pipefail
-cd /home/mrhea/HealysBacktester
+cd "$(dirname "$(readlink -f "$0")")/.."
 
 # stop any single run + clean the two newest frames (possible partial writes)
 pkill -f 'v3.flatfiles' 2>/dev/null || true

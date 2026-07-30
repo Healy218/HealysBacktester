@@ -2,7 +2,7 @@
 # Parallel pre-warm of one walk-forward fold's checkpoints: freeze -> rows,
 # N symbol shards each, with the same until-retry loop as run_build_parallel.
 set -uo pipefail
-cd /home/mrhea/HealysBacktester
+cd "$(dirname "$(readlink -f "$0")")/.."
 export NN_META_POOL=v31
 FOLD=${1:?usage: run_wf_prewarm.sh FOLD [SHARDS]}
 N=${2:-3}

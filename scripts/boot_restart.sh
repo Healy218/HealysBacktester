@@ -13,19 +13,30 @@
 # inconclusive.
 #
 # DONE SEMANTICS (2026-07-22): a job is "done" only when its per-run exit
-# marker (scripts/.jobstate/<JOB_ID>.exit) contains 0. The marker is emptied
-# at (re)launch and written by the launch script on completion, so:
-#   - empty marker  -> launched but never completed (crash) -> relaunch
-#   - "0"           -> finished cleanly                     -> skip
-#   - non-zero      -> finished with an ERROR               -> relaunch (retry)
+# marker (scripts/.jobstate/<JOB_ID>.exit) contains 0. The marker is created
+# (empty) by the launch script at start and filled with the exit code on
+# completion, so:
+#   - NO marker file -> never started on this machine -> SKIP (see below)
+#   - empty marker   -> started but never completed (crash) -> relaunch
+#   - "0"            -> finished cleanly                    -> skip
+#   - non-zero       -> finished with an ERROR              -> relaunch (retry)
 # This replaces `grep -q "X-EXIT:" some.log`, which (a) matched failure markers
 # too and (b) matched a STALE marker from a previous run forever, permanently
 # blocking the restart of any re-run. A descriptor may still set JOB_DONE_CHECK
 # to override with its own legacy check.
 #
+# NEVER-STARTED GUARD (2026-07-27, Pop!_OS): an ABSENT marker is not the same
+# as an empty one. This dispatcher RESTARTS work that was interrupted; it must
+# never START work nobody asked for. That distinction had no teeth while the
+# state lived on one long-lived Windows box, and the migration proved why it
+# matters: run logs and scripts/.jobstate/ are both gitignored, so on the
+# restored box every registered job looked "not done" and a single dispatcher
+# run fired all three multi-hour jobs at once. A job becomes eligible for
+# auto-restart only once something has actually launched it here.
+#
 # To register a new job, drop a descriptor in scripts/jobs.d/*.sh — see
 # scripts/jobs.d/README.md. This dispatcher never needs to change to add a job.
-cd /home/mrhea/HealysBacktester || exit 1
+cd "$(dirname "$(readlink -f "$0")")/.." || exit 1
 export NN_META_POOL=v31
 
 STATE_DIR="scripts/.jobstate"
@@ -66,6 +77,11 @@ for job in scripts/jobs.d/*.sh; do
     pgrep -f "$JOB_PROC_PATTERN" >/dev/null 2>&1 && { echo "RUNNING|$JOB_NAME|"; exit 0; }
 
     marker="$STATE_DIR/${JOB_ID:-$(basename "$job" .sh)}.exit"
+    # Nothing has ever launched this job on this machine — restarting it would
+    # be starting it, which is not this dispatcher's job. Checked ahead of
+    # JOB_DONE_CHECK so legacy log-grep descriptors get the guard too: a
+    # missing (gitignored) run log otherwise reads as "not done" on a fresh box.
+    [ -e "$marker" ] || { echo "SKIP|$JOB_NAME|never started on this machine (no $marker)"; exit 0; }
     if [ -n "$JOB_DONE_CHECK" ]; then
       eval "$JOB_DONE_CHECK" >/dev/null 2>&1 && { echo "DONE|$JOB_NAME|legacy done-check"; exit 0; }
     else

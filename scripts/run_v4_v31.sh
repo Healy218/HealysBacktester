@@ -5,8 +5,13 @@
 # box resilient (v4_evaluate.py has no mid-run checkpointing yet) — a crash
 # means restart from scratch. WiFi-card fix gave 48h+ clean uptime as of
 # 2026-07-21 evening, so treat as low risk, not zero risk.
-cd /home/mrhea/HealysBacktester || exit 1
+cd "$(dirname "$(readlink -f "$0")")/.." || exit 1
 export NN_META_POOL=v31
+
+# See run_v4_finalize.sh: create the marker empty at start so an interrupted
+# run is auto-restartable, and so a job nobody launched here stays untouched.
+MARKER="${JOB_EXIT_MARKER:-scripts/.jobstate/v4_full_run.exit}"
+mkdir -p "$(dirname "$MARKER")" && : > "$MARKER"
 
 echo "=== v4 ablation start: $(date) ==="
 ./venv/bin/python -m nn_meta.v4_evaluate --ablation \
@@ -27,7 +32,7 @@ else
 fi
 echo "V4-EXIT:$RUN_EXIT"
 # Per-run exit marker for scripts/boot_restart.sh (0 => done, else => retry).
-echo "$RUN_EXIT" > "${JOB_EXIT_MARKER:-scripts/.jobstate/v4_full_run.exit}" 2>/dev/null || true
+echo "$RUN_EXIT" > "$MARKER" 2>/dev/null || true
 
 TOKEN=$(grep -m1 "^TELEGRAM_BOT_TOKEN=" .env | cut -d= -f2- | tr -d "\"'")
 CHAT=$(grep -m1 "^TELEGRAM_CHAT_ID=" .env | cut -d= -f2- | tr -d "\"'")

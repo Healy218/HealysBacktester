@@ -6,7 +6,7 @@
 # OOM-churned the 7.7GB WSL cap on 2026-07-16). Sizing: 2 shards under the
 # default ~7.7GB WSL cap; 3 under the 12GB .wslconfig cap set 2026-07-17.
 set -uo pipefail
-cd /home/mrhea/HealysBacktester
+cd "$(dirname "$(readlink -f "$0")")/.."
 export NN_META_POOL=v31
 
 pkill -f 'nn_meta.build_meta_dataset' 2>/dev/null || true

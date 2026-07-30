@@ -3,7 +3,7 @@
 # checkpointed per-symbol and wrapped in a resume-loop — an OOM or reboot just
 # resumes from the shard's spec instead of losing progress. Merge at the end.
 set -uo pipefail
-cd /home/mrhea/HealysBacktester
+cd "$(dirname "$(readlink -f "$0")")/.."
 export NN_META_POOL=v31
 
 pkill -f 'nn_meta.freeze_baseline' 2>/dev/null || true

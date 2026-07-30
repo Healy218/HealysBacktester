@@ -2,7 +2,7 @@
 # Prebuild flat-file 15m day-frames for the 120-symbol big-run universe over
 # the ~2y read-entitlement window. Long-running; launch detached.
 set -euo pipefail
-cd /home/mrhea/HealysBacktester
+cd "$(dirname "$(readlink -f "$0")")/.."
 
 U=$(./venv/bin/python -c "import json;print(','.join(json.load(open('v3/artifacts/universe_120.json'))))")
 echo "universe: $(echo "$U" | tr ',' '\n' | wc -l) symbols"

@@ -5,8 +5,15 @@
 # (v4_finalize.py wipes model_final_v4/ at the start of the persist step,
 # same known limitation as v4_evaluate.py) — a crash means restart from
 # scratch, which scripts/jobs.d/v4_finalize.sh will do automatically.
-cd /home/mrhea/HealysBacktester || exit 1
+cd "$(dirname "$(readlink -f "$0")")/.." || exit 1
 export NN_META_POOL=v31
+
+# Register with scripts/boot_restart.sh BEFORE doing any work: an empty marker
+# means "started here, never finished", which is what makes a crash mid-run
+# eligible for auto-restart. Absent means nobody ever started it (the
+# dispatcher then leaves it alone), so a hand-launched run must create it too.
+MARKER="${JOB_EXIT_MARKER:-scripts/.jobstate/v4_finalize.exit}"
+mkdir -p "$(dirname "$MARKER")" && : > "$MARKER"
 
 echo "=== v4 finalize start: $(date) ==="
 FINAL_SEEDS="0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39"
@@ -17,8 +24,7 @@ EXIT=$?
 echo "=== v4 finalize done: $(date), exit=$EXIT ==="
 echo "V4-FINALIZE-EXIT:$EXIT"
 # Per-run exit marker for scripts/boot_restart.sh (0 => done, else => retry).
-# JOB_EXIT_MARKER is exported by the dispatcher; default the path for manual runs.
-echo "$EXIT" > "${JOB_EXIT_MARKER:-scripts/.jobstate/v4_finalize.exit}" 2>/dev/null || true
+echo "$EXIT" > "$MARKER" 2>/dev/null || true
 
 TOKEN=$(grep -m1 "^TELEGRAM_BOT_TOKEN=" .env | cut -d= -f2- | tr -d "\"'")
 CHAT=$(grep -m1 "^TELEGRAM_CHAT_ID=" .env | cut -d= -f2- | tr -d "\"'")

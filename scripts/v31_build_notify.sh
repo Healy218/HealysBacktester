@@ -5,7 +5,7 @@
 # Hetzner server every 5 min; ~/bin/deadman_check.sh there (cron */5) texts
 # if pushes go stale >15 min — that covers host death, which this local
 # loop cannot report. Disarms on COMPLETE/STOPPED so only host death alerts.
-cd /home/mrhea/HealysBacktester
+cd "$(dirname "$(readlink -f "$0")")/.."
 TELEGRAM_BOT_TOKEN=$(grep -m1 "^TELEGRAM_BOT_TOKEN=" .env | cut -d= -f2- | tr -d "\"'")
 TELEGRAM_CHAT_ID=$(grep -m1 "^TELEGRAM_CHAT_ID=" .env | cut -d= -f2- | tr -d "\"'")
 SERVER=mrhea@62.238.20.66
