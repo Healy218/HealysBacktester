@@ -202,10 +202,19 @@ def validate_marks(marks: pd.DataFrame, trades: pd.DataFrame) -> pd.DataFrame:
     if ((joined["mark_ts"] < joined["fill_entry_ts"]) |
             (joined["mark_ts"] > joined["fill_exit_ts"])).any():
         raise AccountingDataError("mark lies outside its executed position")
-    for trade in trades.itertuples():
-        ts = out.loc[out["trade_id"] == trade.trade_id, "mark_ts"]
-        if trade.fill_entry_ts not in set(ts) or trade.fill_exit_ts not in set(ts):
-            raise AccountingDataError(f"trade {trade.trade_id} lacks an entry or exit mark")
+    # Every mark is now known to lie within its fill window, so "the fill
+    # timestamps are present" is exactly "the extremes match" — one grouped pass
+    # instead of a scan of the whole stream per trade.  observed=True matters:
+    # trade_id arrives as a categorical carrying the full universe's ids.
+    span = out.groupby("trade_id", observed=True)["mark_ts"] \
+              .agg(["min", "max"]).reindex(bounds.index)
+    complete = ((span["min"] == bounds["fill_entry_ts"]) &
+                (span["max"] == bounds["fill_exit_ts"]))   # NaT (no marks) -> False
+    if not complete.all():
+        bad = complete.index[~complete]
+        more = f" (+{len(bad) - 1} more)" if len(bad) > 1 else ""
+        raise AccountingDataError(
+            f"trade {bad[0]} lacks an entry or exit mark{more}")
     return out.sort_values(["mark_ts", "trade_id"]).reset_index(drop=True)
 
 

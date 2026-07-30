@@ -59,6 +59,36 @@ def test_missing_exit_mark_fails_closed():
         )
 
 
+def test_missing_entry_mark_fails_closed():
+    with pytest.raises(AccountingDataError, match="trade b lacks an entry"):
+        mark_to_market_portfolio(
+            _trades(), _marks().query("trade_id != 'b' or mark_ts > '2025-01-03 20:00'"),
+            max_concurrent=2, position_fraction=0.5,
+        )
+
+
+def test_trade_with_no_marks_at_all_fails_closed():
+    """The grouped completeness check must not silently skip an absent trade."""
+    with pytest.raises(AccountingDataError, match="trade b lacks an entry or exit mark"):
+        mark_to_market_portfolio(
+            _trades(), _marks().query("trade_id == 'a'"),
+            max_concurrent=2, position_fraction=0.5,
+        )
+
+
+def test_completeness_check_ignores_unobserved_categories():
+    """trade_id arrives categorical from the sidecar, carrying ids for trades
+    this window never selected — they must not be read as missing marks."""
+    marks = _marks()
+    marks["trade_id"] = pd.Categorical(
+        marks["trade_id"], categories=["a", "b", "unselected-1", "unselected-2"])
+    metrics, _ = mark_to_market_portfolio(
+        _trades(), marks, max_concurrent=2, position_fraction=0.5,
+        costs=CostScenario(name="zero", fee=0, slippage=0),
+    )
+    assert metrics["total_return"] == pytest.approx(0.045)
+
+
 def test_same_symbol_overlap_is_rejected():
     trades = _trades()
     trades.loc[1, "symbol"] = "SPY"

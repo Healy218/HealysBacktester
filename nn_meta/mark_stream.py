@@ -284,4 +284,7 @@ def execution_frames(selected: pd.DataFrame, mark_stream: pd.DataFrame, *,
     })
     marks = validate_mark_stream(mark_stream)
     marks = marks[marks["trade_id"].isin(set(tid))].reset_index(drop=True)
+    # Drop the unselected ids from the dictionary too — otherwise every grouped
+    # operation downstream still carries the whole universe's categories.
+    marks["trade_id"] = marks["trade_id"].cat.remove_unused_categories()
     return trades, marks
