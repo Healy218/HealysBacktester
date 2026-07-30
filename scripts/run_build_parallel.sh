@@ -3,8 +3,14 @@
 # shared meta_rows/ dir (resumable, disjoint symbols = no collision), then one
 # assemble step. Each worker holds ~2.1-2.7GB RSS once the 2M-contract
 # universe is loaded (the earlier ~1.2GB profile missed that phase; 4 shards
-# OOM-churned the 7.7GB WSL cap on 2026-07-16). Sizing: 2 shards under the
-# default ~7.7GB WSL cap; 3 under the 12GB .wslconfig cap set 2026-07-17.
+# OOM-churned the 7.7GB WSL cap on 2026-07-16).
+#
+# Sizing used to be a hardcoded 3, which was the most that fit the retired
+# WSL2 box's 12GB .wslconfig cap. Native Pop!_OS has ~15.5GB and 12 threads,
+# so that constant now leaves a shard's worth of headroom unused. Auto-size
+# from what is ACTUALLY free instead of a new constant: a closed desktop earns
+# an extra shard, and this needs no retuning if the 3.6GHz turbo cap (see the
+# crash investigation) comes off. Pass N explicitly to override.
 set -uo pipefail
 cd "$(dirname "$(readlink -f "$0")")/.."
 export NN_META_POOL=v31
@@ -12,7 +18,10 @@ export NN_META_POOL=v31
 pkill -f 'nn_meta.build_meta_dataset' 2>/dev/null || true
 sleep 2
 
-N=${1:-3}
+# 2800MB/shard = the documented 2.1-2.7GB worst-observed RSS, rounded up.
+. "$(dirname "$(readlink -f "$0")")/lib/autosize.sh"
+N=${1:-$(autosize_workers 2800)}
+autosize_report "build" "$N"
 ./venv/bin/python - "$N" <<'PY'
 import json, sys
 n = int(sys.argv[1])

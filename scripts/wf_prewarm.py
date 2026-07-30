@@ -8,8 +8,10 @@ by symbol and never share a state file; the merge-* commands combine shard
 states into the canonical filenames the wf reads.
 
 Deliberately does NOT import nn_meta.walkforward_meta: that would pull
-tensorflow into every worker (~+0.5-1GB RSS x 3 workers under the 12GB WSL
-cap). fold_boundaries is mirrored below instead -- keep in sync.
+tensorflow into every worker (~+0.5-1GB RSS each). That mattered under the
+retired 12GB WSL cap and still does -- the shard count is now auto-sized from
+free memory (scripts/lib/autosize.sh), so a fatter worker directly costs
+shards. fold_boundaries is mirrored below instead -- keep in sync.
 
 Order per fold:  freeze shards -> merge-freeze -> rows shards -> merge-rows.
 Requires NN_META_POOL exported before launch (the launcher does it).

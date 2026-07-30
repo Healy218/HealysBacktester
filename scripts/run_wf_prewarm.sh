@@ -5,7 +5,11 @@ set -uo pipefail
 cd "$(dirname "$(readlink -f "$0")")/.."
 export NN_META_POOL=v31
 FOLD=${1:?usage: run_wf_prewarm.sh FOLD [SHARDS]}
-N=${2:-3}
+# Same per-shard budget as run_build_parallel.sh — the rows stage is the same
+# work over a fold subset. run_wf_v31.sh normally passes N down explicitly.
+. "$(dirname "$(readlink -f "$0")")/lib/autosize.sh"
+N=${2:-$(autosize_workers 2800)}
+autosize_report "prewarm fold $FOLD" "$N"
 
 run_stage(){
   local stage=$1

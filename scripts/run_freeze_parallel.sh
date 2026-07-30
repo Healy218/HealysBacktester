@@ -1,7 +1,13 @@
 #!/usr/bin/env bash
-# Parallel v3.1 freeze: 2 symbol shards (memory caps the home box at 2), each
-# checkpointed per-symbol and wrapped in a resume-loop — an OOM or reboot just
-# resumes from the shard's spec instead of losing progress. Merge at the end.
+# Parallel v3.1 freeze: N symbol shards, each checkpointed per-symbol and
+# wrapped in a resume-loop — an OOM or reboot just resumes from the shard's
+# spec instead of losing progress. Merge at the end.
+#
+# The old hardcoded 2 was empirical ("memory caps the home box at 2") under
+# the retired 12GB WSL cap; freeze RSS was never actually profiled. Reserving
+# ~2GB, that implies roughly 5GB per freeze worker, which is what the budget
+# below encodes. It is an INFERENCE from the old constant, not a measurement —
+# if you ever profile freeze for real, correct the number here.
 set -uo pipefail
 cd "$(dirname "$(readlink -f "$0")")/.."
 export NN_META_POOL=v31
@@ -10,7 +16,9 @@ pkill -f 'nn_meta.freeze_baseline' 2>/dev/null || true
 sleep 2
 mkdir -p nn_meta/artifacts_v31
 
-N=${1:-2}
+. "$(dirname "$(readlink -f "$0")")/lib/autosize.sh"
+N=${1:-$(autosize_workers 5000)}
+autosize_report "freeze" "$N"
 ./venv/bin/python - "$N" <<'PY'
 import json, sys
 n = int(sys.argv[1])

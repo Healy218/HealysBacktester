@@ -5,7 +5,11 @@
 set -uo pipefail
 cd "$(dirname "$(readlink -f "$0")")/.."
 export NN_META_POOL=v31
-N=${1:-3}
+# Sized once here and passed down to every prewarm fold, so all three folds
+# use the same shard count even if free memory drifts mid-run.
+. "$(dirname "$(readlink -f "$0")")/lib/autosize.sh"
+N=${1:-$(autosize_workers 2800)}
+autosize_report "walk-forward" "$N"
 
 # See run_v4_finalize.sh: create the marker empty at start so an interrupted
 # run is auto-restartable, and so a job nobody launched here stays untouched.
