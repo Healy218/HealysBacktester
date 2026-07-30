@@ -1,3 +1,16 @@
+# nn_meta — machine handoff (HISTORICAL, v2.2)
+
+> **Superseded 2026-07-24 — do not follow these steps.** This is the record of
+> a one-time v2.2 handoff from the MacBook to the Windows/RTX-3060-Ti box. Both
+> the version and the machine are gone: that box was wiped for Pop!_OS, so
+> there is no WSL2 and `wsl --install` does not apply. TensorFlow installs
+> natively on Linux now and the CPU-only caveat below is a Windows artifact.
+> Kept because it documents what the v2.2 walk-forward actually needed to run.
+> For current setup see `CLAUDE.md`; for the box itself see the `popos-box`
+> memory.
+
+## Original document follows
+
 # nn_meta — machine handoff (run the walk-forward on the Windows box)
 
 Move the v2.2 walk-forward from the MacBook (M4) to the Windows/RTX-3060-Ti

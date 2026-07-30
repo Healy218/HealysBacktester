@@ -1,9 +1,17 @@
 #!/usr/bin/env bash
 # Generic reboot-recovery dispatcher for long-running background jobs.
-# Runs at Windows logon via the "HealysBacktester WF AutoRestart" scheduled
-# task (register it with scripts/register_boot_restart.ps1) — with auto-logon
-# enabled, that means right after ANY reboot, including BSODs. Idempotent:
-# safe to run any time, including manually (`bash scripts/boot_restart.sh`).
+# Idempotent: safe to run any time, including manually
+# (`bash scripts/boot_restart.sh`).
+#
+# NOT CURRENTLY WIRED TO ANYTHING (2026-07-30). On the retired Windows box this
+# ran at logon via the "HealysBacktester WF AutoRestart" scheduled task plus
+# auto-logon, so it fired after any reboot including a BSOD. The Pop!_OS
+# migration ported the hourly StockTwits job to a systemd timer but never
+# replaced this trigger — /etc/systemd/system/ has only the healys-stocktwits
+# units. Until a unit exists, nothing restarts an interrupted long job after a
+# crash, and this box still crashes. See the never-started guard below: an
+# arming unit is safe to add, because a job nobody has launched here stays
+# SKIPped rather than being started by the dispatcher.
 #
 # OBSERVABILITY (2026-07-22): every run appends to logs/boot_restart.log and,
 # unless BOOT_RESTART_HEARTBEAT=0, sends ONE Telegram summary per boot. So a

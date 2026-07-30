@@ -62,3 +62,8 @@ nn_meta/model_final_v31/
 nn_meta/model_final_v4/
 # reboot dispatcher per-run exit markers (machine-local runtime state)
 scripts/.jobstate/
+# Run logs. The launchers and notify watchers write these to the REPO ROOT
+# (v31_train.log, v31_wf.log, v31_build_<k>.log, v4_v31.log, v31_notify.log,
+# wf_prewarm_f<N>_<stage>_s<k>.log, ...), which `logs/` above never matched.
+# Anchored to the root so nothing nested is caught by accident.
+/*.log

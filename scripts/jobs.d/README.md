@@ -1,10 +1,11 @@
 # Reboot-recovery job descriptors
 
-`scripts/boot_restart.sh` runs at every Windows logon (auto-logon is on, so
-that means every reboot including BSODs) via the "HealysBacktester WF
-AutoRestart" scheduled task. Register/re-register that task with
-`scripts/register_boot_restart.ps1` (committed so the registration is
-reproducible, not folklore). It globs every `scripts/jobs.d/*.sh` file,
+`scripts/boot_restart.sh` runs at boot via
+`deploy/systemd/healys-boot-restart.service` (committed so the arming is
+reproducible, not folklore — install steps in `deploy/systemd/README.md`).
+This replaced the Windows "HealysBacktester WF AutoRestart" scheduled task and
+its `register_boot_restart.ps1`, both retired with the WSL2 box on 2026-07-24.
+It globs every `scripts/jobs.d/*.sh` file,
 sources each in an isolated subshell, and for each job: if it's already
 running, do nothing; if it finished cleanly, do nothing; otherwise relaunch.
 

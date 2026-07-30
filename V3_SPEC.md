@@ -98,7 +98,8 @@ empirically before anything else is built:
 
 - **Dataset build (the real cost): CPU, not accelerators.** Many-core spot VM
   (32–64 cores); per-symbol parallelism scales linearly. The v2 box
-  (i5-11400 / WSL2) stays useful for pilots and reruns.
+  (i5-11400F, 6C/12T, 16GB, Pop!_OS) stays useful for pilots and reruns —
+  shard counts are auto-sized from free memory by `scripts/lib/autosize.sh`.
 - **Training**: GBT and the small MLP train in minutes on CPU. A single rented
   consumer GPU (RunPod/Lambda/vast, ~$0.30–0.80/hr) only if Stage 7 goes
   sequence-model. **No TPUs** — a tabular MLP leaves them >99% idle; they earn

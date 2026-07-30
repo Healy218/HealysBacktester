@@ -1,0 +1,31 @@
+[Unit]
+# Replaces the Windows Scheduled Task "HealysBacktester WF AutoRestart", which
+# ran scripts/boot_restart.sh at logon (with auto-logon on, that meant after
+# any reboot including a BSOD). Retired with the WSL2 box on 2026-07-24 and
+# left unreplaced until 2026-07-30 — so for that week nothing restarted an
+# interrupted long job after a crash, on a box that crashes.
+#
+# Safe to enable with jobs mid-flight: the dispatcher restarts work that was
+# interrupted, never starts work nobody launched. A job with no marker in
+# scripts/.jobstate/ (gitignored machine-local state) is SKIPped, so a fresh
+# checkout is correctly left alone rather than firing every registered job.
+Description=HealysBacktester reboot-recovery dispatcher
+# Jobs fetch from Massive/Alpaca and send Telegram notices as they relaunch.
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=healylabs
+Group=healylabs
+WorkingDirectory=/home/healylabs/Coding/HealysBacktester
+ExecStart=/home/healylabs/Coding/HealysBacktester/scripts/boot_restart.sh
+# The dispatcher backgrounds whatever it relaunches and returns promptly; it
+# must not be reaped as failed for exiting, nor take its children with it.
+RemainAfterExit=yes
+KillMode=process
+StandardOutput=append:/home/healylabs/Coding/HealysBacktester/logs/boot_restart.log
+StandardError=append:/home/healylabs/Coding/HealysBacktester/logs/boot_restart.log
+
+[Install]
+WantedBy=multi-user.target

@@ -223,11 +223,16 @@ that depend on them.
    and written by the launch script on completion, replace the log-grep — a
    stale marker no longer blocks a re-run; (c) done == marker `0` only, so a
    failed run (non-zero) is retried, and a crash (empty marker) is retried;
-   (d) `scripts/register_boot_restart.ps1` commits the exact `schtasks`
-   registration. `run_v4_{finalize,v31}.sh` write the marker; the v4
-   descriptors carry `JOB_ID`; v31_walkforward's legacy grep tightened to
-   `WF-EXIT:0`. Sandbox-verified across all five marker states; the logon
-   trigger still needs one real logged reboot at the box.
+   (d) the trigger is committed rather than folklore — originally
+   `scripts/register_boot_restart.ps1` (`schtasks`), now
+   `deploy/systemd/healys-boot-restart.service` after the 2026-07-24 Pop!_OS
+   migration. `run_v4_{finalize,v31}.sh` write the marker; the v4 descriptors
+   carry `JOB_ID`; v31_walkforward moved off the legacy log-grep to the marker
+   entirely (2026-07-27). Sandbox-verified across all five marker states; the
+   boot trigger still needs one real logged reboot at the box.
+   **Superseded (2026-07-27):** markers are now created *empty at launch*, and
+   an ABSENT marker means "never started here" → SKIP, so a fresh checkout
+   with gitignored state no longer looks like three unfinished jobs.
 6. [x] **Calibration: isotonic overfit small validation tails.** (Done
    2026-07-22.) `nn_meta/calibration.py` gains `select_calibrator()`, which
    picks among none / Platt / isotonic by out-of-fold validation Brier

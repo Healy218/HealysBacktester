@@ -6,7 +6,7 @@ These replace the Windows Scheduled Tasks that ran on the pre-2026-07-24 WSL2 bo
 |---|---|---|
 | HealysBacktester StockTwits (hourly) | `healys-stocktwits.timer` | here |
 | HealysBacktester Live Scan | — | intentionally absent; the Hetzner server owns live scanning, and re-enabling here would double the Telegram alerts |
-| HealysBacktester WF AutoRestart (logon) | `scripts/boot_restart.sh` | not yet wired; needs a `systemd` unit when a long unattended run is next launched |
+| HealysBacktester WF AutoRestart (logon) | `healys-boot-restart.service` | here (added 2026-07-30); **not installed yet** — see below |
 | HealysBacktester VSCode AutoOpen (logon) | — | obsolete (was the Windows auto-logon remote-control chain) |
 
 ## Install
@@ -24,6 +24,22 @@ systemctl list-timers healys-stocktwits.timer
 sudo systemctl start healys-stocktwits.service   # run once now
 tail -f logs/stocktwits.log
 ```
+
+### Reboot recovery (`healys-boot-restart.service`)
+
+```sh
+sudo cp deploy/systemd/healys-boot-restart.service /etc/systemd/system/
+sudo systemctl daemon-reload
+sudo systemctl enable healys-boot-restart.service
+sudo systemctl start healys-boot-restart.service   # verify without rebooting
+tail logs/boot_restart.log
+```
+
+Enabled but not started, this does nothing until the next boot — which is the
+point. Starting it by hand is the safe way to confirm it dispatches correctly,
+because with an empty `scripts/.jobstate/` every job reports
+`SKIP|<name>|never started on this machine`. That is the expected output on a
+box where nothing has been launched yet, **not** a failure.
 
 These are **system** units (not `--user`) on purpose: the old setup needed
 Windows auto-logon to fire its tasks, and a system timer removes that
