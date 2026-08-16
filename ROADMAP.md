@@ -55,28 +55,49 @@ rollback stays trivial. Task list: **`TODO.md`**.
 ledger, offline/online feature-parity test green (closes v4's last
 first-implementation gate item), v3 running exactly as before.
 
-## ⏭ NEXT — the expert panel (multi-model scanner)
+## ⏭ NEXT — Expert panel, wave 2 (user priorities set 2026-08-16)
 
-The current single-model scanner emits roughly one alert a week — that
-cadence is not enough. The goal is several models live at once, each an
-independent "expert" / scanner selector that can trigger:
+The panel's first three seats went live 2026-08-16 (v3 real; [v4], [v31]
+paper). Wave 2, in dependency order — each seat deploys ALONGSIDE, tracked
+by its own ledger, promoted only by forward results:
 
-- **Registry of experts**: each expert = (model bundle, candidate schema,
-  policy/threshold, alert label). Scanner builds the shared candidate batch;
-  every expert scores it; any expert clearing its own gate fires a labeled
-  alert.
-- **Per-expert paper ledger + scoreboard** (`nn_meta/live/state.py` has the
-  ledger; scoreboard is `docs/EXPERIMENTS.md`): promotion and demotion decided
-  by tracked forward results, not vibes.
-- **Alert cadence is a per-expert dial**, not a fixed fact: threshold triggers
-  vs rank-mode top-N daily watchlist are policy choices selected like any
-  other hyperparameter.
-- Candidate experts, roughly in order: v3 (live), v4 causal GBT (this
-  weekend), EV-sized variant, vol-regime-informed (track 1), FA-discovery
-  expert, stacked blend (track 4), RL-sized (track 3).
+1. **EV-sized v4 seat** — cheapest, highest leverage: train the
+   magnitude/EV head (`ev_sizing.py` is code-ready) on the marks dataset,
+   EV policy joins the nested grid, must beat uniform slots through the
+   ledger → deploys as `[v4ev]`. Attacks the wins-often-wins-small
+   inversion directly.
+2. **SPX/NDX daily-options trader** (user priority #5, ranked ahead of
+   vol-regime): a NEW pool (`spx0`) through the same v4 causal contract —
+   SPX + NDX daily-expiry options, calls and puts, ~2y MINUTE data,
+   multiple trades/day, signal-driven entries AND exits, **25% max-DD
+   gate**, no upside cap. **Stage-0 data audit gates everything**: ① probe
+   the flat files for SPXW/NDXP minute aggs + entitlement window; ② decide
+   the underlying feed (index-data entitlement vs SPY/QQQ-proxy signals
+   with ratio-mapped strikes). Cost modeling matters most here (index fees
+   + spreads on small premiums) — stage-2 accounting is non-negotiable.
+3. **Vol-regime track (track 1)** — the first big GCP Batch job after the
+   pilot passes: v3/data (5.4 GB, 2017→) → 9y intraday realized-vol →
+   HAR-RV/GARCH full OOS → one small sequence model that beats them per
+   regime or is dropped. Product: `available_at`-stamped vol features for
+   every expert; a seat only if the features prove out.
+4. **FA-discovery seat** — composite ranker → FIRST frozen monthly Top-10 →
+   forward tracker → `[fa]` digest + the WSB daily trending digest.
+   Exit metric unchanged: ≥3 frozen monthlies tracking.
+5. **Dual-mode cadence, panel-wide** (user decision): every expert gains a
+   daily **top-N watchlist digest** (best-scored candidates regardless of
+   threshold — flow to browse) alongside the existing threshold-gated
+   conviction pings; the scoreboard tracks watchlist hit-rates so the dial
+   becomes data-driven.
 
-**Exit:** ≥3 experts live simultaneously with tracked ledgers and a scoreboard
-that decides who stays.
+Standing pieces of the panel design (unchanged): expert registry (bundle +
+schema + policy + label), per-expert paper ledgers, scoreboard-driven
+promotion/demotion (`docs/EXPERIMENTS.md`). Stacked blend stays queued
+behind wave 2's outputs; RL sizing stays last. Compute venue: heavy runs on
+GCP Batch contingent on the pilot's byte-identity verdict; crawls and keys
+never leave home.
+
+**Exit:** the wave-2 seats live with tracked ledgers; the SPX/NDX stage-0
+audit written; watchlists flowing daily.
 
 ## ⏭ Model tracks — the pipeline that feeds the panel
 
