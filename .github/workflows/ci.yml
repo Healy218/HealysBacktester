@@ -2,8 +2,13 @@ name: tests
 
 on:
   push:
-    branches: [main, "codex/**"]
+    branches: [main]
   pull_request:
+
+# Superseded runs cancel: rapid consecutive pushes cost one run, not N.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   test:
@@ -12,7 +17,10 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        os: [ubuntu-latest, macos-latest]
+        # macOS dropped 2026-08-16: it bills 10x on private repos and the
+        # entire toolchain is Linux now (home box, server, GCP images) — a
+        # weekend of pushes burned 2 months of Actions quota, mostly here.
+        os: [ubuntu-latest]
     steps:
       - uses: actions/checkout@v4
 
