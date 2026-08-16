@@ -247,10 +247,18 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
                 alert_state.mark(key)                # don't rescore this bar
                 continue
             title, msg = format_v4_alert(row, fresh, bundle, paper)
+            # Crash-consistency order (2026-08-16 review): enqueue -> ledger
+            # -> mark. A crash at any boundary re-detects next pass (not yet
+            # marked); the outbox key dedupes the notification and the ledger
+            # dedupes the position (duplicate trade_id is a no-op), so no
+            # ordering loses an alert or a paper position.
             outbox.enqueue({"title": title, "message": msg}, key=key)
+            try:
+                ledger.open(trade_id=f"{key}|{int(row.dte)}", symbol=row.symbol,
+                            entry_ts=row.entry_ts, price=fresh["spot"])
+            except ValueError:
+                pass                        # replayed after a crash — already open
             alert_state.mark(key)
-            ledger.open(trade_id=f"{key}|{int(row.dte)}", symbol=row.symbol,
-                        entry_ts=row.entry_ts, price=fresh["spot"])
             alerted += 1
 
     delivered = 0
