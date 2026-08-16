@@ -51,7 +51,9 @@ class NNScorer:
         self.ens = json.loads(ens_path.read_text())
         self.threshold = float(self.ens["threshold"])
         self.spec = spec or load_spec()
-        self.provider = provider or get_provider()
+        # live=True: identical for v2/v3 (hybrid either way); required under
+        # v31, whose default provider is the history-only flat-files reader.
+        self.provider = provider or get_provider(live=True)
         self.surface = surface if surface is not None else load_surface_features()
 
     def _feature_row(self, sig: Signal, bars: pd.DataFrame) -> Optional[pd.DataFrame]:

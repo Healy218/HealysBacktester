@@ -30,7 +30,12 @@ logger = setup_logging(log_file="logs/backtester.log")
 
 _BAR = timedelta(minutes=15)
 _LOOKBACK_DAYS = 60                       # enough warmup for the slowest windows
-_STATE_PATH = config.ROOT / "live" / ".alert_state.json"
+# v2/v3 keep the original path byte-for-byte (the deployed server mutates it
+# live). Big-run pools (v31+) get their own file: two experts sharing one
+# dedupe dict keyed by symbol would silently suppress each other's alerts.
+_STATE_PATH = config.ROOT / "live" / (
+    ".alert_state.json" if config.POOL in ("v2", "v3")
+    else f".alert_state_{config.POOL}.json")
 
 # scorer(signal, bars) -> P(win) in [0,1], or None to keep (baseline mode)
 Scorer = Callable[["Signal", pd.DataFrame], Optional[float]]
@@ -117,12 +122,17 @@ def suggest_contract(sig: Signal, now: Optional[datetime] = None) -> str:
 
 
 def format_alert(sig: Signal) -> tuple[str, str]:
-    title = f"{sig.symbol} {sig.action}"
+    # v2/v3 alert text is unchanged; big-run pools (v31+) run as ADDITIONAL
+    # experts next to the v3 line, so their alerts carry the pool label.
+    tag = "" if config.POOL in ("v2", "v3") else f"[{config.POOL}] "
+    title = f"{tag}{sig.symbol} {sig.action}"
     conv = f" · conviction {sig.score:.0%}" if sig.score is not None else ""
-    msg = (f"{sig.symbol}: {sig.action}{conv}\n"
+    msg = (f"{tag}{sig.symbol}: {sig.action}{conv}\n"
            f"trigger: {sig.strategy} ({sig.param_label})\n"
            f"contract: {suggest_contract(sig)}\n"
            f"bar: {sig.bar_ts} UTC · spot ${sig.spot:,.2f}")
+    if tag:
+        msg += f"\nexpert: {config.POOL}-nn · paper"
     return title, msg
 
 

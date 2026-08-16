@@ -27,7 +27,7 @@ def _sig():
 def _scorer(monkeypatch):
     # avoid loading the real surface parquet / provider in unit tests
     monkeypatch.setattr(sc, "load_surface_features", lambda: pd.DataFrame())
-    monkeypatch.setattr(sc, "get_provider", lambda: object())
+    monkeypatch.setattr(sc, "get_provider", lambda **kw: object())
     return sc.NNScorer()
 
 

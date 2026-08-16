@@ -78,17 +78,25 @@ def _aggs_daily(ticker: str, start: str, end: str, key: str) -> list[dict]:
 
 # ── step 1: contracts ─────────────────────────────────────────────────────────
 
-def download_contracts(key: str) -> pd.DataFrame:
+def _atomic_parquet(df: pd.DataFrame, path) -> None:
+    """tmp + rename so a reader (the live scanner) never sees a torn file."""
+    tmp = path.with_suffix(".tmp")
+    df.to_parquet(tmp, index=False)
+    tmp.replace(path)
+
+
+def download_contracts(key: str, expiry_max: str | None = None) -> pd.DataFrame:
+    expiry_max = expiry_max or config.EXPIRY_MAX
     rows: list[dict] = []
     t0 = time.time()
     for sym in config.UNDERLYINGS:
         n0 = len(rows)
-        rows += crawl(True, key, config.EXPIRY_MIN, config.EXPIRY_MAX, sym)
-        rows += crawl(False, key, config.EXPIRY_MIN, config.EXPIRY_MAX, sym)
+        rows += crawl(True, key, config.EXPIRY_MIN, expiry_max, sym)
+        rows += crawl(False, key, config.EXPIRY_MIN, expiry_max, sym)
         print(f"  {sym}: {len(rows) - n0} contracts", flush=True)
     df = pd.DataFrame(rows).drop_duplicates("ticker").reset_index(drop=True)
     df["expiration"] = pd.to_datetime(df["expiration"])
-    df.to_parquet(config.CONTRACTS_PARQUET, index=False)
+    _atomic_parquet(df, config.CONTRACTS_PARQUET)
     print(f"contracts: {len(df)} unique across {df['underlying'].nunique()} names "
           f"| {time.time() - t0:.0f}s → {config.CONTRACTS_PARQUET}")
     return df
@@ -96,11 +104,12 @@ def download_contracts(key: str) -> pd.DataFrame:
 
 # ── step 2: underlying daily bars (Alpaca) ────────────────────────────────────
 
-def download_underlying_daily() -> pd.DataFrame:
+def download_underlying_daily(end: str | None = None) -> pd.DataFrame:
+    end = end or config.WINDOW_END
     frames = []
     for sym in config.UNDERLYINGS:
         raw = vbt_data_loader.load_price_data_smart(
-            sym, config.HISTORY_START, config.WINDOW_END, "1D")
+            sym, config.HISTORY_START, end, "1D")
         if raw is None or raw.empty:
             print(f"  WARNING: no daily bars for {sym}", flush=True)
             continue
@@ -115,7 +124,7 @@ def download_underlying_daily() -> pd.DataFrame:
     und = pd.concat(frames, ignore_index=True)
     und = und[["underlying", "date", "open", "high", "low", "close",
                "volume", "vwap", "transactions"]]
-    und.to_parquet(config.UNDERLYING_DAILY_PARQUET, index=False)
+    _atomic_parquet(und, config.UNDERLYING_DAILY_PARQUET)
     print(f"underlying daily: {len(und)} bars, "
           f"{und['underlying'].nunique()} names → {config.UNDERLYING_DAILY_PARQUET}")
     return und
@@ -123,9 +132,10 @@ def download_underlying_daily() -> pd.DataFrame:
 
 # ── step 3: universe filter (same criteria as nn_options_signal) ─────────────
 
-def _universe_for(contracts: pd.DataFrame, closes: pd.Series) -> pd.Series:
+def _universe_for(contracts: pd.DataFrame, closes: pd.Series,
+                  win_end: str | None = None) -> pd.Series:
     win_start = pd.Timestamp(config.WINDOW_START)
-    win_end = pd.Timestamp(config.WINDOW_END)
+    win_end = pd.Timestamp(win_end or config.WINDOW_END)
     lo_d = (contracts["expiration"] - pd.Timedelta(days=config.DTE_MAX)).clip(lower=win_start)
     hi_d = (contracts["expiration"] - pd.Timedelta(days=config.DTE_MIN)).clip(upper=win_end)
     valid = lo_d <= hi_d
@@ -144,20 +154,21 @@ def _universe_for(contracts: pd.DataFrame, closes: pd.Series) -> pd.Series:
                  & (contracts["strike"] <= span_hi * (1 + band))
 
 
-def build_universe(contracts: pd.DataFrame, und: pd.DataFrame) -> pd.DataFrame:
+def build_universe(contracts: pd.DataFrame, und: pd.DataFrame,
+                   win_end: str | None = None) -> pd.DataFrame:
     kept = []
     for sym, grp in contracts.groupby("underlying"):
         closes = und[und["underlying"] == sym].set_index("date")["close"].sort_index()
         if closes.empty:
             print(f"  {sym}: no underlying bars — skipped")
             continue
-        keep = _universe_for(grp, closes)
+        keep = _universe_for(grp, closes, win_end=win_end)
         kept.append(grp[keep.fillna(False)])
     uni = pd.concat(kept, ignore_index=True)
     uni["life_start"] = (uni["expiration"] - pd.Timedelta(days=config.DTE_MAX + 15)) \
         .dt.strftime("%Y-%m-%d")
     uni["life_end"] = uni["expiration"].dt.strftime("%Y-%m-%d")
-    uni.to_parquet(config.UNIVERSE_PARQUET, index=False)
+    _atomic_parquet(uni, config.UNIVERSE_PARQUET)
     per = uni.groupby("underlying").size().sort_values(ascending=False)
     print(f"universe: {len(uni)} / {len(contracts)} contracts in ±"
           f"{config.MONEYNESS_BAND:.0%} band")
@@ -229,15 +240,32 @@ def bulk_download(uni: pd.DataFrame, key: str) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--universe-only", action="store_true")
+    ap.add_argument("--live-horizon", type=int, default=None, metavar="DAYS",
+                    help="LIVE-SCANNER REFRESH: crawl listings and build the "
+                    "universe through today+DAYS instead of the frozen "
+                    "research window (WINDOW_END stays untouched for research "
+                    "reproducibility), and pull underlying daily bars through "
+                    "today. The deployed chain otherwise dies when the frozen "
+                    "window's horizon passes (it did: 2026-08-16). Weekly "
+                    "cron this with --universe-only on the server.")
     args = ap.parse_args()
     key = os.environ.get("MASSIVE_API_KEY", "")
     if not key:
         sys.exit("MASSIVE_API_KEY not set")
     config.ensure_dirs()
 
-    contracts = download_contracts(key)
-    und = download_underlying_daily()
-    uni = build_universe(contracts, und)
+    expiry_max = daily_end = win_end = None
+    if args.live_horizon is not None:
+        horizon = (pd.Timestamp.today().normalize()
+                   + pd.Timedelta(days=args.live_horizon)).strftime("%Y-%m-%d")
+        today = pd.Timestamp.today().normalize().strftime("%Y-%m-%d")
+        expiry_max, daily_end, win_end = horizon, today, horizon
+        print(f"live refresh: listings+universe through {horizon}, "
+              f"underlying daily through {today}")
+
+    contracts = download_contracts(key, expiry_max=expiry_max)
+    und = download_underlying_daily(end=daily_end)
+    uni = build_universe(contracts, und, win_end=win_end)
     if args.universe_only:
         return
     bulk_download(uni, key)
