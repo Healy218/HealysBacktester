@@ -420,7 +420,9 @@ def assemble(rows_dir=ROWS_DIR, marks_dir=MARKS_DIR) -> None:
     filled = ds[ds["executed"] & ds["fill_lag_s"].notna()]
     assert (filled["fill_lag_s"] >= 0).all(), "option fill precedes signal bar"
 
-    ds.to_parquet(config.META_DATASET_PARQUET, index=False)
+    tmp = config.META_DATASET_PARQUET.with_suffix(".tmp")   # atomic: this is a
+    ds.to_parquet(tmp, index=False)                         # committed artifact
+    tmp.replace(config.META_DATASET_PARQUET)
 
     mark_parts = sorted(marks_dir.glob("*.parquet")) if marks_dir.exists() else []
     if mark_parts:

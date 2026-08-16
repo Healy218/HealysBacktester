@@ -130,6 +130,26 @@ def download_underlying_daily(end: str | None = None) -> pd.DataFrame:
     return und
 
 
+def _guard_universe_shrink(new_uni: pd.DataFrame, *, floor: float = 0.5) -> None:
+    """Refuse to replace a healthy universe with a drastically smaller one.
+
+    The weekly refresh atomically overwrites the file the live scanners select
+    contracts from; a pathological crawl (partial listings, provider hiccup
+    that still exited 0) must not shrink the tradable chain silently. Exits
+    non-zero so the cron chain stops and the old universe stays in place."""
+    if not config.UNIVERSE_PARQUET.exists():
+        return
+    try:
+        old_n = len(pd.read_parquet(config.UNIVERSE_PARQUET, columns=["ticker"]))
+    except Exception:
+        return                                     # old file unreadable — replace
+    if old_n > 0 and len(new_uni) < old_n * floor:
+        raise SystemExit(
+            f"universe shrink guard: new universe has {len(new_uni)} contracts "
+            f"vs {old_n} existing (< {floor:.0%}) — refusing to replace. "
+            f"Inspect the crawl log; the previous universe remains in place.")
+
+
 # ── step 3: universe filter (same criteria as nn_options_signal) ─────────────
 
 def _universe_for(contracts: pd.DataFrame, closes: pd.Series,
@@ -168,6 +188,7 @@ def build_universe(contracts: pd.DataFrame, und: pd.DataFrame,
     uni["life_start"] = (uni["expiration"] - pd.Timedelta(days=config.DTE_MAX + 15)) \
         .dt.strftime("%Y-%m-%d")
     uni["life_end"] = uni["expiration"].dt.strftime("%Y-%m-%d")
+    _guard_universe_shrink(uni)
     _atomic_parquet(uni, config.UNIVERSE_PARQUET)
     per = uni.groupby("underlying").size().sort_values(ascending=False)
     print(f"universe: {len(uni)} / {len(contracts)} contracts in ±"

@@ -254,3 +254,15 @@ def test_alert_shows_tradable_ticker_for_renamed_symbol():
     fresh = {"direction": 0, "param_label": "rsi-frozen", "spot": 55.0}
     title, msg = format_v4_alert(row, fresh, _bundle(), paper=True)
     assert "XYZ (fka SQ)" in title and "XYZ (fka SQ)" in msg
+
+
+def test_atomic_bar_cache_write(tmp_path):
+    from data.vbt_data_loader import _cache_df
+    df = pd.DataFrame({"Close": [1.0, 2.0]},
+                      index=pd.date_range("2026-01-05", periods=2))
+    target = tmp_path / "SPY_15m_a_b.csv"
+    _cache_df(df, str(target))
+    assert target.exists()
+    assert not list(tmp_path.glob("*.tmp.*"))       # no temp litter
+    back = pd.read_csv(target, index_col=0, parse_dates=True)
+    assert len(back) == 2

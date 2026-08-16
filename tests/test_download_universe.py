@@ -75,3 +75,17 @@ def test_bootstrap_manifest_from_parts(tmp_path, monkeypatch):
     assert sorted(manifest.read_text().split()) == ["A", "B"]
     # idempotent: an existing manifest is never rebuilt/overwritten
     assert du.bootstrap_manifest_from_parts() == 0
+
+
+def test_universe_shrink_guard_refuses_drastic_shrink(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    import pytest as _pytest
+    old = tmp_path / "universe.parquet"
+    pd.DataFrame({"ticker": [f"T{i}" for i in range(100)]}).to_parquet(old, index=False)
+    monkeypatch.setattr(config, "UNIVERSE_PARQUET", old)
+    with _pytest.raises(SystemExit, match="shrink guard"):
+        du._guard_universe_shrink(pd.DataFrame({"ticker": ["A"] * 10}))
+    # 90% of old passes; missing old file passes
+    du._guard_universe_shrink(pd.DataFrame({"ticker": ["A"] * 90}))
+    monkeypatch.setattr(config, "UNIVERSE_PARQUET", tmp_path / "absent.parquet")
+    du._guard_universe_shrink(pd.DataFrame({"ticker": ["A"]}))

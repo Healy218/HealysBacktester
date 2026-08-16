@@ -205,9 +205,16 @@ def load_price_data_smart(
 
 
 def _cache_df(df: pd.DataFrame, filepath: str) -> None:
-    """Saves a DataFrame to CSV cache, logging any errors."""
+    """Saves a DataFrame to CSV cache atomically (tmp + rename), logging errors.
+
+    Atomicity matters since 2026-08-16: three scanner processes (v3 / v31 /
+    v4 experts) fire on the same cron minute and share cache paths for their
+    overlapping symbols — a plain to_csv could interleave and a torn-but-
+    parseable file would silently return short bar history."""
     try:
-        df.to_csv(filepath)
+        tmp = f"{filepath}.tmp.{os.getpid()}"
+        df.to_csv(tmp)
+        os.replace(tmp, filepath)
         logger.info(f"[vbt-smart] Cached: {filepath}")
     except Exception as e:
         logger.warning(f"[vbt-smart] Could not cache to {filepath}: {e}")

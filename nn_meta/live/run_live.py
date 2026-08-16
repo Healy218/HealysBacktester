@@ -28,7 +28,8 @@ except ImportError:
 from utils.logging_utils import setup_logging
 from data import vbt_data_loader
 from nn_meta.download_data import filter_rth
-from nn_meta.live.scanner import Scanner, is_rth, format_alert, _LOOKBACK_DAYS
+from nn_meta.live.scanner import (Scanner, aliased_bar_loader, is_rth,
+                                  format_alert, _LOOKBACK_DAYS)
 from nn_meta.live.notifier import get_notifier
 
 logger = setup_logging(log_file="logs/backtester.log")
@@ -77,7 +78,10 @@ def main() -> None:
         logger.warning("[live] NO NN filter — alerting every mechanical entry "
                        "(baseline mode); pass --nn to filter")
 
-    scanner = Scanner(_bar_loader, scorer=scorer, threshold=threshold)
+    # alias wrapper is inert for v2/v3 (no renamed tickers in their specs);
+    # under v31 it revives the SQ seat by fetching bars as XYZ.
+    scanner = Scanner(aliased_bar_loader(_bar_loader), scorer=scorer,
+                      threshold=threshold)
     notifier = get_notifier(force_console=args.dry_run)
 
     signals = scanner.scan_once(symbols=symbols, now=now)

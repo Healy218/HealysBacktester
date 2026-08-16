@@ -56,12 +56,19 @@ from options.execution import to_naive_utc
 from nn_meta import config
 from nn_meta.baseline import load_spec, propose_trades
 from nn_meta.build_meta_dataset import rolling_beta_60d
-from nn_meta.live.scanner import closed_bars, is_rth
+from nn_meta.live.scanner import (TICKER_ALIASES, aliased_bar_loader,
+                                  closed_bars, is_rth)
 from nn_meta.live.state import (AlertState, Outbox, PaperLedger,
                                 atomic_write_json, health_snapshot)
 from nn_meta.live.v4_candidates import build_candidate_batch
-from nn_meta.v4_loader import V4Bundle, load_final_v4, verify_bundle
-from nn_meta.v4_artifacts import ArtifactValidationError
+
+# NOTE: nn_meta.v4_loader (→ v4_evaluate → model → tensorflow) is imported
+# lazily inside load_trusted_bundle()/selftest() — the cron fires 96×/day and
+# most firings exit at the RTH gate before needing a model. Annotations refer
+# to V4Bundle as a string (PEP 563 via __future__ annotations).
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:                                     # pragma: no cover
+    from nn_meta.v4_loader import V4Bundle
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -71,19 +78,9 @@ OUTBOX = STATE_DIR / ".v4_outbox.json"
 LEDGER = STATE_DIR / ".v4_paper_ledger.json"
 HEALTH = STATE_DIR / ".v4_health.json"
 
-# Live ticker renames: spec/model symbols whose exchange listing has changed
-# since training. Bars are FETCHED under the new ticker (the old one returns
-# nothing) while every model-facing key — spec entry, features, one-hots,
-# state, ledger — stays on the trained symbol; alerts show both so the human
-# trades the right listing. Audited 2026-08-16: SQ (Block) → XYZ was the one
-# dark seat out of 118.
-TICKER_ALIASES = {"SQ": "XYZ"}
-
-
-def aliased_bar_loader(loader: Callable[[str], pd.DataFrame]
-                       ) -> Callable[[str], pd.DataFrame]:
-    """Wrap a bar loader so renamed tickers fetch under their new symbol."""
-    return lambda sym: loader(TICKER_ALIASES.get(sym, sym))
+# TICKER_ALIASES / aliased_bar_loader moved to nn_meta.live.scanner
+# (2026-08-16 review) so the legacy run_live path shares them; re-exported
+# here for callers/tests that import them from this module.
 
 
 # ── detection ─────────────────────────────────────────────────────────────────
@@ -275,9 +272,11 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
 # ── bundle trust policy ───────────────────────────────────────────────────────
 
 def load_trusted_bundle(bundle_dir: Optional[Path] = None, *,
-                        paper: bool = False) -> V4Bundle:
+                        paper: bool = False) -> "V4Bundle":
     """Default: hash-verified AND gate-eligible, else refuse. ``paper=True``
     accepts the pre-hashing Option A bundle (logged loudly)."""
+    from nn_meta.v4_loader import load_final_v4, verify_bundle   # lazy: TF chain
+    from nn_meta.v4_artifacts import ArtifactValidationError
     try:
         verify_bundle(bundle_dir)
         verified = True
