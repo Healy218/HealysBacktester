@@ -79,12 +79,15 @@ killing background Steam/Discord.
   provider via `get_provider(live=True)`), own dedupe file, `[v31]` alert
   labels, `model_final_v31/` committed, 40/40 selftest + dry-run green on
   the server. Three experts total: v3 (real), [v4] paper, [v31] paper.
-- Verify when convenient: surface backfill completion
-  (`logs/surface_refresh_*.log` on the server → `surface:` + NaN-rate lines,
-  surface max date ≈ last trading day), and Monday's first RTH cycle across
-  all three logs (`live_cron.log`, `v4_cron.log`, `v31_cron.log`) — watch
-  for Alpaca rate-limit errors from three simultaneous scanners; stagger
-  crons if they appear.
+- **Surface backfill verified complete for BOTH pools** (v3 and v31 surfaces
+  current through 2026-08-14, 100% recent IV coverage; the v31 build first
+  OOM-killed silently on the 8 GB box — fixed with the streaming loader,
+  review finding #6). Adversarial review report:
+  `docs/reviews/2026-08-16-adversarial-review.md`; GCP Batch assessment:
+  `docs/GCP_BATCH_FEASIBILITY.md`.
+- Monday's first RTH cycle: watch all three logs (`live_cron.log`,
+  `v4_cron.log`, `v31_cron.log`) for Alpaca 429s from three simultaneous
+  scanners; stagger crons if they appear.
 
 ## Next session: start here
 

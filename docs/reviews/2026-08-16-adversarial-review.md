@@ -21,6 +21,7 @@ light pass only. Layer-1's known defects (June 2026 review in
 | 3 | P1 | `v4_scan` imported the TF-heavy loader chain (`v4_loader → v4_evaluate → model → tensorflow`) at module level; the cron fires 96×/day and most firings exit at the RTH gate — pure wasted load on the CX33. | Lazy import inside `load_trusted_bundle()`/`selftest()`. |
 | 4 | P1 | The weekly universe refresh atomically **replaces** the file the live scanners select contracts from; a pathological-but-exit-0 crawl could shrink the tradable chain silently. | `_guard_universe_shrink`: refuse replacement below 50% of the existing universe, exit non-zero (+ test). |
 | 5 | P1 | `build_meta_dataset.assemble()` wrote `meta_dataset.parquet` (a committed artifact) non-atomically — a crash mid-write leaves a truncated tracked file. | Atomic tmp+replace. |
+| 6 | **P0** | Discovered *during* the review: the v31 surface rebuild was **silently OOM-killed on the 8 GB server** — `load_daily_bars` concatenated the whole raw bar cache (12M rows post-refresh) before filtering, the kill left no traceback, and the refresh chain's `; echo DONE` masked it. The v31 surface would have quietly stayed frozen at 07-07 while every weekly "refresh" reported success. | Per-part column-pruned streaming reads + meta/dte/premium filters (identical output rows, test-proven); re-ran on the server — v31 surface now current through 08-14, 100% IV coverage on the last week. |
 
 ## Open queue (ordered; none block Monday)
 
