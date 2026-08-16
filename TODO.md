@@ -79,6 +79,19 @@ paper mode.** (User approved same day.)
   nn_meta.live.v4_scan --once --paper >> logs/v4_cron.log`.
 - [x] Rollback documented in `DOCUMENTATION.md` (delete the one cron line).
 
+**Data-feed audit (2026-08-16, user-requested) — verified + findings:**
+Universe membership is correct by construction: v3 scans its 55 trained
+symbols (all healthy), v4 scans its 118 (117 healthy). Findings:
+- [x] **SQ → XYZ rename**: SQ returned zero bars (dark seat). Fixed with
+  `TICKER_ALIASES` in `v4_scan` — bars fetch under XYZ, model/state keys
+  stay "SQ", alerts show "XYZ (fka SQ)".
+- [ ] **Context caches are stale on the server**: v3 surface ends
+  2026-07-02, v31 surface + daily-underlying end 2026-07-07 — so IV/beta
+  features score as-of early July for BOTH experts (pre-existing for v3
+  since its deploy; the scorer's known "nightly refresh TODO"). Build the
+  nightly surface/underlying refresh (home box job + rsync, like the
+  StockTwits push) — panel-phase infra, affects every expert.
+
 **Remaining for this phase** (after the Option B chain in block 1):
 - [ ] Re-finalize → push new `model_final_v4/` → server `git pull` →
   selftest → drop `--paper` from the cron line (bundle then must verify +

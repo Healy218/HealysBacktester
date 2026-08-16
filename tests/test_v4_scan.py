@@ -228,3 +228,29 @@ def test_scan_error_is_counted_not_fatal(monkeypatch, tmp_path):
                         surface=_surface(), bar_loader=boom,
                         notifier=_Notifier(), state_dir=tmp_path, paper=True)
     assert summary["error_count"] == 1 and summary["alerted"] == 0
+
+
+# ── ticker aliases (SQ → XYZ rename, audited 2026-08-16) ─────────────────────
+
+def test_aliased_loader_fetches_renamed_ticker():
+    from nn_meta.live.v4_scan import aliased_bar_loader
+    requested = []
+
+    def loader(sym):
+        requested.append(sym)
+        return _bars()
+
+    wrapped = aliased_bar_loader(loader)
+    wrapped("SQ")
+    wrapped("SPY")
+    assert requested == ["XYZ", "SPY"]      # renamed fetches new; others pass through
+
+
+def test_alert_shows_tradable_ticker_for_renamed_symbol():
+    from nn_meta.live.v4_scan import format_v4_alert
+    row = pd.DataFrame([{"symbol": "SQ", "strategy": "rsi", "dte": 10,
+                         "entry_ts": pd.Timestamp("2026-01-08 15:00"),
+                         "score": 0.61}]).iloc[0]
+    fresh = {"direction": 0, "param_label": "rsi-frozen", "spot": 55.0}
+    title, msg = format_v4_alert(row, fresh, _bundle(), paper=True)
+    assert "XYZ (fka SQ)" in title and "XYZ (fka SQ)" in msg

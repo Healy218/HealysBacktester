@@ -71,6 +71,20 @@ OUTBOX = STATE_DIR / ".v4_outbox.json"
 LEDGER = STATE_DIR / ".v4_paper_ledger.json"
 HEALTH = STATE_DIR / ".v4_health.json"
 
+# Live ticker renames: spec/model symbols whose exchange listing has changed
+# since training. Bars are FETCHED under the new ticker (the old one returns
+# nothing) while every model-facing key — spec entry, features, one-hots,
+# state, ledger — stays on the trained symbol; alerts show both so the human
+# trades the right listing. Audited 2026-08-16: SQ (Block) → XYZ was the one
+# dark seat out of 118.
+TICKER_ALIASES = {"SQ": "XYZ"}
+
+
+def aliased_bar_loader(loader: Callable[[str], pd.DataFrame]
+                       ) -> Callable[[str], pd.DataFrame]:
+    """Wrap a bar loader so renamed tickers fetch under their new symbol."""
+    return lambda sym: loader(TICKER_ALIASES.get(sym, sym))
+
 
 # ── detection ─────────────────────────────────────────────────────────────────
 
@@ -172,8 +186,11 @@ def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool
     action = "BUY CALL" if right == "C" else "BUY PUT"
     expiry = (datetime.now(timezone.utc) + timedelta(days=int(row.dte))).date()
     tag = f"v4-{bundle.family}" + (" · paper" if paper else "")
-    title = f"[v4] {row.symbol} {action}"
-    msg = (f"[v4] {row.symbol}: {action} · P(win) {row.score:.0%}\n"
+    shown = TICKER_ALIASES.get(row.symbol, row.symbol)
+    if shown != row.symbol:
+        shown = f"{shown} (fka {row.symbol})"
+    title = f"[v4] {shown} {action}"
+    msg = (f"[v4] {shown}: {action} · P(win) {row.score:.0%}\n"
            f"trigger: {row.strategy} ({fresh['param_label']}) · "
            f"DTE {int(row.dte)} (best of grid)\n"
            f"contract: ~ATM {right} near ${fresh['spot']:,.2f}, "
@@ -327,7 +344,8 @@ def main() -> None:
     bundle = load_trusted_bundle(bundle_dir, paper=args.paper)
     summary = scan_pass(
         bundle=bundle, spec=load_spec(), surface=load_surface_features(),
-        bar_loader=_bar_loader, notifier=get_notifier(force_console=args.dry_run),
+        bar_loader=aliased_bar_loader(_bar_loader),
+        notifier=get_notifier(force_console=args.dry_run),
         now=now,
         symbols=[s.strip().upper() for s in args.symbols.split(",")]
         if args.symbols else None,
