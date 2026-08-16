@@ -122,6 +122,12 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
 - **Cron (UTC — this cron ignores `CRON_TZ`, verified empirically)**:
   - `*/15 * * * *` live scanner: `NN_META_POOL=v3 … run_live --once --nn`
     → `logs/live_cron.log` (self-gates to RTH)
+  - `*/15 * * * *` **[v4] expert** (since 2026-08-16): `NN_META_POOL=v31 …
+    nn_meta.live.v4_scan --once --paper` → `logs/v4_cron.log`. Paper mode
+    until the Option B re-finalized bundle replaces `model_final_v4/` (then
+    drop `--paper`). **Rollback = delete this one cron line** — v3 is
+    untouched. Needs `nn_meta/data_cache_v3/{surface_daily,underlying_daily}
+    .parquet` on the host (rsync'd; gitignored path, refresh occasionally).
   - `5 * * * *` FA collectors (`fa.collect`) → `logs/fa_cron.log`
   - `30 12 * * 1-5` trending digest (8:30 ET summer) → Telegram
   - `0 17 * * *` scanner heartbeat (noon CT summer): passes/signals + NEW

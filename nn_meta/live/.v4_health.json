@@ -1,0 +1,10 @@
+{
+  "age_seconds": 0.0,
+  "alerted": 0,
+  "delivered": 0,
+  "error_count": 0,
+  "healthy": true,
+  "open_paper_positions": 0,
+  "scanned": 3,
+  "stale": false
+}

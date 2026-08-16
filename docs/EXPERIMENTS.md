@@ -24,4 +24,4 @@ per-expert performance.
 | Expert | Live since | Pool / policy | Ledger | Status |
 |---|---|---|---|---|
 | v3 | 2026-07-11 | v3, rank/label_excess/32x16, thr 0.6 | server alerts (no paper ledger yet) | **live**, ~1 alert/week |
-| v4 | — | v31 causal, gbt/filter (pending Option B re-finalize) | `PaperLedger` at deploy | this weekend — `TODO.md` |
+| v4 | **2026-08-16** | v31 causal, gbt/filter thr 0.5 (Option A bundle) | `.v4_paper_ledger.json` on server | **live — paper mode**; bundle hot-swaps after the Option B re-finalize |

@@ -62,26 +62,29 @@ without it the pipeline silently reads/writes the wrong artifact dirs.
 
 ## 3 — Deploy to Hetzner (alongside v3, never replacing it)
 
-Verified 2026-08-16: the branch's only v3-critical deltas vs `main` are a
-docstring and a default-off `collect_marks` kwarg — merging leaves the live
-v3 scanner behaviorally identical.
+**DONE 2026-08-16 ~16:05 UTC — the [v4] expert is live on the server in
+paper mode.** (User approved same day.)
 
-- [ ] Merge `codex/v4-causal-validation` → `main` (the operational line now
-  includes the additive v4 expert; model promotion stays gated).
-- [ ] Force-add `model_final_v4/` (9.7 MB, 42 files — same pattern as the
-  committed `model_final_v3/`); record in `docs/DECISIONS.md`.
-- [ ] Server: `git pull` (deploy key — never scp);
-  `pip install -r requirements.txt` top-up (needs `lightgbm` to unpickle the
-  gbt members; `scipy` pin is also new).
-- [ ] rsync `surface_daily.parquet` + `underlying_daily.parquet` (12.3 MB) →
-  server `nn_meta/data_cache_v3/` (gitignored path — no pull-wedge risk).
-- [ ] Server self-test: `NN_META_POOL=v31 ./venv/bin/python -m
-  nn_meta.live.v4_scan --selftest`, then one `--dry-run --ignore-hours` pass.
-- [ ] Cron line (UTC, self-gates to RTH): `*/15 * * * * cd
-  /home/mrhea/HealysBacktester && NN_META_POOL=v31 ./venv/bin/python -m
-  nn_meta.live.v4_scan --once --paper >> logs/v4_cron.log 2>&1`
-- [ ] Rollback documented in `DOCUMENTATION.md`: remove that one cron line —
-  v3 runs exactly as today.
+- [x] Verified v3-safety, fast-forward merged the branch → `main` (46
+  commits; only v3-critical deltas were a docstring + default-off kwarg).
+- [x] `model_final_v4/` force-added (9.7 MB / 42 files); `docs/DECISIONS.md`
+  updated.
+- [x] Server pulled main; `pip` top-up installed lightgbm 4.7.0 + scipy.
+- [x] rsync'd `surface_daily` + `underlying_daily` parquets into the
+  server's `nn_meta/data_cache_v3/`.
+- [x] Server selftest: 40/40 gbt members, score median matches local
+  (0.433) — deterministic. Real-data dry run: 3 symbols, 0 errors.
+- [x] Cron installed (v3 line untouched; crontab backed up to
+  `~/crontab.bak.2026-08-16`): `*/15 * * * * … NN_META_POOL=v31 …
+  nn_meta.live.v4_scan --once --paper >> logs/v4_cron.log`.
+- [x] Rollback documented in `DOCUMENTATION.md` (delete the one cron line).
+
+**Remaining for this phase** (after the Option B chain in block 1):
+- [ ] Re-finalize → push new `model_final_v4/` → server `git pull` →
+  selftest → drop `--paper` from the cron line (bundle then must verify +
+  be gate-eligible, enforced by the scan itself).
+- [ ] Re-validate candidate parity against the surviving bundle (Option B
+  step 4) and close the last first-implementation gate item.
 
 ## Fallback if the weekend runs short
 
