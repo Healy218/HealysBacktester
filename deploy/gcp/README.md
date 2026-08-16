@@ -46,15 +46,12 @@ gcloud billing accounts list
 gcloud billing projects link healys-batch --billing-account=XXXXXX-XXXXXX-XXXXXX
 
 # 2. BUDGET ALERT — the "never a surprise bill" guard ($25, emails you)
-gcloud billing budgets create --billing-account=XXXXXX-XXXXXX-XXXXXX \
-  --display-name="healys-batch cap" --budget-amount=25USD \
-  --threshold-rule=percent=0.5 --threshold-rule=percent=0.9
+#    (single line — pasting multi-line backslash commands eats the flags)
+gcloud billing budgets create --billing-account=XXXXXX-XXXXXX-XXXXXX --display-name=healys-batch-cap --budget-amount=25USD --threshold-rule=percent=0.5 --threshold-rule=percent=0.9
 
-# 3. APIs + artifact repo + bucket
-gcloud services enable batch.googleapis.com compute.googleapis.com \
-  storage.googleapis.com artifactregistry.googleapis.com cloudbuild.googleapis.com
-gcloud artifacts repositories create healys --repository-format=docker \
-  --location=us-central1
+# 3. APIs + artifact repo + bucket (each a single line)
+gcloud services enable batch.googleapis.com compute.googleapis.com storage.googleapis.com artifactregistry.googleapis.com cloudbuild.googleapis.com
+gcloud artifacts repositories create healys --repository-format=docker --location=us-central1
 gsutil mb -l us-central1 gs://healys-backtester
 ```
 

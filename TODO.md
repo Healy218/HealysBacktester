@@ -130,11 +130,14 @@ P0s + quick P1s were fixed and deployed same-day (commit `9b8b473`:
 atomic bar cache, shared ticker aliases, lazy TF import, universe shrink
 guard, atomic dataset write). Remaining queue, ordered:
 
-- [~] `bars_daily` compaction + `TICKER_ALIASES` in the daily crawl —
-  **delegated to a worktree agent 2026-08-16 night** (commits land branch-only
-  for the /ultrareview window)
-- [~] Heartbeat coverage for all three experts — **delegated to a second
-  worktree agent**, same window
+- [x] `bars_daily` compaction (newest-wins by NUMERIC part index — mixed
+  padded/unpadded names would invert lexically; crash-safe dir swap;
+  auto-runs after the weekly refresh) + `TICKER_ALIASES` in the daily crawl.
+  Agent-built, verified + cherry-picked; suite green.
+- [x] Heartbeat covers all three experts: per-expert passes/RTH-scans/
+  alerts/new-crash deltas with per-log baselines, RTH-down warnings on
+  missing/stale logs, old-schema migration without false crash explosions.
+  Agent-built, verified + cherry-picked; suite green.
 - [x] Paper-ledger crash-consistency reorder in `v4_scan.scan_pass`
   (enqueue → ledger → mark; duplicate trade_id no-op)
 - [x] State-file landmines defused: `.alert_state.json` +
