@@ -1,15 +1,34 @@
 # nn_meta/live/heartbeat.py
-"""Daily scanner health ping to Telegram — so silence always reads as 'quiet
-market', never 'is it dead?'.
+"""Daily health ping for the three-expert scanner panel — so silence always
+reads as 'quiet market', never 'is it dead?'.
 
-Reports today's scan passes and signals, and — the important part — the
-number of NEW crashes since the last heartbeat (tracebacks in the cron log
-vs a stored baseline). That catches the intermittent 'crashes only when a
-signal fires' failure mode, which a plain uptime check would miss.
+One digest line per expert (v3 → logs/live_cron.log, [v4] → logs/v4_cron.log,
+[v31] → logs/v31_cron.log): completed cron passes, RTH scan passes, alerts,
+and — the important part — the number of NEW crashes per log since the last
+heartbeat (tracebacks vs a stored per-log baseline). That catches both the
+intermittent 'crashes only when a signal fires' failure mode and a
+crashlooping expert cron, which a plain uptime check (or the old single-log
+heartbeat) would miss.
 
-Cron (noon Central, daily):  CRON_TZ=America/Chicago ; 0 12 * * *
+Counting: the cron logs capture each pass's completion print (run_live:
+"Outside RTH — nothing to scan." / "No fresh signals this pass." /
+"N signal(s) alerted: …"; v4_scan: "Outside RTH …" / "[v4] scanned N ·
+alerted N · …"). Those lines are unstamped, so per-expert counts are DELTAS
+against the totals stored at the previous heartbeat — the daily cron makes
+that "today". Scanner errors still come from the shared, timestamped
+logs/backtester.log (FA-collector lines excluded — their transient 503s
+would cry wolf).
+
+State: ``.heartbeat_state.json`` now keys baselines per expert. The legacy
+single-log schema ({"tracebacks": N}) is read as the v3 baseline; any log
+without a stored baseline starts at its CURRENT counts (no false "NEW crash"
+explosion on migration or a fresh host), and a missing log file is "no data
+yet", never a crash.
+
+Cron (daily, noon CT summer — the server cron ignores CRON_TZ):  0 17 * * *
 """
 import json
+import re
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -21,10 +40,24 @@ except ImportError:
 
 from nn_meta.live.notifier import get_notifier
 from nn_meta.live.scanner import is_rth
+from nn_meta.live.state import atomic_write_json
 
 BACKTESTER_LOG = Path("logs/backtester.log")
-CRON_LOG = Path("logs/live_cron.log")
 STATE = Path("nn_meta/live/.heartbeat_state.json")
+
+# digest order: the deployed v3 line first, then the paper experts
+EXPERT_LOGS = {
+    "v3": Path("logs/live_cron.log"),
+    "v4": Path("logs/v4_cron.log"),
+    "v31": Path("logs/v31_cron.log"),
+}
+
+# every expert cron fires */15 — an hour without a single write means the
+# cron (not just the scan) is stuck, whatever the pass counters say
+STALE_AFTER_MIN = 60
+
+_ALERTED_RUN_LIVE = re.compile(r"^(\d+) signal\(s\) alerted: ")
+_ALERTED_V4 = re.compile(r"^\[v4\] scanned \d+ · alerted (\d+)")
 
 
 def _today_lines() -> tuple[list[str], str]:
@@ -36,46 +69,117 @@ def _today_lines() -> tuple[list[str], str]:
     return lines, today
 
 
-def _new_crashes() -> int:
-    """Tracebacks in the cron log since the last heartbeat (0 on first run)."""
-    total = (CRON_LOG.read_text(errors="ignore").count("Traceback")
-             if CRON_LOG.exists() else 0)
-    prev = total
-    if STATE.exists():
-        try:
-            prev = json.loads(STATE.read_text()).get("tracebacks", total)
-        except Exception:
-            pass
-    STATE.parent.mkdir(parents=True, exist_ok=True)
-    STATE.write_text(json.dumps({"tracebacks": total,
-                                 "at": datetime.now(timezone.utc).isoformat()}))
-    return max(0, total - prev)
+def _scan_counts(log: Path) -> dict:
+    """Life-to-date totals for one cron log (all zeros when it is missing).
+
+    ``passes`` counts every completed invocation (incl. the outside-RTH
+    no-ops), ``rth_scans`` only passes that actually scanned; both formats
+    (run_live and v4_scan) are recognized so the map stays config-free.
+    """
+    counts = {"passes": 0, "rth_scans": 0, "alerts": 0, "tracebacks": 0}
+    if not log.exists():
+        return counts
+    text = log.read_text(errors="ignore")
+    counts["tracebacks"] = text.count("Traceback")
+    for ln in text.splitlines():
+        if ln.startswith("Outside RTH"):
+            counts["passes"] += 1
+        elif ln.startswith("No fresh signals this pass"):
+            counts["passes"] += 1
+            counts["rth_scans"] += 1
+        elif m := (_ALERTED_RUN_LIVE.match(ln) or _ALERTED_V4.match(ln)):
+            counts["passes"] += 1
+            counts["rth_scans"] += 1
+            counts["alerts"] += int(m.group(1))
+    return counts
+
+
+def _load_baselines() -> dict:
+    """Per-expert baseline counts from the state file.
+
+    Old single-log schema ({"tracebacks": N, "at": …}) maps to the v3 entry —
+    that counter always was live_cron.log's traceback total. Unknown/absent
+    entries stay absent: the caller defaults each missing metric to its
+    current value, so migration and fresh hosts report 0 new, not the whole
+    log history.
+    """
+    if not STATE.exists():
+        return {}
+    try:
+        state = json.loads(STATE.read_text())
+    except Exception:
+        return {}
+    if isinstance(state.get("logs"), dict):
+        return {k: v for k, v in state["logs"].items() if isinstance(v, dict)}
+    if "tracebacks" in state:                       # legacy single-log schema
+        return {"v3": {"tracebacks": state["tracebacks"]}}
+    return {}
+
+
+def _plural(n: int, word: str, plural: str | None = None) -> str:
+    return f"{n} {word if n == 1 else (plural or word + 's')}"
 
 
 def build_message() -> str:
     lines, today = _today_lines()
-    passes = sum("NN filter enabled" in ln for ln in lines)
-    signals = sum("notify:telegram] sent:" in ln
-                  and ("BUY CALL" in ln or "BUY PUT" in ln) for ln in lines)
     # scanner errors only — the FA collectors (edgar/news/reddit) share this
     # log and have their own transient failures (e.g. EDGAR 503s); counting
     # those here would cry wolf and train the reader to ignore the heartbeat.
     errors_today = sum(" - ERROR - " in ln and "[fa." not in ln for ln in lines)
-    new_crashes = _new_crashes()
-    rth = is_rth()
-    status = "market open" if rth else "market closed"
 
-    if passes == 0 and rth:
-        return (f"⚠️ Scanner: 0 passes recorded today ({today}) during market "
-                f"hours — the cron or scanner may be DOWN. Check the server.")
-    if new_crashes > 0:
-        return (f"⚠️ Scanner: {new_crashes} NEW crash(es) since the last "
-                f"heartbeat — check logs. ({passes} passes, {signals} signals "
-                f"today · {status})")
-    sig = f"{signals} signal{'s' if signals != 1 else ''}"
-    return (f"🩺 Scanner healthy — {today}\n"
-            f"{passes} passes · {errors_today} errors · {sig} today\n"
-            f"({status})")
+    now = datetime.now(timezone.utc)
+    rth = is_rth()
+    baselines = _load_baselines()
+    warnings: list[str] = []
+    digest: list[str] = []
+    totals: dict[str, dict] = {}
+
+    for name, log in EXPERT_LOGS.items():
+        cur = _scan_counts(log)
+        totals[name] = cur
+        base = baselines.get(name, {})
+        # missing metric -> baseline = current -> delta 0 (first-run grace)
+        delta = {k: max(0, v - base.get(k, v)) for k, v in cur.items()}
+        grace = "passes" not in base                # no stored pass window yet
+
+        if not log.exists():
+            digest.append(f"{name}: no log yet")
+            if rth:
+                warnings.append(f"⚠️ {name}: cron log missing during market "
+                                f"hours — cron may be DOWN ({log})")
+            continue
+
+        if grace:
+            digest.append(f"{name}: baseline set — counts start next heartbeat")
+        else:
+            digest.append(
+                f"{name}: {_plural(delta['passes'], 'pass', 'passes')} "
+                f"({delta['rth_scans']} RTH) · "
+                f"{_plural(delta['alerts'], 'alert')} · "
+                f"{delta['tracebacks']} new crash"
+                f"{'' if delta['tracebacks'] == 1 else 'es'}")
+
+        if rth:
+            age_min = (now - datetime.fromtimestamp(
+                log.stat().st_mtime, tz=timezone.utc)).total_seconds() / 60
+            if age_min > STALE_AFTER_MIN:
+                warnings.append(f"⚠️ {name}: cron log stale ({age_min:.0f}m "
+                                f"old) during market hours — cron may be DOWN")
+            elif not grace and delta["rth_scans"] == 0:
+                warnings.append(f"⚠️ {name}: 0 scan passes since the last "
+                                f"heartbeat during market hours — cron or "
+                                f"scanner may be DOWN")
+        if delta["tracebacks"] > 0:
+            warnings.append(f"⚠️ {name}: {delta['tracebacks']} NEW crash(es) "
+                            f"since the last heartbeat — check {log}")
+
+    atomic_write_json(STATE, {"logs": totals, "at": now.isoformat()})
+
+    status = "market open" if rth else "market closed"
+    head = (f"⚠️ Scanner heartbeat — {today}" if warnings
+            else f"🩺 Scanners healthy — {today}")
+    footer = f"{_plural(errors_today, 'error')} today · {status}"
+    return "\n".join([head, *warnings, *digest, footer])
 
 
 def main() -> None:

@@ -141,8 +141,12 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
     silently empties ~45 days after the last refresh without it.
   - `5 * * * *` FA collectors (`fa.collect`) → `logs/fa_cron.log`
   - `30 12 * * 1-5` trending digest (8:30 ET summer) → Telegram
-  - `0 17 * * *` scanner heartbeat (noon CT summer): passes/signals + NEW
-    crash count — silence = quiet market, not "is it dead?"
+  - `0 17 * * *` scanner heartbeat (noon CT summer): one line per expert
+    (v3/v4/v31) — passes/alerts + NEW crashes per cron log since the last
+    heartbeat, plus missing/stale-log warnings during RTH — silence = quiet
+    market, not "is it dead?". Baselines in the gitignored
+    `nn_meta/live/.heartbeat_state.json` (old single-log schema migrates in
+    place; first heartbeat per log prints "baseline set").
   - `*/5` dead-man check (`~/bin/deadman_check.sh`, outside the repo on
     purpose) watching home-box job heartbeats.
 - Server `.env` = home `.env` + `FA_SKIP_COLLECTORS=stocktwits` (StockTwits
