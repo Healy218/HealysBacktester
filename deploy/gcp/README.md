@@ -59,6 +59,13 @@ gcloud billing budgets create --billing-account=XXXXXX-XXXXXX-XXXXXX --display-n
 gcloud services enable batch.googleapis.com compute.googleapis.com storage.googleapis.com artifactregistry.googleapis.com cloudbuild.googleapis.com
 gcloud artifacts repositories create healys --repository-format=docker --location=us-central1
 gsutil mb -l us-central1 gs://healys-backtester
+
+# 3.5 IAM for the Compute Engine default SA (REQUIRED on modern projects —
+#     since ~2024 new projects grant this SA nothing, so Cloud Build can't
+#     read its own source and Batch VMs can't touch the bucket; hit live
+#     2026-08-16). Find the SA: gcloud iam service-accounts list
+SA=<project-number>-compute@developer.gserviceaccount.com
+for role in roles/storage.objectAdmin roles/artifactregistry.writer roles/logging.logWriter roles/batch.agentReporter; do gcloud projects add-iam-policy-binding healys-batch --member="serviceAccount:$SA" --role="$role" --condition=None --quiet; done
 ```
 
 Quota note: fresh projects get modest Spot vCPU quota (often 32–72 in a
@@ -71,12 +78,14 @@ region). That already runs 8–18 tasks wide; request more via IAM → Quotas
 cd ~/Coding/HealysBacktester
 
 # 4. build + push the image (Cloud Build — no local docker; ~5 min).
-#    gcloud only reads a context-root file named exactly `Dockerfile`;
-#    the transient copy is gitignored and removed after the build.
+#    Build from a STATIC `git archive` tree, never the live working dir:
+#    gcloud's tarball snapshotter crashes ("lost gzip_file") if files churn
+#    mid-archive — e.g. a running dataset build's checkpoints (hit live
+#    2026-08-16). Also gives exact-commit provenance for the tag.
 SHA=$(git rev-parse --short HEAD)
-cp deploy/gcp/Dockerfile ./Dockerfile
-gcloud builds submit --tag us-central1-docker.pkg.dev/healys-batch/healys/backtester:$SHA . 2>&1 | tail -2
-rm ./Dockerfile
+TMP=$(mktemp -d) && git archive --format=tar HEAD | tar -x -C "$TMP" && cp deploy/gcp/Dockerfile "$TMP/Dockerfile"
+(cd "$TMP" && gcloud builds submit --tag us-central1-docker.pkg.dev/healys-batch/healys/backtester:$SHA . 2>&1 | tail -2)
+rm -rf "$TMP"
 
 # 5. one-time data sync (ingress is free; ~10 min on home upstream)
 gsutil -m rsync -r nn_meta/data_cache_v3 gs://healys-backtester/data_cache_v3
