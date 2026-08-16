@@ -1,0 +1,6 @@
+# Cloud Build upload filter. Mirrors .gitignore, EXCEPT the transient
+# ./Dockerfile (gitignored as a build artifact, but Cloud Build needs it).
+.git
+.gcloudignore
+#!include:.gitignore
+!Dockerfile
