@@ -18,6 +18,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && apt-get update && apt-get install -y --no-install-recommends google-cloud-cli \
     && rm -rf /var/lib/apt/lists/*
 
+# Batch injects CLOUDSDK_PYTHON=/usr/bin/python3 into every container and
+# gsutil/gcloud wrappers obey it; python:slim only ships /usr/local/bin/python3
+# (exit-127 pilot failure, hit live 2026-08-16). One symlink serves both.
+RUN ln -sf /usr/local/bin/python3 /usr/bin/python3
+
 WORKDIR /app
 COPY requirements.txt deploy/gcp/constraints-linux.txt ./
 RUN pip install --no-cache-dir -r requirements.txt -c constraints-linux.txt
