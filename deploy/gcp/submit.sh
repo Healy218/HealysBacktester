@@ -15,7 +15,9 @@ REGION=${REGION:-us-central1}
 BUCKET=${BUCKET:?set BUCKET (gs://...)}
 SHARDS=${1:-30}
 SYMBOLS=${2:-}
-SHA=$(git rev-parse --short HEAD)
+# IMAGE_TAG overrides the tag when the image was built at an earlier commit
+# (docs-only commits move HEAD without changing task code).
+SHA=${IMAGE_TAG:-$(git rev-parse --short HEAD)}
 IMAGE="${REGION}-docker.pkg.dev/${PROJECT}/healys/backtester:${SHA}"
 JOB="marks-build-${SHA}-$(date +%H%M%S)"
 
@@ -43,7 +45,12 @@ cat > /tmp/healys_batch_job.json <<JSON
     "instances": [{"policy": {
       "machineType": "e2-standard-4",
       "provisioningModel": "SPOT"
-    }}]
+    }}],
+    "network": {"networkInterfaces": [{
+      "network": "projects/${PROJECT}/global/networks/default",
+      "subnetwork": "regions/${REGION}/subnetworks/default",
+      "noExternalIpAddress": true
+    }]}
   },
   "logsPolicy": {"destination": "CLOUD_LOGGING"}
 }

@@ -66,6 +66,12 @@ gsutil mb -l us-central1 gs://healys-backtester
 #     2026-08-16). Find the SA: gcloud iam service-accounts list
 SA=<project-number>-compute@developer.gserviceaccount.com
 for role in roles/storage.objectAdmin roles/artifactregistry.writer roles/logging.logWriter roles/batch.agentReporter; do gcloud projects add-iam-policy-binding healys-batch --member="serviceAccount:$SA" --role="$role" --condition=None --quiet; done
+
+# 3.6 Private Google Access (REQUIRED under a Workspace org — hit live
+#     2026-08-16: the org policy compute.vmExternalIpAccess blocks VMs with
+#     external IPs, so jobs run IP-less; PGA routes their GCS + Artifact
+#     Registry traffic. submit.sh already sets noExternalIpAddress.)
+gcloud compute networks subnets update default --region=us-central1 --enable-private-ip-google-access
 ```
 
 Quota note: fresh projects get modest Spot vCPU quota (often 32–72 in a
