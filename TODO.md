@@ -130,16 +130,21 @@ P0s + quick P1s were fixed and deployed same-day (commit `9b8b473`:
 atomic bar cache, shared ticker aliases, lazy TF import, universe shrink
 guard, atomic dataset write). Remaining queue, ordered:
 
-- [ ] `bars_daily` compaction (weekly refresh appends duplicate life-spans;
-  dedupe is read-time only — disk/build-time creep)
-- [ ] Heartbeat coverage for the new experts (v4/v31 cron logs are invisible
-  to the daily digest today)
-- [ ] Paper-ledger drift window comment/reorder in `v4_scan.scan_pass`
-- [ ] Extend `TICKER_ALIASES` into the daily/surface refresh crawls (SQ's
-  beta/IV context)
-- [ ] Untrack `.claude/settings.local.json` (verified: token never in git
-  history) and defuse the tracked `.alert_state.json` landmine
+- [~] `bars_daily` compaction + `TICKER_ALIASES` in the daily crawl —
+  **delegated to a worktree agent 2026-08-16 night** (commits land branch-only
+  for the /ultrareview window)
+- [~] Heartbeat coverage for all three experts — **delegated to a second
+  worktree agent**, same window
+- [x] Paper-ledger crash-consistency reorder in `v4_scan.scan_pass`
+  (enqueue → ledger → mark; duplicate trade_id no-op)
+- [x] State-file landmines defused: `.alert_state.json` +
+  `.claude/settings.local.json` untracked + gitignored; server choreography
+  done (live dedupe state preserved through the pull)
 - [ ] Monday watch: Alpaca 429s from three same-minute scanners → stagger
+- [ ] **/ultrareview window open**: `main` is deliberately held behind the
+  branch; once the two agents' commits land, run `/ultrareview` from the
+  DESKTOP session (not Remote Control) to multi-agent-review the branch-only
+  diff, then merge to main and deploy.
 
 ## Parked (not this phase)
 
