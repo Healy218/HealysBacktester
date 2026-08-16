@@ -85,12 +85,14 @@ symbols (all healthy), v4 scans its 118 (117 healthy). Findings:
 - [x] **SQ → XYZ rename**: SQ returned zero bars (dark seat). Fixed with
   `TICKER_ALIASES` in `v4_scan` — bars fetch under XYZ, model/state keys
   stay "SQ", alerts show "XYZ (fka SQ)".
-- [ ] **Context caches are stale on the server**: v3 surface ends
-  2026-07-02, v31 surface + daily-underlying end 2026-07-07 — so IV/beta
-  features score as-of early July for BOTH experts (pre-existing for v3
-  since its deploy; the scorer's known "nightly refresh TODO"). Build the
-  nightly surface/underlying refresh (home box job + rsync, like the
-  StockTwits push) — panel-phase infra, affects every expert.
+- [x] **Context caches now self-updating (2026-08-16 evening).** All three
+  layers: ① chain/universe + ② underlying-daily (beta) refreshed on the
+  server via `--live-horizon` and kept fresh by Sunday 10:00/10:30 UTC
+  crons; ③ IV surface: bar caches seeded to the server (420 MB), the
+  incremental `--bars-and-surface-only --refresh-recent-days` mode +
+  `build_surface` backfill ran, and Sunday 11:00/12:00 crons keep it
+  current. Server is fully self-sufficient — no home-box dependency.
+  (Edge contracts whose life predates the 2y entitlement 403 harmlessly.)
 - [x] **PRODUCTION OUTAGE AVERTED (found 2026-08-16 during the v31-deploy
   prep)**: the live chain's universe ends at `WINDOW_END + DTE_MAX` =
   2026-08-16 — the universe filter clips contract eligibility to the frozen

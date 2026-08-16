@@ -68,6 +68,24 @@ Option A bundle, `--selftest` deploy check (passes on the real bundle),
 real-data dry run clean, suite 356 green. Build widened to 3 shards after
 killing background Steam/Discord.
 
+## Done 2026-08-16 evening: [v31] expert live + the universe-horizon outage fix
+
+- **Outage averted**: live chain ended at WINDOW_END+DTE_MAX (= 2026-08-16;
+  had already thinned to Aug 7). `download_universe --live-horizon` rebuilt
+  both pools' chains through 2026-11-30 on the server; weekly Sunday crons
+  keep chain + underlying-daily + IV surface current (server crontab now 10
+  lines; bar caches seeded, incremental `--bars-and-surface-only` mode).
+- **[v31] expert live**: legacy scorer under `NN_META_POOL=v31` (hybrid
+  provider via `get_provider(live=True)`), own dedupe file, `[v31]` alert
+  labels, `model_final_v31/` committed, 40/40 selftest + dry-run green on
+  the server. Three experts total: v3 (real), [v4] paper, [v31] paper.
+- Verify when convenient: surface backfill completion
+  (`logs/surface_refresh_*.log` on the server → `surface:` + NaN-rate lines,
+  surface max date ≈ last trading day), and Monday's first RTH cycle across
+  all three logs (`live_cron.log`, `v4_cron.log`, `v31_cron.log`) — watch
+  for Alpaca rate-limit errors from three simultaneous scanners; stagger
+  crons if they appear.
+
 ## Next session: start here
 
 1. Check the build (log tails + marker above). If done: `--assemble` output
