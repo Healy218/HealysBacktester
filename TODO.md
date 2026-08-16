@@ -91,6 +91,16 @@ symbols (all healthy), v4 scans its 118 (117 healthy). Findings:
   since its deploy; the scorer's known "nightly refresh TODO"). Build the
   nightly surface/underlying refresh (home box job + rsync, like the
   StockTwits push) — panel-phase infra, affects every expert.
+- [x] **PRODUCTION OUTAGE AVERTED (found 2026-08-16 during the v31-deploy
+  prep)**: the live chain's universe ends at `WINDOW_END + DTE_MAX` =
+  2026-08-16 — the universe filter clips contract eligibility to the frozen
+  research window, so from Monday every v3 signal would have failed
+  contract selection and been *silently filtered* (and the chain had
+  already thinned: max cached expiry was 2026-08-07). Fixed:
+  `download_universe --live-horizon 120` rebuilds listings/universe through
+  today+120d and underlying daily through today (beta un-staled as a
+  bonus); ran on the server for both pools; **weekly Sunday refresh cron**
+  installed so it never recurs. Research constants untouched.
 - [ ] **Latent trap, don't trip it**: v3's `nn_meta/live/.alert_state.json`
   is *tracked in git* (pre-existing) while the server mutates it live — any
   future commit touching/deleting it will conflict with the server's dirty

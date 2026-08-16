@@ -5,6 +5,18 @@ relitigate settled questions, and keep "considered and rejected" on the
 record. Append here whenever a real choice gets made (or reversed — new
 entry, never edit history).
 
+- **2026-08-16 — v3.1 joins the panel as the [v31] paper expert.** Its
+  "shelved" verdict barred it from *replacing* v3, not from running
+  alongside: forward paper tracking is exactly how its outlier-fragility
+  question gets settled. Legacy scorer path (`run_live` under
+  `NN_META_POOL=v31`, hybrid provider via `get_provider(live=True)`),
+  pool-suffixed alert state, `[v31]`-labeled alerts. `model_final_v31/`
+  committed (2.7 MB).
+- **2026-08-16 — the live universe refreshes weekly (`--live-horizon`),
+  research windows stay frozen.** The deployed chain must never again
+  inherit its horizon from `WINDOW_END` — that clip silently emptied the
+  live chain when the frozen window's horizon passed. Weekly Sunday server
+  cron rebuilds listings/universe through today+120d for both pools.
 - **2026-08-16 — `model_final_v4/` is committed (force-add), deployed in
   paper mode.** Supersedes the 2026-07-25 out-of-git call for the deployable
   bundle only (9.7 MB — same pattern as `model_final_v3/`; reports stay

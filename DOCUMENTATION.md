@@ -128,6 +128,17 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
     drop `--paper`). **Rollback = delete this one cron line** — v3 is
     untouched. Needs `nn_meta/data_cache_v3/{surface_daily,underlying_daily}
     .parquet` on the host (rsync'd; gitignored path, refresh occasionally).
+  - `*/15 * * * *` **[v31] expert** (since 2026-08-16): `NN_META_POOL=v31 …
+    nn_meta.live.run_live --once --nn` → `logs/v31_cron.log`. Legacy scorer
+    path (prices the frozen-DTE contract live via the hybrid provider);
+    `[v31]`-labeled alerts; own dedupe file `.alert_state_v31.json`.
+    Rollback = delete the line.
+  - `0 10 * * 0` + `30 10 * * 0` **weekly universe refresh** (since
+    2026-08-16): `download_universe --universe-only --live-horizon 120` for
+    the v3 pool then the v31 pool → `logs/universe_refresh_*.log`. This is
+    what keeps the live chain's expiries ahead of the calendar — the frozen
+    research window does NOT roll forward on its own, and the chain
+    silently empties ~45 days after the last refresh without it.
   - `5 * * * *` FA collectors (`fa.collect`) → `logs/fa_cron.log`
   - `30 12 * * 1-5` trending digest (8:30 ET summer) → Telegram
   - `0 17 * * *` scanner heartbeat (noon CT summer): passes/signals + NEW
