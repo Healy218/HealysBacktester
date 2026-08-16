@@ -135,56 +135,80 @@ def build_message() -> str:
     totals: dict[str, dict] = {}
 
     for name, log in EXPERT_LOGS.items():
-        cur = _scan_counts(log)
-        totals[name] = cur
-        base = baselines.get(name, {})
-        # missing metric -> baseline = current -> delta 0 (first-run grace)
-        delta = {k: max(0, v - base.get(k, v)) for k, v in cur.items()}
-        grace = "passes" not in base                # no stored pass window yet
+        # Per-expert isolation (P1-2, 2026-08-16 review): one unreadable log
+        # must degrade to ITS ⚠️ line, not silently abort the whole digest.
+        try:
+            cur = _scan_counts(log)
+            totals[name] = cur
+            base = baselines.get(name, {})
+            grace = "passes" not in base            # no stored pass window yet
+            # Rotation/truncation (P1-3): any counter below its baseline means
+            # the log was rotated — reset to counting the fresh log instead of
+            # clamping deltas to 0 (which masked real crashes AND fired false
+            # "0 passes" DOWN warnings on healthy experts).
+            rotated = any(v < base.get(k, v) for k, v in cur.items())
+            delta = dict(cur) if rotated \
+                else {k: v - base.get(k, v) for k, v in cur.items()}
 
-        if not log.exists():
-            digest.append(f"{name}: no log yet")
+            if not log.exists():
+                digest.append(f"{name}: no log yet")
+                if rth:
+                    warnings.append(f"⚠️ {name}: cron log missing during market "
+                                    f"hours — cron may be DOWN ({log})")
+                continue
+
+            if grace:
+                digest.append(f"{name}: baseline set — counts start next heartbeat")
+            else:
+                digest.append(
+                    f"{name}: {_plural(delta['passes'], 'pass', 'passes')} "
+                    f"({delta['rth_scans']} RTH) · "
+                    f"{_plural(delta['alerts'], 'alert')} · "
+                    f"{delta['tracebacks']} new crash"
+                    f"{'' if delta['tracebacks'] == 1 else 'es'}"
+                    + (" · log rotated — counters reset" if rotated else ""))
+
             if rth:
-                warnings.append(f"⚠️ {name}: cron log missing during market "
-                                f"hours — cron may be DOWN ({log})")
-            continue
-
-        if grace:
-            digest.append(f"{name}: baseline set — counts start next heartbeat")
-        else:
-            digest.append(
-                f"{name}: {_plural(delta['passes'], 'pass', 'passes')} "
-                f"({delta['rth_scans']} RTH) · "
-                f"{_plural(delta['alerts'], 'alert')} · "
-                f"{delta['tracebacks']} new crash"
-                f"{'' if delta['tracebacks'] == 1 else 'es'}")
-
-        if rth:
-            age_min = (now - datetime.fromtimestamp(
-                log.stat().st_mtime, tz=timezone.utc)).total_seconds() / 60
-            if age_min > STALE_AFTER_MIN:
-                warnings.append(f"⚠️ {name}: cron log stale ({age_min:.0f}m "
-                                f"old) during market hours — cron may be DOWN")
-            elif not grace and delta["rth_scans"] == 0:
-                warnings.append(f"⚠️ {name}: 0 scan passes since the last "
-                                f"heartbeat during market hours — cron or "
-                                f"scanner may be DOWN")
-        if delta["tracebacks"] > 0:
-            warnings.append(f"⚠️ {name}: {delta['tracebacks']} NEW crash(es) "
-                            f"since the last heartbeat — check {log}")
-
-    atomic_write_json(STATE, {"logs": totals, "at": now.isoformat()})
+                age_min = (now - datetime.fromtimestamp(
+                    log.stat().st_mtime, tz=timezone.utc)).total_seconds() / 60
+                if age_min > STALE_AFTER_MIN:
+                    warnings.append(f"⚠️ {name}: cron log stale ({age_min:.0f}m "
+                                    f"old) during market hours — cron may be DOWN")
+                elif not grace and not rotated and delta["rth_scans"] == 0:
+                    warnings.append(f"⚠️ {name}: 0 scan passes since the last "
+                                    f"heartbeat during market hours — cron or "
+                                    f"scanner may be DOWN")
+            if delta["tracebacks"] > 0:
+                warnings.append(f"⚠️ {name}: {delta['tracebacks']} NEW crash(es) "
+                                f"since the last heartbeat — check {log}")
+        except Exception as exc:
+            totals.pop(name, None)      # keep this expert's old baseline
+            digest.append(f"{name}: unreadable ({exc.__class__.__name__})")
+            warnings.append(f"⚠️ {name}: could not read {log} "
+                            f"({exc.__class__.__name__}: {exc}) — investigate")
 
     status = "market open" if rth else "market closed"
     head = (f"⚠️ Scanner heartbeat — {today}" if warnings
             else f"🩺 Scanners healthy — {today}")
     footer = f"{_plural(errors_today, 'error')} today · {status}"
-    return "\n".join([head, *warnings, *digest, footer])
+    new_state = {"logs": {**baselines, **totals}, "at": now.isoformat()}
+    return "\n".join([head, *warnings, *digest, footer]), new_state
+
+
+def persist_state(state: dict) -> None:
+    atomic_write_json(STATE, state)
 
 
 def main() -> None:
-    msg = build_message()
-    get_notifier().send(msg, title="Scanner heartbeat")
+    msg, state = build_message()
+    # Persist baselines ONLY after a successful send (P1-1): a failed POST
+    # must not consume the deltas — otherwise those crashes are never
+    # reported by any future digest.
+    if get_notifier().send(msg, title="Scanner heartbeat"):
+        persist_state(state)
+    else:
+        print("⚠️ heartbeat send FAILED — baselines retained, deltas will "
+              "re-report next run")
     print(msg)
 
 
