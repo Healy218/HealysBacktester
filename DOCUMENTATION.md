@@ -135,7 +135,10 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
     Rollback = delete the line.
   - `0 10 * * 0` + `30 10 * * 0` **weekly universe refresh** (since
     2026-08-16): `download_universe --universe-only --live-horizon 120` for
-    the v3 pool then the v31 pool → `logs/universe_refresh_*.log`. This is
+    the v3 pool then the v31 pool → `logs/universe_refresh_*.log`.
+    **Keep each pool's bars+surface steps `&&`-chained in ONE cron entry** —
+    splitting them into separate times invites the refresh/compaction swap
+    racing the surface build's glob-then-open. This is
     what keeps the live chain's expiries ahead of the calendar — the frozen
     research window does NOT roll forward on its own, and the chain
     silently empties ~45 days after the last refresh without it.

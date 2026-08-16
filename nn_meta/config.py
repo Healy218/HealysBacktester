@@ -196,6 +196,14 @@ SIM_CONFIG = {
 # per-trade returns into an equity curve (same convention as nn_options_signal).
 POSITION_FRACTION = 0.10
 
+# ── Live ticker renames ──────────────────────────────────────────────────────
+# Spec/model symbols whose exchange listing changed since training: FETCH
+# market data under the new ticker (the old one returns nothing) while every
+# model-facing key — spec entry, features, one-hots, state — stays on the
+# trained symbol. Lives here (constants-only) so the offline crawler doesn't
+# import the live scanner for it. Audited 2026-08-16: SQ (Block) → XYZ.
+TICKER_ALIASES = {"SQ": "XYZ"}
+
 # ── Sector groups (static one-hot context; hand-maintained) ──────────────────
 SECTOR_GROUPS = ["idx_etf", "sec_etf", "tech", "semis", "fin", "crypto",
                  "defensive", "cyclical", "spec"]

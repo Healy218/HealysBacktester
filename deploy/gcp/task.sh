@@ -27,8 +27,10 @@ gsutil -m -q rsync -r "${BUCKET}/out/meta_marks" nn_meta/artifacts_v31/meta_mark
 if [ "${TASK_MODE:-build}" = "assemble" ]; then
   ./venv/bin/python -m nn_meta.build_meta_dataset --assemble 2>/dev/null \
     || python -m nn_meta.build_meta_dataset --assemble
-  gsutil -m -q cp nn_meta/artifacts_v31/meta_dataset.parquet \
-                  nn_meta/artifacts_v31/*.marks.parquet "${BUCKET}/out/" || true
+  # publish MUST fail the task on error — Batch reporting SUCCEEDED while the
+  # VM holding the only copy self-deletes is the P1-6 failure mode
+  gsutil -m -q cp nn_meta/artifacts_v31/meta_dataset.parquet "${BUCKET}/out/"
+  gsutil -m -q cp nn_meta/artifacts_v31/*.marks.parquet "${BUCKET}/out/"
   exit 0
 fi
 

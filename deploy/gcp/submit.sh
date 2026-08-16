@@ -35,7 +35,7 @@ cat > /tmp/healys_batch_job.json <<JSON
         "BUCKET": "${BUCKET}",
         "SHARDS": "${SHARDS}",
         "SYMBOLS": "${SYMBOLS}",
-        "TASK_MODE": "build"
+        "TASK_MODE": "${TASK_MODE:-build}"
       }}
     }
   }],
@@ -54,4 +54,4 @@ gcloud batch jobs submit "$JOB" --project "$PROJECT" --location "$REGION" \
 echo "submitted: $JOB"
 echo "watch:     gcloud batch jobs describe $JOB --project $PROJECT --location $REGION"
 echo "when all build tasks SUCCEED, run the single assemble task:"
-echo "  TASK_MODE=assemble ... (see README step 6)"
+echo "  TASK_MODE=assemble PROJECT=... BUCKET=... bash deploy/gcp/submit.sh 1"

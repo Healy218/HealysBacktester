@@ -40,16 +40,16 @@ _STATE_PATH = config.ROOT / "live" / (
 # scorer(signal, bars) -> P(win) in [0,1], or None to keep (baseline mode)
 Scorer = Callable[["Signal", pd.DataFrame], Optional[float]]
 
-# Live ticker renames: spec/model symbols whose exchange listing changed since
-# training. Bars are FETCHED under the new ticker (the old one returns
-# nothing) while every model-facing key stays on the trained symbol. Inert for
-# v2/v3 (their specs contain none of these); revives the seat for v31/v4.
-TICKER_ALIASES = {"SQ": "XYZ"}   # Block, Inc. — audited 2026-08-16
+# Renamed-listing aliases live in config (constants-only home, 2026-08-16
+# review P2 — the offline crawler needs them without importing this module's
+# logging side effects); re-exported here for existing callers/tests.
+TICKER_ALIASES = config.TICKER_ALIASES
 
 
 def aliased_bar_loader(loader: Callable[[str], pd.DataFrame]
                        ) -> Callable[[str], pd.DataFrame]:
-    """Wrap a bar loader so renamed tickers fetch under their new symbol."""
+    """Wrap a bar loader so renamed tickers fetch under their new symbol.
+    Inert for v2/v3 (their specs contain no renamed tickers)."""
     return lambda sym: loader(TICKER_ALIASES.get(sym, sym))
 
 

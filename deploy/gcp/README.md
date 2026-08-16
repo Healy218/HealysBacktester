@@ -17,8 +17,14 @@ monthly cost:
 | Residual | Monthly cost | Removed by |
 |---|---|---|
 | GCS bucket (data cache 3.4 GB + results) | ~$0.10 | `teardown.sh` with `DELETE_BUCKET=1` |
-| Container image in Artifact Registry (~2 GB) | ~$0.20 | `teardown.sh` |
+| Container images in Artifact Registry (~2 GB) | ~$0.20 | `teardown.sh` (deletes images, keeps the one-time repo) |
+| Cloud Build staging bucket (`gs://<project>_cloudbuild`, one source tarball per build) | pennies | `teardown.sh` |
 | Batch job *records* (metadata, no compute) | $0 | `teardown.sh` |
+
+Spot note: preemptions count against each task's `maxRetryCount: 3`. In a
+churny spot pool a shard can FAIL after three preemptions — that's fine by
+design: resubmitting the job resumes from the per-symbol checkpoints in the
+bucket and only redoes in-flight symbols.
 
 Belt-and-braces on top of the architecture:
 1. Every job template sets `maxRunDuration: 14400s` — a hung task is killed
@@ -64,13 +70,13 @@ region). That already runs 8–18 tasks wide; request more via IAM → Quotas
 ```sh
 cd ~/Coding/HealysBacktester
 
-# 4. build + push the image (Cloud Build — no local docker; ~5 min)
+# 4. build + push the image (Cloud Build — no local docker; ~5 min).
+#    gcloud only reads a context-root file named exactly `Dockerfile`;
+#    the transient copy is gitignored and removed after the build.
 SHA=$(git rev-parse --short HEAD)
-cp deploy/gcp/Dockerfile ./Dockerfile.gcp
-gcloud builds submit --tag \
-  us-central1-docker.pkg.dev/healys-batch/healys/backtester:$SHA \
-  --gcs-log-dir=gs://healys-backtester/buildlogs . 2>&1 | tail -2
-rm Dockerfile.gcp
+cp deploy/gcp/Dockerfile ./Dockerfile
+gcloud builds submit --tag us-central1-docker.pkg.dev/healys-batch/healys/backtester:$SHA . 2>&1 | tail -2
+rm ./Dockerfile
 
 # 5. one-time data sync (ingress is free; ~10 min on home upstream)
 gsutil -m rsync -r nn_meta/data_cache_v3 gs://healys-backtester/data_cache_v3

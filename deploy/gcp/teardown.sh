@@ -14,9 +14,15 @@ for j in $(gcloud batch jobs list --project "$PROJECT" --location "$REGION" \
   gcloud batch jobs delete "$j" --project "$PROJECT" --location "$REGION" --quiet || true
 done
 
-echo "== container images =="
-gcloud artifacts repositories delete healys --project "$PROJECT" \
-  --location "$REGION" --quiet || true
+echo "== container images (repo itself is one-time setup — keep it) =="
+for img in $(gcloud artifacts docker images list \
+    "${REGION}-docker.pkg.dev/${PROJECT}/healys" --format="value(package)" \
+    2>/dev/null | sort -u); do
+  gcloud artifacts docker images delete "$img" --delete-tags --quiet || true
+done
+
+echo "== Cloud Build staging bucket (auto-created per build) =="
+gcloud storage rm -r "gs://${PROJECT}_cloudbuild" --project "$PROJECT" 2>/dev/null || true
 
 echo "== stray VMs (there should be NONE — Batch self-deletes; listing to prove it) =="
 gcloud compute instances list --project "$PROJECT" --format="table(name,status)" || true

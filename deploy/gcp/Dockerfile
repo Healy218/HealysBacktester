@@ -3,9 +3,10 @@
 #   gcloud builds submit --tag $IMAGE .
 # from the REPO ROOT (this file is passed via --config or copied there).
 #
-# python:3.12-slim + toolchain for numba/vectorbt; deps pinned by
-# constraints-linux.txt — the exact stack the local venv used for every
-# committed result, so cloud-built artifacts are comparable byte-for-byte.
+# python:3.12-slim + toolchain for numba/vectorbt; the PYTHON stack is pinned
+# exactly by constraints-linux.txt (== the local venv that produced every
+# committed result). Base image + apt packages float — pin a digest if a
+# pilot diff ever shows OS-level drift; the numeric stack is what matters.
 FROM python:3.12-slim
 
 RUN apt-get update && apt-get install -y --no-install-recommends \

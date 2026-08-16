@@ -73,3 +73,4 @@ nn_meta/live/.v4_*.json
 nn_meta/live/.alert_state*.json
 nn_meta/live/.heartbeat_state.json
 .claude/settings.local.json
+/Dockerfile

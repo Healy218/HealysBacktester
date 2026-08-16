@@ -1,0 +1,14 @@
+# Local `docker build .` safety net (the gcloud path derives .gcloudignore
+# from .gitignore, but a plain docker build would otherwise bake secrets and
+# ~7GB of caches into layers).
+.env*
+venv/
+.git/
+logs/
+*.log
+nn_meta/data_cache*/
+nn_meta/artifacts_v31/meta_rows*/
+nn_meta/artifacts_v31/meta_marks/
+nn_meta/runs*/
+v3/data/
+.claude/
