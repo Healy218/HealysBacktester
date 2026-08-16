@@ -1,6 +1,11 @@
-# v3 Spec — Big-Universe Meta-Labeling (DRAFT)
+# v3 Spec — Big-Universe Meta-Labeling
 
-**Status:** draft for review — not started.
+**Status (2026-08-15):** SHIPPED — v3 is the live scanner model and the
+at-scale variant (v3.1) ran and was shelved; see `ROADMAP.md` ✅ Done and
+`docs/v31_run_history.md`. Kept as the design record; the original draft
+header follows unedited.
+
+**Original status:** draft for review — not started.
 **Prerequisites:** (1) v2.2 walk-forward verdict is in (`nn_meta/reports/meta_report.md`),
 (2) the live alert scanner is deployed on a server and texting reliably
 (research mode, alert-only). v3 work begins after both.

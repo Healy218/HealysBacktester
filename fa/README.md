@@ -1,6 +1,6 @@
 # fa — ticker discovery pipeline (scaffold)
 
-Spec: `../FA_SPEC.md`. Stubs map 1:1 to the spec's build order.
+Spec: `../docs/specs/FA_SPEC.md`. Stubs map 1:1 to the spec's build order.
 `collectors/` (Stage 0) is the part that deploys EARLY on the live-alert
 server — archive-first, because social history can't be bought later.
 

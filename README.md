@@ -7,7 +7,7 @@ The repo therefore has two layers:
 - **Layer 1 — vectorbt strategy sweeps** (`scripts/`, `signals/`, `portfolio/`, `main.py`): the original framework — fast vectorized backtests of thousands of MA/RSI/MACD/volume parameter combinations on equities, browsed in a Dash dashboard. Still works; documented in full below.
 - **Layer 2 — the options meta-labeling pipeline** (`nn_meta/`, `nn_options_signal/`, `v3/`, `fa/`): the project's current center of gravity. Proposal strategies emit candidate option trades; a meta-classifier decides which to keep; everything is evaluated portfolio-level, out-of-fold, with costs, against a boring baseline.
 
-> **New here? Read [`ROADMAP.md`](ROADMAP.md) first** — it's the one-page map of how the phases fit together. The layer-2 specs are [`V3_SPEC.md`](V3_SPEC.md), [`V4_OUTLINE.md`](V4_OUTLINE.md) (+ [`V4_SMOKE_TEST.md`](V4_SMOKE_TEST.md)), and [`FA_SPEC.md`](FA_SPEC.md).
+> **New here? Read [`CLAUDE.md`](CLAUDE.md) first** — it defines the documentation system: [`ROADMAP.md`](ROADMAP.md) for overall goals, [`TODO.md`](TODO.md) for the current phase, [`HANDOFF.md`](HANDOFF.md) for session state, [`DOCUMENTATION.md`](DOCUMENTATION.md) for conventions/traps/ops. Design specs live in [`docs/specs/`](docs/specs/) — [`V3_SPEC.md`](docs/specs/V3_SPEC.md), [`V4_OUTLINE.md`](docs/specs/V4_OUTLINE.md) (+ [`V4_SMOKE_TEST.md`](docs/specs/V4_SMOKE_TEST.md)), [`FA_SPEC.md`](docs/specs/FA_SPEC.md).
 
 ---
 
@@ -30,7 +30,7 @@ Every generation must **beat the boring baseline** (a LightGBM tree and an under
 
 ### v4 — causal validation (active research line)
 
-`codex/v4-causal-validation` (see [`V4_OUTLINE.md`](V4_OUTLINE.md)) hardens the evaluation contract before the next training generation: explicit `available_at` feature timing, exit-time purging + embargo, nested per-fold model/threshold selection, mark-to-market option accounting, fold-local probability **calibration**, **deflated Sharpe / PBO** multiple-testing control, a score-decile **inversion diagnostic**, HAR-RV/GARCH volatility baselines, and an offline↔online feature-parity gate. It is research-in-progress — its promotion gates are not yet passed.
+`codex/v4-causal-validation` (see [`V4_OUTLINE.md`](docs/specs/V4_OUTLINE.md)) hardens the evaluation contract before the next training generation: explicit `available_at` feature timing, exit-time purging + embargo, nested per-fold model/threshold selection, mark-to-market option accounting, fold-local probability **calibration**, **deflated Sharpe / PBO** multiple-testing control, a score-decile **inversion diagnostic**, HAR-RV/GARCH volatility baselines, and an offline↔online feature-parity gate. It is research-in-progress — its promotion gates are not yet passed.
 
 Typical layer-2 commands (options pipeline, not the equity scripts):
 
@@ -303,7 +303,7 @@ Change to `"DEBUG"` to see verbose output including index normalization and sign
 **Layer 2 (options meta-labeling):**
 - **Options history:** ~2 years of 15-minute option bars (Massive/Polygon entitlement-gated). Longer underlying history feeds longer-window features only.
 - **Survivorship bias:** the universe is a present-day symbol list until a point-in-time constituent source exists.
-- **v4 not yet validated:** the causal-validation gates in `V4_OUTLINE.md` are not all passed; v3.1-at-scale is ROBUST-but-outlier-fragile, not a clear upgrade over live v3 (see `ROADMAP.md`).
+- **v4 not yet validated:** the causal-validation gates in `docs/specs/V4_OUTLINE.md` are not all passed; v3.1-at-scale is ROBUST-but-outlier-fragile, not a clear upgrade over live v3 (see `ROADMAP.md`).
 - **`models/` and `sentiment/`:** early experimental stubs, not wired into the meta pipeline (sentiment is lexicon-level; transformer scoring is a v4 backlog item).
 
 ---

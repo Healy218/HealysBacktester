@@ -1,6 +1,8 @@
 # v3 — big-universe TA pipeline (scaffold)
 
-Spec: `../V3_SPEC.md`. Not started; stubs map 1:1 to the spec's build order.
+Spec: `../docs/specs/V3_SPEC.md`. Stubs map 1:1 to the spec's build order.
+(The v3 *pipeline* shipped and is live — see `ROADMAP.md`; some stubs here
+were superseded by implementations elsewhere, e.g. `nn_meta/`.)
 
 | Stage | Module | Spec section |
 |---|---|---|

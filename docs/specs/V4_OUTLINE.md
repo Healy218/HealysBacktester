@@ -1,5 +1,11 @@
 # v4 Outline — Causal Validation and Research Reproducibility
 
+> **2026-08-15: this file is now a design spec + results record, not a task
+> tracker.** The session queues below are frozen as history (their unticked
+> items were migrated to `TODO.md`, which is where live tasks live — see
+> `CLAUDE.md` for the doc system). Come here for the evaluation contract,
+> the stage designs, the Option B plan, and the stage-0 result tables.
+
 Status: Stage 0 empirical results are in (2026-07-21 night, see below) —
 v4's causal fixes (`prem_spot` removed, purged nested selection) confirmed
 real: the corrected ablation is still solidly positive (not zeroed out by

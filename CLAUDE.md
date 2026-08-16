@@ -1,78 +1,68 @@
 # CLAUDE.md
 
-Durable facts for working in this repo. Live state (what's running, what's
-broken today, current run verdicts) lives in the session memory files, not
-here — this file should only need editing when the *setup* changes.
+Read this first, whoever (and whatever model) you are. This file holds the
+documentation system and the durable setup facts. Live state is never in
+here — it lives in the files below.
 
-New to the project: `README.md` for what it is, `ROADMAP.md` for how the
-phases fit, then `V4_OUTLINE.md` for current work.
+## The documentation system
 
-## Environment
+| File | What it is | Your obligation |
+|---|---|---|
+| `ROADMAP.md` | **Overall goals** — every workstream, one map, phase-gated | Consult for direction; it feeds TODO.md |
+| `TODO.md` | The **current phase's** task list | Read at session start; tick items as they land |
+| `HANDOFF.md` | State left by the **previous session** | Read at session start; rewrite fresh at session end |
+| `handoff-history/` | Archived handoffs, dated | Move the old `HANDOFF.md` here before writing a new one |
+| `DOCUMENTATION.md` | Coding notes, conventions, **traps**, ops runbook | Check its Traps before "fixing" anything that looks wrong; add durable facts here |
+| `docs/DECISIONS.md` | Dated decision log incl. rejected alternatives | Append on real decisions; don't relitigate entries |
+| `docs/EXPERIMENTS.md` | Scoreboard: every generation's verdict | Add a row per evaluated run |
+| `docs/specs/` | Design specs (V4_OUTLINE, FA_SPEC, …) — reference, not task lists | Detail lookup only |
+| `docs/v31_run_history.md` | Archived chronology of the v3.1 era | History, not live state |
+| `README.md` | What the project is, layer by layer | Onboarding |
 
-- **Repo**: `/home/healylabs/Coding/HealysBacktester`
-- **Python**: `./venv/bin/python` (3.12.3). There is no conda, no system-python
-  path — always call the venv binary explicitly.
-- **Tests**: `./venv/bin/python -m pytest tests/ -q` — 345 tests, all green.
-  They must not require LightGBM, network access, or v31 artifacts.
-- **Secrets**: `.env` at the repo root, never in git. Keys: `ALPACA_API_*`,
-  `MASSIVE_API_KEY`, `MASSIVE_FLAT_FILES_API_*`, `ALPHAVANTAGE_KEY`,
-  `FINNHUB_API_KEY`, `REDDIT_CLIENT_*`, `TELEGRAM_BOT_TOKEN`,
-  `TELEGRAM_CHAT_ID`, `FA_SKIP_COLLECTORS`.
-- **`NN_META_POOL`** selects the strategy pool AND suffixes every artifact dir
-  (`nn_meta/config.py`). Defaults to `v2`; the v3.1/v4 launchers export `v31`.
-  Setting it wrong silently reads and writes the wrong directories.
+## Session protocol
 
-## The box
+1. **Start**: read `TODO.md`, then `HANDOFF.md`. That's the whole context
+   load — don't re-derive state from scratch.
+2. **Work**: on `codex/v4-causal-validation`; small single-purpose commits;
+   push often. Tests stay green: `./venv/bin/python -m pytest tests/ -q`
+   (345, self-contained — no LightGBM, no network, no v31 artifacts).
+3. **End** (or at a milestone, or before context runs out): archive
+   `HANDOFF.md` → `handoff-history/HANDOFF-YYYY-MM-DD[-slug].md`, write a
+   fresh `HANDOFF.md`, tick `TODO.md`, log any decision/verdict in
+   `docs/DECISIONS.md` / `docs/EXPERIMENTS.md`, commit and push.
 
-i5-11400F (6C/12T, **no iGPU**), 16 GB DDR4 @ 2400, RTX 3060 Ti, Pop!_OS on
-kernel 7.0.11. **It has an unresolved hardware fault that corrupts kernel
-memory and freezes the machine**, most often under mmap-heavy dev tooling.
-Commit and push often; don't leave hours of work uncommitted. Details and
-everything already ruled out are in the `home-box-memory-corruption` memory —
-read it before re-testing anything.
+## Environment (the facts you need before running anything)
+
+- **Repo**: `/home/healylabs/Coding/HealysBacktester` on the Pop!_OS home
+  box. Production is the Hetzner server — deploy by `git pull` over the
+  deploy key, **never scp** (ops runbook: `DOCUMENTATION.md`).
+- **Python**: `./venv/bin/python` (3.12.3) — always the venv binary
+  explicitly; there is no conda or system path.
+- **`NN_META_POOL`** selects the strategy pool AND suffixes every artifact
+  dir (`nn_meta/config.py`). Defaults to `v2`; the live scanner uses `v3`;
+  all v3.1/v4 work needs `v31`. Wrong value = silently reading and writing
+  the wrong directories.
+- **Secrets** in `.env` at the repo root, never in git.
 
 ## Layout
 
-- `nn_meta/` — the options meta-labeling pipeline (current center of gravity)
-- `v3/`, `nn_options_signal/`, `fa/` — v3 pool, signal layer, fundamentals
+- `nn_meta/` — the options meta-labeling pipeline (center of gravity);
+  live scanner + v4 parity/state under `nn_meta/live/`
+- `v3/`, `nn_options_signal/`, `fa/` — at-scale data layer, signal layer,
+  ticker-discovery loop
 - `scanner/`, `portfolio/`, `signals/`, `indicators/` — layer-1 vectorbt sweeps
-- `scripts/` — launchers, watchers, reboot-recovery dispatcher
-- `deploy/systemd/` — home-box systemd units (committed, not folklore)
+- `scripts/` — launchers, watchers, reboot-recovery dispatcher (+ `jobs.d/`)
+- `deploy/systemd/` — home-box units (committed, not folklore)
 - `tests/` — pytest suite
 
-## Conventions
+## Non-negotiables
 
-- Work on `codex/v4-causal-validation`. Small, single-purpose commits.
-- **Scripts derive their own repo root**:
-  `cd "$(dirname "$(readlink -f "$0")")/.."`. Never reintroduce an absolute
-  local path — that's what broke every launcher when the WSL2 box was retired.
-- **Never hardcode worker/shard counts.** Source `scripts/lib/autosize.sh` and
-  call `autosize_workers <per_worker_mb>`; it divides MemAvailable (less a 2 GB
-  reserve) by the budget and caps at `nproc`. The desktop is a real competitor
-  for RAM here — with VS Code open the correct answer can be *lower* than the
-  old hardcoded constants.
-- Long jobs register with `scripts/boot_restart.sh` by creating an **empty**
-  marker in `scripts/.jobstate/` at launch and writing the exit code at the
-  end. Absent marker = never started here = leave alone.
-
-## Traps
-
-Things that look wrong and are not — check here before "fixing" them:
-
-- `BASE=/home/mrhea/HealysBacktester/...` and `SERVER=mrhea@62.238.20.66` in
-  `scripts/` are **remote** paths on the Hetzner box, where the user really is
-  `mrhea`. Correct as written.
-- `scripts/jobs.d/*.sh` are **sourced**, not executed. Their missing executable
-  bit is correct.
-- `nn_meta/HANDOFF.md` is a historical v2.2 record and tells you to run
-  `wsl --install`. Ignore it; there is no WSL here.
-- Run logs are written to the **repo root**, not `logs/` — `.gitignore` covers
-  them with an anchored `/*.log`.
-- `scripts/.jobstate/` and run logs are gitignored, so on a fresh checkout every
-  job looks "not done". That is why the absent-marker guard exists.
-
-## Deploy
-
-Production is the Hetzner server (live scanner + FA collectors) — see the
-`hetzner-server` memory. Deploy there by `git pull` over the deploy key, never
-by scp: an untracked scp'd file once wedged pulls for days.
+- Scripts derive their own repo root (`cd "$(dirname "$(readlink -f
+  "$0")")/.."`); no absolute local paths, no hardcoded worker counts
+  (`scripts/lib/autosize.sh`).
+- Point-in-time everything; frozen artifacts; new complexity must beat the
+  boring baseline before it ships (full standing rules: `ROADMAP.md`).
+- Experts deploy **alongside** the live scanner, never swapped in before
+  their gates pass; `main` stays the operational line.
+- Before concluding something in `scripts/` or the caches is broken, read
+  `DOCUMENTATION.md` → Traps. Several things here look wrong and are not.
