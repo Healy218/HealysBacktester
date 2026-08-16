@@ -284,3 +284,42 @@ def test_underlying_daily_fetches_alias_stores_spec_symbol(tmp_path, monkeypatch
     assert set(und["underlying"]) == {"SQ", "SPY"}   # stored on the trained symbol
     on_disk = pd.read_parquet(tmp_path / "underlying_daily.parquet")
     assert set(on_disk["underlying"]) == {"SQ", "SPY"}
+
+
+def test_compact_recovery_survives_main_path_ensure_dirs(tmp_path, monkeypatch):
+    """P0 (2026-08-16 pre-merge review): after a mid-swap crash, main()'s
+    REAL ensure_dirs() recreates an empty bars_daily; recovery must be
+    content-based or the rerun deletes .old — the only full copy."""
+    import sys
+    from nn_meta import download_universe as du
+    bars = tmp_path / "bars_daily"
+    old = tmp_path / "bars_daily.old"
+    old.mkdir()
+    pd.DataFrame({"ticker": ["A"], "date": [pd.Timestamp("2026-06-01")],
+                  "close": [5.0]}).to_parquet(old / "bars_part_0000.parquet",
+                                              index=False)
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars)
+    monkeypatch.setattr(config, "DONE_MANIFEST", tmp_path / "bars_done.txt")
+    # do NOT stub ensure_dirs — reproducing the real dispatch is the point
+    monkeypatch.setattr(sys, "argv", ["download_universe", "--compact"])
+    du.main()
+    assert not old.exists()                       # recovered, then cleaned
+    assert (bars / "bars_part_0000.parquet").exists()   # data survived
+    out = pd.read_parquet(bars / "bars_part_0000.parquet")
+    assert list(out["ticker"]) == ["A"]
+
+
+def test_compact_deletes_old_only_when_bars_daily_has_real_parts(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    bars = tmp_path / "bars_daily"; bars.mkdir()
+    old = tmp_path / "bars_daily.old"; old.mkdir()
+    d = pd.Timestamp("2026-06-01")
+    pd.DataFrame({"ticker": ["NEW"], "date": [d], "close": [5.0]}) \
+        .to_parquet(bars / "bars_part_0000.parquet", index=False)
+    pd.DataFrame({"ticker": ["OLD"], "date": [d], "close": [5.0]}) \
+        .to_parquet(old / "bars_part_0000.parquet", index=False)
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars)
+    du.compact_bars_daily()
+    assert not old.exists()                       # completed swap → .old dropped
+    kept = pd.read_parquet(sorted(bars.glob("bars_part_*.parquet"))[0])
+    assert list(kept["ticker"]) == ["NEW"]        # post-swap truth kept

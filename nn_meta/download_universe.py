@@ -41,7 +41,7 @@ except ImportError:
 from data import vbt_data_loader
 from nn_options_signal.download_contracts import crawl
 from nn_meta import config
-from nn_meta.live.scanner import TICKER_ALIASES
+from nn_meta.config import TICKER_ALIASES
 
 FLUSH_EVERY = 500
 _thread_local = threading.local()
@@ -360,13 +360,26 @@ def compact_bars_daily() -> None:
     old_dir = bars_dir.with_name(bars_dir.name + ".old")
     tmp_dir = bars_dir.with_name(bars_dir.name + ".compacting")
 
-    if old_dir.exists() and not bars_dir.exists():     # crashed mid-swap
+    # Recovery is CONTENT-based, not existence-based (P0 fix, 2026-08-16
+    # pre-merge review): main() runs config.ensure_dirs() before dispatching
+    # here, which recreates an EMPTY bars_daily after a mid-swap crash — an
+    # existence check would classify that as "crashed after the swap" and
+    # delete .old, the only full copy (partly unrecoverable: bars older than
+    # the rolling 2y entitlement exist only in this cache).
+    def _has_parts(d):
+        return d.exists() and any(d.glob("bars_part_*.parquet"))
+
+    if _has_parts(old_dir) and not _has_parts(bars_dir):
+        # crashed between the swap renames — .old holds the only real data
         print(f"compact: recovering {bars_dir.name} from {old_dir.name}")
+        if bars_dir.exists():
+            shutil.rmtree(bars_dir)                    # empty ensure_dirs shell
         old_dir.rename(bars_dir)
+    elif old_dir.exists():
+        # bars_daily has real parts (or .old has none) — the swap completed
+        shutil.rmtree(old_dir)
     if tmp_dir.exists():                               # stale partial output
         shutil.rmtree(tmp_dir)
-    if old_dir.exists():                               # crashed after the swap
-        shutil.rmtree(old_dir)
 
     parts = (sorted(bars_dir.glob("bars_part_*.parquet"),
                     key=_part_number, reverse=True)
