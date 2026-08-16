@@ -33,12 +33,36 @@ one moves to `handoff-history/`.
   at repo root (`v4_v31.log`, `v31_notify.log`, empty `wf_prewarm_*.log`)
   are gitignored litter from an aborted 07-27 session, safe to delete.
 
+## THE STANDING GOAL (user, 2026-08-16)
+
+**v4 goes to the server the moment it finishes training/building.** When the
+dataset build completes: re-run evaluate through the ledger → re-finalize →
+deploy immediately. The live scoring path (TODO block 2) gets built *while*
+compute runs so deploy is never waiting on code.
+
+## Running job (2026-08-16 02:42): the --marks dataset build
+
+- `scripts/run_build_parallel.sh` (now emits marks + jobstate marker),
+  logs `v31_marks_build.log` + `v31_build_0.log` at repo root; done when
+  `scripts/.jobstate/v31_marks_build.exit` contains `0` and the log prints
+  `PARALLEL-BUILD-DONE`. Output: rebuilt `meta_dataset.parquet` (now with
+  fill provenance columns — it will show as a *modified tracked file*,
+  expected, don't commit until verified) + `meta_dataset.marks.parquet`.
+- Launched at **1 shard** (desktop RAM). **To widen** (worth it below ~30
+  symbols done): `pkill -f run_build_parallel.sh; pkill -f
+  nn_meta.build_meta_dataset`, then re-run the launcher — per-symbol
+  checkpoints make this cheap. A background watcher pings when MemAvailable
+  crosses 10.5 GB (≈3 shards worth).
+- July checkpoints archived at `artifacts_v31/meta_rows.pre-marks-2026-08-15/`
+  (delete once the new dataset assembles clean).
+
 ## Next session: start here
 
-1. Open `TODO.md`, phase 1, first box: launch the `--marks` dataset build
-   (multi-hour — start it before anything else, `NN_META_POOL=v31`).
-2. While it runs: the selection-side ledger wiring in `nn_meta/v4_evaluate.py`
-   (spec: `docs/specs/V4_OUTLINE.md` "Option B plan", steps 1–3).
+1. Check the build (log tails + marker above). If done: `--assemble` output
+   sanity (row counts vs the July dataset ±, marks row count ~88M), then
+   TODO block 1 items 2–4 (ledger selection wiring → re-runs → re-finalize).
+2. If still running: TODO block 2 (live v4 scoring path) — it only needs
+   already-committed code, not the new dataset.
 
 ## Gotchas carried forward
 

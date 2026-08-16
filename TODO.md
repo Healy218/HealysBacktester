@@ -3,6 +3,12 @@
 **Phase: ship v4 as a second expert on the server** (`ROADMAP.md` ▶ NOW).
 Set 2026-08-15; target: this weekend.
 
+> **The standing goal (user, 2026-08-16): v4 goes to the server the moment
+> it finishes training/building.** Deploy is the *immediate* next action
+> once the bundle lands — nothing queued between re-finalize and deploy.
+> Corollary: do block 2 (the live scoring path) **while** the dataset builds
+> and the model trains, so it is never the bottleneck.
+
 How this file works: it holds the tasks for the *current* ROADMAP phase only.
 Work top to bottom, tick boxes here as things land, record mid-task state in
 `HANDOFF.md`. When the phase exits, refill this file from ROADMAP's next
@@ -13,12 +19,17 @@ without it the pipeline silently reads/writes the wrong artifact dirs.
 
 ## 1 — Finish v4 on the ledger (Option B, `docs/specs/V4_OUTLINE.md` stage 2)
 
-- [ ] **Launch the mark-stream build first — it's the long pole.**
-  `build_meta_dataset --marks` sharded over the 118-symbol universe, then
-  `--assemble` → `meta_dataset.marks.parquet` sidecar (~88M rows / ~1.7 GB).
-  Multi-hour; raw bars are local (`nn_meta/data_cache_v3/`, 3.4 GB). The
-  assemble path already streams shard-by-shard — never `pd.concat` the full
-  stream (~9 GB, kills a 15 GB box).
+- [~] **Mark-stream build RUNNING since 2026-08-16 02:42** via
+  `scripts/run_build_parallel.sh` (now passes `--marks` and writes the
+  `scripts/.jobstate/v31_marks_build.exit` marker; assemble folds
+  `meta_marks/` into the `meta_dataset.marks.parquet` sidecar, ~88M rows /
+  ~1.7 GB). Launched at 1 shard (desktop held RAM); **re-running the same
+  script widens the shard count and resumes from per-symbol checkpoints** —
+  kill the old launcher first (`pkill -f run_build_parallel.sh; pkill -f
+  nn_meta.build_meta_dataset`). Stale July rows archived to
+  `meta_rows.pre-marks-2026-08-15/` (they predate the provenance columns —
+  a cached-skip rebuild would have emitted zero marks). Logs:
+  `v31_marks_build.log` + `v31_build_<k>.log` at repo root.
 - [ ] **Selection-side ledger wiring**: `evaluate_window()` /
   `choose_policy()` in `nn_meta/v4_evaluate.py` rank candidate policies on
   the `v4_accounting` mark-to-market ledger instead of

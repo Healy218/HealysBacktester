@@ -9,11 +9,23 @@
 # WSL2 box's 12GB .wslconfig cap. Native Pop!_OS has ~15.5GB and 12 threads,
 # so that constant now leaves a shard's worth of headroom unused. Auto-size
 # from what is ACTUALLY free instead of a new constant: a closed desktop earns
-# an extra shard, and this needs no retuning if the 3.6GHz turbo cap (see the
-# crash investigation) comes off. Pass N explicitly to override.
+# an extra shard. Pass N explicitly to override. Sizing happens ONCE at
+# launch — if the desktop frees up mid-run, re-running this script widens the
+# shard count and resumes from the per-symbol checkpoints (only in-flight
+# symbols are redone).
+#
+# Since 2026-08-16 every build also emits the per-contract 15m mark-stream
+# shards (--marks -> meta_marks/<sym>.parquet; --assemble folds them into the
+# .marks.parquet sidecar) — the Option B mark-to-market ledger needs them.
 set -uo pipefail
 cd "$(dirname "$(readlink -f "$0")")/.."
 export NN_META_POOL=v31
+
+# reboot-recovery exit marker (see scripts/jobs.d/README.md): empty = running,
+# 0 = done, nonzero = failed. Created empty at launch by convention.
+MARKER=${JOB_EXIT_MARKER:-scripts/.jobstate/v31_marks_build.exit}
+mkdir -p "$(dirname "$MARKER")"
+: > "$MARKER"
 
 pkill -f 'nn_meta.build_meta_dataset' 2>/dev/null || true
 sleep 2
@@ -35,7 +47,7 @@ PY
 run_shard(){
   local k=$1 syms
   syms=$(cat /tmp/bshard_$k.txt)
-  until ./venv/bin/python -m nn_meta.build_meta_dataset --symbols "$syms" \
+  until ./venv/bin/python -m nn_meta.build_meta_dataset --symbols "$syms" --marks \
       >> v31_build_$k.log 2>&1; do
     echo "== build shard $k exited nonzero — resuming in 15s ==" >> v31_build_$k.log
     sleep 15
@@ -52,5 +64,12 @@ done
 for p in "${pids[@]}"; do wait "$p"; done
 
 echo "=== all shards done — assembling dataset ==="
-./venv/bin/python -m nn_meta.build_meta_dataset --assemble
-echo "PARALLEL-BUILD-DONE"
+if ./venv/bin/python -m nn_meta.build_meta_dataset --assemble; then
+  echo "PARALLEL-BUILD-DONE"
+  echo 0 > "$MARKER"
+else
+  rc=$?
+  echo "ASSEMBLE-FAILED rc=$rc"
+  echo "$rc" > "$MARKER"
+  exit "$rc"
+fi

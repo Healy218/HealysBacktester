@@ -54,7 +54,9 @@ nn_meta/model_final_v3/
 # baseline_spec.json stay tracked as keepers, everything else regenerates
 nn_meta/reports_v31/
 nn_meta/artifacts_v31/smoke_subset.parquet
-nn_meta/artifacts_v31/meta_rows/
+nn_meta/artifacts_v31/meta_rows*/
+nn_meta/artifacts_v31/meta_marks/
+nn_meta/artifacts_v31/*.marks.parquet
 nn_meta/artifacts_v31/wf/
 nn_meta/artifacts_v31/spec_shard_*.json
 nn_meta/runs_v31/
