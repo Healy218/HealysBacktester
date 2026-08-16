@@ -69,3 +69,4 @@ scripts/.jobstate/
 # wf_prewarm_f<N>_<stage>_s<k>.log, ...), which `logs/` above never matched.
 # Anchored to the root so nothing nested is caught by accident.
 /*.log
+nn_meta/live/.v4_*.json
