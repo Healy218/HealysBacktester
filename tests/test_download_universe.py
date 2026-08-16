@@ -261,3 +261,26 @@ def test_load_daily_bars_streams_filters_and_dedupes(tmp_path, monkeypatch):
     assert list(out["ticker"]) == ["OK"]        # far-dte + sub-premium filtered,
     assert len(out) == 1                        # duplicate (ticker,date) deduped
     assert {"underlying", "strike", "expiration", "type"} <= set(out.columns)
+
+
+# ── renamed listings in the underlying crawl (added 2026-08-16) ──────────────
+
+def test_underlying_daily_fetches_alias_stores_spec_symbol(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    requested: list[str] = []
+    idx = pd.bdate_range("2026-06-01", periods=3)
+
+    def fake_loader(symbol, start, end, interval, **kw):
+        requested.append(symbol)
+        return pd.DataFrame({"Open": 1.0, "High": 2.0, "Low": 0.5,
+                             "Close": 1.5, "Volume": 100.0}, index=idx)
+
+    monkeypatch.setattr(du.vbt_data_loader, "load_price_data_smart", fake_loader)
+    monkeypatch.setattr(config, "UNDERLYINGS", ["SQ", "SPY"])
+    monkeypatch.setattr(config, "UNDERLYING_DAILY_PARQUET",
+                        tmp_path / "underlying_daily.parquet")
+    und = du.download_underlying_daily(end="2026-06-10")
+    assert requested == ["XYZ", "SPY"]          # SQ fetched under its new listing
+    assert set(und["underlying"]) == {"SQ", "SPY"}   # stored on the trained symbol
+    on_disk = pd.read_parquet(tmp_path / "underlying_daily.parquet")
+    assert set(on_disk["underlying"]) == {"SQ", "SPY"}

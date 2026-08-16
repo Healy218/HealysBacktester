@@ -41,6 +41,7 @@ except ImportError:
 from data import vbt_data_loader
 from nn_options_signal.download_contracts import crawl
 from nn_meta import config
+from nn_meta.live.scanner import TICKER_ALIASES
 
 FLUSH_EVERY = 500
 _thread_local = threading.local()
@@ -110,10 +111,19 @@ def download_underlying_daily(end: str | None = None) -> pd.DataFrame:
     end = end or config.WINDOW_END
     frames = []
     for sym in config.UNDERLYINGS:
+        # Renamed listings (SQ→XYZ) FETCH under the current exchange ticker —
+        # the old symbol returns nothing and would silently kill the name's
+        # beta/moneyness context — while rows keep underlying=sym, the symbol
+        # the spec/universe/models are keyed on. Options-CONTRACT aliasing is
+        # deliberately out of scope: chain continuity across a rename is
+        # messy, and the v31 legacy scorer simply filters SQ (accepted).
+        fetch_sym = TICKER_ALIASES.get(sym, sym)
         raw = vbt_data_loader.load_price_data_smart(
-            sym, config.HISTORY_START, end, "1D")
+            fetch_sym, config.HISTORY_START, end, "1D")
         if raw is None or raw.empty:
-            print(f"  WARNING: no daily bars for {sym}", flush=True)
+            print(f"  WARNING: no daily bars for {sym}"
+                  + (f" (fetched as {fetch_sym})" if fetch_sym != sym else ""),
+                  flush=True)
             continue
         df = raw.rename(columns={"Open": "open", "High": "high", "Low": "low",
                                  "Close": "close", "Volume": "volume"})
