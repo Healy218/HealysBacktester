@@ -1,0 +1,357 @@
+{
+  "baseline_spec": {
+    "path": "baseline_spec.json",
+    "sha256": "f0820a4c580d9b2d701662b32aaaec6b6f38e360909ac36f9268c79f24512f2c"
+  },
+  "code_revision": "6237ecd9328377124dfe6c3fea7ab22153dc352a",
+  "config_hash": "d71e817a5405",
+  "dataset": {
+    "coverage": {
+      "columns": [
+        "atm_iv_far",
+        "atm_iv_near",
+        "bars_since_signal",
+        "bb_z",
+        "beta_60d",
+        "contract",
+        "dir_short",
+        "direction",
+        "dow",
+        "dow_tod",
+        "dte",
+        "dte_frac",
+        "entry_date",
+        "entry_premium",
+        "entry_ts",
+        "executed",
+        "exit_ts",
+        "expiration",
+        "fill_lag_s",
+        "gap_abs_z",
+        "is_first_hour",
+        "is_last_hour",
+        "iv_chg_5",
+        "label",
+        "label_excess",
+        "ma_gap",
+        "macd_hist",
+        "market_iv",
+        "moneyness",
+        "n_fills",
+        "n_rolls",
+        "net_return",
+        "pc_ratio",
+        "prem_spot",
+        "px_vs_fast",
+        "ret_1",
+        "ret_26",
+        "ret_8",
+        "right",
+        "rsi14",
+        "rv_iv_spread",
+        "rvol_21",
+        "rvol_5",
+        "sec_crypto",
+        "sec_cyclical",
+        "sec_defensive",
+        "sec_fin",
+        "sec_idx_etf",
+        "sec_sec_etf",
+        "sec_semis",
+        "sec_spec",
+        "sec_tech",
+        "session_gap",
+        "split",
+        "strat_ma",
+        "strat_macd",
+        "strat_rsi",
+        "strat_squeeze",
+        "strat_tv_rating",
+        "strategy",
+        "strike",
+        "symbol",
+        "term_slope",
+        "tod",
+        "trade_idx",
+        "und_period_return"
+      ],
+      "entry_ts_max": "2026-07-02T19:45:00",
+      "entry_ts_min": "2024-08-01T13:30:00",
+      "executed_rows": 315104,
+      "exit_ts_max": "2026-07-02T19:45:00",
+      "exit_ts_min": "2024-08-01T13:45:00",
+      "rows": 489255,
+      "unique_contracts": 122602,
+      "unique_strategys": 5,
+      "unique_symbols": 118
+    },
+    "path": "meta_dataset.parquet",
+    "sha256": "353d090cde1ca0357c66278f649dbc544e9a63bf381e60b7ee8d08fe32091721"
+  },
+  "feature_schema": [
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ma_gap",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "px_vs_fast",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "rsi14",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "macd_hist",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "bb_z",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ret_1",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ret_8",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ret_26",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "session_gap",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "gap_abs_z",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tod",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dow",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "is_first_hour",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "is_last_hour",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dow_tod",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "rvol_5",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "rvol_21",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "atm_iv_near",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "atm_iv_far",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "term_slope",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "iv_chg_5",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "pc_ratio",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "market_iv",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "rv_iv_spread",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "beta_60d",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dir_short",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dte_frac",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "moneyness",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "bars_since_signal",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_ma",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_macd",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_rsi",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_squeeze",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_rating",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_idx_etf",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_sec_etf",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_tech",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_semis",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_fin",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_crypto",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_defensive",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_cyclical",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_spec",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    }
+  ],
+  "manifest_version": 1,
+  "provider_metadata": {
+    "interval": "15m",
+    "options_history_constraint": "15m; approximately two years",
+    "pool": "v31"
+  }
+}

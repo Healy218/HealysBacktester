@@ -5,6 +5,15 @@ relitigate settled questions, and keep "considered and rejected" on the
 record. Append here whenever a real choice gets made (or reversed — new
 entry, never edit history).
 
+- **2026-08-16 — `model_final_v4/` is committed (force-add), deployed in
+  paper mode.** Supersedes the 2026-07-25 out-of-git call for the deployable
+  bundle only (9.7 MB — same pattern as `model_final_v3/`; reports stay
+  gitignored). The [v4] expert runs on the server via `--paper` until the
+  Option B re-finalize replaces the bundle in place and the flag is dropped.
+- **2026-08-16 — branch merged to `main` for the alongside-deploy.** Verified
+  first: only v3-critical deltas are a docstring + a default-off kwarg, so
+  the live v3 scanner is behaviorally identical. Model *promotion* stays
+  gated; main carries the additive v4 expert in paper mode.
 - **2026-08-15 — Docs system: one ROADMAP, TODO per phase, fresh HANDOFF per
   session.** Specs demoted to `docs/specs/` reference; task tracking moved
   out of `V4_OUTLINE.md` into `TODO.md`. Old handoffs archive to
