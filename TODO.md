@@ -91,6 +91,12 @@ symbols (all healthy), v4 scans its 118 (117 healthy). Findings:
   since its deploy; the scorer's known "nightly refresh TODO"). Build the
   nightly surface/underlying refresh (home box job + rsync, like the
   StockTwits push) — panel-phase infra, affects every expert.
+- [ ] **Latent trap, don't trip it**: v3's `nn_meta/live/.alert_state.json`
+  is *tracked in git* (pre-existing) while the server mutates it live — any
+  future commit touching/deleting it will conflict with the server's dirty
+  copy on pull. Untrack it deliberately some quiet weekend (backup server
+  copy → `git rm --cached` + gitignore → pull → restore). The new v4 state
+  files are gitignored from the start (learned the hard way, 2026-08-16).
 
 **Remaining for this phase** (after the Option B chain in block 1):
 - [ ] Re-finalize → push new `model_final_v4/` → server `git pull` →
