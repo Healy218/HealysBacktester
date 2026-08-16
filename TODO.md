@@ -124,6 +124,23 @@ paper/alert-only mode (labeled unvalidated-by-ledger), and let the Option B
 re-finalize replace the bundle in place next week. Deploying alongside —
 never swapping v3 — is what makes this safe either way.
 
+## From the 2026-08-16 adversarial review (`docs/reviews/`)
+
+P0s + quick P1s were fixed and deployed same-day (commit `9b8b473`:
+atomic bar cache, shared ticker aliases, lazy TF import, universe shrink
+guard, atomic dataset write). Remaining queue, ordered:
+
+- [ ] `bars_daily` compaction (weekly refresh appends duplicate life-spans;
+  dedupe is read-time only — disk/build-time creep)
+- [ ] Heartbeat coverage for the new experts (v4/v31 cron logs are invisible
+  to the daily digest today)
+- [ ] Paper-ledger drift window comment/reorder in `v4_scan.scan_pass`
+- [ ] Extend `TICKER_ALIASES` into the daily/surface refresh crawls (SQ's
+  beta/IV context)
+- [ ] Untrack `.claude/settings.local.json` (verified: token never in git
+  history) and defuse the tracked `.alert_state.json` landmine
+- [ ] Monday watch: Alpaca 429s from three same-minute scanners → stagger
+
 ## Parked (not this phase)
 
 - PBO report wiring (needs the per-fold candidate matrix).

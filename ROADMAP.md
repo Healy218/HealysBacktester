@@ -106,9 +106,16 @@ exit/roll alerts on the live scanner.
 
 ## ⏸ Parked
 
+- **Cloud batch compute (Google Cloud Batch)** — assessed 2026-08-16,
+  **highly feasible**: every heavy stage is an embarrassingly-parallel,
+  checkpointed CPU job; a full research generation ≈ $10–20 spot and ~1–2 h
+  wall vs ~a week local. Pilot spec + architecture:
+  `docs/GCP_BATCH_FEASIBILITY.md`. First real customer: the next full
+  retrain after Option B.
 - **Deeper options history (2017→)**: blocked on a paid Massive/Polygon
   entitlement — proven limit, not a code gap (`DOCUMENTATION.md` → data
-  limits). Underlying-only deep history is already crawled.
+  limits). Underlying-only deep history is already crawled. (Cloud compute
+  does not change this — it's a provider limit.)
 - **Point-in-time universe selection** (survivorship-bias fix).
 - PBO report wiring; magnitude/EV head training (join the grid when trained).
 
