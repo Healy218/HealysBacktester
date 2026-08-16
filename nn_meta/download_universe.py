@@ -22,6 +22,8 @@ Run:  python -m nn_meta.download_universe [--universe-only]
 """
 import argparse
 import os
+import re
+import shutil
 import sys
 import threading
 import time
@@ -299,6 +301,97 @@ def bulk_download(uni: pd.DataFrame, key: str) -> None:
           flush=True)
 
 
+_PART_NO_RE = re.compile(r"bars_part_(\d+)\.parquet$")
+
+
+def _part_number(path) -> int:
+    m = _PART_NO_RE.search(path.name)
+    return int(m.group(1)) if m else -1
+
+
+def compact_bars_daily() -> None:
+    """Rewrite bars_daily so each ticker's rows live only in its newest part.
+
+    The weekly ``--bars-and-surface-only --refresh-recent-days N`` refresh
+    re-downloads each still-alive contract's FULL life-to-date into a new
+    part, so older parts hold fully redundant copies and the cache grows
+    without bound; duplicates were only ever dropped at read time
+    (``build_surface.load_daily_bars``). Compaction walks the parts
+    NEWEST-first, keeps only rows whose ticker has not appeared in a newer
+    part, and writes each part's survivors immediately (one part in memory at
+    a time; only the seen-ticker set persists). Newest-wins is deliberate: a
+    refetched ticker's newest part contains its complete corrected life, so
+    every older row for that ticker is redundant. NOTE this inverts
+    ``load_daily_bars``' current keep-first tie-break for duplicate
+    (ticker, date) rows — safe because duplicates carry identical historical
+    values.
+
+    "Newest" is the highest NUMERIC part index, not reverse-lexical filename
+    order: the v31 cache mixes the flat-file pipeline's unpadded parts
+    (``bars_part_0`` … ``bars_part_12``, ``v3/derive_contracts.py``) with the
+    zero-padded parts this module's refresh appends (``bars_part_0013`` …),
+    and lexically ``bars_part_9`` > ``bars_part_0013``. Numeric order is
+    chronological across both pipelines (the refresh starts numbering at
+    ``len(existing parts)``). Output parts are renumbered ``0000`` ascending
+    in processing order — read order is irrelevant afterwards because no
+    ticker spans two parts.
+
+    Crash-safe swap: survivors are written into a sibling
+    ``bars_daily.compacting/`` dir, then ``bars_daily`` → ``bars_daily.old``,
+    ``bars_daily.compacting`` → ``bars_daily``, and ``bars_daily.old`` is
+    deleted. RECOVERY RULE: if ``bars_daily`` is missing and
+    ``bars_daily.old`` exists, restore ``.old`` back to ``bars_daily`` (a
+    leftover ``.compacting`` dir is partial output — delete it). This
+    function performs that recovery itself on entry, so rerunning after a
+    crash is always safe. ``config.DONE_MANIFEST`` is untouched: the ticker
+    SET is unchanged, only redundant rows are dropped.
+    """
+    bars_dir = config.BARS_DAILY_DIR
+    old_dir = bars_dir.with_name(bars_dir.name + ".old")
+    tmp_dir = bars_dir.with_name(bars_dir.name + ".compacting")
+
+    if old_dir.exists() and not bars_dir.exists():     # crashed mid-swap
+        print(f"compact: recovering {bars_dir.name} from {old_dir.name}")
+        old_dir.rename(bars_dir)
+    if tmp_dir.exists():                               # stale partial output
+        shutil.rmtree(tmp_dir)
+    if old_dir.exists():                               # crashed after the swap
+        shutil.rmtree(old_dir)
+
+    parts = (sorted(bars_dir.glob("bars_part_*.parquet"),
+                    key=_part_number, reverse=True)
+             if bars_dir.exists() else [])
+    if not parts:
+        print("compact: no bar parts — nothing to do")
+        return
+
+    bytes_before = sum(p.stat().st_size for p in parts)
+    seen: set[str] = set()
+    rows_before = rows_after = out_no = 0
+    tmp_dir.mkdir()
+    for p in parts:
+        df = pd.read_parquet(p)
+        rows_before += len(df)
+        if df.empty:
+            continue
+        keep = df[~df["ticker"].isin(seen)]
+        seen.update(df["ticker"].unique())
+        if keep.empty:
+            continue
+        keep.to_parquet(tmp_dir / f"bars_part_{out_no:04d}.parquet", index=False)
+        out_no += 1
+        rows_after += len(keep)
+
+    bytes_after = sum(q.stat().st_size
+                      for q in tmp_dir.glob("bars_part_*.parquet"))
+    bars_dir.rename(old_dir)
+    tmp_dir.rename(bars_dir)
+    shutil.rmtree(old_dir)
+    print(f"compact: {len(parts)} parts / {rows_before} rows / "
+          f"{bytes_before / 1e6:.1f} MB → {out_no} parts / {rows_after} rows / "
+          f"{bytes_after / 1e6:.1f} MB ({len(seen)} tickers)")
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--universe-only", action="store_true")
@@ -312,6 +405,12 @@ def main() -> None:
                     "whose life_end is within DAYS of today (their bars grew "
                     "since the last fetch); weekly cron uses ~10, a backfill "
                     "after a gap uses the gap length")
+    ap.add_argument("--compact", action="store_true",
+                    help="rewrite bars_daily so each ticker's rows live only "
+                    "in its newest part, reclaiming the space the weekly "
+                    "refresh leaks; runs automatically at the end of "
+                    "--bars-and-surface-only, standalone here (offline — no "
+                    "API key needed)")
     ap.add_argument("--live-horizon", type=int, default=None, metavar="DAYS",
                     help="LIVE-SCANNER REFRESH: crawl listings and build the "
                     "universe through today+DAYS instead of the frozen "
@@ -321,10 +420,13 @@ def main() -> None:
                     "window's horizon passes (it did: 2026-08-16). Weekly "
                     "cron this with --universe-only on the server.")
     args = ap.parse_args()
+    config.ensure_dirs()
+    if args.compact and not args.bars_and_surface_only:
+        compact_bars_daily()                 # offline maintenance — no key
+        return
     key = os.environ.get("MASSIVE_API_KEY", "")
     if not key:
         sys.exit("MASSIVE_API_KEY not set")
-    config.ensure_dirs()
 
     if args.bars_and_surface_only:
         uni = pd.read_parquet(config.UNIVERSE_PARQUET)
@@ -332,6 +434,7 @@ def main() -> None:
         if args.refresh_recent_days:
             prune_manifest_for_refresh(uni, args.refresh_recent_days)
         bulk_download(uni, key)
+        compact_bars_daily()                 # weekly cron self-compacts
         return
 
     expiry_max = daily_end = win_end = None

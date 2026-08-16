@@ -91,6 +91,149 @@ def test_universe_shrink_guard_refuses_drastic_shrink(tmp_path, monkeypatch):
     du._guard_universe_shrink(pd.DataFrame({"ticker": ["A"]}))
 
 
+# ── bars_daily compaction (unbounded refresh growth, added 2026-08-16) ───────
+
+def _bars_part(bars_dir, name, tickers, closes):
+    pd.DataFrame({"ticker": pd.Series(tickers, dtype=object),
+                  "date": pd.to_datetime(["2026-06-01"] * len(tickers)),
+                  "open": pd.Series([1.0] * len(tickers)),
+                  "high": pd.Series([1.0] * len(tickers)),
+                  "low": pd.Series([1.0] * len(tickers)),
+                  "close": pd.Series(closes, dtype=float),
+                  "volume": pd.Series([10] * len(tickers)),
+                  "vwap": pd.Series([None] * len(tickers)),
+                  "transactions": pd.Series([None] * len(tickers))}) \
+        .to_parquet(bars_dir / name, index=False)
+
+
+def _read_all(bars_dir):
+    parts = sorted(bars_dir.glob("bars_part_*.parquet"))
+    return pd.concat([pd.read_parquet(p) for p in parts], ignore_index=True)
+
+
+def test_compact_bars_daily_newest_wins_and_swap_is_clean(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    bars_dir = tmp_path / "bars_daily"
+    bars_dir.mkdir()
+    _bars_part(bars_dir, "bars_part_0000.parquet", ["A", "B"], [1.0, 2.0])
+    _bars_part(bars_dir, "bars_part_0001.parquet", [], [])          # empty part
+    _bars_part(bars_dir, "bars_part_0002.parquet", ["A", "C"], [9.0, 3.0])
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
+    du.compact_bars_daily()
+    out = _read_all(bars_dir)
+    # overlap: single A copy survives, from the NEWEST part
+    assert out[out["ticker"] == "A"]["close"].tolist() == [9.0]
+    # non-overlapping tickers all survive
+    assert sorted(out["ticker"]) == ["A", "B", "C"]
+    # crash-swap dirs are gone, new dir is dense-renumbered from 0000
+    assert not (tmp_path / "bars_daily.old").exists()
+    assert not (tmp_path / "bars_daily.compacting").exists()
+    assert [p.name for p in sorted(bars_dir.glob("*.parquet"))] == \
+        ["bars_part_0000.parquet", "bars_part_0001.parquet"]
+    # no ticker spans two parts (newest-processed part carries A+C)
+    assert sorted(pd.read_parquet(bars_dir / "bars_part_0000.parquet")["ticker"]) \
+        == ["A", "C"]
+
+
+def test_compact_bars_daily_non_overlapping_parts_untouched(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    bars_dir = tmp_path / "bars_daily"
+    bars_dir.mkdir()
+    _bars_part(bars_dir, "bars_part_0000.parquet", ["A"], [1.0])
+    _bars_part(bars_dir, "bars_part_0001.parquet", ["B", "C"], [2.0, 3.0])
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
+    du.compact_bars_daily()
+    out = _read_all(bars_dir)
+    assert sorted(zip(out["ticker"], out["close"])) == \
+        [("A", 1.0), ("B", 2.0), ("C", 3.0)]
+
+
+def test_compact_bars_daily_is_idempotent(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    bars_dir = tmp_path / "bars_daily"
+    bars_dir.mkdir()
+    _bars_part(bars_dir, "bars_part_0000.parquet", ["A", "B"], [1.0, 2.0])
+    _bars_part(bars_dir, "bars_part_0001.parquet", ["A"], [9.0])
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
+    du.compact_bars_daily()
+    first = _read_all(bars_dir).sort_values("ticker").reset_index(drop=True)
+    du.compact_bars_daily()
+    second = _read_all(bars_dir).sort_values("ticker").reset_index(drop=True)
+    pd.testing.assert_frame_equal(first, second)
+    assert sorted(zip(second["ticker"], second["close"])) == \
+        [("A", 9.0), ("B", 2.0)]
+
+
+def test_compact_bars_daily_orders_parts_numerically_not_lexically(
+        tmp_path, monkeypatch):
+    """The real v31 cache mixes the flat-file pipeline's unpadded parts
+    (bars_part_0..12) with the refresh's padded ones (bars_part_0013..);
+    lexically bars_part_9 > bars_part_0013, so lexical newest-first would
+    keep the STALE flat-file copy and silently drop the refreshed bars."""
+    from nn_meta import download_universe as du
+    bars_dir = tmp_path / "bars_daily"
+    bars_dir.mkdir()
+    _bars_part(bars_dir, "bars_part_9.parquet", ["A"], [1.0])       # stale fetch
+    _bars_part(bars_dir, "bars_part_0013.parquet", ["A", "A"], [9.0, 9.5])
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
+    du.compact_bars_daily()
+    out = _read_all(bars_dir)
+    assert sorted(out["close"]) == [9.0, 9.5]   # refreshed complete life wins
+
+
+def test_compact_bars_daily_recovers_from_crashed_swap(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    bars_dir = tmp_path / "bars_daily"          # crashed mid-swap: dir absent,
+    old_dir = tmp_path / "bars_daily.old"       # .old holds the real cache,
+    old_dir.mkdir()                             # .compacting is partial output
+    _bars_part(old_dir, "bars_part_0000.parquet", ["A"], [1.0])
+    (tmp_path / "bars_daily.compacting").mkdir()
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
+    du.compact_bars_daily()
+    assert not old_dir.exists()
+    assert not (tmp_path / "bars_daily.compacting").exists()
+    assert _read_all(bars_dir)["ticker"].tolist() == ["A"]
+
+
+def test_main_compact_flag_is_standalone_and_offline(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    bars_dir = tmp_path / "bars_daily"
+    bars_dir.mkdir()
+    _bars_part(bars_dir, "bars_part_0000.parquet", ["A"], [1.0])
+    _bars_part(bars_dir, "bars_part_0001.parquet", ["A"], [9.0])
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
+    monkeypatch.setattr(config, "ensure_dirs", lambda: None)
+    monkeypatch.delenv("MASSIVE_API_KEY", raising=False)    # no key required
+    monkeypatch.setattr("sys.argv", ["download_universe", "--compact"])
+    du.main()
+    out = _read_all(bars_dir)
+    assert list(zip(out["ticker"], out["close"])) == [("A", 9.0)]
+
+
+def test_main_bars_path_autocompacts_and_keeps_manifest(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    bars_dir = tmp_path / "bars_daily"
+    bars_dir.mkdir()
+    _bars_part(bars_dir, "bars_part_0000.parquet", ["A", "B"], [1.0, 2.0])
+    _bars_part(bars_dir, "bars_part_0001.parquet", ["A"], [9.0])
+    uni = tmp_path / "universe.parquet"
+    pd.DataFrame({"ticker": ["A", "B"],
+                  "life_start": ["2026-05-01"] * 2,
+                  "life_end": ["2026-06-15"] * 2}).to_parquet(uni, index=False)
+    manifest = tmp_path / "bars_done.txt"
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
+    monkeypatch.setattr(config, "UNIVERSE_PARQUET", uni)
+    monkeypatch.setattr(config, "DONE_MANIFEST", manifest)
+    monkeypatch.setattr(config, "ensure_dirs", lambda: None)
+    monkeypatch.setattr(du, "bulk_download", lambda uni, key: None)
+    monkeypatch.setenv("MASSIVE_API_KEY", "dummy")
+    monkeypatch.setattr("sys.argv", ["download_universe", "--bars-and-surface-only"])
+    du.main()
+    out = _read_all(bars_dir)                   # cron path self-compacted
+    assert sorted(zip(out["ticker"], out["close"])) == [("A", 9.0), ("B", 2.0)]
+    assert sorted(manifest.read_text().split()) == ["A", "B"]   # untouched set
+
+
 def test_load_daily_bars_streams_filters_and_dedupes(tmp_path, monkeypatch):
     from nn_meta import build_surface as bs
     bars_dir = tmp_path / "bars_daily"
