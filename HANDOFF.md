@@ -48,11 +48,14 @@ compute runs so deploy is never waiting on code.
   `PARALLEL-BUILD-DONE`. Output: rebuilt `meta_dataset.parquet` (now with
   fill provenance columns — it will show as a *modified tracked file*,
   expected, don't commit until verified) + `meta_dataset.marks.parquet`.
-- Launched at **1 shard** (desktop RAM). **To widen** (worth it below ~30
-  symbols done): `pkill -f run_build_parallel.sh; pkill -f
-  nn_meta.build_meta_dataset`, then re-run the launcher — per-symbol
-  checkpoints make this cheap. A background watcher pings when MemAvailable
-  crosses 10.5 GB (≈3 shards worth).
+- **Widened to 3 shards 2026-08-16 10:27** after killing background Steam +
+  Discord (~1.4 GB freed; user closed the rest). 8 symbols were already
+  checkpointed and skip on resume. Observed per-worker RSS with `--marks`
+  peaks ~4.0 GB (launcher budget bumped 2800→3600 MB accordingly). ETA at
+  3 shards: ~30–36 h from relaunch → dataset lands late Sun / Mon morning.
+- Beware self-matching pkill: quoting `nn_meta.build_meta_dataset` inside a
+  compound Bash call kills your own shell mid-batch (`pkill -f` matches the
+  wrapper's cmdline). Use a `[_]` bracket in the pattern.
 - July checkpoints archived at `artifacts_v31/meta_rows.pre-marks-2026-08-15/`
   (delete once the new dataset assembles clean).
 

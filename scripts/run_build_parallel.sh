@@ -30,9 +30,12 @@ mkdir -p "$(dirname "$MARKER")"
 pkill -f 'nn_meta.build_meta_dataset' 2>/dev/null || true
 sleep 2
 
-# 2800MB/shard = the documented 2.1-2.7GB worst-observed RSS, rounded up.
+# 3600MB/shard: the pre-marks profile was 2.1-2.7GB, but with --marks the
+# per-symbol mark sink pushes peaks to ~4.0GB on large names (observed AMGN,
+# 2026-08-16). Budget below peak is deliberate — peaks don't fully coincide
+# across shards and the retry loop self-heals a stray OOM kill.
 . "$(dirname "$(readlink -f "$0")")/lib/autosize.sh"
-N=${1:-$(autosize_workers 2800)}
+N=${1:-$(autosize_workers 3600)}
 autosize_report "build" "$N"
 ./venv/bin/python - "$N" <<'PY'
 import json, sys
