@@ -89,3 +89,32 @@ def test_universe_shrink_guard_refuses_drastic_shrink(tmp_path, monkeypatch):
     du._guard_universe_shrink(pd.DataFrame({"ticker": ["A"] * 90}))
     monkeypatch.setattr(config, "UNIVERSE_PARQUET", tmp_path / "absent.parquet")
     du._guard_universe_shrink(pd.DataFrame({"ticker": ["A"]}))
+
+
+def test_load_daily_bars_streams_filters_and_dedupes(tmp_path, monkeypatch):
+    from nn_meta import build_surface as bs
+    bars_dir = tmp_path / "bars_daily"
+    bars_dir.mkdir()
+    d = pd.Timestamp("2026-06-01")
+    exp_ok = d + pd.Timedelta(days=10)
+    exp_far = d + pd.Timedelta(days=config.DTE_MAX + 50)
+    pd.DataFrame({"ticker": ["OK", "FAR", "CHEAP"], "date": [d] * 3,
+                  "open": 1.0, "high": 1.0, "low": 1.0,
+                  "close": [5.0, 5.0, 0.0], "volume": [10, 10, 10],
+                  "vwap": None, "transactions": None}) \
+        .to_parquet(bars_dir / "bars_part_0000.parquet", index=False)
+    pd.DataFrame({"ticker": ["OK"], "date": [d], "open": 1.0, "high": 1.0,
+                  "low": 1.0, "close": [5.0], "volume": [10],
+                  "vwap": None, "transactions": None}) \
+        .to_parquet(bars_dir / "bars_part_0001.parquet", index=False)   # dup row
+    uni = tmp_path / "universe.parquet"
+    pd.DataFrame({"ticker": ["OK", "FAR", "CHEAP"], "underlying": ["SPY"] * 3,
+                  "strike": [100.0] * 3,
+                  "expiration": [exp_ok, exp_far, exp_ok],
+                  "type": ["call"] * 3}).to_parquet(uni, index=False)
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
+    monkeypatch.setattr(config, "UNIVERSE_PARQUET", uni)
+    out = bs.load_daily_bars()
+    assert list(out["ticker"]) == ["OK"]        # far-dte + sub-premium filtered,
+    assert len(out) == 1                        # duplicate (ticker,date) deduped
+    assert {"underlying", "strike", "expiration", "type"} <= set(out.columns)

@@ -17,14 +17,37 @@ from nn_meta import config
 
 
 def load_daily_bars() -> pd.DataFrame:
+    """Load the per-contract daily bars, filtered per part.
+
+    Streaming matters (2026-08-16 review finding): concatenating every raw
+    part before filtering peaked past the 8 GB deploy host's RAM once the
+    weekly refresh grew the v31 cache (the build was silently OOM-killed).
+    Reading only the needed columns and applying the meta join + dte/premium
+    filters per part keeps the peak at one part plus the survivors — the
+    same rows the old path produced (identical filters, order-independent
+    dedupe on identical values)."""
     parts = sorted(config.BARS_DAILY_DIR.glob("bars_part_*.parquet"))
     if not parts:
         raise SystemExit("no daily bar files — run nn_meta.download_universe first")
-    bars = pd.concat([pd.read_parquet(p) for p in parts], ignore_index=True)
-    bars = bars.drop_duplicates(["ticker", "date"])
     meta = pd.read_parquet(config.UNIVERSE_PARQUET)[
         ["ticker", "underlying", "strike", "expiration", "type"]]
-    return bars.merge(meta, on="ticker", how="inner")
+    meta["expiration"] = pd.to_datetime(meta["expiration"])
+    frames = []
+    for p in parts:
+        b = pd.read_parquet(p, columns=["ticker", "date", "close", "volume"])
+        if b.empty:
+            continue
+        b = b.merge(meta, on="ticker", how="inner")
+        if b.empty:
+            continue
+        dte = (b["expiration"] - b["date"]).dt.days
+        b = b[(dte >= 1) & (dte <= config.DTE_MAX)
+              & (b["close"] >= config.MIN_PREMIUM)]
+        if not b.empty:
+            frames.append(b)
+    if not frames:
+        raise SystemExit("no bars survived the universe join/filters")
+    return pd.concat(frames, ignore_index=True).drop_duplicates(["ticker", "date"])
 
 
 def build_surface(bars: pd.DataFrame, und: pd.DataFrame) -> pd.DataFrame:
