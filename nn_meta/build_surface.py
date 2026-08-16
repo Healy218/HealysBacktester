@@ -71,7 +71,9 @@ def main() -> None:
     print(f"daily bars: {len(bars)} rows, {bars['ticker'].nunique()} contracts, "
           f"{bars['underlying'].nunique()} underlyings")
     surf = build_surface(bars, und)
-    surf.to_parquet(config.SURFACE_DATASET_PARQUET, index=False)
+    tmp = config.SURFACE_DATASET_PARQUET.with_suffix(".tmp")   # atomic: the
+    surf.to_parquet(tmp, index=False)                          # live scanner
+    tmp.replace(config.SURFACE_DATASET_PARQUET)                # reads this
     print(f"surface: {len(surf)} (underlying, date) rows → "
           f"{config.SURFACE_DATASET_PARQUET}")
     nan_rates = surf.drop(columns=["underlying", "date"]).isna().mean()

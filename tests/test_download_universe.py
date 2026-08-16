@@ -39,3 +39,39 @@ def test_default_behavior_unchanged_inside_the_window():
     contracts = pd.DataFrame({"expiration": [inside], "strike": [100.0]})
     closes = pd.Series(100.0, index=pd.bdate_range("2026-04-01", "2026-06-30"))
     assert _universe_for(contracts, closes).iloc[0]
+
+
+# ── incremental bars refresh (surface freshness, added 2026-08-16) ───────────
+
+def test_prune_manifest_refetches_only_recent_life_contracts(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    manifest = tmp_path / "bars_done.txt"
+    manifest.write_text("OLD1\nRECENT1\nOLD2\nFUTURE1\n")
+    monkeypatch.setattr(config, "DONE_MANIFEST", manifest)
+    today = pd.Timestamp.today().normalize()
+    uni = pd.DataFrame({
+        "ticker": ["OLD1", "RECENT1", "OLD2", "FUTURE1", "NEVERFETCHED"],
+        "life_end": [(today - pd.Timedelta(days=400)).strftime("%Y-%m-%d"),
+                     (today - pd.Timedelta(days=3)).strftime("%Y-%m-%d"),
+                     (today - pd.Timedelta(days=100)).strftime("%Y-%m-%d"),
+                     (today + pd.Timedelta(days=30)).strftime("%Y-%m-%d"),
+                     (today + pd.Timedelta(days=10)).strftime("%Y-%m-%d")]})
+    pruned = du.prune_manifest_for_refresh(uni, days=10)
+    kept = manifest.read_text().split()
+    assert pruned == 2                      # RECENT1 + FUTURE1 refetch
+    assert kept == ["OLD1", "OLD2"]         # expired long ago -> stay cached
+
+
+def test_bootstrap_manifest_from_parts(tmp_path, monkeypatch):
+    from nn_meta import download_universe as du
+    bars_dir = tmp_path / "bars_daily"
+    bars_dir.mkdir()
+    pd.DataFrame({"ticker": ["A", "B", "A"], "close": [1.0, 2.0, 3.0]}) \
+        .to_parquet(bars_dir / "bars_part_0000.parquet", index=False)
+    manifest = tmp_path / "bars_done.txt"
+    monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
+    monkeypatch.setattr(config, "DONE_MANIFEST", manifest)
+    assert du.bootstrap_manifest_from_parts() == 2
+    assert sorted(manifest.read_text().split()) == ["A", "B"]
+    # idempotent: an existing manifest is never rebuilt/overwritten
+    assert du.bootstrap_manifest_from_parts() == 0

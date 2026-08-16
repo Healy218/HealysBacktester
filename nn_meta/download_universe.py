@@ -178,6 +178,47 @@ def build_universe(contracts: pd.DataFrame, und: pd.DataFrame,
 
 # ── step 4: resumable bulk daily-bar download ─────────────────────────────────
 
+def bootstrap_manifest_from_parts() -> int:
+    """Synthesize a done-manifest from the tickers already present in the
+    bars_daily parts. The v31 cache was built by the flat-files pipeline and
+    carries no manifest — without this, an incremental refresh would try to
+    re-download the entire universe."""
+    if config.DONE_MANIFEST.exists():
+        return 0
+    parts = sorted(config.BARS_DAILY_DIR.glob("bars_part_*.parquet"))
+    if not parts:
+        return 0
+    tickers: set[str] = set()
+    for p in parts:
+        tickers |= set(pd.read_parquet(p, columns=["ticker"])["ticker"].unique())
+    tmp = config.DONE_MANIFEST.with_suffix(".tmp")
+    tmp.write_text("\n".join(sorted(tickers)) + "\n")
+    tmp.replace(config.DONE_MANIFEST)
+    print(f"manifest bootstrapped from parts: {len(tickers)} tickers")
+    return len(tickers)
+
+
+def prune_manifest_for_refresh(uni: pd.DataFrame, days: int) -> int:
+    """Drop from the done-manifest every universe contract whose bar life may
+    still be growing (life_end within ``days`` of today, or in the future), so
+    ``bulk_download`` refetches it life-to-date. Duplicate (ticker, date) rows
+    across old and new parts are deduped by ``build_surface.load_daily_bars``.
+    """
+    if not config.DONE_MANIFEST.exists():
+        return 0
+    cutoff = (pd.Timestamp.today().normalize()
+              - pd.Timedelta(days=days)).strftime("%Y-%m-%d")
+    recent = set(uni.loc[uni["life_end"] >= cutoff, "ticker"])
+    done = [t for t in config.DONE_MANIFEST.read_text().split() if t]
+    keep = [t for t in done if t not in recent]
+    tmp = config.DONE_MANIFEST.with_suffix(".tmp")
+    tmp.write_text("\n".join(keep) + ("\n" if keep else ""))
+    tmp.replace(config.DONE_MANIFEST)
+    pruned = len(done) - len(keep)
+    print(f"manifest: pruned {pruned} recent-life contracts (life_end >= {cutoff})")
+    return pruned
+
+
 def bulk_download(uni: pd.DataFrame, key: str) -> None:
     done: set[str] = set()
     if config.DONE_MANIFEST.exists():
@@ -240,6 +281,16 @@ def bulk_download(uni: pd.DataFrame, key: str) -> None:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--universe-only", action="store_true")
+    ap.add_argument("--bars-and-surface-only", action="store_true",
+                    help="skip the listings/universe rebuild; incrementally "
+                    "refresh the daily option-bar cache against the EXISTING "
+                    "universe parquet (chain `python -m nn_meta.build_surface` "
+                    "after this to rebuild surface_daily)")
+    ap.add_argument("--refresh-recent-days", type=int, default=None,
+                    metavar="DAYS", help="re-download bars for contracts "
+                    "whose life_end is within DAYS of today (their bars grew "
+                    "since the last fetch); weekly cron uses ~10, a backfill "
+                    "after a gap uses the gap length")
     ap.add_argument("--live-horizon", type=int, default=None, metavar="DAYS",
                     help="LIVE-SCANNER REFRESH: crawl listings and build the "
                     "universe through today+DAYS instead of the frozen "
@@ -253,6 +304,14 @@ def main() -> None:
     if not key:
         sys.exit("MASSIVE_API_KEY not set")
     config.ensure_dirs()
+
+    if args.bars_and_surface_only:
+        uni = pd.read_parquet(config.UNIVERSE_PARQUET)
+        bootstrap_manifest_from_parts()
+        if args.refresh_recent_days:
+            prune_manifest_for_refresh(uni, args.refresh_recent_days)
+        bulk_download(uni, key)
+        return
 
     expiry_max = daily_end = win_end = None
     if args.live_horizon is not None:
