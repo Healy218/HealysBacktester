@@ -59,13 +59,24 @@ compute runs so deploy is never waiting on code.
 - July checkpoints archived at `artifacts_v31/meta_rows.pre-marks-2026-08-15/`
   (delete once the new dataset assembles clean).
 
+## Done 2026-08-16 midday: TODO block 2 — the [v4] expert is code-complete
+
+`nn_meta/live/v4_scan.py` (committed + pushed): second scanner pass under
+`NN_META_POOL=v31`, causal candidates, model-picked DTE, `[v4]`-labeled
+alerts, own outbox/ledger/health state, `--paper` trust policy for the
+Option A bundle, `--selftest` deploy check (passes on the real bundle),
+real-data dry run clean, suite 356 green. Build widened to 3 shards after
+killing background Steam/Discord.
+
 ## Next session: start here
 
 1. Check the build (log tails + marker above). If done: `--assemble` output
    sanity (row counts vs the July dataset ±, marks row count ~88M), then
-   TODO block 1 items 2–4 (ledger selection wiring → re-runs → re-finalize).
-2. If still running: TODO block 2 (live v4 scoring path) — it only needs
-   already-committed code, not the new dataset.
+   TODO block 1 items 2–4 (ledger selection wiring → re-runs → re-finalize),
+   then swap the server bundle in place and drop `--paper` from the cron.
+2. If the server deploy (TODO block 3) hasn't happened yet, that's the next
+   action — the plan is fully specified there; user go/no-go was pending at
+   the time of writing.
 
 ## Gotchas carried forward
 

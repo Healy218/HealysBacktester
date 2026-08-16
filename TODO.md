@@ -45,29 +45,43 @@ without it the pipeline silently reads/writes the wrong artifact dirs.
   manifest (it predates hashed persistence). Persist is atomic + gate-checked
   by construction; the old bundle is additionally in the D: backup.
 
-## 2 — v4 live scoring path (stage 5, closes the last gate item)
+## 2 — v4 live scoring path — DONE 2026-08-16 (`nn_meta/live/v4_scan.py`)
 
-- [ ] **Live v4 scorer**: wire `nn_meta/live/v4_candidates.build_candidate_batch`
-  (causal features from closed bars, no `prem_spot`, no option fill) +
-  `nn_meta/v4_loader.load_final_v4()` / `ensemble_score()` into a scanner
-  entry point for the v4 expert. Do not touch the deployed v3 scorer.
-- [ ] **Parity test green**: `assert_candidate_parity` offline vs live-path
-  features on the same bars — this is the 5th/last first-implementation gate
-  item in `docs/specs/V4_OUTLINE.md`.
-- [ ] **Expert-labeled alerts + own state**: v4 alerts carry a `[v4]` label
-  next to v3's; v4 gets its own `PaperLedger` + alert dedupe/outbox from
-  `nn_meta/live/state.py` (built and tested, needs wiring).
+- [x] **Live v4 scorer**: `nn_meta.live.v4_scan` — every pool strategy
+  proposes on the last closed bar, `build_candidate_batch` featurizes (no
+  `prem_spot`), the bundle scores all DTE variants, best-of-grid alerts iff
+  ≥ threshold. v3 scanner untouched. `--selftest` force-loads all members
+  (passes on the real 40-member gbt bundle); real-data dry run clean.
+- [x] **Parity**: candidate builder is parity-by-construction and covered by
+  `tests/test_v4_candidates.py` + 11 new `tests/test_v4_scan.py` tests
+  (suite 356 green). Re-validate against whichever bundle survives the
+  Option B re-finalize (spec'd as Option B step 4) before dropping `--paper`.
+- [x] **Expert-labeled alerts + own state**: `[v4]`-titled Telegram alerts
+  with paper tag, own AlertState/Outbox (at-least-once, crash replay),
+  PaperLedger, health snapshot — all under `nn_meta/live/.v4_*.json`.
 
 ## 3 — Deploy to Hetzner (alongside v3, never replacing it)
 
-- [ ] Ship the bundle: force-add `model_final_v4/` + its config (same pattern
-  as the committed `model_final_v3/`) or transfer out-of-band — decide and
-  record in `docs/DECISIONS.md`.
-- [ ] Server: `git pull` (deploy key — never scp), v4 self-test that
-  force-loads all seeds (mirror `_st.py`/scorer_selftest), add the v4 expert
-  to the cron scanner pass, verify a Telegram alert end-to-end.
-- [ ] Rollback documented in `DOCUMENTATION.md`: removing the v4 expert
-  leaves v3 running exactly as today.
+Verified 2026-08-16: the branch's only v3-critical deltas vs `main` are a
+docstring and a default-off `collect_marks` kwarg — merging leaves the live
+v3 scanner behaviorally identical.
+
+- [ ] Merge `codex/v4-causal-validation` → `main` (the operational line now
+  includes the additive v4 expert; model promotion stays gated).
+- [ ] Force-add `model_final_v4/` (9.7 MB, 42 files — same pattern as the
+  committed `model_final_v3/`); record in `docs/DECISIONS.md`.
+- [ ] Server: `git pull` (deploy key — never scp);
+  `pip install -r requirements.txt` top-up (needs `lightgbm` to unpickle the
+  gbt members; `scipy` pin is also new).
+- [ ] rsync `surface_daily.parquet` + `underlying_daily.parquet` (12.3 MB) →
+  server `nn_meta/data_cache_v3/` (gitignored path — no pull-wedge risk).
+- [ ] Server self-test: `NN_META_POOL=v31 ./venv/bin/python -m
+  nn_meta.live.v4_scan --selftest`, then one `--dry-run --ignore-hours` pass.
+- [ ] Cron line (UTC, self-gates to RTH): `*/15 * * * * cd
+  /home/mrhea/HealysBacktester && NN_META_POOL=v31 ./venv/bin/python -m
+  nn_meta.live.v4_scan --once --paper >> logs/v4_cron.log 2>&1`
+- [ ] Rollback documented in `DOCUMENTATION.md`: remove that one cron line —
+  v3 runs exactly as today.
 
 ## Fallback if the weekend runs short
 
