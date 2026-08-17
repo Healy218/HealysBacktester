@@ -43,7 +43,7 @@ cat > /tmp/healys_batch_job.json <<JSON
   }],
   "allocationPolicy": {
     "instances": [{"policy": {
-      "machineType": "e2-standard-4",
+      "machineType": "${MACHINE:-e2-standard-4}",
       "provisioningModel": "SPOT"
     }}],
     "network": {"networkInterfaces": [{
