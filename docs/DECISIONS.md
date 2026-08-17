@@ -5,6 +5,13 @@ relitigate settled questions, and keep "considered and rejected" on the
 record. Append here whenever a real choice gets made (or reversed — new
 entry, never edit history).
 
+- **2026-08-16 — compute doctrine: heavy builds/training move to GCP Batch;
+  the home box is for using, not training** (user goal, stated explicitly).
+  Contingent only on the pilot's byte-identity diff. The box keeps: dev,
+  small evals, and the API crawls (entitlement + keys never leave home).
+  First migration: the in-flight marks build (stopped locally at 28/118;
+  checkpoints sync to the bucket AFTER the pilot terminates — uploading
+  mid-pilot would let a retry skip the pilot symbols and fake the diff).
 - **2026-08-16 — v3.1 joins the panel as the [v31] paper expert.** Its
   "shelved" verdict barred it from *replacing* v3, not from running
   alongside: forward paper tracking is exactly how its outlier-fragility
