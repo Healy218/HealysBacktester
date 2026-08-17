@@ -27,7 +27,7 @@ cat > /tmp/healys_batch_job.json <<JSON
 {
   "taskGroups": [{
     "taskCount": ${TASKS},
-    "parallelism": ${TASKS},
+    "parallelism": ${PARALLEL:-${TASKS}},
     "taskSpec": {
       "runnables": [{"container": {"imageUri": "${IMAGE}"}}],
       "computeResource": {"cpuMilli": 4000, "memoryMib": 12288},
