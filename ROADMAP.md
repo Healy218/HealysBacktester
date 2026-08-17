@@ -68,7 +68,7 @@ by its own ledger, promoted only by forward results:
    inversion directly.
 2. **SPX/NDX daily-options trader** (user priority #5, ranked ahead of
    vol-regime): a NEW pool (`spx0`) through the same v4 causal contract —
-   SPX + NDX daily-expiry options, calls and puts, ~2y MINUTE data,
+   SPX + NDX daily-expiry options, calls and puts, ~2y RAW 1-MINUTE bars (stage-0 decision 2026-08-17; extracting to data_cache_spx0/),
    multiple trades/day, signal-driven entries AND exits, **25% max-DD
    gate**, no upside cap. **Stage-0 data audit gates everything**: ① probe
    the flat files for SPXW/NDXP minute aggs + entitlement window; ② decide
