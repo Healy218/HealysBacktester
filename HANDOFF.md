@@ -19,6 +19,25 @@ on this).
   three same-minute scanners → stagger crons if seen.
 - **Marks build was at 26/118 when the box rebooted.** Fully resumable.
 
+## Late-night state (2026-08-16 ~20:30, after the pilot verdict)
+
+- **PILOT CERTIFIED**: cloud vs local = marks hash-identical; rows differ
+  only on two libm-derived features by ≤4e-18 (one ULP, cross-CPU rounding).
+  Cloud doctrine ACTIVE.
+- **Full 118-symbol cloud run in flight** (`marks-build-3c07803-200222`,
+  30 spot VMs, resumes past the 28 synced checkpoints; watcher armed). On
+  SUCCEEDED: assemble task (`TASK_MODE=assemble … submit.sh 1`), download
+  dataset+sidecar, continue Option B.
+- **300-universe expansion overnight at home**: 3 date-sharded niced
+  `v3.flatfiles` workers → `nn_meta/data_cache_v32` (304 roots =
+  universe_300 + SPX/SPXW/NDX/NDXP; logs `v32_extraction_{A,B,C}.log`;
+  entitlement floor confirmed: first available day = 2024-08-16).
+- **SPX/NDX stage-0 half-answered**: options ARE in the flat files (#1–4 by
+  whole-market notional); index UNDERLYING is 403-gated → SPY/QQQ-proxy
+  signals (decision recorded).
+- **GitHub Actions**: `tests` workflow disabled manually (quota exhausted →
+  failure-email spam). RE-ENABLE at billing reset: `gh workflow enable tests`.
+
 ## Resume checklist for the next session (in order)
 
 1. **Relaunch the marks build** (unless boot-recovery did it — check
