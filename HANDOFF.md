@@ -19,6 +19,25 @@ on this).
   three same-minute scanners → stagger crons if seen.
 - **Marks build was at 26/118 when the box rebooted.** Fully resumable.
 
+## OVERNIGHT INCIDENT (2026-08-17 ~01:00): gcloud auth expired
+
+Local gcloud lost its session mid-night ("no active account selected") —
+likely a healylabs.io Workspace session-duration policy. **The cloud build
+is unaffected** (VMs run on the service account); only local
+monitoring/control is blind. Home extractions unaffected (boto3 + .env).
+
+**MORNING STEP 0: `gcloud auth login`** (interactive, user). Then:
+`gcloud batch jobs describe marks-build-3c07803-061743 --location us-central1
+--project healys-batch` → if SUCCEEDED: submit assemble
+(`TASK_MODE=assemble MACHINE=n2-standard-4 IMAGE_TAG=3c07803 PROJECT=healys-batch
+BUCKET=gs://healys-backtester bash deploy/gcp/submit.sh 1`), then download
+`gs://healys-backtester/out/` dataset+sidecar into artifacts_v31.
+
+**Durable fix to decide**: a dedicated minimal service account + local JSON
+key (storage.objectAdmin + batch.jobsEditor on this one project) makes
+unattended nights immune to Workspace session policies — classic tradeoff
+(key on disk) on a single-purpose project. User call.
+
 ## Late-night state (2026-08-16 ~20:30, after the pilot verdict)
 
 - **PILOT CERTIFIED**: cloud vs local = marks hash-identical; rows differ
