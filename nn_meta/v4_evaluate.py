@@ -161,18 +161,36 @@ def _select_winner(selected: list[dict]) -> dict:
 
 
 def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
-                  thresholds: Iterable[float] = config.KEEP_THRESHOLDS) -> dict:
-    """Choose mode and threshold on validation only, using shared portfolio logic."""
+                  thresholds: Iterable[float] = config.KEEP_THRESHOLDS,
+                  mark_stream: pd.DataFrame | None = None,
+                  costs: CostScenario = BASE_COSTS) -> dict:
+    """Choose mode and threshold on validation only.
+
+    With ``mark_stream`` supplied (Option B), every candidate policy — and the
+    frozen baseline it must beat — is scored through the mark-to-market ledger
+    instead of the legacy shared simulator, so SELECTION itself sees the
+    interim mark path. Without a stream the legacy behavior is bit-identical.
+    """
     if len(rows) != len(predictions):
         raise ValueError("row/prediction length mismatch")
     fmask = frozen_mask(rows, spec)
-    baseline = portfolio_metrics(rows[fmask])
+    ledger = mark_stream is not None
+    if ledger:
+        base_rows = rows[fmask].reset_index(drop=True)
+        baseline = _ledger_policy_metrics(
+            base_rows, np.zeros(len(base_rows)), "filter", 0.0, mark_stream,
+            costs=costs)
+    else:
+        baseline = portfolio_metrics(rows[fmask])
     candidates = []
     for mode in config.EVAL_MODES:
         eval_rows = rows[fmask].reset_index(drop=True) if mode == "filter" else rows.reset_index(drop=True)
         eval_pred = predictions[fmask] if mode == "filter" else predictions
         for threshold in thresholds:
-            metrics = _EVALUATORS[mode](eval_rows, eval_pred, float(threshold))
+            metrics = (_ledger_policy_metrics(eval_rows, eval_pred, mode,
+                                              float(threshold), mark_stream,
+                                              costs=costs) if ledger
+                       else _EVALUATORS[mode](eval_rows, eval_pred, float(threshold)))
             candidates.append({
                 "mode": mode,
                 "threshold": float(threshold),
@@ -195,6 +213,7 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
     winner = max(candidates, key=_policy_rank)
     # Every candidate is a "trial"; its Sharpe feeds the deflation later.
     winner["candidate_sharpes"] = [c["metrics"]["per_trade_sharpe"] for c in candidates]
+    winner["selection_basis"] = "ledger" if ledger else "shared_sim"
     return winner
 
 
@@ -241,6 +260,61 @@ def marked_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
     return metrics
 
 
+def _ledger_policy_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
+                           threshold: float, mark_stream: pd.DataFrame, *,
+                           costs: CostScenario = BASE_COSTS) -> dict:
+    """Policy metrics in the SHARED metric schema, computed through the
+    mark-to-market ledger (Option B selection basis).
+
+    The slot portfolio still makes entry decisions (identical skip semantics
+    to the legacy path), but return, drawdown and exposure come from the
+    per-contract mark path — so a policy whose interim marks crater can no
+    longer look placid just because its FINAL returns were fine. Keys mirror
+    ``select_meta.portfolio_metrics`` so the eligibility gate, ``_policy_rank``
+    and the deflation pipeline work unchanged; ledger-only extras
+    (turnover/exposure/cost_scenario) ride along.
+    """
+    empty = {"n": 0, "n_kept": 0, "n_proposals": len(rows), "total_return": None,
+             "max_drawdown": None, "win_rate": None, "mean_return": None,
+             "per_trade_sharpe": None, "total_ex_top3": None,
+             "cost_scenario": costs.name, "basis": "ledger"}
+    selected = _selected_rows(_candidate_rows(rows, pred, mode, threshold))
+    if selected.empty:
+        return empty
+    trades, marks = execution_frames(selected, mark_stream)
+    m, _ = mark_to_market_portfolio(
+        trades, marks, max_concurrent=config.MAX_CONCURRENT,
+        position_fraction=config.PORTFOLIO_FRACTION, costs=costs)
+    rets = selected["net_return"].to_numpy(dtype=float)
+    # ex-top3 through the SAME ledger: drop the three best trades and re-mark —
+    # the house outlier-dependence check, now on the stricter accounting.
+    if len(selected) > 3:
+        keep = selected.drop(index=selected["net_return"].nlargest(3).index)
+        if keep.empty:
+            ex_total = 0.0
+        else:
+            t2, m2 = execution_frames(keep, mark_stream)
+            ex_metrics, _ = mark_to_market_portfolio(
+                t2, m2, max_concurrent=config.MAX_CONCURRENT,
+                position_fraction=config.PORTFOLIO_FRACTION, costs=costs)
+            ex_total = ex_metrics["total_return"]
+    else:
+        ex_total = 0.0
+    out = dict(empty)
+    out.update({
+        "n": len(selected), "n_kept": len(selected),
+        "total_return": m["total_return"], "max_drawdown": m["max_drawdown"],
+        "win_rate": float((rets > 0).mean()), "mean_return": float(rets.mean()),
+        "per_trade_sharpe": float(rets.mean() / rets.std(ddof=1))
+        if len(rets) > 1 and rets.std(ddof=1) > 0 else None,
+        "total_ex_top3": ex_total,
+        "turnover": m["turnover"],
+        "peak_gross_exposure": m["peak_gross_exposure"],
+        "mean_gross_exposure": m["mean_gross_exposure"],
+    })
+    return out
+
+
 def _rows_for_split(ds: pd.DataFrame, split: str) -> pd.DataFrame:
     return all_rows(ds, split).reset_index(drop=True)
 
@@ -272,7 +346,8 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         predictor = fit_family(family, train, ds[ds["split"] == "val"],
                                features=features, label=label, seeds=seeds,
                                epochs=epochs, gbt_estimators=gbt_estimators)
-        policy = choose_policy(val_rows, predictor.predict(val_rows), spec)
+        policy = choose_policy(val_rows, predictor.predict(val_rows), spec,
+                               mark_stream=mark_stream)
         policy["family"] = family
         fitted[family] = predictor
         selected.append(policy)
@@ -321,6 +396,7 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         "winner": {"family": winner["family"], "mode": winner["mode"],
                    "threshold": winner["threshold"], "validation": winner["metrics"],
                    "eligible": bool(winner.get("eligible")),
+                   "selection_basis": winner.get("selection_basis", "shared_sim"),
                    "baseline_return": winner.get("baseline_return"),
                    "test": winner_test, "marked": winner_marked,
                    "calibration": calibration, "deflated_sharpe": deflated,
@@ -365,6 +441,8 @@ def _write_report(results: list[dict], output: Path) -> None:
         ret = test["total_return"]
         dd = test["max_drawdown"]
         gate_cell = "✓" if win.get("eligible") else "⚠ none cleared"
+        if win.get("selection_basis") == "ledger":
+            gate_cell += " 🄻"          # policy SELECTED through the m2m ledger
         marked = win.get("marked")
         if marked is None:
             marked_cell = "pending"

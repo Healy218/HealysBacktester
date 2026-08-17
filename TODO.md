@@ -30,12 +30,13 @@ without it the pipeline silently reads/writes the wrong artifact dirs.
   `meta_rows.pre-marks-2026-08-15/` (they predate the provenance columns —
   a cached-skip rebuild would have emitted zero marks). Logs:
   `v31_marks_build.log` + `v31_build_<k>.log` at repo root.
-- [ ] **Selection-side ledger wiring**: `evaluate_window()` /
-  `choose_policy()` in `nn_meta/v4_evaluate.py` rank candidate policies on
-  the `v4_accounting` mark-to-market ledger instead of
-  `select_meta._portfolio_sim`. (`--marks` reporting path + fail-closed
-  guards already exist; this is the selection swap.) Regression tests with
-  synthetic fixtures, suite stays green.
+- [x] **Selection-side ledger wiring — DONE 2026-08-17.** `choose_policy`
+  scores every candidate AND the baseline through the mark-to-market ledger
+  when a stream is supplied (`_ledger_policy_metrics`: shared metric schema,
+  ledger-derived return/DD/exposure, ex-top3 re-marked through the ledger);
+  no-stream path bit-identical (tested). The decisive regression test
+  constructs a policy whose interim marks crater while finals look placid —
+  shared sim crowns it, the ledger rejects it. Reports tag 🄻 rows.
 - [ ] **Re-run through the ledger**: `v4_evaluate --ablation` and
   `--folds 3` (seeds 0-4, epochs 60, gbt 600, embargo 1D). Compare against
   the stage-0 tables in `docs/specs/V4_OUTLINE.md` — numbers are *expected*

@@ -111,3 +111,78 @@ def test_policy_rank_orders_eligible_first_then_by_return():
     assert _policy_rank(_policy("x", 0.5, True)) > _policy_rank(_policy("x", 0.2, True))
     # None return sorts to the very bottom, not crashes.
     assert _policy_rank(_policy("x", None, False))[1] == float("-inf")
+
+
+# ── Option B: selection through the mark-to-market ledger ────────────────────
+
+def _flip_fixture():
+    """Three trade classes that separate the two selection bases.
+
+    clean  (10, pred .9): +5% net, placid marks — the honest policy.
+    toxic  (5,  pred .85): small positive FINAL return but interim marks at
+           -90%, all five concurrent — invisible to final-return accounting,
+           a >40% equity drawdown on the mark path.
+    junk   (5,  pred .3): big losers no candidate keeps — they exist so the
+           baseline (which keeps everything) is beatable.
+
+    Shared-sim selection crowns thr .5 (clean+toxic: highest return, placid
+    realized-only drawdown). Ledger selection must reject it (mark-path
+    drawdown breaches the cap) and crown thr .88 (clean only).
+    """
+    rows, marks = [], []
+    day = pd.Timestamp("2025-01-02 14:30")
+    for i in range(10):                                     # clean
+        e = day + pd.Timedelta(days=i)
+        rows.append(("C%02d" % i, e, 0.05, 0.07, 0.9))
+    tox_e = day + pd.Timedelta(days=20)
+    for j in range(5):                                      # toxic
+        rows.append(("T%d" % j, tox_e, 0.04, 0.06, 0.85))
+    for j in range(5):                                      # junk
+        e = day + pd.Timedelta(days=25 + j)
+        rows.append(("J%d" % j, e, -0.50, -0.48, 0.3))
+
+    df = pd.DataFrame({
+        "symbol": [r[0] for r in rows], "strategy": "rsi",
+        "trade_idx": 1, "dte": 5,
+        "entry_ts": [r[1] for r in rows],
+        "fill_entry_ts": [r[1] + pd.Timedelta(minutes=15) for r in rows],
+        "exit_ts": [r[1] + pd.Timedelta(days=1) for r in rows],
+        "fill_exit_ts": [r[1] + pd.Timedelta(days=1) for r in rows],
+        "executed": True,
+        "net_return": [r[2] for r in rows],
+        "gross_return": [r[3] for r in rows],
+        "n_fills": 2,
+    })
+    preds = np.array([r[4] for r in rows])
+    tids = stable_trade_id(df).tolist()
+    for i, r in df.iterrows():
+        marks.append((tids[i], r["fill_entry_ts"], 0.0))
+        if r["symbol"].startswith("T"):                     # the concurrent dip
+            marks.append((tids[i], r["fill_entry_ts"] + pd.Timedelta(hours=3), -0.90))
+        marks.append((tids[i], r["fill_exit_ts"], r["gross_return"]))
+    stream = pd.DataFrame(marks, columns=["trade_id", "mark_ts", "gross_return"])
+    spec = {"symbols": {s: {"strategies": {"rsi": {"dte": 5}}} for s in df["symbol"]}}
+    return df, preds, stream, spec
+
+
+def test_ledger_selection_rejects_mark_path_drawdown_the_shared_sim_cannot_see():
+    df, preds, stream, spec = _flip_fixture()
+    shared = choose_policy(df, preds, spec, thresholds=[0.5, 0.88])
+    ledger = choose_policy(df, preds, spec, thresholds=[0.5, 0.88],
+                           mark_stream=stream)
+    assert shared["selection_basis"] == "shared_sim"
+    assert shared["threshold"] == 0.5 and shared["eligible"]     # toxic looks fine
+    assert ledger["selection_basis"] == "ledger"
+    assert ledger["threshold"] == 0.88 and ledger["eligible"]    # toxic rejected
+    assert ledger["metrics"]["basis"] == "ledger"
+    assert "cost_scenario" in ledger["metrics"]
+    assert ledger["baseline_return"] is not None                 # ledger baseline
+
+
+def test_ledger_selection_without_stream_is_bit_identical_to_legacy():
+    rows = _rows()
+    a = choose_policy(rows, np.array([0.8, 0.9, 0.1]), _spec(), thresholds=[0.5])
+    b = choose_policy(rows, np.array([0.8, 0.9, 0.1]), _spec(), thresholds=[0.5],
+                      mark_stream=None)
+    assert a["metrics"] == b["metrics"] and a["threshold"] == b["threshold"]
+    assert b["selection_basis"] == "shared_sim"
