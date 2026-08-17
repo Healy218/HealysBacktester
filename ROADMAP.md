@@ -137,7 +137,12 @@ exit/roll alerts on the live scanner.
   entitlement — proven limit, not a code gap (`DOCUMENTATION.md` → data
   limits). Underlying-only deep history is already crawled. (Cloud compute
   does not change this — it's a provider limit.)
-- **Point-in-time universe selection** (survivorship-bias fix).
+- **Point-in-time universe selection** (survivorship-bias fix) — promoted
+  in importance by the cloud doctrine: universe expansion (120 → ~300 by
+  $volume) and a wider strategy-candidate pool are now compute-trivial
+  (~$25/build; the flat-files day archive is already whole-market), so the
+  binding constraints are THIS item plus the liquidity floor and
+  multiple-testing discipline — not build cost.
 - PBO report wiring; magnitude/EV head training (join the grid when trained).
 
 ---
