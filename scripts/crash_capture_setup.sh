@@ -221,6 +221,9 @@ note "writing $SYSCTL"
 note "  kernel.panic=30          reboot 30s after a panic instead of sitting frozen"
 note "  kernel.panic_on_oops=1   turn an oops into a panic so it is captured, not survived"
 note "  kernel.hardlockup_panic=1 a wedged CPU panics (this is the case that bit us)"
+note "  kernel.nmi_watchdog=1     REQUIRED — dropping nowatchdog sets kernel.watchdog=1"
+note "                            but leaves nmi_watchdog=0, which leaves the hard-lockup"
+note "                            detector off and hardlockup_panic inert."
 note "  kernel.softlockup_panic=0 DELIBERATE: soft lockups false-positive under heavy"
 note "                            IO/CPU, and this box runs long local builds. Log only."
 backup "$SYSCTL"
@@ -232,6 +235,12 @@ if [ "$APPLY" -eq 1 ]; then
 kernel.panic = 30
 kernel.panic_on_oops = 1
 kernel.hardlockup_panic = 1
+# REQUIRED, learned the hard way: dropping `nowatchdog` from the cmdline flips
+# kernel.watchdog 0->1 but leaves kernel.nmi_watchdog at 0, and on a
+# CONFIG_HARDLOCKUP_DETECTOR_PERF kernel that sysctl is what actually gates the
+# hard-lockup detector. Without this line hardlockup_panic=1 is inert and a
+# wedged CPU still freezes silently — i.e. the exact bug we set out to fix.
+kernel.nmi_watchdog = 1
 # Left at 0 on purpose: soft lockups false-positive under sustained IO/CPU load,
 # and a spurious reboot mid-build would be worse than the thing we are diagnosing.
 kernel.softlockup_panic = 0
