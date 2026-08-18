@@ -13,16 +13,16 @@ Written 2026-08-17 morning at session close (context limit). Protocol:
   scores candidates AND baseline through the m2m ledger; flip regression
   test in `tests/test_v4_evaluate.py`; no-stream path bit-identical.
   Suite 388 green.
-- **Cloud v4 build resubmitted 2026-08-17 20:29 CDT (= 08-18 01:29 UTC)**
-  with per-symbol incremental publish — NOT "this morning": nothing ran
-  between Sun ~20:00 CDT (28 symbols banked) and the Mon-evening resubmit;
-  the fix commit `54bd73d` itself only landed Mon 20:20 CDT. (The Sunday
-  12-wide run kill-looped: 8-symbol tasks outran the 4h maxRunDuration and
-  end-only publish reset every retry — fixed in `deploy/gcp/task.sh`, image
-  rebuilt, resubmitted SHARDS=30 PARALLEL=12 n2. Live-log verified 08-18
-  01:39 UTC: tasks skip banked symbols and build new ones.) NOTE:
-  `CPUS_ALL_REGIONS` quota = 32 caps the job at 8 concurrent VMs (not 12);
-  ~6-8h to finish at 8-wide. **Progress = `gcloud storage ls gs://healys-backtester/out/meta_rows/
+- **Cloud v4 build — the TRUE Mon 08-17 timeline (audit-log verified)**:
+  the morning resubmit (~06:18 CDT) ran the OLD `3c0780` image (the task.sh
+  fix wasn't committed yet) → end-only publish + 4h cap kill-looped VMs for
+  ~14h, burning ~$4-5 with ZERO output while the bucket sat at 28. The
+  fix (`54bd73d`, per-symbol publish) landed 20:20 CDT; the looping job was
+  DELETED (hence invisible to `gcloud batch jobs list` — audit logs are the
+  ground truth) and resubmitted 20:29 CDT as `marks-build-54bd73d-202944`.
+  Verified working end-to-end 08-18 02:39 UTC: first new symbol (GME)
+  published; ~1h/symbol. NOTE: `CPUS_ALL_REGIONS` quota = 32 caps the job
+  at 8 concurrent VMs (not 12); ~11h to finish → mid-morning Tue. **Progress = `gcloud storage ls gs://healys-backtester/out/meta_rows/
   | wc -l` toward 118** — now meaningful mid-task. gcloud auth is FRESH
   (user re-logged 08-17 morning; Workspace policy may expire it again).
 
