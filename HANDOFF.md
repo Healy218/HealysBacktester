@@ -22,10 +22,13 @@ for 14h with zero output (~$5 wasted) while sessions believed it was fine.
 - **Cloud v4 marks build RUNNING, live-verified 08-18 04:56 UTC: 49/118**
   symbols in `gs://healys-backtester/out/meta_rows/` (job
   `marks-build-54bd73d-202944`, healys-batch, us-central1, image `54bd73d`).
-  Measured rate is **~7 symbols/hr, not the ~9 the last handoff assumed** —
-  37@03:28Z → 44@04:42Z → 49@04:56Z. Revised ETA **~15:00-16:00 UTC ≈
-  10:00-11:00 CDT Tue**, not 07:00 CDT. Quota `CPUS_ALL_REGIONS=32` caps it
-  at 8 VMs (PENDING 22 is normal). Free trial ~$294 of $300 left.
+  Rate has SETTLED at **~5 symbols/hr**, below both the ~9 the previous
+  handoff assumed and the ~7 measured early: 37@03:28Z → 44@04:42Z →
+  49@04:56Z → 54@05:56Z → 59@06:56Z (two consecutive hours at +5). At 5/hr
+  the remaining ~59 symbols land **~18:00-19:00 UTC ≈ 13:00-14:00 CDT Tue**.
+  Treat any ETA here as decaying — re-measure from the bucket, don't trust
+  this line. Quota `CPUS_ALL_REGIONS=32` caps it at 8 VMs (PENDING 22 is
+  normal). Free trial ~$294 of $300 left.
 - **Watcher armed** as a Monitor (hourly): bucket count + job state, with
   118/118, any terminal job state, job-vanished, auth failure and a
   count-stall as loud events. **Monitors die with the session — re-arm it.**
