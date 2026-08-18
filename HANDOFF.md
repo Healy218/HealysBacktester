@@ -60,8 +60,8 @@ Six things `SETUP.md` could not anticipate — all now recorded in `CLAUDE.md`:
 3. **No official gcloud package.** Installed as Google's rootless tarball at
    `~/google-cloud-sdk`; PATH sourced from `~/.config/fish/config.fish` and
    `~/.bashrc`.
-4. **`pytest` is not in `requirements.txt`** — step 3 alone leaves step 7
-   unrunnable. Install `pytest==9.1.1` separately.
+4. **`pytest` was not in `requirements.txt`** — step 3 alone left step 7
+   unrunnable. Fixed in `a2cd157`; pinned to 9.1.1.
 5. **Git identity was in `~/.gitconfig`, which no backup captured.** Restored
    from the commit history as `Healy218 <mrhealy115@gmail.com>`. Worth adding
    to any future backup script.
@@ -74,11 +74,15 @@ Six things `SETUP.md` could not anticipate — all now recorded in `CLAUDE.md`:
    replaced the server's `2026-08.parquet` (1620 stocktwits + 3240 sentiment
    rows, 08-15 22:00 → 08-18 03:02 UTC) with just that run's messages.
    Averted by pulling the server's archive back down before the timer fired.
-   **Any future backup must include `fa/archive/`**, and a restore must pull
-   it from the server before the timer is allowed to run.
+   **FIXED in `7a17524`**: the script now pulls the archive before collecting,
+   so the mirror is safe by construction and a wiped local archive self-heals
+   instead of truncating the server. Verified three ways (normal run; local
+   archive deleted outright; server unreachable → exits 255 without collecting
+   or pushing). **Any future backup should still include `fa/archive/`.**
 
 Backup-script gaps to close, in one list: `~/.gitconfig`, `fa/archive/`, and
-a note that the target OS may not be Pop!_OS.
+a note that the target OS may not be Pop!_OS. `pytest` is now in
+`requirements.txt` (`a2cd157`), so a clean build can run the gate.
 
 The systemd units hardcoded `/home/healylabs/...` and `User=healylabs`, so
 they would have refused to start; retargeted and committed (`3a7d09c`).
