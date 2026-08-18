@@ -19,17 +19,12 @@ without it the pipeline silently reads/writes the wrong artifact dirs.
 
 ## 1 — Finish v4 on the ledger (Option B, `docs/specs/V4_OUTLINE.md` stage 2)
 
-- [~] **Mark-stream build RUNNING since 2026-08-16 02:42** via
-  `scripts/run_build_parallel.sh` (now passes `--marks` and writes the
-  `scripts/.jobstate/v31_marks_build.exit` marker; assemble folds
-  `meta_marks/` into the `meta_dataset.marks.parquet` sidecar, ~88M rows /
-  ~1.7 GB). Launched at 1 shard (desktop held RAM); **re-running the same
-  script widens the shard count and resumes from per-symbol checkpoints** —
-  kill the old launcher first (`pkill -f run_build_parallel.sh; pkill -f
-  nn_meta.build_meta_dataset`). Stale July rows archived to
-  `meta_rows.pre-marks-2026-08-15/` (they predate the provenance columns —
-  a cached-skip rebuild would have emitted zero marks). Logs:
-  `v31_marks_build.log` + `v31_build_<k>.log` at repo root.
+- [~] **Mark-stream build moved to GCP Batch** (compute doctrine, DECISIONS
+  2026-08-16) and RUNNING verified as of 08-18 03:28 UTC: job
+  `marks-build-54bd73d-202944`, 37/118 symbols published per-symbol to
+  `gs://healys-backtester/out/meta_rows/`. Full state + finish chain:
+  `HANDOFF.md`. (The local `run_build_parallel.sh` path is retired for this
+  build; stale July rows archived in `meta_rows.pre-marks-2026-08-15/`.)
 - [x] **Selection-side ledger wiring — DONE 2026-08-17.** `choose_policy`
   scores every candidate AND the baseline through the mark-to-market ledger
   when a stream is supplied (`_ledger_policy_metrics`: shared metric schema,
