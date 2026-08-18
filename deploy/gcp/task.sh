@@ -49,9 +49,18 @@ PY
 fi
 echo "symbols: $MY_SYMS"
 
-python -m nn_meta.build_meta_dataset --symbols "$MY_SYMS" --marks
-
-# Publish this task's checkpoints (per-symbol files: disjoint across tasks).
-gsutil -m -q rsync -r nn_meta/artifacts_v31/meta_rows  "${BUCKET}/out/meta_rows"
-gsutil -m -q rsync -r nn_meta/artifacts_v31/meta_marks "${BUCKET}/out/meta_marks"
+# Build and publish PER SYMBOL: a maxRunDuration kill or spot preemption
+# then costs at most one in-flight symbol instead of the whole task (the
+# 2026-08-17 kill-loop: 8-symbol tasks outran the 4h cap and, publishing
+# only at task end, every retry restarted from zero).
+IFS=',' read -ra SYMS <<< "$MY_SYMS"
+for sym in "${SYMS[@]}"; do
+  if gsutil -q stat "${BUCKET}/out/meta_rows/${sym}.parquet" 2>/dev/null; then
+    echo "== $sym already in bucket — skip =="
+    continue
+  fi
+  python -m nn_meta.build_meta_dataset --symbols "$sym" --marks
+  gsutil -m -q rsync -r nn_meta/artifacts_v31/meta_rows  "${BUCKET}/out/meta_rows"
+  gsutil -m -q rsync -r nn_meta/artifacts_v31/meta_marks "${BUCKET}/out/meta_marks"
+done
 echo "== task done =="
