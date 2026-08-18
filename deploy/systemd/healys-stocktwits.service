@@ -9,15 +9,15 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-User=healylabs
-Group=healylabs
-WorkingDirectory=/home/healylabs/Coding/HealysBacktester
-ExecStart=/home/healylabs/Coding/HealysBacktester/scripts/stocktwits_collect_push.sh
+User=healy
+Group=healy
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/scripts/stocktwits_collect_push.sh
 # One attempt per hour is enough; the archive is append-only and dedupes, so a
 # missed hour self-heals on the next run.
 TimeoutStartSec=20m
-StandardOutput=append:/home/healylabs/Coding/HealysBacktester/logs/stocktwits.log
-StandardError=append:/home/healylabs/Coding/HealysBacktester/logs/stocktwits.log
+StandardOutput=append:/home/healy/Coding/HealysBacktester/logs/stocktwits.log
+StandardError=append:/home/healy/Coding/HealysBacktester/logs/stocktwits.log
 
 [Install]
 WantedBy=multi-user.target

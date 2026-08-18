@@ -1,4 +1,4 @@
-# Home-box systemd units (Pop!_OS)
+# Home-box systemd units (CachyOS)
 
 These replace the Windows Scheduled Tasks that ran on the pre-2026-07-24 WSL2 box.
 
@@ -46,6 +46,6 @@ Windows auto-logon to fire its tasks, and a system timer removes that
 dependency — it runs after a reboot whether or not anyone logs in.
 
 The paths are absolute and assume the repo at
-`/home/healylabs/Coding/HealysBacktester`; edit `WorkingDirectory`/`ExecStart`
+`/home/healy/Coding/HealysBacktester`; edit `WorkingDirectory`/`ExecStart`
 if that changes. The collector script itself derives its own repo root, so it
 is path-independent.

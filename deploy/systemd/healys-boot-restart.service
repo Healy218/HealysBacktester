@@ -16,16 +16,16 @@ After=network-online.target
 
 [Service]
 Type=oneshot
-User=healylabs
-Group=healylabs
-WorkingDirectory=/home/healylabs/Coding/HealysBacktester
-ExecStart=/home/healylabs/Coding/HealysBacktester/scripts/boot_restart.sh
+User=healy
+Group=healy
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/scripts/boot_restart.sh
 # The dispatcher backgrounds whatever it relaunches and returns promptly; it
 # must not be reaped as failed for exiting, nor take its children with it.
 RemainAfterExit=yes
 KillMode=process
-StandardOutput=append:/home/healylabs/Coding/HealysBacktester/logs/boot_restart.log
-StandardError=append:/home/healylabs/Coding/HealysBacktester/logs/boot_restart.log
+StandardOutput=append:/home/healy/Coding/HealysBacktester/logs/boot_restart.log
+StandardError=append:/home/healy/Coding/HealysBacktester/logs/boot_restart.log
 
 [Install]
 WantedBy=multi-user.target
