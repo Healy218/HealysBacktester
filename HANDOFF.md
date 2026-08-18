@@ -172,6 +172,44 @@ heavy file IO, with the GPU active** — not anonymous swap thrash.
    memtest does not reproduce) and **the NVIDIA out-of-tree module** (DMA, and
    it was busy during the CachyOS event). zram is demoted to bystander.
 
+### NVIDIA is now the leading suspect (2026-08-18)
+
+**XMP/DOCP is OFF** — RAM runs JEDEC stock and still passed 20 memtest passes,
+so the cheapest hardware explanation is gone.
+
+Hardware: RTX 3060 Ti (GA104), **NVIDIA open kernel module 610.57.04**,
+i5-11400, Gigabyte B560 DS3H AC-Y1, BIOS F12c 06/29/2026, kernel 7.1.8-cachyos.
+
+Two published reports put a memory-corruption bug CLASS in this driver family:
+- nvidia-open **610.43.03** -> `BUG: Bad page state` freeing a page at the edge
+  of a driver-registered "nosave" region, reproduced identically on two kernel
+  builds, which isolates it to the driver/GSP rather than the kernel.
+  https://forums.developer.nvidia.com/t/hibernate-resume-fails-with-bug-bad-page-state-on-rtx-2070-super-nvidia-open-610-43-03-reproduces-on-two-kernel-versions/377075
+- nvidia-open **595.80** -> kernel oops, NULL page fault, **GPU left hard-locked**.
+  https://github.com/NVIDIA/open-gpu-kernel-modules/issues/1226
+
+**CAVEAT, do not lose it**: both of those trigger on hibernate/suspend. Ours did
+not — there was NO suspend before 23:10:46 (checked), Steam launch at 23:05:01
+is the context. So this is NOT the same bug, only the same bug class.
+
+Why the mechanism fits better than anything else: a rogue DMA or stale mapping
+writes into whatever kernel pages happen to be there, corrupting an arbitrary
+structure — a jbd2 buffer_head on Pop!_OS, a page struct on CachyOS. That
+explains the otherwise awkward fact that two DIFFERENT structures broke on the
+SAME general path. kswapd walks everything, so kswapd is where damage surfaces;
+it is the detector, not the culprit.
+
+The "7.x reclaim regression" idea (Pop 7.0.11 and CachyOS 7.1.8 are both 7.x)
+found NO supporting evidence — "Bad page state in kswapd" is a generic
+signature spanning 2.4 through 6.9. Not excluded, just unsupported.
+
+**THE DECISIVE TEST, and it is available**: the i5-11400 is a non-F part with
+UHD 730, and `lspci` shows only the RTX 3060 Ti, so the iGPU is merely DISABLED
+IN BIOS. Enable Internal Graphics, move the monitor to the motherboard output,
+blacklist the nvidia modules, run normally for several days. A clean window
+confirms NVIDIA. Cost: no discrete GPU while it runs.
+Cheaper but less decisive: move to a different nvidia-open branch.
+
 It left no record because **three switches were independently off** — fixing
 any one alone still yields silence:
 
