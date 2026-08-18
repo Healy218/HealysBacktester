@@ -25,7 +25,7 @@ here — it lives in the files below.
    load — don't re-derive state from scratch.
 2. **Work**: on `codex/v4-causal-validation`; small single-purpose commits;
    push often. Tests stay green: `./venv/bin/python -m pytest tests/ -q`
-   (345, self-contained — no LightGBM, no network, no v31 artifacts).
+   (390, self-contained — no LightGBM, no network, no v31 artifacts).
 3. **End** (or at a milestone, or before context runs out): archive
    `HANDOFF.md` → `handoff-history/HANDOFF-YYYY-MM-DD[-slug].md`, write a
    fresh `HANDOFF.md`, tick `TODO.md`, log any decision/verdict in
@@ -33,11 +33,16 @@ here — it lives in the files below.
 
 ## Environment (the facts you need before running anything)
 
-- **Repo**: `/home/healylabs/Coding/HealysBacktester` on the Pop!_OS home
-  box. Production is the Hetzner server — deploy by `git pull` over the
-  deploy key, **never scp** (ops runbook: `DOCUMENTATION.md`).
-- **Python**: `./venv/bin/python` (3.12.3) — always the venv binary
-  explicitly; there is no conda or system path.
+- **Repo**: `/home/healy/Coding/HealysBacktester` on the CachyOS (Arch) home
+  box — reinstalled 2026-08-17, replacing Pop!_OS; the user is now `healy`,
+  not `healylabs`. Production is the Hetzner server — deploy by `git pull`
+  over the deploy key, **never scp** (ops runbook: `DOCUMENTATION.md`).
+- **Python**: `./venv/bin/python` (3.12.14, installed via `uv` — Arch ships
+  only 3.14, which the pins reject) — always the venv binary explicitly;
+  there is no conda or system path. `pytest` is NOT in `requirements.txt`;
+  install it separately (`pytest==9.1.1`) to run the suite.
+- **gcloud**: rootless tarball at `~/google-cloud-sdk` (no Arch package);
+  PATH sourced from `~/.config/fish/config.fish` and `~/.bashrc`.
 - **`NN_META_POOL`** selects the strategy pool AND suffixes every artifact
   dir (`nn_meta/config.py`). Defaults to `v2`; the live scanner uses `v3`;
   all v3.1/v4 work needs `v31`. Wrong value = silently reading and writing
