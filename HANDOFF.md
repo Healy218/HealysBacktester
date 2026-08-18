@@ -25,8 +25,8 @@ Written 2026-08-17 morning at session close (context limit). Protocol:
 
 0. Re-arm the watcher (Monitor, hourly): bucket count → terminal at 118.
 1. At 118/118: **assemble** —
-   `TASK_MODE=assemble MACHINE=n2-standard-4 IMAGE_TAG=<current image tag,
-   see gcloud artifacts docker images list> PROJECT=healys-batch
+   `TASK_MODE=assemble MACHINE=n2-standard-4 IMAGE_TAG=54bd73d (job: marks-build-54bd73d-202944,
+   resubmitted 08-17) PROJECT=healys-batch
    BUCKET=gs://healys-backtester bash deploy/gcp/submit.sh 1`
 2. Download:
    `gcloud storage cp gs://healys-backtester/out/meta_dataset.parquet
