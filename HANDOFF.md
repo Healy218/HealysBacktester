@@ -103,13 +103,18 @@ Same process, same reclaim path function-for-function, across a different
 kernel AND a different filesystem. An ext4/jbd2 bug cannot reproduce on btrfs;
 a 7.0.11 bug need not exist in 7.1.8. What survives both changes:
 
-1. **zram** — `zram`/`842_decompress`/`lz4hc_compress` appear in BOTH crash
-   module lists. Live config: `/dev/zram0`, zstd, **zram-size = ram (15.5G on
-   15.5G)**, swap-priority 100, and **`vm.swappiness = 150`**. Unlike the other
-   two candidates, zram sits *directly in the code path that crashed*: both
-   traces die in `evict_folios > shrink_folio_list`, which is exactly where
-   kswapd hands evicted pages to zram to be compressed. This is the most
-   specific lead and it was MISSED in the first pass over the module lists.
+1. ~~**zram**~~ — **RETRACTED 2026-08-18, same day it was raised.** The claim
+   was that zram "sits directly in the code path that crashed" because it
+   appears in both module lists. Reading the Pop!_OS call chain properly kills
+   that: `shrink_folio_list > filemap_release_folio > ext4_release_folio >
+   jbd2_journal_try_to_free_buffers` is **file-backed page-cache reclaim with
+   ext4 journal buffers**. zram serves *anonymous* swap and is not in that path
+   at all — it was loaded, not involved. Presence in a module list is not
+   presence in a call path; that inference was wrong.
+   A 12-minute anonymous-memory->zram thrash (12G working set, peak zram 6.56G
+   orig / 2.83G compressed, 11 sweeps, ~132G verified) found **zero** userspace
+   corruption and produced **zero** kernel signatures. Real, but it exercised
+   the wrong sub-path, so it is weak evidence either way.
 2. **The hardware** — same box, same DIMMs. **DEPRIORITISED**, see memtest below.
 3. **The NVIDIA proprietary driver** — nvidia_drm/modeset/uvm(OE) then,
    nvidia(O) now; out-of-tree in both, and nvidia_uvm does page-level memory
@@ -147,14 +152,25 @@ Revised timeline — worse than the one-off it first looked like:
 - 23:10 corrupt page struct in kswapd — **15 minutes into a brand-new OS**
 - 03:19 silent hard freeze
 
+**WHAT THE WORKLOAD EVIDENCE SAYS.** The CachyOS corruption at 23:10:46 landed
+**5m45s after Steam launched at 23:05:01** — downloads, install verification,
+heavy disk IO and GPU init. Not an idle box. Combined with the Pop!_OS trace
+being *file-cache* reclaim, the profile to reproduce is **page-cache churn from
+heavy file IO, with the GPU active** — not anonymous swap thrash.
+
 **NEXT ACTIONS**, in order of cost:
-1. `sudo sysctl -w vm.swappiness=60` (from 150) — or `swapoff /dev/zram0` to
-   remove zram entirely. Cools the suspect path; no reboot; reversible.
-2. **Check BIOS for XMP/DOCP.** "Passes memtest, corrupts under mixed real
-   load" is a classic above-JEDEC-timings signature. Stock timings = free test.
-3. **Reproduce on demand** rather than waiting days for a random freeze —
-   `scripts/zram_reclaim_stress.py` drives the exact path. With
-   `kernel.nmi_watchdog=1` armed, a lockup now leaves a trace instead of silence.
+1. **Check BIOS for XMP/DOCP.** "Passes 20 memtest passes, corrupts under mixed
+   real load" is a classic above-JEDEC-timings signature, and it costs nothing
+   to drop to stock timings. Cheapest remaining test by a wide margin.
+2. **Reproduce with the RIGHT profile**: sustained file IO to build and reclaim
+   page cache (the ext4/btrfs `release_folio` path), concurrent with GPU load.
+   The existing `scripts/zram_reclaim_stress.py` does NOT do this — it drives
+   anonymous memory only, and came back clean.
+3. `sudo sysctl -w vm.swappiness=60` remains harmless and worth doing, but it
+   is no longer justified by the trace evidence.
+4. Suspect ordering now: **hardware** (marginal under mixed real load, which
+   memtest does not reproduce) and **the NVIDIA out-of-tree module** (DMA, and
+   it was busy during the CachyOS event). zram is demoted to bystander.
 
 It left no record because **three switches were independently off** — fixing
 any one alone still yields silence:
