@@ -6,9 +6,46 @@ Previous handoffs: `handoff-history/`.
 Reboot DONE 07:14 CDT; crash capture verified live (see below). The cloud
 build is unaffected — it runs on GCP Batch, not here.
 
-**THIS BOX IS UNDER SUSPICION.** Three memory-corruption events in ~7 hours
-across two different OS installs (detail below). Do not treat a local hang,
-oops, or odd result as a software bug until memtest86+ has run.
+## !! STOP: DO NOT RUN THE LEDGER RE-RUNS OR v4_finalize ON THIS BOX !!
+
+**Single-bit memory corruption is PROVEN on this machine, with a dated
+artifact preserved at `docs/incidents/corrupt-pyc-2026-08-18.pyc.bin`.**
+
+On 2026-08-17 23:41:52 CDT, Python compiled a gcloud bytecode cache and one bit
+flipped while the CPU was writing it. The module name `user_request_args_factory`
+was written to disk as `usev_request_args_factory`:
+
+    r  0x72  01110010
+    v  0x76  01110110   xor = 0x04 -- exactly ONE bit
+
+The correct spelling is in the source 13 times and across 33 files in the SDK;
+the corrupted spelling existed in exactly one place on the whole disk, that
+.pyc, at byte offset 215. It broke `gcloud storage` (`gcloud batch` was
+unaffected), which is the ONLY reason we noticed. Fixed by purging all 1833
+.pyc files under ~/google-cloud-sdk; `gcloud storage` and `gsutil` now agree.
+
+**What this means for the project — this is the important part.** The corruption
+is SILENT unless it happens to land somewhere that fails loudly. A bit flipped
+in a training array, a parquet buffer, a model weight, or a serialized bundle
+would produce a WRONG ARTIFACT WITH NO ERROR. Finish-chain steps 3 (ledger
+re-runs) and 4 (re-finalize) currently run locally and their output is committed
+and deployed to production. **Do not run them on this box until the hardware is
+resolved.** Options, in order of preference:
+  a. Run the evaluate/finalize on GCP Batch, as the marks build already does.
+  b. Fix the hardware first, then run locally.
+  c. If neither: run twice on different hardware and compare hashes. Never
+     deploy a bundle this box produced alone.
+The marks build itself is SAFE — it runs on GCP, not here.
+
+**Also treat with suspicion**: anything this box wrote since 2026-08-17 22:51
+(the CachyOS first boot). That includes the restored 15 GB of caches if any were
+rewritten, and any local artifact built since. Checksums against the server or
+the D: backup are the cheap check.
+
+Three corruption events on the 22:55 boot alone:
+  23:10:46  BUG: Bad page state in kswapd0 (corrupt page struct)
+  23:41:52  single-bit flip written into a .pyc (the one above)
+  03:19:21  silent hard freeze
 
 ## Verification doctrine (unchanged — it earned its place, twice more today)
 
@@ -172,7 +209,26 @@ heavy file IO, with the GPU active** — not anonymous swap thrash.
    memtest does not reproduce) and **the NVIDIA out-of-tree module** (DMA, and
    it was busy during the CachyOS event). zram is demoted to bystander.
 
-### NVIDIA is now the leading suspect (2026-08-18)
+### SUSPECT RANKING REVERSED (2026-08-18, after the .pyc evidence)
+
+**HARDWARE IS NOW #1 BY A WIDE MARGIN.** The .pyc flip is a single bit in a
+buffer the CPU was writing during bytecode compilation — no GPU, no DMA, no
+reclaim, no filesystem involved. A rogue DMA clobbers blocks and cachelines, not
+single bits. This is the textbook signature of marginal RAM, memory controller,
+or CPU cache.
+
+**Why 20 clean memtest passes did not catch it**: single-bit marginal cells are
+intermittent and depend on pattern, address, refresh timing and temperature. 20
+passes is decent coverage, not proof. Next steps for the hardware, cheapest
+first: reseat the DIMMs; test each DIMM individually (a fault may only appear
+with both channels populated); run a different tool with different patterns; and
+consider that the IMC or CPU cache, not the DIMMs, may be at fault -- in which
+case swapping RAM will not help.
+
+The NVIDIA hypothesis below is DEMOTED but not dead -- it could still explain the
+kswapd events and the freeze. It cannot explain the .pyc bit flip.
+
+### NVIDIA (demoted 2026-08-18, was leading)
 
 **XMP/DOCP is OFF** — RAM runs JEDEC stock and still passed 20 memtest passes,
 so the cheapest hardware explanation is gone.
