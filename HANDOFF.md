@@ -1,52 +1,92 @@
 # HANDOFF — state for the next session
 
-Written 2026-08-17 ~22:35 CDT (= 08-18 03:30 UTC) at session close. Protocol:
-`CLAUDE.md`. Previous handoffs: `handoff-history/`.
+Written 2026-08-18 ~00:05 CDT (= 05:05 UTC). Protocol: `CLAUDE.md`.
+Previous handoffs: `handoff-history/`.
 
-**⚠ THIS BOX MAY BE ON A FRESH OS.** The user is wiping/reinstalling. If the
-repo is freshly cloned, the restore guide is
-`/media/healylabs/MRHA (exFAT drive) → popos_backup_2026-08-17/SETUP.md` —
-follow it top to bottom (secrets → repo → venv → data → gcloud) before
-anything else. Everything below assumes the restore is done.
+**The OS wipe is DONE and the box is fully restored.** No restore work is
+pending; `popos_backup_2026-08-17/SETUP.md` on the MRHA drive has been
+executed end to end and verified (details below). Ignore the restore warning
+at the top of the previous handoff.
 
-## Verification doctrine (learned the hard way this session)
+## Verification doctrine (unchanged — it earned its place)
 
 Never report the cloud build's state from this file or memory — verify live:
-job state + createTime (`gcloud batch jobs list`), fresh task-log lines, and
-advancing bucket count/timestamps. Deleted jobs VANISH from `jobs list`; the
-compute audit log (`instances.insert/delete`) is ground truth. On 08-17 a
-morning resubmit ran the un-fixed image and kill-looped VMs for 14h with
-zero output (~$5 wasted) while sessions believed it was fine.
+job state + createTime (`gcloud batch jobs list` / `jobs describe`), fresh
+task-log lines, and advancing bucket count/timestamps. Deleted jobs VANISH
+from `jobs list`; the compute audit log (`instances.insert/delete`) is ground
+truth. On 08-17 a morning resubmit ran the un-fixed image and kill-looped VMs
+for 14h with zero output (~$5 wasted) while sessions believed it was fine.
 
 ## Where everything stands
 
-- **Cloud v4 marks build RUNNING and VERIFIED progressing**: job
-  `marks-build-54bd73d-202944` (project healys-batch, us-central1, image
-  `54bd73d`), submitted 08-17 20:29 CDT after the per-symbol-publish fix.
-  **37/118 symbols** in `gs://healys-backtester/out/meta_rows/` at 03:28
-  UTC, ~9 symbols/hr fleet-wide → done ~07:00 CDT Tue. Quota
-  `CPUS_ALL_REGIONS=32` caps it at 8 VMs (PENDING 22 is normal). Free-trial
-  budget: ~$294 of $300 left; this run ≈ $4-5 total.
+- **Cloud v4 marks build RUNNING, live-verified 08-18 04:56 UTC: 49/118**
+  symbols in `gs://healys-backtester/out/meta_rows/` (job
+  `marks-build-54bd73d-202944`, healys-batch, us-central1, image `54bd73d`).
+  Measured rate is **~7 symbols/hr, not the ~9 the last handoff assumed** —
+  37@03:28Z → 44@04:42Z → 49@04:56Z. Revised ETA **~15:00-16:00 UTC ≈
+  10:00-11:00 CDT Tue**, not 07:00 CDT. Quota `CPUS_ALL_REGIONS=32` caps it
+  at 8 VMs (PENDING 22 is normal). Free trial ~$294 of $300 left.
+- **Watcher armed** as a Monitor (hourly): bucket count + job state, with
+  118/118, any terminal job state, job-vanished, auth failure and a
+  count-stall as loud events. **Monitors die with the session — re-arm it.**
+  Recipe: poll `gcloud storage ls gs://healys-backtester/out/meta_rows/ |
+  grep -c '\.parquet$'` and `gcloud batch jobs describe
+  marks-build-54bd73d-202944 --location us-central1 --project healys-batch
+  --format='value(status.state)'`; a non-zero rc on describe means the job
+  was DELETED, which is a loud event, not a blip.
 - **`--marks` wired through `v4_finalize`** (commit `8c649dc`): both
-  selection passes (cheap-seed family pick + ensemble operating point) run
-  the m2m ledger; fail-closed blockers check; `selection_basis` recorded in
-  ensemble_config + manifest. Suite **390 green**.
+  selection passes run the m2m ledger; fail-closed blockers check;
+  `selection_basis` recorded in ensemble_config + manifest.
 - **task.sh assemble bug fixed** (commit `7845325`): resume pull silently
-  no-opped (missing mkdir before gsutil rsync) — an assemble would have
-  folded EMPTY dirs; now mkdir'd + refuses to assemble zero row files.
-  **Fixed image BUILT + PUSHED: tag `7845325`** — assemble MUST use it.
-- **Backups COMPLETE + verified** (OS-wipe prep): bucket holds all three
-  nn_meta caches (v32 4.8 GB, v3 3.6 GB, spx0 883 MB); MRHA drive
-  `popos_backup_2026-08-17/` holds v3/data (5.7 GB tar — exists NOWHERE
-  else), all caches, artifacts_v31, .env, ~/.ssh, ~/.claude, git bundle,
-  SETUP.md. All tars verified readable, bundle verified complete.
-- **gcloud auth durably fixed**: Workspace "Google Cloud session control"
-  set to never expire (user, 08-17; DECISIONS logged; SA key rejected).
+  no-opped (missing mkdir before gsutil rsync). **Assemble MUST use image tag
+  `7845325`**, not `54bd73d`.
+- **Suite 390 green** on the rebuilt box (`CLAUDE.md` previously said 345;
+  corrected).
+
+## The restore, and what the guide got wrong
+
+Done: secrets/`~/.ssh`/`~/.claude`, repo at `b5e61b7` matching
+`git_head.txt`, `.env`, all 15 GB of data (v3/data 5.4G — exists nowhere else
+— plus caches v3/v32/spx0 and artifacts_v31, every size an exact match),
+venv, gcloud authed `matt@healylabs.io`, gh authed `Healy218`, systemd units
+installed, 390 tests green.
+
+Six things `SETUP.md` could not anticipate — all now recorded in `CLAUDE.md`:
+
+1. **The box is CachyOS (Arch), not Pop!_OS.** Step 0's `apt` line is dead;
+   use `pacman`. The user is `healy`, not `healylabs`.
+2. **No `python312` package on Arch**, and system python is 3.14 which the
+   pins reject. The venv is **3.12.14 via `uv`** (`uv python install 3.12`).
+3. **No official gcloud package.** Installed as Google's rootless tarball at
+   `~/google-cloud-sdk`; PATH sourced from `~/.config/fish/config.fish` and
+   `~/.bashrc`.
+4. **`pytest` is not in `requirements.txt`** — step 3 alone leaves step 7
+   unrunnable. Install `pytest==9.1.1` separately.
+5. **Git identity was in `~/.gitconfig`, which no backup captured.** Restored
+   from the commit history as `Healy218 <mrhealy115@gmail.com>`. Worth adding
+   to any future backup script.
+6. **`fa/archive/` was in no backup either — and that one nearly cost data.**
+   The archive is monthly parquet (`<source>/<yyyy-mm>.parquet`,
+   `fa/config.py`), and `stocktwits_collect_push.sh` rsyncs local → server as
+   a straight mirror. Its "the home box is the sole writer so a mirror is
+   safe" assumption silently depends on the home box holding the full local
+   history; after the wipe it held none, so the first timed run would have
+   replaced the server's `2026-08.parquet` (1620 stocktwits + 3240 sentiment
+   rows, 08-15 22:00 → 08-18 03:02 UTC) with just that run's messages.
+   Averted by pulling the server's archive back down before the timer fired.
+   **Any future backup must include `fa/archive/`**, and a restore must pull
+   it from the server before the timer is allowed to run.
+
+Backup-script gaps to close, in one list: `~/.gitconfig`, `fa/archive/`, and
+a note that the target OS may not be Pop!_OS.
+
+The systemd units hardcoded `/home/healylabs/...` and `User=healylabs`, so
+they would have refused to start; retargeted and committed (`3a7d09c`).
+Installed state matches the pre-wipe `systemd_units.txt` exactly:
+boot-restart enabled, stocktwits service disabled + timer enabled.
 
 ## THE FINISH CHAIN (execute in order; standing goal: deploy on landing)
 
-0. Re-arm the watcher per the verification doctrine above (hourly count →
-   terminal at 118 + job terminal states + auth failure as loud events).
 1. At 118/118: **assemble** —
    `TASK_MODE=assemble MACHINE=n2-standard-4 IMAGE_TAG=7845325
    PROJECT=healys-batch BUCKET=gs://healys-backtester bash deploy/gcp/submit.sh 1`
@@ -59,21 +99,23 @@ zero output (~$5 wasted) while sessions believed it was fine.
    600 --embargo 1D --marks nn_meta/artifacts_v31/meta_dataset.marks.parquet`
    then same with `--folds 3`. Compare vs stage-0 tables in
    `docs/specs/V4_OUTLINE.md`; log verdict in `docs/EXPERIMENTS.md`.
-4. **Re-finalize**: `v4_finalize --marks ...` (wiring DONE this session) →
-   fresh `model_final_v4/`. Force-add + commit.
+4. **Re-finalize**: `v4_finalize --marks ...` → fresh `model_final_v4/`.
+   Force-add + commit.
 5. **DEPLOY**: push main → server `git pull` → selftest → drop `--paper`
    from the v4_scan cron line → verify one pass → re-validate candidate
    parity (Option B step 4). Update EXPERIMENTS/TODO/DECISIONS.
 
 ## Carry-overs
 
+- Re-enable CI at billing reset: `gh workflow enable tests` (gh is now
+  authed with `workflow` scope, so this is unblocked).
 - Monday open: watch all three server cron logs for Alpaca 429s → stagger.
-- Re-enable CI at billing reset: `gh workflow enable tests`.
-- v32/spx0 bucket backup: DONE 08-17 (both verified size-matched).
-- Claude Code login on this box repeatedly lost credentials (personal
-  account, NOT the Workspace issue) — cause unknown; diagnose if it recurs
-  post-reinstall.
+- Claude Code login on this box repeatedly lost credentials pre-wipe
+  (personal account, NOT the Workspace issue). Watch whether it recurs on
+  the fresh OS — cause unknown.
 - Next phase after deploy: wave 2 (`ROADMAP.md`) — EV head → spx0 pool
   wiring (data banked) → vol-regime on Batch → FA seat → dual-mode cadence.
 - Future Batch jobs: size to 8 VMs (32-CPU quota, free trial can't bump);
   budget doctrine in claude-memory `gcp-free-trial-budget`.
+- The Hetzner server was untouched by the wipe and kept running v3 +
+  v4(paper) + v31(paper) throughout.
