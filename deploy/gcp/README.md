@@ -120,3 +120,37 @@ limited, and they'd put `.env` keys in the cloud. Cache-only compute jobs
 need **no secrets at all** — that's deliberate. And cloud compute does not
 extend the ~2-year options-history entitlement; that's a provider plan
 limit.
+
+## Training modes: `evaluate` and `finalize` (added 2026-08-18)
+
+    TASK_MODE=evaluate PROJECT=... BUCKET=gs://... \
+      EXTRA_ARGS='--ablation --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600 --embargo 1D' \
+      bash deploy/gcp/submit.sh 1
+
+    TASK_MODE=finalize PROJECT=... BUCKET=gs://... \
+      EXTRA_ARGS='--epochs 60 --gbt-estimators 600' bash deploy/gcp/submit.sh 1
+
+**Why these exist.** The home box has proven single-bit memory corruption
+(2026-08-18; evidence in `docs/incidents/`). That corruption is silent unless it
+lands somewhere that fails loudly, and these two steps produce the bundle that
+is committed and deployed to production — a flip in a training array or a model
+weight would ship a wrong model with no error at all. Full reasoning in
+`HANDOFF.md`.
+
+Notes:
+
+- Inputs are pulled from `out/meta_dataset.parquet` and
+  `out/meta_dataset.marks.parquet`, so **assemble must have run first**. The
+  multi-GB `data_cache_v3` rsync is skipped: nothing here reads raw option bars.
+- Outputs go to `out/<mode>-<UTC stamp>/` — `reports/`, `runs/`, and for
+  finalize `model_final_v4/` — plus **`SHA256SUMS.txt`**, so a second run can be
+  compared file for file rather than assumed identical.
+- **Reports are published even when the task exits non-zero.** `v4_finalize`
+  exits 1 when nothing clears the eligibility gate; that is a result, not a
+  crash, and the evidence must survive it.
+- Defaults: `n2-standard-8`, 8 vCPU, 32 GiB, 12h cap, **STANDARD not SPOT**
+  (preemption restarts training from zero — no checkpointing to resume from),
+  1 retry. Override via `MACHINE` / `CPU_MILLI` / `MEMORY_MIB` / `MAX_RUN` /
+  `PROVISIONING` / `RETRIES`.
+- `EXTRA_ARGS` is interpolated into the job JSON and must not contain double
+  quotes; submit.sh refuses rather than emitting invalid JSON.

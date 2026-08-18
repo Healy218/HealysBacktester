@@ -15,20 +15,88 @@ cd /app
 
 echo "== task ${BATCH_TASK_INDEX:-?}/${SHARDS:-?} mode=${TASK_MODE:-build} =="
 
-# Stage the raw option-bar cache + spec (read-only inputs).
-mkdir -p nn_meta/data_cache_v3 nn_meta/artifacts_v31
-gsutil -m -q rsync -r "${BUCKET}/data_cache_v3" nn_meta/data_cache_v3
+MODE="${TASK_MODE:-build}"
+
+# The frozen spec is an input to every mode.
+mkdir -p nn_meta/artifacts_v31
 gsutil -m -q rsync -r "${BUCKET}/artifacts_v31_in" nn_meta/artifacts_v31
 
-# Resume: pull any checkpoints previous attempts already produced.
-# gsutil rsync refuses to create the destination dir — without the mkdirs the
-# pull silently no-ops (seen live 2026-08-18: CommandException swallowed by
-# `|| true`), which would make an assemble task fold up EMPTY local dirs.
-mkdir -p nn_meta/artifacts_v31/meta_rows nn_meta/artifacts_v31/meta_marks
-gsutil -m -q rsync -r "${BUCKET}/out/meta_rows"  nn_meta/artifacts_v31/meta_rows  || true
-gsutil -m -q rsync -r "${BUCKET}/out/meta_marks" nn_meta/artifacts_v31/meta_marks || true
+case "$MODE" in
+  evaluate|finalize)
+    # Training modes read the ASSEMBLED dataset, never the raw option bars, so
+    # the multi-GB data_cache_v3 rsync is skipped — it is the bulk of task
+    # startup and egress and nothing here reads it.
+    for f in meta_dataset.parquet meta_dataset.marks.parquet; do
+      gsutil -q cp "${BUCKET}/out/${f}" "nn_meta/artifacts_v31/${f}" || {
+        echo "FATAL: ${BUCKET}/out/${f} missing — run TASK_MODE=assemble first" >&2
+        exit 1; }
+    done
+    ;;
+  *)
+    # Stage the raw option-bar cache (read-only input) for build/assemble.
+    mkdir -p nn_meta/data_cache_v3
+    gsutil -m -q rsync -r "${BUCKET}/data_cache_v3" nn_meta/data_cache_v3
 
-if [ "${TASK_MODE:-build}" = "assemble" ]; then
+    # Resume: pull any checkpoints previous attempts already produced.
+    # gsutil rsync refuses to create the destination dir — without the mkdirs the
+    # pull silently no-ops (seen live 2026-08-18: CommandException swallowed by
+    # `|| true`), which would make an assemble task fold up EMPTY local dirs.
+    mkdir -p nn_meta/artifacts_v31/meta_rows nn_meta/artifacts_v31/meta_marks
+    gsutil -m -q rsync -r "${BUCKET}/out/meta_rows"  nn_meta/artifacts_v31/meta_rows  || true
+    gsutil -m -q rsync -r "${BUCKET}/out/meta_marks" nn_meta/artifacts_v31/meta_marks || true
+    ;;
+esac
+
+# ---- training modes -------------------------------------------------------
+# WHY THESE RUN HERE AND NOT ON THE HOME BOX: that machine has PROVEN
+# single-bit memory corruption (2026-08-18; a bit flipped r->v inside a .pyc
+# the CPU was writing — evidence kept at docs/incidents/). The corruption is
+# SILENT unless it happens to land somewhere that fails loudly, and these two
+# steps produce the bundle that is committed and deployed to production. A flip
+# in a training array or a model weight would ship a wrong model with no error.
+# Full reasoning: HANDOFF.md.
+if [ "$MODE" = "evaluate" ] || [ "$MODE" = "finalize" ]; then
+  MARKS=nn_meta/artifacts_v31/meta_dataset.marks.parquet
+  [ -f "$MARKS" ] || { echo "FATAL: $MARKS not staged" >&2; exit 1; }
+  STAMP="${MODE}-$(date -u +%Y%m%dT%H%M%SZ)"
+  OUT="${BUCKET}/out/${STAMP}"
+  echo "== $MODE — publishing to ${OUT} =="
+  echo "== extra args: ${EXTRA_ARGS:-<none>} =="
+
+  # EXTRA_ARGS is deliberately unquoted: it carries a flag list that must word-split.
+  set +e
+  if [ "$MODE" = "evaluate" ]; then
+    python -m nn_meta.v4_evaluate --marks "$MARKS" ${EXTRA_ARGS:-}
+  else
+    python -m nn_meta.v4_finalize --marks "$MARKS" ${EXTRA_ARGS:-}
+  fi
+  rc=$?
+  set -e
+  echo "== $MODE exited rc=$rc =="
+
+  # Publish BEFORE honouring rc. v4_finalize exits 1 when nothing clears the
+  # eligibility gate — that is a real RESULT, not a crash, and the reports that
+  # explain WHY must survive it. Losing them to a non-zero exit would waste the
+  # whole run.
+  for pair in "nn_meta/reports_v31:reports" "nn_meta/model_final_v4:model_final_v4" \
+              "nn_meta/runs_v31:runs"; do
+    src=${pair%%:*}; dst=${pair##*:}
+    [ -d "$src" ] || continue
+    echo "publishing $src -> ${OUT}/${dst}"
+    gsutil -m -q rsync -r "$src" "${OUT}/${dst}"
+  done
+
+  # Checksums: the entire point of running here is an artifact you can TRUST.
+  # Hashing every output makes that checkable — a second run, on this or other
+  # hardware, can be compared file for file instead of assumed identical.
+  find nn_meta/reports_v31 nn_meta/model_final_v4 nn_meta/runs_v31 -type f 2>/dev/null \
+    | sort | xargs -r sha256sum > /tmp/SHA256SUMS.txt || true
+  gsutil -q cp /tmp/SHA256SUMS.txt "${OUT}/SHA256SUMS.txt" || true
+  echo "== $MODE published; $(wc -l < /tmp/SHA256SUMS.txt 2>/dev/null || echo 0) files hashed =="
+  exit $rc
+fi
+
+if [ "$MODE" = "assemble" ]; then
   # Fail closed: assembling from an empty pull must never "succeed".
   n_rows=$(find nn_meta/artifacts_v31/meta_rows -name '*.parquet' | wc -l)
   echo "assemble: $n_rows per-symbol row files pulled"

@@ -95,12 +95,29 @@ Today added two more instances of the same lesson, both worth internalising:
    `gcloud storage cp gs://healys-backtester/out/meta_dataset.parquet
    gs://healys-backtester/out/meta_dataset.marks.parquet nn_meta/artifacts_v31/`
    (meta_dataset.parquet is TRACKED — commit it with verified re-run results.)
-3. **Ledger re-runs** (local, NN_META_POOL=v31):
-   `v4_evaluate --ablation --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators
-   600 --embargo 1D --marks nn_meta/artifacts_v31/meta_dataset.marks.parquet`
-   then same with `--folds 3`. Compare vs stage-0 tables in
-   `docs/specs/V4_OUTLINE.md`; log verdict in `docs/EXPERIMENTS.md`.
-4. **Re-finalize**: `v4_finalize --marks ...` → fresh `model_final_v4/`.
+3. **Ledger re-runs — ON GCP, NOT LOCALLY** (wired 2026-08-18; the home box has
+   proven silent memory corruption, see the STOP block at the top):
+   ```
+   TASK_MODE=evaluate PROJECT=healys-batch BUCKET=gs://healys-backtester \
+     EXTRA_ARGS='--ablation --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600 --embargo 1D' \
+     bash deploy/gcp/submit.sh 1
+   ```
+   then again with `EXTRA_ARGS='--folds 3 --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600 --embargo 1D'`.
+   Outputs land in `gs://healys-backtester/out/evaluate-<UTC stamp>/` with a
+   `SHA256SUMS.txt`. Compare vs stage-0 tables in `docs/specs/V4_OUTLINE.md`;
+   log the verdict in `docs/EXPERIMENTS.md`.
+4. **Re-finalize — ALSO ON GCP**:
+   ```
+   TASK_MODE=finalize PROJECT=healys-batch BUCKET=gs://healys-backtester \
+     EXTRA_ARGS='--epochs 60 --gbt-estimators 600' bash deploy/gcp/submit.sh 1
+   ```
+   → `out/finalize-<stamp>/model_final_v4/` + `SHA256SUMS.txt`; pull that down
+   and commit it. **Task rc=1 means nothing cleared the eligibility gate** — a
+   real result, not a crash; the reports are published either way.
+   Training modes default to n2-standard-8, 32 GiB, 12h cap, **STANDARD (not
+   SPOT)** — preemption would restart training from zero and there is no
+   per-symbol checkpoint to resume from. Override with MACHINE / CPU_MILLI /
+   MEMORY_MIB / MAX_RUN / PROVISIONING.
 5. **DEPLOY**: push main → server `git pull` → selftest → drop `--paper` from
    the v4_scan cron line → verify one pass → re-validate candidate parity.
 
