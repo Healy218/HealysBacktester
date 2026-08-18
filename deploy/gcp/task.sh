@@ -21,10 +21,21 @@ gsutil -m -q rsync -r "${BUCKET}/data_cache_v3" nn_meta/data_cache_v3
 gsutil -m -q rsync -r "${BUCKET}/artifacts_v31_in" nn_meta/artifacts_v31
 
 # Resume: pull any checkpoints previous attempts already produced.
+# gsutil rsync refuses to create the destination dir — without the mkdirs the
+# pull silently no-ops (seen live 2026-08-18: CommandException swallowed by
+# `|| true`), which would make an assemble task fold up EMPTY local dirs.
+mkdir -p nn_meta/artifacts_v31/meta_rows nn_meta/artifacts_v31/meta_marks
 gsutil -m -q rsync -r "${BUCKET}/out/meta_rows"  nn_meta/artifacts_v31/meta_rows  || true
 gsutil -m -q rsync -r "${BUCKET}/out/meta_marks" nn_meta/artifacts_v31/meta_marks || true
 
 if [ "${TASK_MODE:-build}" = "assemble" ]; then
+  # Fail closed: assembling from an empty pull must never "succeed".
+  n_rows=$(find nn_meta/artifacts_v31/meta_rows -name '*.parquet' | wc -l)
+  echo "assemble: $n_rows per-symbol row files pulled"
+  if [ "$n_rows" -lt 1 ]; then
+    echo "FATAL: resume pull produced no meta_rows — refusing to assemble" >&2
+    exit 1
+  fi
   ./venv/bin/python -m nn_meta.build_meta_dataset --assemble 2>/dev/null \
     || python -m nn_meta.build_meta_dataset --assemble
   # publish MUST fail the task on error — Batch reporting SUCCEEDED while the
