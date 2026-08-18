@@ -103,10 +103,39 @@ Same process, same reclaim path function-for-function, across a different
 kernel AND a different filesystem. An ext4/jbd2 bug cannot reproduce on btrfs;
 a 7.0.11 bug need not exist in 7.1.8. What survives both changes:
 
-1. **The hardware** — same box, same DIMMs.
-2. **The NVIDIA proprietary driver** — nvidia_drm/modeset/uvm(OE) then,
+1. **zram** — `zram`/`842_decompress`/`lz4hc_compress` appear in BOTH crash
+   module lists. Live config: `/dev/zram0`, zstd, **zram-size = ram (15.5G on
+   15.5G)**, swap-priority 100, and **`vm.swappiness = 150`**. Unlike the other
+   two candidates, zram sits *directly in the code path that crashed*: both
+   traces die in `evict_folios > shrink_folio_list`, which is exactly where
+   kswapd hands evicted pages to zram to be compressed. This is the most
+   specific lead and it was MISSED in the first pass over the module lists.
+2. **The hardware** — same box, same DIMMs. **DEPRIORITISED**, see memtest below.
+3. **The NVIDIA proprietary driver** — nvidia_drm/modeset/uvm(OE) then,
    nvidia(O) now; out-of-tree in both, and nvidia_uvm does page-level memory
-   management.
+   management. DMA from a device is invisible to any RAM test.
+
+**memtest86+ already ran overnight on the Pop!_OS install: 20/20 passes, clean**
+(user, 2026-08-18; exact date of the run not established — worth pinning down,
+since a run well before Aug 17 says less about these crashes). Do NOT re-run it;
+that ground is covered. But clean does not mean exonerated, and the reasons are
+the useful part:
+
+- memtest cannot see **DMA corruption** — it never loads the NVIDIA driver.
+- memtest cannot see a **software lifetime bug** (a page freed while still
+  referenced). `mapcount:-131072` and a NULL buffer_head mid
+  `try_to_free_buffers` are both exactly that shape, and no RAM test detects it.
+- memtest walks patterns at moderate load on a cool CPU. These crashes happen
+  under concurrent reclaim + zstd compression + NVMe + GPU traffic. **zstd across
+  15.5G of zram is a bandwidth-saturating, highly concurrent access pattern
+  memtest never produces**, so a DIMM or memory controller marginal at *that*
+  pattern can pass 20 passes.
+
+Corollary worth holding onto: **zram may be the TRIGGER without being the
+CULPRIT** — it hammers memory in a way memtest does not, so it could simply be
+exposing marginal hardware rather than being buggy itself. The reproduction
+test below does not distinguish these two; it only tells us whether the path is
+where the damage happens.
 
 Caveat that must not be dropped: kswapd is the kernel's busiest memory-toucher,
 so it is the most likely thing to *encounter* corruption whoever caused it.
@@ -118,10 +147,14 @@ Revised timeline — worse than the one-off it first looked like:
 - 23:10 corrupt page struct in kswapd — **15 minutes into a brand-new OS**
 - 03:19 silent hard freeze
 
-**MEMTEST86+ OVERNIGHT IS THE NEXT ACTION AND IT DISCRIMINATES CLEANLY**:
-dirty RAM ends the investigation; clean RAM promotes the NVIDIA module to
-prime suspect. Cost of running it: the box is offline, so StockTwits loses
-those hourly collections (the cloud build is unaffected — it runs on GCP).
+**NEXT ACTIONS**, in order of cost:
+1. `sudo sysctl -w vm.swappiness=60` (from 150) — or `swapoff /dev/zram0` to
+   remove zram entirely. Cools the suspect path; no reboot; reversible.
+2. **Check BIOS for XMP/DOCP.** "Passes memtest, corrupts under mixed real
+   load" is a classic above-JEDEC-timings signature. Stock timings = free test.
+3. **Reproduce on demand** rather than waiting days for a random freeze —
+   `scripts/zram_reclaim_stress.py` drives the exact path. With
+   `kernel.nmi_watchdog=1` armed, a lockup now leaves a trace instead of silence.
 
 It left no record because **three switches were independently off** — fixing
 any one alone still yields silence:
