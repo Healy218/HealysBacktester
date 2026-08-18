@@ -1,96 +1,50 @@
 # HANDOFF — state for the next session
 
-Written 2026-08-18 ~00:05 CDT (= 05:05 UTC). Protocol: `CLAUDE.md`.
+Written 2026-08-18 ~07:15 CDT (= 12:15 UTC). Protocol: `CLAUDE.md`.
 Previous handoffs: `handoff-history/`.
 
-**The OS wipe is DONE and the box is fully restored.** No restore work is
-pending; `popos_backup_2026-08-17/SETUP.md` on the MRHA drive has been
-executed end to end and verified (details below). Ignore the restore warning
-at the top of the previous handoff.
+**This session ends at a reboot** (crash-capture cmdline change, below). The
+box is healthy; nothing is mid-flight locally. The cloud build is unaffected —
+it runs on GCP Batch, not here.
 
-## Verification doctrine (unchanged — it earned its place)
+## Verification doctrine (unchanged — it earned its place, twice more today)
 
 Never report the cloud build's state from this file or memory — verify live:
-job state + createTime (`gcloud batch jobs list` / `jobs describe`), fresh
-task-log lines, and advancing bucket count/timestamps. Deleted jobs VANISH
-from `jobs list`; the compute audit log (`instances.insert/delete`) is ground
-truth. On 08-17 a morning resubmit ran the un-fixed image and kill-looped VMs
-for 14h with zero output (~$5 wasted) while sessions believed it was fine.
+job state + createTime, fresh task-log lines, advancing bucket count. Deleted
+jobs VANISH from `jobs list`; the compute audit log is ground truth.
+
+Today added two more instances of the same lesson, both worth internalising:
+
+- **Counts lie without their shape.** A first pass at the server 429 audit
+  grepped bare `429` and reported 481 hits on `live_cron` — every one was the
+  millisecond field of a log timestamp (`19:45:14,429`). `error` likewise
+  matches the healthy `errors 0` status line. Always print sample lines beside
+  a count. `scripts/server_health.sh` now does.
+- **A dry run is not a formality.** The crash-capture script's first `--apply`
+  reported `line 34: from: 34` on a 3-line file and silently no-opped. See
+  "the anomaly" below — it is unexplained and worth knowing about.
 
 ## Where everything stands
 
-- **Cloud v4 marks build RUNNING, live-verified 08-18 04:56 UTC: 49/118**
+- **Cloud v4 marks build RUNNING, live-verified 08-18 12:10 UTC: 93/118**
   symbols in `gs://healys-backtester/out/meta_rows/` (job
   `marks-build-54bd73d-202944`, healys-batch, us-central1, image `54bd73d`).
-  Rate has SETTLED at **~5 symbols/hr**, below both the ~9 the previous
-  handoff assumed and the ~7 measured early: 37@03:28Z → 44@04:42Z →
-  49@04:56Z → 54@05:56Z → 59@06:56Z (two consecutive hours at +5). At 5/hr
-  the remaining ~59 symbols land **~18:00-19:00 UTC ≈ 13:00-14:00 CDT Tue**.
-  Treat any ETA here as decaying — re-measure from the bucket, don't trust
-  this line. Quota `CPUS_ALL_REGIONS=32` caps it at 8 VMs (PENDING 22 is
-  normal). Free trial ~$294 of $300 left.
-- **Watcher armed** as a Monitor (hourly): bucket count + job state, with
-  118/118, any terminal job state, job-vanished, auth failure and a
-  count-stall as loud events. **Monitors die with the session — re-arm it.**
-  Recipe: poll `gcloud storage ls gs://healys-backtester/out/meta_rows/ |
-  grep -c '\.parquet$'` and `gcloud batch jobs describe
-  marks-build-54bd73d-202944 --location us-central1 --project healys-batch
-  --format='value(status.state)'`; a non-zero rc on describe means the job
-  was DELETED, which is a loud event, not a blip.
-- **`--marks` wired through `v4_finalize`** (commit `8c649dc`): both
-  selection passes run the m2m ledger; fail-closed blockers check;
-  `selection_basis` recorded in ensemble_config + manifest.
-- **task.sh assemble bug fixed** (commit `7845325`): resume pull silently
-  no-opped (missing mkdir before gsutil rsync). **Assemble MUST use image tag
-  `7845325`**, not `54bd73d`.
-- **Suite 390 green** on the rebuilt box (`CLAUDE.md` previously said 345;
-  corrected).
-
-## The restore, and what the guide got wrong
-
-Done: secrets/`~/.ssh`/`~/.claude`, repo at `b5e61b7` matching
-`git_head.txt`, `.env`, all 15 GB of data (v3/data 5.4G — exists nowhere else
-— plus caches v3/v32/spx0 and artifacts_v31, every size an exact match),
-venv, gcloud authed `matt@healylabs.io`, gh authed `Healy218`, systemd units
-installed, 390 tests green.
-
-Six things `SETUP.md` could not anticipate — all now recorded in `CLAUDE.md`:
-
-1. **The box is CachyOS (Arch), not Pop!_OS.** Step 0's `apt` line is dead;
-   use `pacman`. The user is `healy`, not `healylabs`.
-2. **No `python312` package on Arch**, and system python is 3.14 which the
-   pins reject. The venv is **3.12.14 via `uv`** (`uv python install 3.12`).
-3. **No official gcloud package.** Installed as Google's rootless tarball at
-   `~/google-cloud-sdk`; PATH sourced from `~/.config/fish/config.fish` and
-   `~/.bashrc`.
-4. **`pytest` was not in `requirements.txt`** — step 3 alone left step 7
-   unrunnable. Fixed in `a2cd157`; pinned to 9.1.1.
-5. **Git identity was in `~/.gitconfig`, which no backup captured.** Restored
-   from the commit history as `Healy218 <mrhealy115@gmail.com>`. Worth adding
-   to any future backup script.
-6. **`fa/archive/` was in no backup either — and that one nearly cost data.**
-   The archive is monthly parquet (`<source>/<yyyy-mm>.parquet`,
-   `fa/config.py`), and `stocktwits_collect_push.sh` rsyncs local → server as
-   a straight mirror. Its "the home box is the sole writer so a mirror is
-   safe" assumption silently depends on the home box holding the full local
-   history; after the wipe it held none, so the first timed run would have
-   replaced the server's `2026-08.parquet` (1620 stocktwits + 3240 sentiment
-   rows, 08-15 22:00 → 08-18 03:02 UTC) with just that run's messages.
-   Averted by pulling the server's archive back down before the timer fired.
-   **FIXED in `7a17524`**: the script now pulls the archive before collecting,
-   so the mirror is safe by construction and a wiped local archive self-heals
-   instead of truncating the server. Verified three ways (normal run; local
-   archive deleted outright; server unreachable → exits 255 without collecting
-   or pushing). **Any future backup should still include `fa/archive/`.**
-
-Backup-script gaps to close, in one list: `~/.gitconfig`, `fa/archive/`, and
-a note that the target OS may not be Pop!_OS. `pytest` is now in
-`requirements.txt` (`a2cd157`), so a clean build can run the gate.
-
-The systemd units hardcoded `/home/healylabs/...` and `User=healylabs`, so
-they would have refused to start; retargeted and committed (`3a7d09c`).
-Installed state matches the pre-wipe `systemd_units.txt` exactly:
-boot-restart enabled, stocktwits service disabled + timer enabled.
+  Rate settled at **~6 sym/hr**, slightly better than the ~5 the last handoff
+  assumed: 88@11:21Z → 93@12:10Z. At 6/hr the remaining 25 land **~16:15 UTC
+  ≈ 11:15 CDT Tue**. Re-measure from the bucket; do not trust this line.
+  Quota `CPUS_ALL_REGIONS=32` caps it at 8 VMs (PENDING 22 is normal).
+- **WATCHER IS DEAD — RE-ARM IT.** It was a Monitor, and Monitors die with
+  the session; the reboot ends this one. Recipe: poll every ~15 min
+  `gcloud storage ls gs://healys-backtester/out/meta_rows/ | grep -c '\.parquet$'`
+  and `gcloud batch jobs describe marks-build-54bd73d-202944 --location
+  us-central1 --project healys-batch --format='value(status.state)'`. Loud on:
+  118/118, any terminal state, non-zero rc on describe (= job DELETED, not a
+  blip), auth failure, count unchanged for 3 consecutive polls.
+- **`--marks` wired through `v4_finalize`** (`8c649dc`); **task.sh assemble bug
+  fixed** (`7845325`) — **assemble MUST use image tag `7845325`**, not `54bd73d`.
+- **Suite 390 green** on the rebuilt box, re-verified this session post-reboot.
+- **Server healthy**, verified live: 40 days uptime, all three experts
+  scanning, logs fresh, v4 reporting `scanned 118 · alerted 0 · errors 0`.
 
 ## THE FINISH CHAIN (execute in order; standing goal: deploy on landing)
 
@@ -107,22 +61,92 @@ boot-restart enabled, stocktwits service disabled + timer enabled.
    then same with `--folds 3`. Compare vs stage-0 tables in
    `docs/specs/V4_OUTLINE.md`; log verdict in `docs/EXPERIMENTS.md`.
 4. **Re-finalize**: `v4_finalize --marks ...` → fresh `model_final_v4/`.
-   Force-add + commit.
-5. **DEPLOY**: push main → server `git pull` → selftest → drop `--paper`
-   from the v4_scan cron line → verify one pass → re-validate candidate
-   parity (Option B step 4). Update EXPERIMENTS/TODO/DECISIONS.
+5. **DEPLOY**: push main → server `git pull` → selftest → drop `--paper` from
+   the v4_scan cron line → verify one pass → re-validate candidate parity.
+
+## The hard lockup (2026-08-18 03:19:21 CDT) and what came of it
+
+The box **froze**, it did not power off — user found it wedged and held the
+power button at ~06:19. Proven unclean stop: journal ends mid-line at
+03:19:21 with no shutdown sequence, EFI partition dirty bit set, btrfs
+tree-log replay on next mount. Ruled out: software shutdown, thermal, OOM,
+MCE, watchdog reboot, suspend.
+
+**Cause is still UNKNOWN.** The only lead is `BUG: Bad page state in process
+kswapd0 pfn:438ee5, mapcount:-131072, "nonzero mapcount"` at 23:10:46 — a
+corrupted `page` struct, four hours before the freeze, one occurrence, on a
+kernel tainted `O` by the NVIDIA out-of-tree module. The box ran fine in
+between (StockTwits succeeded at 00:01, 01:02, 02:03, 03:01).
+
+It left no record because **three switches were independently off** — fixing
+any one alone still yields silence:
+
+1. `nowatchdog` on the kernel cmdline → hardlockup detector never armed, so a
+   wedged CPU froze instead of panicking.
+2. `CONFIG_EFI_VARS_PSTORE_DEFAULT_DISABLE=y` → pstore compiled in but inert
+   without `efi_pstore.pstore_disable=0`. `dmesg | grep pstore` was empty.
+3. `systemd-pstore.service` disabled → a captured record would never be
+   harvested out of NVRAM.
+
+`scripts/crash_capture_setup.sh` fixes all three plus `kernel.panic=30`,
+`panic_on_oops=1`, `hardlockup_panic=1` (`softlockup_panic` left 0 on purpose
+— it false-positives under sustained IO/CPU and a spurious reboot mid-build
+would be worse than the bug). It also drops `quiet splash` so a panic is
+legible on screen, and installs `memtest86+-efi`.
+
+**NEXT ACTION ON THIS: run memtest86+ overnight** — several hours, not one
+pass. That `Bad page state` makes RAM the first suspect and the cheapest to
+eliminate. If clean, the NVIDIA module is next.
+
+Also unresolved: `limine-update` regenerates snapshot boot entries too;
+confirm the `Snapshots` entries still boot after the cmdline change.
+
+### The anomaly (unexplained — do not assume it is gone)
+
+The first `--apply` printed `line 34: from: 34` for a 3-line file: the line
+number leaked into the value slot, and `sed -i` targeting line 34 no-opped.
+The dry run one minute earlier, and a direct `grep -nE` afterwards, both
+correctly returned line 2; the source differed only in a logging string. **No
+explanation was found.** The file was verified byte-identical to its backup,
+so nothing was damaged.
+
+The fix was to delete the mechanism rather than trust a theory: step 1 now
+uses a python keyed substitution (no line numbers, no shell field-splitting,
+no `sed -i`), then **re-reads the file from disk** and asserts five invariants
+— `root=UUID`, `rootflags=subvol`, pstore param present, `nowatchdog` gone,
+`ESP_PATH` intact. Any failure restores the backup, skips `limine-update`, and
+exits non-zero. All five gates were tested against deliberately broken files.
 
 ## Carry-overs
 
-- Re-enable CI at billing reset: `gh workflow enable tests` (gh is now
-  authed with `workflow` scope, so this is unblocked).
-- Monday open: watch all three server cron logs for Alpaca 429s → stagger.
-- Claude Code login on this box repeatedly lost credentials pre-wipe
-  (personal account, NOT the Workspace issue). Watch whether it recurs on
-  the fresh OS — cause unknown.
+- **Monday-open Alpaca 429s: RESOLVED, no staggering needed.** Zero genuine
+  rate-limit hits across all six server logs. (The 481/132/66 counts from the
+  first pass were timestamp milliseconds — see doctrine above.)
+- **NEW: `fa_cron` is hitting Reddit 500s** —
+  `requests.exceptions.HTTPError: 500 Server Error` on
+  `oauth.reddit.com/r/options/new`. Upstream, not our bug, but the FA
+  discovery loop is losing that source. Not yet triaged.
+- **Fixed this session**: the `~/.claude/settings.json` SessionStart hook
+  pointed at `/home/healylabs/.claude/hooks/herdr-agent-state.sh` — dead since
+  the rebuild, failing silently every session. Repointed to `$HOME/...` (a
+  variable, so the next rename cannot break it). Restore gap #7, same family
+  as the systemd units.
+- **StockTwits lost three collections** (04:00, 05:00, 06:00 CDT) while the
+  box was wedged. The 06:20 post-boot run proved `7a17524` works: it pulled
+  before pushing, so the server's month grew 1620→1830 rows instead of being
+  truncated. The guard held under exactly the condition it was written for.
+- `.claude/settings.local.json` (gitignored) now allows
+  `Bash(./venv/bin/python -m pytest *)` and `Bash(./scripts/server_health.sh)`.
+  Deliberately NO broad ssh allow rule: a permission rule matches a command
+  prefix, so `ssh … <host> *` would grant writes as readily as reads, which
+  contradicts the `soft_deny` posture in `~/.claude/settings.json`. The
+  read-only remote command is pinned in the wrapper instead.
+- Re-enable CI at billing reset: `gh workflow enable tests`.
+- Backup-script gaps still open: `~/.gitconfig`, `fa/archive/`, and a note
+  that the target OS may not be Pop!_OS. Add `scripts/crash_capture_setup.sh`
+  and the three crash-capture switches to any rebuild doc.
 - Next phase after deploy: wave 2 (`ROADMAP.md`) — EV head → spx0 pool
-  wiring (data banked) → vol-regime on Batch → FA seat → dual-mode cadence.
-- Future Batch jobs: size to 8 VMs (32-CPU quota, free trial can't bump);
-  budget doctrine in claude-memory `gcp-free-trial-budget`.
-- The Hetzner server was untouched by the wipe and kept running v3 +
-  v4(paper) + v31(paper) throughout.
+  wiring → vol-regime on Batch → FA seat → dual-mode cadence.
+- Future Batch jobs: size to 8 VMs (32-CPU quota). Free trial ~$294 of $300.
+- **/ultrareview window still open**: `main` is held behind the branch; run it
+  from the DESKTOP session before merging to main and deploying.

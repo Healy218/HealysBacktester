@@ -139,7 +139,8 @@ guard, atomic dataset write). Remaining queue, ordered:
 - [x] State-file landmines defused: `.alert_state.json` +
   `.claude/settings.local.json` untracked + gitignored; server choreography
   done (live dedupe state preserved through the pull)
-- [ ] Monday watch: Alpaca 429s from three same-minute scanners → stagger
+- [x] Monday watch: Alpaca 429s — RESOLVED 2026-08-18, zero genuine hits (the
+  first count was timestamp milliseconds; `scripts/server_health.sh` re-checks)
 - [ ] **/ultrareview window open**: `main` is deliberately held behind the
   branch; once the two agents' commits land, run `/ultrareview` from the
   DESKTOP session (not Remote Control) to multi-agent-review the branch-only
