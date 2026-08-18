@@ -275,7 +275,12 @@ if [ "$APPLY" -eq 1 ]; then
   for b in "${BACKUPS[@]:-}"; do
     [ -n "$b" ] && echo "    cp -a $b ${b%.bak-$STAMP}"
   done
-  echo "    rm -f $SYSCTL"
+  # Only offer 'rm' for the sysctl file when no backup of it was taken — otherwise
+  # the restore line above already covers it, and printing both in sequence would
+  # restore the file and then delete it.
+  if ! printf '%s\n' "${BACKUPS[@]:-}" | grep -q "^$SYSCTL.bak-"; then
+    echo "    rm -f $SYSCTL"
+  fi
   echo "    systemctl disable systemd-pstore.service"
   echo "    # then regenerate the bootloader config (sdboot-manage gen / grub-mkconfig / limine-update)"
 else
