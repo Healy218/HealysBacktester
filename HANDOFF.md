@@ -3,9 +3,12 @@
 Written 2026-08-18 ~07:15 CDT (= 12:15 UTC). Protocol: `CLAUDE.md`.
 Previous handoffs: `handoff-history/`.
 
-**This session ends at a reboot** (crash-capture cmdline change, below). The
-box is healthy; nothing is mid-flight locally. The cloud build is unaffected —
-it runs on GCP Batch, not here.
+Reboot DONE 07:14 CDT; crash capture verified live (see below). The cloud
+build is unaffected — it runs on GCP Batch, not here.
+
+**THIS BOX IS UNDER SUSPICION.** Three memory-corruption events in ~7 hours
+across two different OS installs (detail below). Do not treat a local hang,
+oops, or odd result as a software bug until memtest86+ has run.
 
 ## Verification doctrine (unchanged — it earned its place, twice more today)
 
@@ -33,8 +36,8 @@ Today added two more instances of the same lesson, both worth internalising:
   assumed: 88@11:21Z → 93@12:10Z. At 6/hr the remaining 25 land **~16:15 UTC
   ≈ 11:15 CDT Tue**. Re-measure from the bucket; do not trust this line.
   Quota `CPUS_ALL_REGIONS=32` caps it at 8 VMs (PENDING 22 is normal).
-- **WATCHER IS DEAD — RE-ARM IT.** It was a Monitor, and Monitors die with
-  the session; the reboot ends this one. Recipe: poll every ~15 min
+- **WATCHER: re-armed 12:20 UTC after the reboot killed it.** Monitors die
+  with the session — re-arm on every new session. Recipe: poll every ~15 min
   `gcloud storage ls gs://healys-backtester/out/meta_rows/ | grep -c '\.parquet$'`
   and `gcloud batch jobs describe marks-build-54bd73d-202944 --location
   us-central1 --project healys-batch --format='value(status.state)'`. Loud on:
@@ -72,11 +75,53 @@ power button at ~06:19. Proven unclean stop: journal ends mid-line at
 tree-log replay on next mount. Ruled out: software shutdown, thermal, OOM,
 MCE, watchdog reboot, suspend.
 
-**Cause is still UNKNOWN.** The only lead is `BUG: Bad page state in process
-kswapd0 pfn:438ee5, mapcount:-131072, "nonzero mapcount"` at 23:10:46 — a
-corrupted `page` struct, four hours before the freeze, one occurrence, on a
-kernel tainted `O` by the NVIDIA out-of-tree module. The box ran fine in
-between (StockTwits succeeded at 00:01, 01:02, 02:03, 03:01).
+**Cause narrowed to TWO candidates by a recovered pre-wipe crash record.**
+Enabling pstore harvested three `dmesg-efi_pstore-*` chunks that had been
+sitting in UEFI NVRAM since **Aug 17 20:45** — a kernel oops from the
+**Pop!_OS** install (system76_io/system76_acpi modules present), two hours
+before CachyOS first booted. Decoded:
+
+    RIP: jbd2_journal_grab_journal_head+0x10/0x80
+    RDI: 0000000000000000     <- buffer_head argument was NULL
+    Oops: 0002                <- kernel-mode WRITE to a non-present page
+    Comm: kswapd0   Kernel: 7.0.11-76070011-generic
+
+`jbd2_journal_try_to_free_buffers` handed `grab_journal_head` a NULL
+buffer_head and it did a locked bit-set on address zero. That list was corrupt.
+
+Set beside the CachyOS event, the pattern is the finding:
+
+| | Aug 17 20:45 (Pop!_OS) | Aug 17 23:10 (CachyOS) |
+|---|---|---|
+| Process | kswapd0 | kswapd0 |
+| Path | shrink_node > shrink_one > try_to_shrink_lruvec > evict_folios > shrink_folio_list | identical |
+| Failure | NULL buffer_head in journal list | mapcount:-131072, corrupt page struct |
+| Kernel | 7.0.11 (System76) | 7.1.8 (CachyOS) |
+| Filesystem | **ext4 / jbd2** | **btrfs** |
+
+Same process, same reclaim path function-for-function, across a different
+kernel AND a different filesystem. An ext4/jbd2 bug cannot reproduce on btrfs;
+a 7.0.11 bug need not exist in 7.1.8. What survives both changes:
+
+1. **The hardware** — same box, same DIMMs.
+2. **The NVIDIA proprietary driver** — nvidia_drm/modeset/uvm(OE) then,
+   nvidia(O) now; out-of-tree in both, and nvidia_uvm does page-level memory
+   management.
+
+Caveat that must not be dropped: kswapd is the kernel's busiest memory-toucher,
+so it is the most likely thing to *encounter* corruption whoever caused it.
+These traces prove memory got corrupted; they do not name the corrupter.
+
+Revised timeline — worse than the one-off it first looked like:
+- 20:45 Pop!_OS oops in kswapd (27h into that boot)
+- 22:51 CachyOS installed, first boot
+- 23:10 corrupt page struct in kswapd — **15 minutes into a brand-new OS**
+- 03:19 silent hard freeze
+
+**MEMTEST86+ OVERNIGHT IS THE NEXT ACTION AND IT DISCRIMINATES CLEANLY**:
+dirty RAM ends the investigation; clean RAM promotes the NVIDIA module to
+prime suspect. Cost of running it: the box is offline, so StockTwits loses
+those hourly collections (the cloud build is unaffected — it runs on GCP).
 
 It left no record because **three switches were independently off** — fixing
 any one alone still yields silence:
@@ -88,15 +133,23 @@ any one alone still yields silence:
 3. `systemd-pstore.service` disabled → a captured record would never be
    harvested out of NVRAM.
 
-`scripts/crash_capture_setup.sh` fixes all three plus `kernel.panic=30`,
+**A FOURTH switch was found during post-reboot verification**: dropping
+`nowatchdog` flips `kernel.watchdog` 0->1 but leaves `kernel.nmi_watchdog` at
+**0**, and on this CONFIG_HARDLOCKUP_DETECTOR_PERF kernel that sysctl is what
+actually gates the hard-lockup detector — so `hardlockup_panic=1` was inert.
+Fixed in `ffb7c24` (`kernel.nmi_watchdog = 1` in the drop-in). Verify with
+`sysctl kernel.nmi_watchdog` after any change here; a cmdline that merely
+*looks* right is not enough.
+
+`scripts/crash_capture_setup.sh` fixes all four plus `kernel.panic=30`,
 `panic_on_oops=1`, `hardlockup_panic=1` (`softlockup_panic` left 0 on purpose
 — it false-positives under sustained IO/CPU and a spurious reboot mid-build
 would be worse than the bug). It also drops `quiet splash` so a panic is
 legible on screen, and installs `memtest86+-efi`.
 
 **NEXT ACTION ON THIS: run memtest86+ overnight** — several hours, not one
-pass. That `Bad page state` makes RAM the first suspect and the cheapest to
-eliminate. If clean, the NVIDIA module is next.
+pass. See the two-candidate analysis above for why it is now the decisive
+test rather than merely the cheapest one.
 
 Also unresolved: `limine-update` regenerates snapshot boot entries too;
 confirm the `Snapshots` entries still boot after the cmdline change.
