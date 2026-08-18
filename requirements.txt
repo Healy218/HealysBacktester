@@ -21,3 +21,7 @@ python-dotenv
 
 lightgbm           # v3 GBT baseline (boring-baseline gate)
 boto3              # Massive flat-files S3 ingestion
+
+pytest==9.1.1      # the suite is the gate (CLAUDE.md); pinned because a
+                   # pytest major can break collection, and "390 green" only
+                   # means something against a known runner
