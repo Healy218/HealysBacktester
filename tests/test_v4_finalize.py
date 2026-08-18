@@ -135,7 +135,12 @@ def _install_finalize_stubs(monkeypatch, tmp_path, *, eligible: bool):
                           "n_kept": 25 if eligible else 3, "max_drawdown": 0.2,
                           "per_trade_sharpe": 1.0},
               "candidate_sharpes": [1.0]}
-    monkeypatch.setattr(fz, "choose_policy", lambda *a, **k: dict(policy))
+
+    def fake_choose_policy(rows, pred, spec, mark_stream=None, **k):
+        p = dict(policy)
+        p["selection_basis"] = "ledger" if mark_stream is not None else "shared_sim"
+        return p
+    monkeypatch.setattr(fz, "choose_policy", fake_choose_policy)
 
     monkeypatch.setattr(sys, "argv",
                         ["v4_finalize", "--models", "gbt",
@@ -159,6 +164,53 @@ def test_main_persists_eligible_bundle_with_ensemble_operating_point(monkeypatch
     assert "ensemble_config.json" in manifest["output_artifacts"]
     assert any("model.joblib" in k for k in manifest["output_artifacts"])
     assert (final / "v4-gbt-xs-s0" / "model.joblib").exists()
+
+
+def test_main_marks_flag_routes_both_selection_passes_through_the_ledger(monkeypatch, tmp_path):
+    """--marks must reach BOTH choose_policy call sites (cheap-seed family pick
+    and full-ensemble operating point), and the bundle must record it."""
+    final = _install_finalize_stubs(monkeypatch, tmp_path, eligible=True)
+    marks = tmp_path / "meta.marks.parquet"
+    marks.write_bytes(b"stub")  # existence only; loading is stubbed below
+    sentinel = pd.DataFrame({"mark": [1.0]})
+    monkeypatch.setattr(fz, "option_b_blockers",
+                        lambda cols, mark_stream_exists: [])
+    monkeypatch.setattr(fz, "load_mark_stream", lambda p: sentinel)
+
+    inner = fz.choose_policy
+    seen: list = []
+    def capture(rows, pred, spec, mark_stream=None, **k):
+        seen.append(mark_stream)
+        return inner(rows, pred, spec, mark_stream=mark_stream, **k)
+    monkeypatch.setattr(fz, "choose_policy", capture)
+    monkeypatch.setattr(sys, "argv",
+                        ["v4_finalize", "--models", "gbt",
+                         "--select-seeds", "0", "--final-seeds", "0,1",
+                         "--marks", str(marks)])
+
+    fz.main()
+
+    assert len(seen) == 2 and all(s is sentinel for s in seen)
+    cfg = json.loads((final / "ensemble_config.json").read_text())
+    assert cfg["selection_basis"] == "ledger"
+
+
+def test_main_marks_flag_fails_closed_on_blockers(monkeypatch, tmp_path):
+    """A dataset that can't support the ledger must stop finalize BEFORE any
+    training, mirroring v4_evaluate's fail-closed contract."""
+    _install_finalize_stubs(monkeypatch, tmp_path, eligible=True)
+    marks = tmp_path / "meta.marks.parquet"
+    marks.write_bytes(b"stub")
+    monkeypatch.setattr(fz, "option_b_blockers",
+                        lambda cols, mark_stream_exists: ["missing provenance columns"])
+    monkeypatch.setattr(sys, "argv",
+                        ["v4_finalize", "--models", "gbt",
+                         "--select-seeds", "0", "--final-seeds", "0,1",
+                         "--marks", str(marks)])
+
+    with pytest.raises(SystemExit) as exc:
+        fz.main()
+    assert "missing provenance columns" in str(exc.value)
 
 
 def test_main_refuses_ineligible_and_leaves_existing_bundle_untouched(monkeypatch, tmp_path):

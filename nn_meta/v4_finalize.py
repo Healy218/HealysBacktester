@@ -29,13 +29,15 @@ inputs. Training goes into a .staging sibling and is atomically swapped in
 last, so a crash or a gate failure never destroys a previously-validated
 model_final_v4/.
 
-Does NOT use v4_accounting.py's mark-to-market ledger — still the shared
-select_meta.py portfolio simulator, same as the walk-forward that validated
-this methodology. Wiring the ledger in is a separate follow-up (Option B).
+With ``--marks`` (Option B) both selection passes — the cheap-seed family
+pick and the full-ensemble operating point — run through the mark-to-market
+ledger via ``choose_policy(mark_stream=...)``, exactly like
+``v4_evaluate --marks``. Without it, the legacy shared-simulator path is
+bit-identical to before.
 
 Run: NN_META_POOL=v31 python -m nn_meta.v4_finalize [--val-fraction 0.15]
      [--select-seeds 0,1,2,3,4] [--final-seeds ...] [--epochs 60]
-     [--gbt-estimators 600]
+     [--gbt-estimators 600] [--marks .../meta_dataset.marks.parquet]
 Exit status: 0 on a persisted bundle, 1 if nothing cleared the gate.
 """
 from __future__ import annotations
@@ -53,6 +55,7 @@ import pandas as pd
 from nn_meta import config
 from nn_meta.baseline import load_spec
 from nn_meta.build_meta_dataset import V4_META_FEATURES
+from nn_meta.mark_stream import load_mark_stream, option_b_blockers
 from nn_meta.select_meta import all_rows
 from nn_meta.temporal_validation import assign_purged_splits
 from nn_meta.v4_artifacts import create_manifest, write_manifest
@@ -174,6 +177,10 @@ def main() -> None:
                     help="seeds for the persisted ensemble (default: config.SEEDS, 40)")
     ap.add_argument("--epochs", type=int, default=60)
     ap.add_argument("--gbt-estimators", type=int, default=600)
+    ap.add_argument("--marks", type=Path, default=None,
+                    help="per-contract 15m mark stream; selection (family pick "
+                         "AND ensemble operating point) then runs through the "
+                         "mark-to-market ledger")
     args = ap.parse_args()
 
     select_seeds = [int(s) for s in args.select_seeds.split(",") if s.strip()]
@@ -184,6 +191,14 @@ def main() -> None:
     print(f"loading dataset + spec...", flush=True)
     ds = pd.read_parquet(config.META_DATASET_PARQUET)
     spec = load_spec()
+    if args.marks:
+        # Fail closed BEFORE training if the dataset can't support the ledger
+        # (same contract as v4_evaluate --marks).
+        blockers = option_b_blockers(ds.columns, mark_stream_exists=Path(args.marks).exists())
+        if blockers:
+            raise SystemExit("cannot run mark-to-market selection (Option B):\n  - "
+                             + "\n  - ".join(blockers))
+    mark_stream = load_mark_stream(args.marks) if args.marks else None
     split = _final_split(ds, args.val_fraction, args.embargo)
     d = ds.copy()
     d["split"] = split
@@ -213,7 +228,7 @@ def main() -> None:
             predictor = fit_gbt(train, d[d["split"] == "val"], features=features,
                                label=args.label, n_estimators=args.gbt_estimators)
             pred = predictor.predict(val_rows)
-        policy = choose_policy(val_rows, pred, spec)
+        policy = choose_policy(val_rows, pred, spec, mark_stream=mark_stream)
         policy["family"] = family
         candidates.append(policy)
         ret = policy["metrics"]["total_return"]
@@ -264,7 +279,7 @@ def main() -> None:
     # val scores, whose distribution differs from the 5-seed proxy's.
     print("\n=== re-validating operating point on the full ensemble ===", flush=True)
     ens_val_pred = _ensemble_predict(family, members, val_rows, features)
-    final_policy = choose_policy(val_rows, ens_val_pred, spec)
+    final_policy = choose_policy(val_rows, ens_val_pred, spec, mark_stream=mark_stream)
     mode, threshold = final_policy["mode"], final_policy["threshold"]
     metrics = final_policy["metrics"]
     flipped = bool(winner.get("eligible")) and not final_policy["eligible"]
@@ -290,6 +305,7 @@ def main() -> None:
         "val_max_drawdown": metrics["max_drawdown"], "eligible": True,
         "baseline_return": final_policy.get("baseline_return"),
         "operating_point_source": "full-ensemble revalidation",
+        "selection_basis": final_policy["selection_basis"],
         "select_seeds": select_seeds, "final_seeds": final_seeds,
         "baseline_config_hash": spec["config_hash"],
         "schema": "v4", "purged": True, "embargo": args.embargo,
@@ -301,7 +317,9 @@ def main() -> None:
         baseline_spec_path=config.BASELINE_SPEC_JSON,
         feature_names=features,
         provider_metadata={"pool": config.POOL, "interval": config.INTERVAL,
-                           "options_history_constraint": "15m; approximately two years"},
+                           "options_history_constraint": "15m; approximately two years",
+                           "selection_basis": final_policy["selection_basis"],
+                           "mark_stream": str(args.marks) if args.marks else None},
         code_root=config.ROOT.parent,
         output_artifacts=artifact_files)
     write_manifest(manifest, staging / "manifest.json")
