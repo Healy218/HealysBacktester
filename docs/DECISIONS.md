@@ -5,6 +5,14 @@ relitigate settled questions, and keep "considered and rejected" on the
 record. Append here whenever a real choice gets made (or reversed — new
 entry, never edit history).
 
+- **2026-08-17 — gcloud auth: Workspace session control set to "never
+  expire", no SA key.** The healylabs.io session-duration policy was
+  logging local gcloud out (overnight 08-16/17, again mid-day 08-17),
+  blinding the box's monitoring while cloud jobs ran. User (Workspace
+  admin) set Admin console → Security → Google Cloud session control to
+  never expire. The SA-key alternative (long-lived credential on disk) was
+  considered and rejected as unnecessary once the policy fix exists. Cloud
+  jobs themselves were never affected (VMs run on GCP's service account).
 - **2026-08-16 — compute doctrine: heavy builds/training move to GCP Batch;
   the home box is for using, not training** (user goal, stated explicitly).
   Contingent only on the pilot's byte-identity diff. The box keeps: dev,

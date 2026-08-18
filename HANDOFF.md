@@ -32,9 +32,8 @@ Written 2026-08-17 morning at session close (context limit). Protocol:
 1. At 118/118: **assemble** — ⚠ do NOT use IMAGE_TAG=54bd73d: that image's
    task.sh has a broken resume pull (missing mkdir → gsutil rsync no-ops →
    assemble would fold up EMPTY dirs; fixed + fail-closed guard added
-   2026-08-18, needs an image rebuild at the fix commit first — build cmd in
-   `deploy/gcp/README.md` line ~93). Then:
-   `TASK_MODE=assemble MACHINE=n2-standard-4 IMAGE_TAG=<fix-sha>
+   2026-08-18; fixed image ALREADY BUILT + pushed: tag `7845325`). Run:
+   `TASK_MODE=assemble MACHINE=n2-standard-4 IMAGE_TAG=7845325
    PROJECT=healys-batch BUCKET=gs://healys-backtester bash deploy/gcp/submit.sh 1`
    (build job: marks-build-54bd73d-202944 — the BUILD tasks are unaffected
    by the bug: their skip check hits the bucket directly.)
