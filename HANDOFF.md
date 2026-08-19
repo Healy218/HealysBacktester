@@ -66,7 +66,20 @@ Today added two more instances of the same lesson, both worth internalising:
 
 ## Where everything stands
 
-- **Cloud v4 marks build RUNNING, live-verified 08-18 12:10 UTC: 93/118**
+- **MARKS BUILD COMPLETE 2026-08-19: 118/118, job SUCCEEDED.** Assemble also
+  SUCCEEDED (`marks-assemble-7845325-225241`). Dataset verified before spending
+  a training job on it: `meta_dataset.parquet` **489,255 rows x 69 cols, 118/118
+  symbols none missing**, entry_ts 2024-08-01..2026-07-02, both `label` and
+  `label_excess` present; `meta_dataset.marks.parquet` **6,200,510 rows**;
+  `option_b_blockers` returns NONE, so the ledger can run.
+- **BOTH LEDGER RE-RUNS SUBMITTED on GCP** (image `58c2e5b`, n2-standard-8,
+  STANDARD, 12h cap): `v4-evaluate-58c2e5b-231618` (`--ablation`) and
+  `v4-evaluate-58c2e5b-231626` (`--folds 3`). Outputs land in
+  `out/evaluate-<UTC stamp>/` with SHA256SUMS.txt. **NEXT GATE: compare against
+  the stage-0 tables in `docs/specs/V4_OUTLINE.md` before finalizing.** The
+  numbers are expected to move; if they move the wrong way the correct action is
+  to STOP, not to finalize and deploy.
+- *(historical)* Cloud v4 marks build RUNNING, live-verified 08-18 12:10 UTC: 93/118
   symbols in `gs://healys-backtester/out/meta_rows/` (job
   `marks-build-54bd73d-202944`, healys-batch, us-central1, image `54bd73d`).
   Rate settled at **~6 sym/hr**, slightly better than the ~5 the last handoff
@@ -85,6 +98,22 @@ Today added two more instances of the same lesson, both worth internalising:
 - **Suite 390 green** on the rebuilt box, re-verified this session post-reboot.
 - **Server healthy**, verified live: 40 days uptime, all three experts
   scanning, logs fresh, v4 reporting `scanned 118 · alerted 0 · errors 0`.
+
+## TRAP: the Docker image BAKES the repo — code changes need a rebuild
+
+`deploy/gcp/Dockerfile` ends with `COPY . /app`, so an image is a frozen
+snapshot of the repo at its build commit. Image `7845325` therefore did NOT
+contain the evaluate/finalize modes added in `58c2e5b`, and submitting
+`TASK_MODE=evaluate` against it would have fallen through to the *build* path
+and silently done the wrong thing. Caught 2026-08-19 with:
+
+    git show <tag>:deploy/gcp/task.sh | grep -c 'MODE" = "evaluate'
+
+**Any change to `task.sh`, `nn_meta/`, or anything the tasks execute requires a
+new image before it takes effect on Batch.** Build from a static `git archive`
+(never the live working dir) per `deploy/gcp/README.md`; the tag is the git SHA,
+which is what gives artifacts their provenance. Verify the archived file has
+your change BEFORE submitting the build.
 
 ## THE FINISH CHAIN (execute in order; standing goal: deploy on landing)
 
