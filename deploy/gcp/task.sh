@@ -58,7 +58,13 @@ esac
 if [ "$MODE" = "evaluate" ] || [ "$MODE" = "finalize" ]; then
   MARKS=nn_meta/artifacts_v31/meta_dataset.marks.parquet
   [ -f "$MARKS" ] || { echo "FATAL: $MARKS not staged" >&2; exit 1; }
-  STAMP="${MODE}-$(date -u +%Y%m%dT%H%M%SZ)"
+  # Seconds alone are NOT unique enough. Two evaluate jobs submitted together on
+  # 2026-08-19 stamped 044509Z and 044510Z — one second apart. Had their VMs come
+  # up in the same second both runs would have written to the SAME directory and
+  # silently clobbered each other's reports. BATCH_JOB_UID is unique per job, so
+  # a suffix of it makes collision impossible regardless of start timing.
+  STAMP="${MODE}-$(date -u +%Y%m%dT%H%M%SZ)-${BATCH_JOB_UID##*-}"
+  STAMP="${STAMP%-}"   # tolerate BATCH_JOB_UID being unset (local/manual runs)
   OUT="${BUCKET}/out/${STAMP}"
   echo "== $MODE — publishing to ${OUT} =="
   echo "== extra args: ${EXTRA_ARGS:-<none>} =="
