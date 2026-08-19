@@ -72,7 +72,24 @@ Today added two more instances of the same lesson, both worth internalising:
   symbols none missing**, entry_ts 2024-08-01..2026-07-02, both `label` and
   `label_excess` present; `meta_dataset.marks.parquet` **6,200,510 rows**;
   `option_b_blockers` returns NONE, so the ledger can run.
-- **BOTH LEDGER RE-RUNS SUBMITTED on GCP** (image `58c2e5b`, n2-standard-8,
+- **BOTH LEDGER RE-RUNS FINISHED 2026-08-19 (GCP, image `58c2e5b`, e2-standard-8).**
+  Full tables + verdict: `docs/EXPERIMENTS.md` (2026-08-19 entry). Headline: all
+  gates passed and the fully-corrected ablation row is +231.3% / 24.7% maxDD with
+  the best deflated Sharpe (0.920) — but **DO NOT FINALIZE YET**, three things
+  are open:
+  1. The stage-0 comparison is CONFOUNDED — the dataset changed. Stage-0 hash
+     `353d090c` vs new `2ba866dc`; same rows/symbols/span but 13 of 66 shared
+     columns differ (contract 3.40%, entry_premium 4.98%, label 4.31%,
+     net_return 6.89%; `executed` mean 0.6440->0.6106). Cache refreshes are the
+     likely cause. The 3x improvement cannot be credited to the ledger.
+  2. The ablation's leakage finding INVERTED — dropping `prem_spot` now raises
+     return instead of halving it. Partly because `nn` wins both legacy rows and
+     `gbt` wins both v4 rows, so it is not one family across schemas.
+  3. Fold 3 degraded — maxDD 25.0%->53.4% plus a top-decile return inversion.
+  **Capacity note**: n2-standard-8 hit CODE_GCE_ZONE_RESOURCE_POOL_EXHAUSTED and
+  re-queued after 1080s; e2-standard-8 (same 8vCPU/32GiB) ran fine. Prefer e2 for
+  training jobs. `submit.sh` still defaults to n2 — change it if e2 keeps working.
+- *(superseded)* BOTH LEDGER RE-RUNS SUBMITTED on GCP (image `58c2e5b`, n2-standard-8,
   STANDARD, 12h cap): `v4-evaluate-58c2e5b-231618` (`--ablation`) and
   `v4-evaluate-58c2e5b-231626` (`--folds 3`). Outputs land in
   `out/evaluate-<UTC stamp>/` with SHA256SUMS.txt. **NEXT GATE: compare against

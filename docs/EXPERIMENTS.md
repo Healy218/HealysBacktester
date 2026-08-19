@@ -26,3 +26,49 @@ per-expert performance.
 | v3 | 2026-07-11 | v3, rank/label_excess/32x16, thr 0.6 | server alerts (no paper ledger yet) | **live**, ~1 alert/week — NOTE: alert rate before 2026-08-16 was depressed by the thinning universe horizon (fixed; judge cadence from 08-17 on) |
 | v4 | **2026-08-16** | v31 causal, gbt/filter thr 0.5 (Option A bundle) | `.v4_paper_ledger.json` on server | **live — paper mode**; bundle hot-swaps after the Option B re-finalize |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
+
+## 2026-08-19 — v4 Option B ledger re-runs (GCP Batch, image `58c2e5b`)
+
+First evaluation run entirely on cloud hardware, because the home box has proven
+single-bit memory corruption (`HANDOFF.md`). Dataset rebuilt 118/118 with the
+mark stream; `option_b_blockers` clean; every row tagged 🄻 so the ledger really ran.
+
+**Ablation** (`out/evaluate-20260819T044509Z/`, sha in SHA256SUMS.txt):
+
+| schema | purged | stage-0 | now | marked |
+|---|---|---|---|---|
+| legacy | no | +136.6% / 15.0% | +64.4% / 13.6% | +66.1% / 20.7% |
+| v4 | no | +45.2% / 25.5% | +99.7% / 20.5% | +93.4% / 26.0% |
+| legacy | yes | +90.9% / 27.2% | +33.5% / 19.4% | +31.4% / 19.3% |
+| **v4 corrected** | yes | **+72.6% / 24.4%** | **+231.3% / 24.7%** | **+240.6% / 29.1%** |
+
+All four cleared the gate; the corrected row has the best deflated Sharpe (0.920).
+
+**Nested 3-fold** (`out/evaluate-20260819T044510Z/`):
+
+| fold | stage-0 | now | marked |
+|---|---|---|---|
+| 1 | nn/filter/0.55 +754.6% / 25.5% | +394.3% / 18.9% | +418.0% / 27.0% |
+| 2 | gbt/filter/0.50 +354.3% / 48.7% | +242.5% / 41.4% | +257.7% / 39.0% |
+| 3 | nn/rank/0.50 +117.4% / 25.0% | +78.4% / **53.4%** | +85.6% / 54.9% |
+
+**VERDICT: NOT CLEARED FOR FINALIZE — three open questions, none fatal.**
+
+1. **The stage-0 comparison is CONFOUNDED.** Tracked stage-0 dataset hashes
+   `353d090c`, the new one `2ba866dc`. Same 489,255 rows / 118 symbols / date
+   span, but 13 of 66 shared columns differ: contract/strike/executed 3.40%,
+   entry_premium/prem_spot 4.98%, label 4.31%, net_return 6.89%; `executed`
+   mean 0.6440 -> 0.6106. Almost certainly the cache refreshes (universe
+   `--live-horizon`, bars_daily compaction) changing contract availability.
+   Two variables moved at once, so the +72.6% -> +231.3% jump CANNOT be
+   attributed to the ledger. In a fat-tailed book a few percent of trades is
+   more than enough to swing 3x.
+2. **The ablation's leakage finding INVERTED.** Stage-0's argument was that
+   dropping `prem_spot` halves return (+136.6 -> +45.2), proving it leaked. Now
+   dropping it RAISES return in both conditions. Partly methodological: `nn`
+   wins both legacy rows and `gbt` wins both v4 rows, so it compares
+   nn-on-legacy vs gbt-on-v4 rather than one family across schemas.
+3. **Fold 3 got worse under honest accounting** — maxDD 25.0% -> 53.4% and a
+   flagged top-decile inversion (decile 1 mean return +0.1265 vs decile 10
+   +0.0602) while win rate still rises correctly. It is picking frequent small
+   winners and missing the rare large ones in that regime.
