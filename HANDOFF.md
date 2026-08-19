@@ -1,10 +1,71 @@
 # HANDOFF — state for the next session
 
-Written 2026-08-18 ~07:15 CDT (= 12:15 UTC). Protocol: `CLAUDE.md`.
-Previous handoffs: `handoff-history/`.
+Written 2026-08-18 ~07:15 CDT (= 12:15 UTC), **UPDATED 2026-08-19 ~12:55 CDT**.
+Protocol: `CLAUDE.md`. Previous handoffs: `handoff-history/`.
 
 Reboot DONE 07:14 CDT; crash capture verified live (see below). The cloud
 build is unaffected — it runs on GCP Batch, not here.
+
+## !! THE BOX IS PANIC-REBOOTING — MTBF HAS COLLAPSED TO MINUTES !!
+
+Added 2026-08-19 12:55 CDT. **Every boot since 2026-08-18 22:37 has ended in a
+kernel panic.** It is not "shutting down": `kernel.panic = 30` turns each panic
+into an automatic reboot 30s later, which is exactly what a shutdown loop looks
+like from the outside. The crash-capture rig did its job — for the first time
+there are records, in `/var/lib/systemd/pstore/<epoch>/`, harvested by
+`systemd-pstore.service`.
+
+| Crash | Uptime at death | RIP | Context | Taint already set |
+|---|---|---|---|---|
+| Aug 18 22:39 | 15h 25m | `__refill_obj_stock` | timer IRQ → RCU slab free on an **idle** cpu (`swapper/10`) | `[B]=BAD_PAGE` |
+| Aug 19 07:00 | 8h 20m | `find_lock_entries` | `close()` → `shmem_evict_inode`, `steamwebhelper` | `[B]=BAD_PAGE` |
+| Aug 19 09:11 | 2h 10m | panic: killed init | `systemd-shutdown`, after MEI + TPM faults | `[W]=WARN` |
+| Aug 19 12:40 | **2m 30s** | `proc_pid_status` | `read()` on `/proc`, by **`ps`** | none |
+
+**THE FINDING: pointers arriving as exact powers of two.** The two page-fault
+oopses are one failure wearing two costumes:
+
+    Aug 18:  cmpb $0x0,0x30(%rdi)   RDI = 0x0000000000100000 = 2^20  -> fault @ 0x100030
+    Aug 19:  mov  0x34(%r14),%eax   R14 = 0x0000000000040000 = 2^18  -> fault @ 0x40034
+
+Those registers should hold slab and folio pointers (`ffff8e1cbfcb4440`,
+`ffffcd5ee1173bc0` shapes). Instead each arrived with every bit cleared but
+one, in two unrelated subsystems. Software does not compute those values.
+Note also that `[B]=BAD_PAGE` was ALREADY in the taint mask before the fatal
+oops in both — each of those boots had corruption detected and survived
+earlier, then died to a later hit. The corruption is continuous.
+
+**This promotes HARDWARE further and weakens NVIDIA.** Two arguments the
+earlier analysis did not have:
+
+1. **The corruption now lands in paths with no GPU involvement at all** — an
+   idle core's timer interrupt doing an RCU batch slab free, a tmpfs inode
+   eviction, and `ps` reading `/proc/PID/status`. The rogue-DMA hypothesis now
+   has to explain a write into slab freelist metadata on `swapper/10` while
+   nothing is rendering.
+2. **The MTBF is collapsing on an unchanged kernel.** 15h25m → 8h20m → 2h10m →
+   2m30s, all on `7.1.8-1-cachyos`; no kernel change and no relevant package
+   change since Aug 18 07:03 (both checked). A 370x degradation in 38 hours
+   with no config change is a hardware degradation curve. Software bugs do not
+   accelerate like that.
+
+**Loose thread that is NOT memory — do not lose it behind the RAM hypothesis.**
+The Aug 19 09:11 record shows `mei_hbm_dispatch` WARN → `mei mei0: unexpected
+reset` → `tpm tpm0: A TPM error (257)` / `0x0101` before init died. That is the
+Management Engine and the TPM misbehaving: a PCH/firmware signal, not DIMMs. If
+that is the root, swapping RAM will not fix it.
+
+**The silver lining: the DIMM bisect is now CHEAP.** The earlier plan was
+"memtest86+ overnight". At a 2½-minute MTBF it is a 30-minute experiment —
+boot on one DIMM, see whether it survives an hour, swap, repeat. Do that before
+buying anything. Consider also that the IMC or CPU cache, not the DIMMs, may be
+at fault, in which case a RAM swap changes nothing.
+
+**`kernel.nmi_watchdog` was found at 0 on the live box.** `ffb7c24` added
+`kernel.nmi_watchdog = 1` to `scripts/crash_capture_setup.sh`, but the script
+was never re-run here, so `/etc/sysctl.d/99-crash-capture.conf` lacked the line
+and `hardlockup_panic=1` had been inert the entire time. Set live and persisted
+to the conf 2026-08-19 by the user. Verify with `sysctl kernel.nmi_watchdog`.
 
 ## !! STOP: DO NOT RUN THE LEDGER RE-RUNS OR v4_finalize ON THIS BOX !!
 
@@ -63,6 +124,49 @@ Today added two more instances of the same lesson, both worth internalising:
 - **A dry run is not a formality.** The crash-capture script's first `--apply`
   reported `line 34: from: 34` on a 3-line file and silently no-opped. See
   "the anomaly" below — it is unexplained and worth knowing about.
+
+## !! THE ASSEMBLED DATASET IS STALE — REBUILD BEFORE ANY TRAINING RUN !!
+
+Added 2026-08-19 12:55 CDT. `4f6fa93` found the cause of the confounded stage-0
+comparison (44 of 486 flat-file day-frames missing from the bucket; see the
+commit message and `nn_meta/cache_preflight.py`). **The 44 frames WERE then
+uploaded — but after the dataset had already been built, and the box panicked
+before anything was re-run.** Verified live against the bucket 2026-08-19 12:50:
+
+| Object | Timestamp (UTC) | Built from |
+|---|---|---|
+| `out/meta_rows/*.parquet` (118) | 28 on 08-17, 90 on 08-18 | **incomplete cache** |
+| `out/meta_marks/*.parquet` (118) | 28 on 08-17, 90 on 08-18 | **incomplete cache** |
+| `out/meta_dataset.parquet` | 08-19 **04:03:37Z** | **incomplete cache** |
+| the 44 missing `flatfiles_15m/*.parquet` | 08-19 **11:31–11:32Z** | — |
+
+The frames landed **7.5 hours after** the dataset was assembled. Commit
+`4f6fa93` was made 06:39 CDT (11:39Z), ~7 min after the upload finished, and the
+box panicked at 07:00 CDT — which is why none of this reached the handoff.
+
+**Consequences, in order:**
+
+1. Every number in the 2026-08-19 `docs/EXPERIMENTS.md` entry was computed on
+   the flattered dataset. Treat the whole row as void, not merely confounded.
+2. **Re-running `TASK_MODE=evaluate` alone would reproduce the same wrong
+   numbers**, because evaluate reads `out/meta_dataset.parquet` and never
+   touches the option-bar cache. The `cache_preflight` guard added in `4f6fa93`
+   runs only on the `build`/`assemble` path (see the `case` in
+   `deploy/gcp/task.sh`) — it CANNOT catch this.
+3. **TRAP — a naive re-submit of the build does nothing.** `task.sh` resumes by
+   rsyncing `out/meta_rows` and `out/meta_marks` down and skipping symbols that
+   already have checkpoints. All 118 are present and stale, so the build would
+   skip every one and assemble the same dataset. **`out/meta_rows/` and
+   `out/meta_marks/` must be moved aside first** (archive to a dated prefix —
+   do not delete; they are the evidence for the comparison).
+4. A new image is required: the current images (`7845325`, `58c2e5b`) predate
+   `4f6fa93` and do not contain `cache_preflight`. See the image-bakes-the-repo
+   trap below.
+
+**The correct restart is the full chain from `build`, not from `evaluate`:**
+archive `meta_rows`/`meta_marks` → new image at `4f6fa93` → build 118 symbols
+(~6 sym/hr on 8 VMs ≈ 20h) → assemble → both evaluate runs. Prefer
+`e2-standard-8`; `n2` hit `CODE_GCE_ZONE_RESOURCE_POOL_EXHAUSTED`.
 
 ## Where everything stands
 
