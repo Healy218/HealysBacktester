@@ -168,6 +168,56 @@ archive `meta_rows`/`meta_marks` → new image at `4f6fa93` → build 118 symbol
 (~6 sym/hr on 8 VMs ≈ 20h) → assemble → both evaluate runs. Prefer
 `e2-standard-8`; `n2` hit `CODE_GCE_ZONE_RESOURCE_POOL_EXHAUSTED`.
 
+### CONFIRMED 2026-08-19 by a full stage-0 diff — and the rebuild list is 90, not 118
+
+The stage-0 vs new-dataset diff reproduces the recorded numbers **exactly**
+(13 of 66 shared columns; contract 3.40%, entry_premium 4.98%, label 4.31%,
+net_return 6.89%). Method note that matters: align on the SIGNAL keys
+(`symbol, strategy, entry_ts, direction, right`) — **not** on contract/strike/
+expiration, because those are the columns that moved, so sorting by them
+mis-pairs rows and inflates the diff. A naive alignment also invents ~845 fake
+`dte` differences on AAPL out of duplicate keys; restrict to keys unique on
+both sides, or align on signal keys only.
+
+**One mechanism explains all of it.** 16,617 rows (3.40%) had a DIFFERENT
+option contract selected; `contract`, `strike`, `expiration`, `executed` and
+`moneyness` differ on exactly those rows, and everything else (premium, fills,
+returns, labels) is downstream. **All 16,500 `executed` 1→0 flips have a
+changed contract; ZERO flips without one.** 14,430 of 16,617 (86.8%) have
+their ENTRY DAY on one of the 44 missing day-frames, and the month profile
+tracks the missing-day histogram (2026-02: 9 missing days → 20.0% of that
+month's rows changed; months with no missing days → ~0.0%).
+
+Direction of the error: stage-0 executed 0.6440 → new 0.6106. The incomplete
+cache DROPS trades, and per `4f6fa93` the dropped ones average +0.017 net
+return against +0.114 for survivors — so **the current dataset reads better
+than the truth**. Do not train or deploy on it.
+
+**ONLY 90 SYMBOLS NEED REBUILDING.** Bucket timestamps split the build cleanly:
+28 `meta_rows` were written 08-17 and 90 on 08-18, and the 44 day-frames went
+missing between those two batches. The 29 symbols with ZERO contract changes
+are exactly the 08-17 set plus SQ (built 08-18 but coincidentally unchanged).
+Rebuild the **90 dated 08-18** — the criterion is which cache the symbol was
+built against, not which happened to differ. Saves ~25% of the ~20h.
+Per-symbol dates captured at `scratchpad/builddates.txt`; regenerate with
+`gcloud storage ls -l gs://healys-backtester/out/meta_rows/`.
+
+**TRAP — do not pilot on AAPL.** The README's canonical pilot pair is
+`AAPL,SPY`, and **AAPL has zero changed rows**: it was built 08-17 against a
+complete cache, so rebuilding it is byte-identical no matter what and proves
+nothing. A pilot on AAPL alone reads as "the missing-frames theory is refuted",
+which is wrong. Pick a symbol confirmed to be affected — MARA (380), NKE (341),
+RGTI (335), INTC (307), MRNA (300) — or SPY (230).
+
+### Harness trap seen all through this session
+
+`Bash` calls that run LONG in the foreground fail with `Cannot convert a symbol
+to a string` before executing — a 35 MB `gcloud storage cp`, `pytest tests`
+over the whole suite, multi-file loops. Fast equivalents of the same commands
+succeed, and the same long command succeeds with `run_in_background`. Workaround:
+background it, or split it (the 35 MB download went through as 5 × 8 MB
+`gsutil cat -r` range reads). Not a permission rule — there are no deny rules.
+
 ## Where everything stands
 
 - **MARKS BUILD COMPLETE 2026-08-19: 118/118, job SUCCEEDED.** Assemble also

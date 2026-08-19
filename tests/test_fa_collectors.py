@@ -3,8 +3,10 @@
 the offline-testable core of the collectors."""
 import pandas as pd
 import pytest
+import requests
 
 from fa import archive, config
+from fa.collectors import reddit
 from fa.collectors.edgar import FORMS, parse_master_idx
 from fa.collectors.reddit import _comment_rows, _post_rows
 
@@ -135,3 +137,91 @@ class TestRedditComments:
         assert len(rows) == 1
         assert rows[0]["comment_id"] == "t1_c1"
         assert rows[0]["link_id"] == "t3_megathread"
+
+
+class _FakeResp:
+    def __init__(self, status, payload=None, headers=None):
+        self.status_code = status
+        self.ok = status < 400
+        self.headers = headers or {}
+        self._payload = payload if payload is not None else {"data": {}}
+
+    def json(self):
+        return self._payload
+
+
+class _FakeSession:
+    """Replays a scripted list of responses and counts the calls."""
+
+    def __init__(self, responses):
+        self._responses = list(responses)
+        self.calls = 0
+
+    def get(self, url, **kw):
+        self.calls += 1
+        r = self._responses.pop(0)
+        if isinstance(r, Exception):
+            raise r
+        return r
+
+
+class TestRedditRetry:
+    """Reddit answers /new with sporadic 500s; one blip must not cost the run."""
+
+    @pytest.fixture(autouse=True)
+    def _no_sleep(self, monkeypatch):
+        monkeypatch.setattr(reddit.time, "sleep", lambda *_: None)
+
+    def test_retries_500_then_succeeds(self):
+        want = {"data": {"children": []}}
+        s = _FakeSession([_FakeResp(500), _FakeResp(500), _FakeResp(200, want)])
+        assert reddit._get_json(s, "u", {}, {}) == want
+        assert s.calls == 3
+
+    def test_gives_up_after_max_tries(self):
+        s = _FakeSession([_FakeResp(500)] * reddit._MAX_TRIES)
+        assert reddit._get_json(s, "u", {}, {}) is None
+        assert s.calls == reddit._MAX_TRIES
+
+    def test_does_not_retry_non_transient(self):
+        s = _FakeSession([_FakeResp(403)])
+        assert reddit._get_json(s, "u", {}, {}) is None
+        assert s.calls == 1          # 403 is not worth a second try
+
+    def test_retries_connection_error(self):
+        want = {"data": {"children": []}}
+        s = _FakeSession([requests.ConnectionError("boom"),
+                          _FakeResp(200, want)])
+        assert reddit._get_json(s, "u", {}, {}) == want
+
+    def test_honours_retry_after(self, monkeypatch):
+        waits = []
+        monkeypatch.setattr(reddit.time, "sleep", waits.append)
+        s = _FakeSession([_FakeResp(429, headers={"Retry-After": "7"}),
+                          _FakeResp(200, {"data": {}})])
+        reddit._get_json(s, "u", {}, {})
+        assert waits == [7.0]
+
+    def test_total_wipeout_raises_not_silent_zero(self, tmp_archive, monkeypatch):
+        """A dead source must reach fa.collect as a failure, not as +0 rows."""
+        monkeypatch.setattr(reddit, "_token", lambda _s: "tok")
+        monkeypatch.setattr(reddit.config, "SUBREDDITS", ["options"])
+        monkeypatch.setattr(reddit, "_get_json", lambda *a, **k: None)
+        with pytest.raises(RuntimeError, match="every listing failed"):
+            reddit.collect()
+
+    def test_one_bad_sub_still_archives_the_others(self, tmp_archive, monkeypatch):
+        monkeypatch.setattr(reddit, "_token", lambda _s: "tok")
+        monkeypatch.setattr(reddit.config, "SUBREDDITS", ["dead", "alive"])
+        good = {"data": {"children": [
+            {"data": {"name": "t3_ok", "created_utc": 1751925600,
+                      "title": "hi", "selftext": "", "score": 1,
+                      "num_comments": 0, "permalink": "/r/alive/ok"}}]}}
+
+        def fake_get(_s, url, *a, **k):
+            if "dead" in url:
+                return None
+            return good if url.endswith("/new") else {"data": {}}
+
+        monkeypatch.setattr(reddit, "_get_json", fake_get)
+        assert reddit.collect() == 1          # the live sub's post survived

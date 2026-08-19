@@ -12,6 +12,9 @@ Two archives per run:
 Cashtag extraction happens in Stage 1, NOT here — collectors never analyze.
 Env: REDDIT_CLIENT_ID / REDDIT_CLIENT_SECRET (a "script" app's credentials).
 Raises NotImplementedError when unset so fa.collect reports it as skipped.
+
+Listings are fetched through _get_json, which tolerates Reddit's transient
+5xx — see its docstring for why one blip used to cost the whole run.
 """
 from __future__ import annotations
 
@@ -26,6 +29,12 @@ from fa import archive, config
 _UA = "HealysBacktester/1.0 research (mrhealy115@gmail.com)"
 _TIMEOUT = 30
 _TOKEN: dict = {"value": None, "expires": 0.0}
+
+# Reddit answers /new and /comments with sporadic 500s; 429 is the documented
+# rate-limit reply. Both are worth retrying, and nothing else is.
+_RETRY_STATUS = (429, 500, 502, 503, 504)
+_MAX_TRIES = 4
+_BACKOFF = 2.0             # seconds; doubled per attempt → 2, 4, 8
 
 
 def _token(session: requests.Session) -> str:
@@ -44,6 +53,46 @@ def _token(session: requests.Session) -> str:
     _TOKEN["value"] = body["access_token"]
     _TOKEN["expires"] = time.time() + int(body.get("expires_in", 3600))
     return _TOKEN["value"]
+
+
+def _get_json(session: requests.Session, url: str, params: dict,
+              headers: dict) -> dict | None:
+    """GET one listing, retrying Reddit's transient failures.
+
+    WHY: `oauth.reddit.com/r/<sub>/new` returns sporadic 500s — upstream
+    flakiness, not a bad request; the same URL succeeds seconds later. This
+    module used to call `raise_for_status()` inline in collect(), so ONE blip
+    aborted the run: every remaining subreddit was lost, and so were the posts
+    and comments already gathered before it (nothing is archived until the
+    end). Observed live 2026-08-18 on r/options.
+
+    Returns None when the listing could not be fetched, so the caller skips
+    that one listing and keeps the rest of the run. Non-retryable statuses
+    (401/403 — bad or expired credentials) also return None rather than
+    raising; collect() turns a total wipe-out into a loud failure, which keeps
+    a credentials problem from passing as a quiet "+0 rows".
+    """
+    for attempt in range(_MAX_TRIES):
+        last = attempt == _MAX_TRIES - 1
+        try:
+            r = session.get(url, params=params, headers=headers,
+                            timeout=_TIMEOUT)
+        except requests.RequestException:
+            if last:
+                return None
+            time.sleep(_BACKOFF * 2 ** attempt)
+            continue
+        if r.ok:
+            return r.json()
+        if r.status_code not in _RETRY_STATUS or last:
+            return None
+        # Reddit sends Retry-After on 429; honour it when present.
+        try:
+            wait = float(r.headers.get("Retry-After", ""))
+        except ValueError:
+            wait = _BACKOFF * 2 ** attempt
+        time.sleep(wait)
+    return None
 
 
 def _post_rows(ts: pd.Timestamp, subreddit: str, listing: dict) -> list[dict]:
@@ -99,24 +148,40 @@ def collect() -> int:
 
     posts: list[dict] = []
     comments: list[dict] = []
+    skipped: list[str] = []
     for sub in config.SUBREDDITS:
-        r = session.get(f"https://oauth.reddit.com/r/{sub}/new",
-                        params={"limit": 100}, headers=headers,
-                        timeout=_TIMEOUT)
-        r.raise_for_status()
-        posts.extend(_post_rows(ts, sub, r.json()))
+        listing = _get_json(session, f"https://oauth.reddit.com/r/{sub}/new",
+                            {"limit": 100}, headers)
+        if listing is None:
+            skipped.append(f"{sub}/new")
+        else:
+            posts.extend(_post_rows(ts, sub, listing))
         after = None
         for _ in range(COMMENT_PAGES):
-            r = session.get(f"https://oauth.reddit.com/r/{sub}/comments",
-                            params={"limit": 100, "after": after},
-                            headers=headers, timeout=_TIMEOUT)
-            r.raise_for_status()
-            body = r.json()
+            body = _get_json(session,
+                             f"https://oauth.reddit.com/r/{sub}/comments",
+                             {"limit": 100, "after": after}, headers)
+            if body is None:
+                skipped.append(f"{sub}/comments")
+                break
             comments.extend(_comment_rows(ts, sub, body))
             after = body.get("data", {}).get("after")
             if not after:
                 break
         time.sleep(1)          # 4 subs/run — nowhere near limits, stay polite
+
+    # A blip costs one listing; a wipe-out is a real outage (or dead
+    # credentials) and must NOT pass as a quiet "+0 rows" — fa.collect only
+    # counts a collector as failed if it raises.
+    if skipped and not posts and not comments:
+        raise RuntimeError("reddit: every listing failed ("
+                           + str(len(skipped)) + "): "
+                           + ", ".join(skipped[:6]))
+    if skipped:
+        print("reddit: " + str(len(skipped))
+              + " listing(s) skipped after retries: "
+              + ", ".join(skipped[:6]))
+
     n = archive.append("reddit", pd.DataFrame(posts), key=["post_id"])
     n += archive.append("reddit_comments", pd.DataFrame(comments),
                         key=["comment_id"])
