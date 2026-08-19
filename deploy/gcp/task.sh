@@ -37,6 +37,15 @@ case "$MODE" in
     mkdir -p nn_meta/data_cache_v3
     gsutil -m -q rsync -r "${BUCKET}/data_cache_v3" nn_meta/data_cache_v3
 
+    # FAIL CLOSED ON AN INCOMPLETE CACHE. On 2026-08-19 the bucket was missing
+    # 44 of 486 flat-file day-frames and nothing complained: FlatFilesProvider
+    # returns None for an absent day, so trades spanning the gap were silently
+    # unpriced and dropped. The drop was BIASED (dropped trades averaged
+    # +0.017 net_return against +0.114 for survivors), so the whole ledger
+    # re-run read better than the truth and had to be thrown away. Never again
+    # -- a hole in the archive stops the job here, before it costs a build.
+    python -m nn_meta.cache_preflight --cache nn_meta/data_cache_v3
+
     # Resume: pull any checkpoints previous attempts already produced.
     # gsutil rsync refuses to create the destination dir — without the mkdirs the
     # pull silently no-ops (seen live 2026-08-18: CommandException swallowed by
