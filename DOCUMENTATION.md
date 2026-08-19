@@ -70,6 +70,25 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   fixes it.
 - After any tar-layered restore: `chmod +x scripts/*.sh` — the 07-25 restore
   dropped exec bits and the hourly collector failed `203/EXEC` for a day.
+- **Comparing two dataset builds: use `nn_meta.dataset_diff`, never a naive
+  sort-and-walk.** Both frames carry duplicate keys, so pairing by sorted order
+  mis-pairs rows and every mis-pair reads as a difference — that path invented
+  845 fake `dte` diffs on AAPL (2026-08-19). And the obvious keys are the wrong
+  keys: `contract`/`strike`/`expiration` are exactly what a cache change moves,
+  so keying on them hides the thing you are measuring. Align on the SIGNAL:
+  `symbol, strategy, entry_ts, direction, right, dte, trade_idx`. `dte` is the
+  target bucket (1/5/10/30/45), not days-to-expiry. Omit `dte`+`trade_idx` and
+  you match ZERO rows.
+- **AAPL is a useless pilot symbol for cache work**, despite being the README's
+  canonical pilot (`submit.sh 1 "AAPL,SPY"`). It was built 08-17 against a
+  complete cache, so it rebuilds byte-identical no matter what — a pilot on it
+  alone reads as "the cache theory is refuted", which is wrong. Pick a symbol
+  confirmed affected first.
+- **`fa/collectors/reddit.py` returns None on 401/403 instead of raising** —
+  deliberate. `collect()` decides: it raises only if EVERY listing failed, so a
+  credentials outage surfaces as a failure while a single blip does not. Silent
+  `+0 rows` is the failure mode being avoided; `fa.collect` counts a collector
+  as failed only when it raises.
 
 ## Artifact map — what's where, and what's deliberately not in git
 

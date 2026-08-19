@@ -67,6 +67,34 @@ entry, never edit history).
   candidate now under the existing simulator (done). B: re-route selection
   through the mark-to-market ledger before trusting it further (the current
   phase). Order chosen so a candidate exists while the accounting hardens.
+- **2026-08-19 — Rebuild only the 90 symbols built 08-18, not all 118.**
+  Bucket timestamps split the build cleanly: 28 shards written 08-17 against a
+  complete flat-file cache, 90 on 08-18 after 44 day-frames went missing. The
+  criterion is *which cache the symbol was built against*, not which happened
+  to differ — SQ was built 08-18 and shows no contract change, and is rebuilt
+  anyway. Saves ~25% of the wall clock without weakening the guarantee.
+  Rejected: rebuilding all 118 (wasteful, and the 28 are provably identical);
+  rebuilding only the 89 that visibly differ (would bake an inference into the
+  artifact set).
+- **2026-08-19 — Stale shards ARCHIVED, never deleted.** The pre-fix
+  `meta_rows`/`meta_marks` and the assembled dataset are preserved at
+  `gs://healys-backtester/out/archive-2026-08-19-stale-cache/` (118+118+2,
+  verified before anything was removed). They are the evidence for the
+  before/after comparison; the prefix must survive until the new dataset is
+  verified.
+- **2026-08-19 — Build-vs-build comparison gets a module, not a one-off
+  script** (`nn_meta.dataset_diff`). A naive sort-and-walk comparison produced
+  845 fabricated `dte` differences on AAPL, and keying on
+  contract/strike/expiration hides exactly the rows a cache change moves. The
+  module aligns on the signal, CHECKS key uniqueness rather than assuming it,
+  and refuses to align rather than mis-pair. Validated by reproducing the known
+  13-column result independently.
+- **2026-08-19 — Reddit collector tolerates blips but still fails loudly on a
+  wipe-out.** Retry 429/5xx per listing; a dead listing costs that listing
+  only. `collect()` raises only when EVERY listing failed, because `fa.collect`
+  counts a collector as failed only when it raises — a credentials outage must
+  not pass as a quiet "+0 rows". Rejected: blanket try/except (hides outages),
+  and raising on first error (the status quo, which lost the whole run).
 - **2026-07-21 — CNN-on-chart-images rejected** for the classification
   track: discards exact numerical information for pixels; not serious
   industry practice.

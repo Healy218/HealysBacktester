@@ -32,10 +32,18 @@ without it the pipeline silently reads/writes the wrong artifact dirs.
   no-stream path bit-identical (tested). The decisive regression test
   constructs a policy whose interim marks crater while finals look placid —
   shared sim crowns it, the ledger rejects it. Reports tag 🄻 rows.
-- [ ] **Re-run through the ledger**: `v4_evaluate --ablation` and
+- [~] **Re-run through the ledger**: `v4_evaluate --ablation` and
   `--folds 3` (seeds 0-4, epochs 60, gbt 600, embargo 1D). Compare against
   the stage-0 tables in `docs/specs/V4_OUTLINE.md` — numbers are *expected*
   to move; log the new verdict in `docs/EXPERIMENTS.md`.
+  **Ran 2026-08-19 and the result is VOID** — it was computed on a dataset
+  built from a cache missing 44 flat-file day-frames, which silently dropped
+  16,500 low-return trades and so FLATTERED the book. Cause proven and fixed
+  (`4f6fa93` + `nn_meta/cache_preflight.py`); the 89 affected symbols are
+  rebuilding as `marks-build-d64ca9b-154524`. Full evidence: `HANDOFF.md`.
+  Re-run both legs after assemble, then verify with
+  `python -m nn_meta.dataset_diff --baseline <stage-0> --candidate <new>`
+  (the 13 differing columns must collapse to zero).
 - [ ] **Re-finalize**: `v4_finalize` → fresh `model_final_v4/` selected and
   trained under the ledger. Also fixes the current bundle's unverifiable
   manifest (it predates hashed persistence). Persist is atomic + gate-checked
@@ -99,8 +107,10 @@ symbols (all healthy), v4 scans its 118 (117 healthy). Findings:
   today+120d and underlying daily through today (beta un-staled as a
   bonus); ran on the server for both pools; **weekly Sunday refresh cron**
   installed so it never recurs. Research constants untouched.
-- [ ] **Latent trap, don't trip it**: v3's `nn_meta/live/.alert_state.json`
-  is *tracked in git* (pre-existing) while the server mutates it live — any
+- [x] **Latent trap CLOSED — verified 2026-08-19**: `.alert_state.json` is no
+  longer tracked (`git ls-files` clean) and is gitignored via
+  `nn_meta/live/.alert_state*.json`. Original note kept for context:
+  v3's `nn_meta/live/.alert_state.json` was *tracked in git* while the server mutates it live — any
   future commit touching/deleting it will conflict with the server's dirty
   copy on pull. Untrack it deliberately some quiet weekend (backup server
   copy → `git rm --cached` + gitignore → pull → restore). The new v4 state

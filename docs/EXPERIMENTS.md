@@ -52,7 +52,38 @@ All four cleared the gate; the corrected row has the best deflated Sharpe (0.920
 | 2 | gbt/filter/0.50 +354.3% / 48.7% | +242.5% / 41.4% | +257.7% / 39.0% |
 | 3 | nn/rank/0.50 +117.4% / 25.0% | +78.4% / **53.4%** | +85.6% / 54.9% |
 
-**VERDICT: NOT CLEARED FOR FINALIZE — three open questions, none fatal.**
+**VERDICT: VOID — the run was computed on a corrupted dataset.**
+*(Superseded 2026-08-19 evening. Original verdict was "NOT CLEARED FOR
+FINALIZE — three open questions"; question 1 is now ANSWERED and it
+invalidates the whole row rather than merely confounding it.)*
+
+**Question 1 RESOLVED: the cache was incomplete, and the error is one-sided.**
+44 of 486 flat-file day-frames were missing from the bucket when 90 of the 118
+symbols were built (08-18); the 28 built 08-17 used a complete cache and are
+unaffected. One mechanism accounts for every one of the 13 differing columns:
+**16,617 rows (3.40%) had a different option contract selected**, and
+contract/strike/expiration/executed/moneyness differ on exactly those rows,
+with premium, fills, returns and labels downstream of them. All 16,500
+`executed` 1→0 flips have a changed contract; ZERO flips without one. 86.8% of
+changed rows enter on one of the 44 missing days, and the monthly profile
+tracks the missing-day histogram.
+
+**The bias has a direction: it FLATTERS.** Dropped trades average +0.017 net
+return against +0.114 for survivors, so the incomplete cache removed the losers
+and the book read better than the truth. Do not treat +231.3% / 0.920 as a
+result to beat — the corrected numbers are expected to be LOWER, and lower is
+the fix working.
+
+Confirmed end-to-end on SPY before committing to the rebuild: 230 contract
+mismatches vs stage-0 with the incomplete cache, **0** after rebuilding against
+the complete one, none newly broken, `executed` restored 0.835859 → 0.893434
+(stage-0's value to six decimals). Guard added: `nn_meta/cache_preflight.py`
+fails the job closed on an incomplete archive.
+
+**Questions 2 and 3 remain OPEN and are NOT resolved by clean data alone** —
+check both explicitly on the re-run:
+
+
 
 1. **The stage-0 comparison is CONFOUNDED.** Tracked stage-0 dataset hashes
    `353d090c`, the new one `2ba866dc`. Same 489,255 rows / 118 symbols / date
