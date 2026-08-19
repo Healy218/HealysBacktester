@@ -209,6 +209,50 @@ nothing. A pilot on AAPL alone reads as "the missing-frames theory is refuted",
 which is wrong. Pick a symbol confirmed to be affected — MARA (380), NKE (341),
 RGTI (335), INTC (307), MRNA (300) — or SPY (230).
 
+### PILOT VERIFIED, REBUILD RUNNING (2026-08-19 15:45 CDT / 20:45Z)
+
+SPY rebuilt against the complete cache and the fix is confirmed end to end,
+against the prediction stated BEFORE the run:
+
+| | contract mismatches vs stage-0 | executed |
+|---|---|---|
+| stale shard (incomplete cache) | **230** | 0.835859 |
+| fresh shard (complete cache) | **0** | **0.893434** |
+| stage-0 | — | 0.893434 |
+
+230 fixed, 0 still wrong, 0 newly broken, and `executed` restored to stage-0's
+value to six decimals. AAPL rebuilt byte-identical, as predicted for a symbol
+built 08-17 against a complete cache.
+
+**RUNNING: `marks-build-d64ca9b-154524`** (image `d64ca9b`, 30 shards,
+e2-standard-4 SPOT, submitted 20:45:24Z). The 89 stale shards were deleted
+from `out/meta_rows/` and `out/meta_marks/` first — the resume-skip in
+`task.sh` then does the selection itself, skipping the 29 good symbols and
+rebuilding only the 89 missing. Originals are archived at
+`gs://healys-backtester/out/archive-2026-08-19-stale-cache/` (118+118+2,
+verified) — do NOT delete that prefix until the new dataset is verified.
+
+Expect ~11h. SPY alone took 2h04m (25 strategy×DTE combos at ~4.9 min each)
+against AAPL's 8 minutes, so a few megacaps dominate the wall clock; 30 shards
+is deliberate so no single task outruns the 4h `maxRunDuration`.
+
+**Verification key for the final diff** — `(strategy, entry_ts, direction,
+right, dte, trade_idx)`, per symbol. `dte` is the TARGET bucket (1/5/10/30/45)
+and is stable; `contract`/`strike`/`expiration` are the columns that MOVE, so
+keying on them mis-pairs rows. Omitting `dte`+`trade_idx` matches zero rows,
+because each (strategy, entry_ts) carries five DTE buckets.
+
+**Progress can be watched without waiting for the job**: the build logs one
+`[NN-META-DS] <sym>/<strategy> <n>DTE: x/y executed, z rolls` line per combo,
+25 per symbol. Batch agent chatter drowns it, so filter:
+`gcloud logging read 'labels.job_uid="<uid>" AND textPayload:"NN-META-DS"'`.
+
+NEXT after 118/118: assemble → verify the assembled dataset against stage-0
+(expect the 13 columns to collapse to zero differences) → both evaluate runs →
+only then consider deploy. The two open questions from the last run (fold 3
+maxDD 25.0%→53.4%, and the INVERTED `prem_spot` leakage finding) are separate
+and are NOT resolved by clean data alone — check them explicitly.
+
 ### Harness trap seen all through this session
 
 `Bash` calls that run LONG in the foreground fail with `Cannot convert a symbol
