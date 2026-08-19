@@ -574,6 +574,46 @@ no `sed -i`), then **re-reads the file from disk** and asserts five invariants
 `ESP_PATH` intact. Any failure restores the backup, skips `limine-update`, and
 exits non-zero. All five gates were tested against deliberately broken files.
 
+## SPX0 STAGE-0 DATA AUDIT — DONE 2026-08-19, one blocker found
+
+Run it yourself: `./venv/bin/python scripts/spx0_stage0_audit.py --sample 10`.
+The extraction was already complete; what had never been established was
+whether the archive is SOUND. Given that a v4 dataset was silently corrupted
+today by 44 missing day-frames, that check is not a formality.
+
+**① Option archive: CLEAN.** 500 day-files, 2024-08-16 .. 2026-08-14, 844 MB.
+521 weekdays in span, 21 with no file — and all 21 are US market holidays
+(incl. 2025-01-09, the Carter day of mourning). No interior holes.
+
+**② All four roots present on every sampled day**, median rows/day:
+SPXW 102,572 · NDXP 19,226 · SPX 11,776 · NDX 1,187. SPXW dominates, as the
+daily-expiry premise needs.
+
+**③ 0DTE depth is healthy**: median 566 same-day-expiry contracts/day,
+minimum 339 across the sample. The seat's premise survives contact with data.
+
+**④ BLOCKER — the proxy underlying is a stub.** `data_cache_spx0/underlying_1m/`
+holds SPY and QQQ at **10,000 bars / 12 sessions each, ending 2024-08-16** —
+inside the option window they cover **1 of 521 sessions**. 10,000 is a
+suspiciously round number: this is a truncated pull (an unraised API limit),
+not a real feed. The recorded stage-0 decision was "index data is 403-gated →
+SPY/QQQ-proxy signals"; the decision is fine, the data behind it was never
+actually fetched.
+
+**The fix is mostly already on disk.** The 9y 1m crawl at
+`v3/data/underlying/{SPY,QQQ}/` has 10 yearly parquets, 2017 → **2026-07-07**,
+identical schema (OHLCV, `timestamp` as INDEX not a column — the audit script
+handles both shapes; the first version of it crashed on exactly this).
+So point spx0 at the v3 crawl instead of re-pulling, then **top up the
+28-weekday tail gap 2026-07-08 .. 2026-08-14** to reach the option window's end.
+
+**⑤ Liquidity is thin at 1m, and this is the real design risk.** Median volume
+per 1m bar is **3 contracts**, p90 ~48. ROADMAP already calls cost modeling
+(index fees + spreads on small premiums) the make-or-break for this seat; the
+data agrees. Most 1m bars are effectively untradeable, so the pool will have to
+concentrate on liquid strikes/times rather than assume every bar is fillable.
+Stage-2 accounting is non-negotiable here.
+
 ## Carry-overs
 
 - **Monday-open Alpaca 429s: RESOLVED, no staggering needed.** Zero genuine

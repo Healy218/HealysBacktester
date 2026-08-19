@@ -67,6 +67,20 @@ entry, never edit history).
   candidate now under the existing simulator (done). B: re-route selection
   through the mark-to-market ledger before trusting it further (the current
   phase). Order chosen so a candidate exists while the accounting hardens.
+- **2026-08-19 — spx0 proxy underlying comes from the existing v3 crawl, not
+  a fresh pull.** The stage-0 audit found `data_cache_spx0/underlying_1m/`
+  holding SPY and QQQ at exactly 10,000 bars each (12 sessions, ending
+  2024-08-16) — a truncated pull, covering 1 of the 521 sessions the option
+  archive spans. `v3/data/underlying/{SPY,QQQ}/` already has 2017→2026-07-07
+  at 1m in the same schema, so repoint rather than re-crawl; only the
+  28-weekday tail (2026-07-08..2026-08-14) needs fetching. Rejected: a full
+  2y re-pull (redundant, and burns quota on data we hold).
+- **2026-08-19 — The spx0 seat must model fills, not assume them.** Audit
+  measured a median of **3 contracts of volume per 1m bar** (p90 ~48) across
+  the index roots. At that depth most 1m bars are untradeable, so a backtest
+  that fills at every bar would be fiction. The pool concentrates on liquid
+  strikes/times and stage-2 cost accounting gates the seat — consistent with
+  ROADMAP already naming cost modeling the make-or-break for this expert.
 - **2026-08-19 — Rebuild only the 90 symbols built 08-18, not all 118.**
   Bucket timestamps split the build cleanly: 28 shards written 08-17 against a
   complete flat-file cache, 90 on 08-18 after 44 day-frames went missing. The

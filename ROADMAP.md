@@ -70,11 +70,22 @@ by its own ledger, promoted only by forward results:
    vol-regime): a NEW pool (`spx0`) through the same v4 causal contract —
    SPX + NDX daily-expiry options, calls and puts, ~2y RAW 1-MINUTE bars (stage-0 decision 2026-08-17; extracting to data_cache_spx0/),
    multiple trades/day, signal-driven entries AND exits, **25% max-DD
-   gate**, no upside cap. **Stage-0 data audit gates everything**: ① probe
-   the flat files for SPXW/NDXP minute aggs + entitlement window; ② decide
-   the underlying feed (index-data entitlement vs SPY/QQQ-proxy signals
-   with ratio-mapped strikes). Cost modeling matters most here (index fees
-   + spreads on small premiums) — stage-2 accounting is non-negotiable.
+   gate**, no upside cap.
+   **Stage-0 data audit DONE 2026-08-19** (`scripts/spx0_stage0_audit.py`;
+   findings in `HANDOFF.md`): ① options ARE in the flat files and the archive
+   is CLEAN — 500 day-files 2024-08-16..2026-08-14, the only weekday gaps are
+   the 21 market holidays; all four roots present daily; 0DTE depth healthy at
+   a median 566 same-day contracts/day. ② index underlying is 403-gated, so
+   SPY/QQQ-proxy signals with ratio-mapped strikes stands.
+   **ONE BLOCKER before any build**: the proxy underlying in
+   `data_cache_spx0/underlying_1m/` is a truncated 10,000-bar stub covering 1
+   of 521 sessions. Repoint it at the existing 9y crawl
+   `v3/data/underlying/{SPY,QQQ}/` (2017→2026-07-07) and top up the 28-weekday
+   tail gap to 2026-08-14.
+   Cost modeling matters most here (index fees + spreads on small premiums) —
+   stage-2 accounting is non-negotiable, and the audit backs that up: **median
+   volume per 1m bar is 3 contracts** (p90 ~48), so most bars are untradeable
+   and the pool must concentrate on liquid strikes/times.
 3. **Vol-regime track (track 1)** — the first big GCP Batch job after the
    pilot passes: v3/data (5.4 GB, 2017→) → 9y intraday realized-vol →
    HAR-RV/GARCH full OOS → one small sequence model that beats them per
