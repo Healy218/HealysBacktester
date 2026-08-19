@@ -84,6 +84,18 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   complete cache, so it rebuilds byte-identical no matter what — a pilot on it
   alone reads as "the cache theory is refuted", which is wrong. Pick a symbol
   confirmed affected first.
+- **The 9y 1m crawl is missing 31 Dec of every completed year, except for SPY
+  and QQQ.** `v3/underlying.py` asked Alpaca for `end = "{year}-12-31"`, which
+  is midnight, so the final session fell outside every past-year partition.
+  Fixed 2026-08-19 for new crawls; the 287 already-stored symbols still have
+  the hole, and `underlying_15m`/`underlying_daily` derive from them. This is
+  probably part of why `cache_preflight` reports "5 extra" day-frames — a day
+  the option archive has and `underlying_15m` lacks reads as extra, not
+  missing.
+- **The crawl's CURRENT-year end date must stay at today-00:00.** Asking for
+  tomorrow returns `subscription does not permit querying recent SIP data` and
+  fails the entire year, wiping that year's fetch. Yesterday's close is the
+  most this Alpaca tier holds; the current year is refreshed every run anyway.
 - **`fa/collectors/reddit.py` returns None on 401/403 instead of raising** —
   deliberate. `collect()` decides: it raises only if EVERY listing failed, so a
   credentials outage surfaces as a failure while a single blip does not. Silent

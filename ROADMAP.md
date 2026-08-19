@@ -77,11 +77,11 @@ by its own ledger, promoted only by forward results:
    the 21 market holidays; all four roots present daily; 0DTE depth healthy at
    a median 566 same-day contracts/day. ② index underlying is 403-gated, so
    SPY/QQQ-proxy signals with ratio-mapped strikes stands.
-   **ONE BLOCKER before any build**: the proxy underlying in
-   `data_cache_spx0/underlying_1m/` is a truncated 10,000-bar stub covering 1
-   of 521 sessions. Repoint it at the existing 9y crawl
-   `v3/data/underlying/{SPY,QQQ}/` (2017→2026-07-07) and top up the 28-weekday
-   tail gap to 2026-08-14.
+   The one blocker found — a truncated 10,000-bar proxy stub covering 1 of 500
+   option sessions — was **CLEARED the same day**:
+   `scripts/build_spx0_underlying.py` builds SPY/QQQ from the 9y crawl,
+   RTH-filtered, now **500/500 sessions (100%)**, and fails closed under 99%.
+   **The data layer for this seat is READY**; what remains is design, not data.
    Cost modeling matters most here (index fees + spreads on small premiums) —
    stage-2 accounting is non-negotiable, and the audit backs that up: **median
    volume per 1m bar is 3 contracts** (p90 ~48), so most bars are untradeable

@@ -40,13 +40,28 @@ def crawl_symbol(symbol: str, start_year: int = 2017) -> int:
         path = out_dir / f"{year}.parquet"
         if path.exists() and year < this_year:
             continue                            # completed past year
-        end = (f"{year}-12-31" if year < this_year
+        # END IS EXCLUSIVE at 00:00, so a bare "YYYY-12-31" silently drops
+        # 31 Dec's whole session — every completed year in the 9y crawl was
+        # short its last trading day (found 2026-08-19 via the spx0 proxy,
+        # which came up 498/500 sessions on exactly 2024-12-31 and
+        # 2025-12-31). Ask for the following midnight instead.
+        # The CURRENT year deliberately still ends at today-00:00: asking for
+        # tomorrow trips Alpaca's "subscription does not permit querying
+        # recent SIP data" (seen 2026-08-19), which fails the whole year. The
+        # current year is refreshed on every run anyway, so yesterday's close
+        # is the most this tier can hold.
+        end = (f"{year + 1}-01-01" if year < this_year
                else date.today().isoformat())
         try:
             df = load_alpaca_bars(symbol, f"{year}-01-01", end, "1m")
         except Exception as e:                   # listed later / no data yet
             print(f"  {symbol} {year}: no data ({str(e)[:80]})", flush=True)
             continue
+        # The exclusive-end request above reaches the following midnight, which
+        # can return a single bar stamped 00:00 on Jan 1 — that would land in
+        # BOTH this partition and the next one, and load_1m concatenates
+        # without deduping. Clip to the year that owns the file.
+        df = df[df.index.year == year]
         df.to_parquet(path)
         added += len(df)
         print(f"  {symbol} {year}: {len(df):,} bars", flush=True)

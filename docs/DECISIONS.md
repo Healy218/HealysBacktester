@@ -67,6 +67,17 @@ entry, never edit history).
   candidate now under the existing simulator (done). B: re-route selection
   through the mark-to-market ledger before trusting it further (the current
   phase). Order chosen so a candidate exists while the accounting hardens.
+- **2026-08-19 — `v3/underlying.py` crawl end made exclusive; the 9y crawl was
+  short one session per year.** `end = f"{year}-12-31"` is midnight, so every
+  completed year silently dropped 31 Dec. Fixed to `{year+1}-01-01` plus a clip
+  to the owning year (the wider request can return a lone 00:00 Jan-1 bar, and
+  `load_1m` concatenates partitions without deduping). The CURRENT year still
+  ends at today-00:00 on purpose: asking for tomorrow trips Alpaca's
+  "subscription does not permit querying recent SIP data" and fails the whole
+  year. Only SPY/QQQ were repaired; **re-crawling the other 287 symbols is
+  deferred as a deliberate decision**, not an oversight — it is 289 symbols x
+  9 years for 1 session in ~252, and it should be batched with some other
+  reason to touch the crawl.
 - **2026-08-19 — spx0 proxy underlying comes from the existing v3 crawl, not
   a fresh pull.** The stage-0 audit found `data_cache_spx0/underlying_1m/`
   holding SPY and QQQ at exactly 10,000 bars each (12 sessions, ending

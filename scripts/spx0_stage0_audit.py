@@ -120,16 +120,17 @@ def main() -> int:
             print(f"  MISSING proxy underlying: {sym}")
             continue
         t = proxy_index(sym)
-        sess = sorted(set(t.normalize().strftime("%Y-%m-%d")))
-        # ~390 RTH minutes/session; the option window needs 2y of these.
-        covered = [d for d in sess if lo <= d <= hi]
+        sess = set(t.normalize().strftime("%Y-%m-%d"))
+        # Compare against the DAY-FILES, not weekdays: a market holiday has
+        # neither an option day-file nor proxy bars, and counting it as a
+        # shortfall would cry wolf on a complete feed.
+        gap = sorted(set(days) - sess)
         print(f"  {sym}: {len(t)} bars over {len(sess)} sessions, "
               f"{t.min()} .. {t.max()}")
-        print(f"      sessions inside the option window {lo}..{hi}: "
-              f"{len(covered)} of {len(want)}")
-        if len(covered) < len(want):
-            print(f"      SHORT BY {len(want) - len(covered)} sessions — the "
-                  "proxy cannot feed signals it has no bars for")
+        print(f"      option days with no proxy bars: {len(gap)} of {len(days)}")
+        if gap:
+            print(f"      SHORT — the proxy cannot feed signals it has no bars "
+                  f"for: {gap[:10]}")
 
     picks = days if args.sample == 0 else days[:: max(1, len(days) // args.sample)]
     print(f"\n== 2-4. PER-DAY (sampling {len(picks)} of {len(days)}) ==")

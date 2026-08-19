@@ -600,12 +600,39 @@ not a real feed. The recorded stage-0 decision was "index data is 403-gated →
 SPY/QQQ-proxy signals"; the decision is fine, the data behind it was never
 actually fetched.
 
-**The fix is mostly already on disk.** The 9y 1m crawl at
-`v3/data/underlying/{SPY,QQQ}/` has 10 yearly parquets, 2017 → **2026-07-07**,
-identical schema (OHLCV, `timestamp` as INDEX not a column — the audit script
-handles both shapes; the first version of it crashed on exactly this).
-So point spx0 at the v3 crawl instead of re-pulling, then **top up the
-28-weekday tail gap 2026-07-08 .. 2026-08-14** to reach the option window's end.
+**BLOCKER CLEARED, same session.** `scripts/build_spx0_underlying.py` now
+builds the feed from the 9y crawl at `v3/data/underlying/{SPY,QQQ}/` (same
+schema; `timestamp` is the INDEX, not a column — the audit script crashed on
+exactly that the first time). Result: **SPY 194,840 and QQQ 194,757 RTH bars
+over 500 of 500 option sessions (100.0%)**, 2024-08-16 .. 2026-08-14, up from
+10,000 bars / 12 sessions. RTH-filtered via the pipeline's own `filter_rth`,
+matching `v3/build_underlying.py`; the builder fails closed below 99% coverage
+rather than writing a feed with holes.
+
+**A REAL BUG FELL OUT OF THIS — `v3/underlying.py` was losing one session per
+year, across the whole 9y crawl.** `crawl_symbol` passed `end = f"{year}-12-31"`
+and Alpaca treats that as midnight, so **every completed year silently dropped
+31 Dec's session**. Found because the proxy came up 498/500 on exactly
+2024-12-31 and 2025-12-31; confirmed on the partitions (2022 ends 12-30, 2023
+ends 12-30, 2025 ends 12-30). Fixed to an exclusive `{year+1}-01-01`, plus a
+clip to the owning year — the wider request can return a lone 00:00 Jan-1 bar
+that would land in BOTH partitions, and `load_1m` concatenates without
+deduping. SPY/QQQ 2024+2025 re-crawled and repaired (+735 bars on 2024-12-31
+alone); pre-fix originals kept as `*.parquet.bak` (they do not match
+`load_1m`'s `*.parquet` glob, so they are inert).
+
+**The current-year branch deliberately still ends at today-00:00.** Asking for
+tomorrow trips Alpaca's `subscription does not permit querying recent SIP data`
+and fails the entire year — seen live when the first version of the fix wiped
+QQQ's 2026 fetch. Yesterday's close is the most this tier holds.
+
+**STILL OPEN: the other 287 symbols in the crawl still have the Dec-31 hole.**
+Only SPY and QQQ were repaired. `underlying_15m`/`underlying_daily` derive from
+this crawl, so v3/v31 features are missing 31 Dec each year — small (1 session
+in ~252) but real, and it likely explains part of the "5 extra day-frames"
+`cache_preflight` reports, since a day the option archive has and
+`underlying_15m` lacks reads as "extra". Re-crawling 289 symbols × 9 years is a
+big job; decide deliberately rather than by drift.
 
 **⑤ Liquidity is thin at 1m, and this is the real design risk.** Median volume
 per 1m bar is **3 contracts**, p90 ~48. ROADMAP already calls cost modeling
