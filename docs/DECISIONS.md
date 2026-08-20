@@ -5,6 +5,41 @@ relitigate settled questions, and keep "considered and rejected" on the
 record. Append here whenever a real choice gets made (or reversed — new
 entry, never edit history).
 
+- **2026-08-20 — Marks build moved from SPOT to STANDARD on-demand, 16
+  shards at parallelism 8.** The spot pool turned churny: `marks-build-d64ca9b-161349`
+  lost tasks 0/4/7 permanently, each having burned all four attempts, and two
+  distinct exit codes were eating them — 50001 (Spot preemption) and 50005 (the
+  6h `maxRunDuration`). On-demand removes the first; halving the slice size
+  (16 shards, ~7 symbols each) plus a 12h cap addresses the second. Cost rises
+  to roughly 3x spot per VM-hour, on the order of $10-20 for the remainder —
+  trivial against the $300 trial credits and against the wall-clock already
+  lost. Rejected: restarting the failed tasks (Batch taskGroups are immutable —
+  there is no per-task retry API; the documented recovery is to resubmit, which
+  resumes from per-symbol checkpoints), and 16-way parallelism (impossible —
+  see below). The predecessor was CANCELLED rather than deleted so its failure
+  record survives in `jobs list`.
+- **2026-08-20 — `CPUS_ALL_REGIONS = 32` is the binding GCP quota, and it is
+  global.** Free trials cannot raise it, so 8 x e2-standard-4 = 32 vCPU is a
+  hard ceiling on concurrency regardless of shard count. The *regional*
+  `CPUS = 200` quota is real but is NOT the constraint; checking it alone gives
+  a false all-clear. Check with `gcloud compute project-info describe`, not
+  `gcloud compute regions describe`.
+- **2026-08-20 — 16 GB disk swapfile + earlyoom added to the home box.** A
+  `claude` process hit 9.7 GB RSS and was hard OOM-killed 08-19 20:40; the box
+  had 15 GB RAM and zram-only swap, whose compressed pages live in that same
+  RAM and so provide no real headroom. The swapfile lives in a nested `/swap`
+  btrfs subvolume so snapper can still snapshot `@` (snapshots are not
+  recursive), is created via `btrfs filesystem mkswapfile` (NOCOW + no
+  compression by construction), and carries no `pri=` so it sits at priority
+  -2 beneath zram's 100 — zram stays the fast tier, disk is pure overflow.
+  This is triage for the OOM only: it does nothing for the memory corruption,
+  and the DIMM bisect remains the real fix.
+- **2026-08-20 — Claude Code crashes on this box attributed to the hardware,
+  not to Claude Code.** Three coredumps on 08-19 all faulted in allocator/GC
+  threads (`mi-scavenger`, `HeapHelper`, `abort`) with the system under no
+  memory pressure, on a machine with proven single-bit corruption. Rejected:
+  filing a Claude Code bug, and the earlier "timeout" framing — herdr, its
+  hook, all 15 MCP servers and the network were each verified healthy first.
 - **2026-08-17 — gcloud auth: Workspace session control set to "never
   expire", no SA key.** The healylabs.io session-duration policy was
   logging local gcloud out (overnight 08-16/17, again mid-day 08-17),
