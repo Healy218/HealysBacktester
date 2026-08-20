@@ -44,9 +44,9 @@ NEXT after 118/118: assemble → **diff gate** → both evaluate runs → only t
 consider deploy. Every one of those steps now runs on Batch; nothing in the
 chain touches the home box.
 
-1. `TASK_MODE=assemble PROJECT=healys-batch BUCKET=gs://healys-backtester IMAGE_TAG=<new> bash deploy/gcp/submit.sh 1`
+1. `TASK_MODE=assemble PROJECT=healys-batch BUCKET=gs://healys-backtester IMAGE_TAG=493af85 bash deploy/gcp/submit.sh 1`
    **Do not run assemble before all 16 build tasks SUCCEED.**
-2. `TASK_MODE=diff PROJECT=healys-batch BUCKET=gs://healys-backtester IMAGE_TAG=<new> bash deploy/gcp/submit.sh 1`
+2. `TASK_MODE=diff PROJECT=healys-batch BUCKET=gs://healys-backtester IMAGE_TAG=493af85 bash deploy/gcp/submit.sh 1`
    Added 2026-08-20. Diffs the assembled dataset against stage-0 with
    `--expect-identical`, so **a surviving difference FAILS the task** — the 13
    columns must collapse to zero. Report + input hashes land in
@@ -54,9 +54,13 @@ chain touches the home box.
    gate keeps its evidence. Inputs override via `BASELINE_URI`/`CANDIDATE_URI`.
 3. Only then the two evaluate runs.
 
-**`<new>` is NOT `d64ca9b`** — the diff mode postdates that image, and the
-image bakes the repo. A new image must be built before step 2 (and it is
-simplest to use the same new tag for step 1).
+**Use `493af85`, NOT `d64ca9b`**, for both steps — the diff mode postdates
+`d64ca9b` and the image bakes the repo. Image `493af85` was built and pushed
+2026-08-20 15:20 CDT (Cloud Build 90946217, 9m37s, digest
+`sha256:6f4c3e00b86f227c98b4d4372862124c153ea5a3c453ffcfe638da06fedb4e4d`) and
+is verified present in Artifact Registry. Built from a static `git archive`
+tree with `git fsck` clean beforehand, so the bad RAM did not silently feed it.
+The running build stays pinned to `d64ca9b` and is unaffected.
 
 Still true and still important: do **NOT** delete
 `gs://healys-backtester/out/archive-2026-08-19-stale-cache/` until the new
