@@ -52,6 +52,24 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
 
 ## Traps — things that look wrong and are not
 
+- **The agent Bash tool's shell is `zsh`, not bash — unquoted `$VAR` does NOT
+  word-split.** Building a flag string and expanding it unquoted silently
+  passes the whole string as ONE argument. This produced two false
+  `UNREACHABLE` readings in a Batch watcher on 2026-08-20:
+
+      P="--project=healys-batch --location=us-central1"
+      gcloud batch jobs describe "$J" $P ...
+      # ERROR: The project property must be set to a valid project ID, not the
+      #        project name [healys-batch --location=us-central1]
+
+  Inline the flags, or use an array. Note the same call worked fine when typed
+  directly, so it reads as a flaky API rather than a quoting bug — check for a
+  variable-expanded flag string before blaming the service. (`gcloud storage`
+  kept working throughout, because it had no variable to split.)
+- **A multi-step `sudo a && sudo b && sudo c` chain runs only the FIRST
+  command** on this box; the sudo journal proves it each time. Wrap privileged
+  multi-step work in a single `sudo bash -c "..."`. Separately, the `!` prefix
+  in the CLI runs bash, not the user's fish, so `; and` chaining fails there.
 - `BASE=/home/mrhea/HealysBacktester/...` and `SERVER=mrhea@62.238.20.66`
   in `scripts/` are **remote** paths on the Hetzner box, where the user
   really is `mrhea`. Correct as written.

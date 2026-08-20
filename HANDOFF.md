@@ -108,13 +108,18 @@ not the user's fish, so `; and` chaining is a syntax error there.
 
 ## Watcher
 
-Armed 01:05 CDT on `marks-build-d64ca9b-010138`, every 30 min, emitting shard
-count + task-state breakdown and loud on any terminal state or an unreachable
-job. **Monitors die with the session** — if the box crashes, re-arm it; the
-Batch job is unaffected and keeps running. Nothing on GCP depends on this box
-staying up. First sample printed `UNREACHABLE` from a cold-start gcloud
-timeout; a direct check immediately after returned RUNNING with rc=0, so it was
-a blip, and the watcher is written to survive those rather than die on them.
+Re-armed 01:36 CDT on `marks-build-d64ca9b-010138`, every 30 min, emitting
+shard count + task-state breakdown + the most recent `[NN-META-DS]` symbol line,
+and loud on any terminal state. That last field matters: symbols publish only on
+completion and each takes ~1-2h, so a flat shard count is normal and the symbol
+line is what distinguishes "working" from "stalled". **Monitors die with the
+session** — if the box crashes, re-arm it; the Batch job is unaffected. Nothing
+on GCP depends on this box staying up.
+
+The first watcher (01:05) reported `UNREACHABLE` twice. That was a bug in the
+watcher, NOT the job — see the new zsh word-splitting trap in
+`DOCUMENTATION.md`. The job was RUNNING and healthy throughout; `describe`
+answered in 1.75s when called directly.
 
 ## Unchanged standing warnings
 
