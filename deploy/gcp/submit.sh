@@ -25,6 +25,7 @@ case "$MODE" in
   evaluate) JOB_PREFIX=v4-evaluate ;;
   finalize) JOB_PREFIX=v4-finalize ;;
   assemble) JOB_PREFIX=marks-assemble ;;
+  diff)     JOB_PREFIX=v4-diff ;;
   *)        JOB_PREFIX=marks-build ;;
 esac
 JOB="${JOB_PREFIX}-${SHA}-$(date +%H%M%S)"
@@ -43,6 +44,19 @@ case "$MODE" in
     MAX_RUN=${MAX_RUN:-43200s}          # 12h — training must not be killed mid-run
     # SPOT preemption would restart training from zero and these modes have no
     # per-symbol checkpointing to resume from, so pay for a STANDARD VM.
+    PROVISIONING=${PROVISIONING:-STANDARD}
+    RETRIES=${RETRIES:-1}
+    ;;
+  diff)
+    # One short task. Sized generously on purpose: it loads TWO ~490k-row
+    # frames into pandas and aligns them, and OOM-failing the correctness gate
+    # for the sake of a few cents would be a poor trade. e2 over n2 — n2 hit
+    # CODE_GCE_ZONE_RESOURCE_POOL_EXHAUSTED on 2026-08-19.
+    TASKS=1
+    MACHINE=${MACHINE:-e2-standard-8}
+    CPU_MILLI=${CPU_MILLI:-8000}
+    MEMORY_MIB=${MEMORY_MIB:-24576}
+    MAX_RUN=${MAX_RUN:-3600s}
     PROVISIONING=${PROVISIONING:-STANDARD}
     RETRIES=${RETRIES:-1}
     ;;

@@ -40,16 +40,42 @@ quota — it is real and not the binding constraint. Verify with
 `gcloud compute project-info describe --project=healys-batch`, not
 `regions describe`.
 
-NEXT after 118/118, unchanged from the last handoff:
-assemble → verify the assembled dataset against stage-0 (the 13 differing
-columns must collapse to zero) → both evaluate runs → only then consider
-deploy. Assemble command, as printed by submit.sh:
-`TASK_MODE=assemble PROJECT=healys-batch BUCKET=gs://healys-backtester IMAGE_TAG=d64ca9b bash deploy/gcp/submit.sh 1`
-**Do not run assemble before all 16 build tasks SUCCEED.**
+NEXT after 118/118: assemble → **diff gate** → both evaluate runs → only then
+consider deploy. Every one of those steps now runs on Batch; nothing in the
+chain touches the home box.
+
+1. `TASK_MODE=assemble PROJECT=healys-batch BUCKET=gs://healys-backtester IMAGE_TAG=<new> bash deploy/gcp/submit.sh 1`
+   **Do not run assemble before all 16 build tasks SUCCEED.**
+2. `TASK_MODE=diff PROJECT=healys-batch BUCKET=gs://healys-backtester IMAGE_TAG=<new> bash deploy/gcp/submit.sh 1`
+   Added 2026-08-20. Diffs the assembled dataset against stage-0 with
+   `--expect-identical`, so **a surviving difference FAILS the task** — the 13
+   columns must collapse to zero. Report + input hashes land in
+   `out/diff-<stamp>/`, published before the exit code is honoured so a failing
+   gate keeps its evidence. Inputs override via `BASELINE_URI`/`CANDIDATE_URI`.
+3. Only then the two evaluate runs.
+
+**`<new>` is NOT `d64ca9b`** — the diff mode postdates that image, and the
+image bakes the repo. A new image must be built before step 2 (and it is
+simplest to use the same new tag for step 1).
 
 Still true and still important: do **NOT** delete
 `gs://healys-backtester/out/archive-2026-08-19-stale-cache/` until the new
-dataset is verified — it is the evidence for the comparison.
+dataset is verified — it is the evidence for the comparison (238 objects: 118
+rows + 118 marks + both stale datasets, verified complete 2026-08-20).
+
+**Data-loss posture, audited 2026-08-20.** Bucket soft-delete was already on
+(7 days); **object versioning was OFF and is now ON**. No lifecycle rules, so
+nothing auto-expires. The one command that would destroy everything is
+`teardown.sh` with `DELETE_BUCKET=1` — do not pass it until this is finished.
+
+**The stage-0 baseline used to exist as a SINGLE local copy** at
+`nn_meta/artifacts_v31/meta_dataset.parquet` (Jul 21, 489,255 rows x 66 cols)
+— on the box with the bad RAM, and the diff gate's baseline. It is now also at
+`gs://healys-backtester/out/stage0-baseline-2026-07-21/meta_dataset.parquet`.
+Integrity was checked end to end before trusting it: the local SHA-256 is
+`353d090c...`, matching the stage-0 hash recorded independently in the previous
+handoff (so it was not already corrupted), and the uploaded copy's MD5 matches
+the local one (so it did not corrupt in transit).
 
 Open questions the clean data does NOT resolve (check them explicitly after the
 evaluate runs): fold 3 maxDD 25.0% → 53.4%, and the INVERTED `prem_spot`

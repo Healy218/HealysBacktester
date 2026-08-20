@@ -106,6 +106,15 @@ PROJECT=healys-batch BUCKET=gs://healys-backtester \
 PROJECT=healys-batch BUCKET=gs://healys-backtester bash deploy/gcp/submit.sh 30
 #     ...then the single assemble task (TASK_MODE=assemble via submit tweak)
 
+# 6c. THE VERIFICATION GATE — after assemble, before any training run.
+#     Runs on Batch, not the home box: a flipped bit would give a confident
+#     WRONG verdict, and this gate is what decides if the dataset is trusted.
+#     Exits non-zero if any shared column still differs (--expect-identical).
+TASK_MODE=diff PROJECT=healys-batch BUCKET=gs://healys-backtester \
+  IMAGE_TAG=<tag> bash deploy/gcp/submit.sh 1
+#     Override the inputs with BASELINE_URI / CANDIDATE_URI; report + hashes
+#     land in out/diff-<UTC stamp>/.
+
 # 7. pull results home
 gsutil -m rsync -r gs://healys-backtester/out/ nn_meta/artifacts_v31/
 

@@ -4,6 +4,9 @@
 # Env (set by the job template / submit.sh):
 #   BUCKET       gs://... bucket holding data_cache_v3/ and receiving outputs
 #   TASK_MODE    "build" (default) — per-symbol rows+marks; "assemble" — final
+#                dataset; "diff" — the verification gate; "evaluate"/"finalize"
+#   BASELINE_URI diff mode only: gs:// path to the baseline dataset
+#   CANDIDATE_URI diff mode only: defaults to ${BUCKET}/out/meta_dataset.parquet
 #   SHARDS       total task count (BATCH_TASK_COUNT also works)
 #   SYMBOLS      optional explicit comma list (pilot runs); overrides sharding
 #
@@ -31,6 +34,17 @@ case "$MODE" in
         echo "FATAL: ${BUCKET}/out/${f} missing — run TASK_MODE=assemble first" >&2
         exit 1; }
     done
+    ;;
+  diff)
+    # The verification gate reads two ASSEMBLED datasets and nothing else — no
+    # option-bar cache, no marks — so the multi-GB rsync is skipped entirely.
+    BASELINE_URI="${BASELINE_URI:-${BUCKET}/out/stage0-baseline-2026-07-21/meta_dataset.parquet}"
+    CANDIDATE_URI="${CANDIDATE_URI:-${BUCKET}/out/meta_dataset.parquet}"
+    gsutil -q cp "$BASELINE_URI" nn_meta/artifacts_v31/baseline.parquet || {
+      echo "FATAL: baseline $BASELINE_URI missing" >&2; exit 1; }
+    gsutil -q cp "$CANDIDATE_URI" nn_meta/artifacts_v31/candidate.parquet || {
+      echo "FATAL: candidate $CANDIDATE_URI missing — run TASK_MODE=assemble first" >&2
+      exit 1; }
     ;;
   *)
     # Stage the raw option-bar cache (read-only input) for build/assemble.
@@ -108,6 +122,47 @@ if [ "$MODE" = "evaluate" ] || [ "$MODE" = "finalize" ]; then
     | sort | xargs -r sha256sum > /tmp/SHA256SUMS.txt || true
   gsutil -q cp /tmp/SHA256SUMS.txt "${OUT}/SHA256SUMS.txt" || true
   echo "== $MODE published; $(wc -l < /tmp/SHA256SUMS.txt 2>/dev/null || echo 0) files hashed =="
+  exit $rc
+fi
+
+# ---- the verification gate ------------------------------------------------
+# Runs HERE and not on the home box for the SAME reason as the training modes:
+# a flipped bit in either frame would produce a confident WRONG verdict, and
+# this gate is precisely what decides whether the rebuilt dataset can be
+# trusted. Verifying trustworthiness on untrustworthy hardware is circular.
+if [ "$MODE" = "diff" ]; then
+  STAMP="diff-$(date -u +%Y%m%dT%H%M%SZ)-${BATCH_JOB_UID##*-}"
+  STAMP="${STAMP%-}"   # tolerate BATCH_JOB_UID being unset (local/manual runs)
+  OUT="${BUCKET}/out/${STAMP}"
+  echo "== diff — publishing to ${OUT} =="
+  mkdir -p /tmp/diff
+
+  # --expect-identical is what makes this a GATE rather than a report: any
+  # surviving difference exits 1. The rebuild is only done when the 13 columns
+  # collapse to zero. EXTRA_ARGS is unquoted so a flag list word-splits.
+  set +e
+  python -m nn_meta.dataset_diff \
+    --baseline  nn_meta/artifacts_v31/baseline.parquet \
+    --candidate nn_meta/artifacts_v31/candidate.parquet \
+    --expect-identical ${EXTRA_ARGS:-} 2>&1 | tee /tmp/diff/dataset_diff.txt
+  rc=${PIPESTATUS[0]}
+  set -e
+  echo "== diff exited rc=$rc =="
+
+  # Publish BEFORE honouring rc. A FAILING gate is exactly the result whose
+  # evidence must survive — same doctrine as the training modes.
+  {
+    echo
+    echo "# inputs"
+    echo "# baseline : $BASELINE_URI"
+    echo "# candidate: $CANDIDATE_URI"
+    sha256sum nn_meta/artifacts_v31/baseline.parquet \
+              nn_meta/artifacts_v31/candidate.parquet
+  } >> /tmp/diff/dataset_diff.txt || true
+  find /tmp/diff -type f | sort | xargs -r sha256sum > /tmp/SHA256SUMS.txt || true
+  gsutil -m -q rsync -r /tmp/diff "${OUT}" || true
+  gsutil -q cp /tmp/SHA256SUMS.txt "${OUT}/SHA256SUMS.txt" || true
+  echo "== diff published to ${OUT} =="
   exit $rc
 fi
 
