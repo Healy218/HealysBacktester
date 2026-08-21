@@ -35,6 +35,19 @@ case "$MODE" in
         exit 1; }
     done
     ;;
+  spx0)
+    # spx0 pool (docs/specs/SPX0_SPEC.md): build the 0DTE dataset from the
+    # 1m index archive + proxy underlying, then the nested walk-forward. The
+    # archive is ~850 MB (500 day-files + SPY/QQQ 1m), staged read-only.
+    mkdir -p nn_meta/data_cache_spx0
+    gsutil -m -q rsync -r "${BUCKET}/data_cache_spx0" nn_meta/data_cache_spx0
+    n=$(ls nn_meta/data_cache_spx0/flatfiles_1m/*.parquet 2>/dev/null | wc -l)
+    [ "$n" -ge 500 ] || { echo "FATAL: spx0 archive incomplete ($n day-files, expected 500)" >&2; exit 1; }
+    for f in SPY QQQ; do
+      [ -f "nn_meta/data_cache_spx0/underlying_1m/${f}.parquet" ] || {
+        echo "FATAL: proxy underlying ${f} missing" >&2; exit 1; }
+    done
+    ;;
   diff)
     # The verification gate reads two ASSEMBLED datasets and nothing else — no
     # option-bar cache, no marks — so the multi-GB rsync is skipped entirely.
@@ -69,6 +82,28 @@ case "$MODE" in
     gsutil -m -q rsync -r "${BUCKET}/out/meta_marks" nn_meta/artifacts_v31/meta_marks || true
     ;;
 esac
+
+# ---- spx0: build + evaluate in one task -------------------------------------
+if [ "$MODE" = "spx0" ]; then
+  STAMP="spx0-$(date -u +%Y%m%dT%H%M%SZ)-${BATCH_JOB_UID##*-}"; STAMP="${STAMP%-}"
+  OUT="${BUCKET}/out/${STAMP}"
+  echo "== spx0 — publishing to ${OUT} =="
+  echo "== extra args: ${EXTRA_ARGS:-<none>} =="
+  set +e
+  python -m nn_meta.spx0.build_dataset --out nn_meta/artifacts_spx0 \
+    && python -m nn_meta.spx0.evaluate --dataset nn_meta/artifacts_spx0/meta_dataset.parquet \
+         --output nn_meta/artifacts_spx0/reports/spx0_walkforward_report.md ${EXTRA_ARGS:-}
+  rc=$?
+  set -e
+  echo "== spx0 exited rc=$rc =="
+  if [ -d nn_meta/artifacts_spx0 ]; then
+    gsutil -m -q rsync -r nn_meta/artifacts_spx0 "${OUT}/artifacts_spx0"
+    find nn_meta/artifacts_spx0 -type f | sort | xargs -r sha256sum > /tmp/SHA256SUMS.txt || true
+    gsutil -q cp /tmp/SHA256SUMS.txt "${OUT}/SHA256SUMS.txt" || true
+  fi
+  echo "== spx0 published =="
+  exit $rc
+fi
 
 # ---- training modes -------------------------------------------------------
 # WHY THESE RUN HERE AND NOT ON THE HOME BOX: that machine has PROVEN

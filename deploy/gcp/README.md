@@ -115,6 +115,13 @@ TASK_MODE=diff PROJECT=healys-batch BUCKET=gs://healys-backtester \
 #     Override the inputs with BASELINE_URI / CANDIDATE_URI; report + hashes
 #     land in out/diff-<UTC stamp>/.
 
+# 6d. spx0 pool (SPX/NDX 0DTE, docs/specs/SPX0_SPEC.md): one task builds the
+#     dataset from data_cache_spx0 (synced once, ~850 MB) and runs the nested
+#     walk-forward; outputs land in out/spx0-<stamp>/artifacts_spx0/.
+gsutil -m rsync -r nn_meta/data_cache_spx0 gs://healys-backtester/data_cache_spx0   # once
+TASK_MODE=spx0 EXTRA_ARGS="--folds 3 --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600" \
+  PROJECT=healys-batch BUCKET=gs://healys-backtester IMAGE_TAG=<tag> bash deploy/gcp/submit.sh 1
+
 # 7. pull results home
 gsutil -m rsync -r gs://healys-backtester/out/ nn_meta/artifacts_v31/
 

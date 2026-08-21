@@ -72,7 +72,11 @@ def schema_features(schema: str) -> list[str]:
         return V4_META_FEATURES
     if schema == "legacy":
         return META_FEATURES
-    raise ValueError("schema must be 'legacy' or 'v4'")
+    if schema == "spx0":
+        from nn_meta.spx0.build_dataset import SPX0_META_FEATURES
+        assert_decision_safe(SPX0_META_FEATURES)
+        return SPX0_META_FEATURES
+    raise ValueError("schema must be 'legacy', 'v4' or 'spx0'")
 
 
 def legacy_splits(rows: pd.DataFrame, window: FoldWindow) -> pd.Series:
@@ -266,15 +270,17 @@ def _select_winner(selected: list[dict]) -> dict:
     return max(selected, key=_policy_rank)
 
 
-def _passes_gate(metrics: dict, baseline: dict) -> bool:
+def _passes_gate(metrics: dict, baseline: dict, dd_cap: float | None = None) -> bool:
     """The eligibility gate, identical for every mode: kept >= MIN_KEPT_TRADES,
-    beat the frozen baseline, maxDD <= MAX_DRAWDOWN_CAP."""
+    beat the frozen baseline, maxDD <= ``dd_cap`` (default the shared
+    MAX_DRAWDOWN_CAP; the spx0 pool passes its tighter 0.25)."""
+    cap = config.MAX_DRAWDOWN_CAP if dd_cap is None else float(dd_cap)
     return bool(
         metrics["n_kept"] >= config.MIN_KEPT_TRADES
         and metrics["total_return"] is not None
         and (baseline["total_return"] is None
              or metrics["total_return"] > baseline["total_return"])
-        and (metrics["max_drawdown"] or 0) <= config.MAX_DRAWDOWN_CAP
+        and (metrics["max_drawdown"] or 0) <= cap
     )
 
 
@@ -283,7 +289,8 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                   mark_stream: pd.DataFrame | None = None,
                   costs: CostScenario = BASE_COSTS,
                   ev_predictions: np.ndarray | None = None,
-                  ev_thresholds: Iterable[float] = config.EV_THRESHOLDS) -> dict:
+                  ev_thresholds: Iterable[float] = config.EV_THRESHOLDS,
+                  dd_cap: float | None = None) -> dict:
     """Choose mode and threshold on validation only.
 
     With ``mark_stream`` supplied (Option B), every candidate policy — and the
@@ -323,7 +330,7 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                 "threshold": float(threshold),
                 "metrics": metrics,
                 "baseline_return": baseline["total_return"],
-                "eligible": _passes_gate(metrics, baseline),
+                "eligible": _passes_gate(metrics, baseline, dd_cap),
             })
     if ev_predictions is not None:
         ev_rows = rows.reset_index(drop=True)
@@ -336,7 +343,7 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
             candidates.append({
                 "mode": config.EV_MODE, "threshold": float(threshold),
                 "metrics": metrics, "baseline_return": baseline["total_return"],
-                "eligible": _passes_gate(metrics, baseline),
+                "eligible": _passes_gate(metrics, baseline, dd_cap),
             })
     # An eligible policy always outranks an ineligible one; ties break on
     # validation return. When nothing clears the gate the least-bad candidate
@@ -461,7 +468,9 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
                     schema: str, purged: bool, label: str,
                     models: Iterable[str], seeds: Iterable[int], epochs: int,
                     gbt_estimators: int, embargo: str,
-                    mark_stream: pd.DataFrame | None = None) -> dict:
+                    mark_stream: pd.DataFrame | None = None,
+                    dd_cap: float | None = None,
+                    thresholds: Iterable[float] = config.KEEP_THRESHOLDS) -> dict:
     """Nested temporal evaluation for one fold or global ablation window."""
     ds = ds.copy()
     split = assign_purged_splits(
@@ -485,9 +494,10 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
                                features=features, label=label, seeds=seeds,
                                epochs=epochs, gbt_estimators=gbt_estimators)
         policy = choose_policy(val_rows, predictor.predict(val_rows), spec,
-                               mark_stream=mark_stream,
+                               thresholds=thresholds, mark_stream=mark_stream,
                                ev_predictions=(predictor.predict_ev(val_rows)
-                                               if predictor.predict_ev else None))
+                                               if predictor.predict_ev else None),
+                               dd_cap=dd_cap)
         policy["family"] = family
         fitted[family] = predictor
         selected.append(policy)
@@ -540,6 +550,7 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         }
     return {
         "schema": schema, "purged": purged, "embargo": embargo,
+        "dd_cap": config.MAX_DRAWDOWN_CAP if dd_cap is None else float(dd_cap),
         "window": {k: str(v.date()) for k, v in window.__dict__.items()},
         "split_summary": split_summary(ds, split).to_dict(orient="records"),
         "winner": {"family": winner["family"], "mode": winner["mode"],

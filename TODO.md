@@ -86,15 +86,14 @@ head on signed `net_return`, one new mode `ev`, gate unchanged.
 
 Data layer READY (ROADMAP Wave 2 item 2). Nothing to run on GCP until the
 three pieces below exist; build them in this order, each tested:
-- [ ] Label builder for daily-expiry SPX/NDX options: signal-driven entries
+- [x] Label builder for daily-expiry SPX/NDX options (`nn_meta/spx0/build_dataset.py`, 2026-08-21): signal-driven entries
   AND exits, multiple trades/day, `available_at`-stamped, same v4 causal
   contract (`feature_contract.py`, purged splits + embargo).
-- [ ] Fill model: median 3 contracts/1m bar (p90 ~48) — fills only where
+- [x] Fill model (`nn_meta/spx0/fills.py`, depth-gated, High/Low prints, parity-implied settlement): median 3 contracts/1m bar (p90 ~48) — fills only where
   depth exists, no fill assumed (DECISIONS 2026-08-19); rejects are data.
-- [ ] Cost accounting: index fees + spreads on small premiums through the
+- [x] Cost accounting (`nn_meta/spx0/costs.py`, dollar fees + point spreads, base/stressed; 25% cap via `dd_cap`): index fees + spreads on small premiums through the
   stage-2 ledger; 25% max-DD gate; no upside cap.
-- [ ] Then: `TASK_MODE` for the spx0 build/evaluate in `deploy/gcp/`, launch
-  on Batch alongside.
+- [x] `TASK_MODE=spx0` in `deploy/gcp/` (build + nested walk-forward in one task); archive synced to the bucket. Launch: see HANDOFF.
 
 ## 2 — v4 live scoring path — DONE 2026-08-16 (`nn_meta/live/v4_scan.py`)
 

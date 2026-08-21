@@ -24,6 +24,7 @@ MODE=${TASK_MODE:-build}
 case "$MODE" in
   evaluate) JOB_PREFIX=v4-evaluate ;;
   finalize) JOB_PREFIX=v4-finalize ;;
+  spx0)     JOB_PREFIX=spx0-run ;;
   assemble) JOB_PREFIX=marks-assemble ;;
   diff)     JOB_PREFIX=v4-diff ;;
   *)        JOB_PREFIX=marks-build ;;
@@ -36,6 +37,16 @@ if [ -n "$SYMBOLS" ]; then TASKS=1; else TASKS=$SHARDS; fi
 # a per-symbol build shard: 5 seeds x 60 epochs plus a 600-estimator GBT, and for
 # finalize a 40-seed persisted ensemble. Defaults below are overridable.
 case "$MODE" in
+  spx0)
+    # build (~5 min) + nested walk-forward with 2 heads × seeds; one VM.
+    TASKS=1
+    MACHINE=${MACHINE:-e2-standard-8}
+    CPU_MILLI=${CPU_MILLI:-8000}
+    MEMORY_MIB=${MEMORY_MIB:-32768}
+    MAX_RUN=${MAX_RUN:-43200s}
+    PROVISIONING=${PROVISIONING:-STANDARD}
+    RETRIES=${RETRIES:-1}
+    ;;
   evaluate|finalize)
     TASKS=1
     MACHINE=${MACHINE:-n2-standard-8}

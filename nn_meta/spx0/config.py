@@ -28,12 +28,19 @@ class ExitPolicy:
     """Signal-driven exit plus hard stop/target on the option premium and the
     session floor. A fixed variant per build; alternatives are selected
     inside temporal folds, never on test."""
-    name: str = "s50_t200"
+    name: str = "s50_nocap"
     stop_frac: float = 0.50        # exit if premium <= 50% of entry
-    target_mult: float = 2.00      # exit if premium >= 2x entry
+    target_mult: float = float("inf")   # NO upside cap (ROADMAP: "no upside cap");
+                                        # a finite value is a fold-selectable variant
 
 
 DEFAULT_EXIT = ExitPolicy()
+
+# P(win) grid for this pool. The shared KEEP_THRESHOLDS (>= 0.50) assume the
+# equity pool's base rate; a long-0DTE book wins ~27% of the time (80-session
+# build, 2026-08-21), so a 0.5 cut keeps nothing. These sit around that base
+# rate; the EV mode (sign of predicted return) is base-rate free.
+KEEP_THRESHOLDS = [0.30, 0.35, 0.40, 0.45, 0.50]
 
 SPX0_FEATURES = [
     "spx0_rv_30", "spx0_rv_60", "spx0_min_since_open", "spx0_min_to_expiry",
