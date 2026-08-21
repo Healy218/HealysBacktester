@@ -66,8 +66,8 @@ gone; fold 2 test −11% / 75% DD is the warning. Finalize REFUSED:
 ev/0.05 val +605%, 219 kept, eligible=False = the 40% DD cap (the only gate
 left). Full numbers: `docs/EXPERIMENTS.md` 2026-08-21. **No V118 bundle.**
 User decision pending between: (1) drawdown-aware gross scaling on EV
-sizing, (2) wait, (3) raise the cap — rejected on the record. Ablation
-(`v4-evaluate-c17193c-113658`) and spx0 still running at handoff time.
+sizing, (2) wait, (3) raise the cap — rejected on the record. Ablation SUCCEEDED: unchanged (rank/0.55 wins all 4 runs, stage-0
+reproduced +141%); details in EXPERIMENTS. spx0 still running at handoff time.
 
 ## spx0 / VSPNDX — WIRED 2026-08-21 (block 1c), launching on Batch
 

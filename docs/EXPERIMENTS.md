@@ -28,6 +28,12 @@ drawdown cap**. Conclusion: the EV head fixes SELECTION (the inversion and
 the fold-3 refusal); DRAWDOWN is now the binding constraint on three
 independent measurements. No V118 bundle; nothing persisted. Next lever, if
 pursued: a drawdown/vol-aware gross scaler on EV sizing, fold-selectable.
+**ABLATION** (`out/evaluate-20260821T163916Z-477c0/`): UNCHANGED by the EV
+head — nn/rank/0.55 wins all four runs; run 1 reproduces stage-0 (+141%,
+marked +141%/19%); run 2 v4-unpurged +52%; purged rows still ⚠ (legacy
+−44%/63% DD, v4 +82%/25%). `ev` candidates were in every grid and lost on
+the ablation's earlier validation window. EV deciles not inverted anywhere.
+Reading: EV's win is regime-dependent (later folds); drawdown binds everywhere.
 
 **spx0 seat** (`27adf68`): builder + fills + costs + evaluate, see HANDOFF
 and `docs/specs/SPX0_SPEC.md`. 80-session local smoke: 55% fill rate, win
