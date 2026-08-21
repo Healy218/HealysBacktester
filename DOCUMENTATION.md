@@ -137,6 +137,17 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   `+0 rows` is the failure mode being avoided; `fa.collect` counts a collector
   as failed only when it raises.
 
+- **Batch `SCHEDULED` for >10 min with `CODE_GCE_ZONE_RESOURCE_POOL_EXHAUSTED`
+  in `status.statusEvents`** is GCE capacity for that machine family in the
+  region, NOT our quota and NOT a job bug (2026-08-21, `n2-standard-8`).
+  Batch keeps retrying zones indefinitely. Delete and resubmit with
+  `MACHINE=n2d-standard-8` (separate pool) — it provisioned immediately.
+- **Two `submit.sh` calls in the same second collide**: the job name is
+  `<prefix>-<sha>-<HHMMSS>`, so the second submit errors "already exists" and
+  only one job runs. Submit sequentially with a pause, and always LIST the
+  jobs afterwards rather than trusting the submit echoes (2026-08-21: two
+  evaluate submits produced one job).
+
 ## Artifact map — what's where, and what's deliberately not in git
 
 | Thing | Where | In git? |
