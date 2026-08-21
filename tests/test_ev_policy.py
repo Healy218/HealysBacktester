@@ -57,8 +57,9 @@ def test_ev_candidates_join_the_grid_and_can_win():
     ev = np.array([0.05, 0.70, -0.10])                # EV head: take the 0.80 trade only
     policy = choose_policy(rows, pred, _spec(), thresholds=[0.5],
                            ev_predictions=ev, ev_thresholds=[0.0])
-    # 2 legacy + 1 ev candidate were tried; every one counts as a trial
-    assert len(policy["candidate_sharpes"]) == 3
+    # 2 legacy + 1 ev threshold × len(EV_DD_BRAKES) brakes were tried; every
+    # one counts as a trial
+    assert len(policy["candidate_sharpes"]) == 2 + len(config.EV_DD_BRAKES)
     ev_winner = policy["mode"] == config.EV_MODE
     assert ev_winner                                   # it skipped the -10% trade
     assert policy["metrics"]["n_kept"] == 1
@@ -220,3 +221,79 @@ def test_scanner_picks_and_filters_on_the_decision_score():
     fresh = {"direction": 0, "param_label": "p", "spot": 500.0}
     _, msg = format_v4_alert(next(chosen.itertuples(index=False)), fresh, bundle, True)
     assert "EV +15.0%" in msg and "P(win) 60%" in msg
+
+
+# ── drawdown-aware gross scaler (dd_brake) ──────────────────────────────────
+
+from nn_meta.ev_sizing import ev_weighted_portfolio, gross_scale
+
+
+def test_gross_scale_is_causal_monotone_and_floored():
+    assert gross_scale(0.0, None, 0.25) == 1.0
+    assert gross_scale(0.9, None, 0.25) == 1.0          # no brake → never scales
+    assert gross_scale(0.0, 0.20, 0.25) == 1.0          # at the peak: untouched
+    assert gross_scale(0.10, 0.20, 0.25) == pytest.approx(0.5)
+    assert gross_scale(0.20, 0.20, 0.25) == 0.25        # at the brake: floor
+    assert gross_scale(0.50, 0.20, 0.25) == 0.25        # never below the floor
+    with pytest.raises(ValueError):
+        gross_scale(0.1, 0.0, 0.25)
+    with pytest.raises(ValueError):
+        gross_scale(0.1, 0.2, 1.5)
+
+
+def _streak_rows():
+    """Four sequential single-trade entries: two losers then two winners."""
+    ts = pd.to_datetime(["2025-01-01", "2025-01-02", "2025-01-03", "2025-01-04"])
+    return pd.DataFrame({
+        "symbol": ["A", "B", "C", "D"], "strategy": "s", "trade_idx": [0, 1, 2, 3],
+        "entry_ts": ts, "exit_ts": ts + pd.Timedelta(hours=1),
+        "net_return": [-0.5, -0.5, 0.5, 0.5], "pred_ev": [0.3, 0.3, 0.3, 0.3],
+    })
+
+
+def test_dd_brake_none_is_bit_identical_to_unbraked():
+    rows = _streak_rows()
+    base = ev_weighted_portfolio(rows, 5, 0.10)
+    none = ev_weighted_portfolio(rows, 5, 0.10, dd_brake=None, dd_floor=0.25)
+    assert base[0] == none[0] and base[1] == none[1] and base[2] == none[2]
+
+
+def test_dd_brake_shrinks_size_only_after_realized_drawdown():
+    rows = _streak_rows()
+    total_u, dd_u, ent_u = ev_weighted_portfolio(rows, 5, 0.10)
+    total_b, dd_b, ent_b = ev_weighted_portfolio(rows, 5, 0.10, dd_brake=0.10,
+                                                 dd_floor=0.25)
+    # first entry: no drawdown yet → identical size (causal: nothing to brake on)
+    assert ent_b[0][3] == pytest.approx(ent_u[0][3])
+    # after the first -50% on a 10% slot, dd = 5% → scale 0.5
+    assert ent_b[1][3] == pytest.approx(ent_u[1][3] * 0.5)
+    # after two losers dd = 7.5%... then the brake keeps shrinking: the braked
+    # path loses less in the streak, so its max drawdown is strictly lower
+    assert dd_b < dd_u
+    # size_fraction never exceeds the uniform slot
+    assert all(e[3] <= 0.10 + 1e-12 for e in ent_b)
+
+
+def test_dd_brake_is_fold_selectable_and_reported():
+    rows = _rows()
+    pred = np.array([0.5, 0.5, 0.5])
+    ev = np.array([0.05, 0.70, -0.10])
+    policy = choose_policy(rows, pred, _spec(), thresholds=[0.5],
+                           ev_predictions=ev, ev_thresholds=[0.0],
+                           ev_dd_brakes=[None, 0.2])
+    assert len(policy["candidate_sharpes"]) == 4
+    assert policy["mode"] == config.EV_MODE
+    assert "dd_brake" in policy and policy["dd_brake"] in (None, 0.2)
+    legacy = choose_policy(rows, pred, _spec(), thresholds=[0.5])
+    assert "dd_brake" not in legacy            # non-ev winners carry no brake
+
+
+def test_braked_policy_flows_through_the_ledger_as_size_fraction():
+    cands = _streak_rows()
+    sel = ev_selected_rows(cands, config.MAX_CONCURRENT, config.PORTFOLIO_FRACTION,
+                           dd_brake=0.10, dd_floor=0.25)
+    assert list(sel["size_fraction"]) == pytest.approx(
+        [e[3] for e in ev_weighted_portfolio(cands, config.MAX_CONCURRENT,
+                                             config.PORTFOLIO_FRACTION,
+                                             dd_brake=0.10, dd_floor=0.25)[2]])
+    assert sel["size_fraction"].iloc[1] < sel["size_fraction"].iloc[0]

@@ -194,6 +194,8 @@ def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool
     title = f"[v4] {shown} {action}"
     ev_part = (f" · EV {row.decision:+.1%}" if bundle.mode == config.EV_MODE
                and hasattr(row, "decision") else "")
+    if bundle.mode == config.EV_MODE and bundle.dd_brake is not None:
+        ev_part += f" · DD brake {bundle.dd_brake:.0%}"
     msg = (f"[v4] {shown}: {action} · P(win) {row.score:.0%}{ev_part}\n"
            f"trigger: {row.strategy} ({fresh['param_label']}) · "
            f"DTE {int(row.dte)} (best of grid)\n"

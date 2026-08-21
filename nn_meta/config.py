@@ -265,6 +265,16 @@ MIN_PASSING_SEEDS = 20        # of 40 seeds: require a majority to clear the gat
 EVAL_MODES = ["filter", "rank"]
 EV_MODE = "ev"
 EV_THRESHOLDS = [0.0, 0.05, 0.10]          # predicted expected return (net, per trade)
+# Drawdown-aware gross scaler on EV sizing (2026-08-21, after the EV head
+# cleared selection but the 40% DD cap refused finalize). At each entry the
+# EV portfolio scales every new position by
+#     max(EV_DD_FLOOR, 1 - dd_now / dd_brake)
+# where dd_now is the drawdown of ITS OWN realized equity at that moment
+# (past information only). None = no brake (bit-identical to the unbraked
+# path); the brake is fold-selectable like the threshold, through the same
+# gate. It can only shrink gross, never add leverage.
+EV_DD_BRAKES = [None, 0.20, 0.30]
+EV_DD_FLOOR = 0.25
 EV_WINSOR_QUANTILES = (0.01, 0.99)         # magnitude-head target clipped on train
 MAX_CONCURRENT = 5
 PORTFOLIO_FRACTION = 0.10

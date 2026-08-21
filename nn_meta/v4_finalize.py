@@ -59,7 +59,7 @@ from nn_meta.mark_stream import load_mark_stream, option_b_blockers
 from nn_meta.select_meta import all_rows
 from nn_meta.temporal_validation import assign_purged_splits
 from nn_meta.v4_artifacts import create_manifest, write_manifest
-from nn_meta.v4_evaluate import (choose_policy, fit_gbt, fit_gbt_magnitude, fit_nn,
+from nn_meta.v4_evaluate import (choose_policy, policy_label, fit_gbt, fit_gbt_magnitude, fit_nn,
                                  fit_nn_magnitude, _labeled, _matrix, _select_winner)
 from nn_meta.v4_loader import ensemble_ev, ensemble_score
 
@@ -259,14 +259,14 @@ def main() -> None:
         policy["family"] = family
         candidates.append(policy)
         ret = policy["metrics"]["total_return"]
-        print(f"  {family}: best {policy['mode']}@{policy['threshold']} "
+        print(f"  {family}: best {policy_label(policy)} "
               f"val_return={ret} ({time.time()-t0:.0f}s)", flush=True)
 
     winner = _select_winner(candidates)
     family = winner["family"]
     sel_note = "eligible" if winner.get("eligible") else "INELIGIBLE (cheap-seed)"
     print(f"\nSELECTED FAMILY: {family} "
-          f"(cheap-seed {winner['mode']}/thr={winner['threshold']}, "
+          f"(cheap-seed {policy_label(winner)}, "
           f"val_return={winner['metrics']['total_return']}, {sel_note})", flush=True)
 
     # ── 2) train the full ensemble for the winning family INTO A STAGING DIR ──
@@ -310,9 +310,10 @@ def main() -> None:
     final_policy = choose_policy(val_rows, ens_val_pred, spec, mark_stream=mark_stream,
                                  ev_predictions=ens_val_ev)
     mode, threshold = final_policy["mode"], final_policy["threshold"]
+    dd_brake = final_policy.get("dd_brake")
     metrics = final_policy["metrics"]
     flipped = bool(winner.get("eligible")) and not final_policy["eligible"]
-    print(f"  ensemble winner: {mode}/thr={threshold} "
+    print(f"  ensemble winner: {policy_label(final_policy)} "
           f"val_return={metrics['total_return']} n_kept={metrics['n_kept']} "
           f"eligible={final_policy['eligible']}"
           f"{'  ⚠ FLIPPED from eligible→ineligible' if flipped else ''}", flush=True)
@@ -330,13 +331,14 @@ def main() -> None:
     # ── 5) write the ensemble config + a manifest covering the trained files ──
     (staging / "ensemble_config.json").write_text(json.dumps({
         "run_ids": run_ids, "family": family, "mode": mode, "threshold": threshold,
-        "label": args.label, "features": features,
+        "dd_brake": dd_brake, "label": args.label, "features": features,
         "val_return": metrics["total_return"], "val_n_kept": metrics["n_kept"],
         "val_max_drawdown": metrics["max_drawdown"], "eligible": True,
         "baseline_return": final_policy.get("baseline_return"),
         "operating_point_source": "full-ensemble revalidation",
         "magnitude_head": ens_val_ev is not None,
         "ev_thresholds": list(config.EV_THRESHOLDS),
+        "ev_dd_brakes": list(config.EV_DD_BRAKES), "ev_dd_floor": config.EV_DD_FLOOR,
         "selection_basis": final_policy["selection_basis"],
         "select_seeds": select_seeds, "final_seeds": final_seeds,
         "baseline_config_hash": spec["config_hash"],
@@ -359,7 +361,7 @@ def main() -> None:
     # ── 6) atomic swap: the new bundle replaces the old only now ─────────────
     _atomic_swap(staging, FINAL_DIR)
 
-    print(f"\nDONE. {family}/{mode}/thr={threshold} "
+    print(f"\nDONE. {family}/{policy_label(final_policy)} "
           f"(val_return={metrics['total_return']}, {len(run_ids)} seeds) -> {FINAL_DIR}")
 
 

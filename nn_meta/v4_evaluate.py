@@ -244,12 +244,22 @@ def policy_predictions(predictor: Predictor, rows: pd.DataFrame, mode: str) -> n
 
 
 def evaluate_policy(mode: str, rows: pd.DataFrame, pred: np.ndarray,
-                    threshold: float) -> dict:
-    """Shared-simulator metrics for any mode (filter / rank / ev)."""
+                    threshold: float, dd_brake: float | None = None) -> dict:
+    """Shared-simulator metrics for any mode (filter / rank / ev). ``dd_brake``
+    is the ev mode's drawdown-aware gross scaler (ignored by other modes)."""
     if mode == config.EV_MODE:
         return evaluate_ev(rows, pred, threshold, k=config.MAX_CONCURRENT,
-                           f=config.PORTFOLIO_FRACTION)
+                           f=config.PORTFOLIO_FRACTION, dd_brake=dd_brake,
+                           dd_floor=config.EV_DD_FLOOR)
     return _EVALUATORS[mode](rows, pred, threshold)
+
+
+def policy_label(policy: dict) -> str:
+    """``mode/threshold`` plus the EV brake when one is set, for reports/logs."""
+    label = f"{policy['mode']}/{policy['threshold']}"
+    if policy.get("dd_brake") is not None:
+        label += f" brake={policy['dd_brake']}"
+    return label
 
 
 def _policy_rank(policy: dict) -> tuple[bool, float]:
@@ -290,7 +300,8 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                   costs: CostScenario = BASE_COSTS,
                   ev_predictions: np.ndarray | None = None,
                   ev_thresholds: Iterable[float] = config.EV_THRESHOLDS,
-                  dd_cap: float | None = None) -> dict:
+                  dd_cap: float | None = None,
+                  ev_dd_brakes: Iterable[float | None] = config.EV_DD_BRAKES) -> dict:
     """Choose mode and threshold on validation only.
 
     With ``mark_stream`` supplied (Option B), every candidate policy — and the
@@ -301,7 +312,9 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
     With ``ev_predictions`` (the magnitude head's expected return per row) the
     ``ev`` mode joins the grid: rank-and-size by EV at each ``ev_thresholds``
     cut, through the same gate and (if supplied) the same ledger. Without it
-    the grid is exactly filter × rank as before.
+    the grid is exactly filter × rank as before. Each EV threshold is tried at
+    every ``ev_dd_brakes`` gross scaler (``None`` = unbraked), so the brake is
+    fold-selectable on validation exactly like the threshold.
     """
     if len(rows) != len(predictions):
         raise ValueError("row/prediction length mismatch")
@@ -336,15 +349,20 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
         ev_rows = rows.reset_index(drop=True)
         ev_pred = np.asarray(ev_predictions, dtype=float)
         for threshold in ev_thresholds:
-            metrics = (_ledger_policy_metrics(ev_rows, ev_pred, config.EV_MODE,
-                                              float(threshold), mark_stream, costs=costs)
-                       if ledger else
-                       evaluate_policy(config.EV_MODE, ev_rows, ev_pred, float(threshold)))
-            candidates.append({
-                "mode": config.EV_MODE, "threshold": float(threshold),
-                "metrics": metrics, "baseline_return": baseline["total_return"],
-                "eligible": _passes_gate(metrics, baseline, dd_cap),
-            })
+            for brake in ev_dd_brakes:
+                brake = None if brake is None else float(brake)
+                metrics = (_ledger_policy_metrics(ev_rows, ev_pred, config.EV_MODE,
+                                                  float(threshold), mark_stream,
+                                                  costs=costs, dd_brake=brake)
+                           if ledger else
+                           evaluate_policy(config.EV_MODE, ev_rows, ev_pred,
+                                           float(threshold), dd_brake=brake))
+                candidates.append({
+                    "mode": config.EV_MODE, "threshold": float(threshold),
+                    "dd_brake": brake,
+                    "metrics": metrics, "baseline_return": baseline["total_return"],
+                    "eligible": _passes_gate(metrics, baseline, dd_cap),
+                })
     # An eligible policy always outranks an ineligible one; ties break on
     # validation return. When nothing clears the gate the least-bad candidate
     # is still returned (callers need something to report), but it carries
@@ -370,12 +388,14 @@ def _candidate_rows(rows: pd.DataFrame, pred: np.ndarray, mode: str,
     return cands
 
 
-def _selected_rows(cands: pd.DataFrame, mode: str = "rank") -> pd.DataFrame:
+def _selected_rows(cands: pd.DataFrame, mode: str = "rank",
+                   dd_brake: float | None = None) -> pd.DataFrame:
     """Rows the slot portfolio actually enters (its own slot decision). For the
     ``ev`` mode the EV-sized portfolio decides and each row carries its
-    ``size_fraction`` for the ledger."""
+    ``size_fraction`` for the ledger (already brake-scaled when ``dd_brake``)."""
     if mode == config.EV_MODE:
-        return ev_selected_rows(cands, config.MAX_CONCURRENT, config.PORTFOLIO_FRACTION)
+        return ev_selected_rows(cands, config.MAX_CONCURRENT, config.PORTFOLIO_FRACTION,
+                                dd_brake=dd_brake, dd_floor=config.EV_DD_FLOOR)
     cands = cands.dropna(subset=["entry_ts", "exit_ts", "net_return"])
     if cands.empty:
         return cands
@@ -386,7 +406,8 @@ def _selected_rows(cands: pd.DataFrame, mode: str = "rank") -> pd.DataFrame:
 
 def marked_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
                    threshold: float, mark_stream: pd.DataFrame, *,
-                   costs: CostScenario = BASE_COSTS) -> dict | None:
+                   costs: CostScenario = BASE_COSTS,
+                   dd_brake: float | None = None) -> dict | None:
     """Mark-to-market metrics for the trades this policy enters.
 
     The shared slot portfolio makes the entry/exit decisions (skip semantics);
@@ -395,7 +416,8 @@ def marked_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
     per-contract mark path rather than the final ``net_return``.  Returns
     ``None`` when the portfolio enters nothing.
     """
-    selected = _selected_rows(_candidate_rows(rows, pred, mode, threshold), mode)
+    selected = _selected_rows(_candidate_rows(rows, pred, mode, threshold), mode,
+                              dd_brake=dd_brake)
     if selected.empty:
         return None
     trades, marks = execution_frames(selected, mark_stream)
@@ -407,7 +429,8 @@ def marked_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
 
 def _ledger_policy_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
                            threshold: float, mark_stream: pd.DataFrame, *,
-                           costs: CostScenario = BASE_COSTS) -> dict:
+                           costs: CostScenario = BASE_COSTS,
+                           dd_brake: float | None = None) -> dict:
     """Policy metrics in the SHARED metric schema, computed through the
     mark-to-market ledger (Option B selection basis).
 
@@ -423,7 +446,8 @@ def _ledger_policy_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
              "max_drawdown": None, "win_rate": None, "mean_return": None,
              "per_trade_sharpe": None, "total_ex_top3": None,
              "cost_scenario": costs.name, "basis": "ledger"}
-    selected = _selected_rows(_candidate_rows(rows, pred, mode, threshold), mode)
+    selected = _selected_rows(_candidate_rows(rows, pred, mode, threshold), mode,
+                              dd_brake=dd_brake)
     if selected.empty:
         return empty
     trades, marks = execution_frames(selected, mark_stream)
@@ -516,16 +540,18 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
     fmask = frozen_mask(test_rows, spec)
     test_eval_rows = test_rows[fmask].reset_index(drop=True) if winner["mode"] == "filter" else test_rows
     test_eval_pred = test_policy_pred[fmask] if winner["mode"] == "filter" else test_policy_pred
+    brake = winner.get("dd_brake")
     winner_test = evaluate_policy(winner["mode"], test_eval_rows, test_eval_pred,
-                                  winner["threshold"])
+                                  winner["threshold"], dd_brake=brake)
     winner_marked = (marked_metrics(test_eval_rows, test_eval_pred,
-                                    winner["mode"], winner["threshold"], mark_stream)
+                                    winner["mode"], winner["threshold"], mark_stream,
+                                    dd_brake=brake)
                      if mark_stream is not None else None)
     # Deflate the winner's test Sharpe by the whole grid of tried configurations.
     trial_sharpes = [s for p in selected for s in p.get("candidate_sharpes", [])]
     entered_test = _selected_rows(_candidate_rows(
         test_eval_rows, test_eval_pred, winner["mode"], winner["threshold"]),
-        winner["mode"])
+        winner["mode"], dd_brake=brake)
     deflated = deflated_sharpe_from_trials(
         entered_test["net_return"] if len(entered_test) else [], trial_sharpes)
     # Track the v3.1 top-decile inversion (win rate up, mean return down) on
@@ -545,8 +571,10 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         fpred = pred[fmask] if policy["mode"] == "filter" else pred
         by_model[family] = {
             "mode": policy["mode"], "threshold": policy["threshold"],
+            "dd_brake": policy.get("dd_brake"),
             "validation": policy["metrics"],
-            "test": evaluate_policy(policy["mode"], frows, fpred, policy["threshold"]),
+            "test": evaluate_policy(policy["mode"], frows, fpred, policy["threshold"],
+                                    dd_brake=policy.get("dd_brake")),
         }
     return {
         "schema": schema, "purged": purged, "embargo": embargo,
@@ -554,7 +582,8 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         "window": {k: str(v.date()) for k, v in window.__dict__.items()},
         "split_summary": split_summary(ds, split).to_dict(orient="records"),
         "winner": {"family": winner["family"], "mode": winner["mode"],
-                   "threshold": winner["threshold"], "validation": winner["metrics"],
+                   "threshold": winner["threshold"], "dd_brake": winner.get("dd_brake"),
+                   "validation": winner["metrics"],
                    "eligible": bool(winner.get("eligible")),
                    "selection_basis": winner.get("selection_basis", "shared_sim"),
                    "baseline_return": winner.get("baseline_return"),
@@ -608,9 +637,11 @@ def _write_report(results: list[dict], output: Path) -> None:
             marked_cell = "pending"
         else:
             marked_cell = f"{marked['total_return']:+.1%} / {marked['max_drawdown']:.1%}"
+        brake_cell = ("" if win.get("dd_brake") is None
+                      else f" brake {win['dd_brake']:.2f}")
         lines.append(
             f"| {i} | {result['schema']} | {result['purged']} | {win['family']} | "
-            f"{gate_cell} | {win['mode']} / {win['threshold']:.2f} | "
+            f"{gate_cell} | {win['mode']} / {win['threshold']:.2f}{brake_cell} | "
             f"{'n/a' if ret is None else f'{ret:+.1%}'} | "
             f"{'n/a' if dd is None else f'{dd:.1%}'} | {marked_cell} |"
         )

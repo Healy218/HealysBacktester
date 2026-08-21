@@ -3,7 +3,7 @@
 
 The bundle layout and scoring convention are produced by ``v4_finalize.py``:
 
-    ensemble_config.json   family, mode, threshold, features, run_ids, eligible
+    ensemble_config.json   family, mode, threshold, dd_brake, features, run_ids, eligible
     <run_id>/model.keras + scaler.json + params.json   (nn members)
     <run_id>/model.joblib + params.json                (gbt members)
 
@@ -90,6 +90,9 @@ class V4Bundle:
     eligible: bool
     members: list[dict]
     config: dict
+    # ev-mode drawdown brake chosen on validation (None = unbraked). Live
+    # sizing scales gross by gross_scale(current_dd, dd_brake, EV_DD_FLOOR).
+    dd_brake: float | None = None
 
     def score(self, rows: pd.DataFrame) -> np.ndarray:
         """P(win) for each row, averaged over the ensemble."""
@@ -155,7 +158,8 @@ def load_final_v4(bundle_dir: Path | None = None) -> V4Bundle:
     bundle = V4Bundle(
         family=family, mode=cfg["mode"], threshold=float(cfg["threshold"]),
         features=list(cfg["features"]), eligible=bool(cfg.get("eligible", False)),
-        members=members, config=cfg)
+        members=members, config=cfg,
+        dd_brake=None if cfg.get("dd_brake") is None else float(cfg["dd_brake"]))
     if bundle.mode == config.EV_MODE and not bundle.has_magnitude_head:
         raise FileNotFoundError(
             "bundle operates in ev mode but a member lacks its magnitude head")
