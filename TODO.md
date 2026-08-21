@@ -60,25 +60,26 @@ without it the pipeline silently reads/writes the wrong artifact dirs.
 Design: `docs/DECISIONS.md` 2026-08-21 "EV head definition". One regression
 head on signed `net_return`, one new mode `ev`, gate unchanged.
 
-- [ ] `config.py`: `EV_THRESHOLDS`, `EVAL_MODES += ["ev"]` (opt-in via the
+- [x] `config.py`: `EV_THRESHOLDS`, `EVAL_MODES += ["ev"]` (opt-in via the
   presence of an EV prediction, so legacy callers stay bit-identical).
-- [ ] `ev_sizing.py`: `ev_weighted_portfolio` also reports each entered
+- [x] `ev_sizing.py`: `ev_weighted_portfolio` also reports each entered
   trade's size fraction; `v4_accounting.mark_to_market_portfolio` accepts an
   optional per-trade `size_fraction` (≤ `position_fraction`) so EV sizing is
   scored through the SAME ledger as filter/rank.
-- [ ] `v4_evaluate.py`: `fit_nn`/`fit_gbt` grow a magnitude head (Huber);
+- [x] `v4_evaluate.py`: `fit_nn`/`fit_gbt` grow a magnitude head (Huber);
   `Predictor` returns `(p_win, ev)`; `choose_policy(..., ev_predictions=)`
   adds the `ev` candidates (shared sim + ledger); report shows the mode.
-- [ ] `v4_finalize.py`: magnitude head trained + persisted per seed
+- [x] `v4_finalize.py`: magnitude head trained + persisted per seed
   (`magnitude.keras` / `magnitude.joblib`), ensemble re-validation includes
   `ev`; `ensemble_config.json` records `mode="ev"` + threshold when it wins.
-- [ ] `v4_loader.py` / `live/v4_scan.py`: bundle exposes `decision_score`
+- [x] `v4_loader.py` / `live/v4_scan.py`: bundle exposes `decision_score`
   (P(win) or EV by mode) and a size hint; scan filters on it; alert shows EV.
-- [ ] Tests (suite 410 green, self-contained): ev mode in the grid, ledger
+- [x] Tests (suite 425 green, self-contained): ev mode in the grid, ledger
   per-trade sizing, bundle round-trip with a magnitude head, legacy path
   unchanged.
-- [ ] Image build (pinned `IMAGE_TAG`) → `v4-evaluate --folds 3 --marks` and
-  `--ablation` → `v4-finalize --marks` on Batch (STANDARD, `n2-standard-8`).
+- [~] Image `c17193c` built; `v4-evaluate-c17193c-111903` (folds 3),
+  `-111904` (ablation), `v4-finalize-c17193c-111905` RUNNING on Batch since
+  2026-08-21 11:19 CDT (STANDARD, `n2-standard-8`, all three in parallel).
   Gate decides: bundle → V118 deploy-alongside; refusal → v4 waits, log it.
 
 ## 1c — spx0 / VSPNDX seat (starts WHILE 1b runs on Batch)

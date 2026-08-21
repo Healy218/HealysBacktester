@@ -30,6 +30,29 @@ Full design + task list: `TODO.md` blocks 1b and 1c. Sequence:
 4. Read the verdict. Bundle → V118 deploy-alongside (TODO block 3 remaining
    items). Refusal → v4 waits, spx0 continues; log either way in EXPERIMENTS.
 
+## LAUNCHED 2026-08-21 11:19 CDT — EV-head jobs on Batch (image `c17193c`)
+
+Code landed in `c17193c` (suite 425 green; local `--smoke` on `--folds 1`
+exercised both heads end-to-end, exit 0 — numbers NOT to be trusted, home
+box). Three STANDARD `n2-standard-8` jobs, all verified SCHEDULED with the
+pinned image:
+
+| job | what | expected |
+|---|---|---|
+| `v4-evaluate-c17193c-111903` | `--folds 3 --marks` (seeds 0-4, 60 ep, gbt 600, embargo 1D) | ~3h |
+| `v4-evaluate-c17193c-111904` | `--ablation --marks` (same) | ~3h |
+| `v4-finalize-c17193c-111905` | `--marks` full 40-seed ensemble, gate decides | ~30-40 min (2 heads/seed) |
+
+Outputs land in `gs://healys-backtester/out/{evaluate,finalize}-<stamp>-<uid>/`.
+What to read first: the `ev_deciles` section of each report (does the EV head's
+top decile stop inverting?), whether any fold's winner is `mode=ev`, and the
+finalize task log's `ensemble winner:` line — `eligible=True` means a bundle
+with `magnitude.*` files exists in `.../model_final_v4/` → pull it with
+`gsutil rsync`, commit (force-add, it's gitignored), server `git pull`,
+`v4_scan --selftest`. `eligible=False` → v4 waits; log the verdict.
+The session watcher polls every 10 min; it dies with the session — if so, the
+jobs don't care; check `gcloud batch jobs list --project=healys-batch`.
+
 ## Standing warnings (unchanged)
 
 - **Do NOT run training/finalize on this box** — proven single-bit RAM
