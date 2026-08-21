@@ -164,10 +164,15 @@ def fill_context(batch: pd.DataFrame, surface: pd.DataFrame) -> pd.DataFrame:
 
 # ── selection + alert ─────────────────────────────────────────────────────────
 
-def best_per_signal(batch: pd.DataFrame, scores: np.ndarray) -> pd.DataFrame:
-    """One row per (symbol, strategy): the DTE variant the model scores best."""
-    scored = batch.assign(score=scores)
-    idx = scored.groupby(["symbol", "strategy"])["score"].idxmax()
+def best_per_signal(batch: pd.DataFrame, scores: np.ndarray,
+                    decision: Optional[np.ndarray] = None) -> pd.DataFrame:
+    """One row per (symbol, strategy): the DTE variant the bundle's policy
+    scores best. ``scores`` is P(win) (always shown in the alert); ``decision``
+    is what the policy thresholds on — the EV head's expected return for an
+    ``ev``-mode bundle, else the same P(win)."""
+    scored = batch.assign(score=scores,
+                          decision=scores if decision is None else decision)
+    idx = scored.groupby(["symbol", "strategy"])["decision"].idxmax()
     return scored.loc[idx].reset_index(drop=True)
 
 
@@ -187,7 +192,9 @@ def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool
     if shown != row.symbol:
         shown = f"{shown} (fka {row.symbol})"
     title = f"[v4] {shown} {action}"
-    msg = (f"[v4] {shown}: {action} · P(win) {row.score:.0%}\n"
+    ev_part = (f" · EV {row.decision:+.1%}" if bundle.mode == config.EV_MODE
+               and hasattr(row, "decision") else "")
+    msg = (f"[v4] {shown}: {action} · P(win) {row.score:.0%}{ev_part}\n"
            f"trigger: {row.strategy} ({fresh['param_label']}) · "
            f"DTE {int(row.dte)} (best of grid)\n"
            f"contract: ~ATM {right} near ${fresh['spot']:,.2f}, "
@@ -237,13 +244,15 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
         batch = build_candidate_batch(candidate_frame(list(fresh_by_key.values())),
                                       bars_cache, surface, spec)
         batch = fill_context(batch, surface)
-        winners = best_per_signal(batch, bundle.score(batch))
+        scores = bundle.score(batch)
+        decision = bundle.ev(batch) if bundle.mode == config.EV_MODE else scores
+        winners = best_per_signal(batch, scores, decision)
         for row in winners.itertuples(index=False):
             key = alert_key(row.symbol, row.strategy, row.entry_ts)
             fresh = fresh_by_key[key]
-            if row.score < thr:
+            if row.decision < thr:
                 logger.info(f"[v4-scan] {row.symbol}/{row.strategy}: filtered "
-                            f"(best score {row.score:.3f} < {thr})")
+                            f"(best {bundle.mode} score {row.decision:.3f} < {thr})")
                 alert_state.mark(key)                # don't rescore this bar
                 continue
             title, msg = format_v4_alert(row, fresh, bundle, paper)

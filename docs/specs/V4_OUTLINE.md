@@ -680,11 +680,17 @@ choice (they are not mutually exclusive):
 - [x] Magnitude-aware labels: the return-bucket labels and magnitude
   regression target live in `nn_meta/ev_sizing.py`
   (`return_bucket_labels`, `magnitude_target`, `bucket_expected_value`).
-  Training a head on them is the v31-data step; the labels are code-ready.
+  **WIRED 2026-08-21**: every v4 predictor trains a magnitude head on
+  `magnitude_target` (winsorized, Huber) beside the P(win) head
+  (`v4_evaluate.fit_nn_magnitude` / `fit_gbt_magnitude`); finalize persists
+  it per seed (`magnitude.keras|joblib`). Bucket labels remain unused
+  (DECISIONS 2026-08-21: one head, one mode).
 - [x] Score-scaled sizing: `nn_meta/ev_sizing.py` sizes positions by
   predicted EV (`predicted_ev`, `evaluate_ev`) instead of uniform slots,
-  as a fold-selectable candidate. Empirical comparison vs uniform slots is
-  pending the trained magnitude prediction on v31 data.
+  as a fold-selectable candidate. **WIRED 2026-08-21** as the `ev` mode of
+  `choose_policy` (shared sim AND ledger, via per-trade `size_fraction`).
+  Empirical comparison vs uniform slots: the Batch evaluate/finalize runs
+  after the wiring — verdict in `docs/EXPERIMENTS.md`.
 - [x] The v3.1 calibration table (score deciles vs win rate AND mean return)
   is a standard diagnostic in every v4 report via `nn_meta/diagnostics.py`,
   with an explicit top-decile-inversion flag, so the inversion is tracked

@@ -61,6 +61,25 @@ def ensemble_score(family: str, members: list[dict], rows: pd.DataFrame,
     return np.mean(preds, axis=0)
 
 
+def ensemble_ev(family: str, members: list[dict], rows: pd.DataFrame,
+                features: list[str]) -> np.ndarray:
+    """Mean predicted expected return across the members' magnitude heads
+    (``member["magnitude"]``; nn heads share the classifier's scaler)."""
+    if not members:
+        raise ValueError("cannot score with an empty ensemble")
+    if any(m.get("magnitude") is None for m in members):
+        raise ValueError("ensemble member lacks a magnitude head")
+    if family == "nn":
+        preds = [m["magnitude"].predict(_matrix(rows, features, m["mean"], m["std"]),
+                                        batch_size=4096, verbose=0).flatten()
+                 for m in members]
+    elif family == "gbt":
+        preds = [m["magnitude"].predict(rows[features]) for m in members]
+    else:
+        raise ValueError(f"unknown model family '{family}'")
+    return np.mean(preds, axis=0)
+
+
 @dataclass
 class V4Bundle:
     """A loaded, ready-to-score v4 ensemble."""
@@ -76,9 +95,25 @@ class V4Bundle:
         """P(win) for each row, averaged over the ensemble."""
         return ensemble_score(self.family, self.members, rows, self.features)
 
+    @property
+    def has_magnitude_head(self) -> bool:
+        return bool(self.members) and all(m.get("magnitude") is not None
+                                          for m in self.members)
+
+    def ev(self, rows: pd.DataFrame) -> np.ndarray:
+        """Predicted expected net return per row (magnitude-head ensemble)."""
+        return ensemble_ev(self.family, self.members, rows, self.features)
+
+    def decision_score(self, rows: pd.DataFrame) -> np.ndarray:
+        """The number the bundle's OWN policy thresholds on: EV for the ``ev``
+        mode, P(win) otherwise. Live scoring must use this, not ``score``."""
+        if self.mode == config.EV_MODE:
+            return self.ev(rows)
+        return self.score(rows)
+
     def keep_mask(self, rows: pd.DataFrame) -> np.ndarray:
         """Boolean mask of rows the bundle would keep at its own threshold."""
-        return self.score(rows) >= self.threshold
+        return self.decision_score(rows) >= self.threshold
 
 
 def _load_member(family: str, run_dir: Path) -> dict:
@@ -86,11 +121,15 @@ def _load_member(family: str, run_dir: Path) -> dict:
         import tensorflow as tf
         scaler = json.loads((run_dir / "scaler.json").read_text())
         model = tf.keras.models.load_model(run_dir / "model.keras")
+        mag_path = run_dir / "magnitude.keras"
         return {"model": model,
+                "magnitude": tf.keras.models.load_model(mag_path) if mag_path.exists() else None,
                 "mean": pd.Series(scaler["mean"]), "std": pd.Series(scaler["std"])}
     if family == "gbt":
         import joblib
-        return {"model": joblib.load(run_dir / "model.joblib")}
+        mag_path = run_dir / "magnitude.joblib"
+        return {"model": joblib.load(run_dir / "model.joblib"),
+                "magnitude": joblib.load(mag_path) if mag_path.exists() else None}
     raise ValueError(f"unknown model family '{family}'")
 
 
@@ -113,10 +152,14 @@ def load_final_v4(bundle_dir: Path | None = None) -> V4Bundle:
         if not run_dir.is_dir():
             raise FileNotFoundError(f"bundle member {run_id} missing at {run_dir}")
         members.append(_load_member(family, run_dir))
-    return V4Bundle(
+    bundle = V4Bundle(
         family=family, mode=cfg["mode"], threshold=float(cfg["threshold"]),
         features=list(cfg["features"]), eligible=bool(cfg.get("eligible", False)),
         members=members, config=cfg)
+    if bundle.mode == config.EV_MODE and not bundle.has_magnitude_head:
+        raise FileNotFoundError(
+            "bundle operates in ev mode but a member lacks its magnitude head")
+    return bundle
 
 
 def verify_bundle(bundle_dir: Path | None = None) -> dict:

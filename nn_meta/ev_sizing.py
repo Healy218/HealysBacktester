@@ -60,7 +60,9 @@ def ev_weighted_portfolio(cands: pd.DataFrame, k: int, f: float, *,
     free slots, each sized proportional to its EV share of that set, scaled to
     the ``k*f`` gross budget and capped at ``f`` of equity per name.  P&L
     realizes at each exit.  Returns ``(total_return, max_drawdown, entered)``
-    where ``entered`` is a list of ``(row_index, net_return, amount)``.
+    where ``entered`` is a list of ``(row_index, net_return, amount,
+    size_fraction)`` — ``size_fraction`` is the fraction of equity-at-entry
+    the trade received (``<= f``), which the mark-to-market ledger consumes.
     """
     open_pos: list = []          # (exit_ts, amount, net_return, symbol)
     open_syms: set = set()
@@ -95,12 +97,38 @@ def ev_weighted_portfolio(cands: pd.DataFrame, k: int, f: float, *,
         evs = np.array([float(getattr(r, ev_col)) for r in picks])
         weights = evs / evs.sum()
         for r, w in zip(picks, weights):
-            amount = min(w * budget, f) * equity          # per-name cap = uniform f
+            frac = min(w * budget, f)                     # per-name cap = uniform f
+            amount = frac * equity
             open_pos.append((pd.Timestamp(r.exit_ts), amount, float(r.net_return),
                              r.symbol))
-            entered.append((r.Index, float(r.net_return), amount))
+            entered.append((r.Index, float(r.net_return), amount, frac))
     _close_due(pd.Timestamp.max)
     return equity - 1.0, max_dd, entered
+
+
+def ev_selected_rows(cands: pd.DataFrame, k: int, f: float, *,
+                     ev_col: str = "pred_ev") -> pd.DataFrame:
+    """Rows the EV portfolio actually enters, with a ``size_fraction`` column
+    (fraction of equity at entry, ``<= f``). This is the EV analogue of
+    ``v4_evaluate._selected_rows`` and feeds the mark-to-market ledger so EV
+    sizing is scored on exactly the same accounting as filter/rank."""
+    cands = cands.dropna(subset=["entry_ts", "exit_ts", "net_return", ev_col])
+    if cands.empty:
+        return cands.assign(size_fraction=pd.Series(dtype=float))
+    _, _, entered = ev_weighted_portfolio(cands, k, f, ev_col=ev_col)
+    if not entered:
+        return cands.iloc[0:0].assign(size_fraction=pd.Series(dtype=float))
+    out = cands.loc[[e[0] for e in entered]].copy()
+    out["size_fraction"] = [e[3] for e in entered]
+    return out
+
+
+def ev_candidate_rows(rows: pd.DataFrame, pred_ev, threshold: float) -> pd.DataFrame:
+    """Thresholded, DTE-deduped (best EV per proposal) EV candidate pool."""
+    cands = rows.assign(pred_ev=np.asarray(pred_ev, dtype=float))
+    cands = cands[cands["pred_ev"] >= threshold]
+    return cands.sort_values("pred_ev", ascending=False) \
+        .drop_duplicates(["symbol", "strategy", "trade_idx"])
 
 
 def portfolio_metrics_ev(cands: pd.DataFrame, k: int, f: float, *,
@@ -139,8 +167,5 @@ def evaluate_ev(rows: pd.DataFrame, pred_ev: np.ndarray, threshold: float = 0.0,
     Mirrors the rank evaluator's signature so it can join the policy grid once
     a magnitude/EV prediction column exists (second head or bucket classifier).
     """
-    cands = rows.assign(pred_ev=np.asarray(pred_ev, dtype=float))
-    cands = cands[cands["pred_ev"] >= threshold]
-    cands = cands.sort_values("pred_ev", ascending=False) \
-        .drop_duplicates(["symbol", "strategy", "trade_idx"])
-    return portfolio_metrics_ev(cands, k, f, n_proposals=len(rows))
+    return portfolio_metrics_ev(ev_candidate_rows(rows, pred_ev, threshold), k, f,
+                                n_proposals=len(rows))

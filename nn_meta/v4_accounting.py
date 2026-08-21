@@ -227,12 +227,26 @@ def mark_to_market_portfolio(trades: pd.DataFrame, marks: pd.DataFrame, *,
     debited at entry, option value is marked at every supplied mark, and exit
     costs are applied only at the exit fill.  A same-symbol or slot conflict
     is rejected rather than reinterpreted as a filled trade.
+
+    An optional ``size_fraction`` column on ``trades`` (v4 EV sizing) sets each
+    position's fraction of equity at entry; it must lie in ``(0,
+    position_fraction]`` — a per-trade size can only de-risk below the uniform
+    slot, never concentrate above it. Absent the column every trade takes
+    ``position_fraction`` (the legacy, bit-identical path).
     """
     if max_concurrent < 1 or not 0 < position_fraction <= 1:
         raise ValueError("invalid concurrency or position fraction")
     if max_concurrent * position_fraction > 1:
         raise ValueError("configured gross exposure exceeds available capital")
     trades = validate_execution_rows(trades)
+    if "size_fraction" in trades.columns:
+        sf = trades["size_fraction"].astype(float)
+        if (~np.isfinite(sf)).any() or (sf <= 0).any() or (sf > position_fraction + 1e-12).any():
+            raise AccountingDataError(
+                "size_fraction must be finite and within (0, position_fraction]")
+        size_by_trade = dict(zip(trades["trade_id"], sf))
+    else:
+        size_by_trade = {}
     marks = validate_marks(marks, trades)
     by_trade = {r.trade_id: r for r in trades.itertuples(index=False)}
     marks_by_time = {ts: grp for ts, grp in marks.groupby("mark_ts", sort=True)}
@@ -265,7 +279,7 @@ def mark_to_market_portfolio(trades: pd.DataFrame, marks: pd.DataFrame, *,
                 raise AccountingDataError(f"slot cap exceeded at {ts}")
             if any(p["trade"].symbol == trade.symbol for p in open_pos.values()):
                 raise AccountingDataError(f"overlapping {trade.symbol} position at {ts}")
-            notional = position_fraction * equity()
+            notional = size_by_trade.get(trade.trade_id, position_fraction) * equity()
             cash -= notional
             open_pos[trade.trade_id] = {"trade": trade, "notional": notional,
                                         "value": notional / (1 + costs.side_cost)}

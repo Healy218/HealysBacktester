@@ -49,6 +49,23 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   if unattended recovery is wanted for a long run.
 - Run logs write to the **repo root**, not `logs/` — `.gitignore` covers
   them with an anchored `/*.log`.
+- **v4 policy grid = filter × rank × `ev`** (2026-08-21). Every v4
+  predictor carries two heads: P(win) (`predict`) and a magnitude head
+  (`predict_ev`, expected signed net return, Huber on a target winsorized
+  at the train 1%/99% — the raw column has a 1526× outlier). `choose_policy`
+  adds the `ev` candidates only when `ev_predictions=` is passed, so legacy
+  callers stay bit-identical; `config.EV_THRESHOLDS` are in return units.
+  The gate is the same for all three modes. The ledger
+  (`mark_to_market_portfolio`) takes an optional per-trade `size_fraction`
+  in `(0, PORTFOLIO_FRACTION]` — EV sizing may only de-risk, never
+  concentrate; `execution_frames` passes it through.
+- **Bundle layout** (`model_final_v4/<run_id>/`): `model.keras|joblib` +
+  `magnitude.keras|joblib` (+ `scaler.json` for nn) + `params.json`;
+  `ensemble_config.json` records `mode` (`filter`/`rank`/`ev`),
+  `threshold`, `magnitude_head`. `V4Bundle.decision_score` is what live
+  code must threshold on (EV for an `ev` bundle, P(win) otherwise); a bundle
+  persisted in `ev` mode fails to LOAD if any member lacks its head. Bundles
+  from before 2026-08-21 have no magnitude files and still load.
 
 ## Traps — things that look wrong and are not
 

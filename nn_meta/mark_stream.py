@@ -282,6 +282,8 @@ def execution_frames(selected: pd.DataFrame, mark_stream: pd.DataFrame, *,
         "fill_exit_ts": pd.to_datetime(selected["fill_exit_ts"]).to_numpy(),
         "gross_return": selected[return_col].astype(float).to_numpy(),
     })
+    if "size_fraction" in selected.columns:      # v4 EV sizing rides along
+        trades["size_fraction"] = selected["size_fraction"].astype(float).to_numpy()
     marks = validate_mark_stream(mark_stream)
     marks = marks[marks["trade_id"].isin(set(tid))].reset_index(drop=True)
     # Drop the unselected ids from the dictionary too — otherwise every grouped

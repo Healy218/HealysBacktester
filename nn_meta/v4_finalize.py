@@ -59,9 +59,9 @@ from nn_meta.mark_stream import load_mark_stream, option_b_blockers
 from nn_meta.select_meta import all_rows
 from nn_meta.temporal_validation import assign_purged_splits
 from nn_meta.v4_artifacts import create_manifest, write_manifest
-from nn_meta.v4_evaluate import (choose_policy, fit_gbt, fit_nn, _labeled,
-                                 _matrix, _select_winner)
-from nn_meta.v4_loader import ensemble_score
+from nn_meta.v4_evaluate import (choose_policy, fit_gbt, fit_gbt_magnitude, fit_nn,
+                                 fit_nn_magnitude, _labeled, _matrix, _select_winner)
+from nn_meta.v4_loader import ensemble_ev, ensemble_score
 
 FINAL_DIR = config.ROOT / "model_final_v4"
 
@@ -102,17 +102,24 @@ def _train_nn_seed(train, val, *, features, label, seed, epochs, run_id,
                      epochs=epochs, batch_size=config.BATCH_SIZE,
                      callbacks=[early], verbose=0)
 
+    # Magnitude head (EV sizing): same scaler, signed-return target.
+    mag = fit_nn_magnitude(train, val, features=features, mean=mean, std=std,
+                           seed=seed, epochs=epochs)
+
     run_dir = out_dir / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     model.save(run_dir / "model.keras")
+    mag.model.save(run_dir / "magnitude.keras")
     (run_dir / "scaler.json").write_text(json.dumps(
         {"mean": mean.to_dict(), "std": std.to_dict()}))
     (run_dir / "params.json").write_text(json.dumps(
         {"family": "nn", "seed": seed, "label": label, "features": features,
-         "arch": config.ARCHITECTURES[0], "lr": config.LEARNING_RATES[0]}))
+         "arch": config.ARCHITECTURES[0], "lr": config.LEARNING_RATES[0],
+         "magnitude_head": {"target": "net_return", "loss": "huber",
+                            "winsor_bounds": list(mag.bounds)}}))
     info = {"run_id": run_id, "val_loss": float(min(hist.history["val_loss"])),
-            "files": ["model.keras", "scaler.json", "params.json"]}
-    return info, {"model": model, "mean": mean, "std": std}
+            "files": ["model.keras", "magnitude.keras", "scaler.json", "params.json"]}
+    return info, {"model": model, "magnitude": mag.model, "mean": mean, "std": std}
 
 
 def _train_gbt_seed(train, val, *, features, label, seed, n_estimators, run_id,
@@ -128,13 +135,20 @@ def _train_gbt_seed(train, val, *, features, label, seed, n_estimators, run_id,
              eval_metric="auc",
              callbacks=[early_stopping(max(10, n_estimators // 10)), log_evaluation(0)])
 
+    mag = fit_gbt_magnitude(train, val, features=features, n_estimators=n_estimators,
+                            seed=seed)
+
     run_dir = out_dir / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
     joblib.dump(model, run_dir / "model.joblib")
+    joblib.dump(mag.model, run_dir / "magnitude.joblib")
     (run_dir / "params.json").write_text(json.dumps(
         {"family": "gbt", "seed": seed, "label": label, "features": features,
-         "n_estimators": n_estimators}))
-    return {"run_id": run_id, "files": ["model.joblib", "params.json"]}, {"model": model}
+         "n_estimators": n_estimators,
+         "magnitude_head": {"target": "net_return", "objective": "huber",
+                            "winsor_bounds": list(mag.bounds)}}))
+    return ({"run_id": run_id, "files": ["model.joblib", "magnitude.joblib", "params.json"]},
+            {"model": model, "magnitude": mag.model})
 
 
 def _ensemble_predict(family: str, members: list[dict], rows: pd.DataFrame,
@@ -143,6 +157,15 @@ def _ensemble_predict(family: str, members: list[dict], rows: pd.DataFrame,
     the deployed bundle produces. Delegates to the shared ``ensemble_score`` so
     the training-time and load-time scoring paths can never diverge."""
     return ensemble_score(family, members, rows, features)
+
+
+def _ensemble_ev(family: str, members: list[dict], rows: pd.DataFrame,
+                 features: list[str]) -> np.ndarray | None:
+    """Mean predicted expected return across the magnitude heads, or ``None``
+    when the members carry none (the ``ev`` mode then stays out of the grid)."""
+    if not members or any("magnitude" not in m or m["magnitude"] is None for m in members):
+        return None
+    return ensemble_ev(family, members, rows, features)
 
 
 def _atomic_swap(staging: Path, final: Path) -> None:
@@ -218,17 +241,21 @@ def main() -> None:
         if family == "nn":
             predictor = fit_nn(train, d[d["split"] == "val"], features=features,
                               label=args.label, seed=select_seeds[0], epochs=args.epochs)
-            preds = [predictor.predict(val_rows)]
-            for s in select_seeds[1:]:
-                p = fit_nn(train, d[d["split"] == "val"], features=features,
-                          label=args.label, seed=s, epochs=args.epochs)
-                preds.append(p.predict(val_rows))
-            pred = np.mean(preds, axis=0)
+            members_ = [predictor] + [
+                fit_nn(train, d[d["split"] == "val"], features=features,
+                       label=args.label, seed=s, epochs=args.epochs)
+                for s in select_seeds[1:]]
+            pred = np.mean([m.predict(val_rows) for m in members_], axis=0)
+            ev = (np.mean([m.predict_ev(val_rows) for m in members_], axis=0)
+                  if all(getattr(m, "predict_ev", None) for m in members_) else None)
         else:
             predictor = fit_gbt(train, d[d["split"] == "val"], features=features,
                                label=args.label, n_estimators=args.gbt_estimators)
             pred = predictor.predict(val_rows)
-        policy = choose_policy(val_rows, pred, spec, mark_stream=mark_stream)
+            ev_fn = getattr(predictor, "predict_ev", None)
+            ev = ev_fn(val_rows) if ev_fn else None
+        policy = choose_policy(val_rows, pred, spec, mark_stream=mark_stream,
+                               ev_predictions=ev)
         policy["family"] = family
         candidates.append(policy)
         ret = policy["metrics"]["total_return"]
@@ -279,7 +306,9 @@ def main() -> None:
     # val scores, whose distribution differs from the 5-seed proxy's.
     print("\n=== re-validating operating point on the full ensemble ===", flush=True)
     ens_val_pred = _ensemble_predict(family, members, val_rows, features)
-    final_policy = choose_policy(val_rows, ens_val_pred, spec, mark_stream=mark_stream)
+    ens_val_ev = _ensemble_ev(family, members, val_rows, features)
+    final_policy = choose_policy(val_rows, ens_val_pred, spec, mark_stream=mark_stream,
+                                 ev_predictions=ens_val_ev)
     mode, threshold = final_policy["mode"], final_policy["threshold"]
     metrics = final_policy["metrics"]
     flipped = bool(winner.get("eligible")) and not final_policy["eligible"]
@@ -292,9 +321,10 @@ def main() -> None:
     if not final_policy["eligible"]:
         shutil.rmtree(staging)
         print("\nNO ELIGIBLE CONFIG — the full ensemble did not clear the gate "
-              "(kept >= {}, beat baseline, maxDD <= {:.0%}). Nothing persisted; "
-              "any existing {} is untouched.".format(
-                  config.MIN_KEPT_TRADES, config.MAX_DRAWDOWN_CAP, FINAL_DIR.name))
+              "(kept >= {}, beat baseline, maxDD <= {:.0%}; modes tried: filter, rank{}). "
+              "Nothing persisted; any existing {} is untouched.".format(
+                  config.MIN_KEPT_TRADES, config.MAX_DRAWDOWN_CAP,
+                  ", ev" if ens_val_ev is not None else "", FINAL_DIR.name))
         raise SystemExit(1)
 
     # ── 5) write the ensemble config + a manifest covering the trained files ──
@@ -305,6 +335,8 @@ def main() -> None:
         "val_max_drawdown": metrics["max_drawdown"], "eligible": True,
         "baseline_return": final_policy.get("baseline_return"),
         "operating_point_source": "full-ensemble revalidation",
+        "magnitude_head": ens_val_ev is not None,
+        "ev_thresholds": list(config.EV_THRESHOLDS),
         "selection_basis": final_policy["selection_basis"],
         "select_seeds": select_seeds, "final_seeds": final_seeds,
         "baseline_config_hash": spec["config_hash"],

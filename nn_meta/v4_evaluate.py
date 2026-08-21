@@ -26,9 +26,11 @@ from nn_meta.baseline import load_spec
 from nn_meta.build_meta_dataset import META_FEATURES, V4_META_FEATURES
 from nn_meta.calibration import calibration_summary
 from nn_meta.diagnostics import decile_diagnostic
+from nn_meta.ev_sizing import (ev_candidate_rows, ev_selected_rows, evaluate_ev,
+                               magnitude_target)
 from nn_meta.feature_contract import assert_decision_safe
 from nn_meta.mark_stream import execution_frames, load_mark_stream, option_b_blockers
-from nn_meta.model import build_meta_mlp
+from nn_meta.model import build_magnitude_mlp, build_meta_mlp
 from nn_meta.multiple_testing import deflated_sharpe_from_trials
 from nn_meta.select_meta import (_EVALUATORS, _portfolio_sim, all_rows,
                                  frozen_mask, portfolio_metrics)
@@ -44,6 +46,23 @@ from nn_meta.v4_artifacts import (create_manifest, write_manifest,
 class Predictor:
     family: str
     predict: Callable[[pd.DataFrame], np.ndarray]
+    # Magnitude head (v4 EV sizing, 2026-08-21): predicted expected net return
+    # per row. ``None`` when no head was trained -> the ``ev`` mode is skipped.
+    predict_ev: Callable[[pd.DataFrame], np.ndarray] | None = None
+
+
+def winsor_bounds(values, quantiles=config.EV_WINSOR_QUANTILES) -> tuple[float, float]:
+    """Train-tail clip bounds for the magnitude target (computed on TRAIN only)."""
+    v = np.asarray(values, dtype=float)
+    v = v[np.isfinite(v)]
+    lo, hi = np.quantile(v, quantiles[0]), np.quantile(v, quantiles[1])
+    return float(lo), float(hi)
+
+
+def _magnitude_rows(rows: pd.DataFrame) -> pd.DataFrame:
+    """Rows with a realized signed return — the magnitude head's training set.
+    (Unexecuted proposals carry no ``net_return`` and cannot teach size.)"""
+    return rows[rows["net_return"].notna()].copy()
 
 
 def schema_features(schema: str) -> list[str]:
@@ -101,7 +120,43 @@ def fit_nn(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
         return model.predict(_matrix(rows, features, mean, std), batch_size=4096,
                              verbose=0).flatten()
 
-    return Predictor("nn", predict)
+    mag = fit_nn_magnitude(train, val, features=features, mean=mean, std=std,
+                           seed=seed, epochs=epochs)
+    return Predictor("nn", predict, mag.predict)
+
+
+def fit_nn_magnitude(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
+                     mean: pd.Series, std: pd.Series, seed: int, epochs: int
+                     ) -> Predictor:
+    """Magnitude head: regress the signed realized return (winsorized on the
+    train tail) with the classifier's scaler, so the two heads see identical
+    inputs. Returns a Predictor whose ``predict`` is the expected return."""
+    import tensorflow as tf
+
+    train_m, val_m = _magnitude_rows(train), _magnitude_rows(val)
+    if train_m.empty or val_m.empty:
+        raise ValueError("magnitude head requires executed train and validation rows")
+    lo, hi = winsor_bounds(magnitude_target(train_m["net_return"]))
+    y_train = np.clip(magnitude_target(train_m["net_return"]), lo, hi).astype("float32")
+    y_val = np.clip(magnitude_target(val_m["net_return"]), lo, hi).astype("float32")
+    x_train, x_val = _matrix(train_m, features, mean, std), _matrix(val_m, features, mean, std)
+    tf.keras.utils.set_random_seed(seed + 10_000)
+    model = build_magnitude_mlp(len(features), config.ARCHITECTURES[0], config.LEARNING_RATES[0])
+    early = tf.keras.callbacks.EarlyStopping(
+        monitor="val_loss", patience=max(3, min(12, epochs // 4)),
+        restore_best_weights=True,
+    )
+    model.fit(x_train, y_train, validation_data=(x_val, y_val),
+              epochs=epochs, batch_size=config.BATCH_SIZE, callbacks=[early], verbose=0)
+
+    def predict(rows: pd.DataFrame) -> np.ndarray:
+        return model.predict(_matrix(rows, features, mean, std), batch_size=4096,
+                             verbose=0).flatten()
+
+    pred = Predictor("nn", predict)
+    pred.model = model            # persisted by v4_finalize
+    pred.bounds = (lo, hi)
+    return pred
 
 
 def fit_gbt(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
@@ -123,7 +178,35 @@ def fit_gbt(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
     model.fit(train[features], train[label].astype(int),
               eval_set=[(val[features], val[label].astype(int))], eval_metric="auc",
               callbacks=[early_stopping(max(10, n_estimators // 10)), log_evaluation(0)])
-    return Predictor("gbt", lambda rows: model.predict_proba(rows[features])[:, 1])
+    mag = fit_gbt_magnitude(train, val, features=features, n_estimators=n_estimators)
+    return Predictor("gbt", lambda rows: model.predict_proba(rows[features])[:, 1],
+                     mag.predict)
+
+
+def fit_gbt_magnitude(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
+                      n_estimators: int, seed: int = 0) -> Predictor:
+    """LightGBM magnitude head (Huber objective on the winsorized signed return)."""
+    from lightgbm import LGBMRegressor, early_stopping, log_evaluation
+
+    train_m, val_m = _magnitude_rows(train), _magnitude_rows(val)
+    if train_m.empty or val_m.empty:
+        raise ValueError("magnitude head requires executed train and validation rows")
+    lo, hi = winsor_bounds(magnitude_target(train_m["net_return"]))
+    y_train = np.clip(magnitude_target(train_m["net_return"]), lo, hi)
+    y_val = np.clip(magnitude_target(val_m["net_return"]), lo, hi)
+    model = LGBMRegressor(
+        objective="huber", alpha=0.5,
+        n_estimators=n_estimators, learning_rate=0.02, num_leaves=31,
+        subsample=0.8, colsample_bytree=0.8, min_child_samples=200,
+        reg_lambda=1.0, random_state=seed, n_jobs=-1, verbosity=-1,
+    )
+    model.fit(train_m[features], y_train, eval_set=[(val_m[features], y_val)],
+              eval_metric="l1",
+              callbacks=[early_stopping(max(10, n_estimators // 10)), log_evaluation(0)])
+    pred = Predictor("gbt", lambda rows: model.predict(rows[features]))
+    pred.model = model
+    pred.bounds = (lo, hi)
+    return pred
 
 
 def fit_family(family: str, train: pd.DataFrame, val: pd.DataFrame, *,
@@ -139,7 +222,30 @@ def fit_family(family: str, train: pd.DataFrame, val: pd.DataFrame, *,
                      epochs=epochs) for seed in seeds]
     if not models:
         raise ValueError("NN requires at least one seed")
-    return Predictor("nn", lambda rows: np.mean([m.predict(rows) for m in models], axis=0))
+    ev = None
+    if all(m.predict_ev is not None for m in models):
+        ev = lambda rows: np.mean([m.predict_ev(rows) for m in models], axis=0)
+    return Predictor("nn", lambda rows: np.mean([m.predict(rows) for m in models], axis=0),
+                     ev)
+
+
+def policy_predictions(predictor: Predictor, rows: pd.DataFrame, mode: str) -> np.ndarray:
+    """The score a policy of ``mode`` decides on: P(win) for filter/rank, the
+    magnitude head's expected return for ``ev``."""
+    if mode == config.EV_MODE:
+        if predictor.predict_ev is None:
+            raise ValueError("ev policy selected but the predictor has no magnitude head")
+        return predictor.predict_ev(rows)
+    return predictor.predict(rows)
+
+
+def evaluate_policy(mode: str, rows: pd.DataFrame, pred: np.ndarray,
+                    threshold: float) -> dict:
+    """Shared-simulator metrics for any mode (filter / rank / ev)."""
+    if mode == config.EV_MODE:
+        return evaluate_ev(rows, pred, threshold, k=config.MAX_CONCURRENT,
+                           f=config.PORTFOLIO_FRACTION)
+    return _EVALUATORS[mode](rows, pred, threshold)
 
 
 def _policy_rank(policy: dict) -> tuple[bool, float]:
@@ -160,19 +266,40 @@ def _select_winner(selected: list[dict]) -> dict:
     return max(selected, key=_policy_rank)
 
 
+def _passes_gate(metrics: dict, baseline: dict) -> bool:
+    """The eligibility gate, identical for every mode: kept >= MIN_KEPT_TRADES,
+    beat the frozen baseline, maxDD <= MAX_DRAWDOWN_CAP."""
+    return bool(
+        metrics["n_kept"] >= config.MIN_KEPT_TRADES
+        and metrics["total_return"] is not None
+        and (baseline["total_return"] is None
+             or metrics["total_return"] > baseline["total_return"])
+        and (metrics["max_drawdown"] or 0) <= config.MAX_DRAWDOWN_CAP
+    )
+
+
 def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                   thresholds: Iterable[float] = config.KEEP_THRESHOLDS,
                   mark_stream: pd.DataFrame | None = None,
-                  costs: CostScenario = BASE_COSTS) -> dict:
+                  costs: CostScenario = BASE_COSTS,
+                  ev_predictions: np.ndarray | None = None,
+                  ev_thresholds: Iterable[float] = config.EV_THRESHOLDS) -> dict:
     """Choose mode and threshold on validation only.
 
     With ``mark_stream`` supplied (Option B), every candidate policy — and the
     frozen baseline it must beat — is scored through the mark-to-market ledger
     instead of the legacy shared simulator, so SELECTION itself sees the
     interim mark path. Without a stream the legacy behavior is bit-identical.
+
+    With ``ev_predictions`` (the magnitude head's expected return per row) the
+    ``ev`` mode joins the grid: rank-and-size by EV at each ``ev_thresholds``
+    cut, through the same gate and (if supplied) the same ledger. Without it
+    the grid is exactly filter × rank as before.
     """
     if len(rows) != len(predictions):
         raise ValueError("row/prediction length mismatch")
+    if ev_predictions is not None and len(rows) != len(ev_predictions):
+        raise ValueError("row/ev prediction length mismatch")
     fmask = frozen_mask(rows, spec)
     ledger = mark_stream is not None
     if ledger:
@@ -196,15 +323,20 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                 "threshold": float(threshold),
                 "metrics": metrics,
                 "baseline_return": baseline["total_return"],
-                "eligible": (
-                    metrics["n_kept"] >= config.MIN_KEPT_TRADES
-                    and metrics["total_return"] is not None
-                    and (
-                        baseline["total_return"] is None
-                        or metrics["total_return"] > baseline["total_return"]
-                    )
-                    and (metrics["max_drawdown"] or 0) <= config.MAX_DRAWDOWN_CAP
-                ),
+                "eligible": _passes_gate(metrics, baseline),
+            })
+    if ev_predictions is not None:
+        ev_rows = rows.reset_index(drop=True)
+        ev_pred = np.asarray(ev_predictions, dtype=float)
+        for threshold in ev_thresholds:
+            metrics = (_ledger_policy_metrics(ev_rows, ev_pred, config.EV_MODE,
+                                              float(threshold), mark_stream, costs=costs)
+                       if ledger else
+                       evaluate_policy(config.EV_MODE, ev_rows, ev_pred, float(threshold)))
+            candidates.append({
+                "mode": config.EV_MODE, "threshold": float(threshold),
+                "metrics": metrics, "baseline_return": baseline["total_return"],
+                "eligible": _passes_gate(metrics, baseline),
             })
     # An eligible policy always outranks an ineligible one; ties break on
     # validation return. When nothing clears the gate the least-bad candidate
@@ -221,6 +353,8 @@ def _candidate_rows(rows: pd.DataFrame, pred: np.ndarray, mode: str,
                     threshold: float) -> pd.DataFrame:
     """Thresholded (and, for rank, DTE-deduped) candidate pool for one policy,
     matching the shared filter/rank evaluators."""
+    if mode == config.EV_MODE:
+        return ev_candidate_rows(rows, pred, threshold)
     cands = rows.assign(pred=pred)
     cands = cands[cands["pred"] >= threshold]
     if mode == "rank":
@@ -229,8 +363,12 @@ def _candidate_rows(rows: pd.DataFrame, pred: np.ndarray, mode: str,
     return cands
 
 
-def _selected_rows(cands: pd.DataFrame) -> pd.DataFrame:
-    """Rows the shared slot portfolio actually enters (its own slot decision)."""
+def _selected_rows(cands: pd.DataFrame, mode: str = "rank") -> pd.DataFrame:
+    """Rows the slot portfolio actually enters (its own slot decision). For the
+    ``ev`` mode the EV-sized portfolio decides and each row carries its
+    ``size_fraction`` for the ledger."""
+    if mode == config.EV_MODE:
+        return ev_selected_rows(cands, config.MAX_CONCURRENT, config.PORTFOLIO_FRACTION)
     cands = cands.dropna(subset=["entry_ts", "exit_ts", "net_return"])
     if cands.empty:
         return cands
@@ -250,7 +388,7 @@ def marked_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
     per-contract mark path rather than the final ``net_return``.  Returns
     ``None`` when the portfolio enters nothing.
     """
-    selected = _selected_rows(_candidate_rows(rows, pred, mode, threshold))
+    selected = _selected_rows(_candidate_rows(rows, pred, mode, threshold), mode)
     if selected.empty:
         return None
     trades, marks = execution_frames(selected, mark_stream)
@@ -278,7 +416,7 @@ def _ledger_policy_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
              "max_drawdown": None, "win_rate": None, "mean_return": None,
              "per_trade_sharpe": None, "total_ex_top3": None,
              "cost_scenario": costs.name, "basis": "ledger"}
-    selected = _selected_rows(_candidate_rows(rows, pred, mode, threshold))
+    selected = _selected_rows(_candidate_rows(rows, pred, mode, threshold), mode)
     if selected.empty:
         return empty
     trades, marks = execution_frames(selected, mark_stream)
@@ -347,7 +485,9 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
                                features=features, label=label, seeds=seeds,
                                epochs=epochs, gbt_estimators=gbt_estimators)
         policy = choose_policy(val_rows, predictor.predict(val_rows), spec,
-                               mark_stream=mark_stream)
+                               mark_stream=mark_stream,
+                               ev_predictions=(predictor.predict_ev(val_rows)
+                                               if predictor.predict_ev else None))
         policy["family"] = family
         fitted[family] = predictor
         selected.append(policy)
@@ -355,6 +495,9 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
     winner = _select_winner(selected)
     family = winner["family"]
     test_pred = fitted[family].predict(test_rows)
+    # The score the winning POLICY decides on (EV for the ev mode) — P(win)
+    # still drives calibration and the score-decile diagnostic below.
+    test_policy_pred = policy_predictions(fitted[family], test_rows, winner["mode"])
     # Calibration is fit on the winner's validation predictions only, then
     # scored on test — the test labels never inform the mapping.
     calibration = calibration_summary(
@@ -362,32 +505,38 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         test_rows[label], test_pred, method="auto")
     fmask = frozen_mask(test_rows, spec)
     test_eval_rows = test_rows[fmask].reset_index(drop=True) if winner["mode"] == "filter" else test_rows
-    test_eval_pred = test_pred[fmask] if winner["mode"] == "filter" else test_pred
-    winner_test = _EVALUATORS[winner["mode"]](test_eval_rows, test_eval_pred,
-                                                winner["threshold"])
+    test_eval_pred = test_policy_pred[fmask] if winner["mode"] == "filter" else test_policy_pred
+    winner_test = evaluate_policy(winner["mode"], test_eval_rows, test_eval_pred,
+                                  winner["threshold"])
     winner_marked = (marked_metrics(test_eval_rows, test_eval_pred,
                                     winner["mode"], winner["threshold"], mark_stream)
                      if mark_stream is not None else None)
     # Deflate the winner's test Sharpe by the whole grid of tried configurations.
     trial_sharpes = [s for p in selected for s in p.get("candidate_sharpes", [])]
     entered_test = _selected_rows(_candidate_rows(
-        test_eval_rows, test_eval_pred, winner["mode"], winner["threshold"]))
+        test_eval_rows, test_eval_pred, winner["mode"], winner["threshold"]),
+        winner["mode"])
     deflated = deflated_sharpe_from_trials(
         entered_test["net_return"] if len(entered_test) else [], trial_sharpes)
     # Track the v3.1 top-decile inversion (win rate up, mean return down) on
     # the full test candidate pool for the winning family.
     score_deciles = decile_diagnostic(test_pred, test_rows["net_return"])
+    # Same diagnostic on the magnitude head: the EV head earns its place only
+    # if ITS top deciles stop inverting (mean return rising with predicted EV).
+    ev_deciles = (decile_diagnostic(fitted[family].predict_ev(test_rows),
+                                    test_rows["net_return"])
+                  if fitted[family].predict_ev is not None else None)
 
     by_model = {}
     for policy in selected:
         family = policy["family"]
-        pred = fitted[family].predict(test_rows)
+        pred = policy_predictions(fitted[family], test_rows, policy["mode"])
         frows = test_rows[fmask].reset_index(drop=True) if policy["mode"] == "filter" else test_rows
         fpred = pred[fmask] if policy["mode"] == "filter" else pred
         by_model[family] = {
             "mode": policy["mode"], "threshold": policy["threshold"],
             "validation": policy["metrics"],
-            "test": _EVALUATORS[policy["mode"]](frows, fpred, policy["threshold"]),
+            "test": evaluate_policy(policy["mode"], frows, fpred, policy["threshold"]),
         }
     return {
         "schema": schema, "purged": purged, "embargo": embargo,
@@ -400,7 +549,7 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
                    "baseline_return": winner.get("baseline_return"),
                    "test": winner_test, "marked": winner_marked,
                    "calibration": calibration, "deflated_sharpe": deflated,
-                   "score_deciles": score_deciles},
+                   "score_deciles": score_deciles, "ev_deciles": ev_deciles},
         "models": by_model,
     }
 
@@ -473,16 +622,18 @@ def _write_report(results: list[dict], output: Path) -> None:
             lines.append(f"| {i} | {d['sharpe']:.3f} | {d['n_trials']} | "
                          f"{d['expected_max_sharpe']:.3f} | {d['deflated_sharpe']:.3f} |")
     for i, result in enumerate(results, 1):
-        diag = result["winner"].get("score_deciles")
-        if not diag:
-            continue
-        flag = " ⚠ top-decile inversion" if diag["inverted"] else ""
-        lines += ["", f"## Score deciles (run {i}, winner test){flag}", "",
-                  "| decile | n | mean score | win rate | mean return |",
-                  "|---|---|---|---|---|"]
-        for d in diag["deciles"]:
-            lines.append(f"| {d['decile']} | {d['n']} | {d['mean_score']:.3f} | "
-                         f"{d['win_rate']:.3f} | {d['mean_return']:+.4f} |")
+        for key, title in (("score_deciles", "Score deciles"),
+                           ("ev_deciles", "EV-head deciles (predicted expected return)")):
+            diag = result["winner"].get(key)
+            if not diag:
+                continue
+            flag = " ⚠ top-decile inversion" if diag["inverted"] else ""
+            lines += ["", f"## {title} (run {i}, winner test){flag}", "",
+                      "| decile | n | mean score | win rate | mean return |",
+                      "|---|---|---|---|---|"]
+            for d in diag["deciles"]:
+                lines.append(f"| {d['decile']} | {d['n']} | {d['mean_score']:.3f} | "
+                             f"{d['win_rate']:.3f} | {d['mean_return']:+.4f} |")
     output.write_text("\n".join(lines) + "\n")
     output.with_suffix(".json").write_text(json.dumps(results, indent=2, default=_json_default))
 

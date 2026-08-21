@@ -258,7 +258,14 @@ MIN_PASSING_SEEDS = 20        # of 40 seeds: require a majority to clear the gat
 #          compete on score (DTE variants of one trade dedupe to the
 #          best-scored); up to MAX_CONCURRENT slots, PORTFOLIO_FRACTION of
 #          equity each, P&L applied at each position's exit
+# ev     : (v4, 2026-08-21) rank AND size by the magnitude head's predicted
+#          expected return — same slot count, per-name cap PORTFOLIO_FRACTION,
+#          so it can only de-risk low-EV names. Joins the grid only when an EV
+#          prediction is supplied (legacy callers stay bit-identical).
 EVAL_MODES = ["filter", "rank"]
+EV_MODE = "ev"
+EV_THRESHOLDS = [0.0, 0.05, 0.10]          # predicted expected return (net, per trade)
+EV_WINSOR_QUANTILES = (0.01, 0.99)         # magnitude-head target clipped on train
 MAX_CONCURRENT = 5
 PORTFOLIO_FRACTION = 0.10
 RANK_QUINTILES = 5                         # rank-calibration report buckets
