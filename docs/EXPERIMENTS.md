@@ -27,6 +27,51 @@ per-expert performance.
 | v4 | **2026-08-16** | v31 causal, gbt/filter thr 0.5 (Option A bundle) | `.v4_paper_ledger.json` on server | **live — paper mode**; bundle hot-swaps after the Option B re-finalize |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-20 — v4 ledger re-runs on the VERIFIED dataset (GCP, image `493af85`)
+
+First unconfounded ledger evaluation: dataset proven identical to stage-0, so
+every delta below is the ledger/config, not the data. Both legs SUCCEEDED in
+~30 min (e2-standard-8 STANDARD). Outputs + SHA256SUMS:
+`out/evaluate-20260821T041241Z-49460/` (ablation),
+`out/evaluate-20260821T041248Z-44b40/` (folds 3).
+
+**Ablation** (schema x purged; marked = ledger, all rows 🄻):
+
+| run | schema | purged | gate | test return | maxDD | marked |
+|---|---|---|---|---|---|---|
+| 1 | legacy | no | ✓ | +140.7% | 15.0% | +140.9% / 19.4% |
+| 2 | v4 | no | ✓ | +52.5% | 32.2% | +54.3% / 35.7% |
+| 3 | legacy | yes | ⚠ none cleared | -44.4% | 62.7% | -41.0% / 62.7% |
+| 4 | v4 | yes | ⚠ none cleared | +82.0% | 17.3% | +84.1% / 25.4% |
+
+- **Run 1 reproduces stage-0** (+140.7%/15.0% vs stage-0 +136.6%/15.0%) —
+  closing the loop: same data in, same numbers out, and the void run's +64.4%
+  is confirmed as pure corruption artifact.
+- The ledger is not flattering: marked tracks sim closely with slightly HIGHER
+  maxDD everywhere (e.g. 15.0→19.4). It is doing its job.
+- **Both purged rows now FAIL the validation gate** (the void run claimed all
+  gates passed — retroactively another corruption artifact). Their test numbers
+  are diagnostic only. Purged-legacy collapsed outright (-44.4%/62.7%).
+- Deflated Sharpe, winners: 0.791 / 0.533 / 0.001 / 0.424.
+
+**Walk-forward, 3 folds** (v4 purged, all gates ✓):
+
+| fold | test return | maxDD | marked | dSharpe |
+|---|---|---|---|---|
+| 1 | +177.4% | 18.8% | +183.0% / 24.6% | 0.803 |
+| 2 | +354.3% | 48.7% | +421.1% / 45.7% | 0.816 |
+| 3 | **-15.4%** | 38.9% | **-13.2% / 43.0%** | 0.076 |
+
+**VERDICT on the two open questions:**
+1. **Fold 3 is REAL, not a data artifact.** On clean data it still loses money
+   (-13.2% marked), still has the worst maxDD (43.0%), and the report itself
+   flags a top-decile inversion (decile-10 win rate 0.493 vs decile-2 return
+   2x decile-10's). The most recent fold does not work. DO NOT finalize until
+   this is understood — regime, capacity, or genuine decay.
+2. **`prem_spot` remains OPEN.** This ablation report contains no feature-drop
+   section (verified in md and json) — the 08-19 finding came from a different
+   invocation. Needs its own run before it can be called resolved or refuted.
+
 ## 2026-08-20 — dataset rebuild verified IDENTICAL to stage-0 (diff gate, image `493af85`)
 
 **VERDICT: the missing-frames mechanism explains 100% of the 2026-08-19

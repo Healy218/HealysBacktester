@@ -21,11 +21,16 @@ Report + input hashes: `out/diff-20260821T040444Z-43e30/`. Verdict logged in
 `docs/EXPERIMENTS.md` (2026-08-20). Candidate sha256 `155bae9e…` — pin this
 when comparing future builds.
 
-**NEXT ACTION: the two evaluate re-runs** (ablation + folds 3), on Batch,
-image `493af85`, per the commands below — NOT yet submitted, awaiting the user.
-After them: the two open questions (fold-3 maxDD, inverted `prem_spot`), then
-finalize. The archive prefix can be deleted once the evaluate runs land, but
-keep it until then.
+**EVALUATE RE-RUNS DONE 2026-08-20 23:40 CDT** — both SUCCEEDED on the
+verified dataset (`v4-evaluate-493af85-231023/-231024`); full tables + verdict
+in `docs/EXPERIMENTS.md` (second 2026-08-20 entry). Headlines: run 1
+reproduces stage-0 (+140.7% vs +136.6%, closing the loop); the ledger tracks
+sim with slightly higher maxDD (honest, working); both purged ablation rows
+now FAIL the validation gate (the void run's "all gates passed" was itself a
+corruption artifact). **FOLD 3 IS REAL: -13.2% marked, 43.0% maxDD, top-decile
+inversion, on clean data. DO NOT FINALIZE until fold 3 is understood.**
+`prem_spot` remains OPEN — this ablation has no feature-drop section; it needs
+its own run. The archive prefix may now be deleted, but there is no rush.
 
 ## (superseded) the rebuild as it was planned — `marks-build-d64ca9b-010138`
 
