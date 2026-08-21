@@ -59,6 +59,35 @@ with `magnitude.*` files exists in `.../model_final_v4/` → pull it with
 The session watcher polls every 10 min; it dies with the session — if so, the
 jobs don't care; check `gcloud batch jobs list --project=healys-batch`.
 
+## spx0 / VSPNDX — WIRED 2026-08-21 (block 1c), launching on Batch
+
+Built while the v4 jobs ran. Design: `docs/specs/SPX0_SPEC.md` (read it —
+it records what the data forced: no bid/ask in the archive → depth-gated
+fills at High/Low prints; settlement by put-call-parity-implied index level;
+position key `(index, right)`; dollar costs in points; no upside cap).
+Code: `nn_meta/spx0/{contracts,fills,costs,build_dataset,evaluate,config}.py`,
+13 tests (suite 438). `v4_evaluate` gained `schema="spx0"`, `dd_cap`,
+`thresholds` kwargs (legacy paths unchanged, tests green).
+
+Local smokes (code path only, box untrusted): 80 sessions → 2,666
+proposals, 1,465 filled (55% — depth rejects are real), 67k marks, 36 s;
+evaluate `--smoke` ran 2 folds through the LEDGER (marked metrics
+populated). Base facts: win rate ~18-27%, mean net −25%, "take everything"
+baseline ≈ −85% — this seat lives or dies on selection, as the spec says.
+
+Launch (image from `27adf68`, build in progress at handoff time):
+`TASK_MODE=spx0 EXTRA_ARGS="--folds 3 --seeds 0,1,2,3,4 --epochs 60
+--gbt-estimators 600" PROJECT=healys-batch BUCKET=gs://healys-backtester
+IMAGE_TAG=27adf68 MACHINE=e2-standard-8 bash deploy/gcp/submit.sh 1`.
+Output: `out/spx0-<stamp>/artifacts_spx0/reports/spx0_walkforward_report.md`.
+Read the gate column and the marked column; a ⚠ on every fold is a real
+verdict (the model can't pick winners out of a −85% book), not a bug.
+
+Open design items for the next session (not blockers): the exit policy is
+one fixed variant (`s50_nocap`) — stop fraction should become a fold-
+selectable grid like DTE was; strategies use the v31-frozen SPY/QQQ params
+on 5m bars (not re-swept for 5m); `spx0_` features are minimal.
+
 ## Standing warnings (unchanged)
 
 - **Do NOT run training/finalize on this box** — proven single-bit RAM

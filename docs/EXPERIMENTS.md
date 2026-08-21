@@ -6,6 +6,23 @@ edge and a lottery ticket. Full detail lives in each row's report path.
 When the expert panel goes live, the second table tracks realized (paper)
 per-expert performance.
 
+## 2026-08-21 — EV head wired; v4 evaluate×2 + finalize relaunched on Batch; spx0 seat wired
+
+**v4 magnitude/EV head** (`c17193c`): regression head per family (Huber on
+signed `net_return` winsorized at train 1/99% — raw max is 1526×), `ev`
+policy mode through shared sim AND ledger (per-trade `size_fraction` ≤ slot),
+persisted per seed, loader/scanner threshold on the bundle's own decision
+score. Gate unchanged. Local `--smoke` (untrusted box, code path only): both
+heads trained; `ev/0.05` won the GBT family on validation; EV-head deciles
+monotone with top decile best. Batch jobs (STANDARD, `e2-standard-8` after
+`n2` and `n2d` pools were exhausted in us-central1): `v4-evaluate-c17193c-113654`
+(folds 3), `-113658` (ablation), `v4-finalize-c17193c-113702`. **Verdict
+pending** — fill in from `out/{evaluate,finalize}-*-c17193c*/`.
+
+**spx0 seat** (`27adf68`): builder + fills + costs + evaluate, see HANDOFF
+and `docs/specs/SPX0_SPEC.md`. 80-session local smoke: 55% fill rate, win
+rate ~18-27%, baseline ≈ −85%. **Verdict pending** from the Batch run.
+
 ## Backtest / walk-forward verdicts
 
 | Gen | Date | Data regime | Verdict | Headline | Ex-outlier signature | Detail |
