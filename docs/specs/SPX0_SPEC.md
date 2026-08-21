@@ -107,3 +107,39 @@ dirs) already works by construction.
 4. `nn_meta/spx0/build_dataset.py` — per-session builder → rows + marks.
 5. config pool branch + feature declarations + `TASK_MODE=spx0-build`.
 Nothing launches on Batch before 1–4 are green.
+
+## Second design round (planned 2026-08-21, after the first verdict)
+
+The first design — long ATM 0DTE on the v31 daily-swing strategies run on
+5m proxy bars — lost every fold after costs (`docs/EXPERIMENTS.md`
+2026-08-21). The model ranks; nothing clears ~40% round-trip friction on
+a ~0.30 premium. Levers, in the order they attack that number:
+
+1. **Sell premium (short the contract).** Flips who pays the friction and
+   the base rate (~75-80% wins). NOT a sign flip of the builder:
+   - A short's loss is unbounded; the ledger debits cash at entry and
+     marks value (long semantics). A short position needs a **margin
+     notion**: `size_fraction` becomes the margin posted, and the
+     position's max loss is capped at that margin by a hard stop
+     (`stop_frac > 1`, e.g. 2.0-3.0× premium) — the stop IS the
+     risk-limit, selected in-fold.
+   - `gross_return` on a short = (entry − exit) / margin, so returns
+     stay in the ledger's per-position units and the DD cap still means
+     what it says.
+   - `spx0_rv_30/60` are the right features for it; realized vol at
+     entry vs premium-implied move is the new feature to add.
+   - Cash settlement at 16:00 stays (intrinsic against the parity-implied
+     level), now as the short's payout.
+2. **Exit-policy grid** (open item): `stop_frac` ∈ {0.3, 0.5, 0.7} long /
+   {1.5, 2.0, 3.0} short, fold-selectable like DTE was. Cheap; do with 1.
+3. **Intraday-native strategies**: VWAP reversion, opening-range breakout
+   (15/30 min), gap-fill. Params swept INSIDE folds; the v31 daily params
+   on 5m bars are unswept and were a placeholder.
+4. **Lower signal bar (1m)**: only after 1 shows life — every extra trade
+   pays the same toll, so more trades on a dead design lose faster.
+5. **More data (back to 2022)**: a Polygon flat-file pull, ~850 MB per 2y.
+   Worth it for the short seat's tail risk (2022 bear regime), pointless
+   for a long seat that already loses in calm markets.
+
+Each is its own Batch experiment (<$2). Sequence: 1+2 → verdict → 3 →
+verdict → 5.

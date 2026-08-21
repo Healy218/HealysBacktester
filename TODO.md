@@ -77,10 +77,14 @@ head on signed `net_return`, one new mode `ev`, gate unchanged.
 - [x] Tests (suite 425 green, self-contained): ev mode in the grid, ledger
   per-trade sizing, bundle round-trip with a magnitude head, legacy path
   unchanged.
-- [~] Image `c17193c` built; `v4-evaluate-c17193c-113654` (folds 3),
-  `-112909` (ablation), `v4-finalize-c17193c-113702` on Batch since
-  2026-08-21 11:29 CDT (STANDARD, `e2-standard-8`, all three in parallel).
-  Gate decides: bundle → V118 deploy-alongside; refusal → v4 waits, log it.
+- [x] Image `c17193c` ran 2026-08-21: walk-forward `ev` won all 3 folds,
+  inversion gone; **finalize REFUSED on the 40% DD cap** (ev/0.05, val
+  +605%, eligible=False). EXPERIMENTS 2026-08-21.
+- [~] **Drawdown-aware gross brake on EV sizing** (`0c74274`, user decision
+  2026-08-21): `gross_scale = max(0.25, 1 − dd_now/dd_brake)`, brakes
+  {None, 0.20, 0.30} in the ev grid, same gate. Suite 443. Image built →
+  `v4-evaluate --folds 3` + `v4-finalize` on Batch. Gate decides: bundle →
+  V118 deploy-alongside; refusal → v4 waits, log it.
 
 ## 1c — spx0 / VSPNDX seat (starts WHILE 1b runs on Batch)
 
@@ -94,6 +98,11 @@ three pieces below exist; build them in this order, each tested:
 - [x] Cost accounting (`nn_meta/spx0/costs.py`, dollar fees + point spreads, base/stressed; 25% cap via `dd_cap`): index fees + spreads on small premiums through the
   stage-2 ledger; 25% max-DD gate; no upside cap.
 - [x] `TASK_MODE=spx0` in `deploy/gcp/`; ran 2026-08-21 (`spx0-run-27adf68-115405`): **no edge after costs** — first design rejected, see EXPERIMENTS. Seat parked pending a different design (sell premium / OTM / 5m re-sweep).
+- [ ] **Second design round** (plan: `docs/specs/SPX0_SPEC.md` "Second design
+  round"): (1) sell-premium path with margin-as-size and a hard loss cap via
+  `stop_frac > 1`; (2) `stop_frac` fold-selectable grid; → Batch run →
+  verdict; then (3) VWAP-reversion / ORB / gap-fill swept in-fold; then
+  (5) extend data to 2022 for the short seat's tail regime.
 
 ## 2 — v4 live scoring path — DONE 2026-08-16 (`nn_meta/live/v4_scan.py`)
 

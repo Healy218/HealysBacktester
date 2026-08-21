@@ -201,3 +201,21 @@ entry, never edit history).
   Discord/Telegram scraping rejected outright (closed, unarchivable).
 - **2026-07-08 — Hetzner CX33 over Oracle free tier** (ARM capacity
   unavailable; user declined the PAYG card hold).
+
+## 2026-08-21 (evening) — Drawdown-aware gross brake on EV sizing
+
+**Decision (user):** after the EV head fixed selection but the full
+ensemble refused on the 40% DD cap, add a drawdown-aware gross scaler to
+EV sizing and run it on Batch; the cap stays at 40%; no override.
+
+**Definition:** at each entry, every new EV-sized position is multiplied by
+`max(0.25, 1 − dd_now/dd_brake)`, `dd_now` = the EV portfolio's own
+realized drawdown at that moment. Brake ∈ {None, 0.20, 0.30}, fold-selectable
+beside the EV threshold through the unchanged gate. Only shrinks gross.
+
+**Rejected:** raising the cap (already on the record); vol-targeting on the
+underlying (needs a realized-vol series the selection path doesn't carry
+yet — revisit if the brake isn't enough); a brake on the MARKED drawdown
+inside the ledger (would make sizing depend on the accounting layer; the
+realized-equity brake is simpler and tracks marked DD within ~6 pts on the
+fold-2 evidence).
