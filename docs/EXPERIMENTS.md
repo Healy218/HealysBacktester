@@ -27,6 +27,32 @@ per-expert performance.
 | v4 | **2026-08-16** | v31 causal, gbt/filter thr 0.5 (Option A bundle) | `.v4_paper_ledger.json` on server | **live — paper mode**; bundle hot-swaps after the Option B re-finalize |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-21 — v4_finalize REFUSED: no eligible config on the recent tail
+
+`v4-finalize-493af85-010321` (verified dataset, image `493af85`, e2-standard-8):
+all 40 GBT seeds trained (AUC ~0.598 each), the operating point was re-validated
+on the full ensemble, and the gate refused to persist:
+
+    ensemble winner: filter/thr=0.5  val_return=+22.5%  n_kept=78  eligible=False
+    NO ELIGIBLE CONFIG — (kept >= 10, beat baseline, maxDD <= 40%).
+    Nothing persisted; any existing model_final_v4 is untouched.
+
+n_kept=78 passes, so it failed on **beat-baseline or the 40% maxDD cap** (the
+log does not print which; no report file is written on the refusal path — only
+SHA256SUMS landed in `out/finalize-20260821T061654Z-48940/`). Note finalize
+validates on the MOST RECENT TAIL of all data (`_final_split`) — i.e. exactly
+the fold-3 regime — so this is the fold-3 weakness caught by the last line of
+defense, consistent with both purged ablation rows failing validation gates.
+Two attempts, same result (RETRIES=1 → two output stamps).
+
+**VERDICT: there is no V118 bundle to deploy.** The gate working as designed.
+Paths forward: (a) fix the payoff-size inversion (magnitude-aware labels,
+approved backlog 2026-07-19) and re-finalize; (b) explicitly loosen the gate
+(`MIN_KEPT_TRADES`/`MAX_DRAWDOWN_CAP`/baseline rule in nn_meta/config.py) — a
+deliberate override of a designed safety, user's call only; (c) proceed to
+VSPNDX and revisit v4 after the label work. Deploy-alongside doctrine cannot
+apply: finalize refuses to even produce the artifact.
+
 ## 2026-08-21 — fold-3 dig: March shock + failure to re-engage, NOT decay
 
 Anatomy of the fold-3 loss (test window 2026-03-06 → 2026-07-02), from the

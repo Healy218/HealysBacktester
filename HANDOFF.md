@@ -21,6 +21,19 @@ Report + input hashes: `out/diff-20260821T040444Z-43e30/`. Verdict logged in
 `docs/EXPERIMENTS.md` (2026-08-20). Candidate sha256 `155bae9e…` — pin this
 when comparing future builds.
 
+**FINALIZE REFUSED 2026-08-21 01:33 CDT — NO V118 BUNDLE EXISTS.**
+`v4-finalize-493af85-010321` trained all 40 seeds, then the gate declined:
+ensemble winner filter/0.5, val_return +22.5%, n_kept 78, eligible=False
+(failed beat-baseline or the 40% maxDD cap — the refusal path prints no
+report). Finalize validates on the most recent tail = the fold-3 regime, so
+this is the fold-3 weakness caught at the last gate, and it matches the purged
+ablation rows failing validation. Nothing persisted; the server is untouched.
+The user's V118-alongside plan is BLOCKED at the artifact level — options
+(fix labels / explicit gate override / defer to VSPNDX) are logged in
+`docs/EXPERIMENTS.md` 2026-08-21 finalize entry. Awaiting the user's morning
+decision. Fold-3 dig verdict (March shock + size inversion, not decay):
+`docs/EXPERIMENTS.md` 2026-08-21 first entry.
+
 **EVALUATE RE-RUNS DONE 2026-08-20 23:40 CDT** — both SUCCEEDED on the
 verified dataset (`v4-evaluate-493af85-231023/-231024`); full tables + verdict
 in `docs/EXPERIMENTS.md` (second 2026-08-20 entry). Headlines: run 1
