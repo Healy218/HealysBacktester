@@ -59,7 +59,7 @@ from nn_meta.mark_stream import load_mark_stream, option_b_blockers
 from nn_meta.select_meta import all_rows
 from nn_meta.temporal_validation import assign_purged_splits
 from nn_meta.v4_artifacts import create_manifest, write_manifest
-from nn_meta.v4_evaluate import (choose_policy, policy_label, fit_gbt, fit_gbt_magnitude, fit_nn,
+from nn_meta.v4_evaluate import (choose_policy, format_candidate_grid, policy_label, fit_gbt, fit_gbt_magnitude, fit_nn,
                                  fit_nn_magnitude, _labeled, _matrix, _select_winner)
 from nn_meta.v4_loader import ensemble_ev, ensemble_score
 
@@ -319,6 +319,9 @@ def main() -> None:
           f"{'  ⚠ FLIPPED from eligible→ineligible' if flipped else ''}", flush=True)
 
     # ── 4) GATE: refuse to persist a bundle that cleared no gate ─────────────
+    print("  candidate grid (full ensemble, validation):", flush=True)
+    print(format_candidate_grid(final_policy, final_policy.get("baseline_return")),
+          flush=True)
     if not final_policy["eligible"]:
         shutil.rmtree(staging)
         print("\nNO ELIGIBLE CONFIG — the full ensemble did not clear the gate "

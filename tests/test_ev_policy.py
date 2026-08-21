@@ -297,3 +297,16 @@ def test_braked_policy_flows_through_the_ledger_as_size_fraction():
                                              config.PORTFOLIO_FRACTION,
                                              dd_brake=0.10, dd_floor=0.25)[2]])
     assert sel["size_fraction"].iloc[1] < sel["size_fraction"].iloc[0]
+
+
+def test_candidate_grid_is_reported_with_brakes():
+    from nn_meta.v4_evaluate import format_candidate_grid
+    rows = _rows()
+    policy = choose_policy(rows, np.array([0.5, 0.5, 0.5]), _spec(), thresholds=[0.5],
+                           ev_predictions=np.array([0.05, 0.70, -0.10]),
+                           ev_thresholds=[0.0], ev_dd_brakes=[None, 0.2])
+    grid = policy["candidate_grid"]
+    assert len(grid) == 4
+    assert sorted(str(g.get("dd_brake")) for g in grid if g["mode"] == config.EV_MODE) == ["0.2", "None"]
+    text = format_candidate_grid(policy, policy.get("baseline_return"))
+    assert "brake=0.2" in text and "baseline return" in text

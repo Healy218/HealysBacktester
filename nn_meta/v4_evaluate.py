@@ -254,6 +254,20 @@ def evaluate_policy(mode: str, rows: pd.DataFrame, pred: np.ndarray,
     return _EVALUATORS[mode](rows, pred, threshold)
 
 
+def format_candidate_grid(policy: dict, baseline_return: float | None = None) -> str:
+    """One line per tried candidate: mode/threshold[/brake], kept, val return,
+    maxDD, eligible — the refusal diagnostic."""
+    lines = [f"  baseline return: {baseline_return}"]
+    for c in policy.get("candidate_grid", []):
+        ret = c["total_return"]; dd = c["max_drawdown"]
+        lines.append(
+            f"  {policy_label(c):<24} kept={c['n_kept']:<5} "
+            f"ret={'n/a' if ret is None else f'{ret:+.1%}':<9} "
+            f"maxDD={'n/a' if dd is None else f'{dd:.1%}':<7} "
+            f"{'ELIGIBLE' if c['eligible'] else '-'}")
+    return "\n".join(lines)
+
+
 def policy_label(policy: dict) -> str:
     """``mode/threshold`` plus the EV brake when one is set, for reports/logs."""
     label = f"{policy['mode']}/{policy['threshold']}"
@@ -370,6 +384,13 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
     winner = max(candidates, key=_policy_rank)
     # Every candidate is a "trial"; its Sharpe feeds the deflation later.
     winner["candidate_sharpes"] = [c["metrics"]["per_trade_sharpe"] for c in candidates]
+    # The whole grid, compactly, so a refusal can be read (which candidates
+    # failed which gate term) instead of only the least-bad winner.
+    winner["candidate_grid"] = [{
+        "mode": c["mode"], "threshold": c["threshold"], "dd_brake": c.get("dd_brake"),
+        "n_kept": c["metrics"]["n_kept"], "total_return": c["metrics"]["total_return"],
+        "max_drawdown": c["metrics"]["max_drawdown"], "eligible": c["eligible"],
+    } for c in candidates]
     winner["selection_basis"] = "ledger" if ledger else "shared_sim"
     return winner
 
