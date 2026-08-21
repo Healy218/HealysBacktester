@@ -6,6 +6,27 @@ edge and a lottery ticket. Full detail lives in each row's report path.
 When the expert panel goes live, the second table tracks realized (paper)
 per-expert performance.
 
+## 2026-08-21 (evening) — DD-aware gross brake on EV sizing: walk-forward unchanged, finalize REFUSED again
+
+`0c74274` (brake `max(0.25, 1 − dd_now/dd_brake)` on realized drawdown at
+entry, brakes {None, 0.20, 0.30} in the ev grid). Batch, `e2-standard-8`.
+**Walk-forward** (`out/evaluate-20260821T221528Z-4ae40/`): every fold chose
+`brake=None` and the table is IDENTICAL to the unbraked run (fold 2 still
+−11.4% / 75.1% DD). Structural, not noise: unbraked EV's VALIDATION DD was
+already under the cap in every fold (31.7 / 36.8 / 19.9%), so it was
+eligible with the higher return and the rank rule (eligibility, then
+return) never trades return for risk where the cap isn't binding. The brake
+can only win where unbraked is ineligible — the full-ensemble validation.
+**Finalize** (`v4-finalize-0c74274-171307`): `ensemble winner: ev/0.05
+val +605% n_kept 219 eligible=False` — unchanged, so NO braked candidate
+cleared the gate either. Why is not visible (the refusal printed only the
+winner); `2e6c434` adds the full candidate grid to the finalize log and a
+finalize-only re-run is in flight. Hypothesis: the brake keys off realized
+(closed-trade) drawdown, but a shock drawdown is MARKED — open positions
+crater together before any close, so the brake sees dd≈0 and never fires.
+If confirmed, the next lever is braking on marked equity inside the ledger
+(rejected earlier as the more complex option; the data would now justify it).
+
 ## 2026-08-21 — EV head wired; v4 evaluate×2 + finalize relaunched on Batch; spx0 seat wired
 
 **v4 magnitude/EV head** (`c17193c`): regression head per family (Huber on
