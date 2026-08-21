@@ -34,18 +34,20 @@ Full design + task list: `TODO.md` blocks 1b and 1c. Sequence:
 
 Code landed in `c17193c` (suite 425 green; local `--smoke` on `--folds 1`
 exercised both heads end-to-end, exit 0 — numbers NOT to be trusted, home
-box). Three STANDARD `n2d-standard-8` jobs, all verified SCHEDULED with the
+box). Three STANDARD `e2-standard-8` jobs, all verified SCHEDULED with the
 pinned image:
 
 | job | what | expected |
 |---|---|---|
-| `v4-evaluate-c17193c-112857` | `--folds 3 --marks` (seeds 0-4, 60 ep, gbt 600, embargo 1D) | ~3h |
-| `v4-evaluate-c17193c-112909` | `--ablation --marks` (same) | ~3h |
-| `v4-finalize-c17193c-112858` | `--marks` full 40-seed ensemble, gate decides | ~30-40 min (2 heads/seed) |
+| `v4-evaluate-c17193c-113654` | `--folds 3 --marks` (seeds 0-4, 60 ep, gbt 600, embargo 1D) | ~3h |
+| `v4-evaluate-c17193c-113658` | `--ablation --marks` (same) | ~3h |
+| `v4-finalize-c17193c-113702` | `--marks` full 40-seed ensemble, gate decides | ~30-40 min (2 heads/seed) |
 
-(First submission `-1119xx` on `n2-standard-8` sat SCHEDULED on
-`ZONE_RESOURCE_POOL_EXHAUSTED`; deleted and resubmitted 11:29 CDT on
-`n2d-standard-8` — see the two new Traps in DOCUMENTATION.md.)
+(First submission `-1119xx` on `n2-standard-8` and the second `-1128xx` on
+`n2d-standard-8` both sat SCHEDULED on `ZONE_RESOURCE_POOL_EXHAUSTED` —
+regional capacity crunch in us-central1 today. Deleted and resubmitted 11:37
+CDT on `e2-standard-8`; the diff gate ran on e2 fine yesterday. Slower CPU,
+so allow ~4h for evaluate. Traps in DOCUMENTATION.md.)
 
 Outputs land in `gs://healys-backtester/out/{evaluate,finalize}-<stamp>-<uid>/`.
 What to read first: the `ev_deciles` section of each report (does the EV head's

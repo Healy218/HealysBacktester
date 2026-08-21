@@ -77,9 +77,9 @@ head on signed `net_return`, one new mode `ev`, gate unchanged.
 - [x] Tests (suite 425 green, self-contained): ev mode in the grid, ledger
   per-trade sizing, bundle round-trip with a magnitude head, legacy path
   unchanged.
-- [~] Image `c17193c` built; `v4-evaluate-c17193c-112857` (folds 3),
-  `-112909` (ablation), `v4-finalize-c17193c-112858` on Batch since
-  2026-08-21 11:29 CDT (STANDARD, `n2d-standard-8`, all three in parallel).
+- [~] Image `c17193c` built; `v4-evaluate-c17193c-113654` (folds 3),
+  `-112909` (ablation), `v4-finalize-c17193c-113702` on Batch since
+  2026-08-21 11:29 CDT (STANDARD, `e2-standard-8`, all three in parallel).
   Gate decides: bundle → V118 deploy-alongside; refusal → v4 waits, log it.
 
 ## 1c — spx0 / VSPNDX seat (starts WHILE 1b runs on Batch)
