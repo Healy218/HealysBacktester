@@ -67,7 +67,7 @@ ev/0.05 val +605%, 219 kept, eligible=False = the 40% DD cap (the only gate
 left). Full numbers: `docs/EXPERIMENTS.md` 2026-08-21. **No V118 bundle.**
 User decision pending between: (1) drawdown-aware gross scaling on EV
 sizing, (2) wait, (3) raise the cap — rejected on the record. Ablation SUCCEEDED: unchanged (rank/0.55 wins all 4 runs, stage-0
-reproduced +141%); details in EXPERIMENTS. spx0 still running at handoff time.
+reproduced +141%); details in EXPERIMENTS. spx0 SUCCEEDED: **no edge after costs** — see EXPERIMENTS. Nothing running on GCP.
 
 ## spx0 / VSPNDX — WIRED 2026-08-21 (block 1c), launching on Batch
 
@@ -90,8 +90,10 @@ baseline ≈ −85% — this seat lives or dies on selection, as the spec says.
 three v4 jobs that is 32 CPUs — exactly the global quota; nothing else can
 start until one finishes.
 Output: `out/spx0-<stamp>/artifacts_spx0/reports/spx0_walkforward_report.md`.
-Read the gate column and the marked column; a ⚠ on every fold is a real
-verdict (the model can't pick winners out of a −85% book), not a bug.
+**Result: no edge after costs** (EXPERIMENTS 2026-08-21). The builder and
+fill/cost model are sound and tested; the DESIGN (long ATM 0DTE on 5m proxy
+signals) loses in every fold after a ~40% round-trip cost. Next seat
+designs, each its own experiment: sell premium / liquid OTM / 5m re-sweep.
 
 Open design items for the next session (not blockers): the exit policy is
 one fixed variant (`s50_nocap`) — stop fraction should become a fold-

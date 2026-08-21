@@ -93,7 +93,7 @@ three pieces below exist; build them in this order, each tested:
   depth exists, no fill assumed (DECISIONS 2026-08-19); rejects are data.
 - [x] Cost accounting (`nn_meta/spx0/costs.py`, dollar fees + point spreads, base/stressed; 25% cap via `dd_cap`): index fees + spreads on small premiums through the
   stage-2 ledger; 25% max-DD gate; no upside cap.
-- [x] `TASK_MODE=spx0` in `deploy/gcp/` (build + nested walk-forward in one task); archive synced to the bucket. Launch: see HANDOFF.
+- [x] `TASK_MODE=spx0` in `deploy/gcp/`; ran 2026-08-21 (`spx0-run-27adf68-115405`): **no edge after costs** — first design rejected, see EXPERIMENTS. Seat parked pending a different design (sell premium / OTM / 5m re-sweep).
 
 ## 2 — v4 live scoring path — DONE 2026-08-16 (`nn_meta/live/v4_scan.py`)
 

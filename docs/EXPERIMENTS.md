@@ -37,7 +37,18 @@ Reading: EV's win is regime-dependent (later folds); drawdown binds everywhere.
 
 **spx0 seat** (`27adf68`): builder + fills + costs + evaluate, see HANDOFF
 and `docs/specs/SPX0_SPEC.md`. 80-session local smoke: 55% fill rate, win
-rate ~18-27%, baseline ≈ −85%. **Verdict pending** from the Batch run.
+rate ~18-27%, baseline ≈ −85%.
+**VERDICT — NO EDGE AFTER COSTS** (`spx0-run-27adf68-115405`,
+`out/spx0-20260821T165653Z-4b630/`): 500 sessions, 16,964 proposals,
+10,380 filled (61%). Baseline (take everything) −99..−100%. Winners: fold 1
+nn/filter/0.4 val −8% n13 → test −22% (DD 34%, marked +10%/25%); fold 2
+nn/filter/0.4 val −1% n27 → test −33% (DD 42%, marked −18%/37%); fold 3
+nn/ev/0.05 val n=1 → ⚠. Folds 1-2 "eligible" only by beating a −100%
+baseline — not a pass in spirit. The model RANKS (top P(win) decile −12% vs
+bottom −45% every fold) but the top decile is still negative: no subset
+clears ~40% round-trip cost on a 0.30 premium. Cost modeling was named the
+make-or-break (ROADMAP) and it broke. Different designs, not tuning, if
+revisited: sell premium; liquid OTM strikes; re-sweep params for 5m bars.
 
 ## Backtest / walk-forward verdicts
 
