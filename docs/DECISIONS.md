@@ -5,6 +5,35 @@ relitigate settled questions, and keep "considered and rejected" on the
 record. Append here whenever a real choice gets made (or reversed — new
 entry, never edit history).
 
+- **2026-08-21 — Finalize refused → do the magnitude/EV head FIRST, start
+  spx0 in the overlap, never override the gate.** `v4-finalize-493af85-010321`
+  declined the 40-seed ensemble on the most-recent tail (filter/0.5,
+  val +22.5%, n_kept 78, eligible=False): the fold-3 weakness caught at the
+  last gate. Three paths were costed: (1) train the magnitude/EV head
+  (`nn_meta/ev_sizing.py` is code-ready but wired into NOTHING — the only
+  reference is its own test), ~1 day of wiring + <$2 per Batch cycle on
+  `n2-standard-8`; (2) loosen `MIN_KEPT_TRADES`/`MAX_DRAWDOWN_CAP`/the
+  baseline rule; (3) skip to the spx0 pool, 2–4 weeks before anything can run.
+  Decision: (1) first, because it is the cheapest on both axes and is the
+  roadmap's own Wave-2 item 1; spx0 design/label-builder work starts while the
+  v4 jobs run on Batch (compute is not the bottleneck — quota leaves 24 CPUs
+  free beside an 8-CPU evaluate). (2) is REJECTED: overriding a designed
+  safety to ship a bundle the data rejected three separate ways. If the EV
+  head still fails the gate, v4 waits and spx0 continues — no V118 by fiat.
+- **2026-08-21 — EV head definition: ONE regression head on the signed
+  realized return, ONE new policy mode.** The magnitude head regresses
+  `magnitude_target` (signed `net_return`, winsorized on the train tail)
+  per seed, same family as the P(win) head; its prediction IS the expected
+  return, so the policy's `pred_ev` is the head's output directly rather
+  than `P(win) × E[win size]` (that product ignores loss magnitude, which for
+  defined-risk options trades is most of the EV). Added as a third mode
+  `ev` beside filter/rank — rank-and-size by predicted EV via
+  `ev_weighted_portfolio`, per-name cap at `PORTFOLIO_FRACTION`, thresholds
+  `EV_THRESHOLDS` in return units. One head and one mode on purpose: every
+  candidate is a trial in the deflated-Sharpe count, and the gate (kept ≥ 10,
+  beat baseline, maxDD ≤ 40%) is unchanged. Rejected: a 4-bucket classifier
+  head (`return_bucket_labels`) — more trials, no evidence it beats the
+  regression; revisit only if the regression head's deciles still invert.
 - **2026-08-20 — Marks build moved from SPOT to STANDARD on-demand, 16
   shards at parallelism 8.** The spot pool turned churny: `marks-build-d64ca9b-161349`
   lost tasks 0/4/7 permanently, each having burned all four attempts, and two

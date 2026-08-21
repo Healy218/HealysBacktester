@@ -47,10 +47,53 @@ without it the pipeline silently reads/writes the wrong artifact dirs.
   Re-run both legs after assemble, then verify with
   `python -m nn_meta.dataset_diff --baseline <stage-0> --candidate <new>`
   (the 13 differing columns must collapse to zero).
-- [ ] **Re-finalize**: `v4_finalize` → fresh `model_final_v4/` selected and
-  trained under the ledger. Also fixes the current bundle's unverifiable
-  manifest (it predates hashed persistence). Persist is atomic + gate-checked
-  by construction; the old bundle is additionally in the D: backup.
+- [x] **Evaluate re-runs DONE 2026-08-20** on the verified dataset
+  (`docs/EXPERIMENTS.md`): stage-0 reproduced; fold 3 is real (March shock +
+  size inversion, not decay).
+- [!] **Re-finalize REFUSED 2026-08-21** (`v4-finalize-493af85-010321`):
+  40-seed ensemble, filter/0.5, val +22.5%, n_kept 78, **eligible=False** on
+  the most-recent tail. No V118 bundle; server untouched. Decision
+  (`docs/DECISIONS.md` 2026-08-21): wire the EV head first, never override.
+
+## 1b — Magnitude/EV head (DECIDED 2026-08-21; this weekend, GCP Batch)
+
+Design: `docs/DECISIONS.md` 2026-08-21 "EV head definition". One regression
+head on signed `net_return`, one new mode `ev`, gate unchanged.
+
+- [ ] `config.py`: `EV_THRESHOLDS`, `EVAL_MODES += ["ev"]` (opt-in via the
+  presence of an EV prediction, so legacy callers stay bit-identical).
+- [ ] `ev_sizing.py`: `ev_weighted_portfolio` also reports each entered
+  trade's size fraction; `v4_accounting.mark_to_market_portfolio` accepts an
+  optional per-trade `size_fraction` (≤ `position_fraction`) so EV sizing is
+  scored through the SAME ledger as filter/rank.
+- [ ] `v4_evaluate.py`: `fit_nn`/`fit_gbt` grow a magnitude head (Huber);
+  `Predictor` returns `(p_win, ev)`; `choose_policy(..., ev_predictions=)`
+  adds the `ev` candidates (shared sim + ledger); report shows the mode.
+- [ ] `v4_finalize.py`: magnitude head trained + persisted per seed
+  (`magnitude.keras` / `magnitude.joblib`), ensemble re-validation includes
+  `ev`; `ensemble_config.json` records `mode="ev"` + threshold when it wins.
+- [ ] `v4_loader.py` / `live/v4_scan.py`: bundle exposes `decision_score`
+  (P(win) or EV by mode) and a size hint; scan filters on it; alert shows EV.
+- [ ] Tests (suite 410 green, self-contained): ev mode in the grid, ledger
+  per-trade sizing, bundle round-trip with a magnitude head, legacy path
+  unchanged.
+- [ ] Image build (pinned `IMAGE_TAG`) → `v4-evaluate --folds 3 --marks` and
+  `--ablation` → `v4-finalize --marks` on Batch (STANDARD, `n2-standard-8`).
+  Gate decides: bundle → V118 deploy-alongside; refusal → v4 waits, log it.
+
+## 1c — spx0 / VSPNDX seat (starts WHILE 1b runs on Batch)
+
+Data layer READY (ROADMAP Wave 2 item 2). Nothing to run on GCP until the
+three pieces below exist; build them in this order, each tested:
+- [ ] Label builder for daily-expiry SPX/NDX options: signal-driven entries
+  AND exits, multiple trades/day, `available_at`-stamped, same v4 causal
+  contract (`feature_contract.py`, purged splits + embargo).
+- [ ] Fill model: median 3 contracts/1m bar (p90 ~48) — fills only where
+  depth exists, no fill assumed (DECISIONS 2026-08-19); rejects are data.
+- [ ] Cost accounting: index fees + spreads on small premiums through the
+  stage-2 ledger; 25% max-DD gate; no upside cap.
+- [ ] Then: `TASK_MODE` for the spx0 build/evaluate in `deploy/gcp/`, launch
+  on Batch alongside.
 
 ## 2 — v4 live scoring path — DONE 2026-08-16 (`nn_meta/live/v4_scan.py`)
 
@@ -119,7 +162,7 @@ symbols (all healthy), v4 scans its 118 (117 healthy). Findings:
   copy → `git rm --cached` + gitignore → pull → restore). The new v4 state
   files are gitignored from the start (learned the hard way, 2026-08-16).
 
-**Remaining for this phase** (after the Option B chain in block 1):
+**Remaining for this phase** (after block 1b clears the gate — if it does):
 - [ ] Re-finalize → push new `model_final_v4/` → server `git pull` →
   selftest → drop `--paper` from the cron line (bundle then must verify +
   be gate-eligible, enforced by the scan itself).
@@ -128,10 +171,9 @@ symbols (all healthy), v4 scans its 118 (117 healthy). Findings:
 
 ## Fallback if the weekend runs short
 
-Deploy the **existing Option A bundle** as the `[v4]` expert in
-paper/alert-only mode (labeled unvalidated-by-ledger), and let the Option B
-re-finalize replace the bundle in place next week. Deploying alongside —
-never swapping v3 — is what makes this safe either way.
+The existing Option A bundle already runs as `[v4]` in paper mode; it stays.
+**No gate override** to manufacture a V118 (DECISIONS 2026-08-21). If the EV
+head fails the gate, v4 waits for the next label idea and spx0 continues.
 
 ## From the 2026-08-16 adversarial review (`docs/reviews/`)
 
