@@ -16,8 +16,18 @@ score. Gate unchanged. Local `--smoke` (untrusted box, code path only): both
 heads trained; `ev/0.05` won the GBT family on validation; EV-head deciles
 monotone with top decile best. Batch jobs (STANDARD, `e2-standard-8` after
 `n2` and `n2d` pools were exhausted in us-central1): `v4-evaluate-c17193c-113654`
-(folds 3), `-113658` (ablation), `v4-finalize-c17193c-113702`. **Verdict
-pending** — fill in from `out/{evaluate,finalize}-*-c17193c*/`.
+(folds 3), `-113658` (ablation), `v4-finalize-c17193c-113702`. **WALK-FORWARD VERDICT** (`out/evaluate-20260821T163913Z-40c60/`): the
+`ev` mode won ALL THREE folds, every fold gate-eligible through the ledger,
+top-decile inversion GONE in every fold (top EV decile +12/+15/+8% vs
+bottom −10/−3/+1%). Test: fold 1 +485% (DD 23%, marked +552%/26%); fold 2
+**−11% (DD 75%, marked −1.5%/69%, DSR 0.02** — val +1689% collapsed on the
+Oct-Mar shock window); fold 3 +159% (DD 32%, marked +135%/**45%**).
+**FINALIZE REFUSED** (`v4-finalize-c17193c-113702`): ensemble ev/0.05,
+val +605%, n_kept 219, eligible=False → by elimination the **40% ledger
+drawdown cap**. Conclusion: the EV head fixes SELECTION (the inversion and
+the fold-3 refusal); DRAWDOWN is now the binding constraint on three
+independent measurements. No V118 bundle; nothing persisted. Next lever, if
+pursued: a drawdown/vol-aware gross scaler on EV sizing, fold-selectable.
 
 **spx0 seat** (`27adf68`): builder + fills + costs + evaluate, see HANDOFF
 and `docs/specs/SPX0_SPEC.md`. 80-session local smoke: 55% fill rate, win

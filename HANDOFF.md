@@ -59,6 +59,16 @@ with `magnitude.*` files exists in `.../model_final_v4/` → pull it with
 The session watcher polls every 10 min; it dies with the session — if so, the
 jobs don't care; check `gcloud batch jobs list --project=healys-batch`.
 
+## VERDICTS 12:21 CDT — EV head: selection fixed, DRAWDOWN now binding
+
+Walk-forward SUCCEEDED: `ev` won all 3 folds, all gates passed, inversion
+gone; fold 2 test −11% / 75% DD is the warning. Finalize REFUSED:
+ev/0.05 val +605%, 219 kept, eligible=False = the 40% DD cap (the only gate
+left). Full numbers: `docs/EXPERIMENTS.md` 2026-08-21. **No V118 bundle.**
+User decision pending between: (1) drawdown-aware gross scaling on EV
+sizing, (2) wait, (3) raise the cap — rejected on the record. Ablation
+(`v4-evaluate-c17193c-113658`) and spx0 still running at handoff time.
+
 ## spx0 / VSPNDX — WIRED 2026-08-21 (block 1c), launching on Batch
 
 Built while the v4 jobs ran. Design: `docs/specs/SPX0_SPEC.md` (read it —
