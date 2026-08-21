@@ -27,6 +27,37 @@ per-expert performance.
 | v4 | **2026-08-16** | v31 causal, gbt/filter thr 0.5 (Option A bundle) | `.v4_paper_ledger.json` on server | **live — paper mode**; bundle hot-swaps after the Option B re-finalize |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-21 — fold-3 dig: March shock + failure to re-engage, NOT decay
+
+Anatomy of the fold-3 loss (test window 2026-03-06 → 2026-07-02), from the
+walkforward JSON + the verified dataset. Three findings:
+
+1. **The frozen baseline ALSO lost: -9.2%** (fold baselines: +14.7% / +108.8%
+   / -9.2%). The whole opportunity set turned: 2026-03 is the WORST month in
+   the two-year sample (win rate 33.7%, median net_return -10.1%), and
+   2026-02 was already negative. The fold OPENS with the worst regime in the
+   data. Primary driver: market, not model.
+2. **The model's real failure is not the crash but the recovery.** From April
+   the opportunity set turned strongly positive (+16.0% / +6.8% / +8.5% mean
+   monthly), yet the model finished -15.4% vs the baseline's -9.2% — it did
+   not re-engage. Win rate stayed FINE (52.8%, higher than fold 1's 51.4%
+   which made +177%); the payoff SIZE inverted — consistent with the known
+   v3.1 top-decile size inversion (score ranks win probability, not win size),
+   which the report's decile table shows directly (decile-10 win 0.493, mean
+   return half of decile 2's).
+3. Composition in the window: calls +12.1% vs puts +2.7% mean; `tv_rating`
+   strongest (+15.3%), `squeeze`/`ma` weakest (+2.5%/+3.0%).
+
+**Verdict: fold 3 is a regime shock the model rode down and then under-traded
+on the way back — not monotonic alpha decay, and not a data artifact.** The
+promotion gates are the correct guard for exactly this failure mode, so
+deploying alongside as a gated expert is defensible; promoting to capital on
+fold-3-like regimes is not, until the size-inversion is addressed
+(magnitude-aware labels are already an approved backlog item, 2026-07-19).
+
+User decision 2026-08-21: finalize and deploy alongside as **V118**; next
+workstream **VSPNDX** (spx0).
+
 ## 2026-08-20 — v4 ledger re-runs on the VERIFIED dataset (GCP, image `493af85`)
 
 First unconfounded ledger evaluation: dataset proven identical to stage-0, so
