@@ -40,9 +40,10 @@ without it the pipeline silently reads/writes the wrong artifact dirs.
   built from a cache missing 44 flat-file day-frames, which silently dropped
   16,500 low-return trades and so FLATTERED the book. Cause proven and fixed
   (`4f6fa93` + `nn_meta/cache_preflight.py`); the 89 affected symbols are
-  rebuilding as `marks-build-d64ca9b-010138` (STANDARD on-demand, 16 shards
-  @ parallelism 8, image pinned `d64ca9b`); 57/118 shards as of 2026-08-20
-  01:10 CDT. Full evidence: `HANDOFF.md`.
+  rebuilt as `marks-build-d64ca9b-010138` — **DONE 2026-08-20: 118/118,
+  16/16 tasks SUCCEEDED, zero failures. Assembled and VERIFIED IDENTICAL to
+  stage-0 by the Batch diff gate** (`docs/EXPERIMENTS.md` 2026-08-20 entry).
+  The evaluate re-runs are UNBLOCKED and are the next action.
   Re-run both legs after assemble, then verify with
   `python -m nn_meta.dataset_diff --baseline <stage-0> --candidate <new>`
   (the 13 differing columns must collapse to zero).

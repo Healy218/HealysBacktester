@@ -27,6 +27,30 @@ per-expert performance.
 | v4 | **2026-08-16** | v31 causal, gbt/filter thr 0.5 (Option A bundle) | `.v4_paper_ledger.json` on server | **live — paper mode**; bundle hot-swaps after the Option B re-finalize |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-20 — dataset rebuild verified IDENTICAL to stage-0 (diff gate, image `493af85`)
+
+**VERDICT: the missing-frames mechanism explains 100% of the 2026-08-19
+corruption, and the rebuilt dataset is trustworthy.** The full-scale rebuild
+(90 stale symbols redone against the complete cache; job
+`marks-build-d64ca9b-010138`, 118/118, 16/16 tasks SUCCEEDED, zero failures,
+~21.5h on STANDARD) assembled and passed the new Batch diff gate on its first
+run (`v4-diff-493af85-230233`, report `out/diff-20260821T040444Z-43e30/`):
+
+- 489,255 rows aligned, 0 baseline-only, 0 candidate-only
+- **IDENTICAL — every shared column matches on every aligned row.** The 13
+  differing columns from the void run collapsed to zero, as predicted.
+- Candidate carries 3 extra columns (`fill_entry_ts`, `fill_exit_ts`,
+  `gross_return`) — the v4 mark-stream additions, which postdate stage-0 and
+  are expected.
+- Chain of custody: baseline sha256 `353d090c…` (matches the independently
+  recorded stage-0 hash); candidate sha256 `155bae9e…` (recorded in the
+  report for future comparisons).
+
+Consequence: the 2026-08-19 ledger re-runs (the entry below) were computed on
+provably corrupt data and stay VOID; the evaluate legs must be re-run on this
+dataset. The stage-0-vs-ledger comparison is now UNCONFOUNDED — dataset held
+constant — so the next evaluate runs finally measure the ledger's effect alone.
+
 ## 2026-08-19 — v4 Option B ledger re-runs (GCP Batch, image `58c2e5b`)
 
 First evaluation run entirely on cloud hardware, because the home box has proven

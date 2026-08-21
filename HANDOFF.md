@@ -9,7 +9,25 @@ User went to bed 2026-08-20 ~01:15 CDT leaving the box running, with Claude
 Remote Control deliberately switched ON to test whether it correlates with the
 crashes. It almost certainly does not — see "the box" below.
 
-## THE REBUILD IS RUNNING ON-DEMAND — `marks-build-d64ca9b-010138`
+## DONE 2026-08-20 23:05 CDT: BUILD 118/118 → ASSEMBLE → DIFF GATE **PASSED**
+
+The whole chain completed unattended. `marks-build-d64ca9b-010138` finished
+118/118 with 16/16 tasks SUCCEEDED and ZERO failures (~21.5h, STANDARD).
+`marks-assemble-493af85-224229` folded the dataset (~20 min).
+`v4-diff-493af85-230233` — the new gate's FIRST live run — passed:
+**IDENTICAL, every shared column, all 489,255 rows aligned** (0 orphans either
+side; the 3 candidate-only columns are the expected v4 mark additions).
+Report + input hashes: `out/diff-20260821T040444Z-43e30/`. Verdict logged in
+`docs/EXPERIMENTS.md` (2026-08-20). Candidate sha256 `155bae9e…` — pin this
+when comparing future builds.
+
+**NEXT ACTION: the two evaluate re-runs** (ablation + folds 3), on Batch,
+image `493af85`, per the commands below — NOT yet submitted, awaiting the user.
+After them: the two open questions (fold-3 maxDD, inverted `prem_spot`), then
+finalize. The archive prefix can be deleted once the evaluate runs land, but
+keep it until then.
+
+## (superseded) the rebuild as it was planned — `marks-build-d64ca9b-010138`
 
 Live-verified at 01:10 CDT: state RUNNING, 5 tasks RUNNING / 11 PENDING, task
 logs fresh, **57/118 shards** in `out/meta_rows/` and `out/meta_marks/`
