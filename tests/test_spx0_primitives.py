@@ -72,12 +72,12 @@ def _bars():
 
 
 def test_entry_fill_is_after_signal_and_depth_gated():
-    bars, pol = _bars(), DepthPolicy(qty=1, depth_mult=2.0, entry_window_bars=3)
+    bars, pol = _bars(), DepthPolicy(qty=1, depth_mult=2.0, entry_window_min=3)
     assert list(fillable(bars["Volume"], pol)) == [False, False, True, False, True, False]
     ts, price, depth, fail = entry_fill(bars, bars["timestamp"][0], pol)
     assert fail is None and ts == bars["timestamp"][2] and price == 0.34 and depth == 5
     # window of 1 bar after the signal: bar 1 has no depth -> rejected, kept as data
-    _, _, _, fail = entry_fill(bars, bars["timestamp"][0], DepthPolicy(entry_window_bars=1))
+    _, _, _, fail = entry_fill(bars, bars["timestamp"][0], DepthPolicy(entry_window_min=1))
     assert fail is FillFailure.NO_DEPTH_ENTRY
     _, _, _, fail = entry_fill(bars, bars["timestamp"][5], pol)
     assert fail is FillFailure.NO_ENTRY_BAR
@@ -106,3 +106,29 @@ def test_costs_are_in_points_and_bite_small_premiums():
     assert net_return(3.0, 3.0, BASE) > flat
     with pytest.raises(ValueError):
         net_return(0.0, 0.1)
+
+
+def test_entry_window_is_minutes_not_sparse_bars():
+    # one print 1 minute after the signal with no depth, the next print 90
+    # minutes later with depth: a bar-count window would fill it, a time
+    # window must reject it.
+    t0 = pd.Timestamp("2025-06-10 14:00")
+    bars = pd.DataFrame({"timestamp": [t0, t0 + pd.Timedelta(minutes=1),
+                                       t0 + pd.Timedelta(minutes=90)],
+                         "Open": 0.3, "High": 0.3, "Low": 0.3, "Close": 0.3,
+                         "Volume": [5, 1, 50]})
+    _, _, _, fail = entry_fill(bars, t0, DepthPolicy(entry_window_min=3))
+    assert fail is FillFailure.NO_DEPTH_ENTRY
+
+
+def test_implied_index_level_uses_parity_pairs():
+    from nn_meta.spx0.contracts import implied_index_level
+    at = pd.Timestamp("2025-06-10 19:59")
+    rows = []
+    for k in (5880, 5890, 5900, 5910, 5920):
+        c, p = max(5903.2 - k, 0) + 0.2, max(k - 5903.2, 0) + 0.2      # parity-consistent
+        rows += [{"index": "SPX", "right": "C", "strike": float(k), "Close": c, "timestamp": at},
+                 {"index": "SPX", "right": "P", "strike": float(k), "Close": p, "timestamp": at}]
+    z = pd.DataFrame(rows)
+    assert implied_index_level(z, index="SPX", at=at) == pytest.approx(5903.2, abs=1e-6)
+    assert implied_index_level(z.head(4), index="SPX", at=at) is None      # < 3 pairs

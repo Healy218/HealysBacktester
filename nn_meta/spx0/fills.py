@@ -28,7 +28,9 @@ class FillFailure(str, Enum):
 class DepthPolicy:
     qty: int = 1                 # contracts per trade
     depth_mult: float = 2.0      # take at most 1/depth_mult of printed volume
-    entry_window_bars: int = 3   # bars after the signal the entry may fill in
+    entry_window_min: int = 3    # MINUTES after the signal the entry may fill in
+                                 # (option bars are sparse — a bar count would
+                                 # let an entry drift hours past its signal)
 
     @property
     def min_volume(self) -> float:
@@ -42,9 +44,10 @@ def fillable(volume, policy: DepthPolicy) -> np.ndarray:
 
 def entry_fill(bars: pd.DataFrame, signal_ts: pd.Timestamp, policy: DepthPolicy
                ) -> tuple[pd.Timestamp | None, float | None, float | None, FillFailure | None]:
-    """First bar strictly AFTER the signal bar, within the entry window, with
-    depth. Returns (fill_ts, price=High, depth=Volume, failure)."""
-    after = bars[bars["timestamp"] > signal_ts].head(policy.entry_window_bars)
+    """First bar strictly AFTER the signal bar, within ``entry_window_min``
+    minutes, with depth. Returns (fill_ts, price=High, depth=Volume, failure)."""
+    lim = signal_ts + pd.Timedelta(minutes=policy.entry_window_min)
+    after = bars[(bars["timestamp"] > signal_ts) & (bars["timestamp"] <= lim)]
     if after.empty:
         return None, None, None, FillFailure.NO_ENTRY_BAR
     ok = after[fillable(after["Volume"], policy)]

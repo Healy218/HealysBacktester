@@ -94,6 +94,13 @@ def feature_spec(name: str) -> FeatureSpec:
             name, Availability.SIGNAL_CLOSE, "static sector mapping",
             "static metadata available before the signal",
         )
+    if name.startswith("spx0_"):
+        # spx0 pool (docs/specs/SPX0_SPEC.md): every spx0_ feature is computed
+        # from proxy 1m bars or option PRINTS at or before the signal bar close.
+        return FeatureSpec(
+            name, Availability.SIGNAL_CLOSE, "spx0 proxy 1m bars / option prints",
+            "rolling windows and last prints ending at the signal bar close",
+        )
     raise FeatureAvailabilityError(f"feature '{name}' has no availability declaration")
 
 

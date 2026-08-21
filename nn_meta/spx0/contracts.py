@@ -99,3 +99,29 @@ def pick_atm(zero_dte: pd.DataFrame, *, index: str, right: str, mapped_spot: flo
     dist = (sub["strike"] - mapped_spot).abs()
     row = sub.loc[dist.idxmin()]
     return parse_occ(str(row["occ"]))
+
+
+def implied_index_level(zero_dte: pd.DataFrame, *, index: str, at: pd.Timestamp,
+                        window_min: int = 10, min_pairs: int = 3) -> float | None:
+    """Index level implied by put-call parity on same-strike 0DTE pairs that
+    printed in the ``window_min`` minutes up to ``at``: median of K + C - P.
+    For a 0DTE at the close, carry is nil, so this is the cash index to a
+    fraction of a point — far tighter than any proxy ratio. ``None`` when
+    fewer than ``min_pairs`` strikes have both sides printing."""
+    lo = at - pd.Timedelta(minutes=window_min)
+    sub = zero_dte[(zero_dte["index"] == index) & (zero_dte["timestamp"] > lo)
+                   & (zero_dte["timestamp"] <= at)]
+    if sub.empty:
+        return None
+    last = sub.sort_values("timestamp").groupby(["strike", "right"])["Close"].last().unstack()
+    if "C" not in last or "P" not in last:
+        return None
+    both = last.dropna(subset=["C", "P"])
+    if len(both) < min_pairs:
+        return None
+    lvl = both.index.to_numpy(dtype=float) + both["C"].to_numpy() - both["P"].to_numpy()
+    # restrict to the strikes nearest the first-pass estimate (deep wings print
+    # stale), then take the median.
+    est = float(np.median(lvl))
+    near = np.argsort(np.abs(both.index.to_numpy(dtype=float) - est))[:max(min_pairs, 7)]
+    return float(np.median(lvl[near]))
