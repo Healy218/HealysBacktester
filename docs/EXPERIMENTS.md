@@ -24,8 +24,21 @@ winner); `2e6c434` adds the full candidate grid to the finalize log and a
 finalize-only re-run is in flight. Hypothesis: the brake keys off realized
 (closed-trade) drawdown, but a shock drawdown is MARKED — open positions
 crater together before any close, so the brake sees dd≈0 and never fires.
-If confirmed, the next lever is braking on marked equity inside the ledger
-(rejected earlier as the more complex option; the data would now justify it).
+**GRID VERDICT (`v4-finalize-2e6c434-182208`, same numbers): the DD cap was
+NEVER the binding gate.** Full-ensemble validation: baseline (take
+everything, ledger) **+1853.6%**; `ev/0.05` +604.8% / maxDD **21.9%**;
+`ev/0.05 brake=0.2` +224.9% / 20.3%; `ev/0.05 brake=0.3` +340.8% / 21.2%;
+`filter/0.5` +22.5% / 29.5%; `ev/0.0` +73.1% / 32.2%; `ev/0.1` −50.9% /
+69.0%. Every candidate fails **beat-baseline**, not the cap. The baseline is
+outlier-driven (raw max trade return 1526×; one such ticket at a 10% slot is
++15,000% alone) and, taking every proposal, always holds it — a selective
+policy that skips that ticket cannot "beat" it. Both earlier "refused on the
+DD cap" readings (2026-08-21 morning + this entry's first half) were
+inferences from a log that printed only the winner; retracted. The brake
+works as designed (DD 21.9→20.3%, return cost) and was aimed at the wrong
+term. **Open decision (user): make the beat-baseline term robust — compare
+against the baseline's `total_ex_top3` (option 1, recommended), winsorize
+both sides, or leave it.** No V118 bundle.
 
 ## 2026-08-21 — EV head wired; v4 evaluate×2 + finalize relaunched on Batch; spx0 seat wired
 

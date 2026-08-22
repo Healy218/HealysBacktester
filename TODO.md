@@ -83,8 +83,13 @@ head on signed `net_return`, one new mode `ev`, gate unchanged.
 - [~] **Drawdown-aware gross brake on EV sizing** (`0c74274`, user decision
   2026-08-21): `gross_scale = max(0.25, 1 − dd_now/dd_brake)`, brakes
   {None, 0.20, 0.30} in the ev grid, same gate. Suite 443. Image built →
-  `v4-evaluate --folds 3` + `v4-finalize` on Batch. Gate decides: bundle →
-  V118 deploy-alongside; refusal → v4 waits, log it.
+  `v4-evaluate --folds 3` + `v4-finalize` on Batch — **DONE 2026-08-21
+  evening: walk-forward unchanged, finalize refused, and the candidate grid
+  shows the DD cap was never binding (ev/0.05 maxDD 21.9%). The failing
+  term is beat-baseline against an outlier-carried +1854% baseline.**
+- [ ] **USER DECISION: the gate's baseline term.** Recommended: beat the
+  baseline's `total_ex_top3` (ledger, already computed) instead of its raw
+  return. Then re-run finalize only (`TASK_MODE=finalize`, ~40 min).
 
 ## 1c — spx0 / VSPNDX seat (starts WHILE 1b runs on Batch)
 

@@ -33,7 +33,7 @@ Both verified SCHEDULED on the pinned image, `e2-standard-8`, STANDARD:
 | `v4-finalize-0c74274-171307` | `--marks` full 40-seed ensemble, gate decides | ~40 min |
 
 Outputs: `gs://healys-backtester/out/{evaluate,finalize}-<stamp>-<uid>/`.
-Read first: the finalize task log's `ensemble winner:` line — it now prints
+(Superseded by the verdict below.) Read first: the finalize task log's `ensemble winner:` line — it now prints
 `ev/0.05 brake=0.2`-style labels; `eligible=True` → bundle in
 `.../model_final_v4/` → `gsutil rsync`, force-add commit, server `git pull`,
 `v4_scan --selftest` (TODO block 3). `eligible=False` → v4 waits; log it in
@@ -41,6 +41,20 @@ EXPERIMENTS either way. In the walk-forward report the mode column shows
 `brake X.XX` when a fold picked one; compare fold-2 test DD against the
 unbraked 75% — that is the number this run exists to move.
 Check live: `gcloud batch jobs list --project=healys-batch`.
+
+## VERDICT 18:40 CDT — both jobs done; the gate diagnosis was WRONG
+
+Walk-forward (`out/evaluate-20260821T221528Z-4ae40/`): identical to the
+unbraked run, every fold `brake=None` (unbraked was already eligible on
+val, rank rule prefers return). Finalize refused twice more; the candidate
+grid (`2e6c434`, now printed on every finalize) shows **`ev/0.05` at maxDD
+21.9% — the cap was never binding. Every candidate fails BEAT-BASELINE:
+the take-everything ledger baseline is +1854% on the finalize validation
+window, carried by a single outlier ticket (raw max 1526×).** Full grid in
+EXPERIMENTS. Next action is a USER DECISION on the gate's baseline term
+(recommended: compare against the baseline's `total_ex_top3`). Do not
+touch `_passes_gate` before that decision; it is logged as open in
+EXPERIMENTS and TODO. Nothing running on GCP.
 
 ## spx0 — second design round PLANNED, not started
 
