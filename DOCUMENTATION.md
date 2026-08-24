@@ -20,9 +20,13 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   dir (`nn_meta/config.py`): v2 (default) / v3 (live scanner) / v31 (at-scale
   + v4 work). Setting it wrong silently reads and writes the wrong
   directories — the most common way to burn an evening.
-- **Home box**: i5-11400F (6C/12T, no iGPU), 16 GB, RTX 3060 Ti, Pop!_OS,
-  user `healylabs`. TF is CPU-only here in practice; the heavy work is
-  memory-bound dataset builds, not training.
+- **Home box** (rebuilt 2026-08-23): Ryzen 7 9850X3D (8C/16T + iGPU),
+  32 GB DDR5, RTX 3060 Ti, 1 TB NVMe, CachyOS, user `healy`. The old
+  i5-11400/B560 build (proven RAM fault — hourly `fa.collect` segfaults on
+  its final morning) is retired; the drive moved over intact, so the OS
+  install and all paths are unchanged. TF is CPU-only here in practice; the
+  heavy work is memory-bound dataset builds, not training — which still run
+  on GCP Batch by doctrine, not here.
 
 ## Conventions
 

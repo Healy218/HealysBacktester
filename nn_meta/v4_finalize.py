@@ -325,7 +325,7 @@ def main() -> None:
     if not final_policy["eligible"]:
         shutil.rmtree(staging)
         print("\nNO ELIGIBLE CONFIG — the full ensemble did not clear the gate "
-              "(kept >= {}, beat baseline, maxDD <= {:.0%}; modes tried: filter, rank{}). "
+              "(kept >= {}, beat baseline ex-top3, maxDD <= {:.0%}; modes tried: filter, rank{}). "
               "Nothing persisted; any existing {} is untouched.".format(
                   config.MIN_KEPT_TRADES, config.MAX_DRAWDOWN_CAP,
                   ", ev" if ens_val_ev is not None else "", FINAL_DIR.name))
@@ -338,6 +338,7 @@ def main() -> None:
         "val_return": metrics["total_return"], "val_n_kept": metrics["n_kept"],
         "val_max_drawdown": metrics["max_drawdown"], "eligible": True,
         "baseline_return": final_policy.get("baseline_return"),
+        "baseline_ex_top3": final_policy.get("baseline_ex_top3"),
         "operating_point_source": "full-ensemble revalidation",
         "magnitude_head": ens_val_ev is not None,
         "ev_thresholds": list(config.EV_THRESHOLDS),

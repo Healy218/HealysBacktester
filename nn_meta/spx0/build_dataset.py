@@ -17,6 +17,13 @@ Per session and index (SPX via SPY, NDX via QQQ):
      cost scenario; ``und_period_return`` from the proxy over the same span;
      a marks sidecar of the contract's 1m closes between the fills.
 
+Round 2 (SPX0_SPEC "Second design round"): each signal is emitted at every
+``TradeVariant`` — long premium stops and sell-premium variants (opposite
+right, margin-as-size, loss capped by a stop above entry). The variant code
+rides the ``dte`` column, so rank/EV dedupe makes it fold-selectable exactly
+like DTE in v4; code 0 reproduces the round-1 long build and is the frozen
+baseline. Short returns are per unit posted margin.
+
 Every feature is declared in ``feature_contract`` and computed at or before
 the signal bar close. Nothing here reads the option chain past ``entry_ts``
 to DECIDE anything; it reads past it only to REALIZE the outcome.
@@ -42,7 +49,9 @@ from nn_meta.mark_stream import stable_trade_id
 from nn_meta.spx0 import config as sc
 from nn_meta.spx0.contracts import (implied_index_level, parse_occ_frame, pick_atm,
                                     same_day_expiry, session_ratio)
-from nn_meta.spx0.costs import BASE, IndexCostScenario, gross_return, net_return
+from nn_meta.spx0.costs import (BASE, IndexCostScenario, gross_return,
+                                gross_return_short, net_return, net_return_short,
+                                short_margin)
 from nn_meta.spx0.fills import (DepthPolicy, FillFailure, entry_fill, exit_fill,
                                 intrinsic)
 from nn_meta.temporal_validation import assign_purged_splits
@@ -120,10 +129,16 @@ def _first_true_after(sig: pd.Series, t: pd.Timestamp) -> pd.Timestamp | None:
 
 
 def _stop_target_ts(cbars: pd.DataFrame, fill_ts: pd.Timestamp, entry_px: float,
-                    policy: sc.ExitPolicy) -> pd.Timestamp | None:
+                    variant: sc.TradeVariant) -> pd.Timestamp | None:
+    """First 1m close through the variant's premium stop (or target, longs
+    only). A long stops BELOW its entry; a short's stop is the loss cap ABOVE
+    it (premium rising against the seller)."""
     later = cbars[cbars["timestamp"] > fill_ts]
-    hit = later[(later["Close"] <= policy.stop_frac * entry_px)
-                | (later["Close"] >= policy.target_mult * entry_px)]
+    if variant.short:
+        hit = later[later["Close"] >= variant.stop_frac * entry_px]
+    else:
+        hit = later[(later["Close"] <= variant.stop_frac * entry_px)
+                    | (later["Close"] >= variant.target_mult * entry_px)]
     return None if hit.empty else pd.Timestamp(hit["timestamp"].iloc[0])
 
 
@@ -155,7 +170,9 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                        depth: DepthPolicy = DepthPolicy(),
                        exit_policy: sc.ExitPolicy = sc.DEFAULT_EXIT,
                        costs: IndexCostScenario = BASE,
-                       counters: dict | None = None) -> tuple[list[dict], list[dict]]:
+                       counters: dict | None = None,
+                       variants: tuple[sc.TradeVariant, ...] | None = None
+                       ) -> tuple[list[dict], list[dict]]:
     day = pd.Timestamp(day).normalize()
     px_day = proxy_1m[proxy_1m.index.normalize() == day]
     b5_day = bars_5m[bars_5m.index.normalize() == day]
@@ -175,11 +192,16 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
     implied = implied_index_level(z, index=index, at=floor_ts)
     floor_spot = implied if implied is not None else float(px_day["Close"].iloc[-1]) * ratio
     counters = counters if counters is not None else {}
+    # No variants supplied: the round-1 single-long build, derived from
+    # exit_policy so the legacy call sites (and their outputs) are unchanged.
+    if variants is None:
+        variants = (sc.TradeVariant(0, False, exit_policy.stop_frac,
+                                    exit_policy.target_mult),)
     rows, marks = [], []
 
     for strategy, ((entries, exits, s_ent, s_ext), feats) in prepared.items():
 
-        for side, sig_entry, sig_exit, sig_opp in (
+        for sig_right, sig_entry, sig_exit, sig_opp in (
                 ("C", entries, exits, s_ent), ("P", s_ent, s_ext, entries)):
             if sig_entry is None:
                 continue
@@ -193,95 +215,136 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                 trade_idx = counters[key]
                 spot = float(px_day["Close"].asof(t))
                 mapped = spot * ratio
-                contract = pick_atm(z, index=index, right=side, mapped_spot=mapped, at=t)
-                symbol = f"{index}-{side}"
-                base = {
-                    "symbol": symbol, "root": None, "index": index, "strategy": strategy,
-                    "trade_idx": trade_idx, "dte": 0, "entry_ts": t, "entry_date": day,
-                    "direction": 0 if side == "C" else 1, "right": side,
-                    "contract": None, "strike": np.nan, "expiration": day,
-                    "entry_premium": np.nan, "fill_entry_ts": pd.NaT, "fill_exit_ts": pd.NaT,
-                    "fill_lag_s": np.nan, "n_fills": 0, "n_rolls": 0, "executed": False,
-                    "gross_return": np.nan, "net_return": np.nan, "exit_ts": pd.NaT,
-                    "und_period_return": np.nan, "exit_reason": None,
-                    "depth_entry": np.nan, "depth_exit": np.nan, "spx0_ratio": ratio,
-                }
-                # features at the signal close (all SIGNAL_CLOSE by construction)
-                f = feats.loc[t]
-                c1 = ctx_1m.asof(t) if t >= ctx_1m.index[0] else pd.Series(dtype=float)
-                base.update({k: float(f[k]) for k in TECHNICALS})
-                base.update({
-                    "dir_short": 1.0 if side == "P" else 0.0,
-                    "dte_frac": (floor_ts - t).total_seconds() / 60.0 / 390.0,
-                    "bars_since_signal": 0.0,
-                    "spx0_rv_30": float(c1.get("spx0_rv_30", np.nan)),
-                    "spx0_rv_60": float(c1.get("spx0_rv_60", np.nan)),
-                    "spx0_min_since_open": float(c1.get("spx0_min_since_open", np.nan)),
-                    "spx0_min_to_expiry": (floor_ts - t).total_seconds() / 60.0,
-                })
-                for s_ in sc.STRATEGIES:
-                    base[f"strat_{s_}"] = 1.0 if s_ == strategy else 0.0
-                if contract is None:
-                    base.update({"moneyness": np.nan, "spx0_depth_signal": 0.0,
-                                 "spx0_prem_spot_last": np.nan,
-                                 "exit_reason": "no_contract"})
-                    rows.append(base)
-                    continue
-                cbars = z[z["occ"] == contract.occ]
-                before = cbars[cbars["timestamp"] <= t]
-                last_print = before.iloc[-1] if not before.empty else None
-                base.update({
-                    "root": contract.root, "contract": contract.occ,
-                    "strike": contract.strike,
-                    "moneyness": contract.strike / mapped - 1.0,
-                    "spx0_depth_signal": float(last_print["Volume"]) if last_print is not None else 0.0,
-                    "spx0_prem_spot_last": (float(last_print["Close"]) / mapped
-                                            if last_print is not None else np.nan),
-                })
-                fe_ts, fe_px, fe_depth, fail = entry_fill(cbars, t, depth)
-                if fail is not None:
-                    base["exit_reason"] = fail.value
-                    rows.append(base)
-                    continue
-                # exit signal: strategy exit / opposite entry on a LATER 5m bar,
-                # premium stop/target on 1m closes, or the session floor.
-                cands = [floor_ts]
+                # the symbol keeps the SIGNAL's right so every variant of one
+                # signal shares the (symbol, strategy, trade_idx) dedupe key
+                symbol = f"{index}-{sig_right}"
+                # strategy-driven exit candidates are variant-independent
+                sig_exit_ts = []
                 for sig in (sig_exit, sig_opp):
                     if sig is not None:
                         u = _first_true_after(sig, t)
                         if u is not None:
-                            cands.append(u)
-                st = _stop_target_ts(cbars, fe_ts, fe_px, exit_policy)
-                if st is not None:
-                    cands.append(st)
-                exit_sig_ts = max(min(cands), fe_ts)
-                reason = ("floor" if exit_sig_ts == floor_ts else
-                          "stop_target" if st is not None and exit_sig_ts == st else "signal")
-                fx_ts, fx_px, fx_depth, xfail = exit_fill(
-                    cbars, exit_sig_ts, depth, session_floor_ts=floor_ts,
-                    intrinsic_at_floor=intrinsic(side, contract.strike, floor_spot))
-                if xfail is FillFailure.SETTLED_INTRINSIC:
-                    reason = "settled_intrinsic"
-                g = gross_return(fe_px, fx_px)
-                n = net_return(fe_px, fx_px, costs)
-                und_exit = float(px_day["Close"].asof(fx_ts))
-                base.update({
-                    "entry_premium": fe_px, "fill_entry_ts": fe_ts, "fill_exit_ts": fx_ts,
-                    "fill_lag_s": (fe_ts - t).total_seconds(), "n_fills": 1,
-                    "executed": True, "gross_return": g, "net_return": n,
-                    "exit_ts": fx_ts, "und_period_return": und_exit / spot - 1.0,
-                    "exit_reason": reason, "depth_entry": fe_depth, "depth_exit": fx_depth,
-                })
-                rows.append(base)
-                # marks: contract closes strictly between the fills, bounded by
-                # the fill prints themselves (entry and exit marks guaranteed).
-                tid = f"{symbol}|{strategy}|{trade_idx}|0|{int(pd.Timestamp(t).value)}"
-                inner = cbars[(cbars["timestamp"] > fe_ts) & (cbars["timestamp"] < fx_ts)]
-                marks.append({"trade_id": tid, "mark_ts": fe_ts, "gross_return": 0.0})
-                for r in inner.itertuples(index=False):
-                    marks.append({"trade_id": tid, "mark_ts": pd.Timestamp(r.timestamp),
-                                  "gross_return": float(r.Close) / fe_px - 1.0})
-                marks.append({"trade_id": tid, "mark_ts": fx_ts, "gross_return": g})
+                            sig_exit_ts.append(u)
+                # features at the signal close (all SIGNAL_CLOSE by construction)
+                f = feats.loc[t]
+                c1 = ctx_1m.asof(t) if t >= ctx_1m.index[0] else pd.Series(dtype=float)
+                contract_by_right: dict = {}
+
+                for variant in variants:
+                    # a short variant SELLS the opposite right: a bullish
+                    # signal sells the put, a bearish one sells the call
+                    right = (sig_right if not variant.short
+                             else ("P" if sig_right == "C" else "C"))
+                    if right not in contract_by_right:
+                        contract_by_right[right] = pick_atm(
+                            z, index=index, right=right, mapped_spot=mapped, at=t)
+                    contract = contract_by_right[right]
+                    min_to_exp = (floor_ts - t).total_seconds() / 60.0
+                    base = {
+                        "symbol": symbol, "root": None, "index": index, "strategy": strategy,
+                        "trade_idx": trade_idx, "dte": variant.code, "entry_ts": t,
+                        "entry_date": day,
+                        "direction": 0 if sig_right == "C" else 1, "right": right,
+                        "contract": None, "strike": np.nan, "expiration": day,
+                        "entry_premium": np.nan, "fill_entry_ts": pd.NaT, "fill_exit_ts": pd.NaT,
+                        "fill_lag_s": np.nan, "n_fills": 0, "n_rolls": 0, "executed": False,
+                        "gross_return": np.nan, "net_return": np.nan, "exit_ts": pd.NaT,
+                        "und_period_return": np.nan, "exit_reason": None, "margin": np.nan,
+                        "depth_entry": np.nan, "depth_exit": np.nan, "spx0_ratio": ratio,
+                    }
+                    base.update({k: float(f[k]) for k in TECHNICALS})
+                    rv30 = float(c1.get("spx0_rv_30", np.nan))
+                    base.update({
+                        "dir_short": 1.0 if sig_right == "P" else 0.0,
+                        "dte_frac": min_to_exp / 390.0,
+                        "bars_since_signal": 0.0,
+                        "spx0_rv_30": rv30,
+                        "spx0_rv_60": float(c1.get("spx0_rv_60", np.nan)),
+                        "spx0_min_since_open": float(c1.get("spx0_min_since_open", np.nan)),
+                        "spx0_min_to_expiry": min_to_exp,
+                        "spx0_short": 1.0 if variant.short else 0.0,
+                        "spx0_stop_frac": float(variant.stop_frac),
+                    })
+                    for s_ in sc.STRATEGIES:
+                        base[f"strat_{s_}"] = 1.0 if s_ == strategy else 0.0
+                    if contract is None:
+                        base.update({"moneyness": np.nan, "spx0_depth_signal": 0.0,
+                                     "spx0_prem_spot_last": np.nan,
+                                     "spx0_prem_rich": np.nan,
+                                     "exit_reason": "no_contract"})
+                        rows.append(base)
+                        continue
+                    cbars = z[z["occ"] == contract.occ]
+                    before = cbars[cbars["timestamp"] <= t]
+                    last_print = before.iloc[-1] if not before.empty else None
+                    prem_spot = (float(last_print["Close"]) / mapped
+                                 if last_print is not None else np.nan)
+                    # premium richness: last premium/spot vs the realized-vol
+                    # move to expiry (>1 = premium richer than recent movement)
+                    exp_move = rv30 * np.sqrt(max(min_to_exp, 0.0))
+                    prem_rich = prem_spot / exp_move if exp_move > 0 else np.nan
+                    base.update({
+                        "root": contract.root, "contract": contract.occ,
+                        "strike": contract.strike,
+                        "moneyness": contract.strike / mapped - 1.0,
+                        "spx0_depth_signal": float(last_print["Volume"]) if last_print is not None else 0.0,
+                        "spx0_prem_spot_last": prem_spot,
+                        "spx0_prem_rich": prem_rich,
+                    })
+                    fe_ts, fe_px, fe_depth, fail = entry_fill(cbars, t, depth,
+                                                              sell=variant.short)
+                    if fail is not None:
+                        base["exit_reason"] = fail.value
+                        rows.append(base)
+                        continue
+                    # exit signal: strategy exit / opposite entry on a LATER 5m
+                    # bar, premium stop (and long target) on 1m closes, or the
+                    # session floor.
+                    cands = [floor_ts] + sig_exit_ts
+                    st = _stop_target_ts(cbars, fe_ts, fe_px, variant)
+                    if st is not None:
+                        cands.append(st)
+                    exit_sig_ts = max(min(cands), fe_ts)
+                    reason = ("floor" if exit_sig_ts == floor_ts else
+                              "stop_target" if st is not None and exit_sig_ts == st else "signal")
+                    fx_ts, fx_px, fx_depth, xfail = exit_fill(
+                        cbars, exit_sig_ts, depth, session_floor_ts=floor_ts,
+                        intrinsic_at_floor=intrinsic(right, contract.strike, floor_spot),
+                        buyback=variant.short)
+                    settled = xfail is FillFailure.SETTLED_INTRINSIC
+                    if settled:
+                        reason = "settled_intrinsic"
+                    if variant.short:
+                        margin = short_margin(fe_px, variant.stop_frac)
+                        g = gross_return_short(fe_px, fx_px, margin)
+                        n = net_return_short(fe_px, fx_px, margin, costs, settled=settled)
+                    else:
+                        margin = np.nan
+                        g = gross_return(fe_px, fx_px)
+                        n = net_return(fe_px, fx_px, costs)
+                    und_exit = float(px_day["Close"].asof(fx_ts))
+                    base.update({
+                        "entry_premium": fe_px, "fill_entry_ts": fe_ts, "fill_exit_ts": fx_ts,
+                        "fill_lag_s": (fe_ts - t).total_seconds(), "n_fills": 1,
+                        "executed": True, "gross_return": g, "net_return": n,
+                        "exit_ts": fx_ts, "und_period_return": und_exit / spot - 1.0,
+                        "exit_reason": reason, "depth_entry": fe_depth, "depth_exit": fx_depth,
+                        "margin": margin,
+                    })
+                    rows.append(base)
+                    # marks: contract closes strictly between the fills, bounded
+                    # by the fill prints themselves (entry and exit marks
+                    # guaranteed), in the row's own per-position return units.
+                    tid = (f"{symbol}|{strategy}|{trade_idx}|{variant.code}"
+                           f"|{int(pd.Timestamp(t).value)}")
+                    inner = cbars[(cbars["timestamp"] > fe_ts) & (cbars["timestamp"] < fx_ts)]
+                    marks.append({"trade_id": tid, "mark_ts": fe_ts, "gross_return": 0.0})
+                    for r in inner.itertuples(index=False):
+                        mg = ((fe_px - float(r.Close)) / margin if variant.short
+                              else float(r.Close) / fe_px - 1.0)
+                        marks.append({"trade_id": tid, "mark_ts": pd.Timestamp(r.timestamp),
+                                      "gross_return": mg})
+                    marks.append({"trade_id": tid, "mark_ts": fx_ts, "gross_return": g})
     return rows, marks
 
 
@@ -293,7 +356,9 @@ def available_sessions() -> list[pd.Timestamp]:
 
 def build(days: list[pd.Timestamp], out_dir: Path, *, spec: dict | None = None,
           depth: DepthPolicy = DepthPolicy(), exit_policy: sc.ExitPolicy = sc.DEFAULT_EXIT,
-          costs: IndexCostScenario = BASE) -> tuple[pd.DataFrame, pd.DataFrame]:
+          costs: IndexCostScenario = BASE,
+          variants: tuple[sc.TradeVariant, ...] = sc.ROUND2_VARIANTS
+          ) -> tuple[pd.DataFrame, pd.DataFrame]:
     assert_decision_safe(SPX0_META_FEATURES)
     spec = spec or load_spec()
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -315,7 +380,7 @@ def build(days: list[pd.Timestamp], out_dir: Path, *, spec: dict | None = None,
             r, m = build_session_rows(day, index, proxy_1m=proxies[index], bars_5m=bars5[index],
                                       options=options, prepared=prepared[index], ctx_1m=ctx[index],
                                       depth=depth, exit_policy=exit_policy, costs=costs,
-                                      counters=counters)
+                                      counters=counters, variants=variants)
             all_rows += r
             all_marks += m
         if k % 20 == 0 or k == len(days):
@@ -349,6 +414,7 @@ def build(days: list[pd.Timestamp], out_dir: Path, *, spec: dict | None = None,
         "sessions": [str(d.date()) for d in days], "rows": int(len(ds)),
         "executed": int(ds["executed"].sum()) if len(ds) else 0,
         "depth_policy": depth.__dict__, "exit_policy": exit_policy.__dict__,
+        "variants": [v.__dict__ for v in variants],
         "costs": costs.__dict__, "features": SPX0_META_FEATURES}, indent=2, default=str))
     return ds, marks
 
@@ -367,7 +433,7 @@ def main() -> None:
     ex = ds[ds["executed"]] if len(ds) else ds
     print(f"rows={len(ds)} executed={len(ex)} marks={len(marks)} -> {args.out}")
     if len(ex):
-        print(ex.groupby("exit_reason")["net_return"].agg(["size", "mean"]).round(3))
+        print(ex.groupby(["dte", "exit_reason"])["net_return"].agg(["size", "mean"]).round(3))
 
 
 if __name__ == "__main__":

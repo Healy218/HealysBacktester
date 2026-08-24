@@ -202,6 +202,44 @@ entry, never edit history).
 - **2026-07-08 — Hetzner CX33 over Oracle free tier** (ARM capacity
   unavailable; user declined the PAYG card hold).
 
+## 2026-08-24 — The v4 gate's baseline bar is the baseline's ex-top3
+
+**Decision (user):** `_passes_gate`'s beat-baseline term compares the
+candidate's total return against the baseline's `total_ex_top3` (the
+take-everything book with its top-3 tickets removed, already computed
+through the same ledger), falling back to the raw return only when ex-top3
+is unavailable. Cause: the 2026-08-21 finalize refusals were carried
+entirely by this term — the raw baseline showed +1854% on the validation
+window, riding one 1526× outlier ticket, so the bar measured luck. The DD
+cap and MIN_KEPT terms are untouched; the candidate side stays raw (a
+candidate that catches an outlier deserves the credit).
+
+**Rejected:** overriding the gate for one run (already on the record,
+2026-08-21); winsorizing the baseline's returns (a second knob to justify;
+ex-top3 already exists in the shared metric schema and is reported).
+
+## 2026-08-24 — spx0 second round: sell-premium variants ride the DTE axis
+
+Implemented per SPX0_SPEC "Second design round" items 1+2: every signal is
+emitted at six `TradeVariant`s — long premium stops {0.3, 0.5, 0.7} and
+sell-premium stops {1.5, 2.0, 3.0} — with the variant code riding the
+dataset's `dte` column so rank/EV dedupe on (symbol, strategy, trade_idx)
+makes the variant fold-selectable exactly like DTE in v4; code 0 reproduces
+the round-1 long build bit-identically and stays the frozen baseline.
+
+**Short mechanics:** a short SELLS the opposite right (bullish signal sells
+the put), fills at the bar LOW on entry and buys back at the HIGH (worst
+prints), posts `margin = (stop_frac − 1) × entry premium` — the max planned
+loss, enforced by the premium stop above entry — and returns are per unit
+margin so the ledger's units and the 25% DD cap keep their meaning. Gap
+risk past the stop (and settlement) can exceed −1×margin; that is kept as
+data (smoke build: stop-outs average −1.5 to −2.1× margin). Cash
+settlement pays intrinsic with entry-side costs only (no exit crossing); a
+market buyback pays both sides. New features: `spx0_short`,
+`spx0_stop_frac`, `spx0_prem_rich` (last premium/spot vs the realized-vol
+move to expiry); KEEP_THRESHOLDS gained 0.55/0.60/0.65 rungs for the short
+book's ~0.7+ base rate.
+
 ## 2026-08-21 (evening) — Drawdown-aware gross brake on EV sizing
 
 **Decision (user):** after the EV head fixed selection but the full

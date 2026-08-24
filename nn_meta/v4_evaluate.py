@@ -258,6 +258,8 @@ def format_candidate_grid(policy: dict, baseline_return: float | None = None) ->
     """One line per tried candidate: mode/threshold[/brake], kept, val return,
     maxDD, eligible — the refusal diagnostic."""
     lines = [f"  baseline return: {baseline_return}"]
+    if policy.get("baseline_ex_top3") is not None:
+        lines[0] += f"  (gate bar = ex-top3: {policy['baseline_ex_top3']:+.1%})"
     for c in policy.get("candidate_grid", []):
         ret = c["total_return"]; dd = c["max_drawdown"]
         lines.append(
@@ -297,13 +299,21 @@ def _select_winner(selected: list[dict]) -> dict:
 def _passes_gate(metrics: dict, baseline: dict, dd_cap: float | None = None) -> bool:
     """The eligibility gate, identical for every mode: kept >= MIN_KEPT_TRADES,
     beat the frozen baseline, maxDD <= ``dd_cap`` (default the shared
-    MAX_DRAWDOWN_CAP; the spx0 pool passes its tighter 0.25)."""
+    MAX_DRAWDOWN_CAP; the spx0 pool passes its tighter 0.25).
+
+    The baseline bar is its ``total_ex_top3`` — the take-everything book with
+    its top-3 tickets removed (DECISIONS 2026-08-24: a single 1526× outlier
+    carried the raw baseline to +1854% and made the bar luck, not skill). The
+    raw ``total_return`` is the fallback when ex-top3 is unavailable (too few
+    trades)."""
     cap = config.MAX_DRAWDOWN_CAP if dd_cap is None else float(dd_cap)
+    bar = baseline.get("total_ex_top3")
+    if bar is None:
+        bar = baseline["total_return"]
     return bool(
         metrics["n_kept"] >= config.MIN_KEPT_TRADES
         and metrics["total_return"] is not None
-        and (baseline["total_return"] is None
-             or metrics["total_return"] > baseline["total_return"])
+        and (bar is None or metrics["total_return"] > bar)
         and (metrics["max_drawdown"] or 0) <= cap
     )
 
@@ -382,6 +392,8 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
     # is still returned (callers need something to report), but it carries
     # eligible=False so consumers can refuse to promote it.
     winner = max(candidates, key=_policy_rank)
+    # The gate's actual bar (DECISIONS 2026-08-24), kept so refusals are readable.
+    winner["baseline_ex_top3"] = baseline.get("total_ex_top3")
     # Every candidate is a "trial"; its Sharpe feeds the deflation later.
     winner["candidate_sharpes"] = [c["metrics"]["per_trade_sharpe"] for c in candidates]
     # The whole grid, compactly, so a refusal can be read (which candidates
@@ -640,7 +652,7 @@ def _write_report(results: list[dict], output: Path) -> None:
              "",
              "The **gate** column reports whether the winning policy cleared the "
              "eligibility gate on validation (kept ≥ "
-             f"{config.MIN_KEPT_TRADES} trades, beat the frozen baseline, maxDD ≤ "
+             f"{config.MIN_KEPT_TRADES} trades, beat the frozen baseline ex-top3, maxDD ≤ "
              f"{config.MAX_DRAWDOWN_CAP:.0%}). A ⚠ row's winner is the least-bad "
              "config, not a config that passed — its test numbers are diagnostic "
              "only and must not be promoted.", "",

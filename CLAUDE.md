@@ -34,9 +34,11 @@ here — it lives in the files below.
 ## Environment (the facts you need before running anything)
 
 - **Repo**: `/home/healy/Coding/HealysBacktester` on the CachyOS (Arch) home
-  box — reinstalled 2026-08-17, replacing Pop!_OS; the user is now `healy`,
-  not `healylabs`. Production is the Hetzner server — deploy by `git pull`
-  over the deploy key, **never scp** (ops runbook: `DOCUMENTATION.md`).
+  box — NEW HARDWARE as of 2026-08-23 (Ryzen 7 9850X3D, 32 GB DDR5; the old
+  i5-11400 build with the RAM fault is retired — the NVMe moved over intact,
+  so paths/OS/user `healy` are unchanged). Production is the Hetzner server —
+  deploy by `git pull` over the deploy key, **never scp** (ops runbook:
+  `DOCUMENTATION.md`).
 - **Python**: `./venv/bin/python` (3.12.14, installed via `uv` — Arch ships
   only 3.14, which the pins reject) — always the venv binary explicitly;
   there is no conda or system path. `pytest` is NOT in `requirements.txt`;

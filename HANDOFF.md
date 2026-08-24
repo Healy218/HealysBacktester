@@ -66,13 +66,15 @@ and a hard loss cap via `stop_frac > 1` selected in-fold. Sequence: short
 path + `stop_frac` grid → run → intraday strategies (VWAP/ORB/gap) swept
 in-fold → run → extend data to 2022.
 
-## The box
+## The box — REPLACED 2026-08-23
 
-`claude` coredumped 6× in 42h (SIGSEGV in Bun/JSC allocator threads, no
-memory pressure, once 7 min after boot) — the RAM fault, see memory note.
-Board: Gigabyte B560 DS3H AC-Y1, 4×DDR4 slots, i5-11400 → DDR4-3200 max
-useful. User is buying a 2×16 GB DDR4-3200 kit this weekend; install it
-ALONE (drop the old sticks), then a memtest86+ pass.
+The RAM-fault saga is over: instead of the planned DDR4 kit, the user built
+a NEW machine — Ryzen 7 9850X3D (8C/16T), 32 GB DDR5, RTX 3060 Ti carried
+over, same 1 TB NVMe moved intact (OS/paths/user unchanged). The old box
+segfaulted `fa.collect` hourly on its final morning (05:38–09:03 CDT);
+zero coredumps since the swap, StockTwits service running clean, full
+444-test suite green in 23 s. Compute doctrine unchanged: training/finalize
+still run on GCP Batch, not here.
 
 ## Standing warnings (unchanged)
 

@@ -115,8 +115,10 @@ The first design — long ATM 0DTE on the v31 daily-swing strategies run on
 2026-08-21). The model ranks; nothing clears ~40% round-trip friction on
 a ~0.30 premium. Levers, in the order they attack that number:
 
-1. **Sell premium (short the contract).** Flips who pays the friction and
-   the base rate (~75-80% wins). NOT a sign flip of the builder:
+1. **Sell premium (short the contract). [BUILT 2026-08-24 with 2 — six
+   `TradeVariant`s per signal, variant code on the `dte` axis; margin =
+   (stop_frac − 1) × entry; DECISIONS 2026-08-24.]** Flips who pays the
+   friction and the base rate (~75-80% wins). NOT a sign flip of the builder:
    - A short's loss is unbounded; the ledger debits cash at entry and
      marks value (long semantics). A short position needs a **margin
      notion**: `size_fraction` becomes the margin posted, and the

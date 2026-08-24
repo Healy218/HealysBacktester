@@ -48,3 +48,35 @@ def gross_return(entry_price: float, exit_price: float) -> float:
     if entry_price <= 0:
         raise ValueError("entry premium must be positive")
     return float(exit_price) / float(entry_price) - 1.0
+
+
+def short_margin(entry_price: float, stop_frac: float) -> float:
+    """Margin posted against a sold contract: the max planned loss, set by the
+    premium stop at ``stop_frac × entry`` (SPX0_SPEC "Second design round")."""
+    if entry_price <= 0:
+        raise ValueError("entry premium must be positive")
+    if stop_frac <= 1:
+        raise ValueError("a short's stop_frac must exceed 1")
+    return (float(stop_frac) - 1.0) * float(entry_price)
+
+
+def gross_return_short(entry_price: float, exit_price: float, margin: float) -> float:
+    """Seller's raw return on posted margin: −1 means the stop fired exactly at
+    its level; below −1 is gap/settlement past the stop (real, kept)."""
+    if margin <= 0:
+        raise ValueError("margin must be positive")
+    return (float(entry_price) - float(exit_price)) / float(margin)
+
+
+def net_return_short(entry_price: float, exit_price: float, margin: float,
+                     costs: IndexCostScenario = BASE, *, settled: bool = False) -> float:
+    """Seller's return on posted margin after costs: the premium received nets
+    the entry-side spread and fee; a market buyback pays the exit side too,
+    while cash settlement (``settled=True``) pays intrinsic with no crossing."""
+    if float(entry_price) <= 0:
+        raise ValueError("entry premium must be positive")
+    if float(margin) <= 0:
+        raise ValueError("margin must be positive")
+    got = float(entry_price) - costs.side_cost_points(entry_price)
+    paid = float(exit_price) + (0.0 if settled else costs.side_cost_points(exit_price))
+    return (got - paid) / float(margin)

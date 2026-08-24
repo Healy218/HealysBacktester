@@ -42,10 +42,14 @@ def fillable(volume, policy: DepthPolicy) -> np.ndarray:
     return np.isfinite(v) & (v >= policy.min_volume)
 
 
-def entry_fill(bars: pd.DataFrame, signal_ts: pd.Timestamp, policy: DepthPolicy
+def entry_fill(bars: pd.DataFrame, signal_ts: pd.Timestamp, policy: DepthPolicy,
+               *, sell: bool = False
                ) -> tuple[pd.Timestamp | None, float | None, float | None, FillFailure | None]:
     """First bar strictly AFTER the signal bar, within ``entry_window_min``
-    minutes, with depth. Returns (fill_ts, price=High, depth=Volume, failure)."""
+    minutes, with depth. A buy fills at the bar HIGH, a sell (opening a short)
+    at the bar LOW — the worst print either way. Returns (fill_ts, price,
+    depth=Volume, failure); a sell whose worst print is not positive is
+    uninvestable and rejects like missing depth."""
     lim = signal_ts + pd.Timedelta(minutes=policy.entry_window_min)
     after = bars[(bars["timestamp"] > signal_ts) & (bars["timestamp"] <= lim)]
     if after.empty:
@@ -54,21 +58,27 @@ def entry_fill(bars: pd.DataFrame, signal_ts: pd.Timestamp, policy: DepthPolicy
     if ok.empty:
         return None, None, None, FillFailure.NO_DEPTH_ENTRY
     r = ok.iloc[0]
-    return pd.Timestamp(r["timestamp"]), float(r["High"]), float(r["Volume"]), None
+    price = float(r["Low"]) if sell else float(r["High"])
+    if sell and price <= 0:
+        return None, None, None, FillFailure.NO_DEPTH_ENTRY
+    return pd.Timestamp(r["timestamp"]), price, float(r["Volume"]), None
 
 
 def exit_fill(bars: pd.DataFrame, exit_signal_ts: pd.Timestamp, policy: DepthPolicy, *,
-              session_floor_ts: pd.Timestamp, intrinsic_at_floor: float
+              session_floor_ts: pd.Timestamp, intrinsic_at_floor: float,
+              buyback: bool = False
               ) -> tuple[pd.Timestamp, float, float, FillFailure | None]:
     """First bar at/after the exit signal with depth, no later than the session
-    floor. Fills at the bar LOW. Past the floor with no depth: cash-settles to
-    ``intrinsic_at_floor`` at the floor timestamp (conservative: a 0DTE option
-    that could not be sold is worth exactly its intrinsic at the close)."""
+    floor. A long's exit sells at the bar LOW; a short's exit buys back at the
+    bar HIGH (worst print either way). Past the floor with no depth:
+    cash-settles to ``intrinsic_at_floor`` at the floor timestamp — the long's
+    payout, or exactly what the short owes."""
     cand = bars[(bars["timestamp"] >= exit_signal_ts) & (bars["timestamp"] <= session_floor_ts)]
     ok = cand[fillable(cand["Volume"], policy)]
     if not ok.empty:
         r = ok.iloc[0]
-        return pd.Timestamp(r["timestamp"]), float(r["Low"]), float(r["Volume"]), None
+        price = float(r["High"]) if buyback else float(r["Low"])
+        return pd.Timestamp(r["timestamp"]), price, float(r["Volume"]), None
     return pd.Timestamp(session_floor_ts), float(max(intrinsic_at_floor, 0.0)), 0.0, \
         FillFailure.SETTLED_INTRINSIC
 

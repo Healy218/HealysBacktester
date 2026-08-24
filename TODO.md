@@ -87,9 +87,11 @@ head on signed `net_return`, one new mode `ev`, gate unchanged.
   evening: walk-forward unchanged, finalize refused, and the candidate grid
   shows the DD cap was never binding (ev/0.05 maxDD 21.9%). The failing
   term is beat-baseline against an outlier-carried +1854% baseline.**
-- [ ] **USER DECISION: the gate's baseline term.** Recommended: beat the
-  baseline's `total_ex_top3` (ledger, already computed) instead of its raw
-  return. Then re-run finalize only (`TASK_MODE=finalize`, ~40 min).
+- [x] **USER DECISION 2026-08-24: the gate's baseline term = ex-top3.**
+  `_passes_gate` now bars candidates at the baseline's `total_ex_top3`
+  (raw-return fallback when unavailable); candidate side stays raw. Landed
+  with tests (DECISIONS 2026-08-24). Finalize re-run on Batch is next
+  (`TASK_MODE=finalize`, ~40 min).
 
 ## 1c — spx0 / VSPNDX seat (starts WHILE 1b runs on Batch)
 
@@ -103,9 +105,12 @@ three pieces below exist; build them in this order, each tested:
 - [x] Cost accounting (`nn_meta/spx0/costs.py`, dollar fees + point spreads, base/stressed; 25% cap via `dd_cap`): index fees + spreads on small premiums through the
   stage-2 ledger; 25% max-DD gate; no upside cap.
 - [x] `TASK_MODE=spx0` in `deploy/gcp/`; ran 2026-08-21 (`spx0-run-27adf68-115405`): **no edge after costs** — first design rejected, see EXPERIMENTS. Seat parked pending a different design (sell premium / OTM / 5m re-sweep).
-- [ ] **Second design round** (plan: `docs/specs/SPX0_SPEC.md` "Second design
-  round"): (1) sell-premium path with margin-as-size and a hard loss cap via
-  `stop_frac > 1`; (2) `stop_frac` fold-selectable grid; → Batch run →
+- [~] **Second design round** (plan: `docs/specs/SPX0_SPEC.md` "Second design
+  round"): (1)+(2) **BUILT 2026-08-24** — six `TradeVariant`s per signal
+  (long stops {0.3,0.5,0.7}, sell-premium stops {1.5,2,3}; margin =
+  (stop−1)×entry; variant code rides the `dte` column so rank/EV dedupe
+  fold-selects it like DTE; code 0 bit-identical to round 1). Suite 451,
+  12-session smoke + `--smoke` evaluate clean end-to-end. → Batch run →
   verdict; then (3) VWAP-reversion / ORB / gap-fill swept in-fold; then
   (5) extend data to 2022 for the short seat's tail regime.
 
