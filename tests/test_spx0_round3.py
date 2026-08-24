@@ -157,3 +157,43 @@ def test_prepare_signals_includes_the_intraday_seats():
     b5 = resample_5m(_proxy())
     prepared = prepare_signals(b5, {"strategies": {}})    # no frozen v31 entries
     assert set(prepared) == set(sc.INTRADAY_STRATEGIES)
+
+
+def test_round4_mapping_pairs_seats_with_structures(tmp_path):
+    """Round 4: a variants MAPPING gives each seat only its own variants —
+    vertical seats emit no long rows, gap_fill emits no verticals, unmapped
+    seats emit nothing."""
+    px = _proxy()
+    b5 = resample_5m(px)
+    mapping = {"rsi": sc.VERTICAL_VARIANTS, "macd": ()}
+    rows, _ = build_session_rows(
+        DAY, "SPX", proxy_1m=px, bars_5m=b5, options=_options(),
+        prepared=_prepared(b5, T_IN, T_OUT),      # provides only an rsi signal
+        ctx_1m=proxy_context_features(px), variants=mapping)
+    ds = pd.DataFrame(rows)
+    assert set(ds["strategy"]) == {"rsi"}
+    assert set(ds["dte"]) == {v.code for v in sc.VERTICAL_VARIANTS}
+    assert (ds["dte"] < 0).all()                  # no long rows for a vertical seat
+
+
+def test_round4_frozen_spec_is_seat_aware():
+    from nn_meta.spx0.evaluate import synthetic_spec
+    ds = pd.DataFrame({
+        "symbol": ["SPX-C"] * 4 + ["SPX-C"] * 2,
+        "strategy": ["ma"] * 4 + ["gap_fill_50"] * 2,
+        "dte": [-1001, -1002, -1004, -1001, 0, 30],
+    })
+    spec = synthetic_spec(ds)
+    strats = spec["symbols"]["SPX-C"]["strategies"]
+    assert strats["ma"]["dte"] == -1002           # ROUND4_FROZEN middle width
+    assert strats["gap_fill_50"]["dte"] == 0      # long default
+    # a seat whose frozen code is absent falls back to a code that EXISTS
+    ds2 = ds[ds["dte"] != -1002]
+    assert synthetic_spec(ds2)["symbols"]["SPX-C"]["strategies"]["ma"]["dte"] == -1004
+
+
+def test_round4_config_only_maps_supported_pairs():
+    assert set(sc.ROUND4_SEAT_VARIANTS) == {"ma", "orb_15", "rsi", "gap_fill_50"}
+    for seat, vs in sc.ROUND4_SEAT_VARIANTS.items():
+        short = all(v.wing_strikes > 0 for v in vs)
+        assert short if seat != "gap_fill_50" else all(not v.short for v in vs)

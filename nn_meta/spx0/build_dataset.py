@@ -144,7 +144,8 @@ def _stop_target_ts(cbars: pd.DataFrame, fill_ts: pd.Timestamp, entry_px: float,
     return None if hit.empty else pd.Timestamp(hit["timestamp"].iloc[0])
 
 
-def prepare_signals(bars_5m: pd.DataFrame, spec_entry: dict) -> dict:
+def prepare_signals(bars_5m: pd.DataFrame, spec_entry: dict,
+                    active: set[str] | None = None) -> dict:
     """Per strategy, ONCE over the full proxy history: the four signal series
     and the technical features (5m clock features re-scaled from the 15m
     convention: 78 bars/session, first/last hour = 12 bars). Intraday-native
@@ -161,6 +162,8 @@ def prepare_signals(bars_5m: pd.DataFrame, spec_entry: dict) -> dict:
         return feats
 
     for strategy in sc.STRATEGIES:
+        if active is not None and strategy not in active:
+            continue                       # seat has no variants this round
         if strategy in sc.INTRADAY_STRATEGIES:
             sigs = tuple(_as_series(x) for x in intraday_signals(strategy, bars_5m))
             feats = _clock(technical_features(bars_5m, 12, 26))
@@ -207,12 +210,18 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
     counters = counters if counters is not None else {}
     # No variants supplied: the round-1 single-long build, derived from
     # exit_policy so the legacy call sites (and their outputs) are unchanged.
+    # A MAPPING (round 4) assigns each strategy seat its own variant tuple —
+    # seats absent from the map propose nothing.
     if variants is None:
         variants = (sc.TradeVariant(0, False, exit_policy.stop_frac,
                                     exit_policy.target_mult),)
     rows, marks = [], []
 
     for strategy, ((entries, exits, s_ent, s_ext), feats) in prepared.items():
+        strat_variants = (variants.get(strategy, ()) if isinstance(variants, dict)
+                          else variants)
+        if not strat_variants:
+            continue
 
         for sig_right, sig_entry, sig_exit, sig_opp in (
                 ("C", entries, exits, s_ent), ("P", s_ent, s_ext, entries)):
@@ -250,7 +259,7 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                       else pd.Series(dtype=float))
                 contract_by_right: dict = {}
 
-                for variant in variants:
+                for variant in strat_variants:
                     # a short variant SELLS the opposite right: a bullish
                     # signal sells the put, a bearish one sells the call
                     right = (sig_right if not variant.short
@@ -469,7 +478,7 @@ def available_sessions() -> list[pd.Timestamp]:
 def build(days: list[pd.Timestamp], out_dir: Path, *, spec: dict | None = None,
           depth: DepthPolicy = DepthPolicy(), exit_policy: sc.ExitPolicy = sc.DEFAULT_EXIT,
           costs: IndexCostScenario = BASE,
-          variants: tuple[sc.TradeVariant, ...] = sc.ROUND3_VARIANTS
+          variants: tuple[sc.TradeVariant, ...] | dict = sc.ROUND4_SEAT_VARIANTS
           ) -> tuple[pd.DataFrame, pd.DataFrame]:
     assert_decision_safe(SPX0_META_FEATURES)
     spec = spec or load_spec()
@@ -477,12 +486,13 @@ def build(days: list[pd.Timestamp], out_dir: Path, *, spec: dict | None = None,
     proxies = {i: load_proxy_1m(i) for i in sc.INDEXES}
     bars5 = {i: resample_5m(p) for i, p in proxies.items()}
     ctx = {i: proxy_context_features(p) for i, p in proxies.items()}
+    active = set(variants.keys()) if isinstance(variants, dict) else None
     prepared = {}
     for i in sc.INDEXES:
         entry = spec["symbols"].get(sc.PROXY[i])
         if entry is None:
             raise SystemExit(f"baseline spec has no frozen params for {sc.PROXY[i]}")
-        prepared[i] = prepare_signals(bars5[i], entry)
+        prepared[i] = prepare_signals(bars5[i], entry, active)
     counters: dict = {}
     all_rows, all_marks = [], []
     t0 = time.time()
@@ -526,7 +536,9 @@ def build(days: list[pd.Timestamp], out_dir: Path, *, spec: dict | None = None,
         "sessions": [str(d.date()) for d in days], "rows": int(len(ds)),
         "executed": int(ds["executed"].sum()) if len(ds) else 0,
         "depth_policy": depth.__dict__, "exit_policy": exit_policy.__dict__,
-        "variants": [v.__dict__ for v in variants],
+        "variants": ({k: [v.__dict__ for v in vs] for k, vs in variants.items()}
+                     if isinstance(variants, dict)
+                     else [v.__dict__ for v in variants]),
         "costs": costs.__dict__, "features": SPX0_META_FEATURES}, indent=2, default=str))
     return ds, marks
 

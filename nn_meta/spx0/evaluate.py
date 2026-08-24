@@ -21,11 +21,21 @@ from nn_meta.v4_evaluate import _write_report, evaluate_window, schema_features
 
 
 def synthetic_spec(ds: pd.DataFrame) -> dict:
-    """Frozen spec for the spx0 pool: each (symbol, strategy) at DTE 0."""
-    syms = {}
-    for sym, strat in ds[["symbol", "strategy"]].drop_duplicates().itertuples(index=False):
-        syms.setdefault(sym, {"strategies": {}})["strategies"][strat] = {"dte": 0}
-    return {"symbols": syms, "config_hash": "spx0-dte0"}
+    """Frozen spec for the spx0 pool: each (symbol, strategy)'s
+    take-everything baseline variant. Round 4's seats carry no long-s50
+    (code 0) rows, so the frozen dte per seat comes from
+    ``sc.ROUND4_FROZEN`` when that code exists in the pair's data, else
+    code 0 if present, else the pair's lowest code — never a code the
+    dataset doesn't contain (an empty baseline would gate against nothing)."""
+    frozen = getattr(sc, "ROUND4_FROZEN", {})
+    syms: dict = {}
+    for (sym, strat), grp in ds.groupby(["symbol", "strategy"]):
+        codes = set(int(d) for d in grp["dte"].unique())
+        pick = frozen.get(strat)
+        if pick not in codes:
+            pick = 0 if 0 in codes else sorted(codes)[0]
+        syms.setdefault(sym, {"strategies": {}})["strategies"][strat] = {"dte": int(pick)}
+    return {"symbols": syms, "config_hash": "spx0-seat-frozen"}
 
 
 def main() -> None:

@@ -92,6 +92,27 @@ ROUND3_VARIANTS = (
     TradeVariant(-1004, True, float("inf"), wing_strikes=4),
 )
 
+LONG_VARIANTS = tuple(v for v in ROUND3_VARIANTS if not v.short)
+VERTICAL_VARIANTS = tuple(v for v in ROUND3_VARIANTS if v.wing_strikes > 0)
+
+# Round 4 (round-3 composition diagnosis, EXPERIMENTS 2026-08-24): the grid
+# concentrates on the seat×structure pairs the data supports — verticals for
+# the seats whose cells were positive/near-breakeven across the whole width
+# axis (ma +0.08..+0.12 all widths; orb_15 ~breakeven; rsi best win rate),
+# long stops only for gap_fill_50 (+0.05..+0.13 across all stops). The
+# vwap_rev flood (~24k trades at −0.15 mean), orb_30, gap_fill_30 and the
+# other v31 seats are dropped: negative-mean flow that only paid the toll.
+# A builder given this MAPPING emits each seat only at its own variants.
+ROUND4_SEAT_VARIANTS = {
+    "ma": VERTICAL_VARIANTS,
+    "orb_15": VERTICAL_VARIANTS,
+    "rsi": VERTICAL_VARIANTS,
+    "gap_fill_50": LONG_VARIANTS,
+}
+# The frozen take-everything baseline per seat (the dte the synthetic spec
+# freezes): the middle width for vertical seats, the round-1 s50 for longs.
+ROUND4_FROZEN = {"ma": -1002, "orb_15": -1002, "rsi": -1002, "gap_fill_50": 0}
+
 # P(win) grid for this pool. The shared KEEP_THRESHOLDS (>= 0.50) assume the
 # equity pool's base rate; a long-0DTE book wins ~27% of the time (80-session
 # build, 2026-08-21), so a 0.5 cut keeps nothing. These sit around that base
