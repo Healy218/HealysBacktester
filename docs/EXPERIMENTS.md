@@ -105,6 +105,40 @@ revisited: sell premium; liquid OTM strikes; re-sweep params for 5m bars.
 | v4 | **2026-08-16** (paper) → **2026-08-24 REAL** | v31 causal, **V118: gbt×40 ev/0.05, no brake** (first gate-eligible bundle, ex-top3 gate) | `.v4_paper_ledger.json` on server | **live — real alerts** since 2026-08-24; scan self-enforces verified+eligible |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-24 — spx0 round 3 (verticals + intraday): first signs of life, not yet a seat
+
+`spx0-run-48db82e-095520` (~5h, image `48db82e`, 6 variants × 11 strategy
+seats, 3-fold nested walk-forward, ledger-selected):
+
+| fold | winner | test return / maxDD | marked | deflated Sharpe |
+|---|---|---|---|---|
+| 1 | gbt ev/0.10 | −50.6% / 50.6% | −18.1% / 36.2% | 0.00 |
+| 2 | gbt filter/0.55 | **+2.7% / 16.1%** | **+11.6% / 21.3%** | **0.20** |
+| 3 | nn ev/0.05 brake 0.20 | **+10.2% / 29.2%** | +26.2% / 28.6% | 0.01 |
+
+**The structural fix worked**: no fold blew up — worst marked DD 36% vs
+round 2's 1126%; the vertical's −1×margin floor held in production-scale
+data. Two of three folds positive after costs for the first time in this
+pool (round 1: all negative; round 2: catastrophic). Still NOT a seat:
+fold 1 is bad, deflated Sharpes are weak (0.20 best), and fold 3's marked
+DD (28.6%) breaches the 25% cap. Trajectory is real, edge is not proven.
+Open next steps (TODO block 1, user decision): diagnose WHICH variants/
+seats the winning folds actually entered (vertical vs long, intraday vs
+v31 — the dataset + reports are in the bucket), then round 4 refinement
+vs lever 5 (2022 data — needs the Massive upgrade) vs park.
+Report: `out/spx0-20260824T145751Z-41a00/artifacts_spx0/`.
+
+## 2026-08-24 — FA discovery: FIRST frozen monthly Top-10 (August 2026)
+
+`fa/artifacts/top10_2026-08.json` + `.md`, frozen 2026-08-24 (cutoff same
+day; write-once). 275 tickers scored from ~7 weeks of archive across
+social (reddit posts/comments + StockTwits) and news (Finnhub/AV);
+velocity z vs each name's own 90d baseline; corroboration ≥ 2 families;
+liquidity floor = universe_300. Top-10: IBIT, HTZ*, BMNR*, NKE, TEM*,
+CIFR*, SLS, B*, GDX, RBLX (* = NEW vs the training pool). Forward
+tracking starts now (`fa.tracker`); the exit metric (≥3 monthlies
+tracking) is 1/3 with the September freeze cron'd for Oct 1.
+
 ## 2026-08-24 — prem_spot leakage question CLOSED: it leaks, in both families
 
 The 2026-08-20 confound (the ablation compared nn-on-legacy vs gbt-on-v4,

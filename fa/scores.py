@@ -50,7 +50,12 @@ def attention_velocity(mentions: pd.DataFrame, *,
     if mentions.empty:
         return pd.DataFrame(columns=SCORE_COLUMNS)
     m = mentions.copy()
-    m["day"] = pd.to_datetime(m["observed_at"]).dt.normalize()
+    # Archives mix tz-aware UTC stamps (collectors) with provider-local naive
+    # strings; normalize everything to naive UTC once, drop the unparseable.
+    m["observed_at"] = pd.to_datetime(m["observed_at"], utc=True,
+                                      errors="coerce").dt.tz_localize(None)
+    m = m.dropna(subset=["observed_at"])
+    m["day"] = m["observed_at"].dt.normalize()
     daily = m.groupby(["ticker", "source_family", "day"], as_index=False).agg(
         count=("evidence_ref", "size"), evidence_ref=("evidence_ref", "first"))
 

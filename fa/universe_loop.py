@@ -24,8 +24,11 @@ def monthly_rank(scores: pd.DataFrame, *, as_of: str | pd.Timestamp,
     if missing:
         raise UniverseLoopError(f"missing score fields: {sorted(missing)}")
     cutoff = pd.Timestamp(as_of)
+    if cutoff.tzinfo is not None:
+        cutoff = cutoff.tz_convert("UTC").tz_localize(None)
     rows = scores.copy()
-    rows["observed_at"] = pd.to_datetime(rows["observed_at"])
+    rows["observed_at"] = pd.to_datetime(rows["observed_at"], utc=True) \
+        .dt.tz_localize(None)
     rows = rows[rows["observed_at"] <= cutoff]
     if rows.empty:
         return pd.DataFrame(columns=["ticker", "score", "source_families", "evidence_refs"])

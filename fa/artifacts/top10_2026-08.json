@@ -1,0 +1,206 @@
+{
+  "as_of": "2026-08-24T00:00:00",
+  "rows": [
+    {
+      "evidence_refs": [
+        "news:alphavantage:https://cryptoslate.com/coins/ishares-bitcoin-trust-tokenized-stock-ondo/",
+        "news:alphavantage:https://pluang.com/en/news-feed/blackrock-pangkas-minimum-konversi-ibit",
+        "news:alphavantage:https://www.coingecko.com/en/etfs/ishares-bitcoin-trust",
+        "reddit_comment:t1_p4oqr42",
+        "reddit_comment:t1_p4zjdts",
+        "stocktwits:2026-08-18 15:01:26.022437+00:00:IBIT",
+        "stocktwits:2026-08-20 00:01:15.124571+00:00:IBIT",
+        "stocktwits:2026-08-24 06:02:22.308753+00:00:IBIT"
+      ],
+      "new": false,
+      "score": 3.0483881506501618,
+      "source_families": 2,
+      "ticker": "IBIT"
+    },
+    {
+      "evidence_refs": [
+        "news:alphavantage:https://stockstotrade.com/news/hertz-global-holdings-inc-htz-news-2026_08_07-2/",
+        "news:alphavantage:https://www.globenewswire.com/news-release/2026/08/17/3346062/0/en/shareholders-who-lost-money-in-shares-of-hertz-global-holding-inc-nasdaq-htz-should-contact-wolf-haldenstein-immediately.html",
+        "news:alphavantage:https://www.marketscreener.com/news/certain-warrants-of-hertz-global-holdings-inc-are-subject-to-a-lock-up-agreement-ending-on-9-aug-ce7f50d3dd8df02d",
+        "news:alphavantage:https://www.morningstar.com/news/pr-newswire/20260801dc17104/htz-investors-have-opportunity-to-lead-hertz-global-holdings-inc-securities-fraud-lawsuit",
+        "news:alphavantage:https://www.prnewswire.com/news-releases/htz-investors-have-opportunity-to-lead-hertz-global-holdings-inc-securities-fraud-lawsuit-302852596.html",
+        "news:alphavantage:https://www.prnewswire.com/news-releases/suewallst-reminds-hertz-global-holdings-investors-of-the-pending-class-action-lawsuit-with-a-lead-plaintiff-deadline-of-september-22-2026---htz-302851099.html",
+        "reddit:t3_1vheq79",
+        "reddit:t3_1vhmzgy",
+        "reddit:t3_1vil6l1",
+        "reddit:t3_1vk5hv5",
+        "reddit_comment:t1_p2kgrth",
+        "reddit_comment:t1_p2zwybj",
+        "reddit_comment:t1_p35ga2m",
+        "reddit_comment:t1_p3d263t",
+        "reddit_comment:t1_p3kcc8k",
+        "reddit_comment:t1_p3rbupl",
+        "reddit_comment:t1_p3y7wsi",
+        "reddit_comment:t1_p45b42u",
+        "reddit_comment:t1_p4l7zkm",
+        "reddit_comment:t1_p4ru302",
+        "reddit_comment:t1_p4z3s5d",
+        "reddit_comment:t1_p5698pz",
+        "reddit_comment:t1_p5czg1n",
+        "reddit_comment:t1_p5juv5e"
+      ],
+      "new": true,
+      "score": 2.5327441458303417,
+      "source_families": 2,
+      "ticker": "HTZ"
+    },
+    {
+      "evidence_refs": [
+        "news:alphavantage:https://ca.investing.com/news/stock-market-news/form-8k-bitmine-immersion-technologies-inc-for-14-august-93CH-4801523",
+        "news:alphavantage:https://finance.yahoo.com/markets/crypto/articles/bitmine-buys-another-7-391-152200064.html",
+        "news:alphavantage:https://news.futunn.com/en/post/77719037/bitmine-immersion-technologies-inc-9-5-ser-a-cum-pref",
+        "news:alphavantage:https://simplywall.st/stocks/us/software/nyse-bmnr/bitmine-immersion-technologies/news/bitmine-immersion-technologies-bmnr-buys-more-ethereum-and-s",
+        "news:alphavantage:https://stockstotrade.com/news/bitmine-immersion-technologies-inc-bmnr-news-2026_07_27/",
+        "news:alphavantage:https://www.marketbeat.com/instant-alerts/filing-the-manufacturers-life-insurance-company-has-261-million-stock-holdings-in-bitmine-immersion-technologies-inc-bmnr-2026-08-09/",
+        "news:alphavantage:https://www.moomoo.com/news/post/73510340/trending-industry-today-bitmine-immersion-technologies-leads-losses-in-crypto",
+        "news:alphavantage:https://www.moomoo.com/news/post/73654816/trending-industry-today-bitmine-immersion-technologies-leads-losses-in-eth",
+        "news:alphavantage:https://www.prnewswire.com/news-releases/bitmine-immersion-technologies-bmnr-announces-eth-holdings-reach-5-82-million-tokens-and-total-crypto-and-total-cash-holdings-of-11-4-billion-302852583.html",
+        "news:alphavantage:https://www.tikr.com/blog/bitmine-immersion-technologies-stock-surges-ethereum-treasury?",
+        "reddit:t3_1vx6fp0",
+        "stocktwits:2026-07-27 14:50:49.381884+00:00:BMNR",
+        "stocktwits:2026-08-16 01:02:37.686292+00:00:BMNR",
+        "stocktwits:2026-08-19 17:44:34.254534+00:00:BMNR",
+        "stocktwits:2026-08-20 00:01:15.124571+00:00:BMNR",
+        "stocktwits:2026-08-21 03:05:09.085382+00:00:BMNR",
+        "stocktwits:2026-08-22 00:00:46.457319+00:00:BMNR"
+      ],
+      "new": true,
+      "score": 2.4129002800073738,
+      "source_families": 2,
+      "ticker": "BMNR"
+    },
+    {
+      "evidence_refs": [
+        "news:alphavantage:https://www.tradingview.com/symbols/BCS-NKE0/financials-cash-flow/cash-f-investing-activities/",
+        "reddit:t3_1v151kw",
+        "reddit:t3_1vricis",
+        "reddit_comment:t1_oz4bbc4",
+        "reddit_comment:t1_p3263do",
+        "reddit_comment:t1_p3bsug0",
+        "reddit_comment:t1_p3rgx2r",
+        "reddit_comment:t1_p407hds",
+        "reddit_comment:t1_p49hkrz",
+        "reddit_comment:t1_p4qfnok",
+        "reddit_comment:t1_p51oxo9",
+        "stocktwits:2026-07-14 15:08:47.934044+00:00:NKE",
+        "stocktwits:2026-08-19 09:03:53.037531+00:00:NKE"
+      ],
+      "new": false,
+      "score": 2.410694543478387,
+      "source_families": 2,
+      "ticker": "NKE"
+    },
+    {
+      "evidence_refs": [
+        "news:alphavantage:https://currently.att.yahoo.com/att/tempus-ais-diagnostics-chief-filed-120028956.html",
+        "news:alphavantage:https://www.stocktitan.net/sec-filings/TEM/form-4-tempus-ai-inc-insider-trading-activity-c9159780c7f3.html",
+        "reddit_comment:t1_p0qnx3w",
+        "reddit_comment:t1_p4r17ue",
+        "reddit_comment:t1_p50kk67",
+        "stocktwits:2026-08-16 13:05:01.634536+00:00:TEM",
+        "stocktwits:2026-08-19 12:06:37.975972+00:00:TEM",
+        "stocktwits:2026-08-22 03:02:39.829232+00:00:TEM",
+        "stocktwits:2026-08-24 07:03:32.710857+00:00:TEM"
+      ],
+      "new": true,
+      "score": 2.3326112037272972,
+      "source_families": 2,
+      "ticker": "TEM"
+    },
+    {
+      "evidence_refs": [
+        "news:alphavantage:https://ts2.tech/en/cipher-mining-shares-nasdaqcifr-surge-32-as-ai-driven-valuation-faces-execution-uncertainty/",
+        "news:alphavantage:https://www.marketbeat.com/instant-alerts/cipher-mining-nasdaqcifr-trading-79-higher-heres-what-happened-2026-07-21/",
+        "news:alphavantage:https://www.marketbeat.com/instant-alerts/filing-california-state-teachers-retirement-system-increases-position-in-cipher-mining-inc-cifr-2026-08-08/",
+        "news:alphavantage:https://www.marketbeat.com/instant-alerts/filing-galaxy-digital-capital-management-gp-llc-boosts-position-in-cipher-mining-inc-cifr-2026-07-25/",
+        "news:alphavantage:https://www.marketbeat.com/instant-alerts/stock-traders-purchase-large-volume-of-cipher-mining-call-options-nasdaqcifr-2026-08-19/",
+        "reddit_comment:t1_ozazu90",
+        "reddit_comment:t1_p3llc7m",
+        "reddit_comment:t1_p47z0q2",
+        "reddit_comment:t1_p4wi52m",
+        "stocktwits:2026-07-30 18:56:12.930307+00:00:CIFR",
+        "stocktwits:2026-08-18 16:00:26.165923+00:00:CIFR",
+        "stocktwits:2026-08-19 03:46:26.515688+00:00:CIFR",
+        "stocktwits:2026-08-21 07:02:20.853589+00:00:CIFR",
+        "stocktwits:2026-08-22 00:00:46.457319+00:00:CIFR",
+        "stocktwits:2026-08-24 07:03:32.710857+00:00:CIFR"
+      ],
+      "new": true,
+      "score": 2.306747529101743,
+      "source_families": 2,
+      "ticker": "CIFR"
+    },
+    {
+      "evidence_refs": [
+        "news:alphavantage:https://ca.finance.yahoo.com/news/sellas-life-sciences-group-sls-151347156.html",
+        "news:alphavantage:https://simplywall.st/stocks/us/pharmaceuticals-biotech/nasdaq-sls/sellas-life-sciences-group/news/are-sellas-life-sciences-sls-loss-trends-masking-a-shifting/amp",
+        "news:alphavantage:https://simplywall.st/stocks/us/pharmaceuticals-biotech/nasdaq-sls/sellas-life-sciences-group/news/why-sellas-sls-posted-a-wider-net-loss-but-a-narrower-per-sh/amp",
+        "news:alphavantage:https://www.marketbeat.com/instant-alerts/filing-bank-of-new-york-mellon-corp-acquires-221957-shares-of-sellas-life-sciences-group-inc-sls-2026-08-10/",
+        "news:alphavantage:https://www.quiverquant.com/news/SELLAS+Life+Sciences+Group+Stock+%28SLS%29+Opinions+on+Clinical+Trial+Catalysts",
+        "news:alphavantage:https://www.stocktitan.net/sec-filings/SLS/schedule-13g-sellas-life-sciences-group-inc-passive-investment-disclo-6336b44b18c7.html",
+        "reddit_comment:t1_oyujjml",
+        "reddit_comment:t1_p3015ty",
+        "reddit_comment:t1_p3xzl2e",
+        "reddit_comment:t1_p4pfxxo",
+        "reddit_comment:t1_p4sjyod",
+        "reddit_comment:t1_p5lcs6u",
+        "stocktwits:2026-07-27 19:03:34.740052+00:00:SLS",
+        "stocktwits:2026-08-17 09:04:51.742602+00:00:SLS",
+        "stocktwits:2026-08-18 07:04:01.261579+00:00:SLS",
+        "stocktwits:2026-08-21 04:00:49.928121+00:00:SLS",
+        "stocktwits:2026-08-22 00:00:46.457319+00:00:SLS"
+      ],
+      "new": false,
+      "score": 2.2566714449112424,
+      "source_families": 2,
+      "ticker": "SLS"
+    },
+    {
+      "evidence_refs": [
+        "news:alphavantage:https://kalkinemedia.com/us/stocks/gold/barrick-mining-nyseb-leans-on-gold-and-copper-as-bullion-hits-new-highs",
+        "news:alphavantage:https://www.theglobeandmail.com/business/article-barrick-names-former-randgold-executive-sebastiaan-bock-as-ceo-of-its/",
+        "reddit:t3_1vfxk5t",
+        "stocktwits:2026-08-16 01:02:37.686292+00:00:B",
+        "stocktwits:2026-08-24 18:05:12.319329+00:00:B"
+      ],
+      "new": true,
+      "score": 2.2215470837406324,
+      "source_families": 2,
+      "ticker": "B"
+    },
+    {
+      "evidence_refs": [
+        "news:alphavantage:https://coinmarketcap.com/currencies/vaneck-gold-miners-etf-derivaties/historical-data/",
+        "reddit_comment:t1_p4pfuwx",
+        "stocktwits:2026-08-16 02:04:00.742413+00:00:GDX",
+        "stocktwits:2026-08-18 00:04:25.164238+00:00:GDX",
+        "stocktwits:2026-08-20 01:05:15.112374+00:00:GDX",
+        "stocktwits:2026-08-21 06:02:08.579837+00:00:GDX",
+        "stocktwits:2026-08-22 04:01:29.858910+00:00:GDX",
+        "stocktwits:2026-08-24 04:34:40.482060+00:00:GDX"
+      ],
+      "new": false,
+      "score": 2.1025547626827854,
+      "source_families": 2,
+      "ticker": "GDX"
+    },
+    {
+      "evidence_refs": [
+        "news:alphavantage:https://www.prnewswire.com/news-releases/investor-deadline-roblox-corporation-investors-with-substantial-losses-have-opportunity-to-lead-shareholder-class-action-lawsuit--hbss-302834800.html",
+        "news:alphavantage:https://www.prnewswire.com/news-releases/lost-money-on-roblox-corporation-rblx-join-class-action-suit-seeking-recovery---contact-the-gross-law-firm-302842321.html",
+        "reddit_comment:t1_p4ftx8y",
+        "stocktwits:2026-07-30 18:56:12.930307+00:00:RBLX",
+        "stocktwits:2026-07-31 00:03:15.399200+00:00:RBLX"
+      ],
+      "new": false,
+      "score": 1.7710762946178114,
+      "source_families": 2,
+      "ticker": "RBLX"
+    }
+  ]
+}

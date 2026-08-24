@@ -37,7 +37,7 @@ Thumbs.db
 data/cache/
 # FA discovery raw archive + frozen rankings — data lives out of git
 fa/archive/
-fa/artifacts/
+# fa/artifacts/ is TRACKED: frozen rankings are point-in-time provenance (2026-08-24)
 # v3 1m underlying archive (5+ GB of parquet partitions) — never in git
 v3/data/
 # big-run data cache: flat-file option day-frames + 120-universe underlying

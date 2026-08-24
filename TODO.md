@@ -15,18 +15,16 @@ change); the box codes, tests, and smokes.
 
 ## 1 — spx0 seat, round 3 (wave-2 item 2) — IN FLIGHT
 
-- [~] `spx0-run-48db82e-095520` RUNNING on Batch (launched 2026-08-24
-  ~09:55 CDT): credit verticals (wings 1/2/4 steps, loss bounded by
-  construction) + 6 intraday-native seats, 3-fold nested walk-forward.
-  **Read first:** the walk-forward report's per-fold winners — an eligible
-  vertical (dte < 0) or intraday-strategy winner with positive ledger test
-  return under the 25% DD cap is the first sign of life this pool has
-  shown. Verdict → EXPERIMENTS either way.
-- [ ] If a seat shows life: design the promotion path (spx0 has no
-  finalize/bundle/live-scan equivalent yet — that's a build) and decide
-  levers 4 (1m signals) / 5 (2022 data) with the user.
-- [ ] If rejected again: user decision — park the pool or spend lever 5
-  (2022 bear-regime data) first.
+- [x] Round 3 DONE 2026-08-24 (EXPERIMENTS): **first signs of life** —
+  folds 2/3 positive after costs (+2.7%/+10.2% test), no blowups (the
+  vertical −1×margin floor held; worst marked DD 36%). NOT a seat yet:
+  fold 1 −50.6%, best deflated Sharpe 0.20, fold-3 marked DD 28.6% > cap.
+- [ ] **Diagnose the winning folds' composition** (which dte variants and
+  strategy seats actually entered — dataset + reports in
+  `out/spx0-20260824T145751Z-41a00/`): cheap, shapes round 4.
+- [ ] USER DECISION after the diagnosis: round 4 refinement (e.g. verticals
+  only, wider wings, threshold grid) vs lever 5 (2022 data — needs the
+  Massive Advanced upgrade, see memory/DOCUMENTATION) vs park.
 
 ## 2 — Dual-mode cadence, panel-wide (wave-2 item 5; v4 seat DONE)
 
@@ -41,12 +39,24 @@ change); the box codes, tests, and smokes.
 
 ## 3 — FA-discovery seat (wave-2 item 4; exit metric: ≥3 frozen monthlies)
 
-- [ ] Fundamental overlay → composite ranker (code through the score table
-  exists: `fa/entities.py`, `fa/scores.py`, `fa/universe_loop.py`).
-- [ ] **Freeze the FIRST monthly Top-10 (August 2026)** — calendar-bound:
-  every month not frozen is a month of forward tracking lost.
-- [ ] Forward tracker + `[fa]` digest; WSB daily trending digest queued
-  behind it.
+- [x] Composite ranker BUILT 2026-08-24 (`fa/ranker.py` for real:
+  corroboration ≥2 families, liquidity floor = universe_300, point-in-time,
+  write-once freeze; tz-robust scores). Fundamental overlay (filings LLM /
+  Form 4 / unusual-options) still a stub — heuristic social+news v1 ships
+  first per spec.
+- [x] **FIRST monthly Top-10 FROZEN 2026-08-24** (`fa/artifacts/
+  top10_2026-08.{json,md}`, EXPERIMENTS row). Exit metric: 1 of ≥3.
+- [x] Forward tracker code ready (`fa/tracker.py`: windowed excess vs the
+  training-universe basket, never guesses missing bars); first meaningful
+  run ~late September.
+- [ ] Monthly freeze automation — must run on the HOME box, not the server:
+  frozen artifacts are git-tracked, and a server-side write would dirty the
+  server repo and wedge pulls (the scp lesson). Shape: systemd timer
+  (Persistent=true, like healys-stocktwits) on the 1st → rsync-pull
+  `fa/archive` from the server → `fa.ranker --prior-month --freeze` →
+  commit+push. Until then: manual, ~1 min on the 1st.
+- [ ] `[fa]` digest to Telegram + WSB daily trending digest; fundamental
+  overlay legs (filings deltas, Form 4, unusual options).
 
 ## 4 — Vol-regime track (wave-2 item 3) — first big Batch job
 
