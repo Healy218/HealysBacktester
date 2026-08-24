@@ -118,6 +118,12 @@ cluster of 0DTE tail losses took the slot portfolio through zero. Fold 2
 0.30, −65.7%). Deflated Sharpe ≈ 0 on all three. Report:
 `gs://healys-backtester/out/spx0-20260824T060344Z-47110/artifacts_spx0/`.
 
+**Post-verdict caveat (2026-08-24 review):** this run's dataset carried a
+~1-minute decision-side lookahead (spot/rv/premium features read the
+forming 1m bar; fixed in `a300830`), which FLATTERED results — the
+rejection therefore stands a fortiori. Any future spx0 run builds on the
+fixed code.
+
 **The structural lesson, on the record:** a validation-window DD cap does
 not bound a short-premium seat's tail — the risk simply hadn't printed in
 sample (fold 1 val passed a 25% cap, test hit 1126%). Any future short
