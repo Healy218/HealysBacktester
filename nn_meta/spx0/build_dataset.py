@@ -48,12 +48,14 @@ from nn_meta.feature_contract import assert_decision_safe
 from nn_meta.mark_stream import stable_trade_id
 from nn_meta.spx0 import config as sc
 from nn_meta.spx0.contracts import (implied_index_level, parse_occ_frame, pick_atm,
-                                    same_day_expiry, session_ratio)
+                                    pick_wing, same_day_expiry, session_ratio)
 from nn_meta.spx0.costs import (BASE, IndexCostScenario, gross_return,
-                                gross_return_short, net_return, net_return_short,
-                                short_margin)
+                                gross_return_short, gross_return_vertical,
+                                net_return, net_return_short, net_return_vertical,
+                                short_margin, vertical_margin)
+from nn_meta.spx0.intraday import intraday_signals
 from nn_meta.spx0.fills import (DepthPolicy, FillFailure, entry_fill, exit_fill,
-                                intrinsic)
+                                intrinsic, spread_entry_fill, spread_exit_fill)
 from nn_meta.temporal_validation import assign_purged_splits
 
 TECHNICALS = ["ma_gap", "px_vs_fast", "rsi14", "macd_hist", "bb_z", "ret_1", "ret_8",
@@ -145,21 +147,32 @@ def _stop_target_ts(cbars: pd.DataFrame, fill_ts: pd.Timestamp, entry_px: float,
 def prepare_signals(bars_5m: pd.DataFrame, spec_entry: dict) -> dict:
     """Per strategy, ONCE over the full proxy history: the four signal series
     and the technical features (5m clock features re-scaled from the 15m
-    convention: 78 bars/session, first/last hour = 12 bars)."""
+    convention: 78 bars/session, first/last hour = 12 bars). Intraday-native
+    seats (round 3, ``sc.INTRADAY_STRATEGIES``) have no frozen spec entry —
+    their params ARE the seat name, competing in-fold like any strategy."""
     out = {}
     bar_of_day = bars_5m.groupby(bars_5m.index.normalize()).cumcount()
+
+    def _clock(feats: pd.DataFrame) -> pd.DataFrame:
+        feats["tod"] = bar_of_day / float(BARS_PER_SESSION_5M - 1)
+        feats["is_first_hour"] = (bar_of_day < 12).astype(float)
+        feats["is_last_hour"] = (bar_of_day >= BARS_PER_SESSION_5M - 12).astype(float)
+        feats["dow_tod"] = feats["dow"] * feats["tod"]
+        return feats
+
     for strategy in sc.STRATEGIES:
+        if strategy in sc.INTRADAY_STRATEGIES:
+            sigs = tuple(_as_series(x) for x in intraday_signals(strategy, bars_5m))
+            feats = _clock(technical_features(bars_5m, 12, 26))
+            out[strategy] = (sigs, feats)
+            continue
         sentry = spec_entry["strategies"].get(strategy)
         if sentry is None:
             continue
         params = sentry["params"]
         sigs = tuple(_as_series(x) for x in proposals.single_signals(strategy, bars_5m, params))
         fast, slow = _feature_windows(strategy, params)
-        feats = technical_features(bars_5m, fast, slow)
-        feats["tod"] = bar_of_day / float(BARS_PER_SESSION_5M - 1)
-        feats["is_first_hour"] = (bar_of_day < 12).astype(float)
-        feats["is_last_hour"] = (bar_of_day >= BARS_PER_SESSION_5M - 12).astype(float)
-        feats["dow_tod"] = feats["dow"] * feats["tod"]
+        feats = _clock(technical_features(bars_5m, fast, slow))
         out[strategy] = (sigs, feats)
     return out
 
@@ -258,6 +271,7 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                         "gross_return": np.nan, "net_return": np.nan, "exit_ts": pd.NaT,
                         "und_period_return": np.nan, "exit_reason": None, "margin": np.nan,
                         "depth_entry": np.nan, "depth_exit": np.nan, "spx0_ratio": ratio,
+                        "wing_contract": None, "wing_strike": np.nan,
                     }
                     base.update({k: float(f[k]) for k in TECHNICALS})
                     rv30 = float(c1.get("spx0_rv_30", np.nan))
@@ -270,7 +284,11 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                         "spx0_min_since_open": float(c1.get("spx0_min_since_open", np.nan)),
                         "spx0_min_to_expiry": min_to_exp,
                         "spx0_short": 1.0 if variant.short else 0.0,
-                        "spx0_stop_frac": float(variant.stop_frac),
+                        # verticals carry stop_frac=inf (no stop; the wing IS
+                        # the loss bound) — features must stay finite
+                        "spx0_stop_frac": (float(variant.stop_frac)
+                                           if np.isfinite(variant.stop_frac) else 0.0),
+                        "spx0_wing_width_frac": 0.0,
                     })
                     for s_ in sc.STRATEGIES:
                         base[f"strat_{s_}"] = 1.0 if s_ == strategy else 0.0
@@ -298,6 +316,93 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                         "spx0_prem_spot_last": prem_spot,
                         "spx0_prem_rich": prem_rich,
                     })
+                    # ── credit vertical (round 3): sold leg + bought wing ────
+                    if variant.wing_strikes > 0:
+                        wing = pick_wing(z, short_leg=contract, mapped_spot=mapped,
+                                         wing_strikes=variant.wing_strikes, at=t)
+                        if wing is None:
+                            base["exit_reason"] = "no_wing"
+                            rows.append(base)
+                            continue
+                        wbars = z[z["occ"] == wing.occ]
+                        width = abs(contract.strike - wing.strike)
+                        base.update({"wing_contract": wing.occ,
+                                     "wing_strike": wing.strike,
+                                     "spx0_wing_width_frac": width / mapped})
+                        fe_ts, fe_short, fe_wing, fe_depth, fail = spread_entry_fill(
+                            cbars, wbars, t, depth)
+                        if fail is not None:
+                            base["exit_reason"] = fail.value
+                            rows.append(base)
+                            continue
+                        credit = fe_short - fe_wing
+                        # A credit within a print of the full width prices
+                        # near-certain assignment — at 1m close granularity
+                        # that is stale-print fiction with degenerate ~0
+                        # margin (net −68× showed up in the smoke), not a
+                        # fillable market. Cap at 90% of the width.
+                        if not 0 < credit <= 0.9 * width:
+                            base["exit_reason"] = "no_credit"
+                            rows.append(base)
+                            continue
+                        margin = vertical_margin(width, credit)
+                        # loss is bounded by the wing, so no premium stop:
+                        # strategy exit / opposite signal, else the floor.
+                        exit_sig_ts = max(min([floor_ts] + sig_exit_ts), fe_ts)
+                        reason = "floor" if exit_sig_ts == floor_ts else "signal"
+                        intr_s = intrinsic(right, contract.strike, floor_spot)
+                        intr_w = intrinsic(right, wing.strike, floor_spot)
+                        fx_ts, short_x, wing_x, fx_depth, xfail = spread_exit_fill(
+                            cbars, wbars, exit_sig_ts, depth,
+                            session_floor_ts=floor_ts,
+                            intrinsic_short=intr_s, intrinsic_wing=intr_w)
+                        settled = xfail is FillFailure.SETTLED_INTRINSIC
+                        if settled:
+                            reason = "settled_intrinsic"
+                        # The closing debit is bounded on BOTH paths: a seller
+                        # never pays more than the width to close (cash
+                        # settlement is always available and pays at most the
+                        # width), and a negative debit is a stale-print
+                        # arbitrage, not a fillable price. This is what makes
+                        # the vertical's −1×margin loss floor a hard bound.
+                        exit_debit = min(max(short_x - wing_x, 0.0), width)
+                        g = gross_return_vertical(credit, exit_debit, margin)
+                        n = net_return_vertical(credit, exit_debit, margin, costs,
+                                                settled=settled)
+                        und_exit = float(px_day["Close"].asof(fx_ts))
+                        base.update({
+                            "entry_premium": credit, "fill_entry_ts": fe_ts,
+                            "fill_exit_ts": fx_ts,
+                            "fill_lag_s": (fe_ts - t).total_seconds(), "n_fills": 2,
+                            "executed": True, "gross_return": g, "net_return": n,
+                            "exit_ts": fx_ts,
+                            "und_period_return": und_exit / spot - 1.0,
+                            "exit_reason": reason, "margin": margin,
+                            "depth_entry": fe_depth, "depth_exit": fx_depth,
+                        })
+                        rows.append(base)
+                        tid = (f"{symbol}|{strategy}|{trade_idx}|{variant.code}"
+                               f"|{int(pd.Timestamp(t).value)}")
+                        # marks: minutes where BOTH legs printed a close
+                        joined = cbars[["timestamp", "Close"]].merge(
+                            wbars[["timestamp", "Close"]], on="timestamp",
+                            suffixes=("_s", "_w"))
+                        inner = joined[(joined["timestamp"] > fe_ts)
+                                       & (joined["timestamp"] < fx_ts)]
+                        marks.append({"trade_id": tid, "mark_ts": fe_ts,
+                                      "gross_return": 0.0})
+                        for r in inner.itertuples(index=False):
+                            # marked value is bounded like the exit: the
+                            # spread's liquidation cost lies in [0, width]
+                            spread = min(max(float(r.Close_s) - float(r.Close_w),
+                                             0.0), width)
+                            marks.append({"trade_id": tid,
+                                          "mark_ts": pd.Timestamp(r.timestamp),
+                                          "gross_return": (credit - spread) / margin})
+                        marks.append({"trade_id": tid, "mark_ts": fx_ts,
+                                      "gross_return": g})
+                        continue
+
                     fe_ts, fe_px, fe_depth, fail = entry_fill(cbars, t, depth,
                                                               sell=variant.short)
                     if fail is not None:
@@ -364,7 +469,7 @@ def available_sessions() -> list[pd.Timestamp]:
 def build(days: list[pd.Timestamp], out_dir: Path, *, spec: dict | None = None,
           depth: DepthPolicy = DepthPolicy(), exit_policy: sc.ExitPolicy = sc.DEFAULT_EXIT,
           costs: IndexCostScenario = BASE,
-          variants: tuple[sc.TradeVariant, ...] = sc.ROUND2_VARIANTS
+          variants: tuple[sc.TradeVariant, ...] = sc.ROUND3_VARIANTS
           ) -> tuple[pd.DataFrame, pd.DataFrame]:
     assert_decision_safe(SPX0_META_FEATURES)
     spec = spec or load_spec()

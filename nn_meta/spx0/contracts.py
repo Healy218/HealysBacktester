@@ -103,6 +103,46 @@ def pick_atm(zero_dte: pd.DataFrame, *, index: str, right: str, mapped_spot: flo
     return parse_occ(str(row["occ"]))
 
 
+def strike_step(zero_dte: pd.DataFrame, *, index: str, right: str,
+                near: float, band: float = 0.02) -> float | None:
+    """The listing grid's step near the money, MEASURED from the day's chain
+    (median adjacent gap of unique strikes within ``band`` of ``near``) —
+    SPX weeklies list 5-wide, NDX wider, and hard-coding either would rot."""
+    sub = zero_dte[(zero_dte["index"] == index) & (zero_dte["right"] == right)]
+    ks = np.sort(sub.loc[(sub["strike"] - near).abs() <= band * near,
+                         "strike"].unique())
+    if len(ks) < 3:
+        return None
+    return float(np.median(np.diff(ks)))
+
+
+def pick_wing(zero_dte: pd.DataFrame, *, short_leg: Contract, mapped_spot: float,
+              wing_strikes: int, at: pd.Timestamp,
+              lookback_bars: int = 5) -> Contract | None:
+    """The bought wing of a credit vertical: same right as the sold leg,
+    ``wing_strikes`` listing steps further OTM (below a sold put, above a sold
+    call), chosen among contracts with a COMPLETED print in the same window as
+    :func:`pick_atm`. ``None`` when the grid can't be measured, nothing prints
+    near the target, or the nearest print is at/through the short strike."""
+    step = strike_step(zero_dte, index=short_leg.index, right=short_leg.right,
+                       near=mapped_spot)
+    if step is None or step <= 0:
+        return None
+    sign = -1.0 if short_leg.right == "P" else 1.0
+    target = short_leg.strike + sign * wing_strikes * step
+    lo = at - pd.Timedelta(minutes=lookback_bars)
+    sub = zero_dte[(zero_dte["index"] == short_leg.index)
+                   & (zero_dte["right"] == short_leg.right)
+                   & (zero_dte["timestamp"] >= lo) & (zero_dte["timestamp"] < at)]
+    # OTM of the short strike only — a wing at/inside the short leg is not a
+    # credit vertical.
+    otm = sub[sign * (sub["strike"] - short_leg.strike) > 0]
+    if otm.empty:
+        return None
+    row = otm.loc[(otm["strike"] - target).abs().idxmin()]
+    return parse_occ(str(row["occ"]))
+
+
 def implied_index_level(zero_dte: pd.DataFrame, *, index: str, at: pd.Timestamp,
                         window_min: int = 10, min_pairs: int = 3) -> float | None:
     """Index level implied by put-call parity on same-strike 0DTE pairs that

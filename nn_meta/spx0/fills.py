@@ -83,6 +83,56 @@ def exit_fill(bars: pd.DataFrame, exit_signal_ts: pd.Timestamp, policy: DepthPol
         FillFailure.SETTLED_INTRINSIC
 
 
+def spread_entry_fill(short_bars: pd.DataFrame, wing_bars: pd.DataFrame,
+                      signal_ts: pd.Timestamp, policy: DepthPolicy
+                      ) -> tuple[pd.Timestamp | None, float | None, float | None,
+                                 float | None, FillFailure | None]:
+    """Package fill for a two-leg spread: the first bar strictly after the
+    signal, within the entry window, where BOTH legs have depth. The package
+    prints at the net of that bar's CLOSES — a real simultaneous pair — and
+    per-leg half-spreads are the COST MODEL's job (worst-printing two legs
+    independently in the same minute compounds pathologically and double
+    counts what the cost scenarios already charge). Returns
+    (fill_ts, short_px, wing_px, depth=min leg volume, failure)."""
+    lim = signal_ts + pd.Timedelta(minutes=policy.entry_window_min)
+    j = short_bars[["timestamp", "Close", "Volume"]].merge(
+        wing_bars[["timestamp", "Close", "Volume"]], on="timestamp",
+        suffixes=("_s", "_w"))
+    j = j[(j["timestamp"] > signal_ts) & (j["timestamp"] <= lim)]
+    if j.empty:
+        return None, None, None, None, FillFailure.NO_ENTRY_BAR
+    ok = j[fillable(j["Volume_s"], policy) & fillable(j["Volume_w"], policy)]
+    if ok.empty:
+        return None, None, None, None, FillFailure.NO_DEPTH_ENTRY
+    r = ok.iloc[0]
+    if float(r["Close_s"]) <= 0 or float(r["Close_w"]) <= 0:
+        return None, None, None, None, FillFailure.NO_DEPTH_ENTRY
+    return (pd.Timestamp(r["timestamp"]), float(r["Close_s"]), float(r["Close_w"]),
+            float(min(r["Volume_s"], r["Volume_w"])), None)
+
+
+def spread_exit_fill(short_bars: pd.DataFrame, wing_bars: pd.DataFrame,
+                     exit_signal_ts: pd.Timestamp, policy: DepthPolicy, *,
+                     session_floor_ts: pd.Timestamp, intrinsic_short: float,
+                     intrinsic_wing: float
+                     ) -> tuple[pd.Timestamp, float, float, float, FillFailure | None]:
+    """First bar at/after the exit signal, no later than the floor, where BOTH
+    legs have depth — the package closes at that bar's closes. No such bar:
+    the spread cash-settles at the floor to each leg's intrinsic (the payoff
+    is then bounded by the width by construction)."""
+    j = short_bars[["timestamp", "Close", "Volume"]].merge(
+        wing_bars[["timestamp", "Close", "Volume"]], on="timestamp",
+        suffixes=("_s", "_w"))
+    j = j[(j["timestamp"] >= exit_signal_ts) & (j["timestamp"] <= session_floor_ts)]
+    ok = j[fillable(j["Volume_s"], policy) & fillable(j["Volume_w"], policy)]
+    if not ok.empty:
+        r = ok.iloc[0]
+        return (pd.Timestamp(r["timestamp"]), float(r["Close_s"]),
+                float(r["Close_w"]), float(min(r["Volume_s"], r["Volume_w"])), None)
+    return (pd.Timestamp(session_floor_ts), float(max(intrinsic_short, 0.0)),
+            float(max(intrinsic_wing, 0.0)), 0.0, FillFailure.SETTLED_INTRINSIC)
+
+
 def intrinsic(right: str, strike: float, mapped_spot: float) -> float:
     s = float(mapped_spot) - float(strike)
     return max(s, 0.0) if right == "C" else max(-s, 0.0)

@@ -18,6 +18,12 @@ WINDOW_START, WINDOW_END = "2024-08-16", "2026-08-14"
 INDEXES = ("SPX", "NDX")
 PROXY = {"SPX": "SPY", "NDX": "QQQ"}
 STRATEGIES = list(_c.PROPOSAL_STRATEGIES_V31)      # ma, macd, rsi, squeeze, tv_rating
+# Round 3: intraday-native strategies (SPX0_SPEC item 3). Each param setting
+# is its own strategy seat — the fold's model/policy selection chooses among
+# them, which is what "params swept in-fold" means in this machinery.
+INTRADAY_STRATEGIES = ["vwap_rev_15", "vwap_rev_20", "orb_15", "orb_30",
+                       "gap_fill_30", "gap_fill_50"]
+STRATEGIES += INTRADAY_STRATEGIES
 SIGNAL_BAR = "5min"                                # proxy bars the strategies see
 MAX_DRAWDOWN_CAP = 0.25                            # tighter than the shared 0.40
 LAST_ENTRY_MINUTES_BEFORE_CLOSE = 30               # no fresh 0DTE entries in the last half hour
@@ -51,11 +57,18 @@ class TradeVariant:
     enforced by the premium stop at ``stop_frac × entry``. Returns are per unit
     margin, so they live in the ledger's per-position units and −1 means the
     stop fired at its level (gaps/settlement past the stop can exceed it;
-    that's data, not a bug)."""
+    that's data, not a bug).
+
+    ``wing_strikes > 0`` (round 3, after the round-2 naked-short test blowup)
+    makes a short a CREDIT VERTICAL: the sold leg plus a bought wing that many
+    strike-steps further OTM. Margin = width − credit — the true worst case by
+    CONSTRUCTION (settlement cannot exceed the width), so no premium stop is
+    needed or used; the loss floor is −1 − exit-slippage/margin, not a gap."""
     code: int
     short: bool
     stop_frac: float
     target_mult: float = float("inf")
+    wing_strikes: int = 0
 
 
 ROUND2_VARIANTS = (
@@ -65,6 +78,18 @@ ROUND2_VARIANTS = (
     TradeVariant(-150, True, 1.50),
     TradeVariant(-200, True, 2.00),
     TradeVariant(-300, True, 3.00),
+)
+
+# Round 3 (EXPERIMENTS 2026-08-24): naked shorts are out — their tail cannot
+# be bounded by a stop. Credit verticals replace them (loss bounded by
+# construction); the long stop grid stays. Codes -(1000 + wing_strikes).
+ROUND3_VARIANTS = (
+    TradeVariant(0, False, 0.50),
+    TradeVariant(30, False, 0.30),
+    TradeVariant(70, False, 0.70),
+    TradeVariant(-1001, True, float("inf"), wing_strikes=1),
+    TradeVariant(-1002, True, float("inf"), wing_strikes=2),
+    TradeVariant(-1004, True, float("inf"), wing_strikes=4),
 )
 
 # P(win) grid for this pool. The shared KEEP_THRESHOLDS (>= 0.50) assume the
@@ -81,4 +106,6 @@ SPX0_FEATURES = [
     # round 2: the variant axis (the model must see what it is ranking) and
     # premium richness — last premium/spot vs the realized-vol move to expiry.
     "spx0_short", "spx0_stop_frac", "spx0_prem_rich",
+    # round 3: vertical width as a fraction of spot (0 = not a vertical)
+    "spx0_wing_width_frac",
 ]

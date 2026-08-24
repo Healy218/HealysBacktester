@@ -202,6 +202,36 @@ entry, never edit history).
 - **2026-07-08 — Hetzner CX33 over Oracle free tier** (ARM capacity
   unavailable; user declined the PAYG card hold).
 
+## 2026-08-24 — spx0 round 3: credit verticals + intraday-native seats
+
+**Decision (user):** round 3 pursues both remaining levers at once — credit
+verticals replace the condemned naked shorts, and intraday-native strategies
+replace the daily-swing placeholder params. Grid: `ROUND3_VARIANTS` (long
+stops {.3,.5,.7} + put/call credit spreads with wings 1/2/4 measured strike
+steps OTM, codes −100x) × 11 strategy seats (5 v31 + vwap_rev 1.5σ/2.0σ,
+ORB 15/30, gap-fill 30/50bp — each param setting its own seat, selected
+in-fold like any strategy).
+
+**Vertical mechanics settled by the 12-session smoke, in order:**
+1. Legs fill as a PACKAGE — first bar where BOTH legs have depth, priced at
+   that bar's closes. Worst-printing two legs independently compounds
+   pathologically (−3.6× margin means) and double-counts the cost model.
+2. Package costs — one net-premium half-spread crossing per side plus both
+   contracts' fees (the complex order book trades the net, ~0.1–0.2 wide on
+   a 5-wide vertical; per-leg full-premium spreads overcharged ATM ~10×).
+3. The closing debit and every mark are clamped to [0, width] — a seller
+   never pays more than the width to close (cash settlement bounds it), a
+   negative debit is stale-print arbitrage. This makes −1×margin a HARD
+   gross floor (verified in the smoke), the property round 2's naked
+   shorts fatally lacked.
+4. Credits above 90% of the width are rejected at entry — near-width
+   credit ⇒ margin ≈ 0 ⇒ −68× net artifacts from stale closes, not a
+   fillable market.
+
+**Rejected:** margin = full width (masks leverage rather than bounding
+loss; width − credit IS the worst case once the debit clamp holds); a
+take-profit stop on the spread (bounded already; one fewer knob).
+
 ## 2026-08-24 — The v4 gate's baseline bar is the baseline's ex-top3
 
 **Decision (user):** `_passes_gate`'s beat-baseline term compares the

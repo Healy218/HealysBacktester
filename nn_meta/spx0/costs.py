@@ -68,6 +68,49 @@ def gross_return_short(entry_price: float, exit_price: float, margin: float) -> 
     return (float(entry_price) - float(exit_price)) / float(margin)
 
 
+def vertical_margin(width: float, credit: float) -> float:
+    """Margin posted against a credit vertical: the max possible loss by
+    CONSTRUCTION — settlement pays at most the strike width, so width − credit
+    is the true worst case (no stop needed, unlike a naked short)."""
+    if width <= 0:
+        raise ValueError("strike width must be positive")
+    if not 0 < credit < width:
+        raise ValueError("credit must lie in (0, width) for a credit vertical")
+    return float(width) - float(credit)
+
+
+def gross_return_vertical(credit: float, exit_debit: float, margin: float) -> float:
+    """Seller's raw return on posted margin; ``exit_debit`` is what closing
+    costs (market buy-back net of the wing sale, or settlement in [0, width])."""
+    if margin <= 0:
+        raise ValueError("margin must be positive")
+    return (float(credit) - float(exit_debit)) / float(margin)
+
+
+def package_cost_points(net_premium: float, costs: IndexCostScenario = BASE) -> float:
+    """One side of a two-leg PACKAGE: index verticals trade the complex order
+    book as a single net-premium market, so the crossing pays ONE half-spread
+    on the net (not each leg's full-premium spread — that double-charges an
+    ATM spread ~10× reality) plus both contracts' fees."""
+    return costs.half_spread(abs(float(net_premium))) + 2 * costs.fee_per_contract / MULTIPLIER
+
+
+def net_return_vertical(credit: float, exit_debit: float, margin: float,
+                        costs: IndexCostScenario = BASE, *,
+                        settled: bool = False) -> float:
+    """Credit-vertical return on posted margin after package costs: the net
+    credit pays one package crossing at entry; a market exit pays another on
+    the net debit, while cash settlement pays the net intrinsic with no
+    crossing."""
+    if float(margin) <= 0:
+        raise ValueError("margin must be positive")
+    got = float(credit) - package_cost_points(credit, costs)
+    debit = float(exit_debit)
+    if not settled:
+        debit += package_cost_points(exit_debit, costs)
+    return (got - debit) / float(margin)
+
+
 def net_return_short(entry_price: float, exit_price: float, margin: float,
                      costs: IndexCostScenario = BASE, *, settled: bool = False) -> float:
     """Seller's return on posted margin after costs: the premium received nets
