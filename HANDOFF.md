@@ -33,35 +33,32 @@ now historical.
    KEEP_THRESHOLDS gained .55/.60/.65. 12-session smoke + `--smoke`
    evaluate ran clean end-to-end through the ledger.
 
-## LAUNCHED 2026-08-24 ~01:01 CDT — two jobs on Batch (image `6ab5120`)
+## BOTH VERDICTS LANDED 2026-08-24 (~03:30 and ~04:15 CDT)
 
-Both verified SCHEDULED on the pinned image, STANDARD provisioning:
+**v4 finalize: ELIGIBLE — the first V118 bundle exists and is committed.**
+`v4-finalize-6ab5120-023421` (the 010121 n2 job stocked out ~90 min
+cycling QUEUED↔SCHEDULED; deleted, resubmitted on e2 — precedent 08-19):
+winner **gbt × 40 seeds, `ev/0.05`, dd_brake=None** — val +604.8%, n_kept
+219, maxDD 21.9%, ledger-selected, magnitude head persisted. Gate bar
+(ex-top3) +31.4% vs candidate +605%; raw baseline +1854% recorded, no
+longer the bar. Bundle rsynced from
+`out/finalize-20260824T073639Z-44b60/`, local `v4_scan --selftest` OK
+(40/40, verified+eligible, median 0.433), force-added in `75ef456`.
+dd_brake is None so the not-yet-enforced live brake doesn't matter.
 
-| job | what | expected |
-|---|---|---|
-| `spx0-run-6ab5120-010113` | round-2 build (6 variants, 500 sessions) + `--folds 3 --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600` | build ~30 min + walk-forward several h (dataset is 6× round 1) on e2-standard-8 |
-| `v4-finalize-6ab5120-010121` | 40-seed finalize against the NEW ex-top3 gate (same verified dataset+marks as 08-21) | ~40 min on n2-standard-8 |
+**Deploy is gated on TWO things, in order (user decides the timing):**
+1. `/ultrareview` from the DESKTOP session (user-launched; main is
+   deliberately held behind the branch) → merge to main.
+2. Candidate-parity re-validation against THIS bundle (Option B step 4) —
+   then server `git pull`, selftest, drop `--paper`.
 
-Outputs: `gs://healys-backtester/out/{spx0,finalize}-<stamp>-<uid>/`.
-Check live: `gcloud batch jobs list --project=healys-batch`.
-
-**Read first, finalize:** the task log's `ensemble winner:` +
-`candidate grid` lines — the grid now prints `gate bar = ex-top3`.
-`eligible=True` → bundle in `.../model_final_v4/` → `gsutil rsync`,
-force-add commit, server `git pull`, `v4_scan --selftest`, re-validate
-candidate parity, then drop `--paper` (TODO blocks 1b/3). Note: **live
-sizing does NOT yet enforce the DD brake** (shown, not enforced) — only
-matters if the shipped bundle carries `dd_brake != None`.
-`eligible=False` → v4 waits for the next label idea; log either way in
-EXPERIMENTS.
-
-**Read first, spx0:** `spx0_walkforward_report.md` — the mode column and
-per-fold winners; against round 1 the question is whether any fold's
-winner is a short variant (dte < 0) with a positive ledger test return
-under the 25% DD cap. The build log's `(dte, exit_reason)` table shows the
-raw variant economics. Verdict → EXPERIMENTS; if shorts show life, next
-levers are SPX0_SPEC round-2 items 3 (intraday-native strategies swept
-in-fold) then 5 (extend data to 2022).
+**spx0 round 2: REJECTED — test blowup, no seat** (EXPERIMENTS
+2026-08-24). Fold 1's winner passed the val gate then returned −1863% on
+test (maxDD 1126%, equity through zero): stop-based margin does not bound
+a naked 0DTE short's tail. Structural lesson logged: a future short seat
+needs loss bounded by construction (verticals/margin = strike distance),
+not by a stop. USER DECISION on the next lever (SPX0_SPEC item 3 for the
+long book, and/or defined-risk short redesign). Nothing running on GCP.
 
 ## Standing warnings
 

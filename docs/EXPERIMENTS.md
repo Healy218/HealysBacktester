@@ -105,6 +105,30 @@ revisited: sell premium; liquid OTM strikes; re-sweep params for 5m bars.
 | v4 | **2026-08-16** | v31 causal, gbt/filter thr 0.5 (Option A bundle) | `.v4_paper_ledger.json` on server | **live — paper mode**; bundle hot-swaps after the Option B re-finalize |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-24 — spx0 round 2 (sell-premium variants) REJECTED: test blowup
+
+`spx0-run-6ab5120-010113` (image `6ab5120`, 500 sessions × 6 variants,
+3-fold nested walk-forward, ~3h13m): **no seat.** Fold 1's winner
+(rank/0.50, gbt) CLEARED the gate on validation, then returned **−1862.9%
+on test with maxDD 1126%** — equity went negative: short-variant returns
+are per unit margin, margin = (stop−1)×entry is small, and gap-through-stop
+losses (smoke avg −1.5 to −2.1× margin) can exceed the posted margin, so a
+cluster of 0DTE tail losses took the slot portfolio through zero. Fold 2
+(filter/0.40, nn) −37.6% test; fold 3 nothing cleared (best ev/0.10 brake
+0.30, −65.7%). Deflated Sharpe ≈ 0 on all three. Report:
+`gs://healys-backtester/out/spx0-20260824T060344Z-47110/artifacts_spx0/`.
+
+**The structural lesson, on the record:** a validation-window DD cap does
+not bound a short-premium seat's tail — the risk simply hadn't printed in
+sample (fold 1 val passed a 25% cap, test hit 1126%). Any future short
+design needs the loss bounded by CONSTRUCTION (margin sized to the true
+worst case — e.g. margin = strike distance for spreads, or size scaled so
+a settlement-at-intrinsic loss ≤ margin), not by a stop that assumes the
+next print is near the last. The long-variant folds stayed merely
+unprofitable, as in round 1. Next levers per SPX0_SPEC: item 3
+(intraday-native strategies swept in-fold) for the long book, and/or a
+defined-risk redesign of the short (verticals, not naked) — user decision.
+
 ## 2026-08-24 — v4_finalize ELIGIBLE under the ex-top3 gate: first V118 bundle
 
 `v4-finalize-6ab5120-023421` (image `6ab5120`, e2-standard-8 after the n2

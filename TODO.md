@@ -112,9 +112,13 @@ three pieces below exist; build them in this order, each tested:
   (stop−1)×entry; variant code rides the `dte` column so rank/EV dedupe
   fold-selects it like DTE; code 0 bit-identical to round 1). Suite 451,
   12-session smoke + `--smoke` evaluate clean end-to-end. Batch run
-  LAUNCHED 2026-08-24 (`spx0-run-6ab5120-010113`, verified SCHEDULED) →
-  verdict; then (3) VWAP-reversion / ORB / gap-fill swept in-fold; then
-  (5) extend data to 2022 for the short seat's tail regime.
+  `spx0-run-6ab5120-010113` DONE 2026-08-24: **REJECTED — fold 1 passed
+  the val gate then blew up on test (−1863%, maxDD 1126%, equity through
+  zero): stop-based margin does not bound a naked short's tail**
+  (EXPERIMENTS 2026-08-24). USER DECISION on the next lever: (3)
+  intraday-native strategies for the long book, and/or a defined-risk
+  short redesign (verticals — margin = strike distance, loss bounded by
+  construction); (5) 2022 data only if a short seat survives redesign.
 
 ## 2 — v4 live scoring path — DONE 2026-08-16 (`nn_meta/live/v4_scan.py`)
 
