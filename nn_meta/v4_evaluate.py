@@ -401,6 +401,13 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
     winner["baseline_ex_top3"] = baseline.get("total_ex_top3")
     # Every candidate is a "trial"; its Sharpe feeds the deflation later.
     winner["candidate_sharpes"] = [c["metrics"]["per_trade_sharpe"] for c in candidates]
+    # PBO (CSCV, López de Prado): every candidate's equal-weight daily P&L on
+    # THIS validation window → probability the in-sample-best candidate ranks
+    # below the OOS median. Wired 2026-08-24 (the parked report item);
+    # equal-weight daily sums are a deliberate approximation — PBO measures
+    # selection overfit, not sizing (documented in the report).
+    winner["pbo"] = _grid_pbo(rows, fmask, predictions, ev_predictions,
+                              candidates)
     # The whole grid, compactly, so a refusal can be read (which candidates
     # failed which gate term) instead of only the least-bad winner.
     winner["candidate_grid"] = [{
@@ -410,6 +417,47 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
     } for c in candidates]
     winner["selection_basis"] = "ledger" if ledger else "shared_sim"
     return winner
+
+
+def _grid_pbo(rows: pd.DataFrame, fmask: np.ndarray, predictions: np.ndarray,
+              ev_predictions: np.ndarray | None,
+              candidates: list[dict]) -> dict | None:
+    """CSCV Probability of Backtest Overfitting over the WHOLE policy grid.
+
+    Each candidate becomes a column of equal-weight daily summed net returns
+    on the validation window (0.0 on days it holds nothing — a flat book is a
+    real outcome, not missing data). Needs ≥ 16 distinct days and ≥ 2
+    candidates; returns None (never guesses) otherwise or on any failure."""
+    from nn_meta.multiple_testing import combinatorial_pbo
+    try:
+        days = pd.DatetimeIndex(sorted(pd.to_datetime(rows["entry_ts"])
+                                       .dt.normalize().unique()))
+        if len(days) < 16 or len(candidates) < 2:
+            return None
+        cols = []
+        for c in candidates:
+            mode = c["mode"]
+            if mode == config.EV_MODE:
+                sub, pred = rows.reset_index(drop=True), np.asarray(ev_predictions, float)
+            elif mode == "filter":
+                sub, pred = rows[fmask].reset_index(drop=True), predictions[fmask]
+            else:
+                sub, pred = rows.reset_index(drop=True), predictions
+            sel = _selected_rows(_candidate_rows(sub, pred, mode, c["threshold"]),
+                                 mode, dd_brake=c.get("dd_brake"))
+            if sel.empty:
+                cols.append(np.zeros(len(days)))
+                continue
+            daily = sel.assign(day=pd.to_datetime(sel["entry_ts"]).dt.normalize()) \
+                .groupby("day")["net_return"].sum()
+            cols.append(daily.reindex(days, fill_value=0.0).to_numpy())
+        n_splits = 16 if len(days) >= 32 else 8
+        out = combinatorial_pbo(np.column_stack(cols), n_splits=n_splits)
+        out["n_days"] = int(len(days))
+        return out
+    except Exception as exc:                      # report-only: never sink a run
+        print(f"[v4] PBO computation skipped: {exc}", flush=True)
+        return None
 
 
 def _candidate_rows(rows: pd.DataFrame, pred: np.ndarray, mode: str,
@@ -696,6 +744,18 @@ def _write_report(results: list[dict], output: Path) -> None:
         for i, cal in cal_rows:
             lines.append(f"| {i} | {cal['method']} | {cal['brier_raw']:.4f} | "
                          f"{cal['brier_calibrated']:.4f} |")
+    pbo_rows = [(i, r["winner"]["pbo"]) for i, r in enumerate(results, 1)
+                if r["winner"].get("pbo")]
+    if pbo_rows:
+        lines += ["", "## PBO (CSCV over the policy grid, validation window)", "",
+                  "Equal-weight daily candidate P&L; PBO = probability the "
+                  "in-sample-best candidate ranks below the OOS median. "
+                  "Measures selection overfit, not sizing.", "",
+                  "| run | PBO | combinations | days |",
+                  "|---|---|---|---|"]
+        for i, p_ in pbo_rows:
+            lines.append(f"| {i} | {p_['pbo']:.2f} | {p_['n_combinations']} | "
+                         f"{p_['n_days']} |")
     dsr_rows = [(i, r["winner"]["deflated_sharpe"]) for i, r in enumerate(results, 1)
                 if r["winner"].get("deflated_sharpe")]
     if dsr_rows:

@@ -20,7 +20,7 @@ _SUF = "" if POOL == "v2" else f"_{POOL}"
 # Big-run pools (v3.1+): 120-universe, flat-file option bars, ~2y window.
 # They read a SEPARATE data cache (data_cache_v3) so the live 56-symbol data
 # is never touched, while still writing their own suffixed artifact dirs.
-_BIG_RUN = POOL in {"v31"}
+_BIG_RUN = POOL in {"v31", "v5"}
 
 # ── Paths ────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent
@@ -129,7 +129,15 @@ PROPOSAL_STRATEGIES_V3 = PROPOSAL_STRATEGIES_V2 + ["supertrend", "tv_rating",
 # v3.1: GBT-pruned pool — dropped volume (0.28% gain) and supertrend (1.3%);
 # kept the five strategies that carried the model's signal.
 PROPOSAL_STRATEGIES_V31 = ["ma", "macd", "rsi", "squeeze", "tv_rating"]
-PROPOSAL_STRATEGIES = (PROPOSAL_STRATEGIES_V31 if POOL == "v31"
+# v5 (defined 2026-08-24, ROADMAP "next research generation"): the WIDE
+# candidate pool — every family with a sweep grid and a proposals path. The
+# v5 sweep itself prunes per symbol (activity guards + GBT gain, as v3.1
+# did); starting wide and pruning with discipline is the point — PBO +
+# deflated Sharpe are wired into the evaluation before this pool runs.
+PROPOSAL_STRATEGIES_V5 = ["ma", "macd", "rsi", "squeeze", "tv_rating",
+                          "bbands", "stoch", "volume", "supertrend", "elliott"]
+PROPOSAL_STRATEGIES = (PROPOSAL_STRATEGIES_V5 if POOL == "v5"
+                       else PROPOSAL_STRATEGIES_V31 if POOL == "v31"
                        else PROPOSAL_STRATEGIES_V3 if POOL == "v3"
                        else PROPOSAL_STRATEGIES_V2)
 SWEEP_GRIDS = {
