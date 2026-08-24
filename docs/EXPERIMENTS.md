@@ -105,6 +105,24 @@ revisited: sell premium; liquid OTM strikes; re-sweep params for 5m bars.
 | v4 | **2026-08-16** (paper) → **2026-08-24 REAL** | v31 causal, **V118: gbt×40 ev/0.05, no brake** (first gate-eligible bundle, ex-top3 gate) | `.v4_paper_ledger.json` on server | **live — real alerts** since 2026-08-24; scan self-enforces verified+eligible |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-24 — vol track stages 1–2 DONE at scale: HAR-RV is the bar to beat
+
+`vol-build-d8e5416-161740` (16 spot shards, ~25 min, <$1): 289/289 symbols'
+per-session intraday RV features (2017→, `available_at`-stamped) published
+to `out/vol_features/`; 288 evaluated (864 symbol-folds, expanding OOS):
+
+| model | mean QLIKE | HAR wins per symbol-fold |
+|---|---|---|
+| **HAR-RV** | **0.1174** | — |
+| GARCH(1,1) | 0.2588 | 98.7% |
+| naive | 0.2928 | 99.2% |
+
+Per regime tercile HAR wins 93% (calm) / 96% (mid) / 98% (stressed) of
+folds — the boring baseline is strong and UNIFORM. The track-1 seat gate
+is now a number: a sequence model ships only if it beats HAR-RV's QLIKE
+in every tercile; otherwise the features ship without it (they are usable
+by every expert as-is via `out/vol_features/<SYM>.parquet`).
+
 ## 2026-08-24 — spx0 round 3 (verticals + intraday): first signs of life, not yet a seat
 
 `spx0-run-48db82e-095520` (~5h, image `48db82e`, 6 variants × 11 strategy
