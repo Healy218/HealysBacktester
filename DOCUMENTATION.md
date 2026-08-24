@@ -225,6 +225,12 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
     what keeps the live chain's expiries ahead of the calendar — the frozen
     research window does NOT roll forward on its own, and the chain
     silently empties ~45 days after the last refresh without it.
+  - `10 20 * * 1-5` **[v4] watchlist digest** (since 2026-08-24, ROADMAP
+    wave-2 item 5): `NN_META_POOL=v31 … v4_scan --digest` → one Telegram
+    top-10 of the day's scored signals regardless of threshold, plus the
+    rolling 7-day underlying-direction hit-rate (watchlist vs alerted
+    subset). No model load; state `nn_meta/live/.v4_watchlist.json`
+    (gitignored), 21-day retention. Rollback = delete the line.
   - `5 * * * *` FA collectors (`fa.collect`) → `logs/fa_cron.log`
   - `30 12 * * 1-5` trending digest (8:30 ET summer) → Telegram
   - `0 17 * * *` scanner heartbeat (noon CT summer): one line per expert

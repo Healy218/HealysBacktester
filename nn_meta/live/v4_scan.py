@@ -61,6 +61,7 @@ from nn_meta.live.scanner import (TICKER_ALIASES, aliased_bar_loader,
 from nn_meta.live.state import (AlertState, Outbox, PaperLedger,
                                 atomic_write_json, health_snapshot)
 from nn_meta.live.v4_candidates import build_candidate_batch
+from nn_meta.live.watchlist import Watchlist, format_digest
 
 # NOTE: nn_meta.v4_loader (→ v4_evaluate → model → tensorflow) is imported
 # lazily inside load_trusted_bundle()/selftest() — the cron fires 96×/day and
@@ -77,6 +78,7 @@ ALERT_STATE = STATE_DIR / ".v4_alert_state.json"
 OUTBOX = STATE_DIR / ".v4_outbox.json"
 LEDGER = STATE_DIR / ".v4_paper_ledger.json"
 HEALTH = STATE_DIR / ".v4_health.json"
+WATCHLIST = STATE_DIR / ".v4_watchlist.json"
 
 # TICKER_ALIASES / aliased_bar_loader moved to nn_meta.live.scanner
 # (2026-08-16 review) so the legacy run_live path shares them; re-exported
@@ -222,6 +224,7 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
     alert_state = AlertState(sdir / ALERT_STATE.name)
     outbox = Outbox(sdir / OUTBOX.name)
     ledger = PaperLedger(sdir / LEDGER.name)
+    watchlist = Watchlist(sdir / WATCHLIST.name)
 
     fresh_by_key: dict[str, dict] = {}
     bars_cache: dict[str, pd.DataFrame] = {}
@@ -252,6 +255,14 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
         for row in winners.itertuples(index=False):
             key = alert_key(row.symbol, row.strategy, row.entry_ts)
             fresh = fresh_by_key[key]
+            # Dual-mode cadence (ROADMAP wave-2 item 5): EVERY scored winner
+            # joins the daily watchlist, threshold or no — the digest sends
+            # the day's top-N and tracks forward hit-rates.
+            watchlist.record(key=key, symbol=row.symbol, strategy=row.strategy,
+                             dte=int(row.dte), direction=fresh["direction"],
+                             score=float(row.score), decision=float(row.decision),
+                             spot=fresh["spot"], entry_ts=row.entry_ts,
+                             alerted=bool(row.decision >= thr))
             if row.decision < thr:
                 logger.info(f"[v4-scan] {row.symbol}/{row.strategy}: filtered "
                             f"(best {bundle.mode} score {row.decision:.3f} < {thr})")
@@ -285,6 +296,45 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
     summary["delivered"] = delivered
     summary["open_paper_positions"] = len(ledger.open_positions())
     atomic_write_json(sdir / HEALTH.name, summary)
+    return summary
+
+
+# ── daily watchlist digest (dual-mode cadence, ROADMAP wave-2 item 5) ─────────
+
+def digest_pass(*, bar_loader: Callable[[str], pd.DataFrame], notifier,
+                state_dir: Optional[Path] = None, top: int = 10,
+                now: Optional[datetime] = None) -> dict:
+    """Once daily (cron, after the close): resolve due watchlist outcomes
+    against fresh bars, send today's top-N as one ``[v4 watchlist]`` message,
+    and carry the rolling hit-rate. No model load — this reads only what the
+    15-minute passes recorded. Idempotent per day via the outbox key."""
+    now = now or datetime.now(timezone.utc)
+    sdir = Path(state_dir) if state_dir else STATE_DIR
+    watchlist = Watchlist(sdir / WATCHLIST.name)
+    outbox = Outbox(sdir / OUTBOX.name)
+
+    resolved = watchlist.resolve(bar_loader, now)
+    rows = watchlist.pending_digest(pd.Timestamp(now).date().isoformat())
+    sent = 0
+    if rows:
+        # EV-mode bundles threshold on the EV head, so decision != score;
+        # inferred from the recorded rows to keep the digest TF-free.
+        ev_mode = any(abs(e["decision"] - e["score"]) > 1e-9 for e in rows)
+        stats = watchlist.hit_stats()
+        title, msg = format_digest(rows, stats, expert="v4", top=top,
+                                   aliases=TICKER_ALIASES, ev_mode=ev_mode)
+        key = f"v4-digest|{pd.Timestamp(now).date().isoformat()}"
+        outbox.enqueue({"title": title, "message": msg}, key=key)
+        watchlist.mark_digested([e["key"] for e in rows])
+    for entry in outbox.unacked():
+        p = entry["payload"]
+        if notifier.send(p["message"], title=p["title"]):
+            outbox.mark_sent(entry["id"])
+            outbox.acknowledge(entry["id"])
+            sent += 1
+    summary = {"signals_today": len(rows), "outcomes_resolved": resolved,
+               "delivered": sent}
+    logger.info(f"[v4-digest] {summary}")
     return summary
 
 
@@ -340,6 +390,9 @@ def main() -> None:
                     help="accept an unverified/ineligible bundle; tag alerts")
     ap.add_argument("--bundle", type=str, default=None)
     ap.add_argument("--selftest", action="store_true")
+    ap.add_argument("--digest", action="store_true",
+                    help="send the daily top-N watchlist digest (no model load)")
+    ap.add_argument("--top", type=int, default=10)
     args = ap.parse_args()
 
     if config.POOL != "v31":
@@ -348,6 +401,16 @@ def main() -> None:
     bundle_dir = Path(args.bundle) if args.bundle else None
     if args.selftest:
         selftest(bundle_dir)
+        return
+
+    if args.digest:
+        from nn_meta.live.run_live import _bar_loader       # lazy: data loader
+        from nn_meta.live.notifier import get_notifier
+        s = digest_pass(bar_loader=aliased_bar_loader(_bar_loader),
+                        notifier=get_notifier(force_console=args.dry_run),
+                        top=args.top)
+        print(f"[v4-digest] signals {s['signals_today']} · resolved "
+              f"{s['outcomes_resolved']} · delivered {s['delivered']}")
         return
 
     now = datetime.now(timezone.utc)
