@@ -90,8 +90,9 @@ head on signed `net_return`, one new mode `ev`, gate unchanged.
 - [x] **USER DECISION 2026-08-24: the gate's baseline term = ex-top3.**
   `_passes_gate` now bars candidates at the baseline's `total_ex_top3`
   (raw-return fallback when unavailable); candidate side stays raw. Landed
-  with tests (DECISIONS 2026-08-24). Finalize re-run on Batch is next
-  (`TASK_MODE=finalize`, ~40 min).
+  with tests (DECISIONS 2026-08-24). Finalize re-run LAUNCHED on Batch
+  2026-08-24 (`v4-finalize-6ab5120-010121`, verified SCHEDULED) — see
+  `HANDOFF.md` for the read-first chain.
 
 ## 1c — spx0 / VSPNDX seat (starts WHILE 1b runs on Batch)
 
@@ -110,7 +111,8 @@ three pieces below exist; build them in this order, each tested:
   (long stops {0.3,0.5,0.7}, sell-premium stops {1.5,2,3}; margin =
   (stop−1)×entry; variant code rides the `dte` column so rank/EV dedupe
   fold-selects it like DTE; code 0 bit-identical to round 1). Suite 451,
-  12-session smoke + `--smoke` evaluate clean end-to-end. → Batch run →
+  12-session smoke + `--smoke` evaluate clean end-to-end. Batch run
+  LAUNCHED 2026-08-24 (`spx0-run-6ab5120-010113`, verified SCHEDULED) →
   verdict; then (3) VWAP-reversion / ORB / gap-fill swept in-fold; then
   (5) extend data to 2022 for the short seat's tail regime.
 

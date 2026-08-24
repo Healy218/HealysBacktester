@@ -1,94 +1,83 @@
 # HANDOFF — state for the next session
 
-Written 2026-08-21 (evening CDT). Protocol: `CLAUDE.md`.
-Previous handoff (EV-head verdicts, finalize refused on the DD cap, spx0
-first design rejected):
-`handoff-history/HANDOFF-2026-08-21-ev-verdict-spx0-no-edge.md`.
+Written 2026-08-24 (~01:10 CDT). Protocol: `CLAUDE.md`.
+Previous handoff (braked-EV verdict, DD cap never binding, old box's last
+days): `handoff-history/HANDOFF-2026-08-21-dd-cap-never-binding-new-box.md`.
 
-## Where we are
+## The box is NEW (2026-08-23) — the RAM-fault era is over
 
-- **User decision 2026-08-21 (evening):** drawdown-aware gross scaling on
-  EV sizing, run on Batch. No gate override (still on the record as
-  rejected).
-- **Landed in `0c74274`** (suite 443 green, pushed): `ev_sizing.gross_scale`
-  = `max(EV_DD_FLOOR=0.25, 1 − dd_now/dd_brake)` applied to each new
-  EV-sized position, `dd_now` = the EV portfolio's own realized drawdown at
-  that entry (causal). `config.EV_DD_BRAKES = [None, 0.20, 0.30]` join the
-  `ev` grid beside every EV threshold; `None` is bit-identical to the
-  unbraked path (tested). The scaled `size_fraction` flows into the ledger
-  unchanged; `choose_policy` winners carry `dd_brake`; finalize persists it
-  in `ensemble_config.json` (+ `ev_dd_brakes`, `ev_dd_floor`); the loader
-  exposes `bundle.dd_brake`; the live alert prints "DD brake NN%".
-  **Live sizing does NOT yet apply the brake** — the paper ledger would
-  need to feed its current drawdown into `gross_scale`; it's shown, not
-  enforced. Do that before dropping `--paper` if a braked bundle ships.
+Ryzen 7 9850X3D (8C/16T), 32 GB DDR5, RTX 3060 Ti carried over, same 1 TB
+NVMe moved intact (OS/paths/user `healy` unchanged; CLAUDE.md +
+DOCUMENTATION.md updated). Old box's final morning segfaulted `fa.collect`
+hourly; zero coredumps since the swap, StockTwits service clean, suite
+green in ~14 s. Training still runs on Batch — the checksummed-artifact
+and provenance arguments stand even though the corruption rationale is
+now historical.
 
-## LAUNCHED 2026-08-21 17:13 CDT — braked EV jobs on Batch (image `0c74274`)
+## Two decisions landed 2026-08-24 (commit `6ab5120`, suite 451, pushed)
 
-Both verified SCHEDULED on the pinned image, `e2-standard-8`, STANDARD:
+1. **v4 gate baseline term = ex-top3 (user decision).** `_passes_gate`
+   bars candidates at the baseline's `total_ex_top3` (raw fallback when
+   unavailable); candidate side stays raw. The +1854% outlier-carried bar
+   is gone. Grid print shows `gate bar = ex-top3`; `ensemble_config.json`
+   persists `baseline_ex_top3`. DECISIONS 2026-08-24.
+2. **spx0 second round built** (SPX0_SPEC items 1+2): six `TradeVariant`s
+   per signal — long stops {.3,.5,.7}, sell-premium stops {1.5,2,3} — the
+   variant code rides the `dte` column so rank/EV dedupe on (symbol,
+   strategy, trade_idx) fold-selects it exactly like DTE in v4; code 0 is
+   bit-identical to round 1 and stays the frozen baseline. Shorts: sell the
+   opposite right, fill Low/buy back High, margin = (stop−1)×entry (max
+   planned loss; gap-past-stop kept as data — smoke stop-outs avg −1.5 to
+   −2.1× margin), cash settlement pays intrinsic with entry-side costs
+   only. New features `spx0_short`/`spx0_stop_frac`/`spx0_prem_rich`;
+   KEEP_THRESHOLDS gained .55/.60/.65. 12-session smoke + `--smoke`
+   evaluate ran clean end-to-end through the ledger.
+
+## LAUNCHED 2026-08-24 ~01:01 CDT — two jobs on Batch (image `6ab5120`)
+
+Both verified SCHEDULED on the pinned image, STANDARD provisioning:
 
 | job | what | expected |
 |---|---|---|
-| `v4-evaluate-0c74274-171306` | `--folds 3 --marks` (seeds 0-4, 60 ep, gbt 600, embargo 1D) | ~4h on e2 |
-| `v4-finalize-0c74274-171307` | `--marks` full 40-seed ensemble, gate decides | ~40 min |
+| `spx0-run-6ab5120-010113` | round-2 build (6 variants, 500 sessions) + `--folds 3 --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600` | build ~30 min + walk-forward several h (dataset is 6× round 1) on e2-standard-8 |
+| `v4-finalize-6ab5120-010121` | 40-seed finalize against the NEW ex-top3 gate (same verified dataset+marks as 08-21) | ~40 min on n2-standard-8 |
 
-Outputs: `gs://healys-backtester/out/{evaluate,finalize}-<stamp>-<uid>/`.
-(Superseded by the verdict below.) Read first: the finalize task log's `ensemble winner:` line — it now prints
-`ev/0.05 brake=0.2`-style labels; `eligible=True` → bundle in
-`.../model_final_v4/` → `gsutil rsync`, force-add commit, server `git pull`,
-`v4_scan --selftest` (TODO block 3). `eligible=False` → v4 waits; log it in
-EXPERIMENTS either way. In the walk-forward report the mode column shows
-`brake X.XX` when a fold picked one; compare fold-2 test DD against the
-unbraked 75% — that is the number this run exists to move.
+Outputs: `gs://healys-backtester/out/{spx0,finalize}-<stamp>-<uid>/`.
 Check live: `gcloud batch jobs list --project=healys-batch`.
 
-## VERDICT 18:40 CDT — both jobs done; the gate diagnosis was WRONG
+**Read first, finalize:** the task log's `ensemble winner:` +
+`candidate grid` lines — the grid now prints `gate bar = ex-top3`.
+`eligible=True` → bundle in `.../model_final_v4/` → `gsutil rsync`,
+force-add commit, server `git pull`, `v4_scan --selftest`, re-validate
+candidate parity, then drop `--paper` (TODO blocks 1b/3). Note: **live
+sizing does NOT yet enforce the DD brake** (shown, not enforced) — only
+matters if the shipped bundle carries `dd_brake != None`.
+`eligible=False` → v4 waits for the next label idea; log either way in
+EXPERIMENTS.
 
-Walk-forward (`out/evaluate-20260821T221528Z-4ae40/`): identical to the
-unbraked run, every fold `brake=None` (unbraked was already eligible on
-val, rank rule prefers return). Finalize refused twice more; the candidate
-grid (`2e6c434`, now printed on every finalize) shows **`ev/0.05` at maxDD
-21.9% — the cap was never binding. Every candidate fails BEAT-BASELINE:
-the take-everything ledger baseline is +1854% on the finalize validation
-window, carried by a single outlier ticket (raw max 1526×).** Full grid in
-EXPERIMENTS. Next action is a USER DECISION on the gate's baseline term
-(recommended: compare against the baseline's `total_ex_top3`). Do not
-touch `_passes_gate` before that decision; it is logged as open in
-EXPERIMENTS and TODO. Nothing running on GCP.
+**Read first, spx0:** `spx0_walkforward_report.md` — the mode column and
+per-fold winners; against round 1 the question is whether any fold's
+winner is a short variant (dte < 0) with a positive ledger test return
+under the 25% DD cap. The build log's `(dte, exit_reason)` table shows the
+raw variant economics. Verdict → EXPERIMENTS; if shorts show life, next
+levers are SPX0_SPEC round-2 items 3 (intraday-native strategies swept
+in-fold) then 5 (extend data to 2022).
 
-## spx0 — second design round PLANNED, not started
+## Standing warnings
 
-Plan written to `docs/specs/SPX0_SPEC.md` "Second design round" and TODO
-block 1c. Key finding while reading the builder: **sell-premium is not a
-sign flip** — the ledger has long semantics (cash debited, value marked)
-and a short's loss is unbounded, so the short path needs margin-as-size
-and a hard loss cap via `stop_frac > 1` selected in-fold. Sequence: short
-path + `stop_frac` grid → run → intraday strategies (VWAP/ORB/gap) swept
-in-fold → run → extend data to 2022.
-
-## The box — REPLACED 2026-08-23
-
-The RAM-fault saga is over: instead of the planned DDR4 kit, the user built
-a NEW machine — Ryzen 7 9850X3D (8C/16T), 32 GB DDR5, RTX 3060 Ti carried
-over, same 1 TB NVMe moved intact (OS/paths/user unchanged). The old box
-segfaulted `fa.collect` hourly on its final morning (05:38–09:03 CDT);
-zero coredumps since the swap, StockTwits service running clean, full
-444-test suite green in 23 s. Compute doctrine unchanged: training/finalize
-still run on GCP Batch, not here.
-
-## Standing warnings (unchanged)
-
-- **Do NOT run training/finalize on this box** — run on GCP Batch.
+- **Training/finalize run on GCP Batch**, not locally (provenance +
+  checksums; the old-box corruption rationale is historical).
 - Docker image BAKES the repo → rebuild + pin `IMAGE_TAG` after every code
   change; build from a `git archive` tree.
 - Never report cloud state from memory — job state + task logs + bucket
   listing, live.
-- `NN_META_POOL=v31` for everything v4. Deploy by `git pull`, never scp.
-- Agent shell is zsh (bare `=====` separators fail; no word-splitting of
-  unquoted vars); `!` prefix is bash; chain privileged steps in one
-  `sudo bash -c "..."`.
+- `NN_META_POOL=v31` for everything v4/spx0. Deploy by `git pull`, never scp.
+- Agent shell is zsh (bare `===` separators get eaten — quote them; no
+  word-splitting of unquoted vars); `!` prefix is bash.
 - Do NOT delete `gs://healys-backtester/out/archive-2026-08-19-stale-cache/`;
   do NOT pass `DELETE_BUCKET=1` to teardown.
 - `prem_spot` leakage question still OPEN (needs its own feature-drop run).
 - earlyoom runs the stock `--avoid`; tuned config staged, not installed.
-- CLAUDE.md says 425 tests; actual 443.
+- CLAUDE.md says 425 tests; actual 451.
+- `/ultrareview` window still open (TODO): run from the DESKTOP session
+  once the branch is quiet, then merge to main.
