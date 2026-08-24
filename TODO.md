@@ -187,12 +187,19 @@ symbols (all healthy), v4 scans its 118 (117 healthy). Findings:
   copy → `git rm --cached` + gitignore → pull → restore). The new v4 state
   files are gitignored from the start (learned the hard way, 2026-08-16).
 
-**Remaining for this phase** (after block 1b clears the gate — if it does):
-- [ ] Re-finalize → push new `model_final_v4/` → server `git pull` →
-  selftest → drop `--paper` from the cron line (bundle then must verify +
-  be gate-eligible, enforced by the scan itself).
-- [ ] Re-validate candidate parity against the surviving bundle (Option B
-  step 4) and close the last first-implementation gate item.
+**Remaining for this phase — ALL DONE 2026-08-24. PHASE EXIT ACHIEVED.**
+- [x] Re-finalize (ELIGIBLE under the ex-top3 gate: gbt×40 ev/0.05, val
+  +605%, maxDD 21.9%) → bundle committed → main fast-forwarded to
+  `48db82e` → server `git pull` → on-server selftest (40/40, median
+  0.433) → `--paper` DROPPED (crontab backed up to
+  `~/crontab.bak.2026-08-24`). **[v4] alerts are REAL as of 2026-08-24.**
+- [x] Candidate parity re-validated against the V118 bundle (real-data dry
+  run, 3 symbols, 0 errors) — last first-implementation gate item closed.
+
+**→ Next phase: ROADMAP "Expert panel, wave 2". Refill this file from it
+at the next session start** (spx0 round 3 — wave-2 item 2 — is already in
+flight on Batch; item 1, the EV-sized seat, effectively shipped inside
+V118 since ev mode won the grid).
 
 ## Fallback if the weekend runs short
 

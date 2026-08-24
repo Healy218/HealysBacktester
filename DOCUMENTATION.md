@@ -203,12 +203,14 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
 - **Cron (UTC — this cron ignores `CRON_TZ`, verified empirically)**:
   - `*/15 * * * *` live scanner: `NN_META_POOL=v3 … run_live --once --nn`
     → `logs/live_cron.log` (self-gates to RTH)
-  - `*/15 * * * *` **[v4] expert** (since 2026-08-16): `NN_META_POOL=v31 …
-    nn_meta.live.v4_scan --once --paper` → `logs/v4_cron.log`. Paper mode
-    until the Option B re-finalized bundle replaces `model_final_v4/` (then
-    drop `--paper`). **Rollback = delete this one cron line** — v3 is
-    untouched. Needs `nn_meta/data_cache_v3/{surface_daily,underlying_daily}
-    .parquet` on the host (rsync'd; gitignored path, refresh occasionally).
+  - `*/15 * * * *` **[v4] expert** (paper 2026-08-16 → **REAL 2026-08-24**,
+    V118 bundle gbt/ev/0.05): `NN_META_POOL=v31 … nn_meta.live.v4_scan
+    --once` → `logs/v4_cron.log`. The scan refuses to alert unless the
+    bundle verifies AND is gate-eligible. **Rollback = restore
+    `~/crontab.bak.2026-08-24`** (or re-add `--paper` / delete the line) —
+    v3 is untouched. Needs `nn_meta/data_cache_v3/{surface_daily,
+    underlying_daily}.parquet` on the host (rsync'd; gitignored path,
+    refresh occasionally).
   - `*/15 * * * *` **[v31] expert** (since 2026-08-16): `NN_META_POOL=v31 …
     nn_meta.live.run_live --once --nn` → `logs/v31_cron.log`. Legacy scorer
     path (prices the frozen-DTE contract live via the hybrid provider);
@@ -237,8 +239,9 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   Cloudflare-blocks datacenter IPs — the home box collects it hourly via
   `healys-stocktwits.timer` and rsync-pushes the archive).
 - **v3 rollback**: drop `NN_META_POOL=v3` from the cron line (v2 artifacts
-  still present, untouched). Post-deploy self-test:
-  `NN_META_POOL=v3 ./venv/bin/python _st.py` (force-loads all 40 models).
+  still present, untouched). The once-documented `_st.py` selftest script
+  no longer exists on the server (verified 2026-08-24) — check v3 health
+  from `logs/live_cron.log` (a clean pass every 15 min) instead.
 - State on the server that is NOT in git: `.env`, `fa/archive/`, the 5 root
   parquets of `nn_meta/data_cache/` (scanner needs `surface_daily.parquet`).
 

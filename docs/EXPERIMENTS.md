@@ -102,7 +102,7 @@ revisited: sell premium; liquid OTM strikes; re-sweep params for 5m bars.
 | Expert | Live since | Pool / policy | Ledger | Status |
 |---|---|---|---|---|
 | v3 | 2026-07-11 | v3, rank/label_excess/32x16, thr 0.6 | server alerts (no paper ledger yet) | **live**, ~1 alert/week — NOTE: alert rate before 2026-08-16 was depressed by the thinning universe horizon (fixed; judge cadence from 08-17 on) |
-| v4 | **2026-08-16** | v31 causal, gbt/filter thr 0.5 (Option A bundle) | `.v4_paper_ledger.json` on server | **live — paper mode**; bundle hot-swaps after the Option B re-finalize |
+| v4 | **2026-08-16** (paper) → **2026-08-24 REAL** | v31 causal, **V118: gbt×40 ev/0.05, no brake** (first gate-eligible bundle, ex-top3 gate) | `.v4_paper_ledger.json` on server | **live — real alerts** since 2026-08-24; scan self-enforces verified+eligible |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
 ## 2026-08-24 — spx0 round 2 (sell-premium variants) REJECTED: test blowup

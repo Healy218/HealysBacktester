@@ -46,11 +46,17 @@ longer the bar. Bundle rsynced from
 (40/40, verified+eligible, median 0.433), force-added in `75ef456`.
 dd_brake is None so the not-yet-enforced live brake doesn't matter.
 
-**Deploy is gated on TWO things, in order (user decides the timing):**
-1. `/ultrareview` from the DESKTOP session (user-launched; main is
-   deliberately held behind the branch) → merge to main.
-2. Candidate-parity re-validation against THIS bundle (Option B step 4) —
-   then server `git pull`, selftest, drop `--paper`.
+**DEPLOYED 2026-08-24 — [v4] IS LIVE (real alerts).** User chose to merge
+on the local review (the cloud ultrareview crashed; retry still available,
+2 of 3 free). Chain executed: local /code-review (10 findings, all fixed,
+`a300830`) → parity re-validated (real-data dry run, 0 errors) → main
+fast-forwarded to `48db82e` → server pull → on-server selftest (40/40,
+median 0.433, verified+eligible) → `--paper` dropped from the cron line
+(backup `~/crontab.bak.2026-08-24`; the scan still self-enforces
+verified+eligible before alerting). v3/v31 untouched, logs clean.
+**This completed the NOW phase — refill TODO.md from ROADMAP wave 2.**
+Stale-doc find: the server `_st.py` v3 selftest no longer exists; v3
+health = clean passes in `logs/live_cron.log` (DOCUMENTATION updated).
 
 **spx0 round 2: REJECTED — test blowup, no seat** (EXPERIMENTS
 2026-08-24). Fold 1's winner passed the val gate then returned −1863% on
