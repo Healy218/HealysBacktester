@@ -126,20 +126,22 @@ def fit_nn(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
 
     mag = fit_nn_magnitude(train, val, features=features, mean=mean, std=std,
                            seed=seed, epochs=epochs)
-    return Predictor("nn", predict, mag.predict)
+    return Predictor("nn", predict, mag.predict if mag is not None else None)
 
 
 def fit_nn_magnitude(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
                      mean: pd.Series, std: pd.Series, seed: int, epochs: int
-                     ) -> Predictor:
+                     ) -> Predictor | None:
     """Magnitude head: regress the signed realized return (winsorized on the
     train tail) with the classifier's scaler, so the two heads see identical
-    inputs. Returns a Predictor whose ``predict`` is the expected return."""
+    inputs. Returns a Predictor whose ``predict`` is the expected return, or
+    ``None`` when no executed rows exist to train on — the ``ev`` mode is then
+    simply absent from the policy grid rather than the whole fit crashing."""
     import tensorflow as tf
 
     train_m, val_m = _magnitude_rows(train), _magnitude_rows(val)
     if train_m.empty or val_m.empty:
-        raise ValueError("magnitude head requires executed train and validation rows")
+        return None
     lo, hi = winsor_bounds(magnitude_target(train_m["net_return"]))
     y_train = np.clip(magnitude_target(train_m["net_return"]), lo, hi).astype("float32")
     y_val = np.clip(magnitude_target(val_m["net_return"]), lo, hi).astype("float32")
@@ -184,17 +186,19 @@ def fit_gbt(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
               callbacks=[early_stopping(max(10, n_estimators // 10)), log_evaluation(0)])
     mag = fit_gbt_magnitude(train, val, features=features, n_estimators=n_estimators)
     return Predictor("gbt", lambda rows: model.predict_proba(rows[features])[:, 1],
-                     mag.predict)
+                     mag.predict if mag is not None else None)
 
 
 def fit_gbt_magnitude(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
-                      n_estimators: int, seed: int = 0) -> Predictor:
-    """LightGBM magnitude head (Huber objective on the winsorized signed return)."""
+                      n_estimators: int, seed: int = 0) -> Predictor | None:
+    """LightGBM magnitude head (Huber objective on the winsorized signed
+    return); ``None`` when no executed rows exist — the ``ev`` mode is then
+    absent from the grid rather than the whole fit crashing."""
     from lightgbm import LGBMRegressor, early_stopping, log_evaluation
 
     train_m, val_m = _magnitude_rows(train), _magnitude_rows(val)
     if train_m.empty or val_m.empty:
-        raise ValueError("magnitude head requires executed train and validation rows")
+        return None
     lo, hi = winsor_bounds(magnitude_target(train_m["net_return"]))
     y_train = np.clip(magnitude_target(train_m["net_return"]), lo, hi)
     y_val = np.clip(magnitude_target(val_m["net_return"]), lo, hi)
@@ -304,11 +308,12 @@ def _passes_gate(metrics: dict, baseline: dict, dd_cap: float | None = None) -> 
     The baseline bar is its ``total_ex_top3`` — the take-everything book with
     its top-3 tickets removed (DECISIONS 2026-08-24: a single 1526× outlier
     carried the raw baseline to +1854% and made the bar luck, not skill). The
-    raw ``total_return`` is the fallback when ex-top3 is unavailable (too few
-    trades)."""
+    raw ``total_return`` is the fallback when ex-top3 is unavailable OR the
+    baseline entered ≤ 3 trades — the metric emitters return a 0.0 sentinel
+    there, not None, and a 0.0 bar would wave through anything positive."""
     cap = config.MAX_DRAWDOWN_CAP if dd_cap is None else float(dd_cap)
     bar = baseline.get("total_ex_top3")
-    if bar is None:
+    if bar is None or baseline.get("n_kept", 0) <= 3:
         bar = baseline["total_return"]
     return bool(
         metrics["n_kept"] >= config.MIN_KEPT_TRADES
@@ -645,6 +650,10 @@ def _window_from_config() -> FoldWindow:
 
 
 def _write_report(results: list[dict], output: Path) -> None:
+    # The gate description must state the cap the runs were actually judged
+    # against — pools override it (spx0: 0.25), and results carry their own.
+    caps = sorted({float(r.get("dd_cap", config.MAX_DRAWDOWN_CAP)) for r in results})
+    cap_text = " / ".join(f"{c:.0%}" for c in caps) if caps else f"{config.MAX_DRAWDOWN_CAP:.0%}"
     lines = ["# V4 causal evaluation", "",
              "Each row uses fold-local model/policy selection and the shared slot portfolio.",
              "The marked column is the mark-to-market ledger result and is `pending` "
@@ -653,7 +662,7 @@ def _write_report(results: list[dict], output: Path) -> None:
              "The **gate** column reports whether the winning policy cleared the "
              "eligibility gate on validation (kept ≥ "
              f"{config.MIN_KEPT_TRADES} trades, beat the frozen baseline ex-top3, maxDD ≤ "
-             f"{config.MAX_DRAWDOWN_CAP:.0%}). A ⚠ row's winner is the least-bad "
+             f"{cap_text}). A ⚠ row's winner is the least-bad "
              "config, not a config that passed — its test numbers are diagnostic "
              "only and must not be promoted.", "",
              "| run | schema | purged | winner | gate | mode / threshold | test return | maxDD | marked return / maxDD |",

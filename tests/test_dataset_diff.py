@@ -76,3 +76,35 @@ class TestAlign:
         b = _rows(executed=[0, 0, 1], net_return=[0.99, 0.20, 0.30])
         A, B, _, _ = align(_rows(), b)
         assert [c for c, _ in diff_columns(A, B)] == ["executed", "net_return"]
+
+
+class TestMainGate:
+    """--expect-identical must gate the ROW SET, not just aligned values
+    (review 2026-08-24: silent row drops passed as IDENTICAL)."""
+
+    def _write(self, tmp_path, name, df):
+        p = tmp_path / name
+        df.to_parquet(p, index=False)
+        return p
+
+    def _main(self, monkeypatch, a, b):
+        from nn_meta.dataset_diff import main
+        monkeypatch.setattr("sys.argv", ["dataset_diff", "--baseline", str(a),
+                                         "--candidate", str(b),
+                                         "--expect-identical"])
+        return main()
+
+    def test_identical_row_sets_pass(self, tmp_path, monkeypatch):
+        a = self._write(tmp_path, "a.parquet", _rows())
+        b = self._write(tmp_path, "b.parquet", _rows())
+        assert self._main(monkeypatch, a, b) == 0
+
+    def test_dropped_rows_fail_even_with_matching_values(self, tmp_path, monkeypatch):
+        a = self._write(tmp_path, "a.parquet", _rows(3))
+        b = self._write(tmp_path, "b.parquet", _rows(3).iloc[:2])
+        assert self._main(monkeypatch, a, b) == 1
+
+    def test_zero_aligned_rows_fail(self, tmp_path, monkeypatch):
+        a = self._write(tmp_path, "a.parquet", _rows(2))
+        b = self._write(tmp_path, "b.parquet", _rows(2, trade_idx=[7, 8]))
+        assert self._main(monkeypatch, a, b) == 1

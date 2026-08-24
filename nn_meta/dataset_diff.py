@@ -120,12 +120,21 @@ def main() -> int:
             print(f"columns only in {side}: {', '.join(cols)}")
 
     rows = diff_columns(A, B)
-    if not rows:
-        print("IDENTICAL — every shared column matches on every aligned row")
+    # "Identical" means identical: same row SET and same values. Value diffs
+    # on aligned rows alone would pass a candidate that silently dropped rows
+    # wholesale (the 2026-08-19 biased-drop incident) or aligned nothing at
+    # all — exactly what this gate exists to catch (review 2026-08-24).
+    if not rows and only_a == 0 and only_b == 0 and len(A) > 0:
+        print("IDENTICAL — same row set, every shared column matches")
         return 0
-    print(f"{len(rows)} shared column(s) differ:")
-    for c, n in rows:
-        print(f"   {c:<18} {n:>8} rows  {100.0 * n / max(len(A), 1):>6.2f}%")
+    if len(A) == 0:
+        print("NOT COMPARABLE — zero rows aligned between baseline and candidate")
+    if only_a or only_b:
+        print(f"ROW SET DIFFERS — baseline-only {only_a}, candidate-only {only_b}")
+    if rows:
+        print(f"{len(rows)} shared column(s) differ:")
+        for c, n in rows:
+            print(f"   {c:<18} {n:>8} rows  {100.0 * n / max(len(A), 1):>6.2f}%")
     return 1 if args.expect_identical else 0
 
 

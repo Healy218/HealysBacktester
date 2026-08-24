@@ -51,11 +51,16 @@ def test_session_ratio_is_measured_from_the_first_bar():
         session_ratio(z.head(3), 590.5, index="SPX", first_bar_ts=ts)
 
 
-def test_pick_atm_needs_a_recent_print():
+def test_pick_atm_needs_a_recent_completed_print():
     ts = pd.Timestamp("2025-06-10 14:00")
     z = same_day_expiry(_zero_dte(ts), ts)
-    c = pick_atm(z, index="SPX", right="C", mapped_spot=5912.0, at=ts)
+    # prints stamped ts complete at ts+1min: selectable from then on…
+    c = pick_atm(z, index="SPX", right="C", mapped_spot=5912.0,
+                 at=ts + pd.Timedelta(minutes=1))
     assert c is not None and c.strike == 5910.0
+    # …but NOT at ts itself — the bar stamped ts is still forming (lookahead
+    # fix, review 2026-08-24)
+    assert pick_atm(z, index="SPX", right="C", mapped_spot=5912.0, at=ts) is None
     stale = pick_atm(z, index="SPX", right="C", mapped_spot=5912.0,
                      at=ts + pd.Timedelta(minutes=10))
     assert stale is None

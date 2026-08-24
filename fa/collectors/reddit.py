@@ -83,7 +83,15 @@ def _get_json(session: requests.Session, url: str, params: dict,
             time.sleep(_BACKOFF * 2 ** attempt)
             continue
         if r.ok:
-            return r.json()
+            # A 200 with a non-JSON body (Reddit incident/HTML pages) is a
+            # transient server fault, not a reason to abort the whole run.
+            try:
+                return r.json()
+            except ValueError:
+                if last:
+                    return None
+                time.sleep(_BACKOFF * 2 ** attempt)
+                continue
         if r.status_code not in _RETRY_STATUS or last:
             return None
         # Reddit sends Retry-After on 429; honour it when present.

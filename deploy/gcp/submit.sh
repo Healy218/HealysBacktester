@@ -101,7 +101,9 @@ cat > /tmp/healys_batch_job.json <<JSON
         "SHARDS": "${SHARDS}",
         "SYMBOLS": "${SYMBOLS}",
         "TASK_MODE": "${MODE}",
-        "EXTRA_ARGS": "${EXTRA_ARGS:-}"
+        "EXTRA_ARGS": "${EXTRA_ARGS:-}",
+        "BASELINE_URI": "${BASELINE_URI:-}",
+        "CANDIDATE_URI": "${CANDIDATE_URI:-}"
       }}
     }
   }],

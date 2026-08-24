@@ -102,9 +102,13 @@ def _train_nn_seed(train, val, *, features, label, seed, epochs, run_id,
                      epochs=epochs, batch_size=config.BATCH_SIZE,
                      callbacks=[early], verbose=0)
 
-    # Magnitude head (EV sizing): same scaler, signed-return target.
-    mag = fit_nn_magnitude(train, val, features=features, mean=mean, std=std,
+    # Magnitude head (EV sizing): same scaler, signed-return target — trained
+    # on the SAME label-filtered population as every walk-forward-validated
+    # head (raw frames would include rows the methodology never saw).
+    mag = fit_nn_magnitude(train_l, val_l, features=features, mean=mean, std=std,
                            seed=seed, epochs=epochs)
+    if mag is None:
+        raise ValueError("finalize requires executed rows to train the magnitude head")
 
     run_dir = out_dir / run_id
     run_dir.mkdir(parents=True, exist_ok=True)
@@ -135,8 +139,11 @@ def _train_gbt_seed(train, val, *, features, label, seed, n_estimators, run_id,
              eval_metric="auc",
              callbacks=[early_stopping(max(10, n_estimators // 10)), log_evaluation(0)])
 
-    mag = fit_gbt_magnitude(train, val, features=features, n_estimators=n_estimators,
+    # Same label-filtered population as the walk-forward-validated heads.
+    mag = fit_gbt_magnitude(train_l, val_l, features=features, n_estimators=n_estimators,
                             seed=seed)
+    if mag is None:
+        raise ValueError("finalize requires executed rows to train the magnitude head")
 
     run_dir = out_dir / run_id
     run_dir.mkdir(parents=True, exist_ok=True)

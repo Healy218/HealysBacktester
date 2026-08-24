@@ -102,6 +102,12 @@ def ev_weighted_portfolio(cands: pd.DataFrame, k: int, f: float, *,
 
     for ts, grp in cands.groupby("entry_ts", sort=True):
         _close_due(ts)
+        if equity <= 0:
+            # Busted book (possible when per-margin returns run below −1, e.g.
+            # spx0 short variants gapping past their stop): there is nothing
+            # left to size with, and frac × negative equity would flip losses
+            # into gains. Stop entering; open positions still realize below.
+            continue
         free = k - len(open_pos)
         if free <= 0:
             continue

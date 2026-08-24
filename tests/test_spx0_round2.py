@@ -147,10 +147,71 @@ def test_short_costs_reject_bad_inputs():
 
 def test_gate_bar_is_the_baseline_ex_top3():
     metrics = {"n_kept": 20, "total_return": 0.50, "max_drawdown": 0.10}
-    outlier_carried = {"total_return": 18.54, "total_ex_top3": 0.10}
+    outlier_carried = {"n_kept": 50, "total_return": 18.54, "total_ex_top3": 0.10}
     assert _passes_gate(metrics, outlier_carried)
     # a candidate below the ex-top3 bar still fails
     assert not _passes_gate({**metrics, "total_return": 0.05}, outlier_carried)
-    # no ex-top3 available (tiny baseline): fall back to the raw return
-    assert not _passes_gate(metrics, {"total_return": 18.54, "total_ex_top3": None})
-    assert _passes_gate(metrics, {"total_return": 0.20, "total_ex_top3": None})
+    # no ex-top3 available: fall back to the raw return
+    assert not _passes_gate(
+        metrics, {"n_kept": 50, "total_return": 18.54, "total_ex_top3": None})
+    assert _passes_gate(
+        metrics, {"n_kept": 50, "total_return": 0.20, "total_ex_top3": None})
+
+
+def test_decision_features_blind_to_the_forming_1m_bar():
+    """Bars are start-stamped: the 1m bar stamped t is still forming at the
+    5m signal close t. A price spike inside that bar must not reach any
+    decision-side field (review 2026-08-24 lookahead finding)."""
+    from nn_meta.spx0.build_dataset import build_session_rows
+    spike_t = pd.Timestamp("2025-06-10 14:00")
+
+    def _build(spike):
+        px = _proxy()
+        if spike:
+            px.loc[spike_t, ["Open", "High", "Low", "Close"]] = 700.0
+        b5 = resample_5m(px)
+        rows, _ = build_session_rows(
+            DAY, "SPX", proxy_1m=px, bars_5m=b5, options=_options(),
+            prepared=_prepared(b5, spike_t, pd.Timestamp("2025-06-10 15:00")),
+            ctx_1m=proxy_context_features(px), variants=sc.ROUND2_VARIANTS)
+        return pd.DataFrame(rows)
+
+    clean, spiked = _build(False), _build(True)
+    decision_cols = ["strike", "moneyness", "spx0_rv_30", "spx0_rv_60",
+                     "spx0_prem_spot_last", "spx0_prem_rich", "spx0_depth_signal"]
+    for col in decision_cols:
+        a, b = clean[col].tolist(), spiked[col].tolist()
+        assert all((x == y) or (pd.isna(x) and pd.isna(y)) for x, y in zip(a, b)), col
+
+
+def test_gate_small_baseline_falls_back_to_raw_return():
+    """total_ex_top3 is a 0.0 SENTINEL for baselines entering <= 3 trades —
+    the bar must fall back to the raw return, not become 0.0."""
+    metrics = {"n_kept": 20, "total_return": 0.30, "max_drawdown": 0.10}
+    tiny_baseline = {"n_kept": 3, "total_return": 0.50, "total_ex_top3": 0.0}
+    assert not _passes_gate(metrics, tiny_baseline)
+    assert _passes_gate({**metrics, "total_return": 0.60}, tiny_baseline)
+
+
+def test_ev_portfolio_stops_entering_on_a_busted_book():
+    """Per-margin returns below -1 can take equity negative; a dead book must
+    not size new positions off negative equity (flipping losses into gains)."""
+    from nn_meta.ev_sizing import ev_weighted_portfolio
+    t0, t1, t2 = (pd.Timestamp("2025-06-10 14:00"), pd.Timestamp("2025-06-10 14:30"),
+                  pd.Timestamp("2025-06-10 15:00"))
+    cands = pd.DataFrame({
+        "symbol": ["A", "B", "C"],
+        "entry_ts": [t0, t0, t2], "exit_ts": [t1, t1, t2 + pd.Timedelta("30min")],
+        "net_return": [-8.0, -8.0, 1.0], "pred_ev": [0.5, 0.5, 0.5],
+    })
+    total, max_dd, entered = ev_weighted_portfolio(cands, 2, 0.6)
+    assert len(entered) == 2                     # the post-bust candidate is skipped
+    assert np.isfinite(total) and total < -1.0   # honest busted-book report
+    assert max_dd > 1.0
+
+
+def test_magnitude_head_absent_rather_than_crashing_without_executed_rows():
+    from nn_meta.v4_evaluate import fit_gbt_magnitude
+    rows = pd.DataFrame({"executed": [False, False], "net_return": [np.nan, np.nan],
+                         "f1": [0.1, 0.2]})
+    assert fit_gbt_magnitude(rows, rows, features=["f1"], n_estimators=10) is None

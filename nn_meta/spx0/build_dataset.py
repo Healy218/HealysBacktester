@@ -213,7 +213,12 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                 key = (index, strategy)
                 counters[key] = counters.get(key, 0) + 1
                 trade_idx = counters[key]
-                spot = float(px_day["Close"].asof(t))
+                # DECISION-side lookups must read the last COMPLETED 1m bar:
+                # bars are start-stamped, so the bar stamped t is still forming
+                # at the signal close t — reading it leaks ~1 minute of future
+                # price into strike selection and features (review 2026-08-24).
+                t_done = t - pd.Timedelta(minutes=1)
+                spot = float(px_day["Close"].asof(t_done))
                 mapped = spot * ratio
                 # the symbol keeps the SIGNAL's right so every variant of one
                 # signal shares the (symbol, strategy, trade_idx) dedupe key
@@ -225,9 +230,11 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                         u = _first_true_after(sig, t)
                         if u is not None:
                             sig_exit_ts.append(u)
-                # features at the signal close (all SIGNAL_CLOSE by construction)
+                # features at the signal close (all SIGNAL_CLOSE by construction;
+                # 1m-derived context stops at the last completed bar)
                 f = feats.loc[t]
-                c1 = ctx_1m.asof(t) if t >= ctx_1m.index[0] else pd.Series(dtype=float)
+                c1 = (ctx_1m.asof(t_done) if t_done >= ctx_1m.index[0]
+                      else pd.Series(dtype=float))
                 contract_by_right: dict = {}
 
                 for variant in variants:
@@ -275,7 +282,7 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                         rows.append(base)
                         continue
                     cbars = z[z["occ"] == contract.occ]
-                    before = cbars[cbars["timestamp"] <= t]
+                    before = cbars[cbars["timestamp"] < t]     # completed prints only
                     last_print = before.iloc[-1] if not before.empty else None
                     prem_spot = (float(last_print["Close"]) / mapped
                                  if last_print is not None else np.nan)

@@ -16,6 +16,13 @@
 set -euo pipefail
 cd /app
 
+# Local/manual runs have no Batch env; default it BEFORE any ${BATCH_JOB_UID##*-}
+# expansion, which errors under nounset when the variable is unset entirely.
+BATCH_JOB_UID="${BATCH_JOB_UID:-}"
+# Empty operator overrides must not clobber task.sh defaults below.
+[ -n "${BASELINE_URI:-}" ] || unset BASELINE_URI
+[ -n "${CANDIDATE_URI:-}" ] || unset CANDIDATE_URI
+
 echo "== task ${BATCH_TASK_INDEX:-?}/${SHARDS:-?} mode=${TASK_MODE:-build} =="
 
 MODE="${TASK_MODE:-build}"

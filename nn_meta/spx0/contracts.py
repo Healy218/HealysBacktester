@@ -88,12 +88,14 @@ def map_spot(proxy_price: float, ratio: float) -> float:
 def pick_atm(zero_dte: pd.DataFrame, *, index: str, right: str, mapped_spot: float,
              at: pd.Timestamp, lookback_bars: int = 5) -> Contract | None:
     """The contract to trade: nearest strike to the ratio-mapped spot among
-    contracts that PRINTED within the last ``lookback_bars`` minutes up to
-    ``at`` (no print → no evidence it is tradeable). Returns ``None`` when
-    nothing qualifies; the caller records an unexecuted proposal."""
+    contracts whose prints COMPLETED within the last ``lookback_bars`` minutes
+    before ``at`` (bars are start-stamped, so the bar stamped ``at`` is still
+    forming at decision time; no completed print → no evidence it is
+    tradeable). Returns ``None`` when nothing qualifies; the caller records an
+    unexecuted proposal."""
     lo = at - pd.Timedelta(minutes=lookback_bars)
     sub = zero_dte[(zero_dte["index"] == index) & (zero_dte["right"] == right)
-                   & (zero_dte["timestamp"] > lo) & (zero_dte["timestamp"] <= at)]
+                   & (zero_dte["timestamp"] >= lo) & (zero_dte["timestamp"] < at)]
     if sub.empty:
         return None
     dist = (sub["strike"] - mapped_spot).abs()
