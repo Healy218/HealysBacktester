@@ -105,6 +105,23 @@ revisited: sell premium; liquid OTM strikes; re-sweep params for 5m bars.
 | v4 | **2026-08-16** | v31 causal, gbt/filter thr 0.5 (Option A bundle) | `.v4_paper_ledger.json` on server | **live — paper mode**; bundle hot-swaps after the Option B re-finalize |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-24 — v4_finalize ELIGIBLE under the ex-top3 gate: first V118 bundle
+
+`v4-finalize-6ab5120-023421` (image `6ab5120`, e2-standard-8 after the n2
+pool stocked out ~90 min; same verified dataset+marks as the 08-21 runs):
+**eligible=True.** Winner **gbt × 40 seeds, mode `ev/0.05`, dd_brake=None**
+— val +604.8%, n_kept 219, maxDD 21.9%, selection_basis=ledger, magnitude
+head persisted. The gate's new bar (DECISIONS 2026-08-24) is the baseline's
+`total_ex_top3` = **+31.4%**; the raw baseline (+1853.6%, one 1526× ticket)
+is recorded but no longer the bar. Same candidate that won all three
+walk-forward folds on 08-21 and was refused three times on the outlier bar.
+Bundle: `gs://healys-backtester/out/finalize-20260824T073639Z-44b60/model_final_v4/`
+→ rsynced local, `v4_scan --selftest` OK (40/40, verified=True
+eligible=True, score median 0.433 deterministic), force-added on the
+branch. Before dropping `--paper`: candidate-parity re-validation against
+THIS bundle (Option B step 4) + the `/ultrareview` → merge-to-main path
+(main is still deliberately behind the branch).
+
 ## 2026-08-21 — v4_finalize REFUSED: no eligible config on the recent tail
 
 `v4-finalize-493af85-010321` (verified dataset, image `493af85`, e2-standard-8):
