@@ -73,9 +73,13 @@ change); the box codes, tests, and smokes.
 
 ## 5 — Methodology debt (small, unblocks future verdicts)
 
-- [ ] PBO report wiring — the per-fold candidate matrix it needed now
-  exists (`choose_policy` carries `candidate_grid`/`candidate_sharpes`
-  since 2026-08-21).
+- [x] PBO report wiring DONE 2026-08-24: CSCV over the whole policy grid
+  (equal-weight daily candidate P&L on validation), reported per run
+  beside deflated Sharpe; never guesses on thin windows.
+- [x] v5 wide pool DEFINED 2026-08-24 (`PROPOSAL_STRATEGIES_V5`: all 10
+  swept families, seam-tested; `NN_META_POOL=v5` plumbs through). The
+  300-ticker generation's remaining blocker is POINT-IN-TIME universe
+  membership (the parked ROADMAP item) — design next.
 - [ ] DD-brake live enforcement in `v4_scan` sizing (brake is shown, not
   enforced; moot for V118's `dd_brake=None` but a landmine for any braked
   future bundle).
