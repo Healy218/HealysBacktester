@@ -1,87 +1,80 @@
 # HANDOFF — state for the next session
 
-Written 2026-08-24 (~01:10 CDT). Protocol: `CLAUDE.md`.
-Previous handoff (braked-EV verdict, DD cap never binding, old box's last
-days): `handoff-history/HANDOFF-2026-08-21-dd-cap-never-binding-new-box.md`.
+Written 2026-08-24 ~13:00 CDT. Protocol: `CLAUDE.md`.
+Previous handoff (the day's blow-by-blow: gate decision, review cycle,
+deploy): `handoff-history/HANDOFF-2026-08-24-v118-live-phase-exit.md`.
 
-## The box is NEW (2026-08-23) — the RAM-fault era is over
+## The one-paragraph state
 
-Ryzen 7 9850X3D (8C/16T), 32 GB DDR5, RTX 3060 Ti carried over, same 1 TB
-NVMe moved intact (OS/paths/user `healy` unchanged; CLAUDE.md +
-DOCUMENTATION.md updated). Old box's final morning segfaulted `fa.collect`
-hourly; zero coredumps since the swap, StockTwits service clean, suite
-green in ~14 s. Training still runs on Batch — the checksummed-artifact
-and provenance arguments stand even though the corruption rationale is
-now historical.
+**[v4] is LIVE with real alerts** (V118: gbt×40, ev/0.05, no brake — first
+gate-eligible bundle, ex-top3 gate) on the Hetzner server since 2026-08-24,
+alongside untouched v3 and the v31 paper expert; the daily watchlist digest
+(wave-2 item 5, v4 seat) is cron'd for 20:10 UTC weekdays. The v4-ship
+phase EXITED; **TODO.md is refilled for the wave-2 phase**. The prem_spot
+question is CLOSED (leaks in both families). spx0 rounds 1–2 are rejected;
+**round 3 (credit verticals + intraday seats) is RUNNING on Batch**. The
+box is the new Ryzen build; suite ~474 green in ~11 s.
 
-## Two decisions landed 2026-08-24 (commit `6ab5120`, suite 451, pushed)
+## IN FLIGHT on GCP (verify live, never from memory)
 
-1. **v4 gate baseline term = ex-top3 (user decision).** `_passes_gate`
-   bars candidates at the baseline's `total_ex_top3` (raw fallback when
-   unavailable); candidate side stays raw. The +1854% outlier-carried bar
-   is gone. Grid print shows `gate bar = ex-top3`; `ensemble_config.json`
-   persists `baseline_ex_top3`. DECISIONS 2026-08-24.
-2. **spx0 second round built** (SPX0_SPEC items 1+2): six `TradeVariant`s
-   per signal — long stops {.3,.5,.7}, sell-premium stops {1.5,2,3} — the
-   variant code rides the `dte` column so rank/EV dedupe on (symbol,
-   strategy, trade_idx) fold-selects it exactly like DTE in v4; code 0 is
-   bit-identical to round 1 and stays the frozen baseline. Shorts: sell the
-   opposite right, fill Low/buy back High, margin = (stop−1)×entry (max
-   planned loss; gap-past-stop kept as data — smoke stop-outs avg −1.5 to
-   −2.1× margin), cash settlement pays intrinsic with entry-side costs
-   only. New features `spx0_short`/`spx0_stop_frac`/`spx0_prem_rich`;
-   KEEP_THRESHOLDS gained .55/.60/.65. 12-session smoke + `--smoke`
-   evaluate ran clean end-to-end through the ledger.
+- `spx0-run-48db82e-095520` — round 3, launched 2026-08-24 09:55 CDT,
+  RUNNING as of 12:46 CDT. e2-standard-8, image `48db82e` (code now at
+  `45ab67a`+docs; the spx0 pipeline is unchanged since `48db82e`, so the
+  image is current for THIS run). Output:
+  `gs://healys-backtester/out/spx0-<stamp>-<uid>/artifacts_spx0/`.
+  A session-local watcher may have died with the session — check
+  `gcloud batch jobs list --project=healys-batch` first.
+  **Read first:** walk-forward report per-fold winners. Sign of life = an
+  eligible vertical (dte < 0: −1001/−1002/−1004) or intraday-seat winner
+  with positive ledger test return under the 25% cap. Verdict →
+  EXPERIMENTS; next actions are TODO block 1 (promotion-path design vs
+  lever 4/5 vs park — user decision either way).
 
-## BOTH VERDICTS LANDED 2026-08-24 (~03:30 and ~04:15 CDT)
+## Monday watch (first trading day with everything live)
 
-**v4 finalize: ELIGIBLE — the first V118 bundle exists and is committed.**
-`v4-finalize-6ab5120-023421` (the 010121 n2 job stocked out ~90 min
-cycling QUEUED↔SCHEDULED; deleted, resubmitted on e2 — precedent 08-19):
-winner **gbt × 40 seeds, `ev/0.05`, dd_brake=None** — val +604.8%, n_kept
-219, maxDD 21.9%, ledger-selected, magnitude head persisted. Gate bar
-(ex-top3) +31.4% vs candidate +605%; raw baseline +1854% recorded, no
-longer the bar. Bundle rsynced from
-`out/finalize-20260824T073639Z-44b60/`, local `v4_scan --selftest` OK
-(40/40, verified+eligible, median 0.433), force-added in `75ef456`.
-dd_brake is None so the not-yet-enforced live brake doesn't matter.
+- First REAL `[v4]` alert(s): threshold is EV ≥ 0.05 through the EV head —
+  cadence unknown; the paper history averaged ~a few/week at filter/0.5.
+- First populated watchlist digest lands 20:10 UTC; hit-rates start
+  resolving ~Wednesday (min(dte,7d) horizons).
+- Heartbeat (17:00 UTC) now covers three experts + new crash deltas.
 
-**DEPLOYED 2026-08-24 — [v4] IS LIVE (real alerts).** User chose to merge
-on the local review (the cloud ultrareview crashed; retry still available,
-2 of 3 free). Chain executed: local /code-review (10 findings, all fixed,
-`a300830`) → parity re-validated (real-data dry run, 0 errors) → main
-fast-forwarded to `48db82e` → server pull → on-server selftest (40/40,
-median 0.433, verified+eligible) → `--paper` dropped from the cron line
-(backup `~/crontab.bak.2026-08-24`; the scan still self-enforces
-verified+eligible before alerting). v3/v31 untouched, logs clean.
-**This completed the NOW phase — refill TODO.md from ROADMAP wave 2.**
-Stale-doc find: the server `_st.py` v3 selftest no longer exists; v3
-health = clean passes in `logs/live_cron.log` (DOCUMENTATION updated).
+## Today's landings (all pushed; main == branch == `45ab67a`+)
 
-**spx0 round 2: REJECTED — test blowup, no seat** (EXPERIMENTS
-2026-08-24). Fold 1's winner passed the val gate then returned −1863% on
-test (maxDD 1126%, equity through zero): stop-based margin does not bound
-a naked 0DTE short's tail. Structural lesson logged: a future short seat
-needs loss bounded by construction (verticals/margin = strike distance),
-not by a stop. USER DECISION on the next lever (SPX0_SPEC item 3 for the
-long book, and/or defined-risk short redesign). Nothing running on GCP.
+1. Gate baseline = ex-top3 (user decision; small-baseline raw fallback
+   after review) → finalize ELIGIBLE → **V118 deployed, --paper dropped**
+   (crontab backup `~/crontab.bak.2026-08-24`; rollback = restore it).
+2. 10 local-review findings fixed (spx0 1-minute decision lookahead, diff
+   gate row-set hole, busted-book EV floor, finalize magnitude-head
+   population + bundle regenerated, ops hardening).
+3. prem_spot CLOSED: purged legacy −23%/−44% (gbt/nn) vs causal
+   +69%/+82% — leak confirmed in both families (EXPERIMENTS).
+4. spx0 round 2 REJECTED (naked-short tail blows through stop-margin;
+   structural lesson logged); round 3 BUILT (verticals: package fills,
+   package costs, [0,width] clamps → hard −1×margin floor; 6 intraday
+   seats) and launched.
+5. Watchlist digest shipped end-to-end (code, 7 tests, server cron).
+6. Docs: ROADMAP phase promoted (wave 2 is ▶ NOW; item 1 folded into
+   V118), TODO refilled, CLAUDE.md test count fixed (~474, floor not pin).
 
 ## Standing warnings
 
-- **Training/finalize run on GCP Batch**, not locally (provenance +
-  checksums; the old-box corruption rationale is historical).
 - Docker image BAKES the repo → rebuild + pin `IMAGE_TAG` after every code
-  change; build from a `git archive` tree.
+  change; build from a `git archive` tree. Training/finalize on Batch.
 - Never report cloud state from memory — job state + task logs + bucket
   listing, live.
-- `NN_META_POOL=v31` for everything v4/spx0. Deploy by `git pull`, never scp.
-- Agent shell is zsh (bare `===` separators get eaten — quote them; no
-  word-splitting of unquoted vars); `!` prefix is bash.
+- `NN_META_POOL=v31` for everything v4/spx0. Deploy by `git pull`, never
+  scp. Server crontab edits: stage to a file, show the diff, `crontab
+  <file>` (a piped `crontab -` was classifier-blocked once).
+- Agent shell is zsh (quote `===` separators; no word-splitting); `!`
+  prefix is bash and runs on the HOME box (Remote Control caveat: the
+  user's own terminal may be elsewhere and lacks the Hetzner key).
 - Do NOT delete `gs://healys-backtester/out/archive-2026-08-19-stale-cache/`;
-  do NOT pass `DELETE_BUCKET=1` to teardown.
-- `prem_spot` leakage question CLOSED 2026-08-24 (EXPERIMENTS): leaks in
-  both families under purged selection; the v4 schema stands.
-- earlyoom runs the stock `--avoid`; tuned config staged, not installed.
-- CLAUDE.md says 425 tests; actual 451.
-- `/ultrareview` window still open (TODO): run from the DESKTOP session
-  once the branch is quiet, then merge to main.
+  no `DELETE_BUCKET=1`.
+- The server `_st.py` v3 selftest is GONE — v3 health = clean passes in
+  `logs/live_cron.log` (DOCUMENTATION updated).
+- earlyoom: stock config; the tuned one was staged for the OLD box — 32 GB
+  now, revisit only if OOM ever shows up.
+- Live DD-brake enforcement still missing in v4_scan sizing (moot for
+  V118's `dd_brake=None`; TODO block 5 before any braked bundle ships).
+- Ultrareview retry: 2 of 3 free remain; the branch has only had the
+  local review (DECISIONS 2026-08-24).

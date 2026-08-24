@@ -42,30 +42,28 @@ NEXT ─────────────────────────
   persisted. Design + stage-0 result tables: `docs/specs/V4_OUTLINE.md`.
   Verdicts ledger: `docs/EXPERIMENTS.md`.
 
-## ▶ NOW — ship v4 as a second expert (weekend goal, set 2026-08-15)
+## ✅ Shipped v4 as a second expert — EXIT ACHIEVED 2026-08-24
 
-Finish v4's remaining validation (Option B: route selection through the
-mark-to-market ledger, re-run, re-finalize), give it its own live scoring path
-(the parity-correct candidate builder already exists), and deploy it to the
-Hetzner scanner **alongside** v3 — two independently-triggering experts,
-alerts labeled per expert, each with its own paper ledger. v3 is untouched;
-rollback stays trivial. Task list: **`TODO.md`**.
+The full Option B arc landed: selection routed through the mark-to-market
+ledger, the EV head + DD brake joined the grid, the gate's baseline bar
+moved to ex-top3 (the raw bar was one 1526× ticket), and the **first
+gate-eligible bundle (V118: gbt×40, ev/0.05, val +605%, maxDD 21.9%)
+deployed to the server — `[v4]` alerts are REAL as of 2026-08-24** (paper
+2026-08-16 → real 2026-08-24; the scan self-enforces verified+eligible).
+Parity green, v3 untouched, prem_spot leak question closed (leaks in both
+families under purged selection). Wave-2 item 1 (EV-sized seat)
+effectively shipped inside V118 — the ev mode IS the deployed policy, so
+no separate `[v4ev]` seat is needed.
 
-**Exit:** v4 expert live on the server with its own Telegram label and paper
-ledger, offline/online feature-parity test green (closes v4's last
-first-implementation gate item), v3 running exactly as before.
-
-## ⏭ NEXT — Expert panel, wave 2 (user priorities set 2026-08-16)
+## ▶ NOW — Expert panel, wave 2 (user priorities set 2026-08-16)
 
 The panel's first three seats went live 2026-08-16 (v3 real; [v4], [v31]
 paper). Wave 2, in dependency order — each seat deploys ALONGSIDE, tracked
 by its own ledger, promoted only by forward results:
 
-1. **EV-sized v4 seat** — cheapest, highest leverage: train the
-   magnitude/EV head (`ev_sizing.py` is code-ready) on the marks dataset,
-   EV policy joins the nested grid, must beat uniform slots through the
-   ledger → deploys as `[v4ev]`. Attacks the wins-often-wins-small
-   inversion directly.
+1. **EV-sized v4 seat — DONE 2026-08-24, folded into V118**: the EV head
+   won the grid outright (ev/0.05 through the ledger, all folds), so the
+   deployed `[v4]` IS the EV seat; no separate `[v4ev]` label.
 2. **SPX/NDX daily-options trader** (user priority #5, ranked ahead of
    vol-regime): a NEW pool (`spx0`) through the same v4 causal contract —
    SPX + NDX daily-expiry options, calls and puts, ~2y RAW 1-MINUTE bars (stage-0 decision 2026-08-17; extracting to data_cache_spx0/),
@@ -86,6 +84,12 @@ by its own ledger, promoted only by forward results:
    stage-2 accounting is non-negotiable, and the audit backs that up: **median
    volume per 1m bar is 3 contracts** (p90 ~48), so most bars are untradeable
    and the pool must concentrate on liquid strikes/times.
+   **Design history (EXPERIMENTS/DECISIONS 2026-08-21..24):** round 1 (long
+   ATM 0DTE) — no edge after costs; round 2 (naked sell-premium, stop-based
+   margin) — passed val, blew up on test (−1863%, equity through zero):
+   stops cannot bound a naked short's tail. Round 3 (credit verticals with
+   loss bounded BY CONSTRUCTION + intraday-native signal seats) is the
+   current shot — in flight on Batch as of 2026-08-24.
 3. **Vol-regime track (track 1)** — the first big GCP Batch job after the
    pilot passes: v3/data (5.4 GB, 2017→) → 9y intraday realized-vol →
    HAR-RV/GARCH full OOS → one small sequence model that beats them per
@@ -98,7 +102,9 @@ by its own ledger, promoted only by forward results:
    daily **top-N watchlist digest** (best-scored candidates regardless of
    threshold — flow to browse) alongside the existing threshold-gated
    conviction pings; the scoreboard tracks watchlist hit-rates so the dial
-   becomes data-driven.
+   becomes data-driven. **v4 seat SHIPPED 2026-08-24** (`v4_scan --digest`,
+   20:10 UTC weekdays, underlying-direction hit-rates); v3/v31 seats
+   remain (the legacy scorer path needs its own recording hook).
 
 Standing pieces of the panel design (unchanged): expert registry (bundle +
 schema + policy + label), per-expert paper ledgers, scoreboard-driven

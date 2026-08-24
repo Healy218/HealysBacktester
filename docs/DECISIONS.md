@@ -202,6 +202,19 @@ entry, never edit history).
 - **2026-07-08 — Hetzner CX33 over Oracle free tier** (ARM capacity
   unavailable; user declined the PAYG card hold).
 
+## 2026-08-24 — V118 shipped on the local review; --paper dropped
+
+**Decision (user):** merge `codex/v4-causal-validation` → `main` and deploy
+V118 without waiting for a cloud ultrareview retry. The planned ultrareview
+crashed (orchestrator: all agents terminated — infra, not a verdict); the
+local `/code-review` had produced 10 verified findings, ALL fixed and
+re-tested before the merge (`a300830`), and the bundle was regenerated on
+the fixed code. Deploy chain: v3-safety diff audit → ff-merge → server
+pull → on-server selftest → `--paper` dropped (crontab backup
+`~/crontab.bak.2026-08-24`). The retry (2 of 3 free) remains available for
+the branch at any time. Rejected: holding the live gate-eligible bundle
+behind a crashed review tool with no ETA.
+
 ## 2026-08-24 — spx0 round 3: credit verticals + intraday-native seats
 
 **Decision (user):** round 3 pursues both remaining levers at once — credit

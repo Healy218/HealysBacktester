@@ -1,242 +1,80 @@
 # TODO — current phase
 
-**Phase: ship v4 as a second expert on the server** (`ROADMAP.md` ▶ NOW).
-Set 2026-08-15; target: this weekend.
-
-> **The standing goal (user, 2026-08-16): v4 goes to the server the moment
-> it finishes training/building.** Deploy is the *immediate* next action
-> once the bundle lands — nothing queued between re-finalize and deploy.
-> Corollary: do block 2 (the live scoring path) **while** the dataset builds
-> and the model trains, so it is never the bottleneck.
+**Phase: Expert panel, wave 2** (`ROADMAP.md` ▶ NOW; user priorities set
+2026-08-16). Entered 2026-08-24 after the v4-ship phase exited the same day
+(V118 live, real alerts — see `handoff-history/HANDOFF-2026-08-24-*`).
 
 How this file works: it holds the tasks for the *current* ROADMAP phase only.
-Work top to bottom, tick boxes here as things land, record mid-task state in
+Work top to bottom, tick boxes as things land, record mid-task state in
 `HANDOFF.md`. When the phase exits, refill this file from ROADMAP's next
 phase and log the exit in `docs/EXPERIMENTS.md`.
 
-Everything below runs with `NN_META_POOL=v31` unless said otherwise —
-without it the pipeline silently reads/writes the wrong artifact dirs.
+Everything below runs with `NN_META_POOL=v31` unless said otherwise.
+Heavy compute runs on GCP Batch (rebuild + pin `IMAGE_TAG` after every code
+change); the box codes, tests, and smokes.
 
-## 1 — Finish v4 on the ledger (Option B, `docs/specs/V4_OUTLINE.md` stage 2)
+## 1 — spx0 seat, round 3 (wave-2 item 2) — IN FLIGHT
 
-- [~] **Mark-stream build moved to GCP Batch** (compute doctrine, DECISIONS
-  2026-08-16) and RUNNING verified as of 08-18 03:28 UTC: job
-  `marks-build-54bd73d-202944`, 37/118 symbols published per-symbol to
-  `gs://healys-backtester/out/meta_rows/`. Full state + finish chain:
-  `HANDOFF.md`. (The local `run_build_parallel.sh` path is retired for this
-  build; stale July rows archived in `meta_rows.pre-marks-2026-08-15/`.)
-- [x] **Selection-side ledger wiring — DONE 2026-08-17.** `choose_policy`
-  scores every candidate AND the baseline through the mark-to-market ledger
-  when a stream is supplied (`_ledger_policy_metrics`: shared metric schema,
-  ledger-derived return/DD/exposure, ex-top3 re-marked through the ledger);
-  no-stream path bit-identical (tested). The decisive regression test
-  constructs a policy whose interim marks crater while finals look placid —
-  shared sim crowns it, the ledger rejects it. Reports tag 🄻 rows.
-- [~] **Re-run through the ledger**: `v4_evaluate --ablation` and
-  `--folds 3` (seeds 0-4, epochs 60, gbt 600, embargo 1D). Compare against
-  the stage-0 tables in `docs/specs/V4_OUTLINE.md` — numbers are *expected*
-  to move; log the new verdict in `docs/EXPERIMENTS.md`.
-  **Ran 2026-08-19 and the result is VOID** — it was computed on a dataset
-  built from a cache missing 44 flat-file day-frames, which silently dropped
-  16,500 low-return trades and so FLATTERED the book. Cause proven and fixed
-  (`4f6fa93` + `nn_meta/cache_preflight.py`); the 89 affected symbols are
-  rebuilt as `marks-build-d64ca9b-010138` — **DONE 2026-08-20: 118/118,
-  16/16 tasks SUCCEEDED, zero failures. Assembled and VERIFIED IDENTICAL to
-  stage-0 by the Batch diff gate** (`docs/EXPERIMENTS.md` 2026-08-20 entry).
-  The evaluate re-runs are UNBLOCKED and are the next action.
-  Re-run both legs after assemble, then verify with
-  `python -m nn_meta.dataset_diff --baseline <stage-0> --candidate <new>`
-  (the 13 differing columns must collapse to zero).
-- [x] **Evaluate re-runs DONE 2026-08-20** on the verified dataset
-  (`docs/EXPERIMENTS.md`): stage-0 reproduced; fold 3 is real (March shock +
-  size inversion, not decay).
-- [!] **Re-finalize REFUSED 2026-08-21** (`v4-finalize-493af85-010321`):
-  40-seed ensemble, filter/0.5, val +22.5%, n_kept 78, **eligible=False** on
-  the most-recent tail. No V118 bundle; server untouched. Decision
-  (`docs/DECISIONS.md` 2026-08-21): wire the EV head first, never override.
+- [~] `spx0-run-48db82e-095520` RUNNING on Batch (launched 2026-08-24
+  ~09:55 CDT): credit verticals (wings 1/2/4 steps, loss bounded by
+  construction) + 6 intraday-native seats, 3-fold nested walk-forward.
+  **Read first:** the walk-forward report's per-fold winners — an eligible
+  vertical (dte < 0) or intraday-strategy winner with positive ledger test
+  return under the 25% DD cap is the first sign of life this pool has
+  shown. Verdict → EXPERIMENTS either way.
+- [ ] If a seat shows life: design the promotion path (spx0 has no
+  finalize/bundle/live-scan equivalent yet — that's a build) and decide
+  levers 4 (1m signals) / 5 (2022 data) with the user.
+- [ ] If rejected again: user decision — park the pool or spend lever 5
+  (2022 bear-regime data) first.
 
-## 1b — Magnitude/EV head (DECIDED 2026-08-21; this weekend, GCP Batch)
+## 2 — Dual-mode cadence, panel-wide (wave-2 item 5; v4 seat DONE)
 
-Design: `docs/DECISIONS.md` 2026-08-21 "EV head definition". One regression
-head on signed `net_return`, one new mode `ev`, gate unchanged.
+- [x] v4 seat shipped 2026-08-24: recording in every pass, daily top-10
+  `--digest` (20:10 UTC weekdays), underlying-direction hit-rates.
+  **Watch Monday:** first populated digest + first real `[v4]` alert
+  behavior (threshold ev/0.05 through the EV head).
+- [ ] v3/v31 seats: add the same recording hook to the legacy
+  `run_live` scorer path + a shared digest (one message for the panel, or
+  one per expert — decide when wiring). `watchlist.py` is expert-agnostic
+  by design.
 
-- [x] `config.py`: `EV_THRESHOLDS`, `EVAL_MODES += ["ev"]` (opt-in via the
-  presence of an EV prediction, so legacy callers stay bit-identical).
-- [x] `ev_sizing.py`: `ev_weighted_portfolio` also reports each entered
-  trade's size fraction; `v4_accounting.mark_to_market_portfolio` accepts an
-  optional per-trade `size_fraction` (≤ `position_fraction`) so EV sizing is
-  scored through the SAME ledger as filter/rank.
-- [x] `v4_evaluate.py`: `fit_nn`/`fit_gbt` grow a magnitude head (Huber);
-  `Predictor` returns `(p_win, ev)`; `choose_policy(..., ev_predictions=)`
-  adds the `ev` candidates (shared sim + ledger); report shows the mode.
-- [x] `v4_finalize.py`: magnitude head trained + persisted per seed
-  (`magnitude.keras` / `magnitude.joblib`), ensemble re-validation includes
-  `ev`; `ensemble_config.json` records `mode="ev"` + threshold when it wins.
-- [x] `v4_loader.py` / `live/v4_scan.py`: bundle exposes `decision_score`
-  (P(win) or EV by mode) and a size hint; scan filters on it; alert shows EV.
-- [x] Tests (suite 425 green, self-contained): ev mode in the grid, ledger
-  per-trade sizing, bundle round-trip with a magnitude head, legacy path
-  unchanged.
-- [x] Image `c17193c` ran 2026-08-21: walk-forward `ev` won all 3 folds,
-  inversion gone; **finalize REFUSED on the 40% DD cap** (ev/0.05, val
-  +605%, eligible=False). EXPERIMENTS 2026-08-21.
-- [~] **Drawdown-aware gross brake on EV sizing** (`0c74274`, user decision
-  2026-08-21): `gross_scale = max(0.25, 1 − dd_now/dd_brake)`, brakes
-  {None, 0.20, 0.30} in the ev grid, same gate. Suite 443. Image built →
-  `v4-evaluate --folds 3` + `v4-finalize` on Batch — **DONE 2026-08-21
-  evening: walk-forward unchanged, finalize refused, and the candidate grid
-  shows the DD cap was never binding (ev/0.05 maxDD 21.9%). The failing
-  term is beat-baseline against an outlier-carried +1854% baseline.**
-- [x] **USER DECISION 2026-08-24: the gate's baseline term = ex-top3.**
-  `_passes_gate` now bars candidates at the baseline's `total_ex_top3`
-  (raw-return fallback when unavailable); candidate side stays raw. Landed
-  with tests (DECISIONS 2026-08-24). Finalize re-run LAUNCHED on Batch
-  2026-08-24 (`v4-finalize-6ab5120-010121`, verified SCHEDULED) — see
-  `HANDOFF.md` for the read-first chain.
+## 3 — FA-discovery seat (wave-2 item 4; exit metric: ≥3 frozen monthlies)
 
-## 1c — spx0 / VSPNDX seat (starts WHILE 1b runs on Batch)
+- [ ] Fundamental overlay → composite ranker (code through the score table
+  exists: `fa/entities.py`, `fa/scores.py`, `fa/universe_loop.py`).
+- [ ] **Freeze the FIRST monthly Top-10 (August 2026)** — calendar-bound:
+  every month not frozen is a month of forward tracking lost.
+- [ ] Forward tracker + `[fa]` digest; WSB daily trending digest queued
+  behind it.
 
-Data layer READY (ROADMAP Wave 2 item 2). Nothing to run on GCP until the
-three pieces below exist; build them in this order, each tested:
-- [x] Label builder for daily-expiry SPX/NDX options (`nn_meta/spx0/build_dataset.py`, 2026-08-21): signal-driven entries
-  AND exits, multiple trades/day, `available_at`-stamped, same v4 causal
-  contract (`feature_contract.py`, purged splits + embargo).
-- [x] Fill model (`nn_meta/spx0/fills.py`, depth-gated, High/Low prints, parity-implied settlement): median 3 contracts/1m bar (p90 ~48) — fills only where
-  depth exists, no fill assumed (DECISIONS 2026-08-19); rejects are data.
-- [x] Cost accounting (`nn_meta/spx0/costs.py`, dollar fees + point spreads, base/stressed; 25% cap via `dd_cap`): index fees + spreads on small premiums through the
-  stage-2 ledger; 25% max-DD gate; no upside cap.
-- [x] `TASK_MODE=spx0` in `deploy/gcp/`; ran 2026-08-21 (`spx0-run-27adf68-115405`): **no edge after costs** — first design rejected, see EXPERIMENTS. Seat parked pending a different design (sell premium / OTM / 5m re-sweep).
-- [~] **Second design round** (plan: `docs/specs/SPX0_SPEC.md` "Second design
-  round"): (1)+(2) **BUILT 2026-08-24** — six `TradeVariant`s per signal
-  (long stops {0.3,0.5,0.7}, sell-premium stops {1.5,2,3}; margin =
-  (stop−1)×entry; variant code rides the `dte` column so rank/EV dedupe
-  fold-selects it like DTE; code 0 bit-identical to round 1). Suite 451,
-  12-session smoke + `--smoke` evaluate clean end-to-end. Batch run
-  `spx0-run-6ab5120-010113` DONE 2026-08-24: **REJECTED — fold 1 passed
-  the val gate then blew up on test (−1863%, maxDD 1126%, equity through
-  zero): stop-based margin does not bound a naked short's tail**
-  (EXPERIMENTS 2026-08-24). USER DECISION on the next lever: (3)
-  intraday-native strategies for the long book, and/or a defined-risk
-  short redesign (verticals — margin = strike distance, loss bounded by
-  construction); (5) 2022 data only if a short seat survives redesign.
+## 4 — Vol-regime track (wave-2 item 3) — first big Batch job
 
-## 2 — v4 live scoring path — DONE 2026-08-16 (`nn_meta/live/v4_scan.py`)
+- [ ] Design the realized-vol feature build (v3/data 5.4 GB, 2017→ →
+  9y intraday RV) and the HAR-RV/GARCH OOS harness; launch on Batch.
+  Product: `available_at`-stamped vol features for every expert; a seat
+  only if a sequence model beats the boring baselines per regime.
 
-- [x] **Live v4 scorer**: `nn_meta.live.v4_scan` — every pool strategy
-  proposes on the last closed bar, `build_candidate_batch` featurizes (no
-  `prem_spot`), the bundle scores all DTE variants, best-of-grid alerts iff
-  ≥ threshold. v3 scanner untouched. `--selftest` force-loads all members
-  (passes on the real 40-member gbt bundle); real-data dry run clean.
-- [x] **Parity**: candidate builder is parity-by-construction and covered by
-  `tests/test_v4_candidates.py` + 11 new `tests/test_v4_scan.py` tests
-  (suite 356 green). Re-validate against whichever bundle survives the
-  Option B re-finalize (spec'd as Option B step 4) before dropping `--paper`.
-- [x] **Expert-labeled alerts + own state**: `[v4]`-titled Telegram alerts
-  with paper tag, own AlertState/Outbox (at-least-once, crash replay),
-  PaperLedger, health snapshot — all under `nn_meta/live/.v4_*.json`.
+## 5 — Methodology debt (small, unblocks future verdicts)
 
-## 3 — Deploy to Hetzner (alongside v3, never replacing it)
+- [ ] PBO report wiring — the per-fold candidate matrix it needed now
+  exists (`choose_policy` carries `candidate_grid`/`candidate_sharpes`
+  since 2026-08-21).
+- [ ] DD-brake live enforcement in `v4_scan` sizing (brake is shown, not
+  enforced; moot for V118's `dd_brake=None` but a landmine for any braked
+  future bundle).
 
-**DONE 2026-08-16 ~16:05 UTC — the [v4] expert is live on the server in
-paper mode.** (User approved same day.)
+## Forward-tracking duties (standing, this phase)
 
-- [x] Verified v3-safety, fast-forward merged the branch → `main` (46
-  commits; only v3-critical deltas were a docstring + default-off kwarg).
-- [x] `model_final_v4/` force-added (9.7 MB / 42 files); `docs/DECISIONS.md`
-  updated.
-- [x] Server pulled main; `pip` top-up installed lightgbm 4.7.0 + scipy.
-- [x] rsync'd `surface_daily` + `underlying_daily` parquets into the
-  server's `nn_meta/data_cache_v3/`.
-- [x] Server selftest: 40/40 gbt members, score median matches local
-  (0.433) — deterministic. Real-data dry run: 3 symbols, 0 errors.
-- [x] Cron installed (v3 line untouched; crontab backed up to
-  `~/crontab.bak.2026-08-16`): `*/15 * * * * … NN_META_POOL=v31 …
-  nn_meta.live.v4_scan --once --paper >> logs/v4_cron.log`.
-- [x] Rollback documented in `DOCUMENTATION.md` (delete the one cron line).
+- Scoreboard reads: `[v4]` real-alert hit-rate vs its paper history; the
+  watchlist digest's 7-day rates once they populate; v31's
+  outlier-fragility question answers itself here.
+- Fold-3 regime miss (noise vs real weakness) — answered empirically by
+  per-expert forward tracking, not by another backtest.
 
-**Data-feed audit (2026-08-16, user-requested) — verified + findings:**
-Universe membership is correct by construction: v3 scans its 55 trained
-symbols (all healthy), v4 scans its 118 (117 healthy). Findings:
-- [x] **SQ → XYZ rename**: SQ returned zero bars (dark seat). Fixed with
-  `TICKER_ALIASES` in `v4_scan` — bars fetch under XYZ, model/state keys
-  stay "SQ", alerts show "XYZ (fka SQ)".
-- [x] **Context caches now self-updating (2026-08-16 evening).** All three
-  layers: ① chain/universe + ② underlying-daily (beta) refreshed on the
-  server via `--live-horizon` and kept fresh by Sunday 10:00/10:30 UTC
-  crons; ③ IV surface: bar caches seeded to the server (420 MB), the
-  incremental `--bars-and-surface-only --refresh-recent-days` mode +
-  `build_surface` backfill ran, and Sunday 11:00/12:00 crons keep it
-  current. Server is fully self-sufficient — no home-box dependency.
-  (Edge contracts whose life predates the 2y entitlement 403 harmlessly.)
-- [x] **PRODUCTION OUTAGE AVERTED (found 2026-08-16 during the v31-deploy
-  prep)**: the live chain's universe ends at `WINDOW_END + DTE_MAX` =
-  2026-08-16 — the universe filter clips contract eligibility to the frozen
-  research window, so from Monday every v3 signal would have failed
-  contract selection and been *silently filtered* (and the chain had
-  already thinned: max cached expiry was 2026-08-07). Fixed:
-  `download_universe --live-horizon 120` rebuilds listings/universe through
-  today+120d and underlying daily through today (beta un-staled as a
-  bonus); ran on the server for both pools; **weekly Sunday refresh cron**
-  installed so it never recurs. Research constants untouched.
-- [x] **Latent trap CLOSED — verified 2026-08-19**: `.alert_state.json` is no
-  longer tracked (`git ls-files` clean) and is gitignored via
-  `nn_meta/live/.alert_state*.json`. Original note kept for context:
-  v3's `nn_meta/live/.alert_state.json` was *tracked in git* while the server mutates it live — any
-  future commit touching/deleting it will conflict with the server's dirty
-  copy on pull. Untrack it deliberately some quiet weekend (backup server
-  copy → `git rm --cached` + gitignore → pull → restore). The new v4 state
-  files are gitignored from the start (learned the hard way, 2026-08-16).
+## Parked (unchanged)
 
-**Remaining for this phase — ALL DONE 2026-08-24. PHASE EXIT ACHIEVED.**
-- [x] Re-finalize (ELIGIBLE under the ex-top3 gate: gbt×40 ev/0.05, val
-  +605%, maxDD 21.9%) → bundle committed → main fast-forwarded to
-  `48db82e` → server `git pull` → on-server selftest (40/40, median
-  0.433) → `--paper` DROPPED (crontab backed up to
-  `~/crontab.bak.2026-08-24`). **[v4] alerts are REAL as of 2026-08-24.**
-- [x] Candidate parity re-validated against the V118 bundle (real-data dry
-  run, 3 symbols, 0 errors) — last first-implementation gate item closed.
-
-**→ Next phase: ROADMAP "Expert panel, wave 2". Refill this file from it
-at the next session start** (spx0 round 3 — wave-2 item 2 — is already in
-flight on Batch; item 1, the EV-sized seat, effectively shipped inside
-V118 since ev mode won the grid).
-
-## Fallback if the weekend runs short
-
-The existing Option A bundle already runs as `[v4]` in paper mode; it stays.
-**No gate override** to manufacture a V118 (DECISIONS 2026-08-21). If the EV
-head fails the gate, v4 waits for the next label idea and spx0 continues.
-
-## From the 2026-08-16 adversarial review (`docs/reviews/`)
-
-P0s + quick P1s were fixed and deployed same-day (commit `9b8b473`:
-atomic bar cache, shared ticker aliases, lazy TF import, universe shrink
-guard, atomic dataset write). Remaining queue, ordered:
-
-- [x] `bars_daily` compaction (newest-wins by NUMERIC part index — mixed
-  padded/unpadded names would invert lexically; crash-safe dir swap;
-  auto-runs after the weekly refresh) + `TICKER_ALIASES` in the daily crawl.
-  Agent-built, verified + cherry-picked; suite green.
-- [x] Heartbeat covers all three experts: per-expert passes/RTH-scans/
-  alerts/new-crash deltas with per-log baselines, RTH-down warnings on
-  missing/stale logs, old-schema migration without false crash explosions.
-  Agent-built, verified + cherry-picked; suite green.
-- [x] Paper-ledger crash-consistency reorder in `v4_scan.scan_pass`
-  (enqueue → ledger → mark; duplicate trade_id no-op)
-- [x] State-file landmines defused: `.alert_state.json` +
-  `.claude/settings.local.json` untracked + gitignored; server choreography
-  done (live dedupe state preserved through the pull)
-- [x] Monday watch: Alpaca 429s — RESOLVED 2026-08-18, zero genuine hits (the
-  first count was timestamp milliseconds; `scripts/server_health.sh` re-checks)
-- [ ] **/ultrareview window open**: `main` is deliberately held behind the
-  branch; once the two agents' commits land, run `/ultrareview` from the
-  DESKTOP session (not Remote Control) to multi-agent-review the branch-only
-  diff, then merge to main and deploy.
-
-## Parked (not this phase)
-
-- PBO report wiring (needs the per-fold candidate matrix).
-- Magnitude/EV head training on v31 data (`nn_meta/ev_sizing.py` is
-  code-ready; joins the policy grid once trained).
-- Fold-3 regime miss (noise vs real weakness): carried into the expert-panel
-  phase, where per-expert forward tracking answers it empirically.
+- Point-in-time universe selection (survivorship fix) — first candidate
+  for the next research generation on Batch.
+- Deeper options history (2017→) — provider entitlement, not code.
+- Stacked blend (track 4) behind wave-2 outputs; RL sizing (track 3) last.
