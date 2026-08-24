@@ -105,6 +105,26 @@ revisited: sell premium; liquid OTM strikes; re-sweep params for 5m bars.
 | v4 | **2026-08-16** (paper) → **2026-08-24 REAL** | v31 causal, **V118: gbt×40 ev/0.05, no brake** (first gate-eligible bundle, ex-top3 gate) | `.v4_paper_ledger.json` on server | **live — real alerts** since 2026-08-24; scan self-enforces verified+eligible |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-24 — prem_spot leakage question CLOSED: it leaks, in both families
+
+The 2026-08-20 confound (the ablation compared nn-on-legacy vs gbt-on-v4,
+so schema and family moved together) is resolved by two single-family
+ablations on image `a300830`, seeds 0-4, ledger-selected:
+
+| family | schema (purged) | test return / maxDD |
+|---|---|---|
+| gbt | legacy (with prem_spot) | **−23.3%** / 25.8% |
+| gbt | v4 (causal) | **+68.8%** / 39.1% |
+| nn | legacy (with prem_spot) | **−44.4%** / 62.7% |
+| nn | v4 (causal) | **+82.0%** / 17.3% |
+
+Unpurged, legacy "wins" in both families (gbt +65.2 vs +26.6; nn +140.7
+vs +52.5) — the signature of a leak: `prem_spot` helps exactly when the
+evaluation is allowed to cheat and hurts when it can't. Same verdict from
+two independent model families. Dropping it from the v4 schema was
+correct; the standing warning is retired. Reports:
+`out/evaluate-20260824T{143124Z-41040,143226Z-4eaf0}/`.
+
 ## 2026-08-24 — spx0 round 2 (sell-premium variants) REJECTED: test blowup
 
 `spx0-run-6ab5120-010113` (image `6ab5120`, 500 sessions × 6 variants,

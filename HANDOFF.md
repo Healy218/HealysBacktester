@@ -79,7 +79,8 @@ long book, and/or defined-risk short redesign). Nothing running on GCP.
   word-splitting of unquoted vars); `!` prefix is bash.
 - Do NOT delete `gs://healys-backtester/out/archive-2026-08-19-stale-cache/`;
   do NOT pass `DELETE_BUCKET=1` to teardown.
-- `prem_spot` leakage question still OPEN (needs its own feature-drop run).
+- `prem_spot` leakage question CLOSED 2026-08-24 (EXPERIMENTS): leaks in
+  both families under purged selection; the v4 schema stands.
 - earlyoom runs the stock `--avoid`; tuned config staged, not installed.
 - CLAUDE.md says 425 tests; actual 451.
 - `/ultrareview` window still open (TODO): run from the DESKTOP session
