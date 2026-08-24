@@ -15,19 +15,15 @@ question is CLOSED (leaks in both families). spx0 rounds 1–2 are rejected;
 **round 3 (credit verticals + intraday seats) is RUNNING on Batch**. The
 box is the new Ryzen build; suite ~474 green in ~11 s.
 
-## IN FLIGHT on GCP (verify live, never from memory)
+## Nothing running on GCP — all seven+ jobs landed 2026-08-24
 
-- **spx0 ROUND 4** (`spx0-run-f5294d8-*`, image `f5294d8`, launched
-  2026-08-24 ~16:15 CDT): the CONCENTRATED grid from the round-3
-  composition diagnosis — ma/orb_15/rsi × verticals only, gap_fill_50 ×
-  long stops only, everything else dropped (20× less flow; seat-aware
-  frozen baseline). Round 3's verdict + diagnosis: EXPERIMENTS 2026-08-24
-  (first signs of life — folds 2/3 positive, no blowups — but not a seat).
-  **Read first:** per-fold winners + whether the deflated Sharpes improved
-  on the concentrated grid; verdict → EXPERIMENTS. After the verdict the
-  user intends to look at the Massive data upgrade (lever 5 / 2022 data —
-  see memory `data-provider-subscriptions`).
-  Check live: `gcloud batch jobs list --project=healys-batch`.
+Verdicts (all in EXPERIMENTS, all pushed): v4 finalize ELIGIBLE ×2 →
+V118 LIVE; prem_spot CLOSED (both families); spx0 rounds 2/3/4 (round 4:
+fold 2 +48.5% but fold-3 refusal + cap breach — no seat; USER DECISION
+lever-5 data vs park, tied to the Massive upgrade the user is weighing);
+vol track stages 1–2 DONE (289 symbols' RV features published to
+`out/vol_features/`; HAR-RV QLIKE 0.117 uniform across regimes = the
+stage-3 seat bar).
 
 ## Monday watch (first trading day with everything live)
 

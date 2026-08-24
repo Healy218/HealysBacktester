@@ -24,9 +24,13 @@ change); the box codes, tests, and smokes.
   cells = ma×verticals and gap_fill_50×longs, consistent across the axis.
   strategy seats actually entered — dataset + reports in
   `out/spx0-20260824T145751Z-41a00/`): cheap, shapes round 4.
-- [ ] USER DECISION after the diagnosis: round 4 refinement (e.g. verticals
-  only, wider wings, threshold grid) vs lever 5 (2022 data — needs the
-  Massive Advanced upgrade, see memory/DOCUMENTATION) vs park.
+- [x] Round 4 (concentrated grid) DONE 2026-08-24 (EXPERIMENTS): fold 2
+  jumped to +48.5% (deflated 0.17) but fold 3's validation refused every
+  candidate and fold 2's marked DD breaches the cap — regime instability,
+  not toll, is now the binding problem. No seat after four rounds.
+- [ ] USER DECISION: lever 5 (2022 bear data — blocked on the Massive
+  Advanced upgrade the user is evaluating) vs PARK with the machinery kept
+  (bounded verticals, seat mapping, package fills are durable either way).
 
 ## 2 — Dual-mode cadence, panel-wide (wave-2 item 5; v4 seat DONE)
 

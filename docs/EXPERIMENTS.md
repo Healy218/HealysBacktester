@@ -105,6 +105,29 @@ revisited: sell premium; liquid OTM strikes; re-sweep params for 5m bars.
 | v4 | **2026-08-16** (paper) → **2026-08-24 REAL** | v31 causal, **V118: gbt×40 ev/0.05, no brake** (first gate-eligible bundle, ex-top3 gate) | `.v4_paper_ledger.json` on server | **live — real alerts** since 2026-08-24; scan self-enforces verified+eligible |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-24 — spx0 round 4 (concentrated grid): sharper highs, unstable folds — no seat
+
+`spx0-run-f5294d8-144212` (~2h20m, image `f5294d8`, ma/orb_15/rsi ×
+verticals + gap_fill_50 × longs, 20× less flow than round 3):
+
+| fold | winner | test / maxDD | marked | defl. Sharpe | vs round 3 |
+|---|---|---|---|---|---|
+| 1 | nn ev/0.00 brake .30 | −25.9% / 35.9% | −10.3% / 34.1% | 0.00 | better (was −50.6%) |
+| 2 | gbt ev/0.10 brake .30 | **+48.5% / 31.0%** | +90.6% / **40.5%** | 0.17 | much better (was +2.7%) |
+| 3 | nn rank/0.35 **⚠ none cleared** | −26.3% / 76.2% | +188% / 67.0% | 0.08 | worse (was +10.2% ✓) |
+
+Concentration amplified fold 2 dramatically but BROKE fold 3 (validation
+refused every candidate; round 3's fold-3 winner had cleared) and fold 2's
+marked DD (40.5%) still breaches the 25% cap. The pool's story is now
+regime instability, not toll: each fold's edge lives in a different
+regime slice and ~2 years of 0DTE data gives each fold too little of each
+regime to select reliably. That is precisely the case for lever 5 (2022
+bear data — blocked on the Massive Advanced upgrade, user deciding) or an
+honest park with the best exit-note the pool has had. Four rounds run
+2026-08-21..24; the machinery (bounded verticals, seat mapping, package
+fills) is durable regardless.
+Report: `out/spx0-20260824T194433Z-45fc0/artifacts_spx0/`.
+
 ## 2026-08-24 — vol track stages 1–2 DONE at scale: HAR-RV is the bar to beat
 
 `vol-build-d8e5416-161740` (16 spot shards, ~25 min, <$1): 289/289 symbols'
