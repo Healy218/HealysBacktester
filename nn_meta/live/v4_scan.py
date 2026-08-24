@@ -426,7 +426,7 @@ def main() -> None:
         s = digest_pass(bar_loader=aliased_bar_loader(_bar_loader),
                         notifier=get_notifier(force_console=args.dry_run),
                         top=args.top)
-        print(f"[v4-digest] signals {s['signals_today']} · resolved "
+        print(f"[panel-digest] signals {s['signals_today']} · resolved "
               f"{s['outcomes_resolved']} · delivered {s['delivered']}")
         return
 

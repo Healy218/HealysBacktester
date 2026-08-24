@@ -25,6 +25,7 @@ case "$MODE" in
   evaluate) JOB_PREFIX=v4-evaluate ;;
   finalize) JOB_PREFIX=v4-finalize ;;
   spx0)     JOB_PREFIX=spx0-run ;;
+  vol)      JOB_PREFIX=vol-build ;;
   assemble) JOB_PREFIX=marks-assemble ;;
   diff)     JOB_PREFIX=v4-diff ;;
   *)        JOB_PREFIX=marks-build ;;

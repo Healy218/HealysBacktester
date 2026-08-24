@@ -42,6 +42,16 @@ case "$MODE" in
         exit 1; }
     done
     ;;
+  vol)
+    # vol-regime track stage 1 (docs/specs/VOL_SPEC.md): per-symbol RV
+    # features + baseline eval from the 9y 1m crawl. Sharded by symbol,
+    # resume-safe: published symbols are pulled first and skipped.
+    mkdir -p v3/data/underlying nn_meta/artifacts_vol/features
+    gsutil -m -q rsync -r "${BUCKET}/underlying_1m_9y" v3/data/underlying
+    n=$(ls -d v3/data/underlying/*/ 2>/dev/null | wc -l)
+    [ "$n" -ge 280 ] || { echo "FATAL: underlying crawl incomplete ($n symbols)" >&2; exit 1; }
+    gsutil -m -q rsync -r "${BUCKET}/out/vol_features" nn_meta/artifacts_vol/features || true
+    ;;
   spx0)
     # spx0 pool (docs/specs/SPX0_SPEC.md): build the 0DTE dataset from the
     # 1m index archive + proxy underlying, then the nested walk-forward. The
@@ -89,6 +99,27 @@ case "$MODE" in
     gsutil -m -q rsync -r "${BUCKET}/out/meta_marks" nn_meta/artifacts_v31/meta_marks || true
     ;;
 esac
+
+# ---- vol: sharded per-symbol RV features + baseline eval --------------------
+if [ "$MODE" = "vol" ]; then
+  IDX="${BATCH_TASK_INDEX:-0}"
+  N="${SHARDS:-1}"
+  SYMS=$(ls v3/data/underlying | awk -v n="$N" -v i="$IDX" 'NR % n == i' | paste -sd, -)
+  echo "== vol shard ${IDX}/${N}: $(echo "$SYMS" | tr ',' '\n' | wc -l) symbols =="
+  set +e
+  python -m nn_meta.vol_features --symbols "$SYMS" --skip-existing \
+    --out nn_meta/artifacts_vol
+  rc=$?
+  set -e
+  # publish per-symbol features (shared dir, per-symbol files: shard-safe)
+  gsutil -m -q rsync -r nn_meta/artifacts_vol/features "${BUCKET}/out/vol_features"
+  if [ -f nn_meta/artifacts_vol/baseline_eval.parquet ]; then
+    gsutil -q cp nn_meta/artifacts_vol/baseline_eval.parquet \
+      "${BUCKET}/out/vol_eval/eval_shard_${IDX}.parquet"
+  fi
+  echo "== vol shard ${IDX} exited rc=$rc =="
+  exit $rc
+fi
 
 # ---- spx0: build + evaluate in one task -------------------------------------
 if [ "$MODE" = "spx0" ]; then
