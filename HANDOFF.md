@@ -17,18 +17,17 @@ box is the new Ryzen build; suite ~474 green in ~11 s.
 
 ## IN FLIGHT on GCP (verify live, never from memory)
 
-- `spx0-run-48db82e-095520` — round 3, launched 2026-08-24 09:55 CDT,
-  RUNNING as of 12:46 CDT. e2-standard-8, image `48db82e` (code now at
-  `45ab67a`+docs; the spx0 pipeline is unchanged since `48db82e`, so the
-  image is current for THIS run). Output:
-  `gs://healys-backtester/out/spx0-<stamp>-<uid>/artifacts_spx0/`.
-  A session-local watcher may have died with the session — check
-  `gcloud batch jobs list --project=healys-batch` first.
-  **Read first:** walk-forward report per-fold winners. Sign of life = an
-  eligible vertical (dte < 0: −1001/−1002/−1004) or intraday-seat winner
-  with positive ledger test return under the 25% cap. Verdict →
-  EXPERIMENTS; next actions are TODO block 1 (promotion-path design vs
-  lever 4/5 vs park — user decision either way).
+- **spx0 ROUND 4** (`spx0-run-f5294d8-*`, image `f5294d8`, launched
+  2026-08-24 ~16:15 CDT): the CONCENTRATED grid from the round-3
+  composition diagnosis — ma/orb_15/rsi × verticals only, gap_fill_50 ×
+  long stops only, everything else dropped (20× less flow; seat-aware
+  frozen baseline). Round 3's verdict + diagnosis: EXPERIMENTS 2026-08-24
+  (first signs of life — folds 2/3 positive, no blowups — but not a seat).
+  **Read first:** per-fold winners + whether the deflated Sharpes improved
+  on the concentrated grid; verdict → EXPERIMENTS. After the verdict the
+  user intends to look at the Massive data upgrade (lever 5 / 2022 data —
+  see memory `data-provider-subscriptions`).
+  Check live: `gcloud batch jobs list --project=healys-batch`.
 
 ## Monday watch (first trading day with everything live)
 
