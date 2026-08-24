@@ -19,7 +19,9 @@ change); the box codes, tests, and smokes.
   folds 2/3 positive after costs (+2.7%/+10.2% test), no blowups (the
   vertical −1×margin floor held; worst marked DD 36%). NOT a seat yet:
   fold 1 −50.6%, best deflated Sharpe 0.20, fold-3 marked DD 28.6% > cap.
-- [ ] **Diagnose the winning folds' composition** (which dte variants and
+- [x] **Composition diagnosis DONE 2026-08-24** (EXPERIMENTS): verticals are
+  selectable raw material, longs are not; vwap_rev flood adds toll; positive
+  cells = ma×verticals and gap_fill_50×longs, consistent across the axis.
   strategy seats actually entered — dataset + reports in
   `out/spx0-20260824T145751Z-41a00/`): cheap, shapes round 4.
 - [ ] USER DECISION after the diagnosis: round 4 refinement (e.g. verticals

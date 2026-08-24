@@ -122,10 +122,26 @@ data. Two of three folds positive after costs for the first time in this
 pool (round 1: all negative; round 2: catastrophic). Still NOT a seat:
 fold 1 is bad, deflated Sharpes are weak (0.20 best), and fold 3's marked
 DD (28.6%) breaches the 25% cap. Trajectory is real, edge is not proven.
-Open next steps (TODO block 1, user decision): diagnose WHICH variants/
-seats the winning folds actually entered (vertical vs long, intraday vs
-v31 — the dataset + reports are in the bucket), then round 4 refinement
-vs lever 5 (2022 data — needs the Massive upgrade) vs park.
+**Composition diagnosis (same day, dataset-level per fold-test window):**
+1. NO variant is profitable take-everything anywhere — every fold-2/3 win
+   came from model selection carving a subset out of a negative pool; the
+   friction toll stands.
+2. Verticals are structurally better raw material than longs everywhere:
+   means −0.05..−0.16 vs −0.23..−0.36 per margin, win 54–64% vs 15–26%.
+   The bounded-loss redesign moved the pool from hopeless to selectable.
+3. The intraday sweep mostly added toll, not edge: vwap_rev alone
+   generated ~24k of ~35k intraday trades at −0.15 mean (it sells into
+   moves that keep going); `orb_15` is the best intraday seat on
+   verticals (−0.016, near breakeven). gap_fill is tiny-n and works on
+   the LONG side (+0.05..+0.13 at 50bp), not verticals.
+4. POSITIVE take-everything cells exist and are consistent across the
+   whole variant axis, not one outlier: `ma`-signal verticals (+0.08..
+   +0.12 across all three widths, n≈150 each) and `gap_fill_50` longs
+   (+0.05..+0.13 across all three stops, n=86).
+Round-4 shape the data suggests: concentrate the grid on seat×structure
+pairs that work (ma/orb_15/rsi × verticals; gap_fill × longs), drop the
+vwap_rev flood, fewer trials. Alternatives: lever 5 (2022 data — Massive
+upgrade) for regime depth, or park. USER DECISION.
 Report: `out/spx0-20260824T145751Z-41a00/artifacts_spx0/`.
 
 ## 2026-08-24 — FA discovery: FIRST frozen monthly Top-10 (August 2026)
