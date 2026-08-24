@@ -169,13 +169,20 @@ class Scanner:
 
     def __init__(self, bar_loader, scorer: Optional[Scorer] = None,
                  threshold: float = 0.5, state_path: Path = _STATE_PATH,
-                 spec: Optional[dict] = None):
+                 spec: Optional[dict] = None,
+                 watchlist_path: Optional[Path] = None):
         # bar_loader(symbol) -> recent 15m OHLCV incl. possibly-forming last bar
         self._load = bar_loader
         self._scorer = scorer
         self._threshold = threshold
         self._state_path = state_path
         self._spec = spec or load_spec()
+        # Dual-mode cadence (ROADMAP wave-2 item 5, panel-wide 2026-08-24):
+        # every SCORED signal — above or below threshold — joins the pool's
+        # daily watchlist; the panel digest sends the top-N and tracks
+        # forward hit-rates. Pool-keyed file beside the other live state.
+        self._watchlist_path = watchlist_path or (
+            config.ROOT / "live" / f".{config.POOL}_watchlist.json")
 
     def scan_once(self, symbols: Optional[list[str]] = None,
                   now: Optional[datetime] = None) -> list[Signal]:
@@ -196,6 +203,15 @@ class Scanner:
                 continue
             if self._scorer is not None:
                 sig.score = self._scorer(sig, bars)
+                if sig.score is not None:
+                    from nn_meta.live.watchlist import Watchlist   # lazy, cheap
+                    Watchlist(self._watchlist_path).record(
+                        key=f"{config.POOL}|{sym}|{sig.strategy}|{bar_iso}",
+                        symbol=sym, strategy=sig.strategy, dte=int(sig.dte),
+                        direction=int(sig.direction), score=float(sig.score),
+                        decision=float(sig.score), spot=float(sig.spot),
+                        entry_ts=sig.bar_ts,
+                        alerted=bool(sig.score >= self._threshold))
                 if sig.score is None or sig.score < self._threshold:
                     logger.info(f"[live] {sym}: mechanical entry filtered out "
                                 f"(score={sig.score})")

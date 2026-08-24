@@ -301,40 +301,57 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
 
 # ── daily watchlist digest (dual-mode cadence, ROADMAP wave-2 item 5) ─────────
 
+PANEL_WATCHLISTS = (("v4", ".v4_watchlist.json"), ("v3", ".v3_watchlist.json"),
+                    ("v31", ".v31_watchlist.json"))
+
+
 def digest_pass(*, bar_loader: Callable[[str], pd.DataFrame], notifier,
                 state_dir: Optional[Path] = None, top: int = 10,
                 now: Optional[datetime] = None) -> dict:
     """Once daily (cron, after the close): resolve due watchlist outcomes
-    against fresh bars, send today's top-N as one ``[v4 watchlist]`` message,
-    and carry the rolling hit-rate. No model load — this reads only what the
-    15-minute passes recorded. Idempotent per day via the outbox key."""
+    against fresh bars and send ONE panel message — a top-N section per
+    expert whose watchlist saw signals today (v4 + the legacy v3/v31 seats,
+    panel-wide since 2026-08-24), each with its rolling hit-rate. No model
+    load — this reads only what the 15-minute passes recorded. Idempotent
+    per day via the outbox key."""
     now = now or datetime.now(timezone.utc)
+    day = pd.Timestamp(now).date().isoformat()
     sdir = Path(state_dir) if state_dir else STATE_DIR
-    watchlist = Watchlist(sdir / WATCHLIST.name)
     outbox = Outbox(sdir / OUTBOX.name)
 
-    resolved = watchlist.resolve(bar_loader, now)
-    rows = watchlist.pending_digest(pd.Timestamp(now).date().isoformat())
-    sent = 0
-    if rows:
-        # EV-mode bundles threshold on the EV head, so decision != score;
-        # inferred from the recorded rows to keep the digest TF-free.
+    resolved, signals, sections, digested = 0, 0, [], []
+    for expert, fname in PANEL_WATCHLISTS:
+        path = sdir / fname
+        if not path.exists():
+            continue
+        wl = Watchlist(path)
+        resolved += wl.resolve(bar_loader, now)
+        rows = wl.pending_digest(day)
+        if not rows:
+            continue
+        signals += len(rows)
         ev_mode = any(abs(e["decision"] - e["score"]) > 1e-9 for e in rows)
-        stats = watchlist.hit_stats()
-        title, msg = format_digest(rows, stats, expert="v4", top=top,
-                                   aliases=TICKER_ALIASES, ev_mode=ev_mode)
-        key = f"v4-digest|{pd.Timestamp(now).date().isoformat()}"
-        outbox.enqueue({"title": title, "message": msg}, key=key)
-        watchlist.mark_digested([e["key"] for e in rows])
+        _, msg = format_digest(rows, wl.hit_stats(), expert=expert, top=top,
+                               aliases=TICKER_ALIASES, ev_mode=ev_mode)
+        sections.append(f"── [{expert}] top {min(top, len(rows))} of "
+                        f"{len(rows)} ──\n{msg}")
+        digested.append((wl, [e["key"] for e in rows]))
+    sent = 0
+    if sections:
+        outbox.enqueue({"title": f"[panel watchlist] {day}",
+                        "message": "\n\n".join(sections)},
+                       key=f"panel-digest|{day}")
+        for wl, keys in digested:
+            wl.mark_digested(keys)
     for entry in outbox.unacked():
         p = entry["payload"]
         if notifier.send(p["message"], title=p["title"]):
             outbox.mark_sent(entry["id"])
             outbox.acknowledge(entry["id"])
             sent += 1
-    summary = {"signals_today": len(rows), "outcomes_resolved": resolved,
+    summary = {"signals_today": signals, "outcomes_resolved": resolved,
                "delivered": sent}
-    logger.info(f"[v4-digest] {summary}")
+    logger.info(f"[panel-digest] {summary}")
     return summary
 
 

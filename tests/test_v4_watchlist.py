@@ -101,7 +101,8 @@ def test_digest_pass_sends_once_per_day(tmp_path):
     s1 = digest_pass(bar_loader=lambda s: bars, notifier=notifier,
                      state_dir=tmp_path, top=10, now=NOW)
     assert s1["signals_today"] == 2 and s1["delivered"] == 1
-    assert "top 2 of 2" in notifier.sent[0][0]
+    assert "panel watchlist" in notifier.sent[0][0]
+    assert "top 2 of 2" in notifier.sent[0][1]      # the v4 section header
     # second run the same day: nothing pending, outbox key dedupes
     s2 = digest_pass(bar_loader=lambda s: bars, notifier=notifier,
                      state_dir=tmp_path, top=10, now=NOW)
@@ -114,3 +115,46 @@ def test_digest_pass_quiet_day_sends_nothing(tmp_path):
     s = digest_pass(bar_loader=lambda s: pd.DataFrame(), notifier=notifier,
                     state_dir=tmp_path, now=NOW)
     assert s["signals_today"] == 0 and notifier.sent == []
+
+
+def test_panel_digest_merges_expert_sections(tmp_path):
+    """Panel-wide (2026-08-24): one message, one section per expert whose
+    watchlist saw signals today; each expert's keys marked digested."""
+    for expert in ("v4", "v3"):
+        wl = Watchlist(tmp_path / f".{expert}_watchlist.json")
+        _record(wl, f"{expert}-k", decision=0.6, symbol="SPY")
+    notifier = _Notifier()
+    bars = pd.DataFrame({"Close": [100.0]},
+                        index=[pd.Timestamp("2026-08-24 15:00")])
+    s = digest_pass(bar_loader=lambda s: bars, notifier=notifier,
+                    state_dir=tmp_path, now=NOW)
+    assert s["signals_today"] == 2 and s["delivered"] == 1
+    title, msg = notifier.sent[0]
+    assert "panel watchlist" in title
+    assert "── [v4]" in msg and "── [v3]" in msg and "── [v31]" not in msg
+    # both experts' entries marked digested — a rerun sends nothing new
+    s2 = digest_pass(bar_loader=lambda s: bars, notifier=notifier,
+                     state_dir=tmp_path, now=NOW)
+    assert s2["signals_today"] == 0 and len(notifier.sent) == 1
+
+
+def test_scanner_records_scored_signals_to_the_pool_watchlist(tmp_path, monkeypatch):
+    from nn_meta.live import scanner as sc_mod
+    idx = pd.date_range("2026-08-24 14:00", periods=60, freq="15min")
+    bars = pd.DataFrame({"Open": 100.0, "High": 101.0, "Low": 99.0,
+                         "Close": 100.0, "Volume": 1000.0}, index=idx)
+    sig = sc_mod.Signal(symbol="SPY", strategy="rsi", direction=0, right="C",
+                        bar_ts=idx[-1], dte=5, spot=100.0, param_label="p")
+    monkeypatch.setattr(sc_mod, "detect_fresh_signal", lambda *a, **k: sig)
+    monkeypatch.setattr(sc_mod, "closed_bars", lambda b, now: b)
+    wpath = tmp_path / ".v3_watchlist.json"
+    scanner = sc_mod.Scanner(lambda s: bars, scorer=lambda s, b: 0.40,
+                             threshold=0.60, state_path=tmp_path / "state.json",
+                             spec={"symbols": {"SPY": {}}}, watchlist_path=wpath)
+    fired = scanner.scan_once(now=idx[-1].to_pydatetime().replace(
+        tzinfo=__import__("datetime").timezone.utc))
+    assert fired == []                              # 0.40 < 0.60: filtered…
+    wl = Watchlist(wpath)
+    entry = list(wl._entries.values())[0]           # …but recorded, unalerted
+    assert entry["symbol"] == "SPY" and entry["alerted"] is False
+    assert entry["score"] == 0.40
