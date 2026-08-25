@@ -227,7 +227,10 @@ POSITION_FRACTION = 0.10
 # model-facing key — spec entry, features, one-hots, state — stays on the
 # trained symbol. Lives here (constants-only) so the offline crawler doesn't
 # import the live scanner for it. Audited 2026-08-16: SQ (Block) → XYZ.
-TICKER_ALIASES = {"SQ": "XYZ"}
+# old symbol → current exchange ticker. FI→FISV and BITF→DRAM were found by
+# the PIT universe build (2026-08-24): next-trading-day handoffs in the OPRA
+# day-aggs with matching dollar volume, same signature as the SQ→XYZ seam.
+TICKER_ALIASES = {"SQ": "XYZ", "FI": "FISV", "BITF": "DRAM"}
 
 # ── Sector groups (static one-hot context; hand-maintained) ──────────────────
 SECTOR_GROUPS = ["idx_etf", "sec_etf", "tech", "semis", "fin", "crypto",

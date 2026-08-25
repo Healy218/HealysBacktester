@@ -314,11 +314,12 @@ def write_membership_parquet(membership: pd.DataFrame,
 
 def members_asof(membership: pd.DataFrame, month: str) -> set[str]:
     """Members whose membership a consumer may use DURING calendar month
-    `month`: the latest frozen month with available_at <= that month's first
-    day — i.e. the previous reconstitution, never the one formed at this
-    month's own end."""
+    `month`: the latest freeze whose available_at falls within (or before)
+    that month — i.e. the previous month-end's reconstitution, which becomes
+    available at this month's first trading day; never the one formed at
+    this month's own end (its available_at lands in the NEXT month)."""
     avail = membership.drop_duplicates("month")[["month", "available_at"]]
-    usable = avail[avail["available_at"] <= f"{month}-01"]
+    usable = avail[avail["available_at"].str[:7] <= month]
     if usable.empty:
         return set()
     src = usable["month"].max()

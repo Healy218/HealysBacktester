@@ -1,0 +1,1870 @@
+{
+  "available_at": "2026-01-02",
+  "churn": {
+    "entries": [
+      "AGQ",
+      "CIEN",
+      "COHR",
+      "HUBS",
+      "IAU",
+      "PAAS",
+      "RACE",
+      "SILJ",
+      "TER",
+      "XPEV"
+    ],
+    "exits": [
+      "ASST",
+      "DHI",
+      "DPST",
+      "KTOS",
+      "SOC",
+      "YINN"
+    ]
+  },
+  "members": [
+    {
+      "entered": false,
+      "rank": 1,
+      "score": 2152603341.0,
+      "ticker": "TSLA"
+    },
+    {
+      "entered": false,
+      "rank": 2,
+      "score": 1537840245.0,
+      "ticker": "SPY"
+    },
+    {
+      "entered": false,
+      "rank": 3,
+      "score": 1199904480.0,
+      "ticker": "NVDA"
+    },
+    {
+      "entered": false,
+      "rank": 4,
+      "score": 1145763024.0,
+      "ticker": "QQQ"
+    },
+    {
+      "entered": false,
+      "rank": 5,
+      "score": 694811809.0,
+      "ticker": "META"
+    },
+    {
+      "entered": false,
+      "rank": 6,
+      "score": 545578363.0,
+      "ticker": "MSTR"
+    },
+    {
+      "entered": false,
+      "rank": 7,
+      "score": 440834877.0,
+      "ticker": "AMD"
+    },
+    {
+      "entered": false,
+      "rank": 8,
+      "score": 309275920.0,
+      "ticker": "AMZN"
+    },
+    {
+      "entered": false,
+      "rank": 9,
+      "score": 305428905.0,
+      "ticker": "PLTR"
+    },
+    {
+      "entered": false,
+      "rank": 10,
+      "score": 299170093.0,
+      "ticker": "GLD"
+    },
+    {
+      "entered": false,
+      "rank": 11,
+      "score": 289460270.0,
+      "ticker": "COIN"
+    },
+    {
+      "entered": false,
+      "rank": 12,
+      "score": 279429073.0,
+      "ticker": "AAPL"
+    },
+    {
+      "entered": false,
+      "rank": 13,
+      "score": 257953171.0,
+      "ticker": "GOOGL"
+    },
+    {
+      "entered": false,
+      "rank": 14,
+      "score": 252276514.0,
+      "ticker": "IWM"
+    },
+    {
+      "entered": false,
+      "rank": 15,
+      "score": 238218620.0,
+      "ticker": "NFLX"
+    },
+    {
+      "entered": false,
+      "rank": 16,
+      "score": 237062392.0,
+      "ticker": "AVGO"
+    },
+    {
+      "entered": false,
+      "rank": 17,
+      "score": 230808821.0,
+      "ticker": "MSFT"
+    },
+    {
+      "entered": false,
+      "rank": 18,
+      "score": 226436914.0,
+      "ticker": "ORCL"
+    },
+    {
+      "entered": false,
+      "rank": 19,
+      "score": 219571802.0,
+      "ticker": "UNH"
+    },
+    {
+      "entered": false,
+      "rank": 20,
+      "score": 190129074.0,
+      "ticker": "LULU"
+    },
+    {
+      "entered": false,
+      "rank": 21,
+      "score": 187153738.0,
+      "ticker": "MU"
+    },
+    {
+      "entered": false,
+      "rank": 22,
+      "score": 183656508.0,
+      "ticker": "IBIT"
+    },
+    {
+      "entered": false,
+      "rank": 23,
+      "score": 179862672.0,
+      "ticker": "SLV"
+    },
+    {
+      "entered": false,
+      "rank": 24,
+      "score": 167304914.0,
+      "ticker": "CRWV"
+    },
+    {
+      "entered": false,
+      "rank": 25,
+      "score": 149905538.0,
+      "ticker": "GOOG"
+    },
+    {
+      "entered": false,
+      "rank": 26,
+      "score": 148763881.0,
+      "ticker": "HOOD"
+    },
+    {
+      "entered": false,
+      "rank": 27,
+      "score": 109351564.0,
+      "ticker": "IREN"
+    },
+    {
+      "entered": false,
+      "rank": 28,
+      "score": 107204473.0,
+      "ticker": "APP"
+    },
+    {
+      "entered": false,
+      "rank": 29,
+      "score": 96355743.0,
+      "ticker": "ADBE"
+    },
+    {
+      "entered": false,
+      "rank": 30,
+      "score": 95304042.0,
+      "ticker": "BABA"
+    },
+    {
+      "entered": false,
+      "rank": 31,
+      "score": 91921587.0,
+      "ticker": "TSM"
+    },
+    {
+      "entered": false,
+      "rank": 32,
+      "score": 90297605.0,
+      "ticker": "CVNA"
+    },
+    {
+      "entered": false,
+      "rank": 33,
+      "score": 87586419.0,
+      "ticker": "LLY"
+    },
+    {
+      "entered": false,
+      "rank": 34,
+      "score": 81822560.0,
+      "ticker": "GS"
+    },
+    {
+      "entered": false,
+      "rank": 35,
+      "score": 76482137.0,
+      "ticker": "CRCL"
+    },
+    {
+      "entered": false,
+      "rank": 36,
+      "score": 75749808.0,
+      "ticker": "BMNR"
+    },
+    {
+      "entered": false,
+      "rank": 37,
+      "score": 73783905.0,
+      "ticker": "NBIS"
+    },
+    {
+      "entered": false,
+      "rank": 38,
+      "score": 73305253.0,
+      "ticker": "NOW"
+    },
+    {
+      "entered": false,
+      "rank": 39,
+      "score": 70947841.0,
+      "ticker": "SMH"
+    },
+    {
+      "entered": false,
+      "rank": 40,
+      "score": 70455941.0,
+      "ticker": "SOFI"
+    },
+    {
+      "entered": false,
+      "rank": 41,
+      "score": 68796691.0,
+      "ticker": "INTC"
+    },
+    {
+      "entered": false,
+      "rank": 42,
+      "score": 64950235.0,
+      "ticker": "TQQQ"
+    },
+    {
+      "entered": false,
+      "rank": 43,
+      "score": 59468238.0,
+      "ticker": "OKLO"
+    },
+    {
+      "entered": false,
+      "rank": 44,
+      "score": 59357039.0,
+      "ticker": "COST"
+    },
+    {
+      "entered": false,
+      "rank": 45,
+      "score": 54663906.0,
+      "ticker": "BE"
+    },
+    {
+      "entered": false,
+      "rank": 46,
+      "score": 50406976.0,
+      "ticker": "SOXL"
+    },
+    {
+      "entered": false,
+      "rank": 47,
+      "score": 46713355.0,
+      "ticker": "CRWD"
+    },
+    {
+      "entered": false,
+      "rank": 48,
+      "score": 46034585.0,
+      "ticker": "BA"
+    },
+    {
+      "entered": false,
+      "rank": 49,
+      "score": 45378864.0,
+      "ticker": "MRNA"
+    },
+    {
+      "entered": false,
+      "rank": 50,
+      "score": 45334747.99999999,
+      "ticker": "TTD"
+    },
+    {
+      "entered": false,
+      "rank": 51,
+      "score": 43525787.0,
+      "ticker": "ASTS"
+    },
+    {
+      "entered": false,
+      "rank": 52,
+      "score": 42630770.0,
+      "ticker": "TLT"
+    },
+    {
+      "entered": false,
+      "rank": 53,
+      "score": 40359461.0,
+      "ticker": "CRM"
+    },
+    {
+      "entered": false,
+      "rank": 54,
+      "score": 40178732.0,
+      "ticker": "SMCI"
+    },
+    {
+      "entered": false,
+      "rank": 55,
+      "score": 39341643.0,
+      "ticker": "TGT"
+    },
+    {
+      "entered": false,
+      "rank": 56,
+      "score": 39171092.0,
+      "ticker": "RKLB"
+    },
+    {
+      "entered": false,
+      "rank": 57,
+      "score": 38398149.0,
+      "ticker": "STZ"
+    },
+    {
+      "entered": false,
+      "rank": 58,
+      "score": 38270947.0,
+      "ticker": "ASML"
+    },
+    {
+      "entered": false,
+      "rank": 59,
+      "score": 37011470.0,
+      "ticker": "GDX"
+    },
+    {
+      "entered": false,
+      "rank": 60,
+      "score": 36665463.0,
+      "ticker": "SNDK"
+    },
+    {
+      "entered": false,
+      "rank": 61,
+      "score": 35730629.0,
+      "ticker": "PDD"
+    },
+    {
+      "entered": false,
+      "rank": 62,
+      "score": 35294539.0,
+      "ticker": "JPM"
+    },
+    {
+      "entered": false,
+      "rank": 63,
+      "score": 33788566.0,
+      "ticker": "GEV"
+    },
+    {
+      "entered": false,
+      "rank": 64,
+      "score": 32745446.0,
+      "ticker": "SNOW"
+    },
+    {
+      "entered": false,
+      "rank": 65,
+      "score": 31275638.0,
+      "ticker": "ETHA"
+    },
+    {
+      "entered": false,
+      "rank": 66,
+      "score": 31221894.0,
+      "ticker": "RDDT"
+    },
+    {
+      "entered": false,
+      "rank": 67,
+      "score": 30845497.0,
+      "ticker": "CIFR"
+    },
+    {
+      "entered": false,
+      "rank": 68,
+      "score": 30679724.0,
+      "ticker": "HIMS"
+    },
+    {
+      "entered": false,
+      "rank": 69,
+      "score": 29938293.0,
+      "ticker": "UPS"
+    },
+    {
+      "entered": false,
+      "rank": 70,
+      "score": 29311229.0,
+      "ticker": "MRVL"
+    },
+    {
+      "entered": false,
+      "rank": 71,
+      "score": 29005143.0,
+      "ticker": "VRT"
+    },
+    {
+      "entered": false,
+      "rank": 72,
+      "score": 28608718.0,
+      "ticker": "RGTI"
+    },
+    {
+      "entered": false,
+      "rank": 73,
+      "score": 28282011.0,
+      "ticker": "BKNG"
+    },
+    {
+      "entered": false,
+      "rank": 74,
+      "score": 27677343.0,
+      "ticker": "PYPL"
+    },
+    {
+      "entered": false,
+      "rank": 75,
+      "score": 27451411.0,
+      "ticker": "DIA"
+    },
+    {
+      "entered": false,
+      "rank": 76,
+      "score": 27065821.0,
+      "ticker": "SPOT"
+    },
+    {
+      "entered": false,
+      "rank": 77,
+      "score": 26815613.0,
+      "ticker": "ARM"
+    },
+    {
+      "entered": false,
+      "rank": 78,
+      "score": 26297852.0,
+      "ticker": "SHOP"
+    },
+    {
+      "entered": false,
+      "rank": 79,
+      "score": 24586738.0,
+      "ticker": "ALAB"
+    },
+    {
+      "entered": false,
+      "rank": 80,
+      "score": 24430808.0,
+      "ticker": "ABNB"
+    },
+    {
+      "entered": false,
+      "rank": 81,
+      "score": 24299823.0,
+      "ticker": "CAT"
+    },
+    {
+      "entered": false,
+      "rank": 82,
+      "score": 24036198.0,
+      "ticker": "APLD"
+    },
+    {
+      "entered": false,
+      "rank": 83,
+      "score": 23916959.0,
+      "ticker": "BRKB"
+    },
+    {
+      "entered": false,
+      "rank": 84,
+      "score": 23896959.0,
+      "ticker": "TSLL"
+    },
+    {
+      "entered": false,
+      "rank": 85,
+      "score": 23527437.0,
+      "ticker": "IONQ"
+    },
+    {
+      "entered": false,
+      "rank": 86,
+      "score": 23211758.0,
+      "ticker": "UBER"
+    },
+    {
+      "entered": false,
+      "rank": 87,
+      "score": 22008701.0,
+      "ticker": "MARA"
+    },
+    {
+      "entered": false,
+      "rank": 88,
+      "score": 21944978.0,
+      "ticker": "C"
+    },
+    {
+      "entered": false,
+      "rank": 89,
+      "score": 21589468.0,
+      "ticker": "HD"
+    },
+    {
+      "entered": false,
+      "rank": 90,
+      "score": 20998259.0,
+      "ticker": "FSLR"
+    },
+    {
+      "entered": false,
+      "rank": 91,
+      "score": 20356097.0,
+      "ticker": "NVO"
+    },
+    {
+      "entered": false,
+      "rank": 92,
+      "score": 20292990.0,
+      "ticker": "NKE"
+    },
+    {
+      "entered": false,
+      "rank": 93,
+      "score": 19830627.0,
+      "ticker": "DELL"
+    },
+    {
+      "entered": false,
+      "rank": 94,
+      "score": 19397162.0,
+      "ticker": "CHTR"
+    },
+    {
+      "entered": false,
+      "rank": 95,
+      "score": 19377879.0,
+      "ticker": "LRCX"
+    },
+    {
+      "entered": false,
+      "rank": 96,
+      "score": 19304560.0,
+      "ticker": "CLS"
+    },
+    {
+      "entered": false,
+      "rank": 97,
+      "score": 19301028.0,
+      "ticker": "IBM"
+    },
+    {
+      "entered": false,
+      "rank": 98,
+      "score": 18843466.0,
+      "ticker": "AMAT"
+    },
+    {
+      "entered": false,
+      "rank": 99,
+      "score": 18281805.0,
+      "ticker": "SBUX"
+    },
+    {
+      "entered": false,
+      "rank": 100,
+      "score": 17990496.0,
+      "ticker": "QBTS"
+    },
+    {
+      "entered": false,
+      "rank": 101,
+      "score": 17274447.0,
+      "ticker": "ACN"
+    },
+    {
+      "entered": false,
+      "rank": 102,
+      "score": 17156982.0,
+      "ticker": "DUOL"
+    },
+    {
+      "entered": false,
+      "rank": 103,
+      "score": 16890294.0,
+      "ticker": "QCOM"
+    },
+    {
+      "entered": false,
+      "rank": 104,
+      "score": 16792019.0,
+      "ticker": "WULF"
+    },
+    {
+      "entered": false,
+      "rank": 105,
+      "score": 16756812.0,
+      "ticker": "OPEN"
+    },
+    {
+      "entered": false,
+      "rank": 106,
+      "score": 16623380.0,
+      "ticker": "MP"
+    },
+    {
+      "entered": false,
+      "rank": 107,
+      "score": 16568386.0,
+      "ticker": "MELI"
+    },
+    {
+      "entered": false,
+      "rank": 108,
+      "score": 16334280.0,
+      "ticker": "WMT"
+    },
+    {
+      "entered": false,
+      "rank": 109,
+      "score": 16293472.0,
+      "ticker": "WDC"
+    },
+    {
+      "entered": false,
+      "rank": 110,
+      "score": 15934651.0,
+      "ticker": "EOSE"
+    },
+    {
+      "entered": false,
+      "rank": 111,
+      "score": 15918740.0,
+      "ticker": "PANW"
+    },
+    {
+      "entered": false,
+      "rank": 112,
+      "score": 15639761.0,
+      "ticker": "CRDO"
+    },
+    {
+      "entered": false,
+      "rank": 113,
+      "score": 15223449.0,
+      "ticker": "SMR"
+    },
+    {
+      "entered": false,
+      "rank": 114,
+      "score": 14865214.0,
+      "ticker": "VST"
+    },
+    {
+      "entered": false,
+      "rank": 115,
+      "score": 14836256.999999998,
+      "ticker": "AXON"
+    },
+    {
+      "entered": true,
+      "rank": 116,
+      "score": 14661632.0,
+      "ticker": "HUBS"
+    },
+    {
+      "entered": false,
+      "rank": 117,
+      "score": 14468319.0,
+      "ticker": "NEM"
+    },
+    {
+      "entered": false,
+      "rank": 118,
+      "score": 14350777.0,
+      "ticker": "MDB"
+    },
+    {
+      "entered": false,
+      "rank": 119,
+      "score": 14343639.0,
+      "ticker": "BIDU"
+    },
+    {
+      "entered": false,
+      "rank": 120,
+      "score": 13873037.0,
+      "ticker": "STX"
+    },
+    {
+      "entered": false,
+      "rank": 121,
+      "score": 13858792.0,
+      "ticker": "ANET"
+    },
+    {
+      "entered": false,
+      "rank": 122,
+      "score": 13590794.0,
+      "ticker": "JD"
+    },
+    {
+      "entered": false,
+      "rank": 123,
+      "score": 13417898.0,
+      "ticker": "RBLX"
+    },
+    {
+      "entered": false,
+      "rank": 124,
+      "score": 13287662.0,
+      "ticker": "LITE"
+    },
+    {
+      "entered": false,
+      "rank": 125,
+      "score": 13226683.0,
+      "ticker": "GME"
+    },
+    {
+      "entered": false,
+      "rank": 126,
+      "score": 13085915.0,
+      "ticker": "LEU"
+    },
+    {
+      "entered": false,
+      "rank": 127,
+      "score": 13074099.0,
+      "ticker": "BAC"
+    },
+    {
+      "entered": false,
+      "rank": 128,
+      "score": 13024850.0,
+      "ticker": "CEG"
+    },
+    {
+      "entered": false,
+      "rank": 129,
+      "score": 12958365.0,
+      "ticker": "CORZ"
+    },
+    {
+      "entered": false,
+      "rank": 130,
+      "score": 12903803.0,
+      "ticker": "RIVN"
+    },
+    {
+      "entered": false,
+      "rank": 131,
+      "score": 12876996.0,
+      "ticker": "FIG"
+    },
+    {
+      "entered": false,
+      "rank": 132,
+      "score": 12842115.0,
+      "ticker": "HUT"
+    },
+    {
+      "entered": false,
+      "rank": 133,
+      "score": 12319903.0,
+      "ticker": "CMG"
+    },
+    {
+      "entered": false,
+      "rank": 134,
+      "score": 12295668.0,
+      "ticker": "XBI"
+    },
+    {
+      "entered": false,
+      "rank": 135,
+      "score": 12062677.0,
+      "ticker": "V"
+    },
+    {
+      "entered": false,
+      "rank": 136,
+      "score": 11965509.0,
+      "ticker": "HYG"
+    },
+    {
+      "entered": false,
+      "rank": 137,
+      "score": 11924798.0,
+      "ticker": "BX"
+    },
+    {
+      "entered": false,
+      "rank": 138,
+      "score": 11841922.0,
+      "ticker": "ARKK"
+    },
+    {
+      "entered": false,
+      "rank": 139,
+      "score": 11712320.0,
+      "ticker": "CLSK"
+    },
+    {
+      "entered": false,
+      "rank": 140,
+      "score": 11569076.0,
+      "ticker": "XLK"
+    },
+    {
+      "entered": false,
+      "rank": 141,
+      "score": 11502059.0,
+      "ticker": "FXI"
+    },
+    {
+      "entered": false,
+      "rank": 142,
+      "score": 11493372.0,
+      "ticker": "EEM"
+    },
+    {
+      "entered": false,
+      "rank": 143,
+      "score": 11358377.0,
+      "ticker": "SNPS"
+    },
+    {
+      "entered": false,
+      "rank": 144,
+      "score": 11238768.0,
+      "ticker": "FISV"
+    },
+    {
+      "entered": false,
+      "rank": 145,
+      "score": 11231851.0,
+      "ticker": "KWEB"
+    },
+    {
+      "entered": false,
+      "rank": 146,
+      "score": 11118099.0,
+      "ticker": "TXN"
+    },
+    {
+      "entered": false,
+      "rank": 147,
+      "score": 11010749.0,
+      "ticker": "XLF"
+    },
+    {
+      "entered": false,
+      "rank": 148,
+      "score": 10970906.0,
+      "ticker": "NVDL"
+    },
+    {
+      "entered": false,
+      "rank": 149,
+      "score": 10816274.0,
+      "ticker": "RIOT"
+    },
+    {
+      "entered": false,
+      "rank": 150,
+      "score": 10798625.0,
+      "ticker": "SQQQ"
+    },
+    {
+      "entered": false,
+      "rank": 151,
+      "score": 10750150.0,
+      "ticker": "XOM"
+    },
+    {
+      "entered": false,
+      "rank": 152,
+      "score": 10557260.0,
+      "ticker": "EWZ"
+    },
+    {
+      "entered": false,
+      "rank": 153,
+      "score": 10537140.0,
+      "ticker": "WFC"
+    },
+    {
+      "entered": false,
+      "rank": 154,
+      "score": 10384815.0,
+      "ticker": "ENPH"
+    },
+    {
+      "entered": false,
+      "rank": 155,
+      "score": 10180746.0,
+      "ticker": "COP"
+    },
+    {
+      "entered": false,
+      "rank": 156,
+      "score": 10111371.0,
+      "ticker": "DDOG"
+    },
+    {
+      "entered": false,
+      "rank": 157,
+      "score": 10095698.0,
+      "ticker": "XLE"
+    },
+    {
+      "entered": false,
+      "rank": 158,
+      "score": 9917984.0,
+      "ticker": "PFE"
+    },
+    {
+      "entered": false,
+      "rank": 159,
+      "score": 9874729.0,
+      "ticker": "SOUN"
+    },
+    {
+      "entered": false,
+      "rank": 160,
+      "score": 9726392.0,
+      "ticker": "DIS"
+    },
+    {
+      "entered": false,
+      "rank": 161,
+      "score": 9627253.0,
+      "ticker": "BULL"
+    },
+    {
+      "entered": false,
+      "rank": 162,
+      "score": 9499416.0,
+      "ticker": "FCX"
+    },
+    {
+      "entered": false,
+      "rank": 163,
+      "score": 9347140.0,
+      "ticker": "TMUS"
+    },
+    {
+      "entered": false,
+      "rank": 164,
+      "score": 9275043.0,
+      "ticker": "AFRM"
+    },
+    {
+      "entered": false,
+      "rank": 165,
+      "score": 8983093.0,
+      "ticker": "ONDS"
+    },
+    {
+      "entered": false,
+      "rank": 166,
+      "score": 8970297.0,
+      "ticker": "JNJ"
+    },
+    {
+      "entered": false,
+      "rank": 167,
+      "score": 8879816.0,
+      "ticker": "MA"
+    },
+    {
+      "entered": false,
+      "rank": 168,
+      "score": 8853778.0,
+      "ticker": "AXP"
+    },
+    {
+      "entered": false,
+      "rank": 169,
+      "score": 8768419.0,
+      "ticker": "INTU"
+    },
+    {
+      "entered": false,
+      "rank": 170,
+      "score": 8610250.0,
+      "ticker": "ISRG"
+    },
+    {
+      "entered": false,
+      "rank": 171,
+      "score": 8557961.0,
+      "ticker": "AG"
+    },
+    {
+      "entered": false,
+      "rank": 172,
+      "score": 8552458.0,
+      "ticker": "UPST"
+    },
+    {
+      "entered": false,
+      "rank": 173,
+      "score": 8522482.0,
+      "ticker": "PG"
+    },
+    {
+      "entered": false,
+      "rank": 174,
+      "score": 8429709.0,
+      "ticker": "DASH"
+    },
+    {
+      "entered": false,
+      "rank": 175,
+      "score": 8379292.0,
+      "ticker": "CSCO"
+    },
+    {
+      "entered": false,
+      "rank": 176,
+      "score": 8321331.0,
+      "ticker": "TEM"
+    },
+    {
+      "entered": false,
+      "rank": 177,
+      "score": 8191706.0,
+      "ticker": "MRK"
+    },
+    {
+      "entered": false,
+      "rank": 178,
+      "score": 8191282.0,
+      "ticker": "XYZ"
+    },
+    {
+      "entered": false,
+      "rank": 179,
+      "score": 8173391.0,
+      "ticker": "U"
+    },
+    {
+      "entered": false,
+      "rank": 180,
+      "score": 8172106.0,
+      "ticker": "DKNG"
+    },
+    {
+      "entered": false,
+      "rank": 181,
+      "score": 8078814.0,
+      "ticker": "WBD"
+    },
+    {
+      "entered": false,
+      "rank": 182,
+      "score": 8061140.0,
+      "ticker": "ZS"
+    },
+    {
+      "entered": false,
+      "rank": 183,
+      "score": 8021497.0,
+      "ticker": "UAL"
+    },
+    {
+      "entered": false,
+      "rank": 184,
+      "score": 7954282.0,
+      "ticker": "B"
+    },
+    {
+      "entered": false,
+      "rank": 185,
+      "score": 7952868.0,
+      "ticker": "KRE"
+    },
+    {
+      "entered": false,
+      "rank": 186,
+      "score": 7837441.0,
+      "ticker": "CCJ"
+    },
+    {
+      "entered": false,
+      "rank": 187,
+      "score": 7823088.0,
+      "ticker": "BITX"
+    },
+    {
+      "entered": false,
+      "rank": 188,
+      "score": 7812427.0,
+      "ticker": "ALB"
+    },
+    {
+      "entered": false,
+      "rank": 189,
+      "score": 7802780.0,
+      "ticker": "GE"
+    },
+    {
+      "entered": false,
+      "rank": 190,
+      "score": 7512949.0,
+      "ticker": "EFA"
+    },
+    {
+      "entered": false,
+      "rank": 191,
+      "score": 7506240.0,
+      "ticker": "RKT"
+    },
+    {
+      "entered": false,
+      "rank": 192,
+      "score": 7411926.0,
+      "ticker": "NIO"
+    },
+    {
+      "entered": false,
+      "rank": 193,
+      "score": 7409373.0,
+      "ticker": "DAL"
+    },
+    {
+      "entered": true,
+      "rank": 194,
+      "score": 7350079.0,
+      "ticker": "AGQ"
+    },
+    {
+      "entered": false,
+      "rank": 195,
+      "score": 7344884.0,
+      "ticker": "BLK"
+    },
+    {
+      "entered": false,
+      "rank": 196,
+      "score": 7230653.0,
+      "ticker": "QS"
+    },
+    {
+      "entered": true,
+      "rank": 197,
+      "score": 7229435.0,
+      "ticker": "RACE"
+    },
+    {
+      "entered": false,
+      "rank": 198,
+      "score": 7084291.0,
+      "ticker": "PATH"
+    },
+    {
+      "entered": false,
+      "rank": 199,
+      "score": 6985528.0,
+      "ticker": "MS"
+    },
+    {
+      "entered": false,
+      "rank": 200,
+      "score": 6896006.0,
+      "ticker": "GLXY"
+    },
+    {
+      "entered": false,
+      "rank": 201,
+      "score": 6888273.0,
+      "ticker": "SE"
+    },
+    {
+      "entered": false,
+      "rank": 202,
+      "score": 6718760.0,
+      "ticker": "USAR"
+    },
+    {
+      "entered": false,
+      "rank": 203,
+      "score": 6658572.0,
+      "ticker": "OSCR"
+    },
+    {
+      "entered": false,
+      "rank": 204,
+      "score": 6616447.0,
+      "ticker": "PEP"
+    },
+    {
+      "entered": false,
+      "rank": 205,
+      "score": 6545029.0,
+      "ticker": "CVX"
+    },
+    {
+      "entered": false,
+      "rank": 206,
+      "score": 6532741.0,
+      "ticker": "AVAV"
+    },
+    {
+      "entered": false,
+      "rank": 207,
+      "score": 6517551.0,
+      "ticker": "VXX"
+    },
+    {
+      "entered": false,
+      "rank": 208,
+      "score": 6443878.0,
+      "ticker": "QUBT"
+    },
+    {
+      "entered": false,
+      "rank": 209,
+      "score": 6402827.0,
+      "ticker": "NET"
+    },
+    {
+      "entered": false,
+      "rank": 210,
+      "score": 6396038.0,
+      "ticker": "HUM"
+    },
+    {
+      "entered": false,
+      "rank": 211,
+      "score": 6362807.0,
+      "ticker": "ETHU"
+    },
+    {
+      "entered": false,
+      "rank": 212,
+      "score": 6340047.0,
+      "ticker": "GDXJ"
+    },
+    {
+      "entered": false,
+      "rank": 213,
+      "score": 6306444.0,
+      "ticker": "OXY"
+    },
+    {
+      "entered": false,
+      "rank": 214,
+      "score": 6304132.0,
+      "ticker": "KLAC"
+    },
+    {
+      "entered": false,
+      "rank": 215,
+      "score": 6252692.0,
+      "ticker": "ABBV"
+    },
+    {
+      "entered": false,
+      "rank": 216,
+      "score": 6249011.0,
+      "ticker": "SPXL"
+    },
+    {
+      "entered": false,
+      "rank": 217,
+      "score": 6214227.0,
+      "ticker": "GM"
+    },
+    {
+      "entered": false,
+      "rank": 218,
+      "score": 6164816.0,
+      "ticker": "LMND"
+    },
+    {
+      "entered": false,
+      "rank": 219,
+      "score": 6079447.0,
+      "ticker": "BBAI"
+    },
+    {
+      "entered": false,
+      "rank": 220,
+      "score": 5994904.0,
+      "ticker": "REGN"
+    },
+    {
+      "entered": false,
+      "rank": 221,
+      "score": 5947009.0,
+      "ticker": "PM"
+    },
+    {
+      "entered": false,
+      "rank": 222,
+      "score": 5943383.0,
+      "ticker": "UVXY"
+    },
+    {
+      "entered": false,
+      "rank": 223,
+      "score": 5842774.0,
+      "ticker": "LYFT"
+    },
+    {
+      "entered": true,
+      "rank": 224,
+      "score": 5739855.0,
+      "ticker": "SILJ"
+    },
+    {
+      "entered": false,
+      "rank": 225,
+      "score": 5462505.0,
+      "ticker": "AAL"
+    },
+    {
+      "entered": false,
+      "rank": 226,
+      "score": 5349646.0,
+      "ticker": "AEM"
+    },
+    {
+      "entered": false,
+      "rank": 227,
+      "score": 5198304.0,
+      "ticker": "LMT"
+    },
+    {
+      "entered": false,
+      "rank": 228,
+      "score": 5192343.0,
+      "ticker": "USO"
+    },
+    {
+      "entered": false,
+      "rank": 229,
+      "score": 5190397.0,
+      "ticker": "ACHR"
+    },
+    {
+      "entered": true,
+      "rank": 230,
+      "score": 5156163.0,
+      "ticker": "COHR"
+    },
+    {
+      "entered": false,
+      "rank": 231,
+      "score": 5147871.0,
+      "ticker": "TNA"
+    },
+    {
+      "entered": false,
+      "rank": 232,
+      "score": 5129834.0,
+      "ticker": "MCD"
+    },
+    {
+      "entered": false,
+      "rank": 233,
+      "score": 5128475.0,
+      "ticker": "BYND"
+    },
+    {
+      "entered": false,
+      "rank": 234,
+      "score": 5126945.0,
+      "ticker": "GLW"
+    },
+    {
+      "entered": false,
+      "rank": 235,
+      "score": 5001680.0,
+      "ticker": "VOO"
+    },
+    {
+      "entered": false,
+      "rank": 236,
+      "score": 4990441.0,
+      "ticker": "HL"
+    },
+    {
+      "entered": false,
+      "rank": 237,
+      "score": 4966035.0,
+      "ticker": "CELH"
+    },
+    {
+      "entered": false,
+      "rank": 238,
+      "score": 4956175.0,
+      "ticker": "UUUU"
+    },
+    {
+      "entered": false,
+      "rank": 239,
+      "score": 4888044.0,
+      "ticker": "BMY"
+    },
+    {
+      "entered": false,
+      "rank": 240,
+      "score": 4864785.0,
+      "ticker": "TLN"
+    },
+    {
+      "entered": false,
+      "rank": 241,
+      "score": 4798913.0,
+      "ticker": "RH"
+    },
+    {
+      "entered": false,
+      "rank": 242,
+      "score": 4747163.0,
+      "ticker": "NNE"
+    },
+    {
+      "entered": false,
+      "rank": 243,
+      "score": 4741973.0,
+      "ticker": "COF"
+    },
+    {
+      "entered": false,
+      "rank": 244,
+      "score": 4725394.0,
+      "ticker": "AMGN"
+    },
+    {
+      "entered": true,
+      "rank": 245,
+      "score": 4682439.0,
+      "ticker": "PAAS"
+    },
+    {
+      "entered": false,
+      "rank": 246,
+      "score": 4681038.0,
+      "ticker": "CCL"
+    },
+    {
+      "entered": false,
+      "rank": 247,
+      "score": 4638463.0,
+      "ticker": "TEAM"
+    },
+    {
+      "entered": false,
+      "rank": 248,
+      "score": 4601801.0,
+      "ticker": "AZO"
+    },
+    {
+      "entered": false,
+      "rank": 249,
+      "score": 4554237.0,
+      "ticker": "NUGT"
+    },
+    {
+      "entered": true,
+      "rank": 250,
+      "score": 4539925.0,
+      "ticker": "IAU"
+    },
+    {
+      "entered": false,
+      "rank": 251,
+      "score": 4466472.0,
+      "ticker": "ROKU"
+    },
+    {
+      "entered": true,
+      "rank": 252,
+      "score": 4453053.0,
+      "ticker": "CIEN"
+    },
+    {
+      "entered": false,
+      "rank": 253,
+      "score": 4392795.0,
+      "ticker": "SBET"
+    },
+    {
+      "entered": false,
+      "rank": 254,
+      "score": 4369587.0,
+      "ticker": "SYM"
+    },
+    {
+      "entered": false,
+      "rank": 255,
+      "score": 4321431.0,
+      "ticker": "FDX"
+    },
+    {
+      "entered": false,
+      "rank": 256,
+      "score": 4292087.0,
+      "ticker": "NVTS"
+    },
+    {
+      "entered": false,
+      "rank": 257,
+      "score": 4211364.0,
+      "ticker": "PINS"
+    },
+    {
+      "entered": false,
+      "rank": 258,
+      "score": 4193474.0,
+      "ticker": "URA"
+    },
+    {
+      "entered": false,
+      "rank": 259,
+      "score": 4188784.0,
+      "ticker": "SATS"
+    },
+    {
+      "entered": false,
+      "rank": 260,
+      "score": 4182376.0,
+      "ticker": "SNAP"
+    },
+    {
+      "entered": false,
+      "rank": 261,
+      "score": 4159923.0,
+      "ticker": "RCL"
+    },
+    {
+      "entered": false,
+      "rank": 262,
+      "score": 4105913.0,
+      "ticker": "URI"
+    },
+    {
+      "entered": false,
+      "rank": 263,
+      "score": 4017676.0,
+      "ticker": "KO"
+    },
+    {
+      "entered": false,
+      "rank": 264,
+      "score": 3928568.0,
+      "ticker": "W"
+    },
+    {
+      "entered": false,
+      "rank": 265,
+      "score": 3849241.0,
+      "ticker": "APO"
+    },
+    {
+      "entered": false,
+      "rank": 266,
+      "score": 3843150.0,
+      "ticker": "JOBY"
+    },
+    {
+      "entered": true,
+      "rank": 267,
+      "score": 3834774.0,
+      "ticker": "XPEV"
+    },
+    {
+      "entered": true,
+      "rank": 268,
+      "score": 3833224.0,
+      "ticker": "TER"
+    },
+    {
+      "entered": false,
+      "rank": 269,
+      "score": 3819298.0,
+      "ticker": "ELV"
+    },
+    {
+      "entered": false,
+      "rank": 270,
+      "score": 3793789.0,
+      "ticker": "TMO"
+    },
+    {
+      "entered": false,
+      "rank": 271,
+      "score": 3788015.0,
+      "ticker": "UVIX"
+    },
+    {
+      "entered": false,
+      "rank": 272,
+      "score": 3778925.0,
+      "ticker": "CAVA"
+    },
+    {
+      "entered": false,
+      "rank": 273,
+      "score": 3697987.0,
+      "ticker": "VZ"
+    },
+    {
+      "entered": false,
+      "rank": 274,
+      "score": 3694857.0,
+      "ticker": "DECK"
+    },
+    {
+      "entered": false,
+      "rank": 276,
+      "score": 3648676.0,
+      "ticker": "SOXX"
+    },
+    {
+      "entered": false,
+      "rank": 277,
+      "score": 3597325.0,
+      "ticker": "CVS"
+    },
+    {
+      "entered": false,
+      "rank": 278,
+      "score": 3593393.0,
+      "ticker": "FUTU"
+    },
+    {
+      "entered": false,
+      "rank": 282,
+      "score": 3529586.0,
+      "ticker": "RTX"
+    },
+    {
+      "entered": false,
+      "rank": 283,
+      "score": 3491983.0,
+      "ticker": "XLV"
+    },
+    {
+      "entered": false,
+      "rank": 285,
+      "score": 3475678.0,
+      "ticker": "ELF"
+    },
+    {
+      "entered": false,
+      "rank": 289,
+      "score": 3435524.0,
+      "ticker": "DRAM"
+    },
+    {
+      "entered": false,
+      "rank": 291,
+      "score": 3391887.0,
+      "ticker": "VKTX"
+    },
+    {
+      "entered": false,
+      "rank": 293,
+      "score": 3350611.0,
+      "ticker": "BOIL"
+    },
+    {
+      "entered": false,
+      "rank": 294,
+      "score": 3348669.0,
+      "ticker": "SOXS"
+    },
+    {
+      "entered": false,
+      "rank": 295,
+      "score": 3327750.0,
+      "ticker": "SCHW"
+    },
+    {
+      "entered": false,
+      "rank": 296,
+      "score": 3323172.0,
+      "ticker": "SLB"
+    },
+    {
+      "entered": false,
+      "rank": 297,
+      "score": 3321113.0,
+      "ticker": "AI"
+    },
+    {
+      "entered": false,
+      "rank": 298,
+      "score": 3275436.0,
+      "ticker": "OKTA"
+    },
+    {
+      "entered": false,
+      "rank": 299,
+      "score": 3274779.0,
+      "ticker": "ETSY"
+    },
+    {
+      "entered": false,
+      "rank": 300,
+      "score": 3266336.0,
+      "ticker": "DE"
+    },
+    {
+      "entered": false,
+      "rank": 301,
+      "score": 3171038.0,
+      "ticker": "KVUE"
+    },
+    {
+      "entered": false,
+      "rank": 302,
+      "score": 3170473.0,
+      "ticker": "WDAY"
+    },
+    {
+      "entered": false,
+      "rank": 304,
+      "score": 3021585.0,
+      "ticker": "XLY"
+    },
+    {
+      "entered": false,
+      "rank": 305,
+      "score": 3015213.0,
+      "ticker": "CNC"
+    },
+    {
+      "entered": false,
+      "rank": 306,
+      "score": 3014866.0,
+      "ticker": "NEE"
+    },
+    {
+      "entered": false,
+      "rank": 307,
+      "score": 3014114.0,
+      "ticker": "LCID"
+    },
+    {
+      "entered": false,
+      "rank": 309,
+      "score": 2931100.0,
+      "ticker": "FICO"
+    },
+    {
+      "entered": false,
+      "rank": 310,
+      "score": 2928219.0,
+      "ticker": "NU"
+    },
+    {
+      "entered": false,
+      "rank": 315,
+      "score": 2858143.0,
+      "ticker": "FTNT"
+    },
+    {
+      "entered": false,
+      "rank": 317,
+      "score": 2806777.0,
+      "ticker": "CLF"
+    },
+    {
+      "entered": false,
+      "rank": 320,
+      "score": 2767787.0,
+      "ticker": "WYNN"
+    },
+    {
+      "entered": false,
+      "rank": 321,
+      "score": 2756738.0,
+      "ticker": "LOW"
+    },
+    {
+      "entered": false,
+      "rank": 322,
+      "score": 2672204.0,
+      "ticker": "MSTX"
+    },
+    {
+      "entered": false,
+      "rank": 324,
+      "score": 2653494.0,
+      "ticker": "RUN"
+    },
+    {
+      "entered": false,
+      "rank": 325,
+      "score": 2640153.0,
+      "ticker": "ULTA"
+    },
+    {
+      "entered": false,
+      "rank": 327,
+      "score": 2615181.0,
+      "ticker": "T"
+    }
+  ],
+  "month": "2025-12",
+  "params": {
+    "enter_rank": 270,
+    "exit_rank": 330,
+    "min_active_days": 50,
+    "window_days": 63
+  }
+}
