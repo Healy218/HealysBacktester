@@ -24,7 +24,10 @@ _BIG_RUN = POOL in {"v31", "v5"}
 
 # ── Paths ────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent
-DATA_CACHE = ROOT / ("data_cache_v3" if _BIG_RUN else "data_cache")
+# v5 gets its OWN cache: sharing data_cache_v3 would overwrite v31's frozen
+# inputs (120-name contracts/universe/flatfiles) with 453-name rebuilds.
+DATA_CACHE = ROOT / ("data_cache_v5" if POOL == "v5"
+                     else "data_cache_v3" if _BIG_RUN else "data_cache")
 ARTIFACTS = ROOT / f"artifacts{_SUF}"      # baseline spec, meta dataset
 RUNS_DIR = ROOT / f"runs{_SUF}"
 REPORTS_DIR = ROOT / f"reports{_SUF}"
