@@ -8,6 +8,7 @@ These replace the Windows Scheduled Tasks that ran on the pre-2026-07-24 WSL2 bo
 | HealysBacktester Live Scan | — | intentionally absent; the Hetzner server owns live scanning, and re-enabling here would double the Telegram alerts |
 | HealysBacktester WF AutoRestart (logon) | `healys-boot-restart.service` | here (added 2026-07-30); **not installed yet** — see below |
 | HealysBacktester VSCode AutoOpen (logon) | — | obsolete (was the Windows auto-logon remote-control chain) |
+| — (new 2026-08-25) | `healys-cache-backup.timer` | weekly one-way push of the irreplaceable data caches to GCS (`scripts/backup_caches.sh`) — install like the stocktwits pair |
 
 ## Install
 
