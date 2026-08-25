@@ -386,8 +386,13 @@ def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
                   f"executed {df['executed'].mean():.0%}", flush=True)
 
 
-def assemble(rows_dir=ROWS_DIR, marks_dir=MARKS_DIR) -> None:
+def assemble(rows_dir=ROWS_DIR, marks_dir=MARKS_DIR,
+             membership: bool = False) -> None:
     """Concat all per-symbol rows → surface join → labels → split → write.
+
+    With membership=True (the v5 default), rows are first filtered to
+    (symbol, entry month) pairs where the symbol was a point-in-time universe
+    member — per the frozen monthlies, loud if none exist.
 
     When per-symbol mark shards exist they are concatenated into the sidecar
     beside the dataset, filtered to the rows that survived the split purge.
@@ -399,6 +404,16 @@ def assemble(rows_dir=ROWS_DIR, marks_dir=MARKS_DIR) -> None:
     if not frames:
         raise SystemExit("all per-symbol frames are empty")
     ds = pd.concat(frames, ignore_index=True)
+
+    if membership:
+        from nn_meta.universe_pit import membership_mask
+        keep = membership_mask(ds["symbol"], ds["entry_date"])
+        print(f"membership: kept {int(keep.sum())}/{len(ds)} rows "
+              f"({(~keep).sum()} outside point-in-time membership)")
+        ds = ds[keep].reset_index(drop=True)
+        if ds.empty:
+            raise SystemExit("membership filter left no rows — check the "
+                             "frozen months against the build window")
 
     surface = load_surface_features()
     ds = join_surface_asof(ds, surface)
@@ -462,10 +477,14 @@ def main() -> None:
                     help="concat the per-symbol rows into the final dataset")
     ap.add_argument("--marks", action="store_true",
                     help="also emit the per-contract 15m mark stream (Option B)")
+    ap.add_argument("--membership", action=argparse.BooleanOptionalAction,
+                    default=(config.POOL == "v5"),
+                    help="restrict assemble to point-in-time universe members "
+                         "per (symbol, month) — default ON for the v5 pool")
     args = ap.parse_args()
     config.ensure_dirs()
     if args.assemble:
-        assemble()
+        assemble(membership=args.membership)
         return
     spec = load_spec()
     symbols = [s.strip().upper() for s in args.symbols.split(",")] \

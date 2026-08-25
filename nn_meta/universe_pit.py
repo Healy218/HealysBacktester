@@ -304,6 +304,14 @@ def load_membership(artifact_dir: Path = ARTIFACT_DIR) -> pd.DataFrame:
     return pd.DataFrame(rows)
 
 
+def write_membership_parquet(membership: pd.DataFrame,
+                             daily_dir: Path = UNIVERSE_DAILY_DIR) -> Path:
+    """Consolidated regenerable view beside the daily rows (untracked)."""
+    out = Path(daily_dir) / "universe_membership.parquet"
+    membership.to_parquet(out, index=False)
+    return out
+
+
 def members_asof(membership: pd.DataFrame, month: str) -> set[str]:
     """Members whose membership a consumer may use DURING calendar month
     `month`: the latest frozen month with available_at <= that month's first
@@ -315,3 +323,76 @@ def members_asof(membership: pd.DataFrame, month: str) -> set[str]:
         return set()
     src = usable["month"].max()
     return set(membership.loc[membership["month"] == src, "ticker"])
+
+
+def membership_mask(symbols: pd.Series, entry_dates: pd.Series,
+                    membership: pd.DataFrame | None = None) -> pd.Series:
+    """Vectorized stage-C filter: True where the row's symbol was a usable
+    member during the row's entry month (per members_asof — the latest
+    freeze available before that month began). Loads the frozen artifacts
+    when membership is None; loud if none exist."""
+    if membership is None:
+        membership = load_membership()
+    months = pd.to_datetime(entry_dates).dt.strftime("%Y-%m")
+    allowed = {m: members_asof(membership, m) for m in months.unique()}
+    return pd.Series([s in allowed[m] for s, m in zip(symbols, months)],
+                     index=symbols.index)
+
+
+# ── freeze driver (spec step 3) ──────────────────────────────────────────────
+
+def _parse_canaries(arg: str) -> dict[str, str]:
+    """'MRO:2024-12,CTLT:2025-03' → {ticker: delisting month}."""
+    out = {}
+    for part in filter(None, (p.strip() for p in arg.split(","))):
+        ticker, _, month = part.partition(":")
+        if not month:
+            raise UniversePitError(f"canary needs TICKER:YYYY-MM, got {part!r}")
+        out[ticker] = month
+    return out
+
+
+def main() -> None:
+    import argparse
+
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("--through", required=True,
+                    help="last COMPLETED month to reconstitute (YYYY-MM)")
+    ap.add_argument("--canary", default="",
+                    help="TICKER:YYYY-MM[,...] delistings that must enter "
+                         "while alive and exit after death")
+    ap.add_argument("--freeze", action="store_true",
+                    help="write the monthly artifacts (default: report only)")
+    args = ap.parse_args()
+
+    daily = load_daily_rows()
+    membership = monthly_membership(daily, through=args.through)
+    report = churn_report(membership)
+    for m in report:
+        print(f"{m['month']}: {m['n_members']} members, "
+              f"+{len(m['entries'])} / -{len(m['exits'])}")
+
+    delisting_canary_gate(membership)
+    if args.canary:
+        assert_canaries(membership, _parse_canaries(args.canary))
+        print(f"canaries OK: {args.canary}")
+    elif membership["month"].nunique() >= 12:
+        raise UniversePitError(
+            "a >=12-month freeze requires named delisting canaries (--canary)")
+
+    if not args.freeze:
+        print("\n(report only — rerun with --freeze to write artifacts)")
+        return
+    frozen = 0
+    for month in sorted(membership["month"].unique()):
+        if (ARTIFACT_DIR / f"{month}.json").exists():
+            continue
+        freeze_month(membership, month)
+        frozen += 1
+    out = write_membership_parquet(membership)
+    print(f"\nfroze {frozen} new month(s) under {ARTIFACT_DIR}; "
+          f"consolidated view: {out}")
+
+
+if __name__ == "__main__":
+    main()

@@ -68,7 +68,24 @@ _UNDERLYINGS_V2 = [
     # ETFs
     "IWM", "DIA", "GLD", "TLT", "SMH", "XLE", "XLF", "ARKK",
 ]
-if _BIG_RUN:
+if POOL == "v5":
+    # v5's universe is the POINT-IN-TIME membership (PIT_UNIVERSE_SPEC):
+    # UNDERLYINGS is the union of every frozen monthly artifact — the crawl/
+    # freeze/sweep symbol list. The per-(symbol, month) restriction happens
+    # in the dataset build via nn_meta.universe_pit.membership_mask, so a
+    # name contributes rows only for months it was actually a member.
+    import json as _json
+    _PIT_DIR = ROOT.parent / "v3" / "artifacts" / "universe_pit"
+    _pit_months = sorted(_PIT_DIR.glob("*.json"))
+    if _pit_months:
+        UNDERLYINGS = sorted({m["ticker"] for f in _pit_months
+                              for m in _json.loads(f.read_text())["members"]})
+    else:
+        UNDERLYINGS = []
+        print(f"[nn_meta.config] WARNING: no frozen PIT universe months under "
+              f"{_PIT_DIR} — UNDERLYINGS=[] (run scripts/build_universe_daily"
+              f".py then `python -m nn_meta.universe_pit --freeze` first)")
+elif _BIG_RUN:
     import json as _json
     _UNIVERSE_120_JSON = ROOT.parent / "v3" / "artifacts" / "universe_120.json"
     if _UNIVERSE_120_JSON.exists():

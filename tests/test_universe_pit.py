@@ -217,6 +217,18 @@ def test_members_asof_uses_previous_reconstitution_only(tmp_path):
     assert up.members_asof(loaded, "2024-09") == set()
 
 
+def test_membership_mask_stage_c_filter(tmp_path):
+    m = small_membership()
+    for month in sorted(m["month"].unique()):
+        up.freeze_month(m, month, artifact_dir=tmp_path)
+    loaded = up.load_membership(tmp_path)
+    symbols = pd.Series(["TAA", "ZZZ", "TAA"])
+    dates = pd.Series(pd.to_datetime(["2024-11-15", "2024-11-15", "2024-09-05"]))
+    mask = up.membership_mask(symbols, dates, loaded)
+    # member in Nov; never a member; before the first usable freeze
+    assert list(mask) == [True, False, False]
+
+
 def test_load_daily_rows_absent_is_loud(tmp_path):
     with pytest.raises(up.UniversePitError, match="no universe_daily"):
         up.load_daily_rows(tmp_path)

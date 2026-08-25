@@ -129,7 +129,7 @@ def _fold_dataset(spec_symbols: dict, provider, window_end: str,
 
 def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
              winning: dict, provider, surface: pd.DataFrame,
-             reuse_runs: bool = False) -> dict:
+             reuse_runs: bool = False, membership: bool = False) -> dict:
     print(f"\n─ fold {fold_i}: train →{train_end}, OOS {oos_start}→{oos_end}",
           flush=True)
 
@@ -175,6 +175,17 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
             ["train", "val", "test"], default="purged")
         ds = ds[ds["split"] != "purged"].reset_index(drop=True)
         ds.to_parquet(ds_path, index=False)
+
+    if membership:
+        # point-in-time universe (v5): a (symbol, month) row survives only if
+        # the symbol was a member per the frozen monthlies; applied after the
+        # checkpoint so pre-filter checkpoints resume correctly
+        from nn_meta.universe_pit import membership_mask
+        keep = membership_mask(ds["symbol"], ds["entry_date"])
+        print(f"  membership: kept {int(keep.sum())}/{len(ds)} rows", flush=True)
+        ds = ds[keep].reset_index(drop=True)
+        if ds.empty:
+            return {"fold": fold_i, "error": "no rows after membership filter"}
 
     # 3) train the winning config only (same mode/label/arch as the main run)
     arch = [int(x) for x in winning["arch"].split("x")]
@@ -243,6 +254,10 @@ def main() -> None:
                     help="comma-separated fold numbers whose existing runs/ "
                          "model dirs should be reused instead of retrained "
                          "(only for resuming that same fold)")
+    ap.add_argument("--membership", action=argparse.BooleanOptionalAction,
+                    default=(config.POOL == "v5"),
+                    help="restrict fold datasets to point-in-time universe "
+                         "members per (symbol, month) — default ON for v5")
     args = ap.parse_args()
     reuse_folds = {int(x) for x in args.reuse_runs.split(",") if x.strip()}
 
@@ -264,7 +279,8 @@ def main() -> None:
             results.append(json.loads(res_path.read_text()))
             continue
         results.append(run_fold(i + 1, *b, winning, provider, surface,
-                                reuse_runs=(i + 1) in reuse_folds))
+                                reuse_runs=(i + 1) in reuse_folds,
+                                membership=args.membership))
 
     ok = [r for r in results if not r.get("error")]
     wins = sum(r["nn_beats"] for r in ok)
