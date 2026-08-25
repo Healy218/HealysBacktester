@@ -79,7 +79,12 @@ change); the box codes, tests, and smokes.
 - [x] v5 wide pool DEFINED 2026-08-24 (`PROPOSAL_STRATEGIES_V5`: all 10
   swept families, seam-tested; `NN_META_POOL=v5` plumbs through). The
   300-ticker generation's remaining blocker is POINT-IN-TIME universe
-  membership (the parked ROADMAP item) — design next.
+  membership — DESIGNED 2026-08-24 (`docs/specs/PIT_UNIVERSE_SPEC.md`):
+  Alpaca rejected by live probe (0 bars for 4 delisted names); backbone =
+  the OPRA day_aggs archive we already pay for (option $-volume ranking,
+  survivorship-free by construction). Build order in the spec: stage B
+  pure module → home-box day_aggs crawler → 2024-08→now backfill +
+  delisting-canary gates → --membership wiring.
 - [ ] DD-brake live enforcement in `v4_scan` sizing (brake is shown, not
   enforced; moot for V118's `dd_brake=None` but a landmine for any braked
   future bundle).
