@@ -234,6 +234,10 @@ POSITION_FRACTION = 0.10
 # the PIT universe build (2026-08-24): next-trading-day handoffs in the OPRA
 # day-aggs with matching dollar volume, same signature as the SQ→XYZ seam.
 TICKER_ALIASES = {"SQ": "XYZ", "FI": "FISV", "BITF": "DRAM"}
+# OCC-root symbology → the exchange symbology data vendors want, FETCH ONLY:
+# unlike TICKER_ALIASES this never rekeys rows or membership (the PIT
+# universe is frozen on the OCC-root form, e.g. BRKB).
+FETCH_ALIASES = {"BRKB": "BRK.B"}
 
 # ── Sector groups (static one-hot context; hand-maintained) ──────────────────
 SECTOR_GROUPS = ["idx_etf", "sec_etf", "tech", "semis", "fin", "crypto",

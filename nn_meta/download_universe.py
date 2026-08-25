@@ -117,7 +117,7 @@ def download_underlying_daily(end: str | None = None) -> pd.DataFrame:
         # the spec/universe/models are keyed on. Options-CONTRACT aliasing is
         # deliberately out of scope: chain continuity across a rename is
         # messy, and the v31 legacy scorer simply filters SQ (accepted).
-        fetch_sym = TICKER_ALIASES.get(sym, sym)
+        fetch_sym = config.FETCH_ALIASES.get(sym) or TICKER_ALIASES.get(sym, sym)
         raw = vbt_data_loader.load_price_data_smart(
             fetch_sym, config.HISTORY_START, end, "1D")
         if raw is None or raw.empty:
