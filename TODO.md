@@ -77,14 +77,15 @@ change); the box codes, tests, and smokes.
   (equal-weight daily candidate P&L on validation), reported per run
   beside deflated Sharpe; never guesses on thin windows.
 - [x] v5 wide pool DEFINED 2026-08-24 (`PROPOSAL_STRATEGIES_V5`: all 10
-  swept families, seam-tested; `NN_META_POOL=v5` plumbs through). The
-  300-ticker generation's remaining blocker is POINT-IN-TIME universe
-  membership — DESIGNED 2026-08-24 (`docs/specs/PIT_UNIVERSE_SPEC.md`):
-  Alpaca rejected by live probe (0 bars for 4 delisted names); backbone =
-  the OPRA day_aggs archive we already pay for (option $-volume ranking,
-  survivorship-free by construction). Build order in the spec: stage B
-  pure module → home-box day_aggs crawler → 2024-08→now backfill +
-  delisting-canary gates → --membership wiring.
+  swept families, seam-tested; `NN_META_POOL=v5` plumbs through).
+- [x] **PIT universe BUILT + FROZEN 2026-08-24** (all 4 spec steps,
+  EXPERIMENTS row): `nn_meta/universe_pit.py` + crawler + 496-day
+  backfill → 21 frozen monthlies 2024-11→2026-07 (~300 members, canaries
+  X/SWTX/WBA pass, renames FI→FISV & BITF→DRAM aliased); `--membership`
+  wired into build_meta_dataset + walkforward_meta (default ON for v5).
+  **v5 is unblocked.** Ongoing: monthly crawl+freeze must ride the same
+  home-box automation as the FA monthly (block 3) — the entitlement
+  window rolls, so crawl promptly each month.
 - [ ] DD-brake live enforcement in `v4_scan` sizing (brake is shown, not
   enforced; moot for V118's `dd_brake=None` but a landmine for any braked
   future bundle).

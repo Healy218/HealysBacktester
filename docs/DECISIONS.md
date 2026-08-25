@@ -300,3 +300,30 @@ yet — revisit if the brake isn't enough); a brake on the MARKED drawdown
 inside the ledger (would make sizing depend on the accounting layer; the
 realized-equity brake is simpler and tracks marked DD within ~6 pts on the
 fold-2 evidence).
+
+## 2026-08-24 (late) — PIT universe frozen: params, canaries, and two renames
+
+**Decision:** freeze the point-in-time universe (2024-11→2026-07, 21
+monthlies) with the spec defaults unchanged — enter ≤270 / exit >330,
+63-trading-day median option dollar volume, ≥50 active days. The churn
+report showed ~300 members and ~10 entries/exits per month; no retune
+needed, so the parameters are now frozen with the artifacts.
+
+**Canaries (empirical, from the backfill itself):** X (US Steel, last
+trade 2025-06-17), SWTX (2025-06-30), WBA (2025-08-27) — each enters
+membership while alive and is absent after death. MRO/CTLT/JNPR/HES/ANSS
+were REJECTED as canaries: they died inside the window but their option
+liquidity never cracked top-270, so they can't witness membership churn.
+
+**Renames found by the build:** FI→FISV (2025-11-11) and BITF→DRAM
+(2026-04-07), identified by next-trading-day handoffs with matching dollar
+volume (the SQ→XYZ signature); added to `TICKER_ALIASES`, which stitched
+both membership stints gap-free at the seam.
+
+**members_asof semantics:** a freeze is usable during month M iff its
+available_at falls within (or before) M — comparing against M's first
+CALENDAR day wrongly zeroed out any month starting on a weekend (Dec 2024).
+
+**Rejected:** freezing without named canaries (the driver refuses ≥12
+months without them); seeding from the universe-filtered flatfiles_15m
+cache (stage A re-pulled raw day aggregates per the spec).

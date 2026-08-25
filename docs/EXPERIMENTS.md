@@ -105,6 +105,23 @@ revisited: sell premium; liquid OTM strikes; re-sweep params for 5m bars.
 | v4 | **2026-08-16** (paper) → **2026-08-24 REAL** | v31 causal, **V118: gbt×40 ev/0.05, no brake** (first gate-eligible bundle, ex-top3 gate) | `.v4_paper_ledger.json` on server | **live — real alerts** since 2026-08-24; scan self-enforces verified+eligible |
 | v31 | **2026-08-16** | v31 legacy nn, rank thr 0.55 (40 seeds) | server alerts (`[v31]` label; no ledger yet) | **live — paper expert**; settles the outlier-fragility question with forward tracking |
 
+## 2026-08-24 — PIT universe BUILT + FROZEN: 21 survivorship-free monthlies, v5 unblocked
+
+All four spec steps landed in one day (`PIT_UNIVERSE_SPEC.md`; commits
+`9b212df`→`e77f510`). Stage A: 496-day OPRA day_aggs backfill on the home
+box — the rolling entitlement starts **2024-08-26** exactly (probed), ~4.6k
+option roots/day, 42 MB of daily rows. Stage B: monthly reconstitution
+2024-11→2026-07, ~300 members/month (270–309), ~10/month churn each way —
+the hysteresis defaults (270/330, 63d median, ≥50 active days) held on the
+churn report, no retune. Gates: delisting canary PASSED — **X** (US Steel),
+**SWTX**, **WBA** enter while alive and exit after death; a churn-free
+history would have refused to freeze. Found in the data: FI→FISV (2025-11)
+and BITF→DRAM (2026-04) renames — next-day handoffs matching the SQ→XYZ
+seam — added to `TICKER_ALIASES`. Stage C: `NN_META_POOL=v5` now derives
+453 UNDERLYINGS from the frozen artifacts; `--membership` (default ON for
+v5) filters every (symbol, month) dataset row through `members_asof`.
+**The v5 generation's last blocker is gone.**
+
 ## 2026-08-24 — spx0 round 4 (concentrated grid): sharper highs, unstable folds — no seat
 
 `spx0-run-f5294d8-144212` (~2h20m, image `f5294d8`, ma/orb_15/rsi ×

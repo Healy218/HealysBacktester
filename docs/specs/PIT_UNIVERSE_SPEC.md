@@ -1,5 +1,15 @@
 # Point-in-time universe module — design (2026-08-24)
 
+> **STATUS: BUILT + FROZEN 2026-08-24, same day.** All four build-order
+> steps landed (`nn_meta/universe_pit.py`, `scripts/build_universe_daily
+> .py`, 21 frozen monthlies 2024-11→2026-07 in `v3/artifacts/universe_pit/`,
+> `--membership` in the v5 entry points). Deviations from this design:
+> entitlement actually starts **2024-08-26** (not 2024-08-01), so the first
+> full-window month is 2024-11; canaries are X/SWTX/WBA (obvious picks
+> like MRO/JNPR/HES died in-window but never ranked top-270); put/call
+> split: recorded. Open-question defaults all held. Verdict: EXPERIMENTS
+> 2026-08-24; decisions: DECISIONS 2026-08-24 (late).
+
 The last blocker before the v5 generation (120 → ~300 names, wide strategy
 pool). Purpose: survivorship-free, monthly universe membership so a
 backtest can only ever train on names it could have known about AT THE
