@@ -94,8 +94,16 @@ def download_contracts(key: str, expiry_max: str | None = None) -> pd.DataFrame:
     t0 = time.time()
     for sym in config.UNDERLYINGS:
         n0 = len(rows)
-        rows += crawl(True, key, config.EXPIRY_MIN, expiry_max, sym)
-        rows += crawl(False, key, config.EXPIRY_MIN, expiry_max, sym)
+        # the reference API wants exchange symbology (BRK.B), but the OCC
+        # tickers it returns carry the root form (O:BRKB…) — rekey rows to
+        # sym so everything downstream joins on the OCC-root form
+        fetch_sym = config.FETCH_ALIASES.get(sym, sym)
+        new = crawl(True, key, config.EXPIRY_MIN, expiry_max, fetch_sym) \
+            + crawl(False, key, config.EXPIRY_MIN, expiry_max, fetch_sym)
+        if fetch_sym != sym:
+            for r in new:
+                r["underlying"] = sym
+        rows += new
         print(f"  {sym}: {len(rows) - n0} contracts", flush=True)
     df = pd.DataFrame(rows).drop_duplicates("ticker").reset_index(drop=True)
     df["expiration"] = pd.to_datetime(df["expiration"])
