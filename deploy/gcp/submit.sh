@@ -77,15 +77,16 @@ case "$MODE" in
     ;;
   freeze)
     # Per-ticker tasks (user decision 2026-08-25): SHARDS = the universe size,
-    # one symbol per task. Sizing per task: 1 vCPU of sweep work, RAM per the
-    # (unprofiled, inherited) ~5 GB freeze-worker budget + headroom for the
-    # wider v5 grids. Spot is safe: per-symbol bucket checkpoints.
+    # one symbol per task. MEASURED on the box 2026-08-25 (DKNG, 10 families):
+    # 51 min, 6.4 GB peak RSS — so 12 GiB headroom per task, 3 h leash for
+    # slower cloud cores, highmem machines so RAM doesn't strand vCPUs.
+    # Spot is safe: per-symbol bucket checkpoints.
     CPU_MILLI=${CPU_MILLI:-1000}
-    MEMORY_MIB=${MEMORY_MIB:-7168}
-    MAX_RUN=${MAX_RUN:-7200s}
+    MEMORY_MIB=${MEMORY_MIB:-12288}
+    MAX_RUN=${MAX_RUN:-10800s}
     PROVISIONING=${PROVISIONING:-SPOT}
     RETRIES=${RETRIES:-3}
-    MACHINE=${MACHINE:-e2-standard-8}
+    MACHINE=${MACHINE:-e2-highmem-16}
     ;;
   freeze-merge)
     TASKS=1
