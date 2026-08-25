@@ -23,13 +23,22 @@ BATCH_JOB_UID="${BATCH_JOB_UID:-}"
 [ -n "${BASELINE_URI:-}" ] || unset BASELINE_URI
 [ -n "${CANDIDATE_URI:-}" ] || unset CANDIDATE_URI
 
-echo "== task ${BATCH_TASK_INDEX:-?}/${SHARDS:-?} mode=${TASK_MODE:-build} =="
+echo "== task ${BATCH_TASK_INDEX:-?}/${SHARDS:-?} mode=${TASK_MODE:-build} pool=${NN_META_POOL:-v31} =="
 
 MODE="${TASK_MODE:-build}"
 
-# The frozen spec is an input to every mode.
-mkdir -p nn_meta/artifacts_v31
-gsutil -m -q rsync -r "${BUCKET}/artifacts_v31_in" nn_meta/artifacts_v31
+# Pool selects every path (nn_meta/config.py): v31 reads data_cache_v3 (the
+# historical irregular name), later pools read data_cache_<pool>.
+POOL="${NN_META_POOL:-v31}"
+export NN_META_POOL="$POOL"
+ART="nn_meta/artifacts_${POOL}"
+CACHE="data_cache_v3"; [ "$POOL" != "v31" ] && CACHE="data_cache_${POOL}"
+
+# The frozen spec is an input to every mode EXCEPT freeze, which creates it.
+if [ "$MODE" != "freeze" ] && [ "$MODE" != "freeze-merge" ]; then
+  mkdir -p "$ART"
+  gsutil -m -q rsync -r "${BUCKET}/artifacts_${POOL}_in" "$ART"
+fi
 
 case "$MODE" in
   evaluate|finalize)
@@ -77,9 +86,9 @@ case "$MODE" in
       exit 1; }
     ;;
   *)
-    # Stage the raw option-bar cache (read-only input) for build/assemble.
-    mkdir -p nn_meta/data_cache_v3
-    gsutil -m -q rsync -r "${BUCKET}/data_cache_v3" nn_meta/data_cache_v3
+    # Stage the raw option-bar cache (read-only input) for freeze/build/assemble.
+    mkdir -p "nn_meta/${CACHE}"
+    gsutil -m -q rsync -r "${BUCKET}/${CACHE}" "nn_meta/${CACHE}"
 
     # FAIL CLOSED ON AN INCOMPLETE CACHE. On 2026-08-19 the bucket was missing
     # 44 of 486 flat-file day-frames and nothing complained: FlatFilesProvider
@@ -88,17 +97,73 @@ case "$MODE" in
     # +0.017 net_return against +0.114 for survivors), so the whole ledger
     # re-run read better than the truth and had to be thrown away. Never again
     # -- a hole in the archive stops the job here, before it costs a build.
-    python -m nn_meta.cache_preflight --cache nn_meta/data_cache_v3
+    python -m nn_meta.cache_preflight --cache "nn_meta/${CACHE}"
 
-    # Resume: pull any checkpoints previous attempts already produced.
-    # gsutil rsync refuses to create the destination dir — without the mkdirs the
-    # pull silently no-ops (seen live 2026-08-18: CommandException swallowed by
-    # `|| true`), which would make an assemble task fold up EMPTY local dirs.
-    mkdir -p nn_meta/artifacts_v31/meta_rows nn_meta/artifacts_v31/meta_marks
-    gsutil -m -q rsync -r "${BUCKET}/out/meta_rows"  nn_meta/artifacts_v31/meta_rows  || true
-    gsutil -m -q rsync -r "${BUCKET}/out/meta_marks" nn_meta/artifacts_v31/meta_marks || true
+    if [ "$MODE" = "freeze" ]; then
+      : # freeze needs only the cache; checkpoints are per-symbol in the bucket
+    else
+      # Resume: pull any checkpoints previous attempts already produced.
+      # gsutil rsync refuses to create the destination dir — without the mkdirs the
+      # pull silently no-ops (seen live 2026-08-18: CommandException swallowed by
+      # `|| true`), which would make an assemble task fold up EMPTY local dirs.
+      mkdir -p "$ART/meta_rows" "$ART/meta_marks"
+      gsutil -m -q rsync -r "${BUCKET}/out/meta_rows"  "$ART/meta_rows"  || true
+      gsutil -m -q rsync -r "${BUCKET}/out/meta_marks" "$ART/meta_marks" || true
+    fi
     ;;
 esac
+
+# ---- freeze: per-symbol baseline sweeps, sharded (v5: one ticker per task) --
+if [ "$MODE" = "freeze" ]; then
+  if [ -n "${SYMBOLS:-}" ]; then
+    MY_SYMS="$SYMBOLS"
+  else
+    # Round-robin shard k of N over the pool's universe (config.UNDERLYINGS —
+    # for v5 that is the union of the frozen PIT monthlies, baked in the image).
+    MY_SYMS=$(python - "$BATCH_TASK_INDEX" "${SHARDS:?}" <<'PY'
+import sys
+from nn_meta import config
+k, n = int(sys.argv[1]), int(sys.argv[2])
+print(",".join(sorted(config.UNDERLYINGS)[k::n]))
+PY
+)
+  fi
+  echo "freeze symbols: $MY_SYMS"
+  SPECS="${BUCKET}/out/freeze_specs_${POOL}"
+  mkdir -p "$ART"
+  rc_all=0
+  IFS=',' read -ra SYMS <<< "$MY_SYMS"
+  for sym in "${SYMS[@]}"; do
+    if gsutil -q stat "${SPECS}/${sym}.json" 2>/dev/null; then
+      echo "== $sym already frozen in bucket — skip =="
+      continue
+    fi
+    # A symbol too thin to freeze is a RESULT (freeze_all skips it); only a
+    # crash should fail the task.
+    if python -m nn_meta.freeze_baseline --symbols "$sym" \
+        --out "$ART/freeze_${sym}.json"; then
+      gsutil -q cp "$ART/freeze_${sym}.json" "${SPECS}/${sym}.json"
+    else
+      echo "== $sym freeze CRASHED ==" >&2; rc_all=1
+    fi
+  done
+  exit $rc_all
+fi
+
+if [ "$MODE" = "freeze-merge" ]; then
+  mkdir -p /tmp/fspecs "$ART"
+  gsutil -m -q rsync -r "${BUCKET}/out/freeze_specs_${POOL}" /tmp/fspecs
+  n=$(ls /tmp/fspecs/*.json 2>/dev/null | wc -l)
+  echo "freeze-merge: $n per-symbol specs pulled"
+  [ "$n" -ge 1 ] || { echo "FATAL: no freeze specs to merge" >&2; exit 1; }
+  python -m nn_meta.freeze_baseline \
+    --merge "$(ls /tmp/fspecs/*.json | paste -sd, -)"
+  # Publish as the pool's spec input — every later mode stages it from there.
+  gsutil -q cp "$ART/baseline_spec.json" \
+    "${BUCKET}/artifacts_${POOL}_in/baseline_spec.json"
+  echo "== merged spec published to ${BUCKET}/artifacts_${POOL}_in/ =="
+  exit 0
+fi
 
 # ---- vol: sharded per-symbol RV features + baseline eval --------------------
 if [ "$MODE" = "vol" ]; then
@@ -241,7 +306,7 @@ fi
 
 if [ "$MODE" = "assemble" ]; then
   # Fail closed: assembling from an empty pull must never "succeed".
-  n_rows=$(find nn_meta/artifacts_v31/meta_rows -name '*.parquet' | wc -l)
+  n_rows=$(find "$ART/meta_rows" -name '*.parquet' | wc -l)
   echo "assemble: $n_rows per-symbol row files pulled"
   if [ "$n_rows" -lt 1 ]; then
     echo "FATAL: resume pull produced no meta_rows — refusing to assemble" >&2
@@ -251,8 +316,8 @@ if [ "$MODE" = "assemble" ]; then
     || python -m nn_meta.build_meta_dataset --assemble
   # publish MUST fail the task on error — Batch reporting SUCCEEDED while the
   # VM holding the only copy self-deletes is the P1-6 failure mode
-  gsutil -m -q cp nn_meta/artifacts_v31/meta_dataset.parquet "${BUCKET}/out/"
-  gsutil -m -q cp nn_meta/artifacts_v31/*.marks.parquet "${BUCKET}/out/"
+  gsutil -m -q cp "$ART/meta_dataset.parquet" "${BUCKET}/out/"
+  gsutil -m -q cp "$ART"/*.marks.parquet "${BUCKET}/out/"
   exit 0
 fi
 
@@ -263,8 +328,9 @@ else
   # scripts/run_build_parallel.sh.
   MY_SYMS=$(python - "$BATCH_TASK_INDEX" "${SHARDS:?}" <<'PY'
 import json, sys
+from nn_meta import config
 k, n = int(sys.argv[1]), int(sys.argv[2])
-spec = json.load(open("nn_meta/artifacts_v31/baseline_spec.json"))
+spec = json.load(open(config.BASELINE_SPEC_JSON))
 print(",".join(sorted(spec["symbols"])[k::n]))
 PY
 )
@@ -282,7 +348,7 @@ for sym in "${SYMS[@]}"; do
     continue
   fi
   python -m nn_meta.build_meta_dataset --symbols "$sym" --marks
-  gsutil -m -q rsync -r nn_meta/artifacts_v31/meta_rows  "${BUCKET}/out/meta_rows"
-  gsutil -m -q rsync -r nn_meta/artifacts_v31/meta_marks "${BUCKET}/out/meta_marks"
+  gsutil -m -q rsync -r "$ART/meta_rows"  "${BUCKET}/out/meta_rows"
+  gsutil -m -q rsync -r "$ART/meta_marks" "${BUCKET}/out/meta_marks"
 done
 echo "== task done =="

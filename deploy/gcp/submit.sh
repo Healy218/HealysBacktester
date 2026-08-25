@@ -21,6 +21,7 @@ SHA=${IMAGE_TAG:-$(git rev-parse --short HEAD)}
 IMAGE="${REGION}-docker.pkg.dev/${PROJECT}/healys/backtester:${SHA}"
 
 MODE=${TASK_MODE:-build}
+POOL=${NN_META_POOL:-v31}
 case "$MODE" in
   evaluate) JOB_PREFIX=v4-evaluate ;;
   finalize) JOB_PREFIX=v4-finalize ;;
@@ -28,6 +29,8 @@ case "$MODE" in
   vol)      JOB_PREFIX=vol-build ;;
   assemble) JOB_PREFIX=marks-assemble ;;
   diff)     JOB_PREFIX=v4-diff ;;
+  freeze)       JOB_PREFIX=${POOL}-freeze ;;
+  freeze-merge) JOB_PREFIX=${POOL}-freeze-merge ;;
   *)        JOB_PREFIX=marks-build ;;
 esac
 JOB="${JOB_PREFIX}-${SHA}-$(date +%H%M%S)"
@@ -72,6 +75,26 @@ case "$MODE" in
     PROVISIONING=${PROVISIONING:-STANDARD}
     RETRIES=${RETRIES:-1}
     ;;
+  freeze)
+    # Per-ticker tasks (user decision 2026-08-25): SHARDS = the universe size,
+    # one symbol per task. Sizing per task: 1 vCPU of sweep work, RAM per the
+    # (unprofiled, inherited) ~5 GB freeze-worker budget + headroom for the
+    # wider v5 grids. Spot is safe: per-symbol bucket checkpoints.
+    CPU_MILLI=${CPU_MILLI:-1000}
+    MEMORY_MIB=${MEMORY_MIB:-7168}
+    MAX_RUN=${MAX_RUN:-7200s}
+    PROVISIONING=${PROVISIONING:-SPOT}
+    RETRIES=${RETRIES:-3}
+    MACHINE=${MACHINE:-e2-standard-8}
+    ;;
+  freeze-merge)
+    TASKS=1
+    CPU_MILLI=${CPU_MILLI:-2000}
+    MEMORY_MIB=${MEMORY_MIB:-8192}
+    MAX_RUN=${MAX_RUN:-3600s}
+    PROVISIONING=${PROVISIONING:-STANDARD}
+    RETRIES=${RETRIES:-1}
+    ;;
   *)
     CPU_MILLI=${CPU_MILLI:-4000}
     MEMORY_MIB=${MEMORY_MIB:-12288}
@@ -98,6 +121,7 @@ cat > /tmp/healys_batch_job.json <<JSON
       "maxRetryCount": ${RETRIES},
       "maxRunDuration": "${MAX_RUN}",
       "environment": {"variables": {
+        "NN_META_POOL": "${POOL}",
         "BUCKET": "${BUCKET}",
         "SHARDS": "${SHARDS}",
         "SYMBOLS": "${SYMBOLS}",
@@ -128,6 +152,9 @@ gcloud batch jobs submit "$JOB" --project "$PROJECT" --location "$REGION" \
 echo "submitted: $JOB  (mode=$MODE machine=${MACHINE:-e2-standard-4} $PROVISIONING)"
 echo "watch:     gcloud batch jobs describe $JOB --project $PROJECT --location $REGION"
 case "$MODE" in
+  freeze)
+    echo "when all freeze tasks SUCCEED, merge the per-symbol specs:"
+    echo "  TASK_MODE=freeze-merge NN_META_POOL=${POOL} PROJECT=$PROJECT BUCKET=$BUCKET bash deploy/gcp/submit.sh 1" ;;
   build)
     echo "when all build tasks SUCCEED, run the single assemble task:"
     echo "  TASK_MODE=assemble PROJECT=... BUCKET=... bash deploy/gcp/submit.sh 1" ;;
