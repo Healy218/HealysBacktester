@@ -16,7 +16,8 @@ cd "$(dirname "$(readlink -f "$0")")/.."
 GSUTIL="${GSUTIL:-$HOME/google-cloud-sdk/bin/gsutil}"
 DEST="gs://healys-backtester/backup/homebox"
 
-for d in v3/data nn_meta/data_cache_v3 nn_meta/data_cache_spx0; do
+for d in v3/data nn_meta/data_cache_v3 nn_meta/data_cache_v5 \
+         nn_meta/data_cache_spx0; do
     echo "=== $(date -Is) rsync $d"
     "$GSUTIL" -m -q rsync -r -x '.*\.tmp$' "$d" "$DEST/$d"
 done
