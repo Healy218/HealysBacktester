@@ -68,7 +68,11 @@ def main() -> None:
     print(f"downloading 15m bars for {len(config.UNDERLYINGS)} names "
           f"({config.HISTORY_START} → {config.WINDOW_END}, RTH only)")
     for sym in config.UNDERLYINGS:
-        raw = _load_chunked(sym, config.HISTORY_START, config.WINDOW_END)
+        # fetch under vendor symbology (BRKB→BRK.B) or the current exchange
+        # ticker for renamed listings; rows stay keyed on sym
+        fetch_sym = config.FETCH_ALIASES.get(sym) \
+            or config.TICKER_ALIASES.get(sym, sym)
+        raw = _load_chunked(fetch_sym, config.HISTORY_START, config.WINDOW_END)
         if raw is None or raw.empty:
             print(f"  {sym:6s}: NO DATA")
             continue
