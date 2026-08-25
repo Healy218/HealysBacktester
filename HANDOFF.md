@@ -1,67 +1,83 @@
 # HANDOFF — state for the next session
 
-Written 2026-08-24 ~late evening CDT. Protocol: `CLAUDE.md`.
-Previous handoff (V118 going live, wave-2 phase entry, the day's seven GCP
-verdicts): `handoff-history/HANDOFF-2026-08-24-wave2-entry.md`.
+Written 2026-08-25 ~14:15 CDT. Protocol: `CLAUDE.md`.
+Previous handoff (the PIT universe build itself):
+`handoff-history/HANDOFF-2026-08-24-pit-universe-shipped.md`.
 
 ## The one-paragraph state
 
-**The PIT universe shipped end-to-end today — v5 is unblocked.** All four
-spec steps (`docs/specs/PIT_UNIVERSE_SPEC.md`, now stamped BUILT) landed:
-stage-B module + 17 tests, home-box day_aggs crawler, 496-day backfill,
-21 frozen monthlies (2024-11→2026-07, `v3/artifacts/universe_pit/`),
-and `--membership` wired into `build_meta_dataset` + `walkforward_meta`
-(default ON for v5, which now derives 453 UNDERLYINGS from the frozen
-artifacts). Everything committed and pushed; suite 508 green in ~13 s.
-Otherwise the world is as the previous handoff left it: [v4] V118 live
-with real alerts on Hetzner, spx0 parked pending the USER DECISION
-(lever-5 data vs park), vol track at stage 3's doorstep.
+**The v5 DATA LAYER is COMPLETE and validated** — one day after the PIT
+universe froze, everything the freeze/dataset/training campaign needs sits
+in `nn_meta/data_cache_v5/` (~10 GB): 500 option day-frames (456 roots),
+derived complete universe listing (5.21M contracts) + per-contract daily
+bars, underlying daily+15m for all 453 members, and surface features whose
+option-window NaN rates (5.0–7.1%, SPY 0%) match v31's benchmark exactly.
+Next: the Batch campaign (user decision 2026-08-25: freeze + dataset build
++ assemble + training ALL on GCP on-demand Batch, not the box). V118 was
+live-verified on the server today after the user questioned it (it IS
+running; see below). Cache backup to GCS is live; migration to the user's
+Google Drive (they have Google One) is DEFERRED until the Batch campaign.
 
-## What landed (commits `9b212df` → docs)
+## What landed today (all pushed)
 
-1. `nn_meta/universe_pit.py` — pure stage B: 63-day median option
-   $-volume, ≥50 active days, hysteresis 270/330, write-once monthly
-   freeze, fail-closed gates (delisting canary, loud parse), CLI driver
-   (`python -m nn_meta.universe_pit --through YYYY-MM --canary ... --freeze`).
-2. `scripts/build_universe_daily.py` — resumable per-day crawler.
-   **Probed: the rolling 2y entitlement starts 2024-08-26 exactly**;
-   ~4.6k roots/day; 42 MB of daily rows in `v3/data/universe_daily/`
-   (gitignored — the ONLY copy of days that have rolled off entitlement).
-3. Backfill + freeze: ~300 members/month, ~10/mo churn each way; spec
-   defaults held, no retune. Canaries X/SWTX/WBA pass (MRO/JNPR/HES etc.
-   died in-window but were never top-270 liquid). **Renames discovered:
-   FI→FISV (2025-11-11), BITF→DRAM (2026-04-07)** — added to
-   `TICKER_ALIASES`, stints stitch gap-free.
-4. Stage C: v5 `UNDERLYINGS` = union of frozen monthlies;
-   `membership_mask`/`members_asof` filter (symbol, month) rows.
-   Fixed: a freeze is usable during month M iff `available_at` falls
-   within M (first-calendar-day compare zeroed months starting on a
-   weekend — Dec 2024 had 0 members before the fix).
+1. **Backup**: `scripts/backup_caches.sh` + weekly systemd timer
+   (`healys-cache-backup.timer`, NOT yet sudo-installed — user has the
+   one-liner). Initial 10 GiB push verified in
+   `gs://healys-backtester/backup/homebox/`. data_cache_v5 added to the
+   set; a re-sync will pick it up.
+2. **v5 flat-files**: `scripts/run_flatfiles_v5.sh` (autosized workers) —
+   500 day-frames / 4.9 GB in ~3 h; coverage verified against the
+   universe_daily trading-day set (all 499 + 2026-08-24).
+3. **v5 cache split**: `DATA_CACHE=data_cache_v5` under `NN_META_POOL=v5`
+   (sharing data_cache_v3 would have overwritten v31's frozen inputs).
+4. **Symbology fixes** (`FETCH_ALIASES = {"BRKB": "BRK.B"}`, fetch-only,
+   never rekeys): applied to underlying daily, 15m, AND the contracts
+   reference crawl (underlying_ticker=BRKB returns 0; BRK.B returns the
+   O:BRKB… chain). BRKB now fully covered.
+5. **Universe/bars derivation**: `v3.derive_contracts --cache
+   nn_meta/data_cache_v5` (the v31 recipe) — the crawled, moneyness-
+   filtered universe.parquet was the WRONG semantics for chain selection
+   and was replaced by the derived complete listing. contracts.parquet
+   (REST crawl) remains as a validation artifact only.
+6. **Coverage audit CLEAN**: all 6,311 member-months have 15m bars; dead
+   members' bars end at their death dates (X 2025-06-17, WBA 2025-08-27…).
+7. **V118 verification** (user thought it wasn't deployed): server on
+   main+clean, bundle `model_final_v4/` = 40 gbt seeds + magnitude heads,
+   crontab correct. The 8:32 AM alerts on Monday-close bars are the RTH
+   gate working as built: the 19:45 UTC bar completes AT the close, the
+   20:00 pass exits at `is_rth`, so close-bar signals deliver at the next
+   open (precedent: the 2026-08-17 KO alert, same 13:33 UTC pattern).
+   P(win) 43% alerts with EV ≥ +5% are V118's signature — the old
+   filter/0.5 policy could not emit them. 5 alerts day one ≈ the looser
+   EV gate, watch the digest hit-rates from ~Wednesday.
 
-## Next moves (in priority order per TODO)
+## Next moves (the Batch campaign)
 
-- **v5 generation is runnable**: `NN_META_POOL=v5` end-to-end (download →
-  freeze → dataset → walk-forward with PBO + deflated Sharpe already
-  wired). It's a big Batch job — rebuild + pin `IMAGE_TAG` first; note
-  453 names ≈ 3.7× the v31 crawl/build cost.
-- **Monthly PIT upkeep**: crawl + freeze must run monthly on the HOME box
-  (entitlement rolls forward — crawl promptly). Fold into the same
-  systemd-timer automation as the FA monthly freeze (TODO block 3).
-- Vol track stage 3 (TODO block 4) and the spx0 USER DECISION are
-  unchanged from the previous handoff.
-- Monday watch still stands: first real [v4] alerts, first populated
-  watchlist digest 20:10 UTC.
+- Design the v5 run: freeze (10 families × 453 names) + dataset build +
+  assemble (`--membership` default ON) + training, all as Batch jobs —
+  rebuild image + pin `IMAGE_TAG` first; ship data_cache_v5 (~10 GB) to
+  the bucket as job input. Open design questions: extend WINDOW_END /
+  EXPIRY_MAX beyond the v31-era 2026-07-02/2026-08-15 constants (they're
+  static, decide + document); Batch shard shape for the freeze.
+- Drive backup migration (user has Google One): rclone OAuth (user step) →
+  re-point backup_caches.sh → verify full copy → THEN delete GCS
+  backup/homebox with explicit user go-ahead. See memory
+  `backup-drive-migration-plan`.
+- Monthly PIT upkeep (crawl+freeze on the box) still needs its timer.
 
-## Standing warnings (unchanged unless noted)
+## Standing warnings (delta from yesterday)
 
-- Docker image BAKES the repo → rebuild + pin `IMAGE_TAG` after every
-  code change; never report cloud state from memory.
-- `NN_META_POOL=v31` for v4/spx0 work; `v5` only for the new generation.
-- Deploy by `git pull`, never scp; server crontab edits staged to a file.
-- Do NOT delete `gs://healys-backtester/out/archive-2026-08-19-stale-cache/`.
-- NEW: treat `v3/data/universe_daily/` as precious (back it up with the
-  other caches) — pre-2024-08-26 daily rows can never be re-downloaded,
-  and each passing day rolls another day off the entitlement's front.
-- Live DD-brake enforcement still missing in v4_scan sizing (TODO block 5
-  remainder; moot for V118's `dd_brake=None`).
-- Ultrareview retry: 2 of 3 free remain; branch has only had local review.
+- Background harness tasks kept getting killed today (three times, no
+  OOM); long local jobs should run detached (`setsid nohup … &`) with a
+  log file, like `run_flatfiles_v5.sh` does.
+- Known v5 limitation (accepted, mirrors v31): renamed listings XYZ/FISV/
+  DRAM have no pre-rename-era CONTRACTS (old roots not crawled; strike-
+  basis risk if a rename had a conversion ratio). Underlying bars are
+  complete via aliased fetch.
+- The surface's headline NaN looks scary (~22%) but is the pre-entitlement
+  warmup (2024-04→08); in the option window it is 5.0–7.1% — do not "fix".
+- `v3/data/universe_daily/` + `data_cache_v5/` are irreplaceable once the
+  entitlement rolls; they're in the backup set.
+- Everything else: see the 2026-08-24 handoffs (Docker bakes repo; never
+  report cloud state from memory; deploy via git pull; don't delete the
+  gs:// archive; DD-brake gap in v4_scan sizing).
