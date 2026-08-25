@@ -45,7 +45,14 @@ RUNS_CSV = RUNS_DIR / "runs.csv"
 # because the boundary rolls forward while multi-day downloads run. Data
 # behind the boundary survives ONLY in our parquet caches — download early.
 HISTORY_START = "2024-04-01"               # underlying warmup (Alpaca, unbounded)
-if _BIG_RUN:
+if POOL == "v5":
+    # v5 window runs to the last completed trading day at build time (user
+    # decision 2026-08-25); its flat-file/PIT crawls start at the measured
+    # entitlement wall. Train/val boundaries stay on the family dates; only
+    # the test tail extends.
+    WINDOW_START, WINDOW_END = "2024-08-26", "2026-08-24"
+    TRAIN_START, TRAIN_END = "2024-08-26", "2025-12-19"
+elif _BIG_RUN:
     # option labels begin where the flat-file entitlement does (~2024-08);
     # same val/test boundaries as v2/v3 so cross-version reads stay clean.
     WINDOW_START, WINDOW_END = "2024-08-01", "2026-07-02"
@@ -55,7 +62,8 @@ else:
     TRAIN_START, TRAIN_END = "2024-07-14", "2025-12-19"
 # val/test identical to v1 so before/after comparisons stay clean:
 VAL_START, VAL_END = "2026-01-05", "2026-03-27"
-TEST_START, TEST_END = "2026-04-06", "2026-07-02"
+TEST_START, TEST_END = ("2026-04-06", "2026-08-24") if POOL == "v5" \
+    else ("2026-04-06", "2026-07-02")
 
 # v1's 17 names + 39 liquid adds (thin names auto-skip at freeze time).
 _UNDERLYINGS_V2 = [
@@ -109,7 +117,8 @@ else:
     UNDERLYINGS = _UNDERLYINGS_V2
 
 # Contract crawl / universe filter (same criteria as nn_options_signal)
-EXPIRY_MIN, EXPIRY_MAX = "2024-07-21", "2026-08-15"
+EXPIRY_MIN, EXPIRY_MAX = ("2024-08-26", "2026-10-09") if POOL == "v5" \
+    else ("2024-07-21", "2026-08-15")   # max = window end + max DTE + buffer
 DTE_MIN, DTE_MAX = _nos.DTE_MIN, _nos.DTE_MAX
 MONEYNESS_BAND = _nos.MONEYNESS_BAND
 MIN_VOLUME, MIN_PREMIUM = _nos.MIN_VOLUME, _nos.MIN_PREMIUM
