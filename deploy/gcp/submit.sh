@@ -77,16 +77,26 @@ case "$MODE" in
     ;;
   freeze)
     # Per-ticker tasks (user decision 2026-08-25): SHARDS = the universe size,
-    # one symbol per task. MEASURED on the box 2026-08-25 (DKNG, 10 families):
-    # 51 min, 6.4 GB peak RSS — so 12 GiB headroom per task, 3 h leash for
-    # slower cloud cores, highmem machines so RAM doesn't strand vCPUs.
+    # one symbol per task. RESIZED from the CLOUD pilot 2026-08-25/26: AAPL on
+    # one e2 vCPU ran ~4.3 h (ma 50 min, macd 80 min) — the box measurement
+    # (DKNG 51 min on a Zen5 core) under-predicted cloud time ~5x, and the
+    # 3 h leash kill-looped the first pilot with zero symbols published. The
+    # freeze is single-threaded (baseline.freeze_all is one process), so the
+    # fix is leash + WIDTH, not cores per task: 8 h bounds a hung task at
+    # pennies, and n2-highmem-8 packs five 12 GiB tasks per VM (user decision
+    # 2026-08-26: wide single-core fleet) — 24 instances x 5 = 120 concurrent
+    # under the live quotas (CPUS/N2 200, INSTANCES 24; E2 is capped at 24,
+    # which is why this is N2). BOOT_GB=100: five packed containers each
+    # rsync their own ~10 GB cache copy onto the shared boot disk, and the
+    # 30 GB default would ENOSPC the whole VM.
     # Spot is safe: per-symbol bucket checkpoints.
     CPU_MILLI=${CPU_MILLI:-1000}
     MEMORY_MIB=${MEMORY_MIB:-12288}
-    MAX_RUN=${MAX_RUN:-10800s}
+    MAX_RUN=${MAX_RUN:-28800s}
     PROVISIONING=${PROVISIONING:-SPOT}
     RETRIES=${RETRIES:-3}
-    MACHINE=${MACHINE:-e2-highmem-16}
+    MACHINE=${MACHINE:-n2-highmem-8}
+    BOOT_GB=${BOOT_GB:-100}
     ;;
   freeze-merge)
     TASKS=1
@@ -136,7 +146,8 @@ cat > /tmp/healys_batch_job.json <<JSON
   "allocationPolicy": {
     "instances": [{"policy": {
       "machineType": "${MACHINE:-e2-standard-4}",
-      "provisioningModel": "${PROVISIONING}"
+      "provisioningModel": "${PROVISIONING}",
+      "bootDisk": {"sizeGb": ${BOOT_GB:-30}}
     }}],
     "network": {"networkInterfaces": [{
       "network": "projects/${PROJECT}/global/networks/default",
