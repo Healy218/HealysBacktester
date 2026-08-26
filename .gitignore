@@ -75,3 +75,4 @@ nn_meta/live/.heartbeat_state.json
 .claude/settings.local.json
 /Dockerfile
 nn_meta/live/.*_watchlist.json
+deploy/gcp/.last_job

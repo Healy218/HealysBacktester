@@ -73,6 +73,17 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
 
 ## Traps — things that look wrong and are not
 
+- **Watchers bind to IDs captured at submit time — never list-and-pick.**
+  Two live incidents 2026-08-25: a job watcher re-derived "the newest job"
+  from `gcloud batch jobs list` and confidently reported a stale job's
+  SUCCEEDED; a `pgrep -f`-based watcher matched its own command line and
+  never fired. Rules: (1) `deploy/gcp/submit.sh` writes the submitted job
+  name to `deploy/gcp/.last_job` — watch with `deploy/gcp/watch_job.sh`,
+  which takes the explicit name; (2) any pgrep-in-a-watcher needs the
+  bracket trick (`pgrep -f 'v3\.[f]latfiles'`) so it can't match itself;
+  (3) a watcher's terminal print must include EVIDENCE (task events,
+  artifact listing), not just the state word.
+
 - **The agent Bash tool's shell is `zsh`, not bash — unquoted `$VAR` does NOT
   word-split.** Building a flag string and expanding it unquoted silently
   passes the whole string as ONE argument. This produced two false

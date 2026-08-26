@@ -150,7 +150,11 @@ JSON
 
 gcloud batch jobs submit "$JOB" --project "$PROJECT" --location "$REGION" \
   --config /tmp/healys_batch_job.json
+# Machine-readable handle for watchers: bind to THIS, never re-derive the
+# job by listing (a stale list entry watched the wrong job on 2026-08-25).
+echo "$JOB" > "$(dirname "$(readlink -f "$0")")/.last_job"
 echo "submitted: $JOB  (mode=$MODE machine=${MACHINE:-e2-standard-4} $PROVISIONING)"
+echo "watch:     bash deploy/gcp/watch_job.sh   # follows .last_job"
 echo "watch:     gcloud batch jobs describe $JOB --project $PROJECT --location $REGION"
 case "$MODE" in
   freeze)
