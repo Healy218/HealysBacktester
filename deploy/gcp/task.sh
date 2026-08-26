@@ -33,6 +33,11 @@ POOL="${NN_META_POOL:-v31}"
 export NN_META_POOL="$POOL"
 ART="nn_meta/artifacts_${POOL}"
 CACHE="data_cache_v3"; [ "$POOL" != "v31" ] && CACHE="data_cache_${POOL}"
+# Non-v31 pools publish under out/<pool>/. The unsuffixed out/ names ARE
+# v31's live artifacts (118 meta_rows files + the assembled dataset): a later
+# pool skip-checking or publishing there would silently mix generations —
+# the same wrong-directory failure NN_META_POOL exists to prevent.
+OUTB="${BUCKET}/out"; [ "$POOL" != "v31" ] && OUTB="${BUCKET}/out/${POOL}"
 
 # The frozen spec is an input to every mode EXCEPT freeze, which creates it.
 if [ "$MODE" != "freeze" ] && [ "$MODE" != "freeze-merge" ]; then
@@ -46,8 +51,8 @@ case "$MODE" in
     # the multi-GB data_cache_v3 rsync is skipped — it is the bulk of task
     # startup and egress and nothing here reads it.
     for f in meta_dataset.parquet meta_dataset.marks.parquet; do
-      gsutil -q cp "${BUCKET}/out/${f}" "nn_meta/artifacts_v31/${f}" || {
-        echo "FATAL: ${BUCKET}/out/${f} missing — run TASK_MODE=assemble first" >&2
+      gsutil -q cp "${OUTB}/${f}" "${ART}/${f}" || {
+        echo "FATAL: ${OUTB}/${f} missing — run TASK_MODE=assemble first" >&2
         exit 1; }
     done
     ;;
@@ -78,10 +83,10 @@ case "$MODE" in
     # The verification gate reads two ASSEMBLED datasets and nothing else — no
     # option-bar cache, no marks — so the multi-GB rsync is skipped entirely.
     BASELINE_URI="${BASELINE_URI:-${BUCKET}/out/stage0-baseline-2026-07-21/meta_dataset.parquet}"
-    CANDIDATE_URI="${CANDIDATE_URI:-${BUCKET}/out/meta_dataset.parquet}"
-    gsutil -q cp "$BASELINE_URI" nn_meta/artifacts_v31/baseline.parquet || {
+    CANDIDATE_URI="${CANDIDATE_URI:-${OUTB}/meta_dataset.parquet}"
+    gsutil -q cp "$BASELINE_URI" "$ART/baseline.parquet" || {
       echo "FATAL: baseline $BASELINE_URI missing" >&2; exit 1; }
-    gsutil -q cp "$CANDIDATE_URI" nn_meta/artifacts_v31/candidate.parquet || {
+    gsutil -q cp "$CANDIDATE_URI" "$ART/candidate.parquet" || {
       echo "FATAL: candidate $CANDIDATE_URI missing — run TASK_MODE=assemble first" >&2
       exit 1; }
     ;;
@@ -107,8 +112,8 @@ case "$MODE" in
       # pull silently no-ops (seen live 2026-08-18: CommandException swallowed by
       # `|| true`), which would make an assemble task fold up EMPTY local dirs.
       mkdir -p "$ART/meta_rows" "$ART/meta_marks"
-      gsutil -m -q rsync -r "${BUCKET}/out/meta_rows"  "$ART/meta_rows"  || true
-      gsutil -m -q rsync -r "${BUCKET}/out/meta_marks" "$ART/meta_marks" || true
+      gsutil -m -q rsync -r "${OUTB}/meta_rows"  "$ART/meta_rows"  || true
+      gsutil -m -q rsync -r "${OUTB}/meta_marks" "$ART/meta_marks" || true
     fi
     ;;
 esac
@@ -217,7 +222,7 @@ fi
 # in a training array or a model weight would ship a wrong model with no error.
 # Full reasoning: HANDOFF.md.
 if [ "$MODE" = "evaluate" ] || [ "$MODE" = "finalize" ]; then
-  MARKS=nn_meta/artifacts_v31/meta_dataset.marks.parquet
+  MARKS="$ART/meta_dataset.marks.parquet"
   [ -f "$MARKS" ] || { echo "FATAL: $MARKS not staged" >&2; exit 1; }
   # Seconds alone are NOT unique enough. Two evaluate jobs submitted together on
   # 2026-08-19 stamped 044509Z and 044510Z — one second apart. Had their VMs come
@@ -245,8 +250,10 @@ if [ "$MODE" = "evaluate" ] || [ "$MODE" = "finalize" ]; then
   # eligibility gate — that is a real RESULT, not a crash, and the reports that
   # explain WHY must survive it. Losing them to a non-zero exit would waste the
   # whole run.
-  for pair in "nn_meta/reports_v31:reports" "nn_meta/model_final_v4:model_final_v4" \
-              "nn_meta/runs_v31:runs"; do
+  # reports/runs are pool-suffixed (config._SUF); model_final_v4 is the fixed
+  # v4_finalize bundle dir regardless of pool (v4_finalize.py FINAL_DIR).
+  for pair in "nn_meta/reports_${POOL}:reports" "nn_meta/model_final_v4:model_final_v4" \
+              "nn_meta/runs_${POOL}:runs"; do
     src=${pair%%:*}; dst=${pair##*:}
     [ -d "$src" ] || continue
     echo "publishing $src -> ${OUT}/${dst}"
@@ -256,7 +263,7 @@ if [ "$MODE" = "evaluate" ] || [ "$MODE" = "finalize" ]; then
   # Checksums: the entire point of running here is an artifact you can TRUST.
   # Hashing every output makes that checkable — a second run, on this or other
   # hardware, can be compared file for file instead of assumed identical.
-  find nn_meta/reports_v31 nn_meta/model_final_v4 nn_meta/runs_v31 -type f 2>/dev/null \
+  find "nn_meta/reports_${POOL}" nn_meta/model_final_v4 "nn_meta/runs_${POOL}" -type f 2>/dev/null \
     | sort | xargs -r sha256sum > /tmp/SHA256SUMS.txt || true
   gsutil -q cp /tmp/SHA256SUMS.txt "${OUT}/SHA256SUMS.txt" || true
   echo "== $MODE published; $(wc -l < /tmp/SHA256SUMS.txt 2>/dev/null || echo 0) files hashed =="
@@ -280,8 +287,8 @@ if [ "$MODE" = "diff" ]; then
   # collapse to zero. EXTRA_ARGS is unquoted so a flag list word-splits.
   set +e
   python -m nn_meta.dataset_diff \
-    --baseline  nn_meta/artifacts_v31/baseline.parquet \
-    --candidate nn_meta/artifacts_v31/candidate.parquet \
+    --baseline  "$ART/baseline.parquet" \
+    --candidate "$ART/candidate.parquet" \
     --expect-identical ${EXTRA_ARGS:-} 2>&1 | tee /tmp/diff/dataset_diff.txt
   rc=${PIPESTATUS[0]}
   set -e
@@ -294,8 +301,8 @@ if [ "$MODE" = "diff" ]; then
     echo "# inputs"
     echo "# baseline : $BASELINE_URI"
     echo "# candidate: $CANDIDATE_URI"
-    sha256sum nn_meta/artifacts_v31/baseline.parquet \
-              nn_meta/artifacts_v31/candidate.parquet
+    sha256sum "$ART/baseline.parquet" \
+              "$ART/candidate.parquet"
   } >> /tmp/diff/dataset_diff.txt || true
   find /tmp/diff -type f | sort | xargs -r sha256sum > /tmp/SHA256SUMS.txt || true
   gsutil -m -q rsync -r /tmp/diff "${OUT}" || true
@@ -316,8 +323,8 @@ if [ "$MODE" = "assemble" ]; then
     || python -m nn_meta.build_meta_dataset --assemble
   # publish MUST fail the task on error — Batch reporting SUCCEEDED while the
   # VM holding the only copy self-deletes is the P1-6 failure mode
-  gsutil -m -q cp "$ART/meta_dataset.parquet" "${BUCKET}/out/"
-  gsutil -m -q cp "$ART"/*.marks.parquet "${BUCKET}/out/"
+  gsutil -m -q cp "$ART/meta_dataset.parquet" "${OUTB}/"
+  gsutil -m -q cp "$ART"/*.marks.parquet "${OUTB}/"
   exit 0
 fi
 
@@ -343,12 +350,12 @@ echo "symbols: $MY_SYMS"
 # only at task end, every retry restarted from zero).
 IFS=',' read -ra SYMS <<< "$MY_SYMS"
 for sym in "${SYMS[@]}"; do
-  if gsutil -q stat "${BUCKET}/out/meta_rows/${sym}.parquet" 2>/dev/null; then
+  if gsutil -q stat "${OUTB}/meta_rows/${sym}.parquet" 2>/dev/null; then
     echo "== $sym already in bucket — skip =="
     continue
   fi
   python -m nn_meta.build_meta_dataset --symbols "$sym" --marks
-  gsutil -m -q rsync -r "$ART/meta_rows"  "${BUCKET}/out/meta_rows"
-  gsutil -m -q rsync -r "$ART/meta_marks" "${BUCKET}/out/meta_marks"
+  gsutil -m -q rsync -r "$ART/meta_rows"  "${OUTB}/meta_rows"
+  gsutil -m -q rsync -r "$ART/meta_marks" "${OUTB}/meta_marks"
 done
 echo "== task done =="
