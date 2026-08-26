@@ -89,3 +89,9 @@ the quota mid-run, Batch widens automatically. Memory
 Dataset build fleet (needs image rebuild for the pool-path fix) →
 assemble (`--membership` ON) → evaluate/finalize on Batch. Then: Drive
 backup migration (user OAuth step first), monthly PIT/FA timer on the box.
+
+**When the campaign is DONE (user request 2026-08-26): delete the stale
+image tags in Artifact Registry** (`us-central1-docker.pkg.dev/
+healys-batch/healys/backtester` — ~12 TF-fat tags ≈ $5–10/mo of dead
+storage). Keep only the tag(s) a deployed/running job still references;
+`gcloud artifacts docker images delete <repo>:<tag>` per stale tag.
