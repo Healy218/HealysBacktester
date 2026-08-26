@@ -1,83 +1,86 @@
 # HANDOFF — state for the next session
 
-Written 2026-08-25 ~14:15 CDT. Protocol: `CLAUDE.md`.
-Previous handoff (the PIT universe build itself):
-`handoff-history/HANDOFF-2026-08-24-pit-universe-shipped.md`.
+Written 2026-08-26 ~00:15 CDT (overnight session). Protocol: `CLAUDE.md`.
+Previous handoff (v5 data layer complete):
+`handoff-history/HANDOFF-2026-08-25-v5-data-layer-complete.md`.
 
 ## The one-paragraph state
 
-**The v5 DATA LAYER is COMPLETE and validated** — one day after the PIT
-universe froze, everything the freeze/dataset/training campaign needs sits
-in `nn_meta/data_cache_v5/` (~10 GB): 500 option day-frames (456 roots),
-derived complete universe listing (5.21M contracts) + per-contract daily
-bars, underlying daily+15m for all 453 members, and surface features whose
-option-window NaN rates (5.0–7.1%, SPY 0%) match v31's benchmark exactly.
-Next: the Batch campaign (user decision 2026-08-25: freeze + dataset build
-+ assemble + training ALL on GCP on-demand Batch, not the box). V118 was
-live-verified on the server today after the user questioned it (it IS
-running; see below). Cache backup to GCS is live; migration to the user's
-Google Drive (they have Google One) is DEFERRED until the Batch campaign.
+**The v5 freeze campaign is IN FLIGHT on Batch.** Three single-symbol
+pilot jobs (AAPL / X / BYND, jobs `v5-freeze-0f132b6-2257{07,10,12}`) are
+running on the final fleet shape — n2-highmem-8 SPOT, 1-core/12GiB tasks,
+8h leash, image `0f132b6` — after the first pilot was kill-looped by the
+old 3–4h leash (AAPL alone is ~4.3h on one e2 vCPU; box measurements
+under-predict cloud ~5x). User decisions 2026-08-26: go WIDE not deep
+(freeze is single-threaded; 8-cores-per-symbol rejected), and AUTO-LAUNCH
+the 453-task fleet as soon as the pilots validate. Checkpoints land in
+`gs://healys-backtester/out/freeze_specs_v5/` (one json per symbol; dead
+members like X publish a spec with the symbol under "skipped" — that is a
+result, not a failure).
 
-## What landed today (all pushed)
+## The fleet launch (do this when all 3 pilots SUCCEED)
 
-1. **Backup**: `scripts/backup_caches.sh` + weekly systemd timer
-   (`healys-cache-backup.timer`, NOT yet sudo-installed — user has the
-   one-liner). Initial 10 GiB push verified in
-   `gs://healys-backtester/backup/homebox/`. data_cache_v5 added to the
-   set; a re-sync will pick it up.
-2. **v5 flat-files**: `scripts/run_flatfiles_v5.sh` (autosized workers) —
-   500 day-frames / 4.9 GB in ~3 h; coverage verified against the
-   universe_daily trading-day set (all 499 + 2026-08-24).
-3. **v5 cache split**: `DATA_CACHE=data_cache_v5` under `NN_META_POOL=v5`
-   (sharing data_cache_v3 would have overwritten v31's frozen inputs).
-4. **Symbology fixes** (`FETCH_ALIASES = {"BRKB": "BRK.B"}`, fetch-only,
-   never rekeys): applied to underlying daily, 15m, AND the contracts
-   reference crawl (underlying_ticker=BRKB returns 0; BRK.B returns the
-   O:BRKB… chain). BRKB now fully covered.
-5. **Universe/bars derivation**: `v3.derive_contracts --cache
-   nn_meta/data_cache_v5` (the v31 recipe) — the crawled, moneyness-
-   filtered universe.parquet was the WRONG semantics for chain selection
-   and was replaced by the derived complete listing. contracts.parquet
-   (REST crawl) remains as a validation artifact only.
-6. **Coverage audit CLEAN**: all 6,311 member-months have 15m bars; dead
-   members' bars end at their death dates (X 2025-06-17, WBA 2025-08-27…).
-7. **V118 verification** (user thought it wasn't deployed): server on
-   main+clean, bundle `model_final_v4/` = 40 gbt seeds + magnitude heads,
-   crontab correct. The 8:32 AM alerts on Monday-close bars are the RTH
-   gate working as built: the 19:45 UTC bar completes AT the close, the
-   20:00 pass exits at `is_rth`, so close-bar signals deliver at the next
-   open (precedent: the 2026-08-17 KO alert, same 13:33 UTC pattern).
-   P(win) 43% alerts with EV ≥ +5% are V118's signature — the old
-   filter/0.5 policy could not emit them. 5 alerts day one ≈ the looser
-   EV gate, watch the digest hit-rates from ~Wednesday.
+1. Verify: 3 jsons in `gs://healys-backtester/out/freeze_specs_v5/`, and
+   AAPL.json has real strategy entries (spot-check against
+   `nn_meta/artifacts_v5/freeze_smoke_DKNG.json` for shape).
+2. Submit (SHARDS must be exactly 453 = len(config.UNDERLYINGS) for
+   one-symbol-per-task; already-frozen symbols skip instantly):
+   ```
+   TASK_MODE=freeze NN_META_POOL=v5 IMAGE_TAG=0f132b6 PARALLEL=60 \
+     PROJECT=healys-batch BUCKET=gs://healys-backtester \
+     bash deploy/gcp/submit.sh 453
+   ```
+3. Watch via `bash deploy/gcp/watch_job.sh` (binds to `.last_job`).
+4. When all tasks end: `TASK_MODE=freeze-merge NN_META_POOL=v5
+   IMAGE_TAG=0f132b6 PROJECT=... BUCKET=... bash deploy/gcp/submit.sh 1`
+   publishes the merged spec to `artifacts_v5_in/baseline_spec.json`.
 
-## Next moves (the Batch campaign)
+Expected: ~20 concurrent symbols (global quota, see below), ~2 days wall,
+~$40–60 credits total. A few late tasks may need a resubmit if spot
+preempts near the 8h leash — checkpoints make that free.
 
-- Design the v5 run: freeze (10 families × 453 names) + dataset build +
-  assemble (`--membership` default ON) + training, all as Batch jobs —
-  rebuild image + pin `IMAGE_TAG` first; ship data_cache_v5 (~10 GB) to
-  the bucket as job input. Open design questions: extend WINDOW_END /
-  EXPIRY_MAX beyond the v31-era 2026-07-02/2026-08-15 constants (they're
-  static, decide + document); Batch shard shape for the freeze.
-- Drive backup migration (user has Google One): rclone OAuth (user step) →
-  re-point backup_caches.sh → verify full copy → THEN delete GCS
-  backup/homebox with explicit user go-ahead. See memory
-  `backup-drive-migration-plan`.
-- Monthly PIT upkeep (crawl+freeze on the box) still needs its timer.
+## Quota reality (verified live 2026-08-26)
 
-## Standing warnings (delta from yesterday)
+`CPUS_ALL_REGIONS = 32` (project-global, free trial, unbumpable) is the
+BINDING cap — regional reads (N2 200, CPUS 200) are a mirage. 4×
+n2-highmem-8 = 32 CPUs = 20 packed tasks max. The fleet is submitted with
+PARALLEL=60 so if the user upgrades billing (credits carry over) and bumps
+the quota mid-run, Batch widens automatically. Memory
+`gcp-free-trial-budget` updated.
 
-- Background harness tasks kept getting killed today (three times, no
-  OOM); long local jobs should run detached (`setsid nohup … &`) with a
-  log file, like `run_flatfiles_v5.sh` does.
-- Known v5 limitation (accepted, mirrors v31): renamed listings XYZ/FISV/
-  DRAM have no pre-rename-era CONTRACTS (old roots not crawled; strike-
-  basis risk if a rename had a conversion ratio). Underlying bars are
-  complete via aliased fetch.
-- The surface's headline NaN looks scary (~22%) but is the pre-entitlement
-  warmup (2024-04→08); in the option window it is 5.0–7.1% — do not "fix".
-- `v3/data/universe_daily/` + `data_cache_v5/` are irreplaceable once the
-  entitlement rolls; they're in the backup set.
-- Everything else: see the 2026-08-24 handoffs (Docker bakes repo; never
-  report cloud state from memory; deploy via git pull; don't delete the
-  gs:// archive; DD-brake gap in v4_scan sizing).
+## What landed tonight (all pushed)
+
+1. **task.sh pool paths** (`f4e787a`): non-v31 pools publish under
+   `out/<pool>/`. Before this, a v5 build would have skip-checked against
+   v31's 118 `out/meta_rows` files (franken-dataset), a v5 assemble would
+   have overwritten v31's live `out/meta_dataset.parquet`, and v5
+   evaluate/finalize would have staged from/published to hardcoded v31
+   dirs (outputs dying with the VM). Freeze paths untouched → the freeze
+   fleet still runs on image `0f132b6`; REBUILD + pin IMAGE_TAG before the
+   BUILD stage (`scratch_build_image.sh` is the runbook step).
+2. **submit.sh freeze sizing v2** (`7673b59`): 8h leash, n2-highmem-8,
+   BOOT_GB=100 (five packed containers each rsync their own ~10GB cache
+   copy; the 30GB default would ENOSPC the VM). New `BOOT_GB` knob wired
+   into the job JSON for all modes (default 30).
+3. **DECISIONS.md**: the wide-vs-deep decision + quota reality, dated
+   2026-08-26.
+4. First pilot job `v5-freeze-0f132b6-184938` was CANCELLED (kill-looped,
+   nothing published) — ignore it in job listings.
+
+## Standing warnings (delta)
+
+- The freeze is SINGLE-THREADED — do not "speed it up" by giving tasks
+  more cores; width is the only lever (and it's quota-capped).
+- X/SWTX/WBA-class dead members freeze as "skipped" — a spec json with
+  the symbol in `skipped` is CORRECT output, not a failure to fix.
+- The surface NaN / renamed-listings caveats from the previous handoff
+  still stand; see `handoff-history/HANDOFF-2026-08-25-*`.
+- Local monitors for the pilots live in this session only; if the session
+  is gone, re-derive from `gcloud batch jobs list` + the checkpoint dir
+  (never from memory — job names above are the binding IDs).
+
+## Next after the freeze (unchanged plan)
+
+Dataset build fleet (needs image rebuild for the pool-path fix) →
+assemble (`--membership` ON) → evaluate/finalize on Batch. Then: Drive
+backup migration (user OAuth step first), monthly PIT/FA timer on the box.
