@@ -327,3 +327,35 @@ CALENDAR day wrongly zeroed out any month starting on a weekend (Dec 2024).
 **Rejected:** freezing without named canaries (the driver refuses ≥12
 months without them); seeding from the universe-filtered flatfiles_15m
 cache (stage A re-pulled raw day aggregates per the spec).
+
+## 2026-08-26 (overnight) — v5 freeze fleet: wide single-core on N2, resized from the cloud pilot
+
+**Context:** the first cloud freeze pilot (AAPL,X,BYND on one e2 vCPU,
+4h leash) was kill-looped: AAPL alone ran ~4.3h (ma 50min, macd 80min) —
+the box measurement (DKNG 51min on a Zen5 core) under-predicted cloud
+time ~5x, and the attempt died with zero symbols published.
+
+**Decision (user, 2026-08-26):** go WIDE, not deep. The freeze is
+single-threaded (`baseline.freeze_all` is one process, one family at a
+time), so per-symbol tasks stay 1-core/12GiB and the fleet packs five of
+them per n2-highmem-8 spot VM, 8h leash, 100GB boot disk (five containers
+each stage their own ~10GB cache copy; the 30GB default would ENOSPC).
+
+**Rejected:** the 8-cores-per-symbol shape (would need family-parallel
+freeze + merge code written overnight, and caps at ~3x/symbol because
+macd is an 80min critical path); e2 machines (regional E2 quota is only
+24 CPUs; N2 has 200); e2/n2-highmem-16 packing without a bigger boot disk.
+
+**Quota reality check:** the project-global `CPUS_ALL_REGIONS=32` (free
+trial, unbumpable) is the BINDING cap despite regional reads of 200 —
+max width is 4 VMs = 20 concurrent symbols, ~2 days for 453 names. Wider
+needs the billing upgrade (credits carry over) + a quota request — the
+fleet is submitted with parallelism 60 so a mid-run bump widens it
+automatically.
+
+**Also landed:** task.sh non-v31 pools now publish under `out/<pool>/` —
+the unsuffixed out/ names are v31's live artifacts (118 meta_rows + the
+assembled dataset); a v5 build would have skip-checked against v31 rows
+and a v5 assemble would have overwritten v31's dataset in place. Training
+modes publish pool-suffixed reports/runs dirs (v5 outputs would otherwise
+have died with the VM — the P1-6 mode).
