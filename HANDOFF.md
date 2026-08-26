@@ -6,19 +6,24 @@ Previous handoff (v5 data layer complete):
 
 ## The one-paragraph state
 
-**The v5 freeze campaign is IN FLIGHT on Batch.** Three single-symbol
-pilot jobs (AAPL / X / BYND, jobs `v5-freeze-0f132b6-2257{07,10,12}`) are
-running on the final fleet shape — n2-highmem-8 SPOT, 1-core/12GiB tasks,
-8h leash, image `0f132b6` — after the first pilot was kill-looped by the
-old 3–4h leash (AAPL alone is ~4.3h on one e2 vCPU; box measurements
-under-predict cloud ~5x). User decisions 2026-08-26: go WIDE not deep
-(freeze is single-threaded; 8-cores-per-symbol rejected), and AUTO-LAUNCH
-the 453-task fleet as soon as the pilots validate. Checkpoints land in
-`gs://healys-backtester/out/freeze_specs_v5/` (one json per symbol; dead
-members like X publish a spec with the symbol under "skipped" — that is a
-result, not a failure).
+**The 453-task v5 freeze FLEET IS RUNNING: job
+`v5-freeze-0f132b6-013536`, submitted 2026-08-26 06:35Z** after all three
+pilots (AAPL/X/BYND) SUCCEEDED with verified 10-family specs (identical
+config_hash `4a1897559fe2`). Pilot timings on n2 single-core: X 1h41m,
+BYND 1h57m, AAPL ≤2h33m → fleet ETA ~2 days at ~20 concurrent
+(quota-capped), ~$40–60 credits. Checkpoints land one json per symbol in
+`gs://healys-backtester/out/freeze_specs_v5/` (3/453 at launch); watch
+with `bash deploy/gcp/watch_job.sh` (`.last_job` is bound to the fleet).
+When the fleet ends: verify count ≈453, then freeze-merge (step 4 below).
+Shape: n2-highmem-8 SPOT, 1-core/12GiB tasks, 8h leash, image `0f132b6`,
+PARALLEL=60 (widens automatically if the user upgrades billing and bumps
+`CPUS_ALL_REGIONS`). History: the first pilot was kill-looped by the old
+3–4h leash (AAPL ~4.3h on one e2 vCPU; box measurements under-predict
+cloud ~5x); user decisions 2026-08-26: go WIDE not deep (freeze is
+single-threaded), auto-launch on pilot pass. Note X froze REAL strategies
+(not skipped — dead members can still have full train windows).
 
-## The fleet launch (do this when all 3 pilots SUCCEED)
+## The fleet runbook (launch DONE 06:35Z; steps 1–2 kept for re-runs)
 
 1. Verify: 3 jsons in `gs://healys-backtester/out/freeze_specs_v5/`, and
    AAPL.json has real strategy entries (spot-check against
