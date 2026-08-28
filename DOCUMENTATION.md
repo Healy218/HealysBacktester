@@ -253,7 +253,10 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   - `*/5` dead-man check (`~/bin/deadman_check.sh`, outside the repo on
     purpose) watching home-box job heartbeats.
 - **Reverse dead-man (HOME box → server, added 2026-08-28)**:
-  `healys-server-deadman.timer` (hourly, deploy/systemd/) runs
+  `healys-server-deadman.timer` — installed as a **user timer**
+  (`~/.config/systemd/user/`, linger enabled for healy, so it survives
+  logout/reboot; no sudo was available remotely — deploy/systemd/ keeps
+  the system-unit copies if anyone prefers that install). Hourly, runs
   `scripts/server_deadman.sh` — SSH probe; pages Telegram after 2
   consecutive misses, re-pages every 12h, announces recovery. Built after
   the 2026-08-27/28 outage: a **billing lapse null-routed the server's IP
