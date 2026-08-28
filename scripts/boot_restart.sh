@@ -13,11 +13,12 @@
 # arming unit is safe to add, because a job nobody has launched here stays
 # SKIPped rather than being started by the dispatcher.
 #
-# OBSERVABILITY (2026-07-22): every run appends to logs/boot_restart.log and,
-# unless BOOT_RESTART_HEARTBEAT=0, sends ONE Telegram summary per boot. So a
-# silent boot is no longer ambiguous: no heartbeat == the scheduled task did
-# not fire (a registration/trigger problem), NOT "the dispatcher ran and had
-# nothing to do". That ambiguity is what made the 2026-07-22 reboot test
+# OBSERVABILITY (2026-07-22, revised 2026-08-28): every run appends to
+# logs/boot_restart.d.log; the per-boot Telegram summary now defaults OFF
+# (BOOT_RESTART_HEARTBEAT=1 re-enables) — it earned its keep on the crashy
+# i5 build, but on the stable Ryzen box a ping every routine boot is noise
+# (user decision 2026-08-28). Relaunch notices still send. The 2026-07-22
+# ambiguity note below predates that revision: back then a reboot test
 # inconclusive.
 #
 # DONE SEMANTICS (2026-07-22): a job is "done" only when its per-run exit
@@ -48,7 +49,10 @@ cd "$(dirname "$(readlink -f "$0")")/.." || exit 1
 export NN_META_POOL=v31
 
 STATE_DIR="scripts/.jobstate"
-RUN_LOG="logs/boot_restart.log"
+# NOT boot_restart.log: systemd's StandardOutput=append: creates that file
+# as root, so this script (User=healy) can never append to it — every _log
+# was silently failing with Permission denied until 2026-08-28.
+RUN_LOG="logs/boot_restart.d.log"
 mkdir -p "$STATE_DIR" logs
 STAMP="$(date '+%Y-%m-%d %H:%M:%S')"
 
@@ -120,5 +124,9 @@ done
 
 summary="boot_restart @ ${STAMP}: ${relaunched} relaunched, ${running} running, ${done_clean} done, ${skipped} skipped"
 _log "dispatcher END — $summary"
-[ "${BOOT_RESTART_HEARTBEAT:-1}" = "1" ] && _notify "🔄 $summary"
+# Heartbeat default OFF since 2026-08-28 (user decision): the Ryzen box is
+# stable and a ping on every routine boot is noise. Relaunch notices above
+# still fire when something was actually restarted. Re-enable per-boot
+# pings with BOOT_RESTART_HEARTBEAT=1 in the unit's Environment=.
+[ "${BOOT_RESTART_HEARTBEAT:-0}" = "1" ] && _notify "🔄 $summary"
 exit 0
