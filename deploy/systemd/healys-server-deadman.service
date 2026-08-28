@@ -1,0 +1,10 @@
+[Unit]
+Description=Dead-man probe of the Hetzner server (pages Telegram when dark)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+User=healy
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/scripts/server_deadman.sh

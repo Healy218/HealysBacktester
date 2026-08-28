@@ -252,6 +252,17 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
     place; first heartbeat per log prints "baseline set").
   - `*/5` dead-man check (`~/bin/deadman_check.sh`, outside the repo on
     purpose) watching home-box job heartbeats.
+- **Reverse dead-man (HOME box → server, added 2026-08-28)**:
+  `healys-server-deadman.timer` (hourly, deploy/systemd/) runs
+  `scripts/server_deadman.sh` — SSH probe; pages Telegram after 2
+  consecutive misses, re-pages every 12h, announces recovery. Built after
+  the 2026-08-27/28 outage: a **billing lapse null-routed the server's IP
+  at 13:32Z Thu while the box kept running** — cron fired all along,
+  Alpaca/Telegram just failed, so "no heartbeat" looked like a quiet
+  market for ~31h. Zero alerts fired on stale data (scanners fail closed).
+  Fix path that time: pay invoice → Hetzner unblock request → power-cycle.
+  Keep the payment method current; Hetzner blocks the IP without powering
+  the box off.
 - Server `.env` = home `.env` + `FA_SKIP_COLLECTORS=stocktwits` (StockTwits
   Cloudflare-blocks datacenter IPs — the home box collects it hourly via
   `healys-stocktwits.timer` and rsync-pushes the archive).
