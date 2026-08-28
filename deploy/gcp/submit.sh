@@ -97,6 +97,12 @@ case "$MODE" in
     RETRIES=${RETRIES:-3}
     MACHINE=${MACHINE:-n2-highmem-8}
     BOOT_GB=${BOOT_GB:-100}
+    # pd-standard, not pd-balanced: 100GB boot disks per VM eat the regional
+    # SSD quota (500GB — pd-balanced counts as SSD; the 2026-08-28 freeze
+    # fleet's 4x100GB sat at 400/500, capping any CPU-quota widening at 5
+    # VMs). pd-standard draws from DISKS_TOTAL_GB (4TB, ~empty). Slower VM
+    # startup only; the workload is CPU-bound after staging.
+    BOOT_TYPE=${BOOT_TYPE:-pd-standard}
     ;;
   freeze-merge)
     TASKS=1
@@ -147,7 +153,7 @@ cat > /tmp/healys_batch_job.json <<JSON
     "instances": [{"policy": {
       "machineType": "${MACHINE:-e2-standard-4}",
       "provisioningModel": "${PROVISIONING}",
-      "bootDisk": {"sizeGb": ${BOOT_GB:-30}}
+      "bootDisk": {"sizeGb": ${BOOT_GB:-30}, "type": "${BOOT_TYPE:-pd-balanced}"}
     }}],
     "network": {"networkInterfaces": [{
       "network": "projects/${PROJECT}/global/networks/default",
