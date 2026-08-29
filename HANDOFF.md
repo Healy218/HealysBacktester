@@ -20,18 +20,19 @@ CDT) — that tag carries the task.sh pool-path fix the build stage
 REQUIRES (`f4e787a`); the freeze image `0f132b6` must NOT be used for
 build/assemble/evaluate (it would read/write v31's `out/` paths).
 
-## Next: the build fleet (pilot first, same discipline as the freeze)
+## Build stage: FLEET IN FLIGHT (launched 2026-08-29 17:45Z)
 
-1. Confirm image `7833952` exists in Artifact Registry (Cloud Build was
-   in flight when this was written; `scratch_build_image.sh` rebuilds).
-2. Pilot: 1–2 symbols, `TASK_MODE=build NN_META_POOL=v5
-   IMAGE_TAG=7833952 … bash deploy/gcp/submit.sh 1 AAPL` — verify rows
-   land in `out/v5/meta_rows/` (NOT `out/meta_rows/` — that's v31's).
-3. Fleet: shard over the spec's 441 symbols (build mode round-robins
-   `spec["symbols"]`; SHARDS=441 for one-per-task or fewer for batches;
-   measure pilot timing first — v31's per-symbol build was much faster
-   than a freeze).
-4. Then: assemble (`--membership` ON), and the evaluate/finalize ladder.
+**Job `marks-build-7833952-124534`**: 441 tasks (one per spec symbol),
+image `7833952`, n2-highmem-8 SPOT / 1-core 12GiB tasks / 8h leash /
+pd-standard 100GB boot / PARALLEL=60. Rows land in `out/v5/meta_rows/`,
+marks in `out/v5/meta_marks/`; ETA ~2 days at 32 CPUs.
+History: pilot 1 on the old default e2-standard-4 spot was PREEMPTED 3x
+in 5h and died (exit 50001, nothing published — a ~3h AAPL build can't
+survive churny spot with only end-of-symbol checkpoints); pilot 2 on the
+freeze shape SUCCEEDED (AAPL 3.6h, v5 paths verified live, v31's 118 row
+files untouched). submit.sh now hard-codes this shape for non-v31 builds.
+When the fleet ends: assemble (`--membership` ON), then the
+evaluate/finalize ladder.
 
 ## Quotas / budget (verified live through 2026-08-29)
 
