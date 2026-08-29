@@ -113,11 +113,30 @@ case "$MODE" in
     RETRIES=${RETRIES:-1}
     ;;
   *)
-    CPU_MILLI=${CPU_MILLI:-4000}
-    MEMORY_MIB=${MEMORY_MIB:-12288}
-    MAX_RUN=${MAX_RUN:-14400s}
-    PROVISIONING=${PROVISIONING:-SPOT}
-    RETRIES=${RETRIES:-3}
+    if [ "$MODE" = "build" ] && [ "$POOL" != "v31" ]; then
+      # v5 builds take the freeze fleet's PROVEN shape. The 2026-08-29 build
+      # pilot on e2-standard-4 SPOT was preempted 3x in 5h (exit 50001) and
+      # died with zero output — a single AAPL build runs ~3h and mid-symbol
+      # preemption restarts it from scratch, so churny spot capacity can
+      # starve a slow symbol forever. The n2 spot pool ran the 75h freeze
+      # fleet with ZERO preemptions the same week. Single-core tasks (the
+      # build is one process, like the freeze), 5 packed per n2-highmem-8,
+      # 8h leash, big pd-standard boot disk for 5x ~10GB cache copies.
+      CPU_MILLI=${CPU_MILLI:-1000}
+      MEMORY_MIB=${MEMORY_MIB:-12288}
+      MAX_RUN=${MAX_RUN:-28800s}
+      PROVISIONING=${PROVISIONING:-SPOT}
+      RETRIES=${RETRIES:-3}
+      MACHINE=${MACHINE:-n2-highmem-8}
+      BOOT_GB=${BOOT_GB:-100}
+      BOOT_TYPE=${BOOT_TYPE:-pd-standard}
+    else
+      CPU_MILLI=${CPU_MILLI:-4000}
+      MEMORY_MIB=${MEMORY_MIB:-12288}
+      MAX_RUN=${MAX_RUN:-14400s}
+      PROVISIONING=${PROVISIONING:-SPOT}
+      RETRIES=${RETRIES:-3}
+    fi
     ;;
 esac
 
