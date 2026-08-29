@@ -1,97 +1,72 @@
 # HANDOFF — state for the next session
 
-Written 2026-08-26 ~00:15 CDT (overnight session). Protocol: `CLAUDE.md`.
-Previous handoff (v5 data layer complete):
-`handoff-history/HANDOFF-2026-08-25-v5-data-layer-complete.md`.
+Written 2026-08-29 ~04:45 CDT. Protocol: `CLAUDE.md`.
+Previous handoff (the freeze campaign in flight):
+`handoff-history/HANDOFF-2026-08-26-v5-freeze-campaign.md`.
 
 ## The one-paragraph state
 
-**The 453-task v5 freeze FLEET IS RUNNING: job
-`v5-freeze-0f132b6-013536`, submitted 2026-08-26 06:35Z** after all three
-pilots (AAPL/X/BYND) SUCCEEDED with verified 10-family specs (identical
-config_hash `4a1897559fe2`). Pilot timings on n2 single-core: X 1h41m,
-BYND 1h57m, AAPL ≤2h33m → fleet ETA ~2 days at ~20 concurrent
-(quota-capped), ~$40–60 credits. Checkpoints land one json per symbol in
-`gs://healys-backtester/out/freeze_specs_v5/` (3/453 at launch); watch
-with `bash deploy/gcp/watch_job.sh` (`.last_job` is bound to the fleet).
-When the fleet ends: verify count ≈453, then freeze-merge (step 4 below).
-Shape: n2-highmem-8 SPOT, 1-core/12GiB tasks, 8h leash, image `0f132b6`,
-PARALLEL=60 (widens automatically if the user upgrades billing and bumps
-`CPUS_ALL_REGIONS`). History: the first pilot was kill-looped by the old
-3–4h leash (AAPL ~4.3h on one e2 vCPU; box measurements under-predict
-cloud ~5x); user decisions 2026-08-26: go WIDE not deep (freeze is
-single-threaded), auto-launch on pilot pass. Note X froze REAL strategies
-(not skipped — dead members can still have full train windows).
+**The v5 FREEZE IS DONE AND MERGED.** Fleet `v5-freeze-0f132b6-013536`
+SUCCEEDED 2026-08-29 09:11Z: 453/453 per-symbol specs, zero failures,
+zero preemptions, ~75h wall, ~$40. `freeze-merge` published the pool spec
+to `gs://healys-backtester/artifacts_v5_in/baseline_spec.json` (10.3 MB):
+**441 symbols frozen, 12 skipped-thin** (BKNG, DRAM, KLAC, leveraged
+micro-ETFs…), and every one of the 10 families is some symbol's
+best_strategy (rsi 182, stoch 49, bbands 46, volume 42, squeeze 40,
+supertrend 39, ma 28, elliott 11, macd 3, tv_rating 1) — the wide pool is
+genuinely diverse raw material. Next stage: the DATASET BUILD fleet.
+A fresh image was building at `7833952` (Cloud Build, launched ~04:15
+CDT) — that tag carries the task.sh pool-path fix the build stage
+REQUIRES (`f4e787a`); the freeze image `0f132b6` must NOT be used for
+build/assemble/evaluate (it would read/write v31's `out/` paths).
 
-## The fleet runbook (launch DONE 06:35Z; steps 1–2 kept for re-runs)
+## Next: the build fleet (pilot first, same discipline as the freeze)
 
-1. Verify: 3 jsons in `gs://healys-backtester/out/freeze_specs_v5/`, and
-   AAPL.json has real strategy entries (spot-check against
-   `nn_meta/artifacts_v5/freeze_smoke_DKNG.json` for shape).
-2. Submit (SHARDS must be exactly 453 = len(config.UNDERLYINGS) for
-   one-symbol-per-task; already-frozen symbols skip instantly):
-   ```
-   TASK_MODE=freeze NN_META_POOL=v5 IMAGE_TAG=0f132b6 PARALLEL=60 \
-     PROJECT=healys-batch BUCKET=gs://healys-backtester \
-     bash deploy/gcp/submit.sh 453
-   ```
-3. Watch via `bash deploy/gcp/watch_job.sh` (binds to `.last_job`).
-4. When all tasks end: `TASK_MODE=freeze-merge NN_META_POOL=v5
-   IMAGE_TAG=0f132b6 PROJECT=... BUCKET=... bash deploy/gcp/submit.sh 1`
-   publishes the merged spec to `artifacts_v5_in/baseline_spec.json`.
+1. Confirm image `7833952` exists in Artifact Registry (Cloud Build was
+   in flight when this was written; `scratch_build_image.sh` rebuilds).
+2. Pilot: 1–2 symbols, `TASK_MODE=build NN_META_POOL=v5
+   IMAGE_TAG=7833952 … bash deploy/gcp/submit.sh 1 AAPL` — verify rows
+   land in `out/v5/meta_rows/` (NOT `out/meta_rows/` — that's v31's).
+3. Fleet: shard over the spec's 441 symbols (build mode round-robins
+   `spec["symbols"]`; SHARDS=441 for one-per-task or fewer for batches;
+   measure pilot timing first — v31's per-symbol build was much faster
+   than a freeze).
+4. Then: assemble (`--membership` ON), and the evaluate/finalize ladder.
 
-Expected: ~20 concurrent symbols (global quota, see below), ~2 days wall,
-~$40–60 credits total. A few late tasks may need a resubmit if spot
-preempts near the 8h leash — checkpoints make that free.
+## Quotas / budget (verified live through 2026-08-29)
 
-## Quota reality (verified live 2026-08-26)
+- `CPUS_ALL_REGIONS=32` still binding. The user's 64-CPU request
+  (submitted 2026-08-28 on the now-UPGRADED paid account; prior request
+  #74792265 was cancelled) is pending — if granted, fleets widen
+  automatically (freeze sizing packs 5 tasks/VM; PARALLEL is set high).
+- Regional SSD quota 500GB was the hidden width cap (4×100GB boot disks
+  = 400/500) — freeze-mode boot disks now default `pd-standard`
+  (`BOOT_TYPE` knob, commit `7833952`) drawing on the ~empty 4TB
+  standard-disk quota.
+- Credits: ~$162 of $300 remained per console 2026-08-28 (the $138
+  consumed = whole project to date). Build+assemble+training projected
+  $50–90. Console Billing → Credits is the balance page now (paid
+  accounts lose the trial banner).
 
-`CPUS_ALL_REGIONS = 32` (project-global, free trial, unbumpable) is the
-BINDING cap — regional reads (N2 200, CPUS 200) are a mirage. 4×
-n2-highmem-8 = 32 CPUs = 20 packed tasks max. The fleet is submitted with
-PARALLEL=60 so if the user upgrades billing (credits carry over) and bumps
-the quota mid-run, Batch widens automatically. Memory
-`gcp-free-trial-budget` updated.
+## This week's other events (all resolved, all committed)
 
-## What landed tonight (all pushed)
+- **Hetzner outage 2026-08-27 13:32Z → 08-28 ~20:20Z**: billing lapse
+  null-routed the server IP while the box kept running; scanners failed
+  closed (zero stale alerts), ~1.7 trading days dark. Recovered; runbook
+  updated. **Reverse dead-man now live on the home box** (user systemd
+  timer + linger, hourly SSH probe, Telegram page after 2 misses).
+- Per-boot Telegram heartbeat from `boot_restart.sh` now defaults OFF
+  (user decision — stable Ryzen box); relaunch notices still send. Its
+  broken root-owned log rerouted to `boot_restart.d.log`.
+- Post-campaign cleanup note stands: delete stale Artifact Registry tags
+  when the campaign ends (keep the live one + current build tag).
 
-1. **task.sh pool paths** (`f4e787a`): non-v31 pools publish under
-   `out/<pool>/`. Before this, a v5 build would have skip-checked against
-   v31's 118 `out/meta_rows` files (franken-dataset), a v5 assemble would
-   have overwritten v31's live `out/meta_dataset.parquet`, and v5
-   evaluate/finalize would have staged from/published to hardcoded v31
-   dirs (outputs dying with the VM). Freeze paths untouched → the freeze
-   fleet still runs on image `0f132b6`; REBUILD + pin IMAGE_TAG before the
-   BUILD stage (`scratch_build_image.sh` is the runbook step).
-2. **submit.sh freeze sizing v2** (`7673b59`): 8h leash, n2-highmem-8,
-   BOOT_GB=100 (five packed containers each rsync their own ~10GB cache
-   copy; the 30GB default would ENOSPC the VM). New `BOOT_GB` knob wired
-   into the job JSON for all modes (default 30).
-3. **DECISIONS.md**: the wide-vs-deep decision + quota reality, dated
-   2026-08-26.
-4. First pilot job `v5-freeze-0f132b6-184938` was CANCELLED (kill-looped,
-   nothing published) — ignore it in job listings.
+## Standing warnings
 
-## Standing warnings (delta)
-
-- The freeze is SINGLE-THREADED — do not "speed it up" by giving tasks
-  more cores; width is the only lever (and it's quota-capped).
-- X/SWTX/WBA-class dead members freeze as "skipped" — a spec json with
-  the symbol in `skipped` is CORRECT output, not a failure to fix.
-- The surface NaN / renamed-listings caveats from the previous handoff
-  still stand; see `handoff-history/HANDOFF-2026-08-25-*`.
-- Local monitors for the pilots live in this session only; if the session
-  is gone, re-derive from `gcloud batch jobs list` + the checkpoint dir
-  (never from memory — job names above are the binding IDs).
-
-## Next after the freeze (unchanged plan)
-
-Dataset build fleet (needs image rebuild for the pool-path fix) →
-assemble (`--membership` ON) → evaluate/finalize on Batch. Then: Drive
-backup migration (user OAuth step first), monthly PIT/FA timer on the box.
-
-**When the campaign is DONE (user request 2026-08-26): delete the stale
-image tags in Artifact Registry** (`us-central1-docker.pkg.dev/
-healys-batch/healys/backtester` — ~12 TF-fat tags ≈ $5–10/mo of dead
-storage). Keep only the tag(s) a deployed/running job still references;
-`gcloud artifacts docker images delete <repo>:<tag>` per stale tag.
+- Freeze image `0f132b6` is for freeze/freeze-merge ONLY (pre-pool-path
+  task.sh). Build stage: `7833952` or later.
+- The 12 skipped-thin symbols are RESULTS, not failures — build only
+  shards `spec["symbols"]` (441), so they're naturally excluded.
+- Local monitors die with session restarts (seen repeatedly) — re-derive
+  cloud state from `gcloud batch jobs list` + bucket paths, never from
+  memory.
