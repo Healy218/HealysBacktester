@@ -92,8 +92,22 @@ case "$MODE" in
     ;;
   *)
     # Stage the raw option-bar cache (read-only input) for freeze/build/assemble.
-    mkdir -p "nn_meta/${CACHE}"
-    gsutil -m -q rsync -r "${BUCKET}/${CACHE}" "nn_meta/${CACHE}"
+    # When the job mounts a local-SSD scratch volume at /mnt/ssd (fleet v3+),
+    # all packed tasks on a VM SHARE one cache copy there: the first task
+    # stages it at NVMe speed under an exclusive flock, the rest fast-path
+    # through the same lock. Without the mount, each task stages its own
+    # copy into the container layer (the 2026-08-30 lesson: 5x10GB copies
+    # through a small pd disk cost ~1.4h of every slot cycle).
+    if [ -d /mnt/ssd ]; then
+      mkdir -p "/mnt/ssd/${CACHE}"
+      rm -rf "nn_meta/${CACHE}"
+      ln -sfn "/mnt/ssd/${CACHE}" "nn_meta/${CACHE}"
+      flock /mnt/ssd/.stage.lock \
+        gsutil -m -q rsync -r "${BUCKET}/${CACHE}" "/mnt/ssd/${CACHE}"
+    else
+      mkdir -p "nn_meta/${CACHE}"
+      gsutil -m -q rsync -r "${BUCKET}/${CACHE}" "nn_meta/${CACHE}"
+    fi
 
     # FAIL CLOSED ON AN INCOMPLETE CACHE. On 2026-08-19 the bucket was missing
     # 44 of 486 flat-file day-frames and nothing complained: FlatFilesProvider

@@ -130,7 +130,13 @@ case "$MODE" in
       PROVISIONING=${PROVISIONING:-SPOT}
       RETRIES=${RETRIES:-3}
       MACHINE=${MACHINE:-n2-highmem-8}
-      BOOT_GB=${BOOT_GB:-70}
+      # Local-SSD scratch (fleet v3): tasks share ONE cache copy per VM at
+      # NVMe speed (task.sh /mnt/ssd path) — kills both the per-task 10GB
+      # restage and the small-pd-disk throughput wall (70GB pd-balanced is
+      # ~20MB/s; staging 5 copies through it cost ~1.4h per slot cycle on
+      # the 2026-08-30 fleet). Boot disk shrinks back to overlay-only size.
+      LOCAL_SSD=${LOCAL_SSD:-1}
+      BOOT_GB=${BOOT_GB:-40}
       BOOT_TYPE=${BOOT_TYPE:-pd-balanced}
     else
       CPU_MILLI=${CPU_MILLI:-4000}
@@ -148,12 +154,22 @@ case "${EXTRA_ARGS:-}" in
   *'"'*) echo "EXTRA_ARGS must not contain double quotes" >&2; exit 1 ;;
 esac
 
+# Optional local-SSD scratch volume shared by all tasks on a VM (task.sh
+# looks for /mnt/ssd). 375GB is the fixed local-SSD unit size; the quota
+# (LOCAL_SSD_TOTAL_GB) is effectively unlimited.
+DISKS_JSON=""; VOLUMES_JSON=""
+if [ "${LOCAL_SSD:-0}" = "1" ]; then
+  DISKS_JSON=', "disks": [{"deviceName": "localssd", "newDisk": {"type": "local-ssd", "sizeGb": 375}}]'
+  VOLUMES_JSON='"volumes": [{"deviceName": "localssd", "mountPath": "/mnt/ssd"}],'
+fi
+
 cat > /tmp/healys_batch_job.json <<JSON
 {
   "taskGroups": [{
     "taskCount": ${TASKS},
     "parallelism": ${PARALLEL:-${TASKS}},
     "taskSpec": {
+      ${VOLUMES_JSON}
       "runnables": [{"container": {"imageUri": "${IMAGE}"}}],
       "computeResource": {"cpuMilli": ${CPU_MILLI}, "memoryMib": ${MEMORY_MIB}},
       "maxRetryCount": ${RETRIES},
@@ -174,7 +190,7 @@ cat > /tmp/healys_batch_job.json <<JSON
     "instances": [{"policy": {
       "machineType": "${MACHINE:-e2-standard-4}",
       "provisioningModel": "${PROVISIONING}",
-      "bootDisk": {"sizeGb": ${BOOT_GB:-30}, "type": "${BOOT_TYPE:-pd-balanced}"}
+      "bootDisk": {"sizeGb": ${BOOT_GB:-30}, "type": "${BOOT_TYPE:-pd-balanced}"}${DISKS_JSON}
     }}],
     "network": {"networkInterfaces": [{
       "network": "projects/${PROJECT}/global/networks/default",
