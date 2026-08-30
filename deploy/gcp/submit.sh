@@ -114,22 +114,24 @@ case "$MODE" in
     ;;
   *)
     if [ "$MODE" = "build" ] && [ "$POOL" != "v31" ]; then
-      # v5 builds take the freeze fleet's PROVEN shape. The 2026-08-29 build
-      # pilot on e2-standard-4 SPOT was preempted 3x in 5h (exit 50001) and
-      # died with zero output — a single AAPL build runs ~3h and mid-symbol
-      # preemption restarts it from scratch, so churny spot capacity can
-      # starve a slow symbol forever. The n2 spot pool ran the 75h freeze
-      # fleet with ZERO preemptions the same week. Single-core tasks (the
-      # build is one process, like the freeze), 5 packed per n2-highmem-8,
-      # 8h leash, big pd-standard boot disk for 5x ~10GB cache copies.
-      CPU_MILLI=${CPU_MILLI:-1000}
+      # v5 builds: n2 SPOT (e2 spot was preempted 3x in 5h on 2026-08-29;
+      # n2 ran the 75h freeze with zero preemptions), single-process tasks.
+      # CPU_MILLI=1500, NOT 1000: Batch packs by cpuMilli and overcommits
+      # memoryMib (observed on both fleets — 8x12GiB tasks landed on 64GiB
+      # VMs). At 8-packed, 8x ~10GB cache copies overflow the page cache
+      # and every flatfile read hits the boot disk; on pd-standard's
+      # ~12MB/s that I/O-starved the 2026-08-29 fleet to ONE completion in
+      # 11 hours. 1500 milli packs 5/VM (50GB of caches fit in RAM) and
+      # pd-balanced (~140MB/s) absorbs what misses. BOOT_GB=70 keeps even
+      # a 7-VM fleet inside the 500GB regional SSD quota (7x70=490).
+      CPU_MILLI=${CPU_MILLI:-1500}
       MEMORY_MIB=${MEMORY_MIB:-12288}
       MAX_RUN=${MAX_RUN:-28800s}
       PROVISIONING=${PROVISIONING:-SPOT}
       RETRIES=${RETRIES:-3}
       MACHINE=${MACHINE:-n2-highmem-8}
-      BOOT_GB=${BOOT_GB:-100}
-      BOOT_TYPE=${BOOT_TYPE:-pd-standard}
+      BOOT_GB=${BOOT_GB:-70}
+      BOOT_TYPE=${BOOT_TYPE:-pd-balanced}
     else
       CPU_MILLI=${CPU_MILLI:-4000}
       MEMORY_MIB=${MEMORY_MIB:-12288}
