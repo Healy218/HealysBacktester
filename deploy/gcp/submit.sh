@@ -157,10 +157,14 @@ esac
 # Optional local-SSD scratch volume shared by all tasks on a VM (task.sh
 # looks for /mnt/ssd). 375GB is the fixed local-SSD unit size; the quota
 # (LOCAL_SSD_TOTAL_GB) is effectively unlimited.
-DISKS_JSON=""; VOLUMES_JSON=""
+DISKS_JSON=""; VOLUMES_JSON=""; CONTAINER_VOLS=""
 if [ "${LOCAL_SSD:-0}" = "1" ]; then
   DISKS_JSON=', "disks": [{"deviceName": "localssd", "newDisk": {"type": "local-ssd", "sizeGb": 375}}]'
-  VOLUMES_JSON='"volumes": [{"deviceName": "localssd", "mountPath": "/mnt/ssd"}],'
+  # Host mount MUST live under /mnt/disks/ — COS root is read-only (pilot
+  # 2026-08-30 died exit 125: "mkdir /mnt/ssd: read-only file system").
+  # The container bind-mounts it at /mnt/ssd, the path task.sh probes.
+  VOLUMES_JSON='"volumes": [{"deviceName": "localssd", "mountPath": "/mnt/disks/ssd"}],'
+  CONTAINER_VOLS=', "volumes": ["/mnt/disks/ssd:/mnt/ssd"]'
 fi
 
 cat > /tmp/healys_batch_job.json <<JSON
@@ -170,7 +174,7 @@ cat > /tmp/healys_batch_job.json <<JSON
     "parallelism": ${PARALLEL:-${TASKS}},
     "taskSpec": {
       ${VOLUMES_JSON}
-      "runnables": [{"container": {"imageUri": "${IMAGE}"}}],
+      "runnables": [{"container": {"imageUri": "${IMAGE}"${CONTAINER_VOLS}}}],
       "computeResource": {"cpuMilli": ${CPU_MILLI}, "memoryMib": ${MEMORY_MIB}},
       "maxRetryCount": ${RETRIES},
       "maxRunDuration": "${MAX_RUN}",
