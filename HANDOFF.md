@@ -22,16 +22,20 @@ build/assemble/evaluate (it would read/write v31's `out/` paths).
 
 ## Build stage: FLEET IN FLIGHT (launched 2026-08-29 17:45Z)
 
-**Job `marks-build-7833952-124534`**: 441 tasks (one per spec symbol),
-image `7833952`, n2-highmem-8 SPOT / 1-core 12GiB tasks / 8h leash /
-pd-standard 100GB boot / PARALLEL=60. Rows land in `out/v5/meta_rows/`,
-marks in `out/v5/meta_marks/`; ETA ~2 days at 32 CPUs.
-History: pilot 1 on the old default e2-standard-4 spot was PREEMPTED 3x
-in 5h and died (exit 50001, nothing published — a ~3h AAPL build can't
-survive churny spot with only end-of-symbol checkpoints); pilot 2 on the
-freeze shape SUCCEEDED (AAPL 3.6h, v5 paths verified live, v31's 118 row
-files untouched). submit.sh now hard-codes this shape for non-v31 builds.
-When the fleet ends: assemble (`--membership` ON), then the
+**Job `marks-build-38d8160-081935`** (fleet v3, launched 2026-08-30
+13:19Z): 441 tasks, image `38d8160`, n2-highmem-8 SPOT, 5 packed
+1.5-core/12GiB tasks per VM, 8h leash, **local-SSD scratch shared per VM**
+(`/mnt/disks/ssd` host → `/mnt/ssd` container; task.sh stages ONE cache
+copy per VM under flock at NVMe speed). Rows → `out/v5/meta_rows/`,
+marks → `out/v5/meta_marks/`.
+The sizing saga (each config was piloted or measured, all in submit.sh
+comments): e2-standard-4 spot → preempted 3x/5h (n2 spot never preempts
+here); 8-packed + pd-standard → page-cache overflow, I/O starvation, ONE
+symbol in 11h; 5-packed + 70GB pd-balanced → healthy but ~1.4h/slot
+staging tax (pd throughput scales with disk SIZE — small disks crawl);
+local-SSD v3 → staging 85min→3min (MSFT pilot). Mount gotcha: COS root is
+read-only — host mounts MUST be under /mnt/disks/, bind into the
+container. When the fleet ends: assemble (`--membership` ON), then the
 evaluate/finalize ladder.
 
 ## Quotas / budget (verified live through 2026-08-29)
