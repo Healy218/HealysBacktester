@@ -30,6 +30,17 @@ dependency (proven: n2 filled while c2d was dry).
 
 Restarting any of them is safe and cheap — see "If you need to relaunch".
 
+## What survives a session clear (checked 2026-09-01)
+
+SURVIVES: both cloud fleets (they run in GCP), the home-box builder (it
+was launched `setsid nohup`, so it outlives the CLI), and the server
+dead-man (a systemd *user* timer with linger enabled).
+DIES: every in-session Monitor — the 30-min build watchdog with its
+stall and mass-failure Telegram alarms. **Re-arm a watchdog early in the
+next session**, or the first sign of a wedged fleet will be a stale row
+count. Never re-derive job state from memory: `gcloud batch jobs list`
+plus `gsutil ls out/v5/meta_rows/` is the ground truth.
+
 ## The two mechanisms that make this work
 
 1. **Per-family checkpoints** (`build_symbol_rows(..., partial_dir=)`,
