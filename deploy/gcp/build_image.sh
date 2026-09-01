@@ -1,7 +1,11 @@
 #!/usr/bin/env bash
 # Cloud Build the Batch image from a STATIC git archive tree (runbook step 4).
 set -euo pipefail
-cd "$(dirname "$(readlink -f "$0")")"
+# Repo root, not this script's dir: the original lived at the root; the
+# promoted copy forgot to climb out of deploy/gcp/ and its `cp` of the
+# Dockerfile failed silently in a detached shell (2026-09-01: a fleet then
+# launched on a tag that was never built).
+cd "$(dirname "$(readlink -f "$0")")/../.."
 export PATH="$HOME/google-cloud-sdk/bin:$PATH"
 SHA=$(git rev-parse --short HEAD)
 TMP=$(mktemp -d)

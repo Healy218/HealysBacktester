@@ -20,6 +20,17 @@ SYMBOLS=${2:-}
 SHA=${IMAGE_TAG:-$(git rev-parse --short HEAD)}
 IMAGE="${REGION}-docker.pkg.dev/${PROJECT}/healys/backtester:${SHA}"
 
+# FAIL CLOSED if the tag was never pushed. On 2026-09-01 a 441-task fleet
+# launched against a tag whose Cloud Build had silently failed (and a
+# watcher blessed a STALE build from `builds list`) — 148 tasks died on
+# "manifest unknown" before anyone looked. Verify the manifest exists
+# before spending a job on it.
+gcloud artifacts docker images describe "$IMAGE" >/dev/null 2>&1 || {
+  echo "FATAL: image tag ${SHA} not found in Artifact Registry — build it" \
+       "first (deploy/gcp/build_image.sh) or pass IMAGE_TAG=<existing>" >&2
+  exit 1
+}
+
 MODE=${TASK_MODE:-build}
 POOL=${NN_META_POOL:-v31}
 case "$MODE" in
