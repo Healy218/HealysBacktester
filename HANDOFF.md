@@ -19,11 +19,11 @@ home box. Nothing else in the campaign is running; the live scanner
 
 | Producer | Job / how | Notes |
 |---|---|---|
-| Cloud fleet A | `marks-build-5a76e1c-011718` (c2d-highmem-8 SPOT) | c2d pool went dry ~07:00Z Tue; job alive, 0 workers, will refill if c2d returns |
-| Cloud fleet B | `marks-build-5a76e1c-104922` (n2-highmem-8 SPOT) | the twin; grabbed all 20 slots within 10 min of submit |
+| Cloud fleet A | `marks-build-4cca795-144600` (c2d-highmem-8 SPOT) | c2d's pool went dry for 3h Tue; job stays alive to refill if c2d returns |
+| Cloud fleet B | `marks-build-4cca795-144558` (n2-highmem-8 SPOT) | the twin; n2 filled all 20 slots within 10 min when c2d was dry |
 | Home box | `scripts/run_build_v5_local.sh`, detached, `logs/build_v5_local.log` | 3–4 autosized workers, walks the spec BACKWARDS (Z→A) to meet the fleets in the middle |
 
-Both fleets use image **`5a76e1c`** and `PARALLEL=60`; the global
+Both fleets use image **`4cca795`** (carries the incomplete-checkpoint fix) and `PARALLEL=60`; the global
 `CPUS_ALL_REGIONS=32` caps total concurrency at ~20 packed tasks, so
 running both costs nothing extra — it just removes single-spot-pool
 dependency (proven: n2 filled while c2d was dry).
