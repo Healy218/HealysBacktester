@@ -22,12 +22,24 @@ build/assemble/evaluate (it would read/write v31's `out/` paths).
 
 ## Build stage: FLEET IN FLIGHT (launched 2026-08-29 17:45Z)
 
-**Job `marks-build-38d8160-081935`** (fleet v3, launched 2026-08-30
-13:19Z): 441 tasks, image `38d8160`, n2-highmem-8 SPOT, 5 packed
-1.5-core/12GiB tasks per VM, 8h leash, **local-SSD scratch shared per VM**
-(`/mnt/disks/ssd` host → `/mnt/ssd` container; task.sh stages ONE cache
-copy per VM under flock at NVMe speed). Rows → `out/v5/meta_rows/`,
-marks → `out/v5/meta_marks/`.
+**Cloud: job `marks-build-b995b35-003314`** (launched 2026-09-01 00:33Z):
+441 tasks, image `b995b35`, c2d-highmem-8 SPOT (n2 and c2d pools both
+churn during US business hours; c2d cores are ~1.4x faster), 5 packed
+tasks/VM, local-SSD shared cache, **and per-FAMILY checkpoints** — a
+preemption now costs ~one family (~30-60min), not the ~8h symbol
+(validated by kill/resume test on ZS). Partials live in
+`out/v5/meta_partial/`, pushed every 4min by a background loop in
+task.sh.
+**Box: `scripts/run_build_v5_local.sh`** (user decision 2026-09-01) runs
+DETACHED on the Ryzen (3 autosized workers, log
+`logs/build_v5_local.log`), walking the spec BACKWARDS and skipping
+bucket-present symbols — the two sides meet in the middle; the bucket is
+the only coordination. Caveat: venv-built rows may differ from
+docker-built at BLAS float precision (accepted; no diff gate in v5).
+Rows → `out/v5/meta_rows/`, marks → `out/v5/meta_marks/`.
+One task FAILED permanently in an earlier fleet (retries exhausted by
+preemption) — after the fleet ends, diff the bucket's rows against the
+spec's 441 and resubmit any missing symbols.
 The sizing saga (each config was piloted or measured, all in submit.sh
 comments): e2-standard-4 spot → preempted 3x/5h (n2 spot never preempts
 here); 8-packed + pd-standard → page-cache overflow, I/O starvation, ONE
