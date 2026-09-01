@@ -113,6 +113,17 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
 - [ ] **Dataset build: 144/441 rows** (two cloud fleets + the box).
 - [ ] Reconcile stragglers when the fleets drain (one task died
   permanently to exhausted retries in an earlier fleet).
+- [ ] **Audit marks coverage** for symbols finished after 2026-09-01
+  00:33Z (the incomplete-checkpoint window — see HANDOFF); rebuild any
+  whose rows lack mark-stream entries. Bounded to ~8 symbols + in-flight.
+- [ ] Before the NEXT generation: move `WINDOW_START`/`TRAIN_START` to
+  2024-12 (~20% of the current train span is built then dropped by the
+  membership filter), and key family partials by window (or clear
+  `out/v5/meta_partial/` on any window change — stale partials would
+  silently mix windows within one symbol).
+- [ ] Settle the membership-vs-`assign_split` ordering mismatch
+  (`assemble` filters before, `run_fold` after) before trusting the
+  evaluate ladder's fold splits.
 - [ ] Assemble (`--membership` ON for v5) → `out/v5/meta_dataset.parquet`.
 - [ ] Evaluate/finalize ladder with PBO + deflated Sharpe; verdict row in
   `docs/EXPERIMENTS.md`: does the wide pool beat v31?

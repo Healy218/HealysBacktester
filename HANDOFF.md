@@ -100,6 +100,51 @@ setsid nohup scripts/run_build_v5_local.sh > logs/build_v5_local.log 2>&1 &
 - The 12 skipped-thin symbols are RESULTS; the build only shards the
   spec's 441.
 
+## Code review 2026-09-01 — what was fixed, what is deferred
+
+FIXED and pushed (`4cca795`, image `4cca795`):
+- **Incomplete-checkpoint resume (the one that mattered).** A rows
+  partial with no marks partial was treated as "family has no marks"
+  instead of "transfer was cut in half", committing symbols whose trades
+  have no mark-stream entries. Now rebuilds the family.
+  **AUDIT OWED, bounded:** only symbols finished AFTER the checkpoint
+  rollout (~2026-09-01 00:33Z, roughly rows 137→144 plus whatever was
+  in flight) could be affected — everything earlier was built
+  whole-symbol with no partials. Check those symbols' rows against
+  `meta_marks` coverage before assemble; rebuild any that are short.
+- `freeze_month` refuses a look-ahead freeze (mid-month crawl).
+- `freeze-merge` no longer stages the option cache and every marks shard.
+- `.last_job` cleared before submit; `watch_job.sh` retries are bounded.
+
+DEFERRED, with reasons — all real, none worth disrupting a running fleet:
+- **`WINDOW_START` is ~3.2 months before the first usable PIT membership**
+  (2024-08-26 vs first `available_at` 2024-12-02). With `--membership` ON,
+  every row before 2024-12 is built and then dropped by assemble — ~20%
+  of the train span wasted. Do NOT change mid-campaign: it would
+  invalidate every symbol already built. Fix `WINDOW_START`/`TRAIN_START`
+  for the NEXT generation.
+- **Family partials are keyed `<sym>.<strategy>` only** — no window or
+  spec hash — and the bucket copies are never expired (`rsync` without
+  `-d`; the local cleanup glob does not propagate, and `*.tmp` objects
+  leak). Dormant while the window is fixed; **it bites the moment anyone
+  reruns after moving `WINDOW_END`** (exactly what the untracked
+  `scratch_extend_v5_window.sh` does) — a symbol would then mix families
+  built under two different windows, silently. Clear
+  `out/v5/meta_partial/` whenever the window changes, or key the
+  partials by window before the next campaign.
+- `freeze_month` records the module-level constants, not the params the
+  membership was actually built with — a retuned freeze would write
+  contradictory provenance into a write-once artifact.
+- `build_universe_daily` counts a 403/404 as a market holiday: a
+  >13-day entitlement gap inside a 63-day window silently evicts
+  eligible names via `MIN_ACTIVE_DAYS`. Wants a coverage gate like
+  `cache_preflight`.
+- The membership filter is applied BEFORE `assign_split` in `assemble`
+  but AFTER it in `walkforward_meta.run_fold`, so `val_cut` is derived
+  from the unfiltered day set — the realized val fraction drifts once
+  the early ~20% is dropped. Worth settling before trusting fold splits
+  in the evaluate ladder.
+
 ## Quotas & budget (verified 2026-09-01)
 
 - `CPUS_ALL_REGIONS = 32`, still the binding cap. Google has twice
