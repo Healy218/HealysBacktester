@@ -264,6 +264,21 @@ def freeze_month(membership: pd.DataFrame, month: str, *,
     grp = membership[membership["month"] == month]
     if grp.empty:
         raise UniversePitError(f"no membership rows for {month}")
+    # LOOK-AHEAD GUARD, enforced HERE because this is the irreversible step:
+    # the artifact is write-once and committed to git. available_at must fall
+    # in a LATER month than the one being frozen. If the daily rows stop
+    # mid-month M and an operator freezes M anyway (`--through` is documented
+    # as "last COMPLETED month" but nothing enforced it), m_end is a mid-month
+    # day and available_at lands inside M — so members_asof(M) would select
+    # M's own reconstitution, computed from days inside M. A trailing partial
+    # month in `membership` itself is legitimate (churn reports use it), which
+    # is why the check does not live in monthly_membership.
+    avail = str(grp["available_at"].iloc[0])
+    if avail[:7] <= month:
+        raise UniversePitError(
+            f"refusing to freeze {month}: available_at {avail} is not in a "
+            f"later month — the daily rows end mid-month, so this freeze "
+            f"would look ahead. Crawl through the month's real end first.")
     report = churn_report(membership)
     churn = next(m for m in report if m["month"] == month)
     payload = {"month": month,

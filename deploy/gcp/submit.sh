@@ -217,6 +217,13 @@ cat > /tmp/healys_batch_job.json <<JSON
 }
 JSON
 
+# Clear the handle BEFORE submitting: under `set -e` a failed submit aborts
+# here, and a stale .last_job would leave watch_job.sh bound to the previous
+# (SUCCEEDED) job — reporting a confident, wrong, terminal state. Exactly the
+# stale-watcher trap this file exists to prevent.
+LAST_JOB_F="$(dirname "$(readlink -f "$0")")/.last_job"
+: > "$LAST_JOB_F"
+
 gcloud batch jobs submit "$JOB" --project "$PROJECT" --location "$REGION" \
   --config /tmp/healys_batch_job.json
 # Machine-readable handle for watchers: bind to THIS, never re-derive the

@@ -38,6 +38,17 @@ def small_membership(**kw):
                                  window_days=63, min_active_days=50, **kw)
 
 
+def freezable_months(m):
+    """Months freeze_month will accept: every one but the trailing partial.
+
+    DAYS is a plain bdate_range, so the fixture's last month ends mid-month
+    and its available_at falls inside itself — freeze_month refuses that as
+    look-ahead (see test_freeze_month_refuses_incomplete_month). Production
+    freezes completed months only, so tests mirror that.
+    """
+    return sorted(m["month"].unique())[:-1]
+
+
 # ── OCC parsing / mapping ────────────────────────────────────────────────────
 
 def test_split_occ():
@@ -208,7 +219,7 @@ def test_freeze_month_write_once_and_load(tmp_path):
 
 def test_members_asof_uses_previous_reconstitution_only(tmp_path):
     m = small_membership()
-    for month in sorted(m["month"].unique()):
+    for month in freezable_months(m):
         up.freeze_month(m, month, artifact_dir=tmp_path)
     loaded = up.load_membership(tmp_path)
     # during November, only October's freeze (available 2024-11-01) is usable
@@ -219,7 +230,7 @@ def test_members_asof_uses_previous_reconstitution_only(tmp_path):
 
 def test_membership_mask_stage_c_filter(tmp_path):
     m = small_membership()
-    for month in sorted(m["month"].unique()):
+    for month in freezable_months(m):
         up.freeze_month(m, month, artifact_dir=tmp_path)
     loaded = up.load_membership(tmp_path)
     symbols = pd.Series(["TAA", "ZZZ", "TAA"])
@@ -232,3 +243,21 @@ def test_membership_mask_stage_c_filter(tmp_path):
 def test_load_daily_rows_absent_is_loud(tmp_path):
     with pytest.raises(up.UniversePitError, match="no universe_daily"):
         up.load_daily_rows(tmp_path)
+
+
+def test_freeze_month_refuses_incomplete_month(tmp_path):
+    """A month whose available_at lands inside itself is a look-ahead freeze.
+
+    The fixture's daily rows stop mid-month, so the trailing month's
+    reconstitution would be "available" on a day inside the month it
+    reconstitutes — and members_asof would then filter that month's rows with
+    membership derived from those same days. The artifact is write-once and
+    committed, so this has to fail before it is written, not after.
+    """
+    m = small_membership()
+    trailing = sorted(m["month"].unique())[-1]
+    avail = m[m["month"] == trailing]["available_at"].iloc[0]
+    assert str(avail)[:7] == trailing, "fixture no longer ends mid-month"
+    with pytest.raises(up.UniversePitError, match="would look ahead"):
+        up.freeze_month(m, trailing, artifact_dir=tmp_path)
+    assert not (tmp_path / f"{trailing}.json").exists()

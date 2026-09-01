@@ -213,11 +213,27 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
         if partial_dir is not None:
             p_rows = partial_dir / f"{symbol}.{strat}.rows.parquet"
             p_marks = partial_dir / f"{symbol}.{strat}.marks.parquet"
-            if p_rows.exists():
+            # A rows partial WITHOUT its marks partial is an INCOMPLETE
+            # checkpoint, not a marks-free family: the writer always emits
+            # the marks file first (empty frame included), but the bucket
+            # transport is not atomic across files — task.sh pushes with a
+            # parallel `rsync` every 4 min and pulls with `cp <sym>.* || true`,
+            # either of which can be cut in half by a spot preemption.
+            # Resuming such a family would commit rows whose trades have NO
+            # entries in the mark stream, and assemble's keep_ids filter would
+            # silently accept the under-covered sidecar — the 2026-08-19
+            # biased-drop failure mode wearing a different hat. Rebuild it.
+            if p_rows.exists() and marks_sink is not None \
+                    and not p_marks.exists():
+                logger.warning(f"[{_TAG}] {symbol}/{strat}: rows partial has "
+                               f"no marks partial — incomplete checkpoint, "
+                               f"rebuilding the family")
+                p_rows.unlink(missing_ok=True)
+            elif p_rows.exists():
                 pdf = pd.read_parquet(p_rows)
                 if not pdf.empty:
                     frames.append(pdf)
-                if marks_sink is not None and p_marks.exists():
+                if marks_sink is not None:
                     pmf = pd.read_parquet(p_marks)
                     if not pmf.empty:
                         marks_sink.append(pmf)

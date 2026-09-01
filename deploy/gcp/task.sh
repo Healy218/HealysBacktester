@@ -90,6 +90,14 @@ case "$MODE" in
       echo "FATAL: candidate $CANDIDATE_URI missing — run TASK_MODE=assemble first" >&2
       exit 1; }
     ;;
+  freeze-merge)
+    # Stages NOTHING: the handler below pulls ~450 small JSON specs itself.
+    # It used to fall through to *) and drag down the multi-GB option cache
+    # plus every meta_rows/meta_marks shard — on an e2-standard-4 with a
+    # 30GB boot disk and a 1h leash, which is how a merge task ENOSPCs or
+    # times out instead of doing five seconds of JSON work.
+    :
+    ;;
   *)
     # Stage the raw option-bar cache (read-only input) for freeze/build/assemble.
     # When the job mounts a local-SSD scratch volume at /mnt/ssd (fleet v3+),
