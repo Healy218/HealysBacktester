@@ -362,13 +362,29 @@ echo "symbols: $MY_SYMS"
 # then costs at most one in-flight symbol instead of the whole task (the
 # 2026-08-17 kill-loop: 8-symbol tasks outran the 4h cap and, publishing
 # only at task end, every retry restarted from zero).
+# Per-family partials (2026-09-01): a v5 symbol is ~8h of work and spot
+# preemption used to lose all of it. build_meta_dataset --partial-dir writes
+# a checkpoint per completed family; a background loop pushes them to the
+# bucket every 4 min so a preempted retry loses at most one family in
+# flight. Pull is per-symbol so a task never drags the whole fleet's
+# partials.
+PART="$ART/meta_partial"
+mkdir -p "$PART"
+( while sleep 240; do
+    gsutil -m -q rsync -r "$PART" "${OUTB}/meta_partial" 2>/dev/null || true
+  done ) &
+PART_SYNC=$!
+trap 'kill $PART_SYNC 2>/dev/null || true' EXIT
+
 IFS=',' read -ra SYMS <<< "$MY_SYMS"
 for sym in "${SYMS[@]}"; do
   if gsutil -q stat "${OUTB}/meta_rows/${sym}.parquet" 2>/dev/null; then
     echo "== $sym already in bucket — skip =="
     continue
   fi
-  python -m nn_meta.build_meta_dataset --symbols "$sym" --marks
+  gsutil -m -q cp "${OUTB}/meta_partial/${sym}.*" "$PART/" 2>/dev/null || true
+  python -m nn_meta.build_meta_dataset --symbols "$sym" --marks \
+    --partial-dir "$PART"
   gsutil -m -q rsync -r "$ART/meta_rows"  "${OUTB}/meta_rows"
   gsutil -m -q rsync -r "$ART/meta_marks" "${OUTB}/meta_marks"
 done

@@ -176,16 +176,30 @@ def _feature_windows(strategy: str, params: dict) -> tuple[int, int]:
     return 10, 30
 
 
+def _write_partial(path, df: pd.DataFrame) -> None:
+    tmp = path.with_suffix(".tmp")
+    df.to_parquet(tmp, index=False)
+    tmp.replace(path)
+
+
 def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                       window_start: str = config.WINDOW_START,
                       window_end: str = config.WINDOW_END,
-                      marks_sink: list | None = None) -> pd.DataFrame:
+                      marks_sink: list | None = None,
+                      partial_dir=None) -> pd.DataFrame:
     """Build one symbol's raw rows.
 
     Passing ``marks_sink`` (a list) additionally collects per-contract 15m mark
     frames into it — the Option B mark-to-market input.  It is a sink rather
     than a second return value so the three existing callers keep working
     unchanged.
+
+    ``partial_dir`` (2026-09-01) enables per-FAMILY checkpointing: a v5
+    symbol is ~8h of work (10 families x DTE grid) and a spot preemption used
+    to lose all of it — the family is the natural ~30-60min grain. Each
+    completed family writes ``<sym>.<strat>.rows.parquet`` (+ ``.marks``)
+    atomically; a rerun loads those and skips straight to the first
+    unfinished family. Empty families write 0-row markers.
     """
     bars = load_underlying_15m(symbol)
     if bars.empty:
@@ -195,6 +209,22 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
 
     frames = []
     for strat, entry in spec_entry["strategies"].items():
+        p_rows = p_marks = None
+        if partial_dir is not None:
+            p_rows = partial_dir / f"{symbol}.{strat}.rows.parquet"
+            p_marks = partial_dir / f"{symbol}.{strat}.marks.parquet"
+            if p_rows.exists():
+                pdf = pd.read_parquet(p_rows)
+                if not pdf.empty:
+                    frames.append(pdf)
+                if marks_sink is not None and p_marks.exists():
+                    pmf = pd.read_parquet(p_marks)
+                    if not pmf.empty:
+                        marks_sink.append(pmf)
+                logger.info(f"[{_TAG}] {symbol}/{strat}: resumed from "
+                            f"partial ({len(pdf)} rows)")
+                continue
+        sink_before = len(marks_sink) if marks_sink is not None else 0
         trades = propose_trades(bars, strat, entry["params"],
                                 window_start, window_end)
         if len(trades) > config.MAX_SIGNALS_PER_NAME:
@@ -202,6 +232,8 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                            f"{len(trades)} trades to cap")
             trades = trades[:config.MAX_SIGNALS_PER_NAME]
         if not trades:
+            if p_rows is not None:
+                _write_partial(p_rows, pd.DataFrame())
             continue
 
         f_w, s_w = _feature_windows(strat, entry["params"])
@@ -273,7 +305,17 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                     "bars_since_signal": float(np.log1p(gaps[i])),
                     **{k: frow.get(k, np.nan) for k in feats.columns},
                 })
-        frames.append(pd.DataFrame(rows))
+        fam_df = pd.DataFrame(rows)
+        frames.append(fam_df)
+        if p_rows is not None:
+            # marks before rows, mirroring build_rows' commit order: a rows
+            # partial must never exist without the marks that price it.
+            if marks_sink is not None:
+                new_marks = marks_sink[sink_before:]
+                _write_partial(p_marks,
+                               pd.concat(new_marks, ignore_index=True)
+                               if new_marks else pd.DataFrame())
+            _write_partial(p_rows, fam_df)
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
@@ -344,7 +386,8 @@ MARKS_DIR = config.ARTIFACTS / "meta_marks"   # per-symbol mark-stream shards
 
 
 def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
-               marks: bool = False, marks_dir=MARKS_DIR) -> None:
+               marks: bool = False, marks_dir=MARKS_DIR,
+               partial_dir=None) -> None:
     """Build each symbol's raw rows into rows_dir/<sym>.parquet, skipping any
     already present. Resumable AND shardable: parallel workers on disjoint
     symbol subsets write to the same dir without collision (surface join,
@@ -364,7 +407,7 @@ def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
         print(f"[{sym}] building…", flush=True)
         sink = [] if marks else None
         df = build_symbol_rows(sym, spec["symbols"][sym], provider,
-                               marks_sink=sink)
+                               marks_sink=sink, partial_dir=partial_dir)
         if marks:
             # validate per symbol so a malformed shard surfaces here, not hours
             # later at assemble; also restores the categorical key after concat
@@ -378,6 +421,10 @@ def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
         tmp = pq.with_suffix(".tmp")               # atomic: no truncated checkpoints
         df.to_parquet(tmp, index=False)             # 0-row df writes a marker
         tmp.replace(pq)
+        if partial_dir is not None:
+            # the committed symbol parquet supersedes its family partials
+            for p in partial_dir.glob(f"{sym}.*.parquet"):
+                p.unlink(missing_ok=True)
         if df.empty:
             print(f"[{sym}] no rows")
         else:
@@ -481,6 +528,9 @@ def main() -> None:
                     default=(config.POOL == "v5"),
                     help="restrict assemble to point-in-time universe members "
                          "per (symbol, month) — default ON for the v5 pool")
+    ap.add_argument("--partial-dir", type=str, default=None,
+                    help="enable per-family intra-symbol checkpoints in this "
+                         "dir (spot-preemption resume; see build_symbol_rows)")
     args = ap.parse_args()
     config.ensure_dirs()
     if args.assemble:
@@ -489,7 +539,13 @@ def main() -> None:
     spec = load_spec()
     symbols = [s.strip().upper() for s in args.symbols.split(",")] \
         if args.symbols else list(spec["symbols"])
-    build_rows(symbols, spec, get_provider(), marks=args.marks)
+    partial_dir = None
+    if args.partial_dir:
+        from pathlib import Path
+        partial_dir = Path(args.partial_dir)
+        partial_dir.mkdir(parents=True, exist_ok=True)
+    build_rows(symbols, spec, get_provider(), marks=args.marks,
+               partial_dir=partial_dir)
     print(f"\nbuilt per-symbol rows for {len(symbols)} symbols → {ROWS_DIR}\n"
           f"run `--assemble` to concat into the dataset")
 
