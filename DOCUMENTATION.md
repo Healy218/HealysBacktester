@@ -201,7 +201,33 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
 - Parquet returns dictionary categories in first-appearance order — pin
   category order explicitly or sort order silently depends on assembly order.
 - True dataset-build pace is ~33 min/symbol/shard on big names; don't trust
-  burst extrapolations.
+  burst extrapolations. **A v5 symbol is ~8h packed** (10 families × DTE
+  grid vs v31's 5) — size leashes and stall alarms against that, not v31's.
+
+### GCP Batch fleet sizing (all four paid for during the v5 campaign)
+
+- **Batch packs by `cpuMilli` and OVERCOMMITS `memoryMib`.** Asking for
+  12 GiB does not stop 8 tasks landing on a 64 GiB VM. Eight × ~10 GB of
+  cache overflowed the page cache and the fleet did ONE symbol in 11h.
+  Pin the packing with `CPU_MILLI` (1500 → 5 tasks on an 8-vCPU VM).
+- **Persistent-disk throughput scales with disk SIZE.** A 70 GB
+  pd-balanced boot disk is ~20 MB/s — five tasks staging 10 GB each cost
+  ~1.4h per slot cycle. Fix is a **local-SSD scratch shared per VM**
+  (`LOCAL_SSD=1`): one cache copy at NVMe speed behind an flock.
+- **COS's root filesystem is read-only** — a Batch `volumes` mountPath of
+  `/mnt/ssd` fails with exit 125 (`mkdir: read-only file system`). Host
+  mounts must be under `/mnt/disks/`; bind-mount into the container at
+  whatever path the code probes.
+- **Spot machine families are NOT interchangeable, and none are safe
+  alone.** e2 was reclaimed 3× in 5h; n2 and c2d each ran ~12h clean then
+  swept during US business hours; c2d's pool went dry for 3h while n2
+  filled instantly. Run a **twin fleet on two families** — the global CPU
+  quota caps concurrency anyway, so the second job is free insurance.
+- **Never confirm an image from `gcloud builds list`** (the list-and-pick
+  trap again). A silent Dockerfile-copy failure plus a stale list entry
+  launched 441 tasks against a nonexistent tag — 148 instant failures on
+  `manifest unknown`. `submit.sh` now gates on
+  `artifacts docker images describe <IMAGE>` and refuses to submit.
 
 ## Production ops — Hetzner server
 

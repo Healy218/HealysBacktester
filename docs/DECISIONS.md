@@ -359,3 +359,42 @@ assembled dataset); a v5 build would have skip-checked against v31 rows
 and a v5 assemble would have overwritten v31's dataset in place. Training
 modes publish pool-suffixed reports/runs dirs (v5 outputs would otherwise
 have died with the VM — the P1-6 mode).
+
+## 2026-09-01 — v5 build stage: spot survivability over spot avoidance
+
+**Context:** the 441-symbol dataset build is ~8h of single-process work
+per symbol (10 families × DTE grid). On spot VMs reclaimed every ~3h
+during US business hours, whole-symbol checkpointing meant Monday
+2026-08-31 netted roughly ONE symbol in five hours.
+
+**Decision (user, 2026-09-01):** make spot survivable rather than paying
+to avoid it. Three moves, in order of impact:
+1. **Per-family checkpoints** (`build_symbol_rows(partial_dir=)`): each
+   completed family persists rows+marks atomically and a rerun resumes at
+   the first unfinished one. Preemption cost: ~8h → ~40min.
+2. **Home box as a third build worker**, walking the spec BACKWARDS to
+   meet the cloud fleets in the middle; the bucket skip-check is the only
+   coordination. The Ryzen runs cells ~5–10× faster than a packed cloud
+   core.
+3. **Twin fleets on two machine families** (c2d + n2, same image, same
+   checkpoints). Proven the same day: c2d's spot pool went dry for 3h
+   while n2 filled all 20 slots within 10 minutes of submit. The 32-CPU
+   global quota caps total concurrency, so the twin costs nothing.
+
+**Rejected:** on-demand VMs for the remainder (~$134 — most of the
+remaining credits, would squeeze the training stage that is the actual
+point of the campaign); more cores per task (the build is one process —
+width is the only lever); waiting on the CPU quota increase (Google
+routed it to a Sales-POC dead end twice).
+
+**Accepted caveat:** box-built rows come from the venv, not the docker
+image, so BLAS-level float differences vs cloud-built rows are possible.
+v5 has no identity-diff gate (that was the v31 rebuild), so heterogeneous
+provenance is acceptable; recorded here rather than papered over.
+
+**Also decided:** `boot_restart.sh`'s per-boot Telegram heartbeat now
+defaults OFF — it earned its keep on the crash-prone i5, but the Ryzen
+box is stable and a ping per routine boot is noise. Relaunch notices
+still fire. Conversely a **reverse dead-man** (home box → Hetzner) was
+ADDED after the 2026-08-27/28 outage went unnoticed for ~31h: nothing was
+watching the server, only the server watching the box.

@@ -11,7 +11,11 @@ phase and log the exit in `docs/EXPERIMENTS.md`.
 
 Everything below runs with `NN_META_POOL=v31` unless said otherwise.
 Heavy compute runs on GCP Batch (rebuild + pin `IMAGE_TAG` after every code
-change); the box codes, tests, and smokes.
+change); the box codes, tests, and smokes — **except** the v5 campaign
+(block 6), where the box is also a build worker.
+
+**Active focus since 2026-08-26: block 6, the v5 wide-pool campaign.**
+Blocks 1–5 are paused behind it unless a live-scanner issue jumps the queue.
 
 ## 1 — spx0 seat, round 3 (wave-2 item 2) — IN FLIGHT
 
@@ -89,6 +93,30 @@ change); the box codes, tests, and smokes.
 - [ ] DD-brake live enforcement in `v4_scan` sizing (brake is shown, not
   enforced; moot for V118's `dd_brake=None` but a landmine for any braked
   future bundle).
+
+## 6 — v5 wide-pool campaign (IN FLIGHT since 2026-08-26)
+
+The generation the PIT universe unblocked: 10 families × 441 PIT members,
+all stages on GCP Batch + the home box. Live detail (job ids, relaunch
+commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
+
+- [x] **Freeze DONE 2026-08-29**: 453/453 tasks, zero failures, ~75h,
+  ~$40. Merged spec published to `artifacts_v5_in/baseline_spec.json`:
+  441 symbols frozen, 12 skipped-thin, every family is somebody's
+  best_strategy (rsi 182 · stoch 49 · bbands 46 · volume 42 · squeeze 40
+  · supertrend 39 · ma 28 · elliott 11 · macd 3 · tv_rating 1).
+- [x] Per-family build checkpoints (`--partial-dir`) + bucket partial
+  sync — spot preemption costs ~40min, not ~8h. Kill/resume validated.
+- [x] Home box as a third build worker (`run_build_v5_local.sh`, walks
+  the spec backwards; bucket skip-check is the only coordination).
+- [x] `submit.sh` fails closed when the image tag has no manifest.
+- [ ] **Dataset build: 144/441 rows** (two cloud fleets + the box).
+- [ ] Reconcile stragglers when the fleets drain (one task died
+  permanently to exhausted retries in an earlier fleet).
+- [ ] Assemble (`--membership` ON for v5) → `out/v5/meta_dataset.parquet`.
+- [ ] Evaluate/finalize ladder with PBO + deflated Sharpe; verdict row in
+  `docs/EXPERIMENTS.md`: does the wide pool beat v31?
+- [ ] Post-campaign: delete stale Artifact Registry tags.
 
 ## Forward-tracking duties (standing, this phase)
 

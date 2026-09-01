@@ -1,89 +1,116 @@
 # HANDOFF — state for the next session
 
-Written 2026-08-29 ~04:45 CDT. Protocol: `CLAUDE.md`.
-Previous handoff (the freeze campaign in flight):
-`handoff-history/HANDOFF-2026-08-26-v5-freeze-campaign.md`.
+Written 2026-09-01 ~14:15 CDT. Protocol: `CLAUDE.md`.
+Previous handoff (freeze complete, build stage opening):
+`handoff-history/HANDOFF-2026-08-29-v5-freeze-complete.md`.
 
 ## The one-paragraph state
 
-**The v5 FREEZE IS DONE AND MERGED.** Fleet `v5-freeze-0f132b6-013536`
-SUCCEEDED 2026-08-29 09:11Z: 453/453 per-symbol specs, zero failures,
-zero preemptions, ~75h wall, ~$40. `freeze-merge` published the pool spec
-to `gs://healys-backtester/artifacts_v5_in/baseline_spec.json` (10.3 MB):
-**441 symbols frozen, 12 skipped-thin** (BKNG, DRAM, KLAC, leveraged
-micro-ETFs…), and every one of the 10 families is some symbol's
-best_strategy (rsi 182, stoch 49, bbands 46, volume 42, squeeze 40,
-supertrend 39, ma 28, elliott 11, macd 3, tv_rating 1) — the wide pool is
-genuinely diverse raw material. Next stage: the DATASET BUILD fleet.
-A fresh image was building at `7833952` (Cloud Build, launched ~04:15
-CDT) — that tag carries the task.sh pool-path fix the build stage
-REQUIRES (`f4e787a`); the freeze image `0f132b6` must NOT be used for
-build/assemble/evaluate (it would read/write v31's `out/` paths).
+**v5 freeze: DONE.** 453/453 symbols, merged spec published at
+`gs://healys-backtester/artifacts_v5_in/baseline_spec.json` (441 frozen,
+12 skipped-thin, all 10 families represented). **v5 dataset BUILD: in
+flight, 144/441 rows** (`out/v5/meta_rows/` + matching `meta_marks/`).
+Three producers run concurrently and coordinate ONLY through the bucket
+skip-check (`out/v5/meta_rows/<sym>.parquet`): two cloud fleets and the
+home box. Nothing else in the campaign is running; the live scanner
+(V118 on `main`) is untouched by all of this.
 
-## Build stage: FLEET IN FLIGHT (launched 2026-08-29 17:45Z)
+## What is running right now
 
-**Cloud: job `marks-build-b995b35-003314`** (launched 2026-09-01 00:33Z):
-441 tasks, image `b995b35`, c2d-highmem-8 SPOT (n2 and c2d pools both
-churn during US business hours; c2d cores are ~1.4x faster), 5 packed
-tasks/VM, local-SSD shared cache, **and per-FAMILY checkpoints** — a
-preemption now costs ~one family (~30-60min), not the ~8h symbol
-(validated by kill/resume test on ZS). Partials live in
-`out/v5/meta_partial/`, pushed every 4min by a background loop in
-task.sh.
-**Box: `scripts/run_build_v5_local.sh`** (user decision 2026-09-01) runs
-DETACHED on the Ryzen (3 autosized workers, log
-`logs/build_v5_local.log`), walking the spec BACKWARDS and skipping
-bucket-present symbols — the two sides meet in the middle; the bucket is
-the only coordination. Caveat: venv-built rows may differ from
-docker-built at BLAS float precision (accepted; no diff gate in v5).
-Rows → `out/v5/meta_rows/`, marks → `out/v5/meta_marks/`.
-One task FAILED permanently in an earlier fleet (retries exhausted by
-preemption) — after the fleet ends, diff the bucket's rows against the
-spec's 441 and resubmit any missing symbols.
-The sizing saga (each config was piloted or measured, all in submit.sh
-comments): e2-standard-4 spot → preempted 3x/5h (n2 spot never preempts
-here); 8-packed + pd-standard → page-cache overflow, I/O starvation, ONE
-symbol in 11h; 5-packed + 70GB pd-balanced → healthy but ~1.4h/slot
-staging tax (pd throughput scales with disk SIZE — small disks crawl);
-local-SSD v3 → staging 85min→3min (MSFT pilot). Mount gotcha: COS root is
-read-only — host mounts MUST be under /mnt/disks/, bind into the
-container. When the fleet ends: assemble (`--membership` ON), then the
-evaluate/finalize ladder.
+| Producer | Job / how | Notes |
+|---|---|---|
+| Cloud fleet A | `marks-build-5a76e1c-011718` (c2d-highmem-8 SPOT) | c2d pool went dry ~07:00Z Tue; job alive, 0 workers, will refill if c2d returns |
+| Cloud fleet B | `marks-build-5a76e1c-104922` (n2-highmem-8 SPOT) | the twin; grabbed all 20 slots within 10 min of submit |
+| Home box | `scripts/run_build_v5_local.sh`, detached, `logs/build_v5_local.log` | 3–4 autosized workers, walks the spec BACKWARDS (Z→A) to meet the fleets in the middle |
 
-## Quotas / budget (verified live through 2026-08-29)
+Both fleets use image **`5a76e1c`** and `PARALLEL=60`; the global
+`CPUS_ALL_REGIONS=32` caps total concurrency at ~20 packed tasks, so
+running both costs nothing extra — it just removes single-spot-pool
+dependency (proven: n2 filled while c2d was dry).
 
-- `CPUS_ALL_REGIONS=32` still binding. The user's 64-CPU request
-  (submitted 2026-08-28 on the now-UPGRADED paid account; prior request
-  #74792265 was cancelled) is pending — if granted, fleets widen
-  automatically (freeze sizing packs 5 tasks/VM; PARALLEL is set high).
-- Regional SSD quota 500GB was the hidden width cap (4×100GB boot disks
-  = 400/500) — freeze-mode boot disks now default `pd-standard`
-  (`BOOT_TYPE` knob, commit `7833952`) drawing on the ~empty 4TB
-  standard-disk quota.
-- Credits: ~$162 of $300 remained per console 2026-08-28 (the $138
-  consumed = whole project to date). Build+assemble+training projected
-  $50–90. Console Billing → Credits is the balance page now (paid
-  accounts lose the trial banner).
+Restarting any of them is safe and cheap — see "If you need to relaunch".
 
-## This week's other events (all resolved, all committed)
+## The two mechanisms that make this work
 
-- **Hetzner outage 2026-08-27 13:32Z → 08-28 ~20:20Z**: billing lapse
-  null-routed the server IP while the box kept running; scanners failed
-  closed (zero stale alerts), ~1.7 trading days dark. Recovered; runbook
-  updated. **Reverse dead-man now live on the home box** (user systemd
-  timer + linger, hourly SSH probe, Telegram page after 2 misses).
-- Per-boot Telegram heartbeat from `boot_restart.sh` now defaults OFF
-  (user decision — stable Ryzen box); relaunch notices still send. Its
-  broken root-owned log rerouted to `boot_restart.d.log`.
-- Post-campaign cleanup note stands: delete stale Artifact Registry tags
-  when the campaign ends (keep the live one + current build tag).
+1. **Per-family checkpoints** (`build_symbol_rows(..., partial_dir=)`,
+   commit `b995b35`). A v5 symbol is ~8h (10 families × DTE grid) and
+   spot preemption used to lose ALL of it. Each finished family now
+   writes `<sym>.<strat>.rows.parquet` (+ `.marks`), atomically,
+   marks-before-rows; a rerun resumes at the first unfinished family.
+   task.sh pulls a symbol's partials before building and pushes every
+   4 min in the background. Preemption now costs ~30–60 min.
+   Validated by kill/resume on ZS before rollout.
+2. **Bucket-as-coordinator.** Every producer skip-checks the bucket
+   before a symbol and publishes there after. Worst case for a
+   near-simultaneous start is one duplicated symbol.
 
-## Standing warnings
+## If you need to relaunch
 
-- Freeze image `0f132b6` is for freeze/freeze-merge ONLY (pre-pool-path
-  task.sh). Build stage: `7833952` or later.
-- The 12 skipped-thin symbols are RESULTS, not failures — build only
-  shards `spec["symbols"]` (441), so they're naturally excluded.
-- Local monitors die with session restarts (seen repeatedly) — re-derive
-  cloud state from `gcloud batch jobs list` + bucket paths, never from
-  memory.
+```
+# cloud (either family; ALWAYS build the image first — submit.sh now
+# fails closed if the tag has no manifest)
+bash deploy/gcp/build_image.sh                     # tags $(git rev-parse --short HEAD)
+TASK_MODE=build NN_META_POOL=v5 IMAGE_TAG=<tag> PARALLEL=60 \
+  MACHINE=n2-highmem-8 PROJECT=healys-batch BUCKET=gs://healys-backtester \
+  bash deploy/gcp/submit.sh 441
+
+# home box (detached — harness background tasks get killed on this box)
+setsid nohup scripts/run_build_v5_local.sh > logs/build_v5_local.log 2>&1 &
+```
+
+## When the build finishes
+
+1. **Reconcile**: diff `out/v5/meta_rows/` against the spec's 441
+   symbols and resubmit stragglers (one task died permanently in an
+   earlier fleet when preemption exhausted its retries).
+2. **Assemble**: `TASK_MODE=assemble NN_META_POOL=v5 IMAGE_TAG=<tag> …
+   bash deploy/gcp/submit.sh 1` — `--membership` defaults ON for v5.
+3. Then the evaluate/finalize ladder (PBO + deflated Sharpe are already
+   wired) — the actual verdict on whether the wide pool beats v31.
+
+## Hard-won facts (do not relearn these)
+
+- **Spot machine families are not interchangeable.** e2 churned 3× in 5h;
+  n2 and c2d each run clean for ~12h then sweep during US business
+  hours. Run a twin fleet on a second family instead of betting on one.
+- **Batch packs by `cpuMilli` and overcommits `memoryMib`.** 8 tasks/VM
+  put 8×10GB of cache on a 64GB VM → page-cache thrash → one symbol in
+  11h. `CPU_MILLI=1500` pins it to 5/VM.
+- **PD throughput scales with disk SIZE.** A 70GB pd-balanced boot disk
+  is ~20MB/s; staging five 10GB copies through it cost ~1.4h per slot
+  cycle. Fixed by the local-SSD scratch shared per VM (`/mnt/disks/ssd`
+  host → `/mnt/ssd` container; **COS root is read-only, host mounts MUST
+  live under /mnt/disks/**).
+- **Never trust `gcloud builds list` to confirm an image.** A silent
+  Dockerfile-copy failure + a stale list entry launched a 441-task fleet
+  on a nonexistent tag → 148 instant failures. `submit.sh` now verifies
+  the manifest with `artifacts docker images describe` and refuses to
+  submit otherwise.
+- The 12 skipped-thin symbols are RESULTS; the build only shards the
+  spec's 441.
+
+## Quotas & budget (verified 2026-09-01)
+
+- `CPUS_ALL_REGIONS = 32`, still the binding cap. Google has twice
+  routed the increase request to a "get a Sales POC" dead end (cases
+  #74792265 and the 64-CPU follow-up); the user is pursuing a contact.
+  Regional SSD quota is no longer a constraint (freeze-mode disks are
+  `pd-standard`; build fleets use small pd-balanced + local SSD).
+- Console showed **$138 consumed / ~$162 credit remaining** on 08-28
+  (billing lags ~1–2 days). Build stage to date ≈ $35 including ~$20 of
+  dead-end fleet iterations. Remaining build + assemble + training
+  projects $50–90 → lands inside credits with margin.
+
+## Other live state (unchanged by the campaign)
+
+- **Production server recovered.** 2026-08-27 13:32Z → 08-28 20:20Z it
+  was dark: a billing lapse null-routed the IP while the box kept
+  running, so cron fired into a void and only two missed noon heartbeats
+  showed it. Scanners failed CLOSED (zero stale alerts). A **reverse
+  dead-man** now runs on the home box as a *user* systemd timer (linger
+  enabled): hourly SSH probe, Telegram page after 2 misses, recovery
+  notice. `deploy/systemd/healys-server-deadman.*`.
+- `boot_restart.sh`'s per-boot Telegram heartbeat now defaults **off**
+  (user decision — the Ryzen box is stable); relaunch notices still send.
+- Post-campaign cleanup still owed: delete stale Artifact Registry tags
+  (keep only the tag the last fleet used and anything live).

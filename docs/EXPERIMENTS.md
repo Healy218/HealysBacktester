@@ -6,6 +6,35 @@ edge and a lottery ticket. Full detail lives in each row's report path.
 When the expert panel goes live, the second table tracks realized (paper)
 per-expert performance.
 
+## 2026-08-29 — v5 baseline freeze COMPLETE: the wide pool is genuinely wide
+
+Fleet `v5-freeze-0f132b6-013536` (GCP Batch, image `0f132b6`, 453 tasks,
+n2-highmem-8 spot): **453/453 symbols, zero task failures, zero
+preemptions, ~75h wall, ~$40**. Merged spec published to
+`gs://healys-backtester/artifacts_v5_in/baseline_spec.json`.
+
+**441 symbols frozen, 12 skipped-thin** (BKNG, DRAM, KLAC, leveraged
+micro-ETFs — a RESULT, not a failure; `freeze_all` skips names with no
+freezable baseline).
+
+**The finding that justifies the wide pool: every one of the 10 families
+wins somewhere.** best_strategy distribution across the 441:
+
+| family | rsi | stoch | bbands | volume | squeeze | supertrend | ma | elliott | macd | tv_rating |
+|---|---|---|---|---|---|---|---|---|---|---|
+| symbols | 182 | 49 | 46 | 42 | 40 | 39 | 28 | 11 | 3 | 1 |
+
+v31's five families (ma, macd, rsi, squeeze, tv_rating) would have been
+the best available choice for only 254 of 441 names; the five families v5
+added take 187. That is the raw-material case for the generation — NOT
+yet an edge claim: the pruning discipline (activity guards, GBT gain) and
+the verdict come after the dataset build and the evaluate ladder, with
+PBO + deflated Sharpe attached.
+
+Provenance note: rows for the dataset build come from three producers
+(two cloud fleets + the home box), so BLAS-level float differences are
+possible across symbols. Accepted — v5 has no identity-diff gate.
+
 ## 2026-08-21 (evening) — DD-aware gross brake on EV sizing: walk-forward unchanged, finalize REFUSED again
 
 `0c74274` (brake `max(0.25, 1 − dd_now/dd_brake)` on realized drawdown at
