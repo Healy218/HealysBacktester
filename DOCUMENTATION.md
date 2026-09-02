@@ -278,6 +278,11 @@ simply more expensive than anyone computed, and nobody computed it:
   packed cloud tasks instead contend for one VM's memory bandwidth.
   Corollary: treat the box as the workhorse and cloud as the accelerator
   you pay ~$0.50/symbol for, not the other way round.
+- **`universe.parquet` is written UNSORTED** (`v3/derive_contracts.py:109`
+  builds it from a dict iteration), so underlyings are scattered across
+  every row group and pyarrow can skip none of them — predicate pushdown
+  on `underlying` is useless against the file as written. Sort or
+  partition by underlying at derive time before relying on filtered reads.
 - **Build workers are RAM-bound, not CPU-bound** — 5.4 GB RSS each against
   16 threads, so the box runs 3-5 workers with most cores idle. ~1 GB of
   each worker is a REDUNDANT copy of the 44 MB contract universe

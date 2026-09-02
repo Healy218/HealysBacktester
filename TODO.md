@@ -116,21 +116,55 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
 - [ ] **Audit marks coverage** for symbols finished after 2026-09-01
   00:33Z (the incomplete-checkpoint window — see HANDOFF); rebuild any
   whose rows lack mark-stream entries. Bounded to ~8 symbols + in-flight.
-- [ ] **FIRST THING next campaign — share the contract universe across
-  build workers** (user decision 2026-09-02; measured, not estimated).
-  `HybridProvider._get_universe` (`options/data/hybrid_provider.py:96`)
-  does `pd.read_parquet` per PROCESS and then `u = self._universe.copy()`
-  to normalize 3 columns. Measured on the v5 universe: **44 MB on disk →
-  0.96 GB resident per worker**, and the normalize copy spikes process
-  peak 2.53 → 3.17 GB (~0.64 GB transient). With ~5.4 GB/worker on a
-  32 GB box that redundancy costs a whole worker slot.
-  Fix: normalize in place (kills the spike) and memory-map the parquet via
-  pyarrow so all workers share one physical copy. Expected ~5.4 → ~4.4 GB
-  per worker → 4 workers becomes 5–6 → box throughput ~2.33/hr → ~3/hr.
+- [ ] **FIRST THING next campaign — the universe read path** (user decision
+  2026-09-02). All measured on the live v5 universe, not estimated. Three
+  changes at three layers; together they attack BOTH constraints the v5
+  build hit (RAM ceiling and per-call scan cost).
+
+  *The problem.* `universe.parquet` is 5,214,222 contracts / 44 MB on disk.
+  A symbol build only ever needs its OWN underlying — 21,009 rows, **0.4%**
+  (verified: `Execution.select`, `options/execution.py:89`, always passes
+  `self.symbol`). But today every worker loads the whole thing and every
+  lookup scans the whole thing:
+  - `HybridProvider._get_universe` (`options/data/hybrid_provider.py:96`)
+    reads the parquet per PROCESS → **0.96 GB resident per worker**, then
+    `u = self._universe.copy()` to normalize 3 columns → peak RSS
+    2.53 → 3.17 GB (~0.64 GB transient spike).
+  - `get_chain` (`hybrid_provider.py:120`) builds boolean masks over all
+    5.2M rows on EVERY call: **216 ms/call vs 0.70 ms on a per-symbol
+    pre-filter — 310x**. `Execution._chain_cache` memoizes on
+    `(as_of, right, target_dte)`, so misses are per trade-date and per
+    roll: order 10^3 scans/symbol ≈ **15–40 min of the ~126 min/symbol**.
+
+  *The fix, in dependency order:*
+  1. **Derive sorted/partitioned** — `v3/derive_contracts.py:109` writes
+     `uni.to_parquet(...)` straight from a dict iteration, so underlyings
+     are scattered and every row group is mixed → pyarrow can skip NOTHING
+     and predicate pushdown is useless. Add `uni.sort_values("underlying")`
+     before the write (row-group stats become meaningful) or
+     `partition_cols=["underlying"]` (one small file per symbol).
+     **This one is a prerequisite — steps 2–3 underdeliver without it.**
+  2. **Read only what the worker needs** — load with
+     `filters=[("underlying","==",sym)]`. 0.96 GB → a few MB per worker;
+     the `.copy()` spike becomes irrelevant. Per-worker RSS ~5.4 → ~4.4 GB
+     → 4 workers becomes 5–6.
+  3. **Keep `get_chain`'s API, fix its target** — mask the per-underlying
+     slice, not the full frame. Callers and tests unchanged.
+
+  *Not a data-acquisition problem.* universe.parquet is derived offline
+  from flat-files already on disk — no REST, no quota. Flat-files are
+  already the documented optimal bulk path. No Massive plan or endpoint
+  change helps here (checked 2026-09-02).
+
+  *And not a C++ problem.* The masks already run in numpy/Arrow C++,
+  vectorbt sims are Numba-JIT, training is TF/LightGBM. A rewrite buys
+  maybe 2–5x on genuine Python overhead, costs months, and re-risks
+  diff-gate-validated code — against 310x for ~20 lines of Python.
+
   Deliberately NOT done mid-campaign: touching the data path with symbols
   in flight is the pattern that cost three fleet rebuilds in the v5 build
-  stage. Do it before the next generation launches, when it compounds
-  over the whole run — it is worth more than a RAM upgrade and costs $0.
+  stage. Note step 1 means re-deriving (or one-shot re-sorting) the
+  universe, which workers currently hold open.
 - [ ] Before the NEXT generation: move `WINDOW_START`/`TRAIN_START` to
   2024-12 (~20% of the current train span is built then dropped by the
   membership filter), and key family partials by window (or clear
