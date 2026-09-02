@@ -177,6 +177,76 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
 | FA raw archive | server `fa/archive/` (+ home StockTwits push) | no — append-only, irreplaceable |
 | Full restore kit | home box **D: drive (label MRHA)**, three layered folders + `RESTORE.md` | — |
 
+## GCP billing — how it actually works, and how we blew $263 of $300
+
+Written 2026-09-02, the day the v5 campaign ran the free-trial credits down
+to $36.85. Read this BEFORE launching any fleet.
+
+### The mechanics that bite
+
+- **A GCP "budget" does NOT cap spending.** It sends email at thresholds.
+  There is no native hard spend limit. Believing otherwise is the single
+  most dangerous misconception here — see `scripts/cloud_budget_guard.sh`,
+  which is the brake GCP does not provide (time-based auto-cancel).
+- **The billing console lags 1–2 days.** Any number you read is the past.
+  Never anchor a go/no-go decision on it without adding the burn since.
+- **Credit balance is not exposed to gcloud or any API.** Console →
+  Billing → Credits is the only source, and it lags. So the ONLY real-time
+  spend signal is one you compute yourself from VM-hours.
+- **Trial vs PAID matters enormously.** On a trial, compute simply stops
+  when credits run out. This account was upgraded 2026-08-27 (to escape the
+  32-CPU cap), so now **credits running out means the card gets charged,
+  silently**. Upgrading removed the safety net along with the cap.
+- **Quota was our accidental cost control.** `CPUS_ALL_REGIONS=32` capped
+  us at 4 VMs, which capped burn near $0.70–1.00/h. The quota increase we
+  chased all week would have TRIPLED the burn rate. Be careful what you
+  wish for: on a paid account, a quota bump is a spend multiplier.
+- Local SSD is billed per VM-hour whether or not it is used, and spot
+  prices float. Estimate with the WORST-case rate, never the average.
+
+### The post-mortem: a 3–5x estimating miss, not a spending accident
+
+Roughly $15–25 went to genuine mistakes (an I/O-starved fleet that built
+one symbol in 11h, a fleet launched against a nonexistent image, two dead
+pilots, preemption rework). **That was the small part.** The campaign was
+simply more expensive than anyone computed, and nobody computed it:
+
+1. **Burn rate and duration were never multiplied.** ETAs were quoted in
+   days ("Thursday, maybe Friday") and costs in dollars ("$20–45"), in
+   separate breaths. $16–19/day x 5–7 days = $80–130 for the build stage
+   alone. That multiplication was never once performed before launch.
+2. **Estimates came from PILOT economics, not FLEET economics.** A solo
+   pilot symbol cost ~$0.50 of VM time. But the fleet packs 5 tasks per VM
+   and each v5 symbol is ~8h, so the real unit is
+   `441 symbols x 8h / 5 per VM = ~706 VM-hours` -> **$105–175 for the
+   build stage**, plus ~300 VM-hours (~$45–75) for the freeze. The honest
+   pre-launch number was **$150–250 against $162 remaining**. It never fit,
+   and five minutes of arithmetic would have said so.
+3. **A stale console reading was treated as current.** "$162 remaining"
+   (read 08-28) was quoted for days while $16–19/day kept burning.
+4. **Every relaunch reset progress-per-dollar.** Four fleet configurations
+   in three days each re-staged caches and re-ran in-flight symbols. The
+   configs were necessary; the failure was not re-forecasting after each.
+
+### Rules going forward
+
+- **Before any fleet: compute total VM-hours and dollars, in writing.**
+  `units x hours-per-unit / tasks-per-VM = VM-hours`, x worst-case rate.
+  If that exceeds a third of the remaining budget, resize the JOB, not the
+  estimate.
+- **Express budgets in VM-hours**, the thing measurable in real time.
+  Dollars are a lagging indicator here.
+- **Arm `scripts/cloud_budget_guard.sh` with every fleet launch.** It is
+  the only hard stop that exists.
+- **Re-derive spend daily** from `gcloud batch jobs list` durations x VM
+  count x rate. Do not wait for the console.
+- **The home box is free and fast.** Measured 2026-09-02: 2.26 symbols/hour
+  on the Ryzen (3–5 autosized workers) — roughly half the 4-VM cloud fleet's
+  output, at zero cost. For embarrassingly-parallel work, run the box first
+  and treat cloud as the accelerator you pay for, not the default.
+- **Deleting stale Artifact Registry images is now a cost item**, not
+  housekeeping: ~12 TF-heavy tags at ~$0.10/GB/month.
+
 ## Data limits (probed, definitive — don't re-litigate)
 
 - **Massive options history reaches ~2 years back** (403 before ~mid-2024),
