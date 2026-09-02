@@ -116,6 +116,21 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
 - [ ] **Audit marks coverage** for symbols finished after 2026-09-01
   00:33Z (the incomplete-checkpoint window — see HANDOFF); rebuild any
   whose rows lack mark-stream entries. Bounded to ~8 symbols + in-flight.
+- [ ] **FIRST THING next campaign — share the contract universe across
+  build workers** (user decision 2026-09-02; measured, not estimated).
+  `HybridProvider._get_universe` (`options/data/hybrid_provider.py:96`)
+  does `pd.read_parquet` per PROCESS and then `u = self._universe.copy()`
+  to normalize 3 columns. Measured on the v5 universe: **44 MB on disk →
+  0.96 GB resident per worker**, and the normalize copy spikes process
+  peak 2.53 → 3.17 GB (~0.64 GB transient). With ~5.4 GB/worker on a
+  32 GB box that redundancy costs a whole worker slot.
+  Fix: normalize in place (kills the spike) and memory-map the parquet via
+  pyarrow so all workers share one physical copy. Expected ~5.4 → ~4.4 GB
+  per worker → 4 workers becomes 5–6 → box throughput ~2.33/hr → ~3/hr.
+  Deliberately NOT done mid-campaign: touching the data path with symbols
+  in flight is the pattern that cost three fleet rebuilds in the v5 build
+  stage. Do it before the next generation launches, when it compounds
+  over the whole run — it is worth more than a RAM upgrade and costs $0.
 - [ ] Before the NEXT generation: move `WINDOW_START`/`TRAIN_START` to
   2024-12 (~20% of the current train span is built then dropped by the
   membership filter), and key family partials by window (or clear

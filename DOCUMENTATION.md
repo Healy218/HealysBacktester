@@ -270,6 +270,21 @@ simply more expensive than anyone computed, and nobody computed it:
   bytes/row). Anything else that loads the whole sidecar needs the same care.
 - Parquet returns dictionary categories in first-appearance order — pin
   category order explicitly or sort order silently depends on assembly order.
+- **The home box beats a 4-VM cloud fleet at this workload** (measured
+  2026-09-02): box 2.33 symbols/h from 3-5 workers vs 1.98/h from 4
+  spot VMs running 20 packed tasks — ~2.1 h per symbol on a Ryzen worker
+  vs ~10.1 h on a packed cloud task, ~5x per worker. The 9850X3D's 3D
+  V-Cache suits this (the builds re-read the same chain/bar working set);
+  packed cloud tasks instead contend for one VM's memory bandwidth.
+  Corollary: treat the box as the workhorse and cloud as the accelerator
+  you pay ~$0.50/symbol for, not the other way round.
+- **Build workers are RAM-bound, not CPU-bound** — 5.4 GB RSS each against
+  16 threads, so the box runs 3-5 workers with most cores idle. ~1 GB of
+  each worker is a REDUNDANT copy of the 44 MB contract universe
+  (`HybridProvider._get_universe` reads the parquet per process and then
+  `.copy()`s it to normalize, spiking peak RSS 2.53 -> 3.17 GB). Sharing
+  it (in-place normalize + pyarrow memory-map) buys a whole extra worker
+  for $0 — see TODO block 6, first item of the next campaign.
 - True dataset-build pace is ~33 min/symbol/shard on big names; don't trust
   burst extrapolations. **A v5 symbol is ~8h packed** (10 families × DTE
   grid vs v31's 5) — size leashes and stall alarms against that, not v31's.
