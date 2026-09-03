@@ -236,13 +236,22 @@ if [ "$MODE" = "spx0" ]; then
 fi
 
 # ---- training modes -------------------------------------------------------
-# WHY THESE RUN HERE AND NOT ON THE HOME BOX: that machine has PROVEN
-# single-bit memory corruption (2026-08-18; a bit flipped r->v inside a .pyc
-# the CPU was writing — evidence kept at docs/incidents/). The corruption is
-# SILENT unless it happens to land somewhere that fails loudly, and these two
-# steps produce the bundle that is committed and deployed to production. A flip
-# in a training array or a model weight would ship a wrong model with no error.
-# Full reasoning: HANDOFF.md.
+# HISTORICAL DOCTRINE, SUPERSEDED 2026-09-03 — READ BEFORE RE-APPLYING IT.
+# This block used to say training must NEVER run on the home box, because
+# that machine had PROVEN single-bit memory corruption (2026-08-18; a bit
+# flipped r->v inside a .pyc the CPU was writing — evidence still kept at
+# docs/incidents/). That reasoning was sound for the hardware it was written
+# about: the i5-11400/B560 build with the faulty RAM. **That machine was
+# RETIRED 2026-08-23** and replaced by the Ryzen 9850X3D / new DDR5 box, so
+# the premise no longer holds and the rule no longer binds.
+# Current doctrine (user decision 2026-09-03, docs/DECISIONS.md): assemble
+# and training MAY run on the home box; cloud is optional, not required.
+# The concern that survives the hardware swap is that the NEW RAM is
+# unvalidated, and these steps still produce the bundle that gets committed
+# and deployed to production — so validate by DETERMINISM, not by absence of
+# a crash: run evaluate twice with identical seeds and diff the
+# SHA256SUMS.txt this code already writes. Byte-identical = no silent flip.
+# These modes remain fully supported here for when cloud is the better tool.
 if [ "$MODE" = "evaluate" ] || [ "$MODE" = "finalize" ]; then
   MARKS="$ART/meta_dataset.marks.parquet"
   [ -f "$MARKS" ] || { echo "FATAL: $MARKS not staged" >&2; exit 1; }

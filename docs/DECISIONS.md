@@ -398,3 +398,49 @@ box is stable and a ping per routine boot is noise. Relaunch notices
 still fire. Conversely a **reverse dead-man** (home box → Hetzner) was
 ADDED after the 2026-08-27/28 outage went unnoticed for ~31h: nothing was
 watching the server, only the server watching the box.
+
+## 2026-09-03 — assemble + training move to the home box; the "never train
+## on the box" doctrine is retired with the hardware it was written about
+
+**Decision (user):** the v5 assemble and the evaluate/finalize ladder run
+on the home box. Cloud stays available but is no longer required for them.
+
+**What this overturns.** `deploy/gcp/task.sh` carried a strong rule that
+training must NEVER run on the home box, because that machine had PROVEN
+single-bit memory corruption (2026-08-18: a bit flipped r->v inside a .pyc
+the CPU was writing; evidence retained at `docs/incidents/`). The rule was
+correct for its subject — **the i5-11400/B560 build with the faulty RAM.**
+That machine was retired 2026-08-23 and replaced by the Ryzen 9850X3D with
+new DDR5. The premise is gone, so the rule goes with it. The comment in
+task.sh has been rewritten to say so, because a future reader would
+otherwise route training back to the cloud on the strength of a warning
+about hardware that no longer exists.
+
+**Why now, concretely.** Credits are nearly exhausted ($36.85 of $300 left
+on 2026-09-02, see the billing post-mortem in DOCUMENTATION.md), and the
+box is not a fallback — it is measurably the better machine for this work:
+2.33 symbols/hour against 1.98 from a 4-VM spot fleet, ~5x per worker.
+Training on it costs $0 and preserves the remaining credits.
+
+**The risk that does NOT go away, and how it is handled.** The new RAM is
+unvalidated, and these steps still produce the bundle that is committed and
+deployed to production. Silent corruption does not announce itself, so
+"it didn't crash" is not evidence. **Validate by determinism:** v4_evaluate
+and v4_finalize already emit `SHA256SUMS.txt` over every output — run
+evaluate twice with identical seeds and diff the hashes. Byte-identical
+output means no flip landed in a training array or a model weight. A
+memtest86+ pass is the stronger check when a reboot is convenient.
+
+**Practical constraints noted at decision time:** (1) most row/marks shards
+live only in the bucket (cloud-built), ~1 GB to pull down before assemble;
+(2) the mark stream is the memory-sensitive step — v31's 88M rows peaked
+~9 GB via `pd.concat` and died on the OLD box, which is why the shipped
+path streams shard-by-shard through a `ParquetWriter` (~0.2 GB peak). v5
+has 441 symbols against v31's 118, so expect 300M+ rows; the streaming path
+should hold, and the box now has 32 GB rather than 15.5 GB, but this is the
+step to watch rather than assume.
+
+**Rejected:** paying the last ~$10 of credits to run training in the cloud
+(it buys nothing the box cannot do, and leaves no margin for a re-run);
+and treating the 2026-08-18 incident as a permanent property of "the home
+box" rather than of the specific retired hardware.
