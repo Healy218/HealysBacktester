@@ -30,8 +30,13 @@ REGION=${REGION:-us-central1}
 BUDGET_USD=${BUDGET_USD:-25}
 USD_PER_HOUR=${USD_PER_HOUR:-1.00}
 WARN_FRACTION=${WARN_FRACTION:-0.5}
+# SPENT_USD: spend that already happened BEFORE this guard started — e.g.
+# when raising the budget mid-run, restart with the old guard's reported
+# figure. Without it a restart silently grants a FULL fresh budget on top
+# of what was already burned, which is the opposite of a brake.
+SPENT_USD=${SPENT_USD:-0}
 
-LIMIT_S=$(./venv/bin/python -c "print(int(($BUDGET_USD/$USD_PER_HOUR)*3600))")
+LIMIT_S=$(./venv/bin/python -c "print(max(0, int((($BUDGET_USD-$SPENT_USD)/$USD_PER_HOUR)*3600)))")
 WARN_S=$(./venv/bin/python -c "print(int($LIMIT_S*$WARN_FRACTION))")
 T0=$(date +%s)
 echo "budget \$$BUDGET_USD at \$$USD_PER_HOUR/h -> hard cancel after ${LIMIT_S}s ($(($LIMIT_S/3600))h)"
@@ -51,7 +56,7 @@ PY
 warned=0
 while true; do
   ELAPSED=$(( $(date +%s) - T0 ))
-  SPENT=$(./venv/bin/python -c "print(f'{($ELAPSED/3600)*$USD_PER_HOUR:.2f}')")
+  SPENT=$(./venv/bin/python -c "print(f'{$SPENT_USD+($ELAPSED/3600)*$USD_PER_HOUR:.2f}')")
   # Count only jobs still capable of billing.
   LIVE=0
   for J in "${JOBS[@]}"; do
