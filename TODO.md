@@ -173,8 +173,18 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
 - [ ] Settle the membership-vs-`assign_split` ordering mismatch
   (`assemble` filters before, `run_fold` after) before trusting the
   evaluate ladder's fold splits.
-- [ ] Assemble (`--membership` ON for v5) → `out/v5/meta_dataset.parquet`.
-- [ ] Evaluate/finalize ladder with PBO + deflated Sharpe; verdict row in
+- [ ] Assemble (`--membership` ON for v5) → `out/v5/meta_dataset.parquet`,
+  **on the home box** (user decision 2026-09-03, DECISIONS). Pull all
+  row+marks shards down first (~1 GB — most exist only in the bucket).
+  Watch memory on the mark stream: v31's 88M rows died on the OLD box via
+  `pd.concat`; the shipped path streams through a `ParquetWriter` (~0.2 GB
+  peak) and v5 has ~4x v31's symbol count.
+- [ ] **Determinism check before trusting any box-trained bundle** — the
+  new DDR5 is unvalidated and this output ships to production. Run
+  evaluate twice with identical seeds and diff the `SHA256SUMS.txt` both
+  modes already write; byte-identical = no silent bit flip. (memtest86+ is
+  the stronger check whenever a reboot is convenient.)
+- [ ] Evaluate/finalize ladder **on the box**, with PBO + deflated Sharpe; verdict row in
   `docs/EXPERIMENTS.md`: does the wide pool beat v31?
 - [ ] Post-campaign: delete stale Artifact Registry tags.
 
