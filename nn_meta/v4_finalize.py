@@ -78,6 +78,31 @@ def _final_split(ds: pd.DataFrame, val_fraction: float, embargo: str) -> pd.Seri
         test_start=window_end, test_end=window_end, embargo=embargo)
 
 
+def _dump_val_predictions(val_rows: pd.DataFrame, family: str, pred: np.ndarray,
+                          ev: np.ndarray | None, cheap: dict) -> Path:
+    """Write the validation rows' identity columns + every prediction we hold
+    (full ensemble and each family's cheap-seed proxy) beside the reports."""
+    from nn_meta.mark_stream import stable_trade_id
+    keys = ["symbol", "strategy", "trade_idx", "dte", "entry_ts", "exit_ts",
+            "executed", "net_return"]
+    out = val_rows[[k for k in keys if k in val_rows.columns]].copy()
+    try:
+        out["trade_id"] = stable_trade_id(val_rows).to_numpy()
+    except Exception:                       # synthetic rows without key columns
+        out["trade_id"] = np.arange(len(out))
+    out["pred_ensemble"] = np.asarray(pred, float)
+    out["ev_ensemble"] = np.nan if ev is None else np.asarray(ev, float)
+    out.attrs["ensemble_family"] = family
+    for fam, (p, e) in cheap.items():
+        out[f"pred_cheap_{fam}"] = p
+        out[f"ev_cheap_{fam}"] = np.nan if e is None else e
+    config.REPORTS_DIR.mkdir(parents=True, exist_ok=True)
+    dest = config.REPORTS_DIR / "finalize_val_predictions.parquet"
+    out.to_parquet(dest, index=False)
+    print(f"  wrote {dest} ({len(out)} rows; ensemble family={family})", flush=True)
+    return dest
+
+
 def _train_nn_seed(train, val, *, features, label, seed, epochs, run_id,
                    out_dir: Path) -> tuple[dict, dict]:
     """Train + persist one NN seed and return (info, member). ``member`` keeps
@@ -211,7 +236,22 @@ def main() -> None:
                     help="per-contract 15m mark stream; selection (family pick "
                          "AND ensemble operating point) then runs through the "
                          "mark-to-market ledger")
+    ap.add_argument("--gate-bar", default=config.GATE_BAR, choices=list(config.GATE_BARS),
+                    help="beat-baseline definition used for selection AND the "
+                         "persist decision (config.GATE_BARS; default config.GATE_BAR)")
+    ap.add_argument("--report-all-gates", action="store_true",
+                    help="also print every candidate's verdict under every gate "
+                         "variant (needs --marks; bars computed once)")
+    ap.add_argument("--thresholds", default=None,
+                    help="comma-separated P(win) cuts for filter/rank modes "
+                         "(default config.KEEP_THRESHOLDS); e.g. 0.5,0.55,0.6,0.7")
     args = ap.parse_args()
+    thresholds = ([float(t) for t in args.thresholds.split(",") if t.strip()]
+                  if args.thresholds else list(config.KEEP_THRESHOLDS))
+    gate_kw = dict(gate_bar=args.gate_bar, report_all_gates=args.report_all_gates,
+                   thresholds=thresholds)
+    print(f"gate: {args.gate_bar}{' (+all gates reported)' if args.report_all_gates else ''} "
+          f"| thresholds: {thresholds}", flush=True)
 
     select_seeds = [int(s) for s in args.select_seeds.split(",") if s.strip()]
     final_seeds = ([int(s) for s in args.final_seeds.split(",")] if args.final_seeds
@@ -243,6 +283,7 @@ def main() -> None:
     # ── 1) pick the winning family/mode/threshold on validation (cheap seeds) ──
     print(f"\n=== selecting config (seeds={select_seeds}) ===", flush=True)
     candidates = []
+    cheap_preds: dict[str, tuple[np.ndarray, np.ndarray | None]] = {}
     for family in models:
         t0 = time.time()
         if family == "nn":
@@ -261,8 +302,10 @@ def main() -> None:
             pred = predictor.predict(val_rows)
             ev_fn = getattr(predictor, "predict_ev", None)
             ev = ev_fn(val_rows) if ev_fn else None
+        cheap_preds[family] = (np.asarray(pred, float),
+                               None if ev is None else np.asarray(ev, float))
         policy = choose_policy(val_rows, pred, spec, mark_stream=mark_stream,
-                               ev_predictions=ev)
+                               ev_predictions=ev, **gate_kw)
         policy["family"] = family
         candidates.append(policy)
         ret = policy["metrics"]["total_return"]
@@ -314,8 +357,12 @@ def main() -> None:
     print("\n=== re-validating operating point on the full ensemble ===", flush=True)
     ens_val_pred = _ensemble_predict(family, members, val_rows, features)
     ens_val_ev = _ensemble_ev(family, members, val_rows, features)
+    # Persist the validation-tail predictions so thresholds, modes and gate
+    # parameters can be swept OFFLINE without retraining (the ensemble is
+    # deterministic; scripts/policy_gate_sweep.py consumes this file).
+    _dump_val_predictions(val_rows, family, ens_val_pred, ens_val_ev, cheap_preds)
     final_policy = choose_policy(val_rows, ens_val_pred, spec, mark_stream=mark_stream,
-                                 ev_predictions=ens_val_ev)
+                                 ev_predictions=ens_val_ev, **gate_kw)
     mode, threshold = final_policy["mode"], final_policy["threshold"]
     dd_brake = final_policy.get("dd_brake")
     metrics = final_policy["metrics"]
@@ -332,9 +379,9 @@ def main() -> None:
     if not final_policy["eligible"]:
         shutil.rmtree(staging)
         print("\nNO ELIGIBLE CONFIG — the full ensemble did not clear the gate "
-              "(kept >= {}, beat baseline ex-top3, maxDD <= {:.0%}; modes tried: filter, rank{}). "
+              "(kept >= {}, beat baseline [gate={}], maxDD <= {:.0%}; modes tried: filter, rank{}). "
               "Nothing persisted; any existing {} is untouched.".format(
-                  config.MIN_KEPT_TRADES, config.MAX_DRAWDOWN_CAP,
+                  config.MIN_KEPT_TRADES, args.gate_bar, config.MAX_DRAWDOWN_CAP,
                   ", ev" if ens_val_ev is not None else "", FINAL_DIR.name))
         raise SystemExit(1)
 
@@ -346,6 +393,8 @@ def main() -> None:
         "val_max_drawdown": metrics["max_drawdown"], "eligible": True,
         "baseline_return": final_policy.get("baseline_return"),
         "baseline_ex_top3": final_policy.get("baseline_ex_top3"),
+        "gate_bar": args.gate_bar, "gate_bars": final_policy.get("gate_bars"),
+        "keep_thresholds": thresholds,
         "operating_point_source": "full-ensemble revalidation",
         "magnitude_head": ens_val_ev is not None,
         "ev_thresholds": list(config.EV_THRESHOLDS),

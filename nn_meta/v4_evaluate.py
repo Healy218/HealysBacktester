@@ -18,6 +18,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Callable, Iterable
 
+import math
+
 import numpy as np
 import pandas as pd
 
@@ -264,13 +266,25 @@ def format_candidate_grid(policy: dict, baseline_return: float | None = None) ->
     lines = [f"  baseline return: {baseline_return}"]
     if policy.get("baseline_ex_top3") is not None:
         lines[0] += f"  (gate bar = ex-top3: {policy['baseline_ex_top3']:+.1%})"
+    bars = policy.get("gate_bars") or {}
+    if bars:
+        fmt = lambda v: "n/a" if v is None else f"{v:+.1%}"
+        lines.append(f"  gate = {policy.get('gate_bar')} | bars: ex_top3 {fmt(bars.get('ex_top3'))}"
+                     f" | risk ratio {bars.get('risk'):.2f}" if bars.get("risk") is not None else
+                     f"  gate = {policy.get('gate_bar')} | bars: ex_top3 {fmt(bars.get('ex_top3'))}")
+        lines[-1] += (f" | median_draws {fmt(bars.get('median_draws'))}"
+                      f" | ex_topk_pct {fmt(bars.get('ex_topk_pct'))} (k={bars.get('ex_topk_k')})")
+        lines.append("  " + " " * 55 + "gate→ ex3 risk med topk")
     for c in policy.get("candidate_grid", []):
         ret = c["total_return"]; dd = c["max_drawdown"]
-        lines.append(
-            f"  {policy_label(c):<24} kept={c['n_kept']:<5} "
-            f"ret={'n/a' if ret is None else f'{ret:+.1%}':<9} "
-            f"maxDD={'n/a' if dd is None else f'{dd:.1%}':<7} "
-            f"{'ELIGIBLE' if c['eligible'] else '-'}")
+        row = (f"  {policy_label(c):<24} kept={c['n_kept']:<5} "
+               f"ret={'n/a' if ret is None else f'{ret:+.1%}':<9} "
+               f"maxDD={'n/a' if dd is None else f'{dd:.1%}':<7} "
+               f"{'ELIGIBLE' if c['eligible'] else '-':<8}")
+        by = c.get("eligible_by_gate")
+        if by:
+            row += " " + " ".join(f"{'✓' if by.get(g) else '·':^4}" for g in config.GATE_BARS)
+        lines.append(row)
     return "\n".join(lines)
 
 
@@ -300,7 +314,8 @@ def _select_winner(selected: list[dict]) -> dict:
     return max(selected, key=_policy_rank)
 
 
-def _passes_gate(metrics: dict, baseline: dict, dd_cap: float | None = None) -> bool:
+def _passes_gate(metrics: dict, baseline: dict, dd_cap: float | None = None,
+                 gate_bar: str | None = None) -> bool:
     """The eligibility gate, identical for every mode: kept >= MIN_KEPT_TRADES,
     beat the frozen baseline, maxDD <= ``dd_cap`` (default the shared
     MAX_DRAWDOWN_CAP; the spx0 pool passes its tighter 0.25).
@@ -312,15 +327,93 @@ def _passes_gate(metrics: dict, baseline: dict, dd_cap: float | None = None) -> 
     baseline entered ≤ 3 trades — the metric emitters return a 0.0 sentinel
     there, not None, and a 0.0 bar would wave through anything positive."""
     cap = config.MAX_DRAWDOWN_CAP if dd_cap is None else float(dd_cap)
+    gate_bar = gate_bar or config.GATE_BAR
+    if gate_bar not in config.GATE_BARS:
+        raise ValueError(f"unknown gate_bar {gate_bar!r}; choose from {config.GATE_BARS}")
+    if (metrics["n_kept"] < config.MIN_KEPT_TRADES or metrics["total_return"] is None
+            or (metrics["max_drawdown"] or 0) > cap):
+        return False
+    if gate_bar == "risk":
+        # (a) return per unit of drawdown, against the ex-top3 book's own ratio.
+        base_ret = _gate_bar_value(baseline, "ex_top3")
+        if base_ret is None:
+            return True
+        base_dd = baseline.get("ex_top3_max_drawdown")
+        if base_dd is None:
+            base_dd = baseline.get("max_drawdown")
+        return bool(_risk_ratio(metrics["total_return"], metrics["max_drawdown"])
+                    > _risk_ratio(base_ret, base_dd))
+    bar = _gate_bar_value(baseline, gate_bar)
+    return bool(bar is None or metrics["total_return"] > bar)
+
+
+def _gate_bar_value(baseline: dict, gate_bar: str) -> float | None:
+    """The return bar for the beat-baseline term under ``gate_bar``.
+
+    Falls back to the raw baseline return when the book entered ≤ 3 trades
+    (the metric emitters return a 0.0 sentinel there), and to ex-top3 when a
+    variant's bar was not computed (shared-sim path, or extras not requested)."""
+    raw_fallback = baseline.get("n_kept", 0) <= 3
+    if not raw_fallback:
+        if gate_bar == "median_draws" and baseline.get("ex_top3_median_draws") is not None:
+            return baseline["ex_top3_median_draws"]
+        if gate_bar == "ex_topk_pct" and baseline.get("total_ex_topk") is not None:
+            return baseline["total_ex_topk"]
     bar = baseline.get("total_ex_top3")
-    if bar is None or baseline.get("n_kept", 0) <= 3:
+    if bar is None or raw_fallback:
         bar = baseline["total_return"]
-    return bool(
-        metrics["n_kept"] >= config.MIN_KEPT_TRADES
-        and metrics["total_return"] is not None
-        and (bar is None or metrics["total_return"] > bar)
-        and (metrics["max_drawdown"] or 0) <= cap
-    )
+    return bar
+
+
+def _risk_ratio(ret: float | None, dd: float | None) -> float:
+    """Calmar-style return per unit of max drawdown, drawdown floored so a
+    near-zero DD cannot make a tiny return look infinite."""
+    if ret is None:
+        return -np.inf
+    return float(ret) / max(float(dd or 0.0), config.GATE_DD_FLOOR)
+
+
+def _ledger_ex_topk(selected: pd.DataFrame, mark_stream: pd.DataFrame, k: int, *,
+                    costs: CostScenario) -> tuple[float, float | None]:
+    """(return, maxDD) of ``selected`` with its ``k`` best trades removed and
+    re-marked through the same ledger; (0.0, None) when there are ≤ k trades."""
+    if len(selected) <= k:
+        return 0.0, None
+    keep = selected.drop(index=selected["net_return"].nlargest(k).index)
+    if keep.empty:
+        return 0.0, None
+    t2, m2 = execution_frames(keep, mark_stream)
+    ex, _ = mark_to_market_portfolio(
+        t2, m2, max_concurrent=config.MAX_CONCURRENT,
+        position_fraction=config.PORTFOLIO_FRACTION, costs=costs)
+    return ex["total_return"], ex["max_drawdown"]
+
+
+def _baseline_gate_extras(base_rows: pd.DataFrame, mark_stream: pd.DataFrame, *,
+                          costs: CostScenario, draws: int = config.GATE_DRAWS,
+                          topk_pct: float = config.GATE_TOPK_PCT, seed: int = 0) -> dict:
+    """Extra bars for the gate variants, all from the frozen book through the
+    ledger: ex-top-k with k scaled to the entered book (c), and the median
+    ex-top3 over ``draws`` re-draws where ONLY equal-entry_ts ties are
+    reshuffled (b) — the slot portfolio is first-come, so tie order alone
+    moves the standing bar by hundreds of points."""
+    zeros = np.zeros(len(base_rows))
+    sel = _selected_rows(_candidate_rows(base_rows, zeros, "filter", 0.0), "filter")
+    k = max(3, int(math.ceil(topk_pct * len(sel))))
+    topk_ret, topk_dd = _ledger_ex_topk(sel, mark_stream, k, costs=costs)
+    out = {"total_ex_topk": topk_ret, "ex_topk_k": k, "ex_topk_max_drawdown": topk_dd}
+    rng = np.random.default_rng(seed)
+    vals = []
+    for _ in range(draws):
+        shuffled = (base_rows.assign(_r=rng.random(len(base_rows)))
+                    .sort_values(["entry_ts", "_r"], kind="stable")
+                    .drop(columns="_r").reset_index(drop=True))
+        m = _ledger_policy_metrics(shuffled, np.zeros(len(shuffled)), "filter", 0.0,
+                                   mark_stream, costs=costs)
+        vals.append(0.0 if m["total_ex_top3"] is None else float(m["total_ex_top3"]))
+    out["ex_top3_draws"] = vals
+    out["ex_top3_median_draws"] = float(np.median(vals)) if vals else None
+    return out
 
 
 def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
@@ -330,8 +423,16 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                   ev_predictions: np.ndarray | None = None,
                   ev_thresholds: Iterable[float] = config.EV_THRESHOLDS,
                   dd_cap: float | None = None,
-                  ev_dd_brakes: Iterable[float | None] = config.EV_DD_BRAKES) -> dict:
+                  ev_dd_brakes: Iterable[float | None] = config.EV_DD_BRAKES,
+                  gate_bar: str | None = None,
+                  report_all_gates: bool = False) -> dict:
     """Choose mode and threshold on validation only.
+
+    ``gate_bar`` picks the beat-baseline definition (config.GATE_BARS; default
+    config.GATE_BAR). With ``report_all_gates`` every candidate also carries
+    ``eligible_by_gate`` for all variants and the winner carries ``gate_bars``
+    — the bars are computed once from the same frozen book. Both need the
+    ledger; on the shared-sim path only the standing bar exists.
 
     With ``mark_stream`` supplied (Option B), every candidate policy — and the
     frozen baseline it must beat — is scored through the mark-to-market ledger
@@ -351,13 +452,23 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
         raise ValueError("row/ev prediction length mismatch")
     fmask = frozen_mask(rows, spec)
     ledger = mark_stream is not None
+    gate_bar = gate_bar or config.GATE_BAR
     if ledger:
         base_rows = rows[fmask].reset_index(drop=True)
         baseline = _ledger_policy_metrics(
             base_rows, np.zeros(len(base_rows)), "filter", 0.0, mark_stream,
             costs=costs)
+        if (gate_bar != "ex_top3" or report_all_gates) and not base_rows.empty:
+            baseline.update(_baseline_gate_extras(base_rows, mark_stream, costs=costs))
     else:
         baseline = portfolio_metrics(rows[fmask])
+
+    def _verdict(metrics: dict) -> dict:
+        v = {"eligible": _passes_gate(metrics, baseline, dd_cap, gate_bar)}
+        if report_all_gates:
+            v["eligible_by_gate"] = {g: _passes_gate(metrics, baseline, dd_cap, g)
+                                     for g in config.GATE_BARS}
+        return v
     candidates = []
     for mode in config.EVAL_MODES:
         eval_rows = rows[fmask].reset_index(drop=True) if mode == "filter" else rows.reset_index(drop=True)
@@ -372,7 +483,7 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                 "threshold": float(threshold),
                 "metrics": metrics,
                 "baseline_return": baseline["total_return"],
-                "eligible": _passes_gate(metrics, baseline, dd_cap),
+                **_verdict(metrics),
             })
     if ev_predictions is not None:
         ev_rows = rows.reset_index(drop=True)
@@ -390,7 +501,7 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
                     "mode": config.EV_MODE, "threshold": float(threshold),
                     "dd_brake": brake,
                     "metrics": metrics, "baseline_return": baseline["total_return"],
-                    "eligible": _passes_gate(metrics, baseline, dd_cap),
+                    **_verdict(metrics),
                 })
     # An eligible policy always outranks an ineligible one; ties break on
     # validation return. When nothing clears the gate the least-bad candidate
@@ -399,6 +510,20 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
     winner = max(candidates, key=_policy_rank)
     # The gate's actual bar (DECISIONS 2026-08-24), kept so refusals are readable.
     winner["baseline_ex_top3"] = baseline.get("total_ex_top3")
+    winner["gate_bar"] = gate_bar
+    if "ex_top3_median_draws" in baseline or "total_ex_topk" in baseline:
+        ex3_dd = baseline.get("ex_top3_max_drawdown")
+        winner["gate_bars"] = {
+            "ex_top3": _gate_bar_value(baseline, "ex_top3"),
+            "risk": _risk_ratio(_gate_bar_value(baseline, "ex_top3"),
+                                baseline.get("max_drawdown") if ex3_dd is None else ex3_dd),
+            "median_draws": _gate_bar_value(baseline, "median_draws"),
+            "ex_top3_draws": baseline.get("ex_top3_draws"),
+            "ex_topk_pct": _gate_bar_value(baseline, "ex_topk_pct"),
+            "ex_topk_k": baseline.get("ex_topk_k"),
+            "baseline_max_drawdown": baseline.get("max_drawdown"),
+            "ex_top3_max_drawdown": ex3_dd,
+        }
     # Every candidate is a "trial"; its Sharpe feeds the deflation later.
     winner["candidate_sharpes"] = [c["metrics"]["per_trade_sharpe"] for c in candidates]
     # PBO (CSCV, López de Prado): every candidate's equal-weight daily P&L on
@@ -414,6 +539,7 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
         "mode": c["mode"], "threshold": c["threshold"], "dd_brake": c.get("dd_brake"),
         "n_kept": c["metrics"]["n_kept"], "total_return": c["metrics"]["total_return"],
         "max_drawdown": c["metrics"]["max_drawdown"], "eligible": c["eligible"],
+        **({"eligible_by_gate": c["eligible_by_gate"]} if "eligible_by_gate" in c else {}),
     } for c in candidates]
     winner["selection_basis"] = "ledger" if ledger else "shared_sim"
     return winner
@@ -543,18 +669,7 @@ def _ledger_policy_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
     rets = selected["net_return"].to_numpy(dtype=float)
     # ex-top3 through the SAME ledger: drop the three best trades and re-mark —
     # the house outlier-dependence check, now on the stricter accounting.
-    if len(selected) > 3:
-        keep = selected.drop(index=selected["net_return"].nlargest(3).index)
-        if keep.empty:
-            ex_total = 0.0
-        else:
-            t2, m2 = execution_frames(keep, mark_stream)
-            ex_metrics, _ = mark_to_market_portfolio(
-                t2, m2, max_concurrent=config.MAX_CONCURRENT,
-                position_fraction=config.PORTFOLIO_FRACTION, costs=costs)
-            ex_total = ex_metrics["total_return"]
-    else:
-        ex_total = 0.0
+    ex_total, ex_dd = _ledger_ex_topk(selected, mark_stream, 3, costs=costs)
     out = dict(empty)
     out.update({
         "n": len(selected), "n_kept": len(selected),
@@ -563,6 +678,7 @@ def _ledger_policy_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
         "per_trade_sharpe": float(rets.mean() / rets.std(ddof=1))
         if len(rets) > 1 and rets.std(ddof=1) > 0 else None,
         "total_ex_top3": ex_total,
+        "ex_top3_max_drawdown": ex_dd,
         "turnover": m["turnover"],
         "peak_gross_exposure": m["peak_gross_exposure"],
         "mean_gross_exposure": m["mean_gross_exposure"],

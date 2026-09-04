@@ -306,6 +306,21 @@ MIN_PASSING_SEEDS = 20        # of 40 seeds: require a majority to clear the gat
 #          expected return — same slot count, per-name cap PORTFOLIO_FRACTION,
 #          so it can only de-risk low-EV names. Joins the grid only when an EV
 #          prediction is supplied (legacy callers stay bit-identical).
+# ── Gate: the beat-baseline bar (DECISIONS 2026-08-24; variants 2026-09-04) ──
+# The frozen take-everything book is a 5-slot first-come draw, so its ex-top3
+# return is tie-order noise (scripts/gate_bar_sensitivity.py: −66%…+283% on
+# the same window). GATE_BAR selects how the bar is defined:
+#   ex_top3      — standing gate: candidate return > baseline ex-top3 return
+#   risk         — (a) candidate return/maxDD > the ex-top3 book's return/maxDD
+#   median_draws — (b) bar = median ex-top3 over GATE_DRAWS tie-shuffled draws
+#   ex_topk_pct  — (c) bar = baseline ex-top-k, k = max(3, ceil(pct × entered))
+# Candidate side stays raw in every variant; MIN_KEPT and the DD cap unchanged.
+GATE_BAR = os.environ.get("GATE_BAR", "ex_top3")
+GATE_BARS = ("ex_top3", "risk", "median_draws", "ex_topk_pct")
+GATE_DRAWS = 8
+GATE_TOPK_PCT = 0.05
+GATE_DD_FLOOR = 0.05                        # floor on maxDD in the risk ratio
+
 EVAL_MODES = ["filter", "rank"]
 EV_MODE = "ev"
 EV_THRESHOLDS = [0.0, 0.05, 0.10]          # predicted expected return (net, per trade)

@@ -1,4 +1,5 @@
 """Pure-policy tests for the V4 ablation evaluator."""
+import pytest
 import numpy as np
 import pandas as pd
 
@@ -207,3 +208,56 @@ def test_write_report_surfaces_pbo_when_the_winner_carries_it(tmp_path):
     results[0]["winner"] = {**base_winner, "pbo": None}
     _write_report(results, out)
     assert "## PBO" not in out.read_text()
+
+
+def _gate_case():
+    # The 2026-09-04 v5 finalize numbers: the standing bar refused a candidate
+    # that beats the same book on every risk-aware or order-robust reading.
+    baseline = {"n_kept": 203, "total_return": 27.81, "max_drawdown": 0.466,
+                "total_ex_top3": 3.819, "ex_top3_max_drawdown": 0.575,
+                "ex_top3_median_draws": -0.394, "total_ex_topk": -0.441, "ex_topk_k": 11}
+    candidate = {"n_kept": 154, "total_return": 2.013, "max_drawdown": 0.164}
+    return baseline, candidate
+
+
+def test_gate_variants_read_the_same_book_differently():
+    from nn_meta.v4_evaluate import _passes_gate
+    baseline, cand = _gate_case()
+    assert not _passes_gate(cand, baseline, gate_bar="ex_top3")       # +201% < +382%
+    assert _passes_gate(cand, baseline, gate_bar="risk")              # 12.3 > 6.6 per unit DD
+    assert _passes_gate(cand, baseline, gate_bar="median_draws")      # +201% > -39%
+    assert _passes_gate(cand, baseline, gate_bar="ex_topk_pct")       # +201% > -44%
+    # risk: a candidate with the baseline's own drawdown must still out-return it
+    worse = {"n_kept": 154, "total_return": 2.0, "max_drawdown": 0.40}   # 5.0 < 6.6
+    assert not _passes_gate(worse, baseline, gate_bar="risk")
+    # MIN_KEPT and the DD cap bind under every variant
+    for g in ("ex_top3", "risk", "median_draws", "ex_topk_pct"):
+        assert not _passes_gate({**cand, "n_kept": 5}, baseline, gate_bar=g)
+        assert not _passes_gate({**cand, "max_drawdown": 0.41}, baseline, gate_bar=g)
+    # variants fall back to the standing bar when their extras are absent
+    plain = {k: v for k, v in baseline.items() if k in ("n_kept", "total_return", "total_ex_top3")}
+    assert not _passes_gate(cand, plain, gate_bar="median_draws")
+    assert not _passes_gate(cand, plain, gate_bar="ex_topk_pct")
+    with pytest.raises(ValueError):
+        _passes_gate(cand, baseline, gate_bar="nope")
+
+
+def test_choose_policy_reports_every_gate_from_one_book():
+    df, preds, stream, spec = _flip_fixture()
+    policy = choose_policy(df, preds, spec, thresholds=[0.5, 0.88],
+                           mark_stream=stream, report_all_gates=True)
+    assert policy["gate_bar"] == "ex_top3"
+    bars = policy["gate_bars"]
+    assert set(bars) >= {"ex_top3", "risk", "median_draws", "ex_topk_pct", "ex_topk_k"}
+    assert bars["ex_topk_k"] >= 3 and len(bars["ex_top3_draws"]) == 8
+    for c in policy["candidate_grid"]:
+        assert set(c["eligible_by_gate"]) == {"ex_top3", "risk", "median_draws", "ex_topk_pct"}
+        assert c["eligible"] == c["eligible_by_gate"]["ex_top3"]
+    # the standing path is untouched when nothing is requested
+    plain = choose_policy(df, preds, spec, thresholds=[0.5, 0.88], mark_stream=stream)
+    assert "gate_bars" not in plain and "eligible_by_gate" not in plain["candidate_grid"][0]
+    assert plain["threshold"] == policy["threshold"] and plain["eligible"] == policy["eligible"]
+    # a variant can be the selecting gate
+    alt = choose_policy(df, preds, spec, thresholds=[0.5, 0.88], mark_stream=stream,
+                        gate_bar="median_draws")
+    assert alt["gate_bar"] == "median_draws" and "gate_bars" in alt
