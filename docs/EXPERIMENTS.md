@@ -61,23 +61,40 @@ ev/0.05 +201%, filter/0.5 +197%, ev/0.0 +141%; every row under the 40%
 cap, every row above 10 kept). Log + grid:
 `out/v5/finalize-20260904T183947Z-box-REFUSED/`.
 
-**Reading.** (1) The wide pool's raw May–Aug book was so strong that the
-selector cannot add value over "take everything" on that window — the
-gate is doing its job: a meta-model that keeps 154 of 193k proposals and
-returns less than the unselected book ex-top3 is not a deployable edge on
-that regime. (2) Seed-count sensitivity: the SAME policy on the SAME
-window went +422% (5 seeds) → +201% (40 seeds); with ~150 kept trades the
-operating point is lottery-shaped, as the walk-forward's ex-top3 column
-already said for fold 1. (3) The walk-forward and finalize disagree
-because they ask different questions on different windows: fold 3's
-validation (Jan–May) had a −39% baseline, so beating it was easy; the
-finalize tail (May–Aug) had a +2781% baseline. **VERDICT: the wide pool
-beats v31 on the nested walk-forward (no losing fold, no cap breach,
-PBO 0.24–0.36) but produced NO deployable bundle under the standing
-ex-top3 gate. V118 stays live. Next lever is a USER DECISION** — options
-on the record: re-finalize on a different validation cut (`--val-fraction`)
-to test window-dependence of the bar; investigate the 5→40-seed collapse;
-or park v5 and pursue the universe read-path work first (TODO block 6).
+**The bar itself, dissected (user challenge, same day; reproducible with
+`scripts/gate_bar_sensitivity.py`).** The "baseline" is NOT every proposal:
+it is the frozen per-symbol best strategy's proposals fed first-come
+first-served into the same 5-slot ledger portfolio — **203 trades drawn
+from 41,820 executed proposals**, win rate 37%, median trade −7%, maxDD
+**46.6%**, and its +2781% is carried by a handful of tickets: ex-top1
++992%, ex-top3 +382% (the bar), ex-top5 +129%, **ex-top10 −44%**, ex-top25
+−93%. Which 203 it holds depends on row order — proposals sharing an entry
+timestamp enter in dataset order — so re-drawing with ONLY the
+equal-timestamp ties shuffled (8 draws) gives ex-top3 bars of **−66%,
+−53%, −48%, −45%, −34%, +13%, +66%, +283%** (median −39%; baseline maxDD
+47–77%, median 65%). The +381.9% finalize was judged against is the
+luckiest of nine draws. Against seven of the eight re-draws the refused
+ensemble (**ev/0.05 +201%, maxDD 16.4%, 154 kept**) clears the bar; its
+drawdown is a quarter of the baseline's under every draw. The gate's
+beat-baseline term (DECISIONS 2026-08-24) compares raw return only — no
+risk term on the baseline side, and ex-top3 does not de-lottery a
+5-slot book of this size. **So the refusal is a property of one arbitrary
+tie order, not of the model.**
+
+Still true and still on the record: the same policy went +422% (5 seeds)
+→ +201% (40 seeds) on the same window, and ~150 kept trades is
+lottery-shaped for the candidate too (walk-forward ex-top3 test: +7.7% /
++250% / +339%). **VERDICT: the wide pool beats v31 on the nested
+walk-forward (no losing fold, no cap breach, PBO 0.24–0.36). Finalize
+REFUSED under the standing gate, but the bar it failed is shown to be
+tie-order noise. V118 stays live; the v5 bundle was not persisted.
+USER DECISION: how the beat-baseline term should be defined** — options
+on the record: (a) a risk-aware bar (e.g. candidate must beat the
+baseline's return AND not exceed its maxDD, or compare return/maxDD);
+(b) an order-robust bar (median ex-top3 over N tie-shuffled draws);
+(c) a heavier outlier trim scaled to book size (ex-top-k with k ≈ 5% of
+n); (d) keep the gate and re-finalize on another `--val-fraction`. Any of
+these is a DECISIONS entry, then one finalize re-run (~1h on the box).
 
 ## 2026-08-29 — v5 baseline freeze COMPLETE: the wide pool is genuinely wide
 

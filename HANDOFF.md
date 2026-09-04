@@ -59,6 +59,13 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   persisted; V118 untouched). Full reading + options in the EXPERIMENTS
   entry. Both reboot safety-net units are disabled. The only open item is
   the user's call on the next lever; no compute is running.
+- **19:30Z: the finalize refusal is tie-order noise, not the model** —
+  see the EXPERIMENTS entry's "bar dissected" paragraph and
+  `scripts/gate_bar_sensitivity.py`. The ex-top3 bar re-draws to a median
+  of −39% (range −66%…+283%) with only equal-timestamp ties shuffled; the
+  refused ev/0.05 ensemble (+201%, maxDD 16%) clears 7 of 8. NEXT = user
+  picks the gate definition (options a–d) → DECISIONS → code+test →
+  re-finalize on the box.
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 

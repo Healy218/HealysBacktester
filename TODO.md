@@ -209,9 +209,13 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
   `model_final_v5/`; V118 in `model_final_v4/` untouched). Cheap-seed nn
   ev/0.05 +421.8% eligible → 40-seed ensemble +201.3% INELIGIBLE: the
   ex-top3 bar on the May–Aug validation tail is +381.9% (baseline +2781%).
-  Verdict entry at the top of `docs/EXPERIMENTS.md`. **USER DECISION next:**
-  re-finalize on another validation cut / chase the 5→40-seed collapse /
-  park v5 behind the read-path work. Campaign block otherwise CLOSED.
+  Verdict entry at the top of `docs/EXPERIMENTS.md`.
+- [ ] **USER DECISION — redefine the gate's beat-baseline term.** Shown
+  2026-09-04 (`scripts/gate_bar_sensitivity.py`): the ex-top3 bar is a
+  5-slot draw whose value swings −66%…+283% when only equal-timestamp
+  ties are reordered; the refused ensemble (+201%, maxDD 16%) beats 7 of
+  8 re-draws. Options (a)–(d) in EXPERIMENTS → DECISIONS entry → gate
+  change + test → re-finalize (~1h). Until then no v5 bundle.
 - [ ] Post-campaign: delete stale Artifact Registry tags.
 
 ## Forward-tracking duties (standing, this phase)
