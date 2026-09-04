@@ -12,6 +12,10 @@ equal-timestamp ties shuffled and reports the spread of the bar.
 """
 from __future__ import annotations
 import argparse
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))   # repo root
 import numpy as np
 import pandas as pd
 from nn_meta import config, v4_evaluate as E, v4_finalize as F
