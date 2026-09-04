@@ -3,6 +3,65 @@
 Written 2026-09-04 ~04:00 UTC (2026-09-03 ~23:00 CDT). Protocol: `CLAUDE.md`.
 Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box-workers-alive.md`.
 
+## 2026-09-04 ~13:00 UTC update — cloud build ENDED, box finishing (user decision)
+
+- Box is BACK (fresh OS; hardware trusted — user: ran 10 days clean, the
+  faults were carried over from the old i5 build and are fixed). Restored:
+  repo at `~/Coding/HealysBacktester` on `codex/v4-causal-validation`, venv
+  (py3.12 via uv, 491 tests green), gcloud (creds survived), `.env`
+  (Alpaca, Massive REST + flat-files, Telegram). STILL MISSING: Hetzner
+  ssh key `~/.ssh/id_ed25519`, systemd user timers, FA collector keys.
+- Overnight fleets drained to **426/441**; n2 fleet lost 11 tasks to spot
+  preemption (us-central1-f/c), c2d fleet only got capacity at ~11:30Z.
+  User ended both at ~12:40Z (`gcloud batch jobs delete`, both fleets).
+- **15 stragglers**: AMKR APP ARM BA CELH CRWV DASH DECK DELL EAT ENPH
+  FUTU GDXJ GLD GME. All but FUTU have family partials in
+  `out/v5/meta_partial/`.
+- `data_cache_v5` re-synced from the bucket (5.9 GB); preflight OK
+  (500 day-frames, 0 missing).
+- **`scripts/run_build_v5_local.sh` launched detached ~12:55Z**, 3 workers
+  (autosize), log `logs/build_v5_local.log`; first builds GME + GLD. Check:
+  `pgrep -af '[b]uild_meta_dataset'`; `grep -c published logs/build_v5_local.log`.
+- **Reboot-safe (13:15Z)**: user unit `healys-build-v5.service` (enabled,
+  linger on) relaunches the build at boot and disables itself when the
+  script prints LOCAL-BUILD-DONE. Partials force-synced at 13:15Z. GLD
+  published 13:14Z. After a reboot: `systemctl --user status healys-build-v5`
+  then `tail -f logs/build_v5_local.log`. Resume this Claude session with
+  `cd ~/Coding/HealysBacktester && claude --resume` (or `claude -c` from
+  `~`, where this session was started).
+- **17:07Z: build DONE 441/441 (16:55Z), marks audit CLEAN (all 441, 100%
+  coverage, 0 orphans), ASSEMBLED on the box** (2,113,590 rows; marks 24.7M
+  rows / 1.33M trades; train/val/test 1.37M/306k/442k) → published to
+  `out/v5/meta_dataset{,.marks}.parquet`. `healys-build-v5.service`
+  disabled itself. Determinism check (2× `--smoke --folds 1`, reports in
+  `nn_meta/reports_v5/determinism/`) launched 17:02Z, log
+  `logs/determinism_v5.log`. NEXT: if DETERMINISM-OK → full walk-forward
+  on the box: `v4_evaluate --folds 3 --marks ... --seeds 0,1,2,3,4
+  --epochs 60 --gbt-estimators 600 --embargo 1D` (v31 took ~3–4h on 8 vCPU
+  at 489k rows; v5 is 4.3× rows on 16 threads, expect several hours+).
+- **18:00Z: LADDER NEARLY DONE.** Determinism OK → walk-forward DONE
+  (3 folds, ~21 min, all eligible, no negative fold; PBO 0.36/0.26/0.24
+  after fixing the dropped-PBO report bug in `v4_evaluate.py` + test;
+  rerun reproduced run 1 bit-for-bit; suite 510 green). Verdict entry
+  written at the top of `docs/EXPERIMENTS.md`. Reports published:
+  `out/v5/evaluate-20260904T173053Z-box/` and `…175907Z-box-pbo/`.
+  **Finalize RUNNING** (launched 17:32Z; nn ev/0.05 selected, eligible,
+  val +421.8%; 40-seed ensemble training into
+  `nn_meta/model_final_v5.staging/` → `model_final_v5/`; log
+  `logs/finalize_v5.log`). When it lands: append the finalize line to the
+  EXPERIMENTS entry, publish `model_final_v5/` + reports to
+  `out/v5/finalize-<stamp>-box/` with SHA256SUMS, tick TODO block 6.
+  Deploying a v5 bundle is a USER DECISION (the live scanner reads
+  `model_final_v4/`, which is untouched). Uncommitted: HANDOFF, TODO,
+  EXPERIMENTS, .gitignore, v4_evaluate.py + test.
+- **18:45Z: LADDER COMPLETE. Finalize REFUSED** (40-seed nn ev/0.05
+  +201% vs ex-top3 bar +382% on the 2026-05-21→08-21 tail; nothing
+  persisted; V118 untouched). Full reading + options in the EXPERIMENTS
+  entry. Both reboot safety-net units are disabled. The only open item is
+  the user's call on the next lever; no compute is running.
+- Then: audit marks coverage → assemble on the box (`--membership` ON, pull
+  all row+marks shards first) → determinism check → evaluate/finalize.
+
 ## The one-paragraph state
 
 **v5 dataset build: 393/441 rows and finishing in the cloud overnight,

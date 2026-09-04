@@ -186,3 +186,24 @@ def test_ledger_selection_without_stream_is_bit_identical_to_legacy():
                       mark_stream=None)
     assert a["metrics"] == b["metrics"] and a["threshold"] == b["threshold"]
     assert b["selection_basis"] == "shared_sim"
+
+
+def test_write_report_surfaces_pbo_when_the_winner_carries_it(tmp_path):
+    # Regression (2026-09-04): choose_policy computed PBO but evaluate_window's
+    # per-fold summary never copied it, so no report ever showed the section.
+    from nn_meta.v4_evaluate import _write_report
+    base_winner = {
+        "family": "nn", "mode": "filter", "threshold": 0.5, "dd_brake": None,
+        "eligible": True, "selection_basis": "ledger", "marked": None,
+        "test": {"total_return": 0.1, "max_drawdown": 0.05},
+        "pbo": {"pbo": 0.25, "n_combinations": 70, "n_days": 40},
+    }
+    results = [{"schema": "v4", "purged": True, "embargo": "1D", "dd_cap": 0.4,
+                "winner": base_winner}]
+    out = tmp_path / "r.md"
+    _write_report(results, out)
+    text = out.read_text()
+    assert "## PBO" in text and "| 1 | 0.25 | 70 | 40 |" in text
+    results[0]["winner"] = {**base_winner, "pbo": None}
+    _write_report(results, out)
+    assert "## PBO" not in out.read_text()

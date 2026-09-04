@@ -673,6 +673,11 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
                    "eligible": bool(winner.get("eligible")),
                    "selection_basis": winner.get("selection_basis", "shared_sim"),
                    "baseline_return": winner.get("baseline_return"),
+                   # PBO is computed in choose_policy; without this line it was
+                   # silently dropped from every report (found 2026-09-04 on
+                   # the first v5 walk-forward — "wired" but never surfaced).
+                   "pbo": winner.get("pbo"),
+                   "candidate_grid": winner.get("candidate_grid"),
                    "test": winner_test, "marked": winner_marked,
                    "calibration": calibration, "deflated_sharpe": deflated,
                    "score_deciles": score_deciles, "ev_deciles": ev_deciles},

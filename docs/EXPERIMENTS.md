@@ -6,6 +6,79 @@ edge and a lottery ticket. Full detail lives in each row's report path.
 When the expert panel goes live, the second table tracks realized (paper)
 per-expert performance.
 
+## 2026-09-04 — v5 wide pool WALK-FORWARD: three eligible folds, no negative fold; finalize in flight
+
+Dataset build finished on the box 16:55Z (441/441 rows + marks; cloud
+fleets drained to 426, the box built the last 15 in ~4h). Marks audit over
+ALL 441 symbols: 100% executed-trade coverage, 0 orphans. Assembled with
+`--membership` ON: **2,113,590 rows** (1.62M dropped outside point-in-time
+membership), marks 24.7M rows / 1.33M trades, train/val/test
+1.37M/306k/442k rows. Determinism check on the box PASSED (2× smoke,
+byte-identical). Everything below ran ON THE HOME BOX (DECISIONS
+2026-09-03); the full 3-fold walk-forward took ~21 min, and a second run
+reproduced it bit-for-bit.
+
+**Walk-forward** (`v4_evaluate --folds 3 --marks`, seeds 0–4, 60 ep, gbt
+600, embargo 1D; `out/v5/evaluate-20260904T173053Z-box/` and the
+PBO-bearing rerun `…-box-pbo/`): **nn wins all three folds, all three
+gate-eligible through the ledger.**
+
+| fold | winner | test return / maxDD | marked return / maxDD | DSR | PBO |
+|---|---|---|---|---|---|
+| 1 | nn filter/0.55 | +74.1% / 36.7% | +71.5% / 34.5% | 0.06 | 0.36 |
+| 2 | nn ev/0.05 | +320.8% / 37.3% | +321.1% / 39.6% | 0.92 | 0.26 |
+| 3 | nn ev/0.05 | +452.8% / 8.4% | +500.6% / 10.7% | 0.98 | 0.24 |
+
+**Against v31** (the 2026-08-21 verdict, same protocol: +485%/23%,
+**−11%/75%**, +159%/32%; DSR 0.02 on fold 2): the wide pool has NO losing
+fold and no fold above the 40% cap; fold 2 — the Oct–Mar shock window
+that broke v31 — is +321% at 37% DD instead of −11% at 75%. Fold 1 is
+the weak seat (DSR 0.06, filter mode won, ex-top3 test only +7.7%).
+Caveats on the record: fold windows differ from v31's (v5's train starts
+2024-12-02, membership-filtered); score-decile top-decile inversion
+flagged on folds 2–3 (the EV head's deciles are noisier than v31's);
+n_kept is small everywhere (142–169 test trades per fold), so the
+percentages are lottery-shaped by construction — ex-top3 test: +7.7% /
++250% / +339%.
+
+**PBO was never in any prior report.** `choose_policy` computed it since
+2026-08-24 but `evaluate_window`'s per-fold summary dropped it; fixed
+today (`nn_meta/v4_evaluate.py`, regression test in
+`tests/test_v4_evaluate.py`). Values above are the first ever surfaced:
+0.24–0.36 over a 15-candidate grid (12,870 CSCV combinations).
+
+**Finalize** (`v4_finalize --marks`, 60 ep, gbt 600, bundle redirected to
+`nn_meta/model_final_v5/` so the tracked V118 bundle is untouched):
+cheap-seed selection picked **nn ev/0.05, val +421.8%, eligible** — then
+**the full 40-seed ensemble FLIPPED to ineligible: ev/0.05 val +201.3%,
+n_kept 154, maxDD 16.4%. FINALIZE REFUSED; nothing persisted.** The
+binding gate term is *beat the frozen baseline ex-top3*: on finalize's
+validation tail (last 15% of days, **2026-05-21 → 2026-08-21**, 193,549
+executed proposals, mean net_return +6.7%/trade, single trades up to
++6978%) the take-everything baseline returns **+2781%** through the
+ledger and its ex-top3 bar is **+381.9%**. No candidate came close (best:
+ev/0.05 +201%, filter/0.5 +197%, ev/0.0 +141%; every row under the 40%
+cap, every row above 10 kept). Log + grid:
+`out/v5/finalize-20260904T183947Z-box-REFUSED/`.
+
+**Reading.** (1) The wide pool's raw May–Aug book was so strong that the
+selector cannot add value over "take everything" on that window — the
+gate is doing its job: a meta-model that keeps 154 of 193k proposals and
+returns less than the unselected book ex-top3 is not a deployable edge on
+that regime. (2) Seed-count sensitivity: the SAME policy on the SAME
+window went +422% (5 seeds) → +201% (40 seeds); with ~150 kept trades the
+operating point is lottery-shaped, as the walk-forward's ex-top3 column
+already said for fold 1. (3) The walk-forward and finalize disagree
+because they ask different questions on different windows: fold 3's
+validation (Jan–May) had a −39% baseline, so beating it was easy; the
+finalize tail (May–Aug) had a +2781% baseline. **VERDICT: the wide pool
+beats v31 on the nested walk-forward (no losing fold, no cap breach,
+PBO 0.24–0.36) but produced NO deployable bundle under the standing
+ex-top3 gate. V118 stays live. Next lever is a USER DECISION** — options
+on the record: re-finalize on a different validation cut (`--val-fraction`)
+to test window-dependence of the bar; investigate the 5→40-seed collapse;
+or park v5 and pursue the universe read-path work first (TODO block 6).
+
 ## 2026-08-29 — v5 baseline freeze COMPLETE: the wide pool is genuinely wide
 
 Fleet `v5-freeze-0f132b6-013536` (GCP Batch, image `0f132b6`, 453 tasks,

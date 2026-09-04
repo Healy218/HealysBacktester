@@ -76,3 +76,15 @@ nn_meta/live/.heartbeat_state.json
 /Dockerfile
 nn_meta/live/.*_watchlist.json
 deploy/gcp/.last_job
+
+# v5 wide-pool campaign (2026-09-04): bulk build/train outputs live in the
+# bucket (gs://healys-backtester/out/v5/); only the frozen spec is small.
+nn_meta/artifacts_v5/meta_rows/
+nn_meta/artifacts_v5/meta_marks/
+nn_meta/artifacts_v5/meta_partial_local/
+nn_meta/artifacts_v5/*.parquet
+nn_meta/artifacts_v5/*.marks.parquet
+nn_meta/runs_v5/
+nn_meta/reports_v5/
+nn_meta/model_final_v5/
+nn_meta/data_cache_v5/

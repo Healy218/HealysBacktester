@@ -110,12 +110,14 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
 - [x] Home box as a third build worker (`run_build_v5_local.sh`, walks
   the spec backwards; bucket skip-check is the only coordination).
 - [x] `submit.sh` fails closed when the image tag has no manifest.
-- [ ] **Dataset build: 144/441 rows** (two cloud fleets + the box).
-- [ ] Reconcile stragglers when the fleets drain (one task died
-  permanently to exhausted retries in an earlier fleet).
-- [ ] **Audit marks coverage** for symbols finished after 2026-09-01
-  00:33Z (the incomplete-checkpoint window — see HANDOFF); rebuild any
-  whose rows lack mark-stream entries. Bounded to ~8 symbols + in-flight.
+- [x] **Dataset build DONE 2026-09-04 16:55Z: 441/441 rows + marks.** Cloud
+  fleets drained to 426 (11 spot-preemption deaths), user ended them 12:40Z;
+  the box built the 15 stragglers in ~4h (3–4 workers, service-resumed
+  across a reboot). Zero build failures.
+- [x] Stragglers reconciled 2026-09-04: spec 441 == bucket rows 441 == marks 441.
+- [x] **Marks coverage audited 2026-09-04 over ALL 441 symbols** (not just
+  the window): every executed trade id present in its marks shard (min
+  coverage 100%), zero orphan mark ids. Nothing rebuilt. `logs/marks_audit_v5.csv`.
 - [ ] **FIRST THING next campaign — the universe read path** (user decision
   2026-09-02). All measured on the live v5 universe, not estimated. Three
   changes at three layers; together they attack BOTH constraints the v5
@@ -170,10 +172,18 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
   membership filter), and key family partials by window (or clear
   `out/v5/meta_partial/` on any window change — stale partials would
   silently mix windows within one symbol).
-- [ ] Settle the membership-vs-`assign_split` ordering mismatch
-  (`assemble` filters before, `run_fold` after) before trusting the
-  evaluate ladder's fold splits.
-- [ ] Assemble (`--membership` ON for v5) → `out/v5/meta_dataset.parquet`,
+- [x] Membership-vs-`assign_split` ordering SETTLED 2026-09-04: benign.
+  Both `assign_split` (build) and `assign_purged_splits` (evaluate) decide
+  each row from its OWN `entry_ts`/`exit_ts` only — no cross-row state —
+  and `membership_mask` is a per-row (symbol, month) filter, so the two
+  commute: filter-then-split == split-then-filter row for row. The
+  evaluate ladder's fold splits are trustworthy as-is.
+- [x] **Assembled on the box 2026-09-04 17:02Z** (`--membership` ON): 2,113,590
+  rows (membership kept 2.17M of 3.79M; 1.62M outside PIT membership),
+  marks 24.7M rows over 1.33M trades; train/val/test 1.37M/306k/442k rows,
+  262/58/96 days; label win 40.1%. ~5 min, 5.3 GB peak. Published to
+  `out/v5/meta_dataset{,.marks}.parquet`.
+  Original item: Assemble (`--membership` ON for v5) → `out/v5/meta_dataset.parquet`,
   **on the home box** (user decision 2026-09-03, DECISIONS). Pull all
   row+marks shards down first (~1 GB — most exist only in the bucket).
   Watch memory on the mark stream: v31's 88M rows died on the OLD box via
@@ -185,8 +195,23 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
   memory check is DONE: memtest86+ passed 0 errors / 6 passes on
   2026-09-04, so this is now a cheap belt-and-suspenders for non-RAM
   nondeterminism, not the RAM gate it was.)
-- [ ] Evaluate/finalize ladder **on the box**, with PBO + deflated Sharpe; verdict row in
-  `docs/EXPERIMENTS.md`: does the wide pool beat v31?
+- [x] Determinism check PASSED 2026-09-04 17:08Z (2× `--smoke --folds 1`,
+  reports + manifests byte-identical; `nn_meta/reports_v5/determinism/`).
+- [x] **Walk-forward evaluate DONE on the box 2026-09-04 17:30Z** (~21 min
+  for 3 folds, 8.5 GB): nn wins all three, all gate-eligible via ledger.
+  Test: fold 1 filter/0.55 +74.1% (DD 36.7%, marked +71.5%/34.5%, DSR
+  0.06); fold 2 ev/0.05 +320.8% (DD 37.3%, marked +321.1%/39.6%, DSR
+  0.92); fold 3 ev/0.05 +452.8% (DD 8.4%, marked +500.6%/10.7%, DSR 0.98).
+  No negative fold (v31: −11% / 75% DD on fold 2). Score-decile inversion
+  flagged on folds 2–3 (EV-head deciles noisier than v31's). Published
+  `out/v5/evaluate-20260904T173053Z-box/` (+ SHA256SUMS).
+- [x] **Finalize DONE 2026-09-04 18:39Z — REFUSED** (bundle dir redirected to
+  `model_final_v5/`; V118 in `model_final_v4/` untouched). Cheap-seed nn
+  ev/0.05 +421.8% eligible → 40-seed ensemble +201.3% INELIGIBLE: the
+  ex-top3 bar on the May–Aug validation tail is +381.9% (baseline +2781%).
+  Verdict entry at the top of `docs/EXPERIMENTS.md`. **USER DECISION next:**
+  re-finalize on another validation cut / chase the 5→40-seed collapse /
+  park v5 behind the read-path work. Campaign block otherwise CLOSED.
 - [ ] Post-campaign: delete stale Artifact Registry tags.
 
 ## Forward-tracking duties (standing, this phase)
