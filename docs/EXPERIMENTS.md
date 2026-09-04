@@ -61,6 +61,56 @@ ev/0.05 +201%, filter/0.5 +197%, ev/0.0 +141%; every row under the 40%
 cap, every row above 10 kept). Log + grid:
 `out/v5/finalize-20260904T183947Z-box-REFUSED/`.
 
+**Runs (a)/(b)/(c) + the confidence axis — ONE training, every policy
+(2026-09-04 evening; `out/v5/finalize-20260904T232143Z-box-allgates-REFUSED/`,
+`nn_meta/reports_v5/policy_gate_sweep.md`, `scripts/policy_gate_sweep.py`).**
+The 40-seed ensemble is deterministic (this run reproduced +201.3% / 154
+kept to the digit), so thresholds, modes and every gate parameter are
+post-hoc policies on its saved validation predictions
+(`finalize_val_predictions.parquet`, written by finalize since today).
+Bars on the 2026-05-21→08-21 tail: standing ex-top3 **+381.9%**; (a) risk
+= return/maxDD > **6.64** (the ex-top3 book: +382% at 57.5% DD); (b) median
+ex-top3 over 8 / 16 tie-shuffled draws **−26.3% / −38.8%**; (c) ex-top-k at
+2% / 5% / 10% of the book (k=5/11/21) **+129% / −55% / −90%**.
+
+| policy | kept | return | maxDD | ret/DD | ex-top3 | standing | (a) risk | (b) med-8/16 | (c) 2% / 5% |
+|---|---|---|---|---|---|---|---|---|---|
+| filter/0.20–0.40 (identical) | 162 | +237.5% | 25.7% | 9.2 | +105.5% | · | ✓ | ✓ ✓ | ✓ ✓ |
+| **filter/0.45** | 150 | **+355.2%** | 24.0% | **14.8** | +144.9% | · | ✓ | ✓ ✓ | ✓ ✓ |
+| filter/0.50 | 164 | +196.9% | 31.6% | 6.2 | +49.9% | · | · | ✓ ✓ | ✓ ✓ |
+| filter/0.55 | 114 | +107.1% | 31.4% | 3.4 | +42.9% | · | · | ✓ ✓ | · ✓ |
+| filter/0.60 | 32 | −12.6% | 24.5% | −0.5 | −22.7% | · | · | ✓ ✓ | · ✓ |
+| filter/0.65–0.90 | 0 | — | — | — | — | · | · | · | · |
+| rank/0.20–0.45 (identical) | 153 | +106.5% | 18.4% | 5.8 | +58.7% | · | · | ✓ ✓ | · ✓ |
+| rank/0.50 / 0.55 / 0.60 | 144 / 128 / 75 | +75.6% / +41.7% / +10.1% | 21% / 16% / 18% | 3.5 / 2.6 / 0.6 | | · | · | ✓ ✓ | · ✓ |
+| rank/0.65+ | ≤1 | — | — | — | — | · | · | · | · |
+| ev/0.0 (brakes 0.2/0.3) | 171 | +141% (+119% / +126%) | 26% (22% / 23%) | 5.4 | +80.4% | · | · | ✓ ✓ | ✓/· ✓ |
+| **ev/0.05** | 154 | +201.3% | **16.4%** | 12.2 | +88.6% | · | ✓ | ✓ ✓ | ✓ ✓ |
+| ev/0.05 brake 0.2 / 0.3 | 154 | +192.5% / +195.5% | **14.3%** / 15.0% | **13.4** / 13.0 | +86% / +87% | · | ✓ | ✓ ✓ | ✓ ✓ |
+| ev/0.10 (any brake) | 6 | +3.3% | 12% | 0.3 | | · | · | · | · |
+
+**What the sweep says.** (1) *The "70% confidence" run is empty by
+construction*: the ensemble's P(win) scores sit in a narrow band (p50
+0.41, p90 0.50, p99 0.56, max 0.65 — the label base rate is 40%), so
+filter ≥ 0.65 and rank ≥ 0.65 keep 0–1 trades. "Confidence" above ~0.6
+does not exist in this model's output; rank mode (top-X%) or the EV head is
+how conviction is expressed. (2) *The standing grid never tried 0.45*:
+filter/0.45 is the best row on every axis (+355%, 24% DD, ret/DD 14.8,
+ex-top3 +145%) and thresholds ≤ 0.40 are identical (the cut stops binding;
+the 5-slot portfolio limits kept trades). Adding 0.45 to
+`KEEP_THRESHOLDS` is a grid change — re-run the walk-forward before
+believing it; it is one window here. (3) *Gate verdicts*: the standing bar
+rejects everything. **(a) risk-aware** is the discriminating one — it
+passes exactly filter ≤ 0.45 and the ev/0.05 family and rejects
+filter/0.5+ and rank (higher DD per unit return). **(b) median-draws** and
+**(c) ex-top-k at 5–10%** land their bars BELOW ZERO on this window, so
+they pass 24 of 39 candidates including a −12.6% loser — too lenient as
+parameterised (a bar of "don't lose more than 26%" is not a skill test).
+(c) at 2% (k=5, +129%) behaves like (a). Recommendation on the record:
+**adopt (a)** (or (c) at 2%) as the beat-baseline term; keep MIN_KEPT and
+the 40% cap. Under (a) the refused run's own operating point (nn ev/0.05,
++201%, 16.4% DD) is eligible and finalize would persist it as-is.
+
 **The bar itself, dissected (user challenge, same day; reproducible with
 `scripts/gate_bar_sensitivity.py`).** The "baseline" is NOT every proposal:
 it is the frozen per-symbol best strategy's proposals fed first-come

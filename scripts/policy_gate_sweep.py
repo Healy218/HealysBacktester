@@ -172,11 +172,12 @@ def main() -> None:
              "## Gate bars", "", "| gate | bar |", "|---|---|"]
     for g in gate_labels:
         b = bars[g]
-        if g.startswith("risk"):
+        kind = g.removeprefix("gate:")
+        if kind.startswith("risk"):
             bar = f"return/maxDD > {E._risk_ratio(b['total_ex_top3'], b.get('ex_top3_max_drawdown') or b['max_drawdown']):.2f} (floor {b['_floor']:.2f})"
-        elif g.startswith("median"):
+        elif kind.startswith("median"):
             bar = f"return > {_fmt(b['ex_top3_median_draws'])}"
-        elif g.startswith("ex_topk"):
+        elif kind.startswith("ex_topk"):
             bar = f"return > {_fmt(b['total_ex_topk'])}"
         else:
             bar = f"return > {_fmt(b['total_ex_top3'])}"

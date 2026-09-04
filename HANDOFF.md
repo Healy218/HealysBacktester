@@ -66,6 +66,13 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   refused ev/0.05 ensemble (+201%, maxDD 16%) clears 7 of 8. NEXT = user
   picks the gate definition (options a–d) → DECISIONS → code+test →
   re-finalize on the box.
+- **23:30Z: (a)/(b)/(c) + confidence sweep DONE from one training** (code:
+  `GATE_BAR` variants, `--report-all-gates`, `--thresholds`, finalize
+  saves `finalize_val_predictions.parquet`; `scripts/policy_gate_sweep.py`
+  sweeps everything offline in ~10 min). Results + recommendation (adopt
+  (a) risk-aware; 0.45 never tried; ≥0.65 keeps nothing) in EXPERIMENTS.
+  Still no v5 bundle — needs the user's gate decision, then
+  `--gate-bar risk` finalize (~1h) persists nn ev/0.05 as-is.
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 

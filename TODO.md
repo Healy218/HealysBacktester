@@ -214,8 +214,15 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
   2026-09-04 (`scripts/gate_bar_sensitivity.py`): the ex-top3 bar is a
   5-slot draw whose value swings −66%…+283% when only equal-timestamp
   ties are reordered; the refused ensemble (+201%, maxDD 16%) beats 7 of
-  8 re-draws. Options (a)–(d) in EXPERIMENTS → DECISIONS entry → gate
-  change + test → re-finalize (~1h). Until then no v5 bundle.
+  8 re-draws. **Runs (a)/(b)/(c) + 0.20–0.90 confidence sweep DONE
+  2026-09-04 evening** from one training (`policy_gate_sweep.md`): (a)
+  risk-aware discriminates (passes filter ≤0.45 + ev/0.05 family only);
+  (b)/(c at 5–10%) have negative bars here and pass losers; P(win) never
+  exceeds 0.65 so "70% confidence" keeps nothing; filter/0.45 (+355%,
+  24% DD) was never in the grid. Recommendation: adopt (a). Decision →
+  DECISIONS entry → `GATE_BAR=risk` finalize (~1h) persists ev/0.05 as-is;
+  optionally add 0.45 to KEEP_THRESHOLDS and re-run the walk-forward
+  (~21 min) first. Until then no v5 bundle.
 - [ ] Post-campaign: delete stale Artifact Registry tags.
 
 ## Forward-tracking duties (standing, this phase)
