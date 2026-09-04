@@ -1,98 +1,85 @@
 # HANDOFF — state for the next session
 
-Written 2026-09-03 ~15:10 CDT. Protocol: `CLAUDE.md`.
-Previous handoff: `handoff-history/HANDOFF-2026-09-01-v5-build-checkpointed.md`.
+Written 2026-09-04 ~04:00 UTC (2026-09-03 ~23:00 CDT). Protocol: `CLAUDE.md`.
+Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box-workers-alive.md`.
 
 ## The one-paragraph state
 
-**v5 dataset build: 366/441 rows** (`gs://healys-backtester/out/v5/`,
-matching `meta_marks/` count). Freeze is long done (453/453, merged spec at
-`artifacts_v5_in/baseline_spec.json`, 441 frozen + 12 skipped-thin).
-Three producers are running RIGHT NOW and coordinate only through the
-bucket skip-check. **Credits are nearly gone — $36.85 of $300 remained on
-2026-09-02 and a hard guard now caps this run at $32.** After the build:
-assemble and training run **on the home box, not the cloud** (doctrine
-reversed 2026-09-03 — see below). The live V118 scanner on `main` is
-untouched by all of this.
+**v5 dataset build: 393/441 rows and finishing in the cloud overnight,
+unattended and unguarded — deliberately.** The home box is DOWN for
+hardware repair (user, 2026-09-03 evening); its build workers and the
+budget guard died with it. The user explicitly approved letting the two
+GCP fleets drain on their own, accepting up to **~$20 on the card**
+(credits were ~$5 at decision time; the account is paid). The fleets
+self-terminate: verified via `gcloud batch jobs describe` that both carry
+`maxRetryCount: 3` + `maxRunDuration: 8h` per task, so every task ends
+and VMs deallocate when the queues drain. Expected residual cost ~$13.
+The live V118 scanner on `main` is untouched.
 
-## RUNNING RIGHT NOW — what to leave alone, what dies with the session
+## FIRST ACTIONS next session (in order)
 
-| What | Where | Survives a session clear? |
-|---|---|---|
-| Box build workers (3, symbols I*) | `scripts/run_build_v5_local.sh`, detached, `logs/build_v5_local.log` | **YES** (`setsid nohup`) |
-| Budget guard, $32 cap | `scripts/cloud_budget_guard.sh`, detached, `logs/budget_guard2.log` | **YES** |
-| Cloud fleet n2 `marks-build-4cca795-122502` | GCP Batch (20 running, 309 done, 2 failed) | **YES** |
-| Cloud fleet c2d `marks-build-4cca795-122504` | GCP Batch (mostly skipping already-built) | **YES** |
-| Server dead-man, hourly | systemd **user** timer, linger on | **YES** |
-| StockTwits hourly collect+push | systemd user timer | **YES** |
-| In-session Monitors (progress/stall watchdogs) | this CLI | **NO — re-arm early** |
+1. **Ground truth on the overnight run** — never from memory:
+   `gcloud batch jobs list --location=us-central1` and
+   `gsutil ls gs://healys-backtester/out/v5/meta_rows/ | wc -l`.
+   Expect both `marks-build-4cca795-122502` (n2) and `-122504` (c2d) in a
+   terminal state and the row count near 441 (438 is the realistic max —
+   3 tasks are permanently dead to exhausted retries; 2 of those FAILED
+   tasks were already terminal on the n2 fleet at handoff time).
+2. **Check what it actually cost** (console billing). Baseline: ~$5 of
+   credits left at 2026-09-04 04:00 UTC, burn ~$1.00/hr for the 4 spot
+   VMs. If jobs are still RUNNING well past ~17:00 UTC, something wedged —
+   cancel them by name.
+3. **Reconcile stragglers**: diff `out/v5/meta_rows/` against the 441
+   symbols in `artifacts_v5_in/baseline_spec.json`; rebuild the gap on the
+   box (free, ~5x faster per worker) once the box is trusted again.
+4. **The box returns from a hardware repair — validate before trusting.**
+   Run memtest86+ while reboots are cheap (it gates everything below),
+   then the determinism check (evaluate twice, identical seeds, diff
+   `SHA256SUMS.txt`) before trusting any box-built artifact. This was
+   already doctrine for the unvalidated DDR5; a repair visit makes it
+   mandatory, not optional.
+5. Then the standing ladder from TODO block 6: audit marks coverage for
+   post-2026-09-01-00:33Z symbols (~8 + in-flight) → assemble on the box
+   (`--membership` ON, pull ~1 GB of shards down first, watch the mark
+   stream memory) → evaluate/finalize → verdict row in
+   `docs/EXPERIMENTS.md`.
 
-Nothing here needs babysitting; the guard cancels the fleets on its own.
+## What died with the box (do NOT assume these are running)
 
-## Money — read before spending anything
+| What | Status at handoff |
+|---|---|
+| Box build workers (`run_build_v5_local.sh`) | **DEAD** — last log 2026-09-03 16:21 CDT; user confirmed not running |
+| Budget guard (`cloud_budget_guard.sh`) | **DEAD** — last log 21:21Z; fleets ran unguarded ~6.5h before the user noticed; spend blew past the $32 cap the guard would have enforced (est ~$34 when checked) |
+| In-session Monitors | gone with the session |
+| Server dead-man + StockTwits timers | systemd user timers on the box — **also down while the box is down**; the Hetzner server itself is independent and stays up |
 
-- **$36.85 of $300 credits left** (console, 2026-09-02). The account is
-  **PAID** since 2026-08-27, so credits hitting zero means the card gets
-  charged. There is no native GCP spend cap.
-- The guard is the only real brake: time-budgeted, detached, cancels the
-  named jobs and pages Telegram. Currently **$26.54 spent of $32** with
-  ~5.5 h of runway. Raising a budget mid-run requires `SPENT_USD=` or it
-  silently grants a fresh full budget.
-- Full mechanics + the post-mortem of how $263 went: **DOCUMENTATION.md →
-  "GCP billing — how it actually works"**. The short version: burn rate x
-  duration was never multiplied, and estimates came from solo-pilot
-  economics rather than fleet economics.
-- Remaining after this run (~$5) is enough for assemble + training ONLY
-  because both now run on the box for free.
+The server dead-man being down means server incidents page nobody until
+the box is back. Worth knowing, not worth panicking over.
 
-## When the build finishes (441/441, or when you decide to stop)
+## Money
 
-1. **Reconcile**: diff `out/v5/meta_rows/` against the spec's 441 symbols;
-   3 tasks have died permanently to exhausted retries across the campaign.
-   Rebuild stragglers on the box — it is free and faster per worker.
-2. **Audit marks coverage** for symbols finished after 2026-09-01 00:33Z
-   (the incomplete-checkpoint window, fixed in `4cca795`) — bounded to
-   ~8 symbols plus whatever was in flight.
-3. **Assemble on the box**, `--membership` ON (default for v5). Pull all
-   row+marks shards down first (~1 GB; most exist only in the bucket).
-   Watch memory on the mark stream — see TODO block 6 for why.
-4. **Determinism check, then** the evaluate/finalize ladder on the box.
-   Run evaluate twice with identical seeds and diff `SHA256SUMS.txt`;
-   byte-identical means no silent bit flip. This gates trusting any
-   box-trained bundle — it ships to production.
-5. Verdict row in `docs/EXPERIMENTS.md`: does the wide pool beat v31?
+- Credits effectively exhausted: ~$5 left when the overnight decision was
+  made; overnight drain lands the overage (~$3–9, ceiling ~$15 absent a
+  pathological straggler) **on the card, with the user's explicit OK
+  (2026-09-03 evening, cap ~$20)**. Do not re-litigate; do not extend.
+- The guard's lesson stands: it is the only brake, and it lives on the
+  box. Any future cloud spend while the box is down runs uncapped.
+- Post-campaign cleanup still owed: stale Artifact Registry tags (real
+  cost on a paid account). Keep `4cca795`.
 
-## Doctrine change 2026-09-03 — training may run on the box
+## Standing warnings (carried forward)
 
-`task.sh` used to forbid it, citing PROVEN single-bit memory corruption.
-That was **the i5-11400 with the faulty RAM, retired 2026-08-23** — the
-premise died with the machine, so the rule did too. Full reasoning and
-rejected alternatives in `docs/DECISIONS.md`; the comment in
-`deploy/gcp/task.sh` is rewritten in place so nobody re-applies it. The
-risk that survives: the new DDR5 is unvalidated, hence the determinism
-check above. The box is also simply the better machine here — measured
-2.33 symbols/hour vs 1.98 from a 4-VM spot fleet, ~5x per worker.
-
-## Standing warnings
-
-- **Never `pkill -f` a pattern that matches your own watcher.** Doing
-  exactly that on 2026-09-03 killed the monitor and left the fleets
-  briefly unguarded. Use the bracket trick: `pgrep -f '[c]loud_budget'`.
-- Image `4cca795` is the current build image and carries the
-  incomplete-checkpoint fix. `submit.sh` now refuses to submit against a
-  tag with no manifest — never confirm an image from `gcloud builds list`.
-- The 12 skipped-thin symbols are RESULTS; the build shards only the
-  spec's 441.
-- Cloud state is never re-derived from memory: `gcloud batch jobs list`
-  plus `gsutil ls out/v5/meta_rows/` is the ground truth.
-- Post-campaign cleanup still owed: stale Artifact Registry tags (a real
-  cost item now, on a paid account). Keep `4cca795`.
+- **Never `pkill -f` a pattern that matches your own watcher** — bracket
+  trick: `pgrep -f '[c]loud_budget'`.
+- Image `4cca795` is current; `submit.sh` refuses tags with no manifest.
+- The 12 skipped-thin symbols are RESULTS; the spec's 441 is the universe.
+- Freeze is DONE (453/453, spec at `artifacts_v5_in/baseline_spec.json`).
+- Doctrine 2026-09-03: assemble + training run **on the box** (DECISIONS);
+  the determinism check is the gate, doubly so after the hardware repair.
 
 ## Next campaign, first item
 
-TODO block 6 has the fully-measured universe read-path plan (derive
-sorted → read filtered → scan the slice). Headline: `get_chain` scans all
-5.2M rows per call at 216 ms when the symbol needs 21k rows and 0.70 ms —
-**310x** — and each worker holds a redundant 0.96 GB copy. Prerequisite
-nobody would guess: `derive_contracts` writes the parquet unsorted, so
-predicate pushdown skips nothing until that changes.
+Unchanged: TODO block 6's universe read-path plan (derive sorted → read
+filtered → scan the slice; 310x measured on `get_chain`). Prerequisite:
+`derive_contracts` writes the parquet unsorted, so predicate pushdown
+skips nothing until that changes.
