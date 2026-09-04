@@ -32,12 +32,13 @@ The live V118 scanner on `main` is untouched.
 3. **Reconcile stragglers**: diff `out/v5/meta_rows/` against the 441
    symbols in `artifacts_v5_in/baseline_spec.json`; rebuild the gap on the
    box (free, ~5x faster per worker) once the box is trusted again.
-4. **The box returns from a hardware repair — validate before trusting.**
-   Run memtest86+ while reboots are cheap (it gates everything below),
-   then the determinism check (evaluate twice, identical seeds, diff
-   `SHA256SUMS.txt`) before trusting any box-built artifact. This was
-   already doctrine for the unvalidated DDR5; a repair visit makes it
-   mandatory, not optional.
+4. **Memory validation DONE 2026-09-04: memtest86+ passed, 0 errors
+   through 6 passes** (user ran it during the repair). The DDR5 is no
+   longer "unvalidated" — the main risk gating box-trained bundles is
+   retired. Still run the cheap determinism check once before the first
+   production bundle (evaluate twice, identical seeds, diff
+   `SHA256SUMS.txt`) — it catches non-RAM nondeterminism too and costs
+   one extra evaluate run.
 5. Then the standing ladder from TODO block 6: audit marks coverage for
    post-2026-09-01-00:33Z symbols (~8 + in-flight) → assemble on the box
    (`--membership` ON, pull ~1 GB of shards down first, watch the mark

@@ -179,11 +179,12 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
   Watch memory on the mark stream: v31's 88M rows died on the OLD box via
   `pd.concat`; the shipped path streams through a `ParquetWriter` (~0.2 GB
   peak) and v5 has ~4x v31's symbol count.
-- [ ] **Determinism check before trusting any box-trained bundle** — the
-  new DDR5 is unvalidated and this output ships to production. Run
+- [ ] **Determinism check before trusting any box-trained bundle** — run
   evaluate twice with identical seeds and diff the `SHA256SUMS.txt` both
-  modes already write; byte-identical = no silent bit flip. (memtest86+ is
-  the stronger check whenever a reboot is convenient.)
+  modes already write; byte-identical = no silent bit flip. (The stronger
+  memory check is DONE: memtest86+ passed 0 errors / 6 passes on
+  2026-09-04, so this is now a cheap belt-and-suspenders for non-RAM
+  nondeterminism, not the RAM gate it was.)
 - [ ] Evaluate/finalize ladder **on the box**, with PBO + deflated Sharpe; verdict row in
   `docs/EXPERIMENTS.md`: does the wide pool beat v31?
 - [ ] Post-campaign: delete stale Artifact Registry tags.
