@@ -3,6 +3,8 @@ import pytest
 import numpy as np
 import pandas as pd
 
+from nn_meta import config
+
 from nn_meta.build_meta_dataset import META_FEATURES, V4_META_FEATURES
 from nn_meta.mark_stream import stable_trade_id
 from nn_meta.v4_evaluate import (choose_policy, marked_metrics, schema_features,
@@ -246,13 +248,13 @@ def test_choose_policy_reports_every_gate_from_one_book():
     df, preds, stream, spec = _flip_fixture()
     policy = choose_policy(df, preds, spec, thresholds=[0.5, 0.88],
                            mark_stream=stream, report_all_gates=True)
-    assert policy["gate_bar"] == "ex_top3"
+    assert policy["gate_bar"] == config.GATE_BAR == "risk"      # DECISIONS 2026-09-04
     bars = policy["gate_bars"]
     assert set(bars) >= {"ex_top3", "risk", "median_draws", "ex_topk_pct", "ex_topk_k"}
     assert bars["ex_topk_k"] >= 3 and len(bars["ex_top3_draws"]) == 8
     for c in policy["candidate_grid"]:
         assert set(c["eligible_by_gate"]) == {"ex_top3", "risk", "median_draws", "ex_topk_pct"}
-        assert c["eligible"] == c["eligible_by_gate"]["ex_top3"]
+        assert c["eligible"] == c["eligible_by_gate"][config.GATE_BAR]
     # the standing path is untouched when nothing is requested
     plain = choose_policy(df, preds, spec, thresholds=[0.5, 0.88], mark_stream=stream)
     assert "gate_bars" not in plain and "eligible_by_gate" not in plain["candidate_grid"][0]

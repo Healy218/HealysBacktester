@@ -339,8 +339,12 @@ def _passes_gate(metrics: dict, baseline: dict, dd_cap: float | None = None,
         if base_ret is None:
             return True
         base_dd = baseline.get("ex_top3_max_drawdown")
-        if base_dd is None:
+        if base_dd is None or baseline.get("n_kept", 0) <= 3:
             base_dd = baseline.get("max_drawdown")
+        if base_dd is None:
+            # No drawdown for the book (shared-sim baseline, or the ≤3-trade
+            # sentinel case): a ratio would be meaningless — compare returns.
+            return bool(metrics["total_return"] > base_ret)
         return bool(_risk_ratio(metrics["total_return"], metrics["max_drawdown"])
                     > _risk_ratio(base_ret, base_dd))
     bar = _gate_bar_value(baseline, gate_bar)
@@ -458,7 +462,11 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
         baseline = _ledger_policy_metrics(
             base_rows, np.zeros(len(base_rows)), "filter", 0.0, mark_stream,
             costs=costs)
-        if (gate_bar != "ex_top3" or report_all_gates) and not base_rows.empty:
+        # The re-draw/top-k bars cost extra ledger passes; only pay for them
+        # when a gate reads them (risk needs only ex_top3_max_drawdown, which
+        # _ledger_policy_metrics always emits).
+        if (gate_bar in ("median_draws", "ex_topk_pct") or report_all_gates) \
+                and not base_rows.empty:
             baseline.update(_baseline_gate_extras(base_rows, mark_stream, costs=costs))
     else:
         baseline = portfolio_metrics(rows[fmask])

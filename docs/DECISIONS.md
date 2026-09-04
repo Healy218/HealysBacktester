@@ -245,6 +245,28 @@ in-fold like any strategy).
 loss; width − credit IS the worst case once the debit clamp holds); a
 take-profit stop on the spread (bounded already; one fewer knob).
 
+## 2026-09-04 — The v4 gate's beat-baseline term is risk-aware (return per unit drawdown)
+
+**Decision (user):** `_passes_gate`'s beat-baseline term now compares the
+candidate's validation `total_return / max(max_drawdown, GATE_DD_FLOOR)`
+against the same ratio for the frozen book's ex-top3 ledger result
+(`config.GATE_BAR = "risk"`, `GATE_DD_FLOOR = 0.05`). MIN_KEPT and the 40%
+DD cap are unchanged; the candidate side stays raw. Supersedes the
+2026-08-24 return-only ex-top3 bar.
+
+**Cause:** the ex-top3 bar is a 5-slot first-come draw of ~200 trades from
+~42k proposals; reshuffling only equal-timestamp ties moved it from −66% to
++283% on the 2026-05-21→08-21 tail (`scripts/gate_bar_sensitivity.py`), and
+it carried maxDD 47–77%. A return-only comparison against that book
+measures luck and ignores risk. On the same predictions, the risk-aware bar
+was the only variant that discriminated: it passed filter ≤ 0.45 and the
+ev/0.05 family and rejected the rest (`policy_gate_sweep.md`).
+
+**Rejected:** (b) median ex-top3 over tie-shuffled draws and (c) ex-top-k at
+5–10% of the book — both bars landed below zero here and passed a −12.6%
+candidate; a bar of "don't lose more than X" is not a skill test. (c) at 2%
+behaves like (a) and remains available via `GATE_BAR=ex_topk_pct`.
+
 ## 2026-08-24 — The v4 gate's baseline bar is the baseline's ex-top3
 
 **Decision (user):** `_passes_gate`'s beat-baseline term compares the

@@ -315,7 +315,7 @@ MIN_PASSING_SEEDS = 20        # of 40 seeds: require a majority to clear the gat
 #   median_draws — (b) bar = median ex-top3 over GATE_DRAWS tie-shuffled draws
 #   ex_topk_pct  — (c) bar = baseline ex-top-k, k = max(3, ceil(pct × entered))
 # Candidate side stays raw in every variant; MIN_KEPT and the DD cap unchanged.
-GATE_BAR = os.environ.get("GATE_BAR", "ex_top3")
+GATE_BAR = os.environ.get("GATE_BAR", "risk")      # DECISIONS 2026-09-04: (a) adopted
 GATE_BARS = ("ex_top3", "risk", "median_draws", "ex_topk_pct")
 GATE_DRAWS = 8
 GATE_TOPK_PCT = 0.05
