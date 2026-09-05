@@ -249,10 +249,28 @@ simply more expensive than anyone computed, and nobody computed it:
 
 ## Data limits (probed, definitive — don't re-litigate)
 
-- **Massive options history reaches ~2 years back** (403 before ~mid-2024),
-  on REST *and* flat-files — the S3 bucket lists 2014→ but GetObject is
-  date-gated. Deeper options history requires a **paid plan upgrade**, full
-  stop. Contract listings (reference endpoint) reach 2017 fine.
+**UPGRADED 2026-09-05 to Massive Options Advanced** (probed the same day,
+live, with the box's keys — supersedes everything below the rule):
+- **Option minute/day aggregates: full history** — REST `/v2/aggs` returns
+  1-minute bars for SPY contracts in 2019, 2020, 2021, 2022, 2023 (checked);
+  flat-file `minute_aggs_v1` and `day_aggs_v1` GetObject succeed for 2017,
+  2019, 2021, 2022 … 2026 (bucket lists 2014→).
+- **Trades: full history** — `trades_v1` flat files 2017→ readable (8–67 MB
+  gz/day); REST `/v3/trades/{ticker}` returns 2021+ (checked).
+- **Quotes: 2022-03-07 →** — `quotes_v1` flat files 2022→ readable but
+  **85–140 GB gz per day** (not bulk-crawlable); REST `/v3/quotes/{ticker}`
+  (per contract, `timestamp` filters, limit ≤ 50,000, `next_url`) 2022+.
+- **Snapshots real-time** on Advanced (`/v3/snapshot/options/{underlying}`:
+  greeks, implied_volatility, open_interest, last_quote, last_trade).
+- **WebSocket** options aggregates/trades/quotes real-time on Advanced;
+  wildcard subscriptions are Business-only. Unused: the system decides on
+  closed 15m bars (memory: data-provider-subscriptions).
+- **MCP**: `claude mcp add --transport http massive https://mcp.massive.com/`
+  (OAuth, no key; mirrors entitlements).
+
+*Pre-upgrade record (Starter, until 2026-09-05):* options history reached
+~2 years back (403 before ~mid-2024), on REST *and* flat-files — the S3
+bucket listed 2014→ but GetObject was date-gated.
 - **Flat-files are still the right bulk path within the 2y window**: one
   ~33 MB gz/day covers all OPRA contracts, quota-free
   (`files.massive.com`, bucket `flatfiles`,

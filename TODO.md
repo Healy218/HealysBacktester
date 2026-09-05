@@ -270,6 +270,55 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
   re-run the walk-forward (~21 min) — filter/0.45 was the sweep's best row.
 - [ ] Post-campaign: delete stale Artifact Registry tags.
 
+## Massive Advanced — using the new data (PROPOSED 2026-09-05, awaiting the user's order)
+
+Probed live 2026-09-05 (DOCUMENTATION → Data limits): option minute/day
+aggregates and trades have FULL history (2017+ verified, bucket 2014→);
+quotes from 2022-03-07 (flat files 85–140 GB gz/day → targeted REST only:
+`/v3/quotes/{ticker}` ~3.9k quotes per contract-day, 222 ms/call, 8-way
+parallel fine); real-time chain snapshots with greeks/IV/OI; websockets
+real-time (parked: the panel decides on closed 15m bars); MCP via OAuth.
+
+- [ ] **D1. Live scanner: greeks + quotes in the alert path** (~1 day, all
+  four experts benefit today). `Execution.select` already targets
+  TARGET_DELTA=0.50 and falls back to moneyness because chains had no
+  greeks → use `/v3/snapshot/options/{underlying}` (real-time on Advanced)
+  for delta-targeted contract choice, an IV/OI/spread liquidity filter, and
+  bid/ask + spread in the Telegram text. Rare calls (per alert), no quota risk.
+- [ ] **D2. Deep minute-aggs archive 2017→** (box crawl, ~15 GB, quota-free,
+  overnight; extend `v3/flatfiles.py` / `build_universe_daily` windows).
+  Unblocks two parked items at once: **spx0 lever 5** (2022 bear regime —
+  `data_cache_spx0` is built from these 1-minute files) and the **v7
+  from-scratch generation** on a 2020→2026 (or 2017→) window: ~4× the
+  labels, several regimes instead of one — the answer to "regime
+  instability is the binding problem" (spx0 round 4, v5 fold 3). Also
+  backfill the PIT universe monthlies from `day_aggs_v1` 2017→.
+- [ ] **D3. Quote-verified ledger** (~2–3 days; changes verdict realism).
+  Today fills are worst-print OHLCV (`v4_accounting`: slippage 5 bps,
+  half_spread 0 base / 25 bps stressed). For the trades that MATTER — the
+  ledger's selected trades on validation/test (hundreds per fold + rolls,
+  thousands of REST calls, minutes) — fetch observed bid/ask at entry and
+  exit timestamps and book buy-at-ask / sell-at-bid; report ledger returns
+  both ways and make the quote-verified one the gate basis (DECISIONS
+  entry). Training labels (1.3M trades) keep OHLCV fills but get a
+  **spread model** (half_spread by moneyness × DTE × liquidity bucket)
+  calibrated from sampled quote days, replacing the flat 0/25 bps.
+- [ ] **D4. Trades flat files, 2y (~25 GB)**: (i) fill realism — actual
+  prints inside the fill bar instead of bar extremes; (ii) decision-time
+  liquidity features (prior-bar print count/size, available_at-safe);
+  (iii) a cross-check that v5's executed fills had real prints (the
+  2026-08-19 biased-drop lesson, from the other side).
+- [ ] **D5. Deeper surface features**: `build_surface` from `day_aggs_v1`
+  2017→ so IV/term-slope/put-call features exist for the v7 window.
+- [ ] Skip: bulk quotes crawl (100 GB/day); websockets until an
+  auto-execution or intraday seat exists. Optional: `claude mcp add
+  --transport http massive https://mcp.massive.com/` (OAuth; research
+  queries only — the pipeline stays on REST/flat files).
+
+Suggested order: D1 → D2 (start the crawl first, it's unattended) → D3 →
+D4 → then v7 + spx0-2022 ride on D2. Decisions for the user: v7 window
+start (2020-01 vs 2017), and whether D3 becomes the gate basis.
+
 ## Forward-tracking duties (standing, this phase)
 
 - Scoreboard reads: `[v4]` real-alert hit-rate vs its paper history; the
