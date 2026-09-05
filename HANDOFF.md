@@ -161,6 +161,15 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   re-enable the unit if wanted (`systemctl --user enable healys-freeze-v6`).
   ~230 symbols left ≈ 14 h at 4 workers. Partial tally so far: best_strategy
   bbw_squeeze 43 / keltner 11 of 201 — the new families win somewhere.
+- **2026-09-05 evening: LIVE-PATH BUG FOUND + FIXED.** The panel had been
+  scanning the previous session's bars all day since 2026-07-05 (day-keyed
+  bar cache, no force_download). Fixed in `run_live._bar_loader`
+  (force_download=True), deployed to the server; EXPERIMENTS entry written;
+  paper records before 2026-09-08 are first-pass-only. Also today: Massive
+  Advanced + Alpaca Algo Trader Plus probed and planned (TODO blocks);
+  NEXT = streamed feeds on the server (stock SIP bars → a live bar store the
+  loaders read; OPRA option quotes for active alerts) and the v7
+  "real-time capable" feature contract (offline twin from Massive history).
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 
