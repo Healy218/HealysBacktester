@@ -1,21 +1,36 @@
 # TODO — current phase
 
-**Phase: Expert panel, wave 2** (`ROADMAP.md` ▶ NOW; user priorities set
-2026-08-16). Entered 2026-08-24 after the v4-ship phase exited the same day
-(V118 live, real alerts — see `handoff-history/HANDOFF-2026-08-24-*`).
+**Phase: Expert panel, wave 2 → generation v6 groundwork** (`ROADMAP.md`).
+Re-prioritised 2026-09-05 after the v5 campaign (freeze 75 h/$40 on Batch,
+build 29 Aug→4 Sep across three fleet rebuilds + the box, ladder ~1.5 h on
+the box). Order of operations agreed 2026-09-05 — work top to bottom:
 
-How this file works: it holds the tasks for the *current* ROADMAP phase only.
-Work top to bottom, tick boxes as things land, record mid-task state in
-`HANDOFF.md`. When the phase exits, refill this file from ROADMAP's next
-phase and log the exit in `docs/EXPERIMENTS.md`.
+1. **Monday watch + box automation** — v5's first passes (pass time for 441
+   symbols, alert cadence, the other experts unaffected); StockTwits +
+   cache-backup system timers need `sudo` (deploy/systemd/README.md); FA
+   monthly freeze before 1 Oct; delete stale Artifact Registry tags (keep
+   `4cca795`).
+2. **Universe read path** (block 6 plan: derive sorted → read filtered → scan
+   the slice; 310× measured on `get_chain`, ~1 GB RSS per worker back). Gate:
+   get_chain identity on sampled queries + rebuilt-symbol row identity vs the
+   v5 shards. Every later generation rides it.
+3. **Cheap verdict changers**: 0.45-threshold walk-forward (running
+   2026-09-05), DD-brake live enforcement in `v4_scan`, ~~v3/v31 watchlist
+   hook~~ (done in c3ba880).
+4. **Pre-generation hygiene, in a NEW pool (`v6`), never by editing v5's
+   config** (the deployed v5 spec/hash must stay stable): window start
+   2024-12, family partials keyed by window.
+5. **Generation v6, additive**: Keltner + BB-width-squeeze families + the
+   M/W/F weekly-expiry DTE variant (25 names). Freeze only the new families
+   on Batch (with the read-path fix), merge into the spec, build only the
+   new families' rows, ladder on the box.
+6. FA seat overlay + `[fa]` digest (exit metric is time-gated: 3 monthlies).
+7. Vol-regime stage 3 (must beat HAR-RV QLIKE 0.117 per regime).
+8. spx0 — parked until the Massive Advanced upgrade lands (2022 bear data).
+9. Stacked blend, then RL sizing — last.
 
-Everything below runs with `NN_META_POOL=v31` unless said otherwise.
-Heavy compute runs on GCP Batch (rebuild + pin `IMAGE_TAG` after every code
-change); the box codes, tests, and smokes — **except** the v5 campaign
-(block 6), where the box is also a build worker.
-
-**Active focus since 2026-08-26: block 6, the v5 wide-pool campaign.**
-Blocks 1–5 are paused behind it unless a live-scanner issue jumps the queue.
+Everything below runs with `NN_META_POOL=v31` unless said otherwise; v5 work
+uses `v5`; heavy freezes on GCP Batch, everything else on the box.
 
 ## 1 — spx0 seat, round 3 (wave-2 item 2) — IN FLIGHT
 
@@ -42,10 +57,9 @@ Blocks 1–5 are paused behind it unless a live-scanner issue jumps the queue.
   `--digest` (20:10 UTC weekdays), underlying-direction hit-rates.
   **Watch Monday:** first populated digest + first real `[v4]` alert
   behavior (threshold ev/0.05 through the EV head).
-- [ ] v3/v31 seats: add the same recording hook to the legacy
-  `run_live` scorer path + a shared digest (one message for the panel, or
-  one per expert — decide when wiring). `watchlist.py` is expert-agnostic
-  by design.
+- [x] v3/v31 seats record scored signals + one panel digest — DONE in
+  c3ba880 (2026-08-24; `nn_meta/live/scanner.py` → Watchlist); ticked
+  2026-09-05.
 
 ## 3 — FA-discovery seat (wave-2 item 4; exit metric: ≥3 frozen monthlies)
 

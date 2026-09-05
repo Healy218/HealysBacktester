@@ -921,6 +921,9 @@ def main() -> None:
     ap.add_argument("--gbt-estimators", type=int, default=600)
     ap.add_argument("--embargo", default="1D")
     ap.add_argument("--folds", type=int, default=0, help="expanding nested folds")
+    ap.add_argument("--thresholds", default=None,
+                    help="comma-separated P(win) cuts for filter/rank modes "
+                         "(default config.KEEP_THRESHOLDS); e.g. 0.45,0.5,0.55,0.6")
     ap.add_argument("--marks", type=Path, default=None,
                     help="per-contract 15m mark stream; enables mark-to-market "
                          "accounting of the winning policy's trades")
@@ -951,6 +954,10 @@ def main() -> None:
     mark_stream = load_mark_stream(args.marks) if args.marks else None
     models = [m.strip() for m in args.models.split(",") if m.strip()]
     seeds = [int(seed) for seed in args.seeds.split(",") if seed.strip()]
+    thresholds = ([float(t) for t in args.thresholds.split(",") if t.strip()]
+                  if args.thresholds else list(config.KEEP_THRESHOLDS))
+    if args.thresholds:
+        print(f"thresholds: {thresholds}", flush=True)
     output = args.output or config.REPORTS_DIR / (
         "v4_ablation_report.md" if args.ablation else "v4_walkforward_report.md")
     output.parent.mkdir(parents=True, exist_ok=True)
@@ -965,7 +972,7 @@ def main() -> None:
                 ds, window, spec=spec, schema=schema, purged=purged,
                 label=args.label, models=models, seeds=seeds, epochs=args.epochs,
                 gbt_estimators=args.gbt_estimators, embargo=args.embargo,
-                mark_stream=mark_stream,
+                mark_stream=mark_stream, thresholds=thresholds,
             ))
     else:
         folds = expanding_folds(ds["entry_ts"], n_folds=args.folds or 3)
@@ -975,7 +982,7 @@ def main() -> None:
                 ds, window, spec=spec, schema="v4", purged=True,
                 label=args.label, models=models, seeds=seeds, epochs=args.epochs,
                 gbt_estimators=args.gbt_estimators, embargo=args.embargo,
-                mark_stream=mark_stream,
+                mark_stream=mark_stream, thresholds=thresholds,
             ))
     _write_report(results, output)
     manifest_path = args.manifest or output.with_suffix(".manifest.json")
