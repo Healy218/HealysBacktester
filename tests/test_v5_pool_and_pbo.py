@@ -86,3 +86,14 @@ def test_v6_adds_keltner_and_bbw_squeeze_on_top_of_v5():
         names = list(entries.columns.names)
         single = pr.single_signals(strat, bars, dict(zip(names, col)))
         assert single[0].shape[0] == len(bars)
+
+
+def test_config_hash_ignores_grids_of_families_outside_the_pool(monkeypatch):
+    """The frozen-spec drift check must not flip when a LATER pool adds a
+    family's grid to SWEEP_GRIDS (2026-09-05 regression)."""
+    from nn_meta import baseline
+    before = baseline._config_hash()
+    monkeypatch.setitem(config.SWEEP_GRIDS, "not_in_this_pool", {"window": (1, 2, 1)})
+    assert baseline._config_hash() == before
+    monkeypatch.setitem(config.SWEEP_GRIDS, config.PROPOSAL_STRATEGIES[0], {"window": (99, 100, 1)})
+    assert baseline._config_hash() != before

@@ -329,7 +329,12 @@ def _config_hash() -> str:
     frozen = {
         "interval": config.INTERVAL, "dte_grid": config.DTE_GRID,
         "strategies": config.PROPOSAL_STRATEGIES,
-        "grids": config.SWEEP_GRIDS,
+        # Only THIS pool's grids: adding a family for a later pool must not
+        # change an earlier pool's hash (2026-09-05: v6's keltner/bbw_squeeze
+        # grids flipped v5's hash under the old full-table formula; v5's spec
+        # hash 4a1897559fe2 is reproduced exactly by this scope).
+        "grids": {k: config.SWEEP_GRIDS[k] for k in config.PROPOSAL_STRATEGIES
+                  if k in config.SWEEP_GRIDS},
         "sim": config.SIM_CONFIG, "train": [config.TRAIN_START, config.TRAIN_END],
         "ceiling": config.TRADES_PER_DAY_CEILING,
         "min_trades": config.MIN_TRAIN_TRADES,

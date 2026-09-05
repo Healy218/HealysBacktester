@@ -10,20 +10,26 @@ the box). Order of operations agreed 2026-09-05 — work top to bottom:
    cache-backup system timers need `sudo` (deploy/systemd/README.md); FA
    monthly freeze before 1 Oct; delete stale Artifact Registry tags (keep
    `4cca795`).
-2. **Universe read path** (block 6 plan: derive sorted → read filtered → scan
-   the slice; 310× measured on `get_chain`, ~1 GB RSS per worker back). Gate:
-   get_chain identity on sampled queries + rebuilt-symbol row identity vs the
-   v5 shards. Every later generation rides it.
+2. ~~**Universe read path**~~ **DONE 2026-09-05** (7e7d88b): chains from
+   per-underlying parquet-predicate slices; derive writes sorted row groups.
+   Gate: 200/200 sampled chains identical (order included), 205 → 0.74 ms
+   per call (278×), 201k resident rows vs 5.2M; NOW rebuilt row-identical
+   (see HANDOFF). Every later generation rides it.
 3. **Cheap verdict changers**: 0.45-threshold walk-forward (running
-   2026-09-05), DD-brake live enforcement in `v4_scan`, ~~v3/v31 watchlist
-   hook~~ (done in c3ba880).
-4. **Pre-generation hygiene, in a NEW pool (`v6`), never by editing v5's
-   config** (the deployed v5 spec/hash must stay stable): window start
-   2024-12, family partials keyed by window.
-5. **Generation v6, additive**: Keltner + BB-width-squeeze families + the
-   M/W/F weekly-expiry DTE variant (25 names). Freeze only the new families
-   on Batch (with the read-path fix), merge into the spec, build only the
-   new families' rows, ladder on the box.
+   2026-09-05, `reports_v5/v4_walkforward_thr045.md`); DD-brake live
+   enforcement in `v4_scan` — DEFERRED: the scanner only alerts (no sizing
+   path exists to enforce in); both live bundles are unbraked; revisit when a
+   braked bundle is a candidate. ~~v3/v31 watchlist hook~~ (done in c3ba880).
+4. **Pool `v6` SCAFFOLDED 2026-09-05** (6656d46): window/train start
+   2024-12-01, shares `data_cache_v5` + the PIT universe, `artifacts_v6`; v5
+   config untouched (spec hash 4a1897559fe2 verified; `_config_hash` now
+   scopes grids to the pool's own families). Still to do: family partials
+   keyed by window (or clear `meta_partial` on a window change).
+5. **Generation v6, additive** — families CODED 2026-09-05 (`keltner`,
+   `bbw_squeeze` in `signals/tv_signals.py`, grids, seam-tested). Still to
+   do: the M/W/F weekly-expiry DTE variant (25 names); freeze only the two
+   new families on Batch (image rebuild with the read-path fix), merge into
+   a v6 spec, build only their rows, ladder on the box.
 6. FA seat overlay + `[fa]` digest (exit metric is time-gated: 3 monthlies).
 7. Vol-regime stage 3 (must beat HAR-RV QLIKE 0.117 per regime).
 8. spx0 — parked until the Massive Advanced upgrade lands (2022 bear data).
