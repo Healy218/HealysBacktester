@@ -152,6 +152,15 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   `artifacts_v6_in/baseline_spec.json`. Estimate ~4–5 h wall at 120 wide,
   ~$8 (2 of 10 families of the $40 v5 freeze). If both run, the bucket
   specs and the box shards are the same content; merge whichever finishes.
+- **20:35Z 2026-09-05: v6 FREEZE PAUSED by the user (gaming on the box) at
+  211/441**, zero errors; shards intact in `nn_meta/artifacts_v6/
+  spec_shard_{0..3}.json`; reboot unit `healys-freeze-v6` DISABLED so a
+  restart does not relaunch it. RESUME (each shard skips its done symbols;
+  the 4 in-flight symbols redo from scratch, ~10 min): `setsid nohup
+  scripts/run_freeze_v6_local.sh > logs/freeze_v6_local.log 2>&1 &` and
+  re-enable the unit if wanted (`systemctl --user enable healys-freeze-v6`).
+  ~230 symbols left ≈ 14 h at 4 workers. Partial tally so far: best_strategy
+  bbw_squeeze 43 / keltner 11 of 201 — the new families win somewhere.
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 
