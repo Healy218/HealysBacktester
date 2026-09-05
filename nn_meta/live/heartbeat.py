@@ -158,9 +158,9 @@ def build_message() -> str:
         try:
             hb = _read_json(fpath)
             if not hb:
-                digest.append(f"feed {fname}: no heartbeat yet")
-                if rth:
-                    warnings.append(f"⚠️ feed {fname}: no heartbeat during market hours")
+                # No file = the feed is not deployed on this host (box, tests);
+                # only a heartbeat that EXISTS and went stale is a failure.
+                digest.append(f"feed {fname}: not deployed here")
                 continue
             age_min = (now - datetime.fromisoformat(hb["ts"])).total_seconds() / 60
             extra = (f"{hb.get('symbols', '?')} symbols · last bar {hb.get('last_bar', '—')}"
