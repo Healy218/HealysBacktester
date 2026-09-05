@@ -15,8 +15,9 @@ the box). Order of operations agreed 2026-09-05 — work top to bottom:
    Gate: 200/200 sampled chains identical (order included), 205 → 0.74 ms
    per call (278×), 201k resident rows vs 5.2M; NOW rebuilt row-identical
    (see HANDOFF). Every later generation rides it.
-3. **Cheap verdict changers**: 0.45-threshold walk-forward (running
-   2026-09-05, `reports_v5/v4_walkforward_thr045.md`); DD-brake live
+3. **Cheap verdict changers**: ~~0.45-threshold walk-forward~~ DONE
+   2026-09-05 — REJECTED (fold 3 picked 0.45 on validation, then +82%/45%
+   DD on test vs ev/0.05's +453%/8%; EXPERIMENTS); DD-brake live
    enforcement in `v4_scan` — DEFERRED: the scanner only alerts (no sizing
    path exists to enforce in); both live bundles are unbraked; revisit when a
    braked bundle is a candidate. ~~v3/v31 watchlist hook~~ (done in c3ba880).

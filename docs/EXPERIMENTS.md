@@ -6,6 +6,20 @@ edge and a lottery ticket. Full detail lives in each row's report path.
 When the expert panel goes live, the second table tracks realized (paper)
 per-expert performance.
 
+## 2026-09-05 — 0.45 P(win) cut REJECTED by the walk-forward: a validation lure
+
+The finalize sweep's best single-window row was `filter/0.45` (+355%, 24%
+DD on the May–Aug tail; never in `KEEP_THRESHOLDS`). Re-running the nested
+3-fold walk-forward with `--thresholds 0.45,0.5,0.55,0.6` (same seeds/epochs/
+embargo; `nn_meta/reports_v5/v4_walkforward_thr045.md`): folds 1–2 unchanged
+(the new cut never won validation); **fold 3's validation picked filter/0.45
+over ev/0.05, and on test it returned +82.3% at 45.0% maxDD (marked
++91.5% / 50.0%) against ev/0.05's +452.8% / 8.4%** — a cap breach on test
+that the standing grid never showed. One window said 0.45 was the best
+row; the nested protocol says it is a selection trap. **`KEEP_THRESHOLDS`
+stays [0.50, 0.55, 0.60].** (Same evaluate code; `--thresholds` is a new
+CLI override that leaves the default grid untouched.)
+
 ## 2026-09-04 — v5 wide pool WALK-FORWARD: three eligible folds, no negative fold; finalize in flight
 
 Dataset build finished on the box 16:55Z (441/441 rows + marks; cloud
