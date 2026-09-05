@@ -73,6 +73,12 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   (a) risk-aware; 0.45 never tried; ≥0.65 keeps nothing) in EXPERIMENTS.
   Still no v5 bundle — needs the user's gate decision, then
   `--gate-bar risk` finalize (~1h) persists nn ev/0.05 as-is.
+- **00:50Z 2026-09-05: v5 BUNDLE EXISTS.** User adopted gate (a); finalize
+  under `--gate-bar risk` → ELIGIBLE, nn×40 ev/0.05 persisted to
+  `nn_meta/model_final_v5/` (gitignored; published to
+  `out/v5/finalize-20260905T004700Z-box-risk-ELIGIBLE/` + SHA256SUMS).
+  V118 untouched, nothing deployed, nothing running. Open: deploy
+  decision (TODO block 6 last item); optional 0.45-threshold walk-forward.
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 

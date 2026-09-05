@@ -222,7 +222,15 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
   24% DD) was never in the grid. Recommendation: adopt (a). Decision →
   DECISIONS entry → `GATE_BAR=risk` finalize (~1h) persists ev/0.05 as-is;
   optionally add 0.45 to KEEP_THRESHOLDS and re-run the walk-forward
-  (~21 min) first. Until then no v5 bundle.
+  (~21 min) first.
+- [x] **USER DECISION 2026-09-04: gate (a) adopted** (DECISIONS; `GATE_BAR=risk`
+  default). **Finalize ELIGIBLE 2026-09-05 00:47Z → first v5 bundle** in
+  `nn_meta/model_final_v5/` (nn×40, ev/0.05, val +201%, DD 16.4%);
+  published `out/v5/finalize-20260905T004700Z-box-risk-ELIGIBLE/`.
+- [ ] USER DECISION: deploy v5 alongside/instead of V118? (scanner reads
+  `model_final_v4/`; would need a pool-aware bundle path + server sync +
+  paper phase like v4's). Optional first: add 0.45 to KEEP_THRESHOLDS and
+  re-run the walk-forward (~21 min) — filter/0.45 was the sweep's best row.
 - [ ] Post-campaign: delete stale Artifact Registry tags.
 
 ## Forward-tracking duties (standing, this phase)

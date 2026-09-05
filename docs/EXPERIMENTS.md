@@ -61,6 +61,19 @@ ev/0.05 +201%, filter/0.5 +197%, ev/0.0 +141%; every row under the 40%
 cap, every row above 10 kept). Log + grid:
 `out/v5/finalize-20260904T183947Z-box-REFUSED/`.
 
+**FINALIZE ELIGIBLE under the adopted gate (a) — first v5 bundle
+(2026-09-05 00:47Z, `out/v5/finalize-20260905T004700Z-box-risk-ELIGIBLE/`,
+163 files hashed).** DECISIONS 2026-09-04: the beat-baseline term is
+return per unit of drawdown vs the ex-top3 book (`GATE_BAR=risk`). Same
+deterministic training, third reproduction to the digit: **nn × 40 seeds,
+`ev/0.05`, dd_brake=None, val +201.3%, n_kept 154, maxDD 16.4%,
+ratio 12.2 vs bar 6.64, selection_basis=ledger, eligible=True.** Bundle at
+`nn_meta/model_final_v5/` (48 features, `ensemble_config.json` records
+`gate_bar: risk`); V118 in `model_final_v4/` untouched. NOT deployed —
+the live scanner reads `model_final_v4/`; promotion is a separate user
+decision (deploy runbook: DOCUMENTATION.md; server pulls by `git pull`,
+bundle dir would need to be tracked or synced).
+
 **Runs (a)/(b)/(c) + the confidence axis — ONE training, every policy
 (2026-09-04 evening; `out/v5/finalize-20260904T232143Z-box-allgates-REFUSED/`,
 `nn_meta/reports_v5/policy_gate_sweep.md`, `scripts/policy_gate_sweep.py`).**
