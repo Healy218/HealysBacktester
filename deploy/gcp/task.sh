@@ -33,6 +33,8 @@ POOL="${NN_META_POOL:-v31}"
 export NN_META_POOL="$POOL"
 ART="nn_meta/artifacts_${POOL}"
 CACHE="data_cache_v3"; [ "$POOL" != "v31" ] && CACHE="data_cache_${POOL}"
+# v6 is additive on v5 and shares its archive (nn_meta/config.py DATA_CACHE).
+[ "$POOL" = "v6" ] && CACHE="data_cache_v5"
 # Non-v31 pools publish under out/<pool>/. The unsuffixed out/ names ARE
 # v31's live artifacts (118 meta_rows files + the assembled dataset): a later
 # pool skip-checking or publishing there would silently mix generations —
@@ -158,6 +160,17 @@ PY
   echo "freeze symbols: $MY_SYMS"
   SPECS="${BUCKET}/out/freeze_specs_${POOL}"
   mkdir -p "$ART"
+  # Additive freeze (2026-09-05): BASELINE_URI (unused by freeze until now)
+  # names an EARLIER pool's spec to inherit from; EXTRA_ARGS carries e.g.
+  # "--strategies keltner,bbw_squeeze". Both optional — absent, this is the
+  # full freeze as before.
+  FREEZE_ARGS="${EXTRA_ARGS:-}"
+  if [ -n "${BASELINE_URI:-}" ]; then
+    gsutil -q cp "$BASELINE_URI" "$ART/base_spec.json" || {
+      echo "FATAL: base spec $BASELINE_URI missing" >&2; exit 1; }
+    FREEZE_ARGS="$FREEZE_ARGS --base-spec $ART/base_spec.json"
+    echo "additive freeze: base spec $BASELINE_URI; args: $FREEZE_ARGS"
+  fi
   rc_all=0
   IFS=',' read -ra SYMS <<< "$MY_SYMS"
   for sym in "${SYMS[@]}"; do
@@ -167,8 +180,9 @@ PY
     fi
     # A symbol too thin to freeze is a RESULT (freeze_all skips it); only a
     # crash should fail the task.
+    # FREEZE_ARGS deliberately unquoted: a flag list that must word-split.
     if python -m nn_meta.freeze_baseline --symbols "$sym" \
-        --out "$ART/freeze_${sym}.json"; then
+        --out "$ART/freeze_${sym}.json" ${FREEZE_ARGS:-}; then
       gsutil -q cp "$ART/freeze_${sym}.json" "${SPECS}/${sym}.json"
     else
       echo "== $sym freeze CRASHED ==" >&2; rc_all=1
