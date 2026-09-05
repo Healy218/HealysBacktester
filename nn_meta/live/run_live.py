@@ -29,6 +29,7 @@ import pandas as pd
 
 from utils.logging_utils import setup_logging
 from data import vbt_data_loader
+from nn_meta import config
 from nn_meta.download_data import filter_rth
 from nn_meta.live.scanner import (Scanner, aliased_bar_loader, is_rth,
                                   format_alert, _LOOKBACK_DAYS)
@@ -68,8 +69,12 @@ def _bar_loader(symbol: str, now: datetime | None = None):
     today = now.date()
     start = today - timedelta(days=_LOOKBACK_DAYS)
     yesterday = today - timedelta(days=1)
+    # Vendor symbol (2026-09-05): BRKB is "BRK.B" at Alpaca (config.FETCH_ALIASES);
+    # without this the live scan never saw BRKB at all ("NoneType has no
+    # attribute 'empty'" on every pass).
+    fetch_sym = getattr(config, "FETCH_ALIASES", {}).get(symbol.upper(), symbol)
     hist = vbt_data_loader.load_price_data_smart(
-        symbol, start.isoformat(), yesterday.isoformat(), "15m")
+        fetch_sym, start.isoformat(), yesterday.isoformat(), "15m")
     hist = filter_rth(hist[_OHLCV]) if hist is not None and not hist.empty else None
     today_bars = None
     if _feed_is_fresh(now):
@@ -78,7 +83,7 @@ def _bar_loader(symbol: str, now: datetime | None = None):
         today_bars = tb if not tb.empty else None
     if today_bars is None:
         raw = vbt_data_loader.load_price_data_smart(
-            symbol, today.isoformat(), today.isoformat(), "15m", force_download=True)
+            fetch_sym, today.isoformat(), today.isoformat(), "15m", force_download=True)
         if raw is not None and not raw.empty:
             today_bars = filter_rth(raw[_OHLCV])
     parts = [p for p in (hist, today_bars) if p is not None and not p.empty]

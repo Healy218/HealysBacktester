@@ -48,3 +48,28 @@ def test_aggregate_drops_pre_market_bars():
                       index=pd.date_range("2026-09-04 12:00", periods=120, freq="1min"))
     b = aggregate_15m(m1)
     assert b.index[0] == pd.Timestamp("2026-09-04 13:30") and len(b) == 2
+
+
+def test_stream_maps_vendor_symbols_both_ways(monkeypatch):
+    from nn_meta import config
+    from nn_meta.live.feeds import stock_stream as ss
+    monkeypatch.setattr(config, "FETCH_ALIASES", {"BRKB": "BRK.B"}, raising=False)
+    assert ss.vendor_symbol("BRKB") == "BRK.B" and ss.vendor_symbol("spy") == "SPY"
+    assert ss.pool_symbol("BRK.B") == "BRKB" and ss.pool_symbol("SPY") == "SPY"
+
+
+def test_live_loader_fetches_the_vendor_symbol(monkeypatch):
+    import pandas as pd
+    from datetime import datetime, timezone
+    from nn_meta import config
+    from nn_meta.live import run_live
+    monkeypatch.setattr(config, "FETCH_ALIASES", {"BRKB": "BRK.B"}, raising=False)
+    seen = []
+    def fake_smart(symbol, start, end, interval, cache_dir="data/cache", force_download=False):
+        seen.append(symbol)
+        idx = pd.date_range(pd.Timestamp(end).strftime("%Y-%m-%d") + " 13:30", periods=2, freq="15min")
+        return pd.DataFrame({"Open": 1.0, "High": 1.0, "Low": 1.0, "Close": 1.0, "Volume": 1.0}, index=idx)
+    monkeypatch.setattr(run_live.vbt_data_loader, "load_price_data_smart", fake_smart)
+    monkeypatch.setattr(run_live, "_feed_is_fresh", lambda now: False)
+    run_live._bar_loader("BRKB", now=datetime(2026, 9, 4, 15, 0, tzinfo=timezone.utc))
+    assert seen == ["BRK.B", "BRK.B"]

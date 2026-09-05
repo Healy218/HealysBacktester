@@ -37,6 +37,16 @@ HEARTBEAT = ROOT / "stock_stream.heartbeat.json"
 _POOL_SPECS = ("v3", "v31", "v5", "v6")
 
 
+def vendor_symbol(sym: str) -> str:
+    """Pool symbol → Alpaca symbol (config.FETCH_ALIASES: BRKB → BRK.B)."""
+    return getattr(config, "FETCH_ALIASES", {}).get(sym.upper(), sym.upper())
+
+
+def pool_symbol(vendor: str) -> str:
+    inv = {v.upper(): k for k, v in getattr(config, "FETCH_ALIASES", {}).items()}
+    return inv.get(vendor.upper(), vendor.upper())
+
+
 def union_universe() -> list[str]:
     syms: set[str] = set()
     for pool in _POOL_SPECS:
@@ -59,7 +69,7 @@ def backfill_today(store: BarStore, symbols: list[str], day: str | None = None) 
     client = StockHistoricalDataClient(os.environ["ALPACA_API_KEY"], os.environ["ALPACA_API_SECRET"])
     total = 0
     for i in range(0, len(symbols), 50):                 # multi-symbol requests
-        chunk = symbols[i:i + 50]
+        chunk = [vendor_symbol(s) for s in symbols[i:i + 50]]
         try:
             req = StockBarsRequest(symbol_or_symbols=chunk, timeframe=TimeFrame.Minute,
                                    start=datetime.fromisoformat(f"{day}T00:00:00+00:00"),
@@ -68,7 +78,7 @@ def backfill_today(store: BarStore, symbols: list[str], day: str | None = None) 
             bars = client.get_stock_bars(req)
             data = bars.data if hasattr(bars, "data") else {}
             for sym, blist in data.items():
-                total += store.append_1m(sym, ({"timestamp": b.timestamp, "open": b.open, "high": b.high,
+                total += store.append_1m(pool_symbol(sym), ({"timestamp": b.timestamp, "open": b.open, "high": b.high,
                                                 "low": b.low, "close": b.close, "volume": b.volume}
                                                for b in blist))
         except Exception as e:
@@ -86,7 +96,7 @@ async def _serve(store: BarStore, symbols: list[str], run_seconds: float | None)
 
     async def on_bar(bar):
         try:
-            store.append_1m(bar.symbol, [{"timestamp": bar.timestamp, "open": bar.open, "high": bar.high,
+            store.append_1m(pool_symbol(bar.symbol), [{"timestamp": bar.timestamp, "open": bar.open, "high": bar.high,
                                           "low": bar.low, "close": bar.close, "volume": bar.volume}])
             n["bars"] += 1
             if n["bars"] % 50 == 0:
@@ -95,7 +105,7 @@ async def _serve(store: BarStore, symbols: list[str], run_seconds: float | None)
         except Exception as e:
             logger.error(f"[{_TAG}] {bar.symbol}: store append failed: {e}")
 
-    stream.subscribe_bars(on_bar, *symbols)
+    stream.subscribe_bars(on_bar, *[vendor_symbol(s) for s in symbols])
     write_heartbeat(HEARTBEAT, bars=0, symbols=len(symbols), state="connecting")
     task = asyncio.create_task(stream._run_forever())
     try:
