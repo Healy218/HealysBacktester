@@ -42,8 +42,16 @@ def _bar_loader(symbol: str):
     the scanner trims it)."""
     end = datetime.now(timezone.utc).date()
     start = end - timedelta(days=_LOOKBACK_DAYS)
+    # force_download (2026-09-05): the smart loader's cache is keyed by
+    # (symbol, interval, start, end) with NO time component, so the first
+    # pass of a session cached a file and every later pass that day hit it —
+    # the panel scanned the PREVIOUS session's bars all day (verified in the
+    # server logs: 2026-09-03 13:30 pass 17 loads, every later pass 118 cache
+    # hits, last cached bar 2026-09-02 23:45). The live path must never read
+    # a day-keyed cache; the streamed bar store (nn_meta/live/feeds) is the
+    # proper fix, this is the floor.
     raw = vbt_data_loader.load_price_data_smart(
-        symbol, start.isoformat(), end.isoformat(), "15m")
+        symbol, start.isoformat(), end.isoformat(), "15m", force_download=True)
     if raw is None or raw.empty:
         return raw
     return filter_rth(raw[_OHLCV])

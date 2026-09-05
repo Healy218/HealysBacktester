@@ -190,3 +190,18 @@ class TestScanner:
                                    scorer=lambda sig, bars: 0.8, threshold=0.5)
         out = scanner.scan_once(now=self._NOW)
         assert len(out) == 1 and out[0].score == 0.8
+
+
+def test_live_bar_loader_never_reads_the_day_keyed_cache(monkeypatch):
+    """Regression (2026-09-05): the smart loader's cache key has no time
+    component; a cached first pass made every later pass that day stale."""
+    import pandas as pd
+    from nn_meta.live import run_live
+    calls = []
+    def fake_smart(symbol, start, end, interval, cache_dir="data/cache", force_download=False):
+        calls.append(force_download)
+        idx = pd.date_range("2026-09-04 13:30", periods=3, freq="15min")
+        return pd.DataFrame({"Open": 1.0, "High": 1.0, "Low": 1.0, "Close": 1.0, "Volume": 1.0}, index=idx)
+    monkeypatch.setattr(run_live.vbt_data_loader, "load_price_data_smart", fake_smart)
+    run_live._bar_loader("SPY")
+    assert calls == [True]
