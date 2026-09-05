@@ -27,13 +27,21 @@ def weekly_expiry_symbols(universe_parquet: Path | str = config.UNIVERSE_PARQUET
                           *, since: str | pd.Timestamp | None = None,
                           min_per_week: float = 3.0) -> list[str]:
     """Symbols whose listed expirations include Monday, Wednesday AND Friday
-    and average ≥ ``min_per_week`` distinct expirations per calendar week over
-    the window (default: the last 180 days of the universe's expirations)."""
-    df = pd.read_parquet(universe_parquet, columns=["underlying", "expiration"])
+    and have a median of ≥ ``min_per_week`` distinct expirations per calendar
+    week over the window (default: the 180 days ending on the last listing
+    date in the universe)."""
+    df = pd.read_parquet(universe_parquet,
+                         columns=["underlying", "expiration", "life_start"])
     df["expiration"] = pd.to_datetime(df["expiration"])
+    # Anchor on the last day contracts were SEEN LISTED, not the farthest
+    # expiration: the universe carries LEAPs years out (2028 on the v5
+    # archive), and weeklies are only listed a few weeks ahead, so a window
+    # hung off max(expiration) contains almost nothing (found 2026-09-05:
+    # 0 weekly names instead of 25).
+    until = pd.to_datetime(df["life_start"]).max()
     if since is None:
-        since = df["expiration"].max() - pd.Timedelta(days=180)
-    df = df[df["expiration"] >= pd.Timestamp(since)]
+        since = until - pd.Timedelta(days=180)
+    df = df[(df["expiration"] >= pd.Timestamp(since)) & (df["expiration"] <= until)]
     if df.empty:
         return []
     wd = df.assign(wd=df["expiration"].dt.weekday).groupby("underlying")["wd"] \

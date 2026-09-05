@@ -31,7 +31,7 @@ the box). Order of operations agreed 2026-09-05 — work top to bottom:
 5. **Generation v6, additive** — families CODED 2026-09-05 (`keltner`,
    `bbw_squeeze` in `signals/tv_signals.py`, grids, seam-tested).
    **Weekly-expiry DTE variant CODED** (`nn_meta/weekly_expiry.py`:
-   `DTE_GRID_WEEKLY=[2,4,7]` appended for M/W/F names, `WEEKLY_DTE_ENABLED`
+   `DTE_GRID_WEEKLY=[2,4,7]` appended for M/W/F names — 15 on the v5 archive, `WEEKLY_DTE_ENABLED`
    for pool v6; freeze writes `spec["weekly_symbols"]`, build reads it).
    **Additive reuse CODED** (`build_meta_dataset --reuse-rows-from v5`: takes
    the ten v5 families' rows+marks per symbol, builds only the new ones).
@@ -298,10 +298,11 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
   already has short DTEs (the v5 finalize book entered only 30/45: 13 + 141
   trades — the EV head preferred them; 1/5/10 exist in every row). What is
   NOT modelled: symbols with **Mon/Wed/Fri expirations (3 per week)**. Audit
-  2026-09-05 on `data_cache_v5/contracts.parquet`: **25 of 441** v5 names
-  have M/W/F expiries (AAPL AMD AMZN AVGO EEM EFA GLD GOOGL IBIT INTC IWM META
-  MSFT MU NVDA QQQ SLV SMH SOXL SPY TLT TQQQ TSLA XLE XLF), median 3 distinct
-  expirations/week; the other 416 are weekly-Friday or monthly. Design:
+  2026-09-05 on `data_cache_v5/contracts.parquet`, corrected the same day
+  (per-symbol median over the 180 days ending at the last listing date):
+  **15 of 441** v5 names truly list 3+/week (AAPL AMZN AVGO GLD GOOGL IBIT
+  IWM META MSFT NVDA QQQ SLV SPY TLT TSLA); AMD/EEM/EFA/INTC/MU/SMH/SOXL/
+  TQQQ/XLE/XLF show occasional M/W listings but median 1/week — not weekly. Design:
   an expiry-native DTE variant ("next 1st/2nd/3rd expiration" instead of a
   fixed DTE) for those 25, keyed into the `dte` column like the spx0
   variant codes, so rank/EV dedupe and fold selection work unchanged;
