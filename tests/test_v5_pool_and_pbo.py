@@ -65,3 +65,24 @@ def test_grid_pbo_never_guesses_on_thin_windows():
     cands = [{"mode": "filter", "threshold": 0.5},
              {"mode": "rank", "threshold": 0.5}]
     assert _grid_pbo(rows, fmask, pred, None, cands) is None   # < 16 days
+
+
+def test_v6_adds_keltner_and_bbw_squeeze_on_top_of_v5():
+    """v6 = v5's ten + two band families, each with a grid and a sweep path;
+    v5's list is untouched (its deployed spec hash must stay stable)."""
+    from nn_meta import proposals as pr
+    assert config.PROPOSAL_STRATEGIES_V6[:10] == config.PROPOSAL_STRATEGIES_V5
+    assert config.PROPOSAL_STRATEGIES_V6[10:] == ["keltner", "bbw_squeeze"]
+    bars = _bars(n=1500)
+    for strat in ("keltner", "bbw_squeeze"):
+        assert strat in config.SWEEP_GRIDS
+        entries, exits, s_ent, s_ext = pr.sweep_signals(strat, bars)
+        assert len(entries) == len(bars) and entries.dtypes.eq(bool).all()
+        assert entries.columns.nlevels == 2
+        assert entries.values.any(), f"{strat}: no long entries on random walk"
+        assert exits.values.any()
+        # the frozen-params path re-creates the winning column from its levels
+        col = entries.columns[entries.sum().argmax()]
+        names = list(entries.columns.names)
+        single = pr.single_signals(strat, bars, dict(zip(names, col)))
+        assert single[0].shape[0] == len(bars)

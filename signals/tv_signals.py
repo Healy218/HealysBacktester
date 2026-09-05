@@ -80,3 +80,55 @@ def generate_squeeze_signals(ohlcv: pd.DataFrame, bb_mult_range,
                                        released & (mom < 0),
                                        _cross_over(mom, 0.0))
     return _assemble(out, ["sq_bb_mult", "sq_kc_mult"], enable_shorting)
+
+
+# ── v6 additions (user notes 2026-09-05) ─────────────────────────────────────
+
+def generate_keltner_signals(ohlcv: pd.DataFrame, window_range, mult_range,
+                             enable_shorting: bool = False):
+    """Keltner channel breakout: EMA(close, n) ± mult × ATR(n) (ATR = RMA of
+    true range, TradingView's default). Long on a close crossing above the
+    upper band, exit on a close crossing back under the mid line; shorts
+    mirrored on the lower band. The Keltner half of the squeeze family, as an
+    entry family of its own."""
+    out = {}
+    tr = ta.true_range(ohlcv)
+    close = ohlcv["Close"]
+    for n, m in product(window_range, mult_range):
+        n, m = int(n), float(m)
+        mid = close.ewm(span=n, adjust=False).mean()
+        rng = m * ta.rma(tr, n)
+        upper, lower = mid + rng, mid - rng
+        long_in = (close > upper) & (close.shift(1) <= upper.shift(1))
+        long_out = (close < mid) & (close.shift(1) >= mid.shift(1))
+        short_in = (close < lower) & (close.shift(1) >= lower.shift(1))
+        short_out = (close > mid) & (close.shift(1) <= mid.shift(1))
+        out[(n, m)] = (long_in, long_out, short_in, short_out)
+    return _assemble(out, ["kc_window", "kc_mult"], enable_shorting)
+
+
+def generate_bbw_squeeze_signals(ohlcv: pd.DataFrame, window_range,
+                                 lookback_range, enable_shorting: bool = False):
+    """Bollinger Band Width squeeze (TradingView "BB Width" logic): width =
+    (upper − lower) / basis with a 2σ band; a squeeze is on while the width
+    sits at its lowest over ``lookback`` bars. Entry = the first close outside
+    the band while the squeeze was on the bar before (the release, in the
+    breakout's direction); exit = a close crossing back through the basis.
+    Distinct from the ``squeeze`` family, which is LazyBear's BB-inside-Keltner
+    release with a momentum sign."""
+    out = {}
+    close = ohlcv["Close"]
+    for n, lb in product(window_range, lookback_range):
+        n, lb = int(n), int(lb)
+        basis = ta.sma(close, n)
+        dev = 2.0 * close.rolling(n).std(ddof=0)
+        upper, lower = basis + dev, basis - dev
+        width = (upper - lower) / basis.replace(0, np.nan)
+        squeeze_on = width <= width.rolling(lb).min()
+        armed = squeeze_on.shift(1, fill_value=False)
+        long_in = armed & (close > upper) & (close.shift(1) <= upper.shift(1))
+        long_out = (close < basis) & (close.shift(1) >= basis.shift(1))
+        short_in = armed & (close < lower) & (close.shift(1) >= lower.shift(1))
+        short_out = (close > basis) & (close.shift(1) <= basis.shift(1))
+        out[(n, lb)] = (long_in, long_out, short_in, short_out)
+    return _assemble(out, ["bbw_window", "bbw_lookback"], enable_shorting)

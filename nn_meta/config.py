@@ -20,13 +20,13 @@ _SUF = "" if POOL == "v2" else f"_{POOL}"
 # Big-run pools (v3.1+): 120-universe, flat-file option bars, ~2y window.
 # They read a SEPARATE data cache (data_cache_v3) so the live 56-symbol data
 # is never touched, while still writing their own suffixed artifact dirs.
-_BIG_RUN = POOL in {"v31", "v5"}
+_BIG_RUN = POOL in {"v31", "v5", "v6"}
 
 # ── Paths ────────────────────────────────────────────────────────────────────
 ROOT = Path(__file__).resolve().parent
 # v5 gets its OWN cache: sharing data_cache_v3 would overwrite v31's frozen
 # inputs (120-name contracts/universe/flatfiles) with 453-name rebuilds.
-DATA_CACHE = ROOT / ("data_cache_v5" if POOL == "v5"
+DATA_CACHE = ROOT / ("data_cache_v5" if POOL in ("v5", "v6")   # v6 shares v5's archive
                      else "data_cache_v3" if _BIG_RUN else "data_cache")
 ARTIFACTS = ROOT / f"artifacts{_SUF}"      # baseline spec, meta dataset
 RUNS_DIR = ROOT / f"runs{_SUF}"
@@ -45,7 +45,13 @@ RUNS_CSV = RUNS_DIR / "runs.csv"
 # because the boundary rolls forward while multi-day downloads run. Data
 # behind the boundary survives ONLY in our parquet caches — download early.
 HISTORY_START = "2024-04-01"               # underlying warmup (Alpaca, unbounded)
-if POOL == "v5":
+if POOL == "v6":
+    # TODO item 4 (2026-09-05): start at the first frozen PIT month so the
+    # membership filter no longer drops ~20% of the built train span. Same
+    # end as v5 until the flat-file archive is crawled further.
+    WINDOW_START, WINDOW_END = "2024-12-01", "2026-08-24"
+    TRAIN_START, TRAIN_END = "2024-12-01", "2025-12-19"
+elif POOL == "v5":
     # v5 window runs to the last completed trading day at build time (user
     # decision 2026-08-25); its flat-file/PIT crawls start at the measured
     # entitlement wall. Train/val boundaries stay on the family dates; only
@@ -62,7 +68,7 @@ else:
     TRAIN_START, TRAIN_END = "2024-07-14", "2025-12-19"
 # val/test identical to v1 so before/after comparisons stay clean:
 VAL_START, VAL_END = "2026-01-05", "2026-03-27"
-TEST_START, TEST_END = ("2026-04-06", "2026-08-24") if POOL == "v5" \
+TEST_START, TEST_END = ("2026-04-06", "2026-08-24") if POOL in ("v5", "v6") \
     else ("2026-04-06", "2026-07-02")
 
 # v1's 17 names + 39 liquid adds (thin names auto-skip at freeze time).
@@ -79,7 +85,7 @@ _UNDERLYINGS_V2 = [
     # ETFs
     "IWM", "DIA", "GLD", "TLT", "SMH", "XLE", "XLF", "ARKK",
 ]
-if POOL == "v5":
+if POOL in ("v5", "v6"):
     # v5's universe is the POINT-IN-TIME membership (PIT_UNIVERSE_SPEC):
     # UNDERLYINGS is the union of every frozen monthly artifact — the crawl/
     # freeze/sweep symbol list. The per-(symbol, month) restriction happens
@@ -117,7 +123,8 @@ else:
     UNDERLYINGS = _UNDERLYINGS_V2
 
 # Contract crawl / universe filter (same criteria as nn_options_signal)
-EXPIRY_MIN, EXPIRY_MAX = ("2024-08-26", "2026-10-09") if POOL == "v5" \
+EXPIRY_MIN, EXPIRY_MAX = (("2024-12-01", "2026-10-09") if POOL == "v6"
+                          else ("2024-08-26", "2026-10-09")) if POOL in ("v5", "v6") \
     else ("2024-07-21", "2026-08-15")   # max = window end + max DTE + buffer
 DTE_MIN, DTE_MAX = _nos.DTE_MIN, _nos.DTE_MAX
 MONEYNESS_BAND = _nos.MONEYNESS_BAND
@@ -165,7 +172,12 @@ PROPOSAL_STRATEGIES_V31 = ["ma", "macd", "rsi", "squeeze", "tv_rating"]
 # deflated Sharpe are wired into the evaluation before this pool runs.
 PROPOSAL_STRATEGIES_V5 = ["ma", "macd", "rsi", "squeeze", "tv_rating",
                           "bbands", "stoch", "volume", "supertrend", "elliott"]
-PROPOSAL_STRATEGIES = (PROPOSAL_STRATEGIES_V5 if POOL == "v5"
+# v6 (2026-09-05, user notes): v5's ten families + Keltner channel + BB-width
+# squeeze. ADDITIVE on purpose — a v6 build reuses v5's per-family partials
+# and only builds the two new families' rows.
+PROPOSAL_STRATEGIES_V6 = PROPOSAL_STRATEGIES_V5 + ["keltner", "bbw_squeeze"]
+PROPOSAL_STRATEGIES = (PROPOSAL_STRATEGIES_V6 if POOL == "v6"
+                       else PROPOSAL_STRATEGIES_V5 if POOL == "v5"
                        else PROPOSAL_STRATEGIES_V31 if POOL == "v31"
                        else PROPOSAL_STRATEGIES_V3 if POOL == "v3"
                        else PROPOSAL_STRATEGIES_V2)
@@ -178,6 +190,8 @@ SWEEP_GRIDS = {
     "volume":  {"vol_window": (30, 61, 10), "vol_mult": (1.5, 2.1, 0.25), "exit_ma": (45, 91, 15)},
     "elliott": {"swing": (4, 17, 4), "fib": (0.382, 0.62, 0.118), "tol": (0.01, 0.021, 0.01)},
     "supertrend": {"window": (7, 15, 3), "mult": (2.0, 4.1, 0.5)},
+    "keltner":    {"window": (10, 51, 10), "mult": (1.0, 3.1, 0.5)},
+    "bbw_squeeze": {"window": (10, 31, 10), "lookback": (60, 181, 60)},
     "tv_rating":  {"entry": (0.1, 0.51, 0.2), "exit": (-0.3, -0.09, 0.2)},
     "squeeze":    {"bb_mult": (1.5, 2.6, 0.5), "kc_mult": (1.0, 2.1, 0.5)},
 }

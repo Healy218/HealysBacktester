@@ -97,6 +97,14 @@ def sweep_signals(strategy: str, bars: pd.DataFrame):
         return tv_signals.generate_squeeze_signals(
             bars, _arange(g["bb_mult"]), _arange(g["kc_mult"]),
             enable_shorting=short)
+    if strategy == "keltner":
+        return tv_signals.generate_keltner_signals(
+            bars, _arange(g["window"], int), _arange(g["mult"]),
+            enable_shorting=short)
+    if strategy == "bbw_squeeze":
+        return tv_signals.generate_bbw_squeeze_signals(
+            bars, _arange(g["window"], int), _arange(g["lookback"], int),
+            enable_shorting=short)
     raise ValueError(f"unknown proposal strategy: {strategy}")
 
 
@@ -187,6 +195,14 @@ def single_signals(strategy: str, bars: pd.DataFrame, params: dict):
     elif strategy == "squeeze":
         frames = tv_signals.generate_squeeze_signals(
             bars, _one(p["sq_bb_mult"]), _one(p["sq_kc_mult"]),
+            enable_shorting=short)
+    elif strategy == "keltner":
+        frames = tv_signals.generate_keltner_signals(
+            bars, _one(p["kc_window"], int), _one(p["kc_mult"]),
+            enable_shorting=short)
+    elif strategy == "bbw_squeeze":
+        frames = tv_signals.generate_bbw_squeeze_signals(
+            bars, _one(p["bbw_window"], int), _one(p["bbw_lookback"], int),
             enable_shorting=short)
     else:
         raise ValueError(f"unknown proposal strategy: {strategy}")
