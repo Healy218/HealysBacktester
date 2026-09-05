@@ -138,6 +138,20 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   the 15 weekly names), then the ladder. No cloud needed for any of it.
   Batch image cf4e29e is being built in parallel (Cloud Build) in case.
   Also today: 0.45 cut REJECTED by the walk-forward (EXPERIMENTS).
+- **09:40Z 2026-09-05: freeze pace on the box is ~12.5 min/symbol (2 new
+  families) under 4-way page-cache contention → ~24 h, not 12.** Left
+  running (free, resume-safe, reboot unit `healys-freeze-v6`). CLOUD
+  ALTERNATIVE READY (needs the user's go — unguarded spend): image
+  `04efba8` (Cloud Build in flight; verify with `gcloud artifacts docker
+  images list ... --include-tags | grep 04efba8`), then
+  `TASK_MODE=freeze NN_META_POOL=v6 IMAGE_TAG=04efba8 PROJECT=healys-batch
+  BUCKET=gs://healys-backtester BASELINE_URI=gs://healys-backtester/
+  artifacts_v5_in/baseline_spec.json EXTRA_ARGS="--strategies
+  keltner,bbw_squeeze" bash deploy/gcp/submit.sh 441` → per-symbol specs in
+  `out/freeze_specs_v6/`, then `TASK_MODE=freeze-merge … submit.sh 1` →
+  `artifacts_v6_in/baseline_spec.json`. Estimate ~4–5 h wall at 120 wide,
+  ~$8 (2 of 10 families of the $40 v5 freeze). If both run, the bucket
+  specs and the box shards are the same content; merge whichever finishes.
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 
