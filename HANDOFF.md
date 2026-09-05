@@ -118,6 +118,20 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   bbw_squeeze families, weekly-expiry DTE variants, additive
   `--reuse-rows-from v5` (guarded by frozen-entry identity), config_hash
   scoped to the pool (v5 hash restored). Suite 522. Server on main.
+- **07:12Z 2026-09-05: v6 ADDITIVE FREEZE RUNNING ON THE BOX** (`scripts/
+  run_freeze_v6_local.sh`, 4 workers, detached; shards `nn_meta/artifacts_v6/
+  spec_shard_{0..3}.json`, logs `logs/freeze_v6_shard_*.log`, runner log
+  `logs/freeze_v6_local.log`). Sweeps only keltner + bbw_squeeze per symbol,
+  inherits the other ten from v5's spec; the 15 weekly-expiry names re-freeze
+  all 12 families on the extended DTE grid (1/2/4/5/7/10/30/45). CRWV timing
+  ~35 s/family → expect ~2–3 h wall. Resume: rerun the same command (each
+  shard skips its done symbols). Then: `NN_META_POOL=v6 python -m
+  nn_meta.freeze_baseline --merge "$(ls nn_meta/artifacts_v6/spec_shard_*.json
+  | paste -sd,)"` → `artifacts_v6/baseline_spec.json`; then the build with
+  `--reuse-rows-from v5` (only the 2 new families for 426 names; all 12 for
+  the 15 weekly names), then the ladder. No cloud needed for any of it.
+  Batch image cf4e29e is being built in parallel (Cloud Build) in case.
+  Also today: 0.45 cut REJECTED by the walk-forward (EXPERIMENTS).
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 
