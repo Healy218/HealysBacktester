@@ -243,6 +243,36 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
 - Fold-3 regime miss (noise vs real weakness) — answered empirically by
   per-expert forward tracking, not by another backtest.
 
+## Next generation — user notes 2026-09-05
+
+- [ ] **New proposal families** (user likes the bbands family's win rate: 62.5%
+  on 8 v5 finalize trades, +41% mean; 46 symbols' best_strategy in the freeze):
+  1. **Keltner channel** breakout/mean-revert on its own (EMA ± k×ATR; the
+     Keltner half of the existing squeeze but as an entry family) —
+     `indicators/` has ATR via `ta.squeeze_momentum`; new `signals/keltner.py`
+     + `SWEEP_GRIDS["keltner"]` (window, atr_mult).
+  2. **Bollinger Band Width squeeze** (BBW = (upper−lower)/mid at a percentile
+     low → breakout entry; TradingView "BB Width" logic) — distinct from the
+     current `squeeze` family, which is already **LazyBear Squeeze Momentum**
+     (`signals/tv_signals.py::generate_squeeze_signals`, BB-inside-Keltner
+     release + momentum sign, bb_mult × kc_mult swept). So "Squeeze Momentum
+     from TradingView" is DONE; Keltner-alone and BBW-squeeze are the adds.
+  Both ride the v5 machinery unchanged: family in `PROPOSAL_STRATEGIES_V5`,
+  grid in `SWEEP_GRIDS`, seam test, freeze on Batch/box, rebuild rows.
+- [ ] **Weekly expirations in the DTE grid.** `DTE_GRID = [1, 5, 10, 30, 45]`
+  already has short DTEs (the v5 finalize book entered only 30/45: 13 + 141
+  trades — the EV head preferred them; 1/5/10 exist in every row). What is
+  NOT modelled: symbols with **Mon/Wed/Fri expirations (3 per week)**. Audit
+  2026-09-05 on `data_cache_v5/contracts.parquet`: **25 of 441** v5 names
+  have M/W/F expiries (AAPL AMD AMZN AVGO EEM EFA GLD GOOGL IBIT INTC IWM META
+  MSFT MU NVDA QQQ SLV SMH SOXL SPY TLT TQQQ TSLA XLE XLF), median 3 distinct
+  expirations/week; the other 416 are weekly-Friday or monthly. Design:
+  an expiry-native DTE variant ("next 1st/2nd/3rd expiration" instead of a
+  fixed DTE) for those 25, keyed into the `dte` column like the spx0
+  variant codes, so rank/EV dedupe and fold selection work unchanged;
+  `Execution.select` already picks the nearest listed expiry to a target DTE,
+  so the change is the target list, not the fill engine.
+
 ## Parked (unchanged)
 
 - Point-in-time universe selection (survivorship fix) — first candidate
