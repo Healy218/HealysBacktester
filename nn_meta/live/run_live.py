@@ -25,6 +25,8 @@ try:
 except ImportError:
     pass
 
+import pandas as pd
+
 from utils.logging_utils import setup_logging
 from data import vbt_data_loader
 from nn_meta.download_data import filter_rth
@@ -37,24 +39,53 @@ logger = setup_logging(log_file="logs/backtester.log")
 _OHLCV = ["Open", "High", "Low", "Close", "Volume"]
 
 
-def _bar_loader(symbol: str):
+_FEED_MAX_AGE_MIN = 3      # streamed bars older than this → fall back to REST for today
+
+
+def _feed_is_fresh(now: datetime) -> bool:
+    from nn_meta.live.feeds.barstore import read_heartbeat
+    from nn_meta.live.feeds.stock_stream import HEARTBEAT
+    hb = read_heartbeat(HEARTBEAT)
+    if not hb or not hb.get("ts"):
+        return False
+    age = (now - datetime.fromisoformat(hb["ts"])).total_seconds() / 60
+    return age <= _FEED_MAX_AGE_MIN
+
+
+def _bar_loader(symbol: str, now: datetime | None = None):
     """Recent 15m RTH bars for one symbol (may include the forming last bar;
-    the scanner trims it)."""
-    end = datetime.now(timezone.utc).date()
-    start = end - timedelta(days=_LOOKBACK_DAYS)
-    # force_download (2026-09-05): the smart loader's cache is keyed by
-    # (symbol, interval, start, end) with NO time component, so the first
-    # pass of a session cached a file and every later pass that day hit it —
-    # the panel scanned the PREVIOUS session's bars all day (verified in the
-    # server logs: 2026-09-03 13:30 pass 17 loads, every later pass 118 cache
-    # hits, last cached bar 2026-09-02 23:45). The live path must never read
-    # a day-keyed cache; the streamed bar store (nn_meta/live/feeds) is the
-    # proper fix, this is the floor.
-    raw = vbt_data_loader.load_price_data_smart(
-        symbol, start.isoformat(), end.isoformat(), "15m", force_download=True)
-    if raw is None or raw.empty:
-        return raw
-    return filter_rth(raw[_OHLCV])
+    the scanner trims it).
+
+    Composition (2026-09-05, after the stale-cache incident):
+      * HISTORY — closed sessions up to yesterday — through the smart loader's
+        day-keyed cache. Those sessions never change, so the cache is valid.
+      * TODAY — the streamed bar store (Alpaca SIP 1m → 15m, bar-identical to
+        REST, parity-checked) when its heartbeat is fresh; otherwise today's
+        bars over REST with the cache BYPASSED. The day-keyed cache is never
+        consulted for the current session again.
+    """
+    now = now or datetime.now(timezone.utc)
+    today = now.date()
+    start = today - timedelta(days=_LOOKBACK_DAYS)
+    yesterday = today - timedelta(days=1)
+    hist = vbt_data_loader.load_price_data_smart(
+        symbol, start.isoformat(), yesterday.isoformat(), "15m")
+    hist = filter_rth(hist[_OHLCV]) if hist is not None and not hist.empty else None
+    today_bars = None
+    if _feed_is_fresh(now):
+        from nn_meta.live.feeds.barstore import BarStore
+        tb = BarStore().read_15m(symbol, days=[today.isoformat()])
+        today_bars = tb if not tb.empty else None
+    if today_bars is None:
+        raw = vbt_data_loader.load_price_data_smart(
+            symbol, today.isoformat(), today.isoformat(), "15m", force_download=True)
+        if raw is not None and not raw.empty:
+            today_bars = filter_rth(raw[_OHLCV])
+    parts = [p for p in (hist, today_bars) if p is not None and not p.empty]
+    if not parts:
+        return hist if hist is not None else today_bars
+    out = pd.concat(parts)
+    return out[~out.index.duplicated(keep="last")].sort_index()
 
 
 def main() -> None:
