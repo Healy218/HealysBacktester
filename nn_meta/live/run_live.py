@@ -91,6 +91,8 @@ def _bar_loader(symbol: str, now: datetime | None = None):
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--once", action="store_true", default=True)
+    ap.add_argument("--workers", type=int, default=None,
+                    help="detection processes (default SCAN_WORKERS env, else min(4, cpus))")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--symbols", type=str, default=None)
     ap.add_argument("--nn", action="store_true", help="filter with the NN ensemble")
@@ -119,7 +121,9 @@ def main() -> None:
 
     # alias wrapper is inert for v2/v3 (no renamed tickers in their specs);
     # under v31 it revives the SQ seat by fetching bars as XYZ.
+    from nn_meta.live.parallel import default_workers
     scanner = Scanner(aliased_bar_loader(_bar_loader), scorer=scorer,
+                      workers=args.workers if args.workers is not None else default_workers(),
                       threshold=threshold)
     notifier = get_notifier(force_console=args.dry_run)
 

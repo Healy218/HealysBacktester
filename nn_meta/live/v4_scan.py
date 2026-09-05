@@ -225,9 +225,15 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
               now: Optional[datetime] = None,
               symbols: Optional[list[str]] = None,
               threshold: Optional[float] = None,
-              state_dir: Optional[Path] = None, paper: bool = False) -> dict:
+              state_dir: Optional[Path] = None, paper: bool = False,
+              workers: int = 1) -> dict:
     """Scan → score → alert once. Returns a summary dict (also written as the
-    health snapshot). All state I/O is atomic and idempotent."""
+    health snapshot). All state I/O is atomic and idempotent.
+
+    ``workers`` > 1 (2026-09-05) runs DETECTION in a spawn process pool using
+    the real bar loader (nn_meta.live.parallel); scoring/dedupe/alerting stay
+    here. ``workers == 1`` is the original serial loop with the injected
+    ``bar_loader`` (tests, dry runs)."""
     now = now or datetime.now(timezone.utc)
     thr = bundle.threshold if threshold is None else float(threshold)
     sdir = Path(state_dir) if state_dir else STATE_DIR
@@ -240,12 +246,27 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
     bars_cache: dict[str, pd.DataFrame] = {}
     errors = 0
     scanned = 0
-    for sym in (symbols or list(spec["symbols"])):
+    syms = list(symbols or list(spec["symbols"]))
+    if workers > 1:
+        from nn_meta.live.parallel import detect_many, _v4_detect_one
+        results = detect_many(_v4_detect_one, syms,
+                              lambda s: (spec["symbols"][s], list(config.PROPOSAL_STRATEGIES), now),
+                              workers=workers)
+    else:
+        results = None
+    for sym in syms:
         try:
-            bars = closed_bars(bar_loader(sym), now)
+            if results is not None:
+                res, err = results[sym]
+                if err:
+                    raise RuntimeError(err.splitlines()[0])
+                bars, proposals = res
+            else:
+                bars = closed_bars(bar_loader(sym), now)
+                proposals = fresh_proposals(sym, bars, spec["symbols"][sym],
+                                            config.PROPOSAL_STRATEGIES)
             scanned += 1
-            for f in fresh_proposals(sym, bars, spec["symbols"][sym],
-                                     config.PROPOSAL_STRATEGIES):
+            for f in proposals:
                 key = alert_key(f["symbol"], f["strategy"], f["entry_ts"])
                 if not alert_state.seen(key):        # dedupe before scoring
                     fresh_by_key[key] = f
@@ -367,6 +388,11 @@ def digest_pass(*, bar_loader: Callable[[str], pd.DataFrame], notifier,
 
 # ── bundle trust policy ───────────────────────────────────────────────────────
 
+def _default_workers() -> int:
+    from nn_meta.live.parallel import default_workers
+    return default_workers()
+
+
 def load_trusted_bundle(bundle_dir: Optional[Path] = None, *,
                         paper: bool = False) -> "V4Bundle":
     """Default: hash-verified AND gate-eligible, else refuse. ``paper=True``
@@ -420,6 +446,8 @@ def main() -> None:
     ap.add_argument("--digest", action="store_true",
                     help="send the daily top-N watchlist digest (no model load)")
     ap.add_argument("--top", type=int, default=10)
+    ap.add_argument("--workers", type=int, default=None,
+                    help="detection processes (default SCAN_WORKERS env, else min(4, cpus))")
     args = ap.parse_args()
 
     if config.POOL not in ("v31", "v5"):
@@ -458,7 +486,8 @@ def main() -> None:
         now=now,
         symbols=[s.strip().upper() for s in args.symbols.split(",")]
         if args.symbols else None,
-        threshold=args.threshold, paper=args.paper)
+        threshold=args.threshold, paper=args.paper,
+        workers=args.workers if args.workers is not None else _default_workers())
     print(f"{TAG} scanned {summary['scanned']} · alerted {summary['alerted']} · "
           f"delivered {summary['delivered']} · errors {summary['error_count']}")
 
