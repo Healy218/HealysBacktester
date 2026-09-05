@@ -371,7 +371,10 @@ bucket listed 2014→ but GetObject was date-gated.
   `nn_meta.live.feeds.option_stream` (OPRA quotes for
   `nn_meta/live/feeds/data/option_watch.json`, ≤ 1,000 contracts → 
   `option_quotes.json`). Started by `@reboot` cron lines and restarted by
-  5-minute `pgrep || nohup` watchdog lines (no sudo on this host); logs
+  5-minute `pgrep -f "[f]eeds.<name>" || nohup` watchdog lines (no sudo on
+  this host; the BRACKET pattern is load-bearing — a plain `pgrep -f`
+  matches the watchdog's own shell and never restarts anything, which is how
+  the stock stream sat dead for an hour on 2026-09-05); logs
   `logs/feeds_stock.log`, `logs/feeds_options.log`; heartbeats
   `stock_stream.heartbeat.json` / `option_stream.heartbeat.json` (in the
   17:00Z digest; stale > 5 min during RTH = ⚠️). Loaders read today's bars

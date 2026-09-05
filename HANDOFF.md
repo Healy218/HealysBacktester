@@ -75,6 +75,10 @@ commit; nothing is running on the box.
   targeted REST only.
 - The box's `data_cache_v5/universe.parquet` is still unsorted (fine: slice
   reads are 0.09 s); `scripts/sort_universe.py` exists for new caches.
+- `pgrep -f`/`pkill -f` patterns MUST use the bracket trick (`"[f]eeds…"`)
+  everywhere — cron watchdogs, ssh one-liners, monitors. A plain pattern
+  matches its own shell: the watchdog never restarted the stock stream, my
+  checks reported it alive, and a `pkill` killed my own ssh session.
 - Server has no sudo: daemons run via `@reboot` + 5-min watchdog cron lines;
   crontab edits = stage file, diff, `crontab <file>` (backups in `~/crontab.bak.*`).
 - Reviewer worktree: `~/Coding/HealysBacktester-review` (branch
