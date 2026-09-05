@@ -227,6 +227,8 @@ commands, infra traps) lives in `HANDOFF.md` — this is the checklist.
   default). **Finalize ELIGIBLE 2026-09-05 00:47Z → first v5 bundle** in
   `nn_meta/model_final_v5/` (nn×40, ev/0.05, val +201%, DD 16.4%);
   published `out/v5/finalize-20260905T004700Z-box-risk-ELIGIBLE/`.
+- [x] main fast-forwarded to the branch and pulled on the server 2026-09-05
+  (no live-path code changes; requirements unchanged). Server keys refreshed.
 - [ ] USER DECISION: deploy v5 alongside/instead of V118? (scanner reads
   `model_final_v4/`; would need a pool-aware bundle path + server sync +
   paper phase like v4's). Optional first: add 0.45 to KEEP_THRESHOLDS and

@@ -79,6 +79,14 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   `out/v5/finalize-20260905T004700Z-box-risk-ELIGIBLE/` + SHA256SUMS).
   V118 untouched, nothing deployed, nothing running. Open: deploy
   decision (TODO block 6 last item); optional 0.45-threshold walk-forward.
+- **05:50Z 2026-09-05: main == branch (fast-forward to bec531c) and the
+  server is on it.** Hetzner ssh key restored from the MRHA backup drive
+  (`popos_backup_2026-08-17/ssh_home.tgz`); server `.env` updated with the
+  regenerated Alpaca + Massive keys (old file kept as `.env.bak.<stamp>`)
+  — the old keys had been revoked by the regeneration, so all three live
+  experts were dark from 13:30Z on 2026-09-04 (1,430 no-data errors, 401/403
+  in v4_cron.log). Box `.env` complete except Pushover; dead-man timer
+  re-enabled on the box; StockTwits system timer still needs sudo.
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 
