@@ -271,18 +271,35 @@ def _freeze_one_strategy(symbol: str, strategy: str, bars: pd.DataFrame,
 def freeze_symbol(symbol: str, provider,
                   train_start: str = config.TRAIN_START,
                   train_end: str = config.TRAIN_END,
-                  weekly_symbols: Optional[list[str]] = None) -> Optional[dict]:
-    """Freeze every proposal strategy for one symbol; mark the train-best.
-    ``weekly_symbols`` (2026-09-05) extends the DTE grid for M/W/F names."""
+                  weekly_symbols: Optional[list[str]] = None,
+                  strategies: Optional[list[str]] = None,
+                  base_entry: Optional[dict] = None) -> Optional[dict]:
+    """Freeze proposal strategies for one symbol; mark the train-best.
+
+    ``weekly_symbols`` (2026-09-05) extends the DTE grid for M/W/F names.
+    ``strategies`` restricts the sweep to those families; ``base_entry`` (an
+    earlier pool's frozen entry for this symbol) supplies the rest unchanged
+    — the ADDITIVE freeze: a pool that adds families sweeps only them. A
+    symbol whose DTE grid changed (weekly name) ignores ``base_entry`` and
+    re-freezes every family, because every family's best DTE may move."""
     from nn_meta.weekly_expiry import dte_grid_for
     dte_grid = dte_grid_for(symbol, {"weekly_symbols": weekly_symbols or []})
+    grid_changed = dte_grid != list(config.DTE_GRID)
+    todo = list(config.PROPOSAL_STRATEGIES)
+    inherited: dict[str, dict] = {}
+    if base_entry and not grid_changed:
+        inherited = {st: e for st, e in base_entry.get("strategies", {}).items()
+                     if st in config.PROPOSAL_STRATEGIES}
+        todo = [st for st in todo if st not in inherited]
+    if strategies is not None and not grid_changed:
+        todo = [st for st in todo if st in strategies]
     bars = load_underlying_15m(symbol)
     if bars.empty:
         logger.warning(f"[{_TAG}] {symbol}: no 15m bars")
         return None
 
-    strategies: dict[str, dict] = {}
-    for strat in config.PROPOSAL_STRATEGIES:
+    strategies_out: dict[str, dict] = dict(inherited)
+    for strat in todo:
         try:
             entry = _freeze_one_strategy(symbol, strat, bars, provider,
                                          train_start, train_end, dte_grid=dte_grid)
@@ -290,16 +307,16 @@ def freeze_symbol(symbol: str, provider,
             logger.exception(f"[{_TAG}] {symbol}/{strat}: freeze failed: {e}")
             entry = None
         if entry is not None:
-            strategies[strat] = entry
-    if not strategies:
+            strategies_out[strat] = entry
+    if not strategies_out:
         return None
 
     def _score(s):
-        st = strategies[s]["train_option"][str(strategies[s]["dte"])]
+        st = strategies_out[s]["train_option"][str(strategies_out[s]["dte"])]
         return st["per_trade_sharpe"] if st["per_trade_sharpe"] is not None else -np.inf
 
-    return {"strategies": strategies,
-            "best_strategy": max(strategies, key=_score)}
+    return {"strategies": strategies_out,
+            "best_strategy": max(strategies_out, key=_score)}
 
 
 def evaluate_baseline(symbol: str, spec_entry: dict, window: tuple[str, str],
@@ -363,11 +380,22 @@ def load_spec() -> dict:
     return spec
 
 
-def freeze_all(symbols: Optional[list[str]] = None, out_path=None) -> dict:
+def freeze_all(symbols: Optional[list[str]] = None, out_path=None,
+               strategies: Optional[list[str]] = None,
+               base_spec=None) -> dict:
+    """``strategies``/``base_spec`` (2026-09-05): the additive freeze — sweep
+    only ``strategies`` and inherit every other family's frozen entry from
+    ``base_spec`` (an earlier pool's baseline_spec.json). Weekly-expiry names
+    are re-frozen in full whenever the pool enables weekly DTEs."""
     config.ensure_dirs()
     provider = get_provider()
     from pathlib import Path
     dest = Path(out_path or config.BASELINE_SPEC_JSON)
+    base = json.loads(Path(base_spec).read_text()) if base_spec else None
+    if base is not None:
+        print(f"additive freeze: inheriting from {base_spec} "
+              f"({len(base.get('symbols', {}))} symbols); sweeping "
+              f"{strategies or 'all missing families'}", flush=True)
 
     # resume: reload a partial spec and skip already-frozen symbols. Combined
     # with the per-symbol write below, a killed/rebooted freeze picks up where
@@ -400,7 +428,10 @@ def freeze_all(symbols: Optional[list[str]] = None, out_path=None) -> dict:
             continue
         print(f"[{sym}] sweeping…", flush=True)
         try:
-            entry = freeze_symbol(sym, provider, weekly_symbols=out.get("weekly_symbols"))
+            entry = freeze_symbol(
+                sym, provider, weekly_symbols=out.get("weekly_symbols"),
+                strategies=strategies,
+                base_entry=(base or {}).get("symbols", {}).get(sym))
         except Exception as e:
             logger.exception(f"[{_TAG}] {sym}: freeze failed: {e}")
             entry = None
