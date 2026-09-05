@@ -223,3 +223,23 @@ def test_live_bar_loader_uses_cache_for_history_and_never_for_today(monkeypatch,
     out = run_live._bar_loader("SPY", now=now)
     assert [c[2] for c in calls] == [False]                # only the cached history call
     assert out.loc["2026-09-04 13:30", "Close"] == 5.0 and len(out.loc["2026-09-04"]) == 2
+
+
+def test_heartbeat_reports_feeds_and_warns_when_stale(monkeypatch, tmp_path):
+    import json
+    from datetime import datetime, timedelta, timezone
+    from nn_meta.live import heartbeat as hb
+    stocks = tmp_path / "s.json"; options = tmp_path / "o.json"
+    fresh = (datetime.now(timezone.utc) - timedelta(minutes=1)).isoformat()
+    stale = (datetime.now(timezone.utc) - timedelta(minutes=20)).isoformat()
+    stocks.write_text(json.dumps({"ts": fresh, "bars": 900, "symbols": 443, "last_bar": "2026-09-08 14:29"}))
+    options.write_text(json.dumps({"ts": stale, "quotes": 5, "contracts": 3}))
+    monkeypatch.setattr(hb, "FEED_HEARTBEATS", {"stocks": stocks, "options": options})
+    monkeypatch.setattr(hb, "EXPERT_LOGS", {})
+    monkeypatch.setattr(hb, "is_rth", lambda *a, **k: True)
+    monkeypatch.setattr(hb, "_today_lines", lambda: ([], "2026-09-08"))
+    out = hb.build_message()
+    msg = out[0] if isinstance(out, tuple) else out
+    assert "feed stocks: 443 symbols" in msg and "feed options: 3 contracts" in msg
+    assert "⚠️ feed options: heartbeat 20 min old" in msg
+    assert "⚠️ feed stocks" not in msg

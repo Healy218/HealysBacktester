@@ -331,7 +331,13 @@ sample — Massive's snapshot has them); option bars only from 2024 (Massive
 stays the options-history source); News API (Benzinga) + screener
 (most-actives/movers) work; paper account is options level 3.
 
-- [ ] **A1. Scan the just-closed bar** (biggest live win, ~half a day). The
+- [x] **A1 DONE 2026-09-05 (and a much bigger bug with it):** the loader's
+  day-keyed cache made the panel scan the previous session all day since
+  2026-07-05 (EXPERIMENTS). Fixed: cached history ≤ yesterday + today from the
+  streamed bar store / forced REST. Verify Monday per HANDOFF checklist.
+- [x] **A2 DONE 2026-09-05:** SIP 1m bars streamed for 443 names → barstore
+  (parity-identical 15m bars); OPRA quote stream for a dynamic watch file.
+  Original A1 text: **Scan the just-closed bar** (biggest live win, ~half a day). The
   loader passes no `feed`; on the free tier the newest 15 minutes were
   withheld, so the `*/15` pass at :15 could only see bars closed by :00 —
   every expert acted one bar late. Verify on Monday's logs (bar_ts vs

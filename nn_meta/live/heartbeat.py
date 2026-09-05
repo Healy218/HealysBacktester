@@ -57,6 +57,23 @@ EXPERT_LOGS = {
 # cron (not just the scan) is stuck, whatever the pass counters say
 STALE_AFTER_MIN = 60
 
+# streamed feeds (nn_meta/live/feeds): heartbeats every ~50 bars / 5 s
+FEED_HEARTBEATS = {
+    "stocks": Path("nn_meta/live/feeds/data/stock_stream.heartbeat.json"),
+    "options": Path("nn_meta/live/feeds/data/option_stream.heartbeat.json"),
+}
+FEED_STALE_AFTER_MIN = 5
+
+
+def _read_json(path: Path):
+    if not path.exists():
+        return None
+    try:
+        import json as _json
+        return _json.loads(path.read_text())
+    except Exception:
+        return None
+
 _ALERTED_RUN_LIVE = re.compile(r"^(\d+) signal\(s\) alerted: ")
 _ALERTED_V4 = re.compile(r"^\[v[45]\] scanned \d+ · alerted (\d+)")   # v4_scan prints [v4] or [v5]
 
@@ -134,6 +151,28 @@ def build_message() -> str:
     warnings: list[str] = []
     digest: list[str] = []
     totals: dict[str, dict] = {}
+
+    # Live feeds (2026-09-05): a dead stream is silent — the scanners just fall
+    # back to REST — so the heartbeat is where it must surface.
+    for fname, fpath in FEED_HEARTBEATS.items():
+        try:
+            hb = _read_json(fpath)
+            if not hb:
+                digest.append(f"feed {fname}: no heartbeat yet")
+                if rth:
+                    warnings.append(f"⚠️ feed {fname}: no heartbeat during market hours")
+                continue
+            age_min = (now - datetime.fromisoformat(hb["ts"])).total_seconds() / 60
+            extra = (f"{hb.get('symbols', '?')} symbols · last bar {hb.get('last_bar', '—')}"
+                     if fname == "stocks" else
+                     f"{hb.get('contracts', 0)} contracts · {hb.get('quotes', 0)} quotes")
+            digest.append(f"feed {fname}: {extra} · heartbeat {age_min:.0f} min ago"
+                          + (f" · {hb['state']}" if hb.get("state") not in (None, "streaming") else ""))
+            if rth and age_min > FEED_STALE_AFTER_MIN:
+                warnings.append(f"⚠️ feed {fname}: heartbeat {age_min:.0f} min old during "
+                                f"market hours — stream DOWN, scanners on REST fallback")
+        except Exception as e:                    # never sink the digest
+            digest.append(f"feed {fname}: unreadable ({e})")
 
     for name, log in EXPERT_LOGS.items():
         # Per-expert isolation (P1-2, 2026-08-16 review): one unreadable log

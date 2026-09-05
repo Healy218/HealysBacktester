@@ -170,6 +170,21 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   NEXT = streamed feeds on the server (stock SIP bars → a live bar store the
   loaders read; OPRA option quotes for active alerts) and the v7
   "real-time capable" feature contract (offline twin from Massive history).
+- **22:45Z 2026-09-05: LIVE FEEDS ON THE SERVER.** `nn_meta/live/feeds/`
+  (barstore + stock_stream SIP 1m bars for 443 names; quotestore +
+  option_stream OPRA quotes for a dynamic watch file) deployed via crontab
+  (@reboot + 5-min watchdogs; backup `~/crontab.bak.<stamp>`), both daemons
+  up (~700 MB RSS total), heartbeats writing; `_bar_loader` now = cached
+  history ≤ yesterday + today's bars from the stream (or forced REST when
+  the heartbeat is > 3 min old). Heartbeat digest gained feed lines.
+  Spec: `docs/specs/REALTIME_SPEC.md`. **Monday 2026-09-08 checklist:**
+  (1) `logs/feeds_stock.log` shows bars flowing from 13:30Z; (2) a pass at
+  :15 scans the :00–:15 bar (log "newest closed bar"); (3) v31 cron log
+  shows ~0 "Loading … from Alpaca" for today's bars; (4) 17:00Z heartbeat
+  carries two healthy feed lines. NEXT code: alert-path contract resolution
+  (Massive snapshot → OCC, delta-targeted) + register in `option_watch.json`
+  + bid/ask in alert text (TODO Massive D1) — until then the option stream
+  idles with 0 contracts.
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 
