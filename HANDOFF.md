@@ -96,6 +96,16 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   server pull → `--selftest` + dry-run on the server → crontab (staged
   file, diff, `crontab <file>`): `*/15` v5 scan, Sunday v5 universe +
   surface refresh. Paper seat only.
+- **06:15Z 2026-09-05: [v5] IS ON THE SERVER (paper seat).** Server HEAD
+  f7b682d; `--selftest` + dry-run passed there (bundle verified, eligible;
+  Alpaca bars + v5 surface cache OK); crontab installed from a staged file
+  (backup `~/crontab.bak.<stamp>`): `*/15` v5 scan → `logs/v5_cron.log`,
+  Sunday 13:00Z v5 universe refresh, 14:00Z v5 bars+surface refresh +
+  build_surface. First real pass Monday 2026-09-07 at the open; first
+  `[v5]` digest section 20:10Z; heartbeat 17:00Z now lists four experts.
+  Watch Monday: pass duration for 441 symbols (expect ~2 min), alert
+  cadence at ev/0.05, and that the v3/v31/v4 passes are unaffected by the
+  extra load (4 vCPU). Rollback = delete the three v5 crontab lines.
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 
