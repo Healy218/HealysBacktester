@@ -325,6 +325,18 @@ simply more expensive than anyone computed, and nobody computed it:
   Ubuntu 24.04, ~$9.59/mo. SSH `mrhea@` with the home box's
   `~/.ssh/id_ed25519` (that key is Hetzner-only; GitHub auth is `gh` over
   HTTPS). Repo at `/home/mrhea/HealysBacktester`.
+- **[v5] expert (deployed 2026-09-05, paper seat — alerts only, like every
+  expert)**: the same `nn_meta.live.v4_scan` module run under
+  `NN_META_POOL=v5`. It scores with `nn_meta/model_final_v5/` (nn×40,
+  ev/0.05, cleared the risk-aware gate — DECISIONS 2026-09-04), reads the
+  frozen spec `nn_meta/artifacts_v5/baseline_spec.json` (441 PIT-universe
+  symbols) and the surface/universe caches in `nn_meta/data_cache_v5/`
+  (seeded by rsync from the box 2026-09-05; refreshed by the Sunday v5
+  cron lines like v3/v31). Alerts are titled `[v5] …`; its state files are
+  `nn_meta/live/.v5_*.json`; log `logs/v5_cron.log`; it appears as a
+  `[v5]` section in the panel digest and the heartbeat. One pass scans
+  441 symbols (~2 min; v31's 120 take ~35 s). Promotion beyond paper is a
+  user decision after a forward record beside V118.
 - **Deploy = `git pull origin main` over the read-only deploy key. NEVER
   scp** — an untracked scp'd file once wedged pulls for days, silently.
 - **Cron (UTC — this cron ignores `CRON_TZ`, verified empirically)**:

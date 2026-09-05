@@ -87,6 +87,15 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   experts were dark from 13:30Z on 2026-09-04 (1,430 no-data errors, 401/403
   in v4_cron.log). Box `.env` complete except Pushover; dead-man timer
   re-enabled on the box; StockTwits system timer still needs sudo.
+- **v5 → server (in progress 2026-09-05 ~06:10Z, user decision "put v5 on
+  the server"):** scanner made expert-aware (`[v5]`, `.v5_*` state,
+  model_final_v5 default under pool v5; heartbeat + panel digest know v5);
+  bundle + spec tracked in git (commit 91ba0df, push pending behind the
+  cache rsync); `data_cache_v5/{surface,universe,contracts,underlying_daily,
+  bars_daily,bars_15m,bars_1d}` rsync'd to the server. Remaining: push →
+  server pull → `--selftest` + dry-run on the server → crontab (staged
+  file, diff, `crontab <file>`): `*/15` v5 scan, Sunday v5 universe +
+  surface refresh. Paper seat only.
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 
