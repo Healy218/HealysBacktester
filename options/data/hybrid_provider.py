@@ -88,6 +88,13 @@ class HybridCachedProvider(OptionsDataProvider):
         self._live = live_provider          # constructed lazily if None
         self._allow_fetch = allow_fetch
         self._universe = universe_df        # injectable for tests
+        # Per-underlying slices of the universe (2026-09-05, TODO block 6):
+        # a symbol build only ever needs its OWN underlying (0.4% of the
+        # 5.2M-row universe), so chains are served from a slice read with a
+        # parquet predicate — ~MBs resident instead of ~1 GB, and get_chain
+        # masks ~20k rows instead of 5.2M (310x measured). Row order within
+        # an underlying is the file's order, exactly as before.
+        self._slices: dict[str, pd.DataFrame] = {}
         self._und_daily: Optional[pd.DataFrame] = None
         self._und_15m: Optional[pd.DataFrame] = None
         self.fetch_count = 0                # live fetches this session (stats)
@@ -100,15 +107,40 @@ class HybridCachedProvider(OptionsDataProvider):
             self._universe = pd.read_parquet(self._universe_path)
             logger.info(f"[{_TAG}] universe loaded: {len(self._universe):,} contracts")
         if not self._universe.attrs.get("hybrid_normalized"):
-            u = self._universe.copy()
-            u["expiration"] = pd.to_datetime(u["expiration"])
-            u["life_start"] = pd.to_datetime(u["life_start"])
             # Universe tickers carry the vendor "O:" prefix; OptionContract.symbol
             # is the bare OCC symbol everywhere else in the options subsystem.
-            u["ticker"] = u["ticker"].str.removeprefix("O:")
-            u.attrs["hybrid_normalized"] = True
-            self._universe = u
+            self._universe = self._normalize(self._universe)
         return self._universe
+
+    @staticmethod
+    def _normalize(u: pd.DataFrame) -> pd.DataFrame:
+        u = u.copy()
+        u["expiration"] = pd.to_datetime(u["expiration"])
+        u["life_start"] = pd.to_datetime(u["life_start"])
+        u["ticker"] = u["ticker"].str.removeprefix("O:")
+        u.attrs["hybrid_normalized"] = True
+        return u
+
+    def _get_slice(self, underlying: str) -> pd.DataFrame:
+        """The universe rows for one underlying, normalized, in file order.
+        Served from the in-memory frame when one was injected/loaded, else
+        read straight from the parquet with a predicate (row groups that
+        cannot contain the underlying are skipped when the file is sorted)."""
+        und = underlying.upper()
+        sl = self._slices.get(und)
+        if sl is None:
+            if self._universe is not None:
+                u = self._get_universe()
+                sl = u[u["underlying"] == und].reset_index(drop=True)
+            else:
+                if not self._universe_path.exists():
+                    raise DataError(f"Universe parquet not found: {self._universe_path}")
+                raw = pd.read_parquet(self._universe_path,
+                                      filters=[("underlying", "==", und)])
+                sl = self._normalize(raw).reset_index(drop=True)
+                logger.info(f"[{_TAG}] universe slice {und}: {len(sl):,} contracts")
+            self._slices[und] = sl
+        return sl
 
     def _get_live(self) -> OptionsDataProvider:
         if self._live is None:
@@ -120,8 +152,8 @@ class HybridCachedProvider(OptionsDataProvider):
     def get_chain(self, underlying, *, right=None, expiration_gte=None,
                   expiration_lte=None, strike_gte=None, strike_lte=None,
                   as_of=None) -> list[OptionContract]:
-        u = self._get_universe()
-        m = u["underlying"] == underlying.upper()
+        u = self._get_slice(underlying)
+        m = pd.Series(True, index=u.index)
         if right:
             m &= u["type"] == ("call" if right.upper().startswith("C") else "put")
         if expiration_gte is not None:

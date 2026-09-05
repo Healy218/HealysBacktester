@@ -24,6 +24,10 @@ _CHUNK = 40                                    # day-frames per bars_part file
 _1D = {"Open": "first", "High": "max", "Low": "min", "Close": "last",
        "Volume": "sum"}
 
+# ~5.2M contracts / 441 underlyings ≈ 12k rows per underlying: 20k-row groups
+# keep a one-underlying predicate read to a handful of groups.
+UNIVERSE_ROW_GROUP = 20_000
+
 
 def parse_occ(occ: str):
     m = _OCC.match(occ)
@@ -106,8 +110,13 @@ def main() -> None:
                          "expiration": exp, "life_start": life,
                          "strike": strike, "type": typ})
     uni = pd.DataFrame(rows)
-    uni.to_parquet(cache / "universe.parquet", index=False)
-    uni.to_parquet(cache / "contracts.parquet", index=False)
+    # Sorted by underlying (STABLE — within an underlying the first-seen
+    # order is preserved, so chains come back in the same order as before)
+    # and written in small row groups so a predicate read of one underlying
+    # skips every row group that cannot contain it (TODO block 6, 2026-09-05).
+    uni = uni.sort_values("underlying", kind="stable").reset_index(drop=True)
+    uni.to_parquet(cache / "universe.parquet", index=False, row_group_size=UNIVERSE_ROW_GROUP)
+    uni.to_parquet(cache / "contracts.parquet", index=False, row_group_size=UNIVERSE_ROW_GROUP)
     print(f"\nuniverse: {len(uni):,} contracts, "
           f"{uni['underlying'].nunique()} underlyings → {cache}/universe.parquet")
     print(f"daily bars: {part} part files → {bars_dir}")

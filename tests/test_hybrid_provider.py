@@ -207,3 +207,64 @@ class TestUnderlyingBars:
         p = _provider(tmp_path, FakeLive(_bars("2025-01-02", 4)))
         with pytest.raises(DataError, match="nn_meta.download_data"):
             p.get_underlying_bars("SPY", "2025-01-02", "2025-01-03", "15m")
+
+
+class TestUniverseSlices:
+    """2026-09-05 read path: chains come from a per-underlying slice (in-memory
+    or a parquet predicate read) and must be identical to masking the full
+    frame, row order included — contract selection breaks ties by first
+    occurrence."""
+
+    @staticmethod
+    def _multi_universe():
+        u = _universe_df()
+        v = u.copy()
+        v["ticker"] = v["ticker"].str.replace("SPY", "QQQ")
+        v["underlying"] = "QQQ"
+        return pd.concat([v, u, v.iloc[:1]], ignore_index=True)   # interleaved
+
+    def _old_way(self, u, underlying, **kw):
+        # the pre-2026-09-05 get_chain, verbatim, over the full normalized frame
+        from options.data.hybrid_provider import HybridCachedProvider, _to_date
+        u = HybridCachedProvider._normalize(u)
+        m = u["underlying"] == underlying.upper()
+        if kw.get("right"):
+            m &= u["type"] == ("call" if kw["right"].upper().startswith("C") else "put")
+        if kw.get("as_of") is not None:
+            ts = pd.Timestamp(_to_date(kw["as_of"]))
+            m &= (u["life_start"] <= ts) & (u["expiration"] >= ts)
+        return [(r.ticker, r.strike, r.expiration) for r in u[m].itertuples()]
+
+    def test_injected_frame_slice_matches_full_mask(self, tmp_path):
+        u = self._multi_universe()
+        p = HybridCachedProvider(tmp_path / "u.parquet", tmp_path / "d.parquet",
+                                 tmp_path / "m.parquet", tmp_path / "bars",
+                                 live_provider=FakeLive(_bars("2025-01-02", 10)),
+                                 universe_df=u)
+        for und in ("SPY", "QQQ"):
+            got = [(c.symbol, c.strike, pd.Timestamp(c.expiration)) for c in
+                   p.get_chain(und, right="C", as_of=pd.Timestamp("2025-01-10").date())]
+            exp = [(t, s, e) for t, s, e in self._old_way(u, und, right="C",
+                                                          as_of=pd.Timestamp("2025-01-10").date())]
+            assert got == exp and got, und
+
+    def test_parquet_predicate_path_matches_and_reads_lazily(self, tmp_path):
+        from v3.derive_contracts import UNIVERSE_ROW_GROUP
+        u = self._multi_universe().sort_values("underlying", kind="stable").reset_index(drop=True)
+        path = tmp_path / "universe.parquet"
+        u.to_parquet(path, index=False, row_group_size=UNIVERSE_ROW_GROUP)
+        p = HybridCachedProvider(path, tmp_path / "d.parquet", tmp_path / "m.parquet",
+                                 tmp_path / "bars", live_provider=FakeLive(_bars("2025-01-02", 10)))
+        assert p._universe is None                      # nothing loaded up front
+        got = p.get_chain("SPY", as_of=pd.Timestamp("2025-01-10").date())
+        assert p._universe is None and set(p._slices) == {"SPY"}   # only the slice
+        exp = self._old_way(u, "SPY", as_of=pd.Timestamp("2025-01-10").date())
+        assert [(c.symbol, c.strike, pd.Timestamp(c.expiration)) for c in got] == \
+               [(t, s, e) for t, s, e in exp]
+        assert p.get_chain("NOPE") == []
+
+    def test_stable_sort_keeps_per_underlying_order(self, tmp_path):
+        u = self._multi_universe()
+        s = u.sort_values("underlying", kind="stable").reset_index(drop=True)
+        for und in ("SPY", "QQQ"):
+            assert s[s.underlying == und]["ticker"].tolist() == u[u.underlying == und]["ticker"].tolist()
