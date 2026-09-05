@@ -106,6 +106,18 @@ Previous handoff: `handoff-history/HANDOFF-2026-09-03-v5-build-366-guard-and-box
   Watch Monday: pass duration for 441 symbols (expect ~2 min), alert
   cadence at ev/0.05, and that the v3/v31/v4 passes are unaffected by the
   extra load (4 vCPU). Rollback = delete the three v5 crontab lines.
+- **07:10Z 2026-09-05 — read-path gate CLOSED, plus v6 groundwork.**
+  `HybridCachedProvider` serves chains from per-underlying parquet-predicate
+  slices (7e7d88b): 200/200 sampled chains identical incl. order, 205 →
+  0.74 ms/call, 201k resident rows vs 5.2M. Full-symbol identity: **CRWV
+  (box-built) rebuilt byte-identical** (rows sha a2ae6741deb6, marks
+  e69ba9e3ed88, ~3 min); NOW (cloud-built) differs only in `moneyness` and
+  `bars_since_signal` — both `np.log`/`np.log1p` — with marks identical:
+  cloud-vs-box libm drift (the documented provenance caveat), not the read
+  path. Also landed: v6 pool (shares v5 window+archive), keltner +
+  bbw_squeeze families, weekly-expiry DTE variants, additive
+  `--reuse-rows-from v5` (guarded by frozen-entry identity), config_hash
+  scoped to the pool (v5 hash restored). Suite 522. Server on main.
 - Then: audit marks coverage → assemble on the box (`--membership` ON, pull
   all row+marks shards first) → determinism check → evaluate/finalize.
 
