@@ -81,3 +81,29 @@ def test_reusable_rows_only_for_families_with_identical_frozen_entries(tmp_path,
     rows, mk = B._reusable_rows("SPY", new_entry, "v5", marks=False)
     assert rows["strategy"].tolist() == ["rsi"] and mk is None
     assert B._reusable_rows("XYZ", new_entry, "v5", marks=False) is None
+
+
+def test_additive_freeze_sweeps_only_new_families_and_refreezes_weekly_names(monkeypatch):
+    from nn_meta import baseline as B
+    idx = pd.date_range("2025-01-02 14:30", periods=100, freq="15min")
+    bars = pd.DataFrame({"Open": 1.0, "High": 1.0, "Low": 1.0, "Close": 1.0, "Volume": 1.0}, index=idx)
+    monkeypatch.setattr(B, "load_underlying_15m", lambda sym: bars)
+    swept = []
+    def fake_freeze(symbol, strat, bars, provider, ts, te, dte_grid=None):
+        swept.append((symbol, strat, tuple(dte_grid or [])))
+        return {"params": {"p": 1}, "dte": 5, "train_option": {"5": {"per_trade_sharpe": 0.1}}}
+    monkeypatch.setattr(B, "_freeze_one_strategy", fake_freeze)
+    monkeypatch.setattr(config, "PROPOSAL_STRATEGIES", ["ma", "rsi", "keltner"])
+    monkeypatch.setattr(config, "WEEKLY_DTE_ENABLED", True)
+    base = {"strategies": {"ma": {"params": {"w": 9}, "dte": 30, "train_option": {"30": {"per_trade_sharpe": 0.9}}},
+                           "rsi": {"params": {"w": 14}, "dte": 5, "train_option": {"5": {"per_trade_sharpe": 0.2}}}}}
+    # ordinary name: inherit ma/rsi untouched, sweep only keltner, best across the union
+    out = B.freeze_symbol("XYZ", provider=None, weekly_symbols=["SPY"], strategies=["keltner"], base_entry=base)
+    assert [s[1] for s in swept] == ["keltner"] and swept[0][2] == tuple(config.DTE_GRID)
+    assert out["strategies"]["ma"] == base["strategies"]["ma"] and out["best_strategy"] == "ma"
+    # weekly name: grid changed -> every family re-frozen on the extended grid, base ignored
+    swept.clear()
+    out = B.freeze_symbol("SPY", provider=None, weekly_symbols=["SPY"], strategies=["keltner"], base_entry=base)
+    assert sorted(s[1] for s in swept) == ["keltner", "ma", "rsi"]
+    assert all(set(config.DTE_GRID_WEEKLY) <= set(s[2]) for s in swept)
+    assert out["strategies"]["ma"]["params"] == {"p": 1}
