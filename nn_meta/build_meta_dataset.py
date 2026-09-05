@@ -424,6 +424,33 @@ ROWS_DIR = config.ARTIFACTS / "meta_rows"     # per-symbol checkpoint dir
 MARKS_DIR = config.ARTIFACTS / "meta_marks"   # per-symbol mark-stream shards
 
 
+def _reusable_rows(sym: str, spec_entry: dict, pool: str, marks: bool):
+    """(rows, marks) from ``nn_meta/artifacts_<pool>/`` restricted to the
+    families whose FROZEN ENTRY (params + dte) is identical in both specs — a
+    re-frozen family (e.g. a weekly-expiry name whose grid changed) must be
+    rebuilt, not reused. Returns None when nothing is reusable."""
+    rdir = config.ROOT / f"artifacts_{pool}"
+    rp, mp, sp = (rdir / "meta_rows" / f"{sym}.parquet",
+                  rdir / "meta_marks" / f"{sym}.parquet", rdir / "baseline_spec.json")
+    if not rp.exists() or not sp.exists():
+        return None
+    import json as _json
+    old_entry = _json.loads(sp.read_text()).get("symbols", {}).get(sym)
+    if not old_entry:
+        return None
+    same = [st for st, e in spec_entry["strategies"].items()
+            if st in old_entry.get("strategies", {})
+            and old_entry["strategies"][st].get("params") == e.get("params")
+            and old_entry["strategies"][st].get("dte") == e.get("dte")]
+    if not same:
+        return None
+    rows = pd.read_parquet(rp)
+    rows = rows[rows["strategy"].isin(same)].reset_index(drop=True)
+    mk = pd.read_parquet(mp) if (marks and mp.exists()) else None
+    logger.info(f"[{_TAG}] {sym}: reusable families from {pool}: {same}")
+    return (rows, mk)
+
+
 def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
                marks: bool = False, marks_dir=MARKS_DIR,
                partial_dir=None, reuse_from: str | None = None) -> None:
@@ -447,11 +474,7 @@ def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
         sink = [] if marks else None
         reuse = None
         if reuse_from:
-            rdir = config.ROOT / f"artifacts_{reuse_from}"
-            rp, mp = rdir / "meta_rows" / f"{sym}.parquet", rdir / "meta_marks" / f"{sym}.parquet"
-            if rp.exists():
-                reuse = (pd.read_parquet(rp),
-                         pd.read_parquet(mp) if (marks and mp.exists()) else None)
+            reuse = _reusable_rows(sym, spec["symbols"][sym], reuse_from, marks)
         from nn_meta.weekly_expiry import dte_grid_for
         df = build_symbol_rows(sym, spec["symbols"][sym], provider,
                                marks_sink=sink, partial_dir=partial_dir,

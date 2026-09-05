@@ -63,3 +63,21 @@ def test_build_symbol_rows_reuses_families_from_an_earlier_pool(monkeypatch):
     assert proposed == ["ma"]                          # rsi was NOT rebuilt
     assert len(out) == 2 and set(out["strategy"]) == {"rsi"}
     assert len(sink) == 1 and sink[0]["trade_id"].tolist() == [tids[0]]   # only its marks
+
+
+def test_reusable_rows_only_for_families_with_identical_frozen_entries(tmp_path, monkeypatch):
+    from nn_meta import build_meta_dataset as B
+    import json
+    monkeypatch.setattr(config, "ROOT", tmp_path)
+    old = tmp_path / "artifacts_v5"; (old / "meta_rows").mkdir(parents=True); (old / "meta_marks").mkdir()
+    (old / "baseline_spec.json").write_text(json.dumps({"symbols": {"SPY": {"strategies": {
+        "rsi": {"params": {"w": 14}, "dte": 5}, "ma": {"params": {"w": 20}, "dte": 30}}}}}))
+    pd.DataFrame({"symbol": ["SPY"] * 2, "strategy": ["rsi", "ma"], "trade_idx": [0, 0],
+                  "dte": [5, 30], "entry_ts": pd.to_datetime(["2025-01-02", "2025-01-03"]),
+                  "net_return": [0.1, 0.2], "executed": [True, True]}).to_parquet(old / "meta_rows" / "SPY.parquet")
+    new_entry = {"strategies": {"rsi": {"params": {"w": 14}, "dte": 5},      # unchanged → reuse
+                                "ma": {"params": {"w": 20}, "dte": 45},       # re-frozen → rebuild
+                                "keltner": {"params": {"w": 10}, "dte": 5}}}  # new → build
+    rows, mk = B._reusable_rows("SPY", new_entry, "v5", marks=False)
+    assert rows["strategy"].tolist() == ["rsi"] and mk is None
+    assert B._reusable_rows("XYZ", new_entry, "v5", marks=False) is None
