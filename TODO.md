@@ -319,6 +319,46 @@ Suggested order: D1 → D2 (start the crawl first, it's unattended) → D3 →
 D4 → then v7 + spx0-2022 ride on D2. Decisions for the user: v7 window
 start (2020-01 vs 2017), and whether D3 becomes the gate basis.
 
+## Alpaca Algo Trader Plus — what it changes (probed 2026-09-05)
+
+Probed with the box's (paper) keys: SIP bars real-time (the free tier
+already served SIP for anything older than 15 min — the v5 cache bars ARE
+SIP, verified bar-for-bar — it only withheld the live 15-minute window);
+SIP history to 2016 unrestricted; REST 10,000/min (was 200); stock
+websockets unlimited symbols (1 connection); options OPRA websocket
+(≤1,000 quote symbols, no wildcard) + chain snapshots (no greeks in the
+sample — Massive's snapshot has them); option bars only from 2024 (Massive
+stays the options-history source); News API (Benzinga) + screener
+(most-actives/movers) work; paper account is options level 3.
+
+- [ ] **A1. Scan the just-closed bar** (biggest live win, ~half a day). The
+  loader passes no `feed`; on the free tier the newest 15 minutes were
+  withheld, so the `*/15` pass at :15 could only see bars closed by :00 —
+  every expert acted one bar late. Verify on Monday's logs (bar_ts vs
+  recording time in the watchlists), then make the loader request
+  `feed=sip` explicitly and confirm the pass at :15 scans the :00–:15 bar.
+  If the lag is confirmed historically, note it in EXPERIMENTS: paper
+  hit-rates before 2026-09-08 carried a 15-minute handicap.
+- [ ] **A2. Bars over websocket → near-instant passes** (optional, after A1):
+  one SIP connection, `bars` channel for the 441 v5 names (unlimited
+  symbols), filling the same 15m cache the REST loader fills; the v5 pass
+  drops from ~2 min of REST fetches to seconds. Only worth it once a seat
+  is time-sensitive; REST at 10k/min is not a bottleneck today.
+- [ ] **A3. Paper execution seat on Alpaca** (design item, the real use of
+  the trading API): route `[v5]`/`[v4]` alerts to Alpaca PAPER orders (level
+  3 covers longs and spreads) so the forward record uses Alpaca's NBBO
+  paper fills instead of the in-repo `PaperLedger` simulation. Needs: a
+  contract resolver (`/v2/options/contracts`), order sizing rule, exit
+  logic (the ledger's DTE/roll rules), and a reconciliation digest.
+  Promotion evidence for v5 (TODO block 6) gets much stronger.
+- [ ] **A4. Alpaca News + screener into the FA seat**: Benzinga news as a
+  third collector beside Finnhub/AlphaVantage (`fa/collectors/news.py`),
+  and `most-actives`/`movers` as a daily liquidity/discovery input for the
+  ranker and the WSB trending digest.
+- [ ] Skip for now: OPRA option websockets (Massive REST snapshots cover
+  the per-alert quote need; a live seat would revisit); live-account keys
+  (the `.env` keys are paper keys — live orders are a separate decision).
+
 ## Forward-tracking duties (standing, this phase)
 
 - Scoreboard reads: `[v4]` real-alert hit-rate vs its paper history; the

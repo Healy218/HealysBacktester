@@ -276,6 +276,13 @@ bucket listed 2014→ but GetObject was date-gated.
   (`files.massive.com`, bucket `flatfiles`,
   `us_options_opra/minute_aggs_v1/YYYY/MM/YYYY-MM-DD.csv.gz`, s3v4).
 - **Alpaca 1m underlying is clean back to 2017** for all liquidity tiers.
+- **Alpaca Algo Trader Plus since 2026-09-05**: SIP real-time (the free
+  tier already served SIP history but withheld the newest 15 minutes —
+  cache bars are SIP, verified), 10,000 REST calls/min, unlimited stock
+  websocket symbols, OPRA options websocket (≤1,000 quote symbols), News
+  + screener endpoints; Alpaca option bars only reach 2024 → Massive stays
+  the options-history source. The `.env` keys are PAPER keys (options
+  level 3); live-account keys would be a separate decision.
 - Consequence: features may use deep underlying history; option-fill labels
   live on the rolling ~2y window.
 
