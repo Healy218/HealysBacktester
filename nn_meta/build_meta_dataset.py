@@ -186,7 +186,10 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                       window_start: str = config.WINDOW_START,
                       window_end: str = config.WINDOW_END,
                       marks_sink: list | None = None,
-                      partial_dir=None) -> pd.DataFrame:
+                      partial_dir=None,
+                      dte_grid: list[int] | None = None,
+                      reuse: tuple[pd.DataFrame, pd.DataFrame | None] | None = None
+                      ) -> pd.DataFrame:
     """Build one symbol's raw rows.
 
     Passing ``marks_sink`` (a list) additionally collects per-contract 15m mark
@@ -206,9 +209,29 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
         logger.warning(f"[{_TAG}] {symbol}: no bars")
         return pd.DataFrame()
     close = bars["Close"]
+    dte_grid = list(dte_grid or config.DTE_GRID)
+
+    # ``reuse`` (2026-09-05, additive generations): (rows, marks) of this symbol
+    # from an EARLIER pool built under the same window/grid. Families present
+    # there are taken as-is (rows + their marks) and not rebuilt, so a pool
+    # that only ADDS families builds only the new ones.
+    reuse_rows = reuse[0] if reuse is not None and reuse[0] is not None else None
+    reuse_marks = reuse[1] if reuse is not None else None
 
     frames = []
     for strat, entry in spec_entry["strategies"].items():
+        if reuse_rows is not None and (reuse_rows["strategy"] == strat).any():
+            sub = reuse_rows[reuse_rows["strategy"] == strat].reset_index(drop=True)
+            frames.append(sub)
+            if marks_sink is not None and reuse_marks is not None and not reuse_marks.empty:
+                from nn_meta import mark_stream as _ms
+                keep = set(_ms.stable_trade_id(sub))
+                m = reuse_marks[reuse_marks["trade_id"].astype(str).isin(keep)]
+                if not m.empty:
+                    marks_sink.append(m.reset_index(drop=True))
+            logger.info(f"[{_TAG}] {symbol}/{strat}: reused {len(sub)} rows from "
+                        f"the earlier pool")
+            continue
         p_rows = p_marks = None
         if partial_dir is not None:
             p_rows = partial_dir / f"{symbol}.{strat}.rows.parquet"
@@ -262,7 +285,7 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
         ex = Execution(symbol, config.INTERVAL, window_end, provider,
                        config.EXEC_CONFIG)
         rows = []
-        for dte in config.DTE_GRID:
+        for dte in dte_grid:
             records, meta = execute_at_dte(symbol, trades, bars, dte, provider,
                                            window_end, ex=ex,
                                            collect_marks=marks_sink is not None)
@@ -403,7 +426,7 @@ MARKS_DIR = config.ARTIFACTS / "meta_marks"   # per-symbol mark-stream shards
 
 def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
                marks: bool = False, marks_dir=MARKS_DIR,
-               partial_dir=None) -> None:
+               partial_dir=None, reuse_from: str | None = None) -> None:
     """Build each symbol's raw rows into rows_dir/<sym>.parquet, skipping any
     already present. Resumable AND shardable: parallel workers on disjoint
     symbol subsets write to the same dir without collision (surface join,
@@ -422,8 +445,17 @@ def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
             continue
         print(f"[{sym}] building…", flush=True)
         sink = [] if marks else None
+        reuse = None
+        if reuse_from:
+            rdir = config.ROOT / f"artifacts_{reuse_from}"
+            rp, mp = rdir / "meta_rows" / f"{sym}.parquet", rdir / "meta_marks" / f"{sym}.parquet"
+            if rp.exists():
+                reuse = (pd.read_parquet(rp),
+                         pd.read_parquet(mp) if (marks and mp.exists()) else None)
+        from nn_meta.weekly_expiry import dte_grid_for
         df = build_symbol_rows(sym, spec["symbols"][sym], provider,
-                               marks_sink=sink, partial_dir=partial_dir)
+                               marks_sink=sink, partial_dir=partial_dir,
+                               dte_grid=dte_grid_for(sym, spec), reuse=reuse)
         if marks:
             # validate per symbol so a malformed shard surfaces here, not hours
             # later at assemble; also restores the categorical key after concat
@@ -544,6 +576,10 @@ def main() -> None:
                     default=(config.POOL == "v5"),
                     help="restrict assemble to point-in-time universe members "
                          "per (symbol, month) — default ON for the v5 pool")
+    ap.add_argument("--reuse-rows-from", default=None, metavar="POOL",
+                    help="additive build: take families already built for this "
+                         "symbol in nn_meta/artifacts_<POOL>/ (rows + marks) and "
+                         "build only the missing ones (same window/grid required)")
     ap.add_argument("--partial-dir", type=str, default=None,
                     help="enable per-family intra-symbol checkpoints in this "
                          "dir (spot-preemption resume; see build_symbol_rows)")
@@ -561,7 +597,7 @@ def main() -> None:
         partial_dir = Path(args.partial_dir)
         partial_dir.mkdir(parents=True, exist_ok=True)
     build_rows(symbols, spec, get_provider(), marks=args.marks,
-               partial_dir=partial_dir)
+               partial_dir=partial_dir, reuse_from=args.reuse_rows_from)
     print(f"\nbuilt per-symbol rows for {len(symbols)} symbols → {ROWS_DIR}\n"
           f"run `--assemble` to concat into the dataset")
 

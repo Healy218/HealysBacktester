@@ -23,13 +23,25 @@ the box). Order of operations agreed 2026-09-05 — work top to bottom:
 4. **Pool `v6` SCAFFOLDED 2026-09-05** (6656d46): window/train start
    2024-12-01, shares `data_cache_v5` + the PIT universe, `artifacts_v6`; v5
    config untouched (spec hash 4a1897559fe2 verified; `_config_hash` now
-   scopes grids to the pool's own families). Still to do: family partials
-   keyed by window (or clear `meta_partial` on a window change).
+   scopes grids to the pool's own families). Window kept EQUAL to v5's on
+   purpose (additive reuse must be byte-identical); the 2024-12 start is a
+   v7 (from-scratch) item. Partials-by-window: moot while windows are equal;
+   revisit for v7.
 5. **Generation v6, additive** — families CODED 2026-09-05 (`keltner`,
-   `bbw_squeeze` in `signals/tv_signals.py`, grids, seam-tested). Still to
-   do: the M/W/F weekly-expiry DTE variant (25 names); freeze only the two
-   new families on Batch (image rebuild with the read-path fix), merge into
-   a v6 spec, build only their rows, ladder on the box.
+   `bbw_squeeze` in `signals/tv_signals.py`, grids, seam-tested).
+   **Weekly-expiry DTE variant CODED** (`nn_meta/weekly_expiry.py`:
+   `DTE_GRID_WEEKLY=[2,4,7]` appended for M/W/F names, `WEEKLY_DTE_ENABLED`
+   for pool v6; freeze writes `spec["weekly_symbols"]`, build reads it).
+   **Additive reuse CODED** (`build_meta_dataset --reuse-rows-from v5`: takes
+   the ten v5 families' rows+marks per symbol, builds only the new ones).
+   Still to do, in order: (a) rebuild the Batch image (read path + these);
+   (b) freeze v6 = the two new families for all 441 + the 25 weekly names'
+   full grid re-freeze (the weekly DTEs change their best_strategy/DTE);
+   (c) merge into `artifacts_v6/baseline_spec.json`; (d) build with
+   `--reuse-rows-from v5` (box + Batch); (e) ladder on the box. NOTE: the 25
+   weekly names' OLD families are re-frozen too, so their rows must be
+   rebuilt, not reused (reuse only families whose spec entry is unchanged —
+   enforce by comparing spec params before reusing: TODO before (d)).
 6. FA seat overlay + `[fa]` digest (exit metric is time-gated: 3 monthlies).
 7. Vol-regime stage 3 (must beat HAR-RV QLIKE 0.117 per regime).
 8. spx0 — parked until the Massive Advanced upgrade lands (2022 bear data).

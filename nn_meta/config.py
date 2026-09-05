@@ -45,13 +45,11 @@ RUNS_CSV = RUNS_DIR / "runs.csv"
 # because the boundary rolls forward while multi-day downloads run. Data
 # behind the boundary survives ONLY in our parquet caches — download early.
 HISTORY_START = "2024-04-01"               # underlying warmup (Alpaca, unbounded)
-if POOL == "v6":
-    # TODO item 4 (2026-09-05): start at the first frozen PIT month so the
-    # membership filter no longer drops ~20% of the built train span. Same
-    # end as v5 until the flat-file archive is crawled further.
-    WINDOW_START, WINDOW_END = "2024-12-01", "2026-08-24"
-    TRAIN_START, TRAIN_END = "2024-12-01", "2025-12-19"
-elif POOL == "v5":
+if POOL in ("v5", "v6"):
+    # v6 is ADDITIVE on v5 (reuses v5's per-family rows byte-for-byte), so it
+    # must share v5's window exactly. The "start at the first frozen PIT
+    # month (2024-12) so membership stops dropping ~20% of the built train
+    # span" change is for the next FROM-SCRATCH generation (v7), not here.
     # v5 window runs to the last completed trading day at build time (user
     # decision 2026-08-25); its flat-file/PIT crawls start at the measured
     # entitlement wall. Train/val boundaries stay on the family dates; only
@@ -123,8 +121,7 @@ else:
     UNDERLYINGS = _UNDERLYINGS_V2
 
 # Contract crawl / universe filter (same criteria as nn_options_signal)
-EXPIRY_MIN, EXPIRY_MAX = (("2024-12-01", "2026-10-09") if POOL == "v6"
-                          else ("2024-08-26", "2026-10-09")) if POOL in ("v5", "v6") \
+EXPIRY_MIN, EXPIRY_MAX = ("2024-08-26", "2026-10-09") if POOL in ("v5", "v6") \
     else ("2024-07-21", "2026-08-15")   # max = window end + max DTE + buffer
 DTE_MIN, DTE_MAX = _nos.DTE_MIN, _nos.DTE_MAX
 MONEYNESS_BAND = _nos.MONEYNESS_BAND
@@ -147,6 +144,11 @@ INTERVAL = "15m"
 # expiration from the cached universe (near-expiry bars are the most liquid);
 # short DTEs roll while the proposal stays on, exactly like the overlay.
 DTE_GRID = [1, 5, 10, 30, 45]
+# Weekly-expiry variants (nn_meta/weekly_expiry.py, 2026-09-05): appended to
+# the grid for Mon/Wed/Fri-listed names in pools that enable them. Targets
+# the 1st/2nd/3rd expiry of the week; the dte column keeps them distinct.
+DTE_GRID_WEEKLY = [2, 4, 7]
+WEEKLY_DTE_ENABLED = POOL == "v6"
 
 # ── Proposal engines (v2.1: every offline-backtestable built-in strategy) ────
 # Sentiment is excluded — it requires a live news feed. Sweep grids are

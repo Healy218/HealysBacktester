@@ -231,7 +231,8 @@ def choose_dte(per_dte: dict[int, dict]) -> Optional[int]:
 
 def _freeze_one_strategy(symbol: str, strategy: str, bars: pd.DataFrame,
                          provider, train_start: str, train_end: str
-                         ) -> Optional[dict]:
+                         ,
+                         dte_grid: list[int] | None = None) -> Optional[dict]:
     swp = sweep_train_params(symbol, bars, strategy, train_start, train_end)
     if swp is None:
         return None
@@ -249,7 +250,7 @@ def _freeze_one_strategy(symbol: str, strategy: str, bars: pd.DataFrame,
     ex = Execution(symbol, config.INTERVAL, train_end, provider,
                    config.EXEC_CONFIG)
     per_dte: dict[int, dict] = {}
-    for dte in config.DTE_GRID:
+    for dte in (dte_grid or config.DTE_GRID):
         records, meta = execute_at_dte(symbol, trades, bars.loc[:train_end],
                                        dte, provider, train_end, ex=ex)
         stats = equity_metrics([r["net_return"] for r in records if r["executed"]])
@@ -269,8 +270,12 @@ def _freeze_one_strategy(symbol: str, strategy: str, bars: pd.DataFrame,
 
 def freeze_symbol(symbol: str, provider,
                   train_start: str = config.TRAIN_START,
-                  train_end: str = config.TRAIN_END) -> Optional[dict]:
-    """Freeze every proposal strategy for one symbol; mark the train-best."""
+                  train_end: str = config.TRAIN_END,
+                  weekly_symbols: Optional[list[str]] = None) -> Optional[dict]:
+    """Freeze every proposal strategy for one symbol; mark the train-best.
+    ``weekly_symbols`` (2026-09-05) extends the DTE grid for M/W/F names."""
+    from nn_meta.weekly_expiry import dte_grid_for
+    dte_grid = dte_grid_for(symbol, {"weekly_symbols": weekly_symbols or []})
     bars = load_underlying_15m(symbol)
     if bars.empty:
         logger.warning(f"[{_TAG}] {symbol}: no 15m bars")
@@ -280,7 +285,7 @@ def freeze_symbol(symbol: str, provider,
     for strat in config.PROPOSAL_STRATEGIES:
         try:
             entry = _freeze_one_strategy(symbol, strat, bars, provider,
-                                         train_start, train_end)
+                                         train_start, train_end, dte_grid=dte_grid)
         except Exception as e:
             logger.exception(f"[{_TAG}] {symbol}/{strat}: freeze failed: {e}")
             entry = None
@@ -383,6 +388,11 @@ def freeze_all(symbols: Optional[list[str]] = None, out_path=None) -> dict:
             "symbols": {}, "skipped": [],
         }
         out["config_hash"] = _config_hash()
+        if config.WEEKLY_DTE_ENABLED:
+            from nn_meta.weekly_expiry import weekly_expiry_symbols
+            out["weekly_symbols"] = weekly_expiry_symbols()
+            out["dte_grid_weekly"] = config.DTE_GRID_WEEKLY
+            print(f"weekly-expiry names: {len(out['weekly_symbols'])}", flush=True)
         done = set()
 
     for sym in (symbols or config.UNDERLYINGS):
@@ -390,7 +400,7 @@ def freeze_all(symbols: Optional[list[str]] = None, out_path=None) -> dict:
             continue
         print(f"[{sym}] sweeping…", flush=True)
         try:
-            entry = freeze_symbol(sym, provider)
+            entry = freeze_symbol(sym, provider, weekly_symbols=out.get("weekly_symbols"))
         except Exception as e:
             logger.exception(f"[{_TAG}] {sym}: freeze failed: {e}")
             entry = None
@@ -424,6 +434,9 @@ def merge_specs(shard_paths: list, out_path=None) -> dict:
             merged["symbols"], merged["skipped"] = {}, []
         merged["symbols"].update(s.get("symbols", {}))
         merged["skipped"].extend(s.get("skipped", []))
+        if s.get("weekly_symbols"):
+            merged["weekly_symbols"] = sorted(set(merged.get("weekly_symbols", []))
+                                              | set(s["weekly_symbols"]))
     dest = out_path or config.BASELINE_SPEC_JSON
     Path(dest).write_text(json.dumps(merged, indent=2))
     print(f"merged {len(shard_paths)} shards → {len(merged['symbols'])} "
