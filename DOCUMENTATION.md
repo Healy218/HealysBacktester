@@ -10,7 +10,8 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   `codex/v4-causal-validation`; `main` is the operational line the server runs.
 - **Python**: `./venv/bin/python` (3.12.3). No conda, no system python —
   always call the venv binary explicitly.
-- **Tests**: `./venv/bin/python -m pytest tests/ -q` — 345 tests, green.
+- **Tests**: `./venv/bin/python -m pytest tests/ -q` — ~535 tests, green
+  (2026-09-05; treat as a floor).
   They must stay self-contained: no LightGBM, no network, no v31 artifacts.
 - **Secrets**: `.env` at repo root, never in git. Keys: `ALPACA_API_*`,
   `MASSIVE_API_KEY`, `MASSIVE_FLAT_FILES_API_*`, `ALPHAVANTAGE_KEY`,
@@ -364,8 +365,23 @@ bucket listed 2014→ but GetObject was date-gated.
   user decision after a forward record beside V118.
 - **Deploy = `git pull origin main` over the read-only deploy key. NEVER
   scp** — an untracked scp'd file once wedged pulls for days, silently.
-- **Cron (UTC — this cron ignores `CRON_TZ`, verified empirically)**:
-  - `*/15 * * * *` live scanner: `NN_META_POOL=v3 … run_live --once --nn`
+- **Live feeds (since 2026-09-05)**: two daemons, `nn_meta.live.feeds.
+  stock_stream` (Alpaca SIP 1m bars, 443 names → `nn_meta/live/feeds/data/
+  1m/<SYM>/<day>.parquet`, backfills today on start) and
+  `nn_meta.live.feeds.option_stream` (OPRA quotes for
+  `nn_meta/live/feeds/data/option_watch.json`, ≤ 1,000 contracts → 
+  `option_quotes.json`). Started by `@reboot` cron lines and restarted by
+  5-minute `pgrep || nohup` watchdog lines (no sudo on this host); logs
+  `logs/feeds_stock.log`, `logs/feeds_options.log`; heartbeats
+  `stock_stream.heartbeat.json` / `option_stream.heartbeat.json` (in the
+  17:00Z digest; stale > 5 min during RTH = ⚠️). Loaders read today's bars
+  from the store when the heartbeat is ≤ 3 min old, else forced REST.
+  Health: `pgrep -f feeds.` (2 processes, ~700 MB RSS total).
+- **Cron (UTC — this cron ignores `CRON_TZ`, verified empirically)**.
+  Expert passes fire ONE MINUTE after the 15m bar closes, staggered by pool
+  (2026-09-05): v5 at `1,16,31,46` (`--workers 3`), [v4] and [v31] at
+  `2,17,32,47` (`--workers 2`), v3 at `3,18,33,48` (`--workers 1`).
+  - `3,18,33,48 * * * *` live scanner: `NN_META_POOL=v3 … run_live --once --nn`
     → `logs/live_cron.log` (self-gates to RTH)
   - `*/15 * * * *` **[v4] expert** (paper 2026-08-16 → **REAL 2026-08-24**,
     V118 bundle gbt/ev/0.05): `NN_META_POOL=v31 … nn_meta.live.v4_scan

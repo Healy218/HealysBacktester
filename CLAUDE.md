@@ -25,7 +25,7 @@ here — it lives in the files below.
    load — don't re-derive state from scratch.
 2. **Work**: on `codex/v4-causal-validation`; small single-purpose commits;
    push often. Tests stay green: `./venv/bin/python -m pytest tests/ -q`
-   (~474 as of 2026-08-24 — treat the count as a floor, not a pin;
+   (~535 as of 2026-09-05 — treat the count as a floor, not a pin;
    self-contained: no network, no v31 artifacts; LightGBM/TF are exercised
    from requirements).
 3. **End** (or at a milestone, or before context runs out): archive

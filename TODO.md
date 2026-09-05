@@ -5,11 +5,12 @@ Re-prioritised 2026-09-05 after the v5 campaign (freeze 75 h/$40 on Batch,
 build 29 Aug→4 Sep across three fleet rebuilds + the box, ladder ~1.5 h on
 the box). Order of operations agreed 2026-09-05 — work top to bottom:
 
-1. **Monday watch + box automation** — v5's first passes (pass time for 441
-   symbols, alert cadence, the other experts unaffected); StockTwits +
-   cache-backup system timers need `sudo` (deploy/systemd/README.md); FA
-   monthly freeze before 1 Oct; delete stale Artifact Registry tags (keep
-   `4cca795`).
+1. **Monday 2026-09-08 watch (see HANDOFF first actions)** — the first
+   session on streamed bars + :01 crons + parallel detection; all prior paper
+   records are void as intraday records (EXPERIMENTS 2026-09-05). Box
+   automation still owed: StockTwits + cache-backup system timers need
+   `sudo`; FA monthly freeze before 1 Oct; delete stale Artifact Registry tags
+   (keep `4cca795`, `04efba8`).
 2. ~~**Universe read path**~~ **DONE 2026-09-05** (7e7d88b): chains from
    per-underlying parquet-predicate slices; derive writes sorted row groups.
    Gate: 200/200 sampled chains identical (order included), 205 → 0.74 ms
@@ -350,6 +351,10 @@ stays the options-history source); News API (Benzinga) + screener
   symbols), filling the same 15m cache the REST loader fills; the v5 pass
   drops from ~2 min of REST fetches to seconds. Only worth it once a seat
   is time-sensitive; REST at 10k/min is not a bottleneck today.
+- [x] **Live feeds DEPLOYED 2026-09-05** (`nn_meta/live/feeds`, REALTIME_SPEC):
+  SIP bars → barstore → loaders; OPRA quotes → quotestore (idle until D1
+  registers contracts); heartbeat lines; crons :01/:02/:03 staggered with
+  `--workers` 3/2/2/1; BRKB fetch alias fixed.
 - [ ] **A3. Paper execution seat on Alpaca** (design item, the real use of
   the trading API): route `[v5]`/`[v4]` alerts to Alpaca PAPER orders (level
   3 covers longs and spreads) so the forward record uses Alpaca's NBBO

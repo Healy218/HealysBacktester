@@ -113,6 +113,14 @@ behind wave 2's outputs; RL sizing stays last. Compute venue: heavy runs on
 GCP Batch contingent on the pilot's byte-identity verdict; crawls and keys
 never leave home.
 
+**2026-09-05 addenda:** [v5] (wide pool, PIT universe, risk-aware gate) is
+the fourth seat (paper); the panel now runs on streamed SIP bars with
+one-minute-after-close passes (the pre-09-08 paper record was intraday-blind
+— EXPERIMENTS); Massive Options Advanced + Alpaca Algo Trader Plus unlock
+deep option history, quotes, trades and NBBO fills (plans in TODO; v7
+real-time contract in `docs/specs/REALTIME_SPEC.md`); generation v6
+(additive: keltner, bbw_squeeze, weekly expiries) is mid-freeze.
+
 **Exit:** the wave-2 seats live with tracked ledgers; the SPX/NDX stage-0
 audit written; watchlists flowing daily.
 
