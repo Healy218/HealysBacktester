@@ -50,6 +50,7 @@ EXPERT_LOGS = {
     "v3": Path("logs/live_cron.log"),
     "v4": Path("logs/v4_cron.log"),
     "v31": Path("logs/v31_cron.log"),
+    "v5": Path("logs/v5_cron.log"),       # 2026-09-05: the v5 wide-pool expert
 }
 
 # every expert cron fires */15 — an hour without a single write means the
@@ -57,7 +58,7 @@ EXPERT_LOGS = {
 STALE_AFTER_MIN = 60
 
 _ALERTED_RUN_LIVE = re.compile(r"^(\d+) signal\(s\) alerted: ")
-_ALERTED_V4 = re.compile(r"^\[v4\] scanned \d+ · alerted (\d+)")
+_ALERTED_V4 = re.compile(r"^\[v[45]\] scanned \d+ · alerted (\d+)")   # v4_scan prints [v4] or [v5]
 
 
 def _today_lines() -> tuple[list[str], str]:

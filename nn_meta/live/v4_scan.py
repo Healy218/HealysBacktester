@@ -1,5 +1,7 @@
 # nn_meta/live/v4_scan.py
-"""The [v4] expert — a second, independent live scanner pass.
+"""The [v4] expert — a second, independent live scanner pass. (Since 2026-09-05
+the same module is also the [v5] expert when run under NN_META_POOL=v5: it
+scores with model_final_v5/ and keeps its own .v5_* state files.)
 
 Runs ALONGSIDE the deployed v3 scanner (which is untouched): a separate cron
 line under ``NN_META_POOL=v31`` scores fresh mechanical entries with the
@@ -74,11 +76,19 @@ if TYPE_CHECKING:                                     # pragma: no cover
 logger = setup_logging(log_file="logs/backtester.log")
 
 STATE_DIR = config.ROOT / "live"
-ALERT_STATE = STATE_DIR / ".v4_alert_state.json"
-OUTBOX = STATE_DIR / ".v4_outbox.json"
-LEDGER = STATE_DIR / ".v4_paper_ledger.json"
-HEALTH = STATE_DIR / ".v4_health.json"
-WATCHLIST = STATE_DIR / ".v4_watchlist.json"
+# The expert this process IS, derived from the pool (2026-09-05): the v31 pool
+# runs the [v4] expert (V118 in model_final_v4/); the v5 pool runs the [v5]
+# expert (model_final_v5/). Every label, state file and default bundle dir
+# follows EXPERT so the two never share dedupe state or watchlists.
+EXPERT = "v5" if config.POOL == "v5" else "v4"
+TAG = f"[{EXPERT}]"
+ALERT_STATE = STATE_DIR / f".{EXPERT}_alert_state.json"
+OUTBOX = STATE_DIR / f".{EXPERT}_outbox.json"
+LEDGER = STATE_DIR / f".{EXPERT}_paper_ledger.json"
+HEALTH = STATE_DIR / f".{EXPERT}_health.json"
+WATCHLIST = STATE_DIR / f".{EXPERT}_watchlist.json"
+DEFAULT_BUNDLE_DIR = (config.ROOT / "model_final_v4" if EXPERT == "v4"
+                      else config.ROOT / "model_final_v5")
 
 # TICKER_ALIASES / aliased_bar_loader moved to nn_meta.live.scanner
 # (2026-08-16 review) so the legacy run_live path shares them; re-exported
@@ -189,16 +199,16 @@ def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool
     right = "C" if fresh["direction"] == 0 else "P"
     action = "BUY CALL" if right == "C" else "BUY PUT"
     expiry = (datetime.now(timezone.utc) + timedelta(days=int(row.dte))).date()
-    tag = f"v4-{bundle.family}" + (" · paper" if paper else "")
+    tag = f"{EXPERT}-{bundle.family}" + (" · paper" if paper else "")
     shown = TICKER_ALIASES.get(row.symbol, row.symbol)
     if shown != row.symbol:
         shown = f"{shown} (fka {row.symbol})"
-    title = f"[v4] {shown} {action}"
+    title = f"{TAG} {shown} {action}"
     ev_part = (f" · EV {row.decision:+.1%}" if bundle.mode == config.EV_MODE
                and hasattr(row, "decision") else "")
     if bundle.mode == config.EV_MODE and bundle.dd_brake is not None:
         ev_part += f" · DD brake {bundle.dd_brake:.0%}"
-    msg = (f"[v4] {shown}: {action} · P(win) {row.score:.0%}{ev_part}\n"
+    msg = (f"{TAG} {shown}: {action} · P(win) {row.score:.0%}{ev_part}\n"
            f"trigger: {row.strategy} ({fresh['param_label']}) · "
            f"DTE {int(row.dte)} (best of grid)\n"
            f"contract: ~ATM {right} near ${fresh['spot']:,.2f}, "
@@ -302,7 +312,7 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
 # ── daily watchlist digest (dual-mode cadence, ROADMAP wave-2 item 5) ─────────
 
 PANEL_WATCHLISTS = (("v4", ".v4_watchlist.json"), ("v3", ".v3_watchlist.json"),
-                    ("v31", ".v31_watchlist.json"))
+                    ("v31", ".v31_watchlist.json"), ("v5", ".v5_watchlist.json"))
 
 
 def digest_pass(*, bar_loader: Callable[[str], pd.DataFrame], notifier,
@@ -412,10 +422,11 @@ def main() -> None:
     ap.add_argument("--top", type=int, default=10)
     args = ap.parse_args()
 
-    if config.POOL != "v31":
-        raise SystemExit("[v4-scan] must run with NN_META_POOL=v31 — the v4 "
-                         f"bundle/spec live in the v31 dirs (got '{config.POOL}')")
-    bundle_dir = Path(args.bundle) if args.bundle else None
+    if config.POOL not in ("v31", "v5"):
+        raise SystemExit("[v4-scan] must run with NN_META_POOL=v31 (the [v4] "
+                         "expert, model_final_v4/) or NN_META_POOL=v5 (the [v5] "
+                         f"expert, model_final_v5/) — got '{config.POOL}'")
+    bundle_dir = Path(args.bundle) if args.bundle else DEFAULT_BUNDLE_DIR
     if args.selftest:
         selftest(bundle_dir)
         return
@@ -448,7 +459,7 @@ def main() -> None:
         symbols=[s.strip().upper() for s in args.symbols.split(",")]
         if args.symbols else None,
         threshold=args.threshold, paper=args.paper)
-    print(f"[v4] scanned {summary['scanned']} · alerted {summary['alerted']} · "
+    print(f"{TAG} scanned {summary['scanned']} · alerted {summary['alerted']} · "
           f"delivered {summary['delivered']} · errors {summary['error_count']}")
 
 

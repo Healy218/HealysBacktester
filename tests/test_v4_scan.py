@@ -266,3 +266,27 @@ def test_atomic_bar_cache_write(tmp_path):
     assert not list(tmp_path.glob("*.tmp.*"))       # no temp litter
     back = pd.read_csv(target, index_col=0, parse_dates=True)
     assert len(back) == 2
+
+
+def test_expert_identity_follows_the_pool(monkeypatch):
+    """Under NN_META_POOL=v5 the same module is the [v5] expert: its own
+    labels, state files and default bundle dir; under anything else it stays
+    [v4] (2026-09-05 v5 deploy)."""
+    import importlib
+    from nn_meta import config as cfg
+    assert v4_scan.EXPERT == ("v5" if cfg.POOL == "v5" else "v4")
+    assert v4_scan.WATCHLIST.name == f".{v4_scan.EXPERT}_watchlist.json"
+    assert v4_scan.ALERT_STATE.name == f".{v4_scan.EXPERT}_alert_state.json"
+    assert v4_scan.DEFAULT_BUNDLE_DIR.name == f"model_final_{'v5' if v4_scan.EXPERT == 'v5' else 'v4'}"
+    assert ("v5", ".v5_watchlist.json") in v4_scan.PANEL_WATCHLISTS
+    # flip the pool and re-import: everything renames together
+    monkeypatch.setattr(cfg, "POOL", "v5")
+    mod = importlib.reload(v4_scan)
+    try:
+        assert mod.EXPERT == "v5" and mod.TAG == "[v5]"
+        assert mod.WATCHLIST.name == ".v5_watchlist.json"
+        assert mod.DEFAULT_BUNDLE_DIR.name == "model_final_v5"
+    finally:
+        monkeypatch.undo()
+        importlib.reload(v4_scan)
+    assert v4_scan.EXPERT == ("v5" if cfg.POOL == "v5" else "v4")

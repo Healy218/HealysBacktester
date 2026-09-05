@@ -1,0 +1,560 @@
+{
+  "baseline_spec": {
+    "path": "baseline_spec.json",
+    "sha256": "848ae511bc2810a171f4e89997c81c1d1a2833dc7ab48092c21db1cc71e59702"
+  },
+  "code_revision": "f1e913a19b0866185226be68468d87bde4582623",
+  "config_hash": "4a1897559fe2",
+  "dataset": {
+    "coverage": {
+      "columns": [
+        "atm_iv_far",
+        "atm_iv_near",
+        "bars_since_signal",
+        "bb_z",
+        "beta_60d",
+        "contract",
+        "dir_short",
+        "direction",
+        "dow",
+        "dow_tod",
+        "dte",
+        "dte_frac",
+        "entry_date",
+        "entry_premium",
+        "entry_ts",
+        "executed",
+        "exit_ts",
+        "expiration",
+        "fill_entry_ts",
+        "fill_exit_ts",
+        "fill_lag_s",
+        "gap_abs_z",
+        "gross_return",
+        "is_first_hour",
+        "is_last_hour",
+        "iv_chg_5",
+        "label",
+        "label_excess",
+        "ma_gap",
+        "macd_hist",
+        "market_iv",
+        "moneyness",
+        "n_fills",
+        "n_rolls",
+        "net_return",
+        "pc_ratio",
+        "prem_spot",
+        "px_vs_fast",
+        "ret_1",
+        "ret_26",
+        "ret_8",
+        "right",
+        "rsi14",
+        "rv_iv_spread",
+        "rvol_21",
+        "rvol_5",
+        "sec_crypto",
+        "sec_cyclical",
+        "sec_defensive",
+        "sec_fin",
+        "sec_idx_etf",
+        "sec_sec_etf",
+        "sec_semis",
+        "sec_spec",
+        "sec_tech",
+        "session_gap",
+        "split",
+        "strat_bbands",
+        "strat_elliott",
+        "strat_ma",
+        "strat_macd",
+        "strat_rsi",
+        "strat_squeeze",
+        "strat_stoch",
+        "strat_supertrend",
+        "strat_tv_rating",
+        "strat_volume",
+        "strategy",
+        "strike",
+        "symbol",
+        "term_slope",
+        "tod",
+        "trade_idx",
+        "und_period_return"
+      ],
+      "entry_ts_max": "2026-08-21T19:45:00",
+      "entry_ts_min": "2024-12-02T14:30:00",
+      "executed_rows": 1332630,
+      "exit_ts_max": "2026-08-21T19:45:00",
+      "exit_ts_min": "2024-12-02T14:45:00",
+      "rows": 2113590,
+      "unique_contracts": 358348,
+      "unique_strategys": 10,
+      "unique_symbols": 441
+    },
+    "path": "meta_dataset.parquet",
+    "sha256": "da6a4754e8bd4cc44534071ee07eef4a8ae834f70f6309ac46b3a35db1034c7d"
+  },
+  "feature_schema": [
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ma_gap",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "px_vs_fast",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "rsi14",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "macd_hist",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "bb_z",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ret_1",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ret_8",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ret_26",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "session_gap",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "gap_abs_z",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tod",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dow",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "is_first_hour",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "is_last_hour",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dow_tod",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "rvol_5",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "rvol_21",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "atm_iv_near",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "atm_iv_far",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "term_slope",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "iv_chg_5",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "pc_ratio",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "market_iv",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "rv_iv_spread",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "beta_60d",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dir_short",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dte_frac",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "moneyness",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "bars_since_signal",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_ma",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_macd",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_rsi",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_squeeze",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_rating",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_bbands",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_stoch",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_volume",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_supertrend",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_elliott",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_idx_etf",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_sec_etf",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_tech",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_semis",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_fin",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_crypto",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_defensive",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_cyclical",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_spec",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    }
+  ],
+  "manifest_version": 1,
+  "output_artifacts": {
+    "ensemble_config.json": "b4631653459490045a92e6305922b40440780f3fd6a8b93edcee462601044182",
+    "v4-nn-xs-s0/magnitude.keras": "88351638b00a1094c174e04a1a93c4da73835ccfad9b0c761d0ec3978d4e01cf",
+    "v4-nn-xs-s0/model.keras": "18695f721dc07ce474a7eac1e274e5ea533df1dde9fed216c4717639a20f3277",
+    "v4-nn-xs-s0/params.json": "e821d69d63e39270881faba08c3da57429b2a6f276789af6aa24678873cf7377",
+    "v4-nn-xs-s0/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s1/magnitude.keras": "b8dc68dce7c39304eed07bfe0a313233fcc87dc82b9d15ce390d8a9cc1455127",
+    "v4-nn-xs-s1/model.keras": "e3189f1227c30aa2a863f3ffdf5f68eb8315c6fcd628a42d73087281a73a4713",
+    "v4-nn-xs-s1/params.json": "75b107482885091353d01a4e67854d1841e7ccaef4683ed28bee477f6ace4e37",
+    "v4-nn-xs-s1/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s10/magnitude.keras": "8c76084732762f534ada2d74cd7eb963cb025f7d19d31ddab2fb938ffd3dd39f",
+    "v4-nn-xs-s10/model.keras": "dfc01a061aaf50a91a8eb00d633bd850ef0167776bcfc43be9654dc3a4a8e02c",
+    "v4-nn-xs-s10/params.json": "d34e9b3dc557b31d26e8b406d05931172e5aa22ff44a4ca8d7b808f5edd75d26",
+    "v4-nn-xs-s10/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s11/magnitude.keras": "92fe14f05f646ea9a7a0bad309c8164bd818f85168048708a469ed2a037d292e",
+    "v4-nn-xs-s11/model.keras": "5ceadc664d9aa22e5cb99a2cc30e9933fdb0a3d4aea3c68217f8a4558f948f03",
+    "v4-nn-xs-s11/params.json": "271956a59f334e0851ef81cc12ec242eea76fbe524091824407dd03c649bd286",
+    "v4-nn-xs-s11/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s12/magnitude.keras": "0cae057b57deaff4f8591c031b33586ce4d96e6c7745a8767310fa873032a608",
+    "v4-nn-xs-s12/model.keras": "eaede1e0cb5d9b8a1087d1ac60944b23d3b716610a61f3b161ba7f2f7c0eac01",
+    "v4-nn-xs-s12/params.json": "9c9ec4cd597a65f17326e96778e7ec9bf1875406468b4d86820139b6168522b1",
+    "v4-nn-xs-s12/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s13/magnitude.keras": "463976eca8134fa6e5e2399616c71b37beda0fd95119a9f237280128b18516af",
+    "v4-nn-xs-s13/model.keras": "77722bade4d7d93c0f7479d5b7bffef8584f31947e425a1dd9205de05ca4bc59",
+    "v4-nn-xs-s13/params.json": "b0acf987afceeffea0c2356ac2f00056568e10b47416fe296771b2d2f27b31f6",
+    "v4-nn-xs-s13/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s14/magnitude.keras": "c7abd6050f1111c47f3ed13f33ae8b90581d6e2cedae5dc91304b875b18c6425",
+    "v4-nn-xs-s14/model.keras": "365e41951f274ce7c84324a1e169144977f5c0e71a03f114711788c0b3d84d16",
+    "v4-nn-xs-s14/params.json": "0970a8a5c667fa45d4d7b074bfd9fda7fc53149c23a99f1f2a36e3cd8dfb9441",
+    "v4-nn-xs-s14/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s15/magnitude.keras": "42ec8a8667538a32ee58ac115525bcb9fafb7ed7c172670076844b03a1c49188",
+    "v4-nn-xs-s15/model.keras": "82c834c4d2a7db70810882f38489896c62e0fbbff83c6105787592eb3a2081c0",
+    "v4-nn-xs-s15/params.json": "f65a869d423e27d7ab97e6b7053c0e504a975ba04193636f0a714cef9aaf5416",
+    "v4-nn-xs-s15/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s16/magnitude.keras": "7a09644275c798166bd2d1b878ae38515b3e6e1c7b2ee34efe9ce55093958229",
+    "v4-nn-xs-s16/model.keras": "ae536c780e189877c12edfbd5d0d6be808d000a2dd3fe20f6b59ceceb0125fbc",
+    "v4-nn-xs-s16/params.json": "6f2ab3484149a59404529b3522256fa01143bd2ffc96e72b188a10f42e1f7786",
+    "v4-nn-xs-s16/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s17/magnitude.keras": "12f678be8512e2ced38ef766e6bd6e8e8c71841275ad1be600152b8350268de6",
+    "v4-nn-xs-s17/model.keras": "d368315f077dd2924a75f298f36507651c3acd69f4d529e5841b5553413928b1",
+    "v4-nn-xs-s17/params.json": "84b9cbdfe8a247e6f377e4a887b9c9c5abce1b8da4d53ce963b1f598fad8f397",
+    "v4-nn-xs-s17/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s18/magnitude.keras": "14d64875b782b48464b22b9c949bd73dd7ea6ca8d0ddebc57404c3029432bb5f",
+    "v4-nn-xs-s18/model.keras": "3b6e4a929be6919d80753a6fb4d9f6804825dfdd6459daf821d6f06347b92d95",
+    "v4-nn-xs-s18/params.json": "6061fcb08e8541b09d7eec93520ee40e59773743dd87ab3f2802828617598821",
+    "v4-nn-xs-s18/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s19/magnitude.keras": "ea1db57577aeb8de57bf2c2e7781aa0360eaf471b2ccb1866ce887bc7b03f097",
+    "v4-nn-xs-s19/model.keras": "aedd77e045b278abd7e34377228445f9aa0556d266afb6a25d11910f7de68b0c",
+    "v4-nn-xs-s19/params.json": "1ac8fbeb648c82743455cb325b02de23e58a4a3417a819f2f0cd62ad0cc5c15c",
+    "v4-nn-xs-s19/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s2/magnitude.keras": "42bb4e0ac4e6f43915d269ad66e9a6cc4766a77a5c52c62baef728717ca5e630",
+    "v4-nn-xs-s2/model.keras": "aa4a53d2f56bac1ccd555b1d7fe18c0ae61e1bcf52615de0ab24cf342c603bf4",
+    "v4-nn-xs-s2/params.json": "486ee1174bbbcbb7284c006f4a493717c6b140301d8f1d168525777a2b0c5d8d",
+    "v4-nn-xs-s2/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s20/magnitude.keras": "6c0b32574af168afd4ad424ba2a3cc71450fbf2fc6ada74057b3eff812b1d2d0",
+    "v4-nn-xs-s20/model.keras": "b96504b54551503b5ba474dbd9c1b607d94f78abf012073dae566ddacda46345",
+    "v4-nn-xs-s20/params.json": "e333c66534ebbda3c49cedf0334f6cdfbfa442ed08015b3b07d622d73b17bc4d",
+    "v4-nn-xs-s20/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s21/magnitude.keras": "7b2417e620f30d25eb82c78157179b98490c111b1d75c5b6d61329790fe4d9a5",
+    "v4-nn-xs-s21/model.keras": "b58eca39fc37a6eb1697a2f1c9f9e7ebc8ba7567b7fc818bdb5737b848bd7989",
+    "v4-nn-xs-s21/params.json": "2f201a20b660b750aa2d399f850b8c3e9e91c8a43c6645f2562f64e1f8294e83",
+    "v4-nn-xs-s21/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s22/magnitude.keras": "41ebd22650d6a3e4ca49fb7be1148e8cc478e960e933ce92ce46a1c2906694f1",
+    "v4-nn-xs-s22/model.keras": "80fc7d4d95d50ce4aa043b05a211b7826edcaba89c75d976acfe29a4f14a7d00",
+    "v4-nn-xs-s22/params.json": "e8f84974df6e0eaab6c03c12226a0d72bc5f524028046cbe9e63b3ff095a08a1",
+    "v4-nn-xs-s22/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s23/magnitude.keras": "303996ae6fd7cc84a77902d58692d16b260c190dbaf4515e6054608cb388fa01",
+    "v4-nn-xs-s23/model.keras": "d9fef4b35041b9737c32f17339f4d7f330e966dd02ca2efb4e6fa4e23f192f55",
+    "v4-nn-xs-s23/params.json": "dbae19623481a5440112d720a4a40406b23492a9f07f7c13e39625ddd9eaa5b1",
+    "v4-nn-xs-s23/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s24/magnitude.keras": "06e682c2d5fdd2123c60d2021db15a72b61c54802ca3628dc729efcb885ed679",
+    "v4-nn-xs-s24/model.keras": "699dc12cdba47005f70550711617486241d033f44346eaf5e9a7b074dabfcdca",
+    "v4-nn-xs-s24/params.json": "2162d09ff1b312202035ee291b8723e3d4684557b5c77f9e0c8115ee44d20361",
+    "v4-nn-xs-s24/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s25/magnitude.keras": "c0a1be24f57d0ec26b96a261e297d7d938e42f057d9b261484730275f5e6673c",
+    "v4-nn-xs-s25/model.keras": "afafaab0bb6b300a90c71d466ccf796e25b14588dd246bc657ce711c9f5ac736",
+    "v4-nn-xs-s25/params.json": "b2a36532a88765dbc35cb9b2aee21322d316ba0fa227dd3d22a399b7cab9bb33",
+    "v4-nn-xs-s25/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s26/magnitude.keras": "ce7d286794ced6740226a3c87a4acdea22fa04ed1b2d9c3c4b5d5e464c0cbb59",
+    "v4-nn-xs-s26/model.keras": "715965bacc843a9b856da1fc4f82177aaa53bf19cd4efe84896a99ad442fff18",
+    "v4-nn-xs-s26/params.json": "03b58e87e3fe73704bedc50a718e4747003cbf4337f060cc12933ad7d6e51d66",
+    "v4-nn-xs-s26/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s27/magnitude.keras": "1b41ff018811e7248025d64eb1b196da860e14e481990b37ac67aac3c130ff9d",
+    "v4-nn-xs-s27/model.keras": "636ea819a046d13808b58dd89b46bb70742c675e6de5d3e41e97173390be17ae",
+    "v4-nn-xs-s27/params.json": "7c67293df2f99b3bbca375ac6bc335c6fe2bc6b2f28e717a0e74cb999bddfc2d",
+    "v4-nn-xs-s27/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s28/magnitude.keras": "9f6731e5636930a4599618a711bf2ee798d59b52a4942f04f12636ca4b7a7d65",
+    "v4-nn-xs-s28/model.keras": "46a921f7c855e8a1370dc5d5ca594417436b9cb3d6e0a10993fdc3a6c3c3ed78",
+    "v4-nn-xs-s28/params.json": "50cef3113eff2f1b7df899cc0f03ec0678c81c32b90aa1ee3f5a996f934b284d",
+    "v4-nn-xs-s28/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s29/magnitude.keras": "da33e38992ae389cf5965f934963c0b94ee9fbdaed3ba9f9129d22073c888f48",
+    "v4-nn-xs-s29/model.keras": "534178e48d8aeb4ce033cff5884b71e0690c1f88124880254e5a145553221342",
+    "v4-nn-xs-s29/params.json": "eb1a3d1d7afda8dc0cd21060e02b1a1c0c17085d5998d09aea836d55ebe842fa",
+    "v4-nn-xs-s29/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s3/magnitude.keras": "a80591e19a880c5b6e0a9ad320e0ac95755629305f22a6749ada6e7a72dba131",
+    "v4-nn-xs-s3/model.keras": "100298600a7d5a7bbe93df87b38472fb370ae590dc12326fb21d44e7c0f1d8f2",
+    "v4-nn-xs-s3/params.json": "ec58e4ab215dc82b40593e4bf792b09864358f56459908d8cd1aff52e81aff4e",
+    "v4-nn-xs-s3/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s30/magnitude.keras": "f9f745b178ff9bf1e8a0cee7028046398b46fbb076531c46be62a81214d6ccb3",
+    "v4-nn-xs-s30/model.keras": "93173c67b1107c84613a5e9e70f0964c427cee208852591c51214c6b80e026f4",
+    "v4-nn-xs-s30/params.json": "1c82004cae12dfb406d285f137ca516cc16141156eeeab7e83b737f12ea26320",
+    "v4-nn-xs-s30/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s31/magnitude.keras": "407e347bdfb6598334e15ceda892282fbd415920b17305f20814e6823cffec35",
+    "v4-nn-xs-s31/model.keras": "66a84062949ac2eb56042a56c99d539da9d7ed2fd8b223adfb7c4b0db6f444a7",
+    "v4-nn-xs-s31/params.json": "4ddbb55d29ff4006ba4bb2a44d45bea9bcf96292333d1aa0c28e8c897b19f5f4",
+    "v4-nn-xs-s31/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s32/magnitude.keras": "860e61f0809c97eda21e4b14b08864aab49156946a9dec5985f62df0765e9b8b",
+    "v4-nn-xs-s32/model.keras": "47f3a9578ad68ceb7e7afad29fe54706e89e4f21934b7a47a1a638b5cc22ed53",
+    "v4-nn-xs-s32/params.json": "3ddf6a1c7e21ce2d0c5eb6376d9b92ae9579043aa2fcc523987b08f500062df7",
+    "v4-nn-xs-s32/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s33/magnitude.keras": "ae337562778556e1cfd2e93c881ce20ac903cf629d9cdb6450920fdfb756a86d",
+    "v4-nn-xs-s33/model.keras": "435edb55079a8280a78e7b16b6ec529645b06651e9af37b904307cf8bfdcbc4d",
+    "v4-nn-xs-s33/params.json": "3929216bf59cbf1ba66b0997adeb06d8271249df187f86ae06c283fc570ed126",
+    "v4-nn-xs-s33/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s34/magnitude.keras": "72697d83188f379dd7b00b1cf463276f19d704d2eca2d1373ed3940908e49cb8",
+    "v4-nn-xs-s34/model.keras": "c3f75248026a49d0d9f65904433b5eb959b1af1bfa87141f0dc3998509dce29d",
+    "v4-nn-xs-s34/params.json": "c42e61c0e69f93b9512fbf5a870a14334d5b1a0455dacdd3596ed09d83846ca3",
+    "v4-nn-xs-s34/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s35/magnitude.keras": "9c999c30671d3bbb7935b363acf27af3494d3292bca55a609a55e4adc0ca36dd",
+    "v4-nn-xs-s35/model.keras": "a8d7ae84014cf8d23d0002aa06e1bfa5c0a515bd9e6abfb87427622f1832ff83",
+    "v4-nn-xs-s35/params.json": "06788e71735a4871de7123d909e62c1326bad14d02e15b26402eb6b7b23bdc30",
+    "v4-nn-xs-s35/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s36/magnitude.keras": "0cabc793380364485a5dac6403fceb6331e251e5bf6f3feadbb98b9d80984710",
+    "v4-nn-xs-s36/model.keras": "644a0ef10ccd383f0ec61c1259becaf09b8ee9588b2e5822d2d4864e7b984c46",
+    "v4-nn-xs-s36/params.json": "f95bdc7e243e28304d794220bfc248b9535b3fad576e710227bf9087f418b010",
+    "v4-nn-xs-s36/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s37/magnitude.keras": "02fbb7e91f728e33b6162395a3e66ef5f05e9aad06e13b3cd926d70af2da7c57",
+    "v4-nn-xs-s37/model.keras": "444cdb576dae44b71775cefc1e5a545194056f168de00ba4b707b639b43b638c",
+    "v4-nn-xs-s37/params.json": "eb59f857db36e8f7fb0bd321c717c3215ac362c085abe9054293165536d40b91",
+    "v4-nn-xs-s37/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s38/magnitude.keras": "b445699400c18720bdcb578977fdbf8749d3132f59c0ca3668e05336b57c0b6e",
+    "v4-nn-xs-s38/model.keras": "d149881ccf733ed1a205e5683dc64f5bea20786a13c2a6e7e7466fcdc80e3e04",
+    "v4-nn-xs-s38/params.json": "3b942b69081cb1047bd99371727b2a5aa0304b2254f34f5dbc4a56e36fd9c91a",
+    "v4-nn-xs-s38/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s39/magnitude.keras": "3ad95cde0f104819329efc1eb9cd1a45a95e7b2d7aad088ccd68d526f3dfef15",
+    "v4-nn-xs-s39/model.keras": "26c13a8507d2792b7320d5d262f894311f6997237b3bd65ab4787b49f6acccf2",
+    "v4-nn-xs-s39/params.json": "81d22f418546cfac5dbb42a3e09d7cc80b118903abeff6bd127e255321ac75d9",
+    "v4-nn-xs-s39/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s4/magnitude.keras": "55905768bd18e49b5027369339744184dcb368db70ecc5d96fece29fe35db476",
+    "v4-nn-xs-s4/model.keras": "5bf5bdcb3d2132d093f59edfe2d96e4b9bf87d78a22a1b30cfac902926b0e426",
+    "v4-nn-xs-s4/params.json": "1bca1c9a45b44b3fe994c07be378de1e4b11d3e727e44fd444bdcdd739e8dc13",
+    "v4-nn-xs-s4/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s5/magnitude.keras": "32b184177efc596e5ded7ec31787b9a22af908a5d0ad2ecefcba20d04076d874",
+    "v4-nn-xs-s5/model.keras": "f478ec8d586c6e24f8efd7ab139b305cb638fe0e2ed070bf8d85c51e48b4d5fd",
+    "v4-nn-xs-s5/params.json": "59139b3dd8ca533c47a1e6a5d57cd1af65a8520b467bcbf829a8ba7fd630b9f7",
+    "v4-nn-xs-s5/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s6/magnitude.keras": "7d6dd71da954451cc465b7474437eb0f28b6c0a0582c2a1ab693ae99c2fb144e",
+    "v4-nn-xs-s6/model.keras": "0ccbf1edc3d91790e2a9a3881ea6cf67ba6c712cafcb27c17726b38f809cb654",
+    "v4-nn-xs-s6/params.json": "f0e3076385fde8df85548069846f2d6bee7dae245fbc2f382fe862bc1eb13e10",
+    "v4-nn-xs-s6/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s7/magnitude.keras": "e0e73e8a46e3dc38f36256bd1a8799105ae945b1fc4c0eae4aa48aa838aba7fd",
+    "v4-nn-xs-s7/model.keras": "2191b7cc858226213286c42309c104847b28006d8a8162f36cfe61e95c9e14a5",
+    "v4-nn-xs-s7/params.json": "e549e978f1a9282068d8c350b60f8115a9b51d686bdb904fd3b5386840069c3e",
+    "v4-nn-xs-s7/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s8/magnitude.keras": "afb267a18666b560fb6fbb0af32e7eb4ac9574bf995e8e7549c3bd719315461d",
+    "v4-nn-xs-s8/model.keras": "ea443e51b7a255041b90d47eeb0fa7cf4708791236f32d38872123634c669c42",
+    "v4-nn-xs-s8/params.json": "72ceabddfcf4fdea8f6cfb8a216836f867560f5b19a7abcffa3f2bf2b388a2bf",
+    "v4-nn-xs-s8/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650",
+    "v4-nn-xs-s9/magnitude.keras": "d08d16d55b7abf7946e6ba5830e18bd521e726caf80043c39cb116b22bfc52be",
+    "v4-nn-xs-s9/model.keras": "0e9cba96e64f5c1aa6baec3e2dc67d8e48e3fb18f86c3bf62c7a6fbd093a23c4",
+    "v4-nn-xs-s9/params.json": "ec12bea12c805487f0f0c69e3bd918d0db5fdc8d1a36630f9ae7fecd135361bc",
+    "v4-nn-xs-s9/scaler.json": "2fb238eef8a437913c137bc91184d3f728a1152437719a6eb3614b166d85e650"
+  },
+  "provider_metadata": {
+    "interval": "15m",
+    "mark_stream": "nn_meta/artifacts_v5/meta_dataset.marks.parquet",
+    "options_history_constraint": "15m; approximately two years",
+    "pool": "v5",
+    "selection_basis": "ledger"
+  }
+}

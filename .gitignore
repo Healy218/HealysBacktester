@@ -83,8 +83,10 @@ nn_meta/artifacts_v5/meta_rows/
 nn_meta/artifacts_v5/meta_marks/
 nn_meta/artifacts_v5/meta_partial_local/
 nn_meta/artifacts_v5/*.parquet
+# artifacts_v5/baseline_spec.json is TRACKED (the frozen spec the live scanner reads)
 nn_meta/artifacts_v5/*.marks.parquet
 nn_meta/runs_v5/
 nn_meta/reports_v5/
-nn_meta/model_final_v5/
+# model_final_v5/ is TRACKED (2026-09-05): the deployable v5 bundle ships to the
+# server by git pull, exactly like model_final_v4/ (V118). ~8 MB.
 nn_meta/data_cache_v5/
