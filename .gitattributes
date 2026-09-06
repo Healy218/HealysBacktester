@@ -1,0 +1,4 @@
+# Pinned Pine publications and exact-prefix capture copies are byte evidence.
+# Preserve upstream line endings and whitespace; receipts bind these bytes.
+indicators/tradingview_sources/**/*.pine -text -whitespace
+docs/capture_templates/tradingview/*_capture_DRAFT.pine -text -whitespace
