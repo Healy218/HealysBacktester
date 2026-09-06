@@ -34,6 +34,16 @@ DATA_CACHE = ROOT / ("data_cache_v5" if POOL in ("v5", "v6")   # v6 shares v5's 
 CAMPAIGN = os.environ.get("NN_META_CAMPAIGN", "")
 if CAMPAIGN and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", CAMPAIGN):
     raise ValueError("NN_META_CAMPAIGN must be a simple 1–64 character name")
+# Repaired raw inputs are opt-in and can only feed isolated research outputs.
+DATA_CANDIDATE = os.environ.get("NN_META_DATA_CANDIDATE", "")
+if DATA_CANDIDATE:
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", DATA_CANDIDATE):
+        raise ValueError("NN_META_DATA_CANDIDATE must be a simple 1–64 character name")
+    if not CAMPAIGN or POOL not in ("v5", "v6"):
+        raise ValueError("a data candidate requires a named v5/v6 research campaign")
+    DATA_CACHE = ROOT / "data_candidates" / DATA_CANDIDATE / "cache"
+    if any(p.is_symlink() for p in (DATA_CACHE, DATA_CACHE.parent, DATA_CACHE.parent.parent)):
+        raise ValueError("data candidate path must not contain a symlink")
 
 
 def output_dir(kind: str, pool: str | None = None) -> Path:
@@ -58,6 +68,7 @@ V4_MODEL_FINAL_DIR = (MODEL_FINAL_DIR if CAMPAIGN or POOL in ("v5", "v6")
                      else ROOT / "model_final_v4")
 
 UNDERLYING_15M_PARQUET = DATA_CACHE / "underlying_15m.parquet"
+UNDERLYING_15M_RAW_PARQUET = DATA_CACHE / "underlying_15m_raw.parquet"
 BASELINE_SPEC_JSON = ARTIFACTS / "baseline_spec.json"
 META_DATASET_PARQUET = ARTIFACTS / "meta_dataset.parquet"
 RUNS_CSV = RUNS_DIR / "runs.csv"
@@ -70,10 +81,9 @@ RUNS_CSV = RUNS_DIR / "runs.csv"
 # behind the boundary survives ONLY in our parquet caches — download early.
 HISTORY_START = "2024-04-01"               # underlying warmup (Alpaca, unbounded)
 if POOL in ("v5", "v6"):
-    # v6 is ADDITIVE on v5 (reuses v5's per-family rows byte-for-byte), so it
-    # must share v5's window exactly. The "start at the first frozen PIT
-    # month (2024-12) so membership stops dropping ~20% of the built train
-    # span" change is for the next FROM-SCRATCH generation (v7), not here.
+    # Keep v5/v6 windows identical for the corrected comparison. All pre-audit
+    # freezes and rows require rebuilding; shared dates do not authorize reuse.
+    # Starting at the first frozen PIT month belongs to a separately scoped v7.
     # v5 window runs to the last completed trading day at build time (user
     # decision 2026-08-25); its flat-file/PIT crawls start at the measured
     # entitlement wall. Train/val boundaries stay on the family dates; only
@@ -158,6 +168,7 @@ MASSIVE_BASE_URL = _nos.MASSIVE_BASE_URL
 CONTRACTS_PARQUET = DATA_CACHE / "contracts.parquet"
 UNIVERSE_PARQUET = DATA_CACHE / "universe.parquet"
 UNDERLYING_DAILY_PARQUET = DATA_CACHE / "underlying_daily.parquet"
+UNDERLYING_DAILY_RAW_PARQUET = DATA_CACHE / "underlying_daily_raw.parquet"
 BARS_DAILY_DIR = DATA_CACHE / "bars_daily"
 DONE_MANIFEST = DATA_CACHE / "bars_done.txt"
 SURFACE_DATASET_PARQUET = DATA_CACHE / "surface_daily.parquet"
@@ -199,8 +210,8 @@ PROPOSAL_STRATEGIES_V31 = ["ma", "macd", "rsi", "squeeze", "tv_rating"]
 PROPOSAL_STRATEGIES_V5 = ["ma", "macd", "rsi", "squeeze", "tv_rating",
                           "bbands", "stoch", "volume", "supertrend", "elliott"]
 # v6 (2026-09-05, user notes): v5's ten families + Keltner channel + BB-width
-# squeeze. ADDITIVE on purpose — a v6 build reuses v5's per-family partials
-# and only builds the two new families' rows.
+# squeeze. These configured families require fresh current-contract rows.
+# Selected TradingView prototypes stay gated until their scoped parity checks.
 PROPOSAL_STRATEGIES_V6 = PROPOSAL_STRATEGIES_V5 + ["keltner", "bbw_squeeze"]
 PROPOSAL_STRATEGIES = (PROPOSAL_STRATEGIES_V6 if POOL == "v6"
                        else PROPOSAL_STRATEGIES_V5 if POOL == "v5"

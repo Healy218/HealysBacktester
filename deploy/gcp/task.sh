@@ -31,9 +31,13 @@ MODE="${TASK_MODE:-build}"
 # historical irregular name), later pools read data_cache_<pool>.
 POOL="${NN_META_POOL:-v31}"
 export NN_META_POOL="$POOL"
+if [ -n "${NN_META_CAMPAIGN:-}" ] || [ -n "${NN_META_DATA_CANDIDATE:-}" ]; then
+  echo "FATAL: named campaigns/data candidates require scripts/run_research_local.sh; this legacy Batch transport does not stage their paths" >&2
+  exit 1
+fi
 ART="nn_meta/artifacts_${POOL}"
 CACHE="data_cache_v3"; [ "$POOL" != "v31" ] && CACHE="data_cache_${POOL}"
-# v6 is additive on v5 and shares its archive (nn_meta/config.py DATA_CACHE).
+# Default v6 shares v5's raw archive. Reuse of pre-audit derived rows is invalid.
 [ "$POOL" = "v6" ] && CACHE="data_cache_v5"
 # Non-v31 pools publish under out/<pool>/. The unsuffixed out/ names ARE
 # v31's live artifacts (118 meta_rows files + the assembled dataset): a later

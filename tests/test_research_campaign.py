@@ -108,6 +108,16 @@ def test_preview_is_explicit_read_only_and_cwd_independent(tmp_path):
     assert "--stage" in missing_stage.stderr
 
 
+def test_candidate_preview_includes_raw_cache_selector(tmp_path):
+    result = subprocess.run(["bash", str(ROOT / "scripts/run_research_local.sh"),
+                             "--campaign", "candidate-preview", "--pool", "v6", "--stage", "freeze",
+                             "--symbols", "SPY"], cwd=tmp_path, capture_output=True, text=True,
+                            env=dict(os.environ, NN_META_DATA_CANDIDATE="repair-preview"))
+    assert result.returncode == 0, result.stderr
+    assert "NN_META_DATA_CANDIDATE=repair-preview" in result.stdout
+    assert "data_candidates/repair-preview/cache" in result.stdout
+
+
 def test_launcher_rejects_unsafe_scope_and_out_of_order_stages():
     for arguments in (["--campaign", "../old", "--pool", "v6", "--stage", "freeze"],
                       ["--campaign", "pilot", "--pool", "v3", "--stage", "freeze"],
@@ -142,6 +152,42 @@ def test_two_way_pinned_coverage_catches_underlying_hole(campaign):
     assert report["option_days"] == 3  # out-of-window extra is irrelevant
     with pytest.raises(runner.CampaignError, match="coverage gaps"):
         runner.require_coverage(campaign)
+
+
+def test_repaired_candidate_requires_raw_context_and_resolved_basis_gates(campaign, monkeypatch):
+    campaign.DATA_CANDIDATE = "repair"
+    monkeypatch.setattr(runner, "coverage_gaps", lambda *args: {
+        "option_days": 3, "underlying_days": 3, "missing_options": [], "missing_underlying": []})
+    path = campaign.DATA_CACHE / "repair_manifest.json"
+    manifest = {"coverage_result": {"passed": True}, "context_status": "refreshed_raw_spot"}
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(runner.CampaignError, match="option daily"):
+        runner.require_coverage(campaign)
+    manifest["options_daily_raw_filter_verified"] = True
+    manifest["unresolved_model_gates"] = ["raw15m pending"]
+    path.write_text(json.dumps(manifest))
+    with pytest.raises(runner.CampaignError, match="price-basis"):
+        runner.require_coverage(campaign)
+    manifest["unresolved_model_gates"] = []
+    path.write_text(json.dumps(manifest))
+    assert runner.require_coverage(campaign)["option_days"] == 3
+
+
+def test_candidate_seal_refuses_same_size_mutation_and_file_list_change(campaign):
+    campaign.DATA_CANDIDATE = "repair"
+    path = campaign.DATA_CACHE / "repair_manifest.json"
+    expected = {"contracts.parquet": "verified-hash"}
+    path.write_text(json.dumps({"sealed_cache_sha256": expected}))
+    fingerprint = {"files": [{"path": "cache/contracts.parquet", "sha256": "verified-hash"},
+                              {"path": "cache/repair_manifest.json", "sha256": "self-hash"}]}
+    runner.validate_candidate_seal(campaign, fingerprint)
+    fingerprint["files"][0]["sha256"] = "mutated-same-size-hash"
+    with pytest.raises(runner.CampaignError, match="bytes or file list"):
+        runner.validate_candidate_seal(campaign, fingerprint)
+    fingerprint["files"][0]["sha256"] = "verified-hash"
+    fingerprint["files"].append({"path": "cache/new-input.parquet", "sha256": "new"})
+    with pytest.raises(runner.CampaignError, match="bytes or file list"):
+        runner.validate_candidate_seal(campaign, fingerprint)
 
 
 def test_coverage_failure_precedes_any_run_or_output(campaign, monkeypatch):
@@ -290,6 +336,17 @@ def test_changed_raw_inputs_between_stages_prevent_next_stage(campaign, monkeypa
 
     monkeypatch.setattr(runner, "run_command", mutate_input)
     plan = runner.command_plan(campaign, ["SPY"], ["build", "assemble"], 3)
-    with pytest.raises(runner.CampaignError, match="changed between stages"):
+    with pytest.raises(runner.CampaignError, match="changed during build"):
         runner.run_plan(campaign, ["SPY"], plan, 1, {})
     assert len(calls) == 1
+
+
+@pytest.mark.parametrize("stage", ["assemble", "evaluate", "finalize"])
+def test_final_stage_input_mutation_cannot_report_success(campaign, monkeypatch, capsys, stage):
+    def mutate_input(*args, **kwargs):
+        (campaign.DATA_CACHE / "contracts.parquet").write_bytes(b"raw-input-B")
+
+    monkeypatch.setattr(runner, "run_command", mutate_input)
+    with pytest.raises(runner.CampaignError, match=f"changed during {stage}"):
+        runner.run_plan(campaign, ["SPY"], runner.command_plan(campaign, ["SPY"], [stage], 3), 1, {})
+    assert f"Completed {stage}" not in capsys.readouterr().out

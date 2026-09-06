@@ -1,0 +1,168 @@
+{
+  "scope": "Five missing-stock sessions; option daily moneyness filter comparison on already-present whole-root15m archive",
+  "thresholds": {
+    "minimum_premium": 0.05,
+    "dte": [
+      1,
+      70
+    ],
+    "absolute_log_moneyness": 0.15
+  },
+  "days": [
+    {
+      "day": "2025-03-31",
+      "observed_contracts": 172739,
+      "old_filter_kept": 56269,
+      "raw_filter_kept": 61367,
+      "added_daily_contracts": 5897,
+      "removed_daily_contracts": 799,
+      "added_contracts_already_in_15m_archive": 5897,
+      "selected_symbols": {
+        "SPY": {
+          "old_filter_kept": 2485,
+          "raw_filter_kept": 2437,
+          "added_daily_contracts": 4
+        },
+        "IBKR": {
+          "old_filter_kept": 0,
+          "raw_filter_kept": 33,
+          "added_daily_contracts": 33
+        },
+        "B": {
+          "old_filter_kept": 0,
+          "raw_filter_kept": 0,
+          "added_daily_contracts": 0
+        },
+        "FIG": {
+          "old_filter_kept": 0,
+          "raw_filter_kept": 0,
+          "added_daily_contracts": 0
+        }
+      }
+    },
+    {
+      "day": "2025-07-31",
+      "observed_contracts": 184063,
+      "old_filter_kept": 64437,
+      "raw_filter_kept": 69378,
+      "added_daily_contracts": 5634,
+      "removed_daily_contracts": 693,
+      "added_contracts_already_in_15m_archive": 5634,
+      "selected_symbols": {
+        "SPY": {
+          "old_filter_kept": 2018,
+          "raw_filter_kept": 2005,
+          "added_daily_contracts": 2
+        },
+        "IBKR": {
+          "old_filter_kept": 115,
+          "raw_filter_kept": 114,
+          "added_daily_contracts": 0
+        },
+        "B": {
+          "old_filter_kept": 78,
+          "raw_filter_kept": 75,
+          "added_daily_contracts": 1
+        },
+        "FIG": {
+          "old_filter_kept": 0,
+          "raw_filter_kept": 0,
+          "added_daily_contracts": 0
+        }
+      }
+    },
+    {
+      "day": "2026-03-31",
+      "observed_contracts": 210615,
+      "old_filter_kept": 72447,
+      "raw_filter_kept": 74151,
+      "added_daily_contracts": 2093,
+      "removed_daily_contracts": 389,
+      "added_contracts_already_in_15m_archive": 2093,
+      "selected_symbols": {
+        "SPY": {
+          "old_filter_kept": 2700,
+          "raw_filter_kept": 2702,
+          "added_daily_contracts": 2
+        },
+        "IBKR": {
+          "old_filter_kept": 139,
+          "raw_filter_kept": 139,
+          "added_daily_contracts": 0
+        },
+        "B": {
+          "old_filter_kept": 172,
+          "raw_filter_kept": 161,
+          "added_daily_contracts": 0
+        },
+        "FIG": {
+          "old_filter_kept": 91,
+          "raw_filter_kept": 91,
+          "added_daily_contracts": 0
+        }
+      }
+    },
+    {
+      "day": "2026-07-31",
+      "observed_contracts": 238324,
+      "old_filter_kept": 72857,
+      "raw_filter_kept": 72885,
+      "added_daily_contracts": 69,
+      "removed_daily_contracts": 41,
+      "added_contracts_already_in_15m_archive": 69,
+      "selected_symbols": {
+        "SPY": {
+          "old_filter_kept": 2788,
+          "raw_filter_kept": 2788,
+          "added_daily_contracts": 0
+        },
+        "IBKR": {
+          "old_filter_kept": 134,
+          "raw_filter_kept": 134,
+          "added_daily_contracts": 0
+        },
+        "B": {
+          "old_filter_kept": 132,
+          "raw_filter_kept": 132,
+          "added_daily_contracts": 0
+        },
+        "FIG": {
+          "old_filter_kept": 101,
+          "raw_filter_kept": 101,
+          "added_daily_contracts": 0
+        }
+      }
+    },
+    {
+      "day": "2026-08-24",
+      "observed_contracts": 227009,
+      "old_filter_kept": 80282,
+      "raw_filter_kept": 80267,
+      "added_daily_contracts": 1,
+      "removed_daily_contracts": 16,
+      "added_contracts_already_in_15m_archive": 1,
+      "selected_symbols": {
+        "SPY": {
+          "old_filter_kept": 2532,
+          "raw_filter_kept": 2532,
+          "added_daily_contracts": 0
+        },
+        "IBKR": {
+          "old_filter_kept": 125,
+          "raw_filter_kept": 125,
+          "added_daily_contracts": 0
+        },
+        "B": {
+          "old_filter_kept": 170,
+          "raw_filter_kept": 170,
+          "added_daily_contracts": 0
+        },
+        "FIG": {
+          "old_filter_kept": 132,
+          "raw_filter_kept": 132,
+          "added_daily_contracts": 0
+        }
+      }
+    }
+  ]
+}

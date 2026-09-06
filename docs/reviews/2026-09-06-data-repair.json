@@ -1,0 +1,157 @@
+{
+  "additional_repaired_warmup_day": "2024-07-31",
+  "adjusted_15m_rows": 6887003,
+  "all_observed_contract_scope_unchanged": true,
+  "all_observed_contracts": 5214222,
+  "auxiliary_raw_daily": {
+    "rows": 504,
+    "symbols": [
+      "BITF"
+    ]
+  },
+  "baseline_coverage": {
+    "documented_nontrading_sessions": {
+      "CLSK": [
+        "2024-11-08"
+      ]
+    },
+    "passed": true,
+    "unexpected_missing_sessions_by_symbol": {}
+  },
+  "baseline_partial_sessions": {
+    "interpretation": "Observed no-bar intervals are reported and preserved; no intraday bars or terminal histories were forward-filled.",
+    "symbol_sessions": 1596,
+    "symbols": 57
+  },
+  "baseline_sessions": 500,
+  "baseline_window": [
+    "2024-08-26",
+    "2026-08-24"
+  ],
+  "cache": "nn_meta/data_candidates/audit-repair-20260905-final/cache",
+  "calendar": {
+    "coverage_end": "2027-12-31",
+    "coverage_start": "2024-04-01",
+    "path": "nn_meta/data_candidates/audit-repair-20260905-final/cache/exchange_calendar.json",
+    "sessions": 943,
+    "sha256": "0dd7d43dae4e27d1598017e1bb55a338055167befa8118ad1d4754e1424e53d6"
+  },
+  "candidate": "audit-repair-20260905-final",
+  "context_rows": {
+    "daily": 266905,
+    "surface": 266905
+  },
+  "context_status": "refreshed_raw_spot",
+  "final_validation": {
+    "adopted_option_outputs_exact": true,
+    "candidate_flatfile_hashes_match_original": true,
+    "launcher_readiness": {
+      "campaign_launched": false,
+      "candidate_seal_valid": true,
+      "coverage": {
+        "missing_options": [],
+        "missing_underlying": [],
+        "option_days": 500,
+        "underlying_days": 500,
+        "window": [
+          "2024-08-26",
+          "2026-08-24"
+        ]
+      },
+      "data_cache": "/home/healy/Coding/HealysBacktester/nn_meta/data_candidates/audit-repair-20260905-final/cache",
+      "data_candidate": "audit-repair-20260905-final",
+      "fingerprint_sha256": "b17528378c44f5cbd6c7937a41ed2f7fe7365d68ec94b11e765789d686661fa0",
+      "fingerprinted_files": 123711
+    },
+    "tests": "67 passed in tests/test_underlying_cache_repair.py and tests/test_research_campaign.py"
+  },
+  "full_stock_history_coverage": {
+    "documented_nontrading_sessions": {
+      "CLSK": [
+        "2024-11-08"
+      ],
+      "SBET": [
+        "2024-04-05",
+        "2024-04-19"
+      ]
+    },
+    "passed": true,
+    "unexpected_missing_sessions_by_symbol": {}
+  },
+  "full_stock_partial_sessions": {
+    "interpretation": "Observed no-bar intervals are reported and preserved; no intraday bars or terminal histories were forward-filled.",
+    "symbol_sessions": 2266,
+    "symbols": 69
+  },
+  "full_stock_sessions": 602,
+  "limitations": [
+    "The candidate supplies repaired OHLCV and raw option-price context; quote/trade feature history and model integration are separate work.",
+    "Data sealing does not assert Pine chart-export parity, trained model quality, production rollout, or full-session live verification.",
+    "The bounded SPY+IBKR pilot and any later model campaign are launched separately by the coordinating agent."
+  ],
+  "option_daily_basis_sample_audit": "docs/reviews/2026-09-06-option-daily-basis-audit.json",
+  "option_daily_parts": 13,
+  "option_daily_rows_after_raw_spot_filter": 33597149,
+  "option_daily_rows_before_raw_spot_filter": 29064698,
+  "option_flatfile_days_preserved": 500,
+  "original_cache": "/home/healy/Coding/HealysBacktester/nn_meta/data_cache_v5",
+  "original_cache_preserved": true,
+  "original_off_session_rows_excluded": {
+    "baseline": 15692,
+    "full_history": 18557
+  },
+  "predecessor_issuer_rows_excluded_from_original": 3764,
+  "preview_command": "NN_META_DATA_CANDIDATE=audit-repair-20260905-final scripts/run_research_local.sh --campaign raw-options-20260906 --pool v6 --stage freeze --stage build --stage assemble --symbols SPY,IBKR --workers 2",
+  "raw_15m_rows": 6887003,
+  "raw_adjusted_timestamps_identical": true,
+  "repair_manifest_sha256": "1463af69ef956cea0829a6f0fc98464bc7a5ac77b4cc940236c28ae8dc78e05c",
+  "repaired_original_missing_baseline_days": [
+    "2025-03-31",
+    "2025-07-31",
+    "2026-03-31",
+    "2026-07-31",
+    "2026-08-24"
+  ],
+  "sealed_at_utc": "2026-09-06T04:45:21.435506+00:00",
+  "sealed_cache_digest": "489781bc546994ad1e433e8191bee093d9c99c9817f6f3ea74484ceb4b3fc04c",
+  "sealed_cache_files": 123471,
+  "status": "sealed_data_candidate_verified",
+  "stock_capture_window": [
+    "2024-04-01",
+    "2026-08-24"
+  ],
+  "stock_identity_exceptions": "data/stock_history_exceptions.json",
+  "stock_price_basis": {
+    "contract_selection_and_IV": "Separate Alpaca SIP adjustment=raw daily and 15m prices; exact raw spot required",
+    "technical_features": "Alpaca SIP adjustment=all, full fresh history for all 453 names"
+  },
+  "stock_symbols": 453,
+  "surface_rows": 266905,
+  "terminal_symbol_dates": {
+    "SATS": "2026-06-23",
+    "SAVA": "2026-03-10",
+    "SWTX": "2025-06-30",
+    "WBA": "2025-08-27",
+    "X": "2025-06-17"
+  },
+  "vendor_zero_volume_warmup_sessions": [
+    {
+      "adjusted_daily_volume": 0,
+      "date": "2024-04-05",
+      "feed": "sip",
+      "interpretation": "provider reports zero daily volume; no intraday bars synthesized",
+      "provider": "alpaca",
+      "raw_daily_volume": 0,
+      "symbol": "SBET"
+    },
+    {
+      "adjusted_daily_volume": 0,
+      "date": "2024-04-19",
+      "feed": "sip",
+      "interpretation": "provider reports zero daily volume; no intraday bars synthesized",
+      "provider": "alpaca",
+      "raw_daily_volume": 0,
+      "symbol": "SBET"
+    }
+  ]
+}

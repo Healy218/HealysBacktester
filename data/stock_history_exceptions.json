@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "observed_at_utc": "2026-09-06",
+  "identity_starts": {
+    "FIG": {
+      "date": "2025-07-31",
+      "reason": "Figma first public trading session; earlier same-ticker vendor bars are not Figma warmup.",
+      "source": "https://investor.figma.com/news-events/news/news-details/2025/Figma-Announces-Pricing-of-Initial-Public-Offering/default.aspx"
+    },
+    "BULL": {
+      "date": "2025-04-11",
+      "reason": "Webull began trading after business combination; predecessor SPAC bars are excluded from issuer warmup.",
+      "source": "https://www.sec.gov/Archives/edgar/data/1866364/000121390025030562/ea0237485-6k_webull.htm"
+    },
+    "USAR": {
+      "date": "2025-03-14",
+      "reason": "USA Rare Earth began trading after business combination; predecessor SPAC bars are excluded from issuer warmup.",
+      "source": "https://investors.usare.com/ir-services/investor-faqs"
+    }
+  },
+  "nontrading_sessions": {
+    "CLSK": {
+      "2024-11-08": {
+        "reason": "Nasdaq trading halt from November 7 through November 11; direct Alpaca SIP/all recheck returned zero bars.",
+        "source": "https://www.sec.gov/Archives/edgar/data/827876/000095017024127680/clsk-20241115.htm"
+      }
+    }
+  }
+}

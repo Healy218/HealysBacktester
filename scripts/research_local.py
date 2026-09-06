@@ -126,6 +126,17 @@ def require_coverage(config) -> dict:
     if (not report["option_days"] or not report["underlying_days"]
             or report["missing_options"] or report["missing_underlying"]):
         raise CampaignError("raw archive coverage gaps block campaign execution")
+    if getattr(config, "DATA_CANDIDATE", ""):
+        manifest_path = config.DATA_CACHE / "repair_manifest.json"
+        if not manifest_path.exists():
+            raise CampaignError("data candidate lacks a repair manifest")
+        manifest = json.loads(manifest_path.read_text())
+        if not manifest.get("coverage_result", {}).get("passed") or manifest.get("context_status") != "refreshed_raw_spot":
+            raise CampaignError("data candidate coverage or daily/surface context repair is incomplete")
+        if not manifest.get("options_daily_raw_filter_verified"):
+            raise CampaignError("data candidate option daily bars have not been rederived with raw stock spot")
+        if manifest.get("unresolved_model_gates"):
+            raise CampaignError("data candidate has unresolved model price-basis gates")
     return report
 
 
@@ -209,6 +220,20 @@ def input_fingerprint(config) -> dict:
     payload["sha256"] = hashlib.sha256(
         json.dumps(payload, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
     return payload
+
+
+def validate_candidate_seal(config, fingerprint: dict) -> None:
+    """Check repair claims against the same bytes bound to this campaign."""
+    if not getattr(config, "DATA_CANDIDATE", ""):
+        return
+    manifest = json.loads((config.DATA_CACHE / "repair_manifest.json").read_text())
+    expected = manifest.get("sealed_cache_sha256")
+    if not isinstance(expected, dict) or not expected:
+        raise CampaignError("data candidate is not sealed; finish data validation before launch")
+    current = {row["path"].removeprefix("cache/"): row["sha256"] for row in fingerprint["files"]
+               if row["path"].startswith("cache/") and row["path"] != "cache/repair_manifest.json"}
+    if current != expected:
+        raise CampaignError("sealed data candidate bytes or file list changed; repair and seal a new candidate")
 
 
 def command_plan(config, symbols: list[str], stages: list[str], folds: int) -> list[dict]:
@@ -297,11 +322,14 @@ def run_plan(config, symbols, plan, workers, report):
     base = safe_outputs(config)
     config.RUNS_DIR.mkdir(parents=True, exist_ok=True)
     with campaign_lock(config.RUNS_DIR / ".launcher.lock"):
+        fingerprint = input_fingerprint(config)
+        validate_candidate_seal(config, fingerprint)
         scope = {"campaign": config.CAMPAIGN, "pool": config.POOL, "symbols": symbols,
+                 "data_candidate": getattr(config, "DATA_CANDIDATE", ""),
                  "window": [config.WINDOW_START, config.WINDOW_END],
                  "strategies": config.PROPOSAL_STRATEGIES,
                  "feature_contract_version": CONTRACT_VERSION,
-                 "inputs": input_fingerprint(config)}
+                 "inputs": fingerprint}
         scope_path = base / "campaign_scope.json"
         if scope_path.exists() and json.loads(scope_path.read_text()) != scope:
             raise CampaignError("campaign scope changed (selection/source/raw inputs); choose a new campaign name")
@@ -313,6 +341,7 @@ def run_plan(config, symbols, plan, workers, report):
             folder.mkdir(parents=True, exist_ok=True)
         (config.RUNS_DIR / "coverage.json").write_text(json.dumps(report, indent=2) + "\n")
         environment = dict(os.environ, NN_META_POOL=config.POOL, NN_META_CAMPAIGN=config.CAMPAIGN)
+        environment["NN_META_DATA_CANDIDATE"] = getattr(config, "DATA_CANDIDATE", "")
         for stage_number, stage in enumerate(plan):
             # Earlier stages or another process may have altered shared raw
             # caches/code. Recheck before any following stage can consume them.
@@ -337,6 +366,8 @@ def run_plan(config, symbols, plan, workers, report):
             else:
                 run_command(stage["commands"][0], environment=environment, cwd=config.ROOT.parent,
                             log=log_dir / "stage.log")
+            if input_fingerprint(config) != scope["inputs"]:
+                raise CampaignError(f"campaign inputs changed during {label}; outputs are ineligible for reuse")
             print(f"Completed {label}", flush=True)
 
 
@@ -352,10 +383,14 @@ def main(argv=None) -> int:
         print(f"Required preflight: two-way option/underlying day coverage "
               f"{config.WINDOW_START} .. {config.WINDOW_END}; "
               "does not detect sessions absent from both archives.")
+        candidate = getattr(config, "DATA_CANDIDATE", "")
+        selector = [f"NN_META_DATA_CANDIDATE={candidate}"] if candidate else []
+        if candidate:
+            print(f"Data candidate: {config.DATA_CACHE}; calendar, raw-price and derived-context gates required.")
         for stage in plan:
             for command in stage["commands"] + ([stage["merge"]] if stage["merge"] else []):
                 print(shlex.join(["env", f"NN_META_POOL={args.pool}",
-                                  f"NN_META_CAMPAIGN={args.campaign}", *command]))
+                                  f"NN_META_CAMPAIGN={args.campaign}", *selector, *command]))
         if not args.run:
             print("Preview only. --run executes exactly the selected stages after preflight.")
             return 0
