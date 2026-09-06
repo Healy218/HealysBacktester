@@ -10,6 +10,7 @@ which is what options/execution.py compares against.
 Run:  python -m nn_meta.download_data
 """
 import pandas as pd
+import numbers
 
 try:
     from dotenv import load_dotenv
@@ -45,17 +46,29 @@ def filter_rth(df: pd.DataFrame) -> pd.DataFrame:
 def _load_chunked(sym: str, start: str, end: str, months: int = 4) -> pd.DataFrame:
     """Fetch in date chunks: the Alpaca loader returns a single 10k-bar page,
     which truncates a multi-year 15m request (~64 extended-hours bars/day ≈
-    5 months per page). 4-month chunks stay well under the cap."""
+    5 months per page). 4-month chunks stay well under the cap.
+
+    The public date window is inclusive. Vendor end timestamps denote
+    midnight, so adjacent requests must meet at the same boundary; subtracting
+    one day before each request drops the entire last session of the chunk.
+    Clip each response to [lo, hi) in case the provider includes its endpoint.
+    """
+    if isinstance(months, bool) or not isinstance(months, numbers.Integral) or months < 1:
+        raise ValueError("months must be a positive integer")
     frames = []
-    lo = pd.Timestamp(start)
-    hard_end = pd.Timestamp(end)
-    while lo <= hard_end:
-        hi = min(lo + pd.DateOffset(months=months) - pd.Timedelta(days=1), hard_end)
+    lo = pd.Timestamp(start).normalize()
+    hard_end = pd.Timestamp(end).normalize() + pd.Timedelta(days=1)
+    if lo >= hard_end:
+        raise ValueError("start must not follow end")
+    while lo < hard_end:
+        hi = min(lo + pd.DateOffset(months=int(months)), hard_end)
         chunk = vbt_data_loader.load_price_data_smart(
             sym, lo.date().isoformat(), hi.date().isoformat(), config.INTERVAL)
         if chunk is not None and not chunk.empty:
-            frames.append(chunk)
-        lo = hi + pd.Timedelta(days=1)
+            idx = pd.DatetimeIndex(chunk.index)
+            compare = idx.tz_convert("UTC").tz_localize(None) if idx.tz is not None else idx
+            frames.append(chunk[(compare >= lo) & (compare < hi)])
+        lo = hi
     if not frames:
         return pd.DataFrame(columns=_OHLCV)
     out = pd.concat(frames)
