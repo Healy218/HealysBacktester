@@ -67,3 +67,19 @@ are refused. A dry-run does not acknowledge production notifications.
 After deploying the causal-feature correction, existing specs and bundles
 must be rebuilt and validated under the current feature contract before
 promotion; installing a timer is not a model-validation step.
+
+
+### v6 campaign progress (installed September 6, 2026)
+
+`healys-v6-progress.service` and `.timer` are **user** units for the exact
+`v6-local-20260906` campaign. They report to the existing Telegram destination
+and `logs/v6-progress/v6-local-20260906/` every half hour (:00/:30).
+User linger was verified enabled. Persistent scheduling catches a missed
+report after reboot. The observer remains active during failures and stage
+gaps, and after training until explicitly stopped; it never launches jobs.
+
+Inspect: `systemctl --user status healys-v6-progress.timer` and
+`journalctl --user -u healys-v6-progress.service`.
+Stop after the prelaunch campaign: `systemctl --user disable --now healys-v6-progress.timer`.
+The first Telegram delivery was verified. Failed deliveries fail the service
+visibly, retain local reports and retry at the next scheduled interval.

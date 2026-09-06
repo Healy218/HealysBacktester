@@ -1,0 +1,11 @@
+[Unit]
+Description=Report v6 preparation, freeze, build and training every 30 minutes
+
+[Timer]
+OnCalendar=*-*-* *:00,30:00
+Persistent=true
+AccuracySec=1s
+Unit=healys-v6-progress.service
+
+[Install]
+WantedBy=timers.target

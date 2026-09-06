@@ -6,6 +6,26 @@ both exact commands from the saved resume.json with approved host network
 access. Local research assumptions, all TV13/tick scope and deferred external
 comparison remain unchanged.
 
+## Persistent progress watcher
+
+User requested 30-minute updates throughout preparation/freeze/build/training.
+Installed/enabled user systemd healys-v6-progress.timer and matching service;
+reports at :00/:30 local time, persistent across reboot (user linger=yes).
+First host report delivered successfully to the existing Telegram destination
+at 12:12 CDT. Local snapshots/history: logs/v6-progress/v6-local-20260906/.
+Next scheduled report at installation: September 6, 12:30 CDT.
+
+Watcher binds exact campaign/pool processes, records PID/start identity, counts
+campaign artifacts and reports idle/failed/no-progress states. It remains active
+across stage gaps and after completion until explicitly disabled. It does not
+launch later stages or establish model admission. Current supervisor launches
+freeze only; build/evaluate/finalize still need their appropriate stage launches.
+Watcher code lives in scripts/ outside the current inventory source hash set;
+no causal source/input changes. Three focused watcher tests passed.
+
+First host snapshot: 260/453 inventories, 3/453 tick stores, 6,108 raw capture
+batches; inventory and preparation supervisors both active. Freeze not started.
+
 ## Active jobs and evidence
 
 Durable root: nn_meta/expanded_inputs/v6-local-20260906/
@@ -26,8 +46,7 @@ Durable root: nn_meta/expanded_inputs/v6-local-20260906/
 
 Do not change causal source/config/input files while these jobs run: provenance
 checks reject drift. Preserve incomplete attempts and historical roots. The
-reboot checkpoints and earlier logs remain intact. No code changes or new
-tests were needed for this operational resume. Prior full regression below
+reboot checkpoints and earlier logs remain intact. The initial operational resume needed no causal code changes. Prior full regression below
 applies to the unchanged source. Original untracked artifacts_v6/ is untouched.
 
 ## Implemented and validated
