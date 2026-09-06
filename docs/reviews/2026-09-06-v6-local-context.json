@@ -1,0 +1,65 @@
+{
+  "schema": "v6-local-context-evidence-v1",
+  "planning_inputs_path": "/home/healy/Coding/HealysBacktester/nn_meta/expanded_inputs/v6-local-20260906/context-r2/planning-inputs.json",
+  "planning_inputs_sha256": "21fe4e672af1f243e077bead7cb87b9626b24ca2e9921e3f42a2f718111b160e",
+  "symbols": 453,
+  "external_comparison": "deferred_by_user",
+  "external_context_verified": false,
+  "local_context_policy": {
+    "schema": "local-calendar-context-v1",
+    "two_session_anchor": "2024-04-01",
+    "grouping": "floor(calendar_session_ordinal / 2)",
+    "vwap_reset": "first actual bar of each New York date",
+    "minimum_tick_assumption": 0.01,
+    "missing_bars": "not synthesized",
+    "external_context_verified": false,
+    "source_inputs_sha256": {
+      "/home/healy/Coding/HealysBacktester/nn_meta/data_candidates/audit-repair-20260905-final/cache/underlying_15m.parquet": "7a21c2fbfda76ec88bd8e0cc6a745abab86288656c24c5643f15512bc8774b2f",
+      "/home/healy/Coding/HealysBacktester/nn_meta/data_candidates/audit-repair-20260905-final/cache/exchange_calendar.json": "0dd7d43dae4e27d1598017e1bb55a338055167befa8118ad1d4754e1424e53d6",
+      "/home/healy/Coding/HealysBacktester/nn_meta/expanded_inputs/v6-local-20260906/tick-policy.json": "4c983b8063295c7cb1bfae7d8777ddeb23789fec3f42bcec3ebc7a8763c1457d"
+    }
+  },
+  "ict_session_gaps": {
+    "MULL": {
+      "ASIA": 0,
+      "LNDN": 0,
+      "NYAM": 0,
+      "NYPM": 1
+    },
+    "SBET": {
+      "ASIA": 0,
+      "LNDN": 0,
+      "NYAM": 1,
+      "NYPM": 6
+    }
+  },
+  "real_feature_matrix_checks": [
+    {
+      "symbol": "SPY",
+      "bars": 15580,
+      "columns": 96,
+      "nonmissing_cells": 1438051
+    },
+    {
+      "symbol": "MULL",
+      "bars": 10413,
+      "columns": 96,
+      "nonmissing_cells": 960805
+    },
+    {
+      "symbol": "SBET",
+      "bars": 12351,
+      "columns": 96,
+      "nonmissing_cells": 1138158
+    }
+  ],
+  "historical_tick_access": {
+    "contract": "AA240830P00034500",
+    "start": "2024-08-27T18:30:00Z",
+    "end": "2024-08-27T18:45:00Z",
+    "quotes": 309,
+    "trades": 1,
+    "capture_path": "/home/healy/Coding/HealysBacktester/nn_meta/option_tick_captures/v6-local-first-required-20260906-network"
+  },
+  "freeze_started": false
+}

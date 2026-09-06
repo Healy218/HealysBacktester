@@ -10,7 +10,10 @@ all thirteen selected TradingView indicator scopes and quote/trade features.
 **Latest instruction:** defer the external TradingView comparison, keeping all
 thirteen groups. The implemented opt-in unverified research contract records
 that choice. Actual per-symbol context and complete historical tick coverage
-are still missing; local calendar/VWAP assumptions are awaiting clarification.
+remain required. The user selected Option 1, authorizing explicit local
+calendar/VWAP research assumptions. Context is now sealed for all 453 symbols;
+the request inventory and tick captures were started, then paused for the
+user's reboot. Resume instructions and durable checkpoints are in HANDOFF.md.
 The existing-family SPY/IBKR pilot is now stopped and preserved. Do not launch a full
 universe freeze while those additions are still missing; complete their
 historical coverage and feature integration first. External comparison is

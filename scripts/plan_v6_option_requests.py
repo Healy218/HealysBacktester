@@ -98,6 +98,7 @@ def plan_symbol(symbol, bars, raw_close, selector, *, weekly_symbols):
     train_limit = pd.Timestamp(config.TRAIN_END) + pd.Timedelta(days=1)
     cap = config.MAX_SIGNALS_PER_NAME
     for strategy in config.PROPOSAL_STRATEGIES:
+        print(json.dumps({"event": "planning_family", "symbol": symbol, "strategy": strategy}), flush=True)
         sweep = baseline.sweep_train_params(symbol, bars, strategy,
                                            config.TRAIN_START, config.TRAIN_END)
         if sweep is None:
@@ -168,7 +169,7 @@ def _root_aliases(requests):
 
 
 def _config_record():
-    names = ("POOL", "CAMPAIGN", "V6_EXPANDED", "V6_INPUTS_SHA256", "INTERVAL",
+    names = ("POOL", "CAMPAIGN", "V6_EXPANDED", "V6_PARITY_POLICY", "V6_INPUTS_SHA256", "INTERVAL",
              "TRAIN_START", "TRAIN_END", "WINDOW_START", "WINDOW_END", "PROPOSAL_STRATEGIES",
              "SWEEP_GRIDS", "SIM_CONFIG", "EXEC_CONFIG", "MIN_TRAIN_TRADES",
              "TRADES_PER_DAY_CEILING", "MAX_SIGNALS_PER_NAME", "DTE_GRID", "DTE_GRID_WEEKLY",

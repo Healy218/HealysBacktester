@@ -30,7 +30,7 @@ DEFAULT_SESSIONS = {
     "NYAM": "0930-1100", "NYPM": "1330-1600",
 }
 
-_SESSION_BOOLS = ("in_session", "session_start", "session_end", "partial_session", "break_high",
+_SESSION_BOOLS = ("in_session", "session_start", "session_end", "session_gap", "partial_session", "break_high",
                   "break_low", "alert_high", "alert_low", "midpoint_touch", "pivot_high_valid",
                   "pivot_low_valid")
 _SESSION_INTS = ("completed_ranges", "high_break_count", "low_break_count", "pivot_total",
@@ -149,10 +149,12 @@ class _SessionState:
 
 def _session_step(state, window, local, stamp, available, prices, cutoff, *,
                   max_days, data_lookback, range_measure, show_pivots,
-                  show_midpoints, use_alerts, extend_which, multipliers, minimum_tick):
+                  show_midpoints, use_alerts, extend_which, multipliers, minimum_tick,
+                  strict_session_coverage=True):
     opn, high, low, close = prices
     inside, instance = window.locate(local)
-    if inside and state.previous_inside and instance != state.previous_instance:
+    gap = bool(inside and state.previous_inside and instance != state.previous_instance)
+    if gap and strict_session_coverage:
         raise ValueError("missing outside-session bars across a day boundary; "
                          "Pine would merge distinct session instances")
     started, ended = inside and not state.previous_inside, state.previous_inside and not inside
@@ -219,7 +221,7 @@ def _session_step(state, window, local, stamp, available, prices, cutoff, *,
         (float(np.median(state.ranges)) if state.ranges else np.nan) if (
             range_measure == "Median") else state.sd_value)
     result = {
-        "in_session": inside, "session_start": started, "session_end": ended,
+        "in_session": inside, "session_start": started, "session_end": ended, "session_gap": gap,
         "observed_start": state.observed_start, "partial_session": state.partial_session,
         "current_high": state.high, "current_low": state.low,
         "session_open": state.session_open, "current_range": state.high - state.low,
@@ -324,6 +326,7 @@ def ict_killzones(
     level_multipliers: tuple[float, ...] = (), minimum_tick: float = .01,
     opening_times: tuple[str, ...] = ("0930", "1200", "1600"),
     period_changes: pd.DataFrame | None = None, as_of: pd.Timestamp | None = None,
+    strict_session_coverage: bool = True,
 ) -> pd.DataFrame:
     """Return session/pivot/level features for completed, bar-open-indexed OHLC.
 
@@ -337,7 +340,9 @@ def ict_killzones(
     flags for any of D/W/M, aligned to the bars. Their exchange calendar is not
     inferred from the display timezone. No D/W/M features are emitted without
     these required inputs. Custom sessions must align to bar boundaries. Gaps
-    that hide a session reset raise instead of inventing missing bars/resets.
+    that hide a session reset raise by default. Explicit local research can set
+    strict_session_coverage=False to retain literal membership transitions and
+    expose session_gap, without synthesizing bars or resets.
     """
     validate_bars(bars)
     if not isinstance(bars.index, pd.DatetimeIndex) or bars.index.tz is None:
@@ -353,7 +358,7 @@ def ict_killzones(
     if extend_which not in ("Most Recent", "All"):
         raise ValueError("extend_which must be Most Recent or All")
     for name, value in {"show_pivots": show_pivots, "show_midpoints": show_midpoints,
-                        "use_alerts": use_alerts}.items():
+                        "use_alerts": use_alerts, "strict_session_coverage": strict_session_coverage}.items():
         if not isinstance(value, bool):
             raise ValueError(f"{name} must be boolean")
     level_multipliers = tuple(float(value) for value in level_multipliers)
@@ -413,7 +418,7 @@ def ict_killzones(
                                    range_measure=range_measure, show_pivots=show_pivots,
                                    show_midpoints=show_midpoints, use_alerts=use_alerts,
                                    extend_which=extend_which, multipliers=level_multipliers,
-                                   minimum_tick=minimum_tick)
+                                   minimum_tick=minimum_tick, strict_session_coverage=strict_session_coverage)
             row.update({f"{name}_{key}": value for key, value in values.items()})
         for time, minute in opening_minutes.items():
             member = local_stamp.hour * 60 + local_stamp.minute == minute

@@ -54,6 +54,22 @@ def assert_frames_equal(left, right):
             pd.testing.assert_frame_equal(a, b, check_exact=True)
 
 
+def test_baseline_naive_utc_adapter_preserves_expanded_events():
+    bars, context = data()
+    bars.index = bars.index.tz_convert("UTC")
+    context["timeframe_flags"].index = context["timeframe_flags"].index.tz_convert("UTC")
+    bars.attrs[tv.CONTEXT_ATTRIBUTE] = context
+    expected = proposals.sweep_signals("tv_gaussian", bars)
+    naive = bars.copy()
+    naive.index = naive.index.tz_localize(None)
+    actual = proposals.sweep_signals("tv_gaussian", naive)
+    for left, right in zip(actual, expected):
+        if left is not None:
+            pd.testing.assert_frame_equal(left, right.tz_localize(None))
+    assert naive.index.tz is None
+    assert naive.attrs[tv.CONTEXT_ATTRIBUTE]["timeframe_flags"].index.tz is not None
+
+
 @pytest.mark.parametrize("strategy", tv.STRATEGIES)
 def test_fixed_default_events_match_direct_source_outputs(source_outputs, strategy):
     bars, context, raw = source_outputs

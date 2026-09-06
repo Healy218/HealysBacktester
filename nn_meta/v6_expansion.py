@@ -99,6 +99,8 @@ class ExpandedInputs:
             self.bound_files = dict(self.parity["input_files"])
             self.bound_files.update(self.parity["verification_runtime_sha256"])
         self.bound_files[str(self.path)] = self.digest
+        for record in doc.get("context_references", []):
+            self.bound_files[str(self.reference(record))] = record["sha256"]
         self._contexts = {}
         self._matrices = {}
         self.assert_unchanged()

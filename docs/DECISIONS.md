@@ -702,3 +702,18 @@ This supersedes the external-comparison prerequisite for the research run.
 Per-symbol 2D/VWAP context and historical tick inputs still must exist. Asked
 whether to use explicit local research assumptions for the missing context;
 that is a different choice from skipping output comparison.
+
+### 2026-09-06 — Option 1 local context and full tick scope
+
+The user selected Option 1, authorizing explicit local calendar/VWAP assumptions
+while keeping every TV13 and option-tick feature. Two-session groups use the
+retained calendar anchored on 2024-04-01; daily VWAP resets use New York dates;
+minimum tick is a fixed 0.01 research assumption. No missing bars are inserted.
+The local_research policy preserves observed membership transitions where
+sparse history conceals ICT boundaries. Diagnostics identify one NYPM gap for
+MULL and one NYAM/six NYPM gaps for SBET. Strict modes still reject these cases.
+
+Real inventory execution exposed and fixed pandas rich-attrs propagation in
+legacy strategy arithmetic and the naive-UTC/aware-UTC boundary between baseline
+and expanded proposal wrappers. These fixes preserve caller data and event
+timestamps; regression tests cover both. External parity is still unverified.

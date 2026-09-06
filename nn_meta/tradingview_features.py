@@ -189,8 +189,8 @@ def validate_feature_inputs(bars, *, minimum_tick, timeframe_flags,
     positive("minimum_tick", minimum_tick)
     if isinstance(minimum_tick, (bool, np.bool_)):
         raise ValueError("minimum_tick must be numeric, not boolean")
-    if session_policy not in ("strict", "source_literal"):
-        raise ValueError("session_policy must be strict or source_literal")
+    if session_policy not in ("strict", "source_literal", "local_research"):
+        raise ValueError("session_policy must be strict, source_literal or local_research")
     flag_columns = {"htf_change", "available_at"} | ({"vwap_reset"} if vwap_observations is None else set())
     if (not isinstance(timeframe_flags, pd.DataFrame) or not timeframe_flags.index.equals(bars.index)
             or not timeframe_flags.columns.is_unique
@@ -231,11 +231,13 @@ def validate_feature_inputs(bars, *, minimum_tick, timeframe_flags,
     session_gaps = _gaps(bars.index, "0930-1600")
     if session_policy == "strict" and session_gaps.any():
         raise ValueError("missing outside-session bars conceal Setup ORB reset; explicitly select source_literal for matching RTH chart semantics")
-    for name, session in DEFAULT_SESSIONS.items():
-        if _gaps(bars.index, session).any():
+    ict_gaps = {name: int(_gaps(bars.index, session).sum()) for name, session in DEFAULT_SESSIONS.items()}
+    for name, count in ict_gaps.items():
+        if count and session_policy != "local_research":
             raise ValueError(f"missing outside-session bars conceal ICT {name} reset; unsupported input coverage")
     return {"dependencies_validated": True, "bar_count": len(bars),
             "available_at": available, "setup_session_gap_count": int(session_gaps.sum()),
+            "ict_session_gap_count": ict_gaps,
             "session_policy": session_policy, "external_context_verified": False,
             "vwap_mode": "observed" if vwap_observations is not None else "reset_flags"}
 
@@ -256,6 +258,8 @@ def _settings(catalog, minimum_tick, session_policy):
         parameters = deepcopy(declaration["defaults"])
         if alias in ("uptrick", "ict"):
             parameters["minimum_tick"] = float(minimum_tick)
+        if alias == "ict" and session_policy == "local_research":
+            parameters["strict_session_coverage"] = False
         if alias == "amd":
             parameters["config"]["minimum_tick"] = float(minimum_tick)
         if alias == "setup":
@@ -271,7 +275,7 @@ def feature_schema(*, minimum_tick, session_policy="strict", vwap_mode="reset_fl
     positive("minimum_tick", minimum_tick)
     if isinstance(minimum_tick, (bool, np.bool_)):
         raise ValueError("minimum_tick must not be boolean")
-    if session_policy not in ("strict", "source_literal"):
+    if session_policy not in ("strict", "source_literal", "local_research"):
         raise ValueError("unknown session policy")
     if vwap_mode not in ("reset_flags", "observed"):
         raise ValueError("vwap_mode must be reset_flags or observed")

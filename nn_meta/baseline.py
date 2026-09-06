@@ -110,11 +110,11 @@ def sweep_train_params(symbol: str, bars: pd.DataFrame, strategy: str,
     portfolio column (no label parsing)."""
     bars_hist = bars.loc[:train_end]
     price = bars.loc[train_start:train_end]
-    assert price.index.max() <= pd.Timestamp(train_end) + pd.Timedelta(days=1), \
-        "sweep touched data beyond train_end"
     if len(price) < 26 * 60:      # < ~60 trading days of 15m bars
         logger.warning(f"[{_TAG}] {symbol}: only {len(price)} train bars — skipping")
         return None
+    assert price.index.max() <= pd.Timestamp(train_end) + pd.Timedelta(days=1), \
+        "sweep touched data beyond train_end"
 
     entries, exits, s_ent, s_ext = proposals.sweep_signals(strategy, bars_hist)
     result = simulate_and_rank(

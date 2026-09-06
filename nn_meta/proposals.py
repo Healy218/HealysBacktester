@@ -62,9 +62,17 @@ def sweep_signals(strategy: str, bars: pd.DataFrame):
     if strategy.startswith("tv_") and strategy != "tv_rating":
         from nn_meta import tradingview_proposals
         if strategy in tradingview_proposals.STRATEGIES:
-            return tradingview_proposals.sweep_signals(
-                strategy, bars, context=bars.attrs.get(tradingview_proposals.CONTEXT_ATTRIBUTE),
+            frames = tradingview_proposals.sweep_signals(
+                strategy, bars.tz_localize("UTC") if bars.index.tz is None else bars,
+                context=bars.attrs.get(tradingview_proposals.CONTEXT_ATTRIBUTE),
                 enable_shorting=config.ENABLE_SHORTING)
+            return tuple(frame.set_axis(bars.index) if frame is not None else None for frame in frames)
+    # Legacy generators use pandas concat/arithmetic. Rich context contains
+    # DataFrames whose equality cannot be used by pandas attrs propagation.
+    # Only the expanded wrappers above consume it; keep the caller intact.
+    if "v6_tradingview_context" in bars.attrs:
+        bars = bars.copy(deep=False)
+        bars.attrs = {}
     g = config.SWEEP_GRIDS[strategy]
     close = bars["Close"]
     short = config.ENABLE_SHORTING
@@ -167,9 +175,14 @@ def single_signals(strategy: str, bars: pd.DataFrame, params: dict):
     if strategy.startswith("tv_") and strategy != "tv_rating":
         from nn_meta import tradingview_proposals
         if strategy in tradingview_proposals.STRATEGIES:
-            return tradingview_proposals.single_signals(
-                strategy, bars, params, context=bars.attrs.get(tradingview_proposals.CONTEXT_ATTRIBUTE),
+            frames = tradingview_proposals.single_signals(
+                strategy, bars.tz_localize("UTC") if bars.index.tz is None else bars, params,
+                context=bars.attrs.get(tradingview_proposals.CONTEXT_ATTRIBUTE),
                 enable_shorting=config.ENABLE_SHORTING)
+            return tuple(frame.set_axis(bars.index) if frame is not None else None for frame in frames)
+    if "v6_tradingview_context" in bars.attrs:
+        bars = bars.copy(deep=False)
+        bars.attrs = {}
     close = bars["Close"]
     short = config.ENABLE_SHORTING
     p = params

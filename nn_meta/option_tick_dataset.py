@@ -238,7 +238,7 @@ def _request(record, aliases):
 
 
 def create_task_manifest(requests, *, selection_reference_paths, feature_policy,
-                         root_aliases=None, output_path=None):
+                         root_aliases=None, output_path=None, allow_empty=False):
     """Deduplicate shared decisions, bind evidence, and freeze required coverage.
 
     References must describe pre-decision raw spot/chain selection. A hash
@@ -265,13 +265,17 @@ def create_task_manifest(requests, *, selection_reference_paths, feature_policy,
             req["selection_contexts"] = sorted({_hash(c): c for c in
                 req["selection_contexts"] + prior["selection_contexts"]}.values(), key=_hash)
         merged[req["request_id"]] = req
-    if not merged:
+    if not isinstance(allow_empty, bool):
+        raise TickDataError("allow_empty must be an explicit boolean")
+    if not merged and not allow_empty:
         raise TickDataError("task must contain explicit decision requests")
     task = {"schema": SCHEMA, "selection_basis": "pre_decision_raw_spot_and_chain",
             "selection_references": references, "root_aliases": aliases,
             "feature_policy": feature_policy, "implementation": implementation_identity(),
             "requests": sorted(merged.values(), key=lambda r: r["request_id"]),
             "numeric_features": list(NUMERIC_FEATURES), "model_admission": False}
+    if not merged:
+        task["empty_selection"] = True
     task["task_sha256"] = _hash(task)
     if output_path is not None:
         path = _path(output_path)
@@ -293,7 +297,8 @@ def _verify_task(task):
     _verify_policy(task.get("feature_policy"))
     rebuilt = create_task_manifest(task["requests"],
         selection_reference_paths=[r["path"] for r in task["selection_references"]],
-        feature_policy=task["feature_policy"], root_aliases=task.get("root_aliases"))
+        feature_policy=task["feature_policy"], root_aliases=task.get("root_aliases"),
+        allow_empty=task.get("empty_selection", False))
     if task != rebuilt:
         raise TickDataError("task metadata or request inventory is inconsistent")
 

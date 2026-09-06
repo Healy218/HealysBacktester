@@ -53,6 +53,42 @@ capture/review attestations do not establish authenticated external origin.
 
 ## Ordered completion
 
+### Authorized local research path
+
+The user selected Option 1: retain all thirteen groups and tick features, use
+explicit local context assumptions, and defer external comparison. The context
+builder is `scripts.prepare_v6_local_context`; it uses actual OHLCV without
+inserting bars. The retained calendar begins April 1, 2024; consecutive pairs
+of calendar sessions define 2D groups, including sessions absent from a symbol's
+history. VWAP resets at the first actual bar of each New York trading date.
+Minimum tick is an explicit fixed research parameter (0.01 in this run), not
+verified exchange metadata. `local_research` session policy retains literal
+Setup/ICT membership transitions and records concealed ICT session gaps;
+the strict and source_literal policies keep their previous ICT refusal.
+
+```bash
+./venv/bin/python -m scripts.prepare_v6_local_context \
+  --bars <candidate-cache>/underlying_15m.parquet \
+  --calendar <candidate-cache>/exchange_calendar.json \
+  --tick-policy <retained-policy.json> --minimum-tick 0.01 \
+  --output <fresh-context-directory> --run
+```
+
+The result is a separately hashed planning manifest and per-symbol context
+files. It contains no tick stores. With the expanded/deferred environment and
+that manifest set, run the full inventory in bounded symbol processes:
+
+```bash
+./venv/bin/python -m scripts.run_v6_request_inventory \
+  --output <fresh-inventory-directory> --workers 2 --run
+```
+
+Completed symbols retain actual source/config/input provenance. Resuming
+rechecks that provenance and file hashes; failed outputs are not accepted as
+complete. Source changes require a fresh inventory root. The inventory starts
+no downloads and is not the baseline freeze. Seal a new final manifest only
+after full tick coverage exists.
+
 The capture intake CLI generates the current source-default checklist and an
 explicitly unreviewed pack. It does not generate chart values or approve reviews:
 
