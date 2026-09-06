@@ -175,6 +175,17 @@ class HybridCachedProvider(OptionsDataProvider):
         return self._live
 
     # ── chains ───────────────────────────────────────────────────────────────
+    # This capability means as_of filters the observed catalogue by life_start.
+    # It does not assert an intraday listing clock; expanded research lags a date.
+    point_in_time_chain = True
+
+    def historical_chain_member(self, underlying, occ, as_of):
+        """Bind renamed OCC roots to explicit prior-date universe metadata."""
+        u = self._get_slice(underlying)
+        stamp = pd.Timestamp(_to_date(as_of))
+        return bool(((u["ticker"] == occ) & (u["life_start"] <= stamp)
+                     & (u["expiration"] >= stamp)).any())
+
     def get_chain(self, underlying, *, right=None, expiration_gte=None,
                   expiration_lte=None, strike_gte=None, strike_lte=None,
                   as_of=None) -> list[OptionContract]:

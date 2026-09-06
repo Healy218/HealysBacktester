@@ -73,6 +73,12 @@ class Execution:
         # (entry at the signal bar's own open, ~one bar optimistic).
         self.fill_same_bar = bool(options_config.get("FILL_SAME_BAR", False))
         self.require_raw_spot = bool(options_config.get("REQUIRE_RAW_SPOT", False))
+        self.decision_selector = None
+        if options_config.get("DECISION_CHAIN_POLICY") is not None:
+            from nn_meta.decision_contracts import DecisionContractSelector, POLICY_VERSION
+            if options_config["DECISION_CHAIN_POLICY"] != POLICY_VERSION:
+                raise ValueError("unknown decision-time option selection policy")
+            self.decision_selector = DecisionContractSelector(provider, moneyness=self.moneyness)
         self._chain_cache: dict = {}
         self._bars_cache: dict = {}
         self._bars_windows: dict = {}
@@ -99,6 +105,10 @@ class Execution:
 
     def select(self, as_of: date, right: str, spot: float, target_dte: int, *, spot_basis=None):
         contract_selector.validate_spot_basis(spot, spot_basis, require_raw=self.require_raw_spot)
+        if self.decision_selector is not None:
+            contract_selector.validate_spot_basis(spot, spot_basis, require_raw=True)
+            return self.decision_selector.select(self.symbol, as_of=as_of, right=right,
+                                                  raw_spot=spot, target_dte=target_dte)
         key = (as_of, right, target_dte)
         if key not in self._chain_cache:
             self._chain_cache[key] = self.provider.get_chain(
