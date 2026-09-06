@@ -1,0 +1,109 @@
+{
+  "group": "profiles",
+  "adaptation_recorded_at_utc": "2026-09-06T03:19:18.926748+00:00",
+  "source_origin": "Pinned official exact public revisions from structure_sources.json; raw source bytes unchanged.",
+  "parity_status": "Source-backed local features; exported TradingView fixtures pending",
+  "scripts": [
+    {
+      "public_id": "I8HrQVRv",
+      "name": "Structural Liquidity & POC Matrix [BigBeluga]",
+      "author": "BigBeluga",
+      "publication_version": 1,
+      "pine_id": "PUB;95222effbc4441e38fcef15d270aaf22",
+      "source_url": "https://www.tradingview.com/script/I8HrQVRv-Structural-Liquidity-POC-Matrix-BigBeluga/",
+      "source_file": "I8HrQVRv.pine",
+      "sha256": "5aec4ed35a84133ab417a25f6ce3778e4fde4d3812218a9f6d40b6c876f5da41",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B95222effbc4441e38fcef15d270aaf22/1",
+      "returned_version": "1.0",
+      "script_access": "open_no_auth",
+      "license": "CC-BY-NC-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_verified_from_source_header": true,
+      "imports": [],
+      "implementation_module": "v3/tv_liquidity_poc.py",
+      "feature_function": "v3.tv_liquidity_poc.structural_liquidity_poc",
+      "signal_wrapper": null,
+      "defaults": {
+        "liquidity_length": 100,
+        "fade_liquidity": 100,
+        "show_poc": true,
+        "bar_minutes": 15,
+        "as_of": null,
+        "include_bins": false,
+        "max_profile_bins": 100000
+      },
+      "port_scope": "Liquidity top/bottom/count state, rolling-extreme matches, sweep-label and anchor events, persistent profile bounds/origins, causal last-bar bins and POC.",
+      "input_contract": "Finite repository OHLC, finite nonnegative Volume, unique increasing timezone-aware index of bar opens; explicit duration and optional as_of enforce completed-bar availability. OHLC+nonnegative Volume. ATR100*.2 bin spacing; full volume allocated by close to one bin; exclude out-of-range closes without clamping.",
+      "state_contract": "Source profile drawing is barstate.islast only; every historical row is a completed-prefix last-bar snapshot. Preserve counter increment/fade/anchor/sweep order and na comparisons. A price-change sweep is not a trade entry.",
+      "availability_contract": "Every feature row uses bar-close available_at; origin and drawing indices are metadata only. Historical profile states are immutable causal snapshots.",
+      "fixture_edges_pending": [
+        "ATR warmup/zero ATR do not create a profile. All-zero bins retain the source first-maximum mathematical POC but report unusable profile. Drawing widths divide by zero there; graphics omitted.",
+        "Exported TradingView numerical/state fixtures on identical data/feed, timestamp and calculation-origin inputs.",
+        "Pine stdev/ATR seeding and float comparison/bin-floor boundaries."
+      ],
+      "omissions": [
+        "Chart graphics/colors and width rendering",
+        "No invented entry/exit policy",
+        "No active pool registration"
+      ],
+      "admission_status": "feature-only; pending exported TradingView fixtures; no active-pool registration",
+      "required_runtime_helpers": [
+        "v3/pine_compat.py",
+        "v3/_tv_trend_support.py",
+        "v3/_tv_profile_support.py"
+      ]
+    },
+    {
+      "public_id": "kwXpL7yZ",
+      "name": "HTF Log-Regression Volume Profile [BigBeluga]",
+      "author": "BigBeluga",
+      "publication_version": 4,
+      "pine_id": "PUB;d6fcf16e6a6b4b13963e5e943cf4f5c6",
+      "source_url": "https://www.tradingview.com/script/kwXpL7yZ-HTF-Log-Regression-Volume-Profile-BigBeluga/",
+      "source_file": "kwXpL7yZ.pine",
+      "sha256": "de31292c867ad914c2a76912e6de407262cc690e093d02a828c77ba43825286f",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3Bd6fcf16e6a6b4b13963e5e943cf4f5c6/4",
+      "returned_version": "4.0",
+      "script_access": "open_no_auth",
+      "license": "CC-BY-NC-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_verified_from_source_header": true,
+      "imports": [],
+      "implementation_module": "v3/tv_htf_log_profile.py",
+      "feature_function": "v3.tv_htf_log_profile.htf_log_regression_profile",
+      "signal_wrapper": null,
+      "defaults": {
+        "chart_period": "15",
+        "auto_htf": true,
+        "manual_htf": "D",
+        "channel_width": 1.0,
+        "bin_count": 30,
+        "show_profile": true,
+        "show_poc": true,
+        "bar_minutes": 15,
+        "as_of": null,
+        "include_bins": false
+      },
+      "port_scope": "Developing and completed HTF high/low/mid, source log-regression endpoints and bands, directional volume and delta, regression-relative bins, POC curve/drawing coordinates, explicit completion and availability metadata.",
+      "input_contract": "Finite repository OHLC, finite nonnegative Volume, unique increasing timezone-aware index of bar opens; explicit duration and optional as_of enforce completed-bar availability. Exact aligned nonmissing boolean Pine timeframe.change flags required; optional htf_period attrs must match selected period. On15m source auto period is2D. No request.security or UTC-resample approximation.",
+      "state_contract": "Regression fits reverse chronological log(close) at x1..N but evaluates reg_end at x0 and bin centers at xi; retain extrapolation. First false boundary flag makes an incomplete initial session; new HTF resets length1. Completed profile appears only after the next session is observed and never backfills.",
+      "availability_contract": "Every feature row uses bar-close available_at; origin and drawing indices are metadata only. Historical profile states are immutable causal snapshots.",
+      "fixture_edges_pending": [
+        "Positive Close required. One-bar regression denominator yields na. Constant/zero channel height is reported undefined instead of inventing a zero-width bin. Main adapter supports fixed-duration minute charts; full auto-timeframe mapping utility separately preserves source string distinctions.",
+        "Exported TradingView numerical/state fixtures on identical data/feed, timestamp and calculation-origin inputs.",
+        "Pine stdev/ATR seeding and float comparison/bin-floor boundaries."
+      ],
+      "omissions": [
+        "Chart graphics/colors and width rendering",
+        "No invented entry/exit policy",
+        "No active pool registration"
+      ],
+      "admission_status": "feature-only; pending exported TradingView fixtures; no active-pool registration",
+      "required_runtime_helpers": [
+        "v3/pine_compat.py",
+        "v3/_tv_trend_support.py",
+        "v3/_tv_profile_support.py"
+      ]
+    }
+  ]
+}

@@ -777,7 +777,7 @@
       "license": "MPL-2.0",
       "license_url": "https://mozilla.org/MPL/2.0/",
       "transitive_import_status": {
-        "TradingView/RelativeValue/3": "Not yet pinned. Its TVrv calls occur in relativeVolume; footprint invokes requestVolumeDelta, which does not call TVrv."
+        "TradingView/RelativeValue/3": "Not yet pinned. Its TVrv calls occur in relativeVolume; footprint invokes requestUpAndDownVolume, which does not call TVrv."
       }
     }
   ]

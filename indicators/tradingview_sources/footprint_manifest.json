@@ -1,0 +1,100 @@
+{
+  "group": "footprint",
+  "source_origin": "Pinned official public versioned Pine source, unchanged bytes and SHA256",
+  "parity_status": "Source-backed local numerical features; exported TradingView fixtures pending",
+  "scripts": [
+    {
+      "public_id": "Tm1cGCPD",
+      "name": "Volume Footprint: Measuring by Math & Geometry",
+      "author": "ata_sabanci",
+      "publication_version": 4,
+      "pine_id": "PUB;e15e52b27d234f238522c37120642c73",
+      "source_url": "https://www.tradingview.com/script/Tm1cGCPD-Volume-Footprint-Measuring-by-Math-Geometry/",
+      "source_file": "Tm1cGCPD.pine",
+      "sha256": "4adfa2af51f72b17c54f45a3e0b33a791bd2d165235c6ce1f40e46aa84cbc9c7",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3Be15e52b27d234f238522c37120642c73/4",
+      "returned_version": "4.0",
+      "script_access": "open_no_auth",
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "license_verified_from_source_header": true,
+      "imports": ["TradingView/ta/14 as tvta"],
+      "implementation_module": "v3/tv_volume_footprint.py",
+      "feature_function": "v3.tv_volume_footprint.volume_footprint",
+      "signal_wrapper": null,
+      "defaults": {
+        "tick_size": "required explicit syminfo.mintick value; never inferred",
+        "engine": "geometric",
+        "intrabar_stream": null,
+        "intrabar_minutes": 1,
+        "window": 5,
+        "view_ticks": 5,
+        "bell_div": 3.0,
+        "profile_period": 23,
+        "profile_resolution": 100,
+        "value_area_pct": 70.0,
+        "imbalance_pct": 300.0,
+        "bar_minutes": 15,
+        "as_of": null,
+        "include_levels": false,
+        "include_diagnostics": true
+      },
+      "engines": {
+        "geometric": {
+          "supported": true,
+          "data": "Finite OHLCV and explicit symbol minimum tick. buy=volume*(close-low)/(high-low); sell=remaining volume; flat bar share=.5.",
+          "interpretation": "Modeled geometric volume allocation; not observed aggressor-side transactions."
+        },
+        "intrabar": {
+          "supported": true,
+          "data": "Explicit caller-supplied TradingView/ta/14.requestUpAndDownVolume aggregates, aligned exactly to chart bar opens: up_volume>=0, down_volume<=0, timezone-aware observed_at. Paired NaNs+NaT represent no engine data. Explicit lower timeframe minutes must not exceed chart duration.",
+          "availability": "Each nonmissing aggregate must be observed at or after its chart bar open and no later than its chart bar close; reject late observations rather than backdate. No OHLCV fallback and no claim of complete provider coverage.",
+          "interpretation": "Source takes abs(down_volume), then applies the same geometric price-distribution bells to both side totals. Signed intrabar amounts do not supply native footprint price rows.",
+          "request_emulation": "No emulation of request.security, TradingView feed-history limits, tick-timeframe bid/ask classification, or gaps/merge behavior. Caller must supply the library outputs for the same symbol/feed/context."
+        },
+        "native": {
+          "supported": false,
+          "required": "Exact TradingView request.footprint object, official rows with up_price and buy/sell volume plus native imbalance flags and ticks_per_row. Not reconstructible from OHLCV or these signed aggregates.",
+          "behavior": "Raises NotImplementedError; never substitutes geometric estimates."
+        }
+      },
+      "port_scope": "Default numerical metric scopes: table Gaussian lattice rows, off-frame mass, newest intersecting window up to5000 bars, window POC/value area/nearest diagonal imbalances, rolling chart density components and flat-price atoms, sampled chart POC/value area/nearest imbalances, one-tick integrated band volumes, balance tilt, source Simpson residual and overlap diagnostics. Optional immutable price/volume/density arrays.",
+      "input_contract": "Finite repository OHLC and finite nonnegative Volume; unique increasing timezone-aware bar-open index; explicit fixed-minute duration and optional as_of reject incomplete/future bars. Original source min/max parameters enforced. Main calculation uses caller's fixed history origin.",
+      "availability_contract": "Each output is a completed-prefix last-bar snapshot available at that bar close; final-window/chart drawings are never backfilled to earlier rows. Engine observation timestamps remain explicit. Intrabar missing outputs remain missing even when older window/profile data exists.",
+      "state_contract": "Source chart_poc variable persists when no new span/control level can be computed; chart_poc_fresh=false identifies stale values while per-band values reset toNaN. Flat-price atom mass participates in overlap/total volume but not continuous density or one-tick chart band integrals. Dashboard rows and profile density samples use distinct source CDF implementations.",
+      "source_quirks_preserved": [
+        "Chart POC is the first maximal sampled density, while dashboard POC requires strictly positive summed row volume. POC ties prefer the lowest price; value-area adjacent-volume ties expand upward.",
+        "When all profile bars are atoms at distinct prices, continuous density is zero, but source best=-1 selects the lowest sampled price as chart POC. Status atoms_without_density exposes this edge.",
+        "Overlap scanner cuts only strict sign changes across12 scan intervals. An exact-zero sampled crossing may be missed, so the source diagnostic can overstate normalized overlap; do not interpret this as an independently corrected probability estimate.",
+        "Simpson integration can produce small residuals or overlap above100 by numerical error; values are not silently clamped. Source9-decimal comparison semantics retained at decisions; external precision fixtures pending."
+      ],
+      "library_dependencies": [
+        {
+          "import": "TradingView/ta/14",
+          "source_file": "TradingView_ta_14.pine",
+          "sha256": "7cb212583594abd0a5c884c82b1017204c00f3b7345618a8ef86c5c9acd64008",
+          "source_url": "https://www.tradingview.com/script/BICzyhq0-ta/",
+          "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B77c0f0012daa4ff09d68b6f3bed95a7f/14",
+          "returned_version": "14.0",
+          "author": "TradingView",
+          "license": "MPL-2.0",
+          "used_path": "requestUpAndDownVolume (explicit supplied outputs); main geometric engine does not call the library",
+          "unused_transitive_import": "TradingView/RelativeValue/3 is not acquired. Only relativeVolume uses it; requestUpAndDownVolume does not. No unacquired dependency code is executed or copied."
+        }
+      ],
+      "fixture_edges_pending": [
+        "Exported TradingView fixtures from identical OHLCV/feed/tick size and exact history origin, covering all table/profile metrics and Pine float comparison boundaries.",
+        "Intrabar feed limits, request.security time alignment, gap behavior and observed-data coverage; externally supplied exact library outputs required.",
+        "Cody/A&S CDF and Simpson residual rounding, exact-root crossing scanner behavior, flat atoms, and stale chart POC after no-data/zero-span profiles."
+      ],
+      "omissions": [
+        "Native footprint engine and broker/exchange trade classification",
+        "Chart/table graphics and alternative display-scope switches; default both metric scopes supported",
+        "No invented entry/exit policy or trade alerts",
+        "No active pool registration"
+      ],
+      "admission_status": "feature-only; pending exported TradingView fixtures; no active-pool registration",
+      "required_runtime_helpers": ["v3/_tv_trend_support.py", "v3/_tv_profile_support.py"]
+    }
+  ]
+}

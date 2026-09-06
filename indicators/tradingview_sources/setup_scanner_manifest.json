@@ -1,0 +1,103 @@
+{
+  "group": "setup_scanner",
+  "adaptation_recorded_at_utc": "2026-09-06T03:30:36.687004+00:00",
+  "source_origin": "Official public versioned Pine source already pinned in structure_sources.json; raw bytes reused unchanged.",
+  "parity_status": "Source-backed local implementation; exported TradingView numerical fixtures pending",
+  "scripts": [
+    {
+      "public_id": "XWuYNmhD",
+      "name": "Setup Scanner [GBB]",
+      "author": "GoodBadBitcoin",
+      "publication_version": 2,
+      "pine_id": "PUB;e206beb3690a4a21a6f42f7d589ff2a5",
+      "source_url": "https://www.tradingview.com/script/XWuYNmhD-Setup-Scanner-GBB/",
+      "source_file": "XWuYNmhD.pine",
+      "sha256": "f52a7d6fd73fcd450ad8b4d8c23da95628372504aeae4ed3179c23691fa130db",
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "license_verified_from_source_header": false,
+      "license_basis": "No explicit license in pinned header or source; TradingView documented default for published open-source scripts is MPL2.0.",
+      "license_policy_source": "https://www.tradingview.com/pine-script-docs/writing/publishing/",
+      "imports": [],
+      "required_runtime_helpers": [
+        "v3/_tv_setup_support.py",
+        "v3/_tv_trend_support.py",
+        "v3/pine_compat.py",
+        "v3/tv_ict_killzones.py"
+      ],
+      "admission_status": "pending exported TradingView fixtures and required external data; no active-pool registration",
+      "independent_review": "Source-state review requested from editors agent; pending.",
+      "implementation_module": "v3/tv_setup_scanner.py",
+      "feature_function": "v3.tv_setup_scanner.setup_scanner",
+      "signal_wrapper": "signals.tv_setup_scanner_signals.generate_setup_scanner_signals",
+      "defaults": {
+        "enabled": [
+          "VWAP",
+          "EMA",
+          "BRT",
+          "SWEEP",
+          "DIV",
+          "ORB"
+        ],
+        "atr_length": 14,
+        "stop_atr": 1.2,
+        "targets": [
+          1.0,
+          2.0,
+          3.0
+        ],
+        "max_open": 1,
+        "max_bars": 60,
+        "reentry": 0,
+        "one_way": true,
+        "keep_trades": 8,
+        "volume_multiplier": 1.0,
+        "pivot_length": 5,
+        "vwap_away": 6,
+        "ema_window": 3,
+        "retest_tolerance": 0.3,
+        "retest_window": 20,
+        "sweep_length": 20,
+        "divergence_gap": 60,
+        "opening_session": "0930-1600",
+        "opening_timezone": "America/New_York",
+        "opening_minutes": 15,
+        "vwap_observations": null,
+        "vwap_reset": null,
+        "strict_session_coverage": true,
+        "bar_minutes": 15,
+        "as_of": null
+      },
+      "setup_identity_priority": [
+        "VWAP",
+        "EMA",
+        "BRT",
+        "SWEEP",
+        "DIV",
+        "ORB"
+      ],
+      "input_contract": "Finite OHLC with timezone-aware bar-open index, completed bars only. Volume can be missing/NaN per source but cannot be negative/infinite. Source numeric limits validated; three target multiples need not be ordered because source does not enforce ordering.",
+      "availability_contract": "All observations are available only at bar close. Divergence uses RSI from pivot origin but emits on confirmation, never plot-offset origin. Opening range uses bar-open session time, excludes the first bar at or beyond its duration from range building, and consumes its once-per-session latch on raw signals even when capacity blocks entry.",
+      "external_data_contract": "Volume-bearing VWAP requires either exact aligned observed VWAP+available_at or explicit exchange session reset flags. No New York calendar is substituted for exchange VWAP anchors. Missing volume makes VWAP unavailable as in source. Strict session coverage rejects hidden outside-session gaps; explicitly disabling it preserves the source literal membership transition and emits session_gap diagnostics without inventing resets.",
+      "state_contract": "Six setup identities retain source ordering. BRT keeps active broken level while queueing new pivots, promotes pending level after resolution/expiry, and updates independently of accepted trades. Volume gate applies only VWAP, EMA and sweep. Engine resolves old trades before entries; no entry-bar outcomes. Stop wins ambiguous bars; target ladders update sequentially, TP3 beats inclusive max_bars expiry. Re-entry uses >=cooldown from any close. Existing direction od is sampled once before setup loop, preserving source oneWay quirks when flat/concurrent or both raw directions occur.",
+      "statistics_contract": "Per-setup cFired counts accepted opens, despite broader source comment. TP1/TP2 counters update at observed hits while positions may remain open. Source stop/expiry counters increment only before TP1; all actual reference close outcomes are separately exposed. Snapshots are causal; no chart-end scoreboard backfills or ledger-profitability claims.",
+      "mechanical_proposal_rule": "Each source setup gets its own wrapper identity, while all compete in the original shared book/priority. Entries follow accepted dynamic alerts; raw anyLong/anyShort alert conditions are retained separately. Exits identify source reference resolution. Four-frame wrapper requires max_open=1; numerical book supports source1..5 concurrency.",
+      "port_scope": "All six raw/forming/accepted setup signals, setup panel states, shared reference trade book and causal counters, sessions/VWAP with explicit dependencies, per-setup four-frame wrapper. Graphics and notification transport omitted.",
+      "fixture_edges_pending": [
+        "Built-in flat RSI0/0 and EMA/ATR/SMA/VWAP seeds",
+        "Confirmed pivot rightmost-tie assumption",
+        "Exact exchange VWAP anchor and opening-session feed coverage"
+      ],
+      "omissions": [
+        "Chart zones, labels, colors, future drawing projections and scoreboard rendering",
+        "Notification delivery cadence/alert-frequency transport",
+        "Concurrent-position execution wrapper and active-pool admission"
+      ],
+      "local_validation": {
+        "command": "./venv/bin/python -m pytest tests/test_tv_setup_scanner.py -q",
+        "passed": 14,
+        "coverage": "Source priority/capacity, entry-bar guard, stop-first/ladders/expiry/re-entry, oneWay snapshot, all six setup identities including BRT queue and delayed divergence, explicit VWAP inputs, session gaps, volume missing/filter, prefix/future and wrapper seam."
+      }
+    }
+  ]
+}

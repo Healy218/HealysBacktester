@@ -1,0 +1,99 @@
+{
+  "group": "amd",
+  "adaptation_recorded_at_utc": "2026-09-06T03:30:36.686848+00:00",
+  "source_origin": "Official public versioned Pine source already pinned in structure_sources.json; raw bytes reused unchanged.",
+  "parity_status": "Source-backed local implementation; exported TradingView numerical fixtures pending",
+  "scripts": [
+    {
+      "public_id": "hkKioUnL",
+      "name": "AMD Po3 with Live Edge Stats [WillyAlgoTrader]",
+      "author": "WillyAlgoTrader",
+      "publication_version": 1,
+      "pine_id": "PUB;646ba78cb9e34cd096405b32aa1777a7",
+      "source_url": "https://www.tradingview.com/script/hkKioUnL-AMD-Po3-with-Live-Edge-Stats-WillyAlgoTrader/",
+      "source_file": "hkKioUnL.pine",
+      "sha256": "d6d61bcd1eabbfad26dab2fd4be69dc85bc616121149386765222f605a6979e5",
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "license_verified_from_source_header": false,
+      "license_basis": "No explicit license in pinned header or source; TradingView documented default for published open-source scripts is MPL2.0.",
+      "license_policy_source": "https://www.tradingview.com/pine-script-docs/writing/publishing/",
+      "imports": [],
+      "required_runtime_helpers": [
+        "v3/_tv_setup_support.py",
+        "v3/_tv_trend_support.py",
+        "v3/pine_compat.py",
+        "v3/tv_ict_killzones.py"
+      ],
+      "admission_status": "pending exported TradingView fixtures and required external data; no active-pool registration",
+      "independent_review": "Source-state review requested from editors agent; pending.",
+      "implementation_module": "v3/tv_amd_po3.py",
+      "feature_function": "v3.tv_amd_po3.amd_po3",
+      "signal_wrapper": "signals.tv_amd_po3_signals.generate_amd_po3_signals",
+      "defaults": {
+        "config": {
+          "min_range_bars": 12,
+          "max_range_bars": 96,
+          "compression_percentile": 25,
+          "stat_window": 200,
+          "range_tolerance": 0.1,
+          "min_range_width_pct": 0.15,
+          "boundary_mode": "pivot",
+          "trim_tail_pct": 15,
+          "sweep_return_bars": 8,
+          "require_liquidity": false,
+          "sweep_depth_percentile": 100,
+          "allow_rearm": true,
+          "distribution_timeout": 64,
+          "stop_buffer_atr": 0.4,
+          "fib_extension": 1.5,
+          "use_killzones": false,
+          "use_htf_bias": false,
+          "alerts_on": true,
+          "minimum_tick": 0.01,
+          "min_sample": 10
+        },
+        "bar_minutes": 15,
+        "killzone_timezone": "UTC",
+        "london_session": "0700-1000",
+        "new_york_session": "1330-1600",
+        "htf_minutes": 240,
+        "htf_observations": null,
+        "as_of": null
+      },
+      "source_fixed_lengths": {
+        "donchian_window": 20,
+        "atr": 14,
+        "pivot_left_right": 3,
+        "pivot_capacity_per_side": 60,
+        "equal_high_low_lookback": 96,
+        "cooldown_bars": 10,
+        "form_length": 10,
+        "stats_prune_days": 31
+      },
+      "input_contract": "Finite OHLC with timezone-aware increasing bar-open index; completed bars only, optional as_of enforces availability. Minimum tick is explicit. Config validates source input ranges. Session boundaries must align to chart bars.",
+      "availability_contract": "All state/events are emitted at completed-bar available_at. Confirmed pivots are registered with3-bar lag; graphical historical range/sweep origins never receive backfilled events. Idle detection runs only after bar_index>stat_window. All history references remain in the observed prefix.",
+      "state_contract": "Source idle/accum/sweepPending/manip/dist machine; manip is resolved outside the main branch on the same bar. Impulse trim and confirmed-pivot boundaries preserved; stop ATR anchor precedes the trimmed range. Expiry precedes news-bar reset; filtered inside breaches keep range, outside breaches reset. Sweep return deadline is strict > budget and precedes inside return. HTF rejection may rearm once, refreshing expiry and blocking the repeated side.",
+      "reference_model": "Distribution enters at confirmation close, stop lies beyond full sweep excursion plus anchored ATR buffer, target uses source fib extension beyond opposite range boundary. Outcomes start next bar. Both target+stop means -1R ambiguous stop; target/stop precede timeout, whose condition is strict > budget and closes at actual reference R.",
+      "statistics_contract": "Target/stop/timeout, ambiguity, double-sweep and sumR update only on resolved source cycles. Closed-cycle timestamps use source bar-open time; observations remain available at bar close. All-time counters persist; timestamped buffer prunes older31-day records only on a new resolution. 24h and30d snapshots filter causally on each observed bar. Target rate/average R stay NaN until min_sample. No final-chart backfill and no claim of option-ledger performance.",
+      "external_data_contract": "Optional HTF bias requires aligned exact previous-completed HTF close and EMA50 from source [1]+lookahead_on, with available_at no later than each chart bar OPEN. HTF below chart timeframe is rejected. No HTF values are inferred from complete future candles. Killzone filters use configured timezone; no volume required.",
+      "mechanical_proposal_rule": "Enter on source distribution direction; exit on its reference outcome bar. Sweep alerts are exposed separately and do not invent trades. Wrapper keeps independent compression/fib grids.",
+      "port_scope": "Finite historical-bar numerical/state core, source alert conditions, causal reference statistics, per-period metrics and detached state snapshot; drawing geometry and text layout omitted.",
+      "fixture_edges_pending": [
+        "Pine percentrank previous-window/ties and nearest-rank percentile floating behavior",
+        "ta.pivothigh/low rightmost ties and ATR seed/minimum-tick edge cases",
+        "Exact prior HTF feed mapping and chart initialization origin"
+      ],
+      "omissions": [
+        "Drawing objects, themes, dashboard layout and graphical projection",
+        "Alert transport/webhook formatting",
+        "Production admission and bounded-memory full-history live adapter"
+      ],
+      "local_validation": {
+        "command": "./venv/bin/python -m pytest tests/test_tv_amd_po3.py -q",
+        "passed": 13,
+        "coverage": "Hand exact entry/stop/fib, stop ambiguity, hard return deadlines, HTF rearm/failure, filter/news/expiry priority, EQ liquidity, trim anchor, timeout, rolling stats/restart, full detector prefix/future and four-frame parity."
+      }
+    }
+  ]
+}
