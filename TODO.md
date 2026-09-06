@@ -199,6 +199,15 @@ workload, VM-hour budget and explicit job IDs.
 
 ## 5. Verify operational readiness alongside research
 
+September 6 read-only follow-up: [production alert review](docs/reviews/2026-09-06-production-alert-review.md).
+All four ensembles load/score and Telegram/SIP REST access work. Production
+remains pre-audit 9351d01; v5 refresh was killed (surface ends August 24), and
+freshness/final-close/legacy delivery gaps prevent an end-to-end all-clear.
+- [ ] Repair/complete v5 server surface refresh with a measured memory budget.
+- [ ] Prepare compatible production freshness, final-close/calendar and legacy
+  outbox fixes; validate market-session behavior before declaring readiness.
+
+
 Actual read-only inspection found pre-audit server commit `9351d01`, four
 expert crons and both feed processes. Full-session parity remains pending.
 September 8, 2026 is Tuesday. [Evidence](docs/reviews/2026-09-05-readiness-milestone.md).

@@ -1,10 +1,27 @@
-# Handoff — v6 pipeline resumed after reboot
+# Handoff — production alert review completed; v6 keeps running
 
-September 6, 2026, resumed at 17:04:27 UTC. Main checkout, source commit
-522d9c7. User returned and requested continuing to the v6 freeze. Resumed
-both exact commands from the saved resume.json with approved host network
-access. Local research assumptions, all TV13/tick scope and deferred external
-comparison remain unchanged.
+September 6, 2026. User requested a current server data/alert-path review.
+Read-only SSH verified production still at 9351d01. No deployment or production
+state mutation; local v6 capture and half-hour watcher continue unchanged.
+
+## Production findings
+
+Full review: docs/reviews/2026-09-06-production-alert-review.md.
+All four schedules run; Telegram heartbeat delivered today; authenticated SIP
+REST returned SPY/AAPL historical bars. All four 40-member ensembles passed
+synthetic scoring; v4/v5 also passed deployed hash/eligibility checks.
+Do NOT give a full alert-readiness all-clear:
+- Friday scans logged widespread 401/data failures; final v4 health 0 scanned,
+  118 errors. Latest expert sends predate Friday's failed session.
+- v5 Sunday bars refresh ended Killed; surface remains August 24.
+- Stock daemon alive but heartbeat connecting/zero bars since Saturday;
+  weekend alone cannot determine stream health. OPRA has zero subscriptions
+  and is not wired into deployed expert scoring.
+- Deployed source lacks recent-bar rejection, skips final-close staggered
+  passes, lacks exchange-calendar gating, and v3/v31 dedupe precedes confirmed
+  delivery with no durable retry. Newer local fixes are not on production.
+- Full-session verification and compatible ops remediation remain outstanding.
+  Do not deploy all of main against pre-audit bundles without compatibility work.
 
 ## Latest user direction — dedicate the box to freeze work
 
