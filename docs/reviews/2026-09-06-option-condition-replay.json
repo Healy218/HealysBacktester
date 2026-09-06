@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "created_at_utc": "2026-09-06T05:56:15.347006+00:00",
+  "purpose": "Research-only sensitivity replay of quote-test estimates on unchanged captured ticks; not true aggressor evidence",
+  "capture_directory": "nn_meta/option_tick_captures/spy-20260824-open-v2",
+  "capture_manifest_sha256": "e641538a5da82d08726007b95f80504ca00b73d939f66c2059991b1b7a840f2e",
+  "capture_plan": {
+    "contracts": [
+      "SPY260824C00766000",
+      "SPY260824P00766000"
+    ],
+    "start_ns": 1787578200000000000,
+    "end_ns": 1787579100000000000,
+    "max_pages_per_kind_contract": 20,
+    "contract_selection": "explicit pilot; no training-universe admission",
+    "output": "nn_meta/option_tick_captures/spy-20260824-open-v2",
+    "execute": true
+  },
+  "protected_input_file_sha256": {
+    "nn_meta/option_tick_captures/spy-20260824-open-v2/plan.json": "eedb4c79a5e47bec2e70d04ccec74a6e04cfc765e24bc601e20b691f28edb725",
+    "nn_meta/option_tick_captures/spy-20260824-open-v2/SPY260824C00766000.quotes.json.gz": "b920b9e42407ebe6d05698867ae6a5b1866ddab540615d5d032eed39835b79b4",
+    "nn_meta/option_tick_captures/spy-20260824-open-v2/SPY260824C00766000.trades.json.gz": "7fe680d602854f98ae0640b421e5bba6a5b926a567b3003c3677eca102722f1b",
+    "nn_meta/option_tick_captures/spy-20260824-open-v2/SPY260824P00766000.quotes.json.gz": "71f4d3c79e86fbc81f192a9f00e68d83017e29c2dba925f1be8bde6d5e48ddd5",
+    "nn_meta/option_tick_captures/spy-20260824-open-v2/SPY260824P00766000.trades.json.gz": "49525433ea1d9cd305faa5e96420ec7aee90fc27d3d84ea922670f4de436696b",
+    "nn_meta/option_tick_captures/spy-20260824-open-v2/manifest.json": "e641538a5da82d08726007b95f80504ca00b73d939f66c2059991b1b7a840f2e",
+    "docs/reviews/2026-09-06-option-tick-replay.json": "93458c77ab89e7e639ef1945bb83ecd1907ec3f2f0712bc7cf75d68de2a349a4",
+    "docs/reviews/2026-09-06-option-condition-209.json": "a44705616ca450dafa045b1696bf9a7e9cab96a23e5df8003e082de53ba77a00"
+  },
+  "implementation_sha256": {
+    "options/data/massive_ticks.py": "a336e3aac4fb2017d1e70a10bc68df387c8eb34291e98a498d407d28e278f959",
+    "options/tick_features.py": "52af1a94e254e3f456b754efa7376d0abe6e72b80c42016cb834dd7035e0a42b",
+    "scripts/capture_option_ticks.py": "36d76d3ad25f74b2cd3c3bee10f537df01b2d9b684e8a128c823c8b53d9aed16",
+    "options/data/provider.py": "cb6b3a285ada875136154b667e62c204167d78ef25807fc371e5a9383c69b452"
+  },
+  "official_condition_reference": {
+    "path": "docs/reviews/2026-09-06-option-condition-209.json",
+    "file_sha256": "a44705616ca450dafa045b1696bf9a7e9cab96a23e5df8003e082de53ba77a00",
+    "raw_api_response_sha256": "be0aeef3d9355c0781bee3b923de75f084887e75a430bedaecd71151db3bc578",
+    "canonical_documented_record_sha256": "c4ab0702833a06b33d31b3d34dd11340595e87ab4b6583f6929b7f29fe70ab9d",
+    "source_url": "https://api.massive.com/v3/reference/conditions?asset_class=options&data_type=trade&id=209&sip=OPRA&limit=10",
+    "namespace": {
+      "provider": "Massive",
+      "asset_class": "options",
+      "data_type": "trade",
+      "condition_type": "sale_condition",
+      "condition_id": 209,
+      "sip": "OPRA",
+      "sip_symbol": "I"
+    }
+  },
+  "policies": {
+    "default_empty_allowlist": {
+      "max_quote_age_ns": 30000000000,
+      "allowed_trade_conditions": [],
+      "allow_unconditioned_trades": false
+    },
+    "research_allow_209": {
+      "max_quote_age_ns": 30000000000,
+      "allowed_trade_conditions": [
+        209
+      ],
+      "allow_unconditioned_trades": false
+    }
+  },
+  "shared_policy": {
+    "availability_basis": "historical SIP timestamp",
+    "window_bounds": "[start_ns,end_ns)",
+    "condition_namespace": "massive_integer options/trade/sale_condition",
+    "condition_rule": "All conditions on a trade must belong to the explicit allowlist; missing/empty condition lists excluded",
+    "corrections": "Nonzero correction flags excluded from reported trade measures and quote-test signing",
+    "quote_rule": "Earlier quote availability and event timestamp required; ties excluded; maximum age30s; finite positive uncrossed sizes/prices; locked quotes excluded from signing",
+    "sign_rule": "+1 at/above earlier ask; -1 at/below earlier bid; inside-spread prints unclassified",
+    "fraction_denominator": "Reported contract volume after invalid/corrected-trade exclusions, including all trade conditions",
+    "trade_identity_rule": "Unreliable sequence identities preserve every print; repeated-looking trades are not deduplicated by guessed identity"
+  },
+  "contracts": [
+    {
+      "contract": "SPY260824C00766000",
+      "capture_files": {
+        "SPY260824C00766000.quotes.json.gz": {
+          "bytes": 260439,
+          "sha256": "b920b9e42407ebe6d05698867ae6a5b1866ddab540615d5d032eed39835b79b4"
+        },
+        "SPY260824C00766000.trades.json.gz": {
+          "bytes": 19523,
+          "sha256": "7fe680d602854f98ae0640b421e5bba6a5b926a567b3003c3677eca102722f1b"
+        }
+      },
+      "raw_record_hashes": {
+        "quotes": "0760887b8a2eea747c2a05589877f56a3f837c78e57fe9123c079839c76b7d9c",
+        "trades": "7f9796128948666e6f76d09a19b223b4ce81e22fd27fe3c98d124398a638c456"
+      },
+      "trade_conditions_present": [
+        209,
+        219,
+        227,
+        229,
+        232,
+        233,
+        236
+      ],
+      "raw_trade_condition_histogram": [
+        {
+          "conditions": [
+            209
+          ],
+          "trade_records": 1291,
+          "raw_reported_contract_volume": 6347
+        },
+        {
+          "conditions": [
+            219
+          ],
+          "trade_records": 64,
+          "raw_reported_contract_volume": 516
+        },
+        {
+          "conditions": [
+            227
+          ],
+          "trade_records": 315,
+          "raw_reported_contract_volume": 2743
+        },
+        {
+          "conditions": [
+            229
+          ],
+          "trade_records": 1,
+          "raw_reported_contract_volume": 1
+        },
+        {
+          "conditions": [
+            232
+          ],
+          "trade_records": 40,
+          "raw_reported_contract_volume": 1343
+        },
+        {
+          "conditions": [
+            233
+          ],
+          "trade_records": 87,
+          "raw_reported_contract_volume": 526
+        },
+        {
+          "conditions": [
+            236
+          ],
+          "trade_records": 84,
+          "raw_reported_contract_volume": 1733
+        }
+      ],
+      "mixed_condition_records_observed": 0,
+      "nonzero_correction_records_observed": 0,
+      "unconditioned_records_observed": 0,
+      "records_without_reliable_trade_sequence": 1882,
+      "policies": {
+        "default_empty_allowlist": {
+          "features": {
+            "schema": "option-tick-features-v1",
+            "availability_basis": "sip",
+            "quote_updates": 16626,
+            "valid_quote_time_fraction": 0.9999049779644444,
+            "time_weighted_spread_bps": 379.82191483301585,
+            "time_weighted_size_imbalance": -0.10965529271211565,
+            "last_quote_age_seconds": 6.07884614,
+            "last_bid": 0.15,
+            "last_ask": 0.16,
+            "reported_trade_count": 1882,
+            "reported_contract_volume": 13209,
+            "reported_trade_vwap": 0.3210591263532442,
+            "excluded_invalid_or_corrected_trades": 0,
+            "quote_test_signed_volume": 0,
+            "quote_test_classified_volume_fraction": 0.0,
+            "allowed_trade_conditions": [],
+            "allow_unconditioned_trades": false,
+            "model_admission": false
+          },
+          "derived_classified_contract_volume": 0
+        },
+        "research_allow_209": {
+          "features": {
+            "schema": "option-tick-features-v1",
+            "availability_basis": "sip",
+            "quote_updates": 16626,
+            "valid_quote_time_fraction": 0.9999049779644444,
+            "time_weighted_spread_bps": 379.82191483301585,
+            "time_weighted_size_imbalance": -0.10965529271211565,
+            "last_quote_age_seconds": 6.07884614,
+            "last_bid": 0.15,
+            "last_ask": 0.16,
+            "reported_trade_count": 1882,
+            "reported_contract_volume": 13209,
+            "reported_trade_vwap": 0.3210591263532442,
+            "excluded_invalid_or_corrected_trades": 0,
+            "quote_test_signed_volume": -88,
+            "quote_test_classified_volume_fraction": 0.46786282080399727,
+            "allowed_trade_conditions": [
+              209
+            ],
+            "allow_unconditioned_trades": false,
+            "model_admission": false
+          },
+          "derived_classified_contract_volume": 6180
+        }
+      },
+      "delta": {
+        "quote_test_signed_volume": -88,
+        "quote_test_classified_volume_fraction": 0.46786282080399727
+      }
+    },
+    {
+      "contract": "SPY260824P00766000",
+      "capture_files": {
+        "SPY260824P00766000.quotes.json.gz": {
+          "bytes": 306299,
+          "sha256": "71f4d3c79e86fbc81f192a9f00e68d83017e29c2dba925f1be8bde6d5e48ddd5"
+        },
+        "SPY260824P00766000.trades.json.gz": {
+          "bytes": 6542,
+          "sha256": "49525433ea1d9cd305faa5e96420ec7aee90fc27d3d84ea922670f4de436696b"
+        }
+      },
+      "raw_record_hashes": {
+        "quotes": "c528283dd4a19460fdc62e78c8d46fc513cc498bda856e906d15477b73d34c57",
+        "trades": "71cb808b2b08ee29f6b6139db48154563956f06b0ac7f7b7606a56bfc5603cdc"
+      },
+      "trade_conditions_present": [
+        209,
+        219,
+        227,
+        232,
+        233,
+        236
+      ],
+      "raw_trade_condition_histogram": [
+        {
+          "conditions": [
+            209
+          ],
+          "trade_records": 238,
+          "raw_reported_contract_volume": 1041
+        },
+        {
+          "conditions": [
+            219
+          ],
+          "trade_records": 14,
+          "raw_reported_contract_volume": 79
+        },
+        {
+          "conditions": [
+            227
+          ],
+          "trade_records": 281,
+          "raw_reported_contract_volume": 868
+        },
+        {
+          "conditions": [
+            232
+          ],
+          "trade_records": 20,
+          "raw_reported_contract_volume": 116
+        },
+        {
+          "conditions": [
+            233
+          ],
+          "trade_records": 15,
+          "raw_reported_contract_volume": 44
+        },
+        {
+          "conditions": [
+            236
+          ],
+          "trade_records": 4,
+          "raw_reported_contract_volume": 6
+        }
+      ],
+      "mixed_condition_records_observed": 0,
+      "nonzero_correction_records_observed": 0,
+      "unconditioned_records_observed": 0,
+      "records_without_reliable_trade_sequence": 572,
+      "policies": {
+        "default_empty_allowlist": {
+          "features": {
+            "schema": "option-tick-features-v1",
+            "availability_basis": "sip",
+            "quote_updates": 18699,
+            "valid_quote_time_fraction": 0.9988939361222222,
+            "time_weighted_spread_bps": 133.1315499867493,
+            "time_weighted_size_imbalance": 0.05393785990275084,
+            "last_quote_age_seconds": 0.047181605,
+            "last_bid": 3.88,
+            "last_ask": 3.9,
+            "reported_trade_count": 572,
+            "reported_contract_volume": 2154,
+            "reported_trade_vwap": 2.8787372330547827,
+            "excluded_invalid_or_corrected_trades": 0,
+            "quote_test_signed_volume": 0,
+            "quote_test_classified_volume_fraction": 0.0,
+            "allowed_trade_conditions": [],
+            "allow_unconditioned_trades": false,
+            "model_admission": false
+          },
+          "derived_classified_contract_volume": 0
+        },
+        "research_allow_209": {
+          "features": {
+            "schema": "option-tick-features-v1",
+            "availability_basis": "sip",
+            "quote_updates": 18699,
+            "valid_quote_time_fraction": 0.9988939361222222,
+            "time_weighted_spread_bps": 133.1315499867493,
+            "time_weighted_size_imbalance": 0.05393785990275084,
+            "last_quote_age_seconds": 0.047181605,
+            "last_bid": 3.88,
+            "last_ask": 3.9,
+            "reported_trade_count": 572,
+            "reported_contract_volume": 2154,
+            "reported_trade_vwap": 2.8787372330547827,
+            "excluded_invalid_or_corrected_trades": 0,
+            "quote_test_signed_volume": 235,
+            "quote_test_classified_volume_fraction": 0.40157845868152275,
+            "allowed_trade_conditions": [
+              209
+            ],
+            "allow_unconditioned_trades": false,
+            "model_admission": false
+          },
+          "derived_classified_contract_volume": 865
+        }
+      },
+      "delta": {
+        "quote_test_signed_volume": 235,
+        "quote_test_classified_volume_fraction": 0.40157845868152275
+      }
+    }
+  ],
+  "validation": {
+    "original_default_replay_matches_exactly": true,
+    "only_condition_policy_and_quote_test_outputs_differ": true,
+    "raw_capture_bytes_and_inventory_preserved": true,
+    "original_replay_report_preserved": true,
+    "source_hashes_unchanged_during_replay": true,
+    "runtime_defaults_unchanged": true
+  },
+  "limitations": [
+    "One manually selected SPY call/put pair, one15-minute opening window on expiry day; no broader coverage or production admission.",
+    "The condition209 reference establishes regular aggregation eligibility, not aggressor side. Signed volume is only a quote-test estimate.",
+    "Conditions219,227,229,232,233,236 are present across the capture and remain excluded from signing in both policies; no interpretation/admission of those codes is inferred.",
+    "Mixed-condition records with any nonallowed code and nonzero correction flags remain excluded. Neither category was observed in these two raw trade captures.",
+    "Historical SIP ordering cannot establish local live receipt latency; trade timestamps are millisecond aligned and all captured trade sequence identities are unreliable.",
+    "Same-availability quote/trade ties, missing/stale/invalid/locked quotes, and inside-spread prints remain unclassified; code209 does not bypass these gates.",
+    "No training labels, fills, slippage conclusions, default policy changes or active allowlist changes were produced."
+  ],
+  "model_admission": false,
+  "reproduction": {
+    "loader": "scripts.capture_option_ticks.load_verified_capture",
+    "features": "options.tick_features.verified_window_features",
+    "method": "For each verified contract, call the feature function with its original quote/trade manifests and exact plan start/end bounds once per declared policy."
+  }
+}

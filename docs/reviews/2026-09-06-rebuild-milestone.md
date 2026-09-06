@@ -39,9 +39,14 @@ candidate and verified again on replay.
 The feature layer can describe the bid/ask spread, quoted sizes/imbalance,
 quote age/validity, reported trade count/volume and VWAP. Quote-test signed
 volume is explicitly gated: unknown conditions, ambiguous same-time quotes
-and stale observations cannot silently become buyer/seller labels. Trade
-conditions observed in this pilot have not been mapped to an admissible
-aggressor interpretation. Additional data may improve liquidity filters and
+and stale observations cannot silently become buyer/seller labels. An
+[official condition snapshot](2026-09-06-option-condition-209.json) maps code
+209 to Automatic Execution with regular aggregation eligibility; it does not
+encode aggressor direction. A separate [sensitivity replay](2026-09-06-option-condition-replay.json)
+using only that condition classifies 46.79% of call volume and 40.16% of put
+volume by the quote test. Other conditions and all chronology/quality gates
+remain restrictive; default policy and model admission are unchanged.
+Additional data may improve liquidity filters and
 execution estimates; predictive benefit still requires a controlled comparison.
 
 This two-contract, one-window result does not estimate the cost, download time
@@ -77,6 +82,10 @@ records both active workers, 1,102 growing campaign cache files, unchanged
 sealed inventory and matching source/runtime identities. No freeze shard had
 completed at that snapshot. The status check samples current data hashes;
 the launcher performs full byte verification at stage boundaries.
+
+At 05:54 UTC, IBKR's current-contract freeze shard had completed; SPY was still
+extracting option histories. Combined freeze merge, build and assembly were
+still pending. These are pipeline progress observations, not model results.
 
 Full local validation after this fix: **1,143 tests and 18 subtests passed**,
 11 warnings, 36.00 seconds. Registry identities and `git diff --check` pass.

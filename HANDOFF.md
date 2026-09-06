@@ -33,6 +33,10 @@ shards yet. Candidate inventory and sampled hashes match, all source hashes
 and runtime versions match launch. This is bounded status evidence; the
 launcher performs full byte checks at stage boundaries.
 
+Later progress at 05:54 UTC: IBKR's freeze shard exists and covers IBKR under
+the current raw-spot contract; SPY is still extracting option histories.
+The combined freeze has not merged, and build/assembly have not started.
+
 Entry point: `bash scripts/run_raw_options_pilot_20260906.sh`.
 The wrapper locks before clearing the exit marker and writes the actual result
 at `scripts/.jobstate/raw_options_pilot_20260906.exit`: empty means started
@@ -159,6 +163,15 @@ features cover spreads/sizes, quote age/validity and trade volume/VWAP.
 Unknown conditions remain unsigned; ambiguous/future/stale quotes cannot supply
 aggressor estimates. This is one bounded sample, not full coverage, model
 integration, observed fills or demonstrated predictive gain.
+
+An [official condition reference](docs/reviews/2026-09-06-option-condition-209.json)
+now identifies Massive options trade code 209 as Automatic Execution, OPRA I,
+with normal price/volume aggregation eligibility. It does not identify
+aggressor direction. The active conservative replay policy remains unchanged.
+A separate [research sensitivity replay](docs/reviews/2026-09-06-option-condition-replay.json)
+allows only code 209 while keeping quote/correction gates. It classifies about
+47% of reported call volume and 40% of put volume in this small capture;
+this remains a quote-test estimate with model admission false.
 
 ## Server and next steps
 
