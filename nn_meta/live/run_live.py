@@ -17,6 +17,8 @@ nor PUSHOVER_* is set). It never places orders.
     --ignore-hours    scan even outside RTH (testing)
 """
 import argparse
+from contextlib import nullcontext
+from nn_meta.live.state import preview_state
 from datetime import datetime, timedelta, timezone
 
 try:
@@ -29,7 +31,7 @@ from utils.logging_utils import setup_logging
 from data import vbt_data_loader
 from nn_meta.download_data import filter_rth
 from nn_meta.live.scanner import (Scanner, aliased_bar_loader, is_rth,
-                                  format_alert, _LOOKBACK_DAYS)
+                                  format_alert, _LOOKBACK_DAYS, _STATE_PATH)
 from nn_meta.live.notifier import get_notifier
 
 logger = setup_logging(log_file="logs/backtester.log")
@@ -80,20 +82,18 @@ def main() -> None:
 
     # alias wrapper is inert for v2/v3 (no renamed tickers in their specs);
     # under v31 it revives the SQ seat by fetching bars as XYZ.
-    scanner = Scanner(aliased_bar_loader(_bar_loader), scorer=scorer,
-                      threshold=threshold)
-    notifier = get_notifier(force_console=args.dry_run)
+    with (preview_state(_STATE_PATH.parent) if args.dry_run else nullcontext(_STATE_PATH.parent)) as sdir:
+        scanner = Scanner(aliased_bar_loader(_bar_loader), scorer=scorer,
+                          threshold=threshold, state_path=sdir / _STATE_PATH.name)
+        notifier = get_notifier(force_console=args.dry_run)
+        signals = scanner.scan_once(symbols=symbols, now=now)
+        delivered = scanner.deliver_pending(notifier)
+        if not signals and not delivered:
+            print("No fresh signals this pass.")
+        else:
+            print(f"{delivered} signal(s) alerted: "
+                  f"{', '.join(s.symbol for s in signals)}")
 
-    signals = scanner.scan_once(symbols=symbols, now=now)
-    if not signals:
-        print("No fresh signals this pass.")
-        return
-
-    for sig in signals:
-        title, msg = format_alert(sig)
-        notifier.send(msg, title=title)
-    print(f"{len(signals)} signal(s) alerted: "
-          f"{', '.join(s.symbol for s in signals)}")
 
 
 if __name__ == "__main__":

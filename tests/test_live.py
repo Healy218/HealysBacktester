@@ -164,7 +164,7 @@ class TestScanner:
         return sc.Scanner(lambda s: bars, scorer=scorer, threshold=threshold,
                           state_path=tmp_path / "state.json", spec=spec), bars
 
-    _NOW = datetime(2025, 6, 30, 0, 0, tzinfo=timezone.utc)   # long after bars
+    _NOW = datetime(2025, 6, 11, 0, 30, tzinfo=timezone.utc)   # latest bar closed
 
     def test_fires_then_dedups(self, tmp_path, monkeypatch):
         scanner, _ = self._scanner(tmp_path, monkeypatch)

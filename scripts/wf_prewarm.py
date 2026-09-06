@@ -33,6 +33,8 @@ from nn_meta import config
 from nn_meta.baseline import freeze_symbol
 from nn_meta.build_meta_dataset import build_symbol_rows
 from nn_meta.providers import get_provider
+from nn_meta.wf_context import experiment_key
+from nn_meta.feature_contract import CONTRACT_VERSION
 
 WF_DIR = config.ARTIFACTS / "wf"
 MIN_TRAIN_PCT = 0.5     # MUST mirror nn_meta/walkforward_meta.py
@@ -150,13 +152,21 @@ def cmd_merge_rows(a):
 
 
 def main():
+    global WF_DIR
     ap = argparse.ArgumentParser()
     ap.add_argument("cmd", choices=["freeze", "merge-freeze", "rows", "merge-rows"])
     ap.add_argument("--fold", type=int, required=True)
     ap.add_argument("--folds", type=int, default=3)
+    ap.add_argument("--membership", action=argparse.BooleanOptionalAction, default=(config.POOL in ("v5", "v6")))
+    ap.add_argument("--winner", type=str, default=str(config.MODEL_FINAL_DIR / "ensemble_config.json"))
     ap.add_argument("--shard", type=int, default=0)
     ap.add_argument("--of", type=int, default=3)
     a = ap.parse_args()
+    from pathlib import Path
+    winning = json.loads(Path(a.winner).read_text())
+    if winning.get("feature_contract_version") != CONTRACT_VERSION:
+        raise SystemExit("prewarm winner predates causal fixes; rerun training/selection")
+    WF_DIR = config.ARTIFACTS / "wf" / experiment_key(winning, a.folds, a.membership)
     WF_DIR.mkdir(parents=True, exist_ok=True)
     {"freeze": cmd_freeze, "merge-freeze": cmd_merge_freeze,
      "rows": cmd_rows, "merge-rows": cmd_merge_rows}[a.cmd](a)

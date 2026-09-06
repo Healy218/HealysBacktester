@@ -46,7 +46,7 @@ def _read_source(source: str, archive: Path) -> pd.DataFrame:
     return pd.concat([pd.read_parquet(f) for f in files], ignore_index=True)
 
 
-def load_mention_sources(archive: Path = config.ARCHIVE) -> list[tuple]:
+def load_mention_sources(archive: Path = config.ARCHIVE, *, as_of=None) -> list[tuple]:
     """The ``(source_family, raw_df, colmap)`` triples ``build_score_table``
     consumes. Families are the corroboration unit: everything social pools as
     one family so reddit echoing StockTwits never counts as corroboration."""
@@ -80,12 +80,26 @@ def load_mention_sources(archive: Path = config.ARCHIVE) -> list[tuple]:
     news = _read_source("news", archive)
     if not news.empty:
         news = news[news["tickers"].astype(str).str.len() > 0].assign(
-            text="$" + news["tickers"].astype(str),
+            text=news["tickers"].astype(str).map(
+                lambda value: " ".join("$" + t.strip() for t in value.split(",") if t.strip())),
             ref="news:" + news["provider"].astype(str) + ":" + news["url"].astype(str))
         sources.append(("news", news,
                         {"text_col": "text", "ts_col": "published", "ref_col": "ref"}))
 
-    return sources
+    filtered = []
+    cutoff = pd.Timestamp(as_of) if as_of is not None else None
+    if cutoff is not None:
+        cutoff = cutoff.tz_localize("UTC") if cutoff.tzinfo is None else cutoff.tz_convert("UTC")
+    for family, raw, cols in sources:
+        raw = raw.copy()
+        captured = pd.to_datetime(raw["ts_utc"], utc=True)
+        raw = raw.assign(ts_utc=captured).sort_values("ts_utc")
+        if cutoff is not None:
+            raw = raw[raw["ts_utc"] <= cutoff]
+        raw = raw.drop_duplicates(cols["ref_col"], keep="first")
+        # Availability is first capture, not provider publication time.
+        filtered.append((family, raw, {**cols, "ts_col": "ts_utc"}))
+    return filtered
 
 
 def build_monthly_ranking(as_of, *, archive: Path = config.ARCHIVE,
@@ -95,7 +109,7 @@ def build_monthly_ranking(as_of, *, archive: Path = config.ARCHIVE,
     liquid = set(json.loads(UNIVERSE_LIQUID.read_text()))
     training = (set(json.loads(UNIVERSE_TRAINING.read_text()))
                 if UNIVERSE_TRAINING.exists() else set())
-    scores = build_score_table(load_mention_sources(archive), aliases,
+    scores = build_score_table(load_mention_sources(archive, as_of=as_of), aliases,
                                valid_tickers=liquid)
     ranking = monthly_rank(scores, as_of=as_of, top_n=top_n,
                            min_source_families=config.CORROBORATION_MIN)
@@ -143,9 +157,9 @@ def main() -> None:
     args = ap.parse_args()
     today = pd.Timestamp.utcnow().tz_localize(None).normalize()
     if args.prior_month:
-        as_of = today.replace(day=1) - pd.Timedelta(days=1)
+        as_of = today.replace(day=1) - pd.Timedelta(nanoseconds=1)
     else:
-        as_of = pd.Timestamp(args.as_of) if args.as_of else today
+        as_of = pd.Timestamp(args.as_of) if args.as_of else pd.Timestamp.utcnow()
     ranking, meta = build_monthly_ranking(as_of, top_n=args.top)
     print(render_md(ranking, meta))
     if args.freeze:

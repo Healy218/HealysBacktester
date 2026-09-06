@@ -19,7 +19,7 @@ import pandas as pd
 import tensorflow as tf
 
 from nn_options_signal import config
-from nn_options_signal.build_dataset import FEATURES
+from nn_options_signal.build_dataset import DATASET_VERSION, FEATURES, require_current_panel
 from nn_options_signal.model import build_mlp
 
 
@@ -59,7 +59,8 @@ def run_one(panel: pd.DataFrame, arch: list[int], lr: float, horizon: int,
     (run_dir / "scaler.json").write_text(json.dumps(
         {"mean": mu.to_dict(), "std": sd.to_dict()}))
     (run_dir / "params.json").write_text(json.dumps(
-        {"arch": arch, "lr": lr, "horizon": horizon, "seed": seed}))
+        {"arch": arch, "lr": lr, "horizon": horizon, "seed": seed,
+         "options_signal_version": DATASET_VERSION}))
 
     val_loss = float(np.min(hist.history["val_loss"]))
     return {"run_id": run_id, "arch": "x".join(map(str, arch)), "lr": lr,
@@ -78,6 +79,7 @@ def main() -> None:
     args = ap.parse_args()
 
     panel = pd.read_parquet(config.DATASET_PARQUET)
+    require_current_panel(panel)
     config.ensure_dirs()
 
     archs = config.ARCHITECTURES[:1] if args.smoke else config.ARCHITECTURES

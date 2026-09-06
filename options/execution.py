@@ -74,16 +74,27 @@ class Execution:
         self.fill_same_bar = bool(options_config.get("FILL_SAME_BAR", False))
         self._chain_cache: dict = {}
         self._bars_cache: dict = {}
+        self._bars_windows: dict = {}
 
     def bars(self, occ: str, frm: date, to: date) -> pd.DataFrame:
-        if occ not in self._bars_cache:
-            b = self.provider.get_contract_bars(occ, frm.isoformat(), to.isoformat(),
+        window = self._bars_windows.get(occ)
+        if window is None or frm < window[0] or to > window[1]:
+            lo = min(frm, window[0]) if window else frm
+            hi = max(to, window[1]) if window else to
+            b = self.provider.get_contract_bars(occ, lo.isoformat(), hi.isoformat(),
                                                 self.interval)
-            if (b is None or b.empty) and self.interval not in ("1d", "1D"):
-                logger.info(f"[{_TAG}] {occ}: no {self.interval} bars, falling back to 1D")
-                b = self.provider.get_contract_bars(occ, frm.isoformat(), to.isoformat(), "1D")
+            # Daily OHLC cannot establish an intraday fill or mark timestamp.
+            # Missing intraday data must remain an unfilled proposal.
+            if b is not None:
+                b = b.copy()
+                b.attrs["actual_interval"] = self.interval
             self._bars_cache[occ] = b if b is not None else pd.DataFrame()
-        return self._bars_cache[occ]
+            self._bars_windows[occ] = (lo, hi)
+        b = self._bars_cache[occ]
+        if b.empty:
+            return b
+        return b[(b.index >= pd.Timestamp(frm))
+                 & (b.index < pd.Timestamp(to) + pd.Timedelta(days=1))]
 
     def select(self, as_of: date, right: str, spot: float, target_dte: int):
         key = (as_of, right, target_dte)
@@ -175,6 +186,14 @@ def execute_variant(ex: Execution, stock_trades, und_close, und_index_utc,
                 break   # nothing tradable between fill and exit
 
             chunk = bars.iloc[epos:xpos + 1]
+            actual_interval = bars.attrs.get("actual_interval", ex.interval)
+            if daily or str(actual_interval).lower() == "1d":
+                close_ts = pd.DatetimeIndex([
+                    pd.Timestamp(t).normalize().tz_localize("America/New_York")
+                    + pd.Timedelta(hours=16) for t in chunk.index
+                ]).tz_convert("UTC").tz_localize(None)
+            else:
+                close_ts = chunk.index + pd.Timedelta(actual_interval)
             slices.append(chunk)
             entry_ts_list.append(chunk.index[0])
             exit_ts_list.append(chunk.index[-1])
@@ -183,12 +202,13 @@ def execute_variant(ex: Execution, stock_trades, und_close, und_index_utc,
                 "trade_idx": t_i, "contract": contract.symbol, "right": right,
                 "strike": contract.strike,
                 "expiration": contract.expiration.isoformat(),
-                "entry": str(chunk.index[0]), "exit": str(chunk.index[-1]),
+                "entry": str(chunk.index[0]), "exit": str(close_ts[-1]),
                 "entry_open": float(chunk["Open"].iloc[0]),
                 "exit_close": float(chunk["Close"].iloc[-1]),
             }
             if collect_marks:
                 leg["bar_ts"] = chunk.index.to_numpy()
+                leg["bar_close_ts"] = close_ts.to_numpy()
                 leg["bar_close"] = chunk["Close"].to_numpy(dtype=float)
             blotter.append(leg)
 

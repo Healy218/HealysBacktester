@@ -24,7 +24,7 @@ from typing import Callable, Optional
 
 import pandas as pd
 
-from nn_meta.live.state import _load_json, atomic_write_json
+from nn_meta.live.state import _load_json, atomic_write_json, refreshed
 
 KEEP_DAYS = 21          # bounded state: old resolved entries age out
 MAX_HOLD_DAYS = 7       # resolution horizon cap (a 30-DTE variant's watchlist
@@ -46,6 +46,7 @@ class Watchlist:
         atomic_write_json(self.path, self._entries)
 
     # ── recording (every scan pass) ──────────────────────────────────────────
+    @refreshed("_entries", dict)
     def record(self, *, key: str, symbol: str, strategy: str, dte: int,
                direction: int, score: float, decision: float, spot: float,
                entry_ts, alerted: bool) -> None:
@@ -81,6 +82,7 @@ class Watchlist:
                 if e["date"] == day and not e["digested"]]
         return sorted(rows, key=lambda e: -e["decision"])
 
+    @refreshed("_entries", dict)
     def mark_digested(self, keys: list[str]) -> None:
         for k in keys:
             if k in self._entries:
@@ -92,6 +94,7 @@ class Watchlist:
         return [dict(e, key=k) for k, e in self._entries.items()
                 if e["outcome"] is None]
 
+    @refreshed("_entries", dict)
     def resolve(self, bar_loader: Callable[[str], pd.DataFrame],
                 now: Optional[datetime] = None) -> int:
         """Resolve every entry whose horizon (min(dte, MAX_HOLD_DAYS) calendar
@@ -136,7 +139,8 @@ class Watchlist:
     def hit_stats(self, days: int = 7) -> dict:
         cutoff = (_utcnow() - timedelta(days=days)).date().isoformat()
         res = [e for e in self._entries.values()
-               if e["outcome"] is not None and e["date"] >= cutoff]
+               if e["outcome"] is not None
+               and e["outcome"]["resolved_ts"][:10] >= cutoff]
         al = [e for e in res if e["alerted"]]
         return {
             "window_days": days,
@@ -166,7 +170,7 @@ def format_digest(rows: list[dict], stats: dict, *, expert: str = "v4",
         lines.append("(no fresh signals today)")
     if stats["resolved"]:
         rate = stats["hits"] / stats["resolved"]
-        score = (f"\n{stats['window_days']}d watchlist hit-rate "
+        score = (f"\n{stats['window_days']}d resolved watchlist hit-rate "
                  f"(underlying-direction): {rate:.0%} "
                  f"({stats['hits']}/{stats['resolved']})")
         if stats["alerted_resolved"]:

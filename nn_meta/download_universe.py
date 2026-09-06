@@ -328,21 +328,12 @@ def _part_number(path) -> int:
 
 
 def compact_bars_daily() -> None:
-    """Rewrite bars_daily so each ticker's rows live only in its newest part.
+    """Deduplicate daily observations, preserving disjoint contract history.
 
-    The weekly ``--bars-and-surface-only --refresh-recent-days N`` refresh
-    re-downloads each still-alive contract's FULL life-to-date into a new
-    part, so older parts hold fully redundant copies and the cache grows
-    without bound; duplicates were only ever dropped at read time
-    (``build_surface.load_daily_bars``). Compaction walks the parts
-    NEWEST-first, keeps only rows whose ticker has not appeared in a newer
-    part, and writes each part's survivors immediately (one part in memory at
-    a time; only the seen-ticker set persists). Newest-wins is deliberate: a
-    refetched ticker's newest part contains its complete corrected life, so
-    every older row for that ticker is redundant. NOTE this inverts
-    ``load_daily_bars``' current keep-first tie-break for duplicate
-    (ticker, date) rows — safe because duplicates carry identical historical
-    values.
+    Walk parts newest-first by numeric index and keep the newest value for
+    each (ticker, date). Original flat-file parts partition days, so a ticker
+    can legitimately span several parts; ticker-level replacement loses data.
+    Only one part and the set of seen observation keys remain in memory.
 
     "Newest" is the highest NUMERIC part index, not reverse-lexical filename
     order: the v31 cache mixes the flat-file pipeline's unpadded parts
@@ -352,7 +343,7 @@ def compact_bars_daily() -> None:
     chronological across both pipelines (the refresh starts numbering at
     ``len(existing parts)``). Output parts are renumbered ``0000`` ascending
     in processing order — read order is irrelevant afterwards because no
-    ticker spans two parts.
+    (ticker, date) observation spans two parts.
 
     Crash-safe swap: survivors are written into a sibling
     ``bars_daily.compacting/`` dir, then ``bars_daily`` → ``bars_daily.old``,
@@ -397,7 +388,7 @@ def compact_bars_daily() -> None:
         return
 
     bytes_before = sum(p.stat().st_size for p in parts)
-    seen: set[str] = set()
+    seen: set[tuple] = set()
     rows_before = rows_after = out_no = 0
     tmp_dir.mkdir()
     for p in parts:
@@ -405,8 +396,12 @@ def compact_bars_daily() -> None:
         rows_before += len(df)
         if df.empty:
             continue
-        keep = df[~df["ticker"].isin(seen)]
-        seen.update(df["ticker"].unique())
+        # Flat-file parts partition DAYS, not full contract lifetimes. Only
+        # repeated ticker/date observations are redundant across those parts.
+        df = df.drop_duplicates(["ticker", "date"], keep="last")
+        keys = list(zip(df["ticker"], pd.to_datetime(df["date"])))
+        keep = df[[key not in seen for key in keys]]
+        seen.update(keys)
         if keep.empty:
             continue
         keep.to_parquet(tmp_dir / f"bars_part_{out_no:04d}.parquet", index=False)
@@ -420,7 +415,7 @@ def compact_bars_daily() -> None:
     shutil.rmtree(old_dir)
     print(f"compact: {len(parts)} parts / {rows_before} rows / "
           f"{bytes_before / 1e6:.1f} MB → {out_no} parts / {rows_after} rows / "
-          f"{bytes_after / 1e6:.1f} MB ({len(seen)} tickers)")
+          f"{bytes_after / 1e6:.1f} MB ({len(seen)} ticker/date observations)")
 
 
 def main() -> None:

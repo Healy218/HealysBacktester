@@ -6,6 +6,7 @@ ledger caps at the uniform slot; the bundle loader/scanner threshold on the
 EV head only when the persisted policy says so. No TensorFlow, no LightGBM.
 """
 import json
+from nn_meta.feature_contract import CONTRACT_VERSION
 
 import joblib
 import numpy as np
@@ -181,7 +182,7 @@ def _write_bundle(bundle_dir, mode, *, with_magnitude):
         joblib.dump(FakeReg(0.12), run_dir / "magnitude.joblib")
     (run_dir / "params.json").write_text("{}")
     (bundle_dir / "ensemble_config.json").write_text(json.dumps({
-        "run_ids": ["v4-gbt-xs-s0"], "family": "gbt", "mode": mode,
+        "feature_contract_version": CONTRACT_VERSION, "run_ids": ["v4-gbt-xs-s0"], "family": "gbt", "mode": mode,
         "threshold": 0.1, "features": FEATURES, "eligible": True}))
     return bundle_dir
 

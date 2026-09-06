@@ -15,6 +15,7 @@ from datetime import date, timedelta
 
 import numpy as np
 import pandas as pd
+import vectorbt as vbt
 
 # Load .env so ALPACA_API_KEY is available
 try:
@@ -47,14 +48,8 @@ _BARS_PER_DAY = {
 # ---------------------------------------------------------------------------
 
 def _rsi(close: pd.Series, window: int) -> pd.Series:
-    """Wilder-smoothed RSI matching vectorbt's default implementation."""
-    delta = close.diff()
-    gain  = delta.clip(lower=0)
-    loss  = -delta.clip(upper=0)
-    avg_gain = gain.ewm(alpha=1 / window, adjust=False).mean()
-    avg_loss = loss.ewm(alpha=1 / window, adjust=False).mean()
-    rs = avg_gain / avg_loss
-    return 100 - (100 / (1 + rs))
+    """Use the same vectorbt RSI settings as the parameter sweep."""
+    return vbt.RSI.run(close, window=window).rsi
 
 
 def _ema(series: pd.Series, span: int) -> pd.Series:
@@ -119,8 +114,8 @@ def _check_rsi(close: pd.Series, params: dict) -> dict:
     if pd.isna(prev_rsi):
         return {"signal": "INSUFFICIENT_DATA", "rsi": None}
 
-    crossed_above_entry = (prev_rsi < entry_threshold) and (curr_rsi >= entry_threshold)
-    crossed_below_exit  = (prev_rsi > exit_threshold)  and (curr_rsi <= exit_threshold)
+    crossed_above_entry = bool(rsi.vbt.crossed_above(entry_threshold).iloc[-1])
+    crossed_below_exit = bool(rsi.vbt.crossed_below(exit_threshold).iloc[-1])
 
     if crossed_above_entry:
         signal = "BUY"
@@ -144,8 +139,9 @@ def _check_macd(close: pd.Series, params: dict) -> dict:
     slow_w   = params["slow_window"]
     signal_w = params["signal_window"]
 
-    macd_line   = _ema(close, fast_w) - _ema(close, slow_w)
-    signal_line = _ema(macd_line, signal_w)
+    indicator = vbt.MACD.run(close, fast_window=fast_w, slow_window=slow_w,
+                            signal_window=signal_w)
+    macd_line, signal_line = indicator.macd, indicator.signal
 
     valid = signal_line.dropna()
     if len(valid) < 2:
@@ -157,8 +153,8 @@ def _check_macd(close: pd.Series, params: dict) -> dict:
     if pd.isna(prev_macd) or pd.isna(prev_sig):
         return {"signal": "INSUFFICIENT_DATA", "macd": None, "signal_line": None}
 
-    crossed_above = (prev_macd <= prev_sig) and (curr_macd > curr_sig)
-    crossed_below = (prev_macd >= prev_sig) and (curr_macd < curr_sig)
+    crossed_above = bool(macd_line.vbt.crossed_above(signal_line).iloc[-1])
+    crossed_below = bool(macd_line.vbt.crossed_below(signal_line).iloc[-1])
 
     if crossed_above:
         signal = "BUY"
@@ -349,14 +345,32 @@ def scan_one(scan: dict) -> dict:
     calendar_days   = int(trading_days * 1.5) + 10  # buffer for weekends/holidays
     from utils.date_utils import generate_date_range
     start_date, end_date = generate_date_range(days_back=calendar_days)
+    now = pd.Timestamp.now(tz="UTC")
+    intraday = interval.lower() not in ("1d", "d")
+    if intraday:
+        end_date = now.isoformat()
 
     # --- Download data ---
     logger.info(f"[scanner] {symbol} {strategy} — fetching {interval} data ({start_date} → {end_date})")
-    df = load_price_data_smart(symbol, start_date, end_date, interval)
+    df = load_price_data_smart(symbol, start_date, end_date, interval, force_download=True, use_cache=False)
 
     if df is None or df.empty:
         result["error"] = "No data returned — check ticker/interval/date range."
         return result
+
+    if intraday:
+        duration = pd.Timedelta(interval.replace("m", "min") if interval.endswith("m") else interval)
+        timestamps = pd.to_datetime(df.index, utc=True)
+        df = df.loc[timestamps + duration <= now]
+        if df.empty:
+            result["error"] = "No completed bars available."
+            return result
+        last_close = pd.Timestamp(df.index[-1])
+        last_close = last_close.tz_localize("UTC") if last_close.tzinfo is None else last_close.tz_convert("UTC")
+        result["bar_closed_at"] = (last_close + duration).isoformat()
+        if now - (last_close + duration) > duration * 2:
+            result["error"] = "Stale market data; no current signal."
+            return result
 
     if len(df) < 3:
         result["error"] = f"Not enough bars ({len(df)}) to compute indicator."

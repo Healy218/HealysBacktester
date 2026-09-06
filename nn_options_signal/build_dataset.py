@@ -27,6 +27,26 @@ FEATURES = [
     "atm_iv_near", "atm_iv_far", "term_slope", "iv_chg_5", "pc_ratio", "dow",
 ]
 LABELS = [f"label_h{h}" for h in config.HORIZONS]
+DATASET_VERSION = "2026-09-05-exit-purged"
+
+
+def require_current_panel(panel):
+    if panel.attrs.get("options_signal_version") != DATASET_VERSION:
+        raise ValueError("stale options signal dataset; rebuild with exit-aware purging")
+
+
+def purge_label_boundaries(panel):
+    """Invalidate future partition outcomes without hiding entry candidates."""
+    panel = panel.copy()
+    for h in config.HORIZONS:
+        exit_col = f"exit_date_h{h}"
+        exits = pd.to_datetime(panel[exit_col])
+        crosses = (((panel["split"] == "train") & (exits >= pd.Timestamp(config.VAL_START)))
+                   | ((panel["split"] == "val") & (exits >= pd.Timestamp(config.TEST_START)))
+                   | ((panel["split"] == "test") & (exits > pd.Timestamp(config.TEST_END))))
+        panel.loc[crosses, [f"label_h{h}", f"exit_close_h{h}"]] = np.nan
+        panel.loc[crosses, exit_col] = pd.NaT
+    return panel
 
 
 # ── Black-Scholes IV (European approx; documented limitation for American) ───
@@ -179,12 +199,19 @@ def build_panel(bars: pd.DataFrame, und: pd.DataFrame) -> pd.DataFrame:
         ["train", "val", "test"], default="purged")
     panel = panel[panel["split"] != "purged"]
 
+    # Sparse contract bars can make a nominal H-day label extend beyond the
+    # calendar gap. Never expose the next partition's outcomes to fitting or
+    # validation. Keep the proposal; a simulator selecting it must explicitly
+    # resolve the absent valuation rather than silently substitute a survivor.
+    panel = purge_label_boundaries(panel)
+
     trade_cols = ["entry_open"] + [f"exit_close_h{h}" for h in config.HORIZONS] \
                  + [f"exit_date_h{h}" for h in config.HORIZONS]
     keep = ["date", "ticker", "underlying", "strike", "expiration", "type", "dte",
             "open", "close", "volume", "spot", "split"] + FEATURES + LABELS + trade_cols
     keep = list(dict.fromkeys(keep))          # dedupe, preserve order
     panel = panel[keep].dropna(subset=FEATURES)
+    panel.attrs["options_signal_version"] = DATASET_VERSION
     return panel.sort_values(["date", "ticker"]).reset_index(drop=True)
 
 

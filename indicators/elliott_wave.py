@@ -42,13 +42,14 @@ def _detect_swings(high: np.ndarray, low: np.ndarray, order: int):
         order: Number of bars on each side to confirm a swing.
 
     Returns:
-        swing_high: Array of NaN except at swing high bars (value = high price).
-        swing_low:  Array of NaN except at swing low bars (value = low price).
+        swing_high: Array of NaN except at confirmation bars (value = pivot high price).
+        swing_low:  Array of NaN except at confirmation bars (value = pivot low price).
     """
     n = len(high)
     swing_high = np.full(n, np.nan)
     swing_low = np.full(n, np.nan)
 
+    # A centered pivot becomes observable only after its right-hand window closes.
     for i in range(order, n - order):
         # Check if high[i] is the max in the window
         is_swing_high = True
@@ -57,7 +58,7 @@ def _detect_swings(high: np.ndarray, low: np.ndarray, order: int):
                 is_swing_high = False
                 break
         if is_swing_high:
-            swing_high[i] = high[i]
+            swing_high[i + order] = high[i]
 
         # Check if low[i] is the min in the window
         is_swing_low = True
@@ -66,7 +67,7 @@ def _detect_swings(high: np.ndarray, low: np.ndarray, order: int):
                 is_swing_low = False
                 break
         if is_swing_low:
-            swing_low[i] = low[i]
+            swing_low[i + order] = low[i]
 
     return swing_high, swing_low
 

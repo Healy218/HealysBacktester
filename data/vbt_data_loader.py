@@ -81,7 +81,7 @@ def _normalize_ohlcv(df: pd.DataFrame) -> pd.DataFrame:
 
     # Strip timezone
     if isinstance(df.index, pd.DatetimeIndex) and df.index.tz is not None:
-        df.index = df.index.tz_localize(None)
+        df.index = df.index.tz_convert("UTC").tz_localize(None)
 
     # Keep only OHLCV
     keep = [c for c in ["Open", "High", "Low", "Close", "Volume"] if c in df.columns]
@@ -134,6 +134,7 @@ def load_price_data_smart(
     interval: str,
     cache_dir: str = "data/cache",
     force_download: bool = False,
+    use_cache: bool = True,
 ) -> pd.DataFrame | None:
     """
     Alpaca-only data loader using vectorBT's data classes.
@@ -155,19 +156,21 @@ def load_price_data_smart(
         end_date: End date 'YYYY-MM-DD'.
         interval: Bar interval ('1m', '5m', '1h', '1D', ...).
         cache_dir: Local cache directory.
-        force_download: Skip cache and always fetch fresh data.
+        force_download: Skip cache reads and always fetch fresh data.
+        use_cache: Read/write local cache; disable for timestamp-bounded live scans.
 
     Returns:
         OHLCV DataFrame or None on failure.
     """
-    os.makedirs(cache_dir, exist_ok=True)
+    if use_cache:
+        os.makedirs(cache_dir, exist_ok=True)
 
     safe_symbol = symbol.replace("/", "_")
     cache_filename = f"{safe_symbol}_{interval}_{start_date}_{end_date}.csv"
     cache_filepath = os.path.join(cache_dir, cache_filename)
 
     # 1. Cache check
-    if not force_download and os.path.exists(cache_filepath):
+    if use_cache and not force_download and os.path.exists(cache_filepath):
         logger.info(f"[vbt-smart] Cache hit: {cache_filepath}")
         try:
             df = pd.read_csv(cache_filepath, index_col=0, parse_dates=True)
@@ -194,7 +197,8 @@ def load_price_data_smart(
     logger.info(f"[vbt-smart] Loading {symbol} ({interval}) from Alpaca…")
     df = _download_vbt_alpaca(symbol, start_date, end_date, interval)
     if df is not None and not df.empty:
-        _cache_df(df, cache_filepath)
+        if use_cache:
+            _cache_df(df, cache_filepath)
         return df
 
     logger.error(

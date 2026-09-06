@@ -239,7 +239,7 @@ def _rank_portfolio(portfolio) -> list[dict]:
     # three per-metric winners.
     if sharpe.notna().any():
         rank = 2
-        for col in sharpe.sort_values(ascending=False).index:
+        for col in sharpe.dropna().sort_values(ascending=False).index:
             if len(results) >= TOP_N:
                 break
             if col in used_cols:

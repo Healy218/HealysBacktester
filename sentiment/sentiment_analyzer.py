@@ -70,7 +70,7 @@ def aggregate_sentiment(
     df.index = pd.to_datetime(df.index)
 
     # Resample: mean sentiment per period, fill gaps with 0 (neutral)
-    sentiment = df["score"].resample(freq).mean().fillna(0.0)
+    sentiment = df["score"].resample(freq, closed="right", label="right").mean().fillna(0.0)
     sentiment.name = "sentiment"
 
     logger.info(

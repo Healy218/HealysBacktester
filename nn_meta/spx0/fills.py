@@ -7,6 +7,9 @@ LOW — the worst print, which is the only conservative bound OHLCV supports.
 An entry that cannot fill is a rejected proposal (kept, ``executed=False``).
 An exit that cannot fill walks forward to the next bar with depth; if none
 exists before the session floor the contract settles to intrinsic.
+Returned fill timestamps are the selected minute's END, when its depth and
+worst print are known. ``session_floor_ts`` denotes the last minute's START;
+settlement is recorded one minute later at the actual session close.
 """
 from __future__ import annotations
 
@@ -61,7 +64,7 @@ def entry_fill(bars: pd.DataFrame, signal_ts: pd.Timestamp, policy: DepthPolicy,
     price = float(r["Low"]) if sell else float(r["High"])
     if sell and price <= 0:
         return None, None, None, FillFailure.NO_DEPTH_ENTRY
-    return pd.Timestamp(r["timestamp"]), price, float(r["Volume"]), None
+    return pd.Timestamp(r["timestamp"]) + pd.Timedelta(minutes=1), price, float(r["Volume"]), None
 
 
 def exit_fill(bars: pd.DataFrame, exit_signal_ts: pd.Timestamp, policy: DepthPolicy, *,
@@ -78,8 +81,8 @@ def exit_fill(bars: pd.DataFrame, exit_signal_ts: pd.Timestamp, policy: DepthPol
     if not ok.empty:
         r = ok.iloc[0]
         price = float(r["High"]) if buyback else float(r["Low"])
-        return pd.Timestamp(r["timestamp"]), price, float(r["Volume"]), None
-    return pd.Timestamp(session_floor_ts), float(max(intrinsic_at_floor, 0.0)), 0.0, \
+        return pd.Timestamp(r["timestamp"]) + pd.Timedelta(minutes=1), price, float(r["Volume"]), None
+    return pd.Timestamp(session_floor_ts) + pd.Timedelta(minutes=1), float(max(intrinsic_at_floor, 0.0)), 0.0, \
         FillFailure.SETTLED_INTRINSIC
 
 
@@ -107,7 +110,7 @@ def spread_entry_fill(short_bars: pd.DataFrame, wing_bars: pd.DataFrame,
     r = ok.iloc[0]
     if float(r["Close_s"]) <= 0 or float(r["Close_w"]) <= 0:
         return None, None, None, None, FillFailure.NO_DEPTH_ENTRY
-    return (pd.Timestamp(r["timestamp"]), float(r["Close_s"]), float(r["Close_w"]),
+    return (pd.Timestamp(r["timestamp"]) + pd.Timedelta(minutes=1), float(r["Close_s"]), float(r["Close_w"]),
             float(min(r["Volume_s"], r["Volume_w"])), None)
 
 
@@ -127,9 +130,9 @@ def spread_exit_fill(short_bars: pd.DataFrame, wing_bars: pd.DataFrame,
     ok = j[fillable(j["Volume_s"], policy) & fillable(j["Volume_w"], policy)]
     if not ok.empty:
         r = ok.iloc[0]
-        return (pd.Timestamp(r["timestamp"]), float(r["Close_s"]),
+        return (pd.Timestamp(r["timestamp"]) + pd.Timedelta(minutes=1), float(r["Close_s"]),
                 float(r["Close_w"]), float(min(r["Volume_s"], r["Volume_w"])), None)
-    return (pd.Timestamp(session_floor_ts), float(max(intrinsic_short, 0.0)),
+    return (pd.Timestamp(session_floor_ts) + pd.Timedelta(minutes=1), float(max(intrinsic_short, 0.0)),
             float(max(intrinsic_wing, 0.0)), 0.0, FillFailure.SETTLED_INTRINSIC)
 
 

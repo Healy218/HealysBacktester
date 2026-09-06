@@ -4,6 +4,9 @@ description: State of the NN model and NN pipeline as of June 2026 review
 type: project
 ---
 
+> Historical June 2026 memory, superseded for current implementation/status by [the current handoff](../../../HANDOFF.md) and [the remediation report](../../../docs/reviews/2026-09-05-remediation.md). Old bug claims below require source verification; model APIs/LSTM, sentiment, and loaders have changed.
+
+
 ## Summary (June 2026)
 The NN pipeline has been PARTIALLY fixed since the April 2026 review. The major integration
 gaps in nn_signals.py and nn_backtest.py were addressed. However, a new critical issue was

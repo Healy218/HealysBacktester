@@ -174,9 +174,21 @@ PY
   rc_all=0
   IFS=',' read -ra SYMS <<< "$MY_SYMS"
   for sym in "${SYMS[@]}"; do
-    if gsutil -q stat "${SPECS}/${sym}.json" 2>/dev/null; then
-      echo "== $sym already frozen in bucket — skip =="
-      continue
+    if gsutil -q cp "${SPECS}/${sym}.json" "$ART/resume_${sym}.json" 2>/dev/null; then
+      if python - "$ART/resume_${sym}.json" <<'PY'
+import json
+import sys
+from nn_meta.baseline import require_current_spec, _config_hash
+spec = json.load(open(sys.argv[1]))
+require_current_spec(spec)
+if spec.get("config_hash") != _config_hash():
+    raise ValueError("baseline spec settings changed; re-freeze before reuse")
+PY
+      then
+        echo "== $sym current freeze in bucket — skip =="
+        continue
+      fi
+      echo "== $sym stale freeze in bucket — rebuilding =="
     fi
     # A symbol too thin to freeze is a RESULT (freeze_all skips it); only a
     # crash should fail the task.
@@ -409,14 +421,17 @@ trap 'kill $PART_SYNC 2>/dev/null || true' EXIT
 
 IFS=',' read -ra SYMS <<< "$MY_SYMS"
 for sym in "${SYMS[@]}"; do
-  if gsutil -q stat "${OUTB}/meta_rows/${sym}.parquet" 2>/dev/null; then
-    echo "== $sym already in bucket — skip =="
-    continue
-  fi
+  # Pull the complete checkpoint including its feature-contract provenance.
+  # The Python builder validates the manifest and mark coverage before skipping;
+  # mere remote row existence is never a commit check.
+  for item in "meta_rows/${sym}.parquet" "meta_rows/${sym}.provenance.json" "meta_marks/${sym}.parquet"; do
+    gsutil -q cp "$OUTB/$item" "$ART/$item" 2>/dev/null || true
+  done
   gsutil -m -q cp "${OUTB}/meta_partial/${sym}.*" "$PART/" 2>/dev/null || true
   python -m nn_meta.build_meta_dataset --symbols "$sym" --marks \
     --partial-dir "$PART"
-  gsutil -m -q rsync -r "$ART/meta_rows"  "${OUTB}/meta_rows"
-  gsutil -m -q rsync -r "$ART/meta_marks" "${OUTB}/meta_marks"
+  gsutil -q cp "$ART/meta_marks/${sym}.parquet" "${OUTB}/meta_marks/"
+  gsutil -q cp "$ART/meta_rows/${sym}.parquet" "${OUTB}/meta_rows/"
+  gsutil -q cp "$ART/meta_rows/${sym}.provenance.json" "$OUTB/meta_rows/"
 done
 echo "== task done =="

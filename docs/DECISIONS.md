@@ -466,3 +466,24 @@ step to watch rather than assume.
 (it buys nothing the box cannot do, and leaves no margin for a re-run);
 and treating the 2026-08-18 incident as a permanent property of "the home
 box" rather than of the specific retired hardware.
+
+
+## 2026-09-05 — Repair the adversarial audit before reusing research results
+
+The user requested fixes for every September 5 audit finding. Correct causal
+inputs, event/cost accounting, publication/state durability and research
+splits in the review checkout; retain the original audit and experiment
+history. The shared contract is `2026-09-05-causal-v2`. Old freezes, generated
+rows/marks and verified ensembles must be rebuilt and revalidated; do not
+silently resume them under corrected semantics. Target moneyness is a
+decision-time feature; the executed strike is execution metadata.
+
+A globally frozen proposal generator may only be assessed on validation/test
+periods after its optimization horizon. Such evaluation is explicitly
+conditional on that frozen generator; it is not a claim of fold-local
+refreezing. Genuinely end-to-end nested evaluation requires fold-local
+proposal rebuilds. The historical September 4 risk gate decision is retained,
+with its selection history disclosed; no new untouched forward-performance
+verdict is asserted by local source tests.
+
+Implementation and validation: [remediation report](reviews/2026-09-05-remediation.md).

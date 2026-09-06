@@ -30,7 +30,7 @@ from nn_meta.calibration import calibration_summary
 from nn_meta.diagnostics import decile_diagnostic
 from nn_meta.ev_sizing import (ev_candidate_rows, ev_selected_rows, evaluate_ev,
                                magnitude_target)
-from nn_meta.feature_contract import assert_decision_safe
+from nn_meta.feature_contract import assert_decision_safe, require_current_dataset
 from nn_meta.mark_stream import execution_frames, load_mark_stream, option_b_blockers
 from nn_meta.model import build_magnitude_mlp, build_meta_mlp
 from nn_meta.multiple_testing import deflated_sharpe_from_trials
@@ -705,7 +705,14 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
                     mark_stream: pd.DataFrame | None = None,
                     dd_cap: float | None = None,
                     thresholds: Iterable[float] = config.KEEP_THRESHOLDS) -> dict:
-    """Nested temporal evaluation for one fold or global ablation window."""
+    """Nested meta-model selection conditional on a pre-validation frozen generator."""
+    if not isinstance(spec.get("train_window"), (list, tuple)) or len(spec["train_window"]) != 2:
+        raise ValueError("baseline lacks training-window provenance; refreeze it")
+    baseline_end = pd.Timestamp(spec["train_window"][1]).normalize()
+    if window.val_start < baseline_end + pd.Timedelta(days=1):
+        raise ValueError("validation/OOS overlaps frozen baseline optimization; "
+                         "use a post-freeze window or rebuild fold-local proposals")
+    require_current_dataset(ds, spec)
     ds = ds.copy()
     split = assign_purged_splits(
         ds, train_start=window.train_start, val_start=window.val_start,
@@ -788,6 +795,9 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         }
     return {
         "schema": schema, "purged": purged, "embargo": embargo,
+        "evaluation_scope": "meta selection conditional on pre-validation frozen proposals",
+        "baseline_train_end": baseline_end.isoformat(),
+        "gate_bar": winner.get("gate_bar", config.GATE_BAR),
         "dd_cap": config.MAX_DRAWDOWN_CAP if dd_cap is None else float(dd_cap),
         "window": {k: str(v.date()) for k, v in window.__dict__.items()},
         "split_summary": split_summary(ds, split).to_dict(orient="records"),
@@ -832,13 +842,16 @@ def _write_report(results: list[dict], output: Path) -> None:
     caps = sorted({float(r.get("dd_cap", config.MAX_DRAWDOWN_CAP)) for r in results})
     cap_text = " / ".join(f"{c:.0%}" for c in caps) if caps else f"{config.MAX_DRAWDOWN_CAP:.0%}"
     lines = ["# V4 causal evaluation", "",
-             "Each row uses fold-local model/policy selection and the shared slot portfolio.",
+             "Each row uses fold-local meta-model/policy selection conditional on "
+             "a proposal baseline frozen before validation. These are not end-to-end "
+             "nested strategy-optimization results.",
              "The marked column is the mark-to-market ledger result and is `pending` "
              "until a per-contract mark stream is supplied via `--marks`.",
              "",
              "The **gate** column reports whether the winning policy cleared the "
              "eligibility gate on validation (kept ≥ "
-             f"{config.MIN_KEPT_TRADES} trades, beat the frozen baseline ex-top3, maxDD ≤ "
+             f"{config.MIN_KEPT_TRADES} trades, beat the frozen baseline under "
+             f"gate(s) {', '.join(sorted({r.get('gate_bar', config.GATE_BAR) for r in results}))}, maxDD ≤ "
              f"{cap_text}). A ⚠ row's winner is the least-bad "
              "config, not a config that passed — its test numbers are diagnostic "
              "only and must not be promoted.", "",
@@ -942,7 +955,9 @@ def main() -> None:
         args.seeds, args.epochs, args.gbt_estimators = "0", 5, 50
 
     ds = pd.read_parquet(args.dataset)
+    require_current_dataset(ds)
     spec = load_spec()
+    require_current_dataset(ds, spec)
     if args.marks:
         # Fail closed BEFORE training if the dataset can't support the ledger,
         # rather than surfacing a silent `pending` in every row (which reads as
@@ -976,6 +991,17 @@ def main() -> None:
             ))
     else:
         folds = expanding_folds(ds["entry_ts"], n_folds=args.folds or 3)
+        if not isinstance(spec.get("train_window"), (list, tuple)) or len(spec["train_window"]) != 2:
+            raise SystemExit("baseline lacks training-window provenance; refreeze it")
+        frozen_until = pd.Timestamp(spec["train_window"][1]).normalize()
+        excluded = [w for w in folds if w.val_start <= frozen_until]
+        folds = [w for w in folds if w.val_start > frozen_until]
+        if excluded:
+            print(f"excluded {len(excluded)} folds overlapping baseline optimization "
+                  f"through {frozen_until.date()}; only post-freeze conditional evaluation is valid")
+        if not folds:
+            raise SystemExit("no post-freeze validation folds remain; use a later window "
+                             "or rebuild proposals from an earlier baseline freeze")
         for i, window in enumerate(folds, 1):
             print(f"running nested fold {i}/{len(folds)}", flush=True)
             results.append(evaluate_window(
@@ -992,6 +1018,10 @@ def main() -> None:
         provider_metadata={"pool": config.POOL, "interval": config.INTERVAL,
                            "options_history_constraint": "15m; approximately two years"},
         code_root=config.ROOT.parent,
+        mark_stream_path=args.marks,
+        evaluation_config={"gate_bar": config.GATE_BAR, "costs": "base",
+                           "embargo": args.embargo, "label": args.label,
+                           "thresholds": thresholds, "models": models, "seeds": seeds},
     )
     write_manifest(manifest, manifest_path)
     if args.metadata_bundle:

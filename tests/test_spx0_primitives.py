@@ -80,7 +80,7 @@ def test_entry_fill_is_after_signal_and_depth_gated():
     bars, pol = _bars(), DepthPolicy(qty=1, depth_mult=2.0, entry_window_min=3)
     assert list(fillable(bars["Volume"], pol)) == [False, False, True, False, True, False]
     ts, price, depth, fail = entry_fill(bars, bars["timestamp"][0], pol)
-    assert fail is None and ts == bars["timestamp"][2] and price == 0.34 and depth == 5
+    assert fail is None and ts == bars["timestamp"][2] + pd.Timedelta(minutes=1) and price == 0.34 and depth == 5
     # window of 1 bar after the signal: bar 1 has no depth -> rejected, kept as data
     _, _, _, fail = entry_fill(bars, bars["timestamp"][0], DepthPolicy(entry_window_min=1))
     assert fail is FillFailure.NO_DEPTH_ENTRY
@@ -93,10 +93,10 @@ def test_exit_fill_walks_forward_then_settles_to_intrinsic():
     floor = bars["timestamp"][5]
     ts, price, _, fail = exit_fill(bars, bars["timestamp"][3], pol,
                                    session_floor_ts=floor, intrinsic_at_floor=0.0)
-    assert fail is None and ts == bars["timestamp"][4] and price == 0.32   # LOW
+    assert fail is None and ts == bars["timestamp"][4] + pd.Timedelta(minutes=1) and price == 0.32   # LOW
     ts, price, depth, fail = exit_fill(bars, bars["timestamp"][5], pol,
                                        session_floor_ts=floor, intrinsic_at_floor=1.25)
-    assert fail is FillFailure.SETTLED_INTRINSIC and ts == floor and price == 1.25
+    assert fail is FillFailure.SETTLED_INTRINSIC and ts == floor + pd.Timedelta(minutes=1) and price == 1.25
     assert intrinsic("C", 5900, 5912.5) == 12.5 and intrinsic("P", 5900, 5912.5) == 0.0
 
 

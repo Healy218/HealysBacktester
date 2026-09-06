@@ -21,6 +21,7 @@ import tensorflow as tf
 from nn_meta import config
 from nn_meta.build_meta_dataset import META_FEATURES
 from nn_meta.model import build_meta_mlp
+from nn_meta.feature_contract import CONTRACT_VERSION, require_current_dataset
 
 
 def prepare_matrix(rows: pd.DataFrame, mu: pd.Series, sd: pd.Series) -> np.ndarray:
@@ -73,6 +74,7 @@ def run_one(panel: pd.DataFrame, arch: list[int], lr: float, seed: int,
         {"mean": mu.to_dict(), "std": sd.to_dict()}))
     (run_dir / "params.json").write_text(json.dumps(
         {"arch": arch, "lr": lr, "seed": seed, "label": label_col,
+         "feature_contract_version": CONTRACT_VERSION,
          "features": META_FEATURES}))
 
     best_epoch = int(np.argmin(hist.history["val_loss"]))
@@ -93,6 +95,8 @@ def main() -> None:
     args = ap.parse_args()
 
     panel = pd.read_parquet(config.META_DATASET_PARQUET)
+    from nn_meta.baseline import load_spec
+    require_current_dataset(panel, load_spec())
     config.ensure_dirs()
 
     archs = config.ARCHITECTURES[:1] if args.smoke else config.ARCHITECTURES

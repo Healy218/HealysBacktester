@@ -25,6 +25,7 @@ from utils.logging_utils import setup_logging
 from options.execution import to_naive_utc
 from nn_meta import config
 from nn_meta.baseline import load_spec, propose_trades
+from nn_meta.live.state import Outbox, atomic_write_json, serialized
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -73,7 +74,7 @@ class Signal:
 # ── market hours ──────────────────────────────────────────────────────────────
 
 def is_rth(now: Optional[datetime] = None) -> bool:
-    """True during regular US equity hours (Mon-Fri 09:30-16:00 America/New_York)."""
+    """True during regular US equity hours (Mon-Fri 09:30 through the 16:00 close pass, America/New_York)."""
     now = now or datetime.now(timezone.utc)
     if now.tzinfo is None:
         now = now.replace(tzinfo=timezone.utc)
@@ -81,7 +82,7 @@ def is_rth(now: Optional[datetime] = None) -> bool:
     if et.weekday() >= 5:
         return False
     minutes = et.hour * 60 + et.minute
-    return 9 * 60 + 30 <= minutes < 16 * 60
+    return 9 * 60 + 30 <= minutes <= 16 * 60
 
 
 def _ny_tz():
@@ -91,12 +92,25 @@ def _ny_tz():
 
 def closed_bars(bars: pd.DataFrame, now: Optional[datetime] = None) -> pd.DataFrame:
     """Drop the still-forming bar: keep bars whose 15m interval has fully closed."""
-    if bars.empty:
+    if bars is None or bars.empty:
         return bars
     now = now or datetime.now(timezone.utc)
     now_naive = pd.Timestamp(now).tz_convert("UTC").tz_localize(None) \
         if pd.Timestamp(now).tzinfo else pd.Timestamp(now)
     return bars[bars.index + _BAR <= now_naive]
+
+
+def require_recent_bars(bars, now):
+    """Refuse a feed more than one interval behind the expected closed bar."""
+    if bars is None or bars.empty:
+        raise ValueError("no closed market bars")
+    stamp = pd.Timestamp(now)
+    if stamp.tzinfo is not None:
+        stamp = stamp.tz_convert("UTC").tz_localize(None)
+    age = stamp - bars.index[-1]
+    if age > pd.Timedelta(minutes=30):
+        raise ValueError(f"stale market bars: last bar {bars.index[-1]}, age {age}")
+    return bars
 
 
 # ── detection ─────────────────────────────────────────────────────────────────
@@ -129,7 +143,9 @@ def suggest_contract(sig: Signal, now: Optional[datetime] = None) -> str:
     """Advisory contract string (alert-only: the human picks the live listing)."""
     now = now or datetime.now(timezone.utc)
     target_exp = (now + timedelta(days=sig.dte)).date()
-    return (f"~ATM {sig.right} near ${sig.spot:,.2f} strike, "
+    target = sig.spot * (1.0 + config.EXEC_CONFIG.get("MONEYNESS", 0.0))
+    label = "~ATM" if target == sig.spot else "target"
+    return (f"{label} {sig.right} near ${target:,.2f} strike, "
             f"~{sig.dte} DTE (nearest listed expiry ≈ {target_exp})")
 
 
@@ -159,7 +175,7 @@ def _load_state(path: Path) -> dict:
 
 def _save_state(path: Path, state: dict) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(state, indent=2))
+    atomic_write_json(path, state)
 
 
 # ── scanner ───────────────────────────────────────────────────────────────────
@@ -182,16 +198,19 @@ class Scanner:
         # daily watchlist; the panel digest sends the top-N and tracks
         # forward hit-rates. Pool-keyed file beside the other live state.
         self._watchlist_path = watchlist_path or (
-            config.ROOT / "live" / f".{config.POOL}_watchlist.json")
+            self._state_path.parent / f".{config.POOL}_watchlist.json")
+        self._outbox_path = self._state_path.with_name(self._state_path.stem + "_outbox.json")
 
+    @serialized(lambda self, *args, **kwargs: self._state_path.parent / ".live.lock")
     def scan_once(self, symbols: Optional[list[str]] = None,
                   now: Optional[datetime] = None) -> list[Signal]:
         now = now or datetime.now(timezone.utc)
         state = _load_state(self._state_path)
         fired: list[Signal] = []
+        outbox = Outbox(self._outbox_path)
         for sym in (symbols or list(self._spec["symbols"])):
             try:
-                bars = closed_bars(self._load(sym), now)
+                bars = require_recent_bars(closed_bars(self._load(sym), now), now)
                 sig = detect_fresh_signal(sym, bars, self._spec["symbols"][sym])
             except Exception as e:
                 logger.error(f"[live] {sym}: scan error: {e}")
@@ -216,7 +235,21 @@ class Scanner:
                     logger.info(f"[live] {sym}: mechanical entry filtered out "
                                 f"(score={sig.score})")
                     continue
+            title, message = format_alert(sig)
+            outbox.enqueue({"title": title, "message": message},
+                           key=f"{config.POOL}|{sym}|{sig.strategy}|{bar_iso}")
             fired.append(sig)
             state[sym] = bar_iso
         _save_state(self._state_path, state)
         return fired
+
+    @serialized(lambda self, *args, **kwargs: self._state_path.parent / ".live.lock")
+    def deliver_pending(self, notifier):
+        outbox = Outbox(self._outbox_path)
+        sent = 0
+        for entry in outbox.unacked():
+            p = entry["payload"]
+            if notifier.send(p["message"], title=p["title"]):
+                outbox.acknowledge(entry["id"])
+                sent += 1
+        return sent

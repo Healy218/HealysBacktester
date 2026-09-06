@@ -1,4 +1,4 @@
-# GCP Batch runbook — setup, run, and guaranteed shutdown
+# GCP Batch runbook — setup, run, and verified shutdown
 
 Feasibility + cost analysis: `docs/GCP_BATCH_FEASIBILITY.md`. This is the
 do-it runbook. Files here: `Dockerfile`, `task.sh` (what each cloud task
@@ -8,31 +8,23 @@ cloud runs are comparable by construction).
 
 ## The "does it stay on?" answer, up front
 
-**Google Cloud Batch has no always-on component.** VMs are created when a
-job starts and **deleted automatically the moment its tasks finish or
-fail** — there is nothing to remember to switch off. Cost is strictly
-per-job. The only things that persist between runs, with their worst-case
-monthly cost:
+Batch allocates task VMs and releases them after job termination. Confirm
+terminal job states and inspect remaining instances; a submitted cancellation
+request or a failed describe call is not evidence that billing has stopped.
+Buckets, registry images and build staging storage remain until removed.
 
-| Residual | Monthly cost | Removed by |
-|---|---|---|
-| GCS bucket (data cache 3.4 GB + results) | ~$0.10 | `teardown.sh` with `DELETE_BUCKET=1` |
-| Container images in Artifact Registry (~2 GB) | ~$0.20 | `teardown.sh` (deletes images, keeps the one-time repo) |
-| Cloud Build staging bucket (`gs://<project>_cloudbuild`, one source tarball per build) | pennies | `teardown.sh` |
-| Batch job *records* (metadata, no compute) | $0 | `teardown.sh` |
+`submit.sh` chooses resource limits by mode: build/freeze and training have
+different time caps and retry counts. A time cap applies per task attempt,
+not to total campaign spend. Review `MAX_RUN`, `RETRIES`, packing and fleet
+width before submission. Billing budget alerts are delayed notifications,
+not spending caps.
 
-Spot note: preemptions count against each task's `maxRetryCount: 3`. In a
-churny spot pool a shard can FAIL after three preemptions — that's fine by
-design: resubmitting the job resumes from the per-symbol checkpoints in the
-bucket and only redoes in-flight symbols.
-
-Belt-and-braces on top of the architecture:
-1. Every job template sets `maxRunDuration: 14400s` — a hung task is killed
-   (and its VM deleted) after 4 h no matter what.
-2. `teardown.sh` deletes jobs + images, and *lists compute instances* so you
-   can see with your own eyes that none exist.
-3. Step 2 below creates a **billing budget alert at $25** — if anything ever
-   surprises us, you get an email long before it matters.
+`scripts/cloud_budget_guard.sh` is a time/rate estimate that monitors explicit
+job IDs. Set `PROJECT`, `REGION`, `BUDGET_USD`, `USD_PER_HOUR` and any
+`SPENT_USD` already incurred. It treats describe errors as unknown/active,
+retries cancellation after the deadline, and stays running until every job is
+confirmed terminal. It still depends on the guard host and cloud API remaining
+available; review its log and the cloud resources independently after shutdown.
 
 ## One-time setup (~15 min, needs your Google account)
 
@@ -51,7 +43,7 @@ gcloud config set project healys-batch
 gcloud billing accounts list
 gcloud billing projects link healys-batch --billing-account=XXXXXX-XXXXXX-XXXXXX
 
-# 2. BUDGET ALERT — the "never a surprise bill" guard ($25, emails you)
+# 2. BUDGET ALERT — notification only ($25); does not stop spending
 #    (single line — pasting multi-line backslash commands eats the flags)
 gcloud billing budgets create --billing-account=XXXXXX-XXXXXX-XXXXXX --display-name=healys-batch-cap --budget-amount=25USD --threshold-rule=percent=0.5 --threshold-rule=percent=0.9
 
@@ -88,10 +80,7 @@ cd ~/Coding/HealysBacktester
 #    gcloud's tarball snapshotter crashes ("lost gzip_file") if files churn
 #    mid-archive — e.g. a running dataset build's checkpoints (hit live
 #    2026-08-16). Also gives exact-commit provenance for the tag.
-SHA=$(git rev-parse --short HEAD)
-TMP=$(mktemp -d) && git archive --format=tar HEAD | tar -x -C "$TMP" && cp deploy/gcp/Dockerfile "$TMP/Dockerfile"
-(cd "$TMP" && gcloud builds submit --tag us-central1-docker.pkg.dev/healys-batch/healys/backtester:$SHA . 2>&1 | tail -2)
-rm -rf "$TMP"
+bash deploy/gcp/build_image.sh
 
 # 5. one-time data sync (ingress is free; ~10 min on home upstream)
 gsutil -m rsync -r nn_meta/data_cache_v3 gs://healys-backtester/data_cache_v3
@@ -102,13 +91,13 @@ gsutil -m cp nn_meta/artifacts_v31/baseline_spec.json \
 PROJECT=healys-batch BUCKET=gs://healys-backtester \
   bash deploy/gcp/submit.sh 1 "AAPL,SPY"
 
-# 6b. full build: 30 shards wide (≈1–2 h, ≈$3–5 spot)
+# 6b. full build: review duration/rate estimates for this pool before launching
 PROJECT=healys-batch BUCKET=gs://healys-backtester bash deploy/gcp/submit.sh 30
 #     ...then the single assemble task (TASK_MODE=assemble via submit tweak)
 
 # 6c. THE VERIFICATION GATE — after assemble, before any training run.
-#     Runs on Batch, not the home box: a flipped bit would give a confident
-#     WRONG verdict, and this gate is what decides if the dataset is trusted.
+#     Batch or the current home box can run this check. Validate reproducibility
+#     with identical seeds and comparable artifact hashes.
 #     Exits non-zero if any shared column still differs (--expect-identical).
 TASK_MODE=diff PROJECT=healys-batch BUCKET=gs://healys-backtester \
   IMAGE_TAG=<tag> bash deploy/gcp/submit.sh 1
@@ -125,7 +114,7 @@ TASK_MODE=spx0 EXTRA_ARGS="--folds 3 --seeds 0,1,2,3,4 --epochs 60 --gbt-estimat
 # 7. pull results home
 gsutil -m rsync -r gs://healys-backtester/out/ nn_meta/artifacts_v31/
 
-# 8. SHUTDOWN — even though compute already self-deleted
+# 8. SHUTDOWN — inspect the final job states and remaining compute afterward
 PROJECT=healys-batch BUCKET=gs://healys-backtester bash deploy/gcp/teardown.sh
 ```
 
@@ -146,12 +135,16 @@ limit.
     TASK_MODE=finalize PROJECT=... BUCKET=gs://... \
       EXTRA_ARGS='--epochs 60 --gbt-estimators 600' bash deploy/gcp/submit.sh 1
 
-**Why these exist.** The home box has proven single-bit memory corruption
-(2026-08-18; evidence in `docs/incidents/`). That corruption is silent unless it
-lands somewhere that fails loudly, and these two steps produce the bundle that
-is committed and deployed to production — a flip in a training array or a model
-weight would ship a wrong model with no error at all. Full reasoning in
-`HANDOFF.md`.
+Training may run on Batch or the current home box. The faulty i5/RAM machine
+was retired on 2026-08-23; its incident is not a prohibition on the replacement
+hardware. Compare deterministic runs and artifact hashes when establishing
+trust in a new environment.
+
+The 2026-09-05 causal-feature correction invalidates older research specs,
+row checkpoints and model contracts for current validation. Re-freeze, rebuild,
+evaluate and finalize matching artifacts before promoting a bundle. Existing
+frozen bundles are historical artifacts; default verification rejects stale
+contracts. Research-only overrides do not make an old bundle deployable.
 
 Notes:
 
@@ -170,3 +163,20 @@ Notes:
   `PROVISIONING` / `RETRIES`.
 - `EXTRA_ARGS` is interpolated into the job JSON and must not contain double
   quotes; submit.sh refuses rather than emitting invalid JSON.
+
+## Checkpoint publication and failure semantics
+
+Cloud and local builders pull rows, marks and the matching
+`<symbol>.provenance.json`. The Python builder validates the current feature
+contract, full input signature and mark coverage before it skips a symbol.
+Remote row existence alone never proves completion. Publication is per symbol:
+marks first, rows second, matching provenance last. All required uploads must
+succeed; partial publication is repaired on the next validated build.
+Family partial checkpoints include their provenance sidecars in synchronization.
+The local worker and v6 freeze launcher return nonzero when any worker fails;
+`LOCAL-*-DONE` is emitted only after successful completion.
+
+Freeze retries download an existing per-symbol spec and validate its current
+feature contract and pool configuration hash before skipping. Missing, stale,
+or invalid specs are rebuilt and published; old bucket existence alone is
+not evidence of a completed freeze under the corrected recipe.

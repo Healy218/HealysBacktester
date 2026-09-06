@@ -15,7 +15,7 @@ import pandas as pd
 
 from nn_meta import config
 from nn_meta.build_meta_dataset import V4_META_FEATURES
-from nn_meta.feature_contract import assert_decision_safe
+from nn_meta.feature_contract import CONTRACT_VERSION, assert_decision_safe
 from nn_meta.mark_stream import mark_stream_path, option_b_blockers
 
 
@@ -37,7 +37,10 @@ def check_environment(dataset: Path, spec_path: Path, *, require_gbt: bool) -> d
         add("v4_feature_contract", False, str(exc))
     if dataset.exists():
         try:
-            cols = set(pd.read_parquet(dataset).columns)
+            ds = pd.read_parquet(dataset)
+            cols = set(ds.columns)
+            add("dataset_feature_version", ds.attrs.get("feature_contract_version") == CONTRACT_VERSION,
+                "requires current feature provenance; rebuild pre-audit datasets")
             missing = set(V4_META_FEATURES) - cols
             add("dataset_feature_schema", not missing,
                 "all V4 features present" if not missing else f"missing {sorted(missing)}")

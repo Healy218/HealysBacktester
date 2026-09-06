@@ -297,7 +297,8 @@ def freeze_month(membership: pd.DataFrame, month: str, *,
 
 def load_daily_rows(daily_dir: Path = UNIVERSE_DAILY_DIR) -> pd.DataFrame:
     """Concatenate the stage-A monthly parquets; loud on absence."""
-    files = sorted(Path(daily_dir).glob("*.parquet"))
+    files = sorted(p for p in Path(daily_dir).glob("*.parquet")
+                   if re.fullmatch(r"\d{4}-\d{2}\.parquet", p.name))
     if not files:
         raise UniversePitError(f"no universe_daily parquets under {daily_dir}")
     return pd.concat([pd.read_parquet(f) for f in files], ignore_index=True)

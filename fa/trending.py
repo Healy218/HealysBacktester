@@ -57,7 +57,7 @@ TOP_N = 5
 def _tickers(text: str) -> set[str]:
     out = {m.upper() for m in _CASHTAG.findall(text)}
     out |= {t for t in _BARE.findall(text) if t in BARE_OK}
-    return out
+    return out & set(UNIVERSE)
 
 
 def _load(src: str, since=None) -> pd.DataFrame:
@@ -196,7 +196,7 @@ def build_report(as_of=None) -> tuple[str, dict]:
 
     L = [f"📊 FA trending — {as_of}",
          f"reddit·news·stocktwits · {len(prior)+1}d · ⋈=2-src · "
-         f"🐂/🐻=StockTwits lean", "",
+         f"🐂/🐻=sentiment lean (StockTwits snapshot-weighted when available)", "",
          "📈 Heating up (rising chatter)"]
     L += [fmt(r) for r in up.itertuples()] or ["  (none)"]
     L += ["", "📉 Cooling off (fading chatter)"]

@@ -10,10 +10,11 @@
 # Resume-safe: freeze_all skips symbols already in its shard file.
 # Run DETACHED (harness background tasks get killed on this box):
 #   setsid nohup scripts/run_freeze_v6_local.sh > logs/freeze_v6_local.log 2>&1 &
-set -uo pipefail
+set -euo pipefail
 cd "$(dirname "$(readlink -f "$0")")/.."
 export NN_META_POOL=v6
-WORKERS=${WORKERS:-4}
+. scripts/lib/autosize.sh
+WORKERS=${WORKERS:-$(autosize_workers 5000)}
 BASE=nn_meta/artifacts_v5/baseline_spec.json
 OUT=nn_meta/artifacts_v6
 mkdir -p "$OUT" logs
@@ -36,5 +37,9 @@ for i in $(seq 0 $((WORKERS-1))); do
       --out "$OUT/spec_shard_$i.json" > "logs/freeze_v6_shard_$i.log" 2>&1 &
   pids+=($!)
 done
-wait "${pids[@]}"
+rc=0
+for pid in "${pids[@]}"; do
+  wait "$pid" || rc=1
+done
+[ "$rc" -eq 0 ] || { echo "LOCAL-FREEZE-FAILED" >&2; exit "$rc"; }
 echo "LOCAL-FREEZE-DONE $(date -u +%FT%TZ)"

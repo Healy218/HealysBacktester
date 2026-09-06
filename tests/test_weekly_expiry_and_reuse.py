@@ -53,16 +53,18 @@ def test_build_symbol_rows_reuses_families_from_an_earlier_pool(monkeypatch):
                            "net_return": [0.1, -0.1], "executed": [True, True]})
     from nn_meta.mark_stream import stable_trade_id
     tids = stable_trade_id(reused).tolist()
-    marks = pd.DataFrame({"trade_id": [tids[0], "other"],
-                          "mark_ts": pd.to_datetime(["2025-01-02 15:15", "2025-01-02 15:15"]),
-                          "gross_return": [0.01, 0.5]})
+    marks = pd.DataFrame({"trade_id": [tids[0], tids[1], "other"],
+                          "mark_ts": pd.to_datetime(["2025-01-02 15:15", "2025-01-03 15:15", "2025-01-02 15:15"]),
+                          "gross_return": [0.01, 0.02, 0.5]})
+    marks["cost_entries"] = 1
+    marks["cost_exits"] = 0
     spec_entry = {"strategies": {"rsi": {"params": {}}, "ma": {"params": {}}}}
     sink = []
     out = B.build_symbol_rows("SPY", spec_entry, provider=None, marks_sink=sink,
                               reuse=(reused, marks))
     assert proposed == ["ma"]                          # rsi was NOT rebuilt
     assert len(out) == 2 and set(out["strategy"]) == {"rsi"}
-    assert len(sink) == 1 and sink[0]["trade_id"].tolist() == [tids[0]]   # only its marks
+    assert len(sink) == 1 and sink[0]["trade_id"].tolist() == tids   # only its marks
 
 
 def test_reusable_rows_only_for_families_with_identical_frozen_entries(tmp_path, monkeypatch):
@@ -78,7 +80,9 @@ def test_reusable_rows_only_for_families_with_identical_frozen_entries(tmp_path,
     new_entry = {"strategies": {"rsi": {"params": {"w": 14}, "dte": 5},      # unchanged → reuse
                                 "ma": {"params": {"w": 20}, "dte": 45},       # re-frozen → rebuild
                                 "keltner": {"params": {"w": 10}, "dte": 5}}}  # new → build
-    rows, mk = B._reusable_rows("SPY", new_entry, "v5", marks=False)
+    original_entry = json.loads((old / "baseline_spec.json").read_text())["symbols"]["SPY"]
+    B._write_provenance(old / "meta_rows" / "SPY.parquet", B._provenance(original_entry, [5]))
+    rows, mk = B._reusable_rows("SPY", new_entry, "v5", marks=False, dte_grid=[5])
     assert rows["strategy"].tolist() == ["rsi"] and mk is None
     assert B._reusable_rows("XYZ", new_entry, "v5", marks=False) is None
 

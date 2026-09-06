@@ -168,6 +168,8 @@ def validate_execution_rows(trades: pd.DataFrame) -> pd.DataFrame:
     out = trades.copy()
     for col in ("signal_ts", "fill_entry_ts", "fill_exit_ts"):
         out[col] = pd.to_datetime(out[col])
+        if out[col].isna().any():
+            raise AccountingDataError("execution timestamps must be present")
     if out["trade_id"].duplicated().any():
         raise AccountingDataError("trade_id must be unique")
     if (out["fill_entry_ts"] <= out["signal_ts"]).any():
@@ -196,6 +198,8 @@ def validate_marks(marks: pd.DataFrame, trades: pd.DataFrame) -> pd.DataFrame:
     if (~np.isfinite(out["gross_return"])).any():
         raise AccountingDataError("mark gross_return must be finite")
     bounds = trades.set_index("trade_id")[["fill_entry_ts", "fill_exit_ts"]]
+    if out[["trade_id", "mark_ts"]].duplicated().any() or out["mark_ts"].isna().any():
+        raise AccountingDataError("marks need unique finite trade/timestamp keys")
     if not set(out["trade_id"]).issubset(bounds.index):
         raise AccountingDataError("marks reference an unknown trade")
     joined = out.join(bounds, on="trade_id")
@@ -215,6 +219,27 @@ def validate_marks(marks: pd.DataFrame, trades: pd.DataFrame) -> pd.DataFrame:
         more = f" (+{len(bad) - 1} more)" if len(bad) > 1 else ""
         raise AccountingDataError(
             f"trade {bad[0]} lacks an entry or exit mark{more}")
+    terminal = out.sort_values("mark_ts").groupby("trade_id", observed=True).tail(1).set_index("trade_id")
+    expected = trades.set_index("trade_id")["gross_return"].astype(float)
+    if not np.allclose(terminal["gross_return"].reindex(expected.index), expected,
+                       rtol=1e-9, atol=1e-10):
+        raise AccountingDataError("terminal mark disagrees with execution gross_return")
+    if {"cost_entries", "cost_exits"}.issubset(out):
+        ordered = out.sort_values(["trade_id", "mark_ts"])
+        first = ordered.groupby("trade_id", observed=True).head(1)
+        if not ((first["cost_entries"] == 1) & (first["cost_exits"] == 0)).all():
+            raise AccountingDataError("initial mark must record exactly one entry and no exit")
+        counts = ordered[["cost_entries", "cost_exits"]].astype(float)
+        if (not np.isfinite(counts.to_numpy()).all() or (counts < 0).any().any()
+                or (counts != np.floor(counts)).any().any()
+                or not (counts["cost_entries"] - counts["cost_exits"]).isin([0, 1]).all()
+                or (ordered.groupby("trade_id", observed=True)[["cost_entries", "cost_exits"]].diff() < 0).any().any()
+                or not (terminal["cost_entries"] == terminal["cost_exits"]).all()):
+            raise AccountingDataError("invalid cumulative roll cost events")
+        if "n_fills" in trades:
+            fills = trades.set_index("trade_id")["n_fills"]
+            if not (terminal["cost_entries"].reindex(fills.index) == fills).all():
+                raise AccountingDataError("mark fill counts disagree with execution")
     return out.sort_values(["mark_ts", "trade_id"]).reset_index(drop=True)
 
 
@@ -248,7 +273,16 @@ def mark_to_market_portfolio(trades: pd.DataFrame, marks: pd.DataFrame, *,
     else:
         size_by_trade = {}
     marks = validate_marks(marks, trades)
-    by_trade = {r.trade_id: r for r in trades.itertuples(index=False)}
+    index_costs = "cost_model" in trades and (trades["cost_model"] == "index_dollar").all()
+    if "cost_model" in trades and not index_costs:
+        raise AccountingDataError("mixed or unknown per-trade cost models")
+    if index_costs:
+        required_paths = {f"net_return_{costs.name}", f"turnover_{costs.name}"}
+        if not required_paths <= set(marks) or not {
+                f"entry_turnover_{costs.name}", f"entry_net_return_{costs.name}"} <= set(trades):
+            raise AccountingDataError(f"no explicit index dollar cost path for {costs.name}")
+        if not np.isfinite(marks[list(required_paths)].to_numpy(dtype=float)).all():
+            raise AccountingDataError("nonfinite index dollar cost path")
     marks_by_time = {ts: grp for ts, grp in marks.groupby("mark_ts", sort=True)}
     events = sorted(set(trades["fill_entry_ts"]) | set(marks["mark_ts"]))
     cash, peak, max_dd = 1.0, 1.0, 0.0
@@ -259,30 +293,70 @@ def mark_to_market_portfolio(trades: pd.DataFrame, marks: pd.DataFrame, *,
     def equity() -> float:
         return cash + sum(p["value"] for p in open_pos.values())
 
-    for ts in events:
-        # Exit marks are processed before same-timestamp entries, freeing slots
-        # only after the old position has received its actual closing value.
-        for mark in marks_by_time.get(ts, pd.DataFrame()).itertuples(index=False):
-            pos = open_pos.get(mark.trade_id)
-            if pos is None:
-                continue
-            value = pos["notional"] * (1 + float(mark.gross_return)) / (1 + costs.side_cost)
-            is_exit = ts == pos["trade"].fill_exit_ts
+    def apply_mark(mark, ts):
+        nonlocal cash, turnover
+        pos = open_pos[mark.trade_id]
+        is_exit = ts == pos["trade"].fill_exit_ts
+        if index_costs:
+            # The path includes actual per-contract/package dollar friction.
+            # Adding the equity percentage haircut would double-charge it.
+            value = pos["notional"] * (1 + float(getattr(mark, f"net_return_{costs.name}")))
             if is_exit:
-                cash += value * (1 - costs.side_cost)
-                turnover += 2 * pos["notional"]
+                turnover += pos["notional"] * float(getattr(mark, f"turnover_{costs.name}"))
+                cash += value
                 del open_pos[mark.trade_id]
             else:
                 pos["value"] = value
+            return
+        entries = int(getattr(mark, "cost_entries", 1))
+        exits = int(getattr(mark, "cost_exits", int(is_exit)))
+        # Premium actually bought/sold, including changed reinvestment after
+        # rolls. A boundary may combine the old exit and next entry at one ts.
+        before_events = (pos["notional"] * (1 + float(mark.gross_return))
+                         * (1 - costs.side_cost) ** pos["cost_exits"]
+                         / (1 + costs.side_cost) ** pos["cost_entries"])
+        for _ in range(exits - pos["cost_exits"]):
+            turnover += before_events
+            before_events *= 1 - costs.side_cost
+        for _ in range(entries - pos["cost_entries"]):
+            before_events /= 1 + costs.side_cost
+            turnover += before_events
+        pos["cost_entries"], pos["cost_exits"] = entries, exits
+        value = (pos["notional"] * (1 + float(mark.gross_return))
+                 * (1 - costs.side_cost) ** exits / (1 + costs.side_cost) ** entries)
+        if is_exit:
+            cash += value
+            del open_pos[mark.trade_id]
+        else:
+            pos["value"] = value
+
+    for ts in events:
+        # Exit marks are processed before same-timestamp entries, freeing slots
+        # only after the old position has received its actual closing value.
+        entry_marks = []
+        for mark in marks_by_time.get(ts, pd.DataFrame()).itertuples(index=False):
+            if mark.trade_id in open_pos:
+                apply_mark(mark, ts)
+            else:
+                entry_marks.append(mark)
         for trade in trades[trades["fill_entry_ts"] == ts].itertuples(index=False):
             if len(open_pos) >= max_concurrent:
                 raise AccountingDataError(f"slot cap exceeded at {ts}")
             if any(p["trade"].symbol == trade.symbol for p in open_pos.values()):
                 raise AccountingDataError(f"overlapping {trade.symbol} position at {ts}")
-            notional = size_by_trade.get(trade.trade_id, position_fraction) * equity()
+            notional = min(size_by_trade.get(trade.trade_id, position_fraction) * equity(), cash)
+            if notional <= 0:
+                raise AccountingDataError(f"no available cash for entry at {ts}")
             cash -= notional
+            turnover += (notional * float(getattr(trade, f"entry_turnover_{costs.name}"))
+                         if index_costs else notional / (1 + costs.side_cost))
             open_pos[trade.trade_id] = {"trade": trade, "notional": notional,
-                                        "value": notional / (1 + costs.side_cost)}
+                                        "cost_entries": 1, "cost_exits": 0,
+                                        "value": (notional * (1 + float(getattr(trade, f"entry_net_return_{costs.name}")))
+                                                  if index_costs else notional / (1 + costs.side_cost))}
+        for mark in entry_marks:
+            if mark.trade_id in open_pos:
+                apply_mark(mark, ts)
         nav = equity()
         peak = max(peak, nav)
         max_dd = max(max_dd, (peak - nav) / peak)
@@ -299,5 +373,6 @@ def mark_to_market_portfolio(trades: pd.DataFrame, marks: pd.DataFrame, *,
         "peak_gross_exposure": float(curve_df["gross_exposure"].max()) if len(curve_df) else 0.0,
         "mean_gross_exposure": float(curve_df["gross_exposure"].mean()) if len(curve_df) else 0.0,
         "n_positions": len(trades), "cost_scenario": costs.name,
+        "cost_model": "index_dollar" if index_costs else "equity_percentage",
     }
     return metrics, curve_df

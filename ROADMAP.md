@@ -1,23 +1,23 @@
 # Roadmap — the one map
 
-Every workstream, one page. This file holds **overall goals**; the tasks for
-the phase we are in right now live in `TODO.md` (fed from here); design detail
-lives in `docs/specs/`. Reconciled 2026-08-15.
+**Current phase: adversarial-audit remediation and revalidation (2026-09-05).**
 
-```
-DONE ─► v2.2 ROBUST ─► live server + FA collectors ─► v3 ROBUST & LIVE (the scanner today)
-                                                            │
-                             v3.1-at-scale (ROBUST but outlier-fragile — shelved, not promoted)
-                                                            │
-                             v4 causal fixes (leak removed, edge confirmed real, Option A candidate)
-                                                            │
-NOW ──────────────────────────────────────────────────────  ▼
-        finish v4 (ledger re-runs) ─► deploy v4 as a SECOND expert on the server
-                                                            │
-NEXT ─────────────────────────────────────────────────────  ▼
-        the expert panel: several models live at once, each a scanner selector that can trigger
-        (model tracks 1/3/4 + FA discovery graduate into the panel as they beat their baselines)
-```
+The next milestone is corrected causal data, execution/accounting, and durable
+operations, followed by rebuilt artifacts and a fresh evaluation. Deployment
+and additional cloud campaigns are separate from the local repair work.
+Track implementation and verification in [TODO.md](TODO.md) and the
+[remediation report](docs/reviews/2026-09-05-remediation.md).
+
+PIT membership, the v4/v5 alert infrastructure, and the universe read-path
+optimization are implemented. v6 scaffolding exists, but old freezes and
+additive outputs cannot be reused without the current provenance contract.
+FA graduation still requires prospective evidence; SPX0 and volatility work
+must pass their own corrected evaluation criteria.
+
+The sections below preserve **historical milestones and priorities**. Claims
+such as ROBUST, edge confirmed, or gate eligible describe the code/data used
+at those dates; the September 5 findings require affected verdicts to be
+recomputed. Historical task labels below do not override the current phase.
 
 ## ✅ Done
 

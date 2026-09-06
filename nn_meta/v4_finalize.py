@@ -58,6 +58,7 @@ from nn_meta.build_meta_dataset import V4_META_FEATURES
 from nn_meta.mark_stream import load_mark_stream, option_b_blockers
 from nn_meta.select_meta import all_rows
 from nn_meta.temporal_validation import assign_purged_splits
+from nn_meta.feature_contract import CONTRACT_VERSION, require_current_dataset
 from nn_meta.v4_artifacts import create_manifest, write_manifest
 from nn_meta.v4_evaluate import (choose_policy, format_candidate_grid, policy_label, fit_gbt, fit_gbt_magnitude, fit_nn,
                                  fit_nn_magnitude, _labeled, _matrix, _select_winner)
@@ -201,23 +202,28 @@ def _ensemble_ev(family: str, members: list[dict], rows: pd.DataFrame,
 
 
 def _atomic_swap(staging: Path, final: Path) -> None:
-    """Replace ``final`` with ``staging`` via renames only, so a crash never
+    """Replace ``final`` with ``staging`` via atomic directory exchange, so a crash never
     leaves the deployable bundle half-written: the previous bundle survives
     until the new one is fully in place."""
     import os
     if not final.exists():
         os.replace(staging, final)
         return
-    prev = final.with_name(final.name + ".prev")
-    if prev.exists():
-        shutil.rmtree(prev)
-    os.replace(final, prev)          # current bundle aside (atomic)
-    try:
-        os.replace(staging, final)   # new bundle into place (atomic)
-    except OSError:
-        os.replace(prev, final)      # roll back on failure
-        raise
-    shutil.rmtree(prev, ignore_errors=True)
+    # Linux renameat2 exchanges two directory names in ONE operation. A kill
+    # leaves either the complete old or complete new bundle at `final`.
+    # Unsupported filesystems/platforms fail without moving the old bundle.
+    import ctypes
+    libc = ctypes.CDLL(None, use_errno=True)
+    exchange = getattr(libc, "renameat2", None)
+    if exchange is None:
+        raise OSError("atomic directory exchange unsupported; old bundle retained")
+    exchange.argtypes = [ctypes.c_int, ctypes.c_char_p, ctypes.c_int,
+                         ctypes.c_char_p, ctypes.c_uint]
+    exchange.restype = ctypes.c_int
+    if exchange(-100, os.fsencode(staging), -100, os.fsencode(final), 2) != 0:
+        error = ctypes.get_errno()
+        raise OSError(error, os.strerror(error))
+    shutil.rmtree(staging, ignore_errors=True)  # now the retired old bundle
 
 
 def main() -> None:
@@ -260,7 +266,9 @@ def main() -> None:
 
     print(f"loading dataset + spec...", flush=True)
     ds = pd.read_parquet(config.META_DATASET_PARQUET)
+    require_current_dataset(ds)
     spec = load_spec()
+    require_current_dataset(ds, spec)
     if args.marks:
         # Fail closed BEFORE training if the dataset can't support the ledger
         # (same contract as v4_evaluate --marks).
@@ -270,6 +278,10 @@ def main() -> None:
                              + "\n  - ".join(blockers))
     mark_stream = load_mark_stream(args.marks) if args.marks else None
     split = _final_split(ds, args.val_fraction, args.embargo)
+    baseline_end = pd.Timestamp(spec["train_window"][1]).normalize()
+    if pd.to_datetime(ds.loc[split == "val", "entry_ts"]).min().normalize() <= baseline_end:
+        raise ValueError("final validation overlaps frozen baseline training; "
+                         "use a later validation tail or refreeze on earlier data")
     d = ds.copy()
     d["split"] = split
     features = V4_META_FEATURES
@@ -387,6 +399,7 @@ def main() -> None:
 
     # ── 5) write the ensemble config + a manifest covering the trained files ──
     (staging / "ensemble_config.json").write_text(json.dumps({
+        "feature_contract_version": CONTRACT_VERSION,
         "run_ids": run_ids, "family": family, "mode": mode, "threshold": threshold,
         "dd_brake": dd_brake, "label": args.label, "features": features,
         "val_return": metrics["total_return"], "val_n_kept": metrics["n_kept"],
@@ -415,6 +428,10 @@ def main() -> None:
                            "selection_basis": final_policy["selection_basis"],
                            "mark_stream": str(args.marks) if args.marks else None},
         code_root=config.ROOT.parent,
+        mark_stream_path=args.marks,
+        evaluation_config={"gate_bar": args.gate_bar, "costs": "base",
+                           "embargo": args.embargo, "label": args.label,
+                           "thresholds": thresholds},
         output_artifacts=artifact_files)
     write_manifest(manifest, staging / "manifest.json")
 

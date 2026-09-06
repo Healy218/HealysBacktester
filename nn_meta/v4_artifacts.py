@@ -15,7 +15,7 @@ from typing import Iterable
 
 import pandas as pd
 
-from nn_meta.feature_contract import manifest as feature_manifest
+from nn_meta.feature_contract import CONTRACT_VERSION, manifest as feature_manifest
 
 
 class ArtifactValidationError(ValueError):
@@ -58,7 +58,9 @@ def dataset_coverage(dataset: pd.DataFrame) -> dict:
 def create_manifest(*, dataset_path: Path, baseline_spec_path: Path,
                     feature_names: Iterable[str], provider_metadata: dict,
                     config_hash: str | None = None, code_root: Path | None = None,
-                    output_artifacts: Iterable[Path] | None = None) -> dict:
+                    output_artifacts: Iterable[Path] | None = None,
+                    mark_stream_path: Path | None = None,
+                    evaluation_config: dict | None = None) -> dict:
     """Build a manifest from the exact input files used for an experiment.
 
     ``output_artifacts`` optionally extends the integrity envelope to files
@@ -73,7 +75,9 @@ def create_manifest(*, dataset_path: Path, baseline_spec_path: Path,
     spec = json.loads(baseline_spec_path.read_text())
     ds = pd.read_parquet(dataset_path)
     manifest = {
-        "manifest_version": 1,
+        "manifest_version": 2,
+        "feature_contract_version": CONTRACT_VERSION,
+        "evaluation_config": evaluation_config or {},
         "code_revision": git_revision(code_root),
         "config_hash": config_hash or spec.get("config_hash"),
         "dataset": {"path": dataset_path.name, "sha256": sha256_file(dataset_path),
@@ -83,6 +87,9 @@ def create_manifest(*, dataset_path: Path, baseline_spec_path: Path,
         "feature_schema": feature_manifest(feature_names),
         "provider_metadata": provider_metadata,
     }
+    if mark_stream_path is not None:
+        manifest["mark_stream"] = {"path": Path(mark_stream_path).name,
+                                   "sha256": sha256_file(Path(mark_stream_path))}
     if output_artifacts is not None:
         paths = [Path(p) for p in output_artifacts]
         missing = [str(p) for p in paths if not p.is_file()]
@@ -115,9 +122,15 @@ def write_manifest(manifest: dict, path: Path) -> Path:
 
 
 def validate_manifest(manifest_path: Path, *, dataset_path: Path,
-                      baseline_spec_path: Path, feature_names: Iterable[str]) -> dict:
+                      baseline_spec_path: Path, feature_names: Iterable[str],
+                      mark_stream_path: Path | None = None) -> dict:
     """Fail closed when the manifest's files or ordered feature schema differ."""
     data = json.loads(Path(manifest_path).read_text())
+    if data.get("feature_contract_version") != CONTRACT_VERSION:
+        raise ArtifactValidationError("stale feature contract; rebuild artifacts")
+    if data.get("mark_stream") is not None or mark_stream_path is not None:
+        if mark_stream_path is None or data.get("mark_stream", {}).get("sha256") != sha256_file(mark_stream_path):
+            raise ArtifactValidationError("mark stream hash does not match its manifest")
     for key, path in (("dataset", dataset_path), ("baseline_spec", baseline_spec_path)):
         actual = sha256_file(Path(path))
         if data.get(key, {}).get("sha256") != actual:

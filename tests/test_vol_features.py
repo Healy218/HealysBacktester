@@ -40,9 +40,9 @@ def test_session_rv_features_are_point_in_time():
     assert (daily["jump"] >= 0).all()
     assert daily["overnight_r2"].isna().iloc[0]        # no prior close: NaN, not 0
     assert daily["ret_cc"].notna().iloc[1:].all()
-    # available_at = 15:59 ET bar close in UTC (EST: 20:59), strictly same day
+    # available_at = completion of the 15:59 ET bar (16:00 ET / 21:00 UTC)
     aa = pd.to_datetime(daily["available_at"])
-    assert (aa.dt.hour == 20).all() and not daily["low_coverage"].any()
+    assert (aa.dt.hour == 21).all() and not daily["low_coverage"].any()
 
 
 def test_low_coverage_is_flagged_never_dropped():

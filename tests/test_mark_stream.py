@@ -31,6 +31,7 @@ def _marks_for(rows):
                                     "2025-01-03 14:30", "2025-01-03 14:45",
                                     "2025-01-04 14:30"]),
         "gross_return": [0.0, -0.10, 0.20, 0.0, -0.10],
+        "cost_entries": [1]*5, "cost_exits": [0,0,1,0,1],
     })
 
 
@@ -57,7 +58,7 @@ def test_roundtrip_write_load(tmp_path):
     assert path.name == "meta_dataset.marks.parquet"
     write_mark_stream(marks, path)
     loaded = load_mark_stream(path)
-    assert list(loaded.columns) == ["trade_id", "mark_ts", "gross_return"]
+    assert list(loaded.columns) == ["trade_id", "mark_ts", "gross_return", "cost_entries", "cost_exits"]
     assert len(loaded) == len(marks)
 
 
@@ -127,7 +128,7 @@ def _leg(trade_idx, contract, entry_open, closes, start, exit_close=None):
         "entry": str(ts[0]), "exit": str(ts[-1]),
         "entry_open": entry_open,
         "exit_close": exit_close if exit_close is not None else closes[-1],
-        "bar_ts": ts.to_numpy(), "bar_close": closes,
+        "bar_ts": ts.to_numpy(), "bar_close_ts": (ts + pd.Timedelta("15min")).to_numpy(), "bar_close": closes,
     }
 
 
@@ -135,9 +136,9 @@ def test_marks_from_legs_marks_at_close_against_entry_open():
     leg = _leg(0, "SPY250117C00500000", 2.00, [2.20, 1.80, 2.50],
                "2025-01-02 14:45")
     m = marks_from_legs([leg])
-    assert list(m.columns) == ["mark_ts", "gross_return"]
+    assert list(m.columns) == ["mark_ts", "gross_return", "cost_entries", "cost_exits"]
     # entry is at bar OPEN, marks at bar CLOSE — the first mark is not zero
-    assert m["gross_return"].tolist() == pytest.approx([0.10, -0.10, 0.25])
+    assert m["gross_return"].tolist() == pytest.approx([0., 0.10, -0.10, 0.25])
 
 
 def test_marks_from_legs_chains_across_rolls():
@@ -148,7 +149,7 @@ def test_marks_from_legs_chains_across_rolls():
     # final mark compounds both legs: 1.5 * 1.25 - 1 = 0.875
     assert m["gross_return"].iloc[-1] == pytest.approx(0.875)
     # and the pre-roll marks are the first leg's own growth
-    assert m["gross_return"].iloc[0] == pytest.approx(0.25)
+    assert m["gross_return"].iloc[1] == pytest.approx(0.25)
 
 
 def test_final_mark_equals_the_executors_gross_return():
@@ -165,7 +166,7 @@ def test_final_mark_equals_the_executors_gross_return():
 def test_marks_from_legs_dedupes_roll_boundary_timestamp():
     first = _leg(0, "A", 2.00, [2.00, 3.00], "2025-01-02 14:45")
     # new leg's first bar shares the old leg's last timestamp
-    second = _leg(0, "B", 4.00, [4.40], "2025-01-02 15:00")
+    second = _leg(0, "B", 4.00, [4.40], "2025-01-02 15:15")
     m = marks_from_legs([first, second])
     assert not m["mark_ts"].duplicated().any()
     # the open leg wins: 1.5 * 1.10 - 1
@@ -189,7 +190,7 @@ def test_marks_from_blotter_keys_and_skips_unknown_trades():
     }
     marks = marks_from_blotter(blotter, {1: tid[0], 2: tid[1]})
     assert set(marks["trade_id"]) == {tid[0], tid[1]}
-    assert len(marks) == 2
+    assert len(marks) == 4
 
 
 def test_emitted_marks_flow_into_the_ledger():
@@ -205,11 +206,11 @@ def test_emitted_marks_flow_into_the_ledger():
     # point the rows at the emitted marks' own fill window
     rows["fill_entry_ts"] = [pd.Timestamp("2025-01-02 14:45"),
                              pd.Timestamp("2025-01-03 14:45")]
-    rows["fill_exit_ts"] = [pd.Timestamp("2025-01-02 15:00"),
-                            pd.Timestamp("2025-01-03 15:00")]
+    rows["fill_exit_ts"] = [pd.Timestamp("2025-01-02 15:15"),
+                            pd.Timestamp("2025-01-03 15:15")]
     rows["gross_return"] = [0.20, -0.10]
     trades, filtered = execution_frames(rows, marks)
-    assert len(trades) == 2 and len(filtered) == 4
+    assert len(trades) == 2 and len(filtered) == 6
     assert option_b_blockers(rows.columns, mark_stream_exists=True) == []
 
 
@@ -226,6 +227,7 @@ def _shards(tmp_path, rows):
             "mark_ts": pd.to_datetime([f"2025-01-0{2 + i} 14:45",
                                        f"2025-01-0{3 + i} 14:30"]),
             "gross_return": [0.0, 0.20 if i == 0 else -0.10],
+            "cost_entries": [1,1], "cost_exits": [0,1],
         }).to_parquet(p, index=False)
         paths.append(p)
     return paths, tid

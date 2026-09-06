@@ -124,7 +124,8 @@ def pick_wing(zero_dte: pd.DataFrame, *, short_leg: Contract, mapped_spot: float
     call), chosen among contracts with a COMPLETED print in the same window as
     :func:`pick_atm`. ``None`` when the grid can't be measured, nothing prints
     near the target, or the nearest print is at/through the short strike."""
-    step = strike_step(zero_dte, index=short_leg.index, right=short_leg.right,
+    completed = zero_dte[zero_dte["timestamp"] < at]
+    step = strike_step(completed, index=short_leg.index, right=short_leg.right,
                        near=mapped_spot)
     if step is None or step <= 0:
         return None

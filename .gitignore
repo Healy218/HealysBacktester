@@ -91,3 +91,6 @@ nn_meta/reports_v5/
 # model_final_v5/ is TRACKED (2026-09-05): the deployable v5 bundle ships to the
 # server by git pull, exactly like model_final_v4/ (V118). ~8 MB.
 nn_meta/data_cache_v5/
+
+# Advisory locks used by scanner state transactions
+nn_meta/live/.*.lock

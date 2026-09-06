@@ -178,7 +178,7 @@ def test_compact_bars_daily_orders_parts_numerically_not_lexically(
     monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
     du.compact_bars_daily()
     out = _read_all(bars_dir)
-    assert sorted(out["close"]) == [9.0, 9.5]   # refreshed complete life wins
+    assert sorted(out["close"]) == [9.5]   # newest observation wins, including within a part
 
 
 def test_compact_bars_daily_recovers_from_crashed_swap(tmp_path, monkeypatch):

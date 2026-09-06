@@ -13,6 +13,8 @@ def test_preflight_reports_missing_and_complete_schema(tmp_path):
                         "entry_ts": "2025-01-01", "exit_ts": "2025-01-02",
                         "executed": True, "net_return": 0.1}])
     dataset, spec = tmp_path / "dataset.parquet", tmp_path / "spec.json"
+    from nn_meta.feature_contract import CONTRACT_VERSION
+    ds.attrs["feature_contract_version"] = CONTRACT_VERSION
     ds.to_parquet(dataset)
     spec.write_text(json.dumps({"symbols": {}}))
     complete = check_environment(dataset, spec, require_gbt=False)

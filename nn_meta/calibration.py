@@ -90,11 +90,10 @@ def fit_isotonic(scores, labels) -> IsotonicCalibrator:
     y = np.asarray(labels, dtype=float)
     order = np.argsort(s, kind="mergesort")
     s_sorted, y_sorted = s[order], y[order]
-    yhat = _pav(y_sorted, np.ones_like(y_sorted))
     xs, first = np.unique(s_sorted, return_index=True)
-    sums = np.add.reduceat(yhat, first)
-    counts = np.diff(np.append(first, len(yhat)))
-    ys = np.maximum.accumulate(sums / counts)
+    sums = np.add.reduceat(y_sorted, first)
+    counts = np.diff(np.append(first, len(y_sorted)))
+    ys = _pav(sums / counts, counts)
     if len(xs) == 1:  # np.interp needs at least two breakpoints
         xs = np.array([xs[0], xs[0] + 1e-9])
         ys = np.array([ys[0], ys[0]])

@@ -33,6 +33,7 @@ import pandas as pd
 
 from nn_meta import config
 from nn_meta.v4_artifacts import ArtifactValidationError, sha256_file
+from nn_meta.feature_contract import CONTRACT_VERSION, manifest as feature_manifest
 from nn_meta.v4_evaluate import _matrix
 
 FINAL_DIR = config.ROOT / "model_final_v4"
@@ -148,6 +149,8 @@ def load_final_v4(bundle_dir: Path | None = None) -> V4Bundle:
         raise FileNotFoundError(
             f"{cfg_path} missing — run nn_meta.v4_finalize to build the bundle.")
     cfg = json.loads(cfg_path.read_text())
+    if cfg.get("feature_contract_version") != CONTRACT_VERSION:
+        raise ArtifactValidationError("bundle uses a stale feature contract; retrain and re-finalize")
     family = cfg["family"]
     members = []
     for run_id in cfg["run_ids"]:
@@ -179,14 +182,39 @@ def verify_bundle(bundle_dir: Path | None = None) -> dict:
     if not manifest_path.exists():
         raise ArtifactValidationError(f"{manifest_path} missing — cannot verify bundle")
     manifest = json.loads(manifest_path.read_text())
+    if manifest.get("feature_contract_version") != CONTRACT_VERSION:
+        raise ArtifactValidationError("manifest uses a stale feature contract; rebuild bundle")
     artifacts = manifest.get("output_artifacts")
     if not artifacts:
         raise ArtifactValidationError(
             "manifest records no output_artifacts — bundle predates hashed persistence")
     for rel, expected in artifacts.items():
+        if Path(rel).is_absolute() or ".." in Path(rel).parts:
+            raise ArtifactValidationError(f"artifact escapes bundle: {rel}")
         path = bundle_dir / rel
         if not path.is_file():
             raise ArtifactValidationError(f"bundle artifact missing: {rel}")
         if sha256_file(path) != expected:
             raise ArtifactValidationError(f"bundle artifact hash mismatch: {rel}")
+    if "ensemble_config.json" not in artifacts:
+        raise ArtifactValidationError("manifest does not cover ensemble_config.json")
+    cfg = json.loads((bundle_dir / "ensemble_config.json").read_text())
+    if (cfg.get("feature_contract_version") != CONTRACT_VERSION
+            or manifest.get("feature_schema") != feature_manifest(cfg.get("features", []))):
+        raise ArtifactValidationError("bundle feature schema/version disagrees with manifest")
+    family = cfg.get("family")
+    if family not in {"nn", "gbt"} or not cfg.get("run_ids"):
+        raise ArtifactValidationError("bundle lacks a supported nonempty ensemble")
+    required = {"ensemble_config.json"}
+    for run_id in cfg["run_ids"]:
+        if not isinstance(run_id, str) or Path(run_id).name != run_id or run_id in {".", ".."}:
+            raise ArtifactValidationError("invalid bundle member path")
+        files = ["model.keras", "scaler.json"] if family == "nn" else ["model.joblib"]
+        magnitude = "magnitude.keras" if family == "nn" else "magnitude.joblib"
+        if cfg.get("magnitude_head") or cfg.get("mode") == config.EV_MODE or (bundle_dir / run_id / magnitude).exists():
+            files.append(magnitude)
+        required.update(f"{run_id}/{name}" for name in files)
+    missing = required - set(artifacts)
+    if missing:
+        raise ArtifactValidationError(f"manifest omits load-critical artifacts: {sorted(missing)}")
     return manifest

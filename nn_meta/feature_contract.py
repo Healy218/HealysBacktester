@@ -17,6 +17,23 @@ from dataclasses import dataclass
 from enum import IntEnum
 from typing import Iterable, Mapping
 
+CONTRACT_VERSION = "2026-09-05-causal-v2"
+
+
+def baseline_spec_fingerprint(spec: dict) -> str:
+    import hashlib
+    import json
+    return hashlib.sha256(json.dumps(spec, sort_keys=True, separators=(",", ":")).encode()).hexdigest()
+
+
+def require_current_dataset(rows, spec: dict | None = None) -> None:
+    """Refuse pre-audit features/labels; column names alone cannot prove causality."""
+    if rows.attrs.get("feature_contract_version") != CONTRACT_VERSION:
+        raise FeatureAvailabilityError(
+            "dataset uses an absent/stale feature contract; rebuild freeze, rows and marks")
+    if spec is not None and rows.attrs.get("baseline_spec_sha256") != baseline_spec_fingerprint(spec):
+        raise FeatureAvailabilityError("dataset baseline fingerprint differs; rebuild rows from this exact spec")
+
 
 class Availability(IntEnum):
     """Latest point at which a value can first be known for one proposal."""
@@ -70,6 +87,10 @@ def _specs() -> dict[str, FeatureSpec]:
             name, Availability.SIGNAL_CLOSE, "proposal metadata",
             "known when the signal is generated and the contract is selected",
         )
+    specs["moneyness"] = FeatureSpec(
+        "moneyness", Availability.SIGNAL_CLOSE, "configured proposal target",
+        "log1p(MONEYNESS), independent of executed listed strike",
+    )
     specs["prem_spot"] = FeatureSpec(
         "prem_spot", Availability.NEXT_OPTION_OPEN, "executed option fill",
         "the legacy value uses the first option-bar open after the signal",

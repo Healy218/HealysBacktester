@@ -6,9 +6,9 @@ from fa import trending
 
 
 class TestTickerExtraction:
-    def test_cashtags_always_win(self):
+    def test_cashtags_require_liquidity_membership(self):
         assert "GME" in trending._tickers("yolo $gme calls")
-        assert "SPCE" in trending._tickers("$SPCE to the moon")
+        assert "SPCE" not in trending._tickers("$SPCE to the moon")
 
     def test_bare_ticker_needs_universe_membership(self):
         # NVDA is in the universe and not ambiguous → matched bare

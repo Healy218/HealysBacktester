@@ -60,7 +60,7 @@ def create_labels(df, forward_periods, return_threshold):
     Calculates forward returns and creates binary labels (y).
     """
     forward_return = df['Close'].shift(-forward_periods) / df['Close'] - 1
-    labels = (forward_return > return_threshold).astype(int)
+    labels = (forward_return > return_threshold).astype(float).where(forward_return.notna())
     return labels
 
 @njit
@@ -94,7 +94,9 @@ def create_triple_barrier_labels(df, horizon, pt, sl_mult):
     close_arr = df['Close'].values.astype(np.float64)
     sl = pt * sl_mult
     labels_arr = _triple_barrier_numba(close_arr, horizon, pt, sl)
-    return pd.Series(labels_arr, index=df.index)
+    labels = pd.Series(labels_arr, index=df.index, dtype=float)
+    labels.iloc[max(0, len(labels) - horizon):] = np.nan
+    return labels
 
 def create_sequences(X, y, window_size=30):
     """
@@ -141,6 +143,17 @@ def prepare_nn_data(df, config, forward_periods, mode='classification', use_sequ
         X_test_raw = X_df.iloc[split_idx:]
         y_test_raw = y_series.iloc[split_idx:]
         
+        # Purge targets whose full observation horizon enters the test period.
+        # Use original bar positions because feature filtering may remove rows.
+        if X_test_raw.empty:
+            raise ValueError("No test rows after feature/label filtering")
+        available_at = pd.Series(df.index, index=df.index).shift(-forward_periods)
+        safe = available_at.reindex(X_train_raw.index) < X_test_raw.index[0]
+        X_train_raw = X_train_raw.loc[safe]
+        y_train_raw = y_train_raw.loc[safe]
+        if X_train_raw.empty:
+            raise ValueError("No training rows after label-horizon purge")
+
         # 5. Scale Features
         scaler = StandardScaler()
         X_train_scaled = scaler.fit_transform(X_train_raw)

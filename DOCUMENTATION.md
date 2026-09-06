@@ -6,27 +6,30 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
 
 ## Environment
 
-- **Repo**: `/home/healylabs/Coding/HealysBacktester`, working branch
+- **Repo**: `/home/healy/Coding/HealysBacktester`, working branch
   `codex/v4-causal-validation`; `main` is the operational line the server runs.
-- **Python**: `./venv/bin/python` (3.12.3). No conda, no system python —
+- **Python**: `./venv/bin/python` (Python 3.12; see the installed environment). No conda, no system python —
   always call the venv binary explicitly.
-- **Tests**: `./venv/bin/python -m pytest tests/ -q` — 345 tests, green.
-  They must stay self-contained: no LightGBM, no network, no v31 artifacts.
+- **Tests**: `./venv/bin/python -m pytest tests/ -q` — run the suite for the current checkout; test counts change.
+  Tests use synthetic fixtures, including LightGBM/TensorFlow, without network
+  access or production market artifacts. Current results: `docs/reviews/2026-09-05-remediation.md`.
 - **Secrets**: `.env` at repo root, never in git. Keys: `ALPACA_API_*`,
   `MASSIVE_API_KEY`, `MASSIVE_FLAT_FILES_API_*`, `ALPHAVANTAGE_KEY`,
   `FINNHUB_API_KEY`, `REDDIT_CLIENT_*`, `TELEGRAM_BOT_TOKEN`,
   `TELEGRAM_CHAT_ID`, `FA_SKIP_COLLECTORS`.
 - **`NN_META_POOL`** selects the strategy pool AND suffixes every artifact
   dir (`nn_meta/config.py`): v2 (default) / v3 (live scanner) / v31 (at-scale
-  + v4 work). Setting it wrong silently reads and writes the wrong
+  + v4 work), v5 and v6 (PIT pools with separate generated artifacts).
+  Setting it wrong silently reads and writes the wrong
   directories — the most common way to burn an evening.
 - **Home box** (rebuilt 2026-08-23): Ryzen 7 9850X3D (8C/16T + iGPU),
   32 GB DDR5, RTX 3060 Ti, 1 TB NVMe, CachyOS, user `healy`. The old
   i5-11400/B560 build (proven RAM fault — hourly `fa.collect` segfaults on
   its final morning) is retired; the drive moved over intact, so the OS
   install and all paths are unchanged. TF is CPU-only here in practice; the
-  heavy work is memory-bound dataset builds, not training — which still run
-  on GCP Batch by doctrine, not here.
+  heavy work includes memory-bound builds and model training. Historical
+  campaigns used both local and Batch resources; use measured resource
+  budgets and explicit cloud authorization, not old handoff commands.
 
 ## Conventions
 
@@ -69,7 +72,8 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   `threshold`, `magnitude_head`. `V4Bundle.decision_score` is what live
   code must threshold on (EV for an `ev` bundle, P(win) otherwise); a bundle
   persisted in `ev` mode fails to LOAD if any member lacks its head. Bundles
-  from before 2026-08-21 have no magnitude files and still load.
+  from before the causal audit may be readable for research, but do not pass
+  current default verification.
 
 ## Traps — things that look wrong and are not
 
@@ -114,10 +118,10 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   **unusable on Linux**. To reproduce the v3.1/v4 environment, install
   `requirements.txt` with the D:-backup's `wsl_pip_freeze.txt` as a pip
   constraints file (`-c`).
-- `nn_meta/model_final_v4/` (Option A bundle): `verify_bundle()` fails **by
-  design** — the manifest predates hashed persistence (built 7/21, hashing
-  landed 7/22). Usable, not integrity-verifiable; the Option B re-finalize
-  fixes it.
+- **Old bundles are historical artifacts.** Default verification requires the
+  current causal contract and all load-critical files. Pre-audit bundles must
+  be rebuilt and revalidated before deployment with this code; an explicit
+  research-only unverified load does not establish eligibility.
 - After any tar-layered restore: `chmod +x scripts/*.sh` — the 07-25 restore
   dropped exec bits and the hourly collector failed `203/EXEC` for a day.
 - **Comparing two dataset builds: use `nn_meta.dataset_diff`, never a naive

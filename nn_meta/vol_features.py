@@ -66,7 +66,7 @@ def session_rv(bars_1m: pd.DataFrame) -> pd.DataFrame:
             "n_bars": int(len(g)),
             "low_coverage": bool(len(g) < LOW_COVERAGE_BARS),
             # known at the session close (NY) — stamped back to UTC
-            "available_at": pd.Timestamp(g.index[-1]).tz_localize(
+            "available_at": (pd.Timestamp(g.index[-1]) + pd.Timedelta(minutes=1)).tz_localize(
                 "America/New_York").tz_convert("UTC").tz_localize(None),
         }
         out.append(row)
@@ -99,7 +99,6 @@ def evaluate_symbol(daily: pd.DataFrame, *, n_folds: int = 3) -> list[dict]:
     rv = ok["rv_1m"].to_numpy()
     rets = ok["ret_cc"].to_numpy()
     trail = pd.Series(rv).rolling(21).mean().shift(1)
-    tercile = pd.qcut(trail, 3, labels=["calm", "mid", "stressed"])
 
     results: list[dict] = []
     for w in expanding_folds(pd.Series(dates), n_folds=n_folds):
@@ -108,6 +107,11 @@ def evaluate_symbol(daily: pd.DataFrame, *, n_folds: int = 3) -> list[dict]:
         test_idx = test_idx[test_idx >= 22]
         if train.sum() < 60 or len(test_idx) == 0:
             continue
+        # Regime boundaries, like the forecasting models, only see fold train.
+        cuts = trail.loc[train].dropna().quantile([1 / 3, 2 / 3]).to_numpy()
+        tercile = pd.Series(np.where(trail <= cuts[0], "calm",
+                                     np.where(trail <= cuts[1], "mid", "stressed")))
+        tercile.loc[trail.isna()] = None
         har = HARRV.fit(rv[train])
         garch = GARCH11.fit(rets[train])
         naive = float(rv[train].mean())

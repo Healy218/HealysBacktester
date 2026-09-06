@@ -1,18 +1,15 @@
-# v3 — big-universe TA pipeline (scaffold)
+# v3 historical data and technical indicators
 
-Spec: `../docs/specs/V3_SPEC.md`. Stubs map 1:1 to the spec's build order.
-(The v3 *pipeline* shipped and is live — see `ROADMAP.md`; some stubs here
-were superseded by implementations elsewhere, e.g. `nn_meta/`.)
+This directory contains implemented historical-data and indicator tools plus a few superseded scaffold entry points. The meta-labeling orchestration lives in `nn_meta/`; the historical design is [V3_SPEC.md](../docs/specs/V3_SPEC.md).
 
-| Stage | Module | Spec section |
-|---|---|---|
-| 0 | `audit_data.py` | Data audit (gates the window choice) |
-| 1 | `universe.py` | Point-in-time universe selection |
-| 2 | `underlying.py` | 1m crawl → resample stack → parquet |
-| 3 | `indicators.py` | TV-validated indicator library |
-| 4–5 | `pilot.py` | SPY pilot, then diverse-basket calibration |
-| 6 | `dataset.py` | Parallel full-universe dataset build |
-| 7–8 | `models.py` | GBT-vs-NN bake-off, walk-forward + regime report |
+| Modules | Implemented role |
+|---|---|
+| `flatfiles.py`, `derive_contracts.py` | Ingest minute option aggregates and derive contract/daily archives |
+| `underlying.py`, `build_underlying.py` | Crawl underlying bars and build resampled views |
+| `indicators.py`, `tv_rating.py` | Technical indicators and composite ratings |
+| `audit_data.py`, `pilot_tv.py`, `gbt_baseline.py` | Historical coverage/pilot/baseline tools |
+| `select_120.py` | Historical liquidity-based bootstrap selection |
 
-Shared constants live in `config.py`. Nothing here runs yet; each stub raises
-`NotImplementedError` with its contract in the docstring.
+`universe.select_universe` remains a scaffold; the implemented monthly PIT workflow is `nn_meta/universe_pit.py`. Check individual modules rather than assuming every old spec-stage entry point is operational. Historical bootstrap universes and pilot reports do not establish current point-in-time performance.
+
+See [current repair status](../docs/reviews/2026-09-05-remediation.md) before reusing derived artifacts. Preserve existing raw archives and rebuild derived outputs with the current causal/provenance contract.

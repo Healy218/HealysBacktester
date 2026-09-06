@@ -25,6 +25,7 @@ Run:  python -m nn_meta.build_meta_dataset [--symbols SPY,QQQ]
 from __future__ import annotations
 
 import argparse
+import json
 
 try:
     from dotenv import load_dotenv
@@ -182,6 +183,55 @@ def _write_partial(path, df: pd.DataFrame) -> None:
     tmp.replace(path)
 
 
+def _provenance(entry, grid, start=config.WINDOW_START, end=config.WINDOW_END):
+    from nn_meta.feature_contract import CONTRACT_VERSION
+    return {"version": CONTRACT_VERSION, "entry": entry, "grid": sorted(grid),
+            "window": [start, end], "execution": config.EXEC_CONFIG,
+            "sim": config.SIM_CONFIG, "fees": config.FEES_PERCENT,
+            "slippage": config.SLIPPAGE_PERCENT}
+
+
+def _provenance_path(path):
+    return path.with_suffix(".provenance.json")
+
+
+def _write_provenance(path, value):
+    dest = _provenance_path(path)
+    tmp = dest.with_suffix(".tmp")
+    tmp.write_text(json.dumps(value, sort_keys=True))
+    tmp.replace(dest)
+
+
+def _read_provenance(path):
+    try:
+        return json.loads(_provenance_path(path).read_text())
+    except (OSError, ValueError):
+        return None
+
+
+def _marks_cover(rows, marks):
+    if rows.empty:
+        return True
+    executed = rows[rows["executed"].fillna(False).astype(bool)]
+    if executed.empty:
+        return True
+    if marks is None or marks.empty:
+        return False
+    if not set(mark_stream.PERSISTED_COLUMNS) <= set(marks.columns):
+        return False
+    normalized = mark_stream.validate_mark_stream(marks)
+    ids = mark_stream.stable_trade_id(executed)
+    if not set(ids) <= set(normalized["trade_id"].astype(str)):
+        return False
+    if {"fill_entry_ts", "fill_exit_ts"} <= set(executed.columns):
+        bounds = normalized.groupby("trade_id", observed=True)["mark_ts"].agg(["min", "max"])
+        for tid, row in zip(ids, executed.itertuples()):
+            if bounds.loc[tid, "min"] != pd.Timestamp(row.fill_entry_ts) \
+                    or bounds.loc[tid, "max"] != pd.Timestamp(row.fill_exit_ts):
+                return False
+    return True
+
+
 def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                       window_start: str = config.WINDOW_START,
                       window_end: str = config.WINDOW_END,
@@ -220,7 +270,9 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
 
     frames = []
     for strat, entry in spec_entry["strategies"].items():
-        if reuse_rows is not None and (reuse_rows["strategy"] == strat).any():
+        if reuse_rows is not None and (reuse_rows["strategy"] == strat).any() \
+                and (marks_sink is None or _marks_cover(
+                    reuse_rows[reuse_rows["strategy"] == strat], reuse_marks)):
             sub = reuse_rows[reuse_rows["strategy"] == strat].reset_index(drop=True)
             frames.append(sub)
             if marks_sink is not None and reuse_marks is not None and not reuse_marks.empty:
@@ -236,6 +288,7 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
         if partial_dir is not None:
             p_rows = partial_dir / f"{symbol}.{strat}.rows.parquet"
             p_marks = partial_dir / f"{symbol}.{strat}.marks.parquet"
+            provenance = _provenance(entry, dte_grid, window_start, window_end)
             # A rows partial WITHOUT its marks partial is an INCOMPLETE
             # checkpoint, not a marks-free family: the writer always emits
             # the marks file first (empty frame included), but the bucket
@@ -246,8 +299,10 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
             # entries in the mark stream, and assemble's keep_ids filter would
             # silently accept the under-covered sidecar — the 2026-08-19
             # biased-drop failure mode wearing a different hat. Rebuild it.
-            if p_rows.exists() and marks_sink is not None \
-                    and not p_marks.exists():
+            if p_rows.exists() and (_read_provenance(p_rows) != provenance
+                    or (marks_sink is not None and (not p_marks.exists()
+                        or not _marks_cover(pd.read_parquet(p_rows),
+                                            pd.read_parquet(p_marks))))):
                 logger.warning(f"[{_TAG}] {symbol}/{strat}: rows partial has "
                                f"no marks partial — incomplete checkpoint, "
                                f"rebuilding the family")
@@ -272,7 +327,10 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
             trades = trades[:config.MAX_SIGNALS_PER_NAME]
         if not trades:
             if p_rows is not None:
+                if marks_sink is not None:
+                    _write_partial(p_marks, pd.DataFrame())
                 _write_partial(p_rows, pd.DataFrame())
+                _write_provenance(p_rows, provenance)
             continue
 
         f_w, s_w = _feature_windows(strat, entry["params"])
@@ -340,7 +398,9 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                     "dir_short": float(r["direction"]),
                     "dte_frac": dte / max(config.DTE_GRID),
                     "prem_spot": (prem / spot) if (prem is not None and spot) else np.nan,
-                    "moneyness": np.log(strike / spot) if (strike and spot) else np.nan,
+                    # Target ATM moneyness is knowable at decision time.
+                    # Executed strike remains provenance, never a feature.
+                    "moneyness": float(np.log1p(config.EXEC_CONFIG.get("MONEYNESS", 0.0))),
                     "bars_since_signal": float(np.log1p(gaps[i])),
                     **{k: frow.get(k, np.nan) for k in feats.columns},
                 })
@@ -355,6 +415,7 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                                pd.concat(new_marks, ignore_index=True)
                                if new_marks else pd.DataFrame())
             _write_partial(p_rows, fam_df)
+            _write_provenance(p_rows, provenance)
     return pd.concat(frames, ignore_index=True) if frames else pd.DataFrame()
 
 
@@ -424,7 +485,8 @@ ROWS_DIR = config.ARTIFACTS / "meta_rows"     # per-symbol checkpoint dir
 MARKS_DIR = config.ARTIFACTS / "meta_marks"   # per-symbol mark-stream shards
 
 
-def _reusable_rows(sym: str, spec_entry: dict, pool: str, marks: bool):
+def _reusable_rows(sym: str, spec_entry: dict, pool: str, marks: bool,
+                   dte_grid: list[int] | None = None):
     """(rows, marks) from ``nn_meta/artifacts_<pool>/`` restricted to the
     families whose FROZEN ENTRY (params + dte) is identical in both specs — a
     re-frozen family (e.g. a weekly-expiry name whose grid changed) must be
@@ -434,9 +496,15 @@ def _reusable_rows(sym: str, spec_entry: dict, pool: str, marks: bool):
                   rdir / "meta_marks" / f"{sym}.parquet", rdir / "baseline_spec.json")
     if not rp.exists() or not sp.exists():
         return None
+    grid = list(dte_grid or config.DTE_GRID)
+    recorded = _read_provenance(rp)
+    expected = _provenance(spec_entry, grid)
+    if recorded is None or any(recorded.get(k) != v for k, v in expected.items()
+                               if k not in ("entry", "grid")):
+        return None
     import json as _json
     old_entry = _json.loads(sp.read_text()).get("symbols", {}).get(sym)
-    if not old_entry:
+    if not old_entry or recorded.get("entry") != old_entry:
         return None
     same = [st for st, e in spec_entry["strategies"].items()
             if st in old_entry.get("strategies", {})
@@ -446,7 +514,14 @@ def _reusable_rows(sym: str, spec_entry: dict, pool: str, marks: bool):
         return None
     rows = pd.read_parquet(rp)
     rows = rows[rows["strategy"].isin(same)].reset_index(drop=True)
+    complete = [st for st, g in rows.groupby("strategy")
+                if set(g["dte"]) == set(grid)]
+    rows = rows[rows["strategy"].isin(complete)].reset_index(drop=True)
+    if rows.empty:
+        return None
     mk = pd.read_parquet(mp) if (marks and mp.exists()) else None
+    if marks and not _marks_cover(rows, mk):
+        return None
     logger.info(f"[{_TAG}] {sym}: reusable families from {pool}: {same}")
     return (rows, mk)
 
@@ -467,24 +542,28 @@ def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
             print(f"[{sym}] not in baseline spec — skipped")
             continue
         pq = rows_dir / f"{sym}.parquet"
-        if pq.exists():
+        from nn_meta.weekly_expiry import dte_grid_for
+        grid = dte_grid_for(sym, spec)
+        provenance = _provenance(spec["symbols"][sym], grid)
+        mpq = marks_dir / f"{sym}.parquet"
+        if pq.exists() and _read_provenance(pq) == provenance and (not marks
+                or (mpq.exists() and _marks_cover(pd.read_parquet(pq), pd.read_parquet(mpq)))):
             print(f"[{sym}] cached — skip")
             continue
         print(f"[{sym}] building…", flush=True)
         sink = [] if marks else None
         reuse = None
         if reuse_from:
-            reuse = _reusable_rows(sym, spec["symbols"][sym], reuse_from, marks)
-        from nn_meta.weekly_expiry import dte_grid_for
+            reuse = _reusable_rows(sym, spec["symbols"][sym], reuse_from, marks, grid)
         df = build_symbol_rows(sym, spec["symbols"][sym], provider,
                                marks_sink=sink, partial_dir=partial_dir,
-                               dte_grid=dte_grid_for(sym, spec), reuse=reuse)
+                               dte_grid=grid, reuse=reuse)
         if marks:
             # validate per symbol so a malformed shard surfaces here, not hours
             # later at assemble; also restores the categorical key after concat
             mdf = mark_stream.validate_mark_stream(
                 pd.concat(sink, ignore_index=True)) if sink else \
-                pd.DataFrame({c: [] for c in mark_stream.MARK_STREAM_COLUMNS})
+                pd.DataFrame({c: [] for c in mark_stream.PERSISTED_COLUMNS})
             mpq = marks_dir / f"{sym}.parquet"
             mtmp = mpq.with_suffix(".tmp")
             mdf.to_parquet(mtmp, index=False)
@@ -492,6 +571,7 @@ def build_rows(symbols, spec, provider, rows_dir=ROWS_DIR,
         tmp = pq.with_suffix(".tmp")               # atomic: no truncated checkpoints
         df.to_parquet(tmp, index=False)             # 0-row df writes a marker
         tmp.replace(pq)
+        _write_provenance(pq, provenance)
         if partial_dir is not None:
             # the committed symbol parquet supersedes its family partials
             for p in partial_dir.glob(f"{sym}.*.parquet"):
@@ -518,9 +598,29 @@ def assemble(rows_dir=ROWS_DIR, marks_dir=MARKS_DIR,
     parts = sorted(rows_dir.glob("*.parquet"))
     if not parts:
         raise SystemExit(f"no per-symbol rows in {rows_dir} — build first")
+    expected = _provenance({}, config.DTE_GRID)
+    for part in parts:
+        recorded = _read_provenance(part)
+        if recorded is None or any(recorded.get(k) != v for k, v in expected.items()
+                                   if k not in ("entry", "grid")):
+            raise SystemExit(f"stale or unversioned rows: {part} — rebuild before assembling")
     frames = [d for d in (pd.read_parquet(p) for p in parts) if not d.empty]
     if not frames:
         raise SystemExit("all per-symbol frames are empty")
+    if marks_dir.exists() and any(marks_dir.glob("*.parquet")):
+        for part in parts:
+            rows = pd.read_parquet(part)
+            mp = marks_dir / part.name
+            marks = pd.read_parquet(mp) if mp.exists() else None
+            if not _marks_cover(rows, marks):
+                raise SystemExit(f"incomplete marks for {part.name} — rebuild with --marks")
+    spec = load_spec()
+    from nn_meta.weekly_expiry import dte_grid_for
+    for part in parts:
+        entry = spec.get("symbols", {}).get(part.stem)
+        if entry is None or _read_provenance(part) != _provenance(
+                entry, dte_grid_for(part.stem, spec)):
+            raise SystemExit(f"rows disagree with current frozen spec/grid: {part} — rebuild")
     ds = pd.concat(frames, ignore_index=True)
 
     if membership:
@@ -547,6 +647,9 @@ def assemble(rows_dir=ROWS_DIR, marks_dir=MARKS_DIR,
         np.nan)
     ds["split"] = assign_split(ds["entry_date"])
     ds = ds[ds["split"] != "purged"].reset_index(drop=True)
+    from nn_meta.feature_contract import CONTRACT_VERSION, baseline_spec_fingerprint
+    ds.attrs["feature_contract_version"] = CONTRACT_VERSION
+    ds.attrs["baseline_spec_sha256"] = baseline_spec_fingerprint(spec)
 
     # feature-timestamp hygiene: every feature is computed at the signal close,
     # which must never postdate the option fill used for the label
@@ -596,9 +699,9 @@ def main() -> None:
     ap.add_argument("--marks", action="store_true",
                     help="also emit the per-contract 15m mark stream (Option B)")
     ap.add_argument("--membership", action=argparse.BooleanOptionalAction,
-                    default=(config.POOL == "v5"),
+                    default=(config.POOL in ("v5", "v6")),
                     help="restrict assemble to point-in-time universe members "
-                         "per (symbol, month) — default ON for the v5 pool")
+                         "per (symbol, month) — default ON for v5/v6 pools")
     ap.add_argument("--reuse-rows-from", default=None, metavar="POOL",
                     help="additive build: take families already built for this "
                          "symbol in nn_meta/artifacts_<POOL>/ (rows + marks) and "

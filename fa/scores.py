@@ -57,7 +57,8 @@ def attention_velocity(mentions: pd.DataFrame, *,
     m = m.dropna(subset=["observed_at"])
     m["day"] = m["observed_at"].dt.normalize()
     daily = m.groupby(["ticker", "source_family", "day"], as_index=False).agg(
-        count=("evidence_ref", "size"), evidence_ref=("evidence_ref", "first"))
+        count=("evidence_ref", "size"), evidence_ref=("evidence_ref", "first"),
+        available_at=("observed_at", "max"))
 
     out = []
     for (ticker, source), g in daily.groupby(["ticker", "source_family"]):
@@ -67,13 +68,13 @@ def attention_velocity(mentions: pd.DataFrame, *,
         prior = counts.shift(1)
         roll_mean = prior.rolling(baseline_days, min_periods=min_baseline).mean()
         roll_std = prior.rolling(baseline_days, min_periods=min_baseline).std()
-        for day, ref in zip(g["day"], g["evidence_ref"]):
+        for day, ref, available in zip(g["day"], g["evidence_ref"], g["available_at"]):
             mean = roll_mean.get(day)
             if pd.isna(mean):                       # insufficient baseline history
                 continue
             std = roll_std.get(day)
             std = std_floor if pd.isna(std) else max(float(std), std_floor)
-            out.append({"ticker": ticker, "observed_at": day, "source_family": source,
+            out.append({"ticker": ticker, "observed_at": available, "source_family": source,
                         "score": float((counts[day] - mean) / std), "evidence_ref": ref})
     return pd.DataFrame(out, columns=SCORE_COLUMNS)
 

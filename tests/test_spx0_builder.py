@@ -61,7 +61,7 @@ def test_signal_exit_is_causal_and_marks_are_bounded_by_fills():
     assert len(ds) == 1
     r = ds.iloc[0]
     assert r["executed"] and r["symbol"] == "SPX-C" and r["dte"] == 0
-    assert r["fill_entry_ts"] > r["entry_ts"] and r["fill_lag_s"] == 60
+    assert r["fill_entry_ts"] > r["entry_ts"] and r["fill_lag_s"] == 120
     assert r["exit_reason"] == "signal" and r["fill_exit_ts"] >= t_out
     assert r["entry_premium"] > 0 and r["net_return"] < r["gross_return"]
     # every feature present; contract-declared names only

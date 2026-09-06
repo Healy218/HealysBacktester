@@ -1,5 +1,6 @@
 """Tests for the v4 deployable-bundle loader."""
 import json
+from nn_meta.feature_contract import CONTRACT_VERSION
 
 import joblib
 import numpy as np
@@ -55,7 +56,7 @@ def _write_gbt_bundle(bundle_dir, values, features=FEATURES, *, threshold=0.5,
         (run_dir / "params.json").write_text("{}")
         run_ids.append(run_id)
         artifacts.append(run_dir / "model.joblib")
-    cfg = {"run_ids": run_ids, "family": "gbt", "mode": "rank",
+    cfg = {"feature_contract_version": CONTRACT_VERSION, "run_ids": run_ids, "family": "gbt", "mode": "rank",
            "threshold": threshold, "features": list(features),
            "eligible": eligible}
     (bundle_dir / "ensemble_config.json").write_text(json.dumps(cfg))
@@ -125,7 +126,7 @@ def test_load_and_score_nn_bundle_roundtrip(tmp_path):
     (run_dir / "scaler.json").write_text(json.dumps(
         {"mean": {f: 0.0 for f in FEATURES}, "std": {f: 1.0 for f in FEATURES}}))
     (bundle / "ensemble_config.json").write_text(json.dumps(
-        {"run_ids": ["v4-nn-xs-s0"], "family": "nn", "mode": "filter",
+        {"feature_contract_version": CONTRACT_VERSION, "run_ids": ["v4-nn-xs-s0"], "family": "nn", "mode": "filter",
          "threshold": 0.5, "features": FEATURES, "eligible": True}))
 
     loaded = load_final_v4(bundle)

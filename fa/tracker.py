@@ -17,22 +17,29 @@ from __future__ import annotations
 
 import glob
 import json
+import warnings
 from pathlib import Path
 from typing import Callable, Iterable, Optional
 
 import pandas as pd
 
 from fa import config
+from fa.universe_loop import RANKING_RECIPE_VERSION
 
 RETURN_COLUMNS = ["ticker", "ranking_date", "as_of", "fwd_return",
                   "baseline_return", "excess_return"]
 
 
 def load_frozen_rankings(artifacts: Path = config.ARTIFACTS) -> pd.DataFrame:
-    """All frozen top10_*.json artifacts → (ticker, ranking_date) rows."""
+    """Current-recipe frozen artifacts only; historical rankings are excluded."""
     rows = []
     for f in sorted(glob.glob(str(artifacts / "top10_*.json"))):
         payload = json.loads(Path(f).read_text())
+        if payload.get("recipe_version") != RANKING_RECIPE_VERSION:
+            warnings.warn(f"Skipping historical ranking {Path(f).name}: missing or stale "
+                          "recipe_version; excluded from prospective validation and graduation",
+                          UserWarning, stacklevel=2)
+            continue
         for r in payload["rows"]:
             rows.append({"ticker": r["ticker"],
                          "ranking_date": pd.Timestamp(payload["as_of"]).normalize(),
@@ -46,7 +53,8 @@ def _window_return(closes: Optional[pd.Series], start: pd.Timestamp,
     bar at/before ``end``; None when either edge has no bar (never guessed)."""
     if closes is None or closes.empty:
         return None
-    closes = closes.sort_index()
+    closes = closes.copy().sort_index()
+    closes.index = pd.to_datetime(closes.index, utc=True).tz_localize(None)
     a = closes[closes.index >= start]
     b = closes[closes.index <= end]
     if a.empty or b.empty or b.index[-1] <= a.index[0]:
@@ -59,7 +67,10 @@ def forward_returns(rankings: pd.DataFrame,
                     as_of, baseline: Iterable[str]) -> pd.DataFrame:
     """Each pick's return from its ranking date to ``as_of``, and the excess
     over the equal-weight baseline basket measured over the SAME window."""
-    as_of = pd.Timestamp(as_of).normalize()
+    as_of = pd.Timestamp(as_of)
+    if as_of.tzinfo is not None:
+        as_of = as_of.tz_convert("UTC").tz_localize(None)
+    as_of = as_of.normalize()
     cache: dict[str, Optional[pd.Series]] = {}
 
     def _closes(t: str) -> Optional[pd.Series]:
@@ -73,6 +84,8 @@ def forward_returns(rankings: pd.DataFrame,
     out = []
     for r in rankings.itertuples(index=False):
         start = pd.Timestamp(r.ranking_date)
+        if start.tzinfo is not None:
+            start = start.tz_convert("UTC").tz_localize(None)
         if start >= as_of:
             continue
         fwd = _window_return(_closes(r.ticker), start, as_of)
@@ -93,7 +106,7 @@ def main() -> None:
     from fa.ranker import UNIVERSE_TRAINING
     ranks = load_frozen_rankings()
     if ranks.empty:
-        print("no frozen rankings yet — run fa.ranker --freeze first")
+        print("no current-recipe frozen rankings — run fa.ranker --freeze first")
         return
     baseline = json.loads(UNIVERSE_TRAINING.read_text())
     from data import vbt_data_loader  # lazy: network-capable loader

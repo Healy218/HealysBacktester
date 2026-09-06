@@ -80,7 +80,7 @@ def test_wing_sits_otm_of_the_sold_put():
 def test_vertical_carries_credit_wing_and_true_margin():
     ds, marks = _run(T_IN, T_OUT, variants=VERT_1)
     r = ds.iloc[0]
-    assert r["executed"] and r["dte"] == -1001 and r["n_fills"] == 2
+    assert r["executed"] and r["dte"] == -1001 and r["n_fills"] == 1 and r["n_legs"] == 2
     assert r["right"] == "P" and r["wing_strike"] == r["strike"] - 10.0
     width = r["strike"] - r["wing_strike"]
     assert 0 < r["entry_premium"] < width                 # a real credit

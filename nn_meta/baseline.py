@@ -169,7 +169,7 @@ def equity_metrics(returns: list[float], f: float = config.POSITION_FRACTION) ->
         return {"n": 0, "total_return": None, "max_drawdown": None,
                 "win_rate": None, "mean_return": None, "per_trade_sharpe": None}
     eq = np.cumprod(1.0 + f * r)
-    peak = np.maximum.accumulate(eq)
+    peak = np.maximum.accumulate(np.r_[1.0, eq])[1:]
     return {
         "n": int(r.size),
         "total_return": float(eq[-1] - 1.0),
@@ -348,7 +348,12 @@ def evaluate_baseline(symbol: str, spec_entry: dict, window: tuple[str, str],
 # ── spec I/O ─────────────────────────────────────────────────────────────────
 
 def _config_hash() -> str:
+    from nn_meta.feature_contract import CONTRACT_VERSION
     frozen = {
+        "feature_contract_version": CONTRACT_VERSION,
+        "execution": config.EXEC_CONFIG,
+        "weekly_enabled": config.WEEKLY_DTE_ENABLED,
+        "weekly_grid": config.DTE_GRID_WEEKLY if config.WEEKLY_DTE_ENABLED else [],
         "interval": config.INTERVAL, "dte_grid": config.DTE_GRID,
         "strategies": config.PROPOSAL_STRATEGIES,
         # Only THIS pool's grids: adding a family for a later pool must not
@@ -364,6 +369,26 @@ def _config_hash() -> str:
     return hashlib.md5(json.dumps(frozen, sort_keys=True).encode()).hexdigest()[:12]
 
 
+def require_current_spec(spec: dict) -> None:
+    from nn_meta.feature_contract import CONTRACT_VERSION
+    if spec.get("feature_contract_version") != CONTRACT_VERSION:
+        raise ValueError("baseline spec predates causal fixes; re-freeze all families")
+
+
+def _write_spec(path, spec):
+    from pathlib import Path
+    import os
+    import tempfile
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with tempfile.NamedTemporaryFile(mode="w", dir=path.parent, delete=False) as f:
+        json.dump(spec, f, indent=2)
+        f.flush()
+        os.fsync(f.fileno())
+        temporary = f.name
+    os.replace(temporary, path)
+
+
 def load_spec() -> dict:
     if not config.BASELINE_SPEC_JSON.exists():
         raise FileNotFoundError(
@@ -374,9 +399,9 @@ def load_spec() -> dict:
     if first is not None and "strategies" not in first:
         raise ValueError("baseline_spec.json is the v1 (MA-only) schema — "
                          "re-run `python -m nn_meta.freeze_baseline`.")
+    require_current_spec(spec)
     if spec.get("config_hash") != _config_hash():
-        logger.warning(f"[{_TAG}] baseline_spec config hash mismatch — the spec was "
-                       f"frozen under different settings; consider re-freezing")
+        raise ValueError("baseline_spec settings changed; re-freeze before reuse")
     return spec
 
 
@@ -393,6 +418,9 @@ def freeze_all(symbols: Optional[list[str]] = None, out_path=None,
     dest = Path(out_path or config.BASELINE_SPEC_JSON)
     base = json.loads(Path(base_spec).read_text()) if base_spec else None
     if base is not None:
+        require_current_spec(base)
+        if base.get("train_window") != [config.TRAIN_START, config.TRAIN_END] or base.get("execution") != config.EXEC_CONFIG:
+            raise ValueError("additive base window/execution differs; perform a full freeze")
         print(f"additive freeze: inheriting from {base_spec} "
               f"({len(base.get('symbols', {}))} symbols); sweeping "
               f"{strategies or 'all missing families'}", flush=True)
@@ -402,6 +430,9 @@ def freeze_all(symbols: Optional[list[str]] = None, out_path=None,
     # it stopped instead of losing everything.
     if dest.exists():
         out = json.loads(dest.read_text())
+        require_current_spec(out)
+        if out.get("config_hash") != _config_hash():
+            raise ValueError("freeze checkpoint settings changed; use a new output path")
         out.setdefault("symbols", {})
         done = set(out["symbols"]) | set(out.get("skipped", []))
         if done:
@@ -415,6 +446,9 @@ def freeze_all(symbols: Optional[list[str]] = None, out_path=None,
             "dte_grid": config.DTE_GRID,
             "symbols": {}, "skipped": [],
         }
+        from nn_meta.feature_contract import CONTRACT_VERSION
+        out["feature_contract_version"] = CONTRACT_VERSION
+        out["execution"] = config.EXEC_CONFIG
         out["config_hash"] = _config_hash()
         if config.WEEKLY_DTE_ENABLED:
             from nn_meta.weekly_expiry import weekly_expiry_symbols
@@ -447,7 +481,7 @@ def freeze_all(symbols: Optional[list[str]] = None, out_path=None,
                       f"dte={e['dte']:>2d} | n={t['n']:3d} win={t['win_rate']:.0%} "
                       f"ret={t['total_return']:+.1%} "
                       f"(fills ok {1 - t['fill_fail_rate']:.0%})", flush=True)
-        dest.write_text(json.dumps(out, indent=2))   # checkpoint per symbol
+        _write_spec(dest, out)   # checkpoint per symbol
 
     print(f"\nfroze {len(out['symbols'])} symbols → {dest}")
     return out
@@ -459,6 +493,11 @@ def merge_specs(shard_paths: list, out_path=None) -> dict:
     merged = None
     for p in shard_paths:
         s = json.loads(Path(p).read_text())
+        require_current_spec(s)
+        if s.get("config_hash") != _config_hash():
+            raise ValueError(f"stale/incompatible freeze shard: {p}")
+        if merged is not None and any(s.get(k) != merged.get(k) for k in ("config_hash", "train_window", "dte_grid", "execution")):
+            raise ValueError(f"incompatible freeze shards: {p}")
         if merged is None:
             merged = {k: v for k, v in s.items()
                       if k not in ("symbols", "skipped")}
@@ -469,7 +508,9 @@ def merge_specs(shard_paths: list, out_path=None) -> dict:
             merged["weekly_symbols"] = sorted(set(merged.get("weekly_symbols", []))
                                               | set(s["weekly_symbols"]))
     dest = out_path or config.BASELINE_SPEC_JSON
-    Path(dest).write_text(json.dumps(merged, indent=2))
+    if merged is None:
+        raise ValueError("no freeze shards supplied")
+    _write_spec(dest, merged)
     print(f"merged {len(shard_paths)} shards → {len(merged['symbols'])} "
           f"symbols → {dest}")
     return merged

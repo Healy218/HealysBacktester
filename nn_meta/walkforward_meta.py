@@ -26,6 +26,7 @@ Run:  python -m nn_meta.walkforward_meta [--folds 3] [--reuse-runs 1[,2]]
 import argparse
 import json
 import os
+import hashlib
 
 os.environ.setdefault("KMP_DUPLICATE_LIB_OK", "TRUE")
 
@@ -46,6 +47,9 @@ from nn_meta.build_meta_dataset import (META_FEATURES, add_context_features,
                                         build_symbol_rows, join_surface_asof,
                                         load_surface_features)
 from nn_meta.train_meta import run_one
+from nn_meta.temporal_validation import assign_purged_splits
+from nn_meta.feature_contract import CONTRACT_VERSION
+from nn_meta.wf_context import experiment_key, frame_digest
 from nn_meta.select_meta import (_EVALUATORS, all_rows, basket_buy_hold, fmt,
                                  frozen_mask, portfolio_metrics, predict_rows)
 
@@ -57,6 +61,17 @@ MIN_TRAIN_PCT = 0.5
 VAL_FRACTION = 0.2          # tail of fold-train used as the fold's val slice
 
 WF_DIR = config.ARTIFACTS / "wf"           # resume checkpoints (delete to redo)
+
+
+
+def fold_splits(ds: pd.DataFrame, train_end: str, oos_start: str, oos_end: str) -> pd.Series:
+    days = pd.to_datetime(ds["entry_ts"]).dt.normalize()
+    tr_days = days[days <= pd.Timestamp(train_end)].sort_values().unique()
+    if not len(tr_days):
+        raise ValueError("fold has no training dates")
+    val_cut = tr_days[int(len(tr_days) * (1 - VAL_FRACTION))]
+    return assign_purged_splits(ds, train_start=config.WINDOW_START, val_start=val_cut,
+                                test_start=oos_start, test_end=oos_end, embargo="1D")
 
 
 def _json_default(o):
@@ -166,13 +181,7 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
                            WF_DIR / f"fold{fold_i}_rows")
         if ds.empty:
             return {"fold": fold_i, "error": "no dataset rows"}
-        d = ds["entry_date"]
-        tr_days = d[d <= train_end].sort_values().unique()
-        val_cut = tr_days[int(len(tr_days) * (1 - VAL_FRACTION))] if len(tr_days) else None
-        ds["split"] = np.select(
-            [d < val_cut, (d >= val_cut) & (d <= train_end),
-             (d >= oos_start) & (d <= oos_end)],
-            ["train", "val", "test"], default="purged")
+        ds["split"] = fold_splits(ds, train_end, oos_start, oos_end)
         ds = ds[ds["split"] != "purged"].reset_index(drop=True)
         ds.to_parquet(ds_path, index=False)
 
@@ -200,23 +209,32 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
         else rows_all
     lab_tag = "win" if label_col == "label" else "xs"
     preds = []
+    prediction_key = frame_digest(oos_rows)
+    training_key = hashlib.sha256((frame_digest(ds) + json.dumps(winning, sort_keys=True)
+                                   + CONTRACT_VERSION).encode()).hexdigest()
     for seed in config.SEEDS:
         pred_path = WF_DIR / f"fold{fold_i}_preds_s{seed}.npy"
-        if pred_path.exists():
+        pred_meta = pred_path.with_suffix(".json")
+        expected_meta = {"rows": prediction_key, "training": training_key, "seed": seed}
+        if pred_path.exists() and pred_meta.exists() and json.loads(pred_meta.read_text()) == expected_meta:
             p = np.load(pred_path)
             if len(p) == len(oos_rows):
                 preds.append(p)
                 print(f"  seed {seed}: checkpointed preds", flush=True)
                 continue
         run_id = f"a{winning['arch']}-lr{winning['lr']:g}-{lab_tag}-s{seed}"
-        if reuse_runs and (config.RUNS_DIR / run_id / "model.keras").exists():
+        run_meta = config.RUNS_DIR / run_id / "fold_context.json"
+        if (reuse_runs and (config.RUNS_DIR / run_id / "model.keras").exists()
+                and run_meta.exists() and json.loads(run_meta.read_text()) == expected_meta):
             print(f"  seed {seed}: reusing existing run dir", flush=True)
         else:
             r = run_one(ds, arch, winning["lr"], seed, config.MAX_EPOCHS, label_col)
             run_id = r["run_id"]
+            (config.RUNS_DIR / run_id / "fold_context.json").write_text(json.dumps(expected_meta))
             print(f"  seed {seed}: val_loss={r['val_loss']:.4f}", flush=True)
         p = predict_rows(run_id, oos_rows)
         np.save(pred_path, p)
+        pred_meta.write_text(json.dumps(expected_meta))
         preds.append(p)
 
     # 4) OOS: ensemble (winner's mode) vs fold-frozen baseline AND B&H
@@ -226,7 +244,7 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
     base = portfolio_metrics(base_pool)
     bh = basket_buy_hold(fold_spec, oos_start, oos_end)
     nn_ret = nn["total_return"] if nn["total_return"] is not None else -np.inf
-    beat_base = nn_ret > (base["total_return"] or -np.inf)
+    beat_base = nn_ret > (base["total_return"] if base["total_return"] is not None else -np.inf)
     beat_bh = nn_ret > bh
     print(f"  OOS: NN {fmt(nn['total_return'])} ({nn['n_kept']}/{nn['n_proposals']} kept, "
           f"ex-top3 {fmt(nn['total_ex_top3'])}) "
@@ -248,6 +266,7 @@ def run_fold(fold_i: int, train_end: str, oos_start: str, oos_end: str,
 
 
 def main() -> None:
+    global WF_DIR
     ap = argparse.ArgumentParser()
     ap.add_argument("--folds", type=int, default=3)
     ap.add_argument("--reuse-runs", default="",
@@ -255,7 +274,7 @@ def main() -> None:
                          "model dirs should be reused instead of retrained "
                          "(only for resuming that same fold)")
     ap.add_argument("--membership", action=argparse.BooleanOptionalAction,
-                    default=(config.POOL == "v5"),
+                    default=(config.POOL in ("v5", "v6")),
                     help="restrict fold datasets to point-in-time universe "
                          "members per (symbol, month) — default ON for v5")
     args = ap.parse_args()
@@ -268,6 +287,10 @@ def main() -> None:
         raise SystemExit("run select_meta first — walk-forward retrains the "
                          "winning config only")
     winning = json.loads(ens_path.read_text())
+    if winning.get("feature_contract_version") != CONTRACT_VERSION:
+        raise SystemExit("walk-forward winner predates causal fixes; rerun training/selection")
+    WF_DIR = config.ARTIFACTS / "wf" / experiment_key(winning, args.folds, args.membership)
+    WF_DIR.mkdir(parents=True, exist_ok=True)
 
     provider = get_provider()
     surface = load_surface_features()

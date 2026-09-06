@@ -14,35 +14,20 @@ logger = setup_logging(log_file="logs/backtester.log")
 @handle_errors
 def _get_combined_index(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.MultiIndex:
     """Helper function to create the combined MultiIndex."""
-    if not isinstance(df1.columns, pd.MultiIndex):
-        levels1 = [df1.columns.tolist()] if not isinstance(df1.columns, pd.MultiIndex) else df1.columns.levels
-        names1 = list(df1.columns.names)
-        if all(n is None for n in names1): names1 = [f'param1_{i}' for i in range(len(levels1))]
-    else:
-        levels1 = df1.columns.levels
-        names1 = list(df1.columns.names)
+    def tuples(columns):
+        return list(columns) if isinstance(columns, pd.MultiIndex) else [(c,) for c in columns]
 
-    if not isinstance(df2.columns, pd.MultiIndex):
-        levels2 = [df2.columns.tolist()] if not isinstance(df2.columns, pd.MultiIndex) else df2.columns.levels
-        names2 = list(df2.columns.names)
-        if all(n is None for n in names2): names2 = [f'param2_{i}' for i in range(len(levels2))]
-    else:
-        levels2 = df2.columns.levels
-        names2 = list(df2.columns.names)
+    # Preserve actual valid tuples (e.g. fast < slow), not a product of levels.
+    names = []
+    for group, columns in enumerate((df1.columns, df2.columns), 1):
+        for level, name in enumerate(columns.names):
+            candidate = name or f"param{group}_{level}"
+            while candidate in names:
+                candidate = f"{candidate}_{group}"
+            names.append(candidate)
+    pairs = [a + b for a, b in iter_product(tuples(df1.columns), tuples(df2.columns))]
+    return pd.MultiIndex.from_tuples(pairs, names=names)
 
-    combined_levels = list(levels1) + list(levels2)
-    combined_names = names1 + names2
-
-    # Simple deduplication of names if needed
-    seen = set()
-    unique_combined_names = [n for n in combined_names if not (n in seen or seen.add(n))]
-
-    # Create all combinations of level values
-    combined_product = list(iter_product(*combined_levels))
-
-    # Create the new MultiIndex
-    new_index = pd.MultiIndex.from_tuples(combined_product, names=unique_combined_names)
-    return new_index
 
 
 def combine_signals_and(

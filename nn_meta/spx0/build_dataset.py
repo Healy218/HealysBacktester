@@ -135,13 +135,15 @@ def _stop_target_ts(cbars: pd.DataFrame, fill_ts: pd.Timestamp, entry_px: float,
     """First 1m close through the variant's premium stop (or target, longs
     only). A long stops BELOW its entry; a short's stop is the loss cap ABOVE
     it (premium rising against the seller)."""
-    later = cbars[cbars["timestamp"] > fill_ts]
+    later = cbars[cbars["timestamp"] >= fill_ts]
     if variant.short:
         hit = later[later["Close"] >= variant.stop_frac * entry_px]
     else:
         hit = later[(later["Close"] <= variant.stop_frac * entry_px)
                     | (later["Close"] >= variant.target_mult * entry_px)]
-    return None if hit.empty else pd.Timestamp(hit["timestamp"].iloc[0])
+    # Minute bars are start-stamped; the close is knowable one minute later.
+    return None if hit.empty else (pd.Timestamp(hit["timestamp"].iloc[0])
+                                   + pd.Timedelta(minutes=1))
 
 
 def prepare_signals(bars_5m: pd.DataFrame, spec_entry: dict,
@@ -276,7 +278,8 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                         "direction": 0 if sig_right == "C" else 1, "right": right,
                         "contract": None, "strike": np.nan, "expiration": day,
                         "entry_premium": np.nan, "fill_entry_ts": pd.NaT, "fill_exit_ts": pd.NaT,
-                        "fill_lag_s": np.nan, "n_fills": 0, "n_rolls": 0, "executed": False,
+                        "fill_lag_s": np.nan, "n_fills": 0, "n_legs": 0,
+                        "n_rolls": 0, "executed": False,
                         "gross_return": np.nan, "net_return": np.nan, "exit_ts": pd.NaT,
                         "und_period_return": np.nan, "exit_reason": None, "margin": np.nan,
                         "depth_entry": np.nan, "depth_exit": np.nan, "spx0_ratio": ratio,
@@ -378,11 +381,12 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                         g = gross_return_vertical(credit, exit_debit, margin)
                         n = net_return_vertical(credit, exit_debit, margin, costs,
                                                 settled=settled)
-                        und_exit = float(px_day["Close"].asof(fx_ts))
+                        und_exit = float(px_day["Close"].asof(fx_ts - pd.Timedelta(minutes=1)))
                         base.update({
                             "entry_premium": credit, "fill_entry_ts": fe_ts,
                             "fill_exit_ts": fx_ts,
-                            "fill_lag_s": (fe_ts - t).total_seconds(), "n_fills": 2,
+                            "fill_lag_s": (fe_ts - t).total_seconds(),
+                            "n_fills": 1, "n_legs": 2,
                             "executed": True, "gross_return": g, "net_return": n,
                             "exit_ts": fx_ts,
                             "und_period_return": und_exit / spot - 1.0,
@@ -396,6 +400,7 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                         joined = cbars[["timestamp", "Close"]].merge(
                             wbars[["timestamp", "Close"]], on="timestamp",
                             suffixes=("_s", "_w"))
+                        joined["timestamp"] += pd.Timedelta(minutes=1)
                         inner = joined[(joined["timestamp"] > fe_ts)
                                        & (joined["timestamp"] < fx_ts)]
                         marks.append({"trade_id": tid, "mark_ts": fe_ts,
@@ -443,10 +448,10 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                         margin = np.nan
                         g = gross_return(fe_px, fx_px)
                         n = net_return(fe_px, fx_px, costs)
-                    und_exit = float(px_day["Close"].asof(fx_ts))
+                    und_exit = float(px_day["Close"].asof(fx_ts - pd.Timedelta(minutes=1)))
                     base.update({
                         "entry_premium": fe_px, "fill_entry_ts": fe_ts, "fill_exit_ts": fx_ts,
-                        "fill_lag_s": (fe_ts - t).total_seconds(), "n_fills": 1,
+                        "fill_lag_s": (fe_ts - t).total_seconds(), "n_fills": 1, "n_legs": 1,
                         "executed": True, "gross_return": g, "net_return": n,
                         "exit_ts": fx_ts, "und_period_return": und_exit / spot - 1.0,
                         "exit_reason": reason, "depth_entry": fe_depth, "depth_exit": fx_depth,
@@ -458,7 +463,8 @@ def build_session_rows(day: pd.Timestamp, index: str, *, proxy_1m: pd.DataFrame,
                     # guaranteed), in the row's own per-position return units.
                     tid = (f"{symbol}|{strategy}|{trade_idx}|{variant.code}"
                            f"|{int(pd.Timestamp(t).value)}")
-                    inner = cbars[(cbars["timestamp"] > fe_ts) & (cbars["timestamp"] < fx_ts)]
+                    completed = cbars.assign(timestamp=cbars["timestamp"] + pd.Timedelta(minutes=1))
+                    inner = completed[(completed["timestamp"] > fe_ts) & (completed["timestamp"] < fx_ts)]
                     marks.append({"trade_id": tid, "mark_ts": fe_ts, "gross_return": 0.0})
                     for r in inner.itertuples(index=False):
                         mg = ((fe_px - float(r.Close)) / margin if variant.short
@@ -509,7 +515,14 @@ def build(days: list[pd.Timestamp], out_dir: Path, *, spec: dict | None = None,
             print(f"[spx0] {k}/{len(days)} sessions, {len(all_rows)} rows, "
                   f"{time.time()-t0:.0f}s", flush=True)
     ds = pd.DataFrame(all_rows)
+    from nn_meta.feature_contract import CONTRACT_VERSION
+    ds.attrs["feature_contract_version"] = CONTRACT_VERSION
+    ds.attrs["proposal_train_window"] = spec.get("train_window")
     marks = pd.DataFrame(all_marks, columns=["trade_id", "mark_ts", "gross_return"])
+    # A spread is one position package: its net costs are already encoded
+    # in the row. Both long and spread books have one entry and one exit.
+    marks["cost_entries"] = 1
+    marks["cost_exits"] = 0
     if not ds.empty:
         ds["label"] = np.where(ds["net_return"].notna(), (ds["net_return"] > 0).astype(float), np.nan)
         both = ds["net_return"].notna() & ds["und_period_return"].notna()
@@ -528,6 +541,11 @@ def build(days: list[pd.Timestamp], out_dir: Path, *, spec: dict | None = None,
         tid = stable_trade_id(filled)
         assert set(marks["trade_id"]) == set(tid), "marks/rows trade_id mismatch"
         marks = marks.drop_duplicates(["trade_id", "mark_ts"], keep="last")
+        terminal = marks.groupby("trade_id")["mark_ts"].transform("max")
+        marks["cost_exits"] = (marks["mark_ts"] == terminal).astype(int)
+        from nn_meta.feature_contract import baseline_spec_fingerprint
+        from nn_meta.spx0.evaluate import synthetic_spec
+        ds.attrs["baseline_spec_sha256"] = baseline_spec_fingerprint(synthetic_spec(ds))
     tmp = out_dir / "meta_dataset.parquet.tmp"
     ds.to_parquet(tmp, index=False); tmp.replace(out_dir / "meta_dataset.parquet")
     tmpm = out_dir / "meta_dataset.marks.parquet.tmp"

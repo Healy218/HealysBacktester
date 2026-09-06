@@ -13,6 +13,10 @@ import json
 import os
 import tempfile
 import uuid
+import fcntl
+import shutil
+from contextlib import contextmanager
+from functools import wraps
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -45,6 +49,51 @@ def atomic_write_json(path: Path, obj) -> None:
             os.unlink(tmp)
 
 
+@contextmanager
+def state_lock(path):
+    """Serialize a complete read/modify/write transaction on POSIX."""
+    path = Path(path)
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("a") as fh:
+        fcntl.flock(fh, fcntl.LOCK_EX)
+        try:
+            yield
+        finally:
+            fcntl.flock(fh, fcntl.LOCK_UN)
+
+
+def serialized(path_for_call):
+    def decorate(fn):
+        @wraps(fn)
+        def wrapped(*args, **kwargs):
+            with state_lock(path_for_call(*args, **kwargs)):
+                return fn(*args, **kwargs)
+        return wrapped
+    return decorate
+
+
+@contextmanager
+def preview_state(source):
+    """Snapshot live state into an ephemeral directory for a read-only preview."""
+    with tempfile.TemporaryDirectory(prefix="live-preview-") as tmp:
+        with state_lock(Path(source) / ".live.lock"):
+            for path in Path(source).glob("*.json"):
+                shutil.copy2(path, Path(tmp) / path.name)
+        yield Path(tmp)
+
+
+def refreshed(attribute, default_factory):
+    """Reload under a per-file lock before mutation, including stale instances."""
+    def decorate(fn):
+        @wraps(fn)
+        def wrapped(self, *args, **kwargs):
+            with state_lock(self.path.with_name(self.path.name + ".lock")):
+                setattr(self, attribute, _load_json(self.path, default_factory()))
+                return fn(self, *args, **kwargs)
+        return wrapped
+    return decorate
+
+
 class AlertState:
     """Idempotent alert dedupe keyed by a caller-chosen string."""
 
@@ -55,6 +104,7 @@ class AlertState:
     def seen(self, key: str) -> bool:
         return key in self._seen
 
+    @refreshed("_seen", dict)
     def mark(self, key: str, *, ts: datetime | None = None) -> bool:
         """Record ``key``; return True only the first time (alert iff True)."""
         if key in self._seen:
@@ -75,6 +125,7 @@ class Outbox:
         self.path = Path(path)
         self._entries: list[dict] = _load_json(self.path, [])
 
+    @refreshed("_entries", list)
     def enqueue(self, payload: dict, *, key: str | None = None) -> str:
         if key is not None:
             existing = next((e for e in self._entries if e.get("key") == key), None)
@@ -90,6 +141,7 @@ class Outbox:
         """Entries still needing delivery (pending or sent but not acked)."""
         return [e for e in self._entries if e["status"] != "acked"]
 
+    @refreshed("_entries", list)
     def _set_status(self, entry_id: str, status: str) -> None:
         for e in self._entries:
             if e["id"] == entry_id:
@@ -112,6 +164,7 @@ class PaperLedger:
         self.path = Path(path)
         self._trades: list[dict] = _load_json(self.path, [])
 
+    @refreshed("_trades", list)
     def open(self, trade_id: str, symbol: str, entry_ts, price: float,
              qty: float = 1.0) -> None:
         if any(t["trade_id"] == trade_id for t in self._trades):
@@ -121,6 +174,7 @@ class PaperLedger:
                              "qty": float(qty), "exit_ts": None, "exit_price": None})
         atomic_write_json(self.path, self._trades)
 
+    @refreshed("_trades", list)
     def close(self, trade_id: str, exit_ts, price: float) -> None:
         for t in self._trades:
             if t["trade_id"] == trade_id and t["exit_price"] is None:

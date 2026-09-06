@@ -24,12 +24,15 @@ import pyarrow.parquet as pq
 from nn_meta.v4_accounting import AccountingDataError
 
 MARK_STREAM_COLUMNS = ("trade_id", "mark_ts", "gross_return")
+COST_COLUMNS = ("cost_entries", "cost_exits")
+PERSISTED_COLUMNS = (*MARK_STREAM_COLUMNS, *COST_COLUMNS)
 # On-disk schema.  ``trade_id`` is a plain string so any reader works; parquet
 # dictionary-encodes it per row group, and our own loader reads it back
 # dictionary-encoded (see load_mark_stream) to keep a full stream in memory.
 _ARROW_SCHEMA = pa.schema([("trade_id", pa.string()),
                            ("mark_ts", pa.timestamp("ns")),
-                           ("gross_return", pa.float64())])
+                           ("gross_return", pa.float64()),
+                           ("cost_entries", pa.int16()), ("cost_exits", pa.int16())])
 # Identity columns that make a meta-dataset row unique.  A mark stream keyed by
 # the hash of these can be joined to dataset rows regardless of row order.
 KEY_COLUMNS = ("symbol", "strategy", "trade_idx", "dte", "entry_ts")
@@ -75,32 +78,45 @@ def marks_from_legs(legs: list[dict]) -> pd.DataFrame:
         gross_return(t) = Π_{j<k} (exit_close_j / entry_open_j)
                           · (close_t / entry_open_k) − 1
 
-    Marks are struck at bar CLOSE while entry is at bar OPEN, so the first mark
-    is not 0 — it already carries the entry bar's move.  Costs are deliberately
-    excluded: this is the gross series, and the ledger applies its own haircut.
+    Each leg emits a separate OPEN event followed by actual CLOSE timestamps.
+    The first event has zero gross return; the first close retains the entry
+    bar's move. Costs remain scenario-independent: cumulative entry/exit
+    counters let the ledger charge every roll at the chosen scenario.
 
-    Returns columns (mark_ts, gross_return); the caller attaches ``trade_id``.
+    Returns mark_ts, gross_return, cost_entries, cost_exits; the caller attaches
+    trade_id. Legacy sidecars without fill-event counters must be rebuilt.
     """
-    ts_parts, ret_parts = [], []
+    frames = []
     completed_growth = 1.0
-    for leg in legs:
+    for i, leg in enumerate(legs):
         if "bar_close" not in leg or "bar_ts" not in leg:
             raise AccountingDataError(
                 "blotter leg has no bars — execute with collect_marks=True")
+        if "bar_close_ts" not in leg:
+            raise AccountingDataError("legacy blotter lacks close-time provenance; rebuild marks")
         entry_open = float(leg["entry_open"])
         if not np.isfinite(entry_open) or entry_open <= 0:
             raise AccountingDataError(
                 f"leg {leg.get('contract')} has non-positive entry_open {entry_open}")
         closes = np.asarray(leg["bar_close"], dtype=float)
-        ts_parts.append(pd.to_datetime(pd.Series(leg["bar_ts"])).to_numpy())
-        ret_parts.append(completed_growth * (closes / entry_open) - 1.0)
+        times = pd.to_datetime(leg["bar_close_ts"])
+        starts = pd.to_datetime(leg["bar_ts"])
+        if len(times) != len(closes) or len(times) == 0 or not (times > starts).all():
+            raise AccountingDataError("bar close timestamps must follow bar opens")
+        # The entry-open event is separate from its first close. Counters
+        # preserve every roll haircut without baking a cost scenario into marks.
+        frames.append(pd.DataFrame({"mark_ts": [starts[0]],
+                                    "gross_return": [completed_growth - 1],
+                                    "cost_entries": [i + 1], "cost_exits": [i]}))
+        exits = np.full(len(closes), i, dtype=int)
+        exits[-1] = i + 1
+        frames.append(pd.DataFrame({"mark_ts": times,
+                                    "gross_return": completed_growth * closes / entry_open - 1,
+                                    "cost_entries": i + 1, "cost_exits": exits}))
         completed_growth *= float(leg["exit_close"]) / entry_open
-    if not ts_parts:
-        return pd.DataFrame({"mark_ts": pd.to_datetime([]), "gross_return": []})
-    out = pd.DataFrame({
-        "mark_ts": np.concatenate(ts_parts),
-        "gross_return": np.concatenate(ret_parts),
-    })
+    if not frames:
+        return pd.DataFrame(columns=["mark_ts", "gross_return", *COST_COLUMNS])
+    out = pd.concat(frames, ignore_index=True)
     # Roll boundaries can repeat a timestamp (old leg's last bar, new leg's
     # first); the open leg's mark is the live one, so the later wins.
     out = out.drop_duplicates("mark_ts", keep="last")
@@ -127,7 +143,7 @@ def marks_from_blotter(blotter: dict[int, list[dict]],
         m.insert(0, "trade_id", tid)
         frames.append(m)
     if not frames:
-        return pd.DataFrame({c: [] for c in MARK_STREAM_COLUMNS})
+        return pd.DataFrame({c: [] for c in PERSISTED_COLUMNS})
     return validate_mark_stream(pd.concat(frames, ignore_index=True))
 
 
@@ -168,7 +184,10 @@ def validate_mark_stream(marks: pd.DataFrame) -> pd.DataFrame:
     missing = set(MARK_STREAM_COLUMNS) - set(marks.columns)
     if missing:
         raise AccountingDataError(f"mark stream missing columns: {sorted(missing)}")
-    out = marks.loc[:, list(MARK_STREAM_COLUMNS)].copy()
+    cost_cols = [c for c in COST_COLUMNS if c in marks]
+    if cost_cols and len(cost_cols) != len(COST_COLUMNS):
+        raise AccountingDataError("incomplete cost-event provenance")
+    out = marks.loc[:, [*MARK_STREAM_COLUMNS, *cost_cols]].copy()
     tid = out["trade_id"]
     if not isinstance(tid.dtype, pd.CategoricalDtype):
         tid = tid.astype("category")
@@ -179,6 +198,11 @@ def validate_mark_stream(marks: pd.DataFrame) -> pd.DataFrame:
     out["gross_return"] = out["gross_return"].astype(float)
     if not np.isfinite(out["gross_return"].to_numpy()).all():
         raise AccountingDataError("mark stream gross_return must be finite")
+    for col in cost_cols:
+        values = pd.to_numeric(out[col], errors="coerce")
+        if values.isna().any() or (values < 0).any() or (values > 32767).any() or (values != np.floor(values)).any():
+            raise AccountingDataError("invalid cumulative fill cost counter")
+        out[col] = values.astype("int16")
     if out.duplicated(["trade_id", "mark_ts"]).any():
         raise AccountingDataError("mark stream has duplicate (trade_id, mark_ts)")
     return out.sort_values(["trade_id", "mark_ts"]).reset_index(drop=True)
@@ -191,6 +215,8 @@ def load_mark_stream(path: str | Path) -> pd.DataFrame:
     which is what keeps a full-stream load off the ~9 GB path.
     """
     table = pq.read_table(path, read_dictionary=["trade_id"])
+    if not set(COST_COLUMNS).issubset(table.column_names):
+        raise AccountingDataError("legacy mark stream lacks fill-event provenance; rebuild dataset and marks")
     return validate_mark_stream(table.to_pandas())
 
 
@@ -201,6 +227,8 @@ def write_mark_stream(marks: pd.DataFrame, path: str | Path) -> Path:
     this one holds the whole frame at once.
     """
     out = validate_mark_stream(marks)
+    if not set(COST_COLUMNS).issubset(out):
+        raise AccountingDataError("cannot persist legacy marks without fill-event provenance")
     dest = Path(path)
     dest.parent.mkdir(parents=True, exist_ok=True)
     out.to_parquet(dest, index=False)
@@ -250,7 +278,7 @@ def write_mark_stream_shards(shard_paths, path: str | Path, *,
     if writer is None:                    # no shard survived — still write a stream
         tmp.unlink(missing_ok=True)
         return write_mark_stream(
-            pd.DataFrame({c: [] for c in MARK_STREAM_COLUMNS}), dest), 0, 0
+            pd.DataFrame({c: [] for c in PERSISTED_COLUMNS}), dest), 0, 0
     tmp.replace(dest)                     # atomic: no half-written sidecar
     return dest, n_rows, len(seen)
 
@@ -284,9 +312,17 @@ def execution_frames(selected: pd.DataFrame, mark_stream: pd.DataFrame, *,
     })
     if "size_fraction" in selected.columns:      # v4 EV sizing rides along
         trades["size_fraction"] = selected["size_fraction"].astype(float).to_numpy()
-    marks = validate_mark_stream(mark_stream)
-    marks = marks[marks["trade_id"].isin(set(tid))].reset_index(drop=True)
+    if "n_fills" in selected:
+        trades["n_fills"] = selected["n_fills"].to_numpy()
+    # load_mark_stream validated the full universe once. Copy/sort only the
+    # selected subset here; a policy grid must not repeatedly sort 88M rows.
+    marks = validate_mark_stream(mark_stream.loc[mark_stream["trade_id"].isin(set(tid))])
     # Drop the unselected ids from the dictionary too — otherwise every grouped
     # operation downstream still carries the whole universe's categories.
     marks["trade_id"] = marks["trade_id"].cat.remove_unused_categories()
+    if "spx0_short" in selected:
+        from nn_meta.spx0.costs import ledger_cost_paths
+        marks, entry_turnover = ledger_cost_paths(selected, marks)
+        trades = trades.join(entry_turnover, on="trade_id")
+        trades["cost_model"] = "index_dollar"
     return trades, marks

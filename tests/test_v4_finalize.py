@@ -10,6 +10,7 @@ import numpy as np
 import pandas as pd
 import pytest
 
+from nn_meta.feature_contract import CONTRACT_VERSION, baseline_spec_fingerprint
 import nn_meta.v4_finalize as fz
 from nn_meta import config
 from nn_meta.v4_finalize import _atomic_swap, _ensemble_predict
@@ -91,20 +92,23 @@ def _install_finalize_stubs(monkeypatch, tmp_path, *, eligible: bool):
     training + policy so main()'s persist/gate orchestration runs fast."""
     dataset = tmp_path / "meta.parquet"
     n = 8
-    pd.DataFrame({
+    ds = pd.DataFrame({
         "symbol": ["SPY"] * n, "entry_ts": pd.date_range("2025-01-02", periods=n),
         "exit_ts": pd.date_range("2025-01-03", periods=n),
         "executed": [True] * n, "net_return": np.linspace(-0.1, 0.3, n),
-    }).to_parquet(dataset)
+    })
+    ds.attrs["feature_contract_version"] = CONTRACT_VERSION
+    ds.attrs["baseline_spec_sha256"] = baseline_spec_fingerprint({"config_hash": "test-hash", "train_window": ["2024-01-01", "2025-01-01"]})
+    ds.to_parquet(dataset)
     spec_path = tmp_path / "spec.json"
-    spec_path.write_text(json.dumps({"config_hash": "test-hash"}))
+    spec_path.write_text(json.dumps({"config_hash": "test-hash", "train_window": ["2024-01-01", "2025-01-01"]}))
 
     monkeypatch.setattr(config, "META_DATASET_PARQUET", dataset)
     monkeypatch.setattr(config, "BASELINE_SPEC_JSON", spec_path)
     monkeypatch.setattr(fz.config, "META_DATASET_PARQUET", dataset)
     monkeypatch.setattr(fz.config, "BASELINE_SPEC_JSON", spec_path)
     monkeypatch.setattr(fz, "FINAL_DIR", tmp_path / "model_final_v4")
-    monkeypatch.setattr(fz, "load_spec", lambda: {"config_hash": "test-hash"})
+    monkeypatch.setattr(fz, "load_spec", lambda: {"config_hash": "test-hash", "train_window": ["2024-01-01", "2025-01-01"]})
 
     def fake_split(ds, val_fraction, embargo):
         s = pd.Series("train", index=ds.index, dtype="object")

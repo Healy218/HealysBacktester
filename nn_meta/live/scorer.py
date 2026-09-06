@@ -27,6 +27,7 @@ import pandas as pd
 from utils.logging_utils import setup_logging
 from options.execution import to_naive_utc
 from nn_meta import config
+from nn_meta.feature_contract import CONTRACT_VERSION
 from nn_meta.baseline import execute_at_dte, load_spec, propose_trades
 from nn_meta.build_meta_dataset import (META_FEATURES, _SURFACE_COLS,
                                         _feature_windows, add_context_features,
@@ -49,6 +50,9 @@ class NNScorer:
             raise FileNotFoundError(
                 f"{ens_path} missing — train + select the meta-model first.")
         self.ens = json.loads(ens_path.read_text())
+        if self.ens.get("feature_contract_version") != CONTRACT_VERSION:
+            raise ValueError("legacy ensemble has a stale/missing feature contract; "
+                             "rebuild, retrain and select before live scoring")
         self.threshold = float(self.ens["threshold"])
         self.spec = spec or load_spec()
         # live=True: identical for v2/v3 (hybrid either way); required under
@@ -87,7 +91,7 @@ class NNScorer:
             "dir_short": float(sig.direction),
             "dte_frac": e["dte"] / max(config.DTE_GRID),
             "prem_spot": (prem / spot) if (prem and spot) else np.nan,
-            "moneyness": np.log(strike / spot) if (strike and spot) else np.nan,
+            "moneyness": float(np.log1p(config.EXEC_CONFIG.get("MONEYNESS", 0.0))),
             "bars_since_signal": float(np.log1p(gap)),
             **{k: frow.get(k, np.nan) for k in feats.columns},
         }

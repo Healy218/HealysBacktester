@@ -9,9 +9,10 @@ Causal loop over decision days. While flat:
               the pair threshold (two single-leg tickets, same horizon)
 
 Entries fill at the NEXT day's open, exits at the close H trading days later
-(earlier if forced by DTE). One decision at a time; explicit costs. Rows whose
-forward window is unknowable (contract never traded again -> no fill) are
-skipped, mirroring an unfilled order.
+(earlier if forced by DTE). One decision at a time; explicit costs. Ranking
+never reads future exit availability. A selected order with no entry is
+unfilled; a filled order without a valid exit stops evaluation until its
+valuation is resolved, rather than disappearing from the candidate pool.
 
 Short margin uses the standard naked-equity-option formula
 premium + max(20%*spot - OTM, 10%*basis), computed off the decision-day spot.
@@ -69,7 +70,8 @@ def run_backtest(panel: pd.DataFrame, pred_col: str, horizon: int,
                      "short": config.SHORT_PRED_THRESHOLD,
                      "longshort": config.PRED_SPREAD_THRESHOLD}[mode]
 
-    df = panel.dropna(subset=[pred_col, "entry_open", exit_close_col, exit_date_col])
+    # Exit availability is future information and cannot alter the ranking.
+    df = panel.dropna(subset=[pred_col])
     df = df.sort_values(["date", pred_col], ascending=[True, False])
 
     equity = config.INITIAL_CAPITAL
@@ -83,24 +85,35 @@ def run_backtest(panel: pd.DataFrame, pred_col: str, horizon: int,
                        "type": row["type"], "strike": row["strike"], "dte": row["dte"],
                        "pred": float(row[pred_col])})
 
+    def executable(row):
+        entry = row.get("entry_open")
+        if pd.isna(entry) or not np.isfinite(float(entry)) or float(entry) <= 0:
+            return False                 # selected order did not fill; no substitution
+        if (pd.isna(row.get(exit_date_col)) or pd.isna(row.get(exit_close_col))
+                or not np.isfinite(float(row[exit_close_col]))
+                or float(row[exit_close_col]) < 0):
+            raise ValueError(f"selected filled contract {row['ticker']} lacks a valid "
+                             "exit valuation; rebuild/resolve the open position")
+        return True
+
     for date, day in df.groupby("date", sort=True):
         if date <= busy_until:
             continue
         top, bottom = day.iloc[0], day.iloc[-1]
         legs = []
 
-        if mode == "long" and top[pred_col] > threshold:
+        if mode == "long" and top[pred_col] > threshold and executable(top):
             leg = _long_leg(top, equity, c, comm, exit_close_col)
             if leg:
                 legs.append((leg, top))
-        elif mode == "short" and bottom[pred_col] < threshold:
+        elif mode == "short" and bottom[pred_col] < threshold and executable(bottom):
             leg = _short_leg(bottom, equity, c, comm, exit_close_col)
             if leg:
                 legs.append((leg, bottom))
         elif mode == "longshort" and top["ticker"] != bottom["ticker"] \
                 and (top[pred_col] - bottom[pred_col]) > threshold:
-            l1 = _long_leg(top, equity, c, comm, exit_close_col)
-            l2 = _short_leg(bottom, equity, c, comm, exit_close_col)
+            l1 = _long_leg(top, equity, c, comm, exit_close_col) if executable(top) else None
+            l2 = _short_leg(bottom, equity, c, comm, exit_close_col) if executable(bottom) else None
             if l1:
                 legs.append((l1, top))
             if l2:
@@ -112,19 +125,19 @@ def run_backtest(panel: pd.DataFrame, pred_col: str, horizon: int,
 
         n_decisions += 1
         exit_dates = []
-        for leg, row in legs:
+        for leg, row in sorted(legs, key=lambda pair: pd.Timestamp(pair[1][exit_date_col])):
             equity += leg["pnl"]
             exit_dates.append(pd.Timestamp(row[exit_date_col]))
             record(leg, row, date)
+            curve.append((pd.Timestamp(row[exit_date_col]), equity))
         busy_until = max(exit_dates)
-        curve.append((date, equity))
 
     trades_df = pd.DataFrame(trades)
     curve_df = pd.DataFrame(curve, columns=["date", "equity"])
 
     total_return = equity / config.INITIAL_CAPITAL - 1
     if not curve_df.empty:
-        peak = curve_df["equity"].cummax()
+        peak = curve_df["equity"].cummax().clip(lower=config.INITIAL_CAPITAL)
         max_dd = float(((peak - curve_df["equity"]) / peak).max())
     else:
         max_dd = 0.0

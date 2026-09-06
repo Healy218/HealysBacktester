@@ -4,6 +4,9 @@ description: Full directory layout, module responsibilities, and primary entry p
 type: project
 ---
 
+> Historical June 2026 memory, superseded for current implementation/status by [the current handoff](../../../HANDOFF.md) and [the remediation report](../../../docs/reviews/2026-09-05-remediation.md). Old bug claims below require source verification; model APIs/LSTM, sentiment, and loaders have changed.
+
+
 ## Entry Points
 - `main.py` — Dash interactive dashboard (primary UI). Runs on 127.0.0.1:8050.
 - `scripts/nn_backtest.py` — Single-ticker LSTM backtest (standalone script).

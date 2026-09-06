@@ -36,6 +36,7 @@ from nn_meta import config
 from nn_meta.baseline import load_spec, load_underlying_15m
 from nn_meta.build_meta_dataset import META_FEATURES
 from nn_meta.train_meta import prepare_matrix
+from nn_meta.feature_contract import CONTRACT_VERSION, require_current_dataset
 
 _C1 = config.FEES_PERCENT + config.SLIPPAGE_PERCENT
 
@@ -90,6 +91,9 @@ def resolve_run_dir(run_id: str) -> Path:
 
 def predict_rows(run_id: str, rows: pd.DataFrame) -> np.ndarray:
     run_dir = resolve_run_dir(run_id)
+    params = json.loads((run_dir / "params.json").read_text())
+    if params.get("feature_contract_version") != CONTRACT_VERSION:
+        raise ValueError("stale model training provenance; rebuild dataset and retrain")
     scaler = json.loads((run_dir / "scaler.json").read_text())
     mu = pd.Series(scaler["mean"])[META_FEATURES]
     sd = pd.Series(scaler["std"])[META_FEATURES]
@@ -247,6 +251,7 @@ def main() -> None:
     config.ensure_dirs()
     spec = load_spec()
     ds = pd.read_parquet(config.META_DATASET_PARQUET)
+    require_current_dataset(ds, spec)
     runs = pd.read_csv(config.RUNS_CSV)
 
     val_all = all_rows(ds, "val")
@@ -281,7 +286,7 @@ def main() -> None:
                     "mode": mode, "threshold": thr,
                     "val_return": m["total_return"], "n_kept": m["n_kept"],
                     "max_dd": m["max_drawdown"],
-                    "passes": passes(m, base_val["total_return"] or -np.inf,
+                    "passes": passes(m, base_val["total_return"] if base_val["total_return"] is not None else -np.inf,
                                      bh_val)})
         best = max((x for x in results if x["run_id"] == r.run_id),
                    key=lambda x: x["val_return"] if x["val_return"] is not None
@@ -342,6 +347,7 @@ def main() -> None:
     for rid in win_ids:
         shutil.copytree(config.RUNS_DIR / rid, final_dir / rid)
     (final_dir / "ensemble_config.json").write_text(json.dumps({
+        "feature_contract_version": CONTRACT_VERSION,
         "run_ids": win_ids, "threshold": thr, "mode": mode,
         "label": str(best["label"]), "features": META_FEATURES,
         "arch": best["arch"], "lr": float(best["lr"]),

@@ -240,8 +240,7 @@ case "$MODE" in
     echo "when all build tasks SUCCEED, run the single assemble task:"
     echo "  TASK_MODE=assemble PROJECT=... BUCKET=... bash deploy/gcp/submit.sh 1" ;;
   assemble)
-    echo "then the ledger re-runs (these MUST NOT run on the home box — proven"
-    echo "single-bit memory corruption, see HANDOFF.md):"
+    echo "then run ledger validation on Batch or the current home box:"
     echo "  TASK_MODE=evaluate EXTRA_ARGS='--ablation --seeds 0,1,2,3,4 --epochs 60 --gbt-estimators 600 --embargo 1D' \\"
     echo "    PROJECT=$PROJECT BUCKET=$BUCKET bash deploy/gcp/submit.sh 1" ;;
   evaluate)

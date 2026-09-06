@@ -4,6 +4,9 @@ description: Active bugs, integration gaps, and code quality issues — updated 
 type: project
 ---
 
+> Historical June 2026 memory, superseded for current implementation/status by [the current handoff](../../../HANDOFF.md) and [the remediation report](../../../docs/reviews/2026-09-05-remediation.md). Old bug claims below require source verification; model APIs/LSTM, sentiment, and loaders have changed.
+
+
 ## Critical Bugs (NEW as of June 2026 review)
 
 ### 1. nn_multi_backtest.py — calls nn_model.save_model() which does not exist

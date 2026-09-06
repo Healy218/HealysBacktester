@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
 # Home-box v5 build worker (user decision 2026-09-01): walk the spec's
 # symbols in REVERSE alphabetical order and build any symbol the bucket
-# doesn't have yet — meeting the cloud fleet (which walks forward) in the
-# middle. The bucket IS the coordination: both sides skip-check
-# out/v5/meta_rows/<sym>.parquet before starting and publish there when
-# done, so a near-middle collision costs at most one duplicated symbol.
+# doesn't have a validated checkpoint for, meeting the cloud fleet in the
+# middle. Pull rows, marks and provenance; the builder verifies their input
+# signature and coverage before skipping. Concurrent completion may duplicate
+# work, so publication is per symbol with provenance committed last.
 #
 # Caveat (accepted): rows built here come from the venv, not the docker
 # image — BLAS-level float differences vs cloud-built rows are possible.
@@ -13,7 +13,7 @@
 #
 # Run DETACHED (harness background tasks get killed on this box):
 #   setsid nohup scripts/run_build_v5_local.sh > logs/build_v5_local.log 2>&1 &
-set -uo pipefail
+set -euo pipefail
 cd "$(dirname "$(readlink -f "$0")")/.."
 . scripts/lib/autosize.sh
 export NN_META_POOL=v5
@@ -39,16 +39,19 @@ trap 'kill $PART_SYNC 2>/dev/null || true' EXIT
 
 build_one() {
   sym=$1
-  if gsutil -q stat "$OUTB/meta_rows/${sym}.parquet" 2>/dev/null; then
-    echo "[$sym] already in bucket — skip"; return 0
-  fi
+  # Pull the complete checkpoint including its feature-contract provenance.
+  # The Python builder validates the manifest and mark coverage before skipping;
+  # mere remote row existence is never a commit check.
+  for item in "meta_rows/${sym}.parquet" "meta_rows/${sym}.provenance.json" "meta_marks/${sym}.parquet"; do
+    gsutil -q cp "$OUTB/$item" "$ART/$item" 2>/dev/null || true
+  done
   gsutil -m -q cp "$OUTB/meta_partial/${sym}.*" "$PART/" 2>/dev/null || true
   ./venv/bin/python -m nn_meta.build_meta_dataset --symbols "$sym" --marks \
       --partial-dir "$PART" || { echo "[$sym] BUILD FAILED"; return 1; }
-  # marks before rows, same commit order as the cloud task
-  [ -f "$ART/meta_marks/${sym}.parquet" ] && \
-    gsutil -q cp "$ART/meta_marks/${sym}.parquet" "$OUTB/meta_marks/"
-  gsutil -q cp "$ART/meta_rows/${sym}.parquet" "$OUTB/meta_rows/"
+  # Publish the row commit only after its marks are safely uploaded.
+  gsutil -q cp "$ART/meta_marks/${sym}.parquet" "$OUTB/meta_marks/" || return 1
+  gsutil -q cp "$ART/meta_rows/${sym}.parquet" "$OUTB/meta_rows/" || return 1
+  gsutil -q cp "$ART/meta_rows/${sym}.provenance.json" "$OUTB/meta_rows/" || return 1
   echo "[$sym] published $(date -u +%H:%M:%SZ)"
 }
 export -f build_one

@@ -78,15 +78,17 @@ def clean_ohlcv_data(raw_df: pd.DataFrame) -> pd.DataFrame | None:
 
     # --- Handle Missing Values (NaNs) ---
     if df.isnull().values.any():
-        logger.warning("Warning: NaNs found before filling. Applying ffill/bfill.")
+        logger.warning("Warning: NaNs found before filling. Forward-filling observed values and dropping unavailable leading rows.")
         nan_counts_before = df.isnull().sum()
-        df = df.ffill().bfill()
+        df = df.ffill().dropna(subset=required_cols)
+        if df.empty:
+            return None
         nan_counts_after = df.isnull().sum()
         if nan_counts_after.sum() < nan_counts_before.sum():
              logger.debug("NaNs filled.")
         # Check if any NaNs remain after filling
         if df.isnull().values.any():
-            logger.error("Error: NaNs still present after ffill/bfill. Data quality issue.")
+            logger.error("Error: NaNs still present after causal cleaning. Data quality issue.")
             # Decide: return None, raise error, or return partial data? Returning None for safety.
             return None
 

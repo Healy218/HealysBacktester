@@ -182,6 +182,8 @@ def _worker(tickers, start, end, interval, strategy, backtest_config, strategy_c
             for row in top5:
                 r = row.copy()
                 r["symbol"] = sym
+                r["strategy"] = strategy
+                r["interval"] = interval
                 r["benchmark_return_pct"] = bm_return
                 all_best_rows.append(r)
 
@@ -1247,7 +1249,7 @@ _SCANNER_STRATEGY_MAP = {
     },
     "Volume Breakout": {
         "scanner_key": "volume",
-        "param_map": {"vol_window": "volume_window", "vol_mult": "volume_multiplier", "exit_ma": "exit_ma_window"},
+        "param_map": {"volume": "volume_window", "volume_multiplier": "volume_multiplier", "exit_ma": "exit_ma_window"},
     },
     "Bollinger Bands": {
         "scanner_key": "bbands",
@@ -1300,6 +1302,12 @@ def save_to_scanner(n_clicks, selected_rows, top5_data, table_data, strategy, in
     symbol = row.get("symbol", "")
     param_label = row.get("param_label", "")
 
+    # Results carry the immutable configuration that produced their parameters.
+    strategy = row.get("strategy")
+    interval = row.get("interval")
+    if not strategy or not interval:
+        return "Result lacks strategy/interval metadata; rerun before saving.", True, "warning"
+
     # Check if the strategy is supported by the scanner
     mapping = _SCANNER_STRATEGY_MAP.get(strategy)
     if mapping is None:
@@ -1312,7 +1320,7 @@ def save_to_scanner(n_clicks, selected_rows, top5_data, table_data, strategy, in
         if short_name in parsed:
             scanner_params[scanner_key] = parsed[short_name]
 
-    if not scanner_params:
+    if len(scanner_params) != len(mapping["param_map"]):
         return f"Could not parse parameters from '{param_label}'.", True, "danger"
 
     scan_entry = {

@@ -147,10 +147,9 @@ def simulate_and_rank(
                 )
 
                 # Per-metric winners
-                metric = row.get("ranked_by", "")
-                if metric in best:
+                for metric in best:
                     current = best[metric]
-                    if current is None or _is_better(row, current, metric):
+                    if _is_better(row, current or {}, metric):
                         best[metric] = row
 
                 # Global Sharpe leaderboard (fillers to reach TOP_N)
@@ -169,7 +168,14 @@ def simulate_and_rank(
         gc.collect()
 
     # ── Collect winners and re-simulate ──────────────────────────────────
-    winners = [(m, info) for m, info in best.items() if info is not None]
+    winners = []
+    metric_keys = set()
+    for metric, info in best.items():
+        if info is not None:
+            key = _col_key(info["_saved_signals"])
+            if key not in metric_keys:
+                winners.append((metric, info))
+                metric_keys.add(key)
 
     # Fill up to TOP_N with the next-best combos by Sharpe (deduped by column).
     winner_keys = {_col_key(info["_saved_signals"]) for _, info in winners}
@@ -267,6 +273,7 @@ def simulate_and_rank(
 
         row = {k: v for k, v in info.items() if not k.startswith("_")}
         row["portfolio_col_int_idx"] = new_idx
+        row["ranked_by"] = metric
         top5.append(row)
 
     logger.info(f"{tag} Chunked simulation complete. {len(top5)} winner(s) found.")
@@ -302,7 +309,7 @@ def _col_key(saved: dict):
 
 def _prune_sharpe_pool(pool: list[dict], k: int) -> list[dict]:
     """Keep the top-k rows by Sharpe, deduped by column label."""
-    pool.sort(key=lambda r: r.get("sharpe_ratio") or float("-inf"), reverse=True)
+    pool.sort(key=lambda r: r["sharpe_ratio"] if r.get("sharpe_ratio") is not None else float("-inf"), reverse=True)
     seen: set = set()
     out: list[dict] = []
     for row in pool:

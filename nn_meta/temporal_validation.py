@@ -82,7 +82,8 @@ def expanding_folds(entry_timestamps: pd.Series, *, n_folds: int = 3,
     folds: list[FoldWindow] = []
     for i in range(n_folds):
         test_start_i = first_oos + i * oos_size
-        test_end_i = min(test_start_i + oos_size, len(days)) - 1
+        test_end_i = (len(days) if i == n_folds - 1
+                      else min(test_start_i + oos_size, len(days))) - 1
         if test_start_i >= len(days) or test_end_i < test_start_i:
             break
         val_start_i = max(1, int(test_start_i * (1 - val_fraction)))

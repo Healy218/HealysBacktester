@@ -154,13 +154,16 @@ def run(
 
             # ── OOS: generate signals, extract IS-winning column, simulate ──
             oos_signals = _generate_signals(
-                inner_strategy, oos_data, strat_cfg, backtest_config,
+                inner_strategy, price_data.iloc[:oos_e], strat_cfg, backtest_config,
             )
             if oos_signals is None:
                 logger.warning(f"[WF] Fold {fi+1}: OOS signal generation failed, skipping.")
                 continue
 
-            oos_ent, oos_ext, oos_se, oos_sx = oos_signals
+            oos_ent, oos_ext, oos_se, oos_sx = (
+                s.reindex(oos_data.index) if s is not None else None
+                for s in oos_signals
+            )
 
             # Extract only the IS-winning column
             try:

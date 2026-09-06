@@ -35,7 +35,8 @@ def synthetic_spec(ds: pd.DataFrame) -> dict:
         if pick not in codes:
             pick = 0 if 0 in codes else sorted(codes)[0]
         syms.setdefault(sym, {"strategies": {}})["strategies"][strat] = {"dte": int(pick)}
-    return {"symbols": syms, "config_hash": "spx0-seat-frozen"}
+    return {"symbols": syms, "config_hash": "spx0-seat-frozen",
+            "train_window": ds.attrs.get("proposal_train_window")}
 
 
 def main() -> None:
@@ -65,14 +66,26 @@ def main() -> None:
             raise SystemExit("spx0 dataset cannot support the ledger:\n  - " + "\n  - ".join(blockers))
         mark_stream = load_mark_stream(marks_path)
     spec = synthetic_spec(ds)
+    from nn_meta.feature_contract import require_current_dataset
+    require_current_dataset(ds, spec)
+    if not spec.get("train_window"):
+        raise SystemExit("SPX0 dataset lacks proposal-freeze training window; rebuild it")
     models = [m.strip() for m in args.models.split(",") if m.strip()]
     seeds = [int(x) for x in args.seeds.split(",") if x.strip()]
     output = args.output or (sc.ARTIFACTS / "reports" / "spx0_walkforward_report.md")
     output.parent.mkdir(parents=True, exist_ok=True)
 
     results = []
-    for i, window in enumerate(expanding_folds(ds["entry_ts"], n_folds=args.folds), 1):
-        print(f"[spx0] nested fold {i}/{args.folds}", flush=True)
+    frozen_until = pd.Timestamp(spec["train_window"][1]).normalize()
+    all_folds = expanding_folds(ds["entry_ts"], n_folds=args.folds)
+    folds = [w for w in all_folds if w.val_start > frozen_until]
+    if len(folds) != len(all_folds):
+        print(f"[spx0] excluded {len(all_folds) - len(folds)} folds overlapping "
+              f"proposal optimization through {frozen_until.date()}")
+    if not folds:
+        raise SystemExit("no post-freeze SPX0 validation folds; rebuild with an earlier proposal freeze")
+    for i, window in enumerate(folds, 1):
+        print(f"[spx0] nested fold {i}/{len(folds)}", flush=True)
         results.append(evaluate_window(
             ds, window, spec=spec, schema="spx0", purged=True, label=args.label,
             models=models, seeds=seeds, epochs=args.epochs,
@@ -85,7 +98,12 @@ def main() -> None:
         feature_names=schema_features("spx0"),
         provider_metadata={"pool": "spx0", "interval": "1m", "dd_cap": sc.MAX_DRAWDOWN_CAP,
                            "mark_stream": str(marks_path) if mark_stream is not None else None},
-        code_root=sc.DATA_CACHE.parent.parent)
+        code_root=sc.DATA_CACHE.parent.parent,
+        mark_stream_path=marks_path if mark_stream is not None else None,
+        evaluation_config={"label": args.label, "embargo": args.embargo,
+                           "dd_cap": sc.MAX_DRAWDOWN_CAP,
+                           "thresholds": list(sc.KEEP_THRESHOLDS),
+                           "cost_model": "index_dollar"})
     write_manifest(manifest, output.with_suffix(".manifest.json"))
     print(f"wrote {output}")
 

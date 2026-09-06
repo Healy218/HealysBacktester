@@ -29,7 +29,7 @@ import pandas as pd
 import tensorflow as tf
 
 from nn_options_signal import config
-from nn_options_signal.build_dataset import FEATURES
+from nn_options_signal.build_dataset import DATASET_VERSION, FEATURES, require_current_panel
 from nn_options_signal.backtest import run_backtest, mechanical_atm_score
 
 STRATEGIES = ["long", "short", "longshort"]
@@ -37,6 +37,9 @@ STRATEGIES = ["long", "short", "longshort"]
 
 def predict_run(run_id: str, rows: pd.DataFrame) -> np.ndarray:
     run_dir = config.RUNS_DIR / run_id
+    params = json.loads((run_dir / "params.json").read_text())
+    if params.get("options_signal_version") != DATASET_VERSION:
+        raise ValueError("stale options model training provenance; retrain before selection")
     scaler = json.loads((run_dir / "scaler.json").read_text())
     mu = pd.Series(scaler["mean"])[FEATURES]
     sd = pd.Series(scaler["std"])[FEATURES]
@@ -74,6 +77,7 @@ def benchmarks_section(test: pd.DataFrame, spy: pd.DataFrame, H: int) -> list[st
 
 def main() -> None:
     panel = pd.read_parquet(config.DATASET_PARQUET)
+    require_current_panel(panel)
     runs = pd.read_csv(config.RUNS_CSV)
     val = panel[panel["split"] == "val"].copy()
     test = panel[panel["split"] == "test"].copy()
@@ -149,6 +153,7 @@ def main() -> None:
         for rid in win_ids:
             shutil.copytree(config.RUNS_DIR / rid, final_dir / rid)
         (final_dir / "ensemble_config.json").write_text(json.dumps({
+            "options_signal_version": DATASET_VERSION,
             "strategy": strat, "run_ids": win_ids, "horizon": H,
             "arch": best["arch"], "lr": float(best["lr"]),
             "threshold": {"long": config.PRED_THRESHOLD,

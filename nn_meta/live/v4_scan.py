@@ -40,6 +40,7 @@ failing the pass.
 from __future__ import annotations
 
 import argparse
+from contextlib import nullcontext
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Callable, Optional
@@ -59,9 +60,9 @@ from nn_meta import config
 from nn_meta.baseline import load_spec, propose_trades
 from nn_meta.build_meta_dataset import rolling_beta_60d
 from nn_meta.live.scanner import (TICKER_ALIASES, aliased_bar_loader,
-                                  closed_bars, is_rth)
+                                  closed_bars, is_rth, require_recent_bars)
 from nn_meta.live.state import (AlertState, Outbox, PaperLedger,
-                                atomic_write_json, health_snapshot)
+                                atomic_write_json, health_snapshot, serialized, preview_state)
 from nn_meta.live.v4_candidates import build_candidate_batch
 from nn_meta.live.watchlist import Watchlist, format_digest
 
@@ -129,9 +130,10 @@ def fresh_proposals(symbol: str, bars: pd.DataFrame, spec_entry: dict,
 
 def candidate_frame(fresh: list[dict]) -> pd.DataFrame:
     """Expand fresh signals to one proposal row per DTE-grid variant.
-    Strike is the ATM target (= spot): decision-safe, no option fill."""
+    Strike is the configured moneyness target: decision-safe, no option fill."""
     rows = [{"symbol": f["symbol"], "strategy": f["strategy"], "dte": dte,
-             "direction": f["direction"], "strike": f["spot"],
+             "direction": f["direction"],
+             "strike": f["spot"] * (1.0 + config.EXEC_CONFIG.get("MONEYNESS", 0.0)),
              "entry_ts": f["entry_ts"], "bars_since_signal": f["bars_since_signal"]}
             for f in fresh for dte in config.DTE_GRID]
     return pd.DataFrame(rows)
@@ -199,6 +201,8 @@ def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool
     right = "C" if fresh["direction"] == 0 else "P"
     action = "BUY CALL" if right == "C" else "BUY PUT"
     expiry = (datetime.now(timezone.utc) + timedelta(days=int(row.dte))).date()
+    target = fresh["spot"] * (1.0 + config.EXEC_CONFIG.get("MONEYNESS", 0.0))
+    strike_label = "~ATM" if target == fresh["spot"] else "target"
     tag = f"{EXPERT}-{bundle.family}" + (" · paper" if paper else "")
     shown = TICKER_ALIASES.get(row.symbol, row.symbol)
     if shown != row.symbol:
@@ -211,7 +215,7 @@ def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool
     msg = (f"{TAG} {shown}: {action} · P(win) {row.score:.0%}{ev_part}\n"
            f"trigger: {row.strategy} ({fresh['param_label']}) · "
            f"DTE {int(row.dte)} (best of grid)\n"
-           f"contract: ~ATM {right} near ${fresh['spot']:,.2f}, "
+           f"contract: {strike_label} {right} near ${target:,.2f}, "
            f"~{int(row.dte)} DTE (≈ {expiry})\n"
            f"bar: {row.entry_ts} UTC · spot ${fresh['spot']:,.2f}\n"
            f"expert: {tag}")
@@ -220,6 +224,7 @@ def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool
 
 # ── one pass ──────────────────────────────────────────────────────────────────
 
+@serialized(lambda **kw: Path(kw.get("state_dir") or STATE_DIR) / ".live.lock")
 def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
               bar_loader: Callable[[str], pd.DataFrame], notifier,
               now: Optional[datetime] = None,
@@ -242,7 +247,7 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
     scanned = 0
     for sym in (symbols or list(spec["symbols"])):
         try:
-            bars = closed_bars(bar_loader(sym), now)
+            bars = require_recent_bars(closed_bars(bar_loader(sym), now), now)
             scanned += 1
             for f in fresh_proposals(sym, bars, spec["symbols"][sym],
                                      config.PROPOSAL_STRATEGIES):
@@ -315,6 +320,7 @@ PANEL_WATCHLISTS = (("v4", ".v4_watchlist.json"), ("v3", ".v3_watchlist.json"),
                     ("v31", ".v31_watchlist.json"), ("v5", ".v5_watchlist.json"))
 
 
+@serialized(lambda **kw: Path(kw.get("state_dir") or STATE_DIR) / ".live.lock")
 def digest_pass(*, bar_loader: Callable[[str], pd.DataFrame], notifier,
                 state_dir: Optional[Path] = None, top: int = 10,
                 now: Optional[datetime] = None) -> dict:
@@ -431,36 +437,37 @@ def main() -> None:
         selftest(bundle_dir)
         return
 
-    if args.digest:
-        from nn_meta.live.run_live import _bar_loader       # lazy: data loader
+    with (preview_state(STATE_DIR) if args.dry_run else nullcontext(STATE_DIR)) as sdir:
+        if args.digest:
+            from nn_meta.live.run_live import _bar_loader       # lazy: data loader
+            from nn_meta.live.notifier import get_notifier
+            s = digest_pass(bar_loader=aliased_bar_loader(_bar_loader),
+                            notifier=get_notifier(force_console=args.dry_run),
+                            top=args.top, state_dir=sdir)
+            print(f"[panel-digest] signals {s['signals_today']} · resolved "
+                  f"{s['outcomes_resolved']} · delivered {s['delivered']}")
+            return
+
+        now = datetime.now(timezone.utc)
+        if not args.ignore_hours and not is_rth(now):
+            print("Outside RTH — nothing to scan.")
+            return
+
+        from nn_meta.live.run_live import _bar_loader           # lazy: data loader
         from nn_meta.live.notifier import get_notifier
-        s = digest_pass(bar_loader=aliased_bar_loader(_bar_loader),
-                        notifier=get_notifier(force_console=args.dry_run),
-                        top=args.top)
-        print(f"[panel-digest] signals {s['signals_today']} · resolved "
-              f"{s['outcomes_resolved']} · delivered {s['delivered']}")
-        return
+        from nn_meta.build_meta_dataset import load_surface_features
 
-    now = datetime.now(timezone.utc)
-    if not args.ignore_hours and not is_rth(now):
-        print("Outside RTH — nothing to scan.")
-        return
-
-    from nn_meta.live.run_live import _bar_loader           # lazy: data loader
-    from nn_meta.live.notifier import get_notifier
-    from nn_meta.build_meta_dataset import load_surface_features
-
-    bundle = load_trusted_bundle(bundle_dir, paper=args.paper)
-    summary = scan_pass(
-        bundle=bundle, spec=load_spec(), surface=load_surface_features(),
-        bar_loader=aliased_bar_loader(_bar_loader),
-        notifier=get_notifier(force_console=args.dry_run),
-        now=now,
-        symbols=[s.strip().upper() for s in args.symbols.split(",")]
-        if args.symbols else None,
-        threshold=args.threshold, paper=args.paper)
-    print(f"{TAG} scanned {summary['scanned']} · alerted {summary['alerted']} · "
-          f"delivered {summary['delivered']} · errors {summary['error_count']}")
+        bundle = load_trusted_bundle(bundle_dir, paper=args.paper)
+        summary = scan_pass(
+            bundle=bundle, spec=load_spec(), surface=load_surface_features(),
+            bar_loader=aliased_bar_loader(_bar_loader),
+            notifier=get_notifier(force_console=args.dry_run),
+            now=now,
+            symbols=[s.strip().upper() for s in args.symbols.split(",")]
+            if args.symbols else None,
+            threshold=args.threshold, paper=args.paper, state_dir=sdir)
+        print(f"{TAG} scanned {summary['scanned']} · alerted {summary['alerted']} · "
+              f"delivered {summary['delivered']} · errors {summary['error_count']}")
 
 
 if __name__ == "__main__":

@@ -123,3 +123,56 @@ def net_return_short(entry_price: float, exit_price: float, margin: float,
     got = float(entry_price) - costs.side_cost_points(entry_price)
     paid = float(exit_price) + (0.0 if settled else costs.side_cost_points(exit_price))
     return (got - paid) / float(margin)
+
+
+def ledger_cost_paths(selected, marks):
+    """Attach explicit dollar-cost NAV paths for the shared ledger.
+
+    Gross marks stay untouched for execution reconciliation. Entry friction
+    applies immediately; exit friction applies only at the terminal fill.
+    Returns enriched marks and per-trade entry turnover ratios. The generic
+    equity percentage haircut must not be applied again to these paths.
+    """
+    import numpy as np
+    import pandas as pd
+    from nn_meta.mark_stream import stable_trade_id
+
+    rows = selected.copy()
+    rows['trade_id'] = stable_trade_id(rows)
+    indexed = rows.set_index('trade_id')
+    info = marks[['trade_id', 'mark_ts', 'gross_return']].join(
+        indexed[['entry_premium', 'margin', 'spx0_short', 'wing_contract',
+                 'fill_exit_ts', 'exit_reason']], on='trade_id')
+    entry = info['entry_premium'].to_numpy(dtype=float)
+    margin = info['margin'].to_numpy(dtype=float)
+    short = info['spx0_short'].to_numpy(dtype=float) > 0
+    vertical = info['wing_contract'].notna().to_numpy()
+    terminal = (info['mark_ts'] == info['fill_exit_ts']).to_numpy()
+    settled = (info['exit_reason'] == 'settled_intrinsic').to_numpy()
+    gross = info['gross_return'].to_numpy(dtype=float)
+    premium = np.where(short, entry - gross * margin, entry * (1 + gross))
+    if not np.isfinite(entry).all() or (entry <= 0).any() \
+            or (short & (~np.isfinite(margin) | (margin <= 0))).any():
+        raise ValueError('invalid SPX0 premium/margin cost provenance')
+    out = marks.copy()
+    entry_turnover = pd.DataFrame(index=indexed.index)
+    for scenario in (BASE, STRESSED):
+        def side(px):
+            spread = scenario.half_spread_points + np.maximum(px - 1, 0) * scenario.spread_scale_above_1
+            return spread + scenario.fee_per_contract / MULTIPLIER * np.where(vertical, 2, 1)
+        paid_entry = side(entry)
+        paid_exit = side(np.abs(premium))
+        # Existing long labels charge both sides even at intrinsic settlement;
+        # short/vertical labels exempt a cash settlement from exit crossing.
+        paid_exit = np.where(terminal & ~(short & settled), paid_exit, 0.)
+        denominator = np.where(short, margin, entry + paid_entry)
+        net = np.where(short,
+                       gross - (paid_entry + paid_exit) / denominator,
+                       (premium - paid_exit) / denominator - 1.)
+        out[f'net_return_{scenario.name}'] = net
+        out[f'turnover_{scenario.name}'] = np.abs(premium) / denominator
+        ratios = pd.Series(entry / denominator, index=info['trade_id']).groupby(level=0).first()
+        entry_turnover[f'entry_turnover_{scenario.name}'] = ratios.reindex(indexed.index)
+        initial = pd.Series(net, index=info['trade_id']).groupby(level=0).first()
+        entry_turnover[f'entry_net_return_{scenario.name}'] = initial.reindex(indexed.index)
+    return out, entry_turnover
