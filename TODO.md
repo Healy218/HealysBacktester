@@ -200,12 +200,16 @@ workload, VM-hour budget and explicit job IDs.
 ## 5. Verify operational readiness alongside research
 
 September 6 read-only follow-up: [production alert review](docs/reviews/2026-09-06-production-alert-review.md).
-All four ensembles load/score and Telegram/SIP REST access work. Production
-remains pre-audit 9351d01; v5 refresh was killed (surface ends August 24), and
-freshness/final-close/legacy delivery gaps prevent an end-to-end all-clear.
+All four ensembles load/score and Telegram/SIP REST access work. The separate
+compatibility patch a315034 is now deployed, preserving old models.
+[Deployment evidence](docs/reviews/2026-09-06-production-ops-deployment.md).
+v5 refresh resumed under memory monitoring; completion and live-session
+acceptance remain pending.
 - [ ] Repair/complete v5 server surface refresh with a measured memory budget.
-- [ ] Prepare compatible production freshness, final-close/calendar and legacy
-  outbox fixes; validate market-session behavior before declaring readiness.
+- [x] Deploy compatible production freshness, final-close/calendar and legacy
+  outbox fixes, with separate experimental + confirmed EOD panel.
+- [ ] Validate market-session behavior and EOD timing/coverage before declaring
+  end-to-end readiness.
 
 
 Actual read-only inspection found pre-audit server commit `9351d01`, four

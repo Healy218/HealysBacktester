@@ -1,27 +1,27 @@
-# Handoff — production alert review completed; v6 keeps running
+# Handoff — production ops fixes deployed; v5 refresh and v6 capture running
 
-September 6, 2026. User requested a current server data/alert-path review.
-Read-only SSH verified production still at 9351d01. No deployment or production
-state mutation; local v6 capture and half-hour watcher continue unchanged.
+September 6, 2026. User requested operational fixes and both experimental
+partial-bar view + closed-bar recap five minutes before the exchange close.
+Production compatibility branch ops/server-alert-readiness-20260906 is now at
+a315034 (initial patch 6d83a67), separately from research main. Do not pull
+research main onto old models. Home v6 causal source/data are unchanged.
 
-## Production findings
+Deployment and remaining checks:
+docs/reviews/2026-09-06-production-ops-deployment.md.
+Full ops regression 545 tests +18 subtests; follow-up 10 focused tests passed.
+Freshness/final-close/calendar/stream/retry fixes and separate EOD minute cron
+are active. Models/specs/thresholds retained; bundle and alert-state hash checks
+passed. Actual stream/timing/delivery acceptance awaits the next session.
+Calendar verified September 7 closed, first panel September 8 at 15:55 ET.
+Preview prewarms at 15:46, snapshot target 15:54; incomplete coverage is labeled.
 
-Full review: docs/reviews/2026-09-06-production-alert-review.md.
-All four schedules run; Telegram heartbeat delivered today; authenticated SIP
-REST returned SPY/AAPL historical bars. All four 40-member ensembles passed
-synthetic scoring; v4/v5 also passed deployed hash/eligibility checks.
-Do NOT give a full alert-readiness all-clear:
-- Friday scans logged widespread 401/data failures; final v4 health 0 scanned,
-  118 errors. Latest expert sends predate Friday's failed session.
-- v5 Sunday bars refresh ended Killed; surface remains August 24.
-- Stock daemon alive but heartbeat connecting/zero bars since Saturday;
-  weekend alone cannot determine stream health. OPRA has zero subscriptions
-  and is not wired into deployed expert scoring.
-- Deployed source lacks recent-bar rejection, skips final-close staggered
-  passes, lacks exchange-calendar gating, and v3/v31 dedupe precedes confirmed
-  delivery with no durable retry. Newer local fixes are not on production.
-- Full-session verification and compatible ops remediation remain outstanding.
-  Do not deploy all of main against pre-audit bundles without compatibility work.
+Server v5 refresh remains RUNNING, not complete: supervisor 394442, initial
+worker 394443, eight download workers, sampled 1 GiB available-memory stop guard.
+Exact root logs/ops/v5-refresh-20260906T222750Z/ on server. At last check,
+5,000/208,684 remaining downloads done, ~76/s, 5.6 GiB available. Surface follows
+successful download/compaction automatically. Check result.json and date coverage.
+Server stock stream restarted as PID 394370. Rollback snapshot:
+logs/ops/alert-fix-20260906T222537Z/ on server. No test trading alert was sent.
 
 ## Latest user direction — dedicate the box to freeze work
 
