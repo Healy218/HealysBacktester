@@ -86,8 +86,9 @@ def generate_squeeze_signals(ohlcv: pd.DataFrame, bb_mult_range,
 
 def generate_keltner_signals(ohlcv: pd.DataFrame, window_range, mult_range,
                              enable_shorting: bool = False):
-    """Keltner channel breakout: EMA(close, n) ± mult × ATR(n) (ATR = RMA of
-    true range, TradingView's default). Long on a close crossing above the
+    """Keltner channel breakout: EMA(close, n) ± mult × smoothed true range.
+    Both EWM smoothers retain this family's first-observation seed. Long on
+    a close crossing above the
     upper band, exit on a close crossing back under the mid line; shorts
     mirrored on the lower band. The Keltner half of the squeeze family, as an
     entry family of its own."""
@@ -109,11 +110,11 @@ def generate_keltner_signals(ohlcv: pd.DataFrame, window_range, mult_range,
 
 def generate_bbw_squeeze_signals(ohlcv: pd.DataFrame, window_range,
                                  lookback_range, enable_shorting: bool = False):
-    """Bollinger Band Width squeeze (TradingView "BB Width" logic): width =
+    """Bollinger Band Width squeeze: width =
     (upper − lower) / basis with a 2σ band; a squeeze is on while the width
-    sits at its lowest over ``lookback`` bars. Entry = the first close outside
-    the band while the squeeze was on the bar before (the release, in the
-    breakout's direction); exit = a close crossing back through the basis.
+    sits at its lowest over ``lookback`` fully populated widths, ties included.
+    Entry = a close crossing outside the band while the squeeze was on the
+    bar before; exit = a close crossing back through the basis.
     Distinct from the ``squeeze`` family, which is LazyBear's BB-inside-Keltner
     release with a momentum sign."""
     out = {}

@@ -1,7 +1,7 @@
 """Weekly-expiry DTE variants (user notes 2026-09-05, TODO item 5).
 
-Most names list options monthly or on Fridays; 25 of the v5 universe (AAPL,
-SPY, QQQ, NVDA, TSLA, …) list Monday/Wednesday/Friday expirations — three
+Most names list options monthly or on Fridays; the September 5 archive audit
+identified 15 names with Monday/Wednesday/Friday expirations — three
 per week. ``DTE_GRID`` (1/5/10/30/45) never targets the 2nd or 3rd expiry
 of the week on those names. For pools with weekly variants enabled, such
 symbols get ``DTE_GRID_WEEKLY`` appended to their DTE grid at freeze AND
