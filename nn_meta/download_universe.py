@@ -42,6 +42,7 @@ from data import vbt_data_loader
 from nn_options_signal.download_contracts import crawl
 from nn_meta import config
 from nn_meta.config import TICKER_ALIASES
+from nn_meta.price_basis import load_raw_daily, require_raw_panel, RAW_SPOT_SCHEMA_VERSION
 
 FLUSH_EVERY = 500
 _thread_local = threading.local()
@@ -196,18 +197,20 @@ def _universe_for(contracts: pd.DataFrame, closes: pd.Series,
 
 def build_universe(contracts: pd.DataFrame, und: pd.DataFrame,
                    win_end: str | None = None) -> pd.DataFrame:
+    require_raw_panel(und, "1d")
     kept = []
     for sym, grp in contracts.groupby("underlying"):
         closes = und[und["underlying"] == sym].set_index("date")["close"].sort_index()
         if closes.empty:
-            print(f"  {sym}: no underlying bars — skipped")
-            continue
+            raise ValueError(f"{sym}: no raw daily spot for universe strike filtering")
         keep = _universe_for(grp, closes, win_end=win_end)
         kept.append(grp[keep.fillna(False)])
     uni = pd.concat(kept, ignore_index=True)
     uni["life_start"] = (uni["expiration"] - pd.Timedelta(days=config.DTE_MAX + 15)) \
         .dt.strftime("%Y-%m-%d")
     uni["life_end"] = uni["expiration"].dt.strftime("%Y-%m-%d")
+    uni.attrs.update(universe_price_basis_schema=RAW_SPOT_SCHEMA_VERSION,
+                     strike_filter_spot_basis="raw", raw_spot_provenance=dict(und.attrs))
     _guard_universe_shrink(uni)
     _atomic_parquet(uni, config.UNIVERSE_PARQUET)
     per = uni.groupby("underlying").size().sort_values(ascending=False)
@@ -290,6 +293,8 @@ def bulk_download(uni: pd.DataFrame, key: str) -> None:
             if buffer:
                 df = pd.DataFrame(buffer)
                 df["date"] = pd.to_datetime(df["date"], unit="ms").dt.normalize()
+                df.attrs.update(daily_price_basis_schema=RAW_SPOT_SCHEMA_VERSION,
+                                moneyness_filter_spot_basis="unfiltered", source="massive_contract_daily_aggs")
                 df.to_parquet(config.BARS_DAILY_DIR / f"bars_part_{part_no:04d}.parquet",
                               index=False)
                 part_no += 1
@@ -474,7 +479,14 @@ def main() -> None:
 
     contracts = download_contracts(key, expiry_max=expiry_max)
     und = download_underlying_daily(end=daily_end)
-    uni = build_universe(contracts, und, win_end=win_end)
+    raw_daily = load_raw_daily()
+    # The adjusted refresh above is for returns/technicals only. Do not let a
+    # stale raw cache silently replace current spot in a weekly live refresh.
+    latest = und.groupby("underlying")["date"].max()
+    raw_latest = raw_daily.groupby("underlying")["date"].max().reindex(latest.index)
+    if raw_latest.isna().any() or (raw_latest < latest).any():
+        raise ValueError("raw daily spot does not cover the adjusted refresh; refresh the separate raw cache before universe filtering")
+    uni = build_universe(contracts, raw_daily, win_end=win_end)
     if args.universe_only:
         return
     bulk_download(uni, key)

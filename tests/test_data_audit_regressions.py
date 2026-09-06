@@ -177,6 +177,10 @@ def test_target_moneyness_is_independent_of_selected_strike(monkeypatch, target)
     close,idx=_underlying()
     bars=pd.DataFrame({c:102. for c in ['Open','High','Low','Close']},index=idx)
     bars['Volume']=100.
+    from nn_meta import price_basis
+    raw_close = bars.Close.copy()
+    raw_close.attrs = dict(price_basis.raw_spot_provenance('15m', provider='test', feed='synthetic'), symbol='SPY')
+    monkeypatch.setattr(price_basis, 'load_raw_close_15m', lambda symbol, *, index: raw_close)
     monkeypatch.setattr(builder,'load_underlying_15m',lambda sym:bars)
     monkeypatch.setattr(builder,'propose_trades',lambda *args:[(idx[0],idx[51],0)])
     entry={'strategies':{'ma':{'params':{'fast_window':2,'slow_window':4},'dte':5}}}

@@ -94,3 +94,15 @@ def test_missing_bar_raises():
     props = _proposals("2020-01-01 10:00")   # before any bar
     with pytest.raises(ValueError, match="no underlying bars"):
         build_candidate_batch(props, {"SPY": bars}, _surface(), _spec())
+
+
+def test_live_moneyness_matches_configured_offline_target_independent_of_strike(monkeypatch):
+    from nn_meta import config
+    monkeypatch.setitem(config.EXEC_CONFIG, "MONEYNESS", .02)
+    bars = _bars()
+    proposals = _proposals(_entry_ts(bars))
+    first = build_candidate_batch(proposals, {"SPY": bars}, _surface(), _spec())
+    proposals["strike"] = 2000.  # listed/executed strike never enters this feature
+    second = build_candidate_batch(proposals, {"SPY": bars}, _surface(), _spec())
+    assert first.moneyness.iloc[0] == pytest.approx(np.log1p(.02))
+    assert_candidate_parity(first, second)

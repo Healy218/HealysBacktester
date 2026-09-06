@@ -141,7 +141,10 @@ def load_surface_features() -> pd.DataFrame:
     """Per-(underlying, date) surface state from dataset.parquet."""
     panel = pd.read_parquet(config.SURFACE_DATASET_PARQUET,
                             columns=["underlying", "date"] + _SURFACE_COLS)
+    from nn_meta.price_basis import require_raw_surface
+    require_raw_surface(panel)
     surf = panel.groupby(["underlying", "date"], as_index=False).first()
+    surf.attrs = dict(panel.attrs)
     return surf.sort_values("date")
 
 
@@ -260,6 +263,8 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
         return pd.DataFrame()
     close = bars["Close"]
     dte_grid = list(dte_grid or config.DTE_GRID)
+    from nn_meta.price_basis import load_raw_close_15m
+    raw_close = None
 
     # ``reuse`` (2026-09-05, additive generations): (rows, marks) of this symbol
     # from an EARLIER pool built under the same window/grid. Families present
@@ -333,6 +338,9 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                 _write_provenance(p_rows, provenance)
             continue
 
+        if raw_close is None:
+            raw_close = load_raw_close_15m(symbol, index=bars.index)
+
         f_w, s_w = _feature_windows(strat, entry["params"])
         feats = technical_features(bars, f_w, s_w)
 
@@ -346,7 +354,8 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
         for dte in dte_grid:
             records, meta = execute_at_dte(symbol, trades, bars, dte, provider,
                                            window_end, ex=ex,
-                                           collect_marks=marks_sink is not None)
+                                           collect_marks=marks_sink is not None,
+                                           raw_close=raw_close)
             if marks_sink is not None and meta.get("blotter"):
                 # Key the marks exactly as the rows below will be keyed, so the
                 # sidecar joins back to the dataset without a trade_id column.
@@ -370,6 +379,7 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                 xs = to_naive_utc(r["exit_ts"])
                 hist = close.loc[:ts]
                 spot = float(hist.iloc[-1]) if len(hist) else np.nan
+                raw_spot = float(raw_close.loc[ts])
                 exit_hist = close.loc[:xs]
                 und_ret = (float(exit_hist.iloc[-1]) / spot - 1) \
                     if (len(exit_hist) and spot) else np.nan
@@ -384,6 +394,9 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                     "exit_ts": xs,
                     "direction": r["direction"], "right": r["right"],
                     "contract": r["contract"], "strike": strike,
+                    "selection_spot_raw": raw_spot,
+                    "selection_spot_basis": "raw",
+                    "selection_spot_schema": raw_close.attrs["schema_version"],
                     "expiration": r["expiration"],
                     "entry_premium": prem, "fill_lag_s": r["fill_lag_s"],
                     # Execution provenance retained for V4 accounting; the
@@ -397,7 +410,7 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                     # context features
                     "dir_short": float(r["direction"]),
                     "dte_frac": dte / max(config.DTE_GRID),
-                    "prem_spot": (prem / spot) if (prem is not None and spot) else np.nan,
+                    "prem_spot": (prem / raw_spot) if prem is not None else np.nan,
                     # Target ATM moneyness is knowable at decision time.
                     # Executed strike remains provenance, never a feature.
                     "moneyness": float(np.log1p(config.EXEC_CONFIG.get("MONEYNESS", 0.0))),

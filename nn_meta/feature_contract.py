@@ -16,7 +16,7 @@ from dataclasses import dataclass
 from enum import IntEnum
 from typing import Iterable, Mapping
 
-CONTRACT_VERSION = "2026-09-05-causal-v2"
+CONTRACT_VERSION = "2026-09-06-raw-spot-v3"
 
 
 def baseline_spec_fingerprint(spec: dict) -> str:

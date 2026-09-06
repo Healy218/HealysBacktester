@@ -39,6 +39,7 @@ from portfolio import simulator
 from options.execution import Execution, extract_trades, execute_trade_returns, to_naive_utc
 from nn_meta.providers import get_provider
 from nn_meta import config, proposals
+from nn_meta.price_basis import load_raw_close_15m, require_raw_close
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -199,15 +200,28 @@ def top_k_contribution(returns: list[float], k: int = 3,
 def execute_at_dte(symbol: str, trades: list[tuple], bars: pd.DataFrame,
                    dte: int, provider, end_date: str,
                    ex: Optional[Execution] = None,
-                   collect_marks: bool = False) -> tuple[list[dict], dict]:
+                   collect_marks: bool = False,
+                   raw_close: pd.Series | None = None) -> tuple[list[dict], dict]:
     """Run the shared executor for a trade timeline at one DTE.
 
     ``collect_marks`` surfaces the per-leg intratrade bars in ``meta["blotter"]``
     for mark-stream emission (see :mod:`nn_meta.mark_stream`); off by default.
     """
+    if raw_close is None:
+        raw_close = load_raw_close_15m(symbol, index=bars.index)
+    require_raw_close(raw_close)
+    if raw_close.attrs["symbol"] != symbol.upper():
+        raise ValueError("raw selection spot symbol differs from option underlying")
+    expected = pd.DatetimeIndex([to_naive_utc(t) for t in bars.index])
+    if not raw_close.index.equals(expected):
+        raise ValueError("raw spot and technical bars must have exactly aligned selection timestamps")
     if ex is None:
         ex = Execution(symbol, config.INTERVAL, end_date, provider, config.EXEC_CONFIG)
-    und_close = bars["Close"]
+    # Set on supplied/shared executors too; no strategy or DTE may bypass this
+    # pipeline gate by constructing an executor with legacy default options.
+    ex.require_raw_spot = True
+    ex.fill_same_bar = False
+    und_close = raw_close
     und_idx = pd.DatetimeIndex([to_naive_utc(t) for t in bars.index])
     return execute_trade_returns(
         ex, trades, und_close, und_idx, dte,

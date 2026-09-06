@@ -72,6 +72,7 @@ class Execution:
         # knowable. FILL_SAME_BAR=True restores the legacy convention
         # (entry at the signal bar's own open, ~one bar optimistic).
         self.fill_same_bar = bool(options_config.get("FILL_SAME_BAR", False))
+        self.require_raw_spot = bool(options_config.get("REQUIRE_RAW_SPOT", False))
         self._chain_cache: dict = {}
         self._bars_cache: dict = {}
         self._bars_windows: dict = {}
@@ -96,7 +97,8 @@ class Execution:
         return b[(b.index >= pd.Timestamp(frm))
                  & (b.index < pd.Timestamp(to) + pd.Timedelta(days=1))]
 
-    def select(self, as_of: date, right: str, spot: float, target_dte: int):
+    def select(self, as_of: date, right: str, spot: float, target_dte: int, *, spot_basis=None):
+        contract_selector.validate_spot_basis(spot, spot_basis, require_raw=self.require_raw_spot)
         key = (as_of, right, target_dte)
         if key not in self._chain_cache:
             self._chain_cache[key] = self.provider.get_chain(
@@ -112,6 +114,7 @@ class Execution:
         return contract_selector.select_contract(
             chain, right=right, spot=spot, target_dte=target_dte,
             target_delta=self.target_delta, moneyness=self.moneyness, as_of=as_of,
+            spot_basis=spot_basis, require_raw_spot=self.require_raw_spot,
         )
 
 
@@ -130,6 +133,14 @@ def execute_variant(ex: Execution, stock_trades, und_close, und_index_utc,
     contract bars, and no way for the two to disagree.  Off by default: the
     live scorer executes one trade at a time and has no use for the arrays.
     """
+    if getattr(ex, "require_raw_spot", False):
+        from nn_meta.price_basis import require_raw_close
+        require_raw_close(und_close)
+        if und_close.attrs["symbol"] != ex.symbol.upper():
+            raise ValueError("raw spot symbol differs from option execution underlying")
+        if not pd.DatetimeIndex(und_index_utc).equals(und_close.index):
+            raise ValueError("raw spot values and execution timestamps must align exactly")
+    spot_basis = und_close.attrs.get("price_basis")
     slices: list[pd.DataFrame] = []
     entry_ts_list: list[pd.Timestamp] = []
     exit_ts_list: list[pd.Timestamp] = []
@@ -161,7 +172,7 @@ def execute_variant(ex: Execution, stock_trades, und_close, und_index_utc,
             if spot_hist.empty:
                 break
             spot = float(spot_hist.iloc[-1])
-            contract = ex.select(as_of, right, spot, target_dte)
+            contract = ex.select(as_of, right, spot, target_dte, spot_basis=spot_basis)
             if contract is None:
                 logger.warning(f"[{_TAG}] no contract for {ex.symbol} {right} "
                                f"@ {as_of} ({target_dte} DTE)")
@@ -171,9 +182,10 @@ def execute_variant(ex: Execution, stock_trades, und_close, und_index_utc,
             if bars.empty:
                 break
 
-            # Roll re-entries (hops > 0) are already causal: cur is the first
-            # underlying bar strictly after the expired contract's last close.
-            entry_side = "left" if (ex.fill_same_bar or hops > 0) else "right"
+            # Roll selection also reads cur's stock Close, so its option fill
+            # must occur after that bar. Same-bar roll opens previously used a
+            # stock close that had not yet occurred to choose the contract.
+            entry_side = "left" if ex.fill_same_bar else "right"
             epos = int(bars.index.searchsorted(cur, side=entry_side))
             while epos < len(bars) and last_stitched is not None \
                     and bars.index[epos] <= last_stitched:
@@ -201,6 +213,8 @@ def execute_variant(ex: Execution, stock_trades, und_close, und_index_utc,
             leg = {
                 "trade_idx": t_i, "contract": contract.symbol, "right": right,
                 "strike": contract.strike,
+                "selection_spot": spot, "selection_spot_basis": spot_basis,
+                "selection_bar_ts": str(cur),
                 "expiration": contract.expiration.isoformat(),
                 "entry": str(chunk.index[0]), "exit": str(close_ts[-1]),
                 "entry_open": float(chunk["Open"].iloc[0]),

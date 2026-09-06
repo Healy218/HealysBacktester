@@ -27,12 +27,14 @@ from nn_meta.live.v4_parity import assert_feature_parity
 _CONTEXT_ONLY = ("market_iv", "rv_iv_spread", "beta_60d")
 
 
-def _trade_context(direction, dte, strike, spot, bars_since_signal) -> dict:
+def _trade_context(direction, dte, bars_since_signal) -> dict:
     """Proposal-metadata features — all known at signal close, no option fill."""
     return {
         "dir_short": float(direction),
         "dte_frac": dte / max(config.DTE_GRID),
-        "moneyness": float(np.log(strike / spot)) if (strike and spot) else np.nan,
+        # Same decision-time target as build_meta_dataset. Listed/executed
+        # strike and technical history's adjustment basis are not features.
+        "moneyness": float(np.log1p(config.EXEC_CONFIG.get("MONEYNESS", 0.0))),
         "bars_since_signal": float(np.log1p(bars_since_signal)),
     }
 
@@ -58,9 +60,8 @@ def build_candidate_batch(proposals: pd.DataFrame,
         if feats.empty:
             raise ValueError(f"no underlying bars at or before {entry_ts} for {p.symbol}")
         row = feats.iloc[-1].to_dict()
-        spot = float(bars.loc[:entry_ts, "Close"].iloc[-1])
         lag = getattr(p, "bars_since_signal", 1)
-        row.update(_trade_context(p.direction, p.dte, p.strike, spot, lag))
+        row.update(_trade_context(p.direction, p.dte, lag))
         row.update({"symbol": p.symbol, "strategy": p.strategy, "dte": p.dte,
                     "entry_ts": entry_ts, "entry_date": entry_ts.normalize()})
         rows.append(row)

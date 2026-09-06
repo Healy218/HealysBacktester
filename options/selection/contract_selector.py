@@ -12,8 +12,25 @@ from __future__ import annotations
 
 from datetime import date
 from typing import Optional
+import math
 
 from options.data.provider import OptionContract
+
+
+def validate_spot_basis(spot, spot_basis=None, *, require_raw=False):
+    """Strict pipeline callers declare raw spot before comparing OCC strikes.
+
+    Legacy scalar-only callers cannot establish source lineage. A declared
+    adjusted basis is always rejected; new research execution requires raw.
+    """
+    if spot_basis is not None and spot_basis != "raw":
+        raise ValueError("listed option strikes require raw contemporaneous spot")
+    if require_raw and spot_basis != "raw":
+        raise ValueError("option selection requires explicit raw spot price basis")
+    if spot is not None and (isinstance(spot, bool) or not math.isfinite(float(spot)) or float(spot) <= 0):
+        raise ValueError("option selection spot must be finite and positive")
+    if require_raw and spot is None:
+        raise ValueError("raw spot is required for option selection")
 
 
 def _nearest_expiration(contracts: list[OptionContract], target_dte: int, as_of: date):
@@ -61,12 +78,17 @@ def select_by_dte_and_moneyness(
     target_dte: int = 30,
     moneyness: float = 0.0,
     as_of: Optional[date] = None,
+    spot_basis: Optional[str] = None,
+    require_raw_spot: bool = False,
 ) -> Optional[OptionContract]:
     """Fallback selector by strike distance from spot.
 
     ``moneyness`` is a fraction of spot: ``0.0`` → at-the-money, ``+0.02`` → a
     strike ~2% above spot, etc. Used when the chain lacks greeks.
     """
+    validate_spot_basis(spot, spot_basis, require_raw=require_raw_spot)
+    if isinstance(moneyness, bool) or not math.isfinite(float(moneyness)) or moneyness <= -1:
+        raise ValueError("target moneyness must be finite and greater than -1")
     as_of = as_of or date.today()
     exp = _nearest_expiration([c for c in contracts if c.right == right.upper()[:1]],
                               target_dte, as_of)
@@ -88,12 +110,15 @@ def select_contract(
     target_delta: float = 0.50,
     moneyness: float = 0.0,
     as_of: Optional[date] = None,
+    spot_basis: Optional[str] = None,
+    require_raw_spot: bool = False,
 ) -> Optional[OptionContract]:
     """Convenience: prefer delta-based selection, fall back to moneyness by strike.
 
     When neither greeks nor a spot price are available, returns the median-strike
     contract of the nearest expiration as a last resort.
     """
+    validate_spot_basis(spot, spot_basis, require_raw=require_raw_spot)
     pick = select_by_dte_and_delta(
         contracts, right=right, target_dte=target_dte,
         target_delta=target_delta, as_of=as_of,
@@ -105,6 +130,7 @@ def select_contract(
         return select_by_dte_and_moneyness(
             contracts, right=right, spot=spot, target_dte=target_dte,
             moneyness=moneyness, as_of=as_of,
+            spot_basis=spot_basis, require_raw_spot=require_raw_spot,
         )
 
     # Last resort: no greeks and no spot — take the median strike of nearest expiry.

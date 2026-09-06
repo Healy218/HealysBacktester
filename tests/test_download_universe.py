@@ -257,6 +257,16 @@ def test_load_daily_bars_streams_filters_and_dedupes(tmp_path, monkeypatch):
                   "type": ["call"] * 3}).to_parquet(uni, index=False)
     monkeypatch.setattr(config, "BARS_DAILY_DIR", bars_dir)
     monkeypatch.setattr(config, "UNIVERSE_PARQUET", uni)
+    from nn_meta.price_basis import RAW_SPOT_SCHEMA_VERSION
+    metadata = pd.read_parquet(uni)
+    metadata.attrs.update(universe_price_basis_schema=RAW_SPOT_SCHEMA_VERSION,
+                          strike_filter_spot_basis="raw")
+    metadata.to_parquet(uni, index=False)
+    for path in bars_dir.glob("bars_part_*.parquet"):
+        fixture = pd.read_parquet(path)
+        fixture.attrs.update(daily_price_basis_schema=RAW_SPOT_SCHEMA_VERSION,
+                             moneyness_filter_spot_basis="unfiltered")
+        fixture.to_parquet(path, index=False)
     out = bs.load_daily_bars()
     assert list(out["ticker"]) == ["OK"]        # far-dte + sub-premium filtered,
     assert len(out) == 1                        # duplicate (ticker,date) deduped
