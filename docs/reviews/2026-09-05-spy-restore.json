@@ -1,0 +1,187 @@
+{
+  "observed_at_utc": "2026-09-06T02:07:50.245890+00:00",
+  "source": "gs://healys-backtester/backup/homebox/v3/data/underlying/SPY/*.parquet",
+  "method": "gsutil cp -n; restored missing local files only",
+  "files": [
+    {
+      "path": "v3/data/underlying/SPY/2017.parquet",
+      "sha256": "98bed3eb657e936795e8cdf938170f8b7d4cd77646a585e09d1710fa821ac1d4",
+      "bytes": 3331331,
+      "rows": 171824,
+      "start": "2017-01-03 09:00:00",
+      "end": "2017-12-29 22:59:00",
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "duplicate_timestamps": 0,
+      "selected_day_rows": {}
+    },
+    {
+      "path": "v3/data/underlying/SPY/2018.parquet",
+      "sha256": "0175dde4f8fb2a3225b3168f9d192ef5728d05d5b4879fdc5cfc1c5f16c6804f",
+      "bytes": 3803717,
+      "rows": 192062,
+      "start": "2018-01-02 09:00:00",
+      "end": "2018-12-28 22:59:00",
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "duplicate_timestamps": 0,
+      "selected_day_rows": {}
+    },
+    {
+      "path": "v3/data/underlying/SPY/2019.parquet",
+      "sha256": "1a11ef9a55065c7c891c0dbf6610a181b25250e3466c9c91f3f9c547999bb827",
+      "bytes": 3839173,
+      "rows": 190011,
+      "start": "2019-01-01 00:00:00",
+      "end": "2019-12-31 00:00:00",
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "duplicate_timestamps": 0,
+      "selected_day_rows": {}
+    },
+    {
+      "path": "v3/data/underlying/SPY/2020.parquet",
+      "sha256": "4965871a44740f25ad74926ddf85cbcc402379dd709a9e3261ae36e6ff36c731",
+      "bytes": 4466948,
+      "rows": 213515,
+      "start": "2020-01-01 00:01:00",
+      "end": "2020-12-31 00:00:00",
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "duplicate_timestamps": 0,
+      "selected_day_rows": {}
+    },
+    {
+      "path": "v3/data/underlying/SPY/2021.parquet",
+      "sha256": "9a593beb4b6c65bc0764b615aef0113b2442cbe7c559276bc2f548327b1f60e7",
+      "bytes": 4085236,
+      "rows": 201064,
+      "start": "2021-01-01 00:01:00",
+      "end": "2021-12-31 00:00:00",
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "duplicate_timestamps": 0,
+      "selected_day_rows": {}
+    },
+    {
+      "path": "v3/data/underlying/SPY/2022.parquet",
+      "sha256": "cf339bc8965b3046d1c766f3a017892950df2cd43ae6ac027fd53ab8529cc5f3",
+      "bytes": 4400740,
+      "rows": 212907,
+      "start": "2022-01-03 09:00:00",
+      "end": "2022-12-30 23:00:00",
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "duplicate_timestamps": 0,
+      "selected_day_rows": {}
+    },
+    {
+      "path": "v3/data/underlying/SPY/2023.parquet",
+      "sha256": "a2a58b9ed2ccffb4717f5e1aefd2943dee042007723bd595d2f497e717121870",
+      "bytes": 4100806,
+      "rows": 202657,
+      "start": "2023-01-03 09:00:00",
+      "end": "2023-12-30 00:59:00",
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "duplicate_timestamps": 0,
+      "selected_day_rows": {}
+    },
+    {
+      "path": "v3/data/underlying/SPY/2024.parquet",
+      "sha256": "4b8c0a144595b097ad5f89f80b2820be9465c3a4858519d724beb47e483c5281",
+      "bytes": 4087194,
+      "rows": 196989,
+      "start": "2024-01-02 09:00:00",
+      "end": "2024-12-31 23:59:00",
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "duplicate_timestamps": 0,
+      "selected_day_rows": {
+        "2024-12-31": 735
+      }
+    },
+    {
+      "path": "v3/data/underlying/SPY/2025.parquet",
+      "sha256": "c8df520550e89112357cb57a1bba9312475349ccc29c73dc735368a41315e6df",
+      "bytes": 4503321,
+      "rows": 211589,
+      "start": "2025-01-01 00:00:00",
+      "end": "2025-12-31 23:59:00",
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "duplicate_timestamps": 0,
+      "selected_day_rows": {
+        "2025-03-31": 891,
+        "2025-07-31": 900,
+        "2025-12-31": 870
+      }
+    },
+    {
+      "path": "v3/data/underlying/SPY/2026.parquet",
+      "sha256": "16ccf9a93e3e96cbc2ddc1de1c77b8be8df765041f1637725030e857c1ea9380",
+      "bytes": 3203437,
+      "rows": 143696,
+      "start": "2026-01-01 00:00:00",
+      "end": "2026-08-18 23:59:00",
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "duplicate_timestamps": 0,
+      "selected_day_rows": {
+        "2026-03-31": 947,
+        "2026-07-31": 920,
+        "2026-08-24": 0
+      }
+    }
+  ]
+}

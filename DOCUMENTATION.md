@@ -1,11 +1,15 @@
-# September 5 merge corrections
+# DOCUMENTATION — coding notes, conventions, traps, ops
+
+Reconciled September 5, 2026. Goals live in [ROADMAP](ROADMAP.md), active tasks
+in [TODO](TODO.md), and session milestones in [HANDOFF](HANDOFF.md).
+The previous technical reference is preserved in
+[handoff-history](handoff-history/DOCUMENTATION-2026-09-05-before-checklist-reconciliation.md).
 
 The active working line is `main` in `/home/healy/Coding/HealysBacktester`
-under the user's latest instruction. Older branch/path references below are
-historical. Use the project Python 3.12 virtualenv explicitly. The test suite
-exercises LightGBM/TensorFlow on synthetic fixtures without network or
-production artifacts; older “no LightGBM” text is superseded. Final integration
-validation passed: 642 tests and 18 subtests (10 dependency warnings).
+under the user's instruction. Use the project Python 3.12 virtualenv explicitly.
+The suite exercises LightGBM/TensorFlow on synthetic fixtures without network
+or production artifacts. Integration and the planning rerun passed 642 tests
+and 18 subtests (10 dependency warnings).
 
 The September 5 audit repairs use feature/build contract `2026-09-05-causal-v2`.
 Pre-audit freezes, partial checkpoints, rows, marks and bundles must be rebuilt
@@ -20,11 +24,10 @@ Current default bundle verification covers the feature contract and all
 load-critical artifacts. Older claims that unverifiable bundles are usable
 refer to previous code, not deployment eligibility with this version.
 
-Preserve the paid-provider entitlement and feed instructions below. Massive
-Advanced supersedes the old two-year entitlement cap; old label windows are
-historical build choices. The staggered :01/:02/:03 schedule supersedes old
-`*/15` examples. Use bracketed process patterns even for health checks
-(`pgrep -f "[f]eeds."`), not the older unbracketed example below.
+Massive Advanced supersedes the former two-year entitlement cap; existing
+label windows are frozen research choices. Reported production cadence is
+:01/:02/:03 by pool, pending current server verification. Use bracketed
+process patterns even for health checks (`pgrep -f "[f]eeds."`).
 
 Live readers retain streamed current-session bars and forced REST fallback,
 with actual closed-bar freshness checks. Future delta-targeted contract
@@ -37,38 +40,32 @@ See [audit remediation](docs/reviews/2026-09-05-remediation.md) and the
 [original audit](docs/reviews/2026-09-05-adversarial-audit.md) for implemented
 repairs and migration requirements.
 
----
-
-# DOCUMENTATION — coding notes, conventions, traps, ops
-
-Durable reference for anyone (human or model) working in this repo. Goals
-live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
-`HANDOFF.md` — this file is for how things *work*.
-
 ## Environment
 
-- **Repo**: `/home/healylabs/Coding/HealysBacktester`, working branch
-  `codex/v4-causal-validation`; `main` is the operational line the server runs.
-- **Python**: `./venv/bin/python` (3.12.3). No conda, no system python —
-  always call the venv binary explicitly.
-- **Tests**: `./venv/bin/python -m pytest tests/ -q` — ~535 tests, green
-  (2026-09-05; treat as a floor).
-  They must stay self-contained: no LightGBM, no network, no v31 artifacts.
+- **Repo**: `/home/healy/Coding/HealysBacktester`, working branch `main`.
+  A local merge does not update the deployed checkout.
+- **Python**: `./venv/bin/python` (3.12.14). Always call the venv explicitly.
+- **Tests**: `./venv/bin/python -m pytest tests/ -q`; 642 tests and 18 subtests
+  at the September 5 integration/planning baseline. Tests exercise installed
+  LightGBM/TF using synthetic data, without network or production artifacts.
+  Install pytest separately from runtime requirements when preparing a venv.
 - **Secrets**: `.env` at repo root, never in git. Keys: `ALPACA_API_*`,
   `MASSIVE_API_KEY`, `MASSIVE_FLAT_FILES_API_*`, `ALPHAVANTAGE_KEY`,
   `FINNHUB_API_KEY`, `REDDIT_CLIENT_*`, `TELEGRAM_BOT_TOKEN`,
   `TELEGRAM_CHAT_ID`, `FA_SKIP_COLLECTORS`.
 - **`NN_META_POOL`** selects the strategy pool AND suffixes every artifact
   dir (`nn_meta/config.py`): v2 (default) / v3 (live scanner) / v31 (at-scale
-  + v4 work). Setting it wrong silently reads and writes the wrong
-  directories — the most common way to burn an evening.
+  + v4 work) / v5 / v6 / spx0. v5 and v6 share `data_cache_v5` but have
+  separate artifact outputs; v6 keeps v5's window. Wrong pool settings can
+  silently read/write the wrong directories.
 - **Home box** (rebuilt 2026-08-23): Ryzen 7 9850X3D (8C/16T + iGPU),
   32 GB DDR5, RTX 3060 Ti, 1 TB NVMe, CachyOS, user `healy`. The old
   i5-11400/B560 build (proven RAM fault — hourly `fa.collect` segfaults on
   its final morning) is retired; the drive moved over intact, so the OS
   install and all paths are unchanged. TF is CPU-only here in practice; the
-  heavy work is memory-bound dataset builds, not training — which still run
-  on GCP Batch by doctrine, not here.
+  heavy work is memory-bound dataset building. The September 3 user decision
+  runs assembly/training on this box; cloud is optional measured acceleration.
+  The old faulty-RAM training restriction applied to the retired hardware.
 
 ## Conventions
 
@@ -79,9 +76,9 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   local path — that's what broke every launcher when the WSL2 box was retired.
 - **Never hardcode worker/shard counts.** Source `scripts/lib/autosize.sh`
   and call `autosize_workers <per_worker_mb>`; it divides MemAvailable (less
-  a 2 GB reserve) by the budget and caps at `nproc`. Build/freeze workers
-  hold ~2.1–2.7 GB RSS each; with the desktop up the right answer is ~4
-  shards, headless ~5.
+  a 2 GB reserve) by the budget and caps at `nproc`. Measure per-worker RSS
+  for the current stage/pool; old freeze/build measurements are not fixed
+  worker-count prescriptions for later campaigns.
 - **All long-lived parquet writes are atomic** (tmp + rename). A truncated
   parquet once crash-looped two build shards for 3+ hours; leftover `*.tmp`
   files after a kill are harmless litter.
@@ -93,8 +90,9 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   (`deploy/systemd/healys-boot-restart.service`) is committed but **not
   installed** on the home box — install steps in `deploy/systemd/README.md`
   if unattended recovery is wanted for a long run.
-- Run logs write to the **repo root**, not `logs/` — `.gitignore` covers
-  them with an anchored `/*.log`.
+- Log locations are launcher-specific: newer launchers use `logs/`, while
+  older jobs write root `*.log`. Inspect the descriptor/launcher when
+  wiring a watcher; do not infer the path from an older handoff.
 - **v4 policy grid = filter × rank × `ev`** (2026-08-21). Every v4
   predictor carries two heads: P(win) (`predict`) and a magnitude head
   (`predict_ev`, expected signed net return, Huber on a target winsorized
@@ -110,8 +108,9 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   `ensemble_config.json` records `mode` (`filter`/`rank`/`ev`),
   `threshold`, `magnitude_head`. `V4Bundle.decision_score` is what live
   code must threshold on (EV for an `ev` bundle, P(win) otherwise); a bundle
-  persisted in `ev` mode fails to LOAD if any member lacks its head. Bundles
-  from before 2026-08-21 have no magnitude files and still load.
+  persisted in `ev` mode fails to load if any member lacks its head. Default
+  loaders also require the current feature contract and full verification
+  envelope; old bundles are historical and must be rebuilt/retrained.
 
 ## Traps — things that look wrong and are not
 
@@ -126,10 +125,10 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   (3) a watcher's terminal print must include EVIDENCE (task events,
   artifact listing), not just the state word.
 
-- **The agent Bash tool's shell is `zsh`, not bash — unquoted `$VAR` does NOT
-  word-split.** Building a flag string and expanding it unquoted silently
-  passes the whole string as ONE argument. This produced two false
-  `UNREACHABLE` readings in a Batch watcher on 2026-08-20:
+- **Use arrays or explicit flags, and check the actual shell.** The current
+  session uses bash; a previous tool used zsh, where an unquoted flag string
+  did not word-split. This produced two false `UNREACHABLE` readings in a
+  Batch watcher on 2026-08-20:
 
       P="--project=healys-batch --location=us-central1"
       gcloud batch jobs describe "$J" $P ...
@@ -140,10 +139,10 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   directly, so it reads as a flaky API rather than a quoting bug — check for a
   variable-expanded flag string before blaming the service. (`gcloud storage`
   kept working throughout, because it had no variable to split.)
-- **A multi-step `sudo a && sudo b && sudo c` chain runs only the FIRST
-  command** on this box; the sudo journal proves it each time. Wrap privileged
-  multi-step work in a single `sudo bash -c "..."`. Separately, the `!` prefix
-  in the CLI runs bash, not the user's fish, so `; and` chaining fails there.
+- **Historical shell/tool trap:** a prior privileged-command interface ran
+  only the first step of a chained request. Inspect each exit status and use
+  the current permission interface for required privileged work. Shell syntax
+  follows the actual executor, not the user's interactive fish configuration.
 - `BASE=/home/mrhea/HealysBacktester/...` and `SERVER=mrhea@62.238.20.66`
   in `scripts/` are **remote** paths on the Hetzner box, where the user
   really is `mrhea`. Correct as written.
@@ -156,10 +155,10 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   **unusable on Linux**. To reproduce the v3.1/v4 environment, install
   `requirements.txt` with the D:-backup's `wsl_pip_freeze.txt` as a pip
   constraints file (`-c`).
-- `nn_meta/model_final_v4/` (Option A bundle): `verify_bundle()` fails **by
-  design** — the manifest predates hashed persistence (built 7/21, hashing
-  landed 7/22). Usable, not integrity-verifiable; the Option B re-finalize
-  fixes it.
+- **Historical bundles are not eligible inputs.** The July Option A bundle
+  predates hashed persistence, and pre-audit bundles lack the current contract.
+  Default verification failures are rebuild/refinalize requirements, not
+  permission to bypass the loader.
 - After any tar-layered restore: `chmod +x scripts/*.sh` — the 07-25 restore
   dropped exec bits and the hourly collector failed `203/EXEC` for a day.
 - **Comparing two dataset builds: use `nn_meta.dataset_diff`, never a naive
@@ -184,10 +183,12 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   probably part of why `cache_preflight` reports "5 extra" day-frames — a day
   the option archive has and `underlying_15m` lacks reads as extra, not
   missing.
-- **The crawl's CURRENT-year end date must stay at today-00:00.** Asking for
-  tomorrow returns `subscription does not permit querying recent SIP data` and
-  fails the entire year, wiping that year's fetch. Yesterday's close is the
-  most this Alpaca tier holds; the current year is refreshed every run anyway.
+- **Historical crawls and current-session feeds have separate time bounds.**
+  The former free Alpaca tier withheld recent SIP data; that entitlement
+  restriction ended with Algo Trader Plus on September 5. Historical cache
+  requests may still stop at today-00:00 deliberately. Live readers fetch
+  today through now without day-keyed cache reads/writes and reject forming
+  bars. Do not alter one path on assumptions about the other.
 - **`fa/collectors/reddit.py` returns None on 401/403 instead of raising** —
   deliberate. `collect()` decides: it raises only if EVERY listing failed, so a
   credentials outage surfaces as a failure while a single blip does not. Silent
@@ -205,7 +206,41 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   jobs afterwards rather than trusting the submit echoes (2026-08-21: two
   evaluate submits produced one job).
 
-## Artifact map — what's where, and what's deliberately not in git
+## Indicator and campaign contracts
+
+[TRADINGVIEW_EXPANSION](docs/specs/TRADINGVIEW_EXPANSION.md) records the
+September 5 listing snapshot and thirteen selected indicators. Boosts define
+the requested research scope, not a performance claim. Preserve original
+authors, publication versions, source hashes and licenses. An indicator's
+calculation and a proposed trade rule are separate interfaces; chart-only
+zones/statistics require explicit mechanical rules before proposal admission.
+
+Align numerical outputs and all four signal frames with Pine fixtures and
+frozen-parameter replay. A pivot drawn on an earlier bar becomes available at
+confirmation; higher-timeframe values and resolved outcome statistics need
+their true knowledge times. Geometric OHLCV volume estimates are not native
+footprint data. Each admitted intraday feature needs a historical/live twin
+and the parity gate in [REALTIME_SPEC](docs/specs/REALTIME_SPEC.md).
+
+For corrected campaigns, preserve old files and allocate fresh paths before
+launching. Freeze specs carry the contract/config hash; checkpoints bind
+entry, window, DTE grid, execution and costs. Publish marks and rows together,
+with provenance last. Assembly checks coverage and the exact frozen source
+fingerprint; v5/v6 default to PIT membership. A partial filename alone does
+not establish completion. Default spec/model loaders fail on stale inputs.
+
+v6 currently shares v5's window and data cache, with separate output paths.
+The September 5 archive audit found fifteen symbols with regular multiple
+weekly listings; the implemented extra DTE targets are `[2, 4, 7]`. These are
+target-day buckets resolved to available listings, not an implemented
+first/second/third-expiration ordinal API. Any deeper window or altered
+selection semantics need new generation/provenance inputs.
+
+## Artifact map — historical locations to inventory before migration
+
+This map preserves earlier storage conventions. Check actual contents and
+contract compatibility before reuse; the presence of an old file in git or
+backup is not current-model eligibility.
 
 | Thing | Where | In git? |
 |---|---|---|
@@ -229,7 +264,8 @@ to $36.85. Read this BEFORE launching any fleet.
 - **A GCP "budget" does NOT cap spending.** It sends email at thresholds.
   There is no native hard spend limit. Believing otherwise is the single
   most dangerous misconception here — see `scripts/cloud_budget_guard.sh`,
-  which is the brake GCP does not provide (time-based auto-cancel).
+  a best-effort time-based cancellation monitor. API failures/unknown states
+  require retries and terminal-state evidence; this is not a guaranteed cap.
 - **The billing console lags 1–2 days.** Any number you read is the past.
   Never anchor a go/no-go decision on it without adding the burn since.
 - **Credit balance is not exposed to gcloud or any API.** Console →
@@ -278,21 +314,23 @@ simply more expensive than anyone computed, and nobody computed it:
   estimate.
 - **Express budgets in VM-hours**, the thing measurable in real time.
   Dollars are a lagging indicator here.
-- **Arm `scripts/cloud_budget_guard.sh` with every fleet launch.** It is
-  the only hard stop that exists.
+- **Arm `scripts/cloud_budget_guard.sh` with every fleet launch.** Verify
+  terminal resource state after cancellation; process/API/network failure can
+  prevent the monitor from enforcing its intended time limit.
 - **Re-derive spend daily** from `gcloud batch jobs list` durations x VM
   count x rate. Do not wait for the console.
-- **The home box is free and fast.** Measured 2026-09-02: 2.26 symbols/hour
-  on the Ryzen (3–5 autosized workers) — roughly half the 4-VM cloud fleet's
-  output, at zero cost. For embarrassingly-parallel work, run the box first
-  and treat cloud as the accelerator you pay for, not the default.
+- **Use the home box first.** Recorded September 2 build measurements were
+  about 2.3 symbols/hour locally versus 1.98/hour for one packed 4-VM fleet.
+  New family grids/caches need a fresh pilot; historical pace is not an ETA
+  for the expanded campaign.
 - **Deleting stale Artifact Registry images is now a cost item**, not
   housekeeping: ~12 TF-heavy tags at ~$0.10/GB/month.
 
-## Data limits (probed, definitive — don't re-litigate)
+## Data access — September 5 probes
 
-**UPGRADED 2026-09-05 to Massive Options Advanced** (probed the same day,
-live, with the box's keys — supersedes everything below the rule):
+**Massive Options Advanced upgraded 2026-09-05**, with the following recorded
+provider probes. They describe those observed dates/entitlements; a future
+campaign still needs local coverage and representative provider checks:
 - **Option minute/day aggregates: full history** — REST `/v2/aggs` returns
   1-minute bars for SPY contracts in 2019, 2020, 2021, 2022, 2023 (checked);
   flat-file `minute_aggs_v1` and `day_aggs_v1` GetObject succeed for 2017,
@@ -313,11 +351,13 @@ live, with the box's keys — supersedes everything below the rule):
 *Pre-upgrade record (Starter, until 2026-09-05):* options history reached
 ~2 years back (403 before ~mid-2024), on REST *and* flat-files — the S3
 bucket listed 2014→ but GetObject was date-gated.
-- **Flat-files are still the right bulk path within the 2y window**: one
-  ~33 MB gz/day covers all OPRA contracts, quota-free
+- **Minute aggregate flat files remain the bulk-history path**: the earlier
+  campaign observed ~33 MB gz/day covering OPRA contracts, quota-free
   (`files.massive.com`, bucket `flatfiles`,
   `us_options_opra/minute_aggs_v1/YYYY/MM/YYYY-MM-DD.csv.gz`, s3v4).
-- **Alpaca 1m underlying is clean back to 2017** for all liquidity tiers.
+- Recorded provider probes obtained Alpaca 1m underlying history back to
+  2017. This does not establish completeness of every local cached symbol;
+  reconcile the known year-end holes before a deeper-data campaign.
 - **Alpaca Algo Trader Plus since 2026-09-05**: SIP real-time (the free
   tier already served SIP history but withheld the newest 15 minutes —
   cache bars are SIP, verified), 10,000 REST calls/min, unlimited stock
@@ -325,13 +365,14 @@ bucket listed 2014→ but GetObject was date-gated.
   + screener endpoints; Alpaca option bars only reach 2024 → Massive stays
   the options-history source. The `.env` keys are PAPER keys (options
   level 3); live-account keys would be a separate decision.
-- Consequence: features may use deep underlying history; option-fill labels
-  live on the rolling ~2y window.
+- Existing v5/v6 label windows remain frozen research choices. Advanced
+  enables deeper option history; a v7 expansion must acquire/reconcile raw
+  data, PIT membership and surface coverage before making deeper-label claims.
 
 ## Scale lessons (paid for; don't rediscover)
 
-- The v31 **mark stream is ~88M rows** (489k trades × ~180 bars held).
-  Assembling it via `pd.concat` peaks ~9 GB and dies on this box; the
+- The historical v31 **mark stream is ~88M rows** (489k trades × ~180 bars held).
+  Assembling it via `pd.concat` peaked ~9 GB and failed on the old box; the
   shipped path streams shard-by-shard through a `ParquetWriter` (peak
   ~0.2 GB) with `trade_id` as a **lexically-pinned categorical** (101 → 19
   bytes/row). Anything else that loads the whole sidecar needs the same care.
@@ -345,21 +386,19 @@ bucket listed 2014→ but GetObject was date-gated.
   packed cloud tasks instead contend for one VM's memory bandwidth.
   Corollary: treat the box as the workhorse and cloud as the accelerator
   you pay ~$0.50/symbol for, not the other way round.
-- **`universe.parquet` is written UNSORTED** (`v3/derive_contracts.py:109`
-  builds it from a dict iteration), so underlyings are scattered across
-  every row group and pyarrow can skip none of them — predicate pushdown
-  on `underlying` is useless against the file as written. Sort or
-  partition by underlying at derive time before relying on filtered reads.
-- **Build workers are RAM-bound, not CPU-bound** — 5.4 GB RSS each against
-  16 threads, so the box runs 3-5 workers with most cores idle. ~1 GB of
-  each worker is a REDUNDANT copy of the 44 MB contract universe
-  (`HybridProvider._get_universe` reads the parquet per process and then
-  `.copy()`s it to normalize, spiking peak RSS 2.53 -> 3.17 GB). Sharing
-  it (in-place normalize + pyarrow memory-map) buys a whole extra worker
-  for $0 — see TODO block 6, first item of the next campaign.
-- True dataset-build pace is ~33 min/symbol/shard on big names; don't trust
-  burst extrapolations. **A v5 symbol is ~8h packed** (10 families × DTE
-  grid vs v31's 5) — size leashes and stall alarms against that, not v31's.
+- **The universe read-path optimization shipped September 5.** Providers
+  read per-underlying parquet slices; new derivations sort by underlying for
+  row-group pruning. Recorded chain checks matched 200/200 samples including
+  order, with ~205 to 0.74 ms per call. Existing on-disk universes may remain
+  unsorted until separately regenerated/sorted; inspect before assuming
+  pushdown efficiency. No new provider subscription was needed for this fix.
+- **Build workers are memory-sensitive.** The old full-universe duplication
+  was fixed; earlier 5.4 GB/RSS measurements describe that campaign, not
+  today's guaranteed footprint. Measure the expanded pool before autosizing.
+- Historical big-name builds took ~33 min/symbol/shard, with a packed v5
+  symbol sometimes taking ~8h (ten families × DTE grid versus v31's five).
+  Use representative new-campaign measurements for leashes/stall alarms;
+  burst extrapolations and earlier pool timings are unreliable.
 
 ### GCP Batch fleet sizing (all four paid for during the v5 campaign)
 
@@ -378,8 +417,9 @@ bucket listed 2014→ but GetObject was date-gated.
 - **Spot machine families are NOT interchangeable, and none are safe
   alone.** e2 was reclaimed 3× in 5h; n2 and c2d each ran ~12h clean then
   swept during US business hours; c2d's pool went dry for 3h while n2
-  filled instantly. Run a **twin fleet on two families** — the global CPU
-  quota caps concurrency anyway, so the second job is free insurance.
+  filled instantly. A twin fleet on two families can improve availability;
+  budget aggregate billed VM-hours and verify actual concurrency rather
+  than assuming the second submission has no incremental cost.
 - **Never confirm an image from `gcloud builds list`** (the list-and-pick
   trap again). A silent Dockerfile-copy failure plus a stale list entry
   launched 441 tasks against a nonexistent tag — 148 instant failures on
@@ -388,6 +428,12 @@ bucket listed 2014→ but GetObject was date-gated.
 
 ## Production ops — Hetzner server
 
+Deployment details below are the last recorded September 5 state, not a fresh
+inspection. The audit merge did not deploy source or regenerate bundles.
+Confirm actual commit/artifacts/cron/feeds before applying the runbook; plan
+compatible source and regenerated verified bundles together. All experts
+send alerts; historical “real” labels do not mean broker auto-execution.
+
 - **Host**: Hetzner CX33 (4 vCPU / 8 GB), Helsinki, `62.238.20.66`,
   Ubuntu 24.04, ~$9.59/mo. SSH `mrhea@` with the home box's
   `~/.ssh/id_ed25519` (that key is Hetzner-only; GitHub auth is `gh` over
@@ -395,7 +441,8 @@ bucket listed 2014→ but GetObject was date-gated.
 - **[v5] expert (deployed 2026-09-05, paper seat — alerts only, like every
   expert)**: the same `nn_meta.live.v4_scan` module run under
   `NN_META_POOL=v5`. It scores with `nn_meta/model_final_v5/` (nn×40,
-  ev/0.05, cleared the risk-aware gate — DECISIONS 2026-09-04), reads the
+  ev/0.05, historically cleared the pre-audit risk-aware gate — DECISIONS
+  2026-09-04; this is not a current corrected verdict), reads the
   frozen spec `nn_meta/artifacts_v5/baseline_spec.json` (441 PIT-universe
   symbols) and the surface/universe caches in `nn_meta/data_cache_v5/`
   (seeded by rsync from the box 2026-09-05; refreshed by the Sunday v5
@@ -420,22 +467,24 @@ bucket listed 2014→ but GetObject was date-gated.
   `stock_stream.heartbeat.json` / `option_stream.heartbeat.json` (in the
   17:00Z digest; stale > 5 min during RTH = ⚠️). Loaders read today's bars
   from the store when the heartbeat is ≤ 3 min old, else forced REST.
-  Health: `pgrep -f feeds.` (2 processes, ~700 MB RSS total).
-- **Cron (UTC — this cron ignores `CRON_TZ`, verified empirically)**.
-  Expert passes fire ONE MINUTE after the 15m bar closes, staggered by pool
+  Health: `pgrep -f "[f]eeds."`; validate timestamps and data coverage too.
+  Historical process/RSS counts are diagnostic context, not a parity gate.
+- **Cron (UTC — this cron ignored `CRON_TZ` in the recorded inspection)**.
+  Expert passes fire one to three minutes after the 15m bar closes by pool
   (2026-09-05): v5 at `1,16,31,46` (`--workers 3`), [v4] and [v31] at
   `2,17,32,47` (`--workers 2`), v3 at `3,18,33,48` (`--workers 1`).
   - `3,18,33,48 * * * *` live scanner: `NN_META_POOL=v3 … run_live --once --nn`
     → `logs/live_cron.log` (self-gates to RTH)
-  - `*/15 * * * *` **[v4] expert** (paper 2026-08-16 → **REAL 2026-08-24**,
+  - `2,17,32,47 * * * *` **[v4] expert** (paper 2026-08-16 → alerts 2026-08-24,
     V118 bundle gbt/ev/0.05): `NN_META_POOL=v31 … nn_meta.live.v4_scan
     --once` → `logs/v4_cron.log`. The scan refuses to alert unless the
-    bundle verifies AND is gate-eligible. **Rollback = restore
-    `~/crontab.bak.2026-08-24`** (or re-add `--paper` / delete the line) —
-    v3 is untouched. Needs `nn_meta/data_cache_v3/{surface_daily,
+    bundle verifies AND is gate-eligible. Prepare rollback from the actual
+    current cron/source/bundle snapshot; an August backup predates later
+    experts/feeds and is not a panel-wide rollback. Needs
+    `nn_meta/data_cache_v3/{surface_daily,
     underlying_daily}.parquet` on the host (rsync'd; gitignored path,
     refresh occasionally).
-  - `*/15 * * * *` **[v31] expert** (since 2026-08-16): `NN_META_POOL=v31 …
+  - `2,17,32,47 * * * *` **[v31] expert** (since 2026-08-16): `NN_META_POOL=v31 …
     nn_meta.live.run_live --once --nn` → `logs/v31_cron.log`. Legacy scorer
     path (prices the frozen-DTE contract live via the hybrid provider);
     `[v31]`-labeled alerts; own dedupe file `.alert_state_v31.json`.
@@ -449,16 +498,17 @@ bucket listed 2014→ but GetObject was date-gated.
     what keeps the live chain's expiries ahead of the calendar — the frozen
     research window does NOT roll forward on its own, and the chain
     silently empties ~45 days after the last refresh without it.
-  - `10 20 * * 1-5` **[v4] watchlist digest** (since 2026-08-24, ROADMAP
-    wave-2 item 5): `NN_META_POOL=v31 … v4_scan --digest` → one Telegram
+  - `10 20 * * 1-5` **[v4] watchlist digest** (since 2026-08-24):
+    `NN_META_POOL=v31 … v4_scan --digest` → one Telegram
     top-10 of the day's scored signals regardless of threshold, plus the
-    rolling 7-day underlying-direction hit-rate (watchlist vs alerted
-    subset). No model load; state `nn_meta/live/.v4_watchlist.json`
+    seven-day entry-cohort underlying-direction hit-rate (watchlist vs
+    alerted subset), not seven days of resolved option P&L. No model load;
+    state `nn_meta/live/.v4_watchlist.json`
     (gitignored), 21-day retention. Rollback = delete the line.
   - `5 * * * *` FA collectors (`fa.collect`) → `logs/fa_cron.log`
   - `30 12 * * 1-5` trending digest (8:30 ET summer) → Telegram
   - `0 17 * * *` scanner heartbeat (noon CT summer): one line per expert
-    (v3/v4/v31) — passes/alerts + NEW crashes per cron log since the last
+    (v3/v4/v31/v5) — passes/alerts + NEW crashes per cron log since the last
     heartbeat, plus missing/stale-log warnings during RTH — silence = quiet
     market, not "is it dead?". Baselines in the gitignored
     `nn_meta/live/.heartbeat_state.json` (old single-log schema migrates in
@@ -482,17 +532,20 @@ bucket listed 2014→ but GetObject was date-gated.
 - Server `.env` = home `.env` + `FA_SKIP_COLLECTORS=stocktwits` (StockTwits
   Cloudflare-blocks datacenter IPs — the home box collects it hourly via
   `healys-stocktwits.timer` and rsync-pushes the archive).
-- **v3 rollback**: drop `NN_META_POOL=v3` from the cron line (v2 artifacts
-  still present, untouched). The once-documented `_st.py` selftest script
-  no longer exists on the server (verified 2026-08-24) — check v3 health
-  from `logs/live_cron.log` (a clean pass every 15 min) instead.
+- **Rollback must preserve compatible source and artifacts.** Dropping
+  `NN_META_POOL=v3` selects v2; it is not a valid default rollback when its
+  bundles lack the current contract. The older `_st.py` selftest was absent
+  in the August inspection; inspect `logs/live_cron.log`, closed-bar timestamps
+  and verified bundle state instead.
 - State on the server that is NOT in git: `.env`, `fa/archive/`, the 5 root
   parquets of `nn_meta/data_cache/` (scanner needs `surface_daily.parquet`).
 
 ## Home-box scheduling (systemd)
 
-- Installed + working: `healys-stocktwits.timer` (hourly, `Persistent=true`
-  so missed hours catch up after downtime).
+- StockTwits collection is documented as installed historically, with later
+  OS-restore notes requesting timer checks. Inspect current user/system units
+  and last runs before asserting it is active. The intended timer is hourly
+  and `Persistent=true` to catch up after downtime.
 - Committed, not installed: `healys-boot-restart.service` (unattended
   long-job recovery — optional; see `deploy/systemd/README.md`).
 - Auto-suspend must stay **off** on this box — COSMIC's idle suspend once
@@ -511,3 +564,31 @@ goals → `TODO.md` current phase → `HANDOFF.md` session state
 (`handoff-history/` archives) → this file for durable notes →
 `docs/DECISIONS.md` dated decisions → `docs/EXPERIMENTS.md` run verdicts →
 `docs/specs/` designs → `docs/v31_run_history.md` archived chronology.
+
+## September 5 corrected research preparation
+
+- `nn_meta.download_data._load_chunked` takes inclusive calendar start/end
+  dates. Vendor request endpoints are midnight: adjacent requests meet at the
+  same exclusive boundary, and the final request reaches the midnight after
+  `WINDOW_END`. Subtracting one day and advancing past it drops full sessions.
+  Existing caches require repair; a downloader fix does not backfill old bytes.
+- `NN_META_CAMPAIGN=<simple-name>` isolates derived output below
+  `nn_meta/campaigns/<name>/<pool>/`. Raw caches remain shared read inputs.
+  v5/v6 final bundle paths belong to the selected pool. Use
+  `scripts/run_research_local.sh` for previews and explicit local stages;
+  immutable source/data/runtime fingerprints refuse incompatible resumes.
+  Archived additive/cloud launchers are not corrected-campaign instructions.
+- Two-way option/underlying date coverage catches the five observed chunk-end
+  holes that the old one-way preflight missed. It still cannot detect a session
+  absent from both archives or establish complete per-symbol coverage.
+- `indicators.tradingview_registry` verifies all thirteen selected source
+  identities and generates fixture fingerprints for scoped implementations.
+  Source pinning/local tests do not establish exported Pine parity or admit
+  these families to existing proposal pools.
+- `nn_meta.live.contract_preview` is a captured-snapshot preview, with no
+  network/order/notification side effects. A reported 100 shares per contract
+  does not prove standard deliverables; contract-reference verification and
+  offline selection parity remain required before execution integration.
+
+First-batch evidence and remaining gaps:
+[readiness review](docs/reviews/2026-09-05-readiness-milestone.md).

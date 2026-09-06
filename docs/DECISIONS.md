@@ -544,3 +544,62 @@ Newer operational notes and the v7 real-time contract are retained. Existing
 paused/generated artifacts remain historical; old resume/reuse instructions
 do not override the causal-v2 migration requirements. Shared alert-format
 changes still require the user's go/no-go.
+
+
+## 2026-09-05 — TradingView selection and six-workstream implementation
+
+The user requested the ten most boosted scripts across every exposed page of
+the supplied general TradingView listing and the three most boosted Editors'
+Picks. The completed inventory ranked exact boost counts over 1,000 recent
+general scripts (42 pages) and 758 Editors' Picks (32 pages), yielding thirteen
+distinct indicators. Their detail pages label them open source; Pine source
+pinning, licenses, causal rules and mathematical parity remain separate
+implementation checks. The optional all-time clarification was unanswered at
+this milestone, so the literal supplied-page scope governs the current work.
+[Selection and source snapshot](specs/TRADINGVIEW_EXPANSION.md).
+
+The user then authorized starting all six organized workstreams with multiple
+agents: documentation reconciliation; TradingView implementation; corrected
+campaign preparation; rebuild/comparison after prerequisites; operational
+readiness; and execution/broader research. This is authorization to start and
+advance the work, not a claim that any ports, rebuilds, provider acquisition,
+server inspection or deployment have completed. Dependencies remain explicit
+in [TODO](../TODO.md). The shared alert-format go/no-go applies to a concrete
+preview; resolver/calculation preparation can proceed before that decision.
+
+Keep existing v6/v5 research windows equal and preserve all pre-audit v5
+outputs and 211/441 paused v6 partials as historical artifacts. The corrected
+campaign needs fresh freezes, rows, marks and provenance under
+`2026-09-05-causal-v2`; compatibility checks must pass before any reuse of new
+artifacts. Complete the admitted TradingView source/data contracts first,
+then compare corrected baseline and expanded pools on the same funded,
+fully costed ledger. Current default loaders reject old bundles, so source
+and verified replacement models must be coordinated for rollout.
+
+Reconcile active documentation rather than retaining contradictory open task
+lists below supersession banners. Preserve the old checklist/roadmap/reference
+in dated handoff-history snapshots, keep experiment/decision history intact,
+and record prospective FA evidence separately from the contaminated August
+monthly. Historical gate changes and model results do not create untouched
+forward evidence.
+
+## 2026-09-05 — Scoped source ports and immutable corrected campaigns
+
+The first batch pins all thirteen requested public Pine revisions and implements
+scoped calculations for eight. Keep these outside active proposal pools until
+exported TradingView fixtures and each data/signal contract pass. Emre's MSB
+subset does not claim order-box parity; ICT and VWOB remain feature/event-only.
+Source performance dashboards are not option-ledger evidence. Preserve original
+licenses and bind source, adaptation and runtime hashes for fixture review.
+
+Corrected research uses explicit named campaign paths, full per-symbol freezes,
+exact-list merges and immutable raw/source/runtime identities. A changed input
+requires a new campaign name; do not silently resume old freezes after repairing
+raw history. No campaign ran during this batch. The five observed underlying
+holes block launch; the downloader boundary is fixed and the restored SPY pilot
+supports a wider repair, not an assertion that the archive is complete.
+
+The contract resolver remains a captured-data preview with deliverables marked
+unverified pending contract-reference data. Production alert-format approval,
+offline selection parity and quote-verified accounting precede execution wiring.
+[Implementation evidence](reviews/2026-09-05-readiness-milestone.md).
