@@ -78,6 +78,10 @@ def is_rth(now: Optional[datetime] = None) -> bool:
     now = now or datetime.now(timezone.utc)
     if now.tzinfo is None:
         now = now.replace(tzinfo=timezone.utc)
+    from nn_meta.session_calendar import configured_calendar
+    calendar = configured_calendar()
+    if calendar is not None:
+        return calendar.scan_open(now)
     et = now.astimezone(_ny_tz())
     if et.weekday() >= 5:
         return False

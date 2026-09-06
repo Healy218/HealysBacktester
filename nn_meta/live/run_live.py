@@ -49,10 +49,18 @@ def _feed_is_fresh(now: datetime) -> bool:
     from nn_meta.live.feeds.barstore import read_heartbeat
     from nn_meta.live.feeds.stock_stream import HEARTBEAT
     hb = read_heartbeat(HEARTBEAT)
-    if not hb or not hb.get("ts"):
+    if not isinstance(hb, dict) or not hb.get("ts"):
         return False
-    age = (now - datetime.fromisoformat(hb["ts"])).total_seconds() / 60
-    return age <= _FEED_MAX_AGE_MIN
+    if hb.get("state") in ("connecting", "reconnecting", "stopped"):
+        return False
+    try:
+        stamp, current = pd.Timestamp(hb["ts"]), pd.Timestamp(now)
+        if pd.isna(stamp) or pd.isna(current) or stamp.tzinfo is None or current.tzinfo is None:
+            return False
+        age_ns = current.value - stamp.value
+    except (TypeError, ValueError, OverflowError):
+        return False
+    return 0 <= age_ns <= _FEED_MAX_AGE_MIN * 60 * 1_000_000_000
 
 
 def _bar_loader(symbol: str, now: datetime | None = None):
@@ -62,14 +70,16 @@ def _bar_loader(symbol: str, now: datetime | None = None):
     Composition (2026-09-05, after the stale-cache incident):
       * HISTORY — closed sessions up to yesterday — through the smart loader's
         day-keyed cache. Those sessions never change, so the cache is valid.
-      * TODAY — the streamed bar store (Alpaca SIP 1m → 15m, bar-identical to
-        REST, parity-checked) when its heartbeat is fresh; otherwise today's
+      * TODAY — the streamed bar store (Alpaca SIP 1m → 15m) when its heartbeat
+        is fresh and coverage complete; otherwise today's
         bars over REST with the cache BYPASSED. The day-keyed cache is never
         consulted for the current session again.
     """
     now = now or datetime.now(timezone.utc)
     now = now.replace(tzinfo=timezone.utc) if now.tzinfo is None else now.astimezone(timezone.utc)
     today = now.date()
+    from nn_meta.session_calendar import configured_calendar
+    calendar = configured_calendar()
     start = today - timedelta(days=_LOOKBACK_DAYS)
     # Vendor symbol (2026-09-05): BRKB is "BRK.B" at Alpaca (config.FETCH_ALIASES);
     # without this the live scan never saw BRKB at all ("NoneType has no
@@ -78,13 +88,17 @@ def _bar_loader(symbol: str, now: datetime | None = None):
     hist = vbt_data_loader.load_price_data_smart(
         fetch_sym, start.isoformat(), today.isoformat(), "15m")
     hist = filter_rth(hist[_OHLCV]) if hist is not None and not hist.empty else None
+    if calendar is not None:
+        hist = calendar.filter(hist)
     if hist is not None:
         hist = hist[hist.index < pd.Timestamp(today)]
     today_bars = None
     if _feed_is_fresh(now):
         from nn_meta.live.feeds.barstore import BarStore
         try:
-            tb = BarStore().read_15m(symbol, now=now, days=[today.isoformat()])
+            store = BarStore()
+            tb = (store.read_15m(symbol, now=now, days=[today.isoformat()], calendar=calendar)
+                  if calendar is not None else store.read_15m(symbol, now=now, days=[today.isoformat()]))
             # A fresh heartbeat/newest bar can still hide an earlier outage.
             # Require every closed bucket since the session opened; REST can
             # resolve both genuine no-trade intervals and missing stream data.
@@ -94,7 +108,9 @@ def _bar_loader(symbol: str, now: datetime | None = None):
             expected = min(pd.Timestamp(now).tz_convert("UTC").tz_localize(None).floor("15min")
                            - pd.Timedelta(minutes=15), session_last)
             required = pd.date_range(session_open, expected, freq="15min")
-            if len(required) and tb.index.equals(required):
+            if calendar is not None:
+                required = calendar.closed_starts(et_day.strftime("%Y-%m-%d"), now)
+            if tb.index.equals(required):
                 today_bars = tb
         except (ValueError, OSError) as exc:
             logger.warning(f"[live] {symbol}: stream unavailable/incomplete; using REST: {exc}")
@@ -104,6 +120,8 @@ def _bar_loader(symbol: str, now: datetime | None = None):
             force_download=True, use_cache=False)
         if raw is not None and not raw.empty:
             today_bars = filter_rth(raw[_OHLCV])
+            if calendar is not None:
+                today_bars = calendar.filter(today_bars)
     parts = [p for p in (hist, today_bars) if p is not None and not p.empty]
     if not parts:
         return hist if hist is not None else today_bars

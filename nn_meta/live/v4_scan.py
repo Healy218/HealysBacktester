@@ -1,7 +1,7 @@
 # nn_meta/live/v4_scan.py
 """The [v4] expert — a second, independent live scanner pass. (Since 2026-09-05
-the same module is also the [v5] expert when run under NN_META_POOL=v5: it
-scores with model_final_v5/ and keeps its own .v5_* state files.)
+the same module also runs the [v5] and [v6] experts under their selected pools,
+with separate bundles and state files. Named campaigns select their own bundle.)
 
 Runs ALONGSIDE the deployed v3 scanner (which is untouched): a separate cron
 line under ``NN_META_POOL=v31`` scores fresh mechanical entries with the
@@ -27,15 +27,12 @@ Differences from the v3 pass, by design:
   v3 scanner's state. Alerts are titled ``[v4] …`` and never place orders.
 
 Bundle trust policy: by default the bundle must pass ``verify_bundle()`` and
-carry ``eligible: true`` (the Option-B re-finalized bundle satisfies both).
-``--paper`` accepts the pre-hashing / pre-eligibility Option A bundle and
-tags every alert "paper" — the honest mode for the interim deployment.
+carry ``eligible: true`` and the current feature/build contract.
+``--paper`` permits unverified/ineligible current-contract research bundles and
+tags every alert "paper". It cannot bypass a stale feature/build contract.
 
-Known staleness (shared with the v3 scorer, acceptable for paper mode): the
-IV surface and beta come from the daily caches as-of their last row; a
-nightly surface refresh removes the gap. Context features that cannot be
-computed on the host degrade to NaN (imputed/handled downstream) rather than
-failing the pass.
+IV surface and beta use prior completed daily context. Surface provenance,
+refresh freshness and historical/live parity need validation before rollout.
 """
 from __future__ import annotations
 
@@ -79,17 +76,17 @@ logger = setup_logging(log_file="logs/backtester.log")
 STATE_DIR = config.ROOT / "live"
 # The expert this process IS, derived from the pool (2026-09-05): the v31 pool
 # runs the [v4] expert (V118 in model_final_v4/); the v5 pool runs the [v5]
-# expert (model_final_v5/). Every label, state file and default bundle dir
-# follows EXPERT so the two never share dedupe state or watchlists.
-EXPERT = "v5" if config.POOL == "v5" else "v4"
+# expert (model_final_v5/), and v6 has its own identity. Every label, state file
+# and default bundle dir follows EXPERT so experts never share dedupe state.
+EXPERT = config.POOL if config.POOL in ("v5", "v6") else "v4"
 TAG = f"[{EXPERT}]"
 ALERT_STATE = STATE_DIR / f".{EXPERT}_alert_state.json"
 OUTBOX = STATE_DIR / f".{EXPERT}_outbox.json"
 LEDGER = STATE_DIR / f".{EXPERT}_paper_ledger.json"
 HEALTH = STATE_DIR / f".{EXPERT}_health.json"
 WATCHLIST = STATE_DIR / f".{EXPERT}_watchlist.json"
-DEFAULT_BUNDLE_DIR = (config.ROOT / "model_final_v4" if EXPERT == "v4"
-                      else config.ROOT / "model_final_v5")
+DEFAULT_BUNDLE_DIR = (config.V4_MODEL_FINAL_DIR if config.CAMPAIGN
+                      else config.ROOT / f"model_final_{EXPERT}")
 
 # TICKER_ALIASES / aliased_bar_loader moved to nn_meta.live.scanner
 # (2026-08-16 review) so the legacy run_live path shares them; re-exported
@@ -128,14 +125,17 @@ def fresh_proposals(symbol: str, bars: pd.DataFrame, spec_entry: dict,
     return out
 
 
-def candidate_frame(fresh: list[dict]) -> pd.DataFrame:
+def candidate_frame(fresh: list[dict], spec: dict | None = None) -> pd.DataFrame:
     """Expand fresh signals to one proposal row per DTE-grid variant.
     Strike is the configured moneyness target: decision-safe, no option fill."""
+    from nn_meta.weekly_expiry import dte_grid_for
+    if config.WEEKLY_DTE_ENABLED and spec is None:
+        raise ValueError("weekly live candidates require the frozen baseline spec")
     rows = [{"symbol": f["symbol"], "strategy": f["strategy"], "dte": dte,
              "direction": f["direction"],
              "strike": f["spot"] * (1.0 + config.EXEC_CONFIG.get("MONEYNESS", 0.0)),
              "entry_ts": f["entry_ts"], "bars_since_signal": f["bars_since_signal"]}
-            for f in fresh for dte in config.DTE_GRID]
+            for f in fresh for dte in dte_grid_for(f["symbol"], spec)]
     return pd.DataFrame(rows)
 
 
@@ -283,7 +283,7 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
 
     alerted = 0
     if fresh_by_key:
-        batch = build_candidate_batch(candidate_frame(list(fresh_by_key.values())),
+        batch = build_candidate_batch(candidate_frame(list(fresh_by_key.values()), spec),
                                       bars_cache, surface, spec)
         batch = fill_context(batch, surface)
         scores = bundle.score(batch)
@@ -339,7 +339,8 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
 # ── daily watchlist digest (dual-mode cadence, ROADMAP wave-2 item 5) ─────────
 
 PANEL_WATCHLISTS = (("v4", ".v4_watchlist.json"), ("v3", ".v3_watchlist.json"),
-                    ("v31", ".v31_watchlist.json"), ("v5", ".v5_watchlist.json"))
+                    ("v31", ".v31_watchlist.json"), ("v5", ".v5_watchlist.json"),
+                    ("v6", ".v6_watchlist.json"))
 
 
 @serialized(lambda **kw: Path(kw.get("state_dir") or STATE_DIR) / ".live.lock")
@@ -403,7 +404,7 @@ def _default_workers() -> int:
 def load_trusted_bundle(bundle_dir: Optional[Path] = None, *,
                         paper: bool = False) -> "V4Bundle":
     """Default: hash-verified AND gate-eligible, else refuse. ``paper=True``
-    accepts the pre-hashing Option A bundle (logged loudly)."""
+    permits unverified/ineligible bundles; stale feature contracts still fail."""
     from nn_meta.v4_loader import load_final_v4, verify_bundle   # lazy: TF chain
     from nn_meta.v4_artifacts import ArtifactValidationError
     try:
@@ -457,10 +458,11 @@ def main() -> None:
                     help="detection processes (default SCAN_WORKERS env, else min(4, cpus))")
     args = ap.parse_args()
 
-    if config.POOL not in ("v31", "v5"):
+    if config.POOL not in ("v31", "v5", "v6"):
         raise SystemExit("[v4-scan] must run with NN_META_POOL=v31 (the [v4] "
                          "expert, model_final_v4/) or NN_META_POOL=v5 (the [v5] "
-                         f"expert, model_final_v5/) — got '{config.POOL}'")
+                         "expert, model_final_v5/) or NN_META_POOL=v6 "
+                         f"(the [v6] expert, model_final_v6/) — got '{config.POOL}'")
     bundle_dir = Path(args.bundle) if args.bundle else DEFAULT_BUNDLE_DIR
     if args.selftest:
         selftest(bundle_dir)

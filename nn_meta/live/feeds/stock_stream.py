@@ -47,7 +47,7 @@ def pool_symbol(vendor: str) -> str:
     return inv.get(vendor.upper(), vendor.upper())
 
 
-def union_universe() -> list[str]:
+def union_universe(spec_paths=()) -> list[str]:
     syms: set[str] = set()
     for pool in _POOL_SPECS:
         p = config.ROOT / f"artifacts_{pool}" / "baseline_spec.json"
@@ -56,7 +56,22 @@ def union_universe() -> list[str]:
                 syms |= set(json.loads(p.read_text()).get("symbols", {}))
             except Exception as e:                       # a bad spec must not kill the feed
                 logger.warning(f"[{_TAG}] {p}: {e}")
+    # Explicit campaign specs are required inputs: a typo must not silently leave
+    # the new expert's universe unsubscribed while legacy pools look healthy.
+    paths = list(spec_paths)
+    if getattr(config, "CAMPAIGN", ""):
+        paths.append(config.BASELINE_SPEC_JSON)
+    for path in paths:
+        document = json.loads(Path(path).read_text())
+        symbols = document.get("symbols")
+        if not isinstance(symbols, dict) or not symbols:
+            raise ValueError("explicit stock stream spec has no symbol mapping")
+        syms.update(symbols)
     return sorted(syms)
+
+
+def heartbeat_path(store):
+    return HEARTBEAT if store.root == ROOT else store.root / "stock_stream.heartbeat.json"
 
 
 def backfill_today(store: BarStore, symbols: list[str], day: str | None = None) -> int:
@@ -74,7 +89,7 @@ def backfill_today(store: BarStore, symbols: list[str], day: str | None = None) 
             req = StockBarsRequest(symbol_or_symbols=chunk, timeframe=TimeFrame.Minute,
                                    start=datetime.fromisoformat(f"{day}T00:00:00+00:00"),
                                    end=datetime.fromisoformat(f"{day}T23:59:59+00:00"),
-                                   feed=DataFeed.SIP, adjustment="all")
+                                   feed=DataFeed.SIP, adjustment="raw")
             bars = client.get_stock_bars(req)
             data = bars.data if hasattr(bars, "data") else {}
             for sym, blist in data.items():
@@ -93,50 +108,70 @@ async def _serve(store: BarStore, symbols: list[str], run_seconds: float | None)
     stream = StockDataStream(os.environ["ALPACA_API_KEY"], os.environ["ALPACA_API_SECRET"],
                              feed=DataFeed.SIP)
     n = {"bars": 0}
+    last_heartbeat = None
 
     async def on_bar(bar):
+        nonlocal last_heartbeat
+        received_at_ns = time.time_ns()
         try:
             store.append_1m(pool_symbol(bar.symbol), [{"timestamp": bar.timestamp, "open": bar.open, "high": bar.high,
                                           "low": bar.low, "close": bar.close, "volume": bar.volume}])
             n["bars"] += 1
-            if n["bars"] % 50 == 0:
-                write_heartbeat(HEARTBEAT, bars=n["bars"], symbols=len(symbols),
-                                last_bar=str(bar.timestamp))
+            current = time.monotonic()
+            if last_heartbeat is None or n["bars"] % 50 == 0 or current - last_heartbeat >= 5:
+                write_heartbeat(heartbeat_path(store), bars=n["bars"], symbols=len(symbols),
+                                last_bar=str(bar.timestamp), last_received_at_ns=received_at_ns,
+                                actual_data_received=True, state="running")
+                last_heartbeat = current
         except Exception as e:
             logger.error(f"[{_TAG}] {bar.symbol}: store append failed: {e}")
 
     stream.subscribe_bars(on_bar, *[vendor_symbol(s) for s in symbols])
-    write_heartbeat(HEARTBEAT, bars=0, symbols=len(symbols), state="connecting")
+    write_heartbeat(heartbeat_path(store), bars=0, symbols=len(symbols), state="connecting",
+                    actual_data_received=False)
     task = asyncio.create_task(stream._run_forever())
     try:
         if run_seconds:
-            await asyncio.sleep(run_seconds)
+            done, _ = await asyncio.wait({task}, timeout=run_seconds)
+            if done:
+                await task  # Propagate authentication/connection errors in probes.
+                raise RuntimeError("stock stream task ended before probe timeout")
         else:
             await task
+            raise RuntimeError("stock stream task ended unexpectedly")
     finally:
         try:
             await stream.close()
         except Exception:
             pass
         task.cancel()
+        await asyncio.gather(task, return_exceptions=True)
+        write_heartbeat(heartbeat_path(store), bars=n["bars"], symbols=len(symbols),
+                        state="stopped", actual_data_received=bool(n["bars"]))
 
 
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--symbols", default=None)
+    ap.add_argument("--spec", action="append", type=Path, default=[],
+                    help="include a deployed campaign baseline spec; repeat for multiple experts")
     ap.add_argument("--no-backfill", action="store_true")
     ap.add_argument("--run-seconds", type=float, default=None, help="test: stop after N s")
     ap.add_argument("--root", default=None, help="store root (default nn_meta/live/feeds/data)")
     args = ap.parse_args()
     store = BarStore(args.root) if args.root else BarStore()
-    symbols = [s.strip().upper() for s in args.symbols.split(",")] if args.symbols else union_universe()
+    if args.symbols and args.spec:
+        ap.error("choose --symbols or --spec inputs")
+    symbols = [s.strip().upper() for s in args.symbols.split(",")] if args.symbols else union_universe(args.spec)
+    if not symbols:
+        ap.error("no stock stream symbols resolved")
     logger.info(f"[{_TAG}] {len(symbols)} symbols, store {store.root}")
-    if not args.no_backfill:
-        backfill_today(store, symbols)
     backoff = 5.0
     started = time.time()
     while True:
         try:
+            if not args.no_backfill:
+                backfill_today(store, symbols)
             asyncio.run(_serve(store, symbols, args.run_seconds))
             if args.run_seconds:
                 return
@@ -145,7 +180,7 @@ def main() -> None:
             return
         except Exception as e:
             logger.error(f"[{_TAG}] stream died: {e!r}; reconnecting in {backoff:.0f}s")
-            write_heartbeat(HEARTBEAT, state="reconnecting", error=repr(e)[:200])
+            write_heartbeat(heartbeat_path(store), state="reconnecting", error=repr(e)[:200])
             time.sleep(backoff)
             backoff = min(backoff * 2, 120.0)
         if args.run_seconds and time.time() - started > args.run_seconds:

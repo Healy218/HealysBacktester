@@ -86,13 +86,13 @@ class BarStore:
         return out[COLS].astype(float)
 
     def read_15m(self, symbol: str, now: Optional[datetime] = None,
-                 days: Optional[Iterable[str]] = None) -> pd.DataFrame:
+                 days: Optional[Iterable[str]] = None, *, calendar=None) -> pd.DataFrame:
         """Complete RTH 15m bars aggregated from the stored 1m bars, in the REST
         loader's exact shape."""
         m1 = self.read_1m(symbol, days)
         if m1.empty:
             return pd.DataFrame(columns=COLS)
-        return aggregate_15m(m1, now=now)
+        return aggregate_15m(m1, now=now, calendar=calendar)
 
     def coverage(self, symbol: str) -> dict:
         m1 = self.read_1m(symbol)
@@ -101,7 +101,7 @@ class BarStore:
         return {"rows": int(len(m1)), "first": str(m1.index[0]), "last": str(m1.index[-1])}
 
 
-def aggregate_15m(m1: pd.DataFrame, now: Optional[datetime] = None) -> pd.DataFrame:
+def aggregate_15m(m1: pd.DataFrame, now: Optional[datetime] = None, *, calendar=None) -> pd.DataFrame:
     """1m OHLCV (tz-naive UTC index) → complete 15m RTH bars.
 
     Without ``now``, the last observed minute's end is the cutoff. Forming
@@ -110,7 +110,7 @@ def aggregate_15m(m1: pd.DataFrame, now: Optional[datetime] = None) -> pd.DataFr
     """
     if m1.empty:
         return pd.DataFrame(columns=COLS)
-    m1 = filter_rth(m1)
+    m1 = calendar.filter(m1, bar_minutes=1) if calendar is not None else filter_rth(m1)
     if m1.empty:
         return pd.DataFrame(columns=COLS)
     cutoff = (_to_naive_utc(now) if now is not None
