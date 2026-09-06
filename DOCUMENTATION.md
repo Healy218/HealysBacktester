@@ -10,10 +10,14 @@ under the user's instruction. Use the project Python 3.12 virtualenv explicitly.
 The suite exercises LightGBM/TensorFlow on synthetic fixtures without network
 or production artifacts. The September 6 raw-price/live-data continuation
 passed 1,143 tests and 18 subtests (11 warnings); the September 5 integration
-baseline was 642 tests and 18 subtests.
+baseline was 642 tests and 18 subtests. The final expanded v6 integration
+passed 1,390 tests and 18 subtests (11 warnings, 45.43 seconds).
 
 The September 5 audit began with feature/build contract `2026-09-05-causal-v2`;
 the raw-price continuation advances it to `2026-09-06-raw-spot-v3`.
+Expanded v6 has a distinct opt-in contract, `2026-09-06-tv13-option-ticks-v4`,
+with twenty families and 106 additional features.
+[Expanded input/launch runbook](docs/specs/V6_EXPANDED_INPUTS.md).
 Pre-audit freezes, partial checkpoints, rows, marks and bundles must be rebuilt
 and validated under that contract; preserve existing files as historical
 artifacts, and do not relabel them to bypass verification. Historical returns
@@ -664,3 +668,20 @@ healthy socket nor the historical [two-contract pilot](docs/reviews/2026-09-06-o
 proves complete training coverage or live parity. Quote/trade feature admission,
 costed execution, full-session comparison and compatible bundle rollout remain
 separate checks.
+
+## Expanded v6 freeze boundary (September 6)
+
+`scripts/run_freeze_v6_local.sh` now delegates a fresh expanded freeze to the
+validated campaign runner. It requires the repaired candidate and an externally
+hashed feature manifest; it no longer inherits old v5 freezes or runs only
+Keltner/BBW. `NN_META_V6_EXPANDED=1` selects the 20-family/TV13/tick contract.
+Use the input runbook above. The old raw-options pilot recovery descriptor is
+`.retired`; its actual exit remains1 and its artifacts are preserved.
+
+Historical tick request selection must precede option outcomes. It uses raw
+bar-close spot, prior-date observed catalogue membership, deterministic strike
+selection and the same policy as labels. A live provider that ignores as_of
+cannot supply that historical evidence. The richer candidate interface retains
+selection/request/coverage audit columns and requires an explicit adapter.
+The historical sealed-input replay path does not establish live receipt latency
+or Alpaca/Massive condition equivalence.

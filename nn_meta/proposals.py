@@ -40,7 +40,18 @@ def params_from_portfolio(pf, col_int_idx: int) -> dict:
     names = [n or f"p{i}" for i, n in enumerate(cols.names)]
     out = {}
     for name, val in zip(names, col):
-        v = float(val)
+        if name == "setup_identity":
+            if not isinstance(val, str):
+                raise ValueError("setup_identity must be a string")
+            out[name] = str(val)
+            continue
+        try:
+            v = float(val)
+        except (TypeError, ValueError):
+            if isinstance(val, str):
+                out[name] = str(val)
+                continue
+            raise
         out[name] = int(v) if v == int(v) else v
     return out
 
@@ -48,6 +59,12 @@ def params_from_portfolio(pf, col_int_idx: int) -> dict:
 # ── sweep signal builders ─────────────────────────────────────────────────────
 
 def sweep_signals(strategy: str, bars: pd.DataFrame):
+    if strategy.startswith("tv_") and strategy != "tv_rating":
+        from nn_meta import tradingview_proposals
+        if strategy in tradingview_proposals.STRATEGIES:
+            return tradingview_proposals.sweep_signals(
+                strategy, bars, context=bars.attrs.get(tradingview_proposals.CONTEXT_ATTRIBUTE),
+                enable_shorting=config.ENABLE_SHORTING)
     g = config.SWEEP_GRIDS[strategy]
     close = bars["Close"]
     short = config.ENABLE_SHORTING
@@ -124,13 +141,22 @@ def _pad(v, dtype=float) -> np.ndarray:
     return np.array([dtype(v), dtype(v) + step])
 
 
+def _parameter_matches(value, expected, name):
+    if name == "setup_identity":
+        return isinstance(value, str) and isinstance(expected, str) and value == expected
+    try:
+        return abs(float(value) - float(expected)) < 1e-9
+    except (TypeError, ValueError):
+        return isinstance(value, str) and isinstance(expected, str) and value == expected
+
+
 def _select_col(frames: tuple, params: dict):
     """Slice the single column whose level values match ``params`` exactly."""
     ent = frames[0]
     names = [n or f"p{i}" for i, n in enumerate(ent.columns.names)]
     for col in ent.columns:
         vals = col if isinstance(col, tuple) else (col,)
-        if all(abs(float(v) - float(params[n])) < 1e-9
+        if all(_parameter_matches(v, params[n], n)
                for n, v in zip(names, vals)):
             return tuple(df[[col]] if df is not None else None for df in frames)
     raise KeyError(f"frozen column {params} not found in generator output "
@@ -138,6 +164,12 @@ def _select_col(frames: tuple, params: dict):
 
 
 def single_signals(strategy: str, bars: pd.DataFrame, params: dict):
+    if strategy.startswith("tv_") and strategy != "tv_rating":
+        from nn_meta import tradingview_proposals
+        if strategy in tradingview_proposals.STRATEGIES:
+            return tradingview_proposals.single_signals(
+                strategy, bars, params, context=bars.attrs.get(tradingview_proposals.CONTEXT_ATTRIBUTE),
+                enable_shorting=config.ENABLE_SHORTING)
     close = bars["Close"]
     short = config.ENABLE_SHORTING
     p = params

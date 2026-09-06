@@ -7,18 +7,19 @@ each later stage can run.
 
 **User scope confirmed September 6:** the full v6 freeze/build must include
 all thirteen selected TradingView indicator scopes and quote/trade features.
-The existing-family SPY/IBKR run is a pipeline pilot only. Do not launch a full
+The existing-family SPY/IBKR pilot is now stopped and preserved. Do not launch a full
 universe freeze while those additions are still missing; complete their
 verification, historical coverage and feature integration first.
 
 The audit repairs are implemented and merged: **51 main findings and four
-additional concerns**. The latest completed full suite passed **1,143 tests and
-18 subtests**. All thirteen scoped TradingView ports and the full stock/context
+additional concerns**. The final expanded integration suite passed **1,390 tests and
+18 subtests**, including the planner and strict gate integration. All thirteen scoped TradingView ports and the full stock/context
 repair are implemented; external Pine fixtures, corrected model results and a
 new production rollout remain outstanding. Historical integration evidence is
 retained in the [first-batch review](docs/reviews/2026-09-05-readiness-milestone.md).
 
-The build contract is now `2026-09-06-raw-spot-v3`. Preserve pre-audit freezes,
+The core contract is `2026-09-06-raw-spot-v3`; expanded v6 uses
+`2026-09-06-tv13-option-ticks-v4` with a sealed input manifest. Preserve pre-audit freezes,
 211/441 paused v6 partials, rows, marks and bundles as historical artifacts.
 Create fresh campaign outputs; old v6 resume/merge commands and old v5 reuse
 are superseded. Never relabel old artifacts to pass validation. Source-only
@@ -77,9 +78,15 @@ scope while the optional all-time clarification is unanswered. The result is
 - [ ] Verify Pine value/event parity, prefix invariance, batch/incremental
   equivalence and all four sweep/frozen signal frames. Delayed pivots appear
   at confirmation; outcomes enter statistics only when resolved.
-- [ ] Integrate admitted families/features, scoped grids and provenance.
-  Keep unsupported footprint/intrabar modes visibly pending until their
-  historical/live twin passes [REALTIME_SPEC](docs/specs/REALTIME_SPEC.md).
+- [x] Wire all thirteen feature scopes (96 columns), eight source-default
+  directional families, typed Setup identities and ten tick columns behind
+  strict input gates. No new families are externally admitted yet.
+- [x] Bind actual field/proposal-event comparisons, instrumentation, terminal
+  snapshots, missingness and transitive evidence hashes; draft harnesses remain
+  uncompiled/unreviewed.
+- [ ] Obtain actual chart outputs/context, validate the full proposed source
+  scope, and admit the sealed feature candidate. Unsupported native footprint/
+  intrabar modes remain outside the scope.
 - [x] Run the complete regression suite for the first implementation batch.
 - [ ] Finalize generation boundaries and revalidate after full pool integration.
 
@@ -126,24 +133,34 @@ scope while the optional all-time clarification is unanswered. The result is
   concurrent materialization and exact sealed-input preservation.
 - [x] Launch replacement pilot `raw-options-20260906-r2` with locked exit markers,
   a recovery descriptor and two dynamically selected workers.
-- [ ] Complete replacement pilot `raw-options-20260906-r2`; verify freeze, build and
-  assembly preserve the candidate seal before scaling the corrected campaign.
+- [x] Preserve and stop core pilot `raw-options-20260906-r2` before expanded
+  source integration: both freezes merged, IBKR completed 8,910 rows, SPY MA
+  partial retained. All 123,711 original inputs/seal/runtime match. Assembly
+  did not run. Recovery descriptor retired; nonzero stop status preserved.
 - [x] Download a bounded Massive historical quote/trade pilot and capture
   raw nanosecond/provenance, complete pagination and storage/timing evidence.
 - [x] Verify descriptive causal replay of the captured option ticks while
   preserving original capture bytes. [Replay evidence](docs/reviews/2026-09-06-option-tick-replay.json).
-- [ ] Freeze pre-decision contract selection and trade-condition mapping;
-  scale quote/trade coverage, join identical historical/live features and
-  compare feature ablations before admitting them to v6/v7. Captured ticks have
-  not been joined to model rows or trained; predictive gain is unestablished.
+- [x] Share prior-date/PIT raw-moneyness selection between features and labels;
+  bind explicit trade-condition policy and exact tick request/store identity.
+- [x] Download and materialize a correctly selected v6 call/put sample: 17,814
+  quotes and 648 reported trades, all ten features present, exact joins pass.
+  Durable local store is under `nn_meta/option_tick_features/`.
+- [x] Implement and independently review full pre-outcome request planning: all
+  twenty families, exact TRAIN/full-window caps, weekly grids, prior-date raw
+  selection and source/config/input hashes; no option outcomes or downloads.
+- [ ] Execute full pre-outcome request planning from verified source/context,
+  download/verify all required tick windows, and seal complete feature inputs.
+- [ ] Validate the richer live condition/receipt adapter and full-session twin;
+  run ablations. No predictive gain or production admission is established.
 
 ## 4. Rebuild and compare fairly
 
 The existing configured v5/v6 pipeline can be piloted after data and runtime
 preflight. Adding any of the thirteen new ports requires its external parity
-and admission checks first. The replacement pilot tests the repaired core
-pipeline; richer quote/trade model work still requires its fixed data/feature
-contract and joins. Use the home box first; cloud acceleration needs a measured
+and admission checks first. The stopped pilot tested the repaired core
+pipeline. Expanded feature/selection/join code is implemented; actual source
+comparisons, historical coverage and the sealed manifest remain prerequisites. Use the home box first; cloud acceleration needs a measured
 workload, VM-hour budget and explicit job IDs.
 
 - [ ] Refreeze affected baseline and expanded pools on causal inputs.

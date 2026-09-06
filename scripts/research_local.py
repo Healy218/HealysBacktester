@@ -179,6 +179,12 @@ def input_fingerprint(config) -> dict:
         raise CampaignError("raw cache is missing; cannot bind campaign inputs")
     repo = config.ROOT.parent
     files: dict[str, Path] = {}
+    if getattr(config, "V6_EXPANDED", False):
+        from nn_meta.v6_expansion import from_environment
+        expanded = from_environment()
+        expanded.assert_unchanged()
+        for path in expanded.input_files():
+            files["expanded/" + path] = Path(path)
 
     def include(label, path):
         if _omit_input(path):
@@ -319,6 +325,9 @@ def campaign_lock(path):
 
 def run_plan(config, symbols, plan, workers, report):
     from nn_meta.feature_contract import CONTRACT_VERSION
+    if getattr(config, "V6_EXPANDED", False):
+        from nn_meta.v6_expansion import from_environment
+        from_environment().bind_tick_stores(symbols)
     base = safe_outputs(config)
     config.RUNS_DIR.mkdir(parents=True, exist_ok=True)
     with campaign_lock(config.RUNS_DIR / ".launcher.lock"):

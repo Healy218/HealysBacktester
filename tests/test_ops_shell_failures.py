@@ -84,13 +84,30 @@ gsutil(){ echo "$*" >> calls; return 1; }
     assert 'meta_marks' in (tmp_path/'calls').read_text()
 
 
-def test_freeze_wait_checks_earlier_failed_child(tmp_path):
-    source=(ROOT/'scripts/run_freeze_v6_local.sh').read_text()
-    block=source[source.index('rc=0\n'):]
-    done=subprocess.run(['bash','-c','pids=(); (exit 7) & pids+=($!); (exit 0) & pids+=($!);\n'+block],cwd=tmp_path,capture_output=True,text=True)
-    assert done.returncode==1
-    assert 'LOCAL-FREEZE-DONE' not in done.stdout
-    assert 'LOCAL-FREEZE-FAILED' in done.stderr
+def test_full_v6_freeze_preserves_validated_launcher_failure(tmp_path):
+    executable(tmp_path/'scripts/run_freeze_v6_local.sh',
+               (ROOT/'scripts/run_freeze_v6_local.sh').read_text())
+    executable(tmp_path/'scripts/run_research_local.sh',
+               '#!/usr/bin/env bash\nprintf "%s\\n" "$NN_META_V6_EXPANDED" "$@" > calls\nexit 7\n')
+    env = dict(os.environ, NN_META_CAMPAIGN='expanded-test',
+               NN_META_DATA_CANDIDATE='sealed-test', NN_META_V6_INPUTS='inputs.json',
+               NN_META_V6_INPUTS_SHA256='a'*64)
+    done = subprocess.run(['bash', str(tmp_path/'scripts/run_freeze_v6_local.sh'), '--run'],
+                          cwd=tmp_path, env=env, capture_output=True, text=True)
+    assert done.returncode == 7
+    assert (tmp_path/'calls').read_text().splitlines() == [
+        '1', '--campaign', 'expanded-test', '--pool', 'v6', '--stage', 'freeze', '--run']
+
+
+def test_full_v6_freeze_cannot_start_without_feature_evidence(tmp_path):
+    executable(tmp_path/'scripts/run_freeze_v6_local.sh',
+               (ROOT/'scripts/run_freeze_v6_local.sh').read_text())
+    env = dict(os.environ, NN_META_CAMPAIGN='expanded-test', NN_META_DATA_CANDIDATE='sealed-test')
+    env.pop('NN_META_V6_INPUTS', None)
+    done = subprocess.run(['bash', str(tmp_path/'scripts/run_freeze_v6_local.sh'), '--run'],
+                          cwd=tmp_path, env=env, capture_output=True, text=True)
+    assert done.returncode != 0 and 'reviewed TV13' in done.stderr
+    assert not (tmp_path/'calls').exists()
 
 
 def test_cloud_freeze_skips_only_current_contract_and_settings(tmp_path):

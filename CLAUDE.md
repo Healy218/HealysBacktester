@@ -25,7 +25,7 @@ here — it lives in the files below.
    load — don't re-derive state from scratch.
 2. **Work**: on `main` (user instruction at the September 5 merge); small single-purpose commits;
    push often. Tests stay green: `./venv/bin/python -m pytest tests/ -q`
-   (1,143 plus 18 subtests at the 2026-09-06 milestone — treat the count as a floor, not a pin;
+   (1,390 plus 18 subtests at the 2026-09-06 expanded milestone — treat the count as a floor, not a pin;
    self-contained: no network, no v31 artifacts; LightGBM/TF are exercised
    from requirements).
 3. **End** (or at a milestone, or before context runs out): archive

@@ -72,6 +72,9 @@ META_FEATURES = [
 # separate from META_FEATURES until v2/v3 deployed model bundles are retired:
 # their persisted scalers deliberately reference the legacy schema.
 V4_META_FEATURES = v4_feature_names(META_FEATURES)
+if config.V6_EXPANDED:
+    from nn_meta.v6_expansion import EXTRA_FEATURES
+    V4_META_FEATURES = v4_feature_names([*V4_META_FEATURES, *EXTRA_FEATURES])
 
 
 # ── 15m technical features ────────────────────────────────────────────────────
@@ -188,10 +191,13 @@ def _write_partial(path, df: pd.DataFrame) -> None:
 
 def _provenance(entry, grid, start=config.WINDOW_START, end=config.WINDOW_END):
     from nn_meta.feature_contract import CONTRACT_VERSION
-    return {"version": CONTRACT_VERSION, "entry": entry, "grid": sorted(grid),
+    value = {"version": CONTRACT_VERSION, "entry": entry, "grid": sorted(grid),
             "window": [start, end], "execution": config.EXEC_CONFIG,
             "sim": config.SIM_CONFIG, "fees": config.FEES_PERCENT,
             "slippage": config.SLIPPAGE_PERCENT}
+    if config.V6_EXPANDED:
+        value["v6_inputs_sha256"] = config.V6_INPUTS_SHA256
+    return value
 
 
 def _provenance_path(path):
@@ -418,6 +424,10 @@ def build_symbol_rows(symbol: str, spec_entry: dict, provider,
                     **{k: frow.get(k, np.nan) for k in feats.columns},
                 })
         fam_df = pd.DataFrame(rows)
+        if config.V6_EXPANDED and not fam_df.empty:
+            from nn_meta.v6_expansion import from_environment
+            fam_df = from_environment().append(fam_df, symbol=symbol, bars=bars,
+                                               provider=provider, raw_close=raw_close)
         frames.append(fam_df)
         if p_rows is not None:
             # marks before rows, mirroring build_rows' commit order: a rows

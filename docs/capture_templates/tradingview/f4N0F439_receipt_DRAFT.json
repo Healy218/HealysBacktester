@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "kind": "append_only_observation_plots",
+  "script_id": "f4N0F439",
+  "original_source": {
+    "pine_id": "PUB;6f2fdb5737654d8cb3b6fdd9afdc5ec8",
+    "publication_version": "1",
+    "sha256": "e8b6b78bbe831539a65c6f4e10a4e825466344d66becfa013163540210981f1c"
+  },
+  "original_prefix_bytes": 33586,
+  "instrumented_sha256": "09b929a3fa7e0d6afac0bf51efa6ab572b9ec61c264b4c5c235ed0f6b2424cf4",
+  "append_sha256": "86e4834c16fce3213e8413dae4c9a2a675dbe49c11dfb06f5da514f0939599cf",
+  "diff": "--- pinned-publication\n+++ instrumented-capture\n@@ -662,4 +662,27 @@\n //\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\r\n \r\n alertcondition(upSignal, \"Adaptive Trend Up\", \"Adaptive Trend Trail turned bullish on {{ticker}}\")\r\n-alertcondition(downSignal, \"Adaptive Trend Down\", \"Adaptive Trend Trail turned bearish on {{ticker}}\")+alertcondition(downSignal, \"Adaptive Trend Down\", \"Adaptive Trend Trail turned bearish on {{ticker}}\")\n+// Reviewed capture observations only; original source above is unchanged.\n+plot(basis, \"TVF:basis\", display=display.data_window)\n+plot(safeATR, \"TVF:safe_atr\", display=display.data_window)\n+plot(regime, \"TVF:regime\", display=display.data_window)\n+plot(trend, \"TVF:direction\", display=display.data_window)\n+plot(innerTrail, \"TVF:inner_trail\", display=display.data_window)\n+plot(outerTrail, \"TVF:outer_trail\", display=display.data_window)\n+plot(depthTrail, \"TVF:depth_trail\", display=display.data_window)\n+plot(upper1, \"TVF:upper_band_1\", display=display.data_window)\n+plot(upper2, \"TVF:upper_band_2\", display=display.data_window)\n+plot(upper3, \"TVF:upper_band_3\", display=display.data_window)\n+plot(lower1, \"TVF:lower_band_1\", display=display.data_window)\n+plot(lower2, \"TVF:lower_band_2\", display=display.data_window)\n+plot(lower3, \"TVF:lower_band_3\", display=display.data_window)\n+plot(upSignal ? 1 : 0, \"TVF:bull_signal\", display=display.data_window)\n+plot(downSignal ? 1 : 0, \"TVF:bear_signal\", display=display.data_window)\n+plot(volume, \"TVF:Volume\", display=display.data_window)\n+plot(bar_index, \"TVF:bar_index\", display=display.data_window)\n+plot(time_close, \"TVF:time_close_ms\", display=display.data_window)\n+plot(barstate.isconfirmed ? 1 : 0, \"TVF:confirmed\", display=display.data_window)\n+plot(ta.atr(14), \"TVF:atr14\", display=display.data_window)\n+plot(timeframe.change(\"2D\") ? 1 : 0, \"TVF:htf_change_2D\", display=display.data_window)\n+plot(ta.vwap(hlc3), \"TVF:default_vwap\", display=display.data_window)\n",
+  "diff_sha256": "5e17ceb5053f809a9482ec4377441ca080d95fe820ea95ae781f66d3fbf97669",
+  "plots": [
+    {
+      "title": "TVF:basis",
+      "expression": "basis",
+      "kind": "numeric",
+      "python_column": "basis"
+    },
+    {
+      "title": "TVF:safe_atr",
+      "expression": "safeATR",
+      "kind": "numeric",
+      "python_column": "safe_atr"
+    },
+    {
+      "title": "TVF:regime",
+      "expression": "regime",
+      "kind": "numeric",
+      "python_column": "regime"
+    },
+    {
+      "title": "TVF:direction",
+      "expression": "trend",
+      "kind": "numeric",
+      "python_column": "direction"
+    },
+    {
+      "title": "TVF:inner_trail",
+      "expression": "innerTrail",
+      "kind": "numeric",
+      "python_column": "inner_trail"
+    },
+    {
+      "title": "TVF:outer_trail",
+      "expression": "outerTrail",
+      "kind": "numeric",
+      "python_column": "outer_trail"
+    },
+    {
+      "title": "TVF:depth_trail",
+      "expression": "depthTrail",
+      "kind": "numeric",
+      "python_column": "depth_trail"
+    },
+    {
+      "title": "TVF:upper_band_1",
+      "expression": "upper1",
+      "kind": "numeric",
+      "python_column": "upper_band_1"
+    },
+    {
+      "title": "TVF:upper_band_2",
+      "expression": "upper2",
+      "kind": "numeric",
+      "python_column": "upper_band_2"
+    },
+    {
+      "title": "TVF:upper_band_3",
+      "expression": "upper3",
+      "kind": "numeric",
+      "python_column": "upper_band_3"
+    },
+    {
+      "title": "TVF:lower_band_1",
+      "expression": "lower1",
+      "kind": "numeric",
+      "python_column": "lower_band_1"
+    },
+    {
+      "title": "TVF:lower_band_2",
+      "expression": "lower2",
+      "kind": "numeric",
+      "python_column": "lower_band_2"
+    },
+    {
+      "title": "TVF:lower_band_3",
+      "expression": "lower3",
+      "kind": "numeric",
+      "python_column": "lower_band_3"
+    },
+    {
+      "title": "TVF:bull_signal",
+      "expression": "upSignal ? 1 : 0",
+      "kind": "event",
+      "python_column": "bull_signal"
+    },
+    {
+      "title": "TVF:bear_signal",
+      "expression": "downSignal ? 1 : 0",
+      "kind": "event",
+      "python_column": "bear_signal"
+    },
+    {
+      "title": "TVF:Volume",
+      "expression": "volume",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:bar_index",
+      "expression": "bar_index",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:time_close_ms",
+      "expression": "time_close",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:confirmed",
+      "expression": "barstate.isconfirmed ? 1 : 0",
+      "kind": "event",
+      "python_column": null
+    },
+    {
+      "title": "TVF:atr14",
+      "expression": "ta.atr(14)",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:htf_change_2D",
+      "expression": "timeframe.change(\"2D\") ? 1 : 0",
+      "kind": "event",
+      "python_column": null
+    },
+    {
+      "title": "TVF:default_vwap",
+      "expression": "ta.vwap(hlc3)",
+      "kind": "numeric",
+      "python_column": null
+    }
+  ],
+  "review": {
+    "reviewed": false,
+    "reviewer": null,
+    "reviewed_at": null,
+    "reviewed_diff_sha256": null,
+    "observation_semantics_verified": false
+  },
+  "compiled_on_tradingview": false,
+  "model_admission": false
+}

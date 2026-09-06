@@ -1,0 +1,17 @@
+//@version=6
+// Fixture context only; no entry/exit rules, no executed parity claim.
+indicator("TV Fixture Context DRAFT", overlay=false)
+plot(open, "TVF:Open", display=display.data_window)
+plot(high, "TVF:High", display=display.data_window)
+plot(low, "TVF:Low", display=display.data_window)
+plot(close, "TVF:Close", display=display.data_window)
+plot(volume, "TVF:Volume", display=display.data_window)
+plot(ta.atr(14), "TVF:atr14", display=display.data_window)
+plot(ta.vwap(hlc3), "TVF:default_vwap", display=display.data_window)
+plot(timeframe.change("2D") ? 1 : 0, "TVF:htf_change_2D", display=display.data_window)
+plot(session.isfirstbar ? 1 : 0, "TVF:session_firstbar", display=display.data_window)
+plot(session.isfirstbar_regular ? 1 : 0, "TVF:regular_session_firstbar", display=display.data_window)
+plot(bar_index, "TVF:bar_index", display=display.data_window)
+plot(time_close, "TVF:time_close_ms", display=display.data_window)
+plot(barstate.isconfirmed ? 1 : 0, "TVF:confirmed", display=display.data_window)
+plot(barstate.islast ? 1 : 0, "TVF:last", display=display.data_window)

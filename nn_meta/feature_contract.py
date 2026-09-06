@@ -15,8 +15,11 @@ from __future__ import annotations
 from dataclasses import dataclass
 from enum import IntEnum
 from typing import Iterable, Mapping
+import os
 
-CONTRACT_VERSION = "2026-09-06-raw-spot-v3"
+CONTRACT_VERSION = ("2026-09-06-tv13-option-ticks-v4"
+                    if os.environ.get("NN_META_V6_EXPANDED", "0") == "1"
+                    else "2026-09-06-raw-spot-v3")
 
 
 def baseline_spec_fingerprint(spec: dict) -> str:
@@ -104,6 +107,16 @@ def feature_spec(name: str) -> FeatureSpec:
     """Return a declared spec, including dynamically named one-hot features."""
     if name in FEATURE_SPECS:
         return FEATURE_SPECS[name]
+    if name.startswith("tv_"):
+        from nn_meta.tradingview_features import FEATURE_NAMES
+        if name in FEATURE_NAMES:
+            return FeatureSpec(name, Availability.SIGNAL_CLOSE, "pinned TradingView scoped projection",
+                               "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing")
+    if name.startswith("opt_tick_"):
+        from nn_meta.option_tick_dataset import NUMERIC_FEATURES
+        if name in NUMERIC_FEATURES:
+            return FeatureSpec(name, Availability.SIGNAL_CLOSE, "verified historical option quotes/trades",
+                               "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound")
     if name.startswith("strat_"):
         return FeatureSpec(
             name, Availability.SIGNAL_CLOSE, "proposal strategy identifier",

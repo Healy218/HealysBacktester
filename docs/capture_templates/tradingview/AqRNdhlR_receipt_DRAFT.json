@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "kind": "append_only_observation_plots",
+  "script_id": "AqRNdhlR",
+  "original_source": {
+    "pine_id": "PUB;a98154dd8ce244868b008e6ac629a08d",
+    "publication_version": "1",
+    "sha256": "786b9c32a79d67e461085abd5e848322bf542cf8e514141c486e141e1c5e5b27"
+  },
+  "original_prefix_bytes": 16028,
+  "instrumented_sha256": "744016811375bda7e20c1744e16cd6f9db554e3bd7a2c696c31f77926b24c989",
+  "append_sha256": "1ce75ca467d92fd1b049cf65a09c05b0b914755154070c98b8987b7f09b6d89a",
+  "diff": "--- pinned-publication\n+++ instrumented-capture\n@@ -180,4 +180,22 @@\n //\u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551\u2588\u2588\u2554\u2588\u2588\u2557 \u2588\u2588\u2551   \u2588\u2588\u2551       \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2551\u2588\u2588\u2551     \u2588\u2588\u2551  \u2588\u2588\u2588\u2557\u2588\u2588\u2551   \u2588\u2588\u2551\r\n //\u2588\u2588\u2551\u2584\u2584 \u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2551\u2588\u2588\u2551\u255a\u2588\u2588\u2557\u2588\u2588\u2551   \u2588\u2588\u2551       \u2588\u2588\u2554\u2550\u2550\u2588\u2588\u2551\u2588\u2588\u2551     \u2588\u2588\u2551   \u2588\u2588\u2551\u2588\u2588\u2551   \u2588\u2588\u2551\r\n //\u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2551 \u255a\u2588\u2588\u2588\u2588\u2551   \u2588\u2588\u2551       \u2588\u2588\u2551  \u2588\u2588\u2551\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2557\u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\u255a\u2588\u2588\u2588\u2588\u2588\u2588\u2554\u255d\r\n-// \u255a\u2550\u2550\u2580\u2580\u2550\u255d  \u255a\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u2550\u2550\u255d   \u255a\u2550\u255d       \u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u255d  \u255a\u2550\u2550\u2550\u2550\u2550\u255d+// \u255a\u2550\u2550\u2580\u2580\u2550\u255d  \u255a\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u255d  \u255a\u2550\u2550\u2550\u255d   \u255a\u2550\u255d       \u255a\u2550\u255d  \u255a\u2550\u255d\u255a\u2550\u2550\u2550\u2550\u2550\u2550\u255d \u255a\u2550\u2550\u2550\u2550\u2550\u255d  \u255a\u2550\u2550\u2550\u2550\u2550\u255d\n+// Reviewed capture observations only; original source above is unchanged.\n+plot(filtered_price, \"TVF:filtered_price\", display=display.data_window)\n+plot(efficiency_ratio, \"TVF:efficiency\", display=display.data_window)\n+plot(smoothed_efficiency, \"TVF:smoothed_efficiency\", display=display.data_window)\n+plot(trend_width, \"TVF:trend_width\", display=display.data_window)\n+plot(upper_band, \"TVF:upper_band\", display=display.data_window)\n+plot(lower_band, \"TVF:lower_band\", display=display.data_window)\n+plot(trend_line, \"TVF:trend_line\", display=display.data_window)\n+plot(trend_dir, \"TVF:direction\", display=display.data_window)\n+plot(turned_bull ? 1 : 0, \"TVF:bull_signal\", display=display.data_window)\n+plot(turned_bear ? 1 : 0, \"TVF:bear_signal\", display=display.data_window)\n+plot(volume, \"TVF:Volume\", display=display.data_window)\n+plot(bar_index, \"TVF:bar_index\", display=display.data_window)\n+plot(time_close, \"TVF:time_close_ms\", display=display.data_window)\n+plot(barstate.isconfirmed ? 1 : 0, \"TVF:confirmed\", display=display.data_window)\n+plot(ta.atr(14), \"TVF:atr14\", display=display.data_window)\n+plot(timeframe.change(\"2D\") ? 1 : 0, \"TVF:htf_change_2D\", display=display.data_window)\n+plot(ta.vwap(hlc3), \"TVF:default_vwap\", display=display.data_window)\n",
+  "diff_sha256": "d794ee898506262fce869e3c061c10eb3fd7aa20a9f1fee52de2c9196527f244",
+  "plots": [
+    {
+      "title": "TVF:filtered_price",
+      "expression": "filtered_price",
+      "kind": "numeric",
+      "python_column": "filtered_price"
+    },
+    {
+      "title": "TVF:efficiency",
+      "expression": "efficiency_ratio",
+      "kind": "numeric",
+      "python_column": "efficiency"
+    },
+    {
+      "title": "TVF:smoothed_efficiency",
+      "expression": "smoothed_efficiency",
+      "kind": "numeric",
+      "python_column": "smoothed_efficiency"
+    },
+    {
+      "title": "TVF:trend_width",
+      "expression": "trend_width",
+      "kind": "numeric",
+      "python_column": "trend_width"
+    },
+    {
+      "title": "TVF:upper_band",
+      "expression": "upper_band",
+      "kind": "numeric",
+      "python_column": "upper_band"
+    },
+    {
+      "title": "TVF:lower_band",
+      "expression": "lower_band",
+      "kind": "numeric",
+      "python_column": "lower_band"
+    },
+    {
+      "title": "TVF:trend_line",
+      "expression": "trend_line",
+      "kind": "numeric",
+      "python_column": "trend_line"
+    },
+    {
+      "title": "TVF:direction",
+      "expression": "trend_dir",
+      "kind": "numeric",
+      "python_column": "direction"
+    },
+    {
+      "title": "TVF:bull_signal",
+      "expression": "turned_bull ? 1 : 0",
+      "kind": "event",
+      "python_column": "bull_signal"
+    },
+    {
+      "title": "TVF:bear_signal",
+      "expression": "turned_bear ? 1 : 0",
+      "kind": "event",
+      "python_column": "bear_signal"
+    },
+    {
+      "title": "TVF:Volume",
+      "expression": "volume",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:bar_index",
+      "expression": "bar_index",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:time_close_ms",
+      "expression": "time_close",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:confirmed",
+      "expression": "barstate.isconfirmed ? 1 : 0",
+      "kind": "event",
+      "python_column": null
+    },
+    {
+      "title": "TVF:atr14",
+      "expression": "ta.atr(14)",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:htf_change_2D",
+      "expression": "timeframe.change(\"2D\") ? 1 : 0",
+      "kind": "event",
+      "python_column": null
+    },
+    {
+      "title": "TVF:default_vwap",
+      "expression": "ta.vwap(hlc3)",
+      "kind": "numeric",
+      "python_column": null
+    }
+  ],
+  "review": {
+    "reviewed": false,
+    "reviewer": null,
+    "reviewed_at": null,
+    "reviewed_diff_sha256": null,
+    "observation_semantics_verified": false
+  },
+  "compiled_on_tradingview": false,
+  "model_admission": false
+}

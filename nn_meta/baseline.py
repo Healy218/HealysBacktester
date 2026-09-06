@@ -59,7 +59,11 @@ def load_underlying_15m(symbol: str) -> pd.DataFrame:
     panel = pd.read_parquet(config.UNDERLYING_15M_PARQUET)
     sub = panel[panel["symbol"] == symbol.upper()]
     out = sub.set_index("timestamp")[["Open", "High", "Low", "Close", "Volume"]]
-    return out.sort_index()
+    out = out.sort_index()
+    if config.V6_EXPANDED:
+        from nn_meta.v6_expansion import from_environment
+        from_environment().attach(symbol, out)
+    return out
 
 
 # ── signal generation for a single frozen param set ───────────────────────────
@@ -125,6 +129,8 @@ def sweep_train_params(symbol: str, bars: pd.DataFrame, strategy: str,
     )
     rows = result.get("top5") or []
     pf = result.get("portfolio")
+    if config.V6_EXPANDED and result.get("error"):
+        raise ValueError(f"expanded {symbol}/{strategy} sweep failed: {result['error']}")
     if result.get("error") or not rows or pf is None:
         logger.warning(f"[{_TAG}] {symbol}/{strategy}: sweep failed: "
                        f"{result.get('error')}")
@@ -319,6 +325,8 @@ def freeze_symbol(symbol: str, provider,
                                          train_start, train_end, dte_grid=dte_grid)
         except Exception as e:
             logger.exception(f"[{_TAG}] {symbol}/{strat}: freeze failed: {e}")
+            if config.V6_EXPANDED:
+                raise
             entry = None
         if entry is not None:
             strategies_out[strat] = entry
@@ -380,6 +388,8 @@ def _config_hash() -> str:
         "ceiling": config.TRADES_PER_DAY_CEILING,
         "min_trades": config.MIN_TRAIN_TRADES,
     }
+    if config.V6_EXPANDED:
+        frozen["v6_inputs_sha256"] = config.V6_INPUTS_SHA256
     return hashlib.md5(json.dumps(frozen, sort_keys=True).encode()).hexdigest()[:12]
 
 
@@ -426,6 +436,15 @@ def freeze_all(symbols: Optional[list[str]] = None, out_path=None,
     only ``strategies`` and inherit every other family's frozen entry from
     ``base_spec`` (an earlier pool's baseline_spec.json). Weekly-expiry names
     are re-frozen in full whenever the pool enables weekly DTEs."""
+    if config.V6_EXPANDED:
+        from nn_meta.v6_expansion import from_environment
+        expanded = from_environment()
+        requested = symbols or config.UNDERLYINGS
+        if set(requested) - set(expanded.document["symbols"]):
+            raise ValueError("expanded freeze scope lacks required symbol contexts/tick inputs")
+        expanded.bind_tick_stores(requested)
+        if strategies is not None or base_spec is not None:
+            raise ValueError("expanded v6 requires all configured families in a fresh full freeze")
     config.ensure_dirs()
     provider = get_provider()
     from pathlib import Path
@@ -482,6 +501,8 @@ def freeze_all(symbols: Optional[list[str]] = None, out_path=None,
                 base_entry=(base or {}).get("symbols", {}).get(sym))
         except Exception as e:
             logger.exception(f"[{_TAG}] {sym}: freeze failed: {e}")
+            if config.V6_EXPANDED:
+                raise
             entry = None
         if entry is None:
             print(f"[{sym}] SKIPPED (no freezable baseline)")

@@ -3,18 +3,20 @@
 Reconciled September 6, 2026. [TODO](TODO.md) is the active checklist;
 [HANDOFF](HANDOFF.md) records session milestones. The user authorized starting
 its six workstreams. Thirteen selected TradingView ports are implemented
-locally; admission remains gated while the existing configured pools receive
-corrected pipeline checks. Work remains on `main` in the primary checkout.
+locally and wired into an expanded, versioned research path; actual capture
+admission and historical tick coverage remain gated. Work remains on `main` in the primary checkout.
 
 The user explicitly confirmed that the **full v6 freeze/build must contain all
-thirteen new indicator scopes plus quote/trade features**. The current
-SPY/IBKR run validates the repaired core only; it is not authorization to scale
+thirteen new indicator scopes plus quote/trade features**. The preserved
+SPY/IBKR pilot validated the repaired core only; it is not authorization to scale
 an existing-family-only campaign as the full v6 rebuild.
 
 ## Current foundation
 
 The audit's 51 findings and four additional concerns are repaired and merged.
-The latest completed full suite passed **1,143 tests and 18 subtests**.
+The final expanded integration suite passed **1,390 tests and 18 subtests**.
+[Expanded milestone](docs/reviews/2026-09-06-expanded-v6-milestone.md) records
+the final source validation and current admission boundaries.
 Causal features/splits, cash/mark/cost accounting, PIT selection, cache
 preservation, provenance and live-state safeguards are implemented.
 [Integration](docs/reviews/2026-09-05-main-integration.md) and
@@ -33,7 +35,7 @@ Old results remain in
 [EXPERIMENTS](docs/EXPERIMENTS.md) as history, including the intraday-staleness
 incident and September 4 gate change.
 
-## Current phase: TradingView validation and corrected pipeline pilot
+## Current phase: real TradingView validation and expanded tick coverage
 
 The scope covers the user's **ten highest-boost scripts across the supplied
 general listing's exposed pages plus three highest-boost Editors' Picks**.
@@ -64,8 +66,10 @@ the sealed candidate and was aborted. All 123,471 sealed payload hashes were
 verified; 1,299 derived files were preserved in campaign quarantine and the
 exact original inventory/seal restored. Its IBKR shard is preserved as
 ineligible history. The separate writable provider-cache fix passed independent
-review. Replacement `raw-options-20260906-r2` is running freeze/build/assemble
-with two dynamically selected workers; complete it before scaling.
+review. Replacement `raw-options-20260906-r2` completed both freezes and IBKR rows;
+its remaining SPY build was stopped before expanded integration. It did not complete assembly.
+Its two-worker core campaign and nonzero stop status are preserved; its
+recovery descriptor is retired. Expanded v6 needs a new campaign.
 [Restoration evidence](docs/reviews/2026-09-06-pilot-cache-restoration.json).
 
 In parallel: inventory deeper backups and missing FA/PIT monthlies; preserve
@@ -73,22 +77,25 @@ the 211/441 historical v6 partials; verify server readiness; advance independent
 resolver/FA automation. Fresh campaign paths and guarded launchers are implemented.
 
 The continuation adds historical option quotes/trades and reuse of the existing
-server sockets to the v6/v7 scope. Bounded tick capture and descriptive causal
-replay are verified, but ticks have not been joined to model rows or trained.
-Fixed contract selection, historical/live feature parity and ablations precede
+server sockets to the v6/v7 scope. A predecision-selected tick sample
+now materializes all ten features and exact joins. Full historical model rows
+and training remain pending. Fixed contract selection is shared with labels;
+historical/live feature parity and ablations precede
 any predictive-gain claim. Existing 15-minute closed-bar decisions remain the
 initial near-live target.
 
-**Exit:** the configured-pool pilot completes with unchanged sealed inputs;
-generation/source contracts and launch commands are validated. Each new
-TradingView admission separately requires reviewed rules and external parity
-evidence. v6's existing window stays equal to v5's; the archive audit found
+**Exit:** retain the verified core-pilot evidence, complete actual all-source
+comparisons/context and full required tick coverage, then seal the expanded
+input contract and validate the fresh launch. Each new TradingView scope
+requires reviewed rules and external parity evidence. v6's existing window stays equal to v5's; the archive audit found
 fifteen weekly-expiry names.
 
 ## Next phase: corrected baseline and expanded-pool evidence
 
-Refreeze affected pools under `2026-09-06-raw-spot-v3`, rebuild rows and complete
-marks, retain provenance and assemble with PIT membership. Pre-audit v5 rows
+Refreeze expanded v6 under `2026-09-06-tv13-option-ticks-v4` after the
+[sealed feature input gates](docs/specs/V6_EXPANDED_INPUTS.md); core pools remain
+under `2026-09-06-raw-spot-v3`. Rebuild rows and complete marks, retain
+provenance and assemble with PIT membership. Pre-audit v5 rows
 and paused v6 shards cannot seed this campaign. Use the home box first;
 cloud is measured acceleration with VM-hour budgets and job-bound monitoring,
 not a guaranteed spending cap.

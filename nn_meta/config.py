@@ -34,6 +34,14 @@ DATA_CACHE = ROOT / ("data_cache_v5" if POOL in ("v5", "v6")   # v6 shares v5's 
 CAMPAIGN = os.environ.get("NN_META_CAMPAIGN", "")
 if CAMPAIGN and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", CAMPAIGN):
     raise ValueError("NN_META_CAMPAIGN must be a simple 1–64 character name")
+if os.environ.get("NN_META_V6_EXPANDED", "0") not in ("0", "1"):
+    raise ValueError("NN_META_V6_EXPANDED must be 0 or 1")
+V6_EXPANDED = os.environ.get("NN_META_V6_EXPANDED", "0") == "1"
+V6_INPUTS = os.environ.get("NN_META_V6_INPUTS", "")
+V6_INPUTS_SHA256 = os.environ.get("NN_META_V6_INPUTS_SHA256", "")
+if V6_EXPANDED and (POOL != "v6" or not CAMPAIGN or not V6_INPUTS
+                    or not re.fullmatch(r"[0-9a-f]{64}", V6_INPUTS_SHA256)):
+    raise ValueError("expanded v6 requires a named v6 campaign and sealed feature input path/SHA256")
 # Repaired raw inputs are opt-in and can only feed isolated research outputs.
 DATA_CANDIDATE = os.environ.get("NN_META_DATA_CANDIDATE", "")
 if DATA_CANDIDATE:
@@ -213,6 +221,9 @@ PROPOSAL_STRATEGIES_V5 = ["ma", "macd", "rsi", "squeeze", "tv_rating",
 # squeeze. These configured families require fresh current-contract rows.
 # Selected TradingView prototypes stay gated until their scoped parity checks.
 PROPOSAL_STRATEGIES_V6 = PROPOSAL_STRATEGIES_V5 + ["keltner", "bbw_squeeze"]
+if V6_EXPANDED:
+    from nn_meta.tradingview_proposals import STRATEGIES as _TV_STRATEGIES
+    PROPOSAL_STRATEGIES_V6 = PROPOSAL_STRATEGIES_V6 + list(_TV_STRATEGIES)
 PROPOSAL_STRATEGIES = (PROPOSAL_STRATEGIES_V6 if POOL == "v6"
                        else PROPOSAL_STRATEGIES_V5 if POOL == "v5"
                        else PROPOSAL_STRATEGIES_V31 if POOL == "v31"
@@ -234,6 +245,10 @@ SWEEP_GRIDS = {
 }
 
 # Same cost constants the equity simulator applies (utils/runner_utils.py).
+if V6_EXPANDED:
+    from nn_meta.tradingview_proposals import SWEEP_GRIDS as _TV_GRIDS
+    SWEEP_GRIDS.update(_TV_GRIDS)
+
 FEES_PERCENT = 0.001
 SLIPPAGE_PERCENT = 0.0005
 COST_STRESS_MULT = _nos.COST_STRESS_MULT
@@ -246,6 +261,9 @@ EXEC_CONFIG = {
     "MAX_ROLLS_PER_TRADE": 60,
     "MAX_FILLS_PER_VARIANT": 100_000,
 }
+if V6_EXPANDED:
+    from nn_meta.decision_contracts import POLICY_VERSION as _DECISION_POLICY
+    EXEC_CONFIG["DECISION_CHAIN_POLICY"] = _DECISION_POLICY
 
 # ── Baseline freeze (Phase B) ────────────────────────────────────────────────
 # MA sweep windows are in BARS (26 RTH bars per day at 15m).

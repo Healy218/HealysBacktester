@@ -42,7 +42,9 @@ def _trade_context(direction, dte, bars_since_signal) -> dict:
 def build_candidate_batch(proposals: pd.DataFrame,
                           bars_by_symbol: dict[str, pd.DataFrame],
                           surface: pd.DataFrame, spec: dict, *,
-                          context: pd.DataFrame | None = None) -> pd.DataFrame:
+                          context: pd.DataFrame | None = None,
+                          expanded_inputs=None, option_provider=None,
+                          raw_close_by_symbol=None) -> pd.DataFrame:
     """Construct a v4 causal candidate batch from closed underlying bars.
 
     ``proposals`` needs symbol, strategy, dte, direction, strike, entry_ts, and
@@ -51,6 +53,9 @@ def build_candidate_batch(proposals: pd.DataFrame,
     ``prem_spot``-free and decision-safe by the v4 feature contract.
     """
     rows = []
+    if config.V6_EXPANDED and (expanded_inputs is None or option_provider is None
+                               or raw_close_by_symbol is None):
+        raise ValueError("expanded v6 candidates require verified feature inputs, PIT chain and raw closes; live adapter not configured")
     for p in proposals.itertuples(index=False):
         bars = bars_by_symbol[p.symbol]
         entry_ts = pd.Timestamp(p.entry_ts)
@@ -64,9 +69,17 @@ def build_candidate_batch(proposals: pd.DataFrame,
         row.update(_trade_context(p.direction, p.dte, lag))
         row.update({"symbol": p.symbol, "strategy": p.strategy, "dte": p.dte,
                     "entry_ts": entry_ts, "entry_date": entry_ts.normalize()})
+        if config.V6_EXPANDED:
+            row["direction"] = p.direction
         rows.append(row)
 
-    batch = join_surface_asof(pd.DataFrame(rows), surface)
+    batch = pd.DataFrame(rows)
+    if config.V6_EXPANDED and not batch.empty:
+        batch = pd.concat([expanded_inputs.append(group, symbol=symbol,
+                          bars=bars_by_symbol[symbol], provider=option_provider,
+                          raw_close=raw_close_by_symbol[symbol])
+                           for symbol, group in batch.groupby("symbol", sort=False)])
+    batch = join_surface_asof(batch, surface)
     for s in config.PROPOSAL_STRATEGIES:
         batch[f"strat_{s}"] = (batch["strategy"] == s).astype(float)
     sector = batch["symbol"].map(config.SECTOR_MAP)
@@ -83,7 +96,8 @@ def build_candidate_batch(proposals: pd.DataFrame,
     missing = set(V4_META_FEATURES) - set(batch.columns)
     if missing:
         raise ValueError(f"candidate batch missing v4 features: {sorted(missing)}")
-    return batch[["symbol", "strategy", "dte", "entry_ts"] + V4_META_FEATURES]
+    audit = ["decision_contract", "option_tick_request_id", "option_tick_status"] if config.V6_EXPANDED else []
+    return batch[["symbol", "strategy", "dte", "entry_ts"] + audit + V4_META_FEATURES]
 
 
 def _merge_context(batch: pd.DataFrame, context: pd.DataFrame) -> pd.DataFrame:

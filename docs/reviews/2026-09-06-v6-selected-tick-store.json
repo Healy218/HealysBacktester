@@ -1,0 +1,200 @@
+{
+  "schema": "v6-selected-option-tick-store-evidence-v1",
+  "verified_at_utc": "2026-09-06T07:27:17.070588+00:00",
+  "status": "two_real_selected_windows_verified_materialized_and_exact_joined",
+  "task_sha256": "93cbcccab8c06977612c5bb680690e1cc40d8a2fa3d510b56cd72a0bd6ffe041",
+  "store_sha256": "4054c93d54237a137fc48d3cfa863d63034255160faf748cf5d83d289b20961f",
+  "task_path": "/home/healy/Coding/HealysBacktester/nn_meta/option_tick_features/v6-selected-pilot-20260906/prepared/task.json",
+  "store_path": "/home/healy/Coding/HealysBacktester/nn_meta/option_tick_features/v6-selected-pilot-20260906/store",
+  "selection_evidence_path": "/home/healy/Coding/HealysBacktester/nn_meta/option_tick_features/v6-selected-pilot-20260906/selection.json",
+  "selection_evidence_sha256": "9f1e153fd58908c22e9ccf95696cb0809b23ca4e49e20cc2451c4b88a4d41387",
+  "capture_path": "/home/healy/Coding/HealysBacktester/nn_meta/option_tick_captures/spy-20260824-v6-decision-v2",
+  "capture_manifest_sha256": "0987c9a129621418371d44f939feff19cf39a838de612c361c8b7bff8f459b7e",
+  "feature_file_sha256": "2cf6bf899e043a5024d569f2d227ac3834a5b0c9040999d974c9519b05884ac8",
+  "raw_spot": 762.19,
+  "selection_policy": "previous-date-raw-moneyness-v1",
+  "target_dte": 1,
+  "window_start_utc": "2026-08-24T13:30:00Z",
+  "window_end_utc": "2026-08-24T13:45:00Z",
+  "decision_close_utc": "2026-08-24T13:45:00Z",
+  "exact_join_verified": true,
+  "required_request_count": 2,
+  "covered_request_count": 2,
+  "unselected_request_count": 0,
+  "required_pilot_window_coverage_complete": true,
+  "full_history_coverage_complete": false,
+  "feature_policy": {
+    "schema": "option-tick-dataset-v1",
+    "availability": "sip",
+    "condition_namespace": "massive_integer",
+    "allowed_trade_conditions": [
+      209
+    ],
+    "allow_unconditioned_trades": false,
+    "condition_policy_id": "massive-options-auto-209-reference-20260906-research-only",
+    "condition_references": [
+      {
+        "path": "/home/healy/Coding/HealysBacktester/docs/reviews/2026-09-06-option-condition-209.json",
+        "sha256": "a44705616ca450dafa045b1696bf9a7e9cab96a23e5df8003e082de53ba77a00"
+      }
+    ],
+    "max_quote_age_ns": 30000000000,
+    "missing_measurements": "null_without_imputation",
+    "model_admission": false
+  },
+  "numeric_features": [
+    "opt_tick_spread_bps",
+    "opt_tick_size_imbalance",
+    "opt_tick_valid_quote_fraction",
+    "opt_tick_quote_age_seconds",
+    "opt_tick_quote_updates_per_second",
+    "opt_tick_trade_count_per_second",
+    "opt_tick_trade_volume_per_second",
+    "opt_tick_trade_vwap_mid_bps",
+    "opt_tick_signed_volume_fraction",
+    "opt_tick_classified_volume_fraction"
+  ],
+  "rows": [
+    {
+      "request_id": "05245a86f0903254ced64c78874028b805d9eab203ef3ea3a0ebabacae8380e7",
+      "symbol": "SPY",
+      "contract": "SPY260825P00762000",
+      "window_start_ns": 1787578200000000000,
+      "window_end_ns": 1787579100000000000,
+      "decision_close_ns": 1787579100000000000,
+      "option_tick_status": "covered",
+      "opt_tick_spread_bps": 155.42412901975376,
+      "opt_tick_size_imbalance": -0.020479428478561,
+      "opt_tick_valid_quote_fraction": 0.998721290004444,
+      "opt_tick_quote_age_seconds": 0.031304965,
+      "opt_tick_quote_updates_per_second": 9.034444444444444,
+      "opt_tick_trade_count_per_second": 0.348888888888889,
+      "opt_tick_trade_volume_per_second": 2.261111111111111,
+      "opt_tick_trade_vwap_mid_bps": -1812.6192643959016,
+      "opt_tick_signed_volume_fraction": -0.285012285012285,
+      "opt_tick_classified_volume_fraction": 0.871744471744472,
+      "reported_trade_count": 550,
+      "reported_contract_volume": 2913,
+      "reported_trade_vwap": 1.599924476484726,
+      "eligible_trade_count": 314,
+      "eligible_contract_volume": 2035,
+      "eligible_trade_vwap": 1.612914004914007,
+      "condition_excluded_trade_count": 236,
+      "condition_excluded_contract_volume": 878,
+      "captured_quote_records": 8131,
+      "captured_trade_records": 550,
+      "reported_condition_code_combinations": {
+        "[209]": 314,
+        "[219]": 27,
+        "[227]": 194,
+        "[232]": 6,
+        "[233]": 7,
+        "[236]": 2
+      },
+      "null_numeric_features": []
+    },
+    {
+      "request_id": "4e7208eb2134ac2a2b1ecd04f661784ce7fefe4566c770826c14acb5d36c3a25",
+      "symbol": "SPY",
+      "contract": "SPY260825C00762000",
+      "window_start_ns": 1787578200000000000,
+      "window_end_ns": 1787579100000000000,
+      "decision_close_ns": 1787579100000000000,
+      "option_tick_status": "covered",
+      "opt_tick_spread_bps": 173.37482020732907,
+      "opt_tick_size_imbalance": -0.074465029625709,
+      "opt_tick_valid_quote_fraction": 0.99874960625,
+      "opt_tick_quote_age_seconds": 0.112209853,
+      "opt_tick_quote_updates_per_second": 10.758888888888889,
+      "opt_tick_trade_count_per_second": 0.05,
+      "opt_tick_trade_volume_per_second": 0.115555555555556,
+      "opt_tick_trade_vwap_mid_bps": 3030.5183946488314,
+      "opt_tick_signed_volume_fraction": -0.125,
+      "opt_tick_classified_volume_fraction": 0.798076923076923,
+      "reported_trade_count": 98,
+      "reported_contract_volume": 223,
+      "reported_trade_vwap": 2.979282511210763,
+      "eligible_trade_count": 45,
+      "eligible_contract_volume": 104,
+      "eligible_trade_vwap": 2.997019230769231,
+      "condition_excluded_trade_count": 53,
+      "condition_excluded_contract_volume": 119,
+      "captured_quote_records": 9683,
+      "captured_trade_records": 98,
+      "reported_condition_code_combinations": {
+        "[209]": 45,
+        "[219]": 1,
+        "[227]": 44,
+        "[232]": 5,
+        "[233]": 3
+      },
+      "null_numeric_features": []
+    }
+  ],
+  "preservation": {
+    "main_candidate_or_runtime_modified": false,
+    "original_capture_modified": false,
+    "original_capture_policy_modified": false,
+    "network_requests_by_materializer": 0,
+    "original_draft_task_or_store_modified": false
+  },
+  "limitations": [
+    "Coverage is complete only for these two requested 15-minute windows.",
+    "Historical SIP availability does not establish live local receipt latency.",
+    "The explicit condition 209 policy is reference-bound research input; unknown, absent or mixed unapproved conditions remain excluded.",
+    "Eligible quote-test signed volume is an estimate, not observed aggressor intent.",
+    "No model training, predictive comparison, deployment or admission was performed."
+  ],
+  "model_admission": false,
+  "previous_draft_artifacts": {
+    "task_sha256": "12a3f6f69d7ee29fd19b08870414a4a2e4d40db52bb570e9e9e8d907bca2544f",
+    "store_sha256": "f16b43be10e56a4d368a2bfdaecf707418e1a86d20f920036167238203b8793d",
+    "task_path": "/tmp/healys-option-tick-selection-20260906/prepared/task.json",
+    "store_path": "/tmp/healys-option-tick-selection-20260906/store",
+    "previous_report_sha256": "0e90078f2547795db213134a62839212d16a857515b8b634859f22190df18275",
+    "original_files_preserved_sha256": {
+      "policy.json": "bcec944f5eb1a267f05097646ed2c70a93d7ddd5bbe6b2ba5cd567528b67cff6",
+      "selection.json": "9f1e153fd58908c22e9ccf95696cb0809b23ca4e49e20cc2451c4b88a4d41387",
+      "requests.json": "ccc153b74b1399b36b52c74841f5b98e908d11b99033772843c7d98aab174a13",
+      "store/manifest.json": "2123b1d9a59e43de48ebcaa10d5d4ff61b607c49cdd7d5c2a2f2befda61132a3",
+      "store/features.parquet": "2cf6bf899e043a5024d569f2d227ac3834a5b0c9040999d974c9519b05884ac8",
+      "store/task.json": "5e82c300e3c445cbedbe42ad7f50947cbeb734118b88ce25a111619a64caa5fb",
+      "prepared/manifest.json": "ac3e462bc47fb2d13b96b42a9efde7a4547cbfd8a429f5eff5892e45cd176786",
+      "prepared/capture_plan.json": "5c5d8bef681c932eed601e51efb29671b59bdb208f41dd2c2c92057c6820aa87",
+      "prepared/task.json": "5e82c300e3c445cbedbe42ad7f50947cbeb734118b88ce25a111619a64caa5fb"
+    },
+    "purpose": "historical draft evidence; active references now use durable project paths"
+  },
+  "durable_promotion": {
+    "path": "/home/healy/Coding/HealysBacktester/nn_meta/option_tick_features/v6-selected-pilot-20260906",
+    "source_checkout": "/home/healy/Coding/HealysBacktester",
+    "source_identity": {
+      "source_sha256": {
+        "nn_meta/option_tick_dataset.py": "2cbe0071bb154cef94898250b98ded3deaf2177986ba7d456b1ed682edc4e7c2",
+        "nn_meta/decision_contracts.py": "f6dc888d6f268c872a055ea55ab92f391a0235cb50214d8dd5e307511e274ea2",
+        "options/tick_features.py": "52af1a94e254e3f456b754efa7376d0abe6e72b80c42016cb834dd7035e0a42b",
+        "options/data/massive_ticks.py": "a336e3aac4fb2017d1e70a10bc68df387c8eb34291e98a498d407d28e278f959",
+        "options/data/provider.py": "cb6b3a285ada875136154b667e62c204167d78ef25807fc371e5a9383c69b452",
+        "options/data/hybrid_provider.py": "3fee29bcacc3186504ce2382bc2e42810dae0ce9d7dc9287dc54b3a6d28a2d67",
+        "options/selection/contract_selector.py": "bbe465bbf86cf76aab92f9837cca4df371fa924a3e283ced3bdd045c7ee95bfd",
+        "nn_meta/price_basis.py": "fb6489c469181c2a7e70bb6873bfd9f7c002f82dfeb2296bcdb771d2e504abd7",
+        "scripts/capture_option_ticks.py": "36d76d3ad25f74b2cd3c3bee10f537df01b2d9b684e8a128c823c8b53d9aed16"
+      },
+      "runtime": {
+        "python": "3.12.14",
+        "numpy": "1.26.4",
+        "pandas": "2.2.3",
+        "pyarrow": "25.0.1"
+      }
+    },
+    "requests_copied_byte_exact": true,
+    "selection_evidence_copied_byte_exact": true,
+    "condition_reference_uses_main_path": true,
+    "task_has_no_temporary_path_dependencies": true,
+    "feature_rows_equal_previous_draft_byte_values": true,
+    "original_draft_artifacts_preserved": true,
+    "main_source_files_modified": false,
+    "raw_capture_modified": false,
+    "network_requests": 0
+  }
+}

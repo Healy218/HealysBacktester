@@ -8,6 +8,7 @@ from __future__ import annotations
 import argparse
 from copy import deepcopy
 import csv
+import difflib
 import hashlib
 import inspect
 import io
@@ -30,6 +31,135 @@ ADAPTERS = {
     "U7CZ8jtj": ("v3.tv_fibonacci", "fibonacci_trend_continuation"),
     "f4N0F439": ("v3.tv_uptrick", "uptrick_adaptive_trend"),
 }
+
+INSTRUMENTATION_HEADER = (
+    '\n// Reviewed capture observations only; original source above is unchanged.\n'
+)
+
+
+def instrumentation_append(plots):
+    """Render a narrow append-only observation grammar; no new state or requests.
+
+    Review still must establish that identifiers refer to the intended source
+    state. This renderer does not compile Pine or authenticate a reviewer.
+    """
+    _require(isinstance(plots, list) and 0 < len(plots) <= 32, "declare 1..32 observation plots")
+    titles, outputs, rendered = set(), set(), [INSTRUMENTATION_HEADER]
+    identifier = r"[A-Za-z_][A-Za-z0-9_]*"
+    for plot in plots:
+        _require(isinstance(plot, dict) and set(plot) == {"title", "expression", "kind", "python_column"},
+                 "observation plot fields differ from the supported schema")
+        title, expression, kind, output = (plot[k] for k in ("title", "expression", "kind", "python_column"))
+        _require(isinstance(title, str) and re.fullmatch(r"TVF:[A-Za-z0-9_.:-]+", title)
+                 and title not in titles, "unique TVF observation plot title required")
+        _require(output is None or (_text(output) and output not in outputs), "ambiguous Python observation binding")
+        _require(kind in ("numeric", "event"), "observation kind must be numeric or event")
+        _require(isinstance(expression, str), "observation expression must be text")
+        if kind == "numeric":
+            safe = bool(re.fullmatch(identifier, expression)) or expression in {"ta.atr(14)", "ta.vwap(hlc3)"}
+        else:
+            safe = bool(re.fullmatch(rf"{identifier}(?: and {identifier})? \? 1 : 0", expression))
+            safe |= expression == 'timeframe.change("2D") ? 1 : 0'
+            safe |= expression in {f"{name} ? 1 : 0" for name in
+                                   ("barstate.isconfirmed", "barstate.islast", "session.isfirstbar", "session.isfirstbar_regular")}
+        _require(safe, "unsupported observation expression: no arbitrary new computation or state")
+        titles.add(title)
+        if output is not None:
+            outputs.add(output)
+        rendered.append(f'plot({expression}, "{title}", display=display.data_window)\n')
+    return "".join(rendered).encode()
+
+
+def prepare_instrumentation_receipt(script_id, instrumented_source, plots):
+    """Bind exact original bytes and an observation-only suffix; review is unset."""
+    entry = _entry(script_id)
+    original = (ROOT / entry["source"]["path"]).read_bytes()
+    _require(hashlib.sha256(original).hexdigest() == entry["source"]["sha256"], "pinned source changed")
+    appended = instrumentation_append(plots)
+    actual = Path(instrumented_source).read_bytes()
+    _require(actual == original + appended, "instrumented source is not the exact original plus declared plots")
+    diff = "".join(difflib.unified_diff(original.decode().splitlines(keepends=True),
+                                      actual.decode().splitlines(keepends=True),
+                                      fromfile="pinned-publication", tofile="instrumented-capture"))
+    return {"schema_version": 1, "kind": "append_only_observation_plots", "script_id": script_id,
+            "original_source": {key: entry["source"][key] for key in ("pine_id", "publication_version", "sha256")},
+            "original_prefix_bytes": len(original), "instrumented_sha256": hashlib.sha256(actual).hexdigest(),
+            "append_sha256": hashlib.sha256(appended).hexdigest(), "diff": diff,
+            "diff_sha256": hashlib.sha256(diff.encode()).hexdigest(), "plots": deepcopy(plots),
+            "review": {"reviewed": False, "reviewer": None, "reviewed_at": None,
+                       "reviewed_diff_sha256": None, "observation_semantics_verified": False},
+            "compiled_on_tradingview": False, "model_admission": False}
+
+
+def _validate_instrumentation(metadata, manifest, source_path):
+    _require(isinstance(manifest, dict) and source_path is not None, "instrumentation receipt and source file required")
+    expected = prepare_instrumentation_receipt(metadata["script_id"], source_path, manifest.get("plots"))
+    for key in set(expected) - {"review", "compiled_on_tradingview"}:
+        _require(manifest.get(key) == expected[key], f"instrumentation receipt mismatch: {key}")
+    _require(set(manifest) == set(expected), "unknown instrumentation receipt fields")
+    review = manifest.get("review", {})
+    _require(isinstance(review, dict) and set(review) == set(expected["review"]), "invalid instrumentation review fields")
+    _require(review.get("reviewed") is True and review.get("observation_semantics_verified") is True
+             and _text(review.get("reviewer")), "independent observation/source review is required")
+    reviewed_at = pd.Timestamp(review.get("reviewed_at"))
+    _require(not pd.isna(reviewed_at) and reviewed_at.tzinfo is not None, "reviewed_at must include UTC offset")
+    _require(review.get("reviewed_diff_sha256") == expected["diff_sha256"], "review names a different source diff")
+    _require(manifest.get("compiled_on_tradingview") is True, "actual TradingView compilation attestation required")
+    binding = metadata.get("source_capture")
+    _require(binding == {"kind": "reviewed_append_only_plots", "receipt_sha256": hash_json(manifest),
+                         "instrumented_source_verified_against_chart": True}, "instrumented chart source binding mismatch")
+    _require(metadata.get("source_verified_against_chart") is False,
+             "instrumented source cannot be relabeled as the unmodified publication")
+    plots = {p["title"]: p for p in manifest["plots"]}
+    used = set()
+    mappings = metadata.get("columns", [])
+    _require(isinstance(mappings, list) and all(isinstance(mapping, dict) for mapping in mappings),
+             "each output mapping must be an object")
+    for mapping in mappings:
+        title = mapping.get("instrumented_plot_title")
+        _require(title in plots and title not in used, "map each instrumented plot title explicitly and uniquely")
+        plot = plots[title]
+        _require(plot["python_column"] is not None and plot["python_column"] == mapping.get("python_column")
+                 and plot["kind"] == mapping.get("kind"), "output mapping differs from reviewed plot semantics")
+        used.add(title)
+    return {"kind": "reviewed_append_only_plots", "receipt": deepcopy(manifest),
+            "receipt_sha256": hash_json(manifest), "instrumented_source_path": str(Path(source_path).resolve()),
+            "executed_source_sha256": expected["instrumented_sha256"],
+            "review_authenticated": False, "compilation_authenticated": False}
+
+
+def _comparison_scope(metadata, bars):
+    scope = metadata.get("comparison_scope", {"kind": "full_series"})
+    _require(isinstance(scope, dict), "comparison scope must be an object")
+    if scope == {"kind": "full_series"}:
+        return scope, np.arange(len(bars))
+    _require(metadata.get("schema_version") == 2 and set(scope) == {"kind", "terminal_bar_open", "execution"}
+             and scope.get("kind") == "terminal_snapshot", "unsupported explicit comparison scope")
+    terminal = pd.Timestamp(scope["terminal_bar_open"])
+    _require(terminal.tzinfo is not None and terminal == bars.index[-1], "snapshot must select the final input bar")
+    execution = scope["execution"]
+    _require(isinstance(execution, dict) and set(execution) == {"mode", "history_origin", "steps", "sequence_verified"},
+             "explicit replay execution sequence required")
+    _require(execution["sequence_verified"] is True, "replay execution sequence verification required")
+    origin = pd.Timestamp(execution["history_origin"])
+    _require(origin.tzinfo is not None and origin == bars.index[0], "snapshot calculation history origin mismatch")
+    steps = execution["steps"]
+    _require(isinstance(steps, list) and bool(steps), "record the actual replay/load steps")
+    parsed = []
+    for step in steps:
+        _require(isinstance(step, dict) and set(step) == {"action", "terminal_bar_open"}, "invalid replay step")
+        stamp = pd.Timestamp(step["terminal_bar_open"])
+        _require(stamp.tzinfo is not None and stamp in bars.index, "replay step missing from input history")
+        parsed.append(stamp)
+    _require(steps[0]["action"] == "load" and parsed[-1] == terminal, "execution must load and end at the declared terminal")
+    if execution["mode"] == "fresh_load":
+        _require(len(steps) == 1, "fresh-load snapshot contains replay steps")
+    else:
+        _require(execution["mode"] == "continuous_replay", "unsupported execution mode")
+        _require(all(step["action"] == "forward" for step in steps[1:]), "replay sequence must use single-bar forward steps")
+        start = bars.index.get_loc(parsed[0])
+        _require(parsed == list(bars.index[start:]), "replay sequence skips/reorders input bars")
+    return scope, np.asarray([len(bars) - 1])
 
 
 class FixtureValidationError(ValueError):
@@ -182,16 +312,29 @@ def prepare_template(csv_path, script_id, input_spec, timezone):
     }
 
 
-def _validate_intake(csv_path, metadata):
+def _validate_intake(csv_path, metadata, *, instrumentation_manifest=None, instrumented_source=None):
     _require(isinstance(metadata, dict), "metadata must be an object")
-    _require(metadata.get("schema_version") == 1, "unsupported metadata schema")
+    _require(metadata.get("schema_version") in (1, 2), "unsupported metadata schema")
     entry = _entry(metadata.get("script_id"))
     _require(metadata.get("fixture_identity_sha256") == entry["fixture_identity_sha256"],
              "stale fixture identity: recapture/review changed source or runtime")
     _require(metadata.get("source") == {key: entry["source"][key] for key in
                                         ("pine_id", "publication_version", "sha256")}, "source revision mismatch")
-    _require(metadata.get("source_verified_against_chart") is True and
-             metadata.get("inputs_verified_against_chart") is True, "chart source/input verification is required")
+    if metadata.get("schema_version") == 2:
+        _require(isinstance(metadata.get("source_capture"), dict), "explicit source capture object required")
+        if metadata.get("source_capture", {}).get("kind") == "reviewed_append_only_plots":
+            _validate_instrumentation(metadata, instrumentation_manifest, instrumented_source)
+        else:
+            _require(metadata.get("source_capture") == {"kind": "unmodified_publication"},
+                     "explicit executed-source kind required for schema 2")
+            _require(instrumentation_manifest is None and instrumented_source is None,
+                     "unmodified capture cannot receive instrumentation evidence")
+            _require(metadata.get("source_verified_against_chart") is True, "chart source verification is required")
+    else:
+        _require("source_capture" not in metadata and instrumentation_manifest is None and instrumented_source is None,
+                 "instrumented capture requires schema 2")
+        _require(metadata.get("source_verified_against_chart") is True, "chart source verification is required")
+    _require(metadata.get("inputs_verified_against_chart") is True, "chart input verification is required")
     capture = metadata.get("capture", {})
     _require(isinstance(capture, dict), "capture must be an object")
     _require(all(_text(capture.get(key)) for key in ("symbol", "exchange", "timeframe", "timezone",
@@ -236,11 +379,15 @@ def _validate_intake(csv_path, metadata):
 def local_csv_metadata(metadata, csv_path, producer):
     """Bind a caller-produced canonical local CSV; this does not authenticate it."""
     _require(_text(producer), "identify the local calculation producer")
-    return {"schema_version": 1, "producer": producer, "csv_sha256": file_sha256(csv_path),
+    result = {"schema_version": 1, "producer": producer, "csv_sha256": file_sha256(csv_path),
             "fixture_identity_sha256": metadata["fixture_identity_sha256"],
             "input_ohlcv_sha256": metadata["input"]["ohlcv_sha256"],
             "capture_sha256": hash_json(metadata["capture"]),
             "parameters_sha256": hash_json(metadata["parameters"])}
+    if metadata.get("schema_version") == 2:
+        result.update(schema_version=2, source_capture_sha256=hash_json(metadata["source_capture"]),
+                      comparison_scope_sha256=hash_json(metadata.get("comparison_scope", {"kind": "full_series"})))
+    return result
 
 
 def _local_outputs(metadata, bars, digest, csv_path, local_metadata):
@@ -269,10 +416,17 @@ def _events(values, name, encoding):
     return numbers == 1
 
 
-def compare_fixture(csv_path, metadata, *, local_csv=None, local_metadata=None):
+def compare_fixture(csv_path, metadata, *, local_csv=None, local_metadata=None,
+                    instrumentation_manifest=None, instrumented_source=None):
     metadata, local_metadata = deepcopy(metadata), deepcopy(local_metadata)
+    instrumentation_manifest = deepcopy(instrumentation_manifest)
     validator_hash = file_sha256(__file__)
-    entry, external, bars, digest = _validate_intake(csv_path, metadata)
+    entry, external, bars, digest = _validate_intake(csv_path, metadata,
+        instrumentation_manifest=instrumentation_manifest, instrumented_source=instrumented_source)
+    instrumentation = (_validate_instrumentation(metadata, instrumentation_manifest, instrumented_source)
+                       if instrumentation_manifest is not None else None)
+    scope, positions = _comparison_scope(metadata, bars)
+    comparison_index = bars.index[positions]
     local, mode = _local_outputs(metadata, bars, digest, local_csv, local_metadata)
     _require(local.index.equals(bars.index), "local output timestamps differ from input")
     mappings = metadata.get("columns")
@@ -288,35 +442,53 @@ def compare_fixture(csv_path, metadata, *, local_csv=None, local_metadata=None):
         _require(tv not in [metadata["input"]["timestamp_column"], *metadata["input"]["ohlcv_columns"].values()]
                  and py not in ["time", *OHLCV], "output mappings cannot compare input columns")
         kind, policy = mapping.get("kind"), mapping.get("nan_policy")
+        expectation = mapping.get("expectation", "available")
+        _require(expectation in ("available", "unavailable"), "unsupported output availability expectation")
         if mode == "built_in" and pd.api.types.is_bool_dtype(local[py].dtype):
             _require(kind == "event", f"{py}: built-in boolean outputs require kind=event")
         atol, rtol = mapping.get("atol"), mapping.get("rtol")
         _require(all(isinstance(v, (float, int)) and not isinstance(v, bool) and np.isfinite(v) and v >= 0
                      for v in (atol, rtol)), "declare finite nonnegative absolute/relative tolerances")
         if kind == "event":
+            _require(expectation == "available", "event outputs require exact events, not unavailable numeric scope")
             encoding = mapping.get("event_encoding")
             _require(atol == rtol == 0, "event comparison has zero numerical/time tolerance")
             _require((encoding, policy) in (("zero_one", "forbid"), ("one_or_missing", "missing_is_false")),
                      "declare event encoding and matching missing-value policy")
-            expected = _events(external[tv], tv, encoding)
-            actual = _events(local[py], py, "zero_one")
+            expected = _events(external[tv].iloc[positions], tv, encoding)
+            actual = _events(local[py].iloc[positions], py, "zero_one")
             matched = expected == actual
             details = {"tv_true_count": int(expected.sum()), "python_true_count": int(actual.sum())}
         else:
             _require(kind == "numeric" and policy in ("match", "forbid"), "unsupported kind/NaN policy")
-            expected = _numbers(external[tv], tv, missing=policy == "match")
-            actual = _numbers(local[py], py, missing=policy == "match")
+            expected = _numbers(external[tv].iloc[positions], tv, missing=policy == "match")
+            actual = _numbers(local[py].iloc[positions], py, missing=policy == "match")
             finite = np.isfinite(expected) & np.isfinite(actual)
-            _require(finite.any(), f"{tv}: no finite comparison values")
-            # The exported TradingView value is the relative-tolerance reference.
-            matched = np.isclose(actual, expected, atol=atol, rtol=rtol, equal_nan=policy == "match")
-            details = {"finite_pair_count": int(finite.sum()),
-                       "tv_nan_count": int(np.isnan(expected).sum()), "python_nan_count": int(np.isnan(actual).sum()),
-                       "max_absolute_error": float(np.max(np.abs(actual[finite] - expected[finite])))}
+            if expectation == "unavailable":
+                _require(policy == "match" and atol == rtol == 0,
+                         "unavailable expectation requires matching NaNs and zero numerical tolerances")
+                _require(np.isnan(expected).all() and np.isnan(actual).all(),
+                         f"{tv}: unavailable expectation requires every selected value missing on both sides")
+                matched = np.ones(len(positions), dtype=bool)
+                details = {"finite_pair_count": 0, "tv_nan_count": len(positions), "python_nan_count": len(positions),
+                           "max_absolute_error": None, "evidence_kind": "missingness_only"}
+            else:
+                _require(finite.any(), f"{tv}: no finite comparison values")
+                # The exported TradingView value is the relative-tolerance reference.
+                matched = np.isclose(actual, expected, atol=atol, rtol=rtol, equal_nan=policy == "match")
+                details = {"finite_pair_count": int(finite.sum()),
+                           "tv_nan_count": int(np.isnan(expected).sum()), "python_nan_count": int(np.isnan(actual).sum()),
+                           "max_absolute_error": float(np.max(np.abs(actual[finite] - expected[finite]))),
+                           "evidence_kind": "numerical"}
         failures = np.flatnonzero(~matched)
         results.append({**mapping, **details, "matched": not len(failures), "mismatch_count": len(failures),
-                        "first_mismatch_timestamps": [bars.index[i].isoformat() for i in failures[:10]]})
-    report = {"schema_version": 1, "status": "matched" if all(row["matched"] for row in results) else "mismatch",
+                        "status": "mismatch" if len(failures) else "matched_unavailable" if expectation == "unavailable" else "matched",
+                        "first_mismatch_timestamps": [comparison_index[i].isoformat() for i in failures[:10]]})
+    unavailable = [row["python_column"] for row in results if row["status"] == "matched_unavailable"]
+    status = ("mismatch" if not all(row["matched"] for row in results) else
+              "matched_unavailable" if len(unavailable) == len(results) else
+              "matched_with_unavailable" if unavailable else "matched")
+    report = {"schema_version": 1, "status": status,
             "script_id": entry["script_id"], "fixture_identity_sha256": entry["fixture_identity_sha256"],
             "source": metadata["source"], "capture": metadata["capture"], "parameters": metadata["parameters"],
             "input_ohlcv_sha256": digest, "tradingview_csv_sha256": external.attrs["csv_sha256"],
@@ -324,9 +496,13 @@ def compare_fixture(csv_path, metadata, *, local_csv=None, local_metadata=None):
             "calculation_environment": {"python": platform.python_version(), "numpy": np.__version__,
                                         "pandas": pd.__version__},
             "local_mode": mode, "local_metadata": local_metadata,
-            "rows": len(bars), "comparison": results, "active_pool_admission": False,
+            "rows": len(bars), "compared_rows": len(positions), "comparison_scope": scope,
+            "compared_bar_opens": [stamp.isoformat() for stamp in comparison_index] if len(positions) == 1 else None,
+            "source_capture": metadata.get("source_capture", {"kind": "unmodified_publication"}),
+            "instrumentation": instrumentation, "comparison": results, "active_pool_admission": False,
+            "unavailable_columns": unavailable,
             "origin_authenticated": False,
-            "scope_note": "Only the declared columns/history are compared. Capture and precomputed provenance are user attestations. No admission or other-scope parity is implied."}
+            "scope_note": "Only the declared columns/history are compared. matched_unavailable is exact missingness evidence, not finite numerical parity. Capture and precomputed provenance are user attestations. No admission or other-scope parity is implied."}
     _assert_report_inputs_stable(report, csv_path, local_csv)
     return report
 
@@ -338,6 +514,10 @@ def _assert_report_inputs_stable(report, csv_path, local_csv):
     _require(file_sha256(__file__) == report["validator_sha256"], "validator changed during comparison")
     _require(_entry(report["script_id"])["fixture_identity_sha256"] == report["fixture_identity_sha256"],
              "source/runtime identity changed during comparison")
+    if report.get("instrumentation") is not None:
+        evidence = report["instrumentation"]
+        _require(file_sha256(evidence["instrumented_source_path"]) == evidence["executed_source_sha256"],
+                 "instrumented source changed during comparison")
 
 
 def _report_destination(path, inputs):
@@ -378,6 +558,8 @@ def main():
     validate.add_argument("--metadata", required=True)
     validate.add_argument("--local-csv")
     validate.add_argument("--local-metadata")
+    validate.add_argument("--instrumentation-manifest")
+    validate.add_argument("--instrumented-source")
     validate.add_argument("--report", required=True)
     args = parser.parse_args()
     try:
@@ -386,20 +568,25 @@ def main():
                     "timestamp_semantics": "bar_open", "ohlcv_columns": dict(zip(OHLCV, args.ohlcv_columns))}
             result = prepare_template(args.csv, args.script_id, spec, args.timezone)
         else:
-            inputs = [p for p in (args.csv, args.metadata, args.local_csv, args.local_metadata) if p is not None]
+            inputs = [p for p in (args.csv, args.metadata, args.local_csv, args.local_metadata,
+                                  args.instrumentation_manifest, args.instrumented_source) if p is not None]
             target = _report_destination(args.report, inputs)
             hashes = {p: file_sha256(p) for p in inputs}
             result = compare_fixture(args.csv, load_metadata(args.metadata), local_csv=args.local_csv,
-                                     local_metadata=load_metadata(args.local_metadata) if args.local_metadata else None)
+                                     local_metadata=load_metadata(args.local_metadata) if args.local_metadata else None,
+                                     instrumentation_manifest=load_metadata(args.instrumentation_manifest) if args.instrumentation_manifest else None,
+                                     instrumented_source=args.instrumented_source)
             _require(all(file_sha256(p) == digest for p, digest in hashes.items()), "intake files changed before report write")
             _assert_report_inputs_stable(result, args.csv, args.local_csv)
             result["metadata_file_sha256"] = hashes[args.metadata]
             if args.local_metadata:
                 result["local_metadata_file_sha256"] = hashes[args.local_metadata]
+            if args.instrumentation_manifest:
+                result["instrumentation_manifest_file_sha256"] = hashes[args.instrumentation_manifest]
             _report_destination(target, inputs)
             _write_report(target, result)
         print(json.dumps(result, indent=2, allow_nan=False))
-        return 0 if result.get("status", "matched") == "matched" else 1
+        return 0 if result.get("status", "matched") in ("matched", "matched_unavailable", "matched_with_unavailable") else 1
     except (ValueError, TypeError, KeyError, OSError, csv.Error) as error:
         parser.exit(2, f"fixture validation failed: {error}\n")
 

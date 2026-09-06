@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "kind": "append_only_observation_plots",
+  "script_id": "U7CZ8jtj",
+  "original_source": {
+    "pine_id": "PUB;dbdf1cd29fa94c81b0733f0766c3722a",
+    "publication_version": "1",
+    "sha256": "93aa470927cedab27857b2ae5f33810220f04c7d26ccdfc73fd43c03a3390179"
+  },
+  "original_prefix_bytes": 12986,
+  "instrumented_sha256": "32b7abf02dbb253884a078426b5e7c51e84801bbc06ed6e8ac930f6ecf7a4753",
+  "append_sha256": "aefeea2ac87be22ae91cd8215bc0131dd7de9b60ca7dd26fd5accebce0cdd610",
+  "diff": "--- pinned-publication\n+++ instrumented-capture\n@@ -190,4 +190,32 @@\n alertcondition(bullFibCross, title = \"Bullish Fibonacci Close\")\n alertcondition(bearFibCross, title = \"Bearish Fibonacci Close\")\n alertcondition(trendFlip and bullish, title = \"Bullish Trend Change\")\n-alertcondition(trendFlip and bearish, title = \"Bearish Trend Change\")+alertcondition(trendFlip and bearish, title = \"Bearish Trend Change\")\n+// Reviewed capture observations only; original source above is unchanged.\n+plot(v, \"TVF:midline\", display=display.data_window)\n+plot(volatility, \"TVF:volatility\", display=display.data_window)\n+plot(b1, \"TVF:upper_band\", display=display.data_window)\n+plot(b2, \"TVF:lower_band\", display=display.data_window)\n+plot(direction, \"TVF:direction\", display=display.data_window)\n+plot(bull236, \"TVF:bull_0.236\", display=display.data_window)\n+plot(bull382, \"TVF:bull_0.382\", display=display.data_window)\n+plot(bull500, \"TVF:bull_0.500\", display=display.data_window)\n+plot(bull618, \"TVF:bull_0.618\", display=display.data_window)\n+plot(bull786, \"TVF:bull_0.786\", display=display.data_window)\n+plot(bear236, \"TVF:bear_0.236\", display=display.data_window)\n+plot(bear382, \"TVF:bear_0.382\", display=display.data_window)\n+plot(bear500, \"TVF:bear_0.500\", display=display.data_window)\n+plot(bear618, \"TVF:bear_0.618\", display=display.data_window)\n+plot(bear786, \"TVF:bear_0.786\", display=display.data_window)\n+plot(bullFibCross ? 1 : 0, \"TVF:bull_signal\", display=display.data_window)\n+plot(bearFibCross ? 1 : 0, \"TVF:bear_signal\", display=display.data_window)\n+plot(trendFlip ? 1 : 0, \"TVF:trend_flip\", display=display.data_window)\n+plot(trendFlip and bullish ? 1 : 0, \"TVF:bull_flip\", display=display.data_window)\n+plot(trendFlip and bearish ? 1 : 0, \"TVF:bear_flip\", display=display.data_window)\n+plot(volume, \"TVF:Volume\", display=display.data_window)\n+plot(bar_index, \"TVF:bar_index\", display=display.data_window)\n+plot(time_close, \"TVF:time_close_ms\", display=display.data_window)\n+plot(barstate.isconfirmed ? 1 : 0, \"TVF:confirmed\", display=display.data_window)\n+plot(ta.atr(14), \"TVF:atr14\", display=display.data_window)\n+plot(timeframe.change(\"2D\") ? 1 : 0, \"TVF:htf_change_2D\", display=display.data_window)\n+plot(ta.vwap(hlc3), \"TVF:default_vwap\", display=display.data_window)\n",
+  "diff_sha256": "756bfa471e65507624e0a435d880cbc957fbe1d74411aa15919f347b5254a458",
+  "plots": [
+    {
+      "title": "TVF:midline",
+      "expression": "v",
+      "kind": "numeric",
+      "python_column": "midline"
+    },
+    {
+      "title": "TVF:volatility",
+      "expression": "volatility",
+      "kind": "numeric",
+      "python_column": "volatility"
+    },
+    {
+      "title": "TVF:upper_band",
+      "expression": "b1",
+      "kind": "numeric",
+      "python_column": "upper_band"
+    },
+    {
+      "title": "TVF:lower_band",
+      "expression": "b2",
+      "kind": "numeric",
+      "python_column": "lower_band"
+    },
+    {
+      "title": "TVF:direction",
+      "expression": "direction",
+      "kind": "numeric",
+      "python_column": "direction"
+    },
+    {
+      "title": "TVF:bull_0.236",
+      "expression": "bull236",
+      "kind": "numeric",
+      "python_column": "bull_0.236"
+    },
+    {
+      "title": "TVF:bull_0.382",
+      "expression": "bull382",
+      "kind": "numeric",
+      "python_column": "bull_0.382"
+    },
+    {
+      "title": "TVF:bull_0.500",
+      "expression": "bull500",
+      "kind": "numeric",
+      "python_column": "bull_0.500"
+    },
+    {
+      "title": "TVF:bull_0.618",
+      "expression": "bull618",
+      "kind": "numeric",
+      "python_column": "bull_0.618"
+    },
+    {
+      "title": "TVF:bull_0.786",
+      "expression": "bull786",
+      "kind": "numeric",
+      "python_column": "bull_0.786"
+    },
+    {
+      "title": "TVF:bear_0.236",
+      "expression": "bear236",
+      "kind": "numeric",
+      "python_column": "bear_0.236"
+    },
+    {
+      "title": "TVF:bear_0.382",
+      "expression": "bear382",
+      "kind": "numeric",
+      "python_column": "bear_0.382"
+    },
+    {
+      "title": "TVF:bear_0.500",
+      "expression": "bear500",
+      "kind": "numeric",
+      "python_column": "bear_0.500"
+    },
+    {
+      "title": "TVF:bear_0.618",
+      "expression": "bear618",
+      "kind": "numeric",
+      "python_column": "bear_0.618"
+    },
+    {
+      "title": "TVF:bear_0.786",
+      "expression": "bear786",
+      "kind": "numeric",
+      "python_column": "bear_0.786"
+    },
+    {
+      "title": "TVF:bull_signal",
+      "expression": "bullFibCross ? 1 : 0",
+      "kind": "event",
+      "python_column": "bull_signal"
+    },
+    {
+      "title": "TVF:bear_signal",
+      "expression": "bearFibCross ? 1 : 0",
+      "kind": "event",
+      "python_column": "bear_signal"
+    },
+    {
+      "title": "TVF:trend_flip",
+      "expression": "trendFlip ? 1 : 0",
+      "kind": "event",
+      "python_column": "trend_flip"
+    },
+    {
+      "title": "TVF:bull_flip",
+      "expression": "trendFlip and bullish ? 1 : 0",
+      "kind": "event",
+      "python_column": "bull_flip"
+    },
+    {
+      "title": "TVF:bear_flip",
+      "expression": "trendFlip and bearish ? 1 : 0",
+      "kind": "event",
+      "python_column": "bear_flip"
+    },
+    {
+      "title": "TVF:Volume",
+      "expression": "volume",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:bar_index",
+      "expression": "bar_index",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:time_close_ms",
+      "expression": "time_close",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:confirmed",
+      "expression": "barstate.isconfirmed ? 1 : 0",
+      "kind": "event",
+      "python_column": null
+    },
+    {
+      "title": "TVF:atr14",
+      "expression": "ta.atr(14)",
+      "kind": "numeric",
+      "python_column": null
+    },
+    {
+      "title": "TVF:htf_change_2D",
+      "expression": "timeframe.change(\"2D\") ? 1 : 0",
+      "kind": "event",
+      "python_column": null
+    },
+    {
+      "title": "TVF:default_vwap",
+      "expression": "ta.vwap(hlc3)",
+      "kind": "numeric",
+      "python_column": null
+    }
+  ],
+  "review": {
+    "reviewed": false,
+    "reviewer": null,
+    "reviewed_at": null,
+    "reviewed_diff_sha256": null,
+    "observation_semantics_verified": false
+  },
+  "compiled_on_tradingview": false,
+  "model_admission": false
+}

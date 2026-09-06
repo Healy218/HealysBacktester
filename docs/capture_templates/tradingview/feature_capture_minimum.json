@@ -1,0 +1,809 @@
+{
+  "draft_producer": "nn_meta/tradingview_features.py",
+  "draft_sha256": "fac0864ca77cdf5708709beb1112def215ffe7bf439adf7a5e776d708adce137",
+  "feature_contract_version": "2026-09-06-tv13-features-v1",
+  "source_count": 13,
+  "feature_count": 96,
+  "common_numeric_dependency": "TradingView ta.atr(14) on identical complete OHLCV history plus Close",
+  "common_context": "Exact timeframe.change(2D); observed default ta.vwap or separately verified anchor; full timestamp/session and OHLCV identity; explicit history origin",
+  "rows": [
+    {
+      "script_id": "AqRNdhlR",
+      "feature_group": "gaussian",
+      "source_fields": [
+        "bear_signal",
+        "bull_signal",
+        "direction",
+        "smoothed_efficiency",
+        "trend_line",
+        "trend_width"
+      ],
+      "validity_fields": [],
+      "features": [
+        {
+          "name": "tv_gaussian_direction",
+          "field": "direction",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_gaussian_smoothed_efficiency",
+          "field": "smoothed_efficiency",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_gaussian_bull_signal",
+          "field": "bull_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_gaussian_bear_signal",
+          "field": "bear_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_gaussian_trend_line_distance_atr14",
+          "field": "trend_line",
+          "transform": "price_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_gaussian_trend_width_atr14",
+          "field": "trend_width",
+          "transform": "range_atr",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "U7CZ8jtj",
+      "feature_group": "fibonacci",
+      "source_fields": [
+        "bear_signal",
+        "bull_signal",
+        "direction",
+        "midline",
+        "trend_flip",
+        "volatility"
+      ],
+      "validity_fields": [],
+      "features": [
+        {
+          "name": "tv_fibonacci_direction",
+          "field": "direction",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_fibonacci_bull_signal",
+          "field": "bull_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_fibonacci_bear_signal",
+          "field": "bear_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_fibonacci_trend_flip",
+          "field": "trend_flip",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_fibonacci_midline_distance_atr14",
+          "field": "midline",
+          "transform": "price_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_fibonacci_volatility_atr14",
+          "field": "volatility",
+          "transform": "range_atr",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "f4N0F439",
+      "feature_group": "uptrick",
+      "source_fields": [
+        "bear_signal",
+        "bull_signal",
+        "direction",
+        "inner_trail",
+        "regime"
+      ],
+      "validity_fields": [],
+      "features": [
+        {
+          "name": "tv_uptrick_direction",
+          "field": "direction",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_uptrick_regime",
+          "field": "regime",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_uptrick_bull_signal",
+          "field": "bull_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_uptrick_bear_signal",
+          "field": "bear_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_uptrick_inner_trail_distance_atr14",
+          "field": "inner_trail",
+          "transform": "price_atr",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "DkE7UniD",
+      "feature_group": "structure",
+      "source_fields": [
+        "bear_signal",
+        "bull_signal",
+        "high_0",
+        "low_0",
+        "market_direction"
+      ],
+      "validity_fields": [],
+      "features": [
+        {
+          "name": "tv_structure_market_direction",
+          "field": "market_direction",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_structure_bull_signal",
+          "field": "bull_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_structure_bear_signal",
+          "field": "bear_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_structure_high_0_distance_atr14",
+          "field": "high_0",
+          "transform": "price_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_structure_low_0_distance_atr14",
+          "field": "low_0",
+          "transform": "price_atr",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "Ej53t8Wv",
+      "feature_group": "sr",
+      "source_fields": [
+        "bear_signal",
+        "bull_signal",
+        "channel_1_bottom",
+        "channel_1_strength",
+        "channel_1_top",
+        "inside_channel"
+      ],
+      "validity_fields": [],
+      "features": [
+        {
+          "name": "tv_sr_inside_channel",
+          "field": "inside_channel",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_sr_bull_signal",
+          "field": "bull_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_sr_bear_signal",
+          "field": "bear_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_sr_channel_1_top_distance_atr14",
+          "field": "channel_1_top",
+          "transform": "price_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_sr_channel_1_bottom_distance_atr14",
+          "field": "channel_1_bottom",
+          "transform": "price_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_sr_channel_1_strength",
+          "field": "channel_1_strength",
+          "transform": "value",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "c25U5rsF",
+      "feature_group": "probability",
+      "source_fields": [
+        "active_side",
+        "long_reference_win_pct",
+        "raw_long_signal",
+        "raw_short_signal",
+        "resolved_total",
+        "rsi",
+        "short_reference_win_pct"
+      ],
+      "validity_fields": [],
+      "features": [
+        {
+          "name": "tv_probability_rsi_fraction",
+          "field": "rsi",
+          "transform": "percent",
+          "valid_when": null
+        },
+        {
+          "name": "tv_probability_raw_long_signal",
+          "field": "raw_long_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_probability_raw_short_signal",
+          "field": "raw_short_signal",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_probability_active_side",
+          "field": "active_side",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_probability_resolved_total",
+          "field": "resolved_total",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_probability_long_reference_win_pct_fraction",
+          "field": "long_reference_win_pct",
+          "transform": "percent",
+          "valid_when": null
+        },
+        {
+          "name": "tv_probability_short_reference_win_pct_fraction",
+          "field": "short_reference_win_pct",
+          "transform": "percent",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "nW5oGfdO",
+      "feature_group": "ict",
+      "source_fields": [
+        "ASIA_break_high",
+        "ASIA_break_low",
+        "ASIA_in_session",
+        "ASIA_range_value",
+        "LNDN_break_high",
+        "LNDN_break_low",
+        "LNDN_in_session",
+        "LNDN_range_value",
+        "NYAM_break_high",
+        "NYAM_break_low",
+        "NYAM_in_session",
+        "NYAM_range_value",
+        "NYPM_break_high",
+        "NYPM_break_low",
+        "NYPM_in_session",
+        "NYPM_range_value"
+      ],
+      "validity_fields": [],
+      "features": [
+        {
+          "name": "tv_ict_ASIA_in_session",
+          "field": "ASIA_in_session",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_ASIA_break_high",
+          "field": "ASIA_break_high",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_ASIA_break_low",
+          "field": "ASIA_break_low",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_ASIA_range_value_atr14",
+          "field": "ASIA_range_value",
+          "transform": "range_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_LNDN_in_session",
+          "field": "LNDN_in_session",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_LNDN_break_high",
+          "field": "LNDN_break_high",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_LNDN_break_low",
+          "field": "LNDN_break_low",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_LNDN_range_value_atr14",
+          "field": "LNDN_range_value",
+          "transform": "range_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_NYAM_in_session",
+          "field": "NYAM_in_session",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_NYAM_break_high",
+          "field": "NYAM_break_high",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_NYAM_break_low",
+          "field": "NYAM_break_low",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_NYAM_range_value_atr14",
+          "field": "NYAM_range_value",
+          "transform": "range_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_NYPM_in_session",
+          "field": "NYPM_in_session",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_NYPM_break_high",
+          "field": "NYPM_break_high",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_NYPM_break_low",
+          "field": "NYPM_break_low",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_ict_NYPM_range_value_atr14",
+          "field": "NYPM_range_value",
+          "transform": "range_atr",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "KcnNgwDI",
+      "feature_group": "order_blocks",
+      "source_fields": [
+        "bear_active_count",
+        "bear_latest_trigger",
+        "bear_retest",
+        "bull_active_count",
+        "bull_latest_trigger",
+        "bull_retest"
+      ],
+      "validity_fields": [],
+      "features": [
+        {
+          "name": "tv_order_blocks_bull_active_count",
+          "field": "bull_active_count",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_order_blocks_bear_active_count",
+          "field": "bear_active_count",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_order_blocks_bull_retest",
+          "field": "bull_retest",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_order_blocks_bear_retest",
+          "field": "bear_retest",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_order_blocks_bull_latest_trigger_distance_atr14",
+          "field": "bull_latest_trigger",
+          "transform": "price_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_order_blocks_bear_latest_trigger_distance_atr14",
+          "field": "bear_latest_trigger",
+          "transform": "price_atr",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "hkKioUnL",
+      "feature_group": "amd",
+      "source_fields": [
+        "all_closed",
+        "compression_rank",
+        "long_entry",
+        "phase",
+        "range_width",
+        "short_entry"
+      ],
+      "validity_fields": [],
+      "features": [
+        {
+          "name": "tv_amd_phase",
+          "field": "phase",
+          "transform": "phase",
+          "valid_when": null
+        },
+        {
+          "name": "tv_amd_long_entry",
+          "field": "long_entry",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_amd_short_entry",
+          "field": "short_entry",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_amd_compression_rank_fraction",
+          "field": "compression_rank",
+          "transform": "percent",
+          "valid_when": null
+        },
+        {
+          "name": "tv_amd_range_width_atr14",
+          "field": "range_width",
+          "transform": "range_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_amd_all_closed",
+          "field": "all_closed",
+          "transform": "value",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "XWuYNmhD",
+      "feature_group": "setup",
+      "source_fields": [
+        "BRT_raw_long",
+        "BRT_raw_short",
+        "DIV_raw_long",
+        "DIV_raw_short",
+        "EMA_raw_long",
+        "EMA_raw_short",
+        "ORB_raw_long",
+        "ORB_raw_short",
+        "SWEEP_raw_long",
+        "SWEEP_raw_short",
+        "VWAP_raw_long",
+        "VWAP_raw_short",
+        "or_done",
+        "session_gap",
+        "vwap"
+      ],
+      "validity_fields": [],
+      "features": [
+        {
+          "name": "tv_setup_VWAP_raw_long",
+          "field": "VWAP_raw_long",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_VWAP_raw_short",
+          "field": "VWAP_raw_short",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_EMA_raw_long",
+          "field": "EMA_raw_long",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_EMA_raw_short",
+          "field": "EMA_raw_short",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_BRT_raw_long",
+          "field": "BRT_raw_long",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_BRT_raw_short",
+          "field": "BRT_raw_short",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_SWEEP_raw_long",
+          "field": "SWEEP_raw_long",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_SWEEP_raw_short",
+          "field": "SWEEP_raw_short",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_DIV_raw_long",
+          "field": "DIV_raw_long",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_DIV_raw_short",
+          "field": "DIV_raw_short",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_ORB_raw_long",
+          "field": "ORB_raw_long",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_ORB_raw_short",
+          "field": "ORB_raw_short",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_vwap_distance_atr14",
+          "field": "vwap",
+          "transform": "price_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_or_done",
+          "field": "or_done",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_setup_session_gap",
+          "field": "session_gap",
+          "transform": "event",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "I8HrQVRv",
+      "feature_group": "liquidity",
+      "source_fields": [
+        "bottom_sweep",
+        "liquidity_bottom",
+        "liquidity_top",
+        "poc_price",
+        "profile_ready",
+        "top_sweep"
+      ],
+      "validity_fields": [
+        "profile_ready"
+      ],
+      "features": [
+        {
+          "name": "tv_liquidity_top_sweep",
+          "field": "top_sweep",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_liquidity_bottom_sweep",
+          "field": "bottom_sweep",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_liquidity_profile_ready",
+          "field": "profile_ready",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_liquidity_poc_price_distance_atr14",
+          "field": "poc_price",
+          "transform": "price_atr",
+          "valid_when": "profile_ready"
+        },
+        {
+          "name": "tv_liquidity_liquidity_top_distance_atr14",
+          "field": "liquidity_top",
+          "transform": "price_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_liquidity_liquidity_bottom_distance_atr14",
+          "field": "liquidity_bottom",
+          "transform": "price_atr",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "kwXpL7yZ",
+      "feature_group": "htf",
+      "source_fields": [
+        "completed_poc_end",
+        "completed_profile_ready",
+        "delta_pct",
+        "poc_end",
+        "profile_ready",
+        "regression_end",
+        "regression_slope"
+      ],
+      "validity_fields": [
+        "completed_profile_ready",
+        "profile_ready"
+      ],
+      "features": [
+        {
+          "name": "tv_htf_regression_slope",
+          "field": "regression_slope",
+          "transform": "value",
+          "valid_when": null
+        },
+        {
+          "name": "tv_htf_delta_pct_fraction",
+          "field": "delta_pct",
+          "transform": "percent",
+          "valid_when": null
+        },
+        {
+          "name": "tv_htf_regression_end_distance_atr14",
+          "field": "regression_end",
+          "transform": "price_atr",
+          "valid_when": null
+        },
+        {
+          "name": "tv_htf_poc_end_distance_atr14",
+          "field": "poc_end",
+          "transform": "price_atr",
+          "valid_when": "profile_ready"
+        },
+        {
+          "name": "tv_htf_completed_poc_end_distance_atr14",
+          "field": "completed_poc_end",
+          "transform": "price_atr",
+          "valid_when": "completed_profile_ready"
+        },
+        {
+          "name": "tv_htf_profile_ready",
+          "field": "profile_ready",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_htf_completed_profile_ready",
+          "field": "completed_profile_ready",
+          "transform": "event",
+          "valid_when": null
+        }
+      ]
+    },
+    {
+      "script_id": "Tm1cGCPD",
+      "feature_group": "footprint",
+      "source_fields": [
+        "buy_share_pct",
+        "chart_poc",
+        "chart_poc_fresh",
+        "profile_tilt_pct",
+        "window_bars"
+      ],
+      "validity_fields": [
+        "chart_poc_fresh"
+      ],
+      "features": [
+        {
+          "name": "tv_footprint_buy_share_pct_fraction",
+          "field": "buy_share_pct",
+          "transform": "percent",
+          "valid_when": null
+        },
+        {
+          "name": "tv_footprint_profile_tilt_pct_fraction",
+          "field": "profile_tilt_pct",
+          "transform": "percent",
+          "valid_when": null
+        },
+        {
+          "name": "tv_footprint_chart_poc_distance_atr14",
+          "field": "chart_poc",
+          "transform": "price_atr",
+          "valid_when": "chart_poc_fresh"
+        },
+        {
+          "name": "tv_footprint_chart_poc_fresh",
+          "field": "chart_poc_fresh",
+          "transform": "event",
+          "valid_when": null
+        },
+        {
+          "name": "tv_footprint_window_bars",
+          "field": "window_bars",
+          "transform": "value",
+          "valid_when": null
+        }
+      ]
+    }
+  ],
+  "external_parity": false,
+  "model_admission": false
+}

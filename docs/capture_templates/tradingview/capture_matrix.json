@@ -1,0 +1,1199 @@
+[
+  {
+    "script_id": "hkKioUnL",
+    "title": "AMD Po3 with Live Edge Stats [WillyAlgoTrader]",
+    "source": {
+      "path": "indicators/tradingview_sources/hkKioUnL.pine",
+      "sha256": "d6d61bcd1eabbfad26dab2fd4be69dc85bc616121149386765222f605a6979e5",
+      "publication_version": "1",
+      "pine_id": "PUB;646ba78cb9e34cd096405b32aa1777a7",
+      "returned_version": "1.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/structure_sources.json"
+    },
+    "fixture_identity_sha256": "59270fa70a19625b32402886d319fa4ee172c0f032a927a4299b459d976366ce",
+    "input_contract": "Finite OHLC with timezone-aware increasing bar-open index; completed bars only, optional as_of enforces availability. Minimum tick is explicit. Config validates source input ranges. Session boundaries must align to chart bars.",
+    "source_defaults": {
+      "config": {
+        "min_range_bars": 12,
+        "max_range_bars": 96,
+        "compression_percentile": 25,
+        "stat_window": 200,
+        "range_tolerance": 0.1,
+        "min_range_width_pct": 0.15,
+        "boundary_mode": "pivot",
+        "trim_tail_pct": 15,
+        "sweep_return_bars": 8,
+        "require_liquidity": false,
+        "sweep_depth_percentile": 100,
+        "allow_rearm": true,
+        "distribution_timeout": 64,
+        "stop_buffer_atr": 0.4,
+        "fib_extension": 1.5,
+        "use_killzones": false,
+        "use_htf_bias": false,
+        "alerts_on": true,
+        "minimum_tick": 0.01,
+        "min_sample": 10
+      },
+      "bar_minutes": 15,
+      "killzone_timezone": "UTC",
+      "london_session": "0700-1000",
+      "new_york_session": "1330-1600",
+      "htf_minutes": 240,
+      "htf_observations": null,
+      "as_of": null
+    },
+    "upstream_plots": [],
+    "minimum_python_numerical_outputs": [
+      "phase (explicit integer encoding)",
+      "range_high",
+      "range_low",
+      "direction",
+      "entry",
+      "stop",
+      "target",
+      "risk"
+    ],
+    "minimum_python_event_outputs": [
+      "long_entry",
+      "short_entry",
+      "long_exit",
+      "short_exit",
+      "alert_distribution",
+      "alert_outcome"
+    ],
+    "required_extra_inputs": [
+      "syminfo.mintick",
+      "session timezone/settings; exact HTF close/EMA observations only if HTF bias enabled"
+    ],
+    "capture_route": "Private pinned-source instrumentation: source renders boxes/labels/table, no plot series. Expose existing state and flags after source updates; do not turn drawing coordinates into entry times.",
+    "required_observed_cases": [
+      "accumulation to sweep to distribution",
+      "both sweep directions",
+      "same-bar double-sweep resolver",
+      "target/stop ambiguity",
+      "timeout and rearm"
+    ],
+    "scope_limit": ""
+  },
+  {
+    "script_id": "Tm1cGCPD",
+    "title": "Volume Footprint: Measuring by Math & Geometry",
+    "source": {
+      "path": "indicators/tradingview_sources/Tm1cGCPD.pine",
+      "sha256": "4adfa2af51f72b17c54f45a3e0b33a791bd2d165235c6ce1f40e46aa84cbc9c7",
+      "publication_version": "4",
+      "pine_id": "PUB;e15e52b27d234f238522c37120642c73",
+      "returned_version": "4.0",
+      "imports": [
+        "TradingView/ta/14 as tvta"
+      ],
+      "source_record": "indicators/tradingview_sources/structure_sources.json"
+    },
+    "fixture_identity_sha256": "ce316a959e94b69f411d7d39571f6f0b4635208d17705596042c4735b5b9b445",
+    "input_contract": "Finite repository OHLC and finite nonnegative Volume; unique increasing timezone-aware bar-open index; explicit fixed-minute duration and optional as_of reject incomplete/future bars. Original source min/max parameters enforced. Main calculation uses caller's fixed history origin.",
+    "source_defaults": {
+      "tick_size": "required explicit syminfo.mintick value; never inferred",
+      "engine": "geometric",
+      "intrabar_stream": null,
+      "intrabar_minutes": 1,
+      "window": 5,
+      "view_ticks": 5,
+      "bell_div": 3.0,
+      "profile_period": 23,
+      "profile_resolution": 100,
+      "value_area_pct": 70.0,
+      "imbalance_pct": 300.0,
+      "bar_minutes": 15,
+      "as_of": null,
+      "include_levels": false,
+      "include_diagnostics": true
+    },
+    "upstream_plots": [
+      {
+        "line": 800,
+        "code": "plot(engBuy,           \"Buy Volume\",         color = COL_FWD, display = display.data_window, editable = false)"
+      },
+      {
+        "line": 801,
+        "code": "plot(engSell,          \"Sell Volume\",        color = COL_REV, display = display.data_window, editable = false)"
+      },
+      {
+        "line": 802,
+        "code": "plot(engBuy + engSell, \"Total Volume\",       display = display.data_window, editable = false)"
+      },
+      {
+        "line": 803,
+        "code": "plot(buyShare * 100,   \"Buy Share %\",        color = COL_FWD, display = display.data_window, editable = false, precision = 1)"
+      },
+      {
+        "line": 804,
+        "code": "plot(sellShare * 100,  \"Sell Share %\",       color = COL_REV, display = display.data_window, editable = false, precision = 1)"
+      },
+      {
+        "line": 1649,
+        "code": "plot(profResidual,  \"Residual PPM\",      display = display.data_window, editable = false, precision = 4)"
+      },
+      {
+        "line": 1650,
+        "code": "plot(profTilt,      \"Balance Tilt %\",    display = display.data_window, editable = false, precision = 1)"
+      },
+      {
+        "line": 1662,
+        "code": "plot(pocDashLevel,  \"Dashboard POC\", display = display.data_window, editable = false)"
+      },
+      {
+        "line": 1663,
+        "code": "plot(pocChartLevel, \"Chart POC\",     display = display.data_window, editable = false)"
+      }
+    ],
+    "minimum_python_numerical_outputs": [
+      "buy_volume",
+      "sell_volume",
+      "total_volume",
+      "buy_share_pct",
+      "sell_share_pct",
+      "dashboard_poc",
+      "chart_poc",
+      "profile_residual_ppm",
+      "profile_tilt_pct",
+      "dashboard_val",
+      "dashboard_vah",
+      "chart_val",
+      "chart_vah"
+    ],
+    "minimum_python_event_outputs": [],
+    "required_extra_inputs": [
+      "explicit tick_size=syminfo.mintick",
+      "engine selection",
+      "intrabar engine: exact TradingView ta/14 up/down totals and observed_at; native engine: native footprint rows/provider schema"
+    ],
+    "capture_route": "Unmodified CSV exports Buy Volume, Sell Volume, Total Volume, Buy Share %, Sell Share %, Residual PPM, Balance Tilt %, Dashboard POC, Chart POC. Engine volumes are historical series. Dashboard/profile are barstate.islast: collect separate Bar Replay terminal snapshots with complete history. VA/imbalance/level rows need separately reviewed snapshot serialization.",
+    "required_observed_cases": [
+      "geometric up/down/flat candle",
+      "zero volume",
+      "rolling-window eviction",
+      "POC tie and stale/fresh distinction",
+      "dashboard versus chart profile",
+      "row imbalance"
+    ],
+    "scope_limit": "Geometric is modeled price-action volume; intrabar requires exact external totals. Native footprint is unsupported by current Python port and cannot be admitted by geometric parity."
+  },
+  {
+    "script_id": "KcnNgwDI",
+    "title": "Volume-Weighted Order Block Zones [BigBeluga]",
+    "source": {
+      "path": "indicators/tradingview_sources/KcnNgwDI.pine",
+      "sha256": "30be5494a064908c803de89debc83cf13ad35c6635bcd27cf371e11ccabadb2b",
+      "publication_version": "1",
+      "pine_id": "PUB;891a96497b1f41c2ae6eb73cc0a0e808",
+      "returned_version": "1.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/structure_sources.json"
+    },
+    "fixture_identity_sha256": "81d531386653b575477df7d050824df790bc350d82b7ef686214ad8d0f6c917c",
+    "input_contract": "Finite completed OHLC plus finite nonnegative Volume, unique increasing timezone-aware DatetimeIndex of bar opens. Explicit bar duration; optional as_of rejects forming bars. Swing length positive; max_ob supported from0 through500; min strength0 through100; displacement finite including source-permitted zero/negative values.",
+    "source_defaults": {
+      "sw_len": 10,
+      "max_ob": 10,
+      "displacement": 4.0,
+      "min_volume_strength": 0,
+      "bar_minutes": 15,
+      "include_zone_snapshots": false,
+      "as_of": null
+    },
+    "upstream_plots": [],
+    "minimum_python_numerical_outputs": [
+      "pivot_high",
+      "pivot_low",
+      "pivot_high_strength",
+      "pivot_low_strength",
+      "active_count",
+      "bull_latest_top",
+      "bull_latest_bottom",
+      "bear_latest_top",
+      "bear_latest_bottom",
+      "invalidation_count",
+      "overlap_removal_count",
+      "capacity_removal_count"
+    ],
+    "minimum_python_event_outputs": [
+      "pivot_high_accepted",
+      "pivot_low_accepted",
+      "bull_created",
+      "bear_created",
+      "bull_retest",
+      "bear_retest"
+    ],
+    "required_extra_inputs": [],
+    "capture_route": "No upstream plots. Instrument confirmed pivot, zone creation/removal/retest state as numeric plots. Capture stable zone identity plus origin and confirmed availability timestamps.",
+    "required_observed_cases": [
+      "rightmost pivot ties",
+      "delayed and retroactive zone creation",
+      "overlap and capacity removal",
+      "invalidation and repeated retest"
+    ],
+    "scope_limit": ""
+  },
+  {
+    "script_id": "I8HrQVRv",
+    "title": "Structural Liquidity & POC Matrix [BigBeluga]",
+    "source": {
+      "path": "indicators/tradingview_sources/I8HrQVRv.pine",
+      "sha256": "5aec4ed35a84133ab417a25f6ce3778e4fde4d3812218a9f6d40b6c876f5da41",
+      "publication_version": "1",
+      "pine_id": "PUB;95222effbc4441e38fcef15d270aaf22",
+      "returned_version": "1.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/structure_sources.json"
+    },
+    "fixture_identity_sha256": "5192efb5fb2317c8fdc12bd14b1bb41a58f229476d489a038b685a0bb48f3e1e",
+    "input_contract": "Finite repository OHLC, finite nonnegative Volume, unique increasing timezone-aware index of bar opens; explicit duration and optional as_of enforce completed-bar availability. OHLC+nonnegative Volume. ATR100*.2 bin spacing; full volume allocated by close to one bin; exclude out-of-range closes without clamping.",
+    "source_defaults": {
+      "liquidity_length": 100,
+      "fade_liquidity": 100,
+      "show_poc": true,
+      "bar_minutes": 15,
+      "as_of": null,
+      "include_bins": false,
+      "max_profile_bins": 100000
+    },
+    "upstream_plots": [
+      {
+        "line": 116,
+        "code": "plot(top, \"Liquidity Top\", color = upperCol, style = plot.style_linebr, force_overlay = true, linewidth = 2)"
+      },
+      {
+        "line": 117,
+        "code": "plot(bottom, \"Liquidity Bottom\", color = lowerCol, style = plot.style_linebr, force_overlay = true, linewidth = 2)"
+      }
+    ],
+    "minimum_python_numerical_outputs": [
+      "liquidity_top",
+      "liquidity_bottom",
+      "top_count",
+      "bottom_count",
+      "profile_start_index",
+      "bin_step",
+      "bin_count",
+      "poc_price",
+      "allocated_volume",
+      "excluded_volume"
+    ],
+    "minimum_python_event_outputs": [
+      "top_sweep",
+      "bottom_sweep",
+      "top_anchor_changed",
+      "bottom_anchor_changed",
+      "poc_visible"
+    ],
+    "required_extra_inputs": [],
+    "capture_route": "Liquidity Top and Liquidity Bottom export directly. POC/profile calculation is upstream barstate.islast: multiple replay-terminal snapshots are required. Bin arrays require explicit snapshot/serialization harness.",
+    "required_observed_cases": [
+      "100-bar ATR warmup",
+      "top and bottom sweep",
+      "fade expiry",
+      "anchor restart",
+      "out-of-range volume exclusion",
+      "zero-volume and POC tie"
+    ],
+    "scope_limit": ""
+  },
+  {
+    "script_id": "XWuYNmhD",
+    "title": "Setup Scanner [GBB]",
+    "source": {
+      "path": "indicators/tradingview_sources/XWuYNmhD.pine",
+      "sha256": "f52a7d6fd73fcd450ad8b4d8c23da95628372504aeae4ed3179c23691fa130db",
+      "publication_version": "2",
+      "pine_id": "PUB;e206beb3690a4a21a6f42f7d589ff2a5",
+      "returned_version": "2.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/structure_sources.json"
+    },
+    "fixture_identity_sha256": "a1d6b28dda44bde88de96fb55e2bc28f6562f33d15eed8d3a94ebf991f17024d",
+    "input_contract": "Finite OHLC with timezone-aware bar-open index, completed bars only. Volume can be missing/NaN per source but cannot be negative/infinite. Source numeric limits validated; three target multiples need not be ordered because source does not enforce ordering.",
+    "source_defaults": {
+      "enabled": [
+        "VWAP",
+        "EMA",
+        "BRT",
+        "SWEEP",
+        "DIV",
+        "ORB"
+      ],
+      "atr_length": 14,
+      "stop_atr": 1.2,
+      "targets": [
+        1.0,
+        2.0,
+        3.0
+      ],
+      "max_open": 1,
+      "max_bars": 60,
+      "reentry": 0,
+      "one_way": true,
+      "keep_trades": 8,
+      "volume_multiplier": 1.0,
+      "pivot_length": 5,
+      "vwap_away": 6,
+      "ema_window": 3,
+      "retest_tolerance": 0.3,
+      "retest_window": 20,
+      "sweep_length": 20,
+      "divergence_gap": 60,
+      "opening_session": "0930-1600",
+      "opening_timezone": "America/New_York",
+      "opening_minutes": 15,
+      "vwap_observations": null,
+      "vwap_reset": null,
+      "strict_session_coverage": true,
+      "bar_minutes": 15,
+      "as_of": null
+    },
+    "upstream_plots": [
+      {
+        "line": 390,
+        "code": "plot(useOrb and inSess and orDone ? orH : na, \"OR high\", color.new(cForm, 30), 1, plot.style_linebr)"
+      },
+      {
+        "line": 391,
+        "code": "plot(useOrb and inSess and orDone ? orL : na, \"OR low\",  color.new(cForm, 30), 1, plot.style_linebr)"
+      },
+      {
+        "line": 860,
+        "code": "plotshape(markLong,  \"Long marker\",  shape.triangleup,   location.belowbar, cLong,  size = size.tiny)"
+      },
+      {
+        "line": 861,
+        "code": "plotshape(markShort, \"Short marker\", shape.triangledown, location.abovebar, cShort, size = size.tiny)"
+      },
+      {
+        "line": 863,
+        "code": "alertcondition(anyLong,  \"Any long setup\",  \"Setup Scanner: long signal\")"
+      },
+      {
+        "line": 864,
+        "code": "alertcondition(anyShort, \"Any short setup\", \"Setup Scanner: short signal\")"
+      }
+    ],
+    "minimum_python_numerical_outputs": [
+      "atr",
+      "vwap",
+      "ema9",
+      "ema21",
+      "ema50",
+      "rsi",
+      "or_high",
+      "or_low",
+      "open_count",
+      "per-setup state and fired/TP1/TP2/TP3/stop/expiry counts"
+    ],
+    "minimum_python_event_outputs": [
+      "any_long",
+      "any_short",
+      "took_long",
+      "took_short",
+      "per-setup raw/accepted long and short signals",
+      "per-setup exits"
+    ],
+    "required_extra_inputs": [
+      "exact exported ta.vwap observation or exact exchange reset flags; session start/timezone/opening-range settings"
+    ],
+    "capture_route": "OR high/OR low and Long marker/Short marker export directly. Private instrumentation is required to separate six setup raw signals from accepted signals and reference-trade outcomes; the two generic markers alone do not validate the full adapter.",
+    "required_observed_cases": [
+      "each of six setup branches in both directions",
+      "simultaneous setup priority",
+      "opening-session start",
+      "shared max-open rejection",
+      "TP-before-stop and timeout state"
+    ],
+    "scope_limit": ""
+  },
+  {
+    "script_id": "AqRNdhlR",
+    "title": "Gaussian Filter Trend [QuantAlgo]",
+    "source": {
+      "path": "indicators/tradingview_sources/AqRNdhlR_v1.pine",
+      "sha256": "786b9c32a79d67e461085abd5e848322bf542cf8e514141c486e141e1c5e5b27",
+      "publication_version": "1",
+      "pine_id": "PUB;a98154dd8ce244868b008e6ac629a08d",
+      "returned_version": "1.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/trend_manifest.json"
+    },
+    "fixture_identity_sha256": "5197f300dd7090f81ea38e99f3862c88d32af3f3df0cf2cad04712ef03acf33d",
+    "input_contract": {
+      "required_columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close"
+      ],
+      "closed_bars_only": true,
+      "finite_ohlc_required": true,
+      "unique_increasing_index": true,
+      "decision_cadence": "Caller supplies completed 15m bars under existing available_at contract; math accepts other bar indices for parity fixtures.",
+      "higher_or_lower_timeframe_dependencies": false,
+      "unsupported_pine_source_inputs": [
+        "External indicator plots supplied to Pine input.source; only named OHLC-derived sources are supported."
+      ]
+    },
+    "source_defaults": {
+      "length": 14,
+      "poles": 4,
+      "atr_length": 14,
+      "fixed_multiplier": 1.5,
+      "adaptive_width": true,
+      "efficiency_length": 10,
+      "trend_multiplier": 0.8,
+      "chop_multiplier": 2.5,
+      "efficiency_smooth": 5,
+      "source": "Close",
+      "preset": "Default"
+    },
+    "upstream_plots": [
+      {
+        "line": 157,
+        "code": "plot(show_trend ? trend_line : na, title = 'Gaussian Filter Trend', color = trend_color, linewidth = line_width)"
+      },
+      {
+        "line": 158,
+        "code": "plot(show_stars ? inner_star_a : na, title = 'Inner Star A', color = color.new(trend_color, 30), style = plot.style_circles, linewidth = 2, editable = false, display = display.pane)"
+      },
+      {
+        "line": 159,
+        "code": "plot(show_stars ? inner_star_b : na, title = 'Inner Star B', color = color.new(trend_color, 30), style = plot.style_circles, linewidth = 2, editable = false, display = display.pane)"
+      },
+      {
+        "line": 160,
+        "code": "plot(show_stars ? outer_star_a : na, title = 'Outer Star A', color = color.new(trend_color, 70), style = plot.style_circles, linewidth = 1, editable = false, display = display.pane)"
+      },
+      {
+        "line": 161,
+        "code": "plot(show_stars ? outer_star_b : na, title = 'Outer Star B', color = color.new(trend_color, 70), style = plot.style_circles, linewidth = 1, editable = false, display = display.pane)"
+      },
+      {
+        "line": 170,
+        "code": "alertcondition(turned_bull,  title = 'Bullish Trend Signal', message = 'Gaussian Filter Trend: BULLISH trend confirmed on {{exchange}}:{{ticker}} - {{interval}}')"
+      },
+      {
+        "line": 171,
+        "code": "alertcondition(turned_bear,  title = 'Bearish Trend Signal', message = 'Gaussian Filter Trend: BEARISH trend confirmed on {{exchange}}:{{ticker}} - {{interval}}')"
+      },
+      {
+        "line": 172,
+        "code": "alertcondition(state_change, title = 'Any Trend Change',     message = 'Gaussian Filter Trend: Trend state changed on {{exchange}}:{{ticker}} - {{interval}}')"
+      }
+    ],
+    "minimum_python_numerical_outputs": [
+      "filtered_price",
+      "efficiency",
+      "smoothed_efficiency",
+      "trend_width",
+      "upper_band",
+      "lower_band",
+      "trend_line",
+      "direction"
+    ],
+    "minimum_python_event_outputs": [
+      "bull_signal",
+      "bear_signal"
+    ],
+    "required_extra_inputs": [
+      "source input must be a supported OHLC-derived series"
+    ],
+    "capture_route": "Unmodified Gaussian Filter Trend plot validates trend_line only. Draft append-only private source exports all listed internals and 0/1 alerts; harness identity must be reviewed and bound before admission.",
+    "required_observed_cases": [
+      "initial neutral direction",
+      "bull and bear state changes",
+      "ATR/efficiency warmup",
+      "flat-price efficiency",
+      "all source presets and adaptive/fixed width used in the admitted grid"
+    ],
+    "scope_limit": ""
+  },
+  {
+    "script_id": "c25U5rsF",
+    "title": "RSI Probability Matrix [ChartPrime]",
+    "source": {
+      "path": "indicators/tradingview_sources/c25U5rsF.pine",
+      "sha256": "88d6e36c500269cb54e7f976a571e45dbabda124d64ffac8e0cfb1d464ebabe5",
+      "publication_version": "1",
+      "pine_id": "PUB;5dfdfad08cf348138e3977de614d8f3c",
+      "returned_version": "1.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/structure_sources.json"
+    },
+    "fixture_identity_sha256": "d9a34dd23fb1185bb353ede9fc18ed0a1341984dc26d23d7b74f7b51b45ebbbe",
+    "input_contract": "Finite repository OHLC with unique increasing index; caller supplies only completed bars. No volume, lower-timeframe or higher-timeframe input required.",
+    "source_defaults": {
+      "rsi_period": 14,
+      "signal_period": 14,
+      "oversold": 40,
+      "overbought": 60,
+      "atr_period": 14,
+      "atr_multiplier": 3.0,
+      "include_matrix": false
+    },
+    "upstream_plots": [
+      {
+        "line": 130,
+        "code": "plot(rsiValue, title=\"RSI\", color=rsiGradientColor, linewidth=2)"
+      },
+      {
+        "line": 131,
+        "code": "plot(signalValue, title=\"Signal\", color=color.new(colorMidline, 0), linewidth=1)"
+      }
+    ],
+    "minimum_python_numerical_outputs": [
+      "rsi",
+      "signal",
+      "atr",
+      "active_side",
+      "entry_price",
+      "target_price",
+      "stop_price",
+      "entry_rsi_bucket",
+      "resolved_total",
+      "current-bucket wins/losses"
+    ],
+    "minimum_python_event_outputs": [
+      "raw_long_signal",
+      "raw_short_signal",
+      "long_entry_signal",
+      "short_entry_signal",
+      "long_entry",
+      "short_entry",
+      "long_exit",
+      "short_exit",
+      "ambiguous_resolution"
+    ],
+    "required_extra_inputs": [],
+    "capture_route": "RSI and Signal plots export directly. Source table/state entries and target/stop outcomes need instrumentation after the original update order.",
+    "required_observed_cases": [
+      "RSI warmup including flat source",
+      "raw versus accepted entries",
+      "reversal",
+      "same-bar stop/target ambiguity",
+      "count update and bucket boundary"
+    ],
+    "scope_limit": ""
+  },
+  {
+    "script_id": "U7CZ8jtj",
+    "title": "Fibonacci Trend Continuation Signals [AlgoAlpha]",
+    "source": {
+      "path": "indicators/tradingview_sources/U7CZ8jtj_v1.pine",
+      "sha256": "93aa470927cedab27857b2ae5f33810220f04c7d26ccdfc73fd43c03a3390179",
+      "publication_version": "1",
+      "pine_id": "PUB;dbdf1cd29fa94c81b0733f0766c3722a",
+      "returned_version": "1.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/trend_manifest.json"
+    },
+    "fixture_identity_sha256": "e9308e2b91f909a45f05dc1587377691cbbe378f18f248107dea5aa94e70a3f1",
+    "input_contract": {
+      "required_columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close"
+      ],
+      "closed_bars_only": true,
+      "finite_ohlc_required": true,
+      "unique_increasing_index": true,
+      "decision_cadence": "Caller supplies completed 15m bars under existing available_at contract; math accepts other bar indices for parity fixtures.",
+      "higher_or_lower_timeframe_dependencies": false
+    },
+    "source_defaults": {
+      "midline_length": 200,
+      "pivot_length": 7,
+      "band_width": 3.0,
+      "enabled_levels": [
+        0.236,
+        0.382,
+        0.5,
+        0.618,
+        0.786
+      ]
+    },
+    "upstream_plots": [
+      {
+        "line": 83,
+        "code": "p1 = plot(v, \"1\", color = cOuter, linewidth = 2)"
+      },
+      {
+        "line": 85,
+        "code": "pBull786 = plot(bullish and show786 ? bull786 : na, \"Bull 0.786\", color = color.new(c786, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 86,
+        "code": "pBull618 = plot(bullish and show618 ? bull618 : na, \"Bull 0.618\", color = color.new(c618, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 87,
+        "code": "pBull500 = plot(bullish and show500 ? bull500 : na, \"Bull 0.500\", color = color.new(c500, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 88,
+        "code": "pBull382 = plot(bullish and show382 ? bull382 : na, \"Bull 0.382\", color = color.new(c382, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 89,
+        "code": "pBull236 = plot(bullish and show236 ? bull236 : na, \"Bull 0.236\", color = color.new(c236, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 90,
+        "code": "pBull0 = plot(bullish ? b2 : na, \"Bull 0\", color = color.new(cOuter, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 92,
+        "code": "pBear786 = plot(bearish and show786 ? bear786 : na, \"Bear 0.786\", color = color.new(c786, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 93,
+        "code": "pBear618 = plot(bearish and show618 ? bear618 : na, \"Bear 0.618\", color = color.new(c618, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 94,
+        "code": "pBear500 = plot(bearish and show500 ? bear500 : na, \"Bear 0.500\", color = color.new(c500, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 95,
+        "code": "pBear382 = plot(bearish and show382 ? bear382 : na, \"Bear 0.382\", color = color.new(c382, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 96,
+        "code": "pBear236 = plot(bearish and show236 ? bear236 : na, \"Bear 0.236\", color = color.new(c236, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 97,
+        "code": "pBear0 = plot(bearish ? b1 : na, \"Bear 0\", color = color.new(cOuter, lineTransparency), linewidth = 2, style = plot.style_linebr)"
+      },
+      {
+        "line": 155,
+        "code": "plot(bullish ? bullSignalGuide : bearSignalGuide, \"Signal Guide\", display = display.none)"
+      },
+      {
+        "line": 176,
+        "code": "plotchar(bullFibCross ? bullSignalGuide : na, title = \"Bullish Fibonacci Close\", char = \"\u25b2\", location = location.absolute, color = bullColor, size = size.tiny)"
+      },
+      {
+        "line": 177,
+        "code": "plotchar(bearFibCross ? bearSignalGuide : na, title = \"Bearish Fibonacci Close\", char = \"\u25bc\", location = location.absolute, color = bearColor, size = size.tiny)"
+      },
+      {
+        "line": 181,
+        "code": "plotchar(trendFlip ? (bullish ? b2 : b1) : na, title = \"0 Start\", char = \"\u25cf\", location = location.absolute, color = cOuter, size = size.small)"
+      },
+      {
+        "line": 182,
+        "code": "plotchar(trendFlip and show236 ? (bullish ? bull236 : bear236) : na, title = \"0.236 Start\", char = \"\u25cf\", location = location.absolute, color = color.new(c236, 10), size = size.small)"
+      },
+      {
+        "line": 183,
+        "code": "plotchar(trendFlip and show382 ? (bullish ? bull382 : bear382) : na, title = \"0.382 Start\", char = \"\u25cf\", location = location.absolute, color = color.new(c382, 30), size = size.small)"
+      },
+      {
+        "line": 184,
+        "code": "plotchar(trendFlip and show500 ? (bullish ? bull500 : bear500) : na, title = \"0.500 Start\", char = \"\u25cf\", location = location.absolute, color = color.new(c500, 50), size = size.small)"
+      },
+      {
+        "line": 185,
+        "code": "plotchar(trendFlip and show618 ? (bullish ? bull618 : bear618) : na, title = \"0.618 Start\", char = \"\u25cf\", location = location.absolute, color = color.new(c618, 70), size = size.small)"
+      },
+      {
+        "line": 186,
+        "code": "plotchar(trendFlip and show786 ? (bullish ? bull786 : bear786) : na, title = \"0.786 Start\", char = \"\u25cf\", location = location.absolute, color = color.new(c786, 90), size = size.small)"
+      },
+      {
+        "line": 190,
+        "code": "alertcondition(bullFibCross, title = \"Bullish Fibonacci Close\")"
+      },
+      {
+        "line": 191,
+        "code": "alertcondition(bearFibCross, title = \"Bearish Fibonacci Close\")"
+      },
+      {
+        "line": 192,
+        "code": "alertcondition(trendFlip and bullish, title = \"Bullish Trend Change\")"
+      },
+      {
+        "line": 193,
+        "code": "alertcondition(trendFlip and bearish, title = \"Bearish Trend Change\")"
+      }
+    ],
+    "minimum_python_numerical_outputs": [
+      "midline",
+      "volatility",
+      "upper_band",
+      "lower_band",
+      "direction",
+      "bull_0.236",
+      "bull_0.382",
+      "bull_0.500",
+      "bull_0.618",
+      "bull_0.786",
+      "bear_0.236",
+      "bear_0.382",
+      "bear_0.500",
+      "bear_0.618",
+      "bear_0.786"
+    ],
+    "minimum_python_event_outputs": [
+      "bull_signal",
+      "bear_signal",
+      "trend_flip",
+      "bull_flip",
+      "bear_flip"
+    ],
+    "required_extra_inputs": [],
+    "capture_route": "Unmodified plot 1 is midline; native Fibonacci band plots are direction-masked. Draft append-only private source exports unmasked levels and exact 0/1 events, avoiding absolute-location plotchar values being confused with booleans.",
+    "required_observed_cases": [
+      "205-bar default band warmup",
+      "initial direction without a flip",
+      "all enabled Fibonacci crossings",
+      "bull/bear reversal",
+      "level subsets"
+    ],
+    "scope_limit": ""
+  },
+  {
+    "script_id": "kwXpL7yZ",
+    "title": "HTF Log-Regression Volume Profile [BigBeluga]",
+    "source": {
+      "path": "indicators/tradingview_sources/kwXpL7yZ.pine",
+      "sha256": "de31292c867ad914c2a76912e6de407262cc690e093d02a828c77ba43825286f",
+      "publication_version": "4",
+      "pine_id": "PUB;d6fcf16e6a6b4b13963e5e943cf4f5c6",
+      "returned_version": "4.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/structure_sources.json"
+    },
+    "fixture_identity_sha256": "24ce5249559954e00b3012d34e6c75c592a6b23ce5c0a10e00dedfb3dc98becd",
+    "input_contract": "Finite repository OHLC, finite nonnegative Volume, unique increasing timezone-aware index of bar opens; explicit duration and optional as_of enforce completed-bar availability. Exact aligned nonmissing boolean Pine timeframe.change flags required; optional htf_period attrs must match selected period. On15m source auto period is2D. No request.security or UTC-resample approximation.",
+    "source_defaults": {
+      "chart_period": "15",
+      "auto_htf": true,
+      "manual_htf": "D",
+      "channel_width": 1.0,
+      "bin_count": 30,
+      "show_profile": true,
+      "show_poc": true,
+      "bar_minutes": 15,
+      "as_of": null,
+      "include_bins": false
+    },
+    "upstream_plots": [],
+    "minimum_python_numerical_outputs": [
+      "regression_start",
+      "regression_end",
+      "regression_slope",
+      "deviation",
+      "upper_start",
+      "upper_end",
+      "lower_start",
+      "lower_end",
+      "session_high",
+      "session_low",
+      "buy_volume",
+      "sell_volume",
+      "delta_pct",
+      "poc_start",
+      "poc_end",
+      "completed_* versions of numerical outputs"
+    ],
+    "minimum_python_event_outputs": [
+      "new_htf",
+      "completed_profile_ready"
+    ],
+    "required_extra_inputs": [
+      "exact timeframe.change(htf_period) flags exported from Pine; 15m auto period is 2D, not a UTC two-day resample"
+    ],
+    "capture_route": "No upstream plots. Instrument source state and exact HTF-boundary flag. Developing and prior-completed records require separate named output columns; drawing endpoints cannot be backfilled into earlier bars.",
+    "required_observed_cases": [
+      "multiple HTF boundaries",
+      "first/short period",
+      "developing versus completed fit",
+      "doji volume exclusion",
+      "log-regression and POC bin tie"
+    ],
+    "scope_limit": ""
+  },
+  {
+    "script_id": "f4N0F439",
+    "title": "Uptrick: Adaptive Trend Trail",
+    "source": {
+      "path": "indicators/tradingview_sources/f4N0F439_v1.pine",
+      "sha256": "e8b6b78bbe831539a65c6f4e10a4e825466344d66becfa013163540210981f1c",
+      "publication_version": "1",
+      "pine_id": "PUB;6f2fdb5737654d8cb3b6fdd9afdc5ec8",
+      "returned_version": "1.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/trend_manifest.json"
+    },
+    "fixture_identity_sha256": "b8efe1edcfd146d6fa87d89fe189cab2f14f2724719fbdeb1429db67cfb5f3a8",
+    "input_contract": {
+      "required_columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close"
+      ],
+      "closed_bars_only": true,
+      "finite_ohlc_required": true,
+      "unique_increasing_index": true,
+      "decision_cadence": "Caller supplies completed 15m bars under existing available_at contract; math accepts other bar indices for parity fixtures.",
+      "higher_or_lower_timeframe_dependencies": false
+    },
+    "source_defaults": {
+      "trend_length": 34,
+      "momentum_length": 12,
+      "sensitivity": 0.35,
+      "fast_length": 9,
+      "fast_factor": 1.45,
+      "mid_length": 14,
+      "mid_factor": 1.95,
+      "slow_length": 21,
+      "slow_factor": 2.55,
+      "minimum_tick": 0.01,
+      "trail_size": 1.0,
+      "smoothness": 5
+    },
+    "upstream_plots": [
+      {
+        "line": 416,
+        "code": "pTrailInner = plot(showTrail ? innerTrail : na, \"Trail Inner\", color=color.new(trendColor, 100))"
+      },
+      {
+        "line": 417,
+        "code": "pTrailOuter = plot(showTrail ? outerTrail : na, \"Trail Outer\", color=color.new(trendColor, 100))"
+      },
+      {
+        "line": 418,
+        "code": "pTrailDepth = plot(showTrail ? depthTrail : na, \"Trail Depth\", color=color.new(trendColor, 100))"
+      },
+      {
+        "line": 438,
+        "code": "pU1 = plot(showBands ? upper1 : na, \"Upper Band 1\", color=color.new(bearColor, 100))"
+      },
+      {
+        "line": 439,
+        "code": "pU2 = plot(showBands ? upper2 : na, \"Upper Band 2\", color=color.new(bearColor, 100))"
+      },
+      {
+        "line": 440,
+        "code": "pU3 = plot(showBands ? upper3 : na, \"Upper Band 3\", color=color.new(bearColor, 100))"
+      },
+      {
+        "line": 442,
+        "code": "pL1 = plot(showBands ? lower1 : na, \"Lower Band 1\", color=color.new(bullColor, 100))"
+      },
+      {
+        "line": 443,
+        "code": "pL2 = plot(showBands ? lower2 : na, \"Lower Band 2\", color=color.new(bullColor, 100))"
+      },
+      {
+        "line": 444,
+        "code": "pL3 = plot(showBands ? lower3 : na, \"Lower Band 3\", color=color.new(bullColor, 100))"
+      },
+      {
+        "line": 476,
+        "code": "plotcandle(open, high, low, close, \"Trend Candles\","
+      },
+      {
+        "line": 654,
+        "code": "plot(backtestReturn, \"Internal Return %\", display=display.data_window)"
+      },
+      {
+        "line": 655,
+        "code": "plot(winRate, \"Internal Win Rate %\", display=display.data_window)"
+      },
+      {
+        "line": 656,
+        "code": "plot(profitFactor, \"Internal Profit Factor\", display=display.data_window)"
+      },
+      {
+        "line": 657,
+        "code": "plot(maxDrawdown * 100.0, \"Internal Max Drawdown %\", display=display.data_window)"
+      },
+      {
+        "line": 658,
+        "code": "plot(closedTrades, \"Internal Closed Trades\", display=display.data_window)"
+      },
+      {
+        "line": 664,
+        "code": "alertcondition(upSignal, \"Adaptive Trend Up\", \"Adaptive Trend Trail turned bullish on {{ticker}}\")"
+      },
+      {
+        "line": 665,
+        "code": "alertcondition(downSignal, \"Adaptive Trend Down\", \"Adaptive Trend Trail turned bearish on {{ticker}}\")"
+      }
+    ],
+    "minimum_python_numerical_outputs": [
+      "basis",
+      "safe_atr",
+      "regime",
+      "direction",
+      "inner_trail",
+      "outer_trail",
+      "depth_trail",
+      "upper_band_1",
+      "upper_band_2",
+      "upper_band_3",
+      "lower_band_1",
+      "lower_band_2",
+      "lower_band_3"
+    ],
+    "minimum_python_event_outputs": [
+      "bull_signal",
+      "bear_signal"
+    ],
+    "required_extra_inputs": [
+      "explicit instrument minimum_tick"
+    ],
+    "capture_route": "Trail Inner/Outer/Depth and Upper/Lower Band1..3 export directly when display toggles are on. Draft append-only private source exports state and exact alerts. Internal Return/Win Rate/Profit Factor plots are excluded from port scope.",
+    "required_observed_cases": [
+      "neutral to initial direction",
+      "adaptive Supertrend warmup",
+      "both trend flips",
+      "confirmation/cooldown/hard reversal",
+      "minimum-tick clamp"
+    ],
+    "scope_limit": ""
+  },
+  {
+    "script_id": "DkE7UniD",
+    "title": "Market Structure Break & Order Block by EmreKb",
+    "source": {
+      "path": "indicators/tradingview_sources/DkE7UniD.pine",
+      "sha256": "7a38b51c8f4d222dfa62f5a80a3fb23f358535b5c27eb2ac6df9a42a3fb8cb0b",
+      "publication_version": "9",
+      "pine_id": "PUB;3a1fb6197f314eb2912194d70934bf7e",
+      "returned_version": "9.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/structure_sources.json"
+    },
+    "fixture_identity_sha256": "10f0a24d60802783b3ec9cf120a34571fc424eb4344672991714d458162333e1",
+    "input_contract": "Finite repository OHLC; unique increasing index; caller supplies completed bars; no HTF or volume dependencies.",
+    "source_defaults": {
+      "zigzag_length": 9,
+      "fib_factor": 0.33
+    },
+    "upstream_plots": [
+      {
+        "line": 204,
+        "code": "alertcondition(ta.change(market) != 0, \"MSB\", \"MSB\")"
+      }
+    ],
+    "minimum_python_numerical_outputs": [
+      "market_direction",
+      "zigzag_direction",
+      "high_0",
+      "high_1",
+      "low_0",
+      "low_1",
+      "high_0_index",
+      "low_0_index"
+    ],
+    "minimum_python_event_outputs": [
+      "high_confirmed",
+      "low_confirmed",
+      "bull_signal",
+      "bear_signal"
+    ],
+    "required_extra_inputs": [],
+    "capture_route": "No numeric plots; source only has MSB alertcondition. Private instrumentation must expose existing market/zigzag and confirmed pivots at the bar known, plus the MSB direction.",
+    "required_observed_cases": [
+      "both zigzag confirmations",
+      "both MSB directions",
+      "fib threshold boundary",
+      "source statement-order guards"
+    ],
+    "scope_limit": "Current port excludes upstream order/breaker/mitigation box arrays, zone-touch alerts and deletion behavior; this capture cannot certify that excluded scope."
+  },
+  {
+    "script_id": "nW5oGfdO",
+    "title": "ICT Killzones + Pivots [TFO]",
+    "source": {
+      "path": "indicators/tradingview_sources/nW5oGfdO.pine",
+      "sha256": "c844898884c5f9691068f2302fe868827a0df87be58a20f5a75989e49986baac",
+      "publication_version": "19",
+      "pine_id": "PUB;d0b8be94f1b042bf9f2cb20f92cefc57",
+      "returned_version": "19.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/structure_sources.json"
+    },
+    "fixture_identity_sha256": "951980532ea7bf8884e9cb0e0a47461c657e5da66c817b56940a94fabaf90167",
+    "input_contract": "Finite completed OHLC, unique increasing timezone-aware DatetimeIndex of bar opens; explicit bar duration. Only aligned single non-full-day session intervals are supported. Optional as_of rejects forming bars; missing bars are never fabricated.",
+    "source_defaults": {
+      "sessions": {
+        "ASIA": "2000-0000",
+        "LNDN": "0200-0500",
+        "NYAM": "0930-1100",
+        "NYPM": "1330-1600"
+      },
+      "timezone": "America/New_York",
+      "bar_minutes": 15,
+      "timeframe_limit": 30,
+      "max_days": 3,
+      "data_lookback": 20,
+      "range_measure": "Average",
+      "show_pivots": true,
+      "show_midpoints": false,
+      "use_alerts": true,
+      "extend_which": "Most Recent",
+      "cutoff": null,
+      "level_multipliers": [],
+      "minimum_tick": 0.01,
+      "opening_times": [
+        "0930",
+        "1200",
+        "1600"
+      ],
+      "period_changes": null,
+      "as_of": null
+    },
+    "upstream_plots": [
+      {
+        "line": 659,
+        "code": "plotchar(dow_labels and timeframe.isintraday and dayofweek(new_dow_time, gmt_tz) == 1 and new_day and not dow_hide_wknd, location = dow_top ? location.top : location.bottom, char = \"\", textcolor = txt_color, text = sunday)"
+      },
+      {
+        "line": 660,
+        "code": "plotchar(dow_labels and timeframe.isintraday and dayofweek(new_dow_time, gmt_tz) == 2 and new_day, location = dow_top ? location.top : location.bottom, char = \"\", textcolor = txt_color, text = monday)"
+      },
+      {
+        "line": 661,
+        "code": "plotchar(dow_labels and timeframe.isintraday and dayofweek(new_dow_time, gmt_tz) == 3 and new_day, location = dow_top ? location.top : location.bottom, char = \"\", textcolor = txt_color, text = tuesday)"
+      },
+      {
+        "line": 662,
+        "code": "plotchar(dow_labels and timeframe.isintraday and dayofweek(new_dow_time, gmt_tz) == 4 and new_day, location = dow_top ? location.top : location.bottom, char = \"\", textcolor = txt_color, text = wednesday)"
+      },
+      {
+        "line": 663,
+        "code": "plotchar(dow_labels and timeframe.isintraday and dayofweek(new_dow_time, gmt_tz) == 5 and new_day, location = dow_top ? location.top : location.bottom, char = \"\", textcolor = txt_color, text = thursday)"
+      },
+      {
+        "line": 664,
+        "code": "plotchar(dow_labels and timeframe.isintraday and dayofweek(new_dow_time, gmt_tz) == 6 and new_day, location = dow_top ? location.top : location.bottom, char = \"\", textcolor = txt_color, text = friday)"
+      },
+      {
+        "line": 665,
+        "code": "plotchar(dow_labels and timeframe.isintraday and dayofweek(new_dow_time, gmt_tz) == 7 and new_day and not dow_hide_wknd, location = dow_top ? location.top : location.bottom, char = \"\", textcolor = txt_color, text = saturday)"
+      }
+    ],
+    "minimum_python_numerical_outputs": [
+      "per-session high/low/midpoint/range",
+      "per-session confirmed range and range statistic",
+      "pivot prices and origin times",
+      "opening prices"
+    ],
+    "minimum_python_event_outputs": [
+      "per-session start/end",
+      "per-session high/low breaks and alert flags",
+      "midpoint touches",
+      "opening events"
+    ],
+    "required_extra_inputs": [
+      "IANA timezone and session strings",
+      "extended-session bars for overnight zones",
+      "exact D/W/M timeframe-change flags if those optional outputs are admitted"
+    ],
+    "capture_route": "Existing plotchar outputs are day labels, not pivot values. Private instrumentation must expose session/pivot state; compare available-at/session-end times and optional exact period flags.",
+    "required_observed_cases": [
+      "session open and close",
+      "overnight boundary",
+      "DST weeks",
+      "first break versus repeat",
+      "missing session bars/cutoff/extension policy"
+    ],
+    "scope_limit": ""
+  },
+  {
+    "script_id": "Ej53t8Wv",
+    "title": "Support Resistance Channels",
+    "source": {
+      "path": "indicators/tradingview_sources/Ej53t8Wv.pine",
+      "sha256": "5249a8b830ab7f68e3bbd80d59a29fcca96bec245a8d1da6ea98ad585cb23321",
+      "publication_version": "6",
+      "pine_id": "PUB;9xd5ljxt0JLwYqt32Ve0lnIiRC0Yj9Z2",
+      "returned_version": "6.0",
+      "imports": [],
+      "source_record": "indicators/tradingview_sources/structure_sources.json"
+    },
+    "fixture_identity_sha256": "07c8dffc737d2bc487d285fcfd52ab97d6db568eccb7e665f2eaf73492a33771",
+    "input_contract": "Finite repository OHLC; unique increasing index; caller supplies completed bars; no HTF or volume dependencies.",
+    "source_defaults": {
+      "pivot_period": 10,
+      "pivot_source": "High/Low",
+      "channel_width_pct": 5,
+      "minimum_strength": 1,
+      "max_channels": 6,
+      "lookback": 290
+    },
+    "upstream_plots": [
+      {
+        "line": 27,
+        "code": "plot(ma1, color = not na(ma1) ? color.blue : na)"
+      },
+      {
+        "line": 28,
+        "code": "plot(ma2, color = not na(ma2) ? color.red : na)"
+      },
+      {
+        "line": 37,
+        "code": "plotshape(bool(ph) and showpp, text = 'H', style = shape.labeldown, color = na, textcolor = color.new(color.red, 0), location = location.abovebar, offset = -prd)"
+      },
+      {
+        "line": 38,
+        "code": "plotshape(bool(pl) and showpp, text = 'L', style = shape.labelup, color = na, textcolor = color.new(color.lime, 0), location = location.belowbar, offset = -prd)"
+      },
+      {
+        "line": 189,
+        "code": "alertcondition(resistancebroken, title = 'Resistance Broken', message = 'Resistance Broken')"
+      },
+      {
+        "line": 190,
+        "code": "alertcondition(supportbroken, title = 'Support Broken', message = 'Support Broken')"
+      },
+      {
+        "line": 191,
+        "code": "plotshape(showsrbroken and resistancebroken, style = shape.triangleup, location = location.belowbar, color = color.new(color.lime, 0), size = size.tiny)"
+      },
+      {
+        "line": 192,
+        "code": "plotshape(showsrbroken and supportbroken, style = shape.triangledown, location = location.abovebar, color = color.new(color.red, 0), size = size.tiny)"
+      }
+    ],
+    "minimum_python_numerical_outputs": [
+      "pivot_high",
+      "pivot_low",
+      "pivot_index",
+      "channel_width",
+      "pivot_count",
+      "channel_1..10_top",
+      "channel_1..10_bottom",
+      "channel_1..10_strength"
+    ],
+    "minimum_python_event_outputs": [
+      "pivot_confirmed",
+      "inside_channel",
+      "bull_signal",
+      "bear_signal"
+    ],
+    "required_extra_inputs": [],
+    "capture_route": "Optional breakout plotshapes export event flags when enabled. Pivot shapes use a negative drawing offset and cannot be used as confirmation timestamps. Private instrumentation exposes undelayed confirmation and channel array slots.",
+    "required_observed_cases": [
+      "pivot warmup and rightmost ties",
+      "channel recomputation/ranking ties",
+      "inside-channel exclusion",
+      "both breakouts",
+      "lookback eviction"
+    ],
+    "scope_limit": ""
+  }
+]

@@ -1,0 +1,306 @@
+{
+  "schema": "core-pilot-stop-evidence-v1",
+  "verified_at_utc": "2026-09-06T07:23:14.350433+00:00",
+  "status": "core_pilot_deliberately_stopped_during_build",
+  "campaign": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/raw-options-20260906-r2/v6",
+  "source_checkout": "/home/healy/Coding/HealysBacktester",
+  "source_commit": "18eb6b7cfc0edebfc9bfafae875b5d44fdb18b9e",
+  "verification_module": "/home/healy/Coding/HealysBacktester/scripts/research_local.py",
+  "operator_stop_evidence": {
+    "reported_by": "parent agent /root",
+    "wrapper_exit_code": 1,
+    "SPY_worker_return_code": -15,
+    "reason": "deliberate stop before expanded draft source integration"
+  },
+  "scope_metadata": {
+    "campaign": "raw-options-20260906-r2",
+    "data_candidate": "audit-repair-20260905-final",
+    "feature_contract_version": "2026-09-06-raw-spot-v3",
+    "pool": "v6",
+    "strategies": [
+      "ma",
+      "macd",
+      "rsi",
+      "squeeze",
+      "tv_rating",
+      "bbands",
+      "stoch",
+      "volume",
+      "supertrend",
+      "elliott",
+      "keltner",
+      "bbw_squeeze"
+    ],
+    "symbols": [
+      "IBKR",
+      "SPY"
+    ],
+    "window": [
+      "2024-08-26",
+      "2026-08-24"
+    ]
+  },
+  "scope_file_sha256": "cb80d98a4a49724e5a07f18013b19d1b5546ec09a78e7fd163a88d82a2111a94",
+  "verification": {
+    "full_input_fingerprint_matches_original": true,
+    "scope_metadata_matches_original": true,
+    "candidate_seal_matches": true,
+    "original_input_fingerprint_sha256": "b43c1559b88df59b4c10c98f25cf89cab1f7b6eb4c2970694cfed863fced3cd4",
+    "current_input_fingerprint_sha256": "b43c1559b88df59b4c10c98f25cf89cab1f7b6eb4c2970694cfed863fced3cd4",
+    "full_input_file_count": 123711,
+    "file_counts_by_scope": {
+      "cache": 123472,
+      "source": 215,
+      "universe": 24
+    },
+    "runtime_matches_original": true,
+    "changed_paths": [],
+    "added_paths": [],
+    "removed_paths": [],
+    "elapsed_seconds": 21.272834954994323
+  },
+  "freeze_outputs": [
+    {
+      "path": "artifacts/freeze_shards/IBKR.json",
+      "bytes": 30468,
+      "sha256": "d1689201555205cdf65d3eaa94619219ea968650d16e089fc1d1fe5a364c25fe",
+      "symbols": [
+        "IBKR"
+      ],
+      "family_counts": {
+        "IBKR": 12
+      },
+      "config_hash": "410081c1a9ed",
+      "skipped": []
+    },
+    {
+      "path": "artifacts/freeze_shards/SPY.json",
+      "bytes": 44330,
+      "sha256": "bd98711acd50da1ab492c5441b079d2b528fc44aed28b61f16205f36ff109798",
+      "symbols": [
+        "SPY"
+      ],
+      "family_counts": {
+        "SPY": 12
+      },
+      "config_hash": "410081c1a9ed",
+      "skipped": []
+    },
+    {
+      "path": "artifacts/baseline_spec.json",
+      "bytes": 74105,
+      "sha256": "6bdf6d56a4169415dde7c95b113f3ea4a792eae1efa2b4085af8389aba275bf5",
+      "symbols": [
+        "IBKR",
+        "SPY"
+      ],
+      "family_counts": {
+        "IBKR": 12,
+        "SPY": 12
+      },
+      "config_hash": "410081c1a9ed",
+      "skipped": []
+    }
+  ],
+  "completed_symbol_row_outputs": [
+    {
+      "path": "artifacts/meta_rows/IBKR.parquet",
+      "bytes": 557250,
+      "sha256": "1697476148c10877797c69a45c36f004b25c81a1d3c9096b357a22323f36de60",
+      "row_count": 8910,
+      "symbols": [
+        "IBKR"
+      ],
+      "families": [
+        "bbands",
+        "bbw_squeeze",
+        "elliott",
+        "keltner",
+        "ma",
+        "macd",
+        "rsi",
+        "squeeze",
+        "stoch",
+        "supertrend",
+        "tv_rating",
+        "volume"
+      ],
+      "family_count": 12,
+      "rows_per_family": {
+        "bbands": 1280,
+        "bbw_squeeze": 225,
+        "elliott": 475,
+        "keltner": 970,
+        "ma": 355,
+        "macd": 1580,
+        "rsi": 140,
+        "squeeze": 260,
+        "stoch": 125,
+        "supertrend": 1095,
+        "tv_rating": 1535,
+        "volume": 870
+      },
+      "dtes": [
+        1,
+        5,
+        10,
+        30,
+        45
+      ],
+      "rows_per_dte": {
+        "1": 1782,
+        "5": 1782,
+        "10": 1782,
+        "30": 1782,
+        "45": 1782
+      },
+      "executed_count": 6066,
+      "executed_fraction": 0.6808080808080809
+    }
+  ],
+  "completed_symbol_mark_outputs": [
+    {
+      "path": "artifacts/meta_marks/IBKR.parquet",
+      "bytes": 667609,
+      "sha256": "4712af2664279ea10e999ccf2d6c1a1872c2642cb1059b954355790df9ac255a",
+      "row_count": 95159
+    }
+  ],
+  "remaining_partials": {
+    "row_part_count": 1,
+    "mark_part_count": 1,
+    "provenance_file_count": 13,
+    "rows": [
+      {
+        "path": "artifacts/partials/SPY.ma.rows.parquet",
+        "bytes": 104347,
+        "sha256": "97ac5594991f4175d9d9839b9a7779f5c942ec06114caebeefc4779774ccdef0",
+        "row_count": 984,
+        "symbols": [
+          "SPY"
+        ],
+        "families": [
+          "ma"
+        ],
+        "family_count": 1,
+        "rows_per_family": {
+          "ma": 984
+        },
+        "dtes": [
+          1,
+          2,
+          4,
+          5,
+          7,
+          10,
+          30,
+          45
+        ],
+        "rows_per_dte": {
+          "1": 123,
+          "2": 123,
+          "4": 123,
+          "5": 123,
+          "7": 123,
+          "10": 123,
+          "30": 123,
+          "45": 123
+        },
+        "executed_count": 976,
+        "executed_fraction": 0.991869918699187
+      }
+    ],
+    "marks": [
+      {
+        "path": "artifacts/partials/SPY.ma.marks.parquet",
+        "bytes": 932267,
+        "sha256": "e3fa28476801cfaf42ad8bd31ef21dab540c219cc43158628be95f5e0884884c",
+        "row_count": 83824
+      }
+    ],
+    "provenance": [
+      {
+        "path": "artifacts/partials/IBKR.bbands.rows.provenance.json",
+        "bytes": 2280,
+        "sha256": "4d5af019267327b43e8ddd3d554d66d2f3639fa47acd0c63d4f24fd6ccd5d5dc"
+      },
+      {
+        "path": "artifacts/partials/IBKR.bbw_squeeze.rows.provenance.json",
+        "bytes": 2328,
+        "sha256": "2d5ff12e10d605d42abfa5358321b2e735c3a909a3792fdce10a71e67db2578a"
+      },
+      {
+        "path": "artifacts/partials/IBKR.elliott.rows.provenance.json",
+        "bytes": 2279,
+        "sha256": "9839ee8fd1f6223c447eda2921a3d78e73ac98cda5ff8fbe93771c55e5a6a6c2"
+      },
+      {
+        "path": "artifacts/partials/IBKR.keltner.rows.provenance.json",
+        "bytes": 2294,
+        "sha256": "a9814eedf530b2d2f2a4ff533be21b62aa273b978c8d84ca2d3813e83c01b442"
+      },
+      {
+        "path": "artifacts/partials/IBKR.ma.rows.provenance.json",
+        "bytes": 2298,
+        "sha256": "c1ca1fd52b627694d0638f1758d786c1ab498c31d95d56fd45d2c8d9f2a677ff"
+      },
+      {
+        "path": "artifacts/partials/IBKR.macd.rows.provenance.json",
+        "bytes": 2358,
+        "sha256": "947aea0666dfb0e72d718d33672bc88dfdfba404fc61f908472c875b8b3144c1"
+      },
+      {
+        "path": "artifacts/partials/IBKR.rsi.rows.provenance.json",
+        "bytes": 2221,
+        "sha256": "0f7800420547321577e686a7577aba96ad25e610fa85397f999914b0eff56505"
+      },
+      {
+        "path": "artifacts/partials/IBKR.squeeze.rows.provenance.json",
+        "bytes": 2301,
+        "sha256": "71305be7e88e9fea3164cc415bd528134d2f86e70b94135d9c6815107ffb601f"
+      },
+      {
+        "path": "artifacts/partials/IBKR.stoch.rows.provenance.json",
+        "bytes": 2261,
+        "sha256": "1f2ff4873700e4ccf70f704526350d4625b008986351a9c1a1a17f3e7a1f123b"
+      },
+      {
+        "path": "artifacts/partials/IBKR.supertrend.rows.provenance.json",
+        "bytes": 2270,
+        "sha256": "26b038d023b7674ca728432ca1797cc5a6b9be961c96865303dd5f8c5ec63e6d"
+      },
+      {
+        "path": "artifacts/partials/IBKR.tv_rating.rows.provenance.json",
+        "bytes": 2333,
+        "sha256": "796247e2a251938214cda82674468655160dff87026ba586621c5e9a3d384735"
+      },
+      {
+        "path": "artifacts/partials/IBKR.volume.rows.provenance.json",
+        "bytes": 2331,
+        "sha256": "cdd30a557a42d3486cd99f7251ed6d46f156152549bfa2d2d7baeae6e6d6528c"
+      },
+      {
+        "path": "artifacts/partials/SPY.ma.rows.provenance.json",
+        "bytes": 3074,
+        "sha256": "96246591bd0987c18e7d057b9670ca4af281eedbe1d8523c187211b9e36406ef"
+      }
+    ]
+  },
+  "stage_completion": {
+    "freeze": true,
+    "build": false,
+    "assemble": false,
+    "evaluate": false,
+    "finalize": false
+  },
+  "assembled_dataset_exists": false,
+  "expanded_feature_contract": false,
+  "expanded_reuse_eligible": false,
+  "model_admission": false,
+  "limitations": [
+    "The fingerprint validates the original stopped core pilot inputs, not an expanded source campaign.",
+    "IBKR row execution counts describe pipeline coverage and are not a model or strategy verdict.",
+    "SPY partial output and all stopped-scope artifacts are retained; full build/assembly/evaluation/finalization did not complete.",
+    "Expanded-source work requires a separately bound campaign; this report does not authorize reuse."
+  ]
+}

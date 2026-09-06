@@ -57,3 +57,8 @@ done-check), or `v4_finalize.sh` / `v4_full_run.sh` for the marker-based form.
 Test a descriptor without waiting for a real reboot:
 `bash scripts/boot_restart.sh` — it's idempotent and safe to run any time. But
 a manual run is NOT a substitute for a real reboot test of the logon trigger.
+
+Retired descriptors use a suffix outside `*.sh`, preserving the historical
+launch definition without retrying a superseded campaign. The September 6
+raw-options core pilot is retained as `raw_options_pilot_20260906.retired`;
+its nonzero stop marker is deliberately not rewritten as a success.

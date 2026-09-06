@@ -663,3 +663,30 @@ indicator verification, sufficient historical quote/trade coverage and the
 combined feature integration before freezing the full expanded campaign.
 Keep the controlled baseline comparisons within the final research design;
 they do not replace the requested expanded build.
+
+## 2026-09-06 — full v6 includes all thirteen scopes and option ticks
+
+The user's latest instruction authorizes completing and starting the full
+expanded freeze. Its scope is twenty proposal families, thirteen selected
+indicator feature groups (96 columns), and ten historical tick columns.
+Eight sources have explicit directional wrappers; five remain features.
+Fixed source defaults avoid admitting unverified grid combinations. Setup
+identities are typed strings and preserve source book priority.
+
+A new opt-in research contract binds actual parity/default/proposal/context
+and immutable tick inputs. Shared label/feature selection uses previous-date
+observed contracts and current raw spot, with no current snapshot Greeks.
+Missing windows are errors; unknown conditions stay outside eligible trades.
+Actual source comparisons cover accepted proposal exits as well as indicator
+fields; warmup-only NaNs cannot establish active-value parity.
+
+The older core pilot completed its two freezes and IBKR build, then its
+remaining SPY worker was deliberately stopped before source integration.
+All original input bytes/scope/runtime/seal were verified unchanged first.
+Its nonzero exit and artifacts are preserved, and its descriptor is retired.
+It is not relabeled as the user's expanded rebuild.
+
+The full freeze launcher was invoked and refused the absent reviewed input
+manifest. Actual chart exports/context and broad tick coverage remain gates;
+no synthetic or self-declared admission artifact will replace them. No extra
+user launch confirmation is needed once these real inputs/checks pass.
