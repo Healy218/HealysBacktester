@@ -1,0 +1,178 @@
+{
+  "plan": {
+    "contracts": [
+      "SPY260824C00766000",
+      "SPY260824P00766000"
+    ],
+    "start_ns": 1787578200000000000,
+    "end_ns": 1787579100000000000,
+    "max_pages_per_kind_contract": 20,
+    "contract_selection": "explicit pilot; no training-universe admission",
+    "output": "nn_meta/option_tick_captures/spy-20260824-open-v2",
+    "execute": true
+  },
+  "complete": true,
+  "elapsed_seconds": 2.2481306489971757,
+  "contracts": [
+    {
+      "contract": "SPY260824C00766000",
+      "captures": {
+        "quotes": {
+          "schema": "massive-option-ticks-v1",
+          "provider": "massive",
+          "contract": "O:SPY260824C00766000",
+          "kind": "quotes",
+          "start_ns": 1787578200000000000,
+          "end_ns": 1787579100000000000,
+          "complete": true,
+          "pages": 1,
+          "page_result_sha256": [
+            "0760887b8a2eea747c2a05589877f56a3f837c78e57fe9123c079839c76b7d9c"
+          ],
+          "duplicates_removed": 0,
+          "records": 16626,
+          "records_without_reliable_sequence": 0,
+          "deduplication_policy": "positive sequence plus SIP timestamp; unidentified prints preserved",
+          "records_sha256": "0760887b8a2eea747c2a05589877f56a3f837c78e57fe9123c079839c76b7d9c",
+          "retrieved_at": "2026-09-06T03:38:43.300932+00:00",
+          "availability_basis": "historical_sip_timestamp; local receipt latency unknown"
+        },
+        "trades": {
+          "schema": "massive-option-ticks-v1",
+          "provider": "massive",
+          "contract": "O:SPY260824C00766000",
+          "kind": "trades",
+          "start_ns": 1787578200000000000,
+          "end_ns": 1787579100000000000,
+          "complete": true,
+          "pages": 1,
+          "page_result_sha256": [
+            "7f9796128948666e6f76d09a19b223b4ce81e22fd27fe3c98d124398a638c456"
+          ],
+          "duplicates_removed": 0,
+          "records": 1882,
+          "records_without_reliable_sequence": 1882,
+          "deduplication_policy": "positive sequence plus SIP timestamp; unidentified prints preserved",
+          "records_sha256": "7f9796128948666e6f76d09a19b223b4ce81e22fd27fe3c98d124398a638c456",
+          "retrieved_at": "2026-09-06T03:38:43.490051+00:00",
+          "availability_basis": "historical_sip_timestamp; local receipt latency unknown"
+        }
+      },
+      "files": {
+        "SPY260824C00766000.quotes.json.gz": {
+          "bytes": 260439,
+          "sha256": "b920b9e42407ebe6d05698867ae6a5b1866ddab540615d5d032eed39835b79b4"
+        },
+        "SPY260824C00766000.trades.json.gz": {
+          "bytes": 19523,
+          "sha256": "7fe680d602854f98ae0640b421e5bba6a5b926a567b3003c3677eca102722f1b"
+        }
+      },
+      "features": {
+        "schema": "option-tick-features-v1",
+        "availability_basis": "sip",
+        "quote_updates": 16626,
+        "valid_quote_time_fraction": 0.9999049779644444,
+        "time_weighted_spread_bps": 379.82191483301585,
+        "time_weighted_size_imbalance": -0.10965529271211565,
+        "last_quote_age_seconds": 6.07884614,
+        "last_bid": 0.15,
+        "last_ask": 0.16,
+        "reported_trade_count": 1882,
+        "reported_contract_volume": 13209,
+        "reported_trade_vwap": 0.3210591263532442,
+        "excluded_invalid_or_corrected_trades": 0,
+        "quote_test_signed_volume": 0,
+        "quote_test_classified_volume_fraction": 0.0,
+        "allowed_trade_conditions": [],
+        "model_admission": false
+      }
+    },
+    {
+      "contract": "SPY260824P00766000",
+      "captures": {
+        "quotes": {
+          "schema": "massive-option-ticks-v1",
+          "provider": "massive",
+          "contract": "O:SPY260824P00766000",
+          "kind": "quotes",
+          "start_ns": 1787578200000000000,
+          "end_ns": 1787579100000000000,
+          "complete": true,
+          "pages": 1,
+          "page_result_sha256": [
+            "c528283dd4a19460fdc62e78c8d46fc513cc498bda856e906d15477b73d34c57"
+          ],
+          "duplicates_removed": 0,
+          "records": 18699,
+          "records_without_reliable_sequence": 0,
+          "deduplication_policy": "positive sequence plus SIP timestamp; unidentified prints preserved",
+          "records_sha256": "c528283dd4a19460fdc62e78c8d46fc513cc498bda856e906d15477b73d34c57",
+          "retrieved_at": "2026-09-06T03:38:44.531186+00:00",
+          "availability_basis": "historical_sip_timestamp; local receipt latency unknown"
+        },
+        "trades": {
+          "schema": "massive-option-ticks-v1",
+          "provider": "massive",
+          "contract": "O:SPY260824P00766000",
+          "kind": "trades",
+          "start_ns": 1787578200000000000,
+          "end_ns": 1787579100000000000,
+          "complete": true,
+          "pages": 1,
+          "page_result_sha256": [
+            "71cb808b2b08ee29f6b6139db48154563956f06b0ac7f7b7606a56bfc5603cdc"
+          ],
+          "duplicates_removed": 0,
+          "records": 572,
+          "records_without_reliable_sequence": 572,
+          "deduplication_policy": "positive sequence plus SIP timestamp; unidentified prints preserved",
+          "records_sha256": "71cb808b2b08ee29f6b6139db48154563956f06b0ac7f7b7606a56bfc5603cdc",
+          "retrieved_at": "2026-09-06T03:38:44.742468+00:00",
+          "availability_basis": "historical_sip_timestamp; local receipt latency unknown"
+        }
+      },
+      "files": {
+        "SPY260824P00766000.quotes.json.gz": {
+          "bytes": 306299,
+          "sha256": "71f4d3c79e86fbc81f192a9f00e68d83017e29c2dba925f1be8bde6d5e48ddd5"
+        },
+        "SPY260824P00766000.trades.json.gz": {
+          "bytes": 6542,
+          "sha256": "49525433ea1d9cd305faa5e96420ec7aee90fc27d3d84ea922670f4de436696b"
+        }
+      },
+      "features": {
+        "schema": "option-tick-features-v1",
+        "availability_basis": "sip",
+        "quote_updates": 18699,
+        "valid_quote_time_fraction": 0.9988939361222222,
+        "time_weighted_spread_bps": 133.1315499867493,
+        "time_weighted_size_imbalance": 0.05393785990275084,
+        "last_quote_age_seconds": 0.047181605,
+        "last_bid": 3.88,
+        "last_ask": 3.9,
+        "reported_trade_count": 572,
+        "reported_contract_volume": 2154,
+        "reported_trade_vwap": 2.8787372330547827,
+        "excluded_invalid_or_corrected_trades": 0,
+        "quote_test_signed_volume": 0,
+        "quote_test_classified_volume_fraction": 0.0,
+        "allowed_trade_conditions": [],
+        "model_admission": false
+      }
+    }
+  ],
+  "model_admission": false,
+  "evidence_notes": {
+    "purpose": "Entitlement, timestamp quality, bounded storage and descriptive feature pilot; not model training or fill evidence",
+    "selection": "Explicit SPY 2026-08-24 expiry call and put, strike766; cached prior-session close765.69 informed the pilot, and both cached life_start dates were2026-08-11. This is not the new raw-price training selector.",
+    "limitations": [
+      "Single symbol, one opening15-minute window, expiry day; cannot extrapolate volume or latency to the entire universe",
+      "Trade sequence0 and millisecond-aligned timestamps observed; identical-looking prints are preserved",
+      "Trade condition mapping is not admitted for directional signing",
+      "No historical local receipt latency; quote-test signing is an estimate, not true aggressor side",
+      "No fill, slippage, model or live-feed parity evidence"
+    ]
+  }
+}
