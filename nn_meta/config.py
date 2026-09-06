@@ -37,6 +37,11 @@ if CAMPAIGN and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", CAMPAIGN):
 if os.environ.get("NN_META_V6_EXPANDED", "0") not in ("0", "1"):
     raise ValueError("NN_META_V6_EXPANDED must be 0 or 1")
 V6_EXPANDED = os.environ.get("NN_META_V6_EXPANDED", "0") == "1"
+V6_PARITY_POLICY = os.environ.get("NN_META_V6_PARITY_POLICY", "verified")
+if V6_PARITY_POLICY not in ("verified", "deferred"):
+    raise ValueError("NN_META_V6_PARITY_POLICY must be verified or deferred")
+if V6_PARITY_POLICY == "deferred" and not V6_EXPANDED:
+    raise ValueError("deferred comparison requires the expanded v6 scope")
 V6_INPUTS = os.environ.get("NN_META_V6_INPUTS", "")
 V6_INPUTS_SHA256 = os.environ.get("NN_META_V6_INPUTS_SHA256", "")
 if V6_EXPANDED and (POOL != "v6" or not CAMPAIGN or not V6_INPUTS

@@ -106,7 +106,7 @@ def test_full_v6_freeze_cannot_start_without_feature_evidence(tmp_path):
     env.pop('NN_META_V6_INPUTS', None)
     done = subprocess.run(['bash', str(tmp_path/'scripts/run_freeze_v6_local.sh'), '--run'],
                           cwd=tmp_path, env=env, capture_output=True, text=True)
-    assert done.returncode != 0 and 'reviewed TV13' in done.stderr
+    assert done.returncode != 0 and 'sealed TV13' in done.stderr
     assert not (tmp_path/'calls').exists()
 
 

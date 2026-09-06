@@ -690,3 +690,15 @@ The full freeze launcher was invoked and refused the absent reviewed input
 manifest. Actual chart exports/context and broad tick coverage remain gates;
 no synthetic or self-declared admission artifact will replace them. No extra
 user launch confirmation is needed once these real inputs/checks pass.
+
+### 2026-09-06 — Defer external comparison, retain full TV13 scope
+
+The user explicitly requested moving past external TradingView comparison and
+keeping all thirteen indicator groups in v6. Added an explicit deferred policy
+with a distinct unverified research contract, full 106-column scope and all
+twenty proposal families. The manifest records the reason and complete feature
+settings; no parity report is synthesized. The verified path remains available.
+This supersedes the external-comparison prerequisite for the research run.
+Per-symbol 2D/VWAP context and historical tick inputs still must exist. Asked
+whether to use explicit local research assumptions for the missing context;
+that is a different choice from skipping output comparison.

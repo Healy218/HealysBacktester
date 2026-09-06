@@ -1,5 +1,11 @@
 # Expanded v6 integration milestone
 
+Update: the user subsequently deferred external TradingView comparison while
+retaining all thirteen groups. The new opt-in unverified research contract is
+documented in [expanded inputs](../specs/V6_EXPANDED_INPUTS.md). The original
+milestone below records the earlier gates; context and full tick coverage are
+still missing, and no freeze launch is claimed by this update.
+
 The expanded v6 code is implemented behind real input gates. **The full
 freeze has not started:** actual TradingView comparisons/context and complete
 historical option tick coverage are still missing. A preview template or

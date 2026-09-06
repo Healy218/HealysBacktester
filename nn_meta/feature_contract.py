@@ -17,7 +17,9 @@ from enum import IntEnum
 from typing import Iterable, Mapping
 import os
 
-CONTRACT_VERSION = ("2026-09-06-tv13-option-ticks-v4"
+CONTRACT_VERSION = (("2026-09-06-tv13-option-ticks-unverified-v1"
+                     if os.environ.get("NN_META_V6_PARITY_POLICY", "verified") == "deferred"
+                     else "2026-09-06-tv13-option-ticks-v4")
                     if os.environ.get("NN_META_V6_EXPANDED", "0") == "1"
                     else "2026-09-06-raw-spot-v3")
 

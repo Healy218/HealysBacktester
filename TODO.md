@@ -7,9 +7,14 @@ each later stage can run.
 
 **User scope confirmed September 6:** the full v6 freeze/build must include
 all thirteen selected TradingView indicator scopes and quote/trade features.
+**Latest instruction:** defer the external TradingView comparison, keeping all
+thirteen groups. The implemented opt-in unverified research contract records
+that choice. Actual per-symbol context and complete historical tick coverage
+are still missing; local calendar/VWAP assumptions are awaiting clarification.
 The existing-family SPY/IBKR pilot is now stopped and preserved. Do not launch a full
 universe freeze while those additions are still missing; complete their
-verification, historical coverage and feature integration first.
+historical coverage and feature integration first. External comparison is
+deferred for this research run.
 
 The audit repairs are implemented and merged: **51 main findings and four
 additional concerns**. The final expanded integration suite passed **1,390 tests and

@@ -121,10 +121,12 @@ def test_bar_digest_preserves_utc_identity_but_binds_ohlcv():
     assert expanded.bars_sha256(naive) != expanded.bars_sha256(bars)
 
 
-def test_expanded_config_requires_inputs_and_selects_full_schema(tmp_path):
+@pytest.mark.parametrize("parity_policy", ["verified", "deferred"])
+def test_expanded_config_requires_inputs_and_selects_full_schema(tmp_path, parity_policy):
     root = Path(__file__).resolve().parents[1]
     env = dict(os.environ, NN_META_POOL="v6", NN_META_CAMPAIGN="test-expanded",
-               NN_META_V6_EXPANDED="1", NN_META_V6_INPUTS="", NN_META_V6_INPUTS_SHA256="")
+               NN_META_V6_EXPANDED="1", NN_META_V6_INPUTS="", NN_META_V6_INPUTS_SHA256="",
+               NN_META_V6_PARITY_POLICY=parity_policy)
     result = subprocess.run([sys.executable, "-c", "from nn_meta import config"],
                             cwd=root, env=env, capture_output=True, text=True)
     assert result.returncode != 0 and "sealed feature input" in result.stderr
@@ -135,7 +137,8 @@ def test_expanded_config_requires_inputs_and_selects_full_schema(tmp_path):
     strategies, features, contract, execution = json.loads(result.stdout.strip().splitlines()[-1])
     assert len(strategies) == 20 and len([s for s in strategies if s.startswith("tv_") and s != "tv_rating"]) == 8
     assert set(expanded.EXTRA_FEATURES) <= set(features) and "prem_spot" not in features
-    assert contract == expanded.CONTRACT_VERSION
+    assert contract == (expanded.DEFERRED_CONTRACT_VERSION if parity_policy == "deferred"
+                        else expanded.CONTRACT_VERSION)
     assert execution["DECISION_CHAIN_POLICY"] == "previous-date-raw-moneyness-v1"
 
 
@@ -213,6 +216,67 @@ def test_runtime_context_matches_the_bound_parity_schema(tmp_path, monkeypatch):
     context = inputs.context("SPY", bundle.bars)
     assert context["minimum_tick"] == .01
     assert context["timeframe_flags"].index.equals(bundle.bars.index)
+
+
+def _deferred_bundle(tmp_path, monkeypatch):
+    bundle = _synthetic_input_bundle(tmp_path, monkeypatch)
+    doc = json.loads(bundle.path.read_text())
+    doc.pop("parity_pack")
+    doc["feature_contract_version"] = expanded.DEFERRED_CONTRACT_VERSION
+    doc["external_comparison"] = {"status": "deferred", "research_only": True,
+                                  "reason": "Synthetic test of explicit user deferral"}
+    doc["feature_schema"] = expanded.feature_schema(minimum_tick=.01)
+    bundle.path.write_text(json.dumps(doc))
+    bundle.digest = expanded.sha256(bundle.path)
+    return bundle
+
+
+def test_deferred_comparison_preserves_context_and_tick_requirements(tmp_path, monkeypatch):
+    from nn_meta import v6_admission
+    bundle = _deferred_bundle(tmp_path, monkeypatch)
+    def forbidden(*args):
+        pytest.fail("deferred research must not invoke the external comparator")
+    monkeypatch.setattr(v6_admission, "verify_parity_pack", forbidden)
+    inputs = expanded.ExpandedInputs(bundle.path, bundle.digest, parity_policy="deferred")
+    assert inputs.parity is None
+    assert len(inputs.document["feature_names"]) == 106
+    inputs.context("SPY", bundle.bars)
+    with pytest.raises(KeyError, match="tick_store"):
+        inputs.bind_tick_stores(["SPY"])
+    changed = bundle.bars.copy()
+    changed.iloc[0, 0] += 1
+    with pytest.raises(ValueError, match="history bytes"):
+        inputs.context("SPY", changed)
+    flags_path = inputs.reference(inputs.document["symbols"]["SPY"]["timeframe_flags"])
+    flags = pd.read_parquet(flags_path)
+    flags["htf_change"] = False
+    flags.to_parquet(flags_path)
+    with pytest.raises(ValueError, match="bytes changed"):
+        inputs.context("SPY", bundle.bars)
+
+
+def test_deferred_contract_cannot_be_loaded_as_verified(tmp_path, monkeypatch):
+    bundle = _deferred_bundle(tmp_path, monkeypatch)
+    with pytest.raises(ValueError, match="complete TV13/tick"):
+        expanded.ExpandedInputs(bundle.path, bundle.digest)
+
+
+@pytest.mark.parametrize("mutation", ["reason", "research_only", "parity_pack", "feature_schema"])
+def test_deferred_inputs_reject_ambiguous_or_drifted_declarations(tmp_path, monkeypatch, mutation):
+    bundle = _deferred_bundle(tmp_path, monkeypatch)
+    doc = json.loads(bundle.path.read_text())
+    if mutation == "reason":
+        doc["external_comparison"]["reason"] = " "
+    elif mutation == "research_only":
+        doc["external_comparison"]["research_only"] = False
+    elif mutation == "parity_pack":
+        doc["parity_pack"] = {}
+    else:
+        doc["feature_schema"]["columns"].pop()
+    bundle.path.write_text(json.dumps(doc))
+    with pytest.raises(ValueError):
+        inputs = expanded.ExpandedInputs(bundle.path, expanded.sha256(bundle.path), parity_policy="deferred")
+        inputs.context("SPY", bundle.bars)
 
 
 @pytest.mark.parametrize("setting", ["minimum_tick", "session_policy", "vwap_mode"])

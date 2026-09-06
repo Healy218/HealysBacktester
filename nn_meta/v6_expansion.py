@@ -1,7 +1,9 @@
 """Sealed inputs and common row projection for the expanded v6 research pool.
 
 The manifest is an external hash anchor, not a self-authorizing admission bit.
-Its parity pack is rechecked from captured inputs before a worker can run.
+Verified runs recheck a captured parity pack before a worker can run. Explicit
+comparison deferral uses a separate unverified research contract; context and
+tick coverage are still required.
 Historical tick coverage is exact per decision; live receipt/condition adapters
 remain a separate deployment gate.
 """
@@ -22,6 +24,7 @@ from nn_meta.tradingview_features import FEATURE_NAMES, tradingview_features, va
 
 SCHEMA = "v6-expanded-inputs-v1"
 CONTRACT_VERSION = "2026-09-06-tv13-option-ticks-v4"
+DEFERRED_CONTRACT_VERSION = "2026-09-06-tv13-option-ticks-unverified-v1"
 EXTRA_FEATURES = (*FEATURE_NAMES, *NUMERIC_FEATURES)
 
 
@@ -56,14 +59,18 @@ def bars_sha256(bars):
 
 
 class ExpandedInputs:
-    def __init__(self, path, expected_sha256):
+    def __init__(self, path, expected_sha256, *, parity_policy="verified"):
+        if parity_policy not in ("verified", "deferred"):
+            raise ValueError("parity policy must be verified or deferred")
+        self.parity_policy = parity_policy
         self.path = Path(path).absolute()
         if not expected_sha256 or sha256(self.path) != expected_sha256:
             raise ValueError("expanded input manifest differs from external SHA256 anchor")
         self.digest = expected_sha256
         self.document = json.loads(self.path.read_bytes())
         doc = self.document
-        if (doc.get("schema") != SCHEMA or doc.get("feature_contract_version") != CONTRACT_VERSION
+        contract = DEFERRED_CONTRACT_VERSION if parity_policy == "deferred" else CONTRACT_VERSION
+        if (doc.get("schema") != SCHEMA or doc.get("feature_contract_version") != contract
                 or doc.get("feature_names") != list(EXTRA_FEATURES)
                 or doc.get("selection_policy") != POLICY_VERSION
                 or not isinstance(doc.get("symbols"), dict) or not doc["symbols"]):
@@ -71,11 +78,26 @@ class ExpandedInputs:
         if (not doc.get("tick_feature_policy", {}).get("allowed_trade_conditions")
                 or not doc["tick_feature_policy"].get("condition_references")):
             raise ValueError("expanded quote/trade features require an explicit evidence-bound eligible-trade policy")
-        from nn_meta.v6_admission import verify_parity_pack
-        pack = self.reference(doc["parity_pack"])
-        self.parity = verify_parity_pack(pack, doc["parity_pack"]["sha256"])
-        self.bound_files = dict(self.parity["input_files"])
-        self.bound_files.update(self.parity["verification_runtime_sha256"])
+        if parity_policy == "deferred":
+            declaration = doc.get("external_comparison", {})
+            if (declaration.get("status") != "deferred"
+                    or declaration.get("research_only") is not True
+                    or not isinstance(declaration.get("reason"), str)
+                    or not declaration["reason"].strip()
+                    or "parity_pack" in doc):
+                raise ValueError("deferred comparison requires an explicit research-only declaration and no parity pack")
+            self.parity = None
+            self.expected_feature_schema = doc["feature_schema"]
+            self.bound_files = {}
+        else:
+            if "external_comparison" in doc:
+                raise ValueError("verified inputs cannot contain a comparison waiver")
+            from nn_meta.v6_admission import verify_parity_pack
+            pack = self.reference(doc["parity_pack"])
+            self.parity = verify_parity_pack(pack, doc["parity_pack"]["sha256"])
+            self.expected_feature_schema = self.parity["feature_schema"]
+            self.bound_files = dict(self.parity["input_files"])
+            self.bound_files.update(self.parity["verification_runtime_sha256"])
         self.bound_files[str(self.path)] = self.digest
         self._contexts = {}
         self._matrices = {}
@@ -94,7 +116,8 @@ class ExpandedInputs:
     def assert_unchanged(self):
         if sha256(self.path) != self.digest:
             raise ValueError("expanded manifest changed during work")
-        self.reference(self.document["parity_pack"])
+        if self.parity_policy == "verified":
+            self.reference(self.document["parity_pack"])
         for path, digest in self.bound_files.items():
             if sha256(path) != digest:
                 raise ValueError(f"expanded evidence or runtime changed: {Path(path).name}")
@@ -120,8 +143,8 @@ class ExpandedInputs:
             actual_schema = feature_schema(minimum_tick=context["minimum_tick"],
                 session_policy=context.get("session_policy", "strict"),
                 vwap_mode="observed" if "vwap_observations" in context else "reset_flags")
-            if actual_schema != self.parity["feature_schema"]:
-                raise ValueError("runtime tick/session/VWAP/default feature scope differs from the verified parity pack")
+            if actual_schema != self.expected_feature_schema:
+                raise ValueError("runtime tick/session/VWAP/default feature scope differs from the verified parity pack or declared research schema")
             validate_feature_inputs(aware_bars(bars), **context)
             self._contexts[symbol] = context
         self.assert_unchanged()
@@ -231,7 +254,8 @@ def from_environment():
     from nn_meta import config
     if not config.V6_EXPANDED:
         raise ValueError("expanded inputs require NN_META_V6_EXPANDED=1")
-    result = ExpandedInputs(config.V6_INPUTS, config.V6_INPUTS_SHA256)
+    result = ExpandedInputs(config.V6_INPUTS, config.V6_INPUTS_SHA256,
+                            parity_policy=config.V6_PARITY_POLICY)
     if result.document.get("moneyness", 0.0) != config.EXEC_CONFIG.get("MONEYNESS", 0.0):
         raise ValueError("expanded feature and execution moneyness policies differ")
     return result

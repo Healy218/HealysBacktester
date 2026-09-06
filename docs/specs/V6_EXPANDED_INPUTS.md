@@ -10,11 +10,36 @@ cannot supply expanded freeze checkpoints, rows or bundles.
 
 ## Current admission state
 
+The user explicitly deferred the external TradingView comparison on September
+6 while retaining all thirteen indicator groups. Research may use
+`NN_META_V6_PARITY_POLICY=deferred` with the distinct contract
+`2026-09-06-tv13-option-ticks-unverified-v1`. Verified mode remains the default.
+This deferral does not claim parity or change the 106-column/20-family scope.
+
 Actual TradingView output captures are absent. Only a two-contract,
 one-window tick store has been materialized. A full expanded freeze has
 **not started**. Fixture templates and synthetic tests are preparation,
 not external parity evidence. The capture harnesses need actual review
 and compilation in TradingView before use.
+
+For the deferred path, omit `parity_pack` from the sealed manifest and add:
+
+```json
+"external_comparison": {
+  "status": "deferred",
+  "research_only": true,
+  "reason": "User requested skipping external TradingView comparison while retaining all 13 groups on 2026-09-06"
+}
+```
+
+Also set `feature_contract_version` to the unverified contract above and add
+`feature_schema` from `tradingview_features.feature_schema(...)` using the actual
+minimum tick, session policy and VWAP mode. Context must match that complete
+schema. Supply the externally recorded manifest hash as usual. A verified
+loader rejects this contract; the deferred path never returns a passing parity
+report. Hash-bound context, history, causality and exact tick-store checks still
+apply. The next phase is context materialization and request planning; external
+comparison is no longer its prerequisite on this path.
 
 The [capture intake specification](TRADINGVIEW_INSTRUMENTED_FIXTURES.md)
 explains original versus instrumented sources, retained history and terminal
@@ -61,7 +86,7 @@ report and writes its completion manifest last, after rechecking evidence and
 verifier hashes. Existing output directories are refused. A passing report is
 scoped parity evidence, not full context/tick coverage or freeze readiness.
 
-1. Obtain the actual source-default chart outputs and matching context streams;
+1. For verified mode, obtain the actual source-default chart outputs and matching context streams;
    review/compile any plot-only instrumentation. Include active states and
    proposal exits as well as raw indicator fields. Recompare all thirteen
    scopes using `nn_meta.v6_admission.verify_parity_pack`.
@@ -127,7 +152,7 @@ with a declared point-in-time provider. It avoids present-day Greeks and
 refreshes the moneyness band at each decision. Renamed OCC roots require
 explicit prior-date catalogue membership. Labels use the same selector.
 
-## Request planning after actual parity/context exist
+## Request planning after context exists
 
 Under the expanded pool/campaign/input environment, preview or execute local
 request planning. This stage writes no option outcomes and starts no downloads:
