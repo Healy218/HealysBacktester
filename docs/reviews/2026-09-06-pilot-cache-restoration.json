@@ -1,0 +1,28 @@
+{
+  "aborted_campaign": "raw-options-20260906/v6",
+  "aborted_outputs_eligible_for_resume": false,
+  "finished_at_utc": "2026-09-06T05:24:06.990357+00:00",
+  "moved_files": 1299,
+  "notes": [
+    "The stopped pilot materialized per-contract option bars under the sealed candidate.",
+    "Every original sealed payload was hashed before moving only the additional SPY/IBKR cache files.",
+    "Moved files were hashed before and after rename. Exact original candidate inventory and unchanged repair manifest were checked afterward.",
+    "The existing IBKR freeze shard belongs to the aborted campaign and remains preserved, not promoted.",
+    "A new campaign requires the provider cache namespace fix and its own current input fingerprint."
+  ],
+  "preserved_bytes": 17815393,
+  "quarantine": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/raw-options-20260906/v6/runs/provider_cache/quarantine",
+  "reason": "Aborted pilot wrote derived option contract caches into sealed data namespace.",
+  "repair_manifest_unchanged": true,
+  "restoration_journal": "nn_meta/campaigns/raw-options-20260906/v6/runs/provider_cache/quarantine/restoration_record.json",
+  "restoration_journal_sha256": "fc7e6bf61accdcee47a2518b3b131e55f67511e77b259c2d8914304ecbdba5c7",
+  "restored_exact_file_inventory": true,
+  "seal_claims_modified": false,
+  "source_cache": "/home/healy/Coding/HealysBacktester/nn_meta/data_candidates/audit-repair-20260905-final/cache",
+  "source_code_changed_by_restoration": false,
+  "started_at_utc": "2026-09-06T05:24:04.526798+00:00",
+  "status": "restored",
+  "unchanged_repair_manifest_sha256": "1463af69ef956cea0829a6f0fc98464bc7a5ac77b4cc940236c28ae8dc78e05c",
+  "unchanged_sealed_cache_digest": "489781bc546994ad1e433e8191bee093d9c99c9817f6f3ea74484ceb4b3fc04c",
+  "verified_original_payload_count": 123471
+}

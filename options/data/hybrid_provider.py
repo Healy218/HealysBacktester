@@ -27,6 +27,8 @@ Open/High/Low/Close/Volume) so they drop straight into the simulator.
 from __future__ import annotations
 
 import time
+import tempfile
+import re
 from datetime import date, timedelta
 from pathlib import Path
 from typing import Optional
@@ -68,8 +70,25 @@ def _interval_key(interval: str) -> str:
     return interval.lower().replace(" ", "")
 
 
+def _contained_cache_path(root: Path, occ: str, interval: str) -> Path:
+    key = _interval_key(interval)
+    if (not occ or occ in (".", "..") or "/" in occ or "\\" in occ or "\0" in occ
+            or not re.fullmatch(r"[a-z0-9]+", key)):
+        raise DataError("Unsafe contract/interval cache key")
+    path = root / f"bars_{key}" / f"{occ}.parquet"
+    if not path.resolve().is_relative_to(root.resolve()):
+        raise DataError("Contract cache path escapes its data root")
+    return path
+
+
 class HybridCachedProvider(OptionsDataProvider):
-    """Local-parquet chains/underlying + cached on-demand option bars."""
+    """Local-parquet chains/underlying + cached on-demand option bars.
+
+    ``bars_cache_dir`` is the sole writable materialization root. Optional
+    ``bars_readonly_cache_dirs`` are searched in order after a writable-cache
+    miss, before fetching; hits retain their values/attrs and are never copied
+    or promoted into the writable cache. Empty hits retain the same semantics.
+    """
 
     def __init__(
         self,
@@ -80,11 +99,15 @@ class HybridCachedProvider(OptionsDataProvider):
         live_provider: Optional[OptionsDataProvider] = None,
         allow_fetch: bool = True,
         universe_df: Optional[pd.DataFrame] = None,
+        bars_readonly_cache_dirs: tuple[Path | str, ...] = (),
     ):
         self._universe_path = Path(universe_parquet)
         self._und_daily_path = Path(underlying_daily_parquet)
         self._und_15m_path = Path(underlying_15m_parquet)
         self._cache_dir = Path(bars_cache_dir)
+        self._readonly_cache_dirs = tuple(Path(p) for p in bars_readonly_cache_dirs)
+        if any(self._cache_dir.resolve().is_relative_to(p.resolve()) for p in self._readonly_cache_dirs):
+            raise DataError("Writable contract cache must be outside readonly data roots")
         self._live = live_provider          # constructed lazily if None
         self._allow_fetch = allow_fetch
         self._universe = universe_df        # injectable for tests
@@ -95,9 +118,12 @@ class HybridCachedProvider(OptionsDataProvider):
         # masks ~20k rows instead of 5.2M (310x measured). Row order within
         # an underlying is the file's order, exactly as before.
         self._slices: dict[str, pd.DataFrame] = {}
+        self._life_indexes: dict[str, dict[str, tuple[date, date]]] = {}
+        self._life_fallbacks: dict[str, tuple[date, date]] = {}
         self._und_daily: Optional[pd.DataFrame] = None
         self._und_15m: Optional[pd.DataFrame] = None
         self.fetch_count = 0                # live fetches this session (stats)
+        self.cache_counts = {"writable_hit": 0, "readonly_hit": 0, "materialized": 0}
 
     # ── lazy loads ───────────────────────────────────────────────────────────
     def _get_universe(self) -> pd.DataFrame:
@@ -180,17 +206,46 @@ class HybridCachedProvider(OptionsDataProvider):
 
     # ── option bars: cache-first, fetch-on-miss ──────────────────────────────
     def _cache_path(self, occ: str, interval: str) -> Path:
-        return self._cache_dir / f"bars_{_interval_key(interval)}" / f"{occ}.parquet"
+        return _contained_cache_path(self._cache_dir, occ, interval)
 
     def _life_window(self, occ: str) -> tuple[date, date]:
-        """Full fetch window for a contract: its universe life, else OCC-derived."""
-        u = self._get_universe()
-        row = u[u["ticker"] == occ]
-        if not row.empty:
-            r = row.iloc[0]
-            return r["life_start"].date(), r["expiration"].date()
-        _, exp, _, _ = parse_occ_symbol(occ)
-        return exp - timedelta(days=_FALLBACK_LIFE_DAYS), exp
+        """Exact universe life using one cached ticker index per underlying.
+
+        Reuses chain slices instead of loading/masking the entire universe on
+        every materialization. First duplicate within a slice wins, as before.
+        Old OCC roots catalogued under a renamed underlying use a ticker
+        predicate fallback, preserving metadata life before the 75-day default.
+        """
+        if occ in self._life_fallbacks:
+            return self._life_fallbacks[occ]
+        root, exp, _, _ = parse_occ_symbol(occ)
+        if root not in self._life_indexes:
+            index = {}
+            for row in self._get_slice(root).itertuples():
+                index.setdefault(row.ticker, (row.life_start.date(), row.expiration.date()))
+            self._life_indexes[root] = index
+        window = self._life_indexes[root].get(occ)
+        if window is not None:
+            return window
+        if self._universe is not None:
+            universe = self._get_universe()
+            rows = universe[universe["ticker"] == occ]
+        else:
+            rows = self._normalize(pd.read_parquet(
+                self._universe_path, filters=[("ticker", "in", [occ, "O:" + occ])]))
+        if rows.empty:
+            window = (exp - timedelta(days=_FALLBACK_LIFE_DAYS), exp)
+        else:
+            row = rows.iloc[0]
+            window = (row.life_start.date(), row.expiration.date())
+        self._life_fallbacks[occ] = window
+        return window
+
+    def _assert_writable_cache_path(self, path: Path) -> None:
+        resolved = path.resolve()
+        if (not resolved.is_relative_to(self._cache_dir.resolve()) or
+                any(resolved.is_relative_to(p.resolve()) for p in self._readonly_cache_dirs)):
+            raise DataError("Contract materialization path escapes writable cache or enters readonly data")
 
     def _fetch_with_retry(self, occ: str, frm: date, to: date,
                           interval: str) -> "pd.DataFrame | None":
@@ -229,7 +284,16 @@ class HybridCachedProvider(OptionsDataProvider):
 
         if path.exists():
             df = pd.read_parquet(path)
-        elif self._allow_fetch:
+            self.cache_counts["writable_hit"] += 1
+        else:
+            fallback = next((p for root in self._readonly_cache_dirs
+                             if (p := _contained_cache_path(root, occ, interval)).exists()), None)
+            if fallback is not None:
+                df = pd.read_parquet(fallback)
+                self.cache_counts["readonly_hit"] += 1
+            else:
+                df = None
+        if df is None and self._allow_fetch:
             frm, exp = self._life_window(occ)
             to = min(exp + timedelta(days=1), date.today())
             df = self._fetch_with_retry(occ, frm, to, interval)
@@ -237,11 +301,20 @@ class HybridCachedProvider(OptionsDataProvider):
                 # transient failure — return empty WITHOUT caching so the next
                 # run retries this contract rather than caching a false blank.
                 return pd.DataFrame(columns=_OHLCV)
+            self._assert_writable_cache_path(path)
             path.parent.mkdir(parents=True, exist_ok=True)
-            tmp = path.with_suffix(".tmp")        # atomic: no truncated cache files
-            df.to_parquet(tmp)    # genuine empty results cached too: fetch once
-            tmp.replace(path)
-        else:
+            self._assert_writable_cache_path(path)
+            # Separate workers may miss the same contract. Unique temporary
+            # files prevent one worker replacing another worker's open file.
+            with tempfile.NamedTemporaryFile(dir=path.parent, prefix=".contract-", suffix=".tmp", delete=False) as stream:
+                tmp = Path(stream.name)
+            try:
+                df.to_parquet(tmp)  # genuine empty results still cached once
+                tmp.replace(path)
+            finally:
+                tmp.unlink(missing_ok=True)
+            self.cache_counts["materialized"] += 1
+        elif df is None:
             logger.info(f"[{_TAG}] {occ} {interval}: not cached and fetch disabled")
             return pd.DataFrame(columns=_OHLCV)
 
