@@ -1,4 +1,4 @@
-# Handoff — v6 capture intake CLI; actual inputs still required
+# Handoff — TradingView browser reached; sign-in blocks capture
 
 September 6, 2026, Chicago. Work remains on `main` in the primary checkout.
 The user asked to read the expanded milestone and code what is needed to start
@@ -6,6 +6,40 @@ the v6 freeze. Launch is already authorized once the real input gates pass.
 **The expanded freeze has not started.** Actual TradingView captures, exact
 per-symbol context and full historical option-tick coverage remain required.
 No source parity, evaluated model or deployment is claimed.
+
+## Latest continuation: direct browser capture
+
+The user explicitly directed continuing until the full freeze starts. I checked
+available tools and local exports, then obtained sandbox approval to open the
+unused Firefox `default` profile with localhost WebDriver BiDi on port 9222.
+The existing primary Firefox was left running. TradingView's chart and Pine
+Editor load successfully, but clicking **Add to chart** on its default script
+opens **Sign in**. This was observed directly, not inferred from documentation.
+The user was asked to sign in in the opened Firefox window; access remained
+pending at the last check. Never extract browser credentials or invent the
+required captures/compilation receipts to get past this gate.
+
+The capture browser is visible on the home-box desktop. Local automation code
+and generated harnesses are in `/tmp/healys-v6-browser/`; this is local session
+state, not campaign evidence. The BiDi helper holds an automation session while
+its process lives. Do not start a second session blindly if it is still active.
+Actual chart compilation/export has not occurred.
+
+Reviewed the three existing harnesses and identified their added-plot counts:
+Gaussian 17, Fibonacci 27, Uptrick 22. Pine has a 64-count total limit including
+some series-color/alert/fill counts. Added `scripts.prepare_tradingview_harnesses`
+to split their observations into copies adding at most eight plots each, with
+bar index/close time/confirmation repeated in every copy. All original bytes
+and observations are retained. The generated twelve drafts are in
+`/tmp/healys-v6-browser/split-harnesses/`. Every receipt remains unreviewed and
+uncompiled; this is no actual compiler-success claim. See the updated
+[instrumentation runbook](docs/specs/TRADINGVIEW_INSTRUMENTED_FIXTURES.md).
+
+Focused tests passed: 59. Full regression: **1,412 tests and 18 subtests passed**,
+11 warnings in 46.08 seconds. Diff checks pass.
+No capture/context admission gates were weakened and no freeze was launched.
+The prior handoff is archived
+[here](handoff-history/HANDOFF-2026-09-06-before-browser-capture.md).
 
 ## This session
 

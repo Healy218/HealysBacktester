@@ -12,6 +12,36 @@ the pack has been compiled or executed on TradingView. Preserve the upstream
 copyright/license and keep the copies private; capture provenance is separate from
 license/admission review.
 
+### Split captures for Pine's plot limit
+
+The original three drafts append 17, 27 and 22 observation plots. Pine limits
+each script to 64 plot counts, including series colors, alerts and some fills;
+counting `plot()` statements alone underestimates usage. In particular the
+Fibonacci draft adds 27 to an already plot-heavy original. Actual compilation
+has not yet established the final counts. See
+[TradingView's limits](https://www.tradingview.com/pine-script-docs/writing/limitations/).
+
+Generate smaller append-only drafts without changing the publication:
+
+```bash
+./venv/bin/python -m scripts.prepare_tradingview_harnesses \
+  --output /absolute/path/to/new-split-harnesses --run
+```
+
+The default adds at most eight plots per source copy, repeating bar index,
+close time and confirmed state in each shard. All other declared observations
+are retained across the shards. The three existing drafts produce twelve
+copies (Gaussian three, Fibonacci five, Uptrick four). Input draft receipts
+must match their regenerated unreviewed receipts exactly; completed reviews
+are preserved separately. Each new receipt starts unreviewed and uncompiled.
+This budget is preparation, not a claim that TradingView compiled the result.
+
+Capture each source's shards with identical settings and complete history.
+Each actual export becomes its own parity-pack fixture, with its own completed
+receipt and only the Python fields mapped by that receipt. Retain all source
+and context files. Do not splice rows from different history origins. Without
+`--run`, the command only previews the shard/file plan.
+
 ## Source receipt
 
 `scripts.tradingview_fixture.instrumentation_append(plots)` renders a fixed suffix.
