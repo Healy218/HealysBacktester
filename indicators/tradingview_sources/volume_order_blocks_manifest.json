@@ -1,0 +1,67 @@
+{
+  "group": "volume_order_blocks",
+  "adaptation_recorded_at_utc": "2026-09-06T02:14:15.384886+00:00",
+  "source_origin": "Official public versioned Pine source already pinned in structure_sources.json; raw bytes unchanged.",
+  "parity_status": "Source-backed local feature implementation; exported TradingView numerical fixtures pending",
+  "scripts": [
+    {
+      "public_id": "KcnNgwDI",
+      "name": "Volume-Weighted Order Block Zones [BigBeluga]",
+      "author": "BigBeluga",
+      "publication_version": 1,
+      "pine_id": "PUB;891a96497b1f41c2ae6eb73cc0a0e808",
+      "source_url": "https://www.tradingview.com/script/KcnNgwDI-Volume-Weighted-Order-Block-Zones-BigBeluga/",
+      "source_file": "KcnNgwDI.pine",
+      "sha256": "30be5494a064908c803de89debc83cf13ad35c6635bcd27cf371e11ccabadb2b",
+      "license": "CC-BY-NC-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_verified_from_source_header": true,
+      "imports": [],
+      "implementation_module": "v3/tv_volume_order_blocks.py",
+      "feature_function": "v3.tv_volume_order_blocks.volume_order_blocks",
+      "signal_wrapper": null,
+      "defaults": {
+        "sw_len": 10,
+        "max_ob": 10,
+        "displacement": 4.0,
+        "min_volume_strength": 0,
+        "bar_minutes": 15,
+        "include_zone_snapshots": false,
+        "as_of": null
+      },
+      "source_fixed_lengths": {
+        "volume_sma": 20,
+        "atr": 100,
+        "calc_bars_count": 3000
+      },
+      "input_contract": "Finite completed OHLC plus finite nonnegative Volume, unique increasing timezone-aware DatetimeIndex of bar opens. Explicit bar duration; optional as_of rejects forming bars. Swing length positive; max_ob supported from0 through500; min strength0 through100; displacement finite including source-permitted zero/negative values.",
+      "calculation_origin_contract": "Consume entire fixed supplied history as Pine bar_index0 onward. No rolling last3000 truncation. Exact exported fixtures must pin the first source calculation bar because its indicator declaration uses calc_bars_count=3000; extending and restarting must retain that original history.",
+      "availability_contract": "A pivot is observed only after sw_len right bars. Retrospective origin/cross timestamps are metadata; new zones first appear at the completed confirmation bar or later close-breakout bar through available_at. Earlier rows are never backfilled. Current/created snapshots are immutable OrderBlock records.",
+      "volume_contract": "Zone high/low remain raw pivot-candle prices. Volume changes only strength/filter and source opacity: ratio uses pivot volume divided by SMA20 at the pivot; missing/nonpositive SMA falls back to ratio1. Raw alpha truncates96-12*ratio toward zero, clamps40..92, strength=100-alpha, hence range8..60. Delayed creation retains the pivot-bar average, not the current average.",
+      "state_contract": "Accepted low pivot processed before high pivot. Threshold uses ATR100 on confirmation bar. Earliest crossed bar among the right-side confirmation bars is retained. Retroactive creation and mitigation checks precede active invalidation/retests; delayed close-cross creation follows that pass, so a creation-bar breach can remain active until the next bar. Pending pivots are replaced by new accepted same-side pivots; wicks do not cancel pending state. Crossover compares prior close to prior threshold series value.",
+      "bounds_contract": "Remove inclusive price overlaps only for same-side zones. Shared FIFO active-zone capacity spans both sides. Zero capacity permits creation/removal events with no retained zone. B/S retest cooldown starts at bar0, is global per direction, and requires more than5 bars; active zones are visited newest first. Invalidation precedes any retest label.",
+      "port_scope": "Raw/accepted pivot confirmations, pending thresholds, retroactive/delayed creations, active/latest zone features, origin/cross/availability metadata, volume strength, B/S retest label events, removal counts and optional immutable full-zone snapshots. Source defines no alertcondition/alert call or execution exits; no trade policy invented.",
+      "omissions": [
+        "Chart boxes/lines/labels and opacity rendering",
+        "Bounded-memory incremental replay interface",
+        "Automatic moving calc_bars_count window",
+        "Active trade-proposal registration"
+      ],
+      "fixture_edges_pending": [
+        "ta.pivothigh/low rightmost-tie policy (left inclusive, right strict) is an explicit local assumption awaiting exported fixtures",
+        "Shared ATR100/SMA20 seed and floating-point parity",
+        "Exact chart calculation origin and session/feed parity"
+      ],
+      "admission_status": "feature-only; pending exported TradingView fixtures; no active-pool registration",
+      "required_runtime_helpers": [
+        "v3/pine_compat.py",
+        "v3/_tv_trend_support.py"
+      ],
+      "local_validation": {
+        "command": "./venv/bin/python -m pytest tests/test_tv_volume_order_blocks.py -q",
+        "passed": 15,
+        "coverage": "Hand-computed confirmation ATR/volume ratio, availability/origin, volume filter, immediate and delayed creation order, mirrored bearish case, overlap/FIFO limits, creation-bar breach, cooldown/invalidation, tied-pivot assumption, prefix/future perturbation, immutable snapshots, pre-ATR state, empty schema and bad inputs."
+      }
+    }
+  ]
+}

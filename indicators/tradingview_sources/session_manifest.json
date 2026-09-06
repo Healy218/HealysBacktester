@@ -1,0 +1,91 @@
+{
+  "group": "session",
+  "adaptation_recorded_at_utc": "2026-09-06T01:59:01.099274+00:00",
+  "source_origin": "Official public versioned Pine source already pinned in structure_sources.json; existing raw bytes unchanged.",
+  "parity_status": "Source-backed local feature implementation; exported TradingView numerical fixtures pending",
+  "scripts": [
+    {
+      "public_id": "nW5oGfdO",
+      "name": "ICT Killzones & Pivots [TFO]",
+      "author": "tradeforopp",
+      "publication_version": 19,
+      "pine_id": "PUB;d0b8be94f1b042bf9f2cb20f92cefc57",
+      "source_url": "https://www.tradingview.com/script/nW5oGfdO-ICT-Killzones-Pivots-TFO/",
+      "source_file": "nW5oGfdO.pine",
+      "sha256": "c844898884c5f9691068f2302fe868827a0df87be58a20f5a75989e49986baac",
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "license_verified_from_source_header": true,
+      "imports": [],
+      "implementation_module": "v3/tv_ict_killzones.py",
+      "feature_function": "v3.tv_ict_killzones.ict_killzones",
+      "signal_wrapper": null,
+      "defaults": {
+        "sessions": {
+          "ASIA": "2000-0000",
+          "LNDN": "0200-0500",
+          "NYAM": "0930-1100",
+          "NYPM": "1330-1600"
+        },
+        "timezone": "America/New_York",
+        "bar_minutes": 15,
+        "timeframe_limit": 30,
+        "max_days": 3,
+        "data_lookback": 20,
+        "range_measure": "Average",
+        "show_pivots": true,
+        "show_midpoints": false,
+        "use_alerts": true,
+        "extend_which": "Most Recent",
+        "cutoff": null,
+        "level_multipliers": [],
+        "minimum_tick": 0.01,
+        "opening_times": [
+          "0930",
+          "1200",
+          "1600"
+        ],
+        "period_changes": null,
+        "as_of": null
+      },
+      "source_optional_defaults": {
+        "disabled_sessions": {
+          "NYL": "1200-1300",
+          "RTH": "0930-1600"
+        },
+        "disabled_cutoff": "1800-1801",
+        "disabled_range_level_multipliers": [
+          0.25,
+          0.5,
+          1.0
+        ],
+        "D_W_M_high_low_and_midpoints": true
+      },
+      "input_contract": "Finite completed OHLC, unique increasing timezone-aware DatetimeIndex of bar opens; explicit bar duration. Only aligned single non-full-day session intervals are supported. Optional as_of rejects forming bars; missing bars are never fabricated.",
+      "session_contract": "Pine session membership uses bar opens in the configured IANA or fixed GMT timezone. Overnight masks name session end day. Current session extrema are provisional; confirmed_high/low appear at first observed outside-bar close through confirmed_at, never backfilled. Starting inside a session is preserved and flagged partial_session. Consecutive in-session observations belonging to distinct session dates without an observed outside bar are rejected because the source would merge them.",
+      "period_contract": "D/W/M require caller-supplied exact aligned boolean exchange timeframe.change flags, including first-row flags. Local New York calendar boundaries are not substituted. D/W/M outputs are absent without these inputs; this is an explicit departure from the Pine UI defaults, whose exchange calendar the local bars do not encode.",
+      "state_contract": "Update newest session extrema before detecting strict pivot crossings; track only newest pivot or retained max_days pivots according to extend_which. Range-level touches are inclusive and only counted during their own session. Hits are processed before same-bar cutoff invalidation. Session pivot denominators increment at session START per actual source, despite tooltip text saying end.",
+      "statistics_contract": "Average/median use the most recent completed observed session ranges; displacement population standard deviation pools every close minus its session open across retained sessions, updating only at the next session start. All hit counters are causal observation snapshots, not final-chart backfills or profitability estimates.",
+      "port_scope": "Enabled session membership, observed extrema and their timestamps, provisional/confirmed session ranges, break conditions and source alert conditions, midpoint touches, causal hit counters, optional range levels, optional exact exchange D/W/M features, exact-time opening prices. Only numeric feature/event outputs; no invented directional trade rule.",
+      "omissions": [
+        "Chart drawings, colors, labels, dashboard placement and last-chart label merging",
+        "Text-area color/comment parsing and arbitrary timestamp-only vertical drawings",
+        "Historical drawing objects and rendering extension style",
+        "Disjoint, full-day and unaligned session schedules",
+        "Automatic exchange calendar inference and partial synthetic Pine session bars",
+        "Transport behavior of alert.freq_once_per_bar; high/low condition booleans are separate",
+        "Bounded-memory live state implementation"
+      ],
+      "mechanical_proposal_rule": null,
+      "admission_status": "feature-only; pending exported TradingView fixtures; no active-pool registration",
+      "required_runtime_helpers": [
+        "v3/_tv_trend_support.py"
+      ],
+      "local_validation": {
+        "command": "./venv/bin/python -m pytest tests/test_tv_ict_killzones.py -q",
+        "passed": 16,
+        "coverage": "Hand-computed extrema and availability, strict/inclusive crossings, cutoff order, history pruning, range level ticks and session-only tracking, displacement SD pooling, overnight masks, DST versus GMT, exchange period flags, exact opens, partial/gapped sessions, prefix/future invariance, comparison precision, input failures."
+      }
+    }
+  ]
+}

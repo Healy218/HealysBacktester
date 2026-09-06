@@ -1,0 +1,864 @@
+//@version=6
+// ─────────────────────────────────────────────────────────────────────────────
+//  Setup Scanner [GBB]  v1.1
+// ─────────────────────────────────────────────────────────────────────────────
+
+indicator("Setup Scanner [GBB]", "GBB Setup", overlay = true,
+          max_boxes_count = 500, max_lines_count = 500, max_labels_count = 500)
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  CONSTANTS
+// ═════════════════════════════════════════════════════════════════════════════
+
+const int N_SETUPS = 6
+
+const int S_VWAP  = 0   // VWAP reclaim
+const int S_EMA   = 1   // EMA pullback
+const int S_BRT   = 2   // Break and retest
+const int S_SWEEP = 3   // Liquidity sweep reversal
+const int S_DIV   = 4   // RSI divergence
+const int S_ORB   = 5   // Opening range break
+
+// setup state
+const int ST_OFF     = 0
+const int ST_DORMANT = 1
+const int ST_FORMING = 2
+const int ST_LONG    = 3
+const int ST_SHORT   = 4
+
+setupName(int sid) =>
+    switch sid
+        S_VWAP  => "VWAP reclaim"
+        S_EMA   => "EMA pullback"
+        S_BRT   => "Break and retest"
+        S_SWEEP => "Liquidity sweep"
+        S_DIV   => "RSI divergence"
+        S_ORB   => "Opening range"
+        => "?"
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  INPUTS
+// ═════════════════════════════════════════════════════════════════════════════
+
+var string GS = "Setups"
+bool useVwap  = input.bool(true,  "VWAP reclaim",         group = GS)
+bool useEma   = input.bool(true,  "EMA pullback (9/21)",  group = GS)
+bool useBrt   = input.bool(true,  "Break and retest",     group = GS)
+bool useSweep = input.bool(true,  "Liquidity sweep",      group = GS)
+bool useDiv   = input.bool(true,  "RSI divergence",       group = GS)
+bool useOrb   = input.bool(true,  "Opening range break",  group = GS)
+
+var string GT = "Trade plan"
+float stopAtr  = input.float(1.2, "Stop distance (ATR)",  minval = 0.2, step = 0.1, group = GT)
+float r1       = input.float(1.0, "TP1 (R)",              minval = 0.2, step = 0.1, group = GT)
+float r2       = input.float(2.0, "TP2 (R)",              minval = 0.2, step = 0.1, group = GT)
+float r3       = input.float(3.0, "TP3 (R)",              minval = 0.2, step = 0.1, group = GT)
+int   maxOpen  = input.int(1,     "Max concurrent trades", minval = 1, maxval = 5, group = GT)
+int   maxBars  = input.int(60,    "Give up after N bars",  minval = 5, group = GT)
+int   reentry  = input.int(0,     "Re-entry cooldown (bars)", minval = 0, group = GT,
+     tooltip = "Bars to wait after any trade resolves before a new one may open. " +
+               "0 keeps every signal, which is why stops cluster back-to-back on impulse bars. " +
+               "Changing this changes the scoreboard, so reset counts when you adjust it.")
+bool  oneWay   = input.bool(true, "Block opposite-direction entries", group = GT,
+     tooltip = "While a long is open, ignore short signals and vice versa.")
+
+var string GF = "Filters"
+int   atrLen   = input.int(14,   "ATR length",             minval = 2,  group = GF)
+float volMult  = input.float(1.0,"Volume must exceed x SMA20", minval = 0, step = 0.1, group = GF)
+int   pvLen    = input.int(5,    "Swing pivot length",     minval = 2,  group = GF)
+
+var string GD = "Display"
+bool  showZones = input.bool(true,  "Draw trade zones",    group = GD)
+int   zoneLen   = input.int(6,      "Project zone N bars ahead", minval = 1, group = GD,
+     tooltip = "An open trade's zone extends from entry to the current bar, plus this much " +
+               "projection. It stops growing when the trade resolves.")
+int   keepTrades= input.int(8,      "Keep last N drawings",minval = 1, maxval = 40, group = GD)
+string tblPos   = input.string("Top right", "Panel position",
+     options = ["Top right","Top left","Bottom right","Bottom left","Middle right"], group = GD)
+int   tblSize   = input.int(1, "Panel text size (0 tiny – 3 large)", minval = 0, maxval = 3, group = GD)
+
+var string GC = "Scoreboard"
+bool  showBoard = input.bool(true, "Show scoreboard columns", group = GC)
+int   minSamp   = input.int(10,    "Grey out below N samples", minval = 1, group = GC)
+
+var string GO = "Opening range"
+string orSess   = input.session("0930-1600", "Session",     group = GO)
+string orTz     = input.string("America/New_York", "Timezone", group = GO,
+     tooltip = "Use UTC for 24h crypto and set the session to your chosen anchor.")
+int    orMin    = input.int(15, "Range length (minutes)", minval = 1, group = GO)
+
+var string GX = "Setup tuning"
+int   vwapAway  = input.int(6,    "VWAP: min bars below before reclaim", minval = 1, group = GX)
+int   emaWindow = input.int(3,    "EMA: bars since touch",   minval = 1, group = GX)
+float brtTol    = input.float(0.3,"Retest tolerance (ATR)",  minval = 0.05, step = 0.05, group = GX)
+int   brtWindow = input.int(20,   "Retest window (bars)",    minval = 2, group = GX)
+int   sweepLen  = input.int(20,   "Sweep lookback",          minval = 5, group = GX)
+int   divGap    = input.int(60,   "Divergence max pivot gap",minval = 5, group = GX)
+
+// colours — tuned for dark charts. Drop the brightness if you trade on white.
+color cLong  = input.color(#00E39A, "Long",    group = GD, inline = "col")
+color cShort = input.color(#FF3B6B, "Short",   group = GD, inline = "col")
+color cForm  = input.color(#FFB020, "Forming", group = GD, inline = "col")
+color cEntry = input.color(#9BA4B0, "Entry",   group = GD, inline = "col")
+
+string labelMode = input.string("Short", "Signal labels",
+     options = ["Full","Short","Arrow only","Off"], group = GD)
+bool showOutcomes = input.bool(true, "Show outcome tags (stop / TP3 / expired)", group = GD)
+bool showTpLabels = input.bool(false, "Also label TP1 / TP2 on the bar", group = GD,
+     tooltip = "Off: a filled target promotes its ladder line to solid instead. " +
+               "On: adds a text tag at the hit bar, which will overlap candles on a dense chart.")
+bool showAllSig   = input.bool(false, "Mark blocked signals too", group = GD,
+     tooltip = "Off: only signals that actually opened a trade get a marker. " +
+               "On: every setup fire is marked, including ones skipped by the concurrency limit.")
+
+var string GL = "Live trade appearance"
+string liveLbl   = input.string("Small", "Signal label size",
+     options = ["Tiny","Small","Normal","Large"], group = GL)
+int    liveWidth = input.int(2, "Zone border width", minval = 1, maxval = 4, group = GL)
+int    liveFill  = input.int(16, "Risk zone fill strength", minval = 0, maxval = 60, group = GL,
+     tooltip = "Higher fills the risk box more solidly. The reward box is kept lighter " +
+               "so the two never compete.")
+
+var string GK = "Closed trade appearance"
+bool   dimClosed  = input.bool(true, "Fade closed trades", group = GK)
+int    closedFade = input.int(55, "Fade strength", minval = 0, maxval = 95, group = GK,
+     tooltip = "0 leaves resolved trades as bright as the live one. 95 makes them nearly invisible. " +
+               "Filled targets always fade less than unfilled ones so you can still read how far each trade got.")
+string closedLbl  = input.string("Tiny", "Label size",
+     options = ["Off","Tiny","Small","Normal"], group = GK)
+bool   closedPill = input.bool(false, "Keep pill background", group = GK,
+     tooltip = "Off: resolved labels drop to plain text, which is much quieter on a busy chart.")
+// v1.1: outcome tags used to sit exactly on the resolving level, which put the
+// "stop" pill straight on top of the candle that hit it (hivebit7's report).
+float  outOff     = input.float(0.6, "Outcome tag offset (ATR)", minval = 0, step = 0.1, group = GK,
+     tooltip = "Pushes the stop / TP3 / expired tag away from the candles. " +
+               "0 restores the old anchored-at-level look.")
+
+// Fade helpers. closedFade slides a live transparency toward invisible; the default
+// of 55 reproduces the previous hardcoded look almost exactly.
+fadeT(int liveT) =>
+    math.min(99, liveT + math.round((99 - liveT) * closedFade / 100.0))
+
+// filled rungs fade at half rate so a resolved trade still shows how far it ran
+fadeKeep(int liveT) =>
+    math.min(99, liveT + math.round((99 - liveT) * closedFade / 200.0))
+
+lblSize(string s) =>
+    switch s
+        "Tiny"   => size.tiny
+        "Small"  => size.small
+        "Normal" => size.normal
+        "Large"  => size.large
+        => size.tiny
+
+setupTag(int sid) =>
+    switch sid
+        S_VWAP  => "VWAP"
+        S_EMA   => "EMA"
+        S_BRT   => "B&R"
+        S_SWEEP => "SWEEP"
+        S_DIV   => "DIV"
+        S_ORB   => "ORB"
+        => "?"
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  CONTEXT
+// ═════════════════════════════════════════════════════════════════════════════
+
+float atr    = ta.atr(atrLen)
+float ema9   = ta.ema(close, 9)
+float ema21  = ta.ema(close, 21)
+float ema50  = ta.ema(close, 50)
+float rsiV   = ta.rsi(close, 14)
+float volMa  = ta.sma(volume, 20)
+bool  volOk  = volMult <= 0 or na(volume) or na(volMa) or volume >= volMa * volMult
+
+// NOTE on the volume filter: volOk gates VWAP reclaim, EMA pullback, and the
+// liquidity sweep — setups where participation is part of the thesis. Break &
+// retest, divergence, and ORB deliberately run without it: a valid retest is
+// often quiet, divergence pivots confirm late, and the OR break has the range
+// itself as its filter. Keep that in mind when comparing hit rates across rows.
+
+// ta.* must be evaluated on every bar, so this is unconditional.
+// On symbols with no volume it returns na and the VWAP setup simply stays off.
+float vwapV  = ta.vwap(hlc3)
+
+bool bullBar = close > open
+bool bearBar = close < open
+bool ready   = barstate.isconfirmed and not na(atr) and atr > 0
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  SETUP 1 — VWAP RECLAIM
+//  Price spends time on one side of session VWAP, then closes back across it.
+// ═════════════════════════════════════════════════════════════════════════════
+
+var int belowRun = 0
+var int aboveRun = 0
+
+bool vwapValid = useVwap and not na(vwapV)
+
+// ta.crossover/crossunder must evaluate on every bar, so they are hoisted out
+// of the short-circuiting `and` chains below.
+bool vwapCrossUp = ta.crossover(close, vwapV)
+bool vwapCrossDn = ta.crossunder(close, vwapV)
+
+if not na(vwapV)
+    belowRun := close < vwapV ? belowRun + 1 : 0
+    aboveRun := close > vwapV ? aboveRun + 1 : 0
+
+bool sVwapL = vwapValid and ready and vwapCrossUp and nz(belowRun[1]) >= vwapAway and volOk
+bool sVwapS = vwapValid and ready and vwapCrossDn and nz(aboveRun[1]) >= vwapAway and volOk
+
+bool sVwapForm = vwapValid and not sVwapL and not sVwapS and
+     ((nz(belowRun) >= vwapAway and close > close[1] and vwapV - close < atr * 0.4) or
+      (nz(aboveRun) >= vwapAway and close < close[1] and close - vwapV < atr * 0.4))
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  SETUP 2 — EMA PULLBACK
+//  Trend by 21/50, price pulls back into the 9/21 band, then closes away again.
+// ═════════════════════════════════════════════════════════════════════════════
+
+bool trendUp = ema21 > ema50 and ema50 > ema50[3]
+bool trendDn = ema21 < ema50 and ema50 < ema50[3]
+
+bool touchedUp = ta.barssince(low  <= ema21) <= emaWindow
+bool touchedDn = ta.barssince(high >= ema21) <= emaWindow
+
+bool sEmaL = useEma and ready and trendUp and touchedUp and close > ema9 and bullBar and close > high[1] and volOk
+bool sEmaS = useEma and ready and trendDn and touchedDn and close < ema9 and bearBar and close < low[1]  and volOk
+
+bool sEmaForm = useEma and not sEmaL and not sEmaS and
+     ((trendUp and low  <= ema21 and close < ema9) or
+      (trendDn and high >= ema21 and close > ema9))
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  SETUP 3 — BREAK AND RETEST
+//  Break a confirmed swing, come back to it, hold, continue.
+// ═════════════════════════════════════════════════════════════════════════════
+
+float phV = ta.pivothigh(high, pvLen, pvLen)
+float plV = ta.pivotlow(low,  pvLen, pvLen)
+
+var float brtHiLvl  = na
+var bool  brtHiBrk  = false
+var int   brtHiBar  = na
+var float brtHiPend = na
+var float brtLoLvl  = na
+var bool  brtLoBrk  = false
+var int   brtLoBar  = na
+var float brtLoPend = na
+
+// True while a break is inside its retest window.
+brtBusy(bool brk, int brkBar) =>
+    brk and not na(brkBar) and bar_index - brkBar <= brtWindow
+
+
+if not na(phV)
+    if brtBusy(brtHiBrk, brtHiBar)
+        brtHiPend := phV
+    else
+        brtHiLvl  := phV
+        brtHiBrk  := false
+        brtHiPend := na
+if not na(plV)
+    if brtBusy(brtLoBrk, brtLoBar)
+        brtLoPend := plV
+    else
+        brtLoLvl  := plV
+        brtLoBrk  := false
+        brtLoPend := na
+
+if not na(brtHiLvl) and not brtHiBrk and close > brtHiLvl
+    brtHiBrk := true
+    brtHiBar := bar_index
+if not na(brtLoLvl) and not brtLoBrk and close < brtLoLvl
+    brtLoBrk := true
+    brtLoBar := bar_index
+
+bool brtLiveL = useBrt and brtBusy(brtHiBrk, brtHiBar) and bar_index > brtHiBar
+bool brtLiveS = useBrt and brtBusy(brtLoBrk, brtLoBar) and bar_index > brtLoBar
+
+bool sBrtL = brtLiveL and ready and low  <= brtHiLvl + atr * brtTol and close > brtHiLvl and bullBar
+bool sBrtS = brtLiveS and ready and high >= brtLoLvl - atr * brtTol and close < brtLoLvl and bearBar
+
+
+if sBrtL
+    brtHiBrk := false
+if sBrtS
+    brtLoBrk := false
+
+
+if not brtBusy(brtHiBrk, brtHiBar) and not na(brtHiPend)
+    brtHiLvl  := brtHiPend
+    brtHiBrk  := false
+    brtHiPend := na
+if not brtBusy(brtLoBrk, brtLoBar) and not na(brtLoPend)
+    brtLoLvl  := brtLoPend
+    brtLoBrk  := false
+    brtLoPend := na
+
+bool sBrtForm = (brtLiveL or brtLiveS) and not sBrtL and not sBrtS
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  SETUP 4 — LIQUIDITY SWEEP REVERSAL
+//  Wick takes out a recent extreme, body closes back inside.
+// ═════════════════════════════════════════════════════════════════════════════
+
+float swLo = ta.lowest(low,  sweepLen)[1]
+float swHi = ta.highest(high, sweepLen)[1]
+
+bool sSweepL = useSweep and ready and not na(swLo) and low  < swLo and close > swLo and bullBar and
+     (close - low)  > (high - close) and volOk
+bool sSweepS = useSweep and ready and not na(swHi) and high > swHi and close < swHi and bearBar and
+     (high - close) > (close - low)  and volOk
+
+bool sSweepForm = useSweep and not sSweepL and not sSweepS and
+     ((not na(swLo) and low < swLo) or (not na(swHi) and high > swHi))
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  SETUP 5 — RSI DIVERGENCE
+//  Confirms pvLen bars after the pivot. Late by construction, honest by design.
+// ═════════════════════════════════════════════════════════════════════════════
+
+var float lastPlP = na
+var float lastPlR = na
+var int   lastPlB = na
+var float lastPhP = na
+var float lastPhR = na
+var int   lastPhB = na
+
+bool divL = false
+bool divS = false
+
+if not na(plV)
+    float curP = plV
+    float curR = rsiV[pvLen]
+    if not na(lastPlP) and bar_index - lastPlB <= divGap
+        divL := curP < lastPlP and curR > lastPlR
+    lastPlP := curP
+    lastPlR := curR
+    lastPlB := bar_index
+
+if not na(phV)
+    float curP = phV
+    float curR = rsiV[pvLen]
+    if not na(lastPhP) and bar_index - lastPhB <= divGap
+        divS := curP > lastPhP and curR < lastPhR
+    lastPhP := curP
+    lastPhR := curR
+    lastPhB := bar_index
+
+bool sDivL = useDiv and ready and divL
+bool sDivS = useDiv and ready and divS
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  SETUP 6 — OPENING RANGE BREAK
+// ═════════════════════════════════════════════════════════════════════════════
+
+bool inSess  = not na(time(timeframe.period, orSess, orTz))
+bool newSess = inSess and not inSess[1]
+
+var float orH     = na
+var float orL     = na
+var bool  orDone  = false
+var bool  orFired = false
+var int   orStart = na
+
+
+if newSess
+    orH     := high
+    orL     := low
+    orDone  := false
+    orFired := false
+    orStart := time
+else if inSess and not orDone
+    if not na(orStart) and (time - orStart) >= orMin * 60000
+        orDone := true
+    else
+        orH := math.max(nz(orH, high), high)
+        orL := math.min(nz(orL, low),  low)
+
+bool sOrbL = useOrb and ready and inSess and orDone and not orFired and not na(orH) and close > orH
+bool sOrbS = useOrb and ready and inSess and orDone and not orFired and not na(orL) and close < orL
+
+// orFired is shared by both directions on purpose: one OR break per session.
+if sOrbL or sOrbS
+    orFired := true
+
+bool sOrbForm = useOrb and inSess and orDone and not orFired
+
+plot(useOrb and inSess and orDone ? orH : na, "OR high", color.new(cForm, 30), 1, plot.style_linebr)
+plot(useOrb and inSess and orDone ? orL : na, "OR low",  color.new(cForm, 30), 1, plot.style_linebr)
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  SIGNAL COLLECTION
+// ═════════════════════════════════════════════════════════════════════════════
+
+longSig(int sid) =>
+    switch sid
+        S_VWAP  => sVwapL
+        S_EMA   => sEmaL
+        S_BRT   => sBrtL
+        S_SWEEP => sSweepL
+        S_DIV   => sDivL
+        S_ORB   => sOrbL
+        => false
+
+shortSig(int sid) =>
+    switch sid
+        S_VWAP  => sVwapS
+        S_EMA   => sEmaS
+        S_BRT   => sBrtS
+        S_SWEEP => sSweepS
+        S_DIV   => sDivS
+        S_ORB   => sOrbS
+        => false
+
+formSig(int sid) =>
+    switch sid
+        S_VWAP  => sVwapForm
+        S_EMA   => sEmaForm
+        S_BRT   => sBrtForm
+        S_SWEEP => sSweepForm
+        S_DIV   => false
+        S_ORB   => sOrbForm
+        => false
+
+enabled(int sid) =>
+    switch sid
+        S_VWAP  => useVwap
+        S_EMA   => useEma
+        S_BRT   => useBrt
+        S_SWEEP => useSweep
+        S_DIV   => useDiv
+        S_ORB   => useOrb
+        => false
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  TRADE ENGINE
+// ═════════════════════════════════════════════════════════════════════════════
+
+type Trade
+    int   sid
+    int   dir
+    float entry
+    float stop
+    float t1
+    float t2
+    float t3
+    int   openBar
+    int   stage      // 0 open, 1 TP1 hit, 2 TP2 hit
+    bool  done
+    box   bRisk
+    box   bRwd
+    line  lEnt
+    line  lT1
+    line  lT2
+    line  lT3
+    label lTag
+    label lTp1
+    label lTp2
+    label lTp3
+    label lOut
+
+var array<Trade> trades = array.new<Trade>()
+
+var array<int> cFired = array.new_int(N_SETUPS, 0)
+var array<int> cT1    = array.new_int(N_SETUPS, 0)
+var array<int> cT2    = array.new_int(N_SETUPS, 0)
+var array<int> cT3    = array.new_int(N_SETUPS, 0)
+var array<int> cStop  = array.new_int(N_SETUPS, 0)
+var array<int> cExp   = array.new_int(N_SETUPS, 0)
+
+bump(array<int> a, int i) =>
+    array.set(a, i, array.get(a, i) + 1)
+
+openCount() =>
+    int n  = 0
+    int sz = array.size(trades)
+    if sz > 0
+        for i = 0 to sz - 1
+            Trade t = array.get(trades, i)
+            if not t.done
+                n += 1
+    n
+
+
+openDir() =>
+    int d  = 0
+    int sz = array.size(trades)
+    if sz > 0
+        for i = 0 to sz - 1
+            Trade t = array.get(trades, i)
+            if not t.done
+                d := t.dir
+    d
+
+killDrawings(Trade t) =>
+    box.delete(t.bRisk)
+    box.delete(t.bRwd)
+    line.delete(t.lEnt)
+    line.delete(t.lT1)
+    line.delete(t.lT2)
+    line.delete(t.lT3)
+    label.delete(t.lTag)
+    // outcome and target tags were previously untracked, so culled trades left
+    // orphan labels floating with no zone attached
+    label.delete(t.lTp1)
+    label.delete(t.lTp2)
+    label.delete(t.lTp3)
+    label.delete(t.lOut)
+
+drawTrade(Trade t) =>
+    int l = t.openBar
+    int r = t.openBar + zoneLen
+    if showZones
+        t.bRisk := box.new(l, math.max(t.entry, t.stop), r, math.min(t.entry, t.stop),
+             border_color = color.new(cShort, 5), bgcolor = color.new(cShort, 100 - liveFill),
+             border_width = liveWidth)
+        // The reward box is borderless on purpose: its edges sit exactly on the entry
+        // line and the TP3 rung, and a drawn border masks the dashed TP3 line so an
+        // unfilled target reads as a filled one.
+        t.bRwd  := box.new(l, math.max(t.entry, t.t3),  r, math.min(t.entry, t.t3),
+             border_color = color.new(cLong, 100), bgcolor = color.new(cLong, 100 - liveFill / 2),
+             border_width = 1)
+        t.lEnt  := line.new(l, t.entry, r, t.entry, color = cEntry, width = 2)
+        t.lT1   := line.new(l, t.t1, r, t.t1, color = cLong,                style = line.style_dashed, width = 1)
+        t.lT2   := line.new(l, t.t2, r, t.t2, color = color.new(cLong, 25), style = line.style_dashed, width = 1)
+        t.lT3   := line.new(l, t.t3, r, t.t3, color = color.new(cLong, 45), style = line.style_dashed, width = 1)
+
+    if labelMode != "Off"
+        float off = atr * 0.9
+        string txt = switch labelMode
+            "Full"  => (t.dir == 1 ? "▲ " : "▼ ") + setupName(t.sid)
+            "Short" => (t.dir == 1 ? "▲ " : "▼ ") + setupTag(t.sid)
+            => t.dir == 1 ? "▲" : "▼"
+        t.lTag := label.new(t.openBar, t.dir == 1 ? low - off : high + off, txt,
+             style = t.dir == 1 ? label.style_label_up : label.style_label_down,
+             color = t.dir == 1 ? cLong : cShort,
+             textcolor = #0B0F14, size = lblSize(liveLbl))
+
+// An open trade's zone follows price. Without this the box is stranded at the
+// entry and a live position looks like a closed one.
+extendTrade(Trade t) =>
+    if showZones and not na(t.bRisk)
+        int r = bar_index + zoneLen
+        box.set_right(t.bRisk, r)
+        box.set_right(t.bRwd,  r)
+        line.set_x2(t.lEnt, r)
+        line.set_x2(t.lT1,  r)
+        line.set_x2(t.lT2,  r)
+        line.set_x2(t.lT3,  r)
+
+openTrade(int sid, int dir) =>
+    float risk = atr * stopAtr
+    Trade t = Trade.new(
+         sid     = sid,
+         dir     = dir,
+         entry   = close,
+         stop    = dir == 1 ? close - risk        : close + risk,
+         t1      = dir == 1 ? close + risk * r1   : close - risk * r1,
+         t2      = dir == 1 ? close + risk * r2   : close - risk * r2,
+         t3      = dir == 1 ? close + risk * r3   : close - risk * r3,
+         openBar = bar_index,
+         stage   = 0,
+         done    = false)
+    drawTrade(t)
+    array.push(trades, t)
+    bump(cFired, sid)
+    t
+
+// A filled target promotes its ladder line to solid. The line already sits at the
+// exact level and spans the zone, so it can never collide with a candle or with
+// another drawing's z-order.
+tpMark(line ln, float lvl, string txt) =>
+    line.set_style(ln, line.style_solid)
+    line.set_color(ln, cLong)
+    line.set_width(ln, 2)
+    label lb = na
+    if showTpLabels
+        lb := label.new(bar_index, lvl, txt, style = label.style_label_left,
+             color = color.new(cLong, 20), textcolor = #0B0F14, size = size.tiny)
+    lb
+
+// v0.3: TP pills drawn during the trade's life ("Also label TP1/TP2" on) used
+// to survive the close at full brightness while everything else faded. They
+// now follow the same closed-trade treatment as the signal tag.
+fadeTpLbl(label lb) =>
+    if not na(lb)
+        if closedLbl == "Off"
+            label.delete(lb)
+        else if dimClosed and not closedPill
+            label.set_style(lb, label.style_none)
+            label.set_textcolor(lb, color.new(cLong, fadeT(0) / 2))
+        else if dimClosed
+            label.set_color(lb, color.new(cLong, fadeT(20)))
+
+closeTrade(Trade t, string why) =>
+    t.done := true
+    if showZones and not na(t.bRisk)
+        box.set_right(t.bRisk, bar_index)
+        box.set_right(t.bRwd,  bar_index)
+        line.set_x2(t.lEnt, bar_index)
+        line.set_x2(t.lT1,  bar_index)
+        line.set_x2(t.lT2,  bar_index)
+        line.set_x2(t.lT3,  bar_index)
+        if dimClosed
+            box.set_bgcolor(t.bRisk, color.new(cShort, fadeT(100 - liveFill)))
+            box.set_border_color(t.bRisk, color.new(cShort, fadeT(5)))
+            box.set_border_width(t.bRisk, 1)
+            box.set_bgcolor(t.bRwd, color.new(cLong, fadeT(100 - liveFill / 2)))
+            box.set_border_width(t.bRwd, 1)
+            line.set_color(t.lEnt, color.new(cEntry, fadeT(0)))
+            line.set_width(t.lEnt, 1)
+            // a filled rung stays legible after the fade; an unfilled one recedes
+            line.set_color(t.lT1, color.new(cLong, t.stage >= 1 ? fadeKeep(0) : fadeT(20)))
+            line.set_width(t.lT1, t.stage >= 1 ? 2 : 1)
+            line.set_color(t.lT2, color.new(cLong, t.stage >= 2 ? fadeKeep(10) : fadeT(35)))
+            line.set_width(t.lT2, t.stage >= 2 ? 2 : 1)
+            line.set_color(t.lT3, color.new(cLong, why == "TP3" ? fadeKeep(20) : fadeT(50)))
+            line.set_width(t.lT3, why == "TP3" ? 2 : 1)
+
+    if not na(t.lTag)
+        if closedLbl == "Off"
+            label.delete(t.lTag)
+        else
+            label.set_size(t.lTag, lblSize(closedLbl))
+            if dimClosed and not closedPill
+                label.set_style(t.lTag, label.style_none)
+                label.set_textcolor(t.lTag, color.new(t.dir == 1 ? cLong : cShort, fadeT(0) / 2))
+            else if dimClosed
+                label.set_color(t.lTag, color.new(t.dir == 1 ? cLong : cShort, fadeT(0) / 2))
+
+    fadeTpLbl(t.lTp1)
+    fadeTpLbl(t.lTp2)
+    fadeTpLbl(t.lTp3)
+
+    // When the TP3 hit already drew its own tag (showTpLabels on), the outcome
+    // tag at the same level would double up — skip it in that one case.
+    bool dupTp3 = why == "TP3" and not na(t.lTp3)
+    if showOutcomes and closedLbl != "Off" and not dupTp3
+        // v1.1: the tag is anchored to the resolving level but pushed away from
+        // price by outOff ATR, and the pill points back AT the level, so it no
+        // longer sits on top of the candle that resolved the trade (hivebit7).
+        float lvl  = why == "stop" ? t.stop : why == "TP3" ? t.t3 : close
+        // stop sits on the far side of price from the targets: long stop below
+        // (push down), short stop above (push up). TP3 is the mirror image.
+        // expired anchors at close, pushed to the trade's signal side.
+        float sgn  = why == "stop" ? (t.dir == 1 ? -1.0 :  1.0) :
+                     why == "TP3"  ? (t.dir == 1 ?  1.0 : -1.0) :
+                     (t.dir == 1 ? -1.0 : 1.0)
+        float yAdj = lvl + sgn * atr * outOff
+        color col  = why == "TP3" ? cLong : why == "stop" ? cShort : cEntry
+        bool  pill = closedPill or not dimClosed
+        // label_up puts the tip at the bottom of the pill, so a tag pushed
+        // upward (sgn > 0) uses label_down to point back at its level.
+        t.lOut := label.new(bar_index, yAdj, why,
+             style     = pill ? (sgn > 0 ? label.style_label_down : label.style_label_up) : label.style_none,
+             color     = color.new(col, pill ? 20 : 100),
+             textcolor = pill ? #0B0F14 : color.new(col, dimClosed ? fadeT(0) / 2 : 0),
+             size      = lblSize(closedLbl))
+
+// ── advance open trades ──────────────────────────────────────────────────────
+
+var int  lastCloseBar = -99999
+bool     closedNow    = false
+
+if ready and array.size(trades) > 0
+    for i = array.size(trades) - 1 to 0
+        Trade t = array.get(trades, i)
+        if not t.done
+            bool hitStop = t.dir == 1 ? low  <= t.stop : high >= t.stop
+            bool hit1    = t.dir == 1 ? high >= t.t1   : low  <= t.t1
+            bool hit2    = t.dir == 1 ? high >= t.t2   : low  <= t.t2
+            bool hit3    = t.dir == 1 ? high >= t.t3   : low  <= t.t3
+
+            // conservative: same-bar stop wins
+            if hitStop
+                if t.stage == 0
+                    bump(cStop, t.sid)
+                closeTrade(t, "stop")
+            else
+                if hit1 and t.stage < 1
+                    t.stage := 1
+                    bump(cT1, t.sid)
+                    t.lTp1 := tpMark(t.lT1, t.t1, "TP1")
+                if hit2 and t.stage < 2
+                    t.stage := 2
+                    bump(cT2, t.sid)
+                    t.lTp2 := tpMark(t.lT2, t.t2, "TP2")
+                if hit3
+                    bump(cT3, t.sid)
+                    // v0.2 fix: the TP3 tag is now tracked so killDrawings can
+                    // delete it — it can no longer become an orphan label.
+                    t.lTp3 := tpMark(t.lT3, t.t3, "TP3")
+                    closeTrade(t, "TP3")
+                else if bar_index - t.openBar >= maxBars
+                    if t.stage == 0
+                        bump(cExp, t.sid)
+                    closeTrade(t, "expired")
+
+            if t.done
+                closedNow := true
+            else
+                extendTrade(t)
+
+if closedNow
+    lastCloseBar := bar_index
+
+// ── fire new trades ──────────────────────────────────────────────────────────
+
+var array<int> state = array.new_int(N_SETUPS, ST_OFF)
+
+bool tookLong  = false
+bool tookShort = false
+
+if ready
+    int od = openDir()
+    for sid = 0 to N_SETUPS - 1
+        if not enabled(sid)
+            array.set(state, sid, ST_OFF)
+        else
+            bool L = longSig(sid)
+            bool S = shortSig(sid)
+            bool F = formSig(sid)
+            array.set(state, sid, L ? ST_LONG : S ? ST_SHORT : F ? ST_FORMING : ST_DORMANT)
+
+            bool room  = openCount() < maxOpen
+            bool cool  = bar_index - lastCloseBar >= reentry
+            bool dirOk = not oneWay or od == 0 or (L and od == 1) or (S and od == -1)
+
+            if L and room and cool and dirOk
+                openTrade(sid, 1)
+                tookLong := true
+                alert(setupName(sid) + " LONG @ " + str.tostring(close, format.mintick),
+                      alert.freq_once_per_bar_close)
+            else if S and room and cool and dirOk
+                openTrade(sid, -1)
+                tookShort := true
+                alert(setupName(sid) + " SHORT @ " + str.tostring(close, format.mintick),
+                      alert.freq_once_per_bar_close)
+
+// ── prune old drawings ───────────────────────────────────────────────────────
+
+if barstate.isconfirmed
+    while array.size(trades) > keepTrades
+        Trade old = array.shift(trades)
+        if old.done
+            killDrawings(old)
+        else
+            array.unshift(trades, old)
+            break
+
+textSize() =>
+    switch tblSize
+        0 => size.tiny
+        2 => size.normal
+        3 => size.large
+        => size.small
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  PANEL
+// ═════════════════════════════════════════════════════════════════════════════
+
+tablePos() =>
+    switch tblPos
+        "Top left"      => position.top_left
+        "Bottom right"  => position.bottom_right
+        "Bottom left"   => position.bottom_left
+        "Middle right"  => position.middle_right
+        => position.top_right
+
+var table pnl = table.new(tablePos(), 4, N_SETUPS + 2, border_width = 1,
+     frame_color = color.new(color.gray, 60), frame_width = 1,
+     border_color = color.new(color.gray, 80))
+
+if barstate.islast
+    color hdrBg  = color.new(#5B6472, 82)
+    color hdrTxt = #8A94A3
+    color bodyTx = #C6CDD8
+
+    table.cell(pnl, 0, 0, syminfo.ticker + " · " + timeframe.period, bgcolor = hdrBg,
+         text_color = hdrTxt, text_size = textSize(), text_halign = text.align_left)
+    table.cell(pnl, 1, 0, "state", bgcolor = hdrBg, text_color = hdrTxt, text_size = textSize())
+    table.cell(pnl, 2, 0, showBoard ? "fired" : "", bgcolor = hdrBg, text_color = hdrTxt, text_size = textSize())
+    table.cell(pnl, 3, 0, showBoard ? "→TP1"  : "", bgcolor = hdrBg, text_color = hdrTxt, text_size = textSize())
+
+    for sid = 0 to N_SETUPS - 1
+        int  st  = array.get(state, sid)
+        int  f   = array.get(cFired, sid)
+        int  w   = array.get(cT1, sid)
+        bool off = st == ST_OFF
+        bool live = st == ST_LONG or st == ST_SHORT
+
+        string stTxt = switch st
+            ST_LONG    => "LONG"
+            ST_SHORT   => "SHORT"
+            ST_FORMING => "forming"
+            ST_OFF     => "off"
+            => "·"
+
+        // live states get a solid fill with dark text so they read as a state change,
+        // not just another row of grey
+        color stCol = switch st
+            ST_LONG    => #0B0F14
+            ST_SHORT   => #0B0F14
+            ST_FORMING => cForm
+            ST_OFF     => color.new(#5B6472, 40)
+            => color.new(#5B6472, 25)
+
+        color stBg = switch st
+            ST_LONG    => cLong
+            ST_SHORT   => cShort
+            ST_FORMING => color.new(cForm, 78)
+            => color.new(#5B6472, 100)
+
+        color nameCol = off ? color.new(#5B6472, 35) : live ? color.white : bodyTx
+
+        table.cell(pnl, 0, sid + 1, setupName(sid), text_color = nameCol,
+             text_size = textSize(), text_halign = text.align_left)
+        table.cell(pnl, 1, sid + 1, stTxt, text_color = stCol, bgcolor = stBg,
+             text_size = textSize())
+
+        if showBoard
+            // Note: "→TP1" is trades that REACHED TP1 over trades fired. A trade
+            // that hits TP1 and later stops or expires still counts as reached.
+            // cT2/cT3/cStop/cExp are collected for a fuller panel in a later
+            // version and are not displayed yet.
+            bool   enough = f >= minSamp
+            color  scCol  = not enough ? color.new(#5B6472, 35) : bodyTx
+            string rate   = f > 0 ? str.tostring(math.round(100.0 * w / f)) + "%" : "—"
+            table.cell(pnl, 2, sid + 1, str.tostring(f), text_color = scCol, text_size = textSize())
+            table.cell(pnl, 3, sid + 1, rate, text_color = scCol, text_size = textSize())
+        else
+            table.cell(pnl, 2, sid + 1, "")
+            table.cell(pnl, 3, sid + 1, "")
+
+    int oc = openCount()
+    int odr = openDir()
+    table.cell(pnl, 0, N_SETUPS + 1, oc > 0 ? "trade open" : "flat",
+         text_color = oc > 0 ? color.white : color.new(#5B6472, 35),
+         text_size = textSize(), text_halign = text.align_left, bgcolor = hdrBg)
+    table.cell(pnl, 1, N_SETUPS + 1, oc > 0 ? (odr == 1 ? "long" : "short") : "",
+         text_color = oc > 0 ? (odr == 1 ? cLong : cShort) : hdrTxt,
+         text_size = textSize(), bgcolor = hdrBg)
+    table.cell(pnl, 2, N_SETUPS + 1, "", bgcolor = hdrBg)
+    table.cell(pnl, 3, N_SETUPS + 1, "", bgcolor = hdrBg)
+
+// ═════════════════════════════════════════════════════════════════════════════
+//  MARKERS AND ALERTS
+// ═════════════════════════════════════════════════════════════════════════════
+
+bool anyLong  = sVwapL or sEmaL or sBrtL or sSweepL or sDivL or sOrbL
+bool anyShort = sVwapS or sEmaS or sBrtS or sSweepS or sDivS or sOrbS
+
+// The triangles are for signals that actually became trades. Every fire, including
+// the ones the concurrency limit swallowed, is still counted in the scoreboard.
+bool markLong  = showAllSig ? anyLong  : tookLong
+bool markShort = showAllSig ? anyShort : tookShort
+
+plotshape(markLong,  "Long marker",  shape.triangleup,   location.belowbar, cLong,  size = size.tiny)
+plotshape(markShort, "Short marker", shape.triangledown, location.abovebar, cShort, size = size.tiny)
+
+alertcondition(anyLong,  "Any long setup",  "Setup Scanner: long signal")
+alertcondition(anyShort, "Any short setup", "Setup Scanner: short signal")

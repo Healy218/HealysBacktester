@@ -1,0 +1,48 @@
+{
+  "group": "probability",
+  "adaptation_recorded_at_utc": "2026-09-06T01:43:02.484755+00:00",
+  "source_origin": "official public source acquired and pinned by structure-source agent; existing bytes reused without modification",
+  "parity_status": "Source-backed local implementation; exported TradingView numerical fixtures pending",
+  "scripts": [
+    {
+      "public_id": "c25U5rsF",
+      "name": "RSI Probability Matrix [ChartPrime]",
+      "author": "ChartPrime",
+      "publication_version": 1,
+      "pine_id": "PUB;5dfdfad08cf348138e3977de614d8f3c",
+      "source_url": "https://www.tradingview.com/script/c25U5rsF-RSI-Probability-Matrix-ChartPrime/",
+      "source_file": "c25U5rsF.pine",
+      "sha256": "88d6e36c500269cb54e7f976a571e45dbabda124d64ffac8e0cfb1d464ebabe5",
+      "license": "CC-BY-NC-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_verified_from_source_header": true,
+      "imports": [],
+      "implementation_module": "v3/tv_rsi_probability.py",
+      "signal_wrapper": "signals.tv_rsi_probability_signals.generate_rsi_probability_signals",
+      "defaults": {
+        "rsi_period": 14,
+        "signal_period": 14,
+        "oversold": 40,
+        "overbought": 60,
+        "atr_period": 14,
+        "atr_multiplier": 3.0,
+        "include_matrix": false
+      },
+      "input_contract": "Finite repository OHLC with unique increasing index; caller supplies only completed bars. No volume, lower-timeframe or higher-timeframe input required.",
+      "state_contract": "Resolve old position before source flat-state entry gate; target checked before stop; same-bar re-entry allowed; entry-bar extrema never resolve newly opened position; RSI rounded into0\u2013100 bins; no expiry.",
+      "statistics_contract": "Counts update only on resolution and are snapshotted after each observed completed bar. Entry prior counts include an older trade resolved on the same bar. Default exposes aggregate/current-bucket counts; include_matrix exposes all404 causal count-series. No final-chart backfill.",
+      "ambiguity_contract": "Source-reference target-first outcome preserved with explicit ambiguous_resolution flag. These optimistic counters are not corrected option-ledger outcomes or validated strategy evidence.",
+      "mechanical_proposal_rule": "Enter on source accepted one-position-gated RSI/SMA signals. Exit flags identify its target/stop reference resolution bars. The options execution/accounting layer remains authoritative.",
+      "port_scope": "RSI,SMA,ATR,raw conditions,source entry conditions,accepted entries,reference target/stop states,resolved counts and causal matrix snapshots. Plot graphics and dashboard rendering omitted.",
+      "admission_status": "pending exported TradingView numerical fixtures; no active-pool registration",
+      "required_runtime_helpers": [
+        "v3/pine_compat.py",
+        "v3/_tv_trend_support.py"
+      ],
+      "fixture_edges_pending": [
+        "Built-in ta.rsi flat0/0 behavior: shared primitive currently follows direct division NaN; official STD RSI indicator long-form instead checks down==0 first and returns100. This is not resolved as built-in parity without an exported numeric edge fixture."
+      ],
+      "independent_review": "Editors agent source review found no concrete source-state ordering mismatch; primitive RSI edge remains fixture pending."
+    }
+  ]
+}

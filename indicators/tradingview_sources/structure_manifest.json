@@ -1,0 +1,75 @@
+{
+  "group": "structure",
+  "adaptation_recorded_at_utc": "2026-09-06T02:08:19.251121+00:00",
+  "parity_status": "Source-backed numerical implementations; exported TradingView fixtures pending",
+  "scripts": [
+    {
+      "public_id": "DkE7UniD",
+      "name": "Market Structure Break & Order Block by EmreKb",
+      "author": "EmreKb",
+      "publication_version": 9,
+      "returned_version": "9.0",
+      "pine_id": "PUB;3a1fb6197f314eb2912194d70934bf7e",
+      "source_url": "https://www.tradingview.com/script/DkE7UniD/",
+      "source_file": "DkE7UniD.pine",
+      "sha256": "7a38b51c8f4d222dfa62f5a80a3fb23f358535b5c27eb2ac6df9a42a3fb8cb0b",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B3a1fb6197f314eb2912194d70934bf7e/9",
+      "script_access": "open_no_auth",
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "license_verified_from_source_header": true,
+      "imports": [],
+      "implementation_module": "v3/tv_market_structure.py",
+      "signal_wrapper": "signals.tv_structure_signals.generate_market_structure_signals",
+      "defaults": {
+        "zigzag_length": 9,
+        "fib_factor": 0.33
+      },
+      "port_scope": "Completed-bar zigzag points, availability metadata, market direction and source MSB alert.",
+      "excluded_scope": "Order/mitigation/breaker box arrays, graphics, zone-touch alerts and deletion behavior remain unported.",
+      "unverified_edges": "Pine statement-order valuewhen guard, dynamic barssince and float-comparison boundaries require exported fixtures.",
+      "input_contract": "Finite repository OHLC; unique increasing index; caller supplies completed bars; no HTF or volume dependencies.",
+      "mechanical_proposal_rule": "Enter on source bullish/bearish event and exit on opposite event. Exit rule is local research policy, not upstream strategy accounting.",
+      "admission_status": "pending exported TradingView numerical fixtures and remaining source scope; no active-pool registration",
+      "required_runtime_helpers": [
+        "v3/_tv_trend_support.py"
+      ]
+    },
+    {
+      "public_id": "Ej53t8Wv",
+      "name": "Support Resistance Channels",
+      "author": "LonesomeTheBlue",
+      "publication_version": 6,
+      "returned_version": "6.0",
+      "pine_id": "PUB;9xd5ljxt0JLwYqt32Ve0lnIiRC0Yj9Z2",
+      "source_url": "https://www.tradingview.com/script/Ej53t8Wv-Support-Resistance-Channels/",
+      "source_file": "Ej53t8Wv.pine",
+      "sha256": "5249a8b830ab7f68e3bbd80d59a29fcca96bec245a8d1da6ea98ad585cb23321",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B9xd5ljxt0JLwYqt32Ve0lnIiRC0Yj9Z2/6",
+      "script_access": "open_no_auth",
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "license_verified_from_source_header": true,
+      "imports": [],
+      "implementation_module": "v3/tv_sr_channels.py",
+      "signal_wrapper": "signals.tv_structure_signals.generate_sr_channel_signals",
+      "defaults": {
+        "pivot_period": 10,
+        "pivot_source": "High/Low",
+        "channel_width_pct": 5,
+        "minimum_strength": 1,
+        "max_channels": 6,
+        "lookback": 290
+      },
+      "port_scope": "Confirmed pivots, ten channel snapshots/strengths, visible-channel membership and source support/resistance break alerts.",
+      "excluded_scope": "Chart boxes, colors and optional moving-average graphics omitted.",
+      "unverified_edges": "Rightmost-equal pivot tie convention is an explicit fixture-pending assumption; source sorting/sentinel behavior preserved.",
+      "input_contract": "Finite repository OHLC; unique increasing index; caller supplies completed bars; no HTF or volume dependencies.",
+      "mechanical_proposal_rule": "Enter on source bullish/bearish event and exit on opposite event. Exit rule is local research policy, not upstream strategy accounting.",
+      "admission_status": "pending exported TradingView numerical fixtures and remaining source scope; no active-pool registration",
+      "required_runtime_helpers": [
+        "v3/_tv_trend_support.py"
+      ]
+    }
+  ]
+}

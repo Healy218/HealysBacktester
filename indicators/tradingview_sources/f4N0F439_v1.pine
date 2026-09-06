@@ -1,0 +1,665 @@
+
+// This work is licensed under an Attribution-ShareAlike 4.0 International License (CC BY-SA 4.0)
+// https://creativecommons.org/licenses/by-sa/4.0/
+// © Uptrick
+
+//@version=6
+
+//    ██╗   ██╗██████╗ ████████╗██████╗ ██╗ ██████╗██╗  ██╗
+//    ██║   ██║██╔══██╗╚══██╔══╝██╔══██╗██║██╔════╝██║ ██╔╝
+//    ██║   ██║██████╔╝   ██║   ██████╔╝██║██║     █████╔╝
+//    ██║   ██║██╔═══╝    ██║   ██╔══██╗██║██║     ██╔═██╗
+//    ╚██████╔╝██║        ██║   ██║  ██║██║╚██████╗██║  ██╗
+//     ╚═════╝ ╚═╝        ╚═╝   ╚═╝  ╚═╝╚═╝ ╚═════╝╚═╝  ╚═╝
+
+indicator("Uptrick: Adaptive Trend Trail", shorttitle="Adaptive Trend Trail", overlay=true, max_labels_count=300, max_bars_back=5000)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 01. TREND ENGINE
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gEngine = "01. Trend Engine"
+
+trendLength = input.int(34, "Trend Length", minval=10, maxval=200, group=gEngine,
+     tooltip="Controls the primary trend baseline. Higher values create slower and more stable trend states.")
+
+momentumLength = input.int(12, "Momentum Length", minval=3, maxval=100, group=gEngine,
+     tooltip="Lookback used to measure directional momentum.")
+
+sensitivity = input.float(0.35, "Signal Selectivity", minval=0.10, maxval=1.25, step=0.05, group=gEngine,
+     tooltip="Controls how much directional evidence is required before the trend can reverse. Higher values produce fewer signals.")
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 02. SUPERTREND CONFIRMATION
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gST = "02. Supertrend Confirmation"
+
+stFastLength = input.int(9, "Fast Length", minval=2, maxval=100, group=gST,
+     tooltip="ATR length of the fast hidden Supertrend. Lower values react more quickly.")
+
+stFastFactor = input.float(1.45, "Fast Factor", minval=0.25, maxval=10.0, step=0.05, group=gST,
+     tooltip="Base ATR multiplier of the fast hidden Supertrend. Higher values require a larger move before its direction changes.")
+
+stMidLength = input.int(14, "Medium Length", minval=2, maxval=150, group=gST,
+     tooltip="ATR length of the medium hidden Supertrend.")
+
+stMidFactor = input.float(1.95, "Medium Factor", minval=0.25, maxval=10.0, step=0.05, group=gST,
+     tooltip="Base ATR multiplier of the medium hidden Supertrend.")
+
+stSlowLength = input.int(21, "Slow Length", minval=2, maxval=200, group=gST,
+     tooltip="ATR length of the slow hidden Supertrend. This acts as the broader continuation confirmation.")
+
+stSlowFactor = input.float(2.55, "Slow Factor", minval=0.25, maxval=10.0, step=0.05, group=gST,
+     tooltip="Base ATR multiplier of the slow hidden Supertrend. Higher values make broader trend confirmation more selective.")
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 03. OVERLAY
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gOverlay = "03. Overlay"
+
+overlayMode = input.string("Trail", "Overlay", options=["Trail", "Bands", "None"], group=gOverlay,
+     tooltip="Trail displays the complete trend ribbon with depth. Bands displays layered volatility zones. None hides the overlay.")
+
+trailSize = input.float(1.00, "Width", minval=0.40, maxval=2.50, step=0.05, group=gOverlay,
+     tooltip="Controls the overall distance and thickness of the selected overlay.")
+
+smoothness = input.int(5, "Smoothness", minval=1, maxval=20, group=gOverlay,
+     tooltip="Smooths the overlay geometry. Higher values create softer movement.")
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// 04. VALUATION
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+gMeter = "04. Valuation"
+
+meterMode = input.string("Normal", "Meter Size", options=["Off", "Compact", "Normal", "Large"], group=gMeter,
+     tooltip="Controls whether the Valuation meter is displayed and its overall size.")
+
+meterPosition = input.string("Top Center", "Position", options=["Top Left", "Top Center", "Top Right", "Bottom Left", "Bottom Center", "Bottom Right"], group=gMeter,
+     tooltip="Sets the chart position of the Valuation meter.")
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// COLORS
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+bullColor = #00FFE5
+bearColor = #FF00B5
+neutralColor = #FFD84D
+
+black = #000000
+white = #FFFFFF
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// HELPERS
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+f_clamp(_v, _min, _max) =>
+    math.max(_min, math.min(_max, _v))
+
+f_position(_p) =>
+    _p == "Top Left" ? position.top_left :
+     _p == "Top Center" ? position.top_center :
+     _p == "Bottom Left" ? position.bottom_left :
+     _p == "Bottom Center" ? position.bottom_center :
+     _p == "Bottom Right" ? position.bottom_right :
+     position.top_right
+
+f_tradePnl(_side, _entry, _exit, _capital) =>
+    float gross = _capital * _side * ((_exit - _entry) / _entry)
+    float fee = _capital * 0.001
+    gross - fee
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// BASE MARKET STATE
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+basis = ta.ema(close, trendLength)
+
+atr = ta.atr(14)
+safeATR = math.max(atr, syminfo.mintick)
+
+momentum = ta.ema(close - close[momentumLength], 5) / safeATR
+distance = (close - basis) / safeATR
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// DIRECTIONAL EFFICIENCY
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+effLength = 10
+
+netMovement = math.abs(close - close[effLength])
+travelPath = math.sum(math.abs(close - close[1]), effLength)
+
+efficiency = travelPath > 0.0 ? f_clamp(netMovement / travelPath, 0.0, 1.0) : 0.0
+chop = 1.0 - efficiency
+
+effDirection = close > close[effLength] ? 1.0 :
+     close < close[effLength] ? -1.0 : 0.0
+
+efficiencyField = efficiency * effDirection
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// VOLATILITY REGIME
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+normalATR = ta.ema(safeATR, 50)
+volRatio = normalATR > 0.0 ? safeATR / normalATR : 1.0
+
+volExpansion = f_clamp(volRatio - 1.0, 0.0, 1.25)
+volDeviation = f_clamp(math.abs(volRatio - 1.0), 0.0, 1.50)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ADAPTIVE SUPERTREND MATRIX
+//
+// User inputs define each Supertrend's base parameters.
+// Chop and volatility then add a small dynamic distance adjustment.
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+fastAdaptiveFactor = stFastFactor + chop * 0.25 + volExpansion * 0.10
+midAdaptiveFactor = stMidFactor + chop * 0.35 + volExpansion * 0.15
+slowAdaptiveFactor = stSlowFactor + chop * 0.45 + volExpansion * 0.20
+
+[stFast, stFastDirection] = ta.supertrend(fastAdaptiveFactor, stFastLength)
+[stMid, stMidDirection] = ta.supertrend(midAdaptiveFactor, stMidLength)
+[stSlow, stSlowDirection] = ta.supertrend(slowAdaptiveFactor, stSlowLength)
+
+stFastBull = stFastDirection < 0
+stFastBear = stFastDirection > 0
+
+stMidBull = stMidDirection < 0
+stMidBear = stMidDirection > 0
+
+stSlowBull = stSlowDirection < 0
+stSlowBear = stSlowDirection > 0
+
+bullSTVotes = (stFastBull ? 1 : 0) + (stMidBull ? 1 : 0) + (stSlowBull ? 1 : 0)
+bearSTVotes = (stFastBear ? 1 : 0) + (stMidBear ? 1 : 0) + (stSlowBear ? 1 : 0)
+
+// Clean/normal markets = 2/3.
+// Very choppy markets = 3/3.
+requiredSTVotes = chop > 0.70 ? 3 : 2
+
+bullSTConfirmed = bullSTVotes >= requiredSTVotes
+bearSTConfirmed = bearSTVotes >= requiredSTVotes
+
+fullBullST = bullSTVotes == 3
+fullBearST = bearSTVotes == 3
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SUPERTREND PERSISTENCE
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+var int bullSTBars = 0
+var int bearSTBars = 0
+
+if barstate.isconfirmed
+    bullSTBars := bullSTConfirmed ? math.min(bullSTBars + 1, 5) : 0
+    bearSTBars := bearSTConfirmed ? math.min(bearSTBars + 1, 5) : 0
+
+stPersistenceRequired = chop > 0.72 ? 2 : 1
+
+bullSTPersistent = bullSTBars >= stPersistenceRequired
+bearSTPersistent = bearSTBars >= stPersistenceRequired
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CORE REGIME COMPONENTS
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+distanceField = f_clamp(distance / 1.20, -1.0, 1.0)
+momentumField = f_clamp(momentum / 0.35, -1.0, 1.0)
+
+basisSlope = (basis - basis[3]) / safeATR
+slopeField = f_clamp(basisSlope / 0.25, -1.0, 1.0)
+
+rsi = ta.rsi(close, 14)
+rsiField = f_clamp((rsi - 50.0) / 20.0, -1.0, 1.0)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SUPERTREND CONSENSUS FIELD
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+stField = (bullSTVotes - bearSTVotes) / 3.0
+
+slowCenter = ta.ema(hl2, math.max(10, int(math.round(trendLength * 0.70))))
+
+slowSlope = (slowCenter - slowCenter[3]) / safeATR
+slowSlopeField = f_clamp(slowSlope / 0.25, -1.0, 1.0)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// STRUCTURE BONUS
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+structureLength = math.max(3, int(math.round(trendLength * 0.12)))
+
+recentHigh = ta.highest(high[1], structureLength)
+recentLow = ta.lowest(low[1], structureLength)
+
+bullStructure = close > recentHigh
+bearStructure = close < recentLow
+
+structureField = bullStructure ? 1.0 :
+     bearStructure ? -1.0 : 0.0
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// CANDLE PRESSURE
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+barRange = math.max(high - low, syminfo.mintick)
+
+bodyPressure = (close - open) / barRange
+closeLocation = ((close - low) / barRange - 0.50) * 2.0
+
+pressureField = f_clamp(bodyPressure * 0.60 + closeLocation * 0.40, -1.0, 1.0)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// COMPOSITE REGIME
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+rawRegime =
+     distanceField * 0.22 +
+     momentumField * 0.19 +
+     slopeField * 0.14 +
+     slowSlopeField * 0.10 +
+     rsiField * 0.08 +
+     efficiencyField * 0.09 +
+     pressureField * 0.05 +
+     structureField * 0.05 +
+     stField * 0.20
+
+regime = ta.ema(rawRegime, 3)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// DYNAMIC HYSTERESIS
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+chopPenalty = chop * 0.085
+volPenalty = f_clamp(volDeviation * 0.04, 0.0, 0.06)
+
+dynamicGate = 0.22 + sensitivity * 0.12 + chopPenalty + volPenalty
+
+bullZone = regime > dynamicGate
+bearZone = regime < -dynamicGate
+
+bullPriceOK = close > basis + safeATR * sensitivity * 0.30
+bearPriceOK = close < basis - safeATR * sensitivity * 0.30
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SIGNAL CANDIDATES
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+bullCandidate = bullZone and bullPriceOK and momentum > 0.025 and bullSTPersistent
+bearCandidate = bearZone and bearPriceOK and momentum < -0.025 and bearSTPersistent
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// DYNAMIC CONFIRMATION
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+requiredBars = chop > 0.72 ? 3 :
+     chop > 0.40 ? 2 : 1
+
+var int bullConfirm = 0
+var int bearConfirm = 0
+
+if barstate.isconfirmed
+    bullConfirm := bullCandidate ? math.min(bullConfirm + 1, 4) : 0
+    bearConfirm := bearCandidate ? math.min(bearConfirm + 1, 4) : 0
+
+bullPersistent = bullConfirm >= requiredBars
+bearPersistent = bearConfirm >= requiredBars
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// STRONG MOVE FAST PASS
+//
+// Still requires unanimous 3/3 Supertrend confirmation.
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+strongBull =
+     bullCandidate and
+     fullBullST and
+     regime > dynamicGate + 0.26 and
+     momentum > 0.16 and
+     efficiency > 0.42
+
+strongBear =
+     bearCandidate and
+     fullBearST and
+     regime < -(dynamicGate + 0.26) and
+     momentum < -0.16 and
+     efficiency > 0.42
+
+bullReady = bullPersistent or strongBull
+bearReady = bearPersistent or strongBear
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SUPERTREND TAKEOVER
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+bullTakeover = stFastBull and (stMidBull or stSlowBull)
+bearTakeover = stFastBear and (stMidBear or stSlowBear)
+
+bullReady := bullReady and bullTakeover
+bearReady := bearReady and bearTakeover
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ADAPTIVE COOLDOWN
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+cooldownBars = 6 + int(math.round(chop * 4.0))
+
+var int trend = 0
+var int lastFlipBar = na
+
+barsSinceFlip = na(lastFlipBar) ? 100000 : bar_index - lastFlipBar
+cooldownDone = barsSinceFlip >= cooldownBars
+
+if barstate.isconfirmed
+    if trend != 1 and bullReady and (cooldownDone or strongBull)
+        trend := 1
+        lastFlipBar := bar_index
+
+        bullConfirm := 0
+        bearConfirm := 0
+        bullSTBars := 0
+        bearSTBars := 0
+
+    else if trend != -1 and bearReady and (cooldownDone or strongBear)
+        trend := -1
+        lastFlipBar := bar_index
+
+        bullConfirm := 0
+        bearConfirm := 0
+        bullSTBars := 0
+        bearSTBars := 0
+
+bullish = trend == 1
+bearish = trend == -1
+
+upSignal = barstate.isconfirmed and trend == 1 and trend[1] != 1
+downSignal = barstate.isconfirmed and trend == -1 and trend[1] != -1
+
+trendColor = bullish ? bullColor :
+     bearish ? bearColor :
+     neutralColor
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SMOOTH OVERLAY
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+smoothBasis = smoothness > 1 ? ta.ema(basis, smoothness) : basis
+smoothATR = smoothness > 1 ? ta.ema(safeATR, smoothness) : safeATR
+
+innerDistance = 0.55 * trailSize
+outerDistance = 1.15 * trailSize
+depthDistance = 1.60 * trailSize
+
+innerTrail = bullish ? smoothBasis - smoothATR * innerDistance :
+     bearish ? smoothBasis + smoothATR * innerDistance :
+     smoothBasis
+
+outerTrail = bullish ? smoothBasis - smoothATR * outerDistance :
+     bearish ? smoothBasis + smoothATR * outerDistance :
+     smoothBasis
+
+depthTrail = bullish ? smoothBasis - smoothATR * depthDistance :
+     bearish ? smoothBasis + smoothATR * depthDistance :
+     smoothBasis
+
+showTrail = overlayMode == "Trail"
+showBands = overlayMode == "Bands"
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// TRAIL
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+pTrailInner = plot(showTrail ? innerTrail : na, "Trail Inner", color=color.new(trendColor, 100))
+pTrailOuter = plot(showTrail ? outerTrail : na, "Trail Outer", color=color.new(trendColor, 100))
+pTrailDepth = plot(showTrail ? depthTrail : na, "Trail Depth", color=color.new(trendColor, 100))
+
+fill(pTrailInner, pTrailOuter, color=color.new(trendColor, 68), title="Adaptive Trend Trail")
+fill(pTrailOuter, pTrailDepth, color=color.new(trendColor, 87), title="Trail Depth")
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// BANDS
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+bandBasis = ta.ema(smoothBasis, smoothness)
+bandATR = ta.ema(smoothATR, smoothness)
+
+upper1 = bandBasis + bandATR * 1.30 * trailSize
+upper2 = bandBasis + bandATR * 2.00 * trailSize
+upper3 = bandBasis + bandATR * 2.90 * trailSize
+
+lower1 = bandBasis - bandATR * 1.30 * trailSize
+lower2 = bandBasis - bandATR * 2.00 * trailSize
+lower3 = bandBasis - bandATR * 2.90 * trailSize
+
+pU1 = plot(showBands ? upper1 : na, "Upper Band 1", color=color.new(bearColor, 100))
+pU2 = plot(showBands ? upper2 : na, "Upper Band 2", color=color.new(bearColor, 100))
+pU3 = plot(showBands ? upper3 : na, "Upper Band 3", color=color.new(bearColor, 100))
+
+pL1 = plot(showBands ? lower1 : na, "Lower Band 1", color=color.new(bullColor, 100))
+pL2 = plot(showBands ? lower2 : na, "Lower Band 2", color=color.new(bullColor, 100))
+pL3 = plot(showBands ? lower3 : na, "Lower Band 3", color=color.new(bullColor, 100))
+
+fill(pU1, pU2, color=color.new(bearColor, 91), title="Upper Inner Band")
+fill(pU2, pU3, color=color.new(bearColor, 72), title="Upper Outer Band")
+
+fill(pL1, pL2, color=color.new(bullColor, 91), title="Lower Inner Band")
+fill(pL2, pL3, color=color.new(bullColor, 72), title="Lower Outer Band")
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// SIGNAL LABELS
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+signalPadding = smoothATR * 1.05
+
+if upSignal
+    label.new(bar_index, outerTrail - signalPadding, "𝓤𝓹",
+         style=label.style_label_up,
+         color=bullColor,
+         textcolor=black,
+         size=size.normal)
+
+if downSignal
+    label.new(bar_index, outerTrail + signalPadding, "𝓓𝓸𝔀𝓷",
+         style=label.style_label_down,
+         color=bearColor,
+         textcolor=white,
+         size=size.normal)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// TREND CANDLES
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+plotcandle(open, high, low, close, "Trend Candles",
+     color=trendColor,
+     wickcolor=trendColor,
+     bordercolor=trendColor)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// VALUATION
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+valuation = f_clamp(ta.ema(ta.rsi(close, 14), 3), 0.0, 100.0)
+
+showMeter = meterMode != "Off"
+
+meterSegments = meterMode == "Compact" ? 11 :
+     meterMode == "Large" ? 25 :
+     17
+
+meterColumns = meterSegments + 2
+centerColumn = int(math.floor((meterColumns - 1) / 2))
+
+meterTextSize = meterMode == "Large" ? size.normal :
+     meterMode == "Compact" ? size.tiny :
+     size.small
+
+pointerSize = meterMode == "Large" ? size.large :
+     meterMode == "Compact" ? size.small :
+     size.normal
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// VALUATION METER
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+var table valuationMeter = table.new(
+     f_position(meterPosition),
+     meterColumns,
+     3,
+     bgcolor=black,
+     frame_color=white,
+     frame_width=1,
+     border_color=black,
+     border_width=0
+)
+
+if showMeter and barstate.islast
+    table.clear(valuationMeter, 0, 0, meterColumns - 1, 2)
+
+    int pointerIndex = int(math.round(valuation / 100.0 * (meterSegments - 1)))
+
+    for i = 0 to meterColumns - 1
+        table.cell(valuationMeter, i, 0, "", bgcolor=black)
+
+    table.cell(valuationMeter, centerColumn, 0, "𝓥𝓪𝓵𝓾𝓪𝓽𝓲𝓸𝓷",
+         text_color=white,
+         bgcolor=black,
+         text_size=meterTextSize,
+         text_halign=text.align_center)
+
+    for i = 0 to meterSegments - 1
+        bool pointer = i == pointerIndex
+        string dot = i == 0 or i == meterSegments - 1 ? "●" : "·"
+
+        table.cell(valuationMeter, i + 1, 1, dot,
+             text_color=color.new(white, 30),
+             bgcolor=black,
+             text_size=meterTextSize,
+             text_halign=text.align_center)
+
+        table.cell(valuationMeter, i + 1, 2, pointer ? "▲" : "",
+             text_color=white,
+             bgcolor=black,
+             text_size=pointerSize,
+             text_halign=text.align_center)
+
+        table.cell_set_text_font_family(valuationMeter, i + 1, 1, font.family_monospace)
+        table.cell_set_text_font_family(valuationMeter, i + 1, 2, font.family_monospace)
+
+if not showMeter and barstate.islast
+    table.clear(valuationMeter, 0, 0, meterColumns - 1, 2)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// INTERNAL INDICATOR BACKTEST
+// NO STRATEGY / TP / CROSSES / VISUAL EXITS
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+var float equity = 10000.0
+var float equityPeak = 10000.0
+var float maxDrawdown = 0.0
+
+var int side = 0
+var int entryBar = na
+
+var float entryPrice = na
+var float entryEquity = na
+var float stopPrice = na
+var float tradePnL = 0.0
+
+var int closedTrades = 0
+var int winningTrades = 0
+
+var float grossProfit = 0.0
+var float grossLoss = 0.0
+
+if side != 0 and bar_index > entryBar
+    float candidateStop = outerTrail[1]
+
+    if side == 1 and not na(candidateStop)
+        stopPrice := math.max(stopPrice, candidateStop)
+
+    if side == -1 and not na(candidateStop)
+        stopPrice := math.min(stopPrice, candidateStop)
+
+if side != 0 and bar_index > entryBar
+    bool stopHit = side == 1 ? low <= stopPrice : high >= stopPrice
+    bool reversal = side == 1 ? downSignal : upSignal
+    float exitPrice = stopHit ? stopPrice : reversal ? close : na
+
+    if not na(exitPrice)
+        float result = f_tradePnl(side, entryPrice, exitPrice, entryEquity)
+
+        equity += result
+        tradePnL += result
+        closedTrades += 1
+
+        if tradePnL > 0.0
+            winningTrades += 1
+            grossProfit += tradePnL
+        else if tradePnL < 0.0
+            grossLoss += tradePnL
+
+        side := 0
+        entryBar := na
+        entryPrice := na
+        entryEquity := na
+        stopPrice := na
+        tradePnL := 0.0
+
+if side == 0 and upSignal
+    side := 1
+    entryBar := bar_index
+    entryPrice := close
+    entryEquity := equity
+    stopPrice := math.min(outerTrail, close - syminfo.mintick)
+
+    float fee = entryEquity * 0.001
+    equity -= fee
+    tradePnL := -fee
+
+else if side == 0 and downSignal
+    side := -1
+    entryBar := bar_index
+    entryPrice := close
+    entryEquity := equity
+    stopPrice := math.max(outerTrail, close + syminfo.mintick)
+
+    float fee = entryEquity * 0.001
+    equity -= fee
+    tradePnL := -fee
+
+float unrealized = 0.0
+
+if side != 0 and not na(entryPrice)
+    unrealized := entryEquity * side * ((close - entryPrice) / entryPrice)
+
+liveEquity = equity + unrealized
+
+equityPeak := math.max(equityPeak, liveEquity)
+
+float currentDD = equityPeak > 0.0 ? (equityPeak - liveEquity) / equityPeak : 0.0
+maxDrawdown := math.max(maxDrawdown, currentDD)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// DATA WINDOW
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+backtestReturn = (liveEquity / 10000.0 - 1.0) * 100.0
+winRate = closedTrades > 0 ? winningTrades / closedTrades * 100.0 : na
+profitFactor = grossLoss < 0.0 ? grossProfit / math.abs(grossLoss) : na
+
+plot(backtestReturn, "Internal Return %", display=display.data_window)
+plot(winRate, "Internal Win Rate %", display=display.data_window)
+plot(profitFactor, "Internal Profit Factor", display=display.data_window)
+plot(maxDrawdown * 100.0, "Internal Max Drawdown %", display=display.data_window)
+plot(closedTrades, "Internal Closed Trades", display=display.data_window)
+
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+// ALERTS
+//━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+alertcondition(upSignal, "Adaptive Trend Up", "Adaptive Trend Trail turned bullish on {{ticker}}")
+alertcondition(downSignal, "Adaptive Trend Down", "Adaptive Trend Trail turned bearish on {{ticker}}")

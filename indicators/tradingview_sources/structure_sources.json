@@ -1,0 +1,784 @@
+{
+  "schema_version": 1,
+  "scope": "Ten selected TradingView sources excluding Gaussian, Fibonacci and Uptrick owned by trend manifest",
+  "ranking_snapshot": "docs/specs/tradingview-boost-snapshot-2026-09-05.json",
+  "source_acquisition": "Unauthenticated official TradingView versioned Pine source endpoint. Source files preserve returned UTF-8 content including original line endings.",
+  "sources": [
+    {
+      "id": 23579213,
+      "title": "AMD Po3 with Live Edge Stats [WillyAlgoTrader]",
+      "author": "WillyAlgoTrader",
+      "url": "https://www.tradingview.com/script/hkKioUnL-AMD-Po3-with-Live-Edge-Stats-WillyAlgoTrader/",
+      "boosts": 5261,
+      "type": "indicator",
+      "access_code": 1,
+      "publication_version": "1",
+      "pine_id": "PUB;646ba78cb9e34cd096405b32aa1777a7",
+      "editors_pick": false,
+      "page": 30,
+      "script_id": "hkKioUnL",
+      "path": "indicators/tradingview_sources/hkKioUnL.pine",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B646ba78cb9e34cd096405b32aa1777a7/1",
+      "acquired_at_utc": "2026-09-06T01:14:35.758726+00:00",
+      "sha256_source": "d6d61bcd1eabbfad26dab2fd4be69dc85bc616121149386765222f605a6979e5",
+      "sha256_response": "6a3d58f3fe3c59855d64d723883b364228ea232012ac0b97ec6cf2eed2aaacce",
+      "source_metadata": {
+        "created": "2026-08-17T21:32:02.692549Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": true,
+          "kind": "study",
+          "originalScriptId": "USER;1a83e1f17023411da54f4e9e30021eaf",
+          "originalScriptVersion": "0.539",
+          "sourceInputsCount": 0
+        },
+        "lastVersionMaj": "1.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "AMD Po3 with Live Edge Stats [WillyAlgoTrader]",
+        "updated": "2026-08-17T21:32:02.692549Z",
+        "version": "1.0"
+      },
+      "pine_version": "6",
+      "imports": [],
+      "license_header": [
+        "//@version=6",
+        "// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550",
+        "// AMD Po3 WITH LIVE EDGE STATS [WillyAlgoTrader]",
+        "// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550",
+        "// Author:  Willy | WillyAlgoTrader",
+        "// Version: 2.2.0",
+        "",
+        "indicator(",
+        "     title            = \"AMD Po3 with Live Edge Stats [WillyAlgoTrader]\",",
+        "     shorttitle       = \"AMD Po3 Stats\","
+      ],
+      "license": "NO-EXPLICIT-SOURCE-HEADER",
+      "license_url": null,
+      "license_verified_from_source_header": false,
+      "source_audit": {
+        "scope": "Static source dependency and availability inventory; not numerical parity validation.",
+        "request_calls": [
+          "request.security"
+        ],
+        "library_calls": [],
+        "has_volume_dependency": false,
+        "has_barstate_confirmed": true,
+        "confirmation_lines": [
+          459,
+          761
+        ],
+        "last_bar_only_lines": [
+          925,
+          1133
+        ],
+        "delayed_pivot_lines": [
+          273,
+          274
+        ],
+        "lookahead_lines": [
+          108,
+          281,
+          284
+        ],
+        "source_revision_matches_ranking_snapshot": true,
+        "mathematical_parity": "pending exported TradingView fixtures"
+      }
+    },
+    {
+      "id": 23547615,
+      "title": "Volume Footprint: Measuring by Math & Geometry",
+      "author": "ata_sabanci",
+      "url": "https://www.tradingview.com/script/Tm1cGCPD-Volume-Footprint-Measuring-by-Math-Geometry/",
+      "boosts": 4571,
+      "type": "indicator",
+      "access_code": 1,
+      "publication_version": "4",
+      "pine_id": "PUB;e15e52b27d234f238522c37120642c73",
+      "editors_pick": false,
+      "page": 42,
+      "script_id": "Tm1cGCPD",
+      "path": "indicators/tradingview_sources/Tm1cGCPD.pine",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3Be15e52b27d234f238522c37120642c73/4",
+      "acquired_at_utc": "2026-09-06T01:14:35.798533+00:00",
+      "sha256_source": "4adfa2af51f72b17c54f45a3e0b33a791bd2d165235c6ce1f40e46aa84cbc9c7",
+      "sha256_response": "a4392ee1ea8f041659daaa7a7f7ccd3172a84792a3137a755a17c0428ff7cf2f",
+      "source_metadata": {
+        "created": "2026-08-15T22:05:17.77555Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": true,
+          "kind": "study",
+          "originalScriptId": "USER;e966f62f3efc4c34b5d9e512606e1670",
+          "originalScriptVersion": "14.0",
+          "sourceInputsCount": 0,
+          "stats": {
+            "plot": 9
+          }
+        },
+        "lastVersionMaj": "4.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "Volume Footprint: Measuring Classical Indicators by Math & Geometry, Introduction",
+        "updated": "2026-08-15T22:05:17.77555Z",
+        "version": "4.0"
+      },
+      "pine_version": "6",
+      "imports": [
+        "TradingView/ta/14 as tvta"
+      ],
+      "license_header": [
+        "// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/",
+        "// \u00a9 ata_sabanci",
+        "",
+        "//@version=6",
+        "indicator(\"Volume Footprint: Measuring Classical Indicators by Math & Geometry, Introduction\",",
+        "     shorttitle    = \"VFP-Intro\",",
+        "     overlay       = true,",
+        "     max_bars_back = 5000)",
+        "",
+        "// TradingView's official technical analysis library; the Intrabar"
+      ],
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "license_verified_from_source_header": true,
+      "source_audit": {
+        "scope": "Static source dependency and availability inventory; not numerical parity validation.",
+        "request_calls": [
+          "request.footprint"
+        ],
+        "library_calls": [
+          "tvta.requestUpAndDownVolume"
+        ],
+        "has_volume_dependency": true,
+        "has_barstate_confirmed": false,
+        "confirmation_lines": [],
+        "last_bar_only_lines": [
+          699,
+          827,
+          1110,
+          1168,
+          1688
+        ],
+        "delayed_pivot_lines": [],
+        "lookahead_lines": [],
+        "source_revision_matches_ranking_snapshot": true,
+        "mathematical_parity": "pending exported TradingView fixtures"
+      }
+    },
+    {
+      "id": 23603191,
+      "title": "Volume-Weighted Order Block Zones [BigBeluga]",
+      "author": "BigBeluga",
+      "url": "https://www.tradingview.com/script/KcnNgwDI-Volume-Weighted-Order-Block-Zones-BigBeluga/",
+      "boosts": 4057,
+      "type": "indicator",
+      "access_code": 1,
+      "publication_version": "1",
+      "pine_id": "PUB;891a96497b1f41c2ae6eb73cc0a0e808",
+      "editors_pick": false,
+      "page": 27,
+      "script_id": "KcnNgwDI",
+      "path": "indicators/tradingview_sources/KcnNgwDI.pine",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B891a96497b1f41c2ae6eb73cc0a0e808/1",
+      "acquired_at_utc": "2026-09-06T01:14:35.691643+00:00",
+      "sha256_source": "30be5494a064908c803de89debc83cf13ad35c6635bcd27cf371e11ccabadb2b",
+      "sha256_response": "a8c40c655fa6e524433edddff517e2635564db34440dde5146962a5c3aa9bc19",
+      "source_metadata": {
+        "created": "2026-08-21T10:34:10.936746Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": true,
+          "kind": "study",
+          "originalScriptId": "USER;825b436d00fa4273ac1d6ff7b9230f93",
+          "originalScriptVersion": "76.0",
+          "sourceInputsCount": 0
+        },
+        "lastVersionMaj": "1.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "Volume-Weighted Order Block Zones [BigBeluga]",
+        "updated": "2026-08-21T10:34:10.936746Z",
+        "version": "1.0"
+      },
+      "pine_version": "6",
+      "imports": [],
+      "license_header": [
+        "// This work is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International  ",
+        "// https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "// \u00a9 BigBeluga",
+        "",
+        "//@version=6",
+        "indicator(\"Volume-Weighted Order Block Zones [BigBeluga]\", overlay=true, max_boxes_count=500, max_lines_count=500, max_labels_count=500, calc_bars_count = 3000)",
+        "",
+        "// \uff29\uff2e\uff30\uff35\uff34\uff33 \u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015{",
+        "",
+        "// Order Block Detection Parameters"
+      ],
+      "license": "CC-BY-NC-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_verified_from_source_header": true,
+      "source_audit": {
+        "scope": "Static source dependency and availability inventory; not numerical parity validation.",
+        "request_calls": [],
+        "library_calls": [],
+        "has_volume_dependency": true,
+        "has_barstate_confirmed": true,
+        "confirmation_lines": [
+          278,
+          284,
+          291,
+          320
+        ],
+        "last_bar_only_lines": [],
+        "delayed_pivot_lines": [
+          47,
+          48
+        ],
+        "lookahead_lines": [],
+        "source_revision_matches_ranking_snapshot": true,
+        "mathematical_parity": "pending exported TradingView fixtures"
+      }
+    },
+    {
+      "id": 23559318,
+      "title": "Structural Liquidity & POC Matrix [BigBeluga]",
+      "author": "BigBeluga",
+      "url": "https://www.tradingview.com/script/I8HrQVRv-Structural-Liquidity-POC-Matrix-BigBeluga/",
+      "boosts": 2455,
+      "type": "indicator",
+      "access_code": 1,
+      "publication_version": "1",
+      "pine_id": "PUB;95222effbc4441e38fcef15d270aaf22",
+      "editors_pick": false,
+      "page": 37,
+      "script_id": "I8HrQVRv",
+      "path": "indicators/tradingview_sources/I8HrQVRv.pine",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B95222effbc4441e38fcef15d270aaf22/1",
+      "acquired_at_utc": "2026-09-06T01:14:35.655886+00:00",
+      "sha256_source": "5aec4ed35a84133ab417a25f6ce3778e4fde4d3812218a9f6d40b6c876f5da41",
+      "sha256_response": "9485129b0d5981cdaae9d0ffa00fea60225d89c889b01662669a6d5dea4e2cd7",
+      "source_metadata": {
+        "created": "2026-08-14T09:34:45.393327Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": true,
+          "kind": "study",
+          "originalScriptId": "USER;0cbd16cbc7c8446eb39c7cf0bc94c136",
+          "originalScriptVersion": "193.0",
+          "sourceInputsCount": 0,
+          "stats": {
+            "plot": 2
+          }
+        },
+        "lastVersionMaj": "1.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "Structural Liquidity & POC Matrix [BigBeluga]",
+        "updated": "2026-08-14T09:34:45.393327Z",
+        "version": "1.0"
+      },
+      "pine_version": "6",
+      "imports": [],
+      "license_header": [
+        "// This work is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International  ",
+        "// https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "// \u00a9 BigBeluga",
+        "",
+        "//@version=6",
+        "indicator(\"Structural Liquidity & POC Matrix [BigBeluga]\", overlay = true, max_polylines_count = 100, max_bars_back = 500, max_labels_count = 500)",
+        "",
+        "// \uff29\uff2e\uff30\uff35\uff34\uff33 \u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015{",
+        "",
+        "liquidityLen  = input.int(100, title=\"Liquidity Length\", tooltip=\"Lookback period to determine the highest and lowest historical price levels.\")"
+      ],
+      "license": "CC-BY-NC-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_verified_from_source_header": true,
+      "source_audit": {
+        "scope": "Static source dependency and availability inventory; not numerical parity validation.",
+        "request_calls": [],
+        "library_calls": [],
+        "has_volume_dependency": true,
+        "has_barstate_confirmed": false,
+        "confirmation_lines": [],
+        "last_bar_only_lines": [
+          120
+        ],
+        "delayed_pivot_lines": [],
+        "lookahead_lines": [],
+        "source_revision_matches_ranking_snapshot": true,
+        "mathematical_parity": "pending exported TradingView fixtures"
+      }
+    },
+    {
+      "id": 23580622,
+      "title": "Setup Scanner [GBB]",
+      "author": "GoodBadBitcoin",
+      "url": "https://www.tradingview.com/script/XWuYNmhD-Setup-Scanner-GBB/",
+      "boosts": 2237,
+      "type": "indicator",
+      "access_code": 1,
+      "publication_version": "2",
+      "pine_id": "PUB;e206beb3690a4a21a6f42f7d589ff2a5",
+      "editors_pick": false,
+      "page": 30,
+      "script_id": "XWuYNmhD",
+      "path": "indicators/tradingview_sources/XWuYNmhD.pine",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3Be206beb3690a4a21a6f42f7d589ff2a5/2",
+      "acquired_at_utc": "2026-09-06T01:14:35.870467+00:00",
+      "sha256_source": "f52a7d6fd73fcd450ad8b4d8c23da95628372504aeae4ed3179c23691fa130db",
+      "sha256_response": "51d5a06a819f96124e87debc26b2f6d501a4ad81691345e20f781d7499e215b1",
+      "source_metadata": {
+        "created": "2026-08-21T18:18:24.355381Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": true,
+          "kind": "study",
+          "originalScriptId": "USER;af26a0bfa2dd40ecbd09dbf9e6d6e315",
+          "originalScriptVersion": "1.0",
+          "sourceInputsCount": 0,
+          "stats": {
+            "alertcondition": 2,
+            "plot": 2,
+            "plotshape": 2
+          }
+        },
+        "lastVersionMaj": "2.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "Setup Scanner [GBB]",
+        "updated": "2026-08-21T18:18:24.355381Z",
+        "version": "2.0"
+      },
+      "pine_version": "6",
+      "imports": [],
+      "license_header": [
+        "//@version=6",
+        "// \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+        "//  Setup Scanner [GBB]  v1.1",
+        "// \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500",
+        "",
+        "indicator(\"Setup Scanner [GBB]\", \"GBB Setup\", overlay = true,",
+        "          max_boxes_count = 500, max_lines_count = 500, max_labels_count = 500)",
+        "",
+        "// \u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550",
+        "//  CONSTANTS"
+      ],
+      "license": "NO-EXPLICIT-SOURCE-HEADER",
+      "license_url": null,
+      "license_verified_from_source_header": false,
+      "source_audit": {
+        "scope": "Static source dependency and availability inventory; not numerical parity validation.",
+        "request_calls": [],
+        "library_calls": [],
+        "has_volume_dependency": true,
+        "has_barstate_confirmed": true,
+        "confirmation_lines": [
+          188,
+          744
+        ],
+        "last_bar_only_lines": [
+          776
+        ],
+        "delayed_pivot_lines": [
+          239,
+          240
+        ],
+        "lookahead_lines": [],
+        "source_revision_matches_ranking_snapshot": true,
+        "mathematical_parity": "pending exported TradingView fixtures"
+      }
+    },
+    {
+      "id": 23576227,
+      "title": "RSI Probability Matrix [ChartPrime]",
+      "author": "ChartPrime",
+      "url": "https://www.tradingview.com/script/c25U5rsF-RSI-Probability-Matrix-ChartPrime/",
+      "boosts": 1928,
+      "type": "indicator",
+      "access_code": 1,
+      "publication_version": "1",
+      "pine_id": "PUB;5dfdfad08cf348138e3977de614d8f3c",
+      "editors_pick": false,
+      "page": 31,
+      "script_id": "c25U5rsF",
+      "path": "indicators/tradingview_sources/c25U5rsF.pine",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B5dfdfad08cf348138e3977de614d8f3c/1",
+      "acquired_at_utc": "2026-09-06T01:14:35.898506+00:00",
+      "sha256_source": "88d6e36c500269cb54e7f976a571e45dbabda124d64ffac8e0cfb1d464ebabe5",
+      "sha256_response": "cb02a0ddac671f0a30a00d7f63f61b5ee399f5f0ab2909b1b0f4d0875c08edfb",
+      "source_metadata": {
+        "created": "2026-08-17T12:15:12.317244Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": false,
+          "kind": "study",
+          "originalScriptId": "USER;207773e88759439d91c3f5155d047683",
+          "originalScriptVersion": "1.0",
+          "sourceInputsCount": 0,
+          "stats": {
+            "plot": 2
+          }
+        },
+        "lastVersionMaj": "1.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "RSI Probability Matrix [ChartPrime]",
+        "updated": "2026-08-17T12:15:12.317244Z",
+        "version": "1.0"
+      },
+      "pine_version": "6",
+      "imports": [],
+      "license_header": [
+        "// This work is licensed under a Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0) https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "// \u00a9 ChartPrime",
+        "",
+        "//@version=6",
+        "indicator(\"RSI Probability Matrix [ChartPrime]\", overlay = false, max_lines_count = 500, max_labels_count = 500)",
+        "",
+        "",
+        "// --------------------------------------------------------------------------------------------------------------------}",
+        "// \ud83d\udccc \ud835\ude50\ud835\ude4e\ud835\ude40\ud835\ude4d \ud835\ude44\ud835\ude49\ud835\ude4b\ud835\ude50\ud835\ude4f\ud835\ude4e",
+        "// --------------------------------------------------------------------------------------------------------------------{"
+      ],
+      "license": "CC-BY-NC-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_verified_from_source_header": true,
+      "source_audit": {
+        "scope": "Static source dependency and availability inventory; not numerical parity validation.",
+        "request_calls": [],
+        "library_calls": [],
+        "has_volume_dependency": false,
+        "has_barstate_confirmed": false,
+        "confirmation_lines": [],
+        "last_bar_only_lines": [
+          189
+        ],
+        "delayed_pivot_lines": [],
+        "lookahead_lines": [],
+        "source_revision_matches_ranking_snapshot": true,
+        "mathematical_parity": "pending exported TradingView fixtures"
+      }
+    },
+    {
+      "id": 23575490,
+      "title": "HTF Log-Regression Volume Profile [BigBeluga]",
+      "author": "BigBeluga",
+      "url": "https://www.tradingview.com/script/kwXpL7yZ-HTF-Log-Regression-Volume-Profile-BigBeluga/",
+      "boosts": 1875,
+      "type": "indicator",
+      "access_code": 1,
+      "publication_version": "4",
+      "pine_id": "PUB;d6fcf16e6a6b4b13963e5e943cf4f5c6",
+      "editors_pick": false,
+      "page": 31,
+      "script_id": "kwXpL7yZ",
+      "path": "indicators/tradingview_sources/kwXpL7yZ.pine",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3Bd6fcf16e6a6b4b13963e5e943cf4f5c6/4",
+      "acquired_at_utc": "2026-09-06T01:14:35.998781+00:00",
+      "sha256_source": "de31292c867ad914c2a76912e6de407262cc690e093d02a828c77ba43825286f",
+      "sha256_response": "d0be9af34810c610141177fa437b1c7779d018506bd5399b8554dd88bba70a43",
+      "source_metadata": {
+        "created": "2026-08-18T17:09:00.974847Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": true,
+          "kind": "study",
+          "originalScriptId": "USER;ac13c78cebad46b583af385c88ad0d8c",
+          "originalScriptVersion": "57.0",
+          "sourceInputsCount": 0
+        },
+        "lastVersionMaj": "4.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "HTF Log-Regression Volume Profile [BigBeluga]",
+        "updated": "2026-08-18T17:09:00.974847Z",
+        "version": "4.0"
+      },
+      "pine_version": "6",
+      "imports": [],
+      "license_header": [
+        "// This work is licensed under Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International  ",
+        "// https://creativecommons.org/licenses/by-nc-sa/4.0/",
+        "// \u00a9 BigBeluga",
+        "",
+        "//@version=6",
+        "indicator(\"HTF Log-Regression Volume Profile [BigBeluga]\", overlay=true, max_lines_count=500, max_boxes_count=500, max_polylines_count=100)",
+        "",
+        "// \uff29\uff2e\uff30\uff35\uff34\uff33 \u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015\u2015{",
+        "group_htf     = \"Higher Timeframe Settings\"",
+        "group_chan    = \"Channel & Dimensions\""
+      ],
+      "license": "CC-BY-NC-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "license_verified_from_source_header": true,
+      "source_audit": {
+        "scope": "Static source dependency and availability inventory; not numerical parity validation.",
+        "request_calls": [],
+        "library_calls": [],
+        "has_volume_dependency": true,
+        "has_barstate_confirmed": false,
+        "confirmation_lines": [],
+        "last_bar_only_lines": [],
+        "delayed_pivot_lines": [],
+        "lookahead_lines": [],
+        "source_revision_matches_ranking_snapshot": true,
+        "mathematical_parity": "pending exported TradingView fixtures"
+      }
+    },
+    {
+      "id": 13361417,
+      "title": "Market Structure Break & Order Block by EmreKb",
+      "author": "EmreKb",
+      "url": "https://www.tradingview.com/script/DkE7UniD/",
+      "boosts": 60704,
+      "type": "indicator",
+      "access_code": 1,
+      "publication_version": "9",
+      "pine_id": "PUB;3a1fb6197f314eb2912194d70934bf7e",
+      "editors_pick": true,
+      "page": 18,
+      "script_id": "DkE7UniD",
+      "path": "indicators/tradingview_sources/DkE7UniD.pine",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B3a1fb6197f314eb2912194d70934bf7e/9",
+      "acquired_at_utc": "2026-09-06T01:14:36.070150+00:00",
+      "sha256_source": "7a38b51c8f4d222dfa62f5a80a3fb23f358535b5c27eb2ac6df9a42a3fb8cb0b",
+      "sha256_response": "406d6695afa267e176fcfbe63e6962fc2a3eae8a5f34feb9780cfbff2959070a",
+      "source_metadata": {
+        "created": "2023-05-08T20:36:17.87108Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": true,
+          "kind": "study",
+          "sourceInputsCount": 0,
+          "stats": {
+            "alertcondition": 1
+          }
+        },
+        "lastVersionMaj": "9.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "Market Structure Break & Order Block",
+        "updated": "2023-05-08T20:36:17.87108Z",
+        "version": "9.0"
+      },
+      "pine_version": "5",
+      "imports": [],
+      "license_header": [
+        "// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/",
+        "// \u00a9 EmreKb",
+        "",
+        "//@version=5",
+        "indicator(\"Market Structure Break & Order Block\", \"MSB-OB\", overlay=true, max_lines_count=500, max_bars_back=4900, max_boxes_count=500)",
+        "",
+        "settings = \"Settings\"",
+        "zigzag_len = input.int(9, \"ZigZag Length\", group=settings)",
+        "show_zigzag = input.bool(true, \"Show Zigzag\", group=settings)",
+        "fib_factor = input.float(0.33, \"Fib Factor for breakout confirmation\", 0, 1, 0.01, group=settings)"
+      ],
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "license_verified_from_source_header": true,
+      "source_audit": {
+        "scope": "Static source dependency and availability inventory; not numerical parity validation.",
+        "request_calls": [],
+        "library_calls": [],
+        "has_volume_dependency": false,
+        "has_barstate_confirmed": false,
+        "confirmation_lines": [],
+        "last_bar_only_lines": [],
+        "delayed_pivot_lines": [],
+        "lookahead_lines": [],
+        "source_revision_matches_ranking_snapshot": true,
+        "mathematical_parity": "pending exported TradingView fixtures"
+      }
+    },
+    {
+      "id": 15388169,
+      "title": "ICT Killzones + Pivots [TFO]",
+      "author": "tradeforopp",
+      "url": "https://www.tradingview.com/script/nW5oGfdO-ICT-Killzones-Pivots-TFO/",
+      "boosts": 55049,
+      "type": "indicator",
+      "access_code": 1,
+      "publication_version": "19",
+      "pine_id": "PUB;d0b8be94f1b042bf9f2cb20f92cefc57",
+      "editors_pick": true,
+      "page": 14,
+      "script_id": "nW5oGfdO",
+      "path": "indicators/tradingview_sources/nW5oGfdO.pine",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3Bd0b8be94f1b042bf9f2cb20f92cefc57/19",
+      "acquired_at_utc": "2026-09-06T01:14:36.167299+00:00",
+      "sha256_source": "c844898884c5f9691068f2302fe868827a0df87be58a20f5a75989e49986baac",
+      "sha256_response": "3fafad4c7daf82c22d0a2e6df0ac1ccb925f7f8cf1a9084a567ba5229daa3cf2",
+      "source_metadata": {
+        "created": "2026-07-26T17:57:46.367241Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": true,
+          "kind": "study",
+          "originalScriptId": "USER;3130d32f5512440a8d7690643118a4e6",
+          "originalScriptVersion": "732.0",
+          "sourceInputsCount": 0,
+          "stats": {
+            "plotchar": 7
+          }
+        },
+        "lastVersionMaj": "19.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "ICT Killzones & Pivots [TFO]",
+        "updated": "2026-07-26T17:57:46.367241Z",
+        "version": "19.0"
+      },
+      "pine_version": "6",
+      "imports": [],
+      "license_header": [
+        "// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/",
+        "// \u00a9 tradeforopp",
+        "",
+        "//@version=6",
+        "indicator(\"ICT Killzones & Pivots [TFO]\", \"KZP [TFO]\", true, max_labels_count = 500, max_lines_count = 500, max_boxes_count = 500) ",
+        "",
+        "",
+        "// ---------------------------------------- Common Functions --------------------------------------------------",
+        "var default_transparency = 60",
+        ""
+      ],
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "license_verified_from_source_header": true,
+      "source_audit": {
+        "scope": "Static source dependency and availability inventory; not numerical parity validation.",
+        "request_calls": [],
+        "library_calls": [],
+        "has_volume_dependency": false,
+        "has_barstate_confirmed": false,
+        "confirmation_lines": [],
+        "last_bar_only_lines": [
+          617,
+          1030,
+          1063
+        ],
+        "delayed_pivot_lines": [],
+        "lookahead_lines": [],
+        "source_revision_matches_ranking_snapshot": true,
+        "mathematical_parity": "pending exported TradingView fixtures"
+      }
+    },
+    {
+      "id": 10280100,
+      "title": "Support Resistance Channels",
+      "author": "LonesomeTheBlue",
+      "url": "https://www.tradingview.com/script/Ej53t8Wv-Support-Resistance-Channels/",
+      "boosts": 46188,
+      "type": "indicator",
+      "access_code": 1,
+      "publication_version": "6",
+      "pine_id": "PUB;9xd5ljxt0JLwYqt32Ve0lnIiRC0Yj9Z2",
+      "editors_pick": true,
+      "page": 8,
+      "script_id": "Ej53t8Wv",
+      "path": "indicators/tradingview_sources/Ej53t8Wv.pine",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B9xd5ljxt0JLwYqt32Ve0lnIiRC0Yj9Z2/6",
+      "acquired_at_utc": "2026-09-06T01:14:36.041412+00:00",
+      "sha256_source": "5249a8b830ab7f68e3bbd80d59a29fcca96bec245a8d1da6ea98ad585cb23321",
+      "sha256_response": "3b1e6cd40627b971b392d8ea93d85bffded5c1c0ff91536bb6e4c36b03d9677f",
+      "source_metadata": {
+        "created": "2025-07-04T13:03:03.927647Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": true,
+          "kind": "study",
+          "originalScriptId": "USER;ca295e83b1084a26be5a1c2f14d25193",
+          "originalScriptVersion": "2.0",
+          "sourceInputsCount": 0,
+          "stats": {
+            "alertcondition": 2,
+            "plot": 2,
+            "plotshape": 4
+          }
+        },
+        "lastVersionMaj": "6.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "Support Resistance Channels",
+        "updated": "2025-07-04T13:03:03.927647Z",
+        "version": "6.0"
+      },
+      "pine_version": "6",
+      "imports": [],
+      "license_header": [
+        "// This source code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/",
+        "// \u00a9 LonesomeTheBlue",
+        "",
+        "//@version=6",
+        "indicator('Support Resistance Channels', 'SRchannel', overlay = true, max_bars_back = 501)",
+        "prd = input.int(defval = 10, title = 'Pivot Period', minval = 4, maxval = 30, group = 'Settings \ud83d\udd28', tooltip = 'Used while calculating Pivot Points, checks left&right bars')",
+        "ppsrc = input.string(defval = 'High/Low', title = 'Source', options = ['High/Low', 'Close/Open'], group = 'Settings \ud83d\udd28', tooltip = 'Source for Pivot Points')",
+        "ChannelW = input.int(defval = 5, title = 'Maximum Channel Width %', minval = 1, maxval = 8, group = 'Settings \ud83d\udd28', tooltip = 'Calculated using Highest/Lowest levels in 300 bars')",
+        "minstrength = input.int(defval = 1, title = 'Minimum Strength', minval = 1, group = 'Settings \ud83d\udd28', tooltip = 'Channel must contain at least 2 Pivot Points')",
+        "maxnumsr = input.int(defval = 6, title = 'Maximum Number of S/R', minval = 1, maxval = 10, group = 'Settings \ud83d\udd28', tooltip = 'Maximum number of Support/Resistance Channels to Show') - 1"
+      ],
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "license_verified_from_source_header": true,
+      "source_audit": {
+        "scope": "Static source dependency and availability inventory; not numerical parity validation.",
+        "request_calls": [],
+        "library_calls": [],
+        "has_volume_dependency": false,
+        "has_barstate_confirmed": false,
+        "confirmation_lines": [],
+        "last_bar_only_lines": [],
+        "delayed_pivot_lines": [
+          33,
+          34
+        ],
+        "lookahead_lines": [],
+        "source_revision_matches_ranking_snapshot": true,
+        "mathematical_parity": "pending exported TradingView fixtures"
+      }
+    }
+  ],
+  "libraries": [
+    {
+      "import": "TradingView/ta/14",
+      "author": "TradingView",
+      "url": "https://www.tradingview.com/script/BICzyhq0-ta/",
+      "source_endpoint": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B77c0f0012daa4ff09d68b6f3bed95a7f/14",
+      "path": "indicators/tradingview_sources/TradingView_ta_14.pine",
+      "sha256_source": "7cb212583594abd0a5c884c82b1017204c00f3b7345618a8ef86c5c9acd64008",
+      "sha256_response": "f30e01ce1eca4624498026576f824800c7a12a19d960a082c7ebad1a316125cf",
+      "acquired_at_utc": "2026-09-06T02:02:06.813062+00:00",
+      "source_metadata": {
+        "created": "2026-08-04T02:24:03.126727Z",
+        "extra": {
+          "isCompiled": true,
+          "is_price_study": false,
+          "kind": "library",
+          "originalScriptId": "USER;da09394c20be4df98f5222b3d846f8df",
+          "originalScriptVersion": "19.0",
+          "sourceInputsCount": 0,
+          "stats": {
+            "plot": 1
+          }
+        },
+        "lastVersionMaj": "14.0",
+        "scriptAccess": "open_no_auth",
+        "scriptName": "ta",
+        "updated": "2026-08-04T02:24:03.126727Z",
+        "version": "14.0"
+      },
+      "imports": [
+        "TradingView/RelativeValue/3 as TVrv"
+      ],
+      "license_header": [
+        "// This Pine Script\u00ae code is subject to the terms of the Mozilla Public License 2.0 at https://mozilla.org/MPL/2.0/",
+        "// \u00a9 TradingView",
+        "",
+        "//@version=6",
+        "library(\"ta\")",
+        "",
+        "// \"ta\" Library",
+        "// v14, 2026.08.03"
+      ],
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "transitive_import_status": {
+        "TradingView/RelativeValue/3": "Not yet pinned. Its TVrv calls occur in relativeVolume; footprint invokes requestVolumeDelta, which does not call TVrv."
+      }
+    }
+  ]
+}

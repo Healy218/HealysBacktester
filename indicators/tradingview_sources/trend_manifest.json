@@ -1,0 +1,183 @@
+{
+  "group": "trend",
+  "retrieved_at_utc": "2026-09-06T01:15:12.743604+00:00",
+  "source_origin": "official public TradingView pine-facade source endpoint",
+  "parity_status": "Pine source pinned; TradingView exported numerical fixtures pending",
+  "scripts": [
+    {
+      "selection_name": "Gaussian Filter Trend [QuantAlgo]",
+      "author": "QuantAlgo",
+      "public_id": "AqRNdhlR",
+      "pine_id": "PUB;a98154dd8ce244868b008e6ac629a08d",
+      "publication_version": 1,
+      "returned_version": "1.0",
+      "source_url": "https://www.tradingview.com/script/AqRNdhlR-Gaussian-Filter-Trend-QuantAlgo/",
+      "acquisition_url": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3Ba98154dd8ce244868b008e6ac629a08d/1?no_4xx=true",
+      "script_access": "open_no_auth",
+      "source_file": "AqRNdhlR_v1.pine",
+      "sha256": "786b9c32a79d67e461085abd5e848322bf542cf8e514141c486e141e1c5e5b27",
+      "license": "CC-BY-NC-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-nc-sa/4.0/",
+      "upstream_created": "2026-08-17T06:39:52.725887Z",
+      "upstream_updated": "2026-08-17T06:39:52.725887Z",
+      "pine_language_version": 6,
+      "imports": [],
+      "source_bytes_preserved": true,
+      "license_verified_from_source_header": true,
+      "numerical_fixture_status": "not exported from TradingView",
+      "implementation_module": "v3/tv_gaussian.py",
+      "function": "gaussian_filter_trend",
+      "signal_wrapper": "signals.tv_trend_signals.generate_gaussian_filter_signals",
+      "defaults": {
+        "length": 14,
+        "poles": 4,
+        "atr_length": 14,
+        "fixed_multiplier": 1.5,
+        "adaptive_width": true,
+        "efficiency_length": 10,
+        "trend_multiplier": 0.8,
+        "chop_multiplier": 2.5,
+        "efficiency_smooth": 5,
+        "source": "Close",
+        "preset": "Default"
+      },
+      "mechanical_proposal_rule": "Long on upstream bull alert; exit on bear alert; shorts mirrored.",
+      "port_scope": "Numerical Gaussian stages, efficiency, ATR deadband, directional state and upstream alerts. Decorative star geometry omitted.",
+      "warmup": "Filter initializes on first bar. Adaptive band awaits ATR and EMA efficiency availability; initial direction neutral.",
+      "input_contract": {
+        "required_columns": [
+          "Open",
+          "High",
+          "Low",
+          "Close"
+        ],
+        "closed_bars_only": true,
+        "finite_ohlc_required": true,
+        "unique_increasing_index": true,
+        "decision_cadence": "Caller supplies completed 15m bars under existing available_at contract; math accepts other bar indices for parity fixtures.",
+        "higher_or_lower_timeframe_dependencies": false,
+        "unsupported_pine_source_inputs": [
+          "External indicator plots supplied to Pine input.source; only named OHLC-derived sources are supported."
+        ]
+      },
+      "admission_status": "source implementation under local validation; exported TradingView numerical fixture gate pending"
+    },
+    {
+      "selection_name": "Fibonacci Trend Continuation Signals [AlgoAlpha]",
+      "author": "AlgoAlpha",
+      "public_id": "U7CZ8jtj",
+      "pine_id": "PUB;dbdf1cd29fa94c81b0733f0766c3722a",
+      "publication_version": 1,
+      "returned_version": "1.0",
+      "source_url": "https://www.tradingview.com/script/U7CZ8jtj-Fibonacci-Trend-Continuation-Signals-AlgoAlpha/",
+      "acquisition_url": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3Bdbdf1cd29fa94c81b0733f0766c3722a/1?no_4xx=true",
+      "script_access": "open_no_auth",
+      "source_file": "U7CZ8jtj_v1.pine",
+      "sha256": "93aa470927cedab27857b2ae5f33810220f04c7d26ccdfc73fd43c03a3390179",
+      "license": "MPL-2.0",
+      "license_url": "https://mozilla.org/MPL/2.0/",
+      "upstream_created": "2026-08-18T14:00:05.92445Z",
+      "upstream_updated": "2026-08-18T14:00:05.92445Z",
+      "pine_language_version": 6,
+      "imports": [],
+      "source_bytes_preserved": true,
+      "license_verified_from_source_header": true,
+      "numerical_fixture_status": "not exported from TradingView",
+      "implementation_module": "v3/tv_fibonacci.py",
+      "function": "fibonacci_trend_continuation",
+      "signal_wrapper": "signals.tv_trend_signals.generate_fibonacci_trend_signals",
+      "defaults": {
+        "midline_length": 200,
+        "pivot_length": 7,
+        "band_width": 3.0,
+        "enabled_levels": [
+          0.236,
+          0.382,
+          0.5,
+          0.618,
+          0.786
+        ]
+      },
+      "mechanical_proposal_rule": "Long/short on matching upstream Fibonacci continuation alert; exit on opposing confirmed trend flip. Exits are proposed adapter policy, not an upstream trading strategy.",
+      "port_scope": "Midline, range-smoothed volatility bands, ten numerical Fib levels, directional state, continuation and trend-flip alerts. Chart graphics omitted.",
+      "warmup": "Default RMA7(high-low) first index6; fixed SMA200 first band index205. Initial direction assignment does not produce trend-flip alert.",
+      "input_contract": {
+        "required_columns": [
+          "Open",
+          "High",
+          "Low",
+          "Close"
+        ],
+        "closed_bars_only": true,
+        "finite_ohlc_required": true,
+        "unique_increasing_index": true,
+        "decision_cadence": "Caller supplies completed 15m bars under existing available_at contract; math accepts other bar indices for parity fixtures.",
+        "higher_or_lower_timeframe_dependencies": false
+      },
+      "admission_status": "source implementation under local validation; exported TradingView numerical fixture gate pending"
+    },
+    {
+      "selection_name": "Uptrick: Adaptive Trend Trail",
+      "author": "Uptrick",
+      "public_id": "f4N0F439",
+      "pine_id": "PUB;6f2fdb5737654d8cb3b6fdd9afdc5ec8",
+      "publication_version": 1,
+      "returned_version": "1.0",
+      "source_url": "https://www.tradingview.com/script/f4N0F439-Uptrick-Adaptive-Trend-Trail/",
+      "acquisition_url": "https://pine-facade.tradingview.com/pine-facade/get/PUB%3B6f2fdb5737654d8cb3b6fdd9afdc5ec8/1?no_4xx=true",
+      "script_access": "open_no_auth",
+      "source_file": "f4N0F439_v1.pine",
+      "sha256": "e8b6b78bbe831539a65c6f4e10a4e825466344d66becfa013163540210981f1c",
+      "license": "CC-BY-SA-4.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "upstream_created": "2026-08-14T09:32:09.900061Z",
+      "upstream_updated": "2026-08-14T09:32:09.900061Z",
+      "pine_language_version": 6,
+      "imports": [],
+      "source_bytes_preserved": true,
+      "license_verified_from_source_header": true,
+      "numerical_fixture_status": "not exported from TradingView",
+      "implementation_module": "v3/tv_uptrick.py",
+      "function": "uptrick_adaptive_trend",
+      "signal_wrapper": "signals.tv_trend_signals.generate_uptrick_trend_signals",
+      "defaults": {
+        "trend_length": 34,
+        "momentum_length": 12,
+        "sensitivity": 0.35,
+        "fast_length": 9,
+        "fast_factor": 1.45,
+        "mid_length": 14,
+        "mid_factor": 1.95,
+        "slow_length": 21,
+        "slow_factor": 2.55,
+        "minimum_tick": 0.01,
+        "trail_size": 1.0,
+        "smoothness": 5
+      },
+      "mechanical_proposal_rule": "Long on upstream upSignal; exit on downSignal; shorts mirrored. No upstream internal backtest statistics used.",
+      "port_scope": "Nine-field composite regime, three adaptive Supertrends, confirmation/cooldown/reversal state, numerical trails/bands and valuation. Internal account simulation and chart drawing omitted.",
+      "warmup": "Pine EMA/RMA/ATR/RSI initialization retained; trend remains neutral until first accepted candidate. Minimum tick must match instrument for parity.",
+      "input_contract": {
+        "required_columns": [
+          "Open",
+          "High",
+          "Low",
+          "Close"
+        ],
+        "closed_bars_only": true,
+        "finite_ohlc_required": true,
+        "unique_increasing_index": true,
+        "decision_cadence": "Caller supplies completed 15m bars under existing available_at contract; math accepts other bar indices for parity fixtures.",
+        "higher_or_lower_timeframe_dependencies": false
+      },
+      "admission_status": "source implementation under local validation; exported TradingView numerical fixture gate pending"
+    }
+  ],
+  "local_validation": {
+    "test_file": "tests/test_tv_trend_ports.py",
+    "passed": 20,
+    "command": "./venv/bin/python -m pytest tests/test_tv_trend_ports.py -q",
+    "shared_helper": "v3/pine_compat.py",
+    "cross_platform_parity_claimed": false
+  }
+}
