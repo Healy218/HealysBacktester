@@ -110,7 +110,7 @@ def collect(expert, symbols=None, cutoff=None):
         except Exception:errors+=1
     if cutoff:
         while datetime.now(timezone.utc)<cutoff:
-            time.sleep(min(1,(cutoff-datetime.now(timezone.utc)).total_seconds()))
+            time.sleep(max(0,min(1,(cutoff-datetime.now(timezone.utc)).total_seconds())))
     observed=datetime.now(timezone.utc)
     report={'expert':expert,'day':observed.date().isoformat(),'observed_at':observed.isoformat(),
             'total_symbols':len(names),'scored_symbols':0,'errors':errors,'candidates':[],
@@ -193,8 +193,14 @@ def main():
             outbox.enqueue({'title':f'[EOD panel] {day}','message':message},key=day)
             for entry in outbox.unacked():
                 if entry.get('key')!=day:continue
-                if not notifier.send(entry['payload']['message'],title=entry['payload']['title']):
-                    raise RuntimeError('panel delivery failed; pending message retained')
+                delivered=False
+                for attempt in range(3):
+                    if notifier.send(entry['payload']['message'],title=entry['payload']['title']):
+                        delivered=True
+                        break
+                    time.sleep(attempt+1)
+                if not delivered:
+                    raise RuntimeError('panel delivery failed after three attempts; pending message retained')
                 outbox.acknowledge(entry['id'])
 
 if __name__=='__main__':main()
