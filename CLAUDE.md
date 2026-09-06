@@ -23,9 +23,9 @@ here — it lives in the files below.
 
 1. **Start**: read `TODO.md`, then `HANDOFF.md`. That's the whole context
    load — don't re-derive state from scratch.
-2. **Work**: on `codex/v4-causal-validation`; small single-purpose commits;
+2. **Work**: on `main` (user instruction at the September 5 merge); small single-purpose commits;
    push often. Tests stay green: `./venv/bin/python -m pytest tests/ -q`
-   (~474 as of 2026-08-24 — treat the count as a floor, not a pin;
+   (~535 as of 2026-09-05 — treat the count as a floor, not a pin;
    self-contained: no network, no v31 artifacts; LightGBM/TF are exercised
    from requirements).
 3. **End** (or at a milestone, or before context runs out): archive
@@ -75,3 +75,24 @@ here — it lives in the files below.
   their gates pass; `main` stays the operational line.
 - Before concluding something in `scripts/` or the caches is broken, read
   `DOCUMENTATION.md` → Traps. Several things here look wrong and are not.
+
+## September 5 merge continuation
+
+The user directed merging the review fixes into `main`, continuing in
+`/home/healy/Coding/HealysBacktester`, and doing the TradingView work next,
+before rebuilding the research artifacts. Integration validation passed: 642 tests and 18 subtests;
+the 535-test count in the preserved notes is the pre-merge result. A local
+merge does not deploy the server or launch a freeze/build/training campaign.
+
+The September 5 audit repairs use feature/build contract `2026-09-05-causal-v2`.
+Pre-audit freezes, partial checkpoints, rows, marks and bundles must be rebuilt
+and validated under that contract; preserve existing files as historical
+artifacts, and do not relabel them to bypass verification. Historical returns
+and gate verdicts below are not corrected performance evidence. Evaluation
+with a globally frozen proposal generator is restricted to periods after its
+optimization horizon; it is conditional on that generator, not end-to-end
+fold-local refreezing.
+
+See [audit remediation](docs/reviews/2026-09-05-remediation.md) and the
+[original audit](docs/reviews/2026-09-05-adversarial-audit.md) for implemented
+repairs and migration requirements.

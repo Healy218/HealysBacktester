@@ -74,7 +74,7 @@ class Signal:
 # ── market hours ──────────────────────────────────────────────────────────────
 
 def is_rth(now: Optional[datetime] = None) -> bool:
-    """True during regular US equity hours (Mon-Fri 09:30 through the 16:00 close pass, America/New_York)."""
+    """True during regular US equity hours (Mon-Fri 09:30 through the staggered 16:03 close pass, America/New_York)."""
     now = now or datetime.now(timezone.utc)
     if now.tzinfo is None:
         now = now.replace(tzinfo=timezone.utc)
@@ -82,7 +82,7 @@ def is_rth(now: Optional[datetime] = None) -> bool:
     if et.weekday() >= 5:
         return False
     minutes = et.hour * 60 + et.minute
-    return 9 * 60 + 30 <= minutes <= 16 * 60
+    return 9 * 60 + 30 <= minutes <= 16 * 60 + 3
 
 
 def _ny_tz():
@@ -186,7 +186,12 @@ class Scanner:
     def __init__(self, bar_loader, scorer: Optional[Scorer] = None,
                  threshold: float = 0.5, state_path: Path = _STATE_PATH,
                  spec: Optional[dict] = None,
-                 watchlist_path: Optional[Path] = None):
+                 watchlist_path: Optional[Path] = None,
+                 workers: int = 1):
+        # workers > 1 (2026-09-05): detection in a spawn process pool with the
+        # REAL loader (nn_meta.live.parallel); the injected bar_loader is then
+        # only used by the serial path. Scoring/dedupe/watchlist stay here.
+        self._workers = max(1, int(workers))
         # bar_loader(symbol) -> recent 15m OHLCV incl. possibly-forming last bar
         self._load = bar_loader
         self._scorer = scorer
@@ -208,10 +213,24 @@ class Scanner:
         state = _load_state(self._state_path)
         fired: list[Signal] = []
         outbox = Outbox(self._outbox_path)
-        for sym in (symbols or list(self._spec["symbols"])):
+        syms = list(symbols or list(self._spec["symbols"]))
+        results = None
+        if self._workers > 1:
+            from nn_meta.live.parallel import detect_many, _legacy_detect_one
+            results = detect_many(_legacy_detect_one, syms,
+                                  lambda s: (self._spec["symbols"][s], now),
+                                  workers=self._workers)
+        for sym in syms:
             try:
-                bars = require_recent_bars(closed_bars(self._load(sym), now), now)
-                sig = detect_fresh_signal(sym, bars, self._spec["symbols"][sym])
+                if results is not None:
+                    res, err = results[sym]
+                    if err:
+                        raise RuntimeError(err.splitlines()[0])
+                    bars, sig = res
+                    require_recent_bars(closed_bars(bars, now), now)
+                else:
+                    bars = require_recent_bars(closed_bars(self._load(sym), now), now)
+                    sig = detect_fresh_signal(sym, bars, self._spec["symbols"][sym])
             except Exception as e:
                 logger.error(f"[live] {sym}: scan error: {e}")
                 continue

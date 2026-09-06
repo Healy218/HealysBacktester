@@ -6,6 +6,31 @@ edge and a lottery ticket. Full detail lives in each row's report path.
 When the expert panel goes live, the second table tracks realized (paper)
 per-expert performance.
 
+## 2026-09-05 — LIVE PANEL WAS INTRADAY-BLIND since launch (stale day-keyed bar cache) — FIXED
+
+Found while designing the streamed-feed path. `data/vbt_data_loader.
+load_price_data_smart` caches bars per (symbol, interval, start, end) with
+no time component; the live scanners never passed `force_download`. Server
+logs, 2026-09-03: the 13:30Z pass loaded 17 symbols from Alpaca and cached
+files whose last bar was **2026-09-02 23:45**; every later pass that day
+(13:45 → 19:45) was **118 cache hits, 0 loads**. Same on 08-25 (2,985 hits /
+83 loads) and 09-02 (3,002 / 66). Across the last 14 sessions, alert and
+scoring activity clusters at 13:32–13:33Z; days with any activity after
+14:00Z are the days the cache happened to be empty. **Consequence: from the
+scanner's launch (2026-07-05) through 2026-09-04, every expert — v3, v31,
+[v4] real alerts since 08-24, [v5] — effectively scanned the previous
+session's closed bars, once, at the first pass.** The free tier's 15-minute
+SIP hole compounded it: even the first pass could not see the current
+session's opening bar. Paper hit-rates and the watchlist record before
+2026-09-08 are therefore first-pass-only and one session late; they must
+not be compared with anything scanned after the fix.
+
+**Fix (commit: see HANDOFF):** `_bar_loader` forces the download; the
+paid Alpaca plan removes the 15-minute hole; the streamed bar store
+(TODO "Live feeds") makes the loader read fresh bars without any REST.
+Verified on the server after deploy: the loader returns Friday's last
+closed bar. Forward-tracking restarts Monday 2026-09-08 from a clean slate.
+
 ## 2026-09-05 — 0.45 P(win) cut REJECTED by the walk-forward: a validation lure
 
 The finalize sweep's best single-window row was `filter/0.45` (+355%, 24%

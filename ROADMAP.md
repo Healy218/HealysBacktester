@@ -1,23 +1,51 @@
+# September 5 merge addendum
+
+The user directed merging the review fixes into `main`, continuing in
+`/home/healy/Coding/HealysBacktester`, and doing the TradingView work next,
+before rebuilding the research artifacts. Integration validation passed: 642 tests and 18 subtests;
+the 535-test count in the preserved notes is the pre-merge result. A local
+merge does not deploy the server or launch a freeze/build/training campaign.
+
+The September 5 audit repairs use feature/build contract `2026-09-05-causal-v2`.
+Pre-audit freezes, partial checkpoints, rows, marks and bundles must be rebuilt
+and validated under that contract; preserve existing files as historical
+artifacts, and do not relabel them to bypass verification. Historical returns
+and gate verdicts below are not corrected performance evidence. Evaluation
+with a globally frozen proposal generator is restricted to periods after its
+optimization horizon; it is conditional on that generator, not end-to-end
+fold-local refreezing.
+
+The roadmap and newer v5/v6/v7 notes below remain preserved. Revalidation is
+a prerequisite for relying on old research verdicts or promoting corrected
+bundles; it does not discard the panel, real-time parity, FA, SPX0, volatility,
+stacking or RL goals. Raw archives and historical work must be retained.
+
+See [audit remediation](docs/reviews/2026-09-05-remediation.md) and the
+[original audit](docs/reviews/2026-09-05-adversarial-audit.md) for implemented
+repairs and migration requirements.
+
+---
+
 # Roadmap — the one map
 
-**Current phase: adversarial-audit remediation and revalidation (2026-09-05).**
+Every workstream, one page. This file holds **overall goals**; the tasks for
+the phase we are in right now live in `TODO.md` (fed from here); design detail
+lives in `docs/specs/`. Reconciled 2026-08-15.
 
-The next milestone is corrected causal data, execution/accounting, and durable
-operations, followed by rebuilt artifacts and a fresh evaluation. Deployment
-and additional cloud campaigns are separate from the local repair work.
-Track implementation and verification in [TODO.md](TODO.md) and the
-[remediation report](docs/reviews/2026-09-05-remediation.md).
-
-PIT membership, the v4/v5 alert infrastructure, and the universe read-path
-optimization are implemented. v6 scaffolding exists, but old freezes and
-additive outputs cannot be reused without the current provenance contract.
-FA graduation still requires prospective evidence; SPX0 and volatility work
-must pass their own corrected evaluation criteria.
-
-The sections below preserve **historical milestones and priorities**. Claims
-such as ROBUST, edge confirmed, or gate eligible describe the code/data used
-at those dates; the September 5 findings require affected verdicts to be
-recomputed. Historical task labels below do not override the current phase.
+```
+DONE ─► v2.2 ROBUST ─► live server + FA collectors ─► v3 ROBUST & LIVE (the scanner today)
+                                                            │
+                             v3.1-at-scale (ROBUST but outlier-fragile — shelved, not promoted)
+                                                            │
+                             v4 causal fixes (leak removed, edge confirmed real, Option A candidate)
+                                                            │
+NOW ──────────────────────────────────────────────────────  ▼
+        finish v4 (ledger re-runs) ─► deploy v4 as a SECOND expert on the server
+                                                            │
+NEXT ─────────────────────────────────────────────────────  ▼
+        the expert panel: several models live at once, each a scanner selector that can trigger
+        (model tracks 1/3/4 + FA discovery graduate into the panel as they beat their baselines)
+```
 
 ## ✅ Done
 
@@ -112,6 +140,14 @@ promotion/demotion (`docs/EXPERIMENTS.md`). Stacked blend stays queued
 behind wave 2's outputs; RL sizing stays last. Compute venue: heavy runs on
 GCP Batch contingent on the pilot's byte-identity verdict; crawls and keys
 never leave home.
+
+**2026-09-05 addenda:** [v5] (wide pool, PIT universe, risk-aware gate) is
+the fourth seat (paper); the panel now runs on streamed SIP bars with
+one-minute-after-close passes (the pre-09-08 paper record was intraday-blind
+— EXPERIMENTS); Massive Options Advanced + Alpaca Algo Trader Plus unlock
+deep option history, quotes, trades and NBBO fills (plans in TODO; v7
+real-time contract in `docs/specs/REALTIME_SPEC.md`); generation v6
+(additive: keltner, bbw_squeeze, weekly expiries) is mid-freeze.
 
 **Exit:** the wave-2 seats live with tracked ledgers; the SPX/NDX stage-0
 audit written; watchlists flowing daily.

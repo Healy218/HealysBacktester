@@ -1,5 +1,7 @@
 # September 5 audit remediation
 
+**Integration update:** these repairs were subsequently combined with the newer main-branch pipeline work; [the integration report](2026-09-05-main-integration.md) records preservation checks and the final 642-test suite. The results below describe the initial audit repair snapshot.
+
 All **51 main code findings and four additional implementation concerns** have corrective changes in the review checkout. The [original audit](2026-09-05-adversarial-audit.md) remains a record of commit `f98ed265db3ce3faf4ba7abf8e6604671e3a1c90`; its reproduction scripts demonstrate the old mechanisms. Use the new regression tests to verify corrected behavior.
 
 The changes repair causal signals/splits, mark and cash accounting, cache/history preservation, PIT selection, checkpoint and model provenance, scanner parity/state, FA evidence, and operational failure handling. Documentation now distinguishes historical deployments/verdicts from this checkout's current repair work. Integration review additionally fixed SPX0 dollar/package fee replay, package fill counts, source-spec binding, and the transport/prewarm paths affected by stricter provenance.
@@ -101,4 +103,4 @@ The September 4 gate revision is preserved in the decision/experiment history. R
 
 Platform limits: process locks use POSIX advisory locking. Atomic replacement of an existing model directory uses Linux `renameat2` exchange; an unsupported platform/filesystem refuses promotion while retaining the old directory. Mocked shell tests verify failure handling but do not establish cloud-provider or deployed-host availability.
 
-No commits, pushes, source deployment, trained-artifact regeneration or production-state changes were performed. All edits remain reviewable in this workspace.
+At the initial remediation milestone no commits, pushes, source deployment, trained-artifact regeneration or production-state changes had been performed. The later user-authorized main integration is recorded in the linked integration report; production deployment and artifact rebuilds remain separate work.

@@ -1,3 +1,44 @@
+# September 5 merge corrections
+
+The active working line is `main` in `/home/healy/Coding/HealysBacktester`
+under the user's latest instruction. Older branch/path references below are
+historical. Use the project Python 3.12 virtualenv explicitly. The test suite
+exercises LightGBM/TensorFlow on synthetic fixtures without network or
+production artifacts; older “no LightGBM” text is superseded. Final integration
+validation passed: 642 tests and 18 subtests (10 dependency warnings).
+
+The September 5 audit repairs use feature/build contract `2026-09-05-causal-v2`.
+Pre-audit freezes, partial checkpoints, rows, marks and bundles must be rebuilt
+and validated under that contract; preserve existing files as historical
+artifacts, and do not relabel them to bypass verification. Historical returns
+and gate verdicts below are not corrected performance evidence. Evaluation
+with a globally frozen proposal generator is restricted to periods after its
+optimization horizon; it is conditional on that generator, not end-to-end
+fold-local refreezing.
+
+Current default bundle verification covers the feature contract and all
+load-critical artifacts. Older claims that unverifiable bundles are usable
+refer to previous code, not deployment eligibility with this version.
+
+Preserve the paid-provider entitlement and feed instructions below. Massive
+Advanced supersedes the old two-year entitlement cap; old label windows are
+historical build choices. The staggered :01/:02/:03 schedule supersedes old
+`*/15` examples. Use bracketed process patterns even for health checks
+(`pgrep -f "[f]eeds."`), not the older unbracketed example below.
+
+Live readers retain streamed current-session bars and forced REST fallback,
+with actual closed-bar freshness checks. Future delta-targeted contract
+selection/intraday features require matching offline selection/features and
+versioned provenance. Quote-verified NBBO accounting is planned work, not a
+claim made by the corrected OHLCV ledger. See
+[REALTIME_SPEC](docs/specs/REALTIME_SPEC.md) for the preserved v7 contract.
+
+See [audit remediation](docs/reviews/2026-09-05-remediation.md) and the
+[original audit](docs/reviews/2026-09-05-adversarial-audit.md) for implemented
+repairs and migration requirements.
+
+---
+
 # DOCUMENTATION — coding notes, conventions, traps, ops
 
 Durable reference for anyone (human or model) working in this repo. Goals
@@ -6,30 +47,28 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
 
 ## Environment
 
-- **Repo**: `/home/healy/Coding/HealysBacktester`, working branch
+- **Repo**: `/home/healylabs/Coding/HealysBacktester`, working branch
   `codex/v4-causal-validation`; `main` is the operational line the server runs.
-- **Python**: `./venv/bin/python` (Python 3.12; see the installed environment). No conda, no system python —
+- **Python**: `./venv/bin/python` (3.12.3). No conda, no system python —
   always call the venv binary explicitly.
-- **Tests**: `./venv/bin/python -m pytest tests/ -q` — run the suite for the current checkout; test counts change.
-  Tests use synthetic fixtures, including LightGBM/TensorFlow, without network
-  access or production market artifacts. Current results: `docs/reviews/2026-09-05-remediation.md`.
+- **Tests**: `./venv/bin/python -m pytest tests/ -q` — ~535 tests, green
+  (2026-09-05; treat as a floor).
+  They must stay self-contained: no LightGBM, no network, no v31 artifacts.
 - **Secrets**: `.env` at repo root, never in git. Keys: `ALPACA_API_*`,
   `MASSIVE_API_KEY`, `MASSIVE_FLAT_FILES_API_*`, `ALPHAVANTAGE_KEY`,
   `FINNHUB_API_KEY`, `REDDIT_CLIENT_*`, `TELEGRAM_BOT_TOKEN`,
   `TELEGRAM_CHAT_ID`, `FA_SKIP_COLLECTORS`.
 - **`NN_META_POOL`** selects the strategy pool AND suffixes every artifact
   dir (`nn_meta/config.py`): v2 (default) / v3 (live scanner) / v31 (at-scale
-  + v4 work), v5 and v6 (PIT pools with separate generated artifacts).
-  Setting it wrong silently reads and writes the wrong
+  + v4 work). Setting it wrong silently reads and writes the wrong
   directories — the most common way to burn an evening.
 - **Home box** (rebuilt 2026-08-23): Ryzen 7 9850X3D (8C/16T + iGPU),
   32 GB DDR5, RTX 3060 Ti, 1 TB NVMe, CachyOS, user `healy`. The old
   i5-11400/B560 build (proven RAM fault — hourly `fa.collect` segfaults on
   its final morning) is retired; the drive moved over intact, so the OS
   install and all paths are unchanged. TF is CPU-only here in practice; the
-  heavy work includes memory-bound builds and model training. Historical
-  campaigns used both local and Batch resources; use measured resource
-  budgets and explicit cloud authorization, not old handoff commands.
+  heavy work is memory-bound dataset builds, not training — which still run
+  on GCP Batch by doctrine, not here.
 
 ## Conventions
 
@@ -72,8 +111,7 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   `threshold`, `magnitude_head`. `V4Bundle.decision_score` is what live
   code must threshold on (EV for an `ev` bundle, P(win) otherwise); a bundle
   persisted in `ev` mode fails to LOAD if any member lacks its head. Bundles
-  from before the causal audit may be readable for research, but do not pass
-  current default verification.
+  from before 2026-08-21 have no magnitude files and still load.
 
 ## Traps — things that look wrong and are not
 
@@ -118,10 +156,10 @@ live in `ROADMAP.md`, current tasks in `TODO.md`, session state in
   **unusable on Linux**. To reproduce the v3.1/v4 environment, install
   `requirements.txt` with the D:-backup's `wsl_pip_freeze.txt` as a pip
   constraints file (`-c`).
-- **Old bundles are historical artifacts.** Default verification requires the
-  current causal contract and all load-critical files. Pre-audit bundles must
-  be rebuilt and revalidated before deployment with this code; an explicit
-  research-only unverified load does not establish eligibility.
+- `nn_meta/model_final_v4/` (Option A bundle): `verify_bundle()` fails **by
+  design** — the manifest predates hashed persistence (built 7/21, hashing
+  landed 7/22). Usable, not integrity-verifiable; the Option B re-finalize
+  fixes it.
 - After any tar-layered restore: `chmod +x scripts/*.sh` — the 07-25 restore
   dropped exec bits and the hourly collector failed `203/EXEC` for a day.
 - **Comparing two dataset builds: use `nn_meta.dataset_diff`, never a naive
@@ -253,15 +291,40 @@ simply more expensive than anyone computed, and nobody computed it:
 
 ## Data limits (probed, definitive — don't re-litigate)
 
-- **Massive options history reaches ~2 years back** (403 before ~mid-2024),
-  on REST *and* flat-files — the S3 bucket lists 2014→ but GetObject is
-  date-gated. Deeper options history requires a **paid plan upgrade**, full
-  stop. Contract listings (reference endpoint) reach 2017 fine.
+**UPGRADED 2026-09-05 to Massive Options Advanced** (probed the same day,
+live, with the box's keys — supersedes everything below the rule):
+- **Option minute/day aggregates: full history** — REST `/v2/aggs` returns
+  1-minute bars for SPY contracts in 2019, 2020, 2021, 2022, 2023 (checked);
+  flat-file `minute_aggs_v1` and `day_aggs_v1` GetObject succeed for 2017,
+  2019, 2021, 2022 … 2026 (bucket lists 2014→).
+- **Trades: full history** — `trades_v1` flat files 2017→ readable (8–67 MB
+  gz/day); REST `/v3/trades/{ticker}` returns 2021+ (checked).
+- **Quotes: 2022-03-07 →** — `quotes_v1` flat files 2022→ readable but
+  **85–140 GB gz per day** (not bulk-crawlable); REST `/v3/quotes/{ticker}`
+  (per contract, `timestamp` filters, limit ≤ 50,000, `next_url`) 2022+.
+- **Snapshots real-time** on Advanced (`/v3/snapshot/options/{underlying}`:
+  greeks, implied_volatility, open_interest, last_quote, last_trade).
+- **WebSocket** options aggregates/trades/quotes real-time on Advanced;
+  wildcard subscriptions are Business-only. Unused: the system decides on
+  closed 15m bars (memory: data-provider-subscriptions).
+- **MCP**: `claude mcp add --transport http massive https://mcp.massive.com/`
+  (OAuth, no key; mirrors entitlements).
+
+*Pre-upgrade record (Starter, until 2026-09-05):* options history reached
+~2 years back (403 before ~mid-2024), on REST *and* flat-files — the S3
+bucket listed 2014→ but GetObject was date-gated.
 - **Flat-files are still the right bulk path within the 2y window**: one
   ~33 MB gz/day covers all OPRA contracts, quota-free
   (`files.massive.com`, bucket `flatfiles`,
   `us_options_opra/minute_aggs_v1/YYYY/MM/YYYY-MM-DD.csv.gz`, s3v4).
 - **Alpaca 1m underlying is clean back to 2017** for all liquidity tiers.
+- **Alpaca Algo Trader Plus since 2026-09-05**: SIP real-time (the free
+  tier already served SIP history but withheld the newest 15 minutes —
+  cache bars are SIP, verified), 10,000 REST calls/min, unlimited stock
+  websocket symbols, OPRA options websocket (≤1,000 quote symbols), News
+  + screener endpoints; Alpaca option bars only reach 2024 → Massive stays
+  the options-history source. The `.env` keys are PAPER keys (options
+  level 3); live-account keys would be a separate decision.
 - Consequence: features may use deep underlying history; option-fill labels
   live on the rolling ~2y window.
 
@@ -343,8 +406,26 @@ simply more expensive than anyone computed, and nobody computed it:
   user decision after a forward record beside V118.
 - **Deploy = `git pull origin main` over the read-only deploy key. NEVER
   scp** — an untracked scp'd file once wedged pulls for days, silently.
-- **Cron (UTC — this cron ignores `CRON_TZ`, verified empirically)**:
-  - `*/15 * * * *` live scanner: `NN_META_POOL=v3 … run_live --once --nn`
+- **Live feeds (since 2026-09-05)**: two daemons, `nn_meta.live.feeds.
+  stock_stream` (Alpaca SIP 1m bars, 443 names → `nn_meta/live/feeds/data/
+  1m/<SYM>/<day>.parquet`, backfills today on start) and
+  `nn_meta.live.feeds.option_stream` (OPRA quotes for
+  `nn_meta/live/feeds/data/option_watch.json`, ≤ 1,000 contracts →
+  `option_quotes.json`). Started by `@reboot` cron lines and restarted by
+  5-minute `pgrep -f "[f]eeds.<name>" || nohup` watchdog lines (no sudo on
+  this host; the BRACKET pattern is load-bearing — a plain `pgrep -f`
+  matches the watchdog's own shell and never restarts anything, which is how
+  the stock stream sat dead for an hour on 2026-09-05); logs
+  `logs/feeds_stock.log`, `logs/feeds_options.log`; heartbeats
+  `stock_stream.heartbeat.json` / `option_stream.heartbeat.json` (in the
+  17:00Z digest; stale > 5 min during RTH = ⚠️). Loaders read today's bars
+  from the store when the heartbeat is ≤ 3 min old, else forced REST.
+  Health: `pgrep -f feeds.` (2 processes, ~700 MB RSS total).
+- **Cron (UTC — this cron ignores `CRON_TZ`, verified empirically)**.
+  Expert passes fire ONE MINUTE after the 15m bar closes, staggered by pool
+  (2026-09-05): v5 at `1,16,31,46` (`--workers 3`), [v4] and [v31] at
+  `2,17,32,47` (`--workers 2`), v3 at `3,18,33,48` (`--workers 1`).
+  - `3,18,33,48 * * * *` live scanner: `NN_META_POOL=v3 … run_live --once --nn`
     → `logs/live_cron.log` (self-gates to RTH)
   - `*/15 * * * *` **[v4] expert** (paper 2026-08-16 → **REAL 2026-08-24**,
     V118 bundle gbt/ev/0.05): `NN_META_POOL=v31 … nn_meta.live.v4_scan

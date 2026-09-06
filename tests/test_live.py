@@ -190,3 +190,58 @@ class TestScanner:
                                    scorer=lambda sig, bars: 0.8, threshold=0.5)
         out = scanner.scan_once(now=self._NOW)
         assert len(out) == 1 and out[0].score == 0.8
+
+
+def test_live_bar_loader_uses_cache_for_history_and_never_for_today(monkeypatch, tmp_path):
+    """Regression (2026-09-05): the smart loader's cache key has no time
+    component; a cached first pass made every later pass that day stale. Now:
+    history (≤ yesterday) may use the cache; today is streamed or forced."""
+    import pandas as pd
+    from datetime import datetime, timezone
+    from nn_meta.live import run_live
+    calls = []
+    def fake_smart(symbol, start, end, interval, cache_dir="data/cache", force_download=False, use_cache=True):
+        calls.append((start, end, force_download, use_cache))
+        day = pd.Timestamp(end)
+        idx = pd.date_range(day.strftime("%Y-%m-%d") + " 13:30", periods=3, freq="15min")
+        return pd.DataFrame({"Open": 1.0, "High": 1.0, "Low": 1.0, "Close": 1.0, "Volume": 1.0}, index=idx)
+    monkeypatch.setattr(run_live.vbt_data_loader, "load_price_data_smart", fake_smart)
+    monkeypatch.setattr(run_live, "_feed_is_fresh", lambda now: False)
+    now = datetime(2026, 9, 4, 15, 0, tzinfo=timezone.utc)
+    out = run_live._bar_loader("SPY", now=now)
+    assert [c[2] for c in calls] == [False, True]          # history cached, today forced
+    assert calls[0][1] == "2026-09-04"
+    assert calls[1][0] == "2026-09-04" and calls[1][1] == now.isoformat()
+    assert calls[1][3] is False
+    assert out.index[-1] == pd.Timestamp("2026-09-04 14:00")
+    # with a fresh feed, today comes from the store and REST is not called for today
+    from nn_meta.live.feeds.barstore import BarStore
+    store = BarStore(tmp_path)
+    store.append_1m("SPY", [{"timestamp": pd.Timestamp("2026-09-04 13:30") + pd.Timedelta(minutes=i),
+                             "open": 5.0, "high": 5.0, "low": 5.0, "close": 5.0, "volume": 1.0} for i in range(90)])
+    monkeypatch.setattr(run_live, "_feed_is_fresh", lambda now: True)
+    monkeypatch.setattr("nn_meta.live.feeds.barstore.BarStore.__init__", lambda self, root=None: setattr(self, "root", tmp_path))
+    calls.clear()
+    out = run_live._bar_loader("SPY", now=now)
+    assert [c[2] for c in calls] == [False]                # only the cached history call
+    assert out.loc["2026-09-04 13:30", "Close"] == 5.0 and len(out.loc["2026-09-04"]) == 6
+
+
+def test_heartbeat_reports_feeds_and_warns_when_stale(monkeypatch, tmp_path):
+    import json
+    from datetime import datetime, timedelta, timezone
+    from nn_meta.live import heartbeat as hb
+    stocks = tmp_path / "s.json"; options = tmp_path / "o.json"
+    fresh = (datetime.now(timezone.utc) - timedelta(minutes=1)).isoformat()
+    stale = (datetime.now(timezone.utc) - timedelta(minutes=20)).isoformat()
+    stocks.write_text(json.dumps({"ts": fresh, "bars": 900, "symbols": 443, "last_bar": "2026-09-08 14:29"}))
+    options.write_text(json.dumps({"ts": stale, "quotes": 5, "contracts": 3}))
+    monkeypatch.setattr(hb, "FEED_HEARTBEATS", {"stocks": stocks, "options": options})
+    monkeypatch.setattr(hb, "EXPERT_LOGS", {})
+    monkeypatch.setattr(hb, "is_rth", lambda *a, **k: True)
+    monkeypatch.setattr(hb, "_today_lines", lambda: ([], "2026-09-08"))
+    out = hb.build_message()
+    msg = out[0] if isinstance(out, tuple) else out
+    assert "feed stocks: 443 symbols" in msg and "feed options: 3 contracts" in msg
+    assert "⚠️ feed options: heartbeat 20 min old" in msg
+    assert "⚠️ feed stocks" not in msg

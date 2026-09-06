@@ -245,6 +245,49 @@ in-fold like any strategy).
 loss; width − credit IS the worst case once the debit clamp holds); a
 take-profit stop on the spread (bounded already; one fewer knob).
 
+## 2026-09-05 — The live path never reads a day-keyed cache for the current session; streamed bars are the live source
+
+**Decision:** `run_live._bar_loader` composes closed sessions (≤ yesterday)
+from the smart loader's day-keyed CSV cache — valid, those sessions never
+change — with TODAY's bars from the streamed bar store
+(`nn_meta/live/feeds`, Alpaca SIP 1m → 15m, parity-identical to REST) when
+its heartbeat is ≤ 3 min old, else a forced REST download. The cache is
+never consulted for the current session. Feeds run on the server as
+daemons under `@reboot` + 5-minute watchdog cron lines (no sudo there);
+their heartbeats are in the daily digest.
+
+**Cause:** the panel had scanned the previous session's bars all day since
+2026-07-05 (EXPERIMENTS 2026-09-05) — a scanner that runs and alerts is not
+a scanner that sees current data. Freshness is now judged by the newest bar
+timestamp, never by pass counts.
+
+**Rejected:** deleting the cache each pass (still one REST call per symbol
+per pass; the free-tier 15-minute hole would have remained); a time-keyed
+cache (the same class of bug one refactor away).
+
+## 2026-09-05 — Scan cadence: fire one minute after the bar, stagger by pool, parallel detection
+
+**Decision (user):** expert crons moved from `*/15` to `1,16,31,46` (v5),
+`2,17,32,47` (v4, v31), `3,18,33,48` (v3) so a pass never races the bar it
+wants and the 8 GB server never hosts all experts' worker pools at once;
+detection runs in a spawn process pool (`nn_meta/live/parallel.py`,
+`--workers` 3/2/2/1 on the server, `SCAN_WORKERS` env). Measured: v5 100
+symbols 197 s → 50 s on the server; 60 symbols 66 s → 15 s on the box.
+Scoring, dedupe, state and alerts stay single-process.
+
+**Rejected:** 1-minute pass cadence (15× the work for no new information —
+signals change only when a 15m bar closes; the box would saturate);
+1-minute decision bars (a different seat needing retraining — REALTIME_SPEC).
+
+## 2026-09-05 — v7 "real-time capable" means: offline twin + parity gate per intraday feature
+
+**Decision:** decisions stay on the closed 15m bar. Any feature derived
+from sub-15m data enters v7 only with an offline twin computed from history
+(Alpaca SIP 1m for stocks; Massive minute aggs / trades / quotes for
+options) by the same code, and a parity test live-vs-twin over ≥ 1 session.
+Paper fills use streamed NBBO with the quote-verified ledger as the twin.
+Spec: `docs/specs/REALTIME_SPEC.md`.
+
 ## 2026-09-04 — The v4 gate's beat-baseline term is risk-aware (return per unit drawdown)
 
 **Decision (user):** `_passes_gate`'s beat-baseline term now compares the
@@ -487,3 +530,17 @@ with its selection history disclosed; no new untouched forward-performance
 verdict is asserted by local source tests.
 
 Implementation and validation: [remediation report](reviews/2026-09-05-remediation.md).
+
+
+## 2026-09-05 — Merge to main, preserve pipeline notes, TradingView next
+
+The user directed merging the review fixes into `main`, continuing in
+`/home/healy/Coding/HealysBacktester`, and doing the TradingView work next,
+before rebuilding the research artifacts. Integration validation passed: 642 tests and 18 subtests;
+the 535-test count in the preserved notes is the pre-merge result. A local
+merge does not deploy the server or launch a freeze/build/training campaign.
+
+Newer operational notes and the v7 real-time contract are retained. Existing
+paused/generated artifacts remain historical; old resume/reuse instructions
+do not override the causal-v2 migration requirements. Shared alert-format
+changes still require the user's go/no-go.

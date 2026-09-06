@@ -149,3 +149,51 @@ def test_candidate_moneyness_uses_configured_decision_target(monkeypatch):
                               "spot":100., "entry_ts":pd.Timestamp("2026-09-04 15:00"),
                               "bars_since_signal":2}])
     assert (frame.strike == 102.).all()
+
+
+def test_close_stagger_ends_after_1603():
+    assert is_rth(datetime(2026, 9, 4, 20, 3, tzinfo=timezone.utc))
+    assert not is_rth(datetime(2026, 9, 4, 20, 4, tzinfo=timezone.utc))
+
+
+@pytest.mark.parametrize('worker', ['_legacy_detect_one', '_v4_detect_one'])
+def test_parallel_workers_refuse_stale_before_detection(monkeypatch, worker):
+    from nn_meta.live import parallel, run_live, scanner, v4_scan
+    bars = pd.DataFrame({'Close': [100.]}, index=pd.to_datetime(['2026-09-03 19:45']))
+    monkeypatch.setattr(run_live, '_bar_loader', lambda _: bars)
+    def unexpected(*a, **kw):
+        raise AssertionError('stale bars reached detection')
+    monkeypatch.setattr(scanner, 'detect_fresh_signal', unexpected)
+    monkeypatch.setattr(v4_scan, 'fresh_proposals', unexpected)
+    now = datetime(2026, 9, 4, 15, 1, tzinfo=timezone.utc)
+    args = ({}, [], now) if worker == '_v4_detect_one' else ({}, now)
+    with pytest.raises(ValueError, match='stale market bars'):
+        getattr(parallel, worker)('SPY', *args)
+
+
+def test_live_rest_bounds_and_stale_symbol_fallback(monkeypatch):
+    from nn_meta.live import run_live
+    from nn_meta.live.feeds.barstore import BarStore
+    now = datetime(2026, 9, 4, 15, 1, tzinfo=timezone.utc)
+    idx = pd.to_datetime(['2026-09-03 19:45', '2026-09-04 14:45'])
+    all_bars = pd.DataFrame({c: [100., 101.] for c in run_live._OHLCV}, index=idx)
+    calls = []
+    def bounded(symbol, start, end, interval, **kwargs):
+        calls.append((symbol, start, end, kwargs))
+        # Model the actual vendor's timestamp range, unlike the former date-only fixture.
+        a, b = pd.Timestamp(start), pd.Timestamp(end)
+        a = a.tz_localize(None) if a.tzinfo else a
+        b = b.tz_convert('UTC').tz_localize(None) if b.tzinfo else b
+        return all_bars[(all_bars.index >= a) & (all_bars.index < b)]
+    monkeypatch.setattr(run_live.vbt_data_loader, 'load_price_data_smart', bounded)
+    monkeypatch.setattr(run_live, '_feed_is_fresh', lambda _: True)
+    def stale(self, symbol, now=None, days=None):
+        assert now is not None
+        return all_bars.iloc[:1]
+    monkeypatch.setattr(BarStore, 'read_15m', stale)
+    result = run_live._bar_loader('BRKB', now=now)
+    assert result.index.tolist() == idx.tolist()
+    assert len(calls) == 2 and all(c[0] == 'BRK.B' for c in calls)
+    assert calls[0][2] == '2026-09-04'
+    assert calls[1][2] == now.isoformat()
+    assert calls[1][3] == {'force_download': True, 'use_cache': False}
