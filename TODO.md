@@ -89,8 +89,9 @@ scope while the optional all-time clarification is unanswered. The result is
   separate hash anchor and completion marker after evidence rechecks.
 - [x] Add bounded split-harness generation for the three existing trend drafts,
   preserving original bytes and every observation while reducing added plots.
-  Browser automation now reaches TradingView; actual compilation requires
-  signing in to the opened Firefox capture window.
+  Browser automation now uses the signed-in TradingView profile. The context
+  helper compiled, but Essential Trial blocks CSV export; account export
+  access and actual source-harness compilation remain pending.
 - [ ] Obtain actual chart outputs/context, validate the full proposed source
   scope, and admit the sealed feature candidate. Unsupported native footprint/
   intrabar modes remain outside the scope.

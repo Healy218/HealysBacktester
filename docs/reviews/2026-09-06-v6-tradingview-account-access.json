@@ -1,0 +1,33 @@
+{
+  "schema": "v6-tradingview-browser-access-v1",
+  "recorded_at": "2026-09-06T14:47:05.518842+00:00",
+  "authenticated_chart_access": true,
+  "layout_url": "https://www.tradingview.com/chart/ioDRU5LY/",
+  "layout_name": "V6 verification 20260906",
+  "displayed_symbol": "SPY",
+  "displayed_timeframe": "15m",
+  "displayed_session": "RTH",
+  "export_dialog_feed": "BATS:SPY, 15",
+  "helper": {
+    "path": "docs/capture_templates/tradingview/context_helper_DRAFT.pine",
+    "sha256": "5421e93a973b6d0020a52d7d215861a0ad5a3327d4929b18ef949b8486c127fc",
+    "added_to_chart": true,
+    "observed_chart_title": "TV Fixture Context DRAFT",
+    "observation": "Add to chart completed; chart legend showed helper; editor changed to Update on chart."
+  },
+  "export_attempt": {
+    "action": "Download chart data > Download",
+    "result": "subscription_gate",
+    "displayed_current_plan": "Essential Trial",
+    "displayed_recommended_plan": "Premium",
+    "dialog_text": "Upgrade your plan to export all the chart info you need. Easy.",
+    "csv_downloaded": false
+  },
+  "source_harness_compilation_verified": false,
+  "source_harness_note": "Long-source editor import was not reliably verified; no source compilation receipt or field comparison was issued.",
+  "external_parity": false,
+  "full_context_coverage": false,
+  "model_admission": false,
+  "freeze_started": false,
+  "next_action": "Enable chart-data export on the account, then collect actual source and context captures. Do not bypass the export subscription gate."
+}

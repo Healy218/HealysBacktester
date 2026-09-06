@@ -1,4 +1,4 @@
-# Handoff — TradingView browser reached; sign-in blocks capture
+# Handoff — TradingView signed in; account plan blocks CSV export
 
 September 6, 2026, Chicago. Work remains on `main` in the primary checkout.
 The user asked to read the expanded milestone and code what is needed to start
@@ -6,6 +6,47 @@ the v6 freeze. Launch is already authorized once the real input gates pass.
 **The expanded freeze has not started.** Actual TradingView captures, exact
 per-symbol context and full historical option-tick coverage remain required.
 No source parity, evaluated model or deployment is claimed.
+
+## Current blocker after the user signed in
+
+The user opened a signed-in TradingView tab in their main Firefox profile after
+the automation profile's login was rejected. With explicit desktop approval,
+restarted the existing main profile with local BiDi controls; its authenticated
+session survived. Created the separate **V6 verification 20260906** chart layout
+at `https://www.tradingview.com/chart/ioDRU5LY/` for SPY, 15-minute, RTH.
+The original existing layout is retained; navigating it initially to SPY may
+have autosaved that symbol/interval before the separate layout was created.
+
+The context helper was imported and added to the chart successfully. Chart
+legend displayed **TV Fixture Context DRAFT**, and the editor changed to
+**Update on chart**. This is actual helper compilation/addition evidence,
+not any source-field comparison or full-history admission.
+
+**Download chart data > Download** opened an explicit subscription gate:
+current plan **Essential Trial**, recommended **Premium**. No CSV downloaded.
+The export dialog identified **BATS:SPY, 15**, so do not relabel its data as
+the repaired consolidated provider history. A separate non-professional
+subscriber declaration notice was also displayed; no declaration was made.
+Asked the user to enable chart export or provide an account with access.
+Do not bypass the paywall, extract credentials or fabricate chart outputs.
+
+Tried importing the first Gaussian split harness; long-source editor import
+was not reliably verified. The page became hidden and its editor rendering
+stalled. No successful source-harness compilation is claimed and no compiled
+receipt was written. Recheck editor content before continuing; avoid
+`execCommand('insertText')` for multiline Pine because autoindent can change it.
+
+The localhost browser instance uses the user's main default-release profile.
+The local helper is `/tmp/healys-v6-browser/bidi.py`; do not start a competing
+BiDi session if the existing client is still connected. Signed-in browser PID
+was 776352, automation terminal session 27257; these are observations, not
+durable identifiers. Only interact with the TradingView task tabs.
+
+[Account-access evidence](docs/reviews/2026-09-06-v6-tradingview-account-access.json).
+No source code changed in this continuation; no new regression run was needed.
+The last suite remains 1,412 tests and 18 subtests passed. The freeze has not
+started. The previous handoff is preserved
+[here](handoff-history/HANDOFF-2026-09-06-before-signed-in-capture.md).
 
 ## Latest continuation: direct browser capture
 
