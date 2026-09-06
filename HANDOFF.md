@@ -1,28 +1,34 @@
-# Handoff — Option 1 implemented; jobs paused for user reboot
+# Handoff — v6 pipeline resumed after reboot
 
-September 6, 2026. Main checkout. User selected Option 1: local research
-calendar/VWAP assumptions, full TV13 and tick scope, external comparison
-deferred. They then requested a reboot. Both supervisors were gracefully
-interrupted and exited 130 after running workers finished. No freeze started.
+September 6, 2026, resumed at 17:04:27 UTC. Main checkout, source commit
+522d9c7. User returned and requested continuing to the v6 freeze. Resumed
+both exact commands from the saved resume.json with approved host network
+access. Local research assumptions, all TV13/tick scope and deferred external
+comparison remain unchanged.
 
-## Reboot checkpoint and resume
+## Active jobs and evidence
 
 Durable root: nn_meta/expanded_inputs/v6-local-20260906/
-- resume.json contains exact cwd, environment and two argument-list commands.
-  Run the inventory and full-freeze supervisor concurrently after the user
-  returns. The supervisor needs host network access through normal escalation.
-- inventory-r4: 212 completed symbol inventories, 3,533,521 candidate requests.
-- full-run: 1,902 completed raw capture batches for AA. These are resumable;
-  existing bundles are verified and reused. The first AA store is not yet
-  materialized. Incomplete attempts are retained, never accepted as complete.
-- reboot-checkpoint.json and reboot-pause.json retain counts and real exit codes.
-- Logs copied from /tmp to this durable root before reboot.
+- Inventory supervisor PID 10393, four workers.
+- Full-freeze supervisor PID 10394, sixteen capture workers.
+- Exact commands, PIDs and log paths: resume-start-20260906T170427Z.json.
+- Logs: inventory-resume-20260906T170427Z.log and
+  full-freeze-supervisor-resume-20260906T170427Z.log.
+- Confirmed resume reused saved captures and advanced completed raw batches
+  from 1,902 to 2,057. Inventory has 212 completed symbol manifests and is
+  revalidating retained results before processing remaining symbols.
+- No symbol store or final input seal yet. Baseline freeze has NOT started.
+  The supervisor automatically seals complete inputs and invokes the freeze
+  launcher after all 453 symbol stores validate.
+- Jobs are detached from the tool session and continue running. Check these
+  recorded PIDs/logs before launching anything else; do not duplicate them.
+- 655 GiB free at resume; capture retains the existing 20 GiB reserve guard.
 
-Do not restart automatically while the user is rebooting. After they return,
-resume the exact commands; no new scope or launch authorization is needed.
-Do not change causal source files while resuming this inventory; provenance
-checks reject source/config/input drift. Failed inventory roots r1-r3 and the
-first incomplete context directory are preserved, not reused.
+Do not change causal source/config/input files while these jobs run: provenance
+checks reject drift. Preserve incomplete attempts and historical roots. The
+reboot checkpoints and earlier logs remain intact. No code changes or new
+tests were needed for this operational resume. Prior full regression below
+applies to the unchanged source. Original untracked artifacts_v6/ is untouched.
 
 ## Implemented and validated
 

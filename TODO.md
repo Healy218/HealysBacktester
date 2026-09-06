@@ -12,8 +12,9 @@ thirteen groups. The implemented opt-in unverified research contract records
 that choice. Actual per-symbol context and complete historical tick coverage
 remain required. The user selected Option 1, authorizing explicit local
 calendar/VWAP research assumptions. Context is now sealed for all 453 symbols;
-the request inventory and tick captures were started, then paused for the
-user's reboot. Resume instructions and durable checkpoints are in HANDOFF.md.
+the request inventory and tick captures resumed after the user's reboot on
+September 6 at 17:04 UTC. Active PIDs/logs and durable checkpoints are in
+HANDOFF.md. The supervisor will launch the freeze after complete tick sealing.
 The existing-family SPY/IBKR pilot is now stopped and preserved. Do not launch a full
 universe freeze while those additions are still missing; complete their
 historical coverage and feature integration first. External comparison is
