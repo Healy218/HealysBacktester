@@ -37,3 +37,13 @@ def test_failure_and_no_progress_are_visible(tmp_path):
     text = render(s, s)
     assert 'failed (exit 1)' in text
     assert 'No observed count/log progress' in text
+
+
+def test_halfway_reminder_uses_freeze_not_inventory(tmp_path):
+    s = snapshot(tmp_path, 'wanted', [])
+    s['total_symbols'] = 453
+    s['counts']['inventory_symbols'] = 453
+    s['counts']['freeze_shards'] = 226
+    assert 'HALFWAY FREEZE' not in render(s, None)
+    s['counts']['freeze_shards'] = 227
+    assert 'HALFWAY FREEZE' in render(s, None)

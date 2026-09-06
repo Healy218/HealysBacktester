@@ -113,6 +113,8 @@ def render(s, previous):
         lines.append(f'Raw batch change since last report: {delta:+,}')
         if c == previous['counts'] and s['latest_log_mtime'] == previous['latest_log_mtime']:
             lines.append('No observed count/log progress since previous report; stage may be computing or stopped.')
+    if n and c['freeze_shards'] >= (n + 1) // 2:
+        lines.append('HALFWAY FREEZE CHECKPOINT: prepare build/evaluation launchers; keep compute reserved for freeze until it completes.')
     lines.append('Artifacts present: ' + (', '.join(k for k, v in s['evidence_present'].items() if v) or 'none yet'))
     lines.append('Artifact presence is not a validation or launch verdict. Monitoring continues through stage gaps.')
     return '\n'.join(lines)

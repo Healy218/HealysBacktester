@@ -6,6 +6,22 @@ both exact commands from the saved resume.json with approved host network
 access. Local research assumptions, all TV13/tick scope and deferred external
 comparison remain unchanged.
 
+## Latest user direction — dedicate the box to freeze work
+
+User will close other programs and dedicate the box for the next week.
+Keep build/evaluation/training unlaunched while preparing/freezing. Prepare
+those stage launchers when the actual freeze is about halfway complete.
+Watcher now flags that checkpoint at 227/453 freeze shard files; inventory
+or tick-store completion does not trigger it. The timer sends the reminder;
+it cannot invoke a coding agent to implement launchers autonomously.
+
+Retain automatic memory sizing at freeze launch: 5,000 MiB per worker plus
+2,048 MiB reserve, capped by available CPUs. Approximately 22 GiB was available
+at this instruction, enough for four workers under that rule. Recalculate at
+launch after downloads end and the user closes apps. This is a concurrency
+budget, not OS-enforced RAM reservation or CPU affinity. No new competing
+heavy jobs, forced process termination, or causal-source changes were made.
+
 ## Persistent progress watcher
 
 User requested 30-minute updates throughout preparation/freeze/build/training.
