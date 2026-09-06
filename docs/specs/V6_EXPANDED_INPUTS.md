@@ -28,6 +28,39 @@ capture/review attestations do not establish authenticated external origin.
 
 ## Ordered completion
 
+The capture intake CLI generates the current source-default checklist and an
+explicitly unreviewed pack. It does not generate chart values or approve reviews:
+
+```bash
+./venv/bin/python -m scripts.prepare_v6_parity_pack prepare \
+  --minimum-tick 0.01 --output /absolute/path/to/new-capture-intake --run
+```
+
+Use the actual instrument minimum tick; the default context policy is
+`source_literal` with observed VWAP. The generated `capture_checklist.json`
+lists all 127 required fields, 44 proposal events, exact parameters and the two
+terminal-snapshot sources. Populate `pack.DRAFT.json` with actual retained
+file references/hashes and completed reviews, adding fixture records for
+additional states/sessions as needed. Review fields start blank/false and
+reference hashes start blank, so the draft cannot pass admission. Capture CSV
+metadata still follows the [fixture runbook](TRADINGVIEW_FIXTURE_RUNBOOK.md);
+the checklist is not a substitute for that metadata or a local producer.
+
+After saving a completed pack and recording its SHA256 separately:
+
+```bash
+./venv/bin/python -m scripts.prepare_v6_parity_pack verify \
+  --pack /absolute/path/to/completed-pack.json \
+  --expected-sha256 <separately-recorded-pack-sha256> \
+  --output /absolute/path/to/new-verification --run
+```
+
+Without `--run`, preparation only previews; verification still performs every
+comparison but writes nothing. Written verification retains the full comparison
+report and writes its completion manifest last, after rechecking evidence and
+verifier hashes. Existing output directories are refused. A passing report is
+scoped parity evidence, not full context/tick coverage or freeze readiness.
+
 1. Obtain the actual source-default chart outputs and matching context streams;
    review/compile any plot-only instrumentation. Include active states and
    proposal exits as well as raw indicator fields. Recompare all thirteen

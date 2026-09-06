@@ -84,6 +84,9 @@ scope while the optional all-time clarification is unanswered. The result is
 - [x] Bind actual field/proposal-event comparisons, instrumentation, terminal
   snapshots, missingness and transitive evidence hashes; draft harnesses remain
   uncompiled/unreviewed.
+- [x] Add command-line capture-pack preparation and verification: current
+  127-field/44-event checklist, unreviewed draft, retained comparison report,
+  separate hash anchor and completion marker after evidence rechecks.
 - [ ] Obtain actual chart outputs/context, validate the full proposed source
   scope, and admit the sealed feature candidate. Unsupported native footprint/
   intrabar modes remain outside the scope.
