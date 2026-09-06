@@ -1,17 +1,24 @@
 # TODO — TradingView expansion and corrected research
 
-Reconciled September 5, 2026. The user authorized starting all six workstreams
+Reconciled September 6, 2026. The user authorized starting all six workstreams
 below with multiple agents. Work on `main` in the primary checkout;
 [HANDOFF](HANDOFF.md) records completed milestones. Dependencies control when
 each later stage can run.
 
-The audit repairs are implemented and merged: **51 main findings and four
-additional concerns**. First TradingView/readiness batch integration passed
-**790 tests and 18 subtests** (planning baseline: 642). Corrected research results
-and a new production rollout remain outstanding.
-[First-batch evidence](docs/reviews/2026-09-05-readiness-milestone.md).
+**User scope confirmed September 6:** the full v6 freeze/build must include
+all thirteen selected TradingView indicator scopes and quote/trade features.
+The existing-family SPY/IBKR run is a pipeline pilot only. Do not launch a full
+universe freeze while those additions are still missing; complete their
+verification, historical coverage and feature integration first.
 
-The build contract is `2026-09-05-causal-v2`. Preserve pre-audit freezes,
+The audit repairs are implemented and merged: **51 main findings and four
+additional concerns**. The latest completed full suite passed **1,143 tests and
+18 subtests**. All thirteen scoped TradingView ports and the full stock/context
+repair are implemented; external Pine fixtures, corrected model results and a
+new production rollout remain outstanding. Historical integration evidence is
+retained in the [first-batch review](docs/reviews/2026-09-05-readiness-milestone.md).
+
+The build contract is now `2026-09-06-raw-spot-v3`. Preserve pre-audit freezes,
 211/441 paused v6 partials, rows, marks and bundles as historical artifacts.
 Create fresh campaign outputs; old v6 resume/merge commands and old v5 reuse
 are superseded. Never relabel old artifacts to pass validation. Source-only
@@ -27,6 +34,8 @@ deployment can stop existing experts because loaders reject stale bundles.
 - [x] Correct v6 notes: **v6 keeps v5's window**; the archive audit identified
   **15 weekly-expiry names**, not 25.
 - [x] Reconcile the first implementation milestone with TODO and HANDOFF.
+- [x] Record the completed data repair and exact seal restoration after the
+  aborted first pipeline pilot; retain its outputs as ineligible history.
 
 Already implemented: per-underlying universe reads and sorted new derivations;
 PIT membership; PBO reporting; magnitude/EV head; panel watchlist recording;
@@ -50,15 +59,21 @@ scope while the optional all-time clarification is unanswered. The result is
   unused transitive Footprint library acquisition remains documented pending.
 - [x] Implement and locally test the first eight scoped ports: Gaussian,
   Fibonacci, Uptrick, RSI, ICT, Emre MSB, SR Channels and VWOB. Emre box arrays
-  remain unported; the five other selected scripts remain source-pinned.
+  remain unported.
+- [x] Add the remaining five scoped local ports: AMD, Setup Scanner,
+  Structural Liquidity/POC, HTF Log-Regression Profile and Footprint geometry/
+  supplied signed-volume modes. Native Footprint remains unsupported.
 - [x] Add the verified source/adaptation/runtime registry. No active-pool
   admission until exported TradingView fixture and input-contract checks pass.
-- [ ] Define outputs and mechanical entry/exit rules separately. Resolve
-  existing Keltner breakout/mean-reversion and BBW rolling-minimum/percentile
-  semantics before freezing the expanded pool.
-- [ ] Implement the spec's dependency order: smoothing/trend state;
+- [x] Separate scoped indicator outputs from mechanical entry/exit wrappers.
+  Confirm existing [Keltner breakout and BBW rolling-minimum semantics](docs/specs/V6_KELTNER_BBW_SEMANTICS.md)
+  and all four sweep/frozen outputs without changing formulas.
+- [x] Implement local scopes in the spec's dependency order: smoothing/trend state;
   confirmed structure/sessions; composite setups/resolved statistics;
   volume profiles/higher timeframes; footprint engines with explicit data needs.
+- [x] Add the [chart-export fixture workflow](docs/specs/TRADINGVIEW_FIXTURE_RUNBOOK.md),
+  capture/input bindings and comparison reports. Synthetic test CSVs do not
+  establish external Pine parity or admit a family.
 - [ ] Verify Pine value/event parity, prefix invariance, batch/incremental
   equivalence and all four sweep/frozen signal frames. Delayed pivots appear
   at confirmation; outcomes enter statistics only when resolved.
@@ -72,29 +87,64 @@ scope while the optional all-time clarification is unanswered. The result is
 
 - [x] Find/fix the downloader's chunk-end omission and add regression tests.
 - [x] Restore/verify the SPY raw-history pilot (38 MiB); all 6,448 overlapping
-  2025 resampled OHLCV bars match. Full-universe repair remains open.
+  2025 resampled OHLCV bars match. The completed full repair is recorded below.
 - [x] Add isolated named campaign paths, stable shard merge, immutable input/
   source/runtime fingerprints and fail-closed local stage launchers.
-- [x] Verify the launcher refuses five current underlying gaps despite the
-  old one-direction preflight passing (500 option days versus 495 underlying).
-- [ ] Inventory raw history/backups: compaction losses, year-end underlying
-  holes, renames, date coverage and PIT monthlies. Restore missing observations
-  from surviving sources where available.
-- [ ] Preserve/checksum historical artifacts; allocate fresh freeze,
+- [x] Verify the launcher rejects the five former underlying gaps despite the
+  old one-direction preflight passing. Repaired data now has 500 option and
+  500 underlying sessions in the pinned model window.
+- [ ] Continue the backup/deeper-history inventory outside the repaired
+  April 2024–August 2026 stock window, including compaction losses and missing
+  FA/PIT monthlies; restore surviving observations where available.
+- [x] Preserve/checksum the original cache and allocate fresh campaign freeze,
   checkpoint, row, mark, report and model paths under the current contract.
-- [ ] Replace old additive-only v6 launcher assumptions with a full corrected
+- [ ] Finish inventory/checksums of remaining historical research artifacts,
+  including the preserved 211/441 paused v6 partials.
+- [x] Replace old additive-only v6 launch assumptions with a full corrected
   freeze plan. Reuse requires compatible newly validated artifacts and matching
   provenance, never pre-audit v5.
-- [ ] Select representative pilots, resource limits and run manifests.
+- [x] Select SPY/IBKR and two workers for a bounded freeze/build/assemble pilot.
   Keep v6's current v5 window; deeper windows belong to v7.
 - [x] Validate local launchers and failure/resume behavior before heavy work.
   Rebuild/verify a Batch image only if cloud acceleration is used.
+- [x] Separate raw contemporaneous stock spot for OCC strike selection/IV
+  from adjusted technical history; reject old price-basis data and surfaces.
+- [x] Complete staged whole-universe stock repair: all **453 symbols** have
+  fresh raw and all-adjusted histories with **6,887,003 identical timestamps**.
+  Validate 602 stock sessions including warmup, issuer identities and early
+  closes; retain explicit CLSK/SBET exceptions and partial intervals.
+- [x] Retain the **5,214,222-contract all-observed universe** and all 500 option
+  day files; rederive **33,597,149 option daily rows** and 266,905 surface rows
+  using raw contemporaneous spot. Seal the candidate and verify original cache
+  bytes. [Data evidence](docs/reviews/2026-09-06-data-repair.json).
+- [x] Stop `raw-options-20260906` after its provider wrote derived contract
+  files into the sealed candidate. Verify all 123,471 sealed payloads, preserve
+  1,299 added files in campaign quarantine and restore the exact original seal.
+  Its completed IBKR shard remains ineligible for reuse.
+  [Restoration evidence](docs/reviews/2026-09-06-pilot-cache-restoration.json).
+- [x] Independently review the separate writable provider-cache fix, including
+  concurrent materialization and exact sealed-input preservation.
+- [x] Launch replacement pilot `raw-options-20260906-r2` with locked exit markers,
+  a recovery descriptor and two dynamically selected workers.
+- [ ] Complete replacement pilot `raw-options-20260906-r2`; verify freeze, build and
+  assembly preserve the candidate seal before scaling the corrected campaign.
+- [x] Download a bounded Massive historical quote/trade pilot and capture
+  raw nanosecond/provenance, complete pagination and storage/timing evidence.
+- [x] Verify descriptive causal replay of the captured option ticks while
+  preserving original capture bytes. [Replay evidence](docs/reviews/2026-09-06-option-tick-replay.json).
+- [ ] Freeze pre-decision contract selection and trade-condition mapping;
+  scale quote/trade coverage, join identical historical/live features and
+  compare feature ablations before admitting them to v6/v7. Captured ticks have
+  not been joined to model rows or trained; predictive gain is unestablished.
 
 ## 4. Rebuild and compare fairly
 
-Start after admitted TradingView source/data contracts and campaign preflight.
-Use the home box first; cloud acceleration needs a measured workload,
-VM-hour budget and explicit job IDs.
+The existing configured v5/v6 pipeline can be piloted after data and runtime
+preflight. Adding any of the thirteen new ports requires its external parity
+and admission checks first. The replacement pilot tests the repaired core
+pipeline; richer quote/trade model work still requires its fixed data/feature
+contract and joins. Use the home box first; cloud acceleration needs a measured
+workload, VM-hour budget and explicit job IDs.
 
 - [ ] Refreeze affected baseline and expanded pools on causal inputs.
 - [ ] Build matching per-symbol/family rows, complete marks and provenance;
@@ -123,10 +173,15 @@ September 8, 2026 is Tuesday. [Evidence](docs/reviews/2026-09-05-readiness-miles
   market session; compare signal timestamps, not process/pass counts.
 - [x] Confirm :01/:02/:03 staggering and workers against observed server state.
   Preserve bracketed `pgrep`/`pkill` patterns.
+- [x] Add v6 expert identity/campaign bundle paths, frozen weekly DTE matching,
+  explicit stream campaign universes and captured session-calendar handling.
+- [x] Add opt-in OPRA quote/trade recording with exact decoded timestamps,
+  receipt provenance, bounded contract admission and visible capture failures.
 - [ ] Verify current-contract bundles and isolated previews, then prepare a
   coordinated source/bundle rollout with compatible rollback inputs.
 - [x] Check both user/system timers: StockTwits/cache-backup absent; user
-  deadman active. Restore collectors/backups and audit FA/PIT jobs next.
+  deadman active.
+- [ ] Restore collectors/backups and audit FA/PIT jobs on the home box.
 - [ ] Review obsolete Artifact Registry tags against retained/reproducible
   campaign images before cleanup.
 

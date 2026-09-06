@@ -1,0 +1,64 @@
+{
+  "capture_manifest_sha256": "e641538a5da82d08726007b95f80504ca00b73d939f66c2059991b1b7a840f2e",
+  "original_capture_preserved": true,
+  "implementation_sha256": {
+    "options/data/massive_ticks.py": "a336e3aac4fb2017d1e70a10bc68df387c8eb34291e98a498d407d28e278f959",
+    "options/tick_features.py": "52af1a94e254e3f456b754efa7376d0abe6e72b80c42016cb834dd7035e0a42b",
+    "scripts/capture_option_ticks.py": "36d76d3ad25f74b2cd3c3bee10f537df01b2d9b684e8a128c823c8b53d9aed16"
+  },
+  "feature_policy": {
+    "max_quote_age_ns": 30000000000,
+    "allowed_trade_conditions": [],
+    "allow_unconditioned_trades": false,
+    "condition_namespace": "massive_integer"
+  },
+  "model_admission": false,
+  "contracts": [
+    {
+      "contract": "SPY260824C00766000",
+      "features": {
+        "schema": "option-tick-features-v1",
+        "availability_basis": "sip",
+        "quote_updates": 16626,
+        "valid_quote_time_fraction": 0.9999049779644444,
+        "time_weighted_spread_bps": 379.82191483301585,
+        "time_weighted_size_imbalance": -0.10965529271211565,
+        "last_quote_age_seconds": 6.07884614,
+        "last_bid": 0.15,
+        "last_ask": 0.16,
+        "reported_trade_count": 1882,
+        "reported_contract_volume": 13209,
+        "reported_trade_vwap": 0.3210591263532442,
+        "excluded_invalid_or_corrected_trades": 0,
+        "quote_test_signed_volume": 0,
+        "quote_test_classified_volume_fraction": 0.0,
+        "allowed_trade_conditions": [],
+        "allow_unconditioned_trades": false,
+        "model_admission": false
+      }
+    },
+    {
+      "contract": "SPY260824P00766000",
+      "features": {
+        "schema": "option-tick-features-v1",
+        "availability_basis": "sip",
+        "quote_updates": 18699,
+        "valid_quote_time_fraction": 0.9988939361222222,
+        "time_weighted_spread_bps": 133.1315499867493,
+        "time_weighted_size_imbalance": 0.05393785990275084,
+        "last_quote_age_seconds": 0.047181605,
+        "last_bid": 3.88,
+        "last_ask": 3.9,
+        "reported_trade_count": 572,
+        "reported_contract_volume": 2154,
+        "reported_trade_vwap": 2.8787372330547827,
+        "excluded_invalid_or_corrected_trades": 0,
+        "quote_test_signed_volume": 0,
+        "quote_test_classified_volume_fraction": 0.0,
+        "allowed_trade_conditions": [],
+        "allow_unconditioned_trades": false,
+        "model_admission": false
+      }
+    }
+  ]
+}

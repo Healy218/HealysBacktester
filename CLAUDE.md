@@ -25,7 +25,7 @@ here — it lives in the files below.
    load — don't re-derive state from scratch.
 2. **Work**: on `main` (user instruction at the September 5 merge); small single-purpose commits;
    push often. Tests stay green: `./venv/bin/python -m pytest tests/ -q`
-   (~535 as of 2026-09-05 — treat the count as a floor, not a pin;
+   (1,143 plus 18 subtests at the 2026-09-06 milestone — treat the count as a floor, not a pin;
    self-contained: no network, no v31 artifacts; LightGBM/TF are exercised
    from requirements).
 3. **End** (or at a milestone, or before context runs out): archive
@@ -84,7 +84,8 @@ before rebuilding the research artifacts. Integration validation passed: 642 tes
 the 535-test count in the preserved notes is the pre-merge result. A local
 merge does not deploy the server or launch a freeze/build/training campaign.
 
-The September 5 audit repairs use feature/build contract `2026-09-05-causal-v2`.
+The September 5 audit began with feature/build contract `2026-09-05-causal-v2`;
+the raw-price correction advances the current contract to `2026-09-06-raw-spot-v3`.
 Pre-audit freezes, partial checkpoints, rows, marks and bundles must be rebuilt
 and validated under that contract; preserve existing files as historical
 artifacts, and do not relabel them to bypass verification. Historical returns

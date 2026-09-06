@@ -1,6 +1,7 @@
 # TradingView expansion — selection and implementation plan
 
-Status: scope researched and first implementation batch September 5, 2026 (Chicago).
+Status: thirteen scoped local implementations September 5, 2026 (Chicago;
+September 6 UTC). External numerical parity and pool admission remain pending.
 The user requested the ten most boosted scripts across the supplied general
 listing and the three most boosted Editors' Picks, before corrected research
 artifacts are rebuilt. These are additions to the existing Keltner/BBW work.
@@ -65,8 +66,9 @@ All thirteen remain in scope, including modes awaiting a data/parity answer.
    input data, numerical outputs and alert conditions. Separate the indicator
    calculation from any proposed strategy entry/exit rule. Chart-only tools
    need explicit mechanical rules before becoming proposal families. Existing
-   Keltner breakout/mean-reversion and BBW rolling-minimum/percentile differences
-   are resolved here too.
+   Keltner/BBW semantics are now resolved in the
+   [v6 semantics note](V6_KELTNER_BBW_SEMANTICS.md): existing breakout and
+   rolling-minimum behavior, with matching sweep/replay tests.
 2. **Shared bar calculations and trend state.** Gaussian Filter Trend,
    Fibonacci Trend Continuation and Uptrick build on smoothing, range/ATR and
    persistent directional state. Reuse primitives only after checking Pine
@@ -117,7 +119,7 @@ All thirteen remain in scope, including modes awaiting a data/parity answer.
   evaluation windows, mark/cash/cost reconciliation and preserved gate refusals.
   Boosts select the requested research scope; they do not establish performance.
 
-## First implementation batch
+## Implemented scopes
 
 Run `./venv/bin/python -m indicators.tradingview_registry` to verify all thirteen
 source hashes and print current implementation identities. The identity binds
@@ -134,20 +136,31 @@ math/validation dependencies. The historical ranking snapshot remains unchanged.
 | Market Structure Break & Order Block | Zigzag, market direction, MSB events and wrapper | Box/zone arrays remain unported; statement-order fixtures needed |
 | Support Resistance Channels | Confirmed pivots, channel snapshots/strengths, break events and wrapper | Equal-pivot convention needs fixtures |
 | Volume-Weighted Order Block Zones | Causal zone creation, strength, invalidation, retests and snapshots | Feature-only; fixed calculation origin and fixtures required |
+| AMD Po3 | Accumulation/sweep/distribution state, deadlines, causal resolved statistics, wrapper | Prior completed HTF inputs and exported transition fixtures |
+| Setup Scanner | Six named setups, source acceptance priority, position/statistic state, wrappers | Exact session VWAP reset flags; exported fixtures |
+| Structural Liquidity & POC Matrix | Confirmed anchors, ATR-spaced close-volume bins, prefix POC snapshots | Feature-only; chart last-bar snapshot semantics and fixtures |
+| HTF Log-Regression Volume Profile | Completed/developing profiles, source regression/volume/POC calculations | Explicit exchange timeframe-change flags; no invented security resampling |
+| Volume Footprint | Geometric rows, table/window and chart distributions, POC/VA/imbalance, overlap/residual diagnostics | Intrabar mode requires supplied observed signed volumes; native mode unsupported; exported fixtures |
 
 All implementations remain outside active proposal pools. Shared Pine seeds,
 NA behavior and comparisons have local tests; flat-RSI builtin behavior and
 several pivot/state edges still require actual TradingView outputs. Local
 hand-computed tests and independent source review are not cross-platform parity.
 
-Five selected scripts remain source-pinned without Python implementations:
-AMD Po3, Volume Footprint, Structural Liquidity & POC Matrix, Setup Scanner,
-and HTF Log-Regression Volume Profile. Footprint's `TradingView/ta/14` library
+All thirteen selected scripts have scoped Python implementations. This does
+not mean every graphical/native mode or external library request is emulated.
+Footprint's `TradingView/ta/14` library
 is pinned; its unused transitive `RelativeValue/3` dependency is documented as
 pending. Native/intrabar modes remain subject to their separate data contracts.
 
-No corrected freeze/build/evaluation or deployment has run. Campaign isolation,
-the corrected downloader boundary, raw-history recovery pilot, actual server
-inventory and a contract preview are recorded in
+The first readiness batch ran no corrected freeze/build/evaluation or deployment.
+Campaign isolation, the corrected downloader boundary, raw-history recovery
+pilot, actual server inventory and a contract preview are recorded in
 [readiness review](../reviews/2026-09-05-readiness-milestone.md).
+The later raw-price correction, option tick pilot and socket recording work use
+the new `2026-09-06-raw-spot-v3` build contract; old rows cannot seed that rebuild.
+The SPY/IBKR campaign exercises the existing twelve v6 families; these thirteen
+new selections still need external fixture admission before an expanded run.
+The [capture/comparison runbook](TRADINGVIEW_FIXTURE_RUNBOOK.md) now provides
+strict CSV intake, exact source/input binding and scoped mismatch reports.
 The shared alert-format go/no-go remains in force for a production format change.

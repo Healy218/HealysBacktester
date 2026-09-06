@@ -1,0 +1,284 @@
+{
+  "campaign_cache": {
+    "bytes_observed": 14345799,
+    "file_stat_inventory_sha256": "2fabf00f7e4e1bea788c904829875a282b47eb907966432513129d748049f263",
+    "files_by_occ_root": {
+      "IBKR": 330,
+      "SPY": 772
+    },
+    "isolation_evidence": "Observed new provider cache files resolve inside the campaign. The sealed candidate has no additional/missing nontransient files and no file mtime after the launcher lock; this is bounded snapshot evidence, not continuous filesystem auditing.",
+    "newest_file": {
+      "mtime_ns": 1788673811029737311,
+      "mtime_utc": "2026-09-06T05:50:11.029737+00:00",
+      "path": "nn_meta/campaigns/raw-options-20260906-r2/v6/runs/provider_cache/bars_15m/SPY251107P00661000.parquet",
+      "size_bytes": 19045
+    },
+    "oldest_file": {
+      "mtime_ns": 1788673193059022473,
+      "mtime_utc": "2026-09-06T05:39:53.059023+00:00",
+      "path": "nn_meta/campaigns/raw-options-20260906-r2/v6/runs/provider_cache/bars_15m/IBKR240920P00125000.parquet",
+      "size_bytes": 7336
+    },
+    "parquet_files_observed": 1102,
+    "previous_observation": {
+      "all_files_count": 579,
+      "observed_at_utc": "2026-09-06T05:44:00+00:00",
+      "timestamp_precision": "approximately one minute; initial tool read after 05:43:47 UTC"
+    },
+    "provider_paths_outside_campaign_root": [],
+    "readonly_fallback_root": "nn_meta/data_candidates/audit-repair-20260905-final/cache",
+    "temporary_files_observed": [],
+    "writable_root": "nn_meta/campaigns/raw-options-20260906-r2/v6/runs/provider_cache"
+  },
+  "complete": false,
+  "launch_file_mtime": {
+    "mtime_ns": 1788673178400414454,
+    "mtime_utc": "2026-09-06T05:39:38.400414+00:00",
+    "path": "nn_meta/campaigns/raw-options-20260906-r2/v6/runs/.launcher.lock",
+    "size_bytes": 0
+  },
+  "limitations": [
+    "This is a timestamped running-pilot status snapshot, not a completed freeze/build/assembly result.",
+    "New TradingView ports remain outside this pilot active pool pending real external fixtures.",
+    "No-contract warnings are preserved as availability evidence; no profitability or complete contract coverage is inferred.",
+    "Concurrent log/cache files may advance after the byte snapshots and directory enumeration.",
+    "No running process was stopped, no source or data input was edited, and no broad tests or full dataset hash rescan were run."
+  ],
+  "logs": [
+    {
+      "error_lines": [],
+      "line_count": 316,
+      "mtime_ns": 1788673801098772331,
+      "mtime_utc": "2026-09-06T05:50:01.098772+00:00",
+      "no_contract_warning_count": 217,
+      "path": "nn_meta/campaigns/raw-options-20260906-r2/v6/runs/logs/freeze/IBKR.log",
+      "read_snapshot_bytes": 32807,
+      "read_snapshot_sha256": "12184b5803f1553ea79b6f80e9d8d24b0d05cbb8c4b35e87375f05835d1e94e8",
+      "size_bytes": 32807,
+      "tail": [
+        "2026-09-06 00:49:43,389 - backtester - WARNING - [OPT-EXEC] no contract for IBKR C @ 2025-02-19 (45 DTE)",
+        "2026-09-06 00:49:43,401 - backtester - WARNING - [OPT-EXEC] no contract for IBKR C @ 2025-03-17 (45 DTE)",
+        "2026-09-06 00:49:43,402 - backtester - WARNING - [OPT-EXEC] no contract for IBKR C @ 2025-03-19 (45 DTE)",
+        "2026-09-06 00:50:01,086 - backtester - WARNING - [OPT-EXEC] no contract for IBKR C @ 2025-06-16 (45 DTE)",
+        "2026-09-06 00:50:01,087 - backtester - WARNING - [OPT-EXEC] no contract for IBKR C @ 2025-06-18 (45 DTE)",
+        "2026-09-06 00:50:01,087 - backtester - WARNING - [OPT-EXEC] no contract for IBKR C @ 2025-06-18 (45 DTE)",
+        "2026-09-06 00:50:01,098 - backtester - WARNING - [OPT-EXEC] no contract for IBKR C @ 2025-07-14 (45 DTE)",
+        "2026-09-06 00:50:01,099 - backtester - WARNING - [OPT-EXEC] no contract for IBKR C @ 2025-07-15 (45 DTE)"
+      ],
+      "traceback_count": 0
+    },
+    {
+      "error_lines": [],
+      "line_count": 23,
+      "mtime_ns": 1788673192554253687,
+      "mtime_utc": "2026-09-06T05:39:52.554254+00:00",
+      "no_contract_warning_count": 0,
+      "path": "nn_meta/campaigns/raw-options-20260906-r2/v6/runs/logs/freeze/SPY.log",
+      "read_snapshot_bytes": 2272,
+      "read_snapshot_sha256": "efa9f30816c2f924231c607fe08bd76d5a5ec99b36a777e6ad8be51c7373058e",
+      "size_bytes": 2272,
+      "tail": [
+        "2026-09-06 00:39:51,324 - backtester - INFO - Generating crossover signals...",
+        "2026-09-06 00:39:51,326 - backtester - INFO - MA Crossover signals generated successfully for 3 combinations.",
+        "2026-09-06 00:39:51,329 - backtester - INFO - Starting backtest simulation...",
+        "2026-09-06 00:39:51,330 - backtester - INFO - Trend filter (50-bar MA): 58.4% of bars allow longs, 41.6% allow shorts",
+        "2026-09-06 00:39:51,330 - backtester - INFO - Short signals detected: size_type 'percent' \u2192 'value' (capped at 80%: size=80,000.00, configured pct=90%, init_cash=100,000)",
+        "2026-09-06 00:39:51,330 - backtester - INFO - Running vectorbt Portfolio.from_signals simulation...",
+        "2026-09-06 00:39:52,419 - backtester - INFO - Simulation complete.",
+        "2026-09-06 00:39:52,554 - backtester - INFO - [OPT-HYBRID] universe slice SPY: 142,844 contracts"
+      ],
+      "traceback_count": 0
+    }
+  ],
+  "model_admission": false,
+  "observation_started_at_utc": "2026-09-06T05:50:08.266541+00:00",
+  "process_observation": {
+    "active_freeze_workers": 2,
+    "limitation": "CPU usage and process presence establish activity at this observation, not eventual success or model validity.",
+    "method": "host ps -C python,python3,python3.12 -o pid,ppid,lstart,etime,time,%cpu,%mem,args; host local start times converted from America/Chicago",
+    "observed_at_utc": "2026-09-06T05:48:06+00:00",
+    "processes": [
+      {
+        "command": "./venv/bin/python -m scripts.research_local --campaign raw-options-20260906-r2 --pool v6 --stage freeze --stage build --stage assemble --symbols SPY,IBKR --workers 2 --run",
+        "cpu_percent": 1.8,
+        "cpu_time": "00:00:09",
+        "elapsed": "00:08:30",
+        "memory_percent": 0.6,
+        "pid": 480926,
+        "ppid": 480915,
+        "role": "launcher",
+        "started_at_utc": "2026-09-06T05:39:36+00:00"
+      },
+      {
+        "command": "/home/healy/Coding/HealysBacktester/venv/bin/python -m nn_meta.freeze_baseline --symbols IBKR --out /home/healy/Coding/HealysBacktester/nn_meta/campaigns/raw-options-20260906-r2/v6/artifacts/freeze_shards/IBKR.json",
+        "cpu_percent": 151.0,
+        "cpu_time": "00:12:37",
+        "elapsed": "00:08:21",
+        "memory_percent": 14.7,
+        "pid": 481238,
+        "ppid": 480926,
+        "role": "freeze IBKR",
+        "started_at_utc": "2026-09-06T05:39:45+00:00"
+      },
+      {
+        "command": "/home/healy/Coding/HealysBacktester/venv/bin/python -m nn_meta.freeze_baseline --symbols SPY --out /home/healy/Coding/HealysBacktester/nn_meta/campaigns/raw-options-20260906-r2/v6/artifacts/freeze_shards/SPY.json",
+        "cpu_percent": 143.0,
+        "cpu_time": "00:12:01",
+        "elapsed": "00:08:21",
+        "memory_percent": 13.1,
+        "pid": 481239,
+        "ppid": 480926,
+        "role": "freeze SPY",
+        "started_at_utc": "2026-09-06T05:39:45+00:00"
+      }
+    ]
+  },
+  "provenance": {
+    "current_runtime_matches_launch": true,
+    "current_source_hashes_rechecked_count": 215,
+    "full_launch_input_fingerprint_recomputed_from_recorded_payload_matches": true,
+    "full_launch_input_fingerprint_sha256": "b43c1559b88df59b4c10c98f25cf89cab1f7b6eb4c2970694cfed863fced3cd4",
+    "launch_input_count": 123711,
+    "launch_input_groups": {
+      "cache": 123472,
+      "source": 215,
+      "universe": 24
+    },
+    "runtime_record_sha256": "561dab0390d6af05923b855977794a58f3fda96777afdea94b33264b2200d564",
+    "runtime_recorded_at_launch": {
+      "packages": {
+        "lightgbm": "4.7.0",
+        "numba": "0.61.2",
+        "numpy": "1.26.4",
+        "pandas": "2.2.3",
+        "pyarrow": "25.0.1",
+        "scikit-learn": "1.9.0",
+        "scipy": "1.17.1",
+        "tensorflow": "2.16.2",
+        "vectorbt": "0.27.2"
+      },
+      "python": "3.12.14 (main, Sep  1 2026, 14:16:52) [Clang 22.1.3 ]"
+    },
+    "source_hash_mismatches": [],
+    "source_record_list_sha256": "3838dd532f603dea220c7cf50b78accfea100cff65425239d938bc2c860f5d1e",
+    "universe_record_list_sha256": "6942c192c927919034f0fc5cd42e7c743a34d204f8d46ecc6fa0d724e12f3027"
+  },
+  "schema_version": 1,
+  "scope": {
+    "campaign": "raw-options-20260906-r2",
+    "data_candidate": "audit-repair-20260905-final",
+    "feature_contract_version": "2026-09-06-raw-spot-v3",
+    "pool": "v6",
+    "strategies": [
+      "ma",
+      "macd",
+      "rsi",
+      "squeeze",
+      "tv_rating",
+      "bbands",
+      "stoch",
+      "volume",
+      "supertrend",
+      "elliott",
+      "keltner",
+      "bbw_squeeze"
+    ],
+    "symbols": [
+      "IBKR",
+      "SPY"
+    ],
+    "window": [
+      "2024-08-26",
+      "2026-08-24"
+    ]
+  },
+  "scope_file": {
+    "mtime_ns": 1788673185467334164,
+    "mtime_utc": "2026-09-06T05:39:45.467334+00:00",
+    "path": "nn_meta/campaigns/raw-options-20260906-r2/v6/campaign_scope.json",
+    "sha256": "cb80d98a4a49724e5a07f18013b19d1b5546ec09a78e7fd163a88d82a2111a94",
+    "size_bytes": 20208959
+  },
+  "sealed_candidate": {
+    "current_file_inventory_matches_seal": true,
+    "current_nontransient_file_count_including_manifest": 123472,
+    "current_sample_byte_hashes": [
+      {
+        "expected_sha256": "0dd7d43dae4e27d1598017e1bb55a338055167befa8118ad1d4754e1424e53d6",
+        "matches": true,
+        "path": "exchange_calendar.json",
+        "sha256": "0dd7d43dae4e27d1598017e1bb55a338055167befa8118ad1d4754e1424e53d6"
+      },
+      {
+        "expected_sha256": "274621bea0684f9a34ba46d7db0cc8cc1bcbd6af6d716acfd7c6d22d9ecad1ab",
+        "matches": true,
+        "path": "stock_history_exceptions.json",
+        "sha256": "274621bea0684f9a34ba46d7db0cc8cc1bcbd6af6d716acfd7c6d22d9ecad1ab"
+      },
+      {
+        "expected_sha256": "7917a905ecc85cd025beef9ae6edd6ea0947d4d83354dde8d0197414f4d62048",
+        "matches": true,
+        "path": "option_derivation_manifest.json",
+        "sha256": "7917a905ecc85cd025beef9ae6edd6ea0947d4d83354dde8d0197414f4d62048"
+      },
+      {
+        "expected_sha256": "c1bce1d675ac057206dc95789ed80b7a0aacd58bbfeb0c839bd97c28c52e9157",
+        "matches": true,
+        "path": "bars_15m/AA240830C00034000.parquet",
+        "sha256": "c1bce1d675ac057206dc95789ed80b7a0aacd58bbfeb0c839bd97c28c52e9157"
+      },
+      {
+        "expected_sha256": "1f0872b65c4b23615cc96966d16436c4a7dca7214854189a4896f5b68590dc06",
+        "matches": true,
+        "path": "bars_15m/NOW261002P00128000.parquet",
+        "sha256": "1f0872b65c4b23615cc96966d16436c4a7dca7214854189a4896f5b68590dc06"
+      }
+    ],
+    "current_stat_inventory_sha256": "4b49e965fd35bf82520ac1db99439706144d946e566dfe057b58e78fab94ce8a",
+    "files_with_mtime_after_launcher_lock": [],
+    "global_missing_sessions_retained": {
+      "CLSK": [
+        "2024-11-08"
+      ]
+    },
+    "global_partial_sessions_retained": true,
+    "launch_hash_map_matches_manifest_seal": true,
+    "manifest_file": {
+      "mtime_ns": 1788669921565505550,
+      "mtime_utc": "2026-09-06T04:45:21.565506+00:00",
+      "path": "nn_meta/data_candidates/audit-repair-20260905-final/cache/repair_manifest.json",
+      "sha256": "1463af69ef956cea0829a6f0fc98464bc7a5ac77b4cc940236c28ae8dc78e05c",
+      "size_bytes": 28395614
+    },
+    "manifest_sha256_matches_launch": true,
+    "missing_files": [],
+    "reported_coverage_status": "calendar_and_symbol_session_checks_passed",
+    "sealed_at_utc": "2026-09-06T04:45:21.435506+00:00",
+    "sealed_cache_digest": "489781bc546994ad1e433e8191bee093d9c99c9817f6f3ea74484ceb4b3fc04c",
+    "sealed_cache_file_count_excluding_manifest": 123471,
+    "symlinks": [],
+    "terminal_lifetime_review_symbols": {
+      "SATS": "2026-06-23",
+      "SAVA": "2026-03-10",
+      "SWTX": "2025-06-30",
+      "WBA": "2025-08-27",
+      "X": "2025-06-17"
+    },
+    "unexpected_files": [],
+    "verification_limit": "All current paths and modification times were checked; the launch recorded hashes were compared with the seal and the manifest plus five selected files were rehashed. The entire dataset was not rehashed during this status check. The launcher performs full byte validation at stage boundaries."
+  },
+  "snapshot_at_utc": "2026-09-06T05:50:11.490232+00:00",
+  "stage_outputs": {
+    "assemble_log_directory_present": false,
+    "build_log_directory_present": false,
+    "completed_model_claim": false,
+    "freeze_merge_log_present": false,
+    "freeze_shards_observed": [],
+    "requested": [
+      "freeze",
+      "build",
+      "assemble"
+    ]
+  },
+  "status": "running_freeze_snapshot"
+}

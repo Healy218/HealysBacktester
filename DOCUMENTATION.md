@@ -8,10 +8,12 @@ The previous technical reference is preserved in
 The active working line is `main` in `/home/healy/Coding/HealysBacktester`
 under the user's instruction. Use the project Python 3.12 virtualenv explicitly.
 The suite exercises LightGBM/TensorFlow on synthetic fixtures without network
-or production artifacts. Integration and the planning rerun passed 642 tests
-and 18 subtests (10 dependency warnings).
+or production artifacts. The September 6 raw-price/live-data continuation
+passed 1,143 tests and 18 subtests (11 warnings); the September 5 integration
+baseline was 642 tests and 18 subtests.
 
-The September 5 audit repairs use feature/build contract `2026-09-05-causal-v2`.
+The September 5 audit began with feature/build contract `2026-09-05-causal-v2`;
+the raw-price continuation advances it to `2026-09-06-raw-spot-v3`.
 Pre-audit freezes, partial checkpoints, rows, marks and bundles must be rebuilt
 and validated under that contract; preserve existing files as historical
 artifacts, and do not relabel them to bypass verification. Historical returns
@@ -45,8 +47,8 @@ repairs and migration requirements.
 - **Repo**: `/home/healy/Coding/HealysBacktester`, working branch `main`.
   A local merge does not update the deployed checkout.
 - **Python**: `./venv/bin/python` (3.12.14). Always call the venv explicitly.
-- **Tests**: `./venv/bin/python -m pytest tests/ -q`; 642 tests and 18 subtests
-  at the September 5 integration/planning baseline. Tests exercise installed
+- **Tests**: `./venv/bin/python -m pytest tests/ -q`; 1,143 tests and 18 subtests
+  at the September 6 continuation milestone. Tests exercise installed
   LightGBM/TF using synthetic data, without network or production artifacts.
   Install pytest separately from runtime requirements when preparing a venv.
 - **Secrets**: `.env` at repo root, never in git. Keys: `ALPACA_API_*`,
@@ -592,3 +594,73 @@ goals → `TODO.md` current phase → `HANDOFF.md` session state
 
 First-batch evidence and remaining gaps:
 [readiness review](docs/reviews/2026-09-05-readiness-milestone.md).
+
+## Raw stock basis and option tick continuation
+
+The current build contract is `2026-09-06-raw-spot-v3`. Adjusted technical
+OHLCV and raw contemporaneous option-selection spot are separate inputs.
+`nn_meta.price_basis` requires explicit raw provider/feed/interval provenance;
+renaming an adjusted file does not satisfy it. Raw `underlying_15m_raw.parquet`
+must cover every technical timestamp used for option selection. Raw
+`underlying_daily_raw.parquet` supplies spot for strike filtering and implied
+volatility; adjusted daily returns still supply volatility/beta features.
+Every roll selects after a known bar close and fills in a later bar.
+
+The wide v5 archive's universe was derived from **all observed contracts** in
+the root-filtered option dayframes. Preserve that broad chain. It was the
+surface's daily option summaries that had an adjusted-spot moneyness filter.
+`v3.derive_contracts --cache INPUT --output-cache NEW_OUTPUT` rebuilds those
+parts with raw spot and preserves complete first-seen contract identities.
+Explicit old-root raw history is required when a current ticker does not
+cover its earlier identity. Output tags and hashes prevent mixing old/new
+surface parts or silently narrowing the observed chain.
+
+`NN_META_DATA_CANDIDATE=<name>` selects a separate staged cache and requires
+a named v5/v6 research campaign. `scripts.repair_underlying_cache` records
+provider settings, calendar boundaries, issuer/listing exclusions, observed
+coverage, reference comparisons and immutable input/output evidence. Sealing
+must finish after all repairs and context derivations; a new campaign name
+does not waive the seal. Original caches and paused research artifacts stay
+preserved. Legacy Batch transport rejects these named paths until its
+staging/output transport is implemented; use the local launcher.
+
+Named historical providers write per-contract option slices only under
+`RUNS_DIR/provider_cache`. Existing `DATA_CACHE/bars_*` files are read-only
+fallbacks; never materialize new contract files into a sealed candidate.
+The first raw-price pilot exposed this old provider behavior. Its additional
+files were quarantined after every original payload was verified, restoring
+the exact original inventory without changing the seal. The aborted scope's
+freeze shard is ineligible. A fresh campaign binds the corrected source.
+Contract lifetime lookups now index one underlying slice and retain a ticker
+predicate fallback for old roots catalogued under a renamed symbol.
+
+V6 live aggregation requires a captured exchange calendar with explicit
+coverage dates, holiday omissions and early closes. The default location is
+the selected cache's `exchange_calendar.json`; use `NN_META_SESSION_CALENDAR`
+for a deployed calendar. Dates beyond coverage raise rather than guessing.
+`stock_stream --spec PATH` includes a deployed campaign's frozen universe.
+Stock restart backfill requests raw SIP bars and reruns after reconnects.
+Feed heartbeats distinguish received data, reconnecting/stopped processes,
+malformed/future timestamps and custom store paths. These code checks do not
+establish full-session stream/REST parity.
+
+`scripts.capture_option_ticks` previews by default and downloads only explicit
+contracts/windows with `--run`. It verifies complete pagination, preserves
+integer nanoseconds and raw trade multiplicity when identifiers are absent,
+and binds compressed/raw data hashes, implementation and feature policy.
+`options.tick_features` computes descriptive spreads, quoted-size imbalance,
+quote freshness, reported trade volume/VWAP and an explicitly gated quote-test
+signed-volume estimate. Empty/unknown condition codes are unsigned by default.
+Ambiguous simultaneous quotes, stale receipt-time quotes and mixed contracts
+cannot silently supply a trade's direction. These are research inputs, not
+observed fills or true aggressor labels.
+
+The existing OPRA daemon can record quotes and trades with `--record-ticks`;
+[journal runbook](docs/specs/OPTION_TICK_JOURNAL.md) covers subscription limits,
+raw message preservation, receipt precision and failure/restart behavior.
+Alpaca condition strings and event clocks are not interchangeable with Massive
+condition integers/SIP timestamps without a validated adapter. Neither a
+healthy socket nor the historical [two-contract pilot](docs/reviews/2026-09-06-option-tick-pilot.json)
+proves complete training coverage or live parity. Quote/trade feature admission,
+costed execution, full-session comparison and compatible bundle rollout remain
+separate checks.

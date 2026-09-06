@@ -603,3 +603,63 @@ The contract resolver remains a captured-data preview with deliverables marked
 unverified pending contract-reference data. Production alert-format approval,
 offline selection parity and quote-verified accounting precede execution wiring.
 [Implementation evidence](reviews/2026-09-05-readiness-milestone.md).
+
+## 2026-09-06 — Raw strike basis, richer option history and existing sockets
+
+The user requested a fresh v6 rebuild if possible tonight, reuse of the server's
+existing live sockets in v6/v7, and historical Massive quotes/trades as features.
+The initial near-live target remains decisions on completed15-minute bars.
+Capture richer observations before model admission; do not infer guaranteed
+predictive improvement or exact fills from added data.
+
+Advance the build contract to `2026-09-06-raw-spot-v3`: option strike selection
+and IV need raw contemporaneous stock spot, separate from adjusted technical
+history. The old adjusted-spot filter demonstrably excluded relevant contracts
+(IBKR's split is a concrete example). Rebuild surface daily summaries from the
+existing broad option archive while preserving all observed contract identities.
+All roll selections wait for a known close and fill in a later bar. Preserve
+old artifacts and fully refresh both stock bases after sampled adjustment
+comparisons revealed multiple historical vintages.
+
+Historical tick capture is bounded by explicit contract/time selections, strict
+pagination and input hashes. Missing trade identifiers preserve multiplicity;
+unknown trade conditions remain unsigned. Historical SIP clocks and live SDK
+receipt clocks are distinct. Opt-in OPRA recording reuses the existing daemon
+and exposes capture failures without asserting uninterrupted coverage. No
+server deployment, live subscription change or notification follows merely
+from committing this work.
+
+All thirteen requested TradingView sources now have scoped local calculations.
+Keep actual numerical fixture and input-contract admission gates; chart/native
+features are not fabricated from OHLCV. Existing Keltner breakout and BBW
+rolling-minimum strategies retain their formulas and now have sweep/replay
+regressions. A corrected data/build pilot is preparation for the expanded
+comparison, not completion of quote-feature training or production readiness.
+
+## 2026-09-06 — Keep materialized contract caches outside sealed inputs
+
+The first SPY/IBKR raw-price pilot wrote 1,299 derived contract files into the
+sealed candidate because the historical provider inherited the shared writable
+cache location. Stop that scope, verify all 123,471 original payload hashes,
+and quarantine only the added files. Restore the exact original inventory and
+keep the existing manifest/seal unchanged. The completed IBKR shard belongs to
+the aborted scope and is not reused.
+
+Named historical campaigns now own their writable `runs/provider_cache`.
+Sealed contract files remain read-only fallbacks. Use unique atomic temporary
+files for concurrent writers and per-underlying lifetime indexes to avoid
+repeated full-universe scans. The replacement pilot uses a fresh name,
+`raw-options-20260906-r2`, and cold caches. Reusing the aborted spec or relabeling
+the modified data as newly sealed would conceal the source/input mismatch.
+[Recovery evidence](reviews/2026-09-06-pilot-cache-restoration.json).
+
+## 2026-09-06 — Full v6 includes every requested addition
+
+The user explicitly confirmed that all thirteen selected TradingView indicator
+scopes and quote/trade features must be included when the full v6 freeze/build
+starts. The SPY/IBKR existing-family pilot validates the repaired pipeline;
+do not scale it into an existing-family-only full rebuild. Complete external
+indicator verification, sufficient historical quote/trade coverage and the
+combined feature integration before freezing the full expanded campaign.
+Keep the controlled baseline comparisons within the final research design;
+they do not replace the requested expanded build.
