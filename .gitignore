@@ -94,3 +94,5 @@ nn_meta/data_cache_v5/
 
 # Advisory locks used by scanner state transactions
 nn_meta/live/.*.lock
+# Named research campaigns contain regenerated rows, marks and model bundles.
+/nn_meta/campaigns/

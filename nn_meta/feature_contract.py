@@ -6,10 +6,9 @@ option fill into a model input.  V4 keeps a small, explicit registry of each
 feature's latest availability.  A feature is eligible for a signal-close
 decision only when its availability is no later than ``SIGNAL_CLOSE``.
 
-This module deliberately does not change ``META_FEATURES``.  Existing v2/v3
-model bundles were trained with that schema and remain runnable while v4 is
-developed on its own branch.  ``v4_feature_names`` is the schema new v4 runs
-must use.
+This module deliberately does not change ``META_FEATURES``. Column names do
+not establish compatibility: default loaders reject bundles without the current
+feature-contract tag. ``v4_feature_names`` is the schema new v4 runs must use.
 """
 from __future__ import annotations
 

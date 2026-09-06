@@ -36,7 +36,7 @@ from nn_meta.v4_artifacts import ArtifactValidationError, sha256_file
 from nn_meta.feature_contract import CONTRACT_VERSION, manifest as feature_manifest
 from nn_meta.v4_evaluate import _matrix
 
-FINAL_DIR = config.ROOT / "model_final_v4"
+FINAL_DIR = config.V4_MODEL_FINAL_DIR
 
 
 def ensemble_score(family: str, members: list[dict], rows: pd.DataFrame,

@@ -491,7 +491,7 @@ def _reusable_rows(sym: str, spec_entry: dict, pool: str, marks: bool,
     families whose FROZEN ENTRY (params + dte) is identical in both specs — a
     re-frozen family (e.g. a weekly-expiry name whose grid changed) must be
     rebuilt, not reused. Returns None when nothing is reusable."""
-    rdir = config.ROOT / f"artifacts_{pool}"
+    rdir = config.output_dir("artifacts", pool)
     rp, mp, sp = (rdir / "meta_rows" / f"{sym}.parquet",
                   rdir / "meta_marks" / f"{sym}.parquet", rdir / "baseline_spec.json")
     if not rp.exists() or not sp.exists():

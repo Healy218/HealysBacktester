@@ -7,6 +7,7 @@ Everything nn_meta-specific (15m interval, DTE grid, baseline sweep, meta-model
 grid) lives here.
 """
 import os
+import re
 from pathlib import Path
 
 from nn_options_signal import config as _nos
@@ -28,10 +29,33 @@ ROOT = Path(__file__).resolve().parent
 # inputs (120-name contracts/universe/flatfiles) with 453-name rebuilds.
 DATA_CACHE = ROOT / ("data_cache_v5" if POOL in ("v5", "v6")   # v6 shares v5's archive
                      else "data_cache_v3" if _BIG_RUN else "data_cache")
-ARTIFACTS = ROOT / f"artifacts{_SUF}"      # baseline spec, meta dataset
-RUNS_DIR = ROOT / f"runs{_SUF}"
-REPORTS_DIR = ROOT / f"reports{_SUF}"
-MODEL_FINAL_DIR = ROOT / f"model_final{_SUF}"
+# A corrected research campaign must not overwrite historical/deployed outputs.
+# Keep pool semantics (universe, data and grids) independent of output location.
+CAMPAIGN = os.environ.get("NN_META_CAMPAIGN", "")
+if CAMPAIGN and not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", CAMPAIGN):
+    raise ValueError("NN_META_CAMPAIGN must be a simple 1–64 character name")
+
+
+def output_dir(kind: str, pool: str | None = None) -> Path:
+    """Resolve derived outputs; cross-pool reuse stays inside this campaign."""
+    selected_pool = POOL if pool is None else pool
+    if not re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_-]{0,63}", selected_pool):
+        raise ValueError("pool must be a simple 1–64 character name")
+    if kind not in {"artifacts", "runs", "reports", "model_final"}:
+        raise ValueError(f"unknown output kind: {kind}")
+    if CAMPAIGN:
+        return ROOT / "campaigns" / CAMPAIGN / selected_pool / kind
+    suffix = "" if selected_pool == "v2" else f"_{selected_pool}"
+    return ROOT / f"{kind}{suffix}"
+
+
+ARTIFACTS = output_dir("artifacts")      # baseline spec, meta dataset
+RUNS_DIR = output_dir("runs")
+REPORTS_DIR = output_dir("reports")
+MODEL_FINAL_DIR = output_dir("model_final")
+# The v31 pool feeds the historical v4 expert; wide pools own their bundles.
+V4_MODEL_FINAL_DIR = (MODEL_FINAL_DIR if CAMPAIGN or POOL in ("v5", "v6")
+                     else ROOT / "model_final_v4")
 
 UNDERLYING_15M_PARQUET = DATA_CACHE / "underlying_15m.parquet"
 BASELINE_SPEC_JSON = ARTIFACTS / "baseline_spec.json"

@@ -29,7 +29,7 @@ def main() -> None:
                     help="comma-separated shard spec paths to merge, then exit")
     args = ap.parse_args()
     if args.merge:
-        baseline.merge_specs(args.merge.split(","))
+        baseline.merge_specs(args.merge.split(","), out_path=args.out)
         return
     symbols = [s.strip().upper() for s in args.symbols.split(",")] \
         if args.symbols else None

@@ -64,7 +64,7 @@ from nn_meta.v4_evaluate import (choose_policy, format_candidate_grid, policy_la
                                  fit_nn_magnitude, _labeled, _matrix, _select_winner)
 from nn_meta.v4_loader import ensemble_ev, ensemble_score
 
-FINAL_DIR = config.ROOT / "model_final_v4"
+FINAL_DIR = config.V4_MODEL_FINAL_DIR
 
 
 def _final_split(ds: pd.DataFrame, val_fraction: float, embargo: str) -> pd.Series:
