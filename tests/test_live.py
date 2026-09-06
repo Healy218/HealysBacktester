@@ -164,7 +164,7 @@ class TestScanner:
         return sc.Scanner(lambda s: bars, scorer=scorer, threshold=threshold,
                           state_path=tmp_path / "state.json", spec=spec), bars
 
-    _NOW = datetime(2025, 6, 30, 0, 0, tzinfo=timezone.utc)   # long after bars
+    _NOW = (_bars().index[-1] + pd.Timedelta(minutes=16)).tz_localize("UTC").to_pydatetime()
 
     def test_fires_then_dedups(self, tmp_path, monkeypatch):
         scanner, _ = self._scanner(tmp_path, monkeypatch)
@@ -210,7 +210,8 @@ def test_live_bar_loader_uses_cache_for_history_and_never_for_today(monkeypatch,
     now = datetime(2026, 9, 4, 15, 0, tzinfo=timezone.utc)
     out = run_live._bar_loader("SPY", now=now)
     assert [c[2] for c in calls] == [False, True]          # history cached, today forced
-    assert calls[0][1] == "2026-09-03" and calls[1][0] == calls[1][1] == "2026-09-04"
+    assert calls[0][1] == calls[1][0] == "2026-09-04"
+    assert pd.Timestamp(calls[1][1]) == pd.Timestamp(now)
     assert out.index[-1] == pd.Timestamp("2026-09-04 14:00")
     # with a fresh feed, today comes from the store and REST is not called for today
     from nn_meta.live.feeds.barstore import BarStore
@@ -220,7 +221,7 @@ def test_live_bar_loader_uses_cache_for_history_and_never_for_today(monkeypatch,
     monkeypatch.setattr(run_live, "_feed_is_fresh", lambda now: True)
     monkeypatch.setattr("nn_meta.live.feeds.barstore.BarStore.__init__", lambda self, root=None: setattr(self, "root", tmp_path))
     calls.clear()
-    out = run_live._bar_loader("SPY", now=now)
+    out = run_live._bar_loader("SPY", now=datetime(2026, 9, 4, 14, 0, tzinfo=timezone.utc))
     assert [c[2] for c in calls] == [False]                # only the cached history call
     assert out.loc["2026-09-04 13:30", "Close"] == 5.0 and len(out.loc["2026-09-04"]) == 2
 

@@ -40,6 +40,7 @@ failing the pass.
 from __future__ import annotations
 
 import argparse
+from contextlib import nullcontext
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Callable, Optional
@@ -59,9 +60,9 @@ from nn_meta import config
 from nn_meta.baseline import load_spec, propose_trades
 from nn_meta.build_meta_dataset import rolling_beta_60d
 from nn_meta.live.scanner import (TICKER_ALIASES, aliased_bar_loader,
-                                  closed_bars, is_rth)
+                                  closed_bars, is_rth, require_recent_bars)
 from nn_meta.live.state import (AlertState, Outbox, PaperLedger,
-                                atomic_write_json, health_snapshot)
+                                atomic_write_json, health_snapshot, serialized, preview_state)
 from nn_meta.live.v4_candidates import build_candidate_batch
 from nn_meta.live.watchlist import Watchlist, format_digest
 
@@ -220,6 +221,7 @@ def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool
 
 # ── one pass ──────────────────────────────────────────────────────────────────
 
+@serialized(lambda *a, **kw: Path(kw.get("state_dir") or STATE_DIR) / ".live.lock")
 def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
               bar_loader: Callable[[str], pd.DataFrame], notifier,
               now: Optional[datetime] = None,
@@ -261,8 +263,9 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
                 if err:
                     raise RuntimeError(err.splitlines()[0])
                 bars, proposals = res
+                require_recent_bars(closed_bars(bars, now), now)
             else:
-                bars = closed_bars(bar_loader(sym), now)
+                bars = require_recent_bars(closed_bars(bar_loader(sym), now), now)
                 proposals = fresh_proposals(sym, bars, spec["symbols"][sym],
                                             config.PROPOSAL_STRATEGIES)
             scanned += 1
@@ -479,15 +482,16 @@ def main() -> None:
     from nn_meta.build_meta_dataset import load_surface_features
 
     bundle = load_trusted_bundle(bundle_dir, paper=args.paper)
-    summary = scan_pass(
-        bundle=bundle, spec=load_spec(), surface=load_surface_features(),
-        bar_loader=aliased_bar_loader(_bar_loader),
-        notifier=get_notifier(force_console=args.dry_run),
-        now=now,
-        symbols=[s.strip().upper() for s in args.symbols.split(",")]
-        if args.symbols else None,
-        threshold=args.threshold, paper=args.paper,
-        workers=args.workers if args.workers is not None else _default_workers())
+    with (preview_state(STATE_DIR) if args.dry_run else nullcontext(STATE_DIR)) as sdir:
+        summary = scan_pass(
+            state_dir=sdir, bundle=bundle, spec=load_spec(), surface=load_surface_features(),
+            bar_loader=aliased_bar_loader(_bar_loader),
+            notifier=get_notifier(force_console=args.dry_run),
+            now=now,
+            symbols=[s.strip().upper() for s in args.symbols.split(",")]
+            if args.symbols else None,
+            threshold=args.threshold, paper=args.paper,
+            workers=args.workers if args.workers is not None else _default_workers())
     print(f"{TAG} scanned {summary['scanned']} · alerted {summary['alerted']} · "
           f"delivered {summary['delivered']} · errors {summary['error_count']}")
 

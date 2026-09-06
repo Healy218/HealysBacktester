@@ -27,12 +27,15 @@ except ImportError:
 
 import pandas as pd
 
+from contextlib import nullcontext
+from nn_meta.live.state import preview_state
+
 from utils.logging_utils import setup_logging
 from data import vbt_data_loader
 from nn_meta import config
 from nn_meta.download_data import filter_rth
 from nn_meta.live.scanner import (Scanner, aliased_bar_loader, is_rth,
-                                  format_alert, _LOOKBACK_DAYS)
+                                  format_alert, _LOOKBACK_DAYS, _STATE_PATH)
 from nn_meta.live.notifier import get_notifier
 
 logger = setup_logging(log_file="logs/backtester.log")
@@ -47,10 +50,18 @@ def _feed_is_fresh(now: datetime) -> bool:
     from nn_meta.live.feeds.barstore import read_heartbeat
     from nn_meta.live.feeds.stock_stream import HEARTBEAT
     hb = read_heartbeat(HEARTBEAT)
-    if not hb or not hb.get("ts"):
+    if not isinstance(hb, dict) or not hb.get("ts"):
         return False
-    age = (now - datetime.fromisoformat(hb["ts"])).total_seconds() / 60
-    return age <= _FEED_MAX_AGE_MIN
+    if hb.get("state") in ("connecting", "reconnecting", "stopped"):
+        return False
+    try:
+        stamp, current = pd.Timestamp(hb["ts"]), pd.Timestamp(now)
+        if pd.isna(stamp) or pd.isna(current) or stamp.tzinfo is None or current.tzinfo is None:
+            return False
+        age_ns = current.value - stamp.value
+    except (TypeError, ValueError, OverflowError):
+        return False
+    return 0 <= age_ns <= _FEED_MAX_AGE_MIN * 60 * 1_000_000_000
 
 
 def _bar_loader(symbol: str, now: datetime | None = None):
@@ -60,32 +71,58 @@ def _bar_loader(symbol: str, now: datetime | None = None):
     Composition (2026-09-05, after the stale-cache incident):
       * HISTORY — closed sessions up to yesterday — through the smart loader's
         day-keyed cache. Those sessions never change, so the cache is valid.
-      * TODAY — the streamed bar store (Alpaca SIP 1m → 15m, bar-identical to
-        REST, parity-checked) when its heartbeat is fresh; otherwise today's
+      * TODAY — the streamed bar store (Alpaca SIP 1m → 15m) when its heartbeat
+        is fresh and coverage complete; otherwise today's
         bars over REST with the cache BYPASSED. The day-keyed cache is never
         consulted for the current session again.
     """
     now = now or datetime.now(timezone.utc)
+    now = now.replace(tzinfo=timezone.utc) if now.tzinfo is None else now.astimezone(timezone.utc)
     today = now.date()
+    from nn_meta.session_calendar import configured_calendar
+    calendar = configured_calendar()
     start = today - timedelta(days=_LOOKBACK_DAYS)
-    yesterday = today - timedelta(days=1)
     # Vendor symbol (2026-09-05): BRKB is "BRK.B" at Alpaca (config.FETCH_ALIASES);
     # without this the live scan never saw BRKB at all ("NoneType has no
     # attribute 'empty'" on every pass).
     fetch_sym = getattr(config, "FETCH_ALIASES", {}).get(symbol.upper(), symbol)
     hist = vbt_data_loader.load_price_data_smart(
-        fetch_sym, start.isoformat(), yesterday.isoformat(), "15m")
+        fetch_sym, start.isoformat(), today.isoformat(), "15m")
     hist = filter_rth(hist[_OHLCV]) if hist is not None and not hist.empty else None
+    if calendar is not None:
+        hist = calendar.filter(hist)
+    if hist is not None:
+        hist = hist[hist.index < pd.Timestamp(today)]
     today_bars = None
     if _feed_is_fresh(now):
         from nn_meta.live.feeds.barstore import BarStore
-        tb = BarStore().read_15m(symbol, days=[today.isoformat()])
-        today_bars = tb if not tb.empty else None
+        try:
+            store = BarStore()
+            tb = (store.read_15m(symbol, now=now, days=[today.isoformat()], calendar=calendar)
+                  if calendar is not None else store.read_15m(symbol, now=now, days=[today.isoformat()]))
+            # A fresh heartbeat/newest bar can still hide an earlier outage.
+            # Require every closed bucket since the session opened; REST can
+            # resolve both genuine no-trade intervals and missing stream data.
+            et_day = pd.Timestamp(now).tz_convert("America/New_York").normalize()
+            session_open = (et_day + pd.Timedelta(hours=9, minutes=30)).tz_convert("UTC").tz_localize(None)
+            session_last = (et_day + pd.Timedelta(hours=15, minutes=45)).tz_convert("UTC").tz_localize(None)
+            expected = min(pd.Timestamp(now).tz_convert("UTC").tz_localize(None).floor("15min")
+                           - pd.Timedelta(minutes=15), session_last)
+            required = pd.date_range(session_open, expected, freq="15min")
+            if calendar is not None:
+                required = calendar.closed_starts(et_day.strftime("%Y-%m-%d"), now)
+            if tb.index.equals(required):
+                today_bars = tb
+        except (ValueError, OSError) as exc:
+            logger.warning(f"[live] {symbol}: stream unavailable/incomplete; using REST: {exc}")
     if today_bars is None:
         raw = vbt_data_loader.load_price_data_smart(
-            fetch_sym, today.isoformat(), today.isoformat(), "15m", force_download=True)
+            fetch_sym, today.isoformat(), now.isoformat(), "15m",
+            force_download=True)
         if raw is not None and not raw.empty:
             today_bars = filter_rth(raw[_OHLCV])
+            if calendar is not None:
+                today_bars = calendar.filter(today_bars)
     parts = [p for p in (hist, today_bars) if p is not None and not p.empty]
     if not parts:
         return hist if hist is not None else today_bars
@@ -127,21 +164,19 @@ def main() -> None:
     # alias wrapper is inert for v2/v3 (no renamed tickers in their specs);
     # under v31 it revives the SQ seat by fetching bars as XYZ.
     from nn_meta.live.parallel import default_workers
-    scanner = Scanner(aliased_bar_loader(_bar_loader), scorer=scorer,
-                      workers=args.workers if args.workers is not None else default_workers(),
-                      threshold=threshold)
-    notifier = get_notifier(force_console=args.dry_run)
+    with (preview_state(_STATE_PATH.parent) if args.dry_run else nullcontext(_STATE_PATH.parent)) as sdir:
+        scanner = Scanner(aliased_bar_loader(_bar_loader), scorer=scorer,
+                          workers=args.workers if args.workers is not None else default_workers(),
+                          threshold=threshold, state_path=sdir / _STATE_PATH.name)
+        notifier = get_notifier(force_console=args.dry_run)
+        signals = scanner.scan_once(symbols=symbols, now=now)
+        delivered = scanner.deliver_pending(notifier)
+        if not signals and not delivered:
+            print("No fresh signals this pass.")
+        else:
+            print(f"{delivered} signal(s) alerted: "
+                  f"{', '.join(s.symbol for s in signals)}")
 
-    signals = scanner.scan_once(symbols=symbols, now=now)
-    if not signals:
-        print("No fresh signals this pass.")
-        return
-
-    for sig in signals:
-        title, msg = format_alert(sig)
-        notifier.send(msg, title=title)
-    print(f"{len(signals)} signal(s) alerted: "
-          f"{', '.join(s.symbol for s in signals)}")
 
 
 if __name__ == "__main__":

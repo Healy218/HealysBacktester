@@ -9,9 +9,10 @@ rewrite is cheap and readers never see a torn file).
 Aggregation 1m → 15m follows Alpaca's bar convention: a 15m bar stamped
 13:30 covers [13:30, 13:45); Open = first 1m open, High = max, Low = min,
 Close = last 1m close, Volume = sum. Only COMPLETE 15m buckets are returned
-(all of the bucket's 1m bars must be on or before ``now - 1min``... in
-practice: the bucket's end must be ≤ now), so the scanner's own
-``closed_bars`` trim stays the single source of truth for "closed".
+(the bucket's end must be ≤ now and all 15 distinct minute starts must
+be present). An elapsed bucket with missing or malformed minutes raises
+ValueError so the live loader can fall back to REST. This deliberately
+includes sparse no-trade minutes: the stream never fabricates missing bars.
 """
 from __future__ import annotations
 import json
@@ -85,13 +86,13 @@ class BarStore:
         return out[COLS].astype(float)
 
     def read_15m(self, symbol: str, now: Optional[datetime] = None,
-                 days: Optional[Iterable[str]] = None) -> pd.DataFrame:
+                 days: Optional[Iterable[str]] = None, *, calendar=None) -> pd.DataFrame:
         """Complete RTH 15m bars aggregated from the stored 1m bars, in the REST
         loader's exact shape."""
         m1 = self.read_1m(symbol, days)
         if m1.empty:
             return pd.DataFrame(columns=COLS)
-        return aggregate_15m(m1, now=now)
+        return aggregate_15m(m1, now=now, calendar=calendar)
 
     def coverage(self, symbol: str) -> dict:
         m1 = self.read_1m(symbol)
@@ -100,21 +101,33 @@ class BarStore:
         return {"rows": int(len(m1)), "first": str(m1.index[0]), "last": str(m1.index[-1])}
 
 
-def aggregate_15m(m1: pd.DataFrame, now: Optional[datetime] = None) -> pd.DataFrame:
-    """1m OHLCV (tz-naive UTC index) → complete 15m RTH bars."""
+def aggregate_15m(m1: pd.DataFrame, now: Optional[datetime] = None, *, calendar=None) -> pd.DataFrame:
+    """1m OHLCV (tz-naive UTC index) → complete 15m RTH bars.
+
+    Without ``now``, the last observed minute's end is the cutoff. Forming
+    buckets are discarded before validation. Entirely absent buckets require
+    the caller's session coverage check, since they leave no stream rows.
+    """
     if m1.empty:
         return pd.DataFrame(columns=COLS)
-    m1 = filter_rth(m1)
+    m1 = calendar.filter(m1, bar_minutes=1) if calendar is not None else filter_rth(m1)
+    if m1.empty:
+        return pd.DataFrame(columns=COLS)
+    cutoff = (_to_naive_utc(now) if now is not None
+              else m1.index.max().floor("min") + pd.Timedelta(minutes=1))
+    m1 = m1[m1.index.floor("15min") + _BAR15 <= cutoff].sort_index()
     if m1.empty:
         return pd.DataFrame(columns=COLS)
     g = m1.groupby(m1.index.floor("15min"))
+    for bucket, minutes in g:
+        expected = pd.date_range(bucket, periods=15, freq="1min")
+        if not minutes.index.equals(expected):
+            raise ValueError(f"Incomplete or malformed streamed 15m bucket {bucket}: "
+                             "expected 15 distinct minute-aligned bars")
     out = pd.DataFrame({"Open": g["Open"].first(), "High": g["High"].max(),
                         "Low": g["Low"].min(), "Close": g["Close"].last(),
                         "Volume": g["Volume"].sum()})
     out.index.name = "timestamp"
-    if now is not None:
-        cutoff = _to_naive_utc(now)
-        out = out[out.index + _BAR15 <= cutoff]
     return out.astype(float)
 
 

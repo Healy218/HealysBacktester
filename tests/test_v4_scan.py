@@ -163,7 +163,7 @@ def _run_pass(monkeypatch, tmp_path, *, bundle=None, notifier=None,
     summary = scan_pass(
         bundle=bundle or _bundle(threshold=0.5, base=0.9, dte_gain=0.0),
         spec=_spec(), surface=_surface(), bar_loader=lambda s: bars,
-        notifier=notifier, now=now or (bars.index[-1] + pd.Timedelta(hours=1))
+        notifier=notifier, now=now or (bars.index[-1] + pd.Timedelta(minutes=16))
         .to_pydatetime(), state_dir=tmp_path, paper=True)
     return summary, notifier, bars
 
@@ -184,7 +184,7 @@ def test_pass_is_idempotent_per_bar(monkeypatch, tmp_path):
     n2 = _Notifier()
     s2 = scan_pass(bundle=_bundle(0.5, 0.9, 0.0), spec=_spec(),
                    surface=_surface(), bar_loader=lambda s: bars, notifier=n2,
-                   now=(bars.index[-1] + pd.Timedelta(hours=1)).to_pydatetime(),
+                   now=(bars.index[-1] + pd.Timedelta(minutes=16)).to_pydatetime(),
                    state_dir=tmp_path, paper=True)
     assert s2["alerted"] == 0 and n2.sent == []
 
@@ -207,7 +207,7 @@ def test_failed_send_is_replayed_from_outbox(monkeypatch, tmp_path):
     s2 = scan_pass(bundle=_bundle(0.5, 0.9, 0.0), spec=_spec(),
                    surface=_surface(), bar_loader=lambda s: bars,
                    notifier=good,
-                   now=(bars.index[-1] + pd.Timedelta(hours=1)).to_pydatetime(),
+                   now=(bars.index[-1] + pd.Timedelta(minutes=16)).to_pydatetime(),
                    state_dir=tmp_path, paper=True)
     assert s2["delivered"] == 1
     assert good.sent[0][0].startswith("[v4] SPY")

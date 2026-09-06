@@ -27,7 +27,7 @@ import shutil
 import sys
 import threading
 import time
-from concurrent.futures import ThreadPoolExecutor, as_completed
+from concurrent.futures import ThreadPoolExecutor, as_completed, wait, FIRST_COMPLETED
 
 import pandas as pd
 import requests
@@ -297,23 +297,39 @@ def bulk_download(uni: pd.DataFrame, key: str) -> None:
                 f.write("\n".join(buffer_tickers) + "\n")
         buffer, buffer_tickers = [], []
 
+    failures = 0
     with ThreadPoolExecutor(max_workers=config.DOWNLOAD_WORKERS) as ex:
-        futures = [ex.submit(fetch, row) for row in todo.itertuples()]
-        for fut in as_completed(futures):
-            try:
-                ticker, rows = fut.result()
-            except Exception as e:
-                print(f"  ERROR {e}", flush=True)
-                continue
-            buffer.extend(rows)
-            buffer_tickers.append(ticker)
-            n_done += 1
-            if len(buffer_tickers) >= FLUSH_EVERY:
-                flush()
-                rate = n_done / (time.time() - t0)
-                eta_h = (len(todo) - n_done) / rate / 3600 if rate else 0
-                print(f"  {n_done}/{len(todo)} ({rate:.0f}/s, ETA {eta_h:.1f}h)",
-                      flush=True)
+        source = iter(todo.itertuples())
+        pending = set()
+        def replenish():
+            while len(pending) < config.DOWNLOAD_WORKERS * 2:
+                row = next(source, None)
+                if row is None:
+                    break
+                pending.add(ex.submit(fetch, row))
+        replenish()
+        while pending:
+            ready, pending = wait(pending, return_when=FIRST_COMPLETED)
+            for fut in ready:
+                try:
+                    ticker, rows = fut.result()
+                except Exception as exc:
+                    failures += 1
+                    print(f"  ERROR {type(exc).__name__}: request failed", flush=True)
+                    continue
+                buffer.extend(rows)
+                buffer_tickers.append(ticker)
+                n_done += 1
+                if len(buffer_tickers) >= FLUSH_EVERY:
+                    flush()
+                    rate = n_done / (time.time() - t0)
+                    eta_h = (len(todo) - n_done) / rate / 3600 if rate else 0
+                    print(f"  {n_done}/{len(todo)} ({rate:.0f}/s, ETA {eta_h:.1f}h)", flush=True)
+            ready.clear()
+            replenish()
+    flush()
+    if failures:
+        raise RuntimeError(f"{failures} contract downloads failed; resume before surface build")
     flush()
     print(f"bars download complete: {n_done} contracts in {(time.time()-t0)/3600:.1f}h",
           flush=True)
