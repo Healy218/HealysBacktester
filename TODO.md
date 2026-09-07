@@ -35,6 +35,10 @@ are superseded. Never relabel old artifacts to pass validation. Source-only
 deployment can stop existing experts because loaders reject stale bundles.
 [Migration requirements](docs/reviews/2026-09-05-remediation.md).
 
+- [x] Resume remaining tick stores with four resource-budgeted symbol processes;
+  preserve 181 completed stores, partition CPU affinity leaving two physical cores,
+  retain 4 GiB available RAM guard and the 30-minute watcher. See HANDOFF for evidence.
+
 ## 1. Reconcile the active checklist
 
 - [x] Separate implemented audit repairs and completed prior features from

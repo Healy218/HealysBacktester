@@ -24,6 +24,7 @@ def campaign_processes(campaign, proc=Path('/proc')):
     found = []
     modules = {'scripts.run_v6_request_inventory': 'inventory',
                'scripts.run_v6_full_freeze': 'preparation supervisor',
+               'scripts.run_v6_parallel_freeze': 'parallel preparation supervisor',
                'nn_meta.freeze_baseline': 'freeze',
                'nn_meta.build_meta_dataset': 'build/assemble',
                'nn_meta.train_meta': 'training',
@@ -50,7 +51,10 @@ def campaign_processes(campaign, proc=Path('/proc')):
             stat = entry.joinpath('stat').read_text().rsplit(')', 1)[1].split()
             if stat[0] == 'Z':
                 continue
-            found.append({'pid': int(entry.name), 'start_ticks': stat[19], 'stage': modules[module]})
+            stage = modules[module]
+            if module == 'scripts.run_v6_parallel_freeze' and '--symbol' in args:
+                stage = 'tick store ' + args[args.index('--symbol') + 1]
+            found.append({'pid': int(entry.name), 'start_ticks': stat[19], 'stage': stage})
         except (OSError, UnicodeError, IndexError):
             continue
     return sorted(found, key=lambda p: p['pid'])
@@ -93,6 +97,8 @@ def snapshot(root, campaign, processes):
     return {'time_utc': dt.datetime.now(dt.timezone.utc).isoformat(), 'campaign': campaign,
             'total_symbols': len(symbols), 'counts': counts, 'evidence_present': evidence,
             'processes': processes, 'freeze_launcher_result': result,
+            'parallel': read_json(captures / 'parallel/status.json'),
+            'resource_plan': read_json(captures / 'parallel/resource-plan.json'),
             'latest_log_mtime': latest, 'free_gib': round(shutil.disk_usage(root).free / 1024**3, 1)}
 
 
@@ -108,6 +114,12 @@ def render(s, previous):
              f"Raw batches {c['capture_batches']:,}/{c['prepared_capture_batches']:,} planned so far ({c['prepared_symbols']}/{n} symbols prepared)",
              f"Freeze shards {c['freeze_shards']}/{n}; built symbols {c['build_symbols']}/{n}",
              f"Training registry rows: {c['training_registry_rows']}; model files: {c['model_files']}; free disk {s['free_gib']} GiB"]
+    if s.get('parallel'):
+        parallel = s['parallel']
+        lines.append(f"Symbol workers: {len(parallel['active'])}/{parallel['symbol_workers']}; download threads per symbol: {parallel['download_workers_per_symbol']}")
+        if s.get('resource_plan'):
+            plan = s['resource_plan']
+            lines.append(f"System headroom: {len(plan['reserved_cpus'])} logical CPUs excluded from job affinity; {plan['ram_reserve_gib']} GiB available-RAM reserve")
     if previous:
         delta = c['capture_batches'] - previous['counts']['capture_batches']
         lines.append(f'Raw batch change since last report: {delta:+,}')

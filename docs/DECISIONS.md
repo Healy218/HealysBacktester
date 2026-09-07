@@ -717,3 +717,19 @@ Real inventory execution exposed and fixed pandas rich-attrs propagation in
 legacy strategy arithmetic and the naive-UTC/aware-UTC boundary between baseline
 and expanded proposal wrappers. These fixes preserve caller data and event
 timestamps; regression tests cover both. External parity is still unverified.
+
+
+## 2026-09-06 — Parallel symbol capture with measured host headroom
+
+User requested parallel tick-store processes after observing low host utilization.
+Use `scripts/run_v6_parallel_freeze.py` around the unchanged pinned capture and
+streaming materializer. Four symbol slots maximum, 16 network threads each;
+size from measured idle logical CPUs and MemAvailable, exclude two whole
+physical cores, budget 3 GiB/symbol plus 4 GiB reserve. Delay starts below 7 GiB
+available and stop below 4 GiB. This is a sampled guard, not a cgroup memory cap.
+Keep partial raw captures and completed stores in place; validate every store
+before the original full-universe seal. Freeze independently resizes with 5 GiB
+per worker and the same 4 GiB reserve. Scheduler source snapshot, process checks,
+and per-symbol locks protect provenance and prevent overlapping supervisors.
+Actual four-process launch preserved 181 stores. No fold design or causal input
+changes; build/training remain gated. Main regression 1444 tests +18 subtests.
