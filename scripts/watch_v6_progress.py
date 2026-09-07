@@ -111,12 +111,14 @@ def render(s, previous):
     result = s['freeze_launcher_result']
     if result and result.get('returncode') != 0:
         status += f"; freeze launcher failed (exit {result.get('returncode')})"
-    lines = [f"v6 progress — {s['time_utc'][:16]} UTC", s['campaign'], f'Active: {status}',
+    lines = [f"🧪🔬HealyLabs v6 progress - {s['time_utc'][:16].replace('T', ' ')} UTC💻📲", f'Active: {status}',
              f"Inventory {c['inventory_symbols']}/{n}" + (" ✅" if n and c['inventory_symbols'] == n else ""),
              f"Tick stores {c['tick_stores']}/{n}" + (" ✅" if n and c['tick_stores'] == n else ""),
              f"Freeze shards {c['freeze_shards']}/{n} 🧊",
-             f"Built symbols {c['build_symbols']}/{n}",
-             f"Training registry rows: {c['training_registry_rows']}; model files: {c['model_files']}; free disk {s['free_gib']} GiB"]
+             f"Built symbols {c['build_symbols']}/{n} 🛠️",
+             f"Trained: {c['training_registry_rows']}🎮",
+             f"Model files: {c['model_files']} 🗂️",
+             f"Free disk: {s['free_gib']} GiB 💾"]
     freeze_workers = sum(p['stage'] == 'freeze' for p in s['processes'])
     if freeze_workers:
         plan = s.get('freeze_resource_plan') or {}

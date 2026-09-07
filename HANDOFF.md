@@ -1,5 +1,9 @@
 # Handoff — full v6 freeze running with four workers
 
+Progress header now reads 🧪🔬HealyLabs v6 progress - date/time UTC💻📲,
+without the extra campaign line. Built symbols ends with 🛠️; separate Trained: N🎮,
+Model files: N 🗂️, and Free disk lines.
+
 Progress message formatting updated per user: completed inventory/tick stores
 show ✅, freeze count ends with 🧊, raw batch lines and artifact presence text
 removed. Existing five watcher tests pass; timer uses this format automatically.
