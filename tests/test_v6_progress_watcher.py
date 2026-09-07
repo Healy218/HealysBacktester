@@ -71,9 +71,9 @@ def test_pace_math_placement_and_stage_boundaries(tmp_path):
     prior = deepcopy(s)
     prior['time_utc'] = '2026-09-07T10:00:00+00:00'
     prior['counts']['freeze_shards'] = 10
-    assert pace_line(s, [prior]) == '⏲️ Average: 5.0/hour; ETA: ~Sep 08 04:00 UTC'
+    assert pace_line(s, [prior]) == 'Average: 5.0/hour; ETA: ~Sep 08 04:00 UTC ⏲️'
     lines = render(s, prior, [prior]).splitlines()
-    assert lines[lines.index('Freeze shards 20/100 🧊') + 1].startswith('⏲️ Average: 5.0/hour')
+    assert lines[lines.index('Freeze shards 20/100 🧊') + 1].startswith('Average: 5.0/hour')
     prior['counts']['freeze_shards'] = 20
     assert 'waiting for completions' in pace_line(s, [prior])
     prior['counts']['freeze_shards'] = 21
@@ -92,4 +92,4 @@ def test_training_pace_does_not_assume_symbol_total(tmp_path):
     prior = deepcopy(s)
     prior['time_utc'] = '2026-09-07T11:00:00+00:00'
     prior['counts']['training_registry_rows'] = 1
-    assert pace_line(s, [prior]) == '⏲️ Average: 2.0/hour; ETA: awaiting total job count'
+    assert pace_line(s, [prior]) == 'Average: 2.0/hour; ETA: awaiting total job count ⏲️'

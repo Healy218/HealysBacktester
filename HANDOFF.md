@@ -1,6 +1,6 @@
 # Handoff — full v6 freeze running with four workers
 
-Watcher now inserts ⏲️ average/hour and approximate UTC finish immediately below
+Watcher now inserts average/hour and approximate UTC finish with trailing ⏲️ immediately below
 the live stage. Uses counter deltas over contiguous same-stage observations,
 up to six hours; resets at stage gaps/counter decreases. Requires five minutes
 of observations; zero throughput shows waiting. Training ETA awaits an explicit

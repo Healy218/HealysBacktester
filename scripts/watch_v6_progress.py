@@ -140,25 +140,25 @@ def pace_line(s, history):
         baseline = record
         last_count = count
     if baseline is None:
-        return '⏲️ Average/hour: collecting progress; ETA: calculating'
+        return 'Average/hour: collecting progress; ETA: calculating ⏲️'
     hours = (now - dt.datetime.fromisoformat(baseline['time_utc'])).total_seconds() / 3600
     completed = s['counts'][metric] - baseline['counts'][metric]
     if hours < 1/12:
-        return '⏲️ Average/hour: collecting progress; ETA: calculating'
+        return 'Average/hour: collecting progress; ETA: calculating ⏲️'
     rate = completed / hours
-    label = f'⏲️ Average: {rate:.1f}/hour'
+    label = f'Average: {rate:.1f}/hour'
     if rate <= 0:
-        return label + '; ETA: waiting for completions'
+        return label + '; ETA: waiting for completions ⏲️'
     # Training registry rows have no declared total; never assume symbols
     # equal training jobs. A training launcher can supply its total later.
     total = s.get('training_total') if metric == 'training_registry_rows' else s['total_symbols']
     if not total:
-        return label + '; ETA: awaiting total job count'
+        return label + '; ETA: awaiting total job count ⏲️'
     remaining = max(0, total - s['counts'][metric])
     if not remaining:
-        return label + '; ETA: stage count complete'
+        return label + '; ETA: stage count complete ⏲️'
     finish = now + dt.timedelta(hours=remaining / rate)
-    return label + f"; ETA: ~{finish:%b %d %H:%M} UTC"
+    return label + f"; ETA: ~{finish:%b %d %H:%M} UTC ⏲️"
 
 
 def render(s, previous, history=None):
