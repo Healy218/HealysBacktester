@@ -112,9 +112,10 @@ def render(s, previous):
     if result and result.get('returncode') != 0:
         status += f"; freeze launcher failed (exit {result.get('returncode')})"
     lines = [f"v6 progress — {s['time_utc'][:16]} UTC", s['campaign'], f'Active: {status}',
-             f"Inventory {c['inventory_symbols']}/{n}; tick stores {c['tick_stores']}/{n}",
-             f"Raw batches {c['capture_batches']:,}/{c['prepared_capture_batches']:,} planned so far ({c['prepared_symbols']}/{n} symbols prepared)",
-             f"Freeze shards {c['freeze_shards']}/{n}; built symbols {c['build_symbols']}/{n}",
+             f"Inventory {c['inventory_symbols']}/{n}" + (" ✅" if n and c['inventory_symbols'] == n else ""),
+             f"Tick stores {c['tick_stores']}/{n}" + (" ✅" if n and c['tick_stores'] == n else ""),
+             f"Freeze shards {c['freeze_shards']}/{n} 🧊",
+             f"Built symbols {c['build_symbols']}/{n}",
              f"Training registry rows: {c['training_registry_rows']}; model files: {c['model_files']}; free disk {s['free_gib']} GiB"]
     freeze_workers = sum(p['stage'] == 'freeze' for p in s['processes'])
     if freeze_workers:
@@ -130,14 +131,10 @@ def render(s, previous):
             plan = s['resource_plan']
             lines.append(f"System headroom: {len(plan['reserved_cpus'])} logical CPUs excluded from job affinity; {plan['ram_reserve_gib']} GiB available-RAM reserve")
     if previous:
-        delta = c['capture_batches'] - previous['counts']['capture_batches']
-        lines.append(f'Raw batch change since last report: {delta:+,}')
         if c == previous['counts'] and s['latest_log_mtime'] == previous['latest_log_mtime']:
             lines.append('No observed count/log progress since previous report; stage may be computing or stopped.')
     if n and c['freeze_shards'] >= (n + 1) // 2:
         lines.append('HALFWAY FREEZE CHECKPOINT: prepare build/evaluation launchers; keep compute reserved for freeze until it completes.')
-    lines.append('Artifacts present: ' + (', '.join(k for k, v in s['evidence_present'].items() if v) or 'none yet'))
-    lines.append('Artifact presence is not a validation or launch verdict. Monitoring continues through stage gaps.')
     return '\n'.join(lines)
 
 

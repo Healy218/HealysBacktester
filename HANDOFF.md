@@ -1,5 +1,9 @@
 # Handoff — full v6 freeze running with four workers
 
+Progress message formatting updated per user: completed inventory/tick stores
+show ✅, freeze count ends with 🧊, raw batch lines and artifact presence text
+removed. Existing five watcher tests pass; timer uses this format automatically.
+
 September 7, 2026. User requested starting freeze after tick completion.
 Supervisor already automatically launched it after all 453 stores verified.
 No restart or duplicate job was launched.
