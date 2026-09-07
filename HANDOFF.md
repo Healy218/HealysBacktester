@@ -1,5 +1,12 @@
 # Handoff — full v6 freeze running with four workers
 
+Watcher now inserts ⏲️ average/hour and approximate UTC finish immediately below
+the live stage. Uses counter deltas over contiguous same-stage observations,
+up to six hours; resets at stage gaps/counter decreases. Requires five minutes
+of observations; zero throughput shows waiting. Training ETA awaits an explicit
+job total, never assumes 453 symbols equals training jobs. Seven watcher tests
+pass, including arithmetic, placement, zero progress and stage/reset handling.
+
 Progress header now reads 🧪🔬HealyLabs v6 progress - date/time UTC💻📲,
 without the extra campaign line. Built symbols ends with 🛠️; separate Trained: N🎮,
 Model files: N 🗂️, and Free disk lines.

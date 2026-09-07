@@ -104,7 +104,64 @@ def snapshot(root, campaign, processes):
             'latest_log_mtime': latest, 'free_gib': round(shutil.disk_usage(root).free / 1024**3, 1)}
 
 
-def render(s, previous):
+def active_metric(s):
+    stages = {p['stage'] for p in s['processes']}
+    if any('training' in stage for stage in stages):
+        return 'training_registry_rows'
+    if 'build/assemble' in stages:
+        return 'build_symbols'
+    if 'freeze' in stages:
+        return 'freeze_shards'
+    if any(stage.startswith('tick store ') for stage in stages):
+        return 'tick_stores'
+    if 'inventory' in stages:
+        return 'inventory_symbols'
+    return None
+
+
+def pace_line(s, history):
+    metric = active_metric(s)
+    if metric is None:
+        return None
+    now = dt.datetime.fromisoformat(s['time_utc'])
+    # Average over the current observed stage, up to six hours. Stop at a
+    # stage gap or counter reset rather than mixing unrelated work/resumes.
+    baseline = None
+    last_count = s['counts'][metric]
+    for record in reversed(history):
+        when = dt.datetime.fromisoformat(record['time_utc'])
+        if when >= now or record.get('campaign') != s['campaign']:
+            continue
+        if active_metric(record) != metric or now - when > dt.timedelta(hours=6):
+            break
+        count = record['counts'][metric]
+        if count > last_count:
+            break
+        baseline = record
+        last_count = count
+    if baseline is None:
+        return '⏲️ Average/hour: collecting progress; ETA: calculating'
+    hours = (now - dt.datetime.fromisoformat(baseline['time_utc'])).total_seconds() / 3600
+    completed = s['counts'][metric] - baseline['counts'][metric]
+    if hours < 1/12:
+        return '⏲️ Average/hour: collecting progress; ETA: calculating'
+    rate = completed / hours
+    label = f'⏲️ Average: {rate:.1f}/hour'
+    if rate <= 0:
+        return label + '; ETA: waiting for completions'
+    # Training registry rows have no declared total; never assume symbols
+    # equal training jobs. A training launcher can supply its total later.
+    total = s.get('training_total') if metric == 'training_registry_rows' else s['total_symbols']
+    if not total:
+        return label + '; ETA: awaiting total job count'
+    remaining = max(0, total - s['counts'][metric])
+    if not remaining:
+        return label + '; ETA: stage count complete'
+    finish = now + dt.timedelta(hours=remaining / rate)
+    return label + f"; ETA: ~{finish:%b %d %H:%M} UTC"
+
+
+def render(s, previous, history=None):
     c, n = s['counts'], s['total_symbols']
     stages = sorted({p['stage'] for p in s['processes']})
     status = ', '.join(stages) if stages else 'IDLE/STOPPED: no campaign worker detected; watcher remains active'
@@ -119,6 +176,11 @@ def render(s, previous):
              f"Trained: {c['training_registry_rows']}🎮",
              f"Model files: {c['model_files']} 🗂️",
              f"Free disk: {s['free_gib']} GiB 💾"]
+    pace = pace_line(s, history if history is not None else ([previous] if previous else []))
+    if pace:
+        stage_index = {'inventory_symbols': 2, 'tick_stores': 3, 'freeze_shards': 4,
+                       'build_symbols': 5, 'training_registry_rows': 6}[active_metric(s)]
+        lines.insert(stage_index + 1, pace)
     freeze_workers = sum(p['stage'] == 'freeze' for p in s['processes'])
     if freeze_workers:
         plan = s.get('freeze_resource_plan') or {}
@@ -173,7 +235,15 @@ def main():
         fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
         prior = read_json(out / 'latest.json')
         current = snapshot(ROOT, args.campaign, campaign_processes(args.campaign))
-        message = render(current, prior)
+        history = []
+        history_path = out / 'history.jsonl'
+        if history_path.exists():
+            for line in history_path.read_text().splitlines():
+                try:
+                    history.append(json.loads(line))
+                except json.JSONDecodeError:
+                    continue  # Retain useful history after an interrupted write.
+        message = render(current, prior, history)
         temporary = out / 'latest.json.tmp'
         temporary.write_text(json.dumps(current, indent=2) + '\n')
         temporary.replace(out / 'latest.json')

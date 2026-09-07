@@ -60,3 +60,36 @@ def test_freeze_report_does_not_reuse_stale_tick_worker_count(tmp_path):
     assert 'Symbol workers:' not in report
     s['processes'] = []
     assert 'Symbol workers:' not in render(s, None)
+
+
+def test_pace_math_placement_and_stage_boundaries(tmp_path):
+    from copy import deepcopy
+    from scripts.watch_v6_progress import pace_line
+    s = snapshot(tmp_path, 'wanted', [{'pid': 1, 'stage': 'freeze'}])
+    s.update(time_utc='2026-09-07T12:00:00+00:00', total_symbols=100)
+    s['counts']['freeze_shards'] = 20
+    prior = deepcopy(s)
+    prior['time_utc'] = '2026-09-07T10:00:00+00:00'
+    prior['counts']['freeze_shards'] = 10
+    assert pace_line(s, [prior]) == '⏲️ Average: 5.0/hour; ETA: ~Sep 08 04:00 UTC'
+    lines = render(s, prior, [prior]).splitlines()
+    assert lines[lines.index('Freeze shards 20/100 🧊') + 1].startswith('⏲️ Average: 5.0/hour')
+    prior['counts']['freeze_shards'] = 20
+    assert 'waiting for completions' in pace_line(s, [prior])
+    prior['counts']['freeze_shards'] = 21
+    assert 'collecting progress' in pace_line(s, [prior])
+    prior['processes'] = []
+    assert 'collecting progress' in pace_line(s, [prior])
+    assert pace_line(dict(s, processes=[]), [prior]) is None
+
+
+def test_training_pace_does_not_assume_symbol_total(tmp_path):
+    from copy import deepcopy
+    from scripts.watch_v6_progress import pace_line
+    s = snapshot(tmp_path, 'wanted', [{'pid': 1, 'stage': 'training'}])
+    s.update(time_utc='2026-09-07T12:00:00+00:00', total_symbols=453)
+    s['counts']['training_registry_rows'] = 3
+    prior = deepcopy(s)
+    prior['time_utc'] = '2026-09-07T11:00:00+00:00'
+    prior['counts']['training_registry_rows'] = 1
+    assert pace_line(s, [prior]) == '⏲️ Average: 2.0/hour; ETA: awaiting total job count'
