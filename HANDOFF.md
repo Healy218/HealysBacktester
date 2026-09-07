@@ -1,4 +1,14 @@
-# Handoff — automatic fifth-worker trial controller started
+# Handoff — trial preflight actively verifying inputs
+
+Latest verification September 7: controller 2541751 is RUNNING, phase preflight
+since 13:18:26 UTC. Original four workers have drained; 33 completed shards retained
+on disk. Zero freeze workers during full pinned input verification is expected.
+Three-second live sample: read_chars +88.6 MB, physical read_bytes +79.9 MB, CPU
+jiffies +230; 2.38 GiB RSS. This is active verification, not a stopped controller.
+Five-worker queue and two-hour trial clock have NOT started at this check.
+Watcher corrected to explicitly show 0/5, previous four-worker average 12.0/hour,
+ETA recalculates after restart, and trial clock not started during preflight.
+Eight watcher tests pass. Do not edit the pinned trial controller or causal inputs.
 
 User authorized a two-hour fifth freeze worker trial; return to four if throughput
 does not improve. New controller PID 2541751 started 2026-09-07 13:03:40 UTC.

@@ -174,6 +174,11 @@ def render(s, previous, history=None):
     c, n = s['counts'], s['total_symbols']
     stages = sorted({p['stage'] for p in s['processes']})
     status = ', '.join(stages) if stages else 'IDLE/STOPPED: no campaign worker detected; watcher remains active'
+    trial = s.get('worker_trial')
+    transitioning = (trial or {}).get('phase') in ('draining_four_workers', 'preflight')
+    if transitioning:
+        status += '; ' + ('verifying inputs before five-worker trial' if trial['phase'] == 'preflight'
+                          else 'finishing current symbols before five-worker trial')
     result = s['freeze_launcher_result']
     if result and result.get('returncode') != 0:
         status += f"; freeze launcher failed (exit {result.get('returncode')})"
@@ -186,16 +191,23 @@ def render(s, previous, history=None):
              f"Model files: {c['model_files']} 🗂️",
              f"Free disk: {s['free_gib']} GiB 💾"]
     pace = pace_line(s, history if history is not None else ([previous] if previous else []))
-    if pace:
+    if transitioning:
+        rate = trial['baseline']['average_per_hour']
+        lines.insert(5, f'Previous four-worker average: {rate:.1f}/hour; ETA: recalculates after restart ⏲️')
+    elif pace:
         stage_index = {'inventory_symbols': 2, 'tick_stores': 3, 'freeze_shards': 4,
                        'build_symbols': 5, 'training_registry_rows': 6}[active_metric(s)]
         lines.insert(stage_index + 1, pace)
     freeze_workers = sum(p['stage'] == 'freeze' for p in s['processes'])
-    if freeze_workers:
+    if freeze_workers or transitioning:
         plan = s.get('freeze_resource_plan') or {}
         trial = s.get('worker_trial')
         target = trial.get('target_workers', '?') if trial else plan.get('symbol_workers', '?')
         lines.append(f"Freeze workers: {freeze_workers}/{target}")
+        if transitioning:
+            lines.append('Worker trial: input verification in progress; two-hour clock has not started'
+                         if trial['phase'] == 'preflight' else
+                         'Worker trial: draining current symbols; two-hour clock has not started')
         if trial:
             decision = trial.get('decision')
             if decision:

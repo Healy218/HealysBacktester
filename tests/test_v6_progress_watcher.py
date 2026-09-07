@@ -93,3 +93,15 @@ def test_training_pace_does_not_assume_symbol_total(tmp_path):
     prior['time_utc'] = '2026-09-07T11:00:00+00:00'
     prior['counts']['training_registry_rows'] = 1
     assert pace_line(s, [prior]) == 'Average: 2.0/hour; ETA: awaiting total job count ⏲️'
+
+
+def test_trial_preflight_reports_zero_workers_and_previous_baseline(tmp_path):
+    s = snapshot(tmp_path, 'wanted', [{'pid': 1, 'stage': 'freeze trial supervisor'}])
+    s['worker_trial'] = {'phase': 'preflight', 'target_workers': 5,
+                         'baseline': {'average_per_hour': 12.024}}
+    report = render(s, None)
+    assert 'Freeze workers: 0/5' in report
+    assert 'verifying inputs before five-worker trial' in report
+    assert 'Previous four-worker average: 12.0/hour' in report
+    assert 'two-hour clock has not started' in report
+    assert 'ETA: recalculates after restart ⏲️' in report
