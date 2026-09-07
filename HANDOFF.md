@@ -1,4 +1,46 @@
-# Handoff — full v6 freeze running with four workers
+# Handoff — automatic fifth-worker trial controller started
+
+User authorized a two-hour fifth freeze worker trial; return to four if throughput
+does not improve. New controller PID 2541751 started 2026-09-07 13:03:40 UTC.
+At last check it is DRAINING the old launcher 2086441/start 5911018 with SIGINT:
+original ThreadPool cancels queued jobs and waits for its four active symbols.
+Do not kill those workers or launch another supervisor. Five is the queued target,
+not yet a verified live count. The controller waits for the old launcher to exit,
+then executes original coverage, scope fingerprint and campaign-lock gates before
+starting only remaining symbols. Completed shards are validated and hash-preserved.
+
+Controller: scripts/run_v6_freeze_trial.py; immutable running snapshot at campaign
+preparation full-run/worker-trial/source.txt. Original research_local.py and all
+causal source/input files remain unchanged. Controller replaces only the imported
+parallel_commands scheduling function; original final shard validation/merge and
+before/after fingerprint checks still execute. Inherits original environment and
+CPU affinity (excludes two physical cores). No build/training launch.
+
+Baseline: 12.0242 symbols/hour, 24 completions in 1.996 hours, 11:01:47–13:01:32 UTC.
+The two-hour clock begins when the pending-symbol queue starts, excluding drain
+and preflight time. At review retain five only if measured completions/hour exceeds
+that baseline; otherwise lower target to four, letting active searches finish.
+Memory guard also permanently lowers target to four if MemAvailable drops below
+4 GiB or full memory PSI avg60 exceeds 5% for 120 seconds. No new starts while below
+4 GiB. Reduction drains an occupied fifth slot; this is not a hard memory limit.
+Comparisons are observational: symbol workloads differ and ETA remains approximate.
+
+Durable root: nn_meta/expanded_inputs/v6-local-20260906/full-run/worker-trial/
+- status.json: draining/preflight/running/merging/complete/failed phase, active PIDs,
+  target count, baseline, measured throughput, memory headroom and review decision.
+- review.json: timed two-hour comparison once reached.
+- baseline.json, environment.json (research settings only), retained-shards.json,
+  result.json on final exit. source.txt binds controller implementation.
+Log: preparation campaign freeze-worker-trial-resume-20260907.log.
+Launch receipt: preparation campaign freeze-worker-trial-launch.json.
+Do not use the older capture resume.json to restart this running trial.
+
+Watcher recognizes the controller, reads target workers and review time, and
+suppresses the intentionally drained original launcher's exit while trial is live.
+Original freeze-launcher-result.json is historical after this handoff; use
+worker-trial/result.json for final trial-driven freeze outcome. 30-minute Telegram
+timer remains active. Full regression 1450 tests +18 subtests passed; focused trial
+coverage verifies five simultaneous slots, retained shards and memory admission.
 
 Watcher now inserts average/hour and approximate UTC finish with trailing ⏲️ immediately below
 the live stage. Uses counter deltas over contiguous same-stage observations,

@@ -25,6 +25,7 @@ def campaign_processes(campaign, proc=Path('/proc')):
     modules = {'scripts.run_v6_request_inventory': 'inventory',
                'scripts.run_v6_full_freeze': 'preparation supervisor',
                'scripts.run_v6_parallel_freeze': 'parallel preparation supervisor',
+               'scripts.run_v6_freeze_trial': 'freeze trial supervisor',
                'nn_meta.freeze_baseline': 'freeze',
                'nn_meta.build_meta_dataset': 'build/assemble',
                'nn_meta.train_meta': 'training',
@@ -73,6 +74,13 @@ def snapshot(root, campaign, processes):
     planned = sum(len(read_json(p, {}).get('capture_batches', [])) for p in plans)
     artifacts = base / 'artifacts'
     result = read_json(captures / 'freeze-launcher-result.json')
+    trial = read_json(captures / 'worker-trial/status.json')
+    trial_result = read_json(captures / 'worker-trial/result.json')
+    trial_live = any(p['stage'] == 'freeze trial supervisor' for p in processes)
+    if trial_result is not None:
+        result = trial_result
+    elif trial_live:
+        result = None  # Original launcher drained intentionally for the trial.
     registry = base / 'runs/runs.csv'
     runs = 0
     if registry.exists():
@@ -97,6 +105,7 @@ def snapshot(root, campaign, processes):
     return {'time_utc': dt.datetime.now(dt.timezone.utc).isoformat(), 'campaign': campaign,
             'total_symbols': len(symbols), 'counts': counts, 'evidence_present': evidence,
             'processes': processes, 'freeze_launcher_result': result,
+            'worker_trial': trial if trial_live or trial_result else None,
             'parallel': read_json(captures / 'parallel/status.json'),
             'parallel_result': read_json(captures / 'parallel/result.json'),
             'freeze_resource_plan': read_json(captures / 'parallel/freeze-resource-plan.json'),
@@ -184,8 +193,17 @@ def render(s, previous, history=None):
     freeze_workers = sum(p['stage'] == 'freeze' for p in s['processes'])
     if freeze_workers:
         plan = s.get('freeze_resource_plan') or {}
-        lines.append(f"Freeze workers: {freeze_workers}/{plan.get('symbol_workers', '?')}")
-        if plan:
+        trial = s.get('worker_trial')
+        target = trial.get('target_workers', '?') if trial else plan.get('symbol_workers', '?')
+        lines.append(f"Freeze workers: {freeze_workers}/{target}")
+        if trial:
+            decision = trial.get('decision')
+            if decision:
+                lines.append('Worker trial: ' + decision.replace('_', ' '))
+            elif trial.get('started_utc'):
+                review = dt.datetime.fromisoformat(trial['started_utc']) + dt.timedelta(seconds=trial['trial_seconds'])
+                lines.append(f"Worker trial: review {review:%b %d %H:%M} UTC ⏲️")
+        if plan and not trial:
             lines.append(f"Freeze launch budget: {plan['planned_symbol_ram_gib']} GiB for workers + {plan['ram_reserve_gib']} GiB system headroom; {len(plan['reserved_cpus'])} logical CPUs excluded")
     elif s.get('parallel') and not (s.get('parallel_result') or {}).get('complete'):
         parallel = s['parallel']

@@ -40,6 +40,10 @@ deployment can stop existing experts because loaders reject stale bundles.
   preserve 181 completed stores, partition CPU affinity leaving two physical cores,
   retain 4 GiB available RAM guard and the 30-minute watcher. See HANDOFF for evidence.
 
+- [x] Start an automatic two-hour fifth-worker freeze trial controller, with
+  measured four-worker baseline and automatic return to four if rate does not
+  improve or memory pressure rises. Handoff tracks draining/preflight/live status.
+
 ## 1. Reconcile the active checklist
 
 - [x] Separate implemented audit repairs and completed prior features from
