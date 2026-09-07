@@ -1,49 +1,35 @@
-# Handoff — four parallel tick-store workers active
+# Handoff — full v6 freeze running with four workers
 
-September 6 local / September 7 UTC, 2026. User requested real symbol-process
-parallelism for the remaining tick stores, accounting for current system use.
+September 7, 2026. User requested starting freeze after tick completion.
+Supervisor already automatically launched it after all 453 stores verified.
+No restart or duplicate job was launched.
 
-## Active home v6 campaign
+Campaign: `v6-local-20260906`, pool v6, repaired candidate
+`audit-repair-20260905-final`. Existing expanded/deferred-parity contract remains.
+Preparation root: `nn_meta/expanded_inputs/v6-local-20260906/full-run/`.
+`parallel/result.json` records 453 verified symbols; final-inputs.json is sealed.
+All 1,032,103 planned raw capture batches are present. Tick capture is complete.
 
-Campaign root: `nn_meta/expanded_inputs/v6-local-20260906/`.
-Inventory complete 453/453. Verified old serial supervisor PID 10394/start 18439
-was stopped with SIGINT before replacement. 181 completed stores were preserved;
-all 181 manifest hashes matched after launch. Existing raw captures are reused
-through unchanged pinned validation. No causal source, input, policy, or model
-contract changes were made.
+Freeze launch budget sampled 25.54 GiB available: four workers × 5 GiB plus 4 GiB
+system headroom. CPUs 3,4,11,12 (two physical cores and their SMT siblings) are
+excluded from heavy-worker affinity. This is launch sizing, not a hard RAM cap.
+Live host verification found four freeze workers: ADBE 2306790, AFRM 2344560,
+AGQ 2354903, AI 2374680; aggregate RSS about 12.9 GiB, MemAvailable about 11.8 GiB.
+These worker PIDs rotate per symbol. Stage launcher 2086441, parent 1432456.
+14/453 freeze shard files were complete at verification; remaining work active.
 
-New supervisor PID **1432456**, launched 2026-09-07 04:16:39 UTC:
-`scripts.run_v6_parallel_freeze --symbol-workers 4 --workers 16 --run` with
-inventory/policy/output paths recorded in campaign `resume.json`. Original resume
-is preserved as `resume-before-parallel.json`. Durable log:
-`parallel-freeze-supervisor-resume-20260907T041639Z.log`.
+Freeze outputs: `nn_meta/campaigns/v6-local-20260906/v6/artifacts/freeze_shards/`.
+Per-symbol logs: same campaign `v6/runs/logs/freeze/`.
+Parent log: preparation campaign `parallel-freeze-supervisor-resume-20260907T041639Z.log`.
+Do not change causal source/input files or running parallel scheduler source.
+Do not rerun capture resume while current supervisor/launcher is active.
 
-Four real symbol subprocesses were observed concurrently. GME/GOLD completed
-and advanced to GWW/GS while GOOG/GOOGL materialized. Latest measured workers
-used 1.91 GiB aggregate RSS; 22.8 GiB system MemAvailable. This is an observation,
-not a peak estimate. Host has 8 physical cores /16 logical CPUs /about 30.5 GiB RAM.
-Launch sampled 24.06 GiB available and 11.81 idle logical CPUs in the usable set.
-Budget: four workers × 3 GiB = 12 GiB, plus 4 GiB available-memory reserve.
-Two physical cores, including SMT siblings (CPUs 1,4,9,12), are excluded from
-heavy worker affinity. Remaining core groups are partitioned among the workers.
-Up to 16 network threads per symbol (64 total); numerical inner threads limited
- to 1. RAM estimate is not a hard allocation: scheduler checks every 2 seconds,
-stops children below 4 GiB available, and delays additional starts below 7 GiB.
-
-All 453 stores must verify before sealing; previously completed stores verify
-last so remaining downloads start immediately. Full freeze then launches with
-fresh CPU/RAM sizing: max 4 workers,5 GiB estimate each,4 GiB reserve, two physical
-cores excluded. Build/training remain unlaunched. Prepare their launchers at
-227/453 actual freeze shards, as requested. Do not change pinned causal sources
-or this running scheduler: its exact source is saved as
-`full-run/parallel/scheduler-source.txt` and checked before completion/resume.
-Per-symbol locks plus duplicate-supervisor detection prevent conflicting writes.
-
-Evidence: `parallel-transition-checkpoint.json`, `parallel-live-verification.json`,
-`full-run/parallel/{status,resource-plan}.json`, per-symbol JSON and logs.
-30-minute `healys-v6-progress.timer` remains enabled; watcher now reports live
-symbol workers and the resource plan. Check host processes, not sandbox-only ps.
-Full main regression: **1,444 tests +18 subtests passed**; 18 focused tests passed.
+Watcher corrected: report live freeze processes and freeze launch budget rather
+than the final stale tick status (452 verified/one active). Completion evidence
+comes from parallel/result.json; active counts come from host process discovery.
+Five focused watcher tests passed. Persistent 30-minute timer remains in use.
+Build/training remain unlaunched. Prepare those launchers at 227/453 actual freeze
+shards per user direction; timer reminder cannot itself invoke a coding agent.
 
 ## Production operations (separate host; last verified state retained)
 

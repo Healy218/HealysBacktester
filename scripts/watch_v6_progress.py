@@ -98,6 +98,8 @@ def snapshot(root, campaign, processes):
             'total_symbols': len(symbols), 'counts': counts, 'evidence_present': evidence,
             'processes': processes, 'freeze_launcher_result': result,
             'parallel': read_json(captures / 'parallel/status.json'),
+            'parallel_result': read_json(captures / 'parallel/result.json'),
+            'freeze_resource_plan': read_json(captures / 'parallel/freeze-resource-plan.json'),
             'resource_plan': read_json(captures / 'parallel/resource-plan.json'),
             'latest_log_mtime': latest, 'free_gib': round(shutil.disk_usage(root).free / 1024**3, 1)}
 
@@ -114,9 +116,16 @@ def render(s, previous):
              f"Raw batches {c['capture_batches']:,}/{c['prepared_capture_batches']:,} planned so far ({c['prepared_symbols']}/{n} symbols prepared)",
              f"Freeze shards {c['freeze_shards']}/{n}; built symbols {c['build_symbols']}/{n}",
              f"Training registry rows: {c['training_registry_rows']}; model files: {c['model_files']}; free disk {s['free_gib']} GiB"]
-    if s.get('parallel'):
+    freeze_workers = sum(p['stage'] == 'freeze' for p in s['processes'])
+    if freeze_workers:
+        plan = s.get('freeze_resource_plan') or {}
+        lines.append(f"Freeze workers: {freeze_workers}/{plan.get('symbol_workers', '?')}")
+        if plan:
+            lines.append(f"Freeze launch budget: {plan['planned_symbol_ram_gib']} GiB for workers + {plan['ram_reserve_gib']} GiB system headroom; {len(plan['reserved_cpus'])} logical CPUs excluded")
+    elif s.get('parallel') and not (s.get('parallel_result') or {}).get('complete'):
         parallel = s['parallel']
-        lines.append(f"Symbol workers: {len(parallel['active'])}/{parallel['symbol_workers']}; download threads per symbol: {parallel['download_workers_per_symbol']}")
+        live = sum(p['stage'].startswith('tick store ') for p in s['processes'])
+        lines.append(f"Symbol workers: {live}/{parallel['symbol_workers']}; download threads per symbol: {parallel['download_workers_per_symbol']}")
         if s.get('resource_plan'):
             plan = s['resource_plan']
             lines.append(f"System headroom: {len(plan['reserved_cpus'])} logical CPUs excluded from job affinity; {plan['ram_reserve_gib']} GiB available-RAM reserve")

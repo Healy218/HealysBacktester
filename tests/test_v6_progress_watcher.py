@@ -47,3 +47,16 @@ def test_halfway_reminder_uses_freeze_not_inventory(tmp_path):
     assert 'HALFWAY FREEZE' not in render(s, None)
     s['counts']['freeze_shards'] = 227
     assert 'HALFWAY FREEZE' in render(s, None)
+
+
+def test_freeze_report_does_not_reuse_stale_tick_worker_count(tmp_path):
+    s = snapshot(tmp_path, 'wanted', [{'pid': 123, 'stage': 'freeze'}])
+    s['parallel'] = {'active': {'GM': 456}, 'symbol_workers': 4, 'download_workers_per_symbol': 16}
+    s['parallel_result'] = {'complete': True}
+    s['freeze_resource_plan'] = {'symbol_workers': 4, 'planned_symbol_ram_gib': 20,
+                                 'ram_reserve_gib': 4, 'reserved_cpus': [3, 4, 11, 12]}
+    report = render(s, None)
+    assert 'Freeze workers: 1/4' in report
+    assert 'Symbol workers:' not in report
+    s['processes'] = []
+    assert 'Symbol workers:' not in render(s, None)

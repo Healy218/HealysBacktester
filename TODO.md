@@ -14,7 +14,8 @@ remain required. The user selected Option 1, authorizing explicit local
 calendar/VWAP research assumptions. Context is now sealed for all 453 symbols;
 the request inventory and tick captures resumed after the user's reboot on
 September 6 at 17:04 UTC. Active PIDs/logs and durable checkpoints are in
-HANDOFF.md. The supervisor will launch the freeze after complete tick sealing.
+HANDOFF.md. All 453 tick stores are now verified and sealed; the full freeze is running
+with four workers (confirmed September 7).
 The existing-family SPY/IBKR pilot is now stopped and preserved. Do not launch a full
 universe freeze while those additions are still missing; complete their
 historical coverage and feature integration first. External comparison is
