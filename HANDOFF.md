@@ -1,3 +1,20 @@
+# Handoff — production top-five entry alerts deployed
+
+September 8, 2026. User requested top five highest-probability alerts across the
+four experts per bar batch, plus overflow note and yes/button to summarize the
+rest. Deployed production compatibility branch ops/server-alert-readiness-20260906
+at 7b68970. See docs/reviews/2026-09-08-top-five-alerts.md for behavior, tests,
+cron activation and rollback path. All four scans now use the shared queue;
+minute dispatcher sends winners and handles Telegram replies in configured chat.
+Home research code remains untouched. Never pull research main onto old models.
+
+Home freeze snapshot September 8 15:37 UTC: 274/453 completed, four workers active,
+11.7 GiB MemAvailable. Trial already returned to four through memory guard on
+September 7 before a full two-hour comparison. Current controller 2541751. No
+freeze restart or source changes made for the production alert task.
+Build/training not launched; halfway checkpoint has been reached. Earlier user
+requested preparation of stage launchers at halfway; this remains outstanding.
+
 # Handoff — trial preflight actively verifying inputs
 
 Latest verification September 7: controller 2541751 is RUNNING, phase preflight
