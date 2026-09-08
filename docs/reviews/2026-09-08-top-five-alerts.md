@@ -49,3 +49,19 @@ logs/ops/top-five-alerts-20260908T153558Z/crontab-before.txt on production.
 New scan processes use the cap; any process already running before deployment
 finishes with its previously loaded code. No fake trading alerts were sent.
 Home research source packages were not changed; freeze remains at four workers.
+
+
+## Follow-up: button recovery and strict probability floors
+
+The minute poller encountered expired answerCallbackQuery acknowledgements and
+aborted before sending summaries. Acknowledgement is now best effort; requested
+summaries and durable offsets continue even if that acknowledgement fails.
+User notification floors: v5 P(win) >0.55, v4 P(win) >0.51 (strict inequalities).
+Applied on queue admission and before dispatch, including existing unsent rows;
+other experts unchanged. Below-floor rows retained as suppressed_probability,
+excluded from both top-five notifications and optional remainder summaries.
+552 compatibility tests +18 subtests passed, including expired-ack recovery and
+exact-boundary probability tests.
+
+Deployed follow-up 05f8a68 on production; seven focused tests passed there,
+and the dispatcher/reply poll completed successfully after deployment.

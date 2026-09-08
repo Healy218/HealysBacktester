@@ -104,6 +104,7 @@ def snapshot(root, campaign, processes):
     latest = max((p.stat().st_mtime for p in logs), default=0)
     return {'time_utc': dt.datetime.now(dt.timezone.utc).isoformat(), 'campaign': campaign,
             'total_symbols': len(symbols), 'counts': counts, 'evidence_present': evidence,
+            'launchers_prepared': bool((read_json(prep / 'post-freeze-launchers.json') or {}).get('prepared')),
             'processes': processes, 'freeze_launcher_result': result,
             'worker_trial': trial if trial_live or trial_result else None,
             'parallel': read_json(captures / 'parallel/status.json'),
@@ -182,7 +183,7 @@ def render(s, previous, history=None):
     result = s['freeze_launcher_result']
     if result and result.get('returncode') != 0:
         status += f"; freeze launcher failed (exit {result.get('returncode')})"
-    lines = [f"🧪🔬HealyLabs v6 progress - {s['time_utc'][:16].replace('T', ' ')} UTC💻📲", f'Active: {status}',
+    lines = [f"🧪🔬HealyLabs v6 - {s['time_utc'][:16].replace('T', ' ')} UTC💻📲", f'Active: {status}',
              f"Inventory {c['inventory_symbols']}/{n}" + (" ✅" if n and c['inventory_symbols'] == n else ""),
              f"Tick stores {c['tick_stores']}/{n}" + (" ✅" if n and c['tick_stores'] == n else ""),
              f"Freeze shards {c['freeze_shards']}/{n} 🧊",
@@ -228,7 +229,8 @@ def render(s, previous, history=None):
         if c == previous['counts'] and s['latest_log_mtime'] == previous['latest_log_mtime']:
             lines.append('No observed count/log progress since previous report; stage may be computing or stopped.')
     if n and c['freeze_shards'] >= (n + 1) // 2:
-        lines.append('HALFWAY FREEZE CHECKPOINT: prepare build/evaluation launchers; keep compute reserved for freeze until it completes.')
+        lines.append('Post-freeze launchers ready; waiting for freeze completion 🛠️' if s.get('launchers_prepared') else
+                     'HALFWAY FREEZE CHECKPOINT: prepare build/evaluation launchers; keep compute reserved for freeze until it completes.')
     return '\n'.join(lines)
 
 

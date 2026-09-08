@@ -190,7 +190,7 @@ comparisons, historical coverage and the sealed manifest remain prerequisites. U
 workload, VM-hour budget and explicit job IDs.
 
 - [ ] Refreeze affected baseline and expanded pools on causal inputs.
-- [ ] At roughly 227/453 completed v6 freeze shards, prepare build/evaluation/
+- [x] At roughly 227/453 completed v6 freeze shards, prepare build/evaluation/
   training launchers; keep heavy downstream stages unlaunched until freeze
   completes. User is dedicating the home box to this work for the next week.
 - [ ] Build matching per-symbol/family rows, complete marks and provenance;
