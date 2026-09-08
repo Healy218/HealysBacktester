@@ -113,6 +113,43 @@ class StaleBarsError(ValueError):
     """The feed is more than one closed interval behind the session."""
 
 
+class NoBarsMemo:
+    """Names that returned no bars at all, remembered per expert so the loader
+    is not hit for them every 15 minutes (each attempt costs two REST calls
+    and four ERROR lines). Rechecked after ``RECHECK_DAYS`` in case of a
+    re-listing or rename. File beside the expert's other live state."""
+    RECHECK_DAYS = 7
+
+    def __init__(self, path):
+        self.path = Path(path)
+        try:
+            self._data = json.loads(self.path.read_text()) if self.path.exists() else {}
+        except Exception:
+            self._data = {}
+        if not isinstance(self._data, dict):
+            self._data = {}
+
+    def active(self, now) -> set[str]:
+        stamp = pd.Timestamp(now)
+        stamp = stamp.tz_localize("UTC") if stamp.tzinfo is None else stamp.tz_convert("UTC")
+        out = set()
+        for sym, ts in self._data.items():
+            try:
+                if stamp - pd.Timestamp(ts).tz_convert("UTC") < pd.Timedelta(days=self.RECHECK_DAYS):
+                    out.add(sym)
+            except Exception:
+                continue
+        return out
+
+    def mark(self, sym: str, now) -> None:
+        stamp = pd.Timestamp(now)
+        stamp = stamp.tz_localize("UTC") if stamp.tzinfo is None else stamp.tz_convert("UTC")
+        self._data[sym] = stamp.isoformat()
+
+    def save(self) -> None:
+        atomic_write_json(self.path, self._data)
+
+
 def expected_last_closed_bar(now) -> Optional[pd.Timestamp]:
     """Start (tz-naive UTC) of the latest RTH 15m bar that has fully closed at
     ``now``, walking back across weekends and holidays.
@@ -294,6 +331,12 @@ class Scanner:
         fired: list[Signal] = []
         outbox = Outbox(self._outbox_path)
         syms = list(symbols or list(self._spec["symbols"]))
+        memo = NoBarsMemo(self._state_path.parent / f".{config.POOL}_no_bars.json")
+        known_dead = sorted(set(syms) & memo.active(now))
+        if known_dead:
+            logger.info(f"[live] skipping {len(known_dead)} known no-bars name(s) "
+                        f"(rechecked after {memo.RECHECK_DAYS} days): {', '.join(known_dead)}")
+            syms = [s for s in syms if s not in known_dead]
         results = None
         if self._workers > 1:
             from nn_meta.live.parallel import detect_many, _legacy_detect_one
@@ -314,6 +357,7 @@ class Scanner:
                     sig = detect_fresh_signal(sym, bars, self._spec["symbols"][sym])
             except NoBarsError:
                 skipped.append(sym)                # delisted/renamed: not an error
+                memo.mark(sym, now)
                 continue
             except Exception as e:
                 logger.error(f"[live] {sym}: scan error: {e}")
@@ -351,6 +395,7 @@ class Scanner:
         if skipped:
             logger.info(f"[live] skipped {len(skipped)} name(s) with no bars "
                         f"(delisted?): {', '.join(skipped)}")
+            memo.save()
         _save_state(self._state_path, state)
         return fired
 

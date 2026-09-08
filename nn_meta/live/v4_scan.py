@@ -60,7 +60,7 @@ from nn_meta import config
 from nn_meta.baseline import load_spec, propose_trades
 from nn_meta.build_meta_dataset import rolling_beta_60d
 from nn_meta.live.scanner import (TICKER_ALIASES, aliased_bar_loader,
-                                  closed_bars, is_rth, require_recent_bars, NoBarsError, register_alert_contract)
+                                  closed_bars, is_rth, require_recent_bars, NoBarsError, NoBarsMemo, register_alert_contract)
 from nn_meta.live.state import (AlertState, Outbox, PaperLedger,
                                 atomic_write_json, health_snapshot, serialized, preview_state)
 from nn_meta.live.v4_candidates import build_candidate_batch
@@ -249,6 +249,12 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
     errors = 0
     scanned = 0
     syms = list(symbols or list(spec["symbols"]))
+    memo = NoBarsMemo(sdir / f".{EXPERT}_no_bars.json")
+    known_dead = sorted(set(syms) & memo.active(now))
+    if known_dead:
+        logger.info(f"[v4-scan] skipping {len(known_dead)} known no-bars name(s) "
+                    f"(rechecked after {memo.RECHECK_DAYS} days): {', '.join(known_dead)}")
+        syms = [s for s in syms if s not in known_dead]
     if workers > 1:
         from nn_meta.live.parallel import detect_many, _v4_detect_one
         results = detect_many(_v4_detect_one, syms,
@@ -277,12 +283,14 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
                     bars_cache[sym] = bars
         except NoBarsError:
             skipped.append(sym)                      # delisted/renamed: a skip, not an error
+            memo.mark(sym, now)
         except Exception as exc:
             errors += 1
             logger.error(f"[v4-scan] {sym}: scan error: {exc}")
     if skipped:
         logger.info(f"[v4-scan] skipped {len(skipped)} name(s) with no bars "
                     f"(delisted?): {', '.join(skipped)}")
+        memo.save()
 
     alerted = 0
     if fresh_by_key:
@@ -345,7 +353,7 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
     summary = health_snapshot(last_run_ts=now, now=now, error_count=errors,
                               scanned=scanned, alerted=alerted)
     summary["delivered"] = delivered
-    summary["skipped"] = len(skipped)
+    summary["skipped"] = len(skipped) + len(known_dead)
     summary["open_paper_positions"] = len(ledger.open_positions())
     atomic_write_json(sdir / HEALTH.name, summary)
     return summary

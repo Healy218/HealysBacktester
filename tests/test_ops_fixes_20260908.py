@@ -101,6 +101,25 @@ class TestNoBarsSkip:
                                     state_dir=tmp_path, workers=1)
         assert calls == ["WBA", "X"]
         assert summary["error_count"] == 0 and summary["skipped"] == 2 and summary["scanned"] == 0
+        # next pass: the memo keeps the loader off both names; a week later they are rechecked
+        calls.clear()
+        kw = dict(bundle=bundle, spec={"symbols": {"WBA": {}, "X": {}}}, surface=pd.DataFrame(),
+                  bar_loader=loader, notifier=SimpleNamespace(send=lambda *a, **k: True),
+                  state_dir=tmp_path, workers=1)
+        s2 = v4_scan.scan_pass(now=datetime(2026, 9, 8, 14, 15, tzinfo=timezone.utc), **kw)
+        assert calls == [] and s2["skipped"] == 2 and s2["error_count"] == 0
+        s3 = v4_scan.scan_pass(now=datetime(2026, 9, 16, 14, 15, tzinfo=timezone.utc), **kw)
+        assert calls == ["WBA", "X"] and s3["skipped"] == 2
+
+    def test_legacy_scanner_memo(self, tmp_path):
+        from nn_meta.live.scanner import NoBarsMemo
+        m = NoBarsMemo(tmp_path / "memo.json")
+        m.mark("X", datetime(2026, 9, 8, 14, 0, tzinfo=timezone.utc)); m.save()
+        m2 = NoBarsMemo(tmp_path / "memo.json")
+        assert m2.active(pd.Timestamp("2026-09-10 14:00")) == {"X"}
+        assert m2.active(pd.Timestamp("2026-09-16 14:00")) == set()
+        (tmp_path / "memo.json").write_text("garbage")
+        assert NoBarsMemo(tmp_path / "memo.json").active(pd.Timestamp("2026-09-10")) == set()
 
 
 # ── 3: quiet minutes vs stream gaps ───────────────────────────────────────────
