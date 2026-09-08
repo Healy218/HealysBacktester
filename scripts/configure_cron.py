@@ -7,9 +7,11 @@ Idempotent rewrites:
   * the Sunday ``--bars-and-surface-only … && build_surface`` lines become
     ``scripts/run_refresh.sh <pool>`` (recorded exit status, 6 download workers);
   * a daily ``scripts/rotate_logs.sh`` line is added;
-  * ``--enable-option-feed`` restores the two option-stream lines that were
-    commented out on 2026-09-08 (safe again: the stream idles until the alert
-    path registers contracts).
+  * the feed watchdogs' ``pgrep -f "[f]eeds.<x>"`` becomes ``pgrep -f "feeds\.<x>$"``
+    — the old pattern matched the watchdog's own ``sh -c`` line (which also
+    contains ``-m nn_meta.live.feeds.<x>``), so a dead daemon was never restarted;
+  * ``--enable-option-feed`` restores the two option-stream lines if they were
+    commented out (safe: the stream idles until the alert path registers contracts).
 
     ./venv/bin/python scripts/configure_cron.py            # preview
     ./venv/bin/python scripts/configure_cron.py --run      # install (backs up first)
@@ -25,6 +27,7 @@ _SCAN_MODULES = ('-m nn_meta.live.run_live ', '-m nn_meta.live.v4_scan ')
 _POOL_RE = re.compile(r'NN_META_POOL=(\w+)')
 _SCHEDULE_RE = re.compile(r'^(\S+\s+\S+\s+\S+\s+\S+\s+\S+)\s+(.*)$')
 _DISABLED_MARK = '# DISABLED 2026-09-08 (option feed has no subscribers'
+_WATCHDOG_RE = re.compile(r'pgrep -f "\[f\]eeds\.(\w+)"')
 
 
 def updated_cron(original, repo, *, enable_option_feed=False):
@@ -41,6 +44,7 @@ def updated_cron(original, repo, *, enable_option_feed=False):
                 continue
             lines.append(line)
             continue
+        line = _WATCHDOG_RE.sub(lambda m: f'pgrep -f "feeds\\.{m.group(1)}$"', line)
         if any(m in line for m in _SCAN_MODULES) and SCAN_ENV not in line:
             line = line.replace(' && ', f' && {SCAN_ENV} ', 1)
         if '--bars-and-surface-only' in line:

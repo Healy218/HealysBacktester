@@ -244,6 +244,7 @@ class TestQuietLogging:
             "#@reboot cd /home/mrhea/HealysBacktester && sleep 25 && NN_META_POOL=v31 nohup ./venv/bin/python -m nn_meta.live.feeds.option_stream >> logs/feeds_options.log 2>&1 &",
             "#*/5 * * * * cd /home/mrhea/HealysBacktester && pgrep -f \"[f]eeds.option_stream\" >/dev/null || (NN_META_POOL=v31 nohup ./venv/bin/python -m nn_meta.live.feeds.option_stream >> logs/feeds_options.log 2>&1 &)",
             "* * * * * cd /home/mrhea/HealysBacktester && NN_META_ALERT_TOP_N=5 ./venv/bin/python -m nn_meta.live.alert_batches >> logs/alert_batches.log 2>&1",
+            "*/5 * * * * cd /home/mrhea/HealysBacktester && pgrep -f \"[f]eeds.stock_stream\" >/dev/null || (NN_META_POOL=v31 nohup ./venv/bin/python -m nn_meta.live.feeds.stock_stream >> logs/feeds_stock.log 2>&1 &)",
         ]) + "\n"
         once = updated_cron(original, repo)
         assert updated_cron(once, repo) == once
@@ -254,6 +255,11 @@ class TestQuietLogging:
         assert "--universe-only" in lines[3]
         assert lines[5].startswith("#@reboot") and lines[6].startswith("#*/5")
         assert any(ln.startswith("7 4 * * * ") and "rotate_logs.sh" in ln for ln in lines)
+        # watchdog no longer matches its own sh -c line (which contains "-m nn_meta.live.feeds.stock_stream")
+        assert lines[8].startswith('*/5 * * * * cd /home/mrhea/HealysBacktester && pgrep -f "feeds\\.stock_stream$" >/dev/null || (')
+        import re, subprocess
+        pat = re.search(r'pgrep -f "([^"]+)"', lines[8]).group(1)
+        assert re.search(pat, lines[8]) is None and re.search(pat, "./venv/bin/python -m nn_meta.live.feeds.stock_stream")
         enabled = updated_cron(once, repo, enable_option_feed=True)
         assert "\n@reboot cd" in enabled and "\n*/5 * * * * cd" in enabled and "DISABLED 2026-09-08" not in enabled
         assert updated_cron(enabled, repo, enable_option_feed=True) == enabled
