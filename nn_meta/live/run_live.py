@@ -171,6 +171,8 @@ def main() -> None:
         notifier = get_notifier(force_console=args.dry_run)
         signals = scanner.scan_once(symbols=symbols, now=now)
         delivered = scanner.deliver_pending(notifier)
+        from nn_meta.live.alert_batches import complete
+        complete(config.POOL, now, notifier)
         if not signals and not delivered:
             print("No fresh signals this pass.")
         else:

@@ -308,7 +308,10 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
             # marked); the outbox key dedupes the notification and the ledger
             # dedupes the position (duplicate trade_id is a no-op), so no
             # ordering loses an alert or a paper position.
-            outbox.enqueue({"title": title, "message": msg}, key=key)
+            from nn_meta.live.alert_batches import cycle
+            outbox.enqueue({"title": title, "message": msg, "probability": float(row.score),
+                            "expert": EXPERT, "alert_cycle": cycle(now),
+                            "summary": f"[{EXPERT}] {row.symbol} | {row.strategy} | {'PUT' if fresh['direction'] else 'CALL'} | {int(row.dte)} DTE"}, key=key)
             try:
                 ledger.open(trade_id=f"{key}|{int(row.dte)}", symbol=row.symbol,
                             entry_ts=row.entry_ts, price=fresh["spot"])
@@ -320,10 +323,14 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
     delivered = 0
     for entry in outbox.unacked():                   # incl. replays from crashes
         p = entry["payload"]
-        if notifier.send(p["message"], title=p["title"]):
+        from nn_meta.live.alert_batches import deliver
+        if deliver(p, f"{EXPERT}|{entry.get('key') or entry['id']}", notifier):
             outbox.mark_sent(entry["id"])
             outbox.acknowledge(entry["id"])
             delivered += 1
+
+    from nn_meta.live.alert_batches import complete
+    complete(EXPERT, now, notifier)
 
     summary = health_snapshot(last_run_ts=now, now=now, error_count=errors,
                               scanned=scanned, alerted=alerted)
@@ -379,7 +386,10 @@ def digest_pass(*, bar_loader: Callable[[str], pd.DataFrame], notifier,
             wl.mark_digested(keys)
     for entry in outbox.unacked():
         p = entry["payload"]
-        if notifier.send(p["message"], title=p["title"]):
+        from nn_meta.live.alert_batches import deliver
+        accepted = (deliver(p, f"{EXPERT}|{entry.get('key') or entry['id']}", notifier)
+                    if "alert_cycle" in p else notifier.send(p["message"], title=p["title"]))
+        if accepted:
             outbox.mark_sent(entry["id"])
             outbox.acknowledge(entry["id"])
             sent += 1

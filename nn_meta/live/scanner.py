@@ -260,7 +260,10 @@ class Scanner:
                                 f"(score={sig.score})")
                     continue
             title, message = format_alert(sig)
-            outbox.enqueue({"title": title, "message": message},
+            from nn_meta.live.alert_batches import cycle
+            outbox.enqueue({"title": title, "message": message,
+                            "probability": sig.score, "expert": config.POOL, "alert_cycle": cycle(now),
+                            "summary": f"[{config.POOL}] {sym} | {sig.strategy} | {sig.action} | {sig.dte} DTE"},
                            key=f"{config.POOL}|{sym}|{sig.strategy}|{bar_iso}")
             fired.append(sig)
             state[sym] = bar_iso
@@ -273,7 +276,8 @@ class Scanner:
         sent = 0
         for entry in outbox.unacked():
             p = entry["payload"]
-            if notifier.send(p["message"], title=p["title"]):
+            from nn_meta.live.alert_batches import deliver
+            if deliver(p, entry.get("key") or entry["id"], notifier):
                 outbox.acknowledge(entry["id"])
                 sent += 1
         return sent
