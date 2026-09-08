@@ -126,7 +126,9 @@ EXPIRY_MIN, EXPIRY_MAX = ("2024-08-26", "2026-10-09") if POOL in ("v5", "v6") \
 DTE_MIN, DTE_MAX = _nos.DTE_MIN, _nos.DTE_MAX
 MONEYNESS_BAND = _nos.MONEYNESS_BAND
 MIN_VOLUME, MIN_PREMIUM = _nos.MIN_VOLUME, _nos.MIN_PREMIUM
-DOWNLOAD_WORKERS = 16                      # options tier ~120/s tolerates this
+# 2026-09-08: env-overridable — the Sunday v5 refresh (1.3M contracts) was
+# killed on the 8 GB server at 16 workers; cron runs it with 6.
+DOWNLOAD_WORKERS = int(os.environ.get("NN_META_DOWNLOAD_WORKERS", "16"))   # options tier ~120/s tolerates 16
 REQUEST_TIMEOUT, MAX_RETRIES = _nos.REQUEST_TIMEOUT, _nos.MAX_RETRIES
 MASSIVE_BASE_URL = _nos.MASSIVE_BASE_URL
 

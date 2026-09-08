@@ -104,20 +104,93 @@ def closed_bars(bars: pd.DataFrame, now: Optional[datetime] = None) -> pd.DataFr
     return bars[bars.index + _BAR <= now_naive]
 
 
+class NoBarsError(ValueError):
+    """The loader returned nothing at all for a symbol (delisted, renamed, or
+    never listed) — a skip, not a scan error (2026-09-08 review, fix 5)."""
+
+
+class StaleBarsError(ValueError):
+    """The feed is more than one closed interval behind the session."""
+
+
+def expected_last_closed_bar(now) -> Optional[pd.Timestamp]:
+    """Start (tz-naive UTC) of the latest RTH 15m bar that has fully closed at
+    ``now``, walking back across weekends and holidays.
+
+    Session-aware staleness (2026-09-08 review, fix 4): the first pass after a
+    long weekend fires at 09:31 ET, before today's first bar has closed, so the
+    newest closed bar really is Friday's 15:45 — a wall-clock age would call
+    every symbol stale. Uses the captured exchange calendar when configured
+    (holidays, early closes), else the Mon-Fri 09:30-16:00 ET rule.
+    Returns None only when no session is found within two weeks.
+    """
+    stamp = pd.Timestamp(now)
+    stamp = stamp.tz_localize("UTC") if stamp.tzinfo is None else stamp.tz_convert("UTC")
+    from nn_meta.session_calendar import configured_calendar
+    calendar = configured_calendar()
+    et = stamp.tz_convert(_ny_tz())
+    for back in range(15):
+        day = (et - pd.Timedelta(days=back)).normalize()
+        if calendar is not None:
+            try:
+                starts = calendar.closed_starts(day.strftime("%Y-%m-%d"), stamp)
+            except ValueError:            # outside the captured coverage
+                starts = None
+            if starts is not None:
+                if len(starts):
+                    return pd.Timestamp(starts[-1])
+                continue                  # holiday / not yet open today
+        if day.weekday() >= 5:
+            continue
+        opening = day + pd.Timedelta(hours=9, minutes=30)
+        closing = day + pd.Timedelta(hours=16)
+        starts = pd.date_range(opening, closing, freq="15min", inclusive="left")
+        starts = starts[starts + _BAR <= et]
+        if len(starts):
+            return starts[-1].tz_convert("UTC").tz_localize(None)
+    return None
+
+
 def require_recent_bars(bars, now):
-    """Refuse a feed more than one interval behind the expected closed bar."""
+    """Refuse a feed more than one interval behind the expected closed bar.
+
+    "Expected" is the latest bar the session calendar says has closed (see
+    ``expected_last_closed_bar``), not ``now`` minus a fixed age — so Friday's
+    last bar is current at 09:31 ET on Tuesday after a holiday Monday, and a
+    feed stuck at 14:00 while 14:30 has closed is stale mid-session.
+    """
     if bars is None or bars.empty:
-        raise ValueError("no closed market bars")
+        raise NoBarsError("no closed market bars")
     stamp = pd.Timestamp(now)
     if stamp.tzinfo is not None:
         stamp = stamp.tz_convert("UTC").tz_localize(None)
-    age = stamp - bars.index[-1]
-    if age > pd.Timedelta(minutes=30):
-        raise ValueError(f"stale market bars: last bar {bars.index[-1]}, age {age}")
+    last = pd.Timestamp(bars.index[-1])
+    expected = expected_last_closed_bar(now)
+    if expected is None:                  # no session known: legacy wall-clock rule
+        age = stamp - last
+        if age > pd.Timedelta(minutes=30):
+            raise StaleBarsError(f"stale market bars: last bar {last}, age {age}")
+        return bars
+    if last < expected - _BAR:
+        raise StaleBarsError(f"stale market bars: last bar {last}, "
+                             f"expected closed bar {expected}")
     return bars
 
 
-# ── detection ─────────────────────────────────────────────────────────────────
+def register_alert_contract(symbol: str, right: str, spot: float, dte: int, now) -> Optional[str]:
+    """Best-effort: resolve the alert's ~ATM contract to a listed OCC symbol and
+    register it with the OPRA quote stream's watch list (2026-09-08, fix 1).
+    Never raises — a missing contracts table just means no quotes for it."""
+    try:
+        from nn_meta.live.feeds.contracts import resolve_occ
+        from nn_meta.live.feeds.option_stream import add_to_watch
+        occ = resolve_occ(symbol, right, spot, dte, now)
+        if occ:
+            add_to_watch([occ])
+        return occ
+    except Exception as exc:                       # pragma: no cover - defensive
+        logger.warning(f"[live] {symbol}: could not register contract for quotes: {exc}")
+        return None
 
 
 # ── detection ─────────────────────────────────────────────────────────────────
@@ -157,14 +230,16 @@ def suggest_contract(sig: Signal, now: Optional[datetime] = None) -> str:
 def format_alert(sig: Signal) -> tuple[str, str]:
     # v2/v3 alert text is unchanged; big-run pools (v31+) run as ADDITIONAL
     # experts next to the v3 line, so their alerts carry the pool label.
-    tag = "" if config.POOL in ("v2", "v3") else f"[{config.POOL}] "
+    # 2026-09-08 (fix 6): v3 carries its tag too, so every phone alert and
+    # every top-five slot reads the same way; only the legacy v2 line is bare.
+    tag = "" if config.POOL == "v2" else f"[{config.POOL}] "
     title = f"{tag}{sig.symbol} {sig.action}"
     conv = f" · conviction {sig.score:.0%}" if sig.score is not None else ""
     msg = (f"{tag}{sig.symbol}: {sig.action}{conv}\n"
            f"trigger: {sig.strategy} ({sig.param_label})\n"
            f"contract: {suggest_contract(sig)}\n"
            f"bar: {sig.bar_ts} UTC · spot ${sig.spot:,.2f}")
-    if tag:
+    if config.POOL not in ("v2", "v3"):
         msg += f"\nexpert: {config.POOL}-nn · paper"
     return title, msg
 
@@ -225,6 +300,7 @@ class Scanner:
             results = detect_many(_legacy_detect_one, syms,
                                   lambda s: (self._spec["symbols"][s], now),
                                   workers=self._workers)
+        skipped: list[str] = []
         for sym in syms:
             try:
                 if results is not None:
@@ -236,6 +312,9 @@ class Scanner:
                 else:
                     bars = require_recent_bars(closed_bars(self._load(sym), now), now)
                     sig = detect_fresh_signal(sym, bars, self._spec["symbols"][sym])
+            except NoBarsError:
+                skipped.append(sym)                # delisted/renamed: not an error
+                continue
             except Exception as e:
                 logger.error(f"[live] {sym}: scan error: {e}")
                 continue
@@ -263,10 +342,15 @@ class Scanner:
             from nn_meta.live.alert_batches import cycle
             outbox.enqueue({"title": title, "message": message,
                             "probability": sig.score, "expert": config.POOL, "alert_cycle": cycle(now),
+                            "symbol": sym, "side": sig.action,
                             "summary": f"[{config.POOL}] {sym} | {sig.strategy} | {sig.action} | {sig.dte} DTE"},
                            key=f"{config.POOL}|{sym}|{sig.strategy}|{bar_iso}")
+            register_alert_contract(sym, sig.right, float(sig.spot), int(sig.dte), now)
             fired.append(sig)
             state[sym] = bar_iso
+        if skipped:
+            logger.info(f"[live] skipped {len(skipped)} name(s) with no bars "
+                        f"(delisted?): {', '.join(skipped)}")
         _save_state(self._state_path, state)
         return fired
 

@@ -64,6 +64,19 @@ FEED_HEARTBEATS = {
 }
 FEED_STALE_AFTER_MIN = 5
 
+# 2026-09-08 review (fix 8): three conditions the digest reported but never
+# escalated — "962 errors today", "feed options: 0 contracts", and a Sunday
+# surface refresh that was OOM-killed two days earlier. Each now flips the
+# head to ⚠️ so the one message a day cannot read "healthy" over them.
+ERRORS_WARN_AFTER = 50                # scanner ERROR lines today before it warns
+SURFACE_STALE_DAYS = 8                # weekly refresh + one day of slack
+SURFACE_FILES = {                     # pool → the IV-surface file its expert scans on
+    "v3": Path("nn_meta/data_cache/surface_daily.parquet"),
+    "v31": Path("nn_meta/data_cache_v3/surface_daily.parquet"),
+    "v5": Path("nn_meta/data_cache_v5/surface_daily.parquet"),
+}
+REFRESH_STATUS_DIR = Path("logs/refresh_status")   # scripts/run_refresh.sh writes <pool>.json
+
 
 def _read_json(path: Path):
     if not path.exists():
@@ -171,6 +184,10 @@ def build_message() -> str:
             if rth and age_min > FEED_STALE_AFTER_MIN:
                 warnings.append(f"⚠️ feed {fname}: heartbeat {age_min:.0f} min old during "
                                 f"market hours — stream DOWN, scanners on REST fallback")
+            elif rth and fname == "options" and not hb.get("contracts"):
+                warnings.append("⚠️ feed options: 0 contracts subscribed during market "
+                                "hours — nothing streams until the alert path registers "
+                                "contracts (option_watch.json)")
         except Exception as e:                    # never sink the digest
             digest.append(f"feed {fname}: unreadable ({e})")
 
@@ -227,12 +244,43 @@ def build_message() -> str:
             warnings.append(f"⚠️ {name}: could not read {log} "
                             f"({exc.__class__.__name__}: {exc}) — investigate")
 
+    digest.extend(_surface_lines(now, warnings))
+    if errors_today > ERRORS_WARN_AFTER:
+        warnings.append(f"⚠️ {errors_today} scanner errors today (> {ERRORS_WARN_AFTER}) "
+                        f"— check {BACKTESTER_LOG}")
+
     status = "market open" if rth else "market closed"
     head = (f"⚠️ Scanner heartbeat — {today}" if warnings
             else f"🩺 Scanners healthy — {today}")
     footer = f"{_plural(errors_today, 'error')} today · {status}"
     new_state = {"logs": {**baselines, **totals}, "at": now.isoformat()}
     return "\n".join([head, *warnings, *digest, footer]), new_state
+
+
+def _surface_lines(now: datetime, warnings: list[str]) -> list[str]:
+    """One digest line for surface ages plus the last recorded refresh outcome
+    per pool; appends to ``warnings`` when a surface is older than
+    SURFACE_STALE_DAYS or the last refresh run exited non-zero."""
+    parts = []
+    for pool, path in SURFACE_FILES.items():
+        try:
+            if not path.exists():
+                parts.append(f"{pool} —")
+                continue
+            age_d = (now - datetime.fromtimestamp(path.stat().st_mtime, tz=timezone.utc)
+                     ).total_seconds() / 86400
+            parts.append(f"{pool} {age_d:.0f}d")
+            if age_d > SURFACE_STALE_DAYS:
+                warnings.append(f"⚠️ {pool}: IV surface is {age_d:.0f} days old "
+                                f"(> {SURFACE_STALE_DAYS}) — Sunday refresh failed or "
+                                f"never ran; expert scores on stale context")
+        except Exception as exc:                  # never sink the digest
+            parts.append(f"{pool} unreadable ({exc.__class__.__name__})")
+        st = _read_json(REFRESH_STATUS_DIR / f"{pool}.json")
+        if isinstance(st, dict) and st.get("exit_code") not in (None, 0):
+            warnings.append(f"⚠️ {pool}: last surface refresh exited {st.get('exit_code')} "
+                            f"at {st.get('finished', '?')} — see {st.get('log', 'its log')}")
+    return [f"surfaces: {' · '.join(parts)}"] if parts else []
 
 
 def persist_state(state: dict) -> None:

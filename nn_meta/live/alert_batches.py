@@ -12,9 +12,28 @@ from pathlib import Path
 import sqlite3
 import time
 
+import re
+
 EXPERTS = {'v3', 'v31', 'v4', 'v5'}
 PROBABILITY_FLOORS = {'v4': 0.51, 'v5': 0.55}
 DEFAULT_DB = Path(__file__).parent / '.alert_batches.sqlite3'
+TOP_N = 5
+# "[v5] SIL BUY PUT" / "ORCL BUY CALL" → (symbol, side); the fallback when a
+# legacy payload carries no explicit symbol/side fields.
+_TITLE_RE = re.compile(r'^(?:\[\w+\]\s+)?(?P<symbol>[A-Z][A-Z0-9.\-]*)\s+(?P<side>BUY (?:CALL|PUT))\b')
+
+
+def idea_of(payload):
+    """(symbol, side) identity of an entry, or None when it cannot be told.
+    2026-09-08 (fix 6): the five slots go to five distinct ideas — a second
+    strategy firing on the same symbol and direction is the same trade."""
+    symbol, side = payload.get('symbol'), payload.get('side')
+    if not (symbol and side):
+        m = _TITLE_RE.match(str(payload.get('title', '')))
+        if not m:
+            return None
+        symbol, side = m.group('symbol'), m.group('side')
+    return str(symbol).upper(), str(side).upper()
 
 
 def cycle(now):
@@ -41,6 +60,10 @@ class Batches:
                 CREATE TABLE IF NOT EXISTS completed (batch INTEGER, expert TEXT, PRIMARY KEY(batch, expert));
             ''')
             db.execute('INSERT OR IGNORE INTO reply_state VALUES (?,?)', ('enabled_at', str(int(time.time()))))
+            cols = {r[1] for r in db.execute('PRAGMA table_info(candidates)')}
+            for col in ('symbol', 'side'):          # additive migration for live queues
+                if col not in cols:
+                    db.execute(f'ALTER TABLE candidates ADD COLUMN {col} TEXT')
 
     def connect(self):
         db = sqlite3.connect(self.path, timeout=60)
@@ -62,8 +85,10 @@ class Batches:
             finalized = db.execute('SELECT finalized FROM batches WHERE id=?',(batch,)).fetchone()[0]
             status = ('suppressed_probability' if float(score) <= PROBABILITY_FLOORS.get(expert, -1)
                       else 'suppressed_late' if finalized else 'expired' if now >= batch+900 else 'pending')
-            db.execute('INSERT OR IGNORE INTO candidates VALUES (?,?,?,?,?,?,?,?)',
-                       (key,batch,expert,float(score),payload['title'],payload['message'],status,payload.get('summary',payload['title'])))
+            idea = idea_of(payload)
+            db.execute('INSERT OR IGNORE INTO candidates(key,batch,expert,score,title,message,status,summary,symbol,side) VALUES (?,?,?,?,?,?,?,?,?,?)',
+                       (key,batch,expert,float(score),payload['title'],payload['message'],status,payload.get('summary',payload['title']),
+                        idea[0] if idea else None, idea[1] if idea else None))
         return True
 
     def complete(self, expert, batch):
@@ -89,10 +114,10 @@ class Batches:
                     deadline = min(batch['opened']+300,batch['id']+720)
                     if count < len(EXPERTS) and now < deadline:
                         continue
-                    winners = db.execute("SELECT key FROM candidates WHERE batch=? AND status='pending' ORDER BY score DESC,key ASC LIMIT 5",(batch['id'],)).fetchall()
+                    winners = select_top(db.execute("SELECT key,symbol,side FROM candidates WHERE batch=? AND status='pending' ORDER BY score DESC,key ASC",(batch['id'],)).fetchall())
                     db.execute("UPDATE candidates SET status='suppressed_rank' WHERE batch=? AND status='pending'",(batch['id'],))
                     for winner in winners:
-                        db.execute("UPDATE candidates SET status='selected' WHERE key=?",(winner['key'],))
+                        db.execute("UPDATE candidates SET status='selected' WHERE key=?",(winner,))
                     db.execute('UPDATE batches SET finalized=1 WHERE id=?',(batch['id'],))
             with self.connect() as db:
                 selected = db.execute("SELECT * FROM candidates WHERE status='selected' ORDER BY batch,score DESC,key ASC").fetchall()
@@ -106,6 +131,23 @@ class Batches:
                         db.execute("UPDATE candidates SET status='sent' WHERE key=?",(row['key'],))
                     sent += 1
         return sent
+
+
+def select_top(rows, top_n=TOP_N):
+    """Keys of the top ``top_n`` rows (already score-ordered) covering distinct
+    (symbol, side) ideas; a duplicate idea yields its slot to the next candidate.
+    Rows whose idea is unknown are never treated as duplicates of anything."""
+    chosen, seen = [], set()
+    for row in rows:
+        idea = (row['symbol'], row['side']) if row['symbol'] and row['side'] else None
+        if idea is not None and idea in seen:
+            continue
+        chosen.append(row['key'])
+        if idea is not None:
+            seen.add(idea)
+        if len(chosen) >= top_n:
+            break
+    return chosen
 
 
 def deliver(payload, key, notifier):

@@ -34,9 +34,11 @@ WATCH = ROOT / "option_watch.json"
 MAX_CONTRACTS = 1000
 REFRESH_S = 30
 FLUSH_S = 5
+IDLE_POLL_S = 30          # how often an idle stream re-reads the watch list
 
 
-def read_watch(path: Path = WATCH) -> list[str]:
+def read_watch(path: Path | None = None) -> list[str]:
+    path = Path(path) if path is not None else WATCH      # resolved per call (tests monkeypatch WATCH)
     if not path.exists():
         return []
     try:
@@ -48,8 +50,9 @@ def read_watch(path: Path = WATCH) -> list[str]:
         return []
 
 
-def add_to_watch(contracts, path: Path = WATCH) -> int:
+def add_to_watch(contracts, path: Path | None = None) -> int:
     """Alert path / paper seat: register contracts to stream. Idempotent."""
+    path = Path(path) if path is not None else WATCH
     cur = set(read_watch(path))
     cur |= {_to_occ(c) for c in contracts}
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -88,9 +91,22 @@ async def _serve(store: QuoteStore, fixed: list[str] | None, run_seconds: float 
         return len(add), len(drop)
 
     sync_subscriptions()
+    t0 = time.time()
+    # Gate (2026-09-08 review, fix 1): alpaca-py's _run_forever spins on
+    # `await asyncio.sleep(0)` until the first subscription exists — with an
+    # empty watch list that pinned a full core for three days while streaming
+    # nothing. Idle here (heartbeat state "idle") until the alert path
+    # registers a contract, then start the websocket loop.
+    while not subscribed:
+        write_heartbeat(HEARTBEAT, quotes=0, contracts=0, state="idle")
+        if run_seconds and time.time() - t0 >= run_seconds:
+            return
+        await asyncio.sleep(min(IDLE_POLL_S, run_seconds) if run_seconds else IDLE_POLL_S)
+        sync_subscriptions()
+    logger.info(f"[{_TAG}] starting stream with {len(subscribed)} contract(s)")
     write_heartbeat(HEARTBEAT, quotes=0, contracts=len(subscribed), state="connecting")
     task = asyncio.create_task(stream._run_forever())
-    t0 = time.time(); last_flush = last_refresh = t0
+    last_flush = last_refresh = time.time()
     try:
         while True:
             await asyncio.sleep(1)
