@@ -1,4 +1,4 @@
-"""Preview/install the 2026-09-08 operations fixes in the production crontab,
+r"""Preview/install the 2026-09-08 operations fixes in the production crontab,
 preserving rollback (same shape as configure_top_alerts.py).
 
 Idempotent rewrites:
@@ -38,12 +38,12 @@ def updated_cron(original, repo, *, enable_option_feed=False):
             body = stripped[1:]
             if enable_option_feed and 'feeds.option_stream' in body and \
                     (body.startswith('@reboot') or _SCHEDULE_RE.match(body)):
-                lines.append(body)            # restore the disabled daemon/watchdog
+                line = body                   # restore the disabled daemon/watchdog, then rewrite it like any live line
+            else:
+                if enable_option_feed and stripped.startswith(_DISABLED_MARK):
+                    continue
+                lines.append(line)
                 continue
-            if enable_option_feed and stripped.startswith(_DISABLED_MARK):
-                continue
-            lines.append(line)
-            continue
         line = _WATCHDOG_RE.sub(lambda m: f'pgrep -f "feeds\\.{m.group(1)}$"', line)
         if any(m in line for m in _SCAN_MODULES) and SCAN_ENV not in line:
             line = line.replace(' && ', f' && {SCAN_ENV} ', 1)
