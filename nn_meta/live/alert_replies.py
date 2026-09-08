@@ -92,7 +92,13 @@ def poll_replies(queue, api):
         if batch is not None:
             callback = update.get('callback_query')
             if callback:
-                api.call('answerCallbackQuery',callback_query_id=callback['id'],text='Showing the remaining alerts')
+                try:
+                    api.call('answerCallbackQuery',callback_query_id=callback['id'],text='Showing the remaining alerts')
+                except RuntimeError:
+                    # Telegram click acknowledgements expire sooner than a cron
+                    # polling interval. A failed spinner acknowledgement must
+                    # never prevent the requested summary or block later updates.
+                    pass
             for i,text in enumerate(summary_parts(queue,batch)):
                 with queue.connect() as db:
                     done = db.execute('SELECT 1 FROM reply_parts WHERE update_id=? AND part=?',(update['update_id'],i)).fetchone()

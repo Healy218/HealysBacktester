@@ -13,6 +13,7 @@ import sqlite3
 import time
 
 EXPERTS = {'v3', 'v31', 'v4', 'v5'}
+PROBABILITY_FLOORS = {'v4': 0.51, 'v5': 0.55}
 DEFAULT_DB = Path(__file__).parent / '.alert_batches.sqlite3'
 
 
@@ -59,7 +60,8 @@ class Batches:
             db.execute('BEGIN IMMEDIATE')
             db.execute('INSERT OR IGNORE INTO batches(id,opened) VALUES (?,?)', (batch,now))
             finalized = db.execute('SELECT finalized FROM batches WHERE id=?',(batch,)).fetchone()[0]
-            status = 'suppressed_late' if finalized else 'expired' if now >= batch+900 else 'pending'
+            status = ('suppressed_probability' if float(score) <= PROBABILITY_FLOORS.get(expert, -1)
+                      else 'suppressed_late' if finalized else 'expired' if now >= batch+900 else 'pending')
             db.execute('INSERT OR IGNORE INTO candidates VALUES (?,?,?,?,?,?,?,?)',
                        (key,batch,expert,float(score),payload['title'],payload['message'],status,payload.get('summary',payload['title'])))
         return True
@@ -78,6 +80,8 @@ class Batches:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             with self.connect() as db:
                 db.execute('BEGIN IMMEDIATE')
+                for expert, floor in PROBABILITY_FLOORS.items():
+                    db.execute("UPDATE candidates SET status='suppressed_probability' WHERE expert=? AND score<=? AND status IN ('pending','selected','suppressed_rank','suppressed_late')", (expert,floor))
                 for batch in db.execute('SELECT * FROM batches WHERE finalized=0').fetchall():
                     count = db.execute('SELECT COUNT(*) FROM completed WHERE batch=?',(batch['id'],)).fetchone()[0]
                     # Wait for all experts, or at most five minutes after the first

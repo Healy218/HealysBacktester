@@ -37,3 +37,16 @@ Validation: 550 compatibility tests and 18 subtests passed before cron helper.
 Focused tests cover cross-expert 100-to-5 ranking, no suppressed replays, retries,
 missing-expert deadlines, stale expiry, notice/button/yes routing, wrong chats,
 duplicate updates and summary length. No fabricated trading alert was sent.
+
+
+## Follow-up: button recovery and strict probability floors
+
+The minute poller encountered expired answerCallbackQuery acknowledgements and
+aborted before sending summaries. Acknowledgement is now best effort; requested
+summaries and durable offsets continue even if that acknowledgement fails.
+User notification floors: v5 P(win) >0.55, v4 P(win) >0.51 (strict inequalities).
+Applied on queue admission and before dispatch, including existing unsent rows;
+other experts unchanged. Below-floor rows retained as suppressed_probability,
+excluded from both top-five notifications and optional remainder summaries.
+552 compatibility tests +18 subtests passed, including expired-ack recovery and
+exact-boundary probability tests.
