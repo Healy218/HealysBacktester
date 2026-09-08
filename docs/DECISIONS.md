@@ -733,3 +733,91 @@ per worker and the same 4 GiB reserve. Scheduler source snapshot, process checks
 and per-symbol locks protect provenance and prevent overlapping supervisors.
 Actual four-process launch preserved 181 stores. No fold design or causal input
 changes; build/training remain gated. Main regression 1444 tests +18 subtests.
+
+## 2026-09-07 — Two-hour fifth freeze worker trial, automatic return to four
+
+User authorized trying a fifth v6 freeze worker for two hours and reverting if
+throughput did not improve. `scripts/run_v6_freeze_trial.py` (PID 2541751)
+drained the original launcher with SIGINT, re-ran the coverage/fingerprint/
+campaign-lock gates, then queued five with a memory guard (MemAvailable < 4 GiB
+or full-memory PSI avg60 > 5% for 120 s permanently lowers the target). Baseline
+12.02 symbols/hour (24 completions, 11:01–13:01 UTC). Verdict recorded by the
+controller: `return_to_four_memory_headroom` — trial rate 9.23/hour, memory
+pressure avg60 1.2 %. Four workers stand for the rest of the campaign; a fifth
+worker is not a free speed-up on this box. Rejected: leaving five running and
+"seeing", which the memory guard exists to prevent.
+
+## 2026-09-08 — Top-five cross-expert alert routing with strict probability floors
+
+User asked for at most five highest-probability entry alerts per set of bars
+during bursts, then a count of the remainder with a yes/button to see them.
+Implemented on the production compatibility branch only (home research
+sources untouched): a shared SQLite queue keyed by 15-minute cycle, ranking
+by each expert's own P(win) (no recalibration, no new probability guarantee),
+dispatch after all four completion markers or a 5-minute/12-minute deadline,
+overflow notice with Telegram button and "yes" reply, summaries chunked to the
+message limit. Follow-up the same day: floors v5 > 0.55 and v4 > 0.51 (strict)
+applied on admission and again before dispatch; below-floor rows are kept as
+`suppressed_probability` and excluded from remainder summaries; expired
+callback acknowledgements no longer abort a requested summary. Evening
+amendment (server review, below): one slot per symbol+side idea. Rejected:
+throttling inside each expert (would not rank across experts) and a
+persistent bot process (the minute cron polls replies instead).
+[Review](docs/reviews/2026-09-08-top-five-alerts.md).
+
+## 2026-09-08 — Prepare the post-freeze v6 launchers at halfway; launch nothing
+
+At ~227/453 freeze shards, wrap build/assemble, evaluate and finalize in
+`scripts/run_{build,evaluate,finalize}_v6_local.sh` (preview by default,
+`--run` to execute), each requiring its predecessor's successful receipt, the
+merged freeze and the sealed input digest. Resource sizing happens at execution
+(max four slots, 5 GiB each + 4 GiB reserve, two physical cores excluded), not
+while the freeze owns the box. Three folds are requested; the evaluator keeps
+only folds outside the proposal optimization window, so the eligible count is
+not promised and zero eligible folds refuses. Build and training remain
+unlaunched until the freeze returns zero. Rejected: auto-chaining build into
+training (separate explicit commands keep the admission gates visible).
+[Review](docs/reviews/2026-09-08-v6-stage-launchers.md).
+
+## 2026-09-08 — Server operations fixes: gate the option feed, tolerate quiet minutes, session-aware staleness, anchored watchdogs
+
+A full-session review of the Hetzner scanners (first trading day after Labor
+Day) found the panel operationally clean and eight things to fix; all eight
+shipped the same evening on the compatibility branch
+([review](docs/reviews/2026-09-08-server-ops-fixes.md)). Decisions with
+alternatives considered:
+
+- **Option quote feed**: gate the stream until the watch list is non-empty
+  and make the alert path register real contracts — rather than removing the
+  daemon (it was burning a core for nothing because alpaca-py busy-waits until
+  the first subscription and nothing ever wrote `option_watch.json`).
+- **Streamed 15m buckets**: accept a missing minute when SPY/QQQ streamed it
+  (stream provably alive), reject otherwise — rather than either keeping the
+  strict all-15 rule (~190 REST fallbacks per cycle) or accepting any gap
+  (would hide a real outage).
+- **Staleness**: measure against the session calendar's latest closed bar,
+  stale = more than one interval behind — rather than widening the wall-clock
+  window (would also excuse a feed stalled mid-session).
+- **Delisted names**: skip and remember per expert for a week — rather than
+  editing frozen specs (they are frozen for a reason) or leaving them as
+  errors (they dominated the heartbeat's count).
+- **Top-five**: one slot per symbol+side; the runner-up strategy stays in the
+  remainder summary.
+- **Logs**: file handler WARNING+, quiet console filter that keeps tagged
+  live-path lines, user-cron logrotate with copytruncate — rather than
+  lowering the engine's log level globally (research runs want it).
+- **Heartbeat**: warn on > 50 scanner errors, 0-contract options feed in RTH,
+  surface > 8 days, failed refresh — rather than excluding loader errors from
+  the count (would hide real ones).
+- **Sunday refresh**: `run_refresh.sh` with 6 download workers and a recorded
+  exit status — the 16-worker run was killed at 84 % on the 8 GB host and the
+  `&&`-chained surface build silently never ran.
+- **Feed watchdogs** (found during deploy): anchored `pgrep -f "feeds\.x$"`
+  replaces the bracketed pattern, which self-matched the restart command on
+  the same line. This REVERSES the "preserve bracketed pgrep patterns"
+  instruction in TODO §5; DOCUMENTATION Traps explains when the bracket trick
+  is and is not enough.
+
+Not merged into `main` yet: the freeze campaign imports `nn_meta` from the
+home working tree for every new freeze process, so the live-path source stays
+on the ops branch until the campaign completes.

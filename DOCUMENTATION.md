@@ -31,9 +31,10 @@ load-critical artifacts. Older claims that unverifiable bundles are usable
 refer to previous code, not deployment eligibility with this version.
 
 Massive Advanced supersedes the former two-year entitlement cap; existing
-label windows are frozen research choices. Reported production cadence is
-:01/:02/:03 by pool, pending current server verification. Use bracketed
-process patterns even for health checks (`pgrep -f "[f]eeds."`).
+label windows are frozen research choices. Production cadence is :01/:02/:03
+by pool (verified on the server 2026-09-08). For process health checks use an
+ANCHORED pattern (`pgrep -f 'feeds\.stock_stream$'`); the bracket trick alone
+does not protect a line that also spells out the module path (Traps).
 
 Live readers retain streamed current-session bars and forced REST fallback,
 with actual closed-bar freshness checks. Future delta-targeted contract
@@ -145,6 +146,34 @@ repairs and migration requirements.
   directly, so it reads as a flaky API rather than a quoting bug — check for a
   variable-expanded flag string before blaming the service. (`gcloud storage`
   kept working throughout, because it had no variable to split.)
+- **The bracket trick does not protect a line that also contains the
+  unbracketed text.** The feed watchdog crons were
+  `pgrep -f "[f]eeds.x" || (nohup python -m nn_meta.live.feeds.x &)` — the
+  restart half of the same `sh -c` line contains `feeds.x`, so pgrep always
+  found the watchdog itself and never restarted a dead daemon (found
+  2026-09-08 when a killed option stream stayed down through a cycle). Anchor
+  on the daemon's exact command-line end instead: `pgrep -f "feeds\.x$"`.
+  Rule (2) above still holds for watchers whose line does not repeat the
+  target's name.
+- **A missing 1-minute bar is usually a quiet minute, not a stream gap.**
+  Alpaca emits a 1m bar only when the symbol traded; even GS misses minutes.
+  `barstore.aggregate_15m` used to demand all 15 minutes and threw ~190
+  names per cycle onto REST for the rest of the day. It now accepts a gap when
+  SPY/QQQ streamed that minute (the stream was provably alive) and still
+  rejects — REST fallback — when the reference symbols missed it too.
+  `reference=None` restores the strict rule for offline callers.
+- **The first pass after a long weekend fires before today's first bar has
+  closed.** At 09:31 ET on 2026-09-08 (post Labor Day) the newest closed bar
+  was Friday 15:45 ET; a wall-clock "> 30 min old" rule marked all 441 v5
+  names stale and burned a pass. `scanner.require_recent_bars` now compares
+  against `expected_last_closed_bar` from the captured session calendar
+  (`nn_meta/live/exchange_calendar.json` on the server; without one the
+  Mon–Fri rule applies, which does not know holidays). "Stale" = more than one
+  closed interval behind that bar.
+- **logrotate refuses a group-writable config** ("Ignoring … because of bad
+  file mode") and the server's umask checks files out as 664 — that is why
+  `scripts/rotate_logs.sh` chmods the conf before every run. Do not "fix"
+  the chmod away.
 - **Historical shell/tool trap:** a prior privileged-command interface ran
   only the first step of a chained request. Inspect each exit status and use
   the current permission interface for required privileged work. Shell syntax
@@ -434,11 +463,15 @@ bucket listed 2014→ but GetObject was date-gated.
 
 ## Production ops — Hetzner server
 
-Deployment details below are the last recorded September 5 state, not a fresh
-inspection. The audit merge did not deploy source or regenerate bundles.
-Confirm actual commit/artifacts/cron/feeds before applying the runbook; plan
-compatible source and regenerated verified bundles together. All experts
-send alerts; historical “real” labels do not mean broker auto-execution.
+Deployment details below reflect the 2026-09-08 inspection and fixes
+([review](docs/reviews/2026-09-08-server-ops-fixes.md)). The server runs the
+compatibility branch `ops/server-alert-readiness-20260906` (997d668), which
+carries live-path source that `main` does not have yet (scanner, v4_scan,
+barstore, alert_batches, heartbeat, feeds, logging_utils, config). Deploying
+`main` there would regress those fixes: merge the ops branch into `main` first.
+The audit merge did not regenerate bundles; plan compatible source and
+regenerated verified bundles together. All experts send alerts; historical
+“real” labels do not mean broker auto-execution.
 
 - **Host**: Hetzner CX33 (4 vCPU / 8 GB), Helsinki, `62.238.20.66`,
   Ubuntu 24.04, ~$9.59/mo. SSH `mrhea@` with the home box's
@@ -465,16 +498,26 @@ send alerts; historical “real” labels do not mean broker auto-execution.
   `nn_meta.live.feeds.option_stream` (OPRA quotes for
   `nn_meta/live/feeds/data/option_watch.json`, ≤ 1,000 contracts →
   `option_quotes.json`). Started by `@reboot` cron lines and restarted by
-  5-minute `pgrep -f "[f]eeds.<name>" || nohup` watchdog lines (no sudo on
-  this host; the BRACKET pattern is load-bearing — a plain `pgrep -f`
-  matches the watchdog's own shell and never restarts anything, which is how
-  the stock stream sat dead for an hour on 2026-09-05); logs
-  `logs/feeds_stock.log`, `logs/feeds_options.log`; heartbeats
-  `stock_stream.heartbeat.json` / `option_stream.heartbeat.json` (in the
-  17:00Z digest; stale > 5 min during RTH = ⚠️). Loaders read today's bars
-  from the store when the heartbeat is ≤ 3 min old, else forced REST.
-  Health: `pgrep -f "[f]eeds."`; validate timestamps and data coverage too.
-  Historical process/RSS counts are diagnostic context, not a parity gate.
+  5-minute `pgrep -f "feeds\.<name>$" || nohup` watchdog lines (no sudo on
+  this host). The pattern is ANCHORED since 2026-09-08: the earlier bracketed
+  `"[f]eeds.<name>"` matched the watchdog's own `sh -c` line, because that
+  line also contains the restart command `-m nn_meta.live.feeds.<name>`, so
+  a dead daemon was never restarted (observed: the option stream stayed down
+  through a watchdog cycle after being killed). Logs `logs/feeds_stock.log`,
+  `logs/feeds_options.log`; heartbeats `stock_stream.heartbeat.json` /
+  `option_stream.heartbeat.json` (in the 17:00Z digest; stale > 5 min during
+  RTH = ⚠️). The option stream IDLES (`state: idle`, no CPU) until
+  `option_watch.json` names a contract — before the gate it busy-waited a
+  full core for three days on an empty list. Contracts get there from the
+  alert path: `scanner.register_alert_contract` resolves the ~ATM/~DTE
+  advisory to a listed OCC symbol via `nn_meta/live/feeds/contracts.py`
+  (reads the pool's `contracts.parquet`). Loaders read today's bars from the
+  store when the heartbeat is ≤ 3 min old, else forced REST; a 15m bucket
+  with missing minutes is accepted when SPY/QQQ streamed those minutes
+  (`barstore.ALIVE_REFERENCE`), otherwise it falls back to REST.
+  Health: `pgrep -f 'feeds\.stock_stream$'`; validate timestamps and data
+  coverage too. Historical process/RSS counts are diagnostic context, not a
+  parity gate.
 - **Cron (UTC — this cron ignored `CRON_TZ` in the recorded inspection)**.
   Expert passes fire one to three minutes after the 15m bar closes by pool
   (2026-09-05): v5 at `1,16,31,46` (`--workers 3`), [v4] and [v31] at
@@ -498,9 +541,9 @@ send alerts; historical “real” labels do not mean broker auto-execution.
   - `0 10 * * 0` + `30 10 * * 0` **weekly universe refresh** (since
     2026-08-16): `download_universe --universe-only --live-horizon 120` for
     the v3 pool then the v31 pool → `logs/universe_refresh_*.log`.
-    **Keep each pool's bars+surface steps `&&`-chained in ONE cron entry** —
-    splitting them into separate times invites the refresh/compaction swap
-    racing the surface build's glob-then-open. This is
+    **Keep each pool's bars+surface steps in ONE cron entry** (now the
+    `run_refresh.sh` script) — splitting them into separate times invites the
+    refresh/compaction swap racing the surface build's glob-then-open. This is
     what keeps the live chain's expiries ahead of the calendar — the frozen
     research window does NOT roll forward on its own, and the chain
     silently empties ~45 days after the last refresh without it.
@@ -518,7 +561,38 @@ send alerts; historical “real” labels do not mean broker auto-execution.
     heartbeat, plus missing/stale-log warnings during RTH — silence = quiet
     market, not "is it dead?". Baselines in the gitignored
     `nn_meta/live/.heartbeat_state.json` (old single-log schema migrates in
-    place; first heartbeat per log prints "baseline set").
+    place; first heartbeat per log prints "baseline set"). Since 2026-09-08
+    the head also flips to ⚠️ on: > 50 scanner ERROR lines today, an options
+    heartbeat reporting 0 contracts during RTH, any pool's
+    `surface_daily.parquet` older than 8 days, or a non-zero exit recorded
+    in `logs/refresh_status/<pool>.json`; a `surfaces: v3 2d · v31 2d · v5 …`
+    digest line shows the ages.
+  - `* * * * *` **top-five dispatcher** (since 2026-09-08 a.m.,
+    `NN_META_ALERT_TOP_N=5 … nn_meta.live.alert_batches` →
+    `logs/alert_batches.log`): the four experts enqueue entry alerts into
+    `nn_meta/live/.alert_batches.sqlite3` keyed by 15-minute cycle; after all
+    four completion markers (max 5 min after the first, deadline 12 min after
+    bar close) it sends the five highest P(win) — one slot per symbol+side
+    since the evening fix — and one overflow notice with a button / "yes"
+    reply for the remainder summary. Floors: v5 > 0.55, v4 > 0.51 (strict).
+    Cron-line env `NN_META_ALERT_TOP_N=5` on every scan line is what routes
+    alerts into the queue; without it an expert sends directly.
+  - `* * * * *` **EOD panel tick** (since 2026-09-06, `scripts.eod_panel_tick
+    --run`): calendar-aware; prewarms, then delivers one confirmed end-of-day
+    panel at close − 5 min → `logs/eod_panel.log`.
+  - `0 11/12/14 * * 0` **weekly bars + surface refresh** per pool
+    (`scripts/run_refresh.sh v3|v31|v5` since 2026-09-08): download recent
+    bars with `NN_META_DOWNLOAD_WORKERS=6` (the 16-worker default was killed
+    on this 8 GB host at 84% of the 1.3M-contract v5 run on 2026-09-06, and
+    the `&&`-chained surface build silently never ran — v5 then scanned on a
+    14-day-old surface), then `build_surface`, both inside ONE script so the
+    ordering guarantee below still holds; exit status to
+    `logs/refresh_status/<pool>.json`.
+  - `7 4 * * *` **log rotation** (`scripts/rotate_logs.sh` →
+    `deploy/logrotate/healys.conf`: daily or 100 MB, 14 kept, compressed,
+    copytruncate because the feed daemons hold their logs open; state in
+    `~/.logrotate.healys.state`). The heartbeat detects rotation and resets
+    its counters.
   - `*/5` dead-man check (`~/bin/deadman_check.sh`, outside the repo on
     purpose) watching home-box job heartbeats.
 - **Reverse dead-man (HOME box → server, added 2026-08-28)**:
@@ -544,7 +618,21 @@ send alerts; historical “real” labels do not mean broker auto-execution.
   in the August inspection; inspect `logs/live_cron.log`, closed-bar timestamps
   and verified bundle state instead.
 - State on the server that is NOT in git: `.env`, `fa/archive/`, the 5 root
-  parquets of `nn_meta/data_cache/` (scanner needs `surface_daily.parquet`).
+  parquets of `nn_meta/data_cache/` (scanner needs `surface_daily.parquet`),
+  the alert queue `nn_meta/live/.alert_batches.sqlite3`, per-expert
+  `nn_meta/live/.<expert>_no_bars.json` (names that returned no bars — X,
+  WBA, SWTX, SAVA, SATS as of 2026-09-08 — skipped and rechecked weekly
+  instead of costing two REST calls and four ERROR lines every pass),
+  `logs/refresh_status/`, `logs/ops/*/crontab-before.txt` rollbacks.
+- **Cron edits go through `scripts/configure_cron.py`** (preview without
+  flags, `--run` to install; idempotent; backs up to `logs/ops/ops-fixes-<ts>/`).
+  It owns the scan-line env `TF_CPP_MIN_LOG_LEVEL=2 BACKTESTER_CONSOLE_QUIET=1`
+  (no TensorFlow banners; the console filter in `utils/logging_utils.py`
+  keeps WARNING+ and `[live]`/`[v4-scan]`/`[notify…]`-tagged lines and drops
+  the per-symbol vectorbt chatter that made `v5_cron.log` 93 MB/day; print()
+  pass summaries the heartbeat counts are untouched). `logs/backtester.log`
+  keeps WARNING+ only (`BACKTESTER_FILE_LOG_LEVEL=INFO` to widen for a
+  debugging session) — it is what the heartbeat scans for `- ERROR -`.
 
 ## Home-box scheduling (systemd)
 

@@ -214,7 +214,16 @@ compatibility patch a315034 is now deployed, preserving old models.
 [Deployment evidence](docs/reviews/2026-09-06-production-ops-deployment.md).
 v5 refresh resumed under memory monitoring; completion and live-session
 acceptance remain pending.
-- [ ] Repair/complete v5 server surface refresh with a measured memory budget.
+- [x] September 8 server review: eight operational findings fixed and deployed on
+  the compatibility branch (option feed idle gate + contract registration,
+  recorded Sunday refresh at 6 workers, alive-minute bucket tolerance,
+  session-aware staleness, no-bars skips with weekly recheck, one top-five slot
+  per symbol+side, WARNING-only backtester.log + quiet cron console + logrotate,
+  heartbeat escalations) plus anchored feed watchdogs.
+  [Review](docs/reviews/2026-09-08-server-ops-fixes.md).
+- [x] Repair/complete v5 server surface refresh with a measured memory budget:
+  `scripts/run_refresh.sh v5` (6 workers, recorded exit status); the Sep 8 rerun
+  was still downloading at handoff — confirm `surfaces: v5 0d` in the heartbeat.
 - [x] Deploy compatible production freshness, final-close/calendar and legacy
   outbox fixes, with separate experimental + confirmed EOD panel.
 - [ ] Validate market-session behavior and EOD timing/coverage before declaring
@@ -230,8 +239,12 @@ September 8, 2026 is Tuesday. [Evidence](docs/reviews/2026-09-05-readiness-miles
 - [ ] Verify closed/current bars, complete stream buckets, current-session
   REST fallback, restart/backfill and stale/forming-bar rejection through a
   market session; compare signal timestamps, not process/pass counts.
+  Sep 8 session observed: ~190 names/cycle fell to REST on single quiet minutes
+  and the 09:31 pass failed all 441 v5 names as stale after the holiday — both
+  fixed that evening; re-observe a full session on the new code.
 - [x] Confirm :01/:02/:03 staggering and workers against observed server state.
-  Preserve bracketed `pgrep`/`pkill` patterns.
+  Bracketed `pgrep`/`pkill` patterns are NOT sufficient on the watchdog lines
+  (they self-match the restart command); anchored `feeds\.x$` is installed.
 - [x] Add v6 expert identity/campaign bundle paths, frozen weekly DTE matching,
   explicit stream campaign universes and captured session-calendar handling.
 - [x] Add opt-in OPRA quote/trade recording with exact decoded timestamps,
@@ -253,9 +266,13 @@ preparing resolver/calculations is authorized.
 - [x] Prepare/test a pure captured-chain contract preview with chronology,
   OCC/quote/delta checks, deterministic selection and explicit unverified
   deliverables. Live fetching, reference metadata and offline parity remain open.
-- [ ] Build contract resolution, quote/greeks retrieval, liquidity checks and
-  OPRA watch registration. Specify matching offline selection before changing
-  a model's live decision semantics.
+- [x] Contract resolution to a listed OCC symbol and OPRA watch registration
+  from the alert path (`nn_meta/live/feeds/contracts.py`, ops branch) — the
+  quote stream now has something to stream. Advisory only; alert text and
+  model decisions unchanged.
+- [ ] Quote/greeks retrieval, liquidity checks and quote-aware alert text.
+  Specify matching offline selection before changing a model's live decision
+  semantics.
 - [ ] Prepare quote-verified entry/exit/roll accounting and a sampled spread
   model. Distinguish OHLCV from observed bid/ask results; document any
   proposed eligibility-gate change before adoption.
