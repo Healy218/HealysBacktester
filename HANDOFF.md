@@ -28,13 +28,17 @@ is now anchored, `pgrep -f "feeds\.x$"`. DOCUMENTATION's Traps and runbook are
 updated accordingly.
 
 State at handoff:
-- Crontab rewritten 21:06 UTC by `scripts/configure_cron.py --run`; rollback
+- Crontab rewritten 21:06 UTC by `scripts/configure_cron.py --run` (done); rollback
   copy `logs/ops/ops-fixes-20260908T210652Z/crontab-before.txt` on the server.
-- `scripts/run_refresh.sh v5` running since 20:40 UTC (6 download workers,
-  ~115k/219k contracts at handoff, then `build_surface`); outcome lands in
-  `logs/refresh_status/v5.json` and the heartbeat reads it. The v5 surface is
-  still the Aug 25 file until that finishes — v5 alerts today were scored on
-  a two-week-old IV surface.
+- v5 surface rebuilt 2026-09-09 01:46 UTC. The download took 1.1 h at 6
+  workers; the first `build_surface` was OOM-killed (exit 137) after 2 h —
+  the loader re-factorized the 3.6M-ticker universe per part and then held
+  27.8M rows. Fixed on the ops branch (`build_surface_streaming`: cached
+  index lookup + per-part reduction; 2 min 40 s at 1.9 GB) and rerun with
+  `run_refresh.sh v5 --build-only`. `scripts/watch_refresh.py` reports a
+  refresh to Telegram hourly and on completion. Heartbeat now reads
+  `surfaces: v3 3d · v31 3d · v5 0d`. v5 alerts on Sep 8 were scored on the
+  two-week-old surface.
 - Option quote stream restarted on the new code: state `idle`, 0 CPU, until
   the alert path registers a contract (`option_watch.json`, written by
   `scanner.register_alert_contract` via `feeds/contracts.py`).
@@ -44,10 +48,10 @@ State at handoff:
   6 rank-suppressed across 18 batches; from now on slots go to distinct
   symbol+side ideas.
 
-Verify tomorrow (Sep 9): noon heartbeat footer error count near zero (was 962
-→ 1171 by close today, mostly the holiday first-pass stale burst and dead
-tickers); `surfaces:` line shows v5 0–1d; REST-fallback warnings per cycle
-down from ~190 to a handful; alerts still arrive.
+Verify Sep 9: noon heartbeat footer error count near zero (was 962 → 1171
+by close on Sep 8, mostly the holiday first-pass stale burst and dead
+tickers); REST-fallback warnings per cycle down from ~190 to a handful;
+alerts still arrive; no `⚠️` lines about refresh or surfaces.
 
 Ops-branch source (live path: scanner, v4_scan, barstore, alert_batches,
 heartbeat, feeds, logging_utils, config) is NOT on `main`. Merge it into
