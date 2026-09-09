@@ -15,6 +15,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from types import SimpleNamespace
 
+import numpy as np
 import pandas as pd
 import pytest
 
@@ -464,3 +465,41 @@ class TestSurfaceLoaderAndWatcher:
         monkeypatch.setenv("NN_META_POOL", "v5")
         info = wr.gather("v5", root=tmp_path)
         assert info["status"]["workers"] == "6" and info["tail"] == "1/2 parts" and isinstance(info["processes"], list)
+
+    def test_streaming_surface_equals_in_memory_surface(self, tmp_path, monkeypatch):
+        from nn_meta import config
+        from nn_meta import build_surface as bs
+        rng = pd.date_range("2026-06-01", periods=40, freq="B")
+        und = pd.concat([pd.DataFrame({"underlying": u, "date": rng, "open": px, "high": px * 1.01,
+                                       "low": px * 0.99, "close": px * (1 + 0.001 * np.arange(40)),
+                                       "volume": 1e6, "vwap": px, "transactions": 100})
+                         for u, px in (("AAA", 100.0), ("BBB", 50.0))], ignore_index=True)
+        tickers = []
+        for u, px in (("AAA", 100.0), ("BBB", 50.0)):
+            for exp in ("2026-07-17", "2026-08-21"):
+                for k in np.linspace(px * 0.97, px * 1.03, 13):
+                    for t in ("call", "put"):
+                        tickers.append({"ticker": f"{u}{exp}{t[0]}{k:.2f}", "underlying": u, "strike": round(k, 2),
+                                        "expiration": exp, "type": t})
+        meta = pd.DataFrame(tickers)
+        rs = np.random.default_rng(0)
+        rows = []
+        for tk in meta.itertuples():
+            for d in rng:
+                rows.append({"ticker": tk.ticker, "date": d, "close": float(rs.uniform(0.2, 5.0)),
+                             "volume": int(rs.integers(0, 500))})
+        bars = pd.DataFrame(rows)
+        (tmp_path / "bars").mkdir()
+        # compacted layout: no ticker spans two parts; one part carries an exact duplicate row
+        for k, (_, grp) in enumerate(bars.groupby(bars["ticker"].str[:3])):
+            grp = pd.concat([grp, grp.iloc[:3]]) if k == 0 else grp
+            grp.to_parquet(tmp_path / "bars" / f"bars_part_{k:04d}.parquet", index=False)
+        meta.to_parquet(tmp_path / "universe.parquet")
+        monkeypatch.setattr(config, "UNIVERSE_PARQUET", tmp_path / "universe.parquet")
+        monkeypatch.setattr(config, "BARS_DAILY_DIR", tmp_path / "bars")
+        monkeypatch.setattr(config, "DTE_MAX", 60)
+        monkeypatch.setattr(config, "MIN_PREMIUM", 0.05)
+        ref = bs.build_surface(bs.load_daily_bars(), und).reset_index(drop=True)
+        got = bs.build_surface_streaming(und).reset_index(drop=True)
+        assert ref["atm_iv_near"].notna().any() and ref["pc_ratio"].notna().any()
+        pd.testing.assert_frame_equal(got, ref)
