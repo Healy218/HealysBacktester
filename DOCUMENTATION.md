@@ -170,6 +170,17 @@ repairs and migration requirements.
   (`nn_meta/live/exchange_calendar.json` on the server; without one the
   Mon–Fri rule applies, which does not know holidays). "Stale" = more than one
   closed interval behind that bar.
+- **Never call alpaca-py's `subscribe_*`/`unsubscribe_*` from inside the
+  stream's own event loop once it is running.** They do
+  `run_coroutine_threadsafe(..., self._loop).result()` — fine from another
+  thread, a deadlock from the loop thread, and the frozen loop cannot even
+  write its heartbeat (process alive, 0 CPU, pgrep happy). That froze the
+  option stream 30 s after its first contracts arrived on 2026-09-09.
+  `option_stream.sync_subscriptions` now registers handlers and awaits
+  `_send_subscribe_msg` / `_send_unsubscribe_msg` itself, and a stall-guard
+  thread exits the process after 120 s of loop silence so the cron watchdog
+  restarts it. Same rule applies to the stock stream if it ever resubscribes
+  at runtime.
 - **logrotate refuses a group-writable config** ("Ignoring … because of bad
   file mode") and the server's umask checks files out as 664 — that is why
   `scripts/rotate_logs.sh` chmods the conf before every run. Do not "fix"
