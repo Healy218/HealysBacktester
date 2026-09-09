@@ -503,3 +503,61 @@ class TestSurfaceLoaderAndWatcher:
         got = bs.build_surface_streaming(und).reset_index(drop=True)
         assert ref["atm_iv_near"].notna().any() and ref["pc_ratio"].notna().any()
         pd.testing.assert_frame_equal(got, ref)
+
+
+class TestOptionStreamRunningRefresh:
+    def test_refresh_on_running_stream_never_calls_blocking_subscribe(self, tmp_path, monkeypatch):
+        """alpaca-py's subscribe_quotes blocks on .result() once running — from
+        inside the loop that is a deadlock. The refresh must go async."""
+        from nn_meta.live.feeds import option_stream as os_
+        monkeypatch.setenv("ALPACA_API_KEY", "k"); monkeypatch.setenv("ALPACA_API_SECRET", "s")
+        monkeypatch.setattr(os_, "WATCH", tmp_path / "watch.json")
+        monkeypatch.setattr(os_, "HEARTBEAT", tmp_path / "hb.json")
+        monkeypatch.setattr(os_, "IDLE_POLL_S", 0.01); monkeypatch.setattr(os_, "REFRESH_S", 0.05)
+        monkeypatch.setattr(os_, "FLUSH_S", 0.02); monkeypatch.setattr(os_, "LOOP_TICK_S", 0.01)
+        events = []
+        class FakeStream:
+            def __init__(self, *a, **k):
+                self._running = False; self._handlers = {"quotes": {}}
+            def subscribe_quotes(self, handler, *syms):
+                if self._running:
+                    events.append("BLOCKING-SUBSCRIBE"); raise AssertionError("would deadlock")
+                for s_ in syms: self._handlers["quotes"][s_] = handler
+                events.append(("sub", syms))
+            def unsubscribe_quotes(self, *syms):
+                if self._running: events.append("BLOCKING-UNSUBSCRIBE"); raise AssertionError("would deadlock")
+            async def _send_subscribe_msg(self): events.append(("msg-sub", tuple(sorted(self._handlers["quotes"]))))
+            async def _send_unsubscribe_msg(self, channel, syms): events.append(("msg-unsub", channel, tuple(syms)))
+            async def _run_forever(self):
+                self._running = True; events.append("run"); await asyncio.sleep(3600)
+            async def close(self): pass
+        import types, sys
+        fake_live = types.ModuleType("alpaca.data.live"); fake_live.OptionDataStream = FakeStream
+        fake_enums = types.ModuleType("alpaca.data.enums"); fake_enums.OptionsFeed = SimpleNamespace(OPRA="opra")
+        monkeypatch.setitem(sys.modules, "alpaca.data.live", fake_live)
+        monkeypatch.setitem(sys.modules, "alpaca.data.enums", fake_enums)
+        store = SimpleNamespace(update=lambda *a, **k: None, flush=lambda: 0)
+        os_.add_to_watch(["SPY260918C00650000"], tmp_path / "watch.json")
+        async def scenario():
+            task = asyncio.ensure_future(os_._serve(store, None, run_seconds=None))
+            await asyncio.sleep(0.1)                       # running with one contract
+            os_.add_to_watch(["QQQ260918P00500000"], tmp_path / "watch.json")
+            await asyncio.sleep(0.2)                       # a refresh has fired
+            (tmp_path / "watch.json").write_text(json.dumps({"contracts": ["QQQ260918P00500000"]}))
+            await asyncio.sleep(0.2)                       # SPY dropped
+            task.cancel()
+            try: await task
+            except asyncio.CancelledError: pass
+        asyncio.run(scenario())
+        assert "BLOCKING-SUBSCRIBE" not in events and "BLOCKING-UNSUBSCRIBE" not in events
+        assert ("sub", ("SPY260918C00650000",)) in events and "run" in events
+        assert ("msg-sub", ("QQQ260918P00500000", "SPY260918C00650000")) in events
+        assert ("msg-unsub", "quotes", ("SPY260918C00650000",)) in events
+        hb = json.loads((tmp_path / "hb.json").read_text())
+        assert hb["contracts"] == 1 and "state" not in hb    # streaming, one contract left
+
+    def test_stall_guard_detects_silent_loop(self):
+        from nn_meta.live.feeds.option_stream import loop_stalled
+        assert not loop_stalled(now=1000.0, last_tick=950.0)
+        assert loop_stalled(now=1000.0, last_tick=800.0)
+
