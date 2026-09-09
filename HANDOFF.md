@@ -1,21 +1,39 @@
-# Handoff — server operations fixes deployed; v6 freeze at 314/453
+# Handoff — v6 build and assembly launched
 
-September 8, 2026, 21:20 UTC. Written after the first trading day post
-Labor Day. Two things are live and must not be disturbed: the home v6 freeze
-and the production scanners.
+September 9, 2026. User authorized next phase after freeze completion.
+Freeze completed successfully at 19:16:04 UTC: 453 verified shards, merged baseline
+449 symbols, four explicit skips (CBRS, DRAM, MUU, SNXX). Trial controller result
+full-run/worker-trial/result.json: returncode 0, freeze_completed=true. The prior
+fifth-worker experiment ended early via the memory guard; it did not complete
+a two-hour throughput comparison. Preserve all campaign source/data fingerprints.
 
-## Home box — v6 freeze (do not touch)
+Build/assembly launched 20:33:45 UTC using prepared run_build_v6_local.sh --campaign
+v6-local-20260906 --workers 4 --run. Detached wrapper PID 1193901; original research
+launcher PID 1193987/start 27194439. No evaluation or final training launched.
 
-Campaign `v6-local-20260906`, controller `scripts.run_v6_freeze_trial` PID
-2541751. Freeze shards **314/453**, four workers (QQQ, RACE, RBLX, RCAT at
-last look), 7.3 symbols/hour, ETA ~**Sep 09 15:58 UTC**. The fifth-worker
-trial ran its two hours on Sep 7 and decided `return_to_four_memory_headroom`
-(trial 9.2/hour vs 12.0 baseline; memory PSI avg60 1.2%); it stays on four.
-Do not change the source snapshot, pinned causal packages or the working tree
-under `nn_meta/` while it runs. Post-freeze launchers are prepared and
-UNLAUNCHED (`scripts/run_{build,evaluate,finalize}_v6_local.sh`, preview by
-default; `docs/reviews/2026-09-08-v6-stage-launchers.md`). Watcher reports every
-half hour to Telegram and `logs/v6-progress/v6-local-20260906/`.
+Actual launch sizing: 24.56 GiB MemAvailable; four slots at 5 GiB each plus 4 GiB
+reserve. Two physical cores/SMT siblings excluded (CPUs 1,4,9,12). Worker allocation
+uses remaining 12 logical CPUs. This is admission sizing, not a hard RAM cap.
+At last verification the launcher is in expensive input validation, reading
+~127 MB logically/~65 MB physically over 2 seconds. No build worker had started
+yet; the launcher automatically starts four once all original gates pass.
+Coverage preflight passed 500 option/underlying days with neither missing.
+
+Evidence under nn_meta/campaigns/v6-local-20260906/v6/runs/next-stage/:
+- build-launch.json: detached PID, exact command and log path.
+- build-plan.json: actual CPU/RAM sizing and sealed expanded input digest.
+- build-launch-20260909T203345Z.log: wrapper startup/errors.
+- build.log: original stage launcher, input checks, build and assembly output.
+- build-result.json appears only after build+assembly return. Inspect exit code.
+Per-symbol outputs/logs retain original meta_rows, meta_marks, partials paths.
+
+Watcher now labels build/assembly launcher, reports 0/4 during verification,
+counts builds against 449 eligible symbols, and removes the obsolete halfway
+freeze reminder after merged baseline exists. Rate/ETA starts as completions
+arrive. Thirty-minute Telegram timer remains active; updated report delivered.
+No pinned causal package or original research launcher was modified.
+Two historical watchlist tests became date-dependent when their August 18 entries
+aged beyond retention on September 9; fixed their test-only clock at existing NOW.
 
 ## Production — Hetzner, branch `ops/server-alert-readiness-20260906` at 997d668
 
@@ -54,18 +72,9 @@ tickers); REST-fallback warnings per cycle down from ~190 to a handful;
 alerts still arrive; no `⚠️` lines about refresh or surfaces.
 
 Ops-branch source (live path: scanner, v4_scan, barstore, alert_batches,
-heartbeat, feeds, logging_utils, config) is NOT on `main`. Merge it into
-`main` only after the freeze campaign completes — the campaign imports
-`nn_meta` from this working tree for every new freeze process.
+heartbeat, feeds, logging_utils, config) is NOT on `main`. Keep it isolated throughout this research campaign: build/evaluation also
+verify the original campaign source fingerprint. Completing the freeze alone
+does not authorize changing its downstream source inputs.
 
 Validation: ops branch 579 tests + 18 subtests (26 new in
 `tests/test_ops_fixes_20260908.py`); main unchanged at 1452 + 18.
-
-## Documentation pass (this session)
-
-Reviewed the week's notes (handoffs Sep 5–8, reviews Sep 6–8, commits on both
-branches). Updated: DOCUMENTATION.md runbook + Traps, DECISIONS.md (Sep 7
-fifth-worker trial, Sep 8 top-five routing, launchers, server fixes — none had
-been logged), TODO.md section 5/6 ticks, this handoff. EXPERIMENTS.md has no
-new row: nothing was evaluated this week; the next row is the corrected v6
-result.

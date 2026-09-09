@@ -105,3 +105,18 @@ def test_trial_preflight_reports_zero_workers_and_previous_baseline(tmp_path):
     assert 'Previous four-worker average: 12.0/hour' in report
     assert 'two-hour clock has not started' in report
     assert 'ETA: recalculates after restart ⏲️' in report
+
+
+def test_build_preflight_and_eligible_symbol_total(tmp_path):
+    s = snapshot(tmp_path, 'wanted', [{'pid': 1, 'stage': 'build/assembly launcher'}])
+    s['total_symbols'] = 453
+    s['build_total_symbols'] = 449
+    s['counts']['freeze_shards'] = 453
+    s['evidence_present']['baseline_spec'] = True
+    s['build_plan'] = {'resources': {'symbol_workers': 4}}
+    report = render(s, None)
+    assert 'Built symbols 0/449' in report
+    assert 'Build workers: 0/4' in report
+    assert 'verifying inputs before worker startup' in report
+    assert 'waiting for freeze completion' not in report
+    assert 'HALFWAY' not in report

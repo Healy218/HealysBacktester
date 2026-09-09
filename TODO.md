@@ -14,8 +14,9 @@ remain required. The user selected Option 1, authorizing explicit local
 calendar/VWAP research assumptions. Context is now sealed for all 453 symbols;
 the request inventory and tick captures resumed after the user's reboot on
 September 6 at 17:04 UTC. Active PIDs/logs and durable checkpoints are in
-HANDOFF.md. All 453 tick stores are now verified and sealed; the full freeze is running
-with four workers (confirmed September 7).
+HANDOFF.md. All 453 tick stores and freeze shards are verified; the merged baseline has
+449 eligible symbols and four skips. Build+assembly launched September 9 with
+a four-worker target; evaluation/final training remain unlaunched.
 The existing-family SPY/IBKR pilot is now stopped and preserved. Do not launch a full
 universe freeze while those additions are still missing; complete their
 historical coverage and feature integration first. External comparison is
@@ -189,7 +190,8 @@ pipeline. Expanded feature/selection/join code is implemented; actual source
 comparisons, historical coverage and the sealed manifest remain prerequisites. Use the home box first; cloud acceleration needs a measured
 workload, VM-hour budget and explicit job IDs.
 
-- [ ] Refreeze affected baseline and expanded pools on causal inputs.
+- [x] Complete this expanded v6 campaign freeze on causal inputs (September 9).
+  Other affected pools remain separate rebuild work.
 - [x] At roughly 227/453 completed v6 freeze shards, prepare build/evaluation/
   training launchers; keep heavy downstream stages unlaunched until freeze
   completes. User is dedicating the home box to this work for the next week.

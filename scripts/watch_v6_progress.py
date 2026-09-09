@@ -53,6 +53,10 @@ def campaign_processes(campaign, proc=Path('/proc')):
             if stat[0] == 'Z':
                 continue
             stage = modules[module]
+            if module == 'scripts.research_local' and '--stage' in args and args[args.index('--stage') + 1] == 'build':
+                stage = 'build/assembly launcher'
+            if module == 'nn_meta.build_meta_dataset' and '--assemble' in args:
+                stage = 'assembly'
             if module == 'scripts.run_v6_parallel_freeze' and '--symbol' in args:
                 stage = 'tick store ' + args[args.index('--symbol') + 1]
             found.append({'pid': int(entry.name), 'start_ticks': stat[19], 'stage': stage})
@@ -86,6 +90,8 @@ def snapshot(root, campaign, processes):
     if registry.exists():
         with registry.open() as f:
             runs = sum(1 for _ in csv.DictReader(f))
+    baseline = read_json(artifacts / 'baseline_spec.json')
+    build_total = len(baseline['symbols']) if baseline is not None else len(symbols)
     counts = {'inventory_symbols': inventory, 'tick_stores': stores, 'capture_batches': batches,
               'prepared_capture_batches': planned, 'prepared_symbols': len(plans),
               'freeze_shards': sum((artifacts / 'freeze_shards' / f'{s}.json').exists() for s in symbols),
@@ -101,11 +107,15 @@ def snapshot(root, campaign, processes):
     # File presence is progress evidence, never proof of a passing or deployable model.
     logs = list((base / 'runs/logs').glob('*/*.log'))
     logs += list(prep.glob('*-resume-*.log'))
+    logs += list((base / 'runs/next-stage').glob('*.log'))
     latest = max((p.stat().st_mtime for p in logs), default=0)
     return {'time_utc': dt.datetime.now(dt.timezone.utc).isoformat(), 'campaign': campaign,
             'total_symbols': len(symbols), 'counts': counts, 'evidence_present': evidence,
             'launchers_prepared': bool((read_json(prep / 'post-freeze-launchers.json') or {}).get('prepared')),
             'processes': processes, 'freeze_launcher_result': result,
+            'build_total_symbols': build_total,
+            'build_plan': read_json(base / 'runs/next-stage/build-plan.json'),
+            'build_result': read_json(base / 'runs/next-stage/build-result.json'),
             'worker_trial': trial if trial_live or trial_result else None,
             'parallel': read_json(captures / 'parallel/status.json'),
             'parallel_result': read_json(captures / 'parallel/result.json'),
@@ -162,6 +172,8 @@ def pace_line(s, history):
     # Training registry rows have no declared total; never assume symbols
     # equal training jobs. A training launcher can supply its total later.
     total = s.get('training_total') if metric == 'training_registry_rows' else s['total_symbols']
+    if metric == 'build_symbols':
+        total = s.get('build_total_symbols', total)
     if not total:
         return label + '; ETA: awaiting total job count ⏲️'
     remaining = max(0, total - s['counts'][metric])
@@ -183,11 +195,15 @@ def render(s, previous, history=None):
     result = s['freeze_launcher_result']
     if result and result.get('returncode') != 0:
         status += f"; freeze launcher failed (exit {result.get('returncode')})"
+    build_active = 'build/assembly launcher' in stages or 'build/assemble' in stages or 'assembly' in stages
+    build_workers = sum(p['stage'] == 'build/assemble' for p in s['processes'])
+    if s.get('build_result') and s['build_result'].get('returncode') != 0:
+        status += f"; build/assembly failed (exit {s['build_result'].get('returncode')})"
     lines = [f"🧪🔬HealyLabs v6 - {s['time_utc'][:16].replace('T', ' ')} UTC💻📲", f'Active: {status}',
              f"Inventory {c['inventory_symbols']}/{n}" + (" ✅" if n and c['inventory_symbols'] == n else ""),
              f"Tick stores {c['tick_stores']}/{n}" + (" ✅" if n and c['tick_stores'] == n else ""),
              f"Freeze shards {c['freeze_shards']}/{n} 🧊",
-             f"Built symbols {c['build_symbols']}/{n} 🛠️",
+             f"Built symbols {c['build_symbols']}/{s.get('build_total_symbols', n)} 🛠️",
              f"Trained: {c['training_registry_rows']}🎮",
              f"Model files: {c['model_files']} 🗂️",
              f"Free disk: {s['free_gib']} GiB 💾"]
@@ -199,6 +215,13 @@ def render(s, previous, history=None):
         stage_index = {'inventory_symbols': 2, 'tick_stores': 3, 'freeze_shards': 4,
                        'build_symbols': 5, 'training_registry_rows': 6}[active_metric(s)]
         lines.insert(stage_index + 1, pace)
+    if build_active:
+        target = (s.get('build_plan') or {}).get('resources', {}).get('symbol_workers', '?')
+        lines.append(f'Build workers: {build_workers}/{target}')
+        if not build_workers:
+            phase = 'assembling/verifying dataset' if 'assembly' in stages or c['build_symbols'] >= s.get('build_total_symbols', n) else 'verifying inputs before worker startup'
+            lines.append('Build phase: ' + phase)
+            lines.insert(6, 'Average/hour: awaiting build completions; ETA: calculating ⏲️')
     freeze_workers = sum(p['stage'] == 'freeze' for p in s['processes'])
     if freeze_workers or transitioning:
         plan = s.get('freeze_resource_plan') or {}
@@ -228,7 +251,7 @@ def render(s, previous, history=None):
     if previous:
         if c == previous['counts'] and s['latest_log_mtime'] == previous['latest_log_mtime']:
             lines.append('No observed count/log progress since previous report; stage may be computing or stopped.')
-    if n and c['freeze_shards'] >= (n + 1) // 2:
+    if n and c['freeze_shards'] >= (n + 1) // 2 and not s['evidence_present'].get('baseline_spec'):
         lines.append('Post-freeze launchers ready; waiting for freeze completion 🛠️' if s.get('launchers_prepared') else
                      'HALFWAY FREEZE CHECKPOINT: prepare build/evaluation launchers; keep compute reserved for freeze until it completes.')
     return '\n'.join(lines)
