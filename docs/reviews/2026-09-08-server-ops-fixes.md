@@ -23,6 +23,18 @@ counters read print() lines, which the console filter never touches.
 
 ## Deployment (server, as `mrhea`, no sudo)
 
+Follow-up 2026-09-09 17:10 UTC: the first live alerts registered 11 contracts
+at 13:48 and the option stream started — then froze 30 s later at its first
+watch-list refresh. alpaca-py's `subscribe_quotes` blocks on
+`run_coroutine_threadsafe(...).result()` once running, a deadlock when called
+from the stream's own loop (heartbeat stopped, process alive at 0 CPU; the
+noon heartbeat flagged it as "191 min old"). Fixed in c1762ab: the refresh
+registers handlers and awaits the subscribe/unsubscribe messages itself, and
+a stall-guard thread exits after 120 s of loop silence. The hung daemon was
+killed; the anchored cron watchdog restarted it within 4 minutes (first
+proof that watchdog works), and it is now streaming 235 contracts with ~25k
+quotes in the first two minutes.
+
 Outcome (2026-09-09 01:47 UTC): everything deployed, crontab installed 21:06 UTC
 (rollback `logs/ops/ops-fixes-20260908T210652Z/`). The v5 download finished in
 1.1 h at 6 workers, but `build_surface` was OOM-killed (exit 137) after two
