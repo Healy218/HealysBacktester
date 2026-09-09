@@ -32,12 +32,19 @@ def load_daily_bars() -> pd.DataFrame:
     meta = pd.read_parquet(config.UNIVERSE_PARQUET)[
         ["ticker", "underlying", "strike", "expiration", "type"]]
     meta["expiration"] = pd.to_datetime(meta["expiration"])
+    # Index the universe ONCE (2026-09-08): ``merge(on="ticker")`` re-factorized
+    # the whole universe for every part — 2,978 parts × 3.6M tickers on v5 took
+    # hours at 100 % CPU before the first print. ``join`` on a prebuilt index
+    # reuses its hash engine, so each part costs its own size only. Duplicate
+    # universe rows would only have been removed by the final dedupe anyway.
+    meta = meta.drop_duplicates("ticker").set_index("ticker")
     frames = []
-    for p in parts:
+    kept = 0
+    for i, p in enumerate(parts, 1):
         b = pd.read_parquet(p, columns=["ticker", "date", "close", "volume"])
         if b.empty:
             continue
-        b = b.merge(meta, on="ticker", how="inner")
+        b = b.join(meta, on="ticker", how="inner")
         if b.empty:
             continue
         dte = (b["expiration"] - b["date"]).dt.days
@@ -45,6 +52,9 @@ def load_daily_bars() -> pd.DataFrame:
               & (b["close"] >= config.MIN_PREMIUM)]
         if not b.empty:
             frames.append(b)
+            kept += len(b)
+        if i % 500 == 0 or i == len(parts):
+            print(f"  bars: {i}/{len(parts)} parts read, {kept} rows kept", flush=True)
     if not frames:
         raise SystemExit("no bars survived the universe join/filters")
     return pd.concat(frames, ignore_index=True).drop_duplicates(["ticker", "date"])
@@ -92,7 +102,7 @@ def main() -> None:
     und = pd.read_parquet(config.UNDERLYING_DAILY_PARQUET)
     bars = load_daily_bars()
     print(f"daily bars: {len(bars)} rows, {bars['ticker'].nunique()} contracts, "
-          f"{bars['underlying'].nunique()} underlyings")
+          f"{bars['underlying'].nunique()} underlyings", flush=True)
     surf = build_surface(bars, und)
     tmp = config.SURFACE_DATASET_PARQUET.with_suffix(".tmp")   # atomic: the
     surf.to_parquet(tmp, index=False)                          # live scanner

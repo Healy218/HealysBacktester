@@ -402,3 +402,65 @@ class TestOptionFeed:
         assert occ == "KO261009P00087000" and os_.read_watch(tmp_path / "watch.json") == [occ]
         monkeypatch.setattr(contracts, "load_listing", lambda path=None: None)
         assert sc.register_alert_contract("KO", "P", 87.4, 30, None) is None    # never raises
+
+
+# ── follow-up: surface loader and refresh watcher ─────────────────────────────
+class TestSurfaceLoaderAndWatcher:
+    def test_indexed_join_matches_merge_path(self, tmp_path, monkeypatch):
+        from nn_meta import config
+        from nn_meta import build_surface as bs
+        rng = pd.date_range("2026-08-03", periods=12, freq="B")
+        meta = pd.DataFrame({"ticker": [f"T{i}" for i in range(6)] + ["T1"],   # one duplicate universe row
+                             "underlying": ["AAA"] * 3 + ["BBB"] * 3 + ["AAA"],
+                             "strike": [10, 11, 12, 20, 21, 22, 11], "type": ["call", "put"] * 3 + ["put"],
+                             "expiration": ["2026-08-21"] * 3 + ["2026-09-18"] * 3 + ["2026-08-21"]})
+        (tmp_path / "bars").mkdir()
+        meta.to_parquet(tmp_path / "universe.parquet")
+        rows = []
+        for i, t in enumerate([f"T{i}" for i in range(6)] + ["ZZ"]):     # ZZ is not in the universe
+            for d in rng:
+                rows.append({"ticker": t, "date": d, "close": 0.02 + i * 0.5, "volume": 10})
+        bars = pd.DataFrame(rows)
+        for k, chunk in enumerate([bars.iloc[:30], bars.iloc[30:60], bars.iloc[60:], bars.iloc[:5]]):  # overlap → dedupe
+            chunk.to_parquet(tmp_path / "bars" / f"bars_part_{k:04d}.parquet")
+        monkeypatch.setattr(config, "UNIVERSE_PARQUET", tmp_path / "universe.parquet")
+        monkeypatch.setattr(config, "BARS_DAILY_DIR", tmp_path / "bars")
+        monkeypatch.setattr(config, "DTE_MAX", 45)
+        monkeypatch.setattr(config, "MIN_PREMIUM", 0.05)
+        got = bs.load_daily_bars()
+        # reference = the pre-2026-09-08 merge path
+        m = pd.read_parquet(tmp_path / "universe.parquet"); m["expiration"] = pd.to_datetime(m["expiration"])
+        ref = []
+        for p in sorted((tmp_path / "bars").glob("*.parquet")):
+            b = pd.read_parquet(p, columns=["ticker", "date", "close", "volume"]).merge(m, on="ticker", how="inner")
+            dte = (b["expiration"] - b["date"]).dt.days
+            ref.append(b[(dte >= 1) & (dte <= 45) & (b["close"] >= 0.05)])
+        ref = pd.concat(ref, ignore_index=True).drop_duplicates(["ticker", "date"])
+        key = ["ticker", "date"]
+        assert len(got) == len(ref) and "ZZ" not in set(got["ticker"]) and "T0" not in set(got["ticker"])
+        pd.testing.assert_frame_equal(got.sort_values(key).reset_index(drop=True)[sorted(got.columns)],
+                                      ref.sort_values(key).reset_index(drop=True)[sorted(got.columns)])
+
+    def test_watcher_report_and_done_detection(self, tmp_path, monkeypatch):
+        from scripts import watch_refresh as wr
+        base = {"pool": "v5", "surface_age_h": 30 * 24.0, "tail": "  150000/219108 (56/s, ETA 0.3h)",
+                "now": "2026-09-09T01:00:00+00:00",
+                "status": {"started": "2026-09-08T20:40:22Z", "workers": "6", "step": "download", "exit_code": -1}}
+        running = dict(base, processes=[{"pid": 1, "step": "build_surface", "elapsed_s": 7300, "rss_mb": 3100}])
+        msg, done = wr.format_report(running)
+        assert not done and "running · build_surface 2h01m · 3100 MB RSS" in msg and "30.0 d old" in msg
+        finished = dict(base, processes=[], status=dict(base["status"], exit_code=0, step="build_surface",
+                                                        finished="2026-09-09T01:30:00+00:00"), surface_age_h=0.1)
+        msg, done = wr.format_report(finished)
+        assert done and "FINISHED OK" in msg and "6 min old" in msg
+        failed = dict(base, processes=[], status=dict(base["status"], exit_code=137))
+        assert wr.format_report(failed)[1] and "FAILED" in wr.format_report(failed)[0]
+        vanished = dict(base, processes=[])
+        assert wr.format_report(vanished)[1] and "killed?" in wr.format_report(vanished)[0]
+        # gather() reads the real files under a fake root
+        (tmp_path / "logs" / "refresh_status").mkdir(parents=True)
+        (tmp_path / "logs" / "refresh_status" / "v5.json").write_text(json.dumps(base["status"]))
+        (tmp_path / "logs" / "surface_refresh_v5.log").write_text("a\n  1/2 parts\n\n")
+        monkeypatch.setenv("NN_META_POOL", "v5")
+        info = wr.gather("v5", root=tmp_path)
+        assert info["status"]["workers"] == "6" and info["tail"] == "1/2 parts" and isinstance(info["processes"], list)
