@@ -59,3 +59,27 @@ nohup ./scripts/run_refresh.sh v5 >> logs/surface_refresh_v5.log 2>&1 &   # resu
 
 Rollback: `crontab logs/ops/ops-fixes-<ts>/crontab-before.txt` and `git checkout 05f8a68`.
 The queue column migration is additive; older code ignores the new columns.
+
+## 2026-09-09 — real contract and live quote in every alert (user: "option 1")
+
+User decision: replace the advisory "~ATM near $spot, ~N DTE" line with the
+resolved listed contract and its live market, using a Massive REST snapshot
+when the OPRA stream has not yet delivered a quote for a freshly registered
+contract. Model decisions, P(win) and contract selection (nearest listed
+expiry to the target DTE, nearest strike to spot) are unchanged.
+
+New alert block (both experts' formatters, `nn_meta/live/feeds/quotes.py`):
+
+```
+contract: MARA 2026-10-09 $11.50 CALL (MARA261009C00011500)
+quote: bid 1.26 / ask 1.31 · mid 1.29 · spread 3.9% · 99x31 · 3s old · Δ 0.59 · IV 85% · rest
+```
+
+Sources in order: the stream's NBBO when ≤ 3 min old (`source: stream`), else
+`MassiveProvider.get_contract_snapshot` (`/v3/snapshot/options/{u}/O:{occ}`,
+`source: rest`, also carries delta and IV). REST is only called for alerts
+above the expert's probability floor; below-floor candidates get the stream
+quote or "quote: unavailable". If the contract cannot be resolved the legacy
+line is kept, so no alert is ever blocked by this path. The paper ledger and
+the alert queue payload now carry `contract` and `entry_mid`.
+

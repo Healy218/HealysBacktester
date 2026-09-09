@@ -561,3 +561,102 @@ class TestOptionStreamRunningRefresh:
         assert not loop_stalled(now=1000.0, last_tick=950.0)
         assert loop_stalled(now=1000.0, last_tick=800.0)
 
+
+
+# ── 2026-09-09: real contract + live quote in the alert (user: "option 1") ──
+_SNAPSHOT = {"status": "OK", "results": {
+    "details": {"contract_type": "call", "expiration_date": "2026-10-09", "strike_price": 11.5,
+                "ticker": "O:MARA261009C00011500"},
+    "greeks": {"delta": 0.5872747, "gamma": 0.136, "theta": -0.019, "vega": 0.013},
+    "implied_volatility": 0.8539426,
+    "last_quote": {"ask": 1.31, "ask_size": 86, "bid": 1.26, "bid_size": 88,
+                   "last_updated": 1788974565824497987, "midpoint": 1.285, "timeframe": "REAL-TIME"}}}
+
+
+class TestContractAndQuoteInAlerts:
+    def test_massive_snapshot_parses_nbbo_and_greeks(self, monkeypatch):
+        from options.data.massive_provider import MassiveProvider
+        monkeypatch.setenv("MASSIVE_API_KEY", "k")
+        p = MassiveProvider()
+        seen = []
+        monkeypatch.setattr(p, "_get", lambda path, params: (seen.append(path), _SNAPSHOT)[1])
+        q = p.get_contract_snapshot("MARA261009C00011500")
+        assert seen == ["/v3/snapshot/options/MARA/O:MARA261009C00011500"]
+        assert q["bid"] == 1.26 and q["ask"] == 1.31 and q["bid_size"] == 88 and q["source"] == "rest"
+        assert abs(q["delta"] - 0.587) < 0.01 and abs(q["iv"] - 0.854) < 0.01
+        assert q["ts"].startswith("2026-09-09T17:")
+        monkeypatch.setattr(p, "_get", lambda path, params: {"status": "OK", "results": {"details": {}}})
+        assert p.get_contract_snapshot("MARA261009C00011500") is None
+
+    def test_live_quote_prefers_fresh_stream_then_rest(self, tmp_path, monkeypatch):
+        from nn_meta.live.feeds import quotes as qm
+        from nn_meta.live.feeds.quotestore import QuoteStore
+        store = QuoteStore(tmp_path / "q.json")
+        store.update("MARA261009C00011500", bid=1.20, ask=1.24, bid_size=5, ask_size=7,
+                     ts=datetime.now(timezone.utc)); store.flush()
+        calls = []
+        class FakeMassive:
+            def __init__(self, *a, **k): pass
+            def get_contract_snapshot(self, occ): calls.append(occ); return {"bid": 1.26, "ask": 1.31, "ts": datetime.now(timezone.utc).isoformat(), "source": "rest"}
+        import types, sys
+        fake = types.ModuleType("options.data.massive_provider"); fake.MassiveProvider = FakeMassive
+        monkeypatch.setitem(sys.modules, "options.data.massive_provider", fake)
+        q = qm.live_quote("MARA261009C00011500", store_path=tmp_path / "q.json")
+        assert q["source"] == "stream" and q["bid"] == 1.20 and calls == []
+        q = qm.live_quote("QQQ260918P00500000", store_path=tmp_path / "q.json")      # not streamed yet
+        assert q["source"] == "rest" and calls == ["QQQ260918P00500000"]
+        assert qm.live_quote("SPY260918C00650000", store_path=tmp_path / "q.json", allow_rest=False) is None
+        # a stale streamed quote is not "live": fall through to REST
+        store.update("AAPL261023P00315000", bid=1, ask=2, ts=datetime(2026, 9, 9, 10, 0, tzinfo=timezone.utc)); store.flush()
+        assert qm.live_quote("AAPL261023P00315000", store_path=tmp_path / "q.json")["source"] == "rest"
+
+    def test_alert_lines_format(self):
+        from nn_meta.live.feeds.quotes import contract_lines, format_contract, format_quote_line
+        assert format_contract("MARA261009C00011500") == "MARA 2026-10-09 $11.50 CALL (MARA261009C00011500)"
+        assert format_contract("ASHR261023P00034000") == "ASHR 2026-10-23 $34 PUT (ASHR261023P00034000)"
+        now = datetime(2026, 9, 9, 17, 22, 48, tzinfo=timezone.utc)
+        q = {"bid": 1.26, "ask": 1.31, "bid_size": 99, "ask_size": 31, "ts": "2026-09-09T17:22:45+00:00",
+             "delta": 0.587, "iv": 0.854, "source": "rest"}
+        assert format_quote_line(q, now) == "quote: bid 1.26 / ask 1.31 · mid 1.29 · spread 3.9% · 99x31 · 3s old · Δ 0.59 · IV 85% · rest"
+        assert format_quote_line(None) == "quote: unavailable"
+        block = contract_lines("MARA261009C00011500", None, "~ATM C near $11.73")
+        assert block == "contract: MARA 2026-10-09 $11.50 CALL (MARA261009C00011500)\nquote: unavailable"
+        assert contract_lines(None, None, "~ATM C near $11.73") == "contract: ~ATM C near $11.73"
+
+    def test_scanner_alert_carries_contract_and_quote(self, monkeypatch):
+        from nn_meta import config
+        from nn_meta.live import scanner as sc
+        monkeypatch.setattr(config, "POOL", "v31")
+        sig = sc.Signal(symbol="MARA", strategy="rsi", direction=0, right="C",
+                        bar_ts=pd.Timestamp("2026-09-09 16:30"), dte=30, spot=11.73,
+                        param_label="entry=35, exit=70, window=14", score=0.58)
+        q = {"bid": 1.26, "ask": 1.31, "bid_size": 99, "ask_size": 31,
+             "ts": datetime.now(timezone.utc).isoformat(), "source": "stream"}
+        title, msg = sc.format_alert(sig, "MARA261009C00011500", q)
+        assert title == "[v31] MARA BUY CALL"
+        assert "contract: MARA 2026-10-09 $11.50 CALL (MARA261009C00011500)\nquote: bid 1.26 / ask 1.31" in msg
+        assert "~ATM" not in msg and "bar: 2026-09-09 16:30:00 UTC · spot $11.73" in msg
+        legacy = sc.format_alert(sig)[1]
+        assert "contract: ~ATM C near $11.73 strike, ~30 DTE" in legacy and "quote:" not in legacy
+
+    def test_v4_alert_carries_contract_and_quote(self):
+        from nn_meta.live.v4_scan import format_v4_alert
+        bundle = SimpleNamespace(family="nn", mode="filter", dd_brake=None)
+        row = pd.DataFrame([{"symbol": "APH", "strategy": "tv_rating", "dte": 45,
+                             "entry_ts": pd.Timestamp("2026-09-09 15:00"), "score": 0.64}]).iloc[0]
+        fresh = {"direction": 1, "param_label": "entry_rating=0.50", "spot": 81.44}
+        q = {"bid": 4.60, "ask": 5.30, "bid_size": 484, "ask_size": 20, "ts": datetime.now(timezone.utc).isoformat(), "source": "rest"}
+        _, msg = format_v4_alert(row, fresh, bundle, False, "APH261016P00082500", q)
+        assert "contract: APH 2026-10-16 $82.50 PUT (APH261016P00082500)\nquote: bid 4.60 / ask 5.30 · mid 4.95 · spread 14.1%" in msg
+        assert msg.count("\n") == 5 and "bar: 2026-09-09 15:00:00 UTC · spot $81.44" in msg
+        _, legacy = format_v4_alert(row, fresh, bundle, False)
+        assert "contract: ~ATM P near $81.44, ~45 DTE" in legacy
+
+    def test_ledger_records_contract_and_entry_mid(self, tmp_path):
+        from nn_meta.live.state import PaperLedger
+        led = PaperLedger(tmp_path / "l.json")
+        led.open("t1", "APH", "2026-09-09 15:00", 81.44, contract="APH261016P00082500", entry_mid=4.95)
+        led.open("t2", "KO", "2026-09-09 15:00", 87.0, contract=None, entry_mid=None)   # unresolved: keys absent
+        t = {x["trade_id"]: x for x in PaperLedger(tmp_path / "l.json").open_positions()}
+        assert t["t1"]["contract"] == "APH261016P00082500" and t["t1"]["entry_mid"] == 4.95
+        assert "contract" not in t["t2"] and t["t2"]["entry_price"] == 87.0

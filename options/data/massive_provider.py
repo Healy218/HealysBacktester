@@ -24,7 +24,7 @@ Notes
 from __future__ import annotations
 
 import os
-from datetime import date, datetime
+from datetime import timezone,  date, datetime
 from typing import Optional
 
 import pandas as pd
@@ -118,6 +118,32 @@ class MassiveProvider(OptionsDataProvider):
         else:
             logger.info(f"[options] Massive bars {ticker}: {len(df)} rows")
         return df
+
+    def get_contract_snapshot(self, occ_symbol: str) -> Optional[dict]:
+        """Live NBBO + greeks for ONE contract (Massive Advanced, real-time):
+        GET /v3/snapshot/options/{underlying}/O:{occ}. Returns
+        {bid, ask, bid_size, ask_size, ts (UTC iso), delta, iv, source="rest"}
+        or None when the contract is unknown or has no quote. Used by the
+        alert path as the fallback when the OPRA stream has not yet delivered
+        a quote for a freshly registered contract (2026-09-09)."""
+        occ = occ_symbol.removeprefix("O:").upper()
+        underlying = parse_occ_symbol(occ)[0]
+        try:
+            body = self._get(f"/v3/snapshot/options/{underlying}/O:{occ}", {})
+        except DataError:
+            return None
+        res = body.get("results") or {}
+        q = res.get("last_quote") or {}
+        if q.get("bid") is None or q.get("ask") is None:
+            return None
+        ts_ns = q.get("last_updated") or q.get("sip_timestamp")
+        ts = (datetime.fromtimestamp(ts_ns / 1e9, tz=timezone.utc).isoformat()
+              if ts_ns else datetime.now(timezone.utc).isoformat())
+        greeks = res.get("greeks") or {}
+        return {"bid": float(q["bid"]), "ask": float(q["ask"]),
+                "bid_size": float(q.get("bid_size") or 0), "ask_size": float(q.get("ask_size") or 0),
+                "ts": ts, "delta": greeks.get("delta"), "iv": res.get("implied_volatility"),
+                "source": "rest"}
 
     def get_chain(self, underlying, *, right=None, expiration_gte=None,
                   expiration_lte=None, strike_gte=None, strike_lte=None, as_of=None):

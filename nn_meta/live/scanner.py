@@ -230,6 +230,26 @@ def register_alert_contract(symbol: str, right: str, spot: float, dte: int, now)
         return None
 
 
+def alert_quote(occ: Optional[str], allow_rest: bool = True) -> Optional[dict]:
+    """Best-effort live NBBO for a resolved contract (stream first, then the
+    Massive REST snapshot). Never raises."""
+    if not occ:
+        return None
+    try:
+        from nn_meta.live.feeds.quotes import live_quote
+        return live_quote(occ, allow_rest=allow_rest)
+    except Exception as exc:                       # pragma: no cover - defensive
+        logger.warning(f"[live] {occ}: quote lookup failed: {exc}")
+        return None
+
+
+def _mid(q: Optional[dict]) -> Optional[float]:
+    try:
+        return round((float(q["bid"]) + float(q["ask"])) / 2, 4) if q else None
+    except Exception:
+        return None
+
+
 # ── detection ─────────────────────────────────────────────────────────────────
 
 def detect_fresh_signal(symbol: str, bars: pd.DataFrame, spec_entry: dict
@@ -264,17 +284,21 @@ def suggest_contract(sig: Signal, now: Optional[datetime] = None) -> str:
             f"~{sig.dte} DTE (nearest listed expiry ≈ {target_exp})")
 
 
-def format_alert(sig: Signal) -> tuple[str, str]:
+def format_alert(sig: Signal, contract: Optional[str] = None,
+                 quote: Optional[dict] = None) -> tuple[str, str]:
     # v2/v3 alert text is unchanged; big-run pools (v31+) run as ADDITIONAL
     # experts next to the v3 line, so their alerts carry the pool label.
     # 2026-09-08 (fix 6): v3 carries its tag too, so every phone alert and
     # every top-five slot reads the same way; only the legacy v2 line is bare.
+    # 2026-09-09: with a resolved ``contract`` the advisory "~ATM near $spot"
+    # line becomes the listed contract plus its live NBBO (see feeds/quotes).
+    from nn_meta.live.feeds.quotes import contract_lines
     tag = "" if config.POOL == "v2" else f"[{config.POOL}] "
     title = f"{tag}{sig.symbol} {sig.action}"
     conv = f" · conviction {sig.score:.0%}" if sig.score is not None else ""
     msg = (f"{tag}{sig.symbol}: {sig.action}{conv}\n"
            f"trigger: {sig.strategy} ({sig.param_label})\n"
-           f"contract: {suggest_contract(sig)}\n"
+           f"{contract_lines(contract, quote, suggest_contract(sig))}\n"
            f"bar: {sig.bar_ts} UTC · spot ${sig.spot:,.2f}")
     if config.POOL not in ("v2", "v3"):
         msg += f"\nexpert: {config.POOL}-nn · paper"
@@ -382,14 +406,16 @@ class Scanner:
                     logger.info(f"[live] {sym}: mechanical entry filtered out "
                                 f"(score={sig.score})")
                     continue
-            title, message = format_alert(sig)
+            occ = register_alert_contract(sym, sig.right, float(sig.spot), int(sig.dte), now)
+            quote = alert_quote(occ)
+            title, message = format_alert(sig, occ, quote)
             from nn_meta.live.alert_batches import cycle
             outbox.enqueue({"title": title, "message": message,
                             "probability": sig.score, "expert": config.POOL, "alert_cycle": cycle(now),
-                            "symbol": sym, "side": sig.action,
+                            "symbol": sym, "side": sig.action, "contract": occ,
+                            "entry_mid": _mid(quote),
                             "summary": f"[{config.POOL}] {sym} | {sig.strategy} | {sig.action} | {sig.dte} DTE"},
                            key=f"{config.POOL}|{sym}|{sig.strategy}|{bar_iso}")
-            register_alert_contract(sym, sig.right, float(sig.spot), int(sig.dte), now)
             fired.append(sig)
             state[sym] = bar_iso
         if skipped:

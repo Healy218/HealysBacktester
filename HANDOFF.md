@@ -1,5 +1,8 @@
 # Production top-five alert routing — ready for deployment
 
+**2026-09-09:** alerts now name the resolved contract with its live NBBO
+(stream, else Massive snapshot); see the review note's last section.
+
 **2026-09-08 (later): server operations fixes 1–8 on this branch** — see
 docs/reviews/2026-09-08-server-ops-fixes.md for the findings, changes and the
 deploy sequence (`scripts/configure_cron.py --run`, `scripts/run_refresh.sh v5`).

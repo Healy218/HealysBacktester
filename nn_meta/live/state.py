@@ -166,12 +166,16 @@ class PaperLedger:
 
     @refreshed("_trades", list)
     def open(self, trade_id: str, symbol: str, entry_ts, price: float,
-             qty: float = 1.0) -> None:
+             qty: float = 1.0, **extra) -> None:
+        """``extra`` (2026-09-09): the resolved OCC ``contract`` and its
+        ``entry_mid`` at alert time, so the paper record names the option
+        actually alerted, not just the underlying's spot."""
         if any(t["trade_id"] == trade_id for t in self._trades):
             raise ValueError(f"trade_id already recorded: {trade_id}")
         self._trades.append({"trade_id": trade_id, "symbol": symbol,
                              "entry_ts": str(entry_ts), "entry_price": float(price),
-                             "qty": float(qty), "exit_ts": None, "exit_price": None})
+                             "qty": float(qty), "exit_ts": None, "exit_price": None,
+                             **{k: v for k, v in extra.items() if v is not None}})
         atomic_write_json(self.path, self._trades)
 
     @refreshed("_trades", list)

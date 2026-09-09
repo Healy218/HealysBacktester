@@ -60,7 +60,7 @@ from nn_meta import config
 from nn_meta.baseline import load_spec, propose_trades
 from nn_meta.build_meta_dataset import rolling_beta_60d
 from nn_meta.live.scanner import (TICKER_ALIASES, aliased_bar_loader,
-                                  closed_bars, is_rth, require_recent_bars, NoBarsError, NoBarsMemo, register_alert_contract)
+                                  closed_bars, is_rth, require_recent_bars, NoBarsError, NoBarsMemo, register_alert_contract, alert_quote, _mid)
 from nn_meta.live.state import (AlertState, Outbox, PaperLedger,
                                 atomic_write_json, health_snapshot, serialized, preview_state)
 from nn_meta.live.v4_candidates import build_candidate_batch
@@ -193,8 +193,10 @@ def alert_key(symbol: str, strategy: str, bar_ts: pd.Timestamp) -> str:
     return f"v4|{symbol}|{strategy}|{pd.Timestamp(bar_ts).isoformat()}"
 
 
-def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool
+def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool,
+                    contract: Optional[str] = None, quote: Optional[dict] = None
                     ) -> tuple[str, str]:
+    from nn_meta.live.feeds.quotes import contract_lines
     # direction comes from the fresh-signal dict: the candidate batch only
     # carries it as the dir_short feature.
     right = "C" if fresh["direction"] == 0 else "P"
@@ -212,9 +214,9 @@ def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool
     msg = (f"{TAG} {shown}: {action} · P(win) {row.score:.0%}{ev_part}\n"
            f"trigger: {row.strategy} ({fresh['param_label']}) · "
            f"DTE {int(row.dte)} (best of grid)\n"
-           f"contract: ~ATM {right} near ${fresh['spot']:,.2f}, "
-           f"~{int(row.dte)} DTE (≈ {expiry})\n"
-           f"bar: {row.entry_ts} UTC · spot ${fresh['spot']:,.2f}\n"
+           + contract_lines(contract, quote,
+                            f"~ATM {right} near ${fresh['spot']:,.2f}, ~{int(row.dte)} DTE (≈ {expiry})")
+           + f"\nbar: {row.entry_ts} UTC · spot ${fresh['spot']:,.2f}\n"
            f"expert: {tag}")
     return title, msg
 
@@ -316,7 +318,14 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
                             f"(best {bundle.mode} score {row.decision:.3f} < {thr})")
                 alert_state.mark(key)                # don't rescore this bar
                 continue
-            title, msg = format_v4_alert(row, fresh, bundle, paper)
+            # Resolve the listed contract first so the alert carries it and
+            # its live NBBO; REST only for alerts that can reach the phone
+            # (above this expert's floor) — the stream covers the rest later.
+            occ = register_alert_contract(row.symbol, "P" if fresh["direction"] else "C",
+                                          float(fresh["spot"]), int(row.dte), now)
+            from nn_meta.live.alert_batches import PROBABILITY_FLOORS
+            quote = alert_quote(occ, allow_rest=float(row.score) > PROBABILITY_FLOORS.get(EXPERT, -1))
+            title, msg = format_v4_alert(row, fresh, bundle, paper, occ, quote)
             # Crash-consistency order (2026-08-16 review): enqueue -> ledger
             # -> mark. A crash at any boundary re-detects next pass (not yet
             # marked); the outbox key dedupes the notification and the ledger
@@ -326,13 +335,12 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
             side = "BUY PUT" if fresh["direction"] else "BUY CALL"
             outbox.enqueue({"title": title, "message": msg, "probability": float(row.score),
                             "expert": EXPERT, "alert_cycle": cycle(now),
-                            "symbol": row.symbol, "side": side,
+                            "symbol": row.symbol, "side": side, "contract": occ, "entry_mid": _mid(quote),
                             "summary": f"[{EXPERT}] {row.symbol} | {row.strategy} | {'PUT' if fresh['direction'] else 'CALL'} | {int(row.dte)} DTE"}, key=key)
-            register_alert_contract(row.symbol, "P" if fresh["direction"] else "C",
-                                    float(fresh["spot"]), int(row.dte), now)
             try:
                 ledger.open(trade_id=f"{key}|{int(row.dte)}", symbol=row.symbol,
-                            entry_ts=row.entry_ts, price=fresh["spot"])
+                            entry_ts=row.entry_ts, price=fresh["spot"],
+                            contract=occ, entry_mid=_mid(quote))
             except ValueError:
                 pass                        # replayed after a crash — already open
             alert_state.mark(key)
