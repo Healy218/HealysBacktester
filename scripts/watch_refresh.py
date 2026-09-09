@@ -6,8 +6,10 @@
 
 Reads what ``scripts/run_refresh.sh`` leaves behind — ``logs/refresh_status/<pool>.json``,
 ``logs/surface_refresh_<pool>.log`` — plus the live process table (download or
-build step, elapsed, RSS) and the surface file's age. Exits after reporting a
-finished (or failed) run, or after ``--max-hours``. Never touches the run.
+build step, elapsed, RSS) and the surface file's age. Progress goes out every
+``--interval``; the state is re-checked every ``--poll`` so a finished or
+failed run is reported within minutes, after which the watcher exits (or
+after ``--max-hours``). Never touches the run.
 """
 from __future__ import annotations
 import argparse
@@ -121,7 +123,9 @@ def format_report(info: dict) -> tuple[str, bool]:
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--pool", required=True)
-    ap.add_argument("--interval", type=float, default=3600.0, help="seconds between reports")
+    ap.add_argument("--interval", type=float, default=3600.0, help="seconds between progress reports")
+    ap.add_argument("--poll", type=float, default=300.0,
+                    help="seconds between state checks; a finished/failed run is reported at once")
     ap.add_argument("--max-hours", type=float, default=36.0)
     ap.add_argument("--once", action="store_true")
     ap.add_argument("--dry-run", action="store_true", help="console notifier")
@@ -136,13 +140,17 @@ def main() -> None:
     from nn_meta.live.notifier import get_notifier
     notifier = get_notifier(force_console=args.dry_run)
     t0 = time.time()
+    last_report = None
     while True:
         msg, done = format_report(gather(args.pool))
-        print(msg, flush=True); print("---", flush=True)
-        notifier.send(msg, title=f"{args.pool} surface refresh")
+        due = last_report is None or time.time() - last_report >= args.interval
+        if done or due:
+            print(msg, flush=True); print("---", flush=True)
+            notifier.send(msg, title=f"{args.pool} surface refresh")
+            last_report = time.time()
         if done or args.once or time.time() - t0 > args.max_hours * 3600:
             return
-        time.sleep(args.interval)
+        time.sleep(min(args.poll, args.interval))
 
 
 if __name__ == "__main__":
