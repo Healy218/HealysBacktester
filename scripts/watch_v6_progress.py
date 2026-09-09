@@ -1,4 +1,4 @@
-"""Read-only campaign observer. Run once from a persistent 30-minute timer."""
+"""Read-only campaign observer. Run once from the persistent campaign progress timer."""
 import argparse
 import csv
 import datetime as dt

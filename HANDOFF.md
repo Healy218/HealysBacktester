@@ -1,3 +1,13 @@
+# Build notification cadence — hourly
+
+User requested hourly aggregate build updates, no per-ticker notifications.
+Installed and repository healys-v6-progress.timer now run at :00 each hour.
+Verified active; next report September 9 at18:00 CDT (23:00 UTC). Reports retain
+overall completed count, active worker count, rate and ETA. Build scripts have
+no per-ticker Telegram sender. No immediate extra report sent for this change.
+This cadence applies during build; revisit the prior half-hour training cadence
+when explicitly moving to training.
+
 # Handoff — v6 build and assembly launched
 
 September 9, 2026. User authorized next phase after freeze completion.

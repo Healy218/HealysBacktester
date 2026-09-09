@@ -1,8 +1,8 @@
 [Unit]
-Description=Report v6 preparation, freeze, build and training every 30 minutes
+Description=Report v6 preparation, freeze, build and training hourly during the v6 build
 
 [Timer]
-OnCalendar=*-*-* *:00,30:00
+OnCalendar=*-*-* *:00:00
 Persistent=true
 AccuracySec=1s
 Unit=healys-v6-progress.service
