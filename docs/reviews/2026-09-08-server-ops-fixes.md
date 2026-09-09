@@ -23,6 +23,18 @@ counters read print() lines, which the console filter never touches.
 
 ## Deployment (server, as `mrhea`, no sudo)
 
+Outcome (2026-09-09 01:47 UTC): everything deployed, crontab installed 21:06 UTC
+(rollback `logs/ops/ops-fixes-20260908T210652Z/`). The v5 download finished in
+1.1 h at 6 workers, but `build_surface` was OOM-killed (exit 137) after two
+hours: the loader re-factorized the 3.6M-ticker universe per part (2.3 s ×
+2,978 parts) and then held all 27.8M rows. Fixed on this branch:
+`build_surface_streaming` attaches universe rows by cached index lookup
+(1.3 ms/part) and reduces each part to its near-ATM rows and volume sums; the
+surface then built in **2 min 40 s** at 1.9 GB RSS (`run_refresh.sh v5
+--build-only`, 01:43–01:46 UTC), reported to Telegram by the new
+`scripts/watch_refresh.py` (hourly progress, immediate completion). The
+heartbeat now reads `surfaces: v3 3d · v31 3d · v5 0d`.
+
 ```sh
 cd ~/HealysBacktester && git pull
 ./venv/bin/python scripts/configure_cron.py            # preview
