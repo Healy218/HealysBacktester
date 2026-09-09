@@ -18,6 +18,21 @@ from nn_options_signal.build_dataset import implied_vol, market_features
 from nn_meta import config
 
 
+def _attach_meta(b: pd.DataFrame, meta: pd.DataFrame) -> pd.DataFrame:
+    """Inner-join a part's bars to the ticker-indexed universe by index LOOKUP.
+
+    ``merge``/``join`` re-factorize both key columns on every call — 2.3 s per
+    part against the 3.6M-ticker v5 universe, i.e. hours over ~3,000 parts
+    (measured 2026-09-09). ``Index.get_indexer`` uses the index's cached hash
+    engine (built once, ~2 s), so a part costs only its own rows."""
+    keys = meta.index.get_indexer(b["ticker"].to_numpy())
+    hit = keys >= 0
+    if not hit.any():
+        return b.iloc[0:0].join(meta.iloc[0:0], on="ticker")
+    return pd.concat([b[hit].reset_index(drop=True),
+                      meta.iloc[keys[hit]].reset_index(drop=True)], axis=1)
+
+
 def load_daily_bars() -> pd.DataFrame:
     """Load the per-contract daily bars, filtered per part.
 
@@ -34,10 +49,7 @@ def load_daily_bars() -> pd.DataFrame:
     meta = pd.read_parquet(config.UNIVERSE_PARQUET)[
         ["ticker", "underlying", "strike", "expiration", "type"]]
     meta["expiration"] = pd.to_datetime(meta["expiration"])
-    # Index the universe ONCE (2026-09-08): ``merge(on="ticker")`` re-factorized
-    # the whole universe for every part — 2,978 parts × 3.6M tickers on v5 took
-    # hours at 100 % CPU before the first print. ``join`` on a prebuilt index
-    # reuses its hash engine, so each part costs its own size only. Duplicate
+    # Index the universe ONCE and attach by lookup (see _attach_meta). Duplicate
     # universe rows would only have been removed by the final dedupe anyway.
     meta = meta.drop_duplicates("ticker").set_index("ticker")
     frames = []
@@ -46,7 +58,7 @@ def load_daily_bars() -> pd.DataFrame:
         b = pd.read_parquet(p, columns=["ticker", "date", "close", "volume"])
         if b.empty:
             continue
-        b = b.join(meta, on="ticker", how="inner")
+        b = _attach_meta(b, meta)
         if b.empty:
             continue
         dte = (b["expiration"] - b["date"]).dt.days
@@ -143,7 +155,7 @@ def build_surface_streaming(und: pd.DataFrame) -> pd.DataFrame:
         b = pd.read_parquet(p, columns=["ticker", "date", "close", "volume"])
         if b.empty:
             continue
-        b = b.drop_duplicates(["ticker", "date"]).join(meta, on="ticker", how="inner")
+        b = _attach_meta(b.drop_duplicates(["ticker", "date"]), meta)
         if b.empty:
             continue
         dte = (b["expiration"] - b["date"]).dt.days
