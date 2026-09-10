@@ -38,3 +38,11 @@ closing bar without monitor errors. A subsequent user-supplied premium was
 recorded without changing the held contract or duplicating the position.
 Both Telegram receipts were accepted. This was an actual user-confirmed
 position; its private holding details are retained only in server SQLite.
+
+## Live broker-fee deployment
+
+2026-09-10 04:59 UTC: d2708d6 deployed; private account-tier setting configured,
+active contexts updated with the versioned fee profile, and server arithmetic
+verified against both a standard-option position and Robinhood's published
+index example. Queue backup is under logs/ops/fee-deploy-20260910T045930Z.
+Full suite: 668 passed +18 subtests. Fees affect live cost/PnL estimates only.

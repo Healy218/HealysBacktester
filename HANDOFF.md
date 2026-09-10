@@ -22,3 +22,10 @@ Validation: full ops suite 668 passed +18 subtests. Tests include the exact
 published SPXW fee example, Gold/non-Gold, exchange tiers, penny rounding,
 small-order waivers, caps, DOW-stock versus DJX-index classification, and
 stale/invalid quote suppression. Sources and scope are in DOCUMENTATION.md.
+
+Deployed d2708d6 at 2026-09-10 04:59 UTC. Private account-tier setting applied
+and all active position contexts backfilled with the verified fee profile.
+Server entry-cost calculation and Robinhood's published index example passed.
+Private queue backup: logs/ops/fee-deploy-20260910T045930Z/taken-before.sqlite3.
+No real fills, exit triggers, or research settings changed. Full suite remains
+668 passed +18 subtests. /selllist now shows fee-inclusive estimated entry cost.
