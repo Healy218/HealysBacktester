@@ -44,3 +44,27 @@ changes into main during the build/evaluation/training campaign. Only this
 documentation pointer was added to main. Build state was not rechecked here.
 Next-sale broker verification remains pending independently; no need to block
 further isolated coding on that sale.
+
+## September 10 — FA schedules activated
+
+User authorized archive inputs, daily-price source and activation. Durable
+runtime is `/home/healy/Coding/HealysAutomation`, on isolated FA source
+`82e63a6` from `ops/fa-automation-20260910`. Its HANDOFF.md and
+`docs/reviews/2026-09-10-fa-activation.md` contain the operational record.
+Seven user timers are enabled: archive sync, StockTwits collection/push,
+Alpaca SIP daily prices, monthly freeze, daily tracking, weekly backup and
+hourly health. First archive/StockTwits/prices/tracker service runs passed;
+archive and StockTwits also fired automatically. All 120 price symbols
+validated through September 9. First monthly freeze is October 1 UTC
+(September 30, 8:15 p.m. Chicago); no historical cohort was manufactured.
+
+As of 18:39 UTC, the initial 7.2 GB packed v5 backup upload remains in progress.
+An existing SPY backup object passed a SHA-256 restore test, but the new full
+snapshot is not yet verified. Its job automatically restores a shard before
+publishing a completion manifest. A dependent one-time health check is queued
+as `healys-fa-activation-check.service`; read the durable runtime's
+`logs/job-health/{cache-backup,backup-restore,fa-activation-check}` receipts
+before reporting full completion. No additional manual activation is required.
+Backup covers existing v3/data, v5 cache and runtime FA/inputs, not the corrected
+campaign data_candidates. Runtime source remains isolated from this pinned
+main checkout. Focused activation/automation tests: 22 passed.
