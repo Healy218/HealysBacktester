@@ -31,3 +31,10 @@ Focused tests: 59 passed. New regressions cover equal-count copytruncate,
 regrowth above baseline, compression without rotation, old-state migration,
 and genuine zero-scan detection with an old archive. Full suite and deployment
 verification are recorded in HANDOFF.md.
+
+Deployment: a79cda1, verified September 10 at 17:34:03 UTC. All 59 focused
+server tests passed. Read-only preview: v3/v31 two RTH passes each, v4/v5
+three each since the 17:00 heartbeat, zero new crashes, all scanners healthy.
+Baseline bytes were unchanged; no extra notification was sent. Evidence is
+`logs/ops/heartbeat-rotation-20260910T173350Z/` on the server. Full local suite:
+699 tests and 18 subtests passed.

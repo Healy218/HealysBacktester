@@ -9,8 +9,11 @@ Added independent log-generation detection (device/inode + dateext rotation
 suffix), compatible migration from old state and five regressions. No scanner,
 model, position, cron or feed changes. Details:
 docs/reviews/2026-09-10-heartbeat-rotation.md.
-Focused tests 59 passed; full suite 699 passed plus 18 subtests. Deployment pending. Production last
-inspected at fef6542. Verification must use build_message only, never send or
+Focused tests 59 passed; full suite 699 passed plus 18 subtests. Deployed
+a79cda1 and verified at 17:34:03 UTC: server acceptance passed and read-only
+preview reports all four scanners healthy, 2–3 RTH passes each since 17:00,
+zero new crashes. Baseline bytes unchanged; no notification sent. Evidence on
+server: logs/ops/heartbeat-rotation-20260910T173350Z/. Verification must use build_message only, never send or
 persist a replacement heartbeat unless the user explicitly requests that.
 
 Accounting/recovery remains deployed; user chose their next sale for broker
