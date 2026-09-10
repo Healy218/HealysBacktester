@@ -107,3 +107,8 @@ nn_meta/live/.*.lock
 # Isolated worktrees may share the installed virtualenv via a symlink.
 /venv
 /deploy/fa-automation.env
+/deploy/fa-runtime.json
+
+/deploy/generated-user/
+/inputs/
+/fa/daily_prices/
