@@ -65,27 +65,28 @@ def _option_estimate(quote, spot, stop, direction, now):
             return ''
         mid = (bid + ask) / 2
         estimate = max(0, mid + delta * (stop - spot))
-        return f"; delta-only ≈ ${estimate:.2f} ({estimate / mid - 1:+.0%} vs quote mid, excludes IV/time/spread)"
+        return f", ≈ option ${estimate:.2f}, {estimate / mid - 1:+.0%} (Δ-only)"
     except (KeyError, TypeError, ValueError, AttributeError, OverflowError):
         return ''
 
 
 def format_exit_line(strategy, params, direction, symbol, spot, quote=None, *, sim_config=None, now=None):
     cfg = config.SIM_CONFIG if sim_config is None else sim_config
-    parts = [strategy_exit(strategy, params, direction) + ' on 15m bars']
-    if cfg.get('ENABLE_SHORTING') and strategy != 'volume':
-        parts.append('opposite entry may reverse position')
+    parts = [strategy_exit(strategy, params, direction)]
     if cfg.get('ATR_SL_WINDOW') or cfg.get('USE_TRAILING_STOP'):
-        parts.append('dynamic underlying stop per simulator')
+        parts.append('dynamic stock stop')
     elif cfg.get('USE_STOP_LOSS') and cfg.get('STOP_LOSS_PERCENT'):
         fraction = float(cfg['STOP_LOSS_PERCENT'])
         stop = float(spot) * (1 + fraction if direction == 1 else 1 - fraction)
         if math.isfinite(stop) and spot > 0:
             relation = '≥' if direction == 1 else '≤'
             estimate = _option_estimate(quote, spot, stop, direction, now or datetime.now(timezone.utc))
-            parts.append(f'{symbol} {relation} ${stop:,.2f} ({fraction:.0%} underlying stop from signal close{estimate})')
+            move = fraction if direction == 1 else -fraction
+            parts.append(f'{symbol} {relation} ${stop:,.2f} ({move:+.0%} stock stop{estimate})')
     if cfg.get('USE_TAKE_PROFIT') and cfg.get('TAKE_PROFIT_PERCENT'):
         fraction = float(cfg['TAKE_PROFIT_PERCENT'])
         target = spot * (1 - fraction if direction == 1 else 1 + fraction)
         parts.append(f'underlying take-profit ${target:,.2f}')
+    if cfg.get('ENABLE_SHORTING') and strategy != 'volume':
+        parts.append('opposite signal')
     return 'exit: ' + ' · or '.join(parts) + ' · roll at expiry when available'

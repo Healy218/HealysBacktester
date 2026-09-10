@@ -492,3 +492,13 @@ mid, excluding IV, time decay, and spread; never a premium stop, guaranteed
 fill, or training-derived return. No hardcoded -50% claim. Missing/stale
 Greeks omit that estimate without suppressing the alert. Actual SELL alerts
 and paper position exit monitoring remain a separate implementation.
+
+2026-09-10 presentation follow-up: user prefers Claude's compact preview.
+Exit line now uses `SYMBOL ≤ $X (-5% stock stop, ≈ option $Y, -Z% (Δ-only))`,
+followed by concise opposite-signal and expiry-roll text. Put stop displays
++5% underlying movement. The estimate remains versus current quote mid and
+retains all freshness/validity checks above; only the prose was shortened.
+Telegram previews should resolve a real contract and retrieve a quote, rather
+than invoke the formatter without those optional arguments. Historical signal
+and after-hours quote timestamps must remain explicit; never freshen old data
+just to make the option estimate appear.

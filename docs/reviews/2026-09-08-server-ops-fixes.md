@@ -107,3 +107,12 @@ RSI(21) below 80 and the underlying stop computed from that record's spot.
 No notification or quote API request was made by verification. Existing cron
 scan processes import the formatter on their next pass; no feed restart needed.
 Final wording-only adjustment also passed all 26 exit-guidance tests.
+
+### Compact alert layout follow-up
+
+User requested the layout from Claude's preview. Shortened exit prose, put
+stock stop immediately after the strategy condition, and retained a compact
+`Δ-only` qualifier. Quote lookup for the revised preview resolved recorded
+MARA signal 2026-09-09 16:30 UTC to MARA261009C00011500; latest REST quote was
+1.34/1.41 at 19:59:55 UTC. Its age correctly suppresses the premium estimate.
+Full ops suite: 616 passed +18 subtests. No signal/quote freshness changes.

@@ -1,4 +1,4 @@
-# Production exit guidance in entry alerts
+# Compact production alert layout
 
 2026-09-10 UTC. Ops branch `ops/server-alert-readiness-20260906`, isolated
 worktree `/tmp/healys-server-alert-readiness`; home v6 build remains on main.
@@ -19,3 +19,9 @@ Deployed and verified production code `7bc74ec` on 2026-09-10 ~01:00 UTC.
 Full ops suite: 616 passed +18 subtests; final exit tests 26 passed.
 Read-only server preview passed with a recorded v31 alert. See the server
 ops review note for evidence. Next cron passes pick up the formatter.
+
+User requested Claude’s compact alert appearance after the first Telegram
+preview omitted contract/quote inputs. Follow-up shortens exit prose and
+uses the real recorded MARA signal, resolved contract, and latest REST quote
+for Telegram. Stale quotes still omit the premium estimate. Full suite remains
+616 passed +18 subtests. Deploy this presentation change on the ops branch.

@@ -42,8 +42,8 @@ def test_stop_and_delta_estimate_both_directions(direction, delta, level):
     quote = dict(bid=9, ask=11, delta=delta, ts=NOW.isoformat())
     text = format_exit_line('rsi', RSI, direction, 'XYZ', 100, quote, now=NOW)
     assert level in text
-    assert 'delta-only ≈ $7.50 (-25% vs quote mid' in text
-    assert 'opposite entry may reverse' in text
+    assert '≈ option $7.50, -25% (Δ-only)' in text
+    assert 'or opposite signal' in text
     assert 'take-profit' not in text
 
 
@@ -51,7 +51,7 @@ def test_stop_and_delta_estimate_both_directions(direction, delta, level):
 def test_bad_or_stale_quote_omits_estimate_but_keeps_rule(bad):
     quote = dict(bid=9, ask=11, delta=.5, ts=NOW.isoformat()) | bad
     text = format_exit_line('rsi', RSI, 0, 'XYZ', 100, quote, now=NOW)
-    assert 'delta-only' not in text
+    assert 'Δ-only' not in text
     assert '≤ $95.00' in text
 
 
@@ -59,10 +59,10 @@ def test_configuration_controls_stop_not_hardcoded():
     cfg = dict(USE_STOP_LOSS=True, STOP_LOSS_PERCENT=.02)
     assert '$98.00' in format_exit_line('rsi', RSI, 0, 'XYZ', 100, sim_config=cfg)
     cfg['USE_STOP_LOSS'] = False
-    assert 'underlying stop' not in format_exit_line('rsi', RSI, 0, 'XYZ', 100, sim_config=cfg)
+    assert 'stock stop' not in format_exit_line('rsi', RSI, 0, 'XYZ', 100, sim_config=cfg)
     cfg['ATR_SL_WINDOW'] = 14
     text = format_exit_line('rsi', RSI, 0, 'XYZ', 100, sim_config=cfg)
-    assert 'dynamic underlying stop' in text and '$98' not in text
+    assert 'dynamic stock stop' in text and '$98' not in text
 
 
 def test_both_alert_formatters_include_shared_exit():
