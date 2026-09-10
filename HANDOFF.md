@@ -1,26 +1,27 @@
-# FA monthly and operational health automation coded
+# FA schedule activated on isolated home runtime
 
-September 10, 2026. User explicitly authorized continuing coding while the
-next-sale broker check remains pending, superseding the earlier sequencing
-pause. New work is on ops/fa-automation-20260910 in /tmp/healys-fa-automation,
-based on corrected main 22ea559. FA is fingerprinted by the active campaign;
-neither primary main nor the isolated live-production branch was modified.
+September 10, 2026. User authorized configuring inputs and activating schedules.
+Durable runtime `/home/healy/Coding/HealysAutomation` is deployed through git
+from `ops/fa-automation-20260910`; development checkout remains
+`/tmp/healys-fa-automation`. Do not merge its FA source into the main checkout
+while the v6 campaign pins source. Do not transplant only scheduling code into
+the older live-production FA branch.
 
-Implemented prospective monthly snapshots and safe retries, publication-based
-forward measurement with frozen baseline/local price inputs, monthly/daily
-systemd templates, per-source collector receipts, scheduled-job lock/timeout
-receipts, freshness checks and bounded backup sample restoration tooling.
-See docs/reviews/2026-09-10-fa-automation.md for exact contracts and commands.
+Seven user timers are enabled: archive sync, StockTwits collect/push, daily
+Alpaca SIP prices, monthly prospective freeze, daily tracking, weekly backup,
+and hourly receipt/capture health. First archive/StockTwits/prices/tracker
+services passed. All 120 price symbols validated; StockTwits added 90 rows.
+First prospective freeze is October 1 UTC, no historical cohort manufactured.
+See docs/reviews/2026-09-10-fa-activation.md for inputs, schedules, backup scope
+and verification evidence. Initial 7.2 GB packed backup upload is running;
+full backup verification is pending, not complete. An existing SPY object
+restore passed. The new packed snapshot automatically restores a shard before
+publishing its manifest; `healys-fa-activation-check.service` is queued to run
+health afterward. Check `logs/job-health/{cache-backup,backup-restore,fa-activation-check}`
+in the durable runtime for completion. Archive and StockTwits timers have
+already fired automatically and succeeded. No further manual start is needed.
 
-Full suite passed 1,469 tests and 18 subtests. Final focused run passed
-17 tests after a Markdown publication-label fix and child-process timeout
-regression test. systemd-analyze verify and git diff --check passed. Preview correctly reports
-September 10 outside the August freeze window. No real cohort was created,
-collectors run, provider calls made, schedules installed, cloud files changed,
-or live backup restored. Health preview on this clean checkout correctly
-reports missing receipts/captures; that is not an audit of the installed host.
-
-Next: review/activate the automation after choosing a compatible deployment
-location and configuring archive ownership + daily prices. Normal next freeze
-is October 1 (September captures). Existing live accounting remains separately
-deployed on the ops branch; reconcile the user's next sale when supplied.
+Prior implementation contracts are in docs/reviews/2026-09-10-fa-automation.md.
+Live-accounting and heartbeat fixes remain on the independent production ops
+branch. The user's PTON sale remains pending; FA scheduling does not depend on
+that sale and does not place trades.
