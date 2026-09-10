@@ -15,4 +15,7 @@ does not perform that monitoring. Preserve existing top-five routing,
 probability floors, overflow replies, live feed watchdogs, and hourly home
 build watcher. Do not merge this branch into the source-pinned home campaign.
 
-Validation and deployment outcome: see the server ops review note.
+Deployed and verified production code `7bc74ec` on 2026-09-10 ~01:00 UTC.
+Full ops suite: 616 passed +18 subtests; final exit tests 26 passed.
+Read-only server preview passed with a recorded v31 alert. See the server
+ops review note for evidence. Next cron passes pick up the formatter.

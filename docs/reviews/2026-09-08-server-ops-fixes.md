@@ -98,3 +98,12 @@ than the earlier conversational preview.
 Validation: full ops suite 616 passed +18 subtests. Updated prior alert line
 count expectation and fixed watchlist test clock (expired historical fixtures).
 Quote deployment 4a30010 confirmed on production at 2026-09-09 20:12:02 UTC.
+
+Deployment verified 2026-09-10 ~01:00 UTC: production fast-forwarded to
+`7bc74ec`, imported the module from `/home/mrhea/HealysBacktester`, and rendered
+both directions using MARA's actual frozen RSI params. A second read-only
+preview rendered the recorded v31 MU alert from 2026-09-09 19:30 UTC with
+RSI(21) below 80 and the underlying stop computed from that record's spot.
+No notification or quote API request was made by verification. Existing cron
+scan processes import the formatter on their next pass; no feed restart needed.
+Final wording-only adjustment also passed all 26 exit-guidance tests.
