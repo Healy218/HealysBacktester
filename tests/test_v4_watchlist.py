@@ -5,12 +5,19 @@ from datetime import datetime, timedelta, timezone
 
 import numpy as np
 import pandas as pd
+import pytest
 
 from nn_meta.live.v4_scan import digest_pass
 from nn_meta.live.watchlist import MAX_HOLD_DAYS, Watchlist, format_digest
 
 NOW = datetime(2026, 8, 24, 21, 0, tzinfo=timezone.utc)
 TODAY = "2026-08-24"
+
+
+@pytest.fixture(autouse=True)
+def fixed_watchlist_clock(monkeypatch):
+    # Historical fixtures must not expire with the real wall clock.
+    monkeypatch.setattr("nn_meta.live.watchlist._utcnow", lambda: NOW)
 
 
 def _record(wl, key, *, decision=0.05, direction=0, spot=100.0,

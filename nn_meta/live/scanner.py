@@ -14,7 +14,7 @@ once the v2 model_final bundle is trained.
 from __future__ import annotations
 
 import json
-from dataclasses import dataclass, asdict
+from dataclasses import dataclass, asdict, field
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Callable, Optional
@@ -65,6 +65,8 @@ class Signal:
     spot: float
     param_label: str
     score: Optional[float] = None    # NN P(win), None in baseline mode
+
+    params: dict = field(default_factory=dict)
 
     @property
     def action(self) -> str:
@@ -273,6 +275,7 @@ def detect_fresh_signal(symbol: str, bars: pd.DataFrame, spec_entry: dict
         bar_ts=bars.index[-1], dte=int(e["dte"]),
         spot=float(bars["Close"].iloc[-1]),
         param_label=e.get("param_label", ""),
+        params=dict(e["params"]),
     )
 
 
@@ -292,6 +295,7 @@ def format_alert(sig: Signal, contract: Optional[str] = None,
     # every top-five slot reads the same way; only the legacy v2 line is bare.
     # 2026-09-09: with a resolved ``contract`` the advisory "~ATM near $spot"
     # line becomes the listed contract plus its live NBBO (see feeds/quotes).
+    from nn_meta.live.exit_rules import format_exit_line
     from nn_meta.live.feeds.quotes import contract_lines
     tag = "" if config.POOL == "v2" else f"[{config.POOL}] "
     title = f"{tag}{sig.symbol} {sig.action}"
@@ -299,6 +303,7 @@ def format_alert(sig: Signal, contract: Optional[str] = None,
     msg = (f"{tag}{sig.symbol}: {sig.action}{conv}\n"
            f"trigger: {sig.strategy} ({sig.param_label})\n"
            f"{contract_lines(contract, quote, suggest_contract(sig))}\n"
+           f"{format_exit_line(sig.strategy, sig.params, sig.direction, sig.symbol, sig.spot, quote)}\n"
            f"bar: {sig.bar_ts} UTC · spot ${sig.spot:,.2f}")
     if config.POOL not in ("v2", "v3"):
         msg += f"\nexpert: {config.POOL}-nn · paper"

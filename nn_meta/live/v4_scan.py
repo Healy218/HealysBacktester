@@ -124,6 +124,7 @@ def fresh_proposals(symbol: str, bars: pd.DataFrame, spec_entry: dict,
                     "direction": int(trades[-1][2]),
                     "entry_ts": ent_ts, "bars_since_signal": int(gap),
                     "param_label": e.get("param_label", ""),
+                    "params": dict(e["params"]),
                     "spot": float(bars["Close"].iloc[-1])})
     return out
 
@@ -196,6 +197,7 @@ def alert_key(symbol: str, strategy: str, bar_ts: pd.Timestamp) -> str:
 def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool,
                     contract: Optional[str] = None, quote: Optional[dict] = None
                     ) -> tuple[str, str]:
+    from nn_meta.live.exit_rules import format_exit_line
     from nn_meta.live.feeds.quotes import contract_lines
     # direction comes from the fresh-signal dict: the candidate batch only
     # carries it as the dir_short feature.
@@ -216,6 +218,7 @@ def format_v4_alert(row, fresh: dict, bundle: V4Bundle, paper: bool,
            f"DTE {int(row.dte)} (best of grid)\n"
            + contract_lines(contract, quote,
                             f"~ATM {right} near ${fresh['spot']:,.2f}, ~{int(row.dte)} DTE (≈ {expiry})")
+           + "\n" + format_exit_line(row.strategy, fresh.get("params"), fresh["direction"], shown, fresh["spot"], quote)
            + f"\nbar: {row.entry_ts} UTC · spot ${fresh['spot']:,.2f}\n"
            f"expert: {tag}")
     return title, msg

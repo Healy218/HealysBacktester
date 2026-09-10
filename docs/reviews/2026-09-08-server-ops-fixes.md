@@ -83,3 +83,18 @@ quote or "quote: unavailable". If the contract cannot be resolved the legacy
 line is kept, so no alert is ever blocked by this path. The paper ledger and
 the alert queue payload now carry `contract` and `entry_mid`.
 
+
+## 2026-09-10 — Exit guidance on all entry alerts
+
+User authorized the prior proposed exit-line implementation. Added shared
+family rule formatting and raw params through legacy and v4/v5 detection.
+Stock stop comes from SIM_CONFIG; opposite-entry reversals are disclosed.
+Optional premium stop-level estimate needs fresh valid quotes and signed
+delta and states its linear approximation limitations. No premium stop/target
+or automated SELL monitor introduced. RSI long below/short above, volume
+level condition, and Elliott swing extremes verified against source rather
+than the earlier conversational preview.
+
+Validation: full ops suite 616 passed +18 subtests. Updated prior alert line
+count expectation and fixed watchlist test clock (expired historical fixtures).
+Quote deployment 4a30010 confirmed on production at 2026-09-09 20:12:02 UTC.

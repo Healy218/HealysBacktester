@@ -1,17 +1,18 @@
-# Production top-five alert routing — ready for deployment
+# Production exit guidance in entry alerts
 
-**2026-09-09:** alerts now name the resolved contract with its live NBBO
-(stream, else Massive snapshot); see the review note's last section.
+2026-09-10 UTC. Ops branch `ops/server-alert-readiness-20260906`, isolated
+worktree `/tmp/healys-server-alert-readiness`; home v6 build remains on main.
 
-**2026-09-08 (later): server operations fixes 1–8 on this branch** — see
-docs/reviews/2026-09-08-server-ops-fixes.md for the findings, changes and the
-deploy sequence (`scripts/configure_cron.py --run`, `scripts/run_refresh.sh v5`).
-Option-stream cron lines stay disabled until `option_watch.json` fills.
+Real contract + NBBO change `4a30010` confirmed deployed cleanly at
+2026-09-09 20:12:02 UTC. This session adds shared `exit_rules.py`, passes raw
+frozen params through both scanners, and adds an exit line for all experts.
+Actual source semantics supersede Claude's earlier proposed RSI/volume/Elliott
+descriptions. Fixed stock stop uses signal close; premium estimate is optional,
+fresh, signed-delta-only. No model, training, trade policy, or ledger changes.
 
-September 8, 2026. User requested a global five highest-probability entry alert
-limit per set of bars, plus overflow count and optional summary when replying yes.
-Implementation on ops/server-alert-readiness-20260906, isolated from the running
-home v6 freeze. See docs/reviews/2026-09-08-top-five-alerts.md for behavior and
-validation. 550 tests +18 subtests passed. New minute cron handles dispatch and
-button/yes replies. Apply scripts/configure_top_alerts.py --run after deployment;
-it saves the previous cron for rollback. Existing EOD notices stay separate.
+Next separate work: paper-position exit monitor and SELL alerts. Entry guidance
+does not perform that monitoring. Preserve existing top-five routing,
+probability floors, overflow replies, live feed watchdogs, and hourly home
+build watcher. Do not merge this branch into the source-pinned home campaign.
+
+Validation and deployment outcome: see the server ops review note.

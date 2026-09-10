@@ -415,3 +415,9 @@ stays the options-history source); News API (Benzinga) + screener
   for the next research generation on Batch.
 - Deeper options history (2017→) — provider entitlement, not code.
 - Stacked blend (track 4) behind wave-2 outputs; RL sizing (track 3) last.
+
+## 2026-09-10 alert exit guidance
+
+- [x] Shared entry-alert exit line with frozen family params and simulator stop.
+- [x] Optional fresh-delta premium estimate, explicitly approximate.
+- [ ] Separate phase: monitor open paper positions and emit actual SELL alerts.

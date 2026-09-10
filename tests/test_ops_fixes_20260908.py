@@ -648,7 +648,8 @@ class TestContractAndQuoteInAlerts:
         q = {"bid": 4.60, "ask": 5.30, "bid_size": 484, "ask_size": 20, "ts": datetime.now(timezone.utc).isoformat(), "source": "rest"}
         _, msg = format_v4_alert(row, fresh, bundle, False, "APH261016P00082500", q)
         assert "contract: APH 2026-10-16 $82.50 PUT (APH261016P00082500)\nquote: bid 4.60 / ask 5.30 · mid 4.95 · spread 14.1%" in msg
-        assert msg.count("\n") == 5 and "bar: 2026-09-09 15:00:00 UTC · spot $81.44" in msg
+        assert msg.count("\n") == 6 and "bar: 2026-09-09 15:00:00 UTC · spot $81.44" in msg
+        assert "\nexit:" in msg
         _, legacy = format_v4_alert(row, fresh, bundle, False)
         assert "contract: ~ATM P near $81.44, ~45 DTE" in legacy
 

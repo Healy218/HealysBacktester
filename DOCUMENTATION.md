@@ -470,3 +470,25 @@ goals → `TODO.md` current phase → `HANDOFF.md` session state
 (`handoff-history/` archives) → this file for durable notes →
 `docs/DECISIONS.md` dated decisions → `docs/EXPERIMENTS.md` run verdicts →
 `docs/specs/` designs → `docs/v31_run_history.md` archived chronology.
+
+### Alert exit guidance (2026-09-10, ops branch)
+
+`nn_meta/live/exit_rules.py` formats the frozen strategy params and `SIM_CONFIG`
+for all four entry-alert experts. It does not change signals, models, labels,
+execution, or ledger settlement. Underlying fixed stops reference the signal
+bar close (vectorbt's default `stop_entry_price='close'`), use low/high OHLC
+for stop detection, and may fill differently across gaps. Opposite entries
+can reverse a position under `portfolio/simulator.py` conflict rules.
+
+Do not copy the earlier conversational rule table: RSI long exit is a cross
+**below** `exit_threshold`, short exit a cross **above** `entry_threshold`;
+volume is simply close below the exit MA (no crossing requirement, long only).
+Elliott exits at the latest swing high/low in the applicable swing regime,
+not a generic Fibonacci target. Signal conflicts may prioritize an entry.
+
+Optional premium figures use fresh (<=180 seconds), valid bid/ask and signed
+delta. They are a linear delta-only approximation versus the current quote
+mid, excluding IV, time decay, and spread; never a premium stop, guaranteed
+fill, or training-derived return. No hardcoded -50% claim. Missing/stale
+Greeks omit that estimate without suppressing the alert. Actual SELL alerts
+and paper position exit monitoring remain a separate implementation.

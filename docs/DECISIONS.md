@@ -509,3 +509,14 @@ step to watch rather than assume.
 (it buys nothing the box cannot do, and leaves no margin for a re-run);
 and treating the 2026-08-18 incident as a permanent property of "the home
 box" rather than of the specific retired hardware.
+
+## 2026-09-10 — Display trained exit rules in entry alerts
+
+User authorized completing Claude's exit-line work and supplied the prior
+conversation. Show the actual family exit condition from raw frozen params,
+the underlying stop from the pinned simulator config, and possible opposite
+entry reversal. Include a qualified delta-only option estimate when fresh
+quotes support it. The 5% setting is an adverse underlying stop, not a +/-5%
+option exit; no new premium target or exit policy was authorized here.
+Deployment stays on the isolated ops branch while the home v6 build runs.
+A position monitor producing SELL alerts is the next separate phase.
