@@ -112,3 +112,5 @@ nn_meta/live/.*.lock
 /deploy/generated-user/
 /inputs/
 /fa/daily_prices/
+
+/fa/artifacts/prospective/

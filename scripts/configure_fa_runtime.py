@@ -13,9 +13,9 @@ def main():
              calendar=str(ROOT/'inputs/calendar.json'),state=str(state),server='mrhea@62.238.20.66',
              server_archive='/home/mrhea/HealysBacktester/fa/archive',gsutil='/home/healy/google-cloud-sdk/bin/gsutil',
              backup_roots=[[str(mainroot/'v3/data'),'gs://healys-backtester/backup/homebox/v3/data'],
-                           [str(mainroot/'nn_meta/data_cache_v5'),'gs://healys-backtester/backup/homebox/nn_meta/data_cache_v5'],
                            [str(ROOT/'fa'),'gs://healys-backtester/backup/homebox/fa-runtime/fa'],
                            [str(ROOT/'inputs'),'gs://healys-backtester/backup/homebox/fa-runtime/inputs']],
+             packed_backup={'source':str(mainroot/'nn_meta/data_cache_v5'),'destination':'gs://healys-backtester/backup/homebox/v5-packed'},
              job_hours={'archive-pull':3,'stocktwits-push':3,'fa-prices':48,'fa-tracker':48,'cache-backup':192,'fa-monthly':768},
              capture_hours={'news':48,'reddit':6,'stocktwits':3,'stocktwits_sentiment':3,'edgar':96},
              not_before={'fa-monthly':'2026-10-01T01:30:00+00:00'})

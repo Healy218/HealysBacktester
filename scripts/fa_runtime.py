@@ -105,6 +105,39 @@ def daily_prices(cfg,*,now=None,fetch=None):
     return result
 
 
+def packed_backup(cfg):
+    """Shard tiny cache files into tar archives; publish manifest only after upload."""
+    import tarfile
+    from datetime import datetime, timezone
+    source=Path(cfg['packed_backup']['source'])
+    destination=cfg['packed_backup']['destination'].rstrip('/')+'/'+datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+    files=sorted(p for p in source.rglob('*') if p.is_file())
+    if not files or any(p.is_symlink() for p in files):raise ValueError('Missing or symlinked packed backup inputs')
+    def inventory():return {str(p.relative_to(source)):(p.stat().st_size,p.stat().st_mtime_ns) for p in source.rglob('*') if p.is_file()}
+    before=inventory()
+    files=sorted(source/name for name in before)
+    if any(p.is_symlink() for p in files):raise ValueError('Symlinked packed backup input')
+    with tempfile.TemporaryDirectory(prefix='healys-packed-backup-') as temp:
+        stage=Path(temp);parts=[]
+        for offset in range(0,len(files),1000):
+            target=stage/f'part-{offset//1000:05d}.tar'
+            with tarfile.open(target,'w') as tar:
+                for p in files[offset:offset+1000]:tar.add(p,arcname=str(p.relative_to(source)),recursive=False)
+            parts.append(dict(name=target.name,sha256=sha(target),files=len(files[offset:offset+1000]),bytes=target.stat().st_size))
+        if before!=inventory():raise ValueError('Backup source changed during packing; no snapshot published')
+        print(f'Uploading {len(parts)} shards for {len(files)} files to {destination}',flush=True)
+        subprocess.run([cfg['gsutil'],'-o','GSUtil:parallel_process_count=1','-o','GSUtil:parallel_thread_count=8',
+                        '-m','cp',*[str(stage/p['name']) for p in parts],destination+'/'],check=True)
+        from scripts.verify_backup_sample import verify
+        sample=parts[0]
+        verify(stage/sample['name'],destination+'/'+sample['name'],gsutil=cfg['gsutil'],state_dir=cfg['state'])
+        result=dict(source=str(source),destination=destination,format='tar shards, paths relative to source',files=len(files),parts=parts)
+        write(stage/'manifest.json',result)
+        subprocess.run([cfg['gsutil'],'cp',str(stage/'manifest.json'),destination+'/manifest.json'],check=True)
+        write(Path(cfg['state'])/'packed-backup.json',result)
+        return dict(source=str(source),destination=destination,files=len(files),shards=len(parts),restored_sample=sample['name'])
+
+
 def backup(cfg):
     gsutil=cfg['gsutil'];results=[]
     for source,dest in cfg['backup_roots']:
@@ -112,6 +145,7 @@ def backup(cfg):
         subprocess.run([gsutil,'-o','GSUtil:parallel_process_count=1','-o','GSUtil:parallel_thread_count=2',
                         '-m','-q','rsync','-r','-x',r'.*(\.tmp.*|\.lock)$',source,dest],check=True)
         results.append(dict(source=source,destination=dest))
+    if cfg.get('packed_backup'):results.append(packed_backup(cfg))
     write(Path(cfg['state'])/'backup-scope.json',dict(completed=results))
     return results
 

@@ -1,3 +1,4 @@
+from pathlib import Path
 import json
 from datetime import datetime,timezone,timedelta
 import pandas as pd
@@ -39,3 +40,37 @@ def test_not_yet_due_monthly_is_explicit_but_failure_is_not_hidden(tmp_path,caps
     assert health(cfg)==0 and 'awaiting-first-scheduled-run' in capsys.readouterr().out
     record(tmp_path,'fa-monthly','failed',returncode=1)
     assert health(cfg)==1
+
+
+def test_packed_backup_publishes_manifest_only_after_restore(tmp_path,monkeypatch):
+    from scripts import fa_runtime,verify_backup_sample
+    import tarfile
+    source=tmp_path/'cache';source.mkdir();(source/'one.parquet').write_bytes(b'original')
+    calls=[]
+    def run(args,**kwargs):
+        if args[-1].endswith('manifest.json'):
+            assert calls[-1]=='restored'
+            manifest=json.loads(Path(args[-2]).read_text());assert manifest['files']==1
+            calls.append('manifest')
+        else:
+            tarpath=next(Path(x) for x in args if x.endswith('.tar'))
+            with tarfile.open(tarpath) as tar:assert tar.extractfile('one.parquet').read()==b'original'
+            calls.append('uploaded')
+    def verify(*args,**kwargs):assert calls==['uploaded'];calls.append('restored')
+    monkeypatch.setattr(fa_runtime.subprocess,'run',run)
+    monkeypatch.setattr(verify_backup_sample,'verify',verify)
+    cfg={'packed_backup':{'source':str(source),'destination':'gs://test/snapshots'},'gsutil':'gsutil','state':str(tmp_path/'state')}
+    result=fa_runtime.packed_backup(cfg)
+    assert calls==['uploaded','restored','manifest'] and result['shards']==1
+
+
+def test_packed_backup_restore_failure_never_publishes_manifest(tmp_path,monkeypatch):
+    from scripts import fa_runtime,verify_backup_sample
+    source=tmp_path/'cache';source.mkdir();(source/'one.parquet').write_bytes(b'original')
+    calls=[]
+    monkeypatch.setattr(fa_runtime.subprocess,'run',lambda args,**kwargs:calls.append(args))
+    def fail(*args,**kwargs):raise ValueError('restore differs')
+    monkeypatch.setattr(verify_backup_sample,'verify',fail)
+    cfg={'packed_backup':{'source':str(source),'destination':'gs://test/snapshots'},'gsutil':'gsutil','state':str(tmp_path/'state')}
+    with pytest.raises(ValueError,match='restore differs'):fa_runtime.packed_backup(cfg)
+    assert len(calls)==1 and not (tmp_path/'state/packed-backup.json').exists()
