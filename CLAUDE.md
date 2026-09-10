@@ -8,6 +8,7 @@ here — it lives in the files below.
 
 | File | What it is | Your obligation |
 |---|---|---|
+| `GOALS.md` | **Year-end maturity targets and assessment** | Consult at milestones; reassess after the first week running v6 |
 | `ROADMAP.md` | **Overall goals** — every workstream, one map, phase-gated | Consult for direction; it feeds TODO.md |
 | `TODO.md` | The **current phase's** task list | Read at session start; tick items as they land |
 | `HANDOFF.md` | State left by the **previous session** | Read at session start; rewrite fresh at session end |

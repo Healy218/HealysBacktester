@@ -1,5 +1,10 @@
 # TODO — TradingView expansion and corrected research
 
+[GOALS](GOALS.md) records the September 10 baseline and year-end ≥7/10 targets.
+
+- [ ] After v6 has run for one week and more current TODOs are completed, review
+  the scorecard with operational and research evidence and choose the next priorities.
+
 Reconciled September 6, 2026. The user authorized starting all six workstreams
 below with multiple agents. Work on `main` in the primary checkout;
 [HANDOFF](HANDOFF.md) records completed milestones. Dependencies control when

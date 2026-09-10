@@ -821,3 +821,13 @@ alternatives considered:
 Not merged into `main` yet: the freeze campaign imports `nn_meta` from the
 home working tree for every new freeze process, so the live-path source stays
 on the ops branch until the campaign completes.
+
+
+## 2026-09-10 — Year-end maturity target and v6 checkpoint
+
+User requested GOALS.md with the September 10 assessment and a target of
+≥7/10 in every area and overall by December 31, 2026. Continue the existing
+ROADMAP and TODOs. Reassess after one week actually running v6 and completing
+more TODOs; no immediate broad reprioritization or rewrite is authorized by
+this goal alone. Scores require evidence, and durable trading edge remains
+unproven until supported. The week starts with operational v6, not its build.

@@ -1,5 +1,8 @@
 # Roadmap — expert panel and corrected research
 
+Long-term maturity targets and the first-week v6 review are in [GOALS](GOALS.md).
+Continue this roadmap toward ≥7/10 in every assessment area by December 31, 2026.
+
 Reconciled September 6, 2026. [TODO](TODO.md) is the active checklist;
 [HANDOFF](HANDOFF.md) records session milestones. The user authorized starting
 its six workstreams. Thirteen selected TradingView ports are implemented
