@@ -103,12 +103,16 @@ def load_mention_sources(archive: Path = config.ARCHIVE, *, as_of=None) -> list[
 
 
 def build_monthly_ranking(as_of, *, archive: Path = config.ARCHIVE,
-                          top_n: int = config.TOP_N) -> tuple[pd.DataFrame, dict]:
+                          top_n: int = config.TOP_N, aliases_path=None, liquid_path=None,
+                          training_path=None) -> tuple[pd.DataFrame, dict]:
     """Score table → corroborated, liquidity-floored, point-in-time Top-N."""
-    aliases = load_aliases(ALIASES) if ALIASES.exists() else {}
-    liquid = set(json.loads(UNIVERSE_LIQUID.read_text()))
-    training = (set(json.loads(UNIVERSE_TRAINING.read_text()))
-                if UNIVERSE_TRAINING.exists() else set())
+    aliases_path = Path(aliases_path) if aliases_path is not None else ALIASES
+    liquid_path = Path(liquid_path) if liquid_path is not None else UNIVERSE_LIQUID
+    training_path = Path(training_path) if training_path is not None else UNIVERSE_TRAINING
+    aliases = load_aliases(aliases_path) if aliases_path.exists() else {}
+    liquid = set(json.loads(liquid_path.read_text()))
+    training = (set(json.loads(training_path.read_text()))
+                if training_path.exists() else set())
     scores = build_score_table(load_mention_sources(archive, as_of=as_of), aliases,
                                valid_tickers=liquid)
     ranking = monthly_rank(scores, as_of=as_of, top_n=top_n,
@@ -118,7 +122,7 @@ def build_monthly_ranking(as_of, *, archive: Path = config.ARCHIVE,
     meta = {"as_of": pd.Timestamp(as_of).isoformat(),
             "score_rows": int(len(scores)),
             "tickers_scored": int(scores["ticker"].nunique()) if len(scores) else 0,
-            "liquidity_floor": UNIVERSE_LIQUID.name,
+            "liquidity_floor": liquid_path.name,
             "corroboration_min": config.CORROBORATION_MIN,
             "baseline_days": config.BASELINE_DAYS,
             "aliases": len(aliases)}

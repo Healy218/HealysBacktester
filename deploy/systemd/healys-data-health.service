@@ -1,0 +1,12 @@
+[Unit]
+Description=Check FA capture and scheduled-job health
+
+[Service]
+Type=oneshot
+User=healy
+Group=healy
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python scripts/check_ops_health.py --job fa-monthly:768 --job fa-tracker:48 --job cache-backup:192 --job stocktwits-push:3 --source stocktwits:3
+TimeoutStartSec=5m
+StandardOutput=journal
+StandardError=journal

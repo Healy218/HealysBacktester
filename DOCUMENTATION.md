@@ -784,3 +784,11 @@ cannot supply that historical evidence. The richer candidate interface retains
 selection/request/coverage audit columns and requires an explicit adapter.
 The historical sealed-input replay path does not establish live receipt latency
 or Alpaca/Massive condition equivalence.
+
+## FA automation and job health (coded, not activated)
+
+[September 10 automation](docs/reviews/2026-09-10-fa-automation.md) documents
+monthly cohort snapshots, daily tracking, receipt wrappers, capture freshness
+and bounded backup restoration. Code is on ops/fa-automation-20260910; FA
+changes must not enter the source-pinned home build. Unit templates are not
+proof of installed or successful jobs.

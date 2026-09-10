@@ -83,3 +83,11 @@ Inspect: `systemctl --user status healys-v6-progress.timer` and
 Stop after the prelaunch campaign: `systemctl --user disable --now healys-v6-progress.timer`.
 The first Telegram delivery was verified. Failed deliveries fail the service
 visibly, retain local reports and retry at the next scheduled interval.
+
+### Prospective FA and receipts (templates only, September 10)
+
+`healys-fa-monthly` freezes at 00:15 UTC on the first; `healys-fa-tracker`
+tracks local prices daily at 01:00 UTC and requires `FA_DAILY_PRICES`. Backup
+and StockTwits units now wrap commands with `scripts/run_ops_job.py`. These
+changes are not installed. See ../../docs/reviews/2026-09-10-fa-automation.md
+for prerequisites, output contracts and verification boundaries.

@@ -12,7 +12,7 @@ Type=oneshot
 User=healy
 Group=healy
 WorkingDirectory=/home/healy/Coding/HealysBacktester
-ExecStart=/home/healy/Coding/HealysBacktester/scripts/stocktwits_collect_push.sh
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/run_ops_job.py --name stocktwits-push --timeout 1170 -- /home/healy/Coding/HealysBacktester/scripts/stocktwits_collect_push.sh
 # One attempt per hour is enough; the archive is append-only and dedupes, so a
 # missed hour self-heals on the next run.
 TimeoutStartSec=20m

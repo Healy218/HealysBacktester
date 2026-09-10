@@ -43,3 +43,9 @@ return to the same `(ticker, ranking_date)` cohort that passed probation;
 a later winning pick cannot rescue an earlier losing cohort. Daily StockTwits
 sentiment is explicitly **snapshot-weighted**: overlapping hourly windows can
 contain the same messages, so the total is not a unique-message count.
+
+Prospective automation is available via `python -m fa.monthly` (preview),
+`--run` (first seven UTC days only), and `--track-only --prices DIR --run`.
+It snapshots inputs and baselines separately from historical rankings; forward
+measurement starts after publication. See
+[automation contracts](../docs/reviews/2026-09-10-fa-automation.md).

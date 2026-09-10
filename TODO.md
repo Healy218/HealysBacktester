@@ -304,3 +304,11 @@ preparing resolver/calculations is authorized.
 History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconciliation.md),
 [full-day handoff](handoff-history/HANDOFF-2026-09-05-wipe-restore-v5-ladder-feeds.md),
 [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md).
+
+## September 10 — independent FA/health automation
+
+User authorized coding now while next-sale broker verification stays pending.
+- [x] Code monthly immutable capture cohorts, publication-based tracking, job receipts, freshness CLI and bounded restore verification on isolated ops/fa-automation-20260910.
+- [ ] Configure and activate compatible home FA/collector/backup schedules; verify installed timers and actual runs.
+- [ ] Perform a real bounded backup restore and observe prospective cohorts.
+See docs/reviews/2026-09-10-fa-automation.md.

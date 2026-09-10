@@ -19,6 +19,10 @@ except ImportError:
 
 from utils.logging_utils import setup_logging
 from fa.collectors import edgar, news, reddit, stocktwits
+from pathlib import Path
+from scripts.job_receipts import record, stamp
+
+STATE = Path(__file__).resolve().parents[1] / "logs/job-health"
 
 logger = setup_logging(log_file="logs/backtester.log")
 
@@ -32,16 +36,22 @@ def main() -> int:
     ok, failed = 0, 0
     for name, mod in COLLECTORS:
         if name in skip:
+            record(STATE, "collector-"+name, "skipped", details={"reason": "configured-skip"})
             print(f"{name}: skipped (FA_SKIP_COLLECTORS)")
             continue
+        started = stamp()
+        record(STATE, "collector-"+name, "running", started=started)
         try:
             n = mod.collect()
             logger.info(f"[fa.collect] {name}: +{n} rows")
             print(f"{name}: +{n} rows")
+            record(STATE, "collector-"+name, "success", started=started, returncode=0, details={"added_rows": n})
             ok += 1
         except NotImplementedError:
+            record(STATE, "collector-"+name, "skipped", started=started)
             print(f"{name}: skipped (not implemented)")
         except Exception as e:
+            record(STATE, "collector-"+name, "failed", started=started, returncode=1, details={"error_type": type(e).__name__})
             logger.exception(f"[fa.collect] {name} failed: {e}")
             print(f"{name}: FAILED ({e})")
             failed += 1

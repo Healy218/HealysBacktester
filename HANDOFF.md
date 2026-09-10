@@ -1,23 +1,26 @@
-# Year-end goals recorded
+# FA monthly and operational health automation coded
 
-September 10, 2026. User requested preserving the codebase maturity assessment
-in GOALS.md, aiming for ≥7/10 in every area and overall by December 31, 2026.
-The existing ROADMAP and TODOs remain the delivery plan. First reassessment
-is after v6 has actually run for a week and more TODOs are completed; the run
-start date is not yet recorded. Do not treat one week as proof of trading edge.
-GOALS.md includes the baseline, evidence criteria, assessment rationale, five
-improvement priorities, and review log. ROADMAP, TODO and CLAUDE link to it.
+September 10, 2026. User explicitly authorized continuing coding while the
+next-sale broker check remains pending, superseding the earlier sequencing
+pause. New work is on ops/fa-automation-20260910 in /tmp/healys-fa-automation,
+based on corrected main 22ea559. FA is fingerprinted by the active campaign;
+neither primary main nor the isolated live-production branch was modified.
 
-This was documentation-only; no runtime code, campaign inputs, jobs, account
-settings, or notification schedules were changed. Operational state was not
-rechecked for this task. The preceding home build handoff is preserved in
-handoff-history/HANDOFF-2026-09-10-before-year-end-goals.md; its PIDs, counts
-and dates are historical observations, not current verification. Use the
-anchored campaign receipts/logs for the next build status check.
+Implemented prospective monthly snapshots and safe retries, publication-based
+forward measurement with frozen baseline/local price inputs, monthly/daily
+systemd templates, per-source collector receipts, scheduled-job lock/timeout
+receipts, freshness checks and bounded backup sample restoration tooling.
+See docs/reviews/2026-09-10-fa-automation.md for exact contracts and commands.
 
-Production remains on the isolated ops/server-alert-readiness-20260906 branch
-while the home v6 campaign pins its source inputs. Recent production work
-added actual option/quote and exit guidance, taken-position tracking, exit
-alerts, and Robinhood live fee estimates. Its detailed current handoff is in
-/tmp/healys-server-alert-readiness/HANDOFF.md. Keep private holdings in server
-SQLite. Do not merge production source changes into the active home campaign.
+Full suite passed 1,469 tests and 18 subtests. Final focused run passed
+17 tests after a Markdown publication-label fix and child-process timeout
+regression test. systemd-analyze verify and git diff --check passed. Preview correctly reports
+September 10 outside the August freeze window. No real cohort was created,
+collectors run, provider calls made, schedules installed, cloud files changed,
+or live backup restored. Health preview on this clean checkout correctly
+reports missing receipts/captures; that is not an audit of the installed host.
+
+Next: review/activate the automation after choosing a compatible deployment
+location and configuring archive ownership + daily prices. Normal next freeze
+is October 1 (September captures). Existing live accounting remains separately
+deployed on the ops branch; reconcile the user's next sale when supplied.

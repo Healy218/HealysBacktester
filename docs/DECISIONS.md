@@ -831,3 +831,13 @@ ROADMAP and TODOs. Reassess after one week actually running v6 and completing
 more TODOs; no immediate broad reprioritization or rewrite is authorized by
 this goal alone. Scores require evidence, and durable trading edge remains
 unproven until supported. The week starts with operational v6, not its build.
+
+## 2026-09-10 — continue independent FA/backup coding
+
+The user authorized continuing coding while the next-sale broker comparison
+remains pending. Work from corrected main in an isolated checkout because FA
+is among the active campaign’s fingerprinted packages. New monthly automation
+uses an explicit first-seven-UTC-days freeze window and publication-based
+forward measurement; late runs cannot manufacture prospective history. Code
+and tests do not establish deployed schedules, live captures or verified GCS
+backups. Actual PIT membership is never changed by this automation.

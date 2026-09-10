@@ -10,7 +10,7 @@ Type=oneshot
 User=healy
 Group=healy
 WorkingDirectory=/home/healy/Coding/HealysBacktester
-ExecStart=/home/healy/Coding/HealysBacktester/scripts/backup_caches.sh
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/run_ops_job.py --name cache-backup --timeout 14370 -- /home/healy/Coding/HealysBacktester/scripts/backup_caches.sh
 # Incremental runs are minutes; the first full ~10 GB push can take longer.
 TimeoutStartSec=4h
 StandardOutput=append:/home/healy/Coding/HealysBacktester/logs/cache_backup.log

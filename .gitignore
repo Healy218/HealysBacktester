@@ -103,3 +103,7 @@ nn_meta/live/.*.lock
 /nn_meta/option_tick_captures/
 /nn_meta/option_tick_features/v6-selected-pilot-20260906/
 /nn_meta/live/feeds/data/option_ticks/
+
+# Isolated worktrees may share the installed virtualenv via a symlink.
+/venv
+/deploy/fa-automation.env

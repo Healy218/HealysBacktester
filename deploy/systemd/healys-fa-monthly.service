@@ -1,0 +1,14 @@
+[Unit]
+Description=Freeze prospective FA cohort with captured inputs
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=oneshot
+User=healy
+Group=healy
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python scripts/run_ops_job.py --name fa-monthly --timeout 3300 -- /home/healy/Coding/HealysBacktester/venv/bin/python -m fa.monthly --run
+TimeoutStartSec=1h
+Nice=10
+Environment=OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1

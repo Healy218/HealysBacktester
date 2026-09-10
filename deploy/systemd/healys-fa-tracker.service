@@ -1,0 +1,13 @@
+[Unit]
+Description=Track frozen FA cohorts against their captured baselines
+
+[Service]
+Type=oneshot
+User=healy
+Group=healy
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+EnvironmentFile=-/home/healy/Coding/HealysBacktester/deploy/fa-automation.env
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python scripts/run_ops_job.py --name fa-tracker --timeout 3300 -- /home/healy/Coding/HealysBacktester/venv/bin/python -m fa.monthly --track-only --run
+TimeoutStartSec=1h
+Nice=10
+Environment=OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 MKL_NUM_THREADS=1
