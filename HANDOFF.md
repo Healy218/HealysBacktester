@@ -23,3 +23,8 @@ No worker starts for an empty list. RTH grace includes final closed bar.
 Server preflight: 4 cores, 6.8 GB available of 7.8 GB; no home workers touched.
 See DOCUMENTATION.md for behavior and docs/reviews/2026-09-10-taken-trades.md
 for validation/deployment evidence. No actual user positions created by tests.
+
+Deployed `3b790e0` at 2026-09-10 04:25 UTC. SQLite backed up, cron installed,
+empty-list launcher verified. Read-only real MARA replay succeeded (still open
+through Sep 9 19:45 UTC). No actual positions created. Final suite 640 passed
++18 subtests. Detailed backup/rollback paths are in the review note.

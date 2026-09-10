@@ -13,3 +13,17 @@ message recovery, schema migration, quote contract overrides, delivery retry,
 real simulator open-vs-closed trade status, long/short underlying stops,
 opposite-entry exits, forming-bar exclusion, changed/missing history, and cron
 preservation. Server resource preflight: 4 CPU cores, 6787 MiB available RAM.
+
+## Deployment verified
+
+2026-09-10 04:25 UTC: production fast-forwarded to `3b790e0`. Live SQLite
+backup: `logs/ops/taken-deploy-20260910T042519Z/alert-batches-before.sqlite3`.
+Cron rollback: `logs/ops/taken-monitor-20260910T042521Z/crontab-before.txt`.
+Migration preserved the existing queue; taken-position and message-map tables
+started empty. The watcher launcher ran successfully with that empty list.
+A read-only MARA/v31 replay recovered MARA261009C00011500 and confirmed the
+original strategy was still OPEN through the 2026-09-09 19:45 UTC bar. No
+position or Telegram message was created by that check. Legacy display-price
+rounding is tolerated within half a cent; replay uses the bar's full precision.
+Final complete suite: 640 passed +18 subtests, including attention-notice and
+expiry-review tests. User must explicitly mark actual entries Taken.
