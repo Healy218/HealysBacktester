@@ -82,9 +82,12 @@ def scan(queue, expert, loader, now=None, evaluator=evaluate, quote_loader=None)
                 from nn_meta.live.scanner import alert_quote
                 from nn_meta.live.feeds.quotes import contract_lines
                 q = (quote_loader or alert_quote)(ctx['contract'])
+                from nn_meta.live.broker_fees import quote_pnl_line
+                pnl = quote_pnl_line(ctx, row['quantity'], row['fill_price'], q, now)
                 notice = (f"🔴 SELL WATCH — [{expert}] {ctx['symbol']}\n"
                           + contract_lines(ctx['contract'], q, '')
                           + f"\nexit: {event['reason']}\nbar: {event['bar']} UTC · spot ${event['stock_close']:,.2f}"
+                          + ('\n' + pnl if pnl else '')
                           + f"\nTrade ID: {row['id']}\nAfter closing: /sold {row['id']}")
             with queue.connect() as db:
                 if notice:

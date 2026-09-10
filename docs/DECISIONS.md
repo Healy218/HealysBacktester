@@ -530,3 +530,12 @@ frozen underlying simulator and its exit status rather than invent option
 premium exits. Notify exits separately from the top-five entry ranking; leave
 closure to user confirmation. No broker orders or automatic contract rolls.
 Keep all production code isolated from the active home v6 research campaign.
+
+## 2026-09-10 — Broker fees in live taken-position accounting
+
+User directed use of Robinhood's published schedule, confirmed fees are per
+side, and clarified the base charge is four cents per contract. Implement
+live fee estimates and explicit index-root/account-tier handling. Keep account
+settings and holdings in private server state. Do not retroactively change
+frozen research/training costs. Show fee-aware entry costs and fresh-bid net
+exit estimates; retain the distinction between estimates and broker receipts.

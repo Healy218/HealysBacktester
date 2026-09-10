@@ -118,7 +118,7 @@ def _parse_fill(tokens):
         if not 1 <= quantity <= 100000:
             raise ValueError('Quantity must be positive.')
         return quantity, None, contract
-    match = re.fullmatch(r'(\d+)\s*@\s*\$?(\d+(?:\.\d+)?)', ' '.join(tokens))
+    match = re.fullmatch(r'(\d+)\s*@\s*\$?((?:\d+(?:\.\d+)?|\.\d+))', ' '.join(tokens))
     if not match:
         raise ValueError('Use quantity @ fill_price, for example: taken 2 @ 1.35')
     quantity, price = int(match[1]), float(match[2])
@@ -151,6 +151,10 @@ def _listing(db):
         fill = f"{r['quantity']} @ ${r['fill_price']:.2f}" if r['fill_price'] else f"{r['quantity']} contracts · fill price not recorded" if r['quantity'] else 'fill not recorded'
         state = ' — EXIT ALERT' if r['exit_notice'] else ' — CHECK FAILED' if r['monitor_error'] else ''
         lines.append(f"{r['id']} · [{ctx['expert']}] {ctx['contract']} · {fill}{state}")
+        from nn_meta.live.broker_fees import entry_line
+        cost = entry_line(ctx, r['quantity'], r['fill_price'])
+        if cost:
+            lines.append(cost)
     lines.append('Mark closed: /sold TRADE_ID')
     return '\n'.join(lines)
 
@@ -208,6 +212,8 @@ def handle(queue, update, chat):
                         ctx = recover_context(row)
                     if override:
                         ctx['contract'] = override
+                    from nn_meta.live.broker_fees import profile, entry_line
+                    ctx.setdefault('broker_fees', profile())
                     if not ready(ctx):
                         raise ValueError('This alert lacks the saved contract/exit details needed for tracking. Use a new alert with a Taken button.')
                     _validate_contract(ctx['contract'], ctx)
@@ -229,6 +235,10 @@ def handle(queue, update, chat):
                             response += f'\nQuantity: {quantity} contracts · fill price not recorded'
                         else:
                             response += f'\nOptional fill: /taken {ident} 2 @ 1.35'
+                    saved = db.execute('SELECT * FROM taken_trades WHERE id=?', (ident,)).fetchone()
+                    cost = entry_line(json.loads(saved['context']), saved['quantity'], saved['fill_price'])
+                    if cost:
+                        response += '\n' + cost
                     response += '\nExit watch: strategy/stock stop on closed 15m bars.\nView: /selllist · Close: /sold ' + ident
         except ValueError as exc:
             response = str(exc)

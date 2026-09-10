@@ -550,3 +550,30 @@ override can follow it. Supplying a new quantity without a premium preserves
 an already-recorded fill price. Positions with unknown premium display their
 quantity and “fill price not recorded”; P/L must not be inferred from an
 assumed fill. User-provided actual positions stay in server SQLite, not docs.
+
+### Live Robinhood fee estimates (2026-09-10)
+
+`nn_meta/live/broker_fees.py` implements retail single-leg fees from:
+https://robinhood.com/us/en/support/articles/trading-fees-on-robinhood/
+and https://cdn.robinhood.com/assets/robinhood/legal/RHF%20Fee%20Schedule.pdf
+(PDF revision 20260831-5886092-18771991; checked September 10, 2026).
+
+Use $0.04 ORF/OCC per contract PER SIDE, independent of strike/moneyness,
+plus CAT with its sub-cent waiver/rounding. Stock/ETF option sales also include
+SEC (round UP to cents; no $500 exemption for options) and TAF (sub-cent waiver,
+nearest-cent rounding and per-execution cap). Index contracts have no SEC/TAF;
+use the applicable Robinhood account-tier charge and root-specific exchange
+fees. The private `ROBINHOOD_GOLD=true/false` environment setting controls the
+tier; unknown tiers do not produce a made-up index total. DOW stock options
+are ordinary equity options; DJX is the index root. Use NDX/NDXP, not the
+informal NDQ name. Other index roots from Robinhood's table are covered too.
+
+New taken-position contexts snapshot the schedule version and account tier.
+Entry confirmations and /selllist show estimated premium plus opening fees;
+SELL WATCH notices show estimated net P/L at a fresh, positive bid, after
+opening and closing fees. No P/L is invented with missing fills or stale quotes.
+Amounts assume one execution per side and standard 100 premium multiplier;
+partial-fill tiering/rounding can differ from broker receipts. Professional,
+multi-leg and other nonstandard orders are outside this retail single-leg
+estimator. These costs NEVER modify frozen research SIM_CONFIG, option label
+fees, model decisions, probability thresholds, or exit triggers.

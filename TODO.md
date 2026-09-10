@@ -428,3 +428,6 @@ stays the options-history source); News API (Benzinga) + screener
 - [x] Persistent sell list and user-confirmed sold state.
 - [x] Replay saved underlying policy on closed bars and send exit notifications.
 - [x] Separate exit notifications from entry ranking; sequential monitor workers.
+
+- [x] Live Robinhood per-contract/per-side fee estimates, account tier and index
+  exchange tiers; entry cost and fresh-bid net P/L display, isolated from training.
