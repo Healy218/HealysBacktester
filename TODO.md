@@ -436,3 +436,6 @@ stays the options-history source); News API (Benzinga) + screener
 
 - [x] Code actual sale fills, partial exits, fee completion, realized P/L and read-only broker-record comparison on isolated ops branch.
 - [ ] Deploy and verify actual accounting with user-supplied broker records. See docs/reviews/2026-09-10-trade-accounting.md.
+
+- [x] Synthetic full-session/recovery acceptance, including actual partial sales and restart; fix same-bar recovery and quote outage handling.
+- [ ] Observe captured live-session behavior and compare actual broker records after deployment.

@@ -547,3 +547,10 @@ Keep implementation in the isolated ops checkout. Record user-reported fills
 and actual fees separately from quotes/estimated fees, preserve unknowns,
 allocate entry costs proportionally, and compare supplied broker records
 read-only. Preserve legacy manual closure with explicit incomplete accounting.
+
+## 2026-09-10 — session recovery before accounting deployment
+
+User approved task 2 first, then deployment of actual accounting and broker
+verification before tasks 3–4. Synthetic acceptance exercises the real local
+logic with external transports replaced; retain live-session and real broker
+evidence as separate outstanding gates.

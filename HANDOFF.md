@@ -1,20 +1,13 @@
-# Actual exit fills and reconciliation implemented
+# Session/recovery harness and deployment preparation
 
-September 10, 2026. User chose the first waiting-for-build task: actual fills,
-partial exits, fees, realized P/L and broker reconciliation. Implemented only
-in ops/server-alert-readiness-20260906; not deployed. Home campaign untouched.
-Production remains at the previously recorded d2708d6; not rechecked here.
+September 10, 2026. User approved session/recovery tests followed by accounting
+deployment and broker verification, before FA/backup work. All code remains on
+ops/server-alert-readiness-20260906; the home v6 campaign is untouched.
 
-Commands, schema, limitations, read-only normalized broker JSON workflow and
-rollback precautions: docs/reviews/2026-09-10-trade-accounting.md.
-Existing /sold ID still closes without inventing a fill. Partial sales leave
-remaining contracts tracked. Net P/L requires actual entry and sale fees.
-SQLite migrations preserve existing positions; command events retain fee edits.
-Broker reconciliation requires supplied records; no actual broker comparison
-or production mutation was performed. No private holdings were read.
-
-Validation: full ops suite passed 689 tests and 18 subtests. The final
-broker-reference immutability / oversized sale-ID guard then passed the
-22-test accounting suite. git diff --check passed. Existing dependency
-warnings only.
-Tasks 2–4 remain unstarted, pending the user's assessment of this change.
+Added synthetic full-session acceptance and a receipt-producing runner. Found
+and fixed same-bar error recovery and quote-outage suppression of verified exit
+warnings. Details: docs/reviews/2026-09-10-session-recovery.md.
+Focused acceptance: 104 passed, /tmp/healys-session-recovery-20260910/.
+Full suite: 694 passed and 18 subtests; only existing dependency warnings. Deployment: pending. Server inspected at d2708d6 with no
+tracked changes; private runtime artifacts preserved. Actual broker records
+have not been supplied, so real reconciliation remains pending.

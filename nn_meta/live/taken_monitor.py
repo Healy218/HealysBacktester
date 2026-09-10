@@ -66,7 +66,7 @@ def scan(queue, expert, loader, now=None, evaluator=evaluate, quote_loader=None)
             bars = loader(ctx, now)
             from nn_meta.live.scanner import closed_bars, require_recent_bars
             bars = require_recent_bars(closed_bars(bars, now), now)
-            if row['last_checked'] == str(bars.index[-1]):
+            if row['last_checked'] == str(bars.index[-1]) and not row['monitor_error']:
                 continue
             event, latest = evaluator(ctx, bars, now)
             # A held contract requires a user decision at expiry, not an
@@ -81,7 +81,11 @@ def scan(queue, expert, loader, now=None, evaluator=evaluate, quote_loader=None)
             if event:
                 from nn_meta.live.scanner import alert_quote
                 from nn_meta.live.feeds.quotes import contract_lines
-                q = (quote_loader or alert_quote)(ctx['contract'])
+                try:
+                    q = (quote_loader or alert_quote)(ctx['contract'])
+                except Exception:
+                    # Quote enrichment must not hide an already verified exit.
+                    q = None
                 from nn_meta.live.broker_fees import quote_pnl_line
                 from nn_meta.live.trade_accounting import summary
                 with queue.connect() as db:

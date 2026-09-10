@@ -585,3 +585,10 @@ Actual fees are distinct from estimates. `/sold ID` alone does not establish
 a realized fill. Broker reconciliation reads normalized private JSON and never
 writes the live database. Old code does not understand partial sales; after
 sales are recorded, rollback requires reconciliation or a forward fix.
+
+## Session/recovery acceptance
+
+Run `scripts/run_session_recovery.py --output NEW_DIRECTORY` with the venv.
+See [scope and found repairs](docs/reviews/2026-09-10-session-recovery.md).
+Synthetic acceptance does not establish actual full-session feed parity or
+broker reconciliation. A missing quote must never suppress a verified exit.
