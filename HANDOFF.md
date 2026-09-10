@@ -21,3 +21,26 @@ added actual option/quote and exit guidance, taken-position tracking, exit
 alerts, and Robinhood live fee estimates. Its detailed current handoff is in
 /tmp/healys-server-alert-readiness/HANDOFF.md. Keep private holdings in server
 SQLite. Do not merge production source changes into the active home campaign.
+
+## September 10 — independent coding continuation
+
+User authorized continuing FA/backup coding while the next-sale broker check
+remains pending. This supersedes the temporary sequencing pause recorded in
+the ops checkout. Actual accounting/recovery was last verified deployed at
+fef6542, 16:08 UTC, with 104 server acceptance tests and preserved positions;
+see /tmp/healys-server-alert-readiness/HANDOFF.md and its ops-branch records.
+
+New FA/health automation is committed separately as cae40a2 on
+ops/fa-automation-20260910, checkout /tmp/healys-fa-automation. It uses corrected
+main FA semantics, not the production branch’s older FA code. Details and
+activation prerequisites are in that checkout’s HANDOFF.md and
+docs/reviews/2026-09-10-fa-automation.md. Implemented frozen prospective cohorts,
+publication-based forward tracking, collector/job receipts, health CLI/timer
+and a bounded backup-restore tool. Full suite 1,469 +18 subtests passed; final
+17 focused tests and systemd verification passed. Not deployed or installed.
+
+FA is fingerprinted by the active home campaign: do not merge these runtime
+changes into main during the build/evaluation/training campaign. Only this
+documentation pointer was added to main. Build state was not rechecked here.
+Next-sale broker verification remains pending independently; no need to block
+further isolated coding on that sale.
