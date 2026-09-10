@@ -234,3 +234,69 @@ def test_rotated_log_resets_counters_instead_of_masking(logs):
     msg = _digest()
     assert "log rotated — counters reset" in msg
     assert "2 NEW crash(es)" in msg                     # not clamped to 0
+
+
+def test_copytruncate_regrows_to_equal_counts_is_not_false_down(logs, monkeypatch):
+    monkeypatch.setattr(heartbeat, 'is_rth', lambda: True)
+    for path in (logs.v3,logs.v4,logs.v31):
+        path.write_text('No fresh signals this pass.\n'*14)
+        path.with_name(path.name+'-20260909').write_text('old archive')
+    _digest()
+    # Inode and counts stay equal, but this is a NEW day's log generation.
+    for path in (logs.v3,logs.v4,logs.v31):
+        path.with_name(path.name+'-20260910').write_text(path.read_text())
+        path.write_text('No fresh signals this pass.\n'*14)
+    msg=_digest()
+    assert 'may be DOWN' not in msg
+    assert msg.count('14 passes (14 RTH)')==3
+    assert msg.count('log rotated — counters reset')==3
+    # No more scans really should warn on the next check: don't disable alerts.
+    assert '0 scan passes' in _digest()
+
+
+def test_rotation_regrown_above_baseline_counts_all_new_passes(logs, monkeypatch):
+    monkeypatch.setattr(heartbeat, 'is_rth', lambda: False)
+    logs.v3.write_text('No fresh signals this pass.\n'*2)
+    _digest()
+    logs.v3.with_name(logs.v3.name+'-20260910').write_text(logs.v3.read_text())
+    logs.v3.write_text('No fresh signals this pass.\n'*3)
+    assert 'v3: 3 passes (3 RTH)' in _digest()
+
+
+def test_compression_does_not_change_rotation_generation(logs, monkeypatch):
+    monkeypatch.setattr(heartbeat, 'is_rth', lambda: False)
+    logs.v3.write_text('No fresh signals this pass.\n')
+    archive=logs.v3.with_name(logs.v3.name+'-20260910')
+    archive.write_text('archive');_digest()
+    archive.rename(archive.with_name(archive.name+'.gz'))
+    with logs.v3.open('a') as stream:stream.write('No fresh signals this pass.\n')
+    msg=_digest()
+    assert 'v3: 1 pass (1 RTH)' in msg
+    assert 'log rotated' not in msg
+
+
+def test_old_state_migrates_using_rotation_timestamp(logs, monkeypatch):
+    from datetime import datetime, timezone
+    monkeypatch.setattr(heartbeat, 'is_rth', lambda: True)
+    _seed_state(logs.st, v3={'passes':14,'rth_scans':14})
+    state=json.loads(logs.st.read_text())
+    state['at']=datetime.fromtimestamp(time.time()-3600,timezone.utc).isoformat()
+    logs.st.write_text(json.dumps(state))
+    for path in (logs.v3,logs.v4,logs.v31):path.write_text('No fresh signals this pass.\n'*14)
+    logs.v3.with_name(logs.v3.name+'-20260910').write_text('rotated after last successful heartbeat')
+    msg=_digest()
+    assert 'v3: 14 passes (14 RTH)' in msg
+    assert '⚠️ v3: 0 scan passes' not in msg
+    assert 'log_generation' in json.loads(logs.st.read_text())['logs']['v3']
+
+
+def test_old_archive_does_not_mask_genuine_zero_scans(logs, monkeypatch):
+    from datetime import datetime, timezone
+    monkeypatch.setattr(heartbeat, 'is_rth', lambda: True)
+    _seed_state(logs.st,v3={'passes':1,'rth_scans':1})
+    state=json.loads(logs.st.read_text());state['at']=datetime.now(timezone.utc).isoformat()
+    logs.st.write_text(json.dumps(state))
+    logs.v3.write_text('No fresh signals this pass.\n')
+    archive=logs.v3.with_name(logs.v3.name+'-20260909');archive.write_text('old')
+    os.utime(archive,(time.time()-7200,time.time()-7200))
+    assert '⚠️ v3: 0 scan passes' in _digest()

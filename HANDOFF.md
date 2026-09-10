@@ -1,35 +1,20 @@
-# Accounting and recovery deployed; verify next sale
+# Heartbeat rotation false alarm repair
 
-September 10, 2026. User approved task 2 before deploying actual accounting,
-then selected verification of their NEXT sale before FA/backup tasks 3–4.
-All changes remain on ops/server-alert-readiness-20260906. The home v6
-campaign source, inputs and jobs are unchanged.
+September 10, 2026. User pasted the 17:00 UTC heartbeat reporting v3/v4/v31
+zero passes. Server logs prove successful completions around 17:18; cron entries
+remain installed. All three logs had reached the previous day's 51 passes /14
+RTH passes after daily copytruncate, defeating the count-decrease-only detector.
 
-Deployed fef6542 on Hetzner. Final verification 16:08:47 UTC: all 104 server
-acceptance tests passed, SQLite integrity is ok, accounting schema is present,
-and monitor/dispatcher cron entries remain scheduled. Existing position fields
-were compared exactly across the initial migration and remained unchanged.
-No real fills were inserted and no extra Telegram messages were sent.
+Added independent log-generation detection (device/inode + dateext rotation
+suffix), compatible migration from old state and five regressions. No scanner,
+model, position, cron or feed changes. Details:
+docs/reviews/2026-09-10-heartbeat-rotation.md.
+Focused tests 59 passed; full suite 699 passed plus 18 subtests. Deployment pending. Production last
+inspected at fef6542. Verification must use build_message only, never send or
+persist a replacement heartbeat unless the user explicitly requests that.
 
-Server receipts and private SQLite backup:
-logs/ops/accounting-deploy-20260910T155016Z/{verified.json,deployment.json,
-queue-before.sqlite3,acceptance-r2/}. The first acceptance result is retained:
-103/104 because an old fallback test read the production calendar. Fixed test
-isolation; production calendar logic unchanged. Final accepted code is fef6542.
-
-Local full suite: 694 passed +18 subtests. Focused acceptance: 104 passed,
-including full synthetic 390-minute replay, real strategy exits, stream/REST
-fallback, quiet minutes, restart/backfill, partial/final sale accounting,
-failed delivery retries and reconciliation with fictional broker records.
-Evidence /tmp/healys-session-recovery-20260910-r2/.
-
-Repairs found: same-bar successful recovery now clears the prior monitor error;
-quote lookup outages no longer suppress independently verified exit warnings.
-Commands/accounting scope: docs/reviews/2026-09-10-trade-accounting.md.
-Harness/evidence limits: docs/reviews/2026-09-10-session-recovery.md.
-
-NEXT: use the user's next actual sale, with entry/sale quantities, premiums,
-actual fees and broker fill reference, to reconcile against their confirmation.
-Keep private details in server SQLite/records. Actual broker and captured live
-full-session verification remain pending; synthetic tests do not establish them.
-Do not start FA/backup work before the agreed broker verification checkpoint.
+Accounting/recovery remains deployed; user chose their next sale for broker
+verification. User subsequently authorized independent FA/backup coding despite
+that pending sale: implemented separately at cae40a2 on
+ops/fa-automation-20260910, /tmp/healys-fa-automation. Not deployed or installed.
+Do not merge either runtime branch into the active source-pinned home campaign.

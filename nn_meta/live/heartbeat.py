@@ -125,6 +125,40 @@ def _scan_counts(log: Path) -> dict:
     return counts
 
 
+def _log_generation(log: Path) -> dict:
+    """Identify rename and daily copytruncate rotation independently of counts.
+
+    Our logrotate uses dateext YYYYMMDD and delaycompress. Compression alone
+    keeps the generation date unchanged. Counter decreases remain a fallback
+    for manual truncation and older installations without rotated archives.
+    """
+    stat = log.stat()
+    pattern = re.compile(re.escape(log.name) + r"-(\d{8})(?:\.gz)?$")
+    archives = [(match.group(1), path) for path in log.parent.glob(log.name + "-*")
+                if (match := pattern.fullmatch(path.name))]
+    date, archive = max(archives, default=(None, None), key=lambda item: item[0])
+    return {"device": stat.st_dev, "inode": stat.st_ino,
+            "rotation_date": date,
+            "rotation_mtime": archive.stat().st_mtime if archive else None}
+
+
+def _generation_changed(current: dict, baseline: dict, baseline_at) -> bool:
+    old = baseline.get("log_generation")
+    if isinstance(old, dict):
+        return any(current.get(k) != old.get(k)
+                   for k in ("device", "inode", "rotation_date"))
+    # First upgraded heartbeat still has the old counter-only state. Use the
+    # archive's timestamp relative to that successful heartbeat, not rollout
+    # time, so tomorrow's first rotation cannot produce another false zero.
+    if current.get("rotation_mtime") is not None and baseline_at:
+        try:
+            stamp = datetime.fromisoformat(baseline_at)
+            return stamp.tzinfo is not None and current["rotation_mtime"] > stamp.timestamp()
+        except (TypeError, ValueError):
+            pass
+    return False
+
+
 def _load_baselines() -> dict:
     """Per-expert baseline counts from the state file.
 
@@ -161,6 +195,8 @@ def build_message() -> str:
     now = datetime.now(timezone.utc)
     rth = is_rth()
     baselines = _load_baselines()
+    saved_state = _read_json(STATE)
+    baseline_at = saved_state.get("at") if isinstance(saved_state, dict) else None
     warnings: list[str] = []
     digest: list[str] = []
     totals: dict[str, dict] = {}
@@ -203,7 +239,9 @@ def build_message() -> str:
             # the log was rotated — reset to counting the fresh log instead of
             # clamping deltas to 0 (which masked real crashes AND fired false
             # "0 passes" DOWN warnings on healthy experts).
-            rotated = any(v < base.get(k, v) for k, v in cur.items())
+            generation = _log_generation(log) if log.exists() else {}
+            rotated = (any(v < base.get(k, v) for k, v in cur.items())
+                       or _generation_changed(generation, base, baseline_at))
             delta = dict(cur) if rotated \
                 else {k: v - base.get(k, v) for k, v in cur.items()}
 
@@ -214,6 +252,7 @@ def build_message() -> str:
                                     f"hours — cron may be DOWN ({log})")
                 continue
 
+            totals[name] = dict(cur, log_generation=generation)
             if grace:
                 digest.append(f"{name}: baseline set — counts start next heartbeat")
             else:

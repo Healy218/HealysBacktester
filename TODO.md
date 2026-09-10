@@ -440,3 +440,5 @@ stays the options-history source); News API (Benzinga) + screener
 
 - [x] Synthetic full-session/recovery acceptance, including actual partial sales and restart; fix same-bar recovery and quote outage handling.
 - [ ] Observe captured live-session behavior and compare actual broker records after deployment.
+
+- [x] Fix heartbeat false DOWN warnings when rotated logs regrow to equal/higher pass counts; retain genuine zero-scan detection.

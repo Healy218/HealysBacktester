@@ -592,3 +592,11 @@ Run `scripts/run_session_recovery.py --output NEW_DIRECTORY` with the venv.
 See [scope and found repairs](docs/reviews/2026-09-10-session-recovery.md).
 Synthetic acceptance does not establish actual full-session feed parity or
 broker reconciliation. A missing quote must never suppress a verified exit.
+
+## Heartbeat rotation identity (September 10)
+
+Daily copytruncate can regrow to exactly yesterday’s counters by heartbeat time.
+Counter decreases alone cannot identify rotation. Heartbeat state now records
+log device/inode and newest dateext suffix, with old-state timestamp migration.
+See docs/reviews/2026-09-10-heartbeat-rotation.md. Read-only status checks call
+`build_message()` and must not persist state or send a replacement digest.
