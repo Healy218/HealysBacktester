@@ -578,7 +578,7 @@ multi-leg and other nonstandard orders are outside this retail single-leg
 estimator. These costs NEVER modify frozen research SIM_CONFIG, option label
 fees, model decisions, probability thresholds, or exit triggers.
 
-## Actual taken-trade accounting (September 10, not yet deployed)
+## Actual taken-trade accounting (deployed September 10)
 
 See [commands, accounting, reconciliation and rollback](docs/reviews/2026-09-10-trade-accounting.md).
 Actual fees are distinct from estimates. `/sold ID` alone does not establish

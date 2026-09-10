@@ -1,6 +1,7 @@
 # Actual taken-trade accounting
 
-Implemented on the isolated production branch; not yet deployed. The home v6
+Implemented on the isolated production branch; deployed September 10 with
+recovery fixes (fef6542). See the session-recovery review for rollout evidence. The home v6
 campaign source and artifacts are unchanged.
 
 ## Commands

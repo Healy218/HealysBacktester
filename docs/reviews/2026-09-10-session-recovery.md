@@ -51,3 +51,11 @@ Initial server acceptance: 103/104. The pre-existing weekday-fallback test
 read the real host calendar, correctly finding Labor Day closed. Explicitly
 mock the absence of a calendar for that test and provide the synthetic session
 its own captured calendar. Runtime calendar logic is unchanged.
+
+Final rollout verification at 2026-09-10 16:08:47 UTC: fef6542 deployed,
+104/104 server acceptance tests passed, schema and SQLite integrity verified,
+monitor/dispatcher schedules present. Private backup and receipts remain under
+`logs/ops/accounting-deploy-20260910T155016Z/` on the server; `verified.json`
+is the final result. User chose their next sale for real broker verification.
+Local full suite passed 694 tests and 18 subtests before the test-only calendar
+isolation fix; focused acceptance passed again locally and on the server.
