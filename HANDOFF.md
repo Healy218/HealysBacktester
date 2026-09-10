@@ -33,3 +33,10 @@ Next user-requested live test: record the user-supplied held contract rather
 than the original alert's suggested expiry, retaining the saved exit rule.
 Quantity-only commands now support unknown premiums; actual position details
 belong only in the server SQLite ledger. See final deployment notes below.
+
+Live user-provided position test completed: actual expiry/strike override,
+quantity-only registration, closed-bar replay, then the user's supplied fill
+update all succeeded. Position remains open with no monitor error and no exit
+through the Sep 9 closing bar. Confirmation and corrected fill receipt were
+accepted by Telegram. Actual holding details remain in server SQLite only.
+Code deployed: 3afba5c. Full suite: 641 passed +18 subtests.

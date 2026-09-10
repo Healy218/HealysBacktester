@@ -27,3 +27,14 @@ position or Telegram message was created by that check. Legacy display-price
 rounding is tolerated within half a cent; replay uses the bar's full precision.
 Final complete suite: 640 passed +18 subtests, including attention-notice and
 expiry-review tests. User must explicitly mark actual entries Taken.
+
+## First user-authorized held-position test
+
+Quantity-only support deployed as 3afba5c (641 tests +18 subtests passed).
+The user's actual held contract override was verified against the option
+listing, registered via the same command handler as Telegram, and checked
+against real closed market bars. The replay remained open through the Sep 9
+closing bar without monitor errors. A subsequent user-supplied premium was
+recorded without changing the held contract or duplicating the position.
+Both Telegram receipts were accepted. This was an actual user-confirmed
+position; its private holding details are retained only in server SQLite.
