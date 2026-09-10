@@ -415,10 +415,12 @@ class Scanner:
             quote = alert_quote(occ)
             title, message = format_alert(sig, occ, quote)
             from nn_meta.live.alert_batches import cycle
+            from nn_meta.live.taken_trades import context_for
             outbox.enqueue({"title": title, "message": message,
                             "probability": sig.score, "expert": config.POOL, "alert_cycle": cycle(now),
                             "symbol": sym, "side": sig.action, "contract": occ,
                             "entry_mid": _mid(quote),
+                            "trade_context": context_for(sym, strategy=sig.strategy, params=sig.params, direction=sig.direction, spot=sig.spot, entry_ts=sig.bar_ts, sim_start=bars.index[0]),
                             "summary": f"[{config.POOL}] {sym} | {sig.strategy} | {sig.action} | {sig.dte} DTE"},
                            key=f"{config.POOL}|{sym}|{sig.strategy}|{bar_iso}")
             fired.append(sig)

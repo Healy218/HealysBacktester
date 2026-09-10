@@ -1,27 +1,25 @@
-# Compact production alert layout
+# Taken trades and exit watch
 
-2026-09-10 UTC. Ops branch `ops/server-alert-readiness-20260906`, isolated
-worktree `/tmp/healys-server-alert-readiness`; home v6 build remains on main.
+2026-09-10. User explicitly approved tracking taken trades AND exit alerts.
+Production ops branch remains isolated from the home v6 build on main.
+Compact contract/quote/exit alert layout was deployed as 4e5b165 and its MARA
+Telegram preview was accepted. The current change adds ✅ Taken buttons,
+reply `taken`, `/taken ID [quantity @ price]`, optional `contract OCC_SYMBOL`,
+`/selllist`, `/sold ID`, and `/tradehelp`. Old sent-message replies can recover
+context only when the exact saved message and frozen parameter label match.
 
-Real contract + NBBO change `4a30010` confirmed deployed cleanly at
-2026-09-09 20:12:02 UTC. This session adds shared `exit_rules.py`, passes raw
-frozen params through both scanners, and adds an exit line for all experts.
-Actual source semantics supersede Claude's earlier proposed RSI/volume/Elliott
-descriptions. Fixed stock stop uses signal close; premium estimate is optional,
-fresh, signed-delta-only. No model, training, trade policy, or ledger changes.
+SQLite additive migration retains candidate context and message-ID mapping,
+user-confirmed positions and retry receipts. Repeated commands do not duplicate
+positions. Quantity/price are optional actual fills, never assumed mid fills.
+Exit monitor uses original warmup and saved simulator config, checks closed
+trade status, and sends separate exit notices through the minute dispatcher.
+Underlying stop / strategy / opposite-entry / expiry notices do not place
+orders or mark actual positions sold. User /sold is required. Missing or
+unreproducible market data triggers an attention notice and retry.
 
-Next separate work: paper-position exit monitor and SELL alerts. Entry guidance
-does not perform that monitoring. Preserve existing top-five routing,
-probability floors, overflow replies, live feed watchdogs, and hourly home
-build watcher. Do not merge this branch into the source-pinned home campaign.
-
-Deployed and verified production code `7bc74ec` on 2026-09-10 ~01:00 UTC.
-Full ops suite: 616 passed +18 subtests; final exit tests 26 passed.
-Read-only server preview passed with a recorded v31 alert. See the server
-ops review note for evidence. Next cron passes pick up the formatter.
-
-User requested Claude’s compact alert appearance after the first Telegram
-preview omitted contract/quote inputs. Follow-up shortens exit prose and
-uses the real recorded MARA signal, resolved contract, and latest REST quote
-for Telegram. Stale quotes still omit the premium estimate. Full suite remains
-616 passed +18 subtests. Deploy this presentation change on the ops branch.
+Install via git pull and `scripts/configure_taken_monitor.py --run`; cron is
+:04/:19/:34/:49, sequential expert subprocesses, one compute thread each.
+No worker starts for an empty list. RTH grace includes final closed bar.
+Server preflight: 4 cores, 6.8 GB available of 7.8 GB; no home workers touched.
+See DOCUMENTATION.md for behavior and docs/reviews/2026-09-10-taken-trades.md
+for validation/deployment evidence. No actual user positions created by tests.

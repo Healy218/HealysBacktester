@@ -502,3 +502,44 @@ Telegram previews should resolve a real contract and retrieve a quote, rather
 than invoke the formatter without those optional arguments. Historical signal
 and after-hours quote timestamps must remain explicit; never freshen old data
 just to make the option estimate appear.
+
+### User-confirmed trades and exit watch (2026-09-10)
+
+User-approved scope: track trades explicitly marked taken and send exit alerts.
+`nn_meta/live/taken_trades.py` stores these separately from expert paper ledgers
+in the shared alert SQLite DB. New Telegram entry alerts have ✅ Taken and a
+stable Trade ID. Reply `taken`, optionally `taken 2 @ 1.35`, or send
+`/taken TRADE_ID 2 @ 1.35`. Quantity/fill are optional; supplied quantity is the
+total held quantity, not an incremental add. `/selllist` shows tracked entries;
+`/sold TRADE_ID` closes one. `/tradehelp` documents the syntax. A different
+contract can be specified as `contract OCC_SYMBOL` on the taken command; it
+must match symbol and call/put direction. No broker orders are submitted.
+
+Candidate snapshots retain raw frozen params, simulator config, entry close,
+entry timestamp, and original warmup start. Older original Telegram replies
+can match a saved sent message exactly; reconstruction requires the current
+frozen parameter label to match the original message. Missing/mismatched
+context is rejected. Older warmup starts are reconstructed from the original
+60-day loader window. Display previews alone do not register positions.
+
+`nn_meta/live/taken_monitor.py` replays the original simulator on CLOSED 15m
+bars, retaining the original history window. It checks actual vectorbt trade
+status (open trades' latest exit_idx is NOT an exit). Stops use underlying
+OHLC, and original conflict/opposite-entry behavior is preserved. Missing,
+stale, revised entry data or unreproducible entries produce a check failure,
+not an invented SELL. A failure notification is sent once until recovery;
+`/selllist` shows CHECK FAILED. Quotes remain stream-first with REST fallback.
+At expiry, an open contract prompts close/roll review; no automatic roll or
+replacement position is recorded. Mark sold and use a new alert to track a
+new entry. Repeated Taken clicks never duplicate the position.
+
+Run `scripts/configure_taken_monitor.py --run` to install the watcher at
+:04/:19/:34/:49 (keeps a cron backup). It runs experts sequentially with one
+compute thread each, maps v4 to the v31 data pool, and includes the final
+16:00 closed bar via a three-minute RTH grace at the :04 check. Empty lists
+start no worker. Existing minute alert dispatcher sends persisted exit notices
+outside entry top-five/floor filtering and handles Taken commands through the
+same getUpdates cursor. Exit notices leave the position on the sell list until
+/sold. Normal retries are idempotent; Telegram's lack of send idempotency means
+a crash after an accepted send but before its receipt commits can duplicate a
+notification, never a taken position. Preserve this distinction in claims.

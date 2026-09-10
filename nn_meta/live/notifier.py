@@ -90,6 +90,24 @@ class TelegramNotifier(Notifier):
         return True
 
 
+    def send_trade_alert(self, message: str, title: str, trade_id: str):
+        """Return Telegram message ID so replies resolve the exact entry."""
+        try:
+            r = self._session.post(self._url, json={
+                "chat_id": self._chat_id,
+                "text": f"🔔 {title}\n{message}\nTrade ID: {trade_id}",
+                "reply_markup": {"inline_keyboard": [[{
+                    "text": "✅ Taken", "callback_data": f"taken:{trade_id}"}]]},
+            }, timeout=_TIMEOUT)
+            data = r.json()
+            if r.status_code == 200 and data.get('ok') is True:
+                return int(data['result']['message_id'])
+        except (requests.RequestException, ValueError, KeyError, TypeError):
+            pass
+        logger.error('[notify:telegram] trade alert failed')
+        return None
+
+
 def get_notifier(force_console: bool = False) -> Notifier:
     """First configured transport wins: Telegram, then Pushover, else console."""
     tg_token = os.environ.get("TELEGRAM_BOT_TOKEN", "")

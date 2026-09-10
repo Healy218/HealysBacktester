@@ -88,7 +88,24 @@ def poll_replies(queue, api):
     updates = api.call('getUpdates',offset=offset,timeout=0,allowed_updates=['message','callback_query'])
     for update in updates:
         message = update.get('message',{})
-        batch = None if message and message.get('date',0)<since else requested_batch(queue,update,api.chat)
+        stale = bool(message and message.get('date', 0) < since)
+        from nn_meta.live.taken_trades import handle
+        trade_response = None if stale else handle(queue, update, api.chat)
+        if trade_response is not None:
+            callback = update.get('callback_query')
+            if callback:
+                try:
+                    api.call('answerCallbackQuery', callback_query_id=callback['id'], text='Request received')
+                except RuntimeError:
+                    pass
+            for part, start in enumerate(range(0, len(trade_response), 3500)):
+                with queue.connect() as db:
+                    done = db.execute('SELECT 1 FROM reply_parts WHERE update_id=? AND part=?', (update['update_id'], part)).fetchone()
+                if not done:
+                    api.call('sendMessage', chat_id=api.chat, text=trade_response[start:start+3500])
+                    with queue.connect() as db:
+                        db.execute('INSERT OR IGNORE INTO reply_parts VALUES (?,?)', (update['update_id'], part))
+        batch = None if stale or trade_response is not None else requested_batch(queue,update,api.chat)
         if batch is not None:
             callback = update.get('callback_query')
             if callback:

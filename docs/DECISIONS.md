@@ -520,3 +520,13 @@ quotes support it. The 5% setting is an adverse underlying stop, not a +/-5%
 option exit; no new premium target or exit policy was authorized here.
 Deployment stays on the isolated ops branch while the home v6 build runs.
 A position monitor producing SELL alerts is the next separate phase.
+
+## 2026-09-10 — User-confirmed positions with exit notifications
+
+User explicitly requested “yes track taken trades and give exit alerts.”
+Implement Telegram Taken buttons, replies and manual commands, with optional
+actual quantity/premium and persistent /selllist and /sold state. Reuse the
+frozen underlying simulator and its exit status rather than invent option
+premium exits. Notify exits separately from the top-five entry ranking; leave
+closure to user confirmation. No broker orders or automatic contract rolls.
+Keep all production code isolated from the active home v6 research campaign.

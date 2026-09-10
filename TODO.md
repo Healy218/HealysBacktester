@@ -420,4 +420,11 @@ stays the options-history source); News API (Benzinga) + screener
 
 - [x] Shared entry-alert exit line with frozen family params and simulator stop.
 - [x] Optional fresh-delta premium estimate, explicitly approximate.
-- [ ] Separate phase: monitor open paper positions and emit actual SELL alerts.
+- [x] User-confirmed taken-position exit watch implemented; expert paper-ledger settlement remains separate.
+
+## 2026-09-10 user-confirmed exit watch
+
+- [x] Telegram Taken button, reply/manual taken commands, optional actual fill.
+- [x] Persistent sell list and user-confirmed sold state.
+- [x] Replay saved underlying policy on closed bars and send exit notifications.
+- [x] Separate exit notifications from entry ranking; sequential monitor workers.

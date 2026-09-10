@@ -125,6 +125,7 @@ def fresh_proposals(symbol: str, bars: pd.DataFrame, spec_entry: dict,
                     "entry_ts": ent_ts, "bars_since_signal": int(gap),
                     "param_label": e.get("param_label", ""),
                     "params": dict(e["params"]),
+                    "sim_start": str(bars.index[0]),
                     "spot": float(bars["Close"].iloc[-1])})
     return out
 
@@ -335,10 +336,12 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
             # dedupes the position (duplicate trade_id is a no-op), so no
             # ordering loses an alert or a paper position.
             from nn_meta.live.alert_batches import cycle
+            from nn_meta.live.taken_trades import context_for
             side = "BUY PUT" if fresh["direction"] else "BUY CALL"
             outbox.enqueue({"title": title, "message": msg, "probability": float(row.score),
                             "expert": EXPERT, "alert_cycle": cycle(now),
                             "symbol": row.symbol, "side": side, "contract": occ, "entry_mid": _mid(quote),
+                            "trade_context": context_for(row.symbol, strategy=row.strategy, params=fresh.get("params", {}), direction=fresh["direction"], spot=fresh["spot"], entry_ts=row.entry_ts, sim_start=fresh.get("sim_start", str(row.entry_ts))),
                             "summary": f"[{EXPERT}] {row.symbol} | {row.strategy} | {'PUT' if fresh['direction'] else 'CALL'} | {int(row.dte)} DTE"}, key=key)
             try:
                 ledger.open(trade_id=f"{key}|{int(row.dte)}", symbol=row.symbol,

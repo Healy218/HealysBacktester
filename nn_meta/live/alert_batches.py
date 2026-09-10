@@ -7,6 +7,7 @@ from contextlib import contextmanager
 from datetime import datetime, timezone
 import fcntl
 import math
+import json
 import os
 from pathlib import Path
 import sqlite3
@@ -60,10 +61,18 @@ class Batches:
                 CREATE TABLE IF NOT EXISTS completed (batch INTEGER, expert TEXT, PRIMARY KEY(batch, expert));
             ''')
             db.execute('INSERT OR IGNORE INTO reply_state VALUES (?,?)', ('enabled_at', str(int(time.time()))))
+            db.commit()
+            db.execute('BEGIN IMMEDIATE')
             cols = {r[1] for r in db.execute('PRAGMA table_info(candidates)')}
-            for col in ('symbol', 'side'):          # additive migration for live queues
+            for col in ('symbol', 'side', 'trade_context', 'trade_ref'):          # additive migration for live queues
                 if col not in cols:
                     db.execute(f'ALTER TABLE candidates ADD COLUMN {col} TEXT')
+
+            from nn_meta.live.taken_trades import install, trade_id
+            install(db)
+            db.execute("CREATE UNIQUE INDEX IF NOT EXISTS candidate_trade_ref ON candidates(trade_ref)")
+            for row in db.execute("SELECT key FROM candidates WHERE trade_ref IS NULL").fetchall():
+                db.execute("UPDATE candidates SET trade_ref=? WHERE key=?", (trade_id(row["key"]), row["key"]))
 
     def connect(self):
         db = sqlite3.connect(self.path, timeout=60)
@@ -85,10 +94,12 @@ class Batches:
             finalized = db.execute('SELECT finalized FROM batches WHERE id=?',(batch,)).fetchone()[0]
             status = ('suppressed_probability' if float(score) <= PROBABILITY_FLOORS.get(expert, -1)
                       else 'suppressed_late' if finalized else 'expired' if now >= batch+900 else 'pending')
+            from nn_meta.live.taken_trades import trade_id
             idea = idea_of(payload)
-            db.execute('INSERT OR IGNORE INTO candidates(key,batch,expert,score,title,message,status,summary,symbol,side) VALUES (?,?,?,?,?,?,?,?,?,?)',
+            db.execute('INSERT OR IGNORE INTO candidates(key,batch,expert,score,title,message,status,summary,symbol,side,trade_context,trade_ref) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
                        (key,batch,expert,float(score),payload['title'],payload['message'],status,payload.get('summary',payload['title']),
-                        idea[0] if idea else None, idea[1] if idea else None))
+                        idea[0] if idea else None, idea[1] if idea else None,
+                        json.dumps(dict(payload.get('trade_context') or {}, expert=expert, contract=payload.get('contract'))), trade_id(key)))
         return True
 
     def complete(self, expert, batch):
@@ -126,9 +137,19 @@ class Batches:
                     with self.connect() as db:
                         db.execute("UPDATE candidates SET status='expired' WHERE key=?",(row['key'],))
                     continue
-                if notifier.send(row['message'],title=row['title']):
+                from nn_meta.live.taken_trades import trade_id, ready
+                context = json.loads(row['trade_context'] or '{}')
+                message_id = None
+                if ready(context) and hasattr(notifier, 'send_trade_alert'):
+                    message_id = notifier.send_trade_alert(row['message'], row['title'], trade_id(row['key']))
+                    delivered = message_id is not None
+                else:
+                    delivered = notifier.send(row['message'], title=row['title'])
+                if delivered:
                     with self.connect() as db:
                         db.execute("UPDATE candidates SET status='sent' WHERE key=?",(row['key'],))
+                        if message_id is not None:
+                            db.execute("INSERT OR IGNORE INTO trade_messages VALUES (?,?)", (message_id, row["key"]))
                     sent += 1
         return sent
 
@@ -177,6 +198,8 @@ def main():
             api = BotAPI()
             publish_notices(queue, api)
             poll_replies(queue, api)
+            from nn_meta.live.taken_monitor import send_pending
+            send_pending(queue, api)
     except BlockingIOError:
         print('Previous alert dispatcher still running',flush=True)
 
