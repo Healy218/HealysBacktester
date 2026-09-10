@@ -9,7 +9,11 @@ import time
 HELP = ('Tap ✅ Taken on an alert, or reply taken.\n'
         'Manual: /taken TRADE_ID 5 (quantity only), or /taken TRADE_ID 5 @ 1.35\n'
         'Different contract: /taken TRADE_ID [quantity @ fill_price] contract OCC_SYMBOL\n'
-        '/selllist — tracked trades\n/sold TRADE_ID — mark a trade closed')
+        '/selllist — tracked trades\n/sold ID quantity @ premium [fees TOTAL] [ref BROKER_FILL_ID]\n'
+        '/sold ID — close without fill details\n/trade ID — accounting history\n'
+        '/entryfees ID TOTAL — actual total entry fees\n'
+        '/entryprice ID PREMIUM — fill in a missing entry premium\n'
+        '/salefees ID SALE_NUMBER TOTAL [ref BROKER_FILL_ID] — complete sale fees')
 
 
 def trade_id(key):
@@ -30,6 +34,9 @@ def install(db):
         db.execute('ALTER TABLE taken_trades ADD COLUMN monitor_error TEXT')
     if 'monitor_error_sent' not in cols:
         db.execute('ALTER TABLE taken_trades ADD COLUMN monitor_error_sent INTEGER DEFAULT 0')
+
+    from nn_meta.live.trade_accounting import install as install_accounting
+    install_accounting(db)
 
 
 def context_for(payload, *, strategy, params, direction, spot, entry_ts, sim_start):
@@ -148,6 +155,9 @@ def _listing(db):
     lines = [f'📋 Sell list — {len(rows)} taken trades']
     for r in rows:
         ctx = json.loads(r['context'])
+        from nn_meta.live.trade_accounting import summary
+        remaining = summary(db, r)['remaining']
+        r = dict(r, quantity=remaining)
         fill = f"{r['quantity']} @ ${r['fill_price']:.2f}" if r['fill_price'] else f"{r['quantity']} contracts · fill price not recorded" if r['quantity'] else 'fill not recorded'
         state = ' — EXIT ALERT' if r['exit_notice'] else ' — CHECK FAILED' if r['monitor_error'] else ''
         lines.append(f"{r['id']} · [{ctx['expert']}] {ctx['contract']} · {fill}{state}")
@@ -155,7 +165,7 @@ def _listing(db):
         cost = entry_line(ctx, r['quantity'], r['fill_price'])
         if cost:
             lines.append(cost)
-    lines.append('Mark closed: /sold TRADE_ID')
+    lines.append('Record sale: /sold ID quantity @ premium [fees TOTAL] [ref BROKER_FILL_ID]\nHistory: /trade ID')
     return '\n'.join(lines)
 
 
@@ -175,7 +185,7 @@ def handle(queue, update, chat):
         if not words:
             return None
         action = words[0].lower().lstrip('/').split('@')[0]
-        if action not in ('taken', 'selllist', 'sold', 'tradehelp'):
+        if action not in ('taken', 'selllist', 'sold', 'tradehelp', 'trade', 'entryfees', 'salefees', 'entryprice'):
             return None
         ident, tokens = None, words[1:]
     with queue.connect() as db:
@@ -183,6 +193,7 @@ def handle(queue, update, chat):
         prior = db.execute('SELECT response FROM trade_commands WHERE update_id=?', (update['update_id'],)).fetchone()
         if prior:
             return prior['response']
+        db.execute('SAVEPOINT trade_action')
         try:
             if action == 'tradehelp':
                 response = HELP
@@ -199,11 +210,47 @@ def handle(queue, update, chat):
                     if not tokens:
                         raise ValueError(HELP)
                     ident, tokens = tokens[0].upper(), tokens[1:]
-                if action == 'sold':
-                    if tokens:
-                        raise ValueError('Use /sold TRADE_ID.')
-                    changed = db.execute("UPDATE taken_trades SET status='closed',closed_at=? WHERE id=? AND status!='closed'", (time.time(), ident)).rowcount
-                    response = f'✅ {ident} marked closed and removed from the sell list.' if changed else 'No open taken trade with that ID.'
+                if action in ('sold', 'trade', 'entryfees', 'salefees', 'entryprice'):
+                    from nn_meta.live.trade_accounting import sell, report, position, amount
+                    position(db, ident)
+                    if action == 'sold':
+                        response = sell(db, ident, tokens, update['update_id'])
+                    elif action == 'trade':
+                        if tokens:
+                            raise ValueError('Use /trade ID.')
+                        response = report(db, ident)
+                    elif action == 'entryprice':
+                        if len(tokens) != 1:
+                            raise ValueError('Use /entryprice ID PREMIUM.')
+                        premium = amount(tokens[0])
+                        current = position(db, ident)
+                        if premium <= 0 or current['fill_price'] is not None:
+                            raise ValueError('Entry premium must be positive and previously unrecorded.')
+                        db.execute('UPDATE taken_trades SET fill_price=? WHERE id=?', (float(premium), ident))
+                        response = 'Missing entry premium recorded.\n' + report(db, ident)
+                    elif action == 'entryfees':
+                        if len(tokens) != 1:
+                            raise ValueError('Use /entryfees ID TOTAL_DOLLARS.')
+                        fee = str(amount(tokens[0]))
+                        db.execute('UPDATE taken_trades SET actual_entry_fees=? WHERE id=?', (fee, ident))
+                        response = f'Actual total entry fees recorded: ${fee}\n' + report(db, ident)
+                    else:
+                        if len(tokens) not in (2, 4) or not tokens[0].isdigit() or (len(tokens) == 4 and tokens[2] != 'ref'):
+                            raise ValueError('Use /salefees ID SALE_NUMBER TOTAL [ref BROKER_FILL_ID].')
+                        sale_number = int(tokens[0])
+                        if sale_number > 9223372036854775807:
+                            raise ValueError('Sale number is out of range.')
+                        sale = db.execute('SELECT * FROM taken_sales WHERE trade_id=? AND update_id=?', (ident, sale_number)).fetchone()
+                        if not sale:
+                            raise ValueError('Sale number not found for this trade.')
+                        fee = str(amount(tokens[1]))
+                        ref = tokens[3] if len(tokens) == 4 else sale['broker_ref']
+                        if sale['broker_ref'] and ref != sale['broker_ref']:
+                            raise ValueError('An existing broker reference cannot be reassigned.')
+                        if ref and (not re.fullmatch(r'[A-Za-z0-9_.:-]{1,100}', ref) or db.execute('SELECT 1 FROM taken_sales WHERE broker_ref=? AND update_id!=?', (ref, sale['update_id'])).fetchone()):
+                            raise ValueError('Invalid or already used broker reference.')
+                        db.execute('UPDATE taken_sales SET fees=?,broker_ref=? WHERE update_id=?', (fee, ref, sale['update_id']))
+                        response = 'Actual sale fees/reference recorded.\n' + report(db, ident)
                 else:
                     quantity, price, override = _parse_fill(tokens)
                     row = _candidate(db, ident)
@@ -224,6 +271,8 @@ def handle(queue, update, chat):
                         if override and override != json.loads(old['context'])['contract']:
                             raise ValueError('This ID already tracks a different contract; mark it sold before using a new alert.')
                         if quantity is not None:
+                            if db.execute('SELECT 1 FROM taken_sales WHERE trade_id=?', (ident,)).fetchone() and (quantity != old['quantity'] or (price is not None and old['fill_price'] is not None and price != old['fill_price'])):
+                                raise ValueError('Entry quantity/premium is locked after a sale; reconcile corrections separately.')
                             db.execute('UPDATE taken_trades SET quantity=?,fill_price=COALESCE(?,fill_price) WHERE id=?', (quantity, price, ident))
                         response = f'✅ {ident} already on your sell list.' + (' Fill updated.' if quantity is not None else '')
                     else:
@@ -239,8 +288,13 @@ def handle(queue, update, chat):
                     cost = entry_line(json.loads(saved['context']), saved['quantity'], saved['fill_price'])
                     if cost:
                         response += '\n' + cost
-                    response += '\nExit watch: strategy/stock stop on closed 15m bars.\nView: /selllist · Close: /sold ' + ident
+                    response += '\nExit watch: strategy/stock stop on closed 15m bars.\nView: /selllist · History: /trade ' + ident + '\nSale: /sold ID quantity @ premium [fees TOTAL] [ref BROKER_FILL_ID]'
         except ValueError as exc:
+            db.execute('ROLLBACK TO trade_action')
             response = str(exc)
+        else:
+            if action in ('taken', 'sold', 'entryfees', 'salefees', 'entryprice'):
+                db.execute('INSERT INTO taken_accounting_events VALUES (?,?,?,?)', (update['update_id'], ident, action, json.dumps(tokens)))
+        db.execute('RELEASE trade_action')
         db.execute('INSERT INTO trade_commands VALUES (?,?)', (update['update_id'], response))
         return response

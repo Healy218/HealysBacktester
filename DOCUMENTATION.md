@@ -577,3 +577,11 @@ partial-fill tiering/rounding can differ from broker receipts. Professional,
 multi-leg and other nonstandard orders are outside this retail single-leg
 estimator. These costs NEVER modify frozen research SIM_CONFIG, option label
 fees, model decisions, probability thresholds, or exit triggers.
+
+## Actual taken-trade accounting (September 10, not yet deployed)
+
+See [commands, accounting, reconciliation and rollback](docs/reviews/2026-09-10-trade-accounting.md).
+Actual fees are distinct from estimates. `/sold ID` alone does not establish
+a realized fill. Broker reconciliation reads normalized private JSON and never
+writes the live database. Old code does not understand partial sales; after
+sales are recorded, rollback requires reconciliation or a forward fix.

@@ -539,3 +539,11 @@ live fee estimates and explicit index-root/account-tier handling. Keep account
 settings and holdings in private server state. Do not retroactively change
 frozen research/training costs. Show fee-aware entry costs and fresh-bid net
 exit estimates; retain the distinction between estimates and broker receipts.
+
+## 2026-09-10 — actual sale accounting alongside the pinned build
+
+User selected actual exit fills/reconciliation first; other suggested tasks wait.
+Keep implementation in the isolated ops checkout. Record user-reported fills
+and actual fees separately from quotes/estimated fees, preserve unknowns,
+allocate entry costs proportionally, and compare supplied broker records
+read-only. Preserve legacy manual closure with explicit incomplete accounting.

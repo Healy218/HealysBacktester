@@ -83,12 +83,15 @@ def scan(queue, expert, loader, now=None, evaluator=evaluate, quote_loader=None)
                 from nn_meta.live.feeds.quotes import contract_lines
                 q = (quote_loader or alert_quote)(ctx['contract'])
                 from nn_meta.live.broker_fees import quote_pnl_line
-                pnl = quote_pnl_line(ctx, row['quantity'], row['fill_price'], q, now)
+                from nn_meta.live.trade_accounting import summary
+                with queue.connect() as db:
+                    remaining = summary(db, row)['remaining']
+                pnl = quote_pnl_line(ctx, remaining, row['fill_price'], q, now)
                 notice = (f"🔴 SELL WATCH — [{expert}] {ctx['symbol']}\n"
                           + contract_lines(ctx['contract'], q, '')
                           + f"\nexit: {event['reason']}\nbar: {event['bar']} UTC · spot ${event['stock_close']:,.2f}"
                           + ('\n' + pnl if pnl else '')
-                          + f"\nTrade ID: {row['id']}\nAfter closing: /sold {row['id']}")
+                          + f"\nTrade ID: {row['id']}\nRecord sale: /sold {row['id']} quantity @ premium [fees TOTAL] [ref BROKER_FILL_ID]")
             with queue.connect() as db:
                 if notice:
                     db.execute("UPDATE taken_trades SET status='exit_due',exit_notice=?,notice_sent=0,last_checked=?,monitor_error=NULL,monitor_error_sent=0 WHERE id=? AND status='open'", (notice, latest, row['id']))

@@ -431,3 +431,8 @@ stays the options-history source); News API (Benzinga) + screener
 
 - [x] Live Robinhood per-contract/per-side fee estimates, account tier and index
   exchange tiers; entry cost and fresh-bid net P/L display, isolated from training.
+
+## 2026-09-10 actual trade accounting
+
+- [x] Code actual sale fills, partial exits, fee completion, realized P/L and read-only broker-record comparison on isolated ops branch.
+- [ ] Deploy and verify actual accounting with user-supplied broker records. See docs/reviews/2026-09-10-trade-accounting.md.
