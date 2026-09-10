@@ -97,7 +97,7 @@ def recover_context(row):
             dte = int(dte_match[1]) if dte_match else frozen['dte']
             occ = resolve_occ(row['symbol'], 'P' if direction else 'C', spot, dte, stamp, listing=listing) if listing is not None else None
         ctx = context_for(row['symbol'], strategy=strategy, params=frozen['params'], direction=direction, spot=spot, entry_ts=str(stamp), sim_start=str(stamp.date() - timedelta(days=60)))
-        ctx.update(contract=occ, expert=row['expert'], warmup_date_only=True)
+        ctx.update(contract=occ, expert=row['expert'], warmup_date_only=True, entry_spot_rounded=True)
         return ctx
     except (KeyError, ValueError, OSError):
         return {}

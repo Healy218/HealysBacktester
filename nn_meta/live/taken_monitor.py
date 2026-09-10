@@ -16,8 +16,13 @@ def evaluate(context, bars, now):
     if bars.index[0] > oldest_allowed or entry not in bars.index:
         raise ValueError('Missing entry/warmup history; exit cannot be verified.')
     bars = bars.loc[start:]
-    if abs(float(bars.loc[entry, 'Close']) - context['spot']) > max(.0001, abs(context['spot']) * .00001):
+    entry_close = float(bars.loc[entry, 'Close'])
+    tolerance = .005001 if context.get('entry_spot_rounded') else max(.0001, abs(context['spot']) * .00001)
+    if abs(entry_close - context['spot']) > tolerance:
         raise ValueError('Entry bar changed since the alert; exit cannot be verified.')
+    # Legacy messages printed two decimal places; replay still uses the
+    # original bar's full precision, including its stop reference.
+    context = dict(context, spot=entry_close)
     signals = proposals.single_signals(context['strategy'], bars, context['params'])
     pf = run_backtest(price_df=bars, entries_series=signals[0], exits_series=signals[1],
                       short_entries_series=signals[2], short_exits_series=signals[3],

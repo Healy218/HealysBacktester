@@ -137,3 +137,13 @@ def test_expiring_open_contract_prompts_review(tmp_path):
     mon.scan(q,'v31',lambda c,n:b,late,evaluator,lambda occ:None)
     assert rows(q)[0]['status']=='exit_due'
     assert 'close or roll' in rows(q)[0]['exit_notice']
+
+
+def test_legacy_display_rounding_is_not_treated_as_a_data_revision(monkeypatch):
+    signal_stub(monkeypatch)
+    b=bars();b.loc[b.index[1],'Close']=100.004
+    event,_=mon.evaluate(dict(context(),entry_spot_rounded=True),b,NOW)
+    assert event is None
+    b.loc[b.index[1],'Close']=100.01
+    with pytest.raises(ValueError,match='changed'):
+        mon.evaluate(dict(context(),entry_spot_rounded=True),b,NOW)
