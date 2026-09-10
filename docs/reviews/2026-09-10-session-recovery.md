@@ -46,3 +46,8 @@ The runner limits numerical-library threads and uses temporary test state.
 Local acceptance: 104 tests passed. Evidence:
 `/tmp/healys-session-recovery-20260910/`. Full suite result and server deployment
 receipt will be recorded in HANDOFF.md. No account details belong in git.
+
+Initial server acceptance: 103/104. The pre-existing weekday-fallback test
+read the real host calendar, correctly finding Labor Day closed. Explicitly
+mock the absence of a calendar for that test and provide the synthetic session
+its own captured calendar. Runtime calendar logic is unchanged.

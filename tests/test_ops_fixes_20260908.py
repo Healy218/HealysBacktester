@@ -54,8 +54,9 @@ class TestSessionAwareStaleness:
         with pytest.raises(StaleBarsError, match="stale"):
             require_recent_bars(_bars("2026-09-04 19:45"), pd.Timestamp("2026-09-08 13:46"))
 
-    def test_weekday_fallback_without_calendar_treats_monday_as_session(self):
-        # No captured calendar: the Mon-Fri rule applies (production always has one).
+    def test_weekday_fallback_without_calendar_treats_monday_as_session(self, monkeypatch):
+        # Isolate the fallback even on a host with a captured production calendar.
+        monkeypatch.setattr("nn_meta.session_calendar.configured_calendar", lambda: None)
         assert expected_last_closed_bar(pd.Timestamp("2026-09-08 13:36", tz="UTC")) \
             == pd.Timestamp("2026-09-07 19:45")
 

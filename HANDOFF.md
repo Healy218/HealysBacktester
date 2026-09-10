@@ -11,3 +11,11 @@ Focused acceptance: 104 passed, /tmp/healys-session-recovery-20260910/.
 Full suite: 694 passed and 18 subtests; only existing dependency warnings. Deployment: pending. Server inspected at d2708d6 with no
 tracked changes; private runtime artifacts preserved. Actual broker records
 have not been supplied, so real reconciliation remains pending.
+
+First server rollout at 15:50 UTC pulled 47bb457; SQLite backup and integrity
+passed and every pre-existing position field was preserved. Acceptance was
+103/104: an old fallback-calendar test accidentally read the host calendar.
+Test isolation repaired without production calendar changes; rerun pending.
+Backup/evidence: logs/ops/accounting-deploy-20260910T155016Z/ on server.
+User selected verification of their NEXT sale; no historical broker import
+requested. Hold FA/backup work until that verification.

@@ -22,7 +22,10 @@ from tests.test_taken_monitor import bars, NOW
 def test_full_session_stream_rest_restart_partial_sales_and_final_bar(tmp_path, monkeypatch):
     from nn_meta import config, proposals
     from nn_meta.live.feeds import stock_stream
-    monkeypatch.delenv('NN_META_SESSION_CALENDAR', raising=False)
+    calendar = tmp_path/'session-calendar.json'
+    calendar.write_text(json.dumps(dict(coverage_start='2026-09-09', coverage_end='2026-09-09',
+                                       sessions=[dict(date='2026-09-09',open='09:30',close='16:00')])))
+    monkeypatch.setenv('NN_META_SESSION_CALENDAR', str(calendar))
     # A real MA crossover, then an exit only on the final session bar.
     prices = [100, 99, 98, 99, 100] + [101 + i*.1 for i in range(20)] + [99]
     minute_index = pd.date_range('2026-09-09 13:30', periods=390, freq='min')
