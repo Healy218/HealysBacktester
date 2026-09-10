@@ -7,7 +7,7 @@ import re
 import time
 
 HELP = ('Tap ✅ Taken on an alert, or reply taken.\n'
-        'Manual: /taken TRADE_ID [quantity @ fill_price]\n'
+        'Manual: /taken TRADE_ID 5 (quantity only), or /taken TRADE_ID 5 @ 1.35\n'
         'Different contract: /taken TRADE_ID [quantity @ fill_price] contract OCC_SYMBOL\n'
         '/selllist — tracked trades\n/sold TRADE_ID — mark a trade closed')
 
@@ -113,6 +113,11 @@ def _parse_fill(tokens):
         tokens = tokens[:i]
     if not tokens:
         return None, None, contract
+    if len(tokens) == 1 and tokens[0].isdigit():
+        quantity = int(tokens[0])
+        if not 1 <= quantity <= 100000:
+            raise ValueError('Quantity must be positive.')
+        return quantity, None, contract
     match = re.fullmatch(r'(\d+)\s*@\s*\$?(\d+(?:\.\d+)?)', ' '.join(tokens))
     if not match:
         raise ValueError('Use quantity @ fill_price, for example: taken 2 @ 1.35')
@@ -143,7 +148,7 @@ def _listing(db):
     lines = [f'📋 Sell list — {len(rows)} taken trades']
     for r in rows:
         ctx = json.loads(r['context'])
-        fill = f"{r['quantity']} @ ${r['fill_price']:.2f}" if r['fill_price'] else 'fill not recorded'
+        fill = f"{r['quantity']} @ ${r['fill_price']:.2f}" if r['fill_price'] else f"{r['quantity']} contracts · fill price not recorded" if r['quantity'] else 'fill not recorded'
         state = ' — EXIT ALERT' if r['exit_notice'] else ' — CHECK FAILED' if r['monitor_error'] else ''
         lines.append(f"{r['id']} · [{ctx['expert']}] {ctx['contract']} · {fill}{state}")
     lines.append('Mark closed: /sold TRADE_ID')
@@ -213,12 +218,17 @@ def handle(queue, update, chat):
                         if override and override != json.loads(old['context'])['contract']:
                             raise ValueError('This ID already tracks a different contract; mark it sold before using a new alert.')
                         if quantity is not None:
-                            db.execute('UPDATE taken_trades SET quantity=?,fill_price=? WHERE id=?', (quantity, price, ident))
+                            db.execute('UPDATE taken_trades SET quantity=?,fill_price=COALESCE(?,fill_price) WHERE id=?', (quantity, price, ident))
                         response = f'✅ {ident} already on your sell list.' + (' Fill updated.' if quantity is not None else '')
                     else:
                         db.execute("INSERT INTO taken_trades(id,candidate_key,context,quantity,fill_price,status,taken_at) VALUES (?,?,?,?,?,'open',?)", (ident, row['key'], json.dumps(ctx), quantity, price, time.time()))
                         response = f"✅ Taken — {ctx['contract']}\nTrade ID: {ident}\nAdded to your sell list."
-                        response += f'\nFill: {quantity} @ ${price:.2f}' if quantity else f'\nOptional fill: /taken {ident} 2 @ 1.35'
+                        if quantity is not None and price is not None:
+                            response += f'\nFill: {quantity} @ ${price:.2f}'
+                        elif quantity is not None:
+                            response += f'\nQuantity: {quantity} contracts · fill price not recorded'
+                        else:
+                            response += f'\nOptional fill: /taken {ident} 2 @ 1.35'
                     response += '\nExit watch: strategy/stock stop on closed 15m bars.\nView: /selllist · Close: /sold ' + ident
         except ValueError as exc:
             response = str(exc)

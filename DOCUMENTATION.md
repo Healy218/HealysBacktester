@@ -543,3 +543,10 @@ same getUpdates cursor. Exit notices leave the position on the sell list until
 /sold. Normal retries are idempotent; Telegram's lack of send idempotency means
 a crash after an accepted send but before its receipt commits can duplicate a
 notification, never a taken position. Preserve this distinction in claims.
+
+Quantity-only Taken commands are supported: `/taken TRADE_ID 5` records five
+contracts without inventing a premium. An optional `contract OCC_SYMBOL`
+override can follow it. Supplying a new quantity without a premium preserves
+an already-recorded fill price. Positions with unknown premium display their
+quantity and “fill price not recorded”; P/L must not be inferred from an
+assumed fill. User-provided actual positions stay in server SQLite, not docs.

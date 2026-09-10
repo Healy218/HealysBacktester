@@ -151,3 +151,14 @@ def test_telegram_button_payload_and_message_id():
                 def json(self):return {'ok':True,'result':{'message_id':77}}
             return Response()
     assert TelegramNotifier('test','123',Session()).send_trade_alert('body','title','ABC')==77
+
+
+def test_quantity_without_premium_is_preserved_and_displayed(tmp_path):
+    q,ident=queued(tmp_path)
+    response=handle(q,message(f'/taken {ident} 5 contract MARA351009C00012000'),'123')
+    assert 'Quantity: 5 contracts' in response
+    assert rows(q)[0]['quantity']==5 and rows(q)[0]['fill_price'] is None
+    assert '5 contracts · fill price not recorded' in handle(q,message('/selllist',uid=2),'123')
+    handle(q,message(f'/taken {ident} 5 @ 1.35',uid=3),'123')
+    handle(q,message(f'/taken {ident} 4',uid=4),'123')
+    assert rows(q)[0]['quantity']==4 and rows(q)[0]['fill_price']==1.35

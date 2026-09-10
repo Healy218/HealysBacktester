@@ -28,3 +28,8 @@ Deployed `3b790e0` at 2026-09-10 04:25 UTC. SQLite backed up, cron installed,
 empty-list launcher verified. Read-only real MARA replay succeeded (still open
 through Sep 9 19:45 UTC). No actual positions created. Final suite 640 passed
 +18 subtests. Detailed backup/rollback paths are in the review note.
+
+Next user-requested live test: record the user-supplied held contract rather
+than the original alert's suggested expiry, retaining the saved exit rule.
+Quantity-only commands now support unknown premiums; actual position details
+belong only in the server SQLite ledger. See final deployment notes below.
