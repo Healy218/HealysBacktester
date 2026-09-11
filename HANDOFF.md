@@ -44,3 +44,16 @@ Timer follow-up: switched to 60 seconds after prior completion (plus up to
 5 seconds jitter) to avoid calendar coalescing hitting the 55-second rate guard.
 Corrected home timer completed successfully at 18:06 UTC; live schema and
 anonymous-denial checks still pass. Server timer source is 0595ea7.
+
+## Owner access granted — September 11, 2026, 19:18 UTC
+
+Supersedes the Authentication-initialization-pending notes above. Email/password
+authentication is enabled. Looked up the user by the exact owner email
+mrhealy115@gmail.com and enabled access for UID `6PNmN6SAEsclHtmEXKS5Mma3IZw1`.
+Grant readback succeeded. Firebase reports emailVerified=false; verification
+was not overridden and no email was sent by automation. User must sign in,
+press Send verification email, follow the link, then sign out/in.
+Home/server documents refreshed at 19:18 UTC, passed frontend schemas with no
+source issues, and anonymous reads returned 403. Signed-in owner acceptance
+is pending the user's email verification; administrative readback is not
+evidence of successful browser access.

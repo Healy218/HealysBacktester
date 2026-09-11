@@ -319,3 +319,6 @@ History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconc
 - [x] Deploy stonks-22367 Hosting, private rules, and database.
 - [x] Activate and verify separate home/server summary publishers.
 - [ ] Finish Firebase Authentication console setup, allowlist actual owner UID, and verify signed-in live access.
+
+- [x] Initialize Firebase Authentication and allowlist the real owner UID.
+- [ ] Owner verifies email and confirms signed-in dashboard access.

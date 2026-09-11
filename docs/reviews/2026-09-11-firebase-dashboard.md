@@ -81,3 +81,16 @@ No Auth user/access grant or signed-in live browser acceptance has happened yet.
 Timer acceptance caught calendar coalescing placing two home runs within the
 55-second publication guard. Timer now uses OnUnitInactiveSec=60s plus up to
 5 seconds jitter, so each run waits a full minute after the previous completion.
+
+## Owner access granted — September 11, 2026, 19:18 UTC
+
+Supersedes the Authentication-initialization-pending notes above. Email/password
+authentication is enabled. Looked up the user by the exact owner email
+mrhealy115@gmail.com and enabled access for UID `6PNmN6SAEsclHtmEXKS5Mma3IZw1`.
+Grant readback succeeded. Firebase reports emailVerified=false; verification
+was not overridden and no email was sent by automation. User must sign in,
+press Send verification email, follow the link, then sign out/in.
+Home/server documents refreshed at 19:18 UTC, passed frontend schemas with no
+source issues, and anonymous reads returned 403. Signed-in owner acceptance
+is pending the user's email verification; administrative readback is not
+evidence of successful browser access.
