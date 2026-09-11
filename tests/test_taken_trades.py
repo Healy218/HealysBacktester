@@ -162,3 +162,94 @@ def test_quantity_without_premium_is_preserved_and_displayed(tmp_path):
     handle(q,message(f'/taken {ident} 5 @ 1.35',uid=3),'123')
     handle(q,message(f'/taken {ident} 4',uid=4),'123')
     assert rows(q)[0]['quantity']==4 and rows(q)[0]['fill_price']==1.35
+
+@pytest.fixture
+def contract_clock(monkeypatch):
+    from datetime import datetime, timezone
+    import nn_meta.live.taken_trades as taken
+    class Clock(datetime):
+        @classmethod
+        def now(cls, tz=None):
+            return datetime(2026, 9, 11, 19, tzinfo=timezone.utc)
+    monkeypatch.setattr(taken, 'datetime', Clock)
+
+
+@pytest.mark.parametrize('reply', [True, False])
+def test_short_contract_override_records_actual_fill_and_preserves_alert(tmp_path, contract_clock, reply):
+    q, ident = queued(tmp_path)
+    text = '/taken ' + ('' if reply else ident + ' ') + '1 9/16 72C @ 1.03'
+    update = message(text, reply=42 if reply else None)
+    response = handle(q, update, '123')
+    assert 'Taken — MARA260916C00072000' in response
+    row = rows(q)[0]
+    assert row['quantity'] == 1 and row['fill_price'] == 1.03
+    assert json.loads(row['context'])['contract'] == 'MARA260916C00072000'
+    assert json.loads(row['context'])['params']['exit_threshold'] == 70
+    assert handle(q, update, '123') == response
+    with q.connect() as db:
+        original = json.loads(db.execute('SELECT trade_context FROM candidates').fetchone()[0])
+        assert original['contract'] == OCC
+        assert db.execute('SELECT COUNT(*) FROM taken_accounting_events').fetchone()[0] == 1
+
+
+@pytest.mark.parametrize('value,occ', [
+    ('2 9/16/2027 72.5c @ .95', 'MARA270916C00072500'),
+    ('2 9/16/27 $72.125 C@1.03', 'MARA270916C00072125'),
+    ('2 9/16 72C', 'MARA260916C00072000'),
+])
+def test_short_override_date_decimal_and_quantity_only(tmp_path, contract_clock, value, occ):
+    q, _ = queued(tmp_path)
+    assert 'Taken' in handle(q, message('/taken ' + value, reply=42), '123')
+    assert json.loads(rows(q)[0]['context'])['contract'] == occ
+
+
+@pytest.mark.parametrize('value', [
+    '1 9/16 72P @ 1.03', '1 2/30 72C @ 1.03',
+    '1 9/10 72C @ 1.03', '1 9/16 72.0001C @ 1.03',
+    '1 9/16 0C @ 1.03', '1 9/16 100000C @ 1.03',
+    '0 9/16 72C @ 1.03', '1 9/16 72C @ 0',
+    '1 9/16 72C @ nan', '1 9/16 72C @ 1.03 extra',
+    '1 9/16/1968 72C @ 1.03', '1 9/16 72C @ 1.03 contract MARA351009C00072000',
+])
+def test_invalid_short_override_never_creates_position(tmp_path, contract_clock, value):
+    q, _ = queued(tmp_path)
+    handle(q, message('/taken ' + value, reply=42), '123')
+    assert not rows(q)
+    with q.connect() as db:
+        assert db.execute('SELECT COUNT(*) FROM taken_accounting_events').fetchone()[0] == 0
+
+
+def test_short_override_does_not_guess_alert_or_change_existing_contract(tmp_path, contract_clock):
+    q, ident = queued(tmp_path)
+    assert 'Trade ID not found' in handle(q, message('/taken 1 9/16 72C @ 1.03'), '123')
+    assert not rows(q)
+    handle(q, message(f'/taken {ident} 1 @ 1.03', uid=2), '123')
+    assert 'already tracks a different contract' in handle(q, message('/taken 1 9/16 72C @ 1.03', uid=3, reply=42), '123')
+    assert json.loads(rows(q)[0]['context'])['contract'] == OCC
+    assert rows(q)[0]['quantity'] == 1
+
+
+def test_short_override_corrects_button_placeholder_and_keeps_strategy(tmp_path, contract_clock):
+    q, ident = queued(tmp_path)
+    handle(q, callback(ident), '123')
+    original = json.loads(rows(q)[0]['context'])
+    response = handle(q, message('/taken 1 9/16 72C @ 1.03', uid=2, reply=42), '123')
+    assert 'Contract corrected: MARA260916C00072000' in response
+    assert 'Fill: 1 @ $1.03' in response
+    row = rows(q)[0]
+    expected = dict(original, contract='MARA260916C00072000')
+    assert json.loads(row['context']) == expected
+    assert row['id'] == ident and row['quantity'] == 1 and row['fill_price'] == 1.03
+    assert len(rows(q)) == 1
+
+
+@pytest.mark.parametrize('field,value', [('quantity', 1), ('fill_price', 1.03),
+    ('actual_entry_fees', '0.10'), ('status', 'exit_due'), ('exit_notice', 'Exit now')])
+def test_contract_correction_rejects_nonplaceholder_positions(tmp_path, contract_clock, field, value):
+    q, ident = queued(tmp_path)
+    handle(q, callback(ident), '123')
+    with q.connect() as db:
+        db.execute(f'UPDATE taken_trades SET {field}=? WHERE id=?', (value, ident))
+    before = dict(rows(q)[0])
+    assert 'already tracks a different contract' in handle(q, message('/taken 1 9/16 72C @ 1.03', uid=2, reply=42), '123')
+    assert dict(rows(q)[0]) == before

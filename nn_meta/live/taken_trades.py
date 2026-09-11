@@ -1,5 +1,6 @@
 """User-confirmed option positions, separate from every expert's paper ledger."""
-from datetime import datetime, timezone, timedelta
+from datetime import date, datetime, timezone, timedelta
+from decimal import Decimal
 import hashlib
 import json
 import math
@@ -8,7 +9,10 @@ import time
 
 HELP = ('Tap ✅ Taken on an alert, or reply taken.\n'
         'Manual: /taken TRADE_ID 5 (quantity only), or /taken TRADE_ID 5 @ 1.35\n'
-        'Different contract: /taken TRADE_ID [quantity @ fill_price] contract OCC_SYMBOL\n'
+        'Different contract (reply to alert): /taken 1 9/16 72C @ 1.03\n'
+        'Or: /taken TRADE_ID 1 9/16 72C @ 1.03\n'
+        'Dates without a year use the current UTC year; include /YYYY for another year.\n'
+        'Full symbol: /taken TRADE_ID [quantity @ fill_price] contract OCC_SYMBOL\n'
         '/selllist — tracked trades\n/sold ID quantity @ premium [fees TOTAL] [ref BROKER_FILL_ID]\n'
         '/sold ID — close without fill details\n/trade ID — accounting history\n'
         '/entryfees ID TOTAL — actual total entry fees\n'
@@ -110,8 +114,35 @@ def recover_context(row):
         return {}
 
 
-def _parse_fill(tokens):
+def _parse_fill(tokens, ctx=None):
     contract = None
+    shorthand = re.fullmatch(
+        r'(\d+)\s+(\d{1,2})/(\d{1,2})(?:/(\d{4}|\d{2}))?\s+'
+        r'\$?(\d+(?:\.\d+)?)\s*([CP])(?:\s*(@.*))?',
+        ' '.join(tokens), re.I,
+    )
+    if shorthand:
+        if not ctx or not ctx.get('symbol'):
+            raise ValueError('Reply to the original alert or supply its Trade ID for a contract override.')
+        from nn_meta import config
+        quantity, month, day, year, strike, right, fill = shorthand.groups()
+        year = int(year) + (2000 if len(year) == 2 else 0) if year else datetime.now(timezone.utc).year
+        try:
+            expiry = date(year, int(month), int(day))
+        except ValueError:
+            raise ValueError('Invalid expiration date. Use M/D or M/D/YYYY.') from None
+        if not 2000 <= year <= 2068:
+            raise ValueError('Expiration year must be between 2000 and 2068.')
+        if expiry < datetime.now(timezone.utc).date():
+            raise ValueError('That expiration has passed. Dates without a year use the current UTC year; specify M/D/YYYY if needed.')
+        units = Decimal(strike) * 1000
+        if units != units.to_integral_value() or not 0 < units <= 99999999:
+            raise ValueError('Strike must be positive, below 100000, and have at most three decimal places.')
+        symbol = config.TICKER_ALIASES.get(ctx['symbol'], ctx['symbol'])
+        contract = f'{symbol}{expiry:%y%m%d}{right.upper()}{int(units):08d}'
+        # Reuse the existing quantity/premium validation, including quantity-only fills.
+        quantity, price, _ = _parse_fill([quantity] + ([fill] if fill else []))
+        return quantity, price, contract
     if 'contract' in [t.lower() for t in tokens]:
         i = [t.lower() for t in tokens].index('contract')
         if len(tokens) != i + 2:
@@ -252,11 +283,11 @@ def handle(queue, update, chat):
                         db.execute('UPDATE taken_sales SET fees=?,broker_ref=? WHERE update_id=?', (fee, ref, sale['update_id']))
                         response = 'Actual sale fees/reference recorded.\n' + report(db, ident)
                 else:
-                    quantity, price, override = _parse_fill(tokens)
                     row = _candidate(db, ident)
                     ctx = json.loads(row['trade_context'] or '{}')
                     if not ctx.get('strategy'):
                         ctx = recover_context(row)
+                    quantity, price, override = _parse_fill(tokens, ctx)
                     if override:
                         ctx['contract'] = override
                     from nn_meta.live.broker_fees import profile, entry_line
@@ -268,13 +299,28 @@ def handle(queue, update, chat):
                     if old:
                         if old['status'] == 'closed':
                             raise ValueError('That trade was already marked sold. Use a new entry alert for a new trade.')
+                        corrected_contract = False
                         if override and override != json.loads(old['context'])['contract']:
-                            raise ValueError('This ID already tracks a different contract; mark it sold before using a new alert.')
+                            has_sales = db.execute('SELECT 1 FROM taken_sales WHERE trade_id=?', (ident,)).fetchone()
+                            if (old['quantity'] is not None or old['fill_price'] is not None or
+                                    old['actual_entry_fees'] is not None or has_sales or
+                                    old['status'] != 'open' or old['exit_notice']):
+                                raise ValueError('This ID already tracks a different contract with recorded fill, fees, sale or exit details; reconcile the entry before changing its contract.')
+                            # A Taken-button placeholder is not a confirmed fill. Preserve
+                            # its frozen strategy context and only correct the option.
+                            corrected = json.loads(old['context'])
+                            corrected['contract'] = override
+                            db.execute('UPDATE taken_trades SET context=?,last_checked=NULL,monitor_error=NULL,monitor_error_sent=0 WHERE id=?', (json.dumps(corrected), ident))
+                            corrected_contract = True
                         if quantity is not None:
                             if db.execute('SELECT 1 FROM taken_sales WHERE trade_id=?', (ident,)).fetchone() and (quantity != old['quantity'] or (price is not None and old['fill_price'] is not None and price != old['fill_price'])):
                                 raise ValueError('Entry quantity/premium is locked after a sale; reconcile corrections separately.')
                             db.execute('UPDATE taken_trades SET quantity=?,fill_price=COALESCE(?,fill_price) WHERE id=?', (quantity, price, ident))
                         response = f'✅ {ident} already on your sell list.' + (' Fill updated.' if quantity is not None else '')
+                        if corrected_contract:
+                            response += f'\nContract corrected: {override}'
+                        if quantity is not None and price is not None:
+                            response += f'\nFill: {quantity} @ ${price:.2f}'
                     else:
                         db.execute("INSERT INTO taken_trades(id,candidate_key,context,quantity,fill_price,status,taken_at) VALUES (?,?,?,?,?,'open',?)", (ident, row['key'], json.dumps(ctx), quantity, price, time.time()))
                         response = f"✅ Taken — {ctx['contract']}\nTrade ID: {ident}\nAdded to your sell list."

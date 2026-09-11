@@ -21,3 +21,12 @@ verification. User subsequently authorized independent FA/backup coding despite
 that pending sale: implemented separately at cae40a2 on
 ops/fa-automation-20260910, /tmp/healys-fa-automation. Not deployed or installed.
 Do not merge either runtime branch into the active source-pinned home campaign.
+
+## September 11 — Taken contract shorthand
+
+Implemented quantity/date/strike shorthand and safe correction of unfilled
+Taken-button placeholders. Exact user case is TQQQ 9/16 72C at 1.03, linked
+trade 00EA905144FB; initial button saved the alerted 71C, subsequent shorthand
+was rejected. 102 focused tests passed. See
+`docs/reviews/2026-09-11-taken-contract-shorthand.md`. Deploy and verify on the
+production ops branch; user must resend the failed command as a new update.
