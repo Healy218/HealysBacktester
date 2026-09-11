@@ -92,3 +92,23 @@ provider corrections. HTTP 429 backoff, bulk coverage and stable pagination fixe
 
 The earlier packed backup pending status is superseded: full backup/restore
 succeeded September 10 20:06:44 UTC, dependent activation health 20:06:46 UTC.
+
+## September 11 — Firebase dashboard coded; cloud setup pending
+
+User chose Firebase Spark for the private desktop/iPhone dashboard. Source is
+isolated on `ops/firebase-dashboard-20260911`, durable development worktree
+`/home/healy/Coding/HealyLabsDashboard`. Runbook: `dashboard/README.md` there.
+Overview, Signals, Positions, Research and FA pages implemented with read-only
+server/home adapters. Actual captured inputs validated. Firebase verified-UID
+access, client-write denial and access revocation tested in local emulators.
+Capacitor iOS project generated/synced; Mac/Xcode signing and device acceptance
+remain. Main campaign source and production scanners were not modified.
+
+Validation: 21 focused tests across frontend, Python adapters/accounting,
+Firestore rules, login/revocation and desktop/phone-sized browser checks; Vite
+production build, bundle privacy check and publisher unit verification passed.
+No cloud deployment, project creation, billing activation, publisher schedules,
+APNs/push or notifications. Await Firebase project ID/public config, owner
+email/UID, and publisher credentials. User was asked for project/access details;
+no answer arrived during implementation. Cloud setup guide and exact next steps
+are in the dashboard worktree's README and HANDOFF.md.
