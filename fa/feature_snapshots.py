@@ -100,8 +100,11 @@ def financial_features(rows, cutoff):
     rows = sorted(rows, key=lambda r:r['end_date'], reverse=True)
     if not rows: return {}
     current = rows[0]
+    def year(r):
+        try:return int(r.get('fiscal_year', 0))
+        except (TypeError,ValueError):return 0
     prior = next((r for r in rows[1:] if r.get('fiscal_period') == current.get('fiscal_period') and
-                  int(r.get('fiscal_year', 0)) == int(current.get('fiscal_year', 0))-1), None)
+                  year(current)>0 and year(r) == year(current)-1), None)
     def iv(r, *n): return value(r, 'income_statement', *n)
     def bv(*n): return value(current, 'balance_sheet', *n)
     revenue = iv(current, 'revenues')
@@ -197,6 +200,10 @@ def snapshot(cfg, *, cutoff=None):
     now=datetime.now(timezone.utc)
     for job, hours in [('news-massive',3),('news-alpaca',3),('fa-fundamentals',48),('fa-prices',48)]:
         if not check_job(Path(cfg['state'])/job,hours*3600,now)['healthy']: raise ValueError('Snapshot input job unhealthy: '+job)
+    calendar=json.loads(Path(cfg['calendar']).read_text())
+    expected=max(s['date'] for s in calendar['sessions'] if s['date']<str(cutoff.tz_convert('UTC').date()))
+    price_manifest=json.loads((Path(cfg['prices'])/'manifest.json').read_text())
+    if price_manifest['last']!=expected:raise ValueError('Prices do not include the latest completed input date')
     root=Path(cfg['enrichment_snapshots']);root.mkdir(parents=True,exist_ok=True)
     name=cutoff.tz_convert('UTC').strftime('%Y%m%dT%H%M%S%fZ')
     with locked(root/'.snapshot.lock'), locked(Path(cfg['prices'])/'.prices.lock'):

@@ -12,7 +12,7 @@ from fa.feature_snapshots import GROUPS, TECHNICAL
 from fa.monthly import sha
 
 
-def load_panel(root, prices, *, horizon=5):
+def load_panel(root, prices, *, horizon=5, calendar=None):
     frames=[]; manifests={}; price_hashes={}; cache={}
     for folder in sorted(Path(root).glob('20*T*Z')):
         m=json.loads((folder/'manifest.json').read_text())
@@ -23,6 +23,9 @@ def load_panel(root, prices, *, horizon=5):
             raise ValueError('Invalid feature snapshot identity')
         frame['recipe']=m['recipe'];frames.append(frame);manifests[folder.name]=sha(folder/'manifest.json')
     if not frames:return pd.DataFrame(),dict(snapshot_sha256=manifests,price_sha256=price_hashes)
+    if calendar is None: raise ValueError('Captured session calendar required for outcome timing')
+    sessions=json.loads(Path(calendar).read_text())['sessions']
+    closes={s['date']:pd.Timestamp(s['date']+' '+s['close'],tz='America/New_York').tz_convert('UTC') for s in sessions}
     panel=pd.concat(frames,ignore_index=True);panel['cutoff']=pd.to_datetime(panel.cutoff,utc=True)
     panel['capture_day']=panel.cutoff.dt.date
     # One observation per ticker/capture day; no repeated intraday pseudo-samples.
@@ -36,10 +39,12 @@ def load_panel(root, prices, *, horizon=5):
             before=sha(p);s=pd.read_parquet(p).Close;s.index=pd.to_datetime(s.index,utc=True)
             if sha(p)!=before:raise ValueError('Outcome prices changed during read')
             if s.index.has_duplicates or not ((s>0)&np.isfinite(s)).all():raise ValueError('Invalid outcome prices')
+            try:s.index=pd.DatetimeIndex([closes[str(d.date())] for d in s.index])
+            except KeyError:raise ValueError('Outcome price session outside captured calendar') from None
             cache[symbol]=s.sort_index();price_hashes[symbol]=before
         s=cache[symbol]
-        # Conservative execution assumption: enter at NEXT UTC-date session close.
-        future=s[s.index > row['cutoff'].normalize()]
+        # Enter at the first actual session close after publication, including early closes.
+        future=s[s.index > row['cutoff']]
         if len(future)<=horizon:continue
         if not all(pd.notna(row.get(c)) for c in TECHNICAL):continue
         row.update(entry_date=future.index[0],label_end=future.index[horizon],target=future.iloc[horizon]/future.iloc[0]-1)
@@ -104,7 +109,8 @@ def run(cfg):
     from fa.monthly import locked
     from scripts.job_receipts import write
     with locked(Path(cfg['prices'])/'.prices.lock'):
-        panel,evidence=load_panel(cfg['enrichment_snapshots'],cfg['prices'])
+        panel,evidence=load_panel(cfg['enrichment_snapshots'],cfg['prices'],calendar=cfg['calendar'])
+    evidence['calendar_sha256']=sha(cfg['calendar'])
     result=evaluate(panel);result['evidence']=evidence;result['at']=datetime.now(timezone.utc).isoformat()
     folder=Path(cfg['enrichment_reports']);folder.mkdir(parents=True,exist_ok=True)
     target=folder/(datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')+'.json')

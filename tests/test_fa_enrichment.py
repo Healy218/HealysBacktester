@@ -64,7 +64,7 @@ def test_revisions_keep_first_capture_and_asof_selects_known_revision(tmp_path,m
     en.save_records('fund_test',[('a',new)],captured='2026-09-10T12:00Z')
     rows=fs.read_source(tmp_path,'fund_test',pd.Timestamp('2026-09-09T23:00Z'),{})
     assert len(rows)==1 and rows[0]['payload']==old and rows[0]['captured']==pd.Timestamp('2026-09-08T12:00Z')
-    assert fs.read_source(tmp_path,'fund_test',pd.Timestamp('2026-09-11T00:00Z'),{})[0]['payload']==new
+    assert fs.read_source(tmp_path,'fund_test',pd.Timestamp('2026-09-11T20:00Z'),{})[0]['payload']==new
 
 
 def article(url,title,tickers,sentiment=None,captured='2026-09-10T12:00Z'):
@@ -164,8 +164,25 @@ def test_outcomes_cannot_start_before_snapshot_and_hash_tampering_rejected(tmp_p
     frame.to_parquet(folder/'features.parquet',index=False)
     (folder/'manifest.json').write_text(json.dumps(dict(recipe='test',cutoff=cutoff,files={'features.parquet':sha(folder/'features.parquet')})))
     pd.DataFrame({'Close':np.arange(100.,120.)},index=pd.bdate_range('2026-09-01',periods=20)).to_parquet(prices/'AAPL.parquet')
-    panel,_=load_panel(tmp_path/'snapshots',prices)
-    assert panel.iloc[0].entry_date==pd.Timestamp('2026-09-11T00:00Z')
-    assert panel.iloc[0].label_end==pd.Timestamp('2026-09-18T00:00Z')
+    calendar=tmp_path/'calendar.json';calendar.write_text(json.dumps({'sessions':[{'date':str(d.date()),'close':'16:00'} for d in pd.bdate_range('2026-09-01',periods=20)]}))
+    panel,_=load_panel(tmp_path/'snapshots',prices,calendar=calendar)
+    assert panel.iloc[0].entry_date==pd.Timestamp('2026-09-11T20:00Z')
+    assert panel.iloc[0].label_end==pd.Timestamp('2026-09-18T20:00Z')
     (folder/'features.parquet').write_bytes(b'changed')
-    with pytest.raises(ValueError,match='hash mismatch'):load_panel(tmp_path/'snapshots',prices)
+    with pytest.raises(ValueError,match='hash mismatch'):load_panel(tmp_path/'snapshots',prices,calendar=calendar)
+
+
+def test_preopen_snapshot_uses_same_day_close_and_early_close_is_respected(tmp_path):
+    from fa.monthly import sha
+    snapshots=tmp_path/'snapshots';prices=tmp_path/'prices';prices.mkdir()
+    dates=pd.bdate_range('2026-09-01',periods=20)
+    pd.DataFrame({'Close':np.arange(100.,120.)},index=dates).to_parquet(prices/'AAPL.parquet')
+    calendar=tmp_path/'calendar.json'
+    calendar.write_text(json.dumps({'sessions':[{'date':str(d.date()),'close':'13:00' if str(d.date())=='2026-09-10' else '16:00'} for d in dates]}))
+    for hour in [1,18]:
+        folder=snapshots/f'20260910T{hour:02d}0000Z';folder.mkdir(parents=True)
+        cutoff=f'2026-09-10T{hour:02d}:00:00+00:00'
+        frame=pd.DataFrame([dict(ticker='AAPL',cutoff=cutoff,**{c:.1 for c in fs.TECHNICAL})]);frame.to_parquet(folder/'features.parquet',index=False)
+        (folder/'manifest.json').write_text(json.dumps(dict(recipe='test',cutoff=cutoff,files={'features.parquet':sha(folder/'features.parquet')})))
+        panel,_=load_panel(snapshots,prices,calendar=calendar)
+        assert panel.iloc[0].entry_date==pd.Timestamp('2026-09-10T17:00Z' if hour==1 else '2026-09-11T20:00Z')
