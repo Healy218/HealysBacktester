@@ -120,3 +120,8 @@ and home/server minute publishers deployed; first publications and anonymous
 read-denial verified. Billing remains disabled. Firebase Authentication console
 initialization/user creation is still pending; then allowlist the actual UID and
 verify owner sign-in. Full current state: `/home/healy/Coding/HealyLabsDashboard/HANDOFF.md`.
+
+Firebase owner follow-up: Authentication is initialized and the actual owner
+UID is allowlisted. Email verification and signed-in owner acceptance remain;
+user was directed to the dashboard verification button. Live source documents
+validated at September 11 19:18 UTC; anonymous reads remain denied.
