@@ -1,45 +1,41 @@
-# Firebase dashboard implementation — September 11, 2026
+# Dashboard handoff
 
-User selected Firebase for the private React dashboard and an iPhone app.
-Implemented on `ops/firebase-dashboard-20260911` in a separate worktree. Main
-research source and production scanners remain untouched. Do not merge this
-branch into the active source-pinned campaign or the older production branch.
+## Live Firebase deployment — September 11, 2026
 
-Dashboard source/runbook: `dashboard/README.md`. Five pages: Overview, Signals,
-Positions, Research, FA. Firebase Auth + exact-document Firestore reads; verified
-UID allowlist, all client writes denied. One-minute, read-only Python summary
-publishers for server/home. Actual server and home captures were validated;
-private captures/screenshots are ignored and excluded from production assets.
-Includes bounded candidate records, candidate-cohort rather than send-time
-counts, queued-vs-sent separation, stale markers, exit-due positions counted
-active, missing fee/P&L preservation, and explicit campaign binding.
+Supersedes earlier cloud-setup-pending notes. Project `stonks-22367`, owner
+`mrhealy115@gmail.com`; Hosting is live at https://stonks-22367.web.app.
+Registered web app `1:290920029883:web:1b443e4c821b96a6a2539e`; public config
+is in ignored `dashboard/.env.local`. Standard Native Firestore `(default)`
+is in `us-central1`, deletion protection enabled, billing disabled. Private
+rules and payload index exemptions deployed before Hosting.
 
-Firebase project ID, public web config, owner email/UID and server publisher
-credentials are not supplied. An async question was asked; no answer received.
-No Firebase project created, no billing enabled, no cloud deployment, no summary
-timers activated, no notifications sent. The production predeploy guard correctly
-refuses missing Firebase configuration. Finish concrete setup from README once
-owner supplies the project/access details. Prepare/deploy rules before site/data.
+Home and server publishers deployed in separate checkouts and Python environments.
+Both first publications succeeded with no source issues; live documents passed
+frontend schemas; unauthenticated reads returned 403. One-minute user timers
+`healys-dashboard-publisher@home.timer` (home) and `@server.timer` (Hetzner)
+are enabled. User lingering is enabled on both hosts. Service credentials are
+mode 600 in each user's `.config/healylabs-dashboard`, never committed.
+Dedicated dashboard-home/dashboard-server service accounts have datastore.user
+on this separate project. This role bypasses Firestore client rules.
 
-Capacitor iOS project generated and synced successfully. It needs Mac/Xcode,
-owner signing team, Firebase configuration and physical-device acceptance.
-Push/APNs and TestFlight distribution are not implemented in this first version.
+Python runtime: each host's `~/.local/share/healylabs-dashboard/venv`.
+Home source `/home/healy/Coding/HealysAutomation`; server source
+`/home/mrhea/HealysBacktester`. Server publisher code is a detached Git worktree
+at `/home/mrhea/HealyLabsDashboard` (516e67d). Home code is this checkout.
+Campaign progress is pinned to `logs/v6-progress/v6-local-20260906/latest.json`
+in the home research repo. Source-pinned build and production scanner code
+were not changed. Existing trading environments were not modified.
 
-Validation: production TypeScript/Vite build; four frontend tests; seven Python
-adapter/accounting tests; four Firebase emulator rule tests; two end-to-end
-Auth/Firestore browser tests; four desktop/iPhone-sized Chromium UI tests.
-Publisher systemd templates verified without installation. Production dependency
-audit: zero vulnerabilities; Firebase development tooling reports 11 moderate
-advisories. Node 24 is recommended; local checks ran Node 26 with a Firebase
-CLI static-server engine warning. Native Safari/WKWebView not yet tested.
+Live browser check: HTTP 200, sign-in visible, preview import absent, zero
+JavaScript errors. Production build/privacy check and configured iOS sync passed.
+Native signing/device acceptance and push notifications remain outstanding.
 
-Earlier FA work remains deployed independently in HealysAutomation; see the
-archived handoff and that runtime's README/review documents. PTON sale status
-must be read from current broker/position evidence, never inferred here.
+**Access still pending:** Firebase Authentication returns CONFIGURATION_NOT_FOUND.
+User has been asked to open Authentication in Firebase Console, click Get started,
+enable Email/Password, and add their email with a privately chosen password.
+Once done, inspect the real Firebase Auth UID, create `access/{uid}` enabled=true,
+and have the user verify their email via the dashboard and sign in again.
+Never mark an email verified administratively just to bypass this check.
+No Auth user/access grant or signed-in live browser acceptance has happened yet.
 
-## Firebase project supplied
-
-User supplied project `stonks-22367` and owner email `mrhealy115@gmail.com`.
-The dashboard Firebase CLI default now targets this project. CLI authentication
-is pending; no cloud inspection or deployment has occurred. Complete Firebase
-CLI login locally, then inspect existing resources before deploying.
+Earlier implementation details: `docs/reviews/2026-09-11-firebase-dashboard.md`.

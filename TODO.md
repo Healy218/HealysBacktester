@@ -314,3 +314,8 @@ History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconc
 - [ ] Configure owner Firebase Spark project, deploy rules/site, activate and
   verify publishers. Project ID, owner access and credentials are pending.
 - [ ] Sign/build on Mac and verify the iPhone app on device; push/APNs later.
+
+### Firebase deployment update
+- [x] Deploy stonks-22367 Hosting, private rules, and database.
+- [x] Activate and verify separate home/server summary publishers.
+- [ ] Finish Firebase Authentication console setup, allowlist actual owner UID, and verify signed-in live access.
