@@ -68,3 +68,27 @@ before reporting full completion. No additional manual activation is required.
 Backup covers existing v3/data, v5 cache and runtime FA/inputs, not the corrected
 campaign data_candidates. Runtime source remains isolated from this pinned
 main checkout. Focused activation/automation tests: 22 passed.
+
+
+## September 10 — FA enrichment steps 1–4
+
+Implemented/deployed on isolated `ops/fa-automation-20260910` through runtime
+source `94ba6b2`; main source remains pinned. Durable runtime and detailed
+handoff: `/home/healy/Coding/HealysAutomation`, especially
+`docs/reviews/2026-09-10-fa-enrichment.md`. Four new timers enabled: hourly
+Alpaca/Massive news, daily fundamentals, daily immutable features, weekly
+purged baseline/FA comparison. All first jobs and aggregate health passed
+September 11 03:45 UTC (September 10 Chicago).
+
+First snapshot: 300 symbols, 3,800 deduplicated news stories, sentiment for 215,
+financials 232, short interest 300, short volume 300, float 228; technical baseline
+prices/features remain 120. Snapshot `fa/artifacts/enrichment/20260911T034526761094Z`
+and report `fa/artifacts/enrichment_reports/20260911T034528646388Z.json` in the
+durable runtime. Report honestly awaits forward outcomes (zero labels); 40
+training +10 test sessions cannot accumulate by this month-end. Experimental
+features do not change live thresholds, official ranking or promotion rules.
+Full suite 1,498 tests +18 subtests passed; final 29 focused tests passed after
+provider corrections. HTTP 429 backoff, bulk coverage and stable pagination fixed.
+
+The earlier packed backup pending status is superseded: full backup/restore
+succeeded September 10 20:06:44 UTC, dependent activation health 20:06:46 UTC.
