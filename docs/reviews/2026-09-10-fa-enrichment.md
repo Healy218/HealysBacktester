@@ -22,11 +22,16 @@ Articles fetched today with older publication dates are still first observed
 today. Provider sentiment is explicitly labeled unversioned; captured outputs
 are preserved rather than recomputed silently.
 
-Daily snapshots cover the tracked 300-symbol liquid discovery universe:
+Daily captures cover the tracked 300-symbol liquid discovery universe:
 legacy quarterly financial statements, short interest/days-to-cover, short-sale
 volume and float. Eight-K disclosures are captured market-wide over seven days.
 Empty coverage (e.g. financial statements for an ETF) is distinct from failed
-requests. New paid Financials/Ratio endpoints and Benzinga add-ons are not used.
+requests. Positioning uses market-wide pages: short interest over 35 days,
+short volume over seven days, and latest available float. Date-plus-ticker sort
+prevents pagination from skipping tickers tied on a reporting date. One float
+record without its optional ticker is counted as unmappable. Requests are paced;
+HTTP 429 without Retry-After backs off 60 then 120 seconds. Successful same-day
+financial captures are reused during partial retries, preserving their timestamps. New paid Financials/Ratio endpoints and Benzinga add-ons are not used.
 Reddit remains outside this new feature/training path.
 
 Official schemas checked:
@@ -81,8 +86,31 @@ performance metrics. Real comparative evidence requires collecting forward.
 
 ## Runtime schedule and verification
 
-Pending live deployment/verification in this implementation session.
-Planned additions: hourly news (:05 UTC), daily fundamentals (23:10 UTC),
+Source deployed to the isolated runtime through `94ba6b2`. Additions: hourly news (:05 UTC), daily fundamentals (23:10 UTC),
 daily immutable features (01:40 UTC), weekly evaluation (Sunday 02:00 UTC).
 Use the existing job-receipt wrapper and resource limits. Source-specific
 health and aggregate job checks expose partial failures.
+
+
+Verification on September 11 UTC (September 10 Chicago): full suite 1,498 tests
+and 18 subtests passed before final provider schema corrections; 29 focused
+FA capture/runtime tests passed after those corrections. Live bulk capture:
+financials 232/300 (68 valid empty responses), short interest 300/300 (45,047
+provider rows), short volume 300/300 (61,267 provider rows), float 228/300
+(72 empty; 6,838 provider rows, one unmappable record). Earlier partial HTTP 429
+runs were not accepted as healthy input. Bulk pagination corrections superseded
+the incomplete date-only sorted captures before any feature snapshot was created.
+
+First immutable snapshot: `fa/artifacts/enrichment/20260911T034526761094Z`.
+It contains 300 feature rows and 3,800 deduplicated news stories; sentiment
+available for 215 symbols, same-quarter revenue growth for 202, and technical
+baseline features for 120. Missing feature values remain missing.
+First report: `fa/artifacts/enrichment_reports/20260911T034528646388Z.json`,
+status `awaiting-forward-outcomes`, zero labeled rows, no performance metrics.
+All four new user timers enabled; first news/fundamentals/features/evaluate
+and aggregate health receipts succeeded by 03:45:29 UTC. Daily collection
+builds an honest forward dataset for month-end review; the default 40 training
+plus 10 test sessions cannot be accumulated by this month's end.
+
+The original 7.2 GB packed backup, restore and dependent activation health
+check completed successfully on September 10 at 20:06:44–20:06:46 UTC.
