@@ -217,7 +217,8 @@ def test_headerless_throttle_uses_long_backoff():
 def test_bulk_positioning_keeps_latest_requested_tickers():
     class Bulk:
         def pages(self,path,params,**kw):
-            assert params['limit']==5000 and params['settlement_date.gte']=='2026-08-06'
+            assert params['limit']==50000 and params['settlement_date.gte']=='2026-08-06'
+            assert params['sort']=='settlement_date.desc,ticker.asc'
             yield [dict(ticker='AAPL',settlement_date='2026-09-01',short_interest=10),dict(ticker='OTHER',settlement_date='2026-09-09')]
             yield [dict(ticker='AAPL',settlement_date='2026-09-09',short_interest=20)]
     rows,meta=en.positioning_batch(Bulk(),'short_interest',['AAPL','MSFT'],datetime(2026,9,10,tzinfo=timezone.utc))

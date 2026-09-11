@@ -170,7 +170,7 @@ DATASETS = {
 def positioning_batch(client, dataset, symbols, now):
     from nn_meta.config import TICKER_ALIASES, FETCH_ALIASES
     datefield={'short_interest':'settlement_date','short_volume':'date','float':'effective_date'}[dataset]
-    params={'limit':5000,'sort':datefield+'.desc' if dataset!='float' else 'ticker.asc'}
+    params={'limit':5000 if dataset=='float' else 50000,'sort':datefield+'.desc,ticker.asc' if dataset!='float' else 'ticker.asc'}
     lower=None
     if dataset!='float':
         lower=(now-timedelta(days=35 if dataset=='short_interest' else 7)).date().isoformat()
