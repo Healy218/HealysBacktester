@@ -1,0 +1,9 @@
+{
+	"appId": "com.healylabs.observatory",
+	"appName": "HealyLabs",
+	"webDir": "dist",
+	"ios": {
+		"contentInset": "automatic"
+	},
+	"packageClassList": []
+}

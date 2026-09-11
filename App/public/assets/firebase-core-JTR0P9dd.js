@@ -1,0 +1,1 @@
+import{u as e}from"./firestore-CMEcWP5d.js";import"./firebase-auth-BpgDks-d.js";e(`firebase`,`12.19.0`,`app`);
