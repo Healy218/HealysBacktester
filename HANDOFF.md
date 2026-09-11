@@ -36,3 +36,10 @@ CLI static-server engine warning. Native Safari/WKWebView not yet tested.
 Earlier FA work remains deployed independently in HealysAutomation; see the
 archived handoff and that runtime's README/review documents. PTON sale status
 must be read from current broker/position evidence, never inferred here.
+
+## Firebase project supplied
+
+User supplied project `stonks-22367` and owner email `mrhealy115@gmail.com`.
+The dashboard Firebase CLI default now targets this project. CLI authentication
+is pending; no cloud inspection or deployment has occurred. Complete Firebase
+CLI login locally, then inspect existing resources before deploying.
