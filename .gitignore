@@ -114,3 +114,6 @@ nn_meta/live/.*.lock
 /fa/daily_prices/
 
 /fa/artifacts/prospective/
+
+/fa/artifacts/enrichment/
+/fa/artifacts/enrichment_reports/

@@ -167,10 +167,14 @@ def health(cfg):
 
 def main():
     p=argparse.ArgumentParser(description=__doc__)
-    p.add_argument('job',choices=['archive','seed','prices','monthly','tracker','backup','health','preflight'])
+    p.add_argument('job',choices=['archive','seed','prices','monthly','tracker','backup','health','preflight','news','fundamentals','features','evaluate'])
     p.add_argument('--config',type=Path,default=ROOT/'deploy/fa-runtime.json')
     a=p.parse_args();cfg=json.loads(a.config.read_text())
     if a.job=='health':return health(cfg)
+    if a.job in ('news','fundamentals','features','evaluate'):
+        from fa import enrichment, feature_snapshots, evaluate_features
+        fn={'news':enrichment.collect_news,'fundamentals':enrichment.collect_fundamentals,'features':feature_snapshots.snapshot,'evaluate':evaluate_features.run}[a.job]
+        print(json.dumps(fn(cfg),indent=2));return 0
     if a.job in ('archive','seed'):result=pull_archive(cfg,seed=a.job=='seed')
     elif a.job=='prices':result=daily_prices(cfg)
     elif a.job=='backup':result=backup(cfg)

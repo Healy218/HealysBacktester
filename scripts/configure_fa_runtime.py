@@ -8,7 +8,7 @@ def main():
     state=ROOT/'logs/job-health'
     mainroot=Path('/home/healy/Coding/HealysBacktester')
     cfg=dict(archive=str(ROOT/'fa/archive'),cohorts=str(ROOT/'fa/artifacts/prospective'),
-             prices=str(ROOT/'fa/daily_prices'),liquid=str(ROOT/'v3/artifacts/universe_300.json'),
+             prices=str(ROOT/'fa/daily_prices'),enrichment_snapshots=str(ROOT/'fa/artifacts/enrichment'),enrichment_reports=str(ROOT/'fa/artifacts/enrichment_reports'),liquid=str(ROOT/'v3/artifacts/universe_300.json'),
              baseline=str(ROOT/'v3/artifacts/universe_120.json'),aliases=str(ROOT/'fa/artifacts/aliases.json'),
              calendar=str(ROOT/'inputs/calendar.json'),state=str(state),server='mrhea@62.238.20.66',
              server_archive='/home/mrhea/HealysBacktester/fa/archive',gsutil='/home/healy/google-cloud-sdk/bin/gsutil',
@@ -16,7 +16,7 @@ def main():
                            [str(ROOT/'fa'),'gs://healys-backtester/backup/homebox/fa-runtime/fa'],
                            [str(ROOT/'inputs'),'gs://healys-backtester/backup/homebox/fa-runtime/inputs']],
              packed_backup={'source':str(mainroot/'nn_meta/data_cache_v5'),'destination':'gs://healys-backtester/backup/homebox/v5-packed'},
-             job_hours={'archive-pull':3,'stocktwits-push':3,'fa-prices':48,'fa-tracker':48,'cache-backup':192,'fa-monthly':768},
+             job_hours={'archive-pull':3,'stocktwits-push':3,'fa-prices':48,'fa-tracker':48,'cache-backup':192,'fa-monthly':768,'fa-news':3,'news-massive':3,'news-alpaca':3,'fa-fundamentals':48,'fa-features':48,'fa-evaluate':192},
              capture_hours={'news':48,'reddit':6,'stocktwits':3,'stocktwits_sentiment':3,'edgar':96},
              not_before={'fa-monthly':'2026-10-01T01:30:00+00:00'})
     for d in ['inputs','fa/artifacts/prospective','fa/daily_prices','logs/job-health','deploy/generated-user']:(ROOT/d).mkdir(parents=True,exist_ok=True)
@@ -27,7 +27,11 @@ def main():
           ('fa-monthly','*-*-01 01:15:00 UTC','monthly',3600),
           ('fa-tracker','*-*-* 01:00:00 UTC','tracker',1200),
           ('cache-backup','Sun *-*-* 03:00:00','backup',21600),
-          ('fa-health','*-*-* *:45:00 UTC','health',600)]
+          ('fa-health','*-*-* *:45:00 UTC','health',600),
+          ('fa-news','*-*-* *:05:00 UTC','news',1800),
+          ('fa-fundamentals','*-*-* 23:10:00 UTC','fundamentals',7200),
+          ('fa-features','*-*-* 01:40:00 UTC','features',1800),
+          ('fa-evaluate','Sun *-*-* 02:00:00 UTC','evaluate',1800)]
     for name,schedule,job,timeout in jobs:
         command=f'{ROOT}/venv/bin/python {ROOT}/scripts/fa_runtime.py {job}' if job else f'/bin/bash {ROOT}/scripts/stocktwits_collect_push.sh'
         service=f'''[Unit]
