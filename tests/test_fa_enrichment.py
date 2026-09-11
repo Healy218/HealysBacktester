@@ -186,3 +186,19 @@ def test_preopen_snapshot_uses_same_day_close_and_early_close_is_respected(tmp_p
         (folder/'manifest.json').write_text(json.dumps(dict(recipe='test',cutoff=cutoff,files={'features.parquet':sha(folder/'features.parquet')})))
         panel,_=load_panel(snapshots,prices,calendar=calendar)
         assert panel.iloc[0].entry_date==pd.Timestamp('2026-09-10T17:00Z' if hour==1 else '2026-09-11T20:00Z')
+
+
+def test_partial_fundamental_retry_reuses_successful_captures(tmp_path,monkeypatch):
+    monkeypatch.setattr(en.archive.config,'ARCHIVE',tmp_path/'archive')
+    class Partial:
+        def __init__(self,fail):self.fail=fail;self.calls=[]
+        def get(self,path,params):
+            self.calls.append((path,params['ticker']))
+            if self.fail and params['ticker']=='MSFT':raise RuntimeError('Provider HTTP 503')
+            return {'results':[]}
+        def pages(self,*a,**kw):yield []
+    cfg={'state':str(tmp_path/'state')};now=datetime(2026,9,10,tzinfo=timezone.utc)
+    with pytest.raises(RuntimeError):en.collect_fundamentals(cfg,Partial(True),symbols=['AAPL','MSFT'],now=now)
+    second=Partial(False);out=en.collect_fundamentals(cfg,second,symbols=['AAPL','MSFT'],now=now)
+    assert len(second.calls)==4 and all(t=='MSFT' for _,t in second.calls)
+    assert all(out[k]['reused']==1 and out[k]['empty']==2 for k in en.DATASETS)
