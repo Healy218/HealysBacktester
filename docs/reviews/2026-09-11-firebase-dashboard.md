@@ -51,7 +51,7 @@ rules and payload index exemptions deployed before Hosting.
 
 Home and server publishers deployed in separate checkouts and Python environments.
 Both first publications succeeded with no source issues; live documents passed
-frontend schemas; unauthenticated reads returned 403. One-minute user timers
+frontend schemas; unauthenticated reads returned 403. Timers running about once per minute
 `healys-dashboard-publisher@home.timer` (home) and `@server.timer` (Hetzner)
 are enabled. User lingering is enabled on both hosts. Service credentials are
 mode 600 in each user's `.config/healylabs-dashboard`, never committed.
@@ -61,7 +61,7 @@ on this separate project. This role bypasses Firestore client rules.
 Python runtime: each host's `~/.local/share/healylabs-dashboard/venv`.
 Home source `/home/healy/Coding/HealysAutomation`; server source
 `/home/mrhea/HealysBacktester`. Server publisher code is a detached Git worktree
-at `/home/mrhea/HealyLabsDashboard` (516e67d). Home code is this checkout.
+at `/home/mrhea/HealyLabsDashboard` (0595ea7). Home code is this checkout.
 Campaign progress is pinned to `logs/v6-progress/v6-local-20260906/latest.json`
 in the home research repo. Source-pinned build and production scanner code
 were not changed. Existing trading environments were not modified.
