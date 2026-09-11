@@ -1,0 +1,6 @@
+{
+  "indexes": [],
+  "fieldOverrides": [
+    { "collectionGroup": "dashboard", "fieldPath": "payload", "indexes": [] }
+  ]
+}

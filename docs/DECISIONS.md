@@ -831,3 +831,13 @@ ROADMAP and TODOs. Reassess after one week actually running v6 and completing
 more TODOs; no immediate broad reprioritization or rewrite is authorized by
 this goal alone. Scores require evidence, and durable trading edge remains
 unproven until supported. The week starts with operational v6, not its build.
+
+## 2026-09-11 — Private dashboard on Firebase Spark
+
+User selected Firebase after comparing Supabase, MongoDB, Azure, AWS and
+Cloudflare. Implement React/TypeScript web UI plus Capacitor iOS, with compact
+read-only summaries published by existing machines. Keep raw research/market
+data and trading execution on existing hosts. Do not introduce Cloud Functions,
+paid App Hosting, Cloud Storage or billing for the first version. Separate
+Firebase project and UID access required before deployment. Details:
+`docs/reviews/2026-09-11-firebase-dashboard.md` and `dashboard/README.md`.

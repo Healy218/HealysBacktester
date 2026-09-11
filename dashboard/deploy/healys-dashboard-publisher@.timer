@@ -1,0 +1,8 @@
+[Unit]
+Description=Publish HealyLabs dashboard summary every minute (%i)
+[Timer]
+OnCalendar=*-*-* *:*:00
+RandomizedDelaySec=5
+Persistent=true
+[Install]
+WantedBy=timers.target

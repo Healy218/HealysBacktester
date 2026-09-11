@@ -304,3 +304,13 @@ preparing resolver/calculations is authorized.
 History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconciliation.md),
 [full-day handoff](handoff-history/HANDOFF-2026-09-05-wipe-restore-v5-ladder-feeds.md),
 [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md).
+
+## Private dashboard — September 11 implementation
+
+- [x] Implement isolated React/Firebase dashboard with read-only server/home
+  adapters, source freshness, queue delivery distinction and FA/build views.
+- [x] Verify Firebase access rules, login/revocation, desktop and phone-sized UI.
+- [x] Generate and sync Capacitor iOS project.
+- [ ] Configure owner Firebase Spark project, deploy rules/site, activate and
+  verify publishers. Project ID, owner access and credentials are pending.
+- [ ] Sign/build on Mac and verify the iPhone app on device; push/APNs later.
