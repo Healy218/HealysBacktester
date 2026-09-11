@@ -77,3 +77,7 @@ Once done, inspect the real Firebase Auth UID, create `access/{uid}` enabled=tru
 and have the user verify their email via the dashboard and sign in again.
 Never mark an email verified administratively just to bypass this check.
 No Auth user/access grant or signed-in live browser acceptance has happened yet.
+
+Timer acceptance caught calendar coalescing placing two home runs within the
+55-second publication guard. Timer now uses OnUnitInactiveSec=60s plus up to
+5 seconds jitter, so each run waits a full minute after the previous completion.
