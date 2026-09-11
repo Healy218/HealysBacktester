@@ -196,9 +196,37 @@ def test_partial_fundamental_retry_reuses_successful_captures(tmp_path,monkeypat
             self.calls.append((path,params['ticker']))
             if self.fail and params['ticker']=='MSFT':raise RuntimeError('Provider HTTP 503')
             return {'results':[]}
-        def pages(self,*a,**kw):yield []
+        def pages(self,path,*a,**kw):
+            if 'disclosures' in path:yield []
+            else:yield [dict(ticker='AAPL',settlement_date='2026-09-09',date='2026-09-09',effective_date='2026-09-09')]
     cfg={'state':str(tmp_path/'state')};now=datetime(2026,9,10,tzinfo=timezone.utc)
     with pytest.raises(RuntimeError):en.collect_fundamentals(cfg,Partial(True),symbols=['AAPL','MSFT'],now=now)
     second=Partial(False);out=en.collect_fundamentals(cfg,second,symbols=['AAPL','MSFT'],now=now)
-    assert len(second.calls)==4 and all(t=='MSFT' for _,t in second.calls)
-    assert all(out[k]['reused']==1 and out[k]['empty']==2 for k in en.DATASETS)
+    assert len(second.calls)==1 and all(t=='MSFT' for _,t in second.calls)
+    assert out['financials']['reused']==1 and out['financials']['empty']==2
+    assert all(out[k]['covered']==1 and out[k]['empty']==1 for k in en.DATASETS if k!='financials')
+
+
+def test_headerless_throttle_uses_long_backoff():
+    delays=[]
+    c=en.Client(en.MASSIVE,{},session=Session([Response(429,{}),Response(200,{'results':[]})]),sleep=delays.append)
+    assert c.get('/test')=={'results':[]}
+    assert delays==[60]
+
+
+def test_bulk_positioning_keeps_latest_requested_tickers():
+    class Bulk:
+        def pages(self,path,params,**kw):
+            assert params['limit']==5000 and params['settlement_date.gte']=='2026-08-06'
+            yield [dict(ticker='AAPL',settlement_date='2026-09-01',short_interest=10),dict(ticker='OTHER',settlement_date='2026-09-09')]
+            yield [dict(ticker='AAPL',settlement_date='2026-09-09',short_interest=20)]
+    rows,meta=en.positioning_batch(Bulk(),'short_interest',['AAPL','MSFT'],datetime(2026,9,10,tzinfo=timezone.utc))
+    assert rows[0][1]['rows'][0]['short_interest']==20 and rows[1][1]['rows']==[]
+    assert meta['pages']==2 and meta['provider_rows']==3
+
+
+@pytest.mark.parametrize('rows',[[],[dict(ticker='AAPL',date='2026-08-01')],[dict(ticker='AAPL')]])
+def test_bulk_positioning_rejects_empty_or_invalid_window(rows):
+    class Bulk:
+        def pages(self,*a,**kw):yield rows
+    with pytest.raises(ValueError):en.positioning_batch(Bulk(),'short_volume',['AAPL'],datetime(2026,9,10,tzinfo=timezone.utc))

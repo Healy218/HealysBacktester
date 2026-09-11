@@ -31,9 +31,10 @@ def canonical_url(url):
 
 
 class Client:
-    def __init__(self, origin, headers, *, session=None, sleep=time.sleep):
+    def __init__(self, origin, headers, *, session=None, sleep=time.sleep, interval=0.):
         self.origin, self.headers = origin, headers
         self.session, self.sleep = session or requests.Session(), sleep
+        self.interval, self.next_request = interval, 0.
 
     def get(self, path, params=None):
         url = path if path.startswith('https://') else self.origin + path
@@ -42,6 +43,9 @@ class Client:
         if parsed.scheme != 'https' or parsed.hostname != urlsplit(self.origin).hostname or parsed.port not in (None, 443) or parsed.username:
             raise ValueError('Untrusted provider pagination URL')
         for attempt in range(4):
+            delay = self.next_request-time.monotonic()
+            if delay>0:self.sleep(delay)
+            self.next_request=time.monotonic()+self.interval
             try:
                 response = self.session.get(url, params=params, headers=self.headers, timeout=30, allow_redirects=False)
             except requests.RequestException:
@@ -58,7 +62,7 @@ class Client:
             try: delay = float(retry)
             except ValueError:
                 try: delay = (parsedate_to_datetime(retry) - datetime.now(timezone.utc)).total_seconds()
-                except (ValueError, TypeError): delay = 2 ** attempt
+                except (ValueError, TypeError): delay = min(120,60*2**attempt) if response.status_code==429 else 2 ** attempt
             if delay > 120: raise RuntimeError('Provider retry delay exceeds job budget')
             self.sleep(max(0, delay))
         raise RuntimeError('Provider retries exhausted')
@@ -84,8 +88,8 @@ def clients():
     from dotenv import load_dotenv
     load_dotenv(Path(__file__).resolve().parents[1] / '.env')
     return {
-        'massive': Client(MASSIVE, {'Authorization': 'Bearer ' + os.environ['MASSIVE_API_KEY']}),
-        'alpaca': Client(ALPACA, {'APCA-API-KEY-ID': os.environ['ALPACA_API_KEY'], 'APCA-API-SECRET-KEY': os.environ['ALPACA_API_SECRET']}),
+        'massive': Client(MASSIVE, {'Authorization': 'Bearer ' + os.environ['MASSIVE_API_KEY']}, interval=1.),
+        'alpaca': Client(ALPACA, {'APCA-API-KEY-ID': os.environ['ALPACA_API_KEY'], 'APCA-API-SECRET-KEY': os.environ['ALPACA_API_SECRET']}, interval=.35),
     }
 
 
@@ -163,6 +167,32 @@ DATASETS = {
 }
 
 
+def positioning_batch(client, dataset, symbols, now):
+    from nn_meta.config import TICKER_ALIASES, FETCH_ALIASES
+    datefield={'short_interest':'settlement_date','short_volume':'date','float':'effective_date'}[dataset]
+    params={'limit':5000,'sort':datefield+'.desc' if dataset!='float' else 'ticker.asc'}
+    lower=None
+    if dataset!='float':
+        lower=(now-timedelta(days=35 if dataset=='short_interest' else 7)).date().isoformat()
+        params.update({datefield+'.gte':lower,datefield+'.lte':now.date().isoformat()})
+    vendors={symbol:FETCH_ALIASES.get(TICKER_ALIASES.get(symbol,symbol),TICKER_ALIASES.get(symbol,symbol)) for symbol in symbols}
+    wanted=set(vendors.values());latest={};count=pages=0
+    for rows in client.pages(DATASETS[dataset][0],params,max_pages=100):
+        pages+=1;count+=len(rows)
+        for row in rows:
+            ticker=row.get('ticker');date=row.get(datefield)
+            if not ticker or not date:raise ValueError('Positioning row lacks ticker/date')
+            if lower and not lower<=date<=now.date().isoformat():raise ValueError('Provider did not honor positioning date window')
+            if date>now.date().isoformat():continue
+            if ticker in wanted and (ticker not in latest or date>latest[ticker][datefield]):latest[ticker]=row
+    if not count:raise ValueError('Empty market-wide positioning response')
+    entries=[]
+    for symbol,vendor in vendors.items():
+        payload=dict(dataset=dataset,ticker=symbol,provider_ticker=vendor,rows=[latest[vendor]] if vendor in latest else [],source='massive',snapshot_date=now.date().isoformat())
+        entries.append((symbol+':'+now.date().isoformat(),payload))
+    return entries,dict(pages=pages,provider_rows=count,window_start=lower)
+
+
 def collect_fundamentals(cfg, client=None, *, symbols=None, now=None):
     client = client or clients()['massive']
     now = now or datetime.now(timezone.utc)
@@ -171,14 +201,25 @@ def collect_fundamentals(cfg, client=None, *, symbols=None, now=None):
     results, failed = {}, []
     for dataset, (path, params) in DATASETS.items():
         name = 'fa-' + dataset
+        if dataset!='financials':
+            started=stamp();record(cfg['state'],name,'running',started=started)
+            try:
+                entries,counts=positioning_batch(client,dataset,symbols,now)
+                counts.update(requested=len(symbols),covered=sum(bool(p['rows']) for _,p in entries),failed=[])
+                counts['empty']=len(symbols)-counts['covered'];counts['added']=save_records('fund_'+dataset,entries)
+                record(cfg['state'],name,'success',started=started,returncode=0,details=counts)
+                results[dataset]=counts;print(json.dumps(dict(dataset=dataset,**counts)),flush=True)
+            except Exception as exc:
+                record(cfg['state'],name,'failed',started=started,returncode=1,details={'error_type':type(exc).__name__,'reason':str(exc) if isinstance(exc,RuntimeError) else type(exc).__name__})
+                failed.append(dataset)
+            continue
         previous = Path(cfg['state'])/name/'latest.json'
         resume = previous.exists() and json.loads(previous.read_text()).get('state') != 'success'
         cached = {}
-        if resume:
-            for p in sorted((archive.config.ARCHIVE/('fund_'+dataset)).glob('*.parquet')):
-                for r in pd.read_parquet(p).sort_values('ts_utc').itertuples():
-                    payload = json.loads(r.payload)
-                    if payload['snapshot_date'] == now.date().isoformat():cached[payload['ticker']] = payload
+        for p in sorted((archive.config.ARCHIVE/('fund_'+dataset)).glob('*.parquet')):
+            for r in pd.read_parquet(p).sort_values('ts_utc').itertuples():
+                payload = json.loads(r.payload)
+                if payload['snapshot_date'] == now.date().isoformat() and (resume or pd.Timestamp(r.ts_utc)>=pd.Timestamp(now)-pd.Timedelta(hours=4)):cached[payload['ticker']] = payload
         started = stamp(); record(cfg['state'], name, 'running', started=started)
         counts = dict(requested=len(symbols), covered=0, empty=0, added=0, failed=[], error_counts={}, reused=0)
         entries = []
