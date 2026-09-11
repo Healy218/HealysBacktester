@@ -176,12 +176,14 @@ def positioning_batch(client, dataset, symbols, now):
         lower=(now-timedelta(days=35 if dataset=='short_interest' else 7)).date().isoformat()
         params.update({datefield+'.gte':lower,datefield+'.lte':now.date().isoformat()})
     vendors={symbol:FETCH_ALIASES.get(TICKER_ALIASES.get(symbol,symbol),TICKER_ALIASES.get(symbol,symbol)) for symbol in symbols}
-    wanted=set(vendors.values());latest={};count=pages=0
+    wanted=set(vendors.values());latest={};count=pages=unmapped=0
     for rows in client.pages(DATASETS[dataset][0],params,max_pages=100):
         pages+=1;count+=len(rows)
         for row in rows:
             ticker=row.get('ticker');date=row.get(datefield)
-            if not ticker or not date:raise ValueError('Positioning row lacks ticker/date')
+            if not ticker:
+                unmapped+=1;continue
+            if not date:raise ValueError('Positioning row lacks date')
             if lower and not lower<=date<=now.date().isoformat():raise ValueError('Provider did not honor positioning date window')
             if date>now.date().isoformat():continue
             if ticker in wanted and (ticker not in latest or date>latest[ticker][datefield]):latest[ticker]=row
@@ -190,7 +192,7 @@ def positioning_batch(client, dataset, symbols, now):
     for symbol,vendor in vendors.items():
         payload=dict(dataset=dataset,ticker=symbol,provider_ticker=vendor,rows=[latest[vendor]] if vendor in latest else [],source='massive',snapshot_date=now.date().isoformat())
         entries.append((symbol+':'+now.date().isoformat(),payload))
-    return entries,dict(pages=pages,provider_rows=count,window_start=lower)
+    return entries,dict(pages=pages,provider_rows=count,unmapped_rows=unmapped,window_start=lower)
 
 
 def collect_fundamentals(cfg, client=None, *, symbols=None, now=None):

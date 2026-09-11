@@ -231,3 +231,10 @@ def test_bulk_positioning_rejects_empty_or_invalid_window(rows):
     class Bulk:
         def pages(self,*a,**kw):yield rows
     with pytest.raises(ValueError):en.positioning_batch(Bulk(),'short_volume',['AAPL'],datetime(2026,9,10,tzinfo=timezone.utc))
+
+
+def test_float_without_optional_ticker_is_counted_as_unmapped():
+    class Bulk:
+        def pages(self,*a,**kw):yield [dict(effective_date='2026-09-01',free_float=100),dict(ticker='AAPL',effective_date='2026-09-01',free_float=200)]
+    rows,meta=en.positioning_batch(Bulk(),'float',['AAPL'],datetime(2026,9,10,tzinfo=timezone.utc))
+    assert meta['unmapped_rows']==1 and rows[0][1]['rows'][0]['free_float']==200
