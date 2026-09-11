@@ -199,3 +199,17 @@ Home/server documents refreshed at 19:18 UTC, passed frontend schemas with no
 source issues, and anonymous reads returned 403. Signed-in owner acceptance
 is pending the user's email verification; administrative readback is not
 evidence of successful browser access.
+
+## Standalone Mac download — September 11, 2026
+
+User confirmed web login works. Created and pushed orphan app-only branch
+`ios/ready-to-open` at `07b96a0`. Download ZIP:
+https://github.com/Healy218/HealysBacktester/archive/refs/heads/ios/ready-to-open.zip
+Open root `App.xcodeproj`; bundled production assets and Firebase config are
+included, Capacitor 8.5.2 resolves through Swift Package Manager. Xcode 26+
+required. Owner selects Apple signing team/device and presses Run. No Node/npm
+on the Mac. Source bundle comes from dashboard commit 214a615. Standalone
+branch is a distribution snapshot, not intended for merging into main.
+Resource/XML/plist checks and ZIP manifest hashes passed, package is 432411
+bytes. Xcode compile/signing/device acceptance remain unverified on Linux.
+Build-source metadata is included; no private keys/captures in the archive.
