@@ -112,3 +112,11 @@ APNs/push or notifications. Await Firebase project ID/public config, owner
 email/UID, and publisher credentials. User was asked for project/access details;
 no answer arrived during implementation. Cloud setup guide and exact next steps
 are in the dashboard worktree's README and HANDOFF.md.
+
+## Firebase deployment follow-up
+
+Dashboard is live at https://stonks-22367.web.app (stonks-22367). Private rules
+and home/server minute publishers deployed; first publications and anonymous
+read-denial verified. Billing remains disabled. Firebase Authentication console
+initialization/user creation is still pending; then allowlist the actual UID and
+verify owner sign-in. Full current state: `/home/healy/Coding/HealyLabsDashboard/HANDOFF.md`.
