@@ -265,7 +265,8 @@ def main() -> None:
     models = [m.strip() for m in args.models.split(",") if m.strip()]
 
     print(f"loading dataset + spec...", flush=True)
-    ds = pd.read_parquet(config.META_DATASET_PARQUET)
+    ds = (training_jobs.read_dataset(config.META_DATASET_PARQUET) if training_jobs.enabled()
+          else pd.read_parquet(config.META_DATASET_PARQUET))
     require_current_dataset(ds)
     spec = load_spec()
     require_current_dataset(ds, spec)
@@ -286,10 +287,19 @@ def main() -> None:
     features = V4_META_FEATURES
     print(f"split sizes: {split.value_counts().to_dict()}", flush=True)
 
-    train = d[d["split"] == "train"]
-    val_rows = all_rows(d, "val").reset_index(drop=True)
+    if training_jobs.enabled():
+        train = training_jobs.training_rows(d,split=='train',features,args.label)
+        val_rows = training_jobs.policy_rows(d,split=='val')
+    else:
+        train = d[d["split"] == "train"]
+        val_rows = all_rows(d, "val").reset_index(drop=True)
     if train.empty or val_rows.empty:
         raise SystemExit("empty train or val partition — check --val-fraction/--embargo")
+    if training_jobs.enabled():
+        val_train = training_jobs.training_rows(d,split=='val',features,args.label)
+        prepared = training_jobs.prepare(train,val_train,features,args.label)
+        del ds,d,train,val_train
+        training_jobs.release_memory()
     from nn_meta.mark_stream import stable_trade_id
     mark_stream = ((load_mark_stream(args.marks, trade_ids=stable_trade_id(val_rows))
         if training_jobs.enabled() else load_mark_stream(args.marks)) if args.marks else None)
@@ -301,8 +311,8 @@ def main() -> None:
     for family in models:
         t0 = time.time()
         if training_jobs.enabled():
-            predictor = training_jobs.fit_family(family, train, d[d["split"] == "val"],
-                features=features, label=args.label, seeds=select_seeds,
+            predictor = training_jobs.fit_prepared(family, prepared,
+                features=features, seeds=select_seeds,
                 epochs=args.epochs, gbt_estimators=args.gbt_estimators)
             pred, ev = predictor.predict(val_rows), predictor.predict_ev(val_rows)
         elif family == "nn":
@@ -350,9 +360,8 @@ def main() -> None:
     print(f"\n=== training final {family} ensemble, {len(final_seeds)} seeds "
           f"(-> {staging.name}) ===", flush=True)
     run_ids, members, artifact_files = [], [], []
-    val_split_df = d[d["split"] == "val"]
+    val_split_df = None if training_jobs.enabled() else d[d["split"] == "val"]
     if training_jobs.enabled():
-        prepared = training_jobs.prepare(train, val_split_df, features, args.label)
         lab_tag = "win" if args.label == "label" else "xs"
         paths = training_jobs.run_seeds(prepared, family, final_seeds,
             epochs=args.epochs, estimators=args.gbt_estimators, out=staging,

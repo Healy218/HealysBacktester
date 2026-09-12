@@ -727,22 +727,38 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
     missing = set(features) - set(ds.columns)
     if missing:
         raise ValueError(f"dataset missing model features: {sorted(missing)}")
-    train = ds[ds["split"] == "train"]
-    val_rows, test_rows = _rows_for_split(ds, "val"), _rows_for_split(ds, "test")
+    from nn_meta import training_jobs
+    train = (training_jobs.training_rows(ds,split=='train',features,label)
+             if training_jobs.enabled() else ds[ds['split']=='train'])
+    if training_jobs.enabled():
+        val_rows = training_jobs.policy_rows(ds,split=='val')
+        test_rows = training_jobs.policy_rows(ds,split=='test')
+        training_jobs.release_memory()
+    else:
+        val_rows, test_rows = _rows_for_split(ds, "val"), _rows_for_split(ds, "test")
     if train.empty or val_rows.empty or test_rows.empty:
         raise ValueError("purging left an empty train, validation, or test partition")
 
-    if isinstance(mark_stream, (str, Path)):
-        from nn_meta.mark_stream import stable_trade_id
-        ids = pd.concat([stable_trade_id(val_rows), stable_trade_id(test_rows)])
-        mark_stream = load_mark_stream(mark_stream, trade_ids=ids)
+    if training_jobs.enabled():
+        val_train = training_jobs.training_rows(ds,split=='val',features,label)
+        prepared = training_jobs.prepare(train,val_train,features,label)
+        del train,val_train
+        training_jobs.release_memory()
 
     fitted: dict[str, Predictor] = {}
     selected: list[dict] = []
     for family in models:
-        predictor = fit_family(family, train, ds[ds["split"] == "val"],
+        predictor = (training_jobs.fit_prepared(family,prepared,features=features,
+                     seeds=seeds,epochs=epochs,gbt_estimators=gbt_estimators)
+                     if training_jobs.enabled() else fit_family(family, train, ds[ds["split"] == "val"],
                                features=features, label=label, seeds=seeds,
-                               epochs=epochs, gbt_estimators=gbt_estimators)
+                               epochs=epochs, gbt_estimators=gbt_estimators))
+        if isinstance(mark_stream, (str, Path)):
+            from nn_meta.mark_stream import stable_trade_id
+            ids = pd.concat([stable_trade_id(val_rows), stable_trade_id(test_rows)])
+            mark_stream = load_mark_stream(mark_stream, trade_ids=ids)
+            del ids
+            training_jobs.release_memory()
         policy = choose_policy(val_rows, predictor.predict(val_rows), spec,
                                thresholds=thresholds, mark_stream=mark_stream,
                                ev_predictions=(predictor.predict_ev(val_rows)
@@ -965,7 +981,9 @@ def main() -> None:
     if args.smoke:
         args.seeds, args.epochs, args.gbt_estimators = "0", 5, 50
 
-    ds = pd.read_parquet(args.dataset)
+    from nn_meta import training_jobs
+    ds = (training_jobs.read_dataset(args.dataset) if training_jobs.enabled()
+          else pd.read_parquet(args.dataset))
     require_current_dataset(ds)
     spec = load_spec()
     require_current_dataset(ds, spec)

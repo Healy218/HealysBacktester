@@ -86,7 +86,7 @@ def check_bound(scope):
                 raise ValueError(f'Bound {group} changed: {path}')
 
 
-def prepare(parent, campaign):
+def prepare(parent, campaign, reuse_completed=None):
     from nn_meta import config
     from nn_meta.feature_contract import CONTRACT_VERSION
     parent_base=ROOT/'nn_meta/campaigns'/parent/'v6'
@@ -94,7 +94,8 @@ def prepare(parent, campaign):
     scope_path=base/'continuation_scope.json'
     if scope_path.exists():
         scope=json.loads(scope_path.read_text())
-        if scope['parent'] != parent: raise ValueError('Continuation parent changed')
+        if scope['parent'] != parent or scope.get('reuse_completed') != reuse_completed:
+            raise ValueError('Continuation parent/reuse selection changed')
         check_bound(scope); return scope
     print('Verifying parent scope and completed symbol artifacts...',flush=True)
     old,digest,count=read_parent_scope(parent_base/'campaign_scope.json')
@@ -153,6 +154,7 @@ def prepare(parent, campaign):
     if inputs[str(Path(config.V6_INPUTS).relative_to(ROOT))] != config.V6_INPUTS_SHA256:
         raise ValueError('Expanded manifest digest changed')
     scope={'version':1,'campaign':campaign,'parent':parent,'parent_scope_sha256':digest,
+        'reuse_completed':reuse_completed,
         'parent_input_file_count':count,'feature_contract_version':CONTRACT_VERSION,
         'reuse':'Copied completed derived rows/marks. Raw option archives were not reread or revalidated.',
         'symbols':sorted(symbols),'sources':sources,'source_changes':changes,'inputs':inputs,'runtime':runtime(),
@@ -164,11 +166,54 @@ def prepare(parent, campaign):
     return scope
 
 
+def reuse_outputs(scope, records):
+    """Import completed assembly/comparisons, never prior evaluation/bundles."""
+    source=scope.get('reuse_completed')
+    if not source:return
+    from nn_meta import config
+    base=ROOT/'nn_meta/campaigns'/source/'v6'
+    old=json.loads((base/'continuation_scope.json').read_text())
+    if (old['parent_scope_sha256']!=scope['parent_scope_sha256'] or old['runtime']!=scope['runtime']
+            or old['feature_contract_version']!=scope['feature_contract_version']):
+        raise ValueError('Completed-output lineage/runtime mismatch')
+    training_only={'nn_meta/training_jobs.py','nn_meta/v4_evaluate.py',
+                   'nn_meta/v4_finalize.py','scripts/continue_v6_training.py'}
+    for path,digest in scope['sources'].items():
+        if path not in training_only and old['sources'].get(path)!=digest:
+            raise ValueError(f'Assembly/comparison source changed: {path}')
+    for path,digest in scope['inputs'].items():
+        corresponding=path.replace(f'nn_meta/campaigns/{scope["campaign"]}/',f'nn_meta/campaigns/{source}/',1)
+        if old['inputs'].get(corresponding)!=digest:
+            raise ValueError(f'Assembly/comparison input changed: {path}')
+    for stage,folder in [('assemble','artifacts'),('experiments','reports/objective-comparisons')]:
+        destination=records/f'{stage}.json'
+        if destination.exists():continue
+        receipt_path=base/'runs/continuation'/f'{stage}.json'
+        receipt=json.loads(receipt_path.read_text())
+        if receipt.get('returncode')!=0 or not receipt.get('outputs'):
+            raise ValueError(f'{source} has no completed {stage}')
+        outputs={}
+        for rel,digest in receipt['outputs'].items():
+            origin=ROOT/rel
+            if not origin.is_relative_to(base/folder) or sha(origin)!=digest:
+                raise ValueError(f'Invalid completed output: {rel}')
+            target=config.ARTIFACTS.parent/origin.relative_to(base)
+            target.parent.mkdir(parents=True,exist_ok=True)
+            if target.exists() and sha(target)!=digest:raise ValueError(f'Conflicting output: {target.name}')
+            if not target.exists():shutil.copyfile(origin,target)
+            if sha(target)!=digest:raise ValueError('Copied output checksum mismatch')
+            outputs[str(target.relative_to(ROOT))]=digest
+        write(destination,{'returncode':0,'reused_from':source,
+            'parent_receipt_sha256':sha(receipt_path),'parent_scope_sha256':sha(base/'continuation_scope.json'),
+            'outputs':outputs})
+
+
 def main():
     p=argparse.ArgumentParser(description=__doc__)
     p.add_argument('--parent',type=name,required=True);p.add_argument('--campaign',type=name,required=True)
     p.add_argument('--workers',type=int,choices=[1,2,3,4],default=2)
     p.add_argument('--threads',type=int,choices=[1,2,3,4],default=2)
+    p.add_argument('--reuse-completed',type=name,help='copy verified assembly/comparisons from a prior continuation')
     p.add_argument('--run',action='store_true');p.add_argument('--prepare-only',action='store_true')
     a=p.parse_args()
     if a.parent==a.campaign: raise ValueError('Continuation requires a new campaign name')
@@ -186,7 +231,7 @@ def main():
     from nn_meta import config
     config.RUNS_DIR.mkdir(parents=True,exist_ok=True)
     with campaign_lock(config.RUNS_DIR/'.launcher.lock'):
-        scope=prepare(a.parent,a.campaign)
+        scope=prepare(a.parent,a.campaign,a.reuse_completed)
         if scope['training']['workers']!=a.workers or scope['training']['threads']!=a.threads:
             raise ValueError('Continuation resource plan changed')
         if a.prepare_only: return
@@ -198,6 +243,7 @@ def main():
                         '--marks',marks,'--folds','3','--post-freeze-folds','--output',str(config.REPORTS_DIR/'evaluate.md')],
             'finalize':['nn_meta.v4_finalize','--marks',marks]}
         records=config.RUNS_DIR/'continuation';records.mkdir(exist_ok=True)
+        reuse_outputs(scope,records)
         for stage,args in commands.items():
             check_bound(scope)
             result_path=records/f'{stage}.json'

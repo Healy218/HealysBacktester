@@ -23,6 +23,41 @@ def enabled():
     return os.environ.get('NN_META_PREPARED_TRAINING') == '1'
 
 
+def release_memory():
+    """Return unused Arrow/libc arenas after large temporary transformations."""
+    import pyarrow as pa
+    import ctypes
+    gc.collect()
+    pa.default_memory_pool().release_unused()
+    libc = ctypes.CDLL(None)
+    if hasattr(libc, 'malloc_trim'):
+        libc.malloc_trim(0)
+
+
+def read_dataset(path):
+    """Avoid consolidating a second full numeric table while reading Parquet."""
+    import pyarrow.parquet as pq
+    table = pq.read_table(path)
+    frame = table.to_pandas(split_blocks=True, self_destruct=True)
+    del table
+    release_memory()
+    return frame
+
+
+def training_rows(frame, mask, features, label):
+    columns = list(dict.fromkeys([*features, label, 'net_return']))
+    return frame.loc[mask & frame[label].notna(), columns]
+
+
+def policy_rows(frame, mask):
+    """Same chronological candidate ordering without repeated feature copies."""
+    mask = mask & frame.executed & frame.net_return.notna()
+    order = frame.loc[mask,'entry_ts'].sort_values().index
+    result = frame.loc[order]
+    result.index = pd.RangeIndex(len(result))
+    return result
+
+
 def sha(path):
     h = hashlib.sha256()
     with Path(path).open('rb') as f:
@@ -42,8 +77,11 @@ def prepare(train, val, features, label, *, root=None):
     from nn_meta.ev_sizing import magnitude_target
     root = Path(root or config.RUNS_DIR/'prepared')
     columns = list(dict.fromkeys([*features, label, 'net_return']))
-    tr = train.loc[train[label].notna(), columns]
-    va = val.loc[val[label].notna(), columns]
+    def narrow(frame):
+        if list(frame.columns) == columns and frame[label].notna().all():
+            return frame
+        return frame.loc[frame[label].notna(), columns]
+    tr, va = narrow(train), narrow(val)
     if tr.empty or va.empty:
         raise ValueError('Training requires labeled train and validation rows')
     identity = hashlib.sha256(json.dumps({'features':features,'label':label,
@@ -59,17 +97,28 @@ def prepare(train, val, features, label, *, root=None):
         if doc['key'] == key and all(sha(dest/n)==h for n,h in doc['hashes'].items()):
             return dest
         raise ValueError('Prepared training arrays changed; use a fresh cache')
-    mean = tr[features].mean(); std = tr[features].std().replace(0, 1.0)
+    # Column reductions avoid allocating another full feature block.
+    mean = pd.Series({f:tr[f].mean() for f in features})
+    std = pd.Series({f:tr[f].std() for f in features}).replace(0, 1.0)
     masks = [f['net_return'].notna().to_numpy() for f in (tr,va)]
     if not all(m.any() for m in masks):
         raise ValueError('Prepared training requires observed returns in both partitions; use the reference path for classification-only fits')
     bounds = winsor_bounds(magnitude_target(tr.loc[masks[0], 'net_return']))
     hashes = {}
     for split, frame, mask in zip(['train','val'], [tr,va], masks):
-        # Write one array at a time; independent workers mmap these read-only.
-        arrays = [('raw', lambda: frame[features].to_numpy(dtype='float64')),
-                  ('x', lambda: _matrix(frame, features, mean, std)),
-                  ('y', lambda: frame[label].to_numpy(dtype='float32')),
+        # Standardization used to allocate several complete multi-GB matrices.
+        # Only a bounded batch is transformed; workers mmap the finished arrays.
+        for name, dtype in [('raw','float64'),('x','float32')]:
+            path=dest/f'{split}_{name}.npy'
+            target=np.lib.format.open_memmap(path,mode='w+',dtype=dtype,shape=(len(frame),len(features)))
+            for start in range(0,len(frame),65536):
+                batch=frame.iloc[start:start+65536]
+                target[start:start+len(batch)]=(batch[features].to_numpy(dtype=dtype)
+                    if name=='raw' else _matrix(batch,features,mean,std))
+            target.flush();del target
+            hashes[path.name]=sha(path)
+            release_memory()
+        arrays = [('y', lambda: frame[label].to_numpy(dtype='float32')),
                   ('mindex', lambda: np.flatnonzero(mask)),
                   ('mag', lambda: np.clip(magnitude_target(frame.loc[mask,'net_return']), *bounds))]
         for name, make in arrays:
@@ -143,6 +192,9 @@ def worker(prepared, out, family, seed, epochs, estimators):
     expected=settings(prepared,family,seed,epochs,estimators)
     if reusable(out,expected):return
     a={n[:-4]:np.load(prepared/n,mmap_mode='r',allow_pickle=False) for n in doc['hashes']}
+    def magnitude_x(split, kind):
+        x,index=a[f'{split}_{kind}'],a[f'{split}_mindex']
+        return x if np.array_equal(index,np.arange(len(x))) else x[index]
     start=time.time();files=[]
     if family=='nn':
         import tensorflow as tf
@@ -153,11 +205,11 @@ def worker(prepared, out, family, seed, epochs, estimators):
         hist=model.fit(a['train_x'],a['train_y'],validation_data=(a['val_x'],a['val_y']),
                        epochs=epochs,batch_size=config.BATCH_SIZE,callbacks=[early()],verbose=0)
         loss=float(min(hist.history['val_loss']));model.save(out/'model.keras')
-        del model;tf.keras.backend.clear_session();gc.collect()
+        del model,hist;tf.keras.backend.clear_session();release_memory()
         tf.keras.utils.set_random_seed(seed+10000)
         model=build_magnitude_mlp(len(doc['features']),config.ARCHITECTURES[0],config.LEARNING_RATES[0])
-        model.fit(a['train_x'][a['train_mindex']],a['train_mag'].astype('float32'),
-                  validation_data=(a['val_x'][a['val_mindex']],a['val_mag'].astype('float32')),
+        model.fit(magnitude_x('train','x'),a['train_mag'].astype('float32'),
+                  validation_data=(magnitude_x('val','x'),a['val_mag'].astype('float32')),
                   epochs=epochs,batch_size=config.BATCH_SIZE,callbacks=[early()],verbose=0)
         model.save(out/'magnitude.keras')
         _json(out/'scaler.json',{'mean':doc['mean'],'std':doc['std']})
@@ -173,10 +225,10 @@ def worker(prepared, out, family, seed, epochs, estimators):
         model.fit(a['train_raw'],a['train_y'].astype(int),eval_set=[(a['val_raw'],a['val_y'].astype(int))],
                   eval_metric='auc',feature_name=doc['features'],callbacks=callbacks())
         joblib.dump(model,out/'model.joblib');loss=None
-        del model;gc.collect()
+        del model;release_memory()
         model=LGBMRegressor(objective='huber',alpha=.5,**kw)
-        model.fit(a['train_raw'][a['train_mindex']],a['train_mag'],
-                  eval_set=[(a['val_raw'][a['val_mindex']],a['val_mag'])],eval_metric='l1',
+        model.fit(magnitude_x('train','raw'),a['train_mag'],
+                  eval_set=[(magnitude_x('val','raw'),a['val_mag'])],eval_metric='l1',
                   feature_name=doc['features'],callbacks=callbacks())
         joblib.dump(model,out/'magnitude.joblib');files=['model.joblib','magnitude.joblib']
     else:raise ValueError('Unknown model family')
@@ -214,8 +266,12 @@ def disk_predict(family, paths, rows, features, *, magnitude=False):
 
 
 def fit_family(family,train,val,*,features,label,seeds,epochs,gbt_estimators):
-    from nn_meta.v4_evaluate import Predictor
     prepared=prepare(train,val,features,label)
+    return fit_prepared(family,prepared,features=features,seeds=seeds,epochs=epochs,gbt_estimators=gbt_estimators)
+
+
+def fit_prepared(family,prepared,*,features,seeds,epochs,gbt_estimators):
+    from nn_meta.v4_evaluate import Predictor
     paths=run_seeds(prepared,family,list(seeds) if family=='nn' else [0],epochs=epochs,estimators=gbt_estimators)
     return Predictor(family,lambda rows:disk_predict(family,paths,rows,features),
                      lambda rows:disk_predict(family,paths,rows,features,magnitude=True))

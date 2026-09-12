@@ -103,3 +103,28 @@ def test_vector_mark_endpoints_follow_identity_under_row_reordering():
     marks=_marks_for(rows)
     assert b._marks_cover(rows.iloc[::-1],marks)
     assert not b._marks_cover(rows,marks.iloc[1:])
+
+
+def test_reuse_completed_outputs_requires_matching_lineage_and_hashes(tmp_path,monkeypatch):
+    from scripts import continue_v6_training as c
+    monkeypatch.setattr(c,'ROOT',tmp_path)
+    oldbase=tmp_path/'nn_meta/campaigns/old/v6';newbase=tmp_path/'nn_meta/campaigns/new/v6'
+    monkeypatch.setattr(config,'ARTIFACTS',newbase/'artifacts')
+    records=newbase/'runs/continuation';records.mkdir(parents=True)
+    scope={'campaign':'new','reuse_completed':'old','parent_scope_sha256':'parent',
+        'runtime':{},'feature_contract_version':'contract',
+        'sources':{'nn_meta/stream_assembly.py':'assembly','nn_meta/training_jobs.py':'new'},
+        'inputs':{'nn_meta/campaigns/new/v6/artifacts/baseline_spec.json':'spec'}}
+    old=dict(scope,sources=dict(scope['sources'],**{'nn_meta/training_jobs.py':'old'}),
+             inputs={'nn_meta/campaigns/old/v6/artifacts/baseline_spec.json':'spec'})
+    oldbase.mkdir(parents=True);c.write(oldbase/'continuation_scope.json',old)
+    for stage,folder in [('assemble','artifacts'),('experiments','reports/objective-comparisons')]:
+        path=oldbase/folder/'output';path.parent.mkdir(parents=True,exist_ok=True);path.write_bytes(stage.encode())
+        rp=oldbase/'runs/continuation'/f'{stage}.json';rp.parent.mkdir(parents=True,exist_ok=True)
+        c.write(rp,{'returncode':0,'outputs':{str(path.relative_to(tmp_path)):c.sha(path)}})
+    c.reuse_outputs(scope,records)
+    assert (newbase/'artifacts/output').read_bytes()==b'assemble'
+    assert json.loads((records/'assemble.json').read_text())['reused_from']=='old'
+    scope['sources']['nn_meta/stream_assembly.py']='different'
+    with pytest.raises(ValueError,match='source changed'):
+        c.reuse_outputs(scope,records)

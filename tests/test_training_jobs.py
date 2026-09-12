@@ -118,7 +118,8 @@ def test_finalizer_preserves_completed_seeds_on_resume_and_gate_failure(tmp_path
     final=_install_finalize_stubs(monkeypatch,tmp_path,eligible=False)
     monkeypatch.setattr(fz.config,'REPORTS_DIR',tmp_path/'reports')
     monkeypatch.setenv('NN_META_PREPARED_TRAINING','1')
-    monkeypatch.setattr(jobs,'fit_family',lambda *a,**k:Predictor('gbt',lambda rows:np.full(len(rows),.6),lambda rows:np.zeros(len(rows))))
+    monkeypatch.setattr(jobs,'fit_prepared',lambda *a,**k:Predictor('gbt',lambda rows:np.full(len(rows),.6),lambda rows:np.zeros(len(rows))))
+    monkeypatch.setattr(jobs,'training_rows',lambda frame,mask,*a:frame.loc[mask])
     monkeypatch.setattr(jobs,'prepare',lambda *a,**k:tmp_path/'arrays')
     staging=final.with_name(final.name+'.staging');staging.mkdir()
     marker=staging/'existing-seed';marker.write_text('keep')
@@ -133,3 +134,25 @@ def test_finalizer_preserves_completed_seeds_on_resume_and_gate_failure(tmp_path
     with pytest.raises(SystemExit) as exc:
         fz.main()
     assert exc.value.code==1 and marker.exists() and not final.exists()
+
+
+def test_memory_bounded_reader_and_candidates_match_reference(tmp_path):
+    from nn_meta.select_meta import all_rows
+    from pandas.testing import assert_frame_equal
+    rng=np.random.default_rng(44)
+    rows=pd.DataFrame({'entry_ts':pd.to_datetime(['2026-01-02']*30+['2026-01-01']*30),
+        'executed':rng.integers(0,2,size=60).astype(bool),'net_return':rng.normal(size=60),
+        'split':['val']*60,'feature':rng.normal(size=60)})
+    rows.attrs={'feature_contract_version':'fixture','baseline_spec_sha256':'fixture'}
+    p=tmp_path/'rows.parquet';rows.to_parquet(p,index=False)
+    restored=jobs.read_dataset(p)
+    assert_frame_equal(restored,rows)
+    assert restored.attrs==rows.attrs
+    assert_frame_equal(jobs.policy_rows(restored,restored.split=='val'),all_rows(rows,'val'))
+
+
+def test_matrix_preparation_spans_multiple_batches(tmp_path):
+    n=65539
+    rows=pd.DataFrame({'f':np.arange(n,dtype=float),'label':np.arange(n)%2,'net_return':np.sin(np.arange(n))})
+    path=jobs.prepare(rows,rows.iloc[:32],['f'],'label',root=tmp_path)
+    np.testing.assert_array_equal(np.load(path/'train_x.npy'),_matrix(rows,['f'],rows[['f']].mean(),rows[['f']].std()))
