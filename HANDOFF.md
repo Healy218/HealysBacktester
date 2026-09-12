@@ -125,3 +125,12 @@ Firebase owner follow-up: Authentication is initialized and the actual owner
 UID is allowlisted. Email verification and signed-in owner acceptance remain;
 user was directed to the dashboard verification button. Live source documents
 validated at September 11 19:18 UTC; anonymous reads remain denied.
+
+## Taken contract correction — September 11
+
+Deployed 2cf23a9 on production ops branch: `/taken` supports quantity/date/strike
+overrides, and can correct an unfilled Taken-button placeholder. 102 focused
+tests passed locally and on server. User must resend `/taken 00EA905144FB 1
+9/16 72C @ 1.03` as one standalone message; initial TQQQ 71C placeholder remains
+until then. Confirm subsequent real record before claiming the 72C is tracked.
+Details: `/tmp/healys-server-alert-readiness/docs/reviews/2026-09-11-taken-contract-shorthand.md`.
