@@ -120,3 +120,55 @@ def test_build_preflight_and_eligible_symbol_total(tmp_path):
     assert 'verifying inputs before worker startup' in report
     assert 'waiting for freeze completion' not in report
     assert 'HALFWAY' not in report
+
+
+def continuation_fixture(root, status='running'):
+    base = root / 'nn_meta/campaigns/current/v6'
+    run = base / 'runs/continuation'
+    run.mkdir(parents=True)
+    (base / 'continuation_scope.json').write_text(json.dumps(dict(
+        campaign='current', parent='old', symbols=['AA'], training=dict(final_seeds=[0, 1]))))
+    (run / 'latest.json').write_text(json.dumps(dict(campaign='current', stage='evaluate', status=status)))
+    (run / 'assemble.json').write_text('{"returncode": 0}')
+    return base
+
+
+def test_continuation_supervisor_binds_arguments_and_seed_environment(tmp_path):
+    for pid, module, campaign, bound_env in [(101, 'scripts.continue_v6_training', 'current', False),
+                                            (102, 'scripts.continue_v6_training', 'old', False),
+                                            (103, 'nn_meta.training_jobs', 'current', True)]:
+        p = tmp_path / str(pid); p.mkdir()
+        (p / 'cmdline').write_bytes(f'python\0-m\0{module}\0--campaign\0{campaign}\0'.encode())
+        (p / 'environ').write_bytes(b'NN_META_CAMPAIGN=current\0NN_META_POOL=v6\0' if bound_env else b'')
+        (p / 'stat').write_text(f'{pid} (python) S ' + ' '.join(['0'] * 18 + ['12345']))
+    assert [p['stage'] for p in campaign_processes('current', tmp_path)] == ['training supervisor', 'seed training']
+
+
+def test_continuation_evaluation_with_no_seed_workers_is_active(tmp_path):
+    base = continuation_fixture(tmp_path)
+    seed = base / 'runs/seed-jobs/fold1/nn-s0/complete.json'
+    seed.parent.mkdir(parents=True); seed.write_text('{}')
+    old = tmp_path / 'nn_meta/campaigns/old/v6/runs/next-stage'
+    old.mkdir(parents=True); (old / 'build-result.json').write_text('{"returncode": 1}')
+    s = snapshot(tmp_path, 'current', [{'pid': 123, 'stage': 'evaluation/training'}])
+    report = render(s, None)
+    assert 'evaluate: running' in report
+    assert 'Active seed workers: 0' in report
+    assert 'Selection seed jobs completed: 1' in report
+    assert 'failed' not in report and 'STOPPED' not in report
+
+
+def test_continuation_terminal_state_requires_receipts_and_manifest(tmp_path):
+    base = continuation_fixture(tmp_path, 'complete')
+    assert 'verification needed' in render(snapshot(tmp_path, 'current', []), None)
+    for stage in ('experiments', 'evaluate', 'finalize'):
+        (base / f'runs/continuation/{stage}.json').write_text('{"returncode": 0}')
+    (base / 'model_final').mkdir(); (base / 'model_final/manifest.json').write_text('{}')
+    assert 'Pipeline completed' in render(snapshot(tmp_path, 'current', []), None)
+
+
+def test_continuation_missing_processes_does_not_claim_stopped(tmp_path):
+    continuation_fixture(tmp_path)
+    report = render(snapshot(tmp_path, 'current', []), None)
+    assert 'verify the host service' in report
+    assert 'STOPPED' not in report

@@ -24,8 +24,9 @@ HANDOFF.md. All 453 tick stores and freeze shards are verified; the merged basel
 a four-worker target. All 449 eligible symbol builds completed; monolithic
 assembly was OOM-killed September 12. Separately pinned continuation
 `v6-train-20260912` completed assembly and objective comparisons. Replacement
-`v6-train-20260912r2` reuses those verified outputs and is evaluating with
-bounded memory and final training queued. See the
+`v6-train-20260912r2` reused those verified outputs and completed evaluation plus the 40-seed
+GBT final ensemble on September 12. The configured research gate passed;
+TradingView parity and model promotion remain outstanding. See the
 [training review](docs/reviews/2026-09-12-v6-training.md).
 The existing-family SPY/IBKR pilot is now stopped and preserved. Do not launch a full
 universe freeze while those additions are still missing; complete their
@@ -213,8 +214,13 @@ workload, VM-hour budget and explicit job IDs.
   using existing labels, purged temporal evaluation and no auto-promotion.
 - [x] Configure three post-freeze conditional folds without weakening the
   generator-horizon, exit-time purge or embargo checks.
-- [ ] Inspect continuation comparisons, walk-forward results and final gates
-  before drawing conclusions or deploying anything.
+- [x] Inspect continuation comparisons, walk-forward results and final gates.
+  September 12 verdict: hold scanner promotion. All 20 NN runs have NaN loss;
+  GBT remains promising. See the deployment review and matching test baselines.
+- [ ] Fix all-missing NN feature handling and finite-value guards; rerun family
+  selection in a fresh scope, preserving the original failed training evidence.
+- [ ] Replay fixed policies with executable quote/latency limits and stressed
+  spreads/costs; compare to the frozen baseline on the same marked ledger.
 - [ ] Benchmark larger worker counts/GPU; evaluate ranking, learned contract
   selection/exits, broader event weighting, calibration/abstention and mature
   prospective FA. Dependencies are in the training review.
@@ -320,3 +326,10 @@ preparing resolver/calculations is authorized.
 History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconciliation.md),
 [full-day handoff](handoff-history/HANDOFF-2026-09-05-wipe-restore-v5-ladder-feeds.md),
 [DECISIONS](docs/DECISIONS.md), [EXPERIMENTS](docs/EXPERIMENTS.md).
+
+## September 12 monitoring and report delivery
+
+- [x] Correct the watcher to follow the explicit training continuation and recognize supervisor/seed stages.
+- [x] Verify successful evaluation and final ensemble completion; preserve original failed runs.
+- [x] Publish the complete v6 training summary and V2/V3/V3.1/V4/V5 archives in the private dashboard Training tab, with comparable tables and provenance.
+- [x] Disable Telegram delivery for this watcher; keep summaries in the dashboard.

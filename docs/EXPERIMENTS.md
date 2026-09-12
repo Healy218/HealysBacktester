@@ -1,5 +1,31 @@
 # EXPERIMENTS — every generation's verdict in one table
 
+## 2026-09-12 — v6 complete; hold scanner promotion after review
+
+`v6-train-20260912r2`: 449 symbols, 4,281,562 retained rows,
+62,289,803 marks, 164 final features. Three post-freeze folds selected GBT
+policies; marked test return/maxDD: +73.3%/23.6%, +205.4%/11.9%,
++61.3%/22.4%. Final GBT×40 EV/0.05 validation: +648.8%, maxDD 12.6%,
+241 trades, eligible under the configured risk gate. The final tail is
+selection/revalidation, not a new held-out test. Research-only: deferred
+external TradingView parity and globally frozen proposal scope remain.
+
+All 20 NN receipts contain non-finite validation loss; two all-missing ICT
+columns survived preparation as NaN, inspected weights are non-finite and
+final NN predictions are constant. Zero NN trades do not establish a healthy
+family comparison. GBT predictions are finite/nonconstant. Matching test
+baseline replay under shared accounting shows higher v6 return in 2/3 folds
+and lower drawdown in 3/3. Marked baseline/cost stress, realistic option fills,
+external feature parity and the expanded live adapter remain promotion work.
+PBO 0.178/0.178/0.490 and deflated
+Sharpe 0.0017/0.0326/0.4685 limit the strength of the positive-return readout.
+Event balancing remained mixed; the baseline training objective was retained.
+No scanner deployment. All stage receipts exit 0; source hashes unchanged.
+[Full summary](reviews/2026-09-12-v6-training.md) and the private dashboard
+Training tab carry the tables, calibration, sources and final gate log.
+[Deployment verdict and evidence](reviews/2026-09-12-v6-deployment-review.md).
+
+
 The scoreboard. One row per evaluated model generation / major run; newest
 first. "Ex-outlier" is the ex-top3 check — the difference between a broad
 edge and a lottery ticket. Full detail lives in each row's report path.

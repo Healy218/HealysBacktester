@@ -1,0 +1,813 @@
+{
+  "campaign": "v6-train-20260912r2",
+  "review_date": "2026-09-12",
+  "verdict": "Hold scanner promotion; GBT merits further validation",
+  "method": "Canonical selection/accounting consistency replay; separate return-moment and timestamp arithmetic. Not executable-quote or independent-ledger validation. Nonfinite values retained as strings for strict JSON.",
+  "source_sha256": {
+    "nn_meta/campaigns/v6-train-20260912r2/v6/continuation_scope.json": "3a9c069d495c08fd2073304f289352d551e1755116276e727929c84c11e46928",
+    "nn_meta/campaigns/v6-train-20260912r2/v6/reports/evaluate.json": "aff6f39ee9a7e6254635598bfc7dc45d6410887c47d6c9491ff7aa1cbe112a28",
+    "nn_meta/campaigns/v6-train-20260912r2/v6/reports/evaluate.manifest.json": "ec1d06db97934e81a569e2a0a3522656ac506c230c379ce297532cdfa5a890b6",
+    "nn_meta/campaigns/v6-train-20260912r2/v6/model_final/ensemble_config.json": "cdacbea1bf6a07e573af46b8d266b1d82b5e3bf736945a06b929e46050fdbd6c",
+    "nn_meta/campaigns/v6-train-20260912r2/v6/model_final/manifest.json": "ca008a50fc794e77bb79f899711a8ef65ec373e94c25d9a941c179926c721012"
+  },
+  "checks": {
+    "root-nn-input-check": {
+      "prepared": [
+        {
+          "prepared": "28fab217e29dcb975e852418049fe9e8596f63ea09ad02bdbabb92f659a09ddd",
+          "rows": {
+            "train": 1965006,
+            "val": 282878
+          },
+          "nonfinite_scalers": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ],
+          "sample_rows": 1024,
+          "nonfinite_input_values": 2048
+        },
+        {
+          "prepared": "4645ed6a332cac4cf428f58e384c73a715802ae9c9e19ec61b2dbd428675f025",
+          "rows": {
+            "train": 2240558,
+            "val": 256093
+          },
+          "nonfinite_scalers": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ],
+          "sample_rows": 1024,
+          "nonfinite_input_values": 2048
+        },
+        {
+          "prepared": "9bdb989d970a4ff23f8a04f6b534276d7b3e09eab115d2908953f229b9cc4ba3",
+          "rows": {
+            "train": 2514331,
+            "val": 239793
+          },
+          "nonfinite_scalers": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ],
+          "sample_rows": 1024,
+          "nonfinite_input_values": 2048
+        },
+        {
+          "prepared": "a8026c8ec83b5af50094cfeed172943be4ec6f0c3d4e6eb7d9290ab2a6bb4a15",
+          "rows": {
+            "train": 2611567,
+            "val": 372764
+          },
+          "nonfinite_scalers": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ],
+          "sample_rows": 1024,
+          "nonfinite_input_values": 2048
+        }
+      ],
+      "nn_receipts": [
+        [
+          "runs/seed-jobs/489b06ef746b9a4eb205bc5f/nn-s0/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/489b06ef746b9a4eb205bc5f/nn-s1/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/489b06ef746b9a4eb205bc5f/nn-s2/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/489b06ef746b9a4eb205bc5f/nn-s3/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/489b06ef746b9a4eb205bc5f/nn-s4/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/daffd2da230862ad619d66fb/nn-s0/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/daffd2da230862ad619d66fb/nn-s1/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/daffd2da230862ad619d66fb/nn-s2/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/daffd2da230862ad619d66fb/nn-s3/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/daffd2da230862ad619d66fb/nn-s4/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/bf50a5717d2b340bd3aca439/nn-s0/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/bf50a5717d2b340bd3aca439/nn-s1/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/bf50a5717d2b340bd3aca439/nn-s2/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/bf50a5717d2b340bd3aca439/nn-s3/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/bf50a5717d2b340bd3aca439/nn-s4/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/b4ae16e209cfeea588b62455/nn-s0/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/b4ae16e209cfeea588b62455/nn-s1/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/b4ae16e209cfeea588b62455/nn-s2/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/b4ae16e209cfeea588b62455/nn-s3/complete.json",
+          "NaN"
+        ],
+        [
+          "runs/seed-jobs/b4ae16e209cfeea588b62455/nn-s4/complete.json",
+          "NaN"
+        ]
+      ]
+    },
+    "nn-weight-health": {
+      "model.keras": [
+        {
+          "dataset": "layers/dense/vars/0",
+          "size": 10496,
+          "nonfinite": 128
+        },
+        {
+          "dataset": "layers/dense/vars/1",
+          "size": 64,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "layers/dense_1/vars/0",
+          "size": 2048,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "layers/dense_1/vars/1",
+          "size": 32,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "layers/dense_2/vars/0",
+          "size": 32,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "layers/dense_2/vars/1",
+          "size": 1,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/0",
+          "size": 1,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/1",
+          "size": 1,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/10",
+          "size": 32,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/11",
+          "size": 32,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/12",
+          "size": 1,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/13",
+          "size": 1,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/2",
+          "size": 10496,
+          "nonfinite": 128
+        },
+        {
+          "dataset": "optimizer/vars/3",
+          "size": 10496,
+          "nonfinite": 128
+        },
+        {
+          "dataset": "optimizer/vars/4",
+          "size": 64,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/5",
+          "size": 64,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/6",
+          "size": 2048,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/7",
+          "size": 2048,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/8",
+          "size": 32,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/9",
+          "size": 32,
+          "nonfinite": 0
+        }
+      ],
+      "magnitude.keras": [
+        {
+          "dataset": "layers/dense/vars/0",
+          "size": 10496,
+          "nonfinite": 128
+        },
+        {
+          "dataset": "layers/dense/vars/1",
+          "size": 64,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "layers/dense_1/vars/0",
+          "size": 2048,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "layers/dense_1/vars/1",
+          "size": 32,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "layers/dense_2/vars/0",
+          "size": 32,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "layers/dense_2/vars/1",
+          "size": 1,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/0",
+          "size": 1,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/1",
+          "size": 1,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/10",
+          "size": 32,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/11",
+          "size": 32,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/12",
+          "size": 1,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/13",
+          "size": 1,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/2",
+          "size": 10496,
+          "nonfinite": 128
+        },
+        {
+          "dataset": "optimizer/vars/3",
+          "size": 10496,
+          "nonfinite": 128
+        },
+        {
+          "dataset": "optimizer/vars/4",
+          "size": 64,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/5",
+          "size": 64,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/6",
+          "size": 2048,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/7",
+          "size": 2048,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/8",
+          "size": 32,
+          "nonfinite": 0
+        },
+        {
+          "dataset": "optimizer/vars/9",
+          "size": 32,
+          "nonfinite": 0
+        }
+      ]
+    },
+    "statistical_checks": {
+      "model": {
+        "sample_rows": 2048,
+        "unique_prediction_vectors": 40,
+        "pairwise_correlation_min": 0.9851077021258527,
+        "pairwise_correlation_median": 0.9956337279571917,
+        "across_seed_std_mean": 0.006260440102579805,
+        "ensemble_cross_row_std": 0.08624333987414405,
+        "best_iterations": [
+          376,
+          210,
+          268,
+          154,
+          168,
+          216,
+          244,
+          173,
+          250,
+          184,
+          228,
+          279,
+          229,
+          224,
+          252,
+          271,
+          256,
+          230,
+          269,
+          165,
+          181,
+          260,
+          261,
+          293,
+          188,
+          168,
+          283,
+          180,
+          273,
+          260,
+          230,
+          344,
+          198,
+          315,
+          271,
+          187,
+          158,
+          170,
+          228,
+          174
+        ],
+        "subsample": 0.8,
+        "subsample_freq": 0,
+        "colsample_bytree": 0.8
+      },
+      "magnitude": {
+        "sample_rows": 2048,
+        "unique_prediction_vectors": 40,
+        "pairwise_correlation_min": 0.9969973764917063,
+        "pairwise_correlation_median": 0.9982399187296418,
+        "across_seed_std_mean": 0.005532672726762796,
+        "ensemble_cross_row_std": 0.14169358500033835,
+        "best_iterations": [
+          498,
+          571,
+          567,
+          568,
+          532,
+          544,
+          536,
+          524,
+          501,
+          586,
+          495,
+          562,
+          484,
+          518,
+          576,
+          427,
+          600,
+          592,
+          465,
+          528,
+          560,
+          549,
+          562,
+          484,
+          600,
+          475,
+          505,
+          524,
+          492,
+          475,
+          509,
+          520,
+          597,
+          568,
+          562,
+          597,
+          576,
+          559,
+          535,
+          595
+        ],
+        "subsample": 0.8,
+        "subsample_freq": 0,
+        "colsample_bytree": 0.8
+      },
+      "final_predictions": {
+        "pred_ensemble": {
+          "rows": 372764,
+          "finite": 372764,
+          "unique": 367127,
+          "min": 0.08985460774926382,
+          "max": 0.6138630956147795
+        },
+        "ev_ensemble": {
+          "rows": 372764,
+          "finite": 372764,
+          "unique": 372763,
+          "min": -0.9060667486467345,
+          "max": 0.177541405631259
+        },
+        "pred_cheap_nn": {
+          "rows": 372764,
+          "finite": 372764,
+          "unique": 1,
+          "min": 0.3846548795700073,
+          "max": 0.3846548795700073
+        },
+        "ev_cheap_nn": {
+          "rows": 372764,
+          "finite": 372764,
+          "unique": 1,
+          "min": -0.07163336873054504,
+          "max": -0.07163336873054504
+        },
+        "pred_cheap_gbt": {
+          "rows": 372764,
+          "finite": 372764,
+          "unique": 366434,
+          "min": 0.07223369672714057,
+          "max": 0.6632604215645747
+        },
+        "ev_cheap_gbt": {
+          "rows": 372764,
+          "finite": 372764,
+          "unique": 372297,
+          "min": -0.9056601850835004,
+          "max": 0.17344500937153198
+        }
+      },
+      "nn_receipts": [
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/489b06ef746b9a4eb205bc5f/nn-s0/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/489b06ef746b9a4eb205bc5f/nn-s1/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/489b06ef746b9a4eb205bc5f/nn-s2/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/489b06ef746b9a4eb205bc5f/nn-s3/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/489b06ef746b9a4eb205bc5f/nn-s4/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/daffd2da230862ad619d66fb/nn-s0/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/daffd2da230862ad619d66fb/nn-s1/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/daffd2da230862ad619d66fb/nn-s2/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/daffd2da230862ad619d66fb/nn-s3/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/daffd2da230862ad619d66fb/nn-s4/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/bf50a5717d2b340bd3aca439/nn-s0/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/bf50a5717d2b340bd3aca439/nn-s1/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/bf50a5717d2b340bd3aca439/nn-s2/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/bf50a5717d2b340bd3aca439/nn-s3/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/bf50a5717d2b340bd3aca439/nn-s4/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/b4ae16e209cfeea588b62455/nn-s0/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/b4ae16e209cfeea588b62455/nn-s1/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/b4ae16e209cfeea588b62455/nn-s2/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/b4ae16e209cfeea588b62455/nn-s3/complete.json",
+          "val_loss": "NaN"
+        },
+        {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-train-20260912r2/v6/runs/seed-jobs/b4ae16e209cfeea588b62455/nn-s4/complete.json",
+          "val_loss": "NaN"
+        }
+      ],
+      "nn_scalers": {
+        "28fab217e29dcb975e852418049fe9e8596f63ea09ad02bdbabb92f659a09ddd": {
+          "bad_mean": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ],
+          "bad_std": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ]
+        },
+        "4645ed6a332cac4cf428f58e384c73a715802ae9c9e19ec61b2dbd428675f025": {
+          "bad_mean": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ],
+          "bad_std": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ]
+        },
+        "9bdb989d970a4ff23f8a04f6b534276d7b3e09eab115d2908953f229b9cc4ba3": {
+          "bad_mean": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ],
+          "bad_std": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ]
+        },
+        "a8026c8ec83b5af50094cfeed172943be4ec6f0c3d4e6eb7d9290ab2a6bb4a15": {
+          "bad_mean": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ],
+          "bad_std": [
+            "tv_ict_ASIA_range_value_atr14",
+            "tv_ict_LNDN_range_value_atr14"
+          ]
+        }
+      }
+    },
+    "fold3-replay": {
+      "fold": 3,
+      "rows": 230239,
+      "selected_trades": 156,
+      "wins": 75,
+      "mean_return": 0.03562844964456271,
+      "sd": 0.27818144412490065,
+      "sharpe": 0.1280762983909376,
+      "skew": 2.1538108854548184,
+      "kurtosis": 11.118340593233533,
+      "dsr_given_reported_expected_max": 0.4685212680419262,
+      "selected_symbols": 107,
+      "entry_dates": 37,
+      "top_trade_returns": [
+        1.5399876375912318,
+        1.1668230986853052,
+        1.1342801814594123,
+        0.9940089865202195,
+        0.7408158854319511,
+        0.6519325418055453,
+        0.5830313516060455,
+        0.4955067398901647,
+        0.49166224955625704,
+        0.44079931384973814
+      ],
+      "shared_metrics_replay": {
+        "n": 156,
+        "n_kept": 156,
+        "n_proposals": 230239,
+        "total_return": 0.5947642596428333,
+        "max_drawdown": 0.15489648005878315,
+        "win_rate": 0.4807692307692308,
+        "mean_return": 0.03562844964456271,
+        "per_trade_sharpe": 0.1280762983909376,
+        "total_ex_top3": 0.34139541664459827
+      },
+      "report_test": {
+        "n": 156,
+        "n_kept": 156,
+        "n_proposals": 230239,
+        "total_return": 0.5947642596428333,
+        "max_drawdown": 0.15489648005878315,
+        "win_rate": 0.4807692307692308,
+        "mean_return": 0.03562844964456271,
+        "per_trade_sharpe": 0.1280762983909376,
+        "total_ex_top3": 0.34139541664459827
+      }
+    },
+    "test-baselines": [
+      {
+        "fold": 1,
+        "test_window": [
+          "2026-03-04",
+          "2026-05-05"
+        ],
+        "all_rows": 252629,
+        "baseline": {
+          "n": 148,
+          "n_kept": 148,
+          "n_proposals": 49074,
+          "total_return": -0.05478613842605318,
+          "max_drawdown": 0.41516571953738624,
+          "win_rate": 0.33783783783783783,
+          "mean_return": 0.014657433019175707,
+          "per_trade_sharpe": 0.0347676796182724,
+          "total_ex_top3": -0.05471867765795191
+        },
+        "winner_shared": {
+          "n": 143,
+          "n_kept": 143,
+          "n_proposals": 252629,
+          "total_return": 0.723345743607914,
+          "max_drawdown": 0.22220042888755637,
+          "win_rate": 0.5104895104895105,
+          "mean_return": 0.043444888802825606,
+          "per_trade_sharpe": 0.14544667146777288,
+          "total_ex_top3": 0.2922923854848145
+        }
+      },
+      {
+        "fold": 2,
+        "test_window": [
+          "2026-05-05",
+          "2026-07-01"
+        ],
+        "all_rows": 238456,
+        "baseline": {
+          "n": 118,
+          "n_kept": 118,
+          "n_proposals": 46017,
+          "total_return": 3.7258742841048775,
+          "max_drawdown": 0.36703325859648894,
+          "win_rate": 0.4406779661016949,
+          "mean_return": 0.2185088505103657,
+          "per_trade_sharpe": 0.15243266664905145,
+          "total_ex_top3": 0.35717740273397247
+        },
+        "winner_shared": {
+          "n": 137,
+          "n_kept": 137,
+          "n_proposals": 46017,
+          "total_return": 1.943724804080846,
+          "max_drawdown": 0.07280896836563333,
+          "win_rate": 0.5766423357664233,
+          "mean_return": 0.08711289498943206,
+          "per_trade_sharpe": 0.32617533131120946,
+          "total_ex_top3": 1.6887238220918697
+        }
+      },
+      {
+        "fold": 3,
+        "test_window": [
+          "2026-07-01",
+          "2026-08-25"
+        ],
+        "all_rows": 230239,
+        "baseline": {
+          "n": 139,
+          "n_kept": 139,
+          "n_proposals": 44143,
+          "total_return": -0.20946943788854477,
+          "max_drawdown": 0.41468036206904474,
+          "win_rate": 0.41007194244604317,
+          "mean_return": -0.008080211331642828,
+          "per_trade_sharpe": -0.016714547155487546,
+          "total_ex_top3": 0.9898228874313133
+        },
+        "winner_shared": {
+          "n": 156,
+          "n_kept": 156,
+          "n_proposals": 230239,
+          "total_return": 0.5947642596428333,
+          "max_drawdown": 0.15489648005878315,
+          "win_rate": 0.4807692307692308,
+          "mean_return": 0.03562844964456271,
+          "per_trade_sharpe": 0.1280762983909376,
+          "total_ex_top3": 0.34139541664459827
+        }
+      }
+    ],
+    "final_selected_verification": {
+      "reconstruction": "Existing fixed EV selection and marked ledger; reproducibility check, not an independent implementation.",
+      "latency": {
+        "selected": 241,
+        "same_date_fills": 176,
+        "same_date_lag_gt_1h_from_bar_start": 56,
+        "same_date_post_signal_close_delay_minutes_quantiles": {
+          "min": 0.0,
+          "p50": 15.0,
+          "p90": 127.5,
+          "p95": 213.75,
+          "p99": 270.0,
+          "max": 345.0
+        },
+        "fills_after_planned_exit_bar_start": 0,
+        "fills_after_planned_exit_bar_close": 0,
+        "fills_after_expiration_date": 0,
+        "note": "All delays are wall-clock. Same-date cohort avoids overnight/weekend gaps; no missing-session inference."
+      },
+      "marked_ledger": {
+        "total_return": 6.48824949515781,
+        "max_drawdown": 0.125673088854727,
+        "turnover": 177.28409307061733,
+        "peak_gross_exposure": 0.6272571069090245,
+        "mean_gross_exposure": 0.3642063516407989,
+        "n_positions": 241,
+        "cost_scenario": "base",
+        "cost_model": "equity_percentage"
+      },
+      "marks_loaded": 1518
+    },
+    "root-latency-check": {
+      "selected": 241,
+      "same_date": 176,
+      "wall_clock_median_minutes_from_bar_start": 75.0,
+      "same_date_post_close_delay_median_minutes": 15.0,
+      "same_date_post_close_delay_p90_minutes": 127.5
+    }
+  }
+}

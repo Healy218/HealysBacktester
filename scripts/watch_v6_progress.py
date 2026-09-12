@@ -32,6 +32,9 @@ def campaign_processes(campaign, proc=Path('/proc')):
                'nn_meta.v4_evaluate': 'evaluation/training',
                'nn_meta.v4_finalize': 'final training',
                'nn_meta.walkforward_meta': 'walk-forward training',
+               'scripts.continue_v6_training': 'training supervisor',
+               'nn_meta.training_jobs': 'seed training',
+               'nn_meta.training_experiments': 'objective comparisons',
                'scripts.research_local': 'stage launcher'}
     for entry in proc.iterdir():
         if not entry.name.isdigit():
@@ -47,6 +50,10 @@ def campaign_processes(campaign, proc=Path('/proc')):
             if module == 'scripts.research_local':
                 bound = bound or ('--campaign' in args and args[args.index('--campaign') + 1] == campaign
                                   and '--pool' in args and args[args.index('--pool') + 1] == 'v6')
+            if module == 'scripts.continue_v6_training':
+                # The supervisor sets its children's environment after startup.
+                # /proc/environ need not reflect those later os.environ writes.
+                bound = bound or ('--campaign' in args and args[args.index('--campaign') + 1] == campaign)
             if not bound or module not in modules:
                 continue
             stat = entry.joinpath('stat').read_text().rsplit(')', 1)[1].split()
@@ -68,6 +75,8 @@ def campaign_processes(campaign, proc=Path('/proc')):
 def snapshot(root, campaign, processes):
     prep = root / 'nn_meta/expanded_inputs' / campaign
     base = root / 'nn_meta/campaigns' / campaign / 'v6'
+    if (base / 'continuation_scope.json').exists():
+        return continuation_snapshot(root, campaign, processes)
     scope = read_json(prep / 'inventory-r4/scope.json', {})
     symbols = scope.get('symbols', [])
     captures = prep / 'full-run'
@@ -124,7 +133,71 @@ def snapshot(root, campaign, processes):
             'latest_log_mtime': latest, 'free_gib': round(shutil.disk_usage(root).free / 1024**3, 1)}
 
 
+def continuation_snapshot(root, campaign, processes):
+    """Observe this continuation only; never traverse the parent's raw captures."""
+    base = root / 'nn_meta/campaigns' / campaign / 'v6'
+    scope = read_json(base / 'continuation_scope.json')
+    if scope.get('campaign') != campaign:
+        raise ValueError('Continuation scope campaign mismatch')
+    run = base / 'runs/continuation'
+    latest = read_json(run / 'latest.json', {})
+    if latest.get('campaign', campaign) != campaign:
+        raise ValueError('Continuation status campaign mismatch')
+    receipts = {stage: read_json(run / f'{stage}.json')
+                for stage in ('assemble', 'experiments', 'evaluate', 'finalize')}
+    seeds = list((base / 'runs/seed-jobs').glob('*/*/complete.json'))
+    final = list((base / 'model_final.staging').glob('*/complete.json'))
+    if (base / 'model_final/manifest.json').exists():
+        final = list((base / 'model_final').glob('*/complete.json'))
+    # Completion files are progress observations, not model-integrity verdicts.
+    counts = dict(completed_seed_jobs=len(seeds) + len(final),
+                  selection_seed_jobs=len(seeds), final_seed_jobs=len(final))
+    evidence = dict(baseline_spec=(base / 'artifacts/baseline_spec.json').exists(),
+                    assembled_dataset=(receipts['assemble'] or {}).get('returncode') == 0,
+                    evaluation_manifest=(base / 'reports/evaluate.manifest.json').exists(),
+                    final_model_manifest=(base / 'model_final/manifest.json').exists())
+    logs = list(run.glob('*.log')) + list((base / 'runs/seed-jobs').glob('*/*/worker.log'))
+    logs += list((base / 'model_final.staging').glob('*/worker.log'))
+    latest_log = max((p.stat().st_mtime for p in logs), default=0)
+    return dict(time_utc=dt.datetime.now(dt.timezone.utc).isoformat(), campaign=campaign,
+                parent=scope['parent'], total_symbols=len(scope['symbols']), counts=counts,
+                evidence_present=evidence, processes=processes, continuation=latest,
+                stage_receipts={k: {field: v[field] for field in ('returncode', 'seconds', 'reused_from') if field in v}
+                                for k, v in receipts.items() if v is not None},
+                final_seed_total=len(scope['training']['final_seeds']),
+                latest_log_mtime=latest_log, free_gib=round(shutil.disk_usage(root).free / 1024**3, 1))
+
+
+def render_continuation(s):
+    latest = s['continuation']
+    state, stage = latest.get('status', 'unknown'), latest.get('stage', 'unknown')
+    processes = s['processes']
+    if state == 'complete':
+        verified = (all(s['stage_receipts'].get(k, {}).get('returncode') == 0
+                        for k in ('assemble', 'experiments', 'evaluate', 'finalize'))
+                    and s['evidence_present']['final_model_manifest'])
+        status = 'Pipeline completed; research-only, not deployed' if verified else 'Completion receipt incomplete; verification needed'
+    elif state == 'failed' or state.startswith('stopped'):
+        status = f'{stage}: {state}; inspect the stage receipt/log'
+    elif processes:
+        status = f'{stage}: running ({", ".join(sorted({p["stage"] for p in processes}))})'
+    else:
+        status = f'{stage}: no campaign process visible; last receipt says {state}; verify the host service'
+    c = s['counts']
+    lines = [f"HealyLabs v6 — {s['campaign']}", f"Observed: {s['time_utc']}", f'Active: {status}',
+             f"Selection seed jobs completed: {c['selection_seed_jobs']} (evaluation and final family selection)",
+             f"Final ensemble seeds completed: {c['final_seed_jobs']}/{s['final_seed_total']}",
+             f"Active seed workers: {sum(p['stage'] == 'seed training' for p in processes)}",
+             'Evaluation, preparation and gate checks can run without seed workers.',
+             'Stage receipts: ' + ', '.join(f"{k} exit {v.get('returncode', '?')}" for k, v in s['stage_receipts'].items()),
+             'Artifact presence is progress evidence; it does not establish deployment eligibility.',
+             'Full training summary: dashboard Training tab.']
+    return '\n'.join(lines)
+
+
 def active_metric(s):
+    if 'continuation' in s:
+        return None  # Job phases have different costs; do not invent an ETA.
     stages = {p['stage'] for p in s['processes']}
     if any('training' in stage for stage in stages):
         return 'training_registry_rows'
@@ -184,6 +257,8 @@ def pace_line(s, history):
 
 
 def render(s, previous, history=None):
+    if 'continuation' in s:
+        return render_continuation(s)
     c, n = s['counts'], s['total_symbols']
     stages = sorted({p['stage'] for p in s['processes']})
     status = ', '.join(stages) if stages else 'IDLE/STOPPED: no campaign worker detected; watcher remains active'
