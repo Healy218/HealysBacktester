@@ -28,3 +28,8 @@ quantity/premium absent; failed command response cached at update 710008726.
 The previously rejected update will not be replayed automatically. After deployment
 user can resend `/taken 00EA905144FB 1 9/16 72C @ 1.03` as a new standalone message.
 No live position or Telegram message was changed/sent by the local tests.
+
+Deployed 2cf23a9 through fast-forward Git pull on September 11. All 102
+focused tests also passed on Hetzner. Existing minute dispatcher loads the
+updated parser on its next run. Live position is still awaiting the user’s
+new command; do not claim the 72C has been recorded without readback.
