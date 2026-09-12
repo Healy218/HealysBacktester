@@ -1,136 +1,90 @@
-# Year-end goals recorded
+# V6 training running — September 12, 2026
 
-September 10, 2026. User requested preserving the codebase maturity assessment
-in GOALS.md, aiming for ≥7/10 in every area and overall by December 31, 2026.
-The existing ROADMAP and TODOs remain the delivery plan. First reassessment
-is after v6 has actually run for a week and more TODOs are completed; the run
-start date is not yet recorded. Do not treat one week as proof of trading edge.
-GOALS.md includes the baseline, evidence criteria, assessment rationale, five
-improvement priorities, and review log. ROADMAP, TODO and CLAUDE link to it.
+Current campaign: `v6-train-20260912r2`, source `7137da6` on main.
+User authorized performance optimizations, practical training recommendations,
+later-work notes and launch. Evaluation has completed fold 1 and is on fold 2/3. Its first two
+neural seeds completed; seeds 2 and 3 are running concurrently. Forty-seed final training is queued after evaluation,
+subject to the existing final-ensemble gates. Nothing has been deployed.
 
-This was documentation-only; no runtime code, campaign inputs, jobs, account
-settings, or notification schedules were changed. Operational state was not
-rechecked for this task. The preceding home build handoff is preserved in
-handoff-history/HANDOFF-2026-09-10-before-year-end-goals.md; its PIDs, counts
-and dates are historical observations, not current verification. Use the
-anchored campaign receipts/logs for the next build status check.
+## What completed
 
-Production remains on the isolated ops/server-alert-readiness-20260906 branch
-while the home v6 campaign pins its source inputs. Recent production work
-added actual option/quote and exit guidance, taken-position tracking, exit
-alerts, and Robinhood live fee estimates. Its detailed current handoff is in
-/tmp/healys-server-alert-readiness/HANDOFF.md. Keep private holdings in server
-SQLite. Do not merge production source changes into the active home campaign.
+- Original `v6-local-20260906` built all 449 eligible symbols. Its monolithic
+  assembly was OOM-killed at 10:59 UTC; preserve that failed receipt and scope.
+- `v6-train-20260912` assembled all shards in 169.5 seconds: 4,281,562 retained
+  rows and 62,289,803 marks. It completed both separate objective comparisons.
+- That first continuation stalled at a 20 GiB soft memory throttle during
+  evaluation preparation. It was stopped, not relabeled as successful.
+  Initial implementation/source is preserved in commit `75af6cb`.
+- The memory fix (`7137da6`) prepares the actual first fold in 29 seconds,
+  with 15.21 GiB peak RSS and 8.26 GiB after releasing temporary data.
+  R2 copies byte-identical completed dataset/comparison outputs with verified
+  source/input compatibility and lineage. It does not repeat the raw build
+  or retune experiments after their held-out readout.
+- Latest full suite: 1,468 tests and 18 subtests passed. Tests include NN/GBT
+  reference parity, seed resume/corruption, stream joins/labels/marks, temporal
+  purge/folds, memory-bounded batching and completed-output reuse.
 
-## September 10 — independent coding continuation
+## Current runtime
 
-User authorized continuing FA/backup coding while the next-sale broker check
-remains pending. This supersedes the temporary sequencing pause recorded in
-the ops checkout. Actual accounting/recovery was last verified deployed at
-fef6542, 16:08 UTC, with 104 server acceptance tests and preserved positions;
-see /tmp/healys-server-alert-readiness/HANDOFF.md and its ops-branch records.
+Service: `healys-v6-training-20260912r2.service`, invocation
+`443b9020ac7f4eb9b9c5111823d7079e`. Two seed processes, two threads each, CPU
+quota 600%, affinity excluding two physical cores, nice 10, hard RAM cap
+24 GiB and swap cap 2 GiB. No 20 GiB soft throttle. GPU disabled; its driver
+was unavailable. Use the user systemd manager for live status; host PIDs may
+not be visible inside the command sandbox's process namespace.
 
-New FA/health automation is committed separately as cae40a2 on
-ops/fa-automation-20260910, checkout /tmp/healys-fa-automation. It uses corrected
-main FA semantics, not the production branch’s older FA code. Details and
-activation prerequisites are in that checkout’s HANDOFF.md and
-docs/reviews/2026-09-10-fa-automation.md. Implemented frozen prospective cohorts,
-publication-based forward tracking, collector/job receipts, health CLI/timer
-and a bounded backup-restore tool. Full suite 1,469 +18 subtests passed; final
-17 focused tests and systemd verification passed. Not deployed or installed.
+Paths relative to `nn_meta/campaigns/v6-train-20260912r2/v6/`:
 
-FA is fingerprinted by the active home campaign: do not merge these runtime
-changes into main during the build/evaluation/training campaign. Only this
-documentation pointer was added to main. Build state was not rechecked here.
-Next-sale broker verification remains pending independently; no need to block
-further isolated coding on that sale.
+- `continuation_scope.json`: current source/runtime and consumed-input hashes.
+- `runs/training-service.log`: top-level stage transitions.
+- `runs/continuation/latest.json`, `evaluate.log`: active stage and fold log.
+- `runs/seed-jobs/*/nn-s*/worker.log`, `complete.json`: worker/checkpoint evidence.
+- `reports/objective-comparisons/{plan,results}.json`: copied completed research.
+- `model_final.staging/`: eventual final seeds; retained on gate rejection.
 
-## September 10 — FA schedules activated
+Restart command (same settings/source required):
 
-User authorized archive inputs, daily-price source and activation. Durable
-runtime is `/home/healy/Coding/HealysAutomation`, on isolated FA source
-`82e63a6` from `ops/fa-automation-20260910`. Its HANDOFF.md and
-`docs/reviews/2026-09-10-fa-activation.md` contain the operational record.
-Seven user timers are enabled: archive sync, StockTwits collection/push,
-Alpaca SIP daily prices, monthly freeze, daily tracking, weekly backup and
-hourly health. First archive/StockTwits/prices/tracker service runs passed;
-archive and StockTwits also fired automatically. All 120 price symbols
-validated through September 9. First monthly freeze is October 1 UTC
-(September 30, 8:15 p.m. Chicago); no historical cohort was manufactured.
+```bash
+./venv/bin/python -m scripts.continue_v6_training --parent v6-local-20260906 --campaign v6-train-20260912r2 --reuse-completed v6-train-20260912 --workers 2 --threads 2 --run
+```
 
-As of 18:39 UTC, the initial 7.2 GB packed v5 backup upload remains in progress.
-An existing SPY backup object passed a SHA-256 restore test, but the new full
-snapshot is not yet verified. Its job automatically restores a shard before
-publishing a completion manifest. A dependent one-time health check is queued
-as `healys-fa-activation-check.service`; read the durable runtime's
-`logs/job-health/{cache-backup,backup-restore,fa-activation-check}` receipts
-before reporting full completion. No additional manual activation is required.
-Backup covers existing v3/data, v5 cache and runtime FA/inputs, not the corrected
-campaign data_candidates. Runtime source remains isolated from this pinned
-main checkout. Focused activation/automation tests: 22 passed.
+Run under a bounded background service. The launcher prevents duplicate owners,
+checks bindings between stages and verifies completed seed/stage hashes.
+Do not edit fingerprinted source or merge isolated FA/production changes while
+this campaign runs. New code/input changes need an explicit new continuation.
 
+## Results and outstanding work
 
-## September 10 — FA enrichment steps 1–4
+Event balancing was mixed: held-out AUC 0.60438 versus baseline 0.60564;
+log loss 0.65267 versus 0.65283. Keep the baseline objective. Downside Q10
+pinball loss was 0.06757 versus constant baseline 0.08783, with 11.09% of
+outcomes below the predicted 10th percentile. These are research metrics,
+not a portfolio gate or established trading improvement.
 
-Implemented/deployed on isolated `ops/fa-automation-20260910` through runtime
-source `94ba6b2`; main source remains pinned. Durable runtime and detailed
-handoff: `/home/healy/Coding/HealysAutomation`, especially
-`docs/reviews/2026-09-10-fa-enrichment.md`. Four new timers enabled: hourly
-Alpaca/Massive news, daily fundamentals, daily immutable features, weekly
-purged baseline/FA comparison. All first jobs and aggregate health passed
-September 11 03:45 UTC (September 10 Chicago).
+Actual conditional folds, validation start / test start / test end (2026):
+January 5 / March 4 / May 4; March 3 / May 5 / June 30; May 4 / July 1 /
+August 24. Exit-time purge and one-day embargo remain. Original default fold
+selection would exclude two of its three folds. Expanded TradingView parity
+is still deferred; feature contract remains unverified and research-only.
 
-First snapshot: 300 symbols, 3,800 deduplicated news stories, sentiment for 215,
-financials 232, short interest 300, short volume 300, float 228; technical baseline
-prices/features remain 120. Snapshot `fa/artifacts/enrichment/20260911T034526761094Z`
-and report `fa/artifacts/enrichment_reports/20260911T034528646388Z.json` in the
-durable runtime. Report honestly awaits forward outcomes (zero labels); 40
-training +10 test sessions cannot accumulate by this month-end. Experimental
-features do not change live thresholds, official ranking or promotion rules.
-Full suite 1,498 tests +18 subtests passed; final 29 focused tests passed after
-provider corrections. HTTP 429 backoff, bulk coverage and stable pagination fixed.
+Next: monitor worker completion/resources; inspect walk-forward and final gate
+results; update EXPERIMENTS with a real verdict. Ranking, learned contract/exit
+selection, richer overlap weighting, GPU/larger concurrency, calibration,
+abstention and mature prospective FA have prerequisites in the review.
 
-The earlier packed backup pending status is superseded: full backup/restore
-succeeded September 10 20:06:44 UTC, dependent activation health 20:06:46 UTC.
+Details: [training review](docs/reviews/2026-09-12-v6-training.md),
+[experiment scoreboard](docs/EXPERIMENTS.md), and TODO section 4.
+The previous full handoff is archived at
+`handoff-history/HANDOFF-2026-09-12-before-training-continuation.md`.
 
-## September 11 — Firebase dashboard coded; cloud setup pending
+## Other work remains separate
 
-User chose Firebase Spark for the private desktop/iPhone dashboard. Source is
-isolated on `ops/firebase-dashboard-20260911`, durable development worktree
-`/home/healy/Coding/HealyLabsDashboard`. Runbook: `dashboard/README.md` there.
-Overview, Signals, Positions, Research and FA pages implemented with read-only
-server/home adapters. Actual captured inputs validated. Firebase verified-UID
-access, client-write denial and access revocation tested in local emulators.
-Capacitor iOS project generated/synced; Mac/Xcode signing and device acceptance
-remain. Main campaign source and production scanners were not modified.
-
-Validation: 21 focused tests across frontend, Python adapters/accounting,
-Firestore rules, login/revocation and desktop/phone-sized browser checks; Vite
-production build, bundle privacy check and publisher unit verification passed.
-No cloud deployment, project creation, billing activation, publisher schedules,
-APNs/push or notifications. Await Firebase project ID/public config, owner
-email/UID, and publisher credentials. User was asked for project/access details;
-no answer arrived during implementation. Cloud setup guide and exact next steps
-are in the dashboard worktree's README and HANDOFF.md.
-
-## Firebase deployment follow-up
-
-Dashboard is live at https://stonks-22367.web.app (stonks-22367). Private rules
-and home/server minute publishers deployed; first publications and anonymous
-read-denial verified. Billing remains disabled. Firebase Authentication console
-initialization/user creation is still pending; then allowlist the actual UID and
-verify owner sign-in. Full current state: `/home/healy/Coding/HealyLabsDashboard/HANDOFF.md`.
-
-Firebase owner follow-up: Authentication is initialized and the actual owner
-UID is allowlisted. Email verification and signed-in owner acceptance remain;
-user was directed to the dashboard verification button. Live source documents
-validated at September 11 19:18 UTC; anonymous reads remain denied.
-
-## Taken contract correction — September 11
-
-Deployed 2cf23a9 on production ops branch: `/taken` supports quantity/date/strike
-overrides, and can correct an unfilled Taken-button placeholder. 102 focused
-tests passed locally and on server. User must resend `/taken 00EA905144FB 1
-9/16 72C @ 1.03` as one standalone message; initial TQQQ 71C placeholder remains
-until then. Confirm subsequent real record before claiming the 72C is tracked.
-Details: `/tmp/healys-server-alert-readiness/docs/reviews/2026-09-11-taken-contract-shorthand.md`.
+Production ops: `/tmp/healys-server-alert-readiness`; FA runtime:
+`/home/healy/Coding/HealysAutomation`; Firebase dashboard:
+`/home/healy/Coding/HealyLabsDashboard`. Dashboard login was confirmed by the
+user, and the standalone iOS branch still needs Mac/Xcode device acceptance.
+The taken-contract parser fix was previously deployed; actual broker sale
+verification remains pending. These systems were not revalidated here.
+Older dashboard/watchers still reference their previous campaign receipts;
+new training progress is in the paths above. No new notifications were sent.
+Preexisting untracked `nn_meta/artifacts_v6/` is untouched and must not be added.

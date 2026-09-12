@@ -6,6 +6,33 @@ edge and a lottery ticket. Full detail lives in each row's report path.
 When the expert panel goes live, the second table tracks realized (paper)
 per-expert performance.
 
+## 2026-09-12 — V6 objective comparisons: research metrics, no portfolio verdict
+
+`v6-train-20260912`, reused byte-identically by `v6-train-20260912r2`.
+Corrected expanded/unverified contract, immutable dataset hash
+`dcf0003dafb8ac200af982cd342a838ea9b1d4ffa3da6405c84de19561a249e3`.
+Predeclared temporal split: 1,965,006 training, 430,721 validation and 613,222
+test rows, exit-time purge and one-day embargo. Test is April 6–August 24,
+2026; it was not used to select hyperparameters. Correlated proposal rows
+are not independent observations.
+
+| Excess-label classifier | Test AUC | Test log loss | Test Brier |
+|---|---:|---:|---:|
+| Existing unweighted GBT | 0.60564 | 0.65283 | 0.230414 |
+| Equal total training weight per simultaneous event | 0.60438 | 0.65267 | 0.230388 |
+
+Event balancing is mixed: slightly better probability errors, slightly lower
+AUC. Keep the main objective pending portfolio evidence. The separate Q10
+return model achieved test pinball loss 0.06757 versus 0.08783 for a constant
+training-quantile prediction; empirical outcomes below prediction were 11.09%
+against the nominal 10%. This is useful downside-model evidence, not an
+established portfolio improvement, calibrated risk guarantee or promotion.
+
+Artifacts: `nn_meta/campaigns/v6-train-20260912r2/v6/reports/objective-comparisons/`;
+`plan.json` and `results.json` bind settings/model/data hashes. Main baseline
+walk-forward and full-ensemble gates are still pending. See the
+[training review](reviews/2026-09-12-v6-training.md).
+
 ## 2026-09-05 — LIVE PANEL WAS INTRADAY-BLIND since launch (stale day-keyed bar cache) — FIXED
 
 Found while designing the streamed-feed path. `data/vbt_data_loader.

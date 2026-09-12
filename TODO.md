@@ -21,7 +21,12 @@ the request inventory and tick captures resumed after the user's reboot on
 September 6 at 17:04 UTC. Active PIDs/logs and durable checkpoints are in
 HANDOFF.md. All 453 tick stores and freeze shards are verified; the merged baseline has
 449 eligible symbols and four skips. Build+assembly launched September 9 with
-a four-worker target; evaluation/final training remain unlaunched.
+a four-worker target. All 449 eligible symbol builds completed; monolithic
+assembly was OOM-killed September 12. Separately pinned continuation
+`v6-train-20260912` completed assembly and objective comparisons. Replacement
+`v6-train-20260912r2` reuses those verified outputs and is evaluating with
+bounded memory and final training queued. See the
+[training review](docs/reviews/2026-09-12-v6-training.md).
 The existing-family SPY/IBKR pilot is now stopped and preserved. Do not launch a full
 universe freeze while those additions are still missing; complete their
 historical coverage and feature integration first. External comparison is
@@ -200,8 +205,19 @@ workload, VM-hour budget and explicit job IDs.
 - [x] At roughly 227/453 completed v6 freeze shards, prepare build/evaluation/
   training launchers; keep heavy downstream stages unlaunched until freeze
   completes. User is dedicating the home box to this work for the next week.
-- [ ] Build matching per-symbol/family rows, complete marks and provenance;
+- [x] Build matching per-symbol/family rows, complete marks and provenance;
   assemble with PIT membership and verify coverage/fingerprints.
+- [x] Add streamed assembly, vectorized mark checks, reusable prepared arrays,
+  bounded seed processes, resumable final seeds and bounded ensemble scoring.
+- [x] Add separate event-balanced classifier and downside-quantile experiments
+  using existing labels, purged temporal evaluation and no auto-promotion.
+- [x] Configure three post-freeze conditional folds without weakening the
+  generator-horizon, exit-time purge or embargo checks.
+- [ ] Inspect continuation comparisons, walk-forward results and final gates
+  before drawing conclusions or deploying anything.
+- [ ] Benchmark larger worker counts/GPU; evaluate ranking, learned contract
+  selection/exits, broader event weighting, calibration/abstention and mature
+  prospective FA. Dependencies are in the training review.
 - [ ] Check deterministic reproduction with fixed seeds and exact inputs.
 - [ ] Evaluate candidate and baseline on the same corrected cash/cost ledger:
   every roll fill, entry-bar loss, mark reconciliation and costs.

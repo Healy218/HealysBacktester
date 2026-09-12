@@ -831,3 +831,30 @@ ROADMAP and TODOs. Reassess after one week actually running v6 and completing
 more TODOs; no immediate broad reprioritization or rewrite is authorized by
 this goal alone. Scores require evidence, and durable trading edge remains
 unproven until supported. The week starts with operational v6, not its build.
+
+## 2026-09-12 — Derived-artifact training continuation and objective comparisons
+
+User authorized practical training parallelization/vectorization, recommendations
+using existing data, later-work notes and launch. Parent `v6-local-20260906`
+completed all 449 eligible symbol builds; assembly was OOM-killed. Preserve its
+pinned scope and failed receipt. New `v6-train-20260912` explicitly consumes
+copied/hash-verified derived shards and parent-matching assembly inputs under
+current source/runtime. It does not claim raw archives were reread or the
+freeze repeated.
+
+Use streamed assembly, two bounded seed processes, shared prepared arrays,
+verified resume and sequential member inference. Keep baseline objectives,
+seed counts and gates. Add event-balanced classification and downside-quantile
+regression as separate research comparisons. Use explicit post-freeze folds
+because the old schedule conflicts with generator provenance after dataset
+gaps; results remain conditional. Details, tests, limits and later dependencies:
+[training review](reviews/2026-09-12-v6-training.md).
+
+The first continuation completed assembly/comparisons, then memory-high
+throttling stalled evaluator preparation. Preserve that attempt/source.
+Replacement `v6-train-20260912r2` imports verified completed outputs, uses
+bounded-batch preparation and releases unused copies before workers start.
+Real first-fold preparation: 29 seconds, 15.21 GiB peak RSS, 8.26 GiB after
+release. Keep the 24 GiB hard cap; remove the overly restrictive 20 GiB soft
+throttle. Latest suite: 1,468 +18 subtests passed. No objective retuning after
+the comparison's held-out readout, and no change to promotion requirements.
