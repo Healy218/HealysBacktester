@@ -208,13 +208,16 @@ def validate_mark_stream(marks: pd.DataFrame) -> pd.DataFrame:
     return out.sort_values(["trade_id", "mark_ts"]).reset_index(drop=True)
 
 
-def load_mark_stream(path: str | Path) -> pd.DataFrame:
+def load_mark_stream(path: str | Path, *, trade_ids=None) -> pd.DataFrame:
     """Read and validate a persisted mark stream.
 
     ``trade_id`` is read back dictionary-encoded rather than as loose strings,
     which is what keeps a full-stream load off the ~9 GB path.
     """
-    table = pq.read_table(path, read_dictionary=["trade_id"])
+    # Restrict by identity, never timestamp: a selected trade keeps its entire
+    # path, including terminal marks outside an entry-date filter.
+    filters = None if trade_ids is None else [("trade_id", "in", list(set(trade_ids)))]
+    table = pq.read_table(path, read_dictionary=["trade_id"], filters=filters)
     if not set(COST_COLUMNS).issubset(table.column_names):
         raise AccountingDataError("legacy mark stream lacks fill-event provenance; rebuild dataset and marks")
     return validate_mark_stream(table.to_pandas())

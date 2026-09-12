@@ -52,7 +52,7 @@ import joblib
 import numpy as np
 import pandas as pd
 
-from nn_meta import config
+from nn_meta import config, training_jobs
 from nn_meta.baseline import load_spec
 from nn_meta.build_meta_dataset import V4_META_FEATURES
 from nn_meta.mark_stream import load_mark_stream, option_b_blockers
@@ -276,13 +276,12 @@ def main() -> None:
         if blockers:
             raise SystemExit("cannot run mark-to-market selection (Option B):\n  - "
                              + "\n  - ".join(blockers))
-    mark_stream = load_mark_stream(args.marks) if args.marks else None
     split = _final_split(ds, args.val_fraction, args.embargo)
     baseline_end = pd.Timestamp(spec["train_window"][1]).normalize()
     if pd.to_datetime(ds.loc[split == "val", "entry_ts"]).min().normalize() <= baseline_end:
         raise ValueError("final validation overlaps frozen baseline training; "
                          "use a later validation tail or refreeze on earlier data")
-    d = ds.copy()
+    d = ds.copy(deep=False)
     d["split"] = split
     features = V4_META_FEATURES
     print(f"split sizes: {split.value_counts().to_dict()}", flush=True)
@@ -291,6 +290,9 @@ def main() -> None:
     val_rows = all_rows(d, "val").reset_index(drop=True)
     if train.empty or val_rows.empty:
         raise SystemExit("empty train or val partition — check --val-fraction/--embargo")
+    from nn_meta.mark_stream import stable_trade_id
+    mark_stream = ((load_mark_stream(args.marks, trade_ids=stable_trade_id(val_rows))
+        if training_jobs.enabled() else load_mark_stream(args.marks)) if args.marks else None)
 
     # ── 1) pick the winning family/mode/threshold on validation (cheap seeds) ──
     print(f"\n=== selecting config (seeds={select_seeds}) ===", flush=True)
@@ -298,7 +300,12 @@ def main() -> None:
     cheap_preds: dict[str, tuple[np.ndarray, np.ndarray | None]] = {}
     for family in models:
         t0 = time.time()
-        if family == "nn":
+        if training_jobs.enabled():
+            predictor = training_jobs.fit_family(family, train, d[d["split"] == "val"],
+                features=features, label=args.label, seeds=select_seeds,
+                epochs=args.epochs, gbt_estimators=args.gbt_estimators)
+            pred, ev = predictor.predict(val_rows), predictor.predict_ev(val_rows)
+        elif family == "nn":
             predictor = fit_nn(train, d[d["split"] == "val"], features=features,
                               label=args.label, seed=select_seeds[0], epochs=args.epochs)
             members_ = [predictor] + [
@@ -336,15 +343,26 @@ def main() -> None:
     # trained, gate-checked, and atomically swapped in — a crash or a gate
     # failure never destroys a previously-validated deployable model.
     staging = FINAL_DIR.with_name(FINAL_DIR.name + ".staging")
-    if staging.exists():
+    if staging.exists() and not training_jobs.enabled():
         shutil.rmtree(staging)
-    staging.mkdir(parents=True)
+    staging.mkdir(parents=True, exist_ok=training_jobs.enabled())
 
     print(f"\n=== training final {family} ensemble, {len(final_seeds)} seeds "
           f"(-> {staging.name}) ===", flush=True)
     run_ids, members, artifact_files = [], [], []
     val_split_df = d[d["split"] == "val"]
-    for seed in final_seeds:
+    if training_jobs.enabled():
+        prepared = training_jobs.prepare(train, val_split_df, features, args.label)
+        lab_tag = "win" if args.label == "label" else "xs"
+        paths = training_jobs.run_seeds(prepared, family, final_seeds,
+            epochs=args.epochs, estimators=args.gbt_estimators, out=staging,
+            run_prefix=f"v4-{family}-{lab_tag}")
+        for path in paths:
+            run_ids.append(path.name)
+            receipt = json.loads((path/'complete.json').read_text())
+            artifact_files += [path/n for n in receipt['hashes']]
+            members.append({'disk_path': str(path), 'magnitude': True})
+    for seed in ([] if training_jobs.enabled() else final_seeds):
         t0 = time.time()
         lab_tag = "win" if args.label == "label" else "xs"
         run_id = f"v4-{family}-{lab_tag}-s{seed}"
@@ -389,7 +407,8 @@ def main() -> None:
     print(format_candidate_grid(final_policy, final_policy.get("baseline_return")),
           flush=True)
     if not final_policy["eligible"]:
-        shutil.rmtree(staging)
+        if not training_jobs.enabled():
+            shutil.rmtree(staging)
         print("\nNO ELIGIBLE CONFIG — the full ensemble did not clear the gate "
               "(kept >= {}, beat baseline [gate={}], maxDD <= {:.0%}; modes tried: filter, rank{}). "
               "Nothing persisted; any existing {} is untouched.".format(

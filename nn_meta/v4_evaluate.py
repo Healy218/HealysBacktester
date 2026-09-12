@@ -223,6 +223,10 @@ def fit_family(family: str, train: pd.DataFrame, val: pd.DataFrame, *,
                features: list[str], label: str, seeds: Iterable[int],
                epochs: int, gbt_estimators: int) -> Predictor:
     """Return a fold-local predictor; NN seeds are averaged before policy selection."""
+    from nn_meta import training_jobs
+    if training_jobs.enabled():
+        return training_jobs.fit_family(family, train, val, features=features,
+            label=label, seeds=seeds, epochs=epochs, gbt_estimators=gbt_estimators)
     if family == "gbt":
         return fit_gbt(train, val, features=features, label=label,
                        n_estimators=gbt_estimators)
@@ -713,7 +717,7 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
         raise ValueError("validation/OOS overlaps frozen baseline optimization; "
                          "use a post-freeze window or rebuild fold-local proposals")
     require_current_dataset(ds, spec)
-    ds = ds.copy()
+    ds = ds.copy(deep=False)
     split = assign_purged_splits(
         ds, train_start=window.train_start, val_start=window.val_start,
         test_start=window.test_start, test_end=window.test_end, embargo=embargo,
@@ -727,6 +731,11 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
     val_rows, test_rows = _rows_for_split(ds, "val"), _rows_for_split(ds, "test")
     if train.empty or val_rows.empty or test_rows.empty:
         raise ValueError("purging left an empty train, validation, or test partition")
+
+    if isinstance(mark_stream, (str, Path)):
+        from nn_meta.mark_stream import stable_trade_id
+        ids = pd.concat([stable_trade_id(val_rows), stable_trade_id(test_rows)])
+        mark_stream = load_mark_stream(mark_stream, trade_ids=ids)
 
     fitted: dict[str, Predictor] = {}
     selected: list[dict] = []
@@ -934,6 +943,8 @@ def main() -> None:
     ap.add_argument("--gbt-estimators", type=int, default=600)
     ap.add_argument("--embargo", default="1D")
     ap.add_argument("--folds", type=int, default=0, help="expanding nested folds")
+    ap.add_argument("--post-freeze-folds", action="store_true",
+                    help="place all validation after frozen proposal optimization; 40-session validation tails")
     ap.add_argument("--thresholds", default=None,
                     help="comma-separated P(win) cuts for filter/rank modes "
                          "(default config.KEEP_THRESHOLDS); e.g. 0.45,0.5,0.55,0.6")
@@ -949,7 +960,7 @@ def main() -> None:
                     help="optional portable zip of manifest, baseline spec, and reports")
     ap.add_argument("--smoke", action="store_true")
     args = ap.parse_args()
-    if args.folds and args.ablation:
+    if (args.folds or args.post_freeze_folds) and args.ablation:
         raise SystemExit("choose either --folds or --ablation")
     if args.smoke:
         args.seeds, args.epochs, args.gbt_estimators = "0", 5, 50
@@ -966,7 +977,8 @@ def main() -> None:
         if blockers:
             raise SystemExit("cannot run mark-to-market accounting (Option B):\n  - "
                              + "\n  - ".join(blockers))
-    mark_stream = load_mark_stream(args.marks) if args.marks else None
+    from nn_meta.training_jobs import enabled
+    mark_stream = (args.marks if enabled() else load_mark_stream(args.marks)) if args.marks else None
     models = [m.strip() for m in args.models.split(",") if m.strip()]
     seeds = [int(seed) for seed in args.seeds.split(",") if seed.strip()]
     thresholds = ([float(t) for t in args.thresholds.split(",") if t.strip()]
@@ -994,6 +1006,10 @@ def main() -> None:
         if not isinstance(spec.get("train_window"), (list, tuple)) or len(spec["train_window"]) != 2:
             raise SystemExit("baseline lacks training-window provenance; refreeze it")
         frozen_until = pd.Timestamp(spec["train_window"][1]).normalize()
+        if args.post_freeze_folds:
+            from nn_meta.temporal_validation import post_freeze_folds
+            folds = post_freeze_folds(ds['entry_ts'], frozen_until=frozen_until,
+                                     n_folds=args.folds or 3)
         excluded = [w for w in folds if w.val_start <= frozen_until]
         folds = [w for w in folds if w.val_start > frozen_until]
         if excluded:
@@ -1021,6 +1037,7 @@ def main() -> None:
         mark_stream_path=args.marks,
         evaluation_config={"gate_bar": config.GATE_BAR, "costs": "base",
                            "embargo": args.embargo, "label": args.label,
+                           "post_freeze_folds": args.post_freeze_folds,
                            "thresholds": thresholds, "models": models, "seeds": seeds},
     )
     write_manifest(manifest, manifest_path)

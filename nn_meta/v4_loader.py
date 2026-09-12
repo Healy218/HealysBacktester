@@ -51,6 +51,9 @@ def ensemble_score(family: str, members: list[dict], rows: pd.DataFrame,
     """
     if not members:
         raise ValueError("cannot score with an empty ensemble")
+    if all('disk_path' in m for m in members):
+        from nn_meta.training_jobs import disk_predict
+        return disk_predict(family, [m['disk_path'] for m in members], rows, features)
     if family == "nn":
         preds = [m["model"].predict(_matrix(rows, features, m["mean"], m["std"]),
                                     batch_size=4096, verbose=0).flatten()
@@ -70,6 +73,9 @@ def ensemble_ev(family: str, members: list[dict], rows: pd.DataFrame,
         raise ValueError("cannot score with an empty ensemble")
     if any(m.get("magnitude") is None for m in members):
         raise ValueError("ensemble member lacks a magnitude head")
+    if all('disk_path' in m for m in members):
+        from nn_meta.training_jobs import disk_predict
+        return disk_predict(family, [m['disk_path'] for m in members], rows, features, magnitude=True)
     if family == "nn":
         preds = [m["magnitude"].predict(_matrix(rows, features, m["mean"], m["std"]),
                                         batch_size=4096, verbose=0).flatten()

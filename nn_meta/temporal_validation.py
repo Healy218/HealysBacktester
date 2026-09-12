@@ -100,7 +100,7 @@ def expanding_folds(entry_timestamps: pd.Series, *, n_folds: int = 3,
 
 def split_summary(rows: pd.DataFrame, split: pd.Series) -> pd.DataFrame:
     """Small audit table retained with every v4 experiment artifact."""
-    data = rows.assign(split=split)
+    data = rows[['entry_ts', 'exit_ts']].assign(split=split)
     return data.groupby("split", dropna=False).agg(
         rows=("split", "size"),
         first_entry=("entry_ts", "min"),
@@ -108,3 +108,22 @@ def split_summary(rows: pd.DataFrame, split: pd.Series) -> pd.DataFrame:
         first_exit=("exit_ts", "min"),
         last_exit=("exit_ts", "max"),
     ).reset_index()
+
+
+def post_freeze_folds(entry_timestamps, *, frozen_until, n_folds=3, validation_days=40):
+    """Predeclared expanding folds with all validation strictly after freeze.
+
+    Reserve the first 40 observed post-freeze sessions for validation, then
+    partition the remaining sessions into disjoint tests. Each later fold
+    expands training and uses the preceding 40 sessions for validation.
+    Exit-time purge and embargo are still applied by the evaluator.
+    """
+    if n_folds < 1 or validation_days < 1:
+        raise ValueError('Positive fold and validation lengths required')
+    days = pd.DatetimeIndex(pd.to_datetime(entry_timestamps)).normalize().unique().sort_values()
+    after = days[days > _date(frozen_until)]
+    if len(after) < validation_days + n_folds * 20:
+        raise ValueError('Need at least 20 observed test sessions per post-freeze fold')
+    tests = np.array_split(np.arange(validation_days, len(after)), n_folds)
+    return [FoldWindow(days[0], after[int(t[0])-validation_days], after[int(t[0])], after[int(t[-1])])
+            for t in tests]

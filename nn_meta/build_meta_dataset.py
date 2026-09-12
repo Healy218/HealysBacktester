@@ -234,10 +234,12 @@ def _marks_cover(rows, marks):
         return False
     if {"fill_entry_ts", "fill_exit_ts"} <= set(executed.columns):
         bounds = normalized.groupby("trade_id", observed=True)["mark_ts"].agg(["min", "max"])
-        for tid, row in zip(ids, executed.itertuples()):
-            if bounds.loc[tid, "min"] != pd.Timestamp(row.fill_entry_ts) \
-                    or bounds.loc[tid, "max"] != pd.Timestamp(row.fill_exit_ts):
-                return False
+        aligned = bounds.reindex(ids)
+        starts = pd.to_datetime(executed['fill_entry_ts']).to_numpy()
+        ends = pd.to_datetime(executed['fill_exit_ts']).to_numpy()
+        if not ((aligned['min'].to_numpy() == starts).all() and
+                (aligned['max'].to_numpy() == ends).all()):
+            return False
     return True
 
 
@@ -458,7 +460,7 @@ def rolling_beta_60d() -> pd.DataFrame:
     return out
 
 
-def add_context_features(ds: pd.DataFrame, surface: pd.DataFrame) -> pd.DataFrame:
+def add_context_features(ds: pd.DataFrame, surface: pd.DataFrame, *, beta=None) -> pd.DataFrame:
     """market_iv (SPY ATM IV as-of prev close), rv_iv_spread, beta_60d,
     strategy + sector one-hots. Runs AFTER join_surface_asof."""
     ds = ds.sort_values("entry_date").reset_index(drop=True)
@@ -470,7 +472,8 @@ def add_context_features(ds: pd.DataFrame, surface: pd.DataFrame) -> pd.DataFram
 
     ds["rv_iv_spread"] = ds["rvol_21"] - ds["atm_iv_near"]
 
-    beta = rolling_beta_60d().sort_values("date")
+    if beta is None:
+        beta = rolling_beta_60d().sort_values("date")
     parts = []
     for sym, grp in ds.groupby("symbol"):
         b = beta[beta["underlying"] == sym].drop(columns=["underlying"])
@@ -618,6 +621,10 @@ def assemble(rows_dir=ROWS_DIR, marks_dir=MARKS_DIR,
     When per-symbol mark shards exist they are concatenated into the sidecar
     beside the dataset, filtered to the rows that survived the split purge.
     """
+    import os
+    if os.environ.get("NN_META_STREAM_ASSEMBLY") == "1":
+        from nn_meta.stream_assembly import assemble_streaming
+        return assemble_streaming(rows_dir, marks_dir, membership=membership)
     parts = sorted(rows_dir.glob("*.parquet"))
     if not parts:
         raise SystemExit(f"no per-symbol rows in {rows_dir} — build first")
