@@ -6,6 +6,7 @@ import training code, load weights, or read the multi-GB parent campaign scope.
 from datetime import datetime, timezone
 import hashlib
 import json
+import math
 from pathlib import Path
 import re
 
@@ -329,6 +330,20 @@ def live(root, campaign):
                                      sha256=hashlib.sha256(log.encode()).hexdigest(), excerpt=True,
                                      content='## Final ensemble gate log\n\n```text\n' + log.split('=== re-validating', 1)[1][-18000:] + '\n```'))
     source(root, 'docs/reviews/2026-09-12-v6-training.md', r)
+    nn_receipts = list((base / 'runs/seed-jobs').glob('*/nn-s*/complete.json'))
+    failed_nn = sum(not isinstance(loss := obj(path).get('val_loss'), (int, float))
+                    or isinstance(loss, bool) or not math.isfinite(loss) for path in nn_receipts)
+    if failed_nn:
+        warning = (f'Training health: {failed_nn} of {len(nn_receipts)} completed neural runs have missing or non-finite validation loss. '
+                   'The neural-versus-GBT comparison is invalid; zero neural trades are not evidence of a healthy model losing. '
+                   'Scanner promotion needs review despite the recorded GBT gate pass.')
+        r['notes'].insert(0, warning)
+        r['summary'] += ' Neural training health failed; review the caveat below before interpreting family selection.'
+        if state == 'complete':
+            r['status'] = 'Complete · review required'
+    review = root / 'docs/reviews/2026-09-12-v6-deployment-review.md'
+    if campaign == 'v6-train-20260912r2' and review.exists():
+        source(root, str(review.relative_to(root)), r)
     return r, dict(status=r['status'], stage=latest.get('stage', 'complete'), activity=activity,
                    activeWorkers=active.count('nn_meta.training_jobs'), completedFinalSeeds=len(finals), totalFinalSeeds=len(training['final_seeds']),
                    totalSymbols=len(scope['symbols']), selectionSeedJobs=len(list((base / 'runs/seed-jobs').glob('*/*/complete.json'))),

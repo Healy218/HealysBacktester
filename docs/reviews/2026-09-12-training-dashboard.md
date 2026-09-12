@@ -1,5 +1,14 @@
 # Training library — September 12, 2026
 
+Post-completion review correction: the v6 NN comparison failed numerically.
+The publisher checks NN completion losses and surfaces a warning for missing
+or non-finite values; completed campaigns with such failures show `Complete ·
+review required`, while original GBT gate receipts remain visible. The current
+campaign's deployment review is also included as a private source/download.
+Validation: 16 publisher tests with invalid/finite loss cases; revised real
+payload has 20/20 failed NN losses; desktop and phone warning/source rendering
+and existing download paths passed, with no overflow or runtime errors.
+
 The private Firebase dashboard now has a Training page with Compare, V2, V3,
 V3.1, V4, V5 and V6 views. Each version includes its summary, individual
 out-of-sample folds, available validation/calibration diagnostics, source

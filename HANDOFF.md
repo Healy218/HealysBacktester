@@ -5,6 +5,16 @@ The private app is https://stonks-22367.web.app (project stonks-22367, Spark).
 The user requested all historical training summaries plus the completed v6
 summary on the dashboard only, without Telegram delivery.
 
+The completed v6 review found all 20 NN seed jobs have NaN validation loss.
+Publisher now checks NN completion losses, adds a prominent family-comparison
+warning, and labels operational completion `Complete · review required`.
+It also includes the campaign-specific deployment review from the primary
+checkout when available. GBT gate receipts stay intact; scanner promotion is
+on hold for training health, realistic execution and missing live inputs.
+Verified: 16 publisher tests including NaN/missing/infinite/bool loss handling;
+desktop/phone revised-payload rendering, sources and downloads. No frontend
+asset or schema change; existing timer publishes the corrected private data.
+
 Training has Compare and individual V2, V3, V3.1, V4, V5 and V6 views. Original
 source text, hashes, explanatory notes, fold tables, diagnostics and Markdown
 downloads are private home-payload data; no reports enter the public bundle.

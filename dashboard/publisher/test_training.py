@@ -126,6 +126,19 @@ def test_completed_report_includes_final_validation_without_claiming_deployment(
     assert 'has not been deployed' in r['summary']
     assert any(t['title'] == 'Final ensemble · validation tail' for t in r['tables'])
     assert status['evidence']['final_model_manifest']
+    write(base / 'runs/seed-jobs/fold/nn-s0/complete.json', {'val_loss': float('nan')})
+    write(base / 'runs/seed-jobs/fold/nn-s1/complete.json', {'val_loss': .4})
+    r, status = training.live(tmp_path, 'current')
+    assert r['status'] == status['status'] == 'Complete · review required'
+    assert '1 of 2 completed neural runs' in r['notes'][0]
+    assert 'comparison is invalid' in r['notes'][0]
+    assert status['evidence']['final_model_manifest']
+    # Missing/invalid losses are also failures, while finite zero remains valid.
+    for value in (None, float('inf'), 'NaN', True):
+        write(base / 'runs/seed-jobs/fold/nn-s0/complete.json', {'val_loss': value})
+        assert '1 of 2' in training.live(tmp_path, 'current')[0]['notes'][0]
+    write(base / 'runs/seed-jobs/fold/nn-s0/complete.json', {'val_loss': 0.0})
+    assert training.live(tmp_path, 'current')[0]['status'] == 'Complete · research only'
     config['eligible'] = False
     bind(tmp_path, base, 'finalize', {'model_final/ensemble_config.json': config, 'model_final/manifest.json': {}})
     with pytest.raises(ValueError, match='eligibility mismatch'):
