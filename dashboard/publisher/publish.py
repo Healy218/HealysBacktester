@@ -38,7 +38,8 @@ def main():
         fcntl.flock(lock,fcntl.LOCK_EX|fcntl.LOCK_NB)
         last=a.state/f'{a.source}.json'
         if last.exists() and time.time()-json.loads(last.read_text()).get('publishedEpoch',0)<55:raise RuntimeError('Publish rate limited: wait at least 55 seconds')
-        payload=collect_server(a.root) if a.source=='server' else collect_home(a.root,a.progress)
+        payload=collect_server(a.root) if a.source=='server' else collect_home(a.root,a.progress,
+            training_root=os.environ.get('TRAINING_ROOT'),training_campaign=os.environ.get('TRAINING_CAMPAIGN'))
         envelope(payload)
         if not a.publish:print(json.dumps({'mode':'dry-run','source':a.source,'issues':payload['issues']}));return
         publish(a.project,payload)

@@ -122,7 +122,7 @@ def collect_server(root,now=None):
     except sqlite3.Error:issues.append('Alert database unavailable')
     return out
 
-def collect_home(root,progress=None,now=None):
+def collect_home(root,progress=None,now=None,*,training_root=None,training_campaign=None):
     root=Path(root);now=now or datetime.now(UTC);issues=[]
     out=dict(schemaVersion=1,source='home',observedAt=now.isoformat(),jobs=[],fa=dict(cutoff=None,symbols=None,uniqueNews=None,coverage={},rows=[],evaluationStatus='unavailable',labeledRows=None),research=None,issues=issues)
     for path in sorted((root/'logs/job-health').glob('*/latest.json'))[:100]:
@@ -149,6 +149,17 @@ def collect_home(root,progress=None,now=None):
         try:
             p=read_json(progress);out['research']=dict(campaign=p['campaign'],observedAt=iso(p['time_utc']),counts={k:v for k,v in p['counts'].items() if finite(v) is not None},totalSymbols=finite(p['total_symbols']),stages=sorted({x['stage'] for x in p['processes']}),evidence=p['evidence_present'])
         except (OSError,ValueError,KeyError):issues.append('Configured campaign receipt unavailable')
+    if training_root and training_campaign:
+        from training import collect_training
+        out['training']=collect_training(training_root,training_campaign,now)
+        issues.extend(out['training']['issues'])
+        t=out['training']
+        # One fresh observation drives both views; an hourly watcher snapshot
+        # must not contradict the current continuation on the Training page.
+        if t['status'] != 'Unavailable':
+            out['research']=dict(campaign=training_campaign,observedAt=t['observedAt'],
+                counts=dict(selection_seed_jobs=t['selectionSeedJobs'],final_seed_jobs=t['completedFinalSeeds']),
+                totalSymbols=t['totalSymbols'],stages=[t['activity']],evidence=t['evidence'])
     return out
 
 

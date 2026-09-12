@@ -8,4 +8,9 @@ if(existsSync('private/preview.json')){
   if(typeof r[key]==='string'&&r[key].length>8&&built.includes(r[key]))throw Error('Private captured position found in production bundle.');
  }
 }
-console.log('Production bundle excludes preview controls and captured position identifiers.');
+if(existsSync('private/training-preview.json')){
+ const training=JSON.parse(readFileSync('private/training-preview.json','utf8')).home?.training;
+ const identifiers=[training?.campaign,...(training?.versions??[]).flatMap(r=>r.sources.map(s=>s.sha256))];
+ for(const value of identifiers)if(value&&built.includes(value))throw Error('Private training evidence found in production bundle.');
+}
+console.log('Production bundle excludes preview controls, captured positions and training evidence.');

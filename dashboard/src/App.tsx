@@ -16,6 +16,7 @@ import {
   X,
   Upload,
   Clock3,
+  BookOpen,
 } from "lucide-react";
 import {
   sendEmailVerification,
@@ -24,6 +25,7 @@ import {
 } from "firebase/auth";
 import { auth, authReady, configured } from "./firebase";
 import { useDashboard } from "./useDashboard";
+import { Training } from "./Training";
 import {
   ageSeconds,
   displayNumber as num,
@@ -41,6 +43,7 @@ const tabs = [
   ["Signals", Radio],
   ["Positions", Wallet],
   ["Research", FlaskConical],
+  ["Training", BookOpen],
   ["FA", Database],
 ] as const;
 const money = (n: number | null) =>
@@ -511,7 +514,9 @@ export default function App() {
                       ? "Your taken trades."
                       : tab === "Research"
                         ? "From build to evidence."
-                        : "Fundamentals in focus."}
+                        : tab === "Training"
+                          ? "Every generation, on record."
+                          : "Fundamentals in focus."}
               </h1>
               <p>
                 {tab === "Overview"
@@ -522,7 +527,9 @@ export default function App() {
                       ? "Recorded fills and observed quotes, with accounting gaps visible."
                       : tab === "Research"
                         ? "Progress receipts and completed artifacts from the home machine."
-                        : "Point-in-time news, sentiment, and company data."}
+                        : tab === "Training"
+                          ? "Training summaries, evaluation results, and the evidence behind each model."
+                          : "Point-in-time news, sentiment, and company data."}
               </p>
             </div>
             <Tag
@@ -963,6 +970,13 @@ export default function App() {
                 )}
               </Panel>
             </>
+          )}
+          {tab === "Training" && (
+            <Training
+              key={live.user?.uid ?? "preview"}
+              data={home?.training}
+              now={now}
+            />
           )}
           {tab === "FA" && (
             <>

@@ -213,3 +213,23 @@ branch is a distribution snapshot, not intended for merging into main.
 Resource/XML/plist checks and ZIP manifest hashes passed, package is 432411
 bytes. Xcode compile/signing/device acceptance remain unverified on Linux.
 Build-source metadata is included; no private keys/captures in the archive.
+
+## Training library
+
+The Training page includes Compare plus a separate report view for V2, V3,
+V3.1, V4, V5 and V6. Source-backed reports and downloads are carried in the
+private home document, not the frontend build. Historical results retain their
+original dates and accounting; missing values display as em dashes.
+
+Add `TRAINING_ROOT` and `TRAINING_CAMPAIGN` to the existing home publisher's
+environment to follow an explicit continuation. These refer to the research
+checkout, which can differ from the FA `SOURCE_ROOT`. The existing timer
+refreshes stage progress and adds final metrics automatically after the stage
+receipts and report hashes agree. It performs no training or deployment and
+sends no notifications. Research and Training share the current observation.
+
+See [the implementation review](../docs/reviews/2026-09-12-training-dashboard.md)
+for report provenance, accounting limits and validation. Run publisher tests
+with `python -m pytest publisher -q` using the project virtual environment.
+The regular browser suite covers all generation views; the Auth emulator
+suite also verifies that access revocation removes private training content.

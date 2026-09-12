@@ -1,3 +1,4 @@
+import { trainingFixture } from "../training.fixture";
 import { test, expect } from "@playwright/test";
 import { initializeApp } from "firebase-admin/app";
 import { getAuth } from "firebase-admin/auth";
@@ -24,6 +25,7 @@ const server = {
   issues: [],
 };
 const home = {
+  training: trainingFixture(),
   schemaVersion: 1,
   source: "home",
   observedAt: now,
@@ -71,8 +73,28 @@ test("approved login reads server summaries, revocation clears them, signout hid
       .filter({ hasText: "Alerts sent" })
       .locator("strong"),
   ).toHaveText("7");
+  await page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("button", { name: "Training", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "explicit-campaign" }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("button", { name: "Download summary" }),
+  ).toBeVisible();
   await db.doc("access/owner-browser").set({ enabled: false });
   await page.getByLabel("Refresh data").click();
+  await expect(
+    page.getByRole("heading", { name: "explicit-campaign" }),
+  ).toHaveCount(0);
+  await expect(
+    page.getByRole("button", { name: "Download summary" }),
+  ).toHaveCount(0);
+  await page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("button", { name: "Overview", exact: true })
+    .click();
   await expect(
     page
       .locator(".metric")

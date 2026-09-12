@@ -1,73 +1,35 @@
-# Dashboard handoff
+# Training dashboard — September 12, 2026
 
-## Live Firebase deployment — September 11, 2026
+The Training library is implemented on the isolated Firebase dashboard line.
+The private app is https://stonks-22367.web.app (project stonks-22367, Spark).
+The user requested all historical training summaries plus the completed v6
+summary on the dashboard only, without Telegram delivery.
 
-Supersedes earlier cloud-setup-pending notes. Project `stonks-22367`, owner
-`mrhealy115@gmail.com`; Hosting is live at https://stonks-22367.web.app.
-Registered web app `1:290920029883:web:1b443e4c821b96a6a2539e`; public config
-is in ignored `dashboard/.env.local`. Standard Native Firestore `(default)`
-is in `us-central1`, deletion protection enabled, billing disabled. Private
-rules and payload index exemptions deployed before Hosting.
+Training has Compare and individual V2, V3, V3.1, V4, V5 and V6 views. Original
+source text, hashes, explanatory notes, fold tables, diagnostics and Markdown
+downloads are private home-payload data; no reports enter the public bundle.
+V2–V5 are explicitly pre-audit history. V4's missing original reports are
+represented by preserved documentation with missing dates/metrics left unknown.
 
-Home and server publishers deployed in separate checkouts and Python environments.
-Both first publications succeeded with no source issues; live documents passed
-frontend schemas; unauthenticated reads returned 403. Timers running about once per minute
-`healys-dashboard-publisher@home.timer` (home) and `@server.timer` (Hetzner)
-are enabled. User lingering is enabled on both hosts. Service credentials are
-mode 600 in each user's `.config/healylabs-dashboard`, never committed.
-Dedicated dashboard-home/dashboard-server service accounts have datastore.user
-on this separate project. This role bypasses Firestore client rules.
+The home environment now pins TRAINING_ROOT to the primary research checkout
+and TRAINING_CAMPAIGN to v6-train-20260912r2. PROGRESS_RECEIPT points to that
+campaign too. The existing publisher timer refreshes Training and Research
+from the same live observation and automatically appends the final validation
+table and gate log when completion receipts and hashes agree. No new schedule
+or notification service is required. No model deployment is performed.
 
-Python runtime: each host's `~/.local/share/healylabs-dashboard/venv`.
-Home source `/home/healy/Coding/HealysAutomation`; server source
-`/home/mrhea/HealysBacktester`. Server publisher code is a detached Git worktree
-at `/home/mrhea/HealyLabsDashboard` (0595ea7). Home code is this checkout.
-Campaign progress is pinned to `logs/v6-progress/v6-local-20260906/latest.json`
-in the home research repo. Source-pinned build and production scanner code
-were not changed. Existing trading environments were not modified.
+Validation: 16 Python publisher tests; 7 frontend unit tests; 8 desktop/phone
+browser checks; 2 Firebase-emulator authentication checks covering training
+access and revocation; production build and private-evidence bundle scan.
+Review: docs/reviews/2026-09-12-training-dashboard.md.
 
-Live browser check: HTTP 200, sign-in visible, preview import absent, zero
-JavaScript errors. Production build/privacy check and configured iOS sync passed.
-Native signing/device acceptance and push notifications remain outstanding.
+The primary v6 campaign remains source-pinned and separate. Its watcher was
+fixed on main to recognize the training supervisor/seed jobs and installed
+with the explicit current campaign, without --telegram. The old build's
+failed assembly remains preserved. Main's full suite passed 1,472 tests and
+18 subtests. Current training/service evidence is in the primary HANDOFF.
 
-**Access still pending:** Firebase Authentication returns CONFIGURATION_NOT_FOUND.
-User has been asked to open Authentication in Firebase Console, click Get started,
-enable Email/Password, and add their email with a privately chosen password.
-Once done, inspect the real Firebase Auth UID, create `access/{uid}` enabled=true,
-and have the user verify their email via the dashboard and sign in again.
-Never mark an email verified administratively just to bypass this check.
-No Auth user/access grant or signed-in live browser acceptance has happened yet.
-
-Earlier implementation details: `docs/reviews/2026-09-11-firebase-dashboard.md`.
-
-Timer follow-up: switched to 60 seconds after prior completion (plus up to
-5 seconds jitter) to avoid calendar coalescing hitting the 55-second rate guard.
-Corrected home timer completed successfully at 18:06 UTC; live schema and
-anonymous-denial checks still pass. Server timer source is 0595ea7.
-
-## Owner access granted — September 11, 2026, 19:18 UTC
-
-Supersedes the Authentication-initialization-pending notes above. Email/password
-authentication is enabled. Looked up the user by the exact owner email
-mrhealy115@gmail.com and enabled access for UID `6PNmN6SAEsclHtmEXKS5Mma3IZw1`.
-Grant readback succeeded. Firebase reports emailVerified=false; verification
-was not overridden and no email was sent by automation. User must sign in,
-press Send verification email, follow the link, then sign out/in.
-Home/server documents refreshed at 19:18 UTC, passed frontend schemas with no
-source issues, and anonymous reads returned 403. Signed-in owner acceptance
-is pending the user's email verification; administrative readback is not
-evidence of successful browser access.
-
-## Standalone Mac download — September 11, 2026
-
-User confirmed web login works. Created and pushed orphan app-only branch
-`ios/ready-to-open` at `07b96a0`. Download ZIP:
-https://github.com/Healy218/HealysBacktester/archive/refs/heads/ios/ready-to-open.zip
-Open root `App.xcodeproj`; bundled production assets and Firebase config are
-included, Capacitor 8.5.2 resolves through Swift Package Manager. Xcode 26+
-required. Owner selects Apple signing team/device and presses Run. No Node/npm
-on the Mac. Source bundle comes from dashboard commit 214a615. Standalone
-branch is a distribution snapshot, not intended for merging into main.
-Resource/XML/plist checks and ZIP manifest hashes passed, package is 432411
-bytes. Xcode compile/signing/device acceptance remain unverified on Linux.
-Build-source metadata is included; no private keys/captures in the archive.
+Prior dashboard setup, Firebase login, owner verification and deployment notes
+are preserved in handoff-history/HANDOFF-2026-09-12-before-training-dashboard.md
+and dashboard/README.md. Do not print publisher credentials or embed captures
+in the frontend. The standalone iOS branch still needs Mac/device acceptance.

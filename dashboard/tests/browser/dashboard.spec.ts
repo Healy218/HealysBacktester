@@ -4,6 +4,22 @@ const captured = existsSync("private/preview.json")
   ? JSON.parse(readFileSync("private/preview.json", "utf8"))
   : null;
 const empty = {
+  server: {
+    schemaVersion: 1,
+    source: "server",
+    observedAt: new Date().toISOString(),
+    market: "unknown",
+    scanners: [],
+    feeds: [],
+    signals: [],
+    positions: [],
+    queueCounts: {},
+    queueAvailable: true,
+    positionsAvailable: true,
+    openPositionCount: 0,
+    scope: "Empty test fixture",
+    issues: [],
+  },
   home: {
     schemaVersion: 1,
     source: "home",
@@ -29,13 +45,11 @@ test("private setup is explicit and all views work with captured data", async ({
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("/");
   await expect(page.getByText("Firebase connection pending")).toBeVisible();
-  await page
-    .getByLabel("Open local snapshot")
-    .setInputFiles({
-      name: "snapshot.json",
-      mimeType: "application/json",
-      buffer: Buffer.from(JSON.stringify(captured ?? empty)),
-    });
+  await page.getByLabel("Open local snapshot").setInputFiles({
+    name: "snapshot.json",
+    mimeType: "application/json",
+    buffer: Buffer.from(JSON.stringify(captured ?? empty)),
+  });
   await expect(page.getByText("Local snapshot preview.")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Your market, in view." }),
@@ -44,9 +58,9 @@ test("private setup is explicit and all views work with captured data", async ({
     path: `private/${info.project.name}-overview.png`,
     fullPage: true,
   });
-  for (const name of ["Signals", "Positions", "Research", "FA"]) {
+  for (const name of ["Signals", "Positions", "Research", "Training", "FA"]) {
     await page
-      .getByRole("navigation")
+      .getByRole("navigation", { name: "Main navigation" })
       .getByRole("button", { name, exact: true })
       .click();
     await expect(page.locator("h1")).toBeVisible();
@@ -59,7 +73,7 @@ test("private setup is explicit and all views work with captured data", async ({
   await page.getByLabel("Search FA symbols").fill("zzzz-no-symbol");
   await expect(page.getByText("No matching company snapshots.")).toBeVisible();
   await page
-    .getByRole("navigation")
+    .getByRole("navigation", { name: "Main navigation" })
     .getByRole("button", { name: "Signals", exact: true })
     .click();
   await page.getByLabel("Search signals").fill("zzzz-no-symbol");
@@ -85,13 +99,13 @@ test("malformed preview is rejected without private content", async ({
   page,
 }) => {
   await page.goto("/");
-  await page
-    .getByLabel("Open local snapshot")
-    .setInputFiles({
-      name: "bad.json",
-      mimeType: "application/json",
-      buffer: Buffer.from('{"server":{"schemaVersion":2}}'),
-    });
+  await page.getByLabel("Open local snapshot").setInputFiles({
+    name: "bad.json",
+    mimeType: "application/json",
+    buffer: Buffer.from('{"server":{"schemaVersion":2}}'),
+  });
   await expect(page.getByRole("alert")).toContainText("not a valid");
-  await expect(page.getByRole("navigation")).toHaveCount(0);
+  await expect(
+    page.getByRole("navigation", { name: "Main navigation" }),
+  ).toHaveCount(0);
 });

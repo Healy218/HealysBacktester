@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { trainingSchema } from "./trainingModel";
 const timestamp = z.string().datetime({ offset: true });
 const optionalTime = timestamp.nullable();
 const number = z.number().finite().nullable();
@@ -81,6 +82,7 @@ const faRow = z.object({
   floatPercent: number,
 });
 export const homeSchema = z.object({
+  training: trainingSchema.nullable().optional(),
   schemaVersion: z.literal(1),
   source: z.literal("home"),
   observedAt: timestamp,
