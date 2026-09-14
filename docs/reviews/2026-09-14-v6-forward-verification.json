@@ -1,0 +1,95 @@
+{
+  "schema": "v6-forward-deployment-review-v1",
+  "deployment_completed_at": "2026-09-14T16:04:10.414372+00:00",
+  "runtime_commit": "d6660af295f09ca300dfb49f467e813f1e9a62f6",
+  "production_commit": "093c117",
+  "release_sha256": "3bc974679fff04044002f833cbb4c9246f63fd4d9370c04985f5f6ca7597764f",
+  "model_sha256": "cdacbea1bf6a07e573af46b8d266b1d82b5e3bf736945a06b929e46050fdbd6c",
+  "expiry_cutoff_minutes": 15,
+  "test_executions": 346,
+  "tests_are_overlapping": true,
+  "replay_seconds": 275.047,
+  "opening_parity": {
+    "status": "passed",
+    "rows": 4722,
+    "features": 164,
+    "feature_values_exact": true,
+    "predictions_exact": true,
+    "reference_sha256": "34df662507143333fe7d4b3412046e3820c68c21e40a4e27fa2923b60b72efdf",
+    "candidate_sha256": "34df662507143333fe7d4b3412046e3820c68c21e40a4e27fa2923b60b72efdf",
+    "stock_receipt_sha256": "9b28c99dc52d1244840b851dc61589d3ce4b4e732b42d4fd38a28ccbfcb16711"
+  },
+  "watcher": {
+    "broker_orders": false,
+    "checked_at": "2026-09-14T16:56:51.236124+00:00",
+    "delivery": "server",
+    "expected_close": "2026-09-14T16:45:00+00:00",
+    "last_notification_at": "2026-09-14T13:51:51.271911+00:00",
+    "producer": "home",
+    "status": "healthy"
+  },
+  "paper_events": [
+    {
+      "key": "v6|FXI|bbw_squeeze|2026-09-14T13:45:00",
+      "status": "sent"
+    },
+    {
+      "key": "v6|USAR|bbw_squeeze|2026-09-14T13:45:00",
+      "status": "sent"
+    },
+    {
+      "key": "v6|DUOL|keltner|2026-09-14T13:45:00",
+      "status": "sent"
+    },
+    {
+      "key": "v6|BILI|bbw_squeeze|2026-09-14T13:45:00",
+      "status": "sent"
+    },
+    {
+      "key": "v6|USAR|bbw_squeeze|2026-09-14T13:45:00|leg-close|1",
+      "status": "sent"
+    },
+    {
+      "key": "v6|ETSY|bbw_squeeze|2026-09-14T14:30:00",
+      "status": "sent"
+    },
+    {
+      "key": "v6|MDB|supertrend|2026-09-14T14:45:00",
+      "status": "sent"
+    }
+  ],
+  "latest_pre_update_pass": {
+    "checked_at": "2026-09-14T16:00:20.695032+00:00",
+    "elapsed_seconds": 219.226,
+    "errors": 0,
+    "status": "recorded",
+    "portfolio": {
+      "cycles": 9,
+      "equity": 0.9666159952895769,
+      "execution": "experimental fractional paper ask/bid with frozen 0.15% cost per side",
+      "outbox": {
+        "exported": 7
+      },
+      "positions": {
+        "closed": 1,
+        "open": 5
+      }
+    }
+  },
+  "first_updated_scheduled_pass": "2026-09-14T16:15:05Z",
+  "first_updated_pass_verified": false,
+  "broker_orders": false,
+  "short_dte_training_started": false,
+  "evidence_sha256": {
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v6-forward-20260914/bridge-tests.xml": "97fb648d94676aaedd5c743844400cc27689baf1b09eec845d6c6f736c8e22ab",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v6-forward-20260914/deployed-runtime-tests.xml": "dcaa986410c0ce7dca489ecf49ac246724c1b8d6e20ab7e3257171272bf49bbf",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v6-forward-20260914/feature-parity-reuse/report.json": "8905b795b42d259a2ca3648ac75b0b456ca8efeda2cb605fea20c17b9de669bb",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v6-forward-20260914/opening-canonical/status.json": "e58e9279f825753118476a6e43d5a4ffd66fbd478799c369d39e9498fc0a2b67",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v6-forward-20260914/opening-parity.json": "727856b2f743b0302043aa66fca144fb33d41d772cb1f528100ba0401824ca26",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v6-forward-20260914/reuse-final-tests.xml": "c660aa53b1defd7a1cfcd14e3ed02ad499188115e07d43d0177225bbb02c9fdc"
+  },
+  "notes_verified_at": "2026-09-14T16:57:27.643949+00:00",
+  "runtime_hashes_verified": 169,
+  "home_timers_enabled_active": true,
+  "server_watch_timer_enabled": true
+}

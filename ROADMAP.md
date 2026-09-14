@@ -14,7 +14,26 @@ thirteen new indicator scopes plus quote/trade features**. The preserved
 SPY/IBKR pilot validated the repaired core only; it is not authorization to scale
 an existing-family-only campaign as the full v6 rebuild.
 
-## Current foundation
+## September 14 current phase: forward paper operation and separate short-DTE research
+
+The expanded freeze/build and repaired three-fold/40-member training completed.
+Frozen V6 experimental paper alerts are active: home calculation/portfolio,
+server delivery and watcher, with the explicitly authorized 15-minute expiry
+cutoff. Model weights and selection/risk rules remain frozen. The next task
+is a separate experiment enforcing **actual 1–9-calendar-day expiry**, with
+new scoped artifacts and validation before training. See
+[HANDOFF](HANDOFF.md), [activation](docs/reviews/2026-09-14-v6-forward-activation.md)
+and [short-DTE design](docs/specs/V6_SHORT_DTE_EXPERIMENT.md).
+
+External Pine parity, full historical execution-quote/roll revalidation,
+sustained forward evidence and dashboard portfolio integration remain open.
+Training must coexist with the active home producer under a measured combined
+resource budget. The first operational-week review starts September 14.
+
+The September 6 phase descriptions below are retained as the original roadmap
+and acceptance criteria, not instructions to rerun the completed V6 campaign.
+
+## September 6 foundation (historical phase record)
 
 The audit's 51 findings and four additional concerns are repaired and merged.
 The final expanded integration suite passed **1,390 tests and 18 subtests**.
@@ -38,7 +57,7 @@ Old results remain in
 [EXPERIMENTS](docs/EXPERIMENTS.md) as history, including the intraday-staleness
 incident and September 4 gate change.
 
-## Current phase: real TradingView validation and expanded tick coverage
+## Original phase: real TradingView validation and expanded tick coverage
 
 The scope covers the user's **ten highest-boost scripts across the supplied
 general listing's exposed pages plus three highest-boost Editors' Picks**.
@@ -93,7 +112,7 @@ input contract and validate the fresh launch. Each new TradingView scope
 requires reviewed rules and external parity evidence. v6's existing window stays equal to v5's; the archive audit found
 fifteen weekly-expiry names.
 
-## Next phase: corrected baseline and expanded-pool evidence
+## Original next phase: corrected baseline and expanded-pool evidence
 
 Refreeze expanded v6 under `2026-09-06-tv13-option-ticks-v4` after the
 [sealed feature input gates](docs/specs/V6_EXPANDED_INPUTS.md); core pools remain

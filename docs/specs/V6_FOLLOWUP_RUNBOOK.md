@@ -1,5 +1,13 @@
 # V6 neural repair, execution validation and forward shadow
 
+**September 14 status:** frozen V6 experimental paper alerts now run through
+`scripts/run_v6_forward.py`, a separate home portfolio producer and server
+bridge. The legacy snapshot/shadow commands below remain research tools.
+Use the [activation review](../reviews/2026-09-14-v6-forward-activation.md) and
+[HANDOFF](../../HANDOFF.md) for current services. The next training task is the
+[separate actual-1–9-DTE experiment](V6_SHORT_DTE_EXPERIMENT.md), not a relaunch
+of the completed repair command shown below.
+
 The September 12 campaign stays immutable. These commands create separate
 research evidence; they do not promote a scanner or send alerts.
 
@@ -27,8 +35,9 @@ share the policy. Existing defective receipts are rejected, never rewritten.
 The replacement `v6-cash-repair-20260913` completed under
 `healys-v6-cash-repair-20260913.service`, September 13, 18:04–19:47 UTC.
 All three evaluation folds, 40 final GBT seeds, 32 aggregate execution
-comparisons and the readiness inventory completed. Scanner promotion remains
-blocked on actual quote/roll, forward, parity and operating review evidence.
+comparisons and the readiness inventory completed. At that completion, scanner activation remained blocked. The separate frozen
+experimental paper path subsequently passed activation on September 14;
+full historical quote/roll replay and external Pine parity remain open.
 The prior `v6-neural-repair-20260913r2` scope is preserved after its fold-3
 funding rejection. See the [cash-repair review](../reviews/2026-09-13-v6-cash-repair.md).
 Do not launch a duplicate. The durable pipeline command used was:
@@ -154,7 +163,7 @@ directories must be fresh and outside the completed campaign.
 
 ## Live inputs and shadow collection
 
-The expanded V6 scanner is currently **shadow-only**, including when `--paper`
+The legacy expanded `v4_scan` V6 path is **shadow-only**, including when `--paper`
 is supplied. Ordinary existing expert paths keep their own behavior.
 Shadow writes an isolated SQLite journal, dedupe state and summaries. It never
 opens paper positions or drains any notification outbox.
@@ -230,7 +239,9 @@ scoring observation, and the first contract must match the recorded selection.
 be substituted for known exit times. Unresolved selections suppress that
 side's performance report, avoiding a resolved-only survivorship result.
 Frozen signal-time reservations and sizing are applied before quote replay;
-failed fills do not backfill those reservations. No forward results exist yet.
+failed fills do not backfill those reservations. This shadow replay route has
+no completed result here; the separate September 14 portfolio has actual
+paper records, summarized in the activation review.
 
 ## Private dashboard integration
 

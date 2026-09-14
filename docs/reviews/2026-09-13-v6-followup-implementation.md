@@ -1,5 +1,11 @@
 # V6 follow-up implementation — September 13, 2026
 
+**September 14 follow-up:** the repaired frozen model is now operating
+experimental paper alerts. This review retains the earlier milestone and its
+then-open blockers; current deployment evidence and remaining research limits
+are in [the activation review](2026-09-14-v6-forward-activation.md) and
+[HANDOFF](../../HANDOFF.md). Separate actual-1–9-DTE training is next, not started.
+
 Current update: the cash-ledger failure described below is repaired in
 `v6-cash-repair-20260913`. Its full rerun has passed all three evaluation folds
 and is training the final GBT ensemble. All 20 NN selection seeds are finite;

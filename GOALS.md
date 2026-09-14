@@ -66,8 +66,10 @@ The highest-value improvements identified in the assessment are:
 **Reassess after v6 has actually been running for a week and more existing
 TODOs have been completed.** The clock starts with the operational v6 run,
 not the beginning of its freeze/build or the date this document was written.
-Record the start date and exposure mode (paper/manual/live) when that happens;
-do not assume the pending pipeline is already deployed.
+Operational start is **September 14, 2026**, in experimental paper-alert mode,
+with current quotes and no broker orders. First review is due on or after
+**September 21**, once more current TODOs are complete. See the
+[activation review](docs/reviews/2026-09-14-v6-forward-activation.md).
 
 At that checkpoint:
 
@@ -90,5 +92,5 @@ at the December 31 year-end review.
 | Review | Status | Evidence / next action |
 |---|---|---|
 | September 10 baseline | Recorded | Scores and rationale above; main and isolated production branches represent different stages of the system. |
-| First week running v6 | Pending — start date not yet recorded | Run v6, complete more TODOs, then review operational evidence and remaining gaps. |
+| First week running v6 | Started September 14, experimental paper; review on/after September 21 | Preserve incident/delivery/portfolio evidence, complete more TODOs, then reassess. Initial deployment is not a score increase. |
 | December 31, 2026 | Target | ≥7 in every area and overall, supported by evidence; record any shortfalls honestly. |

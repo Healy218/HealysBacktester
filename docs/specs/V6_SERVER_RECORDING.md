@@ -1,5 +1,13 @@
 # Frozen V6 server recording deployment
 
+**Status update, September 14:** this is the retained September 13 observer/
+feed-recording design. Its waiting observer is now disabled. The implemented
+home producer, persistent paper portfolio, server bridge and operating watcher
+are active under the user's 15-minute expiry-cutoff authorization. Use the
+[current activation review](../reviews/2026-09-14-v6-forward-activation.md) and
+[HANDOFF](../../HANDOFF.md) for operation. Do not reinstall the old observer or
+interpret the historical blockers below as the current deployment status.
+
 The user approved preserving the repaired V6 model and proceeding with a
 recording deployment before experimental alerts. The immutable model is
 `v6-cash-repair-20260913`, config SHA256
@@ -58,7 +66,7 @@ commands remain valid. Inspect heartbeat counters, journal errors, process
 counts and stock-universe size after startup. A quiet closed market cannot
 validate actual receipts.
 
-## Remaining activation requirements
+## September 13 activation requirements (historical; resolved by the new forward path)
 
 There is **no connected live snapshot producer yet**. An option watch list
 populated after prior experts' alerts cannot provide the preceding 15-minute

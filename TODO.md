@@ -1,14 +1,30 @@
-## September 13: V6 server activation follow-up
+## September 14: V6 forward paper activation
 
-- [x] Preserve repaired V6 and deploy its verified 40-member model separately.
-- [x] Match both saved prediction heads on 130 real rows on both hosts.
-- [x] Enable raw OPRA quote/trade recording and add V6 to shared stock universe.
-- [x] Install quarter-hour V6 observer; explicit blocked state and no alerts.
-- [x] Verify provider condition mapping; save separate actual 1–9 DTE plan.
-- [ ] Connect a complete sealed live snapshot producer and pre-decision tick coverage.
-- [ ] Implement/verify persistent frozen allocation, exits/rolls and bid/ask execution.
-- [ ] Connect tested experimental alerts to shared dispatcher/deduplication.
-- [ ] Publish V6 server status in the private dashboard.
+- [x] Freeze the repaired 40-member model, 164 features, 449-symbol inventory.
+- [x] Build causal full-history features and current/prior-date market inputs.
+- [x] Persist five-slot EV allocation, ask/bid paper entries, exits and roll retries.
+- [x] Apply the authorized 15-minute cutoff to each option class's regular close.
+- [x] Validate exact saved feature parity and complete-universe fresh REST replay.
+- [x] Install home calculation, daily refresh and relay timers; server alert bridge
+  and operating watcher. Existing expert ranking/cron and training watcher retained.
+- [x] First scheduled pass started 13:45:20 UTC Sep14 and passed current MASSIVE
+  quote/trade access checks. Experimental alerts enabled subject to runtime gates.
+- [x] Verify actual live allocation and source relay: five completed cycles by
+  15:05 UTC, six entries, one closed position, five open. Opening 13:45 pass
+  exceeded five minutes and correctly opened none; later passes completed.
+- [x] Validate exact reuse against all 4,722 opening candidates: identical parquet
+  SHA256 and predictions; opening replay improved to 275.047s. Deploy with
+  processing scheduled five seconds after each completed bar.
+- [x] Confirm server notification acknowledgments: seven sent, zero pending;
+  watcher healthy. Final runtime `d6660af` activated at 16:04 UTC; +5s timer installed.
+- [ ] Add the new paper portfolio/status to the private dashboard publisher.
+- [ ] Next session: implement and validate a separate actual-1–9-calendar-DTE
+  V6 campaign, then train it. The user is clearing context first; no new run
+  has started. See [short-DTE plan](docs/specs/V6_SHORT_DTE_EXPERIMENT.md).
+- [ ] Budget that campaign around the active home paper producer; bind its
+  watcher to the exact new service/campaign, preserving current paper state.
+
+Review: `docs/reviews/2026-09-14-v6-forward-activation.md`.
 
 # TODO — TradingView expansion and corrected research
 
@@ -37,8 +53,9 @@ a four-worker target. All 449 eligible symbol builds completed; monolithic
 assembly was OOM-killed September 12. Separately pinned continuation
 `v6-train-20260912` completed assembly and objective comparisons. Replacement
 `v6-train-20260912r2` reused those verified outputs and completed evaluation plus the 40-seed
-GBT final ensemble on September 12. The configured research gate passed;
-TradingView parity and model promotion remain outstanding. See the
+GBT final ensemble on September 12. The configured research gate passed. The repaired replacement completed
+September 13; frozen experimental paper alerts were activated September 14.
+External TradingView parity and stronger production/edge claims remain open. See the
 [training review](docs/reviews/2026-09-12-v6-training.md).
 The existing-family SPY/IBKR pilot is now stopped and preserved. Do not launch a full
 universe freeze while those additions are still missing; complete their
@@ -49,7 +66,8 @@ The audit repairs are implemented and merged: **51 main findings and four
 additional concerns**. The final expanded integration suite passed **1,390 tests and
 18 subtests**, including the planner and strict gate integration. All thirteen scoped TradingView ports and the full stock/context
 repair are implemented; external Pine fixtures, corrected model results and a
-new production rollout remain outstanding. Historical integration evidence is
+broader production rollout remain outstanding. Frozen V6 experimental paper
+activation is recorded in the September 14 checklist above. Historical integration evidence is
 retained in the [first-batch review](docs/reviews/2026-09-05-readiness-milestone.md).
 
 The core contract is `2026-09-06-raw-spot-v3`; expanded v6 uses
@@ -240,16 +258,18 @@ workload, VM-hour budget and explicit job IDs.
   All three folds completed; 20 NN selection seeds passed finite checks.
 - [x] Finish the replacement's 40-seed GBT finalization and automatic execution
   validation/readiness report. Completed September 13 at 19:47 UTC: 40/40 final
-  seeds and 32 matched aggregate ledger comparisons; scanner promotion blocked
-  on quote/roll, forward shadow, external parity and operating review evidence.
+  seeds and 32 matched aggregate ledger comparisons. September 14 subsequently
+  enabled the separately validated frozen experimental paper runtime; full
+  historical quote/roll replay and external parity remain research work.
 - [x] Implement frozen quote/latency/cost replay and a separate cash-ledger
   check. Run 32 matching final-tail marked baseline/cost/latency comparisons.
 - [ ] Supply complete execution quote/roll evidence and run quote-based
   campaign validation; aggregate spread assumptions do not establish fills.
 - [x] Wire sealed expanded live inputs into isolated no-notification shadow
   scoring, append-only observations, frozen-exit replay and dashboard summaries.
-- [ ] Collect actual live receipt/condition/parity evidence and forward shadow
-  outcomes before promotion. See [implementation review](docs/reviews/2026-09-13-v6-followup-implementation.md)
+- [ ] Continue collecting actual receipt/condition/parity evidence and forward
+  paper outcomes. Initial paper operation is active; sustained operation,
+  complete rolls and external parity remain open. See [implementation review](docs/reviews/2026-09-13-v6-followup-implementation.md)
   and [runbook](docs/specs/V6_FOLLOWUP_RUNBOOK.md).
 - [ ] Benchmark larger worker counts/GPU; evaluate ranking, learned contract
   selection/exits, broader event weighting, calibration/abstention and mature
@@ -262,7 +282,7 @@ workload, VM-hour budget and explicit job IDs.
   fold-local proposal refreezing/rebuilds.
 - [ ] Walk-forward select and finalize passing candidates only; preserve
   refusals, mark hashes, gate settings and source-spec fingerprints.
-- [ ] Record corrected [EXPERIMENTS](docs/EXPERIMENTS.md), retaining September 4
+- [x] Record corrected [EXPERIMENTS](docs/EXPERIMENTS.md), retaining September 4
   gate-selection history. Fresh forward evidence remains necessary.
 
 ## 5. Verify operational readiness alongside research

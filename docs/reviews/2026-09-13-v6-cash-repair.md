@@ -1,5 +1,11 @@
 # V6 funding rejection and restart — September 13, 2026
 
+**September 14 follow-up:** the repaired frozen model is now operating
+experimental paper alerts. This review retains the earlier milestone and its
+then-open blockers; current deployment evidence and remaining research limits
+are in [the activation review](2026-09-14-v6-forward-activation.md) and
+[HANDOFF](../../HANDOFF.md). Separate actual-1–9-DTE training is next, not started.
+
 The `v6-neural-repair-20260913r2` run failed during fold-3 NN policy evaluation
 after all 15 neural fold seeds passed numerical checks. The failure was
 reproduced using the five saved fold-3 models and the exact 239,793 validation

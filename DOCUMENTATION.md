@@ -47,6 +47,44 @@ See [audit remediation](docs/reviews/2026-09-05-remediation.md) and the
 [original audit](docs/reviews/2026-09-05-adversarial-audit.md) for implemented
 repairs and migration requirements.
 
+## V6 forward paper operating contract (September 14)
+
+The active frozen producer is `scripts/run_v6_forward.py` in the permanent
+`/home/healy/Coding/HealysV6` checkout. Main is the research workspace, not the
+running source checkout. Its `nn_meta/live/v6_server/portfolio.sqlite3` owns
+positions/cycles/outbox; the server's separate V6 checkout receives generated
+state and the existing production dispatcher delivers immutable notices.
+Existing four-expert ranking and feed fixes are preserved. Source deployment
+uses Git; generated data/state may use rsync. Exact paths and receipts are in
+[HANDOFF](HANDOFF.md) and the
+[activation review](docs/reviews/2026-09-14-v6-forward-activation.md).
+
+- Preserve the full original adjusted/raw history and price vintage. Rebase or
+  missing held-symbol data must not silently alter strategy exits/features.
+- Apply expiry cutoff to the option class's final regular session; stock close
+  differs from eligible ETF option close. Use the covered calendar for holidays
+  and early closes. Actual quote receipt/fill is later than the trigger.
+- Real MASSIVE tick features use their original SIP/condition/missingness rules.
+  Current ask/bid paper fills keep actual receipt times. Historical aggregate
+  labels and paper quote fills are different evidence; neither is a broker fill.
+- Activation binds source/evidence hashes. Editing installed numerical source
+  breaks activation; never mutate it during a pass. New source needs reviewed
+  parity evidence and activation. Documentation-only changes do not affect it.
+- `v3/_source_memo.py` reuses identical numerical inputs only within one V6
+  symbol. Pandas storage layout is not numerical identity; keys include actual
+  values/index/attributes. Cached outputs are detached. Changing numerical
+  sources while a replay runs triggers the source guard.
+- The producer shares a 32GB host and main's venv with research. Its 18GB cap
+  and the prior training 24GB cap do not form a viable simultaneous budget.
+  Measure combined resources, isolate new source/artifacts and protect scheduled
+  market scans before starting short-DTE training. Do not update the shared
+  environment while the producer operates.
+- Paper health watcher and completed-training watcher are independent. Bind a
+  new training watcher to the exact new campaign/service; never assume the old
+  completed-run binding follows a new run automatically.
+- The legacy observer/snapshot-shadow route remains available for research but
+  its waiting timer is disabled. Reinstalling it is not an activation step.
+
 ## Environment
 
 - **Repo**: `/home/healy/Coding/HealysBacktester`, working branch `main`.

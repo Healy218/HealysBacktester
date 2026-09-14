@@ -5,6 +5,24 @@ relitigate settled questions, and keep "considered and rejected" on the
 record. Append here whenever a real choice gets made (or reversed — new
 entry, never edit history).
 
+- **2026-09-14 — Frozen V6 experimental paper alerts use an explicit expiry
+  cutoff 15 minutes before each option's final regular-session close.** User
+  explicitly approved this operational convention after the historical
+  completed-aggregate expiry fill limitation was explained. Weights, entry
+  selection, sizing and underlying strategy exits stay frozen. Current ask/bid
+  quotes and actual timestamps determine paper fills; no broker orders. The
+  home producer and existing server notifier are active. Eligible late-close
+  option classes and early closes use their own regular close. Exact numerical
+  reuse and scheduling at bar close +5 seconds preserve the five-minute entry
+  deadline and frozen outputs. [Evidence](reviews/2026-09-14-v6-forward-activation.md).
+- **2026-09-14 — Next training is a separate actual-1–9-DTE V6 experiment.**
+  Preserve the deployed broad-DTE model and paper portfolio. The user requested
+  all notes be updated before clearing chat; no new training launched in this
+  session. Enforce actual listed expiry after contract resolution, including
+  rolls; short target labels alone are insufficient. Keep distinct artifacts,
+  predeclare evaluation and tail treatment, and do not optimize toward a promised
+  1,000% winner. [Design](specs/V6_SHORT_DTE_EXPERIMENT.md).
+
 - **2026-08-21 — Finalize refused → do the magnitude/EV head FIRST, start
   spx0 in the overlap, never override the gate.** `v4-finalize-493af85-010321`
   declined the 40-seed ensemble on the most-recent tail (filter/0.5,
@@ -763,7 +781,7 @@ callback acknowledgements no longer abort a requested summary. Evening
 amendment (server review, below): one slot per symbol+side idea. Rejected:
 throttling inside each expert (would not rank across experts) and a
 persistent bot process (the minute cron polls replies instead).
-[Review](docs/reviews/2026-09-08-top-five-alerts.md).
+[Review](reviews/2026-09-08-top-five-alerts.md).
 
 ## 2026-09-08 — Prepare the post-freeze v6 launchers at halfway; launch nothing
 
@@ -777,14 +795,14 @@ only folds outside the proposal optimization window, so the eligible count is
 not promised and zero eligible folds refuses. Build and training remain
 unlaunched until the freeze returns zero. Rejected: auto-chaining build into
 training (separate explicit commands keep the admission gates visible).
-[Review](docs/reviews/2026-09-08-v6-stage-launchers.md).
+[Review](reviews/2026-09-08-v6-stage-launchers.md).
 
 ## 2026-09-08 — Server operations fixes: gate the option feed, tolerate quiet minutes, session-aware staleness, anchored watchdogs
 
 A full-session review of the Hetzner scanners (first trading day after Labor
 Day) found the panel operationally clean and eight things to fix; all eight
 shipped the same evening on the compatibility branch
-([review](docs/reviews/2026-09-08-server-ops-fixes.md)). Decisions with
+([review](reviews/2026-09-08-server-ops-fixes.md)). Decisions with
 alternatives considered:
 
 - **Option quote feed**: gate the stream until the watch list is non-empty

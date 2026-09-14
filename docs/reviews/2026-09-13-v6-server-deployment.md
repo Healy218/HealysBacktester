@@ -1,5 +1,11 @@
 # V6 server deployment — September 13 CDT / September 14 UTC
 
+**September 14 follow-up:** the repaired frozen model is now operating
+experimental paper alerts. This review retains the earlier milestone and its
+then-open blockers; current deployment evidence and remaining research limits
+are in [the activation review](2026-09-14-v6-forward-activation.md) and
+[HANDOFF](../../HANDOFF.md). Separate actual-1–9-DTE training is next, not started.
+
 The frozen repaired V6 model is deployed in `/home/mrhea/HealysV6`, separate
 from all four working experts. **Live V6 scoring and experimental alerts are
 not active**: the complete snapshot producer and portfolio/alert path remain

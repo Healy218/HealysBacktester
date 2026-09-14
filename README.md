@@ -1,4 +1,15 @@
-# September 5 audit and merge update
+# Current status — September 14, 2026
+
+Frozen V6 experimental paper alerts are operating alongside the existing
+experts, using a persistent home portfolio and server delivery/watchers.
+Expiry rolls trigger 15 minutes before each option's final regular session
+close; weights, entry selection, sizing and strategy exits remain frozen.
+The next research task is a separate actual-1–9-DTE model. Read
+[HANDOFF](HANDOFF.md) and [TODO](TODO.md) for exact deployment state and next
+steps; [the activation review](docs/reviews/2026-09-14-v6-forward-activation.md)
+records validation and first-session limits. No broker orders are placed.
+
+# September 5 audit and merge update (historical)
 
 The user directed merging the review fixes into `main`, continuing in
 `/home/healy/Coding/HealysBacktester`, and doing the TradingView work next,

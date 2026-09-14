@@ -1,6 +1,28 @@
 # EXPERIMENTS — every generation's verdict in one table
 
-## 2026-09-13 — cash rejection repaired; full rerun finalizing
+## 2026-09-14 — Frozen V6 paper alerts active; actual-short-DTE training next
+
+The repaired `v6-cash-repair-20260913` completed September 13 at 19:47 UTC:
+40 final GBT members, EV .05/no DD brake, 241 historical positions,
++648.8249% return/12.5673% maxDD. This is inspected final-tail revalidation,
+not a fresh holdout. All 32 aggregate execution comparisons matched the
+independent ledger. The earlier “finalizing” entry below records interim state.
+
+Frozen experimental paper operation began September 14. By the 16:00 pass:
+six paper entries, one strategy exit, five open positions and nine allocation
+cycles. All seven entry/exit notices have server sent acknowledgments; watcher
+healthy. The first opening pass missed its five-minute deadline and opened
+none. Final runtime `d6660af` preserves all 4,722 saved opening candidate rows
+byte-for-byte and replayed them in 275.047s. No forward profitability verdict
+is drawn from one partial session. [Activation](reviews/2026-09-14-v6-forward-activation.md).
+
+The next actual-1–9-DTE experiment is specified but unimplemented/untrained.
+The current model keeps its broad DTE competition. The selection audit found
+no +200% return ceiling: short and extreme-return rows were present but lost
+at EV, DTE comparison or allocation. [Audit](reviews/2026-09-13-v6-dte-selection-audit.md),
+[next-run design](specs/V6_SHORT_DTE_EXPERIMENT.md).
+
+## 2026-09-13 — cash rejection repaired; full rerun finalizing (interim record)
 
 `v6-cash-repair-20260913` started at 18:04 UTC. All three evaluation folds
 completed successfully; all 20 NN selection seeds passed finite numerical
