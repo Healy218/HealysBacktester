@@ -149,3 +149,5 @@ separate <10-DTE V6 training. That new campaign has not started. Its spec
 requires actual expiry of 1–9 calendar days and separate artifacts; the current
 broad-DTE model and paper portfolio stay frozen. See
 [the next-run spec](../specs/V6_SHORT_DTE_EXPERIMENT.md).
+
+Final notes verification: The updated runtime completed a scheduled pass starting 2026-09-14T16:45:05.688406+00:00 in 15.92 seconds and recorded completion successfully. Current portfolio: {"closed": 1, "open": 5}.

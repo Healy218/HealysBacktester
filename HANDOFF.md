@@ -25,8 +25,7 @@ weights, rules, active positions and services while preparing a separate model.
   Nine allocation cycles completed by the 16:00 pass, with five positions open
   and one closed. These are paper observations, not broker transactions.
 - Latest verified pass before the speed update: 16:00 UTC, 219.226 seconds,
-  zero errors. The first routine pass using `d6660af` is scheduled 16:15:05;
-  check current status rather than assuming a scheduled pass succeeded.
+  zero errors. The updated runtime completed a scheduled pass starting 2026-09-14T16:45:05.688406+00:00 in 15.92 seconds and recorded completion successfully. Current portfolio: {"closed": 1, "open": 5}.
 - No synthetic test message was sent. Real paper notices were sent; the
   operating watcher also reported the opening deadline miss at 13:51:51 UTC.
   The separate completed-training watcher's Telegram setting remains OFF.
