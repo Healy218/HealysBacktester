@@ -12,6 +12,7 @@ import time
 
 from nn_meta.live.v6_release import read, sha, verify_release
 from nn_meta.live.v6_market import save, utcnow
+from nn_meta.live.v6_option_sessions import expiry_cutoff
 
 
 def configure(release, anchor):
@@ -22,15 +23,6 @@ def configure(release, anchor):
         NN_META_V6_INPUTS=str(release / "training-inputs.json"),
         NN_META_V6_INPUTS_SHA256=verified["training_inputs_sha256"])
     return verified
-
-
-def expiry_cutoff(contract, calendar):
-    from options.data.provider import parse_occ_symbol
-    import pandas as pd
-    expiry = parse_occ_symbol(contract)[1].isoformat()
-    calendar.bounds(expiry)  # verifies calendar coverage even for Saturday
-    day = max(d for d in calendar.sessions if d <= expiry)
-    return calendar.bounds(day)[1].tz_localize("UTC") - pd.Timedelta(minutes=15)
 
 
 def monitor_positions(data, book, market, now, *, alerts):

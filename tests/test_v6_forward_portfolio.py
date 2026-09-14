@@ -102,7 +102,10 @@ class ForwardPortfolioTests(unittest.TestCase):
     def test_expiry_cutoff_respects_early_close_and_weekend_expiry(self):
         cal=SessionCalendar({'coverage_start':'2026-11-27','coverage_end':'2026-11-30','sessions':[
             {'date':'2026-11-27','open':'09:30','close':'13:00'}, {'date':'2026-11-30','open':'09:30','close':'16:00'}]})
-        self.assertEqual(expiry_cutoff('SPY261128C00760000',cal),pd.Timestamp('2026-11-27 17:45Z'))
+        self.assertEqual(expiry_cutoff('AAPL261128C00200000',cal),pd.Timestamp('2026-11-27 17:45Z'))
+        self.assertEqual(expiry_cutoff('SPY261128C00760000',cal),pd.Timestamp('2026-11-27 18:00Z'))
+        self.assertEqual(expiry_cutoff('QQQ261130P00600000',cal),pd.Timestamp('2026-11-30 21:00Z'))
+        self.assertEqual(expiry_cutoff('AAPL261130P00200000',cal),pd.Timestamp('2026-11-30 20:45Z'))
 
     def test_late_entry_and_changed_scope_fail_closed(self):
         self.now+=pd.Timedelta(minutes=6)
