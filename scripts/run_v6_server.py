@@ -71,6 +71,15 @@ def run(args, *, now=None):
                               "Forward portfolio allocation, exits and alert delivery need validation."],
                     next_input=str(args.snapshot_index))
             else:
+                from nn_meta.session_calendar import configured_calendar
+                calendar = configured_calendar()
+                if calendar is None:
+                    raise ValueError("a current exchange calendar is required before forward scoring")
+                if not calendar.scan_open(now):
+                    status.update(status="idle", phase="outside_market_hours")
+                    write(args.state / "status.json", status)
+                    print(json.dumps(status, sort_keys=True))
+                    return status
                 from nn_meta.live.v6_inputs import LiveSnapshot
                 pointer = read(args.snapshot_index)
                 snapshot_path = Path(pointer["path"])

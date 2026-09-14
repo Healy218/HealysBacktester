@@ -34,6 +34,7 @@ After=network-online.target
 Type=oneshot
 WorkingDirectory={ROOT}
 Environment=OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 TF_NUM_INTRAOP_THREADS=1 TF_NUM_INTEROP_THREADS=1 TF_CPP_MIN_LOG_LEVEL=2 CUDA_VISIBLE_DEVICES=-1
+Environment="NN_META_SESSION_CALENDAR={production / 'nn_meta/live/exchange_calendar.json'}"
 ExecStart={' '.join(chr(34) + arg + chr(34) for arg in command)}
 TimeoutStartSec=720
 CPUQuota=100%
