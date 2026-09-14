@@ -1,3 +1,15 @@
+## September 13: V6 server activation follow-up
+
+- [x] Preserve repaired V6 and deploy its verified 40-member model separately.
+- [x] Match both saved prediction heads on 130 real rows on both hosts.
+- [x] Enable raw OPRA quote/trade recording and add V6 to shared stock universe.
+- [x] Install quarter-hour V6 observer; explicit blocked state and no alerts.
+- [x] Verify provider condition mapping; save separate actual 1–9 DTE plan.
+- [ ] Connect a complete sealed live snapshot producer and pre-decision tick coverage.
+- [ ] Implement/verify persistent frozen allocation, exits/rolls and bid/ask execution.
+- [ ] Connect tested experimental alerts to shared dispatcher/deduplication.
+- [ ] Publish V6 server status in the private dashboard.
+
 # TODO — TradingView expansion and corrected research
 
 [GOALS](GOALS.md) records the September 10 baseline and year-end ≥7/10 targets.
