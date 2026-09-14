@@ -193,7 +193,19 @@ def main():
         queue = Batches()
         with queue.path.with_suffix('.tick.lock').open('a') as lock:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+            from nn_meta.live.v6_alert_bridge import ingest, publish_notices as v6_notices
+            v6_spool = os.environ.get('NN_META_V6_ALERT_SPOOL')
+            if v6_spool:
+                try:
+                    ingest(queue, Path(v6_spool))
+                except Exception as exc:
+                    print(f'V6 import failed ({type(exc).__name__}); existing experts continue', flush=True)
             print(f'Top-five alerts delivered: {queue.dispatch(notifier)}',flush=True)
+            if v6_spool:
+                try:
+                    v6_notices(queue, notifier)
+                except Exception as exc:
+                    print(f'V6 notice retry pending ({type(exc).__name__}); existing experts continue', flush=True)
             from nn_meta.live.alert_replies import BotAPI, publish_notices, poll_replies
             api = BotAPI()
             publish_notices(queue, api)
