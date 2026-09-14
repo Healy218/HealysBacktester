@@ -59,6 +59,7 @@ def union_universe(spec_paths=()) -> list[str]:
     # Explicit campaign specs are required inputs: a typo must not silently leave
     # the new expert's universe unsubscribed while legacy pools look healthy.
     paths = list(spec_paths)
+    paths.extend(p for p in os.environ.get("NN_META_ADDITIONAL_STOCK_SPECS", "").split(os.pathsep) if p)
     if getattr(config, "CAMPAIGN", ""):
         paths.append(config.BASELINE_SPEC_JSON)
     for path in paths:
