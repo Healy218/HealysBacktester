@@ -3,6 +3,7 @@ import argparse
 from pathlib import Path
 import json
 import os
+import subprocess
 from datetime import datetime, timezone
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -12,7 +13,10 @@ def install(args):
     from dotenv import dotenv_values, set_key
     env=ROOT/'.env'
     current=dotenv_values(env)
-    if current.get('NN_META_ALERT_TOP_N')!='5':
+    cron=subprocess.check_output(['crontab','-l'],text=True)
+    cron_enabled=any('nn_meta.live.alert_batches' in line and 'NN_META_ALERT_TOP_N=5' in line
+                     and not line.lstrip().startswith('#') for line in cron.splitlines())
+    if current.get('NN_META_ALERT_TOP_N')!='5' and not cron_enabled:
         raise ValueError('existing dispatcher is not enabled')
     spool=args.spool.absolute()
     spool.mkdir(parents=True,exist_ok=True)
