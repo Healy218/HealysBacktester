@@ -32,6 +32,10 @@ def _pivot(values, bar, period, high):
     return values[pivot] if valid else np.nan
 
 
+from v3._source_memo import memoized_source
+
+
+@memoized_source
 def support_resistance_channels(bars, *, pivot_period=10, pivot_source="High/Low",
                                 channel_width_pct=5, minimum_strength=1,
                                 max_channels=6, lookback=290):

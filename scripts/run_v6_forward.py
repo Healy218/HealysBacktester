@@ -144,18 +144,38 @@ def run(args):
                 return status
             report(phase="refresh_bars", universe=len(data.spec["symbols"]), data_through=data.document["through"])
             market = MassiveMarket(args.state / "market")
-            if not args.replay_time:
+            if not args.replay_time or getattr(args,'refresh_replay_bars',False) or getattr(args,'stock_capture',None):
                 try:
-                    data.update(now)
+                    captured=None
+                    if getattr(args,'stock_capture',None):
+                        if sha(args.stock_capture)!=args.stock_capture_sha256:
+                            raise ValueError('stock capture receipt changed')
+                        receipt=read(args.stock_capture)
+                        if receipt['data_manifest_sha256']!=args.data_anchor or pd.Timestamp(receipt['signal_close'])!=close:
+                            raise ValueError('stock capture belongs to a different data seed or bar')
+                        captured=receipt['stock_queries']
+                    data.update(now,capture=args.state/'stock-captures',captured=captured)
                 except Exception:
-                    report(expiry_fallback_errors=close_expiring_without_bars(book,data.calendar,market,utcnow(),alerts=args.enable_alerts))
+                    if not args.replay_time:
+                        report(expiry_fallback_errors=close_expiring_without_bars(book,data.calendar,market,utcnow(),alerts=args.enable_alerts))
                     raise
             if not args.replay_time:
                 report(phase="monitor_exits")
                 exit_errors=monitor_positions(data,book,market,now,alerts=args.enable_alerts)
                 if exit_errors:
-                    report(exit_errors=exit_errors)
+                    report(exit_errors=exit_errors,expiry_fallback_errors=close_expiring_without_bars(book,data.calendar,market,utcnow(),alerts=args.enable_alerts))
                     raise ValueError("unresolved position monitoring; new entries withheld")
+                held=book.open_positions()
+                if len(held)==5 and all(p['state']=='open' for p in held):
+                    # Exact zero-capacity case: causal exits were processed,
+                    # and no candidate can be allocated regardless of score.
+                    # All indicators are replayed from full history whenever
+                    # capacity next becomes available; no state is skipped.
+                    result=book.allocate(pd.DataFrame(),bar=bar,now=utcnow(),
+                        quote_loader=market.execution_quote,contexts={},clock=utcnow,alerts=args.enable_alerts)
+                    report(status='recorded',phase='complete',candidate_rows=0,allocation=result,
+                        candidate_skip_reason='all five slots occupied after causal exits',portfolio=book.summary())
+                    return status
                 reference=DecisionContractSelector(market).select('SPY',as_of=now.date(),right='C',
                     raw_spot=float(data.raw['SPY'].Close.iloc[-1]),target_dte=1)
                 if reference is None: raise ValueError('liquid reference option unavailable')
@@ -168,10 +188,12 @@ def run(args):
                 raise ValueError("a held position is missing its current underlying bar")
             fresh, exits, errors = [], {}, []
             batches, contexts, tick_evidence = [], {}, []
+            source_reuse={'hits':0,'misses':0}
             cycle_dir = args.state / "passes" / close.strftime("%Y%m%dT%H%M%SZ")
             cycle_dir.mkdir(parents=True, exist_ok=True)
             def collect(result):
                 fresh.extend(result["fresh"]); exits.update(result["exits"])
+                for k in source_reuse: source_reuse[k]+=result.get('source_reuse',{}).get(k,0)
                 if "batch" in result:
                     batches.append(result["batch"])
                     contexts.update(result["contexts"])
@@ -199,7 +221,8 @@ def run(args):
             if errors:
                 report(detection_errors=errors)
                 raise ValueError("incomplete universe detection; allocation withheld")
-            report(phase="capture_and_score", detected=len(active_tasks), no_current_bar=missing, fresh_signals=len(fresh))
+            report(phase="capture_and_score", detected=len(active_tasks), symbol_results=len(active_tasks),
+                   no_current_bar=missing, fresh_signals=len(fresh),fresh_symbols=len({p['symbol'] for p in fresh}),source_reuse=source_reuse)
             batch = pd.concat(batches, ignore_index=True) if batches else pd.DataFrame()
             if not batch.empty:
                 batch["_symbol_order"] = batch.symbol.map(order)
@@ -247,11 +270,17 @@ if __name__ == "__main__":
     ap.add_argument("--workers", type=int, default=2)
     ap.add_argument("--env", type=Path, default=Path(".env"))
     ap.add_argument("--replay-time")
+    ap.add_argument("--refresh-replay-bars",action='store_true',help='Fetch stock bars through a retrospective replay clock; never permits alerts')
+    ap.add_argument('--stock-capture',type=Path,help='Replay immutable captured stock queries with no stock API request')
+    ap.add_argument('--stock-capture-sha256')
     ap.add_argument("--enable-alerts", action="store_true")
     ap.add_argument("--activation", type=Path)
     args = ap.parse_args()
     if args.workers < 1 or args.workers > 16:
         ap.error("workers must be 1..16")
+    if args.refresh_replay_bars and not args.replay_time: ap.error('--refresh-replay-bars requires --replay-time')
+    if args.stock_capture and (not args.replay_time or not args.stock_capture_sha256):
+        ap.error('--stock-capture requires --replay-time and --stock-capture-sha256')
     if args.data_index:
         pointer=read(args.data_index)
         if pointer.get('schema')!='v6-forward-data-index-v1' or pointer.get('release_sha256')!=args.anchor:

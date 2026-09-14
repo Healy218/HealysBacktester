@@ -23,6 +23,9 @@ def activate(args):
             or replay.get('elapsed_seconds',999)>=280):
         raise ValueError('complete-universe replay has not passed with entry-deadline headroom')
     evidence={str(p.absolute()):sha(p) for p in [args.parity,args.replay,*args.tests]}
+    for path in args.evidence:
+        if read(path).get('status')!='passed': raise ValueError('additional activation evidence has not passed')
+        evidence[str(path.absolute())]=sha(path)
     count=0
     for path in args.tests:
         for suite in ET.parse(path).getroot().iter('testsuite'):
@@ -32,10 +35,10 @@ def activate(args):
     if count<180: raise ValueError('required numerical/portfolio/dispatcher checks are missing')
     # Bind implementation dependencies as well as the top-level entry point.
     paths=set()
-    for directory in ('nn_meta','v3','options','portfolio','indicators'):
+    for directory in ('nn_meta','v3','options','portfolio','indicators','signals'):
         paths.update((ROOT/directory).rglob('*.py'))
     paths.update(ROOT/'scripts'/name for name in ('run_v6_forward.py','prepare_v6_forward_data.py',
-        'prepare_v6_local_context.py','v6_forward_ops.py','activate_v6_forward.py'))
+        'prepare_v6_local_context.py','v6_forward_ops.py','activate_v6_forward.py','install_v6_forward.py'))
     runtime={str(p.relative_to(ROOT)):sha(p) for p in sorted(paths) if '__pycache__' not in p.parts}
     receipt={'status':'passed','schema':'v6-forward-activation-v1','release_sha256':args.anchor,
         'runtime_sha256':runtime,'evidence_sha256':evidence,'tests':count,'activated_at':utcnow().isoformat(),
@@ -54,4 +57,5 @@ if __name__=='__main__':
     ap.add_argument('--release',type=Path,required=True); ap.add_argument('--anchor',required=True)
     ap.add_argument('--parity',type=Path,required=True); ap.add_argument('--replay',type=Path,required=True)
     ap.add_argument('--tests',type=Path,nargs='+',required=True); ap.add_argument('--output',type=Path,required=True)
+    ap.add_argument('--evidence',type=Path,nargs='*',default=[])
     activate(ap.parse_args())

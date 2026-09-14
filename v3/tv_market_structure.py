@@ -18,6 +18,10 @@ import pandas as pd
 from v3._tv_trend_support import comparison_value as cmp, integer, validate_bars
 
 
+from v3._source_memo import memoized_source
+
+
+@memoized_source
 def market_structure_break(bars, *, zigzag_length=9, fib_factor=0.33):
     """Return source market/zigzag state and bullish/bearish MSB events.
 

@@ -54,6 +54,18 @@ class ForwardPortfolioTests(unittest.TestCase):
         self.assertEqual(len(self.book.open_positions()),1)
         self.assertEqual(self.book.summary()['outbox'],{'pending':1})
 
+    def test_full_portfolio_records_zero_capacity_cycle_without_quote_queries(self):
+        rows=pd.concat([self.rows().assign(symbol=s,decision_contract=self.contract.replace('SPY',s))
+                        for s in ['SPY','AAPL','NVDA','MSFT','META']],ignore_index=True)
+        self.assertEqual(self.allocate(rows)['opened'],5)
+        self.now+=pd.Timedelta(minutes=15)
+        def unexpected(*args,**kwargs): raise AssertionError('full portfolio requested an entry quote')
+        result=self.book.allocate(pd.DataFrame(),bar=self.bar+pd.Timedelta(minutes=15),now=self.now,
+            quote_loader=unexpected,contexts={},clock=lambda:self.now,alerts=True)
+        self.assertEqual(result['opened'],0)
+        self.assertEqual(len(self.book.open_positions()),5)
+        self.assertEqual(self.book.summary()['outbox'],{'pending':5})
+
     def test_no_quote_is_recorded_unfilled_without_replacement(self):
         rows=pd.concat([self.rows(),self.rows().assign(strategy='lower',decision=.1)])
         def fail(*a,**k): raise ValueError('no fresh quote')

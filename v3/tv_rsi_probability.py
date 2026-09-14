@@ -128,6 +128,10 @@ class RsiProbabilityState:
         return cls(side, bucket, *prices, counts.astype(np.int64, copy=True))
 
 
+from v3._source_memo import memoized_source
+
+
+@memoized_source
 def rsi_probability_matrix(
     bars: pd.DataFrame, rsi_period: int = 14, signal_period: int = 14,
     oversold: int = 40, overbought: int = 60, atr_period: int = 14,

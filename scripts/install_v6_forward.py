@@ -71,7 +71,7 @@ def install(args):
              '--workers','16','--enable-alerts','--activation',state/'activation.json'],timeout=600,
              extra='ExecStartPost=-'+quote([python,'-m','scripts.v6_forward_ops','relay','--state',state,'--remote',args.remote]))
         units['healys-v6-forward.timer']=timer('V6 completed-bar paper decisions','healys-v6-forward',
-            'Mon..Fri *-*-* 12..22:00,15,30,45:20 UTC')
+            'Mon..Fri *-*-* 12..22:00,15,30,45:05 UTC')
         units['healys-v6-relay.service']=service('Publish V6 paper state and immutable alert events',
             [*common,'relay','--state',state,'--remote',args.remote],timeout=60,memory='512M')
         units['healys-v6-relay.timer']=timer('Retry V6 state and alert transfer each minute','healys-v6-relay','*-*-* *:*:40')

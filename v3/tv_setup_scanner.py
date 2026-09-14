@@ -124,6 +124,10 @@ def _vwap_series(bars, available, supplied, reset):
     return values
 
 
+from v3._source_memo import memoized_source
+
+
+@memoized_source
 def setup_scanner(bars: pd.DataFrame, *, enabled=SETUPS, atr_length=14, stop_atr=1.2,
                   targets=(1., 2., 3.), max_open=1, max_bars=60, reentry=0,
                   one_way=True, keep_trades=8, volume_multiplier=1., pivot_length=5,

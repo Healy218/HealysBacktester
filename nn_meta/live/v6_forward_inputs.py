@@ -13,6 +13,18 @@ from nn_meta.price_basis import require_raw_surface, raw_spot_provenance
 from nn_meta.session_calendar import SessionCalendar
 
 
+def captured_panel(receipt, *, start, now, adjustment):
+    path=Path(receipt['path'])
+    if (receipt.get('adjustment')!=adjustment or pd.Timestamp(receipt['query_start'])!=start
+            or pd.Timestamp(receipt['query_end'])!=now or sha(path)!=receipt['sha256']):
+        raise ValueError('captured stock query identity, clock or bytes changed')
+    frame=pd.read_parquet(path)
+    if (frame.attrs.get('provider')!='alpaca' or frame.attrs.get('feed')!='sip'
+            or frame.attrs.get('adjustment')!=adjustment or len(frame)!=receipt['rows']):
+        raise ValueError('captured stock query metadata differs')
+    return frame
+
+
 def attach_context(symbol, bars, training, calendar):
     from scripts.prepare_v6_local_context import local_context
     flags, context = local_context(bars, calendar, symbol=symbol,
@@ -97,15 +109,18 @@ def init_worker(data_root, release_root, market_root, cycle_root):
 
 def process_symbol(task):
     """Detection and any feature capture run concurrently across symbols."""
-    result = detect_symbol(task)
-    obj, market, directory = _worker_inputs
-    if result["fresh"]:
-        symbol = task[0]
-        obj.bars, obj.raw = {symbol: task[1]}, {symbol: task[2]}
-        before = len(market.evidence)
-        batch, contexts = obj.candidates(result["fresh"], market, directory)
-        result.update(batch=batch, contexts=contexts, evidence=market.evidence[before:])
-    return result
+    from v3._source_memo import reuse_identical_sources
+    with reuse_identical_sources() as reuse:
+        result = detect_symbol(task)
+        obj, market, directory = _worker_inputs
+        if result["fresh"]:
+            symbol = task[0]
+            obj.bars, obj.raw = {symbol: task[1]}, {symbol: task[2]}
+            before = len(market.evidence)
+            batch, contexts = obj.candidates(result["fresh"], market, directory)
+            result.update(batch=batch, contexts=contexts, evidence=market.evidence[before:])
+        result['source_reuse']={'hits':reuse['hits'],'misses':reuse['misses']}
+        return result
 
 
 class ForwardData:
@@ -141,7 +156,7 @@ class ForwardData:
                 dest[symbol] = pd.read_parquet(path)
         self.market_receipts = []
 
-    def update(self, now):
+    def update(self, now, *, capture=None, captured=None):
         """Fetch complete queries for every frozen symbol; never synthesize bars."""
         from concurrent.futures import ThreadPoolExecutor
         now = pd.Timestamp(now)
@@ -151,15 +166,27 @@ class ForwardData:
             raise ValueError(f"daily context is stale: {self.document['through']} vs required {prior}")
         # Include the seed's last day to detect adjusted-price restatements.
         start = self.calendar.bounds(prior)[0].tz_localize("UTC")
+        if captured is not None and sorted(r.get('adjustment') for r in captured)!=['all','raw']:
+            raise ValueError('replay requires both complete adjusted and raw stock queries')
         def fetch(adjustment):
+            if captured is not None:
+                ref=next(r for r in captured if r['adjustment']==adjustment)
+                return adjustment,captured_panel(ref,start=start,now=now,adjustment=adjustment)
             return adjustment, alpaca_bars(list(self.spec["symbols"]), start, now, timeframe="15Min", adjustment=adjustment)
         frames = {}
         with ThreadPoolExecutor(max_workers=2) as pool:
             for adjustment, panel in pool.map(fetch, ("all", "raw")):
                 frames[adjustment] = panel
-                self.market_receipts.append({"kind": "stock_bars", "adjustment": adjustment,
+                receipt={"kind": "stock_bars", "adjustment": adjustment,
                     "rows": len(panel), "symbols": panel.symbol.nunique(), "received_at": panel.attrs["received_at"],
-                    "query_start": start.isoformat(), "query_end": now.isoformat()})
+                    "query_start": start.isoformat(), "query_end": now.isoformat()}
+                if capture is not None:
+                    from nn_meta.live.v6_market import utcnow
+                    path=Path(capture)/(utcnow().strftime('%Y%m%dT%H%M%S%fZ')+'.'+adjustment+'.parquet')
+                    path.parent.mkdir(parents=True,exist_ok=True)
+                    panel.to_parquet(path,index=False)
+                    receipt.update(path=str(path.absolute()),sha256=sha(path))
+                self.market_receipts.append(receipt)
         for symbol in self.spec["symbols"]:
             for adjustment, dest in [("all", self.bars), ("raw", self.raw)]:
                 panel = frames[adjustment]
@@ -203,6 +230,7 @@ class ForwardData:
                 from nn_meta.v6_expansion import aware_bars
                 from nn_meta.tradingview_features import tradingview_features
                 context = inner.context(symbol, bars)
+                context["as_of"] = pd.Timestamp(context["as_of"])
                 if symbol not in inner._matrices:
                     complete = aware_bars(bars)
                     inner._matrices[symbol] = tradingview_features(complete,

@@ -16,6 +16,10 @@ from v3._tv_trend_support import comparison_value as cmp
 from v3._tv_trend_support import integer, pine_ohlc, positive, validate_bars
 
 
+from v3._source_memo import memoized_source
+
+
+@memoized_source
 def uptrick_adaptive_trend(
     bars: pd.DataFrame, trend_length: int = 34, momentum_length: int = 12,
     sensitivity: float = 0.35, fast_length: int = 9, fast_factor: float = 1.45,

@@ -3,6 +3,10 @@ import pandas as pd
 from scripts.prepare_v6_forward_data import daily_frame_from_minutes
 from v3.flatfiles import frame_from_minute_aggs
 from v3.derive_contracts import daily_from_frame
+from pathlib import Path
+import tempfile
+from nn_meta.live.v6_forward_inputs import captured_panel
+from nn_meta.live.v6_release import sha
 
 
 class ForwardDataTests(unittest.TestCase):
@@ -26,6 +30,22 @@ class ForwardDataTests(unittest.TestCase):
         raw=pd.DataFrame([dict(ticker='O:SPY260918C00760000',window_start=1,
             open=1,high=2,low=.5,close=1.5,volume=1.5)])
         with self.assertRaisesRegex(ValueError,'integral'): daily_frame_from_minutes(raw,{'SPY'})
+
+    def test_stock_replay_binds_exact_query_clocks_feed_and_bytes(self):
+        with tempfile.TemporaryDirectory() as directory:
+            path=Path(directory)/'raw.parquet'
+            frame=pd.DataFrame({'symbol':['SPY'],'timestamp':[pd.Timestamp('2026-09-14 13:30')],'Close':[760.]})
+            frame.attrs=dict(provider='alpaca',feed='sip',adjustment='raw')
+            frame.to_parquet(path,index=False)
+            start=pd.Timestamp('2026-09-11T13:30Z');now=pd.Timestamp('2026-09-14T13:45:20Z')
+            receipt=dict(path=str(path),sha256=sha(path),rows=1,adjustment='raw',query_start=start.isoformat(),query_end=now.isoformat())
+            actual=captured_panel(receipt,start=start,now=now,adjustment='raw')
+            pd.testing.assert_frame_equal(actual,frame,check_exact=True)
+            with self.assertRaisesRegex(ValueError,'identity'):
+                captured_panel(receipt,start=start,now=now+pd.Timedelta(seconds=1),adjustment='raw')
+            path.write_bytes(b'changed')
+            with self.assertRaisesRegex(ValueError,'bytes'):
+                captured_panel(receipt,start=start,now=now,adjustment='raw')
 
 
 if __name__=='__main__': unittest.main()
