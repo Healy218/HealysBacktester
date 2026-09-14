@@ -145,6 +145,9 @@ def test_chart_poc_preserves_source_stale_value_and_exposes_freshness():
     assert got.chart_poc.iloc[2] == got.chart_poc.iloc[1]
     assert np.isnan(got.chart_poc_buy_volume.iloc[2])
     assert got.profile_status.iloc[2] == "flat_atoms_only"
+    sparse = volume_footprint(frame, tick_size=1., profile_period=2,
+                             include_diagnostics=False, observation_positions=[2])
+    pd.testing.assert_frame_equal(sparse, got.iloc[[2]], check_exact=True, check_freq=False)
 
 
 def test_distinct_flat_prices_do_not_enter_source_density_or_band_mass():

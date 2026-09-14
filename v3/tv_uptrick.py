@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import os
 
 from v3 import pine_compat as pine
 from v3._tv_trend_support import comparison_value as cmp
@@ -110,40 +111,47 @@ def uptrick_adaptive_trend(
     medium_bear = (medium["direction"] > 0).to_numpy()
     slow_bull = (slow["direction"] < 0).to_numpy()
     slow_bear = (slow["direction"] > 0).to_numpy()
-    for i in range(len(bars)):
-        ch, bv, sv = cmp(chop.iloc[i]), bull_votes.iloc[i], bear_votes.iloc[i]
-        required_votes = 3 if ch > 0.70 else 2
-        bull_st_bars = min(bull_st_bars + 1, 5) if bv >= required_votes else 0
-        bear_st_bars = min(bear_st_bars + 1, 5) if sv >= required_votes else 0
-        persistence = 2 if ch > 0.72 else 1
-        bull_candidate = (cmp(regime.iloc[i]) > cmp(gate.iloc[i]) and bull_price_ok.iloc[i]
-                          and cmp(momentum.iloc[i]) > 0.025 and bull_st_bars >= persistence)
-        bear_candidate = (cmp(regime.iloc[i]) < cmp(-gate.iloc[i]) and bear_price_ok.iloc[i]
-                          and cmp(momentum.iloc[i]) < -0.025 and bear_st_bars >= persistence)
-        required_bars = 3 if ch > 0.72 else 2 if ch > 0.40 else 1
-        bull_confirm = min(bull_confirm + 1, 4) if bull_candidate else 0
-        bear_confirm = min(bear_confirm + 1, 4) if bear_candidate else 0
-        strong_bull = (bull_candidate and bv == 3 and cmp(regime.iloc[i]) > cmp(gate.iloc[i] + 0.26)
-                       and cmp(momentum.iloc[i]) > 0.16 and cmp(efficiency.iloc[i]) > 0.42)
-        strong_bear = (bear_candidate and sv == 3 and cmp(regime.iloc[i]) < cmp(-(gate.iloc[i] + 0.26))
-                       and cmp(momentum.iloc[i]) < -0.16 and cmp(efficiency.iloc[i]) > 0.42)
-        bull_ready = ((bull_confirm >= required_bars or strong_bull)
-                      and fast_bull[i] and (medium_bull[i] or slow_bull[i]))
-        bear_ready = ((bear_confirm >= required_bars or strong_bear)
-                      and fast_bear[i] and (medium_bear[i] or slow_bear[i]))
-        cooldown = 6 + int(pine.round_half_up(chop.iloc[i] * 4.0))
-        cooldown_done = (100000 if last_flip is None else i - last_flip) >= cooldown
-        changed = False
-        if trend != 1 and bull_ready and (cooldown_done or strong_bull):
-            trend, changed = 1, True
-        elif trend != -1 and bear_ready and (cooldown_done or strong_bear):
-            trend, changed = -1, True
-        if changed:
-            last_flip = i
-            bull_confirm = bear_confirm = bull_st_bars = bear_st_bars = 0
-        state[i] = trend
-        counters[i] = bull_st_bars, bear_st_bars, bull_confirm, bear_confirm
-        ready[i], strong[i] = (bull_ready, bear_ready), (strong_bull, strong_bear)
+    if os.environ.get("NN_META_V6_ACCELERATE") == "1":
+        from v3._uptrick_fast import states
+        state, counters, ready, strong = states(
+            *[v.to_numpy() for v in (chop, bull_votes, bear_votes, regime, gate,
+                bull_price_ok, bear_price_ok, momentum, efficiency)],
+            fast_bull, fast_bear, medium_bull, medium_bear, slow_bull, slow_bear)
+    else:
+        for i in range(len(bars)):
+            ch, bv, sv = cmp(chop.iloc[i]), bull_votes.iloc[i], bear_votes.iloc[i]
+            required_votes = 3 if ch > 0.70 else 2
+            bull_st_bars = min(bull_st_bars + 1, 5) if bv >= required_votes else 0
+            bear_st_bars = min(bear_st_bars + 1, 5) if sv >= required_votes else 0
+            persistence = 2 if ch > 0.72 else 1
+            bull_candidate = (cmp(regime.iloc[i]) > cmp(gate.iloc[i]) and bull_price_ok.iloc[i]
+                              and cmp(momentum.iloc[i]) > 0.025 and bull_st_bars >= persistence)
+            bear_candidate = (cmp(regime.iloc[i]) < cmp(-gate.iloc[i]) and bear_price_ok.iloc[i]
+                              and cmp(momentum.iloc[i]) < -0.025 and bear_st_bars >= persistence)
+            required_bars = 3 if ch > 0.72 else 2 if ch > 0.40 else 1
+            bull_confirm = min(bull_confirm + 1, 4) if bull_candidate else 0
+            bear_confirm = min(bear_confirm + 1, 4) if bear_candidate else 0
+            strong_bull = (bull_candidate and bv == 3 and cmp(regime.iloc[i]) > cmp(gate.iloc[i] + 0.26)
+                           and cmp(momentum.iloc[i]) > 0.16 and cmp(efficiency.iloc[i]) > 0.42)
+            strong_bear = (bear_candidate and sv == 3 and cmp(regime.iloc[i]) < cmp(-(gate.iloc[i] + 0.26))
+                           and cmp(momentum.iloc[i]) < -0.16 and cmp(efficiency.iloc[i]) > 0.42)
+            bull_ready = ((bull_confirm >= required_bars or strong_bull)
+                          and fast_bull[i] and (medium_bull[i] or slow_bull[i]))
+            bear_ready = ((bear_confirm >= required_bars or strong_bear)
+                          and fast_bear[i] and (medium_bear[i] or slow_bear[i]))
+            cooldown = 6 + int(pine.round_half_up(chop.iloc[i] * 4.0))
+            cooldown_done = (100000 if last_flip is None else i - last_flip) >= cooldown
+            changed = False
+            if trend != 1 and bull_ready and (cooldown_done or strong_bull):
+                trend, changed = 1, True
+            elif trend != -1 and bear_ready and (cooldown_done or strong_bear):
+                trend, changed = -1, True
+            if changed:
+                last_flip = i
+                bull_confirm = bear_confirm = bull_st_bars = bear_st_bars = 0
+            state[i] = trend
+            counters[i] = bull_st_bars, bear_st_bars, bull_confirm, bear_confirm
+            ready[i], strong[i] = (bull_ready, bear_ready), (strong_bull, strong_bear)
     direction = pd.Series(state, index=bars.index)
     smooth_basis = pine.ema(basis, smoothness) if smoothness > 1 else basis
     smooth_atr = pine.ema(safe_atr, smoothness) if smoothness > 1 else safe_atr

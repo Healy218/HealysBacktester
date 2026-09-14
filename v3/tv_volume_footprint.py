@@ -307,7 +307,7 @@ def volume_footprint(bars, *, tick_size, engine="geometric", intrabar_stream=Non
                      intrabar_minutes=1, window=5, view_ticks=5, bell_div=3.,
                      profile_period=23, profile_resolution=100, value_area_pct=70.,
                      imbalance_pct=300., bar_minutes=15, as_of=None,
-                     include_levels=False, include_diagnostics=True):
+                     include_levels=False, include_diagnostics=True, observation_positions=None):
     """Return source numerical features for each completed bar prefix.
 
     ``include_levels`` adds immutable bottom-to-top table levels, per-selected
@@ -327,6 +327,13 @@ def volume_footprint(bars, *, tick_size, engine="geometric", intrabar_stream=Non
     if engine not in ("geometric", "intrabar"):
         raise ValueError("engine must be geometric, intrabar, or native")
     available = profile_observations(bars, bar_minutes, as_of)
+    requested = None
+    if observation_positions is not None:
+        requested = tuple(observation_positions)
+        if (not requested or any(type(i) is not int or not 0 <= i < len(bars) for i in requested)
+                or list(requested) != sorted(set(requested))):
+            raise ValueError("observation positions must be ordered distinct full-history offsets")
+        selected_positions = set(requested)
     tick = positive("tick_size", tick_size)
     window = integer("window", window, 2, 60)
     view = integer("view_ticks", view_ticks, 1, 50)
@@ -382,6 +389,11 @@ def volume_footprint(bars, *, tick_size, engine="geometric", intrabar_stream=Non
         row = dict(prototype)
         has_data = bool(np.isfinite(buy[i]) and np.isfinite(sell[i]))
         coverage = min(5000, coverage + 1) if has_data else 0
+        # Each source profile is a last-bar snapshot calculated directly from
+        # the original full arrays. Earlier profile calculations do not feed
+        # it. Preserve coverage state; stale carried POC is handled below.
+        if requested is not None and i not in selected_positions:
+            continue
         total = buy[i] + sell[i]
         row.update(available_at=available[i], engine_observed_at=observed[i], engine_data_available=has_data,
                    buy_volume=buy[i], sell_volume=sell[i], total_volume=total, delta_volume=buy[i] - sell[i],
@@ -465,7 +477,18 @@ def volume_footprint(bars, *, tick_size, engine="geometric", intrabar_stream=Non
                     row.update(profile_prices=tuple(profile_prices), profile_buy_density=tuple(pb), profile_sell_density=tuple(ps))
         row["chart_poc"] = chart_poc  # Pine var persists when no new control level is computed
         rows.append(row)
-    result = frame_from_rows(rows, bars.index, prototype, timestamp_columns=("available_at", "engine_observed_at"))
+    result_index = bars.index if requested is None else bars.index[list(requested)]
+    result = frame_from_rows(rows, result_index, prototype, timestamp_columns=("available_at", "engine_observed_at"))
+    if requested is not None and not result.chart_poc_fresh.all():
+        # Exact full-source fallback when a requested row carries a previous
+        # POC. Do not synthesize/rebase that state or silently return NaN.
+        return volume_footprint(bars, tick_size=tick_size, engine=engine,
+            intrabar_stream=intrabar_stream, intrabar_minutes=intrabar_minutes,
+            window=window, view_ticks=view_ticks, bell_div=bell_div,
+            profile_period=profile_period, profile_resolution=profile_resolution,
+            value_area_pct=value_area_pct, imbalance_pct=imbalance_pct,
+            bar_minutes=bar_minutes, as_of=as_of, include_levels=include_levels,
+            include_diagnostics=include_diagnostics).loc[result_index]
     result.attrs.update(public_id="Tm1cGCPD", publication_version=4, engine=engine,
                         source_semantics="completed-prefix last-bar snapshots; default metric scopes both",
                         intrabar_minutes=intrabar_minutes if engine == "intrabar" else None,

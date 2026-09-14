@@ -160,6 +160,19 @@ def feature_requirements() -> dict:
 
 
 def _gaps(index, session):
+    # Every source wrapper validates the same full-history index. Cache only
+    # this pure calendar computation, never prices or feature values. Return
+    # a detached array so a caller cannot mutate another validation result.
+    values = _cached_gaps(index.as_unit("ns").asi8.tobytes(), session)
+    return pd.Series(values.copy(), index=index, dtype=bool)
+
+
+from functools import lru_cache
+
+
+@lru_cache(maxsize=32)
+def _cached_gaps(stamps, session):
+    index = pd.DatetimeIndex(np.frombuffer(stamps, dtype=np.int64), tz="UTC")
     window = SessionWindow.parse(session)
     local = index.tz_convert("America/New_York")
     previous_inside, previous_instance = False, None
@@ -168,7 +181,7 @@ def _gaps(index, session):
         inside, instance = window.locate(stamp)
         gaps.append(bool(inside and previous_inside and instance != previous_instance))
         previous_inside, previous_instance = inside, instance
-    return pd.Series(gaps, index=index, dtype=bool)
+    return np.asarray(gaps, dtype=bool)
 
 
 def validate_feature_inputs(bars, *, minimum_tick, timeframe_flags,
@@ -293,7 +306,7 @@ def feature_schema(*, minimum_tick, session_policy="strict", vwap_mode="reset_fl
 
 def tradingview_features(bars, *, minimum_tick, timeframe_flags,
                         dependency_metadata, as_of, session_policy="strict",
-                        vwap_observations=None) -> TradingViewFeatureMatrix:
+                        vwap_observations=None, observation_index=None) -> TradingViewFeatureMatrix:
     """Project every port with fixed defaults; all rows become known at close.
 
     ``price_atr`` = (source level - current Close) / completed-bar Pine ATR14.
@@ -309,6 +322,10 @@ def tradingview_features(bars, *, minimum_tick, timeframe_flags,
     context = validate_feature_inputs(bars, minimum_tick=minimum_tick, timeframe_flags=timeframe_flags,
                                       dependency_metadata=dependency_metadata, as_of=as_of,
                                       session_policy=session_policy, vwap_observations=vwap_observations)
+    projected_index = bars.index if observation_index is None else pd.DatetimeIndex(observation_index)
+    if (not len(projected_index) or not projected_index.is_unique or not projected_index.is_monotonic_increasing
+            or len(projected_index.difference(bars.index))):
+        raise ValueError("feature observations must be distinct ordered original-history bars")
     catalog = build_catalog(ROOT)
     settings = _settings(catalog, minimum_tick, session_policy)
     frames, timings = {}, {}
@@ -327,15 +344,22 @@ def tradingview_features(bars, *, minimum_tick, timeframe_flags,
             flags = timeframe_flags.htf_change.copy()
             flags.attrs["htf_period"] = "2D"
             kwargs["htf_change"] = flags
+        if alias in ("footprint", "htf") and observation_index is not None:
+            kwargs["observation_positions"] = [int(i) for i in bars.index.get_indexer(projected_index)]
         started = time.perf_counter()
         frames[alias] = calculator(bars, **kwargs)
         timings[alias] = time.perf_counter() - started
-        if not frames[alias].index.equals(bars.index):
+        expected_index = projected_index if alias in ("footprint", "htf") and observation_index is not None else bars.index
+        if not frames[alias].index.equals(expected_index):
             raise ValueError(f"{alias} changed feature observation index")
-        if "available_at" in frames[alias] and not pd.DatetimeIndex(frames[alias].available_at).equals(context["available_at"]):
+        expected_at = pd.DatetimeIndex(pd.Series(context["available_at"], index=bars.index).loc[expected_index])
+        if "available_at" in frames[alias] and not pd.DatetimeIndex(frames[alias].available_at).equals(expected_at):
             raise ValueError(f"{alias} changed completed-bar availability")
+        frames[alias] = frames[alias].loc[projected_index]
     scale = atr(pine_ohlc(bars), 14)
     scale = scale.where(scale > 0)
+    scale = scale.loc[projected_index]
+    projected_close = bars.Close.loc[projected_index]
     columns = {}
     for spec in FEATURE_SPECS:
         frame = frames[spec.source]
@@ -349,7 +373,7 @@ def tradingview_features(bars, *, minimum_tick, timeframe_flags,
                 raise ValueError(f"{spec.name} must be an exact source boolean")
             value = raw.astype(float)
             if spec.transform == "price_atr":
-                value = (value - bars.Close) / scale
+                value = (value - projected_close) / scale
             elif spec.transform == "range_atr":
                 value = value / scale
             elif spec.transform == "percent":
@@ -361,7 +385,7 @@ def tradingview_features(bars, *, minimum_tick, timeframe_flags,
             side = spec.field.split("_", 1)[0]
             value = value.where(frame[f"total_{side}_wins"] + frame[f"total_{side}_losses"] > 0)
         columns[spec.name] = value
-    matrix = pd.DataFrame(columns, index=bars.index, dtype=float)
+    matrix = pd.DataFrame(columns, index=projected_index, dtype=float)
     if tuple(matrix.columns) != FEATURE_NAMES or np.isinf(matrix.to_numpy()).any():
         raise ValueError("invalid feature schema or nonfinite normalization")
     after = build_catalog(ROOT)
@@ -408,4 +432,5 @@ def tradingview_features(bars, *, minimum_tick, timeframe_flags,
         "vwap_mode": context["vwap_mode"],
         "runtime": metadata_out["runtime"],
     })
-    return TradingViewFeatureMatrix(matrix, pd.Series(context["available_at"], index=bars.index, name="available_at"), metadata_out)
+    metadata_out["projected_observation_count"] = len(projected_index)
+    return TradingViewFeatureMatrix(matrix, pd.Series(context["available_at"], index=bars.index, name="available_at").loc[projected_index], metadata_out)

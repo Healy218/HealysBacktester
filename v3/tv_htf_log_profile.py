@@ -147,7 +147,7 @@ def _session_values(opens, highs, lows, closes, volumes, length, start, end,
 def htf_log_regression_profile(bars, htf_change, *, chart_period="15", auto_htf=True,
                                manual_htf="D", channel_width=1., bin_count=30,
                                show_profile=True, show_poc=True, bar_minutes=15,
-                               as_of=None, include_bins=False):
+                               as_of=None, include_bins=False, observation_positions=None):
     """Return current and most-recent-completed session profiles.
 
     ``htf_change`` must be a nonmissing boolean Series aligned to bars, captured
@@ -160,6 +160,11 @@ def htf_log_regression_profile(bars, htf_change, *, chart_period="15", auto_htf=
     previous observation time separately, and is never assigned to earlier rows.
     """
     available = profile_observations(bars, bar_minutes, as_of, logarithmic=True)
+    positions = list(range(len(bars))) if observation_positions is None else list(observation_positions)
+    if (any(type(p) is not int or not 0 <= p < len(bars) for p in positions)
+            or positions != sorted(set(positions))):
+        raise ValueError("observations must be distinct ordered full-history positions")
+    requested = set(positions)
     if not isinstance(chart_period, str) or not chart_period.isdigit() or int(chart_period) != bar_minutes:
         raise ValueError("this adapter requires minute chart_period matching bar_minutes")
     bin_count = integer("bin_count", bin_count, 5, 100)
@@ -178,6 +183,10 @@ def htf_log_regression_profile(bars, htf_change, *, chart_period="15", auto_htf=
         raise ValueError("htf_change must be an aligned nonmissing boolean Series")
     if htf_change.attrs.get("htf_period", period) != period:
         raise ValueError("HTF flag period does not match selected source period")
+    # Completed state depends only on the final observation of each previous
+    # HTF session. Retain all flags/history, but avoid drawing unused developing
+    # profiles. The original session calculation and summation order stay exact.
+    needed = requested | {int(i) - 1 for i in np.flatnonzero(htf_change.to_numpy()) if i > 0}
     arrays = [bars[c].to_numpy(float) for c in ("Open", "High", "Low", "Close", "Volume")]
     numerical = dict(_NUMERICAL)
     if include_bins:
@@ -207,6 +216,8 @@ def htf_log_regression_profile(bars, htf_change, *, chart_period="15", auto_htf=
             length, observed_start, partial = 1, i, False
         else:
             length += 1  # source does this even on bar0 if its flag is false
+        if i not in needed:
+            continue
         start_index = i - length + 1
         values = _session_values(*arrays, length, observed_start, i, channel_width,
                                   bin_count, show_profile, show_poc, include_bins)
@@ -215,11 +226,12 @@ def htf_log_regression_profile(bars, htf_change, *, chart_period="15", auto_htf=
                "session_start_at": bars.index[start_index] if start_index >= 0 else pd.NaT,
                "partial_initial_session": partial, "session_completed": ended,
                **values, **completed}
-        rows.append(row)
+        if i in requested:
+            rows.append(row)
         previous = row
     timestamps = ("available_at", "session_start_at", "completed_available_at",
                   "completed_last_observed_at", "completed_session_start_at")
-    result = frame_from_rows(rows, bars.index, prototype, timestamp_columns=timestamps)
+    result = frame_from_rows(rows, bars.index[positions], prototype, timestamp_columns=timestamps)
     result.attrs.update(source="kwXpL7yZ/v4", htf_period=period,
                         htf_flags_contract="caller-supplied exchange-aligned timeframe.change",
                         admission_status="feature-only; pending exported TradingView fixtures",
