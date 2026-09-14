@@ -30,3 +30,8 @@ trade 00EA905144FB; initial button saved the alerted 71C, subsequent shorthand
 was rejected. 102 focused tests passed. See
 `docs/reviews/2026-09-11-taken-contract-shorthand.md`. Deploy and verify on the
 production ops branch; user must resend the failed command as a new update.
+
+Deployed 2cf23a9 through fast-forward Git pull on September 11. All 102
+focused tests also passed on Hetzner. Existing minute dispatcher loads the
+updated parser on its next run. Live position is still awaiting the user’s
+new command; do not claim the 72C has been recorded without readback.
