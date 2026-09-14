@@ -231,13 +231,7 @@ class ExpandedInputs:
             req["request_id"] = request_id(req)
             requested.append(req)
             selected_features.append(matrix.values.loc[stamp])
-        entry = self.document["symbols"][symbol]["tick_store"]
-        directory = Path(entry["directory"])
-        if not directory.is_absolute():
-            directory = self.path.parent / directory
-        joined = join_decisions(pd.DataFrame(requested), directory,
-            expected_task_sha256=entry["task_sha256"], expected_store_sha256=entry["store_sha256"],
-            allow_unselected=True)
+        joined = self.join_ticks(pd.DataFrame(requested), symbol=symbol)
         if joined.attrs["feature_policy"] != self.document["tick_feature_policy"]:
             raise ValueError("tick store uses a different frozen condition/availability policy")
         extra = {col: [float(row[col]) for row in selected_features] for col in FEATURE_NAMES}
@@ -249,6 +243,16 @@ class ExpandedInputs:
         result.attrs["v6_inputs_sha256"] = self.digest
         self.assert_unchanged()
         return result
+
+    def join_ticks(self, requested, *, symbol):
+        """Historical stores by default; receipt adapters override only this join."""
+        entry = self.document["symbols"][symbol]["tick_store"]
+        directory = Path(entry["directory"])
+        if not directory.is_absolute():
+            directory = self.path.parent / directory
+        return join_decisions(requested, directory,
+            expected_task_sha256=entry["task_sha256"], expected_store_sha256=entry["store_sha256"],
+            allow_unselected=True)
 
 
 @lru_cache(maxsize=1)

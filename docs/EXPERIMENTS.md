@@ -1,5 +1,44 @@
 # EXPERIMENTS — every generation's verdict in one table
 
+## 2026-09-13 — cash rejection repaired; full rerun finalizing
+
+`v6-cash-repair-20260913` started at 18:04 UTC. All three evaluation folds
+completed successfully; all 20 NN selection seeds passed finite numerical
+checks. The finalizer selected GBT and is fitting the 40-seed ensemble
+(14 complete at 19:08 UTC). Final ensemble gates/performance remain pending.
+The original cash guard remains strict. Unfundable candidate books now receive
+an explicit ineligible result; corrupt data still stops evaluation. Full suite:
+1,537 tests +18 subtests passed. The exact failed fold-3 case now completes its
+15-policy grid, with one unfundable policy rejected; both ledgers match the
+funding rejection under four cost scenarios. This preflight is reused validation
+evidence, not a new holdout. [Review](reviews/2026-09-13-v6-cash-repair.md).
+
+## 2026-09-13 — V6 numerical repair and frozen revalidation
+
+Finite neural preprocessing/receipts are implemented. A one-seed/two-epoch
+smoke on 8,192/2,048 preserved train/validation rows produced finite,
+nonconstant classifier and magnitude predictions across all 164 features;
+the two unobserved session columns are explicitly inactive. This is a
+numerical check, not a new family-selection or strategy-performance result.
+Fresh full-training scope `v6-neural-repair-20260913r2` launched at 16:44 UTC
+under `healys-v6-neural-repair-20260913r2.service`: three folds, forty final
+seeds, two workers/two threads. The pipeline automatically follows training
+with new-model execution revalidation and a readiness inventory. All five
+fold-1 NN seeds completed finite classifier/magnitude validation checks.
+Update at 17:13 UTC: all 15 NN fold seeds passed numerical validation, but
+fold-3 policy evaluation failed on a cash-ledger entry rejection. Family
+selection and final performance remain pending; no final ensemble exists.
+
+Final-tail matching marked replay: candidate +648.8% / 12.6% maxDD (241),
+frozen-DTE baseline +90.6% / 50.6% (205). With a five-minute entry-delay limit,
+only 52 candidate positions remain: +48.2% / 9.5%, versus 120 baseline
+positions: −13.8% / 57.6%. A separate cash/event implementation reproduced
+all 32 policy/latency/cost curves. These are fixed-selection revalidation
+results from the previously inspected final tail, not a new holdout; rejected
+fills do not backfill slots. No execution quote campaign replay or forward
+collection has run. Scanner promotion remains on hold.
+[Implementation and evidence](reviews/2026-09-13-v6-followup-implementation.md).
+
 ## 2026-09-12 — v6 complete; hold scanner promotion after review
 
 `v6-train-20260912r2`: 449 symbols, 4,281,562 retained rows,

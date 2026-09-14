@@ -17,6 +17,8 @@ import time
 import numpy as np
 import pandas as pd
 from nn_meta import config
+from nn_meta.neural_validation import (fit_scaler, require_finite, finite_callback,
+    validate_fit, validate_weights, POLICY)
 
 
 def enabled():
@@ -68,7 +70,7 @@ def sha(path):
 
 def _json(path, value):
     p = Path(path); t = p.with_suffix('.tmp')
-    t.write_text(json.dumps(value, sort_keys=True, indent=2)+'\n'); t.replace(p)
+    t.write_text(json.dumps(value, sort_keys=True, indent=2, allow_nan=False)+'\n'); t.replace(p)
 
 
 def prepare(train, val, features, label, *, root=None):
@@ -85,7 +87,7 @@ def prepare(train, val, features, label, *, root=None):
     if tr.empty or va.empty:
         raise ValueError('Training requires labeled train and validation rows')
     identity = hashlib.sha256(json.dumps({'features':features,'label':label,
-        'preparer':sha(__file__)},sort_keys=True).encode())
+        'preparer':sha(__file__), 'neural_validation':sha(Path(__file__).with_name('neural_validation.py'))},sort_keys=True).encode())
     for frame in (tr, va):
         identity.update(pd.util.hash_pandas_object(frame, index=False).values.tobytes())
         identity.update(str(frame.dtypes.tolist()).encode())
@@ -98,12 +100,12 @@ def prepare(train, val, features, label, *, root=None):
             return dest
         raise ValueError('Prepared training arrays changed; use a fresh cache')
     # Column reductions avoid allocating another full feature block.
-    mean = pd.Series({f:tr[f].mean() for f in features})
-    std = pd.Series({f:tr[f].std() for f in features}).replace(0, 1.0)
+    mean, std, preprocessing = fit_scaler(tr, features)
     masks = [f['net_return'].notna().to_numpy() for f in (tr,va)]
     if not all(m.any() for m in masks):
         raise ValueError('Prepared training requires observed returns in both partitions; use the reference path for classification-only fits')
     bounds = winsor_bounds(magnitude_target(tr.loc[masks[0], 'net_return']))
+    require_finite(magnitude_target(va.loc[masks[1], 'net_return']), 'validation magnitude targets')
     hashes = {}
     for split, frame, mask in zip(['train','val'], [tr,va], masks):
         # Standardization used to allocate several complete multi-GB matrices.
@@ -114,7 +116,7 @@ def prepare(train, val, features, label, *, root=None):
             for start in range(0,len(frame),65536):
                 batch=frame.iloc[start:start+65536]
                 target[start:start+len(batch)]=(batch[features].to_numpy(dtype=dtype)
-                    if name=='raw' else _matrix(batch,features,mean,std))
+                    if name=='raw' else _matrix(batch,features,mean,std,preprocessing['inactive']))
             target.flush();del target
             hashes[path.name]=sha(path)
             release_memory()
@@ -122,8 +124,9 @@ def prepare(train, val, features, label, *, root=None):
                   ('mindex', lambda: np.flatnonzero(mask)),
                   ('mag', lambda: np.clip(magnitude_target(frame.loc[mask,'net_return']), *bounds))]
         for name, make in arrays:
-            path=dest/f'{split}_{name}.npy'; np.save(path, make(), allow_pickle=False); hashes[path.name]=sha(path)
-    _json(manifest, {'version':1,'key':key,'features':features,'label':label,
+            values = require_finite(make(), f'{split} {name}', binary=name=='y')
+            path=dest/f'{split}_{name}.npy'; np.save(path, values, allow_pickle=False); hashes[path.name]=sha(path)
+    _json(manifest, {'version':2,'key':key,'preprocessing':preprocessing,'features':features,'label':label,
                      'mean':mean.to_dict(),'std':std.to_dict(),'bounds':list(bounds),
                      'hashes':hashes,'rows':{'train':len(tr),'val':len(va)}})
     print(f'Prepared fold arrays: {key[:12]} train={len(tr)} val={len(va)}', flush=True)
@@ -132,11 +135,11 @@ def prepare(train, val, features, label, *, root=None):
 
 def settings(prepared, family, seed, epochs, estimators):
     from importlib import metadata
-    return dict(version=1, prepared=sha(Path(prepared)/'arrays.json'),family=family,seed=int(seed),
+    return dict(version=2, prepared=sha(Path(prepared)/'arrays.json'),family=family,seed=int(seed),
                 epochs=int(epochs),estimators=int(estimators),arch=config.ARCHITECTURES[0],
                 lr=config.LEARNING_RATES[0],batch=config.BATCH_SIZE,l2=config.L2_REG,dropout=config.DROPOUT,
                 threads=int(os.environ.get('NN_META_TRAIN_THREADS','2')),
-                sources={n:sha(Path(__file__).parent/n) for n in ['training_jobs.py','model.py','v4_evaluate.py','ev_sizing.py']},
+                sources={n:sha(Path(__file__).parent/n) for n in ['training_jobs.py','model.py','v4_evaluate.py','ev_sizing.py','neural_validation.py']},
                 runtime={n:metadata.version(n) for n in ['numpy','pandas','tensorflow','lightgbm']})
 
 
@@ -145,6 +148,18 @@ def reusable(dest, expected):
     if not p.exists(): return False
     doc=json.loads(p.read_text())
     if doc['settings']!=expected: raise ValueError('Seed configuration changed; use fresh output directory')
+    if expected.get('family') == 'nn':
+        validation = doc.get('validation', {})
+        for head in ('classifier', 'magnitude'):
+            result = validation.get(head, {})
+            if (not all(result.get(k) is True for k in ('finite_losses', 'finite_weights', 'finite_predictions'))
+                    or not np.isfinite(result.get('val_loss', np.nan))
+                    or result.get('validation_rows', 0) <= 0):
+                raise ValueError('Seed lacks finite neural validation; use a fresh scope')
+        if not np.isfinite(doc.get('val_loss', np.nan)):
+            raise ValueError('Seed has non-finite validation loss')
+    if not doc.get('hashes'):
+        raise ValueError('Seed receipt has no artifacts')
     if not all((Path(dest)/n).is_file() and sha(Path(dest)/n)==h for n,h in doc['hashes'].items()):
         raise ValueError('Seed artifact checksum mismatch')
     return True
@@ -195,24 +210,33 @@ def worker(prepared, out, family, seed, epochs, estimators):
     def magnitude_x(split, kind):
         x,index=a[f'{split}_{kind}'],a[f'{split}_mindex']
         return x if np.array_equal(index,np.arange(len(x))) else x[index]
-    start=time.time();files=[]
+    start=time.time();files=[];validation={}
+    for split in ('train', 'val'):
+        require_finite(a[f'{split}_y'], f'{split} labels', binary=True)
+        require_finite(a[f'{split}_mag'], f'{split} magnitudes')
     if family=='nn':
+        if doc.get('preprocessing', {}).get('policy') != POLICY:
+            raise ValueError('Neural training requires fresh finite preprocessing')
+        for split in ('train', 'val'):
+            require_finite(a[f'{split}_x'], f'{split} neural arrays')
         import tensorflow as tf
         from nn_meta.model import build_meta_mlp,build_magnitude_mlp
         tf.keras.utils.set_random_seed(seed)
         model=build_meta_mlp(len(doc['features']),config.ARCHITECTURES[0],config.LEARNING_RATES[0])
         def early():return tf.keras.callbacks.EarlyStopping(monitor='val_loss',patience=max(3,min(12,epochs//4)),restore_best_weights=True)
         hist=model.fit(a['train_x'],a['train_y'],validation_data=(a['val_x'],a['val_y']),
-                       epochs=epochs,batch_size=config.BATCH_SIZE,callbacks=[early()],verbose=0)
-        loss=float(min(hist.history['val_loss']));model.save(out/'model.keras')
+                       epochs=epochs,batch_size=config.BATCH_SIZE,callbacks=[finite_callback(),early()],verbose=0)
+        validation['classifier']=validate_fit(model,hist,a['val_x'],head='classifier')
+        loss=validation['classifier']['val_loss'];model.save(out/'model.keras')
         del model,hist;tf.keras.backend.clear_session();release_memory()
         tf.keras.utils.set_random_seed(seed+10000)
         model=build_magnitude_mlp(len(doc['features']),config.ARCHITECTURES[0],config.LEARNING_RATES[0])
-        model.fit(magnitude_x('train','x'),a['train_mag'].astype('float32'),
+        hist=model.fit(magnitude_x('train','x'),a['train_mag'].astype('float32'),
                   validation_data=(magnitude_x('val','x'),a['val_mag'].astype('float32')),
-                  epochs=epochs,batch_size=config.BATCH_SIZE,callbacks=[early()],verbose=0)
+                  epochs=epochs,batch_size=config.BATCH_SIZE,callbacks=[finite_callback(),early()],verbose=0)
+        validation['magnitude']=validate_fit(model,hist,magnitude_x('val','x'),head='magnitude')
         model.save(out/'magnitude.keras')
-        _json(out/'scaler.json',{'mean':doc['mean'],'std':doc['std']})
+        _json(out/'scaler.json',{'mean':doc['mean'],'std':doc['std'],**doc['preprocessing']})
         files=['model.keras','magnitude.keras','scaler.json']
     elif family=='gbt':
         import joblib
@@ -236,7 +260,7 @@ def worker(prepared, out, family, seed, epochs, estimators):
           'arch':config.ARCHITECTURES[0],'lr':config.LEARNING_RATES[0],
           'magnitude_head':{'target':'net_return','loss':'huber','winsor_bounds':doc['bounds']}})
     files.append('params.json')
-    _json(out/'complete.json',{'settings':expected,'seconds':time.time()-start,'val_loss':loss,
+    _json(out/'complete.json',{'settings':expected,'seconds':time.time()-start,'val_loss':loss,'validation':validation,
                              'hashes':{n:sha(out/n) for n in files}})
 
 
@@ -252,17 +276,19 @@ def disk_predict(family, paths, rows, features, *, magnitude=False):
             from nn_meta.v4_evaluate import _matrix
             sc=json.loads((path/'scaler.json').read_text());mu,sd=pd.Series(sc['mean']),pd.Series(sc['std'])
             model=tf.keras.models.load_model(path/('magnitude.keras' if magnitude else 'model.keras'),compile=False)
+            validate_weights(model)
         else:model=joblib.load(path/('magnitude.joblib' if magnitude else 'model.joblib'))
         for start in range(0,len(rows),65536):
             batch=rows.iloc[start:start+65536]
-            if family=='nn':pred=model.predict(_matrix(batch,features,mu,sd),batch_size=4096,verbose=0).flatten()
+            if family=='nn':pred=model.predict(_matrix(batch,features,mu,sd,sc.get('inactive',[])),batch_size=4096,verbose=0).flatten()
             elif magnitude:pred=model.predict(batch[features])
             else:pred=model.predict_proba(batch[features])[:,1]
+            require_finite(pred, "member predictions")
             total[start:start+len(batch)]+=pred
         del model
         if family=='nn':tf.keras.backend.clear_session()
         gc.collect()
-    return total/len(paths)
+    return require_finite(total/len(paths), "ensemble predictions")
 
 
 def fit_family(family,train,val,*,features,label,seeds,epochs,gbt_estimators):

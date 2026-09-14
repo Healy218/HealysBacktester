@@ -33,6 +33,9 @@ def campaign_processes(campaign, proc=Path('/proc')):
                'nn_meta.v4_finalize': 'final training',
                'nn_meta.walkforward_meta': 'walk-forward training',
                'scripts.continue_v6_training': 'training supervisor',
+               'scripts.v6_training_pipeline': 'training/validation pipeline',
+               'scripts.validate_v6_execution': 'execution validation',
+               'scripts.v6_readiness': 'promotion readiness inventory',
                'nn_meta.training_jobs': 'seed training',
                'nn_meta.training_experiments': 'objective comparisons',
                'scripts.research_local': 'stage launcher'}
@@ -50,7 +53,7 @@ def campaign_processes(campaign, proc=Path('/proc')):
             if module == 'scripts.research_local':
                 bound = bound or ('--campaign' in args and args[args.index('--campaign') + 1] == campaign
                                   and '--pool' in args and args[args.index('--pool') + 1] == 'v6')
-            if module == 'scripts.continue_v6_training':
+            if module in ('scripts.continue_v6_training', 'scripts.v6_training_pipeline'):
                 # The supervisor sets its children's environment after startup.
                 # /proc/environ need not reflect those later os.environ writes.
                 bound = bound or ('--campaign' in args and args[args.index('--campaign') + 1] == campaign)
@@ -143,6 +146,9 @@ def continuation_snapshot(root, campaign, processes):
     latest = read_json(run / 'latest.json', {})
     if latest.get('campaign', campaign) != campaign:
         raise ValueError('Continuation status campaign mismatch')
+    pipeline = read_json(base / 'runs/pipeline/status.json')
+    if pipeline is not None and pipeline.get('campaign') != campaign:
+        raise ValueError('Pipeline status campaign mismatch')
     receipts = {stage: read_json(run / f'{stage}.json')
                 for stage in ('assemble', 'experiments', 'evaluate', 'finalize')}
     seeds = list((base / 'runs/seed-jobs').glob('*/*/complete.json'))
@@ -158,10 +164,11 @@ def continuation_snapshot(root, campaign, processes):
                     final_model_manifest=(base / 'model_final/manifest.json').exists())
     logs = list(run.glob('*.log')) + list((base / 'runs/seed-jobs').glob('*/*/worker.log'))
     logs += list((base / 'model_final.staging').glob('*/worker.log'))
+    logs += list((base / 'runs/pipeline').glob('*.log'))
     latest_log = max((p.stat().st_mtime for p in logs), default=0)
     return dict(time_utc=dt.datetime.now(dt.timezone.utc).isoformat(), campaign=campaign,
                 parent=scope['parent'], total_symbols=len(scope['symbols']), counts=counts,
-                evidence_present=evidence, processes=processes, continuation=latest,
+                evidence_present=evidence, processes=processes, continuation=latest, pipeline=pipeline,
                 stage_receipts={k: {field: v[field] for field in ('returncode', 'seconds', 'reused_from') if field in v}
                                 for k, v in receipts.items() if v is not None},
                 final_seed_total=len(scope['training']['final_seeds']),
@@ -183,6 +190,18 @@ def render_continuation(s):
         status = f'{stage}: running ({", ".join(sorted({p["stage"] for p in processes}))})'
     else:
         status = f'{stage}: no campaign process visible; last receipt says {state}; verify the host service'
+    pipeline = s.get('pipeline')
+    if pipeline:
+        phase, pipeline_state = pipeline.get('stage'), pipeline.get('status')
+        if pipeline_state == 'failed':
+            status = f"Pipeline failed at {phase}: {pipeline.get('error', 'inspect pipeline logs')}"
+        elif pipeline_state == 'complete':
+            status = ('Training, execution validation and readiness inventory completed; '
+                      'research-only, not deployed' if state == 'complete' and verified
+                      else 'Pipeline completion disagrees with training receipts; verification needed')
+        elif pipeline_state == 'running' and phase != 'training':
+            status = (f'Training completed; {phase} running' if processes else
+                      f'{phase}: no campaign process visible; verify the host service')
     c = s['counts']
     lines = [f"HealyLabs v6 — {s['campaign']}", f"Observed: {s['time_utc']}", f'Active: {status}',
              f"Selection seed jobs completed: {c['selection_seed_jobs']} (evaluation and final family selection)",
@@ -192,6 +211,9 @@ def render_continuation(s):
              'Stage receipts: ' + ', '.join(f"{k} exit {v.get('returncode', '?')}" for k, v in s['stage_receipts'].items()),
              'Artifact presence is progress evidence; it does not establish deployment eligibility.',
              'Full training summary: dashboard Training tab.']
+    if pipeline:
+        lines.append('Pipeline stages: ' + ', '.join(f'{k} {v}' for k, v in pipeline.get('stages', {}).items()))
+        lines.append('Scanner promotion remains separate from research pipeline completion.')
     return '\n'.join(lines)
 
 

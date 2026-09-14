@@ -53,6 +53,7 @@ import numpy as np
 import pandas as pd
 
 from nn_meta import config, training_jobs
+from nn_meta.neural_validation import fit_scaler, require_finite, finite_callback, validate_fit
 from nn_meta.baseline import load_spec
 from nn_meta.build_meta_dataset import V4_META_FEATURES
 from nn_meta.mark_stream import load_mark_stream, option_b_blockers
@@ -111,13 +112,15 @@ def _train_nn_seed(train, val, *, features, label, seed, epochs, run_id,
     the ACTUAL persisted ensemble before locking the operating point."""
     import tensorflow as tf
     train_l, val_l = _labeled(train, label), _labeled(val, label)
-    mean = train_l[features].mean()
-    std = train_l[features].std().replace(0, 1.0)
-    x_train = _matrix(train_l, features, mean, std)
-    x_val = _matrix(val_l, features, mean, std)
+    mean, std, preprocessing = fit_scaler(train_l, features)
+    inactive = preprocessing["inactive"]
+    x_train = _matrix(train_l, features, mean, std, inactive)
+    x_val = _matrix(val_l, features, mean, std, inactive)
     y_train = train_l[label].astype("float32").values
     y_val = val_l[label].astype("float32").values
 
+    require_finite(y_train, "training labels", binary=True)
+    require_finite(y_val, "validation labels", binary=True)
     tf.keras.utils.set_random_seed(seed)
     from nn_meta.model import build_meta_mlp
     model = build_meta_mlp(len(features), config.ARCHITECTURES[0], config.LEARNING_RATES[0])
@@ -126,13 +129,14 @@ def _train_nn_seed(train, val, *, features, label, seed, epochs, run_id,
         restore_best_weights=True)
     hist = model.fit(x_train, y_train, validation_data=(x_val, y_val),
                      epochs=epochs, batch_size=config.BATCH_SIZE,
-                     callbacks=[early], verbose=0)
+                     callbacks=[finite_callback(), early], verbose=0)
+    validation = validate_fit(model, hist, x_val, head="classifier")
 
     # Magnitude head (EV sizing): same scaler, signed-return target — trained
     # on the SAME label-filtered population as every walk-forward-validated
     # head (raw frames would include rows the methodology never saw).
     mag = fit_nn_magnitude(train_l, val_l, features=features, mean=mean, std=std,
-                           seed=seed, epochs=epochs)
+                           seed=seed, epochs=epochs, inactive=inactive)
     if mag is None:
         raise ValueError("finalize requires executed rows to train the magnitude head")
 
@@ -141,15 +145,15 @@ def _train_nn_seed(train, val, *, features, label, seed, epochs, run_id,
     model.save(run_dir / "model.keras")
     mag.model.save(run_dir / "magnitude.keras")
     (run_dir / "scaler.json").write_text(json.dumps(
-        {"mean": mean.to_dict(), "std": std.to_dict()}))
+        {"mean": mean.to_dict(), "std": std.to_dict(), **preprocessing}, allow_nan=False))
     (run_dir / "params.json").write_text(json.dumps(
         {"family": "nn", "seed": seed, "label": label, "features": features,
          "arch": config.ARCHITECTURES[0], "lr": config.LEARNING_RATES[0],
          "magnitude_head": {"target": "net_return", "loss": "huber",
                             "winsor_bounds": list(mag.bounds)}}))
-    info = {"run_id": run_id, "val_loss": float(min(hist.history["val_loss"])),
+    info = {"run_id": run_id, "val_loss": validation["val_loss"], "validation": {"classifier": validation, "magnitude": mag.validation},
             "files": ["model.keras", "magnitude.keras", "scaler.json", "params.json"]}
-    return info, {"model": model, "magnitude": mag.model, "mean": mean, "std": std}
+    return info, {"model": model, "magnitude": mag.model, "mean": mean, "std": std, "inactive": inactive}
 
 
 def _train_gbt_seed(train, val, *, features, label, seed, n_estimators, run_id,

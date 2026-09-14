@@ -23,7 +23,11 @@ PERFORMANCE_CHANGES = {'nn_meta/build_meta_dataset.py', 'nn_meta/v4_evaluate.py'
     'nn_meta/v4_finalize.py', 'nn_meta/v4_loader.py', 'nn_meta/mark_stream.py',
     'nn_meta/temporal_validation.py'}
 NEW_SOURCES = {'nn_meta/stream_assembly.py', 'nn_meta/training_jobs.py',
-    'nn_meta/training_experiments.py', 'scripts/continue_v6_training.py'}
+    'nn_meta/training_experiments.py', 'scripts/continue_v6_training.py',
+    'nn_meta/neural_validation.py'}
+# Reviewed inference/validation changes; no regenerated labels or proposals.
+NEURAL_REPAIR_CHANGES = {'nn_meta/v4_accounting.py', 'nn_meta/v6_expansion.py',
+                         'nn_meta/live/v4_scan.py'}
 
 
 def sha(path):
@@ -86,7 +90,7 @@ def check_bound(scope):
                 raise ValueError(f'Bound {group} changed: {path}')
 
 
-def prepare(parent, campaign, reuse_completed=None):
+def prepare(parent, campaign, reuse_completed=None, *, repair_neural=False):
     from nn_meta import config
     from nn_meta.feature_contract import CONTRACT_VERSION
     parent_base=ROOT/'nn_meta/campaigns'/parent/'v6'
@@ -94,7 +98,8 @@ def prepare(parent, campaign, reuse_completed=None):
     scope_path=base/'continuation_scope.json'
     if scope_path.exists():
         scope=json.loads(scope_path.read_text())
-        if scope['parent'] != parent or scope.get('reuse_completed') != reuse_completed:
+        if (scope['parent'] != parent or scope.get('reuse_completed') != reuse_completed
+                or scope.get('repair_neural', False) != repair_neural):
             raise ValueError('Continuation parent/reuse selection changed')
         check_bound(scope); return scope
     print('Verifying parent scope and completed symbol artifacts...',flush=True)
@@ -121,7 +126,8 @@ def prepare(parent, campaign, reuse_completed=None):
             rel=label.removeprefix('source/');p=ROOT/rel
             current=sha(p)
             if current!=row['sha256']:
-                if rel not in PERFORMANCE_CHANGES: raise ValueError(f'Unreviewed producer change: {rel}')
+                allowed = PERFORMANCE_CHANGES | (NEURAL_REPAIR_CHANGES if repair_neural else set())
+                if rel not in allowed: raise ValueError(f'Unreviewed producer change: {rel}')
                 changes[rel]={'parent':row['sha256'],'continuation':current}
             sources[rel]=current
         else:
@@ -154,7 +160,8 @@ def prepare(parent, campaign, reuse_completed=None):
     if inputs[str(Path(config.V6_INPUTS).relative_to(ROOT))] != config.V6_INPUTS_SHA256:
         raise ValueError('Expanded manifest digest changed')
     scope={'version':1,'campaign':campaign,'parent':parent,'parent_scope_sha256':digest,
-        'reuse_completed':reuse_completed,
+        'reuse_completed':reuse_completed, 'repair_neural':repair_neural,
+        'neural_preprocessing':'train-only-inactive-zero-v1',
         'parent_input_file_count':count,'feature_contract_version':CONTRACT_VERSION,
         'reuse':'Copied completed derived rows/marks. Raw option archives were not reread or revalidated.',
         'symbols':sorted(symbols),'sources':sources,'source_changes':changes,'inputs':inputs,'runtime':runtime(),
@@ -177,7 +184,10 @@ def reuse_outputs(scope, records):
             or old['feature_contract_version']!=scope['feature_contract_version']):
         raise ValueError('Completed-output lineage/runtime mismatch')
     training_only={'nn_meta/training_jobs.py','nn_meta/v4_evaluate.py',
-                   'nn_meta/v4_finalize.py','scripts/continue_v6_training.py'}
+                   'nn_meta/v4_finalize.py','scripts/continue_v6_training.py',
+                   'nn_meta/neural_validation.py','nn_meta/v4_loader.py'}
+    if scope.get('repair_neural'):
+        training_only |= NEURAL_REPAIR_CHANGES
     for path,digest in scope['sources'].items():
         if path not in training_only and old['sources'].get(path)!=digest:
             raise ValueError(f'Assembly/comparison source changed: {path}')
@@ -214,6 +224,7 @@ def main():
     p.add_argument('--workers',type=int,choices=[1,2,3,4],default=2)
     p.add_argument('--threads',type=int,choices=[1,2,3,4],default=2)
     p.add_argument('--reuse-completed',type=name,help='copy verified assembly/comparisons from a prior continuation')
+    p.add_argument('--repair-neural',action='store_true',help='fresh scope with reviewed finite NN and inference/validation repairs; preserve old failed evidence')
     p.add_argument('--run',action='store_true');p.add_argument('--prepare-only',action='store_true')
     a=p.parse_args()
     if a.parent==a.campaign: raise ValueError('Continuation requires a new campaign name')
@@ -231,7 +242,7 @@ def main():
     from nn_meta import config
     config.RUNS_DIR.mkdir(parents=True,exist_ok=True)
     with campaign_lock(config.RUNS_DIR/'.launcher.lock'):
-        scope=prepare(a.parent,a.campaign,a.reuse_completed)
+        scope=prepare(a.parent,a.campaign,a.reuse_completed,repair_neural=a.repair_neural)
         if scope['training']['workers']!=a.workers or scope['training']['threads']!=a.threads:
             raise ValueError('Continuation resource plan changed')
         if a.prepare_only: return

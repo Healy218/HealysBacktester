@@ -24,6 +24,8 @@ import numpy as np
 import pandas as pd
 
 from nn_meta import config
+from nn_meta.neural_validation import (fit_scaler, matrix, require_finite,
+                                       finite_callback, validate_fit)
 from nn_meta.baseline import load_spec
 from nn_meta.build_meta_dataset import META_FEATURES, V4_META_FEATURES
 from nn_meta.calibration import calibration_summary
@@ -56,7 +58,9 @@ class Predictor:
 def winsor_bounds(values, quantiles=config.EV_WINSOR_QUANTILES) -> tuple[float, float]:
     """Train-tail clip bounds for the magnitude target (computed on TRAIN only)."""
     v = np.asarray(values, dtype=float)
-    v = v[np.isfinite(v)]
+    require_finite(v, "magnitude targets")
+    if not len(v):
+        raise ValueError("magnitude targets are empty")
     lo, hi = np.quantile(v, quantiles[0]), np.quantile(v, quantiles[1])
     return float(lo), float(hi)
 
@@ -92,9 +96,8 @@ def legacy_splits(rows: pd.DataFrame, window: FoldWindow) -> pd.Series:
 
 
 def _matrix(rows: pd.DataFrame, features: list[str], mean: pd.Series,
-            std: pd.Series) -> np.ndarray:
-    values = rows[features].copy().fillna(mean)
-    return ((values - mean) / std).values.astype("float32")
+            std: pd.Series, inactive=()) -> np.ndarray:
+    return matrix(rows, features, mean, std, inactive)
 
 
 def _labeled(rows: pd.DataFrame, label: str) -> pd.DataFrame:
@@ -109,30 +112,33 @@ def fit_nn(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
     train, val = _labeled(train, label), _labeled(val, label)
     if train.empty or val.empty:
         raise ValueError("NN requires non-empty labeled train and validation rows")
-    mean = train[features].mean()
-    std = train[features].std().replace(0, 1.0)
-    x_train, x_val = _matrix(train, features, mean, std), _matrix(val, features, mean, std)
+    mean, std, preprocessing = fit_scaler(train, features)
+    inactive = preprocessing["inactive"]
+    x_train, x_val = _matrix(train, features, mean, std, inactive), _matrix(val, features, mean, std, inactive)
     y_train, y_val = train[label].astype("float32").values, val[label].astype("float32").values
+    require_finite(y_train, "training labels", binary=True)
+    require_finite(y_val, "validation labels", binary=True)
     tf.keras.utils.set_random_seed(seed)
     model = build_meta_mlp(len(features), config.ARCHITECTURES[0], config.LEARNING_RATES[0])
     early = tf.keras.callbacks.EarlyStopping(
         monitor="val_loss", patience=max(3, min(12, epochs // 4)),
         restore_best_weights=True,
     )
-    model.fit(x_train, y_train, validation_data=(x_val, y_val),
-              epochs=epochs, batch_size=config.BATCH_SIZE, callbacks=[early], verbose=0)
+    history = model.fit(x_train, y_train, validation_data=(x_val, y_val),
+              epochs=epochs, batch_size=config.BATCH_SIZE, callbacks=[finite_callback(), early], verbose=0)
+    validate_fit(model, history, x_val, head="classifier")
 
     def predict(rows: pd.DataFrame) -> np.ndarray:
-        return model.predict(_matrix(rows, features, mean, std), batch_size=4096,
-                             verbose=0).flatten()
+        return require_finite(model.predict(_matrix(rows, features, mean, std, inactive),
+                              batch_size=4096, verbose=0).flatten(), "neural predictions")
 
     mag = fit_nn_magnitude(train, val, features=features, mean=mean, std=std,
-                           seed=seed, epochs=epochs)
+                           seed=seed, epochs=epochs, inactive=inactive)
     return Predictor("nn", predict, mag.predict if mag is not None else None)
 
 
 def fit_nn_magnitude(train: pd.DataFrame, val: pd.DataFrame, *, features: list[str],
-                     mean: pd.Series, std: pd.Series, seed: int, epochs: int
+                     mean: pd.Series, std: pd.Series, seed: int, epochs: int, inactive=()
                      ) -> Predictor | None:
     """Magnitude head: regress the signed realized return (winsorized on the
     train tail) with the classifier's scaler, so the two heads see identical
@@ -145,23 +151,28 @@ def fit_nn_magnitude(train: pd.DataFrame, val: pd.DataFrame, *, features: list[s
     if train_m.empty or val_m.empty:
         return None
     lo, hi = winsor_bounds(magnitude_target(train_m["net_return"]))
+    require_finite(magnitude_target(val_m["net_return"]), "validation magnitude targets")
     y_train = np.clip(magnitude_target(train_m["net_return"]), lo, hi).astype("float32")
     y_val = np.clip(magnitude_target(val_m["net_return"]), lo, hi).astype("float32")
-    x_train, x_val = _matrix(train_m, features, mean, std), _matrix(val_m, features, mean, std)
+    x_train, x_val = _matrix(train_m, features, mean, std, inactive), _matrix(val_m, features, mean, std, inactive)
+    require_finite(y_train, "training magnitudes")
+    require_finite(y_val, "validation magnitudes")
     tf.keras.utils.set_random_seed(seed + 10_000)
     model = build_magnitude_mlp(len(features), config.ARCHITECTURES[0], config.LEARNING_RATES[0])
     early = tf.keras.callbacks.EarlyStopping(
         monitor="val_loss", patience=max(3, min(12, epochs // 4)),
         restore_best_weights=True,
     )
-    model.fit(x_train, y_train, validation_data=(x_val, y_val),
-              epochs=epochs, batch_size=config.BATCH_SIZE, callbacks=[early], verbose=0)
+    history = model.fit(x_train, y_train, validation_data=(x_val, y_val),
+              epochs=epochs, batch_size=config.BATCH_SIZE, callbacks=[finite_callback(), early], verbose=0)
+    validation = validate_fit(model, history, x_val, head="magnitude")
 
     def predict(rows: pd.DataFrame) -> np.ndarray:
-        return model.predict(_matrix(rows, features, mean, std), batch_size=4096,
-                             verbose=0).flatten()
+        return require_finite(model.predict(_matrix(rows, features, mean, std, inactive),
+                              batch_size=4096, verbose=0).flatten(), "neural predictions")
 
     pred = Predictor("nn", predict)
+    pred.validation = validation
     pred.model = model            # persisted by v4_finalize
     pred.bounds = (lo, hi)
     return pred
@@ -334,7 +345,9 @@ def _passes_gate(metrics: dict, baseline: dict, dd_cap: float | None = None,
     gate_bar = gate_bar or config.GATE_BAR
     if gate_bar not in config.GATE_BARS:
         raise ValueError(f"unknown gate_bar {gate_bar!r}; choose from {config.GATE_BARS}")
-    if (metrics["n_kept"] < config.MIN_KEPT_TRADES or metrics["total_return"] is None
+    if (metrics.get("accounting_status") == "unfunded"
+            or baseline.get("accounting_status") == "unfunded"
+            or metrics["n_kept"] < config.MIN_KEPT_TRADES or metrics["total_return"] is None
             or (metrics["max_drawdown"] or 0) > cap):
         return False
     if gate_bar == "risk":
@@ -471,7 +484,11 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
         # _ledger_policy_metrics always emits).
         if (gate_bar in ("median_draws", "ex_topk_pct") or report_all_gates) \
                 and not base_rows.empty:
-            baseline.update(_baseline_gate_extras(base_rows, mark_stream, costs=costs))
+            from nn_meta.v4_accounting import UnfundedEntryError
+            try:
+                baseline.update(_baseline_gate_extras(base_rows, mark_stream, costs=costs))
+            except UnfundedEntryError as exc:
+                baseline.update(accounting_status="unfunded", accounting_failure=exc.details)
     else:
         baseline = portfolio_metrics(rows[fmask])
 
@@ -522,6 +539,8 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
     winner = max(candidates, key=_policy_rank)
     # The gate's actual bar (DECISIONS 2026-08-24), kept so refusals are readable.
     winner["baseline_ex_top3"] = baseline.get("total_ex_top3")
+    if baseline.get("accounting_failure"):
+        winner["baseline_accounting_failure"] = baseline["accounting_failure"]
     winner["gate_bar"] = gate_bar
     if "ex_top3_median_draws" in baseline or "total_ex_topk" in baseline:
         ex3_dd = baseline.get("ex_top3_max_drawdown")
@@ -551,6 +570,9 @@ def choose_policy(rows: pd.DataFrame, predictions: np.ndarray, spec: dict,
         "mode": c["mode"], "threshold": c["threshold"], "dd_brake": c.get("dd_brake"),
         "n_kept": c["metrics"]["n_kept"], "total_return": c["metrics"]["total_return"],
         "max_drawdown": c["metrics"]["max_drawdown"], "eligible": c["eligible"],
+        **({"accounting_status": c["metrics"]["accounting_status"],
+            "accounting_failure": c["metrics"]["accounting_failure"]}
+           if c["metrics"].get("accounting_failure") else {}),
         **({"eligible_by_gate": c["eligible_by_gate"]} if "eligible_by_gate" in c else {}),
     } for c in candidates]
     winner["selection_basis"] = "ledger" if ledger else "shared_sim"
@@ -645,9 +667,15 @@ def marked_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
     if selected.empty:
         return None
     trades, marks = execution_frames(selected, mark_stream)
-    metrics, _ = mark_to_market_portfolio(
-        trades, marks, max_concurrent=config.MAX_CONCURRENT,
-        position_fraction=config.PORTFOLIO_FRACTION, costs=costs)
+    from nn_meta.v4_accounting import UnfundedEntryError
+    try:
+        metrics, _ = mark_to_market_portfolio(
+            trades, marks, max_concurrent=config.MAX_CONCURRENT,
+            position_fraction=config.PORTFOLIO_FRACTION, costs=costs)
+    except UnfundedEntryError as exc:
+        return {"total_return": None, "max_drawdown": None, "n_positions": 0,
+                "selected_positions": len(selected), "accounting_status": "unfunded",
+                "accounting_failure": exc.details, "cost_scenario": costs.name}
     return metrics
 
 
@@ -675,13 +703,20 @@ def _ledger_policy_metrics(rows: pd.DataFrame, pred: np.ndarray, mode: str,
     if selected.empty:
         return empty
     trades, marks = execution_frames(selected, mark_stream)
-    m, _ = mark_to_market_portfolio(
-        trades, marks, max_concurrent=config.MAX_CONCURRENT,
-        position_fraction=config.PORTFOLIO_FRACTION, costs=costs)
+    from nn_meta.v4_accounting import UnfundedEntryError
+    try:
+        m, _ = mark_to_market_portfolio(
+            trades, marks, max_concurrent=config.MAX_CONCURRENT,
+            position_fraction=config.PORTFOLIO_FRACTION, costs=costs)
+        # The comparison book must also be fundable. No missing baseline/bar
+        # may become an automatic eligibility pass.
+        ex_total, ex_dd = _ledger_ex_topk(selected, mark_stream, 3, costs=costs)
+    except UnfundedEntryError as exc:
+        return {**empty, "selected_positions": len(selected),
+                "accounting_status": "unfunded", "accounting_failure": exc.details}
     rets = selected["net_return"].to_numpy(dtype=float)
     # ex-top3 through the SAME ledger: drop the three best trades and re-mark —
     # the house outlier-dependence check, now on the stricter accounting.
-    ex_total, ex_dd = _ledger_ex_topk(selected, mark_stream, 3, costs=costs)
     out = dict(empty)
     out.update({
         "n": len(selected), "n_kept": len(selected),
@@ -832,6 +867,8 @@ def evaluate_window(ds: pd.DataFrame, window: FoldWindow, *, spec: dict,
                    "eligible": bool(winner.get("eligible")),
                    "selection_basis": winner.get("selection_basis", "shared_sim"),
                    "baseline_return": winner.get("baseline_return"),
+                   **({"baseline_accounting_failure": winner["baseline_accounting_failure"]}
+                      if winner.get("baseline_accounting_failure") else {}),
                    # PBO is computed in choose_policy; without this line it was
                    # silently dropped from every report (found 2026-09-04 on
                    # the first v5 walk-forward — "wired" but never surfaced).
@@ -892,6 +929,8 @@ def _write_report(results: list[dict], output: Path) -> None:
         marked = win.get("marked")
         if marked is None:
             marked_cell = "pending"
+        elif marked.get("accounting_status") == "unfunded":
+            marked_cell = "infeasible: unfunded entry (no marked return)"
         else:
             marked_cell = f"{marked['total_return']:+.1%} / {marked['max_drawdown']:.1%}"
         brake_cell = ("" if win.get("dd_brake") is None

@@ -1,0 +1,27 @@
+{
+  "allowed_trade_conditions": [
+    "I"
+  ],
+  "basis": "Massive reference explicitly maps condition 209 to OPRA I; Alpaca reference defines I as AUTO.",
+  "condition_namespace": "alpaca_opra_string",
+  "historical_policy_sha256": "6595b5e6db4ed49b45a5446c4a3018623f996568e8aa022ba4ea2d9adaed342a",
+  "limitations": [
+    "Provider mapping does not establish complete capture, receipt/SIP parity, or aggressor side.",
+    "References are relative to the future snapshot root; snapshot producer must preserve paths or rebind explicitly."
+  ],
+  "references": [
+    {
+      "path": "condition-mapping/alpaca-receipt.json",
+      "sha256": "697e2a5199b65a39bccbf6ee662f66c01ee35fb16c295759ff65f6e99d858515"
+    },
+    {
+      "path": "condition-mapping/alpaca-trade-conditions.json",
+      "sha256": "f70600fde5da8fa03e068f08c3352061d455fc97ff22f397bc54a88007467638"
+    },
+    {
+      "path": "condition-mapping/massive-209.json",
+      "sha256": "a44705616ca450dafa045b1696bf9a7e9cab96a23e5df8003e082de53ba77a00"
+    }
+  ],
+  "schema": "v6-provider-condition-mapping-v1"
+}

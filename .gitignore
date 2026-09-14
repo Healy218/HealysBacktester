@@ -97,9 +97,13 @@ nn_meta/live/.*.lock
 # Named research campaigns contain regenerated rows, marks and model bundles.
 /nn_meta/campaigns/
 /nn_meta/expanded_inputs/
+/nn_meta/validation/
+/nn_meta/live/shadow/
 # Immutable staged repairs and provider-download checkpoints.
 /nn_meta/data_candidates/
 # Historical tick captures contain bulk licensed market data; commit manifests only.
 /nn_meta/option_tick_captures/
 /nn_meta/option_tick_features/v6-selected-pilot-20260906/
 /nn_meta/live/feeds/data/option_ticks/
+# Isolated V6 server observer state and incoming capture evidence.
+/nn_meta/live/v6_server/

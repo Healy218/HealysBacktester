@@ -24,6 +24,12 @@ class CostScenario:
     slippage: float = 0.0005
     half_spread_bps: float = 0.0
 
+    def __post_init__(self):
+        if (not all(math.isfinite(v) and v >= 0 for v in
+                    (self.fee, self.slippage, self.half_spread_bps))
+                or self.side_cost >= 1):
+            raise ValueError("costs must be finite, nonnegative and less than one per side")
+
     @property
     def side_cost(self) -> float:
         return self.fee + self.slippage + self.half_spread_bps / 10_000
@@ -36,6 +42,20 @@ STRESSED_COSTS = CostScenario(name="stressed", fee=0.002, slippage=0.001,
 
 class AccountingDataError(ValueError):
     """Raised when a dataset cannot support the requested V4 accounting."""
+
+
+class UnfundedEntryError(AccountingDataError):
+    """A structurally valid selected book cannot fund one of its entries.
+
+    Keep this distinct from invalid marks/timestamps. A policy search can
+    reject this book, but must never suppress a data-integrity failure.
+    """
+
+    def __init__(self, *, timestamp, trade_id, cash, equity):
+        self.details = dict(reason="unfunded_entry", timestamp=str(timestamp),
+                            trade_id=str(trade_id), cash=float(cash), equity=float(equity))
+        super().__init__(f"no available cash for entry at {timestamp} "
+                         f"(trade={trade_id}, cash={cash:.12g}, equity={equity:.12g})")
 
 
 class FillFailure(str, Enum):
@@ -74,8 +94,10 @@ class FillPolicy:
     def __post_init__(self) -> None:
         if self.missing_exit not in {"worst_case", "intrinsic"}:
             raise ValueError("missing_exit must be 'worst_case' or 'intrinsic'")
-        if self.max_half_spread_bps < 0:
+        if not math.isfinite(self.max_half_spread_bps) or self.max_half_spread_bps < 0:
             raise ValueError("max_half_spread_bps must be non-negative")
+        if pd.isna(self.max_staleness) or self.max_staleness < pd.Timedelta(0):
+            raise ValueError("max_staleness must be nonnegative and finite")
 
 
 DEFAULT_FILL_POLICY = FillPolicy()
@@ -90,9 +112,12 @@ def classify_quote(bid, ask, *, quote_age=None,
     (``NO_ENTRY_BAR`` for an entry quote, ``NO_EXIT_BAR`` for an exit quote).
     Checks run structural-first so the most fundamental defect is reported.
     """
-    b = float(bid) if bid is not None else float("nan")
-    a = float(ask) if ask is not None else float("nan")
-    if math.isnan(b) or math.isnan(a):
+    try:
+        b = float(bid) if bid is not None else float("nan")
+        a = float(ask) if ask is not None else float("nan")
+    except (TypeError, ValueError, OverflowError):
+        return missing
+    if not math.isfinite(b) or not math.isfinite(a) or a <= 0 or b < 0:
         return missing
     if b > a:
         return FillFailure.CROSSED_MARKET
@@ -100,7 +125,7 @@ def classify_quote(bid, ask, *, quote_age=None,
         return FillFailure.ZERO_BID
     if quote_age is not None:
         age = pd.Timedelta(quote_age)
-        if pd.notna(age) and age > policy.max_staleness:
+        if pd.isna(age) or age < pd.Timedelta(0) or age > policy.max_staleness:
             return FillFailure.STALE_QUOTE
     mid = (a + b) / 2
     if mid > 0 and (a - b) / 2 / mid * 1e4 > policy.max_half_spread_bps:
@@ -273,7 +298,8 @@ def mark_to_market_portfolio(trades: pd.DataFrame, marks: pd.DataFrame, *,
     else:
         size_by_trade = {}
     marks = validate_marks(marks, trades)
-    index_costs = "cost_model" in trades and (trades["cost_model"] == "index_dollar").all()
+    index_costs = ("cost_model" in trades and trades["cost_model"].nunique() == 1
+                   and trades["cost_model"].iloc[0] in {"index_dollar", "option_quote"})
     if "cost_model" in trades and not index_costs:
         raise AccountingDataError("mixed or unknown per-trade cost models")
     if index_costs:
@@ -346,7 +372,8 @@ def mark_to_market_portfolio(trades: pd.DataFrame, marks: pd.DataFrame, *,
                 raise AccountingDataError(f"overlapping {trade.symbol} position at {ts}")
             notional = min(size_by_trade.get(trade.trade_id, position_fraction) * equity(), cash)
             if notional <= 0:
-                raise AccountingDataError(f"no available cash for entry at {ts}")
+                raise UnfundedEntryError(timestamp=ts, trade_id=trade.trade_id,
+                                         cash=cash, equity=equity())
             cash -= notional
             turnover += (notional * float(getattr(trade, f"entry_turnover_{costs.name}"))
                          if index_costs else notional / (1 + costs.side_cost))
@@ -373,6 +400,6 @@ def mark_to_market_portfolio(trades: pd.DataFrame, marks: pd.DataFrame, *,
         "peak_gross_exposure": float(curve_df["gross_exposure"].max()) if len(curve_df) else 0.0,
         "mean_gross_exposure": float(curve_df["gross_exposure"].mean()) if len(curve_df) else 0.0,
         "n_positions": len(trades), "cost_scenario": costs.name,
-        "cost_model": "index_dollar" if index_costs else "equity_percentage",
+        "cost_model": trades["cost_model"].iloc[0] if index_costs else "equity_percentage",
     }
     return metrics, curve_df

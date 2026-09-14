@@ -217,10 +217,28 @@ workload, VM-hour budget and explicit job IDs.
 - [x] Inspect continuation comparisons, walk-forward results and final gates.
   September 12 verdict: hold scanner promotion. All 20 NN runs have NaN loss;
   GBT remains promising. See the deployment review and matching test baselines.
-- [ ] Fix all-missing NN feature handling and finite-value guards; rerun family
-  selection in a fresh scope, preserving the original failed training evidence.
-- [ ] Replay fixed policies with executable quote/latency limits and stressed
-  spreads/costs; compare to the frozen baseline on the same marked ledger.
+- [x] Fix all-missing NN handling and finite-value guards across training,
+  receipts and loaders; pass a bounded real-data neural smoke. Preserve failures.
+- [x] Launch corrected training with durable resource limits and automatic
+  execution revalidation/readiness inventory. Service
+  `healys-v6-neural-repair-20260913r2.service` started September 13, 16:44 UTC.
+- [x] Reproduce the cash-ledger rejection and fix policy-evaluation handling
+  without weakening ledger/gates; pass full regression and real-data checks.
+- [x] Launch `v6-cash-repair-20260913` and bind watcher/dashboard to it.
+  All three folds completed; 20 NN selection seeds passed finite checks.
+- [x] Finish the replacement's 40-seed GBT finalization and automatic execution
+  validation/readiness report. Completed September 13 at 19:47 UTC: 40/40 final
+  seeds and 32 matched aggregate ledger comparisons; scanner promotion blocked
+  on quote/roll, forward shadow, external parity and operating review evidence.
+- [x] Implement frozen quote/latency/cost replay and a separate cash-ledger
+  check. Run 32 matching final-tail marked baseline/cost/latency comparisons.
+- [ ] Supply complete execution quote/roll evidence and run quote-based
+  campaign validation; aggregate spread assumptions do not establish fills.
+- [x] Wire sealed expanded live inputs into isolated no-notification shadow
+  scoring, append-only observations, frozen-exit replay and dashboard summaries.
+- [ ] Collect actual live receipt/condition/parity evidence and forward shadow
+  outcomes before promotion. See [implementation review](docs/reviews/2026-09-13-v6-followup-implementation.md)
+  and [runbook](docs/specs/V6_FOLLOWUP_RUNBOOK.md).
 - [ ] Benchmark larger worker counts/GPU; evaluate ranking, learned contract
   selection/exits, broader event weighting, calibration/abstention and mature
   prospective FA. Dependencies are in the training review.

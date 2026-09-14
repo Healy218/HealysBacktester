@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-09-06",
+  "fetched_at_utc": "2026-09-06T05:51:28.273872+00:00",
+  "status": "official_options_trade_condition_mapping_verified",
+  "source_url": "https://api.massive.com/v3/reference/conditions?asset_class=options&data_type=trade&id=209&sip=OPRA&limit=10",
+  "documentation_url": "https://massive.com/docs/rest/options/market-operations/condition-codes",
+  "glossary_url": "https://massive.com/glossary/trade-conditions",
+  "http_status": 200,
+  "namespace": {
+    "provider": "Massive",
+    "asset_class": "options",
+    "data_type": "trade",
+    "condition_type": "sale_condition",
+    "condition_id": 209,
+    "sip": "OPRA",
+    "sip_symbol": "I"
+  },
+  "documented_record": {
+    "id": 209,
+    "type": "sale_condition",
+    "abbreviation": "AUTO",
+    "name": "Automatic Execution",
+    "description": "Transaction was executed electronically. Prefix appears solely for information; process as a regular transaction.",
+    "asset_class": "options",
+    "sip_mapping": {
+      "OPRA": "I"
+    },
+    "update_rules": {
+      "consolidated": {
+        "updates_high_low": true,
+        "updates_open_close": true,
+        "updates_volume": true
+      },
+      "market_center": {
+        "updates_high_low": true,
+        "updates_open_close": true,
+        "updates_volume": true
+      }
+    },
+    "data_types": [
+      "trade"
+    ]
+  },
+  "raw_response_sha256": "be0aeef3d9355c0781bee3b923de75f084887e75a430bedaecd71151db3bc578",
+  "raw_response_utf8": "{\"results\":[{\"id\":209,\"type\":\"sale_condition\",\"abbreviation\":\"AUTO\",\"name\":\"Automatic Execution\",\"description\":\"Transaction was executed electronically. Prefix appears solely for information; process as a regular transaction.\",\"asset_class\":\"options\",\"sip_mapping\":{\"OPRA\":\"I\"},\"update_rules\":{\"consolidated\":{\"updates_high_low\":true,\"updates_open_close\":true,\"updates_volume\":true},\"market_center\":{\"updates_high_low\":true,\"updates_open_close\":true,\"updates_volume\":true}},\"data_types\":[\"trade\"]}],\"status\":\"OK\",\"request_id\":\"69b22d4904d3f5c264b1ebad0bfc2375\",\"count\":1}",
+  "interpretation": {
+    "meaning": "Electronic automatic execution; the informational condition is processed as a regular transaction.",
+    "condition_209_aggregation_rules": "Both consolidated and market-center rules permit updating high/low, open/close, and volume.",
+    "aggressor_direction": "Not encoded by this condition. This mapping alone does not establish buyer- or seller-initiated volume.",
+    "classification_policy_change": "Not performed; any later eligibility change must preserve independent correction, quote chronology, quote quality and ambiguity gates."
+  },
+  "limitations": [
+    "Massive condition identifiers are unique per data type; this record is specifically options/trade/sale_condition, not a stock or quote-condition mapping.",
+    "The API gives eligibility for this condition, not unconditional acceptance of every record carrying it. Other simultaneous condition codes and correction flags require their own treatment.",
+    "Aggregation eligibility does not establish aggressor side, quote availability, timestamp ordering, spread quality, trade identity reliability, or fill eligibility.",
+    "This is a reference snapshot fetched on the recorded date. No historical change log or guarantee of unchanged mappings for every past event was supplied by this response.",
+    "No full condition inventory, active policy change, candidate mutation, or pilot source edit was made."
+  ],
+  "runtime_files_changed": false,
+  "candidate_files_changed": false
+}

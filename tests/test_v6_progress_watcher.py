@@ -172,3 +172,53 @@ def test_continuation_missing_processes_does_not_claim_stopped(tmp_path):
     report = render(snapshot(tmp_path, 'current', []), None)
     assert 'verify the host service' in report
     assert 'STOPPED' not in report
+
+
+def test_pipeline_supervisor_binds_exact_campaign(tmp_path):
+    for pid, campaign in [(1, 'current'), (2, 'other')]:
+        p = tmp_path / str(pid); p.mkdir()
+        (p / 'cmdline').write_bytes(f'python\0-m\0scripts.v6_training_pipeline\0--campaign\0{campaign}\0'.encode())
+        (p / 'environ').write_bytes(b'')
+        (p / 'stat').write_text(f'{pid} (python) S ' + ' '.join(['0'] * 18 + ['12345']))
+    assert campaign_processes('current', tmp_path) == [
+        {'pid': 1, 'start_ticks': '12345', 'stage': 'training/validation pipeline'}]
+
+
+def pipeline_fixture(root, status, stage):
+    base = continuation_fixture(root, 'complete')
+    for name in ('experiments', 'evaluate', 'finalize'):
+        (base / f'runs/continuation/{name}.json').write_text('{"returncode": 0}')
+    (base / 'model_final').mkdir(); (base / 'model_final/manifest.json').write_text('{}')
+    directory = base / 'runs/pipeline'; directory.mkdir()
+    (directory / 'status.json').write_text(json.dumps(dict(campaign='current', status=status,
+        stage=stage, stages={'training': 'complete'}, error='execution failed with exit 1')))
+    return directory
+
+
+def test_pipeline_validation_not_mistaken_for_completion(tmp_path):
+    pipeline_fixture(tmp_path, 'running', 'execution')
+    report = render(snapshot(tmp_path, 'current', [{'pid': 1, 'stage': 'execution validation'}]), None)
+    assert 'Training completed; execution running' in report
+    assert 'Pipeline completed' not in report
+
+
+def test_pipeline_failure_wins_over_successful_training(tmp_path):
+    pipeline_fixture(tmp_path, 'failed', 'execution')
+    report = render(snapshot(tmp_path, 'current', []), None)
+    assert 'Pipeline failed at execution: execution failed with exit 1' in report
+    assert 'Pipeline completed' not in report
+
+
+def test_pipeline_campaign_mismatch_rejected(tmp_path):
+    directory = pipeline_fixture(tmp_path, 'complete', None)
+    (directory / 'status.json').write_text('{"campaign": "other"}')
+    import pytest
+    with pytest.raises(ValueError, match='Pipeline status campaign mismatch'):
+        snapshot(tmp_path, 'current', [])
+
+
+def test_pipeline_finished_requires_training_evidence(tmp_path):
+    directory = pipeline_fixture(tmp_path, 'complete', None)
+    assert 'Training, execution validation and readiness inventory completed' in render(snapshot(tmp_path, 'current', []), None)
+    (directory.parent / 'continuation/finalize.json').write_text('{"returncode": 1}')
+    assert 'verification needed' in render(snapshot(tmp_path, 'current', []), None)

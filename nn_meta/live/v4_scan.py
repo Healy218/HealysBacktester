@@ -231,7 +231,8 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
               symbols: Optional[list[str]] = None,
               threshold: Optional[float] = None,
               state_dir: Optional[Path] = None, paper: bool = False,
-              workers: int = 1) -> dict:
+              workers: int = 1, live_inputs=None, shadow: bool = False,
+              shadow_scope: dict | None = None) -> dict:
     """Scan → score → alert once. Returns a summary dict (also written as the
     health snapshot). All state I/O is atomic and idempotent.
 
@@ -242,6 +243,22 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
     now = now or datetime.now(timezone.utc)
     thr = bundle.threshold if threshold is None else float(threshold)
     sdir = Path(state_dir) if state_dir else STATE_DIR
+    shadow_store = None
+    if config.V6_EXPANDED:
+        if not shadow:
+            raise ValueError("expanded V6 remains shadow-only pending promotion evidence")
+        if live_inputs is None:
+            raise ValueError("expanded V6 shadow requires a sealed live input adapter")
+        if workers != 1:
+            raise ValueError("sealed expanded live detection requires workers=1")
+        if live_inputs.expanded_inputs.document["feature_contract_version"] != bundle.config.get("feature_contract_version"):
+            raise ValueError("live input and bundle feature contracts differ")
+    if shadow:
+        from nn_meta.live.v6_shadow import ShadowStore
+        if not shadow_scope or threshold is not None or bundle.dd_brake is not None:
+            raise ValueError("shadow requires a frozen scope, original threshold and unbraked policy")
+        sdir = sdir / "shadow"
+        shadow_store = ShadowStore(sdir, shadow_scope)
     alert_state = AlertState(sdir / ALERT_STATE.name)
     outbox = Outbox(sdir / OUTBOX.name)
     ledger = PaperLedger(sdir / LEDGER.name)
@@ -269,6 +286,8 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
                 require_recent_bars(closed_bars(bars, now), now)
             else:
                 bars = require_recent_bars(closed_bars(bar_loader(sym), now), now)
+                if live_inputs is not None:
+                    bars = live_inputs.attach(sym, bars)
                 proposals = fresh_proposals(sym, bars, spec["symbols"][sym],
                                             config.PROPOSAL_STRATEGIES)
             scanned += 1
@@ -281,13 +300,52 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
             errors += 1
             logger.error(f"[v4-scan] {sym}: scan error: {exc}")
 
+    if shadow_store is not None:
+        recorded = 0
+        failure = None
+        try:
+            if fresh_by_key:
+                kwargs = live_inputs.candidate_kwargs(bars_cache) if live_inputs else {}
+                batch = build_candidate_batch(candidate_frame(list(fresh_by_key.values()), spec),
+                                              bars_cache, surface, spec, **kwargs)
+                if live_inputs is None:
+                    batch = fill_context(batch, surface)
+                scores = bundle.score(batch)
+                decision = bundle.ev(batch) if bundle.mode == config.EV_MODE else scores
+                evidence = live_inputs.evidence() if live_inputs else {"research_only": True}
+                if live_inputs:
+                    live_inputs.assert_unchanged()
+                recorded = shadow_store.record(batch, scores=scores, decisions=decision,
+                    bundle=bundle, spec=spec, observed_at=now, evidence=evidence)
+                for key in fresh_by_key:
+                    alert_state.mark(key)
+            if live_inputs and live_inputs.document.get("execution_quotes"):
+                quotes = pd.read_parquet(live_inputs.reference(live_inputs.document["execution_quotes"]))
+                shadow_store.record_quotes(quotes, observed_at=now, evidence=live_inputs.evidence())
+                live_inputs.assert_unchanged()
+        except Exception as exc:
+            errors += 1
+            failure = str(exc)
+            logger.error(f"[v6-shadow] input/scoring failure: {exc}")
+        summary = health_snapshot(last_run_ts=now, now=now, error_count=errors,
+                                  scanned=scanned, alerted=0)
+        summary.update(delivered=0, shadow=True, recorded=recorded, input_error=failure,
+                       scanner_promotion=False)
+        shadow_store.finish(now=now, status="failed" if errors else "ok", summary=summary)
+        atomic_write_json(sdir / HEALTH.name, summary)
+        return summary
+
     alerted = 0
     if fresh_by_key:
         batch = build_candidate_batch(candidate_frame(list(fresh_by_key.values()), spec),
-                                      bars_cache, surface, spec)
+                                      bars_cache, surface, spec,
+                                      **(live_inputs.candidate_kwargs(bars_cache) if live_inputs else {}))
         batch = fill_context(batch, surface)
         scores = bundle.score(batch)
         decision = bundle.ev(batch) if bundle.mode == config.EV_MODE else scores
+        from nn_meta.neural_validation import require_finite
+        require_finite(scores, "live scores")
+        require_finite(decision, "live decisions")
         winners = best_per_signal(batch, scores, decision)
         for row in winners.itertuples(index=False):
             key = alert_key(row.symbol, row.strategy, row.entry_ts)
@@ -449,6 +507,10 @@ def main() -> None:
     ap.add_argument("--ignore-hours", action="store_true")
     ap.add_argument("--paper", action="store_true",
                     help="accept an unverified/ineligible bundle; tag alerts")
+    ap.add_argument("--shadow", action="store_true", help="record isolated forward evidence without notifications")
+    ap.add_argument("--shadow-dir", type=Path, help="required separate directory for a frozen shadow campaign")
+    ap.add_argument("--live-snapshot", type=Path)
+    ap.add_argument("--live-snapshot-sha256")
     ap.add_argument("--bundle", type=str, default=None)
     ap.add_argument("--selftest", action="store_true")
     ap.add_argument("--digest", action="store_true",
@@ -463,6 +525,12 @@ def main() -> None:
                          "expert, model_final_v4/) or NN_META_POOL=v5 (the [v5] "
                          "expert, model_final_v5/) or NN_META_POOL=v6 "
                          f"(the [v6] expert, model_final_v6/) — got '{config.POOL}'")
+    if args.shadow and (not args.shadow_dir or args.digest or args.dry_run or args.threshold is not None):
+        raise SystemExit("--shadow requires --shadow-dir and cannot combine with digest, dry-run or threshold override")
+    if bool(args.live_snapshot) != bool(args.live_snapshot_sha256):
+        raise SystemExit("live snapshot requires its external SHA256 anchor")
+    if args.live_snapshot and not args.shadow:
+        raise SystemExit("live snapshots are currently supported only for shadow evidence")
     bundle_dir = Path(args.bundle) if args.bundle else DEFAULT_BUNDLE_DIR
     if args.selftest:
         selftest(bundle_dir)
@@ -488,16 +556,45 @@ def main() -> None:
         from nn_meta.live.notifier import get_notifier
         from nn_meta.build_meta_dataset import load_surface_features
 
-        bundle = load_trusted_bundle(bundle_dir, paper=args.paper)
+        bundle = load_trusted_bundle(bundle_dir, paper=args.paper or args.shadow)
+        live_inputs = None
+        scope = None
+        spec = load_spec()
+        surface = None if args.live_snapshot else load_surface_features()
+        loader = aliased_bar_loader(_bar_loader)
+        if args.live_snapshot:
+            from nn_meta.live.v6_inputs import LiveSnapshot
+            live_inputs = LiveSnapshot(args.live_snapshot, args.live_snapshot_sha256, now=now)
+            live_inputs.bind_training(config.V6_INPUTS, config.V6_INPUTS_SHA256)
+            surface, loader = live_inputs.surface, live_inputs.bar_loader
+        if args.shadow:
+            from nn_meta.v4_loader import verify_bundle
+            from nn_meta.live.v6_shadow import canonical
+            import hashlib
+            # Shadow mode still requires intact model bytes; paper mode cannot
+            # waive corruption when recording frozen forward evidence.
+            manifest = verify_bundle(bundle_dir)
+            scope = {"schema": "v6-shadow-scope-v1", "bundle": bundle.config,
+                     "artifacts": manifest["output_artifacts"],
+                     "baseline_sha256": hashlib.sha256(canonical(spec).encode()).hexdigest(),
+                     "portfolio": {"max_concurrent": config.MAX_CONCURRENT,
+                                   "position_fraction": config.PORTFOLIO_FRACTION},
+                     "sources": {name: hashlib.sha256((config.ROOT.parent / name).read_bytes()).hexdigest()
+                         for name in ["nn_meta/live/v4_scan.py", "nn_meta/live/v4_candidates.py",
+                                      "nn_meta/live/v6_inputs.py", "nn_meta/live/v6_shadow.py",
+                                      "nn_meta/v6_expansion.py", "nn_meta/tradingview_features.py",
+                                      "nn_meta/baseline.py", "options/tick_features.py"]},
+                     "research_only": True}
         summary = scan_pass(
-            bundle=bundle, spec=load_spec(), surface=load_surface_features(),
-            bar_loader=aliased_bar_loader(_bar_loader),
-            notifier=get_notifier(force_console=args.dry_run),
+            bundle=bundle, spec=spec, surface=surface,
+            bar_loader=loader,
+            notifier=None if args.shadow else get_notifier(force_console=args.dry_run),
             now=now,
             symbols=[s.strip().upper() for s in args.symbols.split(",")]
             if args.symbols else None,
-            threshold=args.threshold, paper=args.paper, state_dir=sdir,
-            workers=args.workers if args.workers is not None else _default_workers())
+            threshold=args.threshold, paper=args.paper, state_dir=args.shadow_dir if args.shadow else sdir,
+            workers=args.workers if args.workers is not None else (1 if live_inputs else _default_workers()),
+            shadow=args.shadow, shadow_scope=scope, live_inputs=live_inputs)
         print(f"{TAG} scanned {summary['scanned']} · alerted {summary['alerted']} · "
               f"delivered {summary['delivered']} · errors {summary['error_count']}")
 

@@ -1,0 +1,1354 @@
+{
+  "baseline_spec": {
+    "path": "baseline_spec.json",
+    "sha256": "abf1fb710a61b9c373944baf916b2bbc916843a1e32cddf60f36b8d39bea4db9"
+  },
+  "code_revision": "e565fa52888128e28d85d8fc9da1fc363efc8b70",
+  "config_hash": "388cf74d18ac",
+  "dataset": {
+    "coverage": {
+      "columns": [
+        "atm_iv_far",
+        "atm_iv_near",
+        "bars_since_signal",
+        "bb_z",
+        "beta_60d",
+        "contract",
+        "decision_contract",
+        "dir_short",
+        "direction",
+        "dow",
+        "dow_tod",
+        "dte",
+        "dte_frac",
+        "entry_date",
+        "entry_premium",
+        "entry_ts",
+        "executed",
+        "exit_ts",
+        "expiration",
+        "fill_entry_ts",
+        "fill_exit_ts",
+        "fill_lag_s",
+        "gap_abs_z",
+        "gross_return",
+        "is_first_hour",
+        "is_last_hour",
+        "iv_chg_5",
+        "label",
+        "label_excess",
+        "ma_gap",
+        "macd_hist",
+        "market_iv",
+        "moneyness",
+        "n_fills",
+        "n_rolls",
+        "net_return",
+        "opt_tick_classified_volume_fraction",
+        "opt_tick_quote_age_seconds",
+        "opt_tick_quote_updates_per_second",
+        "opt_tick_signed_volume_fraction",
+        "opt_tick_size_imbalance",
+        "opt_tick_spread_bps",
+        "opt_tick_trade_count_per_second",
+        "opt_tick_trade_volume_per_second",
+        "opt_tick_trade_vwap_mid_bps",
+        "opt_tick_valid_quote_fraction",
+        "option_tick_request_id",
+        "option_tick_status",
+        "pc_ratio",
+        "prem_spot",
+        "px_vs_fast",
+        "ret_1",
+        "ret_26",
+        "ret_8",
+        "right",
+        "rsi14",
+        "rv_iv_spread",
+        "rvol_21",
+        "rvol_5",
+        "sec_crypto",
+        "sec_cyclical",
+        "sec_defensive",
+        "sec_fin",
+        "sec_idx_etf",
+        "sec_sec_etf",
+        "sec_semis",
+        "sec_spec",
+        "sec_tech",
+        "selection_spot_basis",
+        "selection_spot_raw",
+        "selection_spot_schema",
+        "session_gap",
+        "split",
+        "strat_bbands",
+        "strat_bbw_squeeze",
+        "strat_elliott",
+        "strat_keltner",
+        "strat_ma",
+        "strat_macd",
+        "strat_rsi",
+        "strat_squeeze",
+        "strat_stoch",
+        "strat_supertrend",
+        "strat_tv_amd",
+        "strat_tv_fibonacci",
+        "strat_tv_gaussian",
+        "strat_tv_msb",
+        "strat_tv_rating",
+        "strat_tv_rsi_probability",
+        "strat_tv_setup",
+        "strat_tv_sr",
+        "strat_tv_uptrick",
+        "strat_volume",
+        "strategy",
+        "strike",
+        "symbol",
+        "term_slope",
+        "tod",
+        "trade_idx",
+        "tv_amd_all_closed",
+        "tv_amd_compression_rank_fraction",
+        "tv_amd_long_entry",
+        "tv_amd_phase",
+        "tv_amd_range_width_atr14",
+        "tv_amd_short_entry",
+        "tv_fibonacci_bear_signal",
+        "tv_fibonacci_bull_signal",
+        "tv_fibonacci_direction",
+        "tv_fibonacci_midline_distance_atr14",
+        "tv_fibonacci_trend_flip",
+        "tv_fibonacci_volatility_atr14",
+        "tv_footprint_buy_share_pct_fraction",
+        "tv_footprint_chart_poc_distance_atr14",
+        "tv_footprint_chart_poc_fresh",
+        "tv_footprint_profile_tilt_pct_fraction",
+        "tv_footprint_window_bars",
+        "tv_gaussian_bear_signal",
+        "tv_gaussian_bull_signal",
+        "tv_gaussian_direction",
+        "tv_gaussian_smoothed_efficiency",
+        "tv_gaussian_trend_line_distance_atr14",
+        "tv_gaussian_trend_width_atr14",
+        "tv_htf_completed_poc_end_distance_atr14",
+        "tv_htf_completed_profile_ready",
+        "tv_htf_delta_pct_fraction",
+        "tv_htf_poc_end_distance_atr14",
+        "tv_htf_profile_ready",
+        "tv_htf_regression_end_distance_atr14",
+        "tv_htf_regression_slope",
+        "tv_ict_ASIA_break_high",
+        "tv_ict_ASIA_break_low",
+        "tv_ict_ASIA_in_session",
+        "tv_ict_ASIA_range_value_atr14",
+        "tv_ict_LNDN_break_high",
+        "tv_ict_LNDN_break_low",
+        "tv_ict_LNDN_in_session",
+        "tv_ict_LNDN_range_value_atr14",
+        "tv_ict_NYAM_break_high",
+        "tv_ict_NYAM_break_low",
+        "tv_ict_NYAM_in_session",
+        "tv_ict_NYAM_range_value_atr14",
+        "tv_ict_NYPM_break_high",
+        "tv_ict_NYPM_break_low",
+        "tv_ict_NYPM_in_session",
+        "tv_ict_NYPM_range_value_atr14",
+        "tv_liquidity_bottom_sweep",
+        "tv_liquidity_liquidity_bottom_distance_atr14",
+        "tv_liquidity_liquidity_top_distance_atr14",
+        "tv_liquidity_poc_price_distance_atr14",
+        "tv_liquidity_profile_ready",
+        "tv_liquidity_top_sweep",
+        "tv_order_blocks_bear_active_count",
+        "tv_order_blocks_bear_latest_trigger_distance_atr14",
+        "tv_order_blocks_bear_retest",
+        "tv_order_blocks_bull_active_count",
+        "tv_order_blocks_bull_latest_trigger_distance_atr14",
+        "tv_order_blocks_bull_retest",
+        "tv_probability_active_side",
+        "tv_probability_long_reference_win_pct_fraction",
+        "tv_probability_raw_long_signal",
+        "tv_probability_raw_short_signal",
+        "tv_probability_resolved_total",
+        "tv_probability_rsi_fraction",
+        "tv_probability_short_reference_win_pct_fraction",
+        "tv_setup_BRT_raw_long",
+        "tv_setup_BRT_raw_short",
+        "tv_setup_DIV_raw_long",
+        "tv_setup_DIV_raw_short",
+        "tv_setup_EMA_raw_long",
+        "tv_setup_EMA_raw_short",
+        "tv_setup_ORB_raw_long",
+        "tv_setup_ORB_raw_short",
+        "tv_setup_SWEEP_raw_long",
+        "tv_setup_SWEEP_raw_short",
+        "tv_setup_VWAP_raw_long",
+        "tv_setup_VWAP_raw_short",
+        "tv_setup_or_done",
+        "tv_setup_session_gap",
+        "tv_setup_vwap_distance_atr14",
+        "tv_sr_bear_signal",
+        "tv_sr_bull_signal",
+        "tv_sr_channel_1_bottom_distance_atr14",
+        "tv_sr_channel_1_strength",
+        "tv_sr_channel_1_top_distance_atr14",
+        "tv_sr_inside_channel",
+        "tv_structure_bear_signal",
+        "tv_structure_bull_signal",
+        "tv_structure_high_0_distance_atr14",
+        "tv_structure_low_0_distance_atr14",
+        "tv_structure_market_direction",
+        "tv_uptrick_bear_signal",
+        "tv_uptrick_bull_signal",
+        "tv_uptrick_direction",
+        "tv_uptrick_inner_trail_distance_atr14",
+        "tv_uptrick_regime",
+        "und_period_return"
+      ],
+      "entry_ts_max": "2026-08-24T19:45:00",
+      "entry_ts_min": "2024-12-02T14:30:00",
+      "executed_rows": 3010830,
+      "exit_ts_max": "2026-08-24T19:45:00",
+      "exit_ts_min": "2024-12-02T14:45:00",
+      "rows": 4281562,
+      "unique_contracts": 468181,
+      "unique_strategys": 19,
+      "unique_symbols": 449
+    },
+    "path": "meta_dataset.parquet",
+    "sha256": "dcf0003dafb8ac200af982cd342a838ea9b1d4ffa3da6405c84de19561a249e3"
+  },
+  "evaluation_config": {
+    "costs": "base",
+    "embargo": "1D",
+    "gate_bar": "risk",
+    "label": "label_excess",
+    "thresholds": [
+      0.5,
+      0.55,
+      0.6
+    ]
+  },
+  "feature_contract_version": "2026-09-06-tv13-option-ticks-unverified-v1",
+  "feature_schema": [
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ma_gap",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "px_vs_fast",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "rsi14",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "macd_hist",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "bb_z",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ret_1",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ret_8",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "ret_26",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "session_gap",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "gap_abs_z",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tod",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dow",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "is_first_hour",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "is_last_hour",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dow_tod",
+      "rationale": "computed from the signal bar and earlier underlying bars",
+      "source": "underlying 15m bar"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "rvol_5",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "rvol_21",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "atm_iv_near",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "atm_iv_far",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "term_slope",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "iv_chg_5",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "pc_ratio",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "market_iv",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "rv_iv_spread",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "PREVIOUS_SESSION_CLOSE",
+      "name": "beta_60d",
+      "rationale": "joined strictly as-of the prior completed session",
+      "source": "daily option surface"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dir_short",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "dte_frac",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "moneyness",
+      "rationale": "log1p(MONEYNESS), independent of executed listed strike",
+      "source": "configured proposal target"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "bars_since_signal",
+      "rationale": "known when the signal is generated and the contract is selected",
+      "source": "proposal metadata"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_ma",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_macd",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_rsi",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_squeeze",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_rating",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_bbands",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_stoch",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_volume",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_supertrend",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_elliott",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_keltner",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_bbw_squeeze",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_gaussian",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_fibonacci",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_uptrick",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_msb",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_sr",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_rsi_probability",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_amd",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "strat_tv_setup",
+      "rationale": "the strategy that emitted the proposal is known at signal time",
+      "source": "proposal strategy identifier"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_idx_etf",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_sec_etf",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_tech",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_semis",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_fin",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_crypto",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_defensive",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_cyclical",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "sec_spec",
+      "rationale": "static metadata available before the signal",
+      "source": "static sector mapping"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_gaussian_direction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_gaussian_smoothed_efficiency",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_gaussian_bull_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_gaussian_bear_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_gaussian_trend_line_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_gaussian_trend_width_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_fibonacci_direction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_fibonacci_bull_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_fibonacci_bear_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_fibonacci_trend_flip",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_fibonacci_midline_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_fibonacci_volatility_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_uptrick_direction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_uptrick_regime",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_uptrick_bull_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_uptrick_bear_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_uptrick_inner_trail_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_structure_market_direction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_structure_bull_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_structure_bear_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_structure_high_0_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_structure_low_0_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_sr_inside_channel",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_sr_bull_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_sr_bear_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_sr_channel_1_top_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_sr_channel_1_bottom_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_sr_channel_1_strength",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_probability_rsi_fraction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_probability_raw_long_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_probability_raw_short_signal",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_probability_active_side",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_probability_resolved_total",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_probability_long_reference_win_pct_fraction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_probability_short_reference_win_pct_fraction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_ASIA_in_session",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_ASIA_break_high",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_ASIA_break_low",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_ASIA_range_value_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_LNDN_in_session",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_LNDN_break_high",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_LNDN_break_low",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_LNDN_range_value_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_NYAM_in_session",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_NYAM_break_high",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_NYAM_break_low",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_NYAM_range_value_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_NYPM_in_session",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_NYPM_break_high",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_NYPM_break_low",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_ict_NYPM_range_value_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_order_blocks_bull_active_count",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_order_blocks_bear_active_count",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_order_blocks_bull_retest",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_order_blocks_bear_retest",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_order_blocks_bull_latest_trigger_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_order_blocks_bear_latest_trigger_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_amd_phase",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_amd_long_entry",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_amd_short_entry",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_amd_compression_rank_fraction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_amd_range_width_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_amd_all_closed",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_VWAP_raw_long",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_VWAP_raw_short",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_EMA_raw_long",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_EMA_raw_short",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_BRT_raw_long",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_BRT_raw_short",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_SWEEP_raw_long",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_SWEEP_raw_short",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_DIV_raw_long",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_DIV_raw_short",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_ORB_raw_long",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_ORB_raw_short",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_vwap_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_or_done",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_setup_session_gap",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_liquidity_top_sweep",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_liquidity_bottom_sweep",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_liquidity_profile_ready",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_liquidity_poc_price_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_liquidity_liquidity_top_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_liquidity_liquidity_bottom_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_htf_regression_slope",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_htf_delta_pct_fraction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_htf_regression_end_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_htf_poc_end_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_htf_completed_poc_end_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_htf_profile_ready",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_htf_completed_profile_ready",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_footprint_buy_share_pct_fraction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_footprint_profile_tilt_pct_fraction",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_footprint_chart_poc_distance_atr14",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_footprint_chart_poc_fresh",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "tv_footprint_window_bars",
+      "rationale": "exact closed-bar history and explicit VWAP/2D context; unavailable values remain missing",
+      "source": "pinned TradingView scoped projection"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "opt_tick_spread_bps",
+      "rationale": "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound",
+      "source": "verified historical option quotes/trades"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "opt_tick_size_imbalance",
+      "rationale": "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound",
+      "source": "verified historical option quotes/trades"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "opt_tick_valid_quote_fraction",
+      "rationale": "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound",
+      "source": "verified historical option quotes/trades"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "opt_tick_quote_age_seconds",
+      "rationale": "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound",
+      "source": "verified historical option quotes/trades"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "opt_tick_quote_updates_per_second",
+      "rationale": "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound",
+      "source": "verified historical option quotes/trades"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "opt_tick_trade_count_per_second",
+      "rationale": "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound",
+      "source": "verified historical option quotes/trades"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "opt_tick_trade_volume_per_second",
+      "rationale": "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound",
+      "source": "verified historical option quotes/trades"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "opt_tick_trade_vwap_mid_bps",
+      "rationale": "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound",
+      "source": "verified historical option quotes/trades"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "opt_tick_signed_volume_fraction",
+      "rationale": "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound",
+      "source": "verified historical option quotes/trades"
+    },
+    {
+      "available_at": "SIGNAL_CLOSE",
+      "name": "opt_tick_classified_volume_fraction",
+      "rationale": "predecision-selected OCC; exact trailing window; SIP availability and condition policy bound",
+      "source": "verified historical option quotes/trades"
+    }
+  ],
+  "manifest_version": 2,
+  "mark_stream": {
+    "path": "meta_dataset.marks.parquet",
+    "sha256": "f47275b1d5fa881a497671f031a2383e9e43e5a00a605d91f312b59c62fe1dbc"
+  },
+  "output_artifacts": {
+    "ensemble_config.json": "cdacbea1bf6a07e573af46b8d266b1d82b5e3bf736945a06b929e46050fdbd6c",
+    "v4-gbt-xs-s0/magnitude.joblib": "d6d5a93e116dd6734eae8e43651ba545b47685c7b98fc9dc255bc3f8248b9dd7",
+    "v4-gbt-xs-s0/model.joblib": "288d2146cc68d85b180525ab5d391aea8dfd76f233ae681690f1441f4b38231e",
+    "v4-gbt-xs-s0/params.json": "89755953fd45c3b31ae89caa44183b4192afb4145409794e7546f5c28cd58ae6",
+    "v4-gbt-xs-s1/magnitude.joblib": "94b34fbd1b5617b02be081a31f2ef5cae387931414649960214b78d35890cfaa",
+    "v4-gbt-xs-s1/model.joblib": "19bb451f6a391fb8a7ae39284f67e847a6459874a4bfe2bea32f9c0ac4afff8a",
+    "v4-gbt-xs-s1/params.json": "a95e2f0d707e7d0912b3f430219e0d6ab3b71e1c2462507d1e7ee2f921dea957",
+    "v4-gbt-xs-s10/magnitude.joblib": "84aa84018c212641a046468ccb5102bedc829e5fcb10009acb290e819882c018",
+    "v4-gbt-xs-s10/model.joblib": "43e624b690cffa34f5fb40706b5d1589225ee68184bdf0c41df06a5ea5b0c842",
+    "v4-gbt-xs-s10/params.json": "885e86762bddae29a6654e7cf57adcf1a32a3824affea5a0d7cc3beaeee72dd0",
+    "v4-gbt-xs-s11/magnitude.joblib": "0e7e5380d0e515ca6fac40ba2b5289e84568648e0008548f3866aedc375b1b6e",
+    "v4-gbt-xs-s11/model.joblib": "e8fab2b46d30c726156a7b5eb2627b920f87bb40743ed23c9f999982b38d832e",
+    "v4-gbt-xs-s11/params.json": "6bbb97419dda98e129b28aa36abcf4a296b07a69403d56e7909162a9792bb3c6",
+    "v4-gbt-xs-s12/magnitude.joblib": "778954e3ee2d846c62949accdc15fdd305d032f0ecb7be09c75346ec31c4bf81",
+    "v4-gbt-xs-s12/model.joblib": "5f3489666b2ee8eea6e19116705f892275f4116ae0be939263874ab185b596eb",
+    "v4-gbt-xs-s12/params.json": "f8b9d632b1132a3abb2472d53f1bb6b4a53a2648ebd67f38331d507862605c36",
+    "v4-gbt-xs-s13/magnitude.joblib": "87d034b50b82ba9e152bf9d937ea05b4946690878d88e93117c50deeeb4c7b35",
+    "v4-gbt-xs-s13/model.joblib": "4522a8ab63a868f9eab1a4d080bc0b19007074ba5a48c609ed8fb6821288b82b",
+    "v4-gbt-xs-s13/params.json": "49cb6031bffa9864488c874890ca822b17156385e0ed83edef480fa521fa7e7c",
+    "v4-gbt-xs-s14/magnitude.joblib": "04ec0b97e697e12a54c099a6b16386a6d4ce2060116f636851fea8063b5e03a2",
+    "v4-gbt-xs-s14/model.joblib": "0ceea3d0373bb44f2c42a7eae82e7d361e354c2e1eb4da77c32a3e6d28e78231",
+    "v4-gbt-xs-s14/params.json": "030706f45c0e71e45d896f1f396902466f4485c1a375e4b3924150b94949f923",
+    "v4-gbt-xs-s15/magnitude.joblib": "f49ba2d15e1af554fd2923664267df3688f0d9f130a4cdaf4df06b22fc7847fc",
+    "v4-gbt-xs-s15/model.joblib": "d2f1a28e6ffe2fd31f9b2b5e9fc8bd915f808ea32928cb17a5ef8fe76659d0bd",
+    "v4-gbt-xs-s15/params.json": "ffaf1727135b11af055cd4160aed5f187e9c6f20eb99b47458d542f0ca4ceff7",
+    "v4-gbt-xs-s16/magnitude.joblib": "f27d1e1042675f4a05c88125b2c29eea36ab017c0beae2a59a9fca9a5577a1d9",
+    "v4-gbt-xs-s16/model.joblib": "045a7aa1a01405cad5bedbb05781f01e795c886154ada19878acabf272f14b8a",
+    "v4-gbt-xs-s16/params.json": "999d16a3ef13ae2f2743eb42ba7d9c1a2888c4ecbec87b1a4d2f7082b1cf3c89",
+    "v4-gbt-xs-s17/magnitude.joblib": "f1fd30160c7aaf3d12127c5fd78084294c7003e070fd165cd2420f77975b7d62",
+    "v4-gbt-xs-s17/model.joblib": "e7a9d51071b7fb50fae7247f9171d923106ee29b0f1908f6c6cec1257dba58fd",
+    "v4-gbt-xs-s17/params.json": "6dbc268bf3547fc95fa19a67d08977771d95d1d298d2e75a38383182acfe8ba6",
+    "v4-gbt-xs-s18/magnitude.joblib": "201180e197b1128aa480189f914b51d0910dec1c0ff6a712c49983e077b5817b",
+    "v4-gbt-xs-s18/model.joblib": "ed1e5b70f796c0dea757859c86461740e2c449ec2b2bcb819e8ee6d062633b9b",
+    "v4-gbt-xs-s18/params.json": "47cdc8a6c838ecd8ad4f47b574fd4c7964f2f2c535ca9af3a53cdb04b84fab9c",
+    "v4-gbt-xs-s19/magnitude.joblib": "5572422fe0b1a186b134800a3445988eabbad5bce0270ee094b197aeb8912bca",
+    "v4-gbt-xs-s19/model.joblib": "f1934a0c42ffbf217a8bcbfef77c017ef90e1a623dc3060c663196edf9842f5f",
+    "v4-gbt-xs-s19/params.json": "7a10e8ad16a53882ad4044e0b1ab80f3ae133e41d557ee52940d8b3fc707495e",
+    "v4-gbt-xs-s2/magnitude.joblib": "4988642742fc1d0f53ba25fbbc758ac1f08a27655094d6c7cd1dd2ebbd996b53",
+    "v4-gbt-xs-s2/model.joblib": "19dd107b5d9651de3f302e7a0db3972c2f2ad8b55c04638488a7a604684efdb0",
+    "v4-gbt-xs-s2/params.json": "6fe3232c48bda6cdd129597e07f35f338b1d24241132bb67b9cc85834510893b",
+    "v4-gbt-xs-s20/magnitude.joblib": "3479fa38d14ea7181df021e6523b18265fb45e8303c5d1c15e3d570689ab0a77",
+    "v4-gbt-xs-s20/model.joblib": "d73dac94989a01b2d7aa0031ddb3938907961e0f0c23d393b0d5517a095aa532",
+    "v4-gbt-xs-s20/params.json": "4f555108b3006bfd2ac78d8de8652ec38abac53e4540e7fd6b5ed069ae78a2b9",
+    "v4-gbt-xs-s21/magnitude.joblib": "fbaf3f25e93ad818edc241904afe8452da0cf5bd027bd0753d06ede36ee3708f",
+    "v4-gbt-xs-s21/model.joblib": "26c1b44c933bea0d91b62688c802a09be8f94d123b2f5cf4c2b1b1acc373a703",
+    "v4-gbt-xs-s21/params.json": "a094def0bade4455ec102fcefb51bf157adba151f584ff5cb126032b95327f48",
+    "v4-gbt-xs-s22/magnitude.joblib": "8717d47daca69d0a9b1ef7180ed67300e0dbe0abacf66592b508b931334d5a3a",
+    "v4-gbt-xs-s22/model.joblib": "33701b7516d7497792fdcf999b2a507d6bbf136651db8a820e3ac8a28d8dadc1",
+    "v4-gbt-xs-s22/params.json": "7172f1dabbc165ab1999b64f14d5ffd593395a4a206087417ca6a9e49e804735",
+    "v4-gbt-xs-s23/magnitude.joblib": "4ab8ee8a6643280c906e44306e8e33e642dfa5bfbf6cc369339cf014a897a538",
+    "v4-gbt-xs-s23/model.joblib": "f5397da1e146fbb520e6a1d91ff4ce0b8962adea5c39033b67deca8b3abd83ec",
+    "v4-gbt-xs-s23/params.json": "f66f797528162d0917822ae8bbe2a5b10d997dd2f3867d56d1dd3c30c717a62d",
+    "v4-gbt-xs-s24/magnitude.joblib": "88fe8623dd6c5367c423fcf7604b992fc3fe0d2778e6c11398ef3d9a97be209c",
+    "v4-gbt-xs-s24/model.joblib": "e6b64944cc3d3e8f82bfb75e4460dd9290fd1d3a337bedf849ed730277137114",
+    "v4-gbt-xs-s24/params.json": "2eb56f9791125f358a634d525c8073012868fe6eeb847c72dd1d9fc929463912",
+    "v4-gbt-xs-s25/magnitude.joblib": "b85281b320f5b0ef870825f0709b97a1fb182114615259f8b4ec3b72f081016b",
+    "v4-gbt-xs-s25/model.joblib": "160db58804331b1f97bb28bcc7d02aa7750a625dd5f88145b146efdd73ec962f",
+    "v4-gbt-xs-s25/params.json": "4d76c7833d20425f8471d4d23ba7f8c300fdcacaf388816c936f99efa824139d",
+    "v4-gbt-xs-s26/magnitude.joblib": "634acfe99ea6422634fe66bad719b61f498a2c1636ae5152ca45a64d4b678002",
+    "v4-gbt-xs-s26/model.joblib": "971f129d9e0e9851a40891bdded62b346a1287d67c1920ee520458d64aa236c3",
+    "v4-gbt-xs-s26/params.json": "b829aaaf36221da927cdfb25c7068891637da78e1b9e3d33a833cf673270b519",
+    "v4-gbt-xs-s27/magnitude.joblib": "fdc6dc29e7a1e9dc59cad0cbc5c32eb8f719937bf109e3b2ace2734e74f18ca4",
+    "v4-gbt-xs-s27/model.joblib": "3964b6fd86f50cefaca5a5a5a1a1aed4af50a3ff17e9494a5ba081c908b2ea6f",
+    "v4-gbt-xs-s27/params.json": "467031485aedf91c7b26da4430137aa176be28af34871129da843a6bcf851812",
+    "v4-gbt-xs-s28/magnitude.joblib": "52e532fa8d07a78ab069ad4369756f7190524fca07057f99331d088b646d1bcf",
+    "v4-gbt-xs-s28/model.joblib": "25fdbbc5ee79fb64bd54123ba23dc01864906def4008a1a54984846981fdc45c",
+    "v4-gbt-xs-s28/params.json": "ea289c98a8630b1c2fe9fa6812cf0f0e8c678e4b4500db15ac4aa42fabdeb0a1",
+    "v4-gbt-xs-s29/magnitude.joblib": "3db858c384191ef7ea811f660b7378c4c89ef1231204a4f82d5ec0fe5dc069f6",
+    "v4-gbt-xs-s29/model.joblib": "72af1658fd7b0a90ec921a9bdbabd9892d924a5de455d6077c8106335a598dc5",
+    "v4-gbt-xs-s29/params.json": "e828bf5477080cbf1ebe0af9113e483bb0973b2261c7b3a535f09a2a5ae746f7",
+    "v4-gbt-xs-s3/magnitude.joblib": "f61901f4f0a72baa1238eb46f2adb2d0389c120c2ff053a3cd428aa29640f963",
+    "v4-gbt-xs-s3/model.joblib": "f3c91e0720ea2f48d65f35273074d92e23a202eef2dd66f0a85cfeb65e3e4798",
+    "v4-gbt-xs-s3/params.json": "293a0cdba9cfd01f5aef993493b540c0507d1e6b4653beb43bd7cd05b097311b",
+    "v4-gbt-xs-s30/magnitude.joblib": "1e481613901f608c041ab2508f10ac23c50d5850d21e7c11fbfcfd13da15153d",
+    "v4-gbt-xs-s30/model.joblib": "7a87788ec480e1e6ee6e867e1cd5514055acd9eac8b950c5a9de5a4cbdd966fa",
+    "v4-gbt-xs-s30/params.json": "38a5751b80de55f59f8301241d9b352f806c6bd20b6e040d233783b855a053ed",
+    "v4-gbt-xs-s31/magnitude.joblib": "eb4d877ae7156e7282a8cf5b6f1f9160c42fdd2f2c10e38768a28211f26d0fc0",
+    "v4-gbt-xs-s31/model.joblib": "91725b23e4fc9e4e2020c981dce3ade1445977790b9f9c6ae167ae5c56942fe5",
+    "v4-gbt-xs-s31/params.json": "c04ddd4dfbe85c5dc57828d0f47948a3f822cfb027fed1bcbbd4c5e9276257ac",
+    "v4-gbt-xs-s32/magnitude.joblib": "67147e9b416e764d031e5fbe2c84e7130e036d18ea30b652712ea7cc705a02b6",
+    "v4-gbt-xs-s32/model.joblib": "c427fe7a2057aabe4ead3347a0976a14bacb25431872ac6fc13830f95f281bbe",
+    "v4-gbt-xs-s32/params.json": "86160362525c4476259226ececf3912e1aa09fef73d011b7ce06bdf44fdee059",
+    "v4-gbt-xs-s33/magnitude.joblib": "55b4ef335dae9f5876cbfdd1862add535ab958972ab073d4567ba54c728c07ce",
+    "v4-gbt-xs-s33/model.joblib": "470c397dd984087dc446f3aba63136588406b5222bd06b335e29a0b86fd7f689",
+    "v4-gbt-xs-s33/params.json": "ff1bbcf5d9ff7f4dba7671297d6b304809233ae1243bbe029491c0ca1ab05375",
+    "v4-gbt-xs-s34/magnitude.joblib": "d4d3a6773074daedbef61c99ea2cdbec30b73cded79b00b6fcd3ce1d6725300d",
+    "v4-gbt-xs-s34/model.joblib": "83edd9294d9fead0eb6b8916ac113532cfe46d68d591de081b9d0acda045ae57",
+    "v4-gbt-xs-s34/params.json": "be0692e3c6af06c01265a0b2514363367f6639af81fef0744540d5d02b10d1ae",
+    "v4-gbt-xs-s35/magnitude.joblib": "501eba13d539c4053f23c269199f6dfeff2d9539fbd8d11946129881fd488c38",
+    "v4-gbt-xs-s35/model.joblib": "cfb58ad39c4c384a40bd184a9537cf8b996fc2100464e6eac3809f9d9c1ae69b",
+    "v4-gbt-xs-s35/params.json": "d48158f70740fe0eb8d11280324cfe5f2421fc97b887a89d396859e43bfd5514",
+    "v4-gbt-xs-s36/magnitude.joblib": "c58de925a410ddc696225372053aed3f0d3beed082003b8225732484e924c31d",
+    "v4-gbt-xs-s36/model.joblib": "eca97d9042cb4e82650f153afefc40fa22f180e005705b9691830287383c8248",
+    "v4-gbt-xs-s36/params.json": "d2a41e7ea4a1acd0e638d29e95fc9f2618f786ee883c6f49333c7f5ffab7b83e",
+    "v4-gbt-xs-s37/magnitude.joblib": "4967a15c291a97d59e5c65b2d6fd7f72cee29217f133bafea279e8ea68b09bff",
+    "v4-gbt-xs-s37/model.joblib": "328cd623f4e7810caf00308e1a8c398f8b1ac7bc656878a1bd9251d9dab5ce75",
+    "v4-gbt-xs-s37/params.json": "f1e79b6afc7e1c95bf3e07bb5396d9504433f81779d7796562f25dcd5fecd7a6",
+    "v4-gbt-xs-s38/magnitude.joblib": "278a6d373b39d00da1b8677862196641c57f07ce9c5ea3d564ed824eb4166865",
+    "v4-gbt-xs-s38/model.joblib": "f6e88777f6b2dc9760aa1930395a6f2bb0a17aec23bd4a0a6f993a61e5491743",
+    "v4-gbt-xs-s38/params.json": "0b900309ef06f243469c323c9e0e1e44943f4a568e8c45090d2c18eb88981b36",
+    "v4-gbt-xs-s39/magnitude.joblib": "43c932cc4fd9fd62772ecabd58ef0976a3a6374149bff4248813e4852d8abf12",
+    "v4-gbt-xs-s39/model.joblib": "400bf33e606a53533c1cf28178e66fa7439a709f6273dad5b9b287c0b590d22d",
+    "v4-gbt-xs-s39/params.json": "d07fa71ffa51e60bb850b424975390bef455f48aa9ba4838f043e70862b2543b",
+    "v4-gbt-xs-s4/magnitude.joblib": "61a6040d094f384e16986239c3d19b33eec41624233953fd2923c946ee6ea8f5",
+    "v4-gbt-xs-s4/model.joblib": "55ea3f28373b365d5a77c3922f72176ffedb8de6728eb737244c17080527f015",
+    "v4-gbt-xs-s4/params.json": "02c8928084db39795ba9a0a47b688e5a84780929a9108f6bd56c99fce1f792b8",
+    "v4-gbt-xs-s5/magnitude.joblib": "bee41ae4b077d8e3fc644c5f4da671bbfb95d4fe65df4ec5113b790459f62e06",
+    "v4-gbt-xs-s5/model.joblib": "14a380b9b439e6719a72041b0712a70393f5b7146824e4bdb8b19177b13c373a",
+    "v4-gbt-xs-s5/params.json": "a60b4e88c790200113fdaa1f6c1918d4df7ada0fa8d1baa0c43c038807a35a9c",
+    "v4-gbt-xs-s6/magnitude.joblib": "ffc5487487e134ec40386291a293b8e672999f9e734ee00dfddcdc2078c9bb57",
+    "v4-gbt-xs-s6/model.joblib": "65c655e3b1fbdae8caa25cf82aff551ef921b64c1778e06c81fe296fcb82cbc7",
+    "v4-gbt-xs-s6/params.json": "186e9ba40701cee97279cb400dbc92afa20fca9e78e411221ec07d8f85319bff",
+    "v4-gbt-xs-s7/magnitude.joblib": "a2496afe09ea494f7d0b29fa17efd83df7944a0cb26d13c16cd75424a38b2bb1",
+    "v4-gbt-xs-s7/model.joblib": "0c4dc8e520fa6b39f5b9ca65eb286859b56be9b9b371562efa350b38886fed7e",
+    "v4-gbt-xs-s7/params.json": "2af5c6af77cabf16ba189c1b0f5fe603b7f7ef0b22c71fef1f6f8dfbf5604d22",
+    "v4-gbt-xs-s8/magnitude.joblib": "2a4f5ab6225fcb4ece8b4fa16cf1ed80362129ea872c872bd2549c1a303c8345",
+    "v4-gbt-xs-s8/model.joblib": "f36f3800750b10683f51e89149ac331d2c07065eb9391d589d67860839fad5fb",
+    "v4-gbt-xs-s8/params.json": "2bf7c9eec1a09900dd839f124ac8a71fa98b6fc4e431d4477ad3b74a018e8cd0",
+    "v4-gbt-xs-s9/magnitude.joblib": "db951a5b9f4b84bc013cc3a86b5a1363691143b84949145f9c6bf910fd75fa14",
+    "v4-gbt-xs-s9/model.joblib": "bc7ec578714ba09659bdf8c3f70165c1e399022d9e8bbd32f8a1ebe1647a58cd",
+    "v4-gbt-xs-s9/params.json": "532d8056395bbf72d57112c95c7c18b5e694b26127a65fbd522945e6b8d1a097"
+  },
+  "provider_metadata": {
+    "interval": "15m",
+    "mark_stream": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-cash-repair-20260913/v6/artifacts/meta_dataset.marks.parquet",
+    "options_history_constraint": "15m; approximately two years",
+    "pool": "v6",
+    "selection_basis": "ledger"
+  }
+}

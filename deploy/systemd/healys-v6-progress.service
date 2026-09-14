@@ -6,7 +6,7 @@ After=network-online.target
 [Service]
 Type=oneshot
 WorkingDirectory=/home/healy/Coding/HealysBacktester
-ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python -m scripts.watch_v6_progress --campaign v6-train-20260912r2
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python -m scripts.watch_v6_progress --campaign v6-cash-repair-20260913
 Environment=PYTHONDONTWRITEBYTECODE=1
 TimeoutStartSec=10min
 UMask=0077

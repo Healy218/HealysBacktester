@@ -1,70 +1,199 @@
-# V6 reviewed: hold scanner promotion; dashboard summaries live — September 12, 2026
+# V6 repaired training and validation complete; scanner promotion blocked — September 13, 2026
 
-Campaign `v6-train-20260912r2` completed at 17:15:02 UTC. All stage receipts
-returned 0. Final ensemble: GBT × 40, EV threshold 0.05, no drawdown brake,
-164 features, full-ensemble risk gate eligible. It remains research-only under
-the unverified TradingView contract; nothing was deployed to the scanner.
-All 225 pinned research-source hashes remain unchanged from the scope.
+Latest user review: they challenged the absence of sub-10-DTE selections and
+large winners. The [DTE/selection audit](docs/reviews/2026-09-13-v6-dte-selection-audit.md)
+reproduced all 241 identities and sizes. Short DTEs were trained/scored, but no
+rule requires their participation. Of 450 sub-10 rows passing EV .05, 78 won
+their proposal's DTE comparison; 43 then hit full slots and 35 lost to higher
+same-time EV. There are 358 final-window candidate rows above +1,000%: 356 fail
+EV and two lose the DTE comparison. All 37 >+200% rows remaining after DTE
+comparison lose at allocation. No realized-return cap or candidate-top-three
+removal caused the selected maximum. Magnitude target clipping is +350.22%,
+but saved V4/V5 bounds were already +358.06%/+373.57%. User requested exact
+rules, not another launch; no policy changes or retraining were made.
 
-## Results and evidence
+The user authorized fixing the training failures and restarting. Replacement
+`v6-cash-repair-20260913` launched at **18:04:23 UTC** under
+`healys-v6-cash-repair-20260913.service`, invocation
+`ab73abc136394dd2aa1de01f3b662d37`. The full pipeline completed successfully at
+**19:47:00 UTC / 14:47 CDT**. All three evaluation folds, 20 finite NN selection
+seeds, four GBT selection seeds and **40/40 final GBT seeds** completed.
+The selected model is GBT, EV threshold 0.05, no drawdown brake, eligible under
+the research gate. Historical validation: +648.8% return, 12.6% maximum drawdown,
+241 positions; matching baseline +90.6%. This overlaps earlier selection/tests
+and is not a fresh holdout. All **32 aggregate execution comparisons** matched
+the independent ledger. Readiness passed training, neural health, final bundle
+and aggregate execution; actual quote/roll evidence, forward shadow replay,
+external feature/feed parity and scanner operating review remain blocked.
+No scanner promotion occurred. Nested training artifacts and all pipeline
+output hashes were reverified at 19:59 UTC.
 
-[Full training summary](docs/reviews/2026-09-12-v6-training.md) now records
-runtime, dataset, folds, calibration, PBO/DSR, objective comparisons, final gate
-and limitations. Marked test return/maxDD by fold: +73.3%/23.6%,
-+205.4%/11.9%, +61.3%/22.4%. Final validation: +648.8%, 12.6% maxDD,
-241 kept trades. That final tail is selection/revalidation, not another test.
-Deployment review found all 20 NN receipts have NaN validation loss. Two
-all-missing ICT columns left NaN arrays and inspected weights; final NN
-predictions are constant. The zero-trade family comparison is invalid.
-GBT results remain worth developing: matching shared-accounting test baselines
-show v6 higher return in 2/3 folds and lower drawdown in all three. The final
-241-position marked ledger replays exactly, but aggregate-bar fills can be
-delayed and base costs omit explicit spreads. Expanded live inputs are not
-connected to scan_pass. Verdict: hold scanner promotion; no retraining or
-scanner deployment was performed during review. See the
-[deployment review](docs/reviews/2026-09-12-v6-deployment-review.md).
+The fix distinguishes unfundable policy books from corrupt accounting data.
+The ledger still refuses an entry when no cash is available. Evaluation records
+that specific policy as ineligible and continues the remaining grid; other
+accounting failures still stop it. An unfundable baseline cannot waive a gate.
+The exact 239,793-row failed case completed all 15 policies after the fix,
+rejecting one unfundable configuration. A separate ledger confirmed the same
+rejection under all four costs. Resume checks now reverify nested artifact
+hashes; aggregate revalidation retains original drawdown-brake sizing.
+See [cash-repair review](docs/reviews/2026-09-13-v6-cash-repair.md).
 
-Evidence root: `nn_meta/campaigns/v6-train-20260912r2/v6/`:
-`continuation_scope.json`, `runs/continuation/*.json`, `reports/evaluate.*`,
-`reports/objective-comparisons/`, `model_final/{ensemble_config,manifest}.json`.
-The original build's OOM failure and first continuation's memory-throttle stop
-remain preserved. Do not relabel or overwrite those campaigns.
+Validation before launch: **1,537 tests +18 subtests passed**, including the
+cash-guard, candidate/baseline rejection, invalid-mark, independent-rejection,
+reporting, braked-sizing and nested-resume regressions. All 226 source and
+1,376 input bindings reverified unchanged after launch. Old failed scope and
+all its seed artifacts remain preserved. Preserve the completed scope bindings.
 
-## Watcher fixed and dashboard delivered
+Both watcher and dashboard now follow `v6-cash-repair-20260913`. The hourly
+watcher was refreshed at 19:59 UTC and reports all pipeline stages complete.
+Dashboard publication observed at 19:58:11 UTC succeeded with no issues. Telegram is off.
+Monitor installation backups/receipt: `/tmp/healys-v6-cash-repair-monitor/`.
 
-The old progress timer checked `v6-local-20260906`, creating the false stopped
-report. `scripts/watch_v6_progress.py` now understands the continuation
-supervisor, seed jobs and stages without workers. The installed service binds
-explicitly to r2 and omits `--telegram`, as requested. Local receipts are in
-`logs/v6-progress/v6-train-20260912r2/`. No Telegram summary was sent.
+Current files under `nn_meta/campaigns/v6-cash-repair-20260913/v6/`:
 
-The private dashboard at https://stonks-22367.web.app now has Training with
-Compare and V2/V3/V3.1/V4/V5/V6 report views. Completed v6 summary and all six
-versions were verified in the live home document; public frontend HTTP 200,
-anonymous data reads 403. `TRAINING_ROOT` and `TRAINING_CAMPAIGN` are configured
-in the existing home publisher environment. The minute publisher updates both
-Research and Training; original source text and downloads stay private.
+- `runs/pipeline/status.json`: overall pipeline state.
+- `runs/continuation/latest.json`, `evaluate.log`, `finalize.log`: training stages.
+- `runs/pipeline/readiness.json`: inventory after training and execution validation.
+- `runs/training-service.log`: supervisor output.
 
-Dashboard code is `7d82c85` (initial library `e86f9fb`) on
-`ops/firebase-dashboard-20260911`, pushed and
-active in `/home/healy/Coding/HealyLabsDashboard`. Its detailed review and
-handoff are in that checkout. Do not merge its older research snapshot over
-main. Scratch development clone: `/tmp/healys-training-library`.
-The correction detects failed NN losses, shows `Complete · review required`,
-and includes the deployment review as a private source/download. Revised
-desktop/phone warning rendering and publisher regression checks passed.
+Completed execution output: `nn_meta/validation/v6-cash-repair-20260913-execution/`.
+The full three-fold/40-final-seed budget and capital/gate limits are unchanged.
+Scanner promotion still needs actual quote/roll, parity and forward evidence.
+Previous status snapshot: `handoff-history/HANDOFF-2026-09-13-before-cash-repair.md`.
 
-Validation: main 1,472 tests + 18 subtests; dashboard 16 publisher tests,
-7 frontend units, 8 desktop/phone browser checks, 2 Auth emulator checks,
-production build and private-evidence bundle scan. User systemd reported
-successful training exit and successful post-completion publisher execution.
+## Previous attempt and retained context
 
-Next: enforce finite NN preprocessing/training checks in a fresh scope, run
-frozen-policy execution/cost and same-marked-ledger baseline comparisons, then
-complete verified live inputs and forward shadow evidence before promotion.
-Preserve the existing campaign and its failed NN evidence. Production ops and FA remain separate in
-`/tmp/healys-server-alert-readiness` and `/home/healy/Coding/HealysAutomation`.
-Standalone iOS still needs Mac/device acceptance. Actual broker sale
-verification remains pending. Preexisting untracked `nn_meta/artifacts_v6/`
-is untouched and must not be added. Prior full state is archived in
-`handoff-history/HANDOFF-2026-09-12-before-watcher-dashboard-completion.md`.
+The previous repair run stopped at **17:13:07 UTC** during fold 3
+NN policy evaluation. `mark_to_market_portfolio` raised
+`AccountingDataError: no available cash for entry at 2026-05-21 14:00:00`.
+All 15 fold NN seeds have finite classifier/magnitude loss/weight/prediction
+receipts; two GBT fold seeds completed. The final 40-seed fit and automatic
+execution validation have not started. Do not report the service as running.
+That failure is fixed in the replacement described above; no failure evidence
+has been overwritten.
+
+The hourly watcher was still configured for `v6-train-20260912r2`. It has been
+updated in source to `v6-neural-repair-20260913r2` and now follows pipeline
+supervisor, execution validation and readiness phases; failures override a
+completed training receipt. Dashboard collector fixes also keep an evaluation
+failure visible when no finalize log exists. Installed watcher service and
+dashboard `TRAINING_CAMPAIGN`/`PROGRESS_RECEIPT` now point to the repair run.
+The watcher completed successfully at 17:48 UTC; its hourly timer is enabled,
+next scheduled run 18:00 UTC (13:00 CDT). Telegram stays disabled. The existing
+dashboard minute timer publishes the updated source/configuration; a manual
+publish hit the existing 55-second rate limit, so do not force duplicate starts.
+The next scheduled publication succeeded at **17:48:25 UTC**, with no issues.
+Installation backups/receipt: `/tmp/healys-v6-watcher-rebind/`. Watcher report:
+`logs/v6-progress/v6-neural-repair-20260913r2/progress.txt`.
+Validated 18 watcher tests, 19 dashboard publisher tests, and 36 combined
+watcher/follow-up/pipeline tests. Original training scope and 15 NN artifact
+receipts reverified unchanged. No training restart was attempted.
+
+The user asked to code the September 12 review follow-up. Neural guards,
+frozen execution/cost validation, matching marked baseline, independent cash
+ledger, sealed expanded live inputs, isolated shadow recording/replay and
+private dashboard publisher integration are implemented. Scanner promotion
+remains on hold. The user explicitly requested full retraining; its durable
+service ran and failed as described above. Scanner deployment and notifications
+remain off.
+
+[Implementation review](docs/reviews/2026-09-13-v6-followup-implementation.md)
+and [commands/evidence runbook](docs/specs/V6_FOLLOWUP_RUNBOOK.md).
+
+## Neural repair
+
+`nn_meta/neural_validation.py` implements train-only inactive-column handling.
+Entirely unobserved training columns stay zero at validation/inference;
+missing other values use the training mean. Infinity/overflow, invalid labels,
+non-finite losses, weights or predictions prevent successful NN receipts.
+Reference evaluation/finalization, parallel workers and loaders share this
+policy. GBT retains native NaN handling. Old failed NN evidence is preserved.
+
+A real-data two-epoch, one-seed numerical smoke used 8,192/2,048 evenly sampled
+rows and all 164 features. Both heads produced finite, nonconstant predictions.
+Only the two original ICT Asia/London range columns were inactive; the RTH-only
+history does not observe those overnight sessions. This is not performance
+validation. Evidence: `nn_meta/validation/v6-neural-smoke-20260913/`.
+
+Full-training scope `v6-neural-repair-20260913r2` launched at 16:44 UTC:
+226 source hashes and 1,376 inputs, original three folds and 40 final seeds.
+Service: `healys-v6-neural-repair-20260913r2.service`, invocation
+`16cede3136944071b855c6df5fb1e25c`. Two workers/two threads, CPU quota 600%,
+CPUs 2–7 and 10–15 (two physical cores reserved), nice 10, 24 GiB memory cap,
+2 GiB swap cap; no soft-memory throttle. Observed 15.7 GiB current/17.7 GiB
+peak memory. At 16:49 UTC fold 1 has four completed NN seeds; both heads have
+finite losses/weights/predictions on 282,878 validation rows. Classifier loss
+0.6471–0.6480, magnitude loss 0.1096–0.1100. No family verdict yet.
+
+`scripts/v6_training_pipeline.py` runs training → this new model's 32 execution
+comparisons → `scripts/v6_readiness.py` inventory. It keeps per-stage logs,
+hash receipts and failure/resume state. No automatic scanner promotion.
+Status: `nn_meta/campaigns/v6-neural-repair-20260913r2/v6/runs/pipeline/status.json`.
+Training stage: `runs/continuation/latest.json`; detailed log:
+`runs/continuation/evaluate.log`; service log: `runs/training-service.log`.
+Final inventory will be `runs/pipeline/readiness.json`; execution output will
+be `nn_meta/validation/v6-neural-repair-20260913r2-execution/`.
+Do not edit scope-bound sources or pipeline sources while this service runs;
+source/input drift fails the next stage check. The older prepared scope without
+`r2` is preserved and must not run.
+
+## Execution evidence
+
+`nn_meta/validation/v6-execution-20260913r3/` contains completed frozen
+revalidation: candidate versus matching frozen-DTE baseline, four latency
+cases and four cost scenarios. All 32 equity curves/maxDD values match a
+separate cash/event implementation. At base costs, original selected fills:
+candidate +648.8%/12.6% maxDD (241 positions); baseline +90.6%/50.6% (205).
+A five-minute post-signal-close entry limit retains only 52 candidate positions
+(+48.2%/9.5%) and 120 baseline positions (−13.8%/57.6%).
+
+These are final-tail selection/revalidation results, overlapping earlier tests,
+not a fresh holdout or achievable alert returns. Rejected positions do not
+backfill slots. Aggregate spreads are assumptions. Actual quote-tape and roll
+coverage remain required for quote-based campaign results. Quote replay code
+handles ask/bid prices, dollar commissions, slippage, receipt chronology,
+missing exits, roll plans and independent cash accounting. Earlier execution
+reports remain preserved; r3 binds all directly consumed calculation sources.
+
+## Live, shadow and dashboard
+
+`nn_meta/live/v6_inputs.py` validates sealed technical history/raw prices,
+prior-date contracts, prior daily context and receipt-based tick windows.
+Training history origins/defaults stay bound. Journal normalized fields are
+verified against raw msgpack payloads; provider-condition mapping needs evidence.
+A heartbeat does not certify complete capture. Expanded `scan_pass` supplies
+these inputs before detection/projection and currently requires `--shadow`.
+
+Shadow records immutable first-observed candidates/baseline decisions and
+optional execution quotes in separate SQLite state. It does not drain outboxes
+or open paper positions. `replay_v6_shadow` uses actual observed decision times
+and bound frozen exit receipts; unresolved selections suppress performance.
+No actual forward scope or live parity/capture evidence has been collected.
+
+Dashboard integration patch/module: `integrations/dashboard/`. The tested
+publisher changes are staged in `/tmp/healys-v6-dashboard-followup/publisher`.
+The separate dashboard checkout is `/home/healy/Coding/HealyLabsDashboard`;
+its existing generic Training renderer needs no frontend changes. Optional
+`V6_EXECUTION_ROOT` / `V6_SHADOW_ROOT` select evidence under `TRAINING_ROOT`.
+Publisher campaign/progress settings were updated to the repair run; the new
+optional execution/shadow evidence paths remain unconfigured pending results.
+Code installation status: all four tested publisher files applied to the
+dashboard checkout. Receipt/backups: `/tmp/healys-v6-dashboard-followup/`.
+
+## Validation and preserved state
+
+Full suite after the launch/pipeline additions: **1,522 tests +18 subtests
+passed** (16 upstream warnings). Dashboard:
+16 existing publisher tests plus three integration tests passed. Actual-data
+preview has 32 scenario rows and no follow-up integrity issues.
+All 121 original final-bundle artifact hashes match; all 20 original failed
+NN receipts remain. Preexisting untracked `nn_meta/artifacts_v6/` is untouched
+and must not be added. Changes are uncommitted on `main`.
+
+Next operating steps: reproduce/fix the fold-3 cash-ledger failure, resume in a
+reviewed fresh training scope, then automatic validation, actual quote/roll replay,
+TradingView/provider/receipt parity and forward shadow evidence before any
+promotion. Production ops/FA remain separate. iOS Mac/device acceptance and
+actual broker-sale verification remain pending.
+Prior handoff: `handoff-history/HANDOFF-2026-09-13-before-v6-followup-implementation.md`.
+Prelaunch handoff: `handoff-history/HANDOFF-2026-09-13-before-training-relaunch.md`.

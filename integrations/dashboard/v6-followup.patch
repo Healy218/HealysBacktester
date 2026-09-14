@@ -1,0 +1,267 @@
+diff --git a/dashboard/publisher/training.py b/dashboard/publisher/training.py
+--- a/dashboard/publisher/training.py
++++ b/dashboard/publisher/training.py
+@@ -221,7 +221,8 @@
+ 
+ def processes(campaign, proc=Path('/proc')):
+     found = []
+-    modules = {'scripts.continue_v6_training', 'nn_meta.v4_evaluate', 'nn_meta.v4_finalize',
++    modules = {'scripts.continue_v6_training', 'scripts.v6_training_pipeline',
++               'scripts.validate_v6_execution', 'scripts.v6_readiness', 'nn_meta.v4_evaluate', 'nn_meta.v4_finalize',
+                'nn_meta.training_jobs', 'nn_meta.training_experiments', 'nn_meta.build_meta_dataset'}
+     for p in proc.iterdir():
+         if not p.name.isdigit():
+@@ -235,7 +236,7 @@
+                 continue
+             env = (p / 'environ').read_bytes().split(b'\0')
+             bound = f'NN_META_CAMPAIGN={campaign}'.encode() in env and b'NN_META_POOL=v6' in env
+-            if module == 'scripts.continue_v6_training':
++            if module in ('scripts.continue_v6_training', 'scripts.v6_training_pipeline'):
+                 bound = '--campaign' in args and args[args.index('--campaign') + 1] == campaign
+             if bound and (p / 'stat').read_text().rsplit(')', 1)[1].split()[0] != 'Z':
+                 found.append(module)
+@@ -251,6 +252,9 @@
+     scope = obj(base / 'continuation_scope.json'); latest = obj(base / 'runs/continuation/latest.json')
+     if scope.get('campaign') != campaign or latest.get('campaign') != campaign:
+         raise ValueError('Training campaign binding failed')
++    pipeline = optional(base / 'runs/pipeline/status.json')
++    if pipeline is not None and pipeline.get('campaign') != campaign:
++        raise ValueError('Training pipeline campaign binding failed')
+     r = report('v6', 'Expanded features, bounded training',
+                'Evaluation compares neural networks and boosted trees across three post-freeze folds. Final family selection, 40-seed training and gate revalidation follow. The summary updates from this campaign’s receipts.')
+     r['notes'] = ['Research-only: external TradingView parity remains deferred. This is conditional meta evaluation on globally frozen proposals, not a full system refrozen within each fold.',
+@@ -323,13 +327,15 @@
+         r['status'] = 'Complete · research only'
+         r['summary'] += f" The final {len(config['final_seeds'])}-seed {config['family'].upper()} ensemble passed its configured validation gate. It has not been deployed."
+         activity = 'Completed; final report and configuration match the recorded stage hashes'
+-    if state in ('complete', 'failed'):
++    if state in ('complete', 'failed') and (base / 'runs/continuation/finalize.log').exists():
+         log = read(base / 'runs/continuation/finalize.log').decode()
+         if '=== re-validating' in log:
+             r['sources'].append(dict(path=str((base / 'runs/continuation/finalize.log').relative_to(root)),
+                                      sha256=hashlib.sha256(log.encode()).hexdigest(), excerpt=True,
+                                      content='## Final ensemble gate log\n\n```text\n' + log.split('=== re-validating', 1)[1][-18000:] + '\n```'))
+-    source(root, 'docs/reviews/2026-09-12-v6-training.md', r)
++    review_path = ('docs/reviews/2026-09-13-v6-followup-implementation.md'
++                  if scope.get('repair_neural') else 'docs/reviews/2026-09-12-v6-training.md')
++    source(root, review_path, r)
+     nn_receipts = list((base / 'runs/seed-jobs').glob('*/nn-s*/complete.json'))
+     failed_nn = sum(not isinstance(loss := obj(path).get('val_loss'), (int, float))
+                     or isinstance(loss, bool) or not math.isfinite(loss) for path in nn_receipts)
+@@ -344,7 +350,22 @@
+     review = root / 'docs/reviews/2026-09-12-v6-deployment-review.md'
+     if campaign == 'v6-train-20260912r2' and review.exists():
+         source(root, str(review.relative_to(root)), r)
+-    return r, dict(status=r['status'], stage=latest.get('stage', 'complete'), activity=activity,
++    if pipeline:
++        phase, pipeline_state = pipeline.get('stage'), pipeline.get('status')
++        if pipeline_state == 'failed':
++            if r['status'] != 'Gate rejected':
++                r['status'] = 'Failed'
++            activity = f"Pipeline {r['status'].lower()} during {phase}"
++            r['notes'].insert(0, pipeline.get('error', 'Inspect the pipeline stage log.'))
++        elif pipeline_state == 'running' and phase != 'training':
++            r['status'] = 'Validating'
++            activity = f'Training complete; {phase} running' if active else f'{phase}: verify the host service'
++        elif pipeline_state == 'complete':
++            if state != 'complete':
++                raise ValueError('Pipeline completion disagrees with training status')
++            activity = 'Training, execution validation and readiness inventory complete; research only'
++        r['facts'].append(dict(label='Pipeline stage', value=str(phase or pipeline_state)))
++    return r, dict(status=r['status'], stage=(pipeline or latest).get('stage') or 'complete', activity=activity,
+                    activeWorkers=active.count('nn_meta.training_jobs'), completedFinalSeeds=len(finals), totalFinalSeeds=len(training['final_seeds']),
+                    totalSymbols=len(scope['symbols']), selectionSeedJobs=len(list((base / 'runs/seed-jobs').glob('*/*/complete.json'))),
+                    evidence=dict(assembled_dataset=(optional(base / 'runs/continuation/assemble.json') or {}).get('returncode') == 0,
+@@ -367,7 +388,7 @@
+     return rows
+ 
+ 
+-def collect_training(root, campaign, now=None):
++def collect_training(root, campaign, now=None, *, execution_root=None, shadow_root=None):
+     root = Path(root); now = now or datetime.now(timezone.utc)
+     result = dict(observedAt=now.isoformat(), campaign=campaign, status='Unavailable', stage='unknown',
+                   activity='Training receipts unavailable', activeWorkers=None, completedFinalSeeds=None,
+@@ -380,6 +401,15 @@
+             if version == 'v6':
+                 value, status = value
+                 result.update(status)
++                if execution_root or shadow_root:
++                    from v6_followup import append_followup
++                    value["campaign"] = campaign
++                    try:
++                        append_followup(root, value, execution=execution_root, shadow=shadow_root, now=now)
++                    except (OSError, ValueError, KeyError, TypeError):
++                        value["notes"].append("Configured execution/shadow evidence is unavailable or failed its integrity check.")
++                        result["issues"].append("v6: follow-up evidence unavailable or invalid")
++                    value.pop("campaign", None)
+             result['versions'].append(value)
+         except (OSError, ValueError, KeyError, TypeError, IndexError):
+             r = report(version, 'Report unavailable', 'A required source is missing, unreadable, or failed its campaign binding. No performance metrics are shown for this version.')
+diff --git a/dashboard/publisher/collect.py b/dashboard/publisher/collect.py
+--- a/dashboard/publisher/collect.py
++++ b/dashboard/publisher/collect.py
+@@ -122,7 +122,7 @@
+     except sqlite3.Error:issues.append('Alert database unavailable')
+     return out
+ 
+-def collect_home(root,progress=None,now=None,*,training_root=None,training_campaign=None):
++def collect_home(root,progress=None,now=None,*,training_root=None,training_campaign=None,execution_root=None,shadow_root=None):
+     root=Path(root);now=now or datetime.now(UTC);issues=[]
+     out=dict(schemaVersion=1,source='home',observedAt=now.isoformat(),jobs=[],fa=dict(cutoff=None,symbols=None,uniqueNews=None,coverage={},rows=[],evaluationStatus='unavailable',labeledRows=None),research=None,issues=issues)
+     for path in sorted((root/'logs/job-health').glob('*/latest.json'))[:100]:
+@@ -151,7 +151,7 @@
+         except (OSError,ValueError,KeyError):issues.append('Configured campaign receipt unavailable')
+     if training_root and training_campaign:
+         from training import collect_training
+-        out['training']=collect_training(training_root,training_campaign,now)
++        out['training']=collect_training(training_root,training_campaign,now,execution_root=execution_root,shadow_root=shadow_root)
+         issues.extend(out['training']['issues'])
+         t=out['training']
+         # One fresh observation drives both views; an hourly watcher snapshot
+diff --git a/dashboard/publisher/publish.py b/dashboard/publisher/publish.py
+--- a/dashboard/publisher/publish.py
++++ b/dashboard/publisher/publish.py
+@@ -39,7 +39,8 @@
+         last=a.state/f'{a.source}.json'
+         if last.exists() and time.time()-json.loads(last.read_text()).get('publishedEpoch',0)<55:raise RuntimeError('Publish rate limited: wait at least 55 seconds')
+         payload=collect_server(a.root) if a.source=='server' else collect_home(a.root,a.progress,
+-            training_root=os.environ.get('TRAINING_ROOT'),training_campaign=os.environ.get('TRAINING_CAMPAIGN'))
++            training_root=os.environ.get('TRAINING_ROOT'),training_campaign=os.environ.get('TRAINING_CAMPAIGN'),
++            execution_root=os.environ.get('V6_EXECUTION_ROOT'),shadow_root=os.environ.get('V6_SHADOW_ROOT'))
+         envelope(payload)
+         if not a.publish:print(json.dumps({'mode':'dry-run','source':a.source,'issues':payload['issues']}));return
+         publish(a.project,payload)
+diff --git a/dashboard/publisher/v6_followup.py b/dashboard/publisher/v6_followup.py
+--- /dev/null
++++ b/dashboard/publisher/v6_followup.py
+@@ -0,0 +1,94 @@
++"""Bounded V6 validation/shadow tables for the private Training report.
++
++Standalone publisher module: stdlib only, no model imports or raw-data reads.
++Directories must be explicitly configured inside the research checkout.
++"""
++from datetime import datetime, timezone
++import hashlib
++import json
++from pathlib import Path
++
++LIMIT = 1_000_000
++
++
++def read(path):
++    with Path(path).open("rb") as stream:
++        raw = stream.read(LIMIT + 1)
++    if len(raw) > LIMIT:
++        raise ValueError("V6 follow-up input exceeds size limit")
++    def reject(value):
++        raise ValueError(f"non-finite follow-up JSON: {value}")
++    return json.loads(raw, parse_constant=reject), raw
++
++
++def directory(root, configured):
++    base = Path(configured)
++    if not base.is_absolute():
++        base = root / base
++    if any(p.is_symlink() for p in (base, *base.parents)) or not base.resolve().is_relative_to(root.resolve()):
++        raise ValueError("V6 evidence must stay inside the research checkout without symlinks")
++    return base
++
++
++def percent(value):
++    return "—" if value is None else f"{value * 100:+.1f}%"
++
++
++def append_followup(root, report, *, execution=None, shadow=None, now=None):
++    root = Path(root)
++    now = now or datetime.now(timezone.utc)
++    if execution:
++        base = directory(root, execution)
++        receipt, _ = read(base / "complete.json")
++        result, raw = read(base / "results.json")
++        scope, scope_raw = read(base / "scope.json")
++        if (receipt.get("outputs", {}).get("results.json") != hashlib.sha256(raw).hexdigest()
++                or receipt.get("outputs", {}).get("scope.json") != hashlib.sha256(scope_raw).hexdigest()
++                or result.get("complete") is not True or result.get("research_only") is not True
++                or result.get("scanner_promotion") is not False):
++            raise ValueError("V6 execution report failed receipt/research binding")
++        # Never append a different campaign's validation to this report.
++        source = str((root / "nn_meta/campaigns" / report["campaign"] / "v6/model_final/ensemble_config.json").resolve())
++        if source not in scope["inputs"]:
++            raise ValueError("execution validation belongs to a different training campaign")
++        _, model_raw = read(source)
++        if hashlib.sha256(model_raw).hexdigest() != scope["inputs"][source]:
++            raise ValueError("execution validation model no longer matches")
++        rows = []
++        for side in ("candidate", "baseline"):
++            for latency, section in result["policies"][side]["aggregate"].items():
++                for name, metric in section["costs"].items():
++                    rows.append([side.title(), latency.replace("_", " "), name.replace("_", " "),
++                        str(metric["n_positions"]), percent(metric["total_return"]),
++                        percent(metric["max_drawdown"]), "Matched" if metric["independent_ledger_match"] else "Failed"])
++        report["tables"].append(dict(title="Frozen execution revalidation", columns=["Policy", "Fill delay", "Costs",
++            "Positions", "Return", "Max drawdown", "Independent ledger"], rows=rows,
++            note="Final selection/revalidation tail, not a fresh holdout. Fixed selections; rejected fills do not backfill slots. Aggregate spread costs are assumptions, not observed quotes."))
++        report["notes"].extend(result["limitations"])
++        report["sources"].append(dict(path=str((base / "results.json").relative_to(root)),
++            sha256=hashlib.sha256(raw).hexdigest(), content=raw.decode(), excerpt=False))
++    if shadow:
++        base = directory(root, shadow)
++        result, _ = read(base / "summary.json")
++        if (result.get("schema") != "v6-shadow-summary-v1" or result.get("research_only") is not True
++                or result.get("scanner_promotion") is not False):
++            raise ValueError("invalid V6 shadow summary")
++        _, model_raw = read(root / "nn_meta/campaigns" / report["campaign"] / "v6/model_final/ensemble_config.json")
++        if result.get("bundle_sha256") != hashlib.sha256(model_raw).hexdigest():
++            raise ValueError("shadow observations belong to a different model")
++        observed = result.get("last_pass_at")
++        stale = True
++        if observed:
++            stamp = datetime.fromisoformat(observed.replace("Z", "+00:00"))
++            stale = stamp.tzinfo is None or not 0 <= (now - stamp).total_seconds() <= 1800
++        report["tables"].append(dict(title="Forward shadow observations", columns=["Measure", "Value"],
++            rows=[["Status", "Stale / no recent pass" if stale else "Recording · research only"],
++                  ["Last pass", observed or "—"], ["Signals", str(result["signals"])],
++                  ["Candidate selections", str(result["candidate_selections"])],
++                  ["Baseline selections", str(result["baseline_selections"])],
++                  ["Quote observations", str(result["quote_observations"])],
++                  ["Failed passes", str(result["failed_passes"])],
++                  ["Execution", result["execution_status"]]],
++            note="Selections are recorded signals, not executed positions. Missing realized returns remain unavailable."))
++        report["notes"].extend(result["limitations"])
++    return report
+diff --git a/dashboard/publisher/test_training.py b/dashboard/publisher/test_training.py
+--- a/dashboard/publisher/test_training.py
++++ b/dashboard/publisher/test_training.py
+@@ -80,6 +80,32 @@
+     assert training.collect_training(tmp_path, 'current')['status'] == 'Unavailable'
+ 
+ 
++def test_evaluation_failure_visible_before_any_finalization_log(tmp_path, monkeypatch):
++    base = fixture(tmp_path, monkeypatch, 'failed', 'evaluate')
++    write(base / 'runs/pipeline/status.json', dict(campaign='current', status='failed', stage='training',
++                                                  error='evaluation cash ledger rejected an entry'))
++    r, status = training.live(tmp_path, 'current')
++    assert r['status'] == 'Failed'
++    assert status['activity'] == 'Pipeline failed during training'
++    assert r['notes'][0] == 'evaluation cash ledger rejected an entry'
++    assert not (base / 'runs/continuation/finalize.log').exists()
++
++
++def test_pipeline_campaign_mismatch_refuses_dashboard_report(tmp_path, monkeypatch):
++    base = fixture(tmp_path, monkeypatch)
++    write(base / 'runs/pipeline/status.json', dict(campaign='other', status='running', stage='execution'))
++    assert training.collect_training(tmp_path, 'current')['status'] == 'Unavailable'
++
++
++def test_pipeline_validation_activity_is_displayed(tmp_path, monkeypatch):
++    base = fixture(tmp_path, monkeypatch)
++    write(base / 'runs/pipeline/status.json', dict(campaign='current', status='running', stage='execution'))
++    r, status = training.live(tmp_path, 'current')
++    assert r['status'] == 'Validating'
++    assert status['activity'] == 'Training complete; execution running'
++    assert status['stage'] == 'execution'
++
++
+ def test_validation_baseline_is_never_used_as_test_baseline():
+     r = training.report('v6', '', '')
+     training.modern_folds(r, [dict(window=dict(val_start='2026-01-01', test_start='2026-03-01', test_end='2026-04-01'),

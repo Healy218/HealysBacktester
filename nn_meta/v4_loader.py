@@ -32,6 +32,7 @@ import numpy as np
 import pandas as pd
 
 from nn_meta import config
+from nn_meta.neural_validation import require_finite, validate_weights
 from nn_meta.v4_artifacts import ArtifactValidationError, sha256_file
 from nn_meta.feature_contract import CONTRACT_VERSION, manifest as feature_manifest
 from nn_meta.v4_evaluate import _matrix
@@ -55,14 +56,16 @@ def ensemble_score(family: str, members: list[dict], rows: pd.DataFrame,
         from nn_meta.training_jobs import disk_predict
         return disk_predict(family, [m['disk_path'] for m in members], rows, features)
     if family == "nn":
-        preds = [m["model"].predict(_matrix(rows, features, m["mean"], m["std"]),
+        preds = [m["model"].predict(_matrix(rows, features, m["mean"], m["std"], m.get("inactive", ())),
                                     batch_size=4096, verbose=0).flatten()
                  for m in members]
     elif family == "gbt":
         preds = [m["model"].predict_proba(rows[features])[:, 1] for m in members]
     else:
         raise ValueError(f"unknown model family '{family}'")
-    return np.mean(preds, axis=0)
+    for pred in preds:
+        require_finite(pred, "member predictions")
+    return require_finite(np.mean(preds, axis=0), "ensemble predictions")
 
 
 def ensemble_ev(family: str, members: list[dict], rows: pd.DataFrame,
@@ -77,14 +80,16 @@ def ensemble_ev(family: str, members: list[dict], rows: pd.DataFrame,
         from nn_meta.training_jobs import disk_predict
         return disk_predict(family, [m['disk_path'] for m in members], rows, features, magnitude=True)
     if family == "nn":
-        preds = [m["magnitude"].predict(_matrix(rows, features, m["mean"], m["std"]),
+        preds = [m["magnitude"].predict(_matrix(rows, features, m["mean"], m["std"], m.get("inactive", ())),
                                         batch_size=4096, verbose=0).flatten()
                  for m in members]
     elif family == "gbt":
         preds = [m["magnitude"].predict(rows[features]) for m in members]
     else:
         raise ValueError(f"unknown model family '{family}'")
-    return np.mean(preds, axis=0)
+    for pred in preds:
+        require_finite(pred, "member predictions")
+    return require_finite(np.mean(preds, axis=0), "ensemble predictions")
 
 
 @dataclass
@@ -131,9 +136,13 @@ def _load_member(family: str, run_dir: Path) -> dict:
         import tensorflow as tf
         scaler = json.loads((run_dir / "scaler.json").read_text())
         model = tf.keras.models.load_model(run_dir / "model.keras")
+        validate_weights(model)
         mag_path = run_dir / "magnitude.keras"
+        magnitude = tf.keras.models.load_model(mag_path) if mag_path.exists() else None
+        if magnitude is not None:
+            validate_weights(magnitude)
         return {"model": model,
-                "magnitude": tf.keras.models.load_model(mag_path) if mag_path.exists() else None,
+                "magnitude": magnitude, "inactive": scaler.get("inactive", []),
                 "mean": pd.Series(scaler["mean"]), "std": pd.Series(scaler["std"])}
     if family == "gbt":
         import joblib
