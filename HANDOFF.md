@@ -1,24 +1,40 @@
-# New research version preparation; old short-DTE build paused
+# V7 full-history preparation; old short-DTE build paused
 
 Updated September 14 Central / September 15 UTC, 2026.
 
-## User's latest direction
+## User's latest direction — supersedes the old dates
 
-Keep the existing training/evaluation dates. Build a separate research version
-with all registered strategy/parameter variations across **1/5/15/30-minute
-stock signals**, verified minute stock data for the full 449-symbol universe,
-and **one-minute option execution using frozen MASSIVE bid/ask quotes**.
-Complete that universe and validate the full pipeline before the long build.
-Four worker processes remain the requested compute target. The user did not
-ask to move the historical period or replace the deployed paper model.
+Name the fresh version **V7**. Research history is **March 7, 2022 through
+September 14, 2026**, the latest completed regular session at preparation.
+The user explicitly changed the dates after clarifying that 2017 history
+includes stock/trade data but MASSIVE bid/ask quotes begin March 7, 2022.
+Do not carry forward the old 2024 start or the old TRAIN split.
 
-Original training: **2024-08-26–2025-12-19**. Full model history:
-**2024-08-26–2026-08-24**, with stock warmup from **2024-04-01**. Previously
-inspected later periods remain revalidation, not untouched holdout.
+Full feature suite and all registered parameter variants at 1/5/15/30-minute
+stock signals; one-minute observed-quote option execution; four-worker target.
+Older observations may supply causal warmup, not fabricated option quote labels.
+Rebuild PIT universe and audit all feature dependencies over the expanded
+window. Freeze new chronological, purged walk-forward splits before training.
+Existing V6 paper runtime remains separate. Long build still waits for full
+coverage, implementation and end-to-end/resource validation.
 
-Read [new-version scope](docs/specs/MULTITIMEFRAME_RESEARCH.md) and
-[session review](docs/reviews/2026-09-14-v6-dashboard-and-multitimeframe-preparation.md).
-TODO.md now leads with the new preparation checklist.
+Current plan: `nn_meta/research_plans/v7-20220307-20260914/plan.json`.
+CLI: `scripts/prepare_multitimeframe_catalog.py --research-version v7` with
+explicit parent symbol reference, calendar, as-of and new output path.
+`nn_meta/v7_plan.py` does not inherit old train dates; it records unresolved
+coverage/design gates and always reports `ready_for_build: false`.
+The calendar used to resolve the cutoff starts April 2024; its historical
+coverage still must be extended for V7. A dated end is not a data freshness claim.
+See [V7 scope](docs/specs/MULTITIMEFRAME_RESEARCH.md).
+
+## Performance suggestions assessed
+
+See [assessment](docs/reviews/2026-09-15-v7-performance-options.md). Training
+already uses `.npy` memory maps; Arrow uses mimalloc; `/tmp` is already tmpfs
+(15.2 GiB limit); THP is enabled. Prioritize bounded full-variant computation,
+shared indicator/quote reuse and streaming assembly; benchmark IPC/Polars.
+No backend, mount, allocator override or sysctl was changed. Keep durable
+checkpoints on NVMe. No measured 5–20x overall speedup claim.
 
 ## Actual campaign state
 
@@ -49,8 +65,8 @@ and `runs/status.json`. Frozen numerical code and existing artifacts preserved.
   No winner selection or old signal cap. This is a planning inventory;
   full vectorization, per-timeframe support and execution are not implemented.
 - Draft catalog and backup listing/report:
-  `nn_meta/validation/multitimeframe-preparation-20260915/`. Original training
-  dates are copied only after checking the baseline hash bound by the old scope.
+  `nn_meta/validation/multitimeframe-preparation-20260915/`. The original inventory preserved V6 dates; the new V7 plan supersedes them
+  and uses that scope only as the symbol reference.
 - Stock backup inventory: 2,761 symbol/year files, 5.33 GiB, 2017–2026. Exact
   campaign matches: 220/221/221 for 2024/2025/2026. Files have not been restored
   or validated. Resolve aliases and listing dates before treating missing
@@ -66,8 +82,9 @@ and `runs/status.json`. Frozen numerical code and existing artifacts preserved.
   remains deferred/unverified. All thirteen indicator scopes stay included;
   eight source publications provide strategies, five provide features only.
 
-Validation: **1,618 tests + 18 subtests passed**, 18 dependency warnings,
-69.70 seconds (`/tmp/healys-multitimeframe-pytest.log`). No new-version
+Latest validation after V7 scope/cutoff implementation: **1,625 tests + 18
+subtests passed**, 18 dependency warnings, 66.83 seconds
+(`/tmp/healys-v7-scope-tests.log`). No new-version
 freeze/build/training has started. No credible duration estimate yet.
 
 ## Dashboard and execution/operating evidence (user's items 2–3)
@@ -107,4 +124,4 @@ Work is on `main`. The checkout and dashboard repo already had extensive
 uncommitted work; preserve it and never stage `nn_meta/artifacts_v6/` wholesale.
 Old handoff archived at
 `handoff-history/HANDOFF-2026-09-14-before-multitimeframe-preparation.md`.
-No background capture/test/browser processes from this preparation remain.
+No new capture/build/training process has started for V7.

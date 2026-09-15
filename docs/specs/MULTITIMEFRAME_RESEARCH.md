@@ -1,42 +1,68 @@
-# New research version: minute data, multiple signal timeframes, frozen option quotes
+# V7: full-history minute signals and frozen option quotes
 
 Status: preparation only, September 14 Central / September 15 UTC, 2026.
-This supersedes resuming the 15-minute short-DTE experiment. It does not
-change the deployed broad-DTE V6 paper release.
+The user explicitly chose a fresh version starting March 7, 2022 through
+"today." This supersedes the earlier instruction to preserve V6 dates.
+The name is **V7**, reflecting new history, signal, feature and execution
+contracts. Existing V6 paper operation remains separate.
 
 ## Accepted scope and dates
 
-The user requested the entire strategy variation universe before the long
-build, with signals selectable at 1/5/15/30 minutes and option execution at
-one-minute resolution using frozen MASSIVE quotes. Keep the historical dates:
-
-| Purpose | Dates |
+| Purpose | Scope |
 |---|---|
-| Underlying warmup | From 2024-04-01 |
-| Original strategy training | 2024-08-26 through 2025-12-19 |
-| Full historical model window | 2024-08-26 through 2026-08-24 |
+| Historical research window | **2022-03-07 through 2026-09-14**, inclusive |
+| End-date meaning | Latest completed regular market session when the plan was prepared |
+| Earlier history | Verified causal feature warmup and separately identified signal research only |
+| Signal timeframes | All registered strategy variants across 1/5/15/30 minutes |
+| Option execution | One-minute cadence, frozen observed MASSIVE bid/ask quotes |
+| Features | Full existing suite, all thirteen TradingView scopes, option quote/trade features |
+| Training/evaluation boundaries | Redesign and freeze chronological purged folds before model selection; V6 dates are not inherited |
 
-Changing lookbacks or selecting parameter variants does not require changing
-these dates. Any selection/normalization/threshold tuning must use training
-data only. Previously inspected evaluation periods remain revalidation;
-calling this a new version does not make those outcomes an untouched holdout.
-Retain the existing purged fold dates as the comparison reference. Where a
-fold requires fitting a proposal selector, fit it only on that fold's past;
-do not reuse a selector fitted through December 2025 to claim earlier
-end-to-end out-of-sample results. Future prospective evaluation needs its own
-declaration before viewing outcomes.
+"Today" is fixed at **September 14, 2026**, resolved from the captured exchange
+calendar at 2026-09-15T04:34:36Z. It does not advance while a long build runs.
+The cutoff calendar currently starts in April 2024: it resolves this end date
+but does not establish full V7 calendar coverage. Extend/verify it back through
+2022 and all required warmup before sealing data.
 
-Use the existing 449-symbol scope, with point-in-time membership and alias
-history. Preserve actual 1–9 calendar DTE at selection and purchase, target
-grid 1/5 plus 2/4/7 for the frozen weekly subset. Zero DTE stays excluded.
-Create new code/data/feature/execution manifests and separate outputs; the
-old rows, labels and weights cannot be relabeled as this experiment.
+The prior 2024–2026 proposal is superseded, not silently edited in its old
+artifacts. Create new source/runtime/data/feature manifests, labels, models
+and outputs. Existing verified raw observations can be reused after coverage
+and provenance checks. No old row or checkpoint is relabeled V7.
+
+Observed bid/ask histories cannot be uniquely reconstructed from trade OHLCV.
+Synthetic spread models would produce a different, explicitly modeled study
+and do not meet this campaign's observed-quote execution contract. Earlier
+stock/trade data can support indicator warmup without creating pre-2022
+option-execution labels. Feature windows needing quotes before March 7 may
+be unavailable at the beginning; determine their actual first eligible
+observations instead of inventing warmup values.
+
+Audit every feature's dependencies, history, vintage and publication time
+across the whole window: prior-date option chains/surfaces, IV, market context,
+corporate actions, calendars, ticks and source indicator inputs. The ability
+to obtain quotes back to 2022 does not prove the full feature suite is available
+on every earlier day. Missing feature history blocks full-suite admission;
+record and repair it rather than silently dropping features or shortening dates.
+
+Use the 449-symbol inventory as the starting reference; rebuild historical
+PIT membership, aliases and listing/delisting coverage. A present-day stock
+list is not proof of a survivorship-free 2022 universe. Preserve actual 1–9
+calendar DTE at selection/purchase, target grid 1/5 and the declared weekly
+2/4/7 subset, with historical eligibility validated. Zero DTE stays excluded.
+
+Freeze chronological walk-forward splits, label-horizon purging and embargo
+before training. All normalization, parameter and threshold selection uses
+only each fold's past. Previously inspected evaluation dates remain
+revalidation; a new version does not turn known outcomes into untouched
+holdout. Prospective evaluation must be declared before outcomes are seen.
 
 ## What the inventory establishes
 
 `scripts/prepare_multitimeframe_catalog.py` creates an outcome-independent
-catalog from the registered grids and verifies the old baseline's hash before
-copying its training dates. `nn_meta/multitimeframe_catalog.py` assigns stable
+catalog from the registered grids. Its `--research-version v7` path uses
+`nn_meta/v7_plan.py` to resolve a completed-session cutoff and explicitly
+avoids inheriting the old training dates. The legacy draft mode is retained
+only for reproducibility of the superseded plan. `nn_meta/multitimeframe_catalog.py` assigns stable
 strategy/timeframe/parameter identities, preserves all variants and refuses
 unknown legacy grid shapes. This is inventory code, not the new signal engine.
 
@@ -50,7 +76,8 @@ invent additional numeric parameter searches for those publications. The
 other five of thirteen TradingView publications remain feature-only.
 
 Generated draft and data inventory:
-`nn_meta/validation/multitimeframe-preparation-20260915/`.
+`nn_meta/validation/multitimeframe-preparation-20260915/` (earlier inventory).
+Current V7 plan: `nn_meta/research_plans/v7-20220307-20260914/plan.json`.
 The draft's `ready_for_build` is always false; it is not a launch approval
 or a replacement for the eventual executable readiness gate.
 
@@ -162,3 +189,11 @@ weeks-long ETA from the old 15-minute build's throughput.
 
 Only after this gate passes: final seal -> full dataset construction ->
 audits -> training/evaluation. A completed inventory alone does not pass it.
+
+## Performance preparation
+
+Prioritize shared indicator/quote reuse, bounded streaming assembly and
+read-only mapped training arrays. Benchmark Arrow IPC and Polars on actual
+shards before adopting them. Durable checkpoints remain on NVMe; no global
+allocator/THP changes are part of this plan. See the
+[performance assessment and benchmark plan](../reviews/2026-09-15-v7-performance-options.md).
