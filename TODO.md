@@ -27,8 +27,16 @@ September 15 implementation progress ([evidence](docs/reviews/2026-09-15-v7-read
 - [x] Implement all 20 strategy-family adapters and run all 11,268 variants in the real SPY four-timeframe warmup pilot.
 - [x] Implement 13-source V7 projections, minute opening-range/VWAP context and bounded observed-quote archive/cash ledger.
 - [x] Declare chronological folds and quote policy; pass initial real observed-fill/minute-mark/cash replay.
-- [ ] Finish daily identity boundaries, supplemental history, complete feature rows and real expiry/roll/portfolio pilots.
-- [ ] Finish full SPY quote capture, forecast full-universe demand and pass full-data no-swap/readiness gates.
+- [x] Complete the 167-root historical supplement and hardened through-cutoff base audit.
+- [x] Complete SPY quote/contract capture, 222-column rows, observed rolls and shared-portfolio pilots.
+- [x] Pass all-variant integrated pilots and full-chain no-swap/equality checks; bind source/runtime/input manifests.
+- [x] Capture both providers' corporate-action histories and audit all 3,714 price pairs; repair GS/NOW/USO inconsistencies.
+- [x] Resolve the seven reviewed identity dates without changing membership/ranks/scores; reconcile 67 rename sessions and capture GAP.
+- [x] Implement bounded factorized rows and fold-indexed LightGBM Sequence; verify exact reconstruction and prediction equivalence.
+- [x] Complete the 598-name quote-demand planning envelope with the verified vectorized selector.
+- [ ] Repair 26 March 8, 2022 provider gaps; complete remaining lifecycle/alias/sector and causal adjustment admission.
+- [ ] Finish dated option hours/expiry policy, actual quote-demand feasibility and full capture under 250 GB.
+- [ ] Complete full-history assembly/resource pilots and pass complete-universe readiness gates before freeze/build/training.
 
 # TODO — TradingView expansion and corrected research
 

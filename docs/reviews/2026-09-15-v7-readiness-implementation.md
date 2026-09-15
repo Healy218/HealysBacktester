@@ -4,6 +4,98 @@ The user authorized all four readiness workstreams on September 15. Work is
 in progress. This checkpoint does **not** authorize or establish full-universe
 freeze, build or training readiness. External Pine comparison remains deferred.
 
+## September 15, 22:40 UTC — current admission checkpoint
+
+**All four workstreams have implemented, tested components. The requested
+full-history preparation is not complete; full freeze/build/training stays blocked.**
+
+### Data and identity
+
+- Base: 8,284/8,284 captures. Hardened audit: 4,142 jobs, including 1,430 option days.
+- Supplement: 167 roots, 2,004 captures, 1,002 raw/adjusted pairs.
+- Actions: 7,113 Massive splits, 258,084 dividends; 242,932 Alpaca action records
+  across all supported types, including name changes, mergers and spin-offs.
+- The full adjustment diagnostic checked 3,714 pairs, 356,664,659 rows and
+  804,596 stock-dates against explicit half-cent adjusted rounding tolerance.
+  Only GS/NOW/USO on September 14 were incompatible. Fresh 2026 captures
+  (`stock-repair-20260915`) pass timestamp and factor checks: 339,503 rows,
+  525 dates, no remaining incompatibility in those replacements. Originals stay preserved.
+- This establishes rounding compatibility, **not** a causal adjusted-feature
+  vintage. Future actions and fixed tick size still require an explicit policy.
+- Seven missing identity dates are resolved by reviewed trading-effective
+  boundaries; see [identity evidence](2026-09-15-v7-identity-boundaries.md).
+  Universe `v7-identity-universe-20260915r3`: 598 names, 596 identities,
+  16,577 membership rows, `identity_boundaries_verified=true` for the checked
+  transition set. Exact comparison with r2 leaves memberships/ranks/scores unchanged.
+- A receipt-verified monthly-membership intersection examined 341,996 eligible
+  stock sessions and found 215 zero-observation ticker/session combinations.
+  Reproducible output: `v7-membership-session-coverage-20260915`, with
+  `missing-sessions.csv` listing the 148 cases remaining after alias reconciliation.
+  This is not a complete listing, intramonth-event or warmup admission audit.
+- 67 of these now have same-FIGI, exact-day successor stock observations:
+  FI→FISV (13), GOLD→B (15), SATS→ECHO (5), SQ→XYZ (9), DWAC→DJT (3),
+  FB→META (15), GPS→GAP (7). Reproducible session routing evidence:
+  `v7-gap-alias-resolution-20260915`. It never creates global aliases.
+  GAP required one new 2024 raw/adjusted pair: 37,902 rows, timestamp parity,
+  zero factor incompatibilities. This source was absent from the 598-name
+  planning superset and must be added to any final identity-bound demand plan.
+- Thirty isolated stock days were recaptured. All still lack regular-session
+  bars. Twenty-six are March 8, 2022; the old BAC backup has the same gap,
+  single-symbol bars do not repair it, and its SIP trade query returns only
+  three opening-second records without pagination. Massive rejected that stock
+  date under the current entitlement. See the [unsent support draft](2026-09-15-alpaca-stock-gap-support-draft.md).
+- Three separate cases have primary-source trading-halt explanations:
+  [BIIB June 9, 2023](https://investors.biogen.com/node/26871),
+  [NVAX June 7, 2022](https://ir.novavax.com/press-releases/Novavax-Statement-on-Stock-Trading-Halt-FDA-Advisory-Committee-to-Review-Novavax-COVID-19-Vaccine?asPDF=1),
+  [CLSK November 8, 2024](https://www.sec.gov/Archives/edgar/data/827876/000095017024127680/clsk-20241115.htm).
+  VERU November 9, 2022 remains unverified as a full-session halt. The other
+  118 candidate/session cases mostly surround lifecycle events and remain
+  open for dated trading-status, identity and held-option disposition checks.
+
+### Bounded storage and quote demand
+
+`nn_meta/v7/factorized.py` stores repeated chart, parameter/strategy and tick
+vectors separately, with int32 references and at most 65,536 rows per shard.
+Explicit fold indices feed a bounded LightGBM Sequence. Tests establish exact
+float32 reconstruction and selected-fold prediction equivalence to dense inputs.
+The real 72-row pilot uses 39,664 numerical bytes versus 63,936 dense bytes;
+this small result is not a full-campaign disk estimate. LightGBM's own binned
+training dataset still needs a full-scale memory pilot.
+
+The through-cutoff chain now has **22,142,875 contracts, 8,704 roots, 1,430 days**
+(`v7-chain-through-cutoff-20260915`), completed in 106.67s, 5 GiB peak, no swap.
+The batched selector matches all 19,500 saved SPY selections, including tested
+expiry/strike tie rules. Full-history SPY selection is now a seconds-scale job.
+
+`v7-full-quote-demand-20260915` finished all **598 names**, covering 227,849,091
+observed stock minutes, 1,946,555 distinct per-root contracts, **11,327,841
+contract-days / 76,222,710.75 quote-hours**. Largest worker RSS: 711,280 KiB;
+service exit status 0. This is an intentionally broad inventory over all
+candidate-name histories, not PIT-filtered; +15-minute closes are provisional.
+No quotes were downloaded by this planner. It excludes unresolved stock gaps
+and the newly added GAP source, so it is not the final demand proof.
+
+Actual proposal/roll/feature interval unions and representative compressed
+quote/trade densities must establish feasibility under the 250 GB cap before
+full capture. Do not extrapolate the SPY week's density across all roots or
+claim that this broad planning envelope itself fits the budget.
+
+### Open gates
+
+1. Repair genuine stock gaps; finish all identity-bound histories, sectors,
+   lifecycle/holding paths and causal adjusted prices.
+2. Resolve dated option-class hours, weekly eligibility and expiry disposition.
+   Unfilled expiry remains unresolved until an explicit policy is accepted.
+3. Complete actual required quote/trade/metadata demand, storage feasibility,
+   full capture and full-history factorized assembly/resource pilots.
+4. Bind those completed inputs to evaluation/source/runtime declarations and
+   pass the full-universe executable gate before launching the campaign.
+
+Regression evidence: **1,715 tests plus 18 subtests**, 83.56s, passed after
+the gap capture/reconciliation scripts. The subsequent membership inventory
+was exercised against all 341,996 eligible sessions. A clean archive of22fa5e8 also passed all**92 V7 tests** in17.10s.
+Clean source validation remains separate from reproduction of dirty-runtime pilots.
+
 ## Later September 15 checkpoint — supersedes open implementation notes below
 
 The complete row adapter now produces **222 columns**: the original 164 groups,
@@ -64,6 +156,14 @@ feature windows and 37,711 decision/exit/side paths before DTE targets. Five
 targets with 222 float32 columns would use 452,848,920 bytes before identifiers
 or labels. This is a measured pilot count, not a full-universe size forecast.
 Full-universe acquisition demand and bounded training assembly still need gates.
+
+The later completed acquisition/audit milestone includes all 2,004 supplemental
+tasks and 1,002 stock pairs (81,553,702 raw minute rows, matching timestamps).
+September 14 option day/minute files are now captured. The hardened base audit
+completed 4,142 jobs, including all 1,430 option days. Corporate capture completed
+7,113 splits and 258,084 dividends after paced retries. These replace the earlier
+pending acquisition statuses below. Latest regression: **1,707 tests +18 subtests**
+in 82.42s; clean committed checkout: **84 V7 tests** in 17.13s.
 
 ## 1. Historical data and security identity
 
