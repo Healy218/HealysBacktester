@@ -16,6 +16,10 @@ from v3._tv_trend_support import cross_over, cross_under, integer, positive, val
 FIB_LEVELS = (0.236, 0.382, 0.500, 0.618, 0.786)
 
 
+from v3._source_memo import memoized_source
+
+
+@memoized_source
 def fibonacci_trend_continuation(
     bars: pd.DataFrame, midline_length: int = 200, pivot_length: int = 7,
     band_width: float = 3.0, enabled_levels: tuple[float, ...] = FIB_LEVELS,

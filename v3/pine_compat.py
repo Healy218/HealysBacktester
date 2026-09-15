@@ -12,6 +12,7 @@ from numbers import Integral
 
 import numpy as np
 import pandas as pd
+import os
 
 
 def _length(length):
@@ -53,6 +54,9 @@ def ema(source, length):
     """EMA seeded with the first non-na observation; na leaves state intact."""
     length = _length(length)
     source = _series(source)
+    if os.environ.get("NN_META_V6_ACCELERATE") == "1":
+        from v3._pine_fast import average
+        return pd.Series(average(source.to_numpy(), length, False), index=source.index, name=source.name)
     alpha = 2.0 / (length + 1)
     values = np.full(len(source), np.nan)
     state = np.nan
@@ -67,6 +71,9 @@ def rma(source, length):
     """Wilder average seeded by the first length non-na values' SMA."""
     length = _length(length)
     source = _series(source)
+    if os.environ.get("NN_META_V6_ACCELERATE") == "1":
+        from v3._pine_fast import average
+        return pd.Series(average(source.to_numpy(), length, True), index=source.index, name=source.name)
     alpha = 1.0 / length
     values = np.full(len(source), np.nan)
     seed = []
@@ -128,6 +135,10 @@ def supertrend(bars, factor, length):
             raise ValueError("factor must have one value per bar")
     if np.isinf(factors).any():
         raise ValueError("infinite factor is unsupported")
+    if os.environ.get("NN_META_V6_ACCELERATE") == "1":
+        from v3._pine_fast import supertrend_core
+        trend, direction = supertrend_core(high, low, close, factors, volatility)
+        return pd.DataFrame({"supertrend": trend, "direction": direction}, index=bars.index)
     upper = np.full(len(bars), np.nan)
     lower = np.full(len(bars), np.nan)
     trend = np.full(len(bars), np.nan)

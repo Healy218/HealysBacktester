@@ -16,6 +16,10 @@ from v3._tv_trend_support import comparison_value as cmp
 from v3._tv_trend_support import integer, pine_ohlc, positive, validate_bars
 
 
+from v3._source_memo import memoized_source
+
+
+@memoized_source
 def gaussian_filter_trend(
     bars: pd.DataFrame, length: int = 14, poles: int = 4,
     atr_length: int = 14, fixed_multiplier: float = 1.5,

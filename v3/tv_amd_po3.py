@@ -304,6 +304,10 @@ class AmdState:
         return observations
 
 
+from v3._source_memo import memoized_source
+
+
+@memoized_source
 def amd_po3(bars, *, config=None, bar_minutes=15, as_of=None,
             killzone_timezone="UTC", london_session="0700-1000", new_york_session="1330-1600",
             htf_observations=None, htf_minutes=240):

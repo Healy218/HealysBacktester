@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import numpy as np
 import pandas as pd
+import os
 
 from v3._tv_trend_support import comparison_value as cmp, integer, validate_bars
 
@@ -31,6 +32,10 @@ def _pivot(values, bar, period, high):
     return values[pivot] if valid else np.nan
 
 
+from v3._source_memo import memoized_source
+
+
+@memoized_source
 def support_resistance_channels(bars, *, pivot_period=10, pivot_source="High/Low",
                                 channel_width_pct=5, minimum_strength=1,
                                 max_channels=6, lookback=290):
@@ -52,6 +57,18 @@ def support_resistance_channels(bars, *, pivot_period=10, pivot_source="High/Low
     high, low, close = (bars[c].to_numpy(float) for c in ("High", "Low", "Close"))
     src_high = high if pivot_source == "High/Low" else bars[["Open", "Close"]].max(axis=1).to_numpy()
     src_low = low if pivot_source == "High/Low" else bars[["Open", "Close"]].min(axis=1).to_numpy()
+    if os.environ.get("NN_META_V6_ACCELERATE") == "1":
+        from v3._sr_fast import channels
+        values = channels(high, low, close, src_high, src_low, pivot_period,
+                          channel_width_pct, minimum_strength, max_channels, lookback)
+        columns = ["pivot_high", "pivot_low", "pivot_index", "pivot_confirmed", "channel_width",
+                   "pivot_count", "inside_channel", "bull_signal", "bear_signal"] + [
+            f"channel_{slot}_{field}" for slot in range(1,11) for field in ("top","bottom","strength")]
+        result = pd.DataFrame(values, index=bars.index, columns=columns)
+        for column in ("pivot_confirmed", "inside_channel", "bull_signal", "bear_signal"):
+            result[column] = result[column].astype(bool)
+        result["pivot_count"] = result["pivot_count"].astype(int)
+        return result
     pivots, locations = [], []
     levels = np.zeros((10, 2))
     strengths = np.zeros(10)

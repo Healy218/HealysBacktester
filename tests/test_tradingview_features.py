@@ -64,6 +64,16 @@ def test_fixed_schema_all_thirteen_sources_and_no_admission(observation):
         assert not any("entry" in s.name or "exit" in s.name for s in tv.FEATURE_SPECS if s.source == alias)
 
 
+def test_sparse_observations_preserve_full_history_features_exactly(observation):
+    bars, flags, metadata, full = observation
+    index = bars.index[[100, 190, len(bars)-1]]
+    sparse = calculate(bars, flags, metadata, observation_index=index)
+    pd.testing.assert_frame_equal(sparse.values, full.values.loc[index], check_exact=True)
+    pd.testing.assert_series_equal(sparse.available_at, full.available_at.loc[index])
+    assert sparse.metadata['history_origin'] == full.metadata['history_origin']
+    assert sparse.metadata['bar_input_sha256'] == full.metadata['bar_input_sha256']
+
+
 @pytest.mark.parametrize("alias,script_id,calculator", tv.SOURCE_MAP, ids=[row[0] for row in tv.SOURCE_MAP])
 def test_each_source_projection_preserves_direct_port_observation(observation, alias, script_id, calculator):
     bars, flags, metadata, result = observation
