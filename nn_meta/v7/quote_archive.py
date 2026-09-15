@@ -6,7 +6,7 @@ import hashlib
 import json
 from pathlib import Path
 
-from nn_meta.v7.execution import QuoteTape, QuotePolicy, QuoteUnavailable
+from nn_meta.v7.execution import QuoteTape, QuotePolicy, CaptureUnavailable
 from nn_meta.v7.storage import verify
 from options.data.massive_ticks import canonical_bytes, verify_capture, integer_ns
 
@@ -39,7 +39,7 @@ class QuoteArchive:
         if cid not in self.cache:
             path = self.root / cid
             if not path.exists():
-                raise QuoteUnavailable('Requested quote shard has not been captured')
+                raise CaptureUnavailable('Requested quote shard has not been captured')
             receipt = verify(path, expected_identity=cid)
             if receipt.get('capture') != capture:
                 raise ValueError('Capture receipt scope changed')
@@ -65,13 +65,13 @@ class QuoteArchive:
             if capture['end_ns'] <= start_ns or capture['start_ns'] >= end_ns:
                 continue
             if capture['start_ns'] > cursor:
-                raise QuoteUnavailable('Gap in required capture interval')
+                raise CaptureUnavailable('Gap in required capture interval')
             records, manifest = self._read(capture)
             rows.extend(deepcopy(r) for r in records if start_ns <= r['sip_timestamp'] < end_ns)
             sources.append({'capture_id': capture['capture_id'], 'records_sha256': manifest['records_sha256']})
             cursor = min(end_ns, capture['end_ns'])
         if cursor != end_ns:
-            raise QuoteUnavailable('Capture does not reach required window end')
+            raise CaptureUnavailable('Capture does not reach required window end')
         manifest = {'schema': 'massive-option-ticks-v1', 'provider': 'massive', 'contract': 'O:' + contract,
                     'kind': kind, 'start_ns': start_ns, 'end_ns': end_ns, 'complete': True,
                     'records': len(rows), 'records_sha256': hashlib.sha256(canonical_bytes(rows)).hexdigest(),

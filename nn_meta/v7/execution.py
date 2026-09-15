@@ -28,6 +28,10 @@ class QuotePolicy:
 class QuoteUnavailable(ValueError):pass
 
 
+class CaptureUnavailable(QuoteUnavailable):
+    """The required provider capture is incomplete, distinct from a sparse market."""
+
+
 class QuoteTape:
     def __init__(self,records,manifest,*,contract,policy=QuotePolicy()):
         from options.data.massive_ticks import verify_capture
@@ -53,7 +57,7 @@ class QuoteTape:
         if type(decision_ns) is not int or decision_ns < 0 or type(end) is not int or end < start:
             raise ValueError('Invalid fill window chronology')
         if self.manifest['start_ns']>start or self.manifest['end_ns']<=end:
-            raise QuoteUnavailable('Fill window is not completely captured')
+            raise CaptureUnavailable('Fill window is not completely captured')
         for i in range(int(self.stamps.searchsorted(start)),int(self.stamps.searchsorted(end,side='right'))):
             row=self.records[i]
             if self.valid(row):
@@ -109,7 +113,7 @@ class CashLedger:
             raise ValueError('Fill cannot precede its decision date')
         dte=(expiry-fill_date).days
         if not 1<=dte<=9:raise ValueError('Every entry/roll purchase requires actual 1–9 DTE')
-        if fill['side']!='buy' or root!=symbol:raise ValueError('Fill security identity mismatch')
+        if fill['side']!='buy' or root!=symbol.replace('.', ''):raise ValueError('Fill security identity mismatch')
         if key in self.positions or len(self.positions)>=self.slots:return False
         if any(p['symbol']==symbol for p in self.positions.values()):return False
         if not math.isfinite(equity) or equity<=0:raise ValueError('Positive observed portfolio equity required')

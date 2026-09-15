@@ -1,8 +1,69 @@
-# V7 preparation: first implementation checkpoint
+# V7 preparation: implementation and integrated pilots
 
 The user authorized all four readiness workstreams on September 15. Work is
 in progress. This checkpoint does **not** authorize or establish full-universe
 freeze, build or training readiness. External Pine comparison remains deferred.
+
+## Later September 15 checkpoint — supersedes open implementation notes below
+
+The complete row adapter now produces **222 columns**: the original 164 groups,
+four timeframe indicators, 48 numeric parameter fields and six setup identities.
+MA rows use the actual variant's windows. Daily IV uses contemporaneous raw spot;
+returns use the separately declared adjusted history. Daily values become
+available at the next captured regular open. The fixed BS rate/dividend inputs
+remain explicit baseline proxies. Missing daily captures cannot be hidden by IV
+forward fills. A real SPY daily artifact covers 300 sessions including 2021 warmup:
+`nn_meta/validation/v7-daily-spy-20260915`.
+
+`nn_meta/validation/v7-pipeline-pilot-20260915` ran all **11,268 variants**, preserving
+**101,993 proposals** and explicit terminal censoring. The deterministic first
+chronological proposal per family/timeframe produced 72 full feature rows;
+70 sample labels completed observed exits and two remain censored at pilot end.
+Families without proposals remain in the tested catalog. No outcome filtering
+selects the sample. The four-worker service finished in 247.6 seconds with a
+4.3 GiB memory peak and swap disabled. One-minute worker peak was 2,302,120 KiB.
+Expanded source/runtime/input manifests and before/after mutation guards are
+stored alongside results. This is plumbing evidence, not performance evidence.
+
+The full disk-partitioned chain rerun also passed its resource pilot: 22,113,664
+contracts in 99.32 seconds, 3.6 GiB peak, swap disabled. External-sort comparison
+proved exact equality with the first catalog, canonical digest
+`af3cf5b1c1a4b0618eaf9c332c67eebd2e181d3d4cc08681b92d05bfb50f9944`.
+Evidence: `v7-chain-bounded-20260915` and `v7-chain-comparison-20260915`.
+
+Dated standard-contract metadata is now enforced before quote features/fills.
+All four tick windows pass real capture checks. The fixed real put replay
+completed entry, expiry roll and final exit with observed marks; the matching
+call remains unresolved because no eligible expiry bid was available. Missing
+captures and complete-but-unfillable markets are separate statuses. No exercise
+or abandonment return has been invented. The user's expiry-policy question is
+pending; unresolved remains the default. These pilots still use the explicitly
+provisional SPY session-close rule and do not establish full historical hours.
+
+Shared allocation is implemented and tested: five slots, 10% equity, one symbol
+across timeframes, causal score ordering, cash reservations until actual fills,
+roll proceeds reinvested, and no new allocations without fresh held-position
+marks. All preselected paths, including censored outcomes, enter the real shared
+pilot (`v7-portfolio-pilot-20260915`). Captures and valuations are complete; one
+position remains open at the pilot boundary, correctly leaving evaluation
+incomplete. Unit tests cover simultaneous symbols, unavailable equity, pending
+fills, and refusal to filter entries using future completion.
+
+Historical supplementation adds 167 stock roots / 2,004 raw-adjusted year tasks
+under the existing quota. Completion and coverage audits remain separate gates.
+The seven unresolved identity dates, listing/alias continuity and price-vintage
+checks remain open. Corporate-action capture now uses Massive's current
+[splits](https://massive.com/docs/rest/stocks/corporate-actions/splits) and
+[dividends](https://massive.com/docs/rest/stocks/corporate-actions/dividends)
+endpoints; current cumulative adjustment factors are not treated as historical
+point-in-time features.
+
+Storage planning must avoid expanding repeated base features into a single wide
+table. In this SPY week alone, 101,993 proposals share 2,509 timeframe/decision/side
+feature windows and 37,711 decision/exit/side paths before DTE targets. Five
+targets with 222 float32 columns would use 452,848,920 bytes before identifiers
+or labels. This is a measured pilot count, not a full-universe size forecast.
+Full-universe acquisition demand and bounded training assembly still need gates.
 
 ## 1. Historical data and security identity
 
