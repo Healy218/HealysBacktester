@@ -23,11 +23,14 @@ def main():
     ap.add_argument('--budget-root', type=Path, required=True)
     ap.add_argument('--start', required=True)
     ap.add_argument('--end', required=True)
+    ap.add_argument('--request-interval-seconds', type=float, default=13.,
+                    help='Conservative pacing for the stock-reference entitlement')
     args = ap.parse_args()
     for value in (args.start, args.end):
         if datetime.strptime(value, '%Y-%m-%d').strftime('%Y-%m-%d') != value:
             raise ValueError('Explicit ISO dates required')
-    if args.start > args.end or not args.output.resolve().is_relative_to(args.budget_root.resolve()):
+    if (args.start > args.end or not args.output.resolve().is_relative_to(args.budget_root.resolve())
+            or not 1 <= args.request_interval_seconds <= 60):
         raise ValueError('Chronological scope and shared quota required')
     load_dotenv(ROOT / '.env')
     session = requests.Session()
@@ -53,6 +56,7 @@ def main():
                         raise ValueError('Pagination loop or changed capture source')
                     seen.add(url)
                     for attempt in range(5):
+                        time.sleep(args.request_interval_seconds)
                         try:
                             response = session.get(url, params=params, timeout=30, allow_redirects=False,
                                 headers={'Authorization': 'Bearer ' + os.environ['MASSIVE_API_KEY']})
@@ -60,7 +64,7 @@ def main():
                             raise RuntimeError('Corporate action transport failed') from None
                         if response.status_code not in (429, 500, 502, 503, 504):
                             break
-                        time.sleep(2 ** attempt)
+                        time.sleep(20 if response.status_code == 429 else 2 ** attempt)
                     if response.status_code != 200:
                         raise RuntimeError(f'Corporate action HTTP {response.status_code}')
                     body = response.json()

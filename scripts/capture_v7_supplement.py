@@ -17,6 +17,9 @@ def main():
     for key in ('symbols', 'base', 'output'):
         ap.add_argument('--' + key, type=Path, required=True)
     ap.add_argument('--workers', type=int, required=True)
+    ap.add_argument('--include-existing', action='store_true', help='Capture a fresh repair source for explicitly listed roots')
+    ap.add_argument('--start')
+    ap.add_argument('--end')
     args = ap.parse_args()
     if not 1 <= args.workers <= 4:
         raise ValueError('Use one to four bounded acquisition workers')
@@ -26,15 +29,21 @@ def main():
         raise ValueError('Supplement requires the existing initialized shared quota root')
     calendar_path = base / 'calendar.json'
     calendar = json.loads(calendar_path.read_text())
+    start, end = args.start or calendar['coverage_start'], args.end or calendar['coverage_end']
+    from datetime import date
+    if (date.fromisoformat(start).isoformat() != start or date.fromisoformat(end).isoformat() != end
+            or not calendar['coverage_start'] <= start <= end <= calendar['coverage_end']):
+        raise ValueError('Acquisition dates must stay within the captured calendar')
     symbols = sorted(set(args.symbols.read_text().split()))
     # Exchange spelling only. No company-renaming or liquidity alias inference.
     symbols = ['BRK.B' if s == 'BRKB' else s for s in symbols]
     existing = {p.name for p in (base / 'stock_1m/raw').iterdir() if p.is_dir()}
-    symbols = [s for s in symbols if s not in existing]
+    if not args.include_existing:
+        symbols = [s for s in symbols if s not in existing]
     scope = {'schema': 'v7-historical-stock-supplement-v1', 'symbols': symbols,
              'candidate_symbols_sha256': sha(args.symbols), 'calendar_sha256': sha(calendar_path),
              'source_sha256': {p: sha(ROOT / p) for p in ('scripts/capture_v7_supplement.py', 'scripts/download_v7_data.py')},
-             'warmup_start': calendar['coverage_start'], 'end': calendar['coverage_end'],
+             'warmup_start': start, 'end': end, 'include_existing': args.include_existing,
              'research_ready': False, 'scope_policy': 'candidate superset; identity/eligibility admission remains separate'}
     output.mkdir(parents=True, exist_ok=True)
     with (output.parent / '.acquisition.lock').open('a') as lock:
@@ -43,7 +52,7 @@ def main():
             raise ValueError('Supplement scope/source changed; use a new output directory')
         save(output / 'acquisition.json', scope)
         save(output / 'calendar.json', calendar)
-        work = list(tasks(symbols, calendar['sessions'], calendar['coverage_start'], calendar['coverage_end'], ['stock']))
+        work = list(tasks(symbols, calendar['sessions'], start, end, ['stock']))
         state = {'status': 'running', 'symbols': len(symbols), 'total': len(work), 'completed': 0,
                  'failed': 0, 'research_ready': False, 'last_results': []}
         save(output / 'status.json', state)

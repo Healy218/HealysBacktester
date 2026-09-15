@@ -14,6 +14,7 @@ def main():
     for key in ('audit','masters','calendar','output'):ap.add_argument('--'+key,type=Path,required=True)
     ap.add_argument('--references',type=Path)
     ap.add_argument('--identity-requests',type=Path)
+    ap.add_argument('--reviewed-boundaries',type=Path)
     args=ap.parse_args();frames=[];sources={}
     for p in sorted((args.audit/'options').glob('*/roots.parquet')):
         verify(p.parent);frames.append(pd.read_parquet(p));sources[str(p)]=sha(p)
@@ -24,6 +25,14 @@ def main():
     if args.references:
         identity_days, identity_sources = daily_identity_overrides(args.references,
                                                json.loads(args.identity_requests.read_text()))
+    if args.reviewed_boundaries:
+        if not args.references:
+            raise ValueError('Reviewed boundaries require original dated captures')
+        from nn_meta.v7.identity_review import reviewed_overrides
+        reviewed, review_sources = reviewed_overrides(args.reviewed_boundaries, masters=masters,
+                                                      reference_root=args.references, known=identity_days)
+        identity_days.update(reviewed)
+        identity_sources.update(review_sources)
     rows,report=membership(pd.concat(frames,ignore_index=True),masters,json.loads(args.calendar.read_text()),
                            identity_days=identity_days)
     relevant=rows[rows.month>='2022-02'];symbols=sorted(set(relevant.ticker))
@@ -33,7 +42,9 @@ def main():
         (temp/'symbols.txt').write_text('\n'.join(symbols)+'\n')
         (temp/'report.json').write_text(json.dumps(report,indent=2)+'\n')
         receipt(temp,{'identity':identity({'daily':sources,'masters':master_sources,'identity_days':identity_sources,'calendar':sha(args.calendar),
-                                        'code':sha(ROOT/'nn_meta/v7/universe.py')}),'research_ready':False})
+                                        'code':{str(p.relative_to(ROOT)):sha(p) for p in
+                                                (Path(__file__),ROOT/'nn_meta/v7/universe.py',ROOT/'nn_meta/v7/identity_review.py')}}),
+                      'research_ready':False})
     print(json.dumps({k:v for k,v in report.items() if k!='unmapped_root_months'},indent=2))
 
 
