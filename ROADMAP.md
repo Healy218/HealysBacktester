@@ -3,6 +3,23 @@
 Long-term maturity targets and the first-week v6 review are in [GOALS](GOALS.md).
 Continue this roadmap toward ≥7/10 in every assessment area by December 31, 2026.
 
+## September 15 checkpoint: V7 acquisition and readiness
+
+Base minute-stock and option trade-aggregate acquisition is running with four
+bounded processes and a shared **250 GB decimal** cap. Shared MA computation,
+calendar-aligned Polars bars, immutable Arrow/Parquet and NumPy/Zarr stores,
+and quote-request union/capture paths passed component pilots. These remain
+preparation: complete the PIT/alias/feature coverage audit, all strategy
+adapters, full observed execution quotes/accounting, frozen purged folds and
+end-to-end resource gates before full-universe build or training. See the
+[download/performance review](docs/reviews/2026-09-15-v7-download-and-performance.md).
+
+V6 remains scheduled for forward paper operation. September 15 overnight
+inspection confirmed completed closing cycles, fresh relay and eight server
+notices sent. Morning input refresh and the next market session remain to be
+observed. Dashboard V6 hosting and continuous evidence collection remain open.
+[Health check](docs/reviews/2026-09-15-v6-paper-health.md).
+
 Reconciled September 6, 2026. [TODO](TODO.md) is the active checklist;
 [HANDOFF](HANDOFF.md) records session milestones. The user authorized starting
 its six workstreams. Thirteen selected TradingView ports are implemented

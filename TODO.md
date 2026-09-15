@@ -1,3 +1,25 @@
+## September 14–15: V7, March 7, 2022 through September 14, 2026
+
+User superseded the earlier dates: V7 uses the full observed-quote history
+through the latest completed session, with the complete feature suite. New
+chronological train/evaluation splits must be frozen before training. The old
+15-minute short-DTE campaign is paused; its main timer is disabled. See
+[scope and readiness requirements](docs/specs/MULTITIMEFRAME_RESEARCH.md) and
+[session review](docs/reviews/2026-09-14-v6-dashboard-and-multitimeframe-preparation.md).
+
+- [x] Add separate V7 plan and completed-session cutoff; do not inherit V6 training dates.
+- [ ] Rebuild full-history PIT universe/calendar and audit every feature dependency from March 2022.
+- [x] Enumerate all registered parameters across 1/5/15/30 minutes with stable identities; planning catalog only.
+- [x] Inventory stock backups by year against the 449-symbol scope; presence is not coverage.
+- [ ] Restore/repair and validate minute stock data, raw/adjusted basis, PIT aliases and session coverage.
+- [ ] Implement bounded full-variant vectorization and causal per-timeframe features/context; verify each strategy.
+- [ ] Freeze complete MASSIVE quote coverage for entries, minute marks, exits and rolls.
+- [ ] Implement/audit quote execution, costs, timing, expiry and shared portfolio accounting.
+- [ ] Bind all dates, parameters, source/runtime/data hashes and evaluation rules in a new version.
+- [ ] Profile stages and benchmark Arrow IPC/Polars against existing Parquet/NumPy maps; prioritize shared computation, bounded assembly and thread limits.
+- [ ] Pass representative end-to-end/resource pilots and the complete-universe readiness gate.
+- [ ] Only then launch the new full build with four bounded processes, audit and train.
+
 # TODO — TradingView expansion and corrected research
 
 [GOALS](GOALS.md) records the September 10 baseline and year-end ≥7/10 targets.
@@ -333,3 +355,13 @@ History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconc
 - [x] Verify successful evaluation and final ensemble completion; preserve original failed runs.
 - [x] Publish the complete v6 training summary and V2/V3/V3.1/V4/V5 archives in the private dashboard Training tab, with comparable tables and provenance.
 - [x] Disable Telegram delivery for this watcher; keep summaries in the dashboard.
+
+## September 15 V7 download/performance checkpoint
+
+- [x] Start four-process V7 stock-minute and option aggregate acquisition under the user-approved 250 GB cap, with durable receipts and reboot-enabled service.
+- [x] Install and benchmark Arrow IPC, Polars and Zarr; implement shared MA signal computation, bounded immutable storage and quote-request union/reuse pilots.
+- [x] Validate 1,646 tests plus 18 subtests and real storage/working-set/quote capture pilots. See current HANDOFF and September 15 download/performance review.
+- [x] Check current V6 paper producer, input refresh scheduling, relay, server delivery and dashboard freshness. Overnight check: 25 cycles, 8 sent notices, fresh relay; morning refresh/market-session acceptance pending. [Evidence](docs/reviews/2026-09-15-v6-paper-health.md).
+- [x] Finish scoped documentation/commit/push for V7 acquisition and performance files.
+- [ ] Complete V7 coverage audits, all strategy/timeframe and feature adapters, full quote inventory/execution labels, purged folds and end-to-end resource gates before full build/training.
+- [x] Verify SPY 2022 raw/adjusted receipt hashes and regular-session minute presence: matching timestamps, 251 sessions, 97,710 minutes, zero missing; full-universe/vintage audit remains open.

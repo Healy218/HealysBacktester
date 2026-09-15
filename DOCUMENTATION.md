@@ -47,6 +47,16 @@ See [audit remediation](docs/reviews/2026-09-05-remediation.md) and the
 [original audit](docs/reviews/2026-09-05-adversarial-audit.md) for implemented
 repairs and migration requirements.
 
+## V7 acquisition operating contract (September 15)
+
+Base acquisition and quote captures share the decimal 250 GB ledger under
+`nn_meta/data_v7/`. Do not reset/reconcile that ledger while quote workers
+are active. Preserve partial attempts and original receipts; a capacity pause
+is not completion. Run only one base controller. The active frozen launcher,
+unit and checkpoint paths are recorded in HANDOFF; editing research source
+must not mutate its frozen copy. Full build/training stays behind the V7
+readiness gates. [Run details](docs/reviews/2026-09-15-v7-download-and-performance.md).
+
 ## Environment
 
 - **Repo**: `/home/healy/Coding/HealysBacktester`, working branch `main`.

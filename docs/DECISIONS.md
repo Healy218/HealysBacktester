@@ -858,3 +858,44 @@ Real first-fold preparation: 29 seconds, 15.21 GiB peak RSS, 8.26 GiB after
 release. Keep the 24 GiB hard cap; remove the overly restrictive 20 GiB soft
 throttle. Latest suite: 1,468 +18 subtests passed. No objective retuning after
 the comparison's held-out readout, and no change to promotion requirements.
+
+## 2026-09-14/15 — Separate minute/multiple-timeframe research version
+
+User expanded the short-DTE trial to all registered strategy variations over
+1/5/15/30-minute stock signals and one-minute option execution using frozen
+MASSIVE bid/ask quotes. Preserve the original train window (2024-08-26 to
+2025-12-19) and historical window (through 2026-08-24); changing strategy
+parameters is distinct from moving dates. Historical evaluation remains
+previously inspected revalidation. Complete data/strategy/execution coverage
+and resource pilots before launching the long build. The old 15-minute
+campaign was stopped, with 21 completed symbols preserved and its main timer
+disabled. Full backup/file inventory does not establish usable minute history.
+See [design](specs/MULTITIMEFRAME_RESEARCH.md).
+
+## 2026-09-14/15 — V7 uses full observed-quote history
+
+User explicitly replaced the earlier fixed V6 dates with March 7, 2022
+through today and requested a fresh V7 or V6.1. Name: V7. End resolves to
+September 14, 2026, the latest completed regular session at preparation;
+freeze that endpoint rather than advancing it during the build. Full feature
+suite, 1/5/15/30-minute signals and observed-quote minute execution remain
+required. Earlier data may support causal warmup; inferred spreads cannot
+be represented as observed execution history. New chronological purged
+fold dates remain to be designed/sealed before training. Audit the complete
+feature dependency/PIT universe history; quote access alone is insufficient.
+See [V7 scope](specs/MULTITIMEFRAME_RESEARCH.md).
+
+## 2026-09-15 — Bound V7 acquisition and choose storage from measured workloads
+
+The user authorized four-process acquisition and 250 GB of data downloads.
+Interpret the cap as 250,000,000,000 retained bytes shared by base and quote
+captures, with cross-process reservations and preserved failed attempts.
+Capacity exhaustion pauses new work; it does not waive research coverage.
+Keep historical observations and frozen launch sources immutable.
+
+Implement shared MA windows, bounded quote unions and streamed storage first.
+Keep Arrow IPC, Parquet, NumPy mmap and Zarr selectable: the SPY pilot favored
+mmap/IPC warm reads, while Parquet saved space and Zarr was slower. No blanket
+format migration, allocator/sysctl change or full-build speedup claim follows
+from this component benchmark. All strategy/feature/execution and temporal
+validation gates still apply. [Evidence](reviews/2026-09-15-v7-download-and-performance.md).

@@ -1,127 +1,133 @@
-# V7 full-history preparation; old short-DTE build paused
+# V6 overnight health verified; V7 acquisition committed and running
 
-Updated September 14 Central / September 15 UTC, 2026.
+Updated 2026-09-15T05:47:21.689661+00:00.
 
-## User's latest direction — supersedes the old dates
+## Immediate continuation
 
-Name the fresh version **V7**. Research history is **March 7, 2022 through
-September 14, 2026**, the latest completed regular session at preparation.
-The user explicitly changed the dates after clarifying that 2017 history
-includes stock/trade data but MASSIVE bid/ask quotes begin March 7, 2022.
-Do not carry forward the old 2024 start or the old TRAIN split.
+1. V6 overnight check completed. Observe the scheduled September 15 09:00 UTC
+   (04:00 Central) input refresh through September 14, then the regular-session
+   producer. No morning run was forced. Full details: [health review](docs/reviews/2026-09-15-v6-paper-health.md).
+2. Continue V7 readiness: full-history PIT/listing/alias and feature dependency
+   coverage audit, all non-MA strategy/timeframe adapters, complete
+   outcome-independent quote request inventory, quote execution/accounting,
+   frozen purged folds and representative full-pipeline resource pilots.
+   Full-universe build/training remains gated. Do not restart the old short-DTE campaign.
+   Known failed acquisition: `options/day_aggs/2026-09-14`, MASSIVE
+   `NoSuchKey`. Provider object availability must be rechecked/retried after
+   the current four-worker acquisition drains; do not silently drop the fixed
+   final session or relabel aggregate coverage complete.
+3. Dashboard V6 Paper hosting, publisher inputs and separate continuous evidence
+   journal remain to be deployed/configured. Existing publisher success does
+   not prove the new tab is live. Prior dashboard work is documented below.
 
-Full feature suite and all registered parameter variants at 1/5/15/30-minute
-stock signals; one-minute observed-quote option execution; four-worker target.
-Older observations may supply causal warmup, not fabricated option quote labels.
-Rebuild PIT universe and audit all feature dependencies over the expanded
-window. Freeze new chronological, purged walk-forward splits before training.
-Existing V6 paper runtime remains separate. Long build still waits for full
-coverage, implementation and end-to-end/resource validation.
+## Authorized scope and running download
 
-Current plan: `nn_meta/research_plans/v7-20220307-20260914/plan.json`.
-CLI: `scripts/prepare_multitimeframe_catalog.py --research-version v7` with
-explicit parent symbol reference, calendar, as-of and new output path.
-`nn_meta/v7_plan.py` does not inherit old train dates; it records unresolved
-coverage/design gates and always reports `ready_for_build: false`.
-The calendar used to resolve the cutoff starts April 2024; its historical
-coverage still must be extended for V7. A dated end is not a data freshness claim.
-See [V7 scope](docs/specs/MULTITIMEFRAME_RESEARCH.md).
+V7: March 7, 2022–September 14, 2026 inclusive, fixed completed-session cutoff;
+2021 warmup only. Full feature suite, all registered variants at 1/5/15/30
+minutes, one-minute observed MASSIVE bid/ask execution, actual 1–9 calendar
+DTE. Four computation processes, 250 GB decimal download allocation. No
+subagents authorized. External Pine parity remains unverified.
 
-## Performance suggestions assessed
+Plan: `nn_meta/research_plans/v7-20220307-20260914/plan.json`;
+nested hash `9a5c1da4c7563471c6bfd73fd30e5eb179c6cb62d497d64c1545f468c7974b09`.
+Catalog: 2,817 variants/timeframe, 11,268/ticker, 5,059,332 across 449 tickers,
+before directions/DTE/events. This is a planning catalog, not a full adapter.
 
-See [assessment](docs/reviews/2026-09-15-v7-performance-options.md). Training
-already uses `.npy` memory maps; Arrow uses mimalloc; `/tmp` is already tmpfs
-(15.2 GiB limit); THP is enabled. Prioritize bounded full-variant computation,
-shared indicator/quote reuse and streaming assembly; benchmark IPC/Polars.
-No backend, mount, allocator override or sysctl was changed. Keep durable
-checkpoints on NVMe. No measured 5–20x overall speedup claim.
+Active user service: `healys-v7-download-20260915-budget.service`.
+Root: `nn_meta/data_v7/base-20260915r4/`; source frozen under `source/`.
+At 2026-09-15T05:47:21.317543+00:00: **2500/8284 tasks,
+1 failures, running; 15.98 GB charged**.
+Read fresh status on continuation. This service runs independently of chat.
 
-## Actual campaign state
+- Four spawned processes/one inner thread, MemoryMax 8 GiB/High 7 GiB,
+  no swap, CPU 300%, Nice 15, 100 GiB free-space reserve.
+- Shared `nn_meta/data_v7/quota.json`, `.quota.lock`, `.acquisition.lock`.
+  250,000,000,000-byte cap, 1 GiB task reservations, actual retained bytes
+  charged including partials; hardlinks counted once. Capacity pauses new
+  tasks, 20 failures stops the controller. Do not reconcile/reset quota
+  concurrently with quote workers. No quote helper is active.
+- Persistent service installed/enabled at
+  `/home/healy/.config/systemd/user/healys-v7-download-20260915-budget.service`;
+  current running fragment is transient. Restart=no avoids retry loops;
+  no restart was made this session.
+- 8,284 tasks: 452 literal stock roots × 6 years × raw/all, plus 1,430 option
+  day/minute aggregate captures. Alpaca SIP 1Min pages retain all hours and
+  `asof=-`; observed-empty captures require listing audit. MASSIVE aggregate
+  gzip files are trade OHLCV, not bid/ask. Full quote inventory is outstanding.
+- Earlier roots and uncapped attempts preserved; r4 reused 299 verified tasks
+  by hardlink. Never alter the frozen running source or relabel old artifacts.
 
-`v6-short-dte-20260914-now` was resumed with four workers/two threads each,
-24 GiB cap, CPU800%, 4 GiB memory reserve and the original nightly cutoff.
-`scripts/resume_v6_short_dte.py` is an execution-only wrapper around the frozen
-launcher. It verifies completed receipts and binds its resource plan/source.
-Its copy and plan are in that campaign's `v6/execution/parallel-4/`.
+## Implemented and committed
 
-Then the user changed scope. **Main service stopped; main timer disabled.**
-21/449 completed symbols are preserved (20 original plus AMDL). Last status
-is `paused`, reason `Service stopped`, at 2026-09-15T04:02:05Z. No short-DTE
-model was trained. Do not restart this 15-minute campaign for the new version.
-The read-only progress timer remains available. The session-chat update
-state remains stopped from the user's earlier pause; do not rebind it.
+Source commit **11fef57**: bounded base acquisition/quota, quote union/capture,
+shared MA indicator batches, calendar-aware Polars bars, immutable
+Arrow/Parquet and NumPy mmap/Zarr stores, benchmark/working-pilot scripts,
+V7 optional requirements, persistent service and tests. Documentation follows
+in a separate commit. Work is on main; unrelated prior changes remain unstaged.
 
-Old scope SHA256:
-`170b630e0d91ed0df705bdfbdcc3c26bc446ae2cf197b56bcb9ed37f7f60b59b`.
-Scope/status: `nn_meta/campaigns/v6-short-dte-20260914-now/v6/short_dte_scope.json`
-and `runs/status.json`. Frozen numerical code and existing artifacts preserved.
+Detailed [download/performance review](docs/reviews/2026-09-15-v7-download-and-performance.md)
+holds file map, measurements and limits. Previous full suite:
+**1,646 passed + 18 subtests**, 18 dependency warnings, 69.32 seconds,
+`/tmp/healys-v7-data-performance-tests.log`. Final capture/metadata changes
+also passed real reuse and working-set pilots before handoff. This session
+changed documentation only and did not rerun the unchanged full suite.
 
-## Preparation completed and remaining
+Evidence under `nn_meta/validation/`:
+- `v7-storage-20260915/report.json`: SPY 2022, 212,907 rows × five OHLCV
+  columns. Arrow warm read ~1.6x faster than Parquet at 3.3x space; NumPy
+  mmap fastest, Zarr slower in this trial. No blanket backend replacement.
+- `v7-working-pilot-20260915r2/report.json`: four processes, only 64 MA
+  variants/timeframe. Shared MA computed once; bounded events; peak workers
+  about 759/526/486/485 MiB. Not the full feature/option pipeline.
+- NEW `v7-coverage-pilot-20260915/report.json`: both SPY 2022 raw/all receipts
+  and all referenced files hash-verified. Identical 212,907 timestamps;
+  251 sessions/97,710 expected regular minutes, zero missing. Presence only,
+  not a corporate-action vintage or full-universe PIT audit.
+- Quote access/reuse: `nn_meta/data_v7/quote-access-pilot-20260915/report.json`,
+  SPY220311C00420000 March 7, 2022 14:31–14:36 UTC; three requests → two
+  captures, 1,432 quotes and two trades. Access/union only, not fill audit.
 
-- Added `nn_meta/multitimeframe_catalog.py` and
-  `scripts/prepare_multitimeframe_catalog.py`, with nine test cases. Stable
-  IDs enumerate 2,817 parameter variants per timeframe, 11,268 per ticker,
-  **5,059,332** combinations over 449 tickers before directions/DTEs/events.
-  No winner selection or old signal cap. This is a planning inventory;
-  full vectorization, per-timeframe support and execution are not implemented.
-- Draft catalog and backup listing/report:
-  `nn_meta/validation/multitimeframe-preparation-20260915/`. The original inventory preserved V6 dates; the new V7 plan supersedes them
-  and uses that scope only as the symbol reference.
-- Stock backup inventory: 2,761 symbol/year files, 5.33 GiB, 2017–2026. Exact
-  campaign matches: 220/221/221 for 2024/2025/2026. Files have not been restored
-  or validated. Resolve aliases and listing dates before treating missing
-  filenames as gaps. Local minute cache only has SPY; repaired full panel is 15m.
-- Existing MASSIVE captures cover selected feature windows, not verified full
-  entry/mark/exit/roll quote histories for the new universe. Do not claim data
-  ready or treat option OHLCV aggregates as bid/ask quotes.
-- Next: restore/repair minute coverage, implement bounded full-variant signal
-  generation and timeframe-specific context/features, complete quote capture
-  and execution, run full readiness/resource pilots, then freeze and launch.
-  HTF auto-selection, opening-range and killzone rules need explicit timeframe
-  handling; changing `INTERVAL` alone is insufficient. External Pine parity
-  remains deferred/unverified. All thirteen indicator scopes stay included;
-  eight source publications provide strategies, five provide features only.
+## V6 operating state and remaining acceptance
 
-Latest validation after V7 scope/cutoff implementation: **1,625 tests + 18
-subtests passed**, 18 dependency warnings, 66.83 seconds
-(`/tmp/healys-v7-scope-tests.log`). No new-version
-freeze/build/training has started. No credible duration estimate yet.
+Home checkout `/home/healy/Coding/HealysV6`, root
+`nn_meta/live/v6_server`. Runtime d6660af, release
+`v6-cash-repair-20260913`, 40 GBT members, 164 features, 449 symbols.
+Server checkout `/home/mrhea/HealysV6`; SSH
+`ssh -o BatchMode=yes mrhea@62.238.20.66`. Delivery bridge remains in the
+old production checkout; no broker orders.
 
-## Dashboard and execution/operating evidence (user's items 2–3)
+At September 15 05:38–05:39 UTC: 25 ledger cycles, closing bar 19:45 UTC
+recorded 20:03:50 September 14, four open/two closed positions. All eight
+notices independently confirmed sent in server DB
+`/home/mrhea/HealysBacktester/nn_meta/live/.alert_batches.sqlite3`,
+`v6_notices`; none pending. Home relay and server watcher are fresh.
+Overnight producer status is expected idle, next session September 15.
 
-Implemented and installed source changes in
-`/home/healy/Coding/HealyLabsDashboard`: V6 Paper tab, filterable portfolio,
-scoped export, closed legs/cycles, quote checks, relay versus server delivery,
-and a read-only collector with a separate deduplicated evidence journal.
-Main-repo source/patch copies: `integrations/dashboard/`; tests under `tests/`.
+Input pointer is still through September 11. No new `refresh.json` exists;
+09/11/12 UTC refresh schedule is installed. Verify morning success before
+claiming next-session input readiness. Producer timer runs weekdays at
+bar-close +5 seconds, 12:00–22:45 UTC; calendar gates market operation.
+No test Telegram messages were sent and no runtime source was changed.
 
-**Hosting not deployed; continuous evidence collection not activated.**
-Home publisher still needs `V6_FORWARD_ROOT` and `V6_FORWARD_EVIDENCE`; exact
-values and server deployment requirement are in the session review. Existing
-privacy/auth rules are unchanged. Nine frontend tests, production build and
-Chrome desktop/phone browser tests passed; screenshots were inspected.
-Chrome executable: `/usr/bin/google-chrome-stable`. The user canceled a
-bundled-browser download; do not install another browser unnecessarily.
+Dashboard source: `/home/healy/Coding/HealyLabsDashboard`, branch
+`ops/firebase-dashboard-20260911`; copies under main `integrations/dashboard/`.
+Prior frontend tests/build and Chrome checks passed, but new hosting is not
+deployed. Existing home/server publishers succeeded during this inspection.
+Home environment is missing `V6_FORWARD_ROOT` and `V6_FORWARD_EVIDENCE`;
+`/home/healy/.local/state/healylabs-dashboard/v6-forward-evidence.sqlite3`
+does not exist. Set the root to the permanent HealysV6 state and configure
+that separate evidence database, then deploy/verify the frontend within
+existing authorization. Do not confuse installed source with live UI.
 
-Ledger last inspected: 4 open, 2 closed, 25 cycles, 0 rolls. Realized
-contribution about -3.96% excludes unmarked open positions, so is not total
-portfolio return. Collection does not invent marks or guarantee capturing
-brief failed passes. Detailed implementation limits are in the review.
+Paused `v6-short-dte-20260914-now`: stopped, main timer disabled, 21 completed
+symbols preserved; read-only progress timer remains. Do not resume it.
 
-## Preserved V6 paper deployment
+## Git and documentation
 
-Home `/home/healy/Coding/HealysV6`; server `/home/mrhea/HealysV6`; runtime
-`d6660af`. Broad-DTE 40-member release `v6-cash-repair-20260913`, 164 features,
-449 symbols. Existing producer, refresh, relay and server delivery preserved.
-No broker orders. Last inspected status was idle outside market hours; this
-is an observation from this session, not a perpetual health claim.
-Release/model activation details remain in the prior archived handoff and
-`docs/reviews/2026-09-14-v6-forward-activation.md`.
-
-## Workspace and continuity
-
-Work is on `main`. The checkout and dashboard repo already had extensive
-uncommitted work; preserve it and never stage `nn_meta/artifacts_v6/` wholesale.
-Old handoff archived at
-`handoff-history/HANDOFF-2026-09-14-before-multitimeframe-preparation.md`.
-No new capture/build/training process has started for V7.
+Scoped V7 source and checkpoint documentation commits only. Preserve all
+preexisting V6/TradingView code, docs, artifacts and dashboard changes.
+Never stage raw data, validation outputs, credentials or `nn_meta/artifacts_v6/`.
+The current handoff is archived at
+[previous checkpoint](handoff-history/HANDOFF-2026-09-15-before-v6-health-and-v7-commit.md),
+which retains the complete acquisition/performance handoff. Required sandbox
+escalation applies to Git staging, user systemd bus, SSH and sibling installs.

@@ -1,6 +1,7 @@
 # V7: full-history minute signals and frozen option quotes
 
-Status: preparation only, September 14 Central / September 15 UTC, 2026.
+Status: acquisition and bounded pilots underway, September 15, 2026.
+Full-universe build/training remains gated.
 The user explicitly chose a fresh version starting March 7, 2022 through
 "today." This supersedes the earlier instruction to preserve V6 dates.
 The name is **V7**, reflecting new history, signal, feature and execution
@@ -20,9 +21,9 @@ contracts. Existing V6 paper operation remains separate.
 
 "Today" is fixed at **September 14, 2026**, resolved from the captured exchange
 calendar at 2026-09-15T04:34:36Z. It does not advance while a long build runs.
-The cutoff calendar currently starts in April 2024: it resolves this end date
-but does not establish full V7 calendar coverage. Extend/verify it back through
-2022 and all required warmup before sealing data.
+The original cutoff calendar started in April 2024. Acquisition now has a
+separate captured calendar for 2021-01-01–2026-09-14, including warmup. Bind
+and validate those calendar bytes with every input before sealing data.
 
 The prior 2024–2026 proposal is superseded, not silently edited in its old
 artifacts. Create new source/runtime/data/feature manifests, labels, models
@@ -197,3 +198,21 @@ read-only mapped training arrays. Benchmark Arrow IPC and Polars on actual
 shards before adopting them. Durable checkpoints remain on NVMe; no global
 allocator/THP changes are part of this plan. See the
 [performance assessment and benchmark plan](../reviews/2026-09-15-v7-performance-options.md).
+
+## September 15 implementation checkpoint
+
+Four-process base acquisition runs under a shared 250,000,000,000-byte cap,
+with immutable provider pages/objects and hashed receipts. Option aggregates
+are trade bars; complete observed execution quotes remain outstanding.
+MA-only shared indicator batches, session-aligned Polars bars, immutable
+Arrow/Parquet and NumPy/Zarr storage and bounded quote union/capture are
+implemented. Full feature and non-MA strategy adapters remain outstanding.
+
+Real SPY 2022 tests found Arrow warm reads about 1.6x faster than Parquet at
+3.3x space; NumPy maps were fastest in this sample. Keep backend selection
+measured rather than replacing all storage. A four-process, 64-MA-variant
+pilot per timeframe passed; it does not admit the full pipeline. A subsequent
+receipt-verified SPY 2022 coverage check found matching raw/adjusted timestamps
+and all 97,710 expected regular-session minutes across 251 sessions. This
+checks presence only; corporate-action vintages and full-universe PIT/listing
+coverage remain unresolved. See [implementation and measurements](../reviews/2026-09-15-v7-download-and-performance.md).
