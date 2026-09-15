@@ -1,0 +1,15 @@
+[Unit]
+Description=Check delayed V6 option context and retry the frozen refresh
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Coding/HealysBacktester
+Environment=OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+ExecStart=%h/Coding/HealysBacktester/venv/bin/python %h/Coding/HealysBacktester/scripts/retry_v6_context.py --calendar %h/Coding/HealysBacktester/nn_meta/data_candidates/audit-repair-20260905-final/cache/exchange_calendar.json --data-index %h/Coding/HealysV6/nn_meta/live/v6_server/data-index.json --run
+MemoryMax=512M
+CPUQuota=25%
+TimeoutStartSec=180
+Nice=10
+UMask=0077
