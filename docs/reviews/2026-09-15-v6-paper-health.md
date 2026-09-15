@@ -46,3 +46,31 @@ Hosting deployment, explicit V6 publisher inputs, continuous journal setup
 and end-to-end display verification remain open.
 
 No runtime/source changes, broker orders or test Telegram notices were made.
+
+## Market-session incident and automatic recovery preparation
+
+The scheduled 09:00, 11:00 and 12:00 UTC refresh attempts failed because the
+September 14 MASSIVE option-minute object returned `NoSuchKey`. The pointer
+remained through September 11; the producer correctly refused fresh entries
+with `daily context is stale`. Ordinary strategy-exit processing also occurs
+after this check and is therefore blocked. The expiry-close fallback still
+runs on the exception path; the inspected pass recorded no fallback errors.
+This is degraded paper operation, not next-session acceptance.
+
+Direct HEAD checks still returned 404 for both September 14 day/minute files.
+Installed `healys-v6-context-retry.timer` checks at :08/:38 UTC, weekdays
+09:00–19:59 UTC. Its separate helper verifies all missing completed sessions,
+distinguishes missing objects from authentication errors, and requests the
+existing frozen refresh only when files are available and both producer and
+refresh are idle. It never publishes data or alters numerical activation.
+
+First installed check at 15:12:18 UTC returned `waiting_for_provider`, using
+82.6 MB peak memory and 1.185 seconds. Next check: 15:38 UTC. The helper's
+successful exit means the availability check ran; it does not mean the daily
+inputs refreshed. Observe `refresh.json` passed, pointer through September 14,
+and a later completed producer cycle before declaring recovery. Existing
+hourly failure notices remain enabled; no test notices were sent.
+
+Validation: 1,651 tests and 18 subtests passed, 18 dependency warnings, 66.76s
+(`/tmp/healys-v6-context-retry-tests.log`); systemd unit/schedule verification
+passed. Installed inference source and model/data freshness guards unchanged.

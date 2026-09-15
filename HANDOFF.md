@@ -1,133 +1,88 @@
-# V6 overnight health verified; V7 acquisition committed and running
+# V6 blocked by provider context; V7 base acquisition nearly complete
 
-Updated 2026-09-15T05:47:21.689661+00:00.
+Updated 2026-09-15T15:15:47.729000+00:00.
 
 ## Immediate continuation
 
-1. V6 overnight check completed. Observe the scheduled September 15 09:00 UTC
-   (04:00 Central) input refresh through September 14, then the regular-session
-   producer. No morning run was forced. Full details: [health review](docs/reviews/2026-09-15-v6-paper-health.md).
-2. Continue V7 readiness: full-history PIT/listing/alias and feature dependency
-   coverage audit, all non-MA strategy/timeframe adapters, complete
-   outcome-independent quote request inventory, quote execution/accounting,
-   frozen purged folds and representative full-pipeline resource pilots.
-   Full-universe build/training remains gated. Do not restart the old short-DTE campaign.
-   Known failed acquisition: `options/day_aggs/2026-09-14`, MASSIVE
-   `NoSuchKey`. Provider object availability must be rechecked/retried after
-   the current four-worker acquisition drains; do not silently drop the fixed
-   final session or relabel aggregate coverage complete.
-3. Dashboard V6 Paper hosting, publisher inputs and separate continuous evidence
-   journal remain to be deployed/configured. Existing publisher success does
-   not prove the new tab is live. Prior dashboard work is documented below.
+1. V6 remains degraded: MASSIVE September 14 minute file is missing. The three
+   morning refreshes failed; pointer through September 11. Entries and ordinary
+   strategy exits are blocked; expiry fallback remains active and latest pass
+   reported no fallback errors. Do not claim recovery from timer success.
+2. Newly installed `healys-v6-context-retry.timer` checks weekdays at :08/:38
+   UTC from 09 through 19 hours. Separate main-checkout helper checks all missing
+   sessions, then requests existing refresh only when files exist and producer/
+   refresh are idle. First check 15:12:18 UTC: `waiting_for_provider`, 82.6 MB,
+   1.185s; next 15:38 UTC. Numerical runtime/activation unchanged.
+3. Once available, verify `refresh.json` passed, `data-index.json` through
+   September 14, next scheduled producer cycle, relay and actual server delivery.
+   No test Telegram messages. See [incident](docs/reviews/2026-09-15-v6-paper-health.md).
+4. User asked whether V7 is ready and what should precede build/training. The
+   answer is no; follow the ordered [readiness checklist](docs/reviews/2026-09-15-v7-readiness-checkpoint.md).
+   Full-universe freeze/build/training remains unlaunched. No subagents authorized.
 
-## Authorized scope and running download
+## V7 acquisition and coding
 
-V7: March 7, 2022–September 14, 2026 inclusive, fixed completed-session cutoff;
-2021 warmup only. Full feature suite, all registered variants at 1/5/15/30
-minutes, one-minute observed MASSIVE bid/ask execution, actual 1–9 calendar
-DTE. Four computation processes, 250 GB decimal download allocation. No
-subagents authorized. External Pine parity remains unverified.
+`healys-v7-download-20260915-budget.service` drained at 07:20:34 UTC with
+8,282/8,284 tasks complete, two failures, 52.516 GB charged of 250 GB decimal,
+no active tasks/reservations. Root `nn_meta/data_v7/base-20260915r4/`.
+All 5,424 stock tasks have receipts (2,712 raw / 2,712 all); 270 observed-empty
+responses require PIT/listing/alias investigation. Clarified for user: these
+are 135 symbol/year pairs across 62/452 fetch roots (4.98% of captures);
+every fetch root has at least one nonempty year. Plain 449-symbol reference:
+`docs/specs/v7-tickers-20260915.txt`; detailed empty-year breakdown:
+`docs/reviews/2026-09-15-v7-empty-stock-years.md`. Option day/minute each
+1,429/1,430; both missing September 14, 2026, direct HEAD still 404.
+Retry those missing tasks after publication, preserving receipts and quota.
 
-Plan: `nn_meta/research_plans/v7-20220307-20260914/plan.json`;
-nested hash `9a5c1da4c7563471c6bfd73fd30e5eb179c6cb62d497d64c1545f468c7974b09`.
-Catalog: 2,817 variants/timeframe, 11,268/ticker, 5,059,332 across 449 tickers,
-before directions/DTE/events. This is a planning catalog, not a full adapter.
+V7 fixed March 7, 2022–September 14, 2026, 2021 warmup only, full features,
+all parameter variants at 1/5/15/30 minutes, actual 1–9 calendar DTE and
+observed bid/ask minute execution. Four computation processes /250 GB cap.
+Plan `nn_meta/research_plans/v7-20220307-20260914/plan.json`, nested hash
+`9a5c1da4c7563471c6bfd73fd30e5eb179c6cb62d497d64c1545f468c7974b09`.
 
-Active user service: `healys-v7-download-20260915-budget.service`.
-Root: `nn_meta/data_v7/base-20260915r4/`; source frozen under `source/`.
-At 2026-09-15T05:47:21.317543+00:00: **2500/8284 tasks,
-1 failures, running; 15.98 GB charged**.
-Read fresh status on continuation. This service runs independently of chat.
+Source commit 11fef57 and checkpoint 85fe15a pushed in prior turn. Implemented:
+full planning catalog, quota/captures, shared MA only, calendar Polars bars,
+Arrow/Parquet and mmap/Zarr stores, quote unions and bounded capture, component
+pilots. Still needed: all other strategy/full feature adapters, full-history
+PIT/vintage/coverage audit, complete outcome-independent quote inventory and
+captures, quote accounting, frozen purged folds and end-to-end resource gates.
+Trade aggregates are not bid/ask data. External Pine comparison remains
+explicitly deferred/unverified; do not invent a new external-parity prerequisite.
 
-- Four spawned processes/one inner thread, MemoryMax 8 GiB/High 7 GiB,
-  no swap, CPU 300%, Nice 15, 100 GiB free-space reserve.
-- Shared `nn_meta/data_v7/quota.json`, `.quota.lock`, `.acquisition.lock`.
-  250,000,000,000-byte cap, 1 GiB task reservations, actual retained bytes
-  charged including partials; hardlinks counted once. Capacity pauses new
-  tasks, 20 failures stops the controller. Do not reconcile/reset quota
-  concurrently with quote workers. No quote helper is active.
-- Persistent service installed/enabled at
-  `/home/healy/.config/systemd/user/healys-v7-download-20260915-budget.service`;
-  current running fragment is transient. Restart=no avoids retry loops;
-  no restart was made this session.
-- 8,284 tasks: 452 literal stock roots × 6 years × raw/all, plus 1,430 option
-  day/minute aggregate captures. Alpaca SIP 1Min pages retain all hours and
-  `asof=-`; observed-empty captures require listing audit. MASSIVE aggregate
-  gzip files are trade OHLCV, not bid/ask. Full quote inventory is outstanding.
-- Earlier roots and uncapped attempts preserved; r4 reused 299 verified tasks
-  by hardlink. Never alter the frozen running source or relabel old artifacts.
+SPY 2022 raw/all receipt-verified presence pilot passed: 212,907 matching
+observations, 251 sessions, 97,710 regular minutes, zero missing. Full universe
+not coverage-admitted. Detailed paths and benchmark measurements are in
+[download/performance review](docs/reviews/2026-09-15-v7-download-and-performance.md).
 
-## Implemented and committed
+## V6 operational paths and dashboard
 
-Source commit **11fef57**: bounded base acquisition/quota, quote union/capture,
-shared MA indicator batches, calendar-aware Polars bars, immutable
-Arrow/Parquet and NumPy mmap/Zarr stores, benchmark/working-pilot scripts,
-V7 optional requirements, persistent service and tests. Documentation follows
-in a separate commit. Work is on main; unrelated prior changes remain unstaged.
+Home `/home/healy/Coding/HealysV6/nn_meta/live/v6_server`, runtime d6660af,
+release `v6-cash-repair-20260913`, 40 GBT members/164 features/449 symbols.
+Data root `/home/healy/Coding/HealysBacktester/nn_meta/live/v6_server/data`.
+Server `/home/mrhea/HealysV6`; SSH `ssh -o BatchMode=yes mrhea@62.238.20.66`.
+Delivery DB `/home/mrhea/HealysBacktester/nn_meta/live/.alert_batches.sqlite3`,
+`v6_notices`. Earlier overnight inspection: 25 cycles, four open/two closed,
+eight sent/zero pending; no new accepted market cycle established this turn.
 
-Detailed [download/performance review](docs/reviews/2026-09-15-v7-download-and-performance.md)
-holds file map, measurements and limits. Previous full suite:
-**1,646 passed + 18 subtests**, 18 dependency warnings, 69.32 seconds,
-`/tmp/healys-v7-data-performance-tests.log`. Final capture/metadata changes
-also passed real reuse and working-set pilots before handoff. This session
-changed documentation only and did not rerun the unchanged full suite.
+Existing forward/data/relay services remain intact. Retry helper is a new
+separate main-checkout script and service/timer, not a change to the activated
+runtime. Availability polling never publishes inputs or forces a paper pass.
+Full tests: **1,651 passed +18 subtests**, 18 warnings, 66.76s, log
+`/tmp/healys-v6-context-retry-tests.log`; unit/schedule verification passed.
 
-Evidence under `nn_meta/validation/`:
-- `v7-storage-20260915/report.json`: SPY 2022, 212,907 rows × five OHLCV
-  columns. Arrow warm read ~1.6x faster than Parquet at 3.3x space; NumPy
-  mmap fastest, Zarr slower in this trial. No blanket backend replacement.
-- `v7-working-pilot-20260915r2/report.json`: four processes, only 64 MA
-  variants/timeframe. Shared MA computed once; bounded events; peak workers
-  about 759/526/486/485 MiB. Not the full feature/option pipeline.
-- NEW `v7-coverage-pilot-20260915/report.json`: both SPY 2022 raw/all receipts
-  and all referenced files hash-verified. Identical 212,907 timestamps;
-  251 sessions/97,710 expected regular minutes, zero missing. Presence only,
-  not a corporate-action vintage or full-universe PIT audit.
-- Quote access/reuse: `nn_meta/data_v7/quote-access-pilot-20260915/report.json`,
-  SPY220311C00420000 March 7, 2022 14:31–14:36 UTC; three requests → two
-  captures, 1,432 quotes and two trades. Access/union only, not fill audit.
+Dashboard V6 Paper frontend source is prepared in sibling
+`/home/healy/Coding/HealyLabsDashboard`, branch `ops/firebase-dashboard-20260911`,
+but hosting not deployed. Home env still lacks `V6_FORWARD_ROOT` and
+`V6_FORWARD_EVIDENCE`; separate evidence DB not initialized. Existing publishers
+working is not evidence of that tab being live. Complete this forward evidence
+work alongside V7 preparation. Old short-DTE campaign remains stopped, timer
+disabled, 21 completed symbols preserved; do not resume.
 
-## V6 operating state and remaining acceptance
+## Git and durable state
 
-Home checkout `/home/healy/Coding/HealysV6`, root
-`nn_meta/live/v6_server`. Runtime d6660af, release
-`v6-cash-repair-20260913`, 40 GBT members, 164 features, 449 symbols.
-Server checkout `/home/mrhea/HealysV6`; SSH
-`ssh -o BatchMode=yes mrhea@62.238.20.66`. Delivery bridge remains in the
-old production checkout; no broker orders.
-
-At September 15 05:38–05:39 UTC: 25 ledger cycles, closing bar 19:45 UTC
-recorded 20:03:50 September 14, four open/two closed positions. All eight
-notices independently confirmed sent in server DB
-`/home/mrhea/HealysBacktester/nn_meta/live/.alert_batches.sqlite3`,
-`v6_notices`; none pending. Home relay and server watcher are fresh.
-Overnight producer status is expected idle, next session September 15.
-
-Input pointer is still through September 11. No new `refresh.json` exists;
-09/11/12 UTC refresh schedule is installed. Verify morning success before
-claiming next-session input readiness. Producer timer runs weekdays at
-bar-close +5 seconds, 12:00–22:45 UTC; calendar gates market operation.
-No test Telegram messages were sent and no runtime source was changed.
-
-Dashboard source: `/home/healy/Coding/HealyLabsDashboard`, branch
-`ops/firebase-dashboard-20260911`; copies under main `integrations/dashboard/`.
-Prior frontend tests/build and Chrome checks passed, but new hosting is not
-deployed. Existing home/server publishers succeeded during this inspection.
-Home environment is missing `V6_FORWARD_ROOT` and `V6_FORWARD_EVIDENCE`;
-`/home/healy/.local/state/healylabs-dashboard/v6-forward-evidence.sqlite3`
-does not exist. Set the root to the permanent HealysV6 state and configure
-that separate evidence database, then deploy/verify the frontend within
-existing authorization. Do not confuse installed source with live UI.
-
-Paused `v6-short-dte-20260914-now`: stopped, main timer disabled, 21 completed
-symbols preserved; read-only progress timer remains. Do not resume it.
-
-## Git and documentation
-
-Scoped V7 source and checkpoint documentation commits only. Preserve all
-preexisting V6/TradingView code, docs, artifacts and dashboard changes.
-Never stage raw data, validation outputs, credentials or `nn_meta/artifacts_v6/`.
-The current handoff is archived at
-[previous checkpoint](handoff-history/HANDOFF-2026-09-15-before-v6-health-and-v7-commit.md),
-which retains the complete acquisition/performance handoff. Required sandbox
-escalation applies to Git staging, user systemd bus, SSH and sibling installs.
+Commit/push only this turn's helper, tests, units and scoped documentation.
+Preserve numerous unrelated prior V6/TradingView/dashboard changes. Never stage
+bulk data, validation outputs, credentials or `nn_meta/artifacts_v6/`.
+[Prior checkpoint](handoff-history/HANDOFF-2026-09-15-before-context-retry.md)
+retains full earlier details. Git staging, user bus, SSH and sibling installs
+require appropriate sandbox escalation.

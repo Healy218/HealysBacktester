@@ -365,3 +365,12 @@ History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconc
 - [x] Finish scoped documentation/commit/push for V7 acquisition and performance files.
 - [ ] Complete V7 coverage audits, all strategy/timeframe and feature adapters, full quote inventory/execution labels, purged folds and end-to-end resource gates before full build/training.
 - [x] Verify SPY 2022 raw/adjusted receipt hashes and regular-session minute presence: matching timestamps, 251 sessions, 97,710 minutes, zero missing; full-universe/vintage audit remains open.
+
+## September 15 market-session incident and V7 admission
+
+- [x] Diagnose V6 stale context: all three morning refreshes hit missing September 14 MASSIVE minute object.
+- [x] Install lightweight provider-availability retry timer without changing the activated inference runtime; 1,651 tests +18 subtests pass.
+- [ ] Observe provider file availability, successful V6 refresh and next accepted live paper cycle/delivery; ordinary strategy exits are also blocked until context recovers.
+- [x] Inventory completed V7 base acquisition: 8,282/8,284, 52.516 GB; 270 observed-empty stock captures require audit.
+- [ ] Retry/capture September 14 option day/minute files after publication; preserve fixed V7 dates.
+- [ ] Complete the ordered [V7 readiness gates](docs/reviews/2026-09-15-v7-readiness-checkpoint.md) before full freeze/build/training.

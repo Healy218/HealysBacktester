@@ -794,3 +794,16 @@ cannot supply that historical evidence. The richer candidate interface retains
 selection/request/coverage audit columns and requires an explicit adapter.
 The historical sealed-input replay path does not establish live receipt latency
 or Alpaca/Massive condition equivalence.
+
+## Delayed V6 option-context publication
+
+A MASSIVE `NoSuchKey` for the previous session blocks fresh V6 data, entries
+and ordinary strategy exits; expiry fallback remains on the exception path.
+Do not advance the data pointer or weaken the freshness check. The separate
+`healys-v6-context-retry.timer` polls weekday :08/:38 UTC between 09 and 19
+hours. `scripts/retry_v6_context.py` checks every missing completed session,
+then requests the existing refresh only when producer/refresh are idle.
+`waiting_for_provider` is not recovery. Verify refresh success, fresh pointer,
+accepted producer cycle and relay/delivery. Keep this helper independent of
+activated numerical source; reinstall its two committed systemd units if
+rebuilding operational timers. [Incident](docs/reviews/2026-09-15-v6-paper-health.md).

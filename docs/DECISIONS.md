@@ -899,3 +899,13 @@ mmap/IPC warm reads, while Parquet saved space and Zarr was slower. No blanket
 format migration, allocator/sysctl change or full-build speedup claim follows
 from this component benchmark. All strategy/feature/execution and temporal
 validation gates still apply. [Evidence](reviews/2026-09-15-v7-download-and-performance.md).
+
+## 2026-09-15 — Retry delayed context without changing frozen V6 inference
+
+The three morning refreshes exhausted their schedule while MASSIVE's prior-
+session minute file was absent. Add a separate lightweight availability poll
+and request the existing refresh when all needed files appear and services
+are idle. Keep the strict context freshness gate, model and numerical source
+unchanged. A successful availability poll is not a successful refresh or an
+accepted paper pass. This avoids repeated full surface builds while the
+provider file is missing. [Incident](reviews/2026-09-15-v6-paper-health.md).
