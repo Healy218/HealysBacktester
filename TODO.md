@@ -20,6 +20,16 @@ chronological train/evaluation splits must be frozen before training. The old
 - [ ] Pass representative end-to-end/resource pilots and the complete-universe readiness gate.
 - [ ] Only then launch the new full build with four bounded processes, audit and train.
 
+September 15 implementation progress ([evidence](docs/reviews/2026-09-15-v7-readiness-implementation.md)):
+
+- [x] Audit all 2,712 base raw/adjusted stock pairs and 1,429 option daily files; preserve unresolved listing/vintage gaps.
+- [x] Capture 69 monthly security masters; identify ticker reuse and replace static-alias ranking with explicit security identities.
+- [x] Implement all 20 strategy-family adapters and run all 11,268 variants in the real SPY four-timeframe warmup pilot.
+- [x] Implement 13-source V7 projections, minute opening-range/VWAP context and bounded observed-quote archive/cash ledger.
+- [x] Declare chronological folds and quote policy; pass initial real observed-fill/minute-mark/cash replay.
+- [ ] Finish daily identity boundaries, supplemental history, complete feature rows and real expiry/roll/portfolio pilots.
+- [ ] Finish full SPY quote capture, forecast full-universe demand and pass full-data no-swap/readiness gates.
+
 # TODO — TradingView expansion and corrected research
 
 [GOALS](GOALS.md) records the September 10 baseline and year-end ≥7/10 targets.

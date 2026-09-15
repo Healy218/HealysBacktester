@@ -1,88 +1,47 @@
-# V6 blocked by provider context; V7 base acquisition nearly complete
+# V7 all-four readiness workstreams — implementation in progress
 
-Updated 2026-09-15T15:15:47.729000+00:00.
+Updated 2026-09-15T18:38:25.269577+00:00. User requested “let’s do all 1–4 for v7 now please.” Continue all four; **not complete**. Full-universe freeze/build/training remains gated. No subagents authorized. Four computation processes, shared 250 GB decimal acquisition cap, main checkout, preserve activated V6 and other dirty work.
 
-## Immediate continuation
+## Pushed checkpoint
 
-1. V6 remains degraded: MASSIVE September 14 minute file is missing. The three
-   morning refreshes failed; pointer through September 11. Entries and ordinary
-   strategy exits are blocked; expiry fallback remains active and latest pass
-   reported no fallback errors. Do not claim recovery from timer success.
-2. Newly installed `healys-v6-context-retry.timer` checks weekdays at :08/:38
-   UTC from 09 through 19 hours. Separate main-checkout helper checks all missing
-   sessions, then requests existing refresh only when files exist and producer/
-   refresh are idle. First check 15:12:18 UTC: `waiting_for_provider`, 82.6 MB,
-   1.185s; next 15:38 UTC. Numerical runtime/activation unchanged.
-3. Once available, verify `refresh.json` passed, `data-index.json` through
-   September 14, next scheduled producer cycle, relay and actual server delivery.
-   No test Telegram messages. See [incident](docs/reviews/2026-09-15-v6-paper-health.md).
-4. User asked whether V7 is ready and what should precede build/training. The
-   answer is no; follow the ordered [readiness checklist](docs/reviews/2026-09-15-v7-readiness-checkpoint.md).
-   Full-universe freeze/build/training remains unlaunched. No subagents authorized.
+- `da66931`: tested source-port reuse/recurrences and bounded observation projections, prerequisites previously uncommitted. No V6 deployment/activation.
+- `b9e995b`: V7 historical audits, all-timeframe adapters, reference captures, quote archive/cash ledger, evaluation policy and pilots.
+- Detailed evidence and remaining gates: [readiness implementation](docs/reviews/2026-09-15-v7-readiness-implementation.md).
+- Full regression: **1,682 tests +18 subtests**, 80.25s, `/tmp/healys-v7-readiness-final-r2-tests.log`. Earlier final attempt failed four tests from eager Polars initialization; chain import now initializes under the thread guard. Latest universe handling of captured-but-missing FIGIs has focused coverage; rerun affected tests after further changes.
 
-## V7 acquisition and coding
+## Completed data work and findings
 
-`healys-v7-download-20260915-budget.service` drained at 07:20:34 UTC with
-8,282/8,284 tasks complete, two failures, 52.516 GB charged of 250 GB decimal,
-no active tasks/reservations. Root `nn_meta/data_v7/base-20260915r4/`.
-All 5,424 stock tasks have receipts (2,712 raw / 2,712 all); 270 observed-empty
-responses require PIT/listing/alias investigation. Clarified for user: these
-are 135 symbol/year pairs across 62/452 fetch roots (4.98% of captures);
-every fetch root has at least one nonempty year. Plain 449-symbol reference:
-`docs/specs/v7-tickers-20260915.txt`; detailed empty-year breakdown:
-`docs/reviews/2026-09-15-v7-empty-stock-years.md`. Option day/minute each
-1,429/1,430; both missing September 14, 2026, direct HEAD still 404.
-Retry those missing tasks after publication, preserving receipts and quota.
+Base root `nn_meta/data_v7/base-20260915r4`, fixed March 7, 2022–September 14, 2026; 2021 warmup only. 8,282/8,284 acquisitions: missing Sep14 option day/minute files. All 5,424 stock receipts exist. Full audit `nn_meta/validation/v7-full-audit-20260915` completed 4,141 jobs: 2,712 stock pairs +1,429 option days, 275,110,957 raw minute observations, all raw/all timestamps match. 135 empty pairs and159 nonempty pairs with some zero-observation sessions still need listing/no-trade/vintage attribution. Subsequent receipt-path hardening needs a new audit output to bind the latest source; preserve prior successful artifacts.
 
-V7 fixed March 7, 2022–September 14, 2026, 2021 warmup only, full features,
-all parameter variants at 1/5/15/30 minutes, actual 1–9 calendar DTE and
-observed bid/ask minute execution. Four computation processes /250 GB cap.
-Plan `nn_meta/research_plans/v7-20220307-20260914/plan.json`, nested hash
-`9a5c1da4c7563471c6bfd73fd30e5eb179c6cb62d497d64c1545f468c7974b09`.
+**Identity defects:** legacy BITF→DRAM is invalid (Bitfarms versus Roundhill Memory ETF, list2026-04-01). FIG ticker has both Simplify ETF and Figma identities. Do not alter frozen V6 numerical source. V7 uses explicit FIGIs, not static aliases. 69 monthly masters captured under `nn_meta/data_v7/security-master-20260915`. All dated transition requests completed:12,692 total response captures under `nn_meta/data_v7/reference-20260915` (including earlier overviews/events). 90 HTTP200 responses lack FIGIs; preserve these as unresolved evidence.
 
-Source commit 11fef57 and checkpoint 85fe15a pushed in prior turn. Implemented:
-full planning catalog, quota/captures, shared MA only, calendar Polars bars,
-Arrow/Parquet and mmap/Zarr stores, quote unions and bounded capture, component
-pilots. Still needed: all other strategy/full feature adapters, full-history
-PIT/vintage/coverage audit, complete outcome-independent quote inventory and
-captures, quote accounting, frozen purged folds and end-to-end resource gates.
-Trade aggregates are not bid/ask data. External Pine comparison remains
-explicitly deferred/unverified; do not invent a new external-parity prerequisite.
+Rebuilt `nn_meta/validation/v7-identity-universe-20260915r2`:598 historical ticker names,596 identities,16,577 membership rows.424 transition months resolved, three still need identities on observed option days: AESI2023-10-02; NUSI2024-11-08; BEPC2024-12-20/23/24/26/27. None is in the598-name candidate list, but ranking impact or exact identity resolution must be established before full admission. `identity_boundaries_verified=false`. Original static-alias draft622names is superseded. Provisional598 list lives in the r2 output `symbols.txt`; current449 reference remains `docs/specs/v7-tickers-20260915.txt`.
 
-SPY 2022 raw/all receipt-verified presence pilot passed: 212,907 matching
-observations, 251 sessions, 97,710 regular minutes, zero missing. Full universe
-not coverage-admitted. Detailed paths and benchmark measurements are in
-[download/performance review](docs/reviews/2026-09-15-v7-download-and-performance.md).
+## Strategy and quote pilots
 
-## V6 operational paths and dashboard
+`nn_meta/validation/v7-signals-pilot-20260915r2`: all11,268 variants,20families,1/5/15/30minutes, SPY2022-03-07..11 retaining all2021warmup. One-minute116,815bars,189.34sec,2,239,272KiBworkerpeak. Other timeframes21.9..50.9sec. 96TV+15base technical columns. Full model features/parameter-specific MA row values, adjusted-price vintage invariance, stop/trend-filter proposal timelines and labels are not yet assembled. V7context minute opening range/VWAP/localHTF assumptions isolated; externalPine parity deferred.
 
-Home `/home/healy/Coding/HealysV6/nn_meta/live/v6_server`, runtime d6660af,
-release `v6-cash-repair-20260913`, 40 GBT members/164 features/449 symbols.
-Data root `/home/healy/Coding/HealysBacktester/nn_meta/live/v6_server/data`.
-Server `/home/mrhea/HealysV6`; SSH `ssh -o BatchMode=yes mrhea@62.238.20.66`.
-Delivery DB `/home/mrhea/HealysBacktester/nn_meta/live/.alert_batches.sqlite3`,
-`v6_notices`. Earlier overnight inspection: 25 cycles, four open/two closed,
-eight sent/zero pending; no new accepted market cycle established this turn.
+`nn_meta/validation/v7-chain-20260915`:22,113,664contracts/8,702roots from1,429days. Initial global grouping completed but used5GiBRAM+16.2GiBswap: resource gate FAIL. Source now disk-partitions grouping; unit exactness test passed. **Running full replacement** `healys-v7-chain-bounded-20260915.service`, output `nn_meta/validation/v7-chain-bounded-20260915`,64partitions,MemoryMax6G/High5G,SwapMax0,CPU100%,Nice15. Check completion, resource counters, and exact catalog equivalence before claiming success.
 
-Existing forward/data/relay services remain intact. Retry helper is a new
-separate main-checkout script and service/timer, not a change to the activated
-runtime. Availability polling never publishes inputs or forces a paper pass.
-Full tests: **1,651 passed +18 subtests**, 18 warnings, 66.76s, log
-`/tmp/healys-v6-context-retry-tests.log`; unit/schedule verification passed.
+SPY quote plan `nn_meta/validation/v7-quote-plan-spy-20260915`:allminute selectors,bothrights,target1/2/4/5/7,19,500selections,148contracts,516contract-days. Complete capture `nn_meta/data_v7/spy-week-quotes-20260915`:27,864shards,72,894,383quote/trade records,1.321GB. Service `healys-v7-spy-quotes-20260915` finished. This is a pilot superset, not full-universe coverage. Raw quotes/trades obey original immutable Massive capture manifests.
 
-Dashboard V6 Paper frontend source is prepared in sibling
-`/home/healy/Coding/HealyLabsDashboard`, branch `ops/firebase-dashboard-20260911`,
-but hosting not deployed. Home env still lacks `V6_FORWARD_ROOT` and
-`V6_FORWARD_EVIDENCE`; separate evidence DB not initialized. Existing publishers
-working is not evidence of that tab being live. Complete this forward evidence
-work alongside V7 preparation. Old short-DTE campaign remains stopped, timer
-disabled, 21 completed symbols preserved; do not resume.
+All516 dated contract-day references captured `nn_meta/data_v7/contract-reference-20260915`; each reports shares_per_contract100,American,noadditionalunderlyings. **Next bind/validate this metadata in a loader before execution labels.** Pilot close extension15minutes is provisional explicit SPY policy; dated option-class session rules still need evidence. Full roll/exercise/expiryhandling is NOT yet implemented in an integrated replay engine.
 
-## Git and durable state
+Fixed four-contract volume sample `nn_meta/data_v7/quote-volume-pilot-20260915`:216shards,511,826quotes+6,731trades,9.55MB. Fixed one-hour plumbing replay `nn_meta/validation/v7-quote-volume-pilot-20260915/replay.json`:twoobservedfills,60/60causalmarks,cash/costreconciliation. Not strategy performance. `QuoteArchive` now reads adjacent verified shards with boundedLRU; missingcapture≠observedempty. `CashLedger` usesask/bid,actualfill-date1–9DTE,fractionalpaperfive sharedslots/10%equity,0.10%fee+0.05%slippage eachside on top ofspread; missingexitsstayopen.
 
-Commit/push only this turn's helper, tests, units and scoped documentation.
-Preserve numerous unrelated prior V6/TradingView/dashboard changes. Never stage
-bulk data, validation outputs, credentials or `nn_meta/artifacts_v6/`.
-[Prior checkpoint](handoff-history/HANDOFF-2026-09-15-before-context-retry.md)
-retains full earlier details. Git staging, user bus, SSH and sibling installs
-require appropriate sandbox escalation.
+## Evaluation declaration
+
+`docs/specs/V7_EVALUATION_20260915.json` immutable declared16:18UTC:expanding2024H2,2025H1,2025H2validation; final2026-01-01..09-14;10sessionembargo;purgefullcompletedlabelhorizons;train-onlyfitting;knownperiodsexplicitlyrevalidation. Hash `f03272ee3545b08c2dbb4deb2d92da3ad32b3e323923e9ff630ef6f94a119ae3`. Do not rewrite; amendments getnewversion. No training launched.
+
+## Next concrete work
+
+1. Finish identity boundary resolution/ranking impact, then acquire supplemental historical598candidate roots absent from452basefetchroots under sharedquota. **Do not reinitializequota while anycaptureworker isactive.** Existing downloader main initializesquota; create a supplement runner using existing `acquire` with the initializedledger, or serialize initialization when allworkersidle.
+2. Fullfeatureadapter:dailyoptionsurfaces/rawspot+adjustedreturns/SPYbeta,explicitproxy rate/dividendassumptions,contracttickfeatureswith existing209conditionpolicy,categorical/timeframe/parameteridentities,correct MAfast/slow perrow. Currentfullsuite164features includes96TV+10ticks. `nn_meta/option_tick_dataset.compute_feature_row` is timeframe-generic; old task declaration is15m-specific. Preserve point-in-time adjustments/minimumtick handling.
+3. Preserve simulator trend50/stops5%/shorting semantics via bounded vectorbt proposals; signal timestamps become decisions atbarclose. Legacy `options.execution.extract_trades` marks openpositions closedatlastbar; **V7 must retain explicit censoring instead**. Develop full minute quote/expiry/roll replay,actual1–9DTE everypurchase,max60rollsexistingsemantics,noaggregatefills,completecounterfactualpaths and sharedledger.
+4. Run all representative real/synthetic pilots, full-data no-swap verification and full-universe demand forecast against250GB. Only then finalizeimmutable source/runtime/data/feature/labelpolicy gates and fullbuild/training.
+
+## V6 and Git
+
+No new V6 recovery has been verified during this V7 work. Priorhandoff/incident records providerSep14NoSuchKey and retrytimer. Read saved status beforeclaimingrecovery. Installedhome runtime `/home/healy/Coding/HealysV6`, d6660af; separate numericalsource untouched. Do not sendtestnotifications. Dashboard/evidencejournal deployment still outstanding fromearlierwork.
+
+Preserve many unrelated dirty V6 files and docs. Commit only scoped prerequisites/V7 changes. Generateddata/validationoutputs ignored and shouldstay outofgit. Source-only deployment usesgit, notscp. UpdateTODO scoped hunks, not unrelated preexistingchanges. Continue pushingcheckpointcommits and archive/rewrite thishandoff atnextmilestone.
