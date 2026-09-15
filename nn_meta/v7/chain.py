@@ -7,20 +7,60 @@ class ObservedChain:
         from nn_meta.v7.runtime import configure_threads
         configure_threads(1)
         import polars as pl
-        self.symbol=symbol
-        self.rows=pl.scan_parquet(path).filter(pl.col('root')==symbol).collect().to_dicts()
-        self.cache={}
+        from collections import OrderedDict
+        self.symbol=symbol.replace('.', '')
+        rows=pl.scan_parquet(path).filter(pl.col('root')==self.symbol).collect().to_dicts()
+        self.expiry_rows={}
+        for row in rows:
+            self.expiry_rows.setdefault((row['expiry'],row['right']),[]).append(row)
+        self.expiries=sorted({key[0] for key in self.expiry_rows})
+        for key in self.expiry_rows:
+            self.expiry_rows[key].sort(key=lambda r:(r['strike'],r['ticker']))
+        self.cache=OrderedDict()
 
     def select(self,day,raw_spot,right,target_dte):
-        import math
+        return self.select_many(day,[raw_spot],right,target_dte)[0]
+
+    def select_many(self,day,raw_spots,right,target_dte):
+        """Vectorized nearest strikes, preserving expiry and tie ordering exactly."""
+        import bisect
+        from datetime import timedelta
+        import numpy as np
         if right not in ('C','P') or type(target_dte) is not int or not 1<=target_dte<=9:
             raise ValueError('Explicit side and 1–9 target required')
-        if not math.isfinite(raw_spot) or raw_spot<=0:raise ValueError('Positive raw spot required')
+        spots=np.asarray(raw_spots,dtype=float)
+        if spots.ndim!=1 or not np.isfinite(spots).all() or (spots<=0).any():
+            raise ValueError('Positive raw spots required')
         key=day,right
         if key not in self.cache:
-            self.cache[key]=[r for r in self.rows if r['first_seen']<day and r['right']==right
-                             and 1<=(r['expiry']-day).days<=9]
-        eligible=[r for r in self.cache[key] if .85*raw_spot<=r['strike']<=1.15*raw_spot]
-        if not eligible:return None
-        expiry=min({r['expiry'] for r in eligible},key=lambda e:(abs((e-day).days-target_dte),e))
-        return min((r for r in eligible if r['expiry']==expiry),key=lambda r:(abs(r['strike']-raw_spot),r['strike'],r['ticker']))
+            first=bisect.bisect_right(self.expiries,day)
+            last=bisect.bisect_right(self.expiries,day+timedelta(days=9))
+            groups={}
+            for expiry in self.expiries[first:last]:
+                # Collapse equal strikes to the lexically first ticker after
+                # applying the prior-date observation requirement.
+                by_strike={}
+                for r in self.expiry_rows.get((expiry,right),[]):
+                    if r['first_seen']<day:
+                        by_strike.setdefault(r['strike'],r)
+                if by_strike:
+                    groups[expiry]=(np.array(list(by_strike),dtype=float),list(by_strike.values()))
+            self.cache[key]=groups
+            if len(self.cache)>128:
+                self.cache.popitem(last=False)
+        self.cache.move_to_end(key)
+        groups=self.cache[key]
+        output=[None]*len(spots)
+        pending=np.ones(len(spots),dtype=bool)
+        for expiry in sorted(groups,key=lambda e:(abs((e-day).days-target_dte),e)):
+            strikes,records=groups[expiry]
+            hi=np.clip(np.searchsorted(strikes,spots),0,len(strikes)-1)
+            lo=np.clip(hi-1,0,len(strikes)-1)
+            chosen=np.where(np.abs(strikes[lo]-spots)<=np.abs(strikes[hi]-spots),lo,hi)
+            eligible=pending & (strikes[chosen]>=.85*spots) & (strikes[chosen]<=1.15*spots)
+            for i in np.flatnonzero(eligible):
+                output[i]=records[chosen[i]]
+            pending[eligible]=False
+            if not pending.any():
+                break
+        return output
