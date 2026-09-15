@@ -1,0 +1,51 @@
+{
+  "declared_at": "2026-09-15T16:18:22.386027+00:00",
+  "evaluation": {
+    "schema": "v7-purged-fold-policy-v1",
+    "history_start": "2022-03-07",
+    "history_end": "2026-09-14",
+    "embargo_sessions": 10,
+    "folds": [
+      {
+        "name": "2024h2",
+        "train_end": "2024-06-30",
+        "validation_start": "2024-07-01",
+        "validation_end": "2024-12-31"
+      },
+      {
+        "name": "2025h1",
+        "train_end": "2024-12-31",
+        "validation_start": "2025-01-01",
+        "validation_end": "2025-06-30"
+      },
+      {
+        "name": "2025h2",
+        "train_end": "2025-06-30",
+        "validation_start": "2025-07-01",
+        "validation_end": "2025-12-31"
+      }
+    ],
+    "final_test": [
+      "2026-01-01",
+      "2026-09-14"
+    ],
+    "evaluation_status": "previously inspected periods; revalidation, not untouched holdout",
+    "proposal_policy": "all registered variants; no global winner selection",
+    "normalization": "fit only on retained training rows in each fold",
+    "label_horizon": "latest exit/roll/mark availability; unresolved positions cannot be scored",
+    "baseline": "same eligible proposals, quotes, five shared slots, 10% equity fraction, costs and ledger",
+    "search_accounting": "retain every strategy/parameter/timeframe/model/threshold trial",
+    "requires_complete_data_and_execution_gate": true
+  },
+  "quote_policy": {
+    "latency_ns": 1000000000,
+    "entry_deadline_ns": 60000000000,
+    "max_mark_age_ns": 30000000000,
+    "fee": 0.001,
+    "slippage": 0.0005,
+    "multiplier": 100,
+    "min_reported_size": 1
+  },
+  "full_pipeline_ready": false,
+  "policy_sha256": "f03272ee3545b08c2dbb4deb2d92da3ad32b3e323923e9ff630ef6f94a119ae3"
+}
