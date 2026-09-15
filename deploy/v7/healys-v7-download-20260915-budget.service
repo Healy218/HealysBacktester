@@ -1,0 +1,21 @@
+[Unit]
+Description=V7 base data acquisition with 250 GB cap
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+Environment=V7_REPOSITORY_ROOT=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/nn_meta/data_v7/base-20260915r4/source/download_v7_data.py --plan /home/healy/Coding/HealysBacktester/nn_meta/research_plans/v7-20220307-20260914/plan.json --output /home/healy/Coding/HealysBacktester/nn_meta/data_v7/base-20260915r4 --workers 4 --reserve-gib 100 --budget-gb 250
+MemoryHigh=7G
+MemoryMax=8G
+MemorySwapMax=0
+CPUQuota=300%
+Nice=15
+KillMode=control-group
+Restart=no
+TimeoutStopSec=30
+
+[Install]
+WantedBy=default.target
