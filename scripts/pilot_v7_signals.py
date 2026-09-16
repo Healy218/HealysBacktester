@@ -37,11 +37,14 @@ def run_one(arguments):
             del frame
             hashes[str(path)] = sha(path)
             paths[basis].extend(path.parent / n for n in doc['files'] if n.endswith('bars.parquet'))
+    from nn_meta.v7.scope import HISTORY_START
     stop = pd.Timestamp(end, tz='America/New_York') + pd.DateOffset(days=1)
     begin = pd.Timestamp(start, tz='America/New_York')
+    feature_begin = pd.Timestamp(HISTORY_START, tz='America/New_York').value
     def bars_at(basis, interval):
         return aggregate_lazy(paths[basis], calendar, interval).filter(
-            pl.col('timestamp').cast(pl.Int64) < stop.value).collect(engine='streaming').to_pandas().set_index('timestamp')
+            (pl.col('timestamp').cast(pl.Int64) >= feature_begin) &
+            (pl.col('timestamp').cast(pl.Int64) < stop.value)).collect(engine='streaming').to_pandas().set_index('timestamp')
     minute = bars_at('all', 1)
     bars = minute if minutes == 1 else bars_at('all', minutes)
     raw = bars_at('raw', minutes)
@@ -103,6 +106,9 @@ def main():
     ap.add_argument('--end', required=True)
     ap.add_argument('--workers', type=int, required=True)
     args = ap.parse_args()
+    from nn_meta.v7.scope import require_active_inputs, require_research_window
+    require_active_inputs(args.source)
+    require_research_window(args.start, args.end)
     args.output.mkdir(parents=True, exist_ok=False)
     with worker_pool(args.workers, threads=1) as pool:
         reports = list(pool.map(run_one, [(str(args.source), str(args.calendar), args.symbol,

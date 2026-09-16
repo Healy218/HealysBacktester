@@ -29,6 +29,9 @@ def main():
     ap.add_argument('--close-extension-minutes', type=int, required=True,
                     help='Explicit provisional option-class session policy, 0 or 15')
     args = ap.parse_args()
+    from nn_meta.v7.scope import require_active_inputs, require_research_window
+    require_active_inputs(args.source)
+    require_research_window(args.start, args.end)
     if args.close_extension_minutes not in (0, 15):
         raise ValueError('Explicit supported option session policy required')
     calendar = json.loads(args.calendar.read_text())

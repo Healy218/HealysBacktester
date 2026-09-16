@@ -36,7 +36,7 @@ def test_cutoff_requires_timezone_and_calendar_coverage(instant):
 
 def test_v7_has_new_history_and_no_inherited_training_split_or_readiness():
     plan = build_plan(["SPY"], calendar(), as_of=datetime.fromisoformat("2026-09-15T04:34:36+00:00"))
-    assert plan["historical_window"] == ["2022-03-07", "2026-09-14"]
+    assert plan["historical_window"] == ["2022-03-15", "2026-09-14"]
     assert plan["version"] == "v7"
     assert plan["train_window"] is None
     assert plan["evaluation_policy"]["inherit_v6_dates"] is False

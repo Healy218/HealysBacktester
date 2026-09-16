@@ -29,18 +29,9 @@ def work(payload):
         raise ValueError('Invalid stock symbol')
     source_files, stock_inputs = [], {}
     for year in range(int(args['start'][:4]), int(args['end'][:4]) + 1):
-        candidates = [Path(args[name]) / f'stock_1m/raw/{symbol}/{year}/complete.json'
-                      for name in ('base', 'supplement')]
-        existing = [p for p in candidates if p.exists()]
-        if len(existing) != 1:
-            raise ValueError(f'{symbol}/{year}: exactly one base/supplement source required')
-        chosen = existing[0]
-        repaired = Path(args['repairs']) / f'stock_1m/raw/{symbol}/{year}/complete.json'
-        if repaired.exists():
-            if json.loads(repaired.read_text())['task'] != json.loads(chosen.read_text())['task']:
-                raise ValueError('Repair has a different acquisition scope')
-            stock_inputs[str(chosen)] = sha(chosen)
-            chosen = repaired
+        chosen = Path(args['base']) / f'stock_1m/raw/{symbol}/{year}/complete.json'
+        if not chosen.exists():
+            raise ValueError(f'{symbol}/{year}: missing consolidated active stock source')
         stock_inputs[str(chosen)] = sha(chosen)
         source_files.append(chosen)
     code_paths = [Path(__file__), ROOT/'nn_meta/v7/chain.py', ROOT/'nn_meta/v7/bars.py', ROOT/'nn_meta/v7/coverage.py']
@@ -129,13 +120,16 @@ def main():
     from nn_meta.v7.storage import verify, sha
     from scripts.download_v7_data import save
     ap = argparse.ArgumentParser(description=__doc__)
-    for name in ('base', 'supplement', 'repairs', 'chain', 'symbols', 'output'):
+    for name in ('base', 'chain', 'symbols', 'output'):
         ap.add_argument('--'+name, type=Path, required=True)
     for name in ('start', 'end'):
         ap.add_argument('--'+name, required=True)
     ap.add_argument('--close-extension-minutes', type=int, choices=[0,15], required=True)
     ap.add_argument('--workers', type=int, required=True)
     args = vars(ap.parse_args())
+    from nn_meta.v7.scope import require_active_inputs, require_research_window
+    require_active_inputs(args['base'])
+    require_research_window(args['start'], args['end'])
     from datetime import date
     calendar = json.loads((args['base']/'calendar.json').read_text())
     if (date.fromisoformat(args['start']).isoformat() != args['start']

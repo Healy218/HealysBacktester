@@ -23,6 +23,8 @@ def main():
         ap.add_argument('--' + name, type=Path, required=True)
     ap.add_argument('--end', required=True)
     args = ap.parse_args()
+    from nn_meta.v7.scope import HISTORY_START, data_day_allowed, require_active_inputs
+    require_active_inputs(args.source)
     calendar_path = args.source / 'calendar.json'
     calendar_doc = json.loads(calendar_path.read_text())
     calendar = SessionCalendar(calendar_doc)
@@ -34,7 +36,7 @@ def main():
     security_id = reference['composite_figi']
     if reference['ticker'] != 'SPY' or not security_id:
         raise ValueError('SPY identity required')
-    days = sorted(d for d in calendar.sessions if '2021-01-01' <= d <= args.end)
+    days = sorted(d for d in calendar.sessions if HISTORY_START <= d <= args.end and data_day_allowed(d))
     option_inputs = [args.audit / 'options' / d / 'complete.json' for d in days]
     stock_inputs = [args.source / f'stock_1m/{b}/SPY/{y}/complete.json'
                     for y in range(2021, int(args.end[:4]) + 1) for b in ('raw', 'all')]
@@ -52,7 +54,7 @@ def main():
         frames.append(daily)
     stock = pd.concat(frames).pivot(index='date', columns='basis', values='Close')
     stock = stock.rename(columns={'raw': 'raw_close', 'all': 'adjusted_close'})
-    stock = stock.loc[stock.index <= args.end].reset_index().rename(columns={'date': 'source_date'})
+    stock = stock.loc[(stock.index >= HISTORY_START) & (stock.index <= args.end)].reset_index().rename(columns={'date': 'source_date'})
     prices = stock.set_index('source_date').raw_close
     surfaces = []
     with transaction(args.output) as temp:

@@ -1,0 +1,103 @@
+{
+  "amends": {
+    "path": "V7_EVALUATION_20260915_PHYSICAL.json",
+    "sha256": "506bef09aa9a85affbf5522fad708c4934a3635d429c1af519c817ca51c67eae"
+  },
+  "date_change_reason": "User-selected March 15, 2022 birthday start; remove March 8\u201314 from working inputs",
+  "declared_at": "2026-09-15; user-directed March 15 start amendment",
+  "evaluation": {
+    "baseline": "same eligible proposals, quotes, five shared slots, 10% equity fraction, costs and ledger",
+    "embargo_sessions": 10,
+    "evaluation_status": "previously inspected periods; revalidation, not untouched holdout",
+    "expiry": {
+      "funding": "shared available cash and deliverable stock inventory; no implicit margin or short borrow",
+      "implementation_status": "pending",
+      "label_horizon": "through final stock liquidation and cash settlement availability",
+      "missing_prerequisites": "unresolved outcome; block affected evaluations",
+      "option_source": "Massive",
+      "policy": "funded-physical-exercise-observed-stock-liquidation-v1",
+      "spec": "V7_PHYSICAL_EXPIRY_20260915.md",
+      "stock_source": "Alpaca"
+    },
+    "final_test": [
+      "2026-01-01",
+      "2026-09-14"
+    ],
+    "folds": [
+      {
+        "name": "2024h2",
+        "train_end": "2024-06-30",
+        "validation_end": "2024-12-31",
+        "validation_start": "2024-07-01"
+      },
+      {
+        "name": "2025h1",
+        "train_end": "2024-12-31",
+        "validation_end": "2025-06-30",
+        "validation_start": "2025-01-01"
+      },
+      {
+        "name": "2025h2",
+        "train_end": "2025-06-30",
+        "validation_end": "2025-12-31",
+        "validation_start": "2025-07-01"
+      }
+    ],
+    "history_end": "2026-09-14",
+    "history_start": "2022-03-15",
+    "input_date_scope": {
+      "evaluation_file": "V7_EVALUATION_20220315_PHYSICAL.json",
+      "excluded_input_dates": [
+        "2022-03-08",
+        "2022-03-14"
+      ],
+      "gap_policy": "Keep exchange calendar; do not forward-fill deleted sessions",
+      "history_end": "2026-09-14",
+      "history_start": "2022-03-15",
+      "research_ready": false,
+      "warmup": "Earlier captured history except excluded dates; no pre-start labels"
+    },
+    "label_horizon": "latest stock liquidation/cash settlement availability, including option exits and rolls; unresolved positions cannot be scored",
+    "normalization": "fit only on retained training rows in each fold",
+    "proposal_policy": "all registered variants; no global winner selection",
+    "requires_complete_data_and_execution_gate": true,
+    "schema": "v7-purged-fold-policy-v3-march15-physical-expiry",
+    "search_accounting": "retain every strategy/parameter/timeframe/model/threshold trial"
+  },
+  "expiry": {
+    "funding": "shared available cash and deliverable stock inventory; no implicit margin or short borrow",
+    "implementation_status": "pending",
+    "label_horizon": "through final stock liquidation and cash settlement availability",
+    "missing_prerequisites": "unresolved outcome; block affected evaluations",
+    "option_source": "Massive",
+    "policy": "funded-physical-exercise-observed-stock-liquidation-v1",
+    "spec": "V7_PHYSICAL_EXPIRY_20260915.md",
+    "stock_source": "Alpaca"
+  },
+  "full_pipeline_ready": false,
+  "history_start": "2022-03-15",
+  "input_date_scope": {
+    "evaluation_file": "V7_EVALUATION_20220315_PHYSICAL.json",
+    "excluded_input_dates": [
+      "2022-03-08",
+      "2022-03-14"
+    ],
+    "gap_policy": "Keep exchange calendar; do not forward-fill deleted sessions",
+    "history_end": "2026-09-14",
+    "history_start": "2022-03-15",
+    "research_ready": false,
+    "warmup": "Earlier captured history except excluded dates; no pre-start labels"
+  },
+  "policy_sha256": "367a41d69b96627781ba1f0ffe94be8ea5ba2ba7e68239236663c4cc3203f3d2",
+  "quote_policy": {
+    "entry_deadline_ns": 60000000000,
+    "fee": 0.001,
+    "latency_ns": 1000000000,
+    "max_mark_age_ns": 30000000000,
+    "min_reported_size": 1,
+    "multiplier": 100,
+    "slippage": 0.0005
+  },
+  "schema": "v7-purged-fold-policy-v3-march15-physical-expiry",
+  "superseded_declared_at": "2026-09-15T16:18:22.386027+00:00"
+}

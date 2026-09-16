@@ -1,0 +1,31 @@
+{
+  "chain": "nn_meta/validation/v7-chain-start-20220315",
+  "chain_receipt_sha256": "5632870dd3619af40d21be518bf1584718187cdd6f003e3318fb28ccda13d2a8",
+  "coverage_inventory": "nn_meta/validation/v7-membership-session-coverage-start-20220315",
+  "coverage_inventory_status": "diagnostic using the old membership; not full new-scope admission",
+  "evaluation": "docs/specs/V7_EVALUATION_20220315_PHYSICAL.json",
+  "evaluation_file_sha256": "d2dd2d0c16bfd26cdbd3be2423e2969c101e92b12246ebc227b25afc6dc5038c",
+  "excluded_input_dates": [
+    "2022-03-08",
+    "2022-03-14"
+  ],
+  "history_end": "2026-09-14",
+  "history_start": "2022-03-15",
+  "input_report_sha256": "4f3b3ead3c60a48d540ff30affc023f821e340e49b5ea9c524fc788a9da546d6",
+  "plan": "nn_meta/research_plans/v7-20220315-20260914/plan.json",
+  "plan_file_sha256": "bee12e1249316ab44f110475a03c33c4d38a7ba36bc0c79b2b00752d8ca5cadd",
+  "plan_sha256": "0328ecd49e75f97c8af93f51ebe6709131bd833e9e2a32920c9588c8697c439f",
+  "quote_inputs": null,
+  "requires_rebuild": [
+    "PIT membership after input exclusions",
+    "daily and intraday feature warmup",
+    "actual quote demand/capture",
+    "physical exercise implementation",
+    "integrated pilots and full-universe admission"
+  ],
+  "research_ready": false,
+  "schema": "v7-active-input-selection-v1",
+  "verification": "nn_meta/validation/v7-start-20220315-verification.json",
+  "verification_sha256": "b1fd29120cb74c5d5d2fd7c6d8fb2349c6c0d769c29c3eaa47e7ef5ae71b1f0b",
+  "working_inputs": "nn_meta/data_v7/start-20220315"
+}

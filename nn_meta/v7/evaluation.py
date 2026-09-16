@@ -1,25 +1,17 @@
 """Predeclared expanding V7 folds; labels are purged by complete roll horizons."""
 from __future__ import annotations
 import pandas as pd
+from nn_meta.v7.scope import HISTORY_START
 
 
 def evaluation_plan():
-    return {'schema':'v7-purged-fold-policy-v1','history_start':'2022-03-07',
-            'history_end':'2026-09-14','embargo_sessions':10,
-            'folds':[{'name':'2024h2','train_end':'2024-06-30','validation_start':'2024-07-01','validation_end':'2024-12-31'},
-                     {'name':'2025h1','train_end':'2024-12-31','validation_start':'2025-01-01','validation_end':'2025-06-30'},
-                     {'name':'2025h2','train_end':'2025-06-30','validation_start':'2025-07-01','validation_end':'2025-12-31'}],
-            'final_test':['2026-01-01','2026-09-14'],
-            'evaluation_status':'previously inspected periods; revalidation, not untouched holdout',
-            'proposal_policy':'all registered variants; no global winner selection',
-            'normalization':'fit only on retained training rows in each fold',
-            'label_horizon':'latest exit/roll/mark availability; unresolved positions cannot be scored',
-            'baseline':'same eligible proposals, quotes, five shared slots, 10% equity fraction, costs and ledger',
-            'search_accounting':'retain every strategy/parameter/timeframe/model/threshold trial',
-            'requires_complete_data_and_execution_gate':True}
+    import json
+    from pathlib import Path
+    from nn_meta.v7.scope import EVALUATION_FILE
+    return json.loads((Path(__file__).resolve().parents[2] / 'docs/specs' / EVALUATION_FILE).read_text())['evaluation']
 
 
-def fold_masks(rows,fold,calendar,*,embargo_sessions=10,history_start='2022-03-07'):
+def fold_masks(rows,fold,calendar,*,embargo_sessions=10,history_start=HISTORY_START):
     required={'decision_at','label_end','label_complete'}
     if not required.issubset(rows):raise ValueError('Complete label horizon fields required')
     if not pd.api.types.is_bool_dtype(rows.label_complete) or rows.label_complete.isna().any():

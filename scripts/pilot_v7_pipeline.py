@@ -33,9 +33,11 @@ def run_one(payload):
     from nn_meta.session_calendar import SessionCalendar
     from nn_meta.option_tick_dataset import feature_policy
     from options.data.provider import parse_occ_symbol
-    start, end = '2022-03-07', '2022-03-11'
+    from nn_meta.v7.scope import HISTORY_START, EVALUATION_FILE, require_active_inputs
+    start, end = HISTORY_START, '2022-03-18'
     began = time.perf_counter()
     paths = {name: Path(value) for name, value in args.items()}
+    require_active_inputs(paths['source'])
     calendar_path = paths['source'] / 'calendar.json'
     calendar_doc = json.loads(calendar_path.read_text())
     calendar = SessionCalendar(calendar_doc)
@@ -51,7 +53,7 @@ def run_one(payload):
     tick_reference = ROOT / 'docs/reviews/2026-09-06-option-condition-209.json'
     inputs = [calendar_path, *stock_receipts, paths['daily'] / 'complete.json',
               paths['chain'].parent / 'complete.json', paths['quotes'] / 'requests.json',
-              tick_reference, ROOT / 'docs/specs/V7_EVALUATION_20260915.json']
+              tick_reference, ROOT / 'docs/specs' / EVALUATION_FILE]
     # The per-capture and metadata receipts are verified when read; include
     # their full immutable inventory so the run guards them too.
     inputs += sorted(paths['quotes'].glob('*/complete.json'))
@@ -63,9 +65,11 @@ def run_one(payload):
         del frame
         stock[doc['task']['adjustment']].extend(path.parent / n for n in doc['files'] if n.endswith('bars.parquet'))
     stop = pd.Timestamp(end, tz='America/New_York') + pd.DateOffset(days=1)
+    feature_begin = pd.Timestamp(HISTORY_START, tz='America/New_York').value
     def bars_at(basis, m):
         return aggregate_lazy(stock[basis], calendar_doc, m).filter(
-            pl.col('timestamp').cast(pl.Int64) < stop.value).collect(engine='streaming').to_pandas().set_index('timestamp')
+            (pl.col('timestamp').cast(pl.Int64) >= feature_begin) &
+            (pl.col('timestamp').cast(pl.Int64) < stop.value)).collect(engine='streaming').to_pandas().set_index('timestamp')
     minute = bars_at('all', 1)
     bars = minute if minutes == 1 else bars_at('all', minutes)
     raw = bars_at('raw', 1)

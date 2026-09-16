@@ -36,7 +36,7 @@ def main():
     binding = RunBinding(ROOT, inputs=inputs, declaration=declaration)
     calendar = SessionCalendar(json.loads(args.calendar.read_text()))
     clocks = [t.value for day, (opening, closing) in sorted(calendar.sessions.items())
-              if '2022-03-07' <= day <= '2022-03-11'
+              if '2022-03-15' <= day <= '2022-03-18'
               for t in pd.date_range(opening.tz_localize('UTC') + pd.Timedelta(minutes=1),
                   closing.tz_localize('UTC') + pd.Timedelta(minutes=14), freq='min')]
     with transaction(args.output) as temp:

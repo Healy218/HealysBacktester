@@ -7,7 +7,7 @@ from zoneinfo import ZoneInfo
 
 from nn_meta.multitimeframe_catalog import canonical, registered_catalog
 
-HISTORY_START = "2022-03-07"
+from nn_meta.v7.scope import HISTORY_START, declaration
 
 
 def completed_session(calendar, as_of):
@@ -47,7 +47,8 @@ def build_plan(symbols, calendar, *, as_of):
         "historical_window": [HISTORY_START, end],
         "cutoff_observed_at": as_of.isoformat(),
         "cutoff_policy": "Latest completed regular session in the supplied exchange calendar",
-        "warmup_policy": "Earlier observed inputs allowed for causal feature warmup; no pre-start option labels",
+        "warmup_policy": declaration()["warmup"],
+        "input_date_scope": declaration(),
         "train_window": None,
         "evaluation_policy": {
             "status": "design_required_before_freeze",
