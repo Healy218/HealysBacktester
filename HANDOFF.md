@@ -1,6 +1,6 @@
 # Handoff — continue V7; leave the V6 experiment unchanged
 
-Updated September 16, 2026 after the bounded model-trial milestone.
+Updated September 16, 2026 after full-universe raw daily stock preparation.
 Read TODO.md then this file. No subagents. Work on main, preserve unrelated dirty
 V6 work, consult DOCUMENTATION.md Traps before fixes, use `./venv/bin/python`.
 
@@ -74,6 +74,37 @@ no browser is available. Web-reader text is not a local original PDF receipt.
 FINRA January 3, 2025 contrary-cutoff HTML did capture successfully (91,562 bytes).
 Request list `nn_meta/validation/v7-occ-calendar-requests-20260916.json`; output
 `nn_meta/data_v7/occ-calendars-20260916`. All attempts ended. No calendar admitted.
+
+## Full-universe raw daily stock milestone
+
+Built and verified `nn_meta/validation/v7-stock-daily-20260916`: **2,966**
+symbol/year shards, 594 source tickers, 669,749 raw calendar rows. Eligible join
+contains all **339,640** sessions and 591 security IDs, including 67 exact-date
+alias sessions and 59 explicit missing sessions. Full rerun verified all shards
+and left the final receipt byte-identical. See
+[full daily stock review](docs/reviews/2026-09-16-v7-full-stock-daily.md).
+
+Implementation: `nn_meta/v7/stock_daily.py`, `scripts/build_v7_stock_daily.py`.
+Raw Alpaca OHLCV only, last observed regular minute with exact nullable clocks,
+captured early closes, no fills and no inferred identity outside membership.
+Verification report `nn_meta/validation/v7-stock-daily-verification-20260916.json`
+checks every eligible row and exact coverage equality. Build/resume logs and the
+exact audit source are retained beside the output. Final receipt SHA256:
+`e59e2259259c95c524bc493a889663a5a897f156400e0d6a316de2f54d94e8ea`.
+
+Latest full suite **1,817 tests +18 subtests**, 18 warnings, 106.89 seconds:
+`/tmp/v7-stock-daily-20260916-tests.log`. Build, resume and tests all ended; no
+V7 jobs from this continuation remain running. Four workers were used, but host
+swap counters increased between sampled points. Attribution is unknown; do not
+claim the no-swap/resource gate passed. More than 23 GiB RAM was available at
+the samples; details in `resource-observations.json`. V6 remains unchanged.
+
+Next concrete daily-context work: causal daily-return integration using reviewed
+actions and full-security option surfaces. Existing `scripts/build_v7_daily.py`
+is an old SPY-only adjusted-price pilot and is not the full builder. Verified
+option aggregate audits are under `nn_meta/validation/v7-full-audit-20260915r2`;
+check transitive lineage to the current filtered active source before using them.
+The raw daily milestone does not complete the `daily_context` readiness stage.
 
 ## User constraints and fixed scope
 
@@ -153,5 +184,5 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-occ-calendar-sources.md`.
+`handoff-history/HANDOFF-2026-09-16-before-full-stock-daily.md`.
 Older dated-sector and no-OTC reviews retain additional provenance.

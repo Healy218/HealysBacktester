@@ -477,3 +477,12 @@ Evidence: [stock quotes and settlement](docs/reviews/2026-09-16-v7-stock-quotes.
 - [ ] Integrate complete historical folds, full campaign runner, portfolio baselines, calibration/threshold declarations, multiple-testing and measured resource gates. Initial uncalibrated component trials do not pass full readiness.
 
 Evidence: [runnable model pilots](docs/reviews/2026-09-16-v7-model-trials.md).
+
+## September 16 V7 full raw daily stock preparation
+
+- [x] Build all 2,966 symbol/year raw daily shards and reconcile all 339,640 eligible sessions, 591 identities and 67 exact-date aliases; retain 59 missing sessions.
+- [x] Verify all joined prices/clocks and exact completed resumption; full suite 1,817 tests +18 subtests.
+- [ ] Apply causal actions and full-security option surfaces, market/sector context and warmup reporting; raw facts alone do not complete daily-context admission.
+- [ ] Measure isolated full-history resource behavior; host swap increased during this build/resume observation interval, so no no-swap gate passed.
+
+Evidence: [full raw daily build](docs/reviews/2026-09-16-v7-full-stock-daily.md).
