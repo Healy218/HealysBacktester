@@ -142,6 +142,8 @@ def run_one(payload):
                     session_open_ns=calendar.bounds(day)[0].tz_localize('UTC').value, policy=tick_policy)
                 row = rows.row(variant=by_id[p['variant_id']], bar_at=decision-pd.Timedelta(minutes=minutes),
                                right=p['right'], target_dte=1,
+                               raw_spot=float(raw_series.iloc[raw_series.index.searchsorted(decision, side='right')-1]),
+                               raw_spot_available_ns=int(raw_series.index[raw_series.index.searchsorted(decision, side='right')-1].value),
                                bars_since_previous_signal=p['bars_since_previous_signal'], ticks=ticks)
                 row.name = p['proposal_id']
                 model_rows.append(row)

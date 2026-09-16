@@ -14,6 +14,10 @@ DAILY = ('rvol_5', 'rvol_21', 'atm_iv_near', 'atm_iv_far', 'term_slope', 'iv_chg
          'market_iv', 'rv_iv_spread', 'beta_60d')
 TRADE = ('dir_short', 'dte_frac', 'moneyness', 'bars_since_signal')
 SECTORS = ('idx_etf', 'sec_etf', 'tech', 'semis', 'fin', 'crypto', 'defensive', 'cyclical', 'spec')
+ROW_CONTRACT = {'version': 'v7-selected-contract-rows-v2',
+                'dte_frac': 'actual calendar DTE at decision / 9',
+                'moneyness': 'log(selected strike / observed raw spot), both rights',
+                'spot': 'completed raw minute close, available no more than 60 seconds before decision'}
 
 
 @lru_cache(maxsize=1)
@@ -53,7 +57,8 @@ class FeatureRows:
             self.averages[window] = self.bars.Close.rolling(window).mean()
         return self.averages[window]
 
-    def row(self, *, variant, bar_at, right, target_dte, bars_since_previous_signal, ticks):
+    def row(self, *, variant, bar_at, right, target_dte, bars_since_previous_signal, ticks,
+            raw_spot, raw_spot_available_ns):
         if self.variants.get(variant['variant_id']) != variant or variant['signal_minutes'] != self.context['minutes']:
             raise ValueError('Unknown or mismatched parameter/timeframe identity')
         if right not in ('C', 'P') or type(target_dte) is not int or not 1 <= target_dte <= 9:
@@ -70,15 +75,27 @@ class FeatureRows:
                 or not set(NUMERIC_FEATURES).issubset(ticks)):
             raise ValueError('Exact covered tick feature window required')
         from options.data.provider import parse_occ_symbol
-        root, _, tick_right, _ = parse_occ_symbol(ticks['contract'])
+        root, expiry, tick_right, strike = parse_occ_symbol(ticks['contract'])
         if root != self.symbol.replace('.', '') or tick_right != right:
             raise ValueError('Tick contract identity/direction differs from the proposal')
+        actual_dte = (expiry - decision.tz_convert('America/New_York').date()).days
+        if not 1 <= actual_dte <= 9:
+            raise ValueError('Selected feature contract requires actual 1–9 calendar DTE')
+        if (isinstance(raw_spot, bool) or not isinstance(raw_spot, (int, float))
+                or not math.isfinite(raw_spot) or raw_spot <= 0
+                or type(raw_spot_available_ns) is not int
+                or not 0 <= decision.value - raw_spot_available_ns <= 60_000_000_000):
+            raise ValueError('Fresh causally available raw spot required')
         daily_pos = self.daily.index.searchsorted(decision, side='right') - 1
         if daily_pos < 0:
-            raise ValueError('No causally available daily context')
-        daily = self.daily.iloc[daily_pos]
-        if pd.Timestamp(daily.source_date).date() >= decision.tz_convert('America/New_York').date():
-            raise ValueError('Daily features require strictly prior-date observations')
+            # A March 15 cold start has no March 14 feature state. Preserve
+            # the requested start with visible NaNs, not a discarded row or
+            # the final daily observation via pandas' negative indexing.
+            daily = pd.Series({k: np.nan for k in DAILY})
+        else:
+            daily = self.daily.iloc[daily_pos]
+            if pd.Timestamp(daily.source_date).date() >= decision.tz_convert('America/New_York').date():
+                raise ValueError('Daily features require strictly prior-date observations')
         values = {**self.technical.loc[bar_at].to_dict(), **self.tv.loc[bar_at].to_dict(),
                   **{k: daily[k] for k in DAILY}, **{k: ticks[k] for k in NUMERIC_FEATURES}}
         if variant['strategy'] == 'ma':
@@ -86,9 +103,8 @@ class FeatureRows:
             slow = self._average(variant['params']['slow_window']).loc[bar_at]
             price = self.bars.Close.loc[bar_at]
             values.update(ma_gap=(fast - slow) / price, px_vs_fast=price / fast - 1)
-        # Preserve the existing short-DTE baseline's 45-day scaling convention.
-        values.update(dir_short=float(right == 'P'), dte_frac=target_dte / 45.,
-                      moneyness=0., bars_since_signal=math.log1p(bars_since_previous_signal))
+        values.update(dir_short=float(right == 'P'), dte_frac=actual_dte / 9.,
+                      moneyness=math.log(strike / raw_spot), bars_since_signal=math.log1p(bars_since_previous_signal))
         for name in schema():
             if name.startswith('strat_'):
                 values[name] = float(name[6:] == variant['strategy'])
@@ -104,6 +120,10 @@ class FeatureRows:
         if np.isinf(result.to_numpy()).any():
             raise ValueError('Infinite model feature')
         result.attrs.update(symbol=self.symbol, security_id=self.security_id, variant_id=variant['variant_id'],
-                            decision_ns=decision.value, daily_available_at=self.daily.index[daily_pos].isoformat(),
-                            tick_request_id=ticks.get('request_id'))
+                            decision_ns=decision.value,
+                            daily_available_at=self.daily.index[daily_pos].isoformat() if daily_pos >= 0 else None,
+                            daily_context_status='available' if daily_pos >= 0 else 'warmup_unavailable',
+                            tick_request_id=ticks.get('request_id'), row_contract=ROW_CONTRACT,
+                            contract=ticks['contract'], target_dte=target_dte, actual_dte=actual_dte,
+                            raw_spot=raw_spot, raw_spot_available_ns=raw_spot_available_ns)
         return result

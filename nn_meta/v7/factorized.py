@@ -4,7 +4,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from nn_meta.v7.rows import schema, TRADE
+from nn_meta.v7.rows import schema, TRADE, ROW_CONTRACT
 from nn_meta.option_tick_dataset import NUMERIC_FEATURES
 from nn_meta.v7.storage import transaction, receipt, verify, identity
 
@@ -30,7 +30,8 @@ def write_shard(path, rows, metadata, *, input_identity):
         raise ValueError('Infinite or float32-overflowing model features')
     frame = pd.DataFrame(values, columns=rows.columns)
     groups, codes, shapes, payload_bytes = partitions(), [], {}, 0
-    declaration = {'schema': 'v7-factorized-float32-v1', 'input_identity': input_identity,
+    declaration = {'schema': 'v7-factorized-float32-v2', 'input_identity': input_identity,
+                   'row_contract': ROW_CONTRACT,
                    'columns': list(schema()), 'groups': groups, 'rows': len(rows)}
     with transaction(path) as temp:
         for name, columns in groups.items():
@@ -61,7 +62,8 @@ class FactorizedRows:
         self.path = Path(path)
         self.receipt = verify(self.path)
         declaration = json.loads((self.path / 'declaration.json').read_text())
-        if (declaration['schema'] != 'v7-factorized-float32-v1' or declaration['columns'] != list(schema())
+        if (declaration['schema'] != 'v7-factorized-float32-v2' or declaration.get('row_contract') != ROW_CONTRACT
+                or declaration['columns'] != list(schema())
                 or declaration['groups'] != partitions() or identity(declaration) != self.receipt['identity']):
             raise ValueError('Factorized schema or lineage changed')
         self.groups = partitions()

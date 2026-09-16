@@ -29,14 +29,17 @@ def fixture():
 def test_full_schema_includes_original_features_and_actual_ma_parameter_values():
     bars, context, tech, tv, daily, variant, clock, ticks = fixture()
     builder = FeatureRows(bars, context, tech, tv, daily, symbol='SPY', security_id='SPY-id', sector='idx_etf')
-    row = builder.row(variant=variant, bar_at=clock, right='C', target_dte=1, bars_since_previous_signal=7, ticks=ticks)
+    row = builder.row(variant=variant, bar_at=clock, right='C', target_dte=1, bars_since_previous_signal=7,
+                      ticks=ticks, raw_spot=400., raw_spot_available_ns=ticks['decision_close_ns'])
     fast, slow = variant['params']['fast_window'], variant['params']['slow_window']
     assert len(row) == len(set(schema())) == 222
     assert row.ma_gap == pytest.approx((bars.Close.rolling(fast).mean()[clock] - bars.Close.rolling(slow).mean()[clock]) / bars.Close[clock])
     assert row.ma_gap != tech.ma_gap[clock]
     assert row.param_fast_window == fast and row.param_slow_window == slow
     assert row.timeframe_1 == 1 and row.timeframe_5 == 0 and row.sec_idx_etf == 1
-    assert row.dte_frac == pytest.approx(1 / 45)
+    assert row.dte_frac == pytest.approx(2 / 9)
+    assert row.moneyness == pytest.approx(np.log(420 / 400))
+    assert row.attrs['actual_dte'] == 2 and row.attrs['target_dte'] == 1
 
 
 def test_same_day_daily_features_and_wrong_contract_direction_are_rejected():
@@ -44,7 +47,42 @@ def test_same_day_daily_features_and_wrong_contract_direction_are_rejected():
     daily.source_date = '2022-03-07'
     builder = FeatureRows(bars, context, tech, tv, daily, symbol='SPY', security_id='SPY-id', sector=None)
     with pytest.raises(ValueError, match='prior-date'):
-        builder.row(variant=variant, bar_at=clock, right='C', target_dte=1, bars_since_previous_signal=0, ticks=ticks)
+        builder.row(variant=variant, bar_at=clock, right='C', target_dte=1, bars_since_previous_signal=0,
+                    ticks=ticks, raw_spot=400., raw_spot_available_ns=ticks['decision_close_ns'])
     daily.source_date = '2022-03-04'
     with pytest.raises(ValueError, match='direction'):
-        builder.row(variant=variant, bar_at=clock, right='P', target_dte=1, bars_since_previous_signal=0, ticks=ticks)
+        builder.row(variant=variant, bar_at=clock, right='P', target_dte=1, bars_since_previous_signal=0,
+                    ticks=ticks, raw_spot=400., raw_spot_available_ns=ticks['decision_close_ns'])
+
+
+@pytest.mark.parametrize('offset,spot', [(1, 400.), (-60_000_000_001, 400.), (0, float('nan')), (0, 0.)])
+def test_raw_spot_must_be_fresh_causal_and_positive(offset, spot):
+    bars, context, tech, tv, daily, variant, clock, ticks = fixture()
+    builder = FeatureRows(bars, context, tech, tv, daily, symbol='SPY', security_id='SPY-id', sector=None)
+    with pytest.raises(ValueError, match='raw spot'):
+        builder.row(variant=variant, bar_at=clock, right='C', target_dte=1, bars_since_previous_signal=0,
+                    ticks=ticks, raw_spot=spot, raw_spot_available_ns=ticks['decision_close_ns']+offset)
+
+
+def test_weekend_dte_uses_calendar_days_and_rejects_expired_contract():
+    bars, context, tech, tv, daily, variant, clock, ticks = fixture()
+    builder = FeatureRows(bars, context, tech, tv, daily, symbol='SPY', security_id='SPY-id', sector=None)
+    ticks['contract'] = 'SPY220311C00420000'
+    row = builder.row(variant=variant, bar_at=clock, right='C', target_dte=1, bars_since_previous_signal=0,
+                      ticks=ticks, raw_spot=400., raw_spot_available_ns=ticks['decision_close_ns'])
+    assert row.dte_frac == pytest.approx(4 / 9)
+    ticks['contract'] = 'SPY220307C00420000'
+    with pytest.raises(ValueError, match='calendar DTE'):
+        builder.row(variant=variant, bar_at=clock, right='C', target_dte=1, bars_since_previous_signal=0,
+                    ticks=ticks, raw_spot=400., raw_spot_available_ns=ticks['decision_close_ns'])
+
+
+def test_initial_daily_warmup_keeps_rows_with_explicit_missing_values():
+    bars, context, tech, tv, daily, variant, clock, ticks = fixture()
+    daily.index = daily.index + pd.Timedelta(days=1)
+    builder = FeatureRows(bars, context, tech, tv, daily, symbol='SPY', security_id='SPY-id', sector=None)
+    row = builder.row(variant=variant, bar_at=clock, right='C', target_dte=1, bars_since_previous_signal=0,
+                      ticks=ticks, raw_spot=400., raw_spot_available_ns=ticks['decision_close_ns'])
+    assert row[list(DAILY)].isna().all()
+    assert row.attrs['daily_context_status'] == 'warmup_unavailable'
+    assert row.attrs['daily_available_at'] is None
