@@ -872,3 +872,15 @@ just because they share amount/date. DVN September13,2024 has three $0.22 Massiv
 rows and one Alpaca row, while the original issuer confirms $0.44 total. Apply
 the reviewed replacement to the **whole event group once**, retaining all source
 IDs. See the September16 action-inventory review and immutable DVN exception.
+
+### V7 publication content versus historical version
+
+The generic cash body matcher requires amount and explicit-year record/pay dates
+in one paragraph, a single issuer, and a captured update clock before the ex-date.
+Do not join unrelated HTML blocks or infer years automatically. Current issuer
+HTML can retain an old publication date while carrying a much later modification
+clock: all 18 Apple releases captured September 16 show August 19, 2026 updates.
+This does not establish changed cash terms, but does require keeping historical
+version proof separate from current issuer confirmation. The finite Apple review
+corroborates all amounts against dated captured news, with 17 record/pay date
+pairs; May 2023 has amount only. See the cash-publication review.

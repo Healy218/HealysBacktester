@@ -1,4 +1,4 @@
-# Handoff — full V7 action inventory reconciled; original DVN correction saved
+# Handoff — full cash publication audit and Apple source corroboration
 
 Updated September 16, 2026. Read TODO.md then this file. No subagents. Work on
 main, preserve unrelated dirty/untracked V6 work and use `./venv/bin/python`.
@@ -6,40 +6,57 @@ The full V7 readiness goal remains active and unfinished; no training launched.
 
 ## Latest V7 progress
 
-Prior goal turn made progress (full daily rebuild and tested causal calculations).
-This turn built the full captured-action reconciliation and verified an original
-issuer correction. Read [current action review](docs/reviews/2026-09-16-v7-action-inventory.md).
+Read [cash-publication review](docs/reviews/2026-09-16-v7-cash-publications.md).
 
-- `nn_meta/validation/v7-action-inventory-20260916r2`: 10,380 records across all
-  594 active source/membership symbols and 5,030 exact-date groups. Includes
-  4,506 matching single events, 354 unreviewed terms, 68 single-provider groups,
-  57 combined/multiple-record groups and 45 mismatches; 213 complex records.
-  Of these groups, 3,016 map to exact eligible security dates; others are not
-  assigned identities merely because they can enter future feature lookbacks.
-  Original records, query scopes, source payloads and code hashes are retained.
-- `nn_meta/validation/v7-dvn-action-review-20260916`: DVN September 13, 2024 is
-  $0.44 total cash ($0.22 fixed plus $0.22 variable), verified from the original
-  August 6 issuer PDF and linked announcement. Captures are under
-  `nn_meta/data_v7/public-actions-20260916/dvn-q2-2024-{release,announcement}`.
-  Massive's three $0.22 records and Alpaca's one $0.22 record are superseded as
-  one complete event group; **never sum this review on top of provider rows**.
-  Prior raw close $40.01, factor 0.9890027493126718, effective September 13 at 13:30 UTC.
-  Full action/no-event coverage and downstream integration still needed.
-- `nn_meta/v7/action_inventory.py` and `scripts/audit_v7_action_inventory.py`
-  implement the complete review queue. All twelve new cases and the full suite
-  passed: **1,863 tests +18 subtests**, 18 warnings, 93.14s.
-  Log `/tmp/v7-action-inventory-tests.log`; inventory `/tmp/v7-action-inventory-r2.log`.
+- New body-text matcher and full inventory CLI inspect amount, record date and
+  pay date in one paragraph, exact publication clocks, ambiguity and provenance.
+  `v7-cash-publications-20260916r2` matches 286/4,975 actions: 256 headline,
+  31 body, 30 additional body actions; 4,689 remain unmatched. All 31 body
+  paragraphs inspected; all 2,569 input bindings reverified. Use r2, not r1.
+- Captured all 18 Apple quarterly issuer announcements corresponding to the full
+  active dividend window. `data_v7/aapl-publications-20260916`; all cash amounts,
+  record and pay dates agree with both providers. Canonical URLs/metadata and
+  exact paragraphs verified in `validation/v7-aapl-publications-review-20260916`.
+  All pages carry later August 19, 2026 modification timestamps, so current HTML
+  alone is not proof of the historical version. No ex-date inferred from record.
+- Manually reviewed 18 dated Apple earnings articles already in Alpaca's news
+  archive: all corroborate the cash amount, 17 record/pay date pairs. May 4,
+  2023 article has amount only. `validation/v7-aapl-news-corroboration-20260916`
+  keeps exact article IDs, paragraphs, update clocks and manual date resolution.
+  Exact one-off verification sources retained in both immutable reviews.
+- Full suite **1,878 tests +18 subtests**, 18 warnings, 93.11s. No production
+  source changes afterward. Log `/tmp/v7-cash-publications-tests.log`, retained
+  with hashes in `validation/v7-cash-publications-tests-20260916`.
+- All jobs terminal, no acquisition reservations, V6 untouched. User's `last`
+  clarification was answered: last is reference; simulated entries/exits/marks
+  consistently use valid supplied midpoint or bid/ask average, as deployed.
 
-Use r2, not preserved r1: r2 rejects stock-dividend endpoint rows as simple split
-terms and validates original capture queries. Alpaca's request is process-date
-bounded and includes incomplete records: absence cannot prove a no-event span.
-Matching amounts do not establish publication vintage or share-delivery semantics.
-All jobs ended; V6 untouched. Readiness still lacks eight substantive stages.
+These new reviews are component evidence, not full-security action/no-event or
+identity-continuity admission. All research-ready flags remain false. The generic
+body parser does not infer years; only the finite inspected Apple review resolves
+abbreviated/yearless dates against the issuer's full dates and article year.
+Do not blindly add the separate Apple review to generic audit counts.
 
-Next: use this full inventory to complete primary-source action/continuity
-reviews (including mismatches, combined events and publication/no-event proof),
-consume reviewed corrections once, then build full causal security/market panels
-with dated sectors. Continue quote, physical, assembly, trial and resource gates.
+Next: integrate the reviewed publication/exception inputs exactly once with
+complete-security action/no-event and identity reviews, then finish causal daily,
+market and sector panels. The AAPL full-window publication evidence is now much
+stronger; historical 40-day pilots retain their original source bindings and
+must be revalidated before reuse. Continue quote/physical/assembly/trial/resource
+work; eight full-universe stage artifacts remain missing.
+
+## Preserved full corporate-action reconciliation
+
+`validation/v7-action-inventory-20260916r2`: all 10,380 records, 594 source symbols,
+5,030 symbol/date groups, 213 complex records; 4,506 matching single-event terms,
+354 unreviewed, 68 single-provider, 57 combined/multiple and 45 mismatches.
+Alpaca queries are process-date bounded and include incomplete records; absence
+is not no-event proof. Review `docs/reviews/2026-09-16-v7-action-inventory.md`.
+
+DVN September 13, 2024 is **$0.44 total cash**, original issuer verified, replacing
+all three Massive $0.22 records and one Alpaca $0.22 record as one group. Never
+sum the review on top of provider rows. `validation/v7-dvn-action-review-20260916`
+retains exact source/correction; prior raw close $40.01, factor
+0.9890027493126718. Full-security admission still required.
 
 ## Current daily artifacts
 
@@ -136,7 +153,7 @@ activation utility/test, policy and documentation are committed on main.
 Current readiness `nn_meta/validation/v7-readiness-20260916-action-inventory.json`:
 three input/membership/coverage checks pass; **eight full-universe stages remain
 missing**. No full training, full no-swap/resource or V6-coexistence claim.
-Acquisition quota remains **62,558,635,013 /250,000,000,000**, reservations empty.
+Acquisition quota remains **62,561,193,933 /250,000,000,000**, reservations empty.
 
 The midpoint-related stock/surface parent-binding rebuild is complete in the
 new paths above; all old outputs remain historical. Old ask/bid execution paths,
@@ -266,4 +283,4 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-action-inventory.md`.
+`handoff-history/HANDOFF-2026-09-16-before-cash-publications.md`.

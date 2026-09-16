@@ -521,3 +521,12 @@ Evidence: [causal daily calculations and rebuilt data](docs/reviews/2026-09-16-v
 - [ ] Resolve remaining publication, combined-event, amount/unit, no-event and identity-continuity evidence before applying the full inventory to causal features.
 
 Evidence: [full action inventory and correction](docs/reviews/2026-09-16-v7-action-inventory.md).
+
+## September 16 V7 full cash-publication evidence
+
+- [x] Audit all 4,975 cash candidates against captured headlines/body text; match 286 actions with retained source/version provenance.
+- [x] Capture/check all 18 Apple issuer announcements and corroborate every amount in dated news; retain 17 record/pay date checks and explicit vintage limits.
+- [x] Pass full regression: 1,878 tests plus 18 subtests.
+- [ ] Integrate publication evidence with complete-security action/no-event and identity review before full causal admission.
+
+Evidence: [cash-publication review](docs/reviews/2026-09-16-v7-cash-publications.md).
