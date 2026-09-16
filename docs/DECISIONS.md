@@ -1006,3 +1006,15 @@ Declaration: `docs/specs/V7_UNIVERSE_EXCLUSIONS_20260916.json`; active universe
 593 tickers /591 identities. Physical-exercise rules remain: missing funding,
 shares or verified settlement evidence stays unresolved. Removing these issuers
 does not waive any remaining full-universe training-readiness gate.
+
+## 2026-09-16 — Freeze V7 coarse dated sector taxonomy
+
+Retain the nine existing sector columns, with classifications derived from dated
+security-type/SIC/business-description captures joined by composite FIGI. This
+is a declared V7 research taxonomy, not GICS or a retrospective copy of V6's
+symbol map. Reference dates precede the eligible session; never backfill future
+classifications across time or ticker reuse. Unknowns remain explicit all-zero
+sector vectors with source and reason. A newer missing classification remains
+unknown rather than being silently filled. See `nn_meta/v7/sectors.py` and the
+frozen `nn_meta/validation/v7-sectors-20260916-final/policy.json`. Original
+publication-vintage claims are not inferred from historical vendor reconstruction.

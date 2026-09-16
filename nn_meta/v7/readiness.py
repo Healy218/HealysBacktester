@@ -38,7 +38,7 @@ def scope_binding(active):
     return identity({k: active.get(k) for k in ('history_start', 'history_end', 'working_inputs',
         'input_report_sha256', 'chain_receipt_sha256', 'universe_receipt_sha256',
         'coverage_receipt_sha256', 'evaluation_file_sha256', 'plan_file_sha256',
-        'universe_exclusions_sha256')} | {'row_contract': ROW_CONTRACT})
+        'universe_exclusions_sha256', 'sector_receipt_sha256')} | {'row_contract': ROW_CONTRACT})
 
 
 def assess(root, active_path):
@@ -64,6 +64,14 @@ def assess(root, active_path):
                 (root/active['plan'], active['plan_file_sha256'])):
             if sha(path) != digest:
                 raise ValueError(f'Active input hash differs: {path}')
+        if active.get('sector_inputs'):
+            from nn_meta.v7.sectors import SectorStore
+            sector_path = root/active['sector_inputs']
+            if sha(sector_path/'complete.json') != active.get('sector_receipt_sha256'):
+                raise ValueError('Dated sector receipt changed')
+            sector_store = SectorStore(sector_path)
+            if active['coverage_receipt_sha256'] not in sector_store.report['sources'].values():
+                raise ValueError('Dated sectors are not bound to the active eligible sessions')
         return {'scope_identity': scope_binding(active), 'feature_columns': len(schema())}
     check('active_inputs', inputs)
     universe = None

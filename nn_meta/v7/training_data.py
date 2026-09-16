@@ -29,6 +29,15 @@ def prepare_fold(paths, fold, calendar, output, *, embargo_sessions=10):
                        calendar=dict(coverage_start=calendar.start, coverage_end=calendar.end,
                            bounds_utc={d: [str(x) for x in calendar.bounds(d)] for d in sorted(calendar.sessions)}),
                        inputs=inputs, feature_columns=list(schema()))
+    if Path(output).exists():
+        verify(output, expected_identity=identity(declaration))
+        # Reuse only the exact source order, fold, calendar and runtime code.
+        # Each source payload is reverified without assembling the full matrix.
+        for path in paths:
+            FactorizedRows(path)
+        FoldRows(output, 'train')
+        FoldRows(output, 'validation')
+        return json.loads((Path(output)/'report.json').read_text())
     totals = dict(source=0, train=0, validation=0, incomplete=0, outside_or_purged=0)
     parts = []
     with transaction(output) as temp:

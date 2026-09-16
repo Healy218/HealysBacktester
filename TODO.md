@@ -441,3 +441,12 @@ Evidence: [lifecycle preparation](docs/reviews/2026-09-16-v7-lifecycle-preparati
 - [ ] Complete causal prices, dated sectors/lifecycle execution, daily context, quotes, physical adapters, full assembly/trials and integrated resource gates.
 
 Evidence: [no-OTC preparation](docs/reviews/2026-09-16-v7-no-otc-preparation.md).
+
+## September 16 V7 dated sectors and training input continuation
+
+- [x] Capture missing prior-date references and freeze identity-bound sector records for all 339,640 eligible sessions, preserving explicit unknowns and all nine fields.
+- [x] Consume dated sectors in feature rows with source/clock provenance and bind the frozen store in active inputs.
+- [x] Implement bounded train-only preprocessing, exact disk-based return quantiles, finite checks and verified fold/preprocessing resumption.
+- [ ] Finish full-history feature/data/execution integration, runnable model trials and measured binned-memory/resource gates; component coverage is not readiness.
+
+Evidence: [sectors and training inputs](docs/reviews/2026-09-16-v7-sectors-training-inputs.md).

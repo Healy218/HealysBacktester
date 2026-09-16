@@ -7,13 +7,13 @@ import pandas as pd
 from nn_meta.multitimeframe_catalog import registered_catalog
 from nn_meta.tradingview_features import FEATURE_NAMES
 from nn_meta.option_tick_dataset import NUMERIC_FEATURES
+from nn_meta.v7.sectors import DatedSectors, SECTORS
 
 TECHNICAL = ('ma_gap', 'px_vs_fast', 'rsi14', 'macd_hist', 'bb_z', 'ret_1', 'ret_8', 'ret_26',
              'session_gap', 'gap_abs_z', 'tod', 'dow', 'is_first_hour', 'is_last_hour', 'dow_tod')
 DAILY = ('rvol_5', 'rvol_21', 'atm_iv_near', 'atm_iv_far', 'term_slope', 'iv_chg_5', 'pc_ratio',
          'market_iv', 'rv_iv_spread', 'beta_60d')
 TRADE = ('dir_short', 'dte_frac', 'moneyness', 'bars_since_signal')
-SECTORS = ('idx_etf', 'sec_etf', 'tech', 'semis', 'fin', 'crypto', 'defensive', 'cyclical', 'spec')
 ROW_CONTRACT = {'version': 'v7-selected-contract-rows-v2',
                 'dte_frac': 'actual calendar DTE at decision / 9',
                 'moneyness': 'log(selected strike / observed raw spot), both rights',
@@ -33,7 +33,10 @@ def schema():
 
 class FeatureRows:
     def __init__(self, bars, context, technical, tv, daily, *, symbol, security_id, sector):
-        if sector is not None and sector not in SECTORS:
+        if isinstance(sector, DatedSectors):
+            if sector.security_id != security_id:
+                raise ValueError('Dated sector security identity differs')
+        elif sector is not None and sector not in SECTORS:
             raise ValueError('Explicit frozen sector taxonomy required')
         if tuple(technical.columns) != TECHNICAL or tuple(tv.columns) != FEATURE_NAMES:
             raise ValueError('Technical/TV feature schema is incomplete')
@@ -69,6 +72,8 @@ class FeatureRows:
         if bar_at.tz is None or bar_at not in self.tv.index:
             raise ValueError('Original completed feature observation required')
         decision = bar_at + pd.Timedelta(minutes=variant['signal_minutes'])
+        sector_record = self.sector.at(decision) if isinstance(self.sector, DatedSectors) else None
+        sector = sector_record['sector'] if sector_record is not None else self.sector
         if (ticks.get('option_tick_status') != 'covered' or ticks.get('decision_close_ns') != decision.value
                 or ticks.get('symbol') != self.symbol
                 or ticks.get('window_start_ns') != bar_at.value or ticks.get('window_end_ns') != decision.value
@@ -109,7 +114,7 @@ class FeatureRows:
             if name.startswith('strat_'):
                 values[name] = float(name[6:] == variant['strategy'])
             elif name.startswith('sec_'):
-                values[name] = float(name[4:] == self.sector)
+                values[name] = float(name[4:] == sector)
             elif name.startswith('timeframe_'):
                 values[name] = float(int(name[10:]) == variant['signal_minutes'])
             elif name.startswith('param_setup_'):
@@ -123,6 +128,8 @@ class FeatureRows:
                             decision_ns=decision.value,
                             daily_available_at=self.daily.index[daily_pos].isoformat() if daily_pos >= 0 else None,
                             daily_context_status='available' if daily_pos >= 0 else 'warmup_unavailable',
+                            sector_context=sector_record,
+                            sector_context_status='dated' if sector_record is not None else 'static_component_fixture',
                             tick_request_id=ticks.get('request_id'), row_contract=ROW_CONTRACT,
                             contract=ticks['contract'], target_dte=target_dte, actual_dte=actual_dte,
                             raw_spot=raw_spot, raw_spot_available_ns=raw_spot_available_ns)

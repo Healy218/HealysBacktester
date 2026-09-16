@@ -86,3 +86,24 @@ def test_initial_daily_warmup_keeps_rows_with_explicit_missing_values():
     assert row[list(DAILY)].isna().all()
     assert row.attrs['daily_context_status'] == 'warmup_unavailable'
     assert row.attrs['daily_available_at'] is None
+
+
+def test_rows_consume_security_bound_dated_sectors_and_retain_provenance():
+    from nn_meta.v7.sectors import DatedSectors
+    bars, context, tech, tv, daily, variant, clock, ticks = fixture()
+    history = pd.DataFrame([dict(date='2022-03-07', security_id='SPY-id', sector='idx_etf',
+        available_ns=bars.index[0].value, reference_date='2022-03-04', reason='dated_fund',
+        source_receipt='fixture', source_sha256='digest')])
+    sectors = DatedSectors(history, security_id='SPY-id')
+    builder = FeatureRows(bars, context, tech, tv, daily, symbol='SPY', security_id='SPY-id', sector=sectors)
+    row = builder.row(variant=variant, bar_at=clock, right='C', target_dte=1, bars_since_previous_signal=0,
+                      ticks=ticks, raw_spot=400., raw_spot_available_ns=ticks['decision_close_ns'])
+    assert row.sec_idx_etf == 1 and row.filter(like='sec_').sum() == 1
+    assert row.attrs['sector_context']['reference_date'] == '2022-03-04'
+    assert row.attrs['sector_context_status'] == 'dated'
+    history['sector'] = None
+    builder.sector = DatedSectors(history, security_id='SPY-id')
+    row = builder.row(variant=variant, bar_at=clock, right='C', target_dte=1, bars_since_previous_signal=0,
+                      ticks=ticks, raw_spot=400., raw_spot_available_ns=ticks['decision_close_ns'])
+    assert row.filter(like='sec_').sum() == 0
+    assert row.attrs['sector_context']['sector'] is None

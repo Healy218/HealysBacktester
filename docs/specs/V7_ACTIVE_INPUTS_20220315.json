@@ -33,6 +33,8 @@
     "version": "v7-selected-contract-rows-v2"
   },
   "schema": "v7-active-input-selection-v1",
+  "sector_inputs": "nn_meta/validation/v7-sectors-20260916-final",
+  "sector_receipt_sha256": "23a95086cb48fa6e0f14cb3ae4f7e9e499264c3378c3d6f6f2df575777d78230",
   "study_scope": "Conditional on user-directed ex-post issuer exclusions; not an unrestricted historical universe.",
   "universe": "nn_meta/validation/v7-universe-no-otc-20260916",
   "universe_exclusions": "docs/specs/V7_UNIVERSE_EXCLUSIONS_20260916.json",

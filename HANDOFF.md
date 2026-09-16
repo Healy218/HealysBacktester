@@ -3,6 +3,45 @@
 Updated September 16, 2026. Continue until the persistent readiness goal passes;
 alert the user only then. No subagents. Preserve existing unrelated V6 changes.
 
+## Latest component milestone: dated sectors and bounded preprocessing
+
+The exclusion checkpoint was committed/pushed as `bc800f8`; this continuation
+adds the following. V7 remains unready; all eight substantive stages still fail.
+
+- Captured 48 missing prior-date company references under the shared quota:
+  `nn_meta/data_v7/sector-reference-20260916`, requests
+  `nn_meta/validation/v7-sector-bootstrap-requests-20260916.json`.
+  Alias-day 404 responses were preserved; same-security prior aliases supply
+  classification continuity without inferring a reused ticker's identity.
+- Frozen sector store `nn_meta/validation/v7-sectors-20260916-final` covers all
+  339,640 eligible sessions and 591 identities. 317,561 classified sessions;
+  22,079 explicit unknowns (mostly missing SIC for foreign issuers). Zero sessions
+  lack a prior identity reference. Nine indicator columns are retained.
+  Taxonomy is declared in `nn_meta/v7/sectors.py` and artifact `policy.json`:
+  coarse dated SIC/business/fund groups, not GICS or the old V6 symbol map.
+  Historical provider reconstruction is recorded, not original-publication proof.
+- `SectorStore` verifies source/receipt/policy bindings; `DatedSectors` enforces
+  same security, session and prior reference date. `FeatureRows` consumes it and
+  records sector provenance. Static sectors remain component-fixture support;
+  full-history builders must consume the dated store. Unknowns stay all-zero,
+  with their reason retained. No future sector backfill.
+- Active input manifest binds sector receipt. New readiness report
+  `nn_meta/validation/v7-readiness-20260916-sectors.json` still passes only the
+  three input/inventory checks and rejects eight missing substantive stages.
+- `nn_meta/v7/preprocessing.py` computes train-only missingness-aware moments in
+  bounded batches, exact return quantiles with an on-disk partitioned target
+  vector, training-normalized return weights, finite transforms and strict
+  immutable resume. Does not allocate a dense full feature matrix. Keep the
+  distinction from still-unmeasured full LightGBM bin allocation and real resource
+  pilots. Default disk reserve is 100 GiB; CLI artifacts use the repository disk.
+- `scripts/prepare_v7_training_fold.py` selects one predeclared expanding fold,
+  purges through full settlement and fits preprocessing; exact completed selection
+  stages can resume. Models/trial declaration and full training runner are still
+  outstanding. No actual model training/full campaign was launched.
+- Quota now **62,555,748,845 /250,000,000,000 bytes**, no reservations or jobs.
+- Final validation: **1,777 tests +18 subtests passed**, 18 warnings, 82.59s.
+  Final full-suite log: `/tmp/v7-sectors-training-20260916-final-tests.log`. Review: `docs/reviews/2026-09-16-v7-sectors-training-inputs.md`.
+
 ## Latest user decisions
 
 Stock prices/quotes remain Alpaca-only. The user explicitly refuses OTC data
@@ -82,9 +121,9 @@ evidence remains unresolved. No synthetic intrinsic sales or free short stock.
 Four bounded workers, 100 GiB reserve, shared 250 GB acquisition cap; protect V6.
 
 Next dependencies:
-- Consume dated aliases/lifecycle effects and freeze security-bound sectors.
-  Existing dated reference root contains historical SIC/type/description snapshots;
-  do not backfill today's sector map or a reused ticker's new issuer.
+- Consume dated aliases/lifecycle effects and the now-frozen sector store in
+  actual full-history features. Dated sector mapping is implemented; complete
+  lifecycle delivery/execution admission is still missing.
 - Complete original split/dividend/combined/spin-off evidence and connect causal
   chart prices to all features/proposals with raw tick units and cross-action stops.
 - Build every security's daily/context features from cold-start causal prices;
@@ -101,4 +140,5 @@ Next dependencies:
 
 No deployment, V6 timer/runtime or alert settings changed; no messages sent.
 First-week maturity reassessment remains due on/after September 21.
-Previous details: `handoff-history/HANDOFF-2026-09-16-before-no-otc-scope.md`.
+Previous checkpoint: `handoff-history/HANDOFF-2026-09-16-before-dated-sectors.md`.
+Earlier details: `handoff-history/HANDOFF-2026-09-16-before-no-otc-scope.md`.

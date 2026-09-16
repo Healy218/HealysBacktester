@@ -51,6 +51,9 @@ def test_folds_purge_full_settlement_horizon_and_reconcile_every_row(tmp_path):
         train.take(np.zeros(MAX_ROWS+1, dtype=int))
     with pytest.raises(ValueError, match='Bounded'):
         train.take(np.array([-1]))
+    assert prepare_fold(paths, fold, cal, tmp_path/'fold', embargo_sessions=2) == report
+    with pytest.raises(ValueError, match='identity mismatch'):
+        prepare_fold(list(reversed(paths)), fold, cal, tmp_path/'fold', embargo_sessions=2)
 
 
 def test_global_duplicate_rows_and_inexact_nanosecond_clocks_are_rejected(tmp_path):
