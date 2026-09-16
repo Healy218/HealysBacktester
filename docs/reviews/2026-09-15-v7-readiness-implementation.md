@@ -84,8 +84,10 @@ claim that this broad planning envelope itself fits the budget.
 
 1. Repair genuine stock gaps; finish all identity-bound histories, sectors,
    lifecycle/holding paths and causal adjusted prices.
-2. Resolve dated option-class hours, weekly eligibility and expiry disposition.
-   Unfilled expiry remains unresolved until an explicit policy is accepted.
+2. Resolve dated option-class hours and weekly eligibility. User explicitly
+   selected unresolved outcomes with blocked affected evaluations for unfilled
+   expiry. Existing replay/portfolio behavior passes 17 focused tests; the
+   fixed SPY call still cannot produce an admitted return.
 3. Complete actual required quote/trade/metadata demand, storage feasibility,
    full capture and full-history factorized assembly/resource pilots.
 4. Bind those completed inputs to evaluation/source/runtime declarations and

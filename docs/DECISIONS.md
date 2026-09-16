@@ -909,3 +909,19 @@ are idle. Keep the strict context freshness gate, model and numerical source
 unchanged. A successful availability poll is not a successful refresh or an
 accepted paper pass. This avoids repeated full surface builds while the
 provider file is missing. [Incident](reviews/2026-09-15-v6-paper-health.md).
+
+## 2026-09-15 — V7 expiry remains unresolved; investigate stock entitlement
+
+User explicitly chose to retain unresolved outcomes and block affected
+V7 evaluations when an expiring position cannot obtain an eligible observed
+bid. Preserve the position, null return and incomplete label; do not silently
+exclude it from portfolio admission or invent exercise, abandonment or a
+terminal value. This confirms the existing replay policy and frozen evaluation
+requirement; it does not make the SPY call pilot evaluation-ready.
+Focused replay/execution/portfolio regressions: 17 passed.
+
+User authorized investigation of the Massive stock upgrade, not purchase or
+external messages. Stocks Starter advertises $29/month, five years of minute
+bars, sufficient date entitlement for March 8, 2022 as of September 15, 2026.
+Actual records remain unverified behind the saved HTTP403. See
+[upgrade investigation](reviews/2026-09-15-v7-massive-stock-upgrade.md).

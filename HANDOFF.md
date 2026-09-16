@@ -1,6 +1,6 @@
 # V7 readiness: implemented pilots; historical admission still blocked
 
-Updated September 15, 2026, 22:45 UTC. User requested **all four V7 workstreams**.
+Updated September 15, 2026 after the user’s expiry and stock-upgrade choices. User requested **all four V7 workstreams**.
 The task remains **incomplete**; continue it. Do not launch full freeze/build/training
 until the complete-universe gates pass. No subagents authorized. Four bounded
 compute workers, shared **250 GB decimal acquisition cap**. Preserve activated
@@ -107,9 +107,11 @@ halts (links in review). VERU2022-11-09 full-session halt remains unverified.
 The other118 candidate/session cases mostly follow lifecycle events; exact
 trading status, identity treatment and held-option disposition still need resolution.
 
-**Pending user input:** source the March8 repair via Alpaca support/another
-provider/investigate Massive stock upgrade. No answer yet. Default is preserve
-blocker and prepare support evidence, never omit dates or buy an upgrade.
+**User chose:** investigate the Massive stock upgrade. Investigation complete:
+Stocks Starter advertises $29/month, five years of minute bars, covering March8
+2022 today. Saved HTTP403 confirms a timeframe entitlement restriction, not
+missing-record availability. No purchase or external message authorized. See
+[findings and unsent verification request](docs/reviews/2026-09-15-v7-massive-stock-upgrade.md).
 
 ## Features, quotes and storage
 
@@ -150,9 +152,11 @@ Shared five-slot/10%-equity/one-symbol allocator has causal scores,reservedcash,
 roll proceeds and no new entries with stale held marks. Real72path pilot has
 8closed+1censoredopen; capture/valuation complete,evaluation incomplete.
 
-**Pending expiry policy question:** unresolved/block(default), explicit
-abandonment, or physical exercise/stock delivery. No reply. Don't infer either
-terminal return. Dated option-class hours/weekly eligibility still unverified.
+**User-selected expiry policy:** retain unresolved outcomes and block affected
+evaluations. No eligible observed exit means null return, incomplete label and
+retained position. Existing replay/portfolio behavior matches; 17 focused
+replay/execution/portfolio tests passed. No expiry-policy question remains.
+Dated option-class hours/weekly eligibility still unverified.
 
 ## Evaluation and next steps
 
@@ -167,6 +171,14 @@ causal price histories; dated option-hours/expiry policy; actual quote demand,
 feasible full capture; full-history resource pilots; executable full-universe gate.
 Do not claim all1–4 complete while these remain. Shared quota last ~60.18GB,
 no active reservations. Never reinitialize while acquisition is active.
+
+## Uncommitted causal-price work from the preceding continuation
+
+`nn_meta/v7/causal_prices.py` and `tests/test_v7_causal_prices.py` remain
+uncommitted; four focused tests previously passed. They implement as-of raw
+price normalization, action epochs and continuous proposal prices. Real action
+publication evidence, integration and full pilots remain open. Do not infer
+that a provider declaration date proves when a dividend amount was known.
 
 ## V6/unrelated work
 
