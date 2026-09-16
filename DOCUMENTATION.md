@@ -895,3 +895,15 @@ must come from the exact preceding captured exchange session with the same
 eligible security ID. Compiled events do not establish full-security continuity
 or no-event coverage; unresolved inventory must remain explicit upstream of any
 full daily/feature admission. See the September 16 cash-action integration review.
+
+### V7 daily identity capture and continuity
+
+Daily listed identity capture restricts primary exchanges to ARCX/BATS/XASE/XNAS/
+XNYS and validates every response. These are metadata requests, not stock-price
+requests or publication-safe fundamentals. `--max-shards` bounds one invocation
+while retaining the full acquisition declaration. Source hashes are immutable
+across resumption: do not edit the running capture or bound dependencies. Poll
+the exact process handle; resume only after a confirmed terminal failure. Exact
+daily identities do not establish corporate-action/no-event coverage. The panel
+retains absent/missing/colliding identities and breaks continuity instead of
+propagating monthly snapshots. See the September16 daily-identities review.

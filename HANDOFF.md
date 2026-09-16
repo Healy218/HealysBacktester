@@ -1,97 +1,95 @@
-# Handoff — reviewed cash events connected to causal returns
+# Handoff — full daily listed-identity capture running
 
 Updated September 16, 2026. Read TODO.md then this file. No subagents. Work on
-main, preserve unrelated dirty/untracked V6 work and use `./venv/bin/python`.
-Full V7 readiness goal is active and unfinished; no training launched.
+main; preserve unrelated dirty/untracked V6 work. Python: `./venv/bin/python`.
+Goal remains active and unfinished. Previous goal turn made progress (reviewed
+cash events integrated). This turn started full-window identity capture and
+implemented the complete-panel consumer. **No training launched.**
 
-## Latest integration milestone
+## LIVE JOB — poll this exact process before any restart
 
-Previous goal turn made progress (publication evidence and original issuer
-corroboration). This turn implemented the consumer and verified actual returns.
-Read [cash-action integration](docs/reviews/2026-09-16-v7-cash-action-integration.md).
+- Current exec session **96839**: full 1,129-session, five-listed-exchange capture.
+  Root `nn_meta/data_v7/daily-identities-20260916`; log
+  `/tmp/v7-daily-identities-capture.log`. Four spawned workers, one inner thread,
+  shared 250 GB quota, 100 GiB disk reserve. No stock-price or OTC requests.
+- Previous full session **87131 exited 1**, confirmed by its terminal handle,
+  with `RuntimeError: Daily identity transport failed`. Resumed the exact same
+  command/declaration with append logging; completed shards preserved.
+- Snapshot at resume: **687 /5,645 shards complete**, latest completed date
+  September29,2022. Quota used 62,619,923,500 bytes with four live reservations.
+  Counts advance; inspect the process/log/current receipts, not this snapshot.
+- Never restart on observation timeout. Only resume after confirmed terminal exit.
+  `acquisition.json` fixes every date/exchange and capture source hash. Do not edit
+  the capture script or its bound dependencies while this run is in progress.
+  Earlier network-denied first-day attempts left preserved partials; successful
+  first-day access check was terminal and reused by this full invocation.
 
-- `nn_meta/v7/cash_actions.py` compiles explicitly reviewed whole cash groups
-  exactly once. All source record hashes and membership in the whole event-day
-  group must agree; partial/duplicate or split/complex overlaps fail. The exact
-  previous exchange session's observed Alpaca close and adjacent security IDs
-  are required. Typed actions preserve availability and reviewed source identity.
-- `scripts/compile_v7_cash_actions.py` verifies all upstream bindings, rejecting
-  conflicting parent hashes. Only reviewed events are compiled; unresolved rows
-  remain explicit, never converted into no-action evidence.
-- `validation/v7-normalized-cash-reviews-20260916` normalizes the 18 reviewed AAPL
-  events plus DVN's $0.44 correction. `validation/v7-compiled-cash-actions-20260916`
-  produces 19 factors, consumes 40 provider records, leaves 10,340 unresolved.
-  The precise normalization source and all parent evidence are retained.
-- `validation/v7-cash-event-returns-20260916`: 19 actual event returns agree with
-  independent 50-digit decimal calculations, maximum absolute error
-  5.915407053080912e-16. All 19 pre-event/no-action and two-day-prefix checks pass.
-  This covers adjacent event dates only; no full-security/no-event admission.
-- Full suite **1,892 tests +18 subtests**, 18 warnings, 93.95 seconds, including
-  fourteen new cases. No production edits after the passing run. Log retained
-  in `validation/v7-cash-actions-tests-20260916`, also `/tmp/v7-cash-actions-tests.log`.
-- All artifact hashes and upstream bindings reverified. All jobs terminal;
-  no new downloads, no V6 changes, no training. Eight full-universe gates remain.
+Exact resume after confirmed failure, if needed:
 
-Next: consume these event actions only with complete-security identity and
-complete action/no-event spans. Extend the same whole-event replacement contract
-for other reviewed cash actions; mixed split/complex days need their own combined
-factor review. Continue full causal market/sector context, quote demand, funded
-physical execution, assembly, full trials and resource evidence. Do not treat the
-19 valid events as evidence that all other events or no-event dates are known.
+```bash
+./venv/bin/python scripts/capture_v7_daily_identities.py \
+  --calendar nn_meta/data_v7/start-20220315/calendar.json \
+  --output nn_meta/data_v7/daily-identities-20260916 \
+  --budget-root nn_meta/data_v7 --workers 4
+```
 
-## Preserved publication evidence
+All launched tests are terminal. Full suite **1,903 tests +18 subtests**, 18
+warnings, 93.28s; `/tmp/v7-daily-identities-final-tests.log`, retained with source
+hashes in `nn_meta/validation/v7-daily-identities-tests-20260916`. No production
+code edits after this passing run. V6 source/runtime unchanged.
 
-Read [cash-publication review](docs/reviews/2026-09-16-v7-cash-publications.md).
+## Latest identity work and next step
 
-- New body-text matcher and full inventory CLI inspect amount, record date and
-  pay date in one paragraph, exact publication clocks, ambiguity and provenance.
-  `v7-cash-publications-20260916r2` matches 286/4,975 actions: 256 headline,
-  31 body, 30 additional body actions; 4,689 remain unmatched. All 31 body
-  paragraphs inspected; all 2,569 input bindings reverified. Use r2, not r1.
-- Captured all 18 Apple quarterly issuer announcements corresponding to the full
-  active dividend window. `data_v7/aapl-publications-20260916`; all cash amounts,
-  record and pay dates agree with both providers. Canonical URLs/metadata and
-  exact paragraphs verified in `validation/v7-aapl-publications-review-20260916`.
-  All pages carry later August 19, 2026 modification timestamps, so current HTML
-  alone is not proof of the historical version. No ex-date inferred from record.
-- Manually reviewed 18 dated Apple earnings articles already in Alpaca's news
-  archive: all corroborate the cash amount, 17 record/pay date pairs. May 4,
-  2023 article has amount only. `validation/v7-aapl-news-corroboration-20260916`
-  keeps exact article IDs, paragraphs, update clocks and manual date resolution.
-  Exact one-off verification sources retained in both immutable reviews.
-- Full suite **1,878 tests +18 subtests**, 18 warnings, 93.11s. No production
-  source changes afterward. Log `/tmp/v7-cash-publications-tests.log`, retained
-  with hashes in `validation/v7-cash-publications-tests-20260916`.
-- All jobs terminal, no acquisition reservations, V6 untouched. User's `last`
-  clarification was answered: last is reference; simulated entries/exits/marks
-  consistently use valid supplied midpoint or bid/ask average, as deployed.
+Read [daily identities](docs/reviews/2026-09-16-v7-daily-identities.md).
+`daily_identities.py` validates primary exchange/market/locale/active flags and
+pagination, retains missing FIGIs, strips URL credentials. Capture uses only
+ARCX/BATS/XASE/XNAS/XNYS reference metadata, the active universe's five listed
+exchanges. This does not change the Alpaca-only stock-price rule.
 
-These new reviews are component evidence, not full-security action/no-event or
-identity-continuity admission. All research-ready flags remain false. The generic
-body parser does not infer years; only the finite inspected Apple review resolves
-abbreviated/yearless dates against the issuer's full dates and article year.
-Do not blindly add the separate Apple review to generic audit counts.
+`identity_panel.py` attaches exact-day identities, explicitly normalizes OCC-root
+punctuation, keeps symbol collisions/absence/missing FIGIs unresolved, and breaks
+continuity on unknown/changed IDs or missing calendar sessions. Nullable-string
+missing values and prefix invariance are covered by tests. No monthly identity
+is silently propagated. All 296 first-day eligible security IDs matched 12,038
+listed records: `validation/v7-daily-identity-first-day-20260916`.
 
-Next: integrate the reviewed publication/exception inputs exactly once with
-complete-security action/no-event and identity reviews, then finish causal daily,
-market and sector panels. The AAPL full-window publication evidence is now much
-stronger; historical 40-day pilots retain their original source bindings and
-must be revalidated before reuse. Continue quote/physical/assembly/trial/resource
-work; eight full-universe stage artifacts remain missing.
+**After capture summary exists and its process is terminal successful**, run:
 
-## Preserved full corporate-action reconciliation
+```bash
+./venv/bin/python scripts/build_v7_identity_panel.py \
+  --stock-daily nn_meta/validation/v7-stock-daily-20260916-midpoint \
+  --identities nn_meta/data_v7/daily-identities-20260916 \
+  --output nn_meta/validation/v7-daily-identity-panel-20260916
+```
 
-`validation/v7-action-inventory-20260916r2`: all 10,380 records, 594 source symbols,
-5,030 symbol/date groups, 213 complex records; 4,506 matching single-event terms,
-354 unreviewed, 68 single-provider, 57 combined/multiple and 45 mismatches.
-Alpaca queries are process-date bounded and include incomplete records; absence
-is not no-event proof. Review `docs/reviews/2026-09-16-v7-action-inventory.md`.
+This full builder is implemented/tested at the core-function level, but the full
+run awaits acquisition. It verifies all source bindings, joins every raw daily
+row and compares every eligible identity. Inspect unresolved/mismatched records,
+stitch dated aliases, then combine with reviewed complete action/no-event evidence.
+Provider-dated identity does not establish original publication-safe fundamentals.
+Continue daily market/sector, quote demand, physical, assembly, trial/resource
+work. Eight substantive full-universe gates remain missing.
 
-DVN September 13, 2024 is **$0.44 total cash**, original issuer verified, replacing
-all three Massive $0.22 records and one Alpaca $0.22 record as one group. Never
-sum the review on top of provider rows. `validation/v7-dvn-action-review-20260916`
-retains exact source/correction; prior raw close $40.01, factor
-0.9890027493126718. Full-security admission still required.
+## Preserved action/publication progress
+
+- `validation/v7-action-inventory-20260916r2`: 10,380 records, 5,030 groups,
+  213 complex events; full inventory review retained. Process-date absence is not
+  no-event proof, and provider split ratios can encode spin-off adjustments.
+- `validation/v7-cash-publications-20260916r2`: 286/4,975 cash actions matched,
+  30 additional body matches, 4,689 unmatched. Article version clocks and exact
+  source paragraphs are retained; generic body parser never infers missing years.
+- All 18 AAPL issuer announcements captured. Dated news corroborates all 18 cash
+  amounts and 17 record/pay pairs; May2023 news has amount only. Current issuer
+  pages have later modification clocks. Full details in cash-publication review.
+- `validation/v7-normalized-cash-reviews-20260916` and
+  `validation/v7-compiled-cash-actions-20260916`: 19 reviewed events from 40
+  provider records, 10,340 unresolved. Whole event group replaced once; exact
+  prior Alpaca close and adjacent security IDs required. No full-security admission.
+- DVN September13,2024 correction is **$0.44 total**, not one or three $0.22
+  entries. Its factor is 0.9890027493126718 against prior $40.01 close.
+- `validation/v7-cash-event-returns-20260916`: all 19 actual event returns and
+  pre-event prefixes verified, max decimal-oracle error 5.915407053080912e-16.
+  See [cash integration](docs/reviews/2026-09-16-v7-cash-action-integration.md).
 
 ## Current daily artifacts
 
@@ -188,7 +186,8 @@ activation utility/test, policy and documentation are committed on main.
 Current readiness `nn_meta/validation/v7-readiness-20260916-action-inventory.json`:
 three input/membership/coverage checks pass; **eight full-universe stages remain
 missing**. No full training, full no-swap/resource or V6-coexistence claim.
-Acquisition quota remains **62,561,193,933 /250,000,000,000**, reservations empty.
+Acquisition quota is changing during the live daily-identity capture; see the
+latest process snapshot above and `nn_meta/data_v7/quota.json`.
 
 The midpoint-related stock/surface parent-binding rebuild is complete in the
 new paths above; all old outputs remain historical. Old ask/bid execution paths,
@@ -318,4 +317,4 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-cash-action-integration.md`.
+`handoff-history/HANDOFF-2026-09-16-before-daily-identities.md`.

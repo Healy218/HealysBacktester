@@ -539,3 +539,12 @@ Evidence: [cash-publication review](docs/reviews/2026-09-16-v7-cash-publications
 - [ ] Complete full-security continuity/no-event coverage and remaining action reviews before full daily admission.
 
 Evidence: [cash-action integration](docs/reviews/2026-09-16-v7-cash-action-integration.md).
+
+## September 16 full daily listed identities
+
+- [x] Implement bounded full-window capture for the five listed exchanges, with shared quota and no OTC or stock-price requests.
+- [x] Implement exact-day identity joins and continuity gaps; verify all 296 first-day eligible IDs.
+- [x] Pass full regression: 1,903 tests plus 18 subtests.
+- [ ] Finish all 5,645 capture shards, run the full raw/eligible identity join, review gaps and stitch aliases before daily admission.
+
+Evidence and live process: [daily identity review](docs/reviews/2026-09-16-v7-daily-identities.md), HANDOFF.
