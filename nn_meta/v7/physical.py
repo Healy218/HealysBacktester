@@ -50,9 +50,16 @@ class SettlementCalendar:
         self.days = days
 
     def settlement(self, event_ns):
+        if type(event_ns) is not int or event_ns < 0:
+            raise ValueError('Exact nonnegative settlement event nanoseconds required')
         day = pd.Timestamp(event_ns, unit='ns', tz='UTC').tz_convert('America/New_York').date().isoformat()
-        if day not in self.days:
-            raise ValueError('Event lacks a captured settlement business date')
+        if not self.document['coverage_start'] <= day <= self.document['coverage_end']:
+            raise ValueError('Event lies outside captured settlement coverage')
+        # Stocks can trade on banking holidays. The trade/exercise event is T,
+        # even when that date is not itself a settlement business day. Count
+        # T+1/T+2 only from later captured settlement dates, never roll T first.
+        if day not in self.days and self.trading.bounds(day) is None:
+            raise ValueError('Event lacks a captured trading or settlement date')
         delay = 2 if day < '2024-05-28' else 1
         later = [d for d in self.days if d > day]
         if len(later) < delay:

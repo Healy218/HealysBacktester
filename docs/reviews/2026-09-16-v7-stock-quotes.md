@@ -87,3 +87,34 @@ Remaining physical dependencies include historical settlement dates, official
 expiry references/deliverables, full liquidation demand/capture and end-to-end
 funding/stock/cash reconciliation. No readiness stage was manufactured or waived.
 Quota after capture: **62,557,784,397 /250,000,000,000 bytes**, no reservations.
+
+## Settlement event correction and source conflicts
+
+`SettlementCalendar.settlement` now accepts a covered trading date that is
+not a settlement date (for example Columbus Day). T+2 before May 28, 2024,
+and T+1 from that date count later captured settlement dates directly from
+the event date. The event is not rolled forward first. Unknown/nontrading
+dates and invalid clocks remain rejected. Conservative cash availability
+continues at the next trading open after settlement. Synthetic regression
+cases include October 10, 2022 and October 14, 2024 and funded inventory.
+Full suite: **1,804 tests and 18 subtests**, 18 warnings, 87.43 seconds;
+`/tmp/v7-settlement-event-20260916-tests.log`.
+
+The official calendar is still unfinished. Captured FINRA 2023 PDF page 3
+lists November 10 as a banking/settlement holiday, while indexed later DTCC
+notice 19155-23 describes normal November 10 processing. Original DTCC bytes
+remain unavailable (HTTP 404); search snippets are not admitted evidence.
+Carter's January 9, 2025 market closure also needs distinct settlement evidence.
+
+The captured Nasdaq URL containing `2025/06/02/0761-25_Holiday...` currently
+serves a **2026** holiday table. Both pages were rendered and inspected.
+Its filename/URL cannot establish a 2025 historical publication vintage.
+Captured bytes and receipts remain under
+`nn_meta/data_v7/public-settlement-extra-20260916`; it is not admitted as
+a 2025 historical calendar. The other two requests in that batch failed
+HTTP 404. Request declarations: 
+`nn_meta/validation/v7-settlement-evidence-extra-requests-20260916.json`.
+
+Latest readiness checkpoint:
+`nn_meta/validation/v7-readiness-20260916-stock-settlement-checkpoint.json`.
+The three input/inventory checks pass; eight substantive stages remain missing.

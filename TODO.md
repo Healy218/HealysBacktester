@@ -456,7 +456,16 @@ Evidence: [sectors and training inputs](docs/reviews/2026-09-16-v7-sectors-train
 - [x] Integrate causal action epochs into all TV/technical features and bounded strategy proposal batches; retain raw execution and cross-action stops.
 - [x] Verify a real AAPL dividend pilot across all 11,268 variants and four timeframes: 757,465 proposals; full suite 1,786 tests plus 18 subtests passed.
 - [x] Capture original AAPL publication/identity evidence and partial official settlement documents; preserve four DTCC 404 failures as unfinished work.
-- [ ] **First next session:** diagnose the user's September 16 recurring V6 error after a successful morning; cause unverified, do not assume the prior stale-context incident.
+- [x] Diagnose September 16 V6 pending-quote errors and SEDG exit; user directed leaving V6 unchanged and continuing V7. See September 16 pending-exits review.
 - [ ] Complete remaining V7 full-history, action, quote, physical settlement, trial and resource evidence; V7 is not ready to train.
 
 Evidence: [causal feature pilot and resume notes](docs/reviews/2026-09-16-v7-causal-feature-pilot.md).
+
+## September 16 V7 stock quotes and settlement events
+
+- [x] Implement receipt-bound Alpaca SIP stock quote capture/replay and dated size conversion; verify actual AAPL 20,628-quote pilot.
+- [x] Correct settlement counting for covered stock trading dates on bank holidays; full suite 1,804 tests +18 subtests.
+- [ ] Resolve official historical settlement calendars and complete funded observed physical replay; captured conflicting/mutable documents are not admission.
+- [ ] Connect bounded folds and train-only preprocessing to runnable predeclared trials, full-history assembly and resource gates.
+
+Evidence: [stock quotes and settlement](docs/reviews/2026-09-16-v7-stock-quotes.md).

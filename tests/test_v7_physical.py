@@ -56,7 +56,7 @@ def test_settlement_transition_and_holiday_are_dated_and_conservative():
     cal = calendar()
     assert cal.settlement(ns('2024-05-24')) == ('2024-05-29', ns('2024-05-30', '13:30'))
     assert cal.settlement(ns('2024-05-28')) == ('2024-05-29', ns('2024-05-30', '13:30'))
-    with pytest.raises(ValueError, match='business date'):
+    with pytest.raises(ValueError, match='trading or settlement date'):
         cal.settlement(ns('2024-05-27'))
     with pytest.raises(ValueError, match='label horizon'):
         cal.settlement(ns('2024-06-10'))
@@ -258,3 +258,34 @@ def test_competing_exercises_reserve_shared_funds_once():
     assert book.expire('b', ns('2024-05-24', '21:00'), **evidence(second)) == 'unresolved_exercise_funding'
     assert book.available_cash == 4800.
     book.reconcile()
+
+
+@pytest.mark.parametrize('holiday,lag,settled,available', [
+    ('2022-10-10',2,'2022-10-12','2022-10-13'),
+    ('2024-10-14',1,'2024-10-15','2024-10-16'),
+])
+def test_trading_on_nonsettlement_bank_holiday_counts_from_event_date(holiday,lag,settled,available):
+    days=pd.bdate_range(pd.Timestamp(holiday)-pd.Timedelta(days=3),periods=8).strftime('%Y-%m-%d').tolist()
+    trading=SessionCalendar(dict(coverage_start=days[0],coverage_end=days[-1],
+        sessions=[dict(date=d,open='09:30',close='16:00') for d in days]))
+    business=[d for d in days if d!=holiday]
+    cal=SettlementCalendar(dict(schema='v7-settlement-calendar-v1',business_dates=business,
+        coverage_start=days[0],coverage_end=days[-1],source_identity='test-calendar'),trading)
+    assert holiday not in cal.days and trading.bounds(holiday) is not None
+    assert cal.settlement(ns(holiday)) == (settled,ns(available,'13:30'))
+    # A stock purchase may take place on the banking holiday. The ledger must
+    # reserve funding and settle later rather than reject the otherwise valid fill.
+    book=PhysicalLedger(settlement_calendar=cal)
+    fill=stock_fill(clock=ns(holiday,'13:30'));fill['side']='buy'
+    assert book.acquire_inventory('inventory','SPY','SPY-id',10,fill)
+    assert book.commitments['inventory']['settled_on']==settled
+    assert book.reconcile()['pending_settlements']==1
+
+
+def test_settlement_rejects_outside_coverage_even_if_trading_calendar_is_longer():
+    cal=calendar()
+    cal.document['coverage_start']='2024-05-24'
+    with pytest.raises(ValueError,match='coverage'):
+        cal.settlement(ns('2024-05-23'))
+    for invalid in [True,1.5,-1]:
+        with pytest.raises(ValueError,match='nanoseconds'):cal.settlement(invalid)

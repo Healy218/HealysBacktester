@@ -1,19 +1,38 @@
-# Handoff — diagnose recurring V6 error first; V7 remains unready
+# Handoff — continue V7; leave the V6 experiment unchanged
 
 Updated September 16, 2026 at the user's request before clearing the session.
 Read TODO.md then this file. No subagents. Work on main, preserve unrelated dirty
 V6 work, consult DOCUMENTATION.md Traps before fixes, use `./venv/bin/python`.
 
-## Immediate next task: V6 incident
+## Latest user direction
 
-User: “the v6 keeps giving an error despite starting the morning off ok.”
-**New incident, not yet diagnosed.** Obtain the actual latest error and compare
-successful morning versus failing cycle timestamps. Trace active home producer,
-input refresh, relay, server consumer and dashboard before changing anything.
-Read the V6 forward activation/runbook and ops scripts; do not assume the older
-September 15 missing Massive option-minute file explains this new failure.
-Preserve activated runtime and existing dirty files. No V6 settings or deployment
-were changed in this V7 continuation. No test alerts/messages were sent.
+The recurring V6 incident was diagnosed; see
+[incident and SEDG explanation](docs/reviews/2026-09-16-v6-pending-exits.md).
+Pending fresh exit quotes blocked entries; the observed 16:30–17:15 UTC
+passes recovered. SEDG exited on its BBW stock signal, not its 5% underlying
+stop. The user accepted the explanation and directed us to leave V6 as it
+is and keep getting V7 ready. No proposed spread policy was adopted.
+
+## Stock quote / settlement milestone
+
+Committed `d4252dc` adds the bounded Alpaca SIP quote capture/replay adapter
+and actual AAPL May 5, 2022 pilot (20,628 quotes). See
+[implementation, evidence and outstanding settlement sources](docs/reviews/2026-09-16-v7-stock-quotes.md).
+It includes dated round-lot/share conversion, exact clocks, receipt/identity
+checks, size/condition guards and bounded archive reuse. Full demand and
+funded physical replay remain unfinished. The subsequent settlement fix
+accepts covered trading events on bank holidays without moving T forward.
+Full suite passed **1,804 tests +18 subtests**, 18 warnings, 87.43s:
+`/tmp/v7-settlement-event-20260916-tests.log`.
+
+Readiness `nn_meta/validation/v7-readiness-20260916-stock-settlement-checkpoint.json`
+still has eight missing stage artifacts. Official calendar is unfinished:
+FINRA/DTCC 2023 Veterans Day conflict, unavailable DTCC original bytes, and
+a nominally 2025 Nasdaq URL now serving a 2026 PDF must be resolved.
+Do not admit a calendar from URL year or search snippets.
+
+Next independent work: connect bounded folds/preprocessing to executable
+predeclared NN/GBT and baseline trials. No full training launch.
 
 ## Latest V7 milestone
 
@@ -103,7 +122,7 @@ Protect V6. No full training until every readiness gate passes; alert user then.
   and exact resume. `scripts/prepare_v7_training_fold.py` prepares inputs only;
   runnable model trials and complete training runner remain outstanding.
 
-## Remaining work after V6 diagnosis
+## Remaining V7 work
 
 1. Apply aliases/lifecycle effects, WBD bridge and cash-merger/halts held-option
    execution; consume dated sectors in full history.
@@ -119,10 +138,10 @@ Protect V6. No full training until every readiness gate passes; alert user then.
 6. Measure full binned memory, recovery, four-worker behavior and V6 coexistence;
    produce all eight stage artifacts and pass readiness before launching training.
 
-No training campaign launched. V7 readiness goal remains unfinished; user asked
-for this checkpoint so they can clear the session. First-week maturity review
+No training campaign launched. V7 readiness goal remains unfinished; continue
+autonomously until all gates pass and then alert the user. First-week maturity review
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-causal-feature-pilot.md`.
+`handoff-history/HANDOFF-2026-09-16-before-stock-quote-settlement.md`.
 Older dated-sector and no-OTC reviews retain additional provenance.

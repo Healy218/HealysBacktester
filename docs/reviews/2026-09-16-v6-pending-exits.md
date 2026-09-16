@@ -58,3 +58,20 @@ bounded pending-exit retry path could reduce missed quote opportunities without
 weakening the 30-second age guard. That would require runtime regression tests,
 revalidation and deployment of a new activation; it was not implemented here.
 Do not suppress the operating notices or assume every future pass will succeed.
+
+## SEDG explanation and user direction
+
+SEDG opened at 17:03:30 UTC and exited at 17:30:32 UTC, approximately 27
+minutes later. Both records show ask $3.90 / bid $3.15: a 21.2766% full spread
+relative to the $3.525 midpoint. The recorded return after existing costs is
+−19.4727%. This option loss did not trigger the exit. The deployed 5% stop
+uses the underlying stock, not option quote P&L. The BBW short exit crossed
+when the 17:15–17:30 bar closed at $34.56 above its $34.53225 basis. Entry
+stock price was $34.33; the approximate 5% short stop was $36.0465 and
+subsequent high only $34.70. Evidence: `nn_meta/validation/v6-incident-20260916/`
+`sedg-positions.json` and `sedg-exit-diagnosis.json`.
+
+After this explanation the user directed: leave the V6 experiment as it is
+and continue getting V7 ready. Tentative unshipped spread-policy changes were
+removed. No new spread cap, midpoint fill/stop policy, or V6 deployment was
+adopted. Further V6 investigation is not the next task.
