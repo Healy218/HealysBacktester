@@ -191,7 +191,7 @@ class MassiveMarket:
         return result
 
     def execution_quote(self, contract, *, after, max_age_seconds=30):
-        """Fresh current NBBO for paper ask-entry/bid-exit; no historical fill."""
+        """Fresh current quote for midpoint paper prices; no broker execution."""
         now = self.clock()
         lower = max(pd.Timestamp(after), now - pd.Timedelta(seconds=max_age_seconds))
         rows, receipt = self.pages("/v3/quotes/O:" + contract.removeprefix("O:"),
@@ -208,6 +208,7 @@ class MassiveMarket:
                 quote.get("bid_size", 0) <= 0 or quote.get("ask_size", 0) <= 0 or not 0 <= age <= max_age_seconds):
             raise ValueError("option quote is stale, crossed, empty or invalid")
         return {"contract": contract, "bid": bid, "ask": ask, "bid_size": quote["bid_size"],
+                **{k: quote[k] for k in ('mid', 'midpoint', 'mid_price', 'midpoint_price', 'last', 'last_price') if k in quote},
                 "ask_size": quote["ask_size"], "sip_timestamp_ns": int(quote["sip_timestamp"]),
                 "received_at": received.isoformat(), "provider": "massive", "receipt": receipt}
 

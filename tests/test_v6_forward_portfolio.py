@@ -82,12 +82,12 @@ class ForwardPortfolioTests(unittest.TestCase):
             q.update(change)
             with self.assertRaises(ValueError): checked_quote(q,self.contract,self.now,self.now-pd.Timedelta(minutes=1))
 
-    def test_exit_frees_slot_and_realizes_ask_bid_costs_once(self):
+    def test_exit_frees_slot_and_realizes_midpoint_costs_once(self):
         self.allocate()
         key=key_of(self.rows().iloc[0])
         self.book.trigger(key,kind='exit',reason='stop',at=self.now-pd.Timedelta(seconds=10))
         self.book.settle(key,quote_loader=self.quote,clock=lambda:self.now,alerts=True)
-        expected=1+.1*(2*.9985/(2.1*1.0015)-1)
+        expected=1+.1*(2.05*.9985/(2.05*1.0015)-1)
         self.assertAlmostEqual(self.book.summary()['equity'],expected)
         self.book.settle(key,quote_loader=self.quote,clock=lambda:self.now,alerts=True)
         self.assertAlmostEqual(self.book.summary()['equity'],expected)
@@ -131,7 +131,7 @@ class ForwardPortfolioTests(unittest.TestCase):
         self.assertEqual(self.book.open_positions()[0]['state'],'roll_pending')
         self.book.trigger(key,kind='exit',reason='strategy exit',at=self.now,alerts=True)
         self.assertFalse(self.book.open_positions())
-        expected=1+.1*(2*.9985/(2.1*1.0015)-1)
+        expected=1+.1*(2.05*.9985/(2.05*1.0015)-1)
         self.assertAlmostEqual(self.book.summary()['equity'],expected)
         self.book.trigger(key,kind='exit',reason='retry',at=self.now)
         self.assertAlmostEqual(self.book.summary()['equity'],expected)

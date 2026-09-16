@@ -1,6 +1,6 @@
 """Persistent V6 experimental paper portfolio and transactional alert outbox.
 
-Frozen EV selection, five slots and 10% caps precede executable ask/bid marks.
+Frozen EV selection, five slots and 10% caps precede midpoint paper pricing.
 These are fractional research positions, never broker orders or user fills.
 """
 from __future__ import annotations
@@ -15,6 +15,7 @@ import numpy as np
 import pandas as pd
 
 from nn_meta.live.v6_shadow import canonical
+from options.paper_pricing import MIDPOINT_POLICY, option_midpoint
 
 COST = .0015
 
@@ -86,6 +87,49 @@ class ForwardPortfolio:
         with self.connect() as db:
             return [json.loads(r[0]) for r in db.execute("SELECT payload FROM positions WHERE state!='closed' ORDER BY key")]
 
+    def migrate_midpoint(self, *, at, apply=False):
+        """Audit the open paper-leg transition; completed history stays intact.
+
+        The retained entry quote supplies the same midpoint basis as future
+        exits. This rebases simulated open-leg units, never broker fills, prior
+        closed legs, realized equity, allocation amounts or signal state.
+        """
+        stamp = pd.Timestamp(at)
+        if pd.isna(stamp) or stamp.tzinfo is None:
+            raise ValueError('Aware pricing transition time required')
+        changes = []
+        with self.connect() as db:
+            db.execute('BEGIN IMMEDIATE' if apply else 'BEGIN')
+            for row in db.execute("SELECT payload FROM positions WHERE state!='closed' ORDER BY key").fetchall():
+                p = json.loads(row[0])
+                if p.get('pricing_policy') == MIDPOINT_POLICY:
+                    continue
+                if p.get('pricing_policy') not in (None, 'legacy-ask-bid'):
+                    raise ValueError('Unknown existing paper price policy')
+                before = p['entry_price']
+                basis = option_midpoint(p['entry_quote'])
+                if not math.isclose(before, p['entry_quote']['ask'] * (1 + COST), rel_tol=1e-12):
+                    raise ValueError('Legacy entry does not reconcile to its retained ask')
+                if p['state'] not in ('open', 'exit_due', 'roll_due', 'roll_pending'):
+                    raise ValueError('Unknown position state during pricing transition')
+                # roll_pending holds cash from an already completed legacy leg.
+                after = before if p['state'] == 'roll_pending' else basis['price'] * (1 + COST)
+                audit = dict(key=p['key'], at=stamp.isoformat(), state=p['state'],
+                    old_policy='legacy-ask-bid', new_policy=MIDPOINT_POLICY,
+                    old_entry_price=before, new_entry_price=after, entry_reference=basis,
+                    completed_legs_preserved=len(p['legs']), realized_equity_unchanged=True)
+                changes.append(audit)
+                if apply:
+                    p.update(pricing_policy=MIDPOINT_POLICY, entry_price=after,
+                             pricing_transition=audit)
+                    if p['state'] != 'roll_pending':p['entry_reference'] = basis
+                    db.execute('UPDATE positions SET payload=? WHERE key=?', (canonical(p), p['key']))
+                    db.execute('INSERT INTO events VALUES (?,?,?,?)',
+                        (p['key']+'|pricing|'+MIDPOINT_POLICY, stamp.isoformat(), 'pricing_change', canonical(audit)))
+            if apply:
+                db.execute('INSERT OR REPLACE INTO metadata VALUES (?,?)', ('pricing_policy', MIDPOINT_POLICY))
+        return dict(pricing_policy=MIDPOINT_POLICY, applied=apply, changes=changes)
+
     def cycle_seen(self, bar):
         with self.connect() as db:
             return bool(db.execute("SELECT 1 FROM cycles WHERE bar=?", (str(bar),)).fetchone())
@@ -108,6 +152,8 @@ class ForwardPortfolio:
             if db.execute("SELECT 1 FROM cycles WHERE bar=?", (str(bar),)).fetchone():
                 return {"duplicate": True, "opened": 0}
             positions = [json.loads(r[0]) for r in db.execute("SELECT payload FROM positions WHERE state!='closed'")]
+            if any(p.get('pricing_policy') != MIDPOINT_POLICY for p in positions):
+                raise ValueError('Open legacy paper positions require audited midpoint migration')
             if any(p["state"] != "open" for p in positions):
                 raise ValueError("unresolved paper exit/roll prevents new allocation")
             occupied = {p["symbol"] for p in positions}
@@ -125,6 +171,7 @@ class ForwardPortfolio:
                     quote = quote_loader(row["decision_contract"], after=close)
                     filled = clock()
                     bid, ask = checked_quote(quote, row["decision_contract"], filled, close)
+                    basis = option_midpoint(quote)
                     if pd.Timestamp(quote["received_at"]) < decision_at:
                         raise ValueError("execution quote was not retrieved for this decision")
                     if filled > close + pd.Timedelta(minutes=5):
@@ -133,7 +180,8 @@ class ForwardPortfolio:
                         raise ValueError("paper equity is nonpositive")
                     amount = float(row["size_fraction"]) * equity
                     position = dict(row, key=key, state="open", initial_amount=amount,
-                        amount=amount, entry_price=ask * (1 + COST), opened_at=filled.isoformat(),
+                        amount=amount, entry_price=basis['price'] * (1 + COST), opened_at=filled.isoformat(),
+                        entry_reference=basis, pricing_policy=MIDPOINT_POLICY,
                         decision_at=decision_at.isoformat(), entry_quote=quote, contract=row["decision_contract"],
                         context=contexts[key], rolls=0, return_factor=1., legs=[])
                     db.execute("INSERT INTO positions VALUES (?,?,?,?)", (key, row["symbol"], "open", canonical(position)))
@@ -168,7 +216,8 @@ class ForwardPortfolio:
             f"EV {p['decision']:+.1%} · excess-return classifier {p['score']:.1%}\n"
             f"paper allocation {p['size_fraction']:.1%} · ask ${quote['ask']:.2f} / bid ${quote['bid']:.2f}\n"
             f"signal close {close.isoformat()} · quote received {quote['received_at']}\n"
-            "Five-slot frozen V6 experiment; paper ask/bid marks, no broker execution.")
+            f"simulated midpoint ${p['entry_reference']['price']:.4f} · cost {COST:.2%} per side\n"
+            "Five-slot V6 experiment; midpoint paper prices, no broker execution.")
         return {"expert": "v6", "probability": p["score"], "alert_cycle": int(close.timestamp()),
                 "symbol": p["symbol"], "side": side, "contract": p["contract"], "title": title, "message": message}
 
@@ -211,15 +260,19 @@ class ForwardPortfolio:
             p = json.loads(row[0])
             if p["state"] not in ("exit_due", "roll_due", "roll_pending"):
                 return None
+            if p.get('pricing_policy') != MIDPOINT_POLICY:
+                raise ValueError('Open legacy paper position requires audited midpoint migration')
             if p["state"] in ("exit_due", "roll_due"):
                 decision = clock()
                 after = pd.Timestamp(p["trigger_at"])
                 quote = quote_loader(p["contract"], after=after)
-                bid, _ = checked_quote(quote, p["contract"], clock(), after)
-                factor = bid * (1 - COST) / p["entry_price"]
+                checked_quote(quote, p["contract"], clock(), after)
+                basis = option_midpoint(quote)
+                factor = basis['price'] * (1 - COST) / p["entry_price"]
                 p["return_factor"] *= factor
                 p["amount"] *= factor
                 p["legs"].append({"contract": p["contract"], "entry_price": p["entry_price"], "exit_quote": quote,
+                    'exit_reference': basis, 'entry_reference': p['entry_reference'], 'pricing_policy': MIDPOINT_POLICY,
                     "reason": p["trigger_reason"], "trigger_at": p["trigger_at"], "return_factor": factor})
                 closed = p["state"] == "exit_due" or p["rolls"] >= 60
                 p["state"] = "closed" if closed else "roll_pending"
@@ -233,7 +286,7 @@ class ForwardPortfolio:
                 if alerts:
                     title = f"[v6] {p['symbol']} PAPER {'EXIT' if closed else 'ROLL CLOSE'}"
                     message = (f"{title}\n{p['contract']} · {p['trigger_reason']}\n"
-                        f"paper bid ${bid:.2f} · cumulative paper option return {p['return_factor'] - 1:+.1%}\n"
+                        f"paper midpoint ${basis['price']:.4f} · cumulative paper option return {p['return_factor'] - 1:+.1%}\n"
                         f"quote received {quote['received_at']} · no broker execution")
                     self._outbox(db, event, "notice", clock(), {"title": title, "message": message})
         # Closing transaction has committed. A failed opening quote leaves
@@ -249,14 +302,16 @@ class ForwardPortfolio:
                 decision = clock()
                 after = pd.Timestamp(p["trigger_at"])
                 quote = quote_loader(replacement, after=after)
-                _, ask = checked_quote(quote, replacement, clock(), after)
-                p.update(state="open", contract=replacement, entry_price=ask * (1 + COST), rolls=p["rolls"] + 1,
+                checked_quote(quote, replacement, clock(), after)
+                basis = option_midpoint(quote)
+                p.update(state="open", contract=replacement, entry_price=basis['price'] * (1 + COST), rolls=p["rolls"] + 1,
+                         entry_reference=basis, pricing_policy=MIDPOINT_POLICY,
                          entry_quote=quote)
                 db.execute("UPDATE positions SET state='open',payload=? WHERE key=?", (canonical(p), key))
                 if alerts:
                     title = f"[v6] {p['symbol']} PAPER ROLL OPEN"
                     self._outbox(db, f"{key}|roll-open|{p['rolls']}", "notice", clock(),
-                        {"title": title, "message": f"{title}\n{replacement} · ask ${ask:.2f}\nOriginal strategy and target DTE retained; no broker execution."})
+                        {"title": title, "message": f"{title}\n{replacement} · simulated midpoint ${basis['price']:.4f}\nOriginal strategy and target DTE retained; no broker execution."})
         return p
 
     def summary(self):
@@ -265,7 +320,7 @@ class ForwardPortfolio:
                 "positions": dict(db.execute("SELECT state,count(*) FROM positions GROUP BY state").fetchall()),
                 "cycles": db.execute("SELECT count(*) FROM cycles").fetchone()[0],
                 "outbox": dict(db.execute("SELECT status,count(*) FROM outbox GROUP BY status").fetchall()),
-                "execution": "experimental fractional paper ask/bid with frozen 0.15% cost per side"}
+                "execution": "experimental fractional midpoint paper; 0.15% cost per side; completed legacy records preserved"}
 
     def export(self, directory):
         """Atomic immutable spool files; export retries survive process crashes."""
