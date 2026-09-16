@@ -884,3 +884,14 @@ This does not establish changed cash terms, but does require keeping historical
 version proof separate from current issuer confirmation. The finite Apple review
 corroborates all amounts against dated captured news, with 17 record/pay date
 pairs; May 2023 has amount only. See the cash-publication review.
+
+### Reviewed cash event consumption
+
+`cash_actions.compile_cash_actions` replaces the whole symbol/effective-day cash
+group once, requiring exact provider IDs/hashes. The normalized review total is
+not added to original provider components. A simultaneous split/complex action
+fails this cash-only compiler and requires combined-event review. Prior close
+must come from the exact preceding captured exchange session with the same
+eligible security ID. Compiled events do not establish full-security continuity
+or no-event coverage; unresolved inventory must remain explicit upstream of any
+full daily/feature admission. See the September 16 cash-action integration review.

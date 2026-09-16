@@ -530,3 +530,12 @@ Evidence: [full action inventory and correction](docs/reviews/2026-09-16-v7-acti
 - [ ] Integrate publication evidence with complete-security action/no-event and identity review before full causal admission.
 
 Evidence: [cash-publication review](docs/reviews/2026-09-16-v7-cash-publications.md).
+
+## September 16 reviewed cash actions connected to causal returns
+
+- [x] Compile reviewed whole event groups exactly once with prior Alpaca closes and adjacent eligible security identities; retain every unresolved provider record.
+- [x] Apply all 18 reviewed Apple events and the Devon correction; verify 19 real event returns and 19 unchanged pre-event prefixes.
+- [x] Pass full regression: 1,892 tests plus 18 subtests.
+- [ ] Complete full-security continuity/no-event coverage and remaining action reviews before full daily admission.
+
+Evidence: [cash-action integration](docs/reviews/2026-09-16-v7-cash-action-integration.md).

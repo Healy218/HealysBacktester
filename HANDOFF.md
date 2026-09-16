@@ -1,10 +1,45 @@
-# Handoff — full cash publication audit and Apple source corroboration
+# Handoff — reviewed cash events connected to causal returns
 
 Updated September 16, 2026. Read TODO.md then this file. No subagents. Work on
 main, preserve unrelated dirty/untracked V6 work and use `./venv/bin/python`.
-The full V7 readiness goal remains active and unfinished; no training launched.
+Full V7 readiness goal is active and unfinished; no training launched.
 
-## Latest V7 progress
+## Latest integration milestone
+
+Previous goal turn made progress (publication evidence and original issuer
+corroboration). This turn implemented the consumer and verified actual returns.
+Read [cash-action integration](docs/reviews/2026-09-16-v7-cash-action-integration.md).
+
+- `nn_meta/v7/cash_actions.py` compiles explicitly reviewed whole cash groups
+  exactly once. All source record hashes and membership in the whole event-day
+  group must agree; partial/duplicate or split/complex overlaps fail. The exact
+  previous exchange session's observed Alpaca close and adjacent security IDs
+  are required. Typed actions preserve availability and reviewed source identity.
+- `scripts/compile_v7_cash_actions.py` verifies all upstream bindings, rejecting
+  conflicting parent hashes. Only reviewed events are compiled; unresolved rows
+  remain explicit, never converted into no-action evidence.
+- `validation/v7-normalized-cash-reviews-20260916` normalizes the 18 reviewed AAPL
+  events plus DVN's $0.44 correction. `validation/v7-compiled-cash-actions-20260916`
+  produces 19 factors, consumes 40 provider records, leaves 10,340 unresolved.
+  The precise normalization source and all parent evidence are retained.
+- `validation/v7-cash-event-returns-20260916`: 19 actual event returns agree with
+  independent 50-digit decimal calculations, maximum absolute error
+  5.915407053080912e-16. All 19 pre-event/no-action and two-day-prefix checks pass.
+  This covers adjacent event dates only; no full-security/no-event admission.
+- Full suite **1,892 tests +18 subtests**, 18 warnings, 93.95 seconds, including
+  fourteen new cases. No production edits after the passing run. Log retained
+  in `validation/v7-cash-actions-tests-20260916`, also `/tmp/v7-cash-actions-tests.log`.
+- All artifact hashes and upstream bindings reverified. All jobs terminal;
+  no new downloads, no V6 changes, no training. Eight full-universe gates remain.
+
+Next: consume these event actions only with complete-security identity and
+complete action/no-event spans. Extend the same whole-event replacement contract
+for other reviewed cash actions; mixed split/complex days need their own combined
+factor review. Continue full causal market/sector context, quote demand, funded
+physical execution, assembly, full trials and resource evidence. Do not treat the
+19 valid events as evidence that all other events or no-event dates are known.
+
+## Preserved publication evidence
 
 Read [cash-publication review](docs/reviews/2026-09-16-v7-cash-publications.md).
 
@@ -283,4 +318,4 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-cash-publications.md`.
+`handoff-history/HANDOFF-2026-09-16-before-cash-action-integration.md`.
