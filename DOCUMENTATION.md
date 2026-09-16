@@ -846,3 +846,16 @@ open paper legs require the audited idempotent `migrate_midpoint` transition.
 The September 16 deployment had zero open legs. Activation changes are limited
 to reviewed pricing modules; all other runtime sources must retain prior hashes.
 See `docs/reviews/2026-09-16-midpoint-paper-pricing.md`.
+
+### V7 causal daily returns and context
+
+`nn_meta/v7/causal_daily.py` uses adjacent raw closes and only reviewed factors
+effective at the current session open. Missing sessions or identity continuity
+breaks invalidate returns and restart rolling warmup; nullable identity spans
+retain explicit unknowns. Do not collapse the calendar to observed rows. All ten
+daily features retain next-session availability and observed surface missingness.
+Caller-supplied action/identity IDs are bindings, not evidence of completeness;
+the full builder still needs reviewed action/no-event and continuity inventories.
+The older `daily.daily_context` adjusted/filled component is not the new causal
+path. Use the fresh `v7-stock-daily-20260916-midpoint` and
+`v7-surfaces-20260916-midpoint` outputs after the midpoint manifest amendment.

@@ -1,8 +1,38 @@
-# Handoff — midpoint pricing deployed in V6; continue V7 readiness
+# Handoff — V7 daily artifacts rebuilt; causal daily calculations verified
 
 Updated September 16, 2026. Read TODO.md then this file. No subagents. Work on
 main, preserve unrelated dirty/untracked V6 work and use `./venv/bin/python`.
 The full V7 readiness goal remains active and unfinished; no training launched.
+
+## Latest V7 progress
+
+Previous goal turn made progress (midpoint implementation/deployment); this turn
+rebuilt all affected daily parent artifacts and implemented/tested causal daily
+calculations. Read [current review](docs/reviews/2026-09-16-v7-causal-daily.md).
+
+Use these fresh outputs for downstream integration:
+- `nn_meta/validation/v7-stock-daily-20260916-midpoint`: all 2,966 raw shards,
+  669,749 calendar rows and 339,640 eligible rows; all old values identical.
+- `nn_meta/validation/v7-surfaces-20260916-midpoint`: all 1,129 days and 339,640
+  eligible rows; all old values/missingness identical, with new parent hashes.
+- `nn_meta/validation/v7-daily-rebuild-verification-20260916`: all-row comparison,
+  current input/source bindings and preserved exact verification source.
+
+`nn_meta/v7/causal_daily.py` replaces the previously parked draft. Seventeen
+new tests cover the ten daily features, effective actions, gaps, identity spans,
+nullable identities, market beta and availability. Full suite **1,851 tests +18
+subtests**, 18 warnings, 97.13s (`/tmp/v7-causal-daily-final-tests.log`).
+`scripts/validate_v7_causal_daily.py` completed actual AAPL 40-session validation
+at `nn_meta/validation/v7-causal-daily-aapl-20260916r2`: 39 independent return
+comparisons (max error 7.8236e-16), all 40 prefixes unchanged. Original issuer,
+provider, raw-stock payloads and source/runtime hashes are bound. Initial r1 is
+preserved; use r2. No full-market identity/action admission is claimed.
+
+All launched processes finished successfully; no build/test jobs remain. V6
+runtime was untouched this turn. No acquisition quota was used. Readiness still
+has eight missing substantive stages; do not launch training or call the goal
+complete. Next is full identity/action evidence and causal context integration,
+then remaining quote, physical execution, assembly, trial and resource gates.
 
 ## Latest explicit user direction overrides the earlier V6 freeze
 
@@ -82,26 +112,22 @@ updated to match the runtime candidate; preserve unrelated changes. Their
 production commit is on the isolated runtime branch. Shared helper, V7 sources,
 activation utility/test, policy and documentation are committed on main.
 
-Current readiness `nn_meta/validation/v7-readiness-20260916-midpoint-checkpoint.json`:
+Current readiness `nn_meta/validation/v7-readiness-20260916-causal-daily-final.json`:
 three input/membership/coverage checks pass; **eight full-universe stages remain
 missing**. No full training, full no-swap/resource or V6-coexistence claim.
 Acquisition quota remains **62,558,385,604 /250,000,000,000**, reservations empty.
 
-**Next:** strict parent bindings in the stock/surface summaries include the active
-manifest hash. The pricing amendment changed that hash. Reverify/rebuild derived
-bindings in new immutable outputs before downstream context integration; retain
-all old artifacts. Raw stock and option observations themselves are unchanged.
-Old ask/bid option paths/marks/labels/portfolios must be recomputed, never relabeled.
+The midpoint-related stock/surface parent-binding rebuild is complete in the
+new paths above; all old outputs remain historical. Old ask/bid execution paths,
+marks, labels and portfolios must still be recomputed, never relabeled.
 
-The causal daily-context draft remains **untested/incomplete** at
-`/tmp/v7-causal-daily-wip-20260916.py`, outside source bindings. Review before
-restoring to `nn_meta/v7/causal_daily.py`; it sketches adjacent raw-close/action
-returns, explicit continuity spans, missing sessions, next-open availability,
-all ten daily features and warmup reporting. Needs substantive tests, reviewed
-original-action/identity integration and actual-data validation. No V7 jobs
-remain running from these continuations.
+The causal daily calculation module is now tested and the AAPL original-action
+replay passed. It still requires reviewed full-security continuity and complete
+original action/no-event evidence. Integrate these with market context and dated
+sectors before claiming the daily stage. Preserve initial missing observations.
+Do not route new full-history builds through historical `daily.daily_context`.
 
-## Completed component data (preserve; current binding caveat above)
+## Preserved component data (use new daily outputs above)
 
 - Raw stock daily `nn_meta/validation/v7-stock-daily-20260916`, commit `cddede8`:
   2,966 symbol/year shards, 594 source tickers, 669,749 raw calendar rows;
@@ -185,7 +211,7 @@ Protect V6. No full training until every readiness gate passes; alert user then.
   2024H2/2025H1/2025H2 folds, final Jan 1–Sep 14, 2026; 10-session embargo,
   full settlement label ends. These periods were previously inspected.
 - Last readiness checkpoint
-  `nn_meta/validation/v7-readiness-20260916-midpoint-checkpoint.json`: three
+  `nn_meta/validation/v7-readiness-20260916-causal-daily-final.json`: three
   input/inventory checks pass; eight substantive stage artifacts remain missing.
   Re-run `scripts/v7_readiness.py --output NEW.json` when new stage evidence exists.
 - Corporate captures `nn_meta/data_v7/corporate-actions-20260915/{dividends,splits}`
@@ -219,4 +245,4 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-midpoint-pricing.md`.
+`handoff-history/HANDOFF-2026-09-16-before-causal-daily.md`.

@@ -503,3 +503,12 @@ Evidence: [full option-surface build](docs/reviews/2026-09-16-v7-full-surfaces.m
 - [ ] Rebuild/reverify affected V7 derived bindings and option labels/marks/portfolios under midpoint pricing; no old ask/bid artifact relabeling.
 
 Evidence: [midpoint pricing and deployment](docs/reviews/2026-09-16-midpoint-paper-pricing.md).
+
+## September 16 V7 causal daily calculations and fresh parent bindings
+
+- [x] Rebuild all 2,966 raw daily shards and 1,129 option-surface days under the midpoint active manifest; reconcile every value in both 339,640-row eligible tables.
+- [x] Implement no-fill causal daily returns/context with reviewed action/span inputs, ten feature columns and warmup reporting; verify 40 actual AAPL sessions and all prefixes.
+- [x] Run the full suite: 1,851 tests plus 18 subtests passed.
+- [ ] Complete full-security identity/action evidence and market/sector integration, then admit daily context only with full-universe evidence.
+
+Evidence: [causal daily calculations and rebuilt data](docs/reviews/2026-09-16-v7-causal-daily.md).
