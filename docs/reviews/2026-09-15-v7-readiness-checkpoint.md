@@ -1,5 +1,11 @@
 # V7 readiness checkpoint — September 15, 2026
 
+**Historical early checkpoint.** Both September 14 option files were later
+captured (8,284/8,284 base captures). The user then moved the research start to
+March 15, 2022. Use the current [feature and freeze audit](2026-09-15-v7-feature-and-freeze-audit.md)
+and [date-migration review](2026-09-15-v7-march15-start.md) for active status.
+The counts and incomplete adapters below describe the earlier checkpoint.
+
 ## Acquisition result
 
 Base acquisition finished at 07:20:34 UTC with **8,282/8,284** completed tasks,

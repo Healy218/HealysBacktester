@@ -1,4 +1,7 @@
-# Alpaca historical SIP gap — support draft, not sent
+# Alpaca historical SIP gap — retired support draft, not sent
+
+Superseded for V7: the user moved the research start to March 15, 2022.
+The March 8 repair is no longer an active V7 task. Preserve this as evidence.
 
 Prepared September 15, 2026. No credentials or customer identifiers included.
 User confirms an existing Alpaca Pro subscription. Alpaca remains the V7

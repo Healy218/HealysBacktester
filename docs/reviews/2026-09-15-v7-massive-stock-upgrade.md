@@ -2,7 +2,9 @@
 
 **Subsequent user clarification:** use existing Alpaca Pro for underlying
 stocks and Massive for options. The upgrade path below is historical research,
-not an active recommendation or pending purchase. Diagnose the Alpaca SIP gap.
+not an active recommendation or pending purchase. The later March 15 research
+start removes March 8–14 from active inputs and retires this repair investigation.
+See [date migration](2026-09-15-v7-march15-start.md).
 
 Checked September 15, 2026. User authorized investigation; no subscription
 was purchased and no message was sent.

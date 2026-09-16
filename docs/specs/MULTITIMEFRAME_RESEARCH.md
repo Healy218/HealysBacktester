@@ -1,9 +1,10 @@
 # V7: full-history minute signals and frozen option quotes
 
-Status: acquisition and bounded pilots underway, September 15, 2026.
+Status: base acquisition and bounded component pilots complete; March 15 working inputs prepared; full freeze/build/training blocked, September 15, 2026.
 Full-universe build/training remains gated.
-The user explicitly chose a fresh version starting March 7, 2022 through
-"today." This supersedes the earlier instruction to preserve V6 dates.
+The user explicitly moved the start to March 15, 2022 (birthday) and removed
+March 8–14 from active inputs. The end remains September 14, 2026. This
+supersedes the original March 7 start and the earlier V6 dates.
 The name is **V7**, reflecting new history, signal, feature and execution
 contracts. Existing V6 paper operation remains separate.
 
@@ -11,9 +12,9 @@ contracts. Existing V6 paper operation remains separate.
 
 | Purpose | Scope |
 |---|---|
-| Historical research window | **2022-03-07 through 2026-09-14**, inclusive |
+| Historical research window | **2022-03-15 through 2026-09-14**, inclusive |
 | End-date meaning | Latest completed regular market session when the plan was prepared |
-| Earlier history | Verified causal feature warmup and separately identified signal research only |
+| Earlier history | Separate verified history may support PIT membership; March 8–14 are excluded, no pre-start labels, and feature state restarts March 15 after the deleted interval |
 | Signal timeframes | All registered strategy variants across 1/5/15/30 minutes |
 | Option execution | One-minute cadence, frozen observed MASSIVE bid/ask quotes |
 | Features | Full existing suite, all thirteen TradingView scopes, option quote/trade features |
@@ -34,7 +35,7 @@ Observed bid/ask histories cannot be uniquely reconstructed from trade OHLCV.
 Synthetic spread models would produce a different, explicitly modeled study
 and do not meet this campaign's observed-quote execution contract. Earlier
 stock/trade data can support indicator warmup without creating pre-2022
-option-execution labels. Feature windows needing quotes before March 7 may
+option-execution labels. Feature windows needing quotes before March 15 may
 be unavailable at the beginning; determine their actual first eligible
 observations instead of inventing warmup values.
 
@@ -78,7 +79,7 @@ other five of thirteen TradingView publications remain feature-only.
 
 Generated draft and data inventory:
 `nn_meta/validation/multitimeframe-preparation-20260915/` (earlier inventory).
-Current V7 plan: `nn_meta/research_plans/v7-20220307-20260914/plan.json`.
+Current V7 plan: `nn_meta/research_plans/v7-20220315-20260914/plan.json`.
 The draft's `ready_for_build` is always false; it is not a launch approval
 or a replacement for the eventual executable readiness gate.
 
@@ -201,18 +202,28 @@ allocator/THP changes are part of this plan. See the
 
 ## September 15 implementation checkpoint
 
-Four-process base acquisition runs under a shared 250,000,000,000-byte cap,
-with immutable provider pages/objects and hashed receipts. Option aggregates
-are trade bars; complete observed execution quotes remain outstanding.
-MA-only shared indicator batches, session-aligned Polars bars, immutable
-Arrow/Parquet and NumPy/Zarr storage and bounded quote union/capture are
-implemented. Full feature and non-MA strategy adapters remain outstanding.
+Base acquisition completed all 8,284 captures. The March 15 working-input
+migration retains 7,430 stock shards and 1,425 option daily captures, excluding
+March 8–14. Provider originals remain historical provenance. A fresh observed
+contract catalog contains 22,130,242 contracts. Option trade aggregates are
+not observed execution quotes.
 
-Real SPY 2022 tests found Arrow warm reads about 1.6x faster than Parquet at
-3.3x space; NumPy maps were fastest in this sample. Keep backend selection
-measured rather than replacing all storage. A four-process, 64-MA-variant
-pilot per timeframe passed; it does not admit the full pipeline. A subsequent
-receipt-verified SPY 2022 coverage check found matching raw/adjusted timestamps
-and all 97,710 expected regular-session minutes across 251 sessions. This
-checks presence only; corporate-action vintages and full-universe PIT/listing
-coverage remain unresolved. See [implementation and measurements](../reviews/2026-09-15-v7-download-and-performance.md).
+All 20 strategy adapters, 13 TradingView scopes and 10 option-tick fields are
+implemented in the 222-column model-row schema. The old-window integrated
+pilot enumerated all 11,268 variants and assembled 72 sampled rows; bounded
+factorization and fold-indexed LightGBM Sequence passed equivalence checks.
+These results must be revalidated on the new window and completed inputs.
+
+**Freeze/build/training remains blocked.** Complete PIT membership after date
+exclusion, causal action prices, every-security daily/context and dated sector
+features, selected-contract DTE/moneyness semantics, physical exercise/stock
+accounting, dated option rules, actual quote capture, full-history assembly
+and training/trial integration. Then pass measured resource pilots and one
+executable complete-universe launch gate. Four workers and 250 GB decimal
+remain the acquisition limits.
+
+The [feature and freeze audit](../reviews/2026-09-15-v7-feature-and-freeze-audit.md)
+contains the full feature inventory and ordered gates. The
+[date-migration review](../reviews/2026-09-15-v7-march15-start.md) records the
+verified input exclusion. Earlier [storage measurements](../reviews/2026-09-15-v7-download-and-performance.md)
+remain historical benchmarks, not full-pipeline admission.

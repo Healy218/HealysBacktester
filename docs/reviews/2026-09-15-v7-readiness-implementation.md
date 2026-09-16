@@ -4,7 +4,15 @@ The user authorized all four readiness workstreams on September 15. Work is
 in progress. This checkpoint does **not** authorize or establish full-universe
 freeze, build or training readiness. External Pine comparison remains deferred.
 
-## September 15, 22:40 UTC — current admission checkpoint
+## Latest scope amendment — March 15 start
+
+User moved the start to **March 15, 2022**; March 8–14 are removed from the
+active working dataset. The March 8 stock repair is retired. New inputs,
+plan and evaluation declaration supersede the historical scopes below.
+See [March 15 migration evidence](2026-09-15-v7-march15-start.md).
+Other readiness gates remain open; no full freeze/build/training launched.
+
+## September 15, 22:40 UTC — historical admission checkpoint
 
 **All four workstreams have implemented, tested components. The requested
 full-history preparation is not complete; full freeze/build/training stays blocked.**

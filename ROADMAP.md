@@ -5,14 +5,19 @@ Continue this roadmap toward ≥7/10 in every assessment area by December 31, 20
 
 ## September 15 checkpoint: V7 acquisition and readiness
 
-Base minute-stock and option trade-aggregate acquisition is running with four
-bounded processes and a shared **250 GB decimal** cap. Shared MA computation,
-calendar-aligned Polars bars, immutable Arrow/Parquet and NumPy/Zarr stores,
-and quote-request union/capture paths passed component pilots. These remain
-preparation: complete the PIT/alias/feature coverage audit, all strategy
-adapters, full observed execution quotes/accounting, frozen purged folds and
-end-to-end resource gates before full-universe build or training. See the
-[download/performance review](docs/reviews/2026-09-15-v7-download-and-performance.md).
+Base acquisition is complete (8,284 captures); active working inputs now start
+**March 15, 2022**, excluding March 8–14. All 20 strategy-family adapters and
+all 13 TradingView scopes are present in the 222-column V7 row schema; bounded
+pilots passed. These are component milestones, not complete-universe admission.
+
+**Not ready for freeze/build/training.** Rebuild PIT membership after the date
+exclusion; finish causal corporate-action prices, complete-universe daily/sector
+features, actual-contract row semantics, funded physical expiry, dated option
+rules and full quote capture. Then finish bounded assembly/training, declare
+the trial manifest, and pass new-window resource pilots plus one executable
+launch gate. Four workers and the shared **250 GB decimal** acquisition cap
+remain fixed. The [feature and freeze audit](docs/reviews/2026-09-15-v7-feature-and-freeze-audit.md)
+is the current ordered checklist; [TODO](TODO.md) tracks it.
 
 V6 remains scheduled for forward paper operation. September 15 overnight
 inspection confirmed completed closing cycles, fresh relay and eight server

@@ -4,6 +4,14 @@
 Plus landed). Feeds code: `nn_meta/live/feeds/`. Supersedes nothing; extends
 V4_OUTLINE's point-in-time contract to intraday data.
 
+**September 15 scope amendment:** the 15-minute-only V7 cadence below is
+historical and superseded by [MULTITIMEFRAME_RESEARCH](MULTITIMEFRAME_RESEARCH.md):
+1/5/15/30-minute signals with one-minute observed option execution. Current
+feature inventory and remaining freeze gates are in the
+[feature audit](../reviews/2026-09-15-v7-feature-and-freeze-audit.md).
+The live/offline parity requirement remains applicable before live promotion;
+example future features below are not extra admitted model columns.
+
 ## 1. What the feeds are for
 
 Two daemons on the Hetzner server, each writing a small on-disk store:

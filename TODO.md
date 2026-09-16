@@ -1,7 +1,8 @@
-## September 14–15: V7, March 7, 2022 through September 14, 2026
+## September 14–15: V7, March 15, 2022 through September 14, 2026
 
-User superseded the earlier dates: V7 uses the full observed-quote history
-through the latest completed session, with the complete feature suite. New
+User superseded the earlier dates: V7 starts March 15, 2022 (birthday) and
+ends September 14, 2026. March 8–14 are removed from active working inputs.
+Alpaca stocks and Massive options remain the sources. Full feature suite retained. New
 chronological train/evaluation splits must be frozen before training. The old
 15-minute short-DTE campaign is paused; its main timer is disabled. See
 [scope and readiness requirements](docs/specs/MULTITIMEFRAME_RESEARCH.md) and
@@ -20,6 +21,20 @@ chronological train/evaluation splits must be frozen before training. The old
 - [ ] Pass representative end-to-end/resource pilots and the complete-universe readiness gate.
 - [ ] Only then launch the new full build with four bounded processes, audit and train.
 
+Current pre-freeze audit ([full inventory and ordered gates](docs/reviews/2026-09-15-v7-feature-and-freeze-audit.md)):
+
+- [x] Reconcile roadmap, training notes and all 222 columns; preserve all 13 TradingView scopes and all 10 tick features. Separate explicitly deferred research from this run.
+- [ ] Rebuild PIT membership with explicit March 8–14 exclusion/lookback policy, retaining the full exchange calendar; validate lifecycle/session aliases and frozen dated sectors.
+- [ ] Integrate the tested causal-price prototype with evidence for splits, dividends, combined actions and spin-offs, contemporaneous tick units and cross-action stops.
+- [ ] Build daily/market context for every eligible security; record initial warmup missingness and first eligible observations after March 15.
+- [ ] Resolve `dte_frac = target_dte / 45` and constant-zero `moneyness` before sealing model inputs; bind selected-contract semantics or explicitly declared baseline conventions.
+- [ ] Connect bounded full-history rows/labels/marks to V7 training; measure binned-dataset memory and recovery alongside V6.
+- [ ] Declare V7 model/objective/seed/weight/calibration trials before outcomes; retain baseline comparisons, finite NN/GBT checks and multiple-testing diagnostics.
+- [ ] Implement one executable full-universe launch gate and rerun new-window integrated pilots, including sparse markets, actions, rolls and funded expiry.
+
+The completed items below describe historical component evidence. Older dated
+checkboxes later in this file do not substitute for these current V7 gates.
+
 September 15 implementation progress ([evidence](docs/reviews/2026-09-15-v7-readiness-implementation.md)):
 
 - [x] Audit all 2,712 base raw/adjusted stock pairs and 1,429 option daily files; preserve unresolved listing/vintage gaps.
@@ -34,7 +49,9 @@ September 15 implementation progress ([evidence](docs/reviews/2026-09-15-v7-read
 - [x] Resolve the seven reviewed identity dates without changing membership/ranks/scores; reconcile 67 rename sessions and capture GAP.
 - [x] Implement bounded factorized rows and fold-indexed LightGBM Sequence; verify exact reconstruction and prediction equivalence.
 - [x] Complete the 598-name quote-demand planning envelope with the verified vectorized selector.
-- [ ] Repair 26 March 8, 2022 provider gaps; complete remaining lifecycle/alias/sector and causal adjustment admission.
+- [x] Move V7 start to March 15, 2022; remove March 8–14 from active working inputs and retire the March 8 repair task.
+- [x] Create the new plan/evaluation amendment and filtered stock/options inputs; rebuild the observed contract catalog and rerun the dated coverage inventory.
+- [ ] Rebuild PIT membership and downstream features/demand/pilots for the new scope; complete lifecycle/alias/sector and causal adjustment admission.
 - [x] Record latest expiry choice: funded physical exercise and stock delivery with observed liquidation prices; supersedes unresolved-only.
 - [ ] Implement and validate the physical-exercise/stock ledger, shared funding and share-delivery checks, dated settlement and Alpaca stock quote liquidation; retain unresolved fallback when prerequisites fail.
 - [x] Confirm source split: existing Alpaca Pro for underlying stocks, Massive for options; stock-upgrade investigation superseded by user clarification.
@@ -384,7 +401,7 @@ History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconc
 - [x] Validate 1,646 tests plus 18 subtests and real storage/working-set/quote capture pilots. See current HANDOFF and September 15 download/performance review.
 - [x] Check current V6 paper producer, input refresh scheduling, relay, server delivery and dashboard freshness. Overnight check: 25 cycles, 8 sent notices, fresh relay; morning refresh/market-session acceptance pending. [Evidence](docs/reviews/2026-09-15-v6-paper-health.md).
 - [x] Finish scoped documentation/commit/push for V7 acquisition and performance files.
-- [ ] Complete V7 coverage audits, all strategy/timeframe and feature adapters, full quote inventory/execution labels, purged folds and end-to-end resource gates before full build/training.
+- [ ] Complete V7 integrated admission: adapters and the full schema are implemented, but full-universe causal inputs, physical expiry, quote coverage, training integration and resource gates remain open (see current checklist above).
 - [x] Verify SPY 2022 raw/adjusted receipt hashes and regular-session minute presence: matching timestamps, 251 sessions, 97,710 minutes, zero missing; full-universe/vintage audit remains open.
 
 ## September 15 market-session incident and V7 admission
@@ -393,5 +410,5 @@ History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconc
 - [x] Install lightweight provider-availability retry timer without changing the activated inference runtime; 1,651 tests +18 subtests pass.
 - [ ] Observe provider file availability, successful V6 refresh and next accepted live paper cycle/delivery; ordinary strategy exits are also blocked until context recovers.
 - [x] Inventory completed V7 base acquisition: 8,282/8,284, 52.516 GB; 270 observed-empty stock captures require audit.
-- [ ] Retry/capture September 14 option day/minute files after publication; preserve fixed V7 dates.
-- [ ] Complete the ordered [V7 readiness gates](docs/reviews/2026-09-15-v7-readiness-checkpoint.md) before full freeze/build/training.
+- [x] Capture September 14 option day/minute files after publication; base acquisition reached 8,284/8,284. The preceding 8,282 count is the historical incident checkpoint.
+- [ ] Complete the ordered [V7 readiness gates](docs/reviews/2026-09-15-v7-feature-and-freeze-audit.md) before full freeze/build/training.

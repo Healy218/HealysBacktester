@@ -953,3 +953,20 @@ New `V7_EVALUATION_20260915_PHYSICAL.json` preserves the original declaration
 and adds this policy as an amendment. Existing code/pilots are not migrated or
 validated by recording this decision; implementation and real replay remain
 required. Alpaca supplies underlying stocks; Massive supplies options.
+
+## 2026-09-15 — User moves V7 start to birthday, March 15, 2022
+
+User explicitly replaces the March 7 research start with March 15, 2022 and
+asks to delete March 8–14. End remains September 14, 2026. This retires the
+March 8 Alpaca repair investigation and Massive stock upgrade path for V7.
+Implement as removal from the active derived dataset; original provider
+captures and old pilots remain archived provenance, outside active inputs.
+March 7 is also outside the label/evaluation window. Separate older captures
+remain available for historical membership; feature state restarts March 15
+and must warm up from retained observations without bridging the deleted week.
+
+Create a new plan, evaluation amendment and input identity. Preserve all
+11,268 variants per ticker, the fold dates, full feature requirements, Alpaca
+stocks/Massive options and funded physical-exercise policy. Previously inspected
+periods remain revalidation. No old pilot or outcome is relabeled current.
+[Change evidence](reviews/2026-09-15-v7-march15-start.md).
