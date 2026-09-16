@@ -834,3 +834,15 @@ calendar does not resolve settlement/exercise-calendar evidence. Full raw
 surfaces retain missing values and literal ticker roots; they establish neither
 identity outside membership nor option deliverables. Causal daily/context
 integration is still required. See the September 16 full-surfaces review.
+
+### September 16 midpoint paper amendment (supersedes ask/bid fills above)
+
+User-directed `option-midpoint-paper-v1` applies to V6 and V7 simulated option
+entries, exits, rolls and marks. Use a valid provided midpoint, otherwise bid/ask
+average; last trade is reference only. Preserve quote sides, source and fees.
+V6 runtime commit `4fe7e5f` is activated on home; closed legacy history is
+preserved. Never silently mix an old ask entry with a new midpoint exit: existing
+open paper legs require the audited idempotent `migrate_midpoint` transition.
+The September 16 deployment had zero open legs. Activation changes are limited
+to reviewed pricing modules; all other runtime sources must retain prior hashes.
+See `docs/reviews/2026-09-16-midpoint-paper-pricing.md`.

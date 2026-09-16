@@ -4,6 +4,7 @@ from dataclasses import asdict,dataclass
 import math
 import numpy as np
 from options.data.provider import parse_occ_symbol
+from options.paper_pricing import MIDPOINT_POLICY, option_midpoint
 
 
 @dataclass(frozen=True)
@@ -15,13 +16,15 @@ class QuotePolicy:
     slippage:float=.0005
     multiplier:int=100
     min_reported_size:float=1
+    option_price_basis:str=MIDPOINT_POLICY
 
     def __post_init__(self):
         if (any(type(v) is not int or v<0 for v in
                 (self.latency_ns,self.entry_deadline_ns,self.max_mark_age_ns))
                 or self.latency_ns>self.entry_deadline_ns or self.multiplier!=100
                 or not all(math.isfinite(v) and v>=0 for v in (self.fee,self.slippage,self.min_reported_size))
-                or self.fee+self.slippage>=1 or self.min_reported_size<=0):
+                or self.fee+self.slippage>=1 or self.min_reported_size<=0
+                or self.option_price_basis!=MIDPOINT_POLICY):
             raise ValueError('Invalid quote policy')
 
 
@@ -48,7 +51,10 @@ class QuoteTape:
         vals=[row.get(k) for k in ('bid_price','ask_price','bid_size','ask_size')]
         if any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) for v in vals):return False
         bid,ask,bs,az=vals
-        return 0<bid<=ask and bs>=self.policy.min_reported_size and az>=self.policy.min_reported_size
+        if not (0<bid<=ask and bs>=self.policy.min_reported_size and az>=self.policy.min_reported_size):return False
+        try:option_midpoint(row)
+        except ValueError:return False
+        return True
 
     def first_fill(self,decision_ns,*,side,deadline_ns=None):
         if side not in ('buy','sell'):raise ValueError('Explicit buy/sell required')
@@ -61,9 +67,8 @@ class QuoteTape:
         for i in range(int(self.stamps.searchsorted(start)),int(self.stamps.searchsorted(end,side='right'))):
             row=self.records[i]
             if self.valid(row):
-                price=row['ask_price'] if side=='buy' else row['bid_price']
                 return {'contract':self.contract,'side':side,'decision_ns':decision_ns,
-                        'sip_timestamp':int(self.stamps[i]),'price':float(price),
+                        'sip_timestamp':int(self.stamps[i]),**option_midpoint(row),
                         'reported_size':row['ask_size'] if side=='buy' else row['bid_size']}
         return None  # Complete observations, but no eligible quote in the window.
 
@@ -77,7 +82,7 @@ class QuoteTape:
         # A newer invalid quote invalidates the book; never search back to an
         # older positive quote through a crossed/zero-sided market update.
         if not self.valid(row):raise QuoteUnavailable('Latest market is invalid')
-        return {'bid':float(row['bid_price']),'sip_timestamp':int(self.stamps[i])}
+        return {**option_midpoint(row),'sip_timestamp':int(self.stamps[i])}
 
 
 class CashLedger:
@@ -94,7 +99,7 @@ class CashLedger:
     def equity(self,clock_ns,tapes):
         if type(clock_ns) is not int or clock_ns < self.last_clock:
             raise ValueError('Equity cannot precede a recorded fill')
-        return self.cash+sum(p['quantity']*self.policy.multiplier*tapes[p['contract']].mark(clock_ns)['bid']
+        return self.cash+sum(p['quantity']*self.policy.multiplier*tapes[p['contract']].mark(clock_ns)['price']
                              for p in self.positions.values())
 
     def _validate_fill(self,fill):

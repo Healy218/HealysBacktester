@@ -67,7 +67,7 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
                     return Tape()
             return ledger.equity(clock, Tapes(), physical.stock_archive)
         return ledger.cash + sum(position['quantity'] * policy.multiplier *
-            archive.mark(position['contract'], clock)['bid'] for position in ledger.positions.values())
+            archive.mark(position['contract'], clock)['price'] for position in ledger.positions.values())
 
     while queue:
         clock, _, _, kind, payload = heapq.heappop(queue)

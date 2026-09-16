@@ -13,6 +13,8 @@
   "history_end": "2026-09-14",
   "history_start": "2022-03-15",
   "input_report_sha256": "4f3b3ead3c60a48d540ff30affc023f821e340e49b5ea9c524fc788a9da546d6",
+  "option_paper_pricing": "docs/specs/V7_PAPER_PRICING_20260916.json",
+  "option_paper_pricing_sha256": "a9d22c9e08bcd28d1f4f11eab74a8134662f97d5a130e25fab7e6bb52d6edeae",
   "plan": "nn_meta/research_plans/v7-20220315-20260914-no-otc/plan.json",
   "plan_file_sha256": "8b804b94db67b328651ce9707c5e008a4f053e8920bc009c6da9b536b5fac0a0",
   "plan_sha256": "fa982cc6d715d277c8d204fd8b36e0ef789ecda146111e86a070ec9396184f1f",

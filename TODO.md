@@ -494,3 +494,12 @@ Evidence: [full raw daily build](docs/reviews/2026-09-16-v7-full-stock-daily.md)
 - [ ] Complete causal daily returns, reviewed identity continuity, market/sector context and cold-start/warmup integration before admitting the daily-context stage.
 
 Evidence: [full option-surface build](docs/reviews/2026-09-16-v7-full-surfaces.md).
+
+## September 16 user-directed midpoint paper pricing
+
+- [x] Use valid provider midpoint, otherwise bid/ask average, for V6/V7 simulated option entries/exits/rolls/marks; retain quotes and separate costs.
+- [x] Verify copied-ledger transition and deploy V6 through Git with a bounded activation amendment; preserve closed history and realized equity.
+- [x] Bind the V7 price-policy amendment in active scope/readiness; full suite 1,834 tests plus 18 subtests passed.
+- [ ] Rebuild/reverify affected V7 derived bindings and option labels/marks/portfolios under midpoint pricing; no old ask/bid artifact relabeling.
+
+Evidence: [midpoint pricing and deployment](docs/reviews/2026-09-16-midpoint-paper-pricing.md).

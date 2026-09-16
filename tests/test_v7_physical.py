@@ -209,7 +209,7 @@ def test_stock_quote_requires_actual_provider_size_and_session():
 def test_shared_replay_extends_horizon_and_retains_unfunded_outcome():
     class Options:
         def mark(self, contract, clock):
-            return dict(bid=1., sip_timestamp=clock)
+            return dict(bid=1., ask=1., price=1., sip_timestamp=clock)
     class Stocks:
         def mark(self, symbol, clock):
             return dict(bid=110., sip_timestamp=clock, security_id='SPY-id', capture_identity='test-stock')

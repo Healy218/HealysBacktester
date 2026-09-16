@@ -1,0 +1,24 @@
+{
+  "schema": "v7-paper-pricing-amendment-v1",
+  "declared_at": "2026-09-16T19:20:47.478514+00:00",
+  "authority": "User explicitly requested bid/ask average for both paper option buys and sells; use valid supplied midpoint when present.",
+  "supersedes_quote_policy_in": "docs/specs/V7_EVALUATION_20220315_PHYSICAL.json",
+  "quote_policy": {
+    "latency_ns": 1000000000,
+    "entry_deadline_ns": 60000000000,
+    "max_mark_age_ns": 30000000000,
+    "fee": 0.001,
+    "slippage": 0.0005,
+    "multiplier": 100,
+    "min_reported_size": 1,
+    "option_price_basis": "option-midpoint-paper-v1"
+  },
+  "fill_and_mark_basis": "Provider mid/midpoint/mid_price/midpoint_price when finite inside spread and nonconflicting; otherwise (bid+ask)/2.",
+  "last_trade": "Retain as reference when supplied; never substitute last for midpoint.",
+  "scope": "All simulated option entries, exits, rolls and equity marks in V7; same reference price convention on both sides.",
+  "costs": "Existing fee 0.10% and slippage 0.05% per side remain separate deductions.",
+  "unchanged_stock_execution": "Funded physical exercise and observed Alpaca stock liquidation retain their existing stock execution policy.",
+  "historical_artifacts": "Preserve prior ask/bid artifacts as superseded; rebuild option labels/marks/portfolios and source-bound stages, never relabel old prices.",
+  "simulated_execution": true,
+  "research_ready": false
+}

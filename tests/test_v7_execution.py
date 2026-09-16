@@ -20,10 +20,11 @@ def quote(t,bid=1.,ask=1.2):
     return {'sip_timestamp':t,'bid_price':bid,'ask_price':ask,'bid_size':2,'ask_size':3}
 
 
-def test_after_decision_ask_fill_and_causal_bid_mark():
+def test_after_decision_midpoint_fill_and_causal_midpoint_mark():
     q=tape([quote(0),quote(2_000_000_000),quote(80_000_000_000,bid=2,ask=2.1)])
     fill=q.first_fill(0,side='buy')
-    assert fill['sip_timestamp']==2_000_000_000 and fill['price']==1.2
+    assert fill['sip_timestamp']==2_000_000_000 and fill['price']==1.1
+    assert q.mark(10_000_000_000)['price']==1.1
     assert q.mark(10_000_000_000)['bid']==1.
     with pytest.raises(QuoteUnavailable,match='fresh'):q.mark(50_000_000_000)
 

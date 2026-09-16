@@ -340,7 +340,7 @@ class PhysicalLedger(CashLedger):
         for key, p in self.positions.items():
             phase = p.get('phase')
             if phase == 'option':
-                value += p['quantity'] * 100 * tapes[p['contract']].mark(clock_ns)['bid']
+                value += p['quantity'] * 100 * tapes[p['contract']].mark(clock_ns)['price']
             elif phase in ('stock', 'delivery_pending', 'inventory_purchase_pending') and p['right'] == 'C':
                 value += p['deliverable_shares'] * stock_bid(p['symbol'], p['security_id'])
             if key in self.commitments:

@@ -36,7 +36,8 @@ class Archive:
     def mark(self, contract, clock):
         if self.stale_marks:
             raise QuoteUnavailable('fixture observed stale market')
-        return {'bid': .99 if contract == OLD else 1.99, 'sip_timestamp': clock}
+        return {'bid': .99 if contract == OLD else 1.99, 'ask': 1.01 if contract == OLD else 2.01,
+                'price': 1. if contract == OLD else 2., 'sip_timestamp': clock}
 
 
 def run(archive, exit_at=EXIT):

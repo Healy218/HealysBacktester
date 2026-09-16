@@ -1,137 +1,145 @@
-# Handoff — continue V7; leave V6 unchanged
+# Handoff — midpoint pricing deployed in V6; continue V7 readiness
 
-Updated September 16, 2026 after the full daily option-surface build and a new V6 exit replay.
-Read TODO.md then this file. No subagents. Main branch; preserve unrelated dirty
-V6 files. Use `./venv/bin/python`; consult DOCUMENTATION.md Traps before fixes.
+Updated September 16, 2026. Read TODO.md then this file. No subagents. Work on
+main, preserve unrelated dirty/untracked V6 work and use `./venv/bin/python`.
+The full V7 readiness goal remains active and unfinished; no training launched.
 
-## User direction and goal
+## Latest explicit user direction overrides the earlier V6 freeze
 
-Continue autonomously until full-scope V7 is ready, then alert the user. The
-persistent readiness goal is still active and unfinished. The user accepted
-[the V6 incident/SEDG explanation](docs/reviews/2026-09-16-v6-pending-exits.md)
-and explicitly directed us to leave the V6 experiment alone. No midpoint stops,
-spread policy, runtime settings or deployment changes were adopted. The user subsequently reopened the question with new rapid-exit alerts; the
-read-only replay below addresses them. No full V7 training campaign has launched.
+After read-only replay proved rapid underlying-strategy exits with large option
+spread losses, the user explicitly requested **one midpoint price for both
+simulated option buys and sells in V6 and V7**. Use a valid supplied mid/midpoint
+when present; otherwise average bid and ask. The user also mentioned `last`;
+we clarified that it is reference data, not a substitute midpoint, and kept the
+agreed midpoint convention. The earlier instruction to leave V6 unchanged was
+superseded for this pricing change. No new spread cap or midpoint stop was added.
 
-## Latest user steering: renewed V6 stop/spread concern
+Read [midpoint implementation, evidence and deployment](docs/reviews/2026-09-16-midpoint-paper-pricing.md).
+Shared helper `options/paper_pricing.py`, policy `option-midpoint-paper-v1`.
+Entries, exits, both roll legs and option equity marks share the same base price;
+quote sides and price source are retained, simulated fills labeled explicitly.
+Existing 0.15% per-side total costs stay separate. Same unchanged quote gives
+about -0.29955% after both sides, not the bid/ask spread loss. Model, strategy,
+underlying stops, quote freshness and physical-stock pricing are unchanged.
 
-The user reported more immediate exits apparently labeled stop exits. Read-only
-replay now completed for CELH/SIL/RH/AFRM/SNDK using the activated runtime and
-actual 19:00 stock capture. All five reproduced their recorded underlying exit
-bar with a true strategy-exit signal; none touched the generic 5% stock stop.
-The label `frozen underlying strategy/5% stop exit` is hardcoded for every exit
-and does not classify the cause. Rapid costly exits are nonetheless real:
-SIL -19.47% at unchanged 4.20/5.20 quotes, AFRM -30.79%, RH -35.64%, SNDK -13.04%.
-CELH was still awaiting a fresh exit quote at the saved snapshot. No V6 settings,
-state, runtime, alerts or spread policy changed. See
-[complete replay](docs/reviews/2026-09-16-v6-late-exit-replay.md) and evidence
-`nn_meta/validation/v6-incident-20260916-late`. Diagnostic replay ended 0.
-This does not establish future returns or resolve spread-cost feasibility.
+## V6 production state
 
-V7 daily context work was interrupted to address the new user concern. Its
-**untested, incomplete draft** is parked at `/tmp/v7-causal-daily-wip-20260916.py`,
-not imported or included in any artifact. Resume by reviewing it before restoring
-to `nn_meta/v7/causal_daily.py`. It sketches adjacent raw-close/action-factor
-returns, explicit continuity spans, missing sessions, next-open clocks, all ten
-daily features and warmup reporting. Still needs substantive tests, actual-data
-integration, input/evidence validation and review. Never claim it shipped or
-that original action coverage is complete. No V7 jobs remain active.
+Tested candidate branch `ops/v6-midpoint-20260916`, commit
+`4fe7e5fff512e3147f6dc5d17b04f61ea791f1ed`, was pulled into home runtime
+`/home/healy/Coding/HealysV6` from previous `5787909`. Candidate checkout remains
+`/tmp/healys-v6-midpoint-20260916`. All **1,574 tests +18 subtests** passed there,
+16 warnings, 64.21s; copied-live-ledger migration and unchanged-quote tests passed.
+The source-only activation amendment accepts exactly the reviewed quote/portfolio
+modules plus the new helper; every other previously bound runtime source must
+match. Activation SHA `dccdd2d167e18d28a23d53cd005e2d3161e9adc8f90cc863f41117f114fcfd56`.
 
-## Latest completed milestone: full option surfaces
+Actual deployment stopped the forward timer, waited for any active pass, held
+its lock, backed up SQLite/activation, pulled via Git, checked all hashes and
+resumed the timer. All positions had closed before deployment: **zero live
+entries needed repricing**. Closed history stayed byte-identical; realized paper
+equity stayed 0.6867286044611687, with 13 closed records, 35 cycles and 26 exported
+outbox items. No equity reset, broker order or manual test notification occurred.
 
-Implementation: `nn_meta/v7/surfaces.py`, `scripts/build_v7_surfaces.py`.
-Read [full build, assumptions and verification](docs/reviews/2026-09-16-v7-full-surfaces.md).
-Output `nn_meta/validation/v7-surfaces-20260916r2`:
+Evidence `nn_meta/validation/v6-midpoint-20260916` contains copied-ledger reports,
+actual before/after backups, activation and transition receipts, Git pull log,
+exact one-off audit/deployment sources and complete test logs/XML. Migration is
+idempotent and only rebases outstanding paper legs from their retained original
+quote; previously completed legs/history/equity stay intact. Unmigrated legacy
+open legs fail closed, avoiding an old-ask/new-midpoint comparison.
 
-- 1,129 completed day shards; 669,749 raw ticker/date rows.
-- All 339,640 eligible sessions and 591 identities reconcile exactly.
-- 339,517 rows with admitted options, 59 missing stock observations,
-  49 observed-stock/no-option rows and 15 with no qualifying tenor/premium.
-- Missing near IV 30,447, far IV 44,678, put/call ratio 177; no filling.
-- Exact active raw option receipt/audit lineage, original stock facts and all
-  next-session integer clocks verified; 58 scalar parity checks over 12 dates.
-- Summary SHA256 `c5ae589033a8262d0b914a3fd1e0553cff52232aa0e12193540db4c957d3da0e`.
-  Full completed resumption left it byte-identical.
+The post-deployment 20:00 UTC home pass **completed successfully** in 235.25s,
+status `recorded`, phase `complete`, no error. All five selected entries were
+unfilled, so no actual midpoint entry occurred during this pass. It recorded
+cycle36, preserved 13 closed trades and the same equity/outbox, and reports the
+midpoint execution policy. Saved `deployment/post-deployment-status.json` is the
+terminal application evidence. The timer was resumed. The existing home relay
+exports activation/status and original alert payloads; server expert/feed
+settings were not changed by this producer-pricing deployment.
+Read-only server verification also confirmed receipt of the new midpoint policy,
+runtime commit `4fe7e5f`, successful cycle36 status and unchanged equity/history.
 
-Audit: `nn_meta/validation/v7-surfaces-verification-20260916.json`; exact source,
-build/resume/test logs and resource observations are retained beside the output.
-Build, audit, resume and tests all ended successfully. **No jobs remain running
-from this continuation.** Full suite: **1,824 tests +18 subtests**, 18 warnings,
-108.99 seconds, `/tmp/v7-surfaces-20260916r2-tests.log`; no code changed afterward.
+The generic alert reason `frozen underlying strategy/5% stop exit` is still not
+an exact cause classifier. Previous replay of CELH/SIL/RH/AFRM/SNDK showed true
+strategy exit signals and no generic 5% stock-stop breach. See
+[read-only diagnosis](docs/reviews/2026-09-16-v6-late-exit-replay.md).
+Pricing correction does not promise profitability or change those exit signals.
 
-The first invocation failed before any option-day output because the stock
-calendar ended September 14. Its completed stock index is retained at
-`nn_meta/validation/v7-surfaces-20260916`, with an old source binding; don't reuse
-it under the new code. Fresh Alpaca calendar capture:
-`nn_meta/data_v7/exchange-calendar-20260916` (1,464 sessions, 2021–October 2026).
-Raw API records exactly match the original calendar throughout shared coverage.
-The extended capture supplies September 15 availability for September 14 facts;
-it adds no out-of-scope stock/options data or labels. Original bytes, request,
-capture metadata and exact source retained. This is an **exchange calendar,
-not settlement/physical-exercise calendar evidence**.
+## V7 implementation and binding changes
 
-Latest shared quota **62,558,385,604 /250,000,000,000 bytes**, reservations empty.
-Do not reset it. Derived surface output approximately 101 MiB before logs.
-Four workers, one inner thread; host samples >23 GiB available RAM. Swap-in rose
-and swap-out stayed constant between samples, but attribution is unknown.
-No full no-swap/resource or V6-coexistence gate is claimed.
+Midpoint now flows through `QuoteTape.first_fill`, `QuoteTape.mark`, `CashLedger`,
+`replay`, shared `portfolio_replay`, and physical-ledger option valuations.
+Stock delivery/liquidation continues with observed Alpaca stock prices.
+`QuotePolicy` declares `option_price_basis=option-midpoint-paper-v1`.
+New `docs/specs/V7_PAPER_PRICING_20260916.json` is bound by active inputs;
+readiness checks the policy against code and includes its hash in stage scope.
+Previous evaluation folds remain fixed; the new quote-price policy supersedes
+the older evaluation JSON's quote-price defaults.
 
-Surface assumptions remain declared fixed European BS proxies (1–45 DTE,
-minimum $0.20, abs log moneyness <0.01, near <=20DTE, r=.0425/q=.012).
-They are not observed IV, executable prices, or option deliverable/alias proof.
-Literal raw ticker facts outside membership have no inferred security identity.
-Receipts retain `research_ready: false`; full daily-context admission is open.
+Main full suite **1,834 tests +18 subtests**, 18 warnings, 91.33s:
+`/tmp/midpoint-main-final-tests.log`, copied into midpoint evidence. No pricing
+code changed afterward. The main checkout's untracked V6 source/tests were
+updated to match the runtime candidate; preserve unrelated changes. Their
+production commit is on the isolated runtime branch. Shared helper, V7 sources,
+activation utility/test, policy and documentation are committed on main.
 
-## Preceding stock daily milestone
+Current readiness `nn_meta/validation/v7-readiness-20260916-midpoint-checkpoint.json`:
+three input/membership/coverage checks pass; **eight full-universe stages remain
+missing**. No full training, full no-swap/resource or V6-coexistence claim.
+Acquisition quota remains **62,558,385,604 /250,000,000,000**, reservations empty.
 
-Pushed commit `cddede8` built `nn_meta/validation/v7-stock-daily-20260916`:
-2,966 symbol/year shards, 594 source tickers, 669,749 raw calendar rows; all
-339,640 eligible sessions/591 identities, 67 verified aliases and 59 zeros.
-[Review and complete command](docs/reviews/2026-09-16-v7-full-stock-daily.md).
-Raw Alpaca regular-session OHLCV; close is last observed minute, not official
-auction. Exact nullable observation clocks; no missing-day fills or inferred
-identity outside membership. Independent full audit and completed resume passed.
-Summary SHA `e59e2259259c95c524bc493a889663a5a897f156400e0d6a316de2f54d94e8ea`.
-Audit `nn_meta/validation/v7-stock-daily-verification-20260916.json`.
+**Next:** strict parent bindings in the stock/surface summaries include the active
+manifest hash. The pricing amendment changed that hash. Reverify/rebuild derived
+bindings in new immutable outputs before downstream context integration; retain
+all old artifacts. Raw stock and option observations themselves are unchanged.
+Old ask/bid option paths/marks/labels/portfolios must be recomputed, never relabeled.
 
-**Next concrete daily work:** implement causal daily-return/context integration
-from these raw facts and reviewed action/identity evidence. Full-security
-surfaces now exist. `scripts/build_v7_daily.py` is an old SPY-only adjusted-price
-pilot and must not stand in for the causal/full-universe builder. Keep initial
-March 15 warmup missing; do not infer pre-membership identity from raw ticker
-history. Market/sector alignment and all 222-column assembly remain unfinished.
+The causal daily-context draft remains **untested/incomplete** at
+`/tmp/v7-causal-daily-wip-20260916.py`, outside source bindings. Review before
+restoring to `nn_meta/v7/causal_daily.py`; it sketches adjacent raw-close/action
+returns, explicit continuity spans, missing sessions, next-open availability,
+all ten daily features and warmup reporting. Needs substantive tests, reviewed
+original-action/identity integration and actual-data validation. No V7 jobs
+remain running from these continuations.
 
-## Other implemented components and unresolved sources
+## Completed component data (preserve; current binding caveat above)
 
-- Causal feature/proposal pilot `2e8ac37`: real AAPL March 15–May 10, 2022,
-  all 11,268 variants, 757,465 proposals, 111 TV/technical columns. Original
-  Apple April 28 $0.23 dividend announcement and prior $156.81 raw close.
-  [Review](docs/reviews/2026-09-16-v7-causal-feature-pilot.md). Full-universe action
-  evidence and integrated throughput still open; never relabel this as 222 columns.
-- Alpaca quote adapter `d4252dc`: actual AAPL May 5, 2022 pilot, 20,628 quotes;
-  exact clocks, SIP asof=-, firm R quotes, size/tie guards, latency/deadline,
-  bounded archive reuse. [Review](docs/reviews/2026-09-16-v7-stock-quotes.md).
-  Historical round-lot/share units require dated evidence. Full demand and
-  funded physical replay remain open. `010134e` fixed bank-holiday event T
-  handling; do not move covered trading T forward before counting settlement days.
-- Model runner `8097c08`: `nn_meta/v7/trials.py`, CLI `run_v7_model_pilot.py`,
-  `V7_MODEL_TRIALS_20260916.json`; 21 predeclared initial trials (three objectives,
-  constant baseline, NN/GBT seeds 11/29/47). Train-only preprocess/weights,
-  immutable source/runtime binding, model reload parity, verified resume;
-  validation does not early-stop/select/calibrate. [Review](docs/reviews/2026-09-16-v7-model-trials.md).
-  Synthetic tests only; bounded pilot <=65,536 rows/split, full runner missing.
-  Old March-7 factorized v1 pilot is outside active scope; never reuse/relabel.
+- Raw stock daily `nn_meta/validation/v7-stock-daily-20260916`, commit `cddede8`:
+  2,966 symbol/year shards, 594 source tickers, 669,749 raw calendar rows;
+  all 339,640 eligible sessions/591 identities, 67 aliases and 59 missing sessions.
+  Summary SHA `e59e2259259c95c524bc493a889663a5a897f156400e0d6a316de2f54d94e8ea`.
+  [Review](docs/reviews/2026-09-16-v7-full-stock-daily.md).
+- Option surfaces `nn_meta/validation/v7-surfaces-20260916r2`, commit `0db94c9`:
+  1,129 day shards, 669,749 raw ticker/date rows and all 339,640 eligible rows.
+  339,517 observed-option rows, 59 missing-stock, 49 no-option and 15 outside
+  tenor/premium filter; missing near IV30,447/far IV44,678/PC ratio177, no fill.
+  Summary SHA `c5ae589033a8262d0b914a3fd1e0553cff52232aa0e12193540db4c957d3da0e`.
+  All-row audit, 58 scalar checks and completed resume passed.
+  [Review](docs/reviews/2026-09-16-v7-full-surfaces.md).
+- Captured extended Alpaca exchange calendar
+  `nn_meta/data_v7/exchange-calendar-20260916`: 1,464 sessions, 2021–October2026,
+  exact agreement with original shared coverage; raw bytes/request/source kept.
+  Enables September15 availability of September14 facts; no out-of-scope prices.
+  This is **not settlement/exercise-calendar evidence**.
+- Causal AAPL40-session pilot `2e8ac37`: 11,268 variants, 757,465 proposals,
+  111 TV/technical columns; original April28 $0.23 dividend and prior $156.81 close.
+  [Review](docs/reviews/2026-09-16-v7-causal-feature-pilot.md).
+- Alpaca quote adapter `d4252dc`: actual May5,2022 AAPL20,628 quotes; exact
+  clocks, conditions/sizes, bounded archive and dated lot/share-unit requirements.
+  [Review](docs/reviews/2026-09-16-v7-stock-quotes.md). `010134e` corrected event-T
+  bank-holiday handling. Full funding/settlement replay remains open.
+- Model runner `8097c08`: 21 declared initial trials, three objectives,
+  constant baseline, NN/GBT seeds11/29/47; train-only preprocess, reload parity,
+  verified resumption. [Review](docs/reviews/2026-09-16-v7-model-trials.md).
+  Synthetic tests only, <=65,536 rows/split pilot; full campaign runner incomplete.
+  Old March7 factorized v1 pilot is excluded; never reuse or relabel.
 
-Official settlement/expiration calendar is still unfinished. Read
-[OCC capture findings](docs/reviews/2026-09-16-v7-occ-calendar-sources.md) before
-repeating failed attempts. OCC annual notices 49729/51460/53701/55737/57897,
-special January 2025 55826 and T+1 54580 were readable through web text but all
-seven raw PDF requests hit Cloudflare 403. No browser available; no raw original
-receipts. FINRA Jan 3, 2025 contrary-cutoff HTML did capture (91,562 bytes).
-DTCC original URLs returned 404; FINRA/DTCC 2023 Veterans Day conflict remains.
-A nominal 2025 Nasdaq URL currently serves 2026 PDF; don't infer vintage from URL.
-No calendar admitted. Requests `v7-occ-calendar-requests-20260916.json`, captures
-`nn_meta/data_v7/occ-calendars-20260916`. All acquisition attempts ended.
+Official settlement/expiration source work remains incomplete. Read
+[OCC findings](docs/reviews/2026-09-16-v7-occ-calendar-sources.md) before retrying.
+OCC annual notices 49729/51460/53701/55737/57897, special 55826 and T+1 54580 returned
+Cloudflare403 for all raw originals; no browser available. Reader text is not a
+local PDF receipt. FINRA Jan3,2025 contrary-cutoff HTML captured, DTCC originals
+returned404, VeteransDay2023 conflict unresolved, nominal Nasdaq2025 URL serves
+2026 PDF. No settlement calendar admitted or acquisition job left running.
 
 ## User constraints and fixed scope
 
@@ -144,7 +152,7 @@ March 15, 2022–September 14, 2026 inclusive; cold-start prices March 15, no
 March 8–14 active price/options. Earlier references/membership and full exchange
 calendar remain. Keep all 20 families, 2,817 variants per timeframe, four
 1/5/15/30-minute timeframes, 222 columns, 13 TV scopes and 10 tick features.
-Actual 1–9 DTE purchases with targets 1/2/4/5/7; observed execution/marks;
+Actual 1–9 DTE purchases with targets 1/2/4/5/7; observed quotes with modeled midpoint option fills/marks;
 five shared slots, 10% equity premium and one symbol across timeframes.
 Funded physical delivery and observed stock liquidation; missing funding/shares/
 evidence stay unresolved, never free financing or synthetic intrinsic sales.
@@ -177,7 +185,7 @@ Protect V6. No full training until every readiness gate passes; alert user then.
   2024H2/2025H1/2025H2 folds, final Jan 1–Sep 14, 2026; 10-session embargo,
   full settlement label ends. These periods were previously inspected.
 - Last readiness checkpoint
-  `nn_meta/validation/v7-readiness-20260916-sectors-checkpoint.json`: three
+  `nn_meta/validation/v7-readiness-20260916-midpoint-checkpoint.json`: three
   input/inventory checks pass; eight substantive stage artifacts remain missing.
   Re-run `scripts/v7_readiness.py --output NEW.json` when new stage evidence exists.
 - Corporate captures `nn_meta/data_v7/corporate-actions-20260915/{dividends,splits}`
@@ -211,4 +219,4 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-late-exit-replay.md`.
+`handoff-history/HANDOFF-2026-09-16-before-midpoint-pricing.md`.

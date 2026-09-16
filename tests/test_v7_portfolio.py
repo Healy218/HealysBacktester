@@ -16,7 +16,7 @@ class Archive:
     def mark(self, contract, clock):
         if clock in self.stale:
             raise QuoteUnavailable('Observed stale quote')
-        return {'bid': 1., 'sip_timestamp': clock}
+        return {'bid': 1., 'ask': 1., 'price': 1., 'sip_timestamp': clock}
 
 
 def candidate(key, symbol, *, decision=T, fill_delay=1, exit_delay=180, score=1., complete=True):

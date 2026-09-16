@@ -39,7 +39,7 @@ def replay(proposal, clocks, archive, references, *, select_contract, expiry_cut
             # the final observation strictly before that regular close.
             quote_clock = min(clock, session_close(clock) - 1)
             value = archive.mark(position['contract'], quote_clock)
-            equity = ledger.cash + position['quantity'] * policy.multiplier * value['bid']
+            equity = ledger.cash + position['quantity'] * policy.multiplier * value['price']
             marks.append({'clock_ns': clock, 'contract': position['contract'], 'status': 'observed',
                           'quote_as_of_ns': quote_clock, 'equity': equity, **value})
         except CaptureUnavailable as exc:

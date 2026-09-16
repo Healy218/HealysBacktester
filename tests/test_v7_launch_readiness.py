@@ -48,6 +48,10 @@ def fixture(tmp_path, monkeypatch):
         universe_receipt_sha256=sha(universe/'complete.json'),coverage_inventory='coverage',
         coverage_receipt_sha256=sha(coverage/'complete.json'),readiness_evidence={})
     active.update(plan='plan.json', plan_file_sha256=sha(tmp_path/'plan.json'), plan_sha256=plan['plan_sha256'])
+    from dataclasses import asdict
+    from nn_meta.v7.execution import QuotePolicy
+    write(tmp_path/'pricing.json', {'quote_policy':asdict(QuotePolicy())})
+    active.update(option_paper_pricing='pricing.json', option_paper_pricing_sha256=sha(tmp_path/'pricing.json'))
     return active
 
 

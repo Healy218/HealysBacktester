@@ -38,7 +38,7 @@ def scope_binding(active):
     return identity({k: active.get(k) for k in ('history_start', 'history_end', 'working_inputs',
         'input_report_sha256', 'chain_receipt_sha256', 'universe_receipt_sha256',
         'coverage_receipt_sha256', 'evaluation_file_sha256', 'plan_file_sha256',
-        'universe_exclusions_sha256', 'sector_receipt_sha256')} | {'row_contract': ROW_CONTRACT})
+        'universe_exclusions_sha256', 'sector_receipt_sha256', 'option_paper_pricing_sha256')} | {'row_contract': ROW_CONTRACT})
 
 
 def assess(root, active_path):
@@ -53,6 +53,12 @@ def assess(root, active_path):
         else:
             gates.append(dict(gate=name, passed=True, evidence=detail))
     def inputs():
+        from dataclasses import asdict
+        from nn_meta.v7.execution import QuotePolicy
+        pricing_path = root/active['option_paper_pricing']
+        if (sha(pricing_path) != active['option_paper_pricing_sha256']
+                or json.loads(pricing_path.read_text())['quote_policy'] != asdict(QuotePolicy())):
+            raise ValueError('Active midpoint paper pricing declaration differs')
         if (active['history_start'], active['history_end']) != (HISTORY_START, HISTORY_END):
             raise ValueError('Active date scope differs')
         source = root / active['working_inputs']

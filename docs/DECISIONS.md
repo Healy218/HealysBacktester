@@ -1033,3 +1033,18 @@ probabilities. These are component trials with no winner/threshold selection;
 full campaign scheduling, calibration/selection amendments, portfolio evidence
 and multiple-testing diagnostics remain required. See the September 16 model
 trial review. This does not authorize full training or change readiness gates.
+
+## 2026-09-16 — user-selected midpoint option paper prices
+
+The user explicitly directed both V6 and upcoming V7 to use one midpoint for
+simulated option buying and selling, preferring a valid provider midpoint when
+available and otherwise averaging bid/ask. Apply that convention consistently
+to option entries, exits, roll legs and equity marks. Retain bid/ask, supplied
+midpoint source and separate existing costs; last trade is reference, not a
+substitute midpoint. These are simulated prices, not guaranteed executions.
+This supersedes ask-entry/bid-exit for this paper experiment; it does not alter
+underlying strategy/stop logic or the funded physical-stock liquidation policy.
+Preserve completed V6 records and legacy V7 artifacts; use an audited retained-
+quote transition only for outstanding V6 paper legs and rebuild V7 derived
+execution artifacts under the new bound policy. Actual deployment found no open
+V6 legs. Do not rewrite historical losses or reset equity.
