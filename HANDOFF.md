@@ -1,110 +1,113 @@
-# Handoff — continue V7; leave the V6 experiment unchanged
+# Handoff — continue V7; leave V6 unchanged
 
-Updated September 16, 2026 after full-universe raw daily stock preparation.
-Read TODO.md then this file. No subagents. Work on main, preserve unrelated dirty
-V6 work, consult DOCUMENTATION.md Traps before fixes, use `./venv/bin/python`.
+Updated September 16, 2026 after the full daily option-surface build.
+Read TODO.md then this file. No subagents. Main branch; preserve unrelated dirty
+V6 files. Use `./venv/bin/python`; consult DOCUMENTATION.md Traps before fixes.
 
-## Latest user direction
+## User direction and goal
 
-The recurring V6 incident was diagnosed; see
-[incident and SEDG explanation](docs/reviews/2026-09-16-v6-pending-exits.md).
-Pending fresh exit quotes blocked entries; the observed 16:30–17:15 UTC
-passes recovered. SEDG exited on its BBW stock signal, not its 5% underlying
-stop. The user accepted the explanation and directed us to leave V6 as it
-is and keep getting V7 ready. No proposed spread policy was adopted.
+Continue autonomously until full-scope V7 is ready, then alert the user. The
+persistent readiness goal is still active and unfinished. The user accepted
+[the V6 incident/SEDG explanation](docs/reviews/2026-09-16-v6-pending-exits.md)
+and explicitly directed us to leave the V6 experiment alone. No midpoint stops,
+spread policy, runtime settings or deployment changes were adopted. Do not
+restart that investigation. No full V7 training campaign has launched.
 
-## Stock quote / settlement milestone
+## Latest completed milestone: full option surfaces
 
-Committed `d4252dc` adds the bounded Alpaca SIP quote capture/replay adapter
-and actual AAPL May 5, 2022 pilot (20,628 quotes). See
-[implementation, evidence and outstanding settlement sources](docs/reviews/2026-09-16-v7-stock-quotes.md).
-It includes dated round-lot/share conversion, exact clocks, receipt/identity
-checks, size/condition guards and bounded archive reuse. Full demand and
-funded physical replay remain unfinished. The subsequent settlement fix
-accepts covered trading events on bank holidays without moving T forward.
-Full suite passed **1,804 tests +18 subtests**, 18 warnings, 87.43s:
-`/tmp/v7-settlement-event-20260916-tests.log`.
+Implementation: `nn_meta/v7/surfaces.py`, `scripts/build_v7_surfaces.py`.
+Read [full build, assumptions and verification](docs/reviews/2026-09-16-v7-full-surfaces.md).
+Output `nn_meta/validation/v7-surfaces-20260916r2`:
 
-Readiness `nn_meta/validation/v7-readiness-20260916-stock-settlement-checkpoint.json`
-still has eight missing stage artifacts. Official calendar is unfinished:
-FINRA/DTCC 2023 Veterans Day conflict, unavailable DTCC original bytes, and
-a nominally 2025 Nasdaq URL now serving a 2026 PDF must be resolved.
-Do not admit a calendar from URL year or search snippets.
+- 1,129 completed day shards; 669,749 raw ticker/date rows.
+- All 339,640 eligible sessions and 591 identities reconcile exactly.
+- 339,517 rows with admitted options, 59 missing stock observations,
+  49 observed-stock/no-option rows and 15 with no qualifying tenor/premium.
+- Missing near IV 30,447, far IV 44,678, put/call ratio 177; no filling.
+- Exact active raw option receipt/audit lineage, original stock facts and all
+  next-session integer clocks verified; 58 scalar parity checks over 12 dates.
+- Summary SHA256 `c5ae589033a8262d0b914a3fd1e0553cff52232aa0e12193540db4c957d3da0e`.
+  Full completed resumption left it byte-identical.
 
-The bounded model-pilot runner is now implemented below. No full training launch.
+Audit: `nn_meta/validation/v7-surfaces-verification-20260916.json`; exact source,
+build/resume/test logs and resource observations are retained beside the output.
+Build, audit, resume and tests all ended successfully. **No jobs remain running
+from this continuation.** Full suite: **1,824 tests +18 subtests**, 18 warnings,
+108.99 seconds, `/tmp/v7-surfaces-20260916r2-tests.log`; no code changed afterward.
 
-## Runnable model trial milestone
+The first invocation failed before any option-day output because the stock
+calendar ended September 14. Its completed stock index is retained at
+`nn_meta/validation/v7-surfaces-20260916`, with an old source binding; don't reuse
+it under the new code. Fresh Alpaca calendar capture:
+`nn_meta/data_v7/exchange-calendar-20260916` (1,464 sessions, 2021–October 2026).
+Raw API records exactly match the original calendar throughout shared coverage.
+The extended capture supplies September 15 availability for September 14 facts;
+it adds no out-of-scope stock/options data or labels. Original bytes, request,
+capture metadata and exact source retained. This is an **exchange calendar,
+not settlement/physical-exercise calendar evidence**.
 
-Added `nn_meta/v7/trials.py`, `scripts/run_v7_model_pilot.py` and the predeclared
-`docs/specs/V7_MODEL_TRIALS_20260916.json`: 21 initial trials (three objectives,
-constant baselines, GBT/NN seeds 11/29/47). See
-[model runner review](docs/reviews/2026-09-16-v7-model-trials.md).
-Runs use identical purged folds, train-only preprocessing/weights, no calibration
-or validation early stopping, fixed budgets, finite checks, exact model reload
-predictions, immutable attempt records and verified resumption. Component binding
-avoids recursive artifact-tree scans; full-campaign binding is unchanged.
+Latest shared quota **62,558,385,604 /250,000,000,000 bytes**, reservations empty.
+Do not reset it. Derived surface output approximately 101 MiB before logs.
+Four workers, one inner thread; host samples >23 GiB available RAM. Swap-in rose
+and swap-out stayed constant between samples, but attribution is unknown.
+No full no-swap/resource or V6-coexistence gate is claimed.
 
-Focused 15 tests passed; **full suite 1,813 tests +18 subtests**, 18 warnings,
-92.31 seconds: `/tmp/v7-model-trials-20260916-full-tests.log`. This includes
-actual NN/GBT fits for all objectives on synthetic test fixtures, not historical
-performance. All test jobs ended. The pilot CLI limits each split to 65,536 rows;
-full scheduling, 2024/2025 fold integration, calibration/threshold decisions,
-portfolio baselines, multiple-testing diagnostics and resource gates remain open.
-The old factorized v1/March-7 pilot was inspected and NOT reused or relabeled.
+Surface assumptions remain declared fixed European BS proxies (1–45 DTE,
+minimum $0.20, abs log moneyness <0.01, near <=20DTE, r=.0425/q=.012).
+They are not observed IV, executable prices, or option deliverable/alias proof.
+Literal raw ticker facts outside membership have no inferred security identity.
+Receipts retain `research_ready: false`; full daily-context admission is open.
 
-Next work: finish historical settlement-source coverage and funded observed
-physical replay, or continue independent full-history daily/context integration.
-No full training started. Shared quota now **62,557,919,862 /250,000,000,000
-bytes**, reservations empty. Do not reset quota or overwrite immutable pilots.
+## Preceding stock daily milestone
 
-Previous causal milestone (`2e8ac37`) remains preserved: all 11,268 variants
-produced 757,465 proposals in actual AAPL March 15–May 10, 2022 action-aware
-features. It had 111 columns, not full 222-column rows/execution. See
-[causal review](docs/reviews/2026-09-16-v7-causal-feature-pilot.md).
-Stock quote/settlement checkpoints `d4252dc` and `010134e` were pushed to main.
+Pushed commit `cddede8` built `nn_meta/validation/v7-stock-daily-20260916`:
+2,966 symbol/year shards, 594 source tickers, 669,749 raw calendar rows; all
+339,640 eligible sessions/591 identities, 67 verified aliases and 59 zeros.
+[Review and complete command](docs/reviews/2026-09-16-v7-full-stock-daily.md).
+Raw Alpaca regular-session OHLCV; close is last observed minute, not official
+auction. Exact nullable observation clocks; no missing-day fills or inferred
+identity outside membership. Independent full audit and completed resume passed.
+Summary SHA `e59e2259259c95c524bc493a889663a5a897f156400e0d6a316de2f54d94e8ea`.
+Audit `nn_meta/validation/v7-stock-daily-verification-20260916.json`.
 
-## Official calendar source follow-up
+**Next concrete daily work:** implement causal daily-return/context integration
+from these raw facts and reviewed action/identity evidence. Full-security
+surfaces now exist. `scripts/build_v7_daily.py` is an old SPY-only adjusted-price
+pilot and must not stand in for the causal/full-universe builder. Keep initial
+March 15 warmup missing; do not infer pre-membership identity from raw ticker
+history. Market/sector alignment and all 222-column assembly remain unfinished.
 
-Model-runner checkpoint `8097c08` is committed and pushed. Then located original
-OCC annual notices 49729/51460/53701/55737/57897 (2022–2026), special January
-2025 notice 55826 and final T+1 notice 54580. Read
-[exact source findings and failed capture status](docs/reviews/2026-09-16-v7-occ-calendar-sources.md)
-before repeating research. Seven raw OCC downloads returned Cloudflare HTTP 403;
-no browser is available. Web-reader text is not a local original PDF receipt.
-FINRA January 3, 2025 contrary-cutoff HTML did capture successfully (91,562 bytes).
-Request list `nn_meta/validation/v7-occ-calendar-requests-20260916.json`; output
-`nn_meta/data_v7/occ-calendars-20260916`. All attempts ended. No calendar admitted.
+## Other implemented components and unresolved sources
 
-## Full-universe raw daily stock milestone
+- Causal feature/proposal pilot `2e8ac37`: real AAPL March 15–May 10, 2022,
+  all 11,268 variants, 757,465 proposals, 111 TV/technical columns. Original
+  Apple April 28 $0.23 dividend announcement and prior $156.81 raw close.
+  [Review](docs/reviews/2026-09-16-v7-causal-feature-pilot.md). Full-universe action
+  evidence and integrated throughput still open; never relabel this as 222 columns.
+- Alpaca quote adapter `d4252dc`: actual AAPL May 5, 2022 pilot, 20,628 quotes;
+  exact clocks, SIP asof=-, firm R quotes, size/tie guards, latency/deadline,
+  bounded archive reuse. [Review](docs/reviews/2026-09-16-v7-stock-quotes.md).
+  Historical round-lot/share units require dated evidence. Full demand and
+  funded physical replay remain open. `010134e` fixed bank-holiday event T
+  handling; do not move covered trading T forward before counting settlement days.
+- Model runner `8097c08`: `nn_meta/v7/trials.py`, CLI `run_v7_model_pilot.py`,
+  `V7_MODEL_TRIALS_20260916.json`; 21 predeclared initial trials (three objectives,
+  constant baseline, NN/GBT seeds 11/29/47). Train-only preprocess/weights,
+  immutable source/runtime binding, model reload parity, verified resume;
+  validation does not early-stop/select/calibrate. [Review](docs/reviews/2026-09-16-v7-model-trials.md).
+  Synthetic tests only; bounded pilot <=65,536 rows/split, full runner missing.
+  Old March-7 factorized v1 pilot is outside active scope; never reuse/relabel.
 
-Built and verified `nn_meta/validation/v7-stock-daily-20260916`: **2,966**
-symbol/year shards, 594 source tickers, 669,749 raw calendar rows. Eligible join
-contains all **339,640** sessions and 591 security IDs, including 67 exact-date
-alias sessions and 59 explicit missing sessions. Full rerun verified all shards
-and left the final receipt byte-identical. See
-[full daily stock review](docs/reviews/2026-09-16-v7-full-stock-daily.md).
-
-Implementation: `nn_meta/v7/stock_daily.py`, `scripts/build_v7_stock_daily.py`.
-Raw Alpaca OHLCV only, last observed regular minute with exact nullable clocks,
-captured early closes, no fills and no inferred identity outside membership.
-Verification report `nn_meta/validation/v7-stock-daily-verification-20260916.json`
-checks every eligible row and exact coverage equality. Build/resume logs and the
-exact audit source are retained beside the output. Final receipt SHA256:
-`e59e2259259c95c524bc493a889663a5a897f156400e0d6a316de2f54d94e8ea`.
-
-Latest full suite **1,817 tests +18 subtests**, 18 warnings, 106.89 seconds:
-`/tmp/v7-stock-daily-20260916-tests.log`. Build, resume and tests all ended; no
-V7 jobs from this continuation remain running. Four workers were used, but host
-swap counters increased between sampled points. Attribution is unknown; do not
-claim the no-swap/resource gate passed. More than 23 GiB RAM was available at
-the samples; details in `resource-observations.json`. V6 remains unchanged.
-
-Next concrete daily-context work: causal daily-return integration using reviewed
-actions and full-security option surfaces. Existing `scripts/build_v7_daily.py`
-is an old SPY-only adjusted-price pilot and is not the full builder. Verified
-option aggregate audits are under `nn_meta/validation/v7-full-audit-20260915r2`;
-check transitive lineage to the current filtered active source before using them.
-The raw daily milestone does not complete the `daily_context` readiness stage.
+Official settlement/expiration calendar is still unfinished. Read
+[OCC capture findings](docs/reviews/2026-09-16-v7-occ-calendar-sources.md) before
+repeating failed attempts. OCC annual notices 49729/51460/53701/55737/57897,
+special January 2025 55826 and T+1 54580 were readable through web text but all
+seven raw PDF requests hit Cloudflare 403. No browser available; no raw original
+receipts. FINRA Jan 3, 2025 contrary-cutoff HTML did capture (91,562 bytes).
+DTCC original URLs returned 404; FINRA/DTCC 2023 Veterans Day conflict remains.
+A nominal 2025 Nasdaq URL currently serves 2026 PDF; don't infer vintage from URL.
+No calendar admitted. Requests `v7-occ-calendar-requests-20260916.json`, captures
+`nn_meta/data_v7/occ-calendars-20260916`. All acquisition attempts ended.
 
 ## User constraints and fixed scope
 
@@ -184,5 +187,4 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-full-stock-daily.md`.
-Older dated-sector and no-OTC reviews retain additional provenance.
+`handoff-history/HANDOFF-2026-09-16-before-full-surfaces.md`.

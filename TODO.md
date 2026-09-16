@@ -486,3 +486,11 @@ Evidence: [runnable model pilots](docs/reviews/2026-09-16-v7-model-trials.md).
 - [ ] Measure isolated full-history resource behavior; host swap increased during this build/resume observation interval, so no no-swap gate passed.
 
 Evidence: [full raw daily build](docs/reviews/2026-09-16-v7-full-stock-daily.md).
+
+## September 16 full daily option-surface checkpoint
+
+- [x] Build all 1,129 day surfaces and reconcile 669,749 raw ticker/date rows and all 339,640 eligible sessions; preserve missing observations.
+- [x] Capture and verify an extended Alpaca exchange calendar, exact next-session availability, all-row lineage and 58 scalar parity checks; verify completed resumption.
+- [ ] Complete causal daily returns, reviewed identity continuity, market/sector context and cold-start/warmup integration before admitting the daily-context stage.
+
+Evidence: [full option-surface build](docs/reviews/2026-09-16-v7-full-surfaces.md).

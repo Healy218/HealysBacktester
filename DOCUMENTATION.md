@@ -822,3 +822,15 @@ rebuilding operational timers. [Incident](docs/reviews/2026-09-15-v6-paper-healt
   model component pilots bind loaded project dependencies plus all V7 code;
   full-campaign provenance remains separate and unchanged. Pilot receipts are
   not full-universe admission. See the September 16 stock-quotes/model reviews.
+
+### V7 full daily surfaces and endpoint calendar
+
+`build_v7_surfaces.py` uses verified raw stock daily shards and exact active
+Massive daily/audit receipts. It requires a separate receipt-backed Alpaca
+availability calendar that agrees across the original calendar's entire
+coverage and extends beyond the study endpoint. Do not rewrite the stock
+calendar or infer the next session from weekdays. The extended exchange
+calendar does not resolve settlement/exercise-calendar evidence. Full raw
+surfaces retain missing values and literal ticker roots; they establish neither
+identity outside membership nor option deliverables. Causal daily/context
+integration is still required. See the September 16 full-surfaces review.
