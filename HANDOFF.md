@@ -1,6 +1,6 @@
 # Handoff — continue V7; leave the V6 experiment unchanged
 
-Updated September 16, 2026 at the user's request before clearing the session.
+Updated September 16, 2026 after the bounded model-trial milestone.
 Read TODO.md then this file. No subagents. Work on main, preserve unrelated dirty
 V6 work, consult DOCUMENTATION.md Traps before fixes, use `./venv/bin/python`.
 
@@ -31,39 +31,37 @@ FINRA/DTCC 2023 Veterans Day conflict, unavailable DTCC original bytes, and
 a nominally 2025 Nasdaq URL now serving a 2026 PDF must be resolved.
 Do not admit a calendar from URL year or search snippets.
 
-Next independent work: connect bounded folds/preprocessing to executable
-predeclared NN/GBT and baseline trials. No full training launch.
+The bounded model-pilot runner is now implemented below. No full training launch.
 
-## Latest V7 milestone
+## Runnable model trial milestone
 
-Previous pushed commits: `bc800f8` (no-OTC scope), `2c5273a` (dated sectors and
-bounded preprocessing). This checkpoint adds causal feature/action epochs and
-an actual AAPL dividend pilot; see
-[complete review and exact commands](docs/reviews/2026-09-16-v7-causal-feature-pilot.md).
+Added `nn_meta/v7/trials.py`, `scripts/run_v7_model_pilot.py` and the predeclared
+`docs/specs/V7_MODEL_TRIALS_20260916.json`: 21 initial trials (three objectives,
+constant baselines, GBT/NN seeds 11/29/47). See
+[model runner review](docs/reviews/2026-09-16-v7-model-trials.md).
+Runs use identical purged folds, train-only preprocessing/weights, no calibration
+or validation early stopping, fixed budgets, finite checks, exact model reload
+predictions, immutable attempt records and verified resumption. Component binding
+avoids recursive artifact-tree scans; full-campaign binding is unchanged.
 
-- New `nn_meta/v7/causal_features.py`: completed-minute, cold-start, action-aware
-  chart prefixes, all TV/technical features and bounded per-epoch strategy
-  signals. `bars.py`, `features.py`, `proposals.py` integrate shared aggregation,
-  required source subsets and cross-action proposal stops. Execution remains raw.
-- Real AAPL March 15–May 10, 2022: all 20 families, all 11,268 variants over
-  1/5/15/30 minutes, all 13 TV feature groups; **757,465 proposals**.
-  Output `nn_meta/validation/v7-causal-aapl-pilot-20260916`, all receipts verified.
-  Captured original Apple announcement and pre-event identity; May 6 $0.23
-  dividend factor uses prior raw Alpaca $156.81 close. No future cumulative factor.
-- This pilot contains 111 feature columns, not the full 222-column assembly,
-  quote labels, physical execution or training. All reports say not ready.
-  Epoch recomputation per variant batch is still a throughput limitation.
-- Full suite **1,786 tests +18 subtests passed**, 18 warnings, 91.01s.
-  `/tmp/v7-causal-features-20260916-full-tests.log`. Includes existing dirty V6
-  work. No code changes after that suite/pilot, only checkpoint documentation.
-- Settlement research captures FINRA 2022/2023/2026 documents; four DTCC raw
-  URLs returned 404. No implemented settlement calendar yet. Exact paths and
-  candidate canonical URLs are in the review; trading calendar is insufficient.
-- All jobs started by this continuation ended. Persistent V6/ops services are
-  separate. Shared quota `nn_meta/data_v7/quota.json` is
-  **62,556,214,251 /250,000,000,000 bytes**, reservations empty. Never reset it.
-- Code/input/source bindings are strict. Preserve pilot history if future code
-  changes invalidate bindings; do not overwrite or relabel immutable outputs.
+Focused 15 tests passed; **full suite 1,813 tests +18 subtests**, 18 warnings,
+92.31 seconds: `/tmp/v7-model-trials-20260916-full-tests.log`. This includes
+actual NN/GBT fits for all objectives on synthetic test fixtures, not historical
+performance. All test jobs ended. The pilot CLI limits each split to 65,536 rows;
+full scheduling, 2024/2025 fold integration, calibration/threshold decisions,
+portfolio baselines, multiple-testing diagnostics and resource gates remain open.
+The old factorized v1/March-7 pilot was inspected and NOT reused or relabeled.
+
+Next work: finish historical settlement-source coverage and funded observed
+physical replay, or continue independent full-history daily/context integration.
+No full training started. Shared quota now **62,557,827,643 /250,000,000,000
+bytes**, reservations empty. Do not reset quota or overwrite immutable pilots.
+
+Previous causal milestone (`2e8ac37`) remains preserved: all 11,268 variants
+produced 757,465 proposals in actual AAPL March 15–May 10, 2022 action-aware
+features. It had 111 columns, not full 222-column rows/execution. See
+[causal review](docs/reviews/2026-09-16-v7-causal-feature-pilot.md).
+Stock quote/settlement checkpoints `d4252dc` and `010134e` were pushed to main.
 
 ## User constraints and fixed scope
 
@@ -120,7 +118,7 @@ Protect V6. No full training until every readiness gate passes; alert user then.
 - Fold selection/loader and `preprocessing.py` implement immutable bounded reads,
   global duplicate checks, settlement purge, train-only moments/quantiles/weights
   and exact resume. `scripts/prepare_v7_training_fold.py` prepares inputs only;
-  runnable model trials and complete training runner remain outstanding.
+  bounded pilot model trials are now runnable; the full campaign runner remains outstanding.
 
 ## Remaining V7 work
 
@@ -143,5 +141,5 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-stock-quote-settlement.md`.
+`handoff-history/HANDOFF-2026-09-16-before-model-trials.md`.
 Older dated-sector and no-OTC reviews retain additional provenance.

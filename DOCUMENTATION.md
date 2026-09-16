@@ -807,3 +807,18 @@ then requests the existing refresh only when producer/refresh are idle.
 accepted producer cycle and relay/delivery. Keep this helper independent of
 activated numerical source; reinstall its two committed systemd units if
 rebuilding operational timers. [Incident](docs/reviews/2026-09-15-v6-paper-health.md).
+
+## V7 historical source and pilot traps (September 16)
+
+- Alpaca SIP quote sizes switched from round lots to shares November 3, 2025.
+  Require dated unit evidence; multiplying all historical sizes by 100 is wrong.
+- A stock trading date may be a settlement bank holiday. Count T+1/T+2 from
+  the original event, using later captured settlement dates; do not roll T first.
+- Official calendars can conflict or URLs can be mutable. Captured FINRA 2023
+  annual notes conflict with later indexed DTCC Veterans Day guidance. A Nasdaq
+  URL naming 2025 currently serves a 2026 PDF; inspect bytes and publication
+  vintage, not URL year. Original DTCC 404s are not successful source captures.
+- Recursive source traversal can spend minutes inside archived data trees. V7
+  model component pilots bind loaded project dependencies plus all V7 code;
+  full-campaign provenance remains separate and unchanged. Pilot receipts are
+  not full-universe admission. See the September 16 stock-quotes/model reviews.

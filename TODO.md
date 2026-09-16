@@ -469,3 +469,11 @@ Evidence: [causal feature pilot and resume notes](docs/reviews/2026-09-16-v7-cau
 - [ ] Connect bounded folds and train-only preprocessing to runnable predeclared trials, full-history assembly and resource gates.
 
 Evidence: [stock quotes and settlement](docs/reviews/2026-09-16-v7-stock-quotes.md).
+
+## September 16 V7 executable model components
+
+- [x] Predeclare 21 initial constant/GBT/NN objective/seed trials and connect bounded folds to actual fitting, immutable attempts, finite checks, model reload parity and verified resumption.
+- [x] Verify validation-label independence and deterministic NN/GBT fits for all three objectives; full suite 1,813 tests +18 subtests.
+- [ ] Integrate complete historical folds, full campaign runner, portfolio baselines, calibration/threshold declarations, multiple-testing and measured resource gates. Initial uncalibrated component trials do not pass full readiness.
+
+Evidence: [runnable model pilots](docs/reviews/2026-09-16-v7-model-trials.md).

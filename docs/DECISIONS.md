@@ -1018,3 +1018,18 @@ sector vectors with source and reason. A newer missing classification remains
 unknown rather than being silently filled. See `nn_meta/v7/sectors.py` and the
 frozen `nn_meta/validation/v7-sectors-20260916-final/policy.json`. Original
 publication-vintage claims are not inferred from historical vendor reconstruction.
+
+## 2026-09-16 — preserve V6 and predeclare initial V7 model pilots
+
+After the observed SEDG exit was explained (BBW stock exit, not a 5% option-P&L
+stop), the user directed us to leave the V6 experiment as it is and resume V7.
+No proposed spread cap or midpoint fill/stop policy was adopted.
+
+Initial V7 model comparisons are predeclared in
+`docs/specs/V7_MODEL_TRIALS_20260916.json`: three objectives, constant baselines
+and GBT/NN seeds 11/29/47, fixed budgets, identical purged selections and no
+post-fit calibration. Weighted-win outputs are not treated as calibrated
+probabilities. These are component trials with no winner/threshold selection;
+full campaign scheduling, calibration/selection amendments, portfolio evidence
+and multiple-testing diagnostics remain required. See the September 16 model
+trial review. This does not authorize full training or change readiness gates.
