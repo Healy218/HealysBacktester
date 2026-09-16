@@ -119,6 +119,8 @@ class PhysicalLedger(CashLedger):
         Its available_ns is a data observation time, not the download time.
         Unknown deliverables and late references are errors, not zero outcomes.
         """
+        if metadata.get('settlement_mode') == 'cash_merger':
+            return self._cash_merger_expiry(key, clock, metadata=metadata, reference=reference)
         p = self.positions[key]
         if p.get('phase') != 'option':
             raise ValueError('Expiry may be processed only once')
@@ -136,7 +138,7 @@ class PhysicalLedger(CashLedger):
                 or clock != reference['exercise_ns'] or day != expiry.isoformat()
                 or type(reference.get('reference_ns')) is not int
                 or not 0 <= reference['reference_ns'] <= reference['available_ns']
-                or pd.Timestamp(reference['reference_ns'], unit='ns', tz='UTC').tz_convert('America/New_York').date() != expiry):
+                or not self._reference_date_admitted(reference, expiry)):
             raise ValueError('Exact dated deliverable, official reference and exercise clock evidence required')
         price = reference.get('price')
         if isinstance(price, bool) or not isinstance(price, (float, int)) or not math.isfinite(price) or price <= 0:
@@ -177,6 +179,68 @@ class PhysicalLedger(CashLedger):
                     receivable=max(cash_delta, 0.), settled_on=settled_on, available_ns=available)
         return 'exercise_committed'
 
+    @staticmethod
+    def _reference_date_admitted(reference, expiry):
+        """A prior-day price requires an exact, separately bound OCC exception."""
+        observed = pd.Timestamp(reference['reference_ns'], unit='ns', tz='UTC').tz_convert('America/New_York').date()
+        if observed == expiry:
+            return True
+        override = reference.get('official_override', {})
+        return (observed < expiry and override.get('authority') == 'OCC'
+                and bool(override.get('notice_identity'))
+                and type(override.get('available_ns')) is int
+                and reference['reference_ns'] <= override['available_ns'] <= reference['available_ns']
+                and all(override.get(k) == reference.get(k) for k in
+                        ('contract', 'security_id', 'date', 'reference_ns', 'price')))
+
+    def _cash_merger_expiry(self, key, clock, *, metadata, reference):
+        """Mandatory OCC cash deliverable, never an assumed option market sale."""
+        p = self.positions[key]
+        root, expiry, right, strike = parse_occ_symbol(p['contract'])
+        day = pd.Timestamp(clock, unit='ns', tz='UTC').tz_convert('America/New_York').date().isoformat()
+        cash = metadata.get('cash_deliverable_per_contract')
+        if (p.get('phase') != 'option' or metadata.get('contract') != p['contract']
+                or metadata.get('expiry') != expiry or metadata.get('underlying') != root
+                or metadata.get('right') != right or metadata.get('strike') != strike
+                or metadata.get('multiplier') != 100 or not metadata.get('metadata_receipt_sha256')
+                or metadata.get('security_id') != p['security_id']
+                or metadata.get('date') != day or day > expiry.isoformat()
+                or type(metadata.get('effective_ns')) is not int
+                or type(metadata.get('available_ns')) is not int
+                or not 0 <= metadata['available_ns'] <= clock
+                or not 0 <= metadata['effective_ns'] <= clock
+                or isinstance(cash, bool) or not isinstance(cash, (int, float))
+                or not math.isfinite(cash) or cash <= 0
+                or reference.get('instruction') != 'cash-exercise-by-exception'
+                or not reference.get('source_identity')
+                or reference.get('exercise_ns') != clock
+                or type(reference.get('available_ns')) is not int
+                or not max(metadata['effective_ns'], metadata['available_ns']) <= reference['available_ns'] <= clock
+                or any(reference.get(k) != metadata.get(k) for k in
+                       ('contract', 'security_id', 'date', 'cash_deliverable_per_contract'))):
+            raise ValueError('Exact dated OCC cash deliverable and exercise evidence required')
+        difference = (Decimal(str(cash)) - Decimal(str(strike))*100) * (1 if right == 'C' else -1)
+        if difference < Decimal(str(self.physical_policy.exercise_threshold))*100:
+            self._event(key, clock, 'cash_expiration_nonexercise', contract=p['contract'],
+                        reference_identity=reference['source_identity'], realized_pnl=-p['cost'])
+            del self.positions[key]
+            self.completed[key] = clock
+            return 'expired_unexercised'
+        fees = p['quantity'] * self.physical_policy.exercise_fee_per_contract
+        if fees > self.available_cash + 1e-8:
+            return 'unresolved_exercise_funding'
+        settled_on, available = self.settlement_calendar.settlement(clock)
+        receivable = p['quantity'] * float(difference)
+        self._event(key, clock, 'cash_merger_exercise', cash_delta=-fees, contract=p['contract'],
+                    receivable=receivable, cash_deliverable_per_contract=cash,
+                    reference_identity=reference['source_identity'],
+                    metadata_receipt_sha256=metadata['metadata_receipt_sha256'])
+        self.cash -= fees
+        self.commitments[key] = dict(cash_delta=receivable, settled_on=settled_on,
+                                    available_ns=available, right='cash', shares=0.)
+        p['phase'] = 'cash_merger_pending'
+        return 'cash_exercise_committed'
+
     def acquire_inventory(self, key, symbol, security_id, quantity, fill):
         """Buy put-delivery inventory from existing cash, with settled delivery.
 
@@ -214,7 +278,7 @@ class PhysicalLedger(CashLedger):
                 self.shares[stock_key] = self.shares.get(stock_key, 0.) + c['shares']
                 self._event(key, clock, 'inventory_delivery', shares=c['shares'])
                 del self.positions[key]
-            elif p['phase'] == 'stock_sale_pending' or c['right'] == 'P':
+            elif p['phase'] in ('stock_sale_pending', 'cash_merger_pending') or c['right'] == 'P':
                 del self.positions[key]
                 self.completed[key] = clock
             else:

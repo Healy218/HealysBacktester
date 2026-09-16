@@ -31,6 +31,8 @@ def main():
     requests = json.loads(args.requests.read_text())
     work, seen = [], set()
     for row in requests:
+        if set(row) - {'symbol', 'date', 'feed'} or row.get('feed', 'sip') not in ('sip', 'otc'):
+            raise ValueError('Unexpected request field or stock feed')
         symbol, day = row['symbol'], row['date']
         if not re.fullmatch(r'[A-Z][A-Z0-9.]{0,14}', symbol) or day not in days:
             raise ValueError('Invalid symbol or uncaptured session')
@@ -42,6 +44,8 @@ def main():
             work.append({'kind': 'stock', 'symbol': symbol, 'adjustment': adjustment,
                          'start': day + 'T00:00:00Z', 'end': end + 'T00:00:00Z',
                          'key': f'stock_1m/{adjustment}/{symbol}/{day}'})
+            if 'feed' in row:
+                work[-1]['feed'] = row['feed']
     sources = {name: sha(ROOT / name) for name in
                ('scripts/capture_v7_stock_gaps.py', 'scripts/download_v7_data.py')}
     scope = {'schema': 'v7-explicit-stock-gap-capture-v1', 'requests': requests,

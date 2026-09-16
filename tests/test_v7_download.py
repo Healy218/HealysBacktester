@@ -5,7 +5,18 @@ import pandas as pd
 import pytest
 
 from scripts.download_v7_data import (completed, digest, save, tasks, validate_bars,
-                                     quota_update, TASK_RESERVATION, CapacityPause, tree_bytes)
+                                     quota_update, TASK_RESERVATION, CapacityPause, tree_bytes, stock_params)
+
+
+def test_stock_feed_is_explicit_and_not_silently_substituted():
+    task = {'symbol': 'BBBYQ', 'adjustment': 'raw',
+            'start': '2023-05-03T00:00:00Z', 'end': '2023-05-04T00:00:00Z'}
+    assert stock_params(task)['feed'] == 'sip'
+    assert stock_params({**task, 'feed': 'otc'})['feed'] == 'otc'
+    assert stock_params(task)['asof'] == '-'
+    assert pd.Timestamp(stock_params(task)['end']) < pd.Timestamp(task['end'])
+    with pytest.raises(ValueError, match='feed'):
+        stock_params({**task, 'feed': 'iex'})
 
 
 def bar(t='2022-03-07T14:30:00Z'):

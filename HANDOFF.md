@@ -1,15 +1,38 @@
-# V7 preparation — tested progress; full training remains gated
+# V7 lifecycle milestone — preparation continues; training remains blocked
 
-Updated September 15, 2026. Read TODO.md first. User asked to get V7 ready to
-train; this session rebuilt membership, fixed row semantics and implemented
-physical-ledger/shared-replay mechanics. **No full campaign or training launched.**
-Full-universe data/execution/training integration remains unfinished.
+Updated September 16, 2026. User directs continuing all necessary work until V7
+is ready, then alerting them. A persistent goal is active. Do not stop at this
+checkpoint or send a readiness alert while gates fail. No subagents.
 
-Review: [training preparation](docs/reviews/2026-09-15-v7-training-preparation.md).
-Previous handoff: [before this work](handoff-history/HANDOFF-2026-09-15-before-training-preparation.md).
-The earlier [full feature audit](docs/reviews/2026-09-15-v7-feature-and-freeze-audit.md)
-remains the scope reference; its row-placeholder and missing-ledger statements
-are superseded by the component implementation described here, not by admission.
+Read [latest review](docs/reviews/2026-09-16-v7-lifecycle-preparation.md).
+Previous handoff archived at
+`handoff-history/HANDOFF-2026-09-16-before-lifecycle-work.md`.
+
+New this milestone:
+- Retrospectively explain 121/122 missing sessions, with ticker+FIGI binding;
+  VERU 2022-11-09 remains unexplained. All held-position/PIT admission stays false.
+- Add explicit receipt-bound Alpaca OTC acquisition. BBBYQ/FRCB probes returned
+  HTTP 403. An asynchronous question asks whether existing Massive access may
+  be checked for those gaps; no source change is authorized until the reply.
+- Capture additional lifecycle and successor dated references. The 74 successor
+  request file is `nn_meta/validation/v7-lifecycle-successor-requests-20260916.json`.
+- Record primary OCC/issuer lifecycle facts in
+  `docs/specs/V7_LIFECYCLE_REVIEW_20260916.json`; generated classification is
+  `nn_meta/validation/v7-lifecycle-review-20260916`. This is a retrospective
+  explanation inventory, not a full lifecycle-admission artifact.
+- Add cash-merger expiry settlement and exact OCC prior-day price overrides to
+  the physical ledger, with synthetic tests. Real evidence adapters remain open.
+- Add bounded public evidence capture. Novavax HTML succeeded; OCC/SEC HTTP403,
+  Biogen timeout. Do not claim the OCC PDFs were archived.
+- Full suite now **1,754 +18 subtests**, 18 warnings, 81.98s;
+  `/tmp/v7-lifecycle-20260916-tests.log`. Existing dirty V6 work preserved.
+- Current checker `nn_meta/validation/v7-readiness-20260916-lifecycle.json`
+  refuses all eight missing stages. First three input/inventory gates pass.
+- Quota at checkpoint: **62,530,264,652 /250,000,000,000 bytes**, reservations empty.
+
+The prior milestone details below remain relevant; its 122 unresolved coverage
+zeros are preserved even though 121 now have retrospective explanations. Its
+1,746-test count is superseded by this checkpoint.
 
 ## Fixed scope
 

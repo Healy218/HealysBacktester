@@ -179,17 +179,25 @@ def acquire(root_text, task, reserve_gib):
         quota_update(root.parent, finish=(reservation, max(used, 0)))
 
 
+def stock_params(task):
+    """Bind an explicitly requested feed; legacy captures remain SIP."""
+    feed = task.get('feed', 'sip')
+    if feed not in ('sip', 'otc'):
+        raise ValueError('Stock feed must be sip or otc')
+    return {'symbols': task['symbol'], 'timeframe': '1Min', 'feed': feed,
+            'adjustment': task['adjustment'], 'asof': '-', 'sort': 'asc', 'limit': 10000,
+            'start': task['start'],
+            'end': (pd.Timestamp(task['end']) - pd.Timedelta(nanoseconds=1)).isoformat()}
+
+
 def acquire_reserved(root, task, reserve_gib):
+    params = stock_params(task) if task['kind'] == 'stock' else None
     dest = root / task['key']
     attempt = dest / ('attempt-' + uuid.uuid4().hex)
     attempt.mkdir(parents=True)
     files, count, upper_bound_bytes = {}, 0, 1024**2
     began = datetime.now(timezone.utc).isoformat()
     if task['kind'] == 'stock':
-        params = {'symbols': task['symbol'], 'timeframe': '1Min', 'feed': 'sip',
-            'adjustment': task['adjustment'], 'asof': '-', 'sort': 'asc', 'limit': 10000,
-            'start': task['start'],
-            'end': (pd.Timestamp(task['end']) - pd.Timedelta(nanoseconds=1)).isoformat()}
         seen, previous, writer = set(), None, None
         session = requests.Session()
         try:

@@ -424,3 +424,10 @@ History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconc
 - [ ] Complete actual option quote/trade demand/capture, full-history assembly/training trials and resource pilots; pass every readiness stage before launch.
 
 See [training preparation](docs/reviews/2026-09-15-v7-training-preparation.md).
+
+## September 16 V7 lifecycle continuation
+
+- [x] Explain 121/122 lifecycle zero sessions in a separately bound retrospective review; keep execution/PIT admission blocked and preserve VERU as unresolved.
+- [x] Add and test official cash-merger expiry settlement and exact OCC prior-day reference exceptions; real evidence adapters and successor data remain open.
+
+Evidence: [lifecycle preparation](docs/reviews/2026-09-16-v7-lifecycle-preparation.md).

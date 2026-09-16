@@ -62,6 +62,66 @@ def test_settlement_transition_and_holiday_are_dated_and_conservative():
         cal.settlement(ns('2024-06-10'))
 
 
+def test_prior_day_official_price_requires_exact_occ_exception():
+    for mode in ('missing', 'wrong_price', 'late', 'valid'):
+        book = ledger()
+        e = evidence(buy(book))
+        ref = e['reference']
+        ref['reference_ns'] = ns('2024-05-23')
+        if mode != 'missing':
+            override = {k: ref[k] for k in ('contract', 'security_id', 'date', 'reference_ns', 'price')}
+            override.update(authority='OCC', notice_identity='bound-notice',
+                            available_ns=ns('2024-05-24', '19:00'))
+            if mode == 'wrong_price':
+                override['price'] += 1
+            if mode == 'late':
+                override['available_ns'] = ns('2024-05-25')
+            ref['official_override'] = override
+        if mode == 'valid':
+            assert book.expire('a', ns('2024-05-24', '21:00'), **e) == 'exercise_committed'
+        else:
+            with pytest.raises(ValueError, match='evidence required'):
+                book.expire('a', ns('2024-05-24', '21:00'), **e)
+
+
+def cash_evidence(contract, cash=11000.):
+    e = evidence(contract)
+    e['metadata'].update(settlement_mode='cash_merger', cash_deliverable_per_contract=cash,
+                         security_id='SPY-id', effective_ns=ns('2024-05-24', '13:30'),
+                         available_ns=ns('2024-05-24', '15:00'))
+    e['reference'].update(instruction='cash-exercise-by-exception', cash_deliverable_per_contract=cash)
+    return e
+
+
+@pytest.mark.parametrize('right,cash', [('C', 11000.), ('P', 9000.)])
+def test_official_cash_deliverable_does_not_need_shares_or_inject_strike_funding(right, cash):
+    book = ledger(capital=1000.)
+    contract = buy(book, right=right)
+    assert book.expire('a', ns('2024-05-24', '21:00'), **cash_evidence(contract, cash)) == 'cash_exercise_committed'
+    assert book.cash == 900. and book.available_cash == 900.
+    assert book.equity(ns('2024-05-24', '21:00'), {}) == 1900.
+    assert book.positions['a']['phase'] == 'cash_merger_pending' and not book.shares
+    book.settle(ns('2024-05-30', '13:30'))
+    assert book.cash == 1900. and not book.positions
+    assert book.completed['a'] == ns('2024-05-30', '13:30')
+    book.reconcile()
+
+
+def test_cash_merger_does_not_assume_positive_payoff_or_accept_late_terms():
+    book = ledger()
+    e = cash_evidence(buy(book), 9900.)
+    assert book.expire('a', ns('2024-05-24', '21:00'), **e) == 'expired_unexercised'
+    assert book.cash == 99900.
+    for field, value in [('available_ns', ns('2024-05-25')), ('security_id', 'other-company'),
+                          ('cash_deliverable_per_contract', float('nan'))]:
+        book = ledger()
+        e = cash_evidence(buy(book))
+        e['metadata'][field] = value
+        with pytest.raises(ValueError, match='cash deliverable'):
+            book.expire('a', ns('2024-05-24', '21:00'), **e)
+        assert book.cash == 99900. and not book.commitments
+
+
 def test_funded_call_keeps_slot_and_cash_commitment_until_sale_settles():
     book = ledger()
     contract = buy(book)
