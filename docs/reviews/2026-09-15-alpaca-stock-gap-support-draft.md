@@ -1,6 +1,10 @@
 # Alpaca historical SIP gap — support draft, not sent
 
 Prepared September 15, 2026. No credentials or customer identifiers included.
+User confirms an existing Alpaca Pro subscription. Alpaca remains the V7
+underlying-stock source; Massive supplies historical options. These incomplete
+SIP responses require data/request investigation, not an assumed stock-plan
+upgrade. The Massive stock probe below is historical diagnostic evidence only.
 
 ## Reproduction
 

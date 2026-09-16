@@ -1,6 +1,6 @@
 # V7 readiness: implemented pilots; historical admission still blocked
 
-Updated September 15, 2026 after the user’s expiry and stock-upgrade choices. User requested **all four V7 workstreams**.
+Updated September 15, 2026 after the user’s Alpaca-stock/Massive-options and physical-exercise choices. User requested **all four V7 workstreams**.
 The task remains **incomplete**; continue it. Do not launch full freeze/build/training
 until the complete-universe gates pass. No subagents authorized. Four bounded
 compute workers, shared **250 GB decimal acquisition cap**. Preserve activated
@@ -107,11 +107,14 @@ halts (links in review). VERU2022-11-09 full-session halt remains unverified.
 The other118 candidate/session cases mostly follow lifecycle events; exact
 trading status, identity treatment and held-option disposition still need resolution.
 
-**User chose:** investigate the Massive stock upgrade. Investigation complete:
-Stocks Starter advertises $29/month, five years of minute bars, covering March8
-2022 today. Saved HTTP403 confirms a timeframe entitlement restriction, not
-missing-record availability. No purchase or external message authorized. See
-[findings and unsent verification request](docs/reviews/2026-09-15-v7-massive-stock-upgrade.md).
+**User clarification supersedes the upgrade path:** the account has Alpaca Pro;
+V7 uses Alpaca underlying stock bars and Massive options. Continue diagnosing
+and repairing the March8 Alpaca SIP observations. The stock gaps are observed
+query/data-quality failures, not an established Alpaca plan limitation. The
+HTTP403 was from the separate Massive stock probe only. No Massive stock
+subscription is needed as a preparation decision, and none was purchased.
+Keep the Alpaca support evidence prepared but unsent; external messages have
+not been authorized. The earlier upgrade investigation is historical only.
 
 ## Features, quotes and storage
 
@@ -152,11 +155,17 @@ Shared five-slot/10%-equity/one-symbol allocator has causal scores,reservedcash,
 roll proceeds and no new entries with stale held marks. Real72path pilot has
 8closed+1censoredopen; capture/valuation complete,evaluation incomplete.
 
-**User-selected expiry policy:** retain unresolved outcomes and block affected
-evaluations. No eligible observed exit means null return, incomplete label and
-retained position. Existing replay/portfolio behavior matches; 17 focused
-replay/execution/portfolio tests passed. No expiry-policy question remains.
-Dated option-class hours/weekly eligibility still unverified.
+**Latest user-selected expiry policy supersedes unresolved-only:** model
+exercise and stock delivery, requiring funding and observed liquidation prices.
+See `docs/specs/V7_PHYSICAL_EXPIRY_20260915.md` and the new immutable evaluation
+amendment `V7_EVALUATION_20260915_PHYSICAL.json`. These are declarations, not
+implemented/validated physical-exercise code. Existing replay still leaves
+unfilled expiry unresolved. Required next work: evidence-bound exercise and
+stock ledger, shared funding/inventory reservations, dated settlement,
+Alpaca stock quotes, stock liquidation costs/marks, extended label horizons,
+regression tests and real replay. Do not relabel existing pilots as passing.
+Missing evidence/funding still blocks affected evaluations; no synthetic
+intrinsic-value cash settlement. Dated option hours/weekly eligibility remain open.
 
 ## Evaluation and next steps
 
@@ -164,7 +173,9 @@ Immutable `docs/specs/V7_EVALUATION_20260915.json`, SHA
 f03272ee3545b08c2dbb4deb2d92da3ad32b3e323923e9ff630ef6f94a119ae3.
 Expanding2024H2/2025H1/2025H2 validation,2026Jan1–Sep14 final,10sessionembargo,
 train-only fitting,completed-label purging; inspected periods are revalidation.
-Amend a new version if policies change, never rewrite it.
+Original preserved. The physical-exercise amendment above must be explicitly
+bound by future launchers after implementation; old launchers still bind the
+original. Never rewrite historical declarations.
 
 Continue: repair external stock gaps; finish session-bound identity/sector and
 causal price histories; dated option-hours/expiry policy; actual quote demand,

@@ -35,8 +35,9 @@ September 15 implementation progress ([evidence](docs/reviews/2026-09-15-v7-read
 - [x] Implement bounded factorized rows and fold-indexed LightGBM Sequence; verify exact reconstruction and prediction equivalence.
 - [x] Complete the 598-name quote-demand planning envelope with the verified vectorized selector.
 - [ ] Repair 26 March 8, 2022 provider gaps; complete remaining lifecycle/alias/sector and causal adjustment admission.
-- [x] Confirm no-bid expiry policy: retain unresolved outcomes and block affected evaluations (17 focused tests passed).
-- [x] Investigate Massive stock upgrade: Starter $29/month covers the requested date; actual repair records and purchase remain unconfirmed.
+- [x] Record latest expiry choice: funded physical exercise and stock delivery with observed liquidation prices; supersedes unresolved-only.
+- [ ] Implement and validate the physical-exercise/stock ledger, shared funding and share-delivery checks, dated settlement and Alpaca stock quote liquidation; retain unresolved fallback when prerequisites fail.
+- [x] Confirm source split: existing Alpaca Pro for underlying stocks, Massive for options; stock-upgrade investigation superseded by user clarification.
 - [ ] Finish dated option hours, enforce expiry admission in the full build, establish actual quote-demand feasibility and full capture under 250 GB.
 - [ ] Complete full-history assembly/resource pilots and pass complete-universe readiness gates before freeze/build/training.
 

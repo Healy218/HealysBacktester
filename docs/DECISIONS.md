@@ -925,3 +925,31 @@ external messages. Stocks Starter advertises $29/month, five years of minute
 bars, sufficient date entitlement for March 8, 2022 as of September 15, 2026.
 Actual records remain unverified behind the saved HTTP403. See
 [upgrade investigation](reviews/2026-09-15-v7-massive-stock-upgrade.md).
+
+## 2026-09-15 — Retain Alpaca stocks and Massive options
+
+User clarified that the existing account has Alpaca Pro and the intended V7
+source split is Alpaca underlying stock data plus Massive historical options.
+This supersedes pursuing the Massive stock upgrade. Investigate the 26 March8
+missing SIP sessions through Alpaca; successful but incomplete stock responses
+are not evidence of an Alpaca subscription/history entitlement restriction.
+The saved HTTP403 belongs to the alternate Massive stock endpoint only.
+Preserve observed gap evidence, originals and the unsent Alpaca support draft;
+no new subscription or support message is authorized by this clarification.
+The selected unresolved-expiry/evaluation-blocking policy is unchanged.
+
+## 2026-09-15 — Physical exercise supersedes unresolved-only expiry policy
+
+Latest explicit user choice: model exercise and stock delivery, requiring
+funding and observed liquidation prices. This supersedes the earlier choice
+to leave all unsold expiring contracts unresolved. It does not authorize an
+intrinsic-value cash settlement or borrowed funding/inventory assumptions.
+Unavailable funding, deliverable evidence or executable stock prices still
+leave affected outcomes unresolved and block evaluation admission.
+
+[Implementation contract](specs/V7_PHYSICAL_EXPIRY_20260915.md) records the
+cash/share checks, dated settlement, quote sources and completion criteria.
+New `V7_EVALUATION_20260915_PHYSICAL.json` preserves the original declaration
+and adds this policy as an amendment. Existing code/pilots are not migrated or
+validated by recording this decision; implementation and real replay remain
+required. Alpaca supplies underlying stocks; Massive supplies options.

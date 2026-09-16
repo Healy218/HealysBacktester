@@ -84,10 +84,12 @@ claim that this broad planning envelope itself fits the budget.
 
 1. Repair genuine stock gaps; finish all identity-bound histories, sectors,
    lifecycle/holding paths and causal adjusted prices.
-2. Resolve dated option-class hours and weekly eligibility. User explicitly
-   selected unresolved outcomes with blocked affected evaluations for unfilled
-   expiry. Existing replay/portfolio behavior passes 17 focused tests; the
-   fixed SPY call still cannot produce an admitted return.
+2. Resolve dated option-class hours and weekly eligibility. The latest user
+   choice supersedes unresolved-only: funded physical exercise and stock
+   delivery with observed stock liquidation. The new policy declaration is
+   `V7_PHYSICAL_EXPIRY_20260915.md`; implementation and validation remain open.
+   Existing replay/portfolio safeguards passed 17 focused tests, but those tests
+   do not validate physical exercise. The fixed SPY call remains incomplete.
 3. Complete actual required quote/trade/metadata demand, storage feasibility,
    full capture and full-history factorized assembly/resource pilots.
 4. Bind those completed inputs to evaluation/source/runtime declarations and

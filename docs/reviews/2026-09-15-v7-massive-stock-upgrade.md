@@ -1,4 +1,8 @@
-# Massive stock repair entitlement investigation
+# Massive stock repair entitlement investigation — superseded
+
+**Subsequent user clarification:** use existing Alpaca Pro for underlying
+stocks and Massive for options. The upgrade path below is historical research,
+not an active recommendation or pending purchase. Diagnose the Alpaca SIP gap.
 
 Checked September 15, 2026. User authorized investigation; no subscription
 was purchased and no message was sent.
