@@ -27,7 +27,7 @@ Current pre-freeze audit ([full inventory and ordered gates](docs/reviews/2026-0
 - [ ] Rebuild PIT membership with explicit March 8–14 exclusion/lookback policy, retaining the full exchange calendar; validate lifecycle/session aliases and frozen dated sectors.
 - [ ] Integrate the tested causal-price prototype with evidence for splits, dividends, combined actions and spin-offs, contemporaneous tick units and cross-action stops.
 - [ ] Build daily/market context for every eligible security; record initial warmup missingness and first eligible observations after March 15.
-- [ ] Resolve `dte_frac = target_dte / 45` and constant-zero `moneyness` before sealing model inputs; bind selected-contract semantics or explicitly declared baseline conventions.
+- [x] Bind selected-contract semantics: actual calendar DTE / 9 and log(strike/raw spot), with fresh causal raw spot and versioned factorized stores.
 - [ ] Connect bounded full-history rows/labels/marks to V7 training; measure binned-dataset memory and recovery alongside V6.
 - [ ] Declare V7 model/objective/seed/weight/calibration trials before outcomes; retain baseline comparisons, finite NN/GBT checks and multiple-testing diagnostics.
 - [ ] Implement one executable full-universe launch gate and rerun new-window integrated pilots, including sparse markets, actions, rolls and funded expiry.
@@ -412,3 +412,15 @@ History: [previous TODO](handoff-history/TODO-2026-09-05-before-checklist-reconc
 - [x] Inventory completed V7 base acquisition: 8,282/8,284, 52.516 GB; 270 observed-empty stock captures require audit.
 - [x] Capture September 14 option day/minute files after publication; base acquisition reached 8,284/8,284. The preceding 8,282 count is the historical incident checkpoint.
 - [ ] Complete the ordered [V7 readiness gates](docs/reviews/2026-09-15-v7-feature-and-freeze-audit.md) before full freeze/build/training.
+
+## September 15 V7 preparation implementation continuation
+
+- [x] Rebuild PIT membership on filtered inputs with calendar-preserving deletion/lookback policy: 597 tickers, 595 identities; rerun eligible-session coverage.
+- [x] Replace legacy DTE/moneyness placeholders with selected-contract semantics; version factorized stores and preserve initial missing daily warmup.
+- [x] Implement and synthetically test shared funded physical-expiry ledger, stock inventory/settlement and extended portfolio horizons.
+- [x] Add executable fail-closed full-universe evidence aggregator; current result rejects missing stage evidence.
+- [ ] Resolve 122 zero-session lifecycle cases, dated sectors and held-position deliverables; finish causal price/action evidence and all-security daily context.
+- [ ] Supply the physical context/receipt adapters, official references, settlement calendar and Alpaca stock quote capture; pass real shared expiry replays.
+- [ ] Complete actual option quote/trade demand/capture, full-history assembly/training trials and resource pilots; pass every readiness stage before launch.
+
+See [training preparation](docs/reviews/2026-09-15-v7-training-preparation.md).

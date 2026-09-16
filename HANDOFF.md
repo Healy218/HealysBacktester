@@ -1,144 +1,121 @@
-# V7 preparation checkpoint — not ready for freeze/build/training
+# V7 preparation — tested progress; full training remains gated
 
-Updated September 15, 2026 after the requested roadmap/TODO/feature audit.
-Read TODO.md first, then this file. The user plans to clear the session before
-continuing. **Finish the pre-freeze gates below before launching a campaign.**
-All agreed feature groups are represented; several essential integrations are
-unfinished. Passing tests and completed base downloads do not close them.
+Updated September 15, 2026. Read TODO.md first. User asked to get V7 ready to
+train; this session rebuilt membership, fixed row semantics and implemented
+physical-ledger/shared-replay mechanics. **No full campaign or training launched.**
+Full-universe data/execution/training integration remains unfinished.
 
-Current detailed checklist: [feature and freeze audit](docs/reviews/2026-09-15-v7-feature-and-freeze-audit.md).
-Previous handoff archived at
-[before March 15 migration](handoff-history/HANDOFF-2026-09-15-before-march15-start.md).
-Earlier numerical pilots and source investigations remain historical evidence.
+Review: [training preparation](docs/reviews/2026-09-15-v7-training-preparation.md).
+Previous handoff: [before this work](handoff-history/HANDOFF-2026-09-15-before-training-preparation.md).
+The earlier [full feature audit](docs/reviews/2026-09-15-v7-feature-and-freeze-audit.md)
+remains the scope reference; its row-placeholder and missing-ledger statements
+are superseded by the component implementation described here, not by admission.
 
-## Fixed decisions
+## Fixed scope
 
-- Research **2022-03-15–2026-09-14** inclusive. User chose the birthday start;
-  March 8–14 are removed from active working inputs. Keep the real exchange
-  calendar. Earlier captures can support separately verified PIT history;
-  price-feature state restarts March 15 with explicit missing warmup.
-- **Alpaca Algo Trader Plus underlying stocks, Massive options.** The March 8
-  repair/stock-upgrade investigation is retired; no subscription purchased or
-  support message sent. Do not reopen it as a prerequisite.
-- All 20 strategy families, 2,817 variants/timeframe, **11,268/ticker**, on
-  1/5/15/30-minute signals. All 13 TradingView scopes and 10 tick features:
-  **222 model columns**. No global winner-only selection or 2,000-event cap.
-- Every-minute observed option execution/marks, actual 1–9 calendar DTE for
-  purchases; planning targets 1/2/4/5/7. Five shared slots, 10% equity, one symbol
-  across timeframes, explicit costs/latency/cash reservations.
-- Latest expiry policy: **funded physical exercise and stock delivery with
-  observed stock liquidation**. This supersedes unresolved-only but is still
-  declared, not implemented. Missing funding/evidence remains unresolved.
-  Spec: [physical expiry](docs/specs/V7_PHYSICAL_EXPIRY_20260915.md).
-- Four bounded workers, **250 GB decimal shared acquisition cap**. Protect V6.
-  No subagents authorized, no unsolicited/test notifications, no full launch.
-- External Pine comparison remains explicitly deferred. Other experts, learned
-  exits/contract selection, new regime features and live-feed promotion are
-  separate work, not additions to this run without a new decision.
+- March 15, 2022–September 14, 2026 inclusive. March 8–14 absent from active
+  price/options inputs; full exchange calendar retained. Earlier captures can
+  support PIT membership; price-feature state restarts March 15 with missing warmup.
+- Alpaca underlying stocks, Massive options. Full 20 families, 2,817 variants
+  per 1/5/15/30-minute timeframe, 11,268/ticker, 222 columns; all 13 TV scopes
+  and 10 tick features. External Pine comparison remains deferred.
+- Actual 1–9 calendar DTE purchases, targets 1/2/4/5/7, minute execution/marks,
+  five shared slots, 10% equity premium allocation, one symbol across timeframes.
+- Funded physical exercise/stock delivery and observed stock liquidation.
+  Insufficient funding/shares/evidence stays unresolved; never inject capital,
+  create stock shorts or turn absent bids into intrinsic-value sales.
+- Four bounded workers, shared 250 GB decimal acquisition cap, protect V6.
+  No subagents, no unsolicited/test notifications, no full launch before gates.
 
-## Completed and verified this checkpoint
+## Landed and verified
 
-The [March 15 migration review](docs/reviews/2026-09-15-v7-march15-start.md)
-records commands, scope and evidence. The new `scripts/rescope_v7_inputs.py`
-creates derived receipt-bound inputs while preserving original provider captures.
+1. `universe.membership` supports explicit excluded sessions. Deleted dates
+   consume the 63-session lookback, but contribute neither zeros nor activity;
+   no older-session backfill. The 50-active-session minimum remains. Builder
+   requires current filtered inputs/full calendar and persists provenance.
+2. New immutable universe `nn_meta/validation/v7-identity-universe-start-20220315`:
+   **597 tickers, 595 securities, 16,580 research membership rows**; reviewed
+   transitions pass. Old 598-name list is historical, not active admission.
+3. New `nn_meta/validation/v7-membership-session-coverage-rebuilt-20220315`:
+   **340,272 eligible sessions, 189 original zeros, 67 aliases resolved, 122
+   unresolved**. No lifecycle/complete-feed admission. Manifest points here.
+4. `v7-selected-contract-rows-v2`: actual DTE / 9; log(strike/raw spot), with
+   completed raw spot available by decision and <=60s old. Target DTE remains
+   metadata. Initial unavailable daily context yields explicit NaNs/status,
+   preserving March 15. Factorized format advances to v2 and rejects v1.
+5. New `nn_meta/v7/physical.py`: shared funded cash/share commitments, official
+   reference/standard-contract checks, explicit nonexercise, delivery/settlement,
+   sized observed stock fills, stock marks and full cash reconciliation. Optional
+   funded stock inventory enables put delivery without creating free shares.
+   Pro-rata fractional paper convention; zero exercise fee and .001/.0005 stock
+   fee/slippage are declared research inputs. Settlement availability is
+   conservative: next trading open after the captured settlement date.
+6. `portfolio_replay(..., physical=context)` integrates the ledger, preserves
+   slots through stock sale/cash settlement and records extended completion times.
+   Ten physical tests are **synthetic**, not real captured exercise admission.
+   Standalone replay is still unresolved at unsold expiry; no artificial funding.
+7. `scripts/v7_readiness.py` aggregates immutable full-universe stage evidence.
+   Current command exits **1**, correctly refusing training. Active inputs,
+   rebuilt membership and coverage inventory pass; eight substantive stages
+   still lack evidence. The aggregator is not the missing full campaign builder.
 
-- Working root: `nn_meta/data_v7/start-20220315`.
-- 7,430 stock shards; **711,178,638 retained raw/adjusted rows**;
-  **2,226,484 raw/adjusted rows excluded**. Other years hardlinked.
-- Independent verification of all **1,238 year-2022 shards**, 117,150,912 rows:
-  zero March 8–14 timestamps in New York time; zero excluded option days.
-  Receipt: `nn_meta/validation/v7-start-20220315-verification.json`.
-- 1,425 option daily captures retained. Original base acquisition had completed
-  all 8,284 tasks, including both September 14 files.
-- New chain: `nn_meta/validation/v7-chain-start-20220315`, **22,130,242 contracts**,
-  8,703 roots, 1,425 days; 99.38 seconds.
-- New-date coverage diagnostic:
-  `nn_meta/validation/v7-membership-session-coverage-start-20220315`.
-  340,208 eligible sessions, 189 original zeros, 67 resolved aliases,
-  **122 remaining zeros**. Uses old PIT membership diagnostically; it does
-  **not** admit a new universe or resolve remaining lifecycle cases.
-- Entry-point date/input guards now select the new scope; pilot dates are
-  March 15–18. Old SPY tick store is historical, not active quote coverage.
-- Causal-price prototype and its four tests preserved in
-  `nn_meta/v7/causal_prices.py`; integration and action-evidence gates stay open.
-- Full suite: **1,722 tests +18 subtests passed**, 82.54s, 18 warnings,
-  `/tmp/v7-march15-final-tests.log`. This was a working-tree suite, including
-  unrelated pending V6 work; do not call it a clean-checkout reproduction.
-- Session migration/catalog/coverage/verification jobs finished. Quota last
-  read: **62,530,084,555 bytes**, no active reservations. Do not reset quota
-  while any future acquisition is active.
+Full suite: **1,746 tests +18 subtests passed**, 18 warnings, 81.97s;
+`/tmp/v7-preparation-20260915-final-tests.log`. Includes preserved unrelated V6
+working-tree changes, so not a clean-checkout reproduction. No active jobs from
+this session remain after final verification.
 
-## Active manifests and ticker inventories
+## Current inputs and reports
 
-The tracked [active-input manifest](docs/specs/V7_ACTIVE_INPUTS_20220315.json)
-binds the working-input report, independent verification, chain and policy.
-It explicitly has `research_ready=false`, `quote_inputs=null`.
+- Active selection: `docs/specs/V7_ACTIVE_INPUTS_20220315.json`, still
+  `research_ready=false`, `quote_inputs=null`, `readiness_evidence={}`.
+- Working root: `nn_meta/data_v7/start-20220315` (7,430 stock shards; 1,425
+  option daily captures). Original provider captures remain historical.
+- Chain: `nn_meta/validation/v7-chain-start-20220315` (22,130,242 contracts).
+- Plan: `nn_meta/research_plans/v7-20220315-20260914/plan.json`; parse selected
+  fields, never print the large catalog. Existing plan dates remain unchanged.
+- Evaluation: `docs/specs/V7_EVALUATION_20220315_PHYSICAL.json`; original frozen
+  declaration remains immutable. New engine defaults need final evidence binding.
+- Readiness: `nn_meta/validation/v7-readiness-20260915-preparation-final.json`.
+  Reproduce with `./venv/bin/python scripts/v7_readiness.py --output NEW_REPORT.json`.
+- Earlier scope verification and chain hashes remain bound by the active manifest.
+  No acquisition ran, and the quota was not reset. Last previous recorded quota
+  was 62,530,084,555 bytes; reread before any new acquisition.
 
-- Plan: `nn_meta/research_plans/v7-20220315-20260914/plan.json`.
-  Plan SHA: `0328ecd49e75f97c8af93f51ebe6709131bd833e9e2a32920c9588c8697c439f`.
-  Large file: parse selected fields, never print the whole catalogue.
-- Current evaluation: `docs/specs/V7_EVALUATION_20220315_PHYSICAL.json`.
-  Nested `evaluation` is what the loader consumes. Train starts March 15;
-  expanding validation 2024H2/2025H1/2025H2, final 2026Jan1–Sep14,
-  ten-session embargo and completed-label purging. Physical delivery extends
-  label horizons. Previously inspected periods remain revalidation.
-  Older declarations are immutable history, not active policy.
-- Current 449 ticker list: `docs/specs/v7-tickers-20260915.txt`.
-- Historical 598-name inventory:
-  `nn_meta/validation/v7-identity-universe-20260915r3/symbols.txt`.
-  596 identities/16,577 memberships; new-scope membership rebuild pending.
-  Old 622 static-alias draft is invalid. Exact dated alias mappings, including
-  GAP, are in the prior handoff; never infer identity from ticker/name alone.
+## Next required work, in dependency order
 
-## Ordered next work — before freeze
+1. Resolve the 122 zero-session cases in the new coverage CSV: ATVI, BBBY, BIIB,
+   CLSK, COUP, DISCA, FRC, NVAX, REV, SGEN, SI, TWTR, VERU, VMW, X. Distinguish
+   known nontrading/lifecycle intervals from capture gaps using dated evidence.
+   Resolve held options/deliverables, consume exact session aliases, freeze sectors.
+2. Integrate causal prices with publication/effective evidence for splits,
+   dividends, combined actions and spin-offs; preserve contemporaneous tick units
+   and cross-action stops. Vendor all-adjusted history is not vintage proof.
+3. Replace SPY-only daily pilot with every eligible identity's causal daily/market
+   context and first-eligible/missingness report. No pre-March15 price warmup.
+4. Supply real physical context/receipt loaders: official expiry references,
+   dated deliverables, settlement business calendar, Alpaca stock quote captures
+   and quote adapter. Engine accepts provider interfaces; no captured adapter was
+   implemented this session. Audit stock actions during delivery, costs, session
+   rules and real funded expiry paths. Current 10% option budgets may be unable
+   to fund exercise; preserve unresolved fallback and do not silently resize.
+5. Validate historical option hours/weeklies. Build actual proposal/feature/roll/
+   exercise interval unions on the new universe; measure feasibility and capture
+   required quote/trade observations under the cap. No old SPY capture reuse.
+6. Connect full-history factorized rows/labels/marks to runnable V7 training,
+   declare model/objective/seeds/weight/calibration/threshold trials, and measure
+   binned-dataset memory, recovery and concurrent V6 load. Retain baseline fairness,
+   finite NN/GBT checks, PBO/deflated-Sharpe and purging through cash settlement.
+7. Produce complete-universe stage evidence and real integrated/resource pilots
+   for `readiness.REQUIRED`; pass every stage before freeze/build/training.
+   Source/runtime/input mutation guards still apply to bound pilots.
 
-1. Rebuild PIT membership with explicit deleted-session/lookback treatment.
-   The current builder requires every calendar session and will reject the
-   removed dates. Do not shorten the calendar or reuse affected old rankings.
-   Finish lifecycle/halts/session aliases and frozen dated sectors.
-2. Integrate causal corporate-action prices: dated publication/effective
-   evidence, splits/dividends/spin-offs, combined actions, contemporaneous tick
-   units, stops across actions. Vendor all-adjusted data is not vintage proof.
-3. Build daily/context features for every eligible security (real builder is
-   still SPY-only), with full market/sector histories and visible warmup
-   missingness. Record first eligible observations without silently changing
-   the requested research start or inventing pre-gap rolling state.
-4. Resolve row semantics: current `FeatureRows.row` uses `target_dte / 45` and
-   constant-zero `moneyness`. These are legacy baseline conventions, not actual
-   selected-contract fields. Freeze intended semantics explicitly before training.
-5. Implement exercise/stock ledger: shared cash/share reservations, settlement,
-   dated exercise evidence, fractional-paper treatment, Alpaca stock quotes,
-   liquidation costs/marks, extended label horizons and real replay tests.
-   Current replay still returns `expiry_liquidation_unresolved`.
-6. Validate historical class hours/early closes and weekly eligibility. Build
-   actual proposal/feature/roll/exercise interval unions, measure retained
-   densities and finish quote/trade capture under the cap. Old 76M quote-hour
-   broad demand and March 7 SPY capture cannot establish current feasibility.
-7. Connect bounded full-history rows/labels/marks to training. Factorized rows
-   and fold-indexed LightGBM Sequence were demonstrated on only 72 real rows;
-   measure full binned-dataset RAM/disk/recovery and coexistence with V6.
-8. Predeclare runnable V7 model/objective/seed/weight/calibration/threshold
-   trials. Retain baseline fairness, finite NN/GBT validation, deterministic
-   seeds, cost/ex-outlier diagnostics and PBO/deflated-Sharpe trial accounting.
-   Explicitly classify existing V6 event-balanced/downside-quantile trials;
-   do not assume V6's 164-column adapters work with the V7 schema.
-9. Pass new-window integrated/resource pilots with sparse markets, actions,
-   early closes, aliases, rolls and funded expiry, then implement/pass one
-   executable complete-universe launch gate. `test_v7_readiness.py` is only
-   component coverage. Source/runtime/data/policy hashes and mutation guards
-   must bind the final run. RunBinding hashes Python, spec JSON and Pine;
-   do not edit these while a bound pilot is running.
+## Repository and operations
 
-## Operations and repository continuity
+Work on main with `./venv/bin/python`. Keep the extensive pre-existing dirty V6
+work. Only scoped paths/hunks were selected for this milestone; no V6 deployment,
+runtime, timers or alert settings changed and no messages were sent.
 
-Work on main using `./venv/bin/python`; never expose `.env`. There is extensive
-unrelated dirty V6 work in this checkout. Preserve it and stage scoped paths or
-hunks only. This checkpoint does not deploy anything; server deployment uses
-Git, never scp. See git log for scoped V7 commits after prior `3f12edb`.
-
-Prior saved V6 status inspection at 21:15Z showed data through September 14,
-idle/outside-market-hours, next session September 16; no new runtime inspection
-or intraday audit was performed by this documentation checkpoint. Runtime
-`d6660af` remains the prior recorded deployment. Dashboard hosting and ongoing
-V6 evidence collection remain open. First-week maturity reassessment is due
-on/after September 21; no GOALS score uplift from component tests alone.
+No fresh operational V6 inspection was performed. Prior checkpoint had data
+through September 14, runtime d6660af and the next session September 16.
+Dashboard/evidence collection remain separate. First-week maturity reassessment
+is due on/after September 21; no score uplift from component tests.

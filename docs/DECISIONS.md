@@ -970,3 +970,24 @@ Create a new plan, evaluation amendment and input identity. Preserve all
 stocks/Massive options and funded physical-exercise policy. Previously inspected
 periods remain revalidation. No old pilot or outcome is relabeled current.
 [Change evidence](reviews/2026-09-15-v7-march15-start.md).
+
+## 2026-09-15 — V7 preparation implementation conventions
+
+- Deleted March 8–14 sessions retain their positions in the 63-session PIT
+  calendar lookback, contribute neither zero volume nor activity, and are not
+  backfilled by older observations. Keep the 50-active-session threshold.
+- V7 selected-contract rows use actual calendar DTE / 9 and log(strike/raw spot),
+  with a causally available raw minute close aged at most 60 seconds. Target
+  maturity remains provenance. Version factorized stores; reject old semantics.
+- Missing initial daily context remains explicit NaN with recorded warmup
+  status; preserve the March 15 start.
+- Physical engine uses pro-rata paper quantities, funded cash/stock, separate
+  commitments/settlement, and conservative availability at the next trading
+  open after settlement date. Zero exercise fee and .001/.0005 stock fee/
+  slippage are declared research inputs, not verified broker fee history.
+  Do not change the five-slot/10%-premium policy to make funding tests pass.
+- Component tests and the readiness aggregator do not admit real exercise or
+  a full campaign. Captured official references, settlement dates, stock quotes,
+  corporate-action deliverables and full-universe stage producers remain gates.
+
+Evidence and limits: [preparation review](reviews/2026-09-15-v7-training-preparation.md).
