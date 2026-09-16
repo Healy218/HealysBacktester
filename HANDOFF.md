@@ -1,4 +1,4 @@
-# Handoff — V7 daily artifacts rebuilt; causal daily calculations verified
+# Handoff — full V7 action inventory reconciled; original DVN correction saved
 
 Updated September 16, 2026. Read TODO.md then this file. No subagents. Work on
 main, preserve unrelated dirty/untracked V6 work and use `./venv/bin/python`.
@@ -6,33 +6,54 @@ The full V7 readiness goal remains active and unfinished; no training launched.
 
 ## Latest V7 progress
 
-Previous goal turn made progress (midpoint implementation/deployment); this turn
-rebuilt all affected daily parent artifacts and implemented/tested causal daily
-calculations. Read [current review](docs/reviews/2026-09-16-v7-causal-daily.md).
+Prior goal turn made progress (full daily rebuild and tested causal calculations).
+This turn built the full captured-action reconciliation and verified an original
+issuer correction. Read [current action review](docs/reviews/2026-09-16-v7-action-inventory.md).
 
-Use these fresh outputs for downstream integration:
-- `nn_meta/validation/v7-stock-daily-20260916-midpoint`: all 2,966 raw shards,
-  669,749 calendar rows and 339,640 eligible rows; all old values identical.
-- `nn_meta/validation/v7-surfaces-20260916-midpoint`: all 1,129 days and 339,640
-  eligible rows; all old values/missingness identical, with new parent hashes.
-- `nn_meta/validation/v7-daily-rebuild-verification-20260916`: all-row comparison,
-  current input/source bindings and preserved exact verification source.
+- `nn_meta/validation/v7-action-inventory-20260916r2`: 10,380 records across all
+  594 active source/membership symbols and 5,030 exact-date groups. Includes
+  4,506 matching single events, 354 unreviewed terms, 68 single-provider groups,
+  57 combined/multiple-record groups and 45 mismatches; 213 complex records.
+  Of these groups, 3,016 map to exact eligible security dates; others are not
+  assigned identities merely because they can enter future feature lookbacks.
+  Original records, query scopes, source payloads and code hashes are retained.
+- `nn_meta/validation/v7-dvn-action-review-20260916`: DVN September 13, 2024 is
+  $0.44 total cash ($0.22 fixed plus $0.22 variable), verified from the original
+  August 6 issuer PDF and linked announcement. Captures are under
+  `nn_meta/data_v7/public-actions-20260916/dvn-q2-2024-{release,announcement}`.
+  Massive's three $0.22 records and Alpaca's one $0.22 record are superseded as
+  one complete event group; **never sum this review on top of provider rows**.
+  Prior raw close $40.01, factor 0.9890027493126718, effective September 13 at 13:30 UTC.
+  Full action/no-event coverage and downstream integration still needed.
+- `nn_meta/v7/action_inventory.py` and `scripts/audit_v7_action_inventory.py`
+  implement the complete review queue. All twelve new cases and the full suite
+  passed: **1,863 tests +18 subtests**, 18 warnings, 93.14s.
+  Log `/tmp/v7-action-inventory-tests.log`; inventory `/tmp/v7-action-inventory-r2.log`.
 
-`nn_meta/v7/causal_daily.py` replaces the previously parked draft. Seventeen
-new tests cover the ten daily features, effective actions, gaps, identity spans,
-nullable identities, market beta and availability. Full suite **1,851 tests +18
-subtests**, 18 warnings, 97.13s (`/tmp/v7-causal-daily-final-tests.log`).
-`scripts/validate_v7_causal_daily.py` completed actual AAPL 40-session validation
-at `nn_meta/validation/v7-causal-daily-aapl-20260916r2`: 39 independent return
-comparisons (max error 7.8236e-16), all 40 prefixes unchanged. Original issuer,
-provider, raw-stock payloads and source/runtime hashes are bound. Initial r1 is
-preserved; use r2. No full-market identity/action admission is claimed.
+Use r2, not preserved r1: r2 rejects stock-dividend endpoint rows as simple split
+terms and validates original capture queries. Alpaca's request is process-date
+bounded and includes incomplete records: absence cannot prove a no-event span.
+Matching amounts do not establish publication vintage or share-delivery semantics.
+All jobs ended; V6 untouched. Readiness still lacks eight substantive stages.
 
-All launched processes finished successfully; no build/test jobs remain. V6
-runtime was untouched this turn. No acquisition quota was used. Readiness still
-has eight missing substantive stages; do not launch training or call the goal
-complete. Next is full identity/action evidence and causal context integration,
-then remaining quote, physical execution, assembly, trial and resource gates.
+Next: use this full inventory to complete primary-source action/continuity
+reviews (including mismatches, combined events and publication/no-event proof),
+consume reviewed corrections once, then build full causal security/market panels
+with dated sectors. Continue quote, physical, assembly, trial and resource gates.
+
+## Current daily artifacts
+
+Use `nn_meta/validation/v7-stock-daily-20260916-midpoint` (2,966 shards,
+669,749 raw calendar rows, 339,640 eligible) and
+`nn_meta/validation/v7-surfaces-20260916-midpoint` (1,129 days, 339,640 eligible).
+All original values/missingness matched under new active-parent bindings:
+`nn_meta/validation/v7-daily-rebuild-verification-20260916`.
+`nn_meta/v7/causal_daily.py` has seventeen tests for ten daily features, effective
+actions, gaps, nullable identity spans, beta and availability. Actual AAPL
+40-session replay `nn_meta/validation/v7-causal-daily-aapl-20260916r2` passed
+39 independent return comparisons and all 40 prefixes. Its earlier broad source
+manifest is historical after adding the new action-inventory code; preserve,
+revalidate if reused, never relabel. [Daily review](docs/reviews/2026-09-16-v7-causal-daily.md).
 
 ## Latest explicit user direction overrides the earlier V6 freeze
 
@@ -112,10 +133,10 @@ updated to match the runtime candidate; preserve unrelated changes. Their
 production commit is on the isolated runtime branch. Shared helper, V7 sources,
 activation utility/test, policy and documentation are committed on main.
 
-Current readiness `nn_meta/validation/v7-readiness-20260916-causal-daily-final.json`:
+Current readiness `nn_meta/validation/v7-readiness-20260916-action-inventory.json`:
 three input/membership/coverage checks pass; **eight full-universe stages remain
 missing**. No full training, full no-swap/resource or V6-coexistence claim.
-Acquisition quota remains **62,558,385,604 /250,000,000,000**, reservations empty.
+Acquisition quota remains **62,558,635,013 /250,000,000,000**, reservations empty.
 
 The midpoint-related stock/surface parent-binding rebuild is complete in the
 new paths above; all old outputs remain historical. Old ask/bid execution paths,
@@ -211,7 +232,7 @@ Protect V6. No full training until every readiness gate passes; alert user then.
   2024H2/2025H1/2025H2 folds, final Jan 1–Sep 14, 2026; 10-session embargo,
   full settlement label ends. These periods were previously inspected.
 - Last readiness checkpoint
-  `nn_meta/validation/v7-readiness-20260916-causal-daily-final.json`: three
+  `nn_meta/validation/v7-readiness-20260916-action-inventory.json`: three
   input/inventory checks pass; eight substantive stage artifacts remain missing.
   Re-run `scripts/v7_readiness.py --output NEW.json` when new stage evidence exists.
 - Corporate captures `nn_meta/data_v7/corporate-actions-20260915/{dividends,splits}`
@@ -245,4 +266,4 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-causal-daily.md`.
+`handoff-history/HANDOFF-2026-09-16-before-action-inventory.md`.

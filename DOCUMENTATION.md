@@ -859,3 +859,16 @@ the full builder still needs reviewed action/no-event and continuity inventories
 The older `daily.daily_context` adjusted/filled component is not the new causal
 path. Use the fresh `v7-stock-daily-20260916-midpoint` and
 `v7-surfaces-20260916-midpoint` outputs after the midpoint manifest amendment.
+
+### V7 corporate-action reconciliation traps
+
+Alpaca corporate-action requests are bounded by **process date**, not ex-date.
+An absent record is not proof of no effective event; `data_quality=all` also
+retains incomplete records. `action_inventory.py` keeps all symbol roles, including
+acquiree/source/new symbols and nested movement legs. Massive split-endpoint rows
+include stock dividends and apparent spin-off adjustment ratios: reported ratios
+are not automatic proof of share delivery. Never sum or deduplicate cash records
+just because they share amount/date. DVN September13,2024 has three $0.22 Massive
+rows and one Alpaca row, while the original issuer confirms $0.44 total. Apply
+the reviewed replacement to the **whole event group once**, retaining all source
+IDs. See the September16 action-inventory review and immutable DVN exception.

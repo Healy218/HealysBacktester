@@ -512,3 +512,12 @@ Evidence: [midpoint pricing and deployment](docs/reviews/2026-09-16-midpoint-pap
 - [ ] Complete full-security identity/action evidence and market/sector integration, then admit daily context only with full-universe evidence.
 
 Evidence: [causal daily calculations and rebuilt data](docs/reviews/2026-09-16-v7-causal-daily.md).
+
+## September 16 full V7 corporate-action reconciliation
+
+- [x] Reconcile all 10,380 captured action records for 594 active source/membership symbols; retain 5,030 exact-date groups and 213 complex events with original payload provenance.
+- [x] Capture and visually verify the original DVN release; record the September 2024 $0.44 total-cash correction replacing the whole conflicting provider event group once.
+- [x] Pass full regression: 1,863 tests plus 18 subtests.
+- [ ] Resolve remaining publication, combined-event, amount/unit, no-event and identity-continuity evidence before applying the full inventory to causal features.
+
+Evidence: [full action inventory and correction](docs/reviews/2026-09-16-v7-action-inventory.md).

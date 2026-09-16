@@ -1048,3 +1048,14 @@ Preserve completed V6 records and legacy V7 artifacts; use an audited retained-
 quote transition only for outstanding V6 paper legs and rebuild V7 derived
 execution artifacts under the new bound policy. Actual deployment found no open
 V6 legs. Do not rewrite historical losses or reset equity.
+
+## 2026-09-16 — original issuer resolves the DVN cash-action group
+
+For DVN September13,2024, use the original August6 issuer release's $0.44 total
+($0.22 fixed plus $0.22 variable). The captured Massive group totals $0.66 and
+Alpaca lists $0.22. Preserve all four records; replace the entire group exactly
+once with the reviewed total, never add it to provider components or generalize
+this correction to another event. Immutable evidence:
+`nn_meta/validation/v7-dvn-action-review-20260916`. This resolves one cash amount
+and publication, not full-security action/identity coverage or training readiness.
+[Evidence](reviews/2026-09-16-v7-action-inventory.md).
