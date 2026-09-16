@@ -63,13 +63,25 @@ def daily_identity_overrides(root, requests):
 
 
 def membership(daily,masters,calendar,*,through='2026-08',window=63,min_active=50,enter=270,exit=330,
-               identity_days=None):
+               identity_days=None, excluded_sessions=()):
     identity_days = {} if identity_days is None else identity_days
-    days=sorted(daily.date.unique());expected=[s['date'] for s in calendar['sessions'] if days[0]<=s['date']<=days[-1]]
-    if days!=expected:raise ValueError('PIT daily history has missing captured sessions')
+    if daily.empty or daily[['date', 'root']].duplicated().any():
+        raise ValueError('Nonempty unique option root/day history required')
+    if not 1 <= min_active <= window or not 1 <= enter <= exit:
+        raise ValueError('Invalid membership lookback/rank policy')
+    days=sorted(daily.date.unique())
+    calendar_days=[s['date'] for s in calendar['sessions']]
+    if calendar_days != sorted(set(calendar_days)):
+        raise ValueError('Ordered unique calendar sessions required')
+    excluded=set(excluded_sessions)
+    if not excluded.issubset(calendar_days) or excluded.intersection(days):
+        raise ValueError('Excluded sessions must remain in calendar and be absent from inputs')
+    expected=[d for d in calendar_days if days[0]<=d<=days[-1]]
+    if days!=[d for d in expected if d not in excluded]:
+        raise ValueError('PIT daily history has missing captured sessions')
     month_days={}
     for day in days:month_days.setdefault(day[:7],[]).append(day)
-    mapped=[];known={};members=set();output=[];unknown=[];root_identities={};unresolved=[];resolved=[]
+    mapped=[];known={};members=set();output=[];unknown=[];root_identities={};unresolved=[];resolved=[];windows=[]
     for month,current_days in sorted(month_days.items()):
         if month>through:break
         end=current_days[-1]
@@ -102,8 +114,15 @@ def membership(daily,masters,calendar,*,through='2026-08',window=63,min_active=5
         block=block.dropna(subset=['security_id'])
         mapped.append(block)
         past=pd.concat(mapped,ignore_index=True)
-        trailing=[d for d in days if d<=end][-window:]
-        if len(trailing)<window:continue
+        calendar_window=[d for d in expected if d<=end][-window:]
+        if len(calendar_window)<window:continue
+        # Deleted sessions consume calendar lookback, but are neither zeros
+        # nor replaced by older observations. Activity retains its absolute
+        # minimum; median ranks are recalculated over the retained sessions.
+        trailing=[d for d in calendar_window if d not in excluded]
+        windows.append({'month':month,'calendar_sessions':len(calendar_window),
+                        'retained_sessions':len(trailing),
+                        'excluded_sessions':sorted(excluded.intersection(calendar_window))})
         history=past[past.date.isin(trailing)].groupby(['date','security_id']).opt_dollar_vol.sum().unstack('security_id').reindex(trailing)
         score=history.fillna(0).median();activity=history.notna().sum()
         score=score[(activity>=min_active)&(score>0)&score.index.isin(active)]
@@ -119,4 +138,8 @@ def membership(daily,masters,calendar,*,through='2026-08',window=63,min_active=5
     # boundary. Keep this explicit blocker for day-level identity resolution.
     return pd.DataFrame(output),{'unmapped_root_months':unknown,'reused_roots':conflicts,
                                 'resolved_transitions': resolved, 'unresolved_transitions': unresolved,
+                                'lookback_policy': {'window':window,'min_active':min_active,
+                                    'enter':enter,'exit':exit,'excluded_sessions':sorted(excluded),
+                                    'deletion_treatment':'consume calendar lookback; omit from median and activity; no backfill'},
+                                'lookback_windows':windows,
                                 'identity_boundaries_verified':not unresolved,'research_ready':False}
