@@ -37,7 +37,8 @@ REQUIRED = {
 def scope_binding(active):
     return identity({k: active.get(k) for k in ('history_start', 'history_end', 'working_inputs',
         'input_report_sha256', 'chain_receipt_sha256', 'universe_receipt_sha256',
-        'coverage_receipt_sha256', 'evaluation_file_sha256')} | {'row_contract': ROW_CONTRACT})
+        'coverage_receipt_sha256', 'evaluation_file_sha256', 'plan_file_sha256',
+        'universe_exclusions_sha256')} | {'row_contract': ROW_CONTRACT})
 
 
 def assess(root, active_path):
@@ -59,7 +60,8 @@ def assess(root, active_path):
         for path, digest in ((source/'report.json', active['input_report_sha256']),
                 (root/active['verification'], active['verification_sha256']),
                 (root/active['chain']/'complete.json', active['chain_receipt_sha256']),
-                (root/active['evaluation'], active['evaluation_file_sha256'])):
+                (root/active['evaluation'], active['evaluation_file_sha256']),
+                (root/active['plan'], active['plan_file_sha256'])):
             if sha(path) != digest:
                 raise ValueError(f'Active input hash differs: {path}')
         return {'scope_identity': scope_binding(active), 'feature_columns': len(schema())}
@@ -83,6 +85,26 @@ def assess(root, active_path):
             if sha(root/name) != digest:
                 raise ValueError('Universe builder source changed; rebuild required')
         universe = pd.read_parquet(path/'membership.parquet')
+        symbols = sorted(set(universe[universe.month >= '2022-02'].ticker))
+        plan = json.loads((root/active['plan']).read_text())['plan']
+        from nn_meta.multitimeframe_catalog import registered_catalog
+        if (plan.get('plan_sha256') != identity({k:v for k,v in plan.items() if k != 'plan_sha256'})
+                or plan.get('plan_sha256') != active.get('plan_sha256')
+                or plan.get('catalog') != registered_catalog(symbols)
+                or plan.get('membership_receipt_sha256') != active['universe_receipt_sha256']):
+            raise ValueError('Training plan does not bind the complete current universe and variant catalog')
+        if active.get('universe_exclusions'):
+            excluded_path = root/active['universe_exclusions']
+            digest = sha(excluded_path)
+            excluded = json.loads(excluded_path.read_text())
+            ids = sorted(e['security_id'] for e in excluded['exclusions'])
+            if (digest != active.get('universe_exclusions_sha256')
+                    or report.get('exclusion_declaration_sha256') != digest
+                    or report.get('excluded_security_ids') != ids
+                    or plan.get('universe_exclusions_sha256') != digest
+                    or universe.security_id.isin(ids).any()
+                    or excluded.get('historically_known_eligibility') is not False):
+                raise ValueError('User study exclusions are absent, changed or disguised as PIT eligibility')
         return {k:report[k] for k in ('historical_symbols', 'historical_securities', 'rows')}
     check('rebuilt_membership', membership)
     def coverage():

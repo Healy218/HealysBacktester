@@ -991,3 +991,18 @@ periods remain revalidation. No old pilot or outcome is relabeled current.
   corporate-action deliverables and full-universe stage producers remain gates.
 
 Evidence and limits: [preparation review](reviews/2026-09-15-v7-training-preparation.md).
+
+## 2026-09-16 — V7 excludes the four OTC-transition issuers
+
+The user says “Keep Alpaca-only stock data” and “no we aren't touching anything
+OTC markets ... we can lose it.” Remove BBBY, FRC, REV and SI by their captured
+security identities across the entire V7 research history. Preserve source
+captures, original ranks/scores and remaining membership; no replacement or
+reranking. Record this explicitly as an ex-post study restriction, not historical
+knowledge of future delisting. Do not seek OTC data from Alpaca or another stock
+provider. This supersedes the unanswered Massive/OTC access question.
+
+Declaration: `docs/specs/V7_UNIVERSE_EXCLUSIONS_20260916.json`; active universe
+593 tickers /591 identities. Physical-exercise rules remain: missing funding,
+shares or verified settlement evidence stays unresolved. Removing these issuers
+does not waive any remaining full-universe training-readiness gate.

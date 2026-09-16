@@ -1,9 +1,9 @@
 {
   "chain": "nn_meta/validation/v7-chain-start-20220315",
   "chain_receipt_sha256": "5632870dd3619af40d21be518bf1584718187cdd6f003e3318fb28ccda13d2a8",
-  "coverage_inventory": "nn_meta/validation/v7-membership-session-coverage-rebuilt-20220315",
-  "coverage_inventory_status": "new-scope membership; 122 unresolved zero sessions, not lifecycle admission",
-  "coverage_receipt_sha256": "ae8b2748b665fea90b91c2053ae62d39ee9b4143316b013a115efeb87cfa7cda",
+  "coverage_inventory": "nn_meta/validation/v7-coverage-no-otc-20260916",
+  "coverage_inventory_status": "OTC-transition issuers excluded by user; 59 remaining zeros have retrospective explanations; execution admission remains pending",
+  "coverage_receipt_sha256": "f389b940b90ae0853edd409d69abad56e2b4ef033a59d83fcfeed1594c647a04",
   "evaluation": "docs/specs/V7_EVALUATION_20220315_PHYSICAL.json",
   "evaluation_file_sha256": "d2dd2d0c16bfd26cdbd3be2423e2969c101e92b12246ebc227b25afc6dc5038c",
   "excluded_input_dates": [
@@ -13,9 +13,9 @@
   "history_end": "2026-09-14",
   "history_start": "2022-03-15",
   "input_report_sha256": "4f3b3ead3c60a48d540ff30affc023f821e340e49b5ea9c524fc788a9da546d6",
-  "plan": "nn_meta/research_plans/v7-20220315-20260914/plan.json",
-  "plan_file_sha256": "bee12e1249316ab44f110475a03c33c4d38a7ba36bc0c79b2b00752d8ca5cadd",
-  "plan_sha256": "0328ecd49e75f97c8af93f51ebe6709131bd833e9e2a32920c9588c8697c439f",
+  "plan": "nn_meta/research_plans/v7-20220315-20260914-no-otc/plan.json",
+  "plan_file_sha256": "8b804b94db67b328651ce9707c5e008a4f053e8920bc009c6da9b536b5fac0a0",
+  "plan_sha256": "fa982cc6d715d277c8d204fd8b36e0ef789ecda146111e86a070ec9396184f1f",
   "quote_inputs": null,
   "readiness_evidence": {},
   "requires_rebuild": [
@@ -33,8 +33,11 @@
     "version": "v7-selected-contract-rows-v2"
   },
   "schema": "v7-active-input-selection-v1",
-  "universe": "nn_meta/validation/v7-identity-universe-start-20220315",
-  "universe_receipt_sha256": "e2411efc10ea7752bb0b3022f4ae786160000834071324e558ec9a7302e05a1c",
+  "study_scope": "Conditional on user-directed ex-post issuer exclusions; not an unrestricted historical universe.",
+  "universe": "nn_meta/validation/v7-universe-no-otc-20260916",
+  "universe_exclusions": "docs/specs/V7_UNIVERSE_EXCLUSIONS_20260916.json",
+  "universe_exclusions_sha256": "5ee1e4b109bba5b457b4c0afbe9b4e3054f0119715723b3d27314f0167f4fcd6",
+  "universe_receipt_sha256": "8ef324261ef2b47809a004648300835c7aec28b48b52b504f8b42b0ef00b5504",
   "verification": "nn_meta/validation/v7-start-20220315-verification.json",
   "verification_sha256": "b1fd29120cb74c5d5d2fd7c6d8fb2349c6c0d769c29c3eaa47e7ef5ae71b1f0b",
   "working_inputs": "nn_meta/data_v7/start-20220315"

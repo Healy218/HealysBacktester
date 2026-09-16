@@ -431,3 +431,13 @@ See [training preparation](docs/reviews/2026-09-15-v7-training-preparation.md).
 - [x] Add and test official cash-merger expiry settlement and exact OCC prior-day reference exceptions; real evidence adapters and successor data remain open.
 
 Evidence: [lifecycle preparation](docs/reviews/2026-09-16-v7-lifecycle-preparation.md).
+
+## September 16 V7 no-OTC scope
+
+- [x] Apply user-directed BBBY/FRC/REV/SI issuer exclusions, preserve ranks/scores, bind exact 593-ticker plan and readiness guards.
+- [x] Explain VERU halt from captured original news; all 59 remaining active zero sessions have retrospective causes. Execution admission remains open.
+- [x] Complete 1,047 Alpaca news queries; verify 256/4,967 original dividend amounts, retaining 4,711 unverified events.
+- [x] Add tested immutable multi-shard fold selection and bounded training reads; full-history integration/resource checks remain open.
+- [ ] Complete causal prices, dated sectors/lifecycle execution, daily context, quotes, physical adapters, full assembly/trials and integrated resource gates.
+
+Evidence: [no-OTC preparation](docs/reviews/2026-09-16-v7-no-otc-preparation.md).

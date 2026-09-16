@@ -1,0 +1,43 @@
+{
+  "schema": "v7-user-universe-exclusions-v1",
+  "declared_on": "2026-09-16",
+  "authorization": "User: no OTC markets; the affected stocks can be dropped. Underlying source remains Alpaca-only.",
+  "scope": "entire_research_history",
+  "rerank_or_replace": false,
+  "historically_known_eligibility": false,
+  "interpretation": "Fixed user-directed study restriction based on later OTC transitions. Historical performance is conditional on these ex-post exclusions, not an unrestricted PIT universe.",
+  "exclusions": [
+    {
+      "security_id": "BBG000CSY9H9",
+      "membership_tickers": [
+        "BBBY"
+      ],
+      "otc_successor": "BBBYQ"
+    },
+    {
+      "security_id": "BBG0019LSQ49",
+      "membership_tickers": [
+        "FRC"
+      ],
+      "otc_successor": "FRCB"
+    },
+    {
+      "security_id": "BBG000BDF6F2",
+      "membership_tickers": [
+        "REV"
+      ],
+      "otc_successor": "REVRQ"
+    },
+    {
+      "security_id": "BBG00MMM95S7",
+      "membership_tickers": [
+        "SI"
+      ],
+      "otc_successor": "SICP"
+    }
+  ],
+  "evidence": "docs/specs/V7_LIFECYCLE_REVIEW_20260916_NEWS.json",
+  "evidence_sha256": "d40900d5c50760152a4a6c235b0c392cb48e4b40ee3ea6f78ef673a4e460c24e",
+  "raw_capture_policy": "Preserve archived originals; excluded identities never generate active V7 rows, labels, portfolios or quote demand.",
+  "research_ready": false
+}

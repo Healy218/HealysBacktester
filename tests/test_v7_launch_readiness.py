@@ -6,7 +6,7 @@ import pytest
 
 from nn_meta.v7 import readiness
 from nn_meta.v7.scope import declaration
-from nn_meta.v7.storage import sha, receipt
+from nn_meta.v7.storage import sha, receipt, identity
 
 
 def write(path, value):
@@ -36,6 +36,10 @@ def fixture(tmp_path, monkeypatch):
     write(coverage/'report.json', dict(eligible_sessions=1,resolved_alias_sessions=0,remaining_zero_sessions=0,
         sources={'universe/complete.json':sha(universe/'complete.json')}))
     receipt(coverage, {'identity':'test-coverage'})
+    from nn_meta.multitimeframe_catalog import registered_catalog
+    plan = dict(catalog=registered_catalog(['SPY']), membership_receipt_sha256=sha(universe/'complete.json'))
+    plan['plan_sha256'] = identity(plan)
+    write(tmp_path/'plan.json', {'plan':plan})
     active = dict(history_start='2022-03-15',history_end='2026-09-14',working_inputs='inputs',
         input_report_sha256=sha(source/'report.json'), verification='verification.json',
         verification_sha256=sha(tmp_path/'verification.json'),chain='chain',
@@ -43,7 +47,19 @@ def fixture(tmp_path, monkeypatch):
         evaluation_file_sha256=sha(tmp_path/'evaluation.json'),universe='universe',
         universe_receipt_sha256=sha(universe/'complete.json'),coverage_inventory='coverage',
         coverage_receipt_sha256=sha(coverage/'complete.json'),readiness_evidence={})
+    active.update(plan='plan.json', plan_file_sha256=sha(tmp_path/'plan.json'), plan_sha256=plan['plan_sha256'])
     return active
+
+
+def test_plan_cannot_reintroduce_excluded_or_missing_historical_symbols(tmp_path, monkeypatch):
+    active = fixture(tmp_path, monkeypatch)
+    plan = json.loads((tmp_path/'plan.json').read_text())
+    plan['plan']['catalog']['symbols'] = ['SPY', 'FRC']
+    plan['plan']['plan_sha256'] = identity({k:v for k,v in plan['plan'].items() if k != 'plan_sha256'})
+    write(tmp_path/'plan.json', plan)
+    active.update(plan_sha256=plan['plan']['plan_sha256'], plan_file_sha256=sha(tmp_path/'plan.json'))
+    result = readiness.assess(tmp_path, write(tmp_path/'active.json', active))
+    assert not next(g for g in result['gates'] if g['gate']=='rebuilt_membership')['passed']
 
 
 def test_downloads_membership_and_component_tests_cannot_admit_training(tmp_path, monkeypatch):
