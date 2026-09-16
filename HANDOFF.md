@@ -54,7 +54,7 @@ The old factorized v1/March-7 pilot was inspected and NOT reused or relabeled.
 
 Next work: finish historical settlement-source coverage and funded observed
 physical replay, or continue independent full-history daily/context integration.
-No full training started. Shared quota now **62,557,827,643 /250,000,000,000
+No full training started. Shared quota now **62,557,919,862 /250,000,000,000
 bytes**, reservations empty. Do not reset quota or overwrite immutable pilots.
 
 Previous causal milestone (`2e8ac37`) remains preserved: all 11,268 variants
@@ -62,6 +62,18 @@ produced 757,465 proposals in actual AAPL March 15–May 10, 2022 action-aware
 features. It had 111 columns, not full 222-column rows/execution. See
 [causal review](docs/reviews/2026-09-16-v7-causal-feature-pilot.md).
 Stock quote/settlement checkpoints `d4252dc` and `010134e` were pushed to main.
+
+## Official calendar source follow-up
+
+Model-runner checkpoint `8097c08` is committed and pushed. Then located original
+OCC annual notices 49729/51460/53701/55737/57897 (2022–2026), special January
+2025 notice 55826 and final T+1 notice 54580. Read
+[exact source findings and failed capture status](docs/reviews/2026-09-16-v7-occ-calendar-sources.md)
+before repeating research. Seven raw OCC downloads returned Cloudflare HTTP 403;
+no browser is available. Web-reader text is not a local original PDF receipt.
+FINRA January 3, 2025 contrary-cutoff HTML did capture successfully (91,562 bytes).
+Request list `nn_meta/validation/v7-occ-calendar-requests-20260916.json`; output
+`nn_meta/data_v7/occ-calendars-20260916`. All attempts ended. No calendar admitted.
 
 ## User constraints and fixed scope
 
@@ -141,5 +153,5 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-model-trials.md`.
+`handoff-history/HANDOFF-2026-09-16-before-occ-calendar-sources.md`.
 Older dated-sector and no-OTC reviews retain additional provenance.
