@@ -450,3 +450,13 @@ Evidence: [no-OTC preparation](docs/reviews/2026-09-16-v7-no-otc-preparation.md)
 - [ ] Finish full-history feature/data/execution integration, runnable model trials and measured binned-memory/resource gates; component coverage is not readiness.
 
 Evidence: [sectors and training inputs](docs/reviews/2026-09-16-v7-sectors-training-inputs.md).
+
+## September 16 causal-feature checkpoint and recurring V6 error
+
+- [x] Integrate causal action epochs into all TV/technical features and bounded strategy proposal batches; retain raw execution and cross-action stops.
+- [x] Verify a real AAPL dividend pilot across all 11,268 variants and four timeframes: 757,465 proposals; full suite 1,786 tests plus 18 subtests passed.
+- [x] Capture original AAPL publication/identity evidence and partial official settlement documents; preserve four DTCC 404 failures as unfinished work.
+- [ ] **First next session:** diagnose the user's September 16 recurring V6 error after a successful morning; cause unverified, do not assume the prior stale-context incident.
+- [ ] Complete remaining V7 full-history, action, quote, physical settlement, trial and resource evidence; V7 is not ready to train.
+
+Evidence: [causal feature pilot and resume notes](docs/reviews/2026-09-16-v7-causal-feature-pilot.md).

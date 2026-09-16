@@ -6,14 +6,19 @@ import numpy as np
 import pandas as pd
 
 
-def source_frames(bars,context,*,minimum_tick=.01,observation_index=None):
+def source_frames(bars,context,*,minimum_tick=.01,observation_index=None,aliases=None):
     from nn_meta.tradingview_features import SOURCE_MAP,_settings,ROOT
     from indicators.tradingview_registry import build_catalog
     from nn_meta.v7.setup import setup_scanner
     from v3.tv_amd_po3 import AmdConfig
     settings=_settings(build_catalog(ROOT),minimum_tick,'local_research')
+    allowed = {alias for alias, _, _ in SOURCE_MAP}
+    if aliases is not None and (not set(aliases) or not set(aliases).issubset(allowed)):
+        raise ValueError('Unknown or empty source selection')
     frames={};minutes=context['minutes'];as_of=context['available_at'][-1]
     for alias,_,calculator in SOURCE_MAP:
+        if aliases is not None and alias not in aliases:
+            continue
         kwargs=deepcopy(settings[alias])
         if alias=='setup':calculator=setup_scanner
         params=inspect.signature(calculator).parameters
