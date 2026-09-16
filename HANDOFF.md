@@ -1,6 +1,6 @@
 # Handoff — continue V7; leave V6 unchanged
 
-Updated September 16, 2026 after the full daily option-surface build.
+Updated September 16, 2026 after the full daily option-surface build and a new V6 exit replay.
 Read TODO.md then this file. No subagents. Main branch; preserve unrelated dirty
 V6 files. Use `./venv/bin/python`; consult DOCUMENTATION.md Traps before fixes.
 
@@ -10,8 +10,32 @@ Continue autonomously until full-scope V7 is ready, then alert the user. The
 persistent readiness goal is still active and unfinished. The user accepted
 [the V6 incident/SEDG explanation](docs/reviews/2026-09-16-v6-pending-exits.md)
 and explicitly directed us to leave the V6 experiment alone. No midpoint stops,
-spread policy, runtime settings or deployment changes were adopted. Do not
-restart that investigation. No full V7 training campaign has launched.
+spread policy, runtime settings or deployment changes were adopted. The user subsequently reopened the question with new rapid-exit alerts; the
+read-only replay below addresses them. No full V7 training campaign has launched.
+
+## Latest user steering: renewed V6 stop/spread concern
+
+The user reported more immediate exits apparently labeled stop exits. Read-only
+replay now completed for CELH/SIL/RH/AFRM/SNDK using the activated runtime and
+actual 19:00 stock capture. All five reproduced their recorded underlying exit
+bar with a true strategy-exit signal; none touched the generic 5% stock stop.
+The label `frozen underlying strategy/5% stop exit` is hardcoded for every exit
+and does not classify the cause. Rapid costly exits are nonetheless real:
+SIL -19.47% at unchanged 4.20/5.20 quotes, AFRM -30.79%, RH -35.64%, SNDK -13.04%.
+CELH was still awaiting a fresh exit quote at the saved snapshot. No V6 settings,
+state, runtime, alerts or spread policy changed. See
+[complete replay](docs/reviews/2026-09-16-v6-late-exit-replay.md) and evidence
+`nn_meta/validation/v6-incident-20260916-late`. Diagnostic replay ended 0.
+This does not establish future returns or resolve spread-cost feasibility.
+
+V7 daily context work was interrupted to address the new user concern. Its
+**untested, incomplete draft** is parked at `/tmp/v7-causal-daily-wip-20260916.py`,
+not imported or included in any artifact. Resume by reviewing it before restoring
+to `nn_meta/v7/causal_daily.py`. It sketches adjacent raw-close/action-factor
+returns, explicit continuity spans, missing sessions, next-open clocks, all ten
+daily features and warmup reporting. Still needs substantive tests, actual-data
+integration, input/evidence validation and review. Never claim it shipped or
+that original action coverage is complete. No V7 jobs remain active.
 
 ## Latest completed milestone: full option surfaces
 
@@ -187,4 +211,4 @@ autonomously until all gates pass and then alert the user. First-week maturity r
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-full-surfaces.md`.
+`handoff-history/HANDOFF-2026-09-16-before-late-exit-replay.md`.
