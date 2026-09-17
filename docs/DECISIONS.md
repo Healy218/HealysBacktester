@@ -1186,3 +1186,21 @@ causal/execution gate is implied. Reuse existing work and acquire only a concret
 missing input needed by the current item. See the
 [report](reviews/2026-09-17-three-day-goals-and-progress.md#6-consolidated-remaining-todos-before-the-goal-is-finished)
 and [active checklist](../TODO.md).
+## 2026-09-17 — matching ordinary actions as effective-session reconstruction
+
+The user explicitly accepts matching provider terms as historical reconstruction
+inputs, applied only from the effective session, retaining the assumption and
+reviewing conflicts/complex actions separately. For a unique ordinary cash or
+split record from each of Alpaca and Massive, exact matching effective dates and
+terms, verified units and dated security continuity may support causal chart
+adjustment without separately captured pre-event publication evidence.
+
+Bind `docs/specs/V7_ORDINARY_ACTION_ADMISSION_20260917.json` in each new output.
+An effective-open reconstruction availability clock is an explicit assumption,
+not proof of publication; preserve null publication availability and
+`publication_verified=false`. Preserve all original IDs, dates, units, source
+receipts and missingness. Existing reviewed whole-group corrections, including
+DVN, take precedence exactly once. Do not sum duplicates, admit simultaneous or
+complex actions, infer option deliverables, change identities, or infer no-event
+intervals from missing records. Full-security admission and 6-1 closure remain
+separate. This supersedes the pending question in the source-routing handoff.

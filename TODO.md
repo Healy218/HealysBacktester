@@ -24,8 +24,11 @@
   Completion evidence: An inspected full-scope report passes every required stage; only then may we claim V7 is ready.
 
 **Current item: 6-1. Items 6-2 through 6-7 are queued.**
-September 17 progress: [reviewed source routing and admission choice](docs/reviews/2026-09-17-v7-6-1-source-routing.md).
-FISV/FI routing is consumed by the full history build; 6-1 remains open.
+September 17 progress: [reviewed source routing](docs/reviews/2026-09-17-v7-6-1-source-routing.md)
+and [authorized ordinary-action reconstruction](docs/reviews/2026-09-17-v7-ordinary-action-admission.md).
+FISV/FI routing is consumed by the full history build; 4,429 action events pass
+consumer boundary checks, including all 18 SPY distributions. Identity, complex
+action, no-event and held-position treatment still keep 6-1 open.
 The user selected this sequence on September 17 after reviewing the
 [three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md#6-consolidated-remaining-todos-before-the-goal-is-finished).
 The report's pause is historical; this checklist and [HANDOFF](HANDOFF.md)

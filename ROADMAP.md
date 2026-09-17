@@ -22,6 +22,12 @@ campaign or declare a later item complete prematurely.
 
 ### Completed work and evidence retained
 
+Current 6-1 progress: the [ordinary-action admission review](docs/reviews/2026-09-17-v7-ordinary-action-admission.md)
+records the user's effective-session reconstruction policy, 4,410 reconstructed
+events plus 19 retained publication-reviewed events, and real consumer checks.
+This advances action compilation; it does not close identity, complex-action,
+no-event or held-position requirements.
+
 Use report sections 2–4 as the September 15–17 evidence index instead of repeating
 all completed checkboxes here. They record base stock/options acquisition;
 historical membership, identity/action inventories, raw daily/surface/sector

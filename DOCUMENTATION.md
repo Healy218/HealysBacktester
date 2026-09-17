@@ -975,6 +975,26 @@ eligible security ID. Compiled events do not establish full-security continuity
 or no-event coverage; unresolved inventory must remain explicit upstream of any
 full daily/feature admission. See the September 16 cash-action integration review.
 
+### V7 ordinary-action admission (September 17)
+
+The user accepted matching ordinary provider terms as historical reconstruction
+inputs from the effective session. `ordinary_actions.py` and
+`compile_v7_ordinary_actions.py` implement the bound policy in
+`docs/specs/V7_ORDINARY_ACTION_ADMISSION_20260917.json`. Original publication
+reviews retain precedence; duplicate, combined, complex and conflicting records
+remain explicit. Exact dated security continuity and observed cash-event prior
+closes are still required.
+
+`ReconstructionAction` subclasses `PriceAction` for the existing causal consumers.
+Its `available_at` equals the effective open **by assumption**, while publication
+availability remains null and `publication_verified` remains false. Keep the
+additional policy/basis fields when serializing; `proposal_store.build_features`
+already retains them via dataclass serialization. Use `ordinary_actions.price_action`
+to load compiled event envelopes without erasing the distinction. Do not label
+these records as publication verified or use them to establish no-event intervals,
+cash entitlements or option deliverables. See the September 17 ordinary-action
+review for the full compilation census and consumer limits.
+
 ### V7 daily identity capture and continuity
 
 Daily listed identity capture restricts primary exchanges to ARCX/BATS/XASE/XNAS/

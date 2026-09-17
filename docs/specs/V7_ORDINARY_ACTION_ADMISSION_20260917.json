@@ -1,0 +1,20 @@
+{
+  "schema": "v7-ordinary-action-admission-v1",
+  "policy_id": "matching-provider-effective-session-reconstruction-20260917",
+  "authorization": "User explicitly accepted matching provider terms as historical reconstruction inputs, applied only from the effective session, with the assumption retained and conflicts/complex actions reviewed separately.",
+  "admission_basis": "matching_provider_historical_reconstruction",
+  "providers": ["alpaca", "massive"],
+  "categories": ["cash", "split"],
+  "unique_record_per_provider": true,
+  "exact_terms_and_effective_date": true,
+  "require_dated_security_continuity": true,
+  "available_at_basis": "effective_session_open_assumption_not_publication",
+  "publication_verified": false,
+  "reviewed_whole_event_replacements_take_precedence": true,
+  "no_event_coverage_inferred": false,
+  "option_deliverables_inferred": false,
+  "combined_or_complex_actions_admitted": false,
+  "duplicate_records_summed_or_deduplicated": false,
+  "unknown_currency_or_units_admitted": false,
+  "full_security_admitted": false
+}
