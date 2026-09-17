@@ -1,155 +1,122 @@
-# Handoff — actual proposal tick-feature demand verified
+# Handoff — V7 item 6-1: finish usable identity/action histories
 
-Updated September 17, 2026. Main; no subagents. Goal active and incomplete.
-No training launched. All tests/build/audit/resume jobs from this turn exited
-successfully. No new provider downloads or V6 runtime changes this turn.
-Preserve the many unrelated dirty/untracked V6 files; never blanket-stage/reset.
+## Goal and current instruction
 
-## Latest milestone
+Make V7 ready to train for March 15, 2022–September 14, 2026 under the agreed
+feature, execution, source and resource constraints. The user reviewed the
+[three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md) and
+selected its section 6 as the sequential plan. Read [TODO](TODO.md) first.
+**Work on 6-1 now. Items 6-2 through 6-7 remain queued and unchecked.**
 
-Review: docs/reviews/2026-09-17-v7-entry-demand.md.
+This replaces the September 17 review pause with the user's numbered workflow.
+This session only reorganized documentation; it did not finish 6-1, launch a job,
+or resume the old broad campaign. Older autonomous/parallel work instructions
+must not expand the current item. Preserve V6 paper operation.
 
-New `nn_meta/v7/entry_demand.py` and `scripts/build_v7_entry_demand.py` consume
-actual compact, PIT-filtered proposal stores. SQLite collapses repeated strategy
-entries into shared contract selections, retaining all five target identities
-and the complete proposal/timeframe census. Raw spot must be causally available
-and at most 60 seconds old; contract first observation must precede the decision
-date. Missing spot/contract is explicit, never a fabricated row or future fill.
-The index keeps one root's chain resident and uses bounded SQL/streamed reads.
+## 6-1 deliverable and completion evidence
 
-For each selected contract/timeframe, quote and trade feature windows include
-30 seconds of seed history, bounded by the session opening, and end exclusively
-at the decision. Identical request scopes are shared. Export batches contain at
-most 10,000 windows and keep each contract/day together. They are compatible with
-`scripts/capture_v7_quotes.py` and its shared quota. Build and export bind all
-parent payloads, sources and runtime. Completed outputs resume without proposal
-reprocessing. `EntryDemand.lookup` connects a proposal/target to its selection
-and requests; `request_batches`/`export_requests` provide capture inputs.
+**Complete usable identity/action histories under an agreed admission policy.**
+Closure requires every relevant security/session/action to have an explicit
+resolved treatment, consumed by the actual feature and held-position paths.
+An inventory, additional source download, selected-symbol pilot, or passing
+component test alone does not finish this item.
 
-**This is pre-entry feature demand only.** Entry fills, minute marks, exits,
-rolls and physical delivery still need demand integration. Do not call these
-exports complete execution coverage, admit labels from them, or launch broad
-capture before reconciling those other necessary windows.
+Start with report sections 3A and 3B and existing implementation. Use the
+current worktree and saved artifacts as evidence; do not restart the full audit.
 
-## Real AAPL integration and evidence
+1. Reconcile the existing exception sets and their affected consumers: the 186
+   eligible identity/source mismatches, relevant lifecycle/rename boundaries,
+   59 explained zero-bar sessions, unconsumed action records, and SPY actions.
+   Group shared causes so fixes address classes of cases rather than repeating
+   individual investigations. Include the captured FISV/FI June 7, 2023 routing
+   evidence where needed for continuity outside entry membership.
+2. State the applied admission rules, including ordinary cash/splits, duplicate
+   provider records, combined/complex actions, identity continuity and no-event
+   intervals. Use existing contracts and evidence first. Record a real policy
+   decision in DECISIONS; do not silently weaken causality, exclude more issuers,
+   or impose new broad publication-collection requirements. If a material scope
+   choice requires the user, identify that exact choice and affected records.
+3. Finish scalable compilation and dated identity/action treatment over the
+   required scope. Retain original source IDs, dates, units and missingness.
+   Do not fill absent prices or treat an absent provider record as proof of no
+   action. Additional capture must serve an exact missing required input.
+4. Connect the resulting history to the real causal-feature and held-position
+   consumers so their treatment is executable. Exercise boundary cases and
+   reconcile a full scoped census: totals, consumed groups, explicit treatments,
+   remaining unsupported cases and their effects. A failure must stay visible;
+   labeling it explained or unresolved alone is not closure. Full daily/feature
+   production belongs to 6-2; full option/physical execution belongs to 6-4.
+5. Verify 6-1's stated scope and consumer behavior, run checks appropriate to
+   the changes (including the repository suite for code changes), and save
+   reproducible evidence in a dated 6-1 review. If a prerequisite is still missing,
+   keep 6-1 open and name it precisely.
 
-March 15–May 10, 2022, all 11,268 variants and 757,595 proposals:
+## Existing evidence and paths — reuse these
 
-- 19,702 distinct feature decisions retaining timeframe.
-- 16,279 shared selection decisions; 81,395 selected records for all five targets.
-- 197,020 feature links; 55,126 distinct quote/trade requests; 107 contracts.
-- Six bounded export batches; 7,472 non-overlapping capture intervals.
-- 603.15 hours per tape (quotes and trades), after union. Not yet downloaded.
-- Build 28.03 seconds, peak RSS 429,828 KiB. Resume 8.35 seconds, 237,108 KiB.
-- All 13 files unchanged on resume. Total output 82,035,332 bytes, including a
-  63,922,176-byte SQLite index. Full-history storage/resource gate remains open.
-- Independent audit recounted every parent proposal, exhaustively checked every
-  selected contract and tie rule, matched raw prices/clocks, checked every
-  feature link, and verified exact export census plus non-overlapping unions.
-- Full suite: 1,970 tests +18 subtests, 18 warnings, 115.58 seconds.
+- Active contract: `docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json`.
+  Scope: `docs/specs/MULTITIMEFRAME_RESEARCH.md`.
+- Security histories: `nn_meta/validation/v7-security-history-20260916`;
+  591 securities, 593 tickers, 1,129 sessions, 667,239 history rows.
+  339,454/339,640 eligible sources match; 186 remain explicit.
+  Stock session presence is 339,581/339,640; 59 absences have retrospective
+  explanations, not automatic execution admission.
+  [Security-history review](docs/reviews/2026-09-16-v7-security-history.md).
+- Action inventory: `nn_meta/validation/v7-action-inventory-20260916r2`;
+  10,380 provider records, 5,030 symbol/day cash-or-split groups, 213 complex
+  records. Compiled cash: `nn_meta/validation/v7-compiled-cash-actions-20260916`;
+  19 events (18 AAPL and one DVN), consuming 40 provider records.
+  The other 10,340 records are not 10,340 distinct events. SPY has 36 unresolved
+  cash-provider records. [Inventory review](docs/reviews/2026-09-16-v7-action-inventory.md)
+  and [cash integration](docs/reviews/2026-09-16-v7-cash-action-integration.md).
+- Main modules: `nn_meta/v7/security_history.py`, `identity_panel.py`,
+  `identity_review.py`, `action_inventory.py`, `cash_actions.py`,
+  `causal_prices.py`, `causal_features.py`, `causal_daily.py`, `lifecycle.py`.
+  Their matching scripts/tests already exist; inspect the relevant consumers.
+- Read DOCUMENTATION's Traps and V7 identity/action sections before changing
+  apparent anomalies. Raw daily/surface/sector and retained publication sources
+  are indexed by the report; do not reacquire completed inventories.
 
-Artifacts:
-`nn_meta/validation/v7-entry-demand-20260917`,
-`nn_meta/validation/v7-entry-demand-exports-20260917`,
-`nn_meta/validation/v7-entry-demand-verification-20260917`.
-Verification receipt:
-`0f2a0f8a2143a65edd74f221365610b417b54d56d10b8a4aeecd225e3a178e9c`.
-Exact command/audit sources, logs/XML, hashes and measurements are retained there.
-Scripts remain `/tmp/run_v7_entry_demand_20260917.py` and
-`/tmp/audit_v7_entry_demand_20260917.py`. Terminal handles: 49013 full tests,
-9599 build, 68110 audit, 39122 resume. No live job to restart or wait for.
+## Constraints and preserved implementation
 
-Input proposal root:
-`nn_meta/validation/v7-compact-proposal-build-20260917/BBG000B9XRY4`.
-CLI takes --proposal-root, --output and --export; active manifest defaults to
-`docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json`.
-No need to repeat completed tests unless code changes.
+Alpaca-only stocks; Massive options; no OTC. BBBY/FRC/REV/SI remain excluded
+without replacement or reranking. Preserve all 20 families, 11,268 variant/TF
+combinations, 222 columns, chronological folds and raw execution prices.
+Preserve arithmetic option midpoint pricing, costs, V7 12.5% premium stops,
+strategy exits, ITM 15-minute expiry cutoff and funded physical fallback.
+At most four outer workers and one inner thread; retain 100 GiB disk reserve.
+The 250 GB acquisition limit is a ceiling, not a target. Last verified quota
+was 63,043,400,695 bytes with no reservations; recheck before a needed acquisition.
 
-## Next work toward the actual full goal
+V7 has no full training dataset or trained model. Latest saved readiness:
+`nn_meta/validation/v7-readiness-20260917-entry-demand.json`, three foundational
+passes and eight substantive stages unpassed. Do not claim training is close
+from partial progress. Full readiness is item 6-7.
 
-Current `nn_meta/validation/v7-readiness-20260917-entry-demand.json` passes three
-basic scope/membership/coverage checks. All eight substantive stages remain
-missing: lifecycle, causal prices, daily context, quotes, physical execution,
-assembly, trials and integrated pilots. No full-universe readiness claim.
+Preserve uncommitted assembly implementation: `nn_meta/v7/assembly.py`,
+`nn_meta/v7/dataset_inputs.py`, `scripts/build_v7_dataset.py`,
+`tests/test_v7_assembly.py`. It is not a full production build. Its
+[review](docs/reviews/2026-09-17-v7-dataset-assembly.md) records the last full suite:
+1,976 tests +18 subtests passed, 18 warnings, 122.33 seconds. Those are historical
+results, not validation of future edits. Preserve other dirty/untracked V6 work;
+no blanket staging, reset or cleanup.
 
-1. Extend actual selected-contract demand to observed entry/exit fills, held
-   minute marks, roll frontiers and physical delivery, using dated class hours
-   and contract references. Merge necessary intervals before capture. Existing
-   `plan_v7_quote_demand.py` is an all-minute conservative envelope, not this
-   actual-proposal consumer. Capture only specifically required missing inputs.
-2. Connect complete causal daily/market context and dated sectors to
-   `StoredFeatureRows`; then join captured tick features. `causal_daily.py` has
-   returns/context/missingness components; old `daily.daily_context` uses the
-   wrong adjusted/filled path for this build. Do not substitute unadjusted market
-   returns. SPY ID BBG000BDTBL9 has all 1,129 captured history sessions and daily
-   surfaces, but 36 provider cash-action records remain unresolved; the existing
-   saved amount-publication matcher has no SPY match. That is a specific market
-   reference dependency, not a reason to restart broad issuer/news acquisition.
-3. Wire option premium stops/ITM expiry, rolls and physical outcomes into labels,
-   factorized bounded assembly, purged folds and the runnable predeclared trials.
-4. Finish remaining identity/action exceptions and full-history resource/storage,
-   recovery, no-swap and V6-coexistence checks, then full-universe readiness.
+The last host check found no running V7 jobs. Old research units were terminal;
+the old short-DTE progress timer was disabled/stopped. No jobs were started by
+this docs update. Existing V6 monitoring remains separate. Its known fresh-quote
+problem and sent-notice findings are in report section 4; no side-track repair,
+policy change or notice resend is part of 6-1.
 
-The prior compact-store/row-adapter milestone is committed as `1d45b31`;
-subsequent V6 observation notes as `c8d5e52`. Compact proposals preserve all
-public fields; full real reconstruction and 736-receipt resume passed. Exact
-222-column row parity includes split warmup and raw option-selection prices.
-That row adapter still requires supplied daily/sector/tick context, not fixtures
-in the full dataset. New consumers can use the existing verified parent stores;
-source edits/recomputed glob manifests can invalidate producer resume. Never
-relabel old receipts or weaken binding checks to reuse changed calculations.
+## Finish the item, then advance the handoff
 
-## Fixed scope and data
+When 6-1 passes its full completion evidence: check 6-1 in TODO, link the evidence
+review, update ROADMAP/DOCUMENTATION and DECISIONS if needed, archive this HANDOFF,
+and write a fresh handoff for **6-2: complete causal daily/market context and full
+feature/proposal stores**. Commit/push only scoped changes on main. Repeat this
+pattern through 6-7; do not advance on an incomplete item or launch later work
+before documenting the current closure. A context limit keeps the handoff on
+6-1 with exact remaining work; it does not justify declaring completion.
 
-March 15, 2022–September 14, 2026 inclusive, cold start March 15. No March 8–14
-active prices. Twenty families, 2,817 variants across 1/5/15/30 minutes, all 222
-columns, 13 TradingView scopes and 10 tick features. Actual 1–9 calendar DTE;
-targets 1/2/4/5/7; five shared slots, 10% equity premium, one symbol across TF.
-Max four outer workers, one inner thread, 100 GiB disk reserve. Acquisition
-ceiling 250 GB, never a target. Alpaca-only stocks/quotes; Massive options.
-Entire BBBY/FRC/REV/SI excluded without replacement/reranking; no OTC.
-Folds 2024H2, 2025H1/H2; final Jan 1–Sep 14, 2026; 10-session embargo through
-settlement. Funded physical delivery and observed Alpaca liquidation remain
-required where applicable; no invented intrinsic-value sale or free financing.
-
-Execution: arithmetic (bid+ask)/2, separate 0.15% per-side costs. Option premium
-loss stops from purchased-leg entry midpoint: V6 7.5%, V7 12.5%. Strategy exits
-retained; no generic 5% underlying stop for held positions. ITM expiry exit
-15 minutes before the dated option-class regular close. Valid trigger quote
-supplies sale midpoint directly; missing/invalid quotes stay explicit and retry.
-Original quote timestamp and observation/execution clock remain distinct.
-
-Raw predecessor `V7_ACTIVE_INPUTS_20220315.json` and raw producer bytes remain
-immutable; execution-aware OPTION_RISK manifest has the same non-execution scope.
-Raw source `nn_meta/data_v7/start-20220315`; history
-`nn_meta/validation/v7-security-history-20260916`; compiled actions
-`nn_meta/validation/v7-compiled-cash-actions-20260916` (19 reviewed events,
-18 AAPL + DVN; 10,340 provider records still unresolved).
-Daily `v7-stock-daily-20260916-midpoint`; surfaces `v7-surfaces-20260916-midpoint`;
-sectors `v7-sectors-20260916-final`. History 591 IDs, 593 tickers, 1,129 sessions.
-Eligible identity matches 339,454/339,640; 186 unresolved. Minute bars present
-in 339,581/339,640 sessions; 59 zero sessions have merger/successor/halt
-explanations. This is session presence, not proof of every minute's completeness.
-
-## Preserve V6; user alerts already diagnosed
-
-Runtime `/home/healy/Coding/HealysV6` at
-`d252c5190c3ca261136966ffe43432b160adfc84`, isolated pushed branch
-`ops/v6-option-risk-20260916`. Activation SHA:
-`d7ce5e3ebbcc58ddb894564b113cc35c210d0d35f4558123944f8cacf8c02f34`.
-V6 frozen entry simulator remains unchanged; held exits use separate signals
-and option-risk rules. Expected-leg guards protect concurrent replacements.
-Candidate tests 1,610 +18 subtests, 16 warnings, 65.15 seconds. Candidate temp
-worktree has an untracked venv symlink; never stage it.
-
-The user supplied a September 17 FIG stop and unresolved-monitoring alert.
-Read-only verification showed FIG midpoint $1.485 to $1.37 over about 3h11m:
-7.7441% premium loss, 8.02046% net including costs, crossing $1.373625 stop.
-This was the requested arithmetic midpoint behavior. Separately, 17:30 forward
-status lacked fresh quotes for AMPX/SOXX; at 17:37 SOXX/COHR passed but AMPX
-remained unresolved. New entries withheld; positions retained for retry. No
-quote-age relaxation, runtime patch or ledger mutation. Do not claim recovery
-without checking newer state. Evidence `v6-live-midpoint-check-20260917` under
-nn_meta/validation. Details in the September16 option-premium-risk review.
-
-Archived predecessor: handoff-history/HANDOFF-2026-09-17-before-entry-demand.md.
+The prior overlapping TODO and review-pause handoff are archived as
+`handoff-history/TODO-2026-09-17-before-report-sequence.md` and
+`handoff-history/HANDOFF-2026-09-17-before-report-sequence.md`.
+The report remains an unchanged dated record of the review, not live task state.

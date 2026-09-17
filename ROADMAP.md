@@ -3,27 +3,55 @@
 Long-term maturity targets and the first-week v6 review are in [GOALS](GOALS.md).
 Continue this roadmap toward ≥7/10 in every assessment area by December 31, 2026.
 
-## September 15 checkpoint: V7 acquisition and readiness
+## September 17 direction: finish V7 through report items 6-1 to 6-7
 
-Base acquisition is complete (8,284 captures); active working inputs now start
-**March 15, 2022**, excluding March 8–14. All 20 strategy-family adapters and
-all 13 TradingView scopes are present in the 222-column V7 row schema; bounded
-pilots passed. These are component milestones, not complete-universe admission.
+The user adopted section 6 of the
+[three-day progress report](docs/reviews/2026-09-17-three-day-goals-and-progress.md)
+as the ordered completion plan. [TODO](TODO.md) is the single active checklist;
+[HANDOFF](HANDOFF.md) names the current item and its next concrete work.
+**Current item: 6-1, usable identity/action histories.** All seven items remain
+open. Finish and document each item before the handoff advances to the next.
+The report's review pause is superseded by this staged workflow; the historical
+checkpoints below are not parallel instructions to restart old workstreams.
 
-**Not ready for freeze/build/training.** Rebuild PIT membership after the date
-exclusion; finish causal corporate-action prices, complete-universe daily/sector
-features, actual-contract row semantics, funded physical expiry, dated option
-rules and full quote capture. Then finish bounded assembly/training, declare
-the trial manifest, and pass new-window resource pilots plus one executable
-launch gate. Four workers and the shared **250 GB decimal** acquisition cap
-remain fixed. The [feature and freeze audit](docs/reviews/2026-09-15-v7-feature-and-freeze-audit.md)
-is the current ordered checklist; [TODO](TODO.md) tracks it.
+The sequence is identity/actions → causal context/features → actual option-path
+capture → integrated execution → full assembly/trials → measured resource and
+recovery feasibility → complete readiness. Dependencies may require touching a
+later component to prove the current item, but do not open another independent
+campaign or declare a later item complete prematurely.
 
-V6 remains scheduled for forward paper operation. September 15 overnight
-inspection confirmed completed closing cycles, fresh relay and eight server
-notices sent. Morning input refresh and the next market session remain to be
-observed. Dashboard V6 hosting and continuous evidence collection remain open.
-[Health check](docs/reviews/2026-09-15-v6-paper-health.md).
+### Completed work and evidence retained
+
+Use report sections 2–4 as the September 15–17 evidence index instead of repeating
+all completed checkboxes here. They record base stock/options acquisition;
+historical membership, identity/action inventories, raw daily/surface/sector
+stores; strategy and 222-column feature components; real compact AAPL proposals
+and selected-contract demand; execution, fold and trial components; and the
+V6 midpoint/risk amendment. Each entry distinguishes full-scope completion from
+component code and selected-data checks. The latest assembly connection and its
+tests remain uncommitted implementation; it has not produced a full real dataset.
+
+**V7 is not ready to train.** No full dataset or trained V7 model exists. The
+saved gate still has eight substantive stages unpassed. The scope, source rules
+and resource limits remain unchanged; progress counts only against TODO's
+explicit closure evidence. This documentation reorganization completes no gate.
+
+### Deferred work preserved outside the V7 sequence
+
+V6's unresolved fresh-quote/health and alert-delivery behavior is recorded in
+report section 4; preserve paper monitoring without silently changing policy.
+Other retained backlog: dashboard/publisher and evidence-journal deployment;
+external Pine parity; wider expert/panel and broker-paper rollout; prospective
+FA/PIT cohorts and overlays; extra volatility/model/SPX0/stacking research; and
+the GOALS first-week/year-end assessment. These are not new V7 prerequisites.
+Detailed former tasks and completed checkboxes remain in the
+[archived TODO](handoff-history/TODO-2026-09-17-before-report-sequence.md).
+Do not infer current runtime health or authorization from older dated entries.
+
+## Historical roadmap and acceptance criteria
+
+The following dated phases preserve prior decisions and evidence. Current work
+order is exclusively the seven-item checklist above and its current handoff.
 
 Reconciled September 6, 2026. [TODO](TODO.md) is the active checklist;
 [HANDOFF](HANDOFF.md) records session milestones. The user authorized starting
@@ -36,7 +64,32 @@ thirteen new indicator scopes plus quote/trade features**. The preserved
 SPY/IBKR pilot validated the repaired core only; it is not authorization to scale
 an existing-family-only campaign as the full v6 rebuild.
 
-## Current foundation
+## September 14 historical phase: forward paper operation and separate short-DTE research
+
+The expanded freeze/build and repaired three-fold/40-member training completed.
+Frozen V6 experimental paper alerts are active: home calculation/portfolio,
+server delivery and watcher, with the explicitly authorized 15-minute expiry
+cutoff. Model weights and selection/risk rules remain frozen. The separate
+**actual 1–9-calendar-day expiry** campaign is coded and prepared with strict
+entry/roll guards, separate artifacts and an overnight resource budget.
+The original end-to-end dataset pilot passed. After a four-process resume,
+`v6-short-dte-20260914-now` was paused at 21 completed symbols and its main
+timer disabled: the user expanded scope to minute option execution and all
+strategy variations across 1/5/15/30-minute signals. V7 now uses March 15, 2022 through September 14, 2026;
+the user superseded the initial plan to keep V6 dates. Complete [new-version preparation](docs/specs/MULTITIMEFRAME_RESEARCH.md)
+before a new freeze/build/training launch. No new trained model exists yet. See
+[HANDOFF](HANDOFF.md), [activation](docs/reviews/2026-09-14-v6-forward-activation.md)
+and [short-DTE design](docs/specs/V6_SHORT_DTE_EXPERIMENT.md).
+
+External Pine parity, full historical execution-quote/roll revalidation,
+sustained forward evidence and dashboard portfolio integration remain open.
+Training must coexist with the active home producer under a measured combined
+resource budget. The first operational-week review starts September 14.
+
+The September 6 phase descriptions below are retained as the original roadmap
+and acceptance criteria, not instructions to rerun the completed V6 campaign.
+
+## September 6 foundation (historical phase record)
 
 The audit's 51 findings and four additional concerns are repaired and merged.
 The final expanded integration suite passed **1,390 tests and 18 subtests**.
@@ -60,7 +113,7 @@ Old results remain in
 [EXPERIMENTS](docs/EXPERIMENTS.md) as history, including the intraday-staleness
 incident and September 4 gate change.
 
-## Current phase: real TradingView validation and expanded tick coverage
+## Original phase: real TradingView validation and expanded tick coverage
 
 The scope covers the user's **ten highest-boost scripts across the supplied
 general listing's exposed pages plus three highest-boost Editors' Picks**.
@@ -115,7 +168,7 @@ input contract and validate the fresh launch. Each new TradingView scope
 requires reviewed rules and external parity evidence. v6's existing window stays equal to v5's; the archive audit found
 fifteen weekly-expiry names.
 
-## Next phase: corrected baseline and expanded-pool evidence
+## Original next phase: corrected baseline and expanded-pool evidence
 
 Refreeze expanded v6 under `2026-09-06-tv13-option-ticks-v4` after the
 [sealed feature input gates](docs/specs/V6_EXPANDED_INPUTS.md); core pools remain

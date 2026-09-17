@@ -47,6 +47,74 @@ See [audit remediation](docs/reviews/2026-09-05-remediation.md) and the
 [original audit](docs/reviews/2026-09-05-adversarial-audit.md) for implemented
 repairs and migration requirements.
 
+## V7 completion workflow and evidence index (September 17)
+
+[TODO](TODO.md) now starts with report items **6-1 through 6-7**. Work on one
+current deliverable, named in [HANDOFF](HANDOFF.md), until its stated scope and
+completion evidence are satisfied. Update the checklist and evidence, archive
+HANDOFF, write the next numbered handoff, then commit and push. An incomplete
+item stays current. The report's pause and older parallel-work instructions do
+not override this user-selected sequence.
+
+The [three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md)
+is the evidence index for work completed September 15–17, with detailed review
+links. Its sections 3A–3B are the starting point for **6-1 identity/actions**;
+sections 3C–3H map the later consumers and gates. [ROADMAP](ROADMAP.md) preserves
+the completed-work summary and deferred backlog. The
+[old TODO](handoff-history/TODO-2026-09-17-before-report-sequence.md) is historical,
+not a second active queue. Do not reconstruct all prior work on every session.
+
+Keep these evidence distinctions explicit: session presence is not every-minute
+coverage; provider records are not distinct actions; an inventory is not admitted
+causal history; retrospective explanation is not contemporaneous observability;
+component tests and a real AAPL pilot are not full-universe readiness. Reuse the
+captured inputs and implement scalable consumption. Additional acquisition must
+serve an identified missing input for the current deliverable. No blanket
+requirement to collect issuer publications for every record is introduced by
+this workflow, and no existing causal requirement is waived.
+
+## V6 forward paper operating contract (September 14)
+
+The active frozen producer is `scripts/run_v6_forward.py` in the permanent
+`/home/healy/Coding/HealysV6` checkout. Main is the research workspace, not the
+running source checkout. Its `nn_meta/live/v6_server/portfolio.sqlite3` owns
+positions/cycles/outbox; the server's separate V6 checkout receives generated
+state and the existing production dispatcher delivers immutable notices.
+Existing four-expert ranking and feed fixes are preserved. Source deployment
+uses Git; generated data/state may use rsync. Exact paths and receipts are in
+[HANDOFF](HANDOFF.md) and the
+[activation review](docs/reviews/2026-09-14-v6-forward-activation.md).
+
+- Preserve the full original adjusted/raw history and price vintage. Rebase or
+  missing held-symbol data must not silently alter strategy exits/features.
+- Apply expiry cutoff to the option class's final regular session; stock close
+  differs from eligible ETF option close. Use the covered calendar for holidays
+  and early closes. Actual quote receipt/fill is later than the trigger.
+- Real MASSIVE tick features use their original SIP/condition/missingness rules.
+  Current arithmetic bid/ask midpoint paper fills keep actual receipt times. Historical aggregate
+  labels and paper quote fills are different evidence; neither is a broker fill.
+- Activation binds source/evidence hashes. Editing installed numerical source
+  breaks activation; never mutate it during a pass. New source needs reviewed
+  parity evidence and activation. Documentation-only changes do not affect it.
+- `v3/_source_memo.py` reuses identical numerical inputs only within one V6
+  symbol. Pandas storage layout is not numerical identity; keys include actual
+  values/index/attributes. Cached outputs are detached. Changing numerical
+  sources while a replay runs triggers the source guard.
+- The producer shares a 32GB host and main's venv with research. Its 18GB cap
+  and the prior training 24GB cap do not form a viable simultaneous budget.
+  Measure combined resources, isolate new source/artifacts and protect scheduled
+  market scans before starting short-DTE training. Do not update the shared
+  environment while the producer operates.
+- Superseded short-DTE campaign: `v6-short-dte-20260914-now` is stopped,
+  with its main timer disabled and 21 completed symbols preserved. V7 replaces
+  this research scope; do not resume the old build. Its read-only progress
+  timer was also disabled/stopped September 17. Historical [launch review](docs/reviews/2026-09-14-v6-short-dte-launch.md).
+- Paper health watcher and completed-training watcher are independent. Bind a
+  new training watcher to the exact new campaign/service; never assume the old
+  completed-run binding follows a new run automatically.
+- The legacy observer/snapshot-shadow route remains available for research but
+  its waiting timer is disabled. Reinstalling it is not an activation step.
+
 ## V7 acquisition operating contract (September 15)
 
 Base acquisition and quote captures share the decimal 250 GB ledger under
@@ -835,7 +903,18 @@ surfaces retain missing values and literal ticker roots; they establish neither
 identity outside membership nor option deliverables. Causal daily/context
 integration is still required. See the September 16 full-surfaces review.
 
-### September 16 midpoint paper amendment (supersedes ask/bid fills above)
+### Current option-risk policy (September 16–17)
+
+The later user choice is arithmetic `(bid + ask) / 2` for simulated option
+entries, exits and marks; retain the separate 0.15% per-side cost allowance.
+Option-midpoint loss stops are 7.5% for V6 and 12.5% for V7, measured from entry
+premium. Retain strategy exits and the ITM expiry cutoff 15 minutes before the
+option class regular close. Last trade is reference only. The earlier
+provider-midpoint and ask/bid descriptions are historical. The actual FIG stop
+and remaining V6 quote-health limitation are documented in the three-day report;
+this note is not a new deployment or a declaration of V6 health.
+
+### September 16 initial midpoint paper amendment (historical)
 
 User-directed `option-midpoint-paper-v1` applies to V6 and V7 simulated option
 entries, exits, rolls and marks. Use a valid provided midpoint, otherwise bid/ask
