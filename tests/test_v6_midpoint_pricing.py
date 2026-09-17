@@ -31,14 +31,14 @@ def test_v6_open_legacy_migration_rebases_both_sides_and_is_idempotent(tmp_path)
         assert db.execute("SELECT count(*) FROM events WHERE kind='pricing_change'").fetchone()[0]==1
 
 
-def test_v6_new_midpoint_entry_uses_provider_value():
+def test_v6_new_midpoint_entry_uses_arithmetic_average():
     fixture=fixtures.ForwardPortfolioTests();fixture.setUp()
     try:
         old=fixture.quote
         fixture.quote=lambda contract,**kwargs:{**old(contract,**kwargs),'mid':2.07,'last':100.}
         fixture.allocate()
         p=fixture.book.open_positions()[0]
-        assert p['entry_price']==pytest.approx(2.07*(1+COST))
-        assert p['entry_reference']['price_source']=='provider:mid'
-        assert 'simulated midpoint $2.0700' in fixture.book.entry_payload(p,fixture.bar.tz_localize('UTC'))['message']
+        assert p['entry_price']==pytest.approx(2.05*(1+COST))
+        assert p['entry_reference']['price_source']=='computed_bid_ask_average'
+        assert 'simulated midpoint $2.0500' in fixture.book.entry_payload(p,fixture.bar.tz_localize('UTC'))['message']
     finally:fixture.tearDown()

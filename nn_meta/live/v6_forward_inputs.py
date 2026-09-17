@@ -37,8 +37,33 @@ def attach_context(symbol, bars, training, calendar):
     return flags, context
 
 
+def held_signal_exit(price, signals, position, config):
+    """First actual exit/opposite signal after entry, excluding generic price stops."""
+    entry = pd.Timestamp(position['entry_ts'])
+    short = int(position['context']['direction']) == 1
+    def channel(number):
+        value = signals[number]
+        if value is None:return pd.Series(False,index=price.index)
+        if (not value.index.equals(price.index) or len(value.columns)!=1
+                or value.isna().any().any() or not pd.api.types.is_bool_dtype(value.iloc[:,0])):
+            raise ValueError('Held strategy requires exact single-variant boolean signals')
+        return value.iloc[:,0]
+    exit_signal = channel(3 if short else 1)
+    same_entry = channel(2 if short else 0)
+    opposite = channel(0 if short else 2)
+    window = config.get('TREND_FILTER_WINDOW',0)
+    if window:
+        trend = price.Close.rolling(window,min_periods=1).mean()
+        opposite = opposite & (price.Close.ge(trend) if short else price.Close.le(trend))
+        same_entry = same_entry & (price.Close.le(trend) if short else price.Close.ge(trend))
+    # Match the frozen simulator's entry-over-exit conflict rule, then its
+    # opposite-entry reversal rule. Only the generic stock stop is removed.
+    exits = price.index[(price.index>entry) & ((exit_signal & ~same_entry)|opposite)]
+    return None if not len(exits) else exits[0]
+
+
 def detect_symbol(task):
-    """Process-pool unit; uses original simulator status for causal exits."""
+    """Keep frozen model entry features; held exits use actual strategy signals."""
     from nn_meta import config, proposals
     from nn_meta.baseline import _SIM_KWARGS
     from portfolio import simulator
@@ -75,13 +100,9 @@ def detect_symbol(task):
             entry_ts = pd.Timestamp(position["entry_ts"])
             if entry_ts not in bars.index or not np.isclose(float(bars.loc[entry_ts, "Close"]), position["context"]["spot"], rtol=1e-7, atol=1e-8):
                 raise ValueError(f"{symbol}: original paper entry history changed")
-            matches = [r for r in records.itertuples() if price.index[int(r.entry_idx)] == entry_ts and int(r.direction) == position["context"]["direction"]]
-            if len(matches) != 1:
-                raise ValueError(f"{symbol}: held strategy entry cannot be reproduced")
-            trade = matches[0]
-            if int(trade.status) != 0:
-                stamp = price.index[int(trade.exit_idx)]
-                exits[position["key"]] = {"bar": stamp.isoformat(), "reason": "frozen underlying strategy/5% stop exit"}
+            stamp = held_signal_exit(price,signals,position,config.SIM_CONFIG)
+            if stamp is not None:
+                exits[position["key"]] = {"bar": stamp.isoformat(), "reason": "underlying strategy sell signal"}
     return {"symbol": symbol, "fresh": fresh, "exits": exits, "latest_bar": bars.index[-1].isoformat()}
 
 
@@ -275,5 +296,6 @@ class ForwardData:
                 from nn_meta import config
                 contexts[key_of(p)] = {"sim_start": bars.index[0].isoformat(), "entry_ts": bars.index[-1].isoformat(),
                     "symbol": symbol, "strategy": p["strategy"], "params": self.spec["symbols"][symbol]["strategies"][p["strategy"]]["params"],
-                    "direction": p["direction"], "spot": p["spot"], "sim_config": config.SIM_CONFIG}
+                    "direction": p["direction"], "spot": p["spot"], "sim_config": config.SIM_CONFIG,
+                    "held_exit_policy":"strategy signals plus option-premium risk; generic stock stop disabled"}
         return pd.concat(batches, ignore_index=True) if batches else pd.DataFrame(), contexts

@@ -31,10 +31,17 @@ def monitor_positions(data, book, market, now, *, alerts):
     from copy import deepcopy
     from nn_meta.live.v6_forward_inputs import detect_symbol
     from nn_meta.decision_contracts import DecisionContractSelector
+    from nn_meta.live.v6_option_risk import monitor_option_position
     errors=[]
     for position in book.open_positions():
         symbol=position['symbol']
         try:
+            risk = monitor_option_position(book,position,market,clock=utcnow,alerts=alerts,
+                calendar=data.calendar,underlying_mark=market.underlying_mark)
+            remaining=[p for p in book.open_positions() if p['key']==position['key']]
+            if not remaining:continue
+            position=remaining[0]
+            if position['state']=='exit_due':continue
             starts=data.calendar.closed_starts(now.tz_convert('America/New_York').date().isoformat(), now)
             bar=starts[-1]
             bars=data.bars[symbol].loc[:bar].copy()
@@ -46,7 +53,7 @@ def monitor_positions(data, book, market, now, *, alerts):
             if event:
                 at=pd.Timestamp(event['bar'],tz='UTC')+pd.Timedelta(minutes=15)
                 book.trigger(position['key'],kind='exit',reason=event['reason'],at=at,alerts=alerts)
-            elif utcnow()>=expiry_cutoff(position['contract'],data.calendar):
+            elif risk['status']=='otm_expiry':
                 book.trigger(position['key'],kind='roll',reason='15-minute final-session expiry cutoff',
                     at=expiry_cutoff(position['contract'],data.calendar),alerts=alerts)
             remaining=[p for p in book.open_positions() if p['key']==position['key']]
@@ -67,17 +74,17 @@ def monitor_positions(data, book, market, now, *, alerts):
 
 
 def close_expiring_without_bars(book, calendar, market, now, *, alerts):
-    """The expiry cutoff can still sell a leg during a stock-data outage.
-
-    A replacement waits for restored current stock data and strategy replay.
-    """
+    """Premium stops and ITM expiry exits work during a stock-bar outage."""
+    from nn_meta.live.v6_option_risk import monitor_option_position
     errors=[]
     for position in book.open_positions():
         try:
-            cutoff=expiry_cutoff(position['contract'],calendar)
-            if now < cutoff: continue
-            book.trigger(position['key'],kind='roll',reason='15-minute final-session expiry cutoff',at=cutoff,alerts=alerts)
-            book.settle(position['key'],quote_loader=market.execution_quote,clock=utcnow,alerts=alerts)
+            result=monitor_option_position(book,position,market,clock=utcnow,alerts=alerts,
+                calendar=calendar,underlying_mark=market.underlying_mark)
+            if result['status']=='otm_expiry':
+                book.trigger(position['key'],kind='roll',reason='OTM option expiry cutoff',
+                    at=expiry_cutoff(position['contract'],calendar),alerts=alerts)
+                book.settle(position['key'],quote_loader=market.execution_quote,clock=utcnow,alerts=alerts)
         except Exception as exc:
             errors.append({'symbol':position['symbol'],'error':f'{type(exc).__name__}: {exc}'})
     return errors
@@ -131,6 +138,12 @@ def run(args):
                     raise ValueError("missing verified activation receipt")
                 if activation.get("expiry_cutoff_minutes") != 15:
                     raise ValueError("expiry execution convention was not bound")
+                from dataclasses import asdict
+                from options.paper_pricing import MIDPOINT_POLICY
+                from options.paper_risk import V6_OPTION_RISK
+                if (activation.get('pricing_policy')!=MIDPOINT_POLICY
+                        or activation.get('option_risk_policy')!=asdict(V6_OPTION_RISK)):
+                    raise ValueError('Option-midpoint stop and expiry rules were not activated')
                 for path, digest in activation["runtime_sha256"].items():
                     if sha(Path(__file__).resolve().parents[1] / path) != digest:
                         raise ValueError("runtime changed since activation validation")

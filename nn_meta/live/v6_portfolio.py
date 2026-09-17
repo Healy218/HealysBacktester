@@ -16,6 +16,8 @@ import pandas as pd
 
 from nn_meta.live.v6_shadow import canonical
 from options.paper_pricing import MIDPOINT_POLICY, option_midpoint
+from options.paper_risk import V6_OPTION_RISK
+from dataclasses import asdict
 
 COST = .0015
 
@@ -182,6 +184,7 @@ class ForwardPortfolio:
                     position = dict(row, key=key, state="open", initial_amount=amount,
                         amount=amount, entry_price=basis['price'] * (1 + COST), opened_at=filled.isoformat(),
                         entry_reference=basis, pricing_policy=MIDPOINT_POLICY,
+                        option_risk_policy=asdict(V6_OPTION_RISK),
                         decision_at=decision_at.isoformat(), entry_quote=quote, contract=row["decision_contract"],
                         context=contexts[key], rolls=0, return_factor=1., legs=[])
                     db.execute("INSERT INTO positions VALUES (?,?,?,?)", (key, row["symbol"], "open", canonical(position)))
@@ -221,15 +224,20 @@ class ForwardPortfolio:
         return {"expert": "v6", "probability": p["score"], "alert_cycle": int(close.timestamp()),
                 "symbol": p["symbol"], "side": side, "contract": p["contract"], "title": title, "message": message}
 
-    def trigger(self, key, *, kind, reason, at, alerts=False):
+    def trigger(self, key, *, kind, reason, at, alerts=False, evidence=None, expected_leg=None):
         if kind not in ("exit", "roll"):
             raise ValueError("unknown portfolio event")
         with self.connect() as db:
             db.execute("BEGIN IMMEDIATE")
             row = db.execute("SELECT state,payload FROM positions WHERE key=?", (key,)).fetchone()
             if not row or row[0] == "closed":
-                return
+                return False
             p = json.loads(row[1])
+            if expected_leg is not None and any(p.get(k) != expected_leg.get(k)
+                    for k in ('contract','rolls','entry_price','entry_quote')):
+                return False
+            if evidence is not None:
+                p['trigger_evidence'] = evidence
             if kind == "exit" and p["state"] == "roll_pending":
                 equity = float(db.execute("SELECT value FROM metadata WHERE key='equity'").fetchone()[0])
                 equity += p["initial_amount"] * (p["return_factor"] - 1)
@@ -240,15 +248,16 @@ class ForwardPortfolio:
                     title=f"[v6] {p['symbol']} PAPER EXIT"
                     self._outbox(db, key+'|cash-exit', 'notice', at, {'title':title,
                         'message':f"{title}\nStrategy exited while waiting for a replacement. Paper roll cash released; no new option opened."})
-                return
+                return True
             if kind == "exit" and p["state"] == "roll_due":
                 p.update(state="exit_due", trigger_at=pd.Timestamp(at).isoformat(), trigger_reason=reason)
                 db.execute("UPDATE positions SET state='exit_due',payload=? WHERE key=?", (canonical(p), key))
-                return
+                return True
             if p["state"] != "open":
-                return
+                return False
             p.update(state=kind + "_due", trigger_at=pd.Timestamp(at).isoformat(), trigger_reason=reason)
             db.execute("UPDATE positions SET state=?,payload=? WHERE key=?", (p["state"], canonical(p), key))
+            return True
 
     def settle(self, key, *, quote_loader, clock, replacement=None, alerts=False):
         """Persist each leg before attempting a replacement; crashes cannot resell."""
@@ -324,6 +333,14 @@ class ForwardPortfolio:
 
     def export(self, directory):
         """Atomic immutable spool files; export retries survive process crashes."""
+        import fcntl
+        directory = Path(directory)
+        directory.mkdir(parents=True, exist_ok=True)
+        with (directory/'.export.lock').open('a') as lock:
+            fcntl.flock(lock, fcntl.LOCK_EX)
+            return self._export_locked(directory)
+
+    def _export_locked(self, directory):
         from nn_meta.live.v6_market import save
         directory = Path(directory)
         directory.mkdir(parents=True, exist_ok=True)

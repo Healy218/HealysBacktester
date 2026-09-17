@@ -212,6 +212,34 @@ class MassiveMarket:
                 "ask_size": quote["ask_size"], "sip_timestamp_ns": int(quote["sip_timestamp"]),
                 "received_at": received.isoformat(), "provider": "massive", "receipt": receipt}
 
+    def underlying_mark(self, symbol, now):
+        """Fresh Alpaca SIP stock midpoint for expiry ITM classification only."""
+        from alpaca.data.historical import StockHistoricalDataClient
+        from alpaca.data.requests import StockLatestQuoteRequest
+        from alpaca.data.enums import DataFeed
+        from nn_meta import config
+        from options.paper_pricing import option_midpoint
+        fetch = config.FETCH_ALIASES.get(symbol, symbol)
+        client = getattr(self, '_stock_client', None)
+        if client is None:
+            client = self._stock_client = StockHistoricalDataClient(
+                os.environ['ALPACA_API_KEY'], os.environ['ALPACA_API_SECRET'])
+        quotes = client.get_stock_latest_quote(StockLatestQuoteRequest(symbol_or_symbols=fetch, feed=DataFeed.SIP))
+        if fetch not in quotes:
+            raise ValueError('No observed Alpaca underlying quote for expiry classification')
+        quote = quotes[fetch]
+        stamp, received = pd.Timestamp(quote.timestamp), self.clock()
+        if stamp.tzinfo is None or not 0 <= (received-stamp).total_seconds() <= 30:
+            raise ValueError('Underlying quote is stale or in the future')
+        basis = option_midpoint(dict(bid=quote.bid_price, ask=quote.ask_price))
+        record = dict(symbol=symbol, fetched_symbol=fetch, provider='alpaca', feed='sip',
+            price=basis['price'], bid=basis['bid'], ask=basis['ask'],
+            sip_timestamp=int(stamp.value), received_at=received.isoformat())
+        path = self.root/'underlying-quotes'/f'{fetch}-{received.value}.json'
+        save(path, record)
+        self.evidence.append(dict(path=str(path), sha256=sha(path), kind='underlying_quote'))
+        return record
+
     def verify_current_access(self, contract):
         """An actual liquid option verifies both current endpoint entitlements.
 

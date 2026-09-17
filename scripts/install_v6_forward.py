@@ -72,6 +72,11 @@ def install(args):
              extra='ExecStartPost=-'+quote([python,'-m','scripts.v6_forward_ops','relay','--state',state,'--remote',args.remote]))
         units['healys-v6-forward.timer']=timer('V6 completed-bar paper decisions','healys-v6-forward',
             'Mon..Fri *-*-* 12..22:00,15,30,45:05 UTC')
+        units['healys-v6-option-risk.service']=service('V6 option-midpoint loss and ITM expiry checks',
+            [python,'-m','scripts.run_v6_option_risk','--state',state,'--env',args.production/'.env',
+             '--activation',state/'activation.json','--enable-alerts'],timeout=55,memory='768M')
+        units['healys-v6-option-risk.timer']=timer('Check V6 option risk each regular-market minute',
+            'healys-v6-option-risk','Mon..Fri *-*-* 12..22:*:10 UTC')
         units['healys-v6-relay.service']=service('Publish V6 paper state and immutable alert events',
             [*common,'relay','--state',state,'--remote',args.remote],timeout=60,memory='512M')
         units['healys-v6-relay.timer']=timer('Retry V6 state and alert transfer each minute','healys-v6-relay','*-*-* *:*:40')
