@@ -1072,3 +1072,16 @@ optional reference completeness is not an independent training prerequisite.
 Keep actual correctness issues visible and preserve the agreed date range,
 features, Alpaca-only stocks, no OTC, midpoint option paper pricing and resource
 limits. This changes the work order, not the validity of unresolved artifacts.
+
+## 2026-09-16 — option-premium stops and confirmed ITM expiry timing
+
+The user specified arithmetic (bid+ask)/2 simulated option entry and exit prices,
+strategy-signal exits, and an option-midpoint loss stop versus entry midpoint of
+7.5% for V6 and 12.5% for V7. This replaces the generic 5% underlying-stock stop.
+Costs remain separate from the midpoint threshold; the existing 0.15% per-side
+bookkeeping allowance is retained until changed. The user confirmed the ITM
+expiry-day close occurs 15 minutes before the option's regular close, when no
+earlier exit occurred. These execution changes are authorized for V6 and V7;
+implementation, validation and V6 activation remain outstanding at this entry.
+Preserve completed paper history. Do not call the previous midpoint-only runtime
+compliant with the new stop/expiry rules.

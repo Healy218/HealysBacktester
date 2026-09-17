@@ -76,8 +76,13 @@ class CausalFeatures:
                 continue
             yield start, end, minute, bars, observed
 
-    def epochs(self):
+    def epochs(self, *, skip_intervals=()):
+        # Disk builders can reuse verified completed epochs without recalculating
+        # their indicators. The underlying views still establish exact bounds.
+        skip_intervals = set(skip_intervals)
         for start, end, minute, bars, observed in self._views():
+            if (start, end) in skip_intervals:
+                continue
             context = chart_context(bars, minute, self.calendar, self.minutes)
             sources = source_frames(bars, context, minimum_tick=self.minimum_tick, observation_index=observed)
             tv = project(bars, sources, context).loc[observed]

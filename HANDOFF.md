@@ -1,8 +1,74 @@
-# Handoff — stop acquisition expansion; complete V7 build integration
+# Handoff — new option-risk rules; V7 proposal build integrated
 
-Updated September 16, 2026. Read TODO.md then this file. No subagents. Work on
-main; preserve unrelated dirty/untracked V6 work. Python: `./venv/bin/python`.
-Goal remains active and unfinished. **No training launched.**
+Updated September 16, 2026. Main; no subagents; preserve unrelated V6 work.
+Goal active and incomplete. No training launched. No build/download jobs live.
+
+## Latest user execution instruction — implementation next
+
+The user now explicitly requires V6 and V7 simulated option entries/exits at
+(bid+ask)/2. Close on the strategy sell signal or on an option-premium midpoint
+loss versus entry midpoint of **7.5% for V6, 12.5% for V7**. Replace the generic
+5% underlying-stock stop; retain strategy sell signals. Costs are separate from
+the midpoint return used for the threshold; retain the existing 0.15% per-side
+bookkeeping allowance pending any further user change. User confirmed closing
+ITM options **15 minutes before the option's regular close on expiration day**
+when no earlier exit occurred. No guaranteed stop execution price is implied.
+
+Acknowledged these semantics; implementation/deployment has NOT happened yet.
+Do not mistake the existing midpoint-only deployment for this new risk policy.
+Existing helper prefers a provided midpoint; the new explicit arithmetic-average
+instruction needs a policy amendment. Completed paper history must remain intact.
+V6 is explicitly in scope for this repair despite earlier preserve-V6 directions.
+No need to ask the expiry timing again. Latest user also clarified useful data
+work is welcome; the complaint was about unclear progress toward training, not
+an instruction to discard necessary safeguards. Continue explaining outcomes and
+remaining blockers, and avoid open-ended acquisition expansion.
+
+Relevant code: options/paper_pricing.py; nn_meta/live/v6_portfolio.py;
+nn_meta/live/v6_forward_inputs.py (currently simulator _SIM_KWARGS includes 5%
+stock stop); scripts/run_v6_forward.py (currently rolls at expiry cutoff);
+nn_meta/v7/proposals.py, execution.py, replay.py, portfolio.py. V6 runtime pricing
+branch/checkouts and previous guarded deployment are documented below. Main has
+unrelated/untracked V6 changes; production candidate must remain isolated.
+
+## Completed V7 build integration
+
+`nn_meta/v7/proposal_store.py` stores causal features once per action epoch and
+bit-packs full variant signals. Bounded simulator batches consume the saved
+signals with continuous strategy-stop state. It saves raw selection prices
+separately, retains zero-signal variants and open/censored proposals, supports
+dated entry/exit ticker routing, and checkpoints epochs and proposal batches.
+`scripts/build_v7_proposals.py` consumes existing security histories, compiled
+actions and raw Alpaca data; rejects unresolved action/identity inputs. Default
+full-window dates, all four timeframes, four single-threaded workers maximum.
+This stage still lacks PIT entry filtering, daily/sector/tick joins, selected
+option demand, labels and full-universe admission. The serialized JSONL proposals
+are too verbose for scaling; compact typed/factorized storage is the next storage
+integration task. Do not scale this pilot's 888 MB JSONL layout blindly.
+
+Actual AAPL March15–May10,2022 run `nn_meta/validation/v7-proposal-build-20260916r2`
+completed all **11,268 variants**, producing **757,465 proposals**:
+1m 598,944 /5m 108,354 /15m 34,156 /30m 16,011. Workers took
+114.92 /37.60 /27.05 /24.15 seconds, peak RSS 896,120 /614,200 /581,084 /575,820 KiB.
+Completed-run resume took 2.95–3.34 seconds per worker; all **736 receipts stayed
+byte-identical**. Output 887,697,704 bytes. This proves component integration,
+not full-history/universe readiness or new option-risk semantics.
+
+Verification `nn_meta/validation/v7-proposal-build-verification-20260916`, receipt
+`5aabbe6a7c23f43dc3f0315e3366562f74750a015562252ede44674192c916ff` retains all
+receipts, source bindings, logs and exact verification source. Six new tests
+cover all-family parity, dated rename routing, corrupted inputs, budgets and
+injected interruption/recovery. Full suite **1,918 tests +18 subtests passed**,
+18 warnings,107.65s. Log /tmp/v7-proposal-build-final-tests.log retained in evidence.
+No production code edits after that passing run at this checkpoint.
+
+Failed initial real build (`v7-proposal-build-20260916`, exec56880 terminal1)
+computed features but reader compared JSON lists with runtime tuples. Fixed
+using canonical runtime identities. Initial failing test logs preserved. Corrected
+build60725 and fullsuite95467 terminal0; resume14303 terminal0. Do not restart them.
+See docs/reviews/2026-09-16-v7-proposal-build.md.
+
+## Previous build-priority and artifact context
 
 ## Latest user correction — controls the next work
 

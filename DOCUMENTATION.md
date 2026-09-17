@@ -917,3 +917,14 @@ provider/action/identity evidence first; optional issuer or reference completene
 must not become an open-ended prerequisite. Preserve explicit unresolved cases
 and finish the executable feature/proposal, execution/label, assembly and training
 path. Current full identity/history artifacts and terminal job state are in HANDOFF.
+
+### V7 reusable causal proposal build
+
+`proposal_store.py` computes one feature/signal set per action epoch, stores
+packed boolean signals and reuses bounded variant columns across epochs for
+proposal simulation. Completed epochs and proposal batches resume only with
+identical input/source/catalog/runtime bindings. JSON round-trips package tuples
+as lists: compare canonical runtime identities, not raw container types. Preserve
+raw execution prices separately from adjusted strategy-stop units. The AAPL
+all-catalog build and unchanged-receipt resume are in the September16 review;
+this is a component result, not full-universe or new option-risk admission.
