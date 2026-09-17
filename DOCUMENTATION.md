@@ -939,3 +939,15 @@ action epoch's observed-only bars loses prior warmup, and reversing normalized
 averages may change floating arithmetic. Bind retained daily/sector inputs and
 verify the adapter's bindings at completion. Full context, demand and label
 consumers remain separate. See the September17 compact-proposal review.
+
+### V7 selected-contract feature demand (September 17)
+
+`EntryDemand` consumes the compact proposals and retains every target identity
+even when different targets select the same contract. Targets can have different
+future roll paths; sharing tick requests is not permission to merge labels. Its
+exports request only pre-decision quote/trade feature windows, including the
+causal quote seed. They do not cover entry fills, minute marks, exits, rolls or
+physical delivery. Extend and reconcile those scopes before scheduling capture.
+Keep each contract/day in one exported capture batch to prevent overlapping
+immutable shards across archives. Current store/CLI require early single-thread
+configuration before Polars initialization.

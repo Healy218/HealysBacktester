@@ -1114,3 +1114,14 @@ truncate a held exit. Keep exact raw-unit parameter averages in saved causal
 epochs for row reconstruction. This changes storage/consumer integration, not
 strategy formulas, execution rules or full-universe admission.
 See [verification](reviews/2026-09-17-v7-compact-proposals.md).
+
+## 2026-09-17 — demand from actual proposal decisions
+
+Use actual PIT-filtered proposals to select contracts and share identical causal
+tick-feature requests. Preserve per-timeframe proposal counts and distinct target
+identities; matching initial contracts do not imply matching future roll paths.
+Export bounded contract/day groups for the existing shared-quota capturer. This
+replaces the all-minute envelope for pre-entry feature demand only; execution,
+marks, rolls and physical-delivery demands still require integration. The component
+completion flag does not establish full quote coverage.
+See [real-data verification](reviews/2026-09-17-v7-entry-demand.md).

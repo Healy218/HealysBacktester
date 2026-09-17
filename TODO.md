@@ -5,6 +5,7 @@
 - [x] Close ITM contracts 15 minutes before their regular close on expiry day; test and deploy the V6 amendment and bind V7 execution rules.
 - [x] Connect captured history/actions to checkpointed all-variant feature/proposal stores; AAPL four-timeframe integration and resume passed, 1,918 tests +18 subtests.
 - [x] Compact proposals, apply PIT entry eligibility and verify the stored 222-column join adapter; 757,595 real AAPL proposals exactly reconstructed, all736 receipts preserved on resume, 1,967 tests +18 subtests.
+- [x] Build actual proposal-driven selected-contract tick-feature demand; all 81,395 real selections and 197,020 causal links verified, six bounded exports, 1,970 tests +18 subtests.
 - [ ] Connect captured daily/sector/tick context, actual proposal demand and labels to the full training build; compact/join component evidence is not full assembly.
 
 ## September 16 user correction: finish the build, stop expanding acquisition
