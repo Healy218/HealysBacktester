@@ -12,7 +12,7 @@ def main():
     configure_threads(1)
     from nn_meta.v7.readiness import assess
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--active', type=Path, default=ROOT/'docs/specs/V7_ACTIVE_INPUTS_20220315.json')
+    parser.add_argument('--active', type=Path, default=ROOT/'docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
     report = assess(ROOT, args.active)

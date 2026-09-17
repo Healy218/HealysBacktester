@@ -22,3 +22,20 @@ def test_underlying_timeline_keeps_open_proposals_censored_and_decisions_at_clos
     assert proposals[0]['proposal_closed']
     assert not proposals[1]['proposal_closed'] and pd.isna(proposals[1]['exit_decision_at'])
     assert proposals[1]['censored_at'] == index[-1] + pd.Timedelta(minutes=5)
+
+
+def test_generic_five_percent_stock_drop_does_not_replace_option_stop(monkeypatch):
+    index=pd.date_range('2022-03-15T13:30Z',periods=6,freq='5min')
+    prices=[100.,99.,90.,89.,88.,88.]
+    bars=pd.DataFrame({k:prices for k in ('Open','High','Low','Close')},index=index)
+    bars['Volume']=100.
+    variant=next(r for r in registered_catalog(['SPY'])['records'] if r['signal_minutes']==5)
+    def signals(*args,**kwargs):
+        channels=[pd.DataFrame(False,index=index,columns=[variant['variant_id']]) for _ in range(4)]
+        channels[0].iloc[0,0]=True
+        channels[1].iloc[-1,0]=True
+        yield [variant],channels
+    monkeypatch.setattr(module,'signal_batches',signals)
+    _,rows=next(module.proposal_batches('SPY',bars,[variant],start='2022-03-15',end='2022-03-15'))
+    assert len(rows)==1 and rows[0]['exit_decision_at']==index[-1]+pd.Timedelta(minutes=5)
+    assert rows[0]['simulator_policy']['USE_STOP_LOSS'] is False

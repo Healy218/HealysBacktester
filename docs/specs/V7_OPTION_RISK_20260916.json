@@ -1,0 +1,37 @@
+{
+  "schema": "v7-option-execution-amendment-v2",
+  "declared_at": "2026-09-17T02:57:54.684837+00:00",
+  "authority": "User requested arithmetic bid/ask midpoint for both buys and sells, V7 12.5% option premium stop, and ITM expiry exit 15 minutes before the option regular close.",
+  "supersedes": "docs/specs/V7_PAPER_PRICING_20260916.json",
+  "quote_policy": {
+    "latency_ns": 1000000000,
+    "entry_deadline_ns": 60000000000,
+    "max_mark_age_ns": 30000000000,
+    "fee": 0.001,
+    "slippage": 0.0005,
+    "multiplier": 100,
+    "min_reported_size": 1,
+    "option_price_basis": "option-arithmetic-midpoint-paper-v2"
+  },
+  "option_risk_policy": {
+    "generation": "v7",
+    "premium_stop_fraction": 0.125,
+    "expiry_exit_before_close_minutes": 15,
+    "price_basis": "arithmetic_bid_ask_midpoint"
+  },
+  "raw_input_predecessor": {
+    "path": "docs/specs/V7_ACTIVE_INPUTS_20220315.json",
+    "sha256": "f544fee197fbc3056e421a1bf20c43ab3eaba0ce67b17939736103509698034d"
+  },
+  "fill_and_mark_basis": "Always (bid+ask)/2 from a valid fresh quote. Supplied midpoint and last are reference fields only.",
+  "stop_basis": "Current long option midpoint <= entry midpoint * 0.875. Fixed per purchased leg, calls and puts alike; costs excluded from trigger.",
+  "strategy_exit": "Underlying strategy sell signal retained. Generic underlying 5% stop disabled.",
+  "risk_sale": "Use the validated stop or ITM-expiry trigger quote midpoint at the observation clock; retain original SIP timestamp separately. No second quote or broker fill proof.",
+  "observation": "Minute observations and fresh quotes; a gap records missingness and the next valid observation may exit beyond the threshold.",
+  "expiry": "For still-open ITM positions, exit 15 minutes before the dated option-class regular close, including early closes. Require a fresh causal Alpaca stock mark to classify ITM.",
+  "other_expiry": "Existing OTM roll and unresolved physical-expiry policies remain; no inferred intrinsic-value sale.",
+  "costs": "Fee 0.10% plus slippage allowance 0.05% per side, separate from midpoint stop calculation.",
+  "artifact_scope": "Preserve unchanged raw stock/options/reference inputs and their immutable predecessor manifest. Rebuild strategy proposals, option paths, marks, labels and portfolios under the new source/policy binding.",
+  "simulated_execution": true,
+  "research_ready": false
+}

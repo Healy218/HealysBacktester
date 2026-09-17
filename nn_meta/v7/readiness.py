@@ -25,7 +25,8 @@ REQUIRED = {
                            'settlement_calendar', 'observed_alpaca_stock_liquidation',
                            'all_outcomes_resolved', 'full_cash_reconciliation'),
     'assembly': ('full_history_all_variants', '222_columns', 'complete_label_and_mark_lineage',
-                 'fold_purging_through_settlement', 'bounded_training_sequences', 'recovery_verified'),
+                 'fold_purging_through_settlement', 'bounded_training_sequences', 'recovery_verified',
+                 'arithmetic_midpoint_option_stops_and_itm_expiry'),
     'trials': ('runnable_predeclared_manifest', 'fair_baselines', 'finite_nn_and_gbt',
                'deterministic_seeds', 'train_only_calibration_and_weights', 'multiple_testing_accounting'),
     'integrated_pilots': ('new_window', 'sparse_and_liquid', 'actions_aliases_early_closes',
@@ -55,10 +56,26 @@ def assess(root, active_path):
     def inputs():
         from dataclasses import asdict
         from nn_meta.v7.execution import QuotePolicy
+        from options.paper_risk import V7_OPTION_RISK
         pricing_path = root/active['option_paper_pricing']
+        pricing = json.loads(pricing_path.read_text())
         if (sha(pricing_path) != active['option_paper_pricing_sha256']
-                or json.loads(pricing_path.read_text())['quote_policy'] != asdict(QuotePolicy())):
+                or pricing['quote_policy'] != asdict(QuotePolicy())
+                or pricing.get('option_risk_policy') != asdict(V7_OPTION_RISK)):
             raise ValueError('Active midpoint paper pricing declaration differs')
+        if pricing.get('raw_input_predecessor'):
+            # Raw captures retain their original, immutable input manifest. This
+            # amendment changes execution only, never dates, prices or universe.
+            previous = pricing['raw_input_predecessor']
+            previous_path = root/previous['path']
+            if sha(previous_path) != previous['sha256']:
+                raise ValueError('Raw-input predecessor manifest changed')
+            before = json.loads(previous_path.read_text())
+            keys = set(before) | set(active)
+            administrative = {'readiness_evidence', 'research_ready', 'requires_rebuild'}
+            changed = {k for k in keys-administrative if before.get(k) != active.get(k)}
+            if changed != {'option_paper_pricing', 'option_paper_pricing_sha256'}:
+                raise ValueError('Execution amendment changed non-execution input scope')
         if (active['history_start'], active['history_end']) != (HISTORY_START, HISTORY_END):
             raise ValueError('Active date scope differs')
         source = root / active['working_inputs']

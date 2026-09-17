@@ -29,7 +29,8 @@ def proposals_from_signals(symbol, bars, signal_groups, *, start, end):
     price = bars[(bars.index >= begin) & (bars.index < stop)]
     if price.empty:
         raise ValueError('Proposal simulation window has no observations')
-    policy = deepcopy(SIM_CONFIG)
+    from options.paper_risk import strategy_only_simulator_config
+    policy = strategy_only_simulator_config(SIM_CONFIG)
     kwargs = sim_kwargs(policy)
     seen, timeframe = set(), None
     from nn_meta.multitimeframe_catalog import registered_catalog

@@ -45,7 +45,8 @@ def run(archive, exit_at=EXIT):
                    'exit_decision_ns': exit_at}, [ENTRY, ENTRY + 60_000_000_000, ROLL, EXIT], archive, References(),
                   select_contract=lambda t: OLD if t < ROLL else NEW,
                   expiry_cutoff=lambda c: ROLL if c == OLD else EXIT + 86_400_000_000_000,
-                  session_close=lambda t: t + 900_000_000_000)
+                  session_close=lambda t: t + 900_000_000_000,
+                  underlying_mark=lambda s,t: {'price':400., 'sip_timestamp':t})
 
 
 def test_roll_reinvests_observed_proceeds_and_all_four_costed_fills_reconcile():
@@ -79,3 +80,62 @@ def test_sparse_observed_marks_remain_visible_and_open_proposals_are_censored():
     assert all(row['status'] == 'unavailable' for row in result['marks'])
     result = run(Archive(), exit_at=None)
     assert not result['label_complete'] and result['open_positions'] and result['net_return'] is None
+
+
+def test_option_stop_sells_at_trigger_midpoint_without_requesting_another_quote():
+    stop = ENTRY+60_000_000_000
+    recovery = stop+60_000_000_000
+    class Falling(Archive):
+        def mark(self, contract, clock):
+            value = .875 if clock==stop else 1.
+            return {'price':value,'sip_timestamp':clock-5_000_000_000}
+        def first_fill(self, contract, clock, *, side, deadline_ns):
+            if side=='sell':pytest.fail('Stop requested a second quote instead of its observed midpoint')
+            return {'contract':contract,'side':side,'price':1.,'decision_ns':clock,
+                    'sip_timestamp':clock+1_000_000_000}
+    result = replay({'proposal_id':'stop','symbol':'SPY','right':'C','decision_ns':ENTRY,
+        'exit_decision_ns':None},[ENTRY,stop,recovery],Falling(),References(),
+        select_contract=lambda t:OLD,expiry_cutoff=lambda c:ROLL,session_close=lambda t:t+900_000_000_000)
+    assert result['label_complete'] and result['status']=='option_midpoint_stop'
+    assert result['risk_exit']['clock_ns']==stop
+    assert result['fills'][-1]['decision_ns']==stop
+    assert result['fills'][-1]['sip_timestamp']==stop-5_000_000_000
+    assert result['fills'][-1]['execution_ns']==result['label_end_ns']==stop
+    assert result['risk_exit']['entry_midpoint']==1.
+    assert result['net_return']==pytest.approx(.875*.9985/1.0015-1)
+    from nn_meta.v7.portfolio import portfolio_replay
+    shared=portfolio_replay([dict(proposal_id='stop',symbol='SPY',decision_ns=ENTRY,score=.5,
+        score_available_ns=ENTRY,path=result)],[ENTRY,stop],Falling())
+    assert shared['complete'] and not shared['open_positions']
+
+
+def test_itm_expiry_closes_instead_of_opening_replacement():
+    result = replay({'proposal_id':'expiry','symbol':'SPY','right':'C','decision_ns':ENTRY,
+        'exit_decision_ns':EXIT},[ENTRY,ROLL,EXIT],Archive(),References(),
+        select_contract=lambda t:OLD if t<ROLL else NEW,expiry_cutoff=lambda c:ROLL,
+        session_close=lambda t:t+900_000_000_000,
+        underlying_mark=lambda s,t:{'price':421.,'sip_timestamp':t})
+    assert result['label_complete'] and result['status']=='itm_expiry_exit'
+    assert result['rolls']==0 and len(result['fills'])==2
+    assert result['label_end_ns']==ROLL
+
+
+def test_expiry_without_underlying_capture_is_not_assumed_out_of_the_money():
+    result = replay({'proposal_id':'expiry','symbol':'SPY','right':'C','decision_ns':ENTRY,
+        'exit_decision_ns':EXIT},[ENTRY,ROLL,EXIT],Archive(),References(),
+        select_contract=lambda t:OLD,expiry_cutoff=lambda c:ROLL,
+        session_close=lambda t:t+900_000_000_000)
+    assert not result['label_complete'] and not result['capture_complete']
+    assert result['status']=='capture_incomplete' and len(result['fills'])==1
+
+
+def test_stale_expiry_stock_quote_retries_without_assuming_otm_or_rolling():
+    retry = ROLL+60_000_000_000
+    result = replay({'proposal_id':'expiry','symbol':'SPY','right':'C','decision_ns':ENTRY,
+        'exit_decision_ns':EXIT},[ENTRY,ROLL,retry],Archive(),References(),
+        select_contract=lambda t:OLD if t<ROLL else pytest.fail('Must not roll unknown expiry'),
+        expiry_cutoff=lambda c:ROLL,session_close=lambda t:t+900_000_000_000,
+        underlying_mark=lambda s,t:{'price':421., 'sip_timestamp':t-(31_000_000_000 if t==ROLL else 0)})
+    assert result['label_complete'] and result['status']=='itm_expiry_exit'
+    assert result['label_end_ns']==retry and result['rolls']==0
+    assert any(a['clock_ns']==ROLL and a['status']=='unavailable' for a in result['attempts'])

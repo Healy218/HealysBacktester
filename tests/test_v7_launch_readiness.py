@@ -50,7 +50,9 @@ def fixture(tmp_path, monkeypatch):
     active.update(plan='plan.json', plan_file_sha256=sha(tmp_path/'plan.json'), plan_sha256=plan['plan_sha256'])
     from dataclasses import asdict
     from nn_meta.v7.execution import QuotePolicy
-    write(tmp_path/'pricing.json', {'quote_policy':asdict(QuotePolicy())})
+    from options.paper_risk import V7_OPTION_RISK
+    write(tmp_path/'pricing.json', {'quote_policy':asdict(QuotePolicy()),
+                                  'option_risk_policy':asdict(V7_OPTION_RISK)})
     active.update(option_paper_pricing='pricing.json', option_paper_pricing_sha256=sha(tmp_path/'pricing.json'))
     return active
 
@@ -101,3 +103,19 @@ def test_full_universe_evidence_is_bound_to_scope_sources_and_checks(tmp_path, m
     assert result['ready_for_training'] == (mutation == 'none')
     if mutation != 'none':
         assert not next(g for g in result['gates'] if g['gate']=='causal_prices')['passed']
+
+
+@pytest.mark.parametrize('mutation',['none','wrong_stop','changed_predecessor','changed_scope'])
+def test_execution_amendment_preserves_raw_scope_and_binds_option_stop(tmp_path,monkeypatch,mutation):
+    active=fixture(tmp_path,monkeypatch)
+    prior=dict(active,option_paper_pricing='historical-pricing.json',option_paper_pricing_sha256='historical')
+    previous=write(tmp_path/'previous.json',prior)
+    pricing=json.loads((tmp_path/'pricing.json').read_text())
+    pricing['raw_input_predecessor']={'path':'previous.json','sha256':sha(previous)}
+    if mutation=='wrong_stop':pricing['option_risk_policy']['premium_stop_fraction']=.05
+    write(tmp_path/'pricing.json',pricing)
+    active['option_paper_pricing_sha256']=sha(tmp_path/'pricing.json')
+    if mutation=='changed_predecessor':write(previous,{**prior,'history_start':'2022-03-08'})
+    if mutation=='changed_scope':active['study_scope']='Changed research restrictions'
+    result=readiness.assess(tmp_path,write(tmp_path/'active.json',active))
+    assert next(g['passed'] for g in result['gates'] if g['gate']=='active_inputs')==(mutation=='none')

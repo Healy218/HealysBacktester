@@ -1085,3 +1085,20 @@ earlier exit occurred. These execution changes are authorized for V6 and V7;
 implementation, validation and V6 activation remain outstanding at this entry.
 Preserve completed paper history. Do not call the previous midpoint-only runtime
 compliant with the new stop/expiry rules.
+
+## 2026-09-16 — option premium risk and arithmetic midpoint
+
+The user selected arithmetic bid/ask midpoint for V6/V7 simulated entries, exits
+and marks; fixed entry-premium loss stops of 7.5%/12.5%, respectively; and ITM
+expiry exits 15 minutes before the option class regular close. Strategy signals
+remain. Generic underlying 5% stops no longer control held exits. Existing 0.15%
+per-side costs remain separate. A valid trigger quote supplies the sale midpoint
+without a second quote request. Quote gaps remain explicit. Preserve completed
+history, V6 frozen entry features, existing OTM rolls and physical fallback.
+
+V6 repair deployed at d415733, followed by the September17 d252c51 expiry-roll
+concurrency guard, with guarded activation, empty-book transition and
+unchanged 13 closed records/equity. V7 uses the new OPTION_RISK active manifest;
+raw predecessor bytes/producer bindings remain unchanged, with exact non-execution
+scope verification. Affected proposals, labels and portfolios require rebuilds.
+See [implementation and evidence](reviews/2026-09-16-option-premium-risk.md).

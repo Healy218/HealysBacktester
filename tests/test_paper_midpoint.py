@@ -6,18 +6,19 @@ from options.paper_pricing import option_midpoint, MIDPOINT_POLICY
 from tests.test_v7_execution import tape, quote
 
 
-def test_provider_midpoint_precedes_computed_average_and_last_is_not_mid():
+def test_arithmetic_midpoint_uses_only_contemporaneous_quote_sides():
     assert option_midpoint(dict(bid=3.15,ask=3.9,last=2.))['price']==pytest.approx(3.525)
     result=option_midpoint(dict(bid_price=3.15,ask_price=3.9,midpoint=3.53,last_price=10.))
-    assert result['price']==3.53 and result['price_source']=='provider:midpoint'
-    for changed in [dict(mid=0),dict(mid=4.),dict(mid=float('nan')),dict(mid=True),dict(mid=3.5,midpoint=3.6),dict(bid=4.)]:
-        with pytest.raises(ValueError):option_midpoint(dict(bid=3.15,ask=3.9,**changed) if 'bid' not in changed else dict(bid=4.,ask=3.9))
+    assert result['price']==pytest.approx(3.525) and result['price_source']=='computed_bid_ask_average'
+    for changed in [dict(mid=0),dict(mid=4.),dict(mid=float('nan')),dict(mid=True),dict(mid=3.5,midpoint=3.6)]:
+        assert option_midpoint(dict(bid=3.15,ask=3.9,**changed))['price']==pytest.approx(3.525)
+    with pytest.raises(ValueError):option_midpoint(dict(bid=4.,ask=3.9))
 
 
 def test_same_quote_produces_identical_v7_buy_sell_and_mark_prices():
     row=quote(2_000_000_000,bid=3.15,ask=3.9);row['mid']=3.53
     book=tape([row]);buy=book.first_fill(0,side='buy');sell=book.first_fill(0,side='sell');mark=book.mark(3_000_000_000)
-    assert buy['price']==sell['price']==mark['price']==3.53
+    assert buy['price']==sell['price']==mark['price']==pytest.approx(3.525)
     assert buy['bid']==3.15 and buy['ask']==3.9 and buy['simulated']
     assert buy['pricing_policy']==MIDPOINT_POLICY
 

@@ -1,8 +1,8 @@
 ## September 16: user-directed option-premium stops and expiry exit
 
-- [ ] Use arithmetic bid/ask midpoint for V6/V7 simulated fills and marks; retain separate costs.
-- [ ] Replace generic 5% stock stop with option-midpoint loss stops: V6 7.5%, V7 12.5%; retain strategy exits.
-- [ ] Close ITM contracts 15 minutes before their regular close on expiry day; test and deploy the V6 amendment and bind V7 execution rules.
+- [x] Use arithmetic bid/ask midpoint for V6/V7 simulated fills and marks; retain separate costs.
+- [x] Replace generic 5% stock stop with option-midpoint loss stops: V6 7.5%, V7 12.5%; retain strategy exits.
+- [x] Close ITM contracts 15 minutes before their regular close on expiry day; test and deploy the V6 amendment and bind V7 execution rules.
 - [x] Connect captured history/actions to checkpointed all-variant feature/proposal stores; AAPL four-timeframe integration and resume passed, 1,918 tests +18 subtests.
 - [ ] Compact proposal storage, apply PIT entry eligibility and join daily/sector/tick context, demand and labels before full training.
 

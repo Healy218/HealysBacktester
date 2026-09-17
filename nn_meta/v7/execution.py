@@ -35,6 +35,11 @@ class CaptureUnavailable(QuoteUnavailable):
     """The required provider capture is incomplete, distinct from a sparse market."""
 
 
+def fill_clock(fill):
+    """Simulation execution clock; retain the original quote timestamp separately."""
+    return fill.get('execution_ns', fill['sip_timestamp'])
+
+
 class QuoteTape:
     def __init__(self,records,manifest,*,contract,policy=QuotePolicy()):
         from options.data.massive_ticks import verify_capture
@@ -108,12 +113,16 @@ class CashLedger:
                 or not math.isfinite(fill['price']) or fill['price']<=0
                 or type(fill.get('sip_timestamp')) is not int or fill['sip_timestamp']<0):
             raise ValueError('Positive finite timestamped fill required')
+        if ('execution_ns' in fill and (type(fill['execution_ns']) is not int
+                or not 0 <= fill['execution_ns']-fill['sip_timestamp'] <= self.policy.max_mark_age_ns
+                or fill.get('decision_ns',fill['execution_ns']) > fill['execution_ns'])):
+            raise ValueError('Simulated execution requires a fresh causal quote and decision')
 
     def buy(self,key,symbol,fill,*,equity,decision_date,budget=None,roll_of=None):
         self._validate_fill(fill)
         root,expiry,_,_=parse_occ_symbol(fill['contract'])
         import pandas as pd
-        fill_date=pd.Timestamp(fill['sip_timestamp'],unit='ns',tz='UTC').tz_convert('America/New_York').date()
+        fill_date=pd.Timestamp(fill_clock(fill),unit='ns',tz='UTC').tz_convert('America/New_York').date()
         if fill_date < decision_date:
             raise ValueError('Fill cannot precede its decision date')
         dte=(expiry-fill_date).days
@@ -128,9 +137,10 @@ class CashLedger:
         quantity=budget/(gross_price*(1+self.policy.fee+self.policy.slippage))
         # Fractional paper allocation matches the existing research baseline.
         # Reported size is recorded, not represented as a guaranteed fill.
-        self._clock(fill['sip_timestamp'])
+        self._clock(fill_clock(fill))
         self.cash-=budget
-        self.positions[key]={'symbol':symbol,'contract':fill['contract'],'quantity':quantity,'cost':budget}
+        self.positions[key]={'symbol':symbol,'contract':fill['contract'],'quantity':quantity,'cost':budget,
+                             'entry_midpoint':fill['price']}
         self.events.append({**fill,'key':key,'quantity':quantity,'cash_delta':-budget,'roll_of':roll_of,
                             'actual_dte':dte,'policy':asdict(self.policy),'fractional_paper':True})
         return True
@@ -140,7 +150,7 @@ class CashLedger:
         if fill is None:return None
         self._validate_fill(fill)
         if fill['side']!='sell' or fill['contract']!=position['contract']:raise ValueError('Exit identity mismatch')
-        self._clock(fill['sip_timestamp'])
+        self._clock(fill_clock(fill))
         proceeds=position['quantity']*self.policy.multiplier*fill['price']*(1-self.policy.fee-self.policy.slippage)
         self.cash+=proceeds;del self.positions[key]
         self.events.append({**fill,'key':key,'quantity':position['quantity'],'cash_delta':proceeds,

@@ -7,7 +7,7 @@ import heapq
 import math
 import pandas as pd
 
-from nn_meta.v7.execution import CashLedger, QuotePolicy, QuoteUnavailable, CaptureUnavailable
+from nn_meta.v7.execution import CashLedger, QuotePolicy, QuoteUnavailable, CaptureUnavailable, fill_clock
 
 
 def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, fraction=.1,
@@ -44,10 +44,11 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
             raise ValueError('Quote path belongs to another proposal')
         previous = clock
         for i, fill in enumerate(path['fills']):
-            if (fill['sip_timestamp'] < previous or fill['side'] != ('buy' if i % 2 == 0 else 'sell')
-                    or fill['decision_ns'] < clock or fill['decision_ns'] > fill['sip_timestamp']):
+            if (fill_clock(fill) < previous or fill['side'] != ('buy' if i % 2 == 0 else 'sell')
+                    or fill['decision_ns'] < clock or fill['decision_ns'] > fill_clock(fill)
+                    or fill['sip_timestamp'] > fill_clock(fill)):
                 raise ValueError('Quote path has invalid event chronology')
-            previous = fill['sip_timestamp']
+            previous = fill_clock(fill)
         by_id[p['proposal_id']] = p
         batches.setdefault(clock, []).append(p)
     for clock in clocks:
@@ -131,12 +132,12 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
                 path = p['path']
                 capture_complete &= path['capture_complete']
                 for fill in path['fills']:
-                    event(fill['sip_timestamp'], 0, 'fill', (key, fill))
+                    event(fill_clock(fill), 0, 'fill', (key, fill))
                 if not path['fills']:
                     event(clock + policy.entry_deadline_ns, 0, 'unfilled', key)
                 elif path['label_complete']:
                     end = path['label_end_ns']
-                    if end < path['fills'][-1]['sip_timestamp']:
+                    if end < fill_clock(path['fills'][-1]):
                         raise ValueError('Terminal label precedes a market fill')
                     event(end, 0, 'terminal', key)
         elif kind == 'fill':
