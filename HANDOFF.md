@@ -1,74 +1,75 @@
-# Handoff — full daily listed-identity capture running
+# Handoff — stop acquisition expansion; complete V7 build integration
 
 Updated September 16, 2026. Read TODO.md then this file. No subagents. Work on
 main; preserve unrelated dirty/untracked V6 work. Python: `./venv/bin/python`.
-Goal remains active and unfinished. Previous goal turn made progress (reviewed
-cash events integrated). This turn started full-window identity capture and
-implemented the complete-panel consumer. **No training launched.**
+Goal remains active and unfinished. **No training launched.**
 
-## LIVE JOB — poll this exact process before any restart
+## Latest user correction — controls the next work
 
-- Current exec session **96839**: full 1,129-session, five-listed-exchange capture.
-  Root `nn_meta/data_v7/daily-identities-20260916`; log
-  `/tmp/v7-daily-identities-capture.log`. Four spawned workers, one inner thread,
-  shared 250 GB quota, 100 GiB disk reserve. No stock-price or OTC requests.
-- Previous full session **87131 exited 1**, confirmed by its terminal handle,
-  with `RuntimeError: Daily identity transport failed`. Resumed the exact same
-  command/declaration with append logging; completed shards preserved.
-- Snapshot at resume: **687 /5,645 shards complete**, latest completed date
-  September29,2022. Quota used 62,619,923,500 bytes with four live reservations.
-  Counts advance; inspect the process/log/current receipts, not this snapshot.
-- Never restart on observation timeout. Only resume after confirmed terminal exit.
-  `acquisition.json` fixes every date/exchange and capture source hash. Do not edit
-  the capture script or its bound dependencies while this run is in progress.
-  Earlier network-denied first-day attempts left preserved partials; successful
-  first-day access check was terminal and reused by this full invocation.
+The user challenged the endless additional data downloads: 250 GB is a ceiling,
+not a target. We acknowledged that preparation had expanded into open-ended
+reference audits instead of completing the build/training integration.
 
-Exact resume after confirmed failure, if needed:
+**No broad reference/news/issuer acquisition next.** All current downloads are
+terminal. Use captured inputs to connect the full feature/proposal build, actual
+quote demand, execution/labels, factorized assembly and training runner. Further
+acquisition must fill a specifically identified required build input. Do not
+substitute another inventory or audit for the executable full pipeline. Do not
+silently waive causal correctness, missing labels, agreed features or validation.
 
-```bash
-./venv/bin/python scripts/capture_v7_daily_identities.py \
-  --calendar nn_meta/data_v7/start-20220315/calendar.json \
-  --output nn_meta/data_v7/daily-identities-20260916 \
-  --budget-root nn_meta/data_v7 --workers 4
-```
+Work order:
+1. Integrate existing identity, action, sector and daily components into the full
+   feature/proposal builder, preserving explicit unresolved cases. Resolve known
+   exceptions using retained evidence. Do not require exhaustive issuer-web-page
+   collection merely because the audit can be extended.
+2. Derive actual selected-contract quote/trade intervals from those proposals;
+   capture only missing required intervals, within the cap.
+3. Complete execution/labels and bounded factorized assembly, connect the
+   predeclared trials to the full training runner, and measure recovery/memory.
+4. Run the integrated readiness checks; report readiness only when demonstrated.
 
-All launched tests are terminal. Full suite **1,903 tests +18 subtests**, 18
-warnings, 93.28s; `/tmp/v7-daily-identities-final-tests.log`, retained with source
-hashes in `nn_meta/validation/v7-daily-identities-tests-20260916`. No production
-code edits after this passing run. V6 source/runtime unchanged.
+## Completed data jobs — no live handles to resume
 
-## Latest identity work and next step
+- Full daily listed-identity capture completed: 1,129 sessions, 5,645 shards,
+  13,184,850 records. Root `nn_meta/data_v7/daily-identities-20260916`.
+  Summary receipt `7e92e44cd8a7dee831bfdb5649bf1c4e01e94a44ceaf1a992bd4ad01edc39f4f`.
+  Prior exec session 96839 is terminal successful; do not restart it.
+- Full identity panel: `nn_meta/validation/v7-daily-identity-panel-20260916`.
+  Receipt `f7705f7d5b721c239ff49f1155dccfce3075bb1136f6f98d7bf45b0200454a73`.
+  669,749 raw rows, 632 listed IDs. Of 339,640 eligible rows, 339,454 match
+  frozen membership IDs and 186 remain unresolved.
+- Full stitched security histories: `nn_meta/validation/v7-security-history-20260916`.
+  Receipt `4811ee662c712b532c663dda15b731f378f999e61a5f14b308ad9e121a3ee7da`.
+  591 securities ×1,129 sessions =667,239 rows; 607 continuity spans;
+  seven dated ticker changes; 614,115 observed rows, 53,084 no listed source,
+  39 listed/no observations, one ambiguous source. These are full-calendar
+  counts, not all eligible missing training rows. No action adjustment applied.
+- Exact-day identity discrepancy review is retained at
+  `nn_meta/validation/v7-identity-discrepancy-review-20260916`: 104 rows where
+  daily/detail endpoints both differ from frozen membership, 33 missing FIGIs,
+  49 absent listings/detail 404s, across 16 symbols. No automatic ID rewrites.
+  All requests finished. Do not start a new broad identity capture.
+- The one ambiguous history date is FISV/FI June7,2023. Both Nasdaq-hosted
+  May25/June7 releases are already captured under
+  `nn_meta/data_v7/public-actions-20260916/fiserv-20230525-nasdaq-release` and
+  `fiserv-20230607-nasdaq-release`. They corroborate the switch to FI on June7.
+  Use these existing sources if adding the full-history routing override; the
+  old 67-row alias review is specifically eligible-session coverage and should
+  remain unchanged. A new full-history routing review may include this extra day.
+- Actual FB→META and GPS→GAP windows preserve eight raw closes, continuous
+  identity and pre-rename prefixes using the existing reviewed alias mappings:
+  `nn_meta/validation/v7-listed-rename-history-20260916`.
+- Quota snapshot: 63,043,400,695 bytes used; **zero reservations**. 250 GB cap.
+  No acquisition or test process is running. Failed original issuer/SEC Fiserv
+  attempts are preserved; Nasdaq copies succeeded. No need to repeat downloads.
 
-Read [daily identities](docs/reviews/2026-09-16-v7-daily-identities.md).
-`daily_identities.py` validates primary exchange/market/locale/active flags and
-pagination, retains missing FIGIs, strips URL credentials. Capture uses only
-ARCX/BATS/XASE/XNAS/XNYS reference metadata, the active universe's five listed
-exchanges. This does not change the Alpaca-only stock-price rule.
-
-`identity_panel.py` attaches exact-day identities, explicitly normalizes OCC-root
-punctuation, keeps symbol collisions/absence/missing FIGIs unresolved, and breaks
-continuity on unknown/changed IDs or missing calendar sessions. Nullable-string
-missing values and prefix invariance are covered by tests. No monthly identity
-is silently propagated. All 296 first-day eligible security IDs matched 12,038
-listed records: `validation/v7-daily-identity-first-day-20260916`.
-
-**After capture summary exists and its process is terminal successful**, run:
-
-```bash
-./venv/bin/python scripts/build_v7_identity_panel.py \
-  --stock-daily nn_meta/validation/v7-stock-daily-20260916-midpoint \
-  --identities nn_meta/data_v7/daily-identities-20260916 \
-  --output nn_meta/validation/v7-daily-identity-panel-20260916
-```
-
-This full builder is implemented/tested at the core-function level, but the full
-run awaits acquisition. It verifies all source bindings, joins every raw daily
-row and compares every eligible identity. Inspect unresolved/mismatched records,
-stitch dated aliases, then combine with reviewed complete action/no-event evidence.
-Provider-dated identity does not establish original publication-safe fundamentals.
-Continue daily market/sector, quote demand, physical, assembly, trial/resource
-work. Eight substantive full-universe gates remain missing.
+New consumer files: `nn_meta/v7/security_history.py`,
+`scripts/build_v7_security_history.py`, `tests/test_v7_security_history.py`.
+See [review](docs/reviews/2026-09-16-v7-security-history.md).
+Full suite **1,912 tests +18 subtests passed**, 18 warnings, 93.92 seconds.
+Log `/tmp/v7-security-history-tests.log`, retained with source hashes in
+`nn_meta/validation/v7-security-history-tests-20260916`. No production code edits
+after this passing run. V6 source/runtime unchanged this session.
 
 ## Preserved action/publication progress
 
@@ -298,23 +299,16 @@ Protect V6. No full training until every readiness gate passes; alert user then.
 
 ## Remaining V7 work
 
-1. Apply aliases/lifecycle effects, WBD bridge and cash-merger/halts held-option
-   execution; consume dated sectors in full history.
-2. Complete original split/dividend/combined/spin-off evidence across securities;
-   extend the now-piloted causal engine and cold-start daily/context integration.
-3. Build real option quote/trade demand, dated option hours/weeklies and feasible
-   capture under quota. Existing envelopes are conservative, not final admission.
-4. Finish funded physical context, historical settlement calendar, Alpaca stock
-   quote adapters and official expiration references; replay actual shared expiry.
-5. Assemble full-history factorized rows/labels/marks and executable NN/GBT trials,
-   predeclared seeds/objectives/calibration/weights, baseline and multiple-testing
-   diagnostics. Old SPY-only daily/context pilot is not admitted full evidence.
-6. Measure full binned memory, recovery, four-worker behavior and V6 coexistence;
-   produce all eight stage artifacts and pass readiness before launching training.
+Follow the build-first order at the top of this handoff. Existing causal/action,
+lifecycle/physical, full quote, assembly/trial and integrated resource requirements
+remain unfinished. Eight stage evidence artifacts are missing; an inventory or
+successful download does not complete those stages. The original full campaign
+runner is still absent. Implement and test the consumers instead of continuing
+open-ended source collection.
 
 No training campaign launched. V7 readiness goal remains unfinished; continue
 autonomously until all gates pass and then alert the user. First-week maturity review
 remains due on/after September 21.
 
 Prior state archived at
-`handoff-history/HANDOFF-2026-09-16-before-daily-identities.md`.
+`handoff-history/HANDOFF-2026-09-16-before-build-focus.md`.

@@ -1059,3 +1059,16 @@ this correction to another event. Immutable evidence:
 `nn_meta/validation/v7-dvn-action-review-20260916`. This resolves one cash amount
 and publication, not full-security action/identity coverage or training readiness.
 [Evidence](reviews/2026-09-16-v7-action-inventory.md).
+
+## 2026-09-16 — stop acquisition expansion and prioritize the executable build
+
+The user explicitly corrected the preparation workflow: the 250 GB allowance is
+an upper limit, not a storage target, and V7 training readiness remains the goal.
+All current capture jobs have finished. Stop broad reference/news/issuer expansion
+and use the captured data to complete full feature/proposal construction, actual
+quote demand, execution/labels, bounded assembly and the full training runner.
+Additional acquisition must correspond to a specific required missing build input;
+optional reference completeness is not an independent training prerequisite.
+Keep actual correctness issues visible and preserve the agreed date range,
+features, Alpaca-only stocks, no OTC, midpoint option paper pricing and resource
+limits. This changes the work order, not the validity of unresolved artifacts.

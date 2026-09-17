@@ -1,3 +1,12 @@
+## September 16 user correction: finish the build, stop expanding acquisition
+
+- [x] Complete existing full listed-identity capture and build the identity/security-history panels; 1,912 tests +18 subtests pass.
+- [x] End broad acquisition expansion. All jobs are terminal; quota reservations are empty. 250 GB is a cap, never a target.
+- [ ] Connect captured history, actions, sectors and context to the full causal feature/proposal build; preserve unresolved cases explicitly.
+- [ ] Generate actual proposal-driven quote/trade demand and obtain only specifically missing required inputs.
+- [ ] Finish execution/labels, bounded assembly and the full training runner; validate integrated correctness, memory and recovery.
+- [ ] Pass training readiness and alert the user. No training launched yet.
+
 ## September 14–15: V7, March 15, 2022 through September 14, 2026
 
 User superseded the earlier dates: V7 starts March 15, 2022 (birthday) and

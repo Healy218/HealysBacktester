@@ -907,3 +907,13 @@ the exact process handle; resume only after a confirmed terminal failure. Exact
 daily identities do not establish corporate-action/no-event coverage. The panel
 retains absent/missing/colliding identities and breaks continuity instead of
 propagating monthly snapshots. See the September16 daily-identities review.
+
+### V7 build-first operating priority (September 16)
+
+The 250 GB acquisition budget is a ceiling, not a target. The user stopped broad
+reference expansion after the current captures completed. Before adding any new
+capture, identify the exact missing input consumed by the full build. Use retained
+provider/action/identity evidence first; optional issuer or reference completeness
+must not become an open-ended prerequisite. Preserve explicit unresolved cases
+and finish the executable feature/proposal, execution/label, assembly and training
+path. Current full identity/history artifacts and terminal job state are in HANDOFF.
