@@ -995,6 +995,27 @@ these records as publication verified or use them to establish no-event interval
 cash entitlements or option deliverables. See the September 17 ordinary-action
 review for the full compilation census and consumer limits.
 
+### V7 exact-date share-class resolutions (September 17)
+
+`share_class_history.py` and `resolve_v7_share_class_history.py` consume finite
+reviews in `V7_SHARE_CLASS_IDENTITIES_20260917.json`. Each exact-day record must
+share a positive share-class FIGI and identical ticker, primary exchange, type,
+market, locale, currency and issuer CIK with an earlier captured scoped listing.
+Both must be active US listings; a competing scoped composite ID cannot be merged.
+Missing CIK is allowed only when both original records omit it. No future anchor,
+name similarity, filled price or absent listing establishes identity.
+
+The canonical candidate panel is temporary. Original captures remain unchanged;
+the output retains `provider_composite_figi`, `resolved_share_class_figi`,
+`identity_resolution` and its review hash separately from the canonical security
+ID. Rebuild from the original selected history plus cumulative finite reviews;
+the script rejects an already resolved baseline to prevent erasing earlier evidence.
+Resolved zero-observation dates remain zero-observation dates. This identifies
+the instrument only; action admission, no-event coverage and held entitlements
+remain separate. Recompile actions after a history change: restored continuity
+can rebind event IDs even when all factors and clocks are unchanged. See the
+[share-class review](docs/reviews/2026-09-17-v7-share-class-identities.md).
+
 ### V7 daily identity capture and continuity
 
 Daily listed identity capture restricts primary exchanges to ARCX/BATS/XASE/XNAS/

@@ -1204,3 +1204,23 @@ DVN, take precedence exactly once. Do not sum duplicates, admit simultaneous or
 complex actions, infer option deliverables, change identities, or infer no-event
 intervals from missing records. Full-security admission and 6-1 closure remain
 separate. This supersedes the pending question in the source-routing handoff.
+
+## 2026-09-17 — finite identity resolution from captured share-class witnesses
+
+Resolve explicitly reviewed exact dates using the retained provider share-class
+FIGI and an earlier captured listing of the scoped security, with identical
+ticker, exchange, instrument type, market, locale, currency and issuer CIK.
+This is a source-backed identity inference: [OpenFIGI's identifier definition](https://www.openfigi.com/api/documentation)
+links composite FIGIs for the same instrument at share-class level. Require an
+unambiguous active US listing on each reviewed day and reject a composite ID
+already assigned to another scoped security. Preserve original composite IDs,
+capture receipts, record hashes and the finite review separately from the
+canonical identity. Apply only listed review dates; do not propagate aliases.
+
+The first 27 reviewed dates are in `V7_SHARE_CLASS_IDENTITIES_20260917.json`.
+Missing/different share classes, absent listings and future-only witnesses remain
+unresolved. This does not infer merger entitlements, historical publication,
+no-event completeness or any new issuer exclusion. Ordinary actions still use
+the user's separately approved effective-session reconstruction policy. Rebuild
+history and action consumers with new immutable outputs; do not relabel old
+artifacts. See [evidence and remaining scope](reviews/2026-09-17-v7-share-class-identities.md).

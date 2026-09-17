@@ -25,9 +25,11 @@
 
 **Current item: 6-1. Items 6-2 through 6-7 are queued.**
 September 17 progress: [reviewed source routing](docs/reviews/2026-09-17-v7-6-1-source-routing.md)
-and [authorized ordinary-action reconstruction](docs/reviews/2026-09-17-v7-ordinary-action-admission.md).
-FISV/FI routing is consumed by the full history build; 4,429 action events pass
-consumer boundary checks, including all 18 SPY distributions. Identity, complex
+and [authorized ordinary-action reconstruction](docs/reviews/2026-09-17-v7-ordinary-action-admission.md),
+followed by [exact-date share-class resolution](docs/reviews/2026-09-17-v7-share-class-identities.md).
+The full history consumes FISV/FI routing and 27 reviewed identity dates; eligible
+identity mismatches fell from 186 to 162. The rebuilt action set has 4,433 events,
+including all 18 SPY distributions and four newly verified splits. Identity, complex
 action, no-event and held-position treatment still keep 6-1 open.
 The user selected this sequence on September 17 after reviewing the
 [three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md#6-consolidated-remaining-todos-before-the-goal-is-finished).

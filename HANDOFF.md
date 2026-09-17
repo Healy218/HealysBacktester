@@ -1,132 +1,142 @@
-# Handoff — V7 item 6-1: ordinary-action policy implemented
+# Handoff — V7 item 6-1: exact-date identity resolutions consumed
 
-## Current instruction and authorized policy
+## Current instruction and settled policy
 
 Make V7 ready to train through the seven-item sequence in [TODO](TODO.md).
-**6-1 remains current and unchecked. Items 6-2 through 6-7 remain queued.**
+**6-1 remains current and unchecked; 6-2 through 6-7 remain queued.** Close 6-1
+only when every relevant security/session/action has an explicit resolved
+treatment consumed by actual feature and held-position paths.
 
-The user explicitly answered the admission question: **accept matching provider
-terms as historical reconstruction inputs, applied only from the effective
-session; retain the assumption explicitly and separately review conflicts/complex
-actions.** The question is resolved; do not ask again or impose individual
-publication capture on these ordinary matching groups. The decision is recorded
-in DECISIONS and `docs/specs/V7_ORDINARY_ACTION_ADMISSION_20260917.json`.
-This does not approve missing identities, duplicates, combined/complex events,
-no-event intervals or inferred stock/option entitlements.
+The user explicitly accepted **matching provider terms as historical reconstruction
+inputs, applied only from the effective session, with the assumption retained
+and conflicts/complex actions separately reviewed**. This question is settled:
+do not ask again or require individual historical publication captures for these
+ordinary matching groups. The policy does not admit unknown identities, combined
+or complex actions, no-event completeness or inferred stock/option entitlements.
+See DECISIONS and `V7_ORDINARY_ACTION_ADMISSION_20260917.json`.
 
-6-1 closes only when every relevant security/session/action has an executable
-resolved treatment consumed by real feature and held-position paths. An event
-compiler or selected-boundary check alone does not finish it. Preserve V6 paper
-operation and unrelated dirty work.
+Preserve V6 paper operation and unrelated dirty work. No blanket staging/reset.
 
-## Completed this session
+## Completed at this milestone
 
-`nn_meta/v7/ordinary_actions.py` and `scripts/compile_v7_ordinary_actions.py`
-compile the authorized policy from retained original sources, full selected
-security histories and existing publication reviews. `ReconstructionAction`
-subclasses `PriceAction`; the existing causal prices, daily returns, feature
-and proposal-basis consumers accept it. Its effective-open availability is
-explicitly assumed, with null publication availability and
-`publication_verified=false`. Persist the additional policy/basis fields;
-`ordinary_actions.price_action` loads envelopes without erasing them.
+Retained original daily listing captures contain share-class FIGIs omitted from
+the normalized panel. `share_class_history.py` and
+`scripts/resolve_v7_share_class_history.py` apply **27 finite exact-date reviews
+across 14 symbols**, matching an earlier scoped listing's share class, ticker,
+exchange, type, market, locale, currency and issuer CIK. Original composite FIGIs
+and record/capture hashes remain separate from canonical identities. No future
+anchor, changed share class, absent listing or price filling is accepted.
 
-Full inventory result: **4,429 events /315 security IDs**, comprising **4,410
-reconstructed events (4,325 cash, 85 split)** plus **19 unchanged publication-
-reviewed events**. All **18 SPY distributions** compile. **8,860 of 10,380 original
-provider records** are consumed exactly once; **1,520 remain explicit**. The
-reviewed Devon $0.44 correction wins once; no source records are summed into it.
+The full history remains **667,239 rows /591 securities /1,129 sessions** with
+598 continuity spans. It restores 23 observed dates and recognizes four listed
+zero-observation dates; the other **667,212 raw rows** remain unchanged. There
+are 614,139 observed rows, 53,057 without a selected listed source and 43 listed
+rows without stock observations. Eligible identity matches improve by 24;
+**162 mismatches remain (previously 186)**.
 
-All 4,429 events passed actual adjacent daily-return/as-of-price checks against
-50-digit decimal calculations; maximum absolute error 1.2351231148954867e-15.
-All pre-event prefixes are unchanged. Real SPY March 18, 2022 and NVDA June 10,
-2024 minute-data checks each consume 780 observed minutes, build two 15-minute
-feature epochs and persist the assumption in the feature-store declarations.
-These are boundary checks, not full daily/context or feature production.
+Recompiling the authorized ordinary-action policy admits four more splits:
+BOIL 2024-11-07, LABU/TMF 2023-12-04 and YINN 2022-05-31. The new total is
+**4,433 events /315 security IDs**: **4,414 reconstructed (4,325 cash /89 splits)**
+plus **19 publication-reviewed events**. All **18 SPY distributions** remain.
+**8,868 of 10,380 original provider records** are consumed; **1,512 remain
+explicit**. Every prior 4,429 factor and clock is unchanged. Restored continuity
+rebinds 47 event IDs without changing factors. The Devon correction still wins
+exactly once. Effective-open availability remains an assumption, not publication.
 
-Focused tests: 37 passed. Full suite: **2,010 tests +18 subtests passed**, 18
-warnings, 125.10 seconds. No production code changed after the suite. All
+All four new splits pass independent decimal daily-return checks and real-minute
+causal feature/prefix checks. BOIL additionally builds a retained bounded feature
+store. Prior all-4,429 numerical checks and SPY/NVDA feature checks remain valid
+and preserved. None of these boundary checks constitutes full feature production
+or a held-position ledger.
+
+Focused tests: **33 passed**. Full suite: **2,034 tests +18 subtests passed**,
+18 warnings, 125.01 seconds. No production code changed after the suite. All
 launched commands finished. No acquisition, V6 change, deployment, full research
 campaign or training launch occurred.
 
-[Review, census, commands and limits](docs/reviews/2026-09-17-v7-ordinary-action-admission.md).
-New artifacts under `nn_meta/validation/`:
+[Full evidence, dates, commands and limits](docs/reviews/2026-09-17-v7-share-class-identities.md).
 
-- `v7-ordinary-actions-20260917`: policy, actions, all 5,030 group treatments,
-  1,520 unresolved original records/reasons and verified source bindings.
-- `v7-ordinary-action-consumers-20260917`: all 4,429 numerical/prefix checks,
-  record partition, retained verification source and boundary integration report.
-- `v7-ordinary-action-feature-check-20260917-SPY` and `...-NVDA`: actual bounded
-  feature stores; all ten subreceipts and declared code sources reverified.
-- `v7-ordinary-actions-tests-20260917`: retained full-suite log and changed-code hashes.
+## Current artifacts and integration rules
+
+All names below are under `nn_meta/validation/` unless specified:
+
+- **Current history:** `v7-security-history-20260917-share-class`; includes prior
+  FISV/FI routing and the 27 resolutions. Output retains `provider_composite_figi`,
+  `resolved_share_class_figi`, `identity_resolution` and its evidence hash.
+- **Current actions:** `v7-ordinary-actions-20260917-share-class`; all 5,030 simple
+  group treatments and 1,512 unresolved original records/reasons are retained.
+  Use `ordinary_actions.price_action` to preserve policy/publication fields.
+- `v7-share-class-consumers-20260917`: full raw-grid and old-action comparison,
+  four real split checks, exact remaining eligible exceptions, retained verifier
+  source and bound BOIL feature-store subreceipts.
+- `v7-share-class-feature-check-20260917-BOIL`, `v7-share-class-tests-20260917`.
+- `docs/specs/V7_SHARE_CLASS_IDENTITIES_20260917.json`: finite review source.
+  Rebuild from **original** `v7-security-history-20260917-routes` plus cumulative
+  reviews. The resolver rejects an already resolved baseline to avoid erasing
+  older resolution evidence. Recompile dependent actions after history changes.
+- Retain `v7-ordinary-action-consumers-20260917`, SPY/NVDA feature stores and
+  `v7-ordinary-actions-tests-20260917` as prior consumer evidence.
+- Source inventory/reviews: `v7-action-inventory-20260916r2`,
+  `v7-normalized-cash-reviews-20260916`, `v7-compiled-cash-actions-20260916`.
+- Identity/lifecycle sources: `v7-daily-identity-panel-20260916`, original captures
+  at `nn_meta/data_v7/daily-identities-20260916`,
+  `v7-identity-discrepancy-review-20260916`, `v7-lifecycle-no-otc-20260916`,
+  `v7-source-routes-20260917`, `v7-6-1-routing-verification-20260917`.
+- Raw data: `v7-stock-daily-20260916-midpoint`, `v7-surfaces-20260916-midpoint`.
+  Preserve historical immutable artifacts; do not relabel or overwrite them.
 
 ## Exact remaining 6-1 work
 
-1. **Identity/lifecycle treatments.** The full selected history still has 186
-   eligible identity/source mismatches across 16 symbols: 104 conflicting FIGIs,
-   33 missing FIGIs (CCL/SWTX) and 49 absent listing/detail-404 sessions. Of these,
-   133 have raw observations. Do not route them by ticker while bypassing identity.
-   The 59 zero-bar sessions overlap 53 mismatches: **192 distinct eligible
-   exception sessions**. Retrospective explanations cover 41 cash-merger,
-   14 stock-successor and four halt sessions; held-position treatment is not
-   yet executable. Reuse `v7-6-1-routing-verification-20260917` for exact dates,
-   grouped counts and source receipts.
-2. **Remaining matching groups.** Of 4,506 ordinary matching groups, 4,410 are
-   reconstructed, 18 retain Apple publication reviews, 70 lack a selected
-   effective-day identity and eight lack adjacent continuity. Exact groups are
-   in the new compiler's `groups.json`. The 70 include B/BMNR/BOIL/FB/FIG/FIGR/
-   GAP/GOLD/LABU/SBET/SIRI/SPCX/TMF/UVIX/XOM/YINN; inspect dated identity and
-   lifecycle scope before using a ticker's event for the wrong security.
-   Five adjacent cases are APLD/BYND/LAZR/SOXS/SST. Three are KSS/LRCX/TMO cash
-   events on March 15, 2022, whose prior day lies outside the selected history
-   panel. Resolve actual consumer need; do not expand acquisition automatically.
-3. **Other action groups.** Remaining simple groups total 601: the 78 above,
-   354 unreviewed units/terms, 68 single-provider, 57 requiring combined review
-   and 44 mismatches. There are also 213 complex records. Provider records are
-   not distinct events; preserve the full original-record partition and review
-   whole event groups. New ordinary matching policy does not admit these cases.
-4. **No-event and held-position paths.** Finish explicit coverage over required
-   histories and executable stock entitlements, payment/settlement clocks,
-   split and option deliverables, and lifecycle continuity. Alpaca queries are
-   process-date bounded; an absent record is not proof of no event. A chart
-   factor is not a cash ledger. Missing outcomes remain visible failures.
-5. Reconcile all scoped security/session/action treatments in actual consumers.
-   Only with full completion evidence check 6-1 and advance HANDOFF to 6-2.
-   Full daily/features belong to 6-2; full option/physical execution to 6-4;
-   only 6-7 establishes training readiness.
+1. **Identity and lifecycle.** The 162 eligible mismatches span ATVI 12, BLK 22,
+   CCL 16, DISCA 14, DKNG 18, RKLB 4, SGEN 10, SIRI 15, SWTX 17, TWTR 1, VMW 5,
+   X 7 and XOM 21. Exact rows are in the new consumer artifact's
+   `remaining_eligible_identity_exceptions.parquet`. There remain 59 zero-bar
+   sessions, overlapping 49 mismatches: **172 distinct eligible exception
+   sessions**. CCL/SWTX have no matching share-class witness; remaining changed
+   share classes cannot use this resolver. Prior explanations cover cash mergers,
+   stock successors and halts; explanations alone do not execute held outcomes.
+2. **Matching groups still blocked.** Of 4,506 matching ordinary groups, 4,414
+   are reconstructed, 18 retain Apple reviews, **66 lack effective-day identity**
+   and **eight lack adjacent continuity**. Exact groups are in current `groups.json`.
+   These include ticker reuse/succession questions, not merely missing aliases.
+   Seven GAP cash groups in 2025–2026 lack raw GAP history: retained GAP shards
+   cover 2024 only, while GPS 2025/2026 have zero observations. Assess that named
+   missing input before targeted acquisition; do not substitute GPS by ticker.
+   Adjacent cases are APLD/BYND/LAZR/SOXS/SST and KSS/LRCX/TMO cash events at the
+   March 15, 2022 study boundary. The latter need a prior session outside the
+   selected panel. Resolve actual consumer need before expanding capture.
+3. **Other action groups.** Remaining simple groups total **597**: the 74 above,
+   354 unreviewed units/terms, 68 single-provider, 57 combined-review and 44
+   mismatches. Also **213 complex records** remain. Records are not distinct
+   events. Review whole event groups and preserve the full original partition;
+   matching-ordinary policy does not admit these separate cases.
+4. **No-event and held-position paths.** Finish coverage over required histories
+   and executable stock entitlements, payment/settlement clocks, splits, option
+   deliverables and lifecycle continuity. Alpaca queries are process-date
+   bounded; an absent record is not proof of no event. A chart factor is not a
+   cash ledger. Missing outcomes stay visible failures.
+5. Reconcile the full scoped security/session/action treatments in actual
+   consumers. Only then check 6-1 and advance to 6-2. Full context/features are
+   6-2; full option/physical execution is 6-4; only 6-7 establishes readiness.
 
-## Reuse prior sources and preserve scope
+## Scope and workspace
 
 Active contract: `docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json`;
 full spec: `docs/specs/MULTITIMEFRAME_RESEARCH.md`.
-
-- `v7-security-history-20260917-routes`: current full selected history, 667,239
-  rows /591 securities /1,129 sessions, 606 spans, eight ticker transitions,
-  614,116 observed rows and zero ambiguous listed-source days. Retains the
-  reviewed FISV/FI June 7, 2023 correction outside entry membership.
-- `v7-source-routes-20260917`: 68 reviewed routes; all 67 earlier routes retained.
-- `v7-daily-identity-panel-20260916`, `v7-identity-discrepancy-review-20260916`,
-  `v7-lifecycle-no-otc-20260916`: retained original identity/lifecycle evidence.
-- `v7-action-inventory-20260916r2`: original 10,380 records /5,030 simple groups.
-- `v7-normalized-cash-reviews-20260916`, `v7-compiled-cash-actions-20260916`:
-  retained 18 Apple publication reviews and one corrected Devon event.
-- Raw daily/surfaces: `v7-stock-daily-20260916-midpoint` and
-  `v7-surfaces-20260916-midpoint`. Do not overwrite historical artifacts.
-
 March 15, 2022–September 14, 2026; Alpaca stocks, Massive options, no OTC.
-BBBY/FRC/REV/SI remain excluded without replacement/reranking. Retain 20 families,
+BBBY/FRC/REV/SI stay excluded without replacement/reranking. Preserve 20 families,
 11,268 variant/timeframe combinations, 222 columns, causal inputs, chronological
 folds, raw execution prices, arithmetic option midpoints, separate costs, V7
 12.5% premium stops, strategy exits, ITM expiry cutoff 15 minutes before regular
 option close, funded physical fallback and shared-capital limits. At most four
 outer workers, one inner thread, 100 GiB reserve, 250 GB acquisition ceiling.
-No acquisition this session; recheck quota before any named necessary capture.
+Recheck quota before any named necessary capture; no broad collection campaign.
 
 V7 has no full dataset or trained model. Saved readiness remains
 `v7-readiness-20260917-entry-demand.json`: three foundational passes and eight
-substantive stages unpassed. Preserve the uncommitted assembly implementation
-(`assembly.py`, `dataset_inputs.py`, `build_v7_dataset.py`, `test_v7_assembly.py`)
-and unrelated V6 edits/untracked files. No blanket staging/reset/cleanup.
-Known V6 issues remain outside this task in the three-day report's section 4.
+substantive stages unpassed. Preserve uncommitted assembly files (`assembly.py`,
+`dataset_inputs.py`, `build_v7_dataset.py`, `test_v7_assembly.py`) and unrelated
+V6 edits/untracked files. Known V6 issues remain in the three-day report section 4.
 
 Prior handoff archived as
-`handoff-history/HANDOFF-2026-09-17-before-ordinary-action-admission.md`.
+`handoff-history/HANDOFF-2026-09-17-before-share-class-resolution.md`.

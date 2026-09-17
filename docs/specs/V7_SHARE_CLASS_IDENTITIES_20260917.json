@@ -1,0 +1,277 @@
+{
+  "schema": "v7-reviewed-share-class-identities-v1",
+  "scope": "Exact reviewed dates only; preserve original composite FIGI; no action or holding admission",
+  "identifier_reference": "https://www.openfigi.com/api/documentation",
+  "reviews": [
+    {
+      "symbol": "BLK",
+      "date": "2024-10-01",
+      "anchor_date": "2024-09-30",
+      "security_id": "BBG000C2PW58",
+      "share_class_figi": "BBG001SDBP55",
+      "original_composite_figi": "BBG000CN81W9",
+      "anchor_record_sha256": "af31530a7619968e745cb8c90a5ed1004076244b2808362be117f11a75da43fa",
+      "record_sha256": "f71dac547dae7e90bcf7b6e8118072b65ff78b39312ca9dd6ef5eb976e837bc6"
+    },
+    {
+      "symbol": "BOIL",
+      "date": "2024-11-07",
+      "anchor_date": "2024-11-06",
+      "security_id": "BBG0024TGRQ2",
+      "share_class_figi": "BBG0024TGSG1",
+      "original_composite_figi": "BBG00HNLYDR5",
+      "anchor_record_sha256": "f1138bb8c730809abe1adf203d305ea34616c22641cbe26c97b75f28bca23a90",
+      "record_sha256": "2ebdb2921b5e584e9b6c93ba7f1c32430b595b8fbc0aa6562c1d78e1ff060d39"
+    },
+    {
+      "symbol": "COUP",
+      "date": "2023-02-28",
+      "anchor_date": "2023-02-27",
+      "security_id": "BBG001J4BCN4",
+      "share_class_figi": "BBG001V0GVM2",
+      "original_composite_figi": "BBG00DZB8SB6",
+      "anchor_record_sha256": "9048d0da0c015114e31db322fb2570897c2b0cd663297e89b0cf46d7967adfa1",
+      "record_sha256": "b4e99020253d2719b98b38ae1129e22deb054d3b6d930fbf5b085fc88dd240ae"
+    },
+    {
+      "symbol": "DISCA",
+      "date": "2022-04-04",
+      "anchor_date": "2022-04-01",
+      "security_id": "BBG00HW3TQG4",
+      "share_class_figi": "BBG001SLZ9C9",
+      "original_composite_figi": "BBG000CHWP52",
+      "anchor_record_sha256": "92ff239d39212f420d6174bc6d2fb47f5ebc58a7a25397cc0af911bbabde21c8",
+      "record_sha256": "f4867179b877495da17b489ccbf92f6fcf3faf189868d1f4d95289b91da6a1f6"
+    },
+    {
+      "symbol": "DISCA",
+      "date": "2022-04-05",
+      "anchor_date": "2022-04-01",
+      "security_id": "BBG00HW3TQG4",
+      "share_class_figi": "BBG001SLZ9C9",
+      "original_composite_figi": "BBG000CHWP52",
+      "anchor_record_sha256": "92ff239d39212f420d6174bc6d2fb47f5ebc58a7a25397cc0af911bbabde21c8",
+      "record_sha256": "11ef5c56322b8ce24e19b9dee8ee5867c89efa6e3ac6581f3598963b2de27be2"
+    },
+    {
+      "symbol": "DKNG",
+      "date": "2022-04-04",
+      "anchor_date": "2022-04-01",
+      "security_id": "BBG00V9V7L54",
+      "share_class_figi": "BBG00TCBG723",
+      "original_composite_figi": "BBG00TCBG714",
+      "anchor_record_sha256": "7ef44a9ccb05d6a9df035cc5f63f54bf75ba40a7229c1d67c805c06665d42f32",
+      "record_sha256": "d32df069f550586ac7fe4ca3976a7c198c2824ac88964ca512b9df8804682eee"
+    },
+    {
+      "symbol": "DKNG",
+      "date": "2022-04-05",
+      "anchor_date": "2022-04-01",
+      "security_id": "BBG00V9V7L54",
+      "share_class_figi": "BBG00TCBG723",
+      "original_composite_figi": "BBG00TCBG714",
+      "anchor_record_sha256": "7ef44a9ccb05d6a9df035cc5f63f54bf75ba40a7229c1d67c805c06665d42f32",
+      "record_sha256": "4d057acae6c1f059b2588f7bb6af6debbbc0c959b285c38f53161a2f2ed95c27"
+    },
+    {
+      "symbol": "DKNG",
+      "date": "2022-04-13",
+      "anchor_date": "2022-04-12",
+      "security_id": "BBG00V9V7L54",
+      "share_class_figi": "BBG00TCBG723",
+      "original_composite_figi": "BBG00TCBG714",
+      "anchor_record_sha256": "8e44b2b0cdaef2f5d69a0fee0cebd58c64a40d290616b81aa971f3b00f879c3c",
+      "record_sha256": "d93a6a2028cd5d5e4df9d56a2789403ec3b18400f94991a3e7d7a04d9e2a628d"
+    },
+    {
+      "symbol": "LABU",
+      "date": "2023-12-04",
+      "anchor_date": "2023-12-01",
+      "security_id": "BBG0099SHLC1",
+      "share_class_figi": "BBG0099SHLB2",
+      "original_composite_figi": "BBG009R6NN10",
+      "anchor_record_sha256": "6b445ae72059a39cc176a85bffd6ee35c4c49b4122fe8363893f7bdbb55cbce0",
+      "record_sha256": "5b92b995ddcfc03cb86bcedfe9e4c4a0e90992e72e6a73a41513f179f6b2659e"
+    },
+    {
+      "symbol": "MCD",
+      "date": "2023-03-16",
+      "anchor_date": "2023-03-15",
+      "security_id": "BBG000BNSZP1",
+      "share_class_figi": "BBG001S5T110",
+      "original_composite_figi": "BBG000C9R4J8",
+      "anchor_record_sha256": "dac2a2c19042442f96d29d364980d30cbeccaa53094fd8ceb6bda11de40e739e",
+      "record_sha256": "5de0a1eb3874322e4c8c3054e18d4f84ab3bb660dc1754eb29fe13baddbc79b2"
+    },
+    {
+      "symbol": "SIRI",
+      "date": "2024-09-09",
+      "anchor_date": "2024-09-06",
+      "security_id": "BBG000BT0093",
+      "share_class_figi": "BBG001S70ZY6",
+      "original_composite_figi": "BBG000BGPKZ1",
+      "anchor_record_sha256": "4ec1cea23220de41c0e8e37f3a3e109a9d01e6d006060cbf4a3444b83651ac74",
+      "record_sha256": "7aeafe6ceb549309f28721db159b62679c00cccffd2782832aeb8aada693d62f"
+    },
+    {
+      "symbol": "TMF",
+      "date": "2023-12-04",
+      "anchor_date": "2023-12-01",
+      "security_id": "BBG000CX0W11",
+      "share_class_figi": "BBG001T0GVX3",
+      "original_composite_figi": "BBG0024565M7",
+      "anchor_record_sha256": "874921a2857429ccc126f51b1479ecae620d487ee13d216d68584541246f5cb8",
+      "record_sha256": "c44b18a77612d30d1ce616d161501f7424317414fc709fe99c6c314db335453a"
+    },
+    {
+      "symbol": "TWTR",
+      "date": "2022-10-28",
+      "anchor_date": "2022-10-27",
+      "security_id": "BBG000H6HNW3",
+      "share_class_figi": "BBG001T35PT7",
+      "original_composite_figi": "BBG005KDKQN2",
+      "anchor_record_sha256": "f83fc4b379d1da10860dac9abcee23a478270b72d53218f60f774f44c4f395b5",
+      "record_sha256": "739763c6a3404b5d7d0a8c0f926fc11cf2596610fcb9b9968ce45f2d3133bd00"
+    },
+    {
+      "symbol": "VMW",
+      "date": "2023-11-21",
+      "anchor_date": "2023-11-20",
+      "security_id": "BBG000BC9938",
+      "share_class_figi": "BBG001S6TFZ0",
+      "original_composite_figi": "BBG000GNV649",
+      "anchor_record_sha256": "0c8fa226dead0ba4b1c3a5a6d99edb3fc80eb65935cfe26bd8b87652a67fe11a",
+      "record_sha256": "52adf05420a304f85acc2122b17a9e1594996fe252c8f963891841f6db9457d3"
+    },
+    {
+      "symbol": "VMW",
+      "date": "2023-11-22",
+      "anchor_date": "2023-11-20",
+      "security_id": "BBG000BC9938",
+      "share_class_figi": "BBG001S6TFZ0",
+      "original_composite_figi": "BBG000GNV649",
+      "anchor_record_sha256": "0c8fa226dead0ba4b1c3a5a6d99edb3fc80eb65935cfe26bd8b87652a67fe11a",
+      "record_sha256": "9d5927181a701e6acfc9a0206f93d7b4fd309469f9cf9d5d63e646dd854a431a"
+    },
+    {
+      "symbol": "X",
+      "date": "2025-06-05",
+      "anchor_date": "2025-06-04",
+      "security_id": "BBG000BX3TD3",
+      "share_class_figi": "BBG001S5XL75",
+      "original_composite_figi": "BBG000DVQZ19",
+      "anchor_record_sha256": "1feebdaa6908b8720d42b133ebf9efa74574474ec2adc7c44ed23cac1b1d9eae",
+      "record_sha256": "38629eecaf0804ab6823d2bc1bf4d65d13a98bd99d5ffe554149936a4ff44b5a"
+    },
+    {
+      "symbol": "X",
+      "date": "2025-06-06",
+      "anchor_date": "2025-06-04",
+      "security_id": "BBG000BX3TD3",
+      "share_class_figi": "BBG001S5XL75",
+      "original_composite_figi": "BBG000DVQZ19",
+      "anchor_record_sha256": "1feebdaa6908b8720d42b133ebf9efa74574474ec2adc7c44ed23cac1b1d9eae",
+      "record_sha256": "83be58d26c126ab5d1df7a417db0fea5e41bfc4b881d56c079e2d38824e56430"
+    },
+    {
+      "symbol": "X",
+      "date": "2025-06-09",
+      "anchor_date": "2025-06-04",
+      "security_id": "BBG000BX3TD3",
+      "share_class_figi": "BBG001S5XL75",
+      "original_composite_figi": "BBG000DVQZ19",
+      "anchor_record_sha256": "1feebdaa6908b8720d42b133ebf9efa74574474ec2adc7c44ed23cac1b1d9eae",
+      "record_sha256": "e45741a8ecd3b2c89e541899de65a7103e57b50090996b1a840d3071a06f681d"
+    },
+    {
+      "symbol": "X",
+      "date": "2025-06-10",
+      "anchor_date": "2025-06-04",
+      "security_id": "BBG000BX3TD3",
+      "share_class_figi": "BBG001S5XL75",
+      "original_composite_figi": "BBG000DVQZ19",
+      "anchor_record_sha256": "1feebdaa6908b8720d42b133ebf9efa74574474ec2adc7c44ed23cac1b1d9eae",
+      "record_sha256": "d525d390dc19c84cf560a586279a3cc9fdd315dd7c50b9fe01d8e50281d35338"
+    },
+    {
+      "symbol": "X",
+      "date": "2025-06-11",
+      "anchor_date": "2025-06-04",
+      "security_id": "BBG000BX3TD3",
+      "share_class_figi": "BBG001S5XL75",
+      "original_composite_figi": "BBG000DVQZ19",
+      "anchor_record_sha256": "1feebdaa6908b8720d42b133ebf9efa74574474ec2adc7c44ed23cac1b1d9eae",
+      "record_sha256": "861dfd40ae8890069145311912605c5d5e43e2c63565256e374f2bb420996e17"
+    },
+    {
+      "symbol": "X",
+      "date": "2025-06-12",
+      "anchor_date": "2025-06-04",
+      "security_id": "BBG000BX3TD3",
+      "share_class_figi": "BBG001S5XL75",
+      "original_composite_figi": "BBG000DVQZ19",
+      "anchor_record_sha256": "1feebdaa6908b8720d42b133ebf9efa74574474ec2adc7c44ed23cac1b1d9eae",
+      "record_sha256": "055afc910e30f0859d7f49f00b7f7a7200821f31beda5af85e8d552aa6c68401"
+    },
+    {
+      "symbol": "X",
+      "date": "2025-06-13",
+      "anchor_date": "2025-06-04",
+      "security_id": "BBG000BX3TD3",
+      "share_class_figi": "BBG001S5XL75",
+      "original_composite_figi": "BBG000DVQZ19",
+      "anchor_record_sha256": "1feebdaa6908b8720d42b133ebf9efa74574474ec2adc7c44ed23cac1b1d9eae",
+      "record_sha256": "533a37c5f83084d697f09c64584606404f792070daeaab83364d76c111e52319"
+    },
+    {
+      "symbol": "X",
+      "date": "2025-06-16",
+      "anchor_date": "2025-06-04",
+      "security_id": "BBG000BX3TD3",
+      "share_class_figi": "BBG001S5XL75",
+      "original_composite_figi": "BBG000DVQZ19",
+      "anchor_record_sha256": "1feebdaa6908b8720d42b133ebf9efa74574474ec2adc7c44ed23cac1b1d9eae",
+      "record_sha256": "cba7b9cd9ddf9a1fb7c39ce02ca793404638009ea489cb1ce6eb5170a2081720"
+    },
+    {
+      "symbol": "X",
+      "date": "2025-06-17",
+      "anchor_date": "2025-06-04",
+      "security_id": "BBG000BX3TD3",
+      "share_class_figi": "BBG001S5XL75",
+      "original_composite_figi": "BBG000DVQZ19",
+      "anchor_record_sha256": "1feebdaa6908b8720d42b133ebf9efa74574474ec2adc7c44ed23cac1b1d9eae",
+      "record_sha256": "1698e64f144f147e3e59b43a52bb14b985820c95cc0638d786a7fbb71bc228ed"
+    },
+    {
+      "symbol": "X",
+      "date": "2025-06-18",
+      "anchor_date": "2025-06-04",
+      "security_id": "BBG000BX3TD3",
+      "share_class_figi": "BBG001S5XL75",
+      "original_composite_figi": "BBG000DVQZ19",
+      "anchor_record_sha256": "1feebdaa6908b8720d42b133ebf9efa74574474ec2adc7c44ed23cac1b1d9eae",
+      "record_sha256": "88ec0a735c658029fb78b39d6c693da1bb03d0853e39ea05c51a15197b963b69"
+    },
+    {
+      "symbol": "XOM",
+      "date": "2026-07-01",
+      "anchor_date": "2026-06-30",
+      "security_id": "BBG000GZQ728",
+      "share_class_figi": "BBG001S69V32",
+      "original_composite_figi": "BBG000H5HTR8",
+      "anchor_record_sha256": "63ae9011e8ae73190b311d01f64cd806935371edcdd1cc5c9b13cda4679aff2e",
+      "record_sha256": "75d50eb1f4bd156f7895c3e1b48c6fe0b2cde5d442eff851674b122cbe8f2cf6"
+    },
+    {
+      "symbol": "YINN",
+      "date": "2022-05-31",
+      "anchor_date": "2022-05-27",
+      "security_id": "BBG000PY4FX3",
+      "share_class_figi": "BBG001T64052",
+      "original_composite_figi": "BBG00C5Y57K0",
+      "anchor_record_sha256": "40378974a9575630b4f08e3b565cf1c6405847d63a926453488d98d72374505f",
+      "record_sha256": "014143651532148befad5e6ccd67614b4bbf7a02701a5da57c8f285bb04d366e"
+    }
+  ]
+}

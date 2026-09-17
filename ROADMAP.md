@@ -25,6 +25,9 @@ campaign or declare a later item complete prematurely.
 Current 6-1 progress: the [ordinary-action admission review](docs/reviews/2026-09-17-v7-ordinary-action-admission.md)
 records the user's effective-session reconstruction policy, 4,410 reconstructed
 events plus 19 retained publication-reviewed events, and real consumer checks.
+The subsequent [share-class review](docs/reviews/2026-09-17-v7-share-class-identities.md)
+resolves 27 exact identity dates, reduces eligible mismatches to 162 and admits
+four additional splits, bringing the compiled action set to 4,433 events.
 This advances action compilation; it does not close identity, complex-action,
 no-event or held-position requirements.
 
