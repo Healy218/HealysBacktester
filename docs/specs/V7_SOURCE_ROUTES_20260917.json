@@ -1,0 +1,31 @@
+{
+  "schema": "v7-reviewed-source-routes-v1",
+  "routes": [
+    {
+      "kind": "same_security_listing_transfer",
+      "date": "2023-06-07",
+      "old_symbol": "FISV",
+      "stock_ticker": "FI",
+      "security_id": "BBG000BJKPG0",
+      "stock_receipt": "nn_meta/validation/v7-stock-daily-20260916-midpoint/shards/FI/2023/complete.json",
+      "identity_receipt": "nn_meta/validation/v7-daily-identity-panel-20260916/complete.json",
+      "review": "Retained Nasdaq-distributed releases announce the FISV-to-FI exchange transfer and confirm completion before the June 7 open. Both exact-day listings have the same composite FIGI. Route this session to FI, retaining its 385 observed minutes and all missing minutes. This does not create entry membership or prove option deliverable continuity.",
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/public-actions-20260916/fiserv-20230525-nasdaq-release",
+          "receipt_sha256": "33dba9b7428c9f66c594f98d01b1adccaec6835ed6aa104945043541b3a48314",
+          "payload_sha256": "9339c898706c6a1e07cdfbf7e3aff755793671194e9ac246bd630c4fda4c91c4",
+          "publication_available_at": "2023-05-25T13:25:00Z",
+          "review": "Displayed publication May 25, 2023, 9:25am EDT; announced expected June 7 NYSE trading under FI."
+        },
+        {
+          "capture": "nn_meta/data_v7/public-actions-20260916/fiserv-20230607-nasdaq-release",
+          "receipt_sha256": "8f90eb1dfe783000709d54f9cc11cd9f02b0ee0c5725f110883f6c2612043f87",
+          "payload_sha256": "344b64ef628afbeb088ddd0f10e6dcf2853dbb273ddd8d37931254a800f6f702",
+          "publication_available_at": "2023-06-07T11:28:00Z",
+          "review": "Displayed publication Jun 7, 2023, 7:28am EDT; NYSE announcement confirms completed transfer and trading that day as FI."
+        }
+      ]
+    }
+  ]
+}

@@ -1,122 +1,129 @@
-# Handoff — V7 item 6-1: finish usable identity/action histories
+# Handoff — V7 item 6-1: source routing landed; admission policy pending
 
-## Goal and current instruction
+## Current instruction
 
-Make V7 ready to train for March 15, 2022–September 14, 2026 under the agreed
-feature, execution, source and resource constraints. The user reviewed the
-[three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md) and
-selected its section 6 as the sequential plan. Read [TODO](TODO.md) first.
-**Work on 6-1 now. Items 6-2 through 6-7 remain queued and unchecked.**
+Make V7 ready to train under the seven-item sequence in [TODO](TODO.md).
+**6-1 remains current and unchecked. Items 6-2 through 6-7 remain queued.**
+The user asked to resume, then briefly interrupted and said to continue. That
+continuation is not an answer to the outstanding corporate-action policy choice.
+Preserve V6 paper operation and unrelated dirty work.
 
-This replaces the September 17 review pause with the user's numbered workflow.
-This session only reorganized documentation; it did not finish 6-1, launch a job,
-or resume the old broad campaign. Older autonomous/parallel work instructions
-must not expand the current item. Preserve V6 paper operation.
+6-1 requires usable identity/action histories over every relevant security,
+session and action, consumed by actual feature and held-position paths. An
+inventory, selected-symbol check or component test does not close it.
 
-## 6-1 deliverable and completion evidence
+## Completed this session
 
-**Complete usable identity/action histories under an agreed admission policy.**
-Closure requires every relevant security/session/action to have an explicit
-resolved treatment, consumed by the actual feature and held-position paths.
-An inventory, additional source download, selected-symbol pilot, or passing
-component test alone does not finish this item.
+Added `nn_meta/v7/source_routes.py`, `scripts/compile_v7_source_routes.py`, the
+reviewed `docs/specs/V7_SOURCE_ROUTES_20260917.json`, and eleven regression cases.
+The compiler extends the existing alias artifact with a publication-backed
+FISV/FI route on June 7, 2023. Both exact-day listings identify BBG000BJKPG0;
+retained Nasdaq-distributed announcements precede the open. It selects FI's
+385 observed minutes, preserves raw observations and missingness, and feeds the
+unchanged full security-history builder through its existing `--aliases` input.
+All 67 earlier alias rows are preserved. No membership or option-deliverable
+admission is inferred.
 
-Start with report sections 3A and 3B and existing implementation. Use the
-current worktree and saved artifacts as evidence; do not restart the full audit.
+Full rebuild: 667,239 rows, 591 securities, 1,129 sessions, 606 identity spans,
+eight ticker transitions, 614,116 observed rows, **zero ambiguous listed-source
+days**. The 186 eligible mismatches remain; the corrected day is outside entry
+membership. Other-security data, the pre-transition prefix and subsequent raw
+facts are unchanged. Old source-selection evidence hashes correctly change
+because they bind the extended alias receipt; independent verification checks
+those hashes separately.
 
-1. Reconcile the existing exception sets and their affected consumers: the 186
-   eligible identity/source mismatches, relevant lifecycle/rename boundaries,
-   59 explained zero-bar sessions, unconsumed action records, and SPY actions.
-   Group shared causes so fixes address classes of cases rather than repeating
-   individual investigations. Include the captured FISV/FI June 7, 2023 routing
-   evidence where needed for continuity outside entry membership.
-2. State the applied admission rules, including ordinary cash/splits, duplicate
-   provider records, combined/complex actions, identity continuity and no-event
-   intervals. Use existing contracts and evidence first. Record a real policy
-   decision in DECISIONS; do not silently weaken causality, exclude more issuers,
-   or impose new broad publication-collection requirements. If a material scope
-   choice requires the user, identify that exact choice and affected records.
-3. Finish scalable compilation and dated identity/action treatment over the
-   required scope. Retain original source IDs, dates, units and missingness.
-   Do not fill absent prices or treat an absent provider record as proof of no
-   action. Additional capture must serve an exact missing required input.
-4. Connect the resulting history to the real causal-feature and held-position
-   consumers so their treatment is executable. Exercise boundary cases and
-   reconcile a full scoped census: totals, consumed groups, explicit treatments,
-   remaining unsupported cases and their effects. A failure must stay visible;
-   labeling it explained or unresolved alone is not closure. Full daily/feature
-   production belongs to 6-2; full option/physical execution belongs to 6-4.
-5. Verify 6-1's stated scope and consumer behavior, run checks appropriate to
-   the changes (including the repository suite for code changes), and save
-   reproducible evidence in a dated 6-1 review. If a prerequisite is still missing,
-   keep 6-1 open and name it precisely.
+[Review, commands and admission alternatives](docs/reviews/2026-09-17-v7-6-1-source-routing.md).
+New artifacts under `nn_meta/validation/`:
 
-## Existing evidence and paths — reuse these
+- `v7-source-routes-20260917`: 68 reviewed routes.
+- `v7-security-history-20260917-routes`: current routed full history.
+- `v7-6-1-routing-verification-20260917`: full comparison, exact exception rows,
+  grouped dates/counts, Fiserv boundary and retained verification source.
+- `v7-source-routes-tests-20260917`: retained full-suite log and changed-code hashes.
 
-- Active contract: `docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json`.
-  Scope: `docs/specs/MULTITIMEFRAME_RESEARCH.md`.
-- Security histories: `nn_meta/validation/v7-security-history-20260916`;
-  591 securities, 593 tickers, 1,129 sessions, 667,239 history rows.
-  339,454/339,640 eligible sources match; 186 remain explicit.
-  Stock session presence is 339,581/339,640; 59 absences have retrospective
-  explanations, not automatic execution admission.
-  [Security-history review](docs/reviews/2026-09-16-v7-security-history.md).
-- Action inventory: `nn_meta/validation/v7-action-inventory-20260916r2`;
-  10,380 provider records, 5,030 symbol/day cash-or-split groups, 213 complex
-  records. Compiled cash: `nn_meta/validation/v7-compiled-cash-actions-20260916`;
-  19 events (18 AAPL and one DVN), consuming 40 provider records.
-  The other 10,340 records are not 10,340 distinct events. SPY has 36 unresolved
-  cash-provider records. [Inventory review](docs/reviews/2026-09-16-v7-action-inventory.md)
-  and [cash integration](docs/reviews/2026-09-16-v7-cash-action-integration.md).
-- Main modules: `nn_meta/v7/security_history.py`, `identity_panel.py`,
-  `identity_review.py`, `action_inventory.py`, `cash_actions.py`,
-  `causal_prices.py`, `causal_features.py`, `causal_daily.py`, `lifecycle.py`.
-  Their matching scripts/tests already exist; inspect the relevant consumers.
-- Read DOCUMENTATION's Traps and V7 identity/action sections before changing
-  apparent anomalies. Raw daily/surface/sector and retained publication sources
-  are indexed by the report; do not reacquire completed inventories.
+Validation: 20 focused tests passed; **1,987 tests +18 subtests passed**, 18
+warnings, 124.14 seconds. No production source changed after the suite. All
+launched build/test commands finished. No acquisition, V6 runtime change,
+deployment or training launch.
 
-## Constraints and preserved implementation
+## Pending policy question — do not assume approval
 
-Alpaca-only stocks; Massive options; no OTC. BBBY/FRC/REV/SI remain excluded
-without replacement or reranking. Preserve all 20 families, 11,268 variant/TF
-combinations, 222 columns, chronological folds and raw execution prices.
-Preserve arithmetic option midpoint pricing, costs, V7 12.5% premium stops,
-strategy exits, ITM 15-minute expiry cutoff and funded physical fallback.
-At most four outer workers and one inner thread; retain 100 GiB disk reserve.
-The 250 GB acquisition limit is a ceiling, not a target. Last verified quota
-was 63,043,400,695 bytes with no reservations; recheck before a needed acquisition.
+An asynchronous question asked whether the 4,506 ordinary matching provider
+cash/split groups may be admitted as explicitly assumed historical reconstruction
+inputs from their effective sessions, or whether each event must retain its own
+pre-event publication evidence. No answer has been received at this checkpoint.
+The current stricter standard remains applied.
 
-V7 has no full training dataset or trained model. Latest saved readiness:
-`nn_meta/validation/v7-readiness-20260917-entry-demand.json`, three foundational
-passes and eight substantive stages unpassed. Do not claim training is close
-from partial progress. Full readiness is item 6-7.
+These comprise 4,409 cash and 97 split groups, including SPY's 36 records as 18
+matching cash groups. Eighteen Apple groups already have separate publication
+reviews. Accepting provider agreement as historical reconstruction would be a
+material admission-policy amendment: record an explicit user choice in DECISIONS
+and preserve missing publication vintage. Do not silently manufacture an
+`available_at` claim from a retrospective capture. The review describes both
+alternatives concretely.
 
-Preserve uncommitted assembly implementation: `nn_meta/v7/assembly.py`,
-`nn_meta/v7/dataset_inputs.py`, `scripts/build_v7_dataset.py`,
-`tests/test_v7_assembly.py`. It is not a full production build. Its
-[review](docs/reviews/2026-09-17-v7-dataset-assembly.md) records the last full suite:
-1,976 tests +18 subtests passed, 18 warnings, 122.33 seconds. Those are historical
-results, not validation of future edits. Preserve other dirty/untracked V6 work;
-no blanket staging, reset or cleanup.
+Neither alternative resolves combined/complex actions, duplicates, unknown
+units, changed FIGIs or no-event intervals. Alpaca requests are process-date
+bounded; an absent provider record is not proof of no event. Continue independent
+identity/lifecycle work while awaiting an answer. Do not broaden collection or
+add issuer exclusions to make the gate pass.
 
-The last host check found no running V7 jobs. Old research units were terminal;
-the old short-DTE progress timer was disabled/stopped. No jobs were started by
-this docs update. Existing V6 monitoring remains separate. Its known fresh-quote
-problem and sent-notice findings are in report section 4; no side-track repair,
-policy change or notice resend is part of 6-1.
+## Exact remaining 6-1 work
 
-## Finish the item, then advance the handoff
+1. Resolve dated identity and lifecycle treatments and consume them in feature
+   and held-position paths. The 186 eligible mismatches span 16 symbols:
+   104 conflicting FIGIs, 33 missing FIGIs (CCL/SWTX), and 49 absent listing/detail
+   404 sessions. **133 have raw stock observations**; do not route these by ticker
+   while bypassing identity. Exact grouped dates and source receipts are in the
+   new verification artifact. The 59 zero-bar sessions overlap 53 mismatches,
+   giving **192 distinct eligible exception sessions**, not 245. Retrospective
+   explanations cover 41 cash-merger, 14 stock-successor and four halt sessions;
+   held-position entitlements/fills/settlement remain unresolved.
+2. Apply the agreed ordinary-action admission standard when answered. Complete
+   scalable compilation using original IDs/dates/units and dated identities,
+   retaining reviewed whole-group replacements exactly once. The prior compiler
+   consumes 40 provider records into 19 cash events; 10,340 records remain
+   unconsumed, including 213 complex records. Records are not distinct events.
+   There are 524 simple groups outside the matching-single-event class.
+3. Resolve combined actions, splits versus spin-off adjustment ratios, identity
+   transitions and complete no-event coverage under explicit evidence rules.
+   Additional captures must serve a named missing consumer input.
+4. Connect completed histories to real causal features and held positions;
+   reconcile the full scoped census and boundary behavior. Missing outcomes
+   remain failures, not invented closes or assumed entitlements.
+5. Only on full closure check 6-1, update the evidence/docs, and advance HANDOFF
+   to 6-2. Full daily/feature production belongs to 6-2; full option/physical
+   execution belongs to 6-4; only 6-7 establishes training readiness.
 
-When 6-1 passes its full completion evidence: check 6-1 in TODO, link the evidence
-review, update ROADMAP/DOCUMENTATION and DECISIONS if needed, archive this HANDOFF,
-and write a fresh handoff for **6-2: complete causal daily/market context and full
-feature/proposal stores**. Commit/push only scoped changes on main. Repeat this
-pattern through 6-7; do not advance on an incomplete item or launch later work
-before documenting the current closure. A context limit keeps the handoff on
-6-1 with exact remaining work; it does not justify declaring completion.
+## Reuse existing sources and preserve scope
 
-The prior overlapping TODO and review-pause handoff are archived as
-`handoff-history/TODO-2026-09-17-before-report-sequence.md` and
-`handoff-history/HANDOFF-2026-09-17-before-report-sequence.md`.
-The report remains an unchanged dated record of the review, not live task state.
+Active contract: `docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json`;
+full spec: `docs/specs/MULTITIMEFRAME_RESEARCH.md`. Source paths:
+
+- Original history `v7-security-history-20260916` remains historical evidence;
+  use `v7-security-history-20260917-routes` for the newly routed panel.
+- `v7-daily-identity-panel-20260916`, `v7-identity-discrepancy-review-20260916`,
+  `v7-lifecycle-no-otc-20260916` retain underlying identity/lifecycle evidence.
+- `v7-action-inventory-20260916r2`: 10,380 records, 5,030 simple groups.
+- `v7-compiled-cash-actions-20260916`: 18 AAPL events and one corrected DVN event.
+- Raw daily/surfaces: `v7-stock-daily-20260916-midpoint` and
+  `v7-surfaces-20260916-midpoint`. Retain original hashes and receipts.
+
+March 15, 2022–September 14, 2026; Alpaca stocks, Massive options, no OTC.
+BBBY/FRC/REV/SI remain excluded without replacement or reranking. Preserve all
+20 families, 11,268 variant/timeframe combinations and 222 columns. Keep causal
+inputs, chronological folds, raw execution prices, arithmetic option midpoints,
+separate costs, V7 12.5% premium stops, strategy exits, ITM expiry cutoff 15 minutes
+before regular option close, funded physical fallback and shared-capital limits.
+At most four outer workers, one inner thread, 100 GiB reserve, 250 GB acquisition
+ceiling. No acquisition this session; recheck quota before any needed capture.
+
+V7 has no full training dataset or trained model. Latest readiness remains
+`v7-readiness-20260917-entry-demand.json`: three foundational passes and eight
+substantive stages unpassed. Preserve the uncommitted assembly implementation
+(`assembly.py`, `dataset_inputs.py`, `build_v7_dataset.py`, `test_v7_assembly.py`)
+and all unrelated V6 edits/untracked work. No blanket staging/reset/cleanup.
+Known V6 issues remain in section 4 of the three-day report, outside this task.
+
+Prior handoff archived as
+`handoff-history/HANDOFF-2026-09-17-before-source-routing.md`.

@@ -997,6 +997,23 @@ must not become an open-ended prerequisite. Preserve explicit unresolved cases
 and finish the executable feature/proposal, execution/label, assembly and training
 path. Current full identity/history artifacts and terminal job state are in HANDOFF.
 
+### V7 reviewed source routes (September 17)
+
+`compile_v7_source_routes.py` extends the existing alias artifact with reviewed
+exact-session routes, including a noneligible day needed by feature history.
+Pass its output directly to `build_v7_security_history.py --aliases`. It requires
+matching exact-day FIGIs for both listings, actual selected-source observations,
+and bound publication evidence available before the open. It does not establish
+membership, corporate-action adjustment or option-deliverable continuity.
+The FISV/FI June 7, 2023 route is in `V7_SOURCE_ROUTES_20260917.json`.
+
+The full builder binds each source-selection hash to the enclosing alias receipt.
+Extending that receipt changes the evidence hash for older aliases even when their
+rows and selected prices are identical. Compare original alias rows and recompute
+their receipt-bound hashes; do not mistake a provenance update for a price change.
+The full comparison and remaining 6-1 scope are in the September 17 source-routing
+review. Ordinary provider matching is still not publication admission.
+
 ### V7 reusable causal proposal build
 
 `proposal_store.py` computes one feature/signal set per action epoch, stores
