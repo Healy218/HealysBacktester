@@ -62,7 +62,8 @@ def run(args):
                     calendar=calendar,underlying_mark=market.underlying_mark)
                 if result['status']=='otm_expiry':
                     book.trigger(position['key'],kind='roll',reason='OTM option expiry cutoff',
-                        at=expiry_cutoff(position['contract'],calendar),alerts=args.enable_alerts)
+                        at=expiry_cutoff(position['contract'],calendar),alerts=args.enable_alerts,
+                        expected_leg=position)
                     book.settle(position['key'],quote_loader=market.execution_quote,clock=utcnow,alerts=args.enable_alerts)
                 results.append(result)
             except Exception as exc:

@@ -36,6 +36,7 @@ def monitor_positions(data, book, market, now, *, alerts):
     for position in book.open_positions():
         symbol=position['symbol']
         try:
+            checked_leg=position
             risk = monitor_option_position(book,position,market,clock=utcnow,alerts=alerts,
                 calendar=data.calendar,underlying_mark=market.underlying_mark)
             remaining=[p for p in book.open_positions() if p['key']==position['key']]
@@ -55,7 +56,8 @@ def monitor_positions(data, book, market, now, *, alerts):
                 book.trigger(position['key'],kind='exit',reason=event['reason'],at=at,alerts=alerts)
             elif risk['status']=='otm_expiry':
                 book.trigger(position['key'],kind='roll',reason='15-minute final-session expiry cutoff',
-                    at=expiry_cutoff(position['contract'],data.calendar),alerts=alerts)
+                    at=expiry_cutoff(checked_leg['contract'],data.calendar),alerts=alerts,
+                    expected_leg=checked_leg)
             remaining=[p for p in book.open_positions() if p['key']==position['key']]
             if not remaining: continue
             current=remaining[0]
@@ -83,7 +85,7 @@ def close_expiring_without_bars(book, calendar, market, now, *, alerts):
                 calendar=calendar,underlying_mark=market.underlying_mark)
             if result['status']=='otm_expiry':
                 book.trigger(position['key'],kind='roll',reason='OTM option expiry cutoff',
-                    at=expiry_cutoff(position['contract'],calendar),alerts=alerts)
+                    at=expiry_cutoff(position['contract'],calendar),alerts=alerts,expected_leg=position)
                 book.settle(position['key'],quote_loader=market.execution_quote,clock=utcnow,alerts=alerts)
         except Exception as exc:
             errors.append({'symbol':position['symbol'],'error':f'{type(exc).__name__}: {exc}'})

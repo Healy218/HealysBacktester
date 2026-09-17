@@ -159,3 +159,24 @@ def test_held_signal_conflicts_match_vectorbt_simulator(direction):
         actual=held_signal_exit(price,channels,{'entry_ts':index[0].isoformat(),
             'context':{'direction':direction}}, {'TREND_FILTER_WINDOW':50})
         assert actual==expected,(direction,bits,actual,expected)
+
+
+def test_old_otm_classification_cannot_roll_a_concurrently_replaced_contract(fixture,monkeypatch):
+    from scripts import run_v6_forward
+    from nn_meta.live import v6_option_risk
+    f=fixture;f.contract='SPY260914C00760000';f.allocate()
+    f.now=pd.Timestamp('2026-09-14T20:00:02Z')
+    before=f.book.open_positions()[0]
+    replacement='SPY261016C00760000'
+    calendar=SessionCalendar(dict(timezone='America/New_York',coverage_start='2026-09-14',coverage_end='2026-09-14',
+        sessions=[dict(date='2026-09-14',open='09:30',close='16:00')]))
+    def classified(*a,**k):
+        f.book.trigger(before['key'],kind='roll',reason='other worker',at=f.now-pd.Timedelta(seconds=2))
+        f.book.settle(before['key'],quote_loader=f.quote,clock=lambda:f.now,replacement=replacement)
+        return {'status':'otm_expiry'}
+    monkeypatch.setattr(v6_option_risk,'monitor_option_position',classified)
+    monkeypatch.setattr(run_v6_forward,'utcnow',lambda:f.now)
+    market=SimpleNamespace(execution_quote=f.quote,underlying_mark=None)
+    assert run_v6_forward.close_expiring_without_bars(f.book,calendar,market,f.now,alerts=False)==[]
+    current=f.book.open_positions()[0]
+    assert current['state']=='open' and current['contract']==replacement and current['rolls']==1
