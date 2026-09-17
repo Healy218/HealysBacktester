@@ -7,7 +7,7 @@ import pytest
 from nn_meta.multitimeframe_catalog import registered_catalog
 from nn_meta.v7.causal_features import CausalFeatures
 from nn_meta.v7.causal_prices import split_action
-from nn_meta.v7.proposal_store import StoredFeatures, build_features, build_proposals
+from nn_meta.v7.proposal_store import StoredFeatures, StoredProposals, build_features, build_proposals
 from nn_meta.v7.storage import sha
 
 
@@ -78,8 +78,7 @@ def test_resume_skips_completed_indicators_and_keeps_proposals_identical(tmp_pat
     path = tmp_path/'proposals'
     got = build_proposals(path, store, symbol='TEST', start='2022-03-15', end='2022-03-16',
                           reserve_bytes=0, batch_columns=4)
-    actual = {r['proposal_id']:r for p in path.glob('batches/*/proposals.jsonl')
-              for line in p.read_text().splitlines() if (r:=json.loads(line))}
+    actual = {r['proposal_id']:r for r in StoredProposals(path,features=store).rows(batch_size=3)}
     expected = {r['proposal_id']:r for _, rows in causal_proposal_batches('TEST', chart, variants,
         start='2022-03-15', end='2022-03-16', batch_columns=4) for r in rows}
     assert set(actual)==set(expected)
@@ -88,11 +87,15 @@ def test_resume_skips_completed_indicators_and_keeps_proposals_identical(tmp_pat
         assert actual[key]['decision_at']==row['decision_at'].isoformat()
         assert actual[key]['exit_decision_ns']==(row['exit_decision_at'].value if row['proposal_closed'] else None)
         assert actual[key]['bars_since_previous_signal']==row['bars_since_previous_signal']
+        serialized = dict(row,security_id='fixture',
+                          exit_decision_ns=row['exit_decision_at'].value if row['proposal_closed'] else None)
+        for field in ('decision_at','exit_decision_at','censored_at'):
+            serialized[field] = None if pd.isna(serialized[field]) else serialized[field].isoformat()
+        assert actual[key]==json.loads(json.dumps(serialized))
     renamed = tmp_path/'renamed'
     build_proposals(renamed, store, symbol='fixture', start='2022-03-15', end='2022-03-16',
                     symbols_by_date={'2022-03-15':'OLD', '2022-03-16':'NEW'}, reserve_bytes=0)
-    routed = [json.loads(line) for p in renamed.glob('batches/*/proposals.jsonl')
-              for line in p.read_text().splitlines()]
+    routed = list(StoredProposals(renamed,features=store).rows(batch_size=7))
     assert len(routed)==len(actual) and {r['symbol'] for r in routed}=={'OLD','NEW'}
     for row in routed:
         day = pd.Timestamp(row['decision_at']).tz_convert('America/New_York').date().isoformat()

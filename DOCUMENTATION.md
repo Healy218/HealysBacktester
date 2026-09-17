@@ -928,3 +928,14 @@ as lists: compare canonical runtime identities, not raw container types. Preserv
 raw execution prices separately from adjusted strategy-stop units. The AAPL
 all-catalog build and unchanged-receipt resume are in the September16 review;
 this is a component result, not full-universe or new option-risk admission.
+
+### V7 compact proposal and stored-row consumption (September 17)
+
+`StoredProposals` verifies and streams the typed Parquet format; do not expect
+`proposals.jsonl` in new builds. Its declaration retains every variant, even if
+no entry was eligible. Membership gates entry decisions only, not later exits.
+`StoredFeatureRows` must use saved raw-unit moving averages: recomputing from an
+action epoch's observed-only bars loses prior warmup, and reversing normalized
+averages may change floating arithmetic. Bind retained daily/sector inputs and
+verify the adapter's bindings at completion. Full context, demand and label
+consumers remain separate. See the September17 compact-proposal review.

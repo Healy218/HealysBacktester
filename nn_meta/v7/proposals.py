@@ -1,5 +1,4 @@
 """Bounded, full-variant proposal timelines preserving the frozen simulator rules."""
-from copy import deepcopy
 import pandas as pd
 
 from nn_meta.v7.signals import signal_batches
@@ -17,11 +16,10 @@ def causal_proposal_batches(symbol, causal_features, variants, *, start, end, ba
         causal_features.signal_batches(variants, batch_columns=batch_columns), start=start, end=end)
 
 
-def proposals_from_signals(symbol, bars, signal_groups, *, start, end):
+def proposals_from_signals(symbol, bars, signal_groups, *, start, end, stream=False):
     from portfolio.simulator import run_backtest
     from utils.runner_utils import sim_kwargs
     from nn_meta.config import SIM_CONFIG
-    from vectorbt.portfolio.enums import TradeStatus
     if bars.index.tz is None:
         raise ValueError('Aware proposal bars are required')
     begin = pd.Timestamp(start, tz='America/New_York')
@@ -55,25 +53,31 @@ def proposals_from_signals(symbol, bars, signal_groups, *, start, end):
             short_entries_series=chosen[2], short_exits_series=chosen[3], frequency=f'{minutes}min', **kwargs)
         if portfolio is None or len(portfolio.wrapper.columns) != len(records):
             raise ValueError('Proposal simulator dropped or changed a variant batch')
-        prior, output = {}, []
-        for trade in portfolio.trades.records.itertuples():
-            variant = records[int(trade.col)]
-            entry_pos = int(trade.entry_idx)
-            decision = price.index[entry_pos] + pd.Timedelta(minutes=minutes)
-            closed = trade.status == TradeStatus.Closed
-            exit_at = price.index[int(trade.exit_idx)] + pd.Timedelta(minutes=minutes) if closed else pd.NaT
-            key = {'symbol': symbol, 'variant_id': variant['variant_id'], 'decision_ns': decision.value,
-                   'right': 'C' if int(trade.direction) == 0 else 'P'}
-            gap = entry_pos - prior.get(variant['variant_id'], 0)
-            prior[variant['variant_id']] = entry_pos
-            output.append({'proposal_id': identity({'schema': 'v7-proposal-v1', **key}), **key,
-                           'decision_at': decision, 'exit_decision_at': exit_at,
-                           'proposal_closed': closed, 'signal_minutes': minutes,
-                           'strategy': variant['strategy'], 'params': variant['params'],
-                           'bars_since_previous_signal': gap, 'simulator_policy': policy,
-                           'censored_at': pd.NaT if closed else price.index[-1] + pd.Timedelta(minutes=minutes)})
+        output = _proposal_rows(symbol, records, portfolio.trades.records, price, policy, minutes)
         # Empty variants remain present in the returned catalog batch. No
         # profitability, minimum-trade or maximum-event filtering is applied.
-        yield records, output
+        yield records, output if stream else list(output)
     if not seen:
         raise ValueError('No proposal variants supplied')
+
+
+def _proposal_rows(symbol, records, trades, price, policy, minutes):
+    """Keep public proposal semantics while streaming repeated metadata to writers."""
+    from vectorbt.portfolio.enums import TradeStatus
+    prior = {}
+    for trade in trades.itertuples():
+        variant = records[int(trade.col)]
+        entry_pos = int(trade.entry_idx)
+        decision = price.index[entry_pos] + pd.Timedelta(minutes=minutes)
+        closed = trade.status == TradeStatus.Closed
+        exit_at = price.index[int(trade.exit_idx)] + pd.Timedelta(minutes=minutes) if closed else pd.NaT
+        key = {'symbol': symbol, 'variant_id': variant['variant_id'], 'decision_ns': decision.value,
+               'right': 'C' if int(trade.direction) == 0 else 'P'}
+        gap = entry_pos - prior.get(variant['variant_id'], 0)
+        prior[variant['variant_id']] = entry_pos
+        yield {'proposal_id': identity({'schema': 'v7-proposal-v1', **key}), **key,
+               'decision_at': decision, 'exit_decision_at': exit_at,
+               'proposal_closed': closed, 'signal_minutes': minutes,
+               'strategy': variant['strategy'], 'params': variant['params'],
+               'bars_since_previous_signal': gap, 'simulator_policy': policy,
+               'censored_at': pd.NaT if closed else price.index[-1] + pd.Timedelta(minutes=minutes)}

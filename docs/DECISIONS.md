@@ -1102,3 +1102,15 @@ unchanged 13 closed records/equity. V7 uses the new OPTION_RISK active manifest;
 raw predecessor bytes/producer bindings remain unchanged, with exact non-execution
 scope verification. Affected proposals, labels and portfolios require rebuilds.
 See [implementation and evidence](reviews/2026-09-16-option-premium-risk.md).
+
+## 2026-09-17 — compact proposal storage and dated entry admission
+
+Use typed ZSTD Parquet with a shared variant/policy dictionary for V7 proposal
+batches. Reconstruct deterministic IDs/public fields on bounded reads; preserve
+all variants, censored horizons and dated stock routing. The real all-variant
+AAPL audit matched every field and reduced proposal bytes98.77% versus identical
+JSON rows. PIT membership applies at entry only; leaving membership does not
+truncate a held exit. Keep exact raw-unit parameter averages in saved causal
+epochs for row reconstruction. This changes storage/consumer integration, not
+strategy formulas, execution rules or full-universe admission.
+See [verification](reviews/2026-09-17-v7-compact-proposals.md).

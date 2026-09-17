@@ -58,7 +58,7 @@ def build_features(path, chart, variants, *, inputs, reserve_bytes,
     root = Path(__file__).resolve().parents[2]
     # Import-time numerical dependencies and dynamically loaded indicators both
     # matter. Limit traversal to source directories; never archived data trees.
-    directories = ('indicators', 'signals', 'portfolio', 'utils', 'nn_options_signal')
+    directories = ('indicators', 'signals', 'portfolio', 'utils', 'nn_options_signal', 'options')
     sources = {p for d in directories for p in (root/d).rglob('*.py')}
     sources.update((root/'nn_meta').glob('*.py'))
     sources.update((root/'nn_meta/v7').glob('*.py'))
@@ -77,7 +77,8 @@ def build_features(path, chart, variants, *, inputs, reserve_bytes,
         start=chart.begin.isoformat(), end=chart.stop.isoformat(), minutes=chart.minutes,
         minimum_tick=chart.minimum_tick, raw_identity=_frame_identity(chart.history.raw),
         calendar=chart.calendar, actions=actions, variants=variants, inputs=inputs,
-        sources=code, runtime=runtime_manifest(), bitorder='little', research_ready=False)
+        sources=code, runtime=runtime_manifest(), bitorder='little', research_ready=False,
+        average_storage='normalized plus exact contemporaneous epoch price units')
     fingerprint = identity(declaration)
     path.mkdir(parents=True, exist_ok=True)
     header = path/'declaration'
@@ -147,8 +148,10 @@ def build_features(path, chart, variants, *, inputs, reserve_bytes,
                               for key in ('fast_window', 'slow_window')})
             # Store normalized averages for parameter-specific ma_gap/px_vs_fast.
             # Later actions cannot change the units of these observed outputs.
-            averages = pd.DataFrame({str(w): (epoch.bars.Close.rolling(w).mean()/epoch.bars.Close)
-                                     .loc[epoch.observed] for w in windows}, index=epoch.observed)
+            raw_averages = pd.DataFrame({str(w): epoch.bars.Close.rolling(w).mean().loc[epoch.observed]
+                                        for w in windows},index=epoch.observed)
+            raw_averages.to_parquet(temp/'raw_averages.parquet')
+            averages = raw_averages.div(epoch.bars.Close.loc[epoch.observed],axis=0)
             averages.to_parquet(temp/'averages.parquet')
             _json(temp/'report.json', dict(ordinal=number, start=epoch.start.isoformat(),
                 end=epoch.end.isoformat(), observations=n, first_position=int(positions[0]),
@@ -202,11 +205,7 @@ class StoredFeatures:
                 or summary['identity'] != identity(dict(parent=self.fingerprint, report=self.report,
                                                         basis_receipt_sha256=basis_digest))):
             raise ValueError('Feature-store declaration or summary binding differs')
-        if any(sha(p) != h for p, h in {**self.declaration['inputs'], **self.declaration['sources']}.items()):
-            raise ValueError('Feature-store sources or inputs changed')
-        from nn_meta.v7.provenance import runtime_manifest
-        if identity(runtime_manifest()) != identity(self.declaration['runtime']):
-            raise ValueError('Feature-store runtime changed')
+        self.verify_bindings()
         verify(self.path/'basis')
         self.basis = pd.read_parquet(self.path/'basis/bars.parquet')
         self.variants = self.declaration['variants']
@@ -232,6 +231,13 @@ class StoredFeatures:
         if not coverage.all():
             raise ValueError('Stored signals omit completed observations')
 
+    def verify_bindings(self):
+        if any(sha(p) != h for p, h in {**self.declaration['inputs'], **self.declaration['sources']}.items()):
+            raise ValueError('Feature-store sources or inputs changed')
+        from nn_meta.v7.provenance import runtime_manifest
+        if identity(runtime_manifest()) != identity(self.declaration['runtime']):
+            raise ValueError('Feature-store runtime changed')
+
     def signal_batches(self, *, batch_columns=16, working_bytes=128*1024**2):
         if type(batch_columns) is not int or batch_columns < 1 or type(working_bytes) is not int or working_bytes < 1:
             raise ValueError('Positive bounded signal budget required')
@@ -250,9 +256,12 @@ class StoredFeatures:
 
 
 def build_proposals(path, store, *, symbol, start, end, reserve_bytes, batch_columns=16,
-                    working_bytes=128*1024**2, symbols_by_date=None):
+                    working_bytes=128*1024**2, symbols_by_date=None, eligibility=None, row_batch_size=16384):
     """Checkpoint bounded catalog batches, retaining all open/censored proposals."""
     from nn_meta.v7.proposals import proposals_from_signals
+    from nn_meta.v7.compact_proposals import FORMAT, write_proposals
+    from options.paper_risk import strategy_only_simulator_config
+    from nn_meta.config import SIM_CONFIG
     from nn_meta.v7.scope import require_research_window
     require_research_window(start, end)
     if not symbol or pd.Timestamp(start, tz='America/New_York') < pd.Timestamp(store.declaration['start']) or (
@@ -261,10 +270,19 @@ def build_proposals(path, store, *, symbol, start, end, reserve_bytes, batch_col
     path = Path(path)
     path.mkdir(parents=True, exist_ok=True)
     parent = sha(store.path/'summary/complete.json')
-    declaration = dict(schema='v7-stored-proposals-v1', feature_summary_sha256=parent,
+    store.verify_bindings()
+    if eligibility is not None:
+        if eligibility.binding['security_id'] != store.declaration['security_id']:
+            raise ValueError('Entry eligibility belongs to another security')
+        if any(store.declaration['inputs'].get(p) != h for p,h in eligibility.binding['sources'].items()):
+            raise ValueError('Entry membership sources are absent from the feature input binding')
+    declaration = dict(schema=FORMAT, feature_summary_sha256=parent,
         feature_store=str(store.path.resolve()), symbol=symbol, start=start, end=end,
         batch_columns=batch_columns, working_bytes=working_bytes,
-        symbols_by_date=symbols_by_date, research_ready=False)
+        symbols_by_date=symbols_by_date, research_ready=False,
+        security_id=store.declaration['security_id'], variants=store.variants,
+        simulator_policy=strategy_only_simulator_config(SIM_CONFIG),timezone=str(store.basis.index.tz),
+        entry_eligibility=None if eligibility is None else eligibility.binding, row_batch_size=row_batch_size)
     fingerprint = identity(declaration)
     header = path/'declaration'
     if header.exists():
@@ -283,41 +301,23 @@ def build_proposals(path, store, *, symbol, start, end, reserve_bytes, batch_col
             verify(destination, expected_identity=part_identity)
             report = json.loads((destination/'report.json').read_text())
         else:
-            result = list(proposals_from_signals(symbol, store.basis, [(records, channels)], start=start, end=end))
-            proposals = result[0][1]
+            _, rows = next(proposals_from_signals(symbol, store.basis, [(records, channels)],
+                                                  start=start, end=end, stream=True))
             with transaction(destination) as temp:
-                with (temp/'proposals.jsonl').open('w') as stream:
-                    for proposal in proposals:
-                        row = dict(proposal)
-                        if symbols_by_date is not None:
-                            day = proposal['decision_at'].tz_convert('America/New_York').date().isoformat()
-                            ticker = symbols_by_date.get(day)
-                            if not isinstance(ticker, str) or not ticker:
-                                raise ValueError('Proposal lacks exact dated entry stock source')
-                            row['symbol'] = ticker
-                            row['proposal_id'] = identity(dict(schema='v7-proposal-v1', symbol=ticker,
-                                variant_id=row['variant_id'], decision_ns=row['decision_ns'], right=row['right']))
-                            if proposal['proposal_closed']:
-                                exit_day = proposal['exit_decision_at'].tz_convert('America/New_York').date().isoformat()
-                                exit_ticker = symbols_by_date.get(exit_day)
-                                if not isinstance(exit_ticker, str) or not exit_ticker:
-                                    raise ValueError('Proposal lacks exact dated exit stock source')
-                                row['exit_stock_ticker'] = exit_ticker
-                        for field in ('decision_at', 'exit_decision_at', 'censored_at'):
-                            value = row[field]
-                            row[field] = None if pd.isna(value) else value.isoformat()
-                        row['exit_decision_ns'] = None if not proposal['proposal_closed'] else int(proposal['exit_decision_at'].value)
-                        row['security_id'] = store.declaration['security_id']
-                        stream.write(json.dumps(row, allow_nan=False)+'\n')
-                report = dict(batch=number, variants=[v['variant_id'] for v in records],
-                    proposals=len(proposals), censored=sum(not p['proposal_closed'] for p in proposals))
+                counts = write_proposals(temp/'proposals.parquet', rows, declaration,
+                                         row_batch_size=row_batch_size, eligibility=eligibility)
+                report = dict(batch=number, variants=[v['variant_id'] for v in records], **counts)
                 _json(temp/'report.json', report)
                 receipt(temp, dict(identity=part_identity))
         reports.append({**report, 'receipt_sha256': sha(destination/'complete.json')})
+    store.verify_bindings()
     if sha(store.path/'summary/complete.json') != parent:
         raise ValueError('Feature summary changed during proposal build')
     report = dict(variants=sum(len(p['variants']) for p in reports),
         proposals=sum(p['proposals'] for p in reports), censored=sum(p['censored'] for p in reports),
+        generated=sum(p['generated'] for p in reports),
+        excluded_not_member=sum(p['excluded_not_member'] for p in reports),
+        entry_filter_applied=eligibility is not None,
         batches=reports, research_ready=False, label_status='not_built')
     if report['variants'] != len(store.variants):
         raise ValueError('Proposal build omitted variants')
@@ -329,3 +329,66 @@ def build_proposals(path, store, *, symbol, start, end, reserve_bytes, batch_col
             _json(temp/'report.json', report)
             receipt(temp, dict(identity=summary_identity))
     return report
+
+
+class StoredProposals:
+    """Verified bounded reads of compact rows and their complete variant catalog."""
+    def __init__(self, path, *, features=None):
+        from nn_meta.v7.compact_proposals import FORMAT
+        self.path = Path(path)
+        header = verify(self.path/'declaration')
+        self.declaration = json.loads((self.path/'declaration/declaration.json').read_text())
+        self.fingerprint = identity(self.declaration)
+        if self.declaration.get('schema')!=FORMAT or header['identity']!=self.fingerprint:
+            raise ValueError('Unsupported or changed proposal declaration')
+        self.features = features or StoredFeatures(self.declaration['feature_store'])
+        self.features.verify_bindings()
+        if (self.features.path.resolve()!=Path(self.declaration['feature_store']).resolve()
+                or sha(self.features.path/'summary/complete.json')!=self.declaration['feature_summary_sha256']
+                or self.features.variants!=self.declaration['variants']
+                or self.features.declaration['security_id']!=self.declaration['security_id']):
+            raise ValueError('Proposal feature parent changed')
+        summary = verify(self.path/'summary')
+        self.report = json.loads((self.path/'summary/report.json').read_text())
+        if summary['identity']!=identity(dict(parent=self.fingerprint, report=self.report)):
+            raise ValueError('Proposal summary changed')
+        self.parts = []
+        seen = []
+        for number, part in enumerate(self.report['batches']):
+            ids = part['variants']
+            records = self.declaration['variants'][len(seen):len(seen)+len(ids)]
+            if part['batch']!=number or [r['variant_id'] for r in records]!=ids or not records:
+                raise ValueError('Proposal batches omit, duplicate or reorder variants')
+            destination = self.path/'batches'/str(number)
+            if sha(destination/'complete.json')!=part['receipt_sha256']:
+                raise ValueError('Proposal batch receipt changed')
+            verify(destination, expected_identity=identity(dict(parent=self.fingerprint, variants=records)))
+            actual = json.loads((destination/'report.json').read_text())
+            if actual != {k:v for k,v in part.items() if k!='receipt_sha256'}:
+                raise ValueError('Proposal batch count binding differs')
+            import pyarrow.parquet as pq
+            if pq.ParquetFile(destination/'proposals.parquet').metadata.num_rows!=part['proposals']:
+                raise ValueError('Compact proposal count differs')
+            seen.extend(ids)
+            self.parts.append((destination,part))
+        if (len(seen)!=len(self.declaration['variants']) or len(seen)!=self.report['variants']
+                or any(sum(p[k] for _,p in self.parts)!=self.report[k] for k in
+                       ('proposals','censored','generated','excluded_not_member'))
+                or self.report['generated']!=self.report['proposals']+self.report['excluded_not_member']):
+            raise ValueError('Proposal summary omits rows or variants')
+
+    def rows(self, *, batch_size=16384):
+        from nn_meta.v7.compact_proposals import read_proposals
+        self.features.verify_bindings()
+        for directory, part in self.parts:
+            # Recheck content at consumption time, including after an earlier read.
+            verify(directory)
+            count = censored = 0
+            for row in read_proposals(directory/'proposals.parquet',self.declaration,batch_size=batch_size):
+                if row['variant_id'] not in part['variants']:
+                    raise ValueError('Compact row belongs to a foreign variant batch')
+                count += 1
+                censored += not row['proposal_closed']
+                yield row
+            if count!=part['proposals'] or censored!=part['censored']:
+                raise ValueError('Compact proposal census differs')

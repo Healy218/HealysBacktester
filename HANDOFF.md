@@ -1,161 +1,142 @@
-# Handoff — option-risk repair deployed; V7 build next
+# Handoff — compact proposal and stored-row milestone verified
 
-Updated September 17, 2026. Main; no subagents. Goal active and incomplete.
-No training launched. No downloads or build jobs live. Preserve unrelated dirty
-V6 work. Main code and isolated runtime branch have separate commits.
+Updated September 17, 2026. Main; no subagents. Goal remains active and incomplete.
+No training launched. All current test/build/audit/resume jobs are terminal. No
+new downloads or V6 runtime changes this turn. Preserve unrelated dirty V6 work;
+never blanket-stage, revert or reset this checkout.
 
-## Latest user execution rules — now implemented
+## User intent and fixed scope
 
-Always `(bid+ask)/2` for simulated option fills and marks, with existing 0.15%
-per-side costs separate. Stop on option midpoint loss from the current purchased
-leg entry midpoint: V6 7.5%, V7 12.5%. No generic 5% underlying loss stop for
-held positions. Actual strategy sell signals remain, with frozen conflict rules.
-ITM options still open on expiration day close 15 minutes before the dated option
-class regular close. User confirmed the timing; do not ask again.
+Finish V7 until ready to train, then alert the user. User acknowledged progress;
+do not imply the remaining work is only one final check. March 15, 2022 through
+September 14, 2026 inclusive; cold start March15, no March8–14 active prices.
+All20families,2,817variants×1/5/15/30m =11,268;222columns,13TVscopes,10tickfeatures.
+Alpaca-only stocks/quotes; Massive options. Entire BBBY/FRC/REV/SI excluded, no
+OTC, no replacements or reranking.250GB is an acquisition ceiling, not a target.
+Max4outerworkers,1innerthread,100GiB disk reserve; preserve V6 coexistence.
 
-A valid stop/ITM trigger quote also supplies the paper sale midpoint. No second
-quote request or broker fill proof. Missing/invalid quotes are explicit gaps,
-not synthetic prices; next observations may exit beyond the threshold. V7 keeps
-actual quote timestamp separate from execution/observation time. Costs do not
-trigger the stop. Supplied midpoint/last cannot override bid/ask average.
-Existing OTM rolls and unresolved physical-expiry fallback remain in scope.
+Arithmetic (bid+ask)/2 for option paper buys/sells/marks. V6/V7 option midpoint
+loss stops7.5%/12.5% from purchased-leg entry midpoint; costs0.15%/side separate.
+No generic5% underlying stop for held exits. Strategy signals retained. ITM expiry
+exit15minutes before dated option-class regular close. A valid trigger quote
+supplies sale midpoint directly; quote gaps remain explicit and retry. Original
+quote and observation/execution clocks remain distinct. Existing OTM rolls and
+funded physical-expiry fallback remain in scope. User already confirmed these.
+Actual1–9DTE; targets1/2/4/5/7;5sharedslots,10%equity premium,one symbol acrossTF.
+Folds2024H2,2025H1/H2;finalJan1–Sep14,2026;10session embargo through settlement.
 
-Review: docs/reviews/2026-09-16-option-premium-risk.md.
+## Completed this milestone
 
-## V6 deployed and verified
+Review: docs/reviews/2026-09-17-v7-compact-proposals.md.
 
-Runtime `/home/healy/Coding/HealysV6` is at
-`d252c5190c3ca261136966ffe43432b160adfc84`, pushed isolated branch
-`ops/v6-option-risk-20260916`. Candidate `/tmp/healys-v6-option-risk-20260916`
-contains an untracked venv symlink; do not commit it. Main V6 source/tests are
-mostly untracked preexisting work; never blanket-stage or revert them.
+- Typed ZSTD Parquet proposal batches, v7-compact-proposals-v2, replace repeated
+  JSONL. Complete variant/policy dictionary; deterministic IDs/clock fields;
+  bounded streaming writes/reads, including zero-entry variants. Exact public
+  fields preserved, including censored rows, signal gaps and dated exit tickers.
+- Captured-input builder binds coverage/membership and execution-aware active
+  manifest. PIT entry admission only; exits after membership ends remain. It
+  still rejects unresolved source identity/actions. No ranking replacements.
+- StoredFeatureRows joins saved causal observations to all222columns using
+  explicit daily, dated-sector and selected-contract tick inputs. Exact saved
+  raw-unit moving averages preserve pre-epoch warmup and direct arithmetic.
+  One epoch cached; future assembly should process by epoch and verify bindings
+  at completion. This adapter does not itself build daily/tick data or labels.
+- Source bindings now include options helpers; original raw producer/manifest
+  bytes remain unchanged. Do not invalidate raw receipts for execution changes.
 
-Deployment via Git pull stopped the forward timer, waited for any active pass,
-held `.forward.lock`, required zero open positions, backed up SQLite/activation,
-verified all source/evidence hashes, installed the guarded amendment and risk
-units, then resumed the forward timer. All 13 closed records and full logical
-ledger stayed identical; realized equity 0.6867286044611687. No reset or broker
-orders. New risk service returned success/0; risk timer active (every minute at
-:10 within regular sessions); existing forward/relay timers remain.
+Current-policy AAPL March15–May10,2022 build:
+`nn_meta/validation/v7-compact-proposal-build-20260917/BBG000B9XRY4/{1,5,15,30}`.
+11,268variants,757,595proposals (598,931/108,336/34,238/16,090 by timeframe).
+All757,595public rows matched a separate fresh simulation from stored channels,
+with independent dated membership application. This is simulator/storage parity,
+not an independent proof of simulator correctness. AAPL had zero membership
+exclusions here; filtering, late availability and retained exits are unit-tested.
 
-Activation SHA `d7ce5e3ebbcc58ddb894564b113cc35c210d0d35f4558123944f8cacf8c02f34`.
-Evidence `nn_meta/validation/v6-option-risk-20260916` retains copied/live ledger
-snapshots, exact audit/deployment scripts, source comparison, test logs/XML,
-review and actual activation, unit files/verification and command/status logs.
-Final follow-up evidence is under `roll-guard/`: expiry-roll decisions also bind
-to the checked leg, preventing a stale OTM classification from rolling its
-concurrent replacement. Original stop/pricing deployment was d415733; follow-up
-d252c51 changed only the two guarded callers plus one regression. Both timers
-were paused, both locks held, ledger backed up/preserved, and risk service passed.
-Candidate full suite: 1,609 tests +18 subtests,16 warnings, 70.24s. Service test was
-with an empty book; no live stopped-position outcome has yet been observed.
+Proposal payload9,896,112bytes vs807,083,883bytes for identical current-policy
+JSON rows:98.7738% smaller. Total feature/proposal output108,089,486bytes. Slowest
+build174.71s;peak worker RSS918,820KiB. Resume4.05–4.15s/worker preserved all736
+receipts. Component tests compare all222features exactly, including explicit
+first-post-split MA feature probe, warmup NaNs, raw spot and dated sectors.
+Full suite1,967tests+18subtests,18warnings,154.81s. No additional suite needed
+unless code changes. Four bounded workers used; no full-history/resource claim.
 
-`monitor_option_position` uses a transactional expected-leg check so a quote
-from before a concurrent roll cannot close the new contract. SQLite prevents
-repeat sales, and alert-spool exports have a shared lock. Minute worker avoids
-heavy feature/model recomputation. Alpaca SIP stock midpoint is used only for
-expiry ITM classification. Held strategy signal conflicts were compared against
-all 16 signal combinations in vectorbt for both directions.
+Evidence `nn_meta/validation/v7-compact-proposal-verification-20260917`, receipt
+`2ddac7740426c8fb411f97ab5bf5cb39096a5eee4fc11fbd752f68ea605a30ad`.
+Contains exact audit source, build/resume/comparison/test logs, XML, measured
+counts and source/receipt hashes. Audit scripts also remain at
+`/tmp/verify_v7_compact_20260917.py`, `/tmp/finalize_v7_compact_evidence.py`.
+Actual handles51215tests,89072build,7642exact,73903resume all exited0.
 
-Frozen V6 entry calculations remain unchanged: the original virtual simulator
-still computes its frozen entry features; actual held exits use strategy signals
-plus premium-risk checks. AST comparison proves unchanged entry calculation code
-excluding only held-exit logic and a descriptive context field. Do not globally
-disable its frozen simulator stop, which would silently change model inputs.
+## Next work — full context/demand/labels integration
 
-## V7 active scope and current evidence
+Current `nn_meta/validation/v7-readiness-20260917-compact.json`: three basic
+input/membership/coverage checks pass; all8 substantive stages remain missing:
+lifecycle,causal prices,daily context,quotes,physical execution,assembly,trials,
+integrated pilots. Do not mark any full gate done based on this bounded pilot.
 
-Current execution-aware manifest:
-`docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json`.
-Policy `docs/specs/V7_OPTION_RISK_20260916.json` binds arithmetic pricing, 12.5%
-premium stop, 15-minute ITM expiry and original quote/execution clock separation.
-`scripts/v7_readiness.py` defaults to this manifest. Raw-only producers retain
-the original `V7_ACTIVE_INPUTS_20220315.json` default: its bytes and producer
-scripts are bound by existing stock/history/action receipts. Both manifests have
-identical non-execution data scope; readiness verifies that against the retained
-predecessor hash. Do not mutate/relabel the predecessor or rebuild raw stock data
-merely because an execution rule changed. Rebuild affected proposals/paths/labels.
+1. Connect captured daily/history/surfaces to all10 causal daily/market features,
+   exact dated sectors and the stored-row adapter. `causal_daily.py` already has
+   returns/context/missingness components. `validate_v7_causal_daily.py` proves
+   AAPL40session returns only; it is not a full market/context builder. Do not
+   use old `daily.daily_context` adjusted/filled path. Preserve unresolved action
+   and identity evidence, and initial warmup NaNs.
+2. Generate actual compact-proposal-driven contract/tick/mark/exit/roll demand,
+   taking only necessary missing inputs. Existing `plan_v7_quote_demand.py` is
+   a conservative all-minute envelope, not this actual-demand consumer.
+   `tick_features.features` needs complete causal quote/trade windows plus dated
+   standard-contract metadata; `StoredFeatureRows` consumes its covered output.
+3. Connect amended midpoint/premium-stop/ITM expiry replay, physical execution,
+   outcomes and labels to bounded factorized assembly and purged training folds.
+   Existing physical funding/stock liquidation/reference exceptions remain.
+4. Finish runnable predeclared trials, resource/storage/recovery/coexistence
+   measurement on full-history inputs, and full-universe readiness. No broad
+   reference/news/issuer acquisition expansion; target actual required gaps.
 
-Current `nn_meta/validation/v7-readiness-20260916-option-risk.json`: three
-input/membership/coverage checks pass; all eight substantive stage gates remain
-missing. Assembly now requires full-universe midpoint/option-stop/ITM-expiry
-proof too. No full readiness, resource/no-swap or training claim.
+Current source consumers:
+`nn_meta/v7/{proposal_store,compact_proposals,entry_eligibility,stored_rows}.py`,
+`proposals.py`, `scripts/build_v7_proposals.py`; tests of matching names.
+`load_inputs` now returns six values, adding EntryEligibility. Builder --active
+is OPTION_RISK by default. StoredFeatures verifies bound sources/runtime/inputs;
+source edits can invalidate reuse. Never relabel old receipts to bypass it.
 
-Main final bound-state suite: 1,957 tests +18 subtests, 18 warnings, 102.97s.
-Logs/XML copied into the evidence directory as main-bound-tests.log/xml.
-All process handles in this turn completed; no test/build/download job remains.
+## Existing data and limitations
 
-Real current AAPL input consumer verified 15,600 raw minutes, 40 routed sessions,
-18 compiled actions and 33,877 parent input bindings, without downloads:
-source `nn_meta/data_v7/start-20220315`, history
+Active `docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json`; policy
+`V7_OPTION_RISK_20260916.json`. Original `V7_ACTIVE_INPUTS_20220315.json` stays
+immutable for raw producer bindings. Readiness verifies non-execution scope.
+AAPL input consumer:15,600rawminutes,40sessions,18compiled actions; source
+`nn_meta/data_v7/start-20220315`, history
 `nn_meta/validation/v7-security-history-20260916`, actions
-`nn_meta/validation/v7-compiled-cash-actions-20260916`, security BBG000B9XRY4,
-March15–May10,2022. Producer-default edits initially invalidated the captured
-stock builder hash; restored those unchanged raw defaults and the load passed.
+`nn_meta/validation/v7-compiled-cash-actions-20260916`, ID BBG000B9XRY4.
+Use those arguments with `scripts/build_v7_proposals.py`, --start2022-03-15
+--end2022-05-10 --workers4 and the current build output for exact resume.
 
-## Next: compact proposals, PIT filtering and full feature/label integration
+Full history591IDs,593tickers,1,129sessions,667,239history rows. Eligible339,640
+sessions;339,454identity matches,186unresolved. Minute bars present339,581;
+59zero sessions have41cash-merger/14successor/4halt explanations. This is session
+presence, not every-minute completeness. Coverage answer evidence:
+`nn_meta/validation/v7-stock-coverage-answer-20260916.json`.
+Daily `v7-stock-daily-20260916-midpoint`, surfaces `v7-surfaces-20260916-midpoint`,
+dated sectors `v7-sectors-20260916-final`. Reviewed cash events19 (18AAPL+DVN);
+10,340provider records unresolved. Preserve FISV/FI June7,2023 identity evidence.
+Historical old proposal pilot757,465rows/887.7MB used superseded generic stock
+stops; do not reuse as new execution/label evidence.
 
-No broad reference/news/issuer acquisition.250 GB is a ceiling, never a target.
-Use captured inputs to finish actual build consumers and demand. Prior successful
-all-variant feature/proposal milestone was main 66b2078, review
-`docs/reviews/2026-09-16-v7-proposal-build.md`. Stores compute each action epoch
-once, pack four full-variant boolean signal channels, checkpoint bounded simulator
-batches, and resume with source/runtime/input/catalog/content verification.
+## V6 — preserve verified deployed experiment
 
-Historical AAPL four-timeframe output
-`nn_meta/validation/v7-proposal-build-20260916r2`: 11,268 variants, 757,465
-proposals, 887,697,704 bytes. Resume preserved all 736 receipts. Those counts use
-the superseded generic stock-stop proposal policy; do not relabel/reuse as new
-training labels. Verification `v7-proposal-build-verification-20260916` retains
-receipt 5aabbe6a7c23f43dc3f0315e3366562f74750a015562252ede44674192c916ff.
-JSONL is too verbose to scale; next convert batch proposal output to typed compact
-storage with lossless factorization and bounded reads, test exact reconstruction
-and resume, then run the current-policy real four-timeframe integration.
+Runtime `/home/healy/Coding/HealysV6` at
+`d252c5190c3ca261136966ffe43432b160adfc84`, isolated pushed branch
+`ops/v6-option-risk-20260916`. Activation SHA
+`d7ce5e3ebbcc58ddb894564b113cc35c210d0d35f4558123944f8cacf8c02f34`.
+Deployment preserved13closed/0open,realized equity0.6867286044611687; empty-book
+service test succeeded, timers resumed. No live stopped-position outcome claimed.
+Final candidate tests1,610+18subtests,16warnings,65.15s (corrects prior handoff's
+stale1,609count). Evidence `nn_meta/validation/v6-option-risk-20260916/roll-guard`.
+V6 frozen entry simulator remains unchanged; held strategy exits use signal-only
+configuration and option risk. Expected-leg transactional guards cover stop,
+ITM and OTM decisions against concurrent replacement. Do not globally change the
+entry simulator and silently alter frozen model features. Candidate
+`/tmp/healys-v6-option-risk-20260916` has an untracked venv symlink; never stage it.
 
-`nn_meta/v7/proposal_store.py::build_proposals` still writes JSONL and repeats
-variant parameters/timestamps/static fields. `tests/test_v7_proposal_store.py`
-contains exact simulator/routing/resume parity checks. Preserve proposal IDs,
-entry/exit clocks, censored state, bars-since-signal, dated stock aliases and all
-variants including zero-signal variants. Apply PIT entry eligibility, join all
-222 daily/sector/technical/TV/tick columns, derive selected-contract quote demand,
-replay new risk/physical labels and shared portfolios, and wire bounded folds to
-the full predeclared training runner. Finish lifecycle/action/physical exceptions
-using retained evidence before targeted missing-input capture. Full-history
-resource/recovery/V6-coexistence gates remain required.
-
-## Fixed scope and preserved data
-
-March15,2022–September14,2026 inclusive; cold start March15, no March8–14 active
-price inputs. All 20 families,2,817 variants×four 1/5/15/30m timeframes;222 columns,
-13 TV scopes,10 tick features. Actual 1–9 DTE purchases, targets 1/2/4/5/7; five shared
-slots, 10% equity premium and one symbol across timeframes. Max four outer workers,
-one inner thread,100 GiB disk reserve and 250 GB acquisition ceiling. Alpaca-only
-stock prices/quotes; Massive options. No OTC: entire BBBY/FRC/REV/SI excluded,
-without replacement or reranking; explicit ex-post study restriction.
-
-Chronological folds 2024H2, 2025H1/H2; final Jan 1–Sep 14, 2026, 10-session embargo
-through full settlement horizon. Funded physical delivery/observed Alpaca stock
-liquidation remains unresolved where funding, deliverables or dated references
-are missing; no free financing or invented intrinsic-value sale.
-
-Daily raw `v7-stock-daily-20260916-midpoint` and surfaces
-`v7-surfaces-20260916-midpoint` retain full 339,640 eligible rows; security history
-591 IDs × 1,129 sessions = 667,239 rows, 339,454/339,640 eligible identity matches,
-186 unresolved. Compiled cash actions 19 reviewed events (18 AAPL + DVN); 10,340 provider
-records unresolved. Preserve identity alias FISV/FI June 7, 2023 and original
-retained evidence; do not restart open-ended collection. Detailed prior data,
-artifacts and remaining exception context are in the archived handoff below.
-
-Archived predecessor: handoff-history/HANDOFF-2026-09-16-before-option-premium-risk.md.
-
-## Latest stock-coverage question
-
-User asked whether all necessary minute bars are present, then acknowledged the
-remaining work. Answered: broad collection is in place, not yet fully verified.
-339,581/339,640 required ticker/session combinations contain minute bars;59zero
-sessions have recorded merger/successor/halt explanations.186identity matches
-remain unresolved and can include existing prices. These are session-presence
-counts, not proof of every expected minute. Both source receipts were reverified;
-exact per-ticker counts are in
-`nn_meta/validation/v7-stock-coverage-answer-20260916.json`. Do not say all bars
-are complete or imply training is ready from these counts.
+Archived predecessor:
+`handoff-history/HANDOFF-2026-09-17-before-compact-proposals.md`.

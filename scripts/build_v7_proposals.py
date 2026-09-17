@@ -20,10 +20,23 @@ def load_inputs(args):
     from nn_meta.v7.scope import require_active_inputs, require_research_window
     from nn_meta.v7.coverage import receipt_frame
     from nn_meta.v7.causal_prices import PriceAction
+    from nn_meta.v7.entry_eligibility import EntryEligibility
     require_active_inputs(args['source'])
     require_research_window(args['start'], args['end'])
     source, history, actions = (Path(args[name]) for name in ('source', 'history', 'actions'))
     inputs = {str(Path(__file__)): sha(__file__)}
+    active_path = Path(args.get('active',ROOT/'docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json'))
+    active = json.loads(active_path.read_text())
+    if source.resolve()!=(ROOT/active['working_inputs']).resolve():
+        raise ValueError('Proposal source differs from the active raw data scope')
+    coverage = ROOT/active['coverage_inventory']
+    verify(coverage)
+    if sha(coverage/'complete.json')!=active['coverage_receipt_sha256']:
+        raise ValueError('Entry membership coverage receipt changed')
+    membership_sources = {str(coverage/'complete.json'):sha(coverage/'complete.json'),
+                          str(coverage/'sessions.parquet'):sha(coverage/'sessions.parquet')}
+    inputs.update(membership_sources)
+    inputs[str(active_path)] = sha(active_path)
     for path in (history, actions):
         doc = verify(path)
         dependencies = json.loads((path/'inputs.json').read_text())
@@ -38,6 +51,9 @@ def load_inputs(args):
     calendar_path = source/'calendar.json'
     inputs[str(calendar_path)] = sha(calendar_path)
     calendar = json.loads(calendar_path.read_text())
+    membership = pd.read_parquet(coverage/'sessions.parquet',filters=[('security_id','=',args['security_id'])])
+    membership = membership[membership.date.between(args['start'],args['end'])]
+    eligibility = EntryEligibility(membership,calendar,security_id=args['security_id'],sources=membership_sources)
     frame = pd.read_parquet(history/'history.parquet', filters=[('security_id', '=', args['security_id'])])
     frame = frame[frame.source_date.between(args['start'], args['end'])].copy()
     observed = frame[frame.source_status.eq('observed')]
@@ -79,7 +95,7 @@ def load_inputs(args):
     raw = pd.concat(raw_parts, ignore_index=True).sort_values('timestamp').set_index('timestamp')
     raw['available_at'] = raw.index+pd.Timedelta(minutes=1)
     routing = dict(zip(middle.source_date, middle.stock_ticker))
-    return raw, typed_actions, calendar, inputs, routing
+    return raw, typed_actions, calendar, inputs, routing, eligibility
 
 
 def work(payload):
@@ -92,7 +108,7 @@ def work(payload):
     from nn_meta.v7.causal_features import CausalFeatures
     from nn_meta.v7.proposal_store import build_features, build_proposals, StoredFeatures
     started = time.perf_counter()
-    raw, actions, calendar, inputs, routing = load_inputs(args)
+    raw, actions, calendar, inputs, routing, eligibility = load_inputs(args)
     chart = CausalFeatures(raw, actions, calendar, security_id=args['security_id'], minutes=minutes,
         start=args['start'], end=args['end'])
     variants = [v for v in registered_catalog(['_build'])['records'] if v['signal_minutes']==minutes]
@@ -103,9 +119,11 @@ def work(payload):
                           variants=features['variants'])), flush=True)
     store = StoredFeatures(output/'features')
     proposals = build_proposals(output/'proposals', store, symbol=args['security_id'],
-        symbols_by_date=routing, start=args['start'], end=args['end'], reserve_bytes=args['reserve_bytes'])
+        symbols_by_date=routing, start=args['start'], end=args['end'], reserve_bytes=args['reserve_bytes'],
+        eligibility=eligibility)
     report = dict(minutes=minutes, variants=proposals['variants'], proposals=proposals['proposals'],
-        feature_observations=features['observations'], seconds=time.perf_counter()-started,
+        feature_observations=features['observations'], generated=proposals['generated'],
+        excluded_not_member=proposals['excluded_not_member'],seconds=time.perf_counter()-started,
         peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss, research_ready=False)
     print(json.dumps(report), flush=True)
     return report
@@ -115,6 +133,7 @@ def main():
     from nn_meta.v7.runtime import worker_pool
     from nn_meta.v7.scope import HISTORY_START, HISTORY_END
     parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--active',type=Path,default=ROOT/'docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json')
     for name in ('source','history','actions','output'):
         parser.add_argument('--'+name, type=Path, required=True)
     parser.add_argument('--security-id', required=True)
