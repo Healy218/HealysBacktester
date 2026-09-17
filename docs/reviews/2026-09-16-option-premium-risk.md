@@ -82,3 +82,23 @@ Evidence main-bound-tests.log/xml is retained alongside the candidate evidence.
 The real AAPL input consumer also verified 15,600 raw minutes,40 routed sessions
 and33,877 parent bindings against the unchanged captured history/actions. No
 market data was downloaded for this amendment.
+
+## September 17 live-paper observation
+
+The user supplied a runtime alert and FIG stop exit. Read-only ledger inspection
+verified FIG entered at arithmetic midpoint $1.485 (bid/ask $1.39/$1.58) at
+14:04:34 UTC and exited at $1.37 ($1.31/$1.43) at 17:15:36 UTC. Its midpoint
+loss was 7.7441%, crossing the 7.5% threshold of $1.373625; the recorded net
+paper loss was 8.02046% including separate 0.15% costs per side. This supplies
+a live-paper example of the activated stop; it is not broker execution evidence.
+
+The separate 17:30 forward failure recorded missing fresh option quotes for AMPX
+and SOXX. The 17:37 minute risk pass assessed COHR/SOXX successfully and retained
+AMPX's missing-quote error. The provider reader requests only the last 30 seconds;
+an empty response prevents a current midpoint assessment and blocks new entries.
+Positions remain open for retry. No runtime rules, quote age, timers or ledger
+records were changed for this diagnosis, and recovery is not claimed.
+
+Current runtime source hashes matched activation. Retained evidence:
+`nn_meta/validation/v6-live-midpoint-check-20260917`, receipt
+`028f3c0b123f086d969bc418876d8e69463e7170979130b69346a88dc8f5e71f`.

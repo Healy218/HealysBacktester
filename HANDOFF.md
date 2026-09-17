@@ -129,7 +129,7 @@ Runtime `/home/healy/Coding/HealysV6` at
 `ops/v6-option-risk-20260916`. Activation SHA
 `d7ce5e3ebbcc58ddb894564b113cc35c210d0d35f4558123944f8cacf8c02f34`.
 Deployment preserved13closed/0open,realized equity0.6867286044611687; empty-book
-service test succeeded, timers resumed. No live stopped-position outcome claimed.
+service test succeeded, timers resumed. Empty-book test at deployment; the live FIG stop is verified below.
 Final candidate tests1,610+18subtests,16warnings,65.15s (corrects prior handoff's
 stale1,609count). Evidence `nn_meta/validation/v6-option-risk-20260916/roll-guard`.
 V6 frozen entry simulator remains unchanged; held strategy exits use signal-only
@@ -140,3 +140,31 @@ entry simulator and silently alter frozen model features. Candidate
 
 Archived predecessor:
 `handoff-history/HANDOFF-2026-09-17-before-compact-proposals.md`.
+
+## User-supplied V6 alerts, inspected after the V7 milestone
+
+V7 compact milestone committed and pushed as `1d45b31`. User then supplied a
+V6 unresolved-monitoring alert and a FIG option-stop exit. Read-only inspection
+confirmed current runtime source hashes still match the activated risk policy.
+FIG entered at midpoint $1.485 on September17 14:04:34 UTC and exited at $1.37
+at17:15:36 UTC, approximately3h11m later. Raw midpoint loss7.7441%; net paper
+loss8.02046% including0.15% per-side costs. Entry bid/ask1.39/1.58;exit1.31/1.43.
+This is an actual inspected live-paper stop using the requested midpoint rule,
+not a repeat of ask-entry/bid-exit accounting. Stop threshold was $1.373625.
+
+Forward status17:30 reported no fresh post-decision option quote for AMPX and
+SOXX. The17:37 minute risk worker successfully assessed COHR and SOXX but still
+recorded AMPX's missing quote. `execution_quote` only queries the latest30seconds
+and rejects an empty result. Open positions remain retained; unresolved checks
+withhold new entries. No arbitrary stale mark, quote-age relaxation, runtime
+patch, restart or ledger mutation was performed. These data-availability gaps
+remain unresolved; do not claim the runtime is fully healthy.
+
+Retained evidence `nn_meta/validation/v6-live-midpoint-check-20260917`, receipt
+`028f3c0b123f086d969bc418876d8e69463e7170979130b69346a88dc8f5e71f`: saved statuses,
+FIG ledger record, numerical checks and activation/source verification. Three
+open positions at inspection:AMPX,COHR,SOXX;16closed total. Original V7 objective
+remains active; continue the context/demand/label integration above.
+
+Additional archived predecessor:
+`handoff-history/HANDOFF-2026-09-17-before-live-stop-check.md`.
