@@ -1303,3 +1303,15 @@ requires exact modeled opens and settlement coverage, and consumes the captured
 AAPL funded purchase with reviewed 2022 settlement dates. Broker posting remains
 unverified, the 55 excluded events remain excluded, and later settlement years
 are not inferred. This implements the accepted model without expanding it.
+
+
+## 2026-09-17 — Finite same-share split interpretation
+
+Ten exact `stock_dividend` provider groups are ordinary same-share forward splits
+under their original primary notices; apply their ratios at the effective open
+through causal chart history and funded stock bookkeeping. Preserve original
+records and publication review bindings. Reject global category conversion,
+ENVX/OPEN warrant-like records, combined entitlements and inferred option contract
+adjustments. Cash payables/receivables do not change with stock units. This is an
+implementation of reviewed terms, not an expansion of the three accepted
+reconstruction assumptions. [Evidence and limits](reviews/2026-09-17-v7-reviewed-splits.md).

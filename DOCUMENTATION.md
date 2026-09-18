@@ -1156,3 +1156,22 @@ calendar is based on the visually reviewed original FINRA annual notice and
 46 checked table rows; it is not authorization to infer 2023–2026 calendars.
 Keep the original failed OCC/DTCC requests and unresolved 2023 Veterans/2025
 mourning distinctions. [Review](docs/reviews/2026-09-17-v7-stock-cash-ledger.md).
+
+
+### V7 same-share splits reported as stock dividends
+
+`reviewed_splits.py` admits only exact two-provider groups with finite primary
+reviews, same selected identity on adjacent dates and no combined cash/other
+security entitlement. `stock_dividend` is not a global alias for a split: ENVX
+and OPEN remain unresolved. Preserve old compiled events when adding reviews.
+The current combined set is `v7-reviewed-splits-20260917`; rebuild consumers with
+`v7-action-coverage-20260917-splits`. [Review](docs/reviews/2026-09-17-v7-reviewed-splits.md).
+
+Pass exact reviewed events through `physical.splits`. Split processing precedes
+marks and trades at the ex-open, changes funded inventory/pending deliveries and
+adds only the incremental beneficial-share delta. Existing cash receivables and
+cash commitments retain their monetary amounts; later ex-dates use the new share
+quantity. Never multiply an option quantity/strike or assign a replacement
+contract from a stock split alone. Open options fail before mutation. Only the
+2022 settlement year has original-source normalization; a unit-tested later-year
+handler is not a complete later-year held-history admission.

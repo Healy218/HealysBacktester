@@ -47,7 +47,8 @@ def main():
     merge(quote['capture']['evidence'])
     for p in [Path(__file__),args.settlement_review,ROOT/'nn_meta/session_calendar.py',
               ROOT/'options/data/provider.py',*[ROOT/'nn_meta/v7'/(n+'.py') for n in
-              ('physical','portfolio','execution','stock_quotes','stock_cash','storage','runtime')]]:
+              ('physical','portfolio','execution','stock_quotes','stock_cash','stock_splits',
+               'ordinary_actions','causal_prices','action_inventory','storage','runtime')]]:
         merge({str(p):sha(p)})
     if str(args.calendar) not in inputs:raise ValueError('Cash events must bind this trading calendar')
     review=json.loads(args.settlement_review.read_text());source=Path(review['source']);bind(source)

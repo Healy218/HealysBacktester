@@ -42,7 +42,11 @@ then admit another 2,026 sessions (586,830 total). The user also accepted the se
 the [implemented dividend ledger](docs/reviews/2026-09-17-v7-stock-cash-ledger.md)
 now compiles all 4,337 eligible events, verifies their clocks and consumes a real
 funded AAPL quote with the reviewed 2022 settlement calendar. The remaining
-years and 55 excluded cash events still require treatment. Unresolved identity/action cases and complete
+years and 55 excluded cash events still require treatment.
+[Ten reviewed same-share splits](docs/reviews/2026-09-17-v7-reviewed-splits.md)
+bring the action set to 4,491 and admitted history to 586,840 sessions, with all
+ten real feature boundaries checked and a funded TSLA split/mark case. The stock
+ledger now carries split quantities into later dividends. Unresolved identity/action cases and complete
 held-position treatment still keep 6-1 open.
 The user selected this sequence on September 17 after reviewing the
 [three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md#6-consolidated-remaining-todos-before-the-goal-is-finished).

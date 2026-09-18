@@ -31,7 +31,7 @@ four additional splits, bringing that compiled action set to 4,433 events.
 The subsequent [coverage and targeted-repair work](docs/reviews/2026-09-17-v7-action-coverage.md)
 implements the user-approved no-event completeness assumption, separates 45
 unrelated ticker-reuse groups and admits another 48 cash events after named
-GAP and process-date-tail captures. Current compiled total: 4,481 events.
+GAP and process-date-tail captures. That milestone compiled 4,481 events.
 [Seven finite rename reviews](docs/reviews/2026-09-17-v7-common-share-renames.md)
 then clear 5,644 more history sessions and add effective-time stock-symbol
 treatment, while retaining separate option-deliverable gates.
@@ -41,6 +41,10 @@ The [authorized stock-cash ledger](docs/reviews/2026-09-17-v7-stock-cash-ledger.
 compiles 4,337 entitlements, retains receivables separately from spendable cash
 and verifies a funded captured AAPL purchase against the reviewed 2022 settlement
 calendar. Remaining settlement years and 55 excluded cash events stay open.
+[Ten finite split reviews](docs/reviews/2026-09-17-v7-reviewed-splits.md) now bring
+the totals to 4,491 actions and 586,840 admitted history sessions. Actual feature
+boundaries and funded TSLA stock accounting/mark checks pass; open-option split
+transitions still require exact deliverable evidence.
 This advances action compilation; it does not close identity, complex-action,
 no-event or held-position requirements.
 

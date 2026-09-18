@@ -1,0 +1,346 @@
+{
+  "schema": "v7-finite-dividend-split-reviews-v1",
+  "scope": "Exact ten provider groups only; no global stock_dividend remapping or held-position admission",
+  "reviews": [
+    {
+      "schema": "v7-reviewed-same-share-split-v1",
+      "symbol": "GOOG",
+      "effective_date": "2022-07-18",
+      "security_id": "BBG009S3NB30",
+      "new_shares_per_old_share": "20",
+      "conclusion": "same_share_class_forward_split",
+      "share_class": "Class C common shares",
+      "other_security_entitlement": false,
+      "cash_entitlement": 0,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "splits",
+          "action_id": "Eb6f05733df42d4fad66e8e05b1f55e14d12e8faf43e5768eba76e102c11133e6",
+          "record_sha256": "8118fd3839e34ae59c212c914be72b4d6fbca10d30a2606442f86b433020ed9f"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "forward_splits",
+          "action_id": "2bd887c4-9bfa-4ea6-8211-d8ff4ae00dc3",
+          "record_sha256": "1ce2c5f2aab5eda9ef8c41a9ad5dd98d023d5feb2a70b287db3dd0efb4cc5981"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-split-notices-20260917/goog-2022-split",
+          "receipt_sha256": "df9ac6644c5b6bd8cf2a92c3d174135a3c99779b4e23afdd21a2face622d8377",
+          "payload_sha256": "9976e0170170b913e3639335aad8d6823fe1464dbfcc75844a9ee4a0ccdd6d9b",
+          "publication_available_at": "2022-06-07T00:00:00-04:00",
+          "review": "Dated 2022-06-06: 20-for-1 split in the same Class C common shares; split-adjusted trading starts 2022-07-18. Total shares include the original share. No other security or cash is part of this split. Publication conservatively bounded at following New York midnight. Option contract terms and settlement delivery are outside this review."
+        }
+      ]
+    },
+    {
+      "schema": "v7-reviewed-same-share-split-v1",
+      "symbol": "GOOGL",
+      "effective_date": "2022-07-18",
+      "security_id": "BBG009S39JX6",
+      "new_shares_per_old_share": "20",
+      "conclusion": "same_share_class_forward_split",
+      "share_class": "Class A common shares",
+      "other_security_entitlement": false,
+      "cash_entitlement": 0,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "splits",
+          "action_id": "E75f0e6c8145d353f2226725ab925f972bcd3f5d050116c4318aba162466c269c",
+          "record_sha256": "23e793334e21d00d26da15b434fefc0533004182f65023b1da47a386d0a38901"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "forward_splits",
+          "action_id": "9fde6185-2545-454f-a181-7a81d7c94c0d",
+          "record_sha256": "bfa3207aca8faeea2e9296bedb570fd2e3d9273175561348dd9ef43a97ddd028"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-split-notices-20260917/googl-2022-split",
+          "receipt_sha256": "6abb5c24b60689216d8361fe2daa81432331d350fe1f7bb7b1bbedda1a3ec038",
+          "payload_sha256": "01396f0a4aab5146c9242e2e8fdfa82a8c8cdbb387070c52712349be1f645982",
+          "publication_available_at": "2022-06-07T00:00:00-04:00",
+          "review": "Dated 2022-06-06: 20-for-1 split in the same Class A common shares; split-adjusted trading starts 2022-07-18. Total shares include the original share. No other security or cash is part of this split. Publication conservatively bounded at following New York midnight. Option contract terms and settlement delivery are outside this review."
+        }
+      ]
+    },
+    {
+      "schema": "v7-reviewed-same-share-split-v1",
+      "symbol": "GME",
+      "effective_date": "2022-07-22",
+      "security_id": "BBG000BB5BF6",
+      "new_shares_per_old_share": "4",
+      "conclusion": "same_share_class_forward_split",
+      "share_class": "Class A common shares",
+      "other_security_entitlement": false,
+      "cash_entitlement": 0,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "splits",
+          "action_id": "E8f0e0ecc0daa1841f6ac276495004372ac48743e665ef73b787c8aac59d6a5e5",
+          "record_sha256": "a000e4b95171fd5400bb5dfa96f20cdd8718961595ec63e571d9089648d824f3"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "forward_splits",
+          "action_id": "dafbf910-e782-4a29-8a6b-feacaf27561f",
+          "record_sha256": "3a21f4e8611cada31547bcb323b4f106b8b95bb76c10346d20b47092e2397a4c"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-split-notices-20260917/gme-2022-split",
+          "receipt_sha256": "7a4a0662771c4c164a29892edb0e01e65d4b85eb16aa5129b7208c4ec020bf53",
+          "payload_sha256": "6073cc74de7da02e2c24a88ccc3128bc53b52957eb6d7d6cdd24ea14b8ec844a",
+          "publication_available_at": "2022-07-07T00:00:00-04:00",
+          "review": "Dated 2022-07-06: 4-for-1 split in the same Class A common shares; split-adjusted trading starts 2022-07-22. Total shares include the original share. No other security or cash is part of this split. Publication conservatively bounded at following New York midnight. Option contract terms and settlement delivery are outside this review."
+        }
+      ]
+    },
+    {
+      "schema": "v7-reviewed-same-share-split-v1",
+      "symbol": "TSLA",
+      "effective_date": "2022-08-25",
+      "security_id": "BBG000N9MNX3",
+      "new_shares_per_old_share": "3",
+      "conclusion": "same_share_class_forward_split",
+      "share_class": "common shares",
+      "other_security_entitlement": false,
+      "cash_entitlement": 0,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "splits",
+          "action_id": "Ea58e4c7785a1f9b68c3641137e7319bd7f7ff71d006d3132e0d0141b03860eb9",
+          "record_sha256": "fad6c95538a72e010710dde34542e83125fe7cad3b7f172b8877cda13d4d82af"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "forward_splits",
+          "action_id": "f8489167-4e4b-431d-a0be-6017ae1cf08a",
+          "record_sha256": "2dc1310cb6f627f49e7711b7746284864e50e22f90cd97e37d0decd47540bc81"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-split-notices-20260917/tsla-2022-split-occ",
+          "receipt_sha256": "9f5196bec8aca9fa4cd68d11c89069a3f5d749f82bddd9d6d762ff220c3aa83f",
+          "payload_sha256": "0c6a670b8e0df78a2cd756959fdfec4e4766da19c64f7398a52bda27a4b2bc5a",
+          "publication_available_at": "2022-08-06T00:00:00-04:00",
+          "review": "Dated 2022-08-05: 3-for-1 split in the same common shares; split-adjusted trading starts 2022-08-25. Total shares include the original share. No other security or cash is part of this split. Publication conservatively bounded at following New York midnight. Option contract terms and settlement delivery are outside this review."
+        }
+      ]
+    },
+    {
+      "schema": "v7-reviewed-same-share-split-v1",
+      "symbol": "PANW",
+      "effective_date": "2022-09-14",
+      "security_id": "BBG0014GJCT9",
+      "new_shares_per_old_share": "3",
+      "conclusion": "same_share_class_forward_split",
+      "share_class": "common shares",
+      "other_security_entitlement": false,
+      "cash_entitlement": 0,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "splits",
+          "action_id": "E37edc6178adbafc6e2df88a607c3b2845bd3428e9f21fa63165ba50673f5b9a1",
+          "record_sha256": "204a1d31a7401d6cd97e49cc64517d1b9ea0083edf3646bee89655904568526f"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "forward_splits",
+          "action_id": "f81faa1f-dc51-4e1c-9aa3-9f547ce3642d",
+          "record_sha256": "a65da154145e43968eaddb7b3abe125d36a57328a1d6ea0925d38abf8aaa19c0"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-split-notices-20260917/panw-2022-split-occ",
+          "receipt_sha256": "1038defd5eb0c2864ea74faaa7e18090c5aee740bbb888494c0d3e7b3a23e102",
+          "payload_sha256": "ea18cef1408059498193eb7dd8d6308e53427af96f66b4b1568c6102b214acbd",
+          "publication_available_at": "2022-08-25T00:00:00-04:00",
+          "review": "Dated 2022-08-24: 3-for-1 split in the same common shares; split-adjusted trading starts 2022-09-14. Total shares include the original share. No other security or cash is part of this split. Publication conservatively bounded at following New York midnight. Option contract terms and settlement delivery are outside this review."
+        }
+      ]
+    },
+    {
+      "schema": "v7-reviewed-same-share-split-v1",
+      "symbol": "APH",
+      "effective_date": "2024-06-12",
+      "security_id": "BBG000B9YJ35",
+      "new_shares_per_old_share": "2",
+      "conclusion": "same_share_class_forward_split",
+      "share_class": "Class A common shares",
+      "other_security_entitlement": false,
+      "cash_entitlement": 0,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "splits",
+          "action_id": "E7d5cac37281d02a111a2e67a3aee68902ef72b7dace4f24641110bc857062feb",
+          "record_sha256": "ff265cf9d4daa9ca8a90f4141c1f6b2baea6cd7825b5f4266cd0f9635d94ab33"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "forward_splits",
+          "action_id": "da0693c2-bf42-412c-9d30-10a80260ae6c",
+          "record_sha256": "13e6317f653f463d6e99cfbc2dea17ca63d5a0a037c0bc1ad035445d53c025ad"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-split-notices-20260917/aph-2024-split",
+          "receipt_sha256": "65d5e9f2b1b5c78872f79b45b66df3862fb8f4fdf3289c1fbaab63ee6bdb9102",
+          "payload_sha256": "bd8fe57185c3159db27fbf4e52131d46e0635a8c9af47d964b878848f3df34df",
+          "publication_available_at": "2024-05-24T00:00:00-04:00",
+          "review": "Dated 2024-05-23: 2-for-1 split in the same Class A common shares; split-adjusted trading starts 2024-06-12. Total shares include the original share. No other security or cash is part of this split. Publication conservatively bounded at following New York midnight. Option contract terms and settlement delivery are outside this review."
+        }
+      ]
+    },
+    {
+      "schema": "v7-reviewed-same-share-split-v1",
+      "symbol": "ORLY",
+      "effective_date": "2025-06-10",
+      "security_id": "BBG000BGYWY6",
+      "new_shares_per_old_share": "15",
+      "conclusion": "same_share_class_forward_split",
+      "share_class": "common shares",
+      "other_security_entitlement": false,
+      "cash_entitlement": 0,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "splits",
+          "action_id": "Efa38e176d2b5f89ee822cb3518470b5c55302533ffa9f234835434e9d4c7997a",
+          "record_sha256": "852f2b4fd43276ba0b60b3c10df9dd9e28d1b72af5c04309b7bd9e4e44c2fa31"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "forward_splits",
+          "action_id": "8b7809df-405c-4805-909b-ab8938206b15",
+          "record_sha256": "f0a6e47b5e9b546f1176070189ea5e71d6df9d8ed16bb37e4825c372e0464d3d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-split-notices-20260917/orly-2025-split",
+          "receipt_sha256": "4dfeb06c8c4066500be31fb28303d89642aeb2aaf7ac2e25d5ef79572f87837b",
+          "payload_sha256": "f9d6094f83ac9edf64450c87a9c60e5a3239a461a5f3cb8eef0230337e548265",
+          "publication_available_at": "2025-05-21T00:00:00-04:00",
+          "review": "Dated 2025-05-20: 15-for-1 split in the same common shares; split-adjusted trading starts 2025-06-10. Total shares include the original share. No other security or cash is part of this split. Publication conservatively bounded at following New York midnight. Option contract terms and settlement delivery are outside this review."
+        }
+      ]
+    },
+    {
+      "schema": "v7-reviewed-same-share-split-v1",
+      "symbol": "IBKR",
+      "effective_date": "2025-06-18",
+      "security_id": "BBG000LV0836",
+      "new_shares_per_old_share": "4",
+      "conclusion": "same_share_class_forward_split",
+      "share_class": "Class A common shares",
+      "other_security_entitlement": false,
+      "cash_entitlement": 0,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "splits",
+          "action_id": "Ed8c95c53489aadade28b9af48b126b877c643a69ab3a581ec22be7110830cdac",
+          "record_sha256": "d47b530f27a42dc5f20670e05dbe2b6c623c87a7217a5553b936e81403412440"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "forward_splits",
+          "action_id": "27de75cb-4a2c-4082-b74f-44511f6167ae",
+          "record_sha256": "f1697db9a8e51da11b0f6651ae1865a486739dff19f2fe0b3b64dd166a3e3d7b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-split-notices-20260917/ibkr-2025-split",
+          "receipt_sha256": "f88a7b5614cd30fd13c5af00b707dcf5f7838241503c00e6e8a54e5e69b018e9",
+          "payload_sha256": "a2b9c8d9d5b8bb08c7b2badc8923d4cd442d7f4d5751eff8d7e7dc42572c20f7",
+          "publication_available_at": "2025-04-25T00:00:00-04:00",
+          "review": "Dated 2025-04-24: 4-for-1 split in the same Class A common shares; split-adjusted trading starts 2025-06-18. Total shares include the original share. No other security or cash is part of this split. Publication conservatively bounded at following New York midnight. Option contract terms and settlement delivery are outside this review."
+        }
+      ]
+    },
+    {
+      "schema": "v7-reviewed-same-share-split-v1",
+      "symbol": "CRWD",
+      "effective_date": "2026-07-02",
+      "security_id": "BBG00BLYKS03",
+      "new_shares_per_old_share": "4",
+      "conclusion": "same_share_class_forward_split",
+      "share_class": "Class A common shares",
+      "other_security_entitlement": false,
+      "cash_entitlement": 0,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "splits",
+          "action_id": "E0f7a58bf74a4cc0965f939a47eb0a18c56803efbaaec2bcf16db5a8f5aad7dbd",
+          "record_sha256": "906393ee0b5d6664a52762886b2c0f7e682de9698490b5ce6c2c4584e6be1514"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "forward_splits",
+          "action_id": "040c6d69-f2b6-4cbe-8d51-9e93521ed754",
+          "record_sha256": "622ecc87a92de7a1e61053485e19b8e2c8e4e1841ad83292f264d18401750201"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-split-notices-20260917/crwd-2026-split-nasdaq",
+          "receipt_sha256": "6e0ffb9a69709822cbc251438d5d0f893e599e9a625deac9a3caa7601f40d63d",
+          "payload_sha256": "dc1cdac212a19000c92cbbc8a6122e3185b2b19085920c74cc38a15915c04410",
+          "publication_available_at": "2026-06-04T00:00:00-04:00",
+          "review": "Dated 2026-06-03: 4-for-1 split in the same Class A common shares; split-adjusted trading starts 2026-07-02. Total shares include the original share. No other security or cash is part of this split. Publication conservatively bounded at following New York midnight. Option contract terms and settlement delivery are outside this review."
+        }
+      ]
+    },
+    {
+      "schema": "v7-reviewed-same-share-split-v1",
+      "symbol": "APH",
+      "effective_date": "2026-09-03",
+      "security_id": "BBG000B9YJ35",
+      "new_shares_per_old_share": "2",
+      "conclusion": "same_share_class_forward_split",
+      "share_class": "Class A common shares",
+      "other_security_entitlement": false,
+      "cash_entitlement": 0,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "splits",
+          "action_id": "Ee98349b9b881855479540b1f8c4acf47e0d341178fb127ac0299631705d76a51",
+          "record_sha256": "3d35f0f25a7e7065c9036c2322538171d22b1a79e60155b0ac5c01317e4bbe57"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "forward_splits",
+          "action_id": "37718fa2-c8a7-437d-958a-d762bca815d5",
+          "record_sha256": "dfd7dfcaf8798f8a978b839786e2b70f10d06cfbc7e5523baa0f62335c3f2e4b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-split-notices-20260917/aph-2026-split",
+          "receipt_sha256": "b92e81e1d1c2f24cd521eb0a1f6d0fd525ee1dcc3df10a6a017e463b9da6e4f4",
+          "payload_sha256": "267faf76f843c48e16005e74e7441351e7dbe13f49a945eb74e53683f84cf1c0",
+          "publication_available_at": "2026-08-08T00:00:00-04:00",
+          "review": "Dated 2026-08-07: 2-for-1 split in the same Class A common shares; split-adjusted trading starts 2026-09-03. Total shares include the original share. No other security or cash is part of this split. Publication conservatively bounded at following New York midnight. Option contract terms and settlement delivery are outside this review."
+        }
+      ]
+    }
+  ]
+}

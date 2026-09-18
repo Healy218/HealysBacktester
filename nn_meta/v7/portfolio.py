@@ -56,6 +56,11 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
     for clock, batch in batches.items():
         event(clock, 2, 'decide', sorted(batch, key=lambda p: (-p['score'], p['proposal_id'])))
     if physical is not None:
+        from nn_meta.v7.stock_splits import stock_split_terms
+        for split in getattr(physical, 'splits', ()):
+            _,clock,_=stock_split_terms(split,physical.settlement_calendar.trading)
+            if clocks[0]<=clock<=clocks[-1]:
+                event(clock,-1,'stock_split',split)
         from nn_meta.v7.renames import validate_rename
         for rename in getattr(physical, 'renames', ()):
             validate_rename(rename)
@@ -87,7 +92,9 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
         clock, _, _, kind, payload = heapq.heappop(queue)
         if clock > clocks[-1]:
             break
-        if kind == 'cash_accrual':
+        if kind == 'stock_split':
+            ledger.apply_stock_split(payload, clock)
+        elif kind == 'cash_accrual':
             ledger.accrue_stock_cash(payload, clock)
         elif kind == 'cash_release':
             ledger.release_stock_cash(payload, clock)

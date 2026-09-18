@@ -83,6 +83,47 @@ class PhysicalLedger(CashLedger):
         self.applied_stock_renames = set()
         self.cash_receivables = {}
         self.applied_cash_entitlements = set()
+        self.applied_stock_splits = set()
+
+    def apply_stock_split(self, event, clock):
+        """Change funded stock units without creating cash or option adjustments."""
+        from nn_meta.v7.stock_splits import stock_split_terms
+        event_id,effective,ratio=stock_split_terms(event,self.settlement_calendar.trading)
+        if (type(clock) is not int or clock!=effective or clock<self.last_clock
+                or event_id in self.applied_stock_splits):
+            raise ValueError('Unique chronological split at its exact effective clock required')
+        sid,symbol=event['security_id'],event['symbol']
+        affected=[k for k,p in self.positions.items() if p['security_id']==sid]
+        if (any(self.positions[k]['phase'] not in ('stock','delivery_pending',
+                    'inventory_purchase_pending','stock_sale_pending')
+                    or self.positions[k]['symbol']!=symbol for k in affected)
+                or any(s!=symbol and q for (s,i),q in self.shares.items() if i==sid)):
+            raise ValueError('Open options or another stock symbol need separate action evidence')
+        if any(e.get('security_id')==sid and e.get('stock_quantity_delta',0)
+                and e['sip_timestamp']==clock for e in self.events):
+            raise ValueError('Split must precede stock transactions at its effective clock')
+        owned=sum(Decimal(str(e.get('stock_quantity_delta',0))) for e in self.events
+            if e.get('security_id')==sid and e['sip_timestamp']<clock)
+        delta=owned*(Decimal(str(ratio))-1)
+        if owned<0 or not math.isfinite(float(delta)):
+            raise ValueError('Finite nonnegative funded split entitlement required')
+        for k in affected:
+            p=self.positions[k]
+            if p['phase']!='stock_sale_pending' and not math.isfinite(p['deliverable_shares']*ratio):
+                raise ValueError('Split quantity is unrepresentable')
+        quantity=self.shares.get((symbol,sid),0.)
+        if not math.isfinite(quantity*ratio):raise ValueError('Split inventory is unrepresentable')
+        self._event(event_id,clock,'stock_split',security_id=sid,symbol=symbol,
+            ratio=ratio,entitled_shares=float(owned),stock_quantity_delta=float(delta),
+            review_identity=event['review_identity'],evidence_identity=event['evidence_identity'])
+        if (symbol,sid) in self.shares:self.shares[symbol,sid]=quantity*ratio
+        for k in affected:
+            p=self.positions[k]
+            if p['phase']!='stock_sale_pending':
+                p['deliverable_shares']*=ratio
+                if k in self.commitments:self.commitments[k]['shares']*=ratio
+        self.applied_stock_splits.add(event_id)
+        return float(delta)
 
     def accrue_stock_cash(self, event, clock):
         """Record funded beneficial-share entitlement before ex-session trading."""
