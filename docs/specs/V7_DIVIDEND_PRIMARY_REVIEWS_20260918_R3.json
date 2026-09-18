@@ -1,0 +1,1345 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AMR",
+      "ex_date": "2022-12-14",
+      "security_id": "BBG00DGWV035",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "5.418",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2022-12-15",
+          "pay_date": "2023-01-03",
+          "cash_per_share": "0.418",
+          "terms_evidence_identity": "a9b4dc922138a55cd2d1886d4d2c48345673eccd070a3e5d11ada776857e0533"
+        },
+        {
+          "name": "primary-payment-2",
+          "record_date": "2022-12-15",
+          "pay_date": "2023-01-03",
+          "cash_per_share": "5",
+          "terms_evidence_identity": "a9b4dc922138a55cd2d1886d4d2c48345673eccd070a3e5d11ada776857e0533"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c9babb00-dec0-4877-bd58-868055c74ebb",
+          "record_sha256": "8945eba7c586f0e60ac2359da5a2a2973a14d2d23fbc1c9eb9e9c93fdd37e1e0"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0bb206b80476b16a7f0cce5eed31c72e5389b13e7ac80b042d8569ecf30143f4",
+          "record_sha256": "7c4c80a01e94daec0d7b67128e2f803edf5f071e36c4a2e398b171d4b21384a6"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E8bb89fb39dc3d3a61c3784786ba310a6af13d02f561c9520b05624a3530ca640",
+          "record_sha256": "3adb243620fb730657fb4f30d1c37b2cb0739fa661894b9fe971e195abac9353"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/amr-dividend-feed",
+          "receipt_sha256": "92f1fcc47c7d0fa26fcf9485d9c49620688acab76c7c3789c8170653cd9ce2ac",
+          "payload_sha256": "4e615510debbeb6f99ccf503fa2a122bd7b90a027f342fd0e6a921d2444f5e8c",
+          "source_rows": [
+            {
+              "record_date": "2022-12-15",
+              "pay_date": "2023-01-03",
+              "cash_per_share": "0.418",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "11/04/2022 00:00:00",
+                "DividendAmount": 0.418,
+                "ExDate": "12/14/2022 00:00:00",
+                "PayDate": "01/03/2023 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "12/15/2022 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            },
+            {
+              "record_date": "2022-12-15",
+              "pay_date": "2023-01-03",
+              "cash_per_share": "5",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "11/04/2022 00:00:00",
+                "DividendAmount": 5,
+                "ExDate": "12/14/2022 00:00:00",
+                "PayDate": "01/03/2023 00:00:00",
+                "PaymentFrequency": "Other",
+                "RecordDate": "12/15/2022 00:00:00",
+                "Type": "ExtraDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "fe90217144844c2e6f1f522d60705d33e5484c8ca0dfa41194600d80305a6df1",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HL",
+      "ex_date": "2022-05-24",
+      "security_id": "BBG000BL5W86",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00625",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2022-05-25",
+          "pay_date": "2022-06-10",
+          "cash_per_share": "0.00625",
+          "terms_evidence_identity": "c90417803cdef4b2a049ed4dbd0d1fc571f2d365dbb319890c5f0d7caf68136b"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "986b140b-ed13-41c6-a0fe-11a0de69a76f",
+          "record_sha256": "4f11fd3714fae749dcfaf1886be861bc74a802f8ebf805a8b82df37e7645742b"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b777fca0-fe4f-4325-aa82-09134749e688",
+          "record_sha256": "b82a9ad59efe4116c4af6843ca0579bedea7bf095704b0319dfd157b4df3e417"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0cf90e5f39b3f2a4169738e77a6877684b897b1deef899bd912755b6048947c1",
+          "record_sha256": "34c7351f02a31abb5bb6ab8bc9b5778d1dc027dfc10c51170758da3275132861"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hl-dividend-feed",
+          "receipt_sha256": "60523fddff71fec26ba909e005d7112901286ecae7a83d261b4cbbd89adc5296",
+          "payload_sha256": "415dea1581ddb76505a96381fcce4dea2b03905151e60fd4d106a6ec7ef5592e",
+          "source_rows": [
+            {
+              "record_date": "2022-05-25",
+              "pay_date": "2022-06-10",
+              "cash_per_share": "0.00625",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "05/10/2022 00:00:00",
+                "DividendAmount": 0.00625,
+                "ExDate": "05/24/2022 00:00:00",
+                "PayDate": "06/10/2022 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "05/25/2022 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "2f463609f362c4169a6a7a404500b03bfce00b4c6a96d5673254af774b885aa0",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HL",
+      "ex_date": "2022-08-18",
+      "security_id": "BBG000BL5W86",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00625",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2022-08-19",
+          "pay_date": "2022-09-02",
+          "cash_per_share": "0.00625",
+          "terms_evidence_identity": "7366ffb1c2d6cec469c09dc470e6836d605d0b9fa3c6a735dfb0e9b1ce0e9ee6"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "43f92ba5-5341-4435-b948-24087a06ae2a",
+          "record_sha256": "b11e17214ac81bc9157826960fe3843099bb757ce0f63805bf64535520934719"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "67be9977-f440-456b-96c0-75b320ad8c04",
+          "record_sha256": "8fe9c5b4e44b6fe976a96afc7cf7e6097876616d6bd1564a15895a934bd76e05"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E8a64f51d343370c62f7ff02026f42f68f01520d79b33e7598c62d881abf81507",
+          "record_sha256": "672ce32bdb0ca33ab47941cf983bd530c53a38f3777c2e94750cf522383f612b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hl-dividend-feed",
+          "receipt_sha256": "60523fddff71fec26ba909e005d7112901286ecae7a83d261b4cbbd89adc5296",
+          "payload_sha256": "415dea1581ddb76505a96381fcce4dea2b03905151e60fd4d106a6ec7ef5592e",
+          "source_rows": [
+            {
+              "record_date": "2022-08-19",
+              "pay_date": "2022-09-02",
+              "cash_per_share": "0.00625",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "08/04/2022 00:00:00",
+                "DividendAmount": 0.00625,
+                "ExDate": "08/18/2022 00:00:00",
+                "PayDate": "09/02/2022 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "08/19/2022 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "be1f4170e8344828374dc6b56425561fc8cc09142548b65247d53074e7244ed1",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HL",
+      "ex_date": "2023-03-08",
+      "security_id": "BBG000BL5W86",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00625",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2023-03-09",
+          "pay_date": "2023-03-24",
+          "cash_per_share": "0.00625",
+          "terms_evidence_identity": "42cd3f05aa0ce7d259320a49eb321e7f35aa1663f78748b50d43e1d48a57e139"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9561cb14-ee5a-4193-aa90-d4942ff4a0dd",
+          "record_sha256": "daa7b757019b0931135216f5ded1fd3c8b8aecb9f13a5740d07841d6f3e7a6f2"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e3538787-f75d-4904-87c9-e2aa54591743",
+          "record_sha256": "914225eeb2f30b2479dec1b644effc469e583fcc12b26ac216d559bcb0e9ae22"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7101fc5210c7b18e0fa23e2f65cce96bd039545dd3c8aebf84e9dfc270c67f82",
+          "record_sha256": "60856e339e101f791b4bee48305cc7206d9aef6236242ab99b634d019e335517"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hl-dividend-feed",
+          "receipt_sha256": "60523fddff71fec26ba909e005d7112901286ecae7a83d261b4cbbd89adc5296",
+          "payload_sha256": "415dea1581ddb76505a96381fcce4dea2b03905151e60fd4d106a6ec7ef5592e",
+          "source_rows": [
+            {
+              "record_date": "2023-03-09",
+              "pay_date": "2023-03-24",
+              "cash_per_share": "0.00625",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "02/15/2023 00:00:00",
+                "DividendAmount": 0.00625,
+                "ExDate": "03/08/2023 00:00:00",
+                "PayDate": "03/24/2023 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "03/09/2023 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "468471e2f9c78f8a49b1a40ab8ef993aa9b1d4f467dd89fc62bbf861129437d0",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HL",
+      "ex_date": "2023-05-19",
+      "security_id": "BBG000BL5W86",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00625",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2023-05-22",
+          "pay_date": "2023-06-09",
+          "cash_per_share": "0.00625",
+          "terms_evidence_identity": "1efbb92701218f1a3fe43920a84861a64b3134fa50777325277a2e56752f8a67"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "a11d01b4-f02c-4783-97da-699979a85212",
+          "record_sha256": "f9757b7faa390060be12d1dbce98708c0d912c9fb299b89f09c0c7050e5de1f1"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E623b08060b32f37bf4b4520b032edbf6445c071cea1eab43e1f0a5829f8a0790",
+          "record_sha256": "09ba9b01b4394692e6ac3ee9bdb2224f3ee7419f2b009253f76f600dca672398"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hl-dividend-feed",
+          "receipt_sha256": "60523fddff71fec26ba909e005d7112901286ecae7a83d261b4cbbd89adc5296",
+          "payload_sha256": "415dea1581ddb76505a96381fcce4dea2b03905151e60fd4d106a6ec7ef5592e",
+          "source_rows": [
+            {
+              "record_date": "2023-05-22",
+              "pay_date": "2023-06-09",
+              "cash_per_share": "0.00625",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "05/10/2023 00:00:00",
+                "DividendAmount": 0.00625,
+                "ExDate": "05/19/2023 00:00:00",
+                "PayDate": "06/09/2023 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "05/22/2023 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "16c1110a89a8d3711e9752659536d35cd29ec26a65597dc535fc4d5ea84cf9f8",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HL",
+      "ex_date": "2023-08-23",
+      "security_id": "BBG000BL5W86",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00625",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2023-08-24",
+          "pay_date": "2023-09-07",
+          "cash_per_share": "0.00625",
+          "terms_evidence_identity": "64f335d0d9ef0ac6b8a3c1006955f618d9155302605f041c02a8517778e0832c"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fec8676d-3745-47cf-9132-e69f9e413e05",
+          "record_sha256": "6583bb1326d406bfc3804ffd967dae2902c50858856d4b26ff8e9a4eb20a2b71"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E32e48579a35a9077dd977b177eec4064b5d297ffe7a9d7ca4f3190aa1a98fb94",
+          "record_sha256": "8343d16a36fe69ce09ce5d20762c61275f8ac32a7dfcf3f1b9059b853d4bcc94"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hl-dividend-feed",
+          "receipt_sha256": "60523fddff71fec26ba909e005d7112901286ecae7a83d261b4cbbd89adc5296",
+          "payload_sha256": "415dea1581ddb76505a96381fcce4dea2b03905151e60fd4d106a6ec7ef5592e",
+          "source_rows": [
+            {
+              "record_date": "2023-08-24",
+              "pay_date": "2023-09-07",
+              "cash_per_share": "0.00625",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "08/08/2023 00:00:00",
+                "DividendAmount": 0.00625,
+                "ExDate": "08/23/2023 00:00:00",
+                "PayDate": "09/07/2023 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "08/24/2023 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "599ca1103384549be8ba15048f9b77871f8ac4d1f597b21c23986663fff5bfc3",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HL",
+      "ex_date": "2023-11-22",
+      "security_id": "BBG000BL5W86",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00625",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2023-11-24",
+          "pay_date": "2023-12-07",
+          "cash_per_share": "0.00625",
+          "terms_evidence_identity": "eb44067b6013c640bb7dd598c6dc98216414efa793559472a2f9d5d4e391cb01"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "08dc2a8e-fc96-46a0-a5fd-f49ca955f40d",
+          "record_sha256": "0d67c8892413851623398165a3e039fdf3b68297fc6edfb6b1fc5de932895d5a"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "534e9096-6f39-4773-87b1-dc35cb11602d",
+          "record_sha256": "0a0c73a933e38c6a2dad4e738514c7420d46104cb99f7913b52dc65c7c475d9f"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E56a2a41a33e3a3ed42f73647774ee81e96a8b4e0d89c596ed892953b787fa8cb",
+          "record_sha256": "b60c339c995432254b2c68c1c677ee4f26a46bb32000b3945440325b98b7c6bf"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hl-dividend-feed",
+          "receipt_sha256": "60523fddff71fec26ba909e005d7112901286ecae7a83d261b4cbbd89adc5296",
+          "payload_sha256": "415dea1581ddb76505a96381fcce4dea2b03905151e60fd4d106a6ec7ef5592e",
+          "source_rows": [
+            {
+              "record_date": "2023-11-24",
+              "pay_date": "2023-12-07",
+              "cash_per_share": "0.00625",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "11/06/2023 00:00:00",
+                "DividendAmount": 0.00625,
+                "ExDate": "11/22/2023 00:00:00",
+                "PayDate": "12/07/2023 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "11/24/2023 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "0e63baf8ca58ff31539207fe45d2fbf768d09b61b695f4796a57155015510bdf",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HL",
+      "ex_date": "2024-03-11",
+      "security_id": "BBG000BL5W86",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00625",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2024-03-12",
+          "pay_date": "2024-03-25",
+          "cash_per_share": "0.00625",
+          "terms_evidence_identity": "de7ad871994db5c30f8f39be1c3450808b3391260eba8a8938c14069010ae06e"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "42c94dad-d1c2-4f05-a9f7-6c9228290aad",
+          "record_sha256": "d64c28ffc24921f5ac5adddeed30b919da065b2d9ef42b0fe59b823a5f720be7"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "588f2243-6969-47a7-95bf-4ee7babdac0d",
+          "record_sha256": "6fd4ae086533f7334cb9491b9e86dd7e977f5c7a2b571fcd4e98846f7057ac04"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E680eddd289a3cf008a255399e62c6edf2549e5aa11978bfb691ac19da9e18e09",
+          "record_sha256": "f921e56d11ffb16fa5c6cdff1ede84c56a3850b7cd3c0e2e72c48d9297e040df"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hl-dividend-feed",
+          "receipt_sha256": "60523fddff71fec26ba909e005d7112901286ecae7a83d261b4cbbd89adc5296",
+          "payload_sha256": "415dea1581ddb76505a96381fcce4dea2b03905151e60fd4d106a6ec7ef5592e",
+          "source_rows": [
+            {
+              "record_date": "2024-03-12",
+              "pay_date": "2024-03-25",
+              "cash_per_share": "0.00625",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "02/14/2024 00:00:00",
+                "DividendAmount": 0.00625,
+                "ExDate": "03/11/2024 00:00:00",
+                "PayDate": "03/25/2024 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "03/12/2024 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "dedab2af750fe9effd73a52936da10c21a78d3a66d33fa9edcbe5764a0fa5169",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HL",
+      "ex_date": "2024-05-23",
+      "security_id": "BBG000BL5W86",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00625",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2024-05-24",
+          "pay_date": "2024-06-11",
+          "cash_per_share": "0.00625",
+          "terms_evidence_identity": "12a59e2737814c4e86cd0e02fac00a8980cd19ceea55faf3327a81eec1cc9306"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "2a3b0047-c04f-4cc5-b3e8-a00498ce5a04",
+          "record_sha256": "9573e9e611f70dfc7ce72a9853a91a160e0c4cdfc31ad11784d0ee25bc2d5de8"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "dfe6204b-d823-45f4-a2ae-fa67ff7123a3",
+          "record_sha256": "fc0d9ab29d1fa211c4ee295eaf1b736dc3bb7777795cca73ffe67e5c2875345a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E927e0389dd314cf172c872c0d2644e9ace1b95790b09c804fe860f87f806cd5d",
+          "record_sha256": "dff202446ff272ce4f27b680d418cd9c7fb94fe50ec6a594f0d303325368472b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hl-dividend-feed",
+          "receipt_sha256": "60523fddff71fec26ba909e005d7112901286ecae7a83d261b4cbbd89adc5296",
+          "payload_sha256": "415dea1581ddb76505a96381fcce4dea2b03905151e60fd4d106a6ec7ef5592e",
+          "source_rows": [
+            {
+              "record_date": "2024-05-24",
+              "pay_date": "2024-06-11",
+              "cash_per_share": "0.00625",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "05/08/2024 00:00:00",
+                "DividendAmount": 0.00625,
+                "ExDate": "05/23/2024 00:00:00",
+                "PayDate": "06/11/2024 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "05/24/2024 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "34466f764c9242e306dd547cfda9f31088d66c4104f0590d2d8b55f911f113ae",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HL",
+      "ex_date": "2024-08-26",
+      "security_id": "BBG000BL5W86",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.01375",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2024-08-26",
+          "pay_date": "2024-09-05",
+          "cash_per_share": "0.01375",
+          "terms_evidence_identity": "5b4fc34b1eaea6ae5f4ff26667ec1d5b4273bd3a01d8e1af4f55ad9d9f3fead7"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "86392a3e-3431-4f9a-9018-fa139d5e5a6c",
+          "record_sha256": "8a27c03ed71afaffb6ede75c97f978384e24edd816fd7bacd0b54abf94fe1bb7"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "93d236e5-e324-4435-96c8-1b346917fb1c",
+          "record_sha256": "f83c0b6531e99ee4c9bf0261518fc4f2e1449841aedc8a687bbec51172d04aec"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E19ca74ca5d944185340c78bb65860680e2c5226955edb917ef7eca7fa5264ce0",
+          "record_sha256": "763309b18acbd6d8b281dde9440f0516a0681c18bb5a806af7df28f9966d8eb4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hl-dividend-feed",
+          "receipt_sha256": "60523fddff71fec26ba909e005d7112901286ecae7a83d261b4cbbd89adc5296",
+          "payload_sha256": "415dea1581ddb76505a96381fcce4dea2b03905151e60fd4d106a6ec7ef5592e",
+          "source_rows": [
+            {
+              "record_date": "2024-08-26",
+              "pay_date": "2024-09-05",
+              "cash_per_share": "0.01375",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "08/06/2024 00:00:00",
+                "DividendAmount": 0.01375,
+                "ExDate": "08/26/2024 00:00:00",
+                "PayDate": "09/05/2024 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "08/26/2024 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "6dcf7f61abfbd3eed862fabb55ef9cb01a79b580f92a1850971d77545d162d1c",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HL",
+      "ex_date": "2024-11-21",
+      "security_id": "BBG000BL5W86",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.01375",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2024-11-21",
+          "pay_date": "2024-12-04",
+          "cash_per_share": "0.01375",
+          "terms_evidence_identity": "e3e154b490f2da0200f64d089c6b53067ba052a1998fecdd8cecc68175b2589c"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "db6602a1-bc02-42d6-948b-3b9afeb26a37",
+          "record_sha256": "fda2bcd5a7892e1c5a1ef7f6c1d1bd775eeaf5f8e574b8e0f62e9cd80e8e2f46"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e28e8c16-20be-4d43-af51-5310326f28ff",
+          "record_sha256": "0ca77e5c0432593afd29d19f29635fa5fe0c189a07e114835b0de4ad4883f64d"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec5c6f0486079ae5497faf43ba237b103c322a6558cce041e4fd8bc05d29485e1",
+          "record_sha256": "d5b143da344b7238c7da5b9133a57b050a3671d52df38e61cec57c8d30431602"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hl-dividend-feed",
+          "receipt_sha256": "60523fddff71fec26ba909e005d7112901286ecae7a83d261b4cbbd89adc5296",
+          "payload_sha256": "415dea1581ddb76505a96381fcce4dea2b03905151e60fd4d106a6ec7ef5592e",
+          "source_rows": [
+            {
+              "record_date": "2024-11-21",
+              "pay_date": "2024-12-04",
+              "cash_per_share": "0.01375",
+              "source_row": {
+                "Code": null,
+                "Currency": "USD",
+                "DeclaredDate": "11/06/2024 00:00:00",
+                "DividendAmount": 0.01375,
+                "ExDate": "11/21/2024 00:00:00",
+                "PayDate": "12/04/2024 00:00:00",
+                "PaymentFrequency": "Quarterly",
+                "RecordDate": "11/21/2024 00:00:00",
+                "Type": "OrdinaryDividend"
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "7679b79a0b89bbf41c1a903c847b344eb4b4ec4c388c4168837d322077d50425",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PBR",
+      "ex_date": "2023-11-22",
+      "security_id": "BBG000BS6FX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.5500111",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2023-11-24",
+          "pay_date": "2024-03-27",
+          "cash_per_share": "0.2742494",
+          "terms_evidence_identity": "d699f648a312bc0d0036e9894300f9706e5a7f28eed71daa01fbd4475ebca3fa"
+        },
+        {
+          "name": "primary-payment-2",
+          "record_date": "2023-11-24",
+          "pay_date": "2024-02-27",
+          "cash_per_share": "0.1760265",
+          "terms_evidence_identity": "d699f648a312bc0d0036e9894300f9706e5a7f28eed71daa01fbd4475ebca3fa"
+        },
+        {
+          "name": "primary-payment-3",
+          "record_date": "2023-11-24",
+          "pay_date": "2024-02-27",
+          "cash_per_share": "0.0997352",
+          "terms_evidence_identity": "d699f648a312bc0d0036e9894300f9706e5a7f28eed71daa01fbd4475ebca3fa"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "28e7bdc8-e3e2-4dd3-ab29-2f8c63d5f467",
+          "record_sha256": "025f98d92ba1c15f891aad5cd2c581b5534d54657a2e515cd2a1f3eac41c5b17"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3c1a71b6-8032-4cee-b220-6c04f5d69659",
+          "record_sha256": "357e86ad303c9b52c58388753beb10f403dc0a78285f98a7cf2bc90d1c67a653"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3e18b45a-f1f9-411b-a014-8dfd08f18520",
+          "record_sha256": "80cd0a903beacbe0d0faed57d035db6990cec9467e5df9f74662558925eabfa2"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "56680047-dd57-4018-bba7-1f44370ef23b",
+          "record_sha256": "351b0a1d0dbf85ac48a6e260457ca93d26f13e5abe427212b6c1d715092f2612"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "84dc1d06-b717-4732-baeb-fbb1fdc005b8",
+          "record_sha256": "c24b43b7ff24b915bd490e0205cb6f42cf60f5c2b9871510d27e3f922fefc86c"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e66271ee-5f6c-489d-aca4-25d6f9e38796",
+          "record_sha256": "8a6b82f4f06929e46164cccd109c4d1613fbaf9cef1ad4af9835ddd4f4b476ad"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E958031c1a4b13ad588f60e3e03859adadc8a5eba86c21081dd5d0c2ff62ae7fa",
+          "record_sha256": "00aadeb121dfd359d9de9d13fc1410e01d7374d358ac41b1fb00be103b623931"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eecb7be2da911e126b2b1db156d5eef69fc824223e52d7e0f43074048d372cb0e",
+          "record_sha256": "66aeb6f260c32720322fd62799b05de24382ff5507039ae12f5b9ea6253055a4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pbr-jpm-dividends",
+          "receipt_sha256": "6e8654aa6a54592ee0ba00c8f59ccc59d5db1f2b0dc99f9c556cc24eae22c8f9",
+          "payload_sha256": "cf2785fbb9c93fee44160bfac956c602f761500b6b8d01547147019a44b2dde0",
+          "source_rows": [
+            {
+              "record_date": "2023-11-24",
+              "pay_date": "2024-03-27",
+              "cash_per_share": "0.2742494",
+              "source_row": {
+                "workId": "33352",
+                "sortOrder": 33,
+                "sequenceNo": 10,
+                "announcementDate": "2024-03-21T00:00:00.000Z",
+                "recordDate": "2023-11-24T00:00:00.000Z",
+                "paymentDate": "2024-03-27T00:00:00.000Z",
+                "ratio": "1:2",
+                "ratePerDr": 0.2742494,
+                "withHoldingAmount": 0.000954,
+                "taxReclaimFee": 0,
+                "dividendFee": 0.005,
+                "finalDivRatePerDr": 0.2682954,
+                "status": "Final",
+                "notices": {
+                  "pdf": "2aed122a6c224d5cb22e075fae93c5c5",
+                  "xbrl": "e430e90b1fac4589ad24503a180fd139"
+                },
+                "underlying": {
+                  "recordDate": "2023-11-21T00:00:00.000Z",
+                  "paymentDate": "2024-03-20T00:00:00.000Z",
+                  "currency": "BRL",
+                  "currencyPerDr": 1.3772868,
+                  "exchangeDate": "2024-03-20T00:00:00.000Z",
+                  "finalExchangeRate": 5.022024
+                }
+              }
+            },
+            {
+              "record_date": "2023-11-24",
+              "pay_date": "2024-02-27",
+              "cash_per_share": "0.1760265",
+              "source_row": {
+                "workId": "33353",
+                "sortOrder": 34,
+                "sequenceNo": 9,
+                "announcementDate": "2024-02-23T00:00:00.000Z",
+                "recordDate": "2023-11-24T00:00:00.000Z",
+                "paymentDate": "2024-02-27T00:00:00.000Z",
+                "ratio": "1:2",
+                "ratePerDr": 0.1760265,
+                "withHoldingAmount": 0.026404,
+                "taxReclaimFee": 0,
+                "dividendFee": 0,
+                "finalDivRatePerDr": 0.1496225,
+                "status": "Amended Final",
+                "notices": {
+                  "pdf": "ac33fa322e5e421a934433cbfd19943a",
+                  "xbrl": "f56a551fdd3b4cfe97a11164d5cb1e99"
+                },
+                "underlying": {
+                  "recordDate": "2023-11-21T00:00:00.000Z",
+                  "paymentDate": "2024-02-20T00:00:00.000Z",
+                  "currency": "BRL",
+                  "currencyPerDr": 0.871451,
+                  "exchangeDate": "2024-02-20T00:00:00.000Z",
+                  "finalExchangeRate": 4.9506816
+                }
+              }
+            },
+            {
+              "record_date": "2023-11-24",
+              "pay_date": "2024-02-27",
+              "cash_per_share": "0.0997352",
+              "source_row": {
+                "workId": "33349",
+                "sortOrder": 35,
+                "sequenceNo": 9,
+                "announcementDate": "2024-02-21T00:00:00.000Z",
+                "recordDate": "2023-11-24T00:00:00.000Z",
+                "paymentDate": "2024-02-27T00:00:00.000Z",
+                "ratio": "1:2",
+                "ratePerDr": 0.0997352,
+                "withHoldingAmount": 0.0002176,
+                "taxReclaimFee": 0,
+                "dividendFee": 0.005,
+                "finalDivRatePerDr": 0.0945176,
+                "status": "Final",
+                "notices": {
+                  "pdf": "9c348afcd50d452b827175ea46ec1a74",
+                  "xbrl": "5adce68b168d48ef9cbbdde46a727473"
+                },
+                "underlying": {
+                  "recordDate": "2023-11-21T00:00:00.000Z",
+                  "paymentDate": "2024-02-20T00:00:00.000Z",
+                  "currency": "BRL",
+                  "currencyPerDr": 0.4937573,
+                  "exchangeDate": "2024-02-20T00:00:00.000Z",
+                  "finalExchangeRate": 4.9506816
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "234a4fc825c0c7585fc35d59d3b7dc3420678d8c472895d89ee9abec49562703",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PBR",
+      "ex_date": "2024-04-26",
+      "security_id": "BBG000BS6FX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.4361608",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2024-04-29",
+          "pay_date": "2024-06-27",
+          "cash_per_share": "0.2124608",
+          "terms_evidence_identity": "994a0e61c7bee72c0734507109eeb168005854b1cd4b1842a19932e607c39f14"
+        },
+        {
+          "name": "primary-payment-2",
+          "record_date": "2024-04-29",
+          "pay_date": "2024-05-28",
+          "cash_per_share": "0.2237",
+          "terms_evidence_identity": "994a0e61c7bee72c0734507109eeb168005854b1cd4b1842a19932e607c39f14"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "026d9147-04d1-4d25-b410-ff5267a55d72",
+          "record_sha256": "9e8e0d0e43be0d0d0e9d2b88a6410bc6d2ca4e49434d410ec89b96071975104c"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "02aa187e-699d-4876-b7f0-b30a4070ea3f",
+          "record_sha256": "b02ce765352fac1f91ba6d0accaac99b9d5c63a36e423ba92d4eca976306564e"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "312d6b0f-270a-4ee6-ad0b-372b29510800",
+          "record_sha256": "f7c4e816d920b368eed981c4df0779e7129d70723898cf16b9573302db865021"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "4df333f4-9a66-4fa6-aa00-cd99ab7ee974",
+          "record_sha256": "df80b2e94447cb2348f788c4207e5ab8e9e02d114ba0e75868aa29b28d274cbe"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4678f72e40558132fdfcdb75a14eb2960e29f89b7629b8c68dabc2f28eb911b6",
+          "record_sha256": "bebd99ad940b748800decf52a510450850311ac07866884f9dea8a707dbf86fc"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pbr-jpm-dividends",
+          "receipt_sha256": "6e8654aa6a54592ee0ba00c8f59ccc59d5db1f2b0dc99f9c556cc24eae22c8f9",
+          "payload_sha256": "cf2785fbb9c93fee44160bfac956c602f761500b6b8d01547147019a44b2dde0",
+          "source_rows": [
+            {
+              "record_date": "2024-04-29",
+              "pay_date": "2024-06-27",
+              "cash_per_share": "0.2124608",
+              "source_row": {
+                "workId": "35366",
+                "sortOrder": 29,
+                "sequenceNo": 11,
+                "announcementDate": "2024-07-08T00:00:00.000Z",
+                "recordDate": "2024-04-29T00:00:00.000Z",
+                "paymentDate": "2024-06-27T00:00:00.000Z",
+                "ratio": "1:2",
+                "ratePerDr": 0.2124608,
+                "withHoldingAmount": 0.0015086,
+                "taxReclaimFee": 0,
+                "dividendFee": 0.005,
+                "finalDivRatePerDr": 0.2059522,
+                "status": "Amended Final",
+                "notices": {
+                  "pdf": "9bcc1d1b7472409d8bb79c2db1e8ffc6",
+                  "xbrl": "cf5fdd3d85e141be9124a05b1ffa2ec7"
+                },
+                "underlying": {
+                  "recordDate": "2024-04-25T00:00:00.000Z",
+                  "paymentDate": "2024-06-20T00:00:00.000Z",
+                  "currency": "BRL",
+                  "currencyPerDr": 1.1549902,
+                  "exchangeDate": "2024-06-20T00:00:00.000Z",
+                  "finalExchangeRate": 5.4362508
+                }
+              }
+            },
+            {
+              "record_date": "2024-04-29",
+              "pay_date": "2024-05-28",
+              "cash_per_share": "0.2237",
+              "source_row": {
+                "workId": "35356",
+                "sortOrder": 32,
+                "sequenceNo": 8,
+                "announcementDate": "2024-05-21T00:00:00.000Z",
+                "recordDate": "2024-04-29T00:00:00.000Z",
+                "paymentDate": "2024-05-28T00:00:00.000Z",
+                "ratio": "1:2",
+                "ratePerDr": 0.2237,
+                "withHoldingAmount": 0.0013111,
+                "taxReclaimFee": 0,
+                "dividendFee": 0.005,
+                "finalDivRatePerDr": 0.2173889,
+                "status": "Final",
+                "notices": {
+                  "pdf": "0fc210a9fbd940de906482c5ab6089ee",
+                  "xbrl": "f7f6af616ceb4a19927c429ac243488a"
+                },
+                "underlying": {
+                  "recordDate": "2024-04-25T00:00:00.000Z",
+                  "paymentDate": "2024-05-20T00:00:00.000Z",
+                  "currency": "BRL",
+                  "currencyPerDr": 1.1450568,
+                  "exchangeDate": "2024-05-20T00:00:00.000Z",
+                  "finalExchangeRate": 5.118717
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "3bc4c171d052e53056fd74e3a36034af118d2253fcd674aa3051a579726f7dda",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PBR",
+      "ex_date": "2024-05-03",
+      "security_id": "BBG000BS6FX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.6735787",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2024-05-06",
+          "pay_date": "2024-06-27",
+          "cash_per_share": "0.3281108",
+          "terms_evidence_identity": "ddf08e994fd553916bb94cb47b9a4b54a1804316c2601a2e2e9baa8c80fc4496"
+        },
+        {
+          "name": "primary-payment-2",
+          "record_date": "2024-05-06",
+          "pay_date": "2024-05-28",
+          "cash_per_share": "0.3454679",
+          "terms_evidence_identity": "ddf08e994fd553916bb94cb47b9a4b54a1804316c2601a2e2e9baa8c80fc4496"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "2a39c213-0fe0-46eb-b233-7c7512fa0c3d",
+          "record_sha256": "65ac45a696774bae3602367548efc98004cab2a91a642139ca56a991f4426017"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "2b854c40-8ed1-49a7-8d6c-6c85a1fdc6ae",
+          "record_sha256": "f707b24365d4ca48b19c39fa5b66ff2978723f3cbe1b689b2877fb667ef61e2d"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "a65366e3-f1a6-4da5-895c-312c97804300",
+          "record_sha256": "e84b0d616b72a35ffe862b7f867dd35c13ab6fd333cbd634eaed65f5bfc9ef53"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b1f2d48d-0f52-49c4-bcef-c249f401533e",
+          "record_sha256": "c29469e64d092f50af17a3ab51d7feef7b5f95465255a8f3ca7f9fe6b2b884a7"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E08e0e50ec6df360cac5478c6ca1f38ad32ffdeaae04b0a34c4c3bb2f9b2fb279",
+          "record_sha256": "06b5a61daffc65ef3be87d65d4a10bd3ba45358570701c91a9b17e87ac3bbf7b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pbr-jpm-dividends",
+          "receipt_sha256": "6e8654aa6a54592ee0ba00c8f59ccc59d5db1f2b0dc99f9c556cc24eae22c8f9",
+          "payload_sha256": "cf2785fbb9c93fee44160bfac956c602f761500b6b8d01547147019a44b2dde0",
+          "source_rows": [
+            {
+              "record_date": "2024-05-06",
+              "pay_date": "2024-06-27",
+              "cash_per_share": "0.3281108",
+              "source_row": {
+                "workId": "36400",
+                "sortOrder": 30,
+                "sequenceNo": 12,
+                "announcementDate": "2024-06-21T00:00:00.000Z",
+                "recordDate": "2024-05-06T00:00:00.000Z",
+                "paymentDate": "2024-06-27T00:00:00.000Z",
+                "ratio": "1:2",
+                "ratePerDr": 0.3281108,
+                "withHoldingAmount": 0.0023297,
+                "taxReclaimFee": 0,
+                "dividendFee": 0,
+                "finalDivRatePerDr": 0.3257811,
+                "status": "Final",
+                "notices": {
+                  "pdf": "4886fe50c782441986f596a7775711d0",
+                  "xbrl": "33629e9685b44cb49ff46ba6d36ed69a"
+                },
+                "underlying": {
+                  "recordDate": "2024-05-02T00:00:00.000Z",
+                  "paymentDate": "2024-06-20T00:00:00.000Z",
+                  "currency": "BRL",
+                  "currencyPerDr": 1.7836926,
+                  "exchangeDate": "2024-06-20T00:00:00.000Z",
+                  "finalExchangeRate": 5.4362508
+                }
+              }
+            },
+            {
+              "record_date": "2024-05-06",
+              "pay_date": "2024-05-28",
+              "cash_per_share": "0.3454679",
+              "source_row": {
+                "workId": "36401",
+                "sortOrder": 31,
+                "sequenceNo": 11,
+                "announcementDate": "2024-05-22T00:00:00.000Z",
+                "recordDate": "2024-05-06T00:00:00.000Z",
+                "paymentDate": "2024-05-28T00:00:00.000Z",
+                "ratio": "1:2",
+                "ratePerDr": 0.3454679,
+                "withHoldingAmount": 0.0020248,
+                "taxReclaimFee": 0,
+                "dividendFee": 0,
+                "finalDivRatePerDr": 0.3434431,
+                "status": "Amended Final",
+                "notices": {
+                  "pdf": "a42baeb7f3a24b49bfd1369b575c3d83",
+                  "xbrl": "fabddcc34e1b4368a51d6f4ab245f8ff"
+                },
+                "underlying": {
+                  "recordDate": "2024-05-02T00:00:00.000Z",
+                  "paymentDate": "2024-05-20T00:00:00.000Z",
+                  "currency": "BRL",
+                  "currencyPerDr": 1.7683521,
+                  "exchangeDate": "2024-05-20T00:00:00.000Z",
+                  "finalExchangeRate": 5.118717
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "3d9bc7e69df6254287306cb8b406d5bc9c8651569fb59d2b1304ad7d81985095",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "QQQ",
+      "ex_date": "2022-09-19",
+      "security_id": "BBG000BSWKH7",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.51856",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2022-09-20",
+          "pay_date": "2022-10-31",
+          "cash_per_share": "0.51856",
+          "terms_evidence_identity": "ea7cd709497ce6b926e0998d05649e0aabeaacd67507b381b79f06636673de36"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "1966d92d-c3ae-4da1-8daa-483789298533",
+          "record_sha256": "02495417126e10935ee5e37a49f3822df8a43b579446630f32ee72cdcf9322b1"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d0409c14-2b32-4cdb-9d5d-57a8a9a0818f",
+          "record_sha256": "b1669817baaff3c9d66f41dc5d1e4e55752d303b6cdf66e9aa1cbf5399d33ae7"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E6f3f74a5aa044588a936795fffb46115ddb6bf49932beac5d5a6457dd8c0800c",
+          "record_sha256": "7166feba8fdd5efd22ae61a1a743e4f66c68a2f190dc7b9e16dd2e5831c3f1d7"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/qqq-indexed-primary-history",
+          "receipt_sha256": "871d8ecae63dc3af03102db80cc0f966247dc05578aa555c7dc3aba396b0d00e",
+          "payload_sha256": "297b22eeda4e9b3d5f545cdabb5019493ee378092f6e23e068b1dfd96d53031f",
+          "source_rows": [
+            {
+              "record_date": "2022-09-20",
+              "pay_date": "2022-10-31",
+              "cash_per_share": "0.51856",
+              "source_row": "09/19/2022 | 09/20/2022 | 10/31/2022 | 0.51856"
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "1d8370a40ffa7e03f665c6a86e8ffec5d7183860f7b1f29caabbc41e839f7bac",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SHEL",
+      "ex_date": "2022-08-11",
+      "security_id": "BBG0147BN6G2",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.5",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2022-08-12",
+          "pay_date": "2022-09-20",
+          "cash_per_share": "0.5",
+          "terms_evidence_identity": "5202bfc62e7eea9aa5a7d2de16e62818530d1254bfad295ef8dd8b9523578333"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b3116db3-cab0-48b8-aa60-d0e8392e5224",
+          "record_sha256": "4466953dc80bdac3d471afb3a1a59afba8b21a4e3c55ecc48870e43984998e9c"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9ac34a90d6bc42023eb7d1e68921dad32c02ab5f28a03003ceddb0c0dbf8ff00",
+          "record_sha256": "f0a12402986d13b0ad893cb069c1a65263d78ef7f68c6bbeb9a3d85d3543a62f"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/shel-jpm-dividends",
+          "receipt_sha256": "bf101c64729e04521a84b84c75fe7b7d0e19b7f84788219b7d58518a83e12fe3",
+          "payload_sha256": "59adda3f1a85500455dbb8cdbb3bc2a375c479129be8979898ebb41984f9f8b8",
+          "source_rows": [
+            {
+              "record_date": "2022-08-12",
+              "pay_date": "2022-09-20",
+              "cash_per_share": "0.5",
+              "source_row": {
+                "workId": "24324",
+                "sortOrder": 17,
+                "sequenceNo": 8,
+                "announcementDate": "2022-09-12T00:00:00.000Z",
+                "recordDate": "2022-08-12T00:00:00.000Z",
+                "paymentDate": "2022-09-20T00:00:00.000Z",
+                "ratio": "1:2",
+                "ratePerDr": 0.5,
+                "withHoldingAmount": 0,
+                "taxReclaimFee": 0,
+                "dividendFee": 0,
+                "finalDivRatePerDr": 0.5,
+                "status": "Amended Final",
+                "notices": {
+                  "pdf": "b240a150c1324038821ef5cbd06a9364",
+                  "xbrl": "d36ef1fc12c8442db761a2f107098498"
+                },
+                "underlying": {
+                  "recordDate": "2022-08-12T00:00:00.000Z",
+                  "paymentDate": "2022-09-20T00:00:00.000Z",
+                  "currency": "USD",
+                  "currencyPerDr": 0.5,
+                  "finalExchangeRate": 1
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "642f9a1243e542edf2441093130cc65d6f96ba50edb66794f3762ce37b40a198",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.",
+      "amount_basis": "exact_primary_terms"
+    }
+  ]
+}

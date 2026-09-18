@@ -1,0 +1,26 @@
+from pathlib import Path
+from decimal import Decimal
+import json,sys
+import pandas as pd
+from nn_meta.v7.storage import identity,sha,verify
+
+work=json.loads(Path(sys.argv[1]+'/uncompiled.json').read_text())
+h=pd.read_parquet('nn_meta/validation/v7-security-history-20260917-gap-r2/history.parquet')
+facts=h[h.stock_ticker.notna()].set_index(['stock_ticker','source_date'])
+reviews=[]
+for t in json.loads(Path(sys.argv[2]).read_text()):
+ g=next(g for g in work if (g['symbol'],g['effective_date'])==(t['symbol'],t['ex']))
+ if t['date_basis']=='matching_original_provider_dates':
+  assert {r['provider'] for r in g['records']}=={'alpaca','massive'}
+  for field,key in [('record_date','record'),('pay_date','pay')]:
+   values={r[field] for r in g['records']};assert len(values)==1 and None not in values
+   t[key]=next(iter(values))
+ p=Path('nn_meta/data_v7/dividend-finish-20260918')/t['capture'];doc=verify(p)
+ ev=dict(capture=str(p),receipt_sha256=sha(p/'complete.json'),payload_sha256=doc['files']['response.bin'],source_terms=t)
+ evidence=[ev]
+ pays=[dict(name=name,record_date=t['record'],pay_date=t['pay'],cash_per_share=str(Decimal(amount)),terms_evidence_identity=identity(ev),date_basis=t['date_basis'],pay_date_qualifier=t.get('qualifier','stated_date')) for name,amount in zip(t['names'],t['amounts'],strict=True)]
+ refs=[{k:r[k] for k in ['provider','kind','action_id','record_sha256']} for r in g['records']]
+ rationale='Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. '+('Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates.' if t['date_basis']=='matching_original_provider_dates' else 'The retained primary notice/history supplies the record and nominal pay dates.')+' Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.'
+ reviews.append(dict(schema='v7-primary-dividend-resolution-v1',symbol=t['symbol'],ex_date=t['ex'],security_id=facts.loc[t['symbol'],t['ex']].security_id,currency='USD',cash_units='per_listed_share_or_unit',cash_per_share=str(sum((Decimal(p['cash_per_share']) for p in pays),Decimal(0))),publication_verified=False,payments=pays,replaces=refs,evidence=evidence,evidence_identity=identity(evidence),rationale=rationale,amount_basis='exact_primary_terms'))
+Path(sys.argv[3]).write_text(json.dumps(dict(schema='v7-primary-dividend-resolutions-v1',reviews=reviews),indent=2)+'\n')
+print(len(reviews))

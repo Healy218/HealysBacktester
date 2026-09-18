@@ -1,0 +1,293 @@
+{
+  "schema": "v7-finite-nominal-cash-date-reviews-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-1e905f86fb2976e80ce55b3e04a92fc30cbeb39d02eff8cd99b7f18a3c847558",
+      "compiled_source_identity": "51c4aec4c7ccb3c22b6b24ad145fb255cd603abfe113931070e7353ab733b961",
+      "symbol": "CMA",
+      "security_id": "BBG000C75N77",
+      "cash_per_share": "0.71",
+      "ex_date": "2023-09-14",
+      "record_date": "2023-09-15",
+      "pay_date": "2023-10-01",
+      "conclusion": "cash_distribution_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Primary source states record 2023-09-15 and nominal payment 2023-10-01 (stated_date); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b5e1179b-6dce-4770-9806-b236e3ca762b",
+          "record_sha256": "d0e945af35b4a828530b865ab31919f3c6a0573e60aeadbabe8e7c03b6fc812c"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9cac43b0b72a7146e3fb69f1f3a0a6a6e2e6d6f3e454fdd00d3d81853d8881d6",
+          "record_sha256": "47f1c53df63afd447b920c29ca4c2a9118636fffc54e8c4a8221ce258939edd1"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/cma-july-web",
+          "receipt_sha256": "eeacc3ad882284e44cc0f114c12890f952d5c5673d8a616b41a8b79b14a202d3",
+          "payload_sha256": "bf937b65fd4ff13ed81b43f02f91b194984f111dc6b88e5e7a8aed49b8fd4b65",
+          "review": "Primary source states record 2023-09-15 and nominal payment 2023-10-01 (stated_date); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting."
+        }
+      ],
+      "evidence_identity": "8bafd07bc1b10cb07b8e95a71d1c860f93e0a248b582561a2d474c3b47fa5aac",
+      "distribution_kind": "regular_cash",
+      "pay_date_qualifier": "stated_date",
+      "payment_model": "nominal_date_broker_posting_unverified",
+      "option_treatment_resolved": false
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-fe2ebfac5dceef027167332b4ac1de8691478658f54bf28961d74952e6fff08e",
+      "compiled_source_identity": "7c77ab35d2a9d600989ba81b0609b8248de6b9cc5f2d4a0078d32a97a940145c",
+      "symbol": "CMA",
+      "security_id": "BBG000C75N77",
+      "cash_per_share": "0.71",
+      "ex_date": "2023-12-14",
+      "record_date": "2023-12-15",
+      "pay_date": "2024-01-01",
+      "conclusion": "cash_distribution_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Primary source states record 2023-12-15 and nominal payment 2024-01-01 (stated_date); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3191d8d6-6450-4f3a-922e-fae8127a15ba",
+          "record_sha256": "b30ec626a255ef37a96e00499b5b735e5f53c7058bcdecfbbb3f72ed3a0f0d6f"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec91c80e136329155ace6e5be8dd41a9eb6a1bdc3fb083c65fd86874fda4e267b",
+          "record_sha256": "c17a0674a8f6dbe4b5c90d377a1baf8026cacd6d0ddd7ad372417f8eb4a105d9"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/cma-nov-web",
+          "receipt_sha256": "16e0aca2a09c2140f1c023ff0fe959c4635934a5f048a93534d9eb143596ecf9",
+          "payload_sha256": "c955140945b8d86dc963fb4ce83871eed14e85181d779281b0d69103d2f76938",
+          "review": "Primary source states record 2023-12-15 and nominal payment 2024-01-01 (stated_date); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting."
+        }
+      ],
+      "evidence_identity": "3da6c158946d7f638e95e07041b282143cc7aae5bf9028c37385ad1bbf791949",
+      "distribution_kind": "regular_cash",
+      "pay_date_qualifier": "stated_date",
+      "payment_model": "nominal_date_broker_posting_unverified",
+      "option_treatment_resolved": false
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-81a444262e304067d0557c9a812bd0c4edf8f49b2738fedbc5684df5d0393047",
+      "compiled_source_identity": "0115209aea2b02622bab57bbafea9fdaf16b8348571f24e615ecc31c53e106ec",
+      "symbol": "FIX",
+      "security_id": "BBG000BWN2Y9",
+      "cash_per_share": "0.2",
+      "ex_date": "2023-05-17",
+      "record_date": "2023-05-18",
+      "pay_date": "2023-05-29",
+      "conclusion": "cash_distribution_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Primary source states record 2023-05-18 and nominal payment 2023-05-29 (stated_date); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fe4f1252-b0c1-47d7-92db-f9a79abec614",
+          "record_sha256": "441df5be0ee1037771fd6c86f61a1d3b23d7b71564f71c7bba26cbcc83897a5a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eb9ab318e7b55f6de6beff0087019f33344eb958c63a97073423b8c581b1bd719",
+          "record_sha256": "8027a782b5fb3efda33b70c61ebcc5dd0209ebdb095545750fa120a30c037112"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/fix-web-extraction",
+          "receipt_sha256": "27eb14b80d472c808e67612a7343461f4905a5983d8343e70018a5ab03ef7407",
+          "payload_sha256": "12eef1b592a16ca1d3f7b83d72645fa28e3c50f791e808e35837fd00d95883a2",
+          "review": "Primary source states record 2023-05-18 and nominal payment 2023-05-29 (stated_date); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting."
+        }
+      ],
+      "evidence_identity": "c132bb94a2bd40a5b89560ef501d611200ef39db799cc726672be86e1fdde11b",
+      "distribution_kind": "regular_cash",
+      "pay_date_qualifier": "stated_date",
+      "payment_model": "nominal_date_broker_posting_unverified",
+      "option_treatment_resolved": false
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-f76fbcfe86394d3c0880b1a89aa691b42f42305960dae5772268676d3421fe42",
+      "compiled_source_identity": "62385893fb1cd233d57af6a3040a436f46b2d10828c7555c1c9394275b548d77",
+      "symbol": "QQQ",
+      "security_id": "BBG000BSWKH7",
+      "cash_per_share": "0.57345",
+      "ex_date": "2024-03-18",
+      "record_date": "2024-03-19",
+      "pay_date": "2024-04-30",
+      "conclusion": "cash_distribution_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Primary source states record 2024-03-19 and nominal payment 2024-04-30 (stated_date); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3c379973-c932-4341-a6dd-0764d28cb599",
+          "record_sha256": "37e939707dca45266305fbf93c07ebcbb14be2eff63592daed636aeba051613b"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea35122d002fb8d736dbeebd5b87762567ddddeffdcb3fbac33bf25195a0e29ea",
+          "record_sha256": "716038033257e4bec19a557d6a13adf83068750b1166194a2147ffeba133d863"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/qqq-indexed-primary-history",
+          "receipt_sha256": "871d8ecae63dc3af03102db80cc0f966247dc05578aa555c7dc3aba396b0d00e",
+          "payload_sha256": "297b22eeda4e9b3d5f545cdabb5019493ee378092f6e23e068b1dfd96d53031f",
+          "review": "Primary source states record 2024-03-19 and nominal payment 2024-04-30 (stated_date); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting."
+        }
+      ],
+      "evidence_identity": "e1f29617b2101299324f6a7a9c62cee56c109d90d32cffe04e389d57b0023e9c",
+      "distribution_kind": "regular_cash",
+      "pay_date_qualifier": "stated_date",
+      "payment_model": "nominal_date_broker_posting_unverified",
+      "option_treatment_resolved": false
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-5931a5885131a45626a4713766cae5206e02391c201f0ed6c72241b05af1a582",
+      "compiled_source_identity": "ff533630e0825656686b8edf08d634447b1d4b43a1bf30194cf21fb49b0b0582",
+      "symbol": "QQQ",
+      "security_id": "BBG000BSWKH7",
+      "cash_per_share": "0.21584",
+      "ex_date": "2023-12-27",
+      "record_date": "2023-12-28",
+      "pay_date": "2024-01-15",
+      "conclusion": "cash_distribution_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Primary source states record 2023-12-28 and nominal payment 2024-01-15 (stated_date); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting. OCC 53847 separately adjusts option strikes; this stock-cash review does not implement or admit option-deliverable treatment.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "6e3ba6ba-8d29-42fd-8023-8928105fcd9b",
+          "record_sha256": "5eb49d012a2f5e3bbc82f17c54ee58f0c3055ad81ae9b321e908aa48bf83c5b9"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9bc41eee54269ad05335e4d6543d7df40462877cb188803afc3ac291a67dd4ae",
+          "record_sha256": "f62037b0572f71cc4c601c572dcb92d11ae7d2656f4523ad6c1e1ae2e6d2ac6e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/qqq-202312-occ",
+          "receipt_sha256": "90da5e54e38460915c7b7429539de53323eff4af1501fba1035f6cd4bec790ce",
+          "payload_sha256": "ebf0b32861a03aa88a2bdf125119cbc38b25fab74cce347b402dac289f8a4d20",
+          "review": "Primary source states record 2023-12-28 and nominal payment 2024-01-15 (stated_date); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting."
+        }
+      ],
+      "evidence_identity": "1855ea857ff5bb7cca2c0875d8507d0be1312ee665f642efa21d38e627f99af7",
+      "distribution_kind": "special_cash",
+      "pay_date_qualifier": "stated_date",
+      "payment_model": "nominal_date_broker_posting_unverified",
+      "option_treatment_resolved": false,
+      "option_notice_evidence_identity": "1f5fec4a3a7a971f19f4e5c0b178a85a04b612b296f9b351e6acd4c684bd9071"
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-d38d258366eabbc165de17d97c2f156b90133ee80e0cda79f55e17ff52eb1d23",
+      "compiled_source_identity": "d4917c2181f43126fb60b80bc63767fc8262033a4ea9e4ffe36a5a5da0ae4e84",
+      "symbol": "PG",
+      "security_id": "BBG000BR2TH3",
+      "cash_per_share": "1.0065",
+      "ex_date": "2024-04-18",
+      "record_date": "2024-04-19",
+      "pay_date": "2024-05-15",
+      "conclusion": "cash_distribution_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Primary source states record 2024-04-19 and nominal payment 2024-05-15 (on_or_after); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "53ee518c-a927-43cb-99bb-a86a3fd7e4b9",
+          "record_sha256": "3e31d73997b55c07fe2320a8a5459d1f95d1be13a64b40fd1b4e8e88cd63b253"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1f4a27aa458956ff8af9961c7ea4e83fa8ac80756cae024a5868164f691dda8d",
+          "record_sha256": "b81248d8784ce6ab1efdf8bd106c00c8b206fd41ee4aa76f5ebf410f5fe90bcb"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/pg-20240409",
+          "receipt_sha256": "e648d029a72a90b98192d21c80d44107c4260a2e77fcb2cf9ccd26580328bb0c",
+          "payload_sha256": "f5cb9b230bfcb03b3de547a2a52ccdbfb9376b5b7e8fa06d69efa25449109d09",
+          "review": "Primary source states record 2024-04-19 and nominal payment 2024-05-15 (on_or_after); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting."
+        }
+      ],
+      "evidence_identity": "6edcb8dda47344491727aca68d1d87d0f099bc3eb8642f7967e7afe62cb80dee",
+      "distribution_kind": "regular_cash",
+      "pay_date_qualifier": "on_or_after",
+      "payment_model": "nominal_date_broker_posting_unverified",
+      "option_treatment_resolved": false
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-978ec467c86a82b58239d1ba0bb5d9a761c099e783b5b08ef5712cacaa2c594e",
+      "compiled_source_identity": "7d0c43d1d7c4c0442012896757df7c13dd105ead42679f05ef7676026eaaf212",
+      "symbol": "RILY",
+      "security_id": "BBG000RTNP69",
+      "cash_per_share": "0.5",
+      "ex_date": "2024-05-23",
+      "record_date": "2024-05-27",
+      "pay_date": "2024-06-11",
+      "conclusion": "cash_distribution_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Primary source states record 2024-05-27 and nominal payment 2024-06-11 (on_or_about); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "ab027b78-cc78-4b4e-979f-2bf3186489ae",
+          "record_sha256": "1cc4673e995bad4c0313ebb59c03673f05baec5d08a54ee26cd715e8556ae88e"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5b1902874304b5841a42dc426396cdb1467dc07ccbb2af36f937a48c1372d72c",
+          "record_sha256": "ecc17639d4b51819522a72d2ae68ee53ea786068d1c62960d816b13d673fe9a3"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/rily-20240515",
+          "receipt_sha256": "920628d8e5e6bce9be00223de52f8f210534f1f12178d5b6528715da2c1feed9",
+          "payload_sha256": "f87edd524f1a88e473fb630afcf3003aa68cf05eeca506bd60b74f4d8aa6ba0a",
+          "review": "Primary source states record 2024-05-27 and nominal payment 2024-06-11 (on_or_about); preserve compiled ex-date and price amount. First regular open strictly after nominal date is the authorized modeled release, not observed broker posting."
+        }
+      ],
+      "evidence_identity": "e7b571610b97d21489db332e72606b17f04254c1bd486c43cd442fd1dcb2c2a8",
+      "distribution_kind": "regular_cash",
+      "pay_date_qualifier": "on_or_about",
+      "payment_model": "nominal_date_broker_posting_unverified",
+      "option_treatment_resolved": false
+    }
+  ]
+}

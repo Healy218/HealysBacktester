@@ -1,0 +1,298 @@
+[
+  {
+    "symbol": "BX",
+    "ex": "2024-04-26",
+    "record": "2024-04-29",
+    "pay": "2024-05-06",
+    "amounts": [
+      ".83"
+    ],
+    "names": [
+      "quarterly"
+    ],
+    "capture": "bx-primary",
+    "date_basis": "primary_notice"
+  },
+  {
+    "symbol": "GM",
+    "ex": "2024-02-29",
+    "record": "2024-03-01",
+    "pay": "2024-03-14",
+    "amounts": [
+      ".12"
+    ],
+    "names": [
+      "quarterly"
+    ],
+    "capture": "gm-primary",
+    "date_basis": "primary_notice"
+  },
+  {
+    "symbol": "CF",
+    "ex": "2024-05-14",
+    "record": "2024-05-15",
+    "pay": "2024-05-31",
+    "amounts": [
+      ".50"
+    ],
+    "names": [
+      "quarterly"
+    ],
+    "capture": "cf-primary",
+    "date_basis": "primary_notice"
+  },
+  {
+    "symbol": "F",
+    "ex": "2025-02-18",
+    "amounts": [
+      ".15",
+      ".15"
+    ],
+    "names": [
+      "regular",
+      "supplemental"
+    ],
+    "capture": "ford25-primary",
+    "date_basis": "matching_original_provider_dates"
+  },
+  {
+    "symbol": "ETHE",
+    "ex": "2026-02-03",
+    "amounts": [
+      ".025709"
+    ],
+    "names": [
+      "staking_cash_distribution"
+    ],
+    "capture": "ethe-june-primary",
+    "date_basis": "matching_original_provider_dates"
+  },
+  {
+    "symbol": "ETHE",
+    "ex": "2026-03-03",
+    "amounts": [
+      ".021011"
+    ],
+    "names": [
+      "staking_cash_distribution"
+    ],
+    "capture": "ethe-june-primary",
+    "date_basis": "matching_original_provider_dates"
+  },
+  {
+    "symbol": "ETHE",
+    "ex": "2026-04-07",
+    "amounts": [
+      ".022794"
+    ],
+    "names": [
+      "staking_cash_distribution"
+    ],
+    "capture": "ethe-june-primary",
+    "date_basis": "matching_original_provider_dates"
+  },
+  {
+    "symbol": "ETHE",
+    "ex": "2026-05-05",
+    "amounts": [
+      ".024577"
+    ],
+    "names": [
+      "staking_cash_distribution"
+    ],
+    "capture": "ethe-june-primary",
+    "date_basis": "matching_original_provider_dates"
+  },
+  {
+    "symbol": "ETHE",
+    "ex": "2026-06-03",
+    "amounts": [
+      ".019508"
+    ],
+    "names": [
+      "staking_cash_distribution"
+    ],
+    "capture": "ethe-june-primary",
+    "date_basis": "matching_original_provider_dates"
+  },
+  {
+    "symbol": "ITB",
+    "ex": "2025-06-16",
+    "record": "2025-06-16",
+    "pay": "2025-06-20",
+    "amounts": [
+      "0.652387"
+    ],
+    "names": [
+      "total_distribution"
+    ],
+    "capture": "ishares-itb",
+    "date_basis": "primary_history",
+    "source_row": [
+      "Jun 16, 2025",
+      "Jun 16, 2025",
+      "Jun 20, 2025",
+      "$0.652387",
+      "$0.652387",
+      "$0.000000",
+      "$0.000000",
+      "$0.000000"
+    ]
+  },
+  {
+    "symbol": "ITB",
+    "ex": "2025-03-18",
+    "record": "2025-03-18",
+    "pay": "2025-03-21",
+    "amounts": [
+      "0.656679"
+    ],
+    "names": [
+      "total_distribution"
+    ],
+    "capture": "ishares-itb",
+    "date_basis": "primary_history",
+    "source_row": [
+      "Mar 18, 2025",
+      "Mar 18, 2025",
+      "Mar 21, 2025",
+      "$0.656679",
+      "$0.656679",
+      "$0.000000",
+      "$0.000000",
+      "$0.000000"
+    ]
+  },
+  {
+    "symbol": "FXI",
+    "ex": "2023-06-07",
+    "record": "2023-06-08",
+    "pay": "2023-06-13",
+    "amounts": [
+      "0.154374"
+    ],
+    "names": [
+      "total_distribution"
+    ],
+    "capture": "ishares-fxi",
+    "date_basis": "primary_history",
+    "source_row": [
+      "Jun 08, 2023",
+      "Jun 07, 2023",
+      "Jun 13, 2023",
+      "$0.154374",
+      "$0.154374",
+      "$0.000000",
+      "$0.000000",
+      "$0.000000"
+    ]
+  },
+  {
+    "symbol": "MTUM",
+    "ex": "2025-03-18",
+    "record": "2025-03-18",
+    "pay": "2025-03-21",
+    "amounts": [
+      "0.527217"
+    ],
+    "names": [
+      "total_distribution"
+    ],
+    "capture": "ishares-mtum",
+    "date_basis": "primary_history",
+    "source_row": [
+      "Mar 18, 2025",
+      "Mar 18, 2025",
+      "Mar 21, 2025",
+      "$0.527217",
+      "$0.527217",
+      "$0.000000",
+      "$0.000000",
+      "$0.000000"
+    ]
+  },
+  {
+    "symbol": "SOXS",
+    "ex": "2024-12-23",
+    "record": "2024-12-23",
+    "pay": "2024-12-31",
+    "amounts": [
+      "0.30199"
+    ],
+    "names": [
+      "income_distribution"
+    ],
+    "capture": "direxion-2024",
+    "date_basis": "primary_history",
+    "source_row": {
+      "column1": "SOXS",
+      "column2": "25460G112",
+      "column3": "Direxion Daily Semiconductor Bear 3X ETF",
+      "column4": "0.30199",
+      "column5": null,
+      "column6": null,
+      "column7": null,
+      "column8": null,
+      "column9": null,
+      "column10": null,
+      "__typename": "DirexionTableRowData"
+    },
+    "source_locator": "Next page data editorBlocks 5, preceding dated schedule"
+  },
+  {
+    "symbol": "SOXS",
+    "ex": "2024-09-24",
+    "record": "2024-09-24",
+    "pay": "2024-10-01",
+    "amounts": [
+      "0.23429"
+    ],
+    "names": [
+      "income_distribution"
+    ],
+    "capture": "direxion-2024",
+    "date_basis": "primary_history",
+    "source_row": {
+      "column1": "SOXS",
+      "column2": "25460G112",
+      "column3": "Direxion Daily Semiconductor Bear 3X ETF",
+      "column4": "0.23429",
+      "column5": null,
+      "column6": null,
+      "column7": null,
+      "column8": null,
+      "column9": null,
+      "column10": null,
+      "__typename": "DirexionTableRowData"
+    },
+    "source_locator": "Next page data editorBlocks 15, preceding dated schedule"
+  },
+  {
+    "symbol": "ETHE",
+    "ex": "2026-07-07",
+    "record": "2026-07-07",
+    "pay": "2026-07-08",
+    "amounts": [
+      ".021855"
+    ],
+    "names": [
+      "staking_cash_distribution"
+    ],
+    "capture": "ethe-subsequent-primary",
+    "date_basis": "primary_notice"
+  },
+  {
+    "symbol": "ETHE",
+    "ex": "2026-08-04",
+    "record": "2026-08-04",
+    "pay": "2026-08-05",
+    "amounts": [
+      ".021664"
+    ],
+    "names": [
+      "staking_cash_distribution"
+    ],
+    "capture": "ethe-subsequent-primary",
+    "date_basis": "primary_notice"
+  }
+]

@@ -1,0 +1,88 @@
+from pathlib import Path
+from decimal import Decimal, InvalidOperation
+import json,re,subprocess
+import pandas as pd
+from bs4 import BeautifulSoup
+from nn_meta.v7.storage import identity,sha,verify
+ROOT=Path('nn_meta/data_v7/dividend-finish-20260918')
+work=json.loads(Path('nn_meta/validation/v7-primary-dividends-20260918/uncompiled.json').read_text())
+originals=json.loads(Path('nn_meta/validation/v7-action-inventory-20260917-tail/candidates.json').read_text())
+byid={(r['provider'],r['kind'],r['action_id']):r for r in originals}
+h=pd.read_parquet('nn_meta/validation/v7-security-history-20260917-gap-r2/history.parquet');facts=h[h.stock_ticker.notna()].set_index(['stock_ticker','source_date'])
+def amount(s):return str(Decimal(s.replace('$','').strip()))
+def date(s,dayfirst=False):return pd.to_datetime(s,dayfirst=dayfirst).date().isoformat()
+def table_rows(name):
+ soup=BeautifulSoup((ROOT/name/'response.bin').read_bytes(),'html.parser')
+ return [[c.get_text(' ',strip=True) for c in tr.find_all(['td','th'])] for t in soup.find_all('table') for tr in t.find_all('tr')]
+records={}
+for sym,name in [('AEM','aem-history'),('GOLD','barrick-history'),('B','barrick-history'),('NTR','ntr-history'),('PAAS','paas-history'),('COP','cop-history'),('DVN','dvn-history'),('AG','ag-dividends')]:
+ out=[]
+ for row in table_rows(name):
+  try:
+   if sym in ['AEM','GOLD','B'] and len(row)==4 and re.match(r'\d+[/|]\d+',row[0]):rec,pay,amt=date(row[0],sym=='AEM'),date(row[1],sym=='AEM'),amount(row[3])
+   elif sym=='COP' and len(row)==4 and re.match(r'\d+/\d+/\d+',row[0]):rec,pay,amt=date(row[1]),date(row[2]),amount(row[3])
+   elif sym=='DVN' and len(row)==7 and row[0].startswith('Q'):rec,pay,amt=date(row[2]),date(row[3]),amount(row[4])
+   elif sym=='AG' and len(row)==4 and re.match('[A-Za-z]+ [0-9]',row[0]):rec,pay,amt=date(row[1]),date(row[2]),amount(row[3])
+   elif sym=='NTR' and len(row)==4 and re.match('[A-Za-z]+ [0-9]',row[0]):rec,pay,amt=date(row[1]),date(row[2]),amount(row[3])
+   elif sym=='PAAS' and len(row)==5 and row[0].startswith('Q'):rec,pay,amt=date(row[2]),date(row[3]),amount(row[4])
+   else:continue
+   if '2022'<=rec<'2027':out.append(dict(record_date=rec,pay_date=pay,cash_per_share=amt,source_row=row))
+  except (ValueError,TypeError,InvalidOperation):continue
+ records[sym]=(name,out)
+for sym,name in [('TSM','tsm-citi-history'),('NOK','nok-citi-654902204'),('BABA','baba-citi-01609w102'),('VALE','vale-citi-91912e105')]:
+ s=subprocess.check_output(['pdftotext','-layout',str(ROOT/name/'response.bin'),'-'],text=True)
+ out=[]
+ for line in s.splitlines():
+  r=line.split()
+  if len(r)==13 and re.match(r'202[2-6]-',r[0]) and r[6]=='CASH':
+   out.append(dict(record_date=r[4],pay_date=r[5],cash_per_share=str(Decimal(r[8])),source_row=r))
+ records[sym]=(name,out)
+# The issuer supplies CAD amounts and its recorded USD conversion rates.
+soup=BeautifulSoup((ROOT/'cve-dividends'/'response.bin').read_bytes(),'html.parser')
+out=[]
+for table in soup.find_all('table'):
+ heading=table.find_previous(['h3','h4'])
+ if not heading:continue
+ m=re.search('202[2-6]',heading.get_text())
+ year=m.group() if m else '2026' if not out else None
+ if not year:continue
+ for tr in table.find_all('tr'):
+  row=[c.get_text(' ',strip=True) for c in tr.find_all('td')]
+  if len(row)!=5:continue
+  a=re.search(r'C\$([0-9.]+)',row[0]);fx=re.search(r'US\$([0-9.]+)',row[4])
+  if not a or not fx:continue
+  out.append(dict(record_date=date(row[1]+' '+year),pay_date=date(row[2]+' '+year),cash_per_share=str(Decimal(a[1])*Decimal(fx[1])),source_row=row,conversion_basis='issuer_record_date_rate',cad_amount=a[1],usd_per_cad=fx[1]))
+records['CVE']=('cve-dividends',out)
+rows=json.loads((ROOT/'wpm-dividend-feed'/'response.bin').read_text())['GetDividendListResult']
+records['WPM']=('wpm-dividend-feed',[dict(record_date=date(r['RecordDate']),pay_date=date(r['PayDate']),cash_per_share=str(r['DividendAmount']),source_row=r) for r in rows if r['Currency']=='USD' and '2022'<=date(r['RecordDate'])<'2027'])
+for sym in ['PBR','BP','JD','FUTU','BUD','BNTX','SIMO','SHEL','NVO','STM','VALE']:
+ name=sym.lower()+'-jpm-dividends'
+ payload=json.loads((ROOT/name/'response.bin').read_text())['data']
+ assert not payload['pagination']['hasMore'] and len(payload['items'])==payload['pagination']['totalItems']
+ records[sym]=(name,[dict(record_date=date(r['recordDate']),pay_date=date(r['paymentDate']),cash_per_share=str(r['ratePerDr']),source_row=r) for r in payload['items'] if r.get('ratePerDr') is not None and r.get('recordDate') and r.get('paymentDate') and '2022'<=date(r['recordDate'])<'2027'])
+reviews=[];pending=[];done=set()
+for g in work:
+ sym=g['symbol'];ex=g['effective_date']
+ if sym not in records or (sym,ex) in done:continue
+ name,primary=records[sym];rec_dates={r['record_date'] for r in g['records']}
+ matching=[r for r in primary if r['record_date'] in rec_dates]
+ if any(r.get('source_row',{}).get('status') not in [None,'Final'] for r in matching if isinstance(r.get('source_row'),dict)):pending.append((sym,ex,'primary provisional FX/amount'));continue
+ if not matching:pending.append((sym,ex,'no primary match'));continue
+ key=(sym,ex)
+ if key not in facts.index:pending.append((sym,ex,'no selected identity'));continue
+ # One US-listed event for matching PAAS records separated by the Canadian holiday.
+ related=[g]
+ if sym=='PAAS' and ex in ['2022-05-20','2022-05-23']:
+  ex='2022-05-20';key=(sym,ex)
+  related=[x for x in work if x['symbol']==sym and x['effective_date'] in ['2022-05-20','2022-05-23']]
+  if key in done:continue
+ doc=verify(ROOT/name);ev=dict(capture=str(ROOT/name),receipt_sha256=sha(ROOT/name/'complete.json'),payload_sha256=doc['files']['response.bin'],source_rows=matching)
+ evidence=[ev];eid=identity(evidence)
+ refs=[{k:r[k] for k in ['provider','kind','action_id','record_sha256']} for x in related for r in x['records']]
+ pays=[dict(name='primary-payment-'+str(i+1),record_date=r['record_date'],pay_date=r['pay_date'],cash_per_share=r['cash_per_share'],terms_evidence_identity=identity(ev)) for i,r in enumerate(matching)]
+ total=sum((Decimal(p['cash_per_share']) for p in pays),Decimal(0))
+ review=dict(schema='v7-primary-dividend-resolution-v1',symbol=sym,ex_date=ex,security_id=facts.loc[key].security_id,currency='USD',cash_units='per_listed_share_or_unit',cash_per_share=str(total),publication_verified=False,payments=pays,replaces=refs,evidence=evidence,evidence_identity=eid,rationale='Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption.',amount_basis='exact_primary_terms')
+ if len(related)>1:review['rationale']+=' PAAS two provider ex-dates represent the same record-date May 24 event: retain the US ex-date May 20; May 23 is a Canadian holiday.'
+ reviews.append(review);done.update((x['symbol'],x['effective_date']) for x in related)
+Path('docs/specs/V7_DIVIDEND_PRIMARY_REVIEWS_20260918_R2.json').write_text(json.dumps(dict(schema='v7-primary-dividend-resolutions-v1',reviews=reviews),indent=2)+'\n')
+print('Reviews',len(reviews),'groups',len(done),'by symbol',pd.Series([r['symbol'] for r in reviews]).value_counts().to_dict(),'pending',pending)

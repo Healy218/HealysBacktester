@@ -1,0 +1,1492 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "FANG",
+      "ex_date": "2022-05-11",
+      "security_id": "BBG002PHSYX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "3.05",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2022-05-12",
+          "pay_date": "2022-05-23",
+          "cash_per_share": "0.70",
+          "terms_evidence_identity": "860e9364606b25b70275fe882c45025e2bbbe2a917497092e717d7ede785173f",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2022-05-12",
+          "pay_date": "2022-05-23",
+          "cash_per_share": "2.35",
+          "terms_evidence_identity": "860e9364606b25b70275fe882c45025e2bbbe2a917497092e717d7ede785173f",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9cb0334f-d1e4-43ab-9e95-f08bffcce7c0",
+          "record_sha256": "7aadf48734409012915c8b4f254f90f40e720418e19e62b853f37fb9201bd921"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E110c05c9d71458516aea167b1260b3919d40b7ca84657212216aff7045f1c033",
+          "record_sha256": "9631c479e42fe1f3b60f3df2a2356e88372ef2bc6d646d2d8b7a58e108b4c279"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ed4690583ba4483cd434d5b5f0223e9f11ad9bd605f7da9411b9fcd6865c364e6",
+          "record_sha256": "6c34885757443aedaea080e42e29dba3e1869cebab610a0a5944a55bd853b994"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/fang-primary-web",
+          "receipt_sha256": "10d5a1ec313f2d66f3f6902e46238c033a990d9ece130309ed73da99fb5033cf",
+          "payload_sha256": "a395679c3020d19e67548c562ad224759114f449d274e24810825f909aec840b",
+          "source_terms": {
+            "symbol": "FANG",
+            "ex": "2022-05-11",
+            "amounts": [
+              ".70",
+              "2.35"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "fang-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2022-05-12",
+            "pay": "2022-05-23"
+          }
+        }
+      ],
+      "evidence_identity": "6f613a17510a38fa11ecade93f668a78e3b60dc127ddc7d70741d30522d14d66",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "FANG",
+      "ex_date": "2022-08-15",
+      "security_id": "BBG002PHSYX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "3.05",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2022-08-16",
+          "pay_date": "2022-08-23",
+          "cash_per_share": "0.75",
+          "terms_evidence_identity": "350b5ac49dfeabc5db94530a43374fe0ddc075724318b13d95e2b24f8236193a",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2022-08-16",
+          "pay_date": "2022-08-23",
+          "cash_per_share": "2.30",
+          "terms_evidence_identity": "350b5ac49dfeabc5db94530a43374fe0ddc075724318b13d95e2b24f8236193a",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b2e3b3e5-4b4d-432f-b762-73048a2a7f7a",
+          "record_sha256": "d3411503f6f531c90cb269fc7a5ea97f9c62ee0b42ff51c1c25dcb7f6629ecaf"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E58ae77d360ade451cc7d247c9abc899a53b99dbe6b6c2ec9747e86a51631e3e2",
+          "record_sha256": "11fdcbc41088307dacd507a3c0d6ac7affc1bf26772aa54fdca3b9f3289732f2"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7d2015e3baeb4d114c8d34832d285b9883084ebe577a0dea61ea96e5a3798aa8",
+          "record_sha256": "d38b6b500aac4009d0c8a8464ef275b07ad7a3b5867a4f547291865d1d9d3bf4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/fang-primary-web",
+          "receipt_sha256": "10d5a1ec313f2d66f3f6902e46238c033a990d9ece130309ed73da99fb5033cf",
+          "payload_sha256": "a395679c3020d19e67548c562ad224759114f449d274e24810825f909aec840b",
+          "source_terms": {
+            "symbol": "FANG",
+            "ex": "2022-08-15",
+            "amounts": [
+              ".75",
+              "2.30"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "fang-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2022-08-16",
+            "pay": "2022-08-23"
+          }
+        }
+      ],
+      "evidence_identity": "369a3c60e12a1c9f69978156640a8a69629e0b1cb0d9d2c314b7d48c1d367c34",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "FANG",
+      "ex_date": "2022-11-16",
+      "security_id": "BBG002PHSYX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "2.26",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2022-11-17",
+          "pay_date": "2022-11-25",
+          "cash_per_share": "0.75",
+          "terms_evidence_identity": "b5d61e6541fe5f5425075b6e2143971aab0390ea204273de505fbde610d99449",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2022-11-17",
+          "pay_date": "2022-11-25",
+          "cash_per_share": "1.51",
+          "terms_evidence_identity": "b5d61e6541fe5f5425075b6e2143971aab0390ea204273de505fbde610d99449",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "0b5a3875-4008-4b73-8ef0-4c21fe053d4a",
+          "record_sha256": "500f6423f2dd22e7c02b13b1ffc308045cfbb5a139f871ea8aaded0bbbefa5a3"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "54beaa5e-8b9a-4214-940e-ac115ad839db",
+          "record_sha256": "8852b21a5960d94d5e5a6c2ce505514d0d00962be8cf2a1465b08c5fbfeb9658"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E562957f68f1ddf7791ac4a15b8823ba0abd77a1e98c13d30b3a326e86b7ab398",
+          "record_sha256": "f67d13e42f5b8577d2a812cf746de89213d13c608a75ffefc896d5e0eec1f768"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ee81fa1b2f39f051cb67f5784030b2e48ce4d0b1be56883d4dbbc22a7158217eb",
+          "record_sha256": "9edc6419a8dbb869db06dae61712669599098f1435d91fabcfb605f5980bb65b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/fang-primary-web",
+          "receipt_sha256": "10d5a1ec313f2d66f3f6902e46238c033a990d9ece130309ed73da99fb5033cf",
+          "payload_sha256": "a395679c3020d19e67548c562ad224759114f449d274e24810825f909aec840b",
+          "source_terms": {
+            "symbol": "FANG",
+            "ex": "2022-11-16",
+            "amounts": [
+              ".75",
+              "1.51"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "fang-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2022-11-17",
+            "pay": "2022-11-25"
+          }
+        }
+      ],
+      "evidence_identity": "166ae0bead5ad886491a9eebcb4a75701ee4b45663732e4aa5fb7057bc1be923",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "FANG",
+      "ex_date": "2023-03-02",
+      "security_id": "BBG002PHSYX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "2.95",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2023-03-03",
+          "pay_date": "2023-03-10",
+          "cash_per_share": "0.80",
+          "terms_evidence_identity": "e99cd90b8e59fd325a94180518290f3f1c4ccbab30424f887954fbfdb1dfd5d9",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2023-03-03",
+          "pay_date": "2023-03-10",
+          "cash_per_share": "2.15",
+          "terms_evidence_identity": "e99cd90b8e59fd325a94180518290f3f1c4ccbab30424f887954fbfdb1dfd5d9",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "92796bc8-d7ae-491b-94ef-271bcb61b036",
+          "record_sha256": "7a96ef86ab2a3da2605243109f926b1c1a0418224a0a7c1c565723363d587d62"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d62c9333-a52e-41e5-8965-d5918472c6be",
+          "record_sha256": "5c559a82a3e9b9644b30decb59379aca9d15974c8a67fda7f6315d6c3fc80349"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1d34fd67a8208ddc91c136d53726285856521f859eab1cbaa34e6f10ea72281d",
+          "record_sha256": "93aee99736788000c73463cd015ebf276d6ba9796a016e69a132b8d17ca1d122"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ed4252d9b4b12688a0a81e8abbccc4fc13d15717431a1925691a698b20a87055b",
+          "record_sha256": "e8c90e3dbc9df1401c3584caeabd4619caa804274b5756425678f5af6ee02361"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/fang-primary-web",
+          "receipt_sha256": "10d5a1ec313f2d66f3f6902e46238c033a990d9ece130309ed73da99fb5033cf",
+          "payload_sha256": "a395679c3020d19e67548c562ad224759114f449d274e24810825f909aec840b",
+          "source_terms": {
+            "symbol": "FANG",
+            "ex": "2023-03-02",
+            "amounts": [
+              ".80",
+              "2.15"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "fang-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2023-03-03",
+            "pay": "2023-03-10"
+          }
+        }
+      ],
+      "evidence_identity": "6f1d4671d05c2faf23d79ad5c020e96304a537973fc4c6fb1e52389c9f81c06a",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "FANG",
+      "ex_date": "2023-05-10",
+      "security_id": "BBG002PHSYX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.83",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2023-05-11",
+          "pay_date": "2023-05-18",
+          "cash_per_share": "0.80",
+          "terms_evidence_identity": "29dbe542ba0a4cc03a08b7d66fa5bba68e9becf79104b0b8b65079532a1dfa3c",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2023-05-11",
+          "pay_date": "2023-05-18",
+          "cash_per_share": "0.03",
+          "terms_evidence_identity": "29dbe542ba0a4cc03a08b7d66fa5bba68e9becf79104b0b8b65079532a1dfa3c",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d9923794-cfec-495b-8eb3-b1ffaca0ca09",
+          "record_sha256": "d0f6611d1960d4848d5b842b3b3e00af3329e3b2e703ed06760203df3dc57ebc"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E686a80c2dcb65c3512b3b79942dbc65bbb76116f1b4089a1074ba00fe5d1dde4",
+          "record_sha256": "b87f50f4b6c1d3a82b052b5434f668dab6e371b8ad1f328e77ae453386dbe3fc"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ebb1e6bb945187773fb72ea5209750935a9575bc2ebae77d920593c3d8c0e54e8",
+          "record_sha256": "b9e7530ce0382cb99c822ccd2ac9476b05464645cc52fb1e5e73d1268695bf0b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/fang-primary-web",
+          "receipt_sha256": "10d5a1ec313f2d66f3f6902e46238c033a990d9ece130309ed73da99fb5033cf",
+          "payload_sha256": "a395679c3020d19e67548c562ad224759114f449d274e24810825f909aec840b",
+          "source_terms": {
+            "symbol": "FANG",
+            "ex": "2023-05-10",
+            "amounts": [
+              ".80",
+              ".03"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "fang-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2023-05-11",
+            "pay": "2023-05-18"
+          }
+        }
+      ],
+      "evidence_identity": "78fbe3ddd487b4a06692785e9bab0d8cb9b1a3dfc3ca24f52be974b4f8cfcde4",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "FANG",
+      "ex_date": "2023-11-15",
+      "security_id": "BBG002PHSYX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "3.37",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2023-11-16",
+          "pay_date": "2023-11-24",
+          "cash_per_share": "0.84",
+          "terms_evidence_identity": "a28a505c1de0d1874685b76a6ed3c09e9bd5d716b99247bd3e5f5fd61f894b69",
+          "date_basis": "primary_notice",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2023-11-16",
+          "pay_date": "2023-11-24",
+          "cash_per_share": "2.53",
+          "terms_evidence_identity": "a28a505c1de0d1874685b76a6ed3c09e9bd5d716b99247bd3e5f5fd61f894b69",
+          "date_basis": "primary_notice",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "7015d20c-d851-4472-926d-dc949421fa83",
+          "record_sha256": "8f0431f0d25d08085df7e4fd014d03fa9feecde3b2e615285afbed3810228baa"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "aeb43e97-b157-4cd5-9cdd-84d2e932739d",
+          "record_sha256": "9999d31d8909ef4910762373ccf848f1ebd42d683484c913273bd7a51aa58a9b"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7af53f5e48ec7909d9039f5d4b4c76b9c55806b63bcff5abe7be3ccf7f1921c4",
+          "record_sha256": "5351cc15bbd62776f4b9baa2d1bc7a74bf661024c66d481dacb8ec624b261dc4"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E92ab62f18ace141774aed99817778e305c1d9ed4b04346355ce8a9323071530d",
+          "record_sha256": "fe77e3c9d90484ad102cead8af15ddde6c217b4c453d9cef2b42613bbc9c305f"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/fang-nov-primary-web",
+          "receipt_sha256": "840cefc57ffa03c2097eaa2a841707c33dda20f4753641d2ccfcb4906cd0ce8c",
+          "payload_sha256": "033d5927f7c56c44c688278cbfe4d62b38f8349d9ed295d736cf3b737c3edb08",
+          "source_terms": {
+            "symbol": "FANG",
+            "ex": "2023-11-15",
+            "amounts": [
+              ".84",
+              "2.53"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "fang-nov-primary-web",
+            "date_basis": "primary_notice",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2023-11-16",
+            "pay": "2023-11-24"
+          }
+        }
+      ],
+      "evidence_identity": "b08d235045684b001860ce4dc415f887d10d85a914fba0c0eb6bde78d06ba8d8",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "FANG",
+      "ex_date": "2024-03-04",
+      "security_id": "BBG002PHSYX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "3.08",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2024-03-05",
+          "pay_date": "2024-03-12",
+          "cash_per_share": "0.90",
+          "terms_evidence_identity": "832cde4feea57e621e038611ced362b0799b7bf484f57f1b2b8df747c8dd644b",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2024-03-05",
+          "pay_date": "2024-03-12",
+          "cash_per_share": "2.18",
+          "terms_evidence_identity": "832cde4feea57e621e038611ced362b0799b7bf484f57f1b2b8df747c8dd644b",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "ccef520e-64cd-408e-b8d9-9f8b6505fe21",
+          "record_sha256": "e8777d676c487e37165db362e029db8bc72d1bd53edf7d719016a317bf411b29"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "ff151c5e-3464-4779-a030-9131b127c78c",
+          "record_sha256": "e96a732785c6943ed5bb1c509723916f5c0298a5740e5fe17a9d9c5763a2246d"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E68001204d6a1f1cec684e3d5ef8f384d9ad153a027998df0e5c2aa2dbe1ebbd2",
+          "record_sha256": "bbbef6050379292fc1ad3492b505aa55e94e3f353b551ec57f4b71f2736b144b"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec1e10e1456dc0a1f5cb3009d98029d66cf31c257cd80b76a2c8b9415340877b8",
+          "record_sha256": "06913eac15d0fc3b6f1ddca1d90137cb1f544889de9d77d4bb1f70668836a0cb"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/fang-primary-web",
+          "receipt_sha256": "10d5a1ec313f2d66f3f6902e46238c033a990d9ece130309ed73da99fb5033cf",
+          "payload_sha256": "a395679c3020d19e67548c562ad224759114f449d274e24810825f909aec840b",
+          "source_terms": {
+            "symbol": "FANG",
+            "ex": "2024-03-04",
+            "amounts": [
+              ".90",
+              "2.18"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "fang-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2024-03-05",
+            "pay": "2024-03-12"
+          }
+        }
+      ],
+      "evidence_identity": "6ad340cd96be10032aa60ee958221525676af3cb6e184c43a3ddfca940ae51f0",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "FANG",
+      "ex_date": "2024-05-14",
+      "security_id": "BBG002PHSYX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "1.97",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2024-05-15",
+          "pay_date": "2024-05-22",
+          "cash_per_share": "0.90",
+          "terms_evidence_identity": "ad434d412c867927dda384fcacc672cec1c65c6b354794b8b7b89edad3682f3c",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2024-05-15",
+          "pay_date": "2024-05-22",
+          "cash_per_share": "1.07",
+          "terms_evidence_identity": "ad434d412c867927dda384fcacc672cec1c65c6b354794b8b7b89edad3682f3c",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "61ea773a-0cb6-4d1c-95e5-05aea2291044",
+          "record_sha256": "68902d3f1b9d3c4e5fcf0fe7555f65c89b192d387c560bf611667edc9a7c7a75"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fa5b5cf2-cb58-4c3a-b183-7f05baa451f2",
+          "record_sha256": "4289be5bc7ad8a2f357d0e470bf3108f6d14cbbbe1ae7a544ec4ba5d37dc74a6"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec63d31dee45d6e30090bfcaee2ddff56ebea1544c65466bad5284df9287ad7c1",
+          "record_sha256": "db0e22127db92da9fa81aaef43fa6d45285f8c2b1793c942cb33959e16657835"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef38cecf45a821f53868897c1f9057df51358063d4ed3118edb6da426e58d3d09",
+          "record_sha256": "a73b709522281a23d9a851ae9dcfffb7e57727c5057a200b7c3499724c9572a8"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/fang-primary-web",
+          "receipt_sha256": "10d5a1ec313f2d66f3f6902e46238c033a990d9ece130309ed73da99fb5033cf",
+          "payload_sha256": "a395679c3020d19e67548c562ad224759114f449d274e24810825f909aec840b",
+          "source_terms": {
+            "symbol": "FANG",
+            "ex": "2024-05-14",
+            "amounts": [
+              ".90",
+              "1.07"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "fang-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2024-05-15",
+            "pay": "2024-05-22"
+          }
+        }
+      ],
+      "evidence_identity": "d9888c682c7799e0ed6f3ebeef70b05f09e4d98a8b24278797547b59c87488a3",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "FANG",
+      "ex_date": "2024-08-15",
+      "security_id": "BBG002PHSYX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "2.34",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2024-08-15",
+          "pay_date": "2024-08-22",
+          "cash_per_share": "0.90",
+          "terms_evidence_identity": "255f6d2e055d10343417bb119fb403fca61012db8855a68bb9619f73e3a92d61",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2024-08-15",
+          "pay_date": "2024-08-22",
+          "cash_per_share": "1.44",
+          "terms_evidence_identity": "255f6d2e055d10343417bb119fb403fca61012db8855a68bb9619f73e3a92d61",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "7e543db7-7dcb-460b-9f7d-fc6d00399ef4",
+          "record_sha256": "955a17beb7f12a67ef612718af32a889f06fb0ff403bd0d45a2beab9159921cf"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9c143fdc-2f09-4106-9967-122ddc4e99cb",
+          "record_sha256": "10f2636e3f1c2b83d205c7da1c68e17f25484ae83e58caea9abb478a4bacf48d"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E45812948727019b5d4562b8cbcb34d59f653026186470a49647c45e017b6ef34",
+          "record_sha256": "c7e9b5aad7348d085a516ceacbd59cbd498b2e580d56505dfe7319088390d4cd"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9ee5de379fa0782a61c69eaa35a5ba11d7082f8261fd6bfc2548f3e77a07cf7f",
+          "record_sha256": "9613bed38def7a8252c55b1fe380a115469a1f1df9f3d0d87e9b842fbafe9779"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/fang-primary-web",
+          "receipt_sha256": "10d5a1ec313f2d66f3f6902e46238c033a990d9ece130309ed73da99fb5033cf",
+          "payload_sha256": "a395679c3020d19e67548c562ad224759114f449d274e24810825f909aec840b",
+          "source_terms": {
+            "symbol": "FANG",
+            "ex": "2024-08-15",
+            "amounts": [
+              ".90",
+              "1.44"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "fang-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2024-08-15",
+            "pay": "2024-08-22"
+          }
+        }
+      ],
+      "evidence_identity": "5e93846e2f9c49e1830e19123bd5875adc81feafa6c92d8a0867984620dff15e",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PXD",
+      "ex_date": "2022-05-27",
+      "security_id": "BBG000BXRPH1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "7.38",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2022-05-31",
+          "pay_date": "2022-06-14",
+          "cash_per_share": "0.78",
+          "terms_evidence_identity": "f16963b4084016c38ad363cca61f64d3721e639b9633d12b38569bc88fb77e78",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2022-05-31",
+          "pay_date": "2022-06-14",
+          "cash_per_share": "6.60",
+          "terms_evidence_identity": "f16963b4084016c38ad363cca61f64d3721e639b9633d12b38569bc88fb77e78",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "33df8e83-bdf2-4667-98d1-21d897319d23",
+          "record_sha256": "48da4c2b1331fbfbaf6c5c332aa170e02e625fe290acff16f52546595f26f266"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5e2d2e49d2c11ef95ad3bdfce7f16737929bbdf5f27a4a4cc795aee86f02f7b6",
+          "record_sha256": "4db4b768559d020096721cb43bfe11450be6b6fc362bf1ebd6bbbb136323cd78"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ed094d045a424be514407852043ec0dfc05fb2fec31d8ff2dd2cdb196ad9cbc3f",
+          "record_sha256": "20c7160cd500087ca397f7d01c5696f201102c2a7fb8cd8162ae429e45cd9764"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pxd-primary-web",
+          "receipt_sha256": "daac1a2f9d069777ea5856eee603e923d9cd2a9da7b97341b319e417b9905be7",
+          "payload_sha256": "da36279e3aba9650e8d43b93684758ce7ca4a044350b35aee6324f3b6f1f9bf2",
+          "source_terms": {
+            "symbol": "PXD",
+            "ex": "2022-05-27",
+            "amounts": [
+              ".78",
+              "6.60"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "pxd-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2022-05-31",
+            "pay": "2022-06-14"
+          }
+        }
+      ],
+      "evidence_identity": "a9dff1599765afd69b38a074cd6b9278f208a104d28355bce36914e4218569a7",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PXD",
+      "ex_date": "2022-09-02",
+      "security_id": "BBG000BXRPH1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "8.57",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2022-09-06",
+          "pay_date": "2022-09-16",
+          "cash_per_share": "1.10",
+          "terms_evidence_identity": "4feb5383d134676453c1e3fbe1cce7ee92be5cbbd0604e8376b262aa4f694ba5",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2022-09-06",
+          "pay_date": "2022-09-16",
+          "cash_per_share": "7.47",
+          "terms_evidence_identity": "4feb5383d134676453c1e3fbe1cce7ee92be5cbbd0604e8376b262aa4f694ba5",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "363fdabe-8480-43b2-8a2e-8396912116a1",
+          "record_sha256": "4b2137abd53b74e6c7b6188e1efe33220b6a534d98c76885a32e90775883b8b8"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0012f2a28de3ae7ee986ff6ccc1e944f6efe2bc8c89286edc2a81650294037f1",
+          "record_sha256": "0ae5ec4cba4452cdb1532cb110a6e86f2c906e239905558e821003e9055ecddb"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0db672aa734ff5dd08f3ab997c8f964c74d50a2f21f1abfbd744ca1120c954dd",
+          "record_sha256": "c208ee30ca8d0793417655cf6fca31328cfac68500da90be8917dd908b1688f4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pxd-primary-web",
+          "receipt_sha256": "daac1a2f9d069777ea5856eee603e923d9cd2a9da7b97341b319e417b9905be7",
+          "payload_sha256": "da36279e3aba9650e8d43b93684758ce7ca4a044350b35aee6324f3b6f1f9bf2",
+          "source_terms": {
+            "symbol": "PXD",
+            "ex": "2022-09-02",
+            "amounts": [
+              "1.10",
+              "7.47"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "pxd-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2022-09-06",
+            "pay": "2022-09-16"
+          }
+        }
+      ],
+      "evidence_identity": "d12ffe317fd20f7247a1945e8ee40403c4a202a7558ffedbb52c2fa01172b305",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PXD",
+      "ex_date": "2022-11-29",
+      "security_id": "BBG000BXRPH1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "5.71",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2022-11-30",
+          "pay_date": "2022-12-15",
+          "cash_per_share": "1.10",
+          "terms_evidence_identity": "b1ce6f39635318b2cd9f14f903705fcac9635224605305c032fbc76b67506284",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2022-11-30",
+          "pay_date": "2022-12-15",
+          "cash_per_share": "4.61",
+          "terms_evidence_identity": "b1ce6f39635318b2cd9f14f903705fcac9635224605305c032fbc76b67506284",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "195df2a6-2124-41b0-b749-0364cc3bac1d",
+          "record_sha256": "3b36f1b69a4aa417ab53a633761aa120bd7f7bdfac58753fef71d656052da924"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0c678d4b7efe0c9c6b347f9879e0b5d2491a4eea301952534f755403811d4a0d",
+          "record_sha256": "674a59cde194b8f92b66006bea20db2d7a83c04306314420aea2a6029237641e"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E10b1d957e739ec520834fd50e1c082b5f021e8e290d11271435bf5c819cf730c",
+          "record_sha256": "1cd705a03730adbd2dbeff3b2cb081c8bfe9885523d3fb9ba799ec9242e38cd8"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pxd-primary-web",
+          "receipt_sha256": "daac1a2f9d069777ea5856eee603e923d9cd2a9da7b97341b319e417b9905be7",
+          "payload_sha256": "da36279e3aba9650e8d43b93684758ce7ca4a044350b35aee6324f3b6f1f9bf2",
+          "source_terms": {
+            "symbol": "PXD",
+            "ex": "2022-11-29",
+            "amounts": [
+              "1.10",
+              "4.61"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "pxd-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2022-11-30",
+            "pay": "2022-12-15"
+          }
+        }
+      ],
+      "evidence_identity": "39a7f55161a36db48a26d61f56b2ab83bc62cbc1c0ff3634c33c539ab3a3a6a6",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PXD",
+      "ex_date": "2023-03-03",
+      "security_id": "BBG000BXRPH1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "5.58",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2023-03-06",
+          "pay_date": "2023-03-17",
+          "cash_per_share": "1.10",
+          "terms_evidence_identity": "979f666ce4c54e3ea601f9d5f70b66129198bb42143c123e2f4364ab97e7398e",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2023-03-06",
+          "pay_date": "2023-03-17",
+          "cash_per_share": "4.48",
+          "terms_evidence_identity": "979f666ce4c54e3ea601f9d5f70b66129198bb42143c123e2f4364ab97e7398e",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c9cddbd9-6df2-4cc0-b976-cda90ed638cd",
+          "record_sha256": "941c22f12a7f6fb4739f9304b5f0a55287ebe3ecc849ae266d19a740c8b9201e"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E55f629a500b0097bde1c0967938817a482f596eb9864468f2002df778b76dae5",
+          "record_sha256": "1695ae66ac7ac7af629c85d24e6a92b732926132a7be8c07aa411b13366f055a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9bbbfae4f5780ca6f12b1d2eb3d9a29c35f6acc8772023738efaa52d70316dc4",
+          "record_sha256": "bc1c5cf8fd6a2ab7ea1661b6f6b9086904d8d30cadc180ae18d789064942ed60"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pxd-primary-web",
+          "receipt_sha256": "daac1a2f9d069777ea5856eee603e923d9cd2a9da7b97341b319e417b9905be7",
+          "payload_sha256": "da36279e3aba9650e8d43b93684758ce7ca4a044350b35aee6324f3b6f1f9bf2",
+          "source_terms": {
+            "symbol": "PXD",
+            "ex": "2023-03-03",
+            "amounts": [
+              "1.10",
+              "4.48"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "pxd-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2023-03-06",
+            "pay": "2023-03-17"
+          }
+        }
+      ],
+      "evidence_identity": "1cc65dd365c2afc602a829e7fad78e17e1971986a24f49d7393741aa93cd7a93",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PXD",
+      "ex_date": "2023-05-31",
+      "security_id": "BBG000BXRPH1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "3.34",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2023-06-01",
+          "pay_date": "2023-06-21",
+          "cash_per_share": "1.25",
+          "terms_evidence_identity": "0c5a20a7534d77d0dd6062d382f779dc2e681ce6f6ba79d62c230f10885caf10",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2023-06-01",
+          "pay_date": "2023-06-21",
+          "cash_per_share": "2.09",
+          "terms_evidence_identity": "0c5a20a7534d77d0dd6062d382f779dc2e681ce6f6ba79d62c230f10885caf10",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c4f1627a-4c2d-42d5-85f5-1cc9dcdf90ed",
+          "record_sha256": "f741aecce2fed2aac493c0257c83bf6072715f3dad390e2ee4916989fe028e93"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E19a8ee6501886b0b57dbc4410859b5ac2b5561ff808b5c27a4aae0aa35c2db80",
+          "record_sha256": "4417abb94b255557b97417fbc17dfce0b8f1a299b879ec515d12c7c1f347c342"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef00a85a00ba0f650841011924aaba76807b612c721890badf096f58831952693",
+          "record_sha256": "756f507f44a43d7a71328d84f144ed9b0a8862268f76bc8982bf1357f7ce0fe2"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pxd-primary-web",
+          "receipt_sha256": "daac1a2f9d069777ea5856eee603e923d9cd2a9da7b97341b319e417b9905be7",
+          "payload_sha256": "da36279e3aba9650e8d43b93684758ce7ca4a044350b35aee6324f3b6f1f9bf2",
+          "source_terms": {
+            "symbol": "PXD",
+            "ex": "2023-05-31",
+            "amounts": [
+              "1.25",
+              "2.09"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "pxd-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2023-06-01",
+            "pay": "2023-06-21"
+          }
+        }
+      ],
+      "evidence_identity": "1eed5128527b8bef2c62a5dc9dbbc134af1964268580f4045df7195376b12904",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PXD",
+      "ex_date": "2023-09-05",
+      "security_id": "BBG000BXRPH1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "1.84",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2023-09-06",
+          "pay_date": "2023-09-21",
+          "cash_per_share": "1.25",
+          "terms_evidence_identity": "a24cd76a7047d1df61ddbafca168ed1ffab2b0257ef28c24e1469efcc5a4219f",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2023-09-06",
+          "pay_date": "2023-09-21",
+          "cash_per_share": "0.59",
+          "terms_evidence_identity": "a24cd76a7047d1df61ddbafca168ed1ffab2b0257ef28c24e1469efcc5a4219f",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f81d87ff-ce99-4010-9561-ace924c00611",
+          "record_sha256": "dfc733902bdc90743e0b8b44d5895aeac208a8fd8a881d02bb7237b573668b34"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E755908c2d06bc0945fa46ae56decbdb163d208ffdb54fbb53fd9b2e3eaa87123",
+          "record_sha256": "5add6d7dae6ffd7ddb3d46a7026da682e94bf2a137271ce163578cbd6363cb3c"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Efcacc99a5b97abb44cb41391691aa3c659455dff4644f6b572a855b52bd9f648",
+          "record_sha256": "39f512238c76f6798861cb1cb58141194af02b7dd6f50cc1d48e451a5b44304d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pxd-primary-web",
+          "receipt_sha256": "daac1a2f9d069777ea5856eee603e923d9cd2a9da7b97341b319e417b9905be7",
+          "payload_sha256": "da36279e3aba9650e8d43b93684758ce7ca4a044350b35aee6324f3b6f1f9bf2",
+          "source_terms": {
+            "symbol": "PXD",
+            "ex": "2023-09-05",
+            "amounts": [
+              "1.25",
+              ".59"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "pxd-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2023-09-06",
+            "pay": "2023-09-21"
+          }
+        }
+      ],
+      "evidence_identity": "c4ee79c1c5a0c870a66663565962b32b8085a712ad8cfc15c7b9a707a3abe5a3",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PXD",
+      "ex_date": "2023-11-29",
+      "security_id": "BBG000BXRPH1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "3.20",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2023-11-30",
+          "pay_date": "2023-12-22",
+          "cash_per_share": "1.25",
+          "terms_evidence_identity": "c91189132440be10aaa1ab830ad52e778aceec197ea991550449c468fbf5f7a8",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2023-11-30",
+          "pay_date": "2023-12-22",
+          "cash_per_share": "1.95",
+          "terms_evidence_identity": "c91189132440be10aaa1ab830ad52e778aceec197ea991550449c468fbf5f7a8",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e32c6a34-2141-42d4-a2ff-df36153e0292",
+          "record_sha256": "2527ec371ffc951e3e5e0596764a8566e1b40cefdf4d89ce6c1f3283c25ce7ff"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5379b57d698950d2f1413fc5e1227cb54981a70a5192aee230c86044f0b4fc3c",
+          "record_sha256": "e3053c4f3e0f28adc1495043d530a74887edb539367950c81a44ae7162305612"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5e012fb781c5f0e9cf4aa04ebfcee142d74100c93339667f91f20d4b7fde0b94",
+          "record_sha256": "90172bcaead5033cb256150713bd0c57d8fee48ce4d1926d21cd08fa9e6d169d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pxd-primary-web",
+          "receipt_sha256": "daac1a2f9d069777ea5856eee603e923d9cd2a9da7b97341b319e417b9905be7",
+          "payload_sha256": "da36279e3aba9650e8d43b93684758ce7ca4a044350b35aee6324f3b6f1f9bf2",
+          "source_terms": {
+            "symbol": "PXD",
+            "ex": "2023-11-29",
+            "amounts": [
+              "1.25",
+              "1.95"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "pxd-primary-web",
+            "date_basis": "matching_original_provider_dates",
+            "source_locator": "Common stock dividends quarterly table in annual filing",
+            "record": "2023-11-30",
+            "pay": "2023-12-22"
+          }
+        }
+      ],
+      "evidence_identity": "3731c4be047e2625f5725e341f352796787a97e4413b50d477f62fb3003b8d92",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PXD",
+      "ex_date": "2024-03-01",
+      "security_id": "BBG000BXRPH1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "2.56",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "base",
+          "record_date": "2024-03-04",
+          "pay_date": "2024-03-22",
+          "cash_per_share": "1.25",
+          "terms_evidence_identity": "45b5f3a6cc4cd1223bb9715335c127053b6301943f7f93dd08c6e8c17a6fd589",
+          "date_basis": "primary_notice",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "variable",
+          "record_date": "2024-03-04",
+          "pay_date": "2024-03-22",
+          "cash_per_share": "1.31",
+          "terms_evidence_identity": "45b5f3a6cc4cd1223bb9715335c127053b6301943f7f93dd08c6e8c17a6fd589",
+          "date_basis": "primary_notice",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e171d36b-ba59-490e-a518-079bdf7a5e66",
+          "record_sha256": "6c39803ecd78954c78fb0eef7312e4b09720d198f1d1348041dfced85efba13f"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0ac4d4ec9161a8305b815b6a1c8c02467bc9b571eec75b182c2ada8e51f51203",
+          "record_sha256": "e3a63c883a2afa0b69160cb83d8a75064cc41ae0a6baa5b6cf3568366e7e6523"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E17739a01e0e19e154eefd396e781cdaf790a5a15777e7003d9e84de98ea58945",
+          "record_sha256": "f60a5a5f3b7229bce19438abb72c5eedaa7e2e332f58603251609fdaa545cbdf"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pxd-primary-web",
+          "receipt_sha256": "daac1a2f9d069777ea5856eee603e923d9cd2a9da7b97341b319e417b9905be7",
+          "payload_sha256": "da36279e3aba9650e8d43b93684758ce7ca4a044350b35aee6324f3b6f1f9bf2",
+          "source_terms": {
+            "symbol": "PXD",
+            "ex": "2024-03-01",
+            "amounts": [
+              "1.25",
+              "1.31"
+            ],
+            "names": [
+              "base",
+              "variable"
+            ],
+            "capture": "pxd-primary-web",
+            "date_basis": "primary_notice",
+            "source_locator": "Note 17 Subsequent Events",
+            "record": "2024-03-04",
+            "pay": "2024-03-22"
+          }
+        }
+      ],
+      "evidence_identity": "42d797b0e1a73735ddf6f57c6d6ca122d0e1c47b36f54b62793946a224366be8",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AMKR",
+      "ex_date": "2024-12-04",
+      "security_id": "BBG000BCKGW7",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.48815",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular",
+          "record_date": "2024-12-04",
+          "pay_date": "2024-12-23",
+          "cash_per_share": "0.08269",
+          "terms_evidence_identity": "3a54aa597c6bd8104aaf04bcdf24e59342b56be8ef592d5b02cd28a4690295fc",
+          "date_basis": "primary_history",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "special",
+          "record_date": "2024-12-04",
+          "pay_date": "2024-12-23",
+          "cash_per_share": "0.40546",
+          "terms_evidence_identity": "3a54aa597c6bd8104aaf04bcdf24e59342b56be8ef592d5b02cd28a4690295fc",
+          "date_basis": "primary_history",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "1859ddd1-5ddd-40de-9d72-f560aff05c27",
+          "record_sha256": "4c8ac15b3add02eeb8b931d6c7a8780297b4625a16c4b2a8f529812ac662df99"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "77233b9b-1081-4b2f-b348-0cef0c09cd42",
+          "record_sha256": "24937c99cac9e42b01a62aa25d87031030953a87c609490c52203c8c6dafdcab"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5c5a1273543b8d702d1d86bca783a822a39792ccc2399b0997f37e477c42f87e",
+          "record_sha256": "43d863a82db23b49c25ae9dadddcf7dc0cdbb4c7f5fd2d54f45e3a90d592bdb6"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E80ed46a245eef7b1ba6a633f1bad4e1e8a31c31ead3e02780a714bd2edb0a624",
+          "record_sha256": "e34b47296a87fe0d1096d27dbbe35d5250b987c11828a9d7790c2b22f37f80d7"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/amkr-primary-web",
+          "receipt_sha256": "5c4a287b57bde30892645b5082533eca0e425fe66e650f13f0d9e56dd43b43b2",
+          "payload_sha256": "c2aa0a41f2fe513db8c1f65169775ccac36f81356100e852497ee7800501025b",
+          "source_terms": {
+            "symbol": "AMKR",
+            "ex": "2024-12-04",
+            "amounts": [
+              ".08269",
+              ".40546"
+            ],
+            "names": [
+              "regular",
+              "special"
+            ],
+            "capture": "amkr-primary-web",
+            "record": "2024-12-04",
+            "pay": "2024-12-23",
+            "date_basis": "primary_history"
+          }
+        }
+      ],
+      "evidence_identity": "14a9c605cebd3ff429c263d8c261e12e0a1175e65e8617728315267f96eda2b3",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AG",
+      "ex_date": "2026-08-14",
+      "security_id": "BBG000CH7WB8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0152",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly",
+          "record_date": "2026-08-14",
+          "pay_date": "2026-08-31",
+          "cash_per_share": "0.0152",
+          "terms_evidence_identity": "f0bb861958076f100ce6da8d3cd7ea7a404cad85e5822911d6c626265155cea5",
+          "date_basis": "primary_notice",
+          "pay_date_qualifier": "on_or_about"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "75a49b87-2cd8-4a03-ae9b-ce7e33041e07",
+          "record_sha256": "27ab2e77905ea87d51d621987d7dec02854297bfb5a46483ebafd684ccfa998a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ebc405d1f38e90fee9f4fa8b3514238f877af0bebd833429c015e2b66bf4926ed",
+          "record_sha256": "8af7d314928edf1015e75213843852eda9dbe839b64aeb178374505a7a3f39b7"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ag-q2-2026",
+          "receipt_sha256": "7cbe959c8ce5e57d5ff53449a33cad588ec67c1ad8e2383e61fc51d39f1ca900",
+          "payload_sha256": "a77c4d7535fd8ffb2bc57da482d3d5e35964373383f6517e97efe1df5145075c",
+          "source_terms": {
+            "symbol": "AG",
+            "ex": "2026-08-14",
+            "amounts": [
+              ".0152"
+            ],
+            "names": [
+              "quarterly"
+            ],
+            "capture": "ag-q2-2026",
+            "record": "2026-08-14",
+            "pay": "2026-08-31",
+            "qualifier": "on_or_about",
+            "date_basis": "primary_notice"
+          }
+        }
+      ],
+      "evidence_identity": "3f9770ac5c1fcb254e635c4f8441a62ef0113b5b499b5edb9cff7a3d2a8c236b",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    }
+  ]
+}

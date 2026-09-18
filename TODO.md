@@ -64,6 +64,7 @@ recovers eight interrupted date fixes and adds 40 reviewed cases. Current cash
 entitlements are **4,421**; **444 dividend items remain: 437 uncompiled groups
 plus seven date cases**. All price actions and history coverage are unchanged.
 The full suite passes 2,246 tests plus 18 subtests. Item 6-1 remains open.
+September 18 primary-term continuation: **4,744 cash payment leaves**; **154 dividend review items remain (147 groups plus seven dates)**. Multi-payment distributions adjust price once and release each payment separately. All 289 new price boundaries and the 10,428-record partition reconcile; full suite passes 2,271 tests plus 18 subtests. Dividend work remains active.
 The user selected this sequence on September 17 after reviewing the
 [three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md#6-consolidated-remaining-todos-before-the-goal-is-finished).
 The report's pause is historical; this checklist and [HANDOFF](HANDOFF.md)
@@ -114,3 +115,5 @@ The previous overlapping checklist is preserved verbatim in
 [the September 17 TODO archive](handoff-history/TODO-2026-09-17-before-report-sequence.md).
 Its old open/checkmarked entries are historical; they are not another active V7
 queue. Deferred work is not deleted and must not delay this seven-item sequence.
+
+September 18 continuation checkpoint: **4,835 payment leaves across all 4,777 compiled cash events; 87 uncompiled dividend groups remain and zero missing-date cases.** R3–R6 and seven nominal date reviews are sealed. Full suite: 2,277 tests plus 18 subtests. Current artifact v7-primary-dividends-20260918-r6; history coverage still pending final rebuild.

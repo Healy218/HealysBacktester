@@ -1,0 +1,421 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AG",
+      "ex_date": "2022-03-18",
+      "security_id": "BBG000CH7WB8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0079",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2022-03-21",
+          "pay_date": "2022-04-04",
+          "cash_per_share": "0.0079",
+          "terms_evidence_identity": "b1a27679bd1d13a71cd383688b36e6e3053067d8b78b76a6f7622d7cedf79c9c"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f7d216c9-3156-4931-9488-65df358b37d5",
+          "record_sha256": "40968c4c96001589411250024f2e3b97ff47df675d818d8c90387c4c3238656f"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E345157ac3a50a7ef39d80871c8ea237dd9e151b317cf8ee8f09e600343bf3528",
+          "record_sha256": "1c687fc76dafd0b3887ac3221118586d46785e7580c148510e167f8eae23f47b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ag-aif-2023",
+          "receipt_sha256": "491bafb42d0902d52fb6f6eb9351d6755f91236a7475728066de2100593ad44a",
+          "payload_sha256": "6104d229e9f075d03cec0b6bb92a1b477981849202b0c65915348b5d8aef9b74",
+          "source_rows": [
+            {
+              "record_date": "2022-03-21",
+              "pay_date": "2022-04-04",
+              "cash_per_share": "0.0079",
+              "source_row": "On March 10, 2022, the Board approved and declared a quarterly dividend of US$0.0079 per Common Share, payable on or about April 4, 2022, to shareholders of record as at the close of business on March 21, 2022",
+              "pay_date_qualifier": "on or about"
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "4df3de9ed707e30bd6d4a398bfbe1533870abe7e72f9bada7cb6e9c712236f5d",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption. Issuer on-or-about nominal payment date retained in source terms; release is modeled, broker posting remains unverified.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AG",
+      "ex_date": "2022-05-24",
+      "security_id": "BBG000CH7WB8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0060",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2022-05-25",
+          "pay_date": "2022-06-10",
+          "cash_per_share": "0.0060",
+          "terms_evidence_identity": "bf66be26bb8b39cbffe9561f012db1f786315acbc67d85e0b819f50863e105c9"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e1b1cf2a-60c9-4816-864f-ff292502e890",
+          "record_sha256": "5b60e621cac35d8c7d3d3889ad46f08c7a928a214303d5357a2f76e0dc56081b"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Edde3b6d8c86b407e8fad06c716d711b1bbafa81dafa2420f1586d3992da5b8b0",
+          "record_sha256": "1ee92b2c16d3cce52a40a09bd468b95f261ee47486749fe4d813856724fbe994"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ag-aif-2023",
+          "receipt_sha256": "491bafb42d0902d52fb6f6eb9351d6755f91236a7475728066de2100593ad44a",
+          "payload_sha256": "6104d229e9f075d03cec0b6bb92a1b477981849202b0c65915348b5d8aef9b74",
+          "source_rows": [
+            {
+              "record_date": "2022-05-25",
+              "pay_date": "2022-06-10",
+              "cash_per_share": "0.0060",
+              "source_row": "On May 12, 2022, the Board approved and declared a quarterly dividend of US$0.0060 per Common Share, payable on or about June 10, 2022, to shareholders of record as at the close of business on May 25, 2022",
+              "pay_date_qualifier": "on or about"
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "ed5c0d8f4f1d501f3829f68f816468f02ebac631616eea16cbc0da4c99ea5bdf",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption. Issuer on-or-about nominal payment date retained in source terms; release is modeled, broker posting remains unverified.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AG",
+      "ex_date": "2022-08-15",
+      "security_id": "BBG000CH7WB8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0061",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2022-08-16",
+          "pay_date": "2022-08-31",
+          "cash_per_share": "0.0061",
+          "terms_evidence_identity": "e68fc253768077375671f75e608f2be78d5e884db41b62de2bd622edee2b58f3"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "cf23df28-c0cb-4470-a799-b8bac3cebad4",
+          "record_sha256": "060c8b0f3926aae11366c6e78b45f455b4aeb75380a01184271b3bf60389e87a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E67111cb113accfde4aa02360dd85f06c2372143609a909f47da022396dda04b3",
+          "record_sha256": "dea11e77d9d31f9ec0679d7e8c560c2d56470b2e92e9492aa7aca787bc074b2a"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ag-aif-2023",
+          "receipt_sha256": "491bafb42d0902d52fb6f6eb9351d6755f91236a7475728066de2100593ad44a",
+          "payload_sha256": "6104d229e9f075d03cec0b6bb92a1b477981849202b0c65915348b5d8aef9b74",
+          "source_rows": [
+            {
+              "record_date": "2022-08-16",
+              "pay_date": "2022-08-31",
+              "cash_per_share": "0.0061",
+              "source_row": "On August 4, 2022, the Board approved and declared a quarterly dividend of US$0.0061 per Common Share, payable on or about August 31, 2022, to shareholders of record as at the close of business on August 16, 2022",
+              "pay_date_qualifier": "on or about"
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "d266826dec7d21f48b0e243791052fb4372a812d1ae14fbfa31ef9d7b4c8c4ed",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption. Issuer on-or-about nominal payment date retained in source terms; release is modeled, broker posting remains unverified.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AG",
+      "ex_date": "2022-11-21",
+      "security_id": "BBG000CH7WB8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0061",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2022-11-22",
+          "pay_date": "2022-12-02",
+          "cash_per_share": "0.0061",
+          "terms_evidence_identity": "2e35e510cc7eb50f80d9ec376e852419234da0b22cd798cc110754e58daf5f25"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f3f2bf80-122c-4a47-84ff-7757e02f5aa4",
+          "record_sha256": "f4580c7d9bffcf522e9d02568d7e2adef264d11f20d9329d02cd531d1cfc6e5a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E364fa16edaa8229da81f916f11afa347c1d24fe77738574eed3137d131eab9a0",
+          "record_sha256": "c331cd4b162135f15b0ca5688bbde4e114aeda9acde8b055f74f7aa6e802cba2"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ag-aif-2023",
+          "receipt_sha256": "491bafb42d0902d52fb6f6eb9351d6755f91236a7475728066de2100593ad44a",
+          "payload_sha256": "6104d229e9f075d03cec0b6bb92a1b477981849202b0c65915348b5d8aef9b74",
+          "source_rows": [
+            {
+              "record_date": "2022-11-22",
+              "pay_date": "2022-12-02",
+              "cash_per_share": "0.0061",
+              "source_row": "On November 9, 2022, the Board approved and declared a quarterly dividend of US$0.0061 per Common Share, payable on or about December 2, 2022, to shareholders of record as at the close of business on November 22, 2022",
+              "pay_date_qualifier": "on or about"
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "30ec9c7be4d17a3043c1c41423cc325b2be1e4c3d733f02e481c42cd6887fc2f",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption. Issuer on-or-about nominal payment date retained in source terms; release is modeled, broker posting remains unverified.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AG",
+      "ex_date": "2023-03-09",
+      "security_id": "BBG000CH7WB8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0054",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2023-03-10",
+          "pay_date": "2023-03-24",
+          "cash_per_share": "0.0054",
+          "terms_evidence_identity": "ada596cfdedfae4b002f8b9ba7895eb263199926fb6d6e4618ece0d9152034df"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "42f03429-d28e-46f7-bc6e-6fcf424ca05e",
+          "record_sha256": "bf0ee714d9d995c251fbe68e5462df4cc49ab8ea0ff0523195f1c86cd21ad05c"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E09cb87d92106eca3c19b7e8a80a27551d78fc94ea61e00f4a14b7ccddf68eca5",
+          "record_sha256": "eb4b24d68d25293ac075995e2386fa9f2fd32b883d0d37677121799b2f926d47"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ag-aif-2023",
+          "receipt_sha256": "491bafb42d0902d52fb6f6eb9351d6755f91236a7475728066de2100593ad44a",
+          "payload_sha256": "6104d229e9f075d03cec0b6bb92a1b477981849202b0c65915348b5d8aef9b74",
+          "source_rows": [
+            {
+              "record_date": "2023-03-10",
+              "pay_date": "2023-03-24",
+              "cash_per_share": "0.0054",
+              "source_row": "Also on February 23, 2023, the Board approved and declared a quarterly dividend of US$0.0054 per Common Share, payable on or about March 24, 2023, to all shareholders of record as of the close of business on March 10, 2023",
+              "pay_date_qualifier": "on or about"
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "3711805d455a187cb8bcd3e8e834e8b309ce22e11caffc83638711704abb7bd5",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption. Issuer on-or-about nominal payment date retained in source terms; release is modeled, broker posting remains unverified.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AG",
+      "ex_date": "2023-05-17",
+      "security_id": "BBG000CH7WB8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0057",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2023-05-18",
+          "pay_date": "2023-06-09",
+          "cash_per_share": "0.0057",
+          "terms_evidence_identity": "30de88f25743b7c667c88307b6618edd3503d84c1a6e58d4dae59b18a05a2c3e"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "77b5de13-a10c-40fc-8281-291173a9714a",
+          "record_sha256": "d1ed3edbfdcbb5ad7ba638a7ba7f6d851d9a5425c47f79802782153465fca4a8"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1914b27731f20e0242faed781d906615a89008b25100ca67a00131a623649560",
+          "record_sha256": "569ca85d9ceec337e488c12384d097a22ae395b83e3648585ec3027d0d0c9af9"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ag-aif-2023",
+          "receipt_sha256": "491bafb42d0902d52fb6f6eb9351d6755f91236a7475728066de2100593ad44a",
+          "payload_sha256": "6104d229e9f075d03cec0b6bb92a1b477981849202b0c65915348b5d8aef9b74",
+          "source_rows": [
+            {
+              "record_date": "2023-05-18",
+              "pay_date": "2023-06-09",
+              "cash_per_share": "0.0057",
+              "source_row": "On May 4, 2023, the Board approved and declared a quarterly dividend of US$0.0057 per Common Share, payable on or about June 9, 2023, to all shareholders of record as of the close of business on May 18, 2023",
+              "pay_date_qualifier": "on or about"
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "b7873511569f74f5a4b48684c283f5717a3076b7d463cf0d78d23d598ff69df8",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption. Issuer on-or-about nominal payment date retained in source terms; release is modeled, broker posting remains unverified.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AG",
+      "ex_date": "2023-08-15",
+      "security_id": "BBG000CH7WB8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0051",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2023-08-16",
+          "pay_date": "2023-08-31",
+          "cash_per_share": "0.0051",
+          "terms_evidence_identity": "af9b3960958002830ec539e82689c4ae80b735099461a560b44fce77e4db57c0"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d6180255-bb60-4f8a-9c23-be0917437dfb",
+          "record_sha256": "1defebfbd37ec61ab63287cc623965ec5b5911c277c67b0c2fd3106836241ca1"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E90922c2a52b1f7f212701ea95109a89f5657a71759fa83cc9cb8390b43e14a80",
+          "record_sha256": "655c54614a5d8f53746b499f2a8289882c0cf2c08b501c65cf40d07f0370a612"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ag-aif-2023",
+          "receipt_sha256": "491bafb42d0902d52fb6f6eb9351d6755f91236a7475728066de2100593ad44a",
+          "payload_sha256": "6104d229e9f075d03cec0b6bb92a1b477981849202b0c65915348b5d8aef9b74",
+          "source_rows": [
+            {
+              "record_date": "2023-08-16",
+              "pay_date": "2023-08-31",
+              "cash_per_share": "0.0051",
+              "source_row": "On August 3, 2023, the Board approved and declared a quarterly dividend of US$0.0051 per Common Share, payable on or about August 31, 2023, to all shareholders of record as of the close of business on August 16, 2023",
+              "pay_date_qualifier": "on or about"
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "57df416541fb4826e36b5f9fd2744f19f18b74dce3973cf5f5cb2ff2f318f27c",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption. Issuer on-or-about nominal payment date retained in source terms; release is modeled, broker posting remains unverified.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AG",
+      "ex_date": "2023-11-14",
+      "security_id": "BBG000CH7WB8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0046",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2023-11-15",
+          "pay_date": "2023-11-30",
+          "cash_per_share": "0.0046",
+          "terms_evidence_identity": "4ef68d9fb9ab1563fadc091d18cf4ec7d649f7a86df999d7717ce08ec27c8588"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "faedcaf2-34ff-4e92-b783-a98d5212f1b0",
+          "record_sha256": "f402c3d1959d389f7c1ed537727f1e841d3001fde79c67aaeb9b25c964cf34d9"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4d848dd75b3141615a3a7a9692a4a1fa75443fd2049a0bfac8afd77460657bb1",
+          "record_sha256": "312ad2a973495c2a9ba7d97eefd61e5b6539b8760cda40aabc6a602b60240095"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ag-aif-2023",
+          "receipt_sha256": "491bafb42d0902d52fb6f6eb9351d6755f91236a7475728066de2100593ad44a",
+          "payload_sha256": "6104d229e9f075d03cec0b6bb92a1b477981849202b0c65915348b5d8aef9b74",
+          "source_rows": [
+            {
+              "record_date": "2023-11-15",
+              "pay_date": "2023-11-30",
+              "cash_per_share": "0.0046",
+              "source_row": "On November 2, 2023, the Board approved and declared a quarterly dividend of US$0.0046 per Common Share, payable on or about November 30, 2023, to all shareholders of record as of the close of business on November 15, 2023",
+              "pay_date_qualifier": "on or about"
+            }
+          ]
+        }
+      ],
+      "evidence_identity": "352644990061d77793a6d94864d952ef0b53701b51212bed63afa8f3312842eb",
+      "rationale": "Exact retained issuer/depositary history identifies the listed-share gross USD amount and record/payment dates. Replace the entire provider group once, retaining each primary payment. Current history is not proof of historical publication; use the explicit effective-session reconstruction assumption. Issuer on-or-about nominal payment date retained in source terms; release is modeled, broker posting remains unverified.",
+      "amount_basis": "exact_primary_terms"
+    }
+  ]
+}

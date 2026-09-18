@@ -1,0 +1,292 @@
+[
+  {
+    "symbol": "FANG",
+    "ex": "2022-05-11",
+    "amounts": [
+      ".70",
+      "2.35"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "fang-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "FANG",
+    "ex": "2022-08-15",
+    "amounts": [
+      ".75",
+      "2.30"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "fang-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "FANG",
+    "ex": "2022-11-16",
+    "amounts": [
+      ".75",
+      "1.51"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "fang-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "FANG",
+    "ex": "2023-03-02",
+    "amounts": [
+      ".80",
+      "2.15"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "fang-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "FANG",
+    "ex": "2023-05-10",
+    "amounts": [
+      ".80",
+      ".03"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "fang-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "FANG",
+    "ex": "2023-11-15",
+    "amounts": [
+      ".84",
+      "2.53"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "fang-nov-primary-web",
+    "date_basis": "primary_notice",
+    "source_locator": "Common stock dividends quarterly table in annual filing",
+    "record": "2023-11-16",
+    "pay": "2023-11-24"
+  },
+  {
+    "symbol": "FANG",
+    "ex": "2024-03-04",
+    "amounts": [
+      ".90",
+      "2.18"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "fang-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "FANG",
+    "ex": "2024-05-14",
+    "amounts": [
+      ".90",
+      "1.07"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "fang-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "FANG",
+    "ex": "2024-08-15",
+    "amounts": [
+      ".90",
+      "1.44"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "fang-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "PXD",
+    "ex": "2022-05-27",
+    "amounts": [
+      ".78",
+      "6.60"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "pxd-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "PXD",
+    "ex": "2022-09-02",
+    "amounts": [
+      "1.10",
+      "7.47"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "pxd-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "PXD",
+    "ex": "2022-11-29",
+    "amounts": [
+      "1.10",
+      "4.61"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "pxd-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "PXD",
+    "ex": "2023-03-03",
+    "amounts": [
+      "1.10",
+      "4.48"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "pxd-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "PXD",
+    "ex": "2023-05-31",
+    "amounts": [
+      "1.25",
+      "2.09"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "pxd-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "PXD",
+    "ex": "2023-09-05",
+    "amounts": [
+      "1.25",
+      ".59"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "pxd-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "PXD",
+    "ex": "2023-11-29",
+    "amounts": [
+      "1.25",
+      "1.95"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "pxd-primary-web",
+    "date_basis": "matching_original_provider_dates",
+    "source_locator": "Common stock dividends quarterly table in annual filing"
+  },
+  {
+    "symbol": "PXD",
+    "ex": "2024-03-01",
+    "amounts": [
+      "1.25",
+      "1.31"
+    ],
+    "names": [
+      "base",
+      "variable"
+    ],
+    "capture": "pxd-primary-web",
+    "date_basis": "primary_notice",
+    "source_locator": "Note 17 Subsequent Events",
+    "record": "2024-03-04",
+    "pay": "2024-03-22"
+  },
+  {
+    "symbol": "AMKR",
+    "ex": "2024-12-04",
+    "amounts": [
+      ".08269",
+      ".40546"
+    ],
+    "names": [
+      "regular",
+      "special"
+    ],
+    "capture": "amkr-primary-web",
+    "record": "2024-12-04",
+    "pay": "2024-12-23",
+    "date_basis": "primary_history"
+  },
+  {
+    "symbol": "AG",
+    "ex": "2026-08-14",
+    "amounts": [
+      ".0152"
+    ],
+    "names": [
+      "quarterly"
+    ],
+    "capture": "ag-q2-2026",
+    "record": "2026-08-14",
+    "pay": "2026-08-31",
+    "qualifier": "on_or_about",
+    "date_basis": "primary_notice"
+  }
+]
