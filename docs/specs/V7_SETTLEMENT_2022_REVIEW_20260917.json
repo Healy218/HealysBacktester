@@ -1,0 +1,219 @@
+{
+  "schema": "v7-reviewed-settlement-year-v1",
+  "year": 2022,
+  "coverage_start": "2022-01-01",
+  "coverage_end": "2022-12-31",
+  "publication_date": "2021-10-15",
+  "available_ns": 1634356800000000000,
+  "source": "nn_meta/data_v7/public-settlement-20260916/finra-2022-holidays",
+  "source_receipt_sha256": "7987e19cd884d38582b5da6a7ec0516269b581e292e5f8c7f101661c94e45bc5",
+  "source_document_sha256": "595cd5817c845ff40370438bdbc018f8d6f9273092b1eda6964995b89562fa66",
+  "evidence": "FINRA Information Notice October 15, 2021, all four pages visually reviewed; settlement columns on pages 2 and 3.",
+  "basis": "Weekday regular-way stock settlement calendar excluding the complete annual settlement-holiday list; not the FINRA extension-filing due-date calendar.",
+  "settlement_holidays": [
+    "2022-01-17",
+    "2022-02-21",
+    "2022-04-15",
+    "2022-05-30",
+    "2022-06-20",
+    "2022-07-04",
+    "2022-09-05",
+    "2022-10-10",
+    "2022-11-11",
+    "2022-11-24",
+    "2022-12-26"
+  ],
+  "trading_bank_holidays": [
+    "2022-10-10",
+    "2022-11-11"
+  ],
+  "settlement_open_trading_closed": [],
+  "checked_trade_settlement_pairs": [
+    {
+      "trade_date": "2022-01-11",
+      "settlement_date": "2022-01-13"
+    },
+    {
+      "trade_date": "2022-01-12",
+      "settlement_date": "2022-01-14"
+    },
+    {
+      "trade_date": "2022-01-13",
+      "settlement_date": "2022-01-18"
+    },
+    {
+      "trade_date": "2022-01-14",
+      "settlement_date": "2022-01-19"
+    },
+    {
+      "trade_date": "2022-02-15",
+      "settlement_date": "2022-02-17"
+    },
+    {
+      "trade_date": "2022-02-16",
+      "settlement_date": "2022-02-18"
+    },
+    {
+      "trade_date": "2022-02-17",
+      "settlement_date": "2022-02-22"
+    },
+    {
+      "trade_date": "2022-02-18",
+      "settlement_date": "2022-02-23"
+    },
+    {
+      "trade_date": "2022-04-11",
+      "settlement_date": "2022-04-13"
+    },
+    {
+      "trade_date": "2022-04-12",
+      "settlement_date": "2022-04-14"
+    },
+    {
+      "trade_date": "2022-04-13",
+      "settlement_date": "2022-04-18"
+    },
+    {
+      "trade_date": "2022-04-14",
+      "settlement_date": "2022-04-19"
+    },
+    {
+      "trade_date": "2022-05-24",
+      "settlement_date": "2022-05-26"
+    },
+    {
+      "trade_date": "2022-05-25",
+      "settlement_date": "2022-05-27"
+    },
+    {
+      "trade_date": "2022-05-26",
+      "settlement_date": "2022-05-31"
+    },
+    {
+      "trade_date": "2022-05-27",
+      "settlement_date": "2022-06-01"
+    },
+    {
+      "trade_date": "2022-06-14",
+      "settlement_date": "2022-06-16"
+    },
+    {
+      "trade_date": "2022-06-15",
+      "settlement_date": "2022-06-17"
+    },
+    {
+      "trade_date": "2022-06-16",
+      "settlement_date": "2022-06-21"
+    },
+    {
+      "trade_date": "2022-06-17",
+      "settlement_date": "2022-06-22"
+    },
+    {
+      "trade_date": "2022-06-28",
+      "settlement_date": "2022-06-30"
+    },
+    {
+      "trade_date": "2022-06-29",
+      "settlement_date": "2022-07-01"
+    },
+    {
+      "trade_date": "2022-06-30",
+      "settlement_date": "2022-07-05"
+    },
+    {
+      "trade_date": "2022-07-01",
+      "settlement_date": "2022-07-06"
+    },
+    {
+      "trade_date": "2022-08-30",
+      "settlement_date": "2022-09-01"
+    },
+    {
+      "trade_date": "2022-08-31",
+      "settlement_date": "2022-09-02"
+    },
+    {
+      "trade_date": "2022-09-01",
+      "settlement_date": "2022-09-06"
+    },
+    {
+      "trade_date": "2022-09-02",
+      "settlement_date": "2022-09-07"
+    },
+    {
+      "trade_date": "2022-11-18",
+      "settlement_date": "2022-11-22"
+    },
+    {
+      "trade_date": "2022-11-21",
+      "settlement_date": "2022-11-23"
+    },
+    {
+      "trade_date": "2022-11-22",
+      "settlement_date": "2022-11-25"
+    },
+    {
+      "trade_date": "2022-11-23",
+      "settlement_date": "2022-11-28"
+    },
+    {
+      "trade_date": "2022-12-20",
+      "settlement_date": "2022-12-22"
+    },
+    {
+      "trade_date": "2022-12-21",
+      "settlement_date": "2022-12-23"
+    },
+    {
+      "trade_date": "2022-12-22",
+      "settlement_date": "2022-12-27"
+    },
+    {
+      "trade_date": "2022-12-23",
+      "settlement_date": "2022-12-28"
+    },
+    {
+      "trade_date": "2022-10-04",
+      "settlement_date": "2022-10-06"
+    },
+    {
+      "trade_date": "2022-10-05",
+      "settlement_date": "2022-10-07"
+    },
+    {
+      "trade_date": "2022-10-06",
+      "settlement_date": "2022-10-11"
+    },
+    {
+      "trade_date": "2022-10-07",
+      "settlement_date": "2022-10-12"
+    },
+    {
+      "trade_date": "2022-10-10",
+      "settlement_date": "2022-10-12"
+    },
+    {
+      "trade_date": "2022-11-07",
+      "settlement_date": "2022-11-09"
+    },
+    {
+      "trade_date": "2022-11-08",
+      "settlement_date": "2022-11-10"
+    },
+    {
+      "trade_date": "2022-11-09",
+      "settlement_date": "2022-11-14"
+    },
+    {
+      "trade_date": "2022-11-10",
+      "settlement_date": "2022-11-15"
+    },
+    {
+      "trade_date": "2022-11-11",
+      "settlement_date": "2022-11-15"
+    }
+  ],
+  "scope": "2022 only; other years and label horizons crossing the year remain unadmitted",
+  "research_ready": false
+}

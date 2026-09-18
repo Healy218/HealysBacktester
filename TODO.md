@@ -39,7 +39,10 @@ clear another 5,644 sessions (584,804 total), with six real feature-boundary che
 and a stock rename ledger handler.
 [Three unrelated rename reviews](docs/reviews/2026-09-17-v7-unrelated-renames.md)
 then admit another 2,026 sessions (586,830 total). The user also accepted the separate pre-tax held-cash reconstruction model;
-its ledger implementation and verification are next. Unresolved identity/action cases and complete
+the [implemented dividend ledger](docs/reviews/2026-09-17-v7-stock-cash-ledger.md)
+now compiles all 4,337 eligible events, verifies their clocks and consumes a real
+funded AAPL quote with the reviewed 2022 settlement calendar. The remaining
+years and 55 excluded cash events still require treatment. Unresolved identity/action cases and complete
 held-position treatment still keep 6-1 open.
 The user selected this sequence on September 17 after reviewing the
 [three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md#6-consolidated-remaining-todos-before-the-goal-is-finished).

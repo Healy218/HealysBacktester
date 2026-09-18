@@ -1128,3 +1128,31 @@ physical delivery. Extend and reconcile those scopes before scheduling capture.
 Keep each contract/day in one exported capture batch to prevent overlapping
 immutable shards across archives. Current store/CLI require early single-thread
 configuration before Polars initialization.
+
+
+### V7 pre-tax dividend ledger (September 17)
+
+The separate user-authorized finite policy is
+`docs/specs/V7_STOCK_CASH_LEDGER_ADMISSION_20260917.json`; its proposal remains an
+immutable historical snapshot. `compile_v7_stock_cash.py` verifies original
+provider references and the approved 4,337-event set, not every compiled cash
+action. The 55 other events remain unresolved. Runtime uses cash entitlements
+through `physical.cash_entitlements`. Ex/record/pay agreement does not establish
+historical broker posting: release is the accepted first regular open strictly
+after pay date, with zero modeled withholding/dividend fees.
+
+Beneficial shares follow funded trade/exercise/sale decisions, not delayed
+settlement entries. A pre-ex purchase can be entitled while unsettled; an ex-open
+purchase cannot. Put delivery and pre-ex sale remove entitlement; a post-ex sale
+does not remove the receivable. Receivables add equity without funding entries
+or exercise, and remain until release even after the originating stock position
+has closed. Reconciliation checks both accrual/release history and remaining
+receivables. Runtime requires captured trading and settlement coverage through
+release; compiler output alone does not admit held history.
+
+`validate_v7_stock_cash.py` verifies the complete finite cash census and the
+existing captured AAPL May 5, 2022 funded purchase. Its normalized 2022 settlement
+calendar is based on the visually reviewed original FINRA annual notice and
+46 checked table rows; it is not authorization to infer 2023–2026 calendars.
+Keep the original failed OCC/DTCC requests and unresolved 2023 Veterans/2025
+mourning distinctions. [Review](docs/reviews/2026-09-17-v7-stock-cash-ledger.md).

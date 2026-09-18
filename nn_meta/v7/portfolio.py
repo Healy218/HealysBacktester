@@ -61,6 +61,13 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
             validate_rename(rename)
             if clocks[0] <= rename['effective_ns'] <= clocks[-1]:
                 event(rename['effective_ns'], -1, 'stock_rename', rename)
+        from nn_meta.v7.stock_cash import validate_cash_event
+        for cash_event in getattr(physical, 'cash_entitlements', ()):
+            if clocks[0] <= cash_event['effective_ns'] <= clocks[-1]:
+                validate_cash_event(cash_event, physical.settlement_calendar.trading,
+                                    settlement_calendar=physical.settlement_calendar)
+                event(cash_event['effective_ns'], -1, 'cash_accrual', cash_event)
+                event(cash_event['release_ns'], -2, 'cash_release', cash_event)
     active, reservations, decisions, marks = {}, {}, [], []
     completed, capture_complete = set(), True
 
@@ -80,7 +87,11 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
         clock, _, _, kind, payload = heapq.heappop(queue)
         if clock > clocks[-1]:
             break
-        if kind == 'stock_rename':
+        if kind == 'cash_accrual':
+            ledger.accrue_stock_cash(payload, clock)
+        elif kind == 'cash_release':
+            ledger.release_stock_cash(payload, clock)
+        elif kind == 'stock_rename':
             affected = ledger.apply_stock_rename(payload, clock)
             for key in affected:
                 if key in active:
@@ -200,10 +211,11 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
     return {'cash': ledger.cash, 'reserved_cash': sum(reservations.values()),
             'physical_completed_at': dict(ledger.completed) if physical is not None else {},
             'physical_commitments': dict(ledger.commitments) if physical is not None else {},
+            'physical_cash_receivables': dict(ledger.cash_receivables) if physical is not None else {},
             'open_positions': ledger.positions, 'active_proposals': active,
             'fills': ledger.events, 'decisions': decisions, 'marks': marks,
             'capture_complete': capture_complete,
-            'complete': not active and capture_complete,
+            'complete': not active and capture_complete and (physical is None or not ledger.cash_receivables),
             'valuation_complete': all(m['status'] == 'observed' for m in marks),
             'completed_proposals': sorted(completed),
             'allocation_policy': {'capital': capital, 'slots': slots, 'fraction': fraction,

@@ -1294,3 +1294,12 @@ Retain source dates, security identity, policy and accrual/release ledger events
 Do not describe this as verified broker posting. Missing/conflicting dates, due
 bills, unknown calendar release clocks and option deliverables remain separate
 gates. The other 55 compiled cash events remain outside this policy's finite set.
+
+
+Implementation evidence for the accepted September 17 stock-cash decision:
+[dividend-ledger review](reviews/2026-09-17-v7-stock-cash-ledger.md). All 4,337
+finite events compile; the ledger separates receivables from spendable cash,
+requires exact modeled opens and settlement coverage, and consumes the captured
+AAPL funded purchase with reviewed 2022 settlement dates. Broker posting remains
+unverified, the 55 excluded events remain excluded, and later settlement years
+are not inferred. This implements the accepted model without expanding it.

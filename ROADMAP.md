@@ -37,6 +37,10 @@ then clear 5,644 more history sessions and add effective-time stock-symbol
 treatment, while retaining separate option-deliverable gates.
 [Three unrelated rename treatments](docs/reviews/2026-09-17-v7-unrelated-renames.md)
 raise admitted history coverage to 586,830 sessions.
+The [authorized stock-cash ledger](docs/reviews/2026-09-17-v7-stock-cash-ledger.md)
+compiles 4,337 entitlements, retains receivables separately from spendable cash
+and verifies a funded captured AAPL purchase against the reviewed 2022 settlement
+calendar. Remaining settlement years and 55 excluded cash events stay open.
 This advances action compilation; it does not close identity, complex-action,
 no-event or held-position requirements.
 

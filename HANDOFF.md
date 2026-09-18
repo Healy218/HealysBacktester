@@ -1,4 +1,4 @@
-# Handoff — V7 item 6-1: unrelated rename records reconciled
+# Handoff — V7 item 6-1: authorized dividend ledger implemented
 
 ## Instruction and settled decisions
 
@@ -7,7 +7,7 @@ and notify the user when all remaining tasks are done. **6-1 remains open; 6-2
 through 6-7 remain queued.** Do not equate this milestone with V7 readiness.
 Preserve V6 operation and unrelated dirty work; no blanket staging or reset.
 
-Both admission questions are settled; do not ask again:
+All three admission questions are settled; do not ask again:
 
 1. Matching ordinary provider terms are accepted as historical reconstruction,
    applied only from the effective session; publication remains unverified.
@@ -17,57 +17,58 @@ Both admission questions are settled; do not ask again:
    Active policy: `docs/specs/V7_NO_EVENT_ADMISSION_20260917.json`.
    Each consumer retains the assumption and completeness_verified=false.
 
-Neither decision admits unknown identities, unresolved complex actions, stock
-entitlements/payment clocks or option deliverables.
+3. The finite pre-tax stock-cash model is accepted for 4,337 existing events.
+   Active policy: `docs/specs/V7_STOCK_CASH_LEDGER_ADMISSION_20260917.json`.
+   Accrue entitled funded beneficial shares at ex-open; receivables add equity
+   but not spendable cash; release at first regular open after pay date; zero
+   modeled withholding/fees; broker posting remains unverified.
+
+These decisions do not admit unknown identities, unresolved complex actions,
+the other 55 compiled cash events or changed option deliverables.
 
 ## Completed milestone
 
-Three additional finite relevance reviews resolve AMRK→GOLD (Gold.com),
-BNZI→PARA (Banzai) and SPCX→SPCK (SPAC ETF) as unrelated to the scoped Barrick,
-Paramount and SpaceX securities. Primary effective-date notices and original
-adjacent composite/share-class identities identify both unrelated rename legs;
-a distinct captured scoped witness prevents ticker-only inference. No new
-exclusion or successor/entitlement relation is created.
+The finite authorized stock-cash compiler seals **4,337 events /272 securities**,
+with the other 55 cash events explicitly excluded. Original provider references,
+source amounts, reconciled ex/record/pay dates, policy identity and release clocks
+are retained. Current output is `v7-stock-cash-entitlements-20260917-r3`; the first
+and r2 outputs predate final validation changes and remain historical.
 
-Coverage now combines treatment references against the original inventory,
-independent of artifact build order. Current partition: **10,428 =8,964 compiled
-cash/split +93 unrelated +7 scoped rename +1,364 pending records**. Cash/split
-events remain 4,481; the seven previous scoped rename treatments remain intact.
+PhysicalLedger now tracks funded beneficial quantity deltas from stock purchases,
+exercise and sales. It accrues receivables before ex-session trading; cash release
+is exactly once at the modeled regular open. Equity includes receivables;
+entry/exercise funding cannot spend them. The portfolio schedules both events,
+preserves entitlements after stock liquidation and remains incomplete while a
+receivable is outstanding. Runtime rejects mistimed events, unsupported terms
+and clocks outside captured settlement coverage before mutation.
 
-Admitted history rises by 2,026 to **586,830 sessions** (582,440 no-price-event,
-4,390 compiled-price-event). Action-blocked rows: 27,777; identity-blocked:
-52,632. The other 663,852 rows outside the three affected scoped securities have
-unchanged coverage. Raw observations, selected identities, membership and all
-previous chart events are unchanged.
+Full finite census verification independently reconciles all 4,337 amounts,
+source identities, approved dates and release opens. The already captured AAPL
+May 5 quote funds a simulated 100-share purchase at $163.83. It reserves
+$16,407.5745 including existing costs, settles May 9 with conservative availability
+May 10, accrues $23 on May 6 and releases that cash May 13. Ending cash is
+$83,615.4255 plus 100 retained funded shares. This is an accounting case, **not**
+a completed strategy outcome, stock sale or held-mark replay.
 
-Real two-session proposal-loader/15-minute feature checks pass B (780 minutes),
-PARA (778), SPCX (780), each with 52 observations. Barrick now correctly consumes
-its previously reviewed GOLD→B identity event. Earlier six scoped-rename checks
-remain historical evidence. No full feature production or held market replay
-is claimed. Existing stock rename ledger/portfolio code remains unchanged.
+The four-page original FINRA October 15, 2021 notice was rendered and visually
+reviewed. Its 2022 calendar has 249 settlement days; all 46 original trade/date
+pairs reconcile, including Juneteenth, Good Friday and the separate Columbus/
+Veterans bank holidays. This calendar admits **2022 only**. Across 681 eligible
+2022 events, the actual portfolio consumer with no inventory creates no dividend
+income. No new acquisition was needed. 2023–2026 settlement calendars still need
+original-source review; do not silently use a trading calendar for settlement.
 
-Focused relevance tests: **10 passed**. Full suite: **2,103 tests +18 subtests
-passed**, 19 warnings, 201.56 seconds. All launched builds/checks completed.
-Three primary notices captured; two Banzai issuer-domain timeouts have a retained
-Nasdaq-distributed issuer fallback. No V6 change, deployment or training launch.
+Verification: `v7-stock-cash-verification-20260917`. Tests: cash-specific 28 passed;
+full suite **2,131 tests +18 subtests passed**, 19 warnings, 163.96 seconds.
+All compiler/verification/test processes completed with exit 0. Test receipt:
+`v7-stock-cash-tests-20260917`.
+[Cash ledger review](docs/reviews/2026-09-17-v7-stock-cash-ledger.md).
 
-[Full relevance review](docs/reviews/2026-09-17-v7-unrelated-renames.md),
-[prior scoped renames](docs/reviews/2026-09-17-v7-common-share-renames.md),
-[prior coverage/repairs](docs/reviews/2026-09-17-v7-action-coverage.md).
-
-## New held-cash policy accepted — implement next
-
-The user explicitly accepted
-`docs/specs/V7_STOCK_CASH_LEDGER_PROPOSAL_20260917.json`:
-4,337 of 4,392 compiled cash events have agreeing ex/record/pay dates and no
-flagged due-bill chronology. Proposal: accrue a pre-tax receivable on entitled
-funded shares, include it in equity but not spendable cash, release cash at the
-first captured regular open after the agreed pay date, and model zero withholding.
-Broker posting is not verified. **This decision is settled; do not ask again.**
-Active policy: `docs/specs/V7_STOCK_CASH_LEDGER_ADMISSION_20260917.json`.
-Implement its funded-share receivable/release ledger and actual consumer checks
-next. The other 55 cash events need separate date review. This is a separate
-admission from the earlier feature/no-event decisions.
+Earlier relevance milestone remains current: 4,481 chart actions, seven scoped
+renames and 93 unrelated records; 586,830 history-admitted sessions. Full original
+partition: 10,428 =8,964 cash/split +93 unrelated +7 rename +1,364 pending.
+Action-blocked rows 27,777; identity-blocked 52,632. Cash implementation does not
+change that feature-history coverage or admit full held-position histories.
 
 ## Current immutable artifacts
 
@@ -79,7 +80,9 @@ Under `nn_meta/validation/`:
 - **Unrelated records:** `v7-other-instruments-20260917-renames` (45 cash groups +3 renames).
 - **Renames:** `v7-common-share-renames-20260917`.
 - **Coverage:** `v7-action-coverage-20260917-relevance`.
-- Current verification: `v7-relevance-consumers-20260917`, three
+- **Stock cash:** `v7-stock-cash-entitlements-20260917-r3`,
+  `v7-stock-cash-verification-20260917` (includes the normalized 2022 settlement calendar).
+- Prior relevance verification: `v7-relevance-consumers-20260917`, three
   `v7-relevance-feature-check-*` stores, `v7-relevance-tests-20260917`.
 - Prior rename verification: `v7-rename-consumers-20260917`, six `v7-rename-feature-check-*`
   stores and `v7-rename-tests-20260917`.
@@ -115,8 +118,9 @@ this does not infer option symbol/deliverable changes.
    dates alone are not effective dates. GAP's pure rename and Barrick's separate
    unrelated AMRK→GOLD record are now resolved. Actual mergers/spinoffs must retain
    executable successor/entitlement treatment rather than a chart-only factor.
-4. Consume treatments in actual feature and held-position paths, including cash
-   entitlements, payment/settlement, splits, lifecycle and option deliverables.
+4. Consume treatments in actual feature and held-position paths, including the implemented finite cash
+   entitlements with remaining 2023–2026 settlement calendars, the 55 excluded cash
+   dates, splits, lifecycle and option deliverables.
    Only full required-scope reconciliation closes 6-1. Never invent outcomes.
 
 ## Fixed scope and resources
@@ -137,7 +141,7 @@ No full V7 dataset or trained model exists. Saved readiness remains
 substantive stages unpassed. Preserve uncommitted assembly modules and unrelated
 V6 edits. This milestone makes no deployment or training launch.
 
-Previous handoff: `handoff-history/HANDOFF-2026-09-17-before-unrelated-renames.md`.
+Previous handoff: `handoff-history/HANDOFF-2026-09-17-before-stock-cash.md`.
 
 Independent next review identified: 12 Massive split records use adjustment_type
 stock_dividend. Ten appear to describe actual same-share splits (GOOG/GOOGL, GME,

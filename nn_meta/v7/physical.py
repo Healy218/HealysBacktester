@@ -81,6 +81,57 @@ class PhysicalLedger(CashLedger):
         self.shares = {}  # Settled stock only, acquired with this ledger's cash.
         self.completed = {}
         self.applied_stock_renames = set()
+        self.cash_receivables = {}
+        self.applied_cash_entitlements = set()
+
+    def accrue_stock_cash(self, event, clock):
+        """Record funded beneficial-share entitlement before ex-session trading."""
+        from nn_meta.v7.stock_cash import validate_cash_event
+        validate_cash_event(event, self.settlement_calendar.trading,
+                            settlement_calendar=self.settlement_calendar)
+        if (type(clock) is not int or clock != event['effective_ns'] or clock < self.last_clock
+                or event['event_id'] in self.applied_cash_entitlements):
+            raise ValueError('Unique chronological cash entitlement at the ex-session open required')
+        # Ownership changes on funded purchase/exercise/sale decisions, not on
+        # settlement bookkeeping. Ignore trades at/after the ex-session open.
+        shares = sum(Decimal(str(e.get('stock_quantity_delta', 0))) for e in self.events
+                     if e.get('security_id') == event['security_id'] and e['sip_timestamp'] < clock)
+        amount = shares * Decimal(event['cash_per_share'])
+        if shares < 0 or not amount.is_finite() or not math.isfinite(float(amount)):
+            raise ValueError('Nonnegative funded beneficial shares required')
+        self._event(event['event_id'], clock, 'stock_cash_accrual',
+            security_id=event['security_id'], entitled_shares=float(shares), receivable=float(amount),
+            cash_per_share=event['cash_per_share'], record_date=event['record_date'], pay_date=event['pay_date'],
+            release_ns=event['release_ns'], policy_identity=event['policy_identity'],
+            source_identity=event['source_identity'], broker_posting_verified=False,
+            withholding_fraction=0, dividend_fee_per_share=0)
+        self.applied_cash_entitlements.add(event['event_id'])
+        if amount:
+            self.cash_receivables[event['event_id']] = dict(amount=float(amount),
+                release_ns=event['release_ns'], policy_identity=event['policy_identity'],
+                security_id=event['security_id'], source_identity=event['source_identity'])
+        return float(amount)
+
+    def release_stock_cash(self, event, clock):
+        """Release modeled spendable cash exactly once at its captured open."""
+        from nn_meta.v7.stock_cash import validate_cash_event
+        validate_cash_event(event, self.settlement_calendar.trading,
+                            settlement_calendar=self.settlement_calendar)
+        if (type(clock) is not int or clock != event['release_ns'] or clock < self.last_clock
+                or event['event_id'] not in self.applied_cash_entitlements):
+            raise ValueError('Accrued entitlement and exact modeled release clock required')
+        value = self.cash_receivables.get(event['event_id'])
+        if value is None:
+            self._clock(clock)
+            return 0.
+        if any(value[k] != event[k] for k in ('release_ns','policy_identity','security_id','source_identity')):
+            raise ValueError('Cash release differs from accrued event')
+        self._event(event['event_id'], clock, 'stock_cash_release', cash_delta=value['amount'],
+            security_id=event['security_id'], policy_identity=event['policy_identity'],
+            source_identity=event['source_identity'], broker_posting_verified=False)
+        self.cash += value['amount']
+        del self.cash_receivables[event['event_id']]
+        return value['amount']
 
     def apply_stock_rename(self, event, clock):
         """Apply a reviewed unchanged-share ticker transition at its exact clock.
@@ -201,6 +252,7 @@ class PhysicalLedger(CashLedger):
             return 'unresolved_share_delivery'
         settled_on, available = self.settlement_calendar.settlement(clock)
         self._event(key, clock, 'exercise', contract=p['contract'], shares=shares,
+                    security_id=p['security_id'], stock_quantity_delta=shares if right == 'C' else -shares,
                     reference_identity=reference['source_identity'],
                     metadata_receipt_sha256=metadata['metadata_receipt_sha256'], policy=asdict(self.physical_policy))
         # Put delivery removes reserved shares from free inventory immediately.
@@ -295,6 +347,7 @@ class PhysicalLedger(CashLedger):
             return False
         settled_on, available = self.settlement_calendar.settlement(fill['sip_timestamp'])
         self._event(key, fill['sip_timestamp'], 'inventory_purchase', payable=cost, shares=quantity,
+                    security_id=security_id, stock_quantity_delta=quantity,
                     price=fill['price'], capture_identity=fill['capture_identity'])
         self.positions[key] = dict(symbol=symbol, security_id=security_id, phase='inventory_purchase_pending',
                                    deliverable_shares=quantity, right='C')
@@ -348,6 +401,7 @@ class PhysicalLedger(CashLedger):
         settled_on, available = self.settlement_calendar.settlement(fill['sip_timestamp'])
         net = p['deliverable_shares'] * fill['price'] * (1-self.physical_policy.stock_fee_fraction-self.physical_policy.stock_slippage_fraction)
         self._event(key, fill['sip_timestamp'], 'stock_sale', shares=p['deliverable_shares'],
+                    security_id=p['security_id'], stock_quantity_delta=-p['deliverable_shares'],
                     price=fill['price'], capture_identity=fill['capture_identity'], receivable=net)
         self.commitments[key] = dict(cash_delta=net, settled_on=settled_on,
                                     available_ns=available, right='C', shares=0.)
@@ -357,7 +411,7 @@ class PhysicalLedger(CashLedger):
     def equity(self, clock_ns, tapes, stock_archive=None):
         if clock_ns < self.last_clock:
             raise ValueError('Equity cannot precede recorded events')
-        value = self.cash
+        value = self.cash + sum(r['amount'] for r in self.cash_receivables.values())
         def stock_bid(symbol, security_id):
             if stock_archive is None:
                 raise QuoteUnavailable('Physical stock mark capture required')
@@ -385,4 +439,16 @@ class PhysicalLedger(CashLedger):
         result = super().reconcile()
         if self.available_cash < -1e-7 or any(v < -1e-9 for v in self.shares.values()):
             raise ValueError('Physical commitments exceed funded resources')
-        return {**result, 'available_cash': self.available_cash, 'pending_settlements': len(self.commitments)}
+        if any(not math.isfinite(r['amount']) or r['amount'] <= 0 for r in self.cash_receivables.values()):
+            raise ValueError('Cash receivables must be positive finite entitlements')
+        expected = {}
+        for event in self.events:
+            if event.get('kind') == 'stock_cash_accrual' and event['receivable']:
+                expected[event['key']] = event['receivable']
+            elif event.get('kind') == 'stock_cash_release':
+                if expected.pop(event['key'], None) != event['cash_delta']:
+                    raise ValueError('Cash release does not reconcile to its accrual')
+        if expected != {k:r['amount'] for k,r in self.cash_receivables.items()}:
+            raise ValueError('Cash receivable balance does not reconcile')
+        return {**result, 'available_cash': self.available_cash, 'pending_settlements': len(self.commitments),
+                'cash_receivables': sum(r['amount'] for r in self.cash_receivables.values())}
