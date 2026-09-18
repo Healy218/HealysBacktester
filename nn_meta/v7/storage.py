@@ -41,6 +41,12 @@ def transaction(destination):
         if path.is_file():
             with path.open('rb') as stream:
                 os.fsync(stream.fileno())
+    # A retry may have sealed the same destination while this writer was
+    # finishing its temporary tree.  Keep both immutable evidence trees and
+    # leave the already-published destination as the winner; callers verify
+    # that receipt immediately after the transaction.
+    if destination.exists():
+        return
     temporary.rename(destination)
     fd = os.open(destination.parent, os.O_DIRECTORY)
     try:
