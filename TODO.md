@@ -59,6 +59,11 @@ plus 55 compiled events awaiting date treatment**. The extension is authorized
 for the original remaining 528 groups as each passes review; do not request
 another per-issuer cash-model approval. Identity, other complex actions and
 full held-position treatment still prevent advancement to 6-2.
+September 18 [recovery and cash-date continuation](docs/reviews/2026-09-18-v7-cash-date-recovery.md)
+recovers eight interrupted date fixes and adds 40 reviewed cases. Current cash
+entitlements are **4,421**; **444 dividend items remain: 437 uncompiled groups
+plus seven date cases**. All price actions and history coverage are unchanged.
+The full suite passes 2,246 tests plus 18 subtests. Item 6-1 remains open.
 The user selected this sequence on September 17 after reviewing the
 [three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md#6-consolidated-remaining-todos-before-the-goal-is-finished).
 The report's pause is historical; this checklist and [HANDOFF](HANDOFF.md)

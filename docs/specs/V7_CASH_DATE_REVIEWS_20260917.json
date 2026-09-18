@@ -1,0 +1,294 @@
+{
+  "schema": "v7-finite-primary-cash-date-reviews-v1",
+  "purpose": "Resolve record/payment dates for existing price actions under the accepted finite pre-tax extension; preserve all existing chart objects and availability assumptions.",
+  "reviews": [
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-b3157e1093a809751d04a089f8ef23411528ebbc746d672c21f3da24258759e2",
+      "compiled_source_identity": "35138388cebcde6bab6a63fb6699cff229a61fa791a3e4b0d2db558756f38a01",
+      "symbol": "IBM",
+      "security_id": "BBG000BLNNH6",
+      "cash_per_share": "1.66",
+      "ex_date": "2023-08-09",
+      "record_date": "2023-08-10",
+      "pay_date": "2023-09-09",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Original issuer cash-dividend history states USD 1.66 per share with the reviewed record date and stated Saturday payable date. Apply the accepted first-regular-open-after-pay model; do not claim verified broker posting.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e115f430-e7a7-4cef-a663-2a615db16302",
+          "record_sha256": "3cd1fdc3e195e1feb346e4d02571ecf460a666bd99c34d7cd7817affb1e91eec"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea23325405a7296aa666ecbe525873c5f614766ba9125b8895b69680083ccb01a",
+          "record_sha256": "d08857c5e232e7599ce623b0ed3f106b5bc03c6cc4be7db1efec512c0c13b0fa"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/ibm-cash-history",
+          "receipt_sha256": "9d2f16d1c5e16fd8fbc4aafb0c6699d3ce935ac2d680f7405604464ccbcdd1b8",
+          "payload_sha256": "f2d8e613c8ad16a21e548ea3aafe46e77a6d6eec44a222c78cb281939163338b",
+          "review": "Original issuer cash-dividend history states USD 1.66 per share with the reviewed record date and stated Saturday payable date. Apply the accepted first-regular-open-after-pay model; do not claim verified broker posting."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-befa08fe80b8a61d6a74dd13928657946aad266179e3c42f07e340a7663dda16",
+      "compiled_source_identity": "0bb061f93d56b68015e184de42469dafbb4bba7b22c69445170342c2bb28c9fb",
+      "symbol": "IBM",
+      "security_id": "BBG000BLNNH6",
+      "cash_per_share": "1.66",
+      "ex_date": "2023-11-09",
+      "record_date": "2023-11-10",
+      "pay_date": "2023-12-09",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Original issuer cash-dividend history states USD 1.66 per share with the reviewed record date and stated Saturday payable date. Apply the accepted first-regular-open-after-pay model; do not claim verified broker posting.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "0bbef1c5-ea34-4baf-8267-fd07fb16b488",
+          "record_sha256": "5582122b256ef0d49f39605d145cfb87303d878dfdaf8e54cc9b4bca8e31ade3"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef2620398d6433d09baaf13dde42a9e9e41d32a18364ff9062d958b2f7861a126",
+          "record_sha256": "9570b6d44c540504c5cc1c7ca1dc72e9b7f70078c584cbaf46c4bfb503e41dfe"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/ibm-cash-history",
+          "receipt_sha256": "9d2f16d1c5e16fd8fbc4aafb0c6699d3ce935ac2d680f7405604464ccbcdd1b8",
+          "payload_sha256": "f2d8e613c8ad16a21e548ea3aafe46e77a6d6eec44a222c78cb281939163338b",
+          "review": "Original issuer cash-dividend history states USD 1.66 per share with the reviewed record date and stated Saturday payable date. Apply the accepted first-regular-open-after-pay model; do not claim verified broker posting."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-27901c02de2f438df188e939da5c6e7f85b1c45c596379ff2df29af8f92cef3e",
+      "compiled_source_identity": "df73307d7604a14b4470bcab8cecc70ab698175ad132633f4e70e92a1b75fc0f",
+      "symbol": "IBM",
+      "security_id": "BBG000BLNNH6",
+      "cash_per_share": "1.66",
+      "ex_date": "2024-02-08",
+      "record_date": "2024-02-09",
+      "pay_date": "2024-03-09",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Original issuer cash-dividend history states USD 1.66 per share with the reviewed record date and stated Saturday payable date. Apply the accepted first-regular-open-after-pay model; do not claim verified broker posting.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fbac5efb-8d49-4cc9-89d1-bfb8b4089141",
+          "record_sha256": "e75d4cc734a11ef91a4fed885230c9b6010936badad1993f340353fde18fd5a0"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eed8aeff13bdcd837e2835e41c2d1637022b82764b7db12e7b267b12afc37fec2",
+          "record_sha256": "e80e4e05a399fa7a9fbd19cb4c69f0fe87e5852d7f2dc9e5f537fdae503fa92d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/ibm-cash-history",
+          "receipt_sha256": "9d2f16d1c5e16fd8fbc4aafb0c6699d3ce935ac2d680f7405604464ccbcdd1b8",
+          "payload_sha256": "f2d8e613c8ad16a21e548ea3aafe46e77a6d6eec44a222c78cb281939163338b",
+          "review": "Original issuer cash-dividend history states USD 1.66 per share with the reviewed record date and stated Saturday payable date. Apply the accepted first-regular-open-after-pay model; do not claim verified broker posting."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-518b1b83b5a05d6f24283881558ddbf292fa2c2d2318ebeaef869b019a5cfa88",
+      "compiled_source_identity": "48272f0e352b8a5bcdb450ceeb74484492f16d6fd913647fa8fab5815ba29002",
+      "symbol": "TGT",
+      "security_id": "BBG000H8TVT2",
+      "cash_per_share": "1.1",
+      "ex_date": "2023-08-15",
+      "record_date": "2023-08-16",
+      "pay_date": "2023-09-10",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Issuer dividend-payment history PDF page 1, visually inspected, lists the exact record date, nominal payable date and unadjusted cash amount. Use its stated payable date under the accepted first-regular-open-after-pay model.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "5df35d36-3367-448c-8733-221561c57972",
+          "record_sha256": "a57ea4e55d2f2bd117251f67776db8b0d5a781796cd5105ebf04265dd4bd99a1"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E2a33de7cc960cb6572160c9daed16d918a678c6c9fdcd4b030783e56c273b1c2",
+          "record_sha256": "b7b664f1a95d2256abc9c65c66ea3afb1e2b3bfb6c9cb267b878280f2db6811c"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/target-cash-history",
+          "receipt_sha256": "d49c2b407d71a3f0dd5b6ab1e557eba6cb1c252161add5fe90718d2c42d8832f",
+          "payload_sha256": "80118dec34630b667827762d3b8d4944744d15f5d801d7940328bc9b35bb1f45",
+          "review": "Issuer dividend-payment history PDF page 1, visually inspected, lists the exact record date, nominal payable date and unadjusted cash amount. Use its stated payable date under the accepted first-regular-open-after-pay model."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-225661f12fc2fd8dab5b17a649ca4c3d9b4ef964dc3b53a13023d149a738ac07",
+      "compiled_source_identity": "72e059dab05589f3a281fcf4a78110d8bfd8bdf16c4bf5a4b764926d0fa2ebb8",
+      "symbol": "TGT",
+      "security_id": "BBG000H8TVT2",
+      "cash_per_share": "1.1",
+      "ex_date": "2023-11-14",
+      "record_date": "2023-11-15",
+      "pay_date": "2023-12-10",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Issuer dividend-payment history PDF page 1, visually inspected, lists the exact record date, nominal payable date and unadjusted cash amount. Use its stated payable date under the accepted first-regular-open-after-pay model.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "832b8e45-05cf-4e9c-ab38-18dfde94ee7b",
+          "record_sha256": "28a531e800af465c616dd1aaffc288e7a3bb4f99c1aaf062b77c20cf0520c9c4"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E75c9434f2a2c29940260251bbb37f6e2995b828dad71f844a505ad6c12d1ed0b",
+          "record_sha256": "10456a16835fbeac2dc40ef870ff9829b090bf096466de1eae94f5ac8bc5c058"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/target-cash-history",
+          "receipt_sha256": "d49c2b407d71a3f0dd5b6ab1e557eba6cb1c252161add5fe90718d2c42d8832f",
+          "payload_sha256": "80118dec34630b667827762d3b8d4944744d15f5d801d7940328bc9b35bb1f45",
+          "review": "Issuer dividend-payment history PDF page 1, visually inspected, lists the exact record date, nominal payable date and unadjusted cash amount. Use its stated payable date under the accepted first-regular-open-after-pay model."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-5f0152299f9dd5721792bc61875eaa4c86a24d18fca7ffe71db08b65df9c7e58",
+      "compiled_source_identity": "d9d489ec9c1efe394981fa40407871eadb8e6580756b979e063e2b2ba238e145",
+      "symbol": "TGT",
+      "security_id": "BBG000H8TVT2",
+      "cash_per_share": "1.1",
+      "ex_date": "2024-02-20",
+      "record_date": "2024-02-21",
+      "pay_date": "2024-03-10",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Issuer dividend-payment history PDF page 1, visually inspected, lists the exact record date, nominal payable date and unadjusted cash amount. Use its stated payable date under the accepted first-regular-open-after-pay model.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3db4c7e5-556a-4f1e-b5d8-bb99cdab3203",
+          "record_sha256": "d687d682ea515094a83d93099c5f375d6b548a6c64a5a5ed5df5eb503eedaac8"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eb64199f181b102ce601d7126b21649d0219964ab1b3e7aed097babba7e7b01a3",
+          "record_sha256": "ca24c0852d32aec1f9ca63afb5c19d285701daf1a4a2bc93a2cffe80453aaa3b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/target-cash-history",
+          "receipt_sha256": "d49c2b407d71a3f0dd5b6ab1e557eba6cb1c252161add5fe90718d2c42d8832f",
+          "payload_sha256": "80118dec34630b667827762d3b8d4944744d15f5d801d7940328bc9b35bb1f45",
+          "review": "Issuer dividend-payment history PDF page 1, visually inspected, lists the exact record date, nominal payable date and unadjusted cash amount. Use its stated payable date under the accepted first-regular-open-after-pay model."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-5fe8610de622183b60472ff3d6b71a7bbf5f92d9787e0f9cd3996e4eed75b89a",
+      "compiled_source_identity": "e7a0ae343603ad22eca740f4ff7bc57fe8ea26b537ed7b1cdb4e2b519f1d4bfe",
+      "symbol": "TGT",
+      "security_id": "BBG000H8TVT2",
+      "cash_per_share": "1.14",
+      "ex_date": "2026-02-11",
+      "record_date": "2026-02-11",
+      "pay_date": "2026-03-01",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Issuer dividend-payment history PDF page 1, visually inspected, lists the exact record date, nominal payable date and unadjusted cash amount. Use its stated payable date under the accepted first-regular-open-after-pay model.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "257d9eaf-f3b6-41fd-8907-706e5b024e1b",
+          "record_sha256": "9321c93f50961020437ae3d2e25bde013aaaa925b9450ec53f9d67563f7520e4"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E33509325351f5e04fdfc4ac8dac0b41e5627a45d5cdba742e1d4d77f4c99ed47",
+          "record_sha256": "2d40b29759f241bba47de8caed0c74b1e7490961d76df6ab1a992ff44bcfa6d4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/target-cash-history",
+          "receipt_sha256": "d49c2b407d71a3f0dd5b6ab1e557eba6cb1c252161add5fe90718d2c42d8832f",
+          "payload_sha256": "80118dec34630b667827762d3b8d4944744d15f5d801d7940328bc9b35bb1f45",
+          "review": "Issuer dividend-payment history PDF page 1, visually inspected, lists the exact record date, nominal payable date and unadjusted cash amount. Use its stated payable date under the accepted first-regular-open-after-pay model."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-6ffeffbfedfede55d1dfbe1d525486aa42bb789ba39263733eaf96b70cf26a49",
+      "compiled_source_identity": "ec120467d2ea7551a37f478f67e97dd355da5e33ec459211114037b6ec6cb21f",
+      "symbol": "PNC",
+      "security_id": "BBG000BRD0D8",
+      "cash_per_share": "1.55",
+      "ex_date": "2023-07-14",
+      "record_date": "2023-07-17",
+      "pay_date": "2023-08-07",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Dated primary release states USD 1.55 per common share, July 17 record date, nominal August 5 payment and an explicit next-business-day payable clause. August 7 is the original Alpaca payable date and a captured settlement business date; use August 7 as the effective payable date, retaining the nominal-date distinction.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8a1b2aa7-16ab-4b30-9ac9-301824f13e45",
+          "record_sha256": "85acfbeff9f45bbe4c0238f204b769e3217b4efb9b77ac5a17d4b39b500139c7"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eed91ccd5be32ef208307d909eb293dab4d18aa928058d1f78356ee65dca852f7",
+          "record_sha256": "a94eceb27cb1c93abe7624a0103de0f4fcd0c666b24259f00796645fb3ed2b87"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/pnc-20230703-dividend",
+          "receipt_sha256": "23527654e6b9ceb14ad580cb1e91cfc9ff2dfaad03dfb50e5378edf8335b1a52",
+          "payload_sha256": "ac2d9fd4267ba8854104d7616ebd3a6b576beffc365ee4bece2bc1206a9c0d26",
+          "review": "Dated primary release states USD 1.55 per common share, July 17 record date, nominal August 5 payment and an explicit next-business-day payable clause. August 7 is the original Alpaca payable date and a captured settlement business date; use August 7 as the effective payable date, retaining the nominal-date distinction."
+        }
+      ]
+    }
+  ]
+}

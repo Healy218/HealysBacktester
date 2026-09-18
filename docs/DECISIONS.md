@@ -1342,3 +1342,15 @@ mapped dates preserve the 2023 Veterans Day, 2024 T+1 and January 2025 exchange
 closure distinctions. This supplies captured scheduled settlement inputs;
 it does not claim actual broker posting, historical publication or option-class
 exercise rules. [Evidence](reviews/2026-09-17-v7-cash-calendar-closure.md).
+
+## 2026-09-18 — finite cash-date reconstruction and producer preservation
+
+Within the previously authorized 528-group extension, consume exact issuer
+record/payment dates for 48 reviewed cases, retaining price actions and the
+first-regular-open-strictly-after-pay model. January 2025 INTU/ORCL/MA chronology
+is permitted only with the original Nasdaq ETA2025-1 notice and issuer evidence.
+Reject a global record-before-ex waiver or a blanket weekend date roll.
+Preserve two exact historical producer versions as hashed snapshots and bind
+current producers separately in new v2 outputs; do not relabel sealed inputs.
+The resulting 4,421-event verification is not full held-history admission.
+[Evidence, limits and seven remaining dates](reviews/2026-09-18-v7-cash-date-recovery.md).

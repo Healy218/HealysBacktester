@@ -1,0 +1,1440 @@
+{
+  "schema": "v7-finite-primary-cash-date-reviews-v1",
+  "purpose": "Continue the already authorized finite date treatment using retained primary evidence; no price-action or historical-publication changes.",
+  "reviews": [
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-0c977e0bbdf3e3921c2c9052b5c09be874938b4306e2edf57f4b1aa03415fbc5",
+      "compiled_source_identity": "39546b8cbd1e5e3c09998941622cc632c57d9bfa6bdf961926bfcf12a0fed0b9",
+      "symbol": "ABBV",
+      "security_id": "BBG0025Y4RY4",
+      "cash_per_share": "1.55",
+      "ex_date": "2024-04-12",
+      "record_date": "2024-04-15",
+      "pay_date": "2024-05-15",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 1.55 per relevant common share, record date 2024-04-15, and payable date 2024-05-15. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "ba4a97f8-9aea-402b-9e25-e0566c9f9892",
+          "record_sha256": "5ae007670349fd04abfbf7e8cf11cecf0e377836e5e2f0a25eeb4d5c82f77180"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E69d50083b87f61795ba0a9205e1923cac1805be2bee830b52ce9755c9bec60aa",
+          "record_sha256": "9d7884dad0a801fe1b177f066134ea6a4d3705ff3df86b4535cb9d302c2cf636"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/abbv-20240215",
+          "receipt_sha256": "36f58a7e6d34b023dc653282e811522240a81329478ae509335988cbc1a40110",
+          "payload_sha256": "71fcf261639ee1d3b81713c7611c8c39b5e6f0b2196bd56668896e0d030a89c6",
+          "review": "Retained primary issuer source states USD 1.55 per relevant common share, record date 2024-04-15, and payable date 2024-05-15. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-cb2a60c7193d6a6b4d9fbabadbd9877ebdd4fff515cf2565e51302c73ad07c7b",
+      "compiled_source_identity": "f1175a7257fb157c0a56abec5550cd3d0cb8c95bdfed1937560509080ee489a4",
+      "symbol": "ABT",
+      "security_id": "BBG000B9ZXB4",
+      "cash_per_share": "0.55",
+      "ex_date": "2024-04-12",
+      "record_date": "2024-04-15",
+      "pay_date": "2024-05-15",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.55 per relevant common share, record date 2024-04-15, and payable date 2024-05-15. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c7238349-bd9d-4f99-b780-63b88faa0716",
+          "record_sha256": "492dbcb96f782f28338d773f6a90af3b8d851f5d8e5814a3fdba31c6e1c02d46"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E2cbe37e5cf30d9313feb8f240c075f1680f4ad914f4f08a8adc6b19a8f8e6542",
+          "record_sha256": "f5f032be377423af598fb5c39a47897ab437543e2c41059a74aed0792f543c83"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/abt-20240216",
+          "receipt_sha256": "ccda70cad4100240b0c4a95cb642dd0fde7cfb32289ce76593037f87a8e6b498",
+          "payload_sha256": "5e4a16eee08552fa9f04e3d3b3e143998a0d19aa3618aa5bdc5d4e8557010531",
+          "review": "Retained primary issuer source states USD 0.55 per relevant common share, record date 2024-04-15, and payable date 2024-05-15. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-99e65dbeba4e3da76bc06763457b5273e3a62afa8ad9ef71eeeb6dd82e9adad0",
+      "compiled_source_identity": "4a809a0a28df2c7bcc5a3fc9117393a54032ef626dc33a57a08a21afa6167a52",
+      "symbol": "AVGO",
+      "security_id": "BBG00KHY5S69",
+      "cash_per_share": "5.25",
+      "ex_date": "2024-03-20",
+      "record_date": "2024-03-21",
+      "pay_date": "2024-03-29",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 5.25 per relevant common share, record date 2024-03-21, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fe4e7c51-52a5-4d5c-8e93-5c2c3b28e859",
+          "record_sha256": "ad8cfa0db5c51623de6a189b28aa4398570ce8980e04ecedf5ea2820567490c8"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ebfc886fc13d1a72f25b996d77ce6a5614ee8bd039fb2a5e0c15949ee4044e28f",
+          "record_sha256": "d1706b4942072adb49a9e02de24e2442dc83679a895c2cc3d0406d8176109733"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/avgo-20240307-pr",
+          "receipt_sha256": "877b1577b598f61a2c41fc3ff0d46d05c5328dd54774334d01dff9b076a4c496",
+          "payload_sha256": "b6461d4cc2933b06783e9fba548652e4d8b1e08926b19c2262c63e3ec87b01a8",
+          "review": "Retained primary issuer source states USD 5.25 per relevant common share, record date 2024-03-21, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-ecc1455951893c534a70a3e47057193fdd88a8093504bb383371157a81916ccb",
+      "compiled_source_identity": "0d4e757f154ed04d94cfa4e1207ea9ecc0b3e9e7a803d3a5e5d1a7e937afef25",
+      "symbol": "AXP",
+      "security_id": "BBG000BCQZS4",
+      "cash_per_share": "0.95",
+      "ex_date": "2026-04-02",
+      "record_date": "2026-04-03",
+      "pay_date": "2026-05-08",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.95 per relevant common share, record date 2026-04-03, and payable date 2026-05-08. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "6aee92ed-8dca-4adb-9f6a-3527a593be55",
+          "record_sha256": "6052049cc81a532d12a69108f7d58fdd1471599901fbfd783cfd5de884014d01"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eeaeaba6c71b83c8d4101e3dfe1f6774e0cde56480994dbf1b222a35dc7e0ec21",
+          "record_sha256": "e4f0eba8beb6799d81180ce965869723fdab8deabd6fa185a9efedbf9bf2aa5a"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/axp-20260302-ir",
+          "receipt_sha256": "67436d6accbd9325e75ee656b40118d8f25ccc3ef0b247522e954da3ac32287c",
+          "payload_sha256": "26ea15a19d8d979855e67fc22a2df01152a436f5ee556b97243cb121d903cbc4",
+          "review": "Retained primary issuer source states USD 0.95 per relevant common share, record date 2026-04-03, and payable date 2026-05-08. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-27e9f1fdfaf0752851f32261e609533c89fb141ba02cad5fa294e4fb945dfa3c",
+      "compiled_source_identity": "d662f790ca7858d9de3c7dcb9e2c9916f249c5db9a8b3285761464960ffc6eec",
+      "symbol": "BAC",
+      "security_id": "BBG000BCTLF6",
+      "cash_per_share": "0.24",
+      "ex_date": "2024-02-29",
+      "record_date": "2024-03-01",
+      "pay_date": "2024-03-29",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.24 per relevant common share, record date 2024-03-01, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9006d95c-88a3-40f5-ac0e-8168da3e4a69",
+          "record_sha256": "7f1d9e9f31040b55987e7fe2a1f20e065b040802b7478b5ea7192b8a894f06bb"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5d8d7a162b1e12a8c96203809bcb97eec4fc37a3151cae085fc9e5e271c7cf01",
+          "record_sha256": "b7d0eb053a2302b9a6f718bb0c99dff3b596770bda12923bfef3d01ea9b7025a"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/bac-20240131",
+          "receipt_sha256": "722903a225de35af0fb1fb189676818f99f781800c11ad6c27e23a2e3f68936c",
+          "payload_sha256": "389851d32b75b474ea10161bd662fd078592474a8652e191badb0dab29e7a810",
+          "review": "Retained primary issuer source states USD 0.24 per relevant common share, record date 2024-03-01, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-540d4e1be34f3a74078e1c01aa91c9c378247f9842b09ce84e2e685b97bda1b2",
+      "compiled_source_identity": "63d84ae6c9c355d2d49ce2144a73520718e874959ea997098edced7bb15a19b7",
+      "symbol": "BBY",
+      "security_id": "BBG000BCWCG1",
+      "cash_per_share": "0.95",
+      "ex_date": "2025-06-18",
+      "record_date": "2025-06-19",
+      "pay_date": "2025-07-10",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.95 per relevant common share, record date 2025-06-19, and payable date 2025-07-10. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9cb2a6e4-d2fa-459d-a283-831d7da207d2",
+          "record_sha256": "ee7b93015029cdc9cae758739ac54ee5ab8cfcf0aff35bb85f6b11f4031553b5"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eade33a1988ab7c9add4600fc3691e840a82e04be91bfdb37de9a456f7211a973",
+          "record_sha256": "7eb33c0d257f7d4bbd118ada4b928168068ad2e0e07578de832e3e9399681b9e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/bby-20250530",
+          "receipt_sha256": "fed2451b78edd20d16477143a40ee2f4e2cb8d445a91ec327ba5522ccc2a261e",
+          "payload_sha256": "8a88bf12481566fc7e56bd8c6847fa0a10acff42467f685081c2df8105b4c397",
+          "review": "Retained primary issuer source states USD 0.95 per relevant common share, record date 2025-06-19, and payable date 2025-07-10. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-72d5b86fc3567268971ef600e7ca94d392bffd80b9dc11925093a5be695622ef",
+      "compiled_source_identity": "85c08d8a9737a86ced6cec59cfdd0c03c61c6388d6822257e981c6297c24c6e7",
+      "symbol": "CMA",
+      "security_id": "BBG000C75N77",
+      "cash_per_share": "0.71",
+      "ex_date": "2025-12-15",
+      "record_date": "2025-12-15",
+      "pay_date": "2026-01-01",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.71 per relevant common share, record date 2025-12-15, and payable date 2026-01-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fbd82394-d002-4f32-818b-fe83b2fe469a",
+          "record_sha256": "1f432bb9976773df61da52ccd70588c1db08a26fefb3ad134ca34b5c5d411ad1"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef9b8a70de6bde2ccd1abf6d8cec45c11fa3dd3321301030bb328de1b8e6ef70e",
+          "record_sha256": "63249116db100b5762a549b922b66befae381947c862268f253b6d277f5875b6"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/cma-20251104",
+          "receipt_sha256": "482f67d36aa64dd260036c302094376f15fd50e3c686adfde0c9dd9b68de6309",
+          "payload_sha256": "0eb62eeb61c05d78746c41762b9caafe34824a5130fdb1812a9403f1c7c3882a",
+          "review": "Retained primary issuer source states USD 0.71 per relevant common share, record date 2025-12-15, and payable date 2026-01-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-57ea42cd7bf753d3f75a3756f475f0a3a74bbe4e4239b99fd77daa935dbc902b",
+      "compiled_source_identity": "0564eecc48233162ac375bee42880d7380d4b6d86a540357802fe2dfcb602fa8",
+      "symbol": "COP",
+      "security_id": "BBG000BQQH30",
+      "cash_per_share": "0.78",
+      "ex_date": "2025-02-14",
+      "record_date": "2025-02-17",
+      "pay_date": "2025-03-03",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.78 per relevant common share, record date 2025-02-17, and payable date 2025-03-03. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c6d42a0e-7659-436a-bf2e-8d1227ce5001",
+          "record_sha256": "05bb510475bf973f039b1e4b2d6b5c8d9e4bc7b9bb3cbe74aab32547d44f8e15"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E177fd08cf5efad1aa9151455abe3fd417cca784730a4a6dea41e89c23159f1a7",
+          "record_sha256": "a630c089a416b22c6ddf15848aca4d0f3fcd266dcda376a237c64ff0c3781e89"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/cop-20250206",
+          "receipt_sha256": "0c06d89b0f41f169ae6db25f89ac25530ad84ad0d179d19212539de1f323156a",
+          "payload_sha256": "7e7ecb81c3ce9e490f4644f64a902c41d418221565281ade3102fabbab333daf",
+          "review": "Retained primary issuer source states USD 0.78 per relevant common share, record date 2025-02-17, and payable date 2025-03-03. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-d29f3b0ac9cb1fbaed64b89a4c4bc5a0c1ab82aaeedb3926e761d850b4b90af3",
+      "compiled_source_identity": "f1ab11ce151c8daa0fead822719ca040fa03ebfa736d78acf2dd014adb83efda",
+      "symbol": "D",
+      "security_id": "BBG000BGVW60",
+      "cash_per_share": "0.6675",
+      "ex_date": "2025-09-05",
+      "record_date": "2025-09-05",
+      "pay_date": "2025-09-20",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.6675 per relevant common share, record date 2025-09-05, and payable date 2025-09-20. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "024bc43f-1730-4ba8-abb3-63db087365cd",
+          "record_sha256": "8463385aef65ce72018f2e14b897969f015b523debf868b6d5671a6bccaf3223"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5383fdb1d00bb84edf8326c094ff199ea5fdd69afa734380fd61ca6f0e92d1fe",
+          "record_sha256": "9bd7f3b52e98789e01c87ce22802a99ce367b428e55600b0f79f3c7a547ebb1c"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/d-20250801",
+          "receipt_sha256": "4ec9b8820d11cb13351095e71ef18964dee76c46e4a1e13d9a91b67c0e16af39",
+          "payload_sha256": "c139380cc624aadc05ee7d23790bc4e7096371cf06b94169a0f989149c899c65",
+          "review": "Retained primary issuer source states USD 0.6675 per relevant common share, record date 2025-09-05, and payable date 2025-09-20. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-56f0e0fe9675d53c97f8e7ae077c055acbef4d7ad5016c229f40205869c0ef48",
+      "compiled_source_identity": "f034c5f36d7ae816590c203535f6142461923fb04201c28f7923b3ab22c7aedf",
+      "symbol": "DPZ",
+      "security_id": "BBG000P458P3",
+      "cash_per_share": "1.51",
+      "ex_date": "2024-03-14",
+      "record_date": "2024-03-15",
+      "pay_date": "2024-03-29",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 1.51 per relevant common share, record date 2024-03-15, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "35537702-43d2-451b-8511-ee6cbc782da8",
+          "record_sha256": "7bb76b756556a8ad59229274de4e6f872d9ed56f16e5834a1b6bd20f36c916f0"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea79942cb917a10d07d5cf4d18004b36a59a4b4a95ce7d173ec9ba76695254e9b",
+          "record_sha256": "ed24fdaf36dd506aadc2c1ce312828515e239a966e63d588b7991f4d35012f2d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/dpz-20240226-pr",
+          "receipt_sha256": "69d5e1d21181bbe79630185ef034fe8db424669f8c4f734876d27f18202e0d27",
+          "payload_sha256": "ff522e58f68f256e6584204453aab73e84e8cdd8f934fa82f0e86989c73487da",
+          "review": "Retained primary issuer source states USD 1.51 per relevant common share, record date 2024-03-15, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-443aca646a593bd9c567a4be37a27186403915915eead90b48d6f1ff3fddc158",
+      "compiled_source_identity": "f5e62b637e2b7d912e5b195d2f16c67d886c71d8e3bedaf7587ab42987c9ac82",
+      "symbol": "EQIX",
+      "security_id": "BBG000MBDGM6",
+      "cash_per_share": "4.26",
+      "ex_date": "2024-05-21",
+      "record_date": "2024-05-22",
+      "pay_date": "2024-06-19",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 4.26 per relevant common share, record date 2024-05-22, and payable date 2024-06-19. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d1358fce-f892-4ff8-b546-207a8e53119d",
+          "record_sha256": "3fbdc070e3417367118fae5cf5f15b7dea87442486ef8cec8ec58301aac75748"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ed04ffbbf3e75c96da8b4aa41033cb1ff0d4779c27a670866755562cbaff6fb28",
+          "record_sha256": "d571c8b17efd622a4676a9629ced224fefc79ac2d1751dc2addf15e613d52a0e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/eqix-20240508",
+          "receipt_sha256": "0cd7ab0148007305fb7a352279a74a268619223202b28a5d674ba3ed6e91da0b",
+          "payload_sha256": "896128f463dd1ba8d853f16407f11d3d94335c7c21e0915a31351406d937de25",
+          "review": "Retained primary issuer source states USD 4.26 per relevant common share, record date 2024-05-22, and payable date 2024-06-19. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-0a2bec9fbca549cca1a02168d58348312929abfe6ef29aa5b4906f94d7dc6161",
+      "compiled_source_identity": "97f085bcab8cf1bc3f867fc450f6e707f79cea92bb6050543bde600bc098f123",
+      "symbol": "EQT",
+      "security_id": "BBG000BHZ5J9",
+      "cash_per_share": "0.1575",
+      "ex_date": "2024-05-07",
+      "record_date": "2024-05-08",
+      "pay_date": "2024-06-01",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.1575 per relevant common share, record date 2024-05-08, and payable date 2024-06-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fe1db107-a8b4-4a68-b7a7-9f52c439cf92",
+          "record_sha256": "d130643bfa1fe5254ac44f94d51b4fe2b13c0eea5f3f1bf90ea70182dcb33e5a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef2c6244e736d990cde1a79a1f682d3822d8c26e6212eb0c33a9f4b50df754ab8",
+          "record_sha256": "299ab7fa81193219c7dcdb60dcac69c64d70837635352f5f9eb26822eda6e468"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/eqt-20240417",
+          "receipt_sha256": "07917b5d2638367c5495c6bb81739481675ae5dc6ca90cfc2b49e607cf07e032",
+          "payload_sha256": "0d89ab957c36d5724dfdf21ba6ea43287cc2705d18b8795705d4706c256bcfdc",
+          "review": "Retained primary issuer source states USD 0.1575 per relevant common share, record date 2024-05-08, and payable date 2024-06-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-e6c8d2240415b1a8d6e108a9909b3a22ab4f3b738e5cadba75ce8f4bcbf533a7",
+      "compiled_source_identity": "89d5e3d9af343cf08bbad5f0691b154460a59a7e44824f5c6de040629a3a4a8a",
+      "symbol": "GEV",
+      "security_id": "BBG013G17W31",
+      "cash_per_share": "0.25",
+      "ex_date": "2025-04-17",
+      "record_date": "2025-04-18",
+      "pay_date": "2025-05-16",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.25 per relevant common share, record date 2025-04-18, and payable date 2025-05-16. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "bfd75694-01a7-47a0-9976-faa5ff8eda5a",
+          "record_sha256": "fa94816048d466ff066df2fdb3f9569051615b5426085d1d2cde514e853ac9b7"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E088bc0bfbcb8ff5bf4528b400e92bf9066caad0ee64c41c61c30a5a019ab7a2c",
+          "record_sha256": "7e5ad84660b582fe1390bccee48ed2f35c1ad8ebaf0e562bc3bc5349779f71fe"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/gev-20250408",
+          "receipt_sha256": "4a65d7cbe649e6cccd9476df25dc35bf7a95a285006565d343d3e4cd4a8d89c2",
+          "payload_sha256": "78a917545df1d5e079653ddb384f43ebe0cc4a7a179df335fcbf92624203b9c4",
+          "review": "Retained primary issuer source states USD 0.25 per relevant common share, record date 2025-04-18, and payable date 2025-05-16. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-76f7e28319ac2559fa04e4d6ab335ec9ff15a908ba2aa8543539ee817a4b6e73",
+      "compiled_source_identity": "9abd3147e6ea92f14fd604e5e7ffb591877869d6bacd665515b2f2cb5267f2de",
+      "symbol": "GOOG",
+      "security_id": "BBG009S3NB30",
+      "cash_per_share": "0.22",
+      "ex_date": "2026-09-04",
+      "record_date": "2026-09-07",
+      "pay_date": "2026-09-14",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.22 per relevant common share, record date 2026-09-07, and payable date 2026-09-14. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 3 visually reviewed. Use common Class A/B/C dividend, not the preferred-stock dividend.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "a058109f-2908-4d03-8acb-b2306eae06db",
+          "record_sha256": "ab4a30520b1b2bfae713e391258c9fceafeb3eedb417c27be592c91794c972c9"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0d6ad6786711c2553ac0d84f923ac5b475aa3ed2ed94af9f94f0d068e2a22e99",
+          "record_sha256": "4a572b7bb99c5d6cdf9ed193024f3e3951c59aa4c356736e9a7a57a69eba420c"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/goog-20260722-pdf",
+          "receipt_sha256": "e6854e0f3c69640043fa7f583f1b0af6d093c377c6e065eaa9dcb476ec7f9e2a",
+          "payload_sha256": "65f35a2e9c287112121f736321c7526d603ba8e0dae27acac56c7d7357602aa8",
+          "review": "Retained primary issuer source states USD 0.22 per relevant common share, record date 2026-09-07, and payable date 2026-09-14. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 3 visually reviewed. Use common Class A/B/C dividend, not the preferred-stock dividend."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-53a20fd4fef3ed99073e003904927ee4bb63af3ba087e25f23495afb008d1378",
+      "compiled_source_identity": "f28b4e6319301c42aea3e044ba0226460098375643bba816e67506b6640c234f",
+      "symbol": "GOOGL",
+      "security_id": "BBG009S39JX6",
+      "cash_per_share": "0.22",
+      "ex_date": "2026-09-04",
+      "record_date": "2026-09-07",
+      "pay_date": "2026-09-14",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.22 per relevant common share, record date 2026-09-07, and payable date 2026-09-14. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 3 visually reviewed. Use common Class A/B/C dividend, not the preferred-stock dividend.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "77c1a261-a233-4a16-94c7-31815e8155f9",
+          "record_sha256": "1560fe4de8e3d4aa8cee8313f8a34f12130ba01fcca70d65456ef6769c95787b"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E65cc97f68a6a7d632fdda1e753ce7b6a1f0fbc9befd88ca91c7fcc0fc6cec10d",
+          "record_sha256": "ca22dbbc5afcd9dd9dff5fb7dfe2751a46214d53e271ca4050a540e222babb53"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/goog-20260722-pdf",
+          "receipt_sha256": "e6854e0f3c69640043fa7f583f1b0af6d093c377c6e065eaa9dcb476ec7f9e2a",
+          "payload_sha256": "65f35a2e9c287112121f736321c7526d603ba8e0dae27acac56c7d7357602aa8",
+          "review": "Retained primary issuer source states USD 0.22 per relevant common share, record date 2026-09-07, and payable date 2026-09-14. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 3 visually reviewed. Use common Class A/B/C dividend, not the preferred-stock dividend."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-e64cfd0d72166560bab98b847c4910b4f0f779361011e204160cce1bf67a1144",
+      "compiled_source_identity": "e3f15053b7b0de4d0f31c01f87695fb843e35bb158496bf1817c9fa281b11ac8",
+      "symbol": "GWW",
+      "security_id": "BBG000BKR1D6",
+      "cash_per_share": "2.05",
+      "ex_date": "2024-05-10",
+      "record_date": "2024-05-13",
+      "pay_date": "2024-06-01",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 2.05 per relevant common share, record date 2024-05-13, and payable date 2024-06-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b2b9542d-d9df-4162-b040-45a420164165",
+          "record_sha256": "a5ed94437f321ef4d64bf2fb2806583c3ed2fd920b1d17639c12fc1e3ed67216"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E970dcbdb8628da0691315828cb982807d1972174679e26f8baadaf4c719c6a83",
+          "record_sha256": "1937358756a6a5432dff4f2c83a877b2565d71b4abfeb03331aaf4ab818bcd24"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/gww-20240424",
+          "receipt_sha256": "0ae4849bd5c20bc7d0738c808fba78fe0607b991ce57bd3a05811301b150a23e",
+          "payload_sha256": "f72bd3ec1b911f6cfba90157dbe51d00e3c3ea485c7d7403bb546cff1182aeba",
+          "review": "Retained primary issuer source states USD 2.05 per relevant common share, record date 2024-05-13, and payable date 2024-06-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-a73e51e9435bc8726d3b1cec997934707e661464109de251b9985295a27450eb",
+      "compiled_source_identity": "e82e6afe1bfc6ec7677019e8be5e27625f4fbea515efe193667153e79be696cc",
+      "symbol": "GWW",
+      "security_id": "BBG000BKR1D6",
+      "cash_per_share": "2.26",
+      "ex_date": "2026-02-09",
+      "record_date": "2026-02-09",
+      "pay_date": "2026-03-01",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 2.26 per relevant common share, record date 2026-02-09, and payable date 2026-03-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e161ef49-e69f-49ba-8dd5-d997b5c6e2ac",
+          "record_sha256": "b174ddcc3a947bb6ea0d8b6c7879457d2e4e666a63078551532bd056baafa9b6"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4a790a250b3f730d12e034930a3cbb07b599d9204618af7a3bc1d31c08db662a",
+          "record_sha256": "56c5c6bb873eac0f5607e6b012b242b04d58832d82789d133a2c85a40532f34c"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/gww-20260128",
+          "receipt_sha256": "56f2135e13a8e39480b5bc9507a9debd9520fb96312ea3fbac56fb955cb7bad5",
+          "payload_sha256": "4f0c2fc40a5e5c99a6fdd6f0aeb4f4ee7fb56148185729c57ef29bba9431550a",
+          "review": "Retained primary issuer source states USD 2.26 per relevant common share, record date 2026-02-09, and payable date 2026-03-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-124f319630a75bf3e20f2df5c43663ecf7bf504cdb19b47c3afe3e5157caf713",
+      "compiled_source_identity": "8e42905f719d8847ffa550894982fb8909390821a20a5429eb9bf2f31a423738",
+      "symbol": "HCA",
+      "security_id": "BBG000QW7VC1",
+      "cash_per_share": "0.66",
+      "ex_date": "2024-03-14",
+      "record_date": "2024-03-15",
+      "pay_date": "2024-03-29",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.66 per relevant common share, record date 2024-03-15, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 3 visually reviewed.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "25774b25-dceb-4a44-95ab-d6eb4fceb75e",
+          "record_sha256": "ed5a0c93e826854da5529940a08f4bdb84b93e66a5a86856355b3668c1ed4b88"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E2464ce599aa9c72ba2e6db9eac0d9c210fd95c261b6e664df2699716a9f6c14e",
+          "record_sha256": "5387d27d2efbeba3787b34aed2bb81ef4a0c326882b29732712356a72a74add4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/hca-20240130-pdf",
+          "receipt_sha256": "f71ebe55fb7d1493f7957bb2326c22c2a3be3c92abb9bbf61a04d183e9168fcd",
+          "payload_sha256": "f030b85a5efc8b4b86ad28b625af87600f4f60ccf1c1882f4232de7937e0f2b0",
+          "review": "Retained primary issuer source states USD 0.66 per relevant common share, record date 2024-03-15, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 3 visually reviewed."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-be9c063e70332f3ee43a2f802442e6f893dbd9530029511e16f78302d9d780cb",
+      "compiled_source_identity": "44e37671e2aa1246c57bafe0b31e7ebf0d91d470934d76c79585cb091c9c0cc3",
+      "symbol": "HPE",
+      "security_id": "BBG0078W3NQ3",
+      "cash_per_share": "0.13",
+      "ex_date": "2024-06-18",
+      "record_date": "2024-06-19",
+      "pay_date": "2024-07-18",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.13 per relevant common share, record date 2024-06-19, and payable date 2024-07-18. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 2 visually reviewed.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "6b1c3015-ad17-4879-b00c-d66a43e100d5",
+          "record_sha256": "908b7df9f45acf42c717309feb4b57a6cc131bca8139ba98d46346bebaeea35e"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E84e1282a37618f6141cb165e3f2146778d0380bdc178c86110892e03a9abba14",
+          "record_sha256": "3462a2e09e93d72a461906965a8e3b188451922566f98fdfdf9dcc2334b5844e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/hpe-20240604-pdf",
+          "receipt_sha256": "4130ccf7b3bb5265e7124d140c787a21f8909e0d64bb883ce674e5d53093705c",
+          "payload_sha256": "ee141c724ff9ce08062da71bf0e0a4c2e510585043e139d4bb98faea37201076",
+          "review": "Retained primary issuer source states USD 0.13 per relevant common share, record date 2024-06-19, and payable date 2024-07-18. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 2 visually reviewed."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-03f85e691f2460b69a307c9894f3bdae39d18393fcc0d3c29b81282e320fb49a",
+      "compiled_source_identity": "2a28a838b8737cd3e0f39ec0a6e5c39fb80510ef05ba0fc25c9d8211b0fcbbf9",
+      "symbol": "HSY",
+      "security_id": "BBG000BLHRS2",
+      "cash_per_share": "1.37",
+      "ex_date": "2025-02-14",
+      "record_date": "2025-02-17",
+      "pay_date": "2025-03-14",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 1.37 per relevant common share, record date 2025-02-17, and payable date 2025-03-14. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. Select Common Stock USD 1.370, not Class B USD 1.245.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f79195ab-667b-4a0a-8de3-d4eeacd96d8a",
+          "record_sha256": "e9fd1ef0a6b2c16888ccbf893f3aff6d4c56a569ba8ae5056db36a486c89ffde"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ee293367dd6c216c605d1736986113285f69560cfce4460636919ac950bbd2667",
+          "record_sha256": "eaa432dc57733853512bb66da8c6aa9e856692b93818e3ce80edb24dd9e5f6a9"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/hsy-20250206",
+          "receipt_sha256": "536d683a31d894d4af57588d059c5a941d3d4db4faa2ca2997da6a29ffffef7c",
+          "payload_sha256": "fd594eb31e6bda71528e106f0ee9359e337cfe0dcf03d9bb7b7d4be8d9f86638",
+          "review": "Retained primary issuer source states USD 1.37 per relevant common share, record date 2025-02-17, and payable date 2025-03-14. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. Select Common Stock USD 1.370, not Class B USD 1.245."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-6e36fc68f9ba0b00ed9661f324867632a0b781f3fe291a730a945041e0102b37",
+      "compiled_source_identity": "e9f442ecfcbf5997c2703d058480efe15968be3e1f1e5a3f686318e04aeac5a3",
+      "symbol": "IBKR",
+      "security_id": "BBG000LV0836",
+      "cash_per_share": "0.08",
+      "ex_date": "2025-08-29",
+      "record_date": "2025-09-01",
+      "pay_date": "2025-09-12",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.08 per relevant common share, record date 2025-09-01, and payable date 2025-09-12. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 1 visually reviewed.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "27656534-dde7-44d2-b36d-1722480bb625",
+          "record_sha256": "346824809f56a8a82a0e6411d1cad766dc50b2bebb28d0b63a2b189894a37142"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E3c0ceac38b96619ae58a839d0d287471d8c0a80d5e16a882f6e33067eb58c03f",
+          "record_sha256": "8f86f54d22d104692ac62c7043df5c958c545991d0220b13f6d5831da3aafde8"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/ibkr-20250717",
+          "receipt_sha256": "3484714df4e567c16b4d3e77b91f2dcb2149f29ed754dad7c7aec7b7c3d3554b",
+          "payload_sha256": "c8dc0140498b6f30ef498e457f5f62af564af929063c47e63c53be27b1c98152",
+          "review": "Retained primary issuer source states USD 0.08 per relevant common share, record date 2025-09-01, and payable date 2025-09-12. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 1 visually reviewed."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-59660c7e5ad409cc9da1d8eab69b09b6b95f0c85d8175b63e06a8fc585514060",
+      "compiled_source_identity": "f011b24ff28e342218e7298d903f3df463b889b69548b08f8443a8806cf3a883",
+      "symbol": "INTC",
+      "security_id": "BBG000C0G1D1",
+      "cash_per_share": "0.125",
+      "ex_date": "2024-05-06",
+      "record_date": "2024-05-07",
+      "pay_date": "2024-06-01",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.125 per relevant common share, record date 2024-05-07, and payable date 2024-06-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "637eb967-aaf6-47c6-8a5f-5f9b31705358",
+          "record_sha256": "bf51d4dae622d0c3c6dc258536b5433ddb694fa0c5fc73713eda0ee4c0351458"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1ee3eb9f225e11ff34b354ca78fe756adcdb38fc0b85e05a172b970db4708e4c",
+          "record_sha256": "7bac95bcea9e1be342e292d937727905f102f97d5892a0510c93a6d1cfae208a"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/intc-20240425",
+          "receipt_sha256": "3a6e2ceea946e6cf460df1b38b4cd72a35650d2097d593160e835c2365b42522",
+          "payload_sha256": "12629b898e8028508edfa16a119f0b82843bbf3e2ead49d024a48301567b85fa",
+          "review": "Retained primary issuer source states USD 0.125 per relevant common share, record date 2024-05-07, and payable date 2024-06-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-278b10d944567ed0e658923a1c013d5608f6669243ed7268b9c4847f1bfeef43",
+      "compiled_source_identity": "f9e2889ad13912fa10897f498075ceadea6fc45f38155ef7d68f53f0e2eda430",
+      "symbol": "INTU",
+      "security_id": "BBG000BH5DV1",
+      "cash_per_share": "1.04",
+      "ex_date": "2025-01-10",
+      "record_date": "2025-01-09",
+      "pay_date": "2025-01-17",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 1.04 per relevant common share, record date 2025-01-09, and payable date 2025-01-17. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "62260a09-95ac-40d3-a03a-11f69247860a",
+          "record_sha256": "b4517c1826050e8ae2ffa8a352195e5f9318fc4fea3fc2790772397fb0c0f1ad"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7eee8ac8b058fcddc5cb88ea7c1ca27adcd2b686372cccc2a61441a311a721b7",
+          "record_sha256": "42d803908e8d3b1b8e26e58f0883eca355163e1c2383e578c2dfbae783b2a28e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/intu-20241121",
+          "receipt_sha256": "e0739b22f994943d0bd4597f7ba0fe3d3482480b30f7bcab6e7d31692f8c416f",
+          "payload_sha256": "e6203f205a8a6214780252700f54f48d7fd9f551880f613f05e4dd1eb9541c2d",
+          "review": "Retained primary issuer source states USD 1.04 per relevant common share, record date 2025-01-09, and payable date 2025-01-17. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        },
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/nasdaq-20250102-ex",
+          "receipt_sha256": "e8980ee902685590612a9178494c799e1d5dce769da86d6df57df342ac6bd277",
+          "payload_sha256": "009001c5ed44da54d552665c325643d29c673b43295b93a9f94f217951e5c2f8",
+          "review": "Nasdaq ETA2025-1 expressly moves January 9 ex-dividend dates to January 10 while January 9 remains a valid settlement date. Retain the issuer record date."
+        }
+      ],
+      "record_date_exception": {
+        "schema": "v7-nasdaq-eta2025-1-cash-dates-v1",
+        "notice_payload_sha256": "009001c5ed44da54d552665c325643d29c673b43295b93a9f94f217951e5c2f8"
+      }
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-c4e76eba26fc212042b108070fc2e7115a2ee277d26dfe18f3265027e434eeaa",
+      "compiled_source_identity": "eb49a995fe715c44be7ed40ab7b238906cd033722e8074ec267007ca7be51f06",
+      "symbol": "LMT",
+      "security_id": "BBG000C1BW00",
+      "cash_per_share": "3.15",
+      "ex_date": "2024-02-29",
+      "record_date": "2024-03-01",
+      "pay_date": "2024-03-29",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 3.15 per relevant common share, record date 2024-03-01, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "75c78ef9-1fce-4eef-b668-d71a0a616a9c",
+          "record_sha256": "edcd3f4f62b49d2d4606e767ad3e471aa111b215965fa274d229d8226a794649"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E82428dad22519c4be57633bcbeafd15ecaea1c87c544c6d74e7174da2b5544d3",
+          "record_sha256": "206f53b20ba20652aad6fd0877810bf22ce3d0457994476cb64b8ca84504d00c"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/lmt-20240123",
+          "receipt_sha256": "b96a41e0eec77507976c7e7fc692230923676b78c005d30c15796fb130999e78",
+          "payload_sha256": "eeb3f6501cb2e05b90cc9ad072bfd745c48ee176ff1f6b76333341b4de4c3478",
+          "review": "Retained primary issuer source states USD 3.15 per relevant common share, record date 2024-03-01, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-96f39a748dd401fd7fce30ce332931ac6d8fe6ef55f5132685b76a2c41038f8b",
+      "compiled_source_identity": "ab76610afb803efb70a4f60372eca79d81f12d82bc96e2fa2ef1f47facc3670b",
+      "symbol": "LUV",
+      "security_id": "BBG000BNJHS8",
+      "cash_per_share": "0.18",
+      "ex_date": "2024-06-18",
+      "record_date": "2024-06-19",
+      "pay_date": "2024-07-10",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.18 per relevant common share, record date 2024-06-19, and payable date 2024-07-10. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c3018878-75eb-45e6-900b-480bbe8636e2",
+          "record_sha256": "10a0b37fbb3bf6b2931879d46aa392a1f2439f64a4288edd952e01a5aae971e1"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E408eabbe3aa39940300163df98689bff97afbca4b2e27ab9185317d0177dc7da",
+          "record_sha256": "bdb81e193365622f1cf586512c3cbef0b255b250efb573cf9bc49eb49ec30de7"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/luv-20240515",
+          "receipt_sha256": "031c067e0b677a05f4a9e923d9676a4bc1c89dd4156987efc1c80443bdbf1a5a",
+          "payload_sha256": "bc021276212378677f45faa58c16f4400018a4063089ca62c9c2746ac367fe50",
+          "review": "Retained primary issuer source states USD 0.18 per relevant common share, record date 2024-06-19, and payable date 2024-07-10. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-a4035819bb4a313fc0635a26b42ea01ac1f7756cb0debed66aff2c1447419beb",
+      "compiled_source_identity": "820425269cc96f8f4d5332e059dd4837d17ca9e69dc1dd71df7ce66a30787633",
+      "symbol": "LVS",
+      "security_id": "BBG000JWD753",
+      "cash_per_share": "0.2",
+      "ex_date": "2024-05-06",
+      "record_date": "2024-05-07",
+      "pay_date": "2024-05-15",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.2 per relevant common share, record date 2024-05-07, and payable date 2024-05-15. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 3 visually reviewed.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "adf6ec74-b497-40cc-a008-cdf8aee25a20",
+          "record_sha256": "af9aa472a2319f62bfff35192afd4e7a9027f8b28842a3f0cbf5ea2020ccd41a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0cade754ff948541fdc0c5bf60d447b0bb2ba33e4729981b1050b09f91cee859",
+          "record_sha256": "882b81f450ca241a13eb98f2d9df9e47888f0781be63bcccf16c644905a58ea2"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/lvs-20240417",
+          "receipt_sha256": "7756f79a14354887645e9301544ba59ff819a9bb33670d9a769a779c5b22dcc1",
+          "payload_sha256": "bc5d3d171830d40c05faa9ca0b0c34d88744f1366529d2ed5e2ae0512f39bd7f",
+          "review": "Retained primary issuer source states USD 0.2 per relevant common share, record date 2024-05-07, and payable date 2024-05-15. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 3 visually reviewed."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-9e90247c0caba2db9963e376472390b92bcebb083ba06b69f3c49d8237ac9f18",
+      "compiled_source_identity": "5113317b503ff9f560705678f735d061f40306996407ee20e0030a87c07341a2",
+      "symbol": "MA",
+      "security_id": "BBG000F1ZSQ2",
+      "cash_per_share": "0.76",
+      "ex_date": "2025-01-10",
+      "record_date": "2025-01-09",
+      "pay_date": "2025-02-07",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.76 per relevant common share, record date 2025-01-09, and payable date 2025-02-07. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "449044c1-d0d5-405b-a6db-a58b4857866f",
+          "record_sha256": "9c49b9817c8479cfb9e3674656ed0b94de18986d931986bb947ca9fc90ee3828"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec6372be9137e6a822fd370e8f0738fc31cfb9db56ee95abb2ee9b45f3022db0b",
+          "record_sha256": "41d95e8aec2e723ed7e6d2cfe0341ad99bccd72697796a98aa4abfefa0e99dc4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/ma-20241217",
+          "receipt_sha256": "d00942974d917113910d24c33dbce66b6f2ebcf38d882a4bae881c11e1a65884",
+          "payload_sha256": "15c7ad4e7b5df41ed8fe2d8a804db98cd9ed2d7428d00dc64063809a8bec20ae",
+          "review": "Retained primary issuer source states USD 0.76 per relevant common share, record date 2025-01-09, and payable date 2025-02-07. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        },
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/nasdaq-20250102-ex",
+          "receipt_sha256": "e8980ee902685590612a9178494c799e1d5dce769da86d6df57df342ac6bd277",
+          "payload_sha256": "009001c5ed44da54d552665c325643d29c673b43295b93a9f94f217951e5c2f8",
+          "review": "Nasdaq ETA2025-1 expressly moves January 9 ex-dividend dates to January 10 while January 9 remains a valid settlement date. Retain the issuer record date."
+        }
+      ],
+      "record_date_exception": {
+        "schema": "v7-nasdaq-eta2025-1-cash-dates-v1",
+        "notice_payload_sha256": "009001c5ed44da54d552665c325643d29c673b43295b93a9f94f217951e5c2f8"
+      }
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-6172487cd7d46ab36c62b0217201ccfd2023fff711f2a8e6e47850f601d26d7b",
+      "compiled_source_identity": "ca39aadf70d05e0327a52311529bc339d5a792eefecf3b58bda5be79f2c1c348",
+      "symbol": "MAR",
+      "security_id": "BBG000BGD7W6",
+      "cash_per_share": "0.52",
+      "ex_date": "2024-02-21",
+      "record_date": "2024-02-22",
+      "pay_date": "2024-03-29",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.52 per relevant common share, record date 2024-02-22, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c4a70e95-8aef-471a-b851-ac72144804c9",
+          "record_sha256": "629c18ec3f6655c40f09554f6d1fbe714cdd4c66120cf87e821617463fea9365"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7e71a8dd37a5e6cad97edb8d7ca2d24fa0f6274ed546d4a8eb7661f35872e969",
+          "record_sha256": "4df8a49d24e14af781db0b8575c853c97f4f75c17032b49a23c7fdc60beb72b4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/mar-20240208-pr",
+          "receipt_sha256": "d37a60a5bc6d7ad42bf1933e882b5d19c73bdfb8894105e3f63dd7590cca10c2",
+          "payload_sha256": "e113e60b23a61a50ad4e12e7c51aaf25fb7337060814c63e80eb813e0658416a",
+          "review": "Retained primary issuer source states USD 0.52 per relevant common share, record date 2024-02-22, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-09ad574972ccb9c7077d4042cce4cccbc173148a6fc8d1ef8759264102578251",
+      "compiled_source_identity": "6e6897bf95ed84e9f3add0f148a647f763dbe819fe072d426f0497abd5c7483d",
+      "symbol": "MS",
+      "security_id": "BBG000BLZRJ2",
+      "cash_per_share": "0.85",
+      "ex_date": "2024-04-29",
+      "record_date": "2024-04-30",
+      "pay_date": "2024-05-15",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.85 per relevant common share, record date 2024-04-30, and payable date 2024-05-15. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 8 visually reviewed.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "47729421-827d-46d3-8cc1-80abf67cbf27",
+          "record_sha256": "2de830cc46bef28cb71a168caad9f9f32a693b46fd4d778d77beb63cc47c6bcc"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E055a0c11c7dc32542790e8f5934aec10fc7784fcdbb184e3d906841b9581ede0",
+          "record_sha256": "167c68d654a3e01ac0d48ae54bb741e008586b055dcbc8a34b237faf02b0129c"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/ms-20240416",
+          "receipt_sha256": "25db7d2ad1ea04559e6bb7c3999caa9089cdbbf358c6a099bc4fae8d3e45beb5",
+          "payload_sha256": "aa9d827c386740b34b5ee14318992cd813dae5d1b06056066133c9346bcb8e48",
+          "review": "Retained primary issuer source states USD 0.85 per relevant common share, record date 2024-04-30, and payable date 2024-05-15. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. PDF page 8 visually reviewed."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-1df41b2205b4dd0ac603eac913c069825da9009bfd735be536553a8e5308d312",
+      "compiled_source_identity": "fbfb5e387a0b01370dfce2e602188cecc5801357c9c1e19c412aca5e9bfd841f",
+      "symbol": "ORCL",
+      "security_id": "BBG000BQLTW7",
+      "cash_per_share": "0.4",
+      "ex_date": "2025-01-10",
+      "record_date": "2025-01-09",
+      "pay_date": "2025-01-23",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.4 per relevant common share, record date 2025-01-09, and payable date 2025-01-23. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "512716c6-e986-4713-a828-7ba4a0f2485e",
+          "record_sha256": "256dc9edcdac38a1e593357063953708788365fbb6883bafa8859cfe43a1746e"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea74cfc74095dead6a1860e9d38dc9097e304455ffb0db7f4ce755dbdb9a7a5fa",
+          "record_sha256": "6d2b0edd08c301356ae221ad25db0a5c9cfcdcbea70ae329da579c204013d93f"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/orcl-20241209",
+          "receipt_sha256": "3229ca05c517c226f1436f5a0d9474396c2597e7db1375eeca8045ca437cd393",
+          "payload_sha256": "0032a0a197070444227fcee0342eb0ea28839f4b79b80b53ce0da259457f8326",
+          "review": "Retained primary issuer source states USD 0.4 per relevant common share, record date 2025-01-09, and payable date 2025-01-23. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        },
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/nasdaq-20250102-ex",
+          "receipt_sha256": "e8980ee902685590612a9178494c799e1d5dce769da86d6df57df342ac6bd277",
+          "payload_sha256": "009001c5ed44da54d552665c325643d29c673b43295b93a9f94f217951e5c2f8",
+          "review": "Nasdaq ETA2025-1 expressly moves January 9 ex-dividend dates to January 10 while January 9 remains a valid settlement date. Retain the issuer record date."
+        }
+      ],
+      "record_date_exception": {
+        "schema": "v7-nasdaq-eta2025-1-cash-dates-v1",
+        "notice_payload_sha256": "009001c5ed44da54d552665c325643d29c673b43295b93a9f94f217951e5c2f8"
+      }
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-bd3f3c3f15a291e01dd1a4572ae0977fbda5d74065554fcc53c2a56e7b2dd05c",
+      "compiled_source_identity": "2b30e6240cdd16e539f74b8165ba28465aab1a2fe68c00ee7bf661064ae5d7ab",
+      "symbol": "PNC",
+      "security_id": "BBG000BRD0D8",
+      "cash_per_share": "1.55",
+      "ex_date": "2023-10-16",
+      "record_date": "2023-10-17",
+      "pay_date": "2023-11-06",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 1.55 per relevant common share, record date 2023-10-17, and payable date 2023-11-06. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. Source states a nominal Sunday date and expressly makes payment the next business day; the reviewed Monday payable date matches an original provider date.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8bd86340-6547-43f5-8e13-e83e2b4177d7",
+          "record_sha256": "aa8e94adeff392a38af89af86d8b3e0f5231fc73c85248824a8be43189d97b77"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E8ee2b066357aab3d94b238020bd3459f341eb2dab09d25acbfe42a3258183fa7",
+          "record_sha256": "1d869edc4c99f5883bf51cd6bb3a07c672e404eb021e8f6aecf7a6635dc4e38d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/pnc-20231002",
+          "receipt_sha256": "cd3250e9dfbb897d199022569a25e7f351822090cc8d6d52a85758cf3d32a1c3",
+          "payload_sha256": "bc69a873dc287729143405d19f6c527201e63f65cc8052b8ee21f56a80ca7026",
+          "review": "Retained primary issuer source states USD 1.55 per relevant common share, record date 2023-10-17, and payable date 2023-11-06. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. Source states a nominal Sunday date and expressly makes payment the next business day; the reviewed Monday payable date matches an original provider date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-b2337aa459c1184c6c94c70170cd26e544b07c31b2f64ee5bd05fe64543f6719",
+      "compiled_source_identity": "fda840b584737d891b609b8ae45e8adac9c05eb938c13fd65422a7b446dbccb4",
+      "symbol": "PNC",
+      "security_id": "BBG000BRD0D8",
+      "cash_per_share": "1.55",
+      "ex_date": "2024-04-12",
+      "record_date": "2024-04-15",
+      "pay_date": "2024-05-06",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 1.55 per relevant common share, record date 2024-04-15, and payable date 2024-05-06. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. Source states a nominal Sunday date and expressly makes payment the next business day; the reviewed Monday payable date matches an original provider date.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "869644f8-9426-41aa-9510-33f5235a9eb7",
+          "record_sha256": "7b74726346b79c8d8a9cee6e5b5748699ced4b582cec8f3e7bd364983516df03"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eff658c6cad748a70393b63d61a6a3ae6f433eda6b2c4547a9ff6cea1275bb65b",
+          "record_sha256": "7f5c692c75173b6eefff8bb2e0101e03a8c65aa3cbce33ac2ba3c710a03934bf"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/pnc-20240403",
+          "receipt_sha256": "4506b55c583477894e44910caaa478ebb222f1b2b58e778b4533507762588426",
+          "payload_sha256": "cb1629e8c3fd440aa65f0e0a5863e3967c89a60c8fa1de2a0dfb6a32ad73545f",
+          "review": "Retained primary issuer source states USD 1.55 per relevant common share, record date 2024-04-15, and payable date 2024-05-06. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified. Source states a nominal Sunday date and expressly makes payment the next business day; the reviewed Monday payable date matches an original provider date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-5150247b7b7aad25aaa48f4f2a202036dd12850ebfa3b4ba99912bc6424e09c0",
+      "compiled_source_identity": "c6768a887949b109fd61f12271583a58f438224e2d11b9ea40dd1c0ed4f2fbb3",
+      "symbol": "SPG",
+      "security_id": "BBG000BJ2D31",
+      "cash_per_share": "1.95",
+      "ex_date": "2024-03-07",
+      "record_date": "2024-03-08",
+      "pay_date": "2024-03-29",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 1.95 per relevant common share, record date 2024-03-08, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f254201d-d4b6-4c18-bb83-fc1cbb05f796",
+          "record_sha256": "71c91d9520c91bf92437bd5c540a2581042e917e4b1fa7db28f6be5817c35955"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea99495aa5e6f3d84e6c9aedcbc636688922af238dd9e65425379909fd3057559",
+          "record_sha256": "01a574876a292b7645f194387a8a42f82a5631980aa6a5bde8ff9717707963a7"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/spg-20240205-pr",
+          "receipt_sha256": "48f9e5bdbc742ee4a10182ea4fc7a56a8fc4bbeb61a586b6bf287e24440f9fc3",
+          "payload_sha256": "864a343a5012b87784dedf301a8f3cac73238f9bdc713364a538f5fc19da6505",
+          "review": "Retained primary issuer source states USD 1.95 per relevant common share, record date 2024-03-08, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-b9f283e9a455230096761abeae23e8e7272b1cf349c8ae0713e59355826cbaf1",
+      "compiled_source_identity": "f2181972294ac8e43154098bc468ee9995ef5919b76123f95b2d219cad51c16c",
+      "symbol": "TFC",
+      "security_id": "BBG000BYYLS8",
+      "cash_per_share": "0.52",
+      "ex_date": "2024-05-09",
+      "record_date": "2024-05-10",
+      "pay_date": "2024-06-03",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.52 per relevant common share, record date 2024-05-10, and payable date 2024-06-03. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "dca031c3-5404-49d8-93c6-3fec48052e41",
+          "record_sha256": "ae2c02ad23f1e2563b2c3fe70ce366106b3c569c2cfd7885d2ad6e9846d5983b"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E88f2fcecc4c9b47b55b2e7f9ff981552caea8665d677d3903a82d9c907ca8289",
+          "record_sha256": "847c9afd134723595989bef614b1e512f877d34e0069b72c12f6473b85a0c974"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/tfc-20240423",
+          "receipt_sha256": "a12355dc503819c9291e3b20e747f28168bfec7558b6b06b7da76cb879432796",
+          "payload_sha256": "48dfb2b9af072254c9ffdac92c2cfd877d6c323ab6a57e8af1d216d38f4e5694",
+          "review": "Retained primary issuer source states USD 0.52 per relevant common share, record date 2024-05-10, and payable date 2024-06-03. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-adc1272e666fd692e31a194bfad54208d04f40255ca1435c0d17675940423988",
+      "compiled_source_identity": "977d0e7906b165037cf11c9c81f21da0941522023097989297ca320c1c011002",
+      "symbol": "UNP",
+      "security_id": "BBG000BW3299",
+      "cash_per_share": "1.3",
+      "ex_date": "2024-02-28",
+      "record_date": "2024-02-29",
+      "pay_date": "2024-03-29",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 1.3 per relevant common share, record date 2024-02-29, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "dfa31aa8-b15d-4020-9995-9d10468aea29",
+          "record_sha256": "66aa396f2c930bff7605de2eba10b8a60dcb6a634ee00dc159cc3d751fd7c565"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E60c3a6eac3a7a9db5a169bd0bb44497d43e355cc4c4e90d255fbe3950e6b1b61",
+          "record_sha256": "eee31172693a915ed97d610d18d7775f109e4b85d8a6ad823b34b8a8457216b6"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/unp-20240208",
+          "receipt_sha256": "ae24cc928554a27af8942661f9d894ce094df59dd1c235f095da3b4bd53bac3b",
+          "payload_sha256": "0a85d2b7d4d81e5ff6f189fc6b79764f2316f5b1345be5beede89c22f371180b",
+          "review": "Retained primary issuer source states USD 1.3 per relevant common share, record date 2024-02-29, and payable date 2024-03-29. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-87b38d211d2ee9935fd4faf299bac931784dd1135064ec83d44626daba2f7515",
+      "compiled_source_identity": "f35700e6c7b7643c11c9088fd2d235fdeab12cc438e73e766ee888a8bc20e988",
+      "symbol": "VST",
+      "security_id": "BBG00DXDL6Q1",
+      "cash_per_share": "0.2175",
+      "ex_date": "2024-06-18",
+      "record_date": "2024-06-19",
+      "pay_date": "2024-06-28",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.2175 per relevant common share, record date 2024-06-19, and payable date 2024-06-28. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f9c9f39f-603a-4a89-bed5-7d6a3111331a",
+          "record_sha256": "b4fd32d2de1cc8becab31e90aaf6620c16f9196e9a09b8d04637452ff92fe935"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0b1f373e2b84c6e20de2210b335881de0799b0818b84daf70b9c507f9e85d1a9",
+          "record_sha256": "33e98a730071c9e44ea1c8b48a14474f12186e5b631a40bdcc06fafeddde9b0c"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/vst-20240502",
+          "receipt_sha256": "67b2ab6b5ad58e7724fa6bda9bae6f546b2ccaebecde3f3448e05610b38d2e89",
+          "payload_sha256": "063632a496ed47ace4325f4a3fc76d7866edbb011db2e5bb93589b0e2196f732",
+          "review": "Retained primary issuer source states USD 0.2175 per relevant common share, record date 2024-06-19, and payable date 2024-06-28. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-9ad1ac719a89c57ec0edd7c3de19e8e114d21c46012a9ee1b9179045bd719640",
+      "compiled_source_identity": "4f5d11032139997ccfbb951aae0e1d25e9cc9fed07bc48d48646d34c6b15c3cf",
+      "symbol": "WFC",
+      "security_id": "BBG000BWQFY7",
+      "cash_per_share": "0.35",
+      "ex_date": "2024-05-09",
+      "record_date": "2024-05-10",
+      "pay_date": "2024-06-01",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.35 per relevant common share, record date 2024-05-10, and payable date 2024-06-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "87987081-7df2-4bb4-9474-d00a814351a6",
+          "record_sha256": "b09150198a5d9b294383f84ed013589ae17bcfdff8a9b555c7481b421799f13e"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4c9245126f404d1cc171878a6537285cff5711acc951ff0d9fed878c4759568a",
+          "record_sha256": "a7ae6b1b065726e8f8a9c9a4664641415f3c2fc205cb7baa382eb5146fc22346"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/wfc-cash-history",
+          "receipt_sha256": "0abe7d1bdd24960f3db2af698466fda191ac3cf95a59460b3f8d89dd7530e6af",
+          "payload_sha256": "859c71d392fd164a57b2483e3f7e252e695a976f5e678813db6005155c802cfb",
+          "review": "Retained primary issuer source states USD 0.35 per relevant common share, record date 2024-05-10, and payable date 2024-06-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-a1a281adc58b5b8b9266bdeb9fe12e537e7abca0bade4f203b05d001f5fec126",
+      "compiled_source_identity": "885e2735bf4caca16d8225609f6c688e0a3417037825fce10d74363fecc8a499",
+      "symbol": "WFC",
+      "security_id": "BBG000BWQFY7",
+      "cash_per_share": "0.45",
+      "ex_date": "2026-02-06",
+      "record_date": "2026-02-06",
+      "pay_date": "2026-03-01",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.45 per relevant common share, record date 2026-02-06, and payable date 2026-03-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "80107c3f-9a1e-4995-9ee6-e418d236ef26",
+          "record_sha256": "d66ce5292c8808eb59242aed0355b7d0d7c4bec84df1456b3079014290597135"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec1aef4fafa9ed9680a3f0f3c3d2bde94a0a6160b778a223ad86118a152f0121b",
+          "record_sha256": "c03941524be68259b22e77d54b359c24506e6091e194784b915b7088db406bf8"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/wfc-cash-history",
+          "receipt_sha256": "0abe7d1bdd24960f3db2af698466fda191ac3cf95a59460b3f8d89dd7530e6af",
+          "payload_sha256": "859c71d392fd164a57b2483e3f7e252e695a976f5e678813db6005155c802cfb",
+          "review": "Retained primary issuer source states USD 0.45 per relevant common share, record date 2026-02-06, and payable date 2026-03-01. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-cash-date-review-v1",
+      "compiled_event_id": "reconstructed-005ef6dc0ae9a811843a2b44d0574b0ea52b95e4956b0b888a730d155f2ad9b9",
+      "compiled_source_identity": "72aa2a4867a4b665733534c92fa8893118d24b9b2ae04b6836f5c44c5c987360",
+      "symbol": "WING",
+      "security_id": "BBG008N298Y8",
+      "cash_per_share": "0.33",
+      "ex_date": "2026-08-14",
+      "record_date": "2026-08-15",
+      "pay_date": "2026-09-05",
+      "conclusion": "ordinary_cash_dates_resolved",
+      "publication_time_used_for_chart": false,
+      "rationale": "Retained primary issuer source states USD 0.33 per relevant common share, record date 2026-08-15, and payable date 2026-09-05. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified.",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "076bc409-727d-45c2-9160-e4af88869661",
+          "record_sha256": "696e6b3b728de58116d92c4181f207011282226362b5f94002d9c9498cb7ec4c"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eb54b0c7a9330eeb5dc00cb939da0393b111af0b6ab9d2d22d30d3035cb0d5fbe",
+          "record_sha256": "5d8e826d9f85e43be4bae578fb680174c5a17bc5d88ae88168281fad48916bc6"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/cash-date-notices-20260917/wing-20260729",
+          "receipt_sha256": "75bc08ad0780a9533254206565eb7c5997736a11e8411d2ba6c4f061e476f27c",
+          "payload_sha256": "331d0ce59fb35dbdcfda77401c29133e31734ae62a2eed746dfe61a161986a58",
+          "review": "Retained primary issuer source states USD 0.33 per relevant common share, record date 2026-08-15, and payable date 2026-09-05. Preserve the existing compiled ex-date and price action. Apply the authorized first-regular-open-strictly-after-pay model; actual broker posting remains unverified."
+        }
+      ]
+    }
+  ]
+}

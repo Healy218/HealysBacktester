@@ -42,7 +42,14 @@ def validate_cash_event(event, calendar=None, *, settlement_calendar=None):
     ex,record,pay=[iso_day(event[k]) for k in ('ex_date','record_date','pay_date')]
     effective_day=pd.Timestamp(event['effective_ns'],unit='ns',tz='UTC').tz_convert('America/New_York').date().isoformat()
     release_day=pd.Timestamp(event['release_ns'],unit='ns',tz='UTC').tz_convert('America/New_York').date().isoformat()
-    if not ex==effective_day or not ex<=record<=pay<release_day:
+    from nn_meta.v7.cash_date_exceptions import closed_record_date_allowed
+    ordering = ex <= record <= pay or (record < ex <= pay and
+        event.get('date_basis') == 'retained_primary_date_review' and
+        bool(event.get('date_review_identity')) and bool(event.get('date_evidence_identity')) and
+        closed_record_date_allowed(event['symbol'], ex, record,
+            event.get('record_date_exception'), calendar))
+    if (not ex==effective_day or not ordering or not pay<release_day
+            or (event.get('record_date_exception') is not None and record >= ex)):
         raise ValueError('Cash entitlement chronology differs')
     if calendar is not None:
         bounds=calendar.bounds(ex)

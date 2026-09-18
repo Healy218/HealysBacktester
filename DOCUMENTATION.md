@@ -1219,3 +1219,21 @@ census: 437 +55 =492 remaining. Alpaca calls its payment field `payable_date`;
 Massive calls it `pay_date`. Inspect original nominal-versus-business payment
 semantics rather than treating either field name or shifted dates as proof.
 [Evidence and limitations](docs/reviews/2026-09-17-v7-cash-calendar-closure.md).
+
+### V7 recovered cash-date lineage (September 18)
+
+Current cash events and verification are `v7-stock-cash-dates-20260918-r2` and
+`v7-stock-cash-dates-verification-20260918-r2`; census is
+`v7-dividend-closure-20260918-r2`: 4,421 entitlements, 437 +7 remaining.
+Use `compile_v7_cash_date_reviews_v2.py`, `validate_v7_cash_extension_v2.py`
+and `audit_v7_dividend_closure_v2.py`. They retain exact old producer bytes via
+two pinned snapshots while binding current executing code separately. Unknown
+changed sources still fail; never rewrite historical receipts to match code.
+
+January 9, 2025 is a closed trading date and valid settlement date. The finite
+INTU/ORCL/MA record-before-ex exception requires original issuer dates and the
+pinned Nasdaq ETA2025-1 notice; it does not relax arbitrary cash chronology.
+PNC next-business-day language and issuer nominal payment dates remain distinct.
+PDF response bytes can have leading whitespace before `%PDF` (MPWR); inspect
+actual file type, not only `startswith`, and do not trust a URL suffix alone.
+[Recovery evidence and remaining cases](docs/reviews/2026-09-18-v7-cash-date-recovery.md).
