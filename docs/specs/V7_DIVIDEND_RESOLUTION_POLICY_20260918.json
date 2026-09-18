@@ -1,0 +1,24 @@
+{
+  "schema": "v7-dividend-resolution-policy-v1",
+  "status": "user_authorized",
+  "scope_change": false,
+  "currency": "USD",
+  "model_policy_id": "pretax-funded-stock-cash-reconstruction-20260917",
+  "publication_verified": false,
+  "require_primary_terms": true,
+  "withholdings_and_fees_modeled": false,
+  "preserve_original_records": true,
+  "proposal_path": "docs/specs/V7_REMAINING_STOCK_CASH_PROPOSAL_20260917.json",
+  "proposal_sha256": "5a7ccdc6d5a607ba486a3b2922a0255f387785d8221fb4238c140bd65e58d494",
+  "proposal_identity": "024c0b4d15f05682a51832f7f0d5d84de68a6abca5b504dcd4802444283c0c5d",
+  "authorization": "Implementation of the September 17 finite 528-group extension, continued under the September 18 instruction: finish it and you have permission to check and edit as much as you need to to get the dividend portion of this done.",
+  "rules": [
+    "Primary issuer/depositary terms resolve each exact original whole group. No provider record is discarded.",
+    "Gross USD per listed share or ADR; preserve distinct cash payments and record/pay dates. Published issuer conversion rates may establish USD gross cash; no investor net-cash claim.",
+    "Current primary histories establish terms, not historical publication. Effective-session availability remains an explicit retrospective reconstruction assumption.",
+    "One combined price adjustment; each positive cash component accrues at that ex-open and releases separately at the first captured regular open strictly after its reviewed pay date.",
+    "The original funded beneficial-share, zero-withholding/fee model and settlement coverage requirements remain. No real fills or broker postings inferred.",
+    "Mixed security entitlements, due bills, missing dated identity or raw prior close require separate resolved treatment."
+  ],
+  "research_ready": false
+}

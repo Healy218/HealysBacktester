@@ -1,139 +1,27 @@
-# Handoff — V7 6-1: recovered session and 48 cash-date resolutions
+# Handoff — active dividend completion, recovery checkpoint
 
-## Current direction and authorization
+The user explicitly asked to finish the dividend portion and authorized necessary checks and edits. Work is ongoing: do not mistake this recovery checkpoint for completion. Main only; preserve unrelated V6/assembly changes. Prior handoff is handoff-history/HANDOFF-2026-09-18-before-primary-dividends.md.
 
-The user reported an overnight reset and asked to recover our place and continue.
-The committed checkpoint was `086eb39` (36 FCX/SLB groups plus settlement mapping).
-Eight additional IBM/TGT/PNC date cases had saved artifacts but uncommitted code;
-the January 2025 closed-record-date exception and v2 lineage code were unfinished.
-Recovered and verified that work, then added 40 primary date reviews from existing
-captures. **6-1 remains open; 6-2 through 6-7 remain queued.**
+## Current verified state
 
-Work on main; preserve the unrelated dirty V6 files, untracked V6 modules/reviews,
-and V7 assembly files. Stage only owned paths. No V6 policy change or deployment,
-new market-data acquisition, full dataset build or training occurred here.
+Current combined action/cash artifact: nn_meta/validation/v7-primary-dividends-20260918-r2. It contains 4,744 cash payment leaves for 4,710 cash price events; 4,717 cash price events total. 154 review items remain: 147 uncompiled groups and seven date cases. All 10,428 original records reconcile. New 289 primary price boundaries use actual captured history. Multiple payments share one price adjustment, with individually dated cash releases. All leaves pass source/amount/clock/settlement verification and the actual empty portfolio replay creates no cash. Funded multi-payment fixture passes; not historical ADR fills.
 
-Four admissions remain settled: ordinary-action reconstruction, provider-union
-no-event completeness, original 4,337-event pre-tax stock-cash model, and its
-finite extension to the original 528 remaining dividend groups as reviews pass.
-Their JSON policies are under docs/specs, dated 20260917. Do not ask for another
-per-issuer approval. No waiver of unresolved amount/date/identity terms is implied.
-Cash accrues on funded beneficial shares at ex-open; receivables add equity but
-cannot fund spending. Release at first captured regular open strictly after the
-reviewed payable date; zero modeled withholding/fees; broker posting unverified.
+Full suite September 18: 2,271 tests plus 18 subtests, 19 warnings, 124.26 seconds; /tmp/v7-dividend-tests-20260918.log. No V6 policy changes or training. History coverage has NOT yet been rebuilt. Item 6-1 remains open.
 
-## Completed checkpoint and verification
+## Frozen inputs and implementation
 
-**4,421 cash entitlements; 4,527 price actions; 4,428 cash price actions;
-586,876 admitted history sessions.** Price objects and history coverage are
-unchanged. All original 4,337 cash objects, subsequent 36 FCX/SLB objects and eight
-recovered IBM/TGT/PNC objects remain unchanged; 40 reviewed objects were added.
+Primary resolution policies/reviews: docs/specs/V7_DIVIDEND_RESOLUTION_POLICY_20260918.json and V7_DIVIDEND_PRIMARY_REVIEWS_20260918{,_R2}.json. Do not mutate these or their bound producers after receipt creation. R3 review is UNSEALED and editable. New modules dividend_resolution/dividend_components and producer registry dividend_producer_versions preserve exact historical producer snapshots. CLI scripts/compile_v7_dividend_resolutions.py binds original inventory, primary captures, finite authorized proposal, actions/cash, history, calendar/settlement, rename and unrelated treatments. Current artifacts inputs.json are the authoritative bindings.
 
-Current dated reviews: `V7_CASH_DATE_REVIEWS_20260917.json` (eight) and
-`V7_CASH_DATE_REVIEWS_20260918_R2.json` (40) under docs/specs. The intermediate
-20260918 file/artifact contains 39 reviews before the last MPWR PDF inspection;
-retain it as history, use R2 for current work. Source bytes are already in
-`nn_meta/data_v7/cash-date-notices-20260917`. PDFs were visually reviewed; MPWR's
-PDF starts with whitespace before `%PDF`, so a strict prefix check missed it.
+Baseline history v7-security-history-20260917-gap-r2; inventory v7-action-inventory-20260917-tail; baseline actions v7-cash-units-20260917; baseline cash v7-stock-cash-dates-20260918-r2; renames v7-common-share-renames-20260917; unrelated v7-other-instruments-20260917-renames; settlement v7-reported-settlement-20260917/settlement_calendar.json. All under nn_meta/validation. Trading calendar nn_meta/data_v7/exchange-calendar-20260916/calendar.json.
 
-INTU/ORCL/MA retain January 9, 2025 record dates with January 10 ex-dates, explicitly
-supported by their issuer notices plus Nasdaq ETA2025-1. The compiler and runtime
-accept only the finite exception and pinned original notice with a closed Jan 9
-calendar. No global chronology relaxation. PNC explicit next-business-day clauses
-remain distinct from other issuers' nominal weekend/holiday dates.
+Primary captures: nn_meta/data_v7/dividend-finish-20260918. JPM public feed /jpmadr-public/v1/dr/dividends/CUSIP supplies gross ratePerDr, dated payments, status and underlying currency. Filter manually to Final/Amended Final: announcementFilter=final still returns Initial. Citi PDFs, issuer tables and Q4 feeds also captured. Ford Q4 historical amounts appear adjusted, so do NOT admit them blindly. Named small documents only; no bulk acquisition.
 
-All 4,421 events pass actual source/amount/identity/clock/settlement verification;
-the real no-inventory portfolio consumes them without creating cash. The prior
-captured funded AAPL case is retained. New funded exception tests use fixtures,
-not historical INTU/ORCL/MA fills. Full held history is not admitted.
+## Immediate continuation
 
-Full suite: **2,246 tests +18 subtests**, 19 warnings, 129.84 seconds, exit 0.
-Receipt `nn_meta/validation/v7-recovery-tests-20260918`; 21 new focused tests pass.
-Actual compile, verification and census CLI runs also pass.
-[Evidence review](docs/reviews/2026-09-18-v7-cash-date-recovery.md).
+R3 currently has 16 reviews (HL10, AMR1, PBR3 amended-final, SHEL1 amended-final, QQQ Sept2022). First Majestic AIF captured as ag-aif-2023; pages 15–20 describe eight 2022/2023 USD dividends and record/pay dates. Add these after visual inspection, retain on/about qualifiers. AG Aug2026 still needs evidence. Do not rerun earlier generators over sealed R1/R2 review files. Temporary preparation scripts /tmp/v7-build-primary-review-batch{,2,3}.py have durable recovery copies in docs/reviews/dividend-preparation-20260918/.
 
-## Current immutable artifacts and commands
+Seven missing dates now have primary evidence: CMA (cma-july-web, cma-nov-web), FIX (fix-web-extraction), QQQ (qqq-indexed-primary-history plus existing OCC#53847 special cash notice), PG pg-20240409 and RILY rily-20240515 under cash-date-notices-20260917. Web-tool extractions explicitly retain extraction provenance, not original HTTP bytes. PG on/after May15 and RILY on/about June11 need qualifiers retained under nominal-payment model, no actual broker posting claim. Old stock_cash_dates compiler only accepts single leaves; use a new wrapper/consumer, preserve frozen producers. QQQ special cash affects option strikes separately; do not claim option deliverable readiness from stock-cash treatment.
 
-All artifact names below are under nn_meta/validation:
+Two PBR 2026 distributions have genuinely provisional future USD conversion terms (June3 ex with Sept28 second payment; Aug25 ex with Dec payments). Do not invent final amounts or silently drop scope. Finish independent cases first. Remaining detailed worklist is current artifact uncompiled.json and missing_held.json. FIGR historical CUSIP327891107 is First National Bank of Groton, unrelated to listed Figure; TE H84989104 is TE Connectivity, not T1 Energy. Prove finite record identity before unrelated treatment. MSTR594972408 is actual common share, so do not call it a preferred share without evidence. SIRI/XOM missing selected identities and scope-first-day KSS/LRCX/TMO need explicit treatment. Existing broader non-dividend blockers remain as prior handoff.
 
-- History `v7-security-history-20260917-gap-r2` (667,239 rows /591 IDs /1,129 sessions).
-- Inventory `v7-action-inventory-20260917-tail` (10,428 original records).
-- Actions `v7-cash-units-20260917` (preserves prior price actions).
-- Coverage `v7-action-coverage-20260917-cash`. Pass --renames when rebuilding;
-  pass --action-coverage to actual proposal builds.
-- Renames `v7-common-share-renames-20260917`; unrelated
-  `v7-other-instruments-20260917-renames`.
-- **Cash `v7-stock-cash-dates-20260918-r2`.**
-- **Cash verification `v7-stock-cash-dates-verification-20260918-r2`.**
-- **Dividend census `v7-dividend-closure-20260918-r2`.** Its uncompiled.json and
-  missing_held.json are the exact current work lists.
-- Settlement `v7-reported-settlement-20260917/settlement_calendar.json`:
-  ReportedSettlementSchedule, 1,212 direct Alpaca mappings through October 2026,
-  all 46 independent FINRA checks agree. Never infer settlement from trading days.
-- Original 4,337-event baseline `v7-stock-cash-entitlements-20260917-r3`;
-  original funded-case verification `v7-reported-settlement-20260917`.
-- Prior split/rename/feature-boundary evidence remains valid history.
-  Supplemental GAP daily `v7-gap-daily-20260917/{2025,2026}` remains required.
-
-Use the **v2** scripts: `compile_v7_cash_date_reviews_v2.py`,
-`validate_v7_cash_extension_v2.py`, `audit_v7_dividend_closure_v2.py`.
-`producer_versions.py` binds exactly two old producer hashes to byte-identical
-snapshots in `nn_meta/v7/producer_snapshots/`; current code is bound separately.
-Unknown changed sources fail. Historical receipts were not rewritten. Older
-CLIs can correctly reject the changed current stock_cash producer.
-Trading calendar: `nn_meta/data_v7/exchange-calendar-20260916/calendar.json`.
-The review and saved inputs.json files identify all other CLI inputs.
-
-## Exact next work
-
-**444 dividend review items remain: 437 uncompiled cash groups +seven date cases.**
-
-Seven dates: CMA 2023-09-14, CMA 2023-12-14, FIX 2023-05-17,
-QQQ 2023-12-27, QQQ 2024-03-18, PG 2024-04-18, RILY 2024-05-23.
-
-1. Resolve exact CMA/FIX payment evidence and QQQ March distribution evidence.
-   Reuse existing captures first; any new acquisition should be named small
-   documents, not a broad crawl.
-2. QQQ December has saved `qqq-202312-occ` (OCC #53847): extracted text describes
-   special cash and option strike adjustment. Visually inspect the full PDF and
-   integrate its separate semantics rather than claim ordinary cash treatment.
-3. PG captured `pg-20240409` says payable on or after May 15; RILY `rily-20240515`
-   says on or about June 11. Do not silently convert qualified dates to exact
-   posting. Resolve terms within the authorized model; record a genuine policy
-   extension explicitly if still needed.
-4. Continue the 437 groups: 328 unit/term, 47 combined, 34 mismatch,
-   14 single-provider, 11 selected-identity, three adjacent-continuity.
-
-Non-dividend 6-1 blockers persist: 162 eligible identity exceptions across
-ATVI12, BLK22, CCL16, DISCA14, DKNG18, RKLB4, SGEN10, SIRI15, SWTX17, TWTR1,
-VMW5, X7, XOM21 (172 including zero-bar cases); 21 other simple groups;
-203 complex records including 37 undated names; complete stock/option held
-lifecycles and option-deliverable treatment. ENVX/OPEN reported stock dividends
-may be warrants; do not convert globally to splits. Action-blocked sessions
-27,731; identity-blocked 52,632. Only full required-scope consumer reconciliation
-can close 6-1, not a selected-symbol test or this date batch.
-
-## Storage and scope
-
-No new download bytes this session. New September 18 date/census/test artifacts
-are about 49.65 MiB including immutable intermediate outputs. Observed acquisition
-quota **68,907,498,073 bytes**, zero reservations; free disk 458.69 GiB. The earlier
-63.07 GB handoff figure was stale; do not attribute that increase to this session.
-User reported roughly 230 GB project usage and constrained storage. Before bulk
-acquisition/full stores, forecast storage and establish the total-project budget;
-250 GB acquisition is not the total-project cap. Preserve old artifacts and
-100 GiB free reserve. At most four outer workers, one inner thread.
-
-Fixed scope: March 15, 2022–September 14, 2026; Alpaca stocks/Massive options;
-no OTC; BBBY/FRC/REV/SI exclusions without replacement or reranking; all 20
-families, 11,268 variants/timeframes, 222 columns. Raw stock execution, arithmetic
-option midpoint with separate costs, V7 12.5% premium stop, strategy exits,
-ITM expiry exit 15 minutes before regular option close, funded physical fallback,
-shared capital limits, causal folds. Active inputs remain
-`V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json`.
-
-No full V7 dataset/model exists. Readiness remains the September 17 entry-demand
-gate (three foundational passes/eight substantive stages unpassed). GOALS review
-is due September 21 after a full V6 operational week; no trading-edge claim.
-
-Previous handoff: handoff-history/HANDOFF-2026-09-18-before-cash-date-recovery.md.
+Fixed acquisition and modeling constraints remain in TODO.md and preceding handoff. No real policy relaxation, scope narrowing, or training authorization implied by dividend completion request.

@@ -63,6 +63,12 @@ def price_action(event):
         action = ReconstructionAction(**event['action'])
         if action.admission_policy_identity != event['admission_policy_identity']:
             raise ValueError('Action policy binding differs from event')
+    elif event['admission_basis'] == 'primary_terms_effective_session_reconstruction':
+        from nn_meta.v7.dividend_resolution import ReviewedDividendAction
+        action = ReviewedDividendAction(**event['action'])
+        if (action.admission_policy_identity != event['admission_policy_identity']
+                or action.review_identity != event['review_identity']):
+            raise ValueError('Primary dividend review binding differs')
     elif event['admission_basis'] == 'reviewed_publication':
         action = PriceAction(**event['action'])
     else:
