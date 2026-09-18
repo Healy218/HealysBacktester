@@ -1,0 +1,10 @@
+{
+  "complete": true,
+  "files": {
+    "coverage.parquet": "dadce0e3f1312db0705062cc352d65151c4f282c14caf4dbf5978bdd15793d51",
+    "report.json": "dbc731233b9732d5fcb2fe840ccdb05a5ef3c14335fe40be3d03da080bd6b494",
+    "treatments.json": "309f39f248a2ceb2d5107218a7815882cdfa739d15d4a1e3932620f4a80f408a"
+  },
+  "identity": "c84e77fa586bfb71115a4c8fdb3653d02ae30d87dc3ebd2e4545d45ef25455bf",
+  "research_ready": false
+}

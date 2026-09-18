@@ -11,7 +11,7 @@ from nn_meta.v7.execution import CashLedger, QuotePolicy, QuoteUnavailable, Capt
 
 
 def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, fraction=.1,
-                     policy=QuotePolicy(), physical=None):
+                     policy=QuotePolicy(), physical=None, noncash_boundaries=None):
     candidates = list(candidates)
     clocks = list(clocks)
     if not clocks or clocks != sorted(set(clocks)) or any(type(t) is not int for t in clocks):
@@ -34,6 +34,10 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
     by_id = {}
     for item in candidates:
         p = dict(item)
+        if noncash_boundaries is not None and p.get('security_id') and p.get('source_dates'):
+            from nn_meta.v7.noncash_admission import require_boundary_safe
+            require_boundary_safe(noncash_boundaries, security_id=p['security_id'],
+                                  source_dates=p['source_dates'])
         clock = p['decision_ns']
         if (type(clock) is not int or clock < clocks[0] or clock > clocks[-1]
                 or not math.isfinite(p['score']) or type(p['score_available_ns']) is not int

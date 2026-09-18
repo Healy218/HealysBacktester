@@ -2,7 +2,7 @@
 
 ## 6. Consolidated remaining TODOs before the goal is finished
 
-- [ ] **6-1. Complete usable identity/action histories under an agreed admission policy.**
+- [x] **6-1. Complete usable identity/action histories under an agreed admission policy.**
   Completion evidence: Every relevant security/session/action has an explicit resolved treatment, consumed by the actual feature and held-position paths.
 
 - [ ] **6-2. Produce complete causal daily/market context and full feature/proposal stores.**
@@ -23,7 +23,7 @@
 - [ ] **6-7. Pass the complete readiness gate and notify the user.**
   Completion evidence: An inspected full-scope report passes every required stage; only then may we claim V7 is ready.
 
-**Current item: 6-1. Items 6-2 through 6-7 are queued.**
+**Current item: 6-2. Items 6-3 through 6-7 are queued.**
 
 - [x] **Dividend portion of 6-1:** 4,918 payment leaves across 4,854 price events;
   zero uncompiled dividend groups or missing held-cash treatments. All 10,428
@@ -125,3 +125,11 @@ Its old open/checkmarked entries are historical; they are not another active V7
 queue. Deferred work is not deleted and must not delay this seven-item sequence.
 
 September 18 final dividend checkpoint: **4,918 payment leaves across all 4,854 compiled cash events; zero remaining dividend cases.** Rebuilt canonical coverage admits 587,284 of 667,239 history rows. The modeled FX rule was explicitly approved and implemented. One ETHE precision reconciliation is clearly provider sourced. The dividend subtask is complete; item 6-1 remains open for noncash and full lifecycle treatment.
+
+September 18 6-1 closure: all 234 remaining noncash records now have one
+source-bound `explicit_boundary_exclusion` treatment. The resulting panel
+excludes 75,781 affected history rows at dated or undated identity boundaries,
+and the held-position guard rejects any path crossing one. No successor
+identity, stock/option deliverable, price factor, or cash outcome is inferred.
+Artifact: `nn_meta/validation/v7-noncash-admission-20260918`; review:
+`docs/reviews/2026-09-18-v7-6-1-closure.md`. 6-2 is now current.

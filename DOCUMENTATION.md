@@ -73,6 +73,17 @@ serve an identified missing input for the current deliverable. No blanket
 requirement to collect issuer publications for every record is introduced by
 this workflow, and no existing causal requirement is waived.
 
+The 234 noncash records left after dividend closure are partitioned one-for-one
+into `explicit_boundary_exclusion` treatments in
+`v7-noncash-admission-20260918`. The panel keeps the original provider records,
+does not manufacture successor FIGIs, stock or option deliverables, price
+factors, or cash, and marks affected dates (or the full symbol span for an
+undated identity change) unavailable to feature history. `history_admitted` and
+`held_position_admitted` are false on those rows. `require_boundary_safe` is the
+consumer guard; a portfolio replay that supplies the panel must reject a path
+crossing an excluded boundary. This is the agreed conservative 6-1 admission
+policy, not a claim that the corporate action was economically settled.
+
 ## V6 forward paper operating contract (September 14)
 
 The active frozen producer is `scripts/run_v6_forward.py` in the permanent

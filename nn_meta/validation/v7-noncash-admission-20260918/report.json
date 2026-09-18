@@ -1,0 +1,31 @@
+{
+  "schema": "v7-noncash-admission-v1",
+  "policy_id": "v7-explicit-noncash-boundary-exclusion-20260918",
+  "original_records": 234,
+  "treated_records": 234,
+  "treatment_counts": {
+    "stock_mergers": 78,
+    "cash_mergers": 48,
+    "name_changes": 37,
+    "spin_offs": 24,
+    "splits": 20,
+    "reverse_splits": 11,
+    "stock_and_cash_mergers": 10,
+    "unit_splits": 3,
+    "stock_dividends": 1,
+    "rights_distributions": 1,
+    "reorganizations": 1
+  },
+  "history_rows": 667239,
+  "excluded_history_rows": 75781,
+  "held_position_admitted": false,
+  "successor_identity_admitted": false,
+  "feature_history_admitted": false,
+  "research_ready": false,
+  "inputs": {
+    "nn_meta/validation/v7-dividends-complete-20260918/unresolved.json": "fb908ba622e93a676f56c9bf2805a80dfbb5ee59b885cb9c74d002119c70b021",
+    "nn_meta/validation/v7-security-history-20260917-gap-r2/complete.json": "71f62a14c7fdfd84e884a4755a650a334a2deba15f1be3e27d1f5e7112eccfac",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/noncash_admission.py": "19605dcdf9c95f8da73b67cdecb30e49891fdbc1dc3b5ee4e119206fecf31535",
+    "/home/healy/Coding/HealysBacktester/scripts/compile_v7_noncash_admission.py": "9f579f8aed5279cdd7597f2d5ac12636745922b30e58d3d24d51d52b1ca2ea84"
+  }
+}

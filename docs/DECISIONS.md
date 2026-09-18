@@ -1,5 +1,15 @@
 # DECISIONS — dated, append-only
 
+### 2026-09-18 — Close 6-1 with explicit noncash boundary exclusions
+
+The 234 remaining noncash provider records are resolved one-for-one as
+source-bound `explicit_boundary_exclusion` treatments. Affected dated sessions,
+and all sessions for an undated identity change, are excluded from usable
+feature history; held-position paths crossing them fail closed. No successor
+identity, stock/option deliverable, cash, or price factor is inferred. This
+closes item 6-1 under a conservative admission policy and leaves 6-2 onward
+unchanged.
+
 One line of context, the decision, and why. Newest first. The point: don't
 relitigate settled questions, and keep "considered and rejected" on the
 record. Append here whenever a real choice gets made (or reversed — new

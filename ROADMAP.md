@@ -9,15 +9,18 @@ The user adopted section 6 of the
 [three-day progress report](docs/reviews/2026-09-17-three-day-goals-and-progress.md)
 as the ordered completion plan. [TODO](TODO.md) is the single active checklist;
 [HANDOFF](HANDOFF.md) names the current item and its next concrete work.
-**Current item: 6-1, usable identity/action histories.** All seven items remain
-open. Finish and document each item before the handoff advances to the next.
+**Current item: 6-2, causal daily/market context and feature stores.** Item 6-1
+is closed under its explicit conservative admission policy; finish and document
+each later item before the handoff advances again.
 The report's review pause is superseded by this staged workflow; the historical
 checkpoints below are not parallel instructions to restart old workstreams.
 
 September 18: the [dividend portion is complete](docs/reviews/2026-09-18-v7-dividends-complete.md),
 with 4,918 dated payments, 4,854 verified price boundaries and no remaining cash
-groups. The remaining 6-1 work is noncash/identity lifecycle and complete held
-treatment; this does not advance the overall phase or authorize training.
+groups. The remaining 6-1 noncash records now have explicit source-bound
+boundary exclusions consumed by the history and held-position guards; no
+successor, deliverable, or cash outcome is inferred. This closes 6-1 under the
+recorded admission policy and does not authorize training.
 
 The sequence is identity/actions → causal context/features → actual option-path
 capture → integrated execution → full assembly/trials → measured resource and
