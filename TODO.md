@@ -7,10 +7,10 @@
 
 - [ ] **7-2. Produce complete causal daily/market context and full feature/proposal stores.**
   Completion evidence: Full scoped census with correct availability, warmup, sectors and all registered variants; no substituted fixture inputs.
-  Started 2026-09-18: the real-shard storage benchmark passed, but the AAPL
-  all-variant pilot extrapolates to roughly 396 GB before inputs and the required
-  100 GiB reserve. A compact-store design and total-project forecast are now
-  required before the full build; see [the 7-2 start checkpoint](docs/reviews/2026-09-18-v7-2-start.md).
+  Started 2026-09-18: the real-shard benchmark passed. The production compact
+  Parquet proposal path reduced the real AAPL pilot from 690.7 MB JSONL to 5.8
+  MB losslessly; next measure peak space and resume behavior on one real full
+  security before scheduling the catalog. See [the 7-2 start checkpoint](docs/reviews/2026-09-18-v7-2-start.md).
 
 - [ ] **7-3. Complete actual option-path demand, dated hours/reference inputs and targeted captures.**
   Completion evidence: The union covers required entry features, purchases, marks, exits, rolls and applicable stock-delivery observations within the acquisition budget.

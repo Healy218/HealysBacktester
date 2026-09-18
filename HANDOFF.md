@@ -54,10 +54,10 @@ context and feature/proposal stores. Use
 the admitted history panel and preserve its explicit noncash boundary exclusions.
 Do not bridge excluded predecessor/successor identities or invent lifecycle
 outcomes. The 7-2 start preflight passed real-shard storage and four-resolution
-aggregation checks, but projected naïve full-store output is roughly 396 GB
-before inputs and the required 100 GiB reserve. Select and measure a compact
-store representation before launching the full build. Items 7-3 through 7-7
-remain queued. See [the 7-2 start checkpoint](docs/reviews/2026-09-18-v7-2-start.md).
+aggregation checks. The compact Parquet proposal path reduced the real AAPL
+pilot from 690.7 MB JSONL to 5.8 MB losslessly. Next, measure peak space and
+resume behavior on one real full security before scheduling the catalog. Items
+7-3 through 7-7 remain queued. See [the 7-2 start checkpoint](docs/reviews/2026-09-18-v7-2-start.md).
 
 Work on `main` with scoped commits. V7 datasets remain untouched during the
 live V6 repair and this documentation cleanup.

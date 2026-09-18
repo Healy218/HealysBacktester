@@ -1,0 +1,22 @@
+{
+  "schema": "v7-proposal-compaction-benchmark-v1",
+  "input": "nn_meta/validation/v7-causal-aapl-pilot-20260916/30/proposals.jsonl",
+  "input_sha256": "ac016b5ec4a95f323e9aa8cff878913c2a3f4aadfa320bfbd1cbf623f3bdd7e0",
+  "minutes": 30,
+  "original_bytes": 14625968,
+  "compact_bytes": 79316,
+  "reduction_ratio": 0.005422957304432773,
+  "counts": {
+    "proposals": 16011,
+    "censored": 2218,
+    "generated": 16011,
+    "excluded_not_member": 0
+  },
+  "decoded_rows": 16011,
+  "seconds": 0.31113100799848326,
+  "limitations": [
+    "Existing pilot rows only; no new signals generated",
+    "Storage reduction does not establish full-build peak space",
+    "No option labels or training readiness claimed"
+  ]
+}
