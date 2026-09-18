@@ -1,0 +1,21 @@
+{
+  "schema": "v7-remaining-stock-cash-extension-admission-v1",
+  "status": "user_authorized",
+  "model_policy_id": "pretax-funded-stock-cash-reconstruction-20260917",
+  "proposal_path": "docs/specs/V7_REMAINING_STOCK_CASH_PROPOSAL_20260917.json",
+  "proposal_sha256": "5a7ccdc6d5a607ba486a3b2922a0255f387785d8221fb4238c140bd65e58d494",
+  "proposal_identity": "024c0b4d15f05682a51832f7f0d5d84de68a6abca5b504dcd4802444283c0c5d",
+  "authorization": "User explicitly accepted the documented extension to the remaining 528 original dividend groups as each passes amount, date and identity review. Acceptance received September 17, 2026: Accept the documented extension.",
+  "finite_remaining_groups": 528,
+  "rules": [
+    "Keep every existing authorized cash event unchanged. This extends eligibility; it does not change the approved entitlement, receivable, release, tax or fee model.",
+    "Only the exact original provider references listed in eligible_groups may qualify. A compiled USD-per-listed-share price action and dated selected identity must already exist; chart admission standards stay unchanged.",
+    "Ex, record and pay dates must agree across original providers, or be explicitly corrected by a retained primary issuer/depositary review. Never infer missing dates from frequency, nearby events or process dates.",
+    "Accrue the reviewed gross cash amount on entitled funded beneficial shares at the effective ex-session open. Include the receivable in equity, keep it unspendable, and release at the first captured regular open strictly after the reviewed pay date.",
+    "Retain zero modeled withholding and zero broker dividend fees, with pro-rata fractional shares, as the same pre-tax paper-research convention. Neither actual broker posting nor actual investor net proceeds are claimed.",
+    "Unresolved currency, ordinary-share-versus-ADR units, due bills, stock distributions, mixed corporate actions and identity changes remain blocked until their separate evidence and executable treatment are complete.",
+    "Require captured trading and reported settlement coverage through release; preserve source hashes and exact original-record replacement sets. No new study exclusions, extra funding, option deliverable assumptions or fabricated fills."
+  ],
+  "scope_change": false,
+  "research_ready": false
+}

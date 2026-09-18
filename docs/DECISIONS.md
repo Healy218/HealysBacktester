@@ -1315,3 +1315,30 @@ ENVX/OPEN warrant-like records, combined entitlements and inferred option contra
 adjustments. Cash payables/receivables do not change with stock units. This is an
 implementation of reviewed terms, not an expansion of the three accepted
 reconstruction assumptions. [Evidence and limits](reviews/2026-09-17-v7-reviewed-splits.md).
+
+## 2026-09-17 — Extend the accepted pre-tax model to the finite remaining cash scope
+
+The user explicitly accepted `V7_REMAINING_STOCK_CASH_PROPOSAL_20260917.json`:
+apply the same approved pre-tax funded-stock cash model to the remaining 528
+original dividend groups **as each passes amount, date and identity review**.
+The exact admission is `V7_REMAINING_STOCK_CASH_ADMISSION_20260917.json`.
+Keep the original 4,337 events unchanged. Retain ex-open accrual, nonspendable
+receivables, release at the first regular open strictly after the reviewed pay
+date, zero modeled withholding/fees and pro-rata fractions. Original provider
+references define the finite scope. Provider-agreed or explicit primary-corrected
+dates qualify; unreviewed currency/ADR units, due bills and mixed/lifecycle cases
+remain blocked. This does not change chart admission or authorize new exclusions.
+Do not request another per-issuer model approval within this accepted scope.
+The first 36 FCX/SLB groups now compile and pass actual portfolio consumption.
+
+## 2026-09-17 — Consume original reported settlement dates directly
+
+Alpaca's already captured original calendar response contains the documented
+`settlement_date` for each trade date. Use that explicit map through
+`ReportedSettlementSchedule`, keeping first-regular-open-after-settlement cash
+availability. Do not infer a bank calendar from exchange sessions or the union
+of reported settlement dates. All 46 independent FINRA 2022 pairs agree; later
+mapped dates preserve the 2023 Veterans Day, 2024 T+1 and January 2025 exchange
+closure distinctions. This supplies captured scheduled settlement inputs;
+it does not claim actual broker posting, historical publication or option-class
+exercise rules. [Evidence](reviews/2026-09-17-v7-cash-calendar-closure.md).

@@ -45,6 +45,13 @@ calendar. Remaining settlement years and 55 excluded cash events stay open.
 the totals to 4,491 actions and 586,840 admitted history sessions. Actual feature
 boundaries and funded TSLA stock accounting/mark checks pass; open-option split
 transitions still require exact deliverable evidence.
+The [cash/calendar continuation](docs/reviews/2026-09-17-v7-cash-calendar-closure.md)
+adds 36 reviewed FCX/SLB events and entitlements: 4,527 price actions, 4,373
+cash entitlements, 586,876 admitted history sessions. The original captured
+Alpaca settlement-date fields resolve the later settlement schedule through
+October 2026 without another market-data download. The user accepted the finite
+cash-model extension for the original 528 remaining groups as each passes
+review; 492 remain (437 price-action groups and 55 cash-date cases).
 This advances action compilation; it does not close identity, complex-action,
 no-event or held-position requirements.
 

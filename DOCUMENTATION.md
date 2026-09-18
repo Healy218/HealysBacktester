@@ -898,7 +898,10 @@ Massive daily/audit receipts. It requires a separate receipt-backed Alpaca
 availability calendar that agrees across the original calendar's entire
 coverage and extends beyond the study endpoint. Do not rewrite the stock
 calendar or infer the next session from weekdays. The extended exchange
-calendar does not resolve settlement/exercise-calendar evidence. Full raw
+calendar's trading-session list alone does not resolve settlement/exercise
+evidence. The separately reviewed original `settlement_date` field now supports
+the direct stock settlement mapping described below; option-specific exercise
+calendars remain separate. Full raw
 surfaces retain missing values and literal ticker roots; they establish neither
 identity outside membership nor option deliverables. Causal daily/context
 integration is still required. See the September 16 full-surfaces review.
@@ -1164,8 +1167,10 @@ mourning distinctions. [Review](docs/reviews/2026-09-17-v7-stock-cash-ledger.md)
 reviews, same selected identity on adjacent dates and no combined cash/other
 security entitlement. `stock_dividend` is not a global alias for a split: ENVX
 and OPEN remain unresolved. Preserve old compiled events when adding reviews.
-The current combined set is `v7-reviewed-splits-20260917`; rebuild consumers with
-`v7-action-coverage-20260917-splits`. [Review](docs/reviews/2026-09-17-v7-reviewed-splits.md).
+That milestone's combined set is `v7-reviewed-splits-20260917`; the subsequent
+cash continuation retains it unchanged inside `v7-cash-units-20260917`, with
+coverage `v7-action-coverage-20260917-cash`.
+[Review](docs/reviews/2026-09-17-v7-reviewed-splits.md).
 
 Pass exact reviewed events through `physical.splits`. Split processing precedes
 marks and trades at the ex-open, changes funded inventory/pending deliveries and
@@ -1175,3 +1180,42 @@ quantity. Never multiply an option quantity/strike or assign a replacement
 contract from a stock split alone. Open options fail before mutation. Only the
 2022 settlement year has original-source normalization; a unit-tested later-year
 handler is not a complete later-year held-history admission.
+
+### V7 finite cash extension and direct settlement mapping (September 17)
+
+The user accepted `V7_REMAINING_STOCK_CASH_PROPOSAL_20260917.json`; admission is
+`V7_REMAINING_STOCK_CASH_ADMISSION_20260917.json`. The original 528 groups are a
+finite eligibility scope, not a blanket waiver. `compile_v7_cash_extension.py`
+keeps existing events unchanged and admits additional groups only after compiled
+cash terms, identity and provider-agreed or primary-reviewed dates resolve.
+`--preview` emits planned terms, never an admitted `events.json`. Do not ask for
+another cash-model approval per issuer within this scope. Current entitlements:
+`v7-stock-cash-extension-20260917` (4,373). The other 55 previously compiled date
+cases still need evidence, not another model decision.
+
+`reviewed_cash.py` replaces complete original cash groups from dated primary
+notices, including named component totals and explicit date corrections.
+`reviewed_cash_units.py` only resolves an exact foreign-unit flag where unique
+provider USD amounts match and a primary common-share witness links through the
+same selected identity span. It retains effective-session reconstruction and
+unverified amount publication. Never use it for ADR conversion or gross/net
+rate disagreements. Current actions/coverage: `v7-cash-units-20260917` and
+`v7-action-coverage-20260917-cash`.
+
+Use `ReportedSettlementSchedule` for the separately normalized direct Alpaca
+trade-to-settlement map in `v7-reported-settlement-20260917`. Its schema is
+`v7-reported-stock-settlement-v1`, distinct from the old explicit business-date
+calendar. The original response's `settlement_date` is essential; a trading
+session list alone remains insufficient. Preserve next-open-after-settlement
+availability and fail when a trade or label horizon lacks a captured mapping.
+Do not reconstruct business dates by taking a union of settlement dates: that
+can omit valid dates around exchange-only closures. All 46 original FINRA 2022
+checks agree with the direct map; all current cash release dates are covered.
+Broker posting and historical calendar publication remain unverified.
+
+`audit_v7_dividend_closure.py` seals the whole original-record partition and
+separates uncompiled price cash from missing held-cash treatment. Current r3
+census: 437 +55 =492 remaining. Alpaca calls its payment field `payable_date`;
+Massive calls it `pay_date`. Inspect original nominal-versus-business payment
+semantics rather than treating either field name or shifted dates as proof.
+[Evidence and limitations](docs/reviews/2026-09-17-v7-cash-calendar-closure.md).

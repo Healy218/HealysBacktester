@@ -1,0 +1,1090 @@
+{
+  "schema": "v7-finite-primary-cash-reviews-v1",
+  "publication_clock_convention": "Midnight after the stated issuer publication day in New York; no exact intraday publication time invented.",
+  "reviews": [
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20230112",
+      "symbol": "FCX",
+      "effective_date": "2023-01-12",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2023-01-13",
+      "pay_date": "2023-02-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4ec08f747b17a66871c76da07df3f48b8bda1f322c4403afbcd05537a558c3b5",
+          "record_sha256": "a0e16333709109b70a06d41e76a73c05f0a5f55f229f4582ad97dee8cd148e50"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea5500d081ec2628304e706b79a819ebb876a737660400432c3f04c0ffb33120e",
+          "record_sha256": "cc66bad97697abaeee30904f70aeb2d1250b69f229c10eaf089846501b14ceda"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "dedd379d-a2e0-410b-96d3-5ae44315d1e0",
+          "record_sha256": "698b7b4c7ba9f6f644461fa9f41dc04deb58552423ec66eda7c931bc84985eed"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-01",
+          "receipt_sha256": "be90ccf391b9bc5468a71df553322065598e9b2c67fcbe5391c7e9380627f955",
+          "payload_sha256": "259e4aeb8877c13f67a24fccf867b8c035f37a323d9f82e3173694c3d4c77fbf",
+          "publication_available_at": "2022-12-22T05:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20221013",
+      "symbol": "FCX",
+      "effective_date": "2022-10-13",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2022-10-14",
+      "pay_date": "2022-11-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4c4212a45278f29cbc9f3b448f5e0f8d92d893b263c5caa6460ebcdba92c9117",
+          "record_sha256": "77a232dd9cc349cce1362ce422c9ea330c93a818ee9c167f717336d80aaf8db9"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E6257d54c09f3979e2404b76be98698adfecf659710e0bdefd76a4fb0d7595a17",
+          "record_sha256": "4b66d5464fc0fe766e2b7ca0363e165462e2611bd54dff73982f1b13069de1de"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "4cd64ec6-0931-4fc1-b6b2-8484734dd329",
+          "record_sha256": "5ac7ff10071bf1b8f1725b093d2b89af7074a0062fa9d8e554af7407e312854d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-02",
+          "receipt_sha256": "afd1e569c4cc66221b27b9dac3f59cdb6ee656bf607ce4d11e1c36434435be9f",
+          "payload_sha256": "0cc97e7b3900216396848b4398c4cbc6b9c381d8f75260aba6fe0d6a6f6cc739",
+          "publication_available_at": "2022-09-22T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20220714",
+      "symbol": "FCX",
+      "effective_date": "2022-07-14",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2022-07-15",
+      "pay_date": "2022-08-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eef934b9eed8eb504923da1a65c0e38550d3a049eec5b6e14cc51283289e3db91",
+          "record_sha256": "6d812a1a2094d780998bed39cb6499fa22dd2e75033fa630dfd8ee8254ade325"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef591e6cfac0cd5afc45672cd88ca70bfe4b43fba80465e28a0ec65bdaa8bd554",
+          "record_sha256": "25765259777cb34b9da0298099257108a03342e09ed25044a6c6f12048067a6f"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "ee2c986d-bd3f-43c6-9c91-d1ffea9a9279",
+          "record_sha256": "cdb8b5f1ee5a09f694dd8b29c9b6b031a384c0bf9860ccdc5c4821c1de2715d2"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-03",
+          "receipt_sha256": "817742a7c443a0ed015d255631fa5edc65637c7e1f6ece45ebe3ed072a2090b9",
+          "payload_sha256": "d5d5a42e007a5dbe153c95e80cabd3f1a9742a31cdf2745c847e41cf47f605fc",
+          "publication_available_at": "2022-06-23T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20220413",
+      "symbol": "FCX",
+      "effective_date": "2022-04-13",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2022-04-14",
+      "pay_date": "2022-05-02",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9d78cd29935cc95ca64c658bbafa411a8fe379edaae08689499e35a30c92f3d7",
+          "record_sha256": "12b40cf879fa1f63bd7eebd871d3e2533e05fbc9e2a956fd33f88676ef09bd38"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eeb4df2039cdc43d95b3dbe9cf50e9b8e7ae195f0e75377e4477023b4baaa8f34",
+          "record_sha256": "c0f5f7ade357f026b7308d54469deed152150e06552e66cf7bd67484bb12384f"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "ab07f05d-be88-4698-85e6-e99bfe7a9176",
+          "record_sha256": "8f4c284ff1dead8f23fc8a414b151b60acd5a5e50965933dd5471d1ac3bf3b6a"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-04",
+          "receipt_sha256": "0d422ba2f7aa8ea225e3e31bbb74931c971c7b130fbd1e2dda079bb4405f9783",
+          "payload_sha256": "d34cd323b25698520cd9ee657f1c251c26e7b16fb2595cbd854aebae418c0667",
+          "publication_available_at": "2022-03-24T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20240111",
+      "symbol": "FCX",
+      "effective_date": "2024-01-11",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2024-01-12",
+      "pay_date": "2024-02-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record dates agree. The primary issuer payment date replaces the conflicting provider payment date; the original records remain retained. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1f673a633b38436f476aacd67e5164411c0b712152bd05314362e7b07f3743f7",
+          "record_sha256": "6c2e2ae033618d016d673ec118347452e75842e9598e7fc303a62045b0fd612c"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E2b203df16b522d8ee2368c1e469f707bbc46e1f7e926ffdf82c35b55f5b1dc5e",
+          "record_sha256": "6418baf3580eb349ecbd41019ebafb95b9e3bc8c335b5c5ef3d95467236941ff"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f7f24906-6018-4605-a6b8-c7527e115843",
+          "record_sha256": "aad760e06f6c9cefe066dc3458a8abc20a2fe0db62cde65485ac9704dff32b98"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-05",
+          "receipt_sha256": "3e74051c6277edcf14058b7bf47e09f9c9054f23d36d739c35a97ff3cd27a44b",
+          "payload_sha256": "1bd349c29e24271282bcf987e45efd0d69e6ab7d4a652aa08d3879705a10490d",
+          "publication_available_at": "2023-12-21T05:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record dates agree. The primary issuer payment date replaces the conflicting provider payment date; the original records remain retained. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20231012",
+      "symbol": "FCX",
+      "effective_date": "2023-10-12",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2023-10-13",
+      "pay_date": "2023-11-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E12bd959148b8e082f6893df3894f6bce36714e67d4d58560f94ed57fa34ef3df",
+          "record_sha256": "9c8bacbc04f2ddc3dfeab877318c85a546716c99de3d1a6a49912dc842af33d9"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5ed7f61912271dd2370a9045f0027c6d73e2fc7c9ce130a8469fb37032674ded",
+          "record_sha256": "839def44cc5f5001c65aaa3789fb59f5995a42f04f3debd53ce7883626999470"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3a697c91-e146-48d9-b0aa-af7843ea1166",
+          "record_sha256": "71c75e832214cadbd99734a53b157a3e396f363ce90a0e29d578ebab93aad914"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "4677b054-4886-4527-91a5-ff0796e9d4f8",
+          "record_sha256": "05c1c93efc5e6731ac1bd4ffd3b1dd0419e0316cec7b975c30b9626e55af3163"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-06",
+          "receipt_sha256": "ced97fd2f6c2508542b41b988ec19da33fd7c2f304a4a453325dafc88d9d8001",
+          "payload_sha256": "6e302c742d446b642e542811886da2906a40025d2be082e82218d5633b00878a",
+          "publication_available_at": "2023-09-21T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20230713",
+      "symbol": "FCX",
+      "effective_date": "2023-07-13",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2023-07-14",
+      "pay_date": "2023-08-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E40fb512102e41f08df21a59574ee671ef3bf734d527aaed64768a0dc58d2df3a",
+          "record_sha256": "e95f28f06b640c6f9a9b6dcb47ef52a223bbe7279160da1ceb4728200f56e3e9"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E62e8b2098c1f56a0203b37c464d89f85bf7aa68e16781d16dfe45482142a9ec8",
+          "record_sha256": "74bc8f6f30c225acc40b4bf3c58310d1740829d18d5fe5c3ecf67fbf0a640895"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "1e031061-1177-4299-930a-69995d076a02",
+          "record_sha256": "8e0d259ded77ddb81a270aa95ce535b0d210b06ca9cb56753d3e383c1b546961"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-07",
+          "receipt_sha256": "0eacb4e42d1382a71bc4e00a8ae252d11b240283820143b175b57815058718d9",
+          "payload_sha256": "e522ad4217c8b72c5f4c08ba0b818d2c7749fed09673b1980b77ed8fb995f6c2",
+          "publication_available_at": "2023-06-22T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20230413",
+      "symbol": "FCX",
+      "effective_date": "2023-04-13",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2023-04-14",
+      "pay_date": "2023-05-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E6e866f05eb31280192e01ea26d43b0d3f74a05f8bd7302767e218517b9dbb159",
+          "record_sha256": "2fb5d8329627379d70ef0f962c1d6eb9cfe3963a4a9022e009572f366d4896fb"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea5cd3885d940775312949b0084403ec478e342dc9d98d949d1f23af21d144bab",
+          "record_sha256": "c3cd9468539b490ed3bcb735bd2d3aa4ac5de1caa3616f1e151e834e40a87b74"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "eabd22f7-53f6-458c-93a4-00e31851af63",
+          "record_sha256": "39ac6b0f6003bf285e9ce45ae3e4905307a9ce96d8467417af50a3700e03e21b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-08",
+          "receipt_sha256": "7da34a8d8e0addfc23faaec75345301b92e2d62e137ca4a3e65484fc86c9efac",
+          "payload_sha256": "57cca43fd7aaf0905768329ebcda9bf086e2656af8442b052c7ff93fad3efb8a",
+          "publication_available_at": "2023-03-23T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20250115",
+      "symbol": "FCX",
+      "effective_date": "2025-01-15",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2025-01-15",
+      "pay_date": "2025-02-03",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4fbb81158d48a04b3b48bc1f31315fabfb16abfabe58c9d570ff2fd88354506f",
+          "record_sha256": "8649afd9fd9cffe56c34fca1ae338c358abc31c8966a23d0ebec4d0c9820afda"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ee376026d331f9a4ddfe8910af16f3d9641230e9668bb10e24b89da1915e0c75b",
+          "record_sha256": "589a52b960c8db60c1c323e55c83a2ba61209b4a4aa3811e7d79c19027287025"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d625c190-3562-4d6c-9aeb-cbc9dcb7ca5b",
+          "record_sha256": "333223bb038617d978fa1e83e767e8b262c1889130291cc8c76cd7cc4d7791c3"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-09",
+          "receipt_sha256": "3a27f306ab7ac760927f7bd63e9a39f39eefc17cefc973dfb4b58fc657d0f420",
+          "payload_sha256": "2efe01e66a48f3b97277b6a1be6e1f664c2c9ba014741cedb8bba6ada789f2cd",
+          "publication_available_at": "2024-12-19T05:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20241015",
+      "symbol": "FCX",
+      "effective_date": "2024-10-15",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2024-10-15",
+      "pay_date": "2024-11-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E2df69fca7d7b0382f6a86a74f2f5229f44b27964116e5524748af6ab33d6586b",
+          "record_sha256": "b08908f7cbd269d10a9253760ffcef0b348382540e523781923d0daee4a39b9b"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E95c2304452182b77b9117753fc1cd49bdd6617d8959fa9f9095aa801a11b1241",
+          "record_sha256": "bccd3fd4b161dd05d64e98b2583abc4c6a8837ddb8b04c6bb6357768223bc3eb"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fadedabf-09b8-4b76-8ba4-5d67940a283f",
+          "record_sha256": "97708f634432fc4408e83473f2d005851e96029eba141920cb8222a616fe75ee"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-10",
+          "receipt_sha256": "6fa05aeac2e8ce63c10c4a3b20f445dd018cde5490bcf7e34e3c57cc49317cb3",
+          "payload_sha256": "22d6beb3115872dec3f241d803e200f452ab7122274a53476194768b8ae56917",
+          "publication_available_at": "2024-09-26T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20240715",
+      "symbol": "FCX",
+      "effective_date": "2024-07-15",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2024-07-15",
+      "pay_date": "2024-08-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E200f552e3aeffc5aa8276f54457e84b55cc5e8f0e3c2edab2582d7414e62cab1",
+          "record_sha256": "fff818483dddc83d731904b36ed0649610a87e177990fc2769be9a9e55e9d9c7"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea2ee69816117f5696919f49ab1ee7aa76cfcfc02957e0c41eeda478756bf2deb",
+          "record_sha256": "735ecc1cbaad81c51cabbf73277f67fe1dcb1a8075b1116e50c5e7e15b38878d"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "719b459d-e049-4be7-b360-8d0a56aa94c7",
+          "record_sha256": "c09fd4781f4df8173f8310603f2941c74e215a1f9d3e3fa65412cf96e42a1199"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "bd26a68b-bbe6-4b68-ab5b-4eec17015d00",
+          "record_sha256": "c9fb436f5238dc650782ab27ed4949af19c53cfa897a392c5cba31401de80934"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-11",
+          "receipt_sha256": "e27fa703fabc4a5aa5aecd3efacaf916e0f8a86071d66053c05736d5681874e1",
+          "payload_sha256": "f6bd39021af83f3596e5479953144785c297b094d0d7ea333b45f622fb845f24",
+          "publication_available_at": "2024-06-27T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20240412",
+      "symbol": "FCX",
+      "effective_date": "2024-04-12",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2024-04-15",
+      "pay_date": "2024-05-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0fb4824a0ccbca05ced623e9e376b47b3845dbc872c3ccb06a770416b041d451",
+          "record_sha256": "5ed695adcaa803dc21524663a6c9dce0f5413aa65735fefd33ebd3c13ef57275"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E29955ee82f2d1e8dfc6414a3f6dab6dae573c2b4efb3a5339a3f37649fd3df3e",
+          "record_sha256": "74ffadede7c42cc4ce799105c029762ce8718d88812dd5056b82dc5d1a45bbcc"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c56d849a-d8ce-41ed-ae46-22e658d08b35",
+          "record_sha256": "68d45eae29a6c2d4b6793b9247df93ffbd6c9b25f759ea0e9a58aeeec595b567"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d91d10a4-ff72-47b1-9bba-1ac698afae1c",
+          "record_sha256": "4f926a51f9e8a4fc9e9036e8beef9731792771407735898e9ba8c280c69879a8"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-12",
+          "receipt_sha256": "449c9ea32ede67a8ebee91b70481e512c793f284c9ce27940997ed70edce4d8d",
+          "payload_sha256": "5d0c0bdb1778284e14709c1b1faaf742d1bd26976b308f055cbc05eec648e371",
+          "publication_available_at": "2024-03-28T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20260115",
+      "symbol": "FCX",
+      "effective_date": "2026-01-15",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2026-01-15",
+      "pay_date": "2026-02-02",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7c323cf94926d02fef340c77f55afc75d593a79a1c18a0e3738ff137915dfb0a",
+          "record_sha256": "05d229d051b3b0ee3c0e0bcf80739f4b4628394c20729304335dcf4cfc3b1dd6"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec126e32a1b1d6620c6f48e86be73548c31c80bc1d6af36ae69535733136f15d6",
+          "record_sha256": "653d766f9146e71fadc2dfc7432236b3102ed8a3c444e35a00f249a78d3a664f"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fe85d3cf-c8ef-43e7-90e9-2b4fcd8820a3",
+          "record_sha256": "85afead857ccfb1b26f004e9ab8a3095202fc8f9087094d6db657582aa2c9826"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-13",
+          "receipt_sha256": "161cda07bf7a99b77fe664860a1469633fb59813d5b51185ebec293f1e7b4303",
+          "payload_sha256": "777289901dd7851e65d8d4dea774b45ea66dda7a8514a14bcf01a9bd6bbb8497",
+          "publication_available_at": "2025-12-18T05:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20251015",
+      "symbol": "FCX",
+      "effective_date": "2025-10-15",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2025-10-15",
+      "pay_date": "2025-11-03",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1d6e9f8cff58d5f7ba5743107bec1fd3192515abc2ff5dd79691a15cbb2a0955",
+          "record_sha256": "8f21b1ad141adb78870cd02a4574bc1b9e228e85500abd3764fe98cfc49a8a8b"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E703137db9f1347f32222fc23e7e5c9ccf29ffbb8c88bb9522c60a5ebecbab8ee",
+          "record_sha256": "821674fa6193cb685e06729dea9f321a6d654700ad9a05b7e4d89b960fed2eca"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "dba7d175-3d33-4e86-99f4-34b39eaaffaf",
+          "record_sha256": "6f2f00d31b39ce0bdb622bebaf0c72653fedac50cae9d74f2c354c70cbb2f003"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-14",
+          "receipt_sha256": "0181bb74b81e18a55dfea3dff91ea4ec5fb458a6ddcedc16b01b697ed4ae8823",
+          "payload_sha256": "f9283c1d86ef0fc246fc95d5f54a00746eab4d97b83fe321214eeb8616753356",
+          "publication_available_at": "2025-09-25T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20250715",
+      "symbol": "FCX",
+      "effective_date": "2025-07-15",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2025-07-15",
+      "pay_date": "2025-08-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E6f12b8267c6b5e78feeab8239896af763002471bf536ef1813de612038c10320",
+          "record_sha256": "326044ce43404648687062846be0f4e9cb171f79870492e3decfd8f5500b00ec"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E97331e0193cc92387dfd4f53bad0a9c4f3b98940929e75cecee34f3620993619",
+          "record_sha256": "8f0be07e885f9b4c59c9489252bf49c2cf59c99e26a10a3f6c3aefe8bec6db64"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9190a42f-b673-4361-aa29-a306825d1814",
+          "record_sha256": "15cc27cb9a49013b7e5b350a0c525e83e18b630bdc9f3bced0029614c4dfd83d"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "aa692c16-2762-44ff-836d-1ed84f5c6787",
+          "record_sha256": "b2ac37a0d622f3d31420118943325da9b3edad2951d22f1d0c6e574a1d107631"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-15",
+          "receipt_sha256": "5cccb477b4b9be82cd76a53e8d9079d015ed0b48eefae244b28a11a1bd2d8d09",
+          "payload_sha256": "b6786dba9b517c1c152b470be7606ffc526b8361f0b061c153a6bf243953dd53",
+          "publication_available_at": "2025-06-26T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20250415",
+      "symbol": "FCX",
+      "effective_date": "2025-04-15",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2025-04-15",
+      "pay_date": "2025-05-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E28cb26a7290b705ea476b84e412f98fd4c8e310187c3a61ed5841fdb16bb1c74",
+          "record_sha256": "57d2af5d9cef57622014c91bb3566fcb8f9cd9e4a11c790c6ea60ed7029bf6e3"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea20a4fff9b435983ed5172179db17fc6954989b0e201e16300601bf0a8a5fbe1",
+          "record_sha256": "e943f36084f435308cda21fdaeb46bd0a7edf71f6238b5998c4cac7e926a8a36"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "4dbc2d37-0756-4eae-9175-51d4b592291c",
+          "record_sha256": "56ea14953ab596ac85eec6de29fcdb6ca8d1bf28d27d1980650a5a1c0f0a56ee"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "97901d51-c2ee-4b07-8218-d5f0f1b57aa0",
+          "record_sha256": "4a78c3cdbe618f61a54c54a4a7ebea2170e716d4acadfbcd0199dc2818acaeb3"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-16",
+          "receipt_sha256": "4e730f3a35533f4a6c86741756bd92fbd0fc6209dd12e5dfc6eb7ffc4f051ea0",
+          "payload_sha256": "01476a1e0f79435c94ba7cee1000bc216ae330fd5d37f7f378f6e6505e57b5e9",
+          "publication_available_at": "2025-03-27T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20260715",
+      "symbol": "FCX",
+      "effective_date": "2026-07-15",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2026-07-15",
+      "pay_date": "2026-08-03",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E40b1dcc07d4f30f70fa97a28dd74d2d8ba3a6b0bfa7a36134371751ca475595a",
+          "record_sha256": "cbcc32eec7923ee976694aaceff5b6c5e09e2df256a8f468df12c5d179051577"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ebcf40fbc63dce9b48996dfce92871dbd804c417448cf938fd0781493e3c4669a",
+          "record_sha256": "a8a2d7c68e5f173968ddccd2c914453b929ad0bd12b2b18d8f2d8fc590bbb722"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9d5d1405-43f1-4059-9857-f33549f982f2",
+          "record_sha256": "4c13256a4588330f340b3fb37a22ec03f41bea0b56daabaf5a87b32fd223e041"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-17",
+          "receipt_sha256": "a7ff31fa3e3ca9e9764c515a81b3e192acabd22c968f87cbfe7c9c6dde8bb03b",
+          "payload_sha256": "434d276d300e44c9c75d1d28f88e8cb3a09b3790cb773b8bb538426ee297a6fc",
+          "publication_available_at": "2026-06-25T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-FCX-20260415",
+      "symbol": "FCX",
+      "effective_date": "2026-04-15",
+      "security_id": "BBG000BJDB15",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.15",
+      "record_date": "2026-04-15",
+      "pay_date": "2026-05-01",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.15"
+        }
+      ],
+      "rationale": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E168e8d259fa907c6e925aaa92c29ac33c584d31c7c846d9a80f006e93e50a775",
+          "record_sha256": "08483418f9f0dfcad6ad7a6a97f6fac59328afce3f21e969023b03b3067399fc"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E693a4e225d06f07da2b90c9aa28cac6c73bc9fbe87488e2dbc6027d557ab6736",
+          "record_sha256": "73869bb6b32cd009381ac8813bcd86b87c21382ca6e943f8c91beb18e91d76df"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "eabf0a3d-54bd-4ba0-b908-ca647d6b9acf",
+          "record_sha256": "8cee7a0de3f81da802f83326b0a962da9072b12a33cdbe020649910e42c81f40"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-tables-20260917/fcx-dividend-18",
+          "receipt_sha256": "93477a553a53b86d06f811501bb10ccb7b03b51d76371fa737f88cb4334c7c84",
+          "payload_sha256": "4b63ba824243d6ead1e60c09cb7947d9ee62ff756b99aa56dba6ac420d51719c",
+          "publication_available_at": "2026-03-26T04:00:00+00:00",
+          "review": "Dated issuer release explicitly declares a total USD 0.15 per FCX common share, comprising base and variable cash. Replace the entire provider group once; neither omit the variable component nor double-count duplicate total rows. Record and payment dates agree with all original rows. The original providers agree on the ex-date."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-SLB-20220531",
+      "symbol": "SLB",
+      "effective_date": "2022-05-31",
+      "security_id": "BBG000BT41Q8",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.175",
+      "record_date": "2022-06-01",
+      "pay_date": "2022-07-14",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.175"
+        }
+      ],
+      "rationale": "Dated issuer quarterly release specifies cash per outstanding common share and exact record/payment dates. Original Massive record explicitly denominates this same amount in USD; both providers agree on amount and ex-date. The Alpaca foreign flag does not establish an ADR conversion for these common shares.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E37d160d05d2f87c3a1d6fb88d8c6f5c3d50cb9b866b14e44bba76f511ae5cea6",
+          "record_sha256": "d2b4ed73ac7177c5338eded03b966419979e5a3f365c6b375a275ba739feb31f"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fa016316-e78b-43f4-ba70-272afa285c1f",
+          "record_sha256": "b118d489c73a0a512916e3f2cac8ef3b13194d59a739fb9400449f37639cfaa4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/slb-cash-notices-20260917/slb-2022q1-units",
+          "receipt_sha256": "7976a8d953289ddb2e66824c1ec50c57bbea6d8675b9eed457c3cd3a05ae38fd",
+          "payload_sha256": "43db44b4370b98233d255067717c83b35a62590e8228ce8f3bf1c782a0ecbd50",
+          "publication_available_at": "2022-04-23T04:00:00+00:00",
+          "review": "Dated issuer quarterly release specifies cash per outstanding common share and exact record/payment dates. Original Massive record explicitly denominates this same amount in USD; both providers agree on amount and ex-date. The Alpaca foreign flag does not establish an ADR conversion for these common shares."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-SLB-20220906",
+      "symbol": "SLB",
+      "effective_date": "2022-09-06",
+      "security_id": "BBG000BT41Q8",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.175",
+      "record_date": "2022-09-07",
+      "pay_date": "2022-10-13",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.175"
+        }
+      ],
+      "rationale": "Dated issuer quarterly release specifies cash per outstanding common share and exact record/payment dates. Original Massive record explicitly denominates this same amount in USD; both providers agree on amount and ex-date. The Alpaca foreign flag does not establish an ADR conversion for these common shares.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ee7f696394518318b825da2fd52237ed8f548a5004401f146afef9d3900895e08",
+          "record_sha256": "e1c050003ffc6708632955d8a8cbc6e579986e8923fa829a7c6ee411f91eaf48"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c5b751bd-705e-4937-8c77-5cfa5f7efe2d",
+          "record_sha256": "419c82835d047ffa7f52d732ca001b515c6998a6a85495e25df4bd6eed3f1080"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/slb-cash-notices-20260917/slb-2022q2-units",
+          "receipt_sha256": "00f939813027476ef0623ab9ae74b1463eb7f0dcdd2b1cdad036c001565521f4",
+          "payload_sha256": "f1aa07940e9ef5bf48df058f44f929ea0a5a00118f4c5e8018892da170d4254b",
+          "publication_available_at": "2022-07-23T04:00:00+00:00",
+          "review": "Dated issuer quarterly release specifies cash per outstanding common share and exact record/payment dates. Original Massive record explicitly denominates this same amount in USD; both providers agree on amount and ex-date. The Alpaca foreign flag does not establish an ADR conversion for these common shares."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-SLB-20221206",
+      "symbol": "SLB",
+      "effective_date": "2022-12-06",
+      "security_id": "BBG000BT41Q8",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.175",
+      "record_date": "2022-12-07",
+      "pay_date": "2023-01-12",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.175"
+        }
+      ],
+      "rationale": "Dated issuer quarterly release specifies cash per outstanding common share and exact record/payment dates. Original Massive record explicitly denominates this same amount in USD; both providers agree on amount and ex-date. The Alpaca foreign flag does not establish an ADR conversion for these common shares.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef74249b635aa820a42fe15850358fe6dd196ac2c4694e1b12456aa99c7d60cca",
+          "record_sha256": "3d9bbdf7536d3ca345ab89d30c832ae6bc75852f11aaa29ec30037e6672209b2"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "21b16af0-1a52-4e95-a775-cfea1b9f72bd",
+          "record_sha256": "1b933e7f355b5c78e0ec6eb2c206628c2b20c8e2961a0965b330eae70e2967d1"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/slb-cash-notices-20260917/slb-2022q3-units",
+          "receipt_sha256": "4f71b2fe280a0e7035fbdf3f24268c512dabc8d8b073c6f2fc53afdaed0b6a3d",
+          "payload_sha256": "56fbfff5838a040b2fad1d2c3066b8b6e030985f89cee0fa6f74512f9625312a",
+          "publication_available_at": "2022-10-22T04:00:00+00:00",
+          "review": "Dated issuer quarterly release specifies cash per outstanding common share and exact record/payment dates. Original Massive record explicitly denominates this same amount in USD; both providers agree on amount and ex-date. The Alpaca foreign flag does not establish an ADR conversion for these common shares."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-common-share-cash-review-v1",
+      "event_id": "reviewed-cash-SLB-20230207",
+      "symbol": "SLB",
+      "effective_date": "2023-02-07",
+      "security_id": "BBG000BT41Q8",
+      "currency": "USD",
+      "cash_units": "per_common_share",
+      "cash_amount": "0.25",
+      "record_date": "2023-02-08",
+      "pay_date": "2023-04-06",
+      "other_security_entitlement": false,
+      "components": [
+        {
+          "name": "total_common_share_cash",
+          "cash_amount": "0.25"
+        }
+      ],
+      "rationale": "Dated issuer quarterly release specifies cash per outstanding common share and exact record/payment dates. Original Massive record explicitly denominates this same amount in USD; both providers agree on amount and ex-date. The Alpaca foreign flag does not establish an ADR conversion for these common shares.",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4b7f0969ac2783b8922326a0248be2b9dac0db44e4ded747475483cb5cb2ed36",
+          "record_sha256": "6dac4794fa279f6dbfc7b6060f6ae3f4b9acd3b88ea4b513c8a86694cb2ca1fe"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "342222fd-76c3-42eb-9db7-3a3b0fd3ba2a",
+          "record_sha256": "d19ed732ec68ec810a4d060b842b0013faab2bd84d5f8f0e29cfb1373e0fb41a"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/slb-cash-notices-20260917/slb-2023-units",
+          "receipt_sha256": "9dc08327cdf543ceea4c7ed8f50bf3a797ec82dd17638d41f719fb5094c97b0c",
+          "payload_sha256": "f4a368c746d0a7ace19a643e932a558c122694d9af1cdceabadec9b55dcfa965",
+          "publication_available_at": "2023-01-21T05:00:00+00:00",
+          "review": "Dated issuer quarterly release specifies cash per outstanding common share and exact record/payment dates. Original Massive record explicitly denominates this same amount in USD; both providers agree on amount and ex-date. The Alpaca foreign flag does not establish an ADR conversion for these common shares."
+        }
+      ]
+    }
+  ]
+}

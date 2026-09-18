@@ -1,0 +1,328 @@
+{
+  "schema": "v7-finite-matching-cash-unit-reviews-v1",
+  "rationale": "An earlier primary issuer notice establishes USD cash per outstanding SLB common share. Selected dated history retains the same security and identity span through each later event. These exact unique provider groups agree on their original USD amounts; only the foreign-unit flag is resolved. Historical amount publication remains unverified under the existing authorized matching-provider policy. This does not resolve foreign gross/net disagreements or admit any held cash entitlement.",
+  "reviews": [
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2023-06-06",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.25",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef3c19bd9a8684dd8b4a3bd8801fc16e8c73b87ec37822eb54df8bfa13084ab80",
+          "record_sha256": "86a705dd513c0a2e05a7c5bcc334cacc642f4dbb572f0be996c98b89aab18aba"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "389da40f-f75a-4373-b99c-d57944de7cde",
+          "record_sha256": "89c3c0bedda8a0b0d591a7e6ec40772f93fdf4527b4be4195a06f35165e77a7d"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2023-09-05",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.25",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea14b32631f058893030f6193f18f8930a05aebd7084475484b0577ee7709faee",
+          "record_sha256": "73c14f9791ddf4d8c7c27f028a1889d92e2437c2ead5f52cd476135da1115925"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "0b958e70-4dc8-40d5-b6ef-8e1cf054464f",
+          "record_sha256": "fcc03c89318ec2f1beda1ee390541db5713ea07b87270ae1548787afa6b1db03"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2023-12-05",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.25",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4f2026e696dc31a709412fdc593826f373389b3cfd2fbf71dde2a68c71d0d95f",
+          "record_sha256": "bfcb6c7369fad553c7a5f058283715cfe368aa68fcca5992a988133dfd3d99a8"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "5b7b874b-d631-450d-bc4d-4982469f28b6",
+          "record_sha256": "c9527e8f9f11410f5a19b1a84847a5fa3b331cafd3c75a71cf4f39b9acb20c32"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2024-02-06",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.275",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E16901ddededce870da6b51e5ec340d0095128b1dd617dd920f6c74651b4b1db3",
+          "record_sha256": "a2bcbe3c9949e4d37241e0a664a759ab1f4ae7ecc9d906018bda459094734c3e"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "4f2c7bc0-53ad-44ae-9aa5-d442b277ea34",
+          "record_sha256": "1bdb98c40c47cae52d1422e2aa0bcc7c80b8820def3b0cf1181fecc53c38cb97"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2024-06-05",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.275",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E90e0c03bd3a143492434bb29178a4178acb4ad67df78dec3dbd27e81a65f9a62",
+          "record_sha256": "9dc6fa7880bfa6a01ad2ae0778b7ca03301ff60dc40990611e083d83ef277cb1"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f0dcba07-a056-4740-bc0c-00d36f46412a",
+          "record_sha256": "1fc5c3ae59b126ada9cc0a948d0358f5c24cbc277f195856816052799a611bc5"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2024-09-04",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.275",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec65a2d61c5af4120cb2a638f98e11b913d2e5b5bb94cf23761df94188e1d58db",
+          "record_sha256": "392d005d50e9c3661943c67c16ed1902238af7fa3f15488bedb6f9ef10293dff"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "0ede048f-29d4-49b6-bd96-1527209473d8",
+          "record_sha256": "da3fc5a2397a4a95e1e6e8685071cdb04c4c8cba2c916e209534f4171c765e2f"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2024-12-04",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.275",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7aec2047b9e4714d73a7b5f061fd89d27fe4c184a34d7d424374c8b60441a516",
+          "record_sha256": "32747e9097e9020581e4da5dfe523c3d5bffddc08ba3f8c31a46fb9b693a4e60"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "a748483a-29b5-4c90-af5b-64675060a489",
+          "record_sha256": "4c351154b8aa0c6628a0dcf3458994e5b7bb5b4b5785a02cf135ccb27a646310"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2025-02-05",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.285",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Efe4f39d9b04afaf722ff4e44a21c058b4bc1a32db8c8f0a87e54c70adabeb10d",
+          "record_sha256": "de839d5d8039154b039e00f2fdb0b10f12ac6ef642680911dcb650aa5a9b3440"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "31a8c778-e015-4392-ab33-fca83a7f9d08",
+          "record_sha256": "2e52f0f44ab468b787a5035576399f94797340f031548454aaf96575909ba224"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2025-06-04",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.285",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eef88025ebd785904415bf648f406cd542793b553de463704480dea917922a5ec",
+          "record_sha256": "4a2023bafbaef18c4d92c95cb0f071e18ae9f419dc6ed5b600eafe56e97ee08b"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f952f169-a9f3-4b53-823f-b5d10c0d9da5",
+          "record_sha256": "3b271fafb40305947c3d30b955e1e15509968d97271abcf6a497f0fc818db4ce"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2025-09-03",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.285",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0c23b618bdebe0c6d23019c3ca28d4efcb066b2f135c59229c8bb0f57508d1ff",
+          "record_sha256": "36ff69c6fdb133c00abbbfe5022e3debadf9c20e91a1e2ee134762d9779fe1cd"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "a8a18a3e-d076-4cdd-ac4e-0b18a6012a50",
+          "record_sha256": "05cea7fc809517348af10064cdf0a77649f650efa2152361a60314b3c2409844"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2025-12-03",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.285",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Efee603144da2cb1d0d9e8caae62be0aa6beef503c9029f1c1f0b2cd8287c0c97",
+          "record_sha256": "a922cc72a7459189f8a14e2b41c411b694b897809f8677e1598bd0352963eabe"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "165c966e-4994-406e-b2ee-d7a4e1329994",
+          "record_sha256": "f264d1098d023a98da99c877ce9ff3970a9da960b0291aaad6765dc0fa1cbf08"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2026-02-11",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.295",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ed02dd51775ae8a2fc6e9293578a8baba19604b8393ad4b70a56b54e5e5f99383",
+          "record_sha256": "ebe50675298364d4a1102b403a6dbee3fa0a1b04c4446ed292ab0918d84a0aa9"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "45dcb409-c928-441d-893e-e692e457d517",
+          "record_sha256": "fcdad6ebc57050e164327fa2477e806c8f6ca5a93350c8f1fcc3c7ed3020050f"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2026-06-03",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.295",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1542912d6cd901fff2ea6e30ba65c2b41b0a20d764844a2dc0b540e7610a3eab",
+          "record_sha256": "4a8cae4b22ff4593a68c4803e006f9476cedde638e3b25e2c51ef033ee30104a"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3153380a-4097-48c5-913e-bc7de89d590c",
+          "record_sha256": "b7d7bc1cd5b14220f6cf6f6ef53057f86af374335297aa6fe9402f123c03a091"
+        }
+      ]
+    },
+    {
+      "schema": "v7-finite-matching-cash-unit-review-v1",
+      "symbol": "SLB",
+      "effective_date": "2026-09-02",
+      "security_id": "BBG000BT41Q8",
+      "cash_amount": "0.295",
+      "unit_witness_event_id": "reviewed-cash-SLB-20220531",
+      "unit_witness_review_identity": "a1b18e7eca34bd468d507a7ffeaa20ea7c6872dd0ec44ce90b07ba440441af00",
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E76685edd257b4996652499533f6003cea29697f7f07ed89612445c6bba916cac",
+          "record_sha256": "d64c7e196cdbe88692ddcdaa78c1fef4e09de9f4965dcef34390af1ec0bf0ec1"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8eca600f-9df7-4329-8ec9-6a5c553a0b0f",
+          "record_sha256": "3e301b2b19ce71f63298122e46102626ff2cac86bab0e506261d703d0dc9c6db"
+        }
+      ]
+    }
+  ]
+}

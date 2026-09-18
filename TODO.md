@@ -48,6 +48,17 @@ bring the action set to 4,491 and admitted history to 586,840 sessions, with all
 ten real feature boundaries checked and a funded TSLA split/mark case. The stock
 ledger now carries split quantities into later dividends. Unresolved identity/action cases and complete
 held-position treatment still keep 6-1 open.
+The [cash/calendar continuation](docs/reviews/2026-09-17-v7-cash-calendar-closure.md)
+resolves 36 FCX/SLB cash groups and their funded-stock entitlements under the
+user-approved finite extension. Current totals are **4,527 price actions,
+4,373 cash entitlements and 586,876 admitted history sessions**. Captured
+Alpaca trade-to-settlement fields now supply the 2022–October 2026 schedule;
+all 46 independent FINRA examples and all 4,337 original cash events reconcile.
+The exact remaining dividend census is **492 items: 437 uncompiled cash groups
+plus 55 compiled events awaiting date treatment**. The extension is authorized
+for the original remaining 528 groups as each passes review; do not request
+another per-issuer cash-model approval. Identity, other complex actions and
+full held-position treatment still prevent advancement to 6-2.
 The user selected this sequence on September 17 after reviewing the
 [three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md#6-consolidated-remaining-todos-before-the-goal-is-finished).
 The report's pause is historical; this checklist and [HANDOFF](HANDOFF.md)
@@ -81,6 +92,11 @@ agreed funded physical fallback remain required. Preserve shared portfolio
 limits, chronological folds and causal inputs. Use at most four outer workers,
 one inner thread, 100 GiB disk reserve and the 250 GB acquisition ceiling.
 Protect existing V6 paper operation; do not change its policy as a side task.
+The user reported a roughly 230 GB project and constrained disk capacity.
+Reuse captures and keep remaining dividend evidence to named small documents.
+Before any further bulk acquisition or full-store generation, provide a storage
+forecast and establish the total-project budget; the acquisition cap alone is
+not a total-project disk budget. Preserve existing historical artifacts.
 Full contracts: [V7 specification](docs/specs/MULTITIMEFRAME_RESEARCH.md) and
 [active inputs](docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json).
 

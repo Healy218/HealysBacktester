@@ -1,0 +1,13 @@
+{
+  "schema": "v7-reported-settlement-field-review-v1",
+  "source": "nn_meta/data_v7/settlement-field-doc-20260917/alpaca-calendar-settlement-fields",
+  "source_receipt_sha256": "ef0b3a406f4b63aaee61a830bcdb7b55633b8fecd4d59eca57156b953b8eba54",
+  "source_document_sha256": "102b2418e552465d63c30ea49026966e01fae7365edc10acd4c19a4551eae357",
+  "endpoint": "https://paper-api.alpaca.markets/v2/calendar",
+  "field": "settlement_date",
+  "meaning": "The response schema identifies this as the settlement date for the trade date.",
+  "treatment": "Use each original captured trade-to-settlement mapping directly. Do not infer settlement holidays from exchange sessions or build a business-day union. Preserve next-regular-open-after-settlement cash availability; this does not verify broker posting.",
+  "historical_publication_verified": false,
+  "scope_change": false,
+  "research_ready": false
+}
