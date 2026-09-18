@@ -56,8 +56,10 @@ Do not bridge excluded predecessor/successor identities or invent lifecycle
 outcomes. The 7-2 start preflight passed real-shard storage and four-resolution
 aggregation checks. The compact Parquet proposal path reduced the real AAPL
 pilot from 690.7 MB JSONL to 5.8 MB losslessly. Next, measure peak space and
-resume behavior on one real full security before scheduling the catalog. Items
-7-3 through 7-7 remain queued. See [the 7-2 start checkpoint](docs/reviews/2026-09-18-v7-2-start.md).
+resume behavior on one real full security before scheduling the catalog. The
+first attempt correctly stopped on a stale transitive `nn_meta/v7/portfolio.py`
+hash; rebuild the bound history/action parents under current code before
+retrying. Items 7-3 through 7-7 remain queued. See [the 7-2 start checkpoint](docs/reviews/2026-09-18-v7-2-start.md).
 
 Work on `main` with scoped commits. V7 datasets remain untouched during the
 live V6 repair and this documentation cleanup.
