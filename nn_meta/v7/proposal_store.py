@@ -122,6 +122,14 @@ def build_features(path, chart, variants, *, inputs, reserve_bytes,
         positions = basis.index.get_indexer(epoch.observed)
         if (positions < 0).any() or (np.diff(positions) != 1).any():
             raise ValueError('Epoch observations must be a contiguous proposal-basis slice')
+        # A resumed build may have sealed this interval after the initial
+        # completed-epoch scan (for example, when an interrupted worker is
+        # being retried).  Re-check immediately before opening the immutable
+        # transaction so the retry verifies the checkpoint instead of
+        # treating it as a fresh write.
+        if destination.exists():
+            verify(destination, expected_identity=identity(dict(parent=fingerprint, ordinal=number)))
+            continue
         with transaction(destination) as temp:
             np.save(temp/'positions.npy', positions, allow_pickle=False)
             packed = np.lib.format.open_memmap(temp/'signals.npy', mode='w+', dtype='uint8',
