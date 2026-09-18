@@ -25,14 +25,6 @@ def configure(release, anchor):
     return verified
 
 
-def is_recoverable_quote_gap(exc):
-    """A missing/stale NBBO is a held-position gap, not a runtime crash."""
-    return isinstance(exc, ValueError) and str(exc) in {
-        'no fresh post-decision option quote',
-        'option quote is stale, crossed, empty or invalid',
-    }
-
-
 def monitor_positions(data, book, market, now, *, alerts):
     """Held-strategy exits get priority over unrelated candidate capture."""
     import pandas as pd
@@ -41,7 +33,6 @@ def monitor_positions(data, book, market, now, *, alerts):
     from nn_meta.decision_contracts import DecisionContractSelector
     from nn_meta.live.v6_option_risk import monitor_option_position
     errors=[]
-    quote_gaps=[]
     for position in book.open_positions():
         symbol=position['symbol']
         try:
@@ -79,10 +70,9 @@ def monitor_positions(data, book, market, now, *, alerts):
             book.settle(position['key'],quote_loader=market.execution_quote,clock=utcnow,
                 replacement=replacement,alerts=alerts)
         except Exception as exc:
-            item={'symbol':symbol,'error':f'{type(exc).__name__}: {exc}'}
-            (quote_gaps if is_recoverable_quote_gap(exc) else errors).append(item)
+            errors.append({'symbol':symbol,'error':f'{type(exc).__name__}: {exc}'})
     if alerts: book.export(book.path.parent/'alert-spool')
-    return {'errors': errors, 'quote_gaps': quote_gaps}
+    return errors
 
 
 def close_expiring_without_bars(book, calendar, market, now, *, alerts):
@@ -186,18 +176,10 @@ def run(args):
                     raise
             if not args.replay_time:
                 report(phase="monitor_exits")
-                monitoring=monitor_positions(data,book,market,now,alerts=args.enable_alerts)
-                exit_errors=monitoring['errors']
-                quote_gaps=monitoring['quote_gaps']
+                exit_errors=monitor_positions(data,book,market,now,alerts=args.enable_alerts)
                 if exit_errors:
                     report(exit_errors=exit_errors,expiry_fallback_errors=close_expiring_without_bars(book,data.calendar,market,utcnow(),alerts=args.enable_alerts))
                     raise ValueError("unresolved position monitoring; new entries withheld")
-                if quote_gaps:
-                    report(status='recorded',phase='complete',monitoring_gaps=quote_gaps,
-                        candidate_rows=0,allocation={'opened':0,'skipped':True},
-                        candidate_skip_reason='held-position quote gap; new entries withheld',
-                        portfolio=book.summary())
-                    return status
                 held=book.open_positions()
                 if len(held)==5 and all(p['state']=='open' for p in held):
                     # Exact zero-capacity case: causal exits were processed,

@@ -1,7 +1,6 @@
 from unittest.mock import patch
 import pandas as pd
 from nn_meta.session_calendar import SessionCalendar
-from scripts.run_v6_forward import is_recoverable_quote_gap
 from scripts.v6_forward_ops import health
 
 
@@ -31,10 +30,3 @@ def test_watcher_reports_explicit_live_failures_and_ignores_weekends():
     assert health({},calendar(),pd.Timestamp('2026-09-13T18:00Z'))['status']=='idle'
     status={'signal_clock':'2026-09-14T13:45:20Z','status':'failed','error':'no fresh quote'}
     assert health(status,calendar(),pd.Timestamp('2026-09-14T13:52Z'))['reason']=='no fresh quote'
-
-
-def test_held_position_quote_gaps_are_recoverable_but_other_errors_fail():
-    assert is_recoverable_quote_gap(ValueError('no fresh post-decision option quote'))
-    assert is_recoverable_quote_gap(ValueError('option quote is stale, crossed, empty or invalid'))
-    assert not is_recoverable_quote_gap(ValueError('held underlying has no current closed bar'))
-    assert not is_recoverable_quote_gap(RuntimeError('provider unavailable'))
