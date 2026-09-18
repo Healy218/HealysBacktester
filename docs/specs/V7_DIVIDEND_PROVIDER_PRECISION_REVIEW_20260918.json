@@ -1,0 +1,59 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "ETHE",
+      "ex_date": "2026-09-03",
+      "security_id": "BBG00P5NVCR8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.025932",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "staking_cash_distribution",
+          "record_date": "2026-09-03",
+          "pay_date": "2026-09-04",
+          "cash_per_share": "0.025932",
+          "terms_evidence_identity": "fc7f41c61ca6805d0beaf9d4ed4b48b35f13dba0906b2402fa45e32e9d8d7dd1",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "provider_stated_nominal_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f6738f6d-b02e-488c-a184-2e846dbf84d8",
+          "record_sha256": "3a473570731745913290ac38fd162d7c3c6d20ba49f04abf648f016c63148f55"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E006ab4193b82dd7e88258431ca7ac147e7730888063782d27c0209035e6e5a1d",
+          "record_sha256": "df65719566024d4a7a716a60bbb0e7e03abc388246f8631b0b6a1969df6f27b9"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ethe-subsequent-primary",
+          "receipt_sha256": "114f1618e49d64ac900af2795a5f998652664de9a2f6c2b401e320ee8d5e1101",
+          "payload_sha256": "afb39a7ba9cb05cc2d988ba4d9e82e18d7c19f1a1ef2bf0d487736070684a482",
+          "source_terms": "SEC issuer filing identifies ETHE USD distributions per share; no claim that the September payment appears in this earlier filing."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ethe-sec-submissions",
+          "receipt_sha256": "e411b9ac424dba3afc1063f1ce47d2bb8314366fea7101c453a088c4cefc68de",
+          "payload_sha256": "a960ebdf73d716b0f7c09f1840f459b2abfdffa9bd061aee79a03191d153e559",
+          "source_terms": "Captured SEC index: latest filing August7; September amount not independently verified here."
+        }
+      ],
+      "evidence_identity": "68ebf23449eb8b9e111923a5fcc3e1dfe07ead6c4fc7da12d7dbf838890e2eb2",
+      "amount_basis": "paired_provider_decimal_precision",
+      "primary_amount_verified": false,
+      "primary_unit_evidence_identity": "fc7f41c61ca6805d0beaf9d4ed4b48b35f13dba0906b2402fa45e32e9d8d7dd1",
+      "rationale": "One original Alpaca domestic USD .025932 record and one original Massive USD .0259 record agree at the latter reported precision, with identical ex/record/pay dates. Preserve .025932 rather than manufacture new digits or average amounts. Primary issuer filing verifies per-share USD unit convention only. September amount and dates remain explicitly provider sourced. Effective-session availability and broker posting remain unverified."
+    }
+  ]
+}

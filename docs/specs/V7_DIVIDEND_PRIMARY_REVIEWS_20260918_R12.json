@@ -1,0 +1,76 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SILJ",
+      "ex_date": "2025-12-29",
+      "security_id": "BBG01L6XWKF7",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.55410448",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "cash_distribution",
+          "record_date": "2025-12-29",
+          "pay_date": "2025-12-30",
+          "cash_per_share": "0.55410448",
+          "terms_evidence_identity": "f1782a1327ededf7d30cba236ec61a2ccc1638f2b4d477eb9297eda21a3dce73",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c8b896cd-65b8-44c7-a979-7f7a25560f75",
+          "record_sha256": "bc7c48c9bbe476a424502c4e8a5f420661507721e406b1b82aa5f3b6c68c9610"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E141b8e2d0c334ef474426a1776eb2e87a9a071e9132df2d457ba591e990138f3",
+          "record_sha256": "c202e8242405834f5a58b5d094942f397456a717712f7139e7ee67259f1cfd84"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/amplify-ici2025",
+          "receipt_sha256": "97c071e01af9513e56922bb784bc678f05f63fe089f255148f8eb93c93244273",
+          "payload_sha256": "08fb3d5531c23c420ff306b8ebf7665af5b00ae71c0fd257d75f0f343c2d54db",
+          "source_terms": {
+            "symbol": "SILJ",
+            "ex": "2025-12-29",
+            "record": "2025-12-29",
+            "pay": "2025-12-30",
+            "amounts": [
+              ".55410448"
+            ],
+            "names": [
+              "cash_distribution"
+            ],
+            "capture": "amplify-ici2025",
+            "date_basis": "primary_stated_dates",
+            "locator": "PDF page 2, SILJ CUSIP 032108649; visually verified total cash distribution, record/ex/pay columns",
+            "date_conflict_resolution": "Issuer January 27 2026 ICI primary tax table establishes December 29 record/ex and December 30 payment, matching both original providers. Supersedes conflicting dates in the January 13 backfilled website distribution pack. Foreign tax paid is a tax reporting gross-up, not additional cash."
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/amplify-silj-distributions",
+          "receipt_sha256": "b0f8af7ab1cf14355323250c26f6b342e0a1de806a16985209fde64ba1f73ea8",
+          "payload_sha256": "1086e2fc25cead7aee4f0f1fcccefcdc3f30f1ee70c7f952f555bd7a3db47ae1"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/silj-tax-documents",
+          "receipt_sha256": "06820c6adcea2aab9f0fc377634243cfdd69d00a5cbb44b38ee3136848c218e3",
+          "payload_sha256": "a086c8ed10174e2efd020a7010902775207f5ec6a615bdfa1f3b54868312ea89"
+        }
+      ],
+      "evidence_identity": "e30276cf82ad394334d3f8d0b182d43d188a0adf66e31fe90e511cc43e0ea84f",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. The visually verified 2025 ICI primary tax table on page 2 supersedes conflicting website pack dates and supplies the exact total cash distribution .55410448. Tax-reporting foreign-tax gross-up is not a second cash entitlement.",
+      "amount_basis": "exact_primary_terms"
+    }
+  ]
+}

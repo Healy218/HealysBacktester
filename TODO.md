@@ -24,6 +24,14 @@
   Completion evidence: An inspected full-scope report passes every required stage; only then may we claim V7 is ready.
 
 **Current item: 6-1. Items 6-2 through 6-7 are queued.**
+
+- [x] **Dividend portion of 6-1:** 4,918 payment leaves across 4,854 price events;
+  zero uncompiled dividend groups or missing held-cash treatments. All 10,428
+  original records and 4,854 actual raw price boundaries reconcile. Final
+  artifact: `v7-dividends-complete-20260918`. See the
+  [completion audit and explicit model limits](docs/reviews/2026-09-18-v7-dividends-complete.md).
+  The remaining 234 original records are noncash; overall identity/lifecycle
+  and option-deliverable coverage keep 6-1 open.
 September 17 progress: [reviewed source routing](docs/reviews/2026-09-17-v7-6-1-source-routing.md)
 and [authorized ordinary-action reconstruction](docs/reviews/2026-09-17-v7-ordinary-action-admission.md),
 followed by [exact-date share-class resolution](docs/reviews/2026-09-17-v7-share-class-identities.md).
@@ -116,4 +124,4 @@ The previous overlapping checklist is preserved verbatim in
 Its old open/checkmarked entries are historical; they are not another active V7
 queue. Deferred work is not deleted and must not delay this seven-item sequence.
 
-September 18 continuation checkpoint: **4,863 payment leaves across all 4,802 compiled cash events; 52 uncompiled dividend groups remain and zero missing-date cases.** R7–R9 and ten false/duplicate cash dispositions are sealed. Full suite: 2,287 tests plus 18 subtests. Current artifact v7-dividend-dispositions-20260918; rebuilt coverage admits 587,253 sessions. Dividend work and item 6-1 remain open; currency modeling question is pending.
+September 18 final dividend checkpoint: **4,918 payment leaves across all 4,854 compiled cash events; zero remaining dividend cases.** Rebuilt canonical coverage admits 587,284 of 667,239 history rows. The modeled FX rule was explicitly approved and implemented. One ETHE precision reconciliation is clearly provider sourced. The dividend subtask is complete; item 6-1 remains open for noncash and full lifecycle treatment.

@@ -1374,3 +1374,21 @@ holdings alone earn none. This closes dividend terms without inventing a share
 conversion; the separate noncash lifecycle gate still governs transitions.
 First-scope March14 observations establish March15 price factors only: retain the
 existing cold-start research feature and unchanged study membership.
+
+### 2026-09-18 — Final SILJ date correction and finite ETHE precision reconciliation
+
+The issuer's ICI 2025 primary tax table (visually checked page 2) supersedes its
+backfilled website distribution dates for SILJ: December 29 record/ex, December
+30 payment, cash $0.55410448. Do not add foreign-tax reporting gross-up as cash.
+
+Under the user's authorization to finish and make necessary implementation
+edits, resolve the final ETHE September 3 pair as reported decimal precision:
+Alpaca USD $0.025932 rounds to Massive USD $0.0259, with identical dates and no
+foreign/special flags. A separate finite policy requires exactly these original
+records, known common USD units, decimal rounding agreement, and strict absolute
+and relative bounds. Retain $0.025932; do not average, manufacture digits or
+relax date/currency/identity conflicts. The original primary-only policy stays
+sealed; this event explicitly uses matching-provider reconstruction and declares
+`primary_amount_verified=false`. The unavailable primary September notice is a
+documented source limitation, not hidden corroboration. This exception does not
+change the scope or the pre-tax beneficial-share cash model.

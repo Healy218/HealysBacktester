@@ -1,39 +1,92 @@
-# Handoff — dividend completion active, FINAL TWO cases remaining
+# Handoff — dividend portion complete, September 18, 2026
 
-Latest state supersedes all older counts: `nn_meta/validation/v7-primary-dividends-20260918-r11` has 4,916 cash payment leaves across 4,852 price events, with just ETHE 2026-09-03 and SILJ 2025-12-29 unresolved. All 10,428 originals reconcile (10,190 resolved, 238 pending including noncash). User approved the modeled FX rule explicitly: prior-ex official FX fixed for cash and price. The 24 groups / 27 payments are sealed in v7-fx-dividends-20260918, with policy/reviews under docs/specs/V7_DIVIDEND_FX*. Bank of Canada raw daily FX is captured; its current history is not a verified historical publication vintage. PBR native currencyPerDr is already BRL per ADR; do not double it. Calendar and reported settlement are extended through 2027-01-08 in nn_meta/data_v7/dividend-calendar-20260918, with exact old rows preserved.
+The interrupted dividend work is finished. Do not restart the old issuer search
+or treat archived remaining counts as live. Current overall item is still 6-1:
+noncash/identity lifecycle and complete held-position treatment. No training,
+deployment, bulk acquisition or V6 policy change was performed.
 
-R10 adds seven precision/acquirer dividends. R11 adds 19 exact-identity boundaries, using `v7-dividend-boundary-history-20260918` solely for dividend compilation. Its extra five cash security IDs (SIRI/SILJ/XOM actual FIGIs plus primary CUSIPs for AZN/CCL) never merge predecessors/successors or change trading membership. Three captured March14 closes establish first-day factors while the actual research feature remains cold on March15. ELV June9 routes to dated ANTM with the same FIGI. All original records remain untouched. Full study coverage must still use canonical `v7-security-history-20260917-gap-r2`, not this auxiliary boundary view. Actual predecessor/successor transitions remain blocked by the separate noncash lifecycle gate.
+## Final verified artifact
 
-Last full suite: 2,308 tests plus 18 subtests, 19 warnings, 126.54 seconds (/tmp/v7-dividend-tests-fx-20260918.log). Ten additional boundary/identity/isolation tests pass. Run final suite after closure. Current cash/price boundary CLI verifies all leaves and zero-inventory replay; no research-ready or overall 6-1 claim yet.
+`nn_meta/validation/v7-dividends-complete-20260918`
 
-Final work: ETHE primary issuer page etfs.grayscale.com/ethe returns 403/429; SEC submissions captured and has no filing after Aug7, so September .025932 amount still needs primary corroboration. Both original vendors agree Sep3 ex/record and Sep4 pay (.025932 vs .0259). SILJ primary Firestore distributions pack has .5541 but erroneous/conflicting Dec30/31 dates versus both original vendors Dec29/30. Tax-center page captured; its public tax-center.js is being captured to locate dated notices. Do not silently discard that date conflict. Original precision cases remain explicit reviewed comparisons, not global tolerances. Once these close, run a complete source/consumer/census/coverage audit with new strict dividend-complete gate, preserving overall lifecycle blocks. Continue; this is a recovery checkpoint, not task completion.
+- 10,428 original provider records reconcile: 10,194 resolved / 234 pending noncash.
+- 4,854 cash price events and 4,918 separately dated cash payment leaves.
+- Zero uncompiled dividend groups; zero missing held-cash treatments.
+- Every cash factor checked against actual raw preceding prices and dated identity.
+- Canonical history remains 667,239 rows, with 587,284 admitted history sessions.
+- All payments pass source/component/clock/settlement checks. Actual zero-inventory
+  portfolio replay creates no receivable and ends with the original $100,000.
+- `dividends_complete=true`; `step_1_complete=false`, `research_ready=false`,
+  and full `held_position_admitted=false`.
+- Full suite: **2,338 tests plus 18 subtests passed**, 19 warnings, 127.33 seconds.
+  Log: /tmp/v7-dividend-tests-final-20260918.log.
 
-Latest checkpoint supersedes counts below: `nn_meta/validation/v7-dividend-dispositions-20260918` contains 4,863 cash payment leaves across 4,802 cash price events; 52 uncompiled cash groups and zero missing-date cases remain. All 10,428 original records reconcile (10,088 resolved / 340 pending). Rebuilt coverage admits 587,253 of 667,239 history sessions. All leaves validate; actual empty portfolio creates no cash. Full suite passes 2,287 tests plus 18 subtests (19 warnings, 125.80 seconds; /tmp/v7-dividend-tests-dispositions-20260918.log).
+The completion audit is
+[docs/reviews/2026-09-18-v7-dividends-complete.md](docs/reviews/2026-09-18-v7-dividends-complete.md).
+TODO has the dividend subtask checked; the seven overall readiness items remain open.
 
-R7–R9 primary reviews add issuer/fund payments. New frozen dividend_dispositions module and resolve_v7_dividend_dispositions CLI resolve ten false/duplicate cash groups (MSTR, ET preferred, canceled DFS, four unrelated FIGR, unrelated TE, duplicate GOLD/B, AMC share distribution). AMC noncash lifecycle remains blocked. Frozen reviews/producers must not be edited after their receipts. No overall lifecycle gate is passed.
+## Inputs and consumers
 
-Remaining: SU18/CCJ4/PBR2 currency cases; SIRI8/AZN2/CCL2/ELV1/XOM1 identity dependencies; KSS/LRCX/TMO first-scope boundaries; HD/OKE acquirer mixed-action cases; JETS/SIL/COPX/SILJ4 precision cases; CCL February2026 and ETHE September2026. A required async question about explicit prior-ex official FX modeling was asked and remains unanswered; do not implement that choice without reply. Continue independent work. Sources and helpers remain in /tmp/v7-* and nn_meta/data_v7/dividend-finish-20260918; R7–R9 review JSON files are authoritative.
+Final artifact contains actions.json, events.json, unresolved.json,
+coverage.parquet, auxiliary_cash_actions.json, price_boundary_checks.json,
+treatments.json, dispositions.json, report.json and all immutable input bindings.
+Reproducer: scripts/finalize_v7_dividends.py; use a fresh output directory for
+a new revision. The final audit rejects incomplete payment partitions or
+inconsistent raw-price factors before declaring dividend completion.
 
-The user explicitly asked to finish the dividend portion and authorized necessary checks and edits. Work is ongoing: do not mistake this recovery checkpoint for completion. Main only; preserve unrelated V6/assembly changes. Prior handoff is handoff-history/HANDOFF-2026-09-18-before-primary-dividends.md.
+Canonical study history remains
+`nn_meta/validation/v7-security-history-20260917-gap-r2`.
+`v7-dividend-boundary-history-20260918` is only the finite dividend compilation
+view, with three preceding-scope observations and five separate cash security IDs.
+It preserves trading membership byte-for-byte and does not replace the feature
+history. The 16 auxiliary cash events accrue only to beneficial holdings under
+the correct identity. They do not convert predecessor shares to successors.
+ANTM/ELV June 2022 is explicitly routed by dated same-FIGI evidence. First-scope
+features remain cold on March 15 despite the verified prior-close factor.
 
-## Current verified state
+Trading and reported settlement clocks are now captured through 2027-01-08:
+`nn_meta/data_v7/dividend-calendar-20260918/{calendar,settlement_calendar}.json`.
+Every original calendar/settlement row in shared coverage was preserved.
+Original inventory is v7-action-inventory-20260917-tail, renames are
+v7-common-share-renames-20260917, and original other/disposition treatments are
+v7-dividend-dispositions-20260918 (all under nn_meta/validation).
 
-Current combined action/cash artifact: nn_meta/validation/v7-primary-dividends-20260918-r6. It contains 4,835 cash payment leaves for all 4,777 cash price events. 87 review items remain, all uncompiled groups; zero missing-date cases. All 10,428 original records reconcile. New 289 primary price boundaries use actual captured history. Multiple payments share one price adjustment, with individually dated cash releases. All leaves pass source/amount/clock/settlement verification and the actual empty portfolio replay creates no cash. Funded multi-payment fixture passes; not historical ADR fills.
+## Explicit model and source decisions
 
-Full suite September 18: 2,277 tests plus 18 subtests, 19 warnings, 211.49 seconds; /tmp/v7-dividend-tests-dates-20260918.log. No V6 policy changes or training. History coverage has NOT yet been rebuilt. Item 6-1 remains open.
+The user approved the native-currency FX rule. The 24 remaining groups / 27
+payments use the last official Bank of Canada daily observation strictly before
+ex-date, fixed for cash and price. Preserve native amount, rate/date, fx_model
+and policy identity. This is modeled USD cash, not actual depositary conversion.
+PBR currencyPerDr already includes its ADR ratio. No withholding/fee model.
 
-## Frozen inputs and implementation
+SILJ December 2025 is resolved by the visually inspected issuer ICI tax table:
+December29 ex/record, December30 pay, $0.55410448 cash. It supersedes the
+conflicting backfilled website dates; tax gross-up is not extra cash.
 
-Primary resolution policies/reviews: docs/specs/V7_DIVIDEND_RESOLUTION_POLICY_20260918.json and V7_DIVIDEND_PRIMARY_REVIEWS_20260918{,_R2}.json. Do not mutate these or their bound producers after receipt creation. R1 through R6 and nominal-date reviews are frozen and bound by receipts. New modules dividend_resolution/dividend_components and producer registry dividend_producer_versions preserve exact historical producer snapshots. CLI scripts/compile_v7_dividend_resolutions.py binds original inventory, primary captures, finite authorized proposal, actions/cash, history, calendar/settlement, rename and unrelated treatments. Current artifacts inputs.json are the authoritative bindings.
+ETHE September3 is one explicitly documented provider precision reconciliation:
+original $0.025932 rounds to the other original USD report $0.0259, with matching
+dates. A separate finite policy preserves the precise original and sets
+primary_amount_verified=false. The September issuer notice was unavailable;
+earlier issuer SEC evidence establishes units only. This is not a general
+tolerance or a primary-source amount claim.
 
-Baseline history v7-security-history-20260917-gap-r2; inventory v7-action-inventory-20260917-tail; baseline actions v7-cash-units-20260917; baseline cash v7-stock-cash-dates-20260918-r2; renames v7-common-share-renames-20260917; unrelated v7-other-instruments-20260917-renames; settlement v7-reported-settlement-20260917/settlement_calendar.json. All under nn_meta/validation. Trading calendar nn_meta/data_v7/exchange-calendar-20260916/calendar.json.
+All source captures are retained under
+`nn_meta/data_v7/dividend-finish-20260918`. R1–R12 reviews, FX and provider
+precision reviews/policies, and their producer modules are frozen by receipts.
+Never edit those bytes in place to bypass verification. The historical producer
+registry preserves exact old snapshots. Follow DOCUMENTATION's traps.
 
-Primary captures: nn_meta/data_v7/dividend-finish-20260918. JPM public feed /jpmadr-public/v1/dr/dividends/CUSIP supplies gross ratePerDr, dated payments, status and underlying currency. Filter manually to Final/Amended Final: announcementFilter=final still returns Initial. Citi PDFs, issuer tables and Q4 feeds also captured. Ford Q4 historical amounts appear adjusted, so do NOT admit them blindly. Named small documents only; no bulk acquisition.
+## Next session
 
-## Immediate continuation
+Continue the remaining **noncash** records and security lifecycle dependencies
+from the final artifact's unresolved.json, including option deliverables and
+funded predecessor/successor transitions. Do not advance to 6-2 until full 6-1
+evidence passes. Keep the original dates, securities, exclusions and study
+membership fixed. Reuse captures, name missing consumer inputs before acquiring
+anything, and honor four outer workers / one inner thread, 100 GiB reserve,
+250 GB acquisition ceiling and a separate total-project forecast before bulk work.
+About 459 GiB was free at completion.
 
-All seven dates compiled in v7-dividend-dates-complete-20260918 with nominal pay-date qualifiers preserved. New dividend_dates module and compile_v7_remaining_cash_dates CLI reuse the frozen legacy validator, preserve multi-payment leaves, and keep option adjustments separate. R3 adds HL/AMR/PBR/SHEL/QQQ; R4 AG; R5 FANG/PXD/AMKR/AG; R6 BX/GM/CF/F/ETHE/ITB/MTUM/FXI/SOXS. Exact inputs and counts are in each receipt/report. Actual primary price boundaries tested on every batch. History coverage still needs rebuilding after final closure.
-
-R7 preparation /tmp/v7-r7-terms.json currently has seven Direxion distributions read from the captured product page __NEXT_DATA__. props.pageProps.ssrData.funds contains all funds: filter ticker and original effective date. Values are historical unadjusted and agree with duplicate original rows. Ford 2023/2024 and KKR Q1 2022 issuer PDFs are being captured. DKS March2024 SEC and SIMO Oct2023 primary notices found. MSTX issuer correction provides exact $14.42760884. Preserve all source records and individual payments; never sum duplicate same distributions.
-
-Recovery helpers copied to docs/reviews/dividend-preparation-20260918 (historical preparation, not automatic overwriting of sealed reviews). Named primary evidence only. Current worklist is R6/uncompiled.json. Two PBR future distributions have provisional USD conversion terms; SU/CCJ native CAD amounts need explicit FX treatment. SIRI/XOM identity cases, first-scope KSS/LRCX/TMO, aliases GOLD/ELV, erroneous/canceled/other-instrument FIGR/TE/AMC/DFS/MSTR and mixed HD/OKE need finite reviewed routing rather than invented cash. Remaining straightforward issuer/fund source reviews continue. Do not claim completion or advance past 6-1 until full consumer audit.
+Work stays on main with scoped commits/pushes. Preserve the large unrelated
+V6/assembly dirty and untracked set; none of it was staged for this dividend work.
+Earlier checkpoints are archived in handoff-history/.

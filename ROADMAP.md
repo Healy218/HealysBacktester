@@ -14,6 +14,11 @@ open. Finish and document each item before the handoff advances to the next.
 The report's review pause is superseded by this staged workflow; the historical
 checkpoints below are not parallel instructions to restart old workstreams.
 
+September 18: the [dividend portion is complete](docs/reviews/2026-09-18-v7-dividends-complete.md),
+with 4,918 dated payments, 4,854 verified price boundaries and no remaining cash
+groups. The remaining 6-1 work is noncash/identity lifecycle and complete held
+treatment; this does not advance the overall phase or authorize training.
+
 The sequence is identity/actions → causal context/features → actual option-path
 capture → integrated execution → full assembly/trials → measured resource and
 recovery feasibility → complete readiness. Dependencies may require touching a

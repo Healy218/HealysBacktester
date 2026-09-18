@@ -1,0 +1,29 @@
+{
+  "schema": "v7-finite-dividend-provider-precision-v1",
+  "status": "authorized_implementation",
+  "authorization": "Implementation judgment under the user instruction to finish dividends and check/edit as needed. This finite ordinary USD case reconciles original reported decimal precision without changing economics or applying a global tolerance.",
+  "symbol": "ETHE",
+  "ex_date": "2026-09-03",
+  "replaces": [
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "f6738f6d-b02e-488c-a184-2e846dbf84d8",
+      "record_sha256": "3a473570731745913290ac38fd162d7c3c6d20ba49f04abf648f016c63148f55"
+    },
+    {
+      "provider": "massive",
+      "kind": "dividends",
+      "action_id": "E006ab4193b82dd7e88258431ca7ac147e7730888063782d27c0209035e6e5a1d",
+      "record_sha256": "df65719566024d4a7a716a60bbb0e7e03abc388246f8631b0b6a1969df6f27b9"
+    }
+  ],
+  "primary_amount_verified": false,
+  "primary_cash_units_verified": true,
+  "withholdings_and_fees_modeled": false,
+  "scope_change": false,
+  "publication_verified": false,
+  "rule": "Exactly one original domestic USD record per provider; equal ex/record/pay dates; most precise original amount rounds half-up to the other provider at its reported precision, with quantum <=0.0001, absolute difference <=0.00005 and relative difference <=0.005. No currency conversion or net/gross inference.",
+  "source_limitation": "Issuer September page could not be retained (403/429); captured SEC filing index has no subsequent filing. Amount and dates come from the original provider pair. Primary SEC filing establishes USD distributions per ETHE share, not this September amount.",
+  "research_ready": false
+}

@@ -1220,6 +1220,32 @@ Massive calls it `pay_date`. Inspect original nominal-versus-business payment
 semantics rather than treating either field name or shifted dates as proof.
 [Evidence and limitations](docs/reviews/2026-09-17-v7-cash-calendar-closure.md).
 
+### V7 completed dividends: preserve source precision and separate cash identities
+
+The September 18 dividend closure is `nn_meta/validation/v7-dividends-complete-20260918`.
+Use its separately dated `events.json` payments with the one-event price actions;
+do not sum duplicate provider rows or collapse multiple payment dates. The final
+auditor checks all cash factors against raw preceding closes and every payment
+against its source and captured settlement/release clocks.
+
+`v7-dividend-boundary-history-20260918` is **only** a cash compilation view. It
+contains three prior-scope observations and five separate cash security IDs,
+plus the dated ANTM alias. It is not the study's canonical feature history and
+must never replace or enlarge trading membership. Its price/cash terms do not
+convert predecessor holdings into successors. First-scope feature cold starts
+and the broader lifecycle gate remain intact.
+
+Retain `cash_amount_basis`, `fx_model`, policy identities and the explicit
+`primary_amount_verified=false` flag when present. Approved FX uses the latest
+official prior-ex daily observation, fixed per payment; PBR `currencyPerDr`
+already includes the ADR ratio. ETF ICI tax tables distinguish actual cash from
+foreign-tax reporting gross-up. ETHE's single September precision reconciliation
+preserves the more precise original USD report without claiming primary notice
+verification. These are finite reviews, not general conflict tolerances.
+
+Full evidence and current limitations:
+[September 18 dividend completion](docs/reviews/2026-09-18-v7-dividends-complete.md).
+
 ### V7 recovered cash-date lineage (September 18)
 
 Current cash events and verification are `v7-stock-cash-dates-20260918-r2` and
