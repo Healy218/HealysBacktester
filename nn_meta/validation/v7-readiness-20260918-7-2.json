@@ -1,0 +1,74 @@
+{
+  "schema": "v7-readiness-report-v1",
+  "scope_identity": "d7cff2646886fd540cee39b39e9be3c3cf891356776efa5f6744c299ce9b0f47",
+  "ready_for_training": false,
+  "gates": [
+    {
+      "gate": "active_inputs",
+      "passed": true,
+      "evidence": {
+        "scope_identity": "d7cff2646886fd540cee39b39e9be3c3cf891356776efa5f6744c299ce9b0f47",
+        "feature_columns": 222
+      }
+    },
+    {
+      "gate": "rebuilt_membership",
+      "passed": true,
+      "evidence": {
+        "historical_symbols": 593,
+        "historical_securities": 591,
+        "rows": 16549
+      }
+    },
+    {
+      "gate": "coverage_inventory",
+      "passed": true,
+      "evidence": {
+        "eligible_sessions": 339640,
+        "resolved_alias_sessions": 67,
+        "remaining_zero_sessions": 59
+      }
+    },
+    {
+      "gate": "lifecycle",
+      "passed": false,
+      "reason": "Full-universe evidence not supplied: all_sessions_classified, dated_aliases_consumed, dated_sectors_complete, held_positions_across_lifecycle_resolved"
+    },
+    {
+      "gate": "causal_prices",
+      "passed": false,
+      "reason": "Full-universe evidence not supplied: all_securities_covered, publication_and_effective_evidence, combined_actions_and_spinoffs, contemporaneous_tick_units, cross_action_stops"
+    },
+    {
+      "gate": "daily_context",
+      "passed": false,
+      "reason": "Full-universe evidence not supplied: all_securities_covered, price_state_starts_march15, warmup_missingness_recorded, market_and_sector_context, first_eligible_observations_recorded"
+    },
+    {
+      "gate": "quotes",
+      "passed": false,
+      "reason": "Full-universe evidence not supplied: actual_interval_union, entries_marks_exits_rolls_exercise_covered, trade_features_covered, dated_class_hours_and_weeklies, shared_quota_under_250gb"
+    },
+    {
+      "gate": "physical_execution",
+      "passed": false,
+      "reason": "Full-universe evidence not supplied: dated_official_exercise_references, dated_deliverables, shared_funding, settlement_calendar, observed_alpaca_stock_liquidation, all_outcomes_resolved, full_cash_reconciliation"
+    },
+    {
+      "gate": "assembly",
+      "passed": false,
+      "reason": "Full-universe evidence not supplied: full_history_all_variants, 222_columns, complete_label_and_mark_lineage, fold_purging_through_settlement, bounded_training_sequences, recovery_verified, arithmetic_midpoint_option_stops_and_itm_expiry"
+    },
+    {
+      "gate": "trials",
+      "passed": false,
+      "reason": "Full-universe evidence not supplied: runnable_predeclared_manifest, fair_baselines, finite_nn_and_gbt, deterministic_seeds, train_only_calibration_and_weights, multiple_testing_accounting"
+    },
+    {
+      "gate": "integrated_pilots",
+      "passed": false,
+      "reason": "Full-universe evidence not supplied: new_window, sparse_and_liquid, actions_aliases_early_closes, rolls_and_funded_expiry, four_bounded_workers, binned_dataset_memory, no_swap_growth, v6_coexistence"
+    }
+  ],
+  "full_launch_performed": false
+}

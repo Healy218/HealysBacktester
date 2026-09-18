@@ -1,0 +1,169 @@
+{
+  "schema": "v7-storage-benchmark-v1",
+  "source_receipt_sha256": "7655777d68375c97393a0c377f4232f839e3776bcda6b809862c163e25ce2e93",
+  "storage": [
+    {
+      "backend": "parquet",
+      "rows": 212907,
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "write_and_commit_seconds": 0.05556288099978701,
+      "verify_seconds": 0.0012295840024307836,
+      "warm_read_and_consume_seconds": [
+        0.00746207699921797,
+        0.007193499997811159,
+        0.0071509299996250775
+      ],
+      "bytes": 2962549,
+      "process_peak_rss_kib": 191812,
+      "numeric_sha256": "8310356868ec672856a43e72ada7dadb2834e97d870b29184cd9a9edb30a3d14",
+      "runtime": {
+        "arrow_cpu_threads": 1,
+        "arrow_io_threads": 1,
+        "blosc_threads": 1,
+        "polars_max_threads": "1",
+        "arrow_allocator": "mimalloc",
+        "process_start_method": "spawn"
+      },
+      "equal": true
+    },
+    {
+      "backend": "arrow",
+      "rows": 212907,
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "write_and_commit_seconds": 0.024710278998099966,
+      "verify_seconds": 0.0042655659999581985,
+      "warm_read_and_consume_seconds": [
+        0.005453382000268903,
+        0.004165786998783005,
+        0.004070358998433221
+      ],
+      "bytes": 8519827,
+      "process_peak_rss_kib": 163788,
+      "numeric_sha256": "8310356868ec672856a43e72ada7dadb2834e97d870b29184cd9a9edb30a3d14",
+      "runtime": {
+        "arrow_cpu_threads": 1,
+        "arrow_io_threads": 1,
+        "blosc_threads": 1,
+        "polars_max_threads": "1",
+        "arrow_allocator": "mimalloc",
+        "process_start_method": "spawn"
+      },
+      "equal": true
+    },
+    {
+      "backend": "numpy",
+      "rows": 212907,
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "write_and_commit_seconds": 0.029931482997199055,
+      "verify_seconds": 0.005228943999100011,
+      "warm_read_and_consume_seconds": [
+        0.003486966001219116,
+        0.0032849880008143373,
+        0.0032860589999472722
+      ],
+      "bytes": 8516745,
+      "process_peak_rss_kib": 163876,
+      "numeric_sha256": "8310356868ec672856a43e72ada7dadb2834e97d870b29184cd9a9edb30a3d14",
+      "runtime": {
+        "arrow_cpu_threads": 1,
+        "arrow_io_threads": 1,
+        "blosc_threads": 1,
+        "polars_max_threads": "1",
+        "arrow_allocator": "mimalloc",
+        "process_start_method": "spawn"
+      },
+      "equal": true
+    },
+    {
+      "backend": "zarr",
+      "rows": 212907,
+      "columns": [
+        "Open",
+        "High",
+        "Low",
+        "Close",
+        "Volume"
+      ],
+      "write_and_commit_seconds": 0.07931767300033243,
+      "verify_seconds": 0.002285390997712966,
+      "warm_read_and_consume_seconds": [
+        0.008544573000108358,
+        0.008552122002583928,
+        0.00824537600055919
+      ],
+      "bytes": 5348278,
+      "process_peak_rss_kib": 157852,
+      "numeric_sha256": "8310356868ec672856a43e72ada7dadb2834e97d870b29184cd9a9edb30a3d14",
+      "runtime": {
+        "arrow_cpu_threads": 1,
+        "arrow_io_threads": 1,
+        "blosc_threads": 1,
+        "polars_max_threads": "1",
+        "arrow_allocator": "mimalloc",
+        "process_start_method": "spawn"
+      },
+      "equal": true
+    }
+  ],
+  "aggregation": [
+    {
+      "minutes": 1,
+      "rows": 97710,
+      "pandas_transform_seconds": 0.6495451720002166,
+      "polars_read_transform_pandas_conversion_seconds": 0.09795209799995064,
+      "buckets_with_unobserved_minutes": 0,
+      "equal": true
+    },
+    {
+      "minutes": 5,
+      "rows": 19542,
+      "pandas_transform_seconds": 0.6426968779996969,
+      "polars_read_transform_pandas_conversion_seconds": 0.06151401700117276,
+      "buckets_with_unobserved_minutes": 0,
+      "equal": true
+    },
+    {
+      "minutes": 15,
+      "rows": 6514,
+      "pandas_transform_seconds": 0.6362689289999253,
+      "polars_read_transform_pandas_conversion_seconds": 0.06126430999938748,
+      "buckets_with_unobserved_minutes": 0,
+      "equal": true
+    },
+    {
+      "minutes": 30,
+      "rows": 3257,
+      "pandas_transform_seconds": 0.6433064409975486,
+      "polars_read_transform_pandas_conversion_seconds": 0.060295121002127416,
+      "buckets_with_unobserved_minutes": 0,
+      "equal": true
+    }
+  ],
+  "workers": 4,
+  "limitations": [
+    "One real stock shard, not full option workload",
+    "Warm cache; no OS page-cache eviction",
+    "Concurrent acquisition may affect timing",
+    "Storage writes include integrity hashes and durable commit",
+    "Pandas aggregation input preloaded; Polars includes read and pandas conversion",
+    "No end-to-end freeze/build/training speedup established"
+  ]
+}

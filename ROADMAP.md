@@ -3,23 +3,27 @@
 Long-term maturity targets and the first-week v6 review are in [GOALS](GOALS.md).
 Continue this roadmap toward ≥7/10 in every assessment area by December 31, 2026.
 
-## September 17 direction: finish V7 through report items 6-1 to 6-7
+## September 18 direction: finish V7 through items 7-1 to 7-7
 
-The user adopted section 6 of the
+The user adopted the numbered V7 sequence formerly recorded as section 6 of the
 [three-day progress report](docs/reviews/2026-09-17-three-day-goals-and-progress.md)
 as the ordered completion plan. [TODO](TODO.md) is the single active checklist;
 [HANDOFF](HANDOFF.md) names the current item and its next concrete work.
-**Current item: 6-2, causal daily/market context and feature stores.** Item 6-1
+**7-1 is complete. Before 7-2, repair and verify the deployed live V6 system on
+the server, which is producing recurring errors. Then 7-2 is the current item:
+causal daily/market context and feature stores.** Item 7-1
 is closed under its explicit conservative admission policy; finish and document
-each later item before the handoff advances again.
+each later item before the handoff advances again. V6 means only the deployed
+server model and its live operation; the abandoned local short-DTE research
+build is not part of the V7 roadmap.
 The report's review pause is superseded by this staged workflow; the historical
 checkpoints below are not parallel instructions to restart old workstreams.
 
 September 18: the [dividend portion is complete](docs/reviews/2026-09-18-v7-dividends-complete.md),
 with 4,918 dated payments, 4,854 verified price boundaries and no remaining cash
-groups. The remaining 6-1 noncash records now have explicit source-bound
+groups. The remaining 7-1 noncash records now have explicit source-bound
 boundary exclusions consumed by the history and held-position guards; no
-successor, deliverable, or cash outcome is inferred. This closes 6-1 under the
+successor, deliverable, or cash outcome is inferred. This closes 7-1 under the
 recorded admission policy and does not authorize training.
 
 The sequence is identity/actions → causal context/features → actual option-path
@@ -30,7 +34,7 @@ campaign or declare a later item complete prematurely.
 
 ### Completed work and evidence retained
 
-Current 6-1 progress: the [ordinary-action admission review](docs/reviews/2026-09-17-v7-ordinary-action-admission.md)
+Current 7-1 progress: the [ordinary-action admission review](docs/reviews/2026-09-17-v7-ordinary-action-admission.md)
 records the user's effective-session reconstruction policy, 4,410 reconstructed
 events plus 19 retained publication-reviewed events, and real consumer checks.
 The subsequent [share-class review](docs/reviews/2026-09-17-v7-share-class-identities.md)
@@ -67,7 +71,7 @@ The [September 18 recovery](docs/reviews/2026-09-18-v7-cash-date-recovery.md)
 resolves 48 of those 55 cash-date cases and verifies all 4,421 entitlements.
 At that historical checkpoint, remaining dividend review was 437 uncompiled groups plus seven date cases (444); the final dividend census supersedes it.
 The finite January 2025 closed-record-date exception is source-bound; full
-identity/action and held-lifecycle requirements still kept item 6-1 open at that
+identity/action and held-lifecycle requirements still kept item 7-1 open at that
 historical checkpoint; the explicit noncash boundary closure now supersedes it.
 
 Use report sections 2–4 as the September 15–17 evidence index instead of repeating
@@ -118,12 +122,11 @@ The expanded freeze/build and repaired three-fold/40-member training completed.
 Frozen V6 experimental paper alerts are active: home calculation/portfolio,
 server delivery and watcher, with the explicitly authorized 15-minute expiry
 cutoff. Model weights and selection/risk rules remain frozen. The separate
-**actual 1–9-calendar-day expiry** campaign is coded and prepared with strict
-entry/roll guards, separate artifacts and an overnight resource budget.
-The original end-to-end dataset pilot passed. After a four-process resume,
-`v6-short-dte-20260914-now` was paused at 21 completed symbols and its main
-timer disabled: the user expanded scope to minute option execution and all
-strategy variations across 1/5/15/30-minute signals. V7 now uses March 15, 2022 through September 14, 2026;
+**actual 1–9-calendar-day expiry** research build was abandoned before
+completion; its paused 21/449 local artifact was deleted. It is not the
+deployed V6 system. The user expanded V7 scope to minute option execution and
+all strategy variations across 1/5/15/30-minute signals. V7 now uses March 15,
+2022 through September 14, 2026;
 the user superseded the initial plan to keep V6 dates. Complete [new-version preparation](docs/specs/MULTITIMEFRAME_RESEARCH.md)
 before a new freeze/build/training launch. No new trained model exists yet. See
 [HANDOFF](HANDOFF.md), [activation](docs/reviews/2026-09-14-v6-forward-activation.md)

@@ -1,37 +1,45 @@
 # TODO — V7 readiness, one deliverable at a time
 
-## 6. Consolidated remaining TODOs before the goal is finished
+## 7. Consolidated remaining TODOs before the goal is finished
 
-- [x] **6-1. Complete usable identity/action histories under an agreed admission policy.**
+- [x] **7-1. Complete usable identity/action histories under an agreed admission policy.**
   Completion evidence: Every relevant security/session/action has an explicit resolved treatment, consumed by the actual feature and held-position paths.
 
-- [ ] **6-2. Produce complete causal daily/market context and full feature/proposal stores.**
+- [ ] **7-2. Produce complete causal daily/market context and full feature/proposal stores.**
   Completion evidence: Full scoped census with correct availability, warmup, sectors and all registered variants; no substituted fixture inputs.
+  Started 2026-09-18: the real-shard storage benchmark passed, but the AAPL
+  all-variant pilot extrapolates to roughly 396 GB before inputs and the required
+  100 GiB reserve. A compact-store design and total-project forecast are now
+  required before the full build; see [the 7-2 start checkpoint](docs/reviews/2026-09-18-v7-2-start.md).
 
-- [ ] **6-3. Complete actual option-path demand, dated hours/reference inputs and targeted captures.**
+- [ ] **7-3. Complete actual option-path demand, dated hours/reference inputs and targeted captures.**
   Completion evidence: The union covers required entry features, purchases, marks, exits, rolls and applicable stock-delivery observations within the acquisition budget.
 
-- [ ] **6-4. Finish integrated option/physical/shared-capital execution.**
+- [ ] **7-4. Finish integrated option/physical/shared-capital execution.**
   Completion evidence: Real captured cases and full accounting demonstrate midpoint stops, signals, expiry, funding, settlement and liquidation without invented outcomes.
 
-- [ ] **6-5. Execute full data assembly and connect folds/trials.**
+- [ ] **7-5. Execute full data assembly and connect folds/trials.**
   Completion evidence: All required 222-column rows and outcome records reconcile; label horizons and fold purging are correct; the complete predeclared campaign is runnable.
 
-- [ ] **6-6. Establish resource and recovery feasibility.**
+- [ ] **7-6. Establish resource and recovery feasibility.**
   Completion evidence: Measured memory, disk, throughput, restart and coexistence evidence supports the proposed full run.
 
-- [ ] **6-7. Pass the complete readiness gate and notify the user.**
+- [ ] **7-7. Pass the complete readiness gate and notify the user.**
   Completion evidence: An inspected full-scope report passes every required stage; only then may we claim V7 is ready.
 
-**Current item: 6-2. Items 6-3 through 6-7 are queued.**
+**7-1 is complete. Before beginning 7-2, repair and verify the deployed live V6
+system on the server, which is currently producing recurring errors. V6 here
+means only the current server model and its live operation; the abandoned local
+short-DTE build is not part of this work. After that prerequisite, 7-2 is the
+current V7 build item. Items 7-3 through 7-7 are queued.**
 
-- [x] **Dividend portion of 6-1:** 4,918 payment leaves across 4,854 price events;
+- [x] **Dividend portion of 7-1:** 4,918 payment leaves across 4,854 price events;
   zero uncompiled dividend groups or missing held-cash treatments. All 10,428
   original records and 4,854 actual raw price boundaries reconcile. Final
   artifact: `v7-dividends-complete-20260918`. See the
   [completion audit and explicit model limits](docs/reviews/2026-09-18-v7-dividends-complete.md).
   At that checkpoint, the remaining 234 original records were noncash; the
-  later 6-1 closure resolves them with explicit boundary exclusions.
+  later 7-1 closure resolves them with explicit boundary exclusions.
 September 17 progress: [reviewed source routing](docs/reviews/2026-09-17-v7-6-1-source-routing.md)
 and [authorized ordinary-action reconstruction](docs/reviews/2026-09-17-v7-ordinary-action-admission.md),
 followed by [exact-date share-class resolution](docs/reviews/2026-09-17-v7-share-class-identities.md).
@@ -55,7 +63,7 @@ years and 55 excluded cash events still require treatment.
 bring the action set to 4,491 and admitted history to 586,840 sessions, with all
 ten real feature boundaries checked and a funded TSLA split/mark case. The stock
 ledger now carries split quantities into later dividends. Unresolved identity/action cases and complete
-held-position treatment still kept 6-1 open at that historical checkpoint;
+held-position treatment still kept 7-1 open at that historical checkpoint;
 the September 18 closure supersedes it.
 The [cash/calendar continuation](docs/reviews/2026-09-17-v7-cash-calendar-closure.md)
 resolves 36 FCX/SLB cash groups and their funded-stock entitlements under the
@@ -67,13 +75,14 @@ The exact remaining dividend census is **492 items: 437 uncompiled cash groups
 plus 55 compiled events awaiting date treatment**. The extension is authorized
 for the original remaining 528 groups as each passes review; do not request
 another per-issuer cash-model approval. Identity, other complex actions and
-full held-position treatment still prevented advancement to 6-2 at that
-historical checkpoint; the explicit exclusion policy now permits 6-2.
+full held-position treatment still prevented advancement to 7-2 at that
+historical checkpoint; the explicit exclusion policy now permits 7-2 after the
+live V6 repair prerequisite.
 September 18 [recovery and cash-date continuation](docs/reviews/2026-09-18-v7-cash-date-recovery.md)
 recovers eight interrupted date fixes and adds 40 reviewed cases. Current cash
 entitlements are **4,421**; **444 dividend items remain: 437 uncompiled groups
 plus seven date cases**. All price actions and history coverage are unchanged.
-The full suite passes 2,246 tests plus 18 subtests. Item 6-1 remained open at
+The full suite passes 2,246 tests plus 18 subtests. Item 7-1 remained open at
 that historical checkpoint and is now closed by the September 18 review.
 September 18 primary-term continuation: **4,744 cash payment leaves**; **154 dividend review items remain (147 groups plus seven dates)**. Multi-payment distributions adjust price once and release each payment separately. All 289 new price boundaries and the 10,428-record partition reconcile; full suite passes 2,271 tests plus 18 subtests. Dividend work remains active.
 The user selected this sequence on September 17 after reviewing the
@@ -96,7 +105,7 @@ archive the old HANDOFF and write the next one for the next numbered item, then
 commit and push the scoped changes. If unfinished, the handoff remains on the
 same item with precise remaining work. Do not advance because a component test
 or a selected-symbol pilot passed. Report completed work separately from remaining
-work; only 6-7 can establish full V7 training readiness.
+work; only 7-7 can establish full V7 training readiness.
 
 ## Scope that stays fixed
 
@@ -119,7 +128,7 @@ Full contracts: [V7 specification](docs/specs/MULTITIMEFRAME_RESEARCH.md) and
 
 ## Completed work and deferred backlog
 
-The report's sections 2–4 retain completed work, evidence and unresolved V6
+The report's sections 2–4 retain completed work, evidence and unresolved live V6
 findings. [ROADMAP](ROADMAP.md) indexes that history and the deferred backlog;
 [DOCUMENTATION](DOCUMENTATION.md) retains implementation conventions and traps.
 The previous overlapping checklist is preserved verbatim in
@@ -127,12 +136,13 @@ The previous overlapping checklist is preserved verbatim in
 Its old open/checkmarked entries are historical; they are not another active V7
 queue. Deferred work is not deleted and must not delay this seven-item sequence.
 
-September 18 final dividend checkpoint: **4,918 payment leaves across all 4,854 compiled cash events; zero remaining dividend cases.** Rebuilt canonical coverage admits 587,284 of 667,239 history rows. The modeled FX rule was explicitly approved and implemented. One ETHE precision reconciliation is clearly provider sourced. The dividend subtask is complete; the subsequent noncash admission review closes 6-1.
+September 18 final dividend checkpoint: **4,918 payment leaves across all 4,854 compiled cash events; zero remaining dividend cases.** Rebuilt canonical coverage admits 587,284 of 667,239 history rows. The modeled FX rule was explicitly approved and implemented. One ETHE precision reconciliation is clearly provider sourced. The dividend subtask is complete; the subsequent noncash admission review closes 7-1.
 
-September 18 6-1 closure: all 234 remaining noncash records now have one
+September 18 7-1 closure: all 234 remaining noncash records now have one
 source-bound `explicit_boundary_exclusion` treatment. The resulting panel
 excludes 75,781 affected history rows at dated or undated identity boundaries,
 and the held-position guard rejects any path crossing one. No successor
 identity, stock/option deliverable, price factor, or cash outcome is inferred.
 Artifact: `nn_meta/validation/v7-noncash-admission-20260918`; review:
-`docs/reviews/2026-09-18-v7-6-1-closure.md`. 6-2 is now current.
+`docs/reviews/2026-09-18-v7-6-1-closure.md`. 7-2 is current after the live V6
+repair prerequisite.
