@@ -1018,6 +1018,32 @@ can rebind event IDs even when all factors and clocks are unchanged. See the
 
 ### V7 daily identity capture and continuity
 
+The production proposal builder now requires `--action-coverage`, produced by
+`audit_v7_action_coverage.py`. `admitted_history.bind_history_coverage` verifies
+the bound policy, exact required sessions, original dependencies, stock routing
+and compiled event IDs. The accepted no-event assumption is in
+`V7_NO_EVENT_ADMISSION_20260917.json`; preserve it in feature-store declarations
+even when no chart actions occur. Event-publication fields must also survive:
+load compiled envelopes with `ordinary_actions.price_action`, not `PriceAction`
+directly. A component pilot may still build features without a complete-history
+admission, but such a pilot does not pass the production builder's input guard.
+
+`review_v7_other_instruments.py` retains finite unrelated ticker-reuse treatments
+separately from chart events. Rebuild that artifact against the current action
+set before producing coverage; the original-record partition must reconcile.
+`extend_v7_action_inventory.py` appends the named process-date-tail capture,
+retaining original records and rejecting revised existing IDs. The effective-date
+scope does not change when a scheduled process/payment date lies later.
+
+`extend_v7_security_history.py` and `history_supplement.py` fill only missing
+source selections with exact-identity observed daily data, preserving prior
+identity provenance, original candidate counts/source status and the full calendar
+grid. GAP 2025–2026 uses this path. Rebuilding from selected rows alone cannot
+recover original candidate multiplicity; preserve that fact explicitly.
+Pass `--raw-supplement` to the proposal builder when needed; its raw receipt must
+already be bound through a selected daily declaration. Ambiguous overlapping raw
+captures cannot silently replace the original data.
+
 Daily listed identity capture restricts primary exchanges to ARCX/BATS/XASE/XNAS/
 XNYS and validates every response. These are metadata requests, not stock-price
 requests or publication-safe fundamentals. `--max-shards` bounds one invocation

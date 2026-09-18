@@ -1,0 +1,336 @@
+{
+  "schema": "v7-named-missing-action-input-v1",
+  "provider": "alpaca",
+  "source_inventory": "nn_meta/validation/v7-action-inventory-20260916r2",
+  "reason": "Original process-date end 2026-09-15 excludes known payable dates for these already effective cash groups. Query only their symbols over the missing process interval; keep the study effective-date end unchanged.",
+  "symbols": [
+    "ALB",
+    "AMKR",
+    "BAC",
+    "BKNG",
+    "BLK",
+    "BP",
+    "CI",
+    "D",
+    "DKS",
+    "ELV",
+    "EQIX",
+    "EXPE",
+    "FDX",
+    "GLW",
+    "GM",
+    "GS",
+    "HAL",
+    "HD",
+    "HPQ",
+    "IEP",
+    "KSS",
+    "LMT",
+    "LUV",
+    "MAR",
+    "MCD",
+    "MOS",
+    "NEM",
+    "NKE",
+    "NOC",
+    "NVDA",
+    "OXY",
+    "PBR",
+    "PEP",
+    "PYPL",
+    "QCOM",
+    "SHEL",
+    "SLB",
+    "SPG",
+    "TER",
+    "UNH",
+    "UNP",
+    "VFC",
+    "VRT",
+    "WDC",
+    "YUMC"
+  ],
+  "process_start": "2026-09-16",
+  "process_end": "2026-12-29",
+  "effective_date_end": "2026-09-14",
+  "missing_provider_records": [
+    {
+      "subject_symbol": "SHEL",
+      "effective_date": "2026-08-14",
+      "action_id": "Ea0a2b67555067213d091ab78ec8168606d0ad0e8ed045568a688d6afc0578850",
+      "record_sha256": "229ef517deb98b0ff16080f3a9ec176c6b3cf5973dc196682c9efaeca5a6bec9"
+    },
+    {
+      "subject_symbol": "BP",
+      "effective_date": "2026-08-14",
+      "action_id": "Ee10705a4c922f5c2b1e64fc61fcf37b37834e15e7eed625d8f718f68b838323d",
+      "record_sha256": "f8c157dd62f3364fbbb4685f26b0e1903ef576002ef69efed024eaeadda06270"
+    },
+    {
+      "subject_symbol": "IEP",
+      "effective_date": "2026-08-17",
+      "action_id": "E9d24083a5840234e94f0ac36635936654deabc56f54f7e30499ab48866e1b470",
+      "record_sha256": "a9f217a82939ee55a683b33039dfa129be64b931bb58eff9811cf6596b2cbf75"
+    },
+    {
+      "subject_symbol": "EQIX",
+      "effective_date": "2026-08-19",
+      "action_id": "Eba32ca85b8a414e98ea450d13d75020d52e1525778d1850c60f2930ac85eca65",
+      "record_sha256": "c14a00ae56bb8f3f5140e768a171302967ecf1436c83f9cd35f1b9a0ea3353d1"
+    },
+    {
+      "subject_symbol": "MAR",
+      "effective_date": "2026-08-20",
+      "action_id": "Ee6ffb83acb201a451867f9a646459552762bdc6257feb69ceaa7f404c0cdab8a",
+      "record_sha256": "f337d8a3500ba1e5c81a85fef48223d629fc961b4a2638c826fba4a18ff9ed7b"
+    },
+    {
+      "subject_symbol": "PBR",
+      "effective_date": "2026-08-25",
+      "action_id": "Eabfc9ddd0968aadbe519d5f4d4ddcd0a68b841c5c826d50c01f65d271fc40c18",
+      "record_sha256": "a9441183eed9414f910d0cee49e21fa977b205bbbe53e2aa94f1cb87749056b5"
+    },
+    {
+      "subject_symbol": "PBR",
+      "effective_date": "2026-08-25",
+      "action_id": "Ec81a2a5bcba6bf255901392ee3eeb8f417cfa4b37b95d5df8227fe9c7d0965c6",
+      "record_sha256": "59037ebe0d2dcebc3364216a9e1bbd3f11420c68f5f37b550b42023a0697d67b"
+    },
+    {
+      "subject_symbol": "YUMC",
+      "effective_date": "2026-08-27",
+      "action_id": "E0344e0faae6d126fdc04c410ff7bb125c25d58d02d1f72f7d6e25f9bb8e5498b",
+      "record_sha256": "06789c3936e97b9f48c73d93ed4451b536930b17ec7a18efa700915ed476cd00"
+    },
+    {
+      "subject_symbol": "EXPE",
+      "effective_date": "2026-08-27",
+      "action_id": "E4cc8f0cc4a793da14f730f6e31ec0ce06ae60cfbeeddeac6b4a43e54ed778dc4",
+      "record_sha256": "a1e8c9afb94f7f312363db56d5823ba0bb1aff4cd6d94d1899dc4e4e099db947"
+    },
+    {
+      "subject_symbol": "UNP",
+      "effective_date": "2026-08-31",
+      "action_id": "Ed2cfcd9d73360ba78782f7d059dff75e721a862d99ac9461a13d74196fd415b5",
+      "record_sha256": "815aa08e9c1c8f2047d465ae1de11d5da40acb66e6c6b7d839c776d6bb070c2d"
+    },
+    {
+      "subject_symbol": "GLW",
+      "effective_date": "2026-08-31",
+      "action_id": "Ef5c029f69c6be55e4a0eb3160156b600e20a516285f31092bb6c391e0854ba17",
+      "record_sha256": "594374c1801fc59d1fca97d6d78208cde66fb51e22277665e826e925376c15c9"
+    },
+    {
+      "subject_symbol": "NOC",
+      "effective_date": "2026-08-31",
+      "action_id": "Ef9e1da66639f1769f31f20f8ad05c43d66a32b9a8a85459317cbf9f56dae2bae",
+      "record_sha256": "bba7b801bf930351c1e5ba1613521e4bb93c805b40c272d5b180ad62fa6e8647"
+    },
+    {
+      "subject_symbol": "GS",
+      "effective_date": "2026-09-01",
+      "action_id": "E33a7f0360e389a1b6e6ae9700cc8db0e88fc145f8450f82ca56a28d722561393",
+      "record_sha256": "acefa3f0090c6125997e5e72e829fd46a6834d7220bd4cd53ac3afce3fe11320"
+    },
+    {
+      "subject_symbol": "LMT",
+      "effective_date": "2026-09-01",
+      "action_id": "E3a0d43a692ac4be614cca5a7c5f85c8380d1f88fc4f7130a14df7b1fd6a2384b",
+      "record_sha256": "e1ea211af475e43424dfb0388e9b345af74a5747ef657917bd6674840b7b9b98"
+    },
+    {
+      "subject_symbol": "MCD",
+      "effective_date": "2026-09-01",
+      "action_id": "Ecafaf0c41f89e488c303b46ebae46cf138b9f3db19cf1b6869d8b8c2a87ac8ed",
+      "record_sha256": "70c607accff3e3778abe4f6fd3e3b9907a29eb823331c95eb477998a9f69e701"
+    },
+    {
+      "subject_symbol": "NKE",
+      "effective_date": "2026-09-01",
+      "action_id": "Edc4181b07b316d099bec5697c5c1e06f404019a4d2f5f6362097aa4180a63780",
+      "record_sha256": "3d61802c132a2a4fb83f1f97650b12ceda299565a634eb1194e793a9cf04e8eb"
+    },
+    {
+      "subject_symbol": "SLB",
+      "effective_date": "2026-09-02",
+      "action_id": "E76685edd257b4996652499533f6003cea29697f7f07ed89612445c6bba916cac",
+      "record_sha256": "d64c7e196cdbe88692ddcdaa78c1fef4e09de9f4965dcef34390af1ec0bf0ec1"
+    },
+    {
+      "subject_symbol": "HAL",
+      "effective_date": "2026-09-02",
+      "action_id": "E9e52b33968ef20c289c180d759501858ff42f789a536a8f394f191b4cb5ea9e1",
+      "record_sha256": "5f9802d4cfc9be604a11dff087f629041962e9127c789353cff069dc906a19bc"
+    },
+    {
+      "subject_symbol": "AMKR",
+      "effective_date": "2026-09-02",
+      "action_id": "Ec8867e1fa2a5ee65f450a8261f1f2c161efc98a92b7c5d5ff7d9c85e4d3ef2a4",
+      "record_sha256": "c6ebfdedef95b901f88da194c3c2aa2b320265d6613a2d9cb7e21f21f0f02c66"
+    },
+    {
+      "subject_symbol": "HD",
+      "effective_date": "2026-09-03",
+      "action_id": "E125ff29baac554896f031db7b71db3cfb059b807ef729251b737c698f63aad20",
+      "record_sha256": "9830d9a866dab531bdf7e70b77d043199b2bd1a75bd6d438c3e3624c41d1bafd"
+    },
+    {
+      "subject_symbol": "LUV",
+      "effective_date": "2026-09-03",
+      "action_id": "Ea26367f4b79f2296ad08ddac97d48621393052412deb96d23adb7d694f9a1304",
+      "record_sha256": "b8be77a483ba7fcf40b6ac164010a52fba1dfcba4d8239481ce09cbc9a6d1e1d"
+    },
+    {
+      "subject_symbol": "QCOM",
+      "effective_date": "2026-09-03",
+      "action_id": "Ec08a02252ea9a9eaafced25a93cda1e3596008d574ea2d3de64fe31e1fd17005",
+      "record_sha256": "9b7990fbebdfac147297654928d56a6a787fb98860e6b92bfa8b383294981e12"
+    },
+    {
+      "subject_symbol": "NEM",
+      "effective_date": "2026-09-03",
+      "action_id": "Eff61f8c5241156bcde5ae921765696c38405bca2986fd7dfddb047472366d7e3",
+      "record_sha256": "e6daf249d70e8c996719465afed4b52e15610511ea63fdb660b36bd1fb1266c3"
+    },
+    {
+      "subject_symbol": "TER",
+      "effective_date": "2026-09-04",
+      "action_id": "E00c78d74fa2feecf2c084dcc55c61b99424830328fddcdbb209ee0ab51aecaee",
+      "record_sha256": "13a63f8a636a845d0a5ef0f2a5986b61fd01df64204e91330a05946d77e49cca"
+    },
+    {
+      "subject_symbol": "D",
+      "effective_date": "2026-09-04",
+      "action_id": "E2031962835bb8064d6125162072b5914b551e28802e61d29674f67ba0303a8a1",
+      "record_sha256": "1ffa6ddafe4652035d17d727dd635b71b3e72a7700f68a9d8dcac9fd81a361a2"
+    },
+    {
+      "subject_symbol": "PYPL",
+      "effective_date": "2026-09-04",
+      "action_id": "E3f11a9d4e5b559cd8e6a60a475b06c4af986b4635acba86cf9dd5597012c1a39",
+      "record_sha256": "d69d89b639bbab8cd153d95fb7e8c268bdd3b8fedad0ff749a2afc0e22fea325"
+    },
+    {
+      "subject_symbol": "GM",
+      "effective_date": "2026-09-04",
+      "action_id": "Ea9999b3f14544fd47c2bc6aacbfe43bc7c53f1d37041db21470764cd9c2d42a9",
+      "record_sha256": "daf4521ca8371d10e911e863678f58463b29cb44a48faaf307d547e9c87b8470"
+    },
+    {
+      "subject_symbol": "PEP",
+      "effective_date": "2026-09-04",
+      "action_id": "Eb0c3bfca49d2be8473e52980fa3bb6fc2547322b6a7d80cb411b1bdf9030f9a0",
+      "record_sha256": "e5b69af0425fca372131a5765694e89a83f59828ccb73a7ae2320fbdf31e86c4"
+    },
+    {
+      "subject_symbol": "BAC",
+      "effective_date": "2026-09-04",
+      "action_id": "Eb49d919f967ab5881c239eb92fffc062549e9c07680ae8076168acaa761f504a",
+      "record_sha256": "5c9377101c74a5d7731dca756d1a1476e72477bf962a6b9267c86e0151c8ef08"
+    },
+    {
+      "subject_symbol": "BLK",
+      "effective_date": "2026-09-08",
+      "action_id": "E1f5929c4d07ee27485e68550d4df3f459f15b57e034bf04155208d0a96091eea",
+      "record_sha256": "0e84578e55c0a2185dab35eb15551b3bfd44305889eeb8dd5119339d5e60bc70"
+    },
+    {
+      "subject_symbol": "CI",
+      "effective_date": "2026-09-08",
+      "action_id": "Ed69953ac72f26f26d172a05228b2708f1671666fd88be5861168038b34c10514",
+      "record_sha256": "ce16779088c4bab066bab2eab7a509c907530be7db730c5c7f2a65b0d7bed7bd"
+    },
+    {
+      "subject_symbol": "WDC",
+      "effective_date": "2026-09-08",
+      "action_id": "Ed8fcce9a7c6b8ba6268572520fccd2a69fa0398a835713c9cfd2b55cfad789b6",
+      "record_sha256": "8e471e8054f631a7e875a55514e638c8c44b513784faa7dec227ddbfaeee0dd0"
+    },
+    {
+      "subject_symbol": "SPG",
+      "effective_date": "2026-09-09",
+      "action_id": "E36a206688d454e01a89a660066d31803dd71b11c33a48d4cb68ccd31427b02ad",
+      "record_sha256": "cbeaa69b30a05c1ea88e1bf4825c617923a77870337569d8906d61926a1cb4e3"
+    },
+    {
+      "subject_symbol": "KSS",
+      "effective_date": "2026-09-09",
+      "action_id": "E9136be3e60a9c08d84b270daf6bf8e1a974d599b7b0bbf0d035a3ee4a4ba3a63",
+      "record_sha256": "70e059cc9e834cc7e22377d95b6a461b27b6c3185f11ec4bbc9084aa36fa2295"
+    },
+    {
+      "subject_symbol": "HPQ",
+      "effective_date": "2026-09-09",
+      "action_id": "Eb6d57da6faefd971c84f903a2cc4b1e55095822be957c7f15921c241e675b95b",
+      "record_sha256": "1ba2f8e9c100cb48b2921623ceb55172eb0b9730d0e39667e2ffc85523981de7"
+    },
+    {
+      "subject_symbol": "ELV",
+      "effective_date": "2026-09-10",
+      "action_id": "E0ce0818efb17bae0322f9f658dfc93078c593f9c88a6ace44faa53b13461b864",
+      "record_sha256": "f6d1b36268b1cb10dced4f70dcc0c9df61ac561800a6da6683698871f859d7de"
+    },
+    {
+      "subject_symbol": "VFC",
+      "effective_date": "2026-09-10",
+      "action_id": "E792dfc5cf32c074d58bdf7cb6da0e58c491ac05907d08ebd6d2f5b426572fe7d",
+      "record_sha256": "56492bc7cfc0fa7f9aa1013367532fb01a7014d17321b87512c3444fd816d3fa"
+    },
+    {
+      "subject_symbol": "OXY",
+      "effective_date": "2026-09-10",
+      "action_id": "Ebbde58941cd585032c61a959bd3cb9788c5201369a27a85e4ece3f619130ca82",
+      "record_sha256": "d4a3d561c371e5e1ebd452655415f0bd165dcb9e7abddd2914606b44e660d60b"
+    },
+    {
+      "subject_symbol": "MOS",
+      "effective_date": "2026-09-10",
+      "action_id": "Edf3c8098bb055c696d2027d725f9c11e8489b80f4e5a80ac5bad2a68387f5e50",
+      "record_sha256": "bcaca8c8dba2984ed239ab205b46f970d0416ecdd0ec7e94941278e09257c5f6"
+    },
+    {
+      "subject_symbol": "NVDA",
+      "effective_date": "2026-09-10",
+      "action_id": "Ee47ce56a66976f5a928406eb02a4279688c89d944b80ef73e3fc38d658ca2ad0",
+      "record_sha256": "895b1d0b62b5444c0c8b7556781186c555010d3a30387027369fdb63a6ec8976"
+    },
+    {
+      "subject_symbol": "ALB",
+      "effective_date": "2026-09-11",
+      "action_id": "E24f5387c102e72fbd59aed3417ebfde27bdb662c33e3f3507bf221ab465d1018",
+      "record_sha256": "d1a89c3dea2acbc4f384d0efa87e90a3373f8210069e856282e34b94366d496b"
+    },
+    {
+      "subject_symbol": "BKNG",
+      "effective_date": "2026-09-11",
+      "action_id": "E44fe63412ba12bbcc415bcb3d33d4b3f3ba1b667dfb02af1045415f460c06d86",
+      "record_sha256": "bed0d8399b853117c68ae43b1dc167782702a00b686d7e38d49737571ff5b115"
+    },
+    {
+      "subject_symbol": "DKS",
+      "effective_date": "2026-09-11",
+      "action_id": "Efb5edb5ca7180f1ec1918690f8e39295ce601b5a079ac52559d65d228cc8f03c",
+      "record_sha256": "e32e6d62ba2c3891010eaeca307e953660e61ce7de1c6d4a91a0a35780440d89"
+    },
+    {
+      "subject_symbol": "FDX",
+      "effective_date": "2026-09-14",
+      "action_id": "E519cd43691c73910fd66c3ab2a50f8033bbc5564d235f43620a582fc197bcf27",
+      "record_sha256": "8fc6b1499a2504696916c416ce0b7f480fd4e4650611bde675b20ab2a41d97f6"
+    },
+    {
+      "subject_symbol": "VRT",
+      "effective_date": "2026-09-14",
+      "action_id": "Ee2b408c108d66b7d79ca7895d07db44c94e59c83d4e90697e296af2f061a64c4",
+      "record_sha256": "5158bc209cde8481442dd18e0dee9587541455301edf12a542fb41badfe86db1"
+    },
+    {
+      "subject_symbol": "UNH",
+      "effective_date": "2026-09-14",
+      "action_id": "Ef25128ab57faefa35c7719ed7c98cfcfc31957e0f3108ef9745c978f7843542a",
+      "record_sha256": "e18f7bcb337d6df34761a1925b74472bf33bc78baf570e76062b0e7b99ae7aef"
+    }
+  ],
+  "quota_limit_bytes": 250000000000,
+  "research_ready": false
+}

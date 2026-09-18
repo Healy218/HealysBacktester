@@ -79,6 +79,8 @@ def build_features(path, chart, variants, *, inputs, reserve_bytes,
         calendar=chart.calendar, actions=actions, variants=variants, inputs=inputs,
         sources=code, runtime=runtime_manifest(), bitorder='little', research_ready=False,
         average_storage='normalized plus exact contemporaneous epoch price units')
+    if hasattr(chart, 'coverage_declaration'):
+        declaration['action_coverage'] = chart.coverage_declaration
     fingerprint = identity(declaration)
     path.mkdir(parents=True, exist_ok=True)
     header = path/'declaration'

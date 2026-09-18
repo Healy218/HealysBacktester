@@ -27,7 +27,11 @@ records the user's effective-session reconstruction policy, 4,410 reconstructed
 events plus 19 retained publication-reviewed events, and real consumer checks.
 The subsequent [share-class review](docs/reviews/2026-09-17-v7-share-class-identities.md)
 resolves 27 exact identity dates, reduces eligible mismatches to 162 and admits
-four additional splits, bringing the compiled action set to 4,433 events.
+four additional splits, bringing that compiled action set to 4,433 events.
+The subsequent [coverage and targeted-repair work](docs/reviews/2026-09-17-v7-action-coverage.md)
+implements the user-approved no-event completeness assumption, separates 45
+unrelated ticker-reuse groups and admits another 48 cash events after named
+GAP and process-date-tail captures. Current compiled total: 4,481 events.
 This advances action compilation; it does not close identity, complex-action,
 no-event or held-position requirements.
 

@@ -138,6 +138,20 @@ def test_disk_reserve_is_enforced_before_epoch_work(tmp_path):
     assert not (tmp_path/'features/epochs').exists()
 
 
+def test_feature_store_persists_no_event_assumption_and_refuses_resume_with_changed_admission(tmp_path):
+    chart, variants = chart_fixture()
+    source = tmp_path/'input'; source.write_text('input')
+    chart.coverage_declaration = dict(policy_identity='approved-policy', receipt_sha256='coverage-receipt',
+        completeness_verified=False, held_position_admitted=False)
+    inputs = {str(source):sha(source)}
+    build_features(tmp_path/'features', chart, variants[:1], inputs=inputs, reserve_bytes=0)
+    store = StoredFeatures(tmp_path/'features')
+    assert store.declaration['action_coverage'] == chart.coverage_declaration
+    chart.coverage_declaration['policy_identity'] = 'changed'
+    with pytest.raises(ValueError, match='identity mismatch'):
+        build_features(tmp_path/'features', chart, variants[:1], inputs=inputs, reserve_bytes=0)
+
+
 def test_interrupted_epoch_keeps_completed_checkpoint_and_resumes(tmp_path, monkeypatch):
     import nn_meta.v7.signals as signals
     chart, variants = chart_fixture()

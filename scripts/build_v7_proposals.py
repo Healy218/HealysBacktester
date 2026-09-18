@@ -19,7 +19,8 @@ def load_inputs(args):
     from nn_meta.v7.storage import verify, sha
     from nn_meta.v7.scope import require_active_inputs, require_research_window
     from nn_meta.v7.coverage import receipt_frame
-    from nn_meta.v7.causal_prices import PriceAction
+    from nn_meta.v7.ordinary_actions import price_action
+    from nn_meta.v7.admitted_history import bind_history_coverage
     from nn_meta.v7.entry_eligibility import EntryEligibility
     require_active_inputs(args['source'])
     require_research_window(args['start'], args['end'])
@@ -66,19 +67,40 @@ def load_inputs(args):
     eligible = eligible[eligible.source_date.between(args['start'], args['end'])]
     if not eligible.source_matches.all():
         raise ValueError('Unresolved eligible source identity; cannot substitute another security')
-    symbols = set(middle.stock_ticker.dropna())
-    pending = json.loads((actions/'unresolved.json').read_text())
-    unresolved = [r for r in pending if symbols.intersection(r['scoped_symbols']) and
-                  (not r['effective_date'] or args['start']<=r['effective_date']<=args['end'])]
-    if unresolved:
-        raise ValueError(f'{len(unresolved)} unresolved captured action records for selected history')
     events = [r for r in json.loads((actions/'actions.json').read_text())
               if r['security_id']==args['security_id']]
-    typed_actions = [PriceAction(**r['action']) for r in events]
+    coverage_declaration = bind_history_coverage(args['action_coverage'], middle, events,
+        security_id=args['security_id'], inputs=inputs)
+    typed_actions = [price_action(r) for r in events]
+    # Daily declarations are immutable parents of the selected history. Expand
+    # their raw bindings before choosing a capture; a supplementary path alone
+    # never authorizes replacing the original prices.
+    needed = set(zip(observed.stock_ticker, observed.source_date.str[:4].astype(int)))
+    daily_inputs = {}
+    for filename in inputs:
+        if Path(filename).name != 'declaration.json':
+            continue
+        declaration = json.loads(Path(filename).read_text())
+        if (declaration.get('schema') == 'v7-raw-session-daily-v1'
+                and (declaration.get('stock_ticker'), declaration.get('year')) in needed):
+            for name, digest in {**declaration['inputs'], **declaration['sources']}.items():
+                if sha(name) != digest or (name in inputs and inputs[name] != digest):
+                    raise ValueError('Selected raw daily parent changed')
+                if name in daily_inputs and daily_inputs[name] != digest:
+                    raise ValueError('Conflicting raw daily parents')
+                daily_inputs[name] = digest
+    inputs.update(daily_inputs)
     raw_parts = []
     for (ticker, year), rows in observed.assign(year=observed.source_date.str[:4]).groupby(['stock_ticker','year']):
-        receipt_path = source/f'stock_1m/raw/{ticker}/{year}/complete.json'
-        doc, raw = receipt_frame(source, receipt_path)
+        roots = [source, *[Path(p) for p in args.get('raw_supplement', [])]]
+        candidates = [(root, root/f'stock_1m/raw/{ticker}/{year}/complete.json') for root in roots
+                      if (root/f'stock_1m/raw/{ticker}/{year}/complete.json').exists()]
+        if len(candidates) != 1:
+            raise ValueError('Exactly one bound raw capture for each selected ticker/year required')
+        raw_root, receipt_path = candidates[0]
+        if str(receipt_path.resolve()) not in {str(Path(p).resolve()) for p in inputs}:
+            raise ValueError('Raw supplement is not bound to the selected history')
+        doc, raw = receipt_frame(raw_root, receipt_path)
         if doc['task']['adjustment']!='raw' or doc['task']['symbol']!=ticker:
             raise ValueError('Wrong raw Alpaca capture')
         inputs[str(receipt_path)] = sha(receipt_path)
@@ -95,7 +117,7 @@ def load_inputs(args):
     raw = pd.concat(raw_parts, ignore_index=True).sort_values('timestamp').set_index('timestamp')
     raw['available_at'] = raw.index+pd.Timedelta(minutes=1)
     routing = dict(zip(middle.source_date, middle.stock_ticker))
-    return raw, typed_actions, calendar, inputs, routing, eligibility
+    return raw, typed_actions, calendar, inputs, routing, eligibility, coverage_declaration
 
 
 def work(payload):
@@ -108,9 +130,10 @@ def work(payload):
     from nn_meta.v7.causal_features import CausalFeatures
     from nn_meta.v7.proposal_store import build_features, build_proposals, StoredFeatures
     started = time.perf_counter()
-    raw, actions, calendar, inputs, routing, eligibility = load_inputs(args)
+    raw, actions, calendar, inputs, routing, eligibility, coverage_declaration = load_inputs(args)
     chart = CausalFeatures(raw, actions, calendar, security_id=args['security_id'], minutes=minutes,
         start=args['start'], end=args['end'])
+    chart.coverage_declaration = coverage_declaration
     variants = [v for v in registered_catalog(['_build'])['records'] if v['signal_minutes']==minutes]
     output = Path(args['output'])/args['security_id']/str(minutes)
     features = build_features(output/'features', chart, variants, inputs=inputs,
@@ -134,8 +157,9 @@ def main():
     from nn_meta.v7.scope import HISTORY_START, HISTORY_END
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--active',type=Path,default=ROOT/'docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json')
-    for name in ('source','history','actions','output'):
+    for name in ('source','history','actions','action-coverage','output'):
         parser.add_argument('--'+name, type=Path, required=True)
+    parser.add_argument('--raw-supplement', type=Path, action='append', default=[])
     parser.add_argument('--security-id', required=True)
     parser.add_argument('--start', default=HISTORY_START)
     parser.add_argument('--end', default=HISTORY_END)

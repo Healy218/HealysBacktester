@@ -1,0 +1,21 @@
+{
+  "schema": "v7-no-event-reconstruction-admission-v1",
+  "status": "user_authorized",
+  "audit": "nn_meta/validation/v7-action-coverage-20260917",
+  "proposed_basis": "retrospective_provider_union_completeness_assumption",
+  "meaning": "Treat a resolved listed security/session with no applicable event in the reconciled retained provider union as a no-event session for historical reconstruction.",
+  "conditions": [
+    "Verify immutable full-window capture queries, receipts, source bindings and completed pagination.",
+    "Reconcile every original provider record; separately resolve conflicts, complex events and undated records before admitting affected histories.",
+    "Require resolved dated identities; no ticker-only joins or automatic issuer exclusions.",
+    "Record capture time, query time basis, review identities and this assumption in every consumer declaration.",
+    "Reject unresolved affected dates rather than silently assigning factor one.",
+    "Keep historical publication and provider completeness unverified; do not represent the assumption as proof.",
+    "Require separate stock entitlement, payment/settlement and option-deliverable evidence for holdings."
+  ],
+  "known_limit": "Alpaca queries process dates and does not guarantee timely availability. A completed capture cannot prove absence of events not reported by either provider.",
+  "scope_change": false,
+  "research_ready": false,
+  "policy_id": "provider-union-no-event-reconstruction-20260917",
+  "authorization": "User explicitly accepted the documented no-event reconstruction assumption in this session."
+}

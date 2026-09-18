@@ -1224,3 +1224,34 @@ no-event completeness or any new issuer exclusion. Ordinary actions still use
 the user's separately approved effective-session reconstruction policy. Rebuild
 history and action consumers with new immutable outputs; do not relabel old
 artifacts. See [evidence and remaining scope](reviews/2026-09-17-v7-share-class-identities.md).
+
+## 2026-09-17 — explicit provider-union no-event reconstruction assumption
+
+The user accepted the concrete proposal in
+`V7_NO_EVENT_RECONSTRUCTION_PROPOSAL_20260917.json`: use reconciled retrospective
+provider histories as a completeness assumption for resolved no-event sessions,
+after resolving every applicable conflict. The active declaration is
+`V7_NO_EVENT_ADMISSION_20260917.json`. This decision is settled; do not ask again.
+
+Each consuming feature declaration must bind the coverage receipt and policy
+identity, retain `completeness_verified=false` and distinguish the assumption
+from historical publication. Unknown identities, unresolved dated or undated
+records and missing required dates remain blocking. This adds no issuer exclusion
+and does not admit stock cash entitlements, payment clocks or option deliverables.
+The proposal builder must consume explicit coverage instead of interpreting an
+empty action list as proof of no events.
+
+## 2026-09-17 — targeted missing-input repairs and unrelated ticker records
+
+Use the named GAP 2025–2026 raw history and the named 45-symbol Alpaca process-date
+tail to repair specific consumer inputs. The latter requests already effective
+cash records whose scheduled payment/process dates fall after the old September
+15 cutoff; it does not extend the study's September 14 effective-date end. Retain
+the old captures and inventory, append verified original records into a new
+inventory and reject unreviewed provider revisions.
+
+The finite 45 cash groups in `V7_UNRELATED_ACTION_IDENTITIES_20260917.json` belong
+to unrelated reused-ticker instruments, established by exact captured identities
+and distinct share classes. Keep their 90 source records as explicit
+`reviewed_unrelated_instrument` treatments. This is record relevance, not a new
+study exclusion or a shortcut for an actual corporate successor.

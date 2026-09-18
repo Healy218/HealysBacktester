@@ -1,0 +1,17 @@
+{
+  "schema": "v7-named-missing-history-input-v1",
+  "symbol": "GAP",
+  "start": "2025-01-01",
+  "end": "2026-09-14",
+  "source": "Alpaca SIP",
+  "consumer": "The scoped Gap security's exact listed raw history and seven blocked cash-action boundaries in 2025–2026.",
+  "retained_gap": "GAP minute/daily shards exist for 2024 only; old GPS 2025–2026 shards contain zero observations. Daily listed original captures already cover the dates.",
+  "acquisition": "Bounded existing supplement capturer for one named ticker and two years; retain raw and all-adjusted provider payloads, consume raw only.",
+  "quota_root": "nn_meta/data_v7",
+  "quota_before_bytes": 63043400695,
+  "quota_limit_bytes": 250000000000,
+  "minimum_free_gib": 100,
+  "output": "nn_meta/data_v7/gap-history-repair-20260917",
+  "does_not_change_universe_or_membership": true,
+  "research_ready": false
+}

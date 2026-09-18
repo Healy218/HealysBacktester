@@ -4,6 +4,7 @@ import argparse
 from datetime import datetime, timezone
 import gzip
 import json
+import re
 import sys
 import time
 import uuid
@@ -20,6 +21,7 @@ def main():
     ap.add_argument('--budget-root', type=Path, required=True)
     ap.add_argument('--start', required=True)
     ap.add_argument('--end', required=True)
+    ap.add_argument('--symbols', type=Path, help='Finite named missing-input ticker list; omit for the original market-wide capture')
     args = ap.parse_args()
     for day in (args.start, args.end):
         if datetime.strptime(day, '%Y-%m-%d').strftime('%Y-%m-%d') != day:
@@ -28,6 +30,11 @@ def main():
         raise ValueError('Chronological process-date scope and shared quota required')
     query = {'start': args.start, 'end': args.end, 'limit': 1000, 'sort': 'asc',
              'region': 'us', 'data_quality': 'all'}
+    if args.symbols:
+        symbols = sorted(set(args.symbols.read_text().split()))
+        if not symbols or any(not re.fullmatch(r'[A-Z][A-Z0-9.]{0,14}', s) for s in symbols):
+            raise ValueError('Explicit nonempty stock symbol list required')
+        query['symbols'] = ','.join(symbols)
     declaration = {'endpoint': 'https://data.alpaca.markets/v1/corporate-actions', 'params': query}
     fingerprint = identity(declaration)
     if args.output.exists():

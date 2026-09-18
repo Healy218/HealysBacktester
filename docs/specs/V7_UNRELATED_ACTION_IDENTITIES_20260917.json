@@ -1,0 +1,1173 @@
+{
+  "schema": "v7-unrelated-ticker-reuse-reviews-v1",
+  "scope": "Finite unrelated cash-event identities only; no issuer exclusion or successor inference",
+  "scoped_witnesses": {
+    "B": {
+      "symbol": "GOLD",
+      "date": "2022-03-15",
+      "security_id": "BBG000BB07P9",
+      "share_class_figi": "BBG001S5N9P3",
+      "record_sha256": "8ecace0f135ea0acbc5c352ab47715b776bf78d6079183abb3b8eebc660665b8",
+      "name": "Barrick Gold Corp."
+    },
+    "GOLD": {
+      "symbol": "GOLD",
+      "date": "2022-03-15",
+      "security_id": "BBG000BB07P9",
+      "share_class_figi": "BBG001S5N9P3",
+      "record_sha256": "8ecace0f135ea0acbc5c352ab47715b776bf78d6079183abb3b8eebc660665b8",
+      "name": "Barrick Gold Corp."
+    },
+    "FB": {
+      "symbol": "FB",
+      "date": "2022-03-15",
+      "security_id": "BBG000MM2P62",
+      "share_class_figi": "BBG001SQCQC5",
+      "record_sha256": "ca5619782a993d5be7512e5be0257f22433933b60d6b8b93e763798176c2c893",
+      "name": "Meta Platforms, Inc. Class A Common Stock"
+    },
+    "FIG": {
+      "symbol": "FIG",
+      "date": "2025-07-30",
+      "security_id": "BBG00BLZ2CD1",
+      "share_class_figi": "BBG00BLZ2CF9",
+      "record_sha256": "031914677aef2832f3d545e78c7552fc91cc7046a088cc0ec504f3d228cfffac",
+      "name": "Figma, Inc."
+    },
+    "SPCX": {
+      "symbol": "SPCX",
+      "date": "2026-06-10",
+      "security_id": "BBG000NQF3Z5",
+      "share_class_figi": "BBG001SQPN65",
+      "record_sha256": "e2e32f2e59089aa705e8a5dbb903061755f412f64c05387c5b65d5ea07a211f7",
+      "name": "Space Exploration Technologies Corp. Class A Common Stock"
+    }
+  },
+  "reviews": [
+    {
+      "symbol": "B",
+      "effective_date": "2022-05-25",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Barnes Group cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG000BCSCB1",
+      "other_share_class_figi": "BBG001S5P0S7",
+      "listed_record_sha256": "3a2d0b4f1189b8ecd38d9d09c7ba70af071a6179cc9e5cd6a3416fe5bd56573b",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E8d0f6ee87aca40b5c7c4e22c16fbf722322c7fc6f2fd285eef56732bddce6c2c",
+          "record_sha256": "aa0f304183f8c635352b6deab26eea713bf95a53ad75b2c85b419f5829245105"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "de94faef-9ed8-47d8-9910-8110f36f96fa",
+          "record_sha256": "35bb53332cd4428e5a7fb36eb48c52b4266e203e8c6a85a36f43d94281ae1119"
+        }
+      ]
+    },
+    {
+      "symbol": "B",
+      "effective_date": "2022-08-24",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Barnes Group cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG000BCSCB1",
+      "other_share_class_figi": "BBG001S5P0S7",
+      "listed_record_sha256": "94beba92ed9a424f7338ce4cd06fa8ee1be7313a1c2687983d0314d547128620",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0f2ab4872985889ab6b68590b19237c095166e9a53004f5d832484c5dcafbbc9",
+          "record_sha256": "70ce78bfdcb94ecec934583d31518cd6fbd9b4b9822f1ef175fc719a0cca026d"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "6183da24-b51e-4a28-9a02-6cf7e50b1723",
+          "record_sha256": "041db37d95f94c9837fe87ac2e867281dba6387d2dd5ad73d38539fd202cb5b6"
+        }
+      ]
+    },
+    {
+      "symbol": "B",
+      "effective_date": "2022-11-21",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Barnes Group cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG000BCSCB1",
+      "other_share_class_figi": "BBG001S5P0S7",
+      "listed_record_sha256": "0816c4a981c561bdfd8cf695de2ab46d207dbefff73e24531fc28c86b8ab5535",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E824a807d2d9107aa4accee26e27fe8daf950a0132352a136d525fb86baa70855",
+          "record_sha256": "863325820fcb8e863a0b1baf928b07c66218eaaf5d10e3aafbe6bfe60395ab3b"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fee58a00-5ad5-404a-a41a-64397d91e1f7",
+          "record_sha256": "4164d1443f437a22d13fc438554406e72d3ef3b681c36ea5d80889a9a758f4a1"
+        }
+      ]
+    },
+    {
+      "symbol": "B",
+      "effective_date": "2023-02-22",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Barnes Group cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG000BCSCB1",
+      "other_share_class_figi": "BBG001S5P0S7",
+      "listed_record_sha256": "6bc3a110fd2ec735e245e9936fd04eb46e41aa14a54378a90690a862b0a9e436",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E939b82fce7a5598716c563f1fc5586bde9f92ae5b5da7c847b6c4739f7b621a3",
+          "record_sha256": "bcb2bfedb0bc128cf36646a533a1149aed0b5dfbab9fffa84abe7c8591ebe652"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9e696c8e-ff3b-4cb6-9ce1-45eac0c68e00",
+          "record_sha256": "6ed75b390b002a5ee4b68ad2f308ec16aa4f2135517dfeb0f0f7fa14df9cd310"
+        }
+      ]
+    },
+    {
+      "symbol": "B",
+      "effective_date": "2023-05-24",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Barnes Group cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG000BCSCB1",
+      "other_share_class_figi": "BBG001S5P0S7",
+      "listed_record_sha256": "9f7762ecfd677452487f1bac779f0388b288c24ca570415d8d434dc5fa5eeee5",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E04b85e1d9b527082cfa73e4a5463a6d1823a37b2ce77305a6995c5b0ce1e1bc5",
+          "record_sha256": "58969ab9e973152e4e4847f93675148fa961f649e24b73317fabd06244ee0031"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "495d4b28-2449-4ed7-9f8b-bebaa21e25b6",
+          "record_sha256": "053c9a4d543a8bd8e4d0cb4d34b5c676d846c0f0f0c75664f9d541547724dd5a"
+        }
+      ]
+    },
+    {
+      "symbol": "B",
+      "effective_date": "2023-08-23",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Barnes Group cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG000BCSCB1",
+      "other_share_class_figi": "BBG001S5P0S7",
+      "listed_record_sha256": "1e0e585cda7459b2a9a0b4840b6be3b3484e600549914bd4f6d182ab52f933fa",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E228a87ed14f31c7e9d20a2b0a1bf56b3f6e600df6005dd843fe39526644ff6c3",
+          "record_sha256": "7d2b05935babd621097b4335c9062683db907709721bb7b9e2130960290ab2f6"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "bcbedb73-d1da-46e6-b8eb-f546037262b2",
+          "record_sha256": "673e333bcf8831b7ab0eb59f822646180bc9499dc23582b3a4f6f07c56198b67"
+        }
+      ]
+    },
+    {
+      "symbol": "B",
+      "effective_date": "2023-11-21",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Barnes Group cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG000BCSCB1",
+      "other_share_class_figi": "BBG001S5P0S7",
+      "listed_record_sha256": "f2794d9ad2ccd65853d7f00cd04b70d165c695ddef6e966d3be10f50fc86a7f0",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E08b4a92d127d650d524dc7338bbd66d03cd7e02e85edd8b6686e638e7b34c482",
+          "record_sha256": "c2eb5437960b4c9d23388775074bcb49e6ebb8a693f8f1a60266d21487fb56d5"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "ec24970f-5d90-4cac-b4f8-ee6ae89ad8e9",
+          "record_sha256": "c0e0b1e06992650f162c1606a6d5f9c655f95beb1b5352694e7703ec228b9b72"
+        }
+      ]
+    },
+    {
+      "symbol": "B",
+      "effective_date": "2024-02-21",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Barnes Group cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG000BCSCB1",
+      "other_share_class_figi": "BBG001S5P0S7",
+      "listed_record_sha256": "881e74554d24848cec84b933b02ca396655bff0fb57908d024948e4a047d5b54",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef680ada808b9a86235bdd51cdf0049228e9cf6cd61e6f66321ff1f06fcc4965d",
+          "record_sha256": "3cbafe54b73b80d3af76111bb8cea11dfd3bec45a00f8c3230e34d3c41207851"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "7cf10749-c6b6-4c8e-8a3a-c29eb5ab2c8d",
+          "record_sha256": "e2c5df3fb09d45693d0a71d0e9943b9e3f1a28c47f6510cd2abfb5f13293d858"
+        }
+      ]
+    },
+    {
+      "symbol": "B",
+      "effective_date": "2024-05-29",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Barnes Group cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG000BCSCB1",
+      "other_share_class_figi": "BBG001S5P0S7",
+      "listed_record_sha256": "fb40e2ecfedd534dfe067b2950f582c0349f6e2788dca2a05f8fb98ec022a8ee",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eae8180e59f82cb723c20f125378c2ade06b226048501781a655e1343a1c2cf59",
+          "record_sha256": "13ef3ff3c49094cb6290cddc59c3a8cc16580af37f161c998d105f8b05987643"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d6db1390-f754-419a-88c8-a69ed12efdb5",
+          "record_sha256": "ce03965fc873bd8d703006b71c48bac310c33c1e3f03c943783a96537f4b228a"
+        }
+      ]
+    },
+    {
+      "symbol": "B",
+      "effective_date": "2024-08-22",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Barnes Group cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG000BCSCB1",
+      "other_share_class_figi": "BBG001S5P0S7",
+      "listed_record_sha256": "96c13d8ca41bfbc0c7268340c447412aeda75ac44624e918a3928c79752e7242",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E0f2524ca4cb547733c73450ee02a69d49a75ab962c2adcb65782560452f6f0e6",
+          "record_sha256": "102620239ddf6a8bcf7735a384a7dbd460c44c9848354c595b3c2fcecfaa751e"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "07928833-a960-450c-ba16-ffec4caa8946",
+          "record_sha256": "cf1af6d0a3e3660a9e42ece095ad2014f1e40c0139875b4a6f49e7645bfafe12"
+        }
+      ]
+    },
+    {
+      "symbol": "FB",
+      "effective_date": "2025-09-24",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "ProShares S&P 500 Dynamic Buffer ETF is a different instrument from scoped Meta Class A common stock.",
+      "other_security_id": "BBG01VRMNFB1",
+      "other_share_class_figi": "BBG01VRMNGC8",
+      "listed_record_sha256": "e5838821559cf6ffd790c5b5e809becaa684f34f8f6a925aaeb64905296f2126",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea6efdf98012518c34818c7b836027def8dcfbd24f2dcc5d85792c648858b95de",
+          "record_sha256": "9d944b2b30b5cf31e14bae80119fbb40aa7de702d92d16481dc150c139f33e18"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "1ab26fcd-1a98-478d-9750-3a4588436712",
+          "record_sha256": "52099d4ae3b6823aafbce191c42619e20b82edd21bfce5f34950aa2c5db985b9"
+        }
+      ]
+    },
+    {
+      "symbol": "FB",
+      "effective_date": "2025-12-24",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "ProShares S&P 500 Dynamic Buffer ETF is a different instrument from scoped Meta Class A common stock.",
+      "other_security_id": "BBG01VRMNFB1",
+      "other_share_class_figi": "BBG01VRMNGC8",
+      "listed_record_sha256": "80471bdd2c1863d115e6332a4830c43f292e43cd27a0a79af79e41f59af5405d",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eae3ce5919501d4a60ed10e2b6fe0c07dc728ab4e7c60ffe72ba40b34a88d6c47",
+          "record_sha256": "aae890d6cb5eaac18bdba62ce237cefa7c327669d494d120301e1b4538c6fe9e"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "dd73e539-c6a8-4403-a9b2-5d7563491bfc",
+          "record_sha256": "821534965ab1f4cdb4eb45f5567748075a6c882c9bffe7dc134bc394a0e3e68d"
+        }
+      ]
+    },
+    {
+      "symbol": "FB",
+      "effective_date": "2026-03-25",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "ProShares S&P 500 Dynamic Buffer ETF is a different instrument from scoped Meta Class A common stock.",
+      "other_security_id": "BBG01VRMNFB1",
+      "other_share_class_figi": "BBG01VRMNGC8",
+      "listed_record_sha256": "f33d5f012fdf9c23b07fa3f189ef0990d94d0086caf4830afb0a2b6d570ad1e8",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E8395d179a013d100e090f98a816494203722651ae10ccfdb737e603885e61d31",
+          "record_sha256": "3e903464b88f967114cce2e568f415471009941cd8bca6460784194a349280be"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "282f080d-4f98-405b-9f57-be0050b810f0",
+          "record_sha256": "2475e3d024a36faa83ea3dd8df1866bae9356a6af83c26549c681d7bf0a6012c"
+        }
+      ]
+    },
+    {
+      "symbol": "FB",
+      "effective_date": "2026-06-24",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "ProShares S&P 500 Dynamic Buffer ETF is a different instrument from scoped Meta Class A common stock.",
+      "other_security_id": "BBG01VRMNFB1",
+      "other_share_class_figi": "BBG01VRMNGC8",
+      "listed_record_sha256": "ec20ed19b51b70933ba15cad579d2af782b1094fcaab94f1a4bd3ff7fb5ba5ae",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E53e1431011d4252201620bd326acf59b1bc8fb1bafdd60683db20673a7f71d1f",
+          "record_sha256": "f319b869dd2d2d258cfc8eccc6d6130a3be9592f9d06f5e29a868b354ce20205"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b179e9be-5718-4836-827b-c17568e546c8",
+          "record_sha256": "d44163a34c8d259d56442566937e83b39b9931c883415a188e537aba8cf8f1d8"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2022-06-27",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "e374d1862632256eb446de6f4851031c2b148f6fdffae68d0b28fa8ffa7557d6",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef9e6ba17f7f1ab6409b15bbd1cdf35129a4c835e976114c441d47bf90c29f10d",
+          "record_sha256": "7b8e399127292ca220b65f110f210001a39db30a712a89a87398a1308c133d1b"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9456254e-95fe-444a-8b40-f44dd42200fb",
+          "record_sha256": "972dcf482cb3054bb3cbf417a58f73d051ae1f7be83f08aec44cedae91a30332"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2022-07-26",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "979431b744397ec8fd31ef2858dc56dc18f98355faa66990f322d5f003f7f533",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E2b6708437b951c823c213c2cb6ec0db750224ac57268dc2623802f51a3d2bfeb",
+          "record_sha256": "cf0f042897066d32879d9e46a6eff5917c22fff4179ed4d48aab9b2c502682f5"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "df348d16-9ff9-4a01-85ea-6029443b8d6f",
+          "record_sha256": "7e978c61f40ef813950d057d682d3731707f17c474904f8140502dbfd2649f2d"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2022-08-26",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "66fdb83b71c4c4cf7c90e7f98ceb1c1af64394784f53864093fdc987171a410e",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4edd9df2b55991e5e78c7622c09ece82859946c80c95835b37b4214ee502055b",
+          "record_sha256": "223cd119054e6914d1039ae887bd9df7aa48d1d5e75cead0cda46b755a8f7056"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "499b3e71-a7d8-4dbe-97d1-8eba48187e05",
+          "record_sha256": "79239758a4d97fb0faafd485d40a1d51c44463c6fbf132aae86af1fe465cfb31"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2022-09-27",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "aa04dc394a57e034ab4bc1d8a8672598b710b2526b17cfc8cd717c903da3ef7c",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Efe3fdbf78c80dac7cf2f5719d9f3df85abbf078b44bb19e2bd58946ec94ac40f",
+          "record_sha256": "055b0fff0d3bb305f2a96cf19c88dcae07433b92ebfaa662b3d7f1b3f521a921"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "5aac44f5-afa6-4561-bbef-0fb581ddd0e9",
+          "record_sha256": "2844a54d6553b16508d33979beb476af6a52ebfa38f5ef089ca2433db7201045"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2022-10-26",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "dfd146367722129f72b21f27c38f6e543278efc7e3a12d391fb2a65afc5aa0a7",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ecd1fe9db8f2d0d82d7cd1eef76ce7513974ba5a45f6825e4af9f3b0d344c08da",
+          "record_sha256": "e9e5f63aeaa14afcca47de3a52fcb0af0092bd768f23c78f4d6c8aa3b050791c"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f6b8415b-b2ff-4a51-b94b-2be10e01c4f9",
+          "record_sha256": "9379bf45f37ee3f895bdf6605108353655d0af272c8ed0d2113106b9fce936b0"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2022-11-25",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "3c066ca335f421c28a50c26b46f25d1b513ebeda71c43a5765514926f2f0979f",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea94db9ba3ffc92783ee52bab882d4f3742e2d7fd5769d7892f61fcc33a524688",
+          "record_sha256": "3d3a693e8ef2b605ef84d39c9580da6de45f11e2cef35c07821ce487ed45a98b"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "2578050f-1a0a-4274-9b25-753c8a094c84",
+          "record_sha256": "90933a9ad149cdb625c2a2e646d8d0b6a3cef49420d8d975c1cb44b7ea033ba9"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2022-12-27",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "0e2f30a18caf55c3f47f6b6eea8e1f4d805c37c50515b775d2e3c5b12068b606",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E602353f7dfba3ea1f5f4bbe02a3d40d9d9171564ac701a8493151b1493890dd2",
+          "record_sha256": "62508fbb262afa0fdb03dea0ee3ada1a1836cd7f24f0d0302289719e6738bb11"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f521a725-9235-44fb-91be-3a4afeb53167",
+          "record_sha256": "930b84986d36b29044fc5c1203c515969175a0a3919ec095157081e2487684f0"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-01-26",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "a1c67ad5b0c5cbe5037ae0ded29026b53b4f55650836771ffb704a45dadfceb3",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ee1fed8eda685b05d5caae4c8e57b72f0df510524449efc2e886d9c3654b1a8ad",
+          "record_sha256": "3f1904cc8c2caa4dd8fa141830ed9c2bd5bc29ea12584043ba94c5b66614f07a"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b38556fd-9ebc-41ac-a70e-06ebfd592a92",
+          "record_sha256": "7dc0992750742002bb947b9ddceb2c6b4f098461db7115f9a02d680157ee6518"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-02-23",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "a43c5a424d32322c98075b167df0836ff844af6c4105d4a5150f66db184b8bac",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E08bc9b70d3ecb9f49696cc90cf94ae6166b0237e9478c6db6ef204f171e17b41",
+          "record_sha256": "bc70ec0f1933a2b0e0ec05998ab16564e86d8deb614b2ff865e263cf35066a9c"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f262990a-8932-4ebd-8986-51156b2c3a3d",
+          "record_sha256": "5ddea054c3bb977c88e4793cea426dae990de8db52b3c2ef1ef5a86c59086c5d"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-03-27",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "caa70118d8b715e4f7af84880384433b3f92de5ccdec04365513b0665d302ed0",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea4f6855535f6ceabea7d6ab764e0f122416b76c3cb2939f816150e1cd94e9917",
+          "record_sha256": "4d5733aead3af1b9fbac9e575c61285a727a86d52a6898a427b3e3300ed67de8"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "a4d8905b-adf0-4f89-a71d-4e4178d36e49",
+          "record_sha256": "e73df46fe454be7892720aad69359ddde91d82e727d75383caee21e4ca483ae6"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-04-25",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "4a20d5cf115846165360d830ea31018db8bf9789ebd095d3ba664f13690062c4",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E94557d24ac55c052961fa14ab2cc88d3ebe40de9693455d57dbc153bc1fb0d28",
+          "record_sha256": "1a1ba025e12faf0a6f291ca85eceada8e01f917d51e3aa693bb97ed7397fc4d6"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "18b29bfd-a4a2-44d6-92a2-07e764505b31",
+          "record_sha256": "4443478923f8033df97c0f72490b8843df41638574e4753d81a6de16ea3304c5"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-05-25",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "3b0220a844ca8943755abe6985bb6a2267b170a54bf2c3cdd40dd8ae2042c384",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E55bfae70c3c63b19920c51ae07df545d7759b4a4eb604a63c51e93b4d2e53c9d",
+          "record_sha256": "52dd71ab82faf7a2faecf0c1066ea6e4d4c2734fd71e95924f7d0f50a5f0454b"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9bea5236-340a-48bd-8137-121c24f13ae1",
+          "record_sha256": "5b0a43bc3a0a7b9eac2d49d539957b168868a4982fd179cba9ecd897f4f77d51"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-06-27",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "4f5c1d26ba5dba9ed2ff1b7aa458b17c6c9271ee1d16c88004011671098fada0",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ebde01b931bc382167cb2b07040c94d6c300c22cb76f248b73651d208386c7de8",
+          "record_sha256": "b51f292cdfff20b29c38ab05f39dbf84439de8513cdd795c5d04ac969fabfb86"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d6c5b234-8959-4153-98c7-83999d9b4a12",
+          "record_sha256": "6d67c2e0bd09ccaa7405088775e94d5c1ce53a36a4f20e6867e5ebe84cbc3c08"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-07-26",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "a0ae8f3ae01e9b6b040a0145f1beac40761eeb049c273f4e5437954210384690",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9a3e37251fdb0366029139fc7b16d764ea0973862693786c87f8a6e6f845ea52",
+          "record_sha256": "c1e32d3f6c09553d940f0ea357f36f962c1518ce45010558c37f99809106c1c6"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "0b2bff73-de0c-47e7-8657-5610302289fa",
+          "record_sha256": "8f81bd9b7ceab766eca6d272a81ca4e1de06a17ec10a871b61711957998d9e97"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-08-28",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "60aa4530565ad5e53e49e060ef91c7f6cc08581700163539e244fa3adf2497b6",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E100171bc81ad10ef4a309b0ad56621fb222bba3d202646dcb3b0de03b53000b5",
+          "record_sha256": "735682cb44e5833311a245fa9e7e8d39517259acd8f0ee7942b036fbee781d2f"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8bf0df89-cfd7-419b-ac3b-22219029b23a",
+          "record_sha256": "24a4a78b10632351df298119a8b9a0250dfbe4691479b91b47a6f302506abd54"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-09-27",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "af4100e23528033e1790029187c3a21d9720b117ec02f6e6bd39f8b99b697134",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1c95bab14a65c60089fca267c941a32ed64810c00d12c06776383c7c57cd26f9",
+          "record_sha256": "f25a6c07f0e2a80bab19b2e4a3ab2c14e1d7b8a733dba7699617a6d79c905964"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8c4f3967-c984-474b-a234-727a914e770c",
+          "record_sha256": "4715985ea03e5a2300fde10e556699fcb7f231c891aca49967f91513c650ef36"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-10-26",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "ef1a9e0a1f9d478a36fba5b2f0d460b047726dd602ae658b13cb831dbdfb8ed8",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eeab8636503b22f21a54c6f1bd83fc35de5744b8008347adc999d2b64305b9870",
+          "record_sha256": "8e7d4df2d5f713f43e558d418d35cc26550da6957fc68e09729ac5b558b3c1cf"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8aa22970-6650-45c9-b2ba-ccea128ddd0b",
+          "record_sha256": "16bb5e167ea41c10d5f22a43c88457eb4111dcc46ae53056739b6c16756c15fa"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-11-27",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "69b7b01fdc621adf009e5463c6dc3370038e51587430b2eb03a9a239e96ef743",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1584dfec3e540f646b9a4c137c900a2afdde05b15c3473c9720e17afba0391fc",
+          "record_sha256": "6da4b1d869e77994f7247fb58921f81dd4a3d2850d6568dbe54798a5715a3dff"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f81c1ef3-46fb-4db4-9307-2b61c6aab989",
+          "record_sha256": "d729bc7bcbd4f9b37bb70230eb608f64b746f904ceeaabff81b0d04b8fe695e7"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2023-12-26",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "67202684bfd267d47d33fc49c8f69bc920d6aba0ad565790b8a1a73628011a2d",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E63dcffff981209438920b28850d3c2fbaa8db6cff348c673c6ad6f2c91ba9cc0",
+          "record_sha256": "3ae56219220942deaaa7b6146e099509532bb43b7103c581b25402302dd1b981"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d046a6cf-d5b8-4647-acd2-6bc02fe583d5",
+          "record_sha256": "f1edf2037362f5324f7282d1a6d519f012e538ca15bfdf9242024c237742e992"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2024-03-25",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "2e27dd25199aa1ab516383bb300abe2120a59acb8d0f73dcf0d7819cd49dbc06",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4cd9ff7e8441d9b500b1837df29cad1a42783570298fbe2033d6fca8c2f962f0",
+          "record_sha256": "93ec3709022a141c1c746dd80b97d8a3082bed1c141345becf8659b11aece5cf"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "41575465-b8df-4ea5-9dc3-e661220e6882",
+          "record_sha256": "491e648727384363fa801bb5c8d7e450f4e3f2c8ad7f8c36545171899bc73f95"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2024-06-25",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "90128b861bc2920ba3820ddb90216324bf71337afeca6945d76fa0a3c56596dd",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eef021de3f6e97cc834aa85e24c224f437774cb0e023bc968cc9ae49bdeb1ceaf",
+          "record_sha256": "398aa65c7f56a375a33f1094ae0dae264f102e2fd14e6bf742d83ac93e7e22af"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f9051c1e-2c20-4b2a-a0e9-314a11a9a33d",
+          "record_sha256": "6e9ed5011eb56196eb5375b7a7e1ac2c925586f81c022ce0414bb87b6c92a687"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2024-09-25",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "39bd384656a111353227a706f44461483e2e249c3e6b8dd680695c9032814a8e",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9176113563a09e77bc4ad734a94fd18f620a5d2b23886caf66ca97d1dcc3eaee",
+          "record_sha256": "2d54884e227f07e389f491c5cde1abfcda79bf6b49adbfe3c2536996f83af053"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "523a52f1-8f18-43f8-b439-1f83d247699b",
+          "record_sha256": "239ca877903f02135c6f114935f756159c8a3a33ec33dd2cc7d2b852d9c4cf6f"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2024-12-23",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "12cddf0831d0b2f7c42384a62f463a59d6bfdbd5b1632343d03e3ba5261e373d",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ed46dc86a99da27ee33a5fed5026238012d09be47bea72fc2ac90ca608b03dba6",
+          "record_sha256": "492146d057ba0a9716cc9e5465569f3864dbf4d0d212d4fe75b70f96af29d60f"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "83990f28-006e-4a6f-8a5b-262d7935e6a1",
+          "record_sha256": "21bbeace034a64d205e0c322ec63d588791361eef960574258f430475fb8d12e"
+        }
+      ]
+    },
+    {
+      "symbol": "FIG",
+      "effective_date": "2025-03-26",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Simplify Macro Strategy ETF is a different instrument from scoped Figma common stock.",
+      "other_security_id": "BBG017H2K4B7",
+      "other_share_class_figi": "BBG017H2K588",
+      "listed_record_sha256": "4b2588177b5684af266a67f17406741479d9fa38ad223244ac7920bc90aaf3e5",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eb9fc5fdddc70291008487ca46142c71900ed9cd3d54c6ce0a678195436ccbed6",
+          "record_sha256": "089bbb783660bfc54fb6a5e81e20cac19e951ead21a7a136d3eb73c6c2efa8cb"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "aad305bc-7028-453e-8cb3-3fc9e519886d",
+          "record_sha256": "e1e4f97ce55900d07d405c490a3e82771bb8c24b927eec9e8e7bb9791b60fb09"
+        }
+      ]
+    },
+    {
+      "symbol": "GOLD",
+      "effective_date": "2026-02-20",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Gold.com cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG005ZVDK48",
+      "other_share_class_figi": "BBG005ZVDK57",
+      "listed_record_sha256": "4dd1a788cdb164445ba01a1815255e9deb039462c80b19b285ec79fc44d67700",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E2aa551218efd3a8cbc8b01b22bfd8b73d3ce513661f37fd5cd0a456942e4e204",
+          "record_sha256": "575fd6842343bb5fd9d8fe6caaf11a8151eecc9d99e92ec83dfac1492770977b"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "6264c5fc-78c2-4e10-a520-90d3fae4d3c4",
+          "record_sha256": "acb4ea96364bddc9650f9eb4c25cd0841c2606d097e25705439c607a11bdf8c7"
+        }
+      ]
+    },
+    {
+      "symbol": "GOLD",
+      "effective_date": "2026-05-20",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "Gold.com cash records concern a different issuer from scoped Barrick.",
+      "other_security_id": "BBG005ZVDK48",
+      "other_share_class_figi": "BBG005ZVDK57",
+      "listed_record_sha256": "320380527ce68871b476167c17740b4c8115f48c8a3a57395e0de3822eeff260",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea16883879a7dc193dc85d7a98e203eb32bff381a0f2a58e4454b5bb905124cbc",
+          "record_sha256": "68400c0b46859e153f6fae4044b4d19fc53951a52caf03567aee898a204a4421"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8a189e2d-9c78-479f-a19d-995f3a938a54",
+          "record_sha256": "386733e5fbcfb177d6906c42dfb3de205f295a4c65407c6f510e8d13114d7e01"
+        }
+      ]
+    },
+    {
+      "symbol": "SPCX",
+      "effective_date": "2023-12-19",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "The SPAC and New Issue ETF is a different instrument from scoped Space Exploration Technologies common stock.",
+      "other_security_id": "BBG00YJ8L8T5",
+      "other_share_class_figi": "BBG00YJ8L9N9",
+      "listed_record_sha256": "7cdfaaa1569703d7daae3dd3dc4d263b4760228c074adc78835d50ccffdbed10",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E27257ede4a65de1d310e58780d7269475332e9c95fb19359b40edc41116a08ca",
+          "record_sha256": "de2a2e78caaae7be53ac93c7dbb94868ee777690aa2ee6801c29465db443480f"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "2176641f-d09d-4745-b2ae-ce1ff4aec95f",
+          "record_sha256": "7d1d3b4c7b65229d6e86f90d92aa57d806ab26ba748ee0e335225174a1a87b25"
+        }
+      ]
+    },
+    {
+      "symbol": "SPCX",
+      "effective_date": "2024-12-17",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "The SPAC and New Issue ETF is a different instrument from scoped Space Exploration Technologies common stock.",
+      "other_security_id": "BBG00YJ8L8T5",
+      "other_share_class_figi": "BBG00YJ8L9N9",
+      "listed_record_sha256": "2ffc6ca665ce91b8eceec44484188436938c4cf122adb94e15d0b5407e40b3ab",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E180e9a370ddf2fa2c20bbd3c5e85bde03a0f9b41e97a4ce6af9fbc0b92097578",
+          "record_sha256": "bc278b0c0ac5853cb98d64c479f66001158e5c274da497211c971a2317f24312"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "02dfe7f3-da90-40f1-a9f0-569f903e3ef5",
+          "record_sha256": "5f0c1f47e1f258a7545e822bcd9c4f8bd3a38582a1603afa925223e8afc06b08"
+        }
+      ]
+    },
+    {
+      "symbol": "SPCX",
+      "effective_date": "2024-12-27",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "The SPAC and New Issue ETF is a different instrument from scoped Space Exploration Technologies common stock.",
+      "other_security_id": "BBG00YJ8L8T5",
+      "other_share_class_figi": "BBG00YJ8L9N9",
+      "listed_record_sha256": "572085115e4961729e4586f8b4e7d17c53d24ee0b97c49acd874ffd56b887288",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5063535b4d1e9e88d2c1caa3e48aa387ef69bb7eda9dfbcdac11a87559d93bf0",
+          "record_sha256": "625dfed637d60b3e3ba40d891b01ec0275b64b8395b7597802abafd0200c9213"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c11d3b68-3bf4-4a75-bce8-dfc817ecd8b3",
+          "record_sha256": "ebe89e83a6833d19dadbb67c272a39fe5225f0c1b43de473ceb96e062ff194fe"
+        }
+      ]
+    },
+    {
+      "symbol": "SPCX",
+      "effective_date": "2025-12-16",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "The SPAC and New Issue ETF is a different instrument from scoped Space Exploration Technologies common stock.",
+      "other_security_id": "BBG00YJ8L8T5",
+      "other_share_class_figi": "BBG00YJ8L9N9",
+      "listed_record_sha256": "77887c41bec106056d9e6d75b43a938af7f0b1ba21b25cfd78f002465980a0c4",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eddb67da8b9264155baa2cb784e4a02b94e4eb35e48e3a8b4cb9a4d7b3e2501ef",
+          "record_sha256": "9ece9ce9fe5303644d1cdeb40ec7be87fd9bf5acb7cc5cfd965879f2c3bdd3c0"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "a9f71f38-ec8d-4af1-afbe-b8a2b9db5332",
+          "record_sha256": "46078a2d8fe2807ea6b47f81d3d431fb2a31d19d4584bd631b62ed034f080340"
+        }
+      ]
+    },
+    {
+      "symbol": "SPCX",
+      "effective_date": "2025-12-24",
+      "treatment": "reviewed_unrelated_instrument",
+      "relationship": "unrelated_ticker_reuse",
+      "rationale": "The SPAC and New Issue ETF is a different instrument from scoped Space Exploration Technologies common stock.",
+      "other_security_id": "BBG00YJ8L8T5",
+      "other_share_class_figi": "BBG00YJ8L9N9",
+      "listed_record_sha256": "ac067aaa72e76bd6edde903f671cd3f4ec4ac733390f5e2b6747d8017db408bb",
+      "successor_or_entitlement_inference": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef7768bffbc2fdbe531df731287d2ab6db4ae391d63aa73b13974d77207b136cc",
+          "record_sha256": "e579382e4b65de318e07c0e133f303f3f77fdec706be3ad1363e725e9e7f245f"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b22aea09-8fbb-41bc-8a3a-cbe451619949",
+          "record_sha256": "8b543c2599e1a8a2814fd40d6997224aa2b3b8c11d4b4c648f108a32d449dba4"
+        }
+      ]
+    }
+  ]
+}
