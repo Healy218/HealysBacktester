@@ -137,13 +137,16 @@ def work(payload):
     variants = [v for v in registered_catalog(['_build'])['records'] if v['signal_minutes']==minutes]
     output = Path(args['output'])/args['security_id']/str(minutes)
     features = build_features(output/'features', chart, variants, inputs=inputs,
-                              reserve_bytes=args['reserve_bytes'])
+                              reserve_bytes=args['reserve_bytes'],
+                              batch_columns=args.get('batch_columns', 16),
+                              working_bytes=args.get('working_bytes', 128*1024**2))
     print(json.dumps(dict(stage='features_complete', minutes=minutes, observations=features['observations'],
                           variants=features['variants'])), flush=True)
     store = StoredFeatures(output/'features')
     proposals = build_proposals(output/'proposals', store, symbol=args['security_id'],
         symbols_by_date=routing, start=args['start'], end=args['end'], reserve_bytes=args['reserve_bytes'],
-        eligibility=eligibility)
+        eligibility=eligibility, batch_columns=args.get('batch_columns', 16),
+        working_bytes=args.get('working_bytes', 128*1024**2))
     report = dict(minutes=minutes, variants=proposals['variants'], proposals=proposals['proposals'],
         feature_observations=features['observations'], generated=proposals['generated'],
         excluded_not_member=proposals['excluded_not_member'],seconds=time.perf_counter()-started,
@@ -164,12 +167,21 @@ def main():
     parser.add_argument('--start', default=HISTORY_START)
     parser.add_argument('--end', default=HISTORY_END)
     parser.add_argument('--workers', type=int, required=True)
+    parser.add_argument('--minutes', type=int, choices=(1, 5, 15, 30), action='append',
+                        help='Build only these signal timeframes; repeat for multiple paths')
+    parser.add_argument('--batch-columns', type=int, default=16,
+                        help='Maximum signal/proposal variant columns held per batch')
+    parser.add_argument('--working-bytes', type=int, default=128*1024**2,
+                        help='Bounded in-memory signal workspace per worker')
     args = vars(parser.parse_args())
+    if args['batch_columns'] < 1 or args['working_bytes'] < 1:
+        raise ValueError('Positive signal batch and workspace budgets required')
     args['reserve_bytes'] = 100*1024**3
     if not args['output'].resolve().is_relative_to(ROOT/'nn_meta'):
         raise ValueError('Build outputs must use repository artifact disk')
     with worker_pool(args.pop('workers'), threads=1) as pool:
-        reports = list(pool.map(work, [(args, m) for m in (1,5,15,30)]))
+        minutes = args.pop('minutes') or [1, 5, 15, 30]
+        reports = list(pool.map(work, [(args, m) for m in minutes]))
     print(json.dumps(dict(security_id=args['security_id'], reports=reports, research_ready=False)), flush=True)
 
 
