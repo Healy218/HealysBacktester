@@ -1,0 +1,231 @@
+{
+  "schema": "v7-finite-dividend-boundaries-v1",
+  "requests": [
+    {
+      "source_symbol": "AZN",
+      "original_symbol": "AZN",
+      "ex_date": "2026-02-20",
+      "prior_date": "2026-02-19",
+      "security_id": "CUSIP:G0593M107",
+      "mode": "primary_cusip_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false,
+      "cusip": "G0593M107",
+      "cik": "0000901832",
+      "primary_identity_evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-cusip-2026",
+          "receipt_sha256": "cac35057e005771fec35423de289d0333fbe3e3230524318ae3ee51484353a4a",
+          "payload_sha256": "bb2f35cd37f43f218fd3a54d0edeff1eae4a232c6e090acf080b5c242cae94d5"
+        }
+      ]
+    },
+    {
+      "source_symbol": "AZN",
+      "original_symbol": "AZN",
+      "ex_date": "2026-08-07",
+      "prior_date": "2026-08-06",
+      "security_id": "CUSIP:G0593M107",
+      "mode": "primary_cusip_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false,
+      "cusip": "G0593M107",
+      "cik": "0000901832",
+      "primary_identity_evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-cusip-2026",
+          "receipt_sha256": "cac35057e005771fec35423de289d0333fbe3e3230524318ae3ee51484353a4a",
+          "payload_sha256": "bb2f35cd37f43f218fd3a54d0edeff1eae4a232c6e090acf080b5c242cae94d5"
+        }
+      ]
+    },
+    {
+      "source_symbol": "CCL",
+      "original_symbol": "CCL",
+      "ex_date": "2026-05-18",
+      "prior_date": "2026-05-15",
+      "security_id": "CUSIP:G2004J103",
+      "mode": "primary_cusip_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false,
+      "cusip": "G2004J103",
+      "cik": "0000815097",
+      "primary_identity_evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ccl-cusip-2026",
+          "receipt_sha256": "3e9c6f8f641b30801b1fc0d808c605c5b61db25ff62f906921165433b1b85182",
+          "payload_sha256": "9aeeab1d6e4b0755c489e251966f890cff53dd7dabd80fa290c925aba241203b"
+        }
+      ]
+    },
+    {
+      "source_symbol": "CCL",
+      "original_symbol": "CCL",
+      "ex_date": "2026-08-07",
+      "prior_date": "2026-08-06",
+      "security_id": "CUSIP:G2004J103",
+      "mode": "primary_cusip_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false,
+      "cusip": "G2004J103",
+      "cik": "0000815097",
+      "primary_identity_evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ccl-cusip-2026",
+          "receipt_sha256": "3e9c6f8f641b30801b1fc0d808c605c5b61db25ff62f906921165433b1b85182",
+          "payload_sha256": "9aeeab1d6e4b0755c489e251966f890cff53dd7dabd80fa290c925aba241203b"
+        }
+      ]
+    },
+    {
+      "source_symbol": "ANTM",
+      "original_symbol": "ELV",
+      "ex_date": "2022-06-09",
+      "prior_date": "2022-06-08",
+      "security_id": "BBG000BCG930",
+      "mode": "same_security_alias",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "KSS",
+      "original_symbol": "KSS",
+      "ex_date": "2022-03-15",
+      "prior_date": "2022-03-14",
+      "security_id": "BBG000CS7CT9",
+      "mode": "warmup",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "LRCX",
+      "original_symbol": "LRCX",
+      "ex_date": "2022-03-15",
+      "prior_date": "2022-03-14",
+      "security_id": "BBG000BNFLM9",
+      "mode": "warmup",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "SILJ",
+      "original_symbol": "SILJ",
+      "ex_date": "2022-12-28",
+      "prior_date": "2022-12-27",
+      "security_id": "BBG003NYHKF4",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "SILJ",
+      "original_symbol": "SILJ",
+      "ex_date": "2023-12-27",
+      "prior_date": "2023-12-26",
+      "security_id": "BBG003NYHKF4",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "SIRI",
+      "original_symbol": "SIRI",
+      "ex_date": "2024-11-05",
+      "prior_date": "2024-11-04",
+      "security_id": "BBG01KJQM3Y8",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "SIRI",
+      "original_symbol": "SIRI",
+      "ex_date": "2025-02-07",
+      "prior_date": "2025-02-06",
+      "security_id": "BBG01KJQM3Y8",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "SIRI",
+      "original_symbol": "SIRI",
+      "ex_date": "2025-05-09",
+      "prior_date": "2025-05-08",
+      "security_id": "BBG01KJQM3Y8",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "SIRI",
+      "original_symbol": "SIRI",
+      "ex_date": "2025-08-08",
+      "prior_date": "2025-08-07",
+      "security_id": "BBG01KJQM3Y8",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "SIRI",
+      "original_symbol": "SIRI",
+      "ex_date": "2025-11-05",
+      "prior_date": "2025-11-04",
+      "security_id": "BBG01KJQM3Y8",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "SIRI",
+      "original_symbol": "SIRI",
+      "ex_date": "2026-02-11",
+      "prior_date": "2026-02-10",
+      "security_id": "BBG01KJQM3Y8",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "SIRI",
+      "original_symbol": "SIRI",
+      "ex_date": "2026-05-11",
+      "prior_date": "2026-05-08",
+      "security_id": "BBG01KJQM3Y8",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "SIRI",
+      "original_symbol": "SIRI",
+      "ex_date": "2026-08-10",
+      "prior_date": "2026-08-07",
+      "security_id": "BBG01KJQM3Y8",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "TMO",
+      "original_symbol": "TMO",
+      "ex_date": "2022-03-15",
+      "prior_date": "2022-03-14",
+      "security_id": "BBG000BVDLH9",
+      "mode": "warmup",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    },
+    {
+      "source_symbol": "XOM",
+      "original_symbol": "XOM",
+      "ex_date": "2026-08-17",
+      "prior_date": "2026-08-14",
+      "security_id": "BBG023CY9MM1",
+      "mode": "separate_cash_security",
+      "changes_trading_eligibility": false,
+      "bridges_reorganization": false
+    }
+  ]
+}

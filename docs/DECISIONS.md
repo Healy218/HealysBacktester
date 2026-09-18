@@ -1354,3 +1354,23 @@ Preserve two exact historical producer versions as hashed snapshots and bind
 current producers separately in new v2 outputs; do not relabel sealed inputs.
 The resulting 4,421-event verification is not full held-history admission.
 [Evidence, limits and seven remaining dates](reviews/2026-09-18-v7-cash-date-recovery.md).
+
+### 2026-09-18 — Explicit modeled FX and separate dividend security identities
+
+The user approved: “Use this modeled FX rule” for the remaining SU, CCJ and PBR
+groups. Convert retained primary native cash amounts using the last official
+Bank of Canada daily observation strictly before the ex-date, rounded to 12 USD
+decimals per payment, and freeze that amount for both the price factor and cash
+entitlement. Preserve the native amounts, observation dates, rates and policy
+identity. This is a pre-tax modeled conversion, not an actual depositary rate or
+verified historical publication vintage. PBR currencyPerDr already incorporates
+the ADR share ratio. Source and policy: V7_DIVIDEND_FX_POLICY_20260918.json.
+
+Compile dividends for changed legal securities under their distinct dated FIGIs
+or primary-confirmed CUSIPs, using a finite auxiliary boundary view. Do not alias
+them onto the predecessor identity or add trading eligibility. The cash consumer
+must see beneficial holdings under the actual dividend security ID; predecessor
+holdings alone earn none. This closes dividend terms without inventing a share
+conversion; the separate noncash lifecycle gate still governs transitions.
+First-scope March14 observations establish March15 price factors only: retain the
+existing cold-start research feature and unchanged study membership.

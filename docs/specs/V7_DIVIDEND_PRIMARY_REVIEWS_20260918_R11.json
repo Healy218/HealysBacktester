@@ -1,0 +1,1368 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AZN",
+      "ex_date": "2026-02-20",
+      "security_id": "CUSIP:G0593M107",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "2.17",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "gross_USD_distribution",
+          "record_date": "2026-02-20",
+          "pay_date": "2026-03-23",
+          "cash_per_share": "2.17",
+          "terms_evidence_identity": "1b2870851a3b7115a2a8feb901dd4f402b6cb3b7ee9f6a105b36883913d24dfc",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "550dec7a-2168-494c-af50-eb9a18a46258",
+          "record_sha256": "876570fc061a0ee46fe98b754301e23cc4cd4ef0ec04033ceb23d5550a630fab"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E10fcf687d1d11d3d9b02bee3d9600b93e01d1b6debb444c556a1cb1a113a923d",
+          "record_sha256": "8bbc7fb836ab16b1d68dbc149b848ec97664c348948a1787f941211cfe9fd014"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-2026-declaration",
+          "receipt_sha256": "aa54c26a9a66f5184e186c4f33f3f10021bebb82219ffbdd473817ccc299e972",
+          "payload_sha256": "eb1a0c5f1766d372bb9b8fffaf82aabbeb0034ee2dd84a27402795a2f18c89bf",
+          "source_terms": {
+            "symbol": "AZN",
+            "ex": "2026-02-20",
+            "amounts": [
+              "2.17"
+            ],
+            "names": [
+              "gross_USD_distribution"
+            ],
+            "capture": "azn-2026-declaration",
+            "date_basis": "matching_original_provider_dates",
+            "conversion_basis": "ordinary_USD_share_following_February_2026_listing_harmonisation",
+            "supporting_captures": [
+              "azn-ratio",
+              "azn-policy"
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-ratio",
+          "receipt_sha256": "f0f4a5657a7fb85daf832abc9c4549d6b7c1c4fa079725208dce4bc4420f32ed",
+          "payload_sha256": "98907a79ad81ed1c4ef73ab87752f4dc91a4f333a7f1aba1120e74b60442ef1c"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-policy",
+          "receipt_sha256": "dd177a7732cc0c4836b3c33f1557447d1f1a1fd09058a1859d2c24828926c862",
+          "payload_sha256": "ccd2ed70e9014306820b1c7de51e5e27f5afa0a2b768120c6ebd0e7fb9445c16"
+        }
+      ],
+      "evidence_identity": "4218b8ded55433f7a49e658c3849e56db9c721fadc6d9010d64a986051c32805",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "AZN",
+        "original_symbol": "AZN",
+        "ex_date": "2026-02-20",
+        "prior_date": "2026-02-19",
+        "security_id": "CUSIP:G0593M107",
+        "mode": "primary_cusip_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false,
+        "cusip": "G0593M107",
+        "cik": "0000901832",
+        "primary_identity_evidence": [
+          {
+            "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-cusip-2026",
+            "receipt_sha256": "cac35057e005771fec35423de289d0333fbe3e3230524318ae3ee51484353a4a",
+            "payload_sha256": "bb2f35cd37f43f218fd3a54d0edeff1eae4a232c6e090acf080b5c242cae94d5"
+          }
+        ]
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AZN",
+      "ex_date": "2026-08-07",
+      "security_id": "CUSIP:G0593M107",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "1.06",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "gross_USD_distribution",
+          "record_date": "2026-08-07",
+          "pay_date": "2026-09-08",
+          "cash_per_share": "1.06",
+          "terms_evidence_identity": "85f55050b8f41c5766711f9c226216aa8fd25ce84ccc8d1806875a8714857073",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b2a32ebc-e83f-4a83-b5ad-8a0712ed3584",
+          "record_sha256": "01ab01f56c756fbb3f4757125e2a399f2014e9ac10df78676f8eba9cc68128d3"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E6a4fdca75c3bdf40614debb3d4aa749360b943ecf366d07e98ef1f34d83c4fe5",
+          "record_sha256": "d64d79db499bce6d88fd1312d3dd1297c9021cda4c709c093652e2e4616e1504"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-policy",
+          "receipt_sha256": "dd177a7732cc0c4836b3c33f1557447d1f1a1fd09058a1859d2c24828926c862",
+          "payload_sha256": "ccd2ed70e9014306820b1c7de51e5e27f5afa0a2b768120c6ebd0e7fb9445c16",
+          "source_terms": {
+            "symbol": "AZN",
+            "ex": "2026-08-07",
+            "amounts": [
+              "1.06"
+            ],
+            "names": [
+              "gross_USD_distribution"
+            ],
+            "capture": "azn-policy",
+            "date_basis": "matching_original_provider_dates",
+            "conversion_basis": "ordinary_USD_share_following_February_2026_listing_harmonisation",
+            "supporting_captures": [
+              "azn-ratio",
+              "azn-policy"
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-ratio",
+          "receipt_sha256": "f0f4a5657a7fb85daf832abc9c4549d6b7c1c4fa079725208dce4bc4420f32ed",
+          "payload_sha256": "98907a79ad81ed1c4ef73ab87752f4dc91a4f333a7f1aba1120e74b60442ef1c"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-policy",
+          "receipt_sha256": "dd177a7732cc0c4836b3c33f1557447d1f1a1fd09058a1859d2c24828926c862",
+          "payload_sha256": "ccd2ed70e9014306820b1c7de51e5e27f5afa0a2b768120c6ebd0e7fb9445c16"
+        }
+      ],
+      "evidence_identity": "186e2bed4bfdaceae5f20b931c6d95db9e8f1ed65d255415dd80b28fa6568963",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "AZN",
+        "original_symbol": "AZN",
+        "ex_date": "2026-08-07",
+        "prior_date": "2026-08-06",
+        "security_id": "CUSIP:G0593M107",
+        "mode": "primary_cusip_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false,
+        "cusip": "G0593M107",
+        "cik": "0000901832",
+        "primary_identity_evidence": [
+          {
+            "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-cusip-2026",
+            "receipt_sha256": "cac35057e005771fec35423de289d0333fbe3e3230524318ae3ee51484353a4a",
+            "payload_sha256": "bb2f35cd37f43f218fd3a54d0edeff1eae4a232c6e090acf080b5c242cae94d5"
+          }
+        ]
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "CCL",
+      "ex_date": "2026-05-18",
+      "security_id": "CUSIP:G2004J103",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.15",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular",
+          "record_date": "2026-05-18",
+          "pay_date": "2026-05-29",
+          "cash_per_share": "0.15",
+          "terms_evidence_identity": "5bc70c929d8d7c07ab7b6a7467032402376c7e5a6b1ec9f4e93cf05856aa5896",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "90d81e44-1933-44be-849c-6215ecb84891",
+          "record_sha256": "c4f117cc2414aa8092bfd3a21fbcc324eea72044af64bf5bca77bb71701d0b95"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E440b1105f106aa8483e4a4e7639573503b7ef9eba65e795b9c9aa634bce24a9d",
+          "record_sha256": "3dd14e9f88ad593621063ac67f5e48c7927dced2379bbb9153157b042d3ddf14"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ccl-may2026",
+          "receipt_sha256": "07679ee7041618f6d81149aa1b2b4b38b0f6ba9c527c0c01155ad8046842ca6e",
+          "payload_sha256": "99ba95cb57e4221fe5137def4a6d8d28bb7a3819f4b1894d3e0028813f31c358",
+          "source_terms": {
+            "symbol": "CCL",
+            "ex": "2026-05-18",
+            "record": "2026-05-18",
+            "pay": "2026-05-29",
+            "amounts": [
+              ".15"
+            ],
+            "names": [
+              "regular"
+            ],
+            "capture": "ccl-may2026",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "bf4a2dbb1f625063fc171174f2b6b2750ed7669441d685629d4eb2dc0ead8a10",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "CCL",
+        "original_symbol": "CCL",
+        "ex_date": "2026-05-18",
+        "prior_date": "2026-05-15",
+        "security_id": "CUSIP:G2004J103",
+        "mode": "primary_cusip_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false,
+        "cusip": "G2004J103",
+        "cik": "0000815097",
+        "primary_identity_evidence": [
+          {
+            "capture": "nn_meta/data_v7/dividend-finish-20260918/ccl-cusip-2026",
+            "receipt_sha256": "3e9c6f8f641b30801b1fc0d808c605c5b61db25ff62f906921165433b1b85182",
+            "payload_sha256": "9aeeab1d6e4b0755c489e251966f890cff53dd7dabd80fa290c925aba241203b"
+          }
+        ]
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "CCL",
+      "ex_date": "2026-08-07",
+      "security_id": "CUSIP:G2004J103",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.15",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular",
+          "record_date": "2026-08-07",
+          "pay_date": "2026-08-28",
+          "cash_per_share": "0.15",
+          "terms_evidence_identity": "4692aa18744e8041f72735fe90c13d35136b0a6bf936643696b5aac861897c4f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "dcc7bfaa-f0f4-4d85-a16b-33bf173e1f40",
+          "record_sha256": "a5254b7412b02f8ee39047de91a595e3919e10fd70525d28bb65558eb20fd7bb"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef8f2ec1cfcfe0a434b272e5e41b4a61b30b4aa955838ceac0a3020cc65553092",
+          "record_sha256": "9b905644e0018c9f84e353ab33fc4b94949cdb7ef5446945a81667b6312629e2"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ccl-july2026",
+          "receipt_sha256": "ce2560f2299b5047a470765fbb13205aa4caebcd684a672b05b147a2b2b2fb48",
+          "payload_sha256": "c85337f068fd0ace87602aff7687a160858afb36331115d5bea9b874d65c7b1d",
+          "source_terms": {
+            "symbol": "CCL",
+            "ex": "2026-08-07",
+            "record": "2026-08-07",
+            "pay": "2026-08-28",
+            "amounts": [
+              ".15"
+            ],
+            "names": [
+              "regular"
+            ],
+            "capture": "ccl-july2026",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "b509db94df9dfb830467fa85444eae1911ae1560b16b5a779831e24346cbdcf7",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "CCL",
+        "original_symbol": "CCL",
+        "ex_date": "2026-08-07",
+        "prior_date": "2026-08-06",
+        "security_id": "CUSIP:G2004J103",
+        "mode": "primary_cusip_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false,
+        "cusip": "G2004J103",
+        "cik": "0000815097",
+        "primary_identity_evidence": [
+          {
+            "capture": "nn_meta/data_v7/dividend-finish-20260918/ccl-cusip-2026",
+            "receipt_sha256": "3e9c6f8f641b30801b1fc0d808c605c5b61db25ff62f906921165433b1b85182",
+            "payload_sha256": "9aeeab1d6e4b0755c489e251966f890cff53dd7dabd80fa290c925aba241203b"
+          }
+        ]
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "ANTM",
+      "ex_date": "2022-06-09",
+      "security_id": "BBG000BCG930",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "1.28",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2022-06-10",
+          "pay_date": "2022-06-24",
+          "cash_per_share": "1.28",
+          "terms_evidence_identity": "3c4d8111bc704ef80a2b62c91abb95f62c3dd20bc2d36d826685398af54a9fd5",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8a7d3c05-5499-4d75-abaa-844f53b372af",
+          "record_sha256": "e6496e58ccaa435d1dcf9bf9595299011a3de10929e187ea11e4dadf02fa0e81"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/elv-june2022-dates",
+          "receipt_sha256": "27b63e5edf6c038ff0d1bd924920982572a20a75a3bef412911dc28e1a0b0db2",
+          "payload_sha256": "5cc56476b0a02b479573dea6a97d198c1ed5cdb2d128a429f17f51ed642ba950",
+          "source_terms": {
+            "symbol": "ELV",
+            "ex": "2022-06-09",
+            "capture": "elv-june2022-dates",
+            "amounts": [
+              "1.28"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "d62efe7e839e006800634f5c51976912c6ea183db7cbd4222b267788c70b313c",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "ANTM",
+        "original_symbol": "ELV",
+        "ex_date": "2022-06-09",
+        "prior_date": "2022-06-08",
+        "security_id": "BBG000BCG930",
+        "mode": "same_security_alias",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication. The vendor retrospectively labels this June 2022 record ELV; dated listings and observed prices identify ANTM with the same scoped FIGI.",
+      "original_symbol_alias": "ELV",
+      "alias_identity_evidence": "315fc443a6e074156ab678fa884c2efbb328781b28712453aaa5d630c88eb061"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "KSS",
+      "ex_date": "2022-03-15",
+      "security_id": "BBG000CS7CT9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.50",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2022-03-16",
+          "pay_date": "2022-03-30",
+          "cash_per_share": "0.50",
+          "terms_evidence_identity": "1e2faa001116f3895c5c2ab41122f05289052cdb1ac6aa7c276cd1a7290de474",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c89d6944-e832-4fe6-8c07-5ca71f47425c",
+          "record_sha256": "7a42873ecbebbb55ad2524ee0d9adcaa991399c70aad4f7d090881a4ae59f7e8"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eba89497d67f85a307e7cf90bc50c8fa4d66d15ffb9c65c549477db9b86ba3bb3",
+          "record_sha256": "5040e8e5d661ae530cf7c043151e877d2174d8073f74bbd51a015fe2d87b6024"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/kss-march2022",
+          "receipt_sha256": "0a2af8d37a327a2ec9644be46f6dfc5dbd0e496ee87af6fb6807081185057ef6",
+          "payload_sha256": "5df0f3c3041234b2a583751d18146782efeb80bdf57bcc2cab89066ee8beca02",
+          "source_terms": {
+            "symbol": "KSS",
+            "ex": "2022-03-15",
+            "capture": "kss-march2022",
+            "amounts": [
+              ".50"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "4e8e5ac0ede9b89c9a53000af8c08c7612c8445e3c97b9e0fb6af11c5962cfa4",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "KSS",
+        "original_symbol": "KSS",
+        "ex_date": "2022-03-15",
+        "prior_date": "2022-03-14",
+        "security_id": "BBG000CS7CT9",
+        "mode": "warmup",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "LRCX",
+      "ex_date": "2022-03-15",
+      "security_id": "BBG000BNFLM9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "1.50",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2022-03-16",
+          "pay_date": "2022-04-06",
+          "cash_per_share": "1.50",
+          "terms_evidence_identity": "54a8b199ee2dd0d5a1d6c4591d78700f44f8a4e62589e55dc700712c1f54a78f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "2507bb77-1590-4b62-94f6-2630ad040656",
+          "record_sha256": "b6594cafa318cd893be8d9868797f9f61bde90e30cd1acb6eee6622e853d970b"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eb9fc96e37e9ec93fea985ae2a769836130a2e76f2db9741b311416053e14bf38",
+          "record_sha256": "7ef85d808d3fcf754f5f3f032d53fb8a43ff57a030b84aebc84f45ce1a1cfe37"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/lrcx-history",
+          "receipt_sha256": "024a34d72200dfb0cfc5adfc3e2f40edc47dd8536f91683cd9701c5e187db645",
+          "payload_sha256": "2007c49a630d03ca289262c3f340c1de297b9e0be25114ad834f4e88062e5289",
+          "source_terms": {
+            "symbol": "LRCX",
+            "ex": "2022-03-15",
+            "capture": "lrcx-history",
+            "amounts": [
+              "1.50"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "0c3df722a10540d3167eadcef477bd5cf2eda7f6f452baebb1b0ae12633b18c7",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "LRCX",
+        "original_symbol": "LRCX",
+        "ex_date": "2022-03-15",
+        "prior_date": "2022-03-14",
+        "security_id": "BBG000BNFLM9",
+        "mode": "warmup",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SILJ",
+      "ex_date": "2022-12-28",
+      "security_id": "BBG003NYHKF4",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0056596",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_distribution",
+          "record_date": "2022-12-29",
+          "pay_date": "2022-12-30",
+          "cash_per_share": "0.0056596",
+          "terms_evidence_identity": "6d2038947623c5736b3f5d354d0d57c4e6ee83eb94de156c12306fdfbd9a9601",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "552c5f28-4bfc-44ec-8a2f-cfedde27f051",
+          "record_sha256": "9784b4328740b76a7be60a11d385839d26b37fbcc6e736d7aa103cebe8ec7765"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef6859d59496c8fb53b5f220051653aefc7b8908fbee847891bfe936b5f7e03fc",
+          "record_sha256": "56cde43eb9421f183a5b9d783b5ed52a8d4d77d34a0fa885be2ea124f061bae4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/amplify-silj-distributions",
+          "receipt_sha256": "b0f8af7ab1cf14355323250c26f6b342e0a1de806a16985209fde64ba1f73ea8",
+          "payload_sha256": "1086e2fc25cead7aee4f0f1fcccefcdc3f30f1ee70c7f952f555bd7a3db47ae1",
+          "source_terms": {
+            "symbol": "SILJ",
+            "ex": "2022-12-28",
+            "record": "2022-12-29",
+            "pay": "2022-12-30",
+            "amounts": [
+              ".0056596"
+            ],
+            "names": [
+              "regular_distribution"
+            ],
+            "capture": "amplify-silj-distributions",
+            "date_basis": "primary_stated_dates",
+            "published_amount": ".0057",
+            "published_quantum": ".0001",
+            "rounding": "nearest"
+          }
+        }
+      ],
+      "evidence_identity": "13df7aaf71b3de6f64bc58b344e67f46c6f3cc7869ce11e138bc9436ca6afe5e",
+      "amount_basis": "primary_corroborated_provider_precision",
+      "dividend_boundary_request": {
+        "source_symbol": "SILJ",
+        "original_symbol": "SILJ",
+        "ex_date": "2022-12-28",
+        "prior_date": "2022-12-27",
+        "security_id": "BBG003NYHKF4",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication.",
+      "precision_review": {
+        "published_amount": ".0057",
+        "published_quantum": ".0001",
+        "rounding": "nearest",
+        "primary_evidence_identity": "6d2038947623c5736b3f5d354d0d57c4e6ee83eb94de156c12306fdfbd9a9601",
+        "rationale": "Original USD amount at greatest reported precision agrees with rounded primary fund history. It belongs to the predecessor ETF, not the 2024 successor."
+      }
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SILJ",
+      "ex_date": "2023-12-27",
+      "security_id": "BBG003NYHKF4",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.0008575",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_distribution",
+          "record_date": "2023-12-28",
+          "pay_date": "2023-12-29",
+          "cash_per_share": "0.0008575",
+          "terms_evidence_identity": "97cfa96fcb7cbcbd106dd15712cd91ff4d5a3b220ab2e8f40b1a3e5d965946a1",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "1b9c61ea-64a4-4dd2-86f7-c32c24e361a7",
+          "record_sha256": "71098ff02d751fb43419ce291cf8d9c3738c82c3705ebf636e049cb872681368"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "7d0fa2d0-a06e-4072-a8ca-06a8b4ccbba5",
+          "record_sha256": "eaf8d63f4ba43eceedbb88516113dc9ff9bf25965c9e7502632b37c78875fd08"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/amplify-silj-distributions",
+          "receipt_sha256": "b0f8af7ab1cf14355323250c26f6b342e0a1de806a16985209fde64ba1f73ea8",
+          "payload_sha256": "1086e2fc25cead7aee4f0f1fcccefcdc3f30f1ee70c7f952f555bd7a3db47ae1",
+          "source_terms": {
+            "symbol": "SILJ",
+            "ex": "2023-12-27",
+            "record": "2023-12-28",
+            "pay": "2023-12-29",
+            "amounts": [
+              ".0008575"
+            ],
+            "names": [
+              "regular_distribution"
+            ],
+            "capture": "amplify-silj-distributions",
+            "date_basis": "primary_stated_dates",
+            "published_amount": ".0009",
+            "published_quantum": ".0001",
+            "rounding": "nearest"
+          }
+        }
+      ],
+      "evidence_identity": "ca1743a6fe05bed4e717e2ffe6db6975be48de99089a2c08edd5b06efe7c7a32",
+      "amount_basis": "primary_corroborated_provider_precision",
+      "dividend_boundary_request": {
+        "source_symbol": "SILJ",
+        "original_symbol": "SILJ",
+        "ex_date": "2023-12-27",
+        "prior_date": "2023-12-26",
+        "security_id": "BBG003NYHKF4",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication.",
+      "precision_review": {
+        "published_amount": ".0009",
+        "published_quantum": ".0001",
+        "rounding": "nearest",
+        "primary_evidence_identity": "97cfa96fcb7cbcbd106dd15712cd91ff4d5a3b220ab2e8f40b1a3e5d965946a1",
+        "rationale": "Original USD amount at greatest reported precision agrees with rounded primary fund history. It belongs to the predecessor ETF, not the 2024 successor."
+      }
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SIRI",
+      "ex_date": "2024-11-05",
+      "security_id": "BBG01KJQM3Y8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.27",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2024-11-05",
+          "pay_date": "2024-11-21",
+          "cash_per_share": "0.27",
+          "terms_evidence_identity": "19e47d2c4e9cb55089066df7402301066dc4f76841bd49aef26188a4e58beab9",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "4c47b2c6-9184-400c-b593-abdacccb6966",
+          "record_sha256": "7a1ee0b47e403e22490612cace962c50cd93bf9fc691e66df5bed7e0bbf62784"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E97535456052115af99bb1af0b48751d0b644e2887463a86d7295fc0ead85a08e",
+          "record_sha256": "517f20866f06e76b9e1bb1ef801a14ad09c25a70710420c515357cecebf07180"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/siri-dividends2025",
+          "receipt_sha256": "dce803233fbfa56d8a395954ec7416ad207749c3ed1d3831c53f3991f3b3fcb8",
+          "payload_sha256": "f09bab9f890d1c1edee789560455b02d82adc3181fea5783410196e16d4da043",
+          "source_terms": {
+            "symbol": "SIRI",
+            "ex": "2024-11-05",
+            "capture": "siri-dividends2025",
+            "amounts": [
+              ".27"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "487e52ead2b36a975614e28ec548b43ca316ce4fc260b21aec77da701a5685ff",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "SIRI",
+        "original_symbol": "SIRI",
+        "ex_date": "2024-11-05",
+        "prior_date": "2024-11-04",
+        "security_id": "BBG01KJQM3Y8",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SIRI",
+      "ex_date": "2025-02-07",
+      "security_id": "BBG01KJQM3Y8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.27",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2025-02-07",
+          "pay_date": "2025-02-25",
+          "cash_per_share": "0.27",
+          "terms_evidence_identity": "8eba36056b8a5c75298181ca58043de1a2290a34218e3180725572a05179e78d",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3d7741fd-766d-46e5-b612-b6a747045c7c",
+          "record_sha256": "76f5dc616ef218a89b51e7a2a49b4fed381b4e32366a63cc631f4a4c905c3397"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Edd6f1b4f74af21764a1b2a63387c200c336bc6e3986b9e0ffd859d3a17232655",
+          "record_sha256": "5660758d671e56c5171446b481c97e802fddda07a4827171f59fdb6908fe80d2"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/siri-dividends2025",
+          "receipt_sha256": "dce803233fbfa56d8a395954ec7416ad207749c3ed1d3831c53f3991f3b3fcb8",
+          "payload_sha256": "f09bab9f890d1c1edee789560455b02d82adc3181fea5783410196e16d4da043",
+          "source_terms": {
+            "symbol": "SIRI",
+            "ex": "2025-02-07",
+            "capture": "siri-dividends2025",
+            "amounts": [
+              ".27"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "5c2a7195b65139ae92a2ae3407c306bb1075109f6ff73d8f3e48071667ed98c6",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "SIRI",
+        "original_symbol": "SIRI",
+        "ex_date": "2025-02-07",
+        "prior_date": "2025-02-06",
+        "security_id": "BBG01KJQM3Y8",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SIRI",
+      "ex_date": "2025-05-09",
+      "security_id": "BBG01KJQM3Y8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.27",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2025-05-09",
+          "pay_date": "2025-05-28",
+          "cash_per_share": "0.27",
+          "terms_evidence_identity": "c725a14cbed842b726fae2f7854fccbc830cb8a9c4ffc085dc1e23dd609e42c8",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f9890be0-87e2-4c9e-84b2-da7e089a3d4f",
+          "record_sha256": "e87bb6be0d0b371e5b26abf3c818d702a299977900d7c959e781429f05248864"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5e12770038c334e3311b676ac3d1d70d9cebc5b57d4b5f4ae553cd7477ae0cef",
+          "record_sha256": "9e06cabc28e7a2eca8296c84e039f2ef64e62f7507eaf03b68399be7f65774f7"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/siri-dividends2025",
+          "receipt_sha256": "dce803233fbfa56d8a395954ec7416ad207749c3ed1d3831c53f3991f3b3fcb8",
+          "payload_sha256": "f09bab9f890d1c1edee789560455b02d82adc3181fea5783410196e16d4da043",
+          "source_terms": {
+            "symbol": "SIRI",
+            "ex": "2025-05-09",
+            "capture": "siri-dividends2025",
+            "amounts": [
+              ".27"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "3885a3b37e6f94e01a37ec39840fdd50f6f8e83129cfa1becca183d633fd9538",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "SIRI",
+        "original_symbol": "SIRI",
+        "ex_date": "2025-05-09",
+        "prior_date": "2025-05-08",
+        "security_id": "BBG01KJQM3Y8",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SIRI",
+      "ex_date": "2025-08-08",
+      "security_id": "BBG01KJQM3Y8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.27",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2025-08-08",
+          "pay_date": "2025-08-27",
+          "cash_per_share": "0.27",
+          "terms_evidence_identity": "496b3a659b9c802db3aa73c548f7284503818fb891637a538726d07ae54199e9",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "625f6639-8f14-49e6-ad33-3b4e73117cbb",
+          "record_sha256": "438ac5e49acc691d52aefcde6ae8a950fb78cdc9b03d0fa6adde2824266e4219"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E16f2a4e8667ff0f174c93aea644b473806991e9f9a915eec7f68886a5484cc04",
+          "record_sha256": "3e361f5ebc0de190016e4836329ff1d4896f877346211c9a0be058a9f65c81a2"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/siri-dividends2025",
+          "receipt_sha256": "dce803233fbfa56d8a395954ec7416ad207749c3ed1d3831c53f3991f3b3fcb8",
+          "payload_sha256": "f09bab9f890d1c1edee789560455b02d82adc3181fea5783410196e16d4da043",
+          "source_terms": {
+            "symbol": "SIRI",
+            "ex": "2025-08-08",
+            "capture": "siri-dividends2025",
+            "amounts": [
+              ".27"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "80a149362e19069a46c45121fa530e63de611b5c8c2a92a5701460a350259a5d",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "SIRI",
+        "original_symbol": "SIRI",
+        "ex_date": "2025-08-08",
+        "prior_date": "2025-08-07",
+        "security_id": "BBG01KJQM3Y8",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SIRI",
+      "ex_date": "2025-11-05",
+      "security_id": "BBG01KJQM3Y8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.27",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2025-11-05",
+          "pay_date": "2025-11-21",
+          "cash_per_share": "0.27",
+          "terms_evidence_identity": "130c7d3f26935e8efba485810306a1a78b340715492a628949600881b4c98853",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c32a7f4f-0b42-4f53-a535-ca6f08dabf44",
+          "record_sha256": "34ae7e99224077059c9d09f557c9138f1edb76ae42f439aea77cc82e84105912"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E8b8f17adb54b5598961a7ff03b87e3c1db0cc1b4b2fe435876f23b38c60686fb",
+          "record_sha256": "bf5e2821452d917f64c57c97554dd400d5060cdcf11ea9a2e50df521036a199d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/siri-dividends2025",
+          "receipt_sha256": "dce803233fbfa56d8a395954ec7416ad207749c3ed1d3831c53f3991f3b3fcb8",
+          "payload_sha256": "f09bab9f890d1c1edee789560455b02d82adc3181fea5783410196e16d4da043",
+          "source_terms": {
+            "symbol": "SIRI",
+            "ex": "2025-11-05",
+            "capture": "siri-dividends2025",
+            "amounts": [
+              ".27"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "f07de99b5b8288bcb04b0e9367c61a115f5c895cef36a6804a88d3eb8709b52c",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "SIRI",
+        "original_symbol": "SIRI",
+        "ex_date": "2025-11-05",
+        "prior_date": "2025-11-04",
+        "security_id": "BBG01KJQM3Y8",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SIRI",
+      "ex_date": "2026-02-11",
+      "security_id": "BBG01KJQM3Y8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.27",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2026-02-11",
+          "pay_date": "2026-02-27",
+          "cash_per_share": "0.27",
+          "terms_evidence_identity": "d5a03ca10238377bd4b9605477f724535612a7341fddf8d0f05748d9f501d88b",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3cfe0222-1166-4517-921b-432e0d94c853",
+          "record_sha256": "8642dd638999c6be36180aa14372890dee5cd61bfd9ac26c3ec4889bf338b7c3"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec2bf8ee234443a138c2575667fa0caf0b9c865518b6ba045ffd937812a2f1d01",
+          "record_sha256": "25ebe76bc7efe7d0b9c86da6ee51ca281d9d81d05f23f3307ea7034ac5ff6a2a"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/siri-feb2026",
+          "receipt_sha256": "1696e7c218d8cc6b359f6c9b85aebe4a2caa2a15a88a4f50fbb62bf622d0e053",
+          "payload_sha256": "8a230b40a376f83d86eadaa552f6ef88067418dd90b1c48febfa01dfaeafb557",
+          "source_terms": {
+            "symbol": "SIRI",
+            "ex": "2026-02-11",
+            "capture": "siri-feb2026",
+            "amounts": [
+              ".27"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "c02a1029de6a2892e609229af30cb32766e7583bb89c09155041f7c0c3d5550d",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "SIRI",
+        "original_symbol": "SIRI",
+        "ex_date": "2026-02-11",
+        "prior_date": "2026-02-10",
+        "security_id": "BBG01KJQM3Y8",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SIRI",
+      "ex_date": "2026-05-11",
+      "security_id": "BBG01KJQM3Y8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.27",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2026-05-11",
+          "pay_date": "2026-05-27",
+          "cash_per_share": "0.27",
+          "terms_evidence_identity": "3d7087bb3c6fedabaf7d7d5532ecd15d2f400823623b447740d8f6c4b1201aea",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "5cbc125f-1234-4aad-8b54-eb81b0b78739",
+          "record_sha256": "be272f0e0ed1814e02a61c923a7d88258c8627b0d5a2b80d80bc36ace14352f5"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9c0ca21ee052bf74ad542d8147c1be86241c0efea6726780d031fda36af34b54",
+          "record_sha256": "f3fa1854299ffd17b4beba482596513b03ac6e35a71498b1df17db704dfeaeec"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/siri-may2026",
+          "receipt_sha256": "27d95e51fb0c2ace3295872ce281d174aaa130954b061ac0f7f040ccd115d89a",
+          "payload_sha256": "f1e2023d0c3e6b0a89b7f244a7b4580c2040e586ebb175dd09f68ca04d306bf6",
+          "source_terms": {
+            "symbol": "SIRI",
+            "ex": "2026-05-11",
+            "capture": "siri-may2026",
+            "amounts": [
+              ".27"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "7066b6f872c842ab0d69d2f1483c8e6caa7eda50ccc52465e444b8518b316e1f",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "SIRI",
+        "original_symbol": "SIRI",
+        "ex_date": "2026-05-11",
+        "prior_date": "2026-05-08",
+        "security_id": "BBG01KJQM3Y8",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SIRI",
+      "ex_date": "2026-08-10",
+      "security_id": "BBG01KJQM3Y8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.27",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2026-08-10",
+          "pay_date": "2026-08-26",
+          "cash_per_share": "0.27",
+          "terms_evidence_identity": "74ba84497542273b771da08ea70515f14ffd14dd3e1b6a9b28f66c2c51f05ec2",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "a855efd9-c678-48a2-8733-1ffa09c40d08",
+          "record_sha256": "c6ff7c4ea562bcabb22d32410dac496734e6f932da21c79456ef1b2ee228a843"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef53cd8eaaec9e823f8a3fdb8c2980c8b228bd130fda3631fcbafe32e1981a354",
+          "record_sha256": "b969e218d17217e30cd99688f57834fc723d71343c2325b5aa16c4485399bc10"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/siri-aug2026",
+          "receipt_sha256": "8ce892b864df5a2f4eb3300be10ea9aaf0247a39e3e13923a620994490c95e23",
+          "payload_sha256": "b01d789925c9474a790ed05fdef3219b13806c807cca89a095f3634c733bb596",
+          "source_terms": {
+            "symbol": "SIRI",
+            "ex": "2026-08-10",
+            "capture": "siri-aug2026",
+            "amounts": [
+              ".27"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "8f1dbe2605fbfadd94bc68dc18d3afa06fb1658b80bbd38a70f7eca9a221dcff",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "SIRI",
+        "original_symbol": "SIRI",
+        "ex_date": "2026-08-10",
+        "prior_date": "2026-08-07",
+        "security_id": "BBG01KJQM3Y8",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "TMO",
+      "ex_date": "2022-03-15",
+      "security_id": "BBG000BVDLH9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.30",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2022-03-16",
+          "pay_date": "2022-04-14",
+          "cash_per_share": "0.30",
+          "terms_evidence_identity": "25112fb2e283a9c00ecd638c85f0d0722ba6acbda192f175a5b0a62f0afc4233",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "0410c9a1-641c-4771-bfa9-053ab5017765",
+          "record_sha256": "0c2f86cf26ae72acfa1d42b18805f80bc8792ff0a6ed093778c5928e25c8e211"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7317d94d87678c5bcd4b3b814c29c03cfc23682be6174319f9c3a00f674f5d24",
+          "record_sha256": "8cd5534ab003222c436b3ddfdf790950ca096e8bc78946bacb39807e204725c9"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/tmo-history",
+          "receipt_sha256": "0d2026c577ffbb00b5940f7ee499738e61408cc91765f02837a982b771cf7c07",
+          "payload_sha256": "351d2479fde74babb4daf00bc92ccd0ecb3d17ecda52669fa9f6230d56281b0c",
+          "source_terms": {
+            "symbol": "TMO",
+            "ex": "2022-03-15",
+            "capture": "tmo-history",
+            "amounts": [
+              ".30"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "b8c3df7cd77fee06f66ed73f488fff2d8ce95a14aa79df1df8ef1188d69b1bde",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "TMO",
+        "original_symbol": "TMO",
+        "ex_date": "2022-03-15",
+        "prior_date": "2022-03-14",
+        "security_id": "BBG000BVDLH9",
+        "mode": "warmup",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "XOM",
+      "ex_date": "2026-08-17",
+      "security_id": "BBG023CY9MM1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "1.03",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_dividend",
+          "record_date": "2026-08-17",
+          "pay_date": "2026-09-10",
+          "cash_per_share": "1.03",
+          "terms_evidence_identity": "e769802a220bb701afa68e7da27564b7304820153207adaf307ca3c13b50a890",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e6bc38d2-0d75-4169-85d2-4edcd1f549f7",
+          "record_sha256": "a6a71d01e5fd35df74ac5cea44aff00d0428f1f82541fcfc6e46899917c253c1"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E8e9aa5b0d748888ad85e41d72674a7ca86cbb1fc6214c08e9a7869b94f82388b",
+          "record_sha256": "e615bb8ad9f7059d8434b73a45e982ac731e1931e30423cf1399d5458f5274db"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/xom-aug2026",
+          "receipt_sha256": "95f5185d9e8ce49713e3800cc03404058143c0b3bc32f02817be26bd4fcff0bb",
+          "payload_sha256": "16762d6cac74e726c07c67ef084b4fa9ec67b911218c6a474cb6e38cd9a41157",
+          "source_terms": {
+            "symbol": "XOM",
+            "ex": "2026-08-17",
+            "capture": "xom-aug2026",
+            "amounts": [
+              "1.03"
+            ],
+            "names": [
+              "regular_dividend"
+            ],
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "4a34c4bd55b6ab3afc31735c6019ae43210e97798ca368b2dc50d8882d578a53",
+      "amount_basis": "exact_primary_terms",
+      "dividend_boundary_request": {
+        "source_symbol": "XOM",
+        "original_symbol": "XOM",
+        "ex_date": "2026-08-17",
+        "prior_date": "2026-08-14",
+        "security_id": "BBG023CY9MM1",
+        "mode": "separate_cash_security",
+        "changes_trading_eligibility": false,
+        "bridges_reorganization": false
+      },
+      "rationale": "Retained primary cash terms and exact dated listing/raw-price witnesses establish this dividend boundary for the actual security. No predecessor/successor holdings are merged. Auxiliary cash security identifiers carry no new trading eligibility; a beneficial holding under the same identity is required to accrue cash. Existing lifecycle gates remain independent. Original records are preserved; effective-session availability is reconstruction, not verified publication."
+    }
+  ]
+}

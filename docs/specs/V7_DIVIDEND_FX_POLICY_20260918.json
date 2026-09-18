@@ -1,0 +1,17 @@
+{
+  "schema": "v7-modeled-dividend-fx-policy-v1",
+  "status": "user_authorized",
+  "authorization": "September 18 user reply: Use this modeled FX rule",
+  "rule": "Issuer native-currency cash per listed unit converted using the last published official daily FX observation strictly before the ex-date, fixed for both the price adjustment and cash payment.",
+  "symbols": ["SU", "CCJ", "PBR"],
+  "official_source": "Bank of Canada daily indicative exchange rates",
+  "cad_per_usd_series": "FXUSDCAD",
+  "cad_per_brl_series": "FXBRLCAD",
+  "rounding": "USD per unit to 12 decimal places, half up, separately for each payment",
+  "historical_publication_vintage_verified": false,
+  "actual_depositary_conversion_claimed": false,
+  "withholdings_and_fees_modeled": false,
+  "original_records_preserved": true,
+  "scope_change": false,
+  "research_ready": false
+}

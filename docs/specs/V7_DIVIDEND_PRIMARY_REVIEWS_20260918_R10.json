@@ -1,0 +1,513 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "JETS",
+      "ex_date": "2025-12-24",
+      "security_id": "BBG008LT6106",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.23289563",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_distribution",
+          "record_date": "2025-12-24",
+          "pay_date": "2025-12-26",
+          "cash_per_share": "0.23289563",
+          "terms_evidence_identity": "31ce5b49e9451948961e26e62411d3c67392c8ef20fb00bc988021c4b4c32c32",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "af1608e9-e99b-46f8-80b2-11efcb4a1013",
+          "record_sha256": "3e3dabc828290602dd22ec3fd34b07e06b37b8d8f12b8c780fb7225f461eed3d"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ee3418c110bc8dc2a3d5dd788cb7eb59203655ea65b05a90cb6864a93615a5d51",
+          "record_sha256": "9d04a2ecc2a08ba37df956f46f6eb0dad396e61905acd8925a5757ef7f334be5"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/jets-2025-distribution",
+          "receipt_sha256": "334d1aef6303149c48dab1c01ca29d1684716dc0f0d129a69c09d78bfb0d86dd",
+          "payload_sha256": "7ec9a488b5329fccdbb6282be82168beb4a77ae087e295bf559a08244d2b2eb5",
+          "source_terms": {
+            "symbol": "JETS",
+            "ex": "2025-12-24",
+            "record": "2025-12-24",
+            "pay": "2025-12-26",
+            "amounts": [
+              ".23289563"
+            ],
+            "names": [
+              "regular_distribution"
+            ],
+            "capture": "jets-2025-distribution",
+            "date_basis": "primary_stated_dates",
+            "published_amount": ".233",
+            "published_quantum": ".001",
+            "rounding": "nearest"
+          }
+        }
+      ],
+      "evidence_identity": "c0b08c762925f492421e6331ee4fd8a91c1ed701815ae6773ca18235b506627c",
+      "rationale": "The primary distribution table corroborates this USD distribution and dates at its published decimal precision. Retain the greatest precision from the unchanged original provider records. The extra digits are provider reported, not claimed as exact primary-source digits. All original amounts reconcile by decimal rounding; a finite truncation comparison applies to the two Global X displayed amounts. No currency conversion, tax or fee adjustment is inferred. One price adjustment and one cash payment; effective-session reconstruction remains explicit.",
+      "amount_basis": "primary_corroborated_provider_precision",
+      "precision_review": {
+        "published_amount": ".233",
+        "published_quantum": ".001",
+        "rounding": "nearest",
+        "primary_evidence_identity": "31ce5b49e9451948961e26e62411d3c67392c8ef20fb00bc988021c4b4c32c32",
+        "rationale": "Explicit per-distribution display-precision comparison; no global conflict tolerance."
+      }
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SIL",
+      "ex_date": "2026-06-29",
+      "security_id": "BBG000BW4G60",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.107996",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_distribution",
+          "record_date": "2026-06-29",
+          "pay_date": "2026-07-07",
+          "cash_per_share": "0.107996",
+          "terms_evidence_identity": "726dd0e9ce992706eb3936a8aefae076023d54241cd051a833d87c6486174d29",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "4b3fc06d-80a8-4577-ac70-34d3086b4231",
+          "record_sha256": "c525d0f935c877d2b0fc6faac5ef6185e3c8190faa59bb50efd9dd4a0a9c2cdc"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E5e02c6121864837b4b25afd7e99df254353b2af9c8e8d535a035e9150537b4dc",
+          "record_sha256": "5c7ef9ec77b9149d2995640ece4949700a9d9f2a3f7fbee0bce79ced5d3c1a65"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/globalx-sil",
+          "receipt_sha256": "fda94b63ec4062bc6afa0066ddcd4b8a7a154431948eedef5bb61c8571ad202f",
+          "payload_sha256": "7e3dd309a38fecd2afd2d88c25aee97e2edd0a0bcd314bb8a22d7d094c73b6a1",
+          "source_terms": {
+            "symbol": "SIL",
+            "ex": "2026-06-29",
+            "record": "2026-06-29",
+            "pay": "2026-07-07",
+            "amounts": [
+              ".107996"
+            ],
+            "names": [
+              "regular_distribution"
+            ],
+            "capture": "globalx-sil",
+            "date_basis": "primary_stated_dates",
+            "published_amount": ".1079",
+            "published_quantum": ".0001",
+            "rounding": "truncate"
+          }
+        }
+      ],
+      "evidence_identity": "944d9494c6372ae56e7e3a2fbe7377e92c22b09298cc3caca1d4eaef4dd51a58",
+      "rationale": "The primary distribution table corroborates this USD distribution and dates at its published decimal precision. Retain the greatest precision from the unchanged original provider records. The extra digits are provider reported, not claimed as exact primary-source digits. All original amounts reconcile by decimal rounding; a finite truncation comparison applies to the two Global X displayed amounts. No currency conversion, tax or fee adjustment is inferred. One price adjustment and one cash payment; effective-session reconstruction remains explicit.",
+      "amount_basis": "primary_corroborated_provider_precision",
+      "precision_review": {
+        "published_amount": ".1079",
+        "published_quantum": ".0001",
+        "rounding": "truncate",
+        "primary_evidence_identity": "726dd0e9ce992706eb3936a8aefae076023d54241cd051a833d87c6486174d29",
+        "rationale": "Explicit per-distribution display-precision comparison; no global conflict tolerance."
+      }
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "COPX",
+      "ex_date": "2026-06-29",
+      "security_id": "BBG000QRNHZ0",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.257976",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_distribution",
+          "record_date": "2026-06-29",
+          "pay_date": "2026-07-07",
+          "cash_per_share": "0.257976",
+          "terms_evidence_identity": "6d9fc6e71402e9f9937a8b43b99bb1f508a1d882d30b69e6fc9d7d4c356eb4e3",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "baa454af-7678-4722-91ee-cf6ea203e2a1",
+          "record_sha256": "463fc306e9b98f1b400299da7a8fa1a8347eb3aa44761d623f2bc61e7f439ed1"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ecb2e0a9b3164f84cb2a0ec4e9f124d48ed398e5fca4c1e8fc09e15c05dbbaf2c",
+          "record_sha256": "408fb6d02d65452e3e787340c076ea97f09892e72bc74f9281d1a3e54b238dfa"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/globalx-copx",
+          "receipt_sha256": "d520edec82d7603ef708774b6c547e67a3b6f6b70da2cd11b7fd17521c6fd73b",
+          "payload_sha256": "e4eaaeed5855e51f81c69f7ac556892d891843283c08a2526bcf41bb4659dfc0",
+          "source_terms": {
+            "symbol": "COPX",
+            "ex": "2026-06-29",
+            "record": "2026-06-29",
+            "pay": "2026-07-07",
+            "amounts": [
+              ".257976"
+            ],
+            "names": [
+              "regular_distribution"
+            ],
+            "capture": "globalx-copx",
+            "date_basis": "primary_stated_dates",
+            "published_amount": ".2579",
+            "published_quantum": ".0001",
+            "rounding": "truncate"
+          }
+        }
+      ],
+      "evidence_identity": "d64c160decda5acad83578a60e6611a1ab1b6f6fd9aa79fe333d300d4edb1418",
+      "rationale": "The primary distribution table corroborates this USD distribution and dates at its published decimal precision. Retain the greatest precision from the unchanged original provider records. The extra digits are provider reported, not claimed as exact primary-source digits. All original amounts reconcile by decimal rounding; a finite truncation comparison applies to the two Global X displayed amounts. No currency conversion, tax or fee adjustment is inferred. One price adjustment and one cash payment; effective-session reconstruction remains explicit.",
+      "amount_basis": "primary_corroborated_provider_precision",
+      "precision_review": {
+        "published_amount": ".2579",
+        "published_quantum": ".0001",
+        "rounding": "truncate",
+        "primary_evidence_identity": "6d9fc6e71402e9f9937a8b43b99bb1f508a1d882d30b69e6fc9d7d4c356eb4e3",
+        "rationale": "Explicit per-distribution display-precision comparison; no global conflict tolerance."
+      }
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SILJ",
+      "ex_date": "2024-12-30",
+      "security_id": "BBG01L6XWKF7",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.72064136",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_distribution",
+          "record_date": "2024-12-30",
+          "pay_date": "2024-12-31",
+          "cash_per_share": "0.72064136",
+          "terms_evidence_identity": "f054ebba76cfc2fb701a0aa90de8d500689e76b6b0fd0420a41b2c068dcb8602",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "94d9240a-723a-4f00-98f1-33db6681d856",
+          "record_sha256": "db1288a3c565bc8f520af45d969abaf199615dff825d083177b5110db923124a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eb731324f24672505e33ddd8f526cc7f8f3966da59d882655cc51a2891af7083e",
+          "record_sha256": "d06a7b52cffbf6db6bb04c0a33a0bff52d82d1a7610ea8591aebd10301820c0e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/amplify-silj-distributions",
+          "receipt_sha256": "b0f8af7ab1cf14355323250c26f6b342e0a1de806a16985209fde64ba1f73ea8",
+          "payload_sha256": "1086e2fc25cead7aee4f0f1fcccefcdc3f30f1ee70c7f952f555bd7a3db47ae1",
+          "source_terms": {
+            "symbol": "SILJ",
+            "ex": "2024-12-30",
+            "record": "2024-12-30",
+            "pay": "2024-12-31",
+            "amounts": [
+              ".72064136"
+            ],
+            "names": [
+              "regular_distribution"
+            ],
+            "capture": "amplify-silj-distributions",
+            "date_basis": "primary_stated_dates",
+            "published_amount": ".72064",
+            "published_quantum": ".00001",
+            "rounding": "nearest"
+          }
+        }
+      ],
+      "evidence_identity": "22572318f224b10cc5c55832047dc29256641b30f00c5d87056b8652fdbe3681",
+      "rationale": "The primary distribution table corroborates this USD distribution and dates at its published decimal precision. Retain the greatest precision from the unchanged original provider records. The extra digits are provider reported, not claimed as exact primary-source digits. All original amounts reconcile by decimal rounding; a finite truncation comparison applies to the two Global X displayed amounts. No currency conversion, tax or fee adjustment is inferred. One price adjustment and one cash payment; effective-session reconstruction remains explicit.",
+      "amount_basis": "primary_corroborated_provider_precision",
+      "precision_review": {
+        "published_amount": ".72064",
+        "published_quantum": ".00001",
+        "rounding": "nearest",
+        "primary_evidence_identity": "f054ebba76cfc2fb701a0aa90de8d500689e76b6b0fd0420a41b2c068dcb8602",
+        "rationale": "Explicit per-distribution display-precision comparison; no global conflict tolerance."
+      }
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "CCL",
+      "ex_date": "2026-02-13",
+      "security_id": "BBG000BF6LY3",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.15",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_distribution",
+          "record_date": "2026-02-13",
+          "pay_date": "2026-02-27",
+          "cash_per_share": "0.15",
+          "terms_evidence_identity": "783de011fe019d7fc37bf2202118ff90da25f7914e63cbf4038aeb15e2c8bf4f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d4f7599e-cfaa-42cd-83e9-0ab8ccf52130",
+          "record_sha256": "cd2a9cc93916bd74aa06fad1a55563a9c5ac3ef4c9c0028fdc447ba81a50213d"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E18ef5183c75095cd845149be79bb87a4bb6bbf2e0724d6e2212b84d7377c2389",
+          "record_sha256": "c81dbbf642fe7cb7a5a3810e9abeb3b667e4acb879ba2e6069c6870fbc5dbbcb"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ccl-annual2025",
+          "receipt_sha256": "a4085e9e2d13faa74b4dee8c9f69c5b46ff1c86779f87c1e73c31e94819b7944",
+          "payload_sha256": "e0f70ce94ee54806ac9dd1c6b3b10bc717937cfdf145ec67579304847bc6cc14",
+          "source_terms": {
+            "symbol": "CCL",
+            "ex": "2026-02-13",
+            "record": "2026-02-13",
+            "pay": "2026-02-27",
+            "amounts": [
+              ".15"
+            ],
+            "names": [
+              "regular_distribution"
+            ],
+            "capture": "ccl-annual2025",
+            "date_basis": "primary_stated_dates",
+            "published_amount": null,
+            "published_quantum": null,
+            "rounding": null
+          }
+        }
+      ],
+      "evidence_identity": "167a882c32b12de7eef8850862512b0b7023960e49ea332cb33ddfbbf3257b9d",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "HD",
+      "ex_date": "2025-09-04",
+      "security_id": "BBG000BKZB36",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "2.30",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_distribution",
+          "record_date": "2025-09-04",
+          "pay_date": "2025-09-18",
+          "cash_per_share": "2.30",
+          "terms_evidence_identity": "34fa7a372236b3622bc2462485f6fb8373b52654e2dc07e42466b557c7ee33b9",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3ea8472b-e4c6-419a-b318-d4d0c4fe3bf4",
+          "record_sha256": "0253f4a42206347d402afae1ae5b03d8df38974d37986a0636a87ca6b87b8318"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E77abc6b05cf607904c6a572c89466bb8f88c789042254384a9d0a362399c41f4",
+          "record_sha256": "0deeefa8c877c5c8a7bdb926090be0c4dbc55839c3a446b9ada347a053880f71"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hd-dividend-2025",
+          "receipt_sha256": "7557e5c61ea5188f9b393bb41b99d89c0ab514245c763023142c27556e57a674",
+          "payload_sha256": "176b3e9c47f0d4963a4548e20975c4695f02d3c139f10c05ccc91ade2d980687",
+          "source_terms": {
+            "symbol": "HD",
+            "ex": "2025-09-04",
+            "record": "2025-09-04",
+            "pay": "2025-09-18",
+            "amounts": [
+              "2.30"
+            ],
+            "names": [
+              "regular_distribution"
+            ],
+            "capture": "hd-dividend-2025",
+            "date_basis": "primary_stated_dates",
+            "published_amount": null,
+            "published_quantum": null,
+            "rounding": null
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/hd-merger-2025",
+          "receipt_sha256": "4833b7ee4d004f277a27114df275cc40baa47096de9ce51ac4b47fee931f647c",
+          "payload_sha256": "3ec1bd7e787bf9983698b7cfed454fa4910cde7c9a3ccabcbab82a8a728fec32",
+          "source_terms": "Acquisition consideration belongs to acquired-company holders; existing acquirer common shares are not converted."
+        }
+      ],
+      "evidence_identity": "7d75b58c5e820feabea60a733c6102c0a4159c3b2132f4c28d4a89f06bcf513a",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. A separately bound issuer merger notice and exact original acquirer role isolate this ordinary dividend. The merger record remains unresolved and no merger cash or shares are created.",
+      "amount_basis": "exact_primary_terms",
+      "acquirer_role_reviews": [
+        {
+          "record": {
+            "provider": "alpaca",
+            "kind": "cash_mergers",
+            "action_id": "e82bf905-289b-4e35-8c4c-ed3b257e9ee9",
+            "record_sha256": "0cf13a54af266daf6c0f9653381b216389b7a10dbf1843cfbf4da854db7798ba"
+          },
+          "acquiree_symbol": "GMS",
+          "acquirer_cusip": "437076102",
+          "acquiree_cusip": "36251C103",
+          "existing_acquirer_shares_unchanged": true,
+          "consume_merger_record": false,
+          "primary_evidence_identity": "0a37a7659844973d87a663c3938549072ed4ac2fe0cc5f3874c0e6d0b203583b",
+          "rationale": "This scope includes only the acquirer. The consideration is for acquiree units/shares, not for existing acquirer shares. Compile its separately declared ordinary dividend while retaining the complete merger record unresolved for broader lifecycle review."
+        }
+      ]
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "OKE",
+      "ex_date": "2025-02-03",
+      "security_id": "BBG000BQHGR6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "1.03",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular_distribution",
+          "record_date": "2025-02-03",
+          "pay_date": "2025-02-14",
+          "cash_per_share": "1.03",
+          "terms_evidence_identity": "1d664fe2e1aa908da2785d60f748d6c1c1dc8cd29389c009095884645c3c4c27",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "94a4d6d8-9a41-4d0b-82e4-cc7a2a9e3494",
+          "record_sha256": "9737fb02ad0a6ab80783e619dbe3d04295e8edaed337dc5002595ef63c9cd245"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea88906d1f6bb9ecdad9ede3ad9f9aacda2ce9414a6fd13dc3c9d058f0cf81efd",
+          "record_sha256": "15b87d56515549998b3983b5c8ce1fe9439c43097d6602a1b2f8a0df2ae86192"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/oke-dividend-2025",
+          "receipt_sha256": "555437cfe289454e07cc2da8f323019908d65bfa6229b115c2697749f5bb64ee",
+          "payload_sha256": "98694e6f2a6d002a47269ae55e98377058275b3a68262c83adece49eee33eb62",
+          "source_terms": {
+            "symbol": "OKE",
+            "ex": "2025-02-03",
+            "record": "2025-02-03",
+            "pay": "2025-02-14",
+            "amounts": [
+              "1.03"
+            ],
+            "names": [
+              "regular_distribution"
+            ],
+            "capture": "oke-dividend-2025",
+            "date_basis": "primary_stated_dates",
+            "published_amount": null,
+            "published_quantum": null,
+            "rounding": null
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/oke-merger-2025",
+          "receipt_sha256": "19287452631feae5b93e8fced4750c1f0979eb4a860d901f99c1ac63123b6bd2",
+          "payload_sha256": "e4a5b226c7bd7d0cc4286276a53f51e4aa6ab58615ff4ec15d8b99a6a4d8b7fc",
+          "source_terms": "Acquisition consideration belongs to acquired-company holders; existing acquirer common shares are not converted."
+        }
+      ],
+      "evidence_identity": "f177f9a759e2c057ec989c9f46b127fa8d3ea8313a05f8b80ab1e1e58c86ec04",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. A separately bound issuer merger notice and exact original acquirer role isolate this ordinary dividend. The merger record remains unresolved and no merger cash or shares are created.",
+      "amount_basis": "exact_primary_terms",
+      "acquirer_role_reviews": [
+        {
+          "record": {
+            "provider": "alpaca",
+            "kind": "stock_mergers",
+            "action_id": "35a7aab6-7872-4510-991c-01d8912803ca",
+            "record_sha256": "d427fd67434c55fecbc3e19630a6522a272fb5e2c3bf22e78736a8e43c5e3bb3"
+          },
+          "acquiree_symbol": "ENLC",
+          "acquirer_cusip": "682680103",
+          "acquiree_cusip": "29336T100",
+          "existing_acquirer_shares_unchanged": true,
+          "consume_merger_record": false,
+          "primary_evidence_identity": "096785d564e23f49376c450f6bbb9b936d27ebf97779412ef4fc87bf469e7cef",
+          "rationale": "This scope includes only the acquirer. The consideration is for acquiree units/shares, not for existing acquirer shares. Compile its separately declared ordinary dividend while retaining the complete merger record unresolved for broader lifecycle review."
+        }
+      ]
+    }
+  ]
+}

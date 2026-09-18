@@ -1,0 +1,2052 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "CCJ",
+      "ex_date": "2022-11-29",
+      "security_id": "BBG000DSZTN6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.089199435070",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "annual_common_dividend",
+          "record_date": "2022-11-30",
+          "pay_date": "2022-12-15",
+          "cash_per_share": "0.089199435070",
+          "terms_evidence_identity": "75df2a534a86f37c3188a69e3810a82a9e8343e419dfc7dfe2f801366cf27997",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2022-11-28",
+            "cad_per_usd": "1.3453",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.12",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fee61b67-02ef-44a8-9c5c-3656e9ba4b98",
+          "record_sha256": "6b9c575aa134d28a67e4ff0c58d0bb224e91abbac66818aa0921c3fc9a804c65"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E68ff3eee625fdd2f64454d6994153dc82d1be5df3579134ab229a18fb51f2c16",
+          "record_sha256": "ab7171d272a85b92550d2008439523926615a726ea173bd2b0db0fe438e98d8d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ccj-history",
+          "receipt_sha256": "18afa0e7974eec3ce129a7ca988b7851c6d3c2ccc01f0dc2c662bc4a0d740b9f",
+          "payload_sha256": "c4fe55ec4ace26e6abd033eac3a7848efee4bacc73dbb0639dd995bc0e69e55b",
+          "source_terms": {
+            "symbol": "CCJ",
+            "ex_date": "2022-11-29",
+            "native_payments": [
+              {
+                "native": "0.12",
+                "record": "2022-11-30",
+                "pay": "2022-12-15",
+                "currency": "CAD",
+                "name": "annual_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "ff74630ae97369e9c2af81908f6060ed930b79fbf249fa7d2812c8edb2fd7a2e",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "CCJ",
+      "ex_date": "2023-11-29",
+      "security_id": "BBG000DSZTN6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.088358736470",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "annual_common_dividend",
+          "record_date": "2023-11-30",
+          "pay_date": "2023-12-15",
+          "cash_per_share": "0.088358736470",
+          "terms_evidence_identity": "2016aeb9313accd4f7fd804fbc3a8775fe61c5d989d6cea6a5bf32761e54f154",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2023-11-28",
+            "cad_per_usd": "1.3581",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.12",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8698ed84-0122-4f81-8b55-5961b12bf521",
+          "record_sha256": "e5a51bcdc8bee9e0a2470dae8be74b9c012071c3b17a6c4df9d85d4695f46e77"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E27b7e6145cd2e8f6e3de74c69a9408722a2ff9e85de8679cd61083bc030e912b",
+          "record_sha256": "ae12c0bd4feec2c58b55b4c6f66cf749a5332451d2e92f50f539f4cbad3dd4d0"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ccj-history",
+          "receipt_sha256": "18afa0e7974eec3ce129a7ca988b7851c6d3c2ccc01f0dc2c662bc4a0d740b9f",
+          "payload_sha256": "c4fe55ec4ace26e6abd033eac3a7848efee4bacc73dbb0639dd995bc0e69e55b",
+          "source_terms": {
+            "symbol": "CCJ",
+            "ex_date": "2023-11-29",
+            "native_payments": [
+              {
+                "native": "0.12",
+                "record": "2023-11-30",
+                "pay": "2023-12-15",
+                "currency": "CAD",
+                "name": "annual_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "9b87f27ab87f8aca65ba8c1102f65e2436049537f136b47ee7faa1ec3a3382ab",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "CCJ",
+      "ex_date": "2024-11-27",
+      "security_id": "BBG000DSZTN6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.113620224400",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "annual_common_dividend",
+          "record_date": "2024-11-27",
+          "pay_date": "2024-12-13",
+          "cash_per_share": "0.113620224400",
+          "terms_evidence_identity": "9d855e733391d076777edf0dd166dd2e4240445f6a53138baff41c1c776f1e13",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2024-11-26",
+            "cad_per_usd": "1.4082",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.16",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "14445f03-5cbe-4171-a543-33e0ba5e2f6e",
+          "record_sha256": "a4937db9e5f585a3429cf63fa17aac7dcb64599ea6373bae0400cfb3b2a318c0"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E58877e6b7e2571ef224738edcaf4d5821007c94b6b28e3fc590a27af0feadd59",
+          "record_sha256": "ca019af96f10538ffcae6cb33f2e6f7ebf290e15757d43036047a50cd680da8d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ccj-history",
+          "receipt_sha256": "18afa0e7974eec3ce129a7ca988b7851c6d3c2ccc01f0dc2c662bc4a0d740b9f",
+          "payload_sha256": "c4fe55ec4ace26e6abd033eac3a7848efee4bacc73dbb0639dd995bc0e69e55b",
+          "source_terms": {
+            "symbol": "CCJ",
+            "ex_date": "2024-11-27",
+            "native_payments": [
+              {
+                "native": "0.16",
+                "record": "2024-11-27",
+                "pay": "2024-12-13",
+                "currency": "CAD",
+                "name": "annual_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "c9944abec2a32505fb879063732246bba992e53c3566cae34ae5a7e4ebe62977",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "CCJ",
+      "ex_date": "2025-12-01",
+      "security_id": "BBG000DSZTN6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.171686100579",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "annual_common_dividend",
+          "record_date": "2025-12-01",
+          "pay_date": "2025-12-16",
+          "cash_per_share": "0.171686100579",
+          "terms_evidence_identity": "b08b3f8913317f66a5efa7ed8799d936f3301306d10b76d80a6f4fef56b3d088",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2025-11-28",
+            "cad_per_usd": "1.3979",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.24",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "86b585d1-9c68-49eb-b160-5b2abc192503",
+          "record_sha256": "383102701b3286cd49519a7709d8b0e503e9d587f4878e729caaf18872cdf9b6"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7bac9c6fede43d66ef5df1bc4a983e5c88e0653bf9a6276864aa7badf9bb18c2",
+          "record_sha256": "2daf4951ff5a6e3d4a018c3105f6f2929adad594e98b357f440a3f4e8539067a"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ccj-history",
+          "receipt_sha256": "18afa0e7974eec3ce129a7ca988b7851c6d3c2ccc01f0dc2c662bc4a0d740b9f",
+          "payload_sha256": "c4fe55ec4ace26e6abd033eac3a7848efee4bacc73dbb0639dd995bc0e69e55b",
+          "source_terms": {
+            "symbol": "CCJ",
+            "ex_date": "2025-12-01",
+            "native_payments": [
+              {
+                "native": "0.24",
+                "record": "2025-12-01",
+                "pay": "2025-12-16",
+                "currency": "CAD",
+                "name": "annual_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "b0071a6ebd3b0d0250c733728668feb6210efde29e87fdeec62c63d369068c92",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PBR",
+      "ex_date": "2026-06-03",
+      "security_id": "BBG000BS6FX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.279598623580",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "depositary_work_50173",
+          "record_date": "2026-06-03",
+          "pay_date": "2026-08-27",
+          "cash_per_share": "0.139799311790",
+          "terms_evidence_identity": "2b1755ac4e8abe56d4b9fecbdd2612d85ba6f54d0e3f2d29a74a622c1fee0c2f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2026-06-02",
+            "cad_per_usd": "1.3834",
+            "cad_per_native": "0.2759",
+            "native_currency": "BRL",
+            "native_amount": "0.7009727",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        },
+        {
+          "name": "depositary_work_50174",
+          "record_date": "2026-06-03",
+          "pay_date": "2026-09-28",
+          "cash_per_share": "0.139799311790",
+          "terms_evidence_identity": "2b1755ac4e8abe56d4b9fecbdd2612d85ba6f54d0e3f2d29a74a622c1fee0c2f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2026-06-02",
+            "cad_per_usd": "1.3834",
+            "cad_per_native": "0.2759",
+            "native_currency": "BRL",
+            "native_amount": "0.7009727",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "7fb4d1bf-a3fd-41a7-a046-bd3fc129921d",
+          "record_sha256": "5f14031cfc1befa99f215429a3bcb3496e4fb530101e22371e24a1815551031d"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "91c03ede-81d2-441d-a42b-a7385df863d7",
+          "record_sha256": "de589397c4f0d78b5f68877555ea99bc0c463354a99d05cc0e7e3c31215d7646"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea107c86efbbc847657db12f250109551afaa48dbb179a81ce03cc5ff9e836e07",
+          "record_sha256": "5784c23f80c97dcb37a8f3485c2e04864f5e4e925120f15c263cfa0ca7cea99b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pbr-jpm-dividends",
+          "receipt_sha256": "6e8654aa6a54592ee0ba00c8f59ccc59d5db1f2b0dc99f9c556cc24eae22c8f9",
+          "payload_sha256": "cf2785fbb9c93fee44160bfac956c602f761500b6b8d01547147019a44b2dde0",
+          "source_terms": {
+            "symbol": "PBR",
+            "ex_date": "2026-06-03",
+            "native_payments": [
+              {
+                "native": "0.7009727",
+                "currency": "BRL",
+                "record": "2026-06-03",
+                "pay": "2026-08-27",
+                "name": "depositary_work_50173",
+                "depositary_status": "Final",
+                "unit_basis": "BRL per DR from currencyPerDr; ratio 1 DR to 2 ordinary shares already applied"
+              },
+              {
+                "native": "0.7009727",
+                "currency": "BRL",
+                "record": "2026-06-03",
+                "pay": "2026-09-28",
+                "name": "depositary_work_50174",
+                "depositary_status": "Initial",
+                "unit_basis": "BRL per DR from currencyPerDr; ratio 1 DR to 2 ordinary shares already applied"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "156b162fb8f79cee4af30f373d12c5a09db5a5566eb49f67e343c0d83d9d3c2d",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PBR",
+      "ex_date": "2026-08-25",
+      "security_id": "BBG000BS6FX9",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.523595912267",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "depositary_work_52186",
+          "record_date": "2026-08-25",
+          "pay_date": "2026-12-01",
+          "cash_per_share": "0.261797956134",
+          "terms_evidence_identity": "0a37907e5e5d2bb47543c2c3e9329d5ec959a480a857a262db1bffae994bb02f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2026-08-24",
+            "cad_per_usd": "1.3842",
+            "cad_per_native": "0.2688",
+            "native_currency": "BRL",
+            "native_amount": "1.3481426",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        },
+        {
+          "name": "depositary_work_52187",
+          "record_date": "2026-08-25",
+          "pay_date": "2026-12-29",
+          "cash_per_share": "0.183148672388",
+          "terms_evidence_identity": "0a37907e5e5d2bb47543c2c3e9329d5ec959a480a857a262db1bffae994bb02f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2026-08-24",
+            "cad_per_usd": "1.3842",
+            "cad_per_native": "0.2688",
+            "native_currency": "BRL",
+            "native_amount": "0.9431339",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        },
+        {
+          "name": "depositary_work_52188",
+          "record_date": "2026-08-25",
+          "pay_date": "2026-12-29",
+          "cash_per_share": "0.078649283745",
+          "terms_evidence_identity": "0a37907e5e5d2bb47543c2c3e9329d5ec959a480a857a262db1bffae994bb02f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2026-08-24",
+            "cad_per_usd": "1.3842",
+            "cad_per_native": "0.2688",
+            "native_currency": "BRL",
+            "native_amount": "0.4050087",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "44ef86e9-c810-4986-ac89-f75b08c1abc9",
+          "record_sha256": "2a4f1cb06ec64bd03752cd2bb5c38d2a026610d65e3590d64facfcfc463aeb4a"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "7c8776fa-747f-43b6-ac3a-bab419d79405",
+          "record_sha256": "72b0ff339263dac1cd6e002f8974c4afb67fba779179105dcdeeaff885ea1654"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c6db04b2-a5e0-434e-be6b-9af6891c83e4",
+          "record_sha256": "56c8cfc1e2894c21d364b088d6c654edb9b9442c8a4763f8e3568dbc76406255"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eabfc9ddd0968aadbe519d5f4d4ddcd0a68b841c5c826d50c01f65d271fc40c18",
+          "record_sha256": "a9441183eed9414f910d0cee49e21fa977b205bbbe53e2aa94f1cb87749056b5"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec81a2a5bcba6bf255901392ee3eeb8f417cfa4b37b95d5df8227fe9c7d0965c6",
+          "record_sha256": "59037ebe0d2dcebc3364216a9e1bbd3f11420c68f5f37b550b42023a0697d67b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pbr-jpm-dividends",
+          "receipt_sha256": "6e8654aa6a54592ee0ba00c8f59ccc59d5db1f2b0dc99f9c556cc24eae22c8f9",
+          "payload_sha256": "cf2785fbb9c93fee44160bfac956c602f761500b6b8d01547147019a44b2dde0",
+          "source_terms": {
+            "symbol": "PBR",
+            "ex_date": "2026-08-25",
+            "native_payments": [
+              {
+                "native": "1.3481426",
+                "currency": "BRL",
+                "record": "2026-08-25",
+                "pay": "2026-12-01",
+                "name": "depositary_work_52186",
+                "depositary_status": "Initial",
+                "unit_basis": "BRL per DR from currencyPerDr; ratio 1 DR to 2 ordinary shares already applied"
+              },
+              {
+                "native": "0.9431339",
+                "currency": "BRL",
+                "record": "2026-08-25",
+                "pay": "2026-12-29",
+                "name": "depositary_work_52187",
+                "depositary_status": "Initial",
+                "unit_basis": "BRL per DR from currencyPerDr; ratio 1 DR to 2 ordinary shares already applied"
+              },
+              {
+                "native": "0.4050087",
+                "currency": "BRL",
+                "record": "2026-08-25",
+                "pay": "2026-12-29",
+                "name": "depositary_work_52188",
+                "depositary_status": "Initial",
+                "unit_basis": "BRL per DR from currencyPerDr; ratio 1 DR to 2 ordinary shares already applied"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "94360d261dfaae0a54aeab68b6df2b960e18117b751b3b5c447a66d94389713d",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2022-06-02",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.371864862726",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2022-06-03",
+          "pay_date": "2022-06-24",
+          "cash_per_share": "0.371864862726",
+          "terms_evidence_identity": "464949ee68cc3602e49d26824f6c575231993f59c50b26fa394d3d63784693a8",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2022-06-01",
+            "cad_per_usd": "1.2639",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.47",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9b6de4f6-43cc-4f40-b4b4-4cf7d1c9023d",
+          "record_sha256": "e23df538e8bd4fcec9c8aff5e714c116010d6e2f3e88d91a9aca3f9769ce9a37"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Edfee5c268f6f8b1ee1aff003ae3ca02849d9e345aa360a9739dbfff301a3fc61",
+          "record_sha256": "f10820440047ce749cef49ec241feac00f877b232ea8478bff3e83597176182e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2022-06-02",
+            "native_payments": [
+              {
+                "native": "0.47",
+                "record": "2022-06-03",
+                "pay": "2022-06-24",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "cc7e40b769e60334f01540157159e2459e454087bc65c731c7bafc0a3100c3b9",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2022-09-01",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.358477614217",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2022-09-02",
+          "pay_date": "2022-09-26",
+          "cash_per_share": "0.358477614217",
+          "terms_evidence_identity": "266ccf4625b90cc4cd6fd339ad9b91367f9dc03dc35ffc27412b5d99c81730a0",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2022-08-31",
+            "cad_per_usd": "1.3111",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.47",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "ea957571-458c-49b0-afb9-537251e7a2e2",
+          "record_sha256": "4d4ff9908f75c4926e8f2859a5a900616c50dc09c7dc01c2576316d67d6d3627"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E32d93dbf072309fd6ae1ab227b6ba63fba2a0604c6abc76b044f63591571560d",
+          "record_sha256": "1377fc1a22b02786bfec61f9dba1ec82c85fbf2195b800175ca4dc6fdf191e82"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2022-09-01",
+            "native_payments": [
+              {
+                "native": "0.47",
+                "record": "2022-09-02",
+                "pay": "2022-09-26",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "56927affc117ed243d0665a6ca7dc3e63e14717aedafd62667d196176df3ff26",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2022-12-01",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.384957062481",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2022-12-02",
+          "pay_date": "2022-12-23",
+          "cash_per_share": "0.384957062481",
+          "terms_evidence_identity": "79794781ca4ee11f752d406ab71aa3a3fc30fc53ad27657e85589283ca5236fe",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2022-11-30",
+            "cad_per_usd": "1.3508",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.52",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "1c9b45e6-b855-4d1b-ab19-02e7953f5a4e",
+          "record_sha256": "30bdcb3c5bc38f453c8dfc0125766d981359a40b65e63165791d9ae008734e7c"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef8f1b9b1785ad53c987f992cf86ec9c8f206e46e3cb360bd2f7a3d87187d199d",
+          "record_sha256": "bfd12877adde57c6c893e62dcddd4bffb790d0269be5a40f3a419aa81a3f8891"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2022-12-01",
+            "native_payments": [
+              {
+                "native": "0.52",
+                "record": "2022-12-02",
+                "pay": "2022-12-23",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "da8d3583f9358e714e13b092be0bee5a75b4e041f28f49dbda19dcbadde84d1a",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2023-03-02",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.382015868351",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2023-03-03",
+          "pay_date": "2023-03-24",
+          "cash_per_share": "0.382015868351",
+          "terms_evidence_identity": "a3c11c5a400fe4f52df6f21d8807a0b858990e4092c1daafc5b38e340308d96f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2023-03-01",
+            "cad_per_usd": "1.3612",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.52",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "91eef766-7a11-44c8-9dd1-07f849eaa3f6",
+          "record_sha256": "d910dd0fe1928d575e46aa0ccf789d61c4269550965d8c5795e220351ed61628"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E8fb222d95a23bada372ce2c322a2861a35479be67fd0efb852495a7a59b422dc",
+          "record_sha256": "63637bd104af72be69fb73f1790c94abd07ca05e9d80ac63377442c5c27d164e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2023-03-02",
+            "native_payments": [
+              {
+                "native": "0.52",
+                "record": "2023-03-03",
+                "pay": "2023-03-24",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "bcf78c0053d5428911002f68b79b6a2ec2a6001ab3120008b40fafeb83ae9ade",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2023-06-02",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.385699451120",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2023-06-05",
+          "pay_date": "2023-06-26",
+          "cash_per_share": "0.385699451120",
+          "terms_evidence_identity": "14c526cb9bd0f1c9d35195183fe630e04e704bc2b17a398bb33ac25f3b4663dd",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2023-06-01",
+            "cad_per_usd": "1.3482",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.52",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d146050c-f017-4cd1-b911-8fe327fddf25",
+          "record_sha256": "ec00b53810bdb29a45737fb6b40c9ea76087a1f390bbe927ea20cc486e9b2392"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec8cd28ba788d5e36903c41402fd6960a581fe1649c98491fdc6be5ff28aebec2",
+          "record_sha256": "87b5572d67de7eb8572ccd9be7798e38c1bdfedfaffe1ca6e2e413a4f73cce27"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2023-06-02",
+            "native_payments": [
+              {
+                "native": "0.52",
+                "record": "2023-06-05",
+                "pay": "2023-06-26",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "eed73f31de815eddb34928cd9a339a5a1589dd8539a1add5de5e9ce3ade1cba9",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2023-08-31",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.384189139269",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2023-09-01",
+          "pay_date": "2023-09-25",
+          "cash_per_share": "0.384189139269",
+          "terms_evidence_identity": "9e88f5a4eada2f6b50c168e84bd88cd82df9f8252cb8a57260d4ed425e38df75",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2023-08-30",
+            "cad_per_usd": "1.3535",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.52",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "67c52e20-9ee6-4768-928e-53dadceb50f7",
+          "record_sha256": "db8d5c63fe0dee96bd8c3f629f2d82f86492385b59b180d031115b32df23aba6"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E85b0790c0ff3e1dbd2c4a516350e2c10be158c30515c44d2ca727d1a4c6f881e",
+          "record_sha256": "df2c7a5d011d620d0b49c2f05f7ae62f742718a6c94da8391e2e7c2d37bcaba1"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2023-08-31",
+            "native_payments": [
+              {
+                "native": "0.52",
+                "record": "2023-09-01",
+                "pay": "2023-09-25",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "ecf3689a443ca111b659108ce687e8537a657c64b2b6b11482849e2818e99f25",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2023-11-30",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.401030169242",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2023-12-01",
+          "pay_date": "2023-12-22",
+          "cash_per_share": "0.401030169242",
+          "terms_evidence_identity": "c4fc8ce6e1bf9136d7dcfd41257f31a53bd4ec5bc761c82ebdbdf4ccb9f78190",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2023-11-29",
+            "cad_per_usd": "1.3590",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.545",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "7a21d310-ed41-405a-bcc0-dd0f533166b0",
+          "record_sha256": "11719043849fbdfb1f76b916c27eb572d41bb01335d233e09b8a8cf13fc78f9e"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E3e4b221b2922bf9eeba9cdf608c84d88a077eef975db516266175d557d8c6bdb",
+          "record_sha256": "6fde6dc02778ecde561b3d71b8e7d2bb88efc1ff0d7f5afd2dba037d4dda3927"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2023-11-30",
+            "native_payments": [
+              {
+                "native": "0.545",
+                "record": "2023-12-01",
+                "pay": "2023-12-22",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "1d957be46bdbd355ca224af52ab7e40128dc82f73006ce6fbe984e337516b1ff",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2024-03-01",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.401621223287",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2024-03-04",
+          "pay_date": "2024-03-25",
+          "cash_per_share": "0.401621223287",
+          "terms_evidence_identity": "0e4c295b35447e6bbf35cd28c604334270cefd20779283019c9518b7b241f010",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2024-02-29",
+            "cad_per_usd": "1.3570",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.545",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "01ff2584-c1a4-4094-b58f-a40d508e6ab5",
+          "record_sha256": "c0398811c780edc1abc245c85647f2dbe689616638cd1557958f6f06740ccbab"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E59fa267deb4009ac4130ea6f89eb4157ce7e90b98d1cd443c9413008da664ad5",
+          "record_sha256": "fe380844d06e24a385fa1fdcccf19f6c8ae49e822f5bdd5d8088993fc59b8e52"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2024-03-01",
+            "native_payments": [
+              {
+                "native": "0.545",
+                "record": "2024-03-04",
+                "pay": "2024-03-25",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "3c803cf8363b04b548abc961947503be86939d70fa1cbf68401882461e6d2f93",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2024-06-04",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.399706637330",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2024-06-04",
+          "pay_date": "2024-06-25",
+          "cash_per_share": "0.399706637330",
+          "terms_evidence_identity": "f0f81338a15e9ad7553a1adf330e4633aa2d31001b8caf21b825b5769bc41838",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2024-06-03",
+            "cad_per_usd": "1.3635",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.545",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "be7c242b-4ba9-4978-9c30-9c68276aa8aa",
+          "record_sha256": "becb91fad2501f3e5d6a47c9509c0b933ac319312245833178ab4a976b31807d"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E557dec003626c9458bb13b81cbc47008fed18b14e1bc4bf2732306f3f920353c",
+          "record_sha256": "709366b731a441373c9a417cb9118ea9a8f59c6865528224a5b0b2d74083796b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2024-06-04",
+            "native_payments": [
+              {
+                "native": "0.545",
+                "record": "2024-06-04",
+                "pay": "2024-06-25",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "bd0a708d61c9dfb559f0ce01fd444483e7f7d12aca22ba9f2f3e616a914a0b7c",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2024-09-04",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.402273398288",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2024-09-04",
+          "pay_date": "2024-09-25",
+          "cash_per_share": "0.402273398288",
+          "terms_evidence_identity": "48678021e98e545d16aec95e11a52fb12cc3425a586662a09404d5db066e7b8d",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2024-09-03",
+            "cad_per_usd": "1.3548",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.545",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "338e3b3e-dd0e-4919-b611-af1069bff29c",
+          "record_sha256": "6d5190f093deb687ada53886af21105355eeb3db6709c7eb0c83cd8232c2ad0d"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eb9501c23c182c85b890172940757bb32eea17ddd587e77c127dfd05f1cc6a8d1",
+          "record_sha256": "fbcdc337b7689d9964edb4ce4f597e85074e405dab0cfb8bcec27228f74ffbfb"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2024-09-04",
+            "native_payments": [
+              {
+                "native": "0.545",
+                "record": "2024-09-04",
+                "pay": "2024-09-25",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "b229eeca4988e23c3f4a915ebb2d5344ac1c31d0fedf88c693c89160886888c7",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2024-12-03",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.405520774047",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2024-12-03",
+          "pay_date": "2024-12-24",
+          "cash_per_share": "0.405520774047",
+          "terms_evidence_identity": "e6817eb6571c05acf37e59d640fd903a8869f96697b09075cdf448503bd40635",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2024-12-02",
+            "cad_per_usd": "1.4056",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.57",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "932e4098-a032-4c6d-a8b0-45caaa6ce5e4",
+          "record_sha256": "3e94eb9a1dc0ae09743855a104469dfe49c43b7b130e6f1f9763bad24e336680"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E386669f7163d3fb94c740028d0192dc0a4764de75efe5c0e0f2accebb6ac2001",
+          "record_sha256": "4db31db95b8a421af86e5b6a4cc970f6384419e330c19f8788976fe772c93911"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2024-12-03",
+            "native_payments": [
+              {
+                "native": "0.57",
+                "record": "2024-12-03",
+                "pay": "2024-12-24",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "5d469c7e82989e9003000d41d2f660403582ab8f32159f0e25d3598d943efb65",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2025-03-04",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.395065151095",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2025-03-04",
+          "pay_date": "2025-03-25",
+          "cash_per_share": "0.395065151095",
+          "terms_evidence_identity": "5a0acfb159bdbc05f72856000281cb9e4af928017ff2319effc4f271a0b47fe8",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2025-03-03",
+            "cad_per_usd": "1.4428",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.57",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f2424b2f-b8d0-4eb2-bd54-cc465e0496e2",
+          "record_sha256": "35c566a8c5c7651e3f8b6761b563136c81d1e9ba4a43782cf5ac39a8ad9a96be"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eb24a66158f0843d21aab34788f4245dc9fff81ed74696efa2e639549e6babb0c",
+          "record_sha256": "9a78341455ae7f3d6f9b315cf366f3696cc45e6c052eb51fd1da84022434b235"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2025-03-04",
+            "native_payments": [
+              {
+                "native": "0.57",
+                "record": "2025-03-04",
+                "pay": "2025-03-25",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "29bec10a0a78553dac8293d0768bcd48368baf45bbfd354039e3ce76bbddc634",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2025-06-04",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.415361072652",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2025-06-04",
+          "pay_date": "2025-06-25",
+          "cash_per_share": "0.415361072652",
+          "terms_evidence_identity": "8020b8ff4f81de065a79433816b592d0a83bcbe571c9fb8e1757427773872789",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2025-06-03",
+            "cad_per_usd": "1.3723",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.57",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "aeb13cf3-c3ac-4917-a598-bc904fa4e865",
+          "record_sha256": "9fbfc9dc44b25784663210878e0d73c2be2826190fa7b4e8645d50c4c7ca5c7f"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E767bfdd2ca6b688db9148cc81f8e082e9bd072d19ddf6c1c204d19566799d648",
+          "record_sha256": "e72d887e4a4e1f108583cafba7f4b193e144f19eb8e883b6f9dd7153b288fb53"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2025-06-04",
+            "native_payments": [
+              {
+                "native": "0.57",
+                "record": "2025-06-04",
+                "pay": "2025-06-25",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "8604753a2bb3c11f18f2726cdd0c9c4ef5769bdaca38d353273fb5305e82cd70",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2025-09-04",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.413223140496",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2025-09-04",
+          "pay_date": "2025-09-25",
+          "cash_per_share": "0.413223140496",
+          "terms_evidence_identity": "c3dff6b4a9e525a5d33ea333600a80069e7b1ce038a620409a817b81b16255ce",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2025-09-03",
+            "cad_per_usd": "1.3794",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.57",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "215e0e73-b842-4bfe-bcdb-902a278b0427",
+          "record_sha256": "2520d6c77b5166f0c7e4033bdea38757c6b11620b808bb7aa17cda27f31bbe24"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E07996c2c557c7673253ab7032e50864fb047ef18e81b27320915c51e35e08a57",
+          "record_sha256": "2e52dfa9f2c3db6d318c720c6836785787573e03505e8323745ee23e2289cadd"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2025-09-04",
+            "native_payments": [
+              {
+                "native": "0.57",
+                "record": "2025-09-04",
+                "pay": "2025-09-25",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "141b6ecf0871e42ab588793c6dfa2c3c71d231b305a212cc887e86af3b665891",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2025-12-03",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.429000429000",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2025-12-03",
+          "pay_date": "2025-12-24",
+          "cash_per_share": "0.429000429000",
+          "terms_evidence_identity": "b136101046c9352cd1b56fa0c44aebd466d0d5931fa754c642ef7d849f3b779b",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2025-12-02",
+            "cad_per_usd": "1.3986",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.60",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b3d3553a-fdcf-4cec-bfd7-0d9d3115c0cf",
+          "record_sha256": "2dc354fcbc62f9a39d47ba9e27a725f8eabd58518cf7efbd3e55e4d68b76f0f4"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E46854a22cbc8e00c7c36139b32a558a40ebb9306d3e24555bdc1dc4a3c5a9a83",
+          "record_sha256": "6a21c00c52dcd71eeccf490cde81d7d4f98f00dcee591da416bff4679fe28b1e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2025-12-03",
+            "native_payments": [
+              {
+                "native": "0.60",
+                "record": "2025-12-03",
+                "pay": "2025-12-24",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "3de015b71c20a01fc54d43fcba60734a749ca8979f62b5e0081ba0bb5761df9f",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2026-03-04",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.438468284127",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2026-03-04",
+          "pay_date": "2026-03-25",
+          "cash_per_share": "0.438468284127",
+          "terms_evidence_identity": "891498c8fd3f0ab5a15a3e1c88e1120bbc33588d942a2b3cc38ac86def2c460f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2026-03-03",
+            "cad_per_usd": "1.3684",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.60",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "62f2cdaa-6ab3-4697-a272-03ea1417a3e4",
+          "record_sha256": "17a6cf0b158313e4b94054ab9ccb94ab5296042d90b7137b7310a363b219be48"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E62406af3a8cb33bc3232f91a3603815fa952bb55095482b3088691d2c4ca0416",
+          "record_sha256": "7d9ba92ea297477d32e68b897378b8a78f8530c8984002233143c0e7463a81ab"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2026-03-04",
+            "native_payments": [
+              {
+                "native": "0.60",
+                "record": "2026-03-04",
+                "pay": "2026-03-25",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "8646dc62b72fec9ec18d432553ad6b280cd88f5d0b65c072cb3f3b66d6f6fa81",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2026-06-04",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.432152117545",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2026-06-04",
+          "pay_date": "2026-06-25",
+          "cash_per_share": "0.432152117545",
+          "terms_evidence_identity": "181eba739cb060bd8bd89fdadde3c3a5787e072bba9aadfea38cf1539cf9e246",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2026-06-03",
+            "cad_per_usd": "1.3884",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.60",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "655989d4-365c-4aee-8f85-6412f181fedb",
+          "record_sha256": "bcbbf53e0ca99748b6d89950af91d8e53621b61816773ccbc1edd4625bd11bed"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E005e6afd4fab8b020f32be983a4f1e92cf24408f71737aede91129411764a680",
+          "record_sha256": "986977bbed2e634868609b55bcfa7ec06876dec1528b8c5d8b56d7b79c6f164e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2026-06-04",
+            "native_payments": [
+              {
+                "native": "0.60",
+                "record": "2026-06-04",
+                "pay": "2026-06-25",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "3e49262026de3ad97144d48165bd5857c80ea25646cf6028b4790bc7e83c066c",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SU",
+      "ex_date": "2026-09-04",
+      "security_id": "BBG000BRK7L6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.435129451012",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "quarterly_common_dividend",
+          "record_date": "2026-09-04",
+          "pay_date": "2026-09-25",
+          "cash_per_share": "0.435129451012",
+          "terms_evidence_identity": "d8b65ea9873c5c4665193275b50c6abddf3df9bab05e4674b497b9a881ce1583",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "announced_nominal_date",
+          "fx_model": {
+            "observation_date": "2026-09-03",
+            "cad_per_usd": "1.3789",
+            "cad_per_native": "1",
+            "native_currency": "CAD",
+            "native_amount": "0.60",
+            "rule": "last_official_daily_observation_strictly_before_ex_date",
+            "actual_conversion": false
+          }
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eefb51145fe6afd67fdfd1c69ae52528a2c81147eab87763ad864ebd4dcc83d99",
+          "record_sha256": "2b1801d5aab705f2c2432e9f71d2b22c7c0106bc824405374de7630db7c8b8d7"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/suncor-history",
+          "receipt_sha256": "e32a7ba5ba93a9422b07a8489410b1a2d738fb36e264d1ea078a8d333564f4a7",
+          "payload_sha256": "03feaadc1ebb7543e539da7b2499931b3aa70cf94843212e1fa3160872c82166",
+          "source_terms": {
+            "symbol": "SU",
+            "ex_date": "2026-09-04",
+            "native_payments": [
+              {
+                "native": "0.60",
+                "record": "2026-09-04",
+                "pay": "2026-09-25",
+                "currency": "CAD",
+                "name": "quarterly_common_dividend"
+              }
+            ]
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/bank-canada-usd-brl-2022-2026",
+          "receipt_sha256": "97a16820b755a7515a9f16582d6dd1dfc5dc6b6be683d720fe240c1865647654",
+          "payload_sha256": "0a6d8ab6b593dc65e96ffbc28d887b7300818281ffd4908b08773549f07ea6ce",
+          "source_terms": "Bank of Canada FXUSDCAD and FXBRLCAD, CAD per one USD/BRL; daily official indicative observations."
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/boc-publication",
+          "receipt_sha256": "207bb5e06c3f150f951c87e920cae5e4933263052a726deda71134aa6e4190bb",
+          "payload_sha256": "dd50063b06dc101cabc602b05d49e81db3ff2728f64386fa609e275c964e8ea9",
+          "source_terms": "Daily publication normally by 16:30 Eastern; last observation strictly before ex-date. Actual historical publication vintage and exceptional delays are unverified."
+        }
+      ],
+      "evidence_identity": "23abe46c38c391cb4410e9e893aace2bcf1d1d4b3e952ed3ed82ae58c61a513f",
+      "amount_basis": "authorized_modeled_official_fx",
+      "fx_policy_identity": "aeb645d27a25c08d4a22b8d2d4d0cf4e95da519b3bc380f6f85887df978381da",
+      "fx_evidence_identity": "7efc0f8cf0613f4c2f8ac9e44fb98d6d2175e3f7f8fc2b66431cc7d08e1796ad",
+      "rationale": "User-authorized modeled conversion of primary native-currency amounts using the latest official daily FX observation strictly before the ex-date. Freeze each resulting USD payment for the price adjustment and held cash. No actual depositary conversion, withholding, fee or broker-posting claim. PBR currencyPerDr is already per ADR; do not multiply by two again. Preserve every original record and separately dated component. All components in these two PBR groups use this same explicit model, including the component whose later final USD rate is now available."
+    }
+  ]
+}
