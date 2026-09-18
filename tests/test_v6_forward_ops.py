@@ -1,7 +1,7 @@
 from unittest.mock import patch
 import pandas as pd
 from nn_meta.session_calendar import SessionCalendar
-from scripts.v6_forward_ops import health, held_quote_gap_only
+from scripts.v6_forward_ops import health
 
 
 def calendar():
@@ -30,14 +30,3 @@ def test_watcher_reports_explicit_live_failures_and_ignores_weekends():
     assert health({},calendar(),pd.Timestamp('2026-09-13T18:00Z'))['status']=='idle'
     status={'signal_clock':'2026-09-14T13:45:20Z','status':'failed','error':'no fresh quote'}
     assert health(status,calendar(),pd.Timestamp('2026-09-14T13:52Z'))['reason']=='no fresh quote'
-
-
-def test_watcher_degrades_without_alerting_for_held_quote_gaps():
-    status={'signal_clock':'2026-09-14T13:45:20Z','status':'failed',
-        'error':'ValueError: unresolved position monitoring; new entries withheld',
-        'exit_errors':[{'symbol':'PTON','error':'ValueError: no fresh post-decision option quote'}]}
-    assert held_quote_gap_only(status)
-    result=health(status,calendar(),pd.Timestamp('2026-09-14T13:52Z'))
-    assert result['status']=='degraded'
-    assert 'new entries withheld' in result['reason']
-    assert not held_quote_gap_only({'exit_errors':[{'error':'ValueError: held underlying has no current closed bar'}]})

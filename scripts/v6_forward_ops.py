@@ -97,18 +97,6 @@ def access(args):
     return market.verify_current_access(contract.symbol)
 
 
-def held_quote_gap_only(status):
-    """A held-position quote gap withholds entries but is not a process crash."""
-    gaps = status.get('monitoring_gaps') or status.get('exit_errors') or []
-    if not gaps:
-        return False
-    messages = [str(item.get('error', '')) for item in gaps if isinstance(item, dict)]
-    return len(messages) == len(gaps) and all(
-        message.endswith('no fresh post-decision option quote')
-        or message.endswith('option quote is stale, crossed, empty or invalid')
-        for message in messages)
-
-
 def health(status,calendar,now):
     """Current-bar results are due six minutes after close, including 16:00."""
     import pandas as pd
@@ -124,9 +112,6 @@ def health(status,calendar,now):
     signal=pd.Timestamp(status.get('signal_clock')) if status.get('signal_clock') else None
     if signal is None or signal.tzinfo is None or signal<expected or status.get('replay'):
         return {'status':'failed','reason':'current paper pass missing','expected_close':expected.isoformat()}
-    if status.get('status')=='failed' and held_quote_gap_only(status):
-        return {'status':'degraded','reason':'held-position quote gap; new entries withheld',
-                'expected_close':expected.isoformat()}
     if status.get('status')=='failed':
         return {'status':'failed','reason':status.get('error','paper pass failed'),'expected_close':expected.isoformat()}
     if signal<expected+pd.Timedelta(minutes=15) and status.get('phase')!='complete':
