@@ -1,0 +1,30 @@
+{
+  "schema": "v7-stock-cash-ledger-admission-v1",
+  "status": "user_authorized",
+  "purpose": "Define executable cash entitlement and spendable-cash availability for already compiled ordinary USD cash distributions; chart factors alone do not define this ledger.",
+  "assumption": "Pre-tax historical research cash-flow model, not verified broker posting.",
+  "eligible_existing_cash_events": 4337,
+  "excluded_existing_cash_events": {
+    "missing_or_conflicting_pay_date": 41,
+    "missing_or_conflicting_record_date": 13,
+    "requires_date_or_due_bill_review": 1
+  },
+  "rules": [
+    "Only already admitted USD-per-listed-share cash events with reconciled ex, record and pay dates and no unresolved due-bill semantics qualify. Conflicting/complex events remain blocked.",
+    "At the effective ex-session open, accrue the declared gross distribution per share on long beneficial shares owned through funded trades or completed exercise decisions before that session; preserve receivables after later stock sale.",
+    "A receivable contributes to equity from entitlement but is not spendable; release it at the first captured regular trading-session open strictly after the agreed pay date. Never spend unposted receivables before this model release clock.",
+    "Apply the agreed fractional paper research convention pro rata. Record zero modeled tax withholding and no inferred broker-specific dividend fees; these are pre-tax research assumptions, not claims about actual account proceeds.",
+    "Retain original source records, dates, security identity, policy identity and both accrual/release cash-ledger events. No invented stock fills, external funding or changed option deliverables.",
+    "Require complete captured settlement/trading calendar coverage for the release clock; missing clocks remain unresolved."
+  ],
+  "scope_change": false,
+  "research_ready": false,
+  "sources": {
+    "nn_meta/validation/v7-ordinary-actions-20260917-tail-gap-r2/complete.json": "02672d56f5a9c16b8fa0c79c7ba6b0c23b5ff08aa15111468f62174acc0b888e",
+    "nn_meta/validation/v7-action-inventory-20260917-tail/complete.json": "1b719252cddd1d95d0b2e2a6c221ac85a759000a599fec085e8945b161e8b3d4"
+  },
+  "policy_id": "pretax-funded-stock-cash-reconstruction-20260917",
+  "proposal_path": "docs/specs/V7_STOCK_CASH_LEDGER_PROPOSAL_20260917.json",
+  "proposal_sha256": "2519c95c038b92c62e7014387d90eab03e230aa34a7f854718d539752f56e1cd",
+  "authorization": "User explicitly accepted the documented pre-tax cash-flow reconstruction model in this session."
+}

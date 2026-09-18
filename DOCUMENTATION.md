@@ -1048,6 +1048,10 @@ Finite unchanged-common-share ticker reviews use `review_v7_renames.py` and
 `V7_COMMON_SHARE_RENAMES_20260917.json`. Supply `--renames` to the coverage auditor;
 it retains identity-event IDs separately from price events and reconciles every
 original record. A reviewed rename never clears other unresolved records.
+`review_v7_other_renames.py` extends finite unrelated-instrument treatments with
+positive adjacent foreign identities and a distinct scoped share-class witness.
+The coverage auditor combines all treatment references against the original
+inventory; do not use the last artifact's pending list as an implicit override.
 `PhysicalLedger.apply_stock_rename` requires the exact effective clock and updates
 stock symbols without changing cash, quantity or settlement; pass reviewed events
 as `physical.renames` for chronological portfolio scheduling. Open option or

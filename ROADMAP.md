@@ -35,6 +35,8 @@ GAP and process-date-tail captures. Current compiled total: 4,481 events.
 [Seven finite rename reviews](docs/reviews/2026-09-17-v7-common-share-renames.md)
 then clear 5,644 more history sessions and add effective-time stock-symbol
 treatment, while retaining separate option-deliverable gates.
+[Three unrelated rename treatments](docs/reviews/2026-09-17-v7-unrelated-renames.md)
+raise admitted history coverage to 586,830 sessions.
 This advances action compilation; it does not close identity, complex-action,
 no-event or held-position requirements.
 

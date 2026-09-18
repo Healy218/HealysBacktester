@@ -1271,3 +1271,26 @@ quantities or settlements. An open option or merger phase still needs its own
 corporate-action evidence. Other unresolved records remain blocking, including
 Barrick's separate AMRK-to-GOLD ticker reuse. See the
 [rename evidence review](reviews/2026-09-17-v7-common-share-renames.md).
+
+## 2026-09-17 — unrelated name-change record relevance
+
+Finite original listing witnesses and captured primary notices distinguish
+AMRK→GOLD, BNZI→PARA and SPCX→SPCK from the scoped Barrick, Paramount and SpaceX
+histories. Retain these three original records as unrelated-instrument treatments,
+without adding exclusions or inferring successors. Coverage combines independent
+explicit treatment sets against the original inventory, preserving the exact
+record partition. [Evidence and limits](reviews/2026-09-17-v7-unrelated-renames.md).
+
+## 2026-09-17 — pre-tax funded-stock cash-flow reconstruction authorized
+
+The user explicitly accepted `V7_STOCK_CASH_LEDGER_PROPOSAL_20260917.json`.
+The active policy is `V7_STOCK_CASH_LEDGER_ADMISSION_20260917.json`, bound to the
+original proposal and its 4,337 eligible compiled cash events. This decision is
+settled; do not ask again. Accrue gross distributions on entitled funded shares,
+include receivables in equity while excluding them from spendable cash, and
+release cash at the first captured regular open strictly after the agreed pay
+date. Model zero withholding under this explicitly pre-tax research convention.
+Retain source dates, security identity, policy and accrual/release ledger events.
+Do not describe this as verified broker posting. Missing/conflicting dates, due
+bills, unknown calendar release clocks and option deliverables remain separate
+gates. The other 55 compiled cash events remain outside this policy's finite set.

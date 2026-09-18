@@ -1,0 +1,12 @@
+{
+  "schema": "v7-named-missing-inputs-v1",
+  "purpose": "Resolve the three undated AMRK-to-GOLD, BNZI-to-PARA and SPCX-to-SPCK records as unrelated ticker reuse using primary effective dates and already captured adjacent foreign composite/share-class identities.",
+  "request_file": "docs/specs/V7_UNRELATED_RENAME_REQUESTS_20260917.json",
+  "max_documents": 5,
+  "scope_change": false,
+  "research_ready": false,
+  "fallback_request_file": "docs/specs/V7_UNRELATED_RENAME_FALLBACK_20260917.json",
+  "fallback_reason": "Banzai gcs-web endpoint timed out; retry the same notice on its primary issuer domain.",
+  "exchange_fallback_request_file": "docs/specs/V7_UNRELATED_RENAME_EXCHANGE_20260917.json",
+  "exchange_fallback_reason": "Both Banzai issuer domains timed out; use the same issuer release retained by Nasdaq."
+}

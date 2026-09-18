@@ -14,6 +14,7 @@ def main():
     configure_threads(1)
     import pandas as pd
     from nn_meta.v7.action_coverage import coverage_panel
+    from nn_meta.v7.cash_actions import record_key
     from nn_meta.v7.storage import identity, receipt, sha, transaction, verify
     parser = argparse.ArgumentParser(description=__doc__)
     for name in ('history', 'inventory', 'actions', 'output'):
@@ -63,6 +64,12 @@ def main():
     for path in [Path(__file__), *[ROOT / 'nn_meta/v7' / (n + '.py') for n in
             ('action_coverage', 'renames', 'cash_actions', 'ordinary_actions', 'causal_prices', 'storage', 'runtime')]]:
         merge({str(path): sha(path)})
+    # Treatment artifacts can share ancestors. Compute the remaining original
+    # records from their explicit references, independent of artifact order.
+    # coverage_panel below checks missing, overlapping and altered references.
+    resolved = {record_key(r) for t in [*other, *renames] for r in t['replaces']}
+    pending = [r for r in json.loads((args.actions / 'unresolved.json').read_text())
+               if record_key(r) not in resolved]
     if any(sha(p) != h for p, h in inputs.items()):
         raise ValueError('Action coverage source changed')
     panel = coverage_panel(pd.read_parquet(args.history / 'history.parquet'),

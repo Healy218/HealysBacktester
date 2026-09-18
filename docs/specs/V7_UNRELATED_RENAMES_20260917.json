@@ -1,0 +1,86 @@
+{
+  "schema": "v7-unrelated-rename-reviews-v1",
+  "reviews": [
+    {
+      "relationship": "unrelated_ticker_reuse",
+      "effective_date": "2025-12-02",
+      "rationale": "Primary notice identifies AMRK to GOLD as the rename of A-Mark Precious Metals, Inc.. Adjacent original listings retain its separate composite/share-class identity, distinct from the scoped Barrick Gold Corp.; neither rename leg belongs to a scoped security.",
+      "prior_listing_sha256": "c495fcfff2e34285ced1fcc34cb88dddf07f8f842e0d3d50b1d650d114e9617b",
+      "effective_listing_sha256": "fb578d9932b628523e37f9edce12e4836588cd921eca4c736b09877e5a1de4ec",
+      "record": {
+        "provider": "alpaca",
+        "kind": "name_changes",
+        "action_id": "ea08e5c8-9d04-4f3f-a11a-019e3caeb927",
+        "record_sha256": "129463f8984014c50a93054fa87073c2ff0298b0ce1d04e3eb3406bd98debc19"
+      },
+      "scoped_witness": {
+        "symbol": "GOLD",
+        "date": "2022-03-15",
+        "security_id": "BBG000BB07P9",
+        "record_sha256": "8ecace0f135ea0acbc5c352ab47715b776bf78d6079183abb3b8eebc660665b8"
+      },
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/unrelated-rename-notices-20260917/amark-20251106-ticker",
+          "receipt_sha256": "ad0ad5591feeae4a911854f2b04f315b7834dafc7ffbe9907aa2068ab1864344",
+          "payload_sha256": "2da491804f3a6b9c505e8a1f72546365d78afd85456067f6e9ead9e45905b161",
+          "review": "Primary notice explicitly dates the AMRK to GOLD ticker change to 2025-12-02. Used only for record relevance; no scoped entitlement or historical publication is inferred."
+        }
+      ]
+    },
+    {
+      "relationship": "unrelated_ticker_reuse",
+      "effective_date": "2026-08-07",
+      "rationale": "Primary notice identifies BNZI to PARA as the rename of Banzai International, Inc. Class A Common Stock. Adjacent original listings retain its separate composite/share-class identity, distinct from the scoped Paramount Global Class B Common Stock; neither rename leg belongs to a scoped security.",
+      "prior_listing_sha256": "f74eefd652d81031f2f8f39452bfd133e99e28f36de82dfee57e2a16545ab13b",
+      "effective_listing_sha256": "9d092cbb8683c2578899d753e50f04e348ea306e19abbddbd7075082c6aed41a",
+      "record": {
+        "provider": "alpaca",
+        "kind": "name_changes",
+        "action_id": "90afefe4-d67b-4b43-b95f-76ffcbdfc4d2",
+        "record_sha256": "a637299faa4765a3377ef1b3379ea031268f4d676bc441f66a82bcbaa9abc127"
+      },
+      "scoped_witness": {
+        "symbol": "PARA",
+        "date": "2022-03-15",
+        "security_id": "BBG000C496P7",
+        "record_sha256": "7845948c473925456e0e86fc4fd9bbc38c1091ff0ddd679562039cc360b6ffe6"
+      },
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/unrelated-rename-notices-20260917/banzai-20260806-nasdaq-ticker",
+          "receipt_sha256": "8b05f784a12aba3b089b836b8810ac7606f37a7013e0ce1a5bb7560f1ea8759c",
+          "payload_sha256": "2596b75c1625228e48c4b4214cc60450afe71f3385648c039532ead0cac30416",
+          "review": "Primary notice explicitly dates the BNZI to PARA ticker change to 2026-08-07. Used only for record relevance; no scoped entitlement or historical publication is inferred."
+        }
+      ]
+    },
+    {
+      "relationship": "unrelated_ticker_reuse",
+      "effective_date": "2026-04-07",
+      "rationale": "Primary notice identifies SPCX to SPCK as the rename of The SPAC and New Issue ETF. Adjacent original listings retain its separate composite/share-class identity, distinct from the scoped Space Exploration Technologies Corp. Class A Common Stock; neither rename leg belongs to a scoped security.",
+      "prior_listing_sha256": "d0cf0896e7f294ae61d04d70725ca33454de5a345af22efa235186ec977a86bc",
+      "effective_listing_sha256": "29864c935ad268939e84a9af2b715e6f6d33fe16a197850f5934325400eab032",
+      "record": {
+        "provider": "alpaca",
+        "kind": "name_changes",
+        "action_id": "82ff6292-b421-428c-9c25-f089a0cb39ea",
+        "record_sha256": "706dfcb48edc70a3a77fd0a6e0a3c1ed8f1392f2b63142ebbf0f546a5eed6c5f"
+      },
+      "scoped_witness": {
+        "symbol": "SPCX",
+        "date": "2026-06-12",
+        "security_id": "BBG000NQF3Z5",
+        "record_sha256": "7cbc0f81a47db96e8ab3a38d8376d9538419b1aa795c366fcdd75c8e0e5d8d4f"
+      },
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/unrelated-rename-notices-20260917/spac-etf-20260407-ticker",
+          "receipt_sha256": "98c456c541564d9ce14fa4201e1df12d7d79c1ed6db3083c39ac34462af9b4a7",
+          "payload_sha256": "1dbdafe1b3532f8aa1cb0f04d6a47d6cfa17f8cdb0ef7f21f9b89ba752cdfed8",
+          "review": "Primary notice explicitly dates the SPCX to SPCK ticker change to 2026-04-07. Used only for record relevance; no scoped entitlement or historical publication is inferred."
+        }
+      ]
+    }
+  ]
+}
