@@ -30,8 +30,8 @@
   original records and 4,854 actual raw price boundaries reconcile. Final
   artifact: `v7-dividends-complete-20260918`. See the
   [completion audit and explicit model limits](docs/reviews/2026-09-18-v7-dividends-complete.md).
-  The remaining 234 original records are noncash; overall identity/lifecycle
-  and option-deliverable coverage keep 6-1 open.
+  At that checkpoint, the remaining 234 original records were noncash; the
+  later 6-1 closure resolves them with explicit boundary exclusions.
 September 17 progress: [reviewed source routing](docs/reviews/2026-09-17-v7-6-1-source-routing.md)
 and [authorized ordinary-action reconstruction](docs/reviews/2026-09-17-v7-ordinary-action-admission.md),
 followed by [exact-date share-class resolution](docs/reviews/2026-09-17-v7-share-class-identities.md).
@@ -55,7 +55,8 @@ years and 55 excluded cash events still require treatment.
 bring the action set to 4,491 and admitted history to 586,840 sessions, with all
 ten real feature boundaries checked and a funded TSLA split/mark case. The stock
 ledger now carries split quantities into later dividends. Unresolved identity/action cases and complete
-held-position treatment still keep 6-1 open.
+held-position treatment still kept 6-1 open at that historical checkpoint;
+the September 18 closure supersedes it.
 The [cash/calendar continuation](docs/reviews/2026-09-17-v7-cash-calendar-closure.md)
 resolves 36 FCX/SLB cash groups and their funded-stock entitlements under the
 user-approved finite extension. Current totals are **4,527 price actions,
@@ -66,12 +67,14 @@ The exact remaining dividend census is **492 items: 437 uncompiled cash groups
 plus 55 compiled events awaiting date treatment**. The extension is authorized
 for the original remaining 528 groups as each passes review; do not request
 another per-issuer cash-model approval. Identity, other complex actions and
-full held-position treatment still prevent advancement to 6-2.
+full held-position treatment still prevented advancement to 6-2 at that
+historical checkpoint; the explicit exclusion policy now permits 6-2.
 September 18 [recovery and cash-date continuation](docs/reviews/2026-09-18-v7-cash-date-recovery.md)
 recovers eight interrupted date fixes and adds 40 reviewed cases. Current cash
 entitlements are **4,421**; **444 dividend items remain: 437 uncompiled groups
 plus seven date cases**. All price actions and history coverage are unchanged.
-The full suite passes 2,246 tests plus 18 subtests. Item 6-1 remains open.
+The full suite passes 2,246 tests plus 18 subtests. Item 6-1 remained open at
+that historical checkpoint and is now closed by the September 18 review.
 September 18 primary-term continuation: **4,744 cash payment leaves**; **154 dividend review items remain (147 groups plus seven dates)**. Multi-payment distributions adjust price once and release each payment separately. All 289 new price boundaries and the 10,428-record partition reconcile; full suite passes 2,271 tests plus 18 subtests. Dividend work remains active.
 The user selected this sequence on September 17 after reviewing the
 [three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md#6-consolidated-remaining-todos-before-the-goal-is-finished).
@@ -124,7 +127,7 @@ The previous overlapping checklist is preserved verbatim in
 Its old open/checkmarked entries are historical; they are not another active V7
 queue. Deferred work is not deleted and must not delay this seven-item sequence.
 
-September 18 final dividend checkpoint: **4,918 payment leaves across all 4,854 compiled cash events; zero remaining dividend cases.** Rebuilt canonical coverage admits 587,284 of 667,239 history rows. The modeled FX rule was explicitly approved and implemented. One ETHE precision reconciliation is clearly provider sourced. The dividend subtask is complete; item 6-1 remains open for noncash and full lifecycle treatment.
+September 18 final dividend checkpoint: **4,918 payment leaves across all 4,854 compiled cash events; zero remaining dividend cases.** Rebuilt canonical coverage admits 587,284 of 667,239 history rows. The modeled FX rule was explicitly approved and implemented. One ETHE precision reconciliation is clearly provider sourced. The dividend subtask is complete; the subsequent noncash admission review closes 6-1.
 
 September 18 6-1 closure: all 234 remaining noncash records now have one
 source-bound `explicit_boundary_exclusion` treatment. The resulting panel

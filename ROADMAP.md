@@ -65,9 +65,10 @@ no-event or held-position requirements.
 
 The [September 18 recovery](docs/reviews/2026-09-18-v7-cash-date-recovery.md)
 resolves 48 of those 55 cash-date cases and verifies all 4,421 entitlements.
-Remaining dividend review: 437 uncompiled groups plus seven date cases (444).
+At that historical checkpoint, remaining dividend review was 437 uncompiled groups plus seven date cases (444); the final dividend census supersedes it.
 The finite January 2025 closed-record-date exception is source-bound; full
-identity/action and held-lifecycle requirements still keep item 6-1 open.
+identity/action and held-lifecycle requirements still kept item 6-1 open at that
+historical checkpoint; the explicit noncash boundary closure now supersedes it.
 
 Use report sections 2–4 as the September 15–17 evidence index instead of repeating
 all completed checkboxes here. They record base stock/options acquisition;
