@@ -23,7 +23,7 @@ def validate_coverage_policy(policy):
     return identity(policy)
 
 
-def coverage_panel(history, candidates, events, unresolved, *, policy=None, other_instruments=()):
+def coverage_panel(history, candidates, events, unresolved, *, policy=None, other_instruments=(), renames=()):
     """Reconcile every original record before classifying every history row.
 
     Undated records block every date routed through an involved symbol. Dated
@@ -72,6 +72,21 @@ def coverage_panel(history, candidates, events, unresolved, *, policy=None, othe
                     or reference['record_sha256'] != originals[rkey]['record_sha256']):
                 raise ValueError('Unrelated-instrument source partition differs')
             consumed.add(rkey)
+    from nn_meta.v7.renames import require_rename_history
+    identity_days = {}
+    for event in renames:
+        require_rename_history(event, history)
+        key = event['security_id'], event['effective_date']
+        if key in identity_days or len(event.get('replaces', [])) != 1:
+            raise ValueError('Unique original name-change treatment required')
+        ref = event['replaces'][0]; rkey = record_key(ref)
+        original = originals.get(rkey)
+        if (rkey in consumed or original is None or rkey[:2] != ('alpaca', 'name_changes')
+                or ref['record_sha256'] != original['record_sha256']
+                or original['record']['old_symbol'] != event['old_symbol']
+                or original['record']['new_symbol'] != event['new_symbol']):
+            raise ValueError('Rename original-record partition differs')
+        consumed.add(rkey); identity_days[key] = event['event_id']
     pending, dated, undated = set(), defaultdict(set), defaultdict(set)
     for row in unresolved:
         key = record_key(row)
@@ -105,6 +120,7 @@ def coverage_panel(history, candidates, events, unresolved, *, policy=None, othe
             status = 'compiled_event_with_assumed_coverage' if event else 'assumed_no_event'
         rows.append(dict(security_id=row.security_id, source_date=row.source_date,
             stock_ticker=row.stock_ticker, coverage_status=status, event_id=event,
+            identity_event_id=identity_days.get((row.security_id, row.source_date)),
             unresolved_record_ids=blocked, history_admitted=admitted,
             coverage_policy_identity=policy_id, completeness_verified=False,
             held_position_admitted=False))

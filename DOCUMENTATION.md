@@ -1044,6 +1044,16 @@ Pass `--raw-supplement` to the proposal builder when needed; its raw receipt mus
 already be bound through a selected daily declaration. Ambiguous overlapping raw
 captures cannot silently replace the original data.
 
+Finite unchanged-common-share ticker reviews use `review_v7_renames.py` and
+`V7_COMMON_SHARE_RENAMES_20260917.json`. Supply `--renames` to the coverage auditor;
+it retains identity-event IDs separately from price events and reconciles every
+original record. A reviewed rename never clears other unresolved records.
+`PhysicalLedger.apply_stock_rename` requires the exact effective clock and updates
+stock symbols without changing cash, quantity or settlement; pass reviewed events
+as `physical.renames` for chronological portfolio scheduling. Open option or
+merger phases reject stock-only notices before any mutation. Primary dates,
+adjacent original identity witnesses and source receipts remain mandatory.
+
 Daily listed identity capture restricts primary exchanges to ARCX/BATS/XASE/XNAS/
 XNYS and validates every response. These are metadata requests, not stock-price
 requests or publication-safe fundamentals. `--max-shards` bounds one invocation

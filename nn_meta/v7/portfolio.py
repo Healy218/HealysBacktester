@@ -55,6 +55,12 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
         event(clock, 1, 'mark', None)
     for clock, batch in batches.items():
         event(clock, 2, 'decide', sorted(batch, key=lambda p: (-p['score'], p['proposal_id'])))
+    if physical is not None:
+        from nn_meta.v7.renames import validate_rename
+        for rename in getattr(physical, 'renames', ()):
+            validate_rename(rename)
+            if clocks[0] <= rename['effective_ns'] <= clocks[-1]:
+                event(rename['effective_ns'], -1, 'stock_rename', rename)
     active, reservations, decisions, marks = {}, {}, [], []
     completed, capture_complete = set(), True
 
@@ -74,7 +80,12 @@ def portfolio_replay(candidates, clocks, archive, *, capital=100000., slots=5, f
         clock, _, _, kind, payload = heapq.heappop(queue)
         if clock > clocks[-1]:
             break
-        if kind == 'mark':
+        if kind == 'stock_rename':
+            affected = ledger.apply_stock_rename(payload, clock)
+            for key in affected:
+                if key in active:
+                    active[key]['symbol'] = payload['new_symbol']
+        elif kind == 'mark':
             if physical is not None:
                 ledger.settle(clock)
                 for key in list(active):

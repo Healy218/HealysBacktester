@@ -32,6 +32,9 @@ The subsequent [coverage and targeted-repair work](docs/reviews/2026-09-17-v7-ac
 implements the user-approved no-event completeness assumption, separates 45
 unrelated ticker-reuse groups and admits another 48 cash events after named
 GAP and process-date-tail captures. Current compiled total: 4,481 events.
+[Seven finite rename reviews](docs/reviews/2026-09-17-v7-common-share-renames.md)
+then clear 5,644 more history sessions and add effective-time stock-symbol
+treatment, while retaining separate option-deliverable gates.
 This advances action compilation; it does not close identity, complex-action,
 no-event or held-position requirements.
 

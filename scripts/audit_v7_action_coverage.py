@@ -20,6 +20,7 @@ def main():
         parser.add_argument('--' + name, type=Path, required=True)
     parser.add_argument('--policy', type=Path)
     parser.add_argument('--other-instruments', type=Path)
+    parser.add_argument('--renames', type=Path)
     args = parser.parse_args()
     if (not args.output.resolve().is_relative_to(ROOT / 'nn_meta')
             or shutil.disk_usage(ROOT).free < 100 * 1024**3):
@@ -51,15 +52,23 @@ def main():
         merge(json.loads((args.other_instruments / 'inputs.json').read_text()))
         other = json.loads((args.other_instruments / 'treatments.json').read_text())
         pending = json.loads((args.other_instruments / 'unresolved.json').read_text())
+    renames = []
+    if args.renames:
+        doc = verify(args.renames)
+        merge({str(args.renames / 'complete.json'): sha(args.renames / 'complete.json')})
+        merge({str(args.renames / n): h for n, h in doc['files'].items()})
+        merge(json.loads((args.renames / 'inputs.json').read_text()))
+        renames = json.loads((args.renames / 'events.json').read_text())
+        pending = json.loads((args.renames / 'unresolved.json').read_text())
     for path in [Path(__file__), *[ROOT / 'nn_meta/v7' / (n + '.py') for n in
-            ('action_coverage', 'cash_actions', 'ordinary_actions', 'causal_prices', 'storage', 'runtime')]]:
+            ('action_coverage', 'renames', 'cash_actions', 'ordinary_actions', 'causal_prices', 'storage', 'runtime')]]:
         merge({str(path): sha(path)})
     if any(sha(p) != h for p, h in inputs.items()):
         raise ValueError('Action coverage source changed')
     panel = coverage_panel(pd.read_parquet(args.history / 'history.parquet'),
         json.loads((args.inventory / 'candidates.json').read_text()),
         json.loads((args.actions / 'actions.json').read_text()),
-        pending, policy=policy, other_instruments=other)
+        pending, policy=policy, other_instruments=other, renames=renames)
     report = dict(schema='v7-action-coverage-audit-v1', rows=len(panel),
         securities=panel.security_id.nunique(), sessions=panel.source_date.nunique(),
         statuses=panel.coverage_status.value_counts().to_dict(),

@@ -42,4 +42,6 @@ def bind_history_coverage(path, history, events, *, security_id, inputs):
     return dict(schema='v7-consumed-action-coverage-v1', receipt_sha256=sha(path / 'complete.json'),
         policy_identity=policy_id, basis=policy['proposed_basis'], start=required[0], end=required[-1],
         sessions=len(required), security_id=security_id, completeness_verified=False,
-        historical_publication_verified=False, held_position_admitted=False)
+        historical_publication_verified=False, held_position_admitted=False,
+        identity_event_ids=sorted(selected.identity_event_id.dropna().tolist())
+            if 'identity_event_id' in selected else [])

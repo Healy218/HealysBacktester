@@ -1,0 +1,174 @@
+{
+  "schema": "v7-finite-common-share-rename-reviews-v1",
+  "publication_clock_convention": "For a date-only notice, use midnight after the stated publication day in New York, never an invented exact publication time. All precede their effective opens.",
+  "reviews": [
+    {
+      "conclusion": "unchanged_common_shares_ticker_change",
+      "effective_date": "2022-06-09",
+      "security_id": "BBG000MM2P62",
+      "share_class_figi": "BBG001SQCQC5",
+      "prior_listing_sha256": "b267e3568263ca4af21d21915c516fd114fffd9680f439c1df0037ba7b873dcb",
+      "effective_listing_sha256": "3a9e7784010d4af44dd58fb6c874362c9c228fdc0a6055afc51faf559bff2310",
+      "record": {
+        "provider": "alpaca",
+        "kind": "name_changes",
+        "action_id": "ed6f16b1-fc46-443e-8dba-898ed9007a7a",
+        "record_sha256": "62c8561c83983746cd232dcccbc0b53f735f36ee41672fd7c5759656471656d4"
+      },
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/rename-notices-20260917/meta-20220531-ticker",
+          "receipt_sha256": "5a2c4b4bb1c1cf4ae82f4b67a5407558064359eccf919bb7f68a6736403ebd99",
+          "payload_sha256": "9c6ae4f206c995f1435e004d09d251feefedb8dbff95c845efb63b95eab8dc1d",
+          "publication_available_at": "2022-06-01T04:00:00Z",
+          "review": "Issuer notice dates the June 9 opening-symbol change; common shares and CUSIP remain unchanged."
+        }
+      ]
+    },
+    {
+      "conclusion": "unchanged_common_shares_ticker_change",
+      "effective_date": "2023-06-07",
+      "security_id": "BBG000BJKPG0",
+      "share_class_figi": "BBG001S5R6Q4",
+      "prior_listing_sha256": "2d87c6a7616b162b92ced1d624c477583f8ba7d923689f06eaec7f00ae0c0b38",
+      "effective_listing_sha256": "bb885f3fd81a45b0ec9c34a4053ecc7ad136fdf2b5d05d861484e8516a1eacff",
+      "record": {
+        "provider": "alpaca",
+        "kind": "name_changes",
+        "action_id": "45fd1861-939b-4e87-9dba-f82c214e2d31",
+        "record_sha256": "b44d464b3bec8c9ee8839edd7a6590e1714386bb5b3b071d360720c87c7a5480"
+      },
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/public-actions-20260916/fiserv-20230525-nasdaq-release",
+          "receipt_sha256": "33dba9b7428c9f66c594f98d01b1adccaec6835ed6aa104945043541b3a48314",
+          "payload_sha256": "9339c898706c6a1e07cdfbf7e3aff755793671194e9ac246bd630c4fda4c91c4",
+          "publication_available_at": "2023-05-25T13:25:00Z",
+          "review": "Displayed publication May 25, 2023, 9:25am EDT; announced expected June 7 NYSE trading under FI."
+        },
+        {
+          "capture": "nn_meta/data_v7/public-actions-20260916/fiserv-20230607-nasdaq-release",
+          "receipt_sha256": "8f90eb1dfe783000709d54f9cc11cd9f02b0ee0c5725f110883f6c2612043f87",
+          "payload_sha256": "344b64ef628afbeb088ddd0f10e6dcf2853dbb273ddd8d37931254a800f6f702",
+          "publication_available_at": "2023-06-07T11:28:00Z",
+          "review": "Displayed publication Jun 7, 2023, 7:28am EDT; NYSE announcement confirms completed transfer and trading that day as FI."
+        }
+      ]
+    },
+    {
+      "conclusion": "unchanged_common_shares_ticker_change",
+      "effective_date": "2025-11-11",
+      "security_id": "BBG000BJKPG0",
+      "share_class_figi": "BBG001S5R6Q4",
+      "prior_listing_sha256": "3f3b7b0b90188d3dc571992a8e5e26d0000fd86a443751389cd6b4e067a293bc",
+      "effective_listing_sha256": "325e18c4d0ca991168a095b175e3d6170ae1d245d23ad95e953385a5c6fc6be5",
+      "record": {
+        "provider": "alpaca",
+        "kind": "name_changes",
+        "action_id": "d97e780d-a698-46f5-8089-8c3fbe83d343",
+        "record_sha256": "1609f35dbb4e363d26090f1ee8738fba852918d493aa70d734bad747173642cf"
+      },
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/rename-notices-20260917/fiserv-20251103-nasdaq-ticker",
+          "receipt_sha256": "5ac48e261f9351a1f0fc171c53f9cb9dabfa5596b9347996fc931248bb37b2f5",
+          "payload_sha256": "19aa3789b1d9ad4cfd0bcb76e5ffa45a05840f6c3cee4b5e6d9374e00e311fa4",
+          "publication_available_at": "2025-11-04T05:00:00Z",
+          "review": "Nasdaq notice published November 3 dates the listing transfer and FISV start to November 11. Original provider CUSIP and adjacent captured share class agree."
+        }
+      ]
+    },
+    {
+      "conclusion": "unchanged_common_shares_ticker_change",
+      "effective_date": "2024-08-22",
+      "security_id": "BBG000BKLH74",
+      "share_class_figi": "BBG001S5RNN0",
+      "prior_listing_sha256": "c69db58ea900a9c782eddcb316cb2771345000065d0d35cb04089a1cee8f9a03",
+      "effective_listing_sha256": "164dfe3d019337ebe7fffdae8e51ffc2d60cafdd95fc8744995d08878a97de7c",
+      "record": {
+        "provider": "alpaca",
+        "kind": "name_changes",
+        "action_id": "1ffe33e0-0c8e-4608-8ba7-e772f0f4a6be",
+        "record_sha256": "373744b0ef669898fe0e143c2740948ce66fb13632b3e1ee16b2feab195741e1"
+      },
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/rename-notices-20260917/gap-20240808-ticker",
+          "receipt_sha256": "c7c2d8a492eeeb270805da8a56fc8cb6e5d9f8dcc80a659034f455e2bc17918a",
+          "payload_sha256": "5bd5010b6ba2a17b2c5868afdb25dc9d94c2ac3319e712c42159f9a2acee9202",
+          "publication_available_at": "2024-08-09T04:00:00Z",
+          "review": "Issuer August 8 notice dates the common-share ticker change to August 22; no shareholder action and unchanged CUSIP."
+        }
+      ]
+    },
+    {
+      "conclusion": "unchanged_common_shares_ticker_change",
+      "effective_date": "2025-01-21",
+      "security_id": "BBG0018SLC07",
+      "share_class_figi": "BBG001TFLWL5",
+      "prior_listing_sha256": "f07cfc2425f56210fa437c7a464274ada8187052881e8815fb893b9b8f9f3f54",
+      "effective_listing_sha256": "3633952aeac93180529fab45e3c62cf31a408165d558f78b1af7792d6f45382b",
+      "record": {
+        "provider": "alpaca",
+        "kind": "name_changes",
+        "action_id": "959d6941-3cb9-4b2d-a282-543a0a3f05d1",
+        "record_sha256": "52e295e3e982cf435ad5ae658491511dc671a331950d54ebe905f7dee85960d1"
+      },
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/rename-notices-20260917/block-20250109-ticker",
+          "receipt_sha256": "5e7718c538a0279b19d364fc200b6e6eff7e6d3b62fffbf70ee986f0c3ae7e13",
+          "payload_sha256": "26acd52666cad458da7efdc84d6a1480856ec4849a7120c4b714fabfa128fc67",
+          "publication_available_at": "2025-01-10T05:00:00Z",
+          "review": "Issuer January 9 notice dates the NYSE common-share ticker change to January 21, with no shareholder action and unchanged CUSIP. Australian listing date is a separate market."
+        }
+      ]
+    },
+    {
+      "conclusion": "unchanged_common_shares_ticker_change",
+      "effective_date": "2025-05-09",
+      "security_id": "BBG000BB07P9",
+      "share_class_figi": "BBG001S5N9P3",
+      "prior_listing_sha256": "3d1422241f0e14f0298f4db99a79c4569432d449ee1a241b2127cfbe98920377",
+      "effective_listing_sha256": "05d4ae10435ad74651f6cc54b30611413a3247903eccad995fb4c70e9ddadb2f",
+      "record": {
+        "provider": "alpaca",
+        "kind": "name_changes",
+        "action_id": "7297ca5d-6549-4af0-b053-0c61701de472",
+        "record_sha256": "3e475976d8b4da10eaf3795ae0eb7fade52db24fbc05f5d90e8866f3888b91cd"
+      },
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/rename-notices-20260917/barrick-20250506-ticker",
+          "receipt_sha256": "dea34d4adb09238bfc3b6837b7cf0cb22630fc4903e7a61fe7ca3535ce0004bc",
+          "payload_sha256": "fe0bd271910415ba765f879e117a10afed677b0cab905a15ded0d59a02611eec",
+          "publication_available_at": "2025-05-07T04:00:00Z",
+          "review": "Issuer May 6 notice dates the NYSE common-share name/ticker change and new CUSIP to the May 9 trading open. Adjacent captured composite and share-class identities remain identical."
+        }
+      ]
+    },
+    {
+      "conclusion": "unchanged_common_shares_ticker_change",
+      "effective_date": "2026-06-24",
+      "security_id": "BBG000TGLV00",
+      "share_class_figi": "BBG001T048Z5",
+      "prior_listing_sha256": "0564eb72fc53e34b70ea98d77244e8ebf42d4d551fa66c1671eb27bd44dbcf2f",
+      "effective_listing_sha256": "4db34542128135854de3b90e68bb6783a5f09c507553bf25507b388691526e8f",
+      "record": {
+        "provider": "alpaca",
+        "kind": "name_changes",
+        "action_id": "e434836c-344d-4e24-a40c-bc24987c0d73",
+        "record_sha256": "a59755501dfd92f1d71408b44c39ea59f31dd129cd60ad33e90a4442b431f069"
+      },
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/rename-notices-20260917/echostar-20260622-nasdaq-ticker",
+          "receipt_sha256": "0244e9512353634023308de4c6068f90a7283cfce8d45d9b68d88496feb2d23b",
+          "payload_sha256": "8354e4d716b584f7bdafba89e691bb0163ac05f8ce6355958502275ed7c5cdb2",
+          "publication_available_at": "2026-06-23T04:00:00Z",
+          "review": "Issuer June 22 release distributed by Nasdaq dates the common-share ticker change to June 24; shareholders need take no action. Same provider CUSIP and adjacent common-share identity corroborate unchanged shares."
+        }
+      ]
+    }
+  ]
+}

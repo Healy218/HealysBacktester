@@ -1,0 +1,10 @@
+{
+  "schema": "v7-named-missing-inputs-v1",
+  "purpose": "Resolve seven undated Alpaca name-change records with primary effective dates, unchanged-share terms and existing exact-day listing identity; seven records include both Fiserv transitions, whose 2023 notice is already retained.",
+  "request_file": "docs/specs/V7_RENAME_EVIDENCE_REQUESTS_20260917.json",
+  "max_documents": 8,
+  "scope_change": false,
+  "research_ready": false,
+  "fallback_request_file": "docs/specs/V7_RENAME_FISERV_FALLBACK_20260917.json",
+  "fallback_reason": "Issuer Fiserv and GlobeNewswire EchoStar endpoints timed out; exchange-hosted notices address the same two records."
+}

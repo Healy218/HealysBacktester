@@ -1,4 +1,4 @@
-# Handoff — V7 item 6-1: authorized no-event coverage consumed
+# Handoff — V7 item 6-1: seven common-share rename records consumed
 
 ## Instruction and settled decisions
 
@@ -22,44 +22,42 @@ entitlements/payment clocks or option deliverables.
 
 ## Completed milestone
 
-The production proposal builder now requires source-bound action coverage,
-checks exact required dates/tickers/events and preserves both assumptions in
-feature declarations. Undated pending records conservatively block affected
-histories; dated pending records block applicable dates through known aliases.
-Every original provider record must have exactly one treatment.
+Seven finite undated name-change records now have primary-notice effective dates
+and exact adjacent composite/share-class identities: FB→META, FISV→FI, FI→FISV,
+GPS→GAP, SQ→XYZ, GOLD→B and SATS→ECHO. These six securities retain their common
+shares; no new chart factor, cash entitlement or successor identity is created.
+Date-only notices use a conservative next-midnight New York publication bound.
 
-Finite exact-date reviews distinguish 45 cash groups /90 original records for
-unrelated B, FB, FIG, GOLD and SPCX ticker reuses. These are relevance treatments,
-not new universe exclusions or inferred successors.
+Coverage consumes these seven records separately from price actions and retains
+identity-event IDs in actual feature declarations. Admission increases by 5,644
+to **584,804 history sessions** (580,427 no-price-event /4,377 price-event).
+Action-blocked sessions fall to 29,803; identity-blocked remain 52,632. The other
+660,465 rows outside these six securities have unchanged coverage fields.
 
-Two named acquisitions repaired missing inputs: GAP raw 2025–2026 observations
-and a 45-ticker Alpaca process-date tail for already effective cash events.
-The latter queries scheduled process/payment dates through December 29 without
-changing the September 14 effective-date scope. It adds 48 in-scope original
-records; revised existing IDs are rejected.
+Current original partition: **10,428 =8,964 compiled cash/split +90 unrelated
+cash +7 reviewed rename +1,367 pending**. The 4,481 cash/split events, raw prices,
+membership and selected identities remain unchanged. The previous GAP repair,
+48 additional cash events and no-event policy implementation remain intact.
 
-Current action total: **4,481 events** =4,462 reconstructed (4,373 cash /89
-splits) +19 publication-reviewed events, including 18 SPY distributions. All
-prior 4,433 complete event objects remain unchanged. Original-record partition:
-**10,428 =8,964 compiled +90 unrelated +1,374 pending**.
+Six captured two-session feature boundaries pass the actual proposal loader and
+saved 15-minute feature path: META/FI/FISV/GAP/XYZ/ECHO. Barrick correctly remains
+blocked by a separate AMRK→GOLD ticker-reuse record. Resolving one record does
+not silently clear another. These bounded stores are not full feature production.
 
-The full history retains 667,239 rows /591 securities /1,129 sessions /598 spans.
-425 GAP sessions are restored; the other 666,814 rows remain unchanged.
-Observed rows: 614,564; listed zero-observation rows: 43; no selected source:
-52,632. Eligible identity mismatches remain 162. Coverage admits **579,160**
-history sessions: 574,811 assumed no-event and 4,349 compiled-event sessions.
-35,447 sessions remain blocked by actions; 52,632 by identity. All held-position
-admission remains false.
+The physical ledger has an exact-clock stock rename handler and portfolio event
+scheduling before same-clock marks. It preserves cash, quantities, settlement
+commitments, cost and security identity. Funded synthetic tests cover inventory,
+exercised-call delivery, liquidation and rejected option handling. **No actual
+held market replay or option-deliverable admission is claimed.** Open options or
+merger phases reject stock-only notices before mutation.
 
-Independent verification passes all 4,481 numerical and unchanged-prefix checks
-(maximum absolute return error 1.24e-15), and the actual SPY proposal-input and
-saved feature path retains both assumptions. Full suite: **2,070 tests +18
-subtests passed**, 19 warnings, 128.77 seconds. A full-grid comparison caught
-one old routing candidate count being lost in supplementation; the repaired
-`-r2` outputs preserve it and have a regression test. Earlier outputs remain
-superseded, not relabeled.
+Focused regression: **59 tests passed**. Full suite: **2,093 tests +18 subtests
+passed**, 19 warnings, 168.78 seconds. All launched builds/checks completed.
+Six new primary notices were captured; earlier Fiserv notices reused. Two timed
+out endpoints have retained exchange-hosted fallbacks. V6 was not changed.
 
-[Detailed evidence and limitations](docs/reviews/2026-09-17-v7-action-coverage.md).
+[Full rename evidence](docs/reviews/2026-09-17-v7-common-share-renames.md) and
+[preceding no-event/repair evidence](docs/reviews/2026-09-17-v7-action-coverage.md).
 
 ## Current immutable artifacts
 
@@ -67,22 +65,28 @@ Under `nn_meta/validation/`:
 
 - History: `v7-security-history-20260917-gap-r2`.
 - Inventory: `v7-action-inventory-20260917-tail`.
-- Actions: `v7-ordinary-actions-20260917-tail-gap-r2`.
-- Unrelated records: `v7-other-instrument-actions-20260917-tail-gap-r2`.
-- Coverage: `v7-action-coverage-20260917-tail-gap-r2`.
-- Verification: `v7-coverage-consumers-20260917`,
+- Price actions: `v7-ordinary-actions-20260917-tail-gap-r2`.
+- Unrelated cash: `v7-other-instrument-actions-20260917-tail-gap-r2`.
+- **Renames:** `v7-common-share-renames-20260917`.
+- **Coverage:** `v7-action-coverage-20260917-renames`.
+- New verification: `v7-rename-consumers-20260917`, six `v7-rename-feature-check-*`
+  stores and `v7-rename-tests-20260917`.
+- Prior verification: `v7-coverage-consumers-20260917`,
   `v7-coverage-feature-check-20260917-SPY`, `v7-coverage-tests-20260917`.
 - Supplemental daily inputs: `v7-gap-daily-20260917/{2025,2026}`.
 
-Under `nn_meta/data_v7/`: `gap-history-repair-20260917`,
-`action-process-tail-20260917`, original `daily-identities-20260916` and
-`start-20220315`. Earlier source routing, share-class, reviewed cash and lifecycle
-artifacts remain unchanged. See the archived handoff for their full index.
+Under `nn_meta/data_v7/`: `rename-notices-20260917`,
+`gap-history-repair-20260917`, `action-process-tail-20260917`, original
+`daily-identities-20260916` and `start-20220315`. Earlier primary, identity,
+source-routing and lifecycle artifacts remain unchanged.
 
-Use `ordinary_actions.price_action` for envelopes; direct PriceAction loading
-loses reconstruction fields. Pass `--action-coverage` to the production proposal
-builder; supplementary raw roots must already be bound by selected daily inputs.
-Producer source changes require new immutable artifacts, not receipt rewriting.
+Use `ordinary_actions.price_action` for action envelopes. Use `--renames` when
+rebuilding coverage, and `--action-coverage` in the production proposal builder.
+Saved feature declarations retain consumed identity-event IDs. Supplementary raw
+roots must be bound through selected daily inputs. Changed producers require
+fresh immutable artifacts; earlier coverage outputs remain historical.
+The stock portfolio handler accepts reviewed events through `physical.renames`;
+this does not infer option symbol/deliverable changes.
 
 ## Exact remaining 6-1 work
 
@@ -94,10 +98,10 @@ Producer source changes require new immutable artifacts, not receipt rewriting.
    57 combined-event, 44 mismatches and 22 matching identity/adjacent-continuity
    cases after unrelated ticker groups are separated. Missing currency/ADR units
    are not admitted just because numerical rates happen to match.
-3. Resolve **213 complex records**, including 47 undated name-change records.
+3. Resolve **206 complex records**, including 40 undated name-change records.
    Pure ticker changes need dated identity plus primary-notice review; process
-   dates alone are not effective dates. These undated records block many known
-   sessions, including restored GAP history. Actual mergers/spinoffs must retain
+   dates alone are not effective dates. GAP's pure rename is now resolved;
+   Barrick still needs a separate unrelated AMRK→GOLD treatment. Actual mergers/spinoffs must retain
    executable successor/entitlement treatment rather than a chart-only factor.
 4. Consume treatments in actual feature and held-position paths, including cash
    entitlements, payment/settlement, splits, lifecycle and option deliverables.
@@ -113,7 +117,7 @@ ITM expiry exit 15 minutes before regular option close, funded physical fallback
 and shared-capital limits. Active contract:
 `docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json`.
 At most four outer workers /one inner thread; 100 GiB reserve; 250 GB cap.
-Current shared quota: 63,056,260,023 bytes, zero reservations. Recheck before
+Current shared quota: 63,056,786,455 bytes, zero reservations. Recheck before
 acquiring another named necessary input; no broad collection campaign.
 
 No full V7 dataset or trained model exists. Saved readiness remains
@@ -121,4 +125,4 @@ No full V7 dataset or trained model exists. Saved readiness remains
 substantive stages unpassed. Preserve uncommitted assembly modules and unrelated
 V6 edits. This milestone makes no deployment or training launch.
 
-Previous handoff: `handoff-history/HANDOFF-2026-09-17-before-no-event-coverage.md`.
+Previous handoff: `handoff-history/HANDOFF-2026-09-17-before-common-share-renames.md`.

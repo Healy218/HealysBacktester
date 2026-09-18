@@ -33,7 +33,10 @@ repairs bring the rebuilt action set to 4,481 events, including all 18 SPY
 distributions. The user also accepted the explicit no-event reconstruction
 assumption; [coverage and targeted repairs](docs/reviews/2026-09-17-v7-action-coverage.md)
 record its consumer integration. The full coverage grid admits 579,160 history
-sessions under the recorded assumptions; unresolved identity/action cases and
+sessions under the recorded assumptions. Subsequent
+[finite common-share rename reviews](docs/reviews/2026-09-17-v7-common-share-renames.md)
+clear another 5,644 sessions (584,804 total), with six real feature-boundary checks
+and a stock rename ledger handler. Unresolved identity/action cases and complete
 held-position treatment still keep 6-1 open.
 The user selected this sequence on September 17 after reviewing the
 [three-day report](docs/reviews/2026-09-17-three-day-goals-and-progress.md#6-consolidated-remaining-todos-before-the-goal-is-finished).

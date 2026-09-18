@@ -80,6 +80,37 @@ class PhysicalLedger(CashLedger):
         self.entry_reservations = {}
         self.shares = {}  # Settled stock only, acquired with this ledger's cash.
         self.completed = {}
+        self.applied_stock_renames = set()
+
+    def apply_stock_rename(self, event, clock):
+        """Apply a reviewed unchanged-share ticker transition at its exact clock.
+
+        Unexpired option symbols/deliverables need their own OCC evidence. Reject
+        those before any mutation; stock-only transitions preserve all funding,
+        quantities, settlement dates, cost basis and security IDs.
+        """
+        from nn_meta.v7.renames import validate_rename
+        validate_rename(event)
+        if (type(clock) is not int or clock != event['effective_ns']
+                or clock < self.last_clock or event['event_id'] in self.applied_stock_renames):
+            raise ValueError('Unique chronological rename at the exact effective clock required')
+        sid, old, new = event['security_id'], event['old_symbol'], event['new_symbol']
+        affected = [key for key, p in self.positions.items()
+                    if p['security_id'] == sid and p['symbol'] == old]
+        if any(self.positions[k]['phase'] not in ('stock', 'delivery_pending',
+                'inventory_purchase_pending', 'stock_sale_pending') for k in affected):
+            raise ValueError('Open option or merger position needs separate corporate-action evidence')
+        quantity = self.shares.get((old, sid), 0.)
+        self._event(event['event_id'], clock, 'stock_ticker_change', security_id=sid,
+            old_symbol=old, new_symbol=new, review_identity=event['review_identity'],
+            evidence_identity=event['evidence_identity'], available_ns=event['available_ns'],
+            inventory_shares=quantity, position_keys=affected)
+        for key in affected:
+            self.positions[key]['symbol'] = new
+        if (old, sid) in self.shares:
+            self.shares[(new, sid)] = self.shares.get((new, sid), 0.) + self.shares.pop((old, sid))
+        self.applied_stock_renames.add(event['event_id'])
+        return affected
 
     @property
     def available_cash(self):

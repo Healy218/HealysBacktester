@@ -1255,3 +1255,19 @@ to unrelated reused-ticker instruments, established by exact captured identities
 and distinct share classes. Keep their 90 source records as explicit
 `reviewed_unrelated_instrument` treatments. This is record relevance, not a new
 study exclusion or a shortcut for an actual corporate successor.
+
+## 2026-09-17 — finite unchanged-common-share ticker treatments
+
+Seven name-change records in `V7_COMMON_SHARE_RENAMES_20260917.json` have primary
+notices and exact adjacent composite/share-class identities. Treat these as
+unchanged common shares with an effective-time ticker transition, separately
+from chart factors and cash entitlements. This is finite evidence review under
+the existing policy, not a broader assumption about all renames or CUSIPs.
+Barrick's changed CUSIP is retained; no different share class is merged.
+
+Date-only notices use a conservative next-midnight New York availability bound.
+The stock ledger can consume reviewed transitions without changing funding,
+quantities or settlements. An open option or merger phase still needs its own
+corporate-action evidence. Other unresolved records remain blocking, including
+Barrick's separate AMRK-to-GOLD ticker reuse. See the
+[rename evidence review](reviews/2026-09-17-v7-common-share-renames.md).
