@@ -1,0 +1,925 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "DPST",
+      "ex_date": "2023-03-21",
+      "security_id": "BBG009T0QND5",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.03638",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "income_distribution",
+          "record_date": "2023-03-22",
+          "pay_date": "2023-03-28",
+          "cash_per_share": "0.03638",
+          "terms_evidence_identity": "d5b6b5639dbb480828ce7ff70ac7193169a63736d88d4e16ef87519c0a84539d",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "59101414-b63e-4dde-a709-7f653834830d",
+          "record_sha256": "00005160e742c95bee38eb22b8418f79281dfee2da9381592af66b0375384990"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "cc41b0fe-6cc6-4810-ada9-247330b5ccd1",
+          "record_sha256": "09ba684d173d119e52fc7dcf830b719c5fc3b11344ad9a448e81be17367a25a8"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea0666f4585a283192b3af2e7573a103879231ed4d0f1ec2c1914bc254f868a11",
+          "record_sha256": "c438b9a73a2deffbb385bb3d02e98253c2f511b2135d66b522f91c957af3366f"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/direxion-tmf",
+          "receipt_sha256": "6f389cb7cc0b93a8acdb1397cc3ab56e371aa3b5062c6488caf6f425d82b7ef3",
+          "payload_sha256": "69f1e2bcaedc4c9037abeb437c5ca9d5589b80d1eb8f0bdfd4dc7b707a88d5ff",
+          "source_terms": {
+            "symbol": "DPST",
+            "ex": "2023-03-21",
+            "record": "2023-03-22",
+            "pay": "2023-03-28",
+            "amounts": [
+              "0.03638"
+            ],
+            "names": [
+              "income_distribution"
+            ],
+            "capture": "direxion-tmf",
+            "date_basis": "primary_stated_dates",
+            "source_row": {
+              "IncomeDividend": 0.03638,
+              "IncomeDividendConvertibleToReturnOfCapital": false,
+              "LongTermCapitalGain": null,
+              "ExDate": "03212023",
+              "PayDate": "03282023",
+              "RecordDate": "03222023",
+              "ReturnOfCapital": null,
+              "ShortTermCapitalGain": null,
+              "__typename": "Distribution"
+            }
+          }
+        }
+      ],
+      "evidence_identity": "22bd623124fd3eb2d2965f04a863084319d9528c4f68e450fba0017123bb72a5",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "LABU",
+      "ex_date": "2023-06-21",
+      "security_id": "BBG0099SHLC1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00868",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "income_distribution",
+          "record_date": "2023-06-22",
+          "pay_date": "2023-06-28",
+          "cash_per_share": "0.00868",
+          "terms_evidence_identity": "85c633a3bf44f97ee515651b46d930761bda4cfe338410983367628b9d2274c8",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "7993f1d5-6d1d-4851-8d19-ba1fbe27205a",
+          "record_sha256": "04daa0eacb94e6c0dde9e863f296c96cdb03bcf31ef41462f949499b8a2e889c"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "96bef76d-9a45-4346-9981-783e7c62ef6f",
+          "record_sha256": "39222e08cbc91d7805b2c099cb74105f2674b51964a2ae97d3ecc35f18df3761"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E73f9cef11cec0fc276c12249e5ae7123c1ec0ffa7edbcd8beb5bd7597cd5c2dd",
+          "record_sha256": "829dca9e961015210872e7b9f7a46e32372b1ffe07d7fc54081d02280cbb2a36"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/direxion-tmf",
+          "receipt_sha256": "6f389cb7cc0b93a8acdb1397cc3ab56e371aa3b5062c6488caf6f425d82b7ef3",
+          "payload_sha256": "69f1e2bcaedc4c9037abeb437c5ca9d5589b80d1eb8f0bdfd4dc7b707a88d5ff",
+          "source_terms": {
+            "symbol": "LABU",
+            "ex": "2023-06-21",
+            "record": "2023-06-22",
+            "pay": "2023-06-28",
+            "amounts": [
+              "0.00868"
+            ],
+            "names": [
+              "income_distribution"
+            ],
+            "capture": "direxion-tmf",
+            "date_basis": "primary_stated_dates",
+            "source_row": {
+              "IncomeDividend": 0.00868,
+              "IncomeDividendConvertibleToReturnOfCapital": false,
+              "LongTermCapitalGain": null,
+              "ExDate": "06212023",
+              "PayDate": "06282023",
+              "RecordDate": "06222023",
+              "ReturnOfCapital": null,
+              "ShortTermCapitalGain": null,
+              "__typename": "Distribution"
+            }
+          }
+        }
+      ],
+      "evidence_identity": "b961f1109b3bd4774fd0ff2127773dc99b0f64b2693a847c3a4c31b84409ebd7",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "LABU",
+      "ex_date": "2023-09-19",
+      "security_id": "BBG0099SHLC1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00202",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "income_distribution",
+          "record_date": "2023-09-20",
+          "pay_date": "2023-09-26",
+          "cash_per_share": "0.00202",
+          "terms_evidence_identity": "ed16913df532066c9845354260c67f621aeeab8e2519c9a38d56df4ea5fb4be9",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "3018baa9-c949-44ce-a4f8-94fa05fa11bb",
+          "record_sha256": "d482fbe36ea463694073957fd8102e295bfbdc4e73cf3d4796ef47ad6e1a7e89"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c8dceffc-86a0-486d-9771-be259836c55b",
+          "record_sha256": "44a265a3e41e2470a07faccf3025478377bd54376c1483ba43000ba75c3cfd6f"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef7c3bfdd7dc645748a1e8dd0de4e4fff1f7d65cce4ebf4a8a941e24d82a781fa",
+          "record_sha256": "680bdf4b8c528133b262cd65a206485e4cdaa3ad6a0722e308e92f1c1e015ca0"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/direxion-tmf",
+          "receipt_sha256": "6f389cb7cc0b93a8acdb1397cc3ab56e371aa3b5062c6488caf6f425d82b7ef3",
+          "payload_sha256": "69f1e2bcaedc4c9037abeb437c5ca9d5589b80d1eb8f0bdfd4dc7b707a88d5ff",
+          "source_terms": {
+            "symbol": "LABU",
+            "ex": "2023-09-19",
+            "record": "2023-09-20",
+            "pay": "2023-09-26",
+            "amounts": [
+              "0.00202"
+            ],
+            "names": [
+              "income_distribution"
+            ],
+            "capture": "direxion-tmf",
+            "date_basis": "primary_stated_dates",
+            "source_row": {
+              "IncomeDividend": 0.00202,
+              "IncomeDividendConvertibleToReturnOfCapital": false,
+              "LongTermCapitalGain": null,
+              "ExDate": "09192023",
+              "PayDate": "09262023",
+              "RecordDate": "09202023",
+              "ReturnOfCapital": null,
+              "ShortTermCapitalGain": null,
+              "__typename": "Distribution"
+            }
+          }
+        }
+      ],
+      "evidence_identity": "04268397e0c4309f78a86f7da36842a91a411fbe47be385df451e0aed9968f41",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "TMF",
+      "ex_date": "2023-03-21",
+      "security_id": "BBG000CX0W11",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.03462",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "income_distribution",
+          "record_date": "2023-03-22",
+          "pay_date": "2023-03-28",
+          "cash_per_share": "0.03462",
+          "terms_evidence_identity": "ebecfa33606720d0122fa5abb84d7a6d12dad063bf06b1d59c73c6ae2cc75de8",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "b826c1d6-0dea-4652-af2d-97d4f0d9525b",
+          "record_sha256": "93d8f25b8e485b3b7eb6c33f79068bbd03e1c9ce99efa16efafdafbe05363aed"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "eabbbc05-75b4-4645-9e49-fce13629aa4b",
+          "record_sha256": "9ce88716eda41d9f58b71c2a8cbc6024d80950904fe701b4e78c524397d6557f"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ef6f572f3dd6fe8ec2b610b6b1e636623018e7b1f4b864000cea9e61187e5e9ef",
+          "record_sha256": "2a5bf7b16de9bb4fd0bd5cb0e2dd86bd7d2d86f34be024d2e323846aacf89ab7"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/direxion-tmf",
+          "receipt_sha256": "6f389cb7cc0b93a8acdb1397cc3ab56e371aa3b5062c6488caf6f425d82b7ef3",
+          "payload_sha256": "69f1e2bcaedc4c9037abeb437c5ca9d5589b80d1eb8f0bdfd4dc7b707a88d5ff",
+          "source_terms": {
+            "symbol": "TMF",
+            "ex": "2023-03-21",
+            "record": "2023-03-22",
+            "pay": "2023-03-28",
+            "amounts": [
+              "0.03462"
+            ],
+            "names": [
+              "income_distribution"
+            ],
+            "capture": "direxion-tmf",
+            "date_basis": "primary_stated_dates",
+            "source_row": {
+              "IncomeDividend": 0.03462,
+              "IncomeDividendConvertibleToReturnOfCapital": false,
+              "LongTermCapitalGain": null,
+              "ExDate": "03212023",
+              "PayDate": "03282023",
+              "RecordDate": "03222023",
+              "ReturnOfCapital": null,
+              "ShortTermCapitalGain": null,
+              "__typename": "Distribution"
+            }
+          }
+        }
+      ],
+      "evidence_identity": "f73d65777249435130f8ba343e7a271d6c08126a413f78a56104b313900bcd5a",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "TMF",
+      "ex_date": "2023-06-21",
+      "security_id": "BBG000CX0W11",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.04763",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "income_distribution",
+          "record_date": "2023-06-22",
+          "pay_date": "2023-06-28",
+          "cash_per_share": "0.04763",
+          "terms_evidence_identity": "96b3eb44bf704b4d2efef67d33f139dbac1515f5781ba046e7220626543d2aaf",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "2e0ec503-a75a-442c-9e54-e4a9c050f724",
+          "record_sha256": "e3e9518a2715f3e4b2b5b7e84709ceee85dbeff69afda104814c3364514218bf"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "30c0cd46-1f32-4f8d-8376-5f4f921525e3",
+          "record_sha256": "77d9c5f80f6c573478c9904e47307d10894f68786b7f71ba9c602e8ba300bf7c"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1ff2087d3735e245d102c9bad823d557bf8ab987435426ed693473d15ecccf5c",
+          "record_sha256": "7abbe39c8a82406d7a0613bd15f1dfc2932e3ae85cb7145954889ba66814716e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/direxion-tmf",
+          "receipt_sha256": "6f389cb7cc0b93a8acdb1397cc3ab56e371aa3b5062c6488caf6f425d82b7ef3",
+          "payload_sha256": "69f1e2bcaedc4c9037abeb437c5ca9d5589b80d1eb8f0bdfd4dc7b707a88d5ff",
+          "source_terms": {
+            "symbol": "TMF",
+            "ex": "2023-06-21",
+            "record": "2023-06-22",
+            "pay": "2023-06-28",
+            "amounts": [
+              "0.04763"
+            ],
+            "names": [
+              "income_distribution"
+            ],
+            "capture": "direxion-tmf",
+            "date_basis": "primary_stated_dates",
+            "source_row": {
+              "IncomeDividend": 0.04763,
+              "IncomeDividendConvertibleToReturnOfCapital": false,
+              "LongTermCapitalGain": null,
+              "ExDate": "06212023",
+              "PayDate": "06282023",
+              "RecordDate": "06222023",
+              "ReturnOfCapital": null,
+              "ShortTermCapitalGain": null,
+              "__typename": "Distribution"
+            }
+          }
+        }
+      ],
+      "evidence_identity": "ff35e6bf91dd1bb5ed082058250fa3c70763303b7ccfb791713c492affe9d83c",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "TMF",
+      "ex_date": "2023-09-19",
+      "security_id": "BBG000CX0W11",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.05015",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "income_distribution",
+          "record_date": "2023-09-20",
+          "pay_date": "2023-09-26",
+          "cash_per_share": "0.05015",
+          "terms_evidence_identity": "55e649f9abb6a6589f2203d02e9e966fd33743309cf6965b8ab63cf1d1ad589f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "2e54f2be-a9da-4cbf-9304-ab940daa4400",
+          "record_sha256": "4d5e487fe43a7a51df2d54355b08cadb90eb0e7e3f912b3147dfdeb8e56915ec"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "5fad276e-809d-474f-ab18-723d437873fc",
+          "record_sha256": "d57b735167c80c1123d3b7759bcb467cecd94a7a3e41a7f46204684727a16c76"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E3dd89de82ba5bb0a27ae9656a68f6ec0a1294ba3a72c4157fbd7ddc0a48609e3",
+          "record_sha256": "8171c9a6afe49c15955ae8f1e9deb2333bc2cb676241ccdf8f9f828fedd4233b"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/direxion-tmf",
+          "receipt_sha256": "6f389cb7cc0b93a8acdb1397cc3ab56e371aa3b5062c6488caf6f425d82b7ef3",
+          "payload_sha256": "69f1e2bcaedc4c9037abeb437c5ca9d5589b80d1eb8f0bdfd4dc7b707a88d5ff",
+          "source_terms": {
+            "symbol": "TMF",
+            "ex": "2023-09-19",
+            "record": "2023-09-20",
+            "pay": "2023-09-26",
+            "amounts": [
+              "0.05015"
+            ],
+            "names": [
+              "income_distribution"
+            ],
+            "capture": "direxion-tmf",
+            "date_basis": "primary_stated_dates",
+            "source_row": {
+              "IncomeDividend": 0.05015,
+              "IncomeDividendConvertibleToReturnOfCapital": false,
+              "LongTermCapitalGain": null,
+              "ExDate": "09192023",
+              "PayDate": "09262023",
+              "RecordDate": "09202023",
+              "ReturnOfCapital": null,
+              "ShortTermCapitalGain": null,
+              "__typename": "Distribution"
+            }
+          }
+        }
+      ],
+      "evidence_identity": "cc4c19b9ce78211ff75ed8ff13bd434977024856055a0327f14766f05dbe17c8",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "YINN",
+      "ex_date": "2022-03-22",
+      "security_id": "BBG000PY4FX3",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.00058",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "income_distribution",
+          "record_date": "2022-03-23",
+          "pay_date": "2022-03-29",
+          "cash_per_share": "0.00058",
+          "terms_evidence_identity": "68310e39678c493562bca0e674f651344978e5a25fe985ac33f8f65c992ba649",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "18b348d1-4ad8-4a72-a9cd-b4d2491d17b5",
+          "record_sha256": "4f82c57815a84297996ea89c23558a2feedd6631264e7ab9c95c57e867836f96"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "eeaf178d-ab92-4fe9-a016-908638ac1a20",
+          "record_sha256": "c3586cacaa57eacf12cd48a3d506f6c43d9e68cb223ca190745b01247142b6cb"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E81ec7357f28ed415689a601228bc22465e0d2363e19138449d2377d60945b4cd",
+          "record_sha256": "9392d3641e35a20358493ce71e826e736a8b981b45be960db2aabe1e3898da1d"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/direxion-tmf",
+          "receipt_sha256": "6f389cb7cc0b93a8acdb1397cc3ab56e371aa3b5062c6488caf6f425d82b7ef3",
+          "payload_sha256": "69f1e2bcaedc4c9037abeb437c5ca9d5589b80d1eb8f0bdfd4dc7b707a88d5ff",
+          "source_terms": {
+            "symbol": "YINN",
+            "ex": "2022-03-22",
+            "record": "2022-03-23",
+            "pay": "2022-03-29",
+            "amounts": [
+              "0.00058"
+            ],
+            "names": [
+              "income_distribution"
+            ],
+            "capture": "direxion-tmf",
+            "date_basis": "primary_stated_dates",
+            "source_row": {
+              "IncomeDividend": 0.00058,
+              "IncomeDividendConvertibleToReturnOfCapital": false,
+              "LongTermCapitalGain": null,
+              "ExDate": "03222022",
+              "PayDate": "03292022",
+              "RecordDate": "03232022",
+              "ReturnOfCapital": null,
+              "ShortTermCapitalGain": null,
+              "__typename": "Distribution"
+            }
+          }
+        }
+      ],
+      "evidence_identity": "64a64d8657f10e67f596526e05ee355f162b174ecb0de5ab79eee0e6f9c21715",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "F",
+      "ex_date": "2023-02-10",
+      "security_id": "BBG000BQPC32",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.80",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular",
+          "record_date": "2023-02-13",
+          "pay_date": "2023-03-01",
+          "cash_per_share": "0.15",
+          "terms_evidence_identity": "b8f3bcf6e75846433f8042a9f411e7da9e7a4bd7b013e12711caf1e30401f26d",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "supplemental",
+          "record_date": "2023-02-13",
+          "pay_date": "2023-03-01",
+          "cash_per_share": "0.65",
+          "terms_evidence_identity": "b8f3bcf6e75846433f8042a9f411e7da9e7a4bd7b013e12711caf1e30401f26d",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "6f11b742-4a95-4081-ae16-98375e8346da",
+          "record_sha256": "29b4a31f454836d144bd4a6bafdb2c5a66243c0e69108e00c9df426d30f9ba71"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d46f965a-5f07-4964-8b8f-21de4e659895",
+          "record_sha256": "65a52e0c89642cbb1062adfe1bc5a118807bd235e5f2fb3ad9cd26f082b187a9"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9d4d170b894538b0d52e7c063c468cae691898df964a7e2b43e6ce53e5230b94",
+          "record_sha256": "2af334cf8b75e32ae117159994e3e9200c17111032c1d7c6d04e8a9451234df7"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eeaa15a4769c8d47373fa402d4427866efeccb625d5bdc7d4688ece5f969a5164",
+          "record_sha256": "79547cb6f315de8e51fcf0c885732a99d2690580c37576e98679089cfd5e2a36"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ford-2023-declaration",
+          "receipt_sha256": "60cf00c1f2cabe5e6237c539d4c79f0b42b036d04da6c381e4d1b182c421456b",
+          "payload_sha256": "216ef5625079c6f4a444fbff63597067a1889c33931cbf0615083a9f9b711ab9",
+          "source_terms": {
+            "symbol": "F",
+            "ex": "2023-02-10",
+            "record": "2023-02-13",
+            "pay": "2023-03-01",
+            "amounts": [
+              ".15",
+              ".65"
+            ],
+            "names": [
+              "regular",
+              "supplemental"
+            ],
+            "capture": "ford-2023-declaration",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "cf2c62857ff7f3f8576552b5e930958f127e3b3e8b05208accaefb0c2148e1fd",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "F",
+      "ex_date": "2024-02-15",
+      "security_id": "BBG000BQPC32",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.33",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular",
+          "record_date": "2024-02-16",
+          "pay_date": "2024-03-01",
+          "cash_per_share": "0.15",
+          "terms_evidence_identity": "1d611af440dcf7a03030f00ddbd443fa9fff81b742885645296e30946f75b385",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "supplemental",
+          "record_date": "2024-02-16",
+          "pay_date": "2024-03-01",
+          "cash_per_share": "0.18",
+          "terms_evidence_identity": "1d611af440dcf7a03030f00ddbd443fa9fff81b742885645296e30946f75b385",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "5758e831-33a8-4f11-9b11-332333af006b",
+          "record_sha256": "faef78618199b9844cccf0619e6a8bb830ceffad481b024db581a4f573c6cd7d"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d393e575-f068-411f-aea7-3f4e321df2d0",
+          "record_sha256": "9fdfb09da3982804823dbfbb97d333ca43792c80cb8a2171e89ddf4e7a3568d7"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4184c26fd424198b54caf1006b40f108002667393fb4d3d13e4415cf0a19013f",
+          "record_sha256": "c57b878eb7342e33db526bb62ecc861f5954bd805c550d33f085531056a8f75c"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ed8f1293bbb72ce9f575bdc316f61b5d944ec1aa09f60045282ca9229399a40e3",
+          "record_sha256": "7485c61abc1ce7ec91e02f638e91d2b802a53ed15b6ead7b657117e9ef0bbf60"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ford-2024-declaration",
+          "receipt_sha256": "ab77866e8521016dce9b772280df1b1367b7d621dc7bba707c5572bf3affd5db",
+          "payload_sha256": "785a9e668a0c8d3fba0fe13c28da41adc44aa6d6e45727f06f1c823b137c6999",
+          "source_terms": {
+            "symbol": "F",
+            "ex": "2024-02-15",
+            "record": "2024-02-16",
+            "pay": "2024-03-01",
+            "amounts": [
+              ".15",
+              ".18"
+            ],
+            "names": [
+              "regular",
+              "supplemental"
+            ],
+            "capture": "ford-2024-declaration",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "0535356f5a1b48bad3389c9798e68a97591ef68ad57b8f1acde941f6c62325c1",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "KKR",
+      "ex_date": "2022-05-13",
+      "security_id": "BBG000BCQ6J8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.155",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular",
+          "record_date": "2022-05-16",
+          "pay_date": "2022-05-31",
+          "cash_per_share": "0.155",
+          "terms_evidence_identity": "6289b125f9062e492352db386d1a2ad42f95f0051d803359a4b1f28e65ffd32f",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "5cd234f7-107e-49de-93eb-d3085c6246ec",
+          "record_sha256": "4b5198a88b3a0dbe369dd8179995b35415985e6cd22e9581bd4255821bfab693"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/kkr-q1-2022",
+          "receipt_sha256": "68d0af4cddd064705fba21772f59bfaad2720a97a2cb33ded196b7db46438d65",
+          "payload_sha256": "ba1e9d48eef4f46c62b7d3c1009b40d3d7e1ab8560f11e21f3bdf46948a54762",
+          "source_terms": {
+            "symbol": "KKR",
+            "ex": "2022-05-13",
+            "record": "2022-05-16",
+            "pay": "2022-05-31",
+            "amounts": [
+              ".155"
+            ],
+            "names": [
+              "regular"
+            ],
+            "capture": "kkr-q1-2022",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "7e63c7d170536b7ad57ff98c658c36701ce70e3d5622df8547c1b08b712257a9",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "DKS",
+      "ex_date": "2024-03-27",
+      "security_id": "BBG000F6ZWH2",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "1.10",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular",
+          "record_date": "2024-03-29",
+          "pay_date": "2024-04-12",
+          "cash_per_share": "1.10",
+          "terms_evidence_identity": "e99b3bcc761ef76f677e5eb0873250b4c83c51e161b540cabf1eecc9fffef685",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "24c79821-9e1e-4a0a-91f2-e8f90eea71bc",
+          "record_sha256": "d33dfc5c242b62917e7c480bdc3ea52096c006ee5dc6f66b287ea895402bff91"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/dks-march2024",
+          "receipt_sha256": "fd6ad5818647f0f0c3237b11560b28898b2cdda62c542ddda17a5a8a98ee44f6",
+          "payload_sha256": "c7d7ed595ffaa931390ce0d48dfafb991343f13af3ade6b1695fe62a18fd5103",
+          "source_terms": {
+            "symbol": "DKS",
+            "ex": "2024-03-27",
+            "record": "2024-03-29",
+            "pay": "2024-04-12",
+            "amounts": [
+              "1.10"
+            ],
+            "names": [
+              "regular"
+            ],
+            "capture": "dks-march2024",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "b6bc8b74a9dee5266faf0787baec526fe7e70e2664737e7d0e5d7996c03d9eda",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "SIMO",
+      "ex_date": "2023-11-15",
+      "security_id": "BBG000GT7XY1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.50",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "regular",
+          "record_date": "2023-11-16",
+          "pay_date": "2023-11-30",
+          "cash_per_share": "0.50",
+          "terms_evidence_identity": "c66f82515142fd55ae31e8f2398c0aa3bcc81427b123dc8cace4fe3ae03df296",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "15a90537-fa9b-4471-908b-86ac86ebf891",
+          "record_sha256": "4b44ade24e3cb53ea6f3dec88fc87a0a372303ca5ac50fdbfefc31e9edec439f"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eea809c29927d30466ec7f5e116175cab4642d2ce4cda8ce88127363d5dfae03b",
+          "record_sha256": "489275f9df402079924ed9af33d92762a8bfd56b9bbbd20c858c8bde7eea9dc1"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/simo-web",
+          "receipt_sha256": "f355d63ca1209e7ccd2263bf6d0bd1cfd0b7e8e6f3a5a829568a28de5cc41458",
+          "payload_sha256": "81c0edd8b50160c8943990f78a6f53a9e1f4432e05532ba1872bfe504cca63a8",
+          "source_terms": {
+            "symbol": "SIMO",
+            "ex": "2023-11-15",
+            "record": "2023-11-16",
+            "pay": "2023-11-30",
+            "amounts": [
+              ".50"
+            ],
+            "names": [
+              "regular"
+            ],
+            "capture": "simo-web",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "d576635566cd6d46b7ce8df38c017de7ae9a96e828cd664ecf468094b9b27d68",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "MSTX",
+      "ex_date": "2024-12-31",
+      "security_id": "BBG01NSK4Y13",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "14.42760884",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "income_distribution",
+          "record_date": "2024-12-31",
+          "pay_date": "2025-01-03",
+          "cash_per_share": "14.42760884",
+          "terms_evidence_identity": "33a1ca264be8a34c69335b1ac67f9c381f9c812070c0347080a1ec3dad7dcccf",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "d5e6c5cf-11fb-4629-b83f-176677a7ac94",
+          "record_sha256": "f4aa470ed62fc9337c27c6c827edcd87c7b12758c339e9f35a290ff0006a09a4"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7b61c3bd5294fbed29900014513bdcea41bd5e46f79227191c1371e066b5afc9",
+          "record_sha256": "563738f5b0e43f91cbd28b11ed5db93ae2c62f0d41b2c4f8ad74a81f75efb513"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/mstx-correction",
+          "receipt_sha256": "36619e64c0de48adf6872272e48584b0c4b7710d1858aa773097ad23845dde60",
+          "payload_sha256": "7e04ea260f02371a1586a56d91bb035541a2e9f28744421fa3b07de816b724fa",
+          "source_terms": {
+            "symbol": "MSTX",
+            "ex": "2024-12-31",
+            "record": "2024-12-31",
+            "pay": "2025-01-03",
+            "amounts": [
+              "14.42760884"
+            ],
+            "names": [
+              "income_distribution"
+            ],
+            "capture": "mstx-correction",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "67e6072fd09f98d9d7f6d00491e474ff38b69f0fabd2babed474c3e746420298",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    }
+  ]
+}

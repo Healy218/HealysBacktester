@@ -1,4 +1,10 @@
-# Handoff — active dividend completion, recovery checkpoint
+# Handoff — dividend completion active, 52 cases remaining
+
+Latest checkpoint supersedes counts below: `nn_meta/validation/v7-dividend-dispositions-20260918` contains 4,863 cash payment leaves across 4,802 cash price events; 52 uncompiled cash groups and zero missing-date cases remain. All 10,428 original records reconcile (10,088 resolved / 340 pending). Rebuilt coverage admits 587,253 of 667,239 history sessions. All leaves validate; actual empty portfolio creates no cash. Full suite passes 2,287 tests plus 18 subtests (19 warnings, 125.80 seconds; /tmp/v7-dividend-tests-dispositions-20260918.log).
+
+R7–R9 primary reviews add issuer/fund payments. New frozen dividend_dispositions module and resolve_v7_dividend_dispositions CLI resolve ten false/duplicate cash groups (MSTR, ET preferred, canceled DFS, four unrelated FIGR, unrelated TE, duplicate GOLD/B, AMC share distribution). AMC noncash lifecycle remains blocked. Frozen reviews/producers must not be edited after their receipts. No overall lifecycle gate is passed.
+
+Remaining: SU18/CCJ4/PBR2 currency cases; SIRI8/AZN2/CCL2/ELV1/XOM1 identity dependencies; KSS/LRCX/TMO first-scope boundaries; HD/OKE acquirer mixed-action cases; JETS/SIL/COPX/SILJ4 precision cases; CCL February2026 and ETHE September2026. A required async question about explicit prior-ex official FX modeling was asked and remains unanswered; do not implement that choice without reply. Continue independent work. Sources and helpers remain in /tmp/v7-* and nn_meta/data_v7/dividend-finish-20260918; R7–R9 review JSON files are authoritative.
 
 The user explicitly asked to finish the dividend portion and authorized necessary checks and edits. Work is ongoing: do not mistake this recovery checkpoint for completion. Main only; preserve unrelated V6/assembly changes. Prior handoff is handoff-history/HANDOFF-2026-09-18-before-primary-dividends.md.
 

@@ -1,0 +1,2054 @@
+{
+  "originals": [
+    {
+      "provider": "massive",
+      "kind": "dividends",
+      "action_id": "E189dca629cbcf28d8c232793418b60b6d7979a1019703c8c8561c0bef225576c",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "ticker",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2022-06-16",
+      "effective_field": "ex_dividend_date",
+      "process_date": null,
+      "term": "8.9",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/corporate-actions-20260915/dividends/complete.json",
+        "payload": "nn_meta/data_v7/corporate-actions-20260915/dividends/page-0011.json.gz",
+        "payload_sha256": "ba7b7cd36e5e1eea81ce1bc273de6f746bd4f71f179542465c819a5277ed5960"
+      },
+      "record_sha256": "fbad1a36f911b18173e118ea0fdadf64ab0a13012a31f9b56cfafc849987a5d9",
+      "record": {
+        "cash_amount": 8.9,
+        "currency": "USD",
+        "declaration_date": "2022-05-26",
+        "distribution_type": "recurring",
+        "ex_dividend_date": "2022-06-16",
+        "frequency": 2,
+        "historical_adjustment_factor": 1.0,
+        "id": "E189dca629cbcf28d8c232793418b60b6d7979a1019703c8c8561c0bef225576c",
+        "pay_date": "2022-07-01",
+        "record_date": "2022-06-20",
+        "split_adjusted_cash_amount": 8.9,
+        "ticker": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "massive",
+      "kind": "dividends",
+      "action_id": "E7a03332f9538dd1a7c029f98284c612a17c066bcb5791bdbec77ed026e128674",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "ticker",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2022-12-19",
+      "effective_field": "ex_dividend_date",
+      "process_date": null,
+      "term": "9.1",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/corporate-actions-20260915/dividends/complete.json",
+        "payload": "nn_meta/data_v7/corporate-actions-20260915/dividends/page-0015.json.gz",
+        "payload_sha256": "8ea7299f6d16de77fe723169bc7c1b9f2f6e3a17987e7852beeacd42fe3f6ef2"
+      },
+      "record_sha256": "a759cb534a085c2d85791f12a6f4a02baad40537e2b17530b5475cbc7c67718a",
+      "record": {
+        "cash_amount": 9.1,
+        "currency": "USD",
+        "declaration_date": "2022-11-29",
+        "distribution_type": "recurring",
+        "ex_dividend_date": "2022-12-19",
+        "frequency": 2,
+        "historical_adjustment_factor": 1.0,
+        "id": "E7a03332f9538dd1a7c029f98284c612a17c066bcb5791bdbec77ed026e128674",
+        "pay_date": "2023-01-03",
+        "record_date": "2022-12-20",
+        "split_adjusted_cash_amount": 9.1,
+        "ticker": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "massive",
+      "kind": "dividends",
+      "action_id": "Ecbf32ec94d03e3e4484e2745eebd637e9d6a14da31873d5a4e30d69b8b5e5343",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "ticker",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2022-12-19",
+      "effective_field": "ex_dividend_date",
+      "process_date": null,
+      "term": "1.5",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/corporate-actions-20260915/dividends/complete.json",
+        "payload": "nn_meta/data_v7/corporate-actions-20260915/dividends/page-0015.json.gz",
+        "payload_sha256": "8ea7299f6d16de77fe723169bc7c1b9f2f6e3a17987e7852beeacd42fe3f6ef2"
+      },
+      "record_sha256": "94fe9cdc914da4e6619ee865954ae27afd9830a661cce96054096e8df75ee5db",
+      "record": {
+        "cash_amount": 1.5,
+        "currency": "USD",
+        "declaration_date": "2022-11-29",
+        "distribution_type": "special",
+        "ex_dividend_date": "2022-12-19",
+        "frequency": 0,
+        "historical_adjustment_factor": 1.0,
+        "id": "Ecbf32ec94d03e3e4484e2745eebd637e9d6a14da31873d5a4e30d69b8b5e5343",
+        "pay_date": "2023-01-03",
+        "record_date": "2022-12-20",
+        "split_adjusted_cash_amount": 1.5,
+        "ticker": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "massive",
+      "kind": "dividends",
+      "action_id": "E48f40b3a36b6f5b9e22e7e7c362ba0c3f188b7c4ea08eaa2db34c08382e7b161",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "ticker",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2023-06-15",
+      "effective_field": "ex_dividend_date",
+      "process_date": null,
+      "term": "9.1",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/corporate-actions-20260915/dividends/complete.json",
+        "payload": "nn_meta/data_v7/corporate-actions-20260915/dividends/page-0019.json.gz",
+        "payload_sha256": "8153c7b4453765aa01ee822ca786b287bc7183ce57a89f0266419c8c6556c707"
+      },
+      "record_sha256": "49900db1f337de5d77b59fcd3b612cecab47cd92779b62d058682629fe6d31b8",
+      "record": {
+        "cash_amount": 9.1,
+        "currency": "USD",
+        "declaration_date": "2023-05-18",
+        "distribution_type": "recurring",
+        "ex_dividend_date": "2023-06-15",
+        "frequency": 2,
+        "historical_adjustment_factor": 1.0,
+        "id": "E48f40b3a36b6f5b9e22e7e7c362ba0c3f188b7c4ea08eaa2db34c08382e7b161",
+        "pay_date": "2023-07-03",
+        "record_date": "2023-06-19",
+        "split_adjusted_cash_amount": 9.1,
+        "ticker": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "massive",
+      "kind": "dividends",
+      "action_id": "E195ddf52016106a27b276f951f41f2c2ce5f4eb29900e2d5f20a374181e60187",
+      "category": "cash",
+      "subject_symbol": "B",
+      "scoped_symbols": [
+        "B"
+      ],
+      "symbol_roles": [
+        {
+          "role": "ticker",
+          "symbol": "B"
+        }
+      ],
+      "effective_date": "2025-05-30",
+      "effective_field": "ex_dividend_date",
+      "process_date": null,
+      "term": "0.1",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/corporate-actions-20260915/dividends/complete.json",
+        "payload": "nn_meta/data_v7/corporate-actions-20260915/dividends/page-0037.json.gz",
+        "payload_sha256": "53764971e5224a52bae48e5cfea7feb171d4fdca38135f1d32099069975d9a5b"
+      },
+      "record_sha256": "7ab443e71b58318ead708a15246bac8f13baceec41e332e202e59c7eb9527f7e",
+      "record": {
+        "cash_amount": 0.1,
+        "currency": "USD",
+        "declaration_date": "2025-05-07",
+        "distribution_type": "recurring",
+        "ex_dividend_date": "2025-05-30",
+        "frequency": 4,
+        "historical_adjustment_factor": 0.968793,
+        "id": "E195ddf52016106a27b276f951f41f2c2ce5f4eb29900e2d5f20a374181e60187",
+        "pay_date": "2025-06-16",
+        "record_date": "2025-05-30",
+        "split_adjusted_cash_amount": 0.1,
+        "ticker": "B"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "0238b79d-415e-41b0-9f5e-a735ff03dbf3",
+      "category": "cash",
+      "subject_symbol": "AMC",
+      "scoped_symbols": [
+        "AMC"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "AMC"
+        }
+      ],
+      "effective_date": "2023-08-23",
+      "effective_field": "ex_date",
+      "process_date": "2023-08-28",
+      "term": "1.133333",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0008.json.gz",
+        "payload_sha256": "2c87debb30b217848b98298211f01eb8f4b6d88a710c79a39fa0b7eff60f5cb0"
+      },
+      "record_sha256": "f5c5d65daa7143169f079df774ee3b754ca973bbc2b976948295fe4c5527d752",
+      "record": {
+        "cusip": "00165C104",
+        "ex_date": "2023-08-23",
+        "foreign": false,
+        "id": "0238b79d-415e-41b0-9f5e-a735ff03dbf3",
+        "payable_date": "2023-08-28",
+        "process_date": "2023-08-28",
+        "rate": 1.133333,
+        "record_date": "2023-08-24",
+        "special": false,
+        "symbol": "AMC"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "stock_dividends",
+      "action_id": "1ae14077-7a0e-40b1-a034-183c92e636c3",
+      "category": "complex",
+      "subject_symbol": null,
+      "scoped_symbols": [
+        "AMC"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "AMC"
+        }
+      ],
+      "effective_date": "2023-08-23",
+      "effective_field": "ex_date",
+      "process_date": "2023-08-23",
+      "term": null,
+      "term_basis": "requires_event_specific_review",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0008.json.gz",
+        "payload_sha256": "2c87debb30b217848b98298211f01eb8f4b6d88a710c79a39fa0b7eff60f5cb0"
+      },
+      "record_sha256": "fa8886bb5c6ea5c33c968dc0c4f59324fa37bd60b426d219238ebddb74684ca6",
+      "record": {
+        "cusip": "00165C104",
+        "ex_date": "2023-08-23",
+        "id": "1ae14077-7a0e-40b1-a034-183c92e636c3",
+        "payable_date": "2023-08-28",
+        "process_date": "2023-08-23",
+        "rate": 1.13333,
+        "record_date": "2023-08-24",
+        "symbol": "AMC"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "stock_mergers",
+      "action_id": "5e6f60bc-98dc-4e52-8add-3c9122f81166",
+      "category": "complex",
+      "subject_symbol": null,
+      "scoped_symbols": [
+        "AMC"
+      ],
+      "symbol_roles": [
+        {
+          "role": "acquiree_symbol",
+          "symbol": "APE"
+        },
+        {
+          "role": "acquirer_symbol",
+          "symbol": "AMC"
+        }
+      ],
+      "effective_date": "2023-08-25",
+      "effective_field": "effective_date",
+      "process_date": "2023-08-25",
+      "term": null,
+      "term_basis": "requires_event_specific_review",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0010.json.gz",
+        "payload_sha256": "d13222ec77e45a42784e5002619a47e60d141a2f1acf66b41ddbc25804978128"
+      },
+      "record_sha256": "3361ecec886f50fa2db616bfa057369f6c0794234008c36bded369c4b2d2841c",
+      "record": {
+        "acquiree_cusip": "00165C203",
+        "acquiree_rate": 1,
+        "acquiree_symbol": "APE",
+        "acquirer_cusip": "00165C302",
+        "acquirer_rate": 0.1,
+        "acquirer_symbol": "AMC",
+        "effective_date": "2023-08-25",
+        "id": "5e6f60bc-98dc-4e52-8add-3c9122f81166",
+        "payable_date": "2023-08-25",
+        "process_date": "2023-08-25"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "e18664f7-4fe4-4bd9-be28-be1015800a0d",
+      "category": "cash",
+      "subject_symbol": "B",
+      "scoped_symbols": [
+        "B"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "B"
+        }
+      ],
+      "effective_date": "2025-05-30",
+      "effective_field": "ex_date",
+      "process_date": "2025-06-16",
+      "term": "0.085",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [
+        "foreign_or_unspecified_cash_units"
+      ],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0015.json.gz",
+        "payload_sha256": "9fbc59832a346b6e04cea50feea4fb21c80728368c5f7608b43d74afde650044"
+      },
+      "record_sha256": "a5a5c3186de4f973ea90ffbad4afdb870afe833d07f3599a994d427ca728f6d6",
+      "record": {
+        "cusip": "06849F108",
+        "ex_date": "2025-05-30",
+        "foreign": true,
+        "id": "e18664f7-4fe4-4bd9-be28-be1015800a0d",
+        "payable_date": "2025-06-16",
+        "process_date": "2025-06-16",
+        "rate": 0.085,
+        "record_date": "2025-05-30",
+        "special": false,
+        "symbol": "B"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "059fde35-7ac4-47a5-b593-28da9dc2a74d",
+      "category": "cash",
+      "subject_symbol": "DFS",
+      "scoped_symbols": [
+        "DFS"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "DFS"
+        }
+      ],
+      "effective_date": "2025-05-23",
+      "effective_field": "ex_date",
+      "process_date": "2025-06-05",
+      "term": "0.7",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0053.json.gz",
+        "payload_sha256": "3a362526372f08edd71540b36ae9a834d9702bdf233373a31ae0a96873665333"
+      },
+      "record_sha256": "28de03a5f6fc6d57b09ef2aa7dd25f6ca7b38da8c6e985a8c9b2b5488914e050",
+      "record": {
+        "cusip": "254709108",
+        "ex_date": "2025-05-23",
+        "foreign": false,
+        "id": "059fde35-7ac4-47a5-b593-28da9dc2a74d",
+        "payable_date": "2025-06-05",
+        "process_date": "2025-06-05",
+        "rate": 0.7,
+        "record_date": "2025-05-23",
+        "special": false,
+        "symbol": "DFS"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "c04fa3fd-1603-4bbe-a5f0-dc762e7f644b",
+      "category": "cash",
+      "subject_symbol": "ET",
+      "scoped_symbols": [
+        "ET"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "ET"
+        }
+      ],
+      "effective_date": "2026-05-04",
+      "effective_field": "ex_date",
+      "process_date": "2026-05-15",
+      "term": "0.2111",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0069.json.gz",
+        "payload_sha256": "38be18b72ef114f006363753ca759890ce24550f04138030d5ceac28363c1f81"
+      },
+      "record_sha256": "7953c79e59fdcba2359ec942a5a4ffda6229baeebcd2dcc26a2a18d37add84e4",
+      "record": {
+        "cusip": "29273V100",
+        "ex_date": "2026-05-04",
+        "foreign": false,
+        "id": "c04fa3fd-1603-4bbe-a5f0-dc762e7f644b",
+        "payable_date": "2026-05-15",
+        "process_date": "2026-05-15",
+        "rate": 0.2111,
+        "record_date": "2026-05-04",
+        "special": false,
+        "symbol": "ET"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "c8c5feea-5333-46d9-a99a-f3f746508a69",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2022-06-16",
+      "effective_field": "ex_date",
+      "process_date": "2022-07-01",
+      "term": "8.9",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0078.json.gz",
+        "payload_sha256": "5f3147081451f7d1ff7930cfec1ec6db5c48ee05d022553c85bb50310b63dda6"
+      },
+      "record_sha256": "104f4e81bbc7373d17d7d67529622a86cb1439809855fd28787667dc7e2050dd",
+      "record": {
+        "cusip": "327891107",
+        "ex_date": "2022-06-16",
+        "foreign": false,
+        "id": "c8c5feea-5333-46d9-a99a-f3f746508a69",
+        "payable_date": "2022-07-01",
+        "process_date": "2022-07-01",
+        "rate": 8.9,
+        "record_date": "2022-06-20",
+        "special": false,
+        "symbol": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "eaa87dc5-8801-4e8f-8247-674ec3a8b7ba",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2022-12-19",
+      "effective_field": "ex_date",
+      "process_date": "2023-01-03",
+      "term": "10.6",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0078.json.gz",
+        "payload_sha256": "5f3147081451f7d1ff7930cfec1ec6db5c48ee05d022553c85bb50310b63dda6"
+      },
+      "record_sha256": "9dde90b3898d369b6e38af3a71c4dde6f7e0ea658e01612f8b272aed334c3650",
+      "record": {
+        "cusip": "327891107",
+        "ex_date": "2022-12-19",
+        "foreign": false,
+        "id": "eaa87dc5-8801-4e8f-8247-674ec3a8b7ba",
+        "payable_date": "2023-01-03",
+        "process_date": "2023-01-03",
+        "rate": 10.6,
+        "record_date": "2022-12-20",
+        "special": true,
+        "symbol": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "484c1469-336c-45ad-91de-fdd0314a9d74",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2023-06-15",
+      "effective_field": "ex_date",
+      "process_date": "2023-07-03",
+      "term": "9.1",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0078.json.gz",
+        "payload_sha256": "5f3147081451f7d1ff7930cfec1ec6db5c48ee05d022553c85bb50310b63dda6"
+      },
+      "record_sha256": "5c1a4b75a52e2cf1ae9e0c2481c01b20e169e55bcc60f211c66bc5402a9aaf9f",
+      "record": {
+        "cusip": "327891107",
+        "ex_date": "2023-06-15",
+        "foreign": false,
+        "id": "484c1469-336c-45ad-91de-fdd0314a9d74",
+        "payable_date": "2023-07-03",
+        "process_date": "2023-07-03",
+        "rate": 9.1,
+        "record_date": "2023-06-19",
+        "special": false,
+        "symbol": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "c2d72b47-41c8-44ed-8256-3f6731593647",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2023-12-18",
+      "effective_field": "ex_date",
+      "process_date": "2024-01-02",
+      "term": "10.65",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0078.json.gz",
+        "payload_sha256": "5f3147081451f7d1ff7930cfec1ec6db5c48ee05d022553c85bb50310b63dda6"
+      },
+      "record_sha256": "55652d11510351a83bbdaecc67adaf0517628366cfaf0893b34c0b59b91e44a3",
+      "record": {
+        "cusip": "327891107",
+        "ex_date": "2023-12-18",
+        "foreign": false,
+        "id": "c2d72b47-41c8-44ed-8256-3f6731593647",
+        "payable_date": "2024-01-02",
+        "process_date": "2024-01-02",
+        "rate": 10.65,
+        "record_date": "2023-12-19",
+        "special": true,
+        "symbol": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "aec165b1-49b9-4998-a755-eb8d4b158997",
+      "category": "cash",
+      "subject_symbol": "GOLD",
+      "scoped_symbols": [
+        "GOLD"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "GOLD"
+        }
+      ],
+      "effective_date": "2025-05-30",
+      "effective_field": "ex_date",
+      "process_date": "2025-06-16",
+      "term": "0.1",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [
+        "foreign_or_unspecified_cash_units"
+      ],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0094.json.gz",
+        "payload_sha256": "63d2f4326af293d81313baea8f2562a9c17570ade6d28a41b6640d0b7eed9651"
+      },
+      "record_sha256": "0e0826f0e550519afec01ec4f90551d554e0b29072086d16646b46eb218f6cc3",
+      "record": {
+        "cusip": "067901108",
+        "ex_date": "2025-05-30",
+        "foreign": true,
+        "id": "aec165b1-49b9-4998-a755-eb8d4b158997",
+        "payable_date": "2025-06-16",
+        "process_date": "2025-06-16",
+        "rate": 0.1,
+        "record_date": "2025-05-30",
+        "special": false,
+        "symbol": "GOLD"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "name_changes",
+      "action_id": "7297ca5d-6549-4af0-b053-0c61701de472",
+      "category": "complex",
+      "subject_symbol": null,
+      "scoped_symbols": [
+        "B",
+        "GOLD"
+      ],
+      "symbol_roles": [
+        {
+          "role": "new_symbol",
+          "symbol": "B"
+        },
+        {
+          "role": "old_symbol",
+          "symbol": "GOLD"
+        }
+      ],
+      "effective_date": null,
+      "effective_field": null,
+      "process_date": "2025-05-09",
+      "term": null,
+      "term_basis": "requires_event_specific_review",
+      "term_issues": [
+        "missing_effective_date"
+      ],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0094.json.gz",
+        "payload_sha256": "63d2f4326af293d81313baea8f2562a9c17570ade6d28a41b6640d0b7eed9651"
+      },
+      "record_sha256": "3e475976d8b4da10eaf3795ae0eb7fade52db24fbc05f5d90e8866f3888b91cd",
+      "record": {
+        "id": "7297ca5d-6549-4af0-b053-0c61701de472",
+        "new_cusip": "06849F108",
+        "new_symbol": "B",
+        "old_cusip": "067901108",
+        "old_symbol": "GOLD",
+        "process_date": "2025-05-09"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "cce34ac8-2310-4649-920e-aa24ac2edcc2",
+      "category": "cash",
+      "subject_symbol": "MSTR",
+      "scoped_symbols": [
+        "MSTR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "MSTR"
+        }
+      ],
+      "effective_date": "2025-05-21",
+      "effective_field": "ex_date",
+      "process_date": "2025-05-22",
+      "term": "0.335",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0147.json.gz",
+        "payload_sha256": "d9cde77cc2e86294444eb9523a53d82a78e5c9dafce4886dc039e6ff4e18a93c"
+      },
+      "record_sha256": "46abd55f48436a7e9d1532cc70bef707defce233e1cddd26b4a5f5c9ee46ae61",
+      "record": {
+        "cusip": "594972408",
+        "ex_date": "2025-05-21",
+        "foreign": false,
+        "id": "cce34ac8-2310-4649-920e-aa24ac2edcc2",
+        "payable_date": "2025-05-22",
+        "process_date": "2025-05-22",
+        "rate": 0.335,
+        "record_date": "2025-05-21",
+        "special": false,
+        "symbol": "MSTR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "0daca30d-eeb2-4501-8e9a-0a634386fa03",
+      "category": "cash",
+      "subject_symbol": "TE",
+      "scoped_symbols": [
+        "TE"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "TE"
+        }
+      ],
+      "effective_date": "2023-05-18",
+      "effective_field": "ex_date",
+      "process_date": "2023-06-02",
+      "term": "0.59",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [
+        "foreign_or_unspecified_cash_units"
+      ],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0211.json.gz",
+        "payload_sha256": "fb61eea18123b2d452971e1dcd49b78c798a2622ca6ac4cd5caa371551844ab6"
+      },
+      "record_sha256": "80ea3986f4508cff19137656a8ebbd7e066707bf70ec44ef451c3fd597e37a9e",
+      "record": {
+        "cusip": "H84989104",
+        "ex_date": "2023-05-18",
+        "foreign": true,
+        "id": "0daca30d-eeb2-4501-8e9a-0a634386fa03",
+        "payable_date": "2023-06-02",
+        "process_date": "2023-06-02",
+        "rate": 0.59,
+        "record_date": "2023-05-19",
+        "special": false,
+        "symbol": "TE"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    }
+  ],
+  "pending": [
+    {
+      "provider": "massive",
+      "kind": "dividends",
+      "action_id": "E189dca629cbcf28d8c232793418b60b6d7979a1019703c8c8561c0bef225576c",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "ticker",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2022-06-16",
+      "effective_field": "ex_dividend_date",
+      "process_date": null,
+      "term": "8.9",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/corporate-actions-20260915/dividends/complete.json",
+        "payload": "nn_meta/data_v7/corporate-actions-20260915/dividends/page-0011.json.gz",
+        "payload_sha256": "ba7b7cd36e5e1eea81ce1bc273de6f746bd4f71f179542465c819a5277ed5960"
+      },
+      "record_sha256": "fbad1a36f911b18173e118ea0fdadf64ab0a13012a31f9b56cfafc849987a5d9",
+      "record": {
+        "cash_amount": 8.9,
+        "currency": "USD",
+        "declaration_date": "2022-05-26",
+        "distribution_type": "recurring",
+        "ex_dividend_date": "2022-06-16",
+        "frequency": 2,
+        "historical_adjustment_factor": 1.0,
+        "id": "E189dca629cbcf28d8c232793418b60b6d7979a1019703c8c8561c0bef225576c",
+        "pay_date": "2022-07-01",
+        "record_date": "2022-06-20",
+        "split_adjusted_cash_amount": 8.9,
+        "ticker": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "massive",
+      "kind": "dividends",
+      "action_id": "E7a03332f9538dd1a7c029f98284c612a17c066bcb5791bdbec77ed026e128674",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "ticker",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2022-12-19",
+      "effective_field": "ex_dividend_date",
+      "process_date": null,
+      "term": "9.1",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/corporate-actions-20260915/dividends/complete.json",
+        "payload": "nn_meta/data_v7/corporate-actions-20260915/dividends/page-0015.json.gz",
+        "payload_sha256": "8ea7299f6d16de77fe723169bc7c1b9f2f6e3a17987e7852beeacd42fe3f6ef2"
+      },
+      "record_sha256": "a759cb534a085c2d85791f12a6f4a02baad40537e2b17530b5475cbc7c67718a",
+      "record": {
+        "cash_amount": 9.1,
+        "currency": "USD",
+        "declaration_date": "2022-11-29",
+        "distribution_type": "recurring",
+        "ex_dividend_date": "2022-12-19",
+        "frequency": 2,
+        "historical_adjustment_factor": 1.0,
+        "id": "E7a03332f9538dd1a7c029f98284c612a17c066bcb5791bdbec77ed026e128674",
+        "pay_date": "2023-01-03",
+        "record_date": "2022-12-20",
+        "split_adjusted_cash_amount": 9.1,
+        "ticker": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "massive",
+      "kind": "dividends",
+      "action_id": "Ecbf32ec94d03e3e4484e2745eebd637e9d6a14da31873d5a4e30d69b8b5e5343",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "ticker",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2022-12-19",
+      "effective_field": "ex_dividend_date",
+      "process_date": null,
+      "term": "1.5",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/corporate-actions-20260915/dividends/complete.json",
+        "payload": "nn_meta/data_v7/corporate-actions-20260915/dividends/page-0015.json.gz",
+        "payload_sha256": "8ea7299f6d16de77fe723169bc7c1b9f2f6e3a17987e7852beeacd42fe3f6ef2"
+      },
+      "record_sha256": "94fe9cdc914da4e6619ee865954ae27afd9830a661cce96054096e8df75ee5db",
+      "record": {
+        "cash_amount": 1.5,
+        "currency": "USD",
+        "declaration_date": "2022-11-29",
+        "distribution_type": "special",
+        "ex_dividend_date": "2022-12-19",
+        "frequency": 0,
+        "historical_adjustment_factor": 1.0,
+        "id": "Ecbf32ec94d03e3e4484e2745eebd637e9d6a14da31873d5a4e30d69b8b5e5343",
+        "pay_date": "2023-01-03",
+        "record_date": "2022-12-20",
+        "split_adjusted_cash_amount": 1.5,
+        "ticker": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "massive",
+      "kind": "dividends",
+      "action_id": "E48f40b3a36b6f5b9e22e7e7c362ba0c3f188b7c4ea08eaa2db34c08382e7b161",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "ticker",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2023-06-15",
+      "effective_field": "ex_dividend_date",
+      "process_date": null,
+      "term": "9.1",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/corporate-actions-20260915/dividends/complete.json",
+        "payload": "nn_meta/data_v7/corporate-actions-20260915/dividends/page-0019.json.gz",
+        "payload_sha256": "8153c7b4453765aa01ee822ca786b287bc7183ce57a89f0266419c8c6556c707"
+      },
+      "record_sha256": "49900db1f337de5d77b59fcd3b612cecab47cd92779b62d058682629fe6d31b8",
+      "record": {
+        "cash_amount": 9.1,
+        "currency": "USD",
+        "declaration_date": "2023-05-18",
+        "distribution_type": "recurring",
+        "ex_dividend_date": "2023-06-15",
+        "frequency": 2,
+        "historical_adjustment_factor": 1.0,
+        "id": "E48f40b3a36b6f5b9e22e7e7c362ba0c3f188b7c4ea08eaa2db34c08382e7b161",
+        "pay_date": "2023-07-03",
+        "record_date": "2023-06-19",
+        "split_adjusted_cash_amount": 9.1,
+        "ticker": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "0238b79d-415e-41b0-9f5e-a735ff03dbf3",
+      "category": "cash",
+      "subject_symbol": "AMC",
+      "scoped_symbols": [
+        "AMC"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "AMC"
+        }
+      ],
+      "effective_date": "2023-08-23",
+      "effective_field": "ex_date",
+      "process_date": "2023-08-28",
+      "term": "1.133333",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0008.json.gz",
+        "payload_sha256": "2c87debb30b217848b98298211f01eb8f4b6d88a710c79a39fa0b7eff60f5cb0"
+      },
+      "record_sha256": "f5c5d65daa7143169f079df774ee3b754ca973bbc2b976948295fe4c5527d752",
+      "record": {
+        "cusip": "00165C104",
+        "ex_date": "2023-08-23",
+        "foreign": false,
+        "id": "0238b79d-415e-41b0-9f5e-a735ff03dbf3",
+        "payable_date": "2023-08-28",
+        "process_date": "2023-08-28",
+        "rate": 1.133333,
+        "record_date": "2023-08-24",
+        "special": false,
+        "symbol": "AMC"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "stock_dividends",
+      "action_id": "1ae14077-7a0e-40b1-a034-183c92e636c3",
+      "category": "complex",
+      "subject_symbol": null,
+      "scoped_symbols": [
+        "AMC"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "AMC"
+        }
+      ],
+      "effective_date": "2023-08-23",
+      "effective_field": "ex_date",
+      "process_date": "2023-08-23",
+      "term": null,
+      "term_basis": "requires_event_specific_review",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0008.json.gz",
+        "payload_sha256": "2c87debb30b217848b98298211f01eb8f4b6d88a710c79a39fa0b7eff60f5cb0"
+      },
+      "record_sha256": "fa8886bb5c6ea5c33c968dc0c4f59324fa37bd60b426d219238ebddb74684ca6",
+      "record": {
+        "cusip": "00165C104",
+        "ex_date": "2023-08-23",
+        "id": "1ae14077-7a0e-40b1-a034-183c92e636c3",
+        "payable_date": "2023-08-28",
+        "process_date": "2023-08-23",
+        "rate": 1.13333,
+        "record_date": "2023-08-24",
+        "symbol": "AMC"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "stock_mergers",
+      "action_id": "5e6f60bc-98dc-4e52-8add-3c9122f81166",
+      "category": "complex",
+      "subject_symbol": null,
+      "scoped_symbols": [
+        "AMC"
+      ],
+      "symbol_roles": [
+        {
+          "role": "acquiree_symbol",
+          "symbol": "APE"
+        },
+        {
+          "role": "acquirer_symbol",
+          "symbol": "AMC"
+        }
+      ],
+      "effective_date": "2023-08-25",
+      "effective_field": "effective_date",
+      "process_date": "2023-08-25",
+      "term": null,
+      "term_basis": "requires_event_specific_review",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0010.json.gz",
+        "payload_sha256": "d13222ec77e45a42784e5002619a47e60d141a2f1acf66b41ddbc25804978128"
+      },
+      "record_sha256": "3361ecec886f50fa2db616bfa057369f6c0794234008c36bded369c4b2d2841c",
+      "record": {
+        "acquiree_cusip": "00165C203",
+        "acquiree_rate": 1,
+        "acquiree_symbol": "APE",
+        "acquirer_cusip": "00165C302",
+        "acquirer_rate": 0.1,
+        "acquirer_symbol": "AMC",
+        "effective_date": "2023-08-25",
+        "id": "5e6f60bc-98dc-4e52-8add-3c9122f81166",
+        "payable_date": "2023-08-25",
+        "process_date": "2023-08-25"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "059fde35-7ac4-47a5-b593-28da9dc2a74d",
+      "category": "cash",
+      "subject_symbol": "DFS",
+      "scoped_symbols": [
+        "DFS"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "DFS"
+        }
+      ],
+      "effective_date": "2025-05-23",
+      "effective_field": "ex_date",
+      "process_date": "2025-06-05",
+      "term": "0.7",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0053.json.gz",
+        "payload_sha256": "3a362526372f08edd71540b36ae9a834d9702bdf233373a31ae0a96873665333"
+      },
+      "record_sha256": "28de03a5f6fc6d57b09ef2aa7dd25f6ca7b38da8c6e985a8c9b2b5488914e050",
+      "record": {
+        "cusip": "254709108",
+        "ex_date": "2025-05-23",
+        "foreign": false,
+        "id": "059fde35-7ac4-47a5-b593-28da9dc2a74d",
+        "payable_date": "2025-06-05",
+        "process_date": "2025-06-05",
+        "rate": 0.7,
+        "record_date": "2025-05-23",
+        "special": false,
+        "symbol": "DFS"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "c04fa3fd-1603-4bbe-a5f0-dc762e7f644b",
+      "category": "cash",
+      "subject_symbol": "ET",
+      "scoped_symbols": [
+        "ET"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "ET"
+        }
+      ],
+      "effective_date": "2026-05-04",
+      "effective_field": "ex_date",
+      "process_date": "2026-05-15",
+      "term": "0.2111",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0069.json.gz",
+        "payload_sha256": "38be18b72ef114f006363753ca759890ce24550f04138030d5ceac28363c1f81"
+      },
+      "record_sha256": "7953c79e59fdcba2359ec942a5a4ffda6229baeebcd2dcc26a2a18d37add84e4",
+      "record": {
+        "cusip": "29273V100",
+        "ex_date": "2026-05-04",
+        "foreign": false,
+        "id": "c04fa3fd-1603-4bbe-a5f0-dc762e7f644b",
+        "payable_date": "2026-05-15",
+        "process_date": "2026-05-15",
+        "rate": 0.2111,
+        "record_date": "2026-05-04",
+        "special": false,
+        "symbol": "ET"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "c8c5feea-5333-46d9-a99a-f3f746508a69",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2022-06-16",
+      "effective_field": "ex_date",
+      "process_date": "2022-07-01",
+      "term": "8.9",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0078.json.gz",
+        "payload_sha256": "5f3147081451f7d1ff7930cfec1ec6db5c48ee05d022553c85bb50310b63dda6"
+      },
+      "record_sha256": "104f4e81bbc7373d17d7d67529622a86cb1439809855fd28787667dc7e2050dd",
+      "record": {
+        "cusip": "327891107",
+        "ex_date": "2022-06-16",
+        "foreign": false,
+        "id": "c8c5feea-5333-46d9-a99a-f3f746508a69",
+        "payable_date": "2022-07-01",
+        "process_date": "2022-07-01",
+        "rate": 8.9,
+        "record_date": "2022-06-20",
+        "special": false,
+        "symbol": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "eaa87dc5-8801-4e8f-8247-674ec3a8b7ba",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2022-12-19",
+      "effective_field": "ex_date",
+      "process_date": "2023-01-03",
+      "term": "10.6",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0078.json.gz",
+        "payload_sha256": "5f3147081451f7d1ff7930cfec1ec6db5c48ee05d022553c85bb50310b63dda6"
+      },
+      "record_sha256": "9dde90b3898d369b6e38af3a71c4dde6f7e0ea658e01612f8b272aed334c3650",
+      "record": {
+        "cusip": "327891107",
+        "ex_date": "2022-12-19",
+        "foreign": false,
+        "id": "eaa87dc5-8801-4e8f-8247-674ec3a8b7ba",
+        "payable_date": "2023-01-03",
+        "process_date": "2023-01-03",
+        "rate": 10.6,
+        "record_date": "2022-12-20",
+        "special": true,
+        "symbol": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "484c1469-336c-45ad-91de-fdd0314a9d74",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2023-06-15",
+      "effective_field": "ex_date",
+      "process_date": "2023-07-03",
+      "term": "9.1",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0078.json.gz",
+        "payload_sha256": "5f3147081451f7d1ff7930cfec1ec6db5c48ee05d022553c85bb50310b63dda6"
+      },
+      "record_sha256": "5c1a4b75a52e2cf1ae9e0c2481c01b20e169e55bcc60f211c66bc5402a9aaf9f",
+      "record": {
+        "cusip": "327891107",
+        "ex_date": "2023-06-15",
+        "foreign": false,
+        "id": "484c1469-336c-45ad-91de-fdd0314a9d74",
+        "payable_date": "2023-07-03",
+        "process_date": "2023-07-03",
+        "rate": 9.1,
+        "record_date": "2023-06-19",
+        "special": false,
+        "symbol": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "c2d72b47-41c8-44ed-8256-3f6731593647",
+      "category": "cash",
+      "subject_symbol": "FIGR",
+      "scoped_symbols": [
+        "FIGR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "FIGR"
+        }
+      ],
+      "effective_date": "2023-12-18",
+      "effective_field": "ex_date",
+      "process_date": "2024-01-02",
+      "term": "10.65",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0078.json.gz",
+        "payload_sha256": "5f3147081451f7d1ff7930cfec1ec6db5c48ee05d022553c85bb50310b63dda6"
+      },
+      "record_sha256": "55652d11510351a83bbdaecc67adaf0517628366cfaf0893b34c0b59b91e44a3",
+      "record": {
+        "cusip": "327891107",
+        "ex_date": "2023-12-18",
+        "foreign": false,
+        "id": "c2d72b47-41c8-44ed-8256-3f6731593647",
+        "payable_date": "2024-01-02",
+        "process_date": "2024-01-02",
+        "rate": 10.65,
+        "record_date": "2023-12-19",
+        "special": true,
+        "symbol": "FIGR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "aec165b1-49b9-4998-a755-eb8d4b158997",
+      "category": "cash",
+      "subject_symbol": "GOLD",
+      "scoped_symbols": [
+        "GOLD"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "GOLD"
+        }
+      ],
+      "effective_date": "2025-05-30",
+      "effective_field": "ex_date",
+      "process_date": "2025-06-16",
+      "term": "0.1",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [
+        "foreign_or_unspecified_cash_units"
+      ],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0094.json.gz",
+        "payload_sha256": "63d2f4326af293d81313baea8f2562a9c17570ade6d28a41b6640d0b7eed9651"
+      },
+      "record_sha256": "0e0826f0e550519afec01ec4f90551d554e0b29072086d16646b46eb218f6cc3",
+      "record": {
+        "cusip": "067901108",
+        "ex_date": "2025-05-30",
+        "foreign": true,
+        "id": "aec165b1-49b9-4998-a755-eb8d4b158997",
+        "payable_date": "2025-06-16",
+        "process_date": "2025-06-16",
+        "rate": 0.1,
+        "record_date": "2025-05-30",
+        "special": false,
+        "symbol": "GOLD"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "cce34ac8-2310-4649-920e-aa24ac2edcc2",
+      "category": "cash",
+      "subject_symbol": "MSTR",
+      "scoped_symbols": [
+        "MSTR"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "MSTR"
+        }
+      ],
+      "effective_date": "2025-05-21",
+      "effective_field": "ex_date",
+      "process_date": "2025-05-22",
+      "term": "0.335",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0147.json.gz",
+        "payload_sha256": "d9cde77cc2e86294444eb9523a53d82a78e5c9dafce4886dc039e6ff4e18a93c"
+      },
+      "record_sha256": "46abd55f48436a7e9d1532cc70bef707defce233e1cddd26b4a5f5c9ee46ae61",
+      "record": {
+        "cusip": "594972408",
+        "ex_date": "2025-05-21",
+        "foreign": false,
+        "id": "cce34ac8-2310-4649-920e-aa24ac2edcc2",
+        "payable_date": "2025-05-22",
+        "process_date": "2025-05-22",
+        "rate": 0.335,
+        "record_date": "2025-05-21",
+        "special": false,
+        "symbol": "MSTR"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    },
+    {
+      "provider": "alpaca",
+      "kind": "cash_dividends",
+      "action_id": "0daca30d-eeb2-4501-8e9a-0a634386fa03",
+      "category": "cash",
+      "subject_symbol": "TE",
+      "scoped_symbols": [
+        "TE"
+      ],
+      "symbol_roles": [
+        {
+          "role": "symbol",
+          "symbol": "TE"
+        }
+      ],
+      "effective_date": "2023-05-18",
+      "effective_field": "ex_date",
+      "process_date": "2023-06-02",
+      "term": "0.59",
+      "term_basis": "provider_reported_cash_amount",
+      "term_issues": [
+        "foreign_or_unspecified_cash_units"
+      ],
+      "source": {
+        "receipt": "nn_meta/data_v7/alpaca-actions-20260915/complete.json",
+        "payload": "nn_meta/data_v7/alpaca-actions-20260915/page-0211.json.gz",
+        "payload_sha256": "fb61eea18123b2d452971e1dcd49b78c798a2622ca6ac4cd5caa371551844ab6"
+      },
+      "record_sha256": "80ea3986f4508cff19137656a8ebbd7e066707bf70ec44ef451c3fd597e37a9e",
+      "record": {
+        "cusip": "H84989104",
+        "ex_date": "2023-05-18",
+        "foreign": true,
+        "id": "0daca30d-eeb2-4501-8e9a-0a634386fa03",
+        "payable_date": "2023-06-02",
+        "process_date": "2023-06-02",
+        "rate": 0.59,
+        "record_date": "2023-05-19",
+        "special": false,
+        "symbol": "TE"
+      },
+      "publication_verified": false,
+      "security_identity_verified": false,
+      "research_ready": false
+    }
+  ],
+  "reviews": [
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "MSTR",
+      "effective_date": "2025-05-21",
+      "disposition": "erroneous_cash_record",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "cce34ac8-2310-4649-920e-aa24ac2edcc2",
+          "record_sha256": "46abd55f48436a7e9d1532cc70bef707defce233e1cddd26b4a5f5c9ee46ae61"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/mstr-no-common-dividend",
+          "receipt_sha256": "111567eb1684ae6b2376ac288443b2acd59b27c0c16008ac303ba2f3f05ca6c0",
+          "payload_sha256": "12e1a4e12d514522de99dd1a4f7cdb9ad424f562ed8f4516c80614d57fb61246"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/mst-actual-distribution",
+          "receipt_sha256": "39d3b8192b81bdd1784d60c18b90119af5e75356d52d308359d6e5acbe44ec19",
+          "payload_sha256": "b520f80a05c9d0794abbf65e6768e6c2faca72cc7829848b3af03610e4e24658"
+        }
+      ],
+      "evidence_identity": "a78ecc600cc8351747d7e295151a8605e0d777dda271eb3ddf8965bd52a610c0",
+      "reviewed_facts": {
+        "issuer_common_cash_denied": true,
+        "actual_distribution_symbol": "MST"
+      },
+      "rationale": "Strategy's 2025 10-K explicitly says neither class of common stock has ever paid a cash dividend. The issuer of MST reports the exact 0.335 distribution on these record/pay dates. Alpaca's MSTR common CUSIP is itself erroneous here; do not relabel it as a preferred CUSIP or invent MSTR cash."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "ET",
+      "effective_date": "2026-05-04",
+      "disposition": "erroneous_cash_record",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c04fa3fd-1603-4bbe-a5f0-dc762e7f644b",
+          "record_sha256": "7953c79e59fdcba2359ec942a5a4ffda6229baeebcd2dcc26a2a18d37add84e4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/et-preferred-primary",
+          "receipt_sha256": "5995aa10f10afb2af8dcf0bf6c2566b5538f574c70619ea153d1bbff492d7c3b",
+          "payload_sha256": "fd83583fded0bbb1f0e491574237b5789b35f034c2f80d896f8ddea60c1c8cff"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/et-common-primary",
+          "receipt_sha256": "46f353849a44b074fcaaac02f08fe3dd0131d0ab9373e17fc46f0715d1ba2982",
+          "payload_sha256": "8d16bd4a1ecf2d97c40c0f979312c797de0f7f280b3666a479790dc625109f90"
+        }
+      ],
+      "evidence_identity": "cfaff4d828a4738f96f7207e5eb06f62fcdae9e20905b84e6876363a9a129746",
+      "reviewed_facts": {
+        "issuer_common_cash_denied": true,
+        "actual_distribution_symbol": "ETprI"
+      },
+      "rationale": "Issuer identifies 0.2111 as the Series I preferred distribution, record May4/pay May15. Its separately declared common payment is 0.3375 record May8/pay May20. The original common ticker/CUSIP attached to preferred terms is erroneous; preserve the record as a correction, without altering the separately compiled common dividend."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "DFS",
+      "effective_date": "2025-05-23",
+      "disposition": "cancelled_before_record_date",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "059fde35-7ac4-47a5-b593-28da9dc2a74d",
+          "record_sha256": "28de03a5f6fc6d57b09ef2aa7dd25f6ca7b38da8c6e985a8c9b2b5488914e050"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/dfs-conditional-dividend",
+          "receipt_sha256": "09a9f4e2f8538b560eddd42dcdcae07dbbb0fb623dd9cbc752d8a4335d865bca",
+          "payload_sha256": "077a9050adacb3e5fb9b6fca5afddd5e03189493adce7c5695d3e4fb4bbfcf1d"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/dfs-merger-completed",
+          "receipt_sha256": "cfaa247b23cd534f502e47bda2496cd6042e43008fe2adad514d7030be7a5a31",
+          "payload_sha256": "5e463f231b326cc0d7f4ebb9cddb6a83da4c4c2f25a2c86dcdfee48441409423"
+        }
+      ],
+      "evidence_identity": "ad88cd89a3740f6d3108d6e1c22f338ae2459ba7ebfae0f715e484e09bd870a6",
+      "reviewed_facts": {
+        "cancellation_date": "2025-05-18",
+        "cash_entitlement_survives": false,
+        "cancellation_evidence_identity": "f3439335714e56f83089723043f732402d6332b22cf92ba6a925d104c56f3cb6"
+      },
+      "rationale": "DFS declared a conditional dividend with explicit warning that it would not be received if the merger closed May18. The completed-merger filing proves that closing. No DFS shares survived to the May23 record date; any COF entitlement is separate. The merger's stock treatment remains unresolved."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "FIGR",
+      "effective_date": "2022-06-16",
+      "disposition": "unrelated_record_security",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E189dca629cbcf28d8c232793418b60b6d7979a1019703c8c8561c0bef225576c",
+          "record_sha256": "fbad1a36f911b18173e118ea0fdadf64ab0a13012a31f9b56cfafc849987a5d9"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c8c5feea-5333-46d9-a99a-f3f746508a69",
+          "record_sha256": "104f4e81bbc7373d17d7d67529622a86cb1439809855fd28787667dc7e2050dd"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/figr-identity-web",
+          "receipt_sha256": "6ca6e650916683acf2d9d7c683b9244101af3a5882da20d1bac424476bc1f89b",
+          "payload_sha256": "b9805ba1e404d512f8e818adf5cf26856a83259662a80ada296393f330e5f022"
+        }
+      ],
+      "evidence_identity": "9ffec8f8ed8159ae950f35fe6ff6d4d0039590442f28e86f092970c3100c8357",
+      "reviewed_facts": {
+        "record_cusip": "327891107",
+        "record_issuer": "First National Bank of Groton (New York)",
+        "scoped_issuer": "Figure Technology Solutions",
+        "successor_relationship": false
+      },
+      "rationale": "Positive broker CUSIP/ticker directory identifies First National Bank of Groton, matching every original Alpaca CUSIP. These bank dividends precede listed Figure Technology Solutions and do not entitle its selected shares. Original Massive rows are retained with the whole matching bank distribution group; no issuer is removed from scope."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "FIGR",
+      "effective_date": "2022-12-19",
+      "disposition": "unrelated_record_security",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7a03332f9538dd1a7c029f98284c612a17c066bcb5791bdbec77ed026e128674",
+          "record_sha256": "a759cb534a085c2d85791f12a6f4a02baad40537e2b17530b5475cbc7c67718a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ecbf32ec94d03e3e4484e2745eebd637e9d6a14da31873d5a4e30d69b8b5e5343",
+          "record_sha256": "94fe9cdc914da4e6619ee865954ae27afd9830a661cce96054096e8df75ee5db"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "eaa87dc5-8801-4e8f-8247-674ec3a8b7ba",
+          "record_sha256": "9dde90b3898d369b6e38af3a71c4dde6f7e0ea658e01612f8b272aed334c3650"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/figr-identity-web",
+          "receipt_sha256": "6ca6e650916683acf2d9d7c683b9244101af3a5882da20d1bac424476bc1f89b",
+          "payload_sha256": "b9805ba1e404d512f8e818adf5cf26856a83259662a80ada296393f330e5f022"
+        }
+      ],
+      "evidence_identity": "9ffec8f8ed8159ae950f35fe6ff6d4d0039590442f28e86f092970c3100c8357",
+      "reviewed_facts": {
+        "record_cusip": "327891107",
+        "record_issuer": "First National Bank of Groton (New York)",
+        "scoped_issuer": "Figure Technology Solutions",
+        "successor_relationship": false
+      },
+      "rationale": "Positive broker CUSIP/ticker directory identifies First National Bank of Groton, matching every original Alpaca CUSIP. These bank dividends precede listed Figure Technology Solutions and do not entitle its selected shares. Original Massive rows are retained with the whole matching bank distribution group; no issuer is removed from scope."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "FIGR",
+      "effective_date": "2023-06-15",
+      "disposition": "unrelated_record_security",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E48f40b3a36b6f5b9e22e7e7c362ba0c3f188b7c4ea08eaa2db34c08382e7b161",
+          "record_sha256": "49900db1f337de5d77b59fcd3b612cecab47cd92779b62d058682629fe6d31b8"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "484c1469-336c-45ad-91de-fdd0314a9d74",
+          "record_sha256": "5c1a4b75a52e2cf1ae9e0c2481c01b20e169e55bcc60f211c66bc5402a9aaf9f"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/figr-identity-web",
+          "receipt_sha256": "6ca6e650916683acf2d9d7c683b9244101af3a5882da20d1bac424476bc1f89b",
+          "payload_sha256": "b9805ba1e404d512f8e818adf5cf26856a83259662a80ada296393f330e5f022"
+        }
+      ],
+      "evidence_identity": "9ffec8f8ed8159ae950f35fe6ff6d4d0039590442f28e86f092970c3100c8357",
+      "reviewed_facts": {
+        "record_cusip": "327891107",
+        "record_issuer": "First National Bank of Groton (New York)",
+        "scoped_issuer": "Figure Technology Solutions",
+        "successor_relationship": false
+      },
+      "rationale": "Positive broker CUSIP/ticker directory identifies First National Bank of Groton, matching every original Alpaca CUSIP. These bank dividends precede listed Figure Technology Solutions and do not entitle its selected shares. Original Massive rows are retained with the whole matching bank distribution group; no issuer is removed from scope."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "FIGR",
+      "effective_date": "2023-12-18",
+      "disposition": "unrelated_record_security",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c2d72b47-41c8-44ed-8256-3f6731593647",
+          "record_sha256": "55652d11510351a83bbdaecc67adaf0517628366cfaf0893b34c0b59b91e44a3"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/figr-identity-web",
+          "receipt_sha256": "6ca6e650916683acf2d9d7c683b9244101af3a5882da20d1bac424476bc1f89b",
+          "payload_sha256": "b9805ba1e404d512f8e818adf5cf26856a83259662a80ada296393f330e5f022"
+        }
+      ],
+      "evidence_identity": "9ffec8f8ed8159ae950f35fe6ff6d4d0039590442f28e86f092970c3100c8357",
+      "reviewed_facts": {
+        "record_cusip": "327891107",
+        "record_issuer": "First National Bank of Groton (New York)",
+        "scoped_issuer": "Figure Technology Solutions",
+        "successor_relationship": false
+      },
+      "rationale": "Positive broker CUSIP/ticker directory identifies First National Bank of Groton, matching every original Alpaca CUSIP. These bank dividends precede listed Figure Technology Solutions and do not entitle its selected shares. Original Massive rows are retained with the whole matching bank distribution group; no issuer is removed from scope."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "TE",
+      "effective_date": "2023-05-18",
+      "disposition": "unrelated_record_security",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "0daca30d-eeb2-4501-8e9a-0a634386fa03",
+          "record_sha256": "80ea3986f4508cff19137656a8ebbd7e066707bf70ec44ef451c3fd597e37a9e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/tel-cusip-primary",
+          "receipt_sha256": "cca39a8fe8b342246a4c5e3fd57e82c1a6ccb20dda22df0eff531633ea726460",
+          "payload_sha256": "03f1b23b9b37cbb2f24dd83149f97ea0e27f4045fe256fb41c940939d1788922"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/tel-2023-dividend",
+          "receipt_sha256": "c233be4017187d72357d9698aadd34054b62d82e1a1f5c7f61f8948c60a223fc",
+          "payload_sha256": "64f241e7aa309874787c2002e8f9c75758087d627f09194c2451611f5d72d0ff"
+        }
+      ],
+      "evidence_identity": "470376ade040ae2ae2e5afd792f872f1dea520f0bfcf3274bb2fa4671f76c1f9",
+      "reviewed_facts": {
+        "record_cusip": "H84989104",
+        "record_issuer": "TE Connectivity",
+        "scoped_issuer": "T1 Energy (formerly FREYR)",
+        "successor_relationship": false
+      },
+      "rationale": "The original CUSIP identifies TE Connectivity, ticker TEL; its issuer notice confirms 0.59, May19 record and June2 pay. It is unrelated to T1 Energy/FREYR. Preserve the erroneous TE ticker record as an unrelated identified security; no scope exclusion or successor inference."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "GOLD",
+      "effective_date": "2025-05-30",
+      "disposition": "duplicate_ticker_alias",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "aec165b1-49b9-4998-a755-eb8d4b158997",
+          "record_sha256": "0e0826f0e550519afec01ec4f90551d554e0b29072086d16646b46eb218f6cc3"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/barrick-history",
+          "receipt_sha256": "594a601b1f6f92dd65004315697a958bb9914f2a6f31b7b8e2afab0ac974bc7a",
+          "payload_sha256": "271d4fb7c740c3612d49effb5eb8368245b3ddefda5eb803cba0bf4f32e48ffb"
+        }
+      ],
+      "evidence_identity": "fca94b4b553f41394db8d916ea577dca208ba7353e1eeb60bcad448f8491a97b",
+      "reviewed_facts": {
+        "target_event_id": "dividend-reviewed:c40bdf73e79c040e3f1a4e541415c68f3f5f692f9f5385861588f50f37d0f287",
+        "security_id": "BBG000BB07P9"
+      },
+      "rationale": "The already reviewed GOLD-to-B rename preserves the same common shares. The 0.10 May30 record/June16 pay dividend is already compiled for B. Bind the old-ticker record as corroborating alias coverage without another price factor or payment."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "AMC",
+      "effective_date": "2023-08-23",
+      "disposition": "noncash_distribution",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "0238b79d-415e-41b0-9f5e-a735ff03dbf3",
+          "record_sha256": "f5c5d65daa7143169f079df774ee3b754ca973bbc2b976948295fe4c5527d752"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/amc-stock-settlement",
+          "receipt_sha256": "eb96aa1c53f83a4ef52297fd3edfdea77387a360b352e7f9314e6eb05081a160",
+          "payload_sha256": "3286d79e7b0b4fdb29762d494f03c393b5c0b5258c2538d63f7e1fea0ebaf55c"
+        }
+      ],
+      "evidence_identity": "f283ad604aa613aace42a86a601ea2dbdee5770e61784d11441be3f794f50a38",
+      "reviewed_facts": {
+        "cash_per_share": "0",
+        "share_entitlement": "one AMC share per 7.5 post-reverse-split common shares; fractional treatment remains part of stock settlement",
+        "pending_noncash_references": [
+          {
+            "provider": "alpaca",
+            "kind": "stock_dividends",
+            "action_id": "1ae14077-7a0e-40b1-a034-183c92e636c3",
+            "record_sha256": "fa8886bb5c6ea5c33c968dc0c4f59324fa37bd60b426d219238ebddb74684ca6"
+          },
+          {
+            "provider": "alpaca",
+            "kind": "stock_mergers",
+            "action_id": "5e6f60bc-98dc-4e52-8add-3c9122f81166",
+            "record_sha256": "3361ecec886f50fa2db616bfa057369f6c0794234008c36bded369c4b2d2841c"
+          }
+        ]
+      },
+      "rationale": "Issuer filed a share settlement for August24 record holders following its reverse split, not a fixed 1.133333 USD cash dividend. Preserve the false cash record as a noncash correction tied to pending share-action records. Block its original effective date until the full split/settlement lifecycle is resolved; do not invent cash in lieu."
+    }
+  ],
+  "actions": [
+    {
+      "symbol": "B",
+      "security_id": "BBG000BB07P9",
+      "effective_date": "2025-05-30",
+      "category": "cash",
+      "cash_amount": "0.10",
+      "cash_units": "USD_per_listed_share_or_unit",
+      "admission_basis": "primary_terms_effective_session_reconstruction",
+      "admission_policy_identity": "2c4452121429811bb45d9be26540f5b8c680edb6ea435887deb7217e9bea804e",
+      "review_identity": "c40bdf73e79c040e3f1a4e541415c68f3f5f692f9f5385861588f50f37d0f287",
+      "publication_verified": false,
+      "publication_available_at": null,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e18664f7-4fe4-4bd9-be28-be1015800a0d",
+          "record_sha256": "a5a5c3186de4f973ea90ffbad4afdb870afe833d07f3599a994d427ca728f6d6"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E195ddf52016106a27b276f951f41f2c2ce5f4eb29900e2d5f20a374181e60187",
+          "record_sha256": "7ab443e71b58318ead708a15246bac8f13baceec41e332e202e59c7eb9527f7e"
+        }
+      ],
+      "action": {
+        "event_id": "dividend-reviewed:c40bdf73e79c040e3f1a4e541415c68f3f5f692f9f5385861588f50f37d0f287",
+        "effective_at": "2025-05-30T13:30:00+00:00",
+        "available_at": "2025-05-30T13:30:00+00:00",
+        "price_factor": 0.9947354566991313,
+        "volume_factor": 1.0,
+        "source_identity": "c40bdf73e79c040e3f1a4e541415c68f3f5f692f9f5385861588f50f37d0f287",
+        "admission_policy_identity": "2c4452121429811bb45d9be26540f5b8c680edb6ea435887deb7217e9bea804e",
+        "review_identity": "c40bdf73e79c040e3f1a4e541415c68f3f5f692f9f5385861588f50f37d0f287",
+        "admission_basis": "primary_terms_effective_session_reconstruction",
+        "publication_verified": false,
+        "publication_available_at": null
+      },
+      "full_security_admitted": false,
+      "prior_source_date": "2025-05-29",
+      "prior_raw_close": 18.995,
+      "reviewed_payments": [
+        {
+          "name": "primary-payment-1",
+          "record_date": "2025-05-30",
+          "pay_date": "2025-06-16",
+          "cash_per_share": "0.10",
+          "terms_evidence_identity": "91800b87b995b7a816bd5850ecce60fb969a8ecaf2c7b6b19b02f4b7906a6356"
+        }
+      ],
+      "held_position_treatment": "authorized_pretax_cash_components"
+    }
+  ],
+  "cash": [
+    {
+      "schema": "v7-stock-cash-entitlement-v1",
+      "compiled_event_id": "dividend-reviewed:c40bdf73e79c040e3f1a4e541415c68f3f5f692f9f5385861588f50f37d0f287",
+      "symbol": "B",
+      "security_id": "BBG000BB07P9",
+      "ex_date": "2025-05-30",
+      "record_date": "2025-05-30",
+      "pay_date": "2025-06-16",
+      "effective_ns": 1748611800000000000,
+      "available_ns": 1748611800000000000,
+      "release_ns": 1750167000000000000,
+      "cash_per_share": "0.10",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "withholding_fraction": 0,
+      "dividend_fee_per_share": 0,
+      "broker_posting_verified": false,
+      "policy_id": "pretax-funded-stock-cash-reconstruction-20260917",
+      "policy_identity": "2c4452121429811bb45d9be26540f5b8c680edb6ea435887deb7217e9bea804e",
+      "source_identity": "7a3e0eadab6537a754b019e3ac72417f3b52f445d6c207ec481b40a750e80b73",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e18664f7-4fe4-4bd9-be28-be1015800a0d",
+          "record_sha256": "a5a5c3186de4f973ea90ffbad4afdb870afe833d07f3599a994d427ca728f6d6"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E195ddf52016106a27b276f951f41f2c2ce5f4eb29900e2d5f20a374181e60187",
+          "record_sha256": "7ab443e71b58318ead708a15246bac8f13baceec41e332e202e59c7eb9527f7e"
+        }
+      ],
+      "date_basis": "retained_primary_dividend_terms",
+      "dividend_component_index": 0,
+      "dividend_component_count": 1,
+      "dividend_component_name": "primary-payment-1",
+      "date_review_identity": "c40bdf73e79c040e3f1a4e541415c68f3f5f692f9f5385861588f50f37d0f287",
+      "date_evidence_identity": "91800b87b995b7a816bd5850ecce60fb969a8ecaf2c7b6b19b02f4b7906a6356",
+      "event_id": "stock-cash:6226bd3f949f98732764955ea5cc003fea670ca7e992c9d9ec44f6f745aea260"
+    }
+  ],
+  "renames": [
+    {
+      "schema": "v7-reviewed-common-share-rename-v1",
+      "event_id": "rename:d1878ae278358e2b0fd2a798ae00437ec3060ffd63021cb1cd3592ef18ffb9d6",
+      "security_id": "BBG000BB07P9",
+      "share_class_figi": "BBG001S5N9P3",
+      "old_symbol": "GOLD",
+      "new_symbol": "B",
+      "prior_date": "2025-05-08",
+      "effective_date": "2025-05-09",
+      "effective_ns": 1746797400000000000,
+      "available_ns": 1746590400000000000,
+      "share_quantity_factor": 1,
+      "cash_delta": 0,
+      "option_deliverables_admitted": false,
+      "review_identity": "d1878ae278358e2b0fd2a798ae00437ec3060ffd63021cb1cd3592ef18ffb9d6",
+      "evidence_identity": "6e00af279fe81fecb963d79de2caeadac29f620958b5bdca57a4235f3e5369e4",
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "name_changes",
+          "action_id": "7297ca5d-6549-4af0-b053-0c61701de472",
+          "record_sha256": "3e475976d8b4da10eaf3795ae0eb7fade52db24fbc05f5d90e8866f3888b91cd"
+        }
+      ]
+    }
+  ],
+  "coverage_policy": {
+    "schema": "v7-no-event-reconstruction-admission-v1",
+    "status": "user_authorized",
+    "audit": "nn_meta/validation/v7-action-coverage-20260917",
+    "proposed_basis": "retrospective_provider_union_completeness_assumption",
+    "meaning": "Treat a resolved listed security/session with no applicable event in the reconciled retained provider union as a no-event session for historical reconstruction.",
+    "conditions": [
+      "Verify immutable full-window capture queries, receipts, source bindings and completed pagination.",
+      "Reconcile every original provider record; separately resolve conflicts, complex events and undated records before admitting affected histories.",
+      "Require resolved dated identities; no ticker-only joins or automatic issuer exclusions.",
+      "Record capture time, query time basis, review identities and this assumption in every consumer declaration.",
+      "Reject unresolved affected dates rather than silently assigning factor one.",
+      "Keep historical publication and provider completeness unverified; do not represent the assumption as proof.",
+      "Require separate stock entitlement, payment/settlement and option-deliverable evidence for holdings."
+    ],
+    "known_limit": "Alpaca queries process dates and does not guarantee timely availability. A completed capture cannot prove absence of events not reported by either provider.",
+    "scope_change": false,
+    "research_ready": false,
+    "policy_id": "provider-union-no-event-reconstruction-20260917",
+    "authorization": "User explicitly accepted the documented no-event reconstruction assumption in this session."
+  }
+}

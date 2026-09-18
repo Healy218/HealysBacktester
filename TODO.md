@@ -116,4 +116,4 @@ The previous overlapping checklist is preserved verbatim in
 Its old open/checkmarked entries are historical; they are not another active V7
 queue. Deferred work is not deleted and must not delay this seven-item sequence.
 
-September 18 continuation checkpoint: **4,835 payment leaves across all 4,777 compiled cash events; 87 uncompiled dividend groups remain and zero missing-date cases.** R3–R6 and seven nominal date reviews are sealed. Full suite: 2,277 tests plus 18 subtests. Current artifact v7-primary-dividends-20260918-r6; history coverage still pending final rebuild.
+September 18 continuation checkpoint: **4,863 payment leaves across all 4,802 compiled cash events; 52 uncompiled dividend groups remain and zero missing-date cases.** R7–R9 and ten false/duplicate cash dispositions are sealed. Full suite: 2,287 tests plus 18 subtests. Current artifact v7-dividend-dispositions-20260918; rebuilt coverage admits 587,253 sessions. Dividend work and item 6-1 remain open; currency modeling question is pending.

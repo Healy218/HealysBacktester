@@ -1,0 +1,752 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "PFE",
+      "ex_date": "2023-07-27",
+      "security_id": "BBG000BR2B91",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.41",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "cash_distribution",
+          "record_date": "2023-07-28",
+          "pay_date": "2023-09-05",
+          "cash_per_share": "0.41",
+          "terms_evidence_identity": "483b09a259943e213ea0a69960c156dfc346328f752c3f21a1decc6e7ed34d75",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "01398b63-1abd-46fa-9391-f75bb754caf0",
+          "record_sha256": "fab16df8a577f6dc504eec4a1b9b47ac72a7c42e45c8c57596f5bb3ae1ffe69c"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Efbda33ce30b364ea804bf79ed3e0be326c15b50912d77e02b28ce68a6f97308c",
+          "record_sha256": "2ed4e1a52530a84f502f1421a2c204faf90c4f09d7ae8af78a1a2edc14798b25"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/pfe-declaration",
+          "receipt_sha256": "add65a95f7b06ef9d851dab05684847e66a55c1a310cc34300ef9355d87fdde2",
+          "payload_sha256": "71f69f49084851095a63149568ae7725b288b637eadc624803d5de391417b5e9",
+          "source_terms": {
+            "symbol": "PFE",
+            "ex": "2023-07-27",
+            "record": "2023-07-28",
+            "pay": "2023-09-05",
+            "amounts": [
+              ".41"
+            ],
+            "names": [
+              "cash_distribution"
+            ],
+            "capture": "pfe-declaration",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "89597ed619bc413cc85f8a84da7922c6be62b04ec7b066594dfccad2cd03267d",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "NTR",
+      "ex_date": "2026-06-30",
+      "security_id": "BBG00JM9XLN6",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.55",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "cash_distribution",
+          "record_date": "2026-06-30",
+          "pay_date": "2026-07-17",
+          "cash_per_share": "0.55",
+          "terms_evidence_identity": "c02e024343863194861a58a54cf9d82cb112562f6949d7beb8a11d71fa2cd080",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9294fb5f-708c-452f-b20f-f2ed4518d76e",
+          "record_sha256": "6fa61840b53df37743cf1b85593b5495b2ac460d99f21ccc97c0e95cd27fd85e"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Eae16d743824ca8f1fe632dd5bd0374a317acf2e5a75113f84155b8a23d9614ad",
+          "record_sha256": "5c1fd4934e2e964e3ea1af27bc104643ad1f9f05bba1a42bd5cc6a8248fe38f6"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ntr-q2-2026",
+          "receipt_sha256": "b82ec9db7590d19bb74f9a018095e6184bb5cc689524e8d6a4fd7156a796d622",
+          "payload_sha256": "ca6a107d62472828d1e543132167faa11d7783c1c3bc139b487e9524816cd7a0",
+          "source_terms": {
+            "symbol": "NTR",
+            "ex": "2026-06-30",
+            "record": "2026-06-30",
+            "pay": "2026-07-17",
+            "amounts": [
+              ".55"
+            ],
+            "names": [
+              "cash_distribution"
+            ],
+            "capture": "ntr-q2-2026",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "0eece88a78481c0ec2cb79b0f440ff30a4ac88cd569b1eae1718a30157e9cf98",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "RKT",
+      "ex_date": "2025-03-20",
+      "security_id": "BBG00VY1MYW7",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.80",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "cash_distribution",
+          "record_date": "2025-03-20",
+          "pay_date": "2025-04-03",
+          "cash_per_share": "0.80",
+          "terms_evidence_identity": "645bada80ab9656ee3ccc5a181097bd437f5daa7368989550c17812e0b05cd02",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8c3ff74f-e48b-4adb-968b-7a38e9b6f8fb",
+          "record_sha256": "0c51d4781f87429a8059c7f79d26d9e435ac0012864a0ba3de947a2d0a248192"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "9ed64143-051c-44d4-9ddd-c6b766831f1f",
+          "record_sha256": "ce08a1e7e2f45d55ec5319182411de2a5adee049845737df4552084436fb9e7d"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec27e8cd9c00a29baaf72e07cbb445cf197562d978734306e331fa7729f40dc03",
+          "record_sha256": "338a3950a4c364073f1594650fb52cbcc51c6f25298225c895239c2c9ef7604e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/rkt-2025-primary",
+          "receipt_sha256": "eb6195bc7c90ebaff9028a59965e19347d2fb6439ed1103ae3cb40499acb38a9",
+          "payload_sha256": "669255368333a6af313f860fabb34a4ef5cd321161f47c419f17fa485d14af19",
+          "source_terms": {
+            "symbol": "RKT",
+            "ex": "2025-03-20",
+            "record": "2025-03-20",
+            "pay": "2025-04-03",
+            "amounts": [
+              ".80"
+            ],
+            "names": [
+              "cash_distribution"
+            ],
+            "capture": "rkt-2025-primary",
+            "date_basis": "primary_stated_dates"
+          }
+        }
+      ],
+      "evidence_identity": "6ec41293fed4f50291daaf07de2b2ba031c7608acb4a703323817423c02ac049",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AZN",
+      "ex_date": "2023-02-23",
+      "security_id": "BBG000BZ0DK8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.985",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "gross_USD_distribution",
+          "record_date": "2023-02-24",
+          "pay_date": "2023-03-27",
+          "cash_per_share": "0.985",
+          "terms_evidence_identity": "dd7a461950f4e706aa8cad1eca26ec4d5e215d4b9cea5f8a6b9d422ab9d9c1a5",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "e5bb3b3e-63c1-43f5-873a-c5ca90eb9e6d",
+          "record_sha256": "e9109518d67a49091d5527edc0e89cff40eab361182baed96ae402406cec6de4"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E9ed5d9eea1089f8e1ae55b7daf9f6fa38017e08cc35a156a12b56d29c0a81fed",
+          "record_sha256": "e4d3c71036be750ad3a5ad7268294fbc3d9c83a94a4078e3701041c713c01fdf"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-annual2025",
+          "receipt_sha256": "6bc6a09026db55408e2dc9f399f4ee1cfca731d5bfa18f5a7621b5ef2e1c3939",
+          "payload_sha256": "093f7e2416137a8c6fbb3754aed7226f93cb0bfbf0dc1b087182c3227928d506",
+          "source_terms": {
+            "symbol": "AZN",
+            "ex": "2023-02-23",
+            "amounts": [
+              ".985"
+            ],
+            "names": [
+              "gross_USD_distribution"
+            ],
+            "capture": "azn-annual2025",
+            "date_basis": "matching_original_provider_dates",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share",
+            "supporting_captures": [
+              "azn-ratio",
+              "azn-policy"
+            ],
+            "record": "2023-02-24",
+            "pay": "2023-03-27"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-ratio",
+          "receipt_sha256": "f0f4a5657a7fb85daf832abc9c4549d6b7c1c4fa079725208dce4bc4420f32ed",
+          "payload_sha256": "98907a79ad81ed1c4ef73ab87752f4dc91a4f333a7f1aba1120e74b60442ef1c",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-policy",
+          "receipt_sha256": "dd177a7732cc0c4836b3c33f1557447d1f1a1fd09058a1859d2c24828926c862",
+          "payload_sha256": "ccd2ed70e9014306820b1c7de51e5e27f5afa0a2b768120c6ebd0e7fb9445c16",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        }
+      ],
+      "evidence_identity": "989c81e628fee781c143a66389dbd76aba48a16c19bacbacc08ef598f28e81ad",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. Divide ordinary USD by two only for the historical ADR periods; use full USD per NYSE ordinary share following February 2026 listing harmonisation. Provider GBP amounts and fees are not gross USD.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AZN",
+      "ex_date": "2023-08-10",
+      "security_id": "BBG000BZ0DK8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.465",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "gross_USD_distribution",
+          "record_date": "2023-08-11",
+          "pay_date": "2023-09-11",
+          "cash_per_share": "0.465",
+          "terms_evidence_identity": "941fbf090eb1e7fd759b645b95214a99609085dbda80a758940aac471a52ba52",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "f3f9790e-6cbc-48c5-a591-7f7ce593d9f7",
+          "record_sha256": "ab5c726c8f100ffd966c5cad3ccb8347b35faa9c35ff2218f965878cdf061044"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E3af290fe36a1294906df68d3995884f04d3116c3fd874d25d9bf32fba998720a",
+          "record_sha256": "560a3f3959f2ca3fda5754f54a90fdbae8e054eaeee6a6636c6348558a48dcd5"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-annual2025",
+          "receipt_sha256": "6bc6a09026db55408e2dc9f399f4ee1cfca731d5bfa18f5a7621b5ef2e1c3939",
+          "payload_sha256": "093f7e2416137a8c6fbb3754aed7226f93cb0bfbf0dc1b087182c3227928d506",
+          "source_terms": {
+            "symbol": "AZN",
+            "ex": "2023-08-10",
+            "amounts": [
+              ".465"
+            ],
+            "names": [
+              "gross_USD_distribution"
+            ],
+            "capture": "azn-annual2025",
+            "date_basis": "matching_original_provider_dates",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share",
+            "supporting_captures": [
+              "azn-ratio",
+              "azn-policy"
+            ],
+            "record": "2023-08-11",
+            "pay": "2023-09-11"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-ratio",
+          "receipt_sha256": "f0f4a5657a7fb85daf832abc9c4549d6b7c1c4fa079725208dce4bc4420f32ed",
+          "payload_sha256": "98907a79ad81ed1c4ef73ab87752f4dc91a4f333a7f1aba1120e74b60442ef1c",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-policy",
+          "receipt_sha256": "dd177a7732cc0c4836b3c33f1557447d1f1a1fd09058a1859d2c24828926c862",
+          "payload_sha256": "ccd2ed70e9014306820b1c7de51e5e27f5afa0a2b768120c6ebd0e7fb9445c16",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        }
+      ],
+      "evidence_identity": "d3896dd7139c54cb3641ac7150078e604cb04a8c1d416d574bf2492267979e01",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. Divide ordinary USD by two only for the historical ADR periods; use full USD per NYSE ordinary share following February 2026 listing harmonisation. Provider GBP amounts and fees are not gross USD.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AZN",
+      "ex_date": "2024-02-22",
+      "security_id": "BBG000BZ0DK8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.985",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "gross_USD_distribution",
+          "record_date": "2024-02-23",
+          "pay_date": "2024-03-25",
+          "cash_per_share": "0.985",
+          "terms_evidence_identity": "6e43ea214e7de5e0ee44dd913591ec0ee8f4eb49112c5e001158233fa15766f0",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "8c53797e-f57c-4a82-b628-8cf479d7dbcb",
+          "record_sha256": "8547a50e0dbc357f23e16d0f3a982bf8905bb330c887b4b124b95dd0ce64d8e4"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ec1b74cab5b488c8c9d339d49f5bf48582b1a78fad89f892184e8ed4a5718d17d",
+          "record_sha256": "76cb87edcd99dd6a71ec7a824c2e5d61501db0fc6dc0f1dd422c983eb9316857"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-annual2025",
+          "receipt_sha256": "6bc6a09026db55408e2dc9f399f4ee1cfca731d5bfa18f5a7621b5ef2e1c3939",
+          "payload_sha256": "093f7e2416137a8c6fbb3754aed7226f93cb0bfbf0dc1b087182c3227928d506",
+          "source_terms": {
+            "symbol": "AZN",
+            "ex": "2024-02-22",
+            "amounts": [
+              ".985"
+            ],
+            "names": [
+              "gross_USD_distribution"
+            ],
+            "capture": "azn-annual2025",
+            "date_basis": "matching_original_provider_dates",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share",
+            "supporting_captures": [
+              "azn-ratio",
+              "azn-policy"
+            ],
+            "record": "2024-02-23",
+            "pay": "2024-03-25"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-ratio",
+          "receipt_sha256": "f0f4a5657a7fb85daf832abc9c4549d6b7c1c4fa079725208dce4bc4420f32ed",
+          "payload_sha256": "98907a79ad81ed1c4ef73ab87752f4dc91a4f333a7f1aba1120e74b60442ef1c",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-policy",
+          "receipt_sha256": "dd177a7732cc0c4836b3c33f1557447d1f1a1fd09058a1859d2c24828926c862",
+          "payload_sha256": "ccd2ed70e9014306820b1c7de51e5e27f5afa0a2b768120c6ebd0e7fb9445c16",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        }
+      ],
+      "evidence_identity": "37e30f38fbd3c50b485bf4efaad9b6c78b29095888adbf86bc0ca65e1bfe050c",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. Divide ordinary USD by two only for the historical ADR periods; use full USD per NYSE ordinary share following February 2026 listing harmonisation. Provider GBP amounts and fees are not gross USD.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AZN",
+      "ex_date": "2024-08-09",
+      "security_id": "BBG000BZ0DK8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.50",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "gross_USD_distribution",
+          "record_date": "2024-08-09",
+          "pay_date": "2024-09-09",
+          "cash_per_share": "0.50",
+          "terms_evidence_identity": "671467f343a292fc8f20698e2afe36740b9ef1854404c50e9bf8ebeb480f3682",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "fdee94db-e5b0-49a6-a713-db191973d838",
+          "record_sha256": "3629c3a37e0131c4aecabc219f9900d9f7ec006d62e5a29f4733d002c59658bd"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E2b1c967073d6b12cf4342c2999ad25fd64ab6b89f9880102e7590213fd0d3a5a",
+          "record_sha256": "5b08e0a569874b98acabc66464457d7c1635a2afdfd9b653e32f59de772edffd"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-annual2025",
+          "receipt_sha256": "6bc6a09026db55408e2dc9f399f4ee1cfca731d5bfa18f5a7621b5ef2e1c3939",
+          "payload_sha256": "093f7e2416137a8c6fbb3754aed7226f93cb0bfbf0dc1b087182c3227928d506",
+          "source_terms": {
+            "symbol": "AZN",
+            "ex": "2024-08-09",
+            "amounts": [
+              ".50"
+            ],
+            "names": [
+              "gross_USD_distribution"
+            ],
+            "capture": "azn-annual2025",
+            "date_basis": "matching_original_provider_dates",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share",
+            "supporting_captures": [
+              "azn-ratio",
+              "azn-policy"
+            ],
+            "record": "2024-08-09",
+            "pay": "2024-09-09"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-ratio",
+          "receipt_sha256": "f0f4a5657a7fb85daf832abc9c4549d6b7c1c4fa079725208dce4bc4420f32ed",
+          "payload_sha256": "98907a79ad81ed1c4ef73ab87752f4dc91a4f333a7f1aba1120e74b60442ef1c",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-policy",
+          "receipt_sha256": "dd177a7732cc0c4836b3c33f1557447d1f1a1fd09058a1859d2c24828926c862",
+          "payload_sha256": "ccd2ed70e9014306820b1c7de51e5e27f5afa0a2b768120c6ebd0e7fb9445c16",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        }
+      ],
+      "evidence_identity": "093e4238cf7f703b6dee9f7a57a19b8079576c729795919b60eda9eb0fab2547",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. Divide ordinary USD by two only for the historical ADR periods; use full USD per NYSE ordinary share following February 2026 listing harmonisation. Provider GBP amounts and fees are not gross USD.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AZN",
+      "ex_date": "2025-02-21",
+      "security_id": "BBG000BZ0DK8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "1.05",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "gross_USD_distribution",
+          "record_date": "2025-02-21",
+          "pay_date": "2025-03-24",
+          "cash_per_share": "1.05",
+          "terms_evidence_identity": "34930da55dee8717b3dd358f5b25ee44c274b24b5b3013ed8b49d4368956b0fb",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "90b81ca3-1c50-46f3-b7b6-904a76736fbc",
+          "record_sha256": "57ffddfd30ac908496aad628db678c287601b88cf15bf6cae5c101ccca64a7e5"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E680465ff8292a72d78e4c53d259781b172ede81d10414a586fea645e35dc8961",
+          "record_sha256": "2ef88469a59d0928abd973053a02b41a5d2c011109ab332af28745684f425620"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-annual2025",
+          "receipt_sha256": "6bc6a09026db55408e2dc9f399f4ee1cfca731d5bfa18f5a7621b5ef2e1c3939",
+          "payload_sha256": "093f7e2416137a8c6fbb3754aed7226f93cb0bfbf0dc1b087182c3227928d506",
+          "source_terms": {
+            "symbol": "AZN",
+            "ex": "2025-02-21",
+            "amounts": [
+              "1.05"
+            ],
+            "names": [
+              "gross_USD_distribution"
+            ],
+            "capture": "azn-annual2025",
+            "date_basis": "matching_original_provider_dates",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share",
+            "supporting_captures": [
+              "azn-ratio",
+              "azn-policy"
+            ],
+            "record": "2025-02-21",
+            "pay": "2025-03-24"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-ratio",
+          "receipt_sha256": "f0f4a5657a7fb85daf832abc9c4549d6b7c1c4fa079725208dce4bc4420f32ed",
+          "payload_sha256": "98907a79ad81ed1c4ef73ab87752f4dc91a4f333a7f1aba1120e74b60442ef1c",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-policy",
+          "receipt_sha256": "dd177a7732cc0c4836b3c33f1557447d1f1a1fd09058a1859d2c24828926c862",
+          "payload_sha256": "ccd2ed70e9014306820b1c7de51e5e27f5afa0a2b768120c6ebd0e7fb9445c16",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        }
+      ],
+      "evidence_identity": "83e91fe5eb21ecde3e6ad867e7a4fadbc49d16d8ab817a0b8b47961035cb0e1a",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. Divide ordinary USD by two only for the historical ADR periods; use full USD per NYSE ordinary share following February 2026 listing harmonisation. Provider GBP amounts and fees are not gross USD.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AZN",
+      "ex_date": "2025-08-08",
+      "security_id": "BBG000BZ0DK8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.515",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "gross_USD_distribution",
+          "record_date": "2025-08-08",
+          "pay_date": "2025-09-08",
+          "cash_per_share": "0.515",
+          "terms_evidence_identity": "db4aacc70af5b721d5e1d0b681dc69d87633643f1c1c2ba2f4fb82bad9babb0d",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "a088028a-d4bf-410d-b9ef-61bce54eb353",
+          "record_sha256": "c3b0536355cc87f7929b66cc62724bdee25e520cef47c7ef4aeb77144e005836"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ea35e110e8c54617f944a8244e730580d8b49888dc366c982174bffbf4c49d6ef",
+          "record_sha256": "3bdf90dfa1c2e2cfea73f787d7e17d7b8f4e91f2982c816fb738cc0d3ca72d3f"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-annual2025",
+          "receipt_sha256": "6bc6a09026db55408e2dc9f399f4ee1cfca731d5bfa18f5a7621b5ef2e1c3939",
+          "payload_sha256": "093f7e2416137a8c6fbb3754aed7226f93cb0bfbf0dc1b087182c3227928d506",
+          "source_terms": {
+            "symbol": "AZN",
+            "ex": "2025-08-08",
+            "amounts": [
+              ".515"
+            ],
+            "names": [
+              "gross_USD_distribution"
+            ],
+            "capture": "azn-annual2025",
+            "date_basis": "matching_original_provider_dates",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share",
+            "supporting_captures": [
+              "azn-ratio",
+              "azn-policy"
+            ],
+            "record": "2025-08-08",
+            "pay": "2025-09-08"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-ratio",
+          "receipt_sha256": "f0f4a5657a7fb85daf832abc9c4549d6b7c1c4fa079725208dce4bc4420f32ed",
+          "payload_sha256": "98907a79ad81ed1c4ef73ab87752f4dc91a4f333a7f1aba1120e74b60442ef1c",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-policy",
+          "receipt_sha256": "dd177a7732cc0c4836b3c33f1557447d1f1a1fd09058a1859d2c24828926c862",
+          "payload_sha256": "ccd2ed70e9014306820b1c7de51e5e27f5afa0a2b768120c6ebd0e7fb9445c16",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        }
+      ],
+      "evidence_identity": "9d9cf7480cb00a42c8231764deb9e0fc9ce38f2c11d7a513240c804c697847c4",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. Divide ordinary USD by two only for the historical ADR periods; use full USD per NYSE ordinary share following February 2026 listing harmonisation. Provider GBP amounts and fees are not gross USD.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "AZN",
+      "ex_date": "2022-08-11",
+      "security_id": "BBG000BZ0DK8",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.465",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "gross_USD_distribution",
+          "record_date": "2022-08-12",
+          "pay_date": "2022-09-12",
+          "cash_per_share": "0.465",
+          "terms_evidence_identity": "3bdfad263f0474a26cf5c31499c2ef168a61130584ea1698860792eb6a081bdf",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "bc23374c-2af1-4189-819c-ba8e1a51f99e",
+          "record_sha256": "7481104f1423656c186132524a6bae7075d94e5e1cd6483d598b457f19a51b63"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E1a1845e14aaeb4fed37079a0225b75a3d1b9b25f14aef705887f47a67f433e9e",
+          "record_sha256": "f97787602e366f5997fb6700c71e8670df04ea28ce729b9c57ba1864c6af3141"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-financial2024-web",
+          "receipt_sha256": "08f76a59c052242360b4067c786829a69fa3b64e753b01e9ad6e4fdb7cbd43f8",
+          "payload_sha256": "4d8194ea6aafc54ab0a472dae2b14a98986441e475e006c6e63ceed9e3314339",
+          "source_terms": {
+            "symbol": "AZN",
+            "ex": "2022-08-11",
+            "amounts": [
+              ".465"
+            ],
+            "names": [
+              "gross_USD_distribution"
+            ],
+            "capture": "azn-financial2024-web",
+            "date_basis": "matching_original_provider_dates",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share",
+            "supporting_captures": [
+              "azn-ratio"
+            ],
+            "record": "2022-08-12",
+            "pay": "2022-09-12"
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/azn-ratio",
+          "receipt_sha256": "f0f4a5657a7fb85daf832abc9c4549d6b7c1c4fa079725208dce4bc4420f32ed",
+          "payload_sha256": "98907a79ad81ed1c4ef73ab87752f4dc91a4f333a7f1aba1120e74b60442ef1c",
+          "source_terms": {
+            "purpose": "ADR ratio and 2026 ordinary listing unit boundary",
+            "conversion_basis": "one_ADS_equals_half_ordinary_share"
+          }
+        }
+      ],
+      "evidence_identity": "84d670f31ed1e552987950f0c06026bbc0ac08b825f726ee8db3d76715c2c24c",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. Divide ordinary USD by two only for the historical ADR periods; use full USD per NYSE ordinary share following February 2026 listing harmonisation. Provider GBP amounts and fees are not gross USD.",
+      "amount_basis": "exact_primary_terms"
+    }
+  ]
+}

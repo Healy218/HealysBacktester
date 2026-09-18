@@ -1,0 +1,150 @@
+{
+  "schema": "v7-primary-dividend-resolutions-v1",
+  "reviews": [
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "NVDL",
+      "ex_date": "2023-12-27",
+      "security_id": "BBG01BWDKNF1",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "10.11147",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "ordinary_income",
+          "record_date": "2023-12-28",
+          "pay_date": "2023-12-29",
+          "cash_per_share": "9.64542",
+          "terms_evidence_identity": "598567d1502ef38c0a9bd72bf48832c544f44d4f439f4361a2a882c69287b589",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        },
+        {
+          "name": "short_term_capital_gain",
+          "record_date": "2023-12-28",
+          "pay_date": "2023-12-29",
+          "cash_per_share": "0.46605",
+          "terms_evidence_identity": "598567d1502ef38c0a9bd72bf48832c544f44d4f439f4361a2a882c69287b589",
+          "date_basis": "matching_original_provider_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "5641ee9e-1d0a-4e7e-95f9-c785d92c800d",
+          "record_sha256": "bf02b6cca083ba75177d05efd6e42ed00c3d61c69061bdd258da9cf97b8c2c35"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "85daebe4-8da4-4cc7-9900-1765b227fae6",
+          "record_sha256": "debe58fcac75a5d290297900d21ba22101e63dda1c4ab0faaa60e01ebdea12ba"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E4ad39708e423f6bc05c5320a26920d56508825aa792acc8b9068352cf152b5bc",
+          "record_sha256": "9b893fcbb3ef2aafb045e5ec8e9db3bf90c6b0bd89ece3571a6530f5ac56e3e4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/nvdl-distributions",
+          "receipt_sha256": "cf6ff1b6c056c6fa35768839fc392d9b37a34d0c7907233c4b193c2fd1f09545",
+          "payload_sha256": "7ab0384980721f6b7eb0a6ca074b3d344fbdbebfe8f9baf71e3c0f197b8f6cf3",
+          "source_terms": {
+            "symbol": "NVDL",
+            "ex": "2023-12-27",
+            "record": "2023-12-28",
+            "pay": "2023-12-29",
+            "amounts": [
+              "9.64542",
+              ".46605"
+            ],
+            "names": [
+              "ordinary_income",
+              "short_term_capital_gain"
+            ],
+            "capture": "nvdl-distributions",
+            "date_basis": "matching_original_provider_dates",
+            "supporting_captures": [
+              "nvdl-occ-web"
+            ],
+            "date_conflict_resolution": "Issuer feed reverses ex and record fields. OCC 53852 and every original provider row agree ex Dec27, record Dec28, pay Dec29."
+          }
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/nvdl-occ-web",
+          "receipt_sha256": "a31161f6c2fd802c8e2cb162efc8f66a0dae8ee3eeb8afc6c9ceccbcf51e5f53",
+          "payload_sha256": "f410323b9033fcd17cfa3fc202a38c93449e6c70c901a96bfaca342f8e659da5",
+          "source_terms": {
+            "ex": "2023-12-27",
+            "record": "2023-12-28",
+            "pay": "2023-12-29",
+            "capital_gain": ".46605"
+          }
+        }
+      ],
+      "evidence_identity": "4fa8448a3cb596d583e49e9ad97cda17a284ace2404dd75147417e2fc24663d8",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. Record/pay dates agree across every original Alpaca and Massive record; retain the already authorized matching-provider date reconstruction. The issuer quarterly table establishes amounts, not exact dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate. The issuer feed supplies exact components but reverses its ex/record fields for this row. OCC 53852 independently confirms December 27 ex and December 28 record, matching both original providers; retain those dates explicitly.",
+      "amount_basis": "exact_primary_terms"
+    },
+    {
+      "schema": "v7-primary-dividend-resolution-v1",
+      "symbol": "DIA",
+      "ex_date": "2024-03-15",
+      "security_id": "BBG000BTDS98",
+      "currency": "USD",
+      "cash_units": "per_listed_share_or_unit",
+      "cash_per_share": "0.93314",
+      "publication_verified": false,
+      "payments": [
+        {
+          "name": "income_distribution",
+          "record_date": "2024-03-18",
+          "pay_date": "2024-04-15",
+          "cash_per_share": "0.93314",
+          "terms_evidence_identity": "d74e9f255b7612fc49febe9b0b20ed8207cb5815a26af66ff3368ae16094328c",
+          "date_basis": "primary_stated_dates",
+          "pay_date_qualifier": "stated_date"
+        }
+      ],
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "1ae523a4-fae1-4d19-9015-4e015429dca3",
+          "record_sha256": "d4dca57ad74ad6d03f0dccdd129b0465a78ac5874447144273ca7c11a49aee6c"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/ssga-historical-distributions",
+          "receipt_sha256": "970ac000613bc16b07192598480aa451329941b6a87e973a31344057843f8759",
+          "payload_sha256": "4549fb870ddc13e6d70693269d0a198ce6587f5666728a83e5a7de59a9d774ed",
+          "source_terms": {
+            "symbol": "DIA",
+            "ex": "2024-03-15",
+            "record": "2024-03-18",
+            "pay": "2024-04-15",
+            "amounts": [
+              ".93314"
+            ],
+            "names": [
+              "income_distribution"
+            ],
+            "capture": "ssga-historical-distributions",
+            "date_basis": "primary_stated_dates",
+            "locator": "sheet1 row1156; headers row1"
+          }
+        }
+      ],
+      "evidence_identity": "0bea2ef26f4b782c0efc2c274fb33c0d581b35f726aa8ac54a1880cc18c91aa8",
+      "rationale": "Retained issuer evidence establishes gross USD cash per listed share and the named component amounts. The retained primary notice/history supplies the record and nominal pay dates. Preserve all original references, one price adjustment and distinct payment components. Effective-session reconstruction is explicit; actual publication and broker posting remain unverified. Option-adjustment treatment remains separate.",
+      "amount_basis": "exact_primary_terms"
+    }
+  ]
+}

@@ -1,0 +1,364 @@
+{
+  "schema": "v7-dividend-disposition-reviews-v1",
+  "reviews": [
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "MSTR",
+      "effective_date": "2025-05-21",
+      "disposition": "erroneous_cash_record",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "cce34ac8-2310-4649-920e-aa24ac2edcc2",
+          "record_sha256": "46abd55f48436a7e9d1532cc70bef707defce233e1cddd26b4a5f5c9ee46ae61"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/mstr-no-common-dividend",
+          "receipt_sha256": "111567eb1684ae6b2376ac288443b2acd59b27c0c16008ac303ba2f3f05ca6c0",
+          "payload_sha256": "12e1a4e12d514522de99dd1a4f7cdb9ad424f562ed8f4516c80614d57fb61246"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/mst-actual-distribution",
+          "receipt_sha256": "39d3b8192b81bdd1784d60c18b90119af5e75356d52d308359d6e5acbe44ec19",
+          "payload_sha256": "b520f80a05c9d0794abbf65e6768e6c2faca72cc7829848b3af03610e4e24658"
+        }
+      ],
+      "evidence_identity": "a78ecc600cc8351747d7e295151a8605e0d777dda271eb3ddf8965bd52a610c0",
+      "reviewed_facts": {
+        "issuer_common_cash_denied": true,
+        "actual_distribution_symbol": "MST"
+      },
+      "rationale": "Strategy's 2025 10-K explicitly says neither class of common stock has ever paid a cash dividend. The issuer of MST reports the exact 0.335 distribution on these record/pay dates. Alpaca's MSTR common CUSIP is itself erroneous here; do not relabel it as a preferred CUSIP or invent MSTR cash."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "ET",
+      "effective_date": "2026-05-04",
+      "disposition": "erroneous_cash_record",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c04fa3fd-1603-4bbe-a5f0-dc762e7f644b",
+          "record_sha256": "7953c79e59fdcba2359ec942a5a4ffda6229baeebcd2dcc26a2a18d37add84e4"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/et-preferred-primary",
+          "receipt_sha256": "5995aa10f10afb2af8dcf0bf6c2566b5538f574c70619ea153d1bbff492d7c3b",
+          "payload_sha256": "fd83583fded0bbb1f0e491574237b5789b35f034c2f80d896f8ddea60c1c8cff"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/et-common-primary",
+          "receipt_sha256": "46f353849a44b074fcaaac02f08fe3dd0131d0ab9373e17fc46f0715d1ba2982",
+          "payload_sha256": "8d16bd4a1ecf2d97c40c0f979312c797de0f7f280b3666a479790dc625109f90"
+        }
+      ],
+      "evidence_identity": "cfaff4d828a4738f96f7207e5eb06f62fcdae9e20905b84e6876363a9a129746",
+      "reviewed_facts": {
+        "issuer_common_cash_denied": true,
+        "actual_distribution_symbol": "ETprI"
+      },
+      "rationale": "Issuer identifies 0.2111 as the Series I preferred distribution, record May4/pay May15. Its separately declared common payment is 0.3375 record May8/pay May20. The original common ticker/CUSIP attached to preferred terms is erroneous; preserve the record as a correction, without altering the separately compiled common dividend."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "DFS",
+      "effective_date": "2025-05-23",
+      "disposition": "cancelled_before_record_date",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "059fde35-7ac4-47a5-b593-28da9dc2a74d",
+          "record_sha256": "28de03a5f6fc6d57b09ef2aa7dd25f6ca7b38da8c6e985a8c9b2b5488914e050"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/dfs-conditional-dividend",
+          "receipt_sha256": "09a9f4e2f8538b560eddd42dcdcae07dbbb0fb623dd9cbc752d8a4335d865bca",
+          "payload_sha256": "077a9050adacb3e5fb9b6fca5afddd5e03189493adce7c5695d3e4fb4bbfcf1d"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/dfs-merger-completed",
+          "receipt_sha256": "cfaa247b23cd534f502e47bda2496cd6042e43008fe2adad514d7030be7a5a31",
+          "payload_sha256": "5e463f231b326cc0d7f4ebb9cddb6a83da4c4c2f25a2c86dcdfee48441409423"
+        }
+      ],
+      "evidence_identity": "ad88cd89a3740f6d3108d6e1c22f338ae2459ba7ebfae0f715e484e09bd870a6",
+      "reviewed_facts": {
+        "cancellation_date": "2025-05-18",
+        "cash_entitlement_survives": false,
+        "cancellation_evidence_identity": "f3439335714e56f83089723043f732402d6332b22cf92ba6a925d104c56f3cb6"
+      },
+      "rationale": "DFS declared a conditional dividend with explicit warning that it would not be received if the merger closed May18. The completed-merger filing proves that closing. No DFS shares survived to the May23 record date; any COF entitlement is separate. The merger's stock treatment remains unresolved."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "FIGR",
+      "effective_date": "2022-06-16",
+      "disposition": "unrelated_record_security",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E189dca629cbcf28d8c232793418b60b6d7979a1019703c8c8561c0bef225576c",
+          "record_sha256": "fbad1a36f911b18173e118ea0fdadf64ab0a13012a31f9b56cfafc849987a5d9"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c8c5feea-5333-46d9-a99a-f3f746508a69",
+          "record_sha256": "104f4e81bbc7373d17d7d67529622a86cb1439809855fd28787667dc7e2050dd"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/figr-identity-web",
+          "receipt_sha256": "6ca6e650916683acf2d9d7c683b9244101af3a5882da20d1bac424476bc1f89b",
+          "payload_sha256": "b9805ba1e404d512f8e818adf5cf26856a83259662a80ada296393f330e5f022"
+        }
+      ],
+      "evidence_identity": "9ffec8f8ed8159ae950f35fe6ff6d4d0039590442f28e86f092970c3100c8357",
+      "reviewed_facts": {
+        "record_cusip": "327891107",
+        "record_issuer": "First National Bank of Groton (New York)",
+        "scoped_issuer": "Figure Technology Solutions",
+        "successor_relationship": false
+      },
+      "rationale": "Positive broker CUSIP/ticker directory identifies First National Bank of Groton, matching every original Alpaca CUSIP. These bank dividends precede listed Figure Technology Solutions and do not entitle its selected shares. Original Massive rows are retained with the whole matching bank distribution group; no issuer is removed from scope."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "FIGR",
+      "effective_date": "2022-12-19",
+      "disposition": "unrelated_record_security",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E7a03332f9538dd1a7c029f98284c612a17c066bcb5791bdbec77ed026e128674",
+          "record_sha256": "a759cb534a085c2d85791f12a6f4a02baad40537e2b17530b5475cbc7c67718a"
+        },
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "Ecbf32ec94d03e3e4484e2745eebd637e9d6a14da31873d5a4e30d69b8b5e5343",
+          "record_sha256": "94fe9cdc914da4e6619ee865954ae27afd9830a661cce96054096e8df75ee5db"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "eaa87dc5-8801-4e8f-8247-674ec3a8b7ba",
+          "record_sha256": "9dde90b3898d369b6e38af3a71c4dde6f7e0ea658e01612f8b272aed334c3650"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/figr-identity-web",
+          "receipt_sha256": "6ca6e650916683acf2d9d7c683b9244101af3a5882da20d1bac424476bc1f89b",
+          "payload_sha256": "b9805ba1e404d512f8e818adf5cf26856a83259662a80ada296393f330e5f022"
+        }
+      ],
+      "evidence_identity": "9ffec8f8ed8159ae950f35fe6ff6d4d0039590442f28e86f092970c3100c8357",
+      "reviewed_facts": {
+        "record_cusip": "327891107",
+        "record_issuer": "First National Bank of Groton (New York)",
+        "scoped_issuer": "Figure Technology Solutions",
+        "successor_relationship": false
+      },
+      "rationale": "Positive broker CUSIP/ticker directory identifies First National Bank of Groton, matching every original Alpaca CUSIP. These bank dividends precede listed Figure Technology Solutions and do not entitle its selected shares. Original Massive rows are retained with the whole matching bank distribution group; no issuer is removed from scope."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "FIGR",
+      "effective_date": "2023-06-15",
+      "disposition": "unrelated_record_security",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "massive",
+          "kind": "dividends",
+          "action_id": "E48f40b3a36b6f5b9e22e7e7c362ba0c3f188b7c4ea08eaa2db34c08382e7b161",
+          "record_sha256": "49900db1f337de5d77b59fcd3b612cecab47cd92779b62d058682629fe6d31b8"
+        },
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "484c1469-336c-45ad-91de-fdd0314a9d74",
+          "record_sha256": "5c1a4b75a52e2cf1ae9e0c2481c01b20e169e55bcc60f211c66bc5402a9aaf9f"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/figr-identity-web",
+          "receipt_sha256": "6ca6e650916683acf2d9d7c683b9244101af3a5882da20d1bac424476bc1f89b",
+          "payload_sha256": "b9805ba1e404d512f8e818adf5cf26856a83259662a80ada296393f330e5f022"
+        }
+      ],
+      "evidence_identity": "9ffec8f8ed8159ae950f35fe6ff6d4d0039590442f28e86f092970c3100c8357",
+      "reviewed_facts": {
+        "record_cusip": "327891107",
+        "record_issuer": "First National Bank of Groton (New York)",
+        "scoped_issuer": "Figure Technology Solutions",
+        "successor_relationship": false
+      },
+      "rationale": "Positive broker CUSIP/ticker directory identifies First National Bank of Groton, matching every original Alpaca CUSIP. These bank dividends precede listed Figure Technology Solutions and do not entitle its selected shares. Original Massive rows are retained with the whole matching bank distribution group; no issuer is removed from scope."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "FIGR",
+      "effective_date": "2023-12-18",
+      "disposition": "unrelated_record_security",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "c2d72b47-41c8-44ed-8256-3f6731593647",
+          "record_sha256": "55652d11510351a83bbdaecc67adaf0517628366cfaf0893b34c0b59b91e44a3"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/figr-identity-web",
+          "receipt_sha256": "6ca6e650916683acf2d9d7c683b9244101af3a5882da20d1bac424476bc1f89b",
+          "payload_sha256": "b9805ba1e404d512f8e818adf5cf26856a83259662a80ada296393f330e5f022"
+        }
+      ],
+      "evidence_identity": "9ffec8f8ed8159ae950f35fe6ff6d4d0039590442f28e86f092970c3100c8357",
+      "reviewed_facts": {
+        "record_cusip": "327891107",
+        "record_issuer": "First National Bank of Groton (New York)",
+        "scoped_issuer": "Figure Technology Solutions",
+        "successor_relationship": false
+      },
+      "rationale": "Positive broker CUSIP/ticker directory identifies First National Bank of Groton, matching every original Alpaca CUSIP. These bank dividends precede listed Figure Technology Solutions and do not entitle its selected shares. Original Massive rows are retained with the whole matching bank distribution group; no issuer is removed from scope."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "TE",
+      "effective_date": "2023-05-18",
+      "disposition": "unrelated_record_security",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "0daca30d-eeb2-4501-8e9a-0a634386fa03",
+          "record_sha256": "80ea3986f4508cff19137656a8ebbd7e066707bf70ec44ef451c3fd597e37a9e"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/tel-cusip-primary",
+          "receipt_sha256": "cca39a8fe8b342246a4c5e3fd57e82c1a6ccb20dda22df0eff531633ea726460",
+          "payload_sha256": "03f1b23b9b37cbb2f24dd83149f97ea0e27f4045fe256fb41c940939d1788922"
+        },
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/tel-2023-dividend",
+          "receipt_sha256": "c233be4017187d72357d9698aadd34054b62d82e1a1f5c7f61f8948c60a223fc",
+          "payload_sha256": "64f241e7aa309874787c2002e8f9c75758087d627f09194c2451611f5d72d0ff"
+        }
+      ],
+      "evidence_identity": "470376ade040ae2ae2e5afd792f872f1dea520f0bfcf3274bb2fa4671f76c1f9",
+      "reviewed_facts": {
+        "record_cusip": "H84989104",
+        "record_issuer": "TE Connectivity",
+        "scoped_issuer": "T1 Energy (formerly FREYR)",
+        "successor_relationship": false
+      },
+      "rationale": "The original CUSIP identifies TE Connectivity, ticker TEL; its issuer notice confirms 0.59, May19 record and June2 pay. It is unrelated to T1 Energy/FREYR. Preserve the erroneous TE ticker record as an unrelated identified security; no scope exclusion or successor inference."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "GOLD",
+      "effective_date": "2025-05-30",
+      "disposition": "duplicate_ticker_alias",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "aec165b1-49b9-4998-a755-eb8d4b158997",
+          "record_sha256": "0e0826f0e550519afec01ec4f90551d554e0b29072086d16646b46eb218f6cc3"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/barrick-history",
+          "receipt_sha256": "594a601b1f6f92dd65004315697a958bb9914f2a6f31b7b8e2afab0ac974bc7a",
+          "payload_sha256": "271d4fb7c740c3612d49effb5eb8368245b3ddefda5eb803cba0bf4f32e48ffb"
+        }
+      ],
+      "evidence_identity": "fca94b4b553f41394db8d916ea577dca208ba7353e1eeb60bcad448f8491a97b",
+      "reviewed_facts": {
+        "target_event_id": "dividend-reviewed:c40bdf73e79c040e3f1a4e541415c68f3f5f692f9f5385861588f50f37d0f287",
+        "security_id": "BBG000BB07P9"
+      },
+      "rationale": "The already reviewed GOLD-to-B rename preserves the same common shares. The 0.10 May30 record/June16 pay dividend is already compiled for B. Bind the old-ticker record as corroborating alias coverage without another price factor or payment."
+    },
+    {
+      "schema": "v7-dividend-disposition-review-v1",
+      "symbol": "AMC",
+      "effective_date": "2023-08-23",
+      "disposition": "noncash_distribution",
+      "creates_cash": false,
+      "creates_price_factor": false,
+      "replaces": [
+        {
+          "provider": "alpaca",
+          "kind": "cash_dividends",
+          "action_id": "0238b79d-415e-41b0-9f5e-a735ff03dbf3",
+          "record_sha256": "f5c5d65daa7143169f079df774ee3b754ca973bbc2b976948295fe4c5527d752"
+        }
+      ],
+      "evidence": [
+        {
+          "capture": "nn_meta/data_v7/dividend-finish-20260918/amc-stock-settlement",
+          "receipt_sha256": "eb96aa1c53f83a4ef52297fd3edfdea77387a360b352e7f9314e6eb05081a160",
+          "payload_sha256": "3286d79e7b0b4fdb29762d494f03c393b5c0b5258c2538d63f7e1fea0ebaf55c"
+        }
+      ],
+      "evidence_identity": "f283ad604aa613aace42a86a601ea2dbdee5770e61784d11441be3f794f50a38",
+      "reviewed_facts": {
+        "cash_per_share": "0",
+        "share_entitlement": "one AMC share per 7.5 post-reverse-split common shares; fractional treatment remains part of stock settlement",
+        "pending_noncash_references": [
+          {
+            "provider": "alpaca",
+            "kind": "stock_dividends",
+            "action_id": "1ae14077-7a0e-40b1-a034-183c92e636c3",
+            "record_sha256": "fa8886bb5c6ea5c33c968dc0c4f59324fa37bd60b426d219238ebddb74684ca6"
+          },
+          {
+            "provider": "alpaca",
+            "kind": "stock_mergers",
+            "action_id": "5e6f60bc-98dc-4e52-8add-3c9122f81166",
+            "record_sha256": "3361ecec886f50fa2db616bfa057369f6c0794234008c36bded369c4b2d2841c"
+          }
+        ]
+      },
+      "rationale": "Issuer filed a share settlement for August24 record holders following its reverse split, not a fixed 1.133333 USD cash dividend. Preserve the false cash record as a noncash correction tied to pending share-action records. Block its original effective date until the full split/settlement lifecycle is resolved; do not invent cash in lieu."
+    }
+  ]
+}
