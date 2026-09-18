@@ -109,6 +109,14 @@ def held_quote_gap_only(status):
         for message in messages)
 
 
+def expected_safety_stop(status):
+    """Fail-closed safety stops withhold entries but are not alert-worthy crashes."""
+    if held_quote_gap_only(status):
+        return True
+    return str(status.get('error', '')).endswith(
+        'entry decision missed the five-minute signal-close deadline')
+
+
 def health(status,calendar,now):
     """Current-bar results are due six minutes after close, including 16:00."""
     import pandas as pd
@@ -124,8 +132,11 @@ def health(status,calendar,now):
     signal=pd.Timestamp(status.get('signal_clock')) if status.get('signal_clock') else None
     if signal is None or signal.tzinfo is None or signal<expected or status.get('replay'):
         return {'status':'failed','reason':'current paper pass missing','expected_close':expected.isoformat()}
-    if status.get('status')=='failed' and held_quote_gap_only(status):
-        return {'status':'degraded','reason':'held-position quote gap; new entries withheld',
+    if status.get('status')=='failed' and expected_safety_stop(status):
+        reason = ('held-position quote gap; new entries withheld'
+                  if held_quote_gap_only(status)
+                  else 'entry timing safety stop; new entries withheld')
+        return {'status':'degraded','reason':reason,
                 'expected_close':expected.isoformat()}
     if status.get('status')=='failed':
         return {'status':'failed','reason':status.get('error','paper pass failed'),'expected_close':expected.isoformat()}
