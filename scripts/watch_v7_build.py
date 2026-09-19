@@ -53,9 +53,15 @@ def snapshot(root: Path, minutes: tuple[int, ...], variants: int) -> tuple[str, 
         feature_status = "COMPLETE" if feature_done else f"{epochs} sealed"
         if partial is not None:
             feature_status += f"; epoch {partial[0]} running ({partial[1]}s)"
+        if not feature_done:
+            progress = "[building features]"
+            proposal_status = "pending until features complete"
+        else:
+            progress = _bar(batches, variants)
+            proposal_status = progress
         lines.append(
-            f"{minute:>2}m features {feature_status}  "
-            f"proposals {_bar(batches, variants)}"
+            f"{minute:>2}m {progress} features {feature_status}  "
+            f"proposals {proposal_status}"
             + ("  COMPLETE" if proposal_done else "")
         )
     return "\n".join(lines), finished
