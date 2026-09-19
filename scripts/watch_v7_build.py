@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 from pathlib import Path
 import sys
 import time
@@ -46,21 +47,29 @@ def snapshot(root: Path, minutes: tuple[int, ...], variants: int) -> tuple[str, 
         proposals = base / "proposals"
         epochs = _count(features / "epochs") if (features / "epochs").is_dir() else 0
         batches = _count(proposals / "batches") if (proposals / "batches").is_dir() else 0
+        expected_batches = variants
+        declaration = proposals / "declaration" / "declaration.json"
+        if declaration.is_file():
+            proposal_declaration = json.loads(declaration.read_text())
+            expected_batches = math.ceil(
+                len(proposal_declaration.get("variants", [])) /
+                proposal_declaration.get("batch_columns", 1)
+            )
         partial = _partial(features / "epochs") if (features / "epochs").is_dir() else None
         feature_done = _summary(features / "summary")
         proposal_done = _summary(proposals / "summary")
         finished &= feature_done and proposal_done
         feature_status = "COMPLETE" if feature_done else f"{epochs} sealed"
-        if partial is not None:
+        if partial is not None and not feature_done:
             feature_status += f"; epoch {partial[0]} running ({partial[1]}s)"
         if not feature_done:
-            progress = "[building features]"
+            stage_prefix = "[building features]"
             proposal_status = "pending until features complete"
         else:
-            progress = _bar(batches, variants)
-            proposal_status = progress
+            stage_prefix = ""
+            proposal_status = _bar(batches, batches if proposal_done else expected_batches)
         lines.append(
-            f"{minute:>2}m {progress} features {feature_status}  "
+            f"{minute:>2}m {stage_prefix} features {feature_status}  "
             f"proposals {proposal_status}"
             + ("  COMPLETE" if proposal_done else "")
         )
