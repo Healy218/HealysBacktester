@@ -22,6 +22,14 @@ def _summary(path: Path) -> bool:
     return (path / "complete.json").is_file()
 
 
+def _partial(path: Path) -> tuple[str, int] | None:
+    partials = sorted(path.glob("*.partial-*"), key=lambda p: p.stat().st_mtime)
+    if not partials:
+        return None
+    current = partials[-1]
+    return current.name.split(".partial-", 1)[0], int(max(0, time.time() - current.stat().st_mtime))
+
+
 def _bar(done: int, total: int, width: int = 24) -> str:
     if total < 1:
         return "[no catalog]"
@@ -38,11 +46,15 @@ def snapshot(root: Path, minutes: tuple[int, ...], variants: int) -> tuple[str, 
         proposals = base / "proposals"
         epochs = _count(features / "epochs") if (features / "epochs").is_dir() else 0
         batches = _count(proposals / "batches") if (proposals / "batches").is_dir() else 0
+        partial = _partial(features / "epochs") if (features / "epochs").is_dir() else None
         feature_done = _summary(features / "summary")
         proposal_done = _summary(proposals / "summary")
         finished &= feature_done and proposal_done
+        feature_status = "COMPLETE" if feature_done else f"{epochs} sealed"
+        if partial is not None:
+            feature_status += f"; epoch {partial[0]} running ({partial[1]}s)"
         lines.append(
-            f"{minute:>2}m features {_bar(epochs, 0) if feature_done else f'{epochs} sealed'}  "
+            f"{minute:>2}m features {feature_status}  "
             f"proposals {_bar(batches, variants)}"
             + ("  COMPLETE" if proposal_done else "")
         )
