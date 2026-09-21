@@ -15,7 +15,10 @@ import time
 
 import re
 
-EXPERTS = {'v3', 'v31', 'v4', 'v5'}
+# Production alert route: V5 is the only batched legacy expert. V6 paper
+# notices are bridged separately after queue dispatch; retired v3/v31/v4
+# experts must not hold V5 alert batches open.
+EXPERTS = {'v5'}
 PROBABILITY_FLOORS = {'v4': 0.51, 'v5': 0.55}
 DEFAULT_DB = Path(__file__).parent / '.alert_batches.sqlite3'
 TOP_N = 5
