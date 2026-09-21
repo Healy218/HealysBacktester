@@ -22,6 +22,7 @@ EXPERTS = {'v5'}
 PROBABILITY_FLOORS = {'v4': 0.51, 'v5': 0.55}
 DEFAULT_DB = Path(__file__).parent / '.alert_batches.sqlite3'
 TOP_N = 5
+BUNDLE_TTL_SECONDS = 3600
 # "[v5] SIL BUY PUT" / "ORCL BUY CALL" → (symbol, side); the fallback when a
 # legacy payload carries no explicit symbol/side fields.
 _TITLE_RE = re.compile(r'^(?:\[\w+\]\s+)?(?P<symbol>[A-Z][A-Z0-9.\-]*)\s+(?P<side>BUY (?:CALL|PUT))\b')
@@ -95,8 +96,10 @@ class Batches:
             db.execute('BEGIN IMMEDIATE')
             db.execute('INSERT OR IGNORE INTO batches(id,opened) VALUES (?,?)', (batch,now))
             finalized = db.execute('SELECT finalized FROM batches WHERE id=?',(batch,)).fetchone()[0]
-            status = ('suppressed_probability' if float(score) <= PROBABILITY_FLOORS.get(expert, -1)
-                      else 'suppressed_late' if finalized else 'expired' if now >= batch+900 else 'pending')
+            # Keep sub-floor signals pending so an eligible same-ticker signal
+            # can include them as supporting context in the hourly bundle.
+            status = ('suppressed_late' if finalized else 'expired'
+                      if now >= batch+BUNDLE_TTL_SECONDS else 'pending')
             from nn_meta.live.taken_trades import trade_id
             idea = idea_of(payload)
             db.execute('INSERT OR IGNORE INTO candidates(key,batch,expert,score,title,message,status,summary,symbol,side,trade_context,trade_ref) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
@@ -120,42 +123,116 @@ class Batches:
             with self.connect() as db:
                 db.execute('BEGIN IMMEDIATE')
                 db.execute("UPDATE candidates SET status='suppressed_disabled' WHERE expert != 'v5' AND status IN ('pending','selected')")
-                for expert, floor in PROBABILITY_FLOORS.items():
-                    db.execute("UPDATE candidates SET status='suppressed_probability' WHERE expert=? AND score<=? AND status IN ('pending','selected','suppressed_rank','suppressed_late')", (expert,floor))
+                # Thresholding happens after ticker grouping so support signals survive.
                 for batch in db.execute('SELECT * FROM batches WHERE finalized=0').fetchall():
                     count = db.execute('SELECT COUNT(*) FROM completed WHERE batch=?',(batch['id'],)).fetchone()[0]
-                    # Wait for all experts, or at most five minutes after the first
-                    # result; never wait beyond twelve minutes after bar close.
+                    # V5 completes each 15-minute scan; the hourly cron controls
+                    # when finalized bundles are actually delivered.
                     deadline = min(batch['opened']+300,batch['id']+720)
                     if count < len(EXPERTS) and now < deadline:
                         continue
-                    winners = select_top(db.execute("SELECT key,symbol,side FROM candidates WHERE batch=? AND status='pending' ORDER BY score DESC,key ASC",(batch['id'],)).fetchall())
-                    db.execute("UPDATE candidates SET status='suppressed_rank' WHERE batch=? AND status='pending'",(batch['id'],))
-                    for winner in winners:
-                        db.execute("UPDATE candidates SET status='selected' WHERE key=?",(winner,))
+                    rows = db.execute('SELECT * FROM candidates WHERE batch=? AND status=\'pending\' ORDER BY score DESC,key ASC', (batch['id'],)).fetchall()
+                    groups = {}
+                    for row in rows:
+                        groups.setdefault((row['symbol'] or row['key'],), []).append(row)
+                    eligible = [group for group in groups.values()
+                                if max(float(row['score']) for row in group) >= PROBABILITY_FLOORS['v5']]
+                    eligible.sort(key=lambda group: (-len(group),
+                                                     -max(float(row['score']) for row in group),
+                                                     str(group[0]['symbol'] or group[0]['key'])))
+                    selected_keys = {row['key'] for group in eligible for row in group}
+                    for row in rows:
+                        members = groups[(row['symbol'] or row['key'],)]
+                        status = ('selected' if row['key'] in selected_keys else
+                                  'suppressed_probability' if max(float(item['score']) for item in members) < PROBABILITY_FLOORS['v5']
+                                  else 'suppressed_rank')
+                        db.execute('UPDATE candidates SET status=? WHERE key=?', (status, row['key']))
                     db.execute('UPDATE batches SET finalized=1 WHERE id=?',(batch['id'],))
             with self.connect() as db:
                 selected = db.execute("SELECT * FROM candidates WHERE status='selected' ORDER BY batch,score DESC,key ASC").fetchall()
-            for row in selected:
-                if now >= row['batch']+900:
+            selected_groups = bundle_groups(selected)
+            for group in selected_groups[TOP_N:]:
+                with self.connect() as db:
+                    db.executemany("UPDATE candidates SET status='suppressed_rank' WHERE key=?", [(row['key'],) for row in group])
+            for group in selected_groups[:TOP_N]:
+                if all(now >= row['batch'] + BUNDLE_TTL_SECONDS for row in group):
                     with self.connect() as db:
-                        db.execute("UPDATE candidates SET status='expired' WHERE key=?",(row['key'],))
+                        db.executemany("UPDATE candidates SET status='expired' WHERE key=?", [(row['key'],) for row in group])
                     continue
+                compact = dedupe_signals(group)
+                primary = max(compact, key=lambda row: float(row['score']))
+                title, message = format_bundle(compact, primary)
                 from nn_meta.live.taken_trades import trade_id, ready
-                context = json.loads(row['trade_context'] or '{}')
+                context = json.loads(primary['trade_context'] or '{}')
                 message_id = None
                 if ready(context) and hasattr(notifier, 'send_trade_alert'):
-                    message_id = notifier.send_trade_alert(row['message'], row['title'], trade_id(row['key']))
+                    message_id = notifier.send_trade_alert(message, title, trade_id(primary['key']))
                     delivered = message_id is not None
                 else:
-                    delivered = notifier.send(row['message'], title=row['title'])
+                    delivered = notifier.send(message, title=title)
                 if delivered:
                     with self.connect() as db:
-                        db.execute("UPDATE candidates SET status='sent' WHERE key=?",(row['key'],))
+                        db.executemany("UPDATE candidates SET status='sent' WHERE key=?", [(row['key'],) for row in group])
                         if message_id is not None:
-                            db.execute("INSERT OR IGNORE INTO trade_messages VALUES (?,?)", (message_id, row["key"]))
+                            db.execute("INSERT OR IGNORE INTO trade_messages VALUES (?,?)", (message_id, primary["key"]))
                     sent += 1
         return sent
+
+
+def _signal_name(row):
+    parts = [part.strip() for part in str(row['summary'] or '').split('|')]
+    return parts[1] if len(parts) > 1 else str(row['title']).split(':', 1)[0]
+
+
+def dedupe_signals(group):
+    """Keep the strongest occurrence of each strategy/direction in the hour."""
+    best = {}
+    for row in group:
+        key = (_signal_name(row), str(row['side'] or '').upper())
+        if key not in best or float(row['score']) > float(best[key]['score']):
+            best[key] = row
+    return sorted(best.values(), key=lambda row: (-float(row['score']), _signal_name(row)))
+
+
+def bundle_groups(rows):
+    """Group the hourly pool by ticker, retaining call/put conflicts together."""
+    groups = {}
+    for row in rows:
+        groups.setdefault(row['symbol'] or row['key'], []).append(row)
+    return sorted(groups.values(), key=lambda group: (
+        -len(dedupe_signals(group)), -max(float(row['score']) for row in dedupe_signals(group)),
+        str(group[0]['symbol'] or group[0]['key'])))
+
+
+def _signal_name(row):
+    parts = [part.strip() for part in str(row['summary'] or '').split('|')]
+    return parts[1] if len(parts) > 1 else str(row['title']).split(':', 1)[0]
+
+
+def format_bundle(group, primary):
+    """Render one ticker proposal, including support and direction conflicts."""
+    group = dedupe_signals(group)
+    directions = {str(row['side'] or '').upper() for row in group}
+    conflict = 'BUY CALL' in directions and 'BUY PUT' in directions
+    title = f"{primary['title']} · {len(group)} signals"
+    if conflict:
+        title = f"⚠️ CALL/PUT CONFLICT · {title}"
+    ordered = sorted(group, key=lambda row: (-float(row['score']), _signal_name(row)))
+    if conflict:
+        lines = []
+        for side in ('BUY CALL', 'BUY PUT'):
+            members = [row for row in ordered if str(row['side']).upper() == side]
+            if members:
+                lines.append(f"{side}: " + ' · '.join(
+                    f"{_signal_name(row)} P {float(row['score']):.0%}" for row in members))
+        proposal = '\n'.join(lines)
+        warning = '⚠️ Both directions fired; manual inspection required.'
+    else:
+        proposal = ' · '.join(
+            f"{_signal_name(row)} P {float(row['score']):.0%}" for row in ordered)
+        warning = ''
+    suffix = f"\n{warning}" if warning else ''
+    return title, f"{primary['message']}{suffix}\nsignal proposal: {proposal}"
 
 
 def select_top(rows, top_n=TOP_N):

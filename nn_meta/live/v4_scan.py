@@ -328,7 +328,7 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
             occ = register_alert_contract(row.symbol, "P" if fresh["direction"] else "C",
                                           float(fresh["spot"]), int(row.dte), now)
             from nn_meta.live.alert_batches import PROBABILITY_FLOORS
-            quote = alert_quote(occ, allow_rest=float(row.score) > PROBABILITY_FLOORS.get(EXPERT, -1))
+            quote = alert_quote(occ, allow_rest=float(row.score) >= PROBABILITY_FLOORS.get(EXPERT, -1))
             title, msg = format_v4_alert(row, fresh, bundle, paper, occ, quote)
             # Crash-consistency order (2026-08-16 review): enqueue -> ledger
             # -> mark. A crash at any boundary re-detects next pass (not yet
