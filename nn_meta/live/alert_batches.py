@@ -119,6 +119,7 @@ class Batches:
             fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
             with self.connect() as db:
                 db.execute('BEGIN IMMEDIATE')
+                db.execute("UPDATE candidates SET status='suppressed_disabled' WHERE expert != 'v5' AND status IN ('pending','selected')")
                 for expert, floor in PROBABILITY_FLOORS.items():
                     db.execute("UPDATE candidates SET status='suppressed_probability' WHERE expert=? AND score<=? AND status IN ('pending','selected','suppressed_rank','suppressed_late')", (expert,floor))
                 for batch in db.execute('SELECT * FROM batches WHERE finalized=0').fetchall():
