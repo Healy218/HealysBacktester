@@ -273,7 +273,10 @@ def alpaca_bars(symbols, start, end, *, timeframe, adjustment, session=None):
               "end": pd.Timestamp(end).isoformat(), "timeframe": timeframe,
               "adjustment": adjustment, "feed": "sip", "limit": 10000, "sort": "asc"}
     rows, seen = [], set()
-    for _ in range(1000):
+    # A full adjusted-history restatement for the complete 453-symbol V6
+    # universe can legitimately exceed 1,000 SIP pages. Keep a hard bound,
+    # but leave enough room for the documented full-history repair path.
+    for _ in range(5000):
         try:
             response = session.get("https://data.alpaca.markets/v2/stocks/bars", headers=headers, params=params, timeout=45)
         except requests.RequestException:
