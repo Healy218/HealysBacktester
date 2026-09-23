@@ -6,20 +6,35 @@
   Completion evidence: Every relevant security/session/action has an explicit resolved treatment, consumed by the actual feature and held-position paths.
 
 - [ ] **7-2. Produce complete causal daily/market context and full feature/proposal stores.**
-  Completion evidence: Full scoped census with correct availability, warmup, sectors and all registered variants; no substituted fixture inputs.
-  Started 2026-09-18: the real-shard benchmark passed. The production compact
-  Parquet proposal path reduced the real AAPL pilot from 690.7 MB JSONL to 5.8
-  MB losslessly; next measure peak space and resume behavior on one real full
-  security before scheduling the catalog. See [the 7-2 start checkpoint](docs/reviews/2026-09-18-v7-2-start.md).
+  Completion evidence: Full 591-security census with correct availability,
+  warmup, sectors and all 8,451 registered 5/15/30 variants per security; no
+  substituted fixture inputs. The active run is managed by
+  `healys-v7-catalog-build.service` and writes to
+  `nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`, with 4
+  outer security workers, one inner thread, compact-final enabled, and 1,773
+  target stores. The CLI and hourly observer are bound to this output.
+
+  The current run is the 7-2 build execution, not completion evidence yet.
+  After it seals, verify every store, source binding, catalog census, compact
+  footprint, worker/restart receipts and the 100 GiB reserve before checking
+  this item. Historical 1-minute and pre-amendment 5/15/30 pilots remain
+  historical only. See the [7-2/7-3 transition plan](docs/reviews/2026-09-20-v7-3-prep.md).
 
 - [ ] **7-3. Complete actual option-path demand, dated hours/reference inputs and targeted captures.**
-  Completion evidence: The union covers required entry features, purchases, marks, exits, rolls and applicable stock-delivery observations within the acquisition budget.
+  Start only after 7-2's full-store verification. First derive proposal-driven
+  entry demand for all completed securities from their 5/15/30 stores; then
+  union bounded quote/trade windows, resolve dated option hours and standard
+  contract references, and capture entry, mark, exit, roll and applicable
+  stock-delivery windows. Preserve no-fresh/no-contract outcomes without
+  fabricating requests. Completion evidence: the union covers every required
+  option path within the 250 GB acquisition ceiling, with immutable request,
+  capture and provider-failure receipts.
 
 - [ ] **7-4. Finish integrated option/physical/shared-capital execution.**
   Completion evidence: Real captured cases and full accounting demonstrate midpoint stops, signals, expiry, funding, settlement and liquidation without invented outcomes.
 
 - [ ] **7-5. Execute full data assembly and connect folds/trials.**
-  Completion evidence: All required 222-column rows and outcome records reconcile; label horizons and fold purging are correct; the complete predeclared campaign is runnable.
+  Completion evidence: All required 221-column rows and outcome records reconcile; label horizons and fold purging are correct; the complete predeclared campaign is runnable.
 
 - [ ] **7-6. Establish resource and recovery feasibility.**
   Completion evidence: Measured memory, disk, throughput, restart and coexistence evidence supports the proposed full run.
@@ -27,11 +42,47 @@
 - [ ] **7-7. Pass the complete readiness gate and notify the user.**
   Completion evidence: An inspected full-scope report passes every required stage; only then may we claim V7 is ready.
 
-**7-1 is complete. Before beginning 7-2, repair and verify the deployed live V6
-system on the server, which is currently producing recurring errors. V6 here
-means only the current server model and its live operation; the abandoned local
-short-DTE build is not part of this work. After that prerequisite, 7-2 is the
-current V7 build item. Items 7-3 through 7-7 are queued.**
+- [ ] **8. Build and validate the AI artifact incubator; activate after V7 readiness.**
+  Treat V5, V6, V7 and future V8 option artifacts as immutable AI candidates. At
+  the configured market close, a master incubator should discover available
+  `.tar.gz` artifacts, verify manifests and hashes, unpack each into an isolated
+  sandbox, stream that day's paper forward-test data through every eligible
+  artifact, and write one unified performance log plus per-artifact receipts.
+  The first version must be read-only with respect to live alerts, broker state,
+  and source artifacts; it must fail closed on missing manifests, incompatible
+  contracts, duplicate artifact IDs, or insufficient forward data. Define the
+  artifact manifest, compatibility matrix, resource/time budget, checkpoint and
+  resume rules, comparable metrics, and retention policy before implementation.
+  Design, local implementation and V5/V6 dry-run testing may begin now while
+  V7 compiles. Do not activate the after-close production run, call a result a
+  readiness result, or admit V7/FA artifacts until 7-2 through 7-7 gates are
+  complete and the paper data boundary is explicitly approved.
+
+  Incubator slices 1–6 are now implemented and smoke-validated for V5/V6:
+  bounded resource/time budgets, dry-run and failure-path tests, a real Keras
+  replay entrypoint wired to common metrics, and a checkpointed after-close
+  service/timer committed but disabled by default. Replay correctly fails closed
+  because the current V6 snapshot lacked the complete model feature matrix;
+  immutable feature capture is now implemented as a strict publication CLI.
+  `strat_volume` is derived only from the recorded strategy identity and is
+  documented in the manifest. A full historical capture and 128-row real V6
+  Keras replay smoke test pass under bounded threads/resources. The current
+  2026-09-22 pass is now published against the actual live V6 GBT contract at
+  `incubator/artifacts/v6-live-20260922/` with 304 rows and all 164 features.
+  Its 40-member bundle loaded and produced 304 read-only predictions; scoring
+  remains gated until candidate outcomes are joined. The older Keras bundle is
+  retired from V6 daily use because its `prem_spot` contract does not match
+  the live causal pass. V5 remains supported for its transition period.
+  The exact-identity outcome joiner is implemented; the current V6 ledger has
+  only opened/unfilled allocation events, not candidate-level `net_return`, so
+  no score has been manufactured.
+
+**7-1 is complete. 7-2 is currently running the systemd-managed full 5/15/30
+compact catalog; do not begin 7-3 capture work until that run and its full
+verification finish. The live V6 repair prerequisite was completed before this
+run. V6 here means only the current server model and its live operation; the
+abandoned local short-DTE build is not part of this work. Items 7-3 through 7-7
+are queued.**
 
 - [x] **Dividend portion of 7-1:** 4,918 payment leaves across 4,854 price events;
   zero uncompiled dividend groups or missing held-cash treatments. All 10,428
@@ -111,7 +162,10 @@ work; only 7-7 can establish full V7 training readiness.
 
 March 15, 2022–September 14, 2026; Alpaca stock data, Massive options; no OTC;
 BBBY/FRC/REV/SI issuer exclusions without replacement or reranking. Retain all
-20 strategy families, 11,268 variant/timeframe combinations and 222 columns.
+20 strategy families across the user-approved 5/15/30-minute signal scope:
+8,451 variant/timeframe combinations and 221 columns. One-minute remains the
+observed option-execution cadence, not a signal timeframe. Prior one-minute
+artifacts remain historical and are not relabeled as current.
 Arithmetic option midpoint pricing, separate costs, V7 12.5% premium stop,
 strategy exits, ITM expiry exit 15 minutes before regular option close, and the
 agreed funded physical fallback remain required. Preserve shared portfolio

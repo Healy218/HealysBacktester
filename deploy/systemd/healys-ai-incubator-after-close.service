@@ -1,0 +1,14 @@
+[Unit]
+Description=Healy AI incubator after-close read-only campaign
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/ai_incubator_after_close.py --bundle-root /home/healy/Coding/HealysBacktester/incubator/artifacts --v6-index /home/healy/Coding/HealysV6/nn_meta/live/v6_server/data-index.json --output-dir /home/healy/Coding/HealysBacktester/incubator/runs/after-close --checkpoint /home/healy/Coding/HealysBacktester/incubator/runs/after-close/checkpoint.json
+Environment=PYTHONDONTWRITEBYTECODE=1
+TimeoutStartSec=2h
+UMask=0077
+
+[Install]
+WantedBy=default.target

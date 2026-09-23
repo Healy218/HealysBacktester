@@ -1,0 +1,11 @@
+[Unit]
+Description=Healy AI incubator after-close schedule
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 16:30:00 America/New_York
+Persistent=true
+AccuracySec=1min
+Unit=healys-ai-incubator-after-close.service
+
+[Install]
+WantedBy=timers.target
