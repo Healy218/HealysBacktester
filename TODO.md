@@ -17,7 +17,9 @@
   The current run is the 7-2 build execution, not completion evidence yet.
   After it seals, verify every store, source binding, catalog census, compact
   footprint, worker/restart receipts and the 100 GiB reserve before checking
-  this item. Historical 1-minute and pre-amendment 5/15/30 pilots remain
+  this item. A read-only live preflight and resource sampler are implemented;
+  the full technical audit is intentionally post-seal and does not by itself
+  authorize 7-3. Historical 1-minute and pre-amendment 5/15/30 pilots remain
   historical only. See the [7-2/7-3 transition plan](docs/reviews/2026-09-20-v7-3-prep.md).
 
 - [ ] **7-3. Complete actual option-path demand, dated hours/reference inputs and targeted captures.**
@@ -84,10 +86,13 @@
   performance log. The curated `incubator/artifacts/active/` bundles use each
   model's actual EV decision head; historical P(win)-labeled V6 smoke output
   is not performance evidence. Multi-row scoring and input-drift regressions
-  pass. V5's live server has only a paper trade ledger, not a full candidate
-  feature feed; genuine V5 daily capture and exact-identity outcome export
-  remain open. A V6-origin V5 compatibility smoke test is not V5 paper
-  validation. The timer remains disabled and the service has no execution
+  pass. The read-only V6 closed-position exporter now seals current-pricing
+  outcome evidence; 14 closed positions yielded only the one exact match to
+  the 2026-09-22 candidate day. V5 scanner batch capture, daily assembly and
+  scaler-mean replay are implemented locally, with an opt-in scanner flag; the
+  live server still needs a safe branch/deployment reconciliation and no
+  genuine V5 paper validation exists. A V6-origin V5 compatibility smoke test
+  is not V5 paper validation. The timer remains disabled and the service has no execution
   opt-in; production isolation and 7-2–7-7 gates still block activation.
 
 **7-1 is complete. 7-2 is currently running the systemd-managed full 5/15/30

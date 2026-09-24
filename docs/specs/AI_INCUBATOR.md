@@ -42,9 +42,16 @@ duplicate artifact is refused; no partial result is emitted.
   --request REQUEST.json --output-dir RUN/ --checkpoint RUN/checkpoint.json \
   --run-id close-YYYYMMDD
 ./venv/bin/python scripts/ai_incubator.py metrics RESULTS.jsonl
+./venv/bin/python scripts/export_v6_incubator_outcomes.py \
+  --database V6_PAPER/portfolio.sqlite3 --through YYYY-MM-DD \
+  --output-dir ARTIFACTS/outcomes/NEW_EXPORT/ \
+  --feature-dir ARTIFACTS/daily/v6-YYYYMMDD/ \
+  --join-dir ARTIFACTS/outcomes/NEW_JOIN/
 ./venv/bin/python scripts/ai_incubator_after_close.py --bundle-root BUNDLES \
   --v6-index V6_DATA_INDEX.json --v6-candidates-root V6_PASSES/ \
   --v6-model-config V6_MODEL/ensemble_config.json \
+  --v5-pass-root LOCALLY_STAGED_V5_PASSES/ \
+  --v5-model-config V5_MODEL/ensemble_config.json \
   --feature-root ARTIFACTS/daily --output-dir RUN_ROOT/ \
   --as-of YYYY-MM-DD
 ```
@@ -77,7 +84,10 @@ score is reported.
 
 The outcome joiner is implemented and requires exact
 `symbol/strategy/dte/entry_ts` identity matches to an explicit `net_return`
-source. The 2026-09-23 join matured one of the 304 rows from the 2026-09-22 V6
+source. The read-only V6 exporter now takes only closed, current-midpoint-policy
+positions from the paper SQLite ledger; it verifies key, DTE, terminal close
+clock and source/WAL hash fence, then seals position evidence and net returns.
+The 2026-09-23 join matured one of the 304 rows from the 2026-09-22 V6
 pass: DUOL/macd/30 DTE at 19:15 UTC, with
 `net_return=-0.12458142055209864` derived from the closed paper position's
 recorded return factor. The other 303 rows remain pending, so the matrix is
@@ -87,10 +97,18 @@ live GBT artifact. A separate V5 Keras/EV bundle is now packaged; the active
 server configuration hash matches the packaged configuration. Its corrected
 replay helper uses the magnitude head and saved `std` scaler. The 304-row V5
 compatibility smoke test used V6-origin rows and is **not** V5 paper evidence.
-The V5 server currently saves a trade ledger, not full candidate features, so
-the daily runner records V5 as input-blocked until a genuine V5 capture is
-published with `generation=v5` and passed via `--v5-feature-dir`. V6 rows must
-never be substituted.
+The V5 server currently saves a trade ledger, not full candidate features.
+An opt-in scanner path now seals the full scored V5 candidate batch per signal
+bar with exact candidate identities, the active model-config hash and a
+`generation=v5` manifest. The daily runner verifies and assembles locally
+staged passes with `--v5-pass-root` (or accepts a presealed
+`--v5-feature-dir`). V5 model-scaler-mean imputation is preserved in the
+replay bundle `v5-keras-ev-replay-v3`; the older v2 remains historical outside
+the curated registry. This is local implementation, not live V5 validation:
+the remote V5 scanner has not received the opt-in flag, no genuine V5 passes
+have been staged, and the diverged/dirty server checkout must be reconciled
+before a safe git-pull deployment. Until then the daily runner records V5 as
+input-blocked. V6 rows must never be substituted.
 
 The daily runner routes each artifact to its own sealed request, writes
 per-artifact attempt directories and receipts, a date-scoped checkpoint,
@@ -129,6 +147,7 @@ Older V6 smoke output used P(win) in `prediction` and must not be scored as EV.
 5. Add the after-market-close scheduler only after dry-run and failure tests
    pass. **Done; committed but disabled by default.**
 6. Validate against V5/V6 paper data, then onboard V7 through the same contract.
-   **V6 daily prediction-only validation is done; real scoring waits for
-   candidate outcomes. V5 bundle compatibility is verified but genuine daily
-   feature capture is outstanding. V7 and production activation remain gated.**
+   **V6 has one exact-identity matured outcome; 303 rows remain pending, so no
+   performance claim is supported. V5 capture is implemented locally but not
+   yet deployed or validated on genuine V5 passes. V7 and production
+   activation remain gated.**

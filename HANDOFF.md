@@ -1,72 +1,62 @@
-# Handoff — 2026-09-23 — daily V5/V6 incubator wiring
+# Handoff — 2026-09-23 — V6 outcomes, V7 audit prep, V5 capture
 
 ## Restart first
 
-Read `TODO.md`, then this file. The prior handoff is archived at
-`handoff-history/HANDOFF-2026-09-23-before-daily-incubator.md`. Preserve the
-active V7-2 compact 5/15/30 catalog; do not stop, restart, relabel, or delete
-it, and do not start V7-3 until it is sealed and verified. See the archived
-handoff and `logs/v7-progress/v7-2-full-catalog-20260922-rebuild-5-15-30/`
-for its last known progress. This session did not operate on that build.
+Read `TODO.md`, then this file. The previous handoff is archived at
+`handoff-history/HANDOFF-2026-09-23-before-outcome-catalog-v5.md`. The active
+V7-2 compact 5/15/30 catalog is still building at
+`nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`. Do not stop,
+restart, relabel or delete it; do not start 7-3 until full 7-2 verification.
 
-## Incubator result
+## What landed locally
 
-The scheduled CLI now reads a dated V6 candidate pass, publishes and verifies
-a sealed 164-feature matrix under `incubator/artifacts/daily/v6-YYYYMMDD/`,
-routes V5 and V6 bundles to separate requests, and writes date-scoped
-checkpoints, per-artifact attempt directories/receipts, an after-close summary,
-and `performance-log.json`. It refuses changed candidate source hashes on
-rerun, and any V5 input without an explicit matching generation/date seal. The
-service points to `incubator/artifacts/active/`, includes bounded memory/CPU
-configuration, but remains disabled and has no `--allow-execution` flag.
+1. `scripts/export_v6_incubator_outcomes.py` opens the local V6 paper SQLite
+   ledger read-only, hashes source/WAL across the read, accepts only fully
+   closed midpoint-policy positions with exact V6 identity and close clocks,
+   and seals net-return parquet, per-position evidence and manifest. An
+   optional exact-identity join is supported. The 2026-09-23 export found 14
+   closed positions; only DUOL/macd/30 DTE matched the 304-row 2026-09-22
+   candidate matrix (`net_return=-0.12458142055209864`). The other 303 are
+   pending, so there is no V6 performance verdict.
+2. `scripts/audit_v7_catalog.py` now supports a small read-only live preflight
+   and a post-seal `--full` audit of all 1,773 compact stores. The sampled
+   preflight passed at 848 present stores/925 missing. Full mode is not yet
+   run. `scripts/sample_v7_catalog_resources.py` records cgroup, CPU temp,
+   disk, progress and age outside the active catalog. A later sample found 291
+   complete securities, 881 proposal stores, 82.25°C CPU, ~12.36 GB current /
+   ~19.96 GB peak memory, ~400.52 GB free disk, and zero cgroup CPU
+   throttling. See `docs/reviews/2026-09-23-v7-catalog-audit-prep.md`.
+3. V5 candidate feature capture is opt-in at the scanner via
+   `--incubator-capture-root`; it seals the scored full candidate batch per
+   signal bar with `generation=v5`, identity, model-config hash and parquet
+   hash. The daily runner can assemble staged passes by date. The V5 replay
+   entrypoint now imputes NaNs with each member's saved scaler mean. The active
+   ignored registry has `v5-keras-ev-replay-v3.tar.gz` and the current V6 GBT
+   bundle; V5 v2 was moved to
+   `incubator/artifacts/v5-live-20260923/bundles/v5-keras-ev-replay-v2-retired.tar.gz`.
+   No real V5 candidate pass has been captured or validated yet.
 
-Active bundles are ignored by git under `incubator/artifacts/active/`:
+## Operational gates
 
-- `v6-gbt-causal-replay-v2.tar.gz`: live 40-member GBT, EV-mode, 164 features.
-  Its `prediction` is now the EV decision, not P(win); `p_win` is separate.
-- `v5-keras-ev-replay-v2.tar.gz`: server-matching config SHA-256
-  `b4631653459490045a92e6305922b40440780f3fd6a8b93edcee462601044182`.
-  Uses the magnitude heads and saved `std` scalers. Its 304-row replay smoke
-  used V6-origin rows **only for compatibility**, not V5 paper evidence.
+The V5 server remains on a divergent branch with unrelated dirty model-file
+deletions, so do not `git pull main`, switch branches or overwrite it blindly.
+The scanner capture flag was not deployed or added to server cron; its current
+paper ledger alone cannot reconstruct full candidate features. Reconcile that
+checkout and use git-pull deployment before adding the opt-in V5 flag; then
+stage sealed pass directories locally under `incubator/artifacts/v5-passes`
+and verify a genuinely captured day. No V5 performance claim is supported.
+The incubator timer remains disabled, the service has no `--allow-execution`,
+and production isolation/paper-data approval plus TODO 7-2–7-7 still gate
+activation. No V7-3 capture work began.
 
-The 2026-09-22 active campaign smoke at
-`incubator/runs/after-close/close-20260922-active-ev-smoke/` executed the V6
-bundle successfully: 304 pending-outcome predictions, 40 members, no execution
-failures. It exited nonzero solely because the V5 input was blocked, and the
-unified performance log records both states. A prior one-row DUOL outcome join
-is partial; 303/304 V6 rows remain pending, so no performance or readiness
-result exists. Older V6 replay output labeled P(win) as `prediction`; it must
-not be used to score EV. Historical bundles are preserved outside the curated
-active registry.
+## Verification and worktree
 
-## Remaining gates
+Focused tests: 23 passed. Full suite: 2,376 passed, 20 warnings, 18 subtests
+passed. The updated incubator user-systemd unit verifies outside the sandbox.
+The V6 exporter read the actual ledger without modifying it. Live V7 preflight
+and resource samples were read-only and wrote only under `logs/v7-progress/`.
 
-1. Capture actual V5 candidate feature batches at the server's V5 scanner
-   boundary and publish them separately with `generation=v5`; its current
-   `.v5_paper_ledger.json` is only a trade ledger. The after-close CLI has a
-   `--v5-feature-dir` slot and fails closed until this exists. Do not substitute
-   the V6 compatibility matrix.
-2. Add durable exact-identity matured-outcome export/joins for both generations
-   and validate multi-day paper scoring. The joined matrix contract now carries
-   generation and is accepted via explicit `--v6-feature-dir` or
-   `--v5-feature-dir`.
-3. Before production activation, validate OS-level network isolation and
-   cgroups in the target user-systemd environment, retention/backup operation,
-   and the TODO.md 7-2 through 7-7 plus explicit paper-data boundary gate.
-   Do not enable the timer or add `--allow-execution` to its service yet.
-
-## Verification and git boundary
-
-Targeted incubator suite: 29 passed after final input-contract edits. Full
-suite: 2,368 passed, 20 warnings, 18 subtests passed. `git diff --check`
-passes. `systemd-analyze --user verify` passes outside the sandbox. The V5
-and V6 active bundles both loaded and produced 304 pending predictions in
-isolated smoke runs; neither proves performance.
-
-The workspace contains many unrelated dirty V7/V6 files. Do not broad-stage,
-reset, clean, or modify the active V7 catalog. This session still sees `.git`
-as a read-only mount (`findmnt -T .../.git` reports `ro`), so it could not
-stage, commit or push. After a fresh writable mount, review and narrowly stage
-only incubator code/tests/service and documentation for this slice. Generated
-artifacts/runs are ignored and should not be force-added without an explicit
-artifact-publication decision.
+Many unrelated V6/V7 changes are present in the worktree. Narrow-stage only
+this slice; `nn_meta/live/v4_scan.py` specifically overlaps other uncommitted
+V6 shadow work, so stage only the V5 capture lines. Generated incubator
+bundles, outcomes and run receipts are ignored and must not be force-added.

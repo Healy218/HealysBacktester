@@ -5,7 +5,7 @@ After=network-online.target
 [Service]
 Type=oneshot
 WorkingDirectory=/home/healy/Coding/HealysBacktester
-ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/ai_incubator_after_close.py --bundle-root /home/healy/Coding/HealysBacktester/incubator/artifacts/active --v6-index /home/healy/Coding/HealysV6/nn_meta/live/v6_server/data-index.json --v6-candidates-root /home/healy/Coding/HealysV6/nn_meta/live/v6_server/passes --v6-model-config /home/healy/Coding/HealysBacktester/deploy/v6/releases/v6-cash-repair-20260913/model/ensemble_config.json --feature-root /home/healy/Coding/HealysBacktester/incubator/artifacts/daily --output-dir /home/healy/Coding/HealysBacktester/incubator/runs/after-close --memory-bytes 4294967296 --artifact-seconds 300
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/ai_incubator_after_close.py --bundle-root /home/healy/Coding/HealysBacktester/incubator/artifacts/active --v6-index /home/healy/Coding/HealysV6/nn_meta/live/v6_server/data-index.json --v6-candidates-root /home/healy/Coding/HealysV6/nn_meta/live/v6_server/passes --v6-model-config /home/healy/Coding/HealysBacktester/deploy/v6/releases/v6-cash-repair-20260913/model/ensemble_config.json --v5-pass-root /home/healy/Coding/HealysBacktester/incubator/artifacts/v5-passes --v5-model-config /home/healy/Coding/HealysBacktester/nn_meta/model_final_v5/ensemble_config.json --feature-root /home/healy/Coding/HealysBacktester/incubator/artifacts/daily --output-dir /home/healy/Coding/HealysBacktester/incubator/runs/after-close --memory-bytes 4294967296 --artifact-seconds 300
 Environment=PYTHONDONTWRITEBYTECODE=1
 TimeoutStartSec=2h
 UMask=0077

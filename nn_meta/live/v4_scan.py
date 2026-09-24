@@ -231,7 +231,8 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
               symbols: Optional[list[str]] = None,
               threshold: Optional[float] = None,
               state_dir: Optional[Path] = None, paper: bool = False,
-              workers: int = 1) -> dict:
+              workers: int = 1,
+              incubator_capture_root: Path | None = None) -> dict:
     """Scan → score → alert once. Returns a summary dict (also written as the
     health snapshot). All state I/O is atomic and idempotent.
 
@@ -288,6 +289,18 @@ def scan_pass(*, bundle: V4Bundle, spec: dict, surface: pd.DataFrame,
         batch = fill_context(batch, surface)
         scores = bundle.score(batch)
         decision = bundle.ev(batch) if bundle.mode == config.EV_MODE else scores
+        if incubator_capture_root is not None:
+            try:
+                from incubator.v5_features import capture_v5_pass
+                captured = capture_v5_pass(batch, incubator_capture_root, bundle.config,
+                                           observed_at=now.isoformat())
+                logger.info(f"[v5-incubator] sealed {captured['rows']} candidates at "
+                            f"{captured['signal_bar']}")
+            except Exception as exc:
+                # Candidate capture is opt-in and must never suppress a live
+                # paper alert. The missing pass will fail closed at replay.
+                errors += 1
+                logger.error(f"[v5-incubator] candidate capture failed: {exc}")
         winners = best_per_signal(batch, scores, decision)
         for row in winners.itertuples(index=False):
             key = alert_key(row.symbol, row.strategy, row.entry_ts)
@@ -456,6 +469,8 @@ def main() -> None:
     ap.add_argument("--top", type=int, default=10)
     ap.add_argument("--workers", type=int, default=None,
                     help="detection processes (default SCAN_WORKERS env, else min(4, cpus))")
+    ap.add_argument("--incubator-capture-root", type=Path,
+                    help="V5 only: seal scored candidate batches without changing alerts")
     args = ap.parse_args()
 
     if config.POOL not in ("v31", "v5", "v6"):
@@ -463,6 +478,8 @@ def main() -> None:
                          "expert, model_final_v4/) or NN_META_POOL=v5 (the [v5] "
                          "expert, model_final_v5/) or NN_META_POOL=v6 "
                          f"(the [v6] expert, model_final_v6/) — got '{config.POOL}'")
+    if args.incubator_capture_root and EXPERT != "v5":
+        raise SystemExit("incubator candidate capture is only valid for the V5 expert")
     bundle_dir = Path(args.bundle) if args.bundle else DEFAULT_BUNDLE_DIR
     if args.selftest:
         selftest(bundle_dir)
@@ -497,7 +514,8 @@ def main() -> None:
             symbols=[s.strip().upper() for s in args.symbols.split(",")]
             if args.symbols else None,
             threshold=args.threshold, paper=args.paper, state_dir=sdir,
-            workers=args.workers if args.workers is not None else _default_workers())
+            workers=args.workers if args.workers is not None else _default_workers(),
+            incubator_capture_root=args.incubator_capture_root)
         print(f"{TAG} scanned {summary['scanned']} · alerted {summary['alerted']} · "
               f"delivered {summary['delivered']} · errors {summary['error_count']}")
 

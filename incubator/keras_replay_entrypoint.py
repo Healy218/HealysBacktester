@@ -28,13 +28,15 @@ def main() -> int:
     frame = pd.read_parquet(source)
     required = columns + ([outcome] if outcome is not None else [])
     missing = sorted(set(required) - set(frame.columns))
-    if missing or frame.empty or frame[required].isna().any().any():
+    if missing or frame.empty or (outcome is not None and frame[outcome].isna().any()):
         raise ValueError(f"forward feature table is incomplete: {missing}")
     import numpy as np
     import tensorflow as tf
     tf.config.threading.set_intra_op_parallelism_threads(1)
     tf.config.threading.set_inter_op_parallelism_threads(1)
     values = frame[columns].to_numpy(dtype=np.float32)
+    if np.isinf(values).any():
+        raise ValueError("forward features contain infinity")
     predictions = []
     mode = config.get("mode", "classification")
     if mode not in {"ev", "classification"}:
@@ -47,7 +49,7 @@ def main() -> int:
         inactive = scaler.get("inactive", [])
         if np.any(scale <= 0) or not np.isfinite(np.concatenate((mean, scale))).all():
             raise ValueError(f"invalid scaler: {run_id}")
-        standardized = (values - mean) / scale
+        standardized = (np.where(np.isnan(values), mean, values) - mean) / scale
         for column in inactive:
             standardized[:, columns.index(column)] = 0.0
         model_path = member / ("magnitude.keras" if mode == "ev" else "model.keras")

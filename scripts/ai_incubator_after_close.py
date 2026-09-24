@@ -24,6 +24,7 @@ from incubator.campaign import run_campaign
 from incubator.forward import load_v6_snapshot
 from incubator.receipts import write_json_atomic
 from incubator.registry import discover
+from incubator.v5_features import assemble_v5_day
 
 
 def main() -> int:
@@ -37,6 +38,10 @@ def main() -> int:
     parser.add_argument("--feature-root", type=Path, required=True)
     parser.add_argument("--v5-feature-dir", type=Path,
                         help="Separately captured, sealed V5 paper features; never substitute V6 candidates.")
+    parser.add_argument("--v5-pass-root", type=Path,
+                        help="Locally staged, scanner-sealed V5 pass directories.")
+    parser.add_argument("--v5-model-config", type=Path,
+                        help="Active V5 ensemble config used to validate pass capture.")
     parser.add_argument("--output-dir", type=Path, required=True)
     parser.add_argument("--run-id", default=None)
     parser.add_argument("--as-of", default=None)
@@ -48,6 +53,8 @@ def main() -> int:
     parser.add_argument("--allow-execution", action="store_true",
                         help="Explicitly opt into sandbox entrypoints; default is verification-only.")
     args = parser.parse_args()
+    if bool(args.v5_pass_root) != bool(args.v5_model_config):
+        parser.error("--v5-pass-root and --v5-model-config must be supplied together")
     cutoff = args.as_of or datetime.now(ZoneInfo("America/New_York")).date().isoformat()
     snapshot = load_v6_snapshot(args.v6_index)
     if snapshot.through > cutoff:
@@ -68,9 +75,14 @@ def main() -> int:
                                capture_v6_day(args.v6_candidates_root, args.v6_model_config,
                                               args.feature_root, cutoff))
             else:
-                if args.v5_feature_dir is None:
+                if args.v5_feature_dir is not None:
+                    feature_dir = args.v5_feature_dir
+                elif args.v5_pass_root is not None:
+                    feature_dir = args.feature_root / f"v5-{cutoff.replace('-', '')}"
+                    assemble_v5_day(args.v5_pass_root, feature_dir,
+                                    json.loads(args.v5_model_config.read_text()), through=cutoff)
+                else:
                     raise DailyInputError("v5: genuine sealed V5 paper feature capture is not configured")
-                feature_dir = args.v5_feature_dir
             selected = load_feature_request(feature_dir, generation=generation, as_of=cutoff)
             for entry in generation_entries:
                 requests[entry["artifact_id"]] = {**selected, "artifact_id": entry["artifact_id"]}
