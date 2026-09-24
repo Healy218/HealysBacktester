@@ -13,10 +13,22 @@
   `nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`, with 4
   outer security workers, one inner thread, compact-final enabled, and 1,773
   target stores. After the September 24 action/coverage recovery, 415 sealed
-  securities are retained under an explicit equivalence manifest; 176 remain
-  to build. The corrected service verifies all admitted events before launch,
+  securities are retained under an explicit equivalence manifest; four more
+  sealed before the first controller exited. The corrected service verifies
+  all admitted events before launch,
   fails on the first builder error, and does not automatically retry. The CLI
   and hourly observer remain bound to this output.
+
+  September 24 audit found that the repaired coverage had omitted seven sealed
+  reviewed renames and the unrelated-instrument treatments. A new reviewed
+  coverage artifact restores admission for the eight affected securities;
+  all other 583 securities retain identical admitted dates and action events.
+  The resumed service uses that coverage for exactly the eight changed
+  securities, verifies 415 reused and four newly sealed securities, and has
+  127 builds left to schedule. The original 1,773-store target remains open:
+  45 securities have no admitted observed day under the September 18 noncash
+  exclusion policy. They need exact source review before their stores can be
+  built. The runner reports them as deferred, never as complete.
 
   The current run is the 7-2 build execution, not completion evidence yet.
   After it seals, verify every store, source binding, catalog census, compact

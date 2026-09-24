@@ -1,90 +1,70 @@
-# Handoff — 2026-09-24 — V7 catalog recovery and V6 paper quote evidence
+# Handoff — 2026-09-24 — V7-2 reviewed coverage restart
 
-## Start here
+Read `TODO.md` first. The prior handoff is archived at
+`handoff-history/HANDOFF-2026-09-24-before-reviewed-coverage-restart.md`.
+V7-1 is complete under its agreed exclusion policy; V7-2 is the active
+proposal catalog build; V7-3 follows a fully verified V7-2. Do not claim the
+591-security/1,773-store gate has passed while the 45 noncash cases below are
+unbuilt. Main is the operating branch. The worktree has extensive unrelated
+dirty files; do not clean, reset, broad-stage, or modify V7 producer sources
+while the build is running.
 
-Read `TODO.md`, then this file. The previous handoff is archived at
-`handoff-history/HANDOFF-2026-09-24-before-v7-catalog-recovery.md`.
-The active phase is still V7-2; do not begin 7-3 until the full 1,773-store
-audit and resource/recovery checks pass. Main is the operating branch. The
-worktree has extensive unrelated dirty V6/V7 sources: never broad-stage,
-clean, reset or relabel them. The active V7 build must not be casually stopped
-or restarted. The user expressly authorized the September 24 recovery below.
+## V7 live state
 
-## V7 live state and exact recovery
+`healys-v7-catalog-build.service` was restarted at 2026-09-24 16:36:37 CDT.
+At 16:44:13 CDT it was active as PID 3093731, with zero restarts, four real
+proposal workers and 1,259/1,773 sealed proposal stores. The first corrected
+GOLD/B worker was generating real signals. The independent service has
+`Restart=no`; its journal is the controller progress bar. The CLI is
+`./venv/bin/python -m scripts.watch_v7_catalog --follow --interval 5` from
+repo root. It follows the same output path and reports host-side service state.
+The one-shot observer may show `unknown` when run in a restricted sandbox;
+the host-side CLI reported `active` and zero restarts.
 
-At 2026-09-24 20:31 UTC, `healys-v7-catalog-build.service` was **active** with
-one controller (PID 3072297), four outer security builders, zero restarts, 415
-complete securities and 1,245/1,773 sealed proposal stores. About 350 GiB of
-disk remained. The four new workers were calculating signals; no new proposal
-store had sealed yet. The service has `Restart=no` and now stops scheduling
-new securities on its first worker failure. If it stops, inspect the failed
-worker and the exact receipt before resuming; do not revert the input guard.
+The first 7-2 restart stopped at 419 complete securities after the GOLD/B
+worker found no admitted history. Root cause: the repaired September 21
+coverage had zero reviewed rename events and omitted the sealed unrelated-
+instrument treatments because the original auditor rejected a historical
+`ordinary_actions.py` hash conflict between sealed parents. The original
+auditor was restored byte-for-byte (its hash matches the September 21
+coverage). A separate `scripts/audit_v7_action_coverage_compatible.py` retains
+the historical review source hash in its report while binding computation to
+the current source. It sealed
+`nn_meta/validation/v7-action-coverage-20260924-reviewed-v2`. This has 4,354
+admitted events and four unresolved rows. It changes admission on exactly
+eight securities and leaves the other 583 with identical admitted dates and
+action events. The service uses this supplemental coverage only for those
+eight, the original coverage for others. Its exact preflight verified 415
+reuse-manifest securities, four newly sealed securities, action-event parity,
+127 schedulable builds, and 45 zero-admission securities. Full suite: 2,381
+passed and 18 subtests. Recovery code/unit commit `de7aada` is pushed to main.
 
-Root cause: the September 18 action and coverage files matched at 4,305
-admitted events when originally checked. A September 21 repaired coverage
-artifact was later paired in the installed service with the old action file.
-That installed pair differed for 96 securities. The corrected sealed action
-artifact `v7-dividends-complete-20260918` matches the repaired coverage for all
-591 securities and all 4,314 admitted events. The old runner continued beyond
-failed securities and systemd auto-retried, so the large receipt count hid
-the configuration regression. The user's prior checks were real and passed
-for the earlier pair; do not describe this as an omitted initial check.
+The 45 still unbuildable securities have no admitted observed day under the
+September 18 explicit noncash boundary exclusions: 36 involve at least one
+undated name-change record and nine have only dated noncash events before any
+observed usable history. Do not turn these into empty stores or silently lower
+the 591 target. Their records require exact primary-source review to admit
+history. All 45 are visibly deferred by the runner; it will return failure
+rather than claim catalog completion when the schedulable work finishes.
+Several undated cases have promising local listed-identity evidence (ELV,
+OSTK/BYON, MPW/MPT), but no new admission has been sealed. Web primary
+issuer notices were identified for those three. The full target remains
+incomplete and V7-3 must not start.
 
-Of 423 completed securities before recovery, 415 have exactly the same typed
-actions with the corrected artifact. Their recorded source hashes still match
-current files; the only added source-inventory files are the read-only audit
-modules. The repaired coverage receipt was already bound in these stores.
-`nn_meta/validation/v7-2-catalog-reuse-20260924.json` binds all 415 original
-feature/proposal summary receipts and is verified before every runner start.
-The eight changed completed securities and four partial checkpoint directories
-were moved without deletion to sibling directory
-`nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30-superseded-20260924`.
-The active output is unchanged at
-`nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`; 176 securities
-remain to build. Never relabel the original sealed stores as new-action stores.
-See `docs/reviews/2026-09-24-v7-catalog-recovery.md` for the complete proof.
+The build output remains
+`nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`. Original
+415 sealed stores have an explicit compatibility manifest at
+`nn_meta/validation/v7-2-catalog-reuse-20260924.json`; four additional stores
+were audited on resume. Do not relabel any old receipt. The old eight changed
+and four partial directories remain preserved under the sibling
+`-superseded-20260924` archive. A superseded staged draft describing the old
+53-security finding was removed; the current zero-admission count is 45.
 
-The corrected runner/unit were committed and pushed in `12847c1` and `81d9e04`.
-The first service invocation caught a launcher import error before any worker;
-`81d9e04` fixed it. The exact service command with `--preflight-only` then
-passed (591 securities, 4,314 events, 415 reused, 176 remaining). The full
-suite passed 2,378 tests and 18 subtests before the restart. Observer repair
-`0c11606` removes its recursive artifact-size scan, reports live service state
-and resets ETA to the recovery run. One local observer snapshot completed in
-under a second, reported `active`, zero restarts and 350 GiB free. A new V7
-source file or code change inside the producer's broad source inventory will
-invalidate future working-store identities; freeze computational sources while
-this build runs. The observer script is outside that inventory.
+## V6 state inherited from prior handoff
 
-## V6 paper state
-
-The V6 broker-ledger projection timer from `19b9ad6` is active; the app's
-broker projection was refreshed from the real paper SQLite. The separate
-V6 quote-evidence repair is on pushed V6 branch
-`ops/v6-quote-evidence-20260924` at `e6991f2`, deployed via Git with verified
-activation and an unchanged SQLite hash. The user authorized exact-leg,
-post-close, 30-second-valid observations from the minute-risk worker within
-the five-minute entry window; missing evidence still blocks entries. The
-isolated V6 suite passed 1,612 tests and 18 subtests.
-
-The first live postdeployment forward pass at 19:45 UTC recorded successfully
-(20 closed and four open positions, two new paper openings). The final-bar
-20:00 UTC pass failed closed: AAOI, CELH, CLF and TTWO had no fresh
-post-decision quote; minute-risk also lacked a qualifying observation.
-`SessionCalendar.scan_open` intentionally permits the final closed-bar scan
-through :03, so do not simply skip the final pass to hide this. The dashboard
-can still show a latest-pass warning after the market close; investigate a
-truthful last-success/failure presentation and any source-backed quote remedy.
-See `docs/reviews/2026-09-24-v6-quote-evidence.md`. Main commit `de280dd`
-records the timer and this limited live verdict. Do not claim full V6 quote
-recovery yet.
-
-## Other queued work
-
-The V5 server capture backport remains on
-`ops/server-alert-readiness-20260906` at `059ff1d`; finish its day's pass
-census and hashes. Paper staging to home still needs an explicit boundary
-decision. The incubator after-close timer remains disabled without
-`--allow-execution`. V7/FA admission still awaits gates 7-2 through 7-7 and
-separate isolation approval. The V7 progress timer is enabled; watch for its
-hourly state report or use the lightweight `scripts/watch_v7_catalog.py`.
+The V6 quote-evidence repair is deployed from the separate V6 checkout branch
+`ops/v6-quote-evidence-20260924` at `e6991f2`; 19:45 UTC paper pass recorded,
+but 20:00 UTC final-bar pass still failed closed due missing fresh option quote
+observations. Dashboard broker projection was refreshed. See
+`docs/reviews/2026-09-24-v6-quote-evidence.md` and the archived handoff for
+full context. Current user focus is V7.
