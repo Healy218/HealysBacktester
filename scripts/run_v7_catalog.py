@@ -13,6 +13,7 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
 MINUTES = (5, 15, 30)
 
 
@@ -69,6 +70,8 @@ def main() -> int:
                         help="Worker-log directory; defaults to a namespace derived from --output")
     parser.add_argument("--reuse-manifest", type=Path,
                         help="Verified proof for sealed securities built with equivalent earlier actions")
+    parser.add_argument("--preflight-only", action="store_true",
+                        help="Validate exact configured inputs and reuse proof, then exit before workers")
     args = parser.parse_args()
     if not 1 <= args.workers <= 4:
         parser.error("--workers must be between 1 and 4; four is the bounded outer-worker ceiling")
@@ -93,6 +96,11 @@ def main() -> int:
         if not all((args.output / security_id / str(minutes) / "proposals/summary/complete.json").exists()
                    for minutes in MINUTES):
             raise ValueError("Reuse proof includes incomplete security")
+    if args.preflight_only:
+        print(json.dumps({"preflight": "passed", **gate,
+                          "reused_securities": len(reused),
+                          "remaining_builds": len(security_ids) - len(reused)}, sort_keys=True))
+        return 0
     args.output.mkdir(parents=True, exist_ok=True)
     log_dir = args.log_dir or Path("/tmp") / f"{args.output.name}-logs"
     log_dir.mkdir(parents=True, exist_ok=True)
