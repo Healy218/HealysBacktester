@@ -12,7 +12,11 @@
   `healys-v7-catalog-build.service` and writes to
   `nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`, with 4
   outer security workers, one inner thread, compact-final enabled, and 1,773
-  target stores. The CLI and hourly observer are bound to this output.
+  target stores. After the September 24 action/coverage recovery, 415 sealed
+  securities are retained under an explicit equivalence manifest; 176 remain
+  to build. The corrected service verifies all admitted events before launch,
+  fails on the first builder error, and does not automatically retry. The CLI
+  and hourly observer remain bound to this output.
 
   The current run is the 7-2 build execution, not completion evidence yet.
   After it seals, verify every store, source binding, catalog census, compact

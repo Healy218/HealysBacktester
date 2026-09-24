@@ -1,0 +1,17 @@
+[Unit]
+Description=Healy V7 full catalog checkpointed build
+After=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/run_v7_catalog.py --source /home/healy/Coding/HealysBacktester/nn_meta/data_v7/start-20220315 --history /home/healy/Coding/HealysBacktester/nn_meta/validation/v7-security-history-20260918-7-2-current --actions /home/healy/Coding/HealysBacktester/nn_meta/validation/v7-dividends-complete-20260918 --action-coverage /home/healy/Coding/HealysBacktester/nn_meta/validation/v7-action-coverage-20260921-7-2-repaired --output /home/healy/Coding/HealysBacktester/nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30 --reuse-manifest /home/healy/Coding/HealysBacktester/nn_meta/validation/v7-2-catalog-reuse-20260924.json --workers 4 --batch-columns 8 --working-bytes 134217728 --compact-final --log-dir /tmp/v7-2-full-catalog-20260922-rebuild-5-15-30-logs
+Environment=PYTHONUNBUFFERED=1
+Environment=MPLCONFIGDIR=/tmp/mpl-v7-full
+Environment=PYTHONDONTWRITEBYTECODE=1
+Restart=no
+TimeoutStopSec=120s
+UMask=0077
+
+[Install]
+WantedBy=default.target
