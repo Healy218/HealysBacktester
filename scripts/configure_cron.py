@@ -12,6 +12,8 @@ Idempotent rewrites:
     contains ``-m nn_meta.live.feeds.<x>``), so a dead daemon was never restarted;
   * ``--enable-option-feed`` restores the two option-stream lines if they were
     commented out (safe: the stream idles until the alert path registers contracts).
+  * ``--enable-v5-incubator-capture`` adds the opt-in candidate capture flag
+    only to the active V5 scanner line. Capture errors do not suppress alerts.
 
     ./venv/bin/python scripts/configure_cron.py            # preview
     ./venv/bin/python scripts/configure_cron.py --run      # install (backs up first)
@@ -30,7 +32,8 @@ _DISABLED_MARK = '# DISABLED 2026-09-08 (option feed has no subscribers'
 _WATCHDOG_RE = re.compile(r'pgrep -f "\[f\]eeds\.(\w+)"')
 
 
-def updated_cron(original, repo, *, enable_option_feed=False):
+def updated_cron(original, repo, *, enable_option_feed=False,
+                 enable_v5_incubator_capture=False):
     lines = []
     for line in original.splitlines():
         stripped = line.lstrip()
@@ -47,6 +50,10 @@ def updated_cron(original, repo, *, enable_option_feed=False):
         line = _WATCHDOG_RE.sub(lambda m: f'pgrep -f "feeds\\.{m.group(1)}$"', line)
         if any(m in line for m in _SCAN_MODULES) and SCAN_ENV not in line:
             line = line.replace(' && ', f' && {SCAN_ENV} ', 1)
+        if (enable_v5_incubator_capture and '-m nn_meta.live.v4_scan ' in line
+                and 'NN_META_POOL=v5' in line and '--incubator-capture-root' not in line):
+            flag = f' --incubator-capture-root {repo}/incubator/artifacts/v5-passes'
+            line = line.replace(' >>', flag + ' >>', 1) if ' >>' in line else line + flag
         if '--bars-and-surface-only' in line:
             pool = _POOL_RE.search(line)
             sched = _SCHEDULE_RE.match(line)
@@ -64,10 +71,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument('--run', action='store_true')
     parser.add_argument('--enable-option-feed', action='store_true')
+    parser.add_argument('--enable-v5-incubator-capture', action='store_true')
     args = parser.parse_args()
     repo = Path(__file__).resolve().parents[1]
     original = subprocess.check_output(['crontab', '-l'], text=True)
-    updated = updated_cron(original, repo, enable_option_feed=args.enable_option_feed)
+    updated = updated_cron(original, repo, enable_option_feed=args.enable_option_feed,
+                           enable_v5_incubator_capture=args.enable_v5_incubator_capture)
     if not args.run:
         print(updated)
         return

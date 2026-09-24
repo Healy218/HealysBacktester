@@ -285,6 +285,21 @@ class TestQuietLogging:
         assert "\n@reboot cd" in enabled and "\n*/5 * * * * cd" in enabled and "DISABLED 2026-09-08" not in enabled
         assert updated_cron(enabled, repo, enable_option_feed=True) == enabled
 
+    def test_v5_incubator_capture_cron_flag_is_opt_in_and_idempotent(self):
+        from scripts.configure_cron import updated_cron
+        repo = "/home/mrhea/HealysBacktester"
+        original = "\n".join([
+            f"1,16,31,46 * * * * cd {repo} && NN_META_POOL=v5 ./venv/bin/python -m nn_meta.live.v4_scan --once --workers 3 >> logs/v5_cron.log 2>&1",
+            f"2,17,32,47 * * * * cd {repo} && NN_META_POOL=v31 ./venv/bin/python -m nn_meta.live.v4_scan --once >> logs/v4_cron.log 2>&1",
+        ]) + "\n"
+        ordinary = updated_cron(original, repo)
+        assert "--incubator-capture-root" not in ordinary
+        enabled = updated_cron(original, repo, enable_v5_incubator_capture=True)
+        assert enabled.count("--incubator-capture-root") == 1
+        assert f"--incubator-capture-root {repo}/incubator/artifacts/v5-passes >> logs/v5_cron.log" in enabled
+        assert "--incubator-capture-root" not in enabled.splitlines()[1]
+        assert updated_cron(enabled, repo, enable_v5_incubator_capture=True) == enabled
+
 
 # ── 8: heartbeat escalations ──────────────────────────────────────────────────
 class TestHeartbeatEscalations:

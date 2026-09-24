@@ -230,6 +230,37 @@ def test_scan_error_is_counted_not_fatal(monkeypatch, tmp_path):
     assert summary["error_count"] == 1 and summary["alerted"] == 0
 
 
+def test_v5_capture_hook_does_not_suppress_paper_alerts(monkeypatch, tmp_path):
+    from incubator import v5_features
+
+    bars = _bars()
+    _fire_on_last_bar(monkeypatch, bars)
+    captured = []
+
+    def capture(batch, root, model_config, *, observed_at):
+        captured.append(batch.copy())
+        return {"rows": len(batch), "signal_bar": str(batch.entry_ts.iloc[0])}
+
+    monkeypatch.setattr(v5_features, "capture_v5_pass", capture)
+    now = (bars.index[-1] + pd.Timedelta(minutes=15)).to_pydatetime()
+    summary = scan_pass(bundle=_bundle(0.5, 0.9, 0.0), spec=_spec(),
+                        surface=_surface(), bar_loader=lambda _: bars,
+                        notifier=_Notifier(), now=now, state_dir=tmp_path,
+                        paper=True, incubator_capture_root=tmp_path / "capture")
+    assert len(captured) == 1
+    assert summary["alerted"] == summary["delivered"] == 1
+
+    def fail(*args, **kwargs):
+        raise ValueError("capture unavailable")
+
+    monkeypatch.setattr(v5_features, "capture_v5_pass", fail)
+    again = scan_pass(bundle=_bundle(0.5, 0.9, 0.0), spec=_spec(),
+                      surface=_surface(), bar_loader=lambda _: bars,
+                      notifier=_Notifier(), now=now, state_dir=tmp_path / "failure",
+                      paper=True, incubator_capture_root=tmp_path / "capture")
+    assert again["error_count"] == 1 and again["alerted"] == 1
+
+
 # ── ticker aliases (SQ → XYZ rename, audited 2026-08-16) ─────────────────────
 
 def test_aliased_loader_fetches_renamed_ticker():
