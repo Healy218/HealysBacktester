@@ -1,0 +1,15 @@
+[Unit]
+Description=Refresh read-only V6 broker-style paper projection
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=%h/Coding/HealysV6
+Environment=OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+Environment=PYTHONPATH=%h/Coding/HealysV6
+ExecStart=%h/Coding/HealysBacktester/venv/bin/python %h/Coding/HealysBacktester/scripts/export_v6_broker_ledger.py --database %h/Coding/HealysV6/nn_meta/live/v6_server/portfolio.sqlite3 --state %h/Coding/HealysV6/nn_meta/live/v6_server --output %h/Coding/HealysV6/nn_meta/live/v6_server/v6-broker-ledger-20260921.json --env %h/Coding/HealysBacktester/.env
+TimeoutStartSec=120
+MemoryMax=512M
+Nice=15
+UMask=0077

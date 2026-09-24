@@ -1,0 +1,11 @@
+[Unit]
+Description=Refresh V6 broker-style paper projection during market hours
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 12..23:03,18,33,48 UTC
+Persistent=true
+AccuracySec=1s
+Unit=healys-v6-broker-ledger.service
+
+[Install]
+WantedBy=timers.target

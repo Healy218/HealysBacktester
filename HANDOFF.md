@@ -1,69 +1,52 @@
-# Handoff — 2026-09-24 — V5 live capture and incubator/V7 checkpoint
+# Handoff — 2026-09-24 — V6 paper dashboard refresh
 
 ## Start here
 
-Read `TODO.md`, then this file. The prior handoff is archived at
-`handoff-history/HANDOFF-2026-09-24-before-consolidated-notes.md`. The active
-V7-2 compact 5/15/30 catalog is still building; do not stop, restart,
-relabel, delete or deep-audit it during the build. Do not start 7-3 until its
-full 1,773-store post-seal and resource/recovery verification passes.
+Read `TODO.md`, then this file. The preceding handoff is archived at
+`handoff-history/HANDOFF-2026-09-24-before-v6-paper-refresh.md`.
+V7-2 is still building; do not stop, restart, relabel, delete or deep-audit it
+during the run. Do not start 7-3 until all 1,773 stores and the resource and
+recovery checks pass. The prior handoff has the 15:50 UTC V7 and V5 censuses.
 
-## State and evidence
+## V6 paper incident and repair
 
-- V7-2: `nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`
-  remained active. At 2026-09-24 15:50 UTC, a read-only sample found 423/591
-  complete securities, 1,277 proposal stores, ~376.6 GB disk free, 20.05 GB
-  current / 22.42 GB peak cgroup memory, 73.625°C CPU and no cgroup CPU
-  throttling. This is a point-in-time resource sample, not a 7-2 verdict.
-  `scripts/audit_v7_catalog.py --full` is reserved for after seal; see
-  `docs/reviews/2026-09-23-v7-catalog-audit-prep.md`.
-- V6 incubator: the read-only closed-position exporter sealed 14 midpoint-policy
-  outcomes. Only DUOL/macd/30 DTE exactly matched the 304-row 2026-09-22
-  candidate matrix (`net_return=-0.12458142055209864`); 303 remain pending.
-  The 40-member live GBT replay produces prediction receipts, not a supported
-  performance verdict. See `docs/specs/AI_INCUBATOR.md`.
-- V5 incubator: the server-compatible branch is deployed at `059ff1d` with
-  `--incubator-capture-root` on only the active V5 cron line. Nine real
-  market-hours passes under `incubator/artifacts/v5-passes/2026-09-24/` had
-  sealed by 15:47 UTC, with 3,555 distinct exact candidate identities and 48
-  model features. A read-only check verified generation, config binding,
-  Parquet hashes, row counts and single signal bars. Recent V5 scan summaries
-  reported zero errors. The day's full pass census is not final; no V5 paper
-  outcomes or performance result exist, and the passes have not been staged
-  on the home box. The model manifest uses a canonical JSON digest
-  `b6a71bbfb74c3de71384e4612106d6bc72e8a0caf8c02726dcba82258c7d213c`;
-  the raw config file SHA-256 is
-  `b4631653459490045a92e6305922b40440780f3fd6a8b93edcee462601044182`.
-  See `docs/reviews/2026-09-24-v5-capture-deployment.md`.
+The user reported that V6 Paper had shown no new account trades for two days
+despite opening/closing notices. At 2026-09-24 19:11 UTC, the actual home V6
+`portfolio.sqlite3` held 19 closed and 3 open positions, with closes through
+18:30 UTC. The dashboard's `V6_BROKER_LEDGER` file was a one-off 2026-09-22
+22:53 UTC export with 13 closed and 1 open, while the home publisher continued
+successfully every minute. This stale projection caused the visible mismatch.
 
-## Deployment and next gates
+`scripts/export_v6_broker_ledger.py` now publishes its JSON and CSV atomically.
+The enabled `healys-v6-broker-ledger.timer` refreshes the existing projection
+at :03/:18/:33/:48 UTC during weekday 12–23 UTC hours. The service reads the
+V6 checkout ledger without modifying it and imports the quote client from that
+checkout; it writes only the broker projection. At 19:18:49 UTC the service
+succeeded with 19 closed, 3 open and 2 freshly marked open positions. The
+19:18:56 UTC home publisher succeeded after the new export and reported only
+`Latest paper pass failed`. The next projection timer was queued for 19:33 UTC.
+The dashboard projection is still stored at the historically dated filename
+`v6-broker-ledger-20260921.json` because the publisher's live config points
+there. Its `summary.snapshot_at` records actual freshness.
 
-The server stayed on `ops/server-alert-readiness-20260906`. The narrow V5
-backport preserved three server-local commits and its unrelated dirty retired
-V3/V4 model deletions; it was pushed and deployed by fast-forward Git pull,
-not by switching to `main` or scp. The previous crontab is recoverable at
-`/home/mrhea/HealysBacktester/logs/ops/ops-fixes-20260924T111725Z/crontab-before.txt`.
-The deployed 40-member V5 model self-test passed. The server branch has the
-same 59 pre-existing alert/accounting test failures before and after the
-backport; targeted scanner/capture/cron tests passed 19/19.
+The separate frozen V6 producer intermittently fails closed at `monitor_exits`
+when CELH has no fresh post-decision option quote. The 19:00 and 19:15 UTC
+passes failed with `unresolved position monitoring; new entries withheld`;
+18:00 and 18:45 passes completed. Do not bypass its quote safety rule to fix
+the dashboard. Follow up if quote absence persists or position exits remain
+unresolved. The paper ledger and notifications continue to update on accepted
+passes. Missing fresh marks leave full marked equity unavailable; the
+projection labels unmarked positions explicitly.
 
-After today's last V5 market-hours scan, verify the final dated pass census,
-manifest hashes and scanner error log. Paper-data staging to the home box
-requires the explicit boundary decision; the home after-close runner remains
-V5 input-blocked until a genuine sealed day is staged. Exact-identity V5
-outcome export and multi-day scoring remain open. Never substitute V6-origin
-compatibility rows. The incubator timer remains disabled and its service has
-no `--allow-execution`; V7/FA admission still awaits 7-2 through 7-7 and
-separate production isolation approval.
+## Other active work
 
-## Git boundary
+The V5 server capture backport remains on `ops/server-alert-readiness-20260906`
+at `059ff1d`; nine real passes had sealed 3,555 candidate identities and 48
+features by 15:47 UTC. Finish the day's pass census and hashes after the last
+scan. Paper staging to home still needs the explicit boundary decision. The
+incubator after-close timer remains disabled without `--allow-execution`; V7/FA
+admission still awaits 7-2 through 7-7 and separate isolation approval.
 
-Main already contains the V5/V6 incubator and V7 audit code (`4783385`,
-`2f39e72`) plus the first deployment record (`d2ba550`). The V5 server
-backport is `059ff1d` on its separate production branch. The home worktree
-still has many unrelated V6/V7 source and documentation changes. Do not
-broad-stage, clean or reset it; stage only this notes update. Generated
-incubator artifacts and the active V7 catalog are ignored and must not be
-force-added. Temporary backport/baseline worktrees remain under
-`/tmp/healys-v5-server-backport-20260923` and
-`/tmp/healys-v5-server-baseline-20260923` for audit.
+Main has unrelated V6/V7 dirty source and documentation changes. Stage only
+files for the scoped task; do not broad-stage, clean or reset. The V7 catalog
+and generated incubator artifacts remain ignored.
