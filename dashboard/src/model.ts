@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { forwardSchema, deliverySchema, brokerSchema } from "./forwardModel";
 import { trainingSchema } from "./trainingModel";
 const timestamp = z.string().datetime({ offset: true });
 const optionalTime = timestamp.nullable();
@@ -58,6 +59,7 @@ const job = z.object({
   source: z.string(),
 });
 export const serverSchema = z.object({
+  v6Delivery: deliverySchema.nullable().optional(),
   schemaVersion: z.literal(1),
   source: z.literal("server"),
   observedAt: timestamp,
@@ -82,6 +84,8 @@ const faRow = z.object({
   floatPercent: number,
 });
 export const homeSchema = z.object({
+  v6Forward: forwardSchema.nullable().optional(),
+  v6Broker: brokerSchema.nullable().optional(),
   training: trainingSchema.nullable().optional(),
   schemaVersion: z.literal(1),
   source: z.literal("home"),

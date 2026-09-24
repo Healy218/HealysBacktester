@@ -25,6 +25,7 @@ import {
 } from "firebase/auth";
 import { auth, authReady, configured } from "./firebase";
 import { useDashboard } from "./useDashboard";
+import { Forward } from "./Forward";
 import { Training } from "./Training";
 import {
   ageSeconds,
@@ -42,6 +43,7 @@ const tabs = [
   ["Overview", LayoutDashboard],
   ["Signals", Radio],
   ["Positions", Wallet],
+  ["V6 Paper", Activity],
   ["Research", FlaskConical],
   ["Training", BookOpen],
   ["FA", Database],
@@ -510,6 +512,8 @@ export default function App() {
                   ? "Your market, in view."
                   : tab === "Signals"
                     ? "Follow every signal."
+                    : tab === "V6 Paper"
+                      ? "V6 paper portfolio"
                     : tab === "Positions"
                       ? "Your taken trades."
                       : tab === "Research"
@@ -523,6 +527,8 @@ export default function App() {
                   ? "A clear view of your trading systems and the activity they report."
                   : tab === "Signals"
                     ? "Follow candidates through ranking and actual delivery."
+                    : tab === "V6 Paper"
+                      ? "Positions, paper exits, and operating evidence."
                     : tab === "Positions"
                       ? "Recorded fills and observed quotes, with accounting gaps visible."
                       : tab === "Research"
@@ -971,6 +977,7 @@ export default function App() {
               </Panel>
             </>
           )}
+          {tab === "V6 Paper" && <Forward data={home?.v6Forward} broker={home?.v6Broker} delivery={server?.v6Delivery} now={now} />}
           {tab === "Training" && (
             <Training
               key={live.user?.uid ?? "preview"}

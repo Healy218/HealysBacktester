@@ -1423,3 +1423,34 @@ dd {
     padding: 0 14px 20px;
   }
 }
+
+.forward-view { display: grid; gap: 20px; min-width: 0; }
+.broker-account .panel-heading { align-items: flex-start; }
+.broker-account .panel-heading h2 { margin-bottom: 4px; }
+.broker-metrics { margin-top: 18px; }
+.broker-chart .panel-heading { align-items: flex-start; gap: 16px; }
+.broker-chart .panel-heading h2 { margin-bottom: 4px; }
+.broker-chart .panel-heading strong { white-space: nowrap; }
+.broker-chart-wrap { width: 100%; overflow-x: auto; }
+.broker-chart-wrap svg { display: block; width: 100%; min-width: 520px; height: auto; }
+.broker-chart-wrap text { fill: var(--muted); font-size: 13px; }
+.broker-chart-zero { stroke: #aebaca; stroke-width: 1; stroke-dasharray: 5 5; }
+.broker-chart-line { fill: none; stroke: #2767a8; stroke-width: 3; stroke-linejoin: round; }
+.broker-chart-end { fill: #2767a8; stroke: white; stroke-width: 2; }
+.pnl-positive { color: #138a53; }
+.pnl-negative { color: #c44343; }
+.forward-view .panel { min-width: 0; padding: 24px; }
+.forward-view h2 { margin: 0 0 16px; }
+.forward-metrics { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 16px; }
+.forward-metrics small { display: block; color: var(--muted); }
+.forward-metrics strong { display: block; font-size: 28px; margin-top: 12px; }
+.forward-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 20px; }
+.forward-controls { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; margin: 16px 0; }
+.forward-controls label { display: grid; gap: 7px; font-size: 13px; }
+.forward-controls input,.forward-controls select { border: 1px solid #d8dfeb; border-radius: 8px; padding: 10px; background: white; color: #162238; max-width: 100%; }
+.forward-view dl { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; font-size: 14px; }
+.forward-view dd { margin: 0; overflow-wrap: anywhere; }
+.forward-view summary { cursor: pointer; font-weight: 600; }
+.forward-view .footnote { overflow-wrap: anywhere; }
+.forward-view li { margin: 8px 0; }
+@media(max-width: 800px) { .forward-metrics {grid-template-columns: repeat(2,minmax(0,1fr));} .forward-grid {grid-template-columns: 1fr;} .forward-view .panel {padding: 16px;} .forward-controls label {max-width:100%;} }
