@@ -34,6 +34,13 @@ restarts on failure. Full post-seal validation of all 1,773 stores, source
 bindings, disk reserve and recovery remains required before item 7-2 closes.
 
 The full suite passed 2,378 tests and 18 subtests before service installation.
-The existing V7 service was stopped before checkpoint archiving; no second
-controller was started. This note records preparation and does not claim the
-remaining build or V7-2 gate is complete.
+The first service invocation stopped before spawning workers because the
+launcher did not add the repository root to its import path. The launcher was
+fixed and the exact configured `--preflight-only` command passed with 415 reuse
+and 176 remaining builds. The second invocation started one controller and four
+security workers, with the first repaired security in signal generation. At
+20:17 UTC the active catalog held 1,245 proposal stores and 415 complete
+securities, with about 350 GiB free. The watcher was amended to report service
+state and stop recursively measuring every artifact file; its recovery ETA
+starts from the new run rather than the earlier build history. This note does
+not claim the remaining build or V7-2 gate is complete.
