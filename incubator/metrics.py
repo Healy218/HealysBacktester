@@ -60,5 +60,5 @@ def score_jsonl(path: Path) -> dict[str, Any]:
             record = json.loads(line)
         except json.JSONDecodeError as exc:
             raise MetricsError(f"invalid JSONL at line {line_number}") from exc
-    records.append(record)
+        records.append(record)
     return score_records(records)

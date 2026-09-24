@@ -73,9 +73,22 @@
   remains gated until candidate outcomes are joined. The older Keras bundle is
   retired from V6 daily use because its `prem_spot` contract does not match
   the live causal pass. V5 remains supported for its transition period.
-  The exact-identity outcome joiner is implemented; the current V6 ledger has
-  only opened/unfilled allocation events, not candidate-level `net_return`, so
-  no score has been manufactured.
+  The exact-identity outcome joiner is implemented. The 2026-09-23 V6 join
+  matured one explicit candidate-level `net_return` (DUOL/macd/30 DTE,
+  -12.4581%); 303 of 304 rows remain pending, so no readiness or performance
+  claim has been manufactured. The duplicate old Keras replay IDs are excluded
+  from the curated registry; the live GBT campaign passed its bounded replay.
+  The after-close runner now captures a dated V6 matrix from genuine pass
+  parquets, routes V5/V6 artifacts to distinct sealed requests, isolates result
+  directories, and writes date-scoped checkpoints, receipts and a unified
+  performance log. The curated `incubator/artifacts/active/` bundles use each
+  model's actual EV decision head; historical P(win)-labeled V6 smoke output
+  is not performance evidence. Multi-row scoring and input-drift regressions
+  pass. V5's live server has only a paper trade ledger, not a full candidate
+  feature feed; genuine V5 daily capture and exact-identity outcome export
+  remain open. A V6-origin V5 compatibility smoke test is not V5 paper
+  validation. The timer remains disabled and the service has no execution
+  opt-in; production isolation and 7-2–7-7 gates still block activation.
 
 **7-1 is complete. 7-2 is currently running the systemd-managed full 5/15/30
 compact catalog; do not begin 7-3 capture work until that run and its full

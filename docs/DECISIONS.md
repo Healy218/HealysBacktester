@@ -1402,3 +1402,15 @@ sealed; this event explicitly uses matching-provider reconstruction and declares
 `primary_amount_verified=false`. The unavailable primary September notice is a
 documented source limitation, not hidden corroboration. This exception does not
 change the scope or the pre-tax beneficial-share cash model.
+
+### 2026-09-23 — Incubator daily registry and EV decision semantics
+
+Keep executable V5/V6 replay bundles in the curated
+`incubator/artifacts/active/` registry; preserve earlier bundles as historical
+artifacts outside that discovery root. Both active models use EV-mode policy,
+so `results.jsonl.prediction` must be the ensemble magnitude-head EV, not
+P(win). Keep V6 P(win) as a separately named diagnostic. A V5-compatible
+matrix built from V6 candidates is not V5 paper evidence. Route V5 only to a
+separately sealed V5 candidate feed; until that feed exists, report it as
+input-blocked while still allowing V6 read-only validation. Production timer
+activation remains gated by TODO.md item 8.

@@ -44,18 +44,23 @@ def main() -> int:
     ev = np.mean(np.vstack(ev_predictions), axis=0)
     if not np.isfinite(score).all() or not np.isfinite(ev).all():
         raise ValueError("non-finite ensemble prediction")
+    mode = config.get("mode", "classification")
+    if mode not in {"ev", "classification"}:
+        raise ValueError(f"unsupported GBT decision mode: {mode}")
     output.mkdir(parents=True, exist_ok=True)
     outcome = request.get("outcome_column")
     if outcome is not None and outcome not in frame:
         raise ValueError(f"outcome column is unavailable: {outcome}")
     with (output / "results.jsonl").open("w") as handle:
-        for index, (prediction, ev_prediction) in enumerate(zip(score, ev)):
-            row = {"prediction": float(prediction), "ev_prediction": float(ev_prediction)}
+        for index, (win_probability, ev_prediction) in enumerate(zip(score, ev)):
+            row = {"prediction": float(ev_prediction if mode == "ev" else win_probability),
+                   "p_win": float(win_probability), "ev_prediction": float(ev_prediction)}
             if outcome is not None:
                 row["outcome"] = float(frame.iloc[index][outcome])
             handle.write(json.dumps(row) + "\n")
     print(json.dumps({"status": "replayed", "rows": len(frame),
-                      "members": len(predictions), "outcome_pending": outcome is None}))
+                      "members": len(predictions), "prediction_kind": mode,
+                      "outcome_pending": outcome is None}))
     return 0
 
 

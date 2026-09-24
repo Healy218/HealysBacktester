@@ -106,3 +106,8 @@ nn_meta/live/.*.lock
 
 /nn_meta/data_v7/
 /nn_meta/research_plans/
+
+# AI incubator generated matrices, bundles and replay receipts.
+/incubator/artifacts/
+/incubator/runs/
+/incubator/__pycache__/

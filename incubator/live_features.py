@@ -63,6 +63,8 @@ def publish_v6_features(sources: Iterable[Path], output_dir: Path,
         ["entry_ts", "symbol", "strategy", "dte"], kind="stable").reset_index(drop=True)
     if result.empty:
         raise LiveFeatureError("no current candidate features remain through cutoff")
+    if result.duplicated(["symbol", "strategy", "dte", "entry_ts"]).any():
+        raise LiveFeatureError("duplicate live candidate identities")
     output_dir = Path(output_dir).resolve()
     if output_dir.exists() and any(output_dir.iterdir()):
         raise LiveFeatureError("output directory must be new and empty")
@@ -73,6 +75,7 @@ def publish_v6_features(sources: Iterable[Path], output_dir: Path,
     temp.replace(matrix)
     manifest = {
         "schema": "incubator-live-feature-matrix-v1",
+        "generation": "v6",
         "through": through,
         "feature_columns": features,
         "outcome_column": "net_return",

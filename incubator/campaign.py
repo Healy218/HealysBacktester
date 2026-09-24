@@ -5,7 +5,7 @@ from __future__ import annotations
 import hashlib
 import time
 from pathlib import Path
-from typing import Any, Iterable
+from typing import Any, Iterable, Mapping
 
 from .checkpoints import Checkpoint
 from .budget import ResourceBudget
@@ -20,15 +20,21 @@ def _fingerprint(entries: Iterable[dict[str, Any]], request: dict[str, Any]) -> 
 
 def run_campaign(entries: list[dict[str, Any]], *, request: dict[str, Any], output_dir: Path,
                  run_id: str, checkpoint_path: Path, allow_execution: bool = False,
-                 budget: ResourceBudget | None = None) -> dict[str, Any]:
+                 budget: ResourceBudget | None = None,
+                 artifact_requests: Mapping[str, dict[str, Any]] | None = None) -> dict[str, Any]:
     """Run a resumable, read-only campaign over registry entries."""
     budget = (budget or ResourceBudget()).validate()
     if len(entries) > budget.max_artifacts:
         raise ValueError(f"campaign has {len(entries)} artifacts; budget allows {budget.max_artifacts}")
+    if artifact_requests is not None and set(artifact_requests) != {entry["artifact_id"] for entry in entries}:
+        raise ValueError("artifact requests must match the campaign artifact IDs exactly")
     output_dir.mkdir(parents=True, exist_ok=True)
     started = time.monotonic()
     checkpoint = Checkpoint(checkpoint_path, run_id=run_id,
-                            input_fingerprint=_fingerprint(entries, request)).load()
+                            input_fingerprint=_fingerprint(entries, {"common": request,
+                                                                 "artifacts": artifact_requests,
+                                                                 "allow_execution": allow_execution,
+                                                                 "budget": budget.as_dict()})).load()
     receipts: list[dict[str, Any]] = []
     for entry in entries:
         artifact_id = entry["artifact_id"]
@@ -44,14 +50,17 @@ def run_campaign(entries: list[dict[str, Any]], *, request: dict[str, Any], outp
             receipts.append(receipt)
             continue
         try:
-            receipt = execute_bundle(Path(entry["bundle"]), request, output_dir,
+            artifact_output = output_dir / artifact_id / f"attempt-{time.time_ns()}"
+            selected_request = artifact_requests[artifact_id] if artifact_requests is not None else request
+            receipt = execute_bundle(Path(entry["bundle"]), selected_request, artifact_output,
                                      allow_execution=allow_execution,
                                      timeout_seconds=budget.artifact_seconds,
                                      memory_bytes=budget.memory_bytes,
                                      output_bytes=budget.output_bytes)
             receipt = make_receipt(run_id=run_id, artifact_id=artifact_id,
                                    artifact_version=entry.get("artifact_version"),
-                                   status=receipt["status"], sandbox=receipt)
+                                   status=receipt["status"], sandbox=receipt,
+                                   output_dir=str(artifact_output))
         except Exception as exc:  # one bad candidate must not corrupt the run
             receipt = make_receipt(run_id=run_id, artifact_id=artifact_id,
                                    artifact_version=entry.get("artifact_version"),

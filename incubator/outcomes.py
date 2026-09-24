@@ -86,6 +86,7 @@ def join_matured_outcomes(feature_dir: Path, outcome_sources: Iterable[Path],
     temp.replace(output_path)
     result = {
         "schema": "incubator-feature-matrix-v1", "status": "replay_ready",
+        "generation": manifest.get("generation"),
         "through": manifest.get("through"), "feature_columns": features,
         "outcome_column": "net_return", "outcome_status": "matured",
         "rows": len(selected), "feature_rows": len(feature_frame),

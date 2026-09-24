@@ -1,5 +1,18 @@
 # EXPERIMENTS — every generation's verdict in one table
 
+## 2026-09-23 — Daily V5/V6 incubator EV replay smoke
+
+The curated V6 GBT EV bundle ran on the sealed September 22 candidate pass:
+40 members loaded, 304 predictions, `executed_pending_outcome`, zero execution
+failures. `prediction` now denotes EV; P(win) is retained separately as
+`p_win`. The V5 Keras EV bundle loaded 40 magnitude heads and produced 304
+predictions in a **compatibility-only** smoke test using V6-origin rows. The
+daily campaign correctly marked V5 input-blocked because no genuine V5
+candidate feed exists. Verdict: **execution contract passes for both; no V5
+paper validation and no V5/V6 performance or readiness verdict.** Earlier
+V6 smoke output labeled P(win) as `prediction`; do not reuse it for EV
+scoring.
+
 ## 2026-09-12 — v6 complete; hold scanner promotion after review
 
 `v6-train-20260912r2`: 449 symbols, 4,281,562 retained rows,

@@ -43,8 +43,10 @@ duplicate artifact is refused; no partial result is emitted.
   --run-id close-YYYYMMDD
 ./venv/bin/python scripts/ai_incubator.py metrics RESULTS.jsonl
 ./venv/bin/python scripts/ai_incubator_after_close.py --bundle-root BUNDLES \
-  --v6-index V6_DATA_INDEX.json --output-dir RUN/ \
-  --checkpoint RUN/checkpoint.json
+  --v6-index V6_DATA_INDEX.json --v6-candidates-root V6_PASSES/ \
+  --v6-model-config V6_MODEL/ensemble_config.json \
+  --feature-root ARTIFACTS/daily --output-dir RUN_ROOT/ \
+  --as-of YYYY-MM-DD
 ```
 
 The dry-run writes `status=verified_not_executed` receipts. The forward adapter
@@ -61,9 +63,11 @@ forward-data contracts. The systemd service and timer are committed but
 deliberately not enabled; they require a populated `incubator/artifacts/`
 directory and an explicit activation decision.
 
-The current V6 forward snapshot is now a complete replay input for the actual
-live GBT release: the 2026-09-22 pass publishes 304 rows with all 164 required
-features under `incubator/artifacts/v6-live-20260922/`. GBT's native NaN policy
+The V6 data index is a verified context snapshot, not itself a complete
+candidate feature matrix. The daily capture selects the named session's
+`passes/YYYYMMDDT*/candidates.parquet`, verifies entry dates and model columns,
+and seals a distinct `incubator/artifacts/daily/v6-YYYYMMDD/` matrix. The
+2026-09-22 pass publishes 304 rows with all 164 required features. GBT's native NaN policy
 is recorded in the manifest. The 40-member bundle loaded successfully and
 produced 304 read-only predictions with status `executed_pending_outcome`.
 This is the V6 daily path. The older Keras bundle remains retired from V6 daily
@@ -73,9 +77,43 @@ score is reported.
 
 The outcome joiner is implemented and requires exact
 `symbol/strategy/dte/entry_ts` identity matches to an explicit `net_return`
-source. The current V6 portfolio ledger has 48 cycles with allocation statuses
-(`opened` and `unfilled`) but no candidate-level realized-return column, so the
-2026-09-22 matrix remains pending and has not been scored.
+source. The 2026-09-23 join matured one of the 304 rows from the 2026-09-22 V6
+pass: DUOL/macd/30 DTE at 19:15 UTC, with
+`net_return=-0.12458142055209864` derived from the closed paper position's
+recorded return factor. The other 303 rows remain pending, so the matrix is
+replay-ready but the performance/readiness gate remains pending. The curated
+daily registry excludes the duplicate old Keras replay bundles and retains the
+live GBT artifact. A separate V5 Keras/EV bundle is now packaged; the active
+server configuration hash matches the packaged configuration. Its corrected
+replay helper uses the magnitude head and saved `std` scaler. The 304-row V5
+compatibility smoke test used V6-origin rows and is **not** V5 paper evidence.
+The V5 server currently saves a trade ledger, not full candidate features, so
+the daily runner records V5 as input-blocked until a genuine V5 capture is
+published with `generation=v5` and passed via `--v5-feature-dir`. V6 rows must
+never be substituted.
+
+The daily runner routes each artifact to its own sealed request, writes
+per-artifact attempt directories and receipts, a date-scoped checkpoint,
+`after-close-summary.json`, and a compact `performance-log.json`. Changing
+execution mode, budget, bundle, or requests invalidates checkpoint reuse.
+Pending outcomes record prediction counts only; no performance is fabricated.
+The timer remains disabled, and the shipped service has no `--allow-execution`.
+Activation requires the TODO.md V7 gate and explicit paper-data-boundary
+approval. The service's eventual activation configuration must also include
+OS-level network isolation and resource cgroups; the current subprocess
+limits alone are not a production isolation claim.
+
+Retention: keep bundles, sealed matrices, request provenance, receipts and
+performance logs immutable for at least 90 days after their last relevant
+outcome matures, and confirm a recoverable backup before any manual pruning.
+No automatic deletion is performed. Treat a changed source or bundle as a new
+version, never overwrite an existing seal.
+
+The curated executable registry is `incubator/artifacts/active/`. Historical
+bundles elsewhere under `incubator/artifacts/` are preserved but not passed to
+the scheduled runner. Both current V5 and V6 artifacts are EV-mode: the common
+`prediction` field is their decision EV; V6 additionally records `p_win`.
+Older V6 smoke output used P(win) in `prediction` and must not be scored as EV.
 
 ## Next implementation slices
 
@@ -91,6 +129,6 @@ source. The current V6 portfolio ledger has 48 cycles with allocation statuses
 5. Add the after-market-close scheduler only after dry-run and failure tests
    pass. **Done; committed but disabled by default.**
 6. Validate against V5/V6 paper data, then onboard V7 through the same contract.
-   **V6 contract-aligned prediction-only validation is done; real scoring waits
-   for candidate outcomes. V5 remains supported for its transition period and
-   V7 remains gated.**
+   **V6 daily prediction-only validation is done; real scoring waits for
+   candidate outcomes. V5 bundle compatibility is verified but genuine daily
+   feature capture is outstanding. V7 and production activation remain gated.**

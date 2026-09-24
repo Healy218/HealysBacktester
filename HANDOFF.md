@@ -1,111 +1,72 @@
-# Handoff — 2026-09-23 — V7-2 active, V6 incubator contract aligned
+# Handoff — 2026-09-23 — daily V5/V6 incubator wiring
 
 ## Restart first
 
-Read `TODO.md`, then this file. Preserve the active V7 build and do not start
-V7-3 until V7-2 is sealed and verified. The previous handoff is archived at
-`handoff-history/HANDOFF-2026-09-23-before-session-restart.md`.
+Read `TODO.md`, then this file. The prior handoff is archived at
+`handoff-history/HANDOFF-2026-09-23-before-daily-incubator.md`. Preserve the
+active V7-2 compact 5/15/30 catalog; do not stop, restart, relabel, or delete
+it, and do not start V7-3 until it is sealed and verified. See the archived
+handoff and `logs/v7-progress/v7-2-full-catalog-20260922-rebuild-5-15-30/`
+for its last known progress. This session did not operate on that build.
 
-## Current V7 run
+## Incubator result
 
-V7 item 7-2 remains the active work item. The current run is the systemd-managed
-compact 5/15/30 catalog rebuild:
+The scheduled CLI now reads a dated V6 candidate pass, publishes and verifies
+a sealed 164-feature matrix under `incubator/artifacts/daily/v6-YYYYMMDD/`,
+routes V5 and V6 bundles to separate requests, and writes date-scoped
+checkpoints, per-artifact attempt directories/receipts, an after-close summary,
+and `performance-log.json`. It refuses changed candidate source hashes on
+rerun, and any V5 input without an explicit matching generation/date seal. The
+service points to `incubator/artifacts/active/`, includes bounded memory/CPU
+configuration, but remains disabled and has no `--allow-execution` flag.
 
-`nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`
+Active bundles are ignored by git under `incubator/artifacts/active/`:
 
-Run configuration:
+- `v6-gbt-causal-replay-v2.tar.gz`: live 40-member GBT, EV-mode, 164 features.
+  Its `prediction` is now the EV decision, not P(win); `p_win` is separate.
+- `v5-keras-ev-replay-v2.tar.gz`: server-matching config SHA-256
+  `b4631653459490045a92e6305922b40440780f3fd6a8b93edcee462601044182`.
+  Uses the magnitude heads and saved `std` scalers. Its 304-row replay smoke
+  used V6-origin rows **only for compatibility**, not V5 paper evidence.
 
-- 591 securities and 1,773 target stores
-- all 20 strategy families at 5/15/30 minutes
-- four outer security workers, one inner thread
-- compact-final enabled, checkpoint/restart capable
-- validation-only; it is not research-ready or training authorization
+The 2026-09-22 active campaign smoke at
+`incubator/runs/after-close/close-20260922-active-ev-smoke/` executed the V6
+bundle successfully: 304 pending-outcome predictions, 40 members, no execution
+failures. It exited nonzero solely because the V5 input was blocked, and the
+unified performance log records both states. A prior one-row DUOL outcome join
+is partial; 303/304 V6 rows remain pending, so no performance or readiness
+result exists. Older V6 replay output labeled P(win) as `prediction`; it must
+not be used to score EV. Historical bundles are preserved outside the curated
+active registry.
 
-Latest available progress receipt, observed 2026-09-23 11:00 UTC:
+## Remaining gates
 
-- 88/591 complete securities
-- 566 feature receipts
-- 276 sealed feature stores
-- 275 proposal stores
-- 20.96 GB output, approximately 19.5 GiB
-- 452.5 GB free disk
-- observer estimate: approximately 55.8 hours remaining, around 2026-09-25 13:46 CDT
-- active worker logs include `BBG000BQ8KV2`, `BBG000BQLTW7`, `BBG000BR2TH3`,
-  `BBG000BRD0D8`, `BBG000BRK7L6`, `BBG000BRNLL2`, and `BBG000BS1YV5`
+1. Capture actual V5 candidate feature batches at the server's V5 scanner
+   boundary and publish them separately with `generation=v5`; its current
+   `.v5_paper_ledger.json` is only a trade ledger. The after-close CLI has a
+   `--v5-feature-dir` slot and fails closed until this exists. Do not substitute
+   the V6 compatibility matrix.
+2. Add durable exact-identity matured-outcome export/joins for both generations
+   and validate multi-day paper scoring. The joined matrix contract now carries
+   generation and is accepted via explicit `--v6-feature-dir` or
+   `--v5-feature-dir`.
+3. Before production activation, validate OS-level network isolation and
+   cgroups in the target user-systemd environment, retention/backup operation,
+   and the TODO.md 7-2 through 7-7 plus explicit paper-data boundary gate.
+   Do not enable the timer or add `--allow-execution` to its service yet.
 
-Evidence is in:
+## Verification and git boundary
 
-- `logs/v7-progress/v7-2-full-catalog-20260922-rebuild-5-15-30/latest.json`
-- `logs/v7-progress/v7-2-full-catalog-20260922-rebuild-5-15-30/progress.txt`
-- `logs/v7-progress/v7-2-full-catalog-20260922-rebuild-5-15-30/history.jsonl`
+Targeted incubator suite: 29 passed after final input-contract edits. Full
+suite: 2,368 passed, 20 warnings, 18 subtests passed. `git diff --check`
+passes. `systemd-analyze --user verify` passes outside the sandbox. The V5
+and V6 active bundles both loaded and produced 304 pending predictions in
+isolated smoke runs; neither proves performance.
 
-Do not stop, restart, relabel, or delete this run. The user-systemd status
-could not be queried from this Codex session because the user bus is outside
-the session namespace; use the progress receipts and the host terminal when
-service state must be checked.
-
-## V6 incubator checkpoint
-
-V6 daily updating is now the priority over V5 because V7 is expected in roughly
-one to two weeks. The V6 incubator uses the actual live V6 GBT release, not the
-older archived Keras contract:
-
-- release source: `deploy/v6/releases/v6-cash-repair-20260913/model/`
-- family: GBT; 40 ensemble members; 164 feature columns
-- current matrix: `incubator/artifacts/v6-live-20260922/`
-- current pass: `/home/healy/Coding/HealysV6/nn_meta/live/v6_server/passes/20260922T193000Z/candidates.parquet`
-- matrix: 304 rows, zero duplicate `symbol/strategy/dte/entry_ts` keys,
-  complete identity fields, model-native NaN policy
-- replay bundle used: `/tmp/incubator-registry-smoke/v6/incubator-v6-gbt-20260922.tar.gz`
-- execution receipt: 304 read-only predictions, `model_loaded=true`,
-  `status=executed_pending_outcome`
-
-No performance score was produced. The current V6 ledger has opened/unfilled
-allocation events but no candidate-level `net_return`; use the exact-identity
-outcome joiner when realized outcomes become available. Do not treat pending
-predictions as a readiness or performance result. The older Keras V6 bundle is
-retired from the daily V6 path because its `prem_spot` feature contract does
-not match the current causal live pass. V5 remains supported for its transition
-period.
-
-Relevant implementation and notes:
-
-- `incubator/gbt_replay_entrypoint.py`
-- `incubator/live_features.py`
-- `incubator/sandbox.py`
-- `scripts/publish_v6_incubator_features.py`
-- `scripts/ai_incubator.py`
-- `docs/specs/AI_INCUBATOR.md`
-- `TODO.md` item 8
-
-The after-close incubator service/timer is committed in the worktree but remains
-disabled. Keep production activation, V7 onboarding, and FA admission gated
-until the V7 readiness gates and explicit paper-data boundary are complete.
-
-## Validation
-
-- Focused incubator suite: `26 passed`.
-- Full suite: `2365 passed, 20 warnings, 18 subtests passed`.
-- V6 live matrix quality checks: 304 rows, 168 total columns, 164 model
-  features, zero duplicate identity keys, zero missing identity fields.
-
-## Git/session blocker
-
-The repository working tree is writable, but this Codex session sees `.git` as
-a separate read-only mount. `findmnt` reports `.git` with `ro`, so staging,
-committing, and pushing cannot occur here. The user attempted host remounts,
-but this existing session still sees the old mount namespace. After restarting
-Codex/the workspace, verify:
-
-```bash
-findmnt -T /home/healy/Coding/HealysBacktester/.git -o TARGET,OPTIONS
-```
-
-It must show `rw`. Then stage only the incubator and note files, review the
-diff, commit, and push `main`; preserve unrelated V7 and historical changes.
-
-## Working-tree caution
-
-The worktree contains many unrelated user changes from the V7 build and prior
-V6/FA work. Do not reset, clean, or broadly stage them. Generated daily
-incubator artifacts are ignored under `/incubator/artifacts/`.
+The workspace contains many unrelated dirty V7/V6 files. Do not broad-stage,
+reset, clean, or modify the active V7 catalog. This session still sees `.git`
+as a read-only mount (`findmnt -T .../.git` reports `ro`), so it could not
+stage, commit or push. After a fresh writable mount, review and narrowly stage
+only incubator code/tests/service and documentation for this slice. Generated
+artifacts/runs are ignored and should not be force-added without an explicit
+artifact-publication decision.

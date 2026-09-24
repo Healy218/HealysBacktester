@@ -10,13 +10,14 @@ import pytest
 
 from incubator.bundles import BundleError, create_manifest, manifest_digest, pack_directory, verify_bundle
 from incubator.budget import BudgetError, ResourceBudget
+from incubator.after_close import DailyInputError, capture_v6_day, load_feature_request
 from incubator.campaign import run_campaign
 from incubator.checkpoints import CheckpointError
 from incubator.feature_capture import FeatureCaptureError, capture_feature_matrix
 from incubator.forward import ForwardDataError, _sha256, load_v6_snapshot
 from incubator.live_features import LiveFeatureError, publish_v6_features
 from incubator.outcomes import OutcomeJoinError, join_matured_outcomes
-from incubator.metrics import MetricsError, score_records
+from incubator.metrics import MetricsError, score_jsonl, score_records
 from incubator.replay import ReplayError, load_feature_frame
 from incubator.registry import discover
 from incubator.sandbox import execute_bundle
@@ -150,6 +151,14 @@ def test_common_metrics_are_comparable() -> None:
         score_records([])
 
 
+def test_jsonl_metrics_score_every_row(tmp_path: Path) -> None:
+    results = tmp_path / "results.jsonl"
+    results.write_text('{"prediction": 1, "outcome": 1}\n{"prediction": -1, "outcome": 1}\n')
+    scored = score_jsonl(results)
+    assert scored["n"] == 2
+    assert scored["directional_accuracy"] == 0.5
+
+
 def test_campaign_checkpoint_skips_completed_artifact(tmp_path: Path) -> None:
     bundle = _make_bundle(tmp_path)
     entry = {"artifact_id": "v5-test", "artifact_version": "2026-09-22", "bundle": str(bundle)}
@@ -157,6 +166,42 @@ def test_campaign_checkpoint_skips_completed_artifact(tmp_path: Path) -> None:
     first = run_campaign([entry], request=request, output_dir=tmp_path / "out", run_id="run-1", checkpoint_path=tmp_path / "checkpoint.json")
     second = run_campaign([entry], request=request, output_dir=tmp_path / "out", run_id="run-1", checkpoint_path=tmp_path / "checkpoint.json")
     assert first["completed_count"] == second["completed_count"] == 1
+
+
+def test_campaign_routes_distinct_requests_and_outputs(tmp_path: Path) -> None:
+    source = tmp_path / "source"
+    source.mkdir()
+    (source / "entrypoint.py").write_text(
+        "import json, os\nfrom pathlib import Path\n"
+        "request=json.loads(Path(os.environ['AI_INCUBATOR_REQUEST']).read_text())\n"
+        "Path(os.environ['AI_INCUBATOR_OUTPUT'], 'results.jsonl').write_text("
+        "json.dumps({'prediction': request['prediction']})+'\\n')\n"
+    )
+    entries = []
+    for artifact_id in ("incubator-v5-test", "incubator-v6-test"):
+        manifest = create_manifest(source, artifact_id=artifact_id, artifact_version="1",
+                                   artifact_kind="option_expert", created_at="2026-09-22T00:00:00+00:00",
+                                   compatibility={"forward_data_contract": "paper_forward_v1"})
+        manifest["entrypoint"] = ["entrypoint.py"]
+        manifest["manifest_sha256"] = manifest_digest(manifest)
+        bundle = tmp_path / f"{artifact_id}.tar.gz"
+        pack_directory(source, bundle, manifest=manifest)
+        entries.append({"artifact_id": artifact_id, "artifact_version": "1", "bundle": str(bundle)})
+    requests = {"incubator-v5-test": {"prediction": 1}, "incubator-v6-test": {"prediction": -1}}
+    result = run_campaign(entries, request={"as_of": "2026-09-22"}, artifact_requests=requests,
+                          output_dir=tmp_path / "out", run_id="run-1",
+                          checkpoint_path=tmp_path / "checkpoint.json", allow_execution=True)
+    assert result["failed_count"] == 0
+    assert {receipt["sandbox"]["prediction_count"] for receipt in result["receipts"]} == {1}
+    assert sorted((tmp_path / "out").rglob("results.jsonl")) and len(list((tmp_path / "out").rglob("results.jsonl"))) == 2
+    for receipt in result["receipts"]:
+        row = json.loads((Path(receipt["output_dir"]) / "results.jsonl").read_text())
+        assert row["prediction"] == requests[receipt["artifact_id"]]["prediction"]
+    with pytest.raises(CheckpointError, match="input fingerprint"):
+        run_campaign(entries, request={"as_of": "2026-09-22"},
+                     artifact_requests={**requests, "incubator-v6-test": {"prediction": 0}},
+                     output_dir=tmp_path / "out", run_id="run-1",
+                     checkpoint_path=tmp_path / "checkpoint.json")
 
 
 def test_checkpoint_refuses_changed_input(tmp_path: Path) -> None:
@@ -283,6 +328,28 @@ def test_live_feature_publication_marks_outcomes_pending(tmp_path: Path) -> None
     manifest = publish_v6_features([source], tmp_path / "live", {"features": ["x"]}, "2026-09-21")
     assert manifest["outcome_status"] == "pending"
     assert "net_return" not in pd.read_parquet(tmp_path / "live" / "features.parquet").columns
+    request = load_feature_request(tmp_path / "live", generation="v6", as_of="2026-09-21")
+    assert "outcome_column" not in request
+    with pytest.raises(DailyInputError, match="generation/date mismatch"):
+        load_feature_request(tmp_path / "live", generation="v5", as_of="2026-09-21")
+
+
+def test_v6_daily_capture_is_session_scoped_and_sealed(tmp_path: Path) -> None:
+    passes = tmp_path / "passes"
+    source = passes / "20260921T193000Z" / "candidates.parquet"
+    source.parent.mkdir(parents=True)
+    pd.DataFrame({"symbol": ["SPY"], "strategy": ["ma"], "dte": [5],
+                  "entry_ts": ["2026-09-21T19:30:00Z"], "x": [1.0]}).to_parquet(source)
+    config = tmp_path / "model.json"
+    config.write_text('{"family": "gbt", "features": ["x"]}')
+    target = capture_v6_day(passes, config, tmp_path / "daily", "2026-09-21")
+    assert capture_v6_day(passes, config, tmp_path / "daily", "2026-09-21") == target
+    with pytest.raises(DailyInputError, match="no candidate parquets"):
+        capture_v6_day(passes, config, tmp_path / "daily", "2026-09-22")
+    pd.DataFrame({"symbol": ["SPY"], "strategy": ["ma"], "dte": [5],
+                  "entry_ts": ["2026-09-21T19:30:00Z"], "x": [2.0]}).to_parquet(source)
+    with pytest.raises(DailyInputError, match="captured inputs changed"):
+        capture_v6_day(passes, config, tmp_path / "daily", "2026-09-21")
 
 
 def test_live_gbt_feature_publication_allows_model_native_nan(tmp_path: Path) -> None:
@@ -314,6 +381,8 @@ def test_outcome_join_requires_exact_identity_and_publishes_matured_rows(tmp_pat
     assert result["status"] == "replay_ready"
     assert result["matched_rows"] == 1
     assert pd.read_parquet(tmp_path / "ready" / "features.parquet")["net_return"].tolist() == [0.25]
+    request = load_feature_request(tmp_path / "ready", generation="v6", as_of="2026-09-21")
+    assert request["outcome_column"] == "net_return"
 
 
 def test_outcome_join_reports_pending_when_nothing_matured(tmp_path: Path) -> None:

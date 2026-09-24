@@ -23,11 +23,12 @@ def main() -> int:
     config = json.loads(Path("ensemble_config.json").read_text())
     columns = config.get("features")
     outcome = request.get("outcome_column")
-    if not isinstance(columns, list) or not columns or not isinstance(outcome, str):
+    if not isinstance(columns, list) or not columns or (outcome is not None and not isinstance(outcome, str)):
         raise ValueError("incomplete replay contract")
     frame = pd.read_parquet(source)
-    missing = sorted(set(columns + [outcome]) - set(frame.columns))
-    if missing or frame.empty or frame[columns + [outcome]].isna().any().any():
+    required = columns + ([outcome] if outcome is not None else [])
+    missing = sorted(set(required) - set(frame.columns))
+    if missing or frame.empty or frame[required].isna().any().any():
         raise ValueError(f"forward feature table is incomplete: {missing}")
     import numpy as np
     import tensorflow as tf
@@ -35,23 +36,35 @@ def main() -> int:
     tf.config.threading.set_inter_op_parallelism_threads(1)
     values = frame[columns].to_numpy(dtype=np.float32)
     predictions = []
+    mode = config.get("mode", "classification")
+    if mode not in {"ev", "classification"}:
+        raise ValueError(f"unsupported Keras decision mode: {mode}")
     for run_id in config["run_ids"]:
         member = Path(run_id)
         scaler = json.loads((member / "scaler.json").read_text())
         mean = np.asarray([scaler["mean"][column] for column in columns], dtype=np.float32)
-        scale = np.asarray([scaler.get("scale", {}).get(column, 1.0) for column in columns], dtype=np.float32)
-        if np.any(scale == 0) or not np.isfinite(np.concatenate((mean, scale))).all():
+        scale = np.asarray([scaler["std"][column] for column in columns], dtype=np.float32)
+        inactive = scaler.get("inactive", [])
+        if np.any(scale <= 0) or not np.isfinite(np.concatenate((mean, scale))).all():
             raise ValueError(f"invalid scaler: {run_id}")
-        model = tf.keras.models.load_model(member / "model.keras", compile=False)
-        predictions.append(np.asarray(model.predict((values - mean) / scale, verbose=0)).reshape(-1))
+        standardized = (values - mean) / scale
+        for column in inactive:
+            standardized[:, columns.index(column)] = 0.0
+        model_path = member / ("magnitude.keras" if mode == "ev" else "model.keras")
+        model = tf.keras.models.load_model(model_path, compile=False)
+        predictions.append(np.asarray(model.predict(standardized, verbose=0)).reshape(-1))
     ensemble = np.mean(np.vstack(predictions), axis=0)
     if not np.isfinite(ensemble).all():
         raise ValueError("non-finite ensemble prediction")
     output.mkdir(parents=True, exist_ok=True)
     with (output / "results.jsonl").open("w") as handle:
-        for prediction, actual in zip(ensemble, frame[outcome]):
-            handle.write(json.dumps({"prediction": float(prediction), "outcome": float(actual)}) + "\n")
-    print(json.dumps({"status": "replayed", "rows": len(frame), "members": len(predictions)}))
+        for index, prediction in enumerate(ensemble):
+            row = {"prediction": float(prediction)}
+            if outcome is not None:
+                row["outcome"] = float(frame.iloc[index][outcome])
+            handle.write(json.dumps(row) + "\n")
+    print(json.dumps({"status": "replayed", "rows": len(frame), "members": len(predictions),
+                      "prediction_kind": mode, "outcome_pending": outcome is None}))
     return 0
 
 
