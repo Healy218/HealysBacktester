@@ -90,17 +90,20 @@
   outcome evidence; 14 closed positions yielded only the one exact match to
   the 2026-09-22 candidate day. V5 scanner batch capture, daily assembly and
   scaler-mean replay are implemented locally. The V5 capture backport is now
-  deployed on the existing server branch and its cron opt-in is enabled; the
-  first genuine post-deployment pass, local paper-data staging and validation
-  are still pending. No genuine V5 paper validation exists. A V6-origin V5 compatibility smoke test
-  is not V5 paper validation. The timer remains disabled and the service has no execution
-  opt-in; production isolation and 7-2–7-7 gates still block activation.
+  deployed on the existing server branch and its cron opt-in is enabled. The
+  first nine genuine V5 passes sealed 3,555 distinct candidate identities and
+  48 features with verified hashes/config binding as of 2026-09-24 15:47 UTC;
+  the active day is still growing. Full-day census, approved local staging,
+  exact-identity V5 outcomes and paper scoring remain open. A V6-origin V5
+  compatibility smoke test is not V5 paper validation. The timer remains
+  disabled and the service has no execution opt-in; production isolation and
+  7-2–7-7 gates still block activation.
 
 **7-1 is complete. 7-2 is currently running the systemd-managed full 5/15/30
 compact catalog; do not begin 7-3 capture work until that run and its full
 verification finish. The live V6 repair prerequisite was completed before this
-run. V6 here means only the current server model and its live operation; the
-abandoned local short-DTE build is not part of this work. Items 7-3 through 7-7
+run. V6 here means only the current home-hosted paper runtime; the abandoned
+local short-DTE build is not part of this work. Items 7-3 through 7-7
 are queued.**
 
 - [x] **Dividend portion of 7-1:** 4,918 payment leaves across 4,854 price events;

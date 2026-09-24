@@ -3,6 +3,25 @@
 Long-term maturity targets and the first-week v6 review are in [GOALS](GOALS.md).
 Continue this roadmap toward ≥7/10 in every assessment area by December 31, 2026.
 
+## September 24 incubator and V7 checkpoint
+
+The read-only V5/V6 incubator now has a curated executable registry, sealed
+generation-specific feature inputs, bounded replay/receipts and a disabled
+after-close service. V6's closed-position exporter found 14 paper outcomes,
+but only one exact match to the 304-row 2026-09-22 candidate day; 303 remain
+pending, so there is no performance verdict. The existing V5-only server branch
+received a narrow candidate-capture backport and cron opt-in without merging
+divergent `main` or touching retired model-file deletions. Nine live V5 passes
+sealed 3,555 distinct candidate identities by 15:47 UTC on September 24;
+full-day verification, approved staging and V5 outcome joins remain open.
+
+V7-2 remains the sole active research gate: the 591-security, 1,773-store
+5/15/30 catalog is still building. Read-only preflight and resource sampling
+are available, but the full catalog/source/resource audit is post-seal. Neither
+V7-3 capture nor incubator production execution is authorized. See
+[TODO](TODO.md), [incubator contract](docs/specs/AI_INCUBATOR.md), and the
+[V5 deployment record](docs/reviews/2026-09-24-v5-capture-deployment.md).
+
 ## September 18 direction: finish V7 through items 7-1 to 7-7
 
 The user adopted the numbered V7 sequence formerly recorded as section 6 of the
@@ -250,6 +269,7 @@ checks. Future effectiveness claims need fresh forward evidence.
 | SPX0 | Bounded verticals and package accounting implemented; four rounds established no seat | Corrected deeper-regime evidence, liquidity/cost checks and 25% DD gate |
 | Volatility | HAR-RV/GARCH machinery exists | Available-at features and sequence-model improvement per regime |
 | FA discovery | Collectors, ranker and forward tracker implemented | Automation/digest/overlays and three clean forward-tracked monthlies |
+| AI artifact incubator | V5/V6 replay, sealed feature routing and receipts implemented; V5 scanner capture live; after-close execution disabled | Complete-day V5 validation, approved paper-data staging and exact outcomes; V7 admission only after 7-2–7-7 |
 | Stacked blend | Queued behind validated experts and FA | Improve panel OOS/forward evidence |
 | RL sizing/exits | Last | Reliable execution ledger and improvement over simple sizing |
 

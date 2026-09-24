@@ -598,6 +598,15 @@ regenerated verified bundles together. All experts send alerts; historical
   Its V5 cron opts into candidate capture under
   `incubator/artifacts/v5-passes/`; the old crontab backup and verification
   are recorded in `docs/reviews/2026-09-24-v5-capture-deployment.md`.
+- **V5 incubator capture is candidate evidence, not a trade ledger or
+  performance verdict.** The scanner seals one `features.parquet` and
+  `feature-manifest.json` per signal bar under the dated pass root, including
+  all scored candidates before winner selection. Capture failure increments
+  the scanner error count without suppressing paper alerts. The manifest's
+  `model_config_sha256` hashes canonical JSON and therefore differs from the
+  raw `ensemble_config.json` file SHA-256. Verify both the manifest seal and
+  exact `symbol/strategy/dte/entry_ts` uniqueness before staging a day at
+  home. Staging and after-close execution remain separate gated decisions.
 - **Live feeds (since 2026-09-05)**: two daemons, `nn_meta.live.feeds.
   stock_stream` (Alpaca SIP 1m bars, 443 names → `nn_meta/live/feeds/data/
   1m/<SYM>/<day>.parquet`, backfills today on start) and

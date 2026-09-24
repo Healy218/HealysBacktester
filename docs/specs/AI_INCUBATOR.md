@@ -106,9 +106,12 @@ staged passes with `--v5-pass-root` (or accepts a presealed
 replay bundle `v5-keras-ev-replay-v3`; the older v2 remains historical outside
 the curated registry. The V5 server-compatible backport is deployed at
 `059ff1d` on `ops/server-alert-readiness-20260906`, and its cron has the
-opt-in capture flag. This is not yet live V5 validation: no post-deployment
-genuine pass has been observed or staged on the home box. Until then the daily
-runner records V5 as input-blocked. V6 rows must never be substituted. See
+opt-in capture flag. Nine market-hours passes with 3,555 distinct candidate
+identities and 48 model features were verified on the server by 15:47 UTC on
+2026-09-24. This is live feature capture, not V5 paper scoring: the day was
+still in progress, no pass had been staged on the home box, and V5 outcomes
+remain unjoined. Until staging, the daily runner records V5 as input-blocked.
+V6 rows must never be substituted. See
 `docs/reviews/2026-09-24-v5-capture-deployment.md` for deployment and rollback evidence.
 
 The daily runner routes each artifact to its own sealed request, writes
@@ -150,5 +153,6 @@ Older V6 smoke output used P(win) in `prediction` and must not be scored as EV.
 6. Validate against V5/V6 paper data, then onboard V7 through the same contract.
    **V6 has one exact-identity matured outcome; 303 rows remain pending, so no
    performance claim is supported. V5 capture is deployed but awaits the
-   first genuine sealed pass and separate paper-data staging. V7 and production
+   a complete-day capture census, separate paper-data staging and actual V5
+   outcome joins. V7 and production
    activation remain gated.**

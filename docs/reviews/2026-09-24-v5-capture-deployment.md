@@ -32,12 +32,23 @@ The crontab preview changed only the active V5 scan line, adding
 saved the prior crontab at
 `/home/mrhea/HealysBacktester/logs/ops/ops-fixes-20260924T111725Z/crontab-before.txt`.
 A post-install check found server HEAD `059ff1d`, the flag on exactly the V5
-scan line, and the rollback file present. No real V5 candidate pass can be
-claimed until a market-hours scan actually emits one; the incubator after-close
-timer remains disabled and has no execution opt-in.
+scan line, and the rollback file present. The incubator after-close timer
+remains disabled and has no execution opt-in.
 
-Next: inspect the first sealed server pass and the V5 cron log for capture
-errors, verify manifest/config/parquet hashes and candidate identities, then
-stage that paper data on the home box only under the separately approved
-paper-data boundary. Do not infer candidate features from the trade ledger or
-the V6 compatibility matrix.
+At 2026-09-24 15:47 UTC, the first nine market-hours V5 passes had sealed
+under `incubator/artifacts/v5-passes/2026-09-24/`. A read-only check verified
+each manifest's `generation=v5`, model-config binding, Parquet SHA-256, row
+count and single signal-bar identity, then normalized all 3,555 rows: all
+3,555 `symbol/strategy/dte/entry_ts` identities were distinct, with 48 model
+features. The manifest's canonical model-config digest is
+`b6a71bbfb74c3de71384e4612106d6bc72e8a0caf8c02726dcba82258c7d213c`;
+this differs from the raw file SHA-256 above by design. The recent V5 scan
+summaries showed zero errors. This is genuine candidate capture, not an outcome
+or performance validation. The day was still in progress and no pass was
+transferred to the home box.
+
+Next: verify the completed day's full pass census and any capture errors after
+the final market-hours scan; then stage sealed paper data on the home box only
+under the separately approved paper-data boundary. The V5 outcome source and
+exact-identity join remain open. Do not infer candidate features from the trade
+ledger or the V6 compatibility matrix.
