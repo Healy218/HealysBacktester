@@ -48,8 +48,12 @@ history. All 45 are visibly deferred by the runner; it will return failure
 rather than claim catalog completion when the schedulable work finishes.
 Several undated cases have promising local listed-identity evidence (ELV,
 OSTK/BYON, MPW/MPT), but no new admission has been sealed. Web primary
-issuer notices were identified for those three. The full target remains
-incomplete and V7-3 must not start.
+issuer notices for those three were captured under
+`nn_meta/data_v7/last45-notices-20260924`. The selected history also needs
+repair: ELV has no prior ANTM row, OSTK remains selected on BYON's effective
+day, and MPW has no selected source on MPT's effective day. Rename coverage
+alone cannot fix those 45. The full target remains incomplete and V7-3 must
+not start.
 
 The build output remains
 `nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`. Original
