@@ -150,9 +150,11 @@ def main() -> int:
         parser.error("--interval must be positive")
     out = ROOT / "logs/v7-progress" / args.output.name
     out.mkdir(parents=True, exist_ok=True)
-    with (out / ".lock").open("a") as lock:
-        fcntl.flock(lock, fcntl.LOCK_EX)
-        while True:
+    while True:
+        with (out / ".lock").open("a") as lock:
+            # A foreground --follow viewer must release this between refreshes
+            # so the scheduled hourly observer can still publish its report.
+            fcntl.flock(lock, fcntl.LOCK_EX)
             current = snapshot(args.output, args.history)
             history_path = out / "history.jsonl"
             message = render(current, estimate_eta(current, history_path))
@@ -161,13 +163,13 @@ def main() -> int:
             (out / "progress.txt").write_text(message + "\n")
             with history_path.open("a") as history:
                 history.write(json.dumps(current) + "\n")
-            print("\033[2J\033[H" + message if args.follow else message, flush=True)
-            if args.telegram:
-                send_telegram(ROOT, message)
-                print("Telegram update delivered.", flush=True)
-            if not args.follow or current["complete_securities"] == current["securities"]:
-                break
-            time.sleep(args.interval)
+        print("\033[2J\033[H" + message if args.follow else message, flush=True)
+        if args.telegram:
+            send_telegram(ROOT, message)
+            print("Telegram update delivered.", flush=True)
+        if not args.follow or current["complete_securities"] == current["securities"]:
+            break
+        time.sleep(args.interval)
     return 0
 
 
