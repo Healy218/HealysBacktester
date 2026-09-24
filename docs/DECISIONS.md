@@ -1437,3 +1437,16 @@ the five-minute entry window. If any held leg lacks that evidence, continue
 withholding new entries. This does not authorize stale execution prices, a
 different stop threshold, or live broker orders. See
 `docs/reviews/2026-09-24-v6-quote-evidence.md`.
+
+### 2026-09-24 — Preserve equivalent V7 stores and fail fast on input drift
+
+Keep the 415 sealed V7 securities whose recorded typed actions are exactly
+equivalent under the corrected action artifact and whose source hashes and
+repaired coverage receipt still match. Bind that equivalence in a separate
+verified manifest; do not rewrite or relabel their original receipts. Archive
+the eight changed completed securities and four partial checkpoints without
+deletion, then rebuild those and the other missing securities under the
+corrected action/coverage pair. Preflight all 591 securities before launching
+workers, stop scheduling on the first builder failure, and disable automatic
+service retries for deterministic input errors. The full 1,773-store gate is
+still required. See `docs/reviews/2026-09-24-v7-catalog-recovery.md`.
