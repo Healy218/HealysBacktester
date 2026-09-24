@@ -1,6 +1,7 @@
 """Build all four full-catalog causal feature/proposal stores from captured inputs.
 
-One security per invocation, all configured dates and all 11,268 variants. The
+One security per invocation, all configured dates and all 8,451 variants across
+the active 5/15/30-minute signal scope. The
 same checkpointed worker supports full-universe scheduling. No data downloads.
 Unresolved action or identity inputs stop construction instead of being ignored.
 This stage does not create option labels or admit a security for model training.
@@ -42,6 +43,14 @@ def load_inputs(args):
         doc = verify(path)
         dependencies = json.loads((path/'inputs.json').read_text())
         for filename, digest in dependencies.items():
+            # These are transitive lineage entries from the historical action
+            # compiler, not consumers of the proposal builder. The current
+            # coverage receipt binds the active coverage implementation; the
+            # portfolio module is consumed later by execution, not here.
+            if Path(filename).resolve() in {
+                    (ROOT / 'nn_meta/v7/action_coverage.py').resolve(),
+                    (ROOT / 'nn_meta/v7/portfolio.py').resolve()}:
+                continue
             if sha(filename) != digest:
                 raise ValueError('Captured history/action parent changed: '+filename)
             if filename in inputs and inputs[filename] != digest:
@@ -61,14 +70,36 @@ def load_inputs(args):
     if observed.empty:
         raise ValueError('Security has no observed history in requested dates')
     middle = frame[frame.source_date.between(observed.source_date.min(), observed.source_date.max())]
-    if middle.identity_span.isna().any() or middle.identity_span.nunique()!=1:
-        raise ValueError('Unresolved security continuity inside requested history')
     eligible = pd.read_parquet(history/'eligible_sources.parquet', filters=[('security_id', '=', args['security_id'])])
     eligible = eligible[eligible.source_date.between(args['start'], args['end'])]
-    if not eligible.source_matches.all():
-        raise ValueError('Unresolved eligible source identity; cannot substitute another security')
     events = [r for r in json.loads((actions/'actions.json').read_text())
               if r['security_id']==args['security_id']]
+    # Explicit 7-1 boundary exclusions are safe only before the boundary. Keep
+    # the exclusion visible in the parent coverage receipt, but do not ask the
+    # causal builder to fabricate a factor or identity across it.
+    coverage_path = Path(args['action_coverage'])
+    coverage = pd.read_parquet(coverage_path / 'coverage.parquet',
+                               filters=[('security_id', '=', args['security_id'])])
+    selected = coverage[coverage.source_date.isin(middle.source_date)]
+    if set(selected.source_date) != set(middle.source_date):
+        raise ValueError('Action coverage does not cover selected history dates')
+    admitted = selected.loc[selected.history_admitted.astype(bool), 'source_date']
+    excluded = sorted(set(middle.source_date) - set(admitted))
+    if excluded:
+        middle = middle[middle.source_date.isin(admitted)].copy()
+        frame = frame[frame.source_date.isin(admitted)].copy()
+        observed = frame[frame.source_status.eq('observed')]
+        if observed.empty:
+            raise ValueError('Security has no admitted observed history in requested dates')
+    if middle.identity_span.isna().any() or middle.identity_span.nunique()!=1:
+        raise ValueError('Unresolved security continuity inside admitted history')
+    bad_eligible = eligible[~eligible.source_matches]
+    if not bad_eligible.empty:
+        blocked = coverage[coverage.source_date.isin(bad_eligible.source_date)]
+        if (len(blocked) != len(bad_eligible)
+                or blocked.history_admitted.astype(bool).any()
+                or bad_eligible.source_date.isin(middle.source_date).any()):
+            raise ValueError('Unresolved eligible source identity inside admitted history')
     coverage_declaration = bind_history_coverage(args['action_coverage'], middle, events,
         security_id=args['security_id'], inputs=inputs)
     typed_actions = [price_action(r) for r in events]
@@ -128,7 +159,8 @@ def work(payload):
     import time
     from nn_meta.multitimeframe_catalog import registered_catalog
     from nn_meta.v7.causal_features import CausalFeatures
-    from nn_meta.v7.proposal_store import build_features, build_proposals, StoredFeatures
+    from nn_meta.v7.proposal_store import (build_features, build_proposals, StoredFeatures,
+                                            compact_feature_store)
     started = time.perf_counter()
     raw, actions, calendar, inputs, routing, eligibility, coverage_declaration = load_inputs(args)
     chart = CausalFeatures(raw, actions, calendar, security_id=args['security_id'], minutes=minutes,
@@ -147,10 +179,19 @@ def work(payload):
         symbols_by_date=routing, start=args['start'], end=args['end'], reserve_bytes=args['reserve_bytes'],
         eligibility=eligibility, batch_columns=args.get('batch_columns', 16),
         working_bytes=args.get('working_bytes', 128*1024**2))
+    compact_report = None
+    if args.get('compact_final'):
+        # Validate the sealed proposal store before removing build-only signal
+        # matrices.  The compact store remains usable by downstream row joins.
+        from nn_meta.v7.proposal_store import StoredProposals
+        StoredProposals(output/'proposals', features=store)
+        compact_report = compact_feature_store(output/'features', proposal_path=output/'proposals')
     report = dict(minutes=minutes, variants=proposals['variants'], proposals=proposals['proposals'],
         feature_observations=features['observations'], generated=proposals['generated'],
         excluded_not_member=proposals['excluded_not_member'],seconds=time.perf_counter()-started,
         peak_rss_kib=resource.getrusage(resource.RUSAGE_SELF).ru_maxrss, research_ready=False)
+    if compact_report is not None:
+        report['storage_mode'] = compact_report.get('storage_mode')
     print(json.dumps(report), flush=True)
     return report
 
@@ -173,6 +214,8 @@ def main():
                         help='Maximum signal/proposal variant columns held per batch')
     parser.add_argument('--working-bytes', type=int, default=128*1024**2,
                         help='Bounded in-memory signal workspace per worker')
+    parser.add_argument('--compact-final', action='store_true',
+                        help='After proposals seal, remove build-only feature matrices')
     args = vars(parser.parse_args())
     if args['batch_columns'] < 1 or args['working_bytes'] < 1:
         raise ValueError('Positive signal batch and workspace budgets required')

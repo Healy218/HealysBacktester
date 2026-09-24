@@ -1,0 +1,11 @@
+{
+  "schema": "v7-reviewed-single-listed-span-v1",
+  "security_ids": [
+    "BBG000BNSZP1", "BBG000CX0W11", "BBG000PY4FX3",
+    "BBG0024TGRQ2", "BBG0099SHLC1", "BBG00HW3TQG4",
+    "BBG00V9V7L54", "BBG01JLG80T8", "BBG01NSK4Y13"
+  ],
+  "rule": "Use only one contiguous exact-listed identity span per security, selected by eligible-session count; keep all other spans and intervening source gaps explicitly excluded.",
+  "held_position_treatment": "reject_crossing_identity_gap",
+  "research_ready": false
+}

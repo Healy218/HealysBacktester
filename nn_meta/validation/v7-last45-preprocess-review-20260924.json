@@ -1,0 +1,14 @@
+{
+  "schema": "v7-reviewed-preprocess-history-v1",
+  "security_ids": [
+    "BBG000BF6LY3", "BBG000BF6RQ9", "BBG000BG14P4", "BBG000BGGXH3",
+    "BBG000BGM5P8", "BBG000BK9YW3", "BBG000BMXK89", "BBG000BQHGR6",
+    "BBG000C0CD58", "BBG000GZQ728", "BBG00L4CWQ45", "BBG00LPWLFD4",
+    "BBG00MS90LK2", "BBG00PZTS4J3", "BBG00S1HJ3M8", "BBG00Y61SZL5"
+  ],
+  "rule": "Admit selected old-identity history only through its final observed and exact listed day, strictly before every provider process date; retain exclusions thereafter.",
+  "held_position_treatment": "reject_crossing_position",
+  "successor_identity_admitted": false,
+  "factor_inference": false,
+  "research_ready": false
+}

@@ -1,0 +1,19 @@
+{
+  "schema": "v7-reviewed-post-noncash-epochs-v1",
+  "security_ids": [
+    "BBG000BWFL03",
+    "BBG000DSJYS8",
+    "BBG000QFMLC3",
+    "BBG0134WCM78",
+    "BBG0192379V9",
+    "BBG01KB9ZVR6",
+    "BBG01KYQ6PV3",
+    "BBG01L5GH011",
+    "BBG01RGY23K6"
+  ],
+  "rule": "Admit only selected raw sessions strictly after every dated noncash boundary for the exact security. The event day and all preceding sessions remain excluded.",
+  "held_position_treatment": "reject_crossing_position",
+  "factor_inference": false,
+  "successor_identity_inference": false,
+  "research_ready": false
+}

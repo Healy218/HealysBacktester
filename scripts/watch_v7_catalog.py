@@ -19,7 +19,7 @@ LOG_DIRS = (
 )
 CURRENT_COVERAGE = (
     ROOT / "nn_meta/validation/v7-action-coverage-20260921-7-2-repaired",
-    ROOT / "nn_meta/validation/v7-action-coverage-20260924-reviewed-v2",
+    ROOT / "nn_meta/validation/v7-action-coverage-20260924-listed-span-restricted-v1",
 )
 
 

@@ -1463,3 +1463,16 @@ prechange history only. Every newly admitted security must pass the real
 proposal loader with source-bound action coverage and raw minute data. This
 does not waive the 591-security/1,773-store V7-2 gate. See
 `docs/reviews/2026-09-24-v7-last45-repair.md`.
+
+### 2026-09-24 — Require one exact listed span per V7 proposal input
+
+The full-market listing evidence shows nine remaining selected histories
+cross an identity interruption, including days when the same ticker belongs
+to another composite FIGI. A proposal store may consume only one contiguous,
+exact listed identity span; choose the span with the most eligible sessions
+and explicitly exclude previously admitted dates outside it. Do not bridge
+that gap with prices, inferred factors or a held position. Check eligible
+source mismatches only on admitted dates, while requiring exact nonadmission
+for every mismatched date; check identity continuity after coverage filtering.
+Run the production loader for every unfinished security before restarting the
+catalog workers. See `docs/reviews/2026-09-24-v7-last45-repair.md`.

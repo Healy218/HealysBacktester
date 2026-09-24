@@ -1,0 +1,14 @@
+{
+  "schema": "v7-reviewed-single-noncash-epoch-v1",
+  "security_ids": [
+    "BBG000BCG930", "BBG000BLW102", "BBG000BPS2C3", "BBG00GLTQCX6",
+    "BBG00YG48NM6", "BBG00YVV3B04", "BBG00ZMYYP00", "BBG0112CBLW3",
+    "BBG011386VF4", "BBG011744HH0", "BBG013G17W31", "BBG019HGLML0",
+    "BBG01HFW5XW1", "BBG01KR6BS70", "BBG01L6XWKF7", "BBG01R388JG1",
+    "BBG01V7JN3F3", "BBG01XLDHDP0"
+  ],
+  "rule": "For each exact security, select one observed, same-share listed identity interval strictly between every dated noncash event or provider process boundary; prefer the interval with the most eligible dates. No cross-boundary history or held position is admitted.",
+  "held_position_treatment": "reject_crossing_position",
+  "factor_inference": false,
+  "research_ready": false
+}

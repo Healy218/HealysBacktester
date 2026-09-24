@@ -14,6 +14,18 @@ def test_reuse_rejects_changed_computation_source():
                                  {"producer.py": "same", "new_signal.py": "new"})
 
 
+def test_reuse_allows_exact_review_additions_but_checks_their_bound_bytes():
+    from nn_meta.v7.catalog_reuse import ROOT
+    review = str(ROOT / "docs/specs/V7_LAST45_DATED_NONCASH_20260924.json")
+    checker = str(ROOT / "nn_meta/v7/catalog_reuse.py")
+    assert source_compatible({"producer.py": "same", checker: "old"},
+                             {"producer.py": "same", checker: "new", review: "sealed"})
+    assert not source_compatible({"producer.py": "same", review: "old"},
+                                 {"producer.py": "same", review: "changed"})
+    assert not source_compatible({"producer.py": "same"},
+                                 {"producer.py": "same", "unknown_review.json": "new"})
+
+
 def test_action_coverage_preflight_rejects_mixed_frozen_parents(tmp_path):
     history, actions, coverage = (tmp_path / name for name in ("history", "actions", "coverage"))
     for path in (history, actions, coverage):

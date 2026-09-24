@@ -30,13 +30,15 @@
   exclusion policy. They need exact source review before their stores can be
   built. The runner reports them as deferred, never as complete.
 
-  September 24 follow-up: a separate source-bound coverage review now admits
-  a safe raw-history epoch for exactly those 45, with no action-event changes.
-  The active service still runs against its prior inputs and defers all 45.
-  The real builder loader passes 41 under the new coverage. The remaining
-  four pass a tested guard-order probe; apply that narrow builder change only
-  after the current workers finish, then verify all 45 and resume the one
-  catalog controller. See
+  September 24 follow-up: the first service stopped at 425 securities / 1,275
+  stores on a VMW eligible-source guard. The exact 45-security noncash review
+  and nine additional listed-span restrictions are now sealed; the production
+  loader guard was fixed only after workers stopped. All 166 unfinished
+  securities pass the real loader under the final coverage. The 415 reused
+  and ten newly sealed securities passed the catalog receipt audit; two
+  shortest histories also passed actual five-minute store builds. The revised
+  unit runs a full loader preflight before scheduling the remaining stores.
+  See
   [the 45-security repair audit](docs/reviews/2026-09-24-v7-last45-repair.md).
 
   The current run is the 7-2 build execution, not completion evidence yet.

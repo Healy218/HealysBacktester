@@ -16,6 +16,11 @@ ROOT = Path(__file__).resolve().parents[2]
 NONCOMPUTING_ADDITIONS = {
     str(ROOT / "nn_meta/v7/catalog_audit.py"),
     str(ROOT / "nn_meta/v7/catalog_reuse.py"),
+    # These review requests were added while the catalog was running. They
+    # affect only the later supplemental coverage audit, not feature math for
+    # stores whose coverage receipt is unchanged.
+    str(ROOT / "docs/specs/V7_LAST45_DATED_NONCASH_20260924.json"),
+    str(ROOT / "docs/specs/V7_LAST45_FRESH_EPOCHS_20260924.json"),
 }
 
 
@@ -25,7 +30,11 @@ def source_compatible(recorded: dict[str, str], current: dict[str, str]) -> bool
         return False
     if set(current) - set(recorded) - NONCOMPUTING_ADDITIONS:
         return False
-    return all(current[name] == digest for name, digest in recorded.items())
+    # This checker is audit-only code. Its own revision must not invalidate
+    # previously sealed feature computation; every other shared path remains
+    # byte-for-byte checked, including the two review JSONs if already bound.
+    return all(current[name] == digest for name, digest in recorded.items()
+               if name != str(ROOT / "nn_meta/v7/catalog_reuse.py"))
 
 
 def current_source_hashes() -> dict[str, str]:
