@@ -97,18 +97,19 @@ live GBT artifact. A separate V5 Keras/EV bundle is now packaged; the active
 server configuration hash matches the packaged configuration. Its corrected
 replay helper uses the magnitude head and saved `std` scaler. The 304-row V5
 compatibility smoke test used V6-origin rows and is **not** V5 paper evidence.
-The V5 server currently saves a trade ledger, not full candidate features.
+The V5 server's historical paper ledger does not include full candidate features.
 An opt-in scanner path now seals the full scored V5 candidate batch per signal
 bar with exact candidate identities, the active model-config hash and a
 `generation=v5` manifest. The daily runner verifies and assembles locally
 staged passes with `--v5-pass-root` (or accepts a presealed
 `--v5-feature-dir`). V5 model-scaler-mean imputation is preserved in the
 replay bundle `v5-keras-ev-replay-v3`; the older v2 remains historical outside
-the curated registry. This is local implementation, not live V5 validation:
-the remote V5 scanner has not received the opt-in flag, no genuine V5 passes
-have been staged, and the diverged/dirty server checkout must be reconciled
-before a safe git-pull deployment. Until then the daily runner records V5 as
-input-blocked. V6 rows must never be substituted.
+the curated registry. The V5 server-compatible backport is deployed at
+`059ff1d` on `ops/server-alert-readiness-20260906`, and its cron has the
+opt-in capture flag. This is not yet live V5 validation: no post-deployment
+genuine pass has been observed or staged on the home box. Until then the daily
+runner records V5 as input-blocked. V6 rows must never be substituted. See
+`docs/reviews/2026-09-24-v5-capture-deployment.md` for deployment and rollback evidence.
 
 The daily runner routes each artifact to its own sealed request, writes
 per-artifact attempt directories and receipts, a date-scoped checkpoint,
@@ -148,6 +149,6 @@ Older V6 smoke output used P(win) in `prediction` and must not be scored as EV.
    pass. **Done; committed but disabled by default.**
 6. Validate against V5/V6 paper data, then onboard V7 through the same contract.
    **V6 has one exact-identity matured outcome; 303 rows remain pending, so no
-   performance claim is supported. V5 capture is implemented locally but not
-   yet deployed or validated on genuine V5 passes. V7 and production
+   performance claim is supported. V5 capture is deployed but awaits the
+   first genuine sealed pass and separate paper-data staging. V7 and production
    activation remain gated.**

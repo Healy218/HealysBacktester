@@ -590,8 +590,14 @@ regenerated verified bundles together. All experts send alerts; historical
   `[v5]` section in the panel digest and the heartbeat. One pass scans
   441 symbols (~2 min; v31's 120 take ~35 s). Promotion beyond paper is a
   user decision after a forward record beside V118.
-- **Deploy = `git pull origin main` over the read-only deploy key. NEVER
-  scp** — an untracked scp'd file once wedged pulls for days, silently.
+- **Deploy = fast-forward `git pull` over the read-only deploy key. NEVER
+  scp** — an untracked scp'd file once wedged pulls for days, silently. The
+  current V5-only server remains on `ops/server-alert-readiness-20260906`
+  (`059ff1d` after the 2026-09-24 capture backport); pull that branch, not
+  `main`, until its compatibility fixes have been deliberately reconciled.
+  Its V5 cron opts into candidate capture under
+  `incubator/artifacts/v5-passes/`; the old crontab backup and verification
+  are recorded in `docs/reviews/2026-09-24-v5-capture-deployment.md`.
 - **Live feeds (since 2026-09-05)**: two daemons, `nn_meta.live.feeds.
   stock_stream` (Alpaca SIP 1m bars, 443 names → `nn_meta/live/feeds/data/
   1m/<SYM>/<day>.parquet`, backfills today on start) and

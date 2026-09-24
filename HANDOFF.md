@@ -1,62 +1,54 @@
-# Handoff — 2026-09-23 — V6 outcomes, V7 audit prep, V5 capture
+# Handoff — 2026-09-24 — V5 capture deployed on server branch
 
 ## Restart first
 
-Read `TODO.md`, then this file. The previous handoff is archived at
-`handoff-history/HANDOFF-2026-09-23-before-outcome-catalog-v5.md`. The active
-V7-2 compact 5/15/30 catalog is still building at
-`nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`. Do not stop,
-restart, relabel or delete it; do not start 7-3 until full 7-2 verification.
+Read `TODO.md`, then this file. The prior handoff is archived at
+`handoff-history/HANDOFF-2026-09-24-before-v5-server-backport.md`. The V7-2
+5/15/30 compact catalog remains active on the home box; do not stop, restart,
+relabel or delete it. V7-3 still waits for full 7-2 post-seal verification.
 
-## What landed locally
+## V5 deployment result
 
-1. `scripts/export_v6_incubator_outcomes.py` opens the local V6 paper SQLite
-   ledger read-only, hashes source/WAL across the read, accepts only fully
-   closed midpoint-policy positions with exact V6 identity and close clocks,
-   and seals net-return parquet, per-position evidence and manifest. An
-   optional exact-identity join is supported. The 2026-09-23 export found 14
-   closed positions; only DUOL/macd/30 DTE matched the 304-row 2026-09-22
-   candidate matrix (`net_return=-0.12458142055209864`). The other 303 are
-   pending, so there is no V6 performance verdict.
-2. `scripts/audit_v7_catalog.py` now supports a small read-only live preflight
-   and a post-seal `--full` audit of all 1,773 compact stores. The sampled
-   preflight passed at 848 present stores/925 missing. Full mode is not yet
-   run. `scripts/sample_v7_catalog_resources.py` records cgroup, CPU temp,
-   disk, progress and age outside the active catalog. A later sample found 291
-   complete securities, 881 proposal stores, 82.25°C CPU, ~12.36 GB current /
-   ~19.96 GB peak memory, ~400.52 GB free disk, and zero cgroup CPU
-   throttling. See `docs/reviews/2026-09-23-v7-catalog-audit-prep.md`.
-3. V5 candidate feature capture is opt-in at the scanner via
-   `--incubator-capture-root`; it seals the scored full candidate batch per
-   signal bar with `generation=v5`, identity, model-config hash and parquet
-   hash. The daily runner can assemble staged passes by date. The V5 replay
-   entrypoint now imputes NaNs with each member's saved scaler mean. The active
-   ignored registry has `v5-keras-ev-replay-v3.tar.gz` and the current V6 GBT
-   bundle; V5 v2 was moved to
-   `incubator/artifacts/v5-live-20260923/bundles/v5-keras-ev-replay-v2-retired.tar.gz`.
-   No real V5 candidate pass has been captured or validated yet.
+The Hetzner server's checkout was on the compatibility branch
+`ops/server-alert-readiness-20260906`, with three unpushed commits and
+unrelated dirty deletions of retired V3/V4 model files. It was not switched
+to `main` or reset. We fetched its exact `c79e877` commit into a temporary
+worktree, added a narrow V5 capture backport, and pushed the existing branch
+to `059ff1d`, preserving those three commits. The server deployed with
+`git pull --ff-only origin ops/server-alert-readiness-20260906` and is now at
+`059ff1d`; the touched scanner/cron/incubator paths are clean. The unrelated
+model deletions remain untouched.
 
-## Operational gates
+The V5 scanner now accepts `--incubator-capture-root`, seals full scored
+candidate batches under `incubator/artifacts/v5-passes/`, and continues paper
+alerts even if capture fails. `scripts/configure_cron.py
+--enable-v5-incubator-capture --run` added the flag to the active V5 line
+only. The previous crontab is recoverable at
+`/home/mrhea/HealysBacktester/logs/ops/ops-fixes-20260924T111725Z/crontab-before.txt`.
+The deployed 40-member V5 model self-test passed. Home and server model-config
+SHA-256 match (`b4631653459490045a92e6305922b40440780f3fd6a8b93edcee462601044182`).
+See `docs/reviews/2026-09-24-v5-capture-deployment.md`.
 
-The V5 server remains on a divergent branch with unrelated dirty model-file
-deletions, so do not `git pull main`, switch branches or overwrite it blindly.
-The scanner capture flag was not deployed or added to server cron; its current
-paper ledger alone cannot reconstruct full candidate features. Reconcile that
-checkout and use git-pull deployment before adding the opt-in V5 flag; then
-stage sealed pass directories locally under `incubator/artifacts/v5-passes`
-and verify a genuinely captured day. No V5 performance claim is supported.
-The incubator timer remains disabled, the service has no `--allow-execution`,
-and production isolation/paper-data approval plus TODO 7-2–7-7 still gate
-activation. No V7-3 capture work began.
+The server-branch full test suite has the same 59 pre-existing alert/accounting
+failures before and after the backport: baseline 682 passed, backport 685
+passed. The focused scanner/capture/cron suite passed 19 tests. This is not a
+new observed test regression, but the branch-wide suite is not green.
 
-## Verification and worktree
+## Next gates
 
-Focused tests: 23 passed. Full suite: 2,376 passed, 20 warnings, 18 subtests
-passed. The updated incubator user-systemd unit verifies outside the sandbox.
-The V6 exporter read the actual ledger without modifying it. Live V7 preflight
-and resource samples were read-only and wrote only under `logs/v7-progress/`.
+No genuine post-deployment V5 pass had yet appeared at handoff: deployment
+occurred before market hours. Inspect the first market-hours V5 cron log and
+`incubator/artifacts/v5-passes/YYYY-MM-DD/` on the server. Verify the feature
+manifest, parquet hash, config hash and candidate identities; investigate any
+`[v5-incubator] candidate capture failed` log. Only then consider staging the
+paper data on the home box under the explicit paper-data boundary; the home
+after-close runner still treats V5 as input-blocked until a genuine sealed pass
+is staged. Do not substitute V6-origin compatibility rows. The incubator timer
+remains disabled and the service has no `--allow-execution`.
 
-Many unrelated V6/V7 changes are present in the worktree. Narrow-stage only
-this slice; `nn_meta/live/v4_scan.py` specifically overlaps other uncommitted
-V6 shadow work, so stage only the V5 capture lines. Generated incubator
-bundles, outcomes and run receipts are ignored and must not be force-added.
+The active V7 catalog remains untouched by this V5 deployment. The home
+worktree still has many unrelated V6/V7 dirty files; narrow-stage only this
+handoff/documentation update. Temporary backport and baseline worktrees are
+under `/tmp/healys-v5-server-backport-20260923` and
+`/tmp/healys-v5-server-baseline-20260923` respectively; the backport commit
+has been pushed. Do not broad-clean the repository or server checkout.

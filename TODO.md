@@ -89,9 +89,10 @@
   pass. The read-only V6 closed-position exporter now seals current-pricing
   outcome evidence; 14 closed positions yielded only the one exact match to
   the 2026-09-22 candidate day. V5 scanner batch capture, daily assembly and
-  scaler-mean replay are implemented locally, with an opt-in scanner flag; the
-  live server still needs a safe branch/deployment reconciliation and no
-  genuine V5 paper validation exists. A V6-origin V5 compatibility smoke test
+  scaler-mean replay are implemented locally. The V5 capture backport is now
+  deployed on the existing server branch and its cron opt-in is enabled; the
+  first genuine post-deployment pass, local paper-data staging and validation
+  are still pending. No genuine V5 paper validation exists. A V6-origin V5 compatibility smoke test
   is not V5 paper validation. The timer remains disabled and the service has no execution
   opt-in; production isolation and 7-2–7-7 gates still block activation.
 

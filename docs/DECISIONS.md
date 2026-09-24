@@ -1414,3 +1414,14 @@ matrix built from V6 candidates is not V5 paper evidence. Route V5 only to a
 separately sealed V5 candidate feed; until that feed exists, report it as
 input-blocked while still allowing V6 read-only validation. Production timer
 activation remains gated by TODO.md item 8.
+
+### 2026-09-24 — Backport V5 capture to the server-compatible branch
+
+Keep the server on `ops/server-alert-readiness-20260906` while V5 is the sole
+active server expert. Its production fixes and dirty retired-model deletions
+make a full `main` merge or checkout switch unsafe for this deployment.
+Preserve the three server-local commits, backport only the opt-in V5 candidate
+capture and tested cron flag, and deploy by fast-forward Git pull. Keep capture
+failure nonfatal to paper alerts. Do not infer V5 candidate evidence from the
+old trade ledger or V6 rows, and do not enable the incubator after-close timer
+before its separate readiness and paper-data gates.
