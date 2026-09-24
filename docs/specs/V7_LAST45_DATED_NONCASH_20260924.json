@@ -1,0 +1,32 @@
+{
+  "schema": "v7-reviewed-noncash-effective-dates-v1",
+  "reviews": [
+    {
+      "old_symbol": "OSTK",
+      "new_symbol": "BYON",
+      "security_id": "BBG000BF7BV7",
+      "prior_date": "2023-11-03",
+      "effective_date": "2023-11-06",
+      "publication_date": "2023-10-24",
+      "notice": "nn_meta/data_v7/last45-notices-20260924/beyond-20231024-byon-rename",
+      "notice_phrase": "All changes effective November 6, 2023",
+      "conclusion": "admit_selected_history_before_boundary_only"
+    },
+    {
+      "old_symbol": "MPW",
+      "new_symbol": "MPT",
+      "security_id": "BBG000BGRB25",
+      "prior_date": "2026-01-30",
+      "effective_date": "2026-02-02",
+      "publication_date": "2026-01-20",
+      "notice": "nn_meta/data_v7/last45-notices-20260924/mpt-20260120-mpt-rename",
+      "notice_phrase": "Ticker Symbol Change to “MPT” Effective February 2, 2026",
+      "conclusion": "admit_selected_history_before_boundary_only"
+    }
+  ],
+  "held_position_treatment": "reject_crossing_position",
+  "successor_identity_admitted": false,
+  "stock_deliverable_admitted": false,
+  "option_deliverable_admitted": false,
+  "research_ready": false
+}

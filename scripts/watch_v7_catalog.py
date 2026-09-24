@@ -17,12 +17,29 @@ MINUTES = (5, 15, 30)
 LOG_DIRS = (
     Path("/tmp/v7-2-full-catalog-20260922-rebuild-5-15-30-logs"),
 )
+CURRENT_COVERAGE = (
+    ROOT / "nn_meta/validation/v7-action-coverage-20260921-7-2-repaired",
+    ROOT / "nn_meta/validation/v7-action-coverage-20260924-reviewed-v2",
+)
 
 
 def snapshot(output: Path, history: Path) -> dict:
     import pandas as pd
-    ids = sorted(pd.read_parquet(history / "history.parquet", columns=["security_id"])
-                 ["security_id"].unique())
+    selected = pd.read_parquet(history / "history.parquet",
+                               columns=["security_id", "source_date", "source_status"])
+    ids = sorted(selected.security_id.unique())
+    observed = selected[selected.source_status.eq("observed")][["security_id", "source_date"]]
+    deferred = None
+    if all((path / "coverage.parquet").exists() for path in CURRENT_COVERAGE):
+        admitted = set()
+        for path in CURRENT_COVERAGE:
+            panel = pd.read_parquet(path / "coverage.parquet",
+                                    columns=["security_id", "source_date", "history_admitted"])
+            matching = observed.merge(panel[panel.history_admitted.astype(bool)],
+                                      on=["security_id", "source_date"], how="inner",
+                                      validate="one_to_one")
+            admitted.update(matching.security_id)
+        deferred = len(set(ids) - admitted)
     timeframe_total = len(ids) * len(MINUTES)
     proposals = features = feature_stores = complete_securities = 0
     active = []
@@ -52,6 +69,7 @@ def snapshot(output: Path, history: Path) -> dict:
     return {
         "observed_at": dt.datetime.now(dt.timezone.utc).isoformat(),
         "securities": len(ids), "complete_securities": complete_securities,
+        "deferred_unadmitted": deferred,
         "features_receipts": features, "feature_stores": feature_stores,
         "proposals": proposals, "timeframe_total": timeframe_total,
         "active_logs": active,
@@ -67,14 +85,19 @@ def estimate_eta(current: dict, history_path: Path) -> str:
     """Estimate completion from the observer's own persisted snapshots."""
     total = current["securities"]
     done = current["complete_securities"]
+    deferred = current.get("deferred_unadmitted") or 0
+    runnable = total - deferred
     if done >= total:
         return "ETA: complete"
+    if deferred and done >= runnable:
+        return f"Runnable build complete; {deferred} input-blocked securities remain"
     snapshots = []
     if history_path.exists():
         for line in history_path.read_text().splitlines():
             try:
                 item = json.loads(line)
                 if (item.get("securities") == total
+                        and item.get("deferred_unadmitted") == current.get("deferred_unadmitted")
                         and item.get("recovery_id") == current.get("recovery_id")):
                     snapshots.append(item)
             except (json.JSONDecodeError, TypeError):
@@ -86,13 +109,17 @@ def estimate_eta(current: dict, history_path: Path) -> str:
             elapsed_hours = (current_at - first_at).total_seconds() / 3600
             prior_done = int(snapshots[0]["complete_securities"])
             rate = (done - prior_done) / elapsed_hours if elapsed_hours > 0 else 0
-            if rate > 0:
-                hours_left = (total - done) / rate
+            # A few freshly sealed stores can make the first minutes look
+            # unrealistically fast. Wait for a full hour of this exact run.
+            if elapsed_hours >= 1 and rate > 0:
+                hours_left = (runnable - done) / rate
                 finish = dt.datetime.now().astimezone() + dt.timedelta(hours=hours_left)
-                return f"ETA: ~{hours_left:.1f}h (around {finish:%Y-%m-%d %H:%M %Z})"
+                label = "Runnable ETA" if deferred else "ETA"
+                return f"{label}: ~{hours_left:.1f}h (around {finish:%Y-%m-%d %H:%M %Z})"
         except (KeyError, TypeError, ValueError):
             pass
-    return "ETA: calculating from completed-security rate"
+    return ("Runnable ETA: waiting for one hour of completed-security rate" if deferred
+            else "ETA: calculating from completed-security rate")
 
 
 def render(s: dict, eta: str) -> str:
@@ -107,6 +134,8 @@ def render(s: dict, eta: str) -> str:
         f"Feature receipts: {s['features_receipts']} "
         f"(sealed feature stores: {s['feature_stores']})\n"
         f"Complete securities: {s['complete_securities']}/{s['securities']}\n"
+        + (f"Input-blocked in this run: {s['deferred_unadmitted']} securities\n"
+           if s.get('deferred_unadmitted') is not None else "") +
         f"Build service: {build_state} (exit {s.get('build_exit_status', 'unknown')}; "
         f"restarts {s.get('build_restarts', 'unknown')})\n"
         f"Active workers/logs: {active}\n"
@@ -167,7 +196,8 @@ def main() -> int:
         if args.telegram:
             send_telegram(ROOT, message)
             print("Telegram update delivered.", flush=True)
-        if not args.follow or current["complete_securities"] == current["securities"]:
+        if (not args.follow or current["complete_securities"] == current["securities"]
+                or current["build_state"] in ("failed", "inactive")):
             break
         time.sleep(args.interval)
     return 0

@@ -1450,3 +1450,16 @@ corrected action/coverage pair. Preflight all 591 securities before launching
 workers, stop scheduling on the first builder failure, and disable automatic
 service retries for deterministic input errors. The full 1,773-store gate is
 still required. See `docs/reviews/2026-09-24-v7-catalog-recovery.md`.
+
+### 2026-09-24 — Admit only bounded V7 history epochs around unresolved noncash actions
+
+For the 45 V7-2 zero-admission securities, keep the September 18 noncash
+records and their one-for-one exclusion treatments. Source-reviewed exceptions
+may admit selected raw history strictly within one exact listed identity epoch
+before or after a dated action/provider process boundary. An event day and
+any crossing held position remain excluded; no share factor, successor or
+option deliverable is inferred. The two issuer-dated ticker changes admit
+prechange history only. Every newly admitted security must pass the real
+proposal loader with source-bound action coverage and raw minute data. This
+does not waive the 591-security/1,773-store V7-2 gate. See
+`docs/reviews/2026-09-24-v7-last45-repair.md`.

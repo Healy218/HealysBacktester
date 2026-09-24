@@ -30,6 +30,15 @@
   exclusion policy. They need exact source review before their stores can be
   built. The runner reports them as deferred, never as complete.
 
+  September 24 follow-up: a separate source-bound coverage review now admits
+  a safe raw-history epoch for exactly those 45, with no action-event changes.
+  The active service still runs against its prior inputs and defers all 45.
+  The real builder loader passes 41 under the new coverage. The remaining
+  four pass a tested guard-order probe; apply that narrow builder change only
+  after the current workers finish, then verify all 45 and resume the one
+  catalog controller. See
+  [the 45-security repair audit](docs/reviews/2026-09-24-v7-last45-repair.md).
+
   The current run is the 7-2 build execution, not completion evidence yet.
   After it seals, verify every store, source binding, catalog census, compact
   footprint, worker/restart receipts and the 100 GiB reserve before checking
