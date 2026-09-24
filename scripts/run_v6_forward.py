@@ -25,6 +25,50 @@ def configure(release, anchor):
     return verified
 
 
+def recent_risk_observation(state, position, bar_close, current):
+    """Accept only this leg's post-close, freshly priced minute-risk check.
+
+    The independent worker applies the same checked_quote 30-second SIP rule.
+    This fallback never supplies an execution price or settles an exit.
+    """
+    from options.paper_pricing import MIDPOINT_POLICY
+    from options.paper_risk import V6_OPTION_RISK
+    from dataclasses import asdict
+    import pandas as pd
+    try:
+        report = read(Path(state) / 'option-risk-status.json')
+        if (report.get('schema') != 'v6-option-risk-status-v1' or
+                report.get('status') not in ('complete', 'failed') or
+                report.get('broker_orders') is not False or
+                report.get('pricing_policy') != MIDPOINT_POLICY or
+                report.get('option_risk_policy') != asdict(V6_OPTION_RISK)):
+            return False
+        close, now = pd.Timestamp(bar_close), pd.Timestamp(current)
+        for result in report.get('results', []):
+            if result.get('key') != position['key'] or result.get('status') != 'holding':
+                continue
+            if any(error.get('key') == position['key'] for error in report.get('errors', [])):
+                return False
+            observed = result['observed']
+            if (observed['contract'] != position['contract'] or
+                    observed['rolls'] != int(position.get('rolls', 0)) or
+                    observed['opened_at'] != position['opened_at']):
+                return False
+            quote_at = pd.Timestamp(int(observed['quote_at_ns']), tz='UTC')
+            received = pd.Timestamp(observed['quote_received_at'])
+            assessed = pd.Timestamp(observed['assessed_at'])
+            checked = pd.Timestamp(report['checked_at'])
+            if any(x.tzinfo is None for x in (close, now, received, assessed, checked)):
+                return False
+            return (close <= quote_at <= received <= assessed <= checked <= now and
+                    (assessed - quote_at).total_seconds() <= 30 and
+                    (now - assessed).total_seconds() <= 60 and
+                    (now - close).total_seconds() <= 300)
+    except (OSError, ValueError, TypeError, KeyError, OverflowError):
+        return False
+    return False
+
+
 def monitor_positions(data, book, market, now, *, alerts):
     """Held-strategy exits get priority over unrelated candidate capture."""
     import pandas as pd
@@ -37,8 +81,17 @@ def monitor_positions(data, book, market, now, *, alerts):
         symbol=position['symbol']
         try:
             checked_leg=position
-            risk = monitor_option_position(book,position,market,clock=utcnow,alerts=alerts,
-                calendar=data.calendar,underlying_mark=market.underlying_mark)
+            try:
+                risk = monitor_option_position(book,position,market,clock=utcnow,alerts=alerts,
+                    calendar=data.calendar,underlying_mark=market.underlying_mark)
+            except ValueError as exc:
+                if str(exc) != 'no fresh post-decision option quote':
+                    raise
+                starts = data.calendar.closed_starts(now.tz_convert('America/New_York').date().isoformat(), now)
+                bar_close = starts[-1].tz_localize('UTC') + pd.Timedelta(minutes=15)
+                if not recent_risk_observation(book.path.parent, position, bar_close, utcnow()):
+                    raise
+                risk = {'status':'holding', 'source':'validated_minute_risk_observation'}
             remaining=[p for p in book.open_positions() if p['key']==position['key']]
             if not remaining:continue
             position=remaining[0]

@@ -49,7 +49,10 @@ def monitor_option_position(book, position, market, *, clock, alerts, calendar=N
         else:
             return {'key':key, 'status':'otm_expiry', 'assessment':assessment}
     if reason is None:
-        return {'key':key, 'status':'holding', 'assessment':assessment}
+        return {'key':key, 'status':'holding', 'assessment':assessment,
+                'observed':{'contract':position['contract'], 'rolls':int(position.get('rolls',0)),
+                    'opened_at':position['opened_at'], 'quote_at_ns':int(quote['sip_timestamp_ns']),
+                    'quote_received_at':quote['received_at'], 'assessed_at':now.isoformat()}}
     triggered = book.trigger(key, kind='exit', reason=reason,
         at=pd.Timestamp(quote['sip_timestamp_ns'], tz='UTC'), alerts=alerts,
         evidence=evidence, expected_leg=position)

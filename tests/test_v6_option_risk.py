@@ -22,7 +22,51 @@ def test_unchanged_wide_spread_is_not_an_option_stop(fixture):
     result=monitor_option_position(f.book,f.book.open_positions()[0],SimpleNamespace(execution_quote=f.quote),
                                    clock=lambda:f.now,alerts=False)
     assert result['status']=='holding' and result['assessment']['premium_return']==0.
+    assert result['observed']['contract']==f.contract
+    assert result['observed']['quote_at_ns']<=pd.Timestamp(result['observed']['assessed_at']).value
     assert len(f.book.open_positions())==1
+
+
+def test_forward_accepts_only_same_leg_recent_post_close_risk_evidence(tmp_path):
+    import json
+    from dataclasses import asdict
+    from options.paper_pricing import MIDPOINT_POLICY
+    from options.paper_risk import V6_OPTION_RISK
+    from scripts.run_v6_forward import recent_risk_observation
+
+    close=pd.Timestamp('2026-09-24T19:15:00Z')
+    now=pd.Timestamp('2026-09-24T19:15:35Z')
+    position=dict(key='v6|CELH|keltner|2026-09-24T15:00:00',
+                  contract='CELH261030P00028000',rolls=0,
+                  opened_at='2026-09-24T15:19:25+00:00')
+    observed=dict(contract=position['contract'],rolls=0,opened_at=position['opened_at'],
+                  quote_at_ns=pd.Timestamp('2026-09-24T19:15:05Z').value,
+                  quote_received_at='2026-09-24T19:15:06+00:00',
+                  assessed_at='2026-09-24T19:15:08+00:00')
+    report=dict(schema='v6-option-risk-status-v1',status='complete',broker_orders=False,
+                pricing_policy=MIDPOINT_POLICY,option_risk_policy=asdict(V6_OPTION_RISK),
+                checked_at='2026-09-24T19:15:11+00:00',
+                results=[dict(key=position['key'],status='holding',observed=observed)])
+    path=tmp_path/'option-risk-status.json'
+    def accepted():
+        path.write_text(json.dumps(report))
+        return recent_risk_observation(tmp_path,position,close,now)
+    assert accepted()
+    report['results'][0]['observed']['contract']='OTHER'
+    assert not accepted()
+    report['results'][0]['observed']['contract']=position['contract']
+    report['results'][0]['observed']['quote_at_ns']=pd.Timestamp('2026-09-24T19:14:59Z').value
+    assert not accepted()
+    report['results'][0]['observed']['quote_at_ns']=pd.Timestamp('2026-09-24T19:15:05Z').value
+    report['status']='failed'
+    report['errors']=[dict(key='other',error='no fresh quote')]
+    assert accepted()  # another leg can fail independently
+    report['errors']=[dict(key=position['key'],error='no fresh quote')]
+    assert not accepted()
+    report['errors']=[]
+    report['status']='complete'
+    assert accepted()
+    assert not recent_risk_observation(tmp_path,position,close,now+pd.Timedelta(seconds=61))
 
 
 @pytest.mark.parametrize('right',['C','P'])
