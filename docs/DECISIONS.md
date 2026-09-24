@@ -1425,3 +1425,15 @@ capture and tested cron flag, and deploy by fast-forward Git pull. Keep capture
 failure nonfatal to paper alerts. Do not infer V5 candidate evidence from the
 old trade ledger or V6 rows, and do not enable the incubator after-close timer
 before its separate readiness and paper-data gates.
+
+### 2026-09-24 — Use bounded minute-risk observations for V6 held options
+
+The user approved using a validated held-option observation from the separate
+minute-risk worker when the quarter-hour scanner's own poll has no fresh
+quote. Require the same exact contract leg, an observation after the bar
+close and within 60 seconds of the scanner check, and the original 30-second
+SIP quote-age validation at observation time. The observation must fall within
+the five-minute entry window. If any held leg lacks that evidence, continue
+withholding new entries. This does not authorize stale execution prices, a
+different stop threshold, or live broker orders. See
+`docs/reviews/2026-09-24-v6-quote-evidence.md`.
