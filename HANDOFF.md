@@ -1,90 +1,69 @@
-# Handoff — 2026-09-24 — V7-2 last-45 source repair
+# Handoff — 2026-09-24 — V7-2 resumed after full loader preflight
 
 Read `TODO.md` first. The prior handoff is archived at
-`handoff-history/HANDOFF-2026-09-24-before-last45-repair.md`. V7-1 remains
-complete under its agreed exclusion policy. V7-2 is running; V7-3 has not
-started. Do not claim the 591-security/1,773-store gate is complete until
-every store is sealed and audited. Main is the operating branch. There is a
-large pre-existing unrelated dirty worktree; stage only exact owned files.
+`handoff-history/HANDOFF-2026-09-24-before-loader-restart.md`. V7-1 is
+complete under the agreed exclusion policy. V7-2 is actively building;
+V7-3 has not started. Do not claim the 591-security/1,773-store gate is
+complete until all stores are sealed and audited. Main is the operating
+branch. The worktree has extensive unrelated pre-existing changes: stage
+only exact owned files. Last V7 fixes are on origin/main at `83d3b6d`
+and `c551654`.
 
 ## Independent active build
 
-`healys-v7-catalog-build.service` remains active under PID 3093731, zero
-restarts at the latest host-side check. It uses four outer workers and
-`Restart=no`. The current controller still uses the September 21 base
-coverage plus September 24 reviewed-v2 supplemental coverage and explicitly
-defers the original 45. At the last read-only snapshot it had 425/591
-complete securities, 1,275/1,773 proposal stores and 348.6 GiB free.
-Run `./venv/bin/python -m scripts.watch_v7_catalog --follow --interval 5`
-in a fresh terminal to monitor the same output. Its revised display separates
-45 input-blocked names and estimates only runnable progress after a full hour
-of data. A sandboxed one-shot viewer may show service `unknown`; host-side
-`systemctl --user show` showed active. Do not start a second worker process
-while this service is active.
+`healys-v7-catalog-build.service` started at 18:12:42 CDT on September 24,
+main PID 3128252, `Restart=no`, four outer workers. Host-side systemd
+showed it active at 18:21 CDT; the controller's 166/166 real-loader
+preflight passed with zero failures at 18:18. The subsequent actual build
+advanced to 426/591 complete securities, 1,281/1,773 proposal stores,
+2,570 feature receipts and 1,281 sealed features at 18:21. The CLI reported
+zero input-blocked securities and 348.4 GiB free. This is progress, not
+completion evidence.
 
-## Last 45 repair completed on separate frozen inputs
+Monitor with `./venv/bin/python -m scripts.watch_v7_catalog --follow
+--interval 5` in a fresh terminal. A sandboxed viewer can show service
+`unknown`; use host-side `systemctl --user status
+healys-v7-catalog-build.service --no-pager` for its real state. Its ETA
+waits for a stable hour of completed-security samples. Do not start a
+second V7 builder while the service is active.
 
-The exact source-backed review is
-`docs/reviews/2026-09-24-v7-last45-repair.md`. Final coverage is
-`nn_meta/validation/v7-action-coverage-20260924-last45-single-epoch-v1`.
-It admits a bounded old-identity or fresh raw interval for exactly the 45
-original zero-admission securities: 28,460 added sessions, zero action-event
-or identity-event changes, no inferred factor/successor/deliverable, and no
-held path crossing a boundary. `check_admitted_actions` passes all 591 IDs
-and 4,453 admitted events. The real active loader passes 41/45, recorded in
-`nn_meta/validation/v7-last45-full-loader-preflight-20260924.json`.
+## Repairs and evidence
 
-Four failures are loader guard placement, not absent data. CCL old ID
-`BBG000BF6LY3`, XOM old ID `BBG000GZQ728`, and RKLB old ID
-`BBG00Y61SZL5` have 16/22/4 unmatched eligible dates respectively after
-their old selected history ended. All those dates have nonadmitted coverage.
-LAZR `BBG00MS90LK2` has two selected identity spans split at a noncash
-boundary, but its admitted interval is one span. A temporary exact copy
-`scripts/build_v7_proposals_probe.py` moves continuity checking after
-coverage filtering and checks mismatched eligible dates against explicit
-nonadmission. All four pass this probe with bound raw minutes and the final
-coverage receipt. The original `scripts/build_v7_proposals.py` has **not**
-been changed because active workers bind its hash. All 415 reuse-manifest
-securities pass the old continuity and eligible-source guards, so the two
-new guard conditions are a no-op for their selected inputs.
+The source-bound review is
+`docs/reviews/2026-09-24-v7-last45-repair.md`. Final supplemental coverage is
+`nn_meta/validation/v7-action-coverage-20260924-listed-span-restricted-v1`.
+The original 45 deferred names gained bounded old-identity or fresh-raw
+epochs, and nine other securities were restricted to one exact listed span
+where admitted dates previously crossed an identity gap. These restrictions
+explicitly exclude 2,246 formerly admitted sessions; a later gate audit
+must review the exclusions. All 591 admitted-action checks passed (4,422
+admitted events). The actual production loader passed all 166 remaining
+securities; report:
+`nn_meta/validation/v7-2-remaining-loader-preflight-20260924.json`.
 
-Five named alias spans (ANTM, BYON, BBBY, NXH, MPT) were captured 16/16
-raw/all tasks under the shared quota at
-`nn_meta/data_v7/last45-alias-spans-20260924`; eight daily shards are at
-`nn_meta/validation/v7-last45-alias-daily-20260924`. These have not been
-spliced into selected history. The 45's admitted epochs use existing bound
-raw stock data. Preserve the alias captures for any later full-history review.
+The prior controller failed at 425/591 on a VMW eligible-source guard.
+After it stopped, the builder guard was moved after admission filtering and
+restricted to explicit nonadmitted mismatch dates. Its reuse contract now
+permits two exact noncomputing review JSON additions and one earlier store
+only when the old and current per-security coverage/policy panels are
+identical. All 415 reuse-manifest stores and ten newly sealed stores passed
+the receipt preflight. Two shortest-history five-minute stores were also
+built as feature-path smoke tests. Full tests after fixes: 2,383 passed plus
+18 subtests. The installed service unit points at the final supplemental
+coverage and runs the loader preflight before scheduling workers.
 
-## Source fingerprint issue to resolve on resume
+## Next actions
 
-The two new `docs/specs/V7_LAST45_*_20260924.json` review files enter the
-broad feature source map. They were briefly moved while two in-flight
-feature declarations already bound them, then immediately restored. Keep
-them byte-identical until the active service stops. The 415 reused stores
-have no changed or removed source hashes; compared with the current source
-map, 276 only lack those two JSONs plus already permitted catalog audit/reuse
-modules, and 139 lack those two JSONs plus the reuse module. Newly sealed
-stores may or may not bind the JSONs depending on their start time. Before
-resuming, explicitly permit just those two noncomputing review additions in
-the reuse compatibility proof and the audit helper's own code hash change;
-verify every sealed store rather than relabeling any receipt.
+1. Monitor the independent service's security/store counts and worker
+   errors. If it stops, inspect the exact failed worker log and receipt
+   before changing inputs or resuming. Preserve all valid sealed stores.
+2. Keep `nn_meta/v7/`, shared `nn_meta` computational sources, and the two
+   new `docs/specs/V7_LAST45_*_20260924.json` files byte-stable while the
+   service runs; worker receipts bind their source hashes.
+3. When 591/591 securities and 1,773/1,773 stores seal, perform the full
+   V7-2 source, availability, variant, compact-size, receipt, and 100 GiB
+   reserve audit. Only then consider checking 7-2 and starting 7-3.
 
-## Next exact sequence
-
-1. Let the existing service finish its scheduled stores. Check its exit,
-   sealed count, source hashes, disk reserve and any worker errors. It should
-   exit nonzero with the 45 explicitly deferred; that is expected until the
-   repaired coverage is consumed.
-2. With no active workers, apply the two tested guard changes from
-   `scripts/build_v7_proposals_probe.py` to the original builder. Keep the
-   original builder's other logic intact. Audit the 415 reused stores for
-   equivalence under the new guard order.
-3. Add the narrow review-file/audit-helper exception to the catalog reuse
-   checker, run full tests and exact controller preflight, then point the
-   service's supplemental coverage at the final last-45 artifact. Resume
-   only incomplete stores with the same four-worker limit. Audit all 1,773
-   stores and the 100 GiB reserve before closing 7-2 or starting 7-3.
-
-Current verification: full suite 2,382 passed plus 18 subtests (112 seconds);
-all new scripts compile; action-event parity and 415 old-guard equivalence
-audits pass. No second V7 builder was started in this repair session.
+Alias minute spans for ANTM, BYON, BBBY, NXH, MPT are preserved under
+`nn_meta/data_v7/last45-alias-spans-20260924`; they were not spliced into
+selected history. No second V7 builder was started during this repair.

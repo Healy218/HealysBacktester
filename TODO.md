@@ -23,12 +23,10 @@
   reviewed renames and the unrelated-instrument treatments. A new reviewed
   coverage artifact restores admission for the eight affected securities;
   all other 583 securities retain identical admitted dates and action events.
-  The resumed service uses that coverage for exactly the eight changed
-  securities, verifies 415 reused and four newly sealed securities, and has
-  127 builds left to schedule. The original 1,773-store target remains open:
-  45 securities have no admitted observed day under the September 18 noncash
-  exclusion policy. They need exact source review before their stores can be
-  built. The runner reports them as deferred, never as complete.
+  The earlier resumed service used that coverage for exactly the eight changed
+  securities. It subsequently stopped on a loader guard at 425 completed
+  securities. The original 1,773-store target remains open; the 45 formerly
+  deferred securities received exact source review and bounded admission.
 
   September 24 follow-up: the first service stopped at 425 securities / 1,275
   stores on a VMW eligible-source guard. The exact 45-security noncash review
@@ -37,7 +35,9 @@
   securities pass the real loader under the final coverage. The 415 reused
   and ten newly sealed securities passed the catalog receipt audit; two
   shortest histories also passed actual five-minute store builds. The revised
-  unit runs a full loader preflight before scheduling the remaining stores.
+  unit passed a full 166/166 production-loader preflight and resumed actual
+  workers at 18:18 CDT. At 18:21 CDT it had 426/591 securities and
+  1,281/1,773 proposal stores, with four active workers and no input blocks.
   See
   [the 45-security repair audit](docs/reviews/2026-09-24-v7-last45-repair.md).
 
