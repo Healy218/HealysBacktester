@@ -32,15 +32,21 @@ def iso_stamp(value):
     return parsed.isoformat()
 
 
+def newest_first(rows):
+    """Order trades by last activity, using the opening time for open trades."""
+    return sorted(rows, key=lambda row: (
+        datetime.fromisoformat(row["closed_at"] or row["opened_at"]).timestamp(),
+        row["key"],
+    ), reverse=True)
+
+
 def export(args):
     load_dotenv(args.env)
     now = utcnow()
     market = MassiveMarket(args.state / "market")
     rows = []
     with sqlite3.connect(f"file:{args.database}?mode=ro", uri=True) as db:
-        positions = db.execute(
-            "SELECT key,state,payload FROM positions ORDER BY key"
-        ).fetchall()
+        positions = db.execute("SELECT key,state,payload FROM positions").fetchall()
         normalized_equity = float(
             db.execute("SELECT value FROM metadata WHERE key='equity'").fetchone()[0]
         )
@@ -72,7 +78,7 @@ def export(args):
             "strategy": position["strategy"],
             "contract": position["contract"],
             "entry_ts": iso_stamp(position["entry_ts"]),
-            "opened_at": position["opened_at"],
+            "opened_at": iso_stamp(position["opened_at"]),
             "entry_price_net": entry_price,
             "allocation_usd": entry_notional,
             "return_factor": factor,
@@ -82,10 +88,12 @@ def export(args):
             "quote_received_at": quote.get("received_at") if quote else None,
             "quote_bid": quote.get("bid") if quote else None,
             "quote_ask": quote.get("ask") if quote else None,
-            "closed_at": position.get("trigger_at"),
+            "closed_at": iso_stamp(position["trigger_at"]) if position.get("trigger_at") else None,
             "exit_reason": position.get("trigger_reason"),
         })
 
+    # Keep both the JSON and CSV newest first by the latest order activity.
+    rows = newest_first(rows)
     realized = sum(row["realized_pnl_usd"] for row in rows)
     unrealized_values = [row["unrealized_pnl_usd"] for row in rows if row["unrealized_pnl_usd"] is not None]
     unrealized = sum(unrealized_values)
