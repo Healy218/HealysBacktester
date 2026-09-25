@@ -1,0 +1,12 @@
+[Unit]
+Description=Observe the Alpaca paper account every five minutes during market hours
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 09..15:00/5:00 America/New_York
+OnCalendar=Mon..Fri *-*-* 16:00:00 America/New_York
+AccuracySec=1s
+Persistent=false
+Unit=healys-v6-alpaca-paper-monitor.service
+
+[Install]
+WantedBy=timers.target

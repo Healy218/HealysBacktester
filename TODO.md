@@ -20,7 +20,9 @@
   fresh mark-limit pricing, whole-contract buying-power sizing, broker
   reconciliation, fills and lifecycle handling. Preview future V6 events
   before activating paper submissions or retiring the old V6 timers. Keep
-  simulator and broker P/L separate in Stonks.
+  simulator and broker P/L separate in Stonks. The account-only read monitor
+  runs every five minutes during market hours and showed zero broker positions
+  and orders on September 25; this is monitoring, not broker execution.
 
 ## 7. Consolidated remaining TODOs before the goal is finished
 
@@ -64,6 +66,12 @@
   [the 45-security repair audit](docs/reviews/2026-09-24-v7-last45-repair.md).
 
   The current run is the 7-2 build execution, not completion evidence yet.
+  September 25: the controller finished all 591 securities and 1,773 proposal
+  stores with zero failed builders. A receipt census checked all 1,773 stores,
+  found no missing/unknown directories and passed the 100 GiB reserve. The
+  strict deep audit stopped on a frozen old builder-input hash in a previously
+  sealed store; an explicit compatibility proof is still required before this
+  item can be checked or 7-3 can begin. Preserve the stores and hashes.
   After it seals, verify every store, source binding, catalog census, compact
   footprint, worker/restart receipts and the 100 GiB reserve before checking
   this item. A read-only live preflight and resource sampler are implemented;

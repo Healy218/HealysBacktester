@@ -1,0 +1,16 @@
+[Unit]
+Description=Read-only V6 Alpaca paper account snapshot
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python -m scripts.monitor_v6_alpaca_paper --output /tmp/v6-alpaca-paper-monitor-latest.json
+StandardOutput=null
+StandardError=journal
+TimeoutStartSec=60
+UMask=0077
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/tmp
+Environment=PYTHONDONTWRITEBYTECODE=1

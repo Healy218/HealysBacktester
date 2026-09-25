@@ -1,7 +1,7 @@
-# Handoff — 2026-09-25 — V5/V6 incubator nightly replay active
+# Handoff — 2026-09-25 — Alpaca account monitor and V7-2 recovery
 
 Read `TODO.md` first. Prior handoff archived at
-`handoff-history/HANDOFF-2026-09-25-before-incubator-activation.md`. Main is the
+`handoff-history/HANDOFF-2026-09-25-before-alpaca-monitor.md`. Main is the
 Backtester operating branch. The worktree has extensive pre-existing dirty
 files; stage exact owned changes only. V7-1 is complete, V7-2 is building,
 V7-3 has not started. Preserve V7-2 source and review artifact hashes while
@@ -87,6 +87,18 @@ enabling paper submission. Do not parse alert prose, reuse old simulator
 positions, or launch the new state via the old installer (it hardcodes the
 old state). Broker P/L needs separate Stonks display.
 
+At the September 25 open, the fresh Alpaca paper account still had zero
+positions and zero orders. The old V6 simulator had four separate historical
+positions; its CLF quote gap blocked a 09:45 ET simulator scan, but this did
+not close or open an Alpaca position. The account-only read monitor is
+`healys-v6-alpaca-paper-monitor.timer`, every five minutes 09:00–16:00 ET on
+weekdays. It writes mode-600
+`/tmp/v6-alpaca-paper-monitor-latest.json` and has no simulator ledger input
+or order-submission method. The installed service and timer ran successfully
+through the 10:05 CDT check, showing zero broker positions/orders and an
+eligible paper account. The V6-to-broker event/order bridge remains unbuilt;
+do not describe this as an active Alpaca trading strategy.
+
 Focused integration tests: 8 passed. Full suite: 2,392 passed, 18 subtests,
 20 warnings. No Alpaca paper order was submitted.
 
@@ -102,8 +114,22 @@ An exact controller preflight passed all 43 remaining production loaders,
 verified 415 reused and 133 newly sealed securities, and found no deferred
 securities. The service was restarted at 07:11 CDT September 25 under PID
 3386401; it passed its own 43/43 loader preflight and began new feature work
-at 07:13 CDT. At 07:13:47 CDT it was 548/591 securities and 1,647/1,773
-proposal stores, with 1,648 feature stores sealed. Refresh for current count.
+at 07:13 CDT. It reached 552/591 and 1,657/1,773 before stopping at 07:50
+CDT: the worker attempted to regenerate a valid already compacted 15-minute
+summary while finishing the same security. `scripts/run_v7_catalog.py` now
+fully audits a pending security's sealed timeframe and passes only missing
+minutes to the worker. The exact preflight passed 39/39 remaining loaders,
+137 newly sealed securities and one partial sealed timeframe. The service
+restarted at 08:53 CDT under PID 3410722 and exited successfully at 10:11 CDT:
+591/591 securities, 1,773/1,773 proposal stores, zero failed builders. The
+all-store receipt census audited 1,773/1,773 receipts, found zero missing or
+unknown stores, and retained 344.8 GB free disk. The strict deep audit stopped
+on its first store because its frozen `build_v7_proposals.py` input hash differs
+from the current loader; the controller's explicit reuse/equivalence checks do
+not make that strict reader pass. Preserve both source and stores. Design and
+run a proof-aware deep audit before checking 7-2 or starting 7-3. Reports:
+`nn_meta/validation/v7-2-full-catalog-receipt-census-20260925.json`; the
+failed full-audit stdout is `/tmp/v7-2-postseal-audit-20260925.stdout`.
 Monitor with `./venv/bin/python -m scripts.watch_v7_catalog --follow
 --interval 5` in a separate terminal. Full 7-2 verification remains due
 after sealing; do not advance to 7-3 before it passes. See

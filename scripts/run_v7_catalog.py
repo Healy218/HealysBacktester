@@ -229,6 +229,34 @@ def main() -> int:
                         variants=variants[minutes])
         newly_sealed.add(security_id)
     pending_ids = sorted(set(security_ids) - reused - newly_sealed - unadmitted_ids)
+    # A stopped security can have one or two fully compacted timeframes. Those
+    # stores cannot be passed back through build_features: compaction changes
+    # their summary identity after removing build-only matrices. Verify their
+    # complete bindings, then build only the missing timeframes on resume.
+    sealed_minutes: dict[str, set[int]] = {}
+    for security_id in pending_ids:
+        complete_minutes = {minutes for minutes in MINUTES if
+            (args.output / security_id / str(minutes) /
+             "proposals/summary/complete.json").exists()}
+        if not complete_minutes:
+            continue
+        coverage_path = (args.supplemental_coverage if security_id in alternate_ids
+                         else args.action_coverage)
+        coverage_sha = sha(coverage_path / "complete.json")
+        for minutes in complete_minutes:
+            base = args.output / security_id / str(minutes)
+            declaration = json.loads((base / "features/declaration/declaration.json").read_text())
+            declared = declared_actions(grouped_actions.get(security_id, []),
+                                        declaration["start"], declaration["end"])
+            canonical = lambda rows: sorted(json.dumps(row, sort_keys=True) for row in rows)
+            if (declaration.get("action_coverage", {}).get("receipt_sha256") != coverage_sha
+                    or not source_compatible(declaration.get("sources", {}), current_sources)
+                    or canonical(declaration.get("actions", [])) != canonical(declared)):
+                raise ValueError(f"Partial sealed timeframe differs from current inputs: "
+                                 f"{security_id}/{minutes}")
+            audit_store(base, security_id=security_id, minutes=minutes,
+                        variants=variants[minutes], full=True)
+        sealed_minutes[security_id] = complete_minutes
     loader_results = []
     if args.loader_preflight:
         from nn_meta.v7.scope import HISTORY_START, HISTORY_END
@@ -266,6 +294,7 @@ def main() -> int:
                           "remaining_builds": len(pending_ids),
                           "real_loader_preflight_passed": len(loader_results) if args.loader_preflight else None,
                           "verified_newly_sealed": len(newly_sealed),
+                          "verified_partial_timeframes": sum(map(len, sealed_minutes.values())),
                           "verified_prior_supplemental_equivalent": sum(
                               sid in previous_panels for sid in newly_sealed),
                           "supplemental_securities": sorted(alternate_ids),
@@ -282,13 +311,13 @@ def main() -> int:
             "--batch-columns", str(args.batch_columns), "--working-bytes", str(args.working_bytes)]
     if args.compact_final:
         base.append("--compact-final")
-    for minutes in MINUTES:
-        base.extend(("--minutes", str(minutes)))
-
     def run_one(security_id: str) -> tuple[str, int]:
         log = (log_dir / f"{security_id}.log").open("a")
         try:
             command = base + ["--security-id", security_id]
+            for minutes in MINUTES:
+                if minutes not in sealed_minutes.get(security_id, set()):
+                    command.extend(("--minutes", str(minutes)))
             if security_id in alternate_ids:
                 i = command.index("--action-coverage")
                 command[i + 1] = str(args.supplemental_coverage)
