@@ -1,5 +1,25 @@
 # DOCUMENTATION — coding notes, conventions, traps, ops
 
+## V7 proof-aware entry-demand scheduler (September 25)
+
+`scripts/run_v7_entry_demand.py` consumes the completed V7-2 gate and its exact
+415+10 historical-loader proofs. It uses an explicit downstream dependency
+view: every original store declaration/receipt remains bound, while current
+source hashes and immutable equivalence evidence become demand parents.
+Only the two reviewed old/current source pairs qualify; runtime, other inputs
+and the deep-audited store receipt pair are checked. Strict producers/readers
+are unchanged. Do not rewrite frozen feature declarations to make them load.
+
+The CLI defaults to planning. Generation needs `--run`, 1–4 `--workers`, and
+`--max-output-bytes`; one inner thread and at least 100 GiB free disk remain
+mandatory. `progress.json` is specific to entry demand. Its full-scope flag
+requires all 591 securities; an explicit validation subset stays partial.
+Resume verifies completed demand, export and checkpoint receipts. Interrupted
+securities restart from their boundary, retaining partial directories as
+counted evidence. No automatic partial deletion or provider capture occurs.
+The scheduler source is a frozen demand parent; source changes require explicit
+version/rebuild treatment. See [validation and commands](docs/reviews/2026-09-25-v7-3-demand-scheduler.md).
+
 ## V7 full daily context and completion receipts (September 25)
 
 Use `scripts/build_v7_full_daily_context.py` with the sealed catalog, reviewed

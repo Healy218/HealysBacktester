@@ -46,9 +46,13 @@
   **Active as of September 25.** The first MTUM demand pilot passed: 29,843
   actual proposals, 3,552 quote/trade requests, 76 contracts. All 591 securities
   remain in scope. The pilot is complete; no background V7 build is running.
-  Next implement the resumable all-security demand scheduler with narrow
-  historical-loader proof support, then measure the request union before
-  targeted captures. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
+  The resumable all-security demand scheduler is implemented with exact
+  historical-loader proof support. Four validation securities passed: 97,935
+  proposals, 7,674 requests and 6,700 union capture windows; all 12 receipts
+  survived restart unchanged. This is a validation subset, not full demand.
+  Next establish the full-run storage forecast/allocation, run the remaining
+  security demand, and measure the full request union before targeted captures.
+  Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
   Derive proposal-driven
   entry demand for all completed securities from their 5/15/30 stores; then
   union bounded quote/trade windows, resolve dated option hours and standard
@@ -130,11 +134,12 @@
   compatibility smoke test is not V5 paper validation; V7 admission remains
   gated by 7-2 through 7-7.
 
-**7-1 is complete. The 7-2 proposal catalog is sealed and deep-audited, but
-full-scope daily context is still due. 7-3 has not started. The live V6 repair
-prerequisite was completed before the 7-2 run. V6 here means only the current
-home-hosted paper runtime; the abandoned local short-DTE build is not part of
-this work. Items 7-3 through 7-7 remain queued.**
+**7-1 and 7-2 are complete, including full-scope daily context. 7-3 is active:
+its scheduler and four-security validation pass; full option-path demand and
+captures remain open. The live V6 repair prerequisite was completed before
+7-2. V6 here means only the current home-hosted paper runtime; the abandoned
+local short-DTE build is not part of this work. Items 7-4 through 7-7 remain
+queued.**
 
 - [x] **Dividend portion of 7-1:** 4,918 payment leaves across 4,854 price events;
   zero uncompiled dividend groups or missing held-cash treatments. All 10,428
