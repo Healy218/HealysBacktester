@@ -1501,3 +1501,13 @@ require both bundles to load and produce predictions, and keep pending
 outcomes unscored. The installed timer runs after close with network-isolated
 model execution and bounded resources. See
 `docs/reviews/2026-09-25-incubator-nightly-activation.md`.
+
+### 2026-09-25 — Accept the catalog proof; keep 7-2 open for daily context
+
+Keep the 1,773 frozen compact stores intact. The full structural audit,
+415-security receipt/action reuse manifest, and ten-security current-loader
+equivalence replay close the proposal-catalog subgate. The old builder hash
+remains historical provenance and is not relabeled. The full 591-security
+joined daily/market context with availability and warmup status is still
+missing, so 7-2 remains open and V7-3 does not start. See
+`docs/reviews/2026-09-25-v7-2-deep-audit.md`.

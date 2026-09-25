@@ -141,6 +141,10 @@ class Journal:
                 state TEXT NOT NULL, broker_order_id TEXT, created_at TEXT NOT NULL,
                 updated_at TEXT NOT NULL, payload TEXT NOT NULL,
                 filled_qty TEXT, filled_avg_price TEXT)""")
+            db.execute("""CREATE TABLE IF NOT EXISTS observations (
+                ordinal INTEGER PRIMARY KEY AUTOINCREMENT, event_id TEXT NOT NULL,
+                observed_at TEXT NOT NULL, state TEXT NOT NULL, broker_order_id TEXT,
+                filled_qty TEXT, filled_avg_price TEXT)""")
         os.chmod(self.path, 0o600)
 
     def connect(self):
@@ -172,17 +176,22 @@ class Journal:
                        (event["event_id"], plan["client_order_id"], event["kind"],
                         plan["contract"], plan["qty"], "intent", None, at, at,
                         json.dumps({"event": event, "plan": plan}, sort_keys=True), None, None))
+            db.execute("INSERT INTO observations (event_id,observed_at,state) VALUES (?,?,?)",
+                       (event["event_id"], at, "intent"))
 
     def update(self, event_id: str, *, state: str, broker_order_id: str | None = None,
                filled_qty: str | None = None, filled_avg_price: str | None = None) -> None:
         with self.connect() as db:
+            at = datetime.now(timezone.utc).isoformat()
             result = db.execute("UPDATE orders SET state=?,broker_order_id=COALESCE(?,broker_order_id),"
                                 "filled_qty=COALESCE(?,filled_qty),"
                                 "filled_avg_price=COALESCE(?,filled_avg_price),updated_at=? WHERE event_id=?",
-                                (state, broker_order_id, filled_qty, filled_avg_price,
-                                 datetime.now(timezone.utc).isoformat(), event_id))
+                                (state, broker_order_id, filled_qty, filled_avg_price, at, event_id))
             if result.rowcount != 1:
                 raise ValueError("broker journal event missing")
+            db.execute("INSERT INTO observations (event_id,observed_at,state,broker_order_id,filled_qty,filled_avg_price) "
+                       "VALUES (?,?,?,?,?,?)",
+                       (event_id, at, state, broker_order_id, filled_qty, filled_avg_price))
 
 
 def broker_order_state(order) -> dict:

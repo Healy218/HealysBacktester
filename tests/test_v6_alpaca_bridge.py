@@ -98,6 +98,9 @@ def test_uncertain_post_is_journaled_and_never_retried(tmp_path):
         process_events([event], journal=journal, trading=trading, data=Data(),
                        expected_fingerprint=fingerprint, submit=True, now=now)
     assert journal.all()[0]["state"] == "uncertain_post"
+    with sqlite3.connect(journal.path) as db:
+        assert db.execute("SELECT state FROM observations ORDER BY ordinal").fetchall() == [
+            ("intent",), ("uncertain_post",)]
     with pytest.raises(ValueError, match="cannot be resolved"):
         process_events([event], journal=journal, trading=trading, data=Data(),
                        expected_fingerprint=fingerprint, submit=True, now=now)

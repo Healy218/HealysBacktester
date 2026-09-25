@@ -65,19 +65,19 @@
   See
   [the 45-security repair audit](docs/reviews/2026-09-24-v7-last45-repair.md).
 
-  The current run is the 7-2 build execution, not completion evidence yet.
-  September 25: the controller finished all 591 securities and 1,773 proposal
-  stores with zero failed builders. A receipt census checked all 1,773 stores,
-  found no missing/unknown directories and passed the 100 GiB reserve. The
-  strict deep audit stopped on a frozen old builder-input hash in a previously
-  sealed store; an explicit compatibility proof is still required before this
-  item can be checked or 7-3 can begin. Preserve the stores and hashes.
-  After it seals, verify every store, source binding, catalog census, compact
-  footprint, worker/restart receipts and the 100 GiB reserve before checking
-  this item. A read-only live preflight and resource sampler are implemented;
-  the full technical audit is intentionally post-seal and does not by itself
-  authorize 7-3. Historical 1-minute and pre-amendment 5/15/30 pilots remain
-  historical only. See the [7-2/7-3 transition plan](docs/reviews/2026-09-20-v7-3-prep.md).
+  September 25: the controller exited successfully with all 591 securities
+  and 1,773 proposal stores. The post-seal deep audit passed all compact
+  feature/proposal receipts, 8,451 variants per security, 221-column row
+  schema, input bindings, action coverage and the 100 GiB reserve. The 415
+  reused securities passed their exact receipt/action equivalence manifest;
+  ten additional old-loader securities passed current-loader replay on all
+  three timeframes. The frozen stores were not changed. **The full daily/market
+  context remains missing:** stock-daily, surface and dated-sector components
+  exist, but only a 300-day SPY daily-context pilot was built. Construct and
+  audit the 591-security joined daily context with availability and warmup
+  missingness before checking 7-2. See the
+  [full deep audit](docs/reviews/2026-09-25-v7-2-deep-audit.md) and
+  [7-2/7-3 transition plan](docs/reviews/2026-09-20-v7-3-prep.md).
 
 - [ ] **7-3. Complete actual option-path demand, dated hours/reference inputs and targeted captures.**
   Start only after 7-2's full-store verification. First derive proposal-driven
@@ -161,12 +161,11 @@
   compatibility smoke test is not V5 paper validation; V7 admission remains
   gated by 7-2 through 7-7.
 
-**7-1 is complete. 7-2 is currently running the systemd-managed full 5/15/30
-compact catalog; do not begin 7-3 capture work until that run and its full
-verification finish. The live V6 repair prerequisite was completed before this
-run. V6 here means only the current home-hosted paper runtime; the abandoned
-local short-DTE build is not part of this work. Items 7-3 through 7-7
-are queued.**
+**7-1 is complete. The 7-2 proposal catalog is sealed and deep-audited, but
+full-scope daily context is still due. 7-3 has not started. The live V6 repair
+prerequisite was completed before the 7-2 run. V6 here means only the current
+home-hosted paper runtime; the abandoned local short-DTE build is not part of
+this work. Items 7-3 through 7-7 remain queued.**
 
 - [x] **Dividend portion of 7-1:** 4,918 payment leaves across 4,854 price events;
   zero uncompiled dividend groups or missing held-cash treatments. All 10,428

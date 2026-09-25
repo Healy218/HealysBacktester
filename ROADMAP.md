@@ -3,6 +3,14 @@
 Long-term maturity targets and the first-week v6 review are in [GOALS](GOALS.md).
 Continue this roadmap toward ≥7/10 in every assessment area by December 31, 2026.
 
+## September 25 V7-2 catalog audit checkpoint
+
+The 591-security 5/15/30-minute catalog finished and passed its full 1,773-store
+deep audit, including narrow historical-loader equivalence and the disk reserve.
+The sealed stores remain validation-only. Full-scope joined daily/market context
+is still missing, so 7-2 stays open and V7-3 has not started. See
+[the deep audit](docs/reviews/2026-09-25-v7-2-deep-audit.md).
+
 ## September 24 incubator and V7 checkpoint
 
 The read-only V5/V6 incubator now has a curated executable registry, sealed
