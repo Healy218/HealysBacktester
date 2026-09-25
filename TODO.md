@@ -1,5 +1,16 @@
 # TODO — V7 readiness, one deliverable at a time
 
+## October 2 Massive subscription decision
+
+- [ ] By **2026-10-02**, give the user a source-backed keep/cancel recommendation
+  for Massive Options Advanced. Check whether V7's required pre-February-2024
+  option quotes/trades have been captured and verified; audit representative
+  SPX/NDX two-year Alpaca OPRA quote/trade windows for the proposed V8; and
+  establish the V6 Alpaca feature-adapter/decision-parity result. If these
+  are incomplete, retain Massive for one more month and reassess before the
+  following renewal. The user will decide the subscription; do not cancel it
+  automatically. See `docs/reviews/2026-09-24-v6-alpaca-paper-start.md`.
+
 ## Parallel V6 Alpaca paper restart
 
 - [x] Verify dedicated paper credentials, account eligibility and empty broker

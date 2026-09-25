@@ -80,3 +80,24 @@ endpoint, whole-contract options, and order status events at:
 - https://docs.alpaca.markets/us/docs/paper-trading
 - https://docs.alpaca.markets/us/docs/options-trading-overview
 - https://docs.alpaca.markets/us/docs/websocket-streaming
+
+## September 24 provider-cost follow-up
+
+The user has until **October 2, 2026** to decide whether to keep Massive
+Options Advanced, and is willing to renew for one more month if evidence is
+incomplete. A read-only request with the existing Alpaca paper credentials to
+the `opra` option snapshot endpoint returned HTTP 200 and one contract with
+both latest quote and trade for each of SPX and NDX. This establishes current
+OPRA access for those example contracts, not complete two-year V8 history or
+V6 feature parity. Alpaca documents option history starting February 2024.
+V8's planned last-two-year SPX/NDX option features may therefore be built
+from Alpaca after exact-contract and minute-window coverage checks. Alpaca
+does not supply the SPX/NDX underlying index level; NDX option paper trading
+is currently unsupported, even though its option market-data probe passed.
+
+Massive remains required by the active V6 frozen tick-feature path and for
+V7 option evidence before February 2024. Its cancellation gate is a verified
+V7 historical capture, a tested Alpaca V6 feature adapter/decision comparison,
+and representative Alpaca OPRA V8 coverage. Retain the subscription for the
+next month if those checks are not complete by October 2. The user makes the
+billing decision; no automated cancellation is authorized.

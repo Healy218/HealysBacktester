@@ -1,11 +1,30 @@
-# Handoff — 2026-09-24 — Alpaca paper state prepared; V7-2 building
+# Handoff — 2026-09-24 — October 2 Massive decision; V7-2 building
 
 Read `TODO.md` first. Prior handoff archived at
-`handoff-history/HANDOFF-2026-09-24-before-alpaca-paper.md`. Main is the
+`handoff-history/HANDOFF-2026-09-24-before-massive-deadline.md`. Main is the
 Backtester operating branch. The worktree has extensive pre-existing dirty
 files; stage exact owned changes only. V7-1 is complete, V7-2 is building,
 V7-3 has not started. Preserve V7-2 source and review artifact hashes while
 its workers run. Do not start a second builder.
+
+## Massive billing decision due October 2
+
+The user can decide whether to keep Massive Options Advanced through
+**2026-10-02** and accepts one additional month if replacement evidence is
+incomplete. Prepare a recommendation before that date; do not cancel the
+subscription automatically. V6's frozen option features still use Massive
+tick data, and V7's March 2022–early 2024 option history is outside Alpaca's
+published February 2024+ coverage. A read-only Alpaca OPRA snapshot probe
+with the existing paper credentials returned SPX and NDX example contracts
+with latest quotes and trades. This proves current access, not full V8
+historical coverage. V8's planned last-two-year SPX/NDX artifact can be
+designed around Alpaca OPRA after exact window and feature checks; Alpaca
+does not provide underlying index levels, and NDX broker trading is not
+currently supported. By the deadline, check V7 historical capture status,
+representative two-year Alpaca quote/trade coverage and a V6 provider
+feature/decision comparison. If any remain open, recommend renewing Massive
+once and reassessing before the following renewal. See the updated TODO and
+`docs/reviews/2026-09-24-v6-alpaca-paper-start.md`.
 
 ## V6 Alpaca paper restart
 
