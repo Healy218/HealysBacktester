@@ -93,7 +93,7 @@
 - [ ] **7-7. Pass the complete readiness gate and notify the user.**
   Completion evidence: An inspected full-scope report passes every required stage; only then may we claim V7 is ready.
 
-- [ ] **8. Build and validate the AI artifact incubator; activate after V7 readiness.**
+- [ ] **8. Run V5/V6 daily artifact replay; add V7 after its readiness gate.**
   Treat V5, V6, V7 and future V8 option artifacts as immutable AI candidates. At
   the configured market close, a master incubator should discover available
   `.tar.gz` artifacts, verify manifests and hashes, unpack each into an isolated
@@ -104,15 +104,16 @@
   contracts, duplicate artifact IDs, or insufficient forward data. Define the
   artifact manifest, compatibility matrix, resource/time budget, checkpoint and
   resume rules, comparable metrics, and retention policy before implementation.
-  Design, local implementation and V5/V6 dry-run testing may begin now while
-  V7 compiles. Do not activate the after-close production run, call a result a
-  readiness result, or admit V7/FA artifacts until 7-2 through 7-7 gates are
-  complete and the paper data boundary is explicitly approved.
+  The user authorized nightly read-only replay of the existing frozen V5/V6
+  bundles on fresh candidate data, with V7 to be added only after its build
+  and readiness gate. This refreshes predictions, not model weights. Do not
+  admit V7/FA artifacts or call pending-outcome predictions a performance or
+  readiness result until their separate gates pass.
 
   Incubator slices 1–6 are now implemented and smoke-validated for V5/V6:
   bounded resource/time budgets, dry-run and failure-path tests, a real Keras
   replay entrypoint wired to common metrics, and a checkpointed after-close
-  service/timer committed but disabled by default. Replay correctly fails closed
+  service/timer implemented. Replay correctly fails closed
   because the current V6 snapshot lacked the complete model feature matrix;
   immutable feature capture is now implemented as a strict publication CLI.
   `strat_volume` is derived only from the recorded strategy identity and is
@@ -140,13 +141,17 @@
   the 2026-09-22 candidate day. V5 scanner batch capture, daily assembly and
   scaler-mean replay are implemented locally. The V5 capture backport is now
   deployed on the existing server branch and its cron opt-in is enabled. The
-  first nine genuine V5 passes sealed 3,555 distinct candidate identities and
-  48 features with verified hashes/config binding as of 2026-09-24 15:47 UTC;
-  the active day is still growing. Full-day census, approved local staging,
-  exact-identity V5 outcomes and paper scoring remain open. A V6-origin V5
-  compatibility smoke test is not V5 paper validation. The timer remains
-  disabled and the service has no execution opt-in; production isolation and
-  7-2–7-7 gates still block activation.
+  September 24 finished with 26 genuine V5 passes, 8,190 candidates and all
+  Parquet hashes valid. A calendar-bound stage copies the closed V5 day from
+  Hetzner to home and rejects missing 15-minute bars. The installed V5/V6
+  after-close service ran both frozen bundles under network and filesystem
+  isolation for that day: 8,190 V5 and 5,085 V6 predictions, two successful
+  receipts, zero input blocks. Its user timer is enabled for 16:30 New York
+  time on weekdays, selecting the last fully closed exchange session on late
+  starts. Confirm the September 25 scheduled run and ongoing daily health.
+  Exact-identity V5 outcomes and paper scoring remain open. A V6-origin V5
+  compatibility smoke test is not V5 paper validation; V7 admission remains
+  gated by 7-2 through 7-7.
 
 **7-1 is complete. 7-2 is currently running the systemd-managed full 5/15/30
 compact catalog; do not begin 7-3 capture work until that run and its full

@@ -3,10 +3,11 @@
 ## Status
 
 Read-only implementation with bounded campaigns. The runner verifies and
-dry-runs bundles; it does not send alerts, place orders, or mutate source
-artifacts. V5/V6 bundle execution has been tested in the disabled sandbox,
-including the real Keras replay entrypoint. V7 onboarding remains a
-compatibility decision after V7 readiness.
+executes the existing frozen V5/V6 bundles on newly captured sessions; it
+does not train new model weights, send alerts, place orders, or mutate source
+artifacts. V5/V6 nightly replay is enabled after an isolated September 24
+production-path run. V7 onboarding remains a compatibility decision after
+V7 readiness.
 
 ## Bundle contract
 
@@ -66,9 +67,8 @@ and writes `results.jsonl`; successful output is scored by the shared metrics
 adapter and included in the receipt. A 128-row real V6 replay smoke test now
 loads all 40 members and completes under the thread-limited sandbox. Discovery is
 fail-closed on invalid bundles, duplicate artifact IDs and incompatible
-forward-data contracts. The systemd service and timer are committed but
-deliberately not enabled; they require a populated `incubator/artifacts/`
-directory and an explicit activation decision.
+forward-data contracts. The systemd service and timer are installed and
+enabled for V5/V6 only.
 
 The V6 data index is a verified context snapshot, not itself a complete
 candidate feature matrix. The daily capture selects the named session's
@@ -119,11 +119,17 @@ per-artifact attempt directories and receipts, a date-scoped checkpoint,
 `after-close-summary.json`, and a compact `performance-log.json`. Changing
 execution mode, budget, bundle, or requests invalidates checkpoint reuse.
 Pending outcomes record prediction counts only; no performance is fabricated.
-The timer remains disabled, and the shipped service has no `--allow-execution`.
-Activation requires the TODO.md V7 gate and explicit paper-data-boundary
-approval. The service's eventual activation configuration must also include
-OS-level network isolation and resource cgroups; the current subprocess
-limits alone are not a production isolation claim.
+The user directed V5/V6 nightly replay before V7 finishes. The service now
+uses `--allow-execution`, `PrivateNetwork=yes`, `ProtectSystem=strict`, bounded
+write paths, CPU quota and a memory cgroup. A separate required oneshot
+service stages V5 passes from Hetzner and verifies Parquet seals, model
+configuration and expected 15-minute exchange-calendar bars. The September
+24 production-path run returned 8,190 V5 and 5,085 V6 predictions, zero
+input blocks, zero failed receipts and successful service status. The timer
+fires weekdays at 16:30 America/New_York; a late/reboot start selects the
+last fully closed covered market session. Pending outcomes remain unscored.
+Confirm the first scheduled September 25 run; do not add V7/FA bundles until
+their readiness and compatibility gates pass.
 
 Retention: keep bundles, sealed matrices, request provenance, receipts and
 performance logs immutable for at least 90 days after their last relevant
@@ -149,10 +155,9 @@ Older V6 smoke output used P(win) in `prediction` and must not be scored as EV.
    budgets. **Done, including campaign, memory, CPU, output and wall-clock
    bounds.**
 5. Add the after-market-close scheduler only after dry-run and failure tests
-   pass. **Done; committed but disabled by default.**
+   pass. **Done and enabled for V5/V6 daily prediction refresh.**
 6. Validate against V5/V6 paper data, then onboard V7 through the same contract.
    **V6 has one exact-identity matured outcome; 303 rows remain pending, so no
-   performance claim is supported. V5 capture is deployed but awaits the
-   a complete-day capture census, separate paper-data staging and actual V5
-   outcome joins. V7 and production
-   activation remain gated.**
+   performance claim is supported. V5 complete-day capture and staging have
+   been validated; V5 outcome joins remain open. V5/V6 prediction refresh is
+   active; V7 admission remains gated.**

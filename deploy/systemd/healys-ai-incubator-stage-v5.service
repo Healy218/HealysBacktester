@@ -1,0 +1,12 @@
+[Unit]
+Description=Stage and verify today's V5 incubator scanner captures
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/stage_v5_incubator_passes.py --calendar-index /home/healy/Coding/HealysV6/nn_meta/live/v6_server/data-index.json
+Environment=PYTHONDONTWRITEBYTECODE=1
+TimeoutStartSec=10min
+UMask=0077

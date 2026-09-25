@@ -9,10 +9,9 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import sys
-from datetime import datetime
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(REPO_ROOT) not in sys.path:
@@ -24,6 +23,7 @@ from incubator.campaign import run_campaign
 from incubator.forward import load_v6_snapshot
 from incubator.receipts import write_json_atomic
 from incubator.registry import discover
+from incubator.schedule import last_closed_session
 from incubator.v5_features import assemble_v5_day
 
 
@@ -55,7 +55,7 @@ def main() -> int:
     args = parser.parse_args()
     if bool(args.v5_pass_root) != bool(args.v5_model_config):
         parser.error("--v5-pass-root and --v5-model-config must be supplied together")
-    cutoff = args.as_of or datetime.now(ZoneInfo("America/New_York")).date().isoformat()
+    cutoff = args.as_of or os.environ.get("AI_INCUBATOR_AS_OF") or last_closed_session(args.v6_index)
     snapshot = load_v6_snapshot(args.v6_index)
     if snapshot.through > cutoff:
         raise ValueError("V6 data index is newer than the requested close date")
@@ -112,6 +112,17 @@ def main() -> int:
     summary["input_blocked_count"] = len(blocked)
     summary["v6_snapshot_through"] = snapshot.through
     summary["as_of"] = cutoff
+    if args.allow_execution:
+        expected = {"v5", "v6"}
+        refreshed = set()
+        for receipt in summary["receipts"]:
+            sandbox = receipt.get("sandbox", {})
+            count = sandbox.get("prediction_count") or sandbox.get("metrics", {}).get("n", 0)
+            if (receipt.get("status") in {"executed", "executed_pending_outcome"}
+                    and sandbox.get("model_loaded") is True and count > 0):
+                refreshed.add(receipt["artifact_id"].split("-", 1)[0])
+        summary["prediction_refresh_complete"] = refreshed == expected
+        summary["refreshed_generations"] = sorted(refreshed)
     performance = {
         "schema": "incubator-performance-log-v1", "run_id": run_id, "as_of": cutoff,
         "read_only": True,
@@ -127,7 +138,8 @@ def main() -> int:
     write_json_atomic(run_dir / "performance-log.json", performance)
     write_json_atomic(run_dir / "after-close-summary.json", summary)
     print(json.dumps(summary, sort_keys=True, indent=2))
-    return 0 if summary["failed_count"] == 0 and not blocked else 1
+    return 0 if (summary["failed_count"] == 0 and not blocked
+                 and (not args.allow_execution or summary["prediction_refresh_complete"])) else 1
 
 
 if __name__ == "__main__":

@@ -1489,3 +1489,15 @@ define broker P/L. Before any order submission, implement idempotent
 structured-event translation, broker reconciliation and an observed preview
 run. The prepared state has scanning and order submission disabled. See
 `docs/reviews/2026-09-24-v6-alpaca-paper-start.md`.
+
+### 2026-09-25 — Activate daily V5/V6 frozen-bundle replay
+
+The incubator's nightly update means applying the existing immutable V5 and
+V6 bundles to each new day's genuine candidate features and saving dated
+predictions, not retraining model weights. Activate this read-only path now;
+admit V7 only after its build and readiness checks. Stage and verify each
+complete V5 day from the server before local replay, use the local V6 passes,
+require both bundles to load and produce predictions, and keep pending
+outcomes unscored. The installed timer runs after close with network-isolated
+model execution and bounded resources. See
+`docs/reviews/2026-09-25-incubator-nightly-activation.md`.

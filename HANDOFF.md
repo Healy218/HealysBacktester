@@ -1,11 +1,34 @@
-# Handoff — 2026-09-24 — October 2 Massive decision; V7-2 building
+# Handoff — 2026-09-25 — V5/V6 incubator nightly replay active
 
 Read `TODO.md` first. Prior handoff archived at
-`handoff-history/HANDOFF-2026-09-24-before-massive-deadline.md`. Main is the
+`handoff-history/HANDOFF-2026-09-25-before-incubator-activation.md`. Main is the
 Backtester operating branch. The worktree has extensive pre-existing dirty
 files; stage exact owned changes only. V7-1 is complete, V7-2 is building,
 V7-3 has not started. Preserve V7-2 source and review artifact hashes while
 its workers run. Do not start a second builder.
+
+## V5/V6 incubator activation
+
+The user clarified that nightly updates mean running the existing frozen V5
+and V6 bundles on each new market day's genuine candidates and saving dated
+predictions. It does **not** mean retraining model weights. V7 remains out of
+the active registry until built and validated. The September 24 V5 server day
+was copied to home: 26 complete calendar bars, 8,190 rows, all manifests and
+Parquet hashes verified. Eight V6 passes supplied 5,085 rows. Both direct and
+installed isolated-service replays succeeded: two complete receipts, zero
+blocked/failed inputs, 8,190 V5 and 5,085 V6 pending-outcome predictions.
+The dated installed receipt is
+`incubator/runs/after-close/close-20260924/after-close-summary.json`.
+
+`healys-ai-incubator-after-close.timer` is enabled and next fires Friday,
+September 25 at 15:30 CDT / 16:30 ET. Its required V5 staging service copies
+the closed day from Hetzner and checks complete calendar bars before the
+network-isolated, CPU/memory-bounded replay. Late starts select the last fully
+closed covered market session. A temporary September 24 date override used for
+the installed test was removed before enabling the timer. Confirm the first
+scheduled September 25 result and V7 coexistence; failure should leave
+source bundles untouched. Pending outcomes mean no performance verdict.
+Review and rollback: `docs/reviews/2026-09-25-incubator-nightly-activation.md`.
 
 ## Massive billing decision due October 2
 
@@ -69,9 +92,18 @@ Focused integration tests: 8 passed. Full suite: 2,392 passed, 18 subtests,
 
 ## V7-2 and Stonks
 
-At the last check V7-2 `healys-v7-catalog-build.service` was active under
-PID 3128252 with zero restarts. Earlier watcher progress was 427/591
-securities and 1,285/1,773 stores at 18:42 CDT; refresh for current count.
+V7-2 stopped at 05:32 UTC September 25 after `BBG00HW3TQG4` rejected its
+already sealed 5-minute feature declaration: the 5-minute store had an older
+input binding, while its 15/30-minute stores used the current binding. An audit
+of all 549 securities with three declarations found this was the only mixed
+set. The stale 5-minute directory was moved intact to
+`nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30-superseded-20260924/BBG00HW3TQG4-5-stale-inputs-20260925`.
+An exact controller preflight passed all 43 remaining production loaders,
+verified 415 reused and 133 newly sealed securities, and found no deferred
+securities. The service was restarted at 07:11 CDT September 25 under PID
+3386401; it passed its own 43/43 loader preflight and began new feature work
+at 07:13 CDT. At 07:13:47 CDT it was 548/591 securities and 1,647/1,773
+proposal stores, with 1,648 feature stores sealed. Refresh for current count.
 Monitor with `./venv/bin/python -m scripts.watch_v7_catalog --follow
 --interval 5` in a separate terminal. Full 7-2 verification remains due
 after sealing; do not advance to 7-3 before it passes. See
