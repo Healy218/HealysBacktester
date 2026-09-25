@@ -1,5 +1,18 @@
 # EXPERIMENTS — every generation's verdict in one table
 
+## 2026-09-25 — V7-2 daily audit and first V7-3 demand run
+
+| Run | Actual scope | Verdict |
+|---|---|---|
+| Full causal daily/market context | 591 securities; 667,239 session rows; 1,182 prefix replays | PASS; together with the 1,773-store catalog audit, closes V7-2 |
+| MTUM entry-demand pilot | 29,843 proposals; 8,451 variants; 3,552 requests; 76 contracts | PASS for pre-decision demand and export; starts V7-3, which remains open |
+
+The demand run retains 75 no-fresh-stock-price target outcomes. No provider
+download, execution outcome, training or performance result is claimed.
+All 591 securities remain in scope. Full suite: 2,401 tests and 18 subtests.
+[Artifacts, audit limits and continuation](reviews/2026-09-25-v7-2-complete-and-v7-3-start.md).
+
+
 ## 2026-09-23 — Daily V5/V6 incubator EV replay smoke
 
 The curated V6 GBT EV bundle ran on the sealed September 22 candidate pass:

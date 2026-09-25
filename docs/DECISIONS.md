@@ -1511,3 +1511,16 @@ remains historical provenance and is not relabeled. The full 591-security
 joined daily/market context with availability and warmup status is still
 missing, so 7-2 remains open and V7-3 does not start. See
 `docs/reviews/2026-09-25-v7-2-deep-audit.md`.
+
+### 2026-09-25 — Close V7-2 and enter V7-3 using the sealed catalog
+
+The user authorized whatever is needed to reach 7-3. The 591-security catalog
+is retained, including its narrowly proven historical-loader receipts. Full
+causal daily context was built beside it and independently audited before a
+new completion receipt admitted 7-3. Frozen gate/input files are not rewritten.
+The first actual demand run uses MTUM as a small current-loader measurement;
+all 591 securities remain in scope. Expand through a resumable proof-aware
+demand scheduler and measured union under the existing 250 GB acquisition
+ceiling, at most four workers and 100 GiB reserve. Pre-decision requests alone
+do not close 7-3, and no training/readiness verdict follows from this milestone.
+Evidence: `docs/reviews/2026-09-25-v7-2-complete-and-v7-3-start.md`.

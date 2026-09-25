@@ -1,3 +1,23 @@
+# Current status — September 25, 2026
+
+**V7-1 and V7-2 are complete; V7-3 is active.** All 591 securities and 1,773
+5/15/30 proposal stores passed the deep audit. The full causal daily/market
+context adds 667,239 rows and passed 1,182 historical-prefix replays. The first
+V7-3 demand pilot processed MTUM's 29,843 proposals into 3,552 quote/trade
+requests across 76 contracts. All 591 securities remain in scope.
+
+The catalog, daily build and first demand pilot have finished. No background
+V7 build is running. Next: a resumable all-security demand scheduler, measured
+request union, dated references and targeted option-path captures. Training
+remains gated. See [the session evidence](docs/reviews/2026-09-25-v7-2-complete-and-v7-3-start.md),
+[TODO](TODO.md) and [HANDOFF](HANDOFF.md) for exact paths and continuation.
+
+V5 remains the server expert and the existing V6 simulator remains separate
+from the fresh Alpaca paper state. The guarded Alpaca bridge is implemented;
+fresh scanning and order submission are disabled, and no broker orders have
+been sent. V6, Stonks and incubator runtimes were unchanged in this V7 session.
+Full regression suite: 2,401 tests and 18 subtests passed.
+
 # September 5 audit and merge update
 
 The user directed merging the review fixes into `main`, continuing in

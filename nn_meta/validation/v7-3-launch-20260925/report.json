@@ -1,0 +1,66 @@
+{
+  "schema": "v7-3-launch-v1",
+  "started_at": "2026-09-25T20:29:46.628131+00:00",
+  "v7_2_complete": true,
+  "v7_3_started": true,
+  "v7_3_complete": false,
+  "research_ready": false,
+  "scope_securities": 591,
+  "pilot_security_id": "BBG004FPTZB8",
+  "pilot_ticker": "MTUM",
+  "pilot_report": {
+    "proposals": 29843,
+    "variants": 8451,
+    "distinct_feature_decisions": 1319,
+    "distinct_selection_decisions": 1021,
+    "selection_statuses": {
+      "no_fresh_raw_spot": 75,
+      "selected": 5030
+    },
+    "requests": 3552,
+    "feature_links": 13030,
+    "contracts": 76,
+    "research_ready": false,
+    "execution_coverage": false,
+    "outstanding": [
+      "entry/exit execution windows and minute marks",
+      "roll and physical delivery demand",
+      "dated option class hours and standard deliverables",
+      "full captured tick coverage"
+    ]
+  },
+  "request_kinds": {
+    "quotes": 1776,
+    "trades": 1776
+  },
+  "export_report": {
+    "batches": [
+      {
+        "path": "requests-00000.json",
+        "requests": 3552,
+        "sha256": "4c899ea8ed99811fe3c4edf54bf8b7f172bf7447e95d3f4119d35dbc40813c31"
+      }
+    ],
+    "requests": 3552,
+    "execution_coverage": false
+  },
+  "demand_root": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-entry-demand-20260925/BBG004FPTZB8",
+  "export_root": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-entry-requests-20260925/BBG004FPTZB8",
+  "disk_free_bytes": 344489451520,
+  "acquisition_ceiling_bytes": 250000000000,
+  "capture_workers_maximum": 4,
+  "provider_downloads_this_launch": 0,
+  "sqlite_integrity_and_census_passed": true,
+  "inputs": {
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-2-completion-20260925/complete.json": "275c9e3d987b42afbd22bebdda2e833d208692af364702c5b98959bf04d4f43f",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-2-completion-20260925/gate.json": "3d316d904fb12f42309c973d89d79d47e37a08e33ffe686430e2be90233e4b47",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-entry-demand-20260925/BBG004FPTZB8/complete.json": "fcde492a411bbbccd1708454f00929631261c2fb1b321d8fbe297d484a3b07b3",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-entry-requests-20260925/BBG004FPTZB8/complete.json": "6ee8b3b0b59ed8542ba2a3d92550ec0f90f04df895d41668f80bad484694dc57"
+  },
+  "remaining": [
+    "All-security resumable demand scheduler with explicit historical-loader equivalence support",
+    "Request union and volume forecast",
+    "Dated option hours and standard contract references",
+    "Entry, mark, exit, roll and applicable delivery demand and capture receipts"
+  ]
+}

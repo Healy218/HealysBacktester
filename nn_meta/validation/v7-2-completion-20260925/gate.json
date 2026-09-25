@@ -1,0 +1,22 @@
+{
+  "schema": "v7-2-completion-v1",
+  "checked_at": "2026-09-25T20:28:02.986754+00:00",
+  "v7_2_complete": true,
+  "ready_for_v7_3": true,
+  "research_ready": false,
+  "catalog_root": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30",
+  "daily_root": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-daily-context-20260925-full",
+  "security_count": 591,
+  "store_count": 1773,
+  "daily_rows": 667239,
+  "prefix_replays": 1182,
+  "inputs": {
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-2-final-deep-gate-20260925.json": "a7640e09d1b183cbb6f22dd8dfdd6dee29a7b2d7294276d435d52a6d8991d645",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-2-full-daily-audit-20260925.json": "54d4db3694f1d8703c876db4cc1b2e42a1f33679cac6b4b1f3db7d5ffc3bc18c",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-daily-context-20260925-full/summary/complete.json": "207296caad4839540ab06c4da37472eb643558a53c73d028416cc0fea20b7bc2"
+  },
+  "limitations": [
+    "Option-path demand and captures are V7-3 work; training remains gated.",
+    "Historical loader equivalence must be honored by downstream readers without rewriting frozen receipts."
+  ]
+}

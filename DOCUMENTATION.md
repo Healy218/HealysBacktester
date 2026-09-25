@@ -1,5 +1,26 @@
 # DOCUMENTATION — coding notes, conventions, traps, ops
 
+## V7 full daily context and completion receipts (September 25)
+
+Use `scripts/build_v7_full_daily_context.py` with the sealed catalog, reviewed
+history/actions, midpoint surface store, extended calendar and dated sectors.
+It uses `causal_daily.py` and the exact frozen routing; it does not modify
+proposal stores. Raw history facts are available at session close; model daily
+features are available at the next captured open. Admission gaps reset warmup.
+Run `scripts/audit_v7_full_daily_context.py` to verify persisted outputs and
+raw-input historical prefixes. Per-security daily roots contain `daily.parquet`,
+`inputs.json`, declarations, reports and immutable receipts for downstream use.
+
+The September 25 full daily root is `v7-daily-context-20260925-full` under
+`nn_meta/validation`. The current completion receipt is
+`v7-2-completion-20260925/complete.json`. Preserve the earlier
+`v7-2-final-deep-gate-20260925.json` unchanged: daily inputs bind its historical
+catalog-only verdict hash. Advance with a new receipt instead of rewriting
+bound evidence. Historical catalog-loader equivalence does not automatically
+make the strict downstream reader accept old hashes; consume the exact proof
+explicitly without relabeling frozen declarations.
+
+
 Reconciled September 5, 2026. Goals live in [ROADMAP](ROADMAP.md), active tasks
 in [TODO](TODO.md), and session milestones in [HANDOFF](HANDOFF.md).
 The previous technical reference is preserved in

@@ -16,71 +16,40 @@
 - [x] Verify dedicated paper credentials, account eligibility and empty broker
   state; prepare a separate hash-verified V6 state with scanning and order
   submission disabled. Evidence: `docs/reviews/2026-09-24-v6-alpaca-paper-start.md`.
-- [ ] Build a structured-event order bridge with stable event/order IDs,
-  fresh mark-limit pricing, whole-contract buying-power sizing, broker
-  reconciliation, fills and lifecycle handling. Preview future V6 events
-  before activating paper submissions or retiring the old V6 timers. Keep
-  simulator and broker P/L separate in Stonks. The account-only read monitor
-  runs every five minutes during market hours and showed zero broker positions
-  and orders on September 25; this is monitoring, not broker execution.
+- [x] Implement the guarded structured-event bridge core: stable event/order
+  IDs, mark-limit pricing, buying-power sizing, broker reconciliation and an
+  append-only intent/observation journal. The real-account preview saw zero
+  new scanner events; no broker order was submitted. Code/tests were pushed
+  in `75e2374` and `1b2da2f`.
+- [ ] Finish prospective fresh-scanner integration and lifecycle verification,
+  including multi-roll handling, before enabling Alpaca paper submissions.
+  Fresh scanning and submission remain disabled. Preview genuine new events;
+  never import the old simulator's positions. Keep simulator and broker P/L
+  separate in Stonks. The account-only read monitor runs every five minutes
+  during market hours; monitoring does not establish broker execution.
 
 ## 7. Consolidated remaining TODOs before the goal is finished
 
 - [x] **7-1. Complete usable identity/action histories under an agreed admission policy.**
   Completion evidence: Every relevant security/session/action has an explicit resolved treatment, consumed by the actual feature and held-position paths.
 
-- [ ] **7-2. Produce complete causal daily/market context and full feature/proposal stores.**
-  Completion evidence: Full 591-security census with correct availability,
-  warmup, sectors and all 8,451 registered 5/15/30 variants per security; no
-  substituted fixture inputs. The active run is managed by
-  `healys-v7-catalog-build.service` and writes to
-  `nn_meta/validation/v7-2-full-catalog-20260922-rebuild-5-15-30`, with 4
-  outer security workers, one inner thread, compact-final enabled, and 1,773
-  target stores. After the September 24 action/coverage recovery, 415 sealed
-  securities are retained under an explicit equivalence manifest; four more
-  sealed before the first controller exited. The corrected service verifies
-  all admitted events before launch,
-  fails on the first builder error, and does not automatically retry. The CLI
-  and hourly observer remain bound to this output.
-
-  September 24 audit found that the repaired coverage had omitted seven sealed
-  reviewed renames and the unrelated-instrument treatments. A new reviewed
-  coverage artifact restores admission for the eight affected securities;
-  all other 583 securities retain identical admitted dates and action events.
-  The earlier resumed service used that coverage for exactly the eight changed
-  securities. It subsequently stopped on a loader guard at 425 completed
-  securities. The original 1,773-store target remains open; the 45 formerly
-  deferred securities received exact source review and bounded admission.
-
-  September 24 follow-up: the first service stopped at 425 securities / 1,275
-  stores on a VMW eligible-source guard. The exact 45-security noncash review
-  and nine additional listed-span restrictions are now sealed; the production
-  loader guard was fixed only after workers stopped. All 166 unfinished
-  securities pass the real loader under the final coverage. The 415 reused
-  and ten newly sealed securities passed the catalog receipt audit; two
-  shortest histories also passed actual five-minute store builds. The revised
-  unit passed a full 166/166 production-loader preflight and resumed actual
-  workers at 18:18 CDT. At 18:21 CDT it had 426/591 securities and
-  1,281/1,773 proposal stores, with four active workers and no input blocks.
-  See
-  [the 45-security repair audit](docs/reviews/2026-09-24-v7-last45-repair.md).
-
-  September 25: the controller exited successfully with all 591 securities
-  and 1,773 proposal stores. The post-seal deep audit passed all compact
-  feature/proposal receipts, 8,451 variants per security, 221-column row
-  schema, input bindings, action coverage and the 100 GiB reserve. The 415
-  reused securities passed their exact receipt/action equivalence manifest;
-  ten additional old-loader securities passed current-loader replay on all
-  three timeframes. The frozen stores were not changed. **The full daily/market
-  context remains missing:** stock-daily, surface and dated-sector components
-  exist, but only a 300-day SPY daily-context pilot was built. Construct and
-  audit the 591-security joined daily context with availability and warmup
-  missingness before checking 7-2. See the
-  [full deep audit](docs/reviews/2026-09-25-v7-2-deep-audit.md) and
-  [7-2/7-3 transition plan](docs/reviews/2026-09-20-v7-3-prep.md).
+- [x] **7-2. Produce complete causal daily/market context and full feature/proposal stores.**
+  September 25 completion: all 591 securities, 1,773 sealed 5/15/30 stores,
+  8,451 variants per security, 221-column downstream schema; plus 667,239
+  joined daily rows and 1,182 passing historical-prefix replays. All catalog
+  stores were preserved. The full daily audit verifies source/receipt hashes,
+  exact routing, action returns, market context, missingness and next-open
+  availability. Completion gate: `nn_meta/validation/v7-2-completion-20260925`.
+  See [completion and launch evidence](docs/reviews/2026-09-25-v7-2-complete-and-v7-3-start.md).
 
 - [ ] **7-3. Complete actual option-path demand, dated hours/reference inputs and targeted captures.**
-  Start only after 7-2's full-store verification. First derive proposal-driven
+  **Active as of September 25.** The first MTUM demand pilot passed: 29,843
+  actual proposals, 3,552 quote/trade requests, 76 contracts. All 591 securities
+  remain in scope. The pilot is complete; no background V7 build is running.
+  Next implement the resumable all-security demand scheduler with narrow
+  historical-loader proof support, then measure the request union before
+  targeted captures. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
+  Derive proposal-driven
   entry demand for all completed securities from their 5/15/30 stores; then
   union bounded quote/trade windows, resolve dated option hours and standard
   contract references, and capture entry, mark, exit, roll and applicable

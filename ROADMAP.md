@@ -3,13 +3,16 @@
 Long-term maturity targets and the first-week v6 review are in [GOALS](GOALS.md).
 Continue this roadmap toward ≥7/10 in every assessment area by December 31, 2026.
 
-## September 25 V7-2 catalog audit checkpoint
+## September 25 V7-2 complete; V7-3 active
 
-The 591-security 5/15/30-minute catalog finished and passed its full 1,773-store
-deep audit, including narrow historical-loader equivalence and the disk reserve.
-The sealed stores remain validation-only. Full-scope joined daily/market context
-is still missing, so 7-2 stays open and V7-3 has not started. See
-[the deep audit](docs/reviews/2026-09-25-v7-2-deep-audit.md).
+All 591 securities and 1,773 proposal stores passed the catalog audit. The full
+667,239-row causal daily/market context now also passes its persisted-data audit
+and 1,182 historical-prefix replays. V7-2 is complete. V7-3 started with an
+actual MTUM entry-demand pilot: 29,843 proposals and 3,552 requests across 76
+contracts. The full 591-security scope remains. The next work is a resumable
+all-security demand scheduler, request union, dated references and targeted
+captures. See [completion evidence](docs/reviews/2026-09-25-v7-2-complete-and-v7-3-start.md).
+The earlier checkpoints below are historical; TODO and HANDOFF hold live state.
 
 ## September 24 incubator and V7 checkpoint
 

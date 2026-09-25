@@ -1,5 +1,17 @@
 # HealyLabs engineering goals — year-end 2026
 
+## September 25 — V7 data and validation milestone
+
+V7-2 is complete with 591 securities, 1,773 audited proposal stores and 667,239
+causal daily rows. The saved-data audit includes 1,182 passing historical-prefix
+replays. V7-3 began with a real proposal-driven demand pilot. This strengthens
+the provenance and temporal-validation evidence for research infrastructure
+and testing. It does not establish trading edge, complete execution or improve
+the live-operations score by itself; the numerical maturity assessment is
+unchanged. The full regression suite passed 2,401 tests and 18 subtests.
+See [completion and remaining gates](docs/reviews/2026-09-25-v7-2-complete-and-v7-3-start.md).
+
+
 Established September 10, 2026. **Target: reach 7/10 or higher in every
 assessment area and overall by December 31, 2026.** Scores should follow
 measured results and demonstrated reliability, not feature count or deadlines.
