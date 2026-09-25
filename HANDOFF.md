@@ -1,66 +1,64 @@
-# Handoff — 2026-09-24 — Stonks V6 paper chart live; V7-2 still building
+# Handoff — 2026-09-24 — Alpaca paper state prepared; V7-2 building
 
-Read `TODO.md` first. The prior handoff is archived at
-`handoff-history/HANDOFF-2026-09-24-before-v6-paper-chart.md`. V7-1 is
-complete under its agreed exclusion policy. V7-2 is still building; V7-3
-has not started. Main is the Backtester operating branch. The worktree has
-extensive unrelated pre-existing changes; stage only exact owned files.
+Read `TODO.md` first. Prior handoff archived at
+`handoff-history/HANDOFF-2026-09-24-before-alpaca-paper.md`. Main is the
+Backtester operating branch. The worktree has extensive pre-existing dirty
+files; stage exact owned changes only. V7-1 is complete, V7-2 is building,
+V7-3 has not started. Preserve V7-2 source and review artifact hashes while
+its workers run. Do not start a second builder.
 
-## V7-2 independent build
+## V6 Alpaca paper restart
 
-`healys-v7-catalog-build.service` remains active under PID 3128252 with
-zero restarts at 18:42 CDT, September 24. The latest watcher snapshot is
-427/591 complete securities, 1,285/1,773 proposal stores and 2,578 feature
-receipts. The restart's 166/166 production-loader preflight passed with zero
-failures before workers began. No second builder was started. Monitor using
-`./venv/bin/python -m scripts.watch_v7_catalog --follow --interval 5` in a
-fresh terminal; a sandboxed one-shot viewer may show service `unknown`, so
-use host-side systemd for service state. Full 7-2 source, availability,
-variant, compact-size, receipt and disk-reserve audit is still required
-after 591/1,773 seals. Do not start 7-3 beforehand. The exact repairs and
-remaining audit obligations are in
-`docs/reviews/2026-09-24-v7-last45-repair.md` and the archived handoff.
-Keep V7 producer sources and the two new last-45 review JSONs byte-stable
-while workers run; their hashes are bound into receipts.
+The user directed a fresh V6 start in their Alpaca **paper** account, using
+current options buying power for sizing. Do not backfill four open V6
+simulator positions as broker trades. A valid provider mark is the entry
+limit; if absent, use a fresh bid/ask midpoint. Last trade is context; actual
+Alpaca fills define broker P/L. The live V6 simulator and Stonks projection
+continue independently until the broker path passes preview and cutover.
 
-## Stonks V6 paper improvement deployed
+Read-only Alpaca preflight succeeded with dedicated aliases in ignored
+mode-600 `.env` (`ALPACA_PAPER_API_KEY`, `ALPACA_PAPER_API_SECRET`). Paper
+account was active, options level 3, $100,000 options buying power, zero
+positions/orders; four old V6 contracts are listed/tradable. No secret or
+full account ID is in tracked files. Preflight receipt is local
+`/tmp/v6-alpaca-paper-account-preflight-20260924.json`; refresh it before
+future decisions. The dedicated integration uses `TradingClient(...,
+paper=True)` only for GET calls so far.
 
-At `https://stonks-22367.web.app/`, the V6 Paper tab now places a realized
-P/L time graph between the broker-style account and trade history. It
-reconstructs cumulative realized P/L from dated closed trades and labels
-open marks as current-only. The trade table shows opened and closed dates
-and sorts by latest activity (close date for closed trades, open date for
-open trades). The exporter writes timezone-qualified dates and the same
-newest-first order to JSON and CSV. It remains a read-only projection, with
-no broker orders.
+The isolated state
+`/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper` was prepared at
+2026-09-25 00:35 UTC from the verified V6 frozen release/data index. It has
+only activation, data-index and paper-restart JSON files (mode 600), no
+portfolio database, scanner, orders or broker process. Its restart manifest
+binds a hashed account ID and explicitly disables scanning and order
+submission. The original V6 ledger was untouched. Source and evidence:
+`integrations/alpaca_paper/`, `scripts/v6_alpaca_paper_preflight.py`,
+`scripts/prepare_v6_alpaca_paper_state.py`, and
+`docs/reviews/2026-09-24-v6-alpaca-paper-start.md`.
 
-The live V6 export was manually refreshed at 18:39:44 CDT: 24 trades had
-open dates, all 20 closed trades had close dates, rows were descending,
-and their realized P/L summed to the account headline. The home publisher
-published the refreshed document at 18:40:07 CDT with `issues: []` and
-exit status 0. Hosting deployment completed successfully; a live GET of
-the site served the new production JS/CSS bundle. Dashboard build and
-10 Vitest tests passed; Backtester suite passed 2,384 tests plus 18
-subtests. Playwright browser tests could not launch because this machine
-lacks the required Chromium headless binary; this was an environment
-failure before any test steps.
+Next: implement structured future V6 event-to-order translation with stable
+client IDs and an append-only broker journal; reconcile broker orders and
+positions before actions; validate fresh mark or midpoint, displayed size,
+buying power and whole contracts; handle fills, exits, rolls and expiry.
+Run a prospective preview and compare expected versus observed events before
+enabling paper submission. Do not parse alert prose, reuse old simulator
+positions, or launch the new state via the old installer (it hardcodes the
+old state). Broker P/L needs separate Stonks display.
 
-Backtester exporter commit `8bf7203` is pushed to origin/main. The
-dashboard UI commit `f3066f6` is pushed to
-`ops/firebase-dashboard-20260911` in the separate
-`/home/healy/Coding/HealyLabsDashboard` checkout. That checkout still has
-pre-existing uncommitted publisher, training, README and browser-test work;
-do not discard or stage it wholesale. The live Hosting bundle was built
-from that checkout. The scheduled home publisher source remains in
-`/home/healy/Coding/HealysAutomation` and was not changed in this task.
+Focused integration tests: 8 passed. Full suite: 2,392 passed, 18 subtests,
+20 warnings. No Alpaca paper order was submitted.
 
-## Next actions
+## V7-2 and Stonks
 
-1. Continue monitoring V7-2 service and actual completed securities/stores,
-   not just its unstable ETA. Investigate the exact worker receipt if it
-   stops. Preserve valid sealed stores.
-2. When V7-2 seals fully, run its full gate audit before marking 7-2
-   complete or beginning 7-3.
-3. If the user wants an account P/L curve including open marks, add a
-   timestamped mark-history source prospectively; the currently available
-   broker export contains current open marks but no historical open marks.
+At the last check V7-2 `healys-v7-catalog-build.service` was active under
+PID 3128252 with zero restarts. Earlier watcher progress was 427/591
+securities and 1,285/1,773 stores at 18:42 CDT; refresh for current count.
+Monitor with `./venv/bin/python -m scripts.watch_v7_catalog --follow
+--interval 5` in a separate terminal. Full 7-2 verification remains due
+after sealing; do not advance to 7-3 before it passes. See
+`docs/reviews/2026-09-24-v7-last45-repair.md`.
+
+The Stonks V6 Paper tab already has the realized P/L timeline and dated,
+newest-first trades, deployed at `https://stonks-22367.web.app/`. It is the
+simulator projection, not Alpaca paper broker state. Prior details and
+deployment receipts remain in the archived handoff.

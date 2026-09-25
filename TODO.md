@@ -1,5 +1,16 @@
 # TODO — V7 readiness, one deliverable at a time
 
+## Parallel V6 Alpaca paper restart
+
+- [x] Verify dedicated paper credentials, account eligibility and empty broker
+  state; prepare a separate hash-verified V6 state with scanning and order
+  submission disabled. Evidence: `docs/reviews/2026-09-24-v6-alpaca-paper-start.md`.
+- [ ] Build a structured-event order bridge with stable event/order IDs,
+  fresh mark-limit pricing, whole-contract buying-power sizing, broker
+  reconciliation, fills and lifecycle handling. Preview future V6 events
+  before activating paper submissions or retiring the old V6 timers. Keep
+  simulator and broker P/L separate in Stonks.
+
 ## 7. Consolidated remaining TODOs before the goal is finished
 
 - [x] **7-1. Complete usable identity/action histories under an agreed admission policy.**

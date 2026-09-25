@@ -1476,3 +1476,16 @@ source mismatches only on admitted dates, while requiring exact nonadmission
 for every mismatched date; check identity continuity after coverage filtering.
 Run the production loader for every unfinished security before restarting the
 catalog workers. See `docs/reviews/2026-09-24-v7-last45-repair.md`.
+
+### 2026-09-24 — Start V6 anew in the Alpaca paper account
+
+Use the dedicated Alpaca paper credentials and a new V6 state. Keep the
+existing simulator ledger as historical evidence; do not open its current
+positions in Alpaca. Size future whole-contract entries from current Alpaca
+options buying power and the V6 position fraction. Prefer a fresh validated
+provider mark as the initial limit price; if the feed exposes no mark, use
+the fresh bid/ask midpoint. A last trade is context only, and broker fills
+define broker P/L. Before any order submission, implement idempotent
+structured-event translation, broker reconciliation and an observed preview
+run. The prepared state has scanning and order submission disabled. See
+`docs/reviews/2026-09-24-v6-alpaca-paper-start.md`.
