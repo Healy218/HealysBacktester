@@ -78,6 +78,18 @@
   coverage remain open. See [union and first capture](docs/reviews/2026-09-26-v7-entry-union-and-first-capture.md).
   The separate viewer is `./venv/bin/python scripts/watch_v7_demand.py --follow`
   (now shows completed demand). Both stale V6/catalog hourly timers are disabled.
+  Later September 26: the full-population volume plan reconciled all 591 stores;
+  **1,440 sampled captures passed**, with 237,417 records across 362 securities
+  and all five years. Current-layout entry storage estimates 218.04 GB (mean
+  plus three SE: 265.77 GB), exceeding 181.02 GB remaining acquisition quota
+  and ~50.67 GB local capacity above the reserve. Experimental lossless columns
+  estimate 164.08 GB but are not a production archive. A full exact contiguous
+  union audit reduces capture ranges to 10,941,828 without adding any seconds;
+  longer-range resource/receipt handling still needs validation. Asked the user
+  for another storage location; an unmounted MRHA exFAT disk is visible but
+  has not been used. Bulk acquisition/training remain gated; all originals and
+  both budget limits remain preserved. See
+  [capture storage forecast](docs/reviews/2026-09-26-v7-capture-storage-forecast.md).
   See `docs/reviews/2026-09-25-v7-3-full-demand-launch.md`.
   Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
   Derive proposal-driven

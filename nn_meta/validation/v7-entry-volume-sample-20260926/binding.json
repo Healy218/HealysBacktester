@@ -1,0 +1,8 @@
+{
+  "audit_sha256": "426544477ee9116e17f99453cb8fbcab5212131d21162326a2d5457ccf0f979b",
+  "per_stratum": 12,
+  "seed": "v7-entry-volume-20260926-v1",
+  "source_sha256": "0910012006ecb70554b945c7e216f173ce623a03d1b09f4eeeae6402bd94b9ee",
+  "stratum_definition": "year/request-count-quartile/duration-330-600-seconds",
+  "union_sha256": "15caf1fa37caad171d1d64cdb27d11d1cd12a4299f9ea6e95c7a6dfce831693b"
+}

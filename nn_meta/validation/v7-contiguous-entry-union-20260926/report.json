@@ -1,0 +1,19 @@
+{
+  "added_coverage_seconds": 0,
+  "caveat": "Request-count optimization only; dense ranges may need bounded pagination splitting. No changed download/storage format has been admitted.",
+  "contiguous_captures": 10941828,
+  "contract_days": 2223844,
+  "durations": {
+    "gt60m": 1222141,
+    "le15m": 1975031,
+    "le60m": 2273742
+  },
+  "original_fixed_cell_captures": 42030534,
+  "provider_downloads": 0,
+  "quotes_duration_ns": 14404985220000000000,
+  "quotes_ranges": 5470914,
+  "research_ready": false,
+  "schema": "v7-exact-contiguous-entry-union-v1",
+  "trades_duration_ns": 14404985220000000000,
+  "trades_ranges": 5470914
+}

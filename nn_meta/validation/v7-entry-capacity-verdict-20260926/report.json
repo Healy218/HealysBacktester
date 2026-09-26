@@ -1,0 +1,34 @@
+{
+  "bulk_launch_allowed": false,
+  "disk_free_bytes": 158043176960,
+  "disk_reserve_bytes": 107374182400,
+  "existing_layout_project_estimate_bytes": 707177157247,
+  "experimental_layout_project_estimate_bytes": 653218402456,
+  "experimental_layout_project_mean_plus_three_se_bytes": 690414690534,
+  "observed_at": "2026-09-26T14:52:46.065077+00:00",
+  "project_apparent_bytes": 489135748190,
+  "project_budget_bytes": 640000000000,
+  "project_measurement_command": "du -sb .",
+  "project_measurement_note": "Whole-tree non-atomic read; conservative gross capture additions do not subtract already retained samples.",
+  "quota": {
+    "limit_bytes": 250000000000,
+    "reservations": {},
+    "unit": "decimal bytes; hardlinks counted once",
+    "used_bytes": 68980125222
+  },
+  "required_next": [
+    "Identify suitable additional storage placement",
+    "Measure and validate contiguous capture and bounded paging/archive costs",
+    "Reconcile full-path acquisition and project budget before bulk launch"
+  ],
+  "research_ready": false,
+  "schema": "v7-entry-capacity-verdict-v1",
+  "unmounted_device_observed": {
+    "capacity_display": "1.8T",
+    "device": "/dev/sda2",
+    "filesystem": "exfat",
+    "free_bytes": null,
+    "label": "MRHA",
+    "mounted_or_written": false
+  }
+}

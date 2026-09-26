@@ -1576,3 +1576,17 @@ full scope and all frozen parents; do not infer full coverage or a universe-wide
 volume estimate from this case. Bulk acquisition still needs a measured storage
 forecast; training remains behind execution/assembly/readiness gates. See
 [full union and first capture](reviews/2026-09-26-v7-entry-union-and-first-capture.md).
+
+### 2026-09-26 — Preserve scope and caps after measured capture forecast
+
+The full-population stratified sample completed all 1,440 captures with verified
+receipts. Existing entry-capture layout estimates 218.04 GB, exceeding both the
+181.02 GB remaining acquisition quota and ~50.67 GB usable local disk capacity.
+A lossless encoding experiment estimates 164.08 GB but is not a production
+archive. Exact contiguous union reduces range count by about 74% with zero
+added seconds; it is a planning result, not an admitted new download path.
+Retain every frozen artifact, research scope and both budget ceilings. Resolve
+storage placement and measure/validate longer-range capture and archive costs
+before full acquisition. No disk mount, deletion, scope reduction, quota
+increase or training launch was performed. See
+[capture/storage evidence](reviews/2026-09-26-v7-capture-storage-forecast.md).
