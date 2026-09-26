@@ -1,0 +1,3010 @@
+{
+  "schema": "v7-demand-storage-plan-v1",
+  "securities": 591,
+  "proposals": 793394264,
+  "feature_decisions": 27576105,
+  "selection_decisions": 20345211,
+  "target_selections": 101726055,
+  "maximum_feature_links": 275761050,
+  "maximum_requests_using_observed_expiry_inventory": 122916244,
+  "expiry_multiplicity_securities": {
+    "5": 17,
+    "2": 524,
+    "1": 34,
+    "4": 10,
+    "3": 6
+  },
+  "row_allowances_bytes": {
+    "decisions": 96,
+    "selections": 256,
+    "requests_and_index": 384,
+    "export_request": 384,
+    "feature_links": 224
+  },
+  "forecast_components_bytes": {
+    "decisions": 2647306080,
+    "selections": 26041870080,
+    "requests_and_index": 47199837696,
+    "export_requests": 47199837696,
+    "feature_links": 61770475200,
+    "lineage_and_working_margin": 8589934592
+  },
+  "stress_forecast_bytes": 193449261344,
+  "baseline_project_allocated_bytes": 421285347328,
+  "baseline_measurement": "du -sx --block-size=1 . on this session",
+  "stage_output_limit_bytes": 214748364800,
+  "total_project_budget_bytes": 640000000000,
+  "required_free_reserve_bytes": 107374182400,
+  "disk_free_bytes": 344466640896,
+  "acquisition_bytes": 0,
+  "research_ready": false,
+  "assumptions": [
+    "Full-scope exact decision census; no pilot-volume extrapolation.",
+    "At most five distinct contracts per decision; for one expiry all targets use the same nearest eligible strike.",
+    "Per-security request bound uses maximum dated-root expiry inventory over any nine-day future window. Ignoring right/first_seen/strike/freshness is conservative.",
+    "The row allowances are a storage stress forecast, not guaranteed SQLite byte bounds. The stage cap and free-space guard stop work if reached.",
+    "640 GB is the total-project budget for this demand stage. New option captures require a separate forecast against actual remaining disk."
+  ],
+  "inputs": {
+    "nn_meta/validation/v7-3-demand-census-20260925/summary/complete.json": "cb9453ded9503fe6a5e1955ddbd7b1363868d27771d52ef5e69c6fdcaab0fd2d",
+    "nn_meta/validation/v7-chain-start-20220315/complete.json": "5632870dd3619af40d21be518bf1584718187cdd6f003e3318fb28ccda13d2a8",
+    "docs/specs/V7_ACTIVE_INPUTS_20220315_OPTION_RISK.json": "04e2892109988a794bfe72f1906af343f91b94a7152e757ad7177bb38d52d245"
+  },
+  "rows": [
+    {
+      "security_id": "BBG000B9XRY4",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 972640
+    },
+    {
+      "security_id": "BBG000B9XYV2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 17392
+    },
+    {
+      "security_id": "BBG000B9YJ35",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 8534
+    },
+    {
+      "security_id": "BBG000B9ZXB4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 334276
+    },
+    {
+      "security_id": "BBG000BB07P9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 278156
+    },
+    {
+      "security_id": "BBG000BB3080",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 16496
+    },
+    {
+      "security_id": "BBG000BB5006",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 400096
+    },
+    {
+      "security_id": "BBG000BB5BF6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 372728
+    },
+    {
+      "security_id": "BBG000BB6G37",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 210528
+    },
+    {
+      "security_id": "BBG000BB6KF5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 45388
+    },
+    {
+      "security_id": "BBG000BB6R33",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 7120
+    },
+    {
+      "security_id": "BBG000BB6WG8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 75244
+    },
+    {
+      "security_id": "BBG000BBDZG3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 13608
+    },
+    {
+      "security_id": "BBG000BBGGQ1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 357508
+    },
+    {
+      "security_id": "BBG000BBJQV0",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 1037160
+    },
+    {
+      "security_id": "BBG000BBL8V7",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 3904
+    },
+    {
+      "security_id": "BBG000BBPFB9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 389188
+    },
+    {
+      "security_id": "BBG000BBQCY0",
+      "maximum_distinct_expiries": 4,
+      "maximum_requests": 757920
+    },
+    {
+      "security_id": "BBG000BBS2Y0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 390648
+    },
+    {
+      "security_id": "BBG000BBV9N3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 311504
+    },
+    {
+      "security_id": "BBG000BBVJZ8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 358832
+    },
+    {
+      "security_id": "BBG000BC9938",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 22520
+    },
+    {
+      "security_id": "BBG000BCG930",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 116380
+    },
+    {
+      "security_id": "BBG000BCJ161",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 99716
+    },
+    {
+      "security_id": "BBG000BCKGW7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 14712
+    },
+    {
+      "security_id": "BBG000BCMBG4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 218924
+    },
+    {
+      "security_id": "BBG000BCQ6J8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG000BCQZS4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 382676
+    },
+    {
+      "security_id": "BBG000BCRJM5",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 2900
+    },
+    {
+      "security_id": "BBG000BCSST7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 340280
+    },
+    {
+      "security_id": "BBG000BCTLF6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 410372
+    },
+    {
+      "security_id": "BBG000BCWCG1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 283036
+    },
+    {
+      "security_id": "BBG000BCZBF1",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 6576
+    },
+    {
+      "security_id": "BBG000BD4GX2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 8972
+    },
+    {
+      "security_id": "BBG000BD8ZK0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 382496
+    },
+    {
+      "security_id": "BBG000BDTBL9",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 955220
+    },
+    {
+      "security_id": "BBG000BDXCJ5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 24724
+    },
+    {
+      "security_id": "BBG000BF0K17",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 423976
+    },
+    {
+      "security_id": "BBG000BF6LY3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 388608
+    },
+    {
+      "security_id": "BBG000BF6RQ9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 50556
+    },
+    {
+      "security_id": "BBG000BF7BV7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 24688
+    },
+    {
+      "security_id": "BBG000BF8TF5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG000BFL116",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 357588
+    },
+    {
+      "security_id": "BBG000BFRF55",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 389364
+    },
+    {
+      "security_id": "BBG000BFS7D3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 32212
+    },
+    {
+      "security_id": "BBG000BFT2L4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 275716
+    },
+    {
+      "security_id": "BBG000BFXHL6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 160020
+    },
+    {
+      "security_id": "BBG000BG14P4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 134244
+    },
+    {
+      "security_id": "BBG000BGB482",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 395708
+    },
+    {
+      "security_id": "BBG000BGD7W6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 254480
+    },
+    {
+      "security_id": "BBG000BGGXH3",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 14754
+    },
+    {
+      "security_id": "BBG000BGKTF9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 311644
+    },
+    {
+      "security_id": "BBG000BGLRN3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 19428
+    },
+    {
+      "security_id": "BBG000BGM5P8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 28580
+    },
+    {
+      "security_id": "BBG000BGQ921",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 121708
+    },
+    {
+      "security_id": "BBG000BGRB25",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 215380
+    },
+    {
+      "security_id": "BBG000BGRY34",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 414092
+    },
+    {
+      "security_id": "BBG000BGVW60",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 7726
+    },
+    {
+      "security_id": "BBG000BGYWY6",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 7930
+    },
+    {
+      "security_id": "BBG000BH0106",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 291560
+    },
+    {
+      "security_id": "BBG000BH0FR6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 36272
+    },
+    {
+      "security_id": "BBG000BH1NH9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 388200
+    },
+    {
+      "security_id": "BBG000BH3JF8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 173192
+    },
+    {
+      "security_id": "BBG000BH4R78",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 428664
+    },
+    {
+      "security_id": "BBG000BH5DV1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 400856
+    },
+    {
+      "security_id": "BBG000BHCP19",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 60188
+    },
+    {
+      "security_id": "BBG000BHJWG1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 102592
+    },
+    {
+      "security_id": "BBG000BHR296",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 15200
+    },
+    {
+      "security_id": "BBG000BHVSG6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 381512
+    },
+    {
+      "security_id": "BBG000BHZ0N5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 29728
+    },
+    {
+      "security_id": "BBG000BHZ5J9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 146588
+    },
+    {
+      "security_id": "BBG000BJ10N8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 171408
+    },
+    {
+      "security_id": "BBG000BJ1MF9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 352336
+    },
+    {
+      "security_id": "BBG000BJ20S2",
+      "maximum_distinct_expiries": 4,
+      "maximum_requests": 789264
+    },
+    {
+      "security_id": "BBG000BJ26K7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 418152
+    },
+    {
+      "security_id": "BBG000BJ29X7",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 974330
+    },
+    {
+      "security_id": "BBG000BJ2D31",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 73280
+    },
+    {
+      "security_id": "BBG000BJ2RF7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 355936
+    },
+    {
+      "security_id": "BBG000BJ7007",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 397128
+    },
+    {
+      "security_id": "BBG000BJ7G75",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 326944
+    },
+    {
+      "security_id": "BBG000BJDB15",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 348404
+    },
+    {
+      "security_id": "BBG000BJF1Z8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 377840
+    },
+    {
+      "security_id": "BBG000BJKPG0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 63708
+    },
+    {
+      "security_id": "BBG000BJKYW3",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 947920
+    },
+    {
+      "security_id": "BBG000BJPDZ1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 383072
+    },
+    {
+      "security_id": "BBG000BJQWD2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 24244
+    },
+    {
+      "security_id": "BBG000BJSBJ0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 331472
+    },
+    {
+      "security_id": "BBG000BK28N7",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 5522
+    },
+    {
+      "security_id": "BBG000BK6MB5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 91968
+    },
+    {
+      "security_id": "BBG000BK9YW3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 45624
+    },
+    {
+      "security_id": "BBG000BKD3K9",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 8172
+    },
+    {
+      "security_id": "BBG000BKFZM4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 35828
+    },
+    {
+      "security_id": "BBG000BKLH74",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 22976
+    },
+    {
+      "security_id": "BBG000BKR1D6",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 37856
+    },
+    {
+      "security_id": "BBG000BKTFN2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 307224
+    },
+    {
+      "security_id": "BBG000BKXWV1",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 9582
+    },
+    {
+      "security_id": "BBG000BKXYX5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 50984
+    },
+    {
+      "security_id": "BBG000BKZB36",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 320324
+    },
+    {
+      "security_id": "BBG000BL5W86",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG000BLBVN4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 349004
+    },
+    {
+      "security_id": "BBG000BLHRS2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 142776
+    },
+    {
+      "security_id": "BBG000BLKK03",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 321680
+    },
+    {
+      "security_id": "BBG000BLMZK6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 36236
+    },
+    {
+      "security_id": "BBG000BLNNH6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 299112
+    },
+    {
+      "security_id": "BBG000BLW102",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 79348
+    },
+    {
+      "security_id": "BBG000BLY663",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 234220
+    },
+    {
+      "security_id": "BBG000BLZRJ2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 399672
+    },
+    {
+      "security_id": "BBG000BM2FL9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 181328
+    },
+    {
+      "security_id": "BBG000BM7HL0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 270344
+    },
+    {
+      "security_id": "BBG000BMHYD1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 208804
+    },
+    {
+      "security_id": "BBG000BMTFR4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 273108
+    },
+    {
+      "security_id": "BBG000BMX289",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 388088
+    },
+    {
+      "security_id": "BBG000BMXK89",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 38968
+    },
+    {
+      "security_id": "BBG000BN2DC2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 419540
+    },
+    {
+      "security_id": "BBG000BN5HF7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 122308
+    },
+    {
+      "security_id": "BBG000BN5LG7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 326468
+    },
+    {
+      "security_id": "BBG000BNBDC2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 244004
+    },
+    {
+      "security_id": "BBG000BNDN65",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 361196
+    },
+    {
+      "security_id": "BBG000BNFLM9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 405532
+    },
+    {
+      "security_id": "BBG000BNGBW9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG000BNJHS8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 305888
+    },
+    {
+      "security_id": "BBG000BNSZP1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 352516
+    },
+    {
+      "security_id": "BBG000BP1152",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 23484
+    },
+    {
+      "security_id": "BBG000BP1Q11",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 48216
+    },
+    {
+      "security_id": "BBG000BP52R2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 220232
+    },
+    {
+      "security_id": "BBG000BP6LJ8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 369632
+    },
+    {
+      "security_id": "BBG000BPD168",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 207972
+    },
+    {
+      "security_id": "BBG000BPH459",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 869480
+    },
+    {
+      "security_id": "BBG000BPS2C3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 192040
+    },
+    {
+      "security_id": "BBG000BPWXK1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 180900
+    },
+    {
+      "security_id": "BBG000BQ2C28",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 166680
+    },
+    {
+      "security_id": "BBG000BQ2JM1",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 19170
+    },
+    {
+      "security_id": "BBG000BQ4512",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 438536
+    },
+    {
+      "security_id": "BBG000BQ8KV2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 324868
+    },
+    {
+      "security_id": "BBG000BQBKR3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG000BQHGR6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 19520
+    },
+    {
+      "security_id": "BBG000BQLTW7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 396112
+    },
+    {
+      "security_id": "BBG000BQPC32",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 377852
+    },
+    {
+      "security_id": "BBG000BQQ2S6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 376988
+    },
+    {
+      "security_id": "BBG000BQQH30",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 273140
+    },
+    {
+      "security_id": "BBG000BQRDD7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 12988
+    },
+    {
+      "security_id": "BBG000BR2B91",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 64452
+    },
+    {
+      "security_id": "BBG000BR2TH3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 400952
+    },
+    {
+      "security_id": "BBG000BRD0D8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 92856
+    },
+    {
+      "security_id": "BBG000BRK7L6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 57596
+    },
+    {
+      "security_id": "BBG000BRNLL2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 243200
+    },
+    {
+      "security_id": "BBG000BS1YV5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 127640
+    },
+    {
+      "security_id": "BBG000BS6FX9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 296064
+    },
+    {
+      "security_id": "BBG000BSC0K9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 348816
+    },
+    {
+      "security_id": "BBG000BSFRF3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 128272
+    },
+    {
+      "security_id": "BBG000BSJK37",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 8648
+    },
+    {
+      "security_id": "BBG000BSLZY7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 391452
+    },
+    {
+      "security_id": "BBG000BSWKH7",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 950570
+    },
+    {
+      "security_id": "BBG000BT0093",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 50520
+    },
+    {
+      "security_id": "BBG000BT41Q8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 333968
+    },
+    {
+      "security_id": "BBG000BT4FC2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 6732
+    },
+    {
+      "security_id": "BBG000BTDS98",
+      "maximum_distinct_expiries": 3,
+      "maximum_requests": 579774
+    },
+    {
+      "security_id": "BBG000BV4DR6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 29484
+    },
+    {
+      "security_id": "BBG000BV7ZQ5",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 986930
+    },
+    {
+      "security_id": "BBG000BV8DN6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 40536
+    },
+    {
+      "security_id": "BBG000BVDLH9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 248276
+    },
+    {
+      "security_id": "BBG000BVPV84",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 266880
+    },
+    {
+      "security_id": "BBG000BVV7G1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 343768
+    },
+    {
+      "security_id": "BBG000BW3299",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 263084
+    },
+    {
+      "security_id": "BBG000BW4G60",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 13340
+    },
+    {
+      "security_id": "BBG000BW8S60",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 333676
+    },
+    {
+      "security_id": "BBG000BWCKB6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 18456
+    },
+    {
+      "security_id": "BBG000BWFL03",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 94180
+    },
+    {
+      "security_id": "BBG000BWJFZ4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 146112
+    },
+    {
+      "security_id": "BBG000BWLMJ4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 320396
+    },
+    {
+      "security_id": "BBG000BWM083",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 11324
+    },
+    {
+      "security_id": "BBG000BWN2Y9",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 10280
+    },
+    {
+      "security_id": "BBG000BWNFZ9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 240376
+    },
+    {
+      "security_id": "BBG000BWQFY7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 344504
+    },
+    {
+      "security_id": "BBG000BWQLY4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 27448
+    },
+    {
+      "security_id": "BBG000BWXBC2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 279956
+    },
+    {
+      "security_id": "BBG000BX3TD3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 316164
+    },
+    {
+      "security_id": "BBG000BX9WL1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 33380
+    },
+    {
+      "security_id": "BBG000BXMFC3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 360888
+    },
+    {
+      "security_id": "BBG000BXRPH1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 161028
+    },
+    {
+      "security_id": "BBG000BXTPV3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 45972
+    },
+    {
+      "security_id": "BBG000BXW687",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 204216
+    },
+    {
+      "security_id": "BBG000BYYLS8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 56616
+    },
+    {
+      "security_id": "BBG000BZ0DK8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 42464
+    },
+    {
+      "security_id": "BBG000BZ9223",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 219276
+    },
+    {
+      "security_id": "BBG000C0CD58",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 22360
+    },
+    {
+      "security_id": "BBG000C0G1D1",
+      "maximum_distinct_expiries": 4,
+      "maximum_requests": 844640
+    },
+    {
+      "security_id": "BBG000C0LW92",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG000C0RGY3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG000C13CD9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 81948
+    },
+    {
+      "security_id": "BBG000C17X76",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 228344
+    },
+    {
+      "security_id": "BBG000C1BW00",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 404392
+    },
+    {
+      "security_id": "BBG000C1HQ43",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 31584
+    },
+    {
+      "security_id": "BBG000C1S2X2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 178368
+    },
+    {
+      "security_id": "BBG000C1XSP8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 244756
+    },
+    {
+      "security_id": "BBG000C2BXK4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 77324
+    },
+    {
+      "security_id": "BBG000C2PW58",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 266412
+    },
+    {
+      "security_id": "BBG000C2YHG9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 46108
+    },
+    {
+      "security_id": "BBG000C30L48",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 55620
+    },
+    {
+      "security_id": "BBG000C3HSR0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 134752
+    },
+    {
+      "security_id": "BBG000C3J3C9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 366664
+    },
+    {
+      "security_id": "BBG000C43RR5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 53992
+    },
+    {
+      "security_id": "BBG000C46HM9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 232308
+    },
+    {
+      "security_id": "BBG000C496P7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 225540
+    },
+    {
+      "security_id": "BBG000C5HS04",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 427072
+    },
+    {
+      "security_id": "BBG000C5Z1S3",
+      "maximum_distinct_expiries": 4,
+      "maximum_requests": 738032
+    },
+    {
+      "security_id": "BBG000C6CFJ5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 4540
+    },
+    {
+      "security_id": "BBG000C6QPN3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 19248
+    },
+    {
+      "security_id": "BBG000C734W3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 358712
+    },
+    {
+      "security_id": "BBG000C75N77",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 25872
+    },
+    {
+      "security_id": "BBG000C7LMS8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 360468
+    },
+    {
+      "security_id": "BBG000C8H633",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 137492
+    },
+    {
+      "security_id": "BBG000CDKWX8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 25880
+    },
+    {
+      "security_id": "BBG000CDZLV8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 141332
+    },
+    {
+      "security_id": "BBG000CGC1X8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 366064
+    },
+    {
+      "security_id": "BBG000CGC9C4",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 927800
+    },
+    {
+      "security_id": "BBG000CH5208",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 64100
+    },
+    {
+      "security_id": "BBG000CH7WB8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG000CKGBP2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 208588
+    },
+    {
+      "security_id": "BBG000CL9VN6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 335816
+    },
+    {
+      "security_id": "BBG000CPLR52",
+      "maximum_distinct_expiries": 3,
+      "maximum_requests": 599922
+    },
+    {
+      "security_id": "BBG000CR90K4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 15624
+    },
+    {
+      "security_id": "BBG000CRF6Q8",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 918300
+    },
+    {
+      "security_id": "BBG000CS7CT9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 88620
+    },
+    {
+      "security_id": "BBG000CSVPZ6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 61252
+    },
+    {
+      "security_id": "BBG000CTQBF3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 370384
+    },
+    {
+      "security_id": "BBG000CVWGS6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 135420
+    },
+    {
+      "security_id": "BBG000CX0W11",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 199492
+    },
+    {
+      "security_id": "BBG000D02J82",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 254892
+    },
+    {
+      "security_id": "BBG000D2KQ55",
+      "maximum_distinct_expiries": 3,
+      "maximum_requests": 567846
+    },
+    {
+      "security_id": "BBG000D6VW15",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 95408
+    },
+    {
+      "security_id": "BBG000D80VV4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 288012
+    },
+    {
+      "security_id": "BBG000D82H52",
+      "maximum_distinct_expiries": 3,
+      "maximum_requests": 553542
+    },
+    {
+      "security_id": "BBG000DH7JK6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 382040
+    },
+    {
+      "security_id": "BBG000DKCC19",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 62764
+    },
+    {
+      "security_id": "BBG000DLVDK3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 118108
+    },
+    {
+      "security_id": "BBG000DMBXR2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 380236
+    },
+    {
+      "security_id": "BBG000DQLV23",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 319184
+    },
+    {
+      "security_id": "BBG000DQTXY6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 160564
+    },
+    {
+      "security_id": "BBG000DSJYS8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 180352
+    },
+    {
+      "security_id": "BBG000DSMS70",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 99740
+    },
+    {
+      "security_id": "BBG000DSZTN6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 359356
+    },
+    {
+      "security_id": "BBG000DV7MX4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 349136
+    },
+    {
+      "security_id": "BBG000DW76Y6",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 55404
+    },
+    {
+      "security_id": "BBG000DWG505",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 408820
+    },
+    {
+      "security_id": "BBG000F0R4N9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 20824
+    },
+    {
+      "security_id": "BBG000F1ZSQ2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 349284
+    },
+    {
+      "security_id": "BBG000F6H8W8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 402028
+    },
+    {
+      "security_id": "BBG000F6ZWH2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 222912
+    },
+    {
+      "security_id": "BBG000F7KQG0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 35976
+    },
+    {
+      "security_id": "BBG000F7RCJ1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 104476
+    },
+    {
+      "security_id": "BBG000F9XKN7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 14864
+    },
+    {
+      "security_id": "BBG000FBND22",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 119380
+    },
+    {
+      "security_id": "BBG000FFDM15",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 104664
+    },
+    {
+      "security_id": "BBG000FKJRC5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 209008
+    },
+    {
+      "security_id": "BBG000FLPRH1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 197596
+    },
+    {
+      "security_id": "BBG000FQ7YR4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 43816
+    },
+    {
+      "security_id": "BBG000FVZQY1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 26444
+    },
+    {
+      "security_id": "BBG000FY4S11",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 372316
+    },
+    {
+      "security_id": "BBG000G12J78",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 48044
+    },
+    {
+      "security_id": "BBG000GC0TZ3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 22656
+    },
+    {
+      "security_id": "BBG000GQJPZ0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 447160
+    },
+    {
+      "security_id": "BBG000GQPB11",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 374820
+    },
+    {
+      "security_id": "BBG000GT7XY1",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 13718
+    },
+    {
+      "security_id": "BBG000GX14P2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 67188
+    },
+    {
+      "security_id": "BBG000GZQ728",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 226328
+    },
+    {
+      "security_id": "BBG000H556T9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 291800
+    },
+    {
+      "security_id": "BBG000H6HNW3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 71720
+    },
+    {
+      "security_id": "BBG000H85B03",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 29016
+    },
+    {
+      "security_id": "BBG000H8TVT2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 414116
+    },
+    {
+      "security_id": "BBG000H9G7X2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 95896
+    },
+    {
+      "security_id": "BBG000HCJMF9",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 13958
+    },
+    {
+      "security_id": "BBG000HCXS51",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 8896
+    },
+    {
+      "security_id": "BBG000HQ1LB3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 7700
+    },
+    {
+      "security_id": "BBG000HS77T5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 361728
+    },
+    {
+      "security_id": "BBG000HZ3562",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 63272
+    },
+    {
+      "security_id": "BBG000J094P3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 37696
+    },
+    {
+      "security_id": "BBG000J1QLT0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 74944
+    },
+    {
+      "security_id": "BBG000J2XL74",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 127932
+    },
+    {
+      "security_id": "BBG000JD6TN5",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 4024
+    },
+    {
+      "security_id": "BBG000JLCF41",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 334128
+    },
+    {
+      "security_id": "BBG000JLF4M3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 193300
+    },
+    {
+      "security_id": "BBG000JLGQR8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 367112
+    },
+    {
+      "security_id": "BBG000JLJV85",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 213736
+    },
+    {
+      "security_id": "BBG000JLK7V0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 179384
+    },
+    {
+      "security_id": "BBG000JP3063",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 296660
+    },
+    {
+      "security_id": "BBG000JWD753",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 306000
+    },
+    {
+      "security_id": "BBG000K4J3T0",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 1194
+    },
+    {
+      "security_id": "BBG000K4ND22",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 28440
+    },
+    {
+      "security_id": "BBG000KHWT55",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 57636
+    },
+    {
+      "security_id": "BBG000KLB4Q1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 24648
+    },
+    {
+      "security_id": "BBG000L9CV04",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 427856
+    },
+    {
+      "security_id": "BBG000LD9JQ8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 360312
+    },
+    {
+      "security_id": "BBG000LV0836",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 37048
+    },
+    {
+      "security_id": "BBG000M0P5L2",
+      "maximum_distinct_expiries": 4,
+      "maximum_requests": 771736
+    },
+    {
+      "security_id": "BBG000M1R011",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 386672
+    },
+    {
+      "security_id": "BBG000M65M61",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 394248
+    },
+    {
+      "security_id": "BBG000MBDGM6",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 7156
+    },
+    {
+      "security_id": "BBG000MM2P62",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 942730
+    },
+    {
+      "security_id": "BBG000MQQ963",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 351592
+    },
+    {
+      "security_id": "BBG000MQSW88",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 177328
+    },
+    {
+      "security_id": "BBG000MYZDJ3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 348700
+    },
+    {
+      "security_id": "BBG000N2HDY5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 290976
+    },
+    {
+      "security_id": "BBG000N2YG88",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 220840
+    },
+    {
+      "security_id": "BBG000N2ZYJ6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 110284
+    },
+    {
+      "security_id": "BBG000N7KBZ3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 49808
+    },
+    {
+      "security_id": "BBG000N7KJX8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 242940
+    },
+    {
+      "security_id": "BBG000N7MXL8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 313488
+    },
+    {
+      "security_id": "BBG000N7MZ06",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 130188
+    },
+    {
+      "security_id": "BBG000N7QR55",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 445280
+    },
+    {
+      "security_id": "BBG000N9MNX3",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 1095760
+    },
+    {
+      "security_id": "BBG000NDCRW7",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 893760
+    },
+    {
+      "security_id": "BBG000NDV1D4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 343716
+    },
+    {
+      "security_id": "BBG000NDYB67",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 371504
+    },
+    {
+      "security_id": "BBG000NL49J3",
+      "maximum_distinct_expiries": 4,
+      "maximum_requests": 712976
+    },
+    {
+      "security_id": "BBG000NQF3Z5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 4148
+    },
+    {
+      "security_id": "BBG000NV1KK7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 323804
+    },
+    {
+      "security_id": "BBG000NVSBL7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 166924
+    },
+    {
+      "security_id": "BBG000NXKWH0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 46876
+    },
+    {
+      "security_id": "BBG000NY37X4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 204316
+    },
+    {
+      "security_id": "BBG000P458P3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 80372
+    },
+    {
+      "security_id": "BBG000PB3SM8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 23168
+    },
+    {
+      "security_id": "BBG000PG8230",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 47896
+    },
+    {
+      "security_id": "BBG000PLNQN7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 315880
+    },
+    {
+      "security_id": "BBG000PP3YK6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 65404
+    },
+    {
+      "security_id": "BBG000PQ4W72",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 226332
+    },
+    {
+      "security_id": "BBG000PSJP22",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 29024
+    },
+    {
+      "security_id": "BBG000PSKYX7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 368500
+    },
+    {
+      "security_id": "BBG000PTYMS2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 222904
+    },
+    {
+      "security_id": "BBG000PVRDL2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 5968
+    },
+    {
+      "security_id": "BBG000PW5VX1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 131532
+    },
+    {
+      "security_id": "BBG000PY4FX3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 95988
+    },
+    {
+      "security_id": "BBG000Q1KFH4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 48232
+    },
+    {
+      "security_id": "BBG000Q4V1R6",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 5436
+    },
+    {
+      "security_id": "BBG000Q8RVM1",
+      "maximum_distinct_expiries": 3,
+      "maximum_requests": 548796
+    },
+    {
+      "security_id": "BBG000QB9Y48",
+      "maximum_distinct_expiries": 4,
+      "maximum_requests": 719088
+    },
+    {
+      "security_id": "BBG000QBB5Z4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 410180
+    },
+    {
+      "security_id": "BBG000QBR5J5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 25080
+    },
+    {
+      "security_id": "BBG000QFMLC3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 358384
+    },
+    {
+      "security_id": "BBG000QG1D78",
+      "maximum_distinct_expiries": 4,
+      "maximum_requests": 742808
+    },
+    {
+      "security_id": "BBG000QLKDR4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 23732
+    },
+    {
+      "security_id": "BBG000QRNHZ0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 37736
+    },
+    {
+      "security_id": "BBG000QS6NV8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 78152
+    },
+    {
+      "security_id": "BBG000QTF8K1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 200376
+    },
+    {
+      "security_id": "BBG000QW7VC1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 27640
+    },
+    {
+      "security_id": "BBG000QX74T1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 400276
+    },
+    {
+      "security_id": "BBG000QXWHD1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 402736
+    },
+    {
+      "security_id": "BBG000QY3XZ2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 330756
+    },
+    {
+      "security_id": "BBG000QZBM11",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 12588
+    },
+    {
+      "security_id": "BBG000R2T3H9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 401880
+    },
+    {
+      "security_id": "BBG000R33BD1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 18108
+    },
+    {
+      "security_id": "BBG000R695F9",
+      "maximum_distinct_expiries": 4,
+      "maximum_requests": 628288
+    },
+    {
+      "security_id": "BBG000R7Z112",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 370668
+    },
+    {
+      "security_id": "BBG000R8ZVD1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 410536
+    },
+    {
+      "security_id": "BBG000RTNP69",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 109288
+    },
+    {
+      "security_id": "BBG000RYC984",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 32376
+    },
+    {
+      "security_id": "BBG000TDCVT6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 50104
+    },
+    {
+      "security_id": "BBG000TGLV00",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG000VC0T95",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 405080
+    },
+    {
+      "security_id": "BBG000VC77H7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 10640
+    },
+    {
+      "security_id": "BBG000VPGNR2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 344464
+    },
+    {
+      "security_id": "BBG0014GJCT9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 361316
+    },
+    {
+      "security_id": "BBG0015VYNT4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 310052
+    },
+    {
+      "security_id": "BBG001636CR2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 19684
+    },
+    {
+      "security_id": "BBG0018JWV58",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 29216
+    },
+    {
+      "security_id": "BBG0018SLC07",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 451788
+    },
+    {
+      "security_id": "BBG0019T5SG0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 173920
+    },
+    {
+      "security_id": "BBG0019YY764",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 27796
+    },
+    {
+      "security_id": "BBG001B17MV2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 371012
+    },
+    {
+      "security_id": "BBG001C7TST4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 192776
+    },
+    {
+      "security_id": "BBG001CGB489",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 5396
+    },
+    {
+      "security_id": "BBG001DCCGR8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 295136
+    },
+    {
+      "security_id": "BBG001HRFJG4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 39084
+    },
+    {
+      "security_id": "BBG001J4BCN4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 80400
+    },
+    {
+      "security_id": "BBG001K7WBT8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 457036
+    },
+    {
+      "security_id": "BBG001MB89V6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 57380
+    },
+    {
+      "security_id": "BBG001R1GCT0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 418632
+    },
+    {
+      "security_id": "BBG001R3MNY9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 400744
+    },
+    {
+      "security_id": "BBG001WMKHH5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 468712
+    },
+    {
+      "security_id": "BBG001Y2XS07",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 377088
+    },
+    {
+      "security_id": "BBG001YV1SM4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 394380
+    },
+    {
+      "security_id": "BBG001ZZPQJ6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 398312
+    },
+    {
+      "security_id": "BBG002293PJ4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 420108
+    },
+    {
+      "security_id": "BBG0022FDRY8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 428004
+    },
+    {
+      "security_id": "BBG0024QY1Y6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 383532
+    },
+    {
+      "security_id": "BBG0024TG624",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 29312
+    },
+    {
+      "security_id": "BBG0024TGRQ2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 258708
+    },
+    {
+      "security_id": "BBG0024TJFY6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 160736
+    },
+    {
+      "security_id": "BBG002583CV8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 388844
+    },
+    {
+      "security_id": "BBG0025XVR85",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 315988
+    },
+    {
+      "security_id": "BBG0025Y4RY4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 370260
+    },
+    {
+      "security_id": "BBG00286S4N9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 111584
+    },
+    {
+      "security_id": "BBG0029ZX840",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 344320
+    },
+    {
+      "security_id": "BBG002B04MT8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 381424
+    },
+    {
+      "security_id": "BBG002CV4Q74",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 34336
+    },
+    {
+      "security_id": "BBG002PHSYX9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 51236
+    },
+    {
+      "security_id": "BBG003338H34",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 431968
+    },
+    {
+      "security_id": "BBG003CVJP50",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 243892
+    },
+    {
+      "security_id": "BBG003D4V951",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 83624
+    },
+    {
+      "security_id": "BBG003NJHZT9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 332168
+    },
+    {
+      "security_id": "BBG003PHHZT1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 406096
+    },
+    {
+      "security_id": "BBG0042V6JM8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 344692
+    },
+    {
+      "security_id": "BBG00441QMJ7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 367612
+    },
+    {
+      "security_id": "BBG004F0NVD6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 15144
+    },
+    {
+      "security_id": "BBG004FPTZB8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 5276
+    },
+    {
+      "security_id": "BBG004M9ZHX5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 441464
+    },
+    {
+      "security_id": "BBG004NLQHL0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 21112
+    },
+    {
+      "security_id": "BBG004S641N5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 51800
+    },
+    {
+      "security_id": "BBG004XB9HY6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 341072
+    },
+    {
+      "security_id": "BBG0056JW5G6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 74776
+    },
+    {
+      "security_id": "BBG005D7QCJ3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 305448
+    },
+    {
+      "security_id": "BBG005HJL923",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 62520
+    },
+    {
+      "security_id": "BBG005K1D4S0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 226580
+    },
+    {
+      "security_id": "BBG005P7Q881",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 355196
+    },
+    {
+      "security_id": "BBG005YHY0Q7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 328436
+    },
+    {
+      "security_id": "BBG00629NGT2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 412060
+    },
+    {
+      "security_id": "BBG0064N0ZZ5",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 2826
+    },
+    {
+      "security_id": "BBG0069FB082",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 31748
+    },
+    {
+      "security_id": "BBG006D97VY9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 17496
+    },
+    {
+      "security_id": "BBG006G2JVL2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 361884
+    },
+    {
+      "security_id": "BBG006HFPX77",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 202552
+    },
+    {
+      "security_id": "BBG006LGV869",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 174524
+    },
+    {
+      "security_id": "BBG0073F9RT7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 27152
+    },
+    {
+      "security_id": "BBG00741Y1N2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 362448
+    },
+    {
+      "security_id": "BBG0074Q3NK6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 306452
+    },
+    {
+      "security_id": "BBG0077VNXV6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 352832
+    },
+    {
+      "security_id": "BBG0078W3NQ3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG007DHGNJ4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 386248
+    },
+    {
+      "security_id": "BBG007FJMV58",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 416064
+    },
+    {
+      "security_id": "BBG007FJPCB0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 43444
+    },
+    {
+      "security_id": "BBG007KGRPY4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 17296
+    },
+    {
+      "security_id": "BBG007T9DYW9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 24204
+    },
+    {
+      "security_id": "BBG0084BBZY6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 344868
+    },
+    {
+      "security_id": "BBG008HBD923",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 411064
+    },
+    {
+      "security_id": "BBG008LT6106",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 24636
+    },
+    {
+      "security_id": "BBG008N298Y8",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 30846
+    },
+    {
+      "security_id": "BBG008NMBXN8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 375852
+    },
+    {
+      "security_id": "BBG0099SHLC1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 162340
+    },
+    {
+      "security_id": "BBG0099SHZZ5",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 75696
+    },
+    {
+      "security_id": "BBG009HYYCD9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 86832
+    },
+    {
+      "security_id": "BBG009NRSWJ4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 253476
+    },
+    {
+      "security_id": "BBG009S39JX6",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 905400
+    },
+    {
+      "security_id": "BBG009S3NB30",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 374116
+    },
+    {
+      "security_id": "BBG009T0QND5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 153440
+    },
+    {
+      "security_id": "BBG00B3T3HD3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 377152
+    },
+    {
+      "security_id": "BBG00B6G7GL7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 55636
+    },
+    {
+      "security_id": "BBG00B8N0HG1",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 6748
+    },
+    {
+      "security_id": "BBG00BLYKS03",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 420576
+    },
+    {
+      "security_id": "BBG00BLZ2CD1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 96392
+    },
+    {
+      "security_id": "BBG00BM5YC05",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 34128
+    },
+    {
+      "security_id": "BBG00BN96922",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 219272
+    },
+    {
+      "security_id": "BBG00BTJVK94",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 8432
+    },
+    {
+      "security_id": "BBG00DGWV035",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 19318
+    },
+    {
+      "security_id": "BBG00DHTYPH8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 23184
+    },
+    {
+      "security_id": "BBG00DQ6VYP3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 139528
+    },
+    {
+      "security_id": "BBG00DW3SZS1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 240840
+    },
+    {
+      "security_id": "BBG00DXDL6Q1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG00FNFPQH4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 13672
+    },
+    {
+      "security_id": "BBG00FWQ4VD6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 367264
+    },
+    {
+      "security_id": "BBG00GBR8753",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 180600
+    },
+    {
+      "security_id": "BBG00GBV88T6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 130808
+    },
+    {
+      "security_id": "BBG00GCTWDJ3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 474412
+    },
+    {
+      "security_id": "BBG00GKS1G03",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 115952
+    },
+    {
+      "security_id": "BBG00GLTQCX6",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 6450
+    },
+    {
+      "security_id": "BBG00HTBWMG5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 408660
+    },
+    {
+      "security_id": "BBG00HTN2CQ3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 43524
+    },
+    {
+      "security_id": "BBG00HW3TQG4",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 3186
+    },
+    {
+      "security_id": "BBG00JG0FFZ2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 207796
+    },
+    {
+      "security_id": "BBG00JM9XLN6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 39092
+    },
+    {
+      "security_id": "BBG00JQ5JWB5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 359636
+    },
+    {
+      "security_id": "BBG00K7T3037",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 169148
+    },
+    {
+      "security_id": "BBG00K8H39V2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 5776
+    },
+    {
+      "security_id": "BBG00KHY5S69",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 457030
+    },
+    {
+      "security_id": "BBG00KP45MJ5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 34128
+    },
+    {
+      "security_id": "BBG00KXRCDP0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 234816
+    },
+    {
+      "security_id": "BBG00L2B8KW8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 207792
+    },
+    {
+      "security_id": "BBG00L4CWQ45",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 146936
+    },
+    {
+      "security_id": "BBG00L7XTP60",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 108972
+    },
+    {
+      "security_id": "BBG00LBLDDR2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 249904
+    },
+    {
+      "security_id": "BBG00LPWLFD4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 95468
+    },
+    {
+      "security_id": "BBG00LPXZB46",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 361388
+    },
+    {
+      "security_id": "BBG00MS90LK2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG00MYXW4R8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 216864
+    },
+    {
+      "security_id": "BBG00NGNL3X5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 30056
+    },
+    {
+      "security_id": "BBG00P19DKZ6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 335352
+    },
+    {
+      "security_id": "BBG00P5NVCR8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 9604
+    },
+    {
+      "security_id": "BBG00PKCBY53",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 491796
+    },
+    {
+      "security_id": "BBG00PZTS4J3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 25956
+    },
+    {
+      "security_id": "BBG00Q011TW9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 9040
+    },
+    {
+      "security_id": "BBG00Q402TR2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 131436
+    },
+    {
+      "security_id": "BBG00Q53VYM7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 141728
+    },
+    {
+      "security_id": "BBG00Q70B3V1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 73164
+    },
+    {
+      "security_id": "BBG00Q741Z16",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 220384
+    },
+    {
+      "security_id": "BBG00QVJV6V4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 239316
+    },
+    {
+      "security_id": "BBG00S1HJ3M8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 26532
+    },
+    {
+      "security_id": "BBG00SHY8ZQ1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 44628
+    },
+    {
+      "security_id": "BBG00TDKHW99",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 169024
+    },
+    {
+      "security_id": "BBG00TJGL0F0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 49540
+    },
+    {
+      "security_id": "BBG00V1KJ6F5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 72696
+    },
+    {
+      "security_id": "BBG00V76KZV6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 18688
+    },
+    {
+      "security_id": "BBG00V9V7L54",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 6280
+    },
+    {
+      "security_id": "BBG00VJ17DS2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 130744
+    },
+    {
+      "security_id": "BBG00VT0KNC3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 126628
+    },
+    {
+      "security_id": "BBG00VY1MYW7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG00W0KZD98",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 204312
+    },
+    {
+      "security_id": "BBG00W7F99V5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 287168
+    },
+    {
+      "security_id": "BBG00WKJG3M7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 252444
+    },
+    {
+      "security_id": "BBG00WYHL732",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 24852
+    },
+    {
+      "security_id": "BBG00X28J818",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 48916
+    },
+    {
+      "security_id": "BBG00XMJRPQ8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 14948
+    },
+    {
+      "security_id": "BBG00XRJ7Y40",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 5756
+    },
+    {
+      "security_id": "BBG00XRTC910",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 107752
+    },
+    {
+      "security_id": "BBG00XRTSTR1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG00XS0FV56",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 7520
+    },
+    {
+      "security_id": "BBG00XYHY0K2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 76412
+    },
+    {
+      "security_id": "BBG00XZP0LB4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 189212
+    },
+    {
+      "security_id": "BBG00Y61SZL5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 25508
+    },
+    {
+      "security_id": "BBG00Y6G6X31",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 274656
+    },
+    {
+      "security_id": "BBG00Y7BP8Y1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 476984
+    },
+    {
+      "security_id": "BBG00YB1ZD58",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 459216
+    },
+    {
+      "security_id": "BBG00YC53854",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 206084
+    },
+    {
+      "security_id": "BBG00YG48NM6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 153556
+    },
+    {
+      "security_id": "BBG00YGLXD60",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 7724
+    },
+    {
+      "security_id": "BBG00YMWFTZ2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 45940
+    },
+    {
+      "security_id": "BBG00YQ6KTL4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 36608
+    },
+    {
+      "security_id": "BBG00YTS96G2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 190916
+    },
+    {
+      "security_id": "BBG00YVV3B04",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 15760
+    },
+    {
+      "security_id": "BBG00Z4HKRV4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 89448
+    },
+    {
+      "security_id": "BBG00Z6F4C10",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 16116
+    },
+    {
+      "security_id": "BBG00Z72HCV1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 51660
+    },
+    {
+      "security_id": "BBG00Z911S16",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 157864
+    },
+    {
+      "security_id": "BBG00ZCV3P74",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 12096
+    },
+    {
+      "security_id": "BBG00ZGF6SS3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 26936
+    },
+    {
+      "security_id": "BBG00ZGF7771",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 459876
+    },
+    {
+      "security_id": "BBG00ZMYYP00",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 71228
+    },
+    {
+      "security_id": "BBG00ZNLTFK3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 58004
+    },
+    {
+      "security_id": "BBG00ZXBJ153",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 368928
+    },
+    {
+      "security_id": "BBG010FXVQ98",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 1884
+    },
+    {
+      "security_id": "BBG0112CBLW3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 190624
+    },
+    {
+      "security_id": "BBG011386VF4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 297560
+    },
+    {
+      "security_id": "BBG011744HH0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 179920
+    },
+    {
+      "security_id": "BBG011N57109",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 34572
+    },
+    {
+      "security_id": "BBG011ZTRJ21",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 132260
+    },
+    {
+      "security_id": "BBG0120SWLS0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 116980
+    },
+    {
+      "security_id": "BBG0122MC900",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 121328
+    },
+    {
+      "security_id": "BBG0131STJL3",
+      "maximum_distinct_expiries": 3,
+      "maximum_requests": 449592
+    },
+    {
+      "security_id": "BBG0134WCM78",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 381204
+    },
+    {
+      "security_id": "BBG013G17W31",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 224716
+    },
+    {
+      "security_id": "BBG0147BN6G2",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 51748
+    },
+    {
+      "security_id": "BBG014HVF3N5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 12032
+    },
+    {
+      "security_id": "BBG014HVGDK5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 0
+    },
+    {
+      "security_id": "BBG014KFRNP7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 158764
+    },
+    {
+      "security_id": "BBG0157C6612",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 19168
+    },
+    {
+      "security_id": "BBG017304ND0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 222868
+    },
+    {
+      "security_id": "BBG0192379V9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 157260
+    },
+    {
+      "security_id": "BBG0193YH501",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 129424
+    },
+    {
+      "security_id": "BBG019HGLML0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 18376
+    },
+    {
+      "security_id": "BBG019MBDC63",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 16720
+    },
+    {
+      "security_id": "BBG019X46Z37",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 69384
+    },
+    {
+      "security_id": "BBG01BGWHFR5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 337248
+    },
+    {
+      "security_id": "BBG01BWDKNF1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 125184
+    },
+    {
+      "security_id": "BBG01C79X561",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 65636
+    },
+    {
+      "security_id": "BBG01F7QNWC1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 92956
+    },
+    {
+      "security_id": "BBG01GWQVVD3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 170492
+    },
+    {
+      "security_id": "BBG01GXLYLP9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 170532
+    },
+    {
+      "security_id": "BBG01HFW5XW1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 82376
+    },
+    {
+      "security_id": "BBG01J1GXZF0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 291080
+    },
+    {
+      "security_id": "BBG01JLG80T8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 91836
+    },
+    {
+      "security_id": "BBG01JLQNZ03",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 48360
+    },
+    {
+      "security_id": "BBG01KB9ZVR6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 35260
+    },
+    {
+      "security_id": "BBG01KR6BS70",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 11524
+    },
+    {
+      "security_id": "BBG01KYQ6PV3",
+      "maximum_distinct_expiries": 5,
+      "maximum_requests": 387530
+    },
+    {
+      "security_id": "BBG01L5GH011",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 96220
+    },
+    {
+      "security_id": "BBG01L6XWKF7",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 45492
+    },
+    {
+      "security_id": "BBG01LNWKBD5",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 12788
+    },
+    {
+      "security_id": "BBG01MZQYJF9",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 170696
+    },
+    {
+      "security_id": "BBG01NGH78G1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 9668
+    },
+    {
+      "security_id": "BBG01NSK4Y13",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 127176
+    },
+    {
+      "security_id": "BBG01NXX8H49",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 124208
+    },
+    {
+      "security_id": "BBG01PSTBWZ8",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 110680
+    },
+    {
+      "security_id": "BBG01PSW2WN4",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 181464
+    },
+    {
+      "security_id": "BBG01Q409XM0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 21804
+    },
+    {
+      "security_id": "BBG01QKK3377",
+      "maximum_distinct_expiries": 1,
+      "maximum_requests": 11294
+    },
+    {
+      "security_id": "BBG01R388JG1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 82328
+    },
+    {
+      "security_id": "BBG01RGY23K6",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 18384
+    },
+    {
+      "security_id": "BBG01T61V2V3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 117000
+    },
+    {
+      "security_id": "BBG01V7JN3F3",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 115152
+    },
+    {
+      "security_id": "BBG01X4QY3R1",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 3468
+    },
+    {
+      "security_id": "BBG01XLDHDP0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 23508
+    },
+    {
+      "security_id": "BBG01ZVQF4M0",
+      "maximum_distinct_expiries": 2,
+      "maximum_requests": 28572
+    },
+    {
+      "security_id": "BBG021DJBSP8",
+      "maximum_distinct_expiries": 4,
+      "maximum_requests": 47904
+    }
+  ]
+}

@@ -1524,3 +1524,16 @@ demand scheduler and measured union under the existing 250 GB acquisition
 ceiling, at most four workers and 100 GiB reserve. Pre-decision requests alone
 do not close 7-3, and no training/readiness verdict follows from this milestone.
 Evidence: `docs/reviews/2026-09-25-v7-2-complete-and-v7-3-start.md`.
+
+### 2026-09-25 — Start full entry demand under a measured project budget
+
+The user directed starting the next V7 stage. The proposal catalog is already
+frozen; launch full entry-feature demand for all 591 securities, retaining the
+existing four checkpoints. The complete proposal census and observed expiry
+inventory support a 193.45 GB storage stress forecast. Allocate 200 GiB to the
+stage and cap the total project at 640 GB, preserving at least 100 GiB free.
+Use four autosized outer workers at most, one inner thread, and a bounded user
+service. Reject a pilot-based whole-universe volume/ETA extrapolation and an
+uncapped build. No option capture or training starts automatically; those need
+the full union and their remaining gates. See the
+[launch review](reviews/2026-09-25-v7-3-full-demand-launch.md).

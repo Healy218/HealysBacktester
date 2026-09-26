@@ -45,13 +45,19 @@
 - [ ] **7-3. Complete actual option-path demand, dated hours/reference inputs and targeted captures.**
   **Active as of September 25.** The first MTUM demand pilot passed: 29,843
   actual proposals, 3,552 quote/trade requests, 76 contracts. All 591 securities
-  remain in scope. The pilot is complete; no background V7 build is running.
+  remain in scope. The full entry-demand service is now running for all 591,
+  reusing the completed pilot checkpoints.
   The resumable all-security demand scheduler is implemented with exact
   historical-loader proof support. Four validation securities passed: 97,935
   proposals, 7,674 requests and 6,700 union capture windows; all 12 receipts
   survived restart unchanged. This is a validation subset, not full demand.
-  Next establish the full-run storage forecast/allocation, run the remaining
-  security demand, and measure the full request union before targeted captures.
+  Full-scope census: 793,394,264 proposals, 27,576,105 timeframe decisions and
+  20,345,211 selection decisions. A 193.45 GB stress forecast supports the
+  200 GiB stage allocation and 640 GB total-project budget. The full service
+  `healys-v7-entry-demand-20260925.service` launched with four workers; 130/591
+  had sealed at the recorded follow-up, with no failures. Monitor its own
+  progress, then reconcile the full request union before targeted captures.
+  See `docs/reviews/2026-09-25-v7-3-full-demand-launch.md`.
   Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
   Derive proposal-driven
   entry demand for all completed securities from their 5/15/30 stores; then
@@ -229,7 +235,9 @@ agreed funded physical fallback remain required. Preserve shared portfolio
 limits, chronological folds and causal inputs. Use at most four outer workers,
 one inner thread, 100 GiB disk reserve and the 250 GB acquisition ceiling.
 Protect existing V6 paper operation; do not change its policy as a side task.
-The user reported a roughly 230 GB project and constrained disk capacity.
+The earlier roughly 230 GB project estimate is stale: the September 25
+measurement is 421.285 GB. The current demand stage has a 200 GiB output cap
+and 640 GB total-project budget; option captures need a fresh storage forecast.
 Reuse captures and keep remaining dividend evidence to named small documents.
 Before any further bulk acquisition or full-store generation, provide a storage
 forecast and establish the total-project budget; the acquisition cap alone is
