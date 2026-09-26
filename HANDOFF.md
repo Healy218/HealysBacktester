@@ -1,88 +1,84 @@
-# Handoff — 2026-09-25 — V7-3 resumed with proven kernel compatibility
+# Handoff — 2026-09-26 — demand running; union audit queued; stale alerts stopped
 
 Read TODO first. Previous handoff:
-`handoff-history/HANDOFF-2026-09-25-before-crash-recovery.md`.
-Main is operational. Extensive unrelated dirty/untracked work predates this
-session; preserve it and stage only owned changes.
+`handoff-history/HANDOFF-2026-09-26-before-capture-preparation.md`.
+Main is operational. Preserve the extensive unrelated dirty/untracked work.
 
-## Current work and preserved freeze
+## User direction and current gate
 
-V7-1 and V7-2 are complete; V7-3 is active. The existing 591-security,
-1,773-store 5/15/30 catalog remains unchanged. All feature/proposal summary
-receipt pairs match the original deep audit. The original completion gates,
-historical-loader proofs and daily context remain intact. No proposal refreeze.
-All 546 pre-shutdown demand checkpoints are retained. Their declarations bind
-21,001,900 inputs across 1,873,058 distinct files; the recovery audit found no
-input/source drift. Only the kernel platform string changed on reboot.
+The user requested starting option captures and training, a separate-terminal
+progress bar, and stopping hourly finished-build alerts. Advance the required
+capture/training dependencies without relabeling incomplete stages as ready.
+V7-1 and V7-2 are complete; V7-3 is active. Actual provider captures and training
+have not launched: demand, full union, storage forecast and later execution,
+assembly/fold/trial/resource/readiness gates remain prerequisites.
 
-The prior launch/handoff edits were staged but uncommitted when the API crashed;
-those were recovered in commit `d76c2e1`.
+All 1,773 frozen stores, completion gates, daily context and original historical
+loader proofs remain preserved. The user-approved exact Linux 7.2.6 → 7.2.7
+exception is backed by four byte-identical demand/export replays. All 546
+pre-reboot demand checkpoints survived and have now been revalidated/reused.
+The run is generating the remaining securities. At the saved follow-up,
+550/591 were complete, with four workers and no failures; use current progress.
+Do not edit either demand scheduler, recovery source or bound inputs while active.
 
-## Active service and progress
+## Running demand and queued union audit
 
-**Service:** `healys-v7-entry-demand-recovery-20260925.service`.
-**Invocation:** `9a07064bbccd4f91aedd75e46580fd3a`.
-**Output:** `nn_meta/validation/v7-3-scheduler-20260925`.
-**Current meter:** `kernel-recovery/progress.json` under that output.
-**Controller log:** `kernel-recovery/controller.log`.
+Demand service: `healys-v7-entry-demand-recovery-20260925.service`.
+Invocation: `9a07064bbccd4f91aedd75e46580fd3a`.
+Root: `nn_meta/validation/v7-3-scheduler-20260925`.
+Active meter/log: `kernel-recovery/progress.json` and `kernel-recovery/controller.log`.
+Root `progress.json` remains the failed strict-runtime restart, not current state.
+Four workers / one inner thread, 400% CPU, 14/16 GiB memory high/max, no swap.
 
-Verified active/running with four autosized workers, one inner thread, 400% CPU,
-14 GiB memory high / 16 GiB maximum, zero swap, nice 10, IO weight 25 and
-AF_UNIX-only sockets. It first revalidates/reuses the 546 saved checkpoints,
-then builds the remaining 45. Its fresh meter starts at zero and measures
-this invocation; it does not mean old checkpoints were lost. The original root
-`progress.json` records a failed strict-runtime restart and is no longer the
-active meter. Inspect the recovery meter for current progress/failures.
+Union service: `healys-v7-entry-union-20260926.service`.
+Invocation: `ceded52087f74d238c957df81eb1305b`.
+It is waiting for all 591 demand checkpoints before starting a read-only audit.
+Script: `scripts/audit_v7_capture_union.py`.
+Status: `nn_meta/validation/v7-3-entry-union-20260926.status.json`.
+Output when complete: `nn_meta/validation/v7-3-entry-union-20260926`.
+Log: `logs/v7-entry-union-20260926.log`.
+One CPU, 3/4 GiB memory high/max, no swap, AF_UNIX only, file-descriptor limit 4096.
+It verifies checkpoint/declaration/export identities and hashes, streams sorted
+request tables through a global union, checks every request's interval coverage,
+and preserves no-contract/no-fresh outcomes in its summary. It writes a small
+census rather than duplicating request tables. No provider requests or training
+are chained to this service. Do not change its source while queued/running.
+Both services are transient; user-manager shutdown/reboot requires recovery.
 
-## Exact compatibility and storage evidence
+## Progress terminal and retired alerts
 
-The reboot changed Linux 7.2.6-1-cachyos to 7.2.7-1-cachyos. The unchanged
-scheduler correctly refused to reuse old-runtime demand. The user explicitly
-approved validating kernel compatibility while preserving every original.
-The separate recovery consumer admits only that exact pair with identical
-Python, executable, glibc, packages, input/source hashes and all other runtime
-fields. Original scheduler/strict readers and producer code were not changed.
+A Konsole tab was opened with the read-only demand viewer:
+`./venv/bin/python scripts/watch_v7_demand.py --follow`.
+It separately shows saved checkpoint presence and verified/completed work in the
+current invocation, active workers, failures, storage and stale/stopped state.
+Ctrl-C closes the viewer without stopping the background job. The old
+`scripts/watch_v7_catalog.py --follow` tracks the completed catalog, not demand.
+No `v7_training_progress.py` exists in this checkout; no separate training job
+was found in the process inspection.
 
-Four real replays passed: 97,935 proposals, 7,674 requests, byte-identical
-SQLite demand, equal reports and byte-identical exported request batches.
-New artifacts record the actual runtime and bind the recovery source/proof;
-legacy receipts are never relabeled. This exception is only for frozen-catalog
-consumption and entry demand, not regeneration, training or provider capture.
-Do not edit either scheduler, recovery source or bound inputs during the run.
+The repeated completed-build notifications were on the HOME box. Both
+`healys-v6-progress.timer` and `healys-v7-catalog-progress.timer` are persistently
+disabled and inactive; their oneshot services were stopped. Hetzner timers/cron
+were inspected and no equivalent hourly build notifier was found there.
+Live scanners, feed health, dashboard, V6 paper and incubator services remain.
 
-The old 200 GiB cap failed the current disk preflight. A new sealed allocation
-uses completed actual bytes plus the original per-security forecast for the
-45 remaining securities, including partial evidence and 8 GiB working margin.
-Total stress forecast: 128.81 GB. Revised cap: **140 GiB** (150.32 GB).
-The 100 GiB free reserve, 640 GB project budget and 250 GB acquisition ceiling
-remain. No files were deleted. Captures still need a separate storage forecast.
+## Budget, evidence and next steps
 
-Evidence under `nn_meta/validation/`:
-- `v7-3-demand-recovery-plan-20260925`
-- `v7-3-recovery-audit-20260925`
-- `v7-3-kernel-equivalence-20260925` (replay outputs in sibling `-replays`)
-- `v7-3-recovery-launch-20260925`
+Demand cap: 140 GiB; prior stress forecast 128.81 GB. Keep 100 GiB free and the
+640 GB project budget. Acquisition quota remains 250 GB; recorded used quota
+was 68.97 GB. Counts alone do not forecast provider bytes. Once the union audit
+finishes, inspect its coverage/counts and produce a measured capture storage
+forecast; then capture required windows under the remaining budget. Dated
+option hours/references and entry/mark/exit/roll/delivery paths remain V7-3 work.
+Training remains gated through integrated execution, assembly and full readiness.
 
-Full review and exact restart command:
+Review: `docs/reviews/2026-09-26-v7-capture-preparation.md`.
+Evidence: `nn_meta/validation/v7-capture-preparation-20260926`.
+Prior preservation/kernel recovery:
 `docs/reviews/2026-09-25-v7-3-crash-recovery.md`.
-Use `scripts/start_v7_entry_demand_recovery.sh` after investigating any failure;
-the original launcher still rejects old-runtime checkpoints on the new kernel.
-The transient service survives terminal closure, not a user-manager shutdown
-or reboot. The same exact approved runtime is required for this recovery proof.
+Full tests: **2,415 passed, 18 subtests, 20 warnings**, 123.33 seconds.
+Four focused monitor/union tests passed; incomplete-demand preflight correctly
+exited without starting a union or capture. Service/timer/terminal states checked.
 
-Validation: **2,411 tests, 18 subtests, 20 warnings**, 120.33 seconds;
-eight focused recovery/scheduler tests, all four real replays and launcher
-syntax/read-only preflight passed. Actual service limits were verified.
-
-## Next work
-
-Monitor recovery. After all 591 complete, independently reconcile the full
-request union and missing/no-contract outcomes. Then resolve dated option hours
-and standard references, and cover entry fills, minute marks, exits, rolls and
-applicable stock delivery. Demand completion alone does not close V7-3.
-V7-4 through V7-7 and training readiness remain open.
-
-V6 Alpaca fresh scanning/submission remain disabled; prospective scanner/bridge
-and multi-roll verification remain open. Preserve separate simulator/broker P/L.
-V5/V6 incubator and the October 2 Massive decision remain carried-forward work.
-No V6 or incubator runtime was changed during recovery.
+V6 Alpaca fresh scanning/submission, incubator daily health/outcomes and October 2
+Massive renewal recommendation remain separate carried-forward work.

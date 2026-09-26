@@ -67,6 +67,14 @@
   is the failed strict-runtime restart. The measured recovery cap is 140 GiB;
   all originals remain intact. See the
   [recovery record](docs/reviews/2026-09-25-v7-3-crash-recovery.md).
+  September 26: recovery has revalidated all 546 saved checkpoints and is
+  generating the remaining demand (550/591 at the recorded follow-up). A
+  bounded read-only full request-union census is queued as
+  `healys-v7-entry-union-20260926.service`, waiting for all 591. Actual provider
+  captures and training have not started. A separate terminal viewer is
+  available as `./venv/bin/python scripts/watch_v7_demand.py --follow`.
+  The two obsolete hourly V6/catalog completion-alert timers are disabled.
+  See [capture preparation](docs/reviews/2026-09-26-v7-capture-preparation.md).
   See `docs/reviews/2026-09-25-v7-3-full-demand-launch.md`.
   Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
   Derive proposal-driven

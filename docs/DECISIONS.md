@@ -1551,3 +1551,16 @@ Preserve all 546 prior checkpoints and partial evidence. A new 140 GiB stage
 cap uses actual completed output plus the original census forecast for the
 remaining 45; the 100 GiB reserve and 640 GB project budget remain unchanged.
 See [recovery evidence](reviews/2026-09-25-v7-3-crash-recovery.md).
+
+### 2026-09-26 — Retire completed-build alerts; monitor demand and queue its union audit
+
+The user requested captures/training and a separate-terminal progress display.
+Continue through the existing evidence gates; do not treat request generation
+as captured paths or training readiness. Queue a bounded read-only full demand
+union census after all 591 securities finish. Provider acquisition awaits its
+measured volume/storage forecast; training awaits execution, assembly and the
+remaining readiness gates. Keep the preserved freeze and exact kernel proof.
+Disable the completed home V6 and V7-catalog hourly progress timers as explicitly
+requested; retain live/scanner/health alerts. Use the demand-stage read-only CLI
+viewer rather than the already-complete catalog viewer. See
+[preparation and verification](reviews/2026-09-26-v7-capture-preparation.md).
