@@ -1,0 +1,12 @@
+{
+  "complete": true,
+  "files": {
+    "BBG000BCQ6J8.log": "1fd7234a0abda8ee0cf3f01230e7e7d4eb7421511687430101439eb6d56603d3",
+    "BBG000BF8TF5.log": "1fd7234a0abda8ee0cf3f01230e7e7d4eb7421511687430101439eb6d56603d3",
+    "BBG000BL5W86.log": "1fd7234a0abda8ee0cf3f01230e7e7d4eb7421511687430101439eb6d56603d3",
+    "failed-progress.json": "b51296af4705d13a3b619b5e5e3cfd3176c87fa728b01b8da19dd74ede2136ac",
+    "report.json": "f9b4da074ce80eea826bd2da45e90bb837c0ce984e69963d4141b8c57b563128"
+  },
+  "identity": "6f43d784b1b1f315a0495dc734b626005d70e346dd6c82299dcd998ddc817843",
+  "research_ready": false
+}

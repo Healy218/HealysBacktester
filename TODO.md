@@ -57,6 +57,16 @@
   `healys-v7-entry-demand-20260925.service` launched with four workers; 130/591
   had sealed at the recorded follow-up, with no failures. Monitor its own
   progress, then reconcile the full request union before targeted captures.
+  Crash recovery: 546 checkpoints survived the user-session shutdown. All frozen
+  catalog receipt pairs and completed demand input/source bindings still match.
+  The user approved the exact Linux 7.2.6 → 7.2.7 compatibility validation;
+  four real byte-parity replays passed. The separate recovery service
+  `healys-v7-entry-demand-recovery-20260925.service` now revalidates/reuses those
+  checkpoints before finishing the remaining 45. Its meter is
+  `v7-3-scheduler-20260925/kernel-recovery/progress.json`. The root progress
+  is the failed strict-runtime restart. The measured recovery cap is 140 GiB;
+  all originals remain intact. See the
+  [recovery record](docs/reviews/2026-09-25-v7-3-crash-recovery.md).
   See `docs/reviews/2026-09-25-v7-3-full-demand-launch.md`.
   Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
   Derive proposal-driven
@@ -236,8 +246,10 @@ limits, chronological folds and causal inputs. Use at most four outer workers,
 one inner thread, 100 GiB disk reserve and the 250 GB acquisition ceiling.
 Protect existing V6 paper operation; do not change its policy as a side task.
 The earlier roughly 230 GB project estimate is stale: the September 25
-measurement is 421.285 GB. The current demand stage has a 200 GiB output cap
-and 640 GB total-project budget; option captures need a fresh storage forecast.
+measurement is 421.285 GB. The original demand allocation was 200 GiB. Recovery uses a measured 140 GiB
+cap (128.81 GB stress forecast including existing output and remaining work)
+within the unchanged 640 GB total-project budget. Option captures need a fresh
+storage forecast.
 Reuse captures and keep remaining dividend evidence to named small documents.
 Before any further bulk acquisition or full-store generation, provide a storage
 forecast and establish the total-project budget; the acquisition cap alone is

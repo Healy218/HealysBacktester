@@ -1,0 +1,30 @@
+{
+  "schema": "v7-demand-recovery-audit-v1",
+  "checked_at": "2026-09-26T04:40:41.961438+00:00",
+  "completed_checkpoints": 546,
+  "catalog_receipt_pairs": 1773,
+  "demand_input_bindings_checked": 21001900,
+  "distinct_bound_files": 1873058,
+  "input_drifts": [],
+  "runtime_differences": [
+    {
+      "count": 546,
+      "differences": {
+        "platform": {
+          "current": "Linux-7.2.7-1-cachyos-x86_64-with-glibc2.44",
+          "saved": "Linux-7.2.6-1-cachyos-x86_64-with-glibc2.44"
+        }
+      }
+    }
+  ],
+  "recovery_plan_sha256": "7b09ac74b37d6e7cd8c07ae805dbcc5e48b2a9b79e79bfeb043999a6c3f48009",
+  "attempted_invocation": "e69f575f2d514a5fa6fb3063c474d90d",
+  "resume_state": "failed_closed_on_runtime_drift",
+  "research_ready": false,
+  "full_payload_audit_repeated": false,
+  "tests": "2407 passed, 18 subtests, 20 warnings, 130.06s",
+  "limitations": [
+    "All completed demand declarations checked; full payload hashes are validated by the unchanged reader upon reuse.",
+    "New kernel has not been admitted and no runtime-equivalence replay is claimed."
+  ]
+}

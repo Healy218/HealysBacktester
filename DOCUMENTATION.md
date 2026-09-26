@@ -1330,3 +1330,19 @@ PNC next-business-day language and issuer nominal payment dates remain distinct.
 PDF response bytes can have leading whitespace before `%PDF` (MPWR); inspect
 actual file type, not only `startswith`, and do not trust a URL suffix alone.
 [Recovery evidence and remaining cases](docs/reviews/2026-09-18-v7-cash-date-recovery.md).
+
+## V7 demand recovery after a kernel update (September 25)
+
+V7 runtime manifests include `platform.platform()`. A reboot into a newer
+kernel can invalidate an otherwise unchanged demand runtime. Never relabel
+frozen runtime declarations or globally suppress that check. The user-approved
+7.2.6-1-cachyos → 7.2.7-1-cachyos exception uses a separate recovery consumer,
+requires identical interpreter/packages/glibc and hashes, and binds four real
+byte-identical demand/export replays. It does not authorize other runtime drift.
+Use `scripts/start_v7_entry_demand_recovery.sh` and its sealed proof/plan;
+see `docs/reviews/2026-09-25-v7-3-crash-recovery.md` for the exact command.
+Its progress is `v7-3-scheduler-20260925/kernel-recovery/progress.json` and
+initially counts checkpoint revalidation. Original root progress can describe
+a failed strict-reader invocation even while recovery is running. Transient
+user services do not survive reboot/user-manager shutdown. Keep the original
+freeze, old scheduler, gates, checkpoints and interrupted partial evidence.

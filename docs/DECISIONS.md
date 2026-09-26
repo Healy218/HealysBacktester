@@ -1537,3 +1537,17 @@ service. Reject a pilot-based whole-universe volume/ETA extrapolation and an
 uncapped build. No option capture or training starts automatically; those need
 the full union and their remaining gates. See the
 [launch review](reviews/2026-09-25-v7-3-full-demand-launch.md).
+
+### 2026-09-25 — Preserve the freeze and prove exact kernel compatibility for V7-3 recovery
+
+The user explicitly selected validating kernel compatibility while preserving
+all originals after a reboot changed Linux 7.2.6-1-cachyos to 7.2.7-1-cachyos.
+Admit only this exact pair for frozen-catalog consumption and entry demand,
+with every other runtime field and source/input hash unchanged, through a
+separate recovery consumer and sealed byte-parity proof. Four established cases
+passed (97,935 proposals, 7,674 requests). Do not rewrite frozen declarations,
+receipts or gates, weaken global readers, or infer training compatibility.
+Preserve all 546 prior checkpoints and partial evidence. A new 140 GiB stage
+cap uses actual completed output plus the original census forecast for the
+remaining 45; the 100 GiB reserve and 640 GB project budget remain unchanged.
+See [recovery evidence](reviews/2026-09-25-v7-3-crash-recovery.md).

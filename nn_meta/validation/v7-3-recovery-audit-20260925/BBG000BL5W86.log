@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/home/healy/Coding/HealysBacktester/scripts/run_v7_entry_demand.py", line 345, in <module>
+    raise SystemExit(main())
+                     ^^^^^^
+  File "/home/healy/Coding/HealysBacktester/scripts/run_v7_entry_demand.py", line 252, in main
+    run_security(args.completion, args.active, args.output, args.worker, args.reserve_bytes)
+  File "/home/healy/Coding/HealysBacktester/scripts/run_v7_entry_demand.py", line 196, in run_security
+    demand = EntryDemand(demand_path)
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/healy/Coding/HealysBacktester/nn_meta/v7/entry_demand.py", line 190, in __init__
+    self.verify_bindings()
+  File "/home/healy/Coding/HealysBacktester/nn_meta/v7/entry_demand.py", line 196, in verify_bindings
+    raise ValueError('Entry demand sources, inputs or runtime changed')
+ValueError: Entry demand sources, inputs or runtime changed

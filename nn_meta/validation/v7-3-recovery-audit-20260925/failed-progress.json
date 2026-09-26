@@ -1,0 +1,29 @@
+{
+  "completed": 0,
+  "completed_ids": [],
+  "failed": {
+    "BBG000BCQ6J8": {
+      "exit_code": 1,
+      "log": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/logs/BBG000BCQ6J8.log"
+    },
+    "BBG000BF8TF5": {
+      "exit_code": 1,
+      "log": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/logs/BBG000BF8TF5.log"
+    },
+    "BBG000BL5W86": {
+      "exit_code": 1,
+      "log": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/logs/BBG000BL5W86.log"
+    }
+  },
+  "full_scope": 591,
+  "full_scope_complete": false,
+  "max_output_bytes": 150323855360,
+  "output_bytes": 88714454051,
+  "pending": 588,
+  "research_ready": false,
+  "running": [],
+  "selected": 591,
+  "stage": "v7-3-entry-demand",
+  "state": "failed",
+  "updated_at": "2026-09-26T04:34:37.723660+00:00"
+}
