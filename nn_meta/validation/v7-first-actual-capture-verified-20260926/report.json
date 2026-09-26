@@ -1,0 +1,37 @@
+{
+  "schema": "v7-first-actual-capture-verification-v1",
+  "captures": [
+    {
+      "capture_id": "d876c0a621db37471091b74e9e8043e278e6eafc0c0dbec11c2bc6fa7e8f8f65",
+      "kind": "quotes",
+      "records": 3239,
+      "pages": 1,
+      "start_ns": 1647351270000000000,
+      "end_ns": 1647351600000000000,
+      "bytes": 57441,
+      "receipt_sha256": "c0e64e4a8300ebadd0cfedc817a3e401b24de554f488180590deb154098cc58d"
+    },
+    {
+      "capture_id": "f1672692ae6ea861ed01845827feb54d6e9fba6b9b92bc8fb9dc812c58042f24",
+      "kind": "trades",
+      "records": 1208,
+      "pages": 1,
+      "start_ns": 1647351270000000000,
+      "end_ns": 1647351600000000000,
+      "bytes": 14101,
+      "receipt_sha256": "58b757fbbb55fcfa605f9e9367fb8be180fb6085cd9f5cb8e525f230017f378f"
+    }
+  ],
+  "requests": 2,
+  "bytes": 73313,
+  "quota_used_bytes": 68973094838,
+  "quota_reservations": {},
+  "pre_feb2024_access_observed": true,
+  "all_older_history_verified": false,
+  "full_execution_coverage": false,
+  "research_ready": false,
+  "inputs": {
+    "nn_meta/data_v7/entry-first-actual-20260926/requests.json": "82924e55b858603bf5b8d3a4ff6016db9d4e9dbe9c0aa00c280bc9e3705f8a14",
+    "nn_meta/data_v7/entry-first-actual-20260926/report.json": "573c6fed267b85b1704bcdc604af32511b857da2b03e4c513c846efa2189c71e"
+  }
+}

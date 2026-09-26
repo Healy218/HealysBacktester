@@ -1,0 +1,28 @@
+{
+  "schema": "v7-bounded-actual-capture-plan-v1",
+  "created_at": "2026-09-26T13:17:00.087035+00:00",
+  "security_id": "BBG000BDTBL9",
+  "contract": "SPY220316P00420000",
+  "date": "2022-03-15",
+  "requests": 2,
+  "capture_windows": 2,
+  "selection": "First chronological actual SPY quote request; matching trade request; chosen before provider inspection",
+  "purpose": "Populate an actual frozen entry-feature consumer window and verify pre-February-2024 provider access",
+  "stage_capacity_ceiling_bytes": 3221225472,
+  "capacity_method": "One 1 GiB existing-capturer reservation per window plus one metadata reservation; per-shard oversize fails closed",
+  "disk_free_bytes": 158068723712,
+  "required_reserve_bytes": 107374182400,
+  "conservative_project_ceiling_bytes": 575874658304,
+  "total_project_budget_bytes": 640000000000,
+  "quota_used_bytes": 68973021525,
+  "quota_limit_bytes": 250000000000,
+  "whole_universe_volume_forecast": false,
+  "full_capture_launch": false,
+  "training_launch": false,
+  "inputs": {
+    "nn_meta/validation/v7-3-entry-union-20260926/complete.json": "426544477ee9116e17f99453cb8fbcab5212131d21162326a2d5457ccf0f979b",
+    "nn_meta/validation/v7-3-scheduler-20260925/demand/BBG000BDTBL9/complete.json": "6f2da4c6bbc06c4f1245ca7c1445ca9107c9517328f065353338d2e23744ec74",
+    "scripts/capture_v7_quotes.py": "f798118a864dc0669ef9a2a88fd2cca80f0f2192048bf45f42736155f88aebd3",
+    "options/data/massive_ticks.py": "a336e3aac4fb2017d1e70a10bc68df387c8eb34291e98a498d407d28e278f959"
+  }
+}

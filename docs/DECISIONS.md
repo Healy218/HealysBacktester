@@ -1564,3 +1564,15 @@ Disable the completed home V6 and V7-catalog hourly progress timers as explicitl
 requested; retain live/scanner/health alerts. Use the demand-stage read-only CLI
 viewer rather than the already-complete catalog viewer. See
 [preparation and verification](reviews/2026-09-26-v7-capture-preparation.md).
+
+### 2026-09-26 — Begin bounded actual captures after full entry-union audit
+
+All 591 demand checkpoints and the global entry-window union passed. Start with
+one actual frozen SPY quote/trade pair dated March 15, 2022, selected before
+provider inspection. Its conservative 3 GiB reservation ceiling fits the disk
+reserve, total-project budget and existing shared acquisition quota. Captures
+passed raw/receipt verification (3,239 quotes and 1,208 trades). Preserve the
+full scope and all frozen parents; do not infer full coverage or a universe-wide
+volume estimate from this case. Bulk acquisition still needs a measured storage
+forecast; training remains behind execution/assembly/readiness gates. See
+[full union and first capture](reviews/2026-09-26-v7-entry-union-and-first-capture.md).

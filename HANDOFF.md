@@ -1,84 +1,94 @@
-# Handoff — 2026-09-26 — demand running; union audit queued; stale alerts stopped
+# Handoff — 2026-09-26 — full entry demand/union complete; first actual ticks captured
 
 Read TODO first. Previous handoff:
-`handoff-history/HANDOFF-2026-09-26-before-capture-preparation.md`.
-Main is operational. Preserve the extensive unrelated dirty/untracked work.
+`handoff-history/HANDOFF-2026-09-26-before-full-union-completion.md`.
+Main is operational. Preserve extensive unrelated dirty/untracked work.
 
-## User direction and current gate
+## Current stage and user authorization
 
-The user requested starting option captures and training, a separate-terminal
-progress bar, and stopping hourly finished-build alerts. Advance the required
-capture/training dependencies without relabeling incomplete stages as ready.
-V7-1 and V7-2 are complete; V7-3 is active. Actual provider captures and training
-have not launched: demand, full union, storage forecast and later execution,
-assembly/fold/trial/resource/readiness gates remain prerequisites.
+V7-1 and V7-2 are complete; V7-3 remains active. The user requested starting
+option captures and training, a separate terminal progress bar and stopping
+hourly finished-build alerts. Actual captures have started with a bounded first
+consumer window. Full acquisition and training have NOT launched. Continue
+through the capture-volume/storage, full execution, assembly and readiness gates.
+No broad policy or scope reduction was authorized.
 
-All 1,773 frozen stores, completion gates, daily context and original historical
-loader proofs remain preserved. The user-approved exact Linux 7.2.6 → 7.2.7
-exception is backed by four byte-identical demand/export replays. All 546
-pre-reboot demand checkpoints survived and have now been revalidated/reused.
-The run is generating the remaining securities. At the saved follow-up,
-550/591 were complete, with four workers and no failures; use current progress.
-Do not edit either demand scheduler, recovery source or bound inputs while active.
+All 1,773 frozen stores and original receipts/gates remain preserved. The exact
+user-approved kernel 7.2.6 → 7.2.7 compatibility proof remains valid for demand
+consumption only. Original producer/reader/scheduler source was left intact.
 
-## Running demand and queued union audit
+## Demand and full entry-union completion
 
-Demand service: `healys-v7-entry-demand-recovery-20260925.service`.
-Invocation: `9a07064bbccd4f91aedd75e46580fd3a`.
-Root: `nn_meta/validation/v7-3-scheduler-20260925`.
-Active meter/log: `kernel-recovery/progress.json` and `kernel-recovery/controller.log`.
-Root `progress.json` remains the failed strict-runtime restart, not current state.
-Four workers / one inner thread, 400% CPU, 14/16 GiB memory high/max, no swap.
+Recovery completed **591/591**, no failures, at 06:03:03 UTC September 26.
+It reused all 546 preserved checkpoints and generated the remaining 45.
+Output: `nn_meta/validation/v7-3-scheduler-20260925` (106.546 GB logical).
+Final meter: `kernel-recovery/progress.json`. The root progress file still
+records the historical failed strict-runtime restart, not the completion.
+Service: `healys-v7-entry-demand-recovery-20260925.service`;
+invocation `9a07064bbccd4f91aedd75e46580fd3a`. Do not restart completed demand.
 
-Union service: `healys-v7-entry-union-20260926.service`.
-Invocation: `ceded52087f74d238c957df81eb1305b`.
-It is waiting for all 591 demand checkpoints before starting a read-only audit.
-Script: `scripts/audit_v7_capture_union.py`.
-Status: `nn_meta/validation/v7-3-entry-union-20260926.status.json`.
-Output when complete: `nn_meta/validation/v7-3-entry-union-20260926`.
-Log: `logs/v7-entry-union-20260926.log`.
-One CPU, 3/4 GiB memory high/max, no swap, AF_UNIX only, file-descriptor limit 4096.
-It verifies checkpoint/declaration/export identities and hashes, streams sorted
-request tables through a global union, checks every request's interval coverage,
-and preserves no-contract/no-fresh outcomes in its summary. It writes a small
-census rather than duplicating request tables. No provider requests or training
-are chained to this service. Do not change its source while queued/running.
-Both services are transient; user-manager shutdown/reboot requires recovery.
+The queued full union audit finished at 06:27:56 UTC. Its immutable output is
+`nn_meta/validation/v7-3-entry-union-20260926`:
+- All 591 securities and 793,394,264 proposals reconcile.
+- 76,910,536 unique quote/trade entry-feature requests.
+- 42,030,534 union captures: 21,015,267 each quotes/trades.
+- 1,057,177 contracts and 2,223,844 contract-days.
+- 14,404,985,220 requested union seconds per quote/trade kind.
+- 2,605,230 no-contract and 770,705 no-fresh-spot outcomes retained.
+- 2,027,648 distinct demand input bindings checked.
+This is full entry-feature demand only, not entry fills/marks/exits/rolls/delivery.
+Union service `healys-v7-entry-union-20260926.service`, invocation
+`ceded52087f74d238c957df81eb1305b`, completed its work; do not duplicate it.
 
-## Progress terminal and retired alerts
+## First actual capture
 
-A Konsole tab was opened with the read-only demand viewer:
-`./venv/bin/python scripts/watch_v7_demand.py --follow`.
-It separately shows saved checkpoint presence and verified/completed work in the
-current invocation, active workers, failures, storage and stale/stopped state.
-Ctrl-C closes the viewer without stopping the background job. The old
-`scripts/watch_v7_catalog.py --follow` tracks the completed catalog, not demand.
-No `v7_training_progress.py` exists in this checkout; no separate training job
-was found in the process inspection.
+The first chronological actual SPY quote request plus its matching trade request
+was chosen before inspecting provider ticks: `SPY220316P00420000`, March 15, 2022,
+SIP interval [1647351270000000000, 1647351600000000000).
+Plan: `nn_meta/validation/v7-first-actual-capture-plan-20260926`.
+Raw capture: `nn_meta/data_v7/entry-first-actual-20260926`.
+Verification: `nn_meta/validation/v7-first-actual-capture-verified-20260926`.
+Both windows passed immutable receipt, count, scope, pagination and record-hash
+checks: **3,239 quotes, 1,208 trades, 73,313 total bytes**. This demonstrates
+pre-February-2024 provider access for this exact case, not full older coverage.
+Dated standard-contract references/hours and feature-row integration remain open.
 
-The repeated completed-build notifications were on the HOME box. Both
-`healys-v6-progress.timer` and `healys-v7-catalog-progress.timer` are persistently
-disabled and inactive; their oneshot services were stopped. Hetzner timers/cron
-were inspected and no equivalent hourly build notifier was found there.
-Live scanners, feed health, dashboard, V6 paper and incubator services remain.
+The bounded plan reserved a conservative 3 GiB capacity ceiling including two
+per-window reservations and metadata, within all existing budgets. Actual shared
+acquisition quota is 68,973,094,838 / 250,000,000,000 bytes, no reservations.
+At the follow-up about 158.07 GB was free, leaving only ~50.69 GB for additions
+above the 100 GiB reserve. The 640 GB total-project budget remains. Do not launch
+42 million provider windows without a measured full-scope volume/storage plan;
+this single capture and old SPY-only pilot cannot establish that forecast.
 
-## Budget, evidence and next steps
+## Monitoring and alerts
 
-Demand cap: 140 GiB; prior stress forecast 128.81 GB. Keep 100 GiB free and the
-640 GB project budget. Acquisition quota remains 250 GB; recorded used quota
-was 68.97 GB. Counts alone do not forecast provider bytes. Once the union audit
-finishes, inspect its coverage/counts and produce a measured capture storage
-forecast; then capture required windows under the remaining budget. Dated
-option hours/references and entry/mark/exit/roll/delivery paths remain V7-3 work.
-Training remains gated through integrated execution, assembly and full readiness.
+Konsole was opened with `./venv/bin/python scripts/watch_v7_demand.py --follow`.
+It is read-only and stops refreshing on full demand completion; --hold keeps the
+finished terminal visible. It separately showed saved versus revalidated counts.
+No `v7_training_progress.py` exists here; the old catalog --follow viewer was for
+7-2. A training progress monitor belongs to the eventual gated training launch.
 
-Review: `docs/reviews/2026-09-26-v7-capture-preparation.md`.
-Evidence: `nn_meta/validation/v7-capture-preparation-20260926`.
-Prior preservation/kernel recovery:
-`docs/reviews/2026-09-25-v7-3-crash-recovery.md`.
-Full tests: **2,415 passed, 18 subtests, 20 warnings**, 123.33 seconds.
-Four focused monitor/union tests passed; incomplete-demand preflight correctly
-exited without starting a union or capture. Service/timer/terminal states checked.
+The repeated completed-build alerts were HOME timers, not Hetzner.
+`healys-v6-progress.timer` and `healys-v7-catalog-progress.timer` are disabled
+and inactive. Do not re-enable them for completed campaigns. Live scanner/feed/
+health/publisher/V6 paper/incubator jobs were not changed.
 
-V6 Alpaca fresh scanning/submission, incubator daily health/outcomes and October 2
-Massive renewal recommendation remain separate carried-forward work.
+## Next work and evidence
+
+Build a measured capture-volume/storage plan for the actual full entry union;
+reuse captures and retain provider failures. Resolve dated option hours and
+standard references, then cover entry fills, minute marks, exits, rolls and
+stock delivery. Complete integrated execution, full assembly/folds/trials and
+resource/readiness gates before training. Entry-demand completion does not close
+V7-3 or imply a trained model.
+
+Reviews: `docs/reviews/2026-09-26-v7-capture-preparation.md` and
+`docs/reviews/2026-09-26-v7-entry-union-and-first-capture.md`.
+Full suite: **2,415 tests + 18 subtests**, 20 warnings, 123.33 seconds.
+No production code changed after that run; actual capture was independently
+verified with the existing receipt/provider validators. The frozen catalog and
+kernel proof remain unchanged.
+
+October 2 Massive keep/cancel recommendation, V6 Alpaca bridge lifecycle and
+incubator outcome/daily-health work remain separate carried-forward items.

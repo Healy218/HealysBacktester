@@ -67,14 +67,17 @@
   is the failed strict-runtime restart. The measured recovery cap is 140 GiB;
   all originals remain intact. See the
   [recovery record](docs/reviews/2026-09-25-v7-3-crash-recovery.md).
-  September 26: recovery has revalidated all 546 saved checkpoints and is
-  generating the remaining demand (550/591 at the recorded follow-up). A
-  bounded read-only full request-union census is queued as
-  `healys-v7-entry-union-20260926.service`, waiting for all 591. Actual provider
-  captures and training have not started. A separate terminal viewer is
-  available as `./venv/bin/python scripts/watch_v7_demand.py --follow`.
-  The two obsolete hourly V6/catalog completion-alert timers are disabled.
-  See [capture preparation](docs/reviews/2026-09-26-v7-capture-preparation.md).
+  September 26: **all 591 demand checkpoints and the full entry-request union
+  audit are complete**. The 793,394,264 proposals produced 76,910,536 unique
+  requests and 42,030,534 union quote/trade windows over 1,057,177 contracts.
+  All no-contract/no-fresh outcomes remain explicit. The first actual SPY
+  March 15, 2022 consumer window was captured and verified: 3,239 quotes,
+  1,208 trades, 73,313 bytes. Full acquisition still requires a measured
+  volume/storage plan; only ~50.69 GB is available above the disk reserve.
+  Training has not started. Dated references/hours and full execution-path
+  coverage remain open. See [union and first capture](docs/reviews/2026-09-26-v7-entry-union-and-first-capture.md).
+  The separate viewer is `./venv/bin/python scripts/watch_v7_demand.py --follow`
+  (now shows completed demand). Both stale V6/catalog hourly timers are disabled.
   See `docs/reviews/2026-09-25-v7-3-full-demand-launch.md`.
   Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
   Derive proposal-driven
