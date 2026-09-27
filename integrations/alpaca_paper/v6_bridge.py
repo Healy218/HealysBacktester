@@ -37,6 +37,9 @@ def events_from_fresh_state(database: Path, *, activated_at: datetime) -> list[d
     with sqlite3.connect(database.resolve().as_uri() + "?mode=ro", uri=True) as db:
         db.execute("PRAGMA query_only=ON")
         positions = [json.loads(row[0]) for row in db.execute("SELECT payload FROM positions ORDER BY key")]
+        durable = bool(db.execute("SELECT 1 FROM sqlite_master WHERE name='broker_source_entries'").fetchone())
+        entries = [json.loads(row[0]) for row in db.execute(
+            "SELECT payload FROM broker_source_entries ORDER BY key,roll")] if durable else []
         closes = [(key, stamp(recorded_at), json.loads(payload)) for key, recorded_at, payload in
                   db.execute("SELECT key,recorded_at,payload FROM events WHERE kind='close' ORDER BY recorded_at,key")]
     for position in positions:
@@ -44,6 +47,15 @@ def events_from_fresh_state(database: Path, *, activated_at: datetime) -> list[d
         if opened < activated_at:
             raise ValueError("fresh scanner contains a pre-activation position")
         key = position["key"]
+        if durable:
+            legs = [e for e in entries if e['position_key'] == key]
+            expected_rolls = list(range(int(position.get('rolls', 0)) + 1))
+            if sorted(e['roll'] for e in legs) != expected_rolls:
+                raise ValueError('durable scanner entry history is incomplete')
+            current = next(e for e in legs if e['roll'] == expected_rolls[-1])
+            if current['contract'] != position['contract']:
+                raise ValueError('durable scanner contract differs from position')
+            continue
         rolls = int(position.get("rolls", 0))
         if rolls < 0 or rolls > 1:
             raise ValueError("unreconciled multi-roll position requires review")
@@ -60,6 +72,11 @@ def events_from_fresh_state(database: Path, *, activated_at: datetime) -> list[d
             events.append({"event_id": f"{key}|entry|1", "kind": "entry", "position_key": key,
                            "contract": position["contract"], "at": opened_roll.isoformat(),
                            "size_fraction": position["size_fraction"], "roll": 1})
+    for entry in entries:
+        opened = stamp(entry['at'])
+        if opened < activated_at:
+            raise ValueError('durable entry predates broker activation')
+        events.append(entry)
     for key, recorded, leg in closes:
         if recorded < activated_at:
             continue
@@ -103,7 +120,7 @@ def order_plan(event: dict, *, account, broker_position, snapshot, contract, now
     market = mark_limit(quote_dict(snapshot, received_at=now), now=now,
                         after=stamp(event.get("trigger_at", event["at"])))
     if event["kind"] == "entry":
-        if not 0 <= (now - stamp(event["at"])).total_seconds() <= 300:
+        if not 0 <= (now - stamp(event.get("signal_close", event["at"]))).total_seconds() <= 300:
             raise ValueError("entry event missed the five-minute broker window")
         if broker_position is not None:
             raise ValueError("broker already holds this contract")
@@ -116,9 +133,12 @@ def order_plan(event: dict, *, account, broker_position, snapshot, contract, now
     else:
         if broker_position is None:
             raise ValueError("no broker position to close")
-        qty = int(Decimal(str(broker_position.qty)))
-        if qty < 1 or qty > int(snapshot.latest_quote.bid_size):
-            raise ValueError("broker exit quantity exceeds validated displayed size")
+        whole = Decimal(str(broker_position.qty))
+        if whole != whole.to_integral_value() or whole <= 0:
+            raise ValueError('broker exit quantity must be positive whole contracts')
+        qty = min(int(whole), int(snapshot.latest_quote.bid_size))
+        if qty < 1:
+            raise ValueError("no displayed bid size for broker exit")
         side, intent = "sell", "sell_to_close"
     return {"event_id": event["event_id"], "client_order_id": client_id(event["event_id"]),
             "contract": event["contract"], "qty": qty, "side": side,
@@ -201,7 +221,8 @@ def broker_order_state(order) -> dict:
             "filled_avg_price": str(order.filled_avg_price) if order.filled_avg_price is not None else None}
 
 
-def reconcile(journal: Journal, trading, *, expected_fingerprint: str) -> tuple[object, dict, dict]:
+def reconcile(journal: Journal, trading, *, expected_fingerprint: str,
+              allow_pending: bool = False) -> tuple[object, dict, dict]:
     """Fail closed on foreign broker state or any unresolved bridge order."""
     from alpaca.trading.enums import QueryOrderStatus
     from alpaca.trading.requests import GetOrdersRequest
@@ -217,9 +238,16 @@ def reconcile(journal: Journal, trading, *, expected_fingerprint: str) -> tuple[
     for order in open_orders:
         if str(order.client_order_id) not in recorded:
             raise ValueError("unrecognized broker open order")
+    open_by_client = {str(order.client_order_id): order for order in open_orders}
     for row in recorded.values():
+        if row['state'] in ('filled', 'canceled', 'expired', 'rejected') and row['filled_qty'] is not None:
+            # Terminal fills are immutable journal facts. Re-fetching all
+            # historic orders on every 15-second poll exhausts the API budget.
+            continue
         try:
-            order = trading.get_order_by_client_id(row["client_order_id"])
+            order = open_by_client.get(row['client_order_id'])
+            if order is None:
+                order = trading.get_order_by_client_id(row["client_order_id"])
         except Exception as exc:
             # An intent may have been durably recorded just before a failed POST.
             # Ambiguous requests require operator review; never retry blindly.
@@ -229,9 +257,13 @@ def reconcile(journal: Journal, trading, *, expected_fingerprint: str) -> tuple[
             raise ValueError("broker order differs from journal")
         journal.update(row["event_id"], state=state["status"], broker_order_id=state["id"],
                        filled_qty=state["filled_qty"], filled_avg_price=state["filled_avg_price"])
-        if state["status"] not in ("filled", "canceled", "expired", "rejected"):
+        if (state["status"] not in ("filled", "canceled", "expired", "rejected")
+                and not allow_pending):
             raise ValueError("broker order remains unresolved")
-        if state["filled_qty"] not in ("0", str(row["quantity"])):
+        filled = Decimal(state['filled_qty'])
+        if not 0 <= filled <= row['quantity'] or filled != filled.to_integral_value():
+            raise ValueError('invalid broker fill quantity')
+        if filled not in (0, row['quantity']) and not allow_pending:
             raise ValueError("partial broker fill requires review")
     entry_contracts = {row["contract"] for row in recorded.values() if row["kind"] == "entry"}
     if set(positions) - entry_contracts:
@@ -243,11 +275,17 @@ def reconcile(journal: Journal, trading, *, expected_fingerprint: str) -> tuple[
             raise ValueError("broker filled quantity is not whole contracts")
         direction = 1 if row["kind"] == "entry" else -1
         expected[row["contract"]] = expected.get(row["contract"], 0) + direction * int(filled)
+    # Re-read positions after order observations to avoid comparing an old
+    # position snapshot with a just-received fill. Races still fail closed.
+    positions = {position.symbol: position for position in trading.get_all_positions()}
+    if set(positions) - entry_contracts:
+        raise ValueError('broker holds a position outside the fresh V6 bridge')
     for symbol in entry_contracts:
         actual = Decimal(str(positions[symbol].qty)) if symbol in positions else Decimal(0)
         if actual != expected.get(symbol, 0):
             raise ValueError("broker position differs from recorded fills")
-    return account, positions, recorded
+    recorded = {row['client_order_id']: row for row in journal.all()}
+    return trading.get_account(), positions, recorded
 
 
 def process_events(events: list[dict], *, journal: Journal, trading, data,
@@ -258,25 +296,69 @@ def process_events(events: list[dict], *, journal: Journal, trading, data,
     from alpaca.data.requests import OptionSnapshotRequest
     from alpaca.trading.enums import OrderSide, PositionIntent, TimeInForce
     from alpaca.trading.requests import LimitOrderRequest
+    fixed_now = now
     now = now or datetime.now(timezone.utc)
-    account, positions, recorded = reconcile(journal, trading, expected_fingerprint=expected_fingerprint)
+    account, positions, recorded = reconcile(journal, trading, expected_fingerprint=expected_fingerprint,
+                                            allow_pending=True)
     result = []
+    terminal = {'filled', 'canceled', 'expired', 'rejected'}
+    for row in recorded.values():
+        if row['state'] in terminal:
+            continue
+        saved = journal.get(row['event_id'])
+        payload = json.loads(saved['payload'])
+        age = (now - stamp(payload['plan']['planned_at'])).total_seconds()
+        # Cancel, then wait for a later confirmed terminal status before any
+        # replacement. Partial fills remain real positions throughout.
+        if submit and age >= 60 and row['state'] != 'pending_cancel':
+            trading.cancel_order_by_id(saved['broker_order_id'])
+        result.append({'event_id': row['event_id'], 'status': 'awaiting_broker',
+                       'filled_qty': row['filled_qty']})
+    if result:
+        return result
+    closed_keys = {e['position_key'] for e in events
+                   if e.get('reason') == 'broker premium stop'}
+    closing_contracts = {(e['position_key'], e['contract']) for e in events if e['kind'] == 'close'}
+    ownership = {}
+    for row in recorded.values():
+        source = json.loads(journal.get(row['event_id'])['payload'])['event']
+        key = (source['position_key'], row['contract'])
+        ownership[key] = ownership.get(key, Decimal(0)) + (
+            Decimal(row['filled_qty'] or '0') * (1 if row['kind'] == 'entry' else -1))
     for event in events:
-        if event["event_id"] in {row["event_id"] for row in recorded.values()}:
+        event = dict(event)
+        base = event['event_id']
+        attempts = [row for row in recorded.values()
+                    if row['event_id'] == base or row['event_id'].startswith(base + '|attempt|')]
+        if event['kind'] == 'entry' and (event['position_key'] in closed_keys
+                                        or (event['position_key'], event['contract']) in closing_contracts):
+            result.append({'event_id': base, 'status': 'superseded'})
+            continue
+        if attempts and event['kind'] == 'entry':
             result.append({"event_id": event["event_id"], "status": "recorded"})
             continue
+        if event['kind'] == 'close' and attempts and event['contract'] in positions:
+            event['event_id'] = base + '|attempt|' + str(len(attempts))
+        if event['kind'] == 'entry' and event.get('roll', 0):
+            prior = [e['contract'] for e in events if e['position_key'] == event['position_key']
+                     and e['kind'] == 'entry' and e.get('roll', 0) < event['roll']]
+            if any(contract in positions for contract in prior):
+                result.append({'event_id': base, 'status': 'awaiting_roll_close'})
+                continue
         if event["kind"] == "entry" and any(
                 row["kind"] == "entry" and row["contract"] == event["contract"]
+                and event['contract'] in positions
                 for row in recorded.values()):
             raise ValueError("multiple V6 positions selected the same option contract")
-        if event["kind"] == "close" and event["contract"] not in positions:
+        if event["kind"] == "close" and (event["contract"] not in positions or
+                ownership.get((event['position_key'], event['contract']), 0) <= 0):
             result.append({"event_id": event["event_id"], "status": "no_broker_position"})
             continue
         try:
             contract = trading.get_option_contract(event["contract"])
             snapshot = data.get_option_snapshot(OptionSnapshotRequest(
                 symbol_or_symbols=event["contract"], feed=OptionsFeed.OPRA))[event["contract"]]
-            planned_at = datetime.now(timezone.utc) if now is None else now
+            planned_at = datetime.now(timezone.utc) if fixed_now is None else now
             plan = order_plan(event, account=account, broker_position=positions.get(event["contract"]),
                               snapshot=snapshot, contract=contract, now=planned_at)
         except (ValueError, KeyError, TypeError) as exc:

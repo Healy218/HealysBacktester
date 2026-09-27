@@ -1,0 +1,11 @@
+[Unit]
+Description=V6 Alpaca paper orders schedule
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 09..16:*:00,15,30,45 America/New_York
+AccuracySec=1s
+Persistent=false
+Unit=healys-v6-alpaca-orders.service
+
+[Install]
+WantedBy=timers.target

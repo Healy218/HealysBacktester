@@ -17,6 +17,7 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--env", type=Path, default=ROOT / ".env")
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--state", type=Path, help="Optional fresh paper runtime health")
     args = parser.parse_args()
     secrets = dotenv_values(args.env)
     key = secrets.get("ALPACA_PAPER_API_KEY")
@@ -25,7 +26,13 @@ def main() -> int:
         parser.error("dedicated Alpaca paper credentials are missing")
     account = paper_account_snapshot(key, secret)
     report = {"schema": "v6-alpaca-paper-monitor-v1",
-              "broker_orders_enabled": False, "alpaca": account}
+              "monitor_can_submit_orders": False, "alpaca": account}
+    if args.state:
+        manifest = json.loads((args.state / 'paper-restart.json').read_text())
+        report['broker_orders_enabled'] = bool(manifest.get('order_submission_enabled'))
+        report['scanner_enabled'] = bool(manifest.get('scanner_enabled'))
+        status_path = args.state / 'broker-status.json'
+        report['runtime'] = json.loads(status_path.read_text()) if status_path.exists() else None
     args.output.parent.mkdir(parents=True, exist_ok=True)
     temporary = args.output.with_name(args.output.name + ".tmp")
     with os.fdopen(os.open(temporary, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600), "w") as stream:
