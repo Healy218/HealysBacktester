@@ -110,6 +110,10 @@ physical outcomes remain open; this is not a full V7-4 completion receipt.
   activation, timer and V6 exact-outcome exporter are implemented. Replay ran
   8,190 V5 and 5,085 V6 predictions under isolation. Ongoing health and outcome
   scoring remain in TODO; the service is not awaiting its original activation.
+  September 25 scheduled refresh is verified: 6,985 V5 and 974 V6 predictions,
+  zero failed/blocked models. V6 had only three upstream candidate passes;
+  coverage and outcome scoring remain separate from successful inference.
+  [September 27 operational audit](docs/reviews/2026-09-27-incubator-fa-alpaca-readiness.md).
 
 See [incubator activation](docs/reviews/2026-09-25-incubator-nightly-activation.md)
 and [Alpaca bridge](docs/reviews/2026-09-25-v6-alpaca-order-bridge.md).

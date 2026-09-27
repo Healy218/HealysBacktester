@@ -1,4 +1,31 @@
-# Handoff — September 27, 2026 — live disk allocation, MRHA and 14 GiB capture
+# Handoff — September 27, 2026 — Friday incubator/FA audit and Monday paper gap
+
+Read TODO first. The latest user asked to verify Friday incubator runs, FA
+progress and Monday V6 Alpaca readiness while V7 downloads continue.
+[Operational audit](docs/reviews/2026-09-27-incubator-fa-alpaca-readiness.md).
+
+- Friday scheduled incubator succeeded: V5 6,985 predictions / 26 source passes;
+  V6 974 / three passes; zero failed or blocked models. Hashes/counts verified.
+  Next timer Monday 15:30 Chicago. Do not rerun successful inference. V6 upstream
+  candidate coverage is limited; earlier scanner activity exists but the reason
+  only three candidate passes were retained remains unresolved. Both model
+  receipts await outcomes; no performance score claimed.
+- FA operational worktree is HealysAutomation: latest jobs healthy, 300-symbol
+  enrichment and 960 labeled rows across six days. Still insufficient history
+  for 40 training / 10 test days. First monthly due September 30 at 20:15 Chicago.
+  FA-0 quality/contract work remains; see fa/FA_NOTES/FA_HANDOFF.md.
+- **V6 Alpaca is not ready for Monday September 28.** Authenticated account GET
+  confirmed ACTIVE, $100,000 options buying power, level 3, zero orders/positions.
+  Fresh state still disables scanner and submissions, has no portfolio database,
+  and copied inputs end September 23. Current scanner uses old v6_server, whose
+  data ends September 25. Only the read-only Alpaca monitor is scheduled.
+  Connect fresh scanner/data/lifecycle events to the existing bridge, verify
+  genuine prospective preview/reconciliation, then activate paper scheduling.
+  Do not import old positions or equate account readiness with order readiness.
+- This session was read-only operational verification plus notes. No services,
+  orders, V7 settings or code changed; no training/test campaign repeated.
+
+## Continuing V7 capture context (unchanged by this audit)
 
 Read TODO first. The user explicitly replaced the earlier allocation: leave
 10 GB free locally and use MRHA for whatever does not fit. They also requested

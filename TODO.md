@@ -62,10 +62,15 @@ fresh blanket download or component-reimplementation task.
   month. [Decision gate](docs/reviews/2026-09-24-v6-alpaca-paper-start.md).
 - [ ] Finish prospective V6 Alpaca bridge/scanner lifecycle integration, including
   rolls, before enabling submissions. Fresh scanning/order submission remain
-  disabled; do not import old simulator positions. Preserve account monitoring.
-- [ ] Confirm scheduled V5/V6 nightly incubator health, finish exact V5 outcome
-  joins and paper scoring. The replay implementation, actual nightly activation,
-  V5 capture and V6 exporter already exist. Admit V7 only after its separate gate.
+  disabled; fresh input index is stale and no bridge schedule is installed.
+  **Not ready for Monday September 28** per the [readiness audit](docs/reviews/2026-09-27-incubator-fa-alpaca-readiness.md).
+  Do not import old simulator positions. Preserve account monitoring.
+- [ ] Finish exact V5 outcome joins and incubator paper scoring. Friday scheduled
+  prediction refresh is verified: V5 6,985 / V6 974, no failed models. Investigate
+  why the upstream V6 scanner retained only three Friday candidate passes;
+  successful replay does not establish full-day coverage. Existing replay,
+  capture, timer and V6 exporter need no reimplementation. Admit V7 only after
+  its separate gate.
 
 ## Scope and working rules
 
