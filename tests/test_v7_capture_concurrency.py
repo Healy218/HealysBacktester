@@ -7,11 +7,16 @@ import pytest
 from nn_meta.v7.storage import verify
 from scripts.run_v7_capture_campaign_v5 import acquire as old_acquire
 from scripts.run_v7_capture_campaign_v6 import acquire, reuse
+from scripts import run_v7_capture_campaign_v7 as twelve
 from scripts.run_v7_capture_campaign_v3 import pack_binding
 from tests.test_v7_capture_memory import storage_job
 
 
-def test_v6_reuses_v5_pack_without_refetch_or_recharge(storage_job, monkeypatch):
+@pytest.mark.parametrize('old_acquire,acquire,reuse', [
+    (old_acquire, acquire, reuse),
+    (acquire, twelve.acquire, twelve.reuse),
+])
+def test_new_runner_reuses_prior_pack_without_refetch_or_recharge(storage_job, monkeypatch, old_acquire, acquire, reuse):
     from options.data.massive_ticks import MassiveTicks
     job = storage_job
     assert old_acquire(job)['status'] == 'completed'
@@ -33,7 +38,8 @@ def test_v6_reuses_v5_pack_without_refetch_or_recharge(storage_job, monkeypatch)
         reuse(Path(job['logical']), dict(job['binding'], captures=[]), job['parents'])
 
 
-def test_v6_new_capture_and_restart_charge_once(storage_job):
+@pytest.mark.parametrize('acquire', [acquire, twelve.acquire])
+def test_new_capture_and_restart_charge_once(storage_job, acquire):
     job = storage_job
     assert acquire(job)['status'] == 'completed'
     quota_path = Path(job['budget']) / 'quota.json'
