@@ -1,0 +1,40 @@
+{
+  "account": {
+    "account_status": "ACTIVE",
+    "cash_usd": "100000",
+    "equity_usd": "100000",
+    "long_option_entry_eligible": true,
+    "observed_at": "2026-09-27T20:48:50.156284+00:00",
+    "open_order_count": 0,
+    "options_buying_power_usd": "100000",
+    "options_trading_level": 3,
+    "position_count": 0
+  },
+  "activated_at": "2026-09-27T20:46:18.846408+00:00",
+  "broker_memory_peak_bytes": 80117760,
+  "data_through": "2026-09-25",
+  "first_broker_fill_verified": false,
+  "first_closed_bar_signal": "2026-09-28T08:45:00-05:00",
+  "focused_paper_tests_passed": 18,
+  "full_suite": {
+    "passed": 2512,
+    "skipped": 1,
+    "subtests_passed": 18
+  },
+  "historical_positions_imported": false,
+  "implementation_commit": "f669d43",
+  "next_broker_timer": "2026-09-28T08:00:00-05:00",
+  "next_data_refresh": "2026-09-28T04:00:00-05:00",
+  "next_incubator": "2026-09-28T15:30:00-05:00",
+  "next_market_open": "2026-09-28T08:30:00-05:00",
+  "next_scanner_timer": "2026-09-28T08:00:05-05:00",
+  "order_submission_enabled": true,
+  "paper_only": true,
+  "scanner_enabled": true,
+  "scanner_memory_peak_bytes": 1582731264,
+  "schema": "v6-alpaca-paper-activation-audit-v1",
+  "server_old_v6_watch_retired": true,
+  "startup_broker_result": "success_market_closed",
+  "startup_scanner_result": "success",
+  "state": "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper"
+}

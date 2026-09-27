@@ -105,7 +105,11 @@ physical outcomes remain open; this is not a full V7-4 completion receipt.
   the old EOD panel and stale monitoring were removed. Stonks publishing repairs
   and the corrected V6 broker projection were completed.
 - Fresh Alpaca credentials/account isolation and the guarded V6 bridge core are
-  implemented. Submissions remain disabled pending prospective integration.
+  implemented. On September 27 the fresh scanner, recoverable order bridge,
+  broker stops/expiry checks, data pointer and schedules were activated; both
+  startup services passed. Old simulator/relay/watch schedules were retired.
+  [Paper deployment](docs/reviews/2026-09-27-v6-alpaca-activation.md). First actual
+  prospective fills await Monday's eligible signals.
 - V5/V6 nightly incubator capture, sealed replay, actual September 24 full-day
   activation, timer and V6 exact-outcome exporter are implemented. Replay ran
   8,190 V5 and 5,085 V6 predictions under isolation. Ongoing health and outcome

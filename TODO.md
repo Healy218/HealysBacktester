@@ -60,11 +60,10 @@ fresh blanket download or component-reimplementation task.
   SPX/NDX Alpaca OPRA history, and V6 adapter/decision parity. The user decides
   cancellation. If required evidence is incomplete, recommend retaining one more
   month. [Decision gate](docs/reviews/2026-09-24-v6-alpaca-paper-start.md).
-- [ ] Finish prospective V6 Alpaca bridge/scanner lifecycle integration, including
-  rolls, before enabling submissions. Fresh scanning/order submission remain
-  disabled; fresh input index is stale and no bridge schedule is installed.
-  **Not ready for Monday September 28** per the [readiness audit](docs/reviews/2026-09-27-incubator-fa-alpaca-readiness.md).
-  Do not import old simulator positions. Preserve account monitoring.
+- [ ] Observe Monday's first prospective V6 Alpaca session and actual order/fill
+  reconciliation. **Paper runtime activated September 27**; scanner, bridge,
+  current data, risk polling and schedules are connected and startup verified.
+  Do not repeat activation or import simulator positions. [Deployment](docs/reviews/2026-09-27-v6-alpaca-activation.md).
 - [ ] Finish exact V5 outcome joins and incubator paper scoring. Friday scheduled
   prediction refresh is verified: V5 6,985 / V6 974, no failed models. Investigate
   why the upstream V6 scanner retained only three Friday candidate passes;

@@ -1733,3 +1733,16 @@ Use MemoryHigh=MemoryMax=14 GiB, bounded up-to-128-request I/O with memory
 backpressure, and allow 800% CPU bursts at low priority. Do not equate increased
 concurrency or disk allocation with a guaranteed ETA or dataset size.
 [Implementation, tests and real readback](reviews/2026-09-27-v7-storage-and-memory.md).
+
+## 2026-09-27 — Activate isolated V6 Alpaca paper runtime for Monday
+
+User directed completing paper trading before Monday, ahead of further FA work.
+The new paper state is activated after 2,512 tests plus 18 subtests, focused
+lifecycle checks, systemd validation and authenticated closed-market startup.
+Keep daily data production; retire old V6 simulator/relay/projected-ledger and
+server-watch schedules. No historical positions are imported. Every prospective
+order gets preview and broker reconciliation; actual fills remain broker facts.
+Use persisted source-leg entries and broker-owned risk, with uncertain state
+blocked for review. First actual fill awaits a qualifying Monday signal; Sunday
+startup is not evidence of an exchange fill. FA remains daily collection with
+monthly cohort freezing. See [activation](reviews/2026-09-27-v6-alpaca-activation.md).

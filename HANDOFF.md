@@ -1,29 +1,40 @@
-# Handoff — September 27, 2026 — Friday incubator/FA audit and Monday paper gap
+# Handoff — September 27, 2026 — V6 Alpaca paper activated for Monday
 
-Read TODO first. The latest user asked to verify Friday incubator runs, FA
-progress and Monday V6 Alpaca readiness while V7 downloads continue.
-[Operational audit](docs/reviews/2026-09-27-incubator-fa-alpaca-readiness.md).
+Read TODO first. The user prioritized completing V6 Alpaca paper trading before
+Monday. **Activation is complete**; do not repeat it. Commit `f669d43` is pushed.
+[Deployment and operating notes](docs/reviews/2026-09-27-v6-alpaca-activation.md)
+and companion JSON contain exact verification and the Monday schedule.
 
-- Friday scheduled incubator succeeded: V5 6,985 predictions / 26 source passes;
-  V6 974 / three passes; zero failed or blocked models. Hashes/counts verified.
-  Next timer Monday 15:30 Chicago. Do not rerun successful inference. V6 upstream
-  candidate coverage is limited; earlier scanner activity exists but the reason
-  only three candidate passes were retained remains unresolved. Both model
-  receipts await outcomes; no performance score claimed.
-- FA operational worktree is HealysAutomation: latest jobs healthy, 300-symbol
-  enrichment and 960 labeled rows across six days. Still insufficient history
-  for 40 training / 10 test days. First monthly due September 30 at 20:15 Chicago.
-  FA-0 quality/contract work remains; see fa/FA_NOTES/FA_HANDOFF.md.
-- **V6 Alpaca is not ready for Monday September 28.** Authenticated account GET
-  confirmed ACTIVE, $100,000 options buying power, level 3, zero orders/positions.
-  Fresh state still disables scanner and submissions, has no portfolio database,
-  and copied inputs end September 23. Current scanner uses old v6_server, whose
-  data ends September 25. Only the read-only Alpaca monitor is scheduled.
-  Connect fresh scanner/data/lifecycle events to the existing bridge, verify
-  genuine prospective preview/reconciliation, then activate paper scheduling.
-  Do not import old positions or equate account readiness with order readiness.
-- This session was read-only operational verification plus notes. No services,
-  orders, V7 settings or code changed; no training/test campaign repeated.
+- Fresh state `/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper`, activated
+  `2026-09-27T20:46:18.846408+00:00`. Scanner/submission flags true; paper only.
+  Both installed services started successfully; market closed, no orders sent.
+  Account ACTIVE, $100,000 options buying power, level 3, no positions/orders.
+- New scanner timer every 15 minutes, broker timer every 15 seconds. Next broker
+  08:00 / scanner 08:00:05 Chicago Monday; open 08:30, first closed-bar decision
+  08:45 if eligible. Current data through Friday September 25; existing daily
+  producer retained, next refresh Monday 04:00. Preview/reconciliation occurs
+  before every prospective submission. First actual broker fill awaits Monday.
+- SQLite triggers capture initial/roll entries transactionally. Bridge handles
+  pending/partial/canceled orders, confirmed-close-before-roll, sized exit slices,
+  idempotent POST recovery, actual-fill premium stops and calendar expiry exits.
+  Ambiguous/unexplained broker state stops submission for review; no stock
+  delivery or fill is fabricated. Current runtime hashes are activation-bound.
+- Old home forward/risk/relay/broker-ledger/session-update timers retired, old
+  Hetzner V6 watcher disabled. Old history preserved; no positions imported.
+  Old Stonks simulator projection remains historical, not actual Alpaca P/L.
+  Account monitor and after-close incubator now follow fresh paper state.
+- Full tests: 2,512 passed, 1 skipped, 18 subtests. Focused paper tests 18 passed;
+  final bridge/lifecycle rerun 10 passed. Real authenticated startup, unit/timer
+  checks passed. No need for repeat activation/testing without a new failure.
+- FA collects daily; monthly is cohort freezing. Jobs healthy, 300-symbol
+  enrichment, 960 labeled rows/six days. Needs 40 training/10 test days. First
+  monthly September 30 20:15 Chicago. FA work remains deferred at user request.
+- Friday incubator already verified: V5 6,985 predictions/26 passes; V6 974/three
+  late source passes, zero model failures. Earlier V6 candidate coverage reason
+  remains unresolved; outcome joins/scoring are still open. Monday incubator
+  consumes fresh paper scanner passes. Do not repeat Friday's successful replay.
+- V7 downloads/settings unchanged and progress still advancing after activation.
+  Broad unrelated dirty/untracked work remains untouched.
 
 ## Continuing V7 capture context (unchanged by this audit)
 
