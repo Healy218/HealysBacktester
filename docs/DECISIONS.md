@@ -1590,3 +1590,20 @@ storage placement and measure/validate longer-range capture and archive costs
 before full acquisition. No disk mount, deletion, scope reduction, quota
 increase or training launch was performed. See
 [capture/storage evidence](reviews/2026-09-26-v7-capture-storage-forecast.md).
+
+### 2026-09-26 — Lower capture reserve and admit lossless adjacency validation
+
+The user explicitly permits using nearly all available local capacity and
+adjoining intervals only without quality loss. New capture planning retains
+20 GiB operating headroom instead of 100 GiB, counting in-flight writes; the
+250 GB acquisition and 640 GB project ceilings remain. Original frozen launchers
+are unchanged. Six real cases pass exact full-range and 126-request causal raw
+parity with 62 fixed captures versus 12 joined. No resampling or gap filling is
+admitted; full volume/packed-storage and readiness gates remain.
+
+The user also requested a storage review. It found 13.30m files, dominated by
+9.54m old V6 input files, and 53.88 GB of extra byte-identical campaign/cache
+copies. Preserve original paths/content and historical evidence; review is not
+permission to erase whole campaigns. No cleanup was performed. Investigate
+content-preserving deduplication and verified archival/restoration first. See
+[storage and adjacent-quality evidence](reviews/2026-09-26-storage-retention-and-adjacent-quality.md).

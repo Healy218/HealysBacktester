@@ -1,0 +1,4 @@
+{
+  "command": "btrfs filesystem du --raw -s [batches of 150 verified duplicate files]",
+  "parent_sha256": "838a5f35fc0737335ca9999dee44f9ab25644f826f04db284ed10e9c270d0073"
+}

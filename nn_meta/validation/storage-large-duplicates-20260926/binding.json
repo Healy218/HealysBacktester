@@ -1,0 +1,9 @@
+{
+  "min_bytes": 1048576,
+  "roots": [
+    "/home/healy/Coding/HealysBacktester/nn_meta/campaigns",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_candidates",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_cache_v5"
+  ],
+  "source_sha256": "793e37cb5ba0b1994a69b3ab503e1065a690070bb05db6db7dc3cc09d21654bf"
+}

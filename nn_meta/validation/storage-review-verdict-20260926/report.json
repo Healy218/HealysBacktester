@@ -1,0 +1,40 @@
+{
+  "acquisition_limit_bytes": 250000000000,
+  "available_after_new_reserve_bytes": 210101903360,
+  "bulk_capture_ready": false,
+  "candidate_exclusive_extent_bytes": 53843275776,
+  "candidates_are_not_additional_free_space_yet": true,
+  "deleted_files": 0,
+  "disk_usage": {
+    "free": 231576739840,
+    "total": 1019912441856,
+    "used": 777867976704
+  },
+  "inventory_totals": {
+    "allocated_bytes": 553569304576,
+    "directories": 2890819,
+    "directory_logical_bytes": 845610344,
+    "files": 13303859,
+    "foreign_device_directories_not_walked": 1,
+    "hardlink_alias_logical_bytes": 24998864176,
+    "hardlink_aliases": 30155,
+    "logical_bytes": 514136493096,
+    "symlink_logical_bytes": 94,
+    "symlinks_not_followed": 4,
+    "unique_allocated_bytes": 528488792064,
+    "unique_files": 13273704,
+    "unique_logical_bytes": 489137628920
+  },
+  "legacy_bound_launchers_unchanged": true,
+  "legacy_validation_writer_reserve_bytes": 107374182400,
+  "new_capture_planning_reserve_bytes": 21474836480,
+  "observed_at": "2026-09-26T17:09:47.958843+00:00",
+  "previous_reserve_bytes": 107374182400,
+  "project_limit_bytes": 640000000000,
+  "project_unique_logical_bytes": 489137628920,
+  "schema": "storage-review-and-reserve-amendment-v1",
+  "statvfs_available_bytes": 231576739840,
+  "training_started": false,
+  "v7_retention_documents": 5326,
+  "verified_extra_identical_logical_bytes": 53884528671
+}

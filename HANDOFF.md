@@ -1,105 +1,110 @@
-# Handoff — 2026-09-26 — capture volume measured; storage placement unresolved
+# Handoff — 2026-09-26 — storage inventory and joined-capture quality verified
 
-Read TODO first. Previous handoff:
-`handoff-history/HANDOFF-2026-09-26-before-capture-volume-sample.md`.
-Work on main; preserve extensive unrelated dirty/untracked work.
+Read TODO first. Prior handoff:
+`handoff-history/HANDOFF-2026-09-26-before-storage-review.md`.
+Work on main and preserve unrelated dirty/untracked changes.
 
-## Current stage
+## Current task and authority
 
-V7-1 and V7-2 complete. V7-3 remains current. User said "lets keep going" after
-the first real capture. We completed full-population sample planning, 1,440 actual
-captures, storage estimates, a lossless encoding benchmark and exact contiguous
-range census. Full acquisition and training have NOT launched.
+V7-1/7-2 complete; V7-3 remains current. User asked to double-check disk space,
+permits using nearly all local storage and joining adjacent intervals without
+quality loss, then requested a review of millions of potentially redundant files.
+The storage/retention review and six-case joined-download proof are complete.
+No project data was deleted, deduplicated, archived/moved or relabeled.
+No bulk capture campaign or training has launched. No live systems were changed.
 
-All original 1,773 stores, catalog/daily gates, 591 demand outputs, kernel parity
-proof and first SPY captures remain preserved. Do not rebuild or relabel them.
-The user-approved kernel 7.2.6 → 7.2.7 exception is scoped to demand consumption.
+New capture planning reserve: **20 GiB**, in
+`docs/specs/V7_CAPTURE_CAPACITY_20260926.json`, counting in-flight writes.
+The 250 GB acquisition and 640 GB project limits remain. Old frozen writers
+retain their historical 100 GiB guards; the small quality pilot used that
+stricter writer too. A new bulk consumer must enforce the amended policy.
+Do not mutate frozen producers/readers to bypass their bindings.
 
-## Completed upstream evidence
+## Latest capacity and inventory
 
-- Full demand: `nn_meta/validation/v7-3-scheduler-20260925`, 591/591 complete,
-  793,394,264 proposals. `kernel-recovery/progress.json` is the final meter;
-  the root progress file is the historical failed strict-runtime restart.
-- Full entry union: `nn_meta/validation/v7-3-entry-union-20260926`,
-  76,910,536 unique requests, 42,030,534 fixed-cell quote/trade captures,
-  1,057,177 contracts, 2,223,844 contract-days; no-fresh/no-contract outcomes
-  explicit. This is entry-feature demand, not complete execution demand.
-- First actual SPY capture: `nn_meta/data_v7/entry-first-actual-20260926`,
-  March 15, 2022, 3,239 quotes and 1,208 trades; verified separately.
+Initial df/statvfs/Btrfs recheck: 158.04 GB free, or 136.57 GB after 20 GiB.
+During this read-only review, free space increased externally to **231.58 GB**,
+leaving **210.10 GB after 20 GiB**. Cause unconfirmed; this agent freed nothing.
+All 6,012 verified duplicate files were still present with unchanged inode,
+device and size; old V6 captures retained 453 symbol directories.
+Recheck free space immediately before any launch; it can change independently.
+Snapshot: `nn_meta/validation/storage-review-verdict-20260926`.
 
-## Actual volume sample and storage constraint
+Read-only inventory: `nn_meta/validation/project-storage-inventory-20260926`.
+13,303,859 file entries, 2,890,819 directories, zero errors. Four symlinks were
+not followed; `.agents` is a separate mount and was excluded.
+489.14 GB unique file contents; 514.14 GB by names, including 25.00 GB already
+shared through hardlinks. Allocated blocks are not guaranteed deletion savings.
 
-Plan: `nn_meta/validation/v7-entry-volume-sample-20260926`.
-Its scanner reconciled every security/request/contract-day/union second with
-full demand. Sixty strata span year, security request-count quartile and window
-length. Twelve paired windows per stratum were selected by seeded SHA256 before
-provider inspection: 720 pairs / 1,440 captures, 362 securities, all five years.
-Preserved scan checkpoints are in the sibling `.checkpoints` directory.
+Largest areas:
+- Current V7 catalog: 117.67 GB, 1,987,291 files; preserve.
+- Current demand: 106.55 GB, 14,495 files; preserve bound exports too.
+- V7 acquisition roots: 87.36 GB by names / ~68.98 GB unique; preserve lineage.
+- V6 campaigns: 83.94 GB, with multiple generations and duplicate arrays.
+- Old V6 expanded inputs: 51.53 GB, 9,541,723 files / 2,066,117 directories.
+  Its 47.21 GB full-run is the main file-count problem, not empty junk.
+- Main V6 live data: current installed data-index points here; preserve.
 
-Raw: `nn_meta/data_v7/entry-volume-sample-20260926`.
-Evidence: `nn_meta/validation/v7-entry-volume-forecast-20260926` and its sibling
-`.attempts` directory. All 1,440 passed with zero failures: 231,858 quote records,
-5,559 trades, 52 empty quote and 437 empty trade windows. The 620 pre-February-2024
-captures contain 100,426 records. Empty/failure states are never invented fills.
-The actual sample used 7,030,384 bytes and 186.55 seconds with four autosized
-workers and one inner thread, within the 8 GiB bounded acquisition plan.
+## Duplicate and retention findings
 
-Estimated full entry captures in current layout: **218.04 GB**, standard error
-15.91 GB; mean plus three SE 265.77 GB. These exclude request mappings, dated
-references and full execution paths. Three SE is not a guaranteed upper bound.
-Current quota: 68,980,125,222 / 250,000,000,000 bytes, no reservations.
-Local free space around 158.04 GB; only ~50.67 GB remains above 100 GiB reserve.
-Existing total-project ceiling is still 640 GB. Full current-layout capture
-cannot be launched against these budgets.
-Fresh `du -sb .` returned 489,135,748,190 apparent project bytes (non-atomic).
-Adding full gross estimates yields 707.18 GB current layout / 653.22 GB candidate,
-both above 640 GB before other missing stages. Saved capacity snapshot:
-`nn_meta/validation/v7-entry-capacity-verdict-20260926`.
+`storage-large-duplicates-20260926`: scanned named campaign/cache roots,
+hashed 6,022 size-matched files >=1 MiB (90.98 GB). Found 1,322 exact-content
+sets: 4,690 extra copies / **53.88 GB**, including **28.87 GB prepared arrays**,
+10.46 GB cache duplicates and 14.56 GB other datasets/marks/files.
+`storage-duplicate-extents-20260926`: Btrfs reports 53.84 GB exclusive extents
+for those extra copies. Exact path/hash/reference lists are saved. This is a
+review list; no file replacement, linking or deduplication was performed.
 
-## Lossless and request-count experiments
+`v7-retained-inputs-audit-20260926`: scanned all current 591 demand/daily and
+1,773 feature/proposal declaration pairs plus gate/kernel inputs: 5,326 docs,
+16.02 GB. Numerous old-looking V7 dividend/action/identity/raw roots are still
+referenced. Path-reference audit is not exhaustive transitive garbage collection.
+Old V6 campaign/expanded-input roots are absent from these V7 declarations.
 
-`nn_meta/validation/v7-entry-encoding-benchmark-20260926`:
-all 1,440 raw streams and exact manifest/receipt texts round-trip through the
-candidate JSON-column/zstd encoding. Estimated 164.08 GB, standard error 12.40 GB,
-mean plus three SE 201.28 GB, with a modeled 128-byte index allowance per capture.
-This is an encoding experiment, NOT an implemented archive/consumer or migration.
-All original files remain intact. Do not present it as admitted production input.
+Installed V6 forward service uses the packaged release under the permanent
+HealysV6 checkout, and its data-index points to main's dated v6_server/data.
+Old raw captures remain valuable training/parity provenance, not its live
+forward-data root. Current bundles/state/data and activation evidence stay intact.
 
-`nn_meta/validation/v7-contiguous-entry-union-20260926`:
-full read-only scan merges only touching/overlapping intervals within contract/day.
-10,941,828 contiguous ranges (5,470,914 per kind) preserve all 14,404,985,220 seconds
-per kind and all 2,223,844 contract-days. Zero added seconds; ~74% fewer ranges.
-Dense ranges may need pagination splitting. Long-range throughput, memory,
-retention and consumer receipt compatibility are not yet measured/implemented.
-The old fixed-cell audit has not changed.
+The weekly cache backup script does NOT include expanded inputs, campaigns or
+V7 acquisition, so do not assume those trees are backed up. MRHA is documented
+as the historical restore-kit disk, remains unmounted and was not written to.
 
-## Pending user input and next actions
+## Joined capture quality
 
-Asked via async input which additional disk/storage location is available.
-Read-only `lsblk` sees `/dev/sda2`, label MRHA, 1.8 TiB exFAT, unmounted. No mount,
-format, write or archive placement was performed. Its free capacity is unknown.
-Await the user's identification before selecting a new storage destination.
-More disk does not authorize increasing the 250 GB acquisition/640 GB project
-caps. Do not delete originals or narrow scope to make the forecast fit.
+Plan: `nn_meta/validation/v7-adjacent-quality-plan-20260926`.
+Proof: `nn_meta/validation/v7-adjacent-quality-proof-20260926`.
+Raw fixed and joined archives: `nn_meta/data_v7/adjacent-quality-20260926`.
+Six cases across 2022–2026 plus density stress: 62 fixed captures vs 12 joined,
+12 previous shards reused by immutable hardlinks. All 24,527 full-range raw
+records and all 126 original causal request reads match exactly: timestamps,
+fields, precision, order and duplicate counts preserved. Gaps stay gaps.
+This proves these real quality cases, not a representative joined volume forecast.
 
-Next: resolve placement, measure/validate exact contiguous capture and archive
-costs (including bounded paging and preserving failure receipts), then make an
-updated full-project acquisition plan. Dated standard-contract references and
-class hours remain missing. Full fill/mark/exit/roll/delivery demand, execution,
-assembly/folds/trials and readiness gates still precede training.
+Prior full census remains `v7-contiguous-entry-union-20260926`: 10,941,828
+contiguous ranges vs 42,030,534 fixed windows; exact same requested nanoseconds.
+The prior 1,440-capture full-population sample and encoding experiment remain
+unchanged: existing layout estimates 218.04 GB; candidate encoding 164.08 GB.
+Their forecasts exclude full execution paths and some storage overhead.
 
-## Monitoring, validation, durable notes
+## Next concrete work
 
-The separate Konsole tab now shows completed sample progress:
-`./venv/bin/python scripts/watch_v7_capture_sample.py --status nn_meta/validation/v7-entry-volume-forecast-20260926.status.json --follow`
-This is a read-only capture monitor, not a training progress bar.
-Old `healys-v6-progress.timer` and `healys-v7-catalog-progress.timer` remain
-inactive/disabled. V6 live paper/scanners/feeds/health jobs were not changed.
+Prepare content-preserving deduplication of exact immutable copies, beginning
+with repeated prepared arrays, while retaining required paths/hashes. User
+requested review; do not interpret it as permission to erase campaign trees.
+For the huge V6 archive, create/verify a recoverable archive and restoration
+proof before considering removal of loose historical files.
 
-Final full suite: **2,424 tests + 18 subtests**, 20 warnings, 128.23 seconds.
-All nine focused sampling/encoding/range tests pass. No producer or frozen
-scheduler source was edited; new scripts are separate consumers/experiments.
-Review: `docs/reviews/2026-09-26-v7-capture-storage-forecast.md`.
+Measure a representative joined-range storage forecast and validate packed,
+indexed capture storage before bulk download. A directory per each of 10.94m
+joined ranges would still create millions more files. Reconcile capture,
+project, temporary storage and full execution-path costs. Dated contract
+references/class hours, fills/marks/exits/rolls/delivery, execution, assembly and
+readiness remain before training. All original V7-2 freezes/proofs are preserved.
 
-October 2 Massive decision, V6 Alpaca bridge lifecycle and incubator outcome/
-daily-health remain separate carried-forward work.
+Review: `docs/reviews/2026-09-26-storage-retention-and-adjacent-quality.md`.
+Full suite: **2,427 tests + 18 subtests**, 20 warnings, 117.26 seconds.
+Real inventory/reference/duplicate/extent audits also completed successfully.
+The old hourly completion-alert timers remain disabled. Existing CLI capture
+viewers show completion, not training. October 2 subscription, V6 Alpaca bridge
+and incubator work remain separate carried-forward tasks.

@@ -1,0 +1,9 @@
+{
+  "inputs": {
+    "/home/healy/Coding/HealysBacktester/docs/specs/V7_CAPTURE_CAPACITY_20260926.json": "b438ccb5d24aa2ba4022026c0a3723c6dbb0e935a38bc512971daa6b764bba2f",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-entry-union-20260926/complete.json": "426544477ee9116e17f99453cb8fbcab5212131d21162326a2d5457ccf0f979b",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-entry-volume-forecast-20260926/complete.json": "6cd23b0f6616a1b6fc0ff9813f2923e7665a7df412461b92041bbb77ec9e88a1",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-entry-volume-sample-20260926/complete.json": "4d3825418954ffc685079865fba983934e647c400ef316dbea6f4625ff5dce1d"
+  },
+  "source_sha256": "145d6594d1267b0ef7eb495bdbfe564f381a48fa1d9fa1c68d03fdb7d96e8334"
+}

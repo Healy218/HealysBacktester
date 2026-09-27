@@ -90,6 +90,21 @@
   has not been used. Bulk acquisition/training remain gated; all originals and
   both budget limits remain preserved. See
   [capture storage forecast](docs/reviews/2026-09-26-v7-capture-storage-forecast.md).
+  Storage review follow-up: the user authorized using more local capacity and
+  joining intervals only without quality loss. New capture planning uses a
+  **20 GiB reserve**; the latest free-space check rose externally to 231.58 GB,
+  leaving ~210.10 GB above that reserve. Joined downloads passed raw/causal
+  parity for all 126 requests in six real cases (62 fixed captures → 12 joined).
+  The project inventory found 13.30 million files / 2.89 million directories;
+  old V6 expanded inputs account for 9.54 million files and 51.53 GB. A focused
+  SHA256 audit found 53.88 GB of extra identical contents, including 28.87 GB
+  of prepared training arrays; no cleanup was performed. Current V7 declarations
+  still reference many older intermediates. Exact retention/duplicate evidence:
+  [storage and quality review](docs/reviews/2026-09-26-storage-retention-and-adjacent-quality.md).
+  Next: content-preserving duplicate cleanup/verified archival planning, a
+  representative joined-range forecast and packed capture storage before bulk
+  acquisition. The acquisition/project ceilings and remaining training gates
+  are unchanged.
   See `docs/reviews/2026-09-25-v7-3-full-demand-launch.md`.
   Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
   Derive proposal-driven
@@ -266,7 +281,12 @@ Arithmetic option midpoint pricing, separate costs, V7 12.5% premium stop,
 strategy exits, ITM expiry exit 15 minutes before regular option close, and the
 agreed funded physical fallback remain required. Preserve shared portfolio
 limits, chronological folds and causal inputs. Use at most four outer workers,
-one inner thread, 100 GiB disk reserve and the 250 GB acquisition ceiling.
+one inner thread and the 250 GB acquisition ceiling. The September 26 user
+amendment permits a **20 GiB reserve for new capture planning**, including
+in-flight writes, under `docs/specs/V7_CAPTURE_CAPACITY_20260926.json`.
+Original frozen launchers keep their historical 100 GiB guards; do not edit
+bound producers merely to change their reserve. New bulk consumers must enforce
+the amended policy explicitly.
 Protect existing V6 paper operation; do not change its policy as a side task.
 The earlier roughly 230 GB project estimate is stale: the September 25
 measurement is 421.285 GB. The original demand allocation was 200 GiB. Recovery uses a measured 140 GiB

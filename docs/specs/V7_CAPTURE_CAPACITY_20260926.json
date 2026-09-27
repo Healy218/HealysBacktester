@@ -1,0 +1,16 @@
+{
+  "schema": "v7-capture-capacity-policy-v1",
+  "authorized_date": "2026-09-26",
+  "authorization": "User permits using nearly all local storage and adjoining intervals if data quality is preserved.",
+  "disk_reserve_bytes": 21474836480,
+  "previous_disk_reserve_bytes": 107374182400,
+  "reserve_choice": "20 GiB operating headroom; account for all in-flight writes before admitting each group.",
+  "acquisition_limit_bytes": 250000000000,
+  "project_limit_bytes": 640000000000,
+  "maximum_outer_workers": 4,
+  "inner_threads": 1,
+  "joining": "Only touching or overlapping intervals for the same contract, data kind and UTC day; exact original request mappings retained.",
+  "quality": "No downsampling, tick removal, changed precision, filled gaps, inferred ticks or cross-contract merging. Raw record and causal consumer parity required.",
+  "preserve_existing_artifacts": true,
+  "full_campaign_launch_authorized_by_this_file": false
+}

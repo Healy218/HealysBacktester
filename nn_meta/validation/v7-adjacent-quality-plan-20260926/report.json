@@ -1,0 +1,991 @@
+{
+  "cases": [
+    {
+      "contract": "COST221118C00515000",
+      "date": "2022-11-14",
+      "end_ns": 1668457800000000000,
+      "fixed_captures": 22,
+      "joined_captures": 2,
+      "parent": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG000F6H8W8/complete.json",
+      "parent_sha256": "dea87a190ee3e6b6e3033934e2a4d1871d99818618c73c91de1ae1d01708e072",
+      "reason": "First seeded-priority joinable sample in year",
+      "requests": [
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668450600000000000,
+          "kind": "quotes",
+          "request_id": "73c95d76c057e07fc9b9ff66eedc4714cf4a47464d9bdf40a8190788e2bfdc6a",
+          "start_ns": 1668448770000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668450600000000000,
+          "kind": "quotes",
+          "request_id": "1ea9950690548ab93f684b85b24bb1f377d7dc2ae0b7b9f612cc482fbffabd91",
+          "start_ns": 1668449670000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668451500000000000,
+          "kind": "quotes",
+          "request_id": "e9e3e4ccb16fece57a43fdae2f6a1030edf3becb2b7fd3769d3a25b1f40d5d25",
+          "start_ns": 1668450570000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668452400000000000,
+          "kind": "quotes",
+          "request_id": "90e2d088735b9ede8a81d83cb57faaa6d41d7c01aa735319fb3f0d11bbdf7306",
+          "start_ns": 1668450570000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668452400000000000,
+          "kind": "quotes",
+          "request_id": "e487ac25dc6fead4d7e767ff8c7a143ff32ccdb9a0c1198c6634be93c36e6ab0",
+          "start_ns": 1668451470000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668452400000000000,
+          "kind": "quotes",
+          "request_id": "03f9f9fae38ebfa17bb6efe48cdc6b5a0e2dbd1dc6ea8b426505ebb366c90b9b",
+          "start_ns": 1668452070000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668452700000000000,
+          "kind": "quotes",
+          "request_id": "92f4f28c6cfb373273af2e5964ad3891d7845033ffd9d12c3da571423035ba9d",
+          "start_ns": 1668452370000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668453300000000000,
+          "kind": "quotes",
+          "request_id": "b83577d7f26bf66858eaeaac6cda725228620ac2fe9c147dbab78ab5514e9c08",
+          "start_ns": 1668452370000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668454200000000000,
+          "kind": "quotes",
+          "request_id": "08205d6bd08c784c82bceff6501e696591901f3a014661b9664e4f32002dee2d",
+          "start_ns": 1668452370000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668453000000000000,
+          "kind": "quotes",
+          "request_id": "f4ad570c88aa451f5e652c2d51481f0d384c8a00e30f0ff51aee5d9822c86d82",
+          "start_ns": 1668452670000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668453300000000000,
+          "kind": "quotes",
+          "request_id": "e255e5158e4f7a256ab3e31c22ea554fed473c6aaea72bc32f452ac577187707",
+          "start_ns": 1668452970000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668453600000000000,
+          "kind": "quotes",
+          "request_id": "12d19c09f2d023ce0868a21b540553672c60a2a16c773c1ac173e03021507e98",
+          "start_ns": 1668453270000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668454200000000000,
+          "kind": "quotes",
+          "request_id": "a969d495865d7f9bd6cbefbf373aaf6778b923189302bee3be5804fb71b54a11",
+          "start_ns": 1668453270000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668453900000000000,
+          "kind": "quotes",
+          "request_id": "1f14592c32405c82eab8a99ea8340f368325ae512693fcde722be41db8661041",
+          "start_ns": 1668453570000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668454200000000000,
+          "kind": "quotes",
+          "request_id": "0279d0ddc8422f8e70e5e58830f882677984c1d7cba092bf7b95d2cc26d0bb37",
+          "start_ns": 1668453870000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668454500000000000,
+          "kind": "quotes",
+          "request_id": "0eb9b287d05aeed150a248c4d965b14eef06167d3b5344aac1f10745a5dd155a",
+          "start_ns": 1668454170000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668455100000000000,
+          "kind": "quotes",
+          "request_id": "9dbc2168df02ffc121674c346940479433cb14d05bac37113670c5d0cfb45e82",
+          "start_ns": 1668454170000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668456000000000000,
+          "kind": "quotes",
+          "request_id": "a4310957b1cf55e5171d391521a2f76a117f8778c130d3db3914b65cc2f975b6",
+          "start_ns": 1668454170000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668454800000000000,
+          "kind": "quotes",
+          "request_id": "44dfe7bb2f16fd19291b93f766a8691c51a5a6c99d700d932fcff266c0ccab76",
+          "start_ns": 1668454470000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668455100000000000,
+          "kind": "quotes",
+          "request_id": "5826ce06cf24c0a9fa4e3368512e90007619efca2ea8b57e765a0aaf443a5671",
+          "start_ns": 1668454770000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668455400000000000,
+          "kind": "quotes",
+          "request_id": "1463c5312bf38178e95a88beff46b21bc302aff8f8707e96ed4330df4bbfd120",
+          "start_ns": 1668455070000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668456000000000000,
+          "kind": "quotes",
+          "request_id": "4c5e6b0c4ef8db49dd3b1967b4b914313602ed9117950ab56083a75a1d4b3193",
+          "start_ns": 1668455070000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668455700000000000,
+          "kind": "quotes",
+          "request_id": "d9623fbd20a78992022b284c040ee550baa6474314ec9ab995d5d29c67061370",
+          "start_ns": 1668455370000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668456300000000000,
+          "kind": "quotes",
+          "request_id": "55531620f85774799e413521f994a2279035778e9fa6aa237466621e69cd46eb",
+          "start_ns": 1668455970000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668456900000000000,
+          "kind": "quotes",
+          "request_id": "74193639e63d25826db902e8e32745cd5473988da221e37a6aef1a5f2b588fcd",
+          "start_ns": 1668455970000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668457800000000000,
+          "kind": "quotes",
+          "request_id": "5e077d349c5aca2cb143d3c5e20c57149a44b064ee75a19ef4175b8dd11c4025",
+          "start_ns": 1668455970000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668456600000000000,
+          "kind": "quotes",
+          "request_id": "9ee22e13f2c65aacd9046bb1afd00562451a8ffd23be200a8cdb46f4ef670886",
+          "start_ns": 1668456270000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668457800000000000,
+          "kind": "quotes",
+          "request_id": "f14b60f0aad26ed6095c32ae0696694957a5928483d6393808fe5ea96080b2e7",
+          "start_ns": 1668456870000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668457500000000000,
+          "kind": "quotes",
+          "request_id": "712ac30697c9f4498e85446c08d1d3f84076812c921fcb769efc65a48644356f",
+          "start_ns": 1668457170000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668450600000000000,
+          "kind": "trades",
+          "request_id": "60da09878d8e21a47bd06ffdc79607b095f2ccc89b5dbf25dd38cf5acf305137",
+          "start_ns": 1668448770000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668450600000000000,
+          "kind": "trades",
+          "request_id": "f3b418dd28eff303be435c54cf56e732c3db6a5a254114c24ff353efec846177",
+          "start_ns": 1668449670000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668451500000000000,
+          "kind": "trades",
+          "request_id": "4b92b59a19d063d25d90289f3c1476729c0e99f0e34b03183aa7c4eaa6db9693",
+          "start_ns": 1668450570000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668452400000000000,
+          "kind": "trades",
+          "request_id": "b3f69ae8201a714a9133b54e6d4bb6c39f36054190bb54676d4fecd3aedb1849",
+          "start_ns": 1668450570000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668452400000000000,
+          "kind": "trades",
+          "request_id": "5b6054003100e032b4f56eb0d15d1e8b2b4d85fdc3d1051fd79eb96844b97cd2",
+          "start_ns": 1668451470000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668452400000000000,
+          "kind": "trades",
+          "request_id": "9842234f7af7e695d5da27a4a73a1084ba33f14d9d7b94f7ea5f36419ed38156",
+          "start_ns": 1668452070000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668452700000000000,
+          "kind": "trades",
+          "request_id": "9571f44f91dafd3c361ece6a3aeb5064d6e4394556660760b3ea07df004ee721",
+          "start_ns": 1668452370000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668453300000000000,
+          "kind": "trades",
+          "request_id": "df0c0d4aa357df73b12b7de5f4eeea55f530eb3593cbe273a6baf1fb09c6c567",
+          "start_ns": 1668452370000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668454200000000000,
+          "kind": "trades",
+          "request_id": "5919f181232a5acc3950490bcdaa033c72196b38eb2d5857f30354a0b679aa4c",
+          "start_ns": 1668452370000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668453000000000000,
+          "kind": "trades",
+          "request_id": "2599cba3974acf288158234587e5aac569dbbeafb729535d417fa66a1f582124",
+          "start_ns": 1668452670000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668453300000000000,
+          "kind": "trades",
+          "request_id": "d7337885869ce3d588e11683921d00d9a27c25d2c341d8740eaa6150b85ce23c",
+          "start_ns": 1668452970000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668453600000000000,
+          "kind": "trades",
+          "request_id": "69f88b150bd5aa85e0188ad2e773f3479478e0d412556459fbb5e17a15af67ed",
+          "start_ns": 1668453270000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668454200000000000,
+          "kind": "trades",
+          "request_id": "454fef3aaf40ae58dc7447dc3c8ba2d98c80119defdb4e72c77a5b896a3f3a52",
+          "start_ns": 1668453270000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668453900000000000,
+          "kind": "trades",
+          "request_id": "fe55c48389f4a8610e4f32dca6eafd9af2f2d3df2a3e4ca1a7b0247d02acf86e",
+          "start_ns": 1668453570000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668454200000000000,
+          "kind": "trades",
+          "request_id": "2026a47256af6669ea09abc162f1b7e6d19041e9b225d9f727cec3de96763ea1",
+          "start_ns": 1668453870000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668454500000000000,
+          "kind": "trades",
+          "request_id": "5b9087ecc422f75db365f2f446325150620785f7c6a8ee800738be61fbf05da2",
+          "start_ns": 1668454170000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668455100000000000,
+          "kind": "trades",
+          "request_id": "83d0dc342bedd5466370496d83860fa0dc5c6597393d074fffb4e46075fdb157",
+          "start_ns": 1668454170000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668456000000000000,
+          "kind": "trades",
+          "request_id": "f981d13097f1473f65503c3d30be7e908d46744bf943dd4f68110fa237af6a3d",
+          "start_ns": 1668454170000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668454800000000000,
+          "kind": "trades",
+          "request_id": "878bb5bfd2ea231a9c20514501555dde97814dcb0f61660bdcc2f01927a8bc70",
+          "start_ns": 1668454470000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668455100000000000,
+          "kind": "trades",
+          "request_id": "756ee48f0d2db422dc5d6e302bb761775bec552e454e58080192493308c596de",
+          "start_ns": 1668454770000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668455400000000000,
+          "kind": "trades",
+          "request_id": "d5159c82b06a2eec9fdf1a47188dfa017effadc5ecaaaa06be6d386b6da1f951",
+          "start_ns": 1668455070000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668456000000000000,
+          "kind": "trades",
+          "request_id": "755c2c07374b43085d8917af9b301608b1e76ab93b72c785ca59c2497490c31a",
+          "start_ns": 1668455070000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668455700000000000,
+          "kind": "trades",
+          "request_id": "f62455bda944cb27f969699bd55ad94fb0d4aadff955e8429e63eba5455624e6",
+          "start_ns": 1668455370000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668456300000000000,
+          "kind": "trades",
+          "request_id": "e3c4d6b83ec89649c352b5bd2a24e5727178a9beb381e455c179e0392f207041",
+          "start_ns": 1668455970000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668456900000000000,
+          "kind": "trades",
+          "request_id": "db6eaaa816aa8aa938789abdcf85704fb76e1c83325f06c7404d0205e6745418",
+          "start_ns": 1668455970000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668457800000000000,
+          "kind": "trades",
+          "request_id": "136abf04cbb59408c31ab22355cee13bec9d6c30e9a8626d6f035dfffa0f8563",
+          "start_ns": 1668455970000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668456600000000000,
+          "kind": "trades",
+          "request_id": "46f5fdaa447cc959a5c782a587d27c0683eeaf1821e80dd20c941e10d8c22ac7",
+          "start_ns": 1668456270000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668457800000000000,
+          "kind": "trades",
+          "request_id": "72d3948cf8b087628849d12301a44b65085f8c0cceb8c5f2cbe7b64f961a3375",
+          "start_ns": 1668456870000000000
+        },
+        {
+          "contract": "COST221118C00515000",
+          "end_ns": 1668457500000000000,
+          "kind": "trades",
+          "request_id": "22d714f41d34435f287f254adf038dc8c059737fe5c2b9f933697b6260972959",
+          "start_ns": 1668457170000000000
+        }
+      ],
+      "security_id": "BBG000F6H8W8",
+      "start_ns": 1668448770000000000
+    },
+    {
+      "contract": "NKE230630C00110000",
+      "date": "2023-06-23",
+      "end_ns": 1687544100000000000,
+      "fixed_captures": 18,
+      "joined_captures": 2,
+      "parent": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG000C5HS04/complete.json",
+      "parent_sha256": "768576a046ee98ecbfca8b84abc78dcf2a04a40c25a25c795f2eb4e69d78cdeb",
+      "reason": "First seeded-priority joinable sample in year",
+      "requests": [
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687537200000000000,
+          "kind": "quotes",
+          "request_id": "32223562023bbbbeec7b5b4a03390261a9818b32e8e09eee0627aeb7cac706f0",
+          "start_ns": 1687536870000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687537500000000000,
+          "kind": "quotes",
+          "request_id": "0e4426f1e70d9913351412530ea03019970e928d80cd56d14122bade700cb19c",
+          "start_ns": 1687537170000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687537800000000000,
+          "kind": "quotes",
+          "request_id": "c95335b4e271e667e338fd1223908c4994869d63e8a9e794f2bed4ea83d2761f",
+          "start_ns": 1687537470000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687538100000000000,
+          "kind": "quotes",
+          "request_id": "c9c174ba359b3221a214dcb2c27cf70c634b6e7ba4441e27bd2d9e3fc0cedbe0",
+          "start_ns": 1687537770000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687538400000000000,
+          "kind": "quotes",
+          "request_id": "4b5ddaa8f2d1d228e1389d710f5e3302cae4d4cf3279615fb4d19f652dc004c0",
+          "start_ns": 1687538070000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687538700000000000,
+          "kind": "quotes",
+          "request_id": "33d5d17e7d2bbeaa37263416eb64c93b914fc56e962a516eba0cb40d72e8f5ed",
+          "start_ns": 1687538370000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687539000000000000,
+          "kind": "quotes",
+          "request_id": "4ae3189295bd382de84f98c65e5a3e783bd6dadb18228600ba2c17fadb2488ff",
+          "start_ns": 1687538670000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687539300000000000,
+          "kind": "quotes",
+          "request_id": "3948c6ce104459a18d34a498d0d2d51b99fed27b8db53ddcc8a36ae2a529c6ba",
+          "start_ns": 1687538970000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687539600000000000,
+          "kind": "quotes",
+          "request_id": "45da98fddab57042cce09218585bc1946cf6c2018e30fe7262404d3c2dd3394b",
+          "start_ns": 1687539270000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687539900000000000,
+          "kind": "quotes",
+          "request_id": "8fd919e2015f4b3c1d9e979b65578441676d7849ac9a5211f3e70b26a5fb05d5",
+          "start_ns": 1687539570000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687540200000000000,
+          "kind": "quotes",
+          "request_id": "d548690450678c6d2f9c91d325ae70e1256883f61f94176271fc49c4403f2d30",
+          "start_ns": 1687539870000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687540500000000000,
+          "kind": "quotes",
+          "request_id": "70948086cd1f6abd4fc4000b629c29cd21eae59aaa79018fa82044693fc9fd6f",
+          "start_ns": 1687540170000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687540800000000000,
+          "kind": "quotes",
+          "request_id": "83b4cd6d136d294b334153bcbf8c56f41568725e7d95fa0f7b82b17b1fc00342",
+          "start_ns": 1687540470000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687541100000000000,
+          "kind": "quotes",
+          "request_id": "363792c07b7d0c90018f938463fc4a26adc10c88f85e39569befa5f535b4ab83",
+          "start_ns": 1687540770000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687541400000000000,
+          "kind": "quotes",
+          "request_id": "575906a56370096904523353a3dd91ef6f31ad33962e1def2341a586c34cf6fa",
+          "start_ns": 1687541070000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687541700000000000,
+          "kind": "quotes",
+          "request_id": "83ed9c1619e4886c619ee2ead0419b1b7a0e022910362b2315ff2894339b2358",
+          "start_ns": 1687541370000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687542300000000000,
+          "kind": "quotes",
+          "request_id": "d798928f9952d7864abc7992041921aeab83f946f7d6650d067f9d11cbd3fdfb",
+          "start_ns": 1687541370000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687542000000000000,
+          "kind": "quotes",
+          "request_id": "61554001762518b7eccc2e8167883faa71bafd01d933e4d7fdb24687d97c008b",
+          "start_ns": 1687541670000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687542300000000000,
+          "kind": "quotes",
+          "request_id": "feba39acd8e79593554aafda886643dc5c876631862795406e07454f8309c63b",
+          "start_ns": 1687541970000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687542600000000000,
+          "kind": "quotes",
+          "request_id": "3e7f80b53a4503d86adc984fd72e414890775846099825573572f3cb52c81ca5",
+          "start_ns": 1687542270000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687542900000000000,
+          "kind": "quotes",
+          "request_id": "1cdd128b52d2d69dfeb85840368d88203d67c0cf546cff388b3a38df410c1f33",
+          "start_ns": 1687542570000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687543200000000000,
+          "kind": "quotes",
+          "request_id": "a95c215ef41305d43b288ff1974ee58afb2060e6cdb56426b0531bbb91b7cad0",
+          "start_ns": 1687542870000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687543500000000000,
+          "kind": "quotes",
+          "request_id": "3e16bf10486b7c7b18eef94410735517cf6d07b41867e0ed8f4a4da623a32ef1",
+          "start_ns": 1687543170000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687543800000000000,
+          "kind": "quotes",
+          "request_id": "ac6621b39810d22fc0df9357ffc83faeb4309c09320c07db3d984752edd93c2d",
+          "start_ns": 1687543470000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687544100000000000,
+          "kind": "quotes",
+          "request_id": "90b436785b4ba3a09914abb9b5754dc7607b11a95dc51527a9433947b0503787",
+          "start_ns": 1687543770000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687537200000000000,
+          "kind": "trades",
+          "request_id": "5772c43c291f6f2ae36c7ead8ba2921a28c18fdd189f382a85df8b6df300b98c",
+          "start_ns": 1687536870000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687537500000000000,
+          "kind": "trades",
+          "request_id": "f7ca7588edb728dfd3c0ba983d717b0ffef029cad49fa4ef0fd4fc9917f7f7b9",
+          "start_ns": 1687537170000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687537800000000000,
+          "kind": "trades",
+          "request_id": "91f8427716720a75b664245ee8890aeebdeca7c222ca8d464137639ec53dae73",
+          "start_ns": 1687537470000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687538100000000000,
+          "kind": "trades",
+          "request_id": "3fa5ba0d21b43cdffa825fe47e0df1d213c55dec94cc9c64c2ce9436b6f19a12",
+          "start_ns": 1687537770000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687538400000000000,
+          "kind": "trades",
+          "request_id": "cec7a34637f3047e703f092c94ec89ce6f0bcb7f7657716000820fd43d285adf",
+          "start_ns": 1687538070000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687538700000000000,
+          "kind": "trades",
+          "request_id": "385024d464b4224146d997d315baf294b96e39b373f626ea6d1ef7308199f31d",
+          "start_ns": 1687538370000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687539000000000000,
+          "kind": "trades",
+          "request_id": "4efa57834fcc99ccb9105d83d4aed0387dd21bb9bcb32b1c52c37593178012f7",
+          "start_ns": 1687538670000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687539300000000000,
+          "kind": "trades",
+          "request_id": "8c3f3dc8dd6871d0f4d0538865c02126b4f1da3c0251a9ca9531ea394d594645",
+          "start_ns": 1687538970000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687539600000000000,
+          "kind": "trades",
+          "request_id": "c8f8b24971227f827b6a298f1a6b041e4f9fb59dd053790fb8c3e4bf82338a0c",
+          "start_ns": 1687539270000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687539900000000000,
+          "kind": "trades",
+          "request_id": "73d8a5f4ecfd30b708e6496fdb62ebcb5e763d09c9291d25806bfd5fe9f8f849",
+          "start_ns": 1687539570000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687540200000000000,
+          "kind": "trades",
+          "request_id": "dd17380ec3788b411300e66fede3e5786888afed705d5953a0dd1c58d1511cbe",
+          "start_ns": 1687539870000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687540500000000000,
+          "kind": "trades",
+          "request_id": "e94da05c6140fe08289b4683dc44a625a6e83935e58efb8c7ad311b8699f5513",
+          "start_ns": 1687540170000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687540800000000000,
+          "kind": "trades",
+          "request_id": "a8080f80ad41f5f1dcfceb62c42b7c5c583b207c39287b86e91625bf18d0503c",
+          "start_ns": 1687540470000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687541100000000000,
+          "kind": "trades",
+          "request_id": "9f213da983dbf92bdc089b26bc4d122f36c72f43aaff510c1b2d651275cca9cd",
+          "start_ns": 1687540770000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687541400000000000,
+          "kind": "trades",
+          "request_id": "ffe657e414ab94dfaf2cb6d77c44379685cab5768edca8db86d6c39079bac16b",
+          "start_ns": 1687541070000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687541700000000000,
+          "kind": "trades",
+          "request_id": "9ba7592683b426045477f71b425ab7688b10b8f7b7a7411bcd6b5fea12addb66",
+          "start_ns": 1687541370000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687542300000000000,
+          "kind": "trades",
+          "request_id": "f51a67b0bf4afee5495d7c1b18b540882a4ad7775d255364758dd6f6695ccbd3",
+          "start_ns": 1687541370000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687542000000000000,
+          "kind": "trades",
+          "request_id": "d5f46ea3c54b8f8c6d962d1a6f026bab18c001ffe0d8011c53885fe244a23c95",
+          "start_ns": 1687541670000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687542300000000000,
+          "kind": "trades",
+          "request_id": "6d4c6b8f6722fece6a23cac15c2d83f4dd3345aa7123383c2869dc7fed69d6fb",
+          "start_ns": 1687541970000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687542600000000000,
+          "kind": "trades",
+          "request_id": "e68e48786524ad912dccd6da7a8390c26cbb2197849e9675fa75c579cf79dedb",
+          "start_ns": 1687542270000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687542900000000000,
+          "kind": "trades",
+          "request_id": "ce532eb4675bdd6a3f1bfa63e78e329f6a2a259f4a5c056bc870adb42136e8ef",
+          "start_ns": 1687542570000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687543200000000000,
+          "kind": "trades",
+          "request_id": "38e5e395e1bca86a1690fb587df8d8d7326a26582970d9fa3003113680ca17fe",
+          "start_ns": 1687542870000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687543500000000000,
+          "kind": "trades",
+          "request_id": "66d71474e0d51f9f6af4fb65c81492eb90f39a125e14a76addae8805e7ad0766",
+          "start_ns": 1687543170000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687543800000000000,
+          "kind": "trades",
+          "request_id": "dac55138259d31cfb0d4ed867406f920d702b2a93261b31e61c09caf76b3dfb7",
+          "start_ns": 1687543470000000000
+        },
+        {
+          "contract": "NKE230630C00110000",
+          "end_ns": 1687544100000000000,
+          "kind": "trades",
+          "request_id": "c6d4ddeadb4e3c589070bd7360b1428b708c53545f593aee7dd06e381879037b",
+          "start_ns": 1687543770000000000
+        }
+      ],
+      "security_id": "BBG000C5HS04",
+      "start_ns": 1687536870000000000
+    },
+    {
+      "contract": "SMCI241011C00048000",
+      "date": "2024-10-09",
+      "end_ns": 1728493200000000000,
+      "fixed_captures": 6,
+      "joined_captures": 2,
+      "parent": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG000MYZDJ3/complete.json",
+      "parent_sha256": "f705be4800b78e889b146c8475a3246fceebe1bb1468e41410aca08ecdbd478f",
+      "reason": "First seeded-priority joinable sample in year",
+      "requests": [
+        {
+          "contract": "SMCI241011C00048000",
+          "end_ns": 1728493200000000000,
+          "kind": "quotes",
+          "request_id": "1a41ca810ea642d00e3ffecd15ce1637046dae7e4ec6eccf6c52225cc04afd1d",
+          "start_ns": 1728491370000000000
+        },
+        {
+          "contract": "SMCI241011C00048000",
+          "end_ns": 1728493200000000000,
+          "kind": "quotes",
+          "request_id": "fb563abdba0e24084d60fe7c686faeaac9eb43a68285cd2be2f7f01219995351",
+          "start_ns": 1728492270000000000
+        },
+        {
+          "contract": "SMCI241011C00048000",
+          "end_ns": 1728493200000000000,
+          "kind": "quotes",
+          "request_id": "87aca571530b939cb80cf128cc521187b8e6e6b1285a0fc36edb7b502b9d1703",
+          "start_ns": 1728492870000000000
+        },
+        {
+          "contract": "SMCI241011C00048000",
+          "end_ns": 1728493200000000000,
+          "kind": "trades",
+          "request_id": "7ac2a538ebff7109c61c4cf235f1349674f2087efdf476d37a902751c5df6b0b",
+          "start_ns": 1728491370000000000
+        },
+        {
+          "contract": "SMCI241011C00048000",
+          "end_ns": 1728493200000000000,
+          "kind": "trades",
+          "request_id": "d12159334e5016f5509f3e7c611ca8f1c56f331a0eccaf1ef668f976a92857b0",
+          "start_ns": 1728492270000000000
+        },
+        {
+          "contract": "SMCI241011C00048000",
+          "end_ns": 1728493200000000000,
+          "kind": "trades",
+          "request_id": "a35631a8530386676e2813782e1663926b0490d7eb45754edae9c5d4dcb58901",
+          "start_ns": 1728492870000000000
+        }
+      ],
+      "security_id": "BBG000MYZDJ3",
+      "start_ns": 1728491370000000000
+    },
+    {
+      "contract": "RGTI251205C00024000",
+      "date": "2025-12-01",
+      "end_ns": 1764619500000000000,
+      "fixed_captures": 4,
+      "joined_captures": 2,
+      "parent": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG00Z911S16/complete.json",
+      "parent_sha256": "c1c305ba9561689a52c7698f156f1fd84b87c405e31d54467d131c678ab13ef9",
+      "reason": "First seeded-priority joinable sample in year",
+      "requests": [
+        {
+          "contract": "RGTI251205C00024000",
+          "end_ns": 1764619500000000000,
+          "kind": "quotes",
+          "request_id": "9f5409cb6fa719522ade88412ed3ab7f9d7da273e12ad4a697bc059d258c219f",
+          "start_ns": 1764619170000000000
+        },
+        {
+          "contract": "RGTI251205C00024000",
+          "end_ns": 1764619500000000000,
+          "kind": "trades",
+          "request_id": "0dcb15ad1da3354a5a5cb163be862126c045b868e7ec443ddd5f46f2341ccc57",
+          "start_ns": 1764619170000000000
+        }
+      ],
+      "security_id": "BBG00Z911S16",
+      "start_ns": 1764619170000000000
+    },
+    {
+      "contract": "CVS260626P00099000",
+      "date": "2026-06-17",
+      "end_ns": 1781718300000000000,
+      "fixed_captures": 8,
+      "joined_captures": 2,
+      "parent": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG000BGRY34/complete.json",
+      "parent_sha256": "4a55f7c4a11b881ee509c7a7323a5bbeb2f329290069472c5eef03c94c071b94",
+      "reason": "First seeded-priority joinable sample in year",
+      "requests": [
+        {
+          "contract": "CVS260626P00099000",
+          "end_ns": 1781717400000000000,
+          "kind": "quotes",
+          "request_id": "3a75fde7bd05f1ee098d02aba0a9bcca1edfc7856545cc4891d01f7a4ee48ecd",
+          "start_ns": 1781715570000000000
+        },
+        {
+          "contract": "CVS260626P00099000",
+          "end_ns": 1781717400000000000,
+          "kind": "quotes",
+          "request_id": "2f59d5065b79d33affcf5e8720e0913b7ce9147b43a03e1e1b4158d332bbb0e4",
+          "start_ns": 1781716470000000000
+        },
+        {
+          "contract": "CVS260626P00099000",
+          "end_ns": 1781718300000000000,
+          "kind": "quotes",
+          "request_id": "8f3150e072b836b1377bbe7f423ac7be69ad46aa38118687e3c6080d2f1037b1",
+          "start_ns": 1781717370000000000
+        },
+        {
+          "contract": "CVS260626P00099000",
+          "end_ns": 1781717400000000000,
+          "kind": "trades",
+          "request_id": "114cdb80782a3c5b1646e6cc2669aca7bf7643a3a56dec7e5c46eb833331e32a",
+          "start_ns": 1781715570000000000
+        },
+        {
+          "contract": "CVS260626P00099000",
+          "end_ns": 1781717400000000000,
+          "kind": "trades",
+          "request_id": "d72979c4ea1aeca3c5c89bb773a13312cfbb505ce0a3c552d871a1e7398e662b",
+          "start_ns": 1781716470000000000
+        },
+        {
+          "contract": "CVS260626P00099000",
+          "end_ns": 1781718300000000000,
+          "kind": "trades",
+          "request_id": "e8342f0953c78fd6d280119de7e88004861746b1fe8352141a5a8b1cc460be9c",
+          "start_ns": 1781717370000000000
+        }
+      ],
+      "security_id": "BBG000BGRY34",
+      "start_ns": 1781715570000000000
+    },
+    {
+      "contract": "IWM260130P00261000",
+      "date": "2026-01-29",
+      "end_ns": 1769701200000000000,
+      "fixed_captures": 4,
+      "joined_captures": 2,
+      "parent": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG000CGC9C4/complete.json",
+      "parent_sha256": "97a17f7304ac2c86422e6c8b8c9170eb00531ae546087d1fa82698ce6ac517aa",
+      "reason": "Densest prior sampled quote window; quality stress only",
+      "requests": [
+        {
+          "contract": "IWM260130P00261000",
+          "end_ns": 1769700900000000000,
+          "kind": "quotes",
+          "request_id": "cee0c97376a7f0d9064371a96628f5bd2a70add7946c96618646625c3a01a0f8",
+          "start_ns": 1769700570000000000
+        },
+        {
+          "contract": "IWM260130P00261000",
+          "end_ns": 1769701200000000000,
+          "kind": "quotes",
+          "request_id": "155af9154555827433cee0aeace3379256f401ee6c52a937f6bc7d7d675dc19b",
+          "start_ns": 1769700870000000000
+        },
+        {
+          "contract": "IWM260130P00261000",
+          "end_ns": 1769700900000000000,
+          "kind": "trades",
+          "request_id": "6d00e538c10f1fce9496e3ecd8bb1baa972fb4864a56afcfecd56f5958632a3b",
+          "start_ns": 1769700570000000000
+        },
+        {
+          "contract": "IWM260130P00261000",
+          "end_ns": 1769701200000000000,
+          "kind": "trades",
+          "request_id": "787df281b78ff9660a2ae9cbce266a1a9a60b2d9c60e95d367d67b0a7869c66b",
+          "start_ns": 1769700870000000000
+        }
+      ],
+      "security_id": "BBG000CGC9C4",
+      "start_ns": 1769700570000000000
+    }
+  ],
+  "full_scope_storage_forecast": false,
+  "metadata_budget_bytes": 67108864,
+  "policy": {
+    "acquisition_limit_bytes": 250000000000,
+    "authorization": "User permits using nearly all local storage and adjoining intervals if data quality is preserved.",
+    "authorized_date": "2026-09-26",
+    "disk_reserve_bytes": 21474836480,
+    "full_campaign_launch_authorized_by_this_file": false,
+    "inner_threads": 1,
+    "joining": "Only touching or overlapping intervals for the same contract, data kind and UTC day; exact original request mappings retained.",
+    "maximum_outer_workers": 4,
+    "preserve_existing_artifacts": true,
+    "previous_disk_reserve_bytes": 107374182400,
+    "project_limit_bytes": 640000000000,
+    "quality": "No downsampling, tick removal, changed precision, filled gaps, inferred ticks or cross-contract merging. Raw record and causal consumer parity required.",
+    "reserve_choice": "20 GiB operating headroom; account for all in-flight writes before admitting each group.",
+    "schema": "v7-capture-capacity-policy-v1"
+  },
+  "project_baseline_ceiling_bytes": 490000000000,
+  "research_ready": false,
+  "sample_budget_bytes": 8589934592
+}
