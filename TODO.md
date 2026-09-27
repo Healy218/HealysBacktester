@@ -135,6 +135,23 @@
   full execution-path demand and its budget, then a resumable packed campaign.
   Existing freezes remain unchanged. Full suite: 2,448 passed + 18 subtests,
   one skipped. See [packed forecast and remaining gates](docs/reviews/2026-09-27-v7-joined-packed-capture.md).
+  Later September 27: dated regular hours now resolve all 301,213 frozen
+  root/date pairs (576 roots, 2,370 early closes); all 18 dated changes pass.
+  IVV's conflicting year is resolved, with no selected IVV root in this demand.
+  The rules are a finite source-backed reconstruction; beyond-scope expiries
+  still need explicit treatment. All 591 first-leg envelope checkpoints pass:
+  5,867,251 possible contract/dates and 32.13 million additional quote hours.
+  A transferred-rate scenario adds ~1.03 TB if all possible holds are captured;
+  this is not realized demand or a final forecast. Use replay-driven acquisition.
+  The actual five-path pilot now supports exact-gap capture, bounded prefetch,
+  and immutable resumes. Across r0–r12, DIS/ABBV complete midpoint-stop labels;
+  NVDA/VKTX/FUTU retain open paths and their next exact held-mark requests.
+  Sixty fill/mark prefix and 21 completed-label comparisons pass; new completed
+  packs total 527,812 bytes. Training remains gated. Full dated references,
+  realized path/roll/stock demand and complete budget remain open; no full
+  campaign is running. All original freezes/caps are preserved. Full suite:
+  2,457 passed + 18 subtests, one skipped. See
+  [dated hours and execution paths](docs/reviews/2026-09-27-v7-dated-hours-and-execution-paths.md).
   See `docs/reviews/2026-09-25-v7-3-full-demand-launch.md`.
   Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
   Derive proposal-driven
@@ -219,8 +236,8 @@
   gated by 7-2 through 7-7.
 
 **7-1 and 7-2 are complete, including full-scope daily context. 7-3 is active:
-its scheduler and four-security validation pass; full option-path demand and
-captures remain open. The live V6 repair prerequisite was completed before
+its full entry demand and dated entry hours pass; realized full option-path
+demand, complete storage forecasting and captures remain open. The live V6 repair prerequisite was completed before
 7-2. V6 here means only the current home-hosted paper runtime; the abandoned
 local short-DTE build is not part of this work. Items 7-4 through 7-7 remain
 queued.**

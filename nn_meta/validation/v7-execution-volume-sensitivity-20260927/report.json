@@ -1,0 +1,157 @@
+{
+  "additional_quote_hours": 32130174.700000003,
+  "authorizes_bulk": false,
+  "caveat": "Finite first-leg upper envelope, not realized path demand. Rates transfer measured entry quote density/compression by year and security-demand quartile; held quotes can have different density. Scenarios are not confidence bounds.",
+  "cells": [
+    {
+      "additional_quote_seconds": 185524080.0,
+      "group": "2022-q0",
+      "pre_entry_quote_bytes_per_second": 4.219744829402689,
+      "transferred_additional_bytes": 782864277.3096908
+    },
+    {
+      "additional_quote_seconds": 2452441470.0,
+      "group": "2022-q1",
+      "pre_entry_quote_bytes_per_second": 5.645206530552615,
+      "transferred_additional_bytes": 13844538602.242056
+    },
+    {
+      "additional_quote_seconds": 8160074880.0,
+      "group": "2022-q2",
+      "pre_entry_quote_bytes_per_second": 5.8138414473701125,
+      "transferred_additional_bytes": 47441381550.98769
+    },
+    {
+      "additional_quote_seconds": 13196053529.999998,
+      "group": "2022-q3",
+      "pre_entry_quote_bytes_per_second": 9.989362178882685,
+      "transferred_additional_bytes": 131820158043.09332
+    },
+    {
+      "additional_quote_seconds": 178203510.0,
+      "group": "2023-q0",
+      "pre_entry_quote_bytes_per_second": 2.026948269016114,
+      "transferred_additional_bytes": 361209296.1270957
+    },
+    {
+      "additional_quote_seconds": 1420058640.0,
+      "group": "2023-q1",
+      "pre_entry_quote_bytes_per_second": 2.896439953786841,
+      "transferred_additional_bytes": 4113114581.6162043
+    },
+    {
+      "additional_quote_seconds": 8900574240.0,
+      "group": "2023-q2",
+      "pre_entry_quote_bytes_per_second": 3.8281566013657513,
+      "transferred_additional_bytes": 34072792032.801956
+    },
+    {
+      "additional_quote_seconds": 12303016140.0,
+      "group": "2023-q3",
+      "pre_entry_quote_bytes_per_second": 8.283681417392907,
+      "transferred_additional_bytes": 101914266176.80302
+    },
+    {
+      "additional_quote_seconds": 201361560.0,
+      "group": "2024-q0",
+      "pre_entry_quote_bytes_per_second": 2.1598682754346417,
+      "transferred_additional_bytes": 434914445.3360291
+    },
+    {
+      "additional_quote_seconds": 1668311520.0,
+      "group": "2024-q1",
+      "pre_entry_quote_bytes_per_second": 2.639687520496349,
+      "transferred_additional_bytes": 4403821099.644295
+    },
+    {
+      "additional_quote_seconds": 7991980560.0,
+      "group": "2024-q2",
+      "pre_entry_quote_bytes_per_second": 4.232788913822055,
+      "transferred_additional_bytes": 33828366713.849377
+    },
+    {
+      "additional_quote_seconds": 12842848200.0,
+      "group": "2024-q3",
+      "pre_entry_quote_bytes_per_second": 10.448038606570908,
+      "transferred_additional_bytes": 134182573811.92969
+    },
+    {
+      "additional_quote_seconds": 353556810.0,
+      "group": "2025-q0",
+      "pre_entry_quote_bytes_per_second": 4.153230554089961,
+      "transferred_additional_bytes": 1468402945.8985791
+    },
+    {
+      "additional_quote_seconds": 3356975160.0,
+      "group": "2025-q1",
+      "pre_entry_quote_bytes_per_second": 9.609396107707145,
+      "transferred_additional_bytes": 32258504036.17357
+    },
+    {
+      "additional_quote_seconds": 7612542570.0,
+      "group": "2025-q2",
+      "pre_entry_quote_bytes_per_second": 6.297089367234974,
+      "transferred_additional_bytes": 47936860875.1706
+    },
+    {
+      "additional_quote_seconds": 13633603260.0,
+      "group": "2025-q3",
+      "pre_entry_quote_bytes_per_second": 15.725426234034547,
+      "transferred_additional_bytes": 214394222369.22293
+    },
+    {
+      "additional_quote_seconds": 1682055780.0,
+      "group": "2026-q0",
+      "pre_entry_quote_bytes_per_second": 3.3809475622084078,
+      "transferred_additional_bytes": 5686942388.889562
+    },
+    {
+      "additional_quote_seconds": 4113423300.0,
+      "group": "2026-q1",
+      "pre_entry_quote_bytes_per_second": 6.430143086293533,
+      "transferred_additional_bytes": 26449900393.493732
+    },
+    {
+      "additional_quote_seconds": 4290516030.0,
+      "group": "2026-q2",
+      "pre_entry_quote_bytes_per_second": 3.465690079725136,
+      "transferred_additional_bytes": 14869598842.072676
+    },
+    {
+      "additional_quote_seconds": 11125507680.0,
+      "group": "2026-q3",
+      "pre_entry_quote_bytes_per_second": 16.11425624236931,
+      "transferred_additional_bytes": 179279281581.9677
+    }
+  ],
+  "excludes": [
+    "new roll contracts",
+    "physical stock data",
+    "additional reference metadata",
+    "assembly and training",
+    "recovery and new index overhead"
+  ],
+  "full_execution_coverage": false,
+  "quote_hours": 35918658.975,
+  "research_ready": false,
+  "scenarios": [
+    {
+      "additional_quote_bytes": 257385928516,
+      "held_to_entry_byte_rate_ratio": 0.25
+    },
+    {
+      "additional_quote_bytes": 514771857032,
+      "held_to_entry_byte_rate_ratio": 0.5
+    },
+    {
+      "additional_quote_bytes": 1029543714065,
+      "held_to_entry_byte_rate_ratio": 1.0
+    },
+    {
+      "additional_quote_bytes": 2059087428129,
+      "held_to_entry_byte_rate_ratio": 2.0
+    }
+  ],
+  "schema": "v7-first-leg-volume-sensitivity-v1",
+  "transferred_additional_quote_bytes": 1029543714065
+}

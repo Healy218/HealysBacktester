@@ -1656,3 +1656,28 @@ in `docs/reviews/2026-09-27-v7-contract-reference-blackouts.md`.
 
 The user permits MRHA disk if needed. This establishes storage-location
 permission; the existing numerical acquisition/project limits are unchanged.
+
+
+## 2026-09-27 — dated regular hours and bounded execution discovery
+
+The user requested dated-hours and execution-path work after authorizing MRHA
+storage if necessary and the five exact reference blackouts. Implemented a
+versioned finite regular-hours reconstruction from retained exchange baselines
+and effective-date changes. Its explicit modeling assumption is completeness of
+the reviewed changes within the finite scope; this is not daily historical
+symbol-directory evidence. Today's hours list is only a cross-check. MIAX
+resolves IVV's conflicting Nasdaq year as April 21, 2026; IVV is not a selected
+root. Calendars and prior freezes remain intact. Beyond-scope expiry cutoffs
+remain unresolved rather than extrapolated.
+
+Engineering direction: discover actual execution reads by replay, stopping at
+the first uncaptured input; preserve partial ledgers and resume from immutable
+sources. Permit bounded same-session quote prefetch in the five-path pilot,
+recording unused coverage as acquisition overhead. Reject blanket capture of
+all first-leg envelopes as a launch plan: a transferred entry-rate scenario
+adds about 1.03 TB before rolls/physical/assembly, but it is not an estimate of
+realized required storage. A representative complete-path forecast is still
+required. The 250 GB acquisition / 640 GB project caps and 20 GiB reserve are
+unchanged; MRHA location permission does not increase them. No new blackout,
+historical eligibility, model trial, or training-launch policy was authorized.
+See `docs/reviews/2026-09-27-v7-dated-hours-and-execution-paths.md`.

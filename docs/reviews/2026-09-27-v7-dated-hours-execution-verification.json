@@ -1,0 +1,23 @@
+{
+  "command": "./venv/bin/python -m pytest tests/ -q",
+  "passed": 2457,
+  "subtests_passed": 18,
+  "skipped": 1,
+  "warnings": 20,
+  "seconds": 116.92,
+  "log_sha256": "a685a2c140a27785449cd0c926555714ad19c58403ff7f9296027e042778a7d7",
+  "focused_tests": 9,
+  "producer_sha256": {
+    "nn_meta/v7/dated_hours.py": "fea49653fd31f13b6938e4a32e05b5384131cf9ab309e82b7156e8977d8a9f31",
+    "nn_meta/v7/execution_frontier.py": "e355f3f64fbaa38fc254f8ef7db75849776a1e77bc189411ec7f283f71cd3b74",
+    "scripts/compile_v7_dated_hours.py": "3b2efee332bf7622096d2e5b9619941e6f1b33fccffdae52bcdde2bcf87c538c",
+    "scripts/plan_v7_execution_envelopes.py": "0df678f9904bcb3b091c7aa994f5258cdeeab8197f99b4feb0cec9d8277b885c",
+    "scripts/discover_v7_execution_paths.py": "fadc98489df6769b0e7908575e5c2ed9a627389358d0f34d0d09326d743ad8ef",
+    "scripts/advance_v7_execution_frontier.py": "743d601f8d28f4da1d7744e3953c8818c8c042048276ffe2a8090cef86483c13",
+    "scripts/forecast_v7_execution_envelopes.py": "54afc2d578a163d67ab45dc988738a83367cf3acc64111b7db09a8fca59f54b7",
+    "scripts/plan_v7_frontier_lookahead.py": "f5a6d7edcee8fabb0f3ae310342345aef695937f8c86dfe5eee885fd20917c52",
+    "scripts/audit_v7_execution_pilot.py": "57f0f45cc336a26714fdf7e342d508a034d4408343a995f5394352c4d28d80ff"
+  },
+  "full_execution_coverage": false,
+  "ready_for_training": false
+}

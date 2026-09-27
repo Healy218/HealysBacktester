@@ -1,0 +1,10 @@
+{
+  "complete": true,
+  "files": {
+    "binding.json": "58a4724af4ea547d76d35bed8571e81fa10c61c1cda06dc60d7f833f190f6c59",
+    "capture-requests.json": "1c4524c6b41f6037265cb3217a4c9109497677a60ad454c63711355e7488dcda",
+    "report.json": "4b516138baa3c738d8ecaa75700ff82176fa7961b511fa96ac68ae4044fc49e8"
+  },
+  "identity": "737bd58f7e853132d19ac372dd36b994c7c01c70e14f4b1fe2328b35ff54990c",
+  "research_ready": false
+}

@@ -1406,3 +1406,28 @@ replace contracts. They are retrospective data-quality exclusions, not historica
 eligibility for portfolio reranking. New missing references remain failures.
 See `docs/reviews/2026-09-27-v7-contract-reference-blackouts.md` for scope and
 remaining held-path/full-portfolio limits.
+
+
+### V7 dated hours and replay frontiers (2026-09-27)
+
+`dated_hours.DatedHours` is a compact, finite regular-session reader over the
+captured exchange calendar. The dated declaration reconstructs historical rules
+from exchange baselines and effective-date notices; reviewed changes are assumed
+complete within its finite scope. Do not backdate today's exception list or
+extrapolate beyond the declared end. Entry-hour coverage is not proof of hours
+for later-expiring held contracts. See the September 27 dated-hours/path review.
+
+`execution_frontier.discover_execution` uses actual replay and latches at the
+first missing input. Missing marks cannot permit later exit/roll branches. A
+completed empty/stale capture is distinct from missing capture, and the five
+approved reference blackouts remain explicit path exclusions. Partial fills and
+marks survive restart; no unavailable observation becomes a zero-return label.
+The bounded prefetch planner stays within the same contract/session; overfetch
+is acquisition overhead, not actual path demand. Never extrapolate a purposive
+five-path pilot into a population storage forecast. Full first-leg envelopes
+omit new roll/physical inputs and overstate paths ended by stops/signals.
+
+The September 27 hours, envelope and r0–r12 pilot producers are now source-bound.
+Do not edit their producers or overwrite outputs to improve a resumed result.
+Use a new version/declaration for changed behavior. Full packed assembly and
+physical/shared-capital readiness remain separate gates.

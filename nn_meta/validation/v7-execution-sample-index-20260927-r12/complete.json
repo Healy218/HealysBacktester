@@ -1,0 +1,11 @@
+{
+  "captures": 1479,
+  "complete": true,
+  "files": {
+    "binding.json": "ab6bd04cbf8d8235a4d70cd6e6d29467a8772dc4c4d84a2bcc8022bf954af36f",
+    "index.sqlite3": "7620e506e659fd909778eec6e73fefe03effac91cfdb92fed34d3cbcd0d73347"
+  },
+  "format": "v7-packed-quote-index-v1",
+  "full_execution_coverage": false,
+  "identity": "91c692715c4d27d38126db2af840ad3a745d1ad4d16fd90eab45773d38a87fa9"
+}

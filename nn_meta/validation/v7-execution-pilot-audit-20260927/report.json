@@ -1,0 +1,173 @@
+{
+  "cases": [
+    {
+      "fills": 2,
+      "label_complete": true,
+      "observed_marks": 6,
+      "pending": [],
+      "proposal_id": "184d0865315eaeade23fe965a24354946839f42d61530bbf39efe078b4a54432",
+      "status": "option_midpoint_stop",
+      "symbol": "DIS",
+      "target_dte": 5
+    },
+    {
+      "fills": 2,
+      "label_complete": true,
+      "observed_marks": 16,
+      "pending": [],
+      "proposal_id": "e55f95bcbe746fddc33777f0061d4b82078380464e0fbe4b7f78b824b7ca3cf5",
+      "status": "option_midpoint_stop",
+      "symbol": "ABBV",
+      "target_dte": 1
+    },
+    {
+      "fills": 1,
+      "label_complete": false,
+      "observed_marks": 142,
+      "pending": [
+        {
+          "contract": "NVDA240322C00910000",
+          "end_ns": 1711038120000000001,
+          "kind": "quotes",
+          "provider": "massive",
+          "purpose": "held_mark",
+          "request_id": "547bef42e8d60f319369db73b2130fb2d08c0740b77a03b54de6a29222e2380c",
+          "start_ns": 1711038090000000000
+        }
+      ],
+      "proposal_id": "aa8ad839cc51a89567b982dc9449dd1936a1f0b8216cc5d26f004e01f4203506",
+      "status": "capture_incomplete",
+      "symbol": "NVDA",
+      "target_dte": 1
+    },
+    {
+      "fills": 1,
+      "label_complete": false,
+      "observed_marks": 46,
+      "pending": [
+        {
+          "contract": "VKTX251121P00038500",
+          "end_ns": 1763058420000000001,
+          "kind": "quotes",
+          "provider": "massive",
+          "purpose": "held_mark",
+          "request_id": "b68a521fa4bb5429c235a5e893667de67add5627fc10b8856cb83857db04ff20",
+          "start_ns": 1763058390000000000
+        }
+      ],
+      "proposal_id": "007fd9a002a89962928e1e1ec530a9919d8a08a331b9c38d54373dd04fae015f",
+      "status": "capture_incomplete",
+      "symbol": "VKTX",
+      "target_dte": 5
+    },
+    {
+      "fills": 1,
+      "label_complete": false,
+      "observed_marks": 39,
+      "pending": [
+        {
+          "contract": "FUTU260213C00152500",
+          "end_ns": 1770401520000000001,
+          "kind": "quotes",
+          "provider": "massive",
+          "purpose": "held_mark",
+          "request_id": "34862db0ec883ea101bffec57498c6b749770f400f7b312667bbcf3e06f93890",
+          "start_ns": 1770401490000000000
+        }
+      ],
+      "proposal_id": "db04f502d0f1d36ce3f4a00c76e5484f3ac8414653233e9aca13ca095ea65b52",
+      "status": "capture_incomplete",
+      "symbol": "FUTU",
+      "target_dte": 1
+    }
+  ],
+  "caveat": "Purposive five-path execution/restart proof, not a representative storage sample or performance result.",
+  "complete_labels": 2,
+  "completed_label_checks": 21,
+  "full_execution_coverage": false,
+  "paths": 5,
+  "physical_fallback_complete": false,
+  "research_ready": false,
+  "retained_prefix_checks": 60,
+  "rounds": [
+    {
+      "complete_labels": 1,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r0",
+      "pending": 4,
+      "receipt_sha256": "3e9d8a331db4b2e1a6f0ce006633655d388500c7a47fd034c365eefd3ce3c646"
+    },
+    {
+      "complete_labels": 1,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r1",
+      "pending": 4,
+      "receipt_sha256": "4d5d517df8e7d1e223766e88e8792fa8f7f0735b2b223ec6809d899fae2161ed"
+    },
+    {
+      "complete_labels": 1,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r2",
+      "pending": 4,
+      "receipt_sha256": "5a427439c6d1a1c5491b55a4cb8691ea95fbc1f8aed1ba31d70975e13f5321a4"
+    },
+    {
+      "complete_labels": 2,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r3",
+      "pending": 3,
+      "receipt_sha256": "6efc92cf21d2b126b39f0ed8f5e48bc9906c74d5af2561b78fe18f8735ea290c"
+    },
+    {
+      "complete_labels": 2,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r4",
+      "pending": 3,
+      "receipt_sha256": "a2a7e8ed550502af1820497d3d030d6730bbeb618e791911a87db374b0d212a0"
+    },
+    {
+      "complete_labels": 2,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r5",
+      "pending": 3,
+      "receipt_sha256": "39d3373e232493111bf76e64db2f41a17b692c3dca462e4b1c40554eec87e17a"
+    },
+    {
+      "complete_labels": 2,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r6",
+      "pending": 3,
+      "receipt_sha256": "1e3d24962ed482c10f90ee88717102fa02a0673089e0c2a52ae69e340376ead5"
+    },
+    {
+      "complete_labels": 2,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r7",
+      "pending": 3,
+      "receipt_sha256": "496a588ce68725eebffbb56dca6657641158c7677b05964d54aa897d1a31452e"
+    },
+    {
+      "complete_labels": 2,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r8",
+      "pending": 3,
+      "receipt_sha256": "59936e4307cf1975f500ee94b14629d35cecc03bd68293b5d801b96b170d6f35"
+    },
+    {
+      "complete_labels": 2,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r9",
+      "pending": 3,
+      "receipt_sha256": "3ed7a28d0b6689e4908601e2f18831a21cae14bc847d287c353279442c587b3b"
+    },
+    {
+      "complete_labels": 2,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r10",
+      "pending": 3,
+      "receipt_sha256": "fd76b88bbd80f07c4d2f3f4c5c453113afbcba0ae7feddb18fdbae7b7b9c55f7"
+    },
+    {
+      "complete_labels": 2,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r11",
+      "pending": 3,
+      "receipt_sha256": "ccbd38223608e9757127336524cb7f59c32c86deb9c466a9bd21c75d1bf8c4d0"
+    },
+    {
+      "complete_labels": 2,
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-discovery-20260927-r12",
+      "pending": 3,
+      "receipt_sha256": "507c3e185115a13be5b81dacd22f8616016e813cc797cba887c7331101833371"
+    }
+  ],
+  "schema": "v7-execution-pilot-restart-audit-v1"
+}
