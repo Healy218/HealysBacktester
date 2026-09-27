@@ -1,5 +1,15 @@
 # EXPERIMENTS — every generation's verdict in one table
 
+## September 27 — preparation results and running acquisition
+
+The full V7 entry-demand census, storage reclamation, lossless packed capture,
+dated hours and finite blackouts are completed preparation. The real entry-data
+capture service is now running. These are engineering/data milestones, not a
+trained-model result or investment-performance verdict. No new model evaluation
+row is claimed. See [current state](V7_CURRENT_STATE.md) and
+[completed evidence](../ROADMAP.md#completed-work). Earlier dated verdicts below
+retain their original scope and do not define current TODOs.
+
 ## 2026-09-25 — V7-2 daily audit and first V7-3 demand run
 
 | Run | Actual scope | Verdict |

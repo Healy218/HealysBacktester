@@ -1,0 +1,28 @@
+{
+  "observed_at": "2026-09-27T16:22:09.336886+00:00",
+  "progress": {
+    "campaign_identity": "0e780ddc5e98d177b51d25018e9e93614760ef544eb1202dca915faaa8ed8f3b",
+    "completed_batches_this_run": 156,
+    "elapsed_seconds": 482.7253445269889,
+    "full_entry_coverage": false,
+    "last": {
+      "bytes": 1448374,
+      "error": null,
+      "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000B9XRY4/927500c654571564e51441410f430ded338792084cc9f6283b5f5a4c3b1e7e62",
+      "requests": 32,
+      "seconds": 8.128416279010708,
+      "split_attempts": [],
+      "status": "completed"
+    },
+    "max_new_bytes": 100000000000,
+    "pending": 3,
+    "requests_this_run": 4992,
+    "retained_campaign_bytes": 440538559,
+    "reused_batches_this_run": 4,
+    "status": "running",
+    "stop_reason": null,
+    "training_started": false,
+    "updated_at": "2026-09-27T16:22:04.849993+00:00"
+  },
+  "model_training_started": false
+}

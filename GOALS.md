@@ -1,5 +1,15 @@
 # HealyLabs engineering goals — year-end 2026
 
+## September 27 — current research milestone
+
+V7-1/V7-2, full entry-demand planning, cleanup, packed storage and dated entry
+hours are complete. The real V7-3 entry download service is running; model
+training and performance evaluation have not started. This advances preparation,
+not demonstrated trading edge; numerical maturity scores remain unchanged.
+Use [TODO](TODO.md), [ROADMAP](ROADMAP.md) and
+[current downloads](docs/V7_CURRENT_STATE.md) for live state. Earlier assessment
+checkpoints below remain dated history, not instructions to rebuild passed work.
+
 ## September 25 — V7 data and validation milestone
 
 V7-2 is complete with 591 securities, 1,773 audited proposal stores and 667,239

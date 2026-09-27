@@ -1,5 +1,22 @@
 # DOCUMENTATION — coding notes, conventions, traps, ops
 
+## Current V7 download and documentation precedence — September 27
+
+The full entry capture service `healys-v7-capture-20260927.service` is running.
+Its authoritative meter is `nn_meta/validation/v7-entry-campaign-20260927/progress.json`;
+new immutable packs are under `nn_meta/data_v7/entry-campaign-20260927/`.
+See [current inputs/downloads](docs/V7_CURRENT_STATE.md) and the
+[launch review](docs/reviews/2026-09-27-v7-entry-campaign-started.md).
+Do not launch a duplicate or edit source-bound producers during the run.
+
+TODO contains unfinished tasks; ROADMAP records completed milestones; HANDOFF
+provides next-session actions. The scheduler/daily/packing instructions below
+document reusable implementations. They are not instructions to repeat completed
+runs. Old dated status statements are superseded by later completion receipts.
+The running service is entry acquisition, not the complete execution pipeline
+or model fitting. Its initial 100 GB allocation is a dispatch guard, not a new
+estimate of total training storage. Existing numerical caps/reserves still apply.
+
 ## V7 proof-aware entry-demand scheduler (September 25)
 
 `scripts/run_v7_entry_demand.py` consumes the completed V7-2 gate and its exact
@@ -1385,9 +1402,9 @@ Sample forecasts include actual pack overhead; global routing is measured and
 reported separately. Do not relabel entry feature coverage as execution paths.
 
 Use the unchanged 250 GB shared acquisition ledger, 640 GB project cap and
-20 GiB reserve, including in-flight writes. Check whether archived historical
-storage counts in the project budget before a bulk launch; the September 27
-scope question is pending. Forecast mean+3SE is a sensitivity, not a hard bound.
+20 GiB reserve, including in-flight writes. The current entry launch conservatively includes archived
+historical storage in its project baseline; no separate location approval
+is pending. MRHA use is authorized, while numerical caps remain unchanged. Forecast mean+3SE is a sensitivity, not a hard bound.
 Dated contract HTTP 404s and conflicting hours dates are unresolved inputs,
 not inferred standard deliverables or no-contract outcomes. See
 [measured storage and remaining gates](docs/reviews/2026-09-27-v7-joined-packed-capture.md).

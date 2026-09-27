@@ -1681,3 +1681,30 @@ required. The 250 GB acquisition / 640 GB project caps and 20 GiB reserve are
 unchanged; MRHA location permission does not increase them. No new blackout,
 historical eligibility, model trial, or training-launch policy was authorized.
 See `docs/reviews/2026-09-27-v7-dated-hours-and-execution-paths.md`.
+
+
+## 2026-09-27 — run completed V7 capture machinery without repeating preparation
+
+The user directed doing the remaining work to start model training and challenged
+repeated claims that completed work was missing. Preserve completed catalog,
+daily context, entry demand, cleanup, packing, hours and blackout evidence. Reuse
+them in the actual full-universe entry capture queue. The new resumable service
+starts within a 100 GB initial dispatch allocation and existing numerical caps;
+that allocation is not a new estimate of total required storage. Entry capture
+is V7-3 data preparation, not model training or full readiness. Reuse existing
+passed checks; validate only changed behavior and real launch requirements.
+See `docs/reviews/2026-09-27-v7-entry-campaign-started.md`.
+
+
+## 2026-09-27 — one current task list; completed work belongs in ROADMAP
+
+The user directed continuing the downloads needed for V7-3 and reconciling all
+live documentation before clearing the session. TODO now contains unfinished
+work only; ROADMAP records completed milestones and evidence; HANDOFF points
+to the running job, current-state document, exact downloads and next steps.
+Prior mixed TODO/ROADMAP/status files were archived verbatim. Historical open
+statements are not active instructions after a later completion. Existing frozen
+artifacts/specs/reviews remain unchanged. The entry capture service continues
+across the session reset; its scope is not misrepresented as all V7-3 coverage
+or a model-training launch. No completed build or broad test campaign should
+be repeated without a specific new defect or changed behavior requiring it.

@@ -1,0 +1,38 @@
+{
+  "observed_at": "2026-09-27T16:15:34.237471+00:00",
+  "service": "healys-v7-capture-20260927.service",
+  "progress": {
+    "campaign_identity": "0e780ddc5e98d177b51d25018e9e93614760ef544eb1202dca915faaa8ed8f3b",
+    "completed_batches_this_run": 24,
+    "elapsed_seconds": 83.73250089399517,
+    "full_entry_coverage": false,
+    "last": {
+      "bytes": 1821108,
+      "error": null,
+      "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000B9XRY4/a80e975adc0bf2fdc8913c006121f91c185a7c5894c8fb609bf77c94824aea70",
+      "requests": 32,
+      "seconds": 9.890303303021938,
+      "split_attempts": [],
+      "status": "completed"
+    },
+    "max_new_bytes": 100000000000,
+    "pending": 3,
+    "requests_this_run": 768,
+    "retained_campaign_bytes": 80838842,
+    "reused_batches_this_run": 4,
+    "status": "running",
+    "stop_reason": null,
+    "training_started": false,
+    "updated_at": "2026-09-27T16:15:25.857150+00:00"
+  },
+  "focused_tests": {
+    "passed": 2,
+    "seconds": 0.19
+  },
+  "model_training_started": false,
+  "sources": {
+    "scripts/run_v7_capture_campaign.py": "5229fe80509d6032c19ca6e9c1523e3a6a6e9ffadb07d13532359a77d2e51eea",
+    "scripts/start_v7_capture_campaign.sh": "03963a73bfd449088929184908e7be3b8d0bfb11b588d224f36c50e002ee0271",
+    "tests/test_v7_capture_campaign.py": "f12d4b211e316385fbc40e2f51d4183a2920f2324203962f338e24e3edba99d6"
+  }
+}

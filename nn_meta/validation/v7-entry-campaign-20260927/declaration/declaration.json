@@ -1,0 +1,27 @@
+{
+  "audit": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-entry-union-20260926",
+  "audit_sha256": "426544477ee9116e17f99453cb8fbcab5212131d21162326a2d5457ccf0f979b",
+  "authorization": "User directed doing the remaining work to start training on 2026-09-27; preserve freezes and reusable completed work.",
+  "batch_size": 32,
+  "disk_reserve_bytes": 21474836480,
+  "existing_index": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-sample-index-20260927-r12",
+  "existing_sha256": "8a588dbbe845bd15637337e2a175c6f76f7fe53f1c569a6e9ee1af8f4b958661",
+  "max_new_bytes": 100000000000,
+  "output": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927",
+  "project_baseline_ceiling_bytes": 490000000000,
+  "project_limit_bytes": 640000000000,
+  "ready_for_training": false,
+  "schema": "v7-full-entry-capture-campaign-v1",
+  "scope": "All 591 frozen entry-demand stores; exact union minus immutable existing coverage; execution extensions follow separately",
+  "sources": {
+    "/home/healy/Coding/HealysBacktester/docs/specs/V7_CAPTURE_CAPACITY_20260926.json": "b438ccb5d24aa2ba4022026c0a3723c6dbb0e935a38bc512971daa6b764bba2f",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quotes.py": "c1f52fdd098b90636424c47facbaa198f802674462a6b9bab56810a72bfde7ed",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quotes_v2.py": "d183e3f192e7240d206ea7d72430b668d0f965793510ac1db7001db7199fb853",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/storage.py": "7d9eba485766f775001f31e92fdb000f0fa5aa50e9ae687c45ac5f0dd45c0ff2",
+    "/home/healy/Coding/HealysBacktester/options/data/massive_ticks.py": "a336e3aac4fb2017d1e70a10bc68df387c8eb34291e98a498d407d28e278f959",
+    "/home/healy/Coding/HealysBacktester/scripts/audit_v7_contiguous_captures.py": "1ee7b46aef30bd7671c83fff6cdffa03753163fd5b772a7147cd64a939bc5ed4",
+    "/home/healy/Coding/HealysBacktester/scripts/capture_v7_joined_sample.py": "1a418235b142062e98e7d0b5c4698d09af66a50f5af55235c6e54823ab783b9a",
+    "/home/healy/Coding/HealysBacktester/scripts/download_v7_data.py": "5024608873c293a08518639efb40e0b0ad1ece074c26a0187b6b621e967da93f",
+    "/home/healy/Coding/HealysBacktester/scripts/run_v7_capture_campaign.py": "5229fe80509d6032c19ca6e9c1523e3a6a6e9ffadb07d13532359a77d2e51eea"
+  }
+}
