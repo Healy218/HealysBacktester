@@ -28,6 +28,19 @@ import { useDashboard } from "./useDashboard";
 import { Forward } from "./Forward";
 import { Training } from "./Training";
 import {
+  Sports,
+  sportsHeadings,
+  sportsTabs,
+  type SportsTab,
+} from "./Sports";
+import { useSports } from "./useSports";
+import {
+  sportsHistorySchema,
+  sportsLatestSchema,
+  type SportsHistory,
+  type SportsLatest,
+} from "./sportsModel";
+import {
   ageSeconds,
   displayNumber as num,
   filteredSignals,
@@ -256,9 +269,14 @@ export default function App() {
   const live = useDashboard();
   const [tab, setTab] = useState("Overview"),
     [now, setNow] = useState(Date.now());
+  // Stocks and Sports are separate workspaces with separate data documents.
+  const [workspace, setWorkspace] = useState<"stocks" | "sports">("stocks"),
+    [sportsTab, setSportsTab] = useState<SportsTab>("Lineups");
+  const sports = useSports(live.user, workspace === "sports");
   const [preview, setPreview] = useState<{
       server: ServerData | null;
       home: HomeData | null;
+      sports?: { latest: SportsLatest | null; history: SportsHistory | null };
     } | null>(null),
     [previewError, setPreviewError] = useState("");
   const [selected, setSelected] = useState<Signal | null>(null),
@@ -284,14 +302,28 @@ export default function App() {
   }, [selected]);
   const server = preview ? preview.server : live.server,
     home = preview ? preview.home : live.home;
+  const sportsLatest = preview ? (preview.sports?.latest ?? null) : sports.latest,
+    sportsHistory = preview ? (preview.sports?.history ?? null) : sports.history;
+  const isSports = workspace === "sports",
+    activeTab = isSports ? sportsTab : tab;
   async function importPreview(file: File | undefined) {
     if (!file) return;
     try {
-      if (file.size > 1500000) throw Error();
+      if (file.size > 3000000) throw Error();
       const raw = JSON.parse(await file.text());
       setPreview({
         server: raw.server ? serverSchema.parse(raw.server) : null,
         home: raw.home ? homeSchema.parse(raw.home) : null,
+        sports: raw.sports
+          ? {
+              latest: raw.sports.latest
+                ? sportsLatestSchema.parse(raw.sports.latest)
+                : null,
+              history: raw.sports.history
+                ? sportsHistorySchema.parse(raw.sports.history)
+                : null,
+            }
+          : undefined,
       });
       setPreviewError("");
     } catch {
@@ -428,7 +460,8 @@ export default function App() {
           href="#"
           onClick={(e) => {
             e.preventDefault();
-            setTab("Overview");
+            if (isSports) setSportsTab("Lineups");
+            else setTab("Overview");
           }}
         >
           <span className="brand-mark">
@@ -438,17 +471,21 @@ export default function App() {
             HEALY<b>LABS</b>
           </span>
         </a>
-        <div className="sidebar-caption">OBSERVATORY</div>
+        <div className="sidebar-caption">
+          {isSports ? "SPORTS · DRAFTKINGS" : "OBSERVATORY"}
+        </div>
         <nav aria-label="Main navigation">
-          {tabs.map(([name, Icon]) => (
+          {(isSports ? sportsTabs : tabs).map(([name, Icon]) => (
             <button
               key={name}
-              className={tab === name ? "active" : ""}
-              onClick={() => setTab(name)}
+              className={activeTab === name ? "active" : ""}
+              onClick={() =>
+                isSports ? setSportsTab(name as SportsTab) : setTab(name)
+              }
             >
               <Icon size={19} />
               <span>{name}</span>
-              {tab === name && <i />}
+              {activeTab === name && <i />}
             </button>
           ))}
         </nav>
@@ -462,8 +499,25 @@ export default function App() {
       <div className="workspace">
         <header className="topbar">
           <span className="breadcrumb">
-            Workspace <ChevronRight size={14} /> <b>{tab}</b>
+            {isSports ? "Sports" : "Stocks"} <ChevronRight size={14} />{" "}
+            <b>{activeTab}</b>
           </span>
+          <div className="workspace-switch" role="group" aria-label="Workspace">
+            <button
+              className={!isSports ? "active" : ""}
+              aria-pressed={!isSports}
+              onClick={() => setWorkspace("stocks")}
+            >
+              Stocks
+            </button>
+            <button
+              className={isSports ? "active" : ""}
+              aria-pressed={isSports}
+              onClick={() => setWorkspace("sports")}
+            >
+              Sports
+            </button>
+          </div>
           <div className="top-actions">
             <span className="clock">
               <Clock3 size={14} />
@@ -477,10 +531,15 @@ export default function App() {
             <button
               className="icon-button"
               aria-label="Refresh data"
-              disabled={live.loading || !!preview}
-              onClick={live.refresh}
+              disabled={(isSports ? sports.loading : live.loading) || !!preview}
+              onClick={isSports ? sports.refresh : live.refresh}
             >
-              <RefreshCw size={17} className={live.loading ? "spinning" : ""} />
+              <RefreshCw
+                size={17}
+                className={
+                  (isSports ? sports.loading : live.loading) ? "spinning" : ""
+                }
+              />
             </button>
             {preview ? (
               <button
@@ -504,6 +563,50 @@ export default function App() {
           </div>
         </header>
         <main className="content">
+          {isSports ? (
+            <>
+              <div className="page-heading">
+                <div>
+                  <div className="eyebrow">
+                    HEALYLABS / SPORTS / {sportsTab.toUpperCase()}
+                  </div>
+                  <h1>{sportsHeadings[sportsTab][0]}</h1>
+                  <p>{sportsHeadings[sportsTab][1]}</p>
+                </div>
+                <Tag tone={sportsLatest ? "good" : "neutral"}>
+                  {sportsLatest
+                    ? `${sportsLatest.season} · Week ${sportsLatest.week}`
+                    : "No DFS capture"}
+                </Tag>
+              </div>
+              {[
+                ...(sportsLatest?.issues ?? []),
+                ...(!preview ? sports.errors : []),
+              ].length > 0 && (
+                <details className="banner issues">
+                  <summary>
+                    <Bell size={17} />
+                    Sports items to review
+                  </summary>
+                  <ul>
+                    {[
+                      ...(sportsLatest?.issues ?? []),
+                      ...(!preview ? sports.errors : []),
+                    ].map((x, i) => (
+                      <li key={i}>{x}</li>
+                    ))}
+                  </ul>
+                </details>
+              )}
+              <Sports
+                tab={sportsTab}
+                latest={sportsLatest}
+                history={sportsHistory}
+                onTab={setSportsTab}
+              />
+            </>
+          ) : (
+          <>
           <div className="page-heading">
             <div>
               <div className="eyebrow">HEALYLABS / {tab.toUpperCase()}</div>
@@ -1117,6 +1220,8 @@ export default function App() {
               Server {time(server?.observedAt)} · Home {time(home?.observedAt)}
             </span>
           </footer>
+          </>
+          )}
         </main>
       </div>
       {selected && (

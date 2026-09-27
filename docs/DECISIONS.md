@@ -841,3 +841,21 @@ data and trading execution on existing hosts. Do not introduce Cloud Functions,
 paid App Hosting, Cloud Storage or billing for the first version. Separate
 Firebase project and UID access required before deployment. Details:
 `docs/reviews/2026-09-11-firebase-dashboard.md` and `dashboard/README.md`.
+
+## 2026-09-27 — Sports workspace (DraftKings DFS) alongside Stocks
+
+User asked for the DraftKings-Scripts DFS dashboard as a separate **Sports**
+workspace: a Stocks | Sports switcher in the top bar, and Sports tabs for
+Lineups, Player chart, Player board, Track record and Underdog. Stocks is
+unchanged.
+- **Data:** DFS data never shares a document with stock data. The
+  DraftKings-Scripts publisher (`python -m dfs.site`) writes only
+  `dfs/latest` and `dfs/history`. The rules allow the owner `get` on exactly
+  those two, and deny list and write.
+- **Source of truth:** the Sports source lives in DraftKings-Scripts `web/`
+  and is copied here: `src/Sports.tsx`, `sportsModel.ts`, `useSports.ts`,
+  `sports.css`, and `tests/sports.test.ts`.
+- **Validation:** build and vitest pass. The rules test was added but not
+  run, because the emulator needs Java.
+- **Deploy:** previewed on channel `sports`, then cloned to live on
+  2026-09-27. Live was verified identical to f3066f6 before the change.

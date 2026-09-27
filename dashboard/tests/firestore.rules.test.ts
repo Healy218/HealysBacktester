@@ -23,6 +23,8 @@ beforeAll(async () => {
       payload: "private",
     });
     await setDoc(doc(c.firestore(), "dashboard/home"), { payload: "private" });
+    for (const name of ["latest", "history", "other"])
+      await setDoc(doc(c.firestore(), `dfs/${name}`), { payload: "private" });
   });
 });
 afterAll(async () => {
@@ -68,4 +70,20 @@ it("revocation takes effect on the next server read", async () => {
       ),
     ),
   );
+});
+it("allows the owner only the two Sports documents, read-only", async () => {
+  const db = env
+    .authenticatedContext("owner", { email_verified: true })
+    .firestore();
+  await assertSucceeds(getDoc(doc(db, "dfs/latest")));
+  await assertSucceeds(getDoc(doc(db, "dfs/history")));
+  await assertFails(getDoc(doc(db, "dfs/other")));
+  await assertFails(getDocs(collection(db, "dfs")));
+  await assertFails(setDoc(doc(db, "dfs/latest"), { payload: "tampered" }));
+  for (const other of [
+    env.unauthenticatedContext().firestore(),
+    env.authenticatedContext("stranger", { email_verified: true }).firestore(),
+    env.authenticatedContext("owner", { email_verified: false }).firestore(),
+  ])
+    await assertFails(getDoc(doc(other, "dfs/latest")));
 });

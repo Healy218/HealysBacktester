@@ -1,0 +1,323 @@
+/* Sports workspace (DraftKings-Scripts). Uses the dashboard's tokens:
+   --panel, --border, --muted, --accent. */
+.workspace-switch {
+  display: inline-flex;
+  gap: 4px;
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  background: var(--panel);
+}
+.workspace-switch button {
+  border: 0;
+  border-radius: 7px;
+  padding: 7px 16px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 13px;
+}
+.workspace-switch button.active {
+  background: #22303b;
+  color: #eef3f7;
+  box-shadow: inset 0 0 0 1px #3a4a57;
+}
+.sports-small {
+  font-size: 22px !important;
+}
+.sports-lineups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+  gap: 1px;
+  background: var(--border);
+}
+.sports-lineup {
+  background: var(--panel);
+  padding: 16px 20px;
+  min-width: 0;
+}
+.sports-lineup-head {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  margin-bottom: 10px;
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+  color: #c4ced8;
+}
+.sports-lineup-head b {
+  font-size: 15px;
+  color: #eef3f7;
+}
+.sports-lineup ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.sports-lineup li {
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 38px 62px 44px;
+  gap: 6px;
+  align-items: center;
+  padding: 5px 0;
+  border-top: 1px solid #222c36;
+  font-size: 12px;
+}
+.sports-slot {
+  color: var(--accent);
+  font-size: 11px;
+  letter-spacing: 0.5px;
+}
+.sports-num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+.sports-link {
+  border: 0;
+  padding: 0;
+  background: none;
+  color: inherit;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.sports-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+.sports-actual,
+.sports-up {
+  color: #7fdcae;
+}
+.sports-down {
+  color: #f28b82;
+}
+.sports-excluded {
+  color: #e9b872;
+  font-size: 12px;
+}
+.sports-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+.sports-controls select {
+  background: #121a22;
+  color: inherit;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 7px 9px;
+}
+.sports-toggle {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--muted);
+}
+.sports-ticker {
+  position: relative;
+  margin-bottom: 18px;
+  max-width: 520px;
+}
+.sports-ticker .search {
+  width: 100%;
+}
+.sports-ticker-results {
+  position: absolute;
+  z-index: 5;
+  left: 0;
+  right: 0;
+  top: calc(100% + 4px);
+  list-style: none;
+  margin: 0;
+  padding: 4px;
+  background: #151d26;
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.35);
+}
+.sports-ticker-results button {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  border: 0;
+  border-radius: 7px;
+  padding: 9px 11px;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+}
+.sports-ticker-results button:hover {
+  background: #22303b;
+}
+.sports-range {
+  display: inline-flex;
+  gap: 4px;
+}
+.sports-range button {
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  padding: 5px 10px;
+  background: transparent;
+  color: var(--muted);
+  font-size: 12px;
+}
+.sports-range button.active {
+  color: #eef3f7;
+  border-color: #4b5d6b;
+  background: #22303b;
+}
+.sports-quote {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 18px 23px 6px;
+}
+.sports-quote strong {
+  display: block;
+  font-size: 34px;
+  font-weight: 500;
+  letter-spacing: -1px;
+  margin: 6px 0 4px;
+  font-variant-numeric: tabular-nums;
+}
+.sports-quote strong small {
+  font-size: 13px;
+  letter-spacing: 0;
+  color: var(--muted);
+}
+.sports-quote dl {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  margin: 0;
+}
+.sports-quote dl > div {
+  display: block;
+  min-width: 64px;
+}
+.sports-quote dt {
+  font-size: 11px;
+  color: var(--muted);
+}
+.sports-quote dd {
+  margin: 4px 0 0;
+  padding: 0;
+  text-align: left;
+  font-size: 18px;
+  font-variant-numeric: tabular-nums;
+}
+.sports-chart {
+  padding: 6px 12px 16px;
+  overflow-x: auto;
+}
+.sports-chart svg {
+  display: block;
+  width: 100%;
+  min-width: 520px;
+  height: auto;
+}
+.sports-chart text {
+  fill: var(--muted);
+  font-size: 11px;
+}
+.sports-grid {
+  stroke: #25303b;
+  stroke-width: 1;
+}
+.sports-season {
+  stroke: #3a4a57;
+  stroke-dasharray: 4 5;
+}
+.sports-line {
+  fill: none;
+  stroke-width: 2.2;
+  stroke-linejoin: round;
+}
+.sports-line.up {
+  stroke: #9ce9c5;
+}
+.sports-line.down {
+  stroke: #f28b82;
+}
+.sports-ma3,
+.sports-ma8 {
+  fill: none;
+  stroke-width: 1.5;
+}
+.sports-ma3 {
+  stroke: #e9b872;
+}
+.sports-ma8 {
+  stroke: #7fa7e8;
+}
+.sports-proj {
+  stroke: #d8a6f5;
+  stroke-width: 2;
+  stroke-dasharray: 5 4;
+}
+.sports-proj-dot {
+  fill: #d8a6f5;
+  stroke: #10151c;
+  stroke-width: 2;
+}
+.sports-cross {
+  stroke: #aebaca;
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+}
+.sports-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  padding: 10px 12px 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+.sports-key::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 3px;
+  margin-right: 6px;
+  vertical-align: middle;
+  border-radius: 2px;
+}
+.sports-key.line::before {
+  background: #9ce9c5;
+}
+.sports-key.ma3::before {
+  background: #e9b872;
+}
+.sports-key.ma8::before {
+  background: #7fa7e8;
+}
+.sports-key.proj::before {
+  background: #d8a6f5;
+}
+.sports-hover {
+  margin-left: auto;
+  color: #c4ced8;
+  font-variant-numeric: tabular-nums;
+}
+@media (max-width: 700px) {
+  /* the page eyebrow already names the tab; make room for the switcher */
+  .topbar .breadcrumb {
+    display: none;
+  }
+  .workspace-switch button {
+    padding: 6px 10px;
+  }
+  .sports-quote dl {
+    gap: 14px 20px;
+  }
+  .sports-hover {
+    margin-left: 0;
+    width: 100%;
+  }
+}

@@ -10,6 +10,12 @@ service cloud.firestore {
       allow get: if owner() && source in ['server', 'home'];
       allow list, write: if false;
     }
+    // Sports workspace (DraftKings-Scripts `dfs.site`): separate documents
+    // from the stock summaries.
+    match /dfs/{doc} {
+      allow get: if owner() && doc in ['latest', 'history'];
+      allow list, write: if false;
+    }
     match /{document=**} { allow read, write: if false; }
   }
 }
