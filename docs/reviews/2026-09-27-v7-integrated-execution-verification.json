@@ -1,0 +1,21 @@
+{
+  "tests": "58 passed: integrated execution, portfolio, physical, frontier, settlement",
+  "command": "./venv/bin/python -m pytest tests/test_v7_integrated_execution.py tests/test_v7_portfolio.py tests/test_v7_physical.py tests/test_v7_execution_frontier.py tests/test_v7_settlement_schedule.py -q",
+  "original_producers_unchanged": [
+    "nn_meta/v7/portfolio.py",
+    "nn_meta/v7/physical.py",
+    "nn_meta/v7/replay.py",
+    "scripts/run_v7_capture_campaign.py"
+  ],
+  "integrated_resume": {
+    "ledger_events_preserved": 1466,
+    "decisions_preserved": 3,
+    "valuation_prefix_preserved": 164,
+    "new_valuation_marks": 1,
+    "cash": 87596.26474814238
+  },
+  "latest_report": "nn_meta/validation/v7-integrated-execution-20260927-r2/report.json",
+  "new_quote_pack_bytes": 19068,
+  "full_v7_4_complete": false,
+  "real_physical_events": 0
+}

@@ -1,126 +1,93 @@
-# Handoff — September 27, 2026 — remaining V7-3 inputs checked against receipts
+# Handoff — September 27, 2026 — V7-4 integration connected
 
-**Read TODO, then this file.** The user is clearing the session. Continue the
-running V7-3 download and finish its actual remaining inputs, then advance to
-training. Do not rebuild work completed yesterday or start another broad test
-campaign. The user explicitly authorized the needed downloads and MRHA use.
+Read TODO first. The user challenged repeated work, then authorized starting
+7-4 alongside the running V7-3 downloads. Advance existing receipts; do not
+restart preparation or repeat old component pilots. Needed provider downloads
+and MRHA use remain authorized. Work on main; protect V6 and unrelated dirty work.
 
-## User correction and receipt check — September 27, 11:31 CDT
+## What changed this session
 
-The user challenged repeated unfinished-work claims. Read the
-[receipt-level verification](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
-Preparation and execution/physical components are already complete and must be
-reused. The current dated-reference stores cover 720 planned pairs (715 valid,
-five blackouts); 2,223,124 planned pairs lack receipts in those stores. The older
-516 dated receipts add no current entry-plan coverage. The three r12 held-mark
-gaps are absent from both the r12 index and 362 completed new entry packs checked.
-Entry acquisition continues: 358 new + four reused batches at 16:31:39 UTC.
+Added a versioned shared execution runner using the existing PhysicalLedger,
+retained option paths, captured option/stock quotes, reported settlement dates,
+final 4,918 cash events, split/rename inputs and noncash guards. It stops at the
+first missing admitted dependency while retaining cash, holdings and reservations.
+Missing future outcomes do not filter allocation; rejected paths do not block it.
+Original portfolio/physical/replay/downloader/assembly producers are unchanged.
 
-Earlier wording about remaining exit/roll/stock data was too broad: capture only
-exact gaps encountered by existing replay after subtracting retained coverage.
-Do not restart completed plans, machinery or pilots. 7-4 integration may proceed
-alongside downloads; do not serialize all work behind repeated setup checks.
-No producer edits, tests, new downloads or replay campaigns ran in this check.
-TODO remains open only for actual unfinished acquisition/integration.
+[Implementation, real evidence and limits](docs/reviews/2026-09-27-v7-integrated-execution.md).
+58 focused tests pass; Bash syntax and actual retained-ledger resume comparison
+pass. No broad suite or old preparation campaign was repeated. New source files
+are bound by these runs: preserve them or version subsequent behavior changes.
 
-## Previous health check — September 27, 11:26 CDT
+## Latest authoritative integration artifacts
 
-The entry service is active with all four workers. Two live meter reads advanced
-from 264 to 266 completed batches in this run (plus four reused batches), reaching
-8,512 ranges and 696,411,106 retained campaign bytes. Latest receipt at
-16:26:49 UTC had no error; status running, stop_reason null. Service memory was
-1.4 GiB (1.5 GiB peak), with 266 GiB filesystem space available. No restart or
-producer change was needed. This is a point-in-time check, not full coverage.
+All shortened roots are under `nn_meta/validation/`:
 
-The user asked for download health and a reminder of 7-4. That stage connects
-existing option execution, funded physical handling and shared-capital replay
-against real inputs, reconciling entries, stops, exits, rolls, expiry, settlement
-and stock liquidation. Full 7-3 still requires the reference and actual path
-captures below. No task was newly completed; no tests or campaigns were rerun.
+- Shared ledger: `v7-integrated-execution-20260927-r2`.
+- Quote index: `v7-integrated-quote-index-20260927-r2`.
+- Actual source paths: `v7-execution-discovery-20260927-r13`.
+- First index reused 3,522 entry packs plus 72 prior packs, 114,062 captures.
+- Added exact NVDA window: `nn_meta/data_v7/integrated-frontier-20260927-r1`,
+  19,068 bytes. No overlapping entry queue was launched.
 
-## First actions in the next session
+The shared account completed DIS and ABBV; NVDA remains open. Cash is
+$87,596.26474814238, no settlement commitments. The first resume preserves all
+1,466 ledger events, three decisions and 164 earlier marks and adds one mark.
+The next shared quote request is NVDA240322C00910000 over
+[1711038150000000000, 1711038180000000001), recorded in the integrated
+`capture-requests.json`. Source r13 retains the later VKTX/FUTU requests too.
 
-1. Read [current state/downloads](docs/V7_CURRENT_STATE.md) and the live meter
-   `nn_meta/validation/v7-entry-campaign-20260927/progress.json`.
-2. Check `healys-v7-capture-20260927.service` and its journal before launching
-   anything. It was running successfully at this handoff, with completed packs
-   and four initial batches reused. No second downloader for the same queue.
-3. Let the entry download continue. If stopped, inspect the exact provider,
-   capacity or source failure; preserve completed packs and partial receipts.
-   The controller/launcher and exact guarded resume are in the
-   [launch review](docs/reviews/2026-09-27-v7-entry-campaign-started.md).
-4. Work only on TODO's remaining reference and actual execution-path inputs,
-   using existing demand plans, replay/physical code and captured packs. Connect
-   existing assembly/fold/trial components. Do not call them absent merely
-   because an old entrypoint or declaration says pilot/pending.
+Run the integration with current input bindings using:
 
-## Completed — do not restart
+```bash
+bash scripts/run_v7_integrated_execution.sh \
+  nn_meta/validation/v7-execution-discovery-20260927-r13 \
+  nn_meta/validation/v7-integrated-quote-index-20260927-r2 \
+  nn_meta/validation/NEW-INTEGRATED-OUTPUT
+```
 
-V7-1 identity/actions, dividend/settlement/boundary treatments; V7-2 full causal
-catalog and daily context; all 591 entry-demand checkpoints; exact request union;
-storage reclamation/MRHA archival; joined-range forecast; lossless v2 pack writer
-and indexed reader; dated reference demand plan; dated entry-hours reconstruction;
-the five exact reference blackouts; first-leg envelope census; actual replay
-frontier, capture/resume and its r0–r12 evidence.
+Use the existing exact-gap capture and replay machinery for new data, preserving
+old outputs. New source discovery outputs start at r14, quote index/shared ledger
+outputs at r3. The runner consumes retained paths; it is not a full-universe
+automatic path-generation/download service. It does not generate model labels
+for the full universe. Full V7-4 remains open; **no real physical exercise or
+stock liquidation occurred in this five-path run**. Unit tests cover those
+connections, but do not establish full real-data coverage.
 
-The [ROADMAP completed section](ROADMAP.md#completed-work) records results and
-links. **It is the completed-work ledger. TODO contains unfinished work only.**
-Do not revive older “492 dividend cases,” “catalog building,” “scheduler next,”
-“IVV unresolved,” or “packing unimplemented” statements from historical files.
+## V7-3 live download and remaining inputs
 
-## Current data job and remaining boundary
+Service `healys-v7-capture-20260927.service` is still running. At 17:54:52 UTC:
+3,601 new batches, four reused; 115,096 ranges; 2,964,679,035 retained bytes;
+no stop reason. Check its current meter/journal before any action. Do not start
+a duplicate or modify its bound producer. Frozen declaration and meter:
+`nn_meta/validation/v7-entry-campaign-20260927/`; packs:
+`nn_meta/data_v7/entry-campaign-20260927/`.
 
-Service: `healys-v7-capture-20260927.service`.
-Controller: `scripts/run_v7_capture_campaign.py`; launcher:
-`bash scripts/start_v7_capture_campaign.sh`.
-Frozen declaration: `nn_meta/validation/v7-entry-campaign-20260927/declaration/`.
-New packs: `nn_meta/data_v7/entry-campaign-20260927/`.
-Source demand: `v7-3-scheduler-20260925/demand/`; existing coverage index:
-`v7-execution-sample-index-20260927-r12` (validation roots).
+The service handles entries only. Dated-reference demand is complete; existing
+receipt stores cover 720 of 2,223,844 planned pairs (715 valid plus five exact
+blackouts). The older 516 receipts add no current entry-plan coverage.
+[Receipt verification](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
+Capture only exact additional held/exit/roll/stock gaps encountered by existing
+replay after subtracting retained coverage. Do not turn conditional stock
+requirements into a blanket new capture or implementation campaign.
 
-This is **entry quote/trade acquisition, not model training**. It does not yet
-run full dated-reference acquisition, all held/exit/roll/stock inputs, assembly,
-or automatic model fitting. Full V7-3 remains open until that actual coverage
-is reconciled. The next session must finish those steps, not mark the entry
-service as the entire V7-3 pipeline. Pending actual five-path reads are in
-`v7-execution-discovery-20260927-r12/report.json`; new outputs start at r13.
+Keep 250 GB shared acquisition / 640 GB project / 20 GiB free reserve. The live
+100 GB allocation and 490 GB baseline allowance are dispatch guards, not total
+size estimates. Four workers, one thread each, 10 GiB MemoryHigh / 14 GiB Max,
+no swap, 400% CPU quota, low priority. MRHA capacity use is authorized.
 
-Caps remain 250 GB shared acquisition / 640 GB project / 20 GiB free reserve.
-The running job's initial new-data allocation is 100 GB, with a conservative
-490 GB project baseline allowance. This is a guard, not a final required-size
-estimate. Monitor measured growth and reconcile downstream needs before the
-cap pauses dispatch. MRHA has additional usable capacity if needed. Do not
-claim the earlier ~1 TB all-possible-holds sensitivity is required storage.
+## Completed work and guardrails
 
-Four autosized workers, one compute thread each; service MemoryHigh 10 GiB,
-MemoryMax 14 GiB, MemorySwapMax 0, CPUQuota 400%, Nice 10. Failed captures never
-become coverage. Exact completed batches are reusable; remaining gaps stay
-explicit. A live run binds its producer hashes: do not edit that producer in
-place. Use versioned changes when behavior needs repair.
+V7-1/2, 591 demand stores, request union, packing/index readers, dated hours,
+five blackouts, dated-reference plan, storage cleanup and original r0–r12
+execution/resume evidence are complete. Use ROADMAP's completion ledger and
+`docs/V7_CURRENT_STATE.md`; do not recreate these components. The new integrated
+runner is another completed component, not evidence that all real paths finished.
 
-## Validation and repository handling
-
-Prior broad suite: 2,457 tests + 18 subtests. New controller: two focused tests
-pass; real first 128 ranges downloaded, and service resume reused all four
-completed packs before continuing. Reuse these results. Check new behavior and
-actual launch failures rather than rerunning completed checks by default.
-
-Work on main, commit/push scoped changes. Preserve the large unrelated dirty/
-untracked backlog, especially existing assembly.py/dataset_inputs.py. No live
-V6/broker changes. Preserve all existing freeze/source/evidence bytes. Strict
-legacy source/runtime readers need the existing compatibility proofs; do not
-relabel frozen stores. The current V7-2 gate uses `gate.json`, not `report.json`.
-
-## Documentation precedence and history
-
-Current instructions: TODO → HANDOFF → docs/V7_CURRENT_STATE.md.
-Completed work/future direction: ROADMAP. Durable traps: DOCUMENTATION.
-Design specs, old dated reviews, archived TODO/ROADMAP/HANDOFF files are evidence,
-not competing live queues. This session archived their pre-reconciliation
-versions in `handoff-history/*-2026-09-27-before-live-doc-reconciliation.md`.
-Old snapshots can correctly describe an earlier incomplete state; later
-completion receipts supersede those status statements without rewriting freezes.
-
-The October 2 Massive recommendation, Alpaca prospective integration and
-incubator health/outcome joins remain separate TODO items. They do not authorize
-changing existing live policy or reopening abandoned local V6 research.
+Preserve frozen bytes, partial ledgers and existing compatibility proofs. The
+V7-2 gate uses gate.json. Existing dirty/untracked assembly.py/dataset_inputs.py
+and the broad unrelated backlog remain untouched. No live V6/broker changes,
+submissions or training launches. Next milestones remain full execution coverage,
+7-5 assembly/folds, 7-6 resource/recovery and 7-7 current readiness/training.
+The October 2 Massive decision, Alpaca integration and incubator work remain
+separate TODO items.

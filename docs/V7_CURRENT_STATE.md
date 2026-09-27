@@ -71,3 +71,15 @@ policies remain. Do not treat `research_ready:false` on an intermediate artifact
 as evidence that its completed subtask failed. The legacy readiness checker has
 stale pre-amendment/222-column requirements; consume current receipts instead
 of rewriting freezes to turn that old report green.
+
+## Current 7-4 integration — September 27
+
+The versioned shared/physical runner is connected. Latest actual ledger:
+`nn_meta/validation/v7-integrated-execution-20260927-r2/`; quote snapshot:
+`v7-integrated-quote-index-20260927-r2`; retained source paths:
+`v7-execution-discovery-20260927-r13` (validation roots). Use these newer receipts
+for integration; r12 remains valid original evidence. The shared ledger completed
+DIS/ABBV, retains NVDA at its next exact missing mark, and has not reached real
+exercise/stock liquidation. Full V7-4 is still open. See the
+[integration review](reviews/2026-09-27-v7-integrated-execution.md) and the current
+three-argument `scripts/run_v7_integrated_execution.sh` launcher.

@@ -83,6 +83,16 @@ complete the connections and real inputs instead of recreating components.
 The last broad regression pass was 2,457 tests + 18 subtests; the new capture
 controller's two focused tests and real initial download/resume also pass.
 
+### V7-4 integrated runner — partial real execution
+
+September 27: versioned integration connects retained option paths, the shared
+PhysicalLedger, stock quotes, reported settlement and final action inputs.
+The real five-path ledger completes DIS/ABBV and retains NVDA at its exact next
+quote gap. One actual capture/resume advances the ledger with unchanged prior
+cash/fills/decisions. 56 focused checks pass. Full-universe execution and real
+physical outcomes remain open; this is not a full V7-4 completion receipt.
+[Integration and continuation](docs/reviews/2026-09-27-v7-integrated-execution.md).
+
 ### Operations and earlier generations
 
 - The September 5–6 audit repairs and expanded V6 pipeline were completed.

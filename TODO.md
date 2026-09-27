@@ -32,11 +32,15 @@ fresh blanket download or component-reimplementation task.
 - [ ] Publish full V7-3 completion only when actual required paths and provider
   failures are accounted for. A finished entry download alone does not close 7-3.
 
-## Then finish the training launch
+## In parallel: execution integration, then training launch
 
-- [ ] **7-4 — integrated execution:** connect and run the existing option,
-  funded-physical and shared-capital components against the required real data;
-  reconcile entries, stops, exits, expiry, settlement and stock liquidation.
+- [ ] **7-4 — complete integrated execution coverage:** the versioned runner is
+  connected and has a reconciled real partial ledger; continue from
+  `v7-integrated-execution-20260927-r2`, quote index `-r2` and source discovery
+  `v7-execution-discovery-20260927-r13`. Extend actual paths/full-scope inputs and
+  reconcile real expiry, settlement and stock liquidation. No real physical
+  event occurred in the retained five-path run. Reuse the completed integration
+  and its 58 focused checks; [review](docs/reviews/2026-09-27-v7-integrated-execution.md).
 - [ ] **7-5 — assembly and folds:** connect existing packed/hour/blackout inputs
   to the existing assembly and fold/trial components. Produce/reconcile the
   full 221-column dataset, label horizons and purged predeclared fold selections.
