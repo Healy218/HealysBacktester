@@ -56,9 +56,13 @@ connections, but do not establish full real-data coverage.
 
 ## V7-3 live download and remaining inputs
 
-Service `healys-v7-capture-20260927.service` is still running. At 17:54:52 UTC:
-3,601 new batches, four reused; 115,096 ranges; 2,964,679,035 retained bytes;
-no stop reason. Check its current meter/journal before any action. Do not start
+Service `healys-v7-capture-20260927.service` is still running. At 18:07:52 UTC:
+4,194 new batches, four reused; 134,052 ranges; 3,097,079,205 retained bytes;
+no stop reason and zero restarts. Service RAM about 3.23 GiB; disk 264 GiB free.
+Average entry rate since launch is 19.63 ranges/s: approximately 1.23% of the
+original 10,941,828 joined ranges, with a rough 6.4-day entry-only remainder
+at that rate. This is not exact coverage or a full V7-3 ETA; request sizes vary.
+The routine status check changed no running job or acquisition plan. Check its current meter/journal before any action. Do not start
 a duplicate or modify its bound producer. Frozen declaration and meter:
 `nn_meta/validation/v7-entry-campaign-20260927/`; packs:
 `nn_meta/data_v7/entry-campaign-20260927/`.
