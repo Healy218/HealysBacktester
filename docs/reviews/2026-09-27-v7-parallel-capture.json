@@ -1,0 +1,499 @@
+{
+  "recorded_at": "2026-09-27T19:25:28.939971+00:00",
+  "service": "healys-v7-capture-v3-20260927.service",
+  "implementation_commits": [
+    "e14a690",
+    "3f7ac39"
+  ],
+  "original_baseline": "docs/reviews/2026-09-27-v7-download-throughput.json",
+  "prior_runs": [
+    {
+      "campaign_identity": "de98bfaf6f56e645cfcc5cbb872233a9ea2022d088abf901080d0b6d8eac5501",
+      "capture_seconds": 166.3020626999787,
+      "completed_batches_this_run": 256,
+      "elapsed_seconds": 171.24892746200203,
+      "full_entry_coverage": false,
+      "io_threads": 8,
+      "last": {
+        "bytes": 1354737,
+        "error": null,
+        "http": {
+          "http_requests": 62,
+          "http_seconds": 13.288206496072235,
+          "response_bytes": 30085424,
+          "retries": 0,
+          "throttles": 0
+        },
+        "io_threads": 8,
+        "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/7619674a8b2b5050074867d6023fe6a8f5646484c555d7e9e23d35b17dbe11a9",
+        "requests": 32,
+        "seconds": 7.510267054021824,
+        "split_attempts": [
+          {
+            "capture_id": "dc32ae621bfdd7cf8157f1d729c7e31026d22ab934e7f19aa879c5ee0b79920c",
+            "depth": 0,
+            "reason": "page budget exhausted; capture incomplete"
+          },
+          {
+            "capture_id": "b09d041ce56799ee7648806ff588cec142341f7035f660da408568f3a6e93a29",
+            "depth": 0,
+            "reason": "page budget exhausted; capture incomplete"
+          }
+        ],
+        "status": "completed"
+      },
+      "max_new_bytes": 100000000000,
+      "pending": 0,
+      "requests_this_run": 8186,
+      "retained_campaign_bytes": 3897205750,
+      "reused_batches_this_run": 6861,
+      "reused_requests": 219314,
+      "status": "paused",
+      "stop_reason": "dispatch_limit",
+      "training_started": false,
+      "updated_at": "2026-09-27T19:12:18.335984+00:00",
+      "workers": 4
+    },
+    {
+      "campaign_identity": "de98bfaf6f56e645cfcc5cbb872233a9ea2022d088abf901080d0b6d8eac5501",
+      "capture_seconds": 466.7065542360069,
+      "completed_batches_this_run": 346,
+      "elapsed_seconds": 471.9198692960199,
+      "full_entry_coverage": false,
+      "io_threads": 16,
+      "last": {
+        "bytes": 2321959,
+        "error": null,
+        "http": {
+          "http_requests": 112,
+          "http_seconds": 28.0935195312195,
+          "response_bytes": 72847696,
+          "retries": 0,
+          "throttles": 0
+        },
+        "io_threads": 16,
+        "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/2dcee25224afc95a3da53857814c1a9a5258f4b1a96e5dd554c9895b71dd2e40",
+        "requests": 32,
+        "seconds": 13.505702237016521,
+        "split_attempts": [
+          {
+            "capture_id": "a39ed4ea702d3f7841352745b00a6ee2e85e38ea651c4e195c37866c44e9a7e3",
+            "depth": 0,
+            "reason": "page budget exhausted; capture incomplete"
+          },
+          {
+            "capture_id": "03a0bd3bfbd4f338fd5efdf4fc7c2d403d3a69b3376424ead00f1f4d150fadcc",
+            "depth": 0,
+            "reason": "page budget exhausted; capture incomplete"
+          },
+          {
+            "capture_id": "635baacdbe8092be3f86dce4460d0952be6987dd28eedd802e09368ff1c83b58",
+            "depth": 1,
+            "reason": "page budget exhausted; capture incomplete"
+          },
+          {
+            "capture_id": "5989a54694d03aaac3fc4c1e10a7331a013f9b67eb99fdd8c5f69ac5946c44ad",
+            "depth": 2,
+            "reason": "page budget exhausted; capture incomplete"
+          },
+          {
+            "capture_id": "01fa294eb4a267c09809d83b4efdff2c384d61b22ce192c67ea3684adcb91758",
+            "depth": 0,
+            "reason": "page budget exhausted; capture incomplete"
+          },
+          {
+            "capture_id": "073fe55622f85d7682eb3b6e1b0d070ac701bc06fc36236b80b6c93cb9081fae",
+            "depth": 0,
+            "reason": "page budget exhausted; capture incomplete"
+          },
+          {
+            "capture_id": "ec4958bd57cfc7a4d62097d83ff5e5fa6bb864d25178ac284eedb4c38f937ffa",
+            "depth": 1,
+            "reason": "page budget exhausted; capture incomplete"
+          },
+          {
+            "capture_id": "e2d3c1fc12c8abba39649f6b5e7df0f117dcfd79b2438984b1538d5fc1a16900",
+            "depth": 1,
+            "reason": "page budget exhausted; capture incomplete"
+          },
+          {
+            "capture_id": "7d906302111a37fe553dad03b5811027d13ab4e2044abc8b6db5e84742db81bf",
+            "depth": 1,
+            "reason": "page budget exhausted; capture incomplete"
+          }
+        ],
+        "status": "completed"
+      },
+      "max_new_bytes": 100000000000,
+      "pending": 0,
+      "requests_this_run": 11072,
+      "retained_campaign_bytes": 4402524973,
+      "reused_batches_this_run": 7117,
+      "reused_requests": 227500,
+      "status": "paused",
+      "stop_reason": "requested_drain",
+      "training_started": false,
+      "updated_at": "2026-09-27T19:21:15.818935+00:00",
+      "workers": 4
+    },
+    {
+      "campaign_identity": "de98bfaf6f56e645cfcc5cbb872233a9ea2022d088abf901080d0b6d8eac5501",
+      "capture_seconds": 148.44600263997563,
+      "completed_batches_this_run": 256,
+      "elapsed_seconds": 154.89363936602604,
+      "full_entry_coverage": false,
+      "io_threads": 4,
+      "last": {
+        "bytes": 572194,
+        "error": null,
+        "http": {
+          "http_requests": 35,
+          "http_seconds": 7.101457803975791,
+          "response_bytes": 7446389,
+          "retries": 0,
+          "throttles": 0
+        },
+        "io_threads": 4,
+        "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBGGQ1/8dc48e6c8d7895574a369b187940ecbf28e311b91fe3f6c848648f447ba8e5d3",
+        "requests": 32,
+        "seconds": 3.696709510986693,
+        "split_attempts": [],
+        "status": "completed"
+      },
+      "max_new_bytes": 100000000000,
+      "pending": 0,
+      "requests_this_run": 8192,
+      "retained_campaign_bytes": 3788879822,
+      "reused_batches_this_run": 6605,
+      "reused_requests": 211122,
+      "status": "paused",
+      "stop_reason": "dispatch_limit",
+      "training_started": false,
+      "updated_at": "2026-09-27T19:07:17.299249+00:00",
+      "workers": 4
+    }
+  ],
+  "intermediate_samples": [
+    {
+      "service": {
+        "ActiveState": "active",
+        "MainPID": "1505921",
+        "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/healys-v7-capture-v2-20260927.service",
+        "MemoryCurrent": "1743319040",
+        "CPUQuotaPerSecUSec": "4s"
+      },
+      "seconds": 30.02,
+      "service_cpu_cores": 0.402,
+      "cpu_throttled_seconds": 0.0,
+      "host_cpu_busy_percent": 4.21,
+      "host_iowait_percent": 0.54,
+      "network": {
+        "lo": {
+          "rx_Mbps": 0.001,
+          "tx_Mbps": 0.001
+        },
+        "eno1": {
+          "rx_Mbps": 5.431,
+          "tx_Mbps": 0.447
+        },
+        "wlan0": {
+          "rx_Mbps": 0.0,
+          "tx_Mbps": 0.0
+        },
+        "tailscale0": {
+          "rx_Mbps": 0.015,
+          "tx_Mbps": 0.061
+        }
+      },
+      "disks": {
+        "nvme0n1": {
+          "read_MB_s": 0.0,
+          "write_MB_s": 4.708,
+          "busy_percent": 9.36
+        }
+      },
+      "processes": {
+        "1505921": {
+          "cpu_percent": 0.1,
+          "wait_samples": {
+            "futex_wait": 30
+          }
+        },
+        "1505925": {
+          "cpu_percent": 0.0,
+          "wait_samples": {
+            "anon_pipe_read.cold": 30
+          }
+        },
+        "1505957": {
+          "cpu_percent": 9.0,
+          "wait_samples": {
+            "futex_wait": 28,
+            "folio_wait_bit_common.llvm.5096930944507585826": 1,
+            "0": 1
+          }
+        },
+        "1505960": {
+          "cpu_percent": 10.6,
+          "wait_samples": {
+            "futex_wait": 27,
+            "0": 2,
+            "wait_dev_flush": 1
+          }
+        },
+        "1505961": {
+          "cpu_percent": 10.2,
+          "wait_samples": {
+            "0": 3,
+            "futex_wait": 25,
+            "wait_dev_flush": 2
+          }
+        },
+        "1505962": {
+          "cpu_percent": 10.3,
+          "wait_samples": {
+            "futex_wait": 25,
+            "0": 3,
+            "wait_dev_flush": 1,
+            "folio_wait_bit_common.llvm.5096930944507585826": 1
+          }
+        }
+      }
+    },
+    {
+      "io_threads": 8,
+      "sample_seconds": 30.006297068001004,
+      "range_rate": 96.84633840071474,
+      "cpu_cores": 0.3943917162847841,
+      "throttled_seconds": 0.0,
+      "memory_peak_bytes": 793825280,
+      "memory_end_bytes": 793825280,
+      "progress": {
+        "campaign_identity": "de98bfaf6f56e645cfcc5cbb872233a9ea2022d088abf901080d0b6d8eac5501",
+        "capture_seconds": 70.51736439098022,
+        "completed_batches_this_run": 197,
+        "elapsed_seconds": 75.46422865299974,
+        "full_entry_coverage": false,
+        "io_threads": 8,
+        "last": {
+          "bytes": 654166,
+          "error": null,
+          "http": {
+            "http_requests": 36,
+            "http_seconds": 8.294126721069915,
+            "response_bytes": 10961247,
+            "retries": 0,
+            "throttles": 0
+          },
+          "io_threads": 8,
+          "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/fdbdd19ec5d621f59685512fb01304f28035771ecd9f23ca233a616a78ff7c3c",
+          "requests": 32,
+          "seconds": 2.6800933049817104,
+          "split_attempts": [],
+          "status": "completed"
+        },
+        "max_new_bytes": 100000000000,
+        "pending": 3,
+        "requests_this_run": 6298,
+        "retained_campaign_bytes": 3826444527,
+        "reused_batches_this_run": 6861,
+        "reused_requests": 219314,
+        "status": "running",
+        "stop_reason": null,
+        "training_started": false,
+        "updated_at": "2026-09-27T19:10:42.551294+00:00",
+        "workers": 4
+      }
+    },
+    {
+      "io_threads": 16,
+      "sample_seconds": 30.006685375003144,
+      "range_rate": 22.395009365473097,
+      "cpu_cores": 1.577617934416558,
+      "throttled_seconds": 0.0,
+      "memory_peak_bytes": 1532502016,
+      "memory_end_bytes": 1522266112,
+      "progress": {
+        "campaign_identity": "de98bfaf6f56e645cfcc5cbb872233a9ea2022d088abf901080d0b6d8eac5501",
+        "capture_seconds": 49.87710499600507,
+        "completed_batches_this_run": 35,
+        "elapsed_seconds": 55.090419776999624,
+        "full_entry_coverage": false,
+        "io_threads": 16,
+        "last": {
+          "bytes": 2157880,
+          "error": null,
+          "http": {
+            "http_requests": 103,
+            "http_seconds": 22.830620885040844,
+            "response_bytes": 64097525,
+            "retries": 0,
+            "throttles": 0
+          },
+          "io_threads": 16,
+          "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/6025adb1bb31e57eb0a3598597d90ff4a3373e419bfef8fe15947d17cbaea917",
+          "requests": 32,
+          "seconds": 7.452929990016855,
+          "split_attempts": [
+            {
+              "capture_id": "84bcf02691c7fc194f9dfface6252a417a969e430bd31dcff060f34b185f3af5",
+              "depth": 0,
+              "reason": "page budget exhausted; capture incomplete"
+            },
+            {
+              "capture_id": "1d08cf4d29d1d853575697a72fd36f7979758bb832a0dcd017e8b0cb7ed425d5",
+              "depth": 0,
+              "reason": "page budget exhausted; capture incomplete"
+            },
+            {
+              "capture_id": "4c751dc375b5e2102335920d331482720e47b1e8cf57d148ce635a527dbcfd95",
+              "depth": 0,
+              "reason": "page budget exhausted; capture incomplete"
+            },
+            {
+              "capture_id": "96b91ff4e0ff9ff95833a45d6fd8dd805ae03e102f01ecc1a48e559b87bf7430",
+              "depth": 0,
+              "reason": "page budget exhausted; capture incomplete"
+            },
+            {
+              "capture_id": "d4f974a4c6ee0f010fa4c30b12d54b94936e40208985e34614bf99730a344d4d",
+              "depth": 1,
+              "reason": "page budget exhausted; capture incomplete"
+            },
+            {
+              "capture_id": "da307fd5e574dbea8932d5bc0dd068c63cb962011e5073d03289776962e7894d",
+              "depth": 2,
+              "reason": "page budget exhausted; capture incomplete"
+            }
+          ],
+          "status": "completed"
+        },
+        "max_new_bytes": 100000000000,
+        "pending": 3,
+        "requests_this_run": 1120,
+        "retained_campaign_bytes": 3947069187,
+        "reused_batches_this_run": 7117,
+        "reused_requests": 227500,
+        "status": "running",
+        "stop_reason": null,
+        "training_started": false,
+        "updated_at": "2026-09-27T19:14:18.989489+00:00",
+        "workers": 4
+      }
+    }
+  ],
+  "final_sample": {
+    "io_threads": 16,
+    "sample_seconds": 30.005953868007055,
+    "range_rate": 77.85121613783089,
+    "cpu_cores": 2.2691878851616183,
+    "throttled_seconds": 0.56061,
+    "memory_peak_bytes": 1596547072,
+    "memory_end_bytes": 1596547072,
+    "progress": {
+      "campaign_identity": "f68893d6fd9793d269b35308cb8bcb57284c4fd2cc320f3e226c8500a2dec81c",
+      "capture_seconds": 53.334598072979134,
+      "completed_batches_this_run": 104,
+      "elapsed_seconds": 58.88012107400573,
+      "full_entry_coverage": false,
+      "io_threads": 16,
+      "last": {
+        "bytes": 1199220,
+        "error": null,
+        "http": {
+          "http_requests": 32,
+          "http_seconds": 9.18678904697299,
+          "response_bytes": 21362703,
+          "retries": 0,
+          "throttles": 0
+        },
+        "io_threads": 16,
+        "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/643622aa7128ffb100cd479bdb2ad4e60494c5222f2df53900868c693b2dae40",
+        "requests": 32,
+        "seconds": 2.1241488619998563,
+        "split_attempts": [],
+        "status": "completed"
+      },
+      "max_new_bytes": 100000000000,
+      "pending": 3,
+      "requests_this_run": 3328,
+      "retained_campaign_bytes": 4495753482,
+      "reused_batches_this_run": 7463,
+      "reused_requests": 238572,
+      "status": "running",
+      "stop_reason": null,
+      "training_started": false,
+      "updated_at": "2026-09-27T19:23:53.869531+00:00",
+      "workers": 4
+    }
+  },
+  "progress": {
+    "campaign_identity": "f68893d6fd9793d269b35308cb8bcb57284c4fd2cc320f3e226c8500a2dec81c",
+    "capture_seconds": 148.36041890498018,
+    "completed_batches_this_run": 301,
+    "elapsed_seconds": 153.90594188601244,
+    "full_entry_coverage": false,
+    "io_threads": 16,
+    "last": {
+      "bytes": 1584242,
+      "error": null,
+      "http": {
+        "http_requests": 32,
+        "http_seconds": 8.998946082021575,
+        "response_bytes": 28510163,
+        "retries": 0,
+        "throttles": 0
+      },
+      "io_threads": 16,
+      "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/0c1cdf62cce0c844467fc42a74789449002c0411111905e0ee95fdb265e75d85",
+      "requests": 32,
+      "seconds": 2.7454503980115987,
+      "split_attempts": [],
+      "status": "completed"
+    },
+    "max_new_bytes": 100000000000,
+    "pending": 3,
+    "requests_this_run": 9632,
+    "retained_campaign_bytes": 4682657945,
+    "reused_batches_this_run": 7463,
+    "reused_requests": 238572,
+    "status": "running",
+    "stop_reason": null,
+    "training_started": false,
+    "updated_at": "2026-09-27T19:25:28.895352+00:00",
+    "workers": 4
+  },
+  "completed_attempts": 301,
+  "failed_attempts": 0,
+  "http_requests": 9654,
+  "http_retries": 0,
+  "http_429": 0,
+  "mean_batch_seconds": 1.948239696601002,
+  "memory_current_bytes": 1799647232,
+  "memory_peak_bytes": 1865035776,
+  "memory_events": {
+    "low": 0,
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0,
+    "oom_group_kill": 0,
+    "sock_throttled": 0
+  },
+  "live_pids": [
+    "0",
+    "0",
+    "0",
+    "0",
+    "0",
+    "0"
+  ],
+  "cpu_max": "400000 100000",
+  "memory_high": "10737418240",
+  "memory_max": "15032385536",
+  "qualification": "Successive real-work measurements differ in tick density. No constant multiplier, total byte size, full V7-3 completion, or guaranteed ETA is established.",
+  "tests": {
+    "initial_focused_passed": 51,
+    "final_version_focused_passed": 7
+  }
+}

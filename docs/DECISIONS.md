@@ -1708,3 +1708,16 @@ artifacts/specs/reviews remain unchanged. The entry capture service continues
 across the session reset; its scope is not misrepresented as all V7-3 coverage
 or a model-training launch. No completed build or broad test campaign should
 be repeated without a specific new defect or changed behavior requiring it.
+
+## 2026-09-27 — speed up V7 entry acquisition without replacing completed data
+
+User directed speeding up the running download as much as possible. Retain four
+autosized processes and one numerical thread each, adding bounded concurrent I/O
+and persistent thread-local Massive sessions. Version the producer and bind both
+prior campaign declarations; verify/reuse existing packs without relabeling.
+After dense data exposed small-page overhead, preserve that intermediate producer
+and use full 50,000-row pages with one page per bounded leaf and exact recursive
+splitting. Deploy 16 I/O threads per process, retaining memory and storage limits.
+Do not infer total completion time or bytes from quiet early ranges. Reject
+duplicate campaigns, redownloading completed packs, or editing frozen producers.
+Evidence and qualifications: [concurrency review](reviews/2026-09-27-v7-parallel-capture.md).

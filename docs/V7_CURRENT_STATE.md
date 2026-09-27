@@ -6,15 +6,17 @@ work and [ROADMAP](../ROADMAP.md#completed-work) for completed work.
 
 ## Running download
 
-- Service: `healys-v7-capture-20260927.service` (home box).
-- Live meter: `nn_meta/validation/v7-entry-campaign-20260927/progress.json`.
-- Immutable launch: `nn_meta/validation/v7-entry-campaign-20260927/declaration/`.
+- Service: `healys-v7-capture-v3-20260927.service` (home box).
+- Live meter: `nn_meta/validation/v7-entry-campaign-v3-20260927/progress.json`.
+- Immutable launch: `nn_meta/validation/v7-entry-campaign-v3-20260927/declaration/`.
 - New packs: `nn_meta/data_v7/entry-campaign-20260927/<security>/<batch-hash>/`.
-- Attempt journal: `nn_meta/validation/v7-entry-campaign-20260927/attempts/`.
+- Attempt journal: `nn_meta/validation/v7-entry-campaign-v3-20260927/attempts/`.
 - Shared acquisition accounting: `nn_meta/data_v7/quota.json`.
-- Launcher: `bash scripts/start_v7_capture_campaign.sh`; do not start a duplicate
+- Launcher: `bash scripts/start_v7_capture_campaign_v3.sh 16`; do not start a duplicate
   while the service is active. Existing batches are verified/reused on resume.
-- [Launch review](reviews/2026-09-27-v7-entry-campaign-started.md) and
+- [Concurrency upgrade](reviews/2026-09-27-v7-parallel-capture.md); original
+  declaration and journals remain in `v7-entry-campaign-20260927/`.
+- [Original launch review](reviews/2026-09-27-v7-entry-campaign-started.md) and
   [initial live proof](reviews/2026-09-27-v7-entry-campaign-launch.json).
 
 This job downloads the exact full-universe **entry quote/trade** union minus
@@ -22,7 +24,8 @@ already captured coverage. It does not yet automate all held/roll/stock/referenc
 acquisition or assembly/training. Those are the precise remaining V7-3/next-stage
 connections in TODO, not reasons to rebuild completed preparation.
 
-Four autosized workers; 10 GiB MemoryHigh / 14 GiB MemoryMax; no swap allocation;
+Four autosized process workers with 16 bounded I/O threads each (64 requests
+maximum); one compute thread per worker; 10 GiB MemoryHigh / 14 GiB MemoryMax; no swap allocation;
 400% CPU quota, low priority. The initial new-data allocation is 100 GB, with the
 unchanged 250 GB acquisition / 640 GB project limits and 20 GiB free reserve.
 MRHA use is authorized. The 100 GB number is a dispatch guard, not a total size
