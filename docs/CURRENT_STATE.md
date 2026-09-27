@@ -63,6 +63,18 @@ Logical pack directories/receipts stay local, with only SQLite payload files
 linked to MRHA. Four real overflow batches passed existing-reader readback.
 Keep MRHA connected. Existing external files and completed local packs are intact.
 
+### Session-close observation — September 27, 2026
+
+At **2026-09-27T18:14:33.398487-05:00**, the selected capture service was active/running;
+its receipt showed **17.02%** of the original contiguous entry-range
+census completed/reused (1,862,262 / 10,941,828), with twelve workers.
+The local disk had **251.6 GB** free and mounted MRHA **743.7 GB** free;
+the 10 GB reserve on each still applies. This is an observation, not a completion
+claim or a persistent health guarantee. Range-count ETA samples were about
+7.4–8.9 hours remaining; those estimates apply only to entry capture and must be
+remeasured. [Read-only closeout snapshot](../nn_meta/validation/v7-eta-check-20260927/session-close.md)
+and the neighboring JSON retain the sample details.
+
 ### One-time ETA check — September 27, 2026
 
 User-requested timer `healys-v7-eta-20260927-1830.timer` is scheduled for
@@ -71,7 +83,7 @@ It runs `nn_meta/validation/v7-eta-check-20260927/observe.py`, reads the live
 meter selected above at execution time, and writes `check-1830.json` and
 `check-1830.md` in that same directory. It reads only; it does not restart or
 change acquisition. This is a local report, not an automatic chat message.
-Timer activation/next-elapse were verified when scheduled; inspect its result
+Timer activation/next-elapse were reverified active/waiting at session close; inspect its result
 and report after 18:30 rather than assuming it ran. `baseline-now.*` contains
 the immediate dry-run observation. Stopped/stale receipts produce no ETA.
 
