@@ -1,0 +1,93 @@
+{
+  "service": {
+    "ActiveState": "active",
+    "MainPID": "1466184",
+    "ControlGroup": "/user.slice/user-1000.slice/user@1000.service/app.slice/healys-v7-capture-20260927.service",
+    "MemoryCurrent": "3991150592",
+    "CPUQuotaPerSecUSec": "4s"
+  },
+  "seconds": 30.02,
+  "service_cpu_cores": 0.157,
+  "cpu_throttled_seconds": 0.0,
+  "host_cpu_busy_percent": 2.79,
+  "host_iowait_percent": 0.3,
+  "network": {
+    "lo": {
+      "rx_Mbps": 0.001,
+      "tx_Mbps": 0.001
+    },
+    "eno1": {
+      "rx_Mbps": 2.106,
+      "tx_Mbps": 0.277
+    },
+    "wlan0": {
+      "rx_Mbps": 0.0,
+      "tx_Mbps": 0.0
+    },
+    "tailscale0": {
+      "rx_Mbps": 0.04,
+      "tx_Mbps": 0.077
+    }
+  },
+  "disks": {
+    "nvme0n1": {
+      "read_MB_s": 0.002,
+      "write_MB_s": 2.431,
+      "busy_percent": 5.07
+    }
+  },
+  "processes": {
+    "1466184": {
+      "cpu_percent": 0.1,
+      "wait_samples": {
+        "futex_wait": 30
+      }
+    },
+    "1466194": {
+      "cpu_percent": 0.0,
+      "wait_samples": {
+        "anon_pipe_read.cold": 30
+      }
+    },
+    "1466195": {
+      "cpu_percent": 4.0,
+      "wait_samples": {
+        "wait_dev_flush": 1,
+        "__x64_sys_poll.cold": 29
+      }
+    },
+    "1466199": {
+      "cpu_percent": 3.3,
+      "wait_samples": {
+        "__x64_sys_poll.cold": 30
+      }
+    },
+    "1466200": {
+      "cpu_percent": 3.9,
+      "wait_samples": {
+        "0": 2,
+        "__x64_sys_poll.cold": 27,
+        "folio_wait_bit_common.llvm.5096930944507585826": 1
+      }
+    },
+    "1466201": {
+      "cpu_percent": 4.5,
+      "wait_samples": {
+        "__x64_sys_poll.cold": 29,
+        "0": 1
+      }
+    }
+  },
+  "recent_batches": {
+    "recent_report_count": 200,
+    "statuses": {
+      "completed": 200
+    },
+    "median_batch_seconds": 4.945,
+    "p90_batch_seconds": 5.575,
+    "mean_batch_seconds": 4.988,
+    "median_batch_bytes": 168309.0,
+    "total_ranges": 6366,
+    "split_attempts": 0
+  }
+}

@@ -74,6 +74,28 @@ additional held-path/assembly/training requirements remain to be measured.
 Do not confuse full aggregate history with complete bid/ask tick coverage, or
 present a budget as an estimated additional requirement. No job was changed.
 
+## Download throughput diagnosis — September 27
+
+The user asked why entry acquisition takes days and whether hardware is limiting.
+A read-only 30-second host sample found service CPU 0.157 cores, no CPU throttling,
+host CPU 2.79% busy, I/O wait 0.30%, NVMe 5.07% busy at 2.431 MB/s writes and
+0.002 MB/s reads. Host Ethernet received 2.106 Mbps. Four workers spent 115/120
+sample points in socket-style poll waits; CPU and SSD bandwidth were not saturated.
+These measurements do not independently measure the internet connection ceiling
+or prove the provider's maximum allowed request rate.
+
+The controller allows four workers; each worker sends sequential blocking HTTP
+requests within its 32-range batch. Recent 200 batches all completed, with no
+splits/failures; median 4.945 seconds and mean 4.988 seconds per batch. Current
+throughput is therefore dominated by small-request waiting and four-way
+concurrency, rather than CPU or disk throughput. The six-day estimate extrapolated
+~20 ranges/second over ~10.94 million joined ranges. Faster safe request concurrency
+is a candidate optimization, but no increase/provider-limit claim was tested.
+No live producer, worker count, quota or job was changed. Any optimization must
+be versioned, preserve retained packs and cap/reserve rules, and measure actual
+provider behavior rather than assume linear scaling.
+Evidence: `docs/reviews/2026-09-27-v7-download-throughput.json`.
+
 ## V7-3 live download and remaining inputs
 
 Service `healys-v7-capture-20260927.service` is still running. At 18:07:52 UTC:
