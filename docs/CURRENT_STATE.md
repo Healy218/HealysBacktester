@@ -63,6 +63,18 @@ Logical pack directories/receipts stay local, with only SQLite payload files
 linked to MRHA. Four real overflow batches passed existing-reader readback.
 Keep MRHA connected. Existing external files and completed local packs are intact.
 
+### One-time ETA check — September 27, 2026
+
+User-requested timer `healys-v7-eta-20260927-1830.timer` is scheduled for
+**2026-09-27 18:30 America/Chicago** (23:30 UTC), accuracy 1 second.
+It runs `nn_meta/validation/v7-eta-check-20260927/observe.py`, reads the live
+meter selected above at execution time, and writes `check-1830.json` and
+`check-1830.md` in that same directory. It reads only; it does not restart or
+change acquisition. This is a local report, not an automatic chat message.
+Timer activation/next-elapse were verified when scheduled; inspect its result
+and report after 18:30 rather than assuming it ran. `baseline-now.*` contains
+the immediate dry-run observation. Stopped/stale receipts produce no ETA.
+
 ## V7 scope and selected inputs
 
 Accepted V7 scope: March 15, 2022–September 14, 2026; 591 securities,

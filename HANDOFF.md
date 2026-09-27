@@ -1,8 +1,9 @@
-# Handoff — September 27, 2026 — twelve-worker download selected
+# Handoff — September 27, 2026 — 6:30 PM ETA check scheduled
 
 ## Focus and stopping point
 
-The user requested twelve workers after the successful six/eight-worker trials.
+The twelve-worker upgrade is complete. The user then requested a fresh ETA and
+a one-time follow-up check at 6:30 PM Central on September 27.
 The versioned capture service is now running **12 workers × 32 I/O threads**,
 a ceiling of 384 concurrent requests. Research remains in Phase 7, gate 7-3.
 The download continues; no readiness or completion gate was advanced.
@@ -20,6 +21,14 @@ The download continues; no readiness or completion gate was advanced.
 - 26 focused tests and shell/whitespace checks passed. The previous full suite
   passed 2,514 tests plus 18 subtests (one skipped), before this ceiling extension.
 - Documentation ownership/consolidation and all other workstreams are unchanged.
+
+## Scheduled follow-up
+
+`healys-v7-eta-20260927-1830.timer` was verified active/waiting for 18:30 Central
+(23:30 UTC). It saves the current campaign ETA/storage/health observation to
+`nn_meta/validation/v7-eta-check-20260927/check-1830.md` and `.json`.
+Read those after the scheduled time; this is a local report, not a chat delivery.
+The observer was dry-run successfully and does not alter the downloader.
 
 ## Next session
 
