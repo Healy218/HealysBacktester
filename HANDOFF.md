@@ -8,25 +8,41 @@ finished concurrency/overflow checks. Protect V6 and unrelated working changes.
 
 ## Current running entry capture
 
-- Service: `healys-v7-capture-v4-20260927.service`.
-- Meter: `nn_meta/validation/v7-entry-campaign-v4-20260927/progress.json`.
+- Service: `healys-v7-capture-v5-20260927.service`.
+- Meter: `nn_meta/validation/v7-entry-campaign-v5-20260927/progress.json`.
 - Declaration/invocations/attempts/runs: same state root.
-- Launcher: `bash scripts/start_v7_capture_campaign_v4.sh 32`.
+- Launcher: `bash scripts/start_v7_capture_campaign_v5.sh 32`.
 - Logical packs remain `nn_meta/data_v7/entry-campaign-20260927/<security>/<key>`.
 - MRHA payload root: `HealysBacktester/v7-entry-campaign-20260927` on UUID
   `62C9-C390`, currently mounted at `/run/media/healy/MRHA`.
 - Four autosized process workers, up to 32 I/O threads each (128 requests max).
   Numerical libraries stay one thread per worker. Prefetch backs off at 6/8/10 GiB
-  service memory usage to drain buffers before reaching the hard limit.
+  live working-memory usage to drain buffers before reaching the hard limit.
 - MemoryHigh and MemoryMax are both 14 GiB; no swap. CPU burst quota 800%,
   CPUWeight 50 and Nice 10. This removes the former 400% burst restriction.
-- SIGINT/SIGTERM drains current batches. All four campaign state locks are held,
+- SIGINT/SIGTERM drains current batches. All five campaign state locks are held,
   preventing an older controller from overlapping the live queue.
 
-All prior producers/declarations remain frozen and must not be edited. Version 4
-reuses their exact original pack bindings. It verified 8,704 completed packs /
-278,284 ranges at startup. Code commit a545b31 is pushed. Version 4 code, helper,
+All prior producers/declarations remain frozen and must not be edited. Version 5
+reuses their exact original pack bindings. The final resume verified 9,422 completed packs /
+301,248 ranges, including the four MRHA packs. Code commits a545b31 and 0a87eef are pushed. Version 5 code, helper,
 and policy are now frozen too: version any subsequent behavior change.
+
+## Final memory-guard correction
+
+Version 4 counted clean file cache as buffer pressure after verifying old packs.
+Observed cgroup memory was about 10.98 GB, including 9.12 GB inactive file cache
+and only 1.73 GB anonymous memory. This unnecessarily reduced I/O concurrency.
+Version 5 subtracts only clean inactive file cache, retaining dirty/writeback
+pages, active cache, anonymous allocations and kernel/socket memory in its
+pressure calculation. The 14 GiB hard cgroup limit remains unchanged. Eight
+focused checks passed for this correction and its overflow/resume paths. All
+v4 packs are reused too; no real-data verification/download was discarded.
+Do not restore the cache-blind v4 prefetch guard. After correction, the new run
+sustained about 164 ranges/s over its first two minutes; the latest 30-second
+measurement is in the companion evidence. The user was told ~18 hours if that
+rate holds, with a provisional 24–48-hour planning allowance. That replaces the
+~three-day pre-fix extrapolation; none is an upper bound or a full 7-3 ETA.
 
 ## Storage authorization — supersedes prior fixed caps
 

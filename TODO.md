@@ -14,8 +14,8 @@ Exit/roll/stock acquisition is conditional on actual replay requests, not a
 fresh blanket download or component-reimplementation task.
 
 - [ ] Finish the full-universe entry quote/trade download already running as
-  `healys-v7-capture-v4-20260927.service`. Monitor
-  `nn_meta/validation/v7-entry-campaign-v4-20260927/progress.json` and reuse every
+  `healys-v7-capture-v5-20260927.service`. Monitor
+  `nn_meta/validation/v7-entry-campaign-v5-20260927/progress.json` and reuse every
   completed pack. No new catalog, daily build, demand census or packing trial.
 - [ ] Acquire remaining dated contract references from the **already completed**
   `v7-dated-reference-demand-20260927` plan (2,223,844 entry contract/dates).

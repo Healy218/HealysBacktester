@@ -6,13 +6,13 @@ work and [ROADMAP](../ROADMAP.md#completed-work) for completed work.
 
 ## Running download
 
-- Service: `healys-v7-capture-v4-20260927.service` (home box).
-- Live meter: `nn_meta/validation/v7-entry-campaign-v4-20260927/progress.json`.
-- Immutable launch: `nn_meta/validation/v7-entry-campaign-v4-20260927/declaration/`.
+- Service: `healys-v7-capture-v5-20260927.service` (home box).
+- Live meter: `nn_meta/validation/v7-entry-campaign-v5-20260927/progress.json`.
+- Immutable launch: `nn_meta/validation/v7-entry-campaign-v5-20260927/declaration/`.
 - New packs: `nn_meta/data_v7/entry-campaign-20260927/<security>/<batch-hash>/`.
-- Attempt journal: `nn_meta/validation/v7-entry-campaign-v4-20260927/attempts/`.
+- Attempt journal: `nn_meta/validation/v7-entry-campaign-v5-20260927/attempts/`.
 - Shared acquisition accounting: `nn_meta/data_v7/quota.json`.
-- Launcher: `bash scripts/start_v7_capture_campaign_v4.sh 32`; do not start a duplicate
+- Launcher: `bash scripts/start_v7_capture_campaign_v5.sh 32`; do not start a duplicate
   while the service is active. Existing batches are verified/reused on resume.
 - [Concurrency upgrade](reviews/2026-09-27-v7-parallel-capture.md); original
   declaration and journals remain in `v7-entry-campaign-20260927/`.

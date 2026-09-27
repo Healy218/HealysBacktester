@@ -2,8 +2,8 @@
 
 The user authorized leaving only 10 GB free locally, using MRHA for overflow,
 and downloading as fast as possible within the training-size 14 GB RAM allocation.
-Both changes are deployed in `healys-v7-capture-v4-20260927.service`.
-Code commit: `a545b31`. Current meter and launcher are in HANDOFF.
+Both changes are deployed in `healys-v7-capture-v5-20260927.service`.
+Code commits: `a545b31` and `0a87eef`. Current meter and launcher are in HANDOFF.
 
 ## Capacity and location
 
@@ -71,3 +71,24 @@ records policy application, before/after measurements, mounted drive, readback,
 resource settings and the live snapshot. At that snapshot 299 v4 batches had
 completed, with zero failed attempts, retries or HTTP 429s. The service remained
 running with no stop reason.
+
+## Cache-aware final guard
+
+The follow-up ETA check found 10.98 GB cgroup memory consisted primarily of
+9.12 GB clean inactive file cache, with 1.73 GB anonymous memory. Version 4 had
+incorrectly treated that reclaimable cache as live-buffer pressure and reduced
+concurrency. Version 5 subtracts only clean inactive file cache, preserves
+dirty/writeback and active pages in the pressure estimate, and floors it at
+anonymous/kernel/socket/shared-memory usage. The 14 GiB hard limit is unchanged.
+The original cache-blind producer remains frozen; the new controller also binds
+and reuses its packs. Eight focused tests and launcher syntax passed. This is
+a performance correction, not a change to tick data or overflow semantics.
+
+The final live sample measured 185.56 ranges/s, with
+729 newly completed batches and no failed attempts/API throttles at
+the evidence snapshot. It reused 9,422 packs / 301,248 ranges including all four
+MRHA packs. This follows the working-memory correction; the earlier roughly
+three-day extrapolation was taken while the cache-blind guard was reducing I/O.
+The new run's short sustained pace around 164 ranges/s extrapolates to roughly
+18 hours for entry capture, but later density remains unknown; budget 24–48 hours
+provisionally, not as an upper bound or a full V7-3 ETA.

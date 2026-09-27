@@ -1,240 +1,429 @@
 {
-  "recorded_at": "2026-09-27T19:53:23.494342+00:00",
-  "service": "healys-v7-capture-v4-20260927.service",
-  "implementation_commit": "a545b31",
-  "progress": {
-    "campaign_identity": "b697791501ee3d2ba55396335596ce878816f3566555076a0941fea08ca05038",
-    "capacity_mode": "live_free_space_with_MRHA_overflow",
-    "capture_seconds": 226.07169620500645,
-    "completed_batches_this_run": 299,
-    "disk_reserve_bytes": 10000000000,
-    "elapsed_seconds": 245.01487288900535,
-    "external_batches_this_run": 4,
-    "full_entry_coverage": false,
-    "io_threads": 32,
-    "last": {
-      "bytes": 544401,
-      "error": null,
-      "http": {
-        "http_requests": 32,
-        "http_seconds": 5.890291417948902,
-        "response_bytes": 7802927,
-        "retries": 0,
-        "throttles": 0
-      },
-      "io_threads": 32,
-      "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBPFB9/a6fb69d82db49178fac0a6448d726d97070ed989ff05f3ca24ee7d1d343e5681",
-      "physical_pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBPFB9/a6fb69d82db49178fac0a6448d726d97070ed989ff05f3ca24ee7d1d343e5681",
-      "recovered_external_pack": false,
-      "requests": 32,
-      "seconds": 3.992253464006353,
-      "split_attempts": [],
-      "status": "completed",
-      "tier": "local"
-    },
-    "local_free_bytes": 278747447296,
-    "overflow_free_bytes": 743718256640,
-    "pending": 3,
-    "requests_this_run": 9556,
-    "retained_campaign_bytes": 7270551521,
-    "reused_batches_this_run": 8704,
-    "reused_requests": 278284,
-    "status": "running",
-    "stop_reason": null,
-    "training_started": false,
-    "updated_at": "2026-09-27T19:53:22.404466+00:00",
-    "workers": 4
-  },
-  "invocations": [
-    {
-      "campaign_identity": "b697791501ee3d2ba55396335596ce878816f3566555076a0941fea08ca05038",
-      "force_overflow_batches": 4,
-      "io_threads": 32,
-      "max_batches": 0,
-      "mount": {
-        "fstype": "exfat",
-        "options": "rw,nosuid,nodev,relatime,uid=1000,gid=1000,fmask=0022,dmask=0022,iocharset=utf8,errors=remount-ro",
-        "target": "/run/media/healy/MRHA",
-        "uuid": "62C9-C390"
-      },
-      "quota_amendment": {
-        "after": {
-          "capacity_authorization": "2026-09-27 user: The allocation can be moved up to 10GB less than storage left on disk. We can also put whatever doesn't fit into MRHA external drive.",
-          "limit_bytes": 1078764082946,
-          "reservations": {},
-          "unit": "decimal bytes; hardlinks counted once",
-          "used_bytes": 76042125058
-        },
-        "before": {
-          "limit_bytes": 250000000000,
-          "reservations": {},
-          "unit": "decimal bytes; hardlinks counted once",
-          "used_bytes": 76042125058
-        }
-      },
-      "started_at": "2026-09-27T19:49:17.161200+00:00",
-      "workers": 4
-    }
-  ],
-  "quota": {
-    "capacity_authorization": "2026-09-27 user: The allocation can be moved up to 10GB less than storage left on disk. We can also put whatever doesn't fit into MRHA external drive.",
-    "limit_bytes": 1078764082946,
-    "reservations": {
-      "0d92cbfc67914b2dad6fa3fbad5c0eee": 1073741824,
-      "30ae2e4383f34541b48b508fa6744f0c": 1073741824,
-      "565dc895e10944dcb58ffc06aea12a55": 1073741824,
-      "9397ae142a69463cb08d509220f860dc": 1073741824
-    },
-    "unit": "decimal bytes; hardlinks counted once",
-    "used_bytes": 76290490028
-  },
-  "overflow_proof": {
-    "index": "nn_meta/validation/v7-overflow-readback-20260927",
-    "original_readers_unchanged": true,
-    "packs": [
-      {
-        "logical": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/4b8525c0b94f4dff16e2afc79778e0c36fbb583ce4b00b3c0bbe8aef6879d9e6",
-        "physical": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/4b8525c0b94f4dff16e2afc79778e0c36fbb583ce4b00b3c0bbe8aef6879d9e6",
-        "receipt_identity": "77f0b9885e7ebb90a043992a5ed52424c9db0138b0786b0f24a2770a1c339fe4",
-        "records_sha256": "b81d824db082539e8fae1a355ba973e55e7cef68d998a1c126eaa112df5453bd",
-        "rows": 19
-      },
-      {
-        "logical": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/cfc11aa5b58f7f9853654c11693aa652570e7e44f1516569a74938058712523c",
-        "physical": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/cfc11aa5b58f7f9853654c11693aa652570e7e44f1516569a74938058712523c",
-        "receipt_identity": "617ddeca5a6bcc7752ac7d029ed4b0786877d6e342e06ae4832eb94812f67572",
-        "records_sha256": "699bb4f6c37626c5d179bda5a19768bc0d45d19914d0cf5541c4ddac54642567",
-        "rows": 899
-      },
-      {
-        "logical": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/9131cd8e7eb78ff1cfb21fba64247910ca97bf554cbbda31ed36711f2078c135",
-        "physical": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/9131cd8e7eb78ff1cfb21fba64247910ca97bf554cbbda31ed36711f2078c135",
-        "receipt_identity": "40e5f0274a4f14429e9328cfb60e299b7d7064922c82cae92c6ca11f2bb0af6e",
-        "records_sha256": "1ca3689d0f8de0a737bb563bc4a0b6d06145e930e55e5503ac189cc33f9d3748",
-        "rows": 34306
-      },
-      {
-        "logical": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/00c8bcfd83e70c461b1c60ba855031994f1978a9be1c0d70ffa5348d280ed7b8",
-        "physical": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/00c8bcfd83e70c461b1c60ba855031994f1978a9be1c0d70ffa5348d280ed7b8",
-        "receipt_identity": "7ab2cb595ed98f26143e97518ab4958bf279fd364c814313b3e5c44e9b63934e",
-        "records_sha256": "6ad967bb5123088c09e052b36eb27f43ae95bb4b3fe4d7e98a9a909122820478",
-        "rows": 5662
-      }
-    ],
-    "passed": true
-  },
-  "before_sample": {
-    "version": "v3",
-    "seconds": 30.00725551598589,
-    "range_rate": 10.66408755140986,
-    "cpu_cores": 2.178482399537506,
-    "cpu_throttled_seconds": 0.878714,
-    "memory_sample_peak_bytes": 4735754240,
-    "progress": {
-      "campaign_identity": "f68893d6fd9793d269b35308cb8bcb57284c4fd2cc320f3e226c8500a2dec81c",
-      "capture_seconds": 1326.4266886889818,
-      "completed_batches_this_run": 1103,
-      "elapsed_seconds": 1331.9722116600024,
-      "full_entry_coverage": false,
-      "io_threads": 16,
-      "last": {
-        "bytes": 1039466,
-        "error": null,
-        "http": {
-          "http_requests": 32,
-          "http_seconds": 7.205065289948834,
-          "response_bytes": 16430815,
-          "retries": 0,
-          "throttles": 0
-        },
-        "io_threads": 16,
-        "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/e1898204bc7aaf06e85ea8cc4e3b0b3c04818581a1ef93aa77ddaf544282cb70",
-        "requests": 32,
-        "seconds": 1.8098614210030064,
-        "split_attempts": [],
-        "status": "completed"
-      },
-      "max_new_bytes": 100000000000,
-      "pending": 3,
-      "requests_this_run": 35296,
-      "retained_campaign_bytes": 6636722876,
-      "reused_batches_this_run": 7463,
-      "reused_requests": 238572,
-      "status": "running",
-      "stop_reason": null,
-      "training_started": false,
-      "updated_at": "2026-09-27T19:45:06.961620+00:00",
-      "workers": 4
-    },
-    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
-  },
-  "after_sample": {
-    "version": "v4",
-    "seconds": 30.00693857402075,
-    "range_rate": 22.394820396033357,
-    "cpu_cores": 2.1584083574614916,
-    "cpu_throttled_seconds": 0.0,
-    "memory_sample_peak_bytes": 10396798976,
+  "storage_launch": {
+    "recorded_at": "2026-09-27T19:53:23.494342+00:00",
+    "service": "healys-v7-capture-v4-20260927.service",
+    "implementation_commit": "a545b31",
     "progress": {
       "campaign_identity": "b697791501ee3d2ba55396335596ce878816f3566555076a0941fea08ca05038",
       "capacity_mode": "live_free_space_with_MRHA_overflow",
-      "capture_seconds": 87.3062699729926,
-      "completed_batches_this_run": 53,
+      "capture_seconds": 226.07169620500645,
+      "completed_batches_this_run": 299,
       "disk_reserve_bytes": 10000000000,
-      "elapsed_seconds": 106.24944983699243,
+      "elapsed_seconds": 245.01487288900535,
       "external_batches_this_run": 4,
       "full_entry_coverage": false,
       "io_threads": 32,
       "last": {
-        "bytes": 1531555,
+        "bytes": 544401,
         "error": null,
         "http": {
           "http_requests": 32,
-          "http_seconds": 6.914868176972959,
-          "response_bytes": 26321690,
+          "http_seconds": 5.890291417948902,
+          "response_bytes": 7802927,
           "retries": 0,
           "throttles": 0
         },
         "io_threads": 32,
-        "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/da385e13f2d1ffbcd4ea9823d2ed0c7d02c4982fc6cc3b7326312b1c459a8ede",
-        "physical_pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/da385e13f2d1ffbcd4ea9823d2ed0c7d02c4982fc6cc3b7326312b1c459a8ede",
+        "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBPFB9/a6fb69d82db49178fac0a6448d726d97070ed989ff05f3ca24ee7d1d343e5681",
+        "physical_pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBPFB9/a6fb69d82db49178fac0a6448d726d97070ed989ff05f3ca24ee7d1d343e5681",
         "recovered_external_pack": false,
         "requests": 32,
-        "seconds": 3.6102602430037223,
+        "seconds": 3.992253464006353,
         "split_attempts": [],
         "status": "completed",
         "tier": "local"
       },
-      "local_free_bytes": 278899486720,
+      "local_free_bytes": 278747447296,
       "overflow_free_bytes": 743718256640,
       "pending": 3,
-      "requests_this_run": 1696,
-      "retained_campaign_bytes": 7143901761,
+      "requests_this_run": 9556,
+      "retained_campaign_bytes": 7270551521,
       "reused_batches_this_run": 8704,
       "reused_requests": 278284,
       "status": "running",
       "stop_reason": null,
       "training_started": false,
-      "updated_at": "2026-09-27T19:51:03.639033+00:00",
+      "updated_at": "2026-09-27T19:53:22.404466+00:00",
       "workers": 4
     },
-    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+    "invocations": [
+      {
+        "campaign_identity": "b697791501ee3d2ba55396335596ce878816f3566555076a0941fea08ca05038",
+        "force_overflow_batches": 4,
+        "io_threads": 32,
+        "max_batches": 0,
+        "mount": {
+          "fstype": "exfat",
+          "options": "rw,nosuid,nodev,relatime,uid=1000,gid=1000,fmask=0022,dmask=0022,iocharset=utf8,errors=remount-ro",
+          "target": "/run/media/healy/MRHA",
+          "uuid": "62C9-C390"
+        },
+        "quota_amendment": {
+          "after": {
+            "capacity_authorization": "2026-09-27 user: The allocation can be moved up to 10GB less than storage left on disk. We can also put whatever doesn't fit into MRHA external drive.",
+            "limit_bytes": 1078764082946,
+            "reservations": {},
+            "unit": "decimal bytes; hardlinks counted once",
+            "used_bytes": 76042125058
+          },
+          "before": {
+            "limit_bytes": 250000000000,
+            "reservations": {},
+            "unit": "decimal bytes; hardlinks counted once",
+            "used_bytes": 76042125058
+          }
+        },
+        "started_at": "2026-09-27T19:49:17.161200+00:00",
+        "workers": 4
+      }
+    ],
+    "quota": {
+      "capacity_authorization": "2026-09-27 user: The allocation can be moved up to 10GB less than storage left on disk. We can also put whatever doesn't fit into MRHA external drive.",
+      "limit_bytes": 1078764082946,
+      "reservations": {
+        "0d92cbfc67914b2dad6fa3fbad5c0eee": 1073741824,
+        "30ae2e4383f34541b48b508fa6744f0c": 1073741824,
+        "565dc895e10944dcb58ffc06aea12a55": 1073741824,
+        "9397ae142a69463cb08d509220f860dc": 1073741824
+      },
+      "unit": "decimal bytes; hardlinks counted once",
+      "used_bytes": 76290490028
+    },
+    "overflow_proof": {
+      "index": "nn_meta/validation/v7-overflow-readback-20260927",
+      "original_readers_unchanged": true,
+      "packs": [
+        {
+          "logical": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/4b8525c0b94f4dff16e2afc79778e0c36fbb583ce4b00b3c0bbe8aef6879d9e6",
+          "physical": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/4b8525c0b94f4dff16e2afc79778e0c36fbb583ce4b00b3c0bbe8aef6879d9e6",
+          "receipt_identity": "77f0b9885e7ebb90a043992a5ed52424c9db0138b0786b0f24a2770a1c339fe4",
+          "records_sha256": "b81d824db082539e8fae1a355ba973e55e7cef68d998a1c126eaa112df5453bd",
+          "rows": 19
+        },
+        {
+          "logical": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/cfc11aa5b58f7f9853654c11693aa652570e7e44f1516569a74938058712523c",
+          "physical": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/cfc11aa5b58f7f9853654c11693aa652570e7e44f1516569a74938058712523c",
+          "receipt_identity": "617ddeca5a6bcc7752ac7d029ed4b0786877d6e342e06ae4832eb94812f67572",
+          "records_sha256": "699bb4f6c37626c5d179bda5a19768bc0d45d19914d0cf5541c4ddac54642567",
+          "rows": 899
+        },
+        {
+          "logical": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/9131cd8e7eb78ff1cfb21fba64247910ca97bf554cbbda31ed36711f2078c135",
+          "physical": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/9131cd8e7eb78ff1cfb21fba64247910ca97bf554cbbda31ed36711f2078c135",
+          "receipt_identity": "40e5f0274a4f14429e9328cfb60e299b7d7064922c82cae92c6ca11f2bb0af6e",
+          "records_sha256": "1ca3689d0f8de0a737bb563bc4a0b6d06145e930e55e5503ac189cc33f9d3748",
+          "rows": 34306
+        },
+        {
+          "logical": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/00c8bcfd83e70c461b1c60ba855031994f1978a9be1c0d70ffa5348d280ed7b8",
+          "physical": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/00c8bcfd83e70c461b1c60ba855031994f1978a9be1c0d70ffa5348d280ed7b8",
+          "receipt_identity": "7ab2cb595ed98f26143e97518ab4958bf279fd364c814313b3e5c44e9b63934e",
+          "records_sha256": "6ad967bb5123088c09e052b36eb27f43ae95bb4b3fe4d7e98a9a909122820478",
+          "rows": 5662
+        }
+      ],
+      "passed": true
+    },
+    "before_sample": {
+      "version": "v3",
+      "seconds": 30.00725551598589,
+      "range_rate": 10.66408755140986,
+      "cpu_cores": 2.178482399537506,
+      "cpu_throttled_seconds": 0.878714,
+      "memory_sample_peak_bytes": 4735754240,
+      "progress": {
+        "campaign_identity": "f68893d6fd9793d269b35308cb8bcb57284c4fd2cc320f3e226c8500a2dec81c",
+        "capture_seconds": 1326.4266886889818,
+        "completed_batches_this_run": 1103,
+        "elapsed_seconds": 1331.9722116600024,
+        "full_entry_coverage": false,
+        "io_threads": 16,
+        "last": {
+          "bytes": 1039466,
+          "error": null,
+          "http": {
+            "http_requests": 32,
+            "http_seconds": 7.205065289948834,
+            "response_bytes": 16430815,
+            "retries": 0,
+            "throttles": 0
+          },
+          "io_threads": 16,
+          "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/e1898204bc7aaf06e85ea8cc4e3b0b3c04818581a1ef93aa77ddaf544282cb70",
+          "requests": 32,
+          "seconds": 1.8098614210030064,
+          "split_attempts": [],
+          "status": "completed"
+        },
+        "max_new_bytes": 100000000000,
+        "pending": 3,
+        "requests_this_run": 35296,
+        "retained_campaign_bytes": 6636722876,
+        "reused_batches_this_run": 7463,
+        "reused_requests": 238572,
+        "status": "running",
+        "stop_reason": null,
+        "training_started": false,
+        "updated_at": "2026-09-27T19:45:06.961620+00:00",
+        "workers": 4
+      },
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+    },
+    "after_sample": {
+      "version": "v4",
+      "seconds": 30.00693857402075,
+      "range_rate": 22.394820396033357,
+      "cpu_cores": 2.1584083574614916,
+      "cpu_throttled_seconds": 0.0,
+      "memory_sample_peak_bytes": 10396798976,
+      "progress": {
+        "campaign_identity": "b697791501ee3d2ba55396335596ce878816f3566555076a0941fea08ca05038",
+        "capacity_mode": "live_free_space_with_MRHA_overflow",
+        "capture_seconds": 87.3062699729926,
+        "completed_batches_this_run": 53,
+        "disk_reserve_bytes": 10000000000,
+        "elapsed_seconds": 106.24944983699243,
+        "external_batches_this_run": 4,
+        "full_entry_coverage": false,
+        "io_threads": 32,
+        "last": {
+          "bytes": 1531555,
+          "error": null,
+          "http": {
+            "http_requests": 32,
+            "http_seconds": 6.914868176972959,
+            "response_bytes": 26321690,
+            "retries": 0,
+            "throttles": 0
+          },
+          "io_threads": 32,
+          "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/da385e13f2d1ffbcd4ea9823d2ed0c7d02c4982fc6cc3b7326312b1c459a8ede",
+          "physical_pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/da385e13f2d1ffbcd4ea9823d2ed0c7d02c4982fc6cc3b7326312b1c459a8ede",
+          "recovered_external_pack": false,
+          "requests": 32,
+          "seconds": 3.6102602430037223,
+          "split_attempts": [],
+          "status": "completed",
+          "tier": "local"
+        },
+        "local_free_bytes": 278899486720,
+        "overflow_free_bytes": 743718256640,
+        "pending": 3,
+        "requests_this_run": 1696,
+        "retained_campaign_bytes": 7143901761,
+        "reused_batches_this_run": 8704,
+        "reused_requests": 278284,
+        "status": "running",
+        "stop_reason": null,
+        "training_started": false,
+        "updated_at": "2026-09-27T19:51:03.639033+00:00",
+        "workers": 4
+      },
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+    },
+    "service_limits": {
+      "memory.high": "15032385536",
+      "memory.max": "15032385536",
+      "memory.swap.max": "0",
+      "cpu.max": "800000 100000",
+      "cpu.weight": "50",
+      "pids.max": "256"
+    },
+    "memory_current_bytes": 10796445696,
+    "memory_peak_bytes": 10796953600,
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+    "completed_attempts": 299,
+    "failed_attempts": 0,
+    "api_throttles": 0,
+    "retries": 0,
+    "focused_tests_passed": 16,
+    "qualification": "Successive production batches differ in row density. Rates are observations, not a controlled multiplier or a complete campaign ETA."
   },
-  "service_limits": {
-    "memory.high": "15032385536",
-    "memory.max": "15032385536",
-    "memory.swap.max": "0",
-    "cpu.max": "800000 100000",
-    "cpu.weight": "50",
-    "pids.max": "256"
-  },
-  "memory_current_bytes": 10796445696,
-  "memory_peak_bytes": 10796953600,
-  "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
-  "completed_attempts": 299,
-  "failed_attempts": 0,
-  "api_throttles": 0,
-  "retries": 0,
-  "focused_tests_passed": 16,
-  "qualification": "Successive production batches differ in row density. Rates are observations, not a controlled multiplier or a complete campaign ETA."
+  "final_cache_aware_run": {
+    "recorded_at": "2026-09-27T20:03:05.685925+00:00",
+    "service": "healys-v7-capture-v5-20260927.service",
+    "implementation_commit": "0a87eef",
+    "progress": {
+      "campaign_identity": "e9c933f48c6a9fb3b1c5ebdf0d08b50c05e0b17101b5da28c7f7b1b730e987b5",
+      "capacity_mode": "live_free_space_with_MRHA_overflow",
+      "capture_seconds": 154.98642781400122,
+      "completed_batches_this_run": 729,
+      "disk_reserve_bytes": 10000000000,
+      "elapsed_seconds": 162.53919216099894,
+      "external_batches_this_run": 0,
+      "full_entry_coverage": false,
+      "io_threads": 32,
+      "last": {
+        "bytes": 3588091,
+        "error": null,
+        "http": {
+          "http_requests": 34,
+          "http_seconds": 20.457845237950096,
+          "response_bytes": 78549188,
+          "retries": 0,
+          "throttles": 0
+        },
+        "io_threads": 32,
+        "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBQCY0/b87588a0e5a11208409171368e800f8d5c6bf3f6bb6b7592ba9efc6181fdbf13",
+        "physical_pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBQCY0/b87588a0e5a11208409171368e800f8d5c6bf3f6bb6b7592ba9efc6181fdbf13",
+        "recovered_external_pack": false,
+        "requests": 32,
+        "seconds": 6.246513385005528,
+        "split_attempts": [
+          {
+            "capture_id": "65a7005f149c8f1ad7efe1d301e3fb55952217c658bdb176e64bf636def029fd",
+            "depth": 0,
+            "reason": "page budget exhausted; capture incomplete"
+          }
+        ],
+        "status": "completed",
+        "tier": "local"
+      },
+      "local_free_bytes": 278313308160,
+      "overflow_free_bytes": 743718256640,
+      "pending": 3,
+      "requests_this_run": 23326,
+      "retained_campaign_bytes": 7726485125,
+      "reused_batches_this_run": 9422,
+      "reused_requests": 301248,
+      "status": "running",
+      "stop_reason": null,
+      "training_started": false,
+      "updated_at": "2026-09-27T20:03:05.672750+00:00",
+      "workers": 4
+    },
+    "sample": {
+      "version": "v5",
+      "seconds": 30.005858062999323,
+      "range_rate": 185.56376519243705,
+      "cpu_cores": 1.897712402706345,
+      "cpu_throttled_seconds": 0.0,
+      "memory_sample_peak_bytes": 1789714432,
+      "progress": {
+        "campaign_identity": "e9c933f48c6a9fb3b1c5ebdf0d08b50c05e0b17101b5da28c7f7b1b730e987b5",
+        "capacity_mode": "live_free_space_with_MRHA_overflow",
+        "capture_seconds": 106.2884367450024,
+        "completed_batches_this_run": 543,
+        "disk_reserve_bytes": 10000000000,
+        "elapsed_seconds": 113.84119594201911,
+        "external_batches_this_run": 0,
+        "full_entry_coverage": false,
+        "io_threads": 32,
+        "last": {
+          "bytes": 130975,
+          "error": null,
+          "http": {
+            "http_requests": 32,
+            "http_seconds": 5.091449471976375,
+            "response_bytes": 812075,
+            "retries": 0,
+            "throttles": 0
+          },
+          "io_threads": 32,
+          "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBPFB9/35c0a001699745f69c23dbade87137df2407c28d826888feeeff27f0259e6ae0",
+          "physical_pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BBPFB9/35c0a001699745f69c23dbade87137df2407c28d826888feeeff27f0259e6ae0",
+          "recovered_external_pack": false,
+          "requests": 32,
+          "seconds": 0.4437181289831642,
+          "split_attempts": [],
+          "status": "completed",
+          "tier": "local"
+        },
+        "local_free_bytes": 278425477120,
+        "overflow_free_bytes": 743718256640,
+        "pending": 3,
+        "requests_this_run": 17376,
+        "retained_campaign_bytes": 7633175273,
+        "reused_batches_this_run": 9422,
+        "reused_requests": 301248,
+        "status": "running",
+        "stop_reason": null,
+        "training_started": false,
+        "updated_at": "2026-09-27T20:02:16.974760+00:00",
+        "workers": 4
+      },
+      "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n"
+    },
+    "memory_current_bytes": 2729398272,
+    "working_memory_bytes": 2109595648,
+    "memory_stat": {
+      "anon": 2071072768,
+      "file": 620105728,
+      "kernel": 19677184,
+      "kernel_stack": 2293760,
+      "pagetables": 7200768,
+      "sec_pagetables": 0,
+      "percpu": 1728,
+      "sock": 0,
+      "vmalloc": 0,
+      "shmem": 20480,
+      "zswap": 0,
+      "zswapped": 0,
+      "zswap_incomp": 0,
+      "file_mapped": 16384,
+      "file_dirty": 184320,
+      "file_writeback": 0,
+      "swapcached": 0,
+      "anon_thp": 568328192,
+      "file_thp": 0,
+      "shmem_thp": 0,
+      "inactive_anon": 0,
+      "active_anon": 2087616512,
+      "inactive_file": 619986944,
+      "active_file": 0,
+      "unevictable": 0,
+      "slab_reclaimable": 7348448,
+      "slab_unreclaimable": 2753680,
+      "slab": 10102128,
+      "hugetlb": 0,
+      "workingset_refault_anon": 0,
+      "workingset_refault_file": 0,
+      "workingset_activate_anon": 0,
+      "workingset_activate_file": 0,
+      "workingset_restore_anon": 0,
+      "workingset_restore_file": 0,
+      "workingset_nodereclaim": 0,
+      "pgdemote_kswapd": 0,
+      "pgdemote_direct": 0,
+      "pgdemote_khugepaged": 0,
+      "pgdemote_proactive": 0,
+      "pgsteal_kswapd": 0,
+      "pgsteal_direct": 0,
+      "pgsteal_khugepaged": 0,
+      "pgsteal_proactive": 0,
+      "pgscan_kswapd": 0,
+      "pgscan_direct": 0,
+      "pgscan_khugepaged": 0,
+      "pgscan_proactive": 0,
+      "pgrefill": 0,
+      "pgpromote_success": 0,
+      "pgscan": 0,
+      "pgsteal": 0,
+      "pswpin": 0,
+      "pswpout": 0,
+      "pgfault": 1622458,
+      "pgmajfault": 0,
+      "pgactivate": 0,
+      "pgdeactivate": 0,
+      "pglazyfree": 0,
+      "pglazyfreed": 0,
+      "swpin_zero": 0,
+      "swpout_zero": 0,
+      "zswpin": 0,
+      "zswpout": 0,
+      "zswpwb": 0,
+      "thp_fault_alloc": 1740,
+      "thp_collapse_alloc": 0,
+      "thp_swpout": 0,
+      "thp_swpout_fallback": 0,
+      "numa_pages_migrated": 0,
+      "numa_pte_updates": 0,
+      "numa_hint_faults": 0
+    },
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+    "completed_attempts": 729,
+    "failed_attempts": 0,
+    "api_throttles": 0,
+    "focused_tests_passed": 8
+  }
 }
