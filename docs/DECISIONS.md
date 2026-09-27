@@ -1773,3 +1773,15 @@ not add requirements. Prior working documents were archived byte-for-byte.
 No runtime code, installed service, launch, capture setting, dataset, model,
 checkpoint or V7-3 scope was changed. See the
 [consolidation review](reviews/2026-09-27-documentation-consolidation.md).
+
+## 2026-09-27 — Select eight-worker entry acquisition after live trials
+
+The user authorized six workers × 32 I/O threads, then eight × 32 if throughput
+improved. Select eight after retained-data/response-throughput observations with
+no errors or throttling. Keep the 14 GiB hard limit, cache-aware memory guard,
+800% CPU quota, low priority, exact demand, frozen pack provenance and 10 GB disk
+reserves. Version the runner/policy, drain transitions, and reuse completed packs;
+do not mutate old producers or infer a campaign ETA from short heterogeneous
+windows. The service task allowance increases to 320. This changes operational
+concurrency only, not V7 gate scope or training readiness.
+[Evidence](reviews/2026-09-27-v7-eight-worker-capture.md).

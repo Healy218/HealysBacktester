@@ -1,0 +1,194 @@
+{
+  "observed_at": "2026-09-27T22:30:03.123094+00:00",
+  "selected_workers": 8,
+  "io_threads_per_worker": 32,
+  "concurrency_ceiling": 256,
+  "memory_limit_gib": 14,
+  "cpu_quota_percent": 800,
+  "task_limit": 320,
+  "campaign_identity": "84dac9f69f53ede38fa448e4da484bbfa04fdaf43dbf3ad81cc1e799c24b68b7",
+  "progress": {
+    "campaign_identity": "84dac9f69f53ede38fa448e4da484bbfa04fdaf43dbf3ad81cc1e799c24b68b7",
+    "capacity_mode": "live_free_space_with_MRHA_overflow",
+    "capture_seconds": 189.72113948798506,
+    "completed_batches_this_run": 2334,
+    "disk_reserve_bytes": 10000000000,
+    "elapsed_seconds": 244.1072705849947,
+    "external_batches_this_run": 0,
+    "full_entry_coverage": false,
+    "io_threads": 32,
+    "last": {
+      "bytes": 241832,
+      "error": null,
+      "http": {
+        "http_requests": 32,
+        "http_seconds": 5.107973113073967,
+        "response_bytes": 2445072,
+        "retries": 0,
+        "throttles": 0
+      },
+      "io_threads": 32,
+      "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BGB482/a5f2d7c19c5907dfbc38d1e1bd480454e1e0b74467494be055e55e255156483f",
+      "physical_pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BGB482/a5f2d7c19c5907dfbc38d1e1bd480454e1e0b74467494be055e55e255156483f",
+      "recovered_external_pack": false,
+      "requests": 32,
+      "seconds": 0.5447032040101476,
+      "split_attempts": [],
+      "status": "completed",
+      "tier": "local"
+    },
+    "local_free_bytes": 259788357632,
+    "overflow_free_bytes": 743718256640,
+    "pending": 7,
+    "requests_this_run": 74584,
+    "retained_campaign_bytes": 26434915556,
+    "reused_batches_this_run": 28891,
+    "reused_requests": 923904,
+    "status": "running",
+    "stop_reason": null,
+    "training_started": false,
+    "updated_at": "2026-09-27T22:30:02.880311+00:00",
+    "workers": 8
+  },
+  "unchanged_prior_source_hashes": true,
+  "measurements": [
+    {
+      "evidence": "nn_meta/validation/v7-concurrency-20260927/baseline-summary.json",
+      "workers": 4,
+      "seconds": 300,
+      "ranges_per_second": 146.82666666666665,
+      "response_MB_per_range": 0.14799286773519796,
+      "response_MB_per_second": 21.72929946,
+      "retained_MB_per_second": 1.66232222,
+      "failed_batches": 0,
+      "retries": 0,
+      "throttles": 0
+    },
+    {
+      "evidence": "nn_meta/validation/v7-concurrency-20260927/six-workers-1.json",
+      "seconds": 45.0080783367157,
+      "workers": 6,
+      "status": "running",
+      "new_ranges": 13024,
+      "ranges_per_second": 289.3702748774228,
+      "response_MB_per_range": 0.10510548180282556,
+      "response_MB_per_second": 30.41440216040759,
+      "retained_MB_per_second": 2.6379205775410077,
+      "working_GiB_min": 0.8069114685058594,
+      "working_GiB_max": 1.445526123046875,
+      "prefetch_samples": {
+        "32": 45
+      },
+      "cpu_cores": 2.4709830348227984,
+      "cpu_throttled_seconds": 0.0,
+      "memory_events_delta": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "failed_batches": 0,
+      "retries": 0,
+      "throttles": 0
+    },
+    {
+      "evidence": "nn_meta/validation/v7-concurrency-20260927/six-workers-2.json",
+      "seconds": 45.00850224494934,
+      "workers": 6,
+      "status": "running",
+      "new_ranges": 9366,
+      "ranges_per_second": 208.09401630446416,
+      "response_MB_per_range": 0.18199985949177877,
+      "response_MB_per_second": 37.8730817284924,
+      "retained_MB_per_second": 2.667886666090396,
+      "working_GiB_min": 1.4479446411132812,
+      "working_GiB_max": 2.2155494689941406,
+      "prefetch_samples": {
+        "32": 45
+      },
+      "cpu_cores": 3.0050274337928533,
+      "cpu_throttled_seconds": 0.0,
+      "memory_events_delta": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "failed_batches": 0,
+      "retries": 0,
+      "throttles": 0
+    },
+    {
+      "evidence": "nn_meta/validation/v7-concurrency-20260927/eight-workers-1.json",
+      "seconds": 45.008087396621704,
+      "workers": 8,
+      "status": "running",
+      "new_ranges": 17184,
+      "ranges_per_second": 381.7980499497925,
+      "response_MB_per_range": 0.09522864251629423,
+      "response_MB_per_second": 36.35811001208704,
+      "retained_MB_per_second": 3.237050370883694,
+      "working_GiB_min": 1.4969978332519531,
+      "working_GiB_max": 2.1755752563476562,
+      "prefetch_samples": {
+        "32": 45
+      },
+      "cpu_cores": 2.9585242497994875,
+      "cpu_throttled_seconds": 0.0,
+      "memory_events_delta": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "failed_batches": 0,
+      "retries": 0,
+      "throttles": 0
+    },
+    {
+      "evidence": "nn_meta/validation/v7-concurrency-20260927/eight-workers-2.json",
+      "seconds": 45.00755071640015,
+      "workers": 8,
+      "status": "running",
+      "new_ranges": 16706,
+      "ranges_per_second": 371.1821624168622,
+      "response_MB_per_range": 0.09058310116125944,
+      "response_MB_per_second": 33.62283136746165,
+      "retained_MB_per_second": 3.198546481836066,
+      "working_GiB_min": 2.1551513671875,
+      "working_GiB_max": 2.2349929809570312,
+      "prefetch_samples": {
+        "32": 45
+      },
+      "cpu_cores": 2.846292143449619,
+      "cpu_throttled_seconds": 0.0,
+      "memory_events_delta": {
+        "low": 0,
+        "high": 0,
+        "max": 0,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "failed_batches": 0,
+      "retries": 0,
+      "throttles": 0
+    }
+  ],
+  "tests": {
+    "passed": 2514,
+    "skipped": 1,
+    "subtests_passed": 18
+  },
+  "scope": "Live entry acquisition only; no gate closure or training readiness claim."
+}
