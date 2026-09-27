@@ -1,0 +1,13 @@
+{
+  "plan_sha256": "e51c4248f6e3fdcce8e01773ec512370af5a15d41c25217370196677439c14ae",
+  "sources": {
+    "/home/healy/Coding/HealysBacktester/docs/specs/V7_CAPTURE_CAPACITY_20260926.json": "b438ccb5d24aa2ba4022026c0a3723c6dbb0e935a38bc512971daa6b764bba2f",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quotes.py": "c1f52fdd098b90636424c47facbaa198f802674462a6b9bab56810a72bfde7ed",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/quote_archive.py": "5a1d3b22703c4ac1cbfed47052c41cceaa0bd314c2346c3d21cde19f261a6afa",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/storage.py": "7d9eba485766f775001f31e92fdb000f0fa5aa50e9ae687c45ac5f0dd45c0ff2",
+    "/home/healy/Coding/HealysBacktester/options/data/massive_ticks.py": "a336e3aac4fb2017d1e70a10bc68df387c8eb34291e98a498d407d28e278f959",
+    "/home/healy/Coding/HealysBacktester/scripts/capture_v7_joined_sample.py": "1a418235b142062e98e7d0b5c4698d09af66a50f5af55235c6e54823ab783b9a",
+    "/home/healy/Coding/HealysBacktester/scripts/capture_v7_volume_sample.py": "91b4ee9c92029eae72d3ff589f8a53deedef57357d9dfd21304de42e5425f576",
+    "/home/healy/Coding/HealysBacktester/scripts/download_v7_data.py": "5024608873c293a08518639efb40e0b0ad1ece074c26a0187b6b621e967da93f"
+  }
+}

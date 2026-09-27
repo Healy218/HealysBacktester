@@ -1,0 +1,109 @@
+{
+  "requests_path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-direct-packed-fill-requests-20260927.json",
+  "requests_sha256": "c180ea863ae8fcba749404f6f0770afa3d7a4fe9b78cf5b4fcda025ffe938a09",
+  "sources": {
+    "/home/healy/Coding/HealysBacktester/docs/specs/V7_CAPTURE_CAPACITY_20260926.json": "b438ccb5d24aa2ba4022026c0a3723c6dbb0e935a38bc512971daa6b764bba2f",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quotes.py": "c1f52fdd098b90636424c47facbaa198f802674462a6b9bab56810a72bfde7ed",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quotes_v2.py": "d183e3f192e7240d206ea7d72430b668d0f965793510ac1db7001db7199fb853",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/quotes.py": "15caf1fa37caad171d1d64cdb27d11d1cd12a4299f9ea6e95c7a6dfce831693b",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/storage.py": "7d9eba485766f775001f31e92fdb000f0fa5aa50e9ae687c45ac5f0dd45c0ff2",
+    "/home/healy/Coding/HealysBacktester/options/data/massive_ticks.py": "a336e3aac4fb2017d1e70a10bc68df387c8eb34291e98a498d407d28e278f959",
+    "/home/healy/Coding/HealysBacktester/scripts/capture_v7_joined_sample.py": "1a418235b142062e98e7d0b5c4698d09af66a50f5af55235c6e54823ab783b9a",
+    "/home/healy/Coding/HealysBacktester/scripts/capture_v7_packed_batch.py": "1df440fd07e6c825f6b34e6241b4b0ba8792fe3c6b305d7354552b5a280142c4",
+    "/home/healy/Coding/HealysBacktester/scripts/download_v7_data.py": "5024608873c293a08518639efb40e0b0ad1ece074c26a0187b6b621e967da93f"
+  },
+  "union": {
+    "captures": [
+      {
+        "capture_id": "59195ef9f22ef5cf796ebae68c0b0f241468d732f21ea974a7c35ff3be016363",
+        "contract": "ABBV231110P00142000",
+        "end_ns": 1699282860000000001,
+        "kind": "quotes",
+        "start_ns": 1699282801000000000
+      },
+      {
+        "capture_id": "1e8630c7c1764b91fe17138e21d98dbd6156fc3905dc90bc27779146ccc8a401",
+        "contract": "DIS221209C00099000",
+        "end_ns": 1669913160000000001,
+        "kind": "quotes",
+        "start_ns": 1669913101000000000
+      },
+      {
+        "capture_id": "59a7f97ef87e16750f5912bad70a3c9bb4c021d0cb9d7319009ce2860f08fd4c",
+        "contract": "FUTU260213C00152500",
+        "end_ns": 1770394560000000001,
+        "kind": "quotes",
+        "start_ns": 1770394501000000000
+      },
+      {
+        "capture_id": "5d83e37be2ab26ab84027494706e3e8fc71b0d5d3050b90fa763d464f5001b94",
+        "contract": "NVDA240322C00910000",
+        "end_ns": 1711029660000000001,
+        "kind": "quotes",
+        "start_ns": 1711029601000000000
+      },
+      {
+        "capture_id": "91c42e5f9b009edb4c733eab481564d272c7bf343466c3840c5354b29d776c08",
+        "contract": "VKTX251121P00038500",
+        "end_ns": 1763052360000000001,
+        "kind": "quotes",
+        "start_ns": 1763052301000000000
+      }
+    ],
+    "request_captures": {
+      "1e8630c7c1764b91fe17138e21d98dbd6156fc3905dc90bc27779146ccc8a401": [
+        "1e8630c7c1764b91fe17138e21d98dbd6156fc3905dc90bc27779146ccc8a401"
+      ],
+      "59195ef9f22ef5cf796ebae68c0b0f241468d732f21ea974a7c35ff3be016363": [
+        "59195ef9f22ef5cf796ebae68c0b0f241468d732f21ea974a7c35ff3be016363"
+      ],
+      "59a7f97ef87e16750f5912bad70a3c9bb4c021d0cb9d7319009ce2860f08fd4c": [
+        "59a7f97ef87e16750f5912bad70a3c9bb4c021d0cb9d7319009ce2860f08fd4c"
+      ],
+      "5d83e37be2ab26ab84027494706e3e8fc71b0d5d3050b90fa763d464f5001b94": [
+        "5d83e37be2ab26ab84027494706e3e8fc71b0d5d3050b90fa763d464f5001b94"
+      ],
+      "91c42e5f9b009edb4c733eab481564d272c7bf343466c3840c5354b29d776c08": [
+        "91c42e5f9b009edb4c733eab481564d272c7bf343466c3840c5354b29d776c08"
+      ]
+    },
+    "requests": [
+      {
+        "contract": "DIS221209C00099000",
+        "end_ns": 1669913160000000001,
+        "kind": "quotes",
+        "request_id": "1e8630c7c1764b91fe17138e21d98dbd6156fc3905dc90bc27779146ccc8a401",
+        "start_ns": 1669913101000000000
+      },
+      {
+        "contract": "ABBV231110P00142000",
+        "end_ns": 1699282860000000001,
+        "kind": "quotes",
+        "request_id": "59195ef9f22ef5cf796ebae68c0b0f241468d732f21ea974a7c35ff3be016363",
+        "start_ns": 1699282801000000000
+      },
+      {
+        "contract": "FUTU260213C00152500",
+        "end_ns": 1770394560000000001,
+        "kind": "quotes",
+        "request_id": "59a7f97ef87e16750f5912bad70a3c9bb4c021d0cb9d7319009ce2860f08fd4c",
+        "start_ns": 1770394501000000000
+      },
+      {
+        "contract": "NVDA240322C00910000",
+        "end_ns": 1711029660000000001,
+        "kind": "quotes",
+        "request_id": "5d83e37be2ab26ab84027494706e3e8fc71b0d5d3050b90fa763d464f5001b94",
+        "start_ns": 1711029601000000000
+      },
+      {
+        "contract": "VKTX251121P00038500",
+        "end_ns": 1763052360000000001,
+        "kind": "quotes",
+        "request_id": "91c42e5f9b009edb4c733eab481564d272c7bf343466c3840c5354b29d776c08",
+        "start_ns": 1763052301000000000
+      }
+    ],
+    "schema": "v7-shared-capture-requests-v1"
+  }
+}

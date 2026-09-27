@@ -1,0 +1,23 @@
+{
+  "inputs": {
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/0dcb15ad1da3354a5a5cb163be862126c045b868e7ec443ddd5f46f2341ccc57/complete.json": "f84e9f1f3ea3fd70941d59b9ea173c62e69b88c411df4d7e15c7edf79af12414",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/1a41ca810ea642d00e3ffecd15ce1637046dae7e4ec6eccf6c52225cc04afd1d/complete.json": "49c5144907fd3acf27d06ba95f45b213f0ca7344d99a35563451481ca6b0598c",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/3c7d388a0e26a97d817a9224e853781df5b901c442f40524f3fae2c251daa0ba/complete.json": "5b39f40e84f77aaf70c77545f8159a7ab1291ff11069c789f8de296aad52e72d",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/443de4a08fb98d5b027f95b2579f91a7faa6c8023c277137ab1f5c3040411bf7/complete.json": "cfc50bdc4c7f33ffe4cd588f360305c2baf277ab254d01389290223c4f7633ab",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/60fb9c4505835d9d2cf2d07291ab0d2af0aa085ccf4fb3362e9898327d5eeba4/complete.json": "cfa6cc6fb132a21641c7e15b91ac30733f57f8cdb9c669acd56ed981440009bd",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/7ac2a538ebff7109c61c4cf235f1349674f2087efdf476d37a902751c5df6b0b/complete.json": "fd3527bb8a8e0133e267e18193fd8d4cd98e8e2deeba609ab68a3ee94fd06a07",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/7b1bb0d5edb80e13c4abc83000038b4977c8ac8c89a211bc817eac70188e9066/complete.json": "25deda109af55f99592895c6d5d1dbf59e090ce99490281753a9c400523640e8",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/9a24dfb911380d833336338fec736a916613f36c6d9025e434450c86e073a006/complete.json": "d1e9a9babe87bbe5b214d3499a04b7230924da98e1977f0bed793e0d7fa295f9",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/9f5409cb6fa719522ade88412ed3ab7f9d7da273e12ad4a697bc059d258c219f/complete.json": "89b28818b2a870beb6e2fdfe55659c9ebec404f3381e2770e237d6bc89ac3094",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/cd31dff0568ed6a389cd837102d701d26938c2bb9f93c121114a012dab9da27d/complete.json": "a77be00df5258d15ac99da36cd558fc28d0012bfd4dbb8fc5842631ad97d10b5",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/d5ce706630acf5b429ef3b917f814471c9ced399117ad9c652401840121a9a2b/complete.json": "01001234f83873e48df631623db6ea1c991c06541819c558157bf5dae1ef3fb4",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/fa757388d4c502a4ea20891467aa06a09e46eca7854ce4e0afe17d5dd0fb0134/complete.json": "7eaaff2542a9ec52fa61be2c878bab802b956b619228674b3fd256e97ddb3c2d",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/adjacent-quality-20260926/joined/requests.json": "3e494972e056e825a0d378188234746902b481be7c2f2fbbfde5cf42dc92100b",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-adjacent-quality-plan-20260926/complete.json": "9db5c7b3d8da8f3bcbd9287e54d0a85e5ca6208611bbc6457663e781c79f75ba"
+  },
+  "sources": {
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quotes.py": "c1f52fdd098b90636424c47facbaa198f802674462a6b9bab56810a72bfde7ed",
+    "/home/healy/Coding/HealysBacktester/nn_meta/v7/quote_archive.py": "5a1d3b22703c4ac1cbfed47052c41cceaa0bd314c2346c3d21cde19f261a6afa",
+    "/home/healy/Coding/HealysBacktester/scripts/validate_v7_packed_capture.py": "49a4017dc0222ec969e4657504e1b5601d053852df37363901d3e5f3f36fb0f0"
+  }
+}

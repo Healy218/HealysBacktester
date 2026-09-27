@@ -1,0 +1,54 @@
+[
+  {
+    "evidence_id": "nasdaq-hours-current",
+    "url": "https://nasdaqtrader.com/Trader.aspx?id=optionshours"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2023-2",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=OTA+2023-2"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2024-71",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=2024-71a"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2025-10",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=OTA+2025-10"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2025-22",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=2025-22"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2025-36",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=OTA+2025-36"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2025-52",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=2025-52"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2026-9",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=OTA+2026-9"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2026-10",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=OTA+2026-10"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2026-17",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=OTA+2026-17"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2026-20",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=OTA+2026-20"
+  },
+  {
+    "evidence_id": "nasdaq-hours-2026-33",
+    "url": "https://www.nasdaqtrader.com/MicroNews.aspx?id=OTA+2026-33"
+  },
+  {
+    "evidence_id": "nasdaq-thanksgiving-2022",
+    "url": "https://classic.nasdaqtrader.com/TraderNews.aspx?id=ETA2022-99"
+  }
+]

@@ -1621,3 +1621,20 @@ reconciliation, and a restoration test. Current V7 bindings and live V6 data
 remain protected. This supersedes the prior review-only restriction for these
 explicitly identified copies and this old V6 tree, not other data directories.
 See [authorized storage reclamation](reviews/2026-09-26-authorized-storage-reclamation.md).
+
+## 2026-09-27 — Lossless joined option packs; no readiness shortcut
+
+Implemented additive immutable packed capture formats and a disk-backed routing
+index after a full-population joined-range sample. V2 integer deltas / shuffled
+IEEE doubles / zstd retains exact canonical raw records, manifests, duplicates,
+precision and missingness. All original fixed/joined archives and producers
+remain unchanged. Raw parity passes 1,440 samples and indexed original-request
+parity passes 12,760 windows. The selected v2 format estimates 139.17 GB plus
+3.22 GB routing; the earlier v1 evidence remains preserved.
+
+No acquisition/project cap or admission policy changed. The remaining full
+execution-path budget, dated sessions and five unavailable sampled references
+prevent a full readiness claim. Questions about counting MRHA in the 640 GB
+project cap and preparing a missing-reference exclusion policy are pending;
+no default terms, alternate contracts or implicit user approval are admitted.
+See [forecast, references and gates](../docs/reviews/2026-09-27-v7-joined-packed-capture.md).

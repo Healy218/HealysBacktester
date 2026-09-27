@@ -1,0 +1,157 @@
+{
+  "checks": [
+    {
+      "contract": "DIS221209C00099000",
+      "date": "2022-12-01",
+      "decision_ns": 1669913100000000000,
+      "fill": {
+        "ask": 1.64,
+        "bid": 1.6,
+        "contract": "DIS221209C00099000",
+        "decision_ns": 1669913100000000000,
+        "price": 1.62,
+        "price_source": "computed_bid_ask_average",
+        "pricing_policy": "option-arithmetic-midpoint-paper-v2",
+        "reported_size": 386,
+        "side": "buy",
+        "simulated": true,
+        "sip_timestamp": 1669913101120708352
+      },
+      "fill_status": "observed_filled",
+      "mark": {
+        "ask": 1.63,
+        "bid": 1.59,
+        "price": 1.6099999999999999,
+        "price_source": "computed_bid_ask_average",
+        "pricing_policy": "option-arithmetic-midpoint-paper-v2",
+        "simulated": true,
+        "sip_timestamp": 1669913158775038720
+      },
+      "mark_status": "observed",
+      "metadata_receipt_sha256": "922f8c9c5ff235b350e621856c45d266ceb14ce598ff8f8a5bdea7d9df52c629"
+    },
+    {
+      "contract": "ABBV231110P00142000",
+      "date": "2023-11-06",
+      "decision_ns": 1699282800000000000,
+      "fill": {
+        "ask": 1.42,
+        "bid": 1.34,
+        "contract": "ABBV231110P00142000",
+        "decision_ns": 1699282800000000000,
+        "price": 1.38,
+        "price_source": "computed_bid_ask_average",
+        "pricing_policy": "option-arithmetic-midpoint-paper-v2",
+        "reported_size": 22,
+        "side": "buy",
+        "simulated": true,
+        "sip_timestamp": 1699282815151155456
+      },
+      "fill_status": "observed_filled",
+      "mark": {
+        "ask": 1.4,
+        "bid": 1.32,
+        "price": 1.3599999999999999,
+        "price_source": "computed_bid_ask_average",
+        "pricing_policy": "option-arithmetic-midpoint-paper-v2",
+        "simulated": true,
+        "sip_timestamp": 1699282853634470144
+      },
+      "mark_status": "observed",
+      "metadata_receipt_sha256": "f58814f6b62791baffce7fe1c00d477cf147dc583d65e8a22fa47bc41e4b9979"
+    },
+    {
+      "contract": "NVDA240322C00910000",
+      "date": "2024-03-21",
+      "decision_ns": 1711029600000000000,
+      "fill": {
+        "ask": 12.05,
+        "bid": 11.5,
+        "contract": "NVDA240322C00910000",
+        "decision_ns": 1711029600000000000,
+        "price": 11.775,
+        "price_source": "computed_bid_ask_average",
+        "pricing_policy": "option-arithmetic-midpoint-paper-v2",
+        "reported_size": 9,
+        "side": "buy",
+        "simulated": true,
+        "sip_timestamp": 1711029601011752192
+      },
+      "fill_status": "observed_filled",
+      "mark": {
+        "ask": 11.0,
+        "bid": 10.7,
+        "price": 10.85,
+        "price_source": "computed_bid_ask_average",
+        "pricing_policy": "option-arithmetic-midpoint-paper-v2",
+        "simulated": true,
+        "sip_timestamp": 1711029658834148608
+      },
+      "mark_status": "observed",
+      "metadata_receipt_sha256": "6815f501b60828f24e553f7315d735662a0ab68fab48ea6fe730fa1bd71c0666"
+    },
+    {
+      "contract": "VKTX251121P00038500",
+      "date": "2025-11-13",
+      "decision_ns": 1763052300000000000,
+      "fill": {
+        "ask": 2.36,
+        "bid": 2.27,
+        "contract": "VKTX251121P00038500",
+        "decision_ns": 1763052300000000000,
+        "price": 2.315,
+        "price_source": "computed_bid_ask_average",
+        "pricing_policy": "option-arithmetic-midpoint-paper-v2",
+        "reported_size": 16,
+        "side": "buy",
+        "simulated": true,
+        "sip_timestamp": 1763052306841330677
+      },
+      "fill_status": "observed_filled",
+      "mark": {
+        "ask": 2.36,
+        "bid": 2.21,
+        "price": 2.285,
+        "price_source": "computed_bid_ask_average",
+        "pricing_policy": "option-arithmetic-midpoint-paper-v2",
+        "simulated": true,
+        "sip_timestamp": 1763052351923345124
+      },
+      "mark_status": "observed",
+      "metadata_receipt_sha256": "6bc2c15a78c9f734b82cc797e5625166c4293b7b4efc375635e99badd28c32ec"
+    },
+    {
+      "contract": "FUTU260213C00152500",
+      "date": "2026-02-06",
+      "decision_ns": 1770394500000000000,
+      "fill": {
+        "ask": 4.3,
+        "bid": 3.05,
+        "contract": "FUTU260213C00152500",
+        "decision_ns": 1770394500000000000,
+        "price": 3.675,
+        "price_source": "computed_bid_ask_average",
+        "pricing_policy": "option-arithmetic-midpoint-paper-v2",
+        "reported_size": 142,
+        "side": "buy",
+        "simulated": true,
+        "sip_timestamp": 1770394512038904985
+      },
+      "fill_status": "observed_filled",
+      "mark": {
+        "ask": 4.3,
+        "bid": 3.05,
+        "price": 3.675,
+        "price_source": "computed_bid_ask_average",
+        "pricing_policy": "option-arithmetic-midpoint-paper-v2",
+        "simulated": true,
+        "sip_timestamp": 1770394558929269192
+      },
+      "mark_status": "observed",
+      "metadata_receipt_sha256": "e130347e40cd622ba0f10da6a079bab174dcd517c3a601723c6ecfe254735139"
+    }
+  ],
+  "full_execution_coverage": false,
+  "observed_at": "2026-09-27T05:25:36.514415+00:00",
+  "research_ready": false
+}

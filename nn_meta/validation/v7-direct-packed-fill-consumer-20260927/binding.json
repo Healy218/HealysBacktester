@@ -1,0 +1,17 @@
+{
+  "inputs": {
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG000BBJQV0/complete.json": "93ba5eaa67d9e42950043525afd647dff542431cc33b7b46c2080931b129a1df",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG000BH4R78/complete.json": "9882e12d078e1c6be8ab4bc59588beca1aa2781e9408d7cdca034f49e1dda380",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG0025Y4RY4/complete.json": "0d4ba32edf24ca4173da009fa8b8a3df80368b79adfcbb64d910f229961a6ed6",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG006LGV869/complete.json": "a4083f740cc14ad8aaa08bd6ca16eb6a1594409c5d5ab55adf25eac34ce22df5",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG00MYXW4R8/complete.json": "b3f5fa2b29c772640c3fd4c73e956ccd61f6490dba80c3d753026a46ab6e8ab9",
+    "nn_meta/data_v7/direct-packed-fills-20260927/complete.json": "1be211fb022b0d73f01ca518a4bc39238ad349383419404615c597bcb0a25878",
+    "nn_meta/data_v7/entry-joined-sample-references-20260926/ABBV231110P00142000/2023-11-06/complete.json": "f58814f6b62791baffce7fe1c00d477cf147dc583d65e8a22fa47bc41e4b9979",
+    "nn_meta/data_v7/entry-joined-sample-references-20260926/DIS221209C00099000/2022-12-01/complete.json": "922f8c9c5ff235b350e621856c45d266ceb14ce598ff8f8a5bdea7d9df52c629",
+    "nn_meta/data_v7/entry-joined-sample-references-20260926/FUTU260213C00152500/2026-02-06/complete.json": "e130347e40cd622ba0f10da6a079bab174dcd517c3a601723c6ecfe254735139",
+    "nn_meta/data_v7/entry-joined-sample-references-20260926/NVDA240322C00910000/2024-03-21/complete.json": "6815f501b60828f24e553f7315d735662a0ab68fab48ea6fe730fa1bd71c0666",
+    "nn_meta/data_v7/entry-joined-sample-references-20260926/VKTX251121P00038500/2025-11-13/complete.json": "6bc2c15a78c9f734b82cc797e5625166c4293b7b4efc375635e99badd28c32ec",
+    "nn_meta/validation/v7-direct-packed-fill-requests-20260927.json": "c180ea863ae8fcba749404f6f0770afa3d7a4fe9b78cf5b4fcda025ffe938a09"
+  },
+  "scope": "Five source-bound mid-session consumer checks; full lifecycle and hours remain open"
+}

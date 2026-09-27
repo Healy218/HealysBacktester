@@ -1,0 +1,11 @@
+{
+  "command": "./venv/bin/python -m pytest tests/ -q",
+  "elapsed_seconds": 123.97,
+  "exit_code": 0,
+  "implementation_commit": "772cc0d",
+  "log_sha256": "027dc0330f2fe6bd6051ebb5b460b7a4db1b5881f82009b3abb5ca7003cdd9b3",
+  "passed": 2441,
+  "skipped": 1,
+  "subtests_passed": 18,
+  "warnings": 20
+}

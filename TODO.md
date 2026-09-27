@@ -109,8 +109,26 @@
   loose tree and local staging archives are removed; receipts and a locator remain.
   Post-tests internal free space is ~297.03 GB, ~275.55 GB above reserve. See
   [completed migration](docs/reviews/2026-09-26-authorized-storage-reclamation.md).
-  Next: a representative joined-range forecast and packed capture storage before
-  bulk acquisition. Acquisition/project ceilings and training gates are unchanged.
+  September 27: the representative joined-range forecast and packed capture
+  implementation are complete. All 1,440 sampled captures passed (1,168,551
+  records, 376 securities). Lossless v2 packing estimates 139.17 GB; with measured
+  routing, 142.39 GB mean / 173.95 GB mean-plus-three-SE. Indexed reads passed
+  12,760 original request windows; five additional actual purchase-window
+  fill/mark checks passed. The exact pre-entry reference census is 2,223,844
+  contract/dates and 301,213 root/dates. Of 720 sampled dated references, 715
+  pass and five return 404; narrow alternative endpoint probes found no exact
+  matches. Thirteen named Nasdaq hours sources were retained; a complete dated
+  schedule remains open, including an inconsistent IVV effective date.
+  Entry plus reference planning allowance uses 175.69 GB at the three-SE
+  sensitivity, leaving only 5.29 GB of acquisition capacity before additional
+  execution paths/recovery. Project stress is 613.52 GB locally or 648.63 GB
+  including MRHA's historical archive, before assembly/training. Asked the user
+  whether MRHA counts within the unchanged 640 GB cap and whether to prepare
+  an explicit policy for missing-metadata paths; no answer is inferred.
+  Bulk acquisition/training remain gated. Next: historical hours/reference gaps,
+  full execution-path demand and its budget, then a resumable packed campaign.
+  Existing freezes remain unchanged. Full suite: 2,441 passed + 18 subtests,
+  one skipped. See [packed forecast and remaining gates](docs/reviews/2026-09-27-v7-joined-packed-capture.md).
   See `docs/reviews/2026-09-25-v7-3-full-demand-launch.md`.
   Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
   Derive proposal-driven

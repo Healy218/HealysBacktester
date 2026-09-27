@@ -1,0 +1,96 @@
+........................................................................ [  2%]
+........................................................................ [  5%]
+........................................................................ [  8%]
+........................................................................ [ 11%]
+........................................................................ [ 14%]
+........................................................................ [ 17%]
+........................................................................ [ 20%]
+........................................................................ [ 23%]
+........................................................................ [ 26%]
+........................................................................ [ 29%]
+...................................................... [ 31%]
+...........................................s............................ [ 34%]
+........................................................................ [ 37%]
+........................................................................ [ 40%]
+........................................................................ [ 43%]
+........................................................................ [ 46%]
+........................................................................ [ 49%]
+........................................................................ [ 52%]
+........................................................................ [ 55%]
+........................................................................ [ 58%]
+........................................................................ [ 61%]
+........................................................................ [ 64%]
+........................................................................ [ 67%]
+........................................................................ [ 70%]
+........................................................................ [ 72%]
+........................................................................ [ 75%]
+........................................................................ [ 78%]
+........................................................................ [ 81%]
+........................................................................ [ 84%]
+........................................................................ [ 87%]
+........................................................................ [ 90%]
+........................................................................ [ 93%]
+........................................................................ [ 96%]
+........................................................................ [ 99%]
+............                                                             [100%]
+=============================== warnings summary ===============================
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning:
+  
+  Type google._upb._message.MessageMapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated and will no longer be allowed in Python 3.14.
+
+<frozen importlib._bootstrap>:488
+  <frozen importlib._bootstrap>:488: DeprecationWarning:
+  
+  Type google._upb._message.ScalarMapContainer uses PyType_Spec with a metaclass that has custom tp_new. This is deprecated and will no longer be allowed in Python 3.14.
+
+venv/lib/python3.12/site-packages/dash/development/base_component.py:159
+tests/test_option_log.py::TestSettlement::test_rolled_then_signal_exit
+tests/test_option_log.py::TestSettlement::test_single_fill_held_to_expiration
+tests/test_option_log.py::TestSettlement::test_pnl_and_return_math
+tests/test_option_log.py::TestUpdateCallback::test_renders_variant_blotter
+  /home/healy/Coding/HealysBacktester/venv/lib/python3.12/site-packages/dash/development/base_component.py:159: DeprecationWarning:
+  
+  
+  The dash_table.DataTable will be removed from the builtin dash components in a future major version.
+  We recommend using dash-ag-grid as a replacement. Install with `pip install dash[ag-grid]`.
+
+tests/test_fa_ranker.py::test_ranking_requires_corroboration_and_liquidity
+tests/test_fa_ranker.py::test_ranking_is_point_in_time
+  /home/healy/Coding/HealysBacktester/fa/scores.py:96: FutureWarning:
+  
+  The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+
+tests/test_live_feed_readiness_review.py::test_stock_backfill_requests_raw_basis
+  /home/healy/Coding/HealysBacktester/venv/lib/python3.12/site-packages/websockets/legacy/__init__.py:6: DeprecationWarning:
+  
+  websockets.legacy is deprecated; see https://websockets.readthedocs.io/en/stable/howto/upgrade.html for upgrade instructions
+
+tests/test_training_jobs.py::test_parallel_gbt_matches_reference_and_resumes
+tests/test_training_jobs.py::test_parallel_gbt_matches_reference_and_resumes
+tests/test_training_jobs.py::test_objective_comparisons_use_purged_partitions_and_remain_research
+tests/test_training_jobs.py::test_objective_comparisons_use_purged_partitions_and_remain_research
+tests/test_training_jobs.py::test_objective_comparisons_use_purged_partitions_and_remain_research
+tests/test_v6_short_dte.py::test_real_gbt_heads_use_164_features_train_only_bounds_and_verified_resume
+tests/test_v6_short_dte.py::test_real_gbt_heads_use_164_features_train_only_bounds_and_verified_resume
+  /home/healy/Coding/HealysBacktester/venv/lib/python3.12/site-packages/lightgbm/sklearn.py:1106: LGBMDeprecationWarning:
+  
+  The argument 'eval_set' is deprecated, use 'eval_X' and 'eval_y' instead.
+
+tests/test_v4_loader.py::test_load_and_score_nn_bundle_roundtrip
+  /home/healy/Coding/HealysBacktester/venv/lib/python3.12/site-packages/keras/src/saving/saving_lib.py:869: UserWarning:
+  
+  Skipping variable loading for optimizer 'adam', because it has 14 variables whereas the saved optimizer has 2 variables.
+
+tests/test_v7_assembly.py::test_real_component_path_to_all_targets_and_float32_shards
+  /home/healy/Coding/HealysBacktester/tests/test_v7_assembly.py:98: FutureWarning:
+  
+  The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+
+tests/test_v7_history_supplement.py::test_additive_supplement_restores_only_observed_exact_identity_without_changing_prefix
+  /home/healy/Coding/HealysBacktester/nn_meta/v7/history_supplement.py:43: FutureWarning:
+  
+  The behavior of DataFrame concatenation with empty or all-NA entries is deprecated. In a future version, this will no longer exclude empty or all-NA columns when determining the result dtypes. To retain the old behavior, exclude the relevant entries before the concat operation.
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+2441 passed, 1 skipped, 20 warnings, 18 subtests passed in 123.97s (0:02:03)

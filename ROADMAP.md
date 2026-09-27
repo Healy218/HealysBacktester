@@ -316,3 +316,16 @@ describe entry cohorts, not realized option P&L.
 History: [archived roadmap](handoff-history/ROADMAP-2026-09-05-before-checklist-reconciliation.md),
 [EXPERIMENTS](docs/EXPERIMENTS.md), [DECISIONS](docs/DECISIONS.md),
 [v3.1 history](docs/v31_run_history.md).
+
+## September 27 — V7-3 joined forecast and packed consumer milestone
+
+Representative joined-range acquisition and lossless indexed storage now pass:
+1,440 captures, 1.17 million records, and 12,760 original request-window checks.
+All 591 securities remain in the sampling/reference populations and existing
+freezes are preserved. Entry plus routing estimates 142.39 GB, or 173.95 GB
+at mean+3SE; full execution-path and training budgets remain unresolved.
+Dated reference demand is enumerated; five sampled references are unavailable,
+and historical hours still require source-backed completion. V7-3 stays current.
+No bulk acquisition/training or full readiness claim was made. The next work
+is the missing reference/hours treatment and full-path demand/budget, followed
+by the remaining numbered gates in TODO. [Evidence](docs/reviews/2026-09-27-v7-joined-packed-capture.md).

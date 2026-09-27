@@ -1,0 +1,62 @@
+[
+  {
+    "consumer": "QuoteArchive.first_fill",
+    "contract": "DIS221209C00099000",
+    "decision_ns": 1669913100000000000,
+    "demand_receipt": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG000BH4R78/complete.json",
+    "demand_receipt_sha256": "9882e12d078e1c6be8ab4bc59588beca1aa2781e9408d7cdca034f49e1dda380",
+    "end_ns": 1669913160000000001,
+    "kind": "quotes",
+    "original_feature_request": "a265ae0fd783ef01e7e0437a977041155acdd47db9935bf274942f62e254ad81",
+    "request_id": "1e8630c7c1764b91fe17138e21d98dbd6156fc3905dc90bc27779146ccc8a401",
+    "start_ns": 1669913101000000000
+  },
+  {
+    "consumer": "QuoteArchive.first_fill",
+    "contract": "ABBV231110P00142000",
+    "decision_ns": 1699282800000000000,
+    "demand_receipt": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG0025Y4RY4/complete.json",
+    "demand_receipt_sha256": "0d4ba32edf24ca4173da009fa8b8a3df80368b79adfcbb64d910f229961a6ed6",
+    "end_ns": 1699282860000000001,
+    "kind": "quotes",
+    "original_feature_request": "f68cd89dc859eacbfd1d40af4e42df425dc054e5682692f2b5475650744ecc5d",
+    "request_id": "59195ef9f22ef5cf796ebae68c0b0f241468d732f21ea974a7c35ff3be016363",
+    "start_ns": 1699282801000000000
+  },
+  {
+    "consumer": "QuoteArchive.first_fill",
+    "contract": "NVDA240322C00910000",
+    "decision_ns": 1711029600000000000,
+    "demand_receipt": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG000BBJQV0/complete.json",
+    "demand_receipt_sha256": "93ba5eaa67d9e42950043525afd647dff542431cc33b7b46c2080931b129a1df",
+    "end_ns": 1711029660000000001,
+    "kind": "quotes",
+    "original_feature_request": "8be5f89037eaddf26e88d63745b20bdb854b3e7b64dcd2c151ef4231a3350fb3",
+    "request_id": "5d83e37be2ab26ab84027494706e3e8fc71b0d5d3050b90fa763d464f5001b94",
+    "start_ns": 1711029601000000000
+  },
+  {
+    "consumer": "QuoteArchive.first_fill",
+    "contract": "VKTX251121P00038500",
+    "decision_ns": 1763052300000000000,
+    "demand_receipt": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG006LGV869/complete.json",
+    "demand_receipt_sha256": "a4083f740cc14ad8aaa08bd6ca16eb6a1594409c5d5ab55adf25eac34ce22df5",
+    "end_ns": 1763052360000000001,
+    "kind": "quotes",
+    "original_feature_request": "595398327fe8a13a0b26db982a1bc46103257d83b5267d96c70ea38c9b9e6d07",
+    "request_id": "91c42e5f9b009edb4c733eab481564d272c7bf343466c3840c5354b29d776c08",
+    "start_ns": 1763052301000000000
+  },
+  {
+    "consumer": "QuoteArchive.first_fill",
+    "contract": "FUTU260213C00152500",
+    "decision_ns": 1770394500000000000,
+    "demand_receipt": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-3-scheduler-20260925/demand/BBG00MYXW4R8/complete.json",
+    "demand_receipt_sha256": "b3f5fa2b29c772640c3fd4c73e956ccd61f6490dba80c3d753026a46ab6e8ab9",
+    "end_ns": 1770394560000000001,
+    "kind": "quotes",
+    "original_feature_request": "080347cf7f9e7a99d42f8630dd3aa3c76016da3b2e5bbb80ec51e743af0bb478",
+    "request_id": "59a7f97ef87e16750f5912bad70a3c9bb4c021d0cb9d7319009ce2860f08fd4c",
+    "start_ns": 1770394501000000000
+  }
+]

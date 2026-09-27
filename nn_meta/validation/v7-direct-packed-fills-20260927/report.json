@@ -1,0 +1,36 @@
+{
+  "bytes": 41798,
+  "captures": 5,
+  "checks": [
+    {
+      "records": 199,
+      "records_sha256": "e6b4f84942ed0c6746c7272f79de4273d6c3e51a438694ac3d925095ff195dbd",
+      "request_id": "1e8630c7c1764b91fe17138e21d98dbd6156fc3905dc90bc27779146ccc8a401"
+    },
+    {
+      "records": 10,
+      "records_sha256": "503af0ffc40df85b4cde130ba34e9580de9416c4200550f657c0d3e3b611891a",
+      "request_id": "59195ef9f22ef5cf796ebae68c0b0f241468d732f21ea974a7c35ff3be016363"
+    },
+    {
+      "records": 181,
+      "records_sha256": "869fd797cb3f09f7bd924c2229b239c15817af43b365b6ef987693e9eb0c24ac",
+      "request_id": "5d83e37be2ab26ab84027494706e3e8fc71b0d5d3050b90fa763d464f5001b94"
+    },
+    {
+      "records": 2,
+      "records_sha256": "e1acb2e48695cc14ad21eaedf62a28cb818a17eaccebc266739869c604daeea5",
+      "request_id": "91c42e5f9b009edb4c733eab481564d272c7bf343466c3840c5354b29d776c08"
+    },
+    {
+      "records": 24,
+      "records_sha256": "cd065f972eda588f3df1f3d15e390f583854a88b6f475c21148be6b3af505dad",
+      "request_id": "59a7f97ef87e16750f5912bad70a3c9bb4c021d0cb9d7319009ce2860f08fd4c"
+    }
+  ],
+  "full_execution_coverage": false,
+  "pack_receipt_sha256": "1be211fb022b0d73f01ca518a4bc39238ad349383419404615c597bcb0a25878",
+  "requests": 5,
+  "research_ready": false,
+  "schema": "v7-direct-packed-batch-v1"
+}

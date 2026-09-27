@@ -1,0 +1,9 @@
+{
+  "audit_sha256": "426544477ee9116e17f99453cb8fbcab5212131d21162326a2d5457ccf0f979b",
+  "contiguous_sha256": "1d1a4993b5126a41878622c4e5d215c705ebbb6b916203222e9a7c513f6953a9",
+  "per_stratum": 12,
+  "seed": "v7-joined-volume-20260926-v1",
+  "source_sha256": "cdedb216685727a69b1965f04a8ec71bb4f417133d218bc71cc3f4018d3f664d",
+  "stratum_definition": "year/request-count-quartile/joined-duration-900-3600-seconds",
+  "union_sha256": "15caf1fa37caad171d1d64cdb27d11d1cd12a4299f9ea6e95c7a6dfce831693b"
+}

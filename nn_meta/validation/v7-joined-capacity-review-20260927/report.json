@@ -1,0 +1,71 @@
+{
+  "acquisition_remaining_bytes": 180982927591,
+  "all_locations_entry_and_reference_stress_bytes": 648631041410,
+  "bulk_launch_allowed": false,
+  "disk_free_bytes": 286241583104,
+  "disk_reserve_bytes": 21474836480,
+  "entry_and_reference_stress_bytes": 175692927109,
+  "entry_and_reference_stress_fits_acquisition": true,
+  "entry_estimate_with_routing_bytes": 142389007024,
+  "entry_reference_planning_allowance_bytes": 1739046008,
+  "entry_three_se_with_routing_bytes": 173953881101,
+  "external_historical_archive_bytes": 35107383404,
+  "full_execution_coverage": false,
+  "local_project_bytes": 437830730897,
+  "local_project_entry_and_reference_stress_bytes": 613523658006,
+  "max_sample_reference_bytes": 782,
+  "measurement_note": "Non-atomic apparent bytes. Reflink copies count logically; gross new forecast does not subtract retained samples.",
+  "missing_budget": [
+    "Additional purchase/mark/exit/roll/physical-delivery captures",
+    "full assembly and training outputs",
+    "in-flight/recovery headroom"
+  ],
+  "observed_at": "2026-09-27T05:14:20.732092+00:00",
+  "project_limit_bytes": 640000000000,
+  "quota": {
+    "limit_bytes": 250000000000,
+    "reservations": {},
+    "unit": "decimal bytes; hardlinks counted once",
+    "used_bytes": 69017072409
+  },
+  "reference_allowance_note": "Maximum measured sample directory bytes times exact contract/date census; not a proved bound.",
+  "reference_failures": [
+    {
+      "contract": "CMA230630C00041000",
+      "date": "2023-06-22",
+      "http_status": 404,
+      "reason": "Dated contract metadata is unavailable or has a different scope"
+    },
+    {
+      "contract": "FANG220520P00130000",
+      "date": "2022-05-18",
+      "http_status": 404,
+      "reason": "Dated contract metadata is unavailable or has a different scope"
+    },
+    {
+      "contract": "MSTR230630P00320000",
+      "date": "2023-06-27",
+      "http_status": 404,
+      "reason": "Dated contract metadata is unavailable or has a different scope"
+    },
+    {
+      "contract": "RH230630P00290000",
+      "date": "2023-06-22",
+      "http_status": 404,
+      "reason": "Dated contract metadata is unavailable or has a different scope"
+    },
+    {
+      "contract": "VFC230630C00019000",
+      "date": "2023-06-28",
+      "http_status": 404,
+      "reason": "Dated contract metadata is unavailable or has a different scope"
+    }
+  ],
+  "reference_sample_bytes": 558423,
+  "reference_sample_statuses": {
+    "unavailable_or_nonstandard": 5,
+    "verified_standard": 715
+  },
+  "research_ready": false,
+  "schema": "v7-joined-capture-capacity-review-v1"
+}

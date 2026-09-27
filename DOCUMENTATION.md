@@ -1366,3 +1366,28 @@ The same cleanup replaced 4,690 duplicate allocations with verified Btrfs
 reflinks, preserving names, hashes, metadata and independent writes. Reflinks
 save physical storage but remain distinct inodes and logical files; do not count
 that physical saving as a second logical project-budget reduction.
+
+## V7 immutable packed option captures (September 27)
+
+`packed_quotes.py` (v1) and `packed_quotes_v2.py` (v2) are now source-bound by
+real sample evidence. Keep both immutable when advancing writers; the older
+raw directory reader and producers remain unchanged. V2 uses lossless integer
+deltas and shuffled IEEE doubles, preserving mixed/null/absent values and raw
+canonical record hashes. Each SQLite pack has immutable payload hashes,
+provider manifests, scope indexes and a receipt. Bounded incomplete pagination
+splits exact intervals, retains failed attempts and never creates coverage.
+
+`packed_quote_index.py` routes windows on disk with bounded pack caches and
+rejects gaps, overlap and changed receipts. `capture_v7_packed_batch.py` is a
+bounded direct-v2 validation writer, not a full campaign scheduler. A compatible
+window/fill/mark API does not itself establish production assembly integration.
+Sample forecasts include actual pack overhead; global routing is measured and
+reported separately. Do not relabel entry feature coverage as execution paths.
+
+Use the unchanged 250 GB shared acquisition ledger, 640 GB project cap and
+20 GiB reserve, including in-flight writes. Check whether archived historical
+storage counts in the project budget before a bulk launch; the September 27
+scope question is pending. Forecast mean+3SE is a sensitivity, not a hard bound.
+Dated contract HTTP 404s and conflicting hours dates are unresolved inputs,
+not inferred standard deliverables or no-contract outcomes. See
+[measured storage and remaining gates](docs/reviews/2026-09-27-v7-joined-packed-capture.md).
