@@ -1721,3 +1721,15 @@ splitting. Deploy 16 I/O threads per process, retaining memory and storage limit
 Do not infer total completion time or bytes from quiet early ranges. Reject
 duplicate campaigns, redownloading completed packs, or editing frozen producers.
 Evidence and qualifications: [concurrency review](reviews/2026-09-27-v7-parallel-capture.md).
+
+## 2026-09-27 — user replaces fixed capture caps and requests 14 GB maximum speed
+
+Use actual disk availability with a 10,000,000,000-byte reserve, then verified
+MRHA overflow. This supersedes the earlier 100 GB campaign, 250 GB acquisition,
+640 GB project and 20 GiB local-reserve numbers for this acquisition. Preserve
+external existing files; link immutable payload files from real local pack
+directories so existing discovery and readers work. Keep 10 GB free on MRHA too.
+Use MemoryHigh=MemoryMax=14 GiB, bounded up-to-128-request I/O with memory
+backpressure, and allow 800% CPU bursts at low priority. Do not equate increased
+concurrency or disk allocation with a guaranteed ETA or dataset size.
+[Implementation, tests and real readback](reviews/2026-09-27-v7-storage-and-memory.md).

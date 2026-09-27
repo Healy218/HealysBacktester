@@ -14,8 +14,8 @@ Exit/roll/stock acquisition is conditional on actual replay requests, not a
 fresh blanket download or component-reimplementation task.
 
 - [ ] Finish the full-universe entry quote/trade download already running as
-  `healys-v7-capture-v3-20260927.service`. Monitor
-  `nn_meta/validation/v7-entry-campaign-v3-20260927/progress.json` and reuse every
+  `healys-v7-capture-v4-20260927.service`. Monitor
+  `nn_meta/validation/v7-entry-campaign-v4-20260927/progress.json` and reuse every
   completed pack. No new catalog, daily build, demand census or packing trial.
 - [ ] Acquire remaining dated contract references from the **already completed**
   `v7-dated-reference-demand-20260927` plan (2,223,844 entry contract/dates).
@@ -26,9 +26,9 @@ fresh blanket download or component-reimplementation task.
   execution state and new entry packs. Preserve partial ledgers and count actual
   held blackout crossings. Potential first-leg envelopes are not download orders.
 - [ ] Reconcile the complete request/capture/reference census and measured storage
-  for execution, assembly, training and recovery. The live 100 GB allocation is
-  a dispatch guard, not a new estimate or a full-campaign size claim. Preserve
-  existing numerical caps/reserves; MRHA storage is available if needed.
+  for execution, assembly, training and recovery. Use the user-authorized live
+  disk allocation with a 10 GB reserve and automatic MRHA overflow; earlier
+  fixed caps are superseded. Capacity is not a final dataset-size estimate.
 - [ ] Publish full V7-3 completion only when actual required paths and provider
   failures are accounted for. A finished entry download alone does not close 7-3.
 

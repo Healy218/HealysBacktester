@@ -65,6 +65,7 @@ The prerequisite live V6 repair is complete; it is not a new V7 prerequisite.
 | First-leg envelope census | All 591 securities; 5,867,251 possible contract/dates | Same review; potential demand, not a capture order |
 | Actual replay frontier and resume | Implemented exact-gap capture/bounded prefetch; r0–r12 retain all five paths; DIS/ABBV closed, three paths pending | Same review; 60 prefix and 21 completed-label comparisons pass |
 | Persistent full-universe entry capture controller | Real download launched September 27; completed packs reused after resume | [Live capture launch](docs/reviews/2026-09-27-v7-entry-campaign-started.md) |
+| Live disk allocation, MRHA overflow and 14 GiB concurrency | Deployed; 8,704 prior packs reused, four real overflow batches read back; 16 focused checks | [Storage/memory review](docs/reviews/2026-09-27-v7-storage-and-memory.md) |
 | Concurrent entry download with immutable resume | Versioned I/O upgrade; original 6,605 packs reused; 51 focused checks pass | [Concurrency review](docs/reviews/2026-09-27-v7-parallel-capture.md) |
 
 The ~1 TB all-possible-first-leg scenario is **not** a measured storage

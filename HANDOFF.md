@@ -1,60 +1,77 @@
-# Handoff — September 27, 2026 — faster V7 entry capture
+# Handoff — September 27, 2026 — live disk allocation, MRHA and 14 GiB capture
 
-Read TODO first. The user explicitly asked to speed up the live download as much
-as possible. The versioned parallel downloader is deployed; completed preparation
-and capture packs were preserved. Do not restart demand/catalog work or repeat
-the completed concurrency trials. Work on main; protect V6 and unrelated changes.
+Read TODO first. The user explicitly replaced the earlier allocation: leave
+10 GB free locally and use MRHA for whatever does not fit. They also requested
+as much download speed as possible with the training-size 14 GB RAM allocation.
+Both changes are deployed. Do not restart completed preparation or repeat the
+finished concurrency/overflow checks. Protect V6 and unrelated working changes.
 
-## Authoritative running download
+## Current running entry capture
 
-- Service: `healys-v7-capture-v3-20260927.service`.
-- Meter: `nn_meta/validation/v7-entry-campaign-v3-20260927/progress.json`.
-- Frozen declaration, invocations, runs and attempts: same state root.
-- Packs still in `nn_meta/data_v7/entry-campaign-20260927/`.
-- Launcher: `bash scripts/start_v7_capture_campaign_v3.sh 16`.
-- Four autosized process workers, 16 bounded I/O threads each (64 requests max),
-  persistent per-thread sessions; numerical libraries remain one thread each.
-- MemoryHigh 10 GiB / Max 14 GiB, no swap, 400% CPU, Nice 10, TasksMax 256.
-- Graceful systemd stop signals only the controller; it drains workers and records
-  a pause. Original/v2/v3 locks prevent overlapping controllers on this queue.
+- Service: `healys-v7-capture-v4-20260927.service`.
+- Meter: `nn_meta/validation/v7-entry-campaign-v4-20260927/progress.json`.
+- Declaration/invocations/attempts/runs: same state root.
+- Launcher: `bash scripts/start_v7_capture_campaign_v4.sh 32`.
+- Logical packs remain `nn_meta/data_v7/entry-campaign-20260927/<security>/<key>`.
+- MRHA payload root: `HealysBacktester/v7-entry-campaign-20260927` on UUID
+  `62C9-C390`, currently mounted at `/run/media/healy/MRHA`.
+- Four autosized process workers, up to 32 I/O threads each (128 requests max).
+  Numerical libraries stay one thread per worker. Prefetch backs off at 6/8/10 GiB
+  service memory usage to drain buffers before reaching the hard limit.
+- MemoryHigh and MemoryMax are both 14 GiB; no swap. CPU burst quota 800%,
+  CPUWeight 50 and Nice 10. This removes the former 400% burst restriction.
+- SIGINT/SIGTERM drains current batches. All four campaign state locks are held,
+  preventing an older controller from overlapping the live queue.
 
-[Implementation, measurements and qualifications](docs/reviews/2026-09-27-v7-parallel-capture.md)
-and its companion JSON. Check the current meter, not old state directories, for
-live progress. Original and v2 services have drained; their frozen declarations,
-producer files and completed packs must remain unchanged. Version 3 binds them
-and accepts their original pack identities without relabeling or charging twice.
-First resume verified 6,605 original packs; v2 added 858 packs, all retained.
+All prior producers/declarations remain frozen and must not be edited. Version 4
+reuses their exact original pack bindings. It verified 8,704 completed packs /
+278,284 ranges at startup. Code commit a545b31 is pushed. Version 4 code, helper,
+and policy are now frozen too: version any subsequent behavior change.
 
-51 focused checks passed for v2 plus seven for the final pagination adjustment
-and v2 receipt reuse. Real resumes, quota drain and Bash syntax passed. No broad
-unchanged suite or completed data campaign was rerun. Code commits: e14a690 and
-3f7ac39, pushed to main. The new producers are now frozen too; version future
-behavior changes rather than editing bound files under a running campaign.
+## Storage authorization — supersedes prior fixed caps
 
-## Why final pagination differs from the first setting
+Policy: `docs/specs/V7_CAPTURE_STORAGE_20260927.json`. The earlier 100 GB campaign,
+250 GB acquisition, 640 GB project caps and 20 GiB local reserve are superseded
+by the user's newer allocation. Keep **10,000,000,000 bytes free**, accounting
+for all pending payloads and local metadata before dispatch. Prefer local disk;
+route new payloads to verified MRHA when the local reserve would be breached.
+The external drive also retains 10 GB of headroom. Other MRHA files are untouched.
+At launch: approximately 279 GB local free and 744 GB external free, giving about
+269 GB local plus 734 GB external headroom. These are live, changing values.
+The shared quota limit was expanded to roughly 1.079 TB including already charged
+data, based on available space; it is not a dataset-size requirement.
 
-The first concurrent implementation used 5,000-row pages. The next dense ticker
-exposed redundant round trips and splits. Version 3 uses one full 50,000-row page
-per leaf, then the existing exact recursive split, with at most one prefetched
-leaf per active generator. All tick rows/precision/manifests and lossless v2 packs
-remain. Existing pack limits still fail closed. HTTP 429/permanent failures pause;
-transient transport/5xx retries are bounded. No secret URLs/bodies are logged.
-Rates depend heavily on ticker/window density; early quiet ranges reached about
-55–97 ranges/s but the first dense implementation was only about 22/s. Do not
-claim a constant multiplier or retain the old six-day estimate as a promise.
-The final version's sample reached 77.85 ranges/s with 1.60 GB RAM and
-zero API throttles/failures. At the evidence snapshot it had completed 301
-new v3 batches after verifying 7,463 retained packs. See the companion JSON.
+Keep the logical pack directories and binding/completion receipts local. Only
+`captures.sqlite3` is a file symlink to the immutable external payload. This
+preserves rglob discovery, hashes and existing packed/index readers; do not replace
+whole pack directories with symlinks. MRHA must stay connected for those payloads.
+The quota includes external physical data and local locator metadata, charged
+once. Do not blindly rerun the old quota initializer: a local-only tree scan
+would miss external partials or reset the newly authorized limit.
 
-## Storage and scope
+## Verification and measurements — complete, do not repeat
 
-The 100 GB campaign allocation, 250 GB shared acquisition cap, 640 GB project cap
-and 20 GiB free reserve remain. Faster acquisition does not establish that the
-remaining data fits these limits. MRHA storage use is authorized. The earlier
-142–174 GB sample forecast was not a bound; the user's 3 GB / 1% arithmetic was
-valid, but range sizes vary and the final total remains uncertain. Existing option
-flat files contain OHLCV aggregates, not event-level bid/ask ticks. This download
-uses Massive (formerly Polygon) REST quotes/trades, not Alpaca.
+[Review and live evidence](docs/reviews/2026-09-27-v7-storage-and-memory.md), plus
+its companion JSON. Sixteen focused checks passed: routing at the reserve,
+in-flight accounting, wrong-drive rejection, locator/index reads, failed
+publication recovery without another API fetch/charge, prior binding rejection,
+and existing pagination/index checks. Bash syntax passed.
+
+Four real pending batches were captured on MRHA, then 40,886 records were read
+back through unchanged local packed/index readers. The proof index is
+`nn_meta/validation/v7-overflow-readback-20260927`; its sibling `-proof.json`
+records matching hashes. These are real completed inputs, not throwaway samples.
+The launch used `32 0 4` to validate four external batches; ordinary resumes use
+`32` and prefer local storage. Original v3 drained with no outstanding quota
+reservations before v4 started.
+
+The dense-data before/after 30-second observations were 10.66 and 22.39 ranges/s,
+respectively. New sample memory peaked at 10.40 GB, with no memory-limit/OOM
+counter increments, provider throttles or failed batches. CPU burst throttling
+fell to zero in that sample. Inputs differ, so do not promise a constant 2x gain.
+Earlier quiet-data 78 ranges/s and 38–48-hour estimates are not a reliable current
+full-campaign ETA; larger windows vary sharply in records and splitting cost.
+Keep measuring actual sustained work instead of multiplying concurrency counts.
 
 Entry acquisition alone does not complete 7-3. Dated-reference plan and five exact
 blackouts are done, but the retained reference stores cover only 720 of 2,223,844

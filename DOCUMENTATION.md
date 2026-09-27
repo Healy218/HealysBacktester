@@ -1448,3 +1448,21 @@ The September 27 hours, envelope and r0–r12 pilot producers are now source-bou
 Do not edit their producers or overwrite outputs to improve a resumed result.
 Use a new version/declaration for changed behavior. Full packed assembly and
 physical/shared-capital readiness remain separate gates.
+
+## V7 live capacity and MRHA payload locators — September 27
+
+The user's later allocation supersedes the old fixed caps: use live available
+space with a 10 GB decimal reserve and MRHA overflow. Current launcher and meter
+are in HANDOFF; frozen older producers/capacity specs are historical and must
+not be edited or restarted. The active service has 14 GiB high/hard memory limits
+and reduces concurrent raw-leaf prefetch as cgroup usage rises.
+
+Overflow packs retain real local directories, binding.json and complete.json.
+Only captures.sqlite3 is a file symlink to the sealed MRHA pack, preserving
+rglob discovery and existing reader hashes. Whole-directory symlinks would break
+discovery. Verify UUID 62C9-C390 before writes; a missing drive must fail closed.
+Do not remove or relabel external payloads needed by local completion receipts.
+The shared quota includes external files/partials and local metadata once; do
+not use an old local-only quota reinitializer to reconstruct this accounting.
+Exact limits, source bindings and actual readback proof: the September 27
+[storage/memory review](docs/reviews/2026-09-27-v7-storage-and-memory.md).

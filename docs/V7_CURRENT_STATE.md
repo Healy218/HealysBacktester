@@ -6,13 +6,13 @@ work and [ROADMAP](../ROADMAP.md#completed-work) for completed work.
 
 ## Running download
 
-- Service: `healys-v7-capture-v3-20260927.service` (home box).
-- Live meter: `nn_meta/validation/v7-entry-campaign-v3-20260927/progress.json`.
-- Immutable launch: `nn_meta/validation/v7-entry-campaign-v3-20260927/declaration/`.
+- Service: `healys-v7-capture-v4-20260927.service` (home box).
+- Live meter: `nn_meta/validation/v7-entry-campaign-v4-20260927/progress.json`.
+- Immutable launch: `nn_meta/validation/v7-entry-campaign-v4-20260927/declaration/`.
 - New packs: `nn_meta/data_v7/entry-campaign-20260927/<security>/<batch-hash>/`.
-- Attempt journal: `nn_meta/validation/v7-entry-campaign-v3-20260927/attempts/`.
+- Attempt journal: `nn_meta/validation/v7-entry-campaign-v4-20260927/attempts/`.
 - Shared acquisition accounting: `nn_meta/data_v7/quota.json`.
-- Launcher: `bash scripts/start_v7_capture_campaign_v3.sh 16`; do not start a duplicate
+- Launcher: `bash scripts/start_v7_capture_campaign_v4.sh 32`; do not start a duplicate
   while the service is active. Existing batches are verified/reused on resume.
 - [Concurrency upgrade](reviews/2026-09-27-v7-parallel-capture.md); original
   declaration and journals remain in `v7-entry-campaign-20260927/`.
@@ -24,12 +24,18 @@ already captured coverage. It does not yet automate all held/roll/stock/referenc
 acquisition or assembly/training. Those are the precise remaining V7-3/next-stage
 connections in TODO, not reasons to rebuild completed preparation.
 
-Four autosized process workers with 16 bounded I/O threads each (64 requests
-maximum); one compute thread per worker; 10 GiB MemoryHigh / 14 GiB MemoryMax; no swap allocation;
-400% CPU quota, low priority. The initial new-data allocation is 100 GB, with the
-unchanged 250 GB acquisition / 640 GB project limits and 20 GiB free reserve.
-MRHA use is authorized. The 100 GB number is a dispatch guard, not a total size
-forecast. It pauses on a limit/provider failure and drains current work.
+Four autosized process workers, up to 32 I/O threads each (128 requests), and one
+numerical thread per worker. MemoryHigh/Max are both 14 GiB with no swap; prefetch
+backs off under memory pressure. CPU burst quota is 800%, with low scheduling
+priority. [Storage/memory update and verification](reviews/2026-09-27-v7-storage-and-memory.md).
+
+The user superseded the old 100/250/640-GB fixed limits and 20-GiB reserve.
+Allocation now follows live free space, leaving **10 GB free** locally and
+accounting for in-flight writes. New payloads overflow to MRHA (UUID 62C9-C390)
+under `HealysBacktester/v7-entry-campaign-20260927`, also leaving 10 GB there.
+Logical pack directories/receipts stay local, with only SQLite payload files
+linked to MRHA. Four real overflow batches passed existing-reader readback.
+Keep MRHA connected. Existing external files and completed local packs are intact.
 
 ## Authoritative completed inputs — reuse exactly
 
