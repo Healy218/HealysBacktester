@@ -1,0 +1,1268 @@
+{
+  "default_close_extension_minutes": 0,
+  "default_sources": {
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-17/complete.json": "52ca059f3c59c84cb159cd816c83083b8416212dccbe601f32c506a9a2023045",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-17/response.bin": "7240caf3480c4a397fa646c8f488812da6616b094bc96835f4ca471246bb94b2",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-ivv-20260421/complete.json": "5ea3f6c2fc93667f52e64a82a7f562a77fd1a5a154a45f78cda3f223cb6b9e4b",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-ivv-20260421/response.bin": "39d7f766e69dfd6283966a418d1bb1595945b4e7da7863e33e25978ba8979ef1",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-listings-20170306/complete.json": "73d56a08d7bb58948a282a86a7b78a332543ceed2de591852d216f511859c114",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-listings-20170306/response.bin": "5a34c4fdc67ac3cbf55e0a51a4eba6646df3d5a284bc89849e686e2e1b99e747",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-general-hours-2011/complete.json": "372e61b93e2df0e74fa5e3d458ed7c982a8aa3ca501a95eb418647ca62a6ba84",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-general-hours-2011/response.bin": "0bc65d9c776262b11eee86f939cb84d1296bd899348bbcc8d28f237d00ae57eb"
+  },
+  "early_close_extension": "same_as_regular",
+  "early_close_sources": {
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-thanksgiving-2022/complete.json": "94dd96af2b5ff383d73ee97f681ab4c788fe9ac1d32648c00b9d1c2fb007c379",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-thanksgiving-2022/response.bin": "d16180227d163f2ebe61bcc059ccca3bf8b9cc12aae82e0704f9884521ec6a1a"
+  },
+  "end": "2026-09-23",
+  "exceptions": {
+    "DIA": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "DRAM": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-33/complete.json": "61c32074970a8cb4c9e7eef1bbea9f97d95ec3068bf4e36328d090dc35e0b9fe",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-33/response.bin": "1fbf9230f7977ad8f04bfc014929c1649ed98d71a4460a1b5996ae976743d16c"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-33/complete.json": "61c32074970a8cb4c9e7eef1bbea9f97d95ec3068bf4e36328d090dc35e0b9fe",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-33/response.bin": "1fbf9230f7977ad8f04bfc014929c1649ed98d71a4460a1b5996ae976743d16c"
+        },
+        "start": "2026-08-17"
+      }
+    ],
+    "EEM": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "EFA": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "EWY": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-20/complete.json": "c64fa7b01c5f8eda8139efcbac6c5b97d5215109d7d865e1d0718ac2d4578b7d",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-20/response.bin": "28072c1f82b28109b87ffd9aa8bdfe9c7139b2a3e680daefaca1ac09b0778739"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-20/complete.json": "c64fa7b01c5f8eda8139efcbac6c5b97d5215109d7d865e1d0718ac2d4578b7d",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-20/response.bin": "28072c1f82b28109b87ffd9aa8bdfe9c7139b2a3e680daefaca1ac09b0778739"
+        },
+        "start": "2026-04-29"
+      }
+    ],
+    "EWZ": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-hyg-ewz-20230918/complete.json": "5696394cce7b00513bdc1582c4c9e523fee6568e6882aa4dc9d34848faf93aed",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-hyg-ewz-20230918/response.bin": "f23188729a59a8d728ea18f7d572684fed113b45214f22022037987c6e438772"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-hyg-ewz-20230918/complete.json": "5696394cce7b00513bdc1582c4c9e523fee6568e6882aa4dc9d34848faf93aed",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-hyg-ewz-20230918/response.bin": "f23188729a59a8d728ea18f7d572684fed113b45214f22022037987c6e438772"
+        },
+        "start": "2023-09-18"
+      }
+    ],
+    "FXI": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-fxi-lqd-20241101/complete.json": "197d759ac4a767b91fee7bc157a36fd6a20af3a9e87de399bbeb5331ece6d4f6",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-fxi-lqd-20241101/response.bin": "a39e6dcc8042009371791009a12e269cb284a5a6edf46fc929bd1a92fcb0aaa3"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-fxi-lqd-20241101/complete.json": "197d759ac4a767b91fee7bc157a36fd6a20af3a9e87de399bbeb5331ece6d4f6",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-fxi-lqd-20241101/response.bin": "a39e6dcc8042009371791009a12e269cb284a5a6edf46fc929bd1a92fcb0aaa3"
+        },
+        "start": "2024-11-01"
+      }
+    ],
+    "GLD": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-gld-20210201/complete.json": "66a80b8694026c90cc536a78eadb37932e116cd563a49bc4d07c0f5c0002b66b",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-gld-20210201/response.bin": "d383fae83683dab7f36c27dd633f26316ed0741f2c80bdad5e73598db6f2b511"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "HYG": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-hyg-ewz-20230918/complete.json": "5696394cce7b00513bdc1582c4c9e523fee6568e6882aa4dc9d34848faf93aed",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-hyg-ewz-20230918/response.bin": "f23188729a59a8d728ea18f7d572684fed113b45214f22022037987c6e438772"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-hyg-ewz-20230918/complete.json": "5696394cce7b00513bdc1582c4c9e523fee6568e6882aa4dc9d34848faf93aed",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-hyg-ewz-20230918/response.bin": "f23188729a59a8d728ea18f7d572684fed113b45214f22022037987c6e438772"
+        },
+        "start": "2023-09-18"
+      }
+    ],
+    "IBIT": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-52/complete.json": "8f4de3e32d07929aecd930785115859716851a0588de947a9e02904d82b61e9c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-52/response.bin": "4cfb87ea6a7dbc8ddf3481a6c028eb8374d91e2ea3d84019f7aaa91c61cdda6a"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-52/complete.json": "8f4de3e32d07929aecd930785115859716851a0588de947a9e02904d82b61e9c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-52/response.bin": "4cfb87ea6a7dbc8ddf3481a6c028eb8374d91e2ea3d84019f7aaa91c61cdda6a"
+        },
+        "start": "2025-11-10"
+      }
+    ],
+    "IEF": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-22/complete.json": "1833af5c3c821fba46f5f4291676212e085afc756efbad70a56b749372d21c08",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-22/response.bin": "2bebe849a4d676e265006cb2964e33e9f53a3ac007d30fcb0055dc5e0e5b9446"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-22/complete.json": "1833af5c3c821fba46f5f4291676212e085afc756efbad70a56b749372d21c08",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-22/response.bin": "2bebe849a4d676e265006cb2964e33e9f53a3ac007d30fcb0055dc5e0e5b9446"
+        },
+        "start": "2025-05-27"
+      }
+    ],
+    "IWM": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "IYR": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2024-71/complete.json": "a473c1045e0ac9a5320b1805aa5280d52e5ffb6df6b4307dc0912e4f9d22bcec",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2024-71/response.bin": "d7be6f9a1973628b3779ae1c446dd0b289e7ded0222a9d78e67f6f8bbe73e56f"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2024-71/complete.json": "a473c1045e0ac9a5320b1805aa5280d52e5ffb6df6b4307dc0912e4f9d22bcec",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2024-71/response.bin": "d7be6f9a1973628b3779ae1c446dd0b289e7ded0222a9d78e67f6f8bbe73e56f"
+        },
+        "start": "2024-11-11"
+      }
+    ],
+    "KRE": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-kre-20170821/complete.json": "5bbbd9bdcd4de9e3f205c8d48c78a886eb7a265aad07c25a065196fa2da64187",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-kre-20170821/response.bin": "8157a8d1bc5c4255a86744a7360b862dc40882d7a9a3ca893c3c2d2885ce68e3"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "KWEB": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-kweb-20250530/complete.json": "b2623c21aaf63a8455cd848d7c64095e8d386790248c04ea7b6fd58a855c13b0",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-kweb-20250530/response.bin": "724ea0a17637ccf01f34f3765175dea9de9212b053bde7392e79da74e5dccea3"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-kweb-20250530/complete.json": "b2623c21aaf63a8455cd848d7c64095e8d386790248c04ea7b6fd58a855c13b0",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-kweb-20250530/response.bin": "724ea0a17637ccf01f34f3765175dea9de9212b053bde7392e79da74e5dccea3"
+        },
+        "start": "2025-05-30"
+      }
+    ],
+    "LQD": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-fxi-lqd-20241101/complete.json": "197d759ac4a767b91fee7bc157a36fd6a20af3a9e87de399bbeb5331ece6d4f6",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-fxi-lqd-20241101/response.bin": "a39e6dcc8042009371791009a12e269cb284a5a6edf46fc929bd1a92fcb0aaa3"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-fxi-lqd-20241101/complete.json": "197d759ac4a767b91fee7bc157a36fd6a20af3a9e87de399bbeb5331ece6d4f6",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-fxi-lqd-20241101/response.bin": "a39e6dcc8042009371791009a12e269cb284a5a6edf46fc929bd1a92fcb0aaa3"
+        },
+        "start": "2024-11-01"
+      }
+    ],
+    "QQQ": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "SLV": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-10/complete.json": "d141ea5266acded0bf5bc330a1835d7ee687ae90bb434b7441b18d3b93a1fd78",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-10/response.bin": "06faca15dcbd22c7bfa5950e675f8a7c8c682da220d2d3f7a3ab150d389d4aa8"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-10/complete.json": "d141ea5266acded0bf5bc330a1835d7ee687ae90bb434b7441b18d3b93a1fd78",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-10/response.bin": "06faca15dcbd22c7bfa5950e675f8a7c8c682da220d2d3f7a3ab150d389d4aa8"
+        },
+        "start": "2025-02-18"
+      }
+    ],
+    "SMH": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/complete.json": "7b96f3e93ee86b9583346997898d635ae4c76ffba3f89d6fc52b236e362f2f52",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/response.bin": "c2cea3db58462ac55734fff1e521f8caec3ab7a9b59530c82700c50b81986008"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/complete.json": "7b96f3e93ee86b9583346997898d635ae4c76ffba3f89d6fc52b236e362f2f52",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/response.bin": "c2cea3db58462ac55734fff1e521f8caec3ab7a9b59530c82700c50b81986008"
+        },
+        "start": "2025-08-25"
+      }
+    ],
+    "SOXL": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/complete.json": "7b96f3e93ee86b9583346997898d635ae4c76ffba3f89d6fc52b236e362f2f52",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/response.bin": "c2cea3db58462ac55734fff1e521f8caec3ab7a9b59530c82700c50b81986008"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/complete.json": "7b96f3e93ee86b9583346997898d635ae4c76ffba3f89d6fc52b236e362f2f52",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/response.bin": "c2cea3db58462ac55734fff1e521f8caec3ab7a9b59530c82700c50b81986008"
+        },
+        "start": "2025-08-25"
+      }
+    ],
+    "SOXX": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/complete.json": "7b96f3e93ee86b9583346997898d635ae4c76ffba3f89d6fc52b236e362f2f52",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/response.bin": "c2cea3db58462ac55734fff1e521f8caec3ab7a9b59530c82700c50b81986008"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/complete.json": "7b96f3e93ee86b9583346997898d635ae4c76ffba3f89d6fc52b236e362f2f52",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2025-36/response.bin": "c2cea3db58462ac55734fff1e521f8caec3ab7a9b59530c82700c50b81986008"
+        },
+        "start": "2025-08-25"
+      }
+    ],
+    "SPY": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "SVIX": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-svix-uvix-20220414/complete.json": "c4622f14d04c66629317f458813bfa82ac81db31faadc1ee99425a3734802942",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-svix-uvix-20220414/response.bin": "772c12be89f25767c5ff1336a506fbf631037705e97abbad4d2a291d3da882ae"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-svix-uvix-20220414/complete.json": "c4622f14d04c66629317f458813bfa82ac81db31faadc1ee99425a3734802942",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-svix-uvix-20220414/response.bin": "772c12be89f25767c5ff1336a506fbf631037705e97abbad4d2a291d3da882ae"
+        },
+        "start": "2022-04-25"
+      }
+    ],
+    "SVXY": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "TLT": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-tlt-20240812/complete.json": "e33293471c43cc7b8e87027597ba9596b135acda54e37599f76ad0a9beca001a",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-tlt-20240812/response.bin": "566e7d4e7976bd4b5cbefa7dd4a301d47ce3e6d218b4890dd20ff29b9c496325"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-tlt-20240812/complete.json": "e33293471c43cc7b8e87027597ba9596b135acda54e37599f76ad0a9beca001a",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-tlt-20240812/response.bin": "566e7d4e7976bd4b5cbefa7dd4a301d47ce3e6d218b4890dd20ff29b9c496325"
+        },
+        "start": "2024-08-12"
+      }
+    ],
+    "UNG": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "UVXY": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "VOO": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-10/complete.json": "ea26996c410ffd8007bd516d66276a8bf57ce163f84a154f739e42a4a44e8001",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-10/response.bin": "69798ed7f3377a719440d7d1480150f38ca08e885093d658c8917dfac7663d3b"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-10/complete.json": "ea26996c410ffd8007bd516d66276a8bf57ce163f84a154f739e42a4a44e8001",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-10/response.bin": "69798ed7f3377a719440d7d1480150f38ca08e885093d658c8917dfac7663d3b"
+        },
+        "start": "2026-02-25"
+      }
+    ],
+    "VXX": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-vxx-rename-2019/complete.json": "83082927307e35ae238046f8dc98a0e41b4f7e8f1c9125a66ac016b99b769584",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-vxx-rename-2019/response.bin": "18c59b58631385f99cd0718549b9983fb407e491f3a040efd2e21d4fe056d4dd",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-vxxb-2018/complete.json": "cdd1455ff1dd1c1703bb74720e65d00dea23ae492a730e96e9719b2b78fa7a28",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-vxxb-2018/response.bin": "066b03ae1dd88fe548b2f0c26fde8c832e9167399f08fc8809ae619e0a357268"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "XHB": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "XLE": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "XLF": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "XLI": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "XLK": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "XLP": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "XLU": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "XLV": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "XLY": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ],
+    "XOP": [
+      {
+        "description": "Notice identifies the prior 16:00 close; applies before its effective date.",
+        "extension_minutes": 0,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-xop-20250924/complete.json": "1cffdb24d5b8212f05132970caa86da6b9e5ad16335fb7db323554b8c835892e",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-xop-20250924/response.bin": "150d658ef2f3b31960091a3d85f47e172889782fbe53cf7b1dd7086d9a610719"
+        },
+        "start": "2022-03-15"
+      },
+      {
+        "description": "Exchange announced change from 16:00 to 16:15 effective on this date.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-xop-20250924/complete.json": "1cffdb24d5b8212f05132970caa86da6b9e5ad16335fb7db323554b8c835892e",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/nasdaq-xop-20250924/response.bin": "150d658ef2f3b31960091a3d85f47e172889782fbe53cf7b1dd7086d9a610719"
+        },
+        "start": "2025-09-24"
+      }
+    ],
+    "XRT": [
+      {
+        "description": "Historical exchange baseline carried forward until a named effective-date change; current Nasdaq class list cross-check.",
+        "extension_minutes": 15,
+        "sources": {
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/complete.json": "4e36c6d7fa72df8ac0b44661eb05f7c036e8acab32b25849b9f137d92167a00c",
+          "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/cboe-etf-institute/response.bin": "724253c54e0cc8fea4302678a06b4c3782411656adf8672b0bc3c3f2792d2556"
+        },
+        "start": "2022-03-15"
+      }
+    ]
+  },
+  "ivv_resolution": {
+    "description": "MIAX explicitly confirms 2026; retain contradictory Nasdaq year. IVV has no selected entry-demand root in this campaign.",
+    "effective": "2026-04-21",
+    "sources": {
+      "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-17/complete.json": "52ca059f3c59c84cb159cd816c83083b8416212dccbe601f32c506a9a2023045",
+      "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-2026-17/response.bin": "7240caf3480c4a397fa646c8f488812da6616b094bc96835f4ca471246bb94b2",
+      "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-ivv-20260421/complete.json": "5ea3f6c2fc93667f52e64a82a7f562a77fd1a5a154a45f78cda3f223cb6b9e4b",
+      "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-followup-20260927/miax-ivv-20260421/response.bin": "39d7f766e69dfd6283966a418d1bb1595945b4e7da7863e33e25978ba8979ef1"
+    }
+  },
+  "methodology": "Reconstruct regular class hours from historical exchange baselines and effective-date changes, carrying each rule until superseded. Ordinary equity/ETF classes follow the exchange regular close except the finite late-closing class list. This is a source-backed reconstruction, not daily historical symbol-directory capture. Reviewed changes are assumed complete for this finite scope; current hours are a cross-check, never a backdated exception list.",
+  "opening_sources": {
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/complete.json": "059d1a3409d9e4e563d33e9528b8093957d12cd763c53010cb0897f5cb941bc8",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/option-hours-evidence-20260927/nasdaq-hours-current/response.bin": "2f7d96386a3fff960bb6d1f3164e99298acd0a966af94a6d24628c36aa4e1de3"
+  },
+  "research_ready": false,
+  "schema": "v7-dated-option-hours-v2",
+  "scope_roots": [
+    "AA",
+    "AAL",
+    "AAOI",
+    "AAP",
+    "AAPL",
+    "ABBV",
+    "ABNB",
+    "ABT",
+    "ABVX",
+    "ACHR",
+    "ADBE",
+    "ADI",
+    "ADM",
+    "ADSK",
+    "AEHR",
+    "AEM",
+    "AFRM",
+    "AGQ",
+    "AGX",
+    "AI",
+    "AIG",
+    "AKAM",
+    "ALAB",
+    "ALB",
+    "ALGN",
+    "AMAT",
+    "AMC",
+    "AMD",
+    "AMDL",
+    "AMGN",
+    "AMKR",
+    "AMPX",
+    "AMR",
+    "AMT",
+    "AMZN",
+    "ANET",
+    "ANF",
+    "APA",
+    "APH",
+    "APLD",
+    "APLS",
+    "APO",
+    "APP",
+    "APPS",
+    "AR",
+    "ARKG",
+    "ARKK",
+    "ARM",
+    "ASAN",
+    "ASHR",
+    "ASST",
+    "ASTS",
+    "ATVI",
+    "AUPH",
+    "AVAV",
+    "AVGO",
+    "AXON",
+    "AXP",
+    "AXSM",
+    "AXTI",
+    "AZN",
+    "AZO",
+    "BA",
+    "BABA",
+    "BAC",
+    "BB",
+    "BBAI",
+    "BBIG",
+    "BBY",
+    "BE",
+    "BIDU",
+    "BIIB",
+    "BILI",
+    "BILL",
+    "BITF",
+    "BITO",
+    "BITX",
+    "BKKT",
+    "BKNG",
+    "BLDR",
+    "BLK",
+    "BLNK",
+    "BMNR",
+    "BMY",
+    "BNO",
+    "BNTX",
+    "BOIL",
+    "BP",
+    "BRCC",
+    "BRKB",
+    "BTU",
+    "BUD",
+    "BURL",
+    "BX",
+    "BYND",
+    "C",
+    "CAR",
+    "CAT",
+    "CAVA",
+    "CBRS",
+    "CCJ",
+    "CCL",
+    "CDNS",
+    "CEG",
+    "CELH",
+    "CF",
+    "CGC",
+    "CHPT",
+    "CHTR",
+    "CHWY",
+    "CI",
+    "CIEN",
+    "CIFR",
+    "CLAR",
+    "CLF",
+    "CLS",
+    "CLSK",
+    "CLX",
+    "CMA",
+    "CMCSA",
+    "CMG",
+    "CNC",
+    "COF",
+    "COHR",
+    "COIN",
+    "COP",
+    "COPX",
+    "CORZ",
+    "COST",
+    "COUP",
+    "CPNG",
+    "CRCL",
+    "CRM",
+    "CROX",
+    "CRWD",
+    "CRWV",
+    "CSCO",
+    "CVE",
+    "CVNA",
+    "CVS",
+    "CVX",
+    "CYTK",
+    "CZR",
+    "D",
+    "DAL",
+    "DASH",
+    "DDOG",
+    "DE",
+    "DECK",
+    "DELL",
+    "DFS",
+    "DG",
+    "DHI",
+    "DHR",
+    "DIA",
+    "DIS",
+    "DISCA",
+    "DISH",
+    "DJT",
+    "DKNG",
+    "DKS",
+    "DLTR",
+    "DOCN",
+    "DOCU",
+    "DOW",
+    "DPST",
+    "DPZ",
+    "DRAM",
+    "DUOL",
+    "DVN",
+    "DXCM",
+    "EAT",
+    "EBAY",
+    "EEM",
+    "EFA",
+    "EL",
+    "ELF",
+    "ELV",
+    "EMB",
+    "ENPH",
+    "ENVX",
+    "EOG",
+    "EOSE",
+    "EQIX",
+    "EQT",
+    "ET",
+    "ETHA",
+    "ETHE",
+    "ETHU",
+    "ETSY",
+    "EWY",
+    "EWZ",
+    "EXPE",
+    "F",
+    "FANG",
+    "FAS",
+    "FAZE",
+    "FB",
+    "FCEL",
+    "FCX",
+    "FDX",
+    "FEZ",
+    "FI",
+    "FICO",
+    "FIG",
+    "FIGR",
+    "FISV",
+    "FIVE",
+    "FIX",
+    "FLY",
+    "FRMI",
+    "FSLR",
+    "FSLY",
+    "FSR",
+    "FTNT",
+    "FUBO",
+    "FUTU",
+    "FXI",
+    "GAP",
+    "GDX",
+    "GDXJ",
+    "GE",
+    "GEO",
+    "GEV",
+    "GH",
+    "GILD",
+    "GLD",
+    "GLW",
+    "GLXY",
+    "GM",
+    "GME",
+    "GNRC",
+    "GOLD",
+    "GOOG",
+    "GOOGL",
+    "GPS",
+    "GS",
+    "GTLB",
+    "GUSH",
+    "GWW",
+    "HAL",
+    "HCA",
+    "HD",
+    "HIMS",
+    "HON",
+    "HOOD",
+    "HPQ",
+    "HSY",
+    "HTZ",
+    "HUBS",
+    "HUM",
+    "HUT",
+    "HYG",
+    "IAU",
+    "IBIT",
+    "IBKR",
+    "IBM",
+    "IBRX",
+    "IEF",
+    "IEP",
+    "IGV",
+    "ILMN",
+    "INTC",
+    "INTU",
+    "IONQ",
+    "ISRG",
+    "ITB",
+    "IWM",
+    "IYR",
+    "JD",
+    "JETS",
+    "JNJ",
+    "JPM",
+    "KLAC",
+    "KMX",
+    "KO",
+    "KOLD",
+    "KORU",
+    "KRE",
+    "KSS",
+    "KTOS",
+    "KVUE",
+    "KWEB",
+    "LABU",
+    "LAC",
+    "LCID",
+    "LEN",
+    "LEU",
+    "LI",
+    "LITE",
+    "LLY",
+    "LMND",
+    "LMT",
+    "LNG",
+    "LOW",
+    "LQD",
+    "LRCX",
+    "LULU",
+    "LUMN",
+    "LUNR",
+    "LUV",
+    "LVS",
+    "LYFT",
+    "LYV",
+    "M",
+    "MA",
+    "MAR",
+    "MARA",
+    "MBLY",
+    "MCD",
+    "MCHP",
+    "MDB",
+    "MDGL",
+    "MELI",
+    "MET",
+    "META",
+    "MGM",
+    "MMM",
+    "MO",
+    "MOS",
+    "MP",
+    "MPC",
+    "MPW",
+    "MPWR",
+    "MRK",
+    "MRNA",
+    "MRO",
+    "MRVL",
+    "MS",
+    "MSFT",
+    "MSOS",
+    "MSTR",
+    "MSTU",
+    "MSTX",
+    "MTCH",
+    "MTTR",
+    "MTUM",
+    "MU",
+    "MULL",
+    "MUU",
+    "MXL",
+    "NCR",
+    "NEE",
+    "NEM",
+    "NET",
+    "NFLX",
+    "NIO",
+    "NKE",
+    "NKLA",
+    "NNE",
+    "NOC",
+    "NOW",
+    "NTR",
+    "NUE",
+    "NUGT",
+    "NVAX",
+    "NVDA",
+    "NVDL",
+    "NVTS",
+    "OIH",
+    "OKE",
+    "OKLO",
+    "OKTA",
+    "ON",
+    "ONDS",
+    "OPEN",
+    "ORCL",
+    "ORLY",
+    "OSCR",
+    "OSTK",
+    "OXY",
+    "PACW",
+    "PANW",
+    "PARA",
+    "PATH",
+    "PAYC",
+    "PBR",
+    "PDD",
+    "PENG",
+    "PENN",
+    "PEP",
+    "PFE",
+    "PG",
+    "PINS",
+    "PL",
+    "PLTR",
+    "PLUG",
+    "PM",
+    "PNC",
+    "POET",
+    "PPLT",
+    "PRU",
+    "PSX",
+    "PTON",
+    "PWR",
+    "PXD",
+    "PYPL",
+    "QBTS",
+    "QCOM",
+    "QQQ",
+    "QS",
+    "QUBT",
+    "RBLX",
+    "RCAT",
+    "RDDT",
+    "RDW",
+    "REGN",
+    "RETA",
+    "RGTI",
+    "RH",
+    "RILY",
+    "RIOT",
+    "RIVN",
+    "RKLB",
+    "RNG",
+    "ROKU",
+    "RTX",
+    "RUN",
+    "SAM",
+    "SAVA",
+    "SAVE",
+    "SBET",
+    "SBUX",
+    "SCHW",
+    "SE",
+    "SEDG",
+    "SGEN",
+    "SHEL",
+    "SHOP",
+    "SIGA",
+    "SIL",
+    "SILJ",
+    "SIMO",
+    "SIRI",
+    "SLB",
+    "SLS",
+    "SLV",
+    "SMCI",
+    "SMH",
+    "SMR",
+    "SNAP",
+    "SNDK",
+    "SNOW",
+    "SNPS",
+    "SNXX",
+    "SOC",
+    "SOFI",
+    "SOUN",
+    "SOXL",
+    "SOXS",
+    "SOXX",
+    "SPCE",
+    "SPCX",
+    "SPG",
+    "SPGI",
+    "SPLK",
+    "SPXL",
+    "SPXS",
+    "SPXU",
+    "SPY",
+    "SQ",
+    "SQQQ",
+    "SRPT",
+    "SST",
+    "STM",
+    "STRL",
+    "STZ",
+    "SU",
+    "SVIX",
+    "SVXY",
+    "SWKS",
+    "SWTX",
+    "SYM",
+    "T",
+    "TBT",
+    "TDOC",
+    "TE",
+    "TEAM",
+    "TECL",
+    "TEM",
+    "TER",
+    "TEVA",
+    "TFC",
+    "TGT",
+    "TGTX",
+    "TJX",
+    "TLN",
+    "TLRY",
+    "TLT",
+    "TMF",
+    "TMO",
+    "TMUS",
+    "TNA",
+    "TOST",
+    "TQQQ",
+    "TSLA",
+    "TSLL",
+    "TSM",
+    "TSN",
+    "TTD",
+    "TTWO",
+    "TWLO",
+    "TWTR",
+    "TXN",
+    "TZA",
+    "U",
+    "UAL",
+    "UBER",
+    "UCO",
+    "ULTA",
+    "UNG",
+    "UNH",
+    "UNP",
+    "UPRO",
+    "UPS",
+    "UPST",
+    "URA",
+    "URI",
+    "USAR",
+    "USB",
+    "USO",
+    "UUUU",
+    "UVXY",
+    "V",
+    "VALE",
+    "VEEV",
+    "VERU",
+    "VFC",
+    "VG",
+    "VKTX",
+    "VLO",
+    "VMW",
+    "VOO",
+    "VRT",
+    "VRTX",
+    "VTNR",
+    "VXX",
+    "VZ",
+    "W",
+    "WAL",
+    "WBA",
+    "WBD",
+    "WDAY",
+    "WDC",
+    "WFC",
+    "WING",
+    "WMT",
+    "WOLF",
+    "WPM",
+    "WULF",
+    "WYNN",
+    "X",
+    "XBI",
+    "XHB",
+    "XLE",
+    "XLF",
+    "XLI",
+    "XLK",
+    "XLP",
+    "XLU",
+    "XLV",
+    "XLY",
+    "XOM",
+    "XOP",
+    "XPEV",
+    "XRT",
+    "XYZ",
+    "YINN",
+    "YUMC",
+    "Z",
+    "ZEN",
+    "ZETA",
+    "ZI",
+    "ZION",
+    "ZM",
+    "ZS"
+  ],
+  "start": "2022-03-15",
+  "timezone": "America/New_York"
+}

@@ -1,0 +1,11 @@
+{
+  "complete": true,
+  "files": {
+    "binding.json": "d74dc89598dbe4ee52574dc48d63d7273ef0defdf3f6c46e8ab523451da1a68f",
+    "calendar.json": "b8c5306c0443d810f8a8b177b2d2e4d4e073b1a8735fa74396eeca2b9e992570",
+    "rules.json": "d1d88a346a315f30c09cf4b49b4ed8f45ad2012b5a9a393f1ae78b50e89eca6f"
+  },
+  "identity": "6d92e3e01199199abb82494f315bf343b8c1730a982f34ebf3c6b09ac06de2f5",
+  "research_ready": false,
+  "schema": "v7-dated-option-hours-v2"
+}
