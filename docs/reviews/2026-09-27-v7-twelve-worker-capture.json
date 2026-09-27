@@ -1,0 +1,151 @@
+{
+  "observed_at": "2026-09-27T22:46:49.301228+00:00",
+  "selected_workers": 12,
+  "io_threads_per_worker": 32,
+  "concurrency_ceiling": 384,
+  "memory_limit_gib": 14,
+  "cpu_quota_percent": 800,
+  "task_limit": 464,
+  "campaign_identity": "8ea809659f0647dbbfef9682321a6828dc182ccac1bbbe9d3e2d5bfb4e99f568",
+  "progress": {
+    "campaign_identity": "8ea809659f0647dbbfef9682321a6828dc182ccac1bbbe9d3e2d5bfb4e99f568",
+    "capacity_mode": "live_free_space_with_MRHA_overflow",
+    "capture_seconds": 181.91246673697606,
+    "completed_batches_this_run": 2836,
+    "disk_reserve_bytes": 10000000000,
+    "elapsed_seconds": 260.594167645002,
+    "external_batches_this_run": 0,
+    "full_entry_coverage": false,
+    "io_threads": 32,
+    "last": {
+      "bytes": 201169,
+      "error": null,
+      "http": {
+        "http_requests": 32,
+        "http_seconds": 6.367443808994722,
+        "response_bytes": 1870039,
+        "retries": 0,
+        "throttles": 0
+      },
+      "io_threads": 32,
+      "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BHVSG6/a39ad72b7e8a3c6c633801ce2297a5c2041719085480477819df7584ffb83b72",
+      "physical_pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG000BHVSG6/a39ad72b7e8a3c6c633801ce2297a5c2041719085480477819df7584ffb83b72",
+      "recovered_external_pack": false,
+      "requests": 32,
+      "seconds": 0.9576702869962901,
+      "split_attempts": [],
+      "status": "completed",
+      "tier": "local"
+    },
+    "local_free_bytes": 257271078912,
+    "overflow_free_bytes": 743718256640,
+    "pending": 11,
+    "requests_this_run": 90650,
+    "retained_campaign_bytes": 29034593107,
+    "reused_batches_this_run": 38646,
+    "reused_requests": 1235732,
+    "status": "running",
+    "stop_reason": null,
+    "training_started": false,
+    "updated_at": "2026-09-27T22:46:49.227255+00:00",
+    "workers": 12
+  },
+  "unchanged_prior_source_hashes": true,
+  "measurements": [
+    {
+      "evidence": "nn_meta/validation/v7-twelve-workers-20260927/eight-worker-baseline.json",
+      "seconds": 180,
+      "workers": 8,
+      "ranges_per_second": 438.1777777777778,
+      "response_MB_per_range": 0.06258500971193832,
+      "response_MB_per_second": 27.42336047777778,
+      "retained_MB_per_second": 2.8223393999999997,
+      "failures": 0,
+      "retries": 0,
+      "throttles": 0
+    },
+    {
+      "evidence": "nn_meta/validation/v7-twelve-workers-20260927/twelve-workers-1.json",
+      "seconds": 45.010427474975586,
+      "workers": 12,
+      "status": "running",
+      "new_ranges": 21520,
+      "ranges_per_second": 478.11143344427154,
+      "response_MB_per_range": 0.0668329656133829,
+      "response_MB_per_second": 31.953604990746204,
+      "retained_MB_per_second": 3.210821338685329,
+      "working_GiB_min": 1.9082069396972656,
+      "working_GiB_max": 2.8113670349121094,
+      "prefetch_samples": {
+        "32": 45
+      },
+      "cpu_cores": 2.7472270524146376,
+      "cpu_throttled_seconds": 1.089585,
+      "memory_events_delta": {
+        "low": 0,
+        "high": 0,
+        "max": 6784,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "failed_batches": 0,
+      "retries": 0,
+      "throttles": 0,
+      "temperature_max_c": {
+        "temp3_input": 81.5,
+        "temp1_input": 82.5
+      }
+    },
+    {
+      "evidence": "nn_meta/validation/v7-twelve-workers-20260927/twelve-workers-2.json",
+      "seconds": 45.01009464263916,
+      "workers": 12,
+      "status": "running",
+      "new_ranges": 23380,
+      "ranges_per_second": 519.4390321910489,
+      "response_MB_per_range": 0.04379915718562874,
+      "response_MB_per_second": 22.750991819286618,
+      "retained_MB_per_second": 2.5772654983512866,
+      "working_GiB_min": 2.788848876953125,
+      "working_GiB_max": 2.8192977905273438,
+      "prefetch_samples": {
+        "32": 45
+      },
+      "cpu_cores": 2.118864484893871,
+      "cpu_throttled_seconds": 0.0,
+      "memory_events_delta": {
+        "low": 0,
+        "high": 0,
+        "max": 2369,
+        "oom": 0,
+        "oom_kill": 0,
+        "oom_group_kill": 0,
+        "sock_throttled": 0
+      },
+      "failed_batches": 0,
+      "retries": 0,
+      "throttles": 0,
+      "temperature_max_c": {
+        "temp3_input": 78.25,
+        "temp1_input": 75.625
+      }
+    }
+  ],
+  "validation": {
+    "focused_tests_passed": 26,
+    "shell_syntax_passed": true,
+    "preceding_full_suite": "2514 passed, 1 skipped, 18 subtests; before the twelve-worker extension"
+  },
+  "scope": "Entry acquisition concurrency only; no gate closure or training readiness claim.",
+  "resource_snapshot": {
+    "memory.current": "15018954752",
+    "memory.peak": "15032987648",
+    "memory.events": "low 0\nhigh 0\nmax 104157\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0",
+    "memory.pressure": "some avg10=0.00 avg60=0.00 avg300=0.00 total=259633\nfull avg10=0.00 avg60=0.00 avg300=0.00 total=259324",
+    "cpu.stat": "usage_usec 478977672\nuser_usec 454359006\nsystem_usec 24618665\nnice_usec 442784063\ncore_sched.force_idle_usec 0\nnr_periods 2620\nnr_throttled 8\nthrottled_usec 1686928\nnr_bursts 0\nburst_usec 0",
+    "cpu.max": "800000 100000",
+    "pids.max": "464"
+  }
+}

@@ -26,13 +26,13 @@ Never infer a current ETA from a historical throughput sample.
 
 ## V7 acquisition runtime
 
-- Service: `healys-v7-capture-v6-20260927.service` (home box).
-- Live meter: `nn_meta/validation/v7-entry-campaign-v6-20260927/progress.json`.
-- Immutable launch: `nn_meta/validation/v7-entry-campaign-v6-20260927/declaration/`.
+- Service: `healys-v7-capture-v7-20260927.service` (home box).
+- Live meter: `nn_meta/validation/v7-entry-campaign-v7-20260927/progress.json`.
+- Immutable launch: `nn_meta/validation/v7-entry-campaign-v7-20260927/declaration/`.
 - New packs: `nn_meta/data_v7/entry-campaign-20260927/<security>/<batch-hash>/`.
-- Attempt journal: `nn_meta/validation/v7-entry-campaign-v6-20260927/attempts/`.
+- Attempt journal: `nn_meta/validation/v7-entry-campaign-v7-20260927/attempts/`.
 - Shared acquisition accounting: `nn_meta/data_v7/quota.json`.
-- Launcher: `bash scripts/start_v7_capture_campaign_v6.sh 8 32`; do not start a duplicate
+- Launcher: `bash scripts/start_v7_capture_campaign_v7.sh 12 32`; do not start a duplicate
   while the service is active. Existing batches are verified/reused on resume.
 - [Concurrency upgrade](reviews/2026-09-27-v7-parallel-capture.md); original
   declaration and journals remain in `v7-entry-campaign-20260927/`.
@@ -44,17 +44,17 @@ already captured coverage. It does not yet automate all held/roll/stock/referenc
 acquisition or assembly/training. Those are the precise remaining V7-3/next-stage
 connections in TODO, not reasons to rebuild completed preparation.
 
-Eight autosized process workers, up to 32 I/O threads each (**256-request ceiling**),
-and one numerical thread per worker. Selected after the September 27 six/eight-worker
-live trials; [measurement and preservation review](reviews/2026-09-27-v7-eight-worker-capture.md).
+Twelve autosized process workers, up to 32 I/O threads each (**384-request ceiling**),
+and one numerical thread per worker. Selected after the user-requested September 27
+trial; [measurements and preservation](reviews/2026-09-27-v7-twelve-worker-capture.md).
 MemoryHigh/Max remain 14 GiB with no swap. Prefetch backs off at 6/8/10 GiB of
 working-memory pressure, excluding only clean inactive file cache. All prior
-producers and the current source-bound v6 producer remain frozen; version any
+producers and the current source-bound v7 producer remain frozen; version any
 subsequent behavior change. CPU quota remains 800%, low scheduling priority,
-and TasksMax is 320. The same runner can resume with a measured lower worker
-ceiling after draining; older runners cannot accept newly produced v6 packs.
+and TasksMax is 464. The same runner can resume with a measured lower worker
+ceiling after draining; older runners cannot accept newly produced v7 packs.
 
-The selected storage policy is [V7_CAPTURE_STORAGE_V6_20260927.json](specs/V7_CAPTURE_STORAGE_V6_20260927.json).
+The selected storage policy is [V7_CAPTURE_STORAGE_V7_20260927.json](specs/V7_CAPTURE_STORAGE_V7_20260927.json).
 The user superseded the old 100/250/640-GB fixed limits and 20-GiB reserve.
 Allocation now follows live free space, leaving **10 GB free** locally and
 accounting for in-flight writes. New payloads overflow to MRHA (UUID 62C9-C390)

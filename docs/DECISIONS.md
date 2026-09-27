@@ -1785,3 +1785,14 @@ do not mutate old producers or infer a campaign ETA from short heterogeneous
 windows. The service task allowance increases to 320. This changes operational
 concurrency only, not V7 gate scope or training readiness.
 [Evidence](reviews/2026-09-27-v7-eight-worker-capture.md).
+
+## 2026-09-27 — User-requested twelve-worker acquisition
+
+The user requested twelve workers after the eight-worker trial. Select 12 × 32
+(up to 384 concurrent requests) after observing new retained downloads and resource
+usage. Preserve 14 GiB RAM, no swap, the unchanged working-memory guard, 800% CPU
+quota, low priority, 10 GB disk reserves, exact scope and all completed packs.
+Version the runner/policy; autosize workers and allow 464 tasks. Lower concurrency,
+if warranted by later evidence, through the same new runner after a clean drain.
+This is an operational adjustment, not a new V7 gate or an ETA guarantee.
+[Measurement and preservation evidence](reviews/2026-09-27-v7-twelve-worker-capture.md).
