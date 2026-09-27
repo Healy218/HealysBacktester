@@ -1607,3 +1607,17 @@ copies. Preserve original paths/content and historical evidence; review is not
 permission to erase whole campaigns. No cleanup was performed. Investigate
 content-preserving deduplication and verified archival/restoration first. See
 [storage and adjacent-quality evidence](reviews/2026-09-26-storage-retention-and-adjacent-quality.md).
+
+### 2026-09-26 — Authorized redundant-storage removal and MRHA V6 archival
+
+The user explicitly requested deleting the byte-identical extra copies and
+moving the 9.54 million-file historical V6 tree into an archive on MRHA. Remove
+redundant physical allocations using verified, atomic copy-on-write replacements
+so all historical paths/hashes remain and future writes stay independent.
+Archive the complete old V6 expanded-input tree into compressed POSIX containers
+on external UUID 62C9-C390, retaining Unix metadata despite exFAT. Remove loose
+sources only after full external archive/source comparison, count and SHA256
+reconciliation, and a restoration test. Current V7 bindings and live V6 data
+remain protected. This supersedes the prior review-only restriction for these
+explicitly identified copies and this old V6 tree, not other data directories.
+See [authorized storage reclamation](reviews/2026-09-26-authorized-storage-reclamation.md).

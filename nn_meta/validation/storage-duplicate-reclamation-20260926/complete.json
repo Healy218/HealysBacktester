@@ -1,0 +1,10 @@
+{
+  "state": "complete",
+  "reviewed_sha256": "a57d55660d158a6bdba29dc2d987c2db654002a9f481b12aa8a55df2cef1289a",
+  "files_replaced": 4690,
+  "pathnames_removed": 0,
+  "duplicate_logical_bytes": 53884528671,
+  "free_before": 231547076608,
+  "free_after": 263215714304,
+  "method": "verified atomic reflink replacement; independent copy-on-write inodes"
+}
