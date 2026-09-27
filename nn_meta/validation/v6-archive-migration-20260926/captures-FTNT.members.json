@@ -1,0 +1,10 @@
+{
+  "id": "captures-FTNT",
+  "sha256": "1b9857fe951aa84968e92c3b9c24bafab0f2fe1d1897f316788ec2457f1957f7",
+  "members": {
+    "files": 25178,
+    "directories": 5231,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

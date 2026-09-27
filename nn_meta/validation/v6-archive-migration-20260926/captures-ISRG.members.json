@@ -1,0 +1,10 @@
+{
+  "id": "captures-ISRG",
+  "sha256": "34ee616f92bf3670328c098b817fa8fbeca964a80d51e3a88fa79b92c6207e8a",
+  "members": {
+    "files": 22600,
+    "directories": 4703,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

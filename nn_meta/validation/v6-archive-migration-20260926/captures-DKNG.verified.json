@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-DKNG",
+    "source": {
+      "files": 23110,
+      "directories": 4835,
+      "symlinks": 0,
+      "bytes": 114031640,
+      "metadata_sha256": "c89461ac00248484652da43342f7ca83a008714d9a0a900ad019b4d43d933d63"
+    },
+    "archive_bytes": 101205050,
+    "sha256": "6b205c29a6d49eba6800a9aa016d0500de8f7fca443aac9631e01f4ef7407fba",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-DKNG.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

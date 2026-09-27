@@ -1,0 +1,13 @@
+{
+  "id": "captures-BYND",
+  "source": {
+    "files": 21590,
+    "directories": 4517,
+    "symlinks": 0,
+    "bytes": 29713569,
+    "metadata_sha256": "94be8ab5328c97c3a2693a8bb6e63ca4caa0f88d11756fd4b8e060d5bbf4e418"
+  },
+  "archive_bytes": 17202079,
+  "sha256": "a0b5aeafe47b81095796412c7e3f63938b2d734a7f901b26f2a06119d685ef8c",
+  "state": "packed-source-stable"
+}

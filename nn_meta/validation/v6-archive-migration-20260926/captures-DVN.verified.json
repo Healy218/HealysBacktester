@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-DVN",
+    "source": {
+      "files": 22508,
+      "directories": 4689,
+      "symlinks": 0,
+      "bytes": 82681985,
+      "metadata_sha256": "5f73830963ae46d3efc8ab3885518786f85121b11733a588c70febc35c770a8e"
+    },
+    "archive_bytes": 70113575,
+    "sha256": "7c336f8cae6d5daabfc163024df898efcb29be99f4559eb1ff471816f30aef94",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-DVN.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

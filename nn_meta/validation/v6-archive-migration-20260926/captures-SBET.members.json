@@ -1,0 +1,10 @@
+{
+  "id": "captures-SBET",
+  "sha256": "6f1451ca31395af4918c07d4c3fbb86e835415c06ada6ee2582be3533d844c71",
+  "members": {
+    "files": 8890,
+    "directories": 1895,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

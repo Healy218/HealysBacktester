@@ -1,0 +1,10 @@
+{
+  "id": "captures-JNJ",
+  "sha256": "db56aeb246c62fc9ee8fe162a5275e1705db3241288996600364e5cecb5a21a3",
+  "members": {
+    "files": 20062,
+    "directories": 4177,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

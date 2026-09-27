@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-GOLD",
+    "source": {
+      "files": 12570,
+      "directories": 3883,
+      "symlinks": 0,
+      "bytes": 11128330,
+      "metadata_sha256": "1ca844402c048a1439c5e6b66117fb9e92353885213bf2d0d08ada42830e1f20"
+    },
+    "archive_bytes": 4243164,
+    "sha256": "a8d160ffa761b6c1e87bc2660c8e2b21a2c97758565518a70394d66fdc8ca43b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-GOLD.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

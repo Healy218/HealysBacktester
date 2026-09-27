@@ -1,0 +1,10 @@
+{
+  "id": "captures-BNO",
+  "sha256": "7c580bb6d410be06021ce83c325bff1cc3224d16b42d6e85e5f13bb993d2c9c7",
+  "members": {
+    "files": 14004,
+    "directories": 4351,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

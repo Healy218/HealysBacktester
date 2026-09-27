@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-DLTR",
+    "source": {
+      "files": 14616,
+      "directories": 3045,
+      "symlinks": 0,
+      "bytes": 39444875,
+      "metadata_sha256": "801c20a5140c5b27e477891f6ba383d19bcc7513fc1f77531bfe3d98b8ad076a"
+    },
+    "archive_bytes": 31129225,
+    "sha256": "ca8fe9aeb8906181626c0085a8fcc766c5f3b0238de66ab78cb61a4d5bddbd23",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-DLTR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

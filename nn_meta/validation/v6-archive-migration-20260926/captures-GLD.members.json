@@ -1,0 +1,10 @@
+{
+  "id": "captures-GLD",
+  "sha256": "7c1b2679a28c4235798a3c62188c5dadcdedeaffa7a4b2658f8b5b76ec08dcb8",
+  "members": {
+    "files": 28920,
+    "directories": 4163,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

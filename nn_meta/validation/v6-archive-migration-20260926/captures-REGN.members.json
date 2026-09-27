@@ -1,0 +1,10 @@
+{
+  "id": "captures-REGN",
+  "sha256": "622855ccb39ea0870d33ba5a9821a00f02968a07dd6b5abe148fb7bca7cb6ed5",
+  "members": {
+    "files": 22342,
+    "directories": 4651,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

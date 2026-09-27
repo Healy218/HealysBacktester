@@ -1,0 +1,13 @@
+{
+  "id": "captures-SLB",
+  "source": {
+    "files": 21630,
+    "directories": 4513,
+    "symlinks": 0,
+    "bytes": 74774638,
+    "metadata_sha256": "b92dfd7bfe956b1e69346cc823b6fbb963f294e4a44d4d61897daa3771d8e436"
+  },
+  "archive_bytes": 62642166,
+  "sha256": "982cbded42aaa7d7382dc4025205372e753f29f1a457407e85348ee1eaab1725",
+  "state": "packed-source-stable"
+}

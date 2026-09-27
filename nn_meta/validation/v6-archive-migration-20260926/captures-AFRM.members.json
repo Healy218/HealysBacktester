@@ -1,0 +1,10 @@
+{
+  "id": "captures-AFRM",
+  "sha256": "f74bb6e4d9a70d13f6df2b11035ff6ac70b722af71849866a0fb2aacfb2c2b8b",
+  "members": {
+    "files": 26206,
+    "directories": 5455,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

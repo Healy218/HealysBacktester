@@ -1,0 +1,10 @@
+{
+  "id": "captures-NOK",
+  "sha256": "5bd985bcf81328cfee9b93b9e3b2c281fed381b9e48bb9e2ea9ad26288f2479e",
+  "members": {
+    "files": 22460,
+    "directories": 4661,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

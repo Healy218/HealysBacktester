@@ -1,0 +1,10 @@
+{
+  "id": "captures-ASST",
+  "sha256": "aef1200036a6f4225aed5a4f72023a9c33ba9be0000e3527e7bd9e9099537db8",
+  "members": {
+    "files": 7036,
+    "directories": 1559,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

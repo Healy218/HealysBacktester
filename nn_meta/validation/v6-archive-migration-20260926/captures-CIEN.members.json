@@ -1,0 +1,10 @@
+{
+  "id": "captures-CIEN",
+  "sha256": "153e1292a4f0fb407c7187890361507c4cd36c9232b92d390b391d1d2fbb5965",
+  "members": {
+    "files": 18084,
+    "directories": 4865,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

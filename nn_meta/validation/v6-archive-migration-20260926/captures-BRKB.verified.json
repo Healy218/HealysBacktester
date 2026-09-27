@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-BRKB",
+    "source": {
+      "files": 21810,
+      "directories": 4545,
+      "symlinks": 0,
+      "bytes": 68226367,
+      "metadata_sha256": "89dde739046898befd8623fc16eac4bc9ad9a09ec6606bc3183d505d5e8b002d"
+    },
+    "archive_bytes": 56106759,
+    "sha256": "9a20c24be025e986f83d315f407a5d63601fc8d102d61836ede4bec2555ab249",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-BRKB.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

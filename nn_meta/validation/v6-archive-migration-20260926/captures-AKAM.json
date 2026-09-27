@@ -1,0 +1,13 @@
+{
+  "id": "captures-AKAM",
+  "source": {
+    "files": 22816,
+    "directories": 5329,
+    "symlinks": 0,
+    "bytes": 30477699,
+    "metadata_sha256": "1a9f34f20a61fce249d5321afbc757d472841a717cefbad162066bf79fe8c163"
+  },
+  "archive_bytes": 17597939,
+  "sha256": "509ccdfdfd21b00e16b270b3ce48aea4bc68395c7c99073ba60218adef197a02",
+  "state": "packed-source-stable"
+}

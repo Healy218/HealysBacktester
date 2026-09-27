@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-AFRM",
+    "source": {
+      "files": 26206,
+      "directories": 5455,
+      "symlinks": 0,
+      "bytes": 127527566,
+      "metadata_sha256": "31da8616c9cb6fb6d1ebded1388c08f76e8a141c39cd3f5d24a044e33e62ad1a"
+    },
+    "archive_bytes": 112914177,
+    "sha256": "f74bb6e4d9a70d13f6df2b11035ff6ac70b722af71849866a0fb2aacfb2c2b8b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-AFRM.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

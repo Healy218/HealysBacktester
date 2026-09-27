@@ -1,0 +1,10 @@
+{
+  "id": "captures-NUE",
+  "sha256": "bd33da772b761a63b3c6b258f1d9ae33a2e13da35dcd8b941591d63fa5c57c7b",
+  "members": {
+    "files": 19074,
+    "directories": 4527,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

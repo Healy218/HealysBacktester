@@ -1,0 +1,10 @@
+{
+  "id": "captures-LCID",
+  "sha256": "00316a7bc5d1de83c7081d51090896c9b580a834f19be9ccba105931a18dcd5d",
+  "members": {
+    "files": 23406,
+    "directories": 4891,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-AMAT",
+  "source": {
+    "files": 19062,
+    "directories": 3959,
+    "symlinks": 0,
+    "bytes": 99321357,
+    "metadata_sha256": "fe0d127f25a895dd5a97d9fd720799bfccab10fc980289e822c5986bcb04e1f2"
+  },
+  "archive_bytes": 88691459,
+  "sha256": "2fa052ac2ffbd0eb2def112a1484a084a13bfc0eb72b955a7d494c81a56466cb",
+  "state": "packed-source-stable"
+}

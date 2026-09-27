@@ -1,0 +1,13 @@
+{
+  "id": "captures-BSX",
+  "source": {
+    "files": 24842,
+    "directories": 5185,
+    "symlinks": 0,
+    "bytes": 42591710,
+    "metadata_sha256": "4110af53d955a4bd25e9afa0ef98f7efc3d515a06704c7c7de109b876283da15"
+  },
+  "archive_bytes": 28401930,
+  "sha256": "09c373ba69192e54847985cd1fb1627579cd6e25b107a9f9bdbab96761824d56",
+  "state": "packed-source-stable"
+}

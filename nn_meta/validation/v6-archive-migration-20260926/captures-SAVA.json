@@ -1,0 +1,13 @@
+{
+  "id": "captures-SAVA",
+  "source": {
+    "files": 19956,
+    "directories": 4241,
+    "symlinks": 0,
+    "bytes": 22779398,
+    "metadata_sha256": "f1d1784322187efd05b522f7f932fa0e8d6a909d94ad09533d63513206644f22"
+  },
+  "archive_bytes": 10866361,
+  "sha256": "ce91e8e22f3e8548e11f828e8b99e86f52c2faa183b19377ff0153bb057fa687",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-ELF",
+  "source": {
+    "files": 27826,
+    "directories": 5803,
+    "symlinks": 0,
+    "bytes": 55143149,
+    "metadata_sha256": "509fb26f9f304421c86a58da6ccb65e82dc5b6be05570575c5d10fecb9a435eb"
+  },
+  "archive_bytes": 39334484,
+  "sha256": "450d162afcdab45bc79468b28d2e8c15f6ffcca03cabda31d4778952722f049b",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-BOIL",
+  "sha256": "5b2fff2ac7ddb4b5269e0239bfbd7b08c894925714c91e94ef93118bce49bb4a",
+  "members": {
+    "files": 26040,
+    "directories": 5441,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

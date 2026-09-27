@@ -1,0 +1,13 @@
+{
+  "id": "captures-CNC",
+  "source": {
+    "files": 18058,
+    "directories": 3765,
+    "symlinks": 0,
+    "bytes": 30114755,
+    "metadata_sha256": "dfce70bdaf9a45d70090d0de59f27ebc8c68b826abd2e1c8bc7a6ec1fd684480"
+  },
+  "archive_bytes": 19807841,
+  "sha256": "c3a4798e4d44d6fc2338e86b8f1a57b0c7cf85e405f53a34d254ca6ff609986b",
+  "state": "packed-source-stable"
+}

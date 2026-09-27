@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-UVIX",
+    "source": {
+      "files": 21154,
+      "directories": 4425,
+      "symlinks": 0,
+      "bytes": 43979496,
+      "metadata_sha256": "46bb821f8d9a8b277b67acbaf550bd2ff1c242f96eed83c38ac8ee2ba43c8610"
+    },
+    "archive_bytes": 32081205,
+    "sha256": "f09004b1c9fbba7acd49ff3a5fa41034f17951135827bba097c6daa478681a2b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-UVIX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

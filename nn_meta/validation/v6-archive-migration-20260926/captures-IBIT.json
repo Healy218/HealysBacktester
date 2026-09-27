@@ -1,0 +1,13 @@
+{
+  "id": "captures-IBIT",
+  "source": {
+    "files": 23176,
+    "directories": 4283,
+    "symlinks": 0,
+    "bytes": 201447522,
+    "metadata_sha256": "b1046477564a867b110c4aa1db16caaaca2751edf6c518591c56b677aed86bda"
+  },
+  "archive_bytes": 188513144,
+  "sha256": "8a64a59beac57ee0cfc94420173f4735bc722f6f94ba6d7422f18421220fba37",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-TQQQ",
+  "sha256": "5002a9aeda6d8505889651c3efe69625b34b4638d95fed9f0c2b873c760cee41",
+  "members": {
+    "files": 19764,
+    "directories": 4111,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

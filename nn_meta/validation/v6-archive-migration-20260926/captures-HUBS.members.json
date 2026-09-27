@@ -1,0 +1,10 @@
+{
+  "id": "captures-HUBS",
+  "sha256": "cf8772605b0c06f49bfde02ea116ecc31c9e93e6bcf2b84aa9b5d2b77641b6da",
+  "members": {
+    "files": 17590,
+    "directories": 5791,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

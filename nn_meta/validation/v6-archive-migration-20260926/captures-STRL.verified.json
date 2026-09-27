@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-STRL",
+    "source": {
+      "files": 14190,
+      "directories": 4717,
+      "symlinks": 0,
+      "bytes": 14873307,
+      "metadata_sha256": "a0538801c313c373845c9921b492ee98d3d1dc805a61795d63fa960f4a36093c"
+    },
+    "archive_bytes": 7742173,
+    "sha256": "2df69a03197447af406f9fc5b20596df48d38c73f82a62613bc2bdc37c2d7ae9",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-STRL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-CDE",
+  "sha256": "9309050920d8795ac0364e5a3f789f82332ec44ece3fd838a2a953a185a84864",
+  "members": {
+    "files": 14520,
+    "directories": 3933,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

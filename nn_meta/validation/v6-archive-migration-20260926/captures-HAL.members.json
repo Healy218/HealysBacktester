@@ -1,0 +1,10 @@
+{
+  "id": "captures-HAL",
+  "sha256": "10ce5a3cf8f08c43b8c3e024679d641bd4547e38294632c1ce79b26f4a9505f5",
+  "members": {
+    "files": 21926,
+    "directories": 4571,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

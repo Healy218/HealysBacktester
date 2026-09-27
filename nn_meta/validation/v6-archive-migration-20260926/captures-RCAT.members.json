@@ -1,0 +1,10 @@
+{
+  "id": "captures-RCAT",
+  "sha256": "f395df759e3872d267e366c5626d59f88105ad59e2edadaea3cc703e85fab42e",
+  "members": {
+    "files": 26570,
+    "directories": 5905,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

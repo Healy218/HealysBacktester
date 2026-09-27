@@ -1,0 +1,10 @@
+{
+  "id": "captures-COF",
+  "sha256": "ae9324c3974add4ff61c71ec8183733e6e5ee510a057a13b08c16f688f5964bd",
+  "members": {
+    "files": 21720,
+    "directories": 4525,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

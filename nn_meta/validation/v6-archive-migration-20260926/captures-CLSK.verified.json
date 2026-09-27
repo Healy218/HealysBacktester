@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CLSK",
+    "source": {
+      "files": 18338,
+      "directories": 3817,
+      "symlinks": 0,
+      "bytes": 84407277,
+      "metadata_sha256": "b790d774f9144573a99b3fd3ce0db8723b5643c3902e67932a58f09c2447248b"
+    },
+    "archive_bytes": 74310884,
+    "sha256": "4859c60753202026ad4fbfab8ebbb575a0dd7f72455fa47298de64290eac3d5a",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CLSK.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-AMDL",
+  "sha256": "6c8c0f242f8740acab97e54746a8a413dea790ddfe896e8fcfa100000a694591",
+  "members": {
+    "files": 16908,
+    "directories": 4283,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

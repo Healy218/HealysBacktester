@@ -1,0 +1,10 @@
+{
+  "id": "captures-CVNA",
+  "sha256": "52acb9c0adfe39f690286950d0be3bc63d246c2edda65aa58fc1f3d2b6909726",
+  "members": {
+    "files": 23838,
+    "directories": 4969,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-CDE",
+  "source": {
+    "files": 14520,
+    "directories": 3933,
+    "symlinks": 0,
+    "bytes": 25731395,
+    "metadata_sha256": "99feaf39443c19cd2782024a05ccc2cbfb751d320e963745ff61265191a5748b"
+  },
+  "archive_bytes": 18112813,
+  "sha256": "9309050920d8795ac0364e5a3f789f82332ec44ece3fd838a2a953a185a84864",
+  "state": "packed-source-stable"
+}

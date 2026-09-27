@@ -1,0 +1,10 @@
+{
+  "id": "captures-SNOW",
+  "sha256": "b6c45262743a5d22c93482527ff4fa6a3493f0826893b4d0fffa01399de1f2c9",
+  "members": {
+    "files": 17668,
+    "directories": 3683,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

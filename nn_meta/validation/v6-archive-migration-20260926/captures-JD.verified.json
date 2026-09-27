@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-JD",
+    "source": {
+      "files": 20598,
+      "directories": 4307,
+      "symlinks": 0,
+      "bytes": 72164890,
+      "metadata_sha256": "36ba0902b8cc2be9ab8e0d364cfcd951980d023412cdacee7ad661c02ac2fecc"
+    },
+    "archive_bytes": 60793015,
+    "sha256": "a5b2e7f7348b488668ae2e2b5f37e1d67451d4cf5b73052863c962ba8e35f249",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-JD.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

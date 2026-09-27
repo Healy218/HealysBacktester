@@ -1,0 +1,10 @@
+{
+  "id": "captures-LNG",
+  "sha256": "569db0d1ec5dbff3b42ae6b74d8868807076cfe633b66db0f269c2993db7cd9b",
+  "members": {
+    "files": 21928,
+    "directories": 5117,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

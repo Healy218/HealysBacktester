@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-PANW",
+    "source": {
+      "files": 22846,
+      "directories": 4767,
+      "symlinks": 0,
+      "bytes": 95032671,
+      "metadata_sha256": "641bb90f6df621813e51d6683f1452d57283e035bb95a096a36e976db1050640"
+    },
+    "archive_bytes": 82407293,
+    "sha256": "ea5dae47af0101f60da866a4ee859f65a9a16cb97241f541734ff0a8c57d588b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-PANW.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-ASHR",
+  "sha256": "6fc9c67e9a9b6e99f16814a3e9b4bb4416b832009a4214d3e6a1f82c64f8e90c",
+  "members": {
+    "files": 19112,
+    "directories": 3983,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

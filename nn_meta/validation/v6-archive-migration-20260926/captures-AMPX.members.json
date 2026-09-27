@@ -1,0 +1,10 @@
+{
+  "id": "captures-AMPX",
+  "sha256": "ed6a44255ecc90d4d25cbd104c821c3e78bd1c5b9ebd7d421824173bf614ee6f",
+  "members": {
+    "files": 16034,
+    "directories": 4887,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

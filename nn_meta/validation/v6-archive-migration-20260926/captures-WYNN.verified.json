@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-WYNN",
+    "source": {
+      "files": 21710,
+      "directories": 4537,
+      "symlinks": 0,
+      "bytes": 46692334,
+      "metadata_sha256": "04c64fe0aa591a269d9ef043e7ec46333f7d8dfc07081950ff6e751b847e97a3"
+    },
+    "archive_bytes": 34211111,
+    "sha256": "192af592b7084be72ab4a38fd0c3e1897c81c11186a2800e9c3cbcd76507118f",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-WYNN.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

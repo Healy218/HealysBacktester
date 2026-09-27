@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ULTA",
+    "source": {
+      "files": 21794,
+      "directories": 4545,
+      "symlinks": 0,
+      "bytes": 33877644,
+      "metadata_sha256": "caa6c08013c25a7a8d1a68b026c6d7daf603a562e9a4f60fa3f955563638c6a7"
+    },
+    "archive_bytes": 21285738,
+    "sha256": "8512cef6f4297dc7f3a6f3433c507207627c3c5cc1017f871dbbd01902c5630c",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ULTA.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-CEG",
+  "sha256": "04ce11ad8eee4604c8e20acdcdb86e73a592d349863952b7f65b751ab96b85fd",
+  "members": {
+    "files": 20302,
+    "directories": 4287,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

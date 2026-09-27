@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-TNA",
+    "source": {
+      "files": 22662,
+      "directories": 4709,
+      "symlinks": 0,
+      "bytes": 100251013,
+      "metadata_sha256": "8c99bf76fbfa3b75ad7d6c4666adb2ca893cfe73fbe7006c6065bf395971ff27"
+    },
+    "archive_bytes": 87675077,
+    "sha256": "afa21f4a5b0a98780e3be71ea320476e9e8807b2598a15c2bdabbc44cb6f1c09",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-TNA.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

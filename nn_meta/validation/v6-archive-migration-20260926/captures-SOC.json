@@ -1,0 +1,13 @@
+{
+  "id": "captures-SOC",
+  "source": {
+    "files": 19658,
+    "directories": 5159,
+    "symlinks": 0,
+    "bytes": 25987586,
+    "metadata_sha256": "5b9f646589d44fbeaf5e5de4fe51151b988a5a99706aae3934c4337f8d90ac9b"
+  },
+  "archive_bytes": 15392861,
+  "sha256": "30e737b9ff9c391b469e43aca5dde962ac746432323b6b3e235e27dc52cbbb6e",
+  "state": "packed-source-stable"
+}

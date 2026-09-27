@@ -1,0 +1,13 @@
+{
+  "id": "captures-EWY",
+  "source": {
+    "files": 15380,
+    "directories": 4403,
+    "symlinks": 0,
+    "bytes": 27100289,
+    "metadata_sha256": "c74f7fff9d4b77b4c03fab00a8ed86ce87e421a98023c272cfd549fd5cb99e54"
+  },
+  "archive_bytes": 18998838,
+  "sha256": "f13d6a765a39c91c00681a15f53e07bc63a3de7dda04c1a9f40bffedd7009a1f",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-GOLD",
+  "sha256": "a8d160ffa761b6c1e87bc2660c8e2b21a2c97758565518a70394d66fdc8ca43b",
+  "members": {
+    "files": 12570,
+    "directories": 3883,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

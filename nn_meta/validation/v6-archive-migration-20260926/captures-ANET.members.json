@@ -1,0 +1,10 @@
+{
+  "id": "captures-ANET",
+  "sha256": "8bda8b2dd750b4a283a0d953e4c9feda41f8f3c29de926b70d1df541be943e5c",
+  "members": {
+    "files": 22324,
+    "directories": 4649,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

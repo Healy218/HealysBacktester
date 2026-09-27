@@ -1,0 +1,13 @@
+{
+  "id": "captures-JNJ",
+  "source": {
+    "files": 20062,
+    "directories": 4177,
+    "symlinks": 0,
+    "bytes": 70719317,
+    "metadata_sha256": "e5432f004a65f7ee5dc973736f969b7f8e482869664fa7ed44ed90ec2a033d1d"
+  },
+  "archive_bytes": 59644181,
+  "sha256": "db56aeb246c62fc9ee8fe162a5275e1705db3241288996600364e5cecb5a21a3",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-LEU",
+    "source": {
+      "files": 12458,
+      "directories": 4117,
+      "symlinks": 0,
+      "bytes": 18143645,
+      "metadata_sha256": "23b45583d7122eb71a341436a816aabce5ac52337f30eb139807f12e21c6086c"
+    },
+    "archive_bytes": 12141811,
+    "sha256": "e37fe0e9610bec098a0e58022df12fdd7ca710d43c8c57fdc115e3bdc5899eaf",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-LEU.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-FISV",
+  "source": {
+    "files": 10652,
+    "directories": 2381,
+    "symlinks": 0,
+    "bytes": 16416775,
+    "metadata_sha256": "e4b93e3837dd7eab2a328a3a8eb3b263fbd74cffa62ff3754847996f9fa841c7"
+  },
+  "archive_bytes": 10461570,
+  "sha256": "42911eed3e948c1ba8f89d821065306c7db758ac4852b7a998df9279ddf19349",
+  "state": "packed-source-stable"
+}

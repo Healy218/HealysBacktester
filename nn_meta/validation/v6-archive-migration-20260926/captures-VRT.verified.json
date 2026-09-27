@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-VRT",
+    "source": {
+      "files": 22080,
+      "directories": 4609,
+      "symlinks": 0,
+      "bytes": 98988351,
+      "metadata_sha256": "bea988bdd0c5e81396e3f3fd89eccb93c9a7df71c15a476261cf287184c8d972"
+    },
+    "archive_bytes": 86758524,
+    "sha256": "21777c684e10e5a711df0b2f5ffbb7122f4f5a34e9d587f21b9a74623f816cb2",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-VRT.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

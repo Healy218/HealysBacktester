@@ -1,0 +1,13 @@
+{
+  "id": "captures-PENG",
+  "source": {
+    "files": 13630,
+    "directories": 4611,
+    "symlinks": 0,
+    "bytes": 13359754,
+    "metadata_sha256": "fab944a2f7226c42162e053fbb1b53530333098f20d7621da921de336c23e10b"
+  },
+  "archive_bytes": 6526961,
+  "sha256": "e77ff3a7b1125ccb5bb9d5535646f4cb618f5ca5204c59c28c664b64550c4378",
+  "state": "packed-source-stable"
+}

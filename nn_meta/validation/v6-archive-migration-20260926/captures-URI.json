@@ -1,0 +1,13 @@
+{
+  "id": "captures-URI",
+  "source": {
+    "files": 22880,
+    "directories": 4773,
+    "symlinks": 0,
+    "bytes": 32811710,
+    "metadata_sha256": "c928d2fc2df3449d9a57f16e1ff5e79e573c1f80304e63ca2a2fc920a2e87465"
+  },
+  "archive_bytes": 19513311,
+  "sha256": "f578c2d3fdccbb4d328dba4761e1bf019e6840976ca7c9e3a0d7c8ba7ef07de6",
+  "state": "packed-source-stable"
+}

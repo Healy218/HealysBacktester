@@ -1,0 +1,13 @@
+{
+  "id": "captures-QCOM",
+  "source": {
+    "files": 20714,
+    "directories": 4311,
+    "symlinks": 0,
+    "bytes": 102629845,
+    "metadata_sha256": "a9667ed6f9e9ee25b663ab69293741629d5d4dd0f135eb03b7f5a34842a922af"
+  },
+  "archive_bytes": 91191398,
+  "sha256": "673b2c50063fd938bdccd8405c9de5c4457078e6245b14adae43820bf5b0ff47",
+  "state": "packed-source-stable"
+}

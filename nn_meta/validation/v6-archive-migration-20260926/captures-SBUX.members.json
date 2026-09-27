@@ -1,0 +1,10 @@
+{
+  "id": "captures-SBUX",
+  "sha256": "63b5d85de0355c7886fe76ec923ccdc62a33cb2050c80abeebf3a41dd6e31321",
+  "members": {
+    "files": 22158,
+    "directories": 4623,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

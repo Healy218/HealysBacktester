@@ -1,0 +1,13 @@
+{
+  "id": "captures-YINN",
+  "source": {
+    "files": 23824,
+    "directories": 4971,
+    "symlinks": 0,
+    "bytes": 44249438,
+    "metadata_sha256": "a7ea556f57d439685adfe85f41fe7aedebeeea4308f98a6ac61336849172fc38"
+  },
+  "archive_bytes": 30551309,
+  "sha256": "f91a456e666cb439f59157413778d42ef294f8d0bc5f7fc1aaaec53bffeee7a4",
+  "state": "packed-source-stable"
+}

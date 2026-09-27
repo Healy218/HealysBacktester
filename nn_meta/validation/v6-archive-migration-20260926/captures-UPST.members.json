@@ -1,0 +1,10 @@
+{
+  "id": "captures-UPST",
+  "sha256": "aa996311f3ff2a8370444672366dc80809bfa3492fb28870922c96b0a0ec09df",
+  "members": {
+    "files": 24426,
+    "directories": 5089,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

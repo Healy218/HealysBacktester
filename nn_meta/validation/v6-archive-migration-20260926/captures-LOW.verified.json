@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-LOW",
+    "source": {
+      "files": 22178,
+      "directories": 4635,
+      "symlinks": 0,
+      "bytes": 58563092,
+      "metadata_sha256": "d6f27b4045028c236c4f038c27331cd53eae6cfcb79969a176c21462a1738341"
+    },
+    "archive_bytes": 46010370,
+    "sha256": "cf90d0e8d622f3f309fc57558307cc910e3e84b2849dbdde721496a235d96716",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-LOW.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

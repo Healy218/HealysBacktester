@@ -1,0 +1,13 @@
+{
+  "id": "captures-CI",
+  "source": {
+    "files": 27324,
+    "directories": 5681,
+    "symlinks": 0,
+    "bytes": 37836497,
+    "metadata_sha256": "454b5ad6d3af830f20276a693004bfd6a07bfe7362c1f70821639f40c5daa809"
+  },
+  "archive_bytes": 22047961,
+  "sha256": "bd0a0a407d0c6790351f8825bfe8d4bc5e9eed5c6fa558e9d15dd2c086aa568f",
+  "state": "packed-source-stable"
+}

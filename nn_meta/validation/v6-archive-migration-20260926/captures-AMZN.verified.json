@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-AMZN",
+    "source": {
+      "files": 30272,
+      "directories": 5677,
+      "symlinks": 0,
+      "bytes": 535493905,
+      "metadata_sha256": "c49f55b4afed1c8df291b39605e767b4ff9663b1eff14b90322fa3ea7f42e442"
+    },
+    "archive_bytes": 519101370,
+    "sha256": "de4b6feb91eda557bb766af1dea53aad5efdbcbbb1f84c94cbfd8208e97a1f53",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-AMZN.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

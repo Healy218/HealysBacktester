@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ABNB",
+    "source": {
+      "files": 23746,
+      "directories": 4949,
+      "symlinks": 0,
+      "bytes": 80054380,
+      "metadata_sha256": "5fd52d87d867b9a415ee752d74de66f9cb944fb2552376bb6572cabd2b902ce6"
+    },
+    "archive_bytes": 66654849,
+    "sha256": "5637d05b33094da67238f90bf1651b946a3376ee08d88be720f02cd31fd2381e",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ABNB.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

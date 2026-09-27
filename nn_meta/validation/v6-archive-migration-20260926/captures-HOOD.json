@@ -1,0 +1,13 @@
+{
+  "id": "captures-HOOD",
+  "source": {
+    "files": 26958,
+    "directories": 5615,
+    "symlinks": 0,
+    "bytes": 300710867,
+    "metadata_sha256": "589edae47c46854fc52024458eb829164ba1bcce1b59cdc503009a25ad2f5d90"
+  },
+  "archive_bytes": 286243772,
+  "sha256": "bf534a85b17b4bda3cb46aea3a70ec19507d79b948bfd97c70df34487e217012",
+  "state": "packed-source-stable"
+}

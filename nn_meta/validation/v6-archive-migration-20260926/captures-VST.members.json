@@ -1,0 +1,10 @@
+{
+  "id": "captures-VST",
+  "sha256": "b580f5f75bf8c988ee0723bc960f70c1bbd9ff1e2cc652e601d56a1bb7afbada",
+  "members": {
+    "files": 21094,
+    "directories": 4401,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

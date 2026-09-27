@@ -1,0 +1,13 @@
+{
+  "id": "captures-IREN",
+  "source": {
+    "files": 18804,
+    "directories": 3927,
+    "symlinks": 0,
+    "bytes": 112584322,
+    "metadata_sha256": "8b0a64fcbcda024f9c705513d5049f59846900c39b34d67b6da663d2f319df41"
+  },
+  "archive_bytes": 102229437,
+  "sha256": "16536e3443afff616250b6985d82cbed63d1e760e4882ee269fadac853198d15",
+  "state": "packed-source-stable"
+}

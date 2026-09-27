@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-PEP",
+    "source": {
+      "files": 21632,
+      "directories": 4505,
+      "symlinks": 0,
+      "bytes": 99406612,
+      "metadata_sha256": "1d7dad98a040745123d3a8efde499ce48fb3f9297d6b705870e3567e628e8e69"
+    },
+    "archive_bytes": 87456719,
+    "sha256": "2d1cee1073ef10071f0b82d111853b74cf3aae43a1aa7ff877156a3bca880a37",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-PEP.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

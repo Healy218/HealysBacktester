@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-AVGO",
+    "source": {
+      "files": 27772,
+      "directories": 5163,
+      "symlinks": 0,
+      "bytes": 313656731,
+      "metadata_sha256": "4aa92db8ea9b72b627acfed91676f9adae9e022d1e6a70aec49ca5e23e111c72"
+    },
+    "archive_bytes": 298255983,
+    "sha256": "4d45d2ef9087eb2f1992b2bc7015f9600c0696cc3b89c8c38e10729afad51182",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-AVGO.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

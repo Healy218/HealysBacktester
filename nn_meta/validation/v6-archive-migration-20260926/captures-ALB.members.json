@@ -1,0 +1,10 @@
+{
+  "id": "captures-ALB",
+  "sha256": "ffdfd2f377fbb5e6c5ff493ed6e4b427d308545f2370a1d3750f1f2ed811e23f",
+  "members": {
+    "files": 22808,
+    "directories": 4771,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

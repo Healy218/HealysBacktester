@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ARKK",
+    "source": {
+      "files": 23516,
+      "directories": 4889,
+      "symlinks": 0,
+      "bytes": 92762139,
+      "metadata_sha256": "ebce79d16a5e7cfe3f2e578aef0f19e354fd1916b0684870630f081e76e5fe6d"
+    },
+    "archive_bytes": 79439469,
+    "sha256": "4da38a5f057ace91774df4bf0b061bcbfa32fd7bcd011b017f87cbdf4926c0bf",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ARKK.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

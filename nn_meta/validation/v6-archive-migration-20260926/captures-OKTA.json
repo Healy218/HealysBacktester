@@ -1,0 +1,13 @@
+{
+  "id": "captures-OKTA",
+  "source": {
+    "files": 22578,
+    "directories": 4707,
+    "symlinks": 0,
+    "bytes": 71950433,
+    "metadata_sha256": "8c9ab5e9a169fe86258268351b0c6c4c3f246b90eec21c6077f5b72149e1ec4b"
+  },
+  "archive_bytes": 59117019,
+  "sha256": "9e49dd0f714b5f9195d4dd6a84b2b1660087992fd7ba8ff842e674864ccc2a92",
+  "state": "packed-source-stable"
+}

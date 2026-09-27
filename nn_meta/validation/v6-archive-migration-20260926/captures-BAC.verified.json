@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-BAC",
+    "source": {
+      "files": 21964,
+      "directories": 4565,
+      "symlinks": 0,
+      "bytes": 232506814,
+      "metadata_sha256": "748c461ce447baec1f8589134e426de24dc99cd48258f1c324b5c87f29ba6baf"
+    },
+    "archive_bytes": 220670911,
+    "sha256": "ca5d0027b68522418d5172c0b64e7d111c37abc655f3ec65acbe8509faa0f585",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-BAC.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

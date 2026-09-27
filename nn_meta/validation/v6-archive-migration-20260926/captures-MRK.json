@@ -1,0 +1,13 @@
+{
+  "id": "captures-MRK",
+  "source": {
+    "files": 23854,
+    "directories": 4987,
+    "symlinks": 0,
+    "bytes": 86410154,
+    "metadata_sha256": "f1feb25a9080eea76a138d87cb9bc8555fb1accd79f6f6375915d86230c40fd0"
+  },
+  "archive_bytes": 73150603,
+  "sha256": "9bf3199cb398c7e015ce5fb536abbf6d8a87cd75840141ec50fb8b216d22c6ea",
+  "state": "packed-source-stable"
+}

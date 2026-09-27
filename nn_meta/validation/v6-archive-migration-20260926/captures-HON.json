@@ -1,0 +1,13 @@
+{
+  "id": "captures-HON",
+  "source": {
+    "files": 22868,
+    "directories": 4771,
+    "symlinks": 0,
+    "bytes": 36667637,
+    "metadata_sha256": "c2f9477fbe8f77bf6372c1417af482fc124293b28a2ac49e6cfe9ab735bd4f3e"
+  },
+  "archive_bytes": 23645428,
+  "sha256": "ec17e1402ff515955cb2c71c1624534dd12001fd2e7675f0bc98392405a09ef0",
+  "state": "packed-source-stable"
+}

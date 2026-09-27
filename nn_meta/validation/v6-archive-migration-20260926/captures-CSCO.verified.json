@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CSCO",
+    "source": {
+      "files": 20824,
+      "directories": 4341,
+      "symlinks": 0,
+      "bytes": 78335022,
+      "metadata_sha256": "32bd31901f434d0588e88fd2c8981afc2695ff554e834d2c96491a7328479e14"
+    },
+    "archive_bytes": 66782358,
+    "sha256": "e5904b5dfcd096776479b2eb47e6f9341ae5b152b1402f9a3291f5b368c5b7e6",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CSCO.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

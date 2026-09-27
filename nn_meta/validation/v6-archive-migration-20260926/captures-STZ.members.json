@@ -1,0 +1,10 @@
+{
+  "id": "captures-STZ",
+  "sha256": "7575e45050dacb1bbdf503e7b7f497a744603a64a6663f72a336cf773bc19eaf",
+  "members": {
+    "files": 22904,
+    "directories": 4777,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

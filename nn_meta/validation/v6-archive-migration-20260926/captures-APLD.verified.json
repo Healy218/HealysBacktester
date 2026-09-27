@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-APLD",
+    "source": {
+      "files": 18854,
+      "directories": 3925,
+      "symlinks": 0,
+      "bytes": 73981360,
+      "metadata_sha256": "f647748bc7caccacab9dfbae5aa792d2d7f732438ef1e115ffeed4ccb640c203"
+    },
+    "archive_bytes": 63577258,
+    "sha256": "6165bdd9a454b9472923ee793cec744f62e0cfcd9eadc1edcc6b5e6fd76ae8b7",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-APLD.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

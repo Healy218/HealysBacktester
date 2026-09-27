@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-FIX",
+    "source": {
+      "files": 13200,
+      "directories": 4369,
+      "symlinks": 0,
+      "bytes": 15228048,
+      "metadata_sha256": "2cddc9c170b9cf26130750ab4f8eef48242a23ba46cc882a60c3addffd21588c"
+    },
+    "archive_bytes": 8625223,
+    "sha256": "e3ad231b9b59c6a0bf6153e68a534154f5ea6ca4c770b435597b19c8effe1c93",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-FIX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

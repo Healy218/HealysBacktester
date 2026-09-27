@@ -1,0 +1,10 @@
+{
+  "id": "captures-CRDO",
+  "sha256": "09c9edf8863b50c2783151e45bd81e9a53611581fee0e7231a70819533bdc36b",
+  "members": {
+    "files": 19426,
+    "directories": 4923,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

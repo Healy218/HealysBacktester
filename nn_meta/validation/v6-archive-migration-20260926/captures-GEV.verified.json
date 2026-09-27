@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-GEV",
+    "source": {
+      "files": 20894,
+      "directories": 4399,
+      "symlinks": 0,
+      "bytes": 58418438,
+      "metadata_sha256": "ef1a9beaad2b081061eaf09ef6ea2b9f67d3fa4a95993d0477f40f0fa0745b41"
+    },
+    "archive_bytes": 46719287,
+    "sha256": "85737c570a4bf3da0cee76e382c3deaf4e501996cbd087011a6593f7ce7ce9ac",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-GEV.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

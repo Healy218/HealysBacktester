@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CAR",
+    "source": {
+      "files": 25372,
+      "directories": 5293,
+      "symlinks": 0,
+      "bytes": 35487836,
+      "metadata_sha256": "adb374f9c9d7113e10f6600bcce38e1a7b1378881aae8aba0d35e56f6a0f43ee"
+    },
+    "archive_bytes": 20732852,
+    "sha256": "a91f84bf4daf0cab6c2d82a7d7dd188c2af4eeed7f6ce798e7241ccefb7e3546",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CAR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

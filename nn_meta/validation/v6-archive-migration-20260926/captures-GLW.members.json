@@ -1,0 +1,10 @@
+{
+  "id": "captures-GLW",
+  "sha256": "328fbc9c5b7f81ae1a91ead6256acbcce7b2efe5bcd12030125cf804549797c9",
+  "members": {
+    "files": 20456,
+    "directories": 4273,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

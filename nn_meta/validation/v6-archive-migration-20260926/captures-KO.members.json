@@ -1,0 +1,10 @@
+{
+  "id": "captures-KO",
+  "sha256": "212d72762a9621fa521203e65468fe10ef7241e79d3df5e4d719101fbabf70ac",
+  "members": {
+    "files": 23522,
+    "directories": 4897,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

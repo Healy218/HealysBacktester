@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-TTWO",
+    "source": {
+      "files": 25752,
+      "directories": 5359,
+      "symlinks": 0,
+      "bytes": 43907997,
+      "metadata_sha256": "f4f1b5d5bb452736745ddaf6f162bee10256683015949732fd63f34406bde4c3"
+    },
+    "archive_bytes": 29053414,
+    "sha256": "c51bd06c034a7b786b4f490fe915501d3e733f39b73f99342607aea9e8cb2634",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-TTWO.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

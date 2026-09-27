@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CEG",
+    "source": {
+      "files": 20302,
+      "directories": 4287,
+      "symlinks": 0,
+      "bytes": 53242883,
+      "metadata_sha256": "396c5d5ded00afb3a62a6f5aae4dbafe1bd56a7751d31845a63a89e2ce41c275"
+    },
+    "archive_bytes": 41848432,
+    "sha256": "04ce11ad8eee4604c8e20acdcdb86e73a592d349863952b7f65b751ab96b85fd",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CEG.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

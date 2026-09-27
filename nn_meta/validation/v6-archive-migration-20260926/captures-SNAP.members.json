@@ -1,0 +1,10 @@
+{
+  "id": "captures-SNAP",
+  "sha256": "582f0d9d8fa6e27aa73e710377a9edac2af0d728d9b61a914f776c3e497411cb",
+  "members": {
+    "files": 15560,
+    "directories": 3233,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

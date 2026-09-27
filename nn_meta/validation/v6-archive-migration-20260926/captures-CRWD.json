@@ -1,0 +1,13 @@
+{
+  "id": "captures-CRWD",
+  "source": {
+    "files": 25230,
+    "directories": 5249,
+    "symlinks": 0,
+    "bytes": 132414383,
+    "metadata_sha256": "8475051e35bc27064b5f39dd8e7f64cef95bda34f9b7494844b6412159f5fbe0"
+  },
+  "archive_bytes": 118510567,
+  "sha256": "d89268fe8e477570b11ec3bd8e42b3e8b7a38c875024f0f5bfa8aa881088c6a6",
+  "state": "packed-source-stable"
+}

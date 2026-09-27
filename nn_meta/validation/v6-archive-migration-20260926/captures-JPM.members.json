@@ -1,0 +1,10 @@
+{
+  "id": "captures-JPM",
+  "sha256": "b58adfefc67643e3afa872751dab11cfe3ac7ca5c280eea83d51e62a60b1fac2",
+  "members": {
+    "files": 20522,
+    "directories": 4269,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

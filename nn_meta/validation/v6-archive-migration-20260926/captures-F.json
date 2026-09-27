@@ -1,0 +1,13 @@
+{
+  "id": "captures-F",
+  "source": {
+    "files": 19876,
+    "directories": 4153,
+    "symlinks": 0,
+    "bytes": 85348629,
+    "metadata_sha256": "2bc308c05497925fe5f4f78345520ebd2c8531c25d521e4b7334155e0aa4fcc3"
+  },
+  "archive_bytes": 74694672,
+  "sha256": "4eea5b7a5a7d5ac08e7570838b078c07f00091d30f032d10293dee06669d2402",
+  "state": "packed-source-stable"
+}

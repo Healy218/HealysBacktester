@@ -1,0 +1,13 @@
+{
+  "id": "captures-AAL",
+  "source": {
+    "files": 14608,
+    "directories": 3035,
+    "symlinks": 0,
+    "bytes": 47323429,
+    "metadata_sha256": "5b2087a9bcf93e81a9e3c82ae9eeb8a65f5d18b408b5d504eeb7edc821a4093c"
+  },
+  "archive_bytes": 39394306,
+  "sha256": "bf6fdded8715c7209997e20016da0a5a519441f987993c9fef4ff3362abf98f8",
+  "state": "packed-source-stable"
+}

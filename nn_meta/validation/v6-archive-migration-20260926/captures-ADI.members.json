@@ -1,0 +1,10 @@
+{
+  "id": "captures-ADI",
+  "sha256": "3ca373fcb50cc56b44e021adf29b75d06ea907be618efcfb70afc51c847a7146",
+  "members": {
+    "files": 24618,
+    "directories": 5143,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

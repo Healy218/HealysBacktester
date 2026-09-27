@@ -1,0 +1,13 @@
+{
+  "id": "captures-WULF",
+  "source": {
+    "files": 14638,
+    "directories": 3059,
+    "symlinks": 0,
+    "bytes": 47976991,
+    "metadata_sha256": "1b0f11bbe819205989c788ff3290b5a502127a01136600a70c0f3481952c7515"
+  },
+  "archive_bytes": 39859952,
+  "sha256": "28658caf4e96184bccab4e83d69cfa3c9ec976f497942796a65cc106a4d05de2",
+  "state": "packed-source-stable"
+}

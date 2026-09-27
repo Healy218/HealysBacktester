@@ -1,0 +1,13 @@
+{
+  "id": "captures-FLEX",
+  "source": {
+    "files": 12840,
+    "directories": 4215,
+    "symlinks": 0,
+    "bytes": 15426102,
+    "metadata_sha256": "97398a082fe8e4ec13a5cb2222efb8e359980d2b267b8e006dd21396d4b6c4b4"
+  },
+  "archive_bytes": 8994296,
+  "sha256": "598bae9abe01a8d29120bfd32ae6da6110cc266f9ab80553252b45b7d28ff9a9",
+  "state": "packed-source-stable"
+}

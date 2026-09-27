@@ -1,0 +1,13 @@
+{
+  "id": "captures-DAL",
+  "source": {
+    "files": 20676,
+    "directories": 4321,
+    "symlinks": 0,
+    "bytes": 88507983,
+    "metadata_sha256": "2e4834b1dbe691ce187c322d06cbf7f6cd3455068be472e7cce8dd95573fff76"
+  },
+  "archive_bytes": 77083983,
+  "sha256": "843cf19e887c11720f2c3372b931fc24f0836bee373771304aba923a1b28e067",
+  "state": "packed-source-stable"
+}

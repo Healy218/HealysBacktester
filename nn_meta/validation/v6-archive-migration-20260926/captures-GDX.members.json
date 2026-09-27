@@ -1,0 +1,10 @@
+{
+  "id": "captures-GDX",
+  "sha256": "1c7cd943e61b67e44e95ef8890ac11344648817c055216b4d241cf86a0ddaf39",
+  "members": {
+    "files": 22284,
+    "directories": 4643,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

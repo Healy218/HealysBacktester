@@ -1,0 +1,10 @@
+{
+  "id": "captures-KORU",
+  "sha256": "44db0c0d51db2ec96087884c936cbeba30471233f35960c8de429d2a0d560a31",
+  "members": {
+    "files": 13198,
+    "directories": 4511,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

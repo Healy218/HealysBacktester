@@ -1,0 +1,10 @@
+{
+  "id": "captures-CIFR",
+  "sha256": "e0ca148165a501e8f7de3979052bca724edfc991b0caedb8ed836b461ff4a5ab",
+  "members": {
+    "files": 28420,
+    "directories": 5909,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

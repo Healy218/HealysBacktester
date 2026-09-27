@@ -1,0 +1,10 @@
+{
+  "id": "captures-DXCM",
+  "sha256": "09ff5b5304154ed97f88c8a8a557a0092db33d35ca813dcf2c2cd355b7d9f993",
+  "members": {
+    "files": 24916,
+    "directories": 5195,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

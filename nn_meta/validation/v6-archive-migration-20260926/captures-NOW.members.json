@@ -1,0 +1,10 @@
+{
+  "id": "captures-NOW",
+  "sha256": "bcde9a80f5caf7dc8700bd07299d9f1173c67be98ebb6193ea6536ea4734e4b9",
+  "members": {
+    "files": 27628,
+    "directories": 5757,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-PYPL",
+  "source": {
+    "files": 23444,
+    "directories": 4891,
+    "symlinks": 0,
+    "bytes": 128358324,
+    "metadata_sha256": "e71cfbde22b9bb40ee9a80b6b4f9e22ab90a41fd61d9c44d786924a29faec342"
+  },
+  "archive_bytes": 115514009,
+  "sha256": "89d784c4843e1eb1a9701697f671453776b6fc2f1d50eefaede1543e97657b66",
+  "state": "packed-source-stable"
+}

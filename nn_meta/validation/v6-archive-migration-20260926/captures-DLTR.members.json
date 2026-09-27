@@ -1,0 +1,10 @@
+{
+  "id": "captures-DLTR",
+  "sha256": "ca8fe9aeb8906181626c0085a8fcc766c5f3b0238de66ab78cb61a4d5bddbd23",
+  "members": {
+    "files": 14616,
+    "directories": 3045,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

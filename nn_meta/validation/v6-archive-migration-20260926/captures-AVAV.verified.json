@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-AVAV",
+    "source": {
+      "files": 20410,
+      "directories": 5167,
+      "symlinks": 0,
+      "bytes": 31450015,
+      "metadata_sha256": "4e93bf6a1b607aca2c639c4094d8d06740265a3f3695d4c1f0d78cf301ce92e0"
+    },
+    "archive_bytes": 20324147,
+    "sha256": "8825acfbca1ca4a458941f8760e043c5de414761bf581212c516ab6e10006a59",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-AVAV.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

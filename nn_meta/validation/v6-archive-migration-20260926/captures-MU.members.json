@@ -1,0 +1,10 @@
+{
+  "id": "captures-MU",
+  "sha256": "600d8605cb68cf12c66e04e7a3f9d6e23a9b94987ffe54aef0383aa6bc4bfc7a",
+  "members": {
+    "files": 24318,
+    "directories": 4957,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

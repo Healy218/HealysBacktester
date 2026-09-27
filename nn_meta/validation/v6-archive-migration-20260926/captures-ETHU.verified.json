@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ETHU",
+    "source": {
+      "files": 19574,
+      "directories": 4409,
+      "symlinks": 0,
+      "bytes": 24423988,
+      "metadata_sha256": "cac963b40196a44bef1d2af4c20944ace961d3b83d1ee688d8ab1cc3556f2949"
+    },
+    "archive_bytes": 13201890,
+    "sha256": "05fb453369f6ea877fed22963e50fe9b7766f856b78411abe2aa2f29820ca3b9",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ETHU.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

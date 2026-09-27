@@ -1,0 +1,10 @@
+{
+  "id": "captures-XLP",
+  "sha256": "5999d4cdb9c837d98a0f63ba6b4057eb4b175a251aee94213afb5083ade19395",
+  "members": {
+    "files": 22966,
+    "directories": 4799,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

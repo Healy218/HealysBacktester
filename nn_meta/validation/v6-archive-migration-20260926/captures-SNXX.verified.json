@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SNXX",
+    "source": {
+      "files": 0,
+      "directories": 1,
+      "symlinks": 0,
+      "bytes": 0,
+      "metadata_sha256": "21b49ef034d26f0592ec1b4e54dd1f0981a720cb3e81930faee4b5efb88fbb59"
+    },
+    "archive_bytes": 216,
+    "sha256": "cfed89c90169a7246bb27d7fd82132b456bd66dcfedfa54b8a20af490b4dee44",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SNXX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

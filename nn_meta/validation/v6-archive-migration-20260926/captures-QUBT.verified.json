@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-QUBT",
+    "source": {
+      "files": 23594,
+      "directories": 4961,
+      "symlinks": 0,
+      "bytes": 63801738,
+      "metadata_sha256": "f773d35ec15458e1a0abffb591d3cf528675f673845696a2b1cda3f04cdf6091"
+    },
+    "archive_bytes": 50724842,
+    "sha256": "3ac7b5c0ab5de90dac69e6454bb8458381f1305e8dd6b5c40b7b90d312cd096c",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-QUBT.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

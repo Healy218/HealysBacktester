@@ -1,0 +1,10 @@
+{
+  "id": "captures-CRSP",
+  "sha256": "4e62b32f838bbef5e97f87dc1ff14f58f39c9342098d9c33cfccb101415deb1d",
+  "members": {
+    "files": 21628,
+    "directories": 4503,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

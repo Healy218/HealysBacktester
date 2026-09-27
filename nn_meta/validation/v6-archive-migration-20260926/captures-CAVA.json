@@ -1,0 +1,13 @@
+{
+  "id": "captures-CAVA",
+  "source": {
+    "files": 21734,
+    "directories": 4527,
+    "symlinks": 0,
+    "bytes": 60597297,
+    "metadata_sha256": "c91c8eda467a38306ae09b528db6ea6b3db8503c06b2f56946d95274f91b910f"
+  },
+  "archive_bytes": 48339105,
+  "sha256": "3539c40f19c6e5c1c91b77e24dbcb43a181a13fa9c53a29e068453a5c6ca4405",
+  "state": "packed-source-stable"
+}

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Pack, externally verify, and retire the explicitly authorized old V6 tree.
 
-Three separate commands keep deletion behind completed external verification.
+Separate stages keep deletion behind completed external verification.
 Archives are partitioned by capture symbol for bounded restart and restoration.
 """
 import argparse
@@ -14,6 +14,7 @@ from pathlib import Path
 import shutil
 import stat
 import subprocess
+import tempfile
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -167,19 +168,61 @@ def transfer_one(group, bundle, destination):
 def restore_sample(bundle, destination, plan):
     group = next(g for g in plan['groups'] if g['id'] == 'captures-AA')
     root = ROOT / group['members'][0]
-    sample = next(p for p in root.rglob('*') if p.is_file() and not p.is_symlink())
-    relative = sample.relative_to(ROOT)
+    quote = next(p for p in root.rglob('*.quotes.json.gz') if p.is_file() and not p.is_symlink())
+    samples = [quote, quote.with_name(quote.name.replace('.quotes.', '.trades.')),
+               quote.parent / 'manifest.json']
+    relatives = [p.relative_to(ROOT) for p in samples]
     smoke = bundle / 'restore-smoke'
     smoke.mkdir(exist_ok=True)
     subprocess.run(['tar', '-I', 'zstd -T1 -d', '-xf', str(destination / 'captures-AA.tar.zst'),
-                    '-C', str(smoke), '--', str(relative)], check=True)
-    restored = smoke / relative
-    if sha(restored) != sha(sample) or restored.stat().st_mode != sample.stat().st_mode:
-        raise ValueError('Restoration smoke mismatch')
-    result = dict(path=str(relative), sha256=sha(sample), bytes=sample.stat().st_size,
-                  state='restored-from-external-and-compared')
+                    '-C', str(smoke), '--', *map(str, relatives)], check=True)
+    records = []
+    for sample, relative in zip(samples, relatives):
+        restored = smoke / relative
+        if sha(restored) != sha(sample) or restored.stat().st_mode != sample.stat().st_mode:
+            raise ValueError('Restoration smoke mismatch')
+        records.append(dict(path=str(relative), sha256=sha(sample), bytes=sample.stat().st_size))
+    result = dict(files=records, state='restored-from-external-and-compared')
     save(bundle / 'restore-smoke.json', result)
     save(destination / 'restore-smoke.json', result)
+
+
+def archive_census(archive):
+    """Count actual GNU-tar members, including archived hardlinks as files."""
+    counts = dict(files=0, directories=0, symlinks=0)
+    types = {'-': 'files', 'h': 'files', 'd': 'directories', 'l': 'symlinks'}
+    with tempfile.TemporaryFile() as errors:
+        process = subprocess.Popen(['tar', '--numeric-owner', '-I', 'zstd -T1 -d',
+                                    '-tvf', str(archive)], stdout=subprocess.PIPE, stderr=errors)
+        try:
+            for line in process.stdout:
+                key = types.get(chr(line[0]))
+                if key is None:
+                    raise ValueError('Unexpected archive member type: ' + repr(line[:120]))
+                counts[key] += 1
+            if process.wait() != 0:
+                raise ValueError('Archive listing failed')
+            errors.seek(0)
+            if errors.read():
+                raise ValueError('Unexpected archive listing diagnostics')
+        finally:
+            process.stdout.close()
+            if process.poll() is None:
+                process.terminate(); process.wait()
+    return counts
+
+
+def census_one(group, destination):
+    verified = json.loads((destination / (group['id'] + '.verified.json')).read_text())
+    packed = verified['packed']
+    actual = archive_census(destination / (group['id'] + '.tar.zst'))
+    expected = {key: packed['source'][key] for key in actual}
+    if actual != expected:
+        raise ValueError('Archive omits or adds members: ' + group['id'])
+    result = dict(id=group['id'], sha256=packed['sha256'], members=actual,
+                  state='actual-archive-member-counts-match-source')
+    save(destination / (group['id'] + '.members.json'), result)
+    return result
 
 
 def retire(bundle, destination, plan):
@@ -187,6 +230,10 @@ def retire(bundle, destination, plan):
     completion = json.loads((destination / 'VERIFIED.json').read_text())
     if completion['plan_sha256'] != sha(bundle / 'plan.json'):
         raise ValueError('Plan differs from externally verified plan')
+    census = json.loads((destination / 'MEMBERS-VERIFIED.json').read_text())
+    if census['plan_sha256'] != completion['plan_sha256'] or any(
+            census[key] != completion[key] for key in ('files', 'directories', 'symlinks')):
+        raise ValueError('Actual archive member counts not verified')
     journal = bundle / 'retirement.jsonl'
     done = set()
     if journal.exists():
@@ -236,7 +283,8 @@ def retire(bundle, destination, plan):
     save(locator, dict(external_folder=str(destination), drive_uuid=UUID,
                        plan_sha256=completion['plan_sha256'], restore='See external RESTORE.md',
                        retired_files=completion['files'], retired_directories=completion['directories']))
-    save(bundle / 'RETIRED.json', dict(state='complete', locator=str(locator), **completion))
+    save(bundle / 'RETIRED.json', {**completion, 'state': 'complete',
+                                  'stage': 'retire', 'locator': str(locator)})
     shutil.copyfile(bundle / 'RETIRED.json', destination / 'RETIRED.json')
     shutil.copyfile(journal, destination / journal.name)
     os.sync()
@@ -244,7 +292,7 @@ def retire(bundle, destination, plan):
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument('stage', choices=['pack', 'transfer', 'retire'])
+    ap.add_argument('stage', choices=['pack', 'transfer', 'census', 'retire'])
     ap.add_argument('--bundle', type=Path, required=True)
     ap.add_argument('--destination', type=Path)
     ap.add_argument('--workers', type=int, required=True)
@@ -271,6 +319,22 @@ def main():
         destination.mkdir(exist_ok=True)
     if args.stage == 'retire':
         retire(bundle, destination, plan)
+        return
+    if args.stage == 'census':
+        results = []
+        with ThreadPoolExecutor(max_workers=args.workers) as pool:
+            tasks = [pool.submit(census_one, g, destination) for g in plan['groups']]
+            for future in as_completed(tasks):
+                results.append(future.result())
+                save(bundle / 'progress.json', dict(stage='census', completed=len(results),
+                     total=len(tasks), updated_unix=time.time()))
+                print(f'Archive member census: {len(results)}/{len(tasks)}', flush=True)
+        result = dict(plan_sha256=sha(plan_file), archives=len(results),
+                      **{key: sum(r['members'][key] for r in results)
+                         for key in ('files', 'directories', 'symlinks')})
+        save(bundle / 'MEMBERS-VERIFIED.json', result)
+        save(destination / 'MEMBERS-VERIFIED.json', result)
+        print(json.dumps(result), flush=True)
         return
     if args.stage == 'pack' and shutil.disk_usage(bundle).free < 100 * 1024**3:
         raise ValueError('Insufficient local staging capacity')
@@ -309,7 +373,7 @@ def main():
             'Each tar.zst contains repo-relative paths, Unix metadata, ACLs and xattrs. '
             'Extract onto a Linux filesystem, not directly as loose files on exFAT.\n\n'
             'From the repository root, for each archive run:\n\n'
-            '    tar --xattrs --acls -I zstd -xf /path/to/archive.tar.zst\n\n'
+            '    tar --same-permissions --xattrs --acls -I zstd -xf /path/to/archive.tar.zst\n\n'
             'Extract context-and-stores.tar.zst last to restore parent metadata. '
             'Verify every compressed SHA256 against its corresponding verified.json before restoration. '
             'All archives passed full GNU tar source comparisons before source retirement. '

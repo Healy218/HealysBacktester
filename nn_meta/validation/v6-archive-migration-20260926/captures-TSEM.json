@@ -1,0 +1,13 @@
+{
+  "id": "captures-TSEM",
+  "source": {
+    "files": 12944,
+    "directories": 3983,
+    "symlinks": 0,
+    "bytes": 15547476,
+    "metadata_sha256": "4cc71c021aab729e2b2568f79c0715c3424f7c3063e051a36fa91984154e2fc9"
+  },
+  "archive_bytes": 8870316,
+  "sha256": "34971123d4c98bf40ea7c057a8f4b1aecd229da98c4d7edea6b71d94dddac7c5",
+  "state": "packed-source-stable"
+}

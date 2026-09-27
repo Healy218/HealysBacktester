@@ -1,0 +1,10 @@
+{
+  "id": "captures-SMH",
+  "sha256": "2519010147a3952b674fcc875a54c1eb1b9580bf1c2ffb1f92e0231f2d913409",
+  "members": {
+    "files": 19862,
+    "directories": 4061,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

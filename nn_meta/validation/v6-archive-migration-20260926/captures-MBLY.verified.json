@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-MBLY",
+    "source": {
+      "files": 19738,
+      "directories": 4105,
+      "symlinks": 0,
+      "bytes": 41897187,
+      "metadata_sha256": "77671af812e11307a0ce41d303a14ddebddfb0abad0ab3720de5589237729c65"
+    },
+    "archive_bytes": 30591841,
+    "sha256": "fdceb483e105d852fb736fb98adeb49a9421bbeabc387f3bf9f4b1d96ea09442",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-MBLY.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

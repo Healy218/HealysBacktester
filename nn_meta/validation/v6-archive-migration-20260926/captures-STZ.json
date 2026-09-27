@@ -1,0 +1,13 @@
+{
+  "id": "captures-STZ",
+  "source": {
+    "files": 22904,
+    "directories": 4777,
+    "symlinks": 0,
+    "bytes": 31623040,
+    "metadata_sha256": "312601e80dabb71ce47682065f1e150f467425901a018ebf14ae0921d60cadb8"
+  },
+  "archive_bytes": 18457346,
+  "sha256": "7575e45050dacb1bbdf503e7b7f497a744603a64a6663f72a336cf773bc19eaf",
+  "state": "packed-source-stable"
+}

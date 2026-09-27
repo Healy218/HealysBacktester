@@ -1,0 +1,13 @@
+{
+  "id": "captures-FICO",
+  "source": {
+    "files": 16722,
+    "directories": 5473,
+    "symlinks": 0,
+    "bytes": 20980237,
+    "metadata_sha256": "57ea941d96c2e33ae7dad3a401c76a91750adc2028f5575db26f68cefb009dd9"
+  },
+  "archive_bytes": 12604713,
+  "sha256": "56d9db0df374aa6ed5e8c1aa842d59182dfc3812e4f93ce0e85d572338835b59",
+  "state": "packed-source-stable"
+}

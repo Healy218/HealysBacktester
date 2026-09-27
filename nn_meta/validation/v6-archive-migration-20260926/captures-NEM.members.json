@@ -1,0 +1,10 @@
+{
+  "id": "captures-NEM",
+  "sha256": "1bfe5e5012a113972cc2392985061c0b5f050871868805137347511a1c553a0e",
+  "members": {
+    "files": 21960,
+    "directories": 4583,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

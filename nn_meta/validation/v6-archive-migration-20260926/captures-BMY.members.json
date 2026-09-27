@@ -1,0 +1,10 @@
+{
+  "id": "captures-BMY",
+  "sha256": "b7e84fd3df793cc2a2d092af32576bd56f28f0f576715cdce9a51c942684c27c",
+  "members": {
+    "files": 24442,
+    "directories": 5089,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

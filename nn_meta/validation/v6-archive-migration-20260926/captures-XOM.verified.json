@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-XOM",
+    "source": {
+      "files": 21182,
+      "directories": 4423,
+      "symlinks": 0,
+      "bytes": 129283353,
+      "metadata_sha256": "68bf80cb35a69dc5e5d9fc67af6e708158df5e2969e5b5e4c26a4c24490473ce"
+    },
+    "archive_bytes": 117783737,
+    "sha256": "1782c949f034bd0d2b2ad11af97790f997d1b1c141b26a20c6dded9413fd72db",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-XOM.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

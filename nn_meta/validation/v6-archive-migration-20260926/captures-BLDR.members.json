@@ -1,0 +1,10 @@
+{
+  "id": "captures-BLDR",
+  "sha256": "cac0909177c0b520bbf7ac3448d911054b92bb0cb5e8a912dcdd44d8643d80d0",
+  "members": {
+    "files": 15946,
+    "directories": 5239,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

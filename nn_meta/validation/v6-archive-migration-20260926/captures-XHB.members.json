@@ -1,0 +1,10 @@
+{
+  "id": "captures-XHB",
+  "sha256": "5b03e3e29596f4b01887d62098a9e9ccb17a178f41d7108efca16cb28c72795a",
+  "members": {
+    "files": 23178,
+    "directories": 4841,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

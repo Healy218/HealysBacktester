@@ -1,0 +1,13 @@
+{
+  "id": "captures-UCO",
+  "source": {
+    "files": 19154,
+    "directories": 4391,
+    "symlinks": 0,
+    "bytes": 27900592,
+    "metadata_sha256": "ec6b3edd66df80924ad12710909efbd95699951cf38aa1847a80cbc38cee0fbf"
+  },
+  "archive_bytes": 17201260,
+  "sha256": "de17f98c1d19b04798ea933f40d0b20785301fdbcc12027b2fa2e586ad5c3ff5",
+  "state": "packed-source-stable"
+}

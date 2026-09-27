@@ -1,0 +1,10 @@
+{
+  "id": "captures-CPRI",
+  "sha256": "a56be325bfaf72ff7f3d6ffd170b24de919229c78efc0caeff02479feef46480",
+  "members": {
+    "files": 22342,
+    "directories": 5477,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

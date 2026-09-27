@@ -1,0 +1,10 @@
+{
+  "id": "captures-ARKK",
+  "sha256": "4da38a5f057ace91774df4bf0b061bcbfa32fd7bcd011b017f87cbdf4926c0bf",
+  "members": {
+    "files": 23516,
+    "directories": 4889,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

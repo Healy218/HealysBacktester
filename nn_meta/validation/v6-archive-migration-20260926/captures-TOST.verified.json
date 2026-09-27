@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-TOST",
+    "source": {
+      "files": 26064,
+      "directories": 5429,
+      "symlinks": 0,
+      "bytes": 98246419,
+      "metadata_sha256": "6e61fbd849d70a722e30008b3497a7575f60633ec62887296c9bd38a37985cb1"
+    },
+    "archive_bytes": 83429610,
+    "sha256": "db89865443914d361bdb21caef8c65e072c0c82f7d69505787740c8b068ea008",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-TOST.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

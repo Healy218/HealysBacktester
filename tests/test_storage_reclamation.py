@@ -1,6 +1,7 @@
 import errno
 import hashlib
 import json
+import os
 import subprocess
 
 import pytest
@@ -44,13 +45,16 @@ def test_archive_preserves_nested_files_links_empty_dirs_and_detects_drift(tmp_p
     source.mkdir(); (source / 'empty').mkdir()
     (source / 'data').write_bytes(b'historical\0data')
     (source / 'data').chmod(0o640)
+    os.link(source / 'data', source / 'hardlink')
     (source / 'link').symlink_to('data')
     bundle = tmp_path / 'bundle'; bundle.mkdir()
     group = dict(id='sample', members=['history'], shallow=[])
     result = archive_v6_inputs.pack_one(group, bundle)
-    assert result['source']['files'] == 1
+    assert result['source']['files'] == 2
     assert result['source']['directories'] == 2
     assert result['source']['symlinks'] == 1
+    assert archive_v6_inputs.archive_census(bundle / 'sample.tar.zst') == {
+        'files': 2, 'directories': 2, 'symlinks': 1}
     subprocess.run(['tar', '--xattrs', '--acls', '-I', 'zstd -T1 -d', '-df',
                     str(bundle / 'sample.tar.zst')], cwd=tmp_path, check=True)
     restored = tmp_path / 'restored'; restored.mkdir()
@@ -64,3 +68,28 @@ def test_archive_preserves_nested_files_links_empty_dirs_and_detects_drift(tmp_p
     comparison = subprocess.run(['tar', '-I', 'zstd -T1 -d', '-df',
                                  str(bundle / 'sample.tar.zst')], cwd=tmp_path, capture_output=True)
     assert comparison.returncode != 0
+
+
+@pytest.mark.parametrize('failure', ['member_counts', 'archive_hash'])
+def test_retirement_guards_leave_source_intact(tmp_path, monkeypatch, failure):
+    monkeypatch.setattr(archive_v6_inputs, 'ROOT', tmp_path)
+    monkeypatch.setattr(archive_v6_inputs, 'check_drive', lambda _: None)
+    monkeypatch.setattr(archive_v6_inputs, 'check_layout', lambda _: None)
+    source = tmp_path / 'history'; source.mkdir()
+    data = source / 'data'; data.write_bytes(b'irreplaceable history')
+    bundle = tmp_path / 'bundle'; bundle.mkdir()
+    destination = tmp_path / 'external'; destination.mkdir()
+    plan = {'groups': [{'id': 'sample', 'members': ['history'], 'shallow': []}]}
+    (bundle / 'plan.json').write_text(json.dumps(plan))
+    completion = dict(plan_sha256=archive_v6_inputs.sha(bundle / 'plan.json'),
+                      files=1, directories=1, symlinks=0)
+    (destination / 'VERIFIED.json').write_text(json.dumps(completion))
+    census = dict(completion)
+    if failure == 'member_counts':
+        census['files'] = 0
+    (destination / 'MEMBERS-VERIFIED.json').write_text(json.dumps(census))
+    (destination / 'sample.verified.json').write_text(json.dumps({'packed': {'sha256': '0' * 64}}))
+    (destination / 'sample.tar.zst').write_bytes(b'corrupted archive')
+    with pytest.raises(ValueError, match='member counts|External content drifted'):
+        archive_v6_inputs.retire(bundle, destination, plan)
+    assert data.read_bytes() == b'irreplaceable history'

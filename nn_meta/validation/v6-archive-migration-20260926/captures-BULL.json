@@ -1,0 +1,13 @@
+{
+  "id": "captures-BULL",
+  "source": {
+    "files": 20616,
+    "directories": 4327,
+    "symlinks": 0,
+    "bytes": 49354605,
+    "metadata_sha256": "be604494839ddce8ebfdc18e392f49600f7bcdd2e691ef0e9715742db1236485"
+  },
+  "archive_bytes": 38016046,
+  "sha256": "85ef00a8c43fb960d8e770a67fe700516237a03a095e3c279985807bb508423c",
+  "state": "packed-source-stable"
+}

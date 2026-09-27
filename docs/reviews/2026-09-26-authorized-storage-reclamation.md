@@ -59,3 +59,41 @@ admit them as current V7 input or performance evidence.
 The migration's current stage is recorded under
 `nn_meta/validation/v6-archive-migration-20260926/progress.json`.
 Only a `RETIRED.json` receipt establishes completion of source retirement.
+
+## Completed outcome
+
+All **454 archives / 35,106,688,686 bytes** are on MRHA. The source's
+**9,541,723 files, 2,066,117 directories and 51,534,857,599 file bytes** reconcile.
+The independent archive-member census confirms those exact file/directory
+counts inside the containers. Every external archive passed SHA256 and full
+GNU tar byte/metadata comparison; a second external SHA256 pass preceded
+retirement. A real quote/trade/manifest restoration matched all original hashes
+and decoded 309 quote records, one trade record and the manifest.
+
+The complete loose tree was removed, with 454 per-part retirement journal
+entries, and the 454 local staging archives were removed after checking their
+hashes against the verified external-copy records. No local tar.zst staging
+copies remain. The small metadata receipts and restored sample remain locally.
+The locator is `nn_meta/expanded_inputs/v6-local-20260906.ARCHIVED.json`.
+
+Final measured internal free space: **303,613,919,232 bytes (303.61 GB)**,
+about **72.07 GB more** than immediately before duplicate cleanup. This leaves
+about **282.14 GB above the 20 GiB reserve**. MRHA has about **743.73 GB free**.
+These are measured filesystem values; they can change with other activity.
+The remaining reflink paths still count toward logical-byte budgets, so their
+physical savings must not be credited again as a logical project-size reduction.
+The existing acquisition/project limits and V7 readiness gates remain unchanged.
+
+Evidence: `nn_meta/validation/v6-archive-migration-20260926`, especially
+`VERIFIED.json`, `MEMBERS-VERIFIED.json`, `restore-smoke.json`,
+`restore-consumer-read.json`, `RETIRED.json`, `retirement.jsonl`,
+`staging-cleanup.json` and `final-capacity.json`. External `RESTORE.md` explains
+how to restore the original repository-relative paths onto a Linux filesystem.
+
+Post-move full suite: **2,432 passed plus 18 subtests**, 20 warnings, 136.58 s,
+with the historical tree absent. Generated test temporary directories were
+removed afterward. A newer post-tests reading was **297,025,257,472 bytes free**
+(~297.03 GB), or **275.55 GB above reserve**; it supersedes the earlier 303.61 GB
+snapshot for launch planning. Free-space changes outside the measured cleanup
+steps are not claimed as cleanup effects. Final source/proof hashes are recorded
+in `final-binding.json` and the test result in `post-move-tests.json`.

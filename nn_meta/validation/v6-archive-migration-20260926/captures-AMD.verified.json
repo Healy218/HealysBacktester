@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-AMD",
+    "source": {
+      "files": 23518,
+      "directories": 4825,
+      "symlinks": 0,
+      "bytes": 449690170,
+      "metadata_sha256": "ec4af95d19cf30cb4bae7a401085757702eb5479a7f376d8a5bf08358c3e6850"
+    },
+    "archive_bytes": 437362527,
+    "sha256": "3c864ce07141eaf3230b33b234e56eac3204df41d6cfd22006228eda742a005e",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-AMD.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

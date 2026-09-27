@@ -1,0 +1,10 @@
+{
+  "id": "captures-PLTR",
+  "sha256": "8706007606d13950682368d80fea7cbdbc423f5fb21af22bdef6c4b382486498",
+  "members": {
+    "files": 21746,
+    "directories": 4537,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

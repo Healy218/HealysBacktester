@@ -1,0 +1,10 @@
+{
+  "id": "captures-MPWR",
+  "sha256": "d5b2a4586b39a19a0c346092e5948fc7dc9f4ab0a1c1a4c6601a44f46214b96b",
+  "members": {
+    "files": 12850,
+    "directories": 4219,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

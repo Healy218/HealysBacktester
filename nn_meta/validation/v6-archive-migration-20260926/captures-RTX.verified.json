@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-RTX",
+    "source": {
+      "files": 23200,
+      "directories": 4847,
+      "symlinks": 0,
+      "bytes": 71566020,
+      "metadata_sha256": "528778d019d9079a67952721c1619eaac4b7a9685a5dc107ad3d9739172d8eac"
+    },
+    "archive_bytes": 58582843,
+    "sha256": "c7b76d2458ec7416c2a4cecb841ea53024e6296606ea0d742eee5b3ce46ca075",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-RTX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

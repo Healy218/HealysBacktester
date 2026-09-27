@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-HUT",
+    "source": {
+      "files": 21094,
+      "directories": 4385,
+      "symlinks": 0,
+      "bytes": 92326571,
+      "metadata_sha256": "90ec6d1836588ce6bf28cdd6124e4507fb28641fe79d8e4d82469f756e366a0b"
+    },
+    "archive_bytes": 80443196,
+    "sha256": "d9362efcf15f60fa3834dcb95a4323cd930901eca6f95b4ddbc1b45b4efbd7a0",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-HUT.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

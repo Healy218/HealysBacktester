@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SOXX",
+    "source": {
+      "files": 19610,
+      "directories": 4867,
+      "symlinks": 0,
+      "bytes": 48723789,
+      "metadata_sha256": "6d6460b90816ae014b8f89727d0d626aa64a98903893d1a9da706b960199ba18"
+    },
+    "archive_bytes": 38014590,
+    "sha256": "c7fd3179eca5b7bfb5e80c8ffa191919d682519dff3a3131e463e847ef3c4ffd",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SOXX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

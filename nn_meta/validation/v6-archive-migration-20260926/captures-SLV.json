@@ -1,0 +1,13 @@
+{
+  "id": "captures-SLV",
+  "source": {
+    "files": 28176,
+    "directories": 4055,
+    "symlinks": 0,
+    "bytes": 353273254,
+    "metadata_sha256": "8003c6be8a8251ca85d3de1434ee25fcc9654e9223b81ec6d14bfeade530df83"
+  },
+  "archive_bytes": 336808741,
+  "sha256": "5825dadd324b7e852b7446bd087a2904229c78a413017281bc24845c17a4c852",
+  "state": "packed-source-stable"
+}

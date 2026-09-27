@@ -1,0 +1,13 @@
+{
+  "id": "captures-MP",
+  "source": {
+    "files": 19390,
+    "directories": 4681,
+    "symlinks": 0,
+    "bytes": 51538626,
+    "metadata_sha256": "0eca5799b8e94057ef133084c61e662ac99e5e50cf5dfbf49146070aff3d8f26"
+  },
+  "archive_bytes": 41208055,
+  "sha256": "192c33d349a10a4f91cb6a209cadc95c4ddc72f46f989dae317c1ec406e4f245",
+  "state": "packed-source-stable"
+}

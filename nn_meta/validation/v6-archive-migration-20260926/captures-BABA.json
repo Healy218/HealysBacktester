@@ -1,0 +1,13 @@
+{
+  "id": "captures-BABA",
+  "source": {
+    "files": 20908,
+    "directories": 4355,
+    "symlinks": 0,
+    "bytes": 134631281,
+    "metadata_sha256": "4c0fbeb626fddd1a594853491d59f6165d7f61ff21991adf696abb6166384891"
+  },
+  "archive_bytes": 123257702,
+  "sha256": "b2c984a95f05e84ada5bc8405541f093120f3ba922f133ad5ca231926b1d560b",
+  "state": "packed-source-stable"
+}

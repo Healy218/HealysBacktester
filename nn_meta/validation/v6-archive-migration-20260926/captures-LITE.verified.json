@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-LITE",
+    "source": {
+      "files": 17220,
+      "directories": 4535,
+      "symlinks": 0,
+      "bytes": 39114716,
+      "metadata_sha256": "27ccbb4ad1c1fe2f28362988230ee75696b5faaf2d74680bca3d1634ef417ccf"
+    },
+    "archive_bytes": 29941314,
+    "sha256": "1a2cf9fe03e048c1efc9eb9d6e570749436ca762196d5fc489531a894f9a1a8b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-LITE.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

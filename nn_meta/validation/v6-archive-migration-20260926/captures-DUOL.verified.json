@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-DUOL",
+    "source": {
+      "files": 21418,
+      "directories": 5523,
+      "symlinks": 0,
+      "bytes": 30529834,
+      "metadata_sha256": "793f104846625ccac5aff583ee0d603d720e499c66b6a8ad8244047a5b758ace"
+    },
+    "archive_bytes": 18936082,
+    "sha256": "6148985461597cb0e211a2e23c89ca77167b6917ef34e28d01873dfdfd01eaed",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-DUOL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-BAC",
+  "sha256": "ca5d0027b68522418d5172c0b64e7d111c37abc655f3ec65acbe8509faa0f585",
+  "members": {
+    "files": 21964,
+    "directories": 4565,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

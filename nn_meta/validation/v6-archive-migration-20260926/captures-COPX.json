@@ -1,0 +1,13 @@
+{
+  "id": "captures-COPX",
+  "source": {
+    "files": 14692,
+    "directories": 4297,
+    "symlinks": 0,
+    "bytes": 15472564,
+    "metadata_sha256": "5ba483bb3f1af033319d2a5a46445039a74ae977c7fc83efcfe8f8e1fb104ab6"
+  },
+  "archive_bytes": 7643200,
+  "sha256": "c08b5d0d8fb751345579ebb98dd6f181bb95aa5871701a13d7120a0848f03835",
+  "state": "packed-source-stable"
+}

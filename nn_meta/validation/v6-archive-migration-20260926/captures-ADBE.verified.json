@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ADBE",
+    "source": {
+      "files": 24550,
+      "directories": 5111,
+      "symlinks": 0,
+      "bytes": 102404194,
+      "metadata_sha256": "02551a1d4d929dcd7dfc9416f644f3dffc143bd337893bf3f184b91b62f3bf84"
+    },
+    "archive_bytes": 88794294,
+    "sha256": "1e52e1a274796f8f9f1af75f44fc6ce9f9f9b1b13c3608d9c96aa0e1c811388c",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ADBE.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

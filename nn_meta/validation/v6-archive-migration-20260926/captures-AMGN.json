@@ -1,0 +1,13 @@
+{
+  "id": "captures-AMGN",
+  "source": {
+    "files": 22258,
+    "directories": 4647,
+    "symlinks": 0,
+    "bytes": 56449244,
+    "metadata_sha256": "cef5921fe3bfe9fc38081f0a76c439858e5a5be3a3cfb5587b9e626f3a65e6db"
+  },
+  "archive_bytes": 43743886,
+  "sha256": "36f1c09b49be5679e8a0eca06558c5530f8a8ed439968e42502942caba52eae0",
+  "state": "packed-source-stable"
+}

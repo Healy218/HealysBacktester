@@ -1,0 +1,13 @@
+{
+  "id": "captures-REGN",
+  "source": {
+    "files": 22342,
+    "directories": 4651,
+    "symlinks": 0,
+    "bytes": 29114528,
+    "metadata_sha256": "eb79c1c133ed31dab9829815610d41ac2f108fee038a5ea9942180f0e5450fa7"
+  },
+  "archive_bytes": 16023532,
+  "sha256": "622855ccb39ea0870d33ba5a9821a00f02968a07dd6b5abe148fb7bca7cb6ed5",
+  "state": "packed-source-stable"
+}

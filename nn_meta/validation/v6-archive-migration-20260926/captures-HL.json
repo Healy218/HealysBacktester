@@ -1,0 +1,13 @@
+{
+  "id": "captures-HL",
+  "source": {
+    "files": 21846,
+    "directories": 4569,
+    "symlinks": 0,
+    "bytes": 60330965,
+    "metadata_sha256": "69c4cff5f3cd40af5391e6e90410b54adbd823ee570c1c2a377f7a64f2dee179"
+  },
+  "archive_bytes": 48125987,
+  "sha256": "6e7195457973fe25ce7b9362ffa36ee22a552143a6e40d0d8e13188ee31bd27a",
+  "state": "packed-source-stable"
+}

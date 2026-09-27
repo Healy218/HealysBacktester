@@ -1,0 +1,13 @@
+{
+  "id": "captures-VRTX",
+  "source": {
+    "files": 23966,
+    "directories": 4999,
+    "symlinks": 0,
+    "bytes": 28980144,
+    "metadata_sha256": "602dca6982068817a0a54e16eca695b40042832b2d06be135a27831a1a916155"
+  },
+  "archive_bytes": 14891917,
+  "sha256": "d373e5621c5aca58a6066281c76c0fdcbdc43bb40d80f73d54b4ce512e41c7de",
+  "state": "packed-source-stable"
+}

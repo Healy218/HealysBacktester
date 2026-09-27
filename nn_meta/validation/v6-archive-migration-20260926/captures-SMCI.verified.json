@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SMCI",
+    "source": {
+      "files": 23052,
+      "directories": 4809,
+      "symlinks": 0,
+      "bytes": 270530344,
+      "metadata_sha256": "dfb2cb2b426051e35461d569924f0d35542fe85df98728c9a6e942168446b991"
+    },
+    "archive_bytes": 258133084,
+    "sha256": "302c2c97966f9d1fc6a1b4c865002cc6ec6aece4e7d7fb80986199e597b270d5",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SMCI.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

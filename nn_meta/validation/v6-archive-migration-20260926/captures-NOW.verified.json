@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-NOW",
+    "source": {
+      "files": 27628,
+      "directories": 5757,
+      "symlinks": 0,
+      "bytes": 89863297,
+      "metadata_sha256": "19493fb771613e92902e899f7ded2a860c10cc06e9938d706572bae2c0597e04"
+    },
+    "archive_bytes": 74377999,
+    "sha256": "bcde9a80f5caf7dc8700bd07299d9f1173c67be98ebb6193ea6536ea4734e4b9",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-NOW.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

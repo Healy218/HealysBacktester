@@ -1,0 +1,10 @@
+{
+  "id": "captures-WDAY",
+  "sha256": "5ea1c5905ead3cc5a2a95fbe96f86a8a95db5b26227d5cbbd8d074fbe794c68b",
+  "members": {
+    "files": 25822,
+    "directories": 5383,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

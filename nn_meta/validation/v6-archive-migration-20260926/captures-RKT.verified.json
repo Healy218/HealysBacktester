@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-RKT",
+    "source": {
+      "files": 21204,
+      "directories": 4403,
+      "symlinks": 0,
+      "bytes": 44545020,
+      "metadata_sha256": "bbac6ee6537f033d7a49d2337c125bbad2626749d70182f2a4d1b9ae9c3911b4"
+    },
+    "archive_bytes": 32567788,
+    "sha256": "8a091d38b1c7f22b105ba0787fe945911027f114bb0a3ea93f454137fb6f16a5",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-RKT.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

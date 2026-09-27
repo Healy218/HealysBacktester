@@ -1,0 +1,10 @@
+{
+  "id": "captures-ANF",
+  "sha256": "f06d6ce8d5b5a1ba920e79d7ebc71fa67f3cc776fb880c92d3b9f23163060f77",
+  "members": {
+    "files": 18552,
+    "directories": 3869,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

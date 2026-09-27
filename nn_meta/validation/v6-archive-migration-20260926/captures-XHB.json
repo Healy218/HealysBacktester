@@ -1,0 +1,13 @@
+{
+  "id": "captures-XHB",
+  "source": {
+    "files": 23178,
+    "directories": 4841,
+    "symlinks": 0,
+    "bytes": 43049145,
+    "metadata_sha256": "124d29481e14cf226ddadb03d6f13419e5e32015571166bb2f76e5f1f1219cb8"
+  },
+  "archive_bytes": 29604965,
+  "sha256": "5b03e3e29596f4b01887d62098a9e9ccb17a178f41d7108efca16cb28c72795a",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-STX",
+  "sha256": "d7e58c79a2d81b914776870c1340b885a8a8d9a228d34f2ee4c0c154af04c739",
+  "members": {
+    "files": 22284,
+    "directories": 4657,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

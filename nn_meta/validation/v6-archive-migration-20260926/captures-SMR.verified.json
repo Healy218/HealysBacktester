@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SMR",
+    "source": {
+      "files": 26038,
+      "directories": 5417,
+      "symlinks": 0,
+      "bytes": 100212868,
+      "metadata_sha256": "45c6ea0271abc73f1419eb6a37c17d7e67d2b9133b6ede35ba7e077a49e919fa"
+    },
+    "archive_bytes": 85824924,
+    "sha256": "89b2fef10e18120b286e1f54c7fed70a3b3eefbe1e4b06ed71b7bf7714739118",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SMR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

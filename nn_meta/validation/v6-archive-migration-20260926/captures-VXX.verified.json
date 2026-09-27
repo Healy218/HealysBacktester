@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-VXX",
+    "source": {
+      "files": 23336,
+      "directories": 4875,
+      "symlinks": 0,
+      "bytes": 45354791,
+      "metadata_sha256": "08a423cd421b20e321b734098b564ea0c4a633bc33d79e0b29ea12efec0f5a9a"
+    },
+    "archive_bytes": 32272212,
+    "sha256": "b8bbe72367c9bc773f2993af69e9170d3628696d646705119c81deaf81f114bc",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-VXX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

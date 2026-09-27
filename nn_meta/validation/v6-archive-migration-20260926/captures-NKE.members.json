@@ -1,0 +1,10 @@
+{
+  "id": "captures-NKE",
+  "sha256": "1d912765152ab619e81cc58888dd19fb3ccc4e037d1d5ebb037cfc5212e0510c",
+  "members": {
+    "files": 25696,
+    "directories": 5357,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

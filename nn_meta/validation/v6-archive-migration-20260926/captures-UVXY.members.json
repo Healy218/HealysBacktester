@@ -1,0 +1,10 @@
+{
+  "id": "captures-UVXY",
+  "sha256": "2f4073ed536418186b374ee250ee5a6d7c3f4512097c9d158d8b1ad426ae06dd",
+  "members": {
+    "files": 25710,
+    "directories": 5383,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

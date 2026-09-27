@@ -1,0 +1,9 @@
+{
+  "command": "./venv/bin/python -m pytest tests/ -q --basetemp=nn_meta/validation/storage-reclamation-suite-tmp",
+  "passed": 2432,
+  "subtests_passed": 18,
+  "warnings": 20,
+  "seconds": 136.58,
+  "source_tree_absent": true,
+  "test_temporary_directories_removed": true
+}

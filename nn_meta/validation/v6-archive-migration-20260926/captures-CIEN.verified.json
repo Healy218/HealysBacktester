@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CIEN",
+    "source": {
+      "files": 18084,
+      "directories": 4865,
+      "symlinks": 0,
+      "bytes": 28047403,
+      "metadata_sha256": "2b671a1b2a8306f8d35b8b3bc0bb3ed55336809344952f150544e94f297fd295"
+    },
+    "archive_bytes": 18366061,
+    "sha256": "153e1292a4f0fb407c7187890361507c4cd36c9232b92d390b391d1d2fbb5965",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CIEN.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

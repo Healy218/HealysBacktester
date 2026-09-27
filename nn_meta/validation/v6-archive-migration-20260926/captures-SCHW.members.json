@@ -1,0 +1,10 @@
+{
+  "id": "captures-SCHW",
+  "sha256": "99423a381681fcc98c26e2f35be31b6cf9657a8222349a79a8ab8e58d0837ce5",
+  "members": {
+    "files": 24058,
+    "directories": 5019,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

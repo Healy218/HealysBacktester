@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-APO",
+    "source": {
+      "files": 22832,
+      "directories": 4759,
+      "symlinks": 0,
+      "bytes": 41967852,
+      "metadata_sha256": "bcd62df0777ac24e3638c3d0cdb1596eb540a30d3a0b1bbc828741a311f12759"
+    },
+    "archive_bytes": 28826047,
+    "sha256": "9ae3c9c414a0856170f2e207cf1b1a1077b51c6c96ef059196c5d0837184ec76",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-APO.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

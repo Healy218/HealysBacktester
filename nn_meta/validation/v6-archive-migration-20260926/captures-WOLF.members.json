@@ -1,0 +1,10 @@
+{
+  "id": "captures-WOLF",
+  "sha256": "4d443dd9698794a17582f4f8506e3f899e7f58ca5f909aa2052641f23d0597cd",
+  "members": {
+    "files": 15912,
+    "directories": 3677,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

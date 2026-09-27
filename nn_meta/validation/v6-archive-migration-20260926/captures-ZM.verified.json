@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ZM",
+    "source": {
+      "files": 21468,
+      "directories": 4475,
+      "symlinks": 0,
+      "bytes": 61708879,
+      "metadata_sha256": "076bda0dc73a80faa6d556a25ce135ee50267b4bca700b75fe25bfa3117ebfe4"
+    },
+    "archive_bytes": 49678371,
+    "sha256": "26719a2df6bedab3466d8c0f6383dfd9fb3d12ee8215af64dd31f89998ec4d76",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ZM.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

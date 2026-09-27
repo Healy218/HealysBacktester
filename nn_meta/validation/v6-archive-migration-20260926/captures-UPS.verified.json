@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-UPS",
+    "source": {
+      "files": 23526,
+      "directories": 4903,
+      "symlinks": 0,
+      "bytes": 84421866,
+      "metadata_sha256": "654eff9c418346787ee599ae13f9224891e14efa051c00023e2a00cbdb565848"
+    },
+    "archive_bytes": 71402600,
+    "sha256": "687848d938b880e3a6053bbe103f16a54f88ea03c4596b7380fb2b56e766dc46",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-UPS.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-GDX",
+    "source": {
+      "files": 22284,
+      "directories": 4643,
+      "symlinks": 0,
+      "bytes": 98248830,
+      "metadata_sha256": "14c5a4cbef9518a35ded3a75a84cf3675306b1586ca66c1465b7ee5e10ba103c"
+    },
+    "archive_bytes": 85977127,
+    "sha256": "1c7cd943e61b67e44e95ef8890ac11344648817c055216b4d241cf86a0ddaf39",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-GDX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

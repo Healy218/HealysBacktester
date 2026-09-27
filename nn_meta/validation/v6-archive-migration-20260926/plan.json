@@ -1,0 +1,3721 @@
+{
+  "schema": "v6-external-archive-plan-v1",
+  "source": "nn_meta/expanded_inputs/v6-local-20260906",
+  "drive_uuid": "62C9-C390",
+  "groups": [
+    {
+      "id": "context-and-stores",
+      "shallow": [
+        "nn_meta/expanded_inputs/v6-local-20260906",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures"
+      ],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/context",
+        "nn_meta/expanded_inputs/v6-local-20260906/context-r2",
+        "nn_meta/expanded_inputs/v6-local-20260906/freeze-worker-trial-launch.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/freeze-worker-trial-resume-20260907.log",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-freeze-supervisor-resume-20260906T170427Z.log",
+        "nn_meta/expanded_inputs/v6-local-20260906/inventory",
+        "nn_meta/expanded_inputs/v6-local-20260906/inventory-r2",
+        "nn_meta/expanded_inputs/v6-local-20260906/inventory-r3",
+        "nn_meta/expanded_inputs/v6-local-20260906/inventory-r4",
+        "nn_meta/expanded_inputs/v6-local-20260906/inventory-resume-20260906T170427Z.log",
+        "nn_meta/expanded_inputs/v6-local-20260906/parallel-freeze-supervisor-resume-20260907T041639Z.log",
+        "nn_meta/expanded_inputs/v6-local-20260906/parallel-live-verification.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/parallel-resume-start-20260907T041639Z.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/parallel-transition-checkpoint.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/post-freeze-launchers.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/reboot-checkpoint.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/reboot-pause.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/resume-before-parallel.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/resume-start-20260906T170427Z.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/resume.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/tick-policy.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/tick-prepared",
+        "nn_meta/expanded_inputs/v6-local-20260906/v6-full-freeze-supervisor.log",
+        "nn_meta/expanded_inputs/v6-local-20260906/v6-local-context-r2.log",
+        "nn_meta/expanded_inputs/v6-local-20260906/v6-real-matrix-check.log",
+        "nn_meta/expanded_inputs/v6-local-20260906/v6-request-inventory-r4.log",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/final-inputs.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/final-inputs.sha256",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/freeze-launcher-result.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/manifest.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/parallel",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/prepared",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/scope.json",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/stores",
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/worker-trial"
+      ]
+    },
+    {
+      "id": "captures-AA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AA"
+      ]
+    },
+    {
+      "id": "captures-AAL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AAL"
+      ]
+    },
+    {
+      "id": "captures-AAOI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AAOI"
+      ]
+    },
+    {
+      "id": "captures-AAPL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AAPL"
+      ]
+    },
+    {
+      "id": "captures-ABBV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ABBV"
+      ]
+    },
+    {
+      "id": "captures-ABNB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ABNB"
+      ]
+    },
+    {
+      "id": "captures-ABT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ABT"
+      ]
+    },
+    {
+      "id": "captures-ABVX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ABVX"
+      ]
+    },
+    {
+      "id": "captures-ACHR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ACHR"
+      ]
+    },
+    {
+      "id": "captures-ACN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ACN"
+      ]
+    },
+    {
+      "id": "captures-ADBE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ADBE"
+      ]
+    },
+    {
+      "id": "captures-ADI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ADI"
+      ]
+    },
+    {
+      "id": "captures-AEHR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AEHR"
+      ]
+    },
+    {
+      "id": "captures-AEM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AEM"
+      ]
+    },
+    {
+      "id": "captures-AFRM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AFRM"
+      ]
+    },
+    {
+      "id": "captures-AG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AG"
+      ]
+    },
+    {
+      "id": "captures-AGQ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AGQ"
+      ]
+    },
+    {
+      "id": "captures-AI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AI"
+      ]
+    },
+    {
+      "id": "captures-AKAM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AKAM"
+      ]
+    },
+    {
+      "id": "captures-ALAB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ALAB"
+      ]
+    },
+    {
+      "id": "captures-ALB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ALB"
+      ]
+    },
+    {
+      "id": "captures-AMAT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AMAT"
+      ]
+    },
+    {
+      "id": "captures-AMD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AMD"
+      ]
+    },
+    {
+      "id": "captures-AMDL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AMDL"
+      ]
+    },
+    {
+      "id": "captures-AMGN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AMGN"
+      ]
+    },
+    {
+      "id": "captures-AMKR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AMKR"
+      ]
+    },
+    {
+      "id": "captures-AMPX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AMPX"
+      ]
+    },
+    {
+      "id": "captures-AMZN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AMZN"
+      ]
+    },
+    {
+      "id": "captures-ANET",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ANET"
+      ]
+    },
+    {
+      "id": "captures-ANF",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ANF"
+      ]
+    },
+    {
+      "id": "captures-APH",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/APH"
+      ]
+    },
+    {
+      "id": "captures-APLD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/APLD"
+      ]
+    },
+    {
+      "id": "captures-APO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/APO"
+      ]
+    },
+    {
+      "id": "captures-APP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/APP"
+      ]
+    },
+    {
+      "id": "captures-ARKK",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ARKK"
+      ]
+    },
+    {
+      "id": "captures-ARM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ARM"
+      ]
+    },
+    {
+      "id": "captures-ASHR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ASHR"
+      ]
+    },
+    {
+      "id": "captures-ASML",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ASML"
+      ]
+    },
+    {
+      "id": "captures-ASST",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ASST"
+      ]
+    },
+    {
+      "id": "captures-ASTS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ASTS"
+      ]
+    },
+    {
+      "id": "captures-AVAV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AVAV"
+      ]
+    },
+    {
+      "id": "captures-AVGO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AVGO"
+      ]
+    },
+    {
+      "id": "captures-AXON",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AXON"
+      ]
+    },
+    {
+      "id": "captures-AXP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AXP"
+      ]
+    },
+    {
+      "id": "captures-AXTI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AXTI"
+      ]
+    },
+    {
+      "id": "captures-AZO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AZO"
+      ]
+    },
+    {
+      "id": "captures-B",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/B"
+      ]
+    },
+    {
+      "id": "captures-BA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BA"
+      ]
+    },
+    {
+      "id": "captures-BABA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BABA"
+      ]
+    },
+    {
+      "id": "captures-BAC",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BAC"
+      ]
+    },
+    {
+      "id": "captures-BB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BB"
+      ]
+    },
+    {
+      "id": "captures-BBAI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BBAI"
+      ]
+    },
+    {
+      "id": "captures-BE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BE"
+      ]
+    },
+    {
+      "id": "captures-BIDU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BIDU"
+      ]
+    },
+    {
+      "id": "captures-BIIB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BIIB"
+      ]
+    },
+    {
+      "id": "captures-BILI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BILI"
+      ]
+    },
+    {
+      "id": "captures-BITO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BITO"
+      ]
+    },
+    {
+      "id": "captures-BITX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BITX"
+      ]
+    },
+    {
+      "id": "captures-BKNG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BKNG"
+      ]
+    },
+    {
+      "id": "captures-BLDR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BLDR"
+      ]
+    },
+    {
+      "id": "captures-BLK",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BLK"
+      ]
+    },
+    {
+      "id": "captures-BMNR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BMNR"
+      ]
+    },
+    {
+      "id": "captures-BMY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BMY"
+      ]
+    },
+    {
+      "id": "captures-BNO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BNO"
+      ]
+    },
+    {
+      "id": "captures-BOIL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BOIL"
+      ]
+    },
+    {
+      "id": "captures-BP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BP"
+      ]
+    },
+    {
+      "id": "captures-BRKB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BRKB"
+      ]
+    },
+    {
+      "id": "captures-BSX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BSX"
+      ]
+    },
+    {
+      "id": "captures-BTDR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BTDR"
+      ]
+    },
+    {
+      "id": "captures-BULL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BULL"
+      ]
+    },
+    {
+      "id": "captures-BX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BX"
+      ]
+    },
+    {
+      "id": "captures-BYND",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/BYND"
+      ]
+    },
+    {
+      "id": "captures-C",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/C"
+      ]
+    },
+    {
+      "id": "captures-CAR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CAR"
+      ]
+    },
+    {
+      "id": "captures-CAT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CAT"
+      ]
+    },
+    {
+      "id": "captures-CAVA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CAVA"
+      ]
+    },
+    {
+      "id": "captures-CBRS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CBRS"
+      ]
+    },
+    {
+      "id": "captures-CCJ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CCJ"
+      ]
+    },
+    {
+      "id": "captures-CCL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CCL"
+      ]
+    },
+    {
+      "id": "captures-CDE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CDE"
+      ]
+    },
+    {
+      "id": "captures-CDNS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CDNS"
+      ]
+    },
+    {
+      "id": "captures-CEG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CEG"
+      ]
+    },
+    {
+      "id": "captures-CELH",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CELH"
+      ]
+    },
+    {
+      "id": "captures-CF",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CF"
+      ]
+    },
+    {
+      "id": "captures-CHTR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CHTR"
+      ]
+    },
+    {
+      "id": "captures-CHWY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CHWY"
+      ]
+    },
+    {
+      "id": "captures-CI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CI"
+      ]
+    },
+    {
+      "id": "captures-CIEN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CIEN"
+      ]
+    },
+    {
+      "id": "captures-CIFR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CIFR"
+      ]
+    },
+    {
+      "id": "captures-CLF",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CLF"
+      ]
+    },
+    {
+      "id": "captures-CLS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CLS"
+      ]
+    },
+    {
+      "id": "captures-CLSK",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CLSK"
+      ]
+    },
+    {
+      "id": "captures-CMG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CMG"
+      ]
+    },
+    {
+      "id": "captures-CNC",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CNC"
+      ]
+    },
+    {
+      "id": "captures-COF",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/COF"
+      ]
+    },
+    {
+      "id": "captures-COHR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/COHR"
+      ]
+    },
+    {
+      "id": "captures-COIN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/COIN"
+      ]
+    },
+    {
+      "id": "captures-CONL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CONL"
+      ]
+    },
+    {
+      "id": "captures-COP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/COP"
+      ]
+    },
+    {
+      "id": "captures-COPX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/COPX"
+      ]
+    },
+    {
+      "id": "captures-CORZ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CORZ"
+      ]
+    },
+    {
+      "id": "captures-COST",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/COST"
+      ]
+    },
+    {
+      "id": "captures-CPRI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CPRI"
+      ]
+    },
+    {
+      "id": "captures-CRCL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CRCL"
+      ]
+    },
+    {
+      "id": "captures-CRDO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CRDO"
+      ]
+    },
+    {
+      "id": "captures-CRM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CRM"
+      ]
+    },
+    {
+      "id": "captures-CROX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CROX"
+      ]
+    },
+    {
+      "id": "captures-CRSP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CRSP"
+      ]
+    },
+    {
+      "id": "captures-CRWD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CRWD"
+      ]
+    },
+    {
+      "id": "captures-CRWV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CRWV"
+      ]
+    },
+    {
+      "id": "captures-CSCO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CSCO"
+      ]
+    },
+    {
+      "id": "captures-CVNA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CVNA"
+      ]
+    },
+    {
+      "id": "captures-CVS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CVS"
+      ]
+    },
+    {
+      "id": "captures-CVX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/CVX"
+      ]
+    },
+    {
+      "id": "captures-DAL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DAL"
+      ]
+    },
+    {
+      "id": "captures-DASH",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DASH"
+      ]
+    },
+    {
+      "id": "captures-DDOG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DDOG"
+      ]
+    },
+    {
+      "id": "captures-DE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DE"
+      ]
+    },
+    {
+      "id": "captures-DECK",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DECK"
+      ]
+    },
+    {
+      "id": "captures-DELL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DELL"
+      ]
+    },
+    {
+      "id": "captures-DG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DG"
+      ]
+    },
+    {
+      "id": "captures-DHI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DHI"
+      ]
+    },
+    {
+      "id": "captures-DHR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DHR"
+      ]
+    },
+    {
+      "id": "captures-DIA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DIA"
+      ]
+    },
+    {
+      "id": "captures-DIS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DIS"
+      ]
+    },
+    {
+      "id": "captures-DJT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DJT"
+      ]
+    },
+    {
+      "id": "captures-DKNG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DKNG"
+      ]
+    },
+    {
+      "id": "captures-DKS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DKS"
+      ]
+    },
+    {
+      "id": "captures-DLTR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DLTR"
+      ]
+    },
+    {
+      "id": "captures-DOCN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DOCN"
+      ]
+    },
+    {
+      "id": "captures-DOW",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DOW"
+      ]
+    },
+    {
+      "id": "captures-DPST",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DPST"
+      ]
+    },
+    {
+      "id": "captures-DRAM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DRAM"
+      ]
+    },
+    {
+      "id": "captures-DUOL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DUOL"
+      ]
+    },
+    {
+      "id": "captures-DVN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DVN"
+      ]
+    },
+    {
+      "id": "captures-DXCM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/DXCM"
+      ]
+    },
+    {
+      "id": "captures-EAT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/EAT"
+      ]
+    },
+    {
+      "id": "captures-EEM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/EEM"
+      ]
+    },
+    {
+      "id": "captures-EFA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/EFA"
+      ]
+    },
+    {
+      "id": "captures-EL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/EL"
+      ]
+    },
+    {
+      "id": "captures-ELF",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ELF"
+      ]
+    },
+    {
+      "id": "captures-ELV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ELV"
+      ]
+    },
+    {
+      "id": "captures-ENPH",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ENPH"
+      ]
+    },
+    {
+      "id": "captures-EOSE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/EOSE"
+      ]
+    },
+    {
+      "id": "captures-EQT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/EQT"
+      ]
+    },
+    {
+      "id": "captures-ET",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ET"
+      ]
+    },
+    {
+      "id": "captures-ETHA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ETHA"
+      ]
+    },
+    {
+      "id": "captures-ETHE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ETHE"
+      ]
+    },
+    {
+      "id": "captures-ETHU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ETHU"
+      ]
+    },
+    {
+      "id": "captures-ETN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ETN"
+      ]
+    },
+    {
+      "id": "captures-ETSY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ETSY"
+      ]
+    },
+    {
+      "id": "captures-EWY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/EWY"
+      ]
+    },
+    {
+      "id": "captures-EWZ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/EWZ"
+      ]
+    },
+    {
+      "id": "captures-F",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/F"
+      ]
+    },
+    {
+      "id": "captures-FANG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FANG"
+      ]
+    },
+    {
+      "id": "captures-FAS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FAS"
+      ]
+    },
+    {
+      "id": "captures-FCEL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FCEL"
+      ]
+    },
+    {
+      "id": "captures-FCX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FCX"
+      ]
+    },
+    {
+      "id": "captures-FDX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FDX"
+      ]
+    },
+    {
+      "id": "captures-FICO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FICO"
+      ]
+    },
+    {
+      "id": "captures-FIG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FIG"
+      ]
+    },
+    {
+      "id": "captures-FISV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FISV"
+      ]
+    },
+    {
+      "id": "captures-FIX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FIX"
+      ]
+    },
+    {
+      "id": "captures-FLEX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FLEX"
+      ]
+    },
+    {
+      "id": "captures-FLY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FLY"
+      ]
+    },
+    {
+      "id": "captures-FSLR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FSLR"
+      ]
+    },
+    {
+      "id": "captures-FSLY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FSLY"
+      ]
+    },
+    {
+      "id": "captures-FTAI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FTAI"
+      ]
+    },
+    {
+      "id": "captures-FTNT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FTNT"
+      ]
+    },
+    {
+      "id": "captures-FUTU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FUTU"
+      ]
+    },
+    {
+      "id": "captures-FXI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/FXI"
+      ]
+    },
+    {
+      "id": "captures-GDX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GDX"
+      ]
+    },
+    {
+      "id": "captures-GDXJ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GDXJ"
+      ]
+    },
+    {
+      "id": "captures-GE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GE"
+      ]
+    },
+    {
+      "id": "captures-GEO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GEO"
+      ]
+    },
+    {
+      "id": "captures-GEV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GEV"
+      ]
+    },
+    {
+      "id": "captures-GILD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GILD"
+      ]
+    },
+    {
+      "id": "captures-GLD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GLD"
+      ]
+    },
+    {
+      "id": "captures-GLW",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GLW"
+      ]
+    },
+    {
+      "id": "captures-GLXY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GLXY"
+      ]
+    },
+    {
+      "id": "captures-GM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GM"
+      ]
+    },
+    {
+      "id": "captures-GME",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GME"
+      ]
+    },
+    {
+      "id": "captures-GOLD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GOLD"
+      ]
+    },
+    {
+      "id": "captures-GOOG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GOOG"
+      ]
+    },
+    {
+      "id": "captures-GOOGL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GOOGL"
+      ]
+    },
+    {
+      "id": "captures-GS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GS"
+      ]
+    },
+    {
+      "id": "captures-GWW",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/GWW"
+      ]
+    },
+    {
+      "id": "captures-HAL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HAL"
+      ]
+    },
+    {
+      "id": "captures-HD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HD"
+      ]
+    },
+    {
+      "id": "captures-HIMS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HIMS"
+      ]
+    },
+    {
+      "id": "captures-HL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HL"
+      ]
+    },
+    {
+      "id": "captures-HON",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HON"
+      ]
+    },
+    {
+      "id": "captures-HOOD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HOOD"
+      ]
+    },
+    {
+      "id": "captures-HPE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HPE"
+      ]
+    },
+    {
+      "id": "captures-HSY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HSY"
+      ]
+    },
+    {
+      "id": "captures-HUBS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HUBS"
+      ]
+    },
+    {
+      "id": "captures-HUM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HUM"
+      ]
+    },
+    {
+      "id": "captures-HUT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HUT"
+      ]
+    },
+    {
+      "id": "captures-HYG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/HYG"
+      ]
+    },
+    {
+      "id": "captures-IAU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/IAU"
+      ]
+    },
+    {
+      "id": "captures-IBIT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/IBIT"
+      ]
+    },
+    {
+      "id": "captures-IBKR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/IBKR"
+      ]
+    },
+    {
+      "id": "captures-IBM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/IBM"
+      ]
+    },
+    {
+      "id": "captures-IGV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/IGV"
+      ]
+    },
+    {
+      "id": "captures-INTC",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/INTC"
+      ]
+    },
+    {
+      "id": "captures-INTU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/INTU"
+      ]
+    },
+    {
+      "id": "captures-IONQ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/IONQ"
+      ]
+    },
+    {
+      "id": "captures-IREN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/IREN"
+      ]
+    },
+    {
+      "id": "captures-ISRG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ISRG"
+      ]
+    },
+    {
+      "id": "captures-IWM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/IWM"
+      ]
+    },
+    {
+      "id": "captures-JD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/JD"
+      ]
+    },
+    {
+      "id": "captures-JNJ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/JNJ"
+      ]
+    },
+    {
+      "id": "captures-JOBY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/JOBY"
+      ]
+    },
+    {
+      "id": "captures-JPM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/JPM"
+      ]
+    },
+    {
+      "id": "captures-KKR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/KKR"
+      ]
+    },
+    {
+      "id": "captures-KLAC",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/KLAC"
+      ]
+    },
+    {
+      "id": "captures-KO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/KO"
+      ]
+    },
+    {
+      "id": "captures-KORU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/KORU"
+      ]
+    },
+    {
+      "id": "captures-KRE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/KRE"
+      ]
+    },
+    {
+      "id": "captures-KTOS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/KTOS"
+      ]
+    },
+    {
+      "id": "captures-KVUE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/KVUE"
+      ]
+    },
+    {
+      "id": "captures-KWEB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/KWEB"
+      ]
+    },
+    {
+      "id": "captures-LABU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LABU"
+      ]
+    },
+    {
+      "id": "captures-LCID",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LCID"
+      ]
+    },
+    {
+      "id": "captures-LEN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LEN"
+      ]
+    },
+    {
+      "id": "captures-LEU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LEU"
+      ]
+    },
+    {
+      "id": "captures-LI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LI"
+      ]
+    },
+    {
+      "id": "captures-LITE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LITE"
+      ]
+    },
+    {
+      "id": "captures-LLY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LLY"
+      ]
+    },
+    {
+      "id": "captures-LMND",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LMND"
+      ]
+    },
+    {
+      "id": "captures-LMT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LMT"
+      ]
+    },
+    {
+      "id": "captures-LNG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LNG"
+      ]
+    },
+    {
+      "id": "captures-LOW",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LOW"
+      ]
+    },
+    {
+      "id": "captures-LQD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LQD"
+      ]
+    },
+    {
+      "id": "captures-LRCX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LRCX"
+      ]
+    },
+    {
+      "id": "captures-LULU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LULU"
+      ]
+    },
+    {
+      "id": "captures-LUNR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LUNR"
+      ]
+    },
+    {
+      "id": "captures-LUV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LUV"
+      ]
+    },
+    {
+      "id": "captures-LVS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LVS"
+      ]
+    },
+    {
+      "id": "captures-LYFT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/LYFT"
+      ]
+    },
+    {
+      "id": "captures-MA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MA"
+      ]
+    },
+    {
+      "id": "captures-MARA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MARA"
+      ]
+    },
+    {
+      "id": "captures-MBLY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MBLY"
+      ]
+    },
+    {
+      "id": "captures-MCD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MCD"
+      ]
+    },
+    {
+      "id": "captures-MCHP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MCHP"
+      ]
+    },
+    {
+      "id": "captures-MDB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MDB"
+      ]
+    },
+    {
+      "id": "captures-MELI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MELI"
+      ]
+    },
+    {
+      "id": "captures-META",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/META"
+      ]
+    },
+    {
+      "id": "captures-MMM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MMM"
+      ]
+    },
+    {
+      "id": "captures-MO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MO"
+      ]
+    },
+    {
+      "id": "captures-MP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MP"
+      ]
+    },
+    {
+      "id": "captures-MPC",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MPC"
+      ]
+    },
+    {
+      "id": "captures-MPWR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MPWR"
+      ]
+    },
+    {
+      "id": "captures-MRK",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MRK"
+      ]
+    },
+    {
+      "id": "captures-MRNA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MRNA"
+      ]
+    },
+    {
+      "id": "captures-MRVL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MRVL"
+      ]
+    },
+    {
+      "id": "captures-MS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MS"
+      ]
+    },
+    {
+      "id": "captures-MSFT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MSFT"
+      ]
+    },
+    {
+      "id": "captures-MSTR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MSTR"
+      ]
+    },
+    {
+      "id": "captures-MSTU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MSTU"
+      ]
+    },
+    {
+      "id": "captures-MSTX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MSTX"
+      ]
+    },
+    {
+      "id": "captures-MTUM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MTUM"
+      ]
+    },
+    {
+      "id": "captures-MU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MU"
+      ]
+    },
+    {
+      "id": "captures-MULL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MULL"
+      ]
+    },
+    {
+      "id": "captures-MUU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MUU"
+      ]
+    },
+    {
+      "id": "captures-MXL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/MXL"
+      ]
+    },
+    {
+      "id": "captures-NBIS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NBIS"
+      ]
+    },
+    {
+      "id": "captures-NEE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NEE"
+      ]
+    },
+    {
+      "id": "captures-NEM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NEM"
+      ]
+    },
+    {
+      "id": "captures-NET",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NET"
+      ]
+    },
+    {
+      "id": "captures-NFLX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NFLX"
+      ]
+    },
+    {
+      "id": "captures-NIO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NIO"
+      ]
+    },
+    {
+      "id": "captures-NKE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NKE"
+      ]
+    },
+    {
+      "id": "captures-NNE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NNE"
+      ]
+    },
+    {
+      "id": "captures-NOK",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NOK"
+      ]
+    },
+    {
+      "id": "captures-NOW",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NOW"
+      ]
+    },
+    {
+      "id": "captures-NU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NU"
+      ]
+    },
+    {
+      "id": "captures-NUE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NUE"
+      ]
+    },
+    {
+      "id": "captures-NUGT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NUGT"
+      ]
+    },
+    {
+      "id": "captures-NVDA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NVDA"
+      ]
+    },
+    {
+      "id": "captures-NVDL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NVDL"
+      ]
+    },
+    {
+      "id": "captures-NVO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NVO"
+      ]
+    },
+    {
+      "id": "captures-NVTS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/NVTS"
+      ]
+    },
+    {
+      "id": "captures-OKE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/OKE"
+      ]
+    },
+    {
+      "id": "captures-OKLO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/OKLO"
+      ]
+    },
+    {
+      "id": "captures-OKTA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/OKTA"
+      ]
+    },
+    {
+      "id": "captures-ON",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ON"
+      ]
+    },
+    {
+      "id": "captures-ONDS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ONDS"
+      ]
+    },
+    {
+      "id": "captures-OPEN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/OPEN"
+      ]
+    },
+    {
+      "id": "captures-ORCL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ORCL"
+      ]
+    },
+    {
+      "id": "captures-OSCR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/OSCR"
+      ]
+    },
+    {
+      "id": "captures-OXY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/OXY"
+      ]
+    },
+    {
+      "id": "captures-PAAS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PAAS"
+      ]
+    },
+    {
+      "id": "captures-PANW",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PANW"
+      ]
+    },
+    {
+      "id": "captures-PATH",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PATH"
+      ]
+    },
+    {
+      "id": "captures-PBR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PBR"
+      ]
+    },
+    {
+      "id": "captures-PDD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PDD"
+      ]
+    },
+    {
+      "id": "captures-PENG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PENG"
+      ]
+    },
+    {
+      "id": "captures-PEP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PEP"
+      ]
+    },
+    {
+      "id": "captures-PFE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PFE"
+      ]
+    },
+    {
+      "id": "captures-PG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PG"
+      ]
+    },
+    {
+      "id": "captures-PINS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PINS"
+      ]
+    },
+    {
+      "id": "captures-PL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PL"
+      ]
+    },
+    {
+      "id": "captures-PLTR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PLTR"
+      ]
+    },
+    {
+      "id": "captures-PM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PM"
+      ]
+    },
+    {
+      "id": "captures-POET",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/POET"
+      ]
+    },
+    {
+      "id": "captures-PPLT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PPLT"
+      ]
+    },
+    {
+      "id": "captures-PTON",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PTON"
+      ]
+    },
+    {
+      "id": "captures-PWR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PWR"
+      ]
+    },
+    {
+      "id": "captures-PYPL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/PYPL"
+      ]
+    },
+    {
+      "id": "captures-QBTS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/QBTS"
+      ]
+    },
+    {
+      "id": "captures-QCOM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/QCOM"
+      ]
+    },
+    {
+      "id": "captures-QQQ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/QQQ"
+      ]
+    },
+    {
+      "id": "captures-QS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/QS"
+      ]
+    },
+    {
+      "id": "captures-QUBT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/QUBT"
+      ]
+    },
+    {
+      "id": "captures-RACE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RACE"
+      ]
+    },
+    {
+      "id": "captures-RBLX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RBLX"
+      ]
+    },
+    {
+      "id": "captures-RCAT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RCAT"
+      ]
+    },
+    {
+      "id": "captures-RCL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RCL"
+      ]
+    },
+    {
+      "id": "captures-RDDT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RDDT"
+      ]
+    },
+    {
+      "id": "captures-RDW",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RDW"
+      ]
+    },
+    {
+      "id": "captures-REGN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/REGN"
+      ]
+    },
+    {
+      "id": "captures-RGTI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RGTI"
+      ]
+    },
+    {
+      "id": "captures-RH",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RH"
+      ]
+    },
+    {
+      "id": "captures-RIOT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RIOT"
+      ]
+    },
+    {
+      "id": "captures-RIVN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RIVN"
+      ]
+    },
+    {
+      "id": "captures-RKLB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RKLB"
+      ]
+    },
+    {
+      "id": "captures-RKT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RKT"
+      ]
+    },
+    {
+      "id": "captures-ROKU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ROKU"
+      ]
+    },
+    {
+      "id": "captures-RTX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RTX"
+      ]
+    },
+    {
+      "id": "captures-RUN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/RUN"
+      ]
+    },
+    {
+      "id": "captures-SATS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SATS"
+      ]
+    },
+    {
+      "id": "captures-SAVA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SAVA"
+      ]
+    },
+    {
+      "id": "captures-SBET",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SBET"
+      ]
+    },
+    {
+      "id": "captures-SBUX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SBUX"
+      ]
+    },
+    {
+      "id": "captures-SCHW",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SCHW"
+      ]
+    },
+    {
+      "id": "captures-SE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SE"
+      ]
+    },
+    {
+      "id": "captures-SEDG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SEDG"
+      ]
+    },
+    {
+      "id": "captures-SHOP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SHOP"
+      ]
+    },
+    {
+      "id": "captures-SIL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SIL"
+      ]
+    },
+    {
+      "id": "captures-SILJ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SILJ"
+      ]
+    },
+    {
+      "id": "captures-SIMO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SIMO"
+      ]
+    },
+    {
+      "id": "captures-SLB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SLB"
+      ]
+    },
+    {
+      "id": "captures-SLS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SLS"
+      ]
+    },
+    {
+      "id": "captures-SLV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SLV"
+      ]
+    },
+    {
+      "id": "captures-SMCI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SMCI"
+      ]
+    },
+    {
+      "id": "captures-SMH",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SMH"
+      ]
+    },
+    {
+      "id": "captures-SMR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SMR"
+      ]
+    },
+    {
+      "id": "captures-SNAP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SNAP"
+      ]
+    },
+    {
+      "id": "captures-SNDK",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SNDK"
+      ]
+    },
+    {
+      "id": "captures-SNOW",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SNOW"
+      ]
+    },
+    {
+      "id": "captures-SNPS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SNPS"
+      ]
+    },
+    {
+      "id": "captures-SNXX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SNXX"
+      ]
+    },
+    {
+      "id": "captures-SOC",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SOC"
+      ]
+    },
+    {
+      "id": "captures-SOFI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SOFI"
+      ]
+    },
+    {
+      "id": "captures-SOUN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SOUN"
+      ]
+    },
+    {
+      "id": "captures-SOXL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SOXL"
+      ]
+    },
+    {
+      "id": "captures-SOXS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SOXS"
+      ]
+    },
+    {
+      "id": "captures-SOXX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SOXX"
+      ]
+    },
+    {
+      "id": "captures-SPOT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SPOT"
+      ]
+    },
+    {
+      "id": "captures-SPXL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SPXL"
+      ]
+    },
+    {
+      "id": "captures-SPY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SPY"
+      ]
+    },
+    {
+      "id": "captures-SQQQ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SQQQ"
+      ]
+    },
+    {
+      "id": "captures-SRPT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SRPT"
+      ]
+    },
+    {
+      "id": "captures-STM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/STM"
+      ]
+    },
+    {
+      "id": "captures-STRL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/STRL"
+      ]
+    },
+    {
+      "id": "captures-STX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/STX"
+      ]
+    },
+    {
+      "id": "captures-STZ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/STZ"
+      ]
+    },
+    {
+      "id": "captures-SWTX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SWTX"
+      ]
+    },
+    {
+      "id": "captures-SYM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/SYM"
+      ]
+    },
+    {
+      "id": "captures-T",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/T"
+      ]
+    },
+    {
+      "id": "captures-TEAM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TEAM"
+      ]
+    },
+    {
+      "id": "captures-TECL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TECL"
+      ]
+    },
+    {
+      "id": "captures-TEM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TEM"
+      ]
+    },
+    {
+      "id": "captures-TER",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TER"
+      ]
+    },
+    {
+      "id": "captures-TGT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TGT"
+      ]
+    },
+    {
+      "id": "captures-TJX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TJX"
+      ]
+    },
+    {
+      "id": "captures-TLN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TLN"
+      ]
+    },
+    {
+      "id": "captures-TLT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TLT"
+      ]
+    },
+    {
+      "id": "captures-TMF",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TMF"
+      ]
+    },
+    {
+      "id": "captures-TMO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TMO"
+      ]
+    },
+    {
+      "id": "captures-TMUS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TMUS"
+      ]
+    },
+    {
+      "id": "captures-TNA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TNA"
+      ]
+    },
+    {
+      "id": "captures-TOST",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TOST"
+      ]
+    },
+    {
+      "id": "captures-TQQQ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TQQQ"
+      ]
+    },
+    {
+      "id": "captures-TSEM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TSEM"
+      ]
+    },
+    {
+      "id": "captures-TSLA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TSLA"
+      ]
+    },
+    {
+      "id": "captures-TSLL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TSLL"
+      ]
+    },
+    {
+      "id": "captures-TSM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TSM"
+      ]
+    },
+    {
+      "id": "captures-TTD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TTD"
+      ]
+    },
+    {
+      "id": "captures-TTWO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TTWO"
+      ]
+    },
+    {
+      "id": "captures-TWLO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TWLO"
+      ]
+    },
+    {
+      "id": "captures-TXN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/TXN"
+      ]
+    },
+    {
+      "id": "captures-U",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/U"
+      ]
+    },
+    {
+      "id": "captures-UAL",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/UAL"
+      ]
+    },
+    {
+      "id": "captures-UBER",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/UBER"
+      ]
+    },
+    {
+      "id": "captures-UCO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/UCO"
+      ]
+    },
+    {
+      "id": "captures-ULTA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ULTA"
+      ]
+    },
+    {
+      "id": "captures-UNH",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/UNH"
+      ]
+    },
+    {
+      "id": "captures-UPRO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/UPRO"
+      ]
+    },
+    {
+      "id": "captures-UPS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/UPS"
+      ]
+    },
+    {
+      "id": "captures-UPST",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/UPST"
+      ]
+    },
+    {
+      "id": "captures-URA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/URA"
+      ]
+    },
+    {
+      "id": "captures-URI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/URI"
+      ]
+    },
+    {
+      "id": "captures-USAR",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/USAR"
+      ]
+    },
+    {
+      "id": "captures-USO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/USO"
+      ]
+    },
+    {
+      "id": "captures-UUUU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/UUUU"
+      ]
+    },
+    {
+      "id": "captures-UVIX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/UVIX"
+      ]
+    },
+    {
+      "id": "captures-UVXY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/UVXY"
+      ]
+    },
+    {
+      "id": "captures-V",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/V"
+      ]
+    },
+    {
+      "id": "captures-VALE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VALE"
+      ]
+    },
+    {
+      "id": "captures-VEEV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VEEV"
+      ]
+    },
+    {
+      "id": "captures-VG",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VG"
+      ]
+    },
+    {
+      "id": "captures-VKTX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VKTX"
+      ]
+    },
+    {
+      "id": "captures-VLO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VLO"
+      ]
+    },
+    {
+      "id": "captures-VOO",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VOO"
+      ]
+    },
+    {
+      "id": "captures-VRT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VRT"
+      ]
+    },
+    {
+      "id": "captures-VRTX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VRTX"
+      ]
+    },
+    {
+      "id": "captures-VST",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VST"
+      ]
+    },
+    {
+      "id": "captures-VXX",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VXX"
+      ]
+    },
+    {
+      "id": "captures-VZ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/VZ"
+      ]
+    },
+    {
+      "id": "captures-W",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/W"
+      ]
+    },
+    {
+      "id": "captures-WBA",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/WBA"
+      ]
+    },
+    {
+      "id": "captures-WBD",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/WBD"
+      ]
+    },
+    {
+      "id": "captures-WDAY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/WDAY"
+      ]
+    },
+    {
+      "id": "captures-WDC",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/WDC"
+      ]
+    },
+    {
+      "id": "captures-WFC",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/WFC"
+      ]
+    },
+    {
+      "id": "captures-WMT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/WMT"
+      ]
+    },
+    {
+      "id": "captures-WOLF",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/WOLF"
+      ]
+    },
+    {
+      "id": "captures-WPM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/WPM"
+      ]
+    },
+    {
+      "id": "captures-WULF",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/WULF"
+      ]
+    },
+    {
+      "id": "captures-WYNN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/WYNN"
+      ]
+    },
+    {
+      "id": "captures-X",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/X"
+      ]
+    },
+    {
+      "id": "captures-XBI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XBI"
+      ]
+    },
+    {
+      "id": "captures-XHB",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XHB"
+      ]
+    },
+    {
+      "id": "captures-XLE",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XLE"
+      ]
+    },
+    {
+      "id": "captures-XLF",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XLF"
+      ]
+    },
+    {
+      "id": "captures-XLI",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XLI"
+      ]
+    },
+    {
+      "id": "captures-XLK",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XLK"
+      ]
+    },
+    {
+      "id": "captures-XLP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XLP"
+      ]
+    },
+    {
+      "id": "captures-XLU",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XLU"
+      ]
+    },
+    {
+      "id": "captures-XLV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XLV"
+      ]
+    },
+    {
+      "id": "captures-XLY",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XLY"
+      ]
+    },
+    {
+      "id": "captures-XOM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XOM"
+      ]
+    },
+    {
+      "id": "captures-XOP",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XOP"
+      ]
+    },
+    {
+      "id": "captures-XPEV",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XPEV"
+      ]
+    },
+    {
+      "id": "captures-XRT",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XRT"
+      ]
+    },
+    {
+      "id": "captures-XYZ",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/XYZ"
+      ]
+    },
+    {
+      "id": "captures-YINN",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/YINN"
+      ]
+    },
+    {
+      "id": "captures-Z",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/Z"
+      ]
+    },
+    {
+      "id": "captures-ZIM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ZIM"
+      ]
+    },
+    {
+      "id": "captures-ZM",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ZM"
+      ]
+    },
+    {
+      "id": "captures-ZS",
+      "shallow": [],
+      "members": [
+        "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/ZS"
+      ]
+    }
+  ],
+  "source_layout": {
+    "root": [
+      "context",
+      "context-r2",
+      "freeze-worker-trial-launch.json",
+      "freeze-worker-trial-resume-20260907.log",
+      "full-freeze-supervisor-resume-20260906T170427Z.log",
+      "full-run",
+      "inventory",
+      "inventory-r2",
+      "inventory-r3",
+      "inventory-r4",
+      "inventory-resume-20260906T170427Z.log",
+      "parallel-freeze-supervisor-resume-20260907T041639Z.log",
+      "parallel-live-verification.json",
+      "parallel-resume-start-20260907T041639Z.json",
+      "parallel-transition-checkpoint.json",
+      "post-freeze-launchers.json",
+      "reboot-checkpoint.json",
+      "reboot-pause.json",
+      "resume-before-parallel.json",
+      "resume-start-20260906T170427Z.json",
+      "resume.json",
+      "tick-policy.json",
+      "tick-prepared",
+      "v6-full-freeze-supervisor.log",
+      "v6-local-context-r2.log",
+      "v6-real-matrix-check.log",
+      "v6-request-inventory-r4.log"
+    ],
+    "full_run": [
+      "captures",
+      "final-inputs.json",
+      "final-inputs.sha256",
+      "freeze-launcher-result.json",
+      "manifest.json",
+      "parallel",
+      "prepared",
+      "scope.json",
+      "stores",
+      "worker-trial"
+    ],
+    "captures": [
+      "AA",
+      "AAL",
+      "AAOI",
+      "AAPL",
+      "ABBV",
+      "ABNB",
+      "ABT",
+      "ABVX",
+      "ACHR",
+      "ACN",
+      "ADBE",
+      "ADI",
+      "AEHR",
+      "AEM",
+      "AFRM",
+      "AG",
+      "AGQ",
+      "AI",
+      "AKAM",
+      "ALAB",
+      "ALB",
+      "AMAT",
+      "AMD",
+      "AMDL",
+      "AMGN",
+      "AMKR",
+      "AMPX",
+      "AMZN",
+      "ANET",
+      "ANF",
+      "APH",
+      "APLD",
+      "APO",
+      "APP",
+      "ARKK",
+      "ARM",
+      "ASHR",
+      "ASML",
+      "ASST",
+      "ASTS",
+      "AVAV",
+      "AVGO",
+      "AXON",
+      "AXP",
+      "AXTI",
+      "AZO",
+      "B",
+      "BA",
+      "BABA",
+      "BAC",
+      "BB",
+      "BBAI",
+      "BE",
+      "BIDU",
+      "BIIB",
+      "BILI",
+      "BITO",
+      "BITX",
+      "BKNG",
+      "BLDR",
+      "BLK",
+      "BMNR",
+      "BMY",
+      "BNO",
+      "BOIL",
+      "BP",
+      "BRKB",
+      "BSX",
+      "BTDR",
+      "BULL",
+      "BX",
+      "BYND",
+      "C",
+      "CAR",
+      "CAT",
+      "CAVA",
+      "CBRS",
+      "CCJ",
+      "CCL",
+      "CDE",
+      "CDNS",
+      "CEG",
+      "CELH",
+      "CF",
+      "CHTR",
+      "CHWY",
+      "CI",
+      "CIEN",
+      "CIFR",
+      "CLF",
+      "CLS",
+      "CLSK",
+      "CMG",
+      "CNC",
+      "COF",
+      "COHR",
+      "COIN",
+      "CONL",
+      "COP",
+      "COPX",
+      "CORZ",
+      "COST",
+      "CPRI",
+      "CRCL",
+      "CRDO",
+      "CRM",
+      "CROX",
+      "CRSP",
+      "CRWD",
+      "CRWV",
+      "CSCO",
+      "CVNA",
+      "CVS",
+      "CVX",
+      "DAL",
+      "DASH",
+      "DDOG",
+      "DE",
+      "DECK",
+      "DELL",
+      "DG",
+      "DHI",
+      "DHR",
+      "DIA",
+      "DIS",
+      "DJT",
+      "DKNG",
+      "DKS",
+      "DLTR",
+      "DOCN",
+      "DOW",
+      "DPST",
+      "DRAM",
+      "DUOL",
+      "DVN",
+      "DXCM",
+      "EAT",
+      "EEM",
+      "EFA",
+      "EL",
+      "ELF",
+      "ELV",
+      "ENPH",
+      "EOSE",
+      "EQT",
+      "ET",
+      "ETHA",
+      "ETHE",
+      "ETHU",
+      "ETN",
+      "ETSY",
+      "EWY",
+      "EWZ",
+      "F",
+      "FANG",
+      "FAS",
+      "FCEL",
+      "FCX",
+      "FDX",
+      "FICO",
+      "FIG",
+      "FISV",
+      "FIX",
+      "FLEX",
+      "FLY",
+      "FSLR",
+      "FSLY",
+      "FTAI",
+      "FTNT",
+      "FUTU",
+      "FXI",
+      "GDX",
+      "GDXJ",
+      "GE",
+      "GEO",
+      "GEV",
+      "GILD",
+      "GLD",
+      "GLW",
+      "GLXY",
+      "GM",
+      "GME",
+      "GOLD",
+      "GOOG",
+      "GOOGL",
+      "GS",
+      "GWW",
+      "HAL",
+      "HD",
+      "HIMS",
+      "HL",
+      "HON",
+      "HOOD",
+      "HPE",
+      "HSY",
+      "HUBS",
+      "HUM",
+      "HUT",
+      "HYG",
+      "IAU",
+      "IBIT",
+      "IBKR",
+      "IBM",
+      "IGV",
+      "INTC",
+      "INTU",
+      "IONQ",
+      "IREN",
+      "ISRG",
+      "IWM",
+      "JD",
+      "JNJ",
+      "JOBY",
+      "JPM",
+      "KKR",
+      "KLAC",
+      "KO",
+      "KORU",
+      "KRE",
+      "KTOS",
+      "KVUE",
+      "KWEB",
+      "LABU",
+      "LCID",
+      "LEN",
+      "LEU",
+      "LI",
+      "LITE",
+      "LLY",
+      "LMND",
+      "LMT",
+      "LNG",
+      "LOW",
+      "LQD",
+      "LRCX",
+      "LULU",
+      "LUNR",
+      "LUV",
+      "LVS",
+      "LYFT",
+      "MA",
+      "MARA",
+      "MBLY",
+      "MCD",
+      "MCHP",
+      "MDB",
+      "MELI",
+      "META",
+      "MMM",
+      "MO",
+      "MP",
+      "MPC",
+      "MPWR",
+      "MRK",
+      "MRNA",
+      "MRVL",
+      "MS",
+      "MSFT",
+      "MSTR",
+      "MSTU",
+      "MSTX",
+      "MTUM",
+      "MU",
+      "MULL",
+      "MUU",
+      "MXL",
+      "NBIS",
+      "NEE",
+      "NEM",
+      "NET",
+      "NFLX",
+      "NIO",
+      "NKE",
+      "NNE",
+      "NOK",
+      "NOW",
+      "NU",
+      "NUE",
+      "NUGT",
+      "NVDA",
+      "NVDL",
+      "NVO",
+      "NVTS",
+      "OKE",
+      "OKLO",
+      "OKTA",
+      "ON",
+      "ONDS",
+      "OPEN",
+      "ORCL",
+      "OSCR",
+      "OXY",
+      "PAAS",
+      "PANW",
+      "PATH",
+      "PBR",
+      "PDD",
+      "PENG",
+      "PEP",
+      "PFE",
+      "PG",
+      "PINS",
+      "PL",
+      "PLTR",
+      "PM",
+      "POET",
+      "PPLT",
+      "PTON",
+      "PWR",
+      "PYPL",
+      "QBTS",
+      "QCOM",
+      "QQQ",
+      "QS",
+      "QUBT",
+      "RACE",
+      "RBLX",
+      "RCAT",
+      "RCL",
+      "RDDT",
+      "RDW",
+      "REGN",
+      "RGTI",
+      "RH",
+      "RIOT",
+      "RIVN",
+      "RKLB",
+      "RKT",
+      "ROKU",
+      "RTX",
+      "RUN",
+      "SATS",
+      "SAVA",
+      "SBET",
+      "SBUX",
+      "SCHW",
+      "SE",
+      "SEDG",
+      "SHOP",
+      "SIL",
+      "SILJ",
+      "SIMO",
+      "SLB",
+      "SLS",
+      "SLV",
+      "SMCI",
+      "SMH",
+      "SMR",
+      "SNAP",
+      "SNDK",
+      "SNOW",
+      "SNPS",
+      "SNXX",
+      "SOC",
+      "SOFI",
+      "SOUN",
+      "SOXL",
+      "SOXS",
+      "SOXX",
+      "SPOT",
+      "SPXL",
+      "SPY",
+      "SQQQ",
+      "SRPT",
+      "STM",
+      "STRL",
+      "STX",
+      "STZ",
+      "SWTX",
+      "SYM",
+      "T",
+      "TEAM",
+      "TECL",
+      "TEM",
+      "TER",
+      "TGT",
+      "TJX",
+      "TLN",
+      "TLT",
+      "TMF",
+      "TMO",
+      "TMUS",
+      "TNA",
+      "TOST",
+      "TQQQ",
+      "TSEM",
+      "TSLA",
+      "TSLL",
+      "TSM",
+      "TTD",
+      "TTWO",
+      "TWLO",
+      "TXN",
+      "U",
+      "UAL",
+      "UBER",
+      "UCO",
+      "ULTA",
+      "UNH",
+      "UPRO",
+      "UPS",
+      "UPST",
+      "URA",
+      "URI",
+      "USAR",
+      "USO",
+      "UUUU",
+      "UVIX",
+      "UVXY",
+      "V",
+      "VALE",
+      "VEEV",
+      "VG",
+      "VKTX",
+      "VLO",
+      "VOO",
+      "VRT",
+      "VRTX",
+      "VST",
+      "VXX",
+      "VZ",
+      "W",
+      "WBA",
+      "WBD",
+      "WDAY",
+      "WDC",
+      "WFC",
+      "WMT",
+      "WOLF",
+      "WPM",
+      "WULF",
+      "WYNN",
+      "X",
+      "XBI",
+      "XHB",
+      "XLE",
+      "XLF",
+      "XLI",
+      "XLK",
+      "XLP",
+      "XLU",
+      "XLV",
+      "XLY",
+      "XOM",
+      "XOP",
+      "XPEV",
+      "XRT",
+      "XYZ",
+      "YINN",
+      "Z",
+      "ZIM",
+      "ZM",
+      "ZS"
+    ]
+  }
+}

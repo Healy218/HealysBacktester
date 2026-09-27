@@ -1,0 +1,10 @@
+{
+  "id": "captures-DELL",
+  "sha256": "5bf0a8ea73590aea65ee71d342e3218ded6fd4d10efde05da2bee779fe46c120",
+  "members": {
+    "files": 22798,
+    "directories": 4763,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

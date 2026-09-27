@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SOUN",
+    "source": {
+      "files": 27454,
+      "directories": 5731,
+      "symlinks": 0,
+      "bytes": 92858422,
+      "metadata_sha256": "35ff9e3a000e6c8608045c1159a1026be96230c53f76cb6f6a3701d487cce652"
+    },
+    "archive_bytes": 77810478,
+    "sha256": "a9bdcce97b24a923091705b6363a0029cc84264ea4a3f8ccfa8284a05a83931c",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SOUN.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

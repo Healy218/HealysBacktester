@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-BMNR",
+    "source": {
+      "files": 11784,
+      "directories": 2473,
+      "symlinks": 0,
+      "bytes": 82360587,
+      "metadata_sha256": "b06b1b772e809473e8efc42182b4f13ecdfbfadadf9cd334fcf7f456f3804080"
+    },
+    "archive_bytes": 75959664,
+    "sha256": "32ed6933bef7959ac50a2655063c4ab7d0492b4d124ee7653e3b3d6e17520ee0",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-BMNR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

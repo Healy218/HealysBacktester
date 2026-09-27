@@ -1,0 +1,13 @@
+{
+  "id": "captures-LYFT",
+  "source": {
+    "files": 23988,
+    "directories": 5007,
+    "symlinks": 0,
+    "bytes": 82780825,
+    "metadata_sha256": "c9d5e483baaf2d74bd435a5438d153859cdb417a818b076f7eccee2b37e86d00"
+  },
+  "archive_bytes": 69421044,
+  "sha256": "235e451100540adfd06b43cab8a3a49e40382590879060b3817e915d751357a6",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-EEM",
+  "source": {
+    "files": 20938,
+    "directories": 4259,
+    "symlinks": 0,
+    "bytes": 43767923,
+    "metadata_sha256": "0fcd9585b189cc337dfc6915789decf20a5c482f42ee7ceb806a524091ab2ffe"
+  },
+  "archive_bytes": 31696986,
+  "sha256": "89818e1f8e34fee88fce737e47904fb5cc32a983da2d274a800cf3d9e251fd23",
+  "state": "packed-source-stable"
+}

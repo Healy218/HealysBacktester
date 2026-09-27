@@ -1,0 +1,13 @@
+{
+  "id": "captures-GDXJ",
+  "source": {
+    "files": 21544,
+    "directories": 4489,
+    "symlinks": 0,
+    "bytes": 63089298,
+    "metadata_sha256": "9e7e8a72fc98976daaaed4760e2be8f37f866a14d7a401bdb2117e41102900f1"
+  },
+  "archive_bytes": 50718590,
+  "sha256": "bf4108e3a24e70fc5b7f04e730978a9bbb3b6aaea41ec5ffae9592ed0e3e72a1",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-FANG",
+  "source": {
+    "files": 18536,
+    "directories": 4717,
+    "symlinks": 0,
+    "bytes": 32424688,
+    "metadata_sha256": "222be582c3e7bb890524854fbb7e747ac2a67780a84b3bebb58987b045a6364d"
+  },
+  "archive_bytes": 22388862,
+  "sha256": "c4c8e33cb56ca43db21619a62800d7b950900abeb2f1f2a16db9abb82eadca3b",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-EQT",
+    "source": {
+      "files": 25702,
+      "directories": 5367,
+      "symlinks": 0,
+      "bytes": 109427465,
+      "metadata_sha256": "82514f16ddd578496cdbf95d690e0d35bd9b59d4049eeb24e391d0139b1270ef"
+    },
+    "archive_bytes": 94870509,
+    "sha256": "38893644d42e4aeebb98cb56b82a6069d5c9a268540ff2cf031bc563fffff42c",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-EQT.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

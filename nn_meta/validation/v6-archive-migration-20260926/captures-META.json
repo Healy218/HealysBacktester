@@ -1,0 +1,13 @@
+{
+  "id": "captures-META",
+  "source": {
+    "files": 23986,
+    "directories": 4505,
+    "symlinks": 0,
+    "bytes": 257161576,
+    "metadata_sha256": "d513ca31782b5811e9eb6ae4f557dda8128e661091886de896ebec7442a020d2"
+  },
+  "archive_bytes": 243997511,
+  "sha256": "e5f3ea8f58b8c24769d58ee0a803ef02718199618e82ddb0da61e620527dbec2",
+  "state": "packed-source-stable"
+}

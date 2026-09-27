@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-MULL",
+    "source": {
+      "files": 10764,
+      "directories": 3851,
+      "symlinks": 0,
+      "bytes": 11274563,
+      "metadata_sha256": "e41686da26f203c211e8a7cd39b0ab250f155666bae0c0b8efac41dd9b63e4aa"
+    },
+    "archive_bytes": 5889112,
+    "sha256": "6bddd95f1442ab0924429d204bf1abf5cec048d3286542b4e4dd470d524022de",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-MULL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

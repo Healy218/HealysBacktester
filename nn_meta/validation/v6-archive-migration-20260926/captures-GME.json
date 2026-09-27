@@ -1,0 +1,13 @@
+{
+  "id": "captures-GME",
+  "source": {
+    "files": 28510,
+    "directories": 5957,
+    "symlinks": 0,
+    "bytes": 64945085,
+    "metadata_sha256": "c86dd893603e9e40fe003a7b72208f341d66755a92407714348c508426d8cd57"
+  },
+  "archive_bytes": 49357102,
+  "sha256": "1df7935076b4dd427b06a2591a1d45cfeae6a25be31e0a84756cb481908d9a6c",
+  "state": "packed-source-stable"
+}

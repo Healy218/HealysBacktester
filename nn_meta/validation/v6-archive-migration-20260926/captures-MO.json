@@ -1,0 +1,13 @@
+{
+  "id": "captures-MO",
+  "source": {
+    "files": 23338,
+    "directories": 4873,
+    "symlinks": 0,
+    "bytes": 80013745,
+    "metadata_sha256": "207a5ca269ef171cf10ad3150b27b4df883eda77831b9041c262566dcfe38ff7"
+  },
+  "archive_bytes": 67143564,
+  "sha256": "6e33602c0a2ec6c98ee9774048fe47d97650a1cb87c140257e9fb6ebf3c7dcbb",
+  "state": "packed-source-stable"
+}

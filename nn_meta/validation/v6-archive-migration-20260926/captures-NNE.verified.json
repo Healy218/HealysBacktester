@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-NNE",
+    "source": {
+      "files": 19462,
+      "directories": 4089,
+      "symlinks": 0,
+      "bytes": 40570762,
+      "metadata_sha256": "444ddfd7bc954192279bb139588944af2f709505dbc11923ff2057ae1a24ab73"
+    },
+    "archive_bytes": 29536623,
+    "sha256": "4b461561f505a87a65f6d549cf85572129200514f67564302ff0a1b9f400fb59",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-NNE.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

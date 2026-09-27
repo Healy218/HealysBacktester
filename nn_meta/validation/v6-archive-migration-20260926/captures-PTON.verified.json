@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-PTON",
+    "source": {
+      "files": 20718,
+      "directories": 4311,
+      "symlinks": 0,
+      "bytes": 40630381,
+      "metadata_sha256": "3fa60e1c81e3d22896e5c7c7588e9212e0b3d0005a1f514e5e47f43403ece1ce"
+    },
+    "archive_bytes": 28902983,
+    "sha256": "b3c61bef8b936941491fd19bb220def30f76abc8dc095539235b8361382cb352",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-PTON.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

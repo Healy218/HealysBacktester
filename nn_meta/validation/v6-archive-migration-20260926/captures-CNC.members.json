@@ -1,0 +1,10 @@
+{
+  "id": "captures-CNC",
+  "sha256": "c3a4798e4d44d6fc2338e86b8f1a57b0c7cf85e405f53a34d254ca6ff609986b",
+  "members": {
+    "files": 18058,
+    "directories": 3765,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

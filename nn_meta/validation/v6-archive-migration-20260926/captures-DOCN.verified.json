@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-DOCN",
+    "source": {
+      "files": 14076,
+      "directories": 3925,
+      "symlinks": 0,
+      "bytes": 18542405,
+      "metadata_sha256": "c402d7be5122b826e7df228315dc07cac39061c37483ec67d2f5b464c522f283"
+    },
+    "archive_bytes": 11043627,
+    "sha256": "18a8c0f1e451b4763b7cca30ac90ec2b644d7cf5964366facb780a7a7ba330d1",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-DOCN.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

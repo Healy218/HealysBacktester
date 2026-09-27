@@ -1,0 +1,13 @@
+{
+  "id": "captures-DHR",
+  "source": {
+    "files": 21454,
+    "directories": 4457,
+    "symlinks": 0,
+    "bytes": 34761403,
+    "metadata_sha256": "a2880963f5f169e5d75fe41bc6ef86658dd23a827ae4be11071eddffbd5b4812"
+  },
+  "archive_bytes": 22408731,
+  "sha256": "d057cdda648bd5dc28425ea3783cc4951bb38b06045a411eeefee49e467a0325",
+  "state": "packed-source-stable"
+}

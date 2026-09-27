@@ -1,0 +1,13 @@
+{
+  "id": "captures-ETHE",
+  "source": {
+    "files": 15076,
+    "directories": 3449,
+    "symlinks": 0,
+    "bytes": 19642065,
+    "metadata_sha256": "6702579659841ba1736976a909ea4b416ac24a00c5f802099115ec3663c074a7"
+  },
+  "archive_bytes": 10938463,
+  "sha256": "2f079ec22540c6a602fecb8081558a2f14a5010c90c0f0793cbe509184471d32",
+  "state": "packed-source-stable"
+}

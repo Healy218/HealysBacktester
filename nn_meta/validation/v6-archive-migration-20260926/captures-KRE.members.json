@@ -1,0 +1,10 @@
+{
+  "id": "captures-KRE",
+  "sha256": "55bd95c4a58f00c9c6321a08fe22d5ae5296fb82da39e92e840962f631981551",
+  "members": {
+    "files": 23264,
+    "directories": 4785,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

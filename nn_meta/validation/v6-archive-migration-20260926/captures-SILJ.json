@@ -1,0 +1,13 @@
+{
+  "id": "captures-SILJ",
+  "source": {
+    "files": 21818,
+    "directories": 4689,
+    "symlinks": 0,
+    "bytes": 32885083,
+    "metadata_sha256": "93f4fa3050d8270ecb7b12ced7f28ba9789945841a27abc553a0e1321f176471"
+  },
+  "archive_bytes": 20193086,
+  "sha256": "37589a79bddc9f394359d16aae921b484788725b4341ac8e0ffb0a5dcfd8db2e",
+  "state": "packed-source-stable"
+}

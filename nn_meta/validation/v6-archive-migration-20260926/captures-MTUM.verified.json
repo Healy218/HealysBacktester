@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-MTUM",
+    "source": {
+      "files": 15416,
+      "directories": 4935,
+      "symlinks": 0,
+      "bytes": 14543099,
+      "metadata_sha256": "ed0ca9bdc54683dbf27fb38a64be695ee85f6d3446977997767733860a5c8427"
+    },
+    "archive_bytes": 6539123,
+    "sha256": "cca43b09bf7bf0a235d481c25746d8c5998d13195056478055b6a13a8b386223",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-MTUM.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

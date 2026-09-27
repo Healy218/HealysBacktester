@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-COF",
+    "source": {
+      "files": 21720,
+      "directories": 4525,
+      "symlinks": 0,
+      "bytes": 46095036,
+      "metadata_sha256": "842500f7914136d00b3581120f906600cff399f7065e54adfbe092654e8e6094"
+    },
+    "archive_bytes": 33758040,
+    "sha256": "ae9324c3974add4ff61c71ec8183733e6e5ee510a057a13b08c16f688f5964bd",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-COF.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

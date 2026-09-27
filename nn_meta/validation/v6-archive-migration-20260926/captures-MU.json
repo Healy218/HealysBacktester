@@ -1,0 +1,13 @@
+{
+  "id": "captures-MU",
+  "source": {
+    "files": 24318,
+    "directories": 4957,
+    "symlinks": 0,
+    "bytes": 281960898,
+    "metadata_sha256": "5463f82d091e503dbd250890406c8c41ad92bf6162b997fc82261534d94e451b"
+  },
+  "archive_bytes": 268991538,
+  "sha256": "600d8605cb68cf12c66e04e7a3f9d6e23a9b94987ffe54aef0383aa6bc4bfc7a",
+  "state": "packed-source-stable"
+}

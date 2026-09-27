@@ -1,0 +1,10 @@
+{
+  "id": "captures-ZIM",
+  "sha256": "51dadaa0d71b56048005394e5a32e4c64020adbdda67b929b7ca3416c3ad7288",
+  "members": {
+    "files": 26672,
+    "directories": 5565,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

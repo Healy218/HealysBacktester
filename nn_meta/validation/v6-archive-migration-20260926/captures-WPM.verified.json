@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-WPM",
+    "source": {
+      "files": 20116,
+      "directories": 4189,
+      "symlinks": 0,
+      "bytes": 33314486,
+      "metadata_sha256": "64d8c3e6832379daaaf6a91538229754d09de754fbbcb3d369cb8a0301c53036"
+    },
+    "archive_bytes": 21723741,
+    "sha256": "9e7d81e472bb8fecebb1c368f11f2725184b26fb871aa73ac70928a1a213ae04",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-WPM.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

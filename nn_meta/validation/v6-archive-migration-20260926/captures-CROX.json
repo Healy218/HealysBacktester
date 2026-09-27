@@ -1,0 +1,13 @@
+{
+  "id": "captures-CROX",
+  "source": {
+    "files": 20136,
+    "directories": 4587,
+    "symlinks": 0,
+    "bytes": 35916564,
+    "metadata_sha256": "597064008c845d002169f951ef7183e58bd2a6c34d53498c7f40d57871086407"
+  },
+  "archive_bytes": 24609155,
+  "sha256": "39dbf5e5acf48fcb821f646f96837958e850f2d1d208d8e2a2c3bb524517552c",
+  "state": "packed-source-stable"
+}

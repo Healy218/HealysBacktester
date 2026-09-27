@@ -1,0 +1,13 @@
+{
+  "id": "captures-CELH",
+  "source": {
+    "files": 22978,
+    "directories": 4807,
+    "symlinks": 0,
+    "bytes": 93400101,
+    "metadata_sha256": "773d1ab898b627c66f5fee84236beafd3f3017d93f19030230db2f641f655624"
+  },
+  "archive_bytes": 80635846,
+  "sha256": "53b5647cdeb25cd8d7d197e56a980aab2f8b57297b66ae1fd41cacb2ba2d4b07",
+  "state": "packed-source-stable"
+}

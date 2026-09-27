@@ -1,0 +1,13 @@
+{
+  "id": "captures-NU",
+  "source": {
+    "files": 23488,
+    "directories": 4897,
+    "symlinks": 0,
+    "bytes": 66864946,
+    "metadata_sha256": "64551ce18346a619c908d956fbe9723c7a92bd7def47feeb765638a278d47f8c"
+  },
+  "archive_bytes": 53923156,
+  "sha256": "beff8ed3fa22969a1173507ea88b8d25eb40fe9639abd8eb19b6a102904829cd",
+  "state": "packed-source-stable"
+}

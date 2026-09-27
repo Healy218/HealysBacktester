@@ -1,0 +1,10 @@
+{
+  "id": "captures-IREN",
+  "sha256": "16536e3443afff616250b6985d82cbed63d1e760e4882ee269fadac853198d15",
+  "members": {
+    "files": 18804,
+    "directories": 3927,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

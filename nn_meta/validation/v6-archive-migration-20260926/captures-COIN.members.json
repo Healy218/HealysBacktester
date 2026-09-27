@@ -1,0 +1,10 @@
+{
+  "id": "captures-COIN",
+  "sha256": "902574e3912898abaf8b9fa174fd5ef8618ca8e5f6dc463afc69993dcd83043c",
+  "members": {
+    "files": 22240,
+    "directories": 4641,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

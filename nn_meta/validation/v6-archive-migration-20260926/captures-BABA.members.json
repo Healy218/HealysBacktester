@@ -1,0 +1,10 @@
+{
+  "id": "captures-BABA",
+  "sha256": "b2c984a95f05e84ada5bc8405541f093120f3ba922f133ad5ca231926b1d560b",
+  "members": {
+    "files": 20908,
+    "directories": 4355,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

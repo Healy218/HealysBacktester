@@ -1,0 +1,10 @@
+{
+  "id": "captures-IGV",
+  "sha256": "f7081e4f16513d3b3c16903138e052e59ed297339712611ed15fa17ec321131e",
+  "members": {
+    "files": 21278,
+    "directories": 4593,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -101,10 +101,16 @@
   of prepared training arrays; no cleanup was performed. Current V7 declarations
   still reference many older intermediates. Exact retention/duplicate evidence:
   [storage and quality review](docs/reviews/2026-09-26-storage-retention-and-adjacent-quality.md).
-  Next: content-preserving duplicate cleanup/verified archival planning, a
-  representative joined-range forecast and packed capture storage before bulk
-  acquisition. The acquisition/project ceilings and remaining training gates
-  are unchanged.
+  Authorized cleanup subsequently completed: 4,690 redundant allocations were
+  replaced with verified independent reflinks (31.67 GB measured saving). All
+  9,541,723 old V6 input files / 2,066,117 directories were archived to MRHA in
+  454 tar.zst files (35.11 GB). External hashes, full source comparisons, actual
+  archive-member counts and restoration passed before source retirement. The
+  loose tree and local staging archives are removed; receipts and a locator remain.
+  Post-tests internal free space is ~297.03 GB, ~275.55 GB above reserve. See
+  [completed migration](docs/reviews/2026-09-26-authorized-storage-reclamation.md).
+  Next: a representative joined-range forecast and packed capture storage before
+  bulk acquisition. Acquisition/project ceilings and training gates are unchanged.
   See `docs/reviews/2026-09-25-v7-3-full-demand-launch.md`.
   Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.
   Derive proposal-driven

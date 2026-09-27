@@ -1,0 +1,10 @@
+{
+  "id": "captures-AI",
+  "sha256": "3f965287d900f766e029a74e624e433165c27a733e8d66a2ea22f7764dce932b",
+  "members": {
+    "files": 26972,
+    "directories": 5615,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

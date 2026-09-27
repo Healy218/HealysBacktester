@@ -1,0 +1,13 @@
+{
+  "id": "captures-TMF",
+  "source": {
+    "files": 23720,
+    "directories": 4933,
+    "symlinks": 0,
+    "bytes": 54241180,
+    "metadata_sha256": "8e5d8dc262f660c1b1f9aeaf88dfdb8b5cccc9bd938dbf0198bb9e95a15bad8a"
+  },
+  "archive_bytes": 40932303,
+  "sha256": "8a2872a09b4e5a605fd06a5cb0e7c8d99678c2925e91bf7407a0bf63b4228bf9",
+  "state": "packed-source-stable"
+}

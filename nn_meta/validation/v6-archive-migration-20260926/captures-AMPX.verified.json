@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-AMPX",
+    "source": {
+      "files": 16034,
+      "directories": 4887,
+      "symlinks": 0,
+      "bytes": 20428413,
+      "metadata_sha256": "c7a867b7539193f8a2b86048d0974807266318d1607425241c63961d4872c0a2"
+    },
+    "archive_bytes": 12189616,
+    "sha256": "ed6a44255ecc90d4d25cbd104c821c3e78bd1c5b9ebd7d421824173bf614ee6f",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-AMPX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

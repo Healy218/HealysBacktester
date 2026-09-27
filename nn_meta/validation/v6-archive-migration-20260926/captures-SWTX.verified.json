@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SWTX",
+    "source": {
+      "files": 7166,
+      "directories": 2081,
+      "symlinks": 0,
+      "bytes": 6053565,
+      "metadata_sha256": "739c99c1ef980f6650ff6088825333564c29a6c3abdd54322edf1e9687baa463"
+    },
+    "archive_bytes": 2072498,
+    "sha256": "e01815f59e27ebb44d7b156475ce38b932297e6f41f3a7860fdf5c6b569b4b90",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SWTX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

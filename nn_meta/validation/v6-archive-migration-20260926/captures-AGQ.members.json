@@ -1,0 +1,10 @@
+{
+  "id": "captures-AGQ",
+  "sha256": "1e1b50a6fb93f7a19c193444b4e36231f76327aa6e8c2d161a6cb38640fcc825",
+  "members": {
+    "files": 15370,
+    "directories": 3193,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

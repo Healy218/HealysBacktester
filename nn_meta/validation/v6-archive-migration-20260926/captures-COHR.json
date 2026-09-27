@@ -1,0 +1,13 @@
+{
+  "id": "captures-COHR",
+  "source": {
+    "files": 25200,
+    "directories": 5299,
+    "symlinks": 0,
+    "bytes": 52805291,
+    "metadata_sha256": "5542de20decc318321e85a18c3aed7741b322e8f452022cd1e21364ef39ffb17"
+  },
+  "archive_bytes": 38355872,
+  "sha256": "6f657ed14838660520ee11f0d31c8892fa39f2542ec7cf28cd3f17e440132352",
+  "state": "packed-source-stable"
+}

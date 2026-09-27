@@ -1,0 +1,10 @@
+{
+  "id": "captures-HUT",
+  "sha256": "d9362efcf15f60fa3834dcb95a4323cd930901eca6f95b4ddbc1b45b4efbd7a0",
+  "members": {
+    "files": 21094,
+    "directories": 4385,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

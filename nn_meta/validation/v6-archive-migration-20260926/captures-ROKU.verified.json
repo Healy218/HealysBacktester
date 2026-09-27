@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ROKU",
+    "source": {
+      "files": 18662,
+      "directories": 3889,
+      "symlinks": 0,
+      "bytes": 57666419,
+      "metadata_sha256": "abb356abefd67ea336b442ef0f2f3c2f0f97ca2d13b4e0e25795681722b3c0df"
+    },
+    "archive_bytes": 47113479,
+    "sha256": "a5dd824e7bcdb5c1d1baa49dbb2feb2b52a91c723b33c75c4655484d8d6e0ad8",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ROKU.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

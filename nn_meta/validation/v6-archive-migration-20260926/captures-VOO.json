@@ -1,0 +1,13 @@
+{
+  "id": "captures-VOO",
+  "source": {
+    "files": 23188,
+    "directories": 4835,
+    "symlinks": 0,
+    "bytes": 55120775,
+    "metadata_sha256": "3c87642429b452785ac96e7cc12c332e31431f47e87755d8ccf9014c8151933c"
+  },
+  "archive_bytes": 42013424,
+  "sha256": "fa6183afd499e74fc21bce804557ff64d079526be844772247b7e394eba1677f",
+  "state": "packed-source-stable"
+}

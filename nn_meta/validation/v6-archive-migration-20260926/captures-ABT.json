@@ -1,0 +1,13 @@
+{
+  "id": "captures-ABT",
+  "source": {
+    "files": 19216,
+    "directories": 4017,
+    "symlinks": 0,
+    "bytes": 55055788,
+    "metadata_sha256": "ffc1914329ef6bedc30914fb023299c51bcc59b4ca6c5c84c57c02717c665111"
+  },
+  "archive_bytes": 44215015,
+  "sha256": "cc3de94a272ba319692e3cca93c76374fb0d0dd3e42bc16ad890c5d9764c5bb2",
+  "state": "packed-source-stable"
+}

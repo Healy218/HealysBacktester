@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-FLY",
+    "source": {
+      "files": 14590,
+      "directories": 3189,
+      "symlinks": 0,
+      "bytes": 21597533,
+      "metadata_sha256": "f62ec04b8753d0c00067ed5630cf8ff3a52d49c318503125cc75f7cc17da136a"
+    },
+    "archive_bytes": 13330185,
+    "sha256": "be216633328b9db8d6486dc8a61e9360ad0c2f04b98130370fc826e77e60497a",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-FLY.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

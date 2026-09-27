@@ -1,0 +1,10 @@
+{
+  "id": "captures-AMAT",
+  "sha256": "2fa052ac2ffbd0eb2def112a1484a084a13bfc0eb72b955a7d494c81a56466cb",
+  "members": {
+    "files": 19062,
+    "directories": 3959,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

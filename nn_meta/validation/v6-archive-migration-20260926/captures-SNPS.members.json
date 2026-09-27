@@ -1,0 +1,10 @@
+{
+  "id": "captures-SNPS",
+  "sha256": "f1ff1dc04b5ba10b9f5418e3aec3c66fa3cda155afe84a98bf2305d8b1646602",
+  "members": {
+    "files": 23026,
+    "directories": 5785,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

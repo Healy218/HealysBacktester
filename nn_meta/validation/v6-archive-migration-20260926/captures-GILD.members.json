@@ -1,0 +1,10 @@
+{
+  "id": "captures-GILD",
+  "sha256": "d1c41fc6e23d42a3fc47b376b59fd1878425a0f60d2e891a10e5f495b23f28bb",
+  "members": {
+    "files": 22156,
+    "directories": 4619,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

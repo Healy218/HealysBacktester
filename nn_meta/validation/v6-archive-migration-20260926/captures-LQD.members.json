@@ -1,0 +1,10 @@
+{
+  "id": "captures-LQD",
+  "sha256": "258d9f3c8d6fc7f650967073d27504960990341beb83de5c7a95d0244108bb19",
+  "members": {
+    "files": 22540,
+    "directories": 4681,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

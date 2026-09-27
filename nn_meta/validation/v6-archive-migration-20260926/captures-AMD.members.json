@@ -1,0 +1,10 @@
+{
+  "id": "captures-AMD",
+  "sha256": "3c864ce07141eaf3230b33b234e56eac3204df41d6cfd22006228eda742a005e",
+  "members": {
+    "files": 23518,
+    "directories": 4825,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

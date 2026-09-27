@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SCHW",
+    "source": {
+      "files": 24058,
+      "directories": 5019,
+      "symlinks": 0,
+      "bytes": 83639669,
+      "metadata_sha256": "7266dc620f1064b4261aae10d9ea2c7a56aed19b5aa89350f387cca2bfad3742"
+    },
+    "archive_bytes": 70059626,
+    "sha256": "99423a381681fcc98c26e2f35be31b6cf9657a8222349a79a8ab8e58d0837ce5",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SCHW.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

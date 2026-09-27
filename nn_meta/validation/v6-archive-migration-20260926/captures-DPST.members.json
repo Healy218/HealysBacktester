@@ -1,0 +1,10 @@
+{
+  "id": "captures-DPST",
+  "sha256": "89b0552867e907b843c2201b87544bd65c63225e25240349d2ee4c223b2057ef",
+  "members": {
+    "files": 25914,
+    "directories": 5421,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

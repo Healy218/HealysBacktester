@@ -1,0 +1,10 @@
+{
+  "id": "context-and-stores",
+  "sha256": "3d152e20851e0c97a847d92d62010285b104588be5065a6c9ff0be7cd0fa3af5",
+  "members": {
+    "files": 7503,
+    "directories": 1458,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

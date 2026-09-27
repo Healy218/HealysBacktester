@@ -1,0 +1,10 @@
+{
+  "id": "captures-SPY",
+  "sha256": "1006fa739e25655e306fd392fef4ad007f3338c1ca33e6950c6ea1fb31f7baa3",
+  "members": {
+    "files": 38456,
+    "directories": 4743,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

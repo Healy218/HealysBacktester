@@ -1,0 +1,10 @@
+{
+  "id": "captures-XRT",
+  "sha256": "ba77ae00d690866eb0dd0ef046941976e57b48b97dd77af95d81efcbb210b4d1",
+  "members": {
+    "files": 23514,
+    "directories": 4893,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

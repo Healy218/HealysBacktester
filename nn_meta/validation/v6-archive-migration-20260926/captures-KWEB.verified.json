@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-KWEB",
+    "source": {
+      "files": 20018,
+      "directories": 4181,
+      "symlinks": 0,
+      "bytes": 44170721,
+      "metadata_sha256": "caf6f6e3e409bc9f920a173909a4a298d0055fe3eed3c5275d7b0af8b68c2311"
+    },
+    "archive_bytes": 32871861,
+    "sha256": "641dd812b6b329e9f887bfd15071fbae1c5f8d607d782b70d5c2e36a713ef62f",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-KWEB.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

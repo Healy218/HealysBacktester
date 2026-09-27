@@ -1,0 +1,10 @@
+{
+  "id": "captures-FXI",
+  "sha256": "694c26e769fc24f8c9bb0652b52fa922ddd4da98e62162e3a3e7e5f4807402b2",
+  "members": {
+    "files": 20112,
+    "directories": 4137,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

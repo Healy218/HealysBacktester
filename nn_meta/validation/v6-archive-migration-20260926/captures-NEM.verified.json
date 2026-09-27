@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-NEM",
+    "source": {
+      "files": 21960,
+      "directories": 4583,
+      "symlinks": 0,
+      "bytes": 88152020,
+      "metadata_sha256": "0722b2837215e2490417f883ce27a828f031644b16008f0d6f87969f93e7798e"
+    },
+    "archive_bytes": 75924702,
+    "sha256": "1bfe5e5012a113972cc2392985061c0b5f050871868805137347511a1c553a0e",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-NEM.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

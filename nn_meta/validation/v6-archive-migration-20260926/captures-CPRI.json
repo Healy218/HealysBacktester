@@ -1,0 +1,13 @@
+{
+  "id": "captures-CPRI",
+  "source": {
+    "files": 22342,
+    "directories": 5477,
+    "symlinks": 0,
+    "bytes": 44149927,
+    "metadata_sha256": "2b25a06f153d81df1c56a33b8527b1623169da476b8c80013da0c918b0a79d41"
+  },
+  "archive_bytes": 31696993,
+  "sha256": "a56be325bfaf72ff7f3d6ffd170b24de919229c78efc0caeff02479feef46480",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-BTDR",
+    "source": {
+      "files": 24570,
+      "directories": 5409,
+      "symlinks": 0,
+      "bytes": 45216773,
+      "metadata_sha256": "4d92ff98b43f688dcaa449d4772356725f57b16b26998466b5d4159df1dfc27e"
+    },
+    "archive_bytes": 31217991,
+    "sha256": "942026916abc59daf9aee2c269e656492c4cef00ace01d36091bfadacfc37e78",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-BTDR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

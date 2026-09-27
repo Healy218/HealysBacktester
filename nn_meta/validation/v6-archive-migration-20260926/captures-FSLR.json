@@ -1,0 +1,13 @@
+{
+  "id": "captures-FSLR",
+  "source": {
+    "files": 16336,
+    "directories": 3403,
+    "symlinks": 0,
+    "bytes": 62639962,
+    "metadata_sha256": "60b2db8a26fd556569a304f6b8c14c74238bff043229ec2300a2f7ef1a0921c6"
+  },
+  "archive_bytes": 53489564,
+  "sha256": "9c3925a783e1fabdcf5fe072d9648e353d6efc3910794608e4d2651355778e57",
+  "state": "packed-source-stable"
+}

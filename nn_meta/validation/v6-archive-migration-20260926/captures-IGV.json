@@ -1,0 +1,13 @@
+{
+  "id": "captures-IGV",
+  "source": {
+    "files": 21278,
+    "directories": 4593,
+    "symlinks": 0,
+    "bytes": 31779504,
+    "metadata_sha256": "4c17f6afa8c6ad6f4c12afc606595f8bd82bdb9d39503fe733482168d2cebe4b"
+  },
+  "archive_bytes": 19577321,
+  "sha256": "f7081e4f16513d3b3c16903138e052e59ed297339712611ed15fa17ec321131e",
+  "state": "packed-source-stable"
+}

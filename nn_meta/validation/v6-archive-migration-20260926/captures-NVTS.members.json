@@ -1,0 +1,10 @@
+{
+  "id": "captures-NVTS",
+  "sha256": "cdbc150ada9e3c7d957f837adc710cf7863a02e6ec912fa7615146157ead9ea9",
+  "members": {
+    "files": 12542,
+    "directories": 3083,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

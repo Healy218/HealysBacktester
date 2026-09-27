@@ -1,0 +1,10 @@
+{
+  "id": "captures-AVGO",
+  "sha256": "4d45d2ef9087eb2f1992b2bc7015f9600c0696cc3b89c8c38e10729afad51182",
+  "members": {
+    "files": 27772,
+    "directories": 5163,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

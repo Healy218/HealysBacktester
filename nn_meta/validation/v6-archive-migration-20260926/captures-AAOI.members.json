@@ -1,0 +1,10 @@
+{
+  "id": "captures-AAOI",
+  "sha256": "310a056d5bcf862e3c79f58278ccff84aa46cb5ac96a9a9466af4dddffe96841",
+  "members": {
+    "files": 19350,
+    "directories": 4497,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

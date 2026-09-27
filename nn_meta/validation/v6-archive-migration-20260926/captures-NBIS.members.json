@@ -1,0 +1,10 @@
+{
+  "id": "captures-NBIS",
+  "sha256": "b9c0a9e92a4d6a7afee0a0367534f71cc91f3a895ad37b96863eaeeeccfa2b3e",
+  "members": {
+    "files": 18774,
+    "directories": 4015,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

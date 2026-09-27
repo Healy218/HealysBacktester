@@ -1,0 +1,10 @@
+{
+  "id": "captures-SOC",
+  "sha256": "30e737b9ff9c391b469e43aca5dde962ac746432323b6b3e235e27dc52cbbb6e",
+  "members": {
+    "files": 19658,
+    "directories": 5159,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

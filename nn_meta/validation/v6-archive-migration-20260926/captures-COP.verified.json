@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-COP",
+    "source": {
+      "files": 21472,
+      "directories": 4491,
+      "symlinks": 0,
+      "bytes": 77538422,
+      "metadata_sha256": "6bcf1ed11441f65449a59e66a84c60f471014e7dbe5a9df4b0f2b0679c89d882"
+    },
+    "archive_bytes": 65479714,
+    "sha256": "7f4121fc1b0d935cfcbb9f9d670298c78e8500bf08a0d524282a42860d43da23",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-COP.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

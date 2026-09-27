@@ -1,0 +1,10 @@
+{
+  "id": "captures-AMZN",
+  "sha256": "de4b6feb91eda557bb766af1dea53aad5efdbcbbb1f84c94cbfd8208e97a1f53",
+  "members": {
+    "files": 30272,
+    "directories": 5677,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

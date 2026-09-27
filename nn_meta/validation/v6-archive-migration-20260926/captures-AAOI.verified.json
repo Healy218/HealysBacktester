@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-AAOI",
+    "source": {
+      "files": 19350,
+      "directories": 4497,
+      "symlinks": 0,
+      "bytes": 49066500,
+      "metadata_sha256": "93a71c8d023332433db247b3239c3f43211df2f052869d55753a7547ea43c7c4"
+    },
+    "archive_bytes": 38448840,
+    "sha256": "310a056d5bcf862e3c79f58278ccff84aa46cb5ac96a9a9466af4dddffe96841",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-AAOI.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

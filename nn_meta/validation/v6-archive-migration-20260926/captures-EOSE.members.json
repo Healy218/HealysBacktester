@@ -1,0 +1,10 @@
+{
+  "id": "captures-EOSE",
+  "sha256": "6e0059b9514863773e2aed96db0b34f698895fddbf5c0f2d9c13b37f48d55f25",
+  "members": {
+    "files": 14848,
+    "directories": 3191,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

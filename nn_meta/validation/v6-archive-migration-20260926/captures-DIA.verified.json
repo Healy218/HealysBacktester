@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-DIA",
+    "source": {
+      "files": 24154,
+      "directories": 4949,
+      "symlinks": 0,
+      "bytes": 164189134,
+      "metadata_sha256": "9746ea9dab5d1634f671b4eb7de1bc83a094010d3da0e1738fe6ca59d253eb3f"
+    },
+    "archive_bytes": 150891200,
+    "sha256": "c295dbd8f5e9c48a4afba390d143cbaa5013f85961115af8701a7abcf3316930",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-DIA.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

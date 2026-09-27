@@ -1,0 +1,13 @@
+{
+  "id": "captures-DOW",
+  "source": {
+    "files": 23052,
+    "directories": 4819,
+    "symlinks": 0,
+    "bytes": 70897013,
+    "metadata_sha256": "fc3c12114cbcdb59511e682c62800071f3287eca63a49418408d3f1cce656657"
+  },
+  "archive_bytes": 58028929,
+  "sha256": "9cd1a1c042ae2338db7916284688e5f619a29803092f7674c55f22872674372a",
+  "state": "packed-source-stable"
+}

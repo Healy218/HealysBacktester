@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-WDC",
+    "source": {
+      "files": 19734,
+      "directories": 4113,
+      "symlinks": 0,
+      "bytes": 89184270,
+      "metadata_sha256": "a757c78a5b483b5bd537368275a74cd082f8b0deec47b8453cc17f9d2d2b2746"
+    },
+    "archive_bytes": 78137552,
+    "sha256": "42754a5a82348947c86fb74367442509208385e60c8527e36cd79190225d6fe1",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-WDC.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

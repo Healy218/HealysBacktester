@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-MSFT",
+    "source": {
+      "files": 23836,
+      "directories": 4491,
+      "symlinks": 0,
+      "bytes": 258610352,
+      "metadata_sha256": "bb744ab06929a001dd60f1a15794a9a3d0c1c8dff0c3482dd4f75c9ef62872fe"
+    },
+    "archive_bytes": 245554930,
+    "sha256": "619803a5574a83356cea5f5db7a34116de16d06d2afff0b8b6497e15c7b6c75d",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-MSFT.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

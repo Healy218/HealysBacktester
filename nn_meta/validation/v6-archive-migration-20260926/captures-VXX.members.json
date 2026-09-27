@@ -1,0 +1,10 @@
+{
+  "id": "captures-VXX",
+  "sha256": "b8bbe72367c9bc773f2993af69e9170d3628696d646705119c81deaf81f114bc",
+  "members": {
+    "files": 23336,
+    "directories": 4875,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

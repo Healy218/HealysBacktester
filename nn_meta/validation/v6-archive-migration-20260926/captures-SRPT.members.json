@@ -1,0 +1,10 @@
+{
+  "id": "captures-SRPT",
+  "sha256": "77808151d01428efad4f2c50799884745e9a96ddad4083f7bb561397754c9611",
+  "members": {
+    "files": 25412,
+    "directories": 5311,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

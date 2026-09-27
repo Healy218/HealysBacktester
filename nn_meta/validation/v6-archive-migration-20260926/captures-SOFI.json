@@ -1,0 +1,13 @@
+{
+  "id": "captures-SOFI",
+  "source": {
+    "files": 25170,
+    "directories": 5251,
+    "symlinks": 0,
+    "bytes": 191798213,
+    "metadata_sha256": "aa64ba5591396fd424cb776025c72097f917b79875d0e52ec4c66f6d3ffd4c97"
+  },
+  "archive_bytes": 178348009,
+  "sha256": "b6ec5a998a0183efcddbe827579c6b2c317ec9e8f6e3bf4b13c70df19064373d",
+  "state": "packed-source-stable"
+}

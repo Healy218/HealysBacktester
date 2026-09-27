@@ -1,0 +1,10 @@
+{
+  "id": "captures-MARA",
+  "sha256": "0aba66124871871dd301eada7e9227d9eb0cba1402e4f33ababb42d169a4f2d1",
+  "members": {
+    "files": 23300,
+    "directories": 4845,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

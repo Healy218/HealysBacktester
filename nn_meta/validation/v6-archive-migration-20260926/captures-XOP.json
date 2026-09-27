@@ -1,0 +1,13 @@
+{
+  "id": "captures-XOP",
+  "source": {
+    "files": 23240,
+    "directories": 4853,
+    "symlinks": 0,
+    "bytes": 57519195,
+    "metadata_sha256": "95f2c7ad26382e43874ed6550d5830ab9eaaffbd67f4008566b247f90b30c16d"
+  },
+  "archive_bytes": 44196688,
+  "sha256": "d3806289276cf382ad18ec5be4e3515725967b5e13d1aaf1651984e7501aaae2",
+  "state": "packed-source-stable"
+}

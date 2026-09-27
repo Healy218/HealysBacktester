@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CDNS",
+    "source": {
+      "files": 18460,
+      "directories": 4629,
+      "symlinks": 0,
+      "bytes": 24090488,
+      "metadata_sha256": "cb366a1a5c9ac31d3a89c6277889e176dff301d2146294d241f03e018d7558ed"
+    },
+    "archive_bytes": 13898147,
+    "sha256": "984821c8a668f96cfe92b593eda386a277312091648011c9f7fdc086838df05a",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CDNS.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

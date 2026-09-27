@@ -1,0 +1,13 @@
+{
+  "id": "captures-TMO",
+  "source": {
+    "files": 21330,
+    "directories": 4455,
+    "symlinks": 0,
+    "bytes": 36550711,
+    "metadata_sha256": "8598d09d42b0ddca2d00a68f08d9f0ca66bc3e7c58a99db2e6a78dbcd8620c4b"
+  },
+  "archive_bytes": 24236643,
+  "sha256": "059eec02debb26520f57e95e928c82801139878590b6430655a64ffa9f388a69",
+  "state": "packed-source-stable"
+}

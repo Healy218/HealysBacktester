@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-MPWR",
+    "source": {
+      "files": 12850,
+      "directories": 4219,
+      "symlinks": 0,
+      "bytes": 15297525,
+      "metadata_sha256": "b377ceebdf852b5220cdc018922c4be1a3249f918f6c5b3e37c11ba96d4d0ef5"
+    },
+    "archive_bytes": 8882611,
+    "sha256": "d5b2a4586b39a19a0c346092e5948fc7dc9f4ab0a1c1a4c6601a44f46214b96b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-MPWR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

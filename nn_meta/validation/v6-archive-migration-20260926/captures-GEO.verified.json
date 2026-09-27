@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-GEO",
+    "source": {
+      "files": 19404,
+      "directories": 4607,
+      "symlinks": 0,
+      "bytes": 28697647,
+      "metadata_sha256": "563b33cc88dd63d5a4ef96bf4ed134507be67223e20118d741890e657c811fdb"
+    },
+    "archive_bytes": 17832786,
+    "sha256": "ac5051ce30c396267481d11ab370ade57ff0fecf004908558eb52f4a1c96a35b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-GEO.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

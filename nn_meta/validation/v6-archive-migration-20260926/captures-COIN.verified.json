@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-COIN",
+    "source": {
+      "files": 22240,
+      "directories": 4641,
+      "symlinks": 0,
+      "bytes": 226824931,
+      "metadata_sha256": "82b546837544fa06f2cd2dccc9f923b3257b4db081426be5239ef83f41d4b5a5"
+    },
+    "archive_bytes": 214851452,
+    "sha256": "902574e3912898abaf8b9fa174fd5ef8618ca8e5f6dc463afc69993dcd83043c",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-COIN.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

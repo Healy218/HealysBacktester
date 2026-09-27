@@ -1,0 +1,10 @@
+{
+  "id": "captures-MCD",
+  "sha256": "47e68882bfd7de2134d9f603e9d2b4d7eb22137120bd6cc16a7cdb803401bea6",
+  "members": {
+    "files": 24128,
+    "directories": 5033,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

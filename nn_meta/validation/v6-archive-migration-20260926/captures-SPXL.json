@@ -1,0 +1,13 @@
+{
+  "id": "captures-SPXL",
+  "source": {
+    "files": 22004,
+    "directories": 4583,
+    "symlinks": 0,
+    "bytes": 47975187,
+    "metadata_sha256": "20baedfcce4803194b281fa0cfc986be500aa010f24ec835e83166b704ea1795"
+  },
+  "archive_bytes": 35410082,
+  "sha256": "313e609befba052eca576be9b8ffdc915a29ef7cfa9a5bd09cd32c63b41885e3",
+  "state": "packed-source-stable"
+}

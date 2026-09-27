@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CCJ",
+    "source": {
+      "files": 23586,
+      "directories": 4915,
+      "symlinks": 0,
+      "bytes": 106742881,
+      "metadata_sha256": "793fec361a265ed11504f7bfa0044b5dd4dc9e86d9d9d4a618853807067a5068"
+    },
+    "archive_bytes": 93521454,
+    "sha256": "0f0464eb955086a8cd4950744f0e2390124a631345a0e3b4ce89d953b4d9a59b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CCJ.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

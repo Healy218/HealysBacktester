@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SBUX",
+    "source": {
+      "files": 22158,
+      "directories": 4623,
+      "symlinks": 0,
+      "bytes": 107781054,
+      "metadata_sha256": "7f76fc661571c42763abb8627ea7cf22dc2146d0aec247d866fd72fc7f8b3712"
+    },
+    "archive_bytes": 95539820,
+    "sha256": "63b5d85de0355c7886fe76ec923ccdc62a33cb2050c80abeebf3a41dd6e31321",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SBUX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

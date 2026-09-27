@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SNDK",
+    "source": {
+      "files": 12144,
+      "directories": 2995,
+      "symlinks": 0,
+      "bytes": 73838071,
+      "metadata_sha256": "7bbd991703f401233149968e04f35651a6e8088d67b718765c8f50da873af2a2"
+    },
+    "archive_bytes": 67398949,
+    "sha256": "dc1c7b9c127ea727f8960a08818da0b8b2e009cd75d75dd70aba71c5cabd3bab",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SNDK.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

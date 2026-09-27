@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-NUGT",
+    "source": {
+      "files": 18252,
+      "directories": 3805,
+      "symlinks": 0,
+      "bytes": 32705628,
+      "metadata_sha256": "9c8db81ad68ae9d4c971c808a9b2118e9cbb3ae8a97dc6e832c84131d677045f"
+    },
+    "archive_bytes": 22081789,
+    "sha256": "3db190f67dca6a99d69d2d25ef81a79e3e27b7a45c6c7af143a07f37a0b13195",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-NUGT.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

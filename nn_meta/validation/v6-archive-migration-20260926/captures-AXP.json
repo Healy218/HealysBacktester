@@ -1,0 +1,13 @@
+{
+  "id": "captures-AXP",
+  "source": {
+    "files": 24150,
+    "directories": 5035,
+    "symlinks": 0,
+    "bytes": 63425226,
+    "metadata_sha256": "c49260d39190a812fe01f2bebd6c18c40cb2f1821c8c6cf35d8f56237305c114"
+  },
+  "archive_bytes": 49873020,
+  "sha256": "6b51281904d26b86e24dee67c1e1933dd4b70fea6c8d20f5c3facd88bb3b1370",
+  "state": "packed-source-stable"
+}

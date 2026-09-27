@@ -1,0 +1,13 @@
+{
+  "id": "captures-ARM",
+  "source": {
+    "files": 24330,
+    "directories": 5059,
+    "symlinks": 0,
+    "bytes": 101127022,
+    "metadata_sha256": "17d6a1df13a1fd130ddebc3102e88e6444ef1f7e303121309e11901d1e060119"
+  },
+  "archive_bytes": 87733695,
+  "sha256": "31c7ecd918167989c70c33ad0daebdc7b581a5164798e6a6ba5af681b18488a7",
+  "state": "packed-source-stable"
+}

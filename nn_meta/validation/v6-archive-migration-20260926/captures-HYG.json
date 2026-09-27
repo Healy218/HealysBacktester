@@ -1,0 +1,13 @@
+{
+  "id": "captures-HYG",
+  "source": {
+    "files": 21684,
+    "directories": 4513,
+    "symlinks": 0,
+    "bytes": 27924464,
+    "metadata_sha256": "342da3b17699823e78113dd5844c33d566c1f159014d65c298d0f411ec5c3699"
+  },
+  "archive_bytes": 15367750,
+  "sha256": "232a110adf1b11281ddf4ae94f71fd7d25175fd98398d78b5c14417293fc6696",
+  "state": "packed-source-stable"
+}

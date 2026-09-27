@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-DDOG",
+    "source": {
+      "files": 22702,
+      "directories": 4719,
+      "symlinks": 0,
+      "bytes": 86029447,
+      "metadata_sha256": "029405afe109875e4cb7fe3fa8a039fe59f3be76ca0306b313abbc4cac919a20"
+    },
+    "archive_bytes": 73198812,
+    "sha256": "a443bd1fa1410f0138fc11d93cb9b31c2ee61bc28f21246d016c291b2c4fdeb8",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-DDOG.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

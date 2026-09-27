@@ -1,0 +1,13 @@
+{
+  "id": "captures-PDD",
+  "source": {
+    "files": 20484,
+    "directories": 4265,
+    "symlinks": 0,
+    "bytes": 99243341,
+    "metadata_sha256": "dd16b3a297254ce40835f277c69960997d6baa231a3e2366c3006e9c386d2888"
+  },
+  "archive_bytes": 87924153,
+  "sha256": "f280f3d6a1a354269409893114df5b9a0452e273676ea75fdfceddda047e54ab",
+  "state": "packed-source-stable"
+}

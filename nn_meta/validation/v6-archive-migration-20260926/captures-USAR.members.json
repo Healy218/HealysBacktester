@@ -1,0 +1,10 @@
+{
+  "id": "captures-USAR",
+  "sha256": "2b3b79497e76fa51c230b74ae63519ada71edbe8fb98c77ccc4a8ebd4ec12710",
+  "members": {
+    "files": 15802,
+    "directories": 3401,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

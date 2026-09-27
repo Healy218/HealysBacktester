@@ -1,0 +1,10 @@
+{
+  "id": "captures-STM",
+  "sha256": "82b6a0baf0bf6809a51dff36361c763e18bbf53795fda7b2d6c38eef450994db",
+  "members": {
+    "files": 16646,
+    "directories": 5037,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

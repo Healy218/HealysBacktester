@@ -1,0 +1,13 @@
+{
+  "id": "captures-OXY",
+  "source": {
+    "files": 21210,
+    "directories": 4417,
+    "symlinks": 0,
+    "bytes": 105850998,
+    "metadata_sha256": "959cbfc54e4b292b02afb5e25a8a81dc6107682e37c397fdb31092a3cf5ddf62"
+  },
+  "archive_bytes": 94224779,
+  "sha256": "f55ec487d9c28849f72c18dc1c9d300deef72159ce6e7f433829a02fa6787b1c",
+  "state": "packed-source-stable"
+}

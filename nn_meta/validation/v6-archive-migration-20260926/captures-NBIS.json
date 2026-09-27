@@ -1,0 +1,13 @@
+{
+  "id": "captures-NBIS",
+  "source": {
+    "files": 18774,
+    "directories": 4015,
+    "symlinks": 0,
+    "bytes": 101617648,
+    "metadata_sha256": "62f215367f53ef4a90de73e21f158465d0226a29573756843e5e11a125477789"
+  },
+  "archive_bytes": 91314747,
+  "sha256": "b9c0a9e92a4d6a7afee0a0367534f71cc91f3a895ad37b96863eaeeeccfa2b3e",
+  "state": "packed-source-stable"
+}

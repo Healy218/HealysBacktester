@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-TXN",
+    "source": {
+      "files": 21628,
+      "directories": 4505,
+      "symlinks": 0,
+      "bytes": 66700528,
+      "metadata_sha256": "0644d0bad0805d434d80a10e200a61ebab02bcfb51098a20c2d17d9a7d22262f"
+    },
+    "archive_bytes": 54525199,
+    "sha256": "ebe4211b6e04e7d34bb0462662316874db105fd8d4f7e6e3ea4574dc3d1c62e1",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-TXN.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-AZO",
+  "sha256": "f281bbece0e1b02adb38a0f56e02067d64f5acc7ac696b6c9c6c7de0f559eba6",
+  "members": {
+    "files": 15358,
+    "directories": 5119,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

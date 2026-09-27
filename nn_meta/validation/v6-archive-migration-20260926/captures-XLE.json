@@ -1,0 +1,13 @@
+{
+  "id": "captures-XLE",
+  "source": {
+    "files": 22170,
+    "directories": 4557,
+    "symlinks": 0,
+    "bytes": 99051888,
+    "metadata_sha256": "1a5da4a1caba6969acf4e3fb70c9e8d42644737c1748fece590c2e6fbd73e016"
+  },
+  "archive_bytes": 86762685,
+  "sha256": "08ee70ee24f68baf0a3109e57df9a4076a2cbde81fc88cb2baee14df517888c4",
+  "state": "packed-source-stable"
+}

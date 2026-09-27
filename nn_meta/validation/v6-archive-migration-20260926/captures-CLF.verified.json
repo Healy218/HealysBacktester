@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CLF",
+    "source": {
+      "files": 26904,
+      "directories": 5621,
+      "symlinks": 0,
+      "bytes": 65661754,
+      "metadata_sha256": "29c252e8e08e32360d81a2bf1833ff9615f25594e566d694c7f472308027519b"
+    },
+    "archive_bytes": 50723904,
+    "sha256": "053754176a35bd2be1f36d16f8c226d46c9bdf3368ed227142ce4960ffe27de8",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CLF.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

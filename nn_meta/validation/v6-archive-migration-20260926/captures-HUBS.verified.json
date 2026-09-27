@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-HUBS",
+    "source": {
+      "files": 17590,
+      "directories": 5791,
+      "symlinks": 0,
+      "bytes": 17620791,
+      "metadata_sha256": "c2dba31b5a0b3bef952bef06f1cfc128cc469d3bd30d436ed410ad2c1263cd6a"
+    },
+    "archive_bytes": 8748730,
+    "sha256": "cf8772605b0c06f49bfde02ea116ecc31c9e93e6bcf2b84aa9b5d2b77641b6da",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-HUBS.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

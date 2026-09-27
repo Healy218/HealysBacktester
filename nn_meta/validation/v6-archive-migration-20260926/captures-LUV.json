@@ -1,0 +1,13 @@
+{
+  "id": "captures-LUV",
+  "source": {
+    "files": 18344,
+    "directories": 3819,
+    "symlinks": 0,
+    "bytes": 61498755,
+    "metadata_sha256": "e9e07f70f2c08b7e26d8a7d22d68f7d1a856b7181edde043a9d9040f5032a360"
+  },
+  "archive_bytes": 51188664,
+  "sha256": "8ccac15999dd13730b7d583de5d383c8a4a5a165dfaa3af2972c8b8a12c74bf2",
+  "state": "packed-source-stable"
+}

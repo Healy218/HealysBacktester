@@ -1,0 +1,10 @@
+{
+  "id": "captures-SPXL",
+  "sha256": "313e609befba052eca576be9b8ffdc915a29ef7cfa9a5bd09cd32c63b41885e3",
+  "members": {
+    "files": 22004,
+    "directories": 4583,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

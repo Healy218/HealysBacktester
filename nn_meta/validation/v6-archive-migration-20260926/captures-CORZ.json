@@ -1,0 +1,13 @@
+{
+  "id": "captures-CORZ",
+  "source": {
+    "files": 21596,
+    "directories": 4501,
+    "symlinks": 0,
+    "bytes": 65147637,
+    "metadata_sha256": "39053478345b2c7138549997839169ba2c3bf13d4621655645522d94d1376efc"
+  },
+  "archive_bytes": 52938178,
+  "sha256": "8964d917ba3848dae9e2dd846240258a352cdc8800892164123bba8900cfc72b",
+  "state": "packed-source-stable"
+}

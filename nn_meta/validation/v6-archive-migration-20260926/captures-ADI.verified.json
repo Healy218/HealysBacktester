@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ADI",
+    "source": {
+      "files": 24618,
+      "directories": 5143,
+      "symlinks": 0,
+      "bytes": 57340648,
+      "metadata_sha256": "f007bf3f422ba2a0bd2ba6205da159d6813ddeb533716bd713c1a4f916924c81"
+    },
+    "archive_bytes": 43237113,
+    "sha256": "3ca373fcb50cc56b44e021adf29b75d06ea907be618efcfb70afc51c847a7146",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ADI.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

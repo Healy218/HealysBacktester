@@ -1,0 +1,10 @@
+{
+  "id": "captures-WYNN",
+  "sha256": "192af592b7084be72ab4a38fd0c3e1897c81c11186a2800e9c3cbcd76507118f",
+  "members": {
+    "files": 21710,
+    "directories": 4537,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

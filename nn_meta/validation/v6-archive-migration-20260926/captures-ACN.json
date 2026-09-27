@@ -1,0 +1,13 @@
+{
+  "id": "captures-ACN",
+  "source": {
+    "files": 23140,
+    "directories": 4825,
+    "symlinks": 0,
+    "bytes": 45133070,
+    "metadata_sha256": "cabeec3a17155cf08892c8e6cdd2386d7c8400caeffc834af772e65f1d959692"
+  },
+  "archive_bytes": 31964389,
+  "sha256": "e61863fd4f7dbd1d05f38a2b2ce97364a15b096eb5d5cb63d2b219cf39a7e77a",
+  "state": "packed-source-stable"
+}

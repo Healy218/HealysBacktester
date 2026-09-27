@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-MELI",
+    "source": {
+      "files": 25528,
+      "directories": 5321,
+      "symlinks": 0,
+      "bytes": 40133193,
+      "metadata_sha256": "307f26a46b8294818abce09d617e3b6c7a15e0eb7e0a654d67ea44b6c06af698"
+    },
+    "archive_bytes": 25336659,
+    "sha256": "1277e3a76c0e0cfd18b0ad602211093450d6f59eff03dfa9a6c25b7e99c77324",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-MELI.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

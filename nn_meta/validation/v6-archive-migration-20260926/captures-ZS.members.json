@@ -1,0 +1,10 @@
+{
+  "id": "captures-ZS",
+  "sha256": "2b8af461c54880a180e397bffe07981883ec78fa00122c145be55cef602af595",
+  "members": {
+    "files": 19992,
+    "directories": 4167,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

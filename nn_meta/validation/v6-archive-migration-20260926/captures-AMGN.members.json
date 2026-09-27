@@ -1,0 +1,10 @@
+{
+  "id": "captures-AMGN",
+  "sha256": "36f1c09b49be5679e8a0eca06558c5530f8a8ed439968e42502942caba52eae0",
+  "members": {
+    "files": 22258,
+    "directories": 4647,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

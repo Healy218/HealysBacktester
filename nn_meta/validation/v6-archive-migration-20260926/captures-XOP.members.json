@@ -1,0 +1,10 @@
+{
+  "id": "captures-XOP",
+  "sha256": "d3806289276cf382ad18ec5be4e3515725967b5e13d1aaf1651984e7501aaae2",
+  "members": {
+    "files": 23240,
+    "directories": 4853,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

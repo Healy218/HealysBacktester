@@ -1,0 +1,10 @@
+{
+  "id": "captures-ABNB",
+  "sha256": "5637d05b33094da67238f90bf1651b946a3376ee08d88be720f02cd31fd2381e",
+  "members": {
+    "files": 23746,
+    "directories": 4949,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

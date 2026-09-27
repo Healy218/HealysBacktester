@@ -1,0 +1,10 @@
+{
+  "id": "captures-CLSK",
+  "sha256": "4859c60753202026ad4fbfab8ebbb575a0dd7f72455fa47298de64290eac3d5a",
+  "members": {
+    "files": 18338,
+    "directories": 3817,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

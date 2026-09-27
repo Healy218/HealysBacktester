@@ -1,0 +1,13 @@
+{
+  "id": "captures-DE",
+  "source": {
+    "files": 23992,
+    "directories": 4989,
+    "symlinks": 0,
+    "bytes": 49767577,
+    "metadata_sha256": "3eba1fff20eaaeaec992b16d71efce3824490ccd586ebc7b76413905274600f7"
+  },
+  "archive_bytes": 36121479,
+  "sha256": "95083801ded9388c34cda7b98d0779ae047410cc1400aa85af6aaa523fce9006",
+  "state": "packed-source-stable"
+}

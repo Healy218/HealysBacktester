@@ -1,0 +1,13 @@
+{
+  "id": "captures-DIS",
+  "source": {
+    "files": 21942,
+    "directories": 4581,
+    "symlinks": 0,
+    "bytes": 96185969,
+    "metadata_sha256": "60d36f96dc2bde61b9dc106d70011a60e0672f9887b9afc2c5fb57b65386f663"
+  },
+  "archive_bytes": 84173486,
+  "sha256": "fc62f4dddabbbe8cb1d978a9ba393fd8e8754bd68702a5110ac0050d516229c6",
+  "state": "packed-source-stable"
+}

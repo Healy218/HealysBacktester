@@ -1,0 +1,13 @@
+{
+  "id": "captures-MA",
+  "source": {
+    "files": 23608,
+    "directories": 4927,
+    "symlinks": 0,
+    "bytes": 51636895,
+    "metadata_sha256": "9dc30c3e83f3164f80fdeb8203a0a173a0f1d14d414b5cc19a869c5943fbd93c"
+  },
+  "archive_bytes": 38296193,
+  "sha256": "32ae766c5e4e5391ec305153a584899dcedaccbdf7e7e8072dcefb0b0c2b1d74",
+  "state": "packed-source-stable"
+}

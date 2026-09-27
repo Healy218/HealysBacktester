@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-FXI",
+    "source": {
+      "files": 20112,
+      "directories": 4137,
+      "symlinks": 0,
+      "bytes": 44477334,
+      "metadata_sha256": "12501acae5b92b79e9ea2eed702a6fef4a0b1062d67726926bd483500cb3cef7"
+    },
+    "archive_bytes": 33043803,
+    "sha256": "694c26e769fc24f8c9bb0652b52fa922ddd4da98e62162e3a3e7e5f4807402b2",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-FXI.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-QQQ",
+  "source": {
+    "files": 37308,
+    "directories": 4613,
+    "symlinks": 0,
+    "bytes": 1319176375,
+    "metadata_sha256": "931e5084d8e9f14b794f9cadcd4088e42474916f8d7a11070cd94e79a1e25eef"
+  },
+  "archive_bytes": 1297778974,
+  "sha256": "c321e12121e5a74126e37ca14bbaa281f6fc78639ddad0e014ed99daed2e53e8",
+  "state": "packed-source-stable"
+}

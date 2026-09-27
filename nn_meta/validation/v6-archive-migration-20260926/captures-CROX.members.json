@@ -1,0 +1,10 @@
+{
+  "id": "captures-CROX",
+  "sha256": "39dbf5e5acf48fcb821f646f96837958e850f2d1d208d8e2a2c3bb524517552c",
+  "members": {
+    "files": 20136,
+    "directories": 4587,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-NIO",
+    "source": {
+      "files": 24238,
+      "directories": 5041,
+      "symlinks": 0,
+      "bytes": 58677323,
+      "metadata_sha256": "6004cf75487bbb8c8fbcd123ad7bdff183e6ed4624f373a0471148fc03c1b4b4"
+    },
+    "archive_bytes": 45421213,
+    "sha256": "ac660920be0f07652b5c1fde090635cfc4aee0ae09ac3b8b3b2c602557904f45",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-NIO.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

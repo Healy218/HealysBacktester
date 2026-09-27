@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-UAL",
+    "source": {
+      "files": 21962,
+      "directories": 4575,
+      "symlinks": 0,
+      "bytes": 93770133,
+      "metadata_sha256": "367b39ccc813b37fa7d3c73b6e47a83647ab8a4145551b7b21205b27dc9090cc"
+    },
+    "archive_bytes": 81499024,
+    "sha256": "57f757a3021788f3452401fadcbbfd3dba712eab38b2256b4767c7eb12135f29",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-UAL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

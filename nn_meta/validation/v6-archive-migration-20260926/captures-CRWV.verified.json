@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CRWV",
+    "source": {
+      "files": 15546,
+      "directories": 3269,
+      "symlinks": 0,
+      "bytes": 107685407,
+      "metadata_sha256": "ea0692a325534e93415a8d227658fca79bc191faf50af86a9150588b4b05ac4d"
+    },
+    "archive_bytes": 99269079,
+    "sha256": "7ec43aab23a37e379a1f8bcc7771df4a5460b7441c780744b324823ee27767e3",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CRWV.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

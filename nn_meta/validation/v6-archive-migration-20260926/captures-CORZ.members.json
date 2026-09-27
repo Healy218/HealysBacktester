@@ -1,0 +1,10 @@
+{
+  "id": "captures-CORZ",
+  "sha256": "8964d917ba3848dae9e2dd846240258a352cdc8800892164123bba8900cfc72b",
+  "members": {
+    "files": 21596,
+    "directories": 4501,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

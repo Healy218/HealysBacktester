@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CRSP",
+    "source": {
+      "files": 21628,
+      "directories": 4503,
+      "symlinks": 0,
+      "bytes": 31011510,
+      "metadata_sha256": "7bc8ad2e85d3b3ff1f45349123c143045737d49d3538b4d68f0e0a9d340835f7"
+    },
+    "archive_bytes": 18486913,
+    "sha256": "4e62b32f838bbef5e97f87dc1ff14f58f39c9342098d9c33cfccb101415deb1d",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CRSP.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

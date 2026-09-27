@@ -1,0 +1,10 @@
+{
+  "id": "captures-GOOG",
+  "sha256": "7ffb46e35ed5d8ed9e7d35c51bc8c64cb908605d3c1bb4c45da9fb8159f91819",
+  "members": {
+    "files": 22220,
+    "directories": 4631,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

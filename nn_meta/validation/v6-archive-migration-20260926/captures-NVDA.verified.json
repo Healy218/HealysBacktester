@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-NVDA",
+    "source": {
+      "files": 25850,
+      "directories": 4803,
+      "symlinks": 0,
+      "bytes": 1060014035,
+      "metadata_sha256": "7ec0cccf5e8d3b981bfd6d57c193b1ff07036963b603065ba83cee7346f11ddd"
+    },
+    "archive_bytes": 1046662172,
+    "sha256": "c737f4526b6f2cf62528269880577b0a4afb7b1826ff59da99f1cda6ef8d1548",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-NVDA.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

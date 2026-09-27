@@ -1346,3 +1346,23 @@ initially counts checkpoint revalidation. Original root progress can describe
 a failed strict-reader invocation even while recovery is running. Transient
 user services do not survive reboot/user-manager shutdown. Keep the original
 freeze, old scheduler, gates, checkpoints and interrupted partial evidence.
+
+## Historical V6 inputs archived to MRHA — September 26
+
+The user-authorized storage migration removed the loose
+`nn_meta/expanded_inputs/v6-local-20260906` tree after complete external
+verification. Its 9,541,723 files and 2,066,117 directories are preserved in
+454 tar.zst archives under `HealysBacktester/v6-archive-20260926` on MRHA
+(UUID `62C9-C390`, mounted at `/run/media/healy/MRHA` when available).
+The archive is 35.11 GB; extract onto a Linux filesystem with preserved
+permissions/ACLs/xattrs, following the external `RESTORE.md`. Restore the
+context-and-stores container last. Verify compressed hashes in the per-archive
+verified.json receipts first. The adjacent `.ARCHIVED.json` locator and local
+`nn_meta/validation/v6-archive-migration-20260926` receipts record the move.
+Do not interpret the missing loose tree as corruption or start recapturing it.
+Current V7 stores/demand/raw lineage and live V6 data were not moved.
+
+The same cleanup replaced 4,690 duplicate allocations with verified Btrfs
+reflinks, preserving names, hashes, metadata and independent writes. Reflinks
+save physical storage but remain distinct inodes and logical files; do not count
+that physical saving as a second logical project-budget reduction.

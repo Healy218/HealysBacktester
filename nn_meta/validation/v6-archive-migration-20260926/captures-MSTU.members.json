@@ -1,0 +1,10 @@
+{
+  "id": "captures-MSTU",
+  "sha256": "e0b49c3767bdd97780f50afa29f7a223d693bd60fe330ea690dff2098ea4c9b2",
+  "members": {
+    "files": 23806,
+    "directories": 5157,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

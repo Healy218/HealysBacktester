@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CRM",
+    "source": {
+      "files": 22414,
+      "directories": 4663,
+      "symlinks": 0,
+      "bytes": 110831051,
+      "metadata_sha256": "d6ceb7c117ac0f538f6173aac806fe9696c75beeb39efe17512ab26f87c83172"
+    },
+    "archive_bytes": 98567287,
+    "sha256": "444c03964a2f8708f46a68b48c5130d5c9d140a0bd2805c8b6cf9469b02bdd74",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CRM.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

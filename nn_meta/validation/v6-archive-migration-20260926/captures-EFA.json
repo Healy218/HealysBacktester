@@ -1,0 +1,13 @@
+{
+  "id": "captures-EFA",
+  "source": {
+    "files": 22610,
+    "directories": 4625,
+    "symlinks": 0,
+    "bytes": 46010013,
+    "metadata_sha256": "368d6c6662a3fea06f5cef3c56b71aa0427271bc52568c2f799b6fce885ddf5f"
+  },
+  "archive_bytes": 32837303,
+  "sha256": "ee8736c26fc409bc7b8f1322f4eab0f3c2fc701ab9642c3acf03726cb2b99bc1",
+  "state": "packed-source-stable"
+}

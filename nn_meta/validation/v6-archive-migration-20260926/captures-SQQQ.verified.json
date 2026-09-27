@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SQQQ",
+    "source": {
+      "files": 20964,
+      "directories": 4383,
+      "symlinks": 0,
+      "bytes": 127033837,
+      "metadata_sha256": "ba036c30d7c47d13b621f2eb6a7336a3b788f351e4c655b5bcd821129f25b353"
+    },
+    "archive_bytes": 115576345,
+    "sha256": "b9e176f1b33cc6abfe9776596d470d26c16255353d951670cc2c2252eb69f6ee",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SQQQ.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-FDX",
+  "source": {
+    "files": 21608,
+    "directories": 4499,
+    "symlinks": 0,
+    "bytes": 61082805,
+    "metadata_sha256": "3f322a929fd626228ec2c9e6ccf33f69ccb85607a8d5488bdc9a1c199d7c75b6"
+  },
+  "archive_bytes": 48919641,
+  "sha256": "b731378a060d55a52861b0a47f73f69a2e8e00b06b4c7ecc072911209e1fba6b",
+  "state": "packed-source-stable"
+}

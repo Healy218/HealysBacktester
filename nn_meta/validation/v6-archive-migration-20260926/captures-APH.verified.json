@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-APH",
+    "source": {
+      "files": 12420,
+      "directories": 4075,
+      "symlinks": 0,
+      "bytes": 23493747,
+      "metadata_sha256": "17c6ae58fc5c8f210f86120b6049c235d5be17dde15b758a30efb90b58c5620a"
+    },
+    "archive_bytes": 17594844,
+    "sha256": "9cd7f524fd151721fedd67ce64f9fafdc756c4eae839b853ffc6b229f7c892ec",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-APH.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

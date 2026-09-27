@@ -1,0 +1,13 @@
+{
+  "id": "captures-UPRO",
+  "source": {
+    "files": 22358,
+    "directories": 4655,
+    "symlinks": 0,
+    "bytes": 42216698,
+    "metadata_sha256": "39860037be5191a78f3557e11506efed7ed60fc43e8a9f8742124cdd3f080a6e"
+  },
+  "archive_bytes": 29391269,
+  "sha256": "231af94fd603178e63897b773be140f12719ee6c44941643f522a2f770df5fd7",
+  "state": "packed-source-stable"
+}

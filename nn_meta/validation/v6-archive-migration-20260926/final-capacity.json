@@ -1,0 +1,15 @@
+{
+  "state": "complete",
+  "source_tree_removed": true,
+  "staged_archives_remaining": 0,
+  "external_archives": 454,
+  "internal_free_bytes": 303613919232,
+  "external_free_bytes": 743729790976,
+  "archive_bytes": 35106688686,
+  "files_archived": 9541723,
+  "directories_archived": 2066117,
+  "post_tests_internal_free_bytes": 297025257472,
+  "reserve_bytes": 21474836480,
+  "post_tests_available_above_reserve_bytes": 275550420992,
+  "earlier_capacity_snapshot_note": "Free space changed independently after initial staging cleanup; use latest post-tests reading."
+}

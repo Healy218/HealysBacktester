@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-VST",
+    "source": {
+      "files": 21094,
+      "directories": 4401,
+      "symlinks": 0,
+      "bytes": 101020596,
+      "metadata_sha256": "7ad8ff725587fb68ad4046410c47c8d14124a473c4cb668d887811b39616ef33"
+    },
+    "archive_bytes": 89314939,
+    "sha256": "b580f5f75bf8c988ee0723bc960f70c1bbd9ff1e2cc652e601d56a1bb7afbada",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-VST.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

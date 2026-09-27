@@ -1,0 +1,10 @@
+{
+  "id": "captures-BIIB",
+  "sha256": "16c847329cfbc806a6fed37d2eb64aef0598b6a427c395291ed8fff5fad9cb31",
+  "members": {
+    "files": 24602,
+    "directories": 5123,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

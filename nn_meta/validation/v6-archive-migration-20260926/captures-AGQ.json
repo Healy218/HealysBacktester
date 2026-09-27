@@ -1,0 +1,13 @@
+{
+  "id": "captures-AGQ",
+  "source": {
+    "files": 15370,
+    "directories": 3193,
+    "symlinks": 0,
+    "bytes": 44704747,
+    "metadata_sha256": "619b52a196045e8137a0f73fade26ac0ac517aa0b9a3c49641e7a85ef0f641fc"
+  },
+  "archive_bytes": 35833759,
+  "sha256": "1e1b50a6fb93f7a19c193444b4e36231f76327aa6e8c2d161a6cb38640fcc825",
+  "state": "packed-source-stable"
+}

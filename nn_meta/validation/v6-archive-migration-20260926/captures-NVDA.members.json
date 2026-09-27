@@ -1,0 +1,10 @@
+{
+  "id": "captures-NVDA",
+  "sha256": "c737f4526b6f2cf62528269880577b0a4afb7b1826ff59da99f1cda6ef8d1548",
+  "members": {
+    "files": 25850,
+    "directories": 4803,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

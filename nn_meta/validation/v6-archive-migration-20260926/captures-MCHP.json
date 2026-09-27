@@ -1,0 +1,13 @@
+{
+  "id": "captures-MCHP",
+  "source": {
+    "files": 21674,
+    "directories": 4769,
+    "symlinks": 0,
+    "bytes": 44029830,
+    "metadata_sha256": "3c2618238faf47b2431e0faaa2bdeb5c1f05a8e5b2523c1dd8a146222351c888"
+  },
+  "archive_bytes": 31744931,
+  "sha256": "bae5b7e94aeda06adf4a909fc3f0825722dc6d6ab703672f4ed51cbf81952658",
+  "state": "packed-source-stable"
+}

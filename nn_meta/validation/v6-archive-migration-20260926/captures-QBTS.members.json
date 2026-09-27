@@ -1,0 +1,10 @@
+{
+  "id": "captures-QBTS",
+  "sha256": "282343e5ce8af8c4e4cadcae3881e65a199ed227e80a8e31a14d73f9b2f46d5b",
+  "members": {
+    "files": 23056,
+    "directories": 5067,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

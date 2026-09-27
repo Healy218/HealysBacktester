@@ -1,0 +1,10 @@
+{
+  "id": "captures-COPX",
+  "sha256": "c08b5d0d8fb751345579ebb98dd6f181bb95aa5871701a13d7120a0848f03835",
+  "members": {
+    "files": 14692,
+    "directories": 4297,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-PLTR",
+  "source": {
+    "files": 21746,
+    "directories": 4537,
+    "symlinks": 0,
+    "bytes": 429885666,
+    "metadata_sha256": "c543befe12d0bd26655116113d0367198cc0835bf1cbb439e97ff21640835287"
+  },
+  "archive_bytes": 418522865,
+  "sha256": "8706007606d13950682368d80fea7cbdbc423f5fb21af22bdef6c4b382486498",
+  "state": "packed-source-stable"
+}

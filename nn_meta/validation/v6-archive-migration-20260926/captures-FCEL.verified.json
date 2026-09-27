@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-FCEL",
+    "source": {
+      "files": 23760,
+      "directories": 4983,
+      "symlinks": 0,
+      "bytes": 32121393,
+      "metadata_sha256": "e2e8def7eeb7fbf92537dd63739b5126ef2d826755aa1a908287fc39b9904498"
+    },
+    "archive_bytes": 18142089,
+    "sha256": "2e6ace78db3b4b7a85bf925b392f4f6a3108441d29a5c70d3b510ed32e12214d",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-FCEL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

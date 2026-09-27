@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ASML",
+    "source": {
+      "files": 21744,
+      "directories": 4513,
+      "symlinks": 0,
+      "bytes": 81525190,
+      "metadata_sha256": "743687e9eb92694228154b21deca365c1b749baf2d26f6f5ee6276b69847c05c"
+    },
+    "archive_bytes": 69287425,
+    "sha256": "75d168e1c7493ae239e45c10790c1a9336e68bb6e5636ff6af4ad15bc9235d1b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ASML.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

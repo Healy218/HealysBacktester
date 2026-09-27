@@ -1,0 +1,8 @@
+{
+  "command": "./venv/bin/python -m pytest tests/ -q --basetemp=nn_meta/validation/storage-reclamation-suite-tmp",
+  "passed": 2430,
+  "subtests_passed": 18,
+  "warnings": 20,
+  "seconds": 196.79,
+  "filesystem_note": "Repo-local test temporary files exercise real Btrfs reflinks; /tmp is not reflink-capable."
+}

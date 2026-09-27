@@ -1,0 +1,13 @@
+{
+  "id": "captures-CF",
+  "source": {
+    "files": 23092,
+    "directories": 4821,
+    "symlinks": 0,
+    "bytes": 35426886,
+    "metadata_sha256": "6ae8551c1ae9a2116e12ca63e9d75c4abc4b4515f057a92f12c939f71d751222"
+  },
+  "archive_bytes": 22124186,
+  "sha256": "2c4f31c3d1e585561a4407fbac10eb6cf3c086339cd8620709dc37cba8f1ef4c",
+  "state": "packed-source-stable"
+}

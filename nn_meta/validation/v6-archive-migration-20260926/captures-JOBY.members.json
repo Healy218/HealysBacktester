@@ -1,0 +1,10 @@
+{
+  "id": "captures-JOBY",
+  "sha256": "fa9baaf262496cc70cbbc0449a493f36dc39de548998a8014a34bbe51c9a655c",
+  "members": {
+    "files": 24794,
+    "directories": 5165,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-XLP",
+  "source": {
+    "files": 22966,
+    "directories": 4799,
+    "symlinks": 0,
+    "bytes": 50814084,
+    "metadata_sha256": "1b7d707eb29aee5283a17db7f8e022d7677849cdf48562e4de1595f48fa20fb2"
+  },
+  "archive_bytes": 37763470,
+  "sha256": "5999d4cdb9c837d98a0f63ba6b4057eb4b175a251aee94213afb5083ade19395",
+  "state": "packed-source-stable"
+}

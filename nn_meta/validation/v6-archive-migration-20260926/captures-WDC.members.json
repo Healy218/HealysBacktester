@@ -1,0 +1,10 @@
+{
+  "id": "captures-WDC",
+  "sha256": "42754a5a82348947c86fb74367442509208385e60c8527e36cd79190225d6fe1",
+  "members": {
+    "files": 19734,
+    "directories": 4113,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

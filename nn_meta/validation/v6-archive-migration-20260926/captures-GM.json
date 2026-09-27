@@ -1,0 +1,13 @@
+{
+  "id": "captures-GM",
+  "source": {
+    "files": 16256,
+    "directories": 3393,
+    "symlinks": 0,
+    "bytes": 61705338,
+    "metadata_sha256": "4193399111d438c5a1a4d4cbd0b8f28ad2b47505d9778a998b8b815b5f1e9562"
+  },
+  "archive_bytes": 52719991,
+  "sha256": "aef70d5b1067f3ee97437d00026baec17c5772377732cd390cc41b417e6e0f7a",
+  "state": "packed-source-stable"
+}

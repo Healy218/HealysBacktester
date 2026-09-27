@@ -1,0 +1,10 @@
+{
+  "id": "captures-LULU",
+  "sha256": "b533301d2c3d28ba756f4dea31675e09b33729dd32bc80c7fb9b55429bd82b14",
+  "members": {
+    "files": 23498,
+    "directories": 4899,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

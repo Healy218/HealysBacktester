@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-KLAC",
+    "source": {
+      "files": 12974,
+      "directories": 4203,
+      "symlinks": 0,
+      "bytes": 18374996,
+      "metadata_sha256": "1c00f57f7a0bfbf430038478d56064b195a2eb9c5345ce37d56ac1f74c63171d"
+    },
+    "archive_bytes": 11958999,
+    "sha256": "f12e2cca40777768688734ecd3be472cefd65aff291c01aedf3af09270646112",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-KLAC.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

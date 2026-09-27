@@ -1,0 +1,13 @@
+{
+  "id": "captures-ETN",
+  "source": {
+    "files": 21596,
+    "directories": 4921,
+    "symlinks": 0,
+    "bytes": 32795488,
+    "metadata_sha256": "6f3f97ee0995dcd10a7f31f0caf0fcf422a99d7a7ccefac27ecb8468210b56c5"
+  },
+  "archive_bytes": 20664397,
+  "sha256": "ad3c912c22ecdd19379280ee1fe38862d8226ebecdbf12a91b32e7fd5d8c5995",
+  "state": "packed-source-stable"
+}

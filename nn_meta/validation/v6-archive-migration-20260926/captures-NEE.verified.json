@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-NEE",
+    "source": {
+      "files": 24306,
+      "directories": 5071,
+      "symlinks": 0,
+      "bytes": 95372105,
+      "metadata_sha256": "0dac7fcfae35b3c0b3268be124fab79d8b5b828072de05665f6b58d40efae0cd"
+    },
+    "archive_bytes": 81755739,
+    "sha256": "5a4d9cf2cfcb5afb32372da17f8a8de004b521d623a84ce4a04a820501980641",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-NEE.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

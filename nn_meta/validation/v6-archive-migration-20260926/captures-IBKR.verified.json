@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-IBKR",
+    "source": {
+      "files": 17408,
+      "directories": 4347,
+      "symlinks": 0,
+      "bytes": 30775720,
+      "metadata_sha256": "be68dd10f6dfb10f45a5ca2c4f7f7f007d86f74b6c4af90a07c1b80c33f8a62d"
+    },
+    "archive_bytes": 21372202,
+    "sha256": "11f0dac0d4f266477bf60a00e388b59696c1230ed898427ce3b44755a8b64e8e",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-IBKR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,18 @@
+[
+  {
+    "path": "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AA/a6eb54ea20b5f01703812d893f12b3e4524a1fe2bd1350f1dec8868a1ce16020/attempt-0000/AA240830P00034500.quotes.json.gz",
+    "valid_json": true,
+    "container_type": "list",
+    "top_level_count": 309
+  },
+  {
+    "path": "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AA/a6eb54ea20b5f01703812d893f12b3e4524a1fe2bd1350f1dec8868a1ce16020/attempt-0000/AA240830P00034500.trades.json.gz",
+    "valid_json": true,
+    "container_type": "list",
+    "top_level_count": 1
+  },
+  {
+    "path": "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AA/a6eb54ea20b5f01703812d893f12b3e4524a1fe2bd1350f1dec8868a1ce16020/attempt-0000/manifest.json",
+    "valid_manifest_json": true
+  }
+]

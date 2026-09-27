@@ -1,0 +1,10 @@
+{
+  "id": "captures-SHOP",
+  "sha256": "6497ff4ce831d5a9a77a17cb17f1ce5dc43067ca267a0b92c369732bd95389a1",
+  "members": {
+    "files": 23416,
+    "directories": 4893,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

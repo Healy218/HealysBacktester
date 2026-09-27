@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-NUE",
+    "source": {
+      "files": 19074,
+      "directories": 4527,
+      "symlinks": 0,
+      "bytes": 32067006,
+      "metadata_sha256": "b44016de880212ed4bcc6b7168e15eef8e84b77e8dfc276a2e49fe206a9a5026"
+    },
+    "archive_bytes": 21533808,
+    "sha256": "bd33da772b761a63b3c6b258f1d9ae33a2e13da35dcd8b941591d63fa5c57c7b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-NUE.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

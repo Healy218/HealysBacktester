@@ -1,0 +1,13 @@
+{
+  "id": "captures-DPST",
+  "source": {
+    "files": 25914,
+    "directories": 5421,
+    "symlinks": 0,
+    "bytes": 44347555,
+    "metadata_sha256": "5d7c9f4752f1625fae31530c7c857ba233045c9f51841a87b8ff8582f41c7594"
+  },
+  "archive_bytes": 29236598,
+  "sha256": "89b0552867e907b843c2201b87544bd65c63225e25240349d2ee4c223b2057ef",
+  "state": "packed-source-stable"
+}

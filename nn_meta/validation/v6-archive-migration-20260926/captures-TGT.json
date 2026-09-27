@@ -1,0 +1,13 @@
+{
+  "id": "captures-TGT",
+  "source": {
+    "files": 19678,
+    "directories": 4089,
+    "symlinks": 0,
+    "bytes": 95385357,
+    "metadata_sha256": "8be7c02b42fea58fb4dfc175d59411702b980b787af6fffee9a20bb86f9f89c5"
+  },
+  "archive_bytes": 84563623,
+  "sha256": "1af6fcd66f39491f5dde6100472d2dd56a822af49c273a4df36aab1df9a5bfd6",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CVS",
+    "source": {
+      "files": 24026,
+      "directories": 5009,
+      "symlinks": 0,
+      "bytes": 80602138,
+      "metadata_sha256": "8f515471b37020dbb4f2f316a44a30e095e78074480bfdfd8c2350ec3dd7fbdc"
+    },
+    "archive_bytes": 67211838,
+    "sha256": "de39ea496dbc9fc67e821cec5baa01025c04699488bb7985efaeca262084e0a2",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CVS.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

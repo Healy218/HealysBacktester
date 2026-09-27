@@ -1,0 +1,17 @@
+{
+  "stage": "transfer",
+  "archives": 454,
+  "plan_sha256": "93771351bc6563ce6033c5083a5da7cb4ba1cd9d0a90f8f906362d13a695dc2a",
+  "files": 9541723,
+  "directories": 2066117,
+  "source_bytes": 51534857599,
+  "compressed_bytes": 35106688686,
+  "symlinks": 0,
+  "context_members_fingerprint": {
+    "files": 7503,
+    "directories": 1455,
+    "symlinks": 0,
+    "bytes": 13080332714,
+    "metadata_sha256": "4ff7e11dfbb232eb757459bf4fab71990ce50dd699d2bb56fae7dd9b344856fc"
+  }
+}

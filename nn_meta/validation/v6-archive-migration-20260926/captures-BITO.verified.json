@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-BITO",
+    "source": {
+      "files": 21086,
+      "directories": 4329,
+      "symlinks": 0,
+      "bytes": 42859769,
+      "metadata_sha256": "0987583f4f1db1583062fff5a7dd0c8e0fa0d91658a889a9a9616965c9c5caca"
+    },
+    "archive_bytes": 30866340,
+    "sha256": "fad351f8e51102789be3efee8b479b8105f7326e2534cf2a4bb73131021a4d31",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-BITO.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

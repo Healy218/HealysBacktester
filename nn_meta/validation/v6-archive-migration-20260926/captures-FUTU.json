@@ -1,0 +1,13 @@
+{
+  "id": "captures-FUTU",
+  "source": {
+    "files": 22662,
+    "directories": 4709,
+    "symlinks": 0,
+    "bytes": 59035083,
+    "metadata_sha256": "c468a64ef1d5c5992f5c19f6bfbc0ed552624587b288177f07eb760d8984330f"
+  },
+  "archive_bytes": 46009606,
+  "sha256": "deaa5c93d952e7d4da4c93fc17871f219826b2a16c2be7e9cb3d1847b6397937",
+  "state": "packed-source-stable"
+}

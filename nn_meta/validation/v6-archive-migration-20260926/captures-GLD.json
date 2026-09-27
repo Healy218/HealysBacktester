@@ -1,0 +1,13 @@
+{
+  "id": "captures-GLD",
+  "source": {
+    "files": 28920,
+    "directories": 4163,
+    "symlinks": 0,
+    "bytes": 292203313,
+    "metadata_sha256": "cfedd727f80c41ca3de412dbe2519807651f9757668c8145f2ed81146fbb0a24"
+  },
+  "archive_bytes": 275164886,
+  "sha256": "7c1b2679a28c4235798a3c62188c5dadcdedeaffa7a4b2658f8b5b76ec08dcb8",
+  "state": "packed-source-stable"
+}

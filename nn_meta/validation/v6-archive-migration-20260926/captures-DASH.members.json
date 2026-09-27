@@ -1,0 +1,10 @@
+{
+  "id": "captures-DASH",
+  "sha256": "6a4d202685ad46315de8f6802e8dc452bbf0023c95da2e60c2242accef3643d4",
+  "members": {
+    "files": 26042,
+    "directories": 5419,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

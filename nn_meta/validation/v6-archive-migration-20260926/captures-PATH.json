@@ -1,0 +1,13 @@
+{
+  "id": "captures-PATH",
+  "source": {
+    "files": 23558,
+    "directories": 4913,
+    "symlinks": 0,
+    "bytes": 61248685,
+    "metadata_sha256": "be00c5a9602232fe97f3f3afd62d87336167e76ce3a3da91ffd3ca276e29844c"
+  },
+  "archive_bytes": 48046011,
+  "sha256": "bd15fb5a6e64999503f3e5fb62b6a723eb3248aef0ba692574c0967666fca699",
+  "state": "packed-source-stable"
+}

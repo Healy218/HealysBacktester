@@ -1,0 +1,10 @@
+{
+  "id": "captures-QCOM",
+  "sha256": "673b2c50063fd938bdccd8405c9de5c4457078e6245b14adae43820bf5b0ff47",
+  "members": {
+    "files": 20714,
+    "directories": 4311,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

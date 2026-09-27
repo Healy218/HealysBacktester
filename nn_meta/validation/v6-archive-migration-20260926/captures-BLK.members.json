@@ -1,0 +1,10 @@
+{
+  "id": "captures-BLK",
+  "sha256": "bf75eb9389e8d70007ab859ab8d180ef9f6490358d968c16107a20ed3655a61c",
+  "members": {
+    "files": 19948,
+    "directories": 4151,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

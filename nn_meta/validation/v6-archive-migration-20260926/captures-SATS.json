@@ -1,0 +1,13 @@
+{
+  "id": "captures-SATS",
+  "source": {
+    "files": 16800,
+    "directories": 4231,
+    "symlinks": 0,
+    "bytes": 22163696,
+    "metadata_sha256": "5b9e21282e260bcae477b6c45325a4d0efa68fb0be23e9af6f197910917ec7e1"
+  },
+  "archive_bytes": 12844860,
+  "sha256": "dd2ec8a4d07e851dda78a1b0f8d2530513274e0a156287721212f3d22a673a89",
+  "state": "packed-source-stable"
+}

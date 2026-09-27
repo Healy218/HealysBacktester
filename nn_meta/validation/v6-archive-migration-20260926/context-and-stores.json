@@ -1,0 +1,13 @@
+{
+  "id": "context-and-stores",
+  "source": {
+    "files": 7503,
+    "directories": 1458,
+    "symlinks": 0,
+    "bytes": 13080332714,
+    "metadata_sha256": "4e9327a15d38a69c94a08c5dddca7a09d9300397470c971052128b01e4556a34"
+  },
+  "archive_bytes": 1960247349,
+  "sha256": "3d152e20851e0c97a847d92d62010285b104588be5065a6c9ff0be7cd0fa3af5",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-IBIT",
+  "sha256": "8a64a59beac57ee0cfc94420173f4735bc722f6f94ba6d7422f18421220fba37",
+  "members": {
+    "files": 23176,
+    "directories": 4283,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

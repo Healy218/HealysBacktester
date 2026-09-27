@@ -1,0 +1,10 @@
+{
+  "id": "captures-CSCO",
+  "sha256": "e5904b5dfcd096776479b2eb47e6f9341ae5b152b1402f9a3291f5b368c5b7e6",
+  "members": {
+    "files": 20824,
+    "directories": 4341,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

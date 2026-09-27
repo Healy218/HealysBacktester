@@ -1,0 +1,13 @@
+{
+  "id": "captures-FCX",
+  "source": {
+    "files": 22376,
+    "directories": 4651,
+    "symlinks": 0,
+    "bytes": 91953292,
+    "metadata_sha256": "4a55018fea150a71766c0aa325f55a2b5d9981da4428bfa50e965271abb923fb"
+  },
+  "archive_bytes": 79571992,
+  "sha256": "61a739e85f493f9f23464ab7671e890306866042cad947bf3d3778dcc501f395",
+  "state": "packed-source-stable"
+}

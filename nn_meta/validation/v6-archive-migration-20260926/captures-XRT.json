@@ -1,0 +1,13 @@
+{
+  "id": "captures-XRT",
+  "source": {
+    "files": 23514,
+    "directories": 4893,
+    "symlinks": 0,
+    "bytes": 47803320,
+    "metadata_sha256": "99c6a77c2ff4b2704041c145bc577a482f01e7901b29f2409ecb90b4531a61cd"
+  },
+  "archive_bytes": 34171717,
+  "sha256": "ba77ae00d690866eb0dd0ef046941976e57b48b97dd77af95d81efcbb210b4d1",
+  "state": "packed-source-stable"
+}

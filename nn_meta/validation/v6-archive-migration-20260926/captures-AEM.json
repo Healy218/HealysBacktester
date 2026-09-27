@@ -1,0 +1,13 @@
+{
+  "id": "captures-AEM",
+  "source": {
+    "files": 13568,
+    "directories": 3247,
+    "symlinks": 0,
+    "bytes": 25831540,
+    "metadata_sha256": "c601ececc4edd2a2fd3275ed05ecfb61c5fe81e90971b3233e46b0f863e58f9d"
+  },
+  "archive_bytes": 18488682,
+  "sha256": "5ff98c9781826f2172edf42ddb740c97fc2564c2fac344577d4c038d81179d45",
+  "state": "packed-source-stable"
+}

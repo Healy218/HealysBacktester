@@ -1,0 +1,13 @@
+{
+  "id": "captures-MARA",
+  "source": {
+    "files": 23300,
+    "directories": 4845,
+    "symlinks": 0,
+    "bytes": 161760802,
+    "metadata_sha256": "c68ba47faca6372414bdf61f071a5c5ced56cc142bd19354ac8194f95a355206"
+  },
+  "archive_bytes": 149139983,
+  "sha256": "0aba66124871871dd301eada7e9227d9eb0cba1402e4f33ababb42d169a4f2d1",
+  "state": "packed-source-stable"
+}

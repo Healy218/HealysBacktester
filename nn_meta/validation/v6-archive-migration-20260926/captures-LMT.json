@@ -1,0 +1,13 @@
+{
+  "id": "captures-LMT",
+  "source": {
+    "files": 22322,
+    "directories": 4649,
+    "symlinks": 0,
+    "bytes": 57399985,
+    "metadata_sha256": "1831a4d9302c4f9bfded53e7bae5446b3956cf2e41b3929670328dadad00d2fa"
+  },
+  "archive_bytes": 44782472,
+  "sha256": "04f83d885cfb56b7bd1bbcc8d53dbee6d66b34d00991ecc95dd71db2eaf6785b",
+  "state": "packed-source-stable"
+}

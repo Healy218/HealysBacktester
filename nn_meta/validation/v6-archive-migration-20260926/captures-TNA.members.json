@@ -1,0 +1,10 @@
+{
+  "id": "captures-TNA",
+  "sha256": "afa21f4a5b0a98780e3be71ea320476e9e8807b2598a15c2bdabbc44cb6f1c09",
+  "members": {
+    "files": 22662,
+    "directories": 4709,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

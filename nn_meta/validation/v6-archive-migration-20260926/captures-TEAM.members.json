@@ -1,0 +1,10 @@
+{
+  "id": "captures-TEAM",
+  "sha256": "d03656786a415f3ce2552eaebefc00b51035fa173b22f8f5c5f6ed73a5e0ed79",
+  "members": {
+    "files": 24270,
+    "directories": 5061,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

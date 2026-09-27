@@ -1,0 +1,13 @@
+{
+  "id": "captures-BIIB",
+  "source": {
+    "files": 24602,
+    "directories": 5123,
+    "symlinks": 0,
+    "bytes": 31815628,
+    "metadata_sha256": "1f1fa1421705c97d99b7c44e26675c1495f26d44cb71955fd463dc5bddd1b78f"
+  },
+  "archive_bytes": 17390383,
+  "sha256": "16c847329cfbc806a6fed37d2eb64aef0598b6a427c395291ed8fff5fad9cb31",
+  "state": "packed-source-stable"
+}

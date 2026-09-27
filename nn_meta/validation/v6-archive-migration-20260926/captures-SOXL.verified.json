@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SOXL",
+    "source": {
+      "files": 20620,
+      "directories": 4289,
+      "symlinks": 0,
+      "bytes": 117027975,
+      "metadata_sha256": "a71519a0d3c2bcdb544ae90a3ffd46629ef66309f14f989d357d5b2a0d9fcfb9"
+    },
+    "archive_bytes": 105803326,
+    "sha256": "fdd733a850b6f2f143b00915074bfdba7795a13f637e9ff290be166892845769",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SOXL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

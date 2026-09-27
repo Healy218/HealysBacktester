@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CRDO",
+    "source": {
+      "files": 19426,
+      "directories": 4923,
+      "symlinks": 0,
+      "bytes": 41663809,
+      "metadata_sha256": "4b0cc586c1d93f325b289f94b89eabfdb3c17f74ccd13ba8c8d1f01d8e19792e"
+    },
+    "archive_bytes": 31360642,
+    "sha256": "09c9edf8863b50c2783151e45bd81e9a53611581fee0e7231a70819533bdc36b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CRDO.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

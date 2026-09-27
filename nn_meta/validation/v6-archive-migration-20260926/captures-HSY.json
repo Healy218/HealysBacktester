@@ -1,0 +1,13 @@
+{
+  "id": "captures-HSY",
+  "source": {
+    "files": 23560,
+    "directories": 4925,
+    "symlinks": 0,
+    "bytes": 31485307,
+    "metadata_sha256": "7823e44a620735489ed196dbc8d447f8b2326496af121f6b29a9aba834215802"
+  },
+  "archive_bytes": 17860023,
+  "sha256": "ae6c4f5847ac6e4e42312c6574facceb7bf416162818293592a927653d89fd1e",
+  "state": "packed-source-stable"
+}

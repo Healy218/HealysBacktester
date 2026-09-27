@@ -1,0 +1,10 @@
+{
+  "id": "captures-KTOS",
+  "sha256": "9ff2a91add3d951dad6ef6b61e2d5657bed0f4478d889226d8010d52c4ff5d15",
+  "members": {
+    "files": 22540,
+    "directories": 5633,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

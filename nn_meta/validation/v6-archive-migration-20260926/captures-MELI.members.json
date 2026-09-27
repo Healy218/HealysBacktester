@@ -1,0 +1,10 @@
+{
+  "id": "captures-MELI",
+  "sha256": "1277e3a76c0e0cfd18b0ad602211093450d6f59eff03dfa9a6c25b7e99c77324",
+  "members": {
+    "files": 25528,
+    "directories": 5321,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

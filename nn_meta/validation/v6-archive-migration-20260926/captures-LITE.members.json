@@ -1,0 +1,10 @@
+{
+  "id": "captures-LITE",
+  "sha256": "1a2cf9fe03e048c1efc9eb9d6e570749436ca762196d5fc489531a894f9a1a8b",
+  "members": {
+    "files": 17220,
+    "directories": 4535,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

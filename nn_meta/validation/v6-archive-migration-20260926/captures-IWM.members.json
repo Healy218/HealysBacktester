@@ -1,0 +1,10 @@
+{
+  "id": "captures-IWM",
+  "sha256": "78170a246fe82a0691d02336db9a71f700ef3edbecebe1c492a8032ae5c5f8b2",
+  "members": {
+    "files": 36242,
+    "directories": 4469,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

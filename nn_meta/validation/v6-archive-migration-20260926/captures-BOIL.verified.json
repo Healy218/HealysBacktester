@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-BOIL",
+    "source": {
+      "files": 26040,
+      "directories": 5441,
+      "symlinks": 0,
+      "bytes": 67270100,
+      "metadata_sha256": "01b31f221664ffe266e74c1a702950100fc8cfb1c3f465d1976f3617b10c91f5"
+    },
+    "archive_bytes": 52480027,
+    "sha256": "5b2fff2ac7ddb4b5269e0239bfbd7b08c894925714c91e94ef93118bce49bb4a",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-BOIL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CONL",
+    "source": {
+      "files": 21006,
+      "directories": 5681,
+      "symlinks": 0,
+      "bytes": 49736692,
+      "metadata_sha256": "cea054b0d9b84a9e8e808f84110b7b94aa991c8e36e53db4aeb6694613ae30c0"
+    },
+    "archive_bytes": 38762919,
+    "sha256": "f36b6fc187434ac34a8429d024810f0469385f27b18801515ad0850964471319",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CONL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

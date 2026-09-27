@@ -1,0 +1,13 @@
+{
+  "id": "captures-HAL",
+  "source": {
+    "files": 21926,
+    "directories": 4571,
+    "symlinks": 0,
+    "bytes": 64492813,
+    "metadata_sha256": "0b531860393f62018ccacc589d05ec9243709fcb5fcfa654a14abb36a1cefb50"
+  },
+  "archive_bytes": 52195196,
+  "sha256": "10ce5a3cf8f08c43b8c3e024679d641bd4547e38294632c1ce79b26f4a9505f5",
+  "state": "packed-source-stable"
+}

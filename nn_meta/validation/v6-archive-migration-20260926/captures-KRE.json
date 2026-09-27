@@ -1,0 +1,13 @@
+{
+  "id": "captures-KRE",
+  "source": {
+    "files": 23264,
+    "directories": 4785,
+    "symlinks": 0,
+    "bytes": 82165254,
+    "metadata_sha256": "9c1fce2815281cdce81b25745bfc5b257fb1462c382c3e95cfcf8fc5437dcfa6"
+  },
+  "archive_bytes": 68998624,
+  "sha256": "55bd95c4a58f00c9c6321a08fe22d5ae5296fb82da39e92e840962f631981551",
+  "state": "packed-source-stable"
+}

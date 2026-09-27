@@ -1,0 +1,13 @@
+{
+  "id": "captures-CHWY",
+  "source": {
+    "files": 21622,
+    "directories": 4503,
+    "symlinks": 0,
+    "bytes": 64113714,
+    "metadata_sha256": "062213ba19f4a906d37bf726e05d45320ef7dc88a117efe792e7864bc549ce13"
+  },
+  "archive_bytes": 51954837,
+  "sha256": "d56f595762bef814c2bf68337555fb7d2252401ad3c31769e3934b25423cbc5e",
+  "state": "packed-source-stable"
+}

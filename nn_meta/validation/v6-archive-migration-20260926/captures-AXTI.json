@@ -1,0 +1,13 @@
+{
+  "id": "captures-AXTI",
+  "source": {
+    "files": 7904,
+    "directories": 2339,
+    "symlinks": 0,
+    "bytes": 14219937,
+    "metadata_sha256": "f7bd21aaf8acedc60f60c935f6b5464a28781d46f60ed9e2f0a16a3ffd6a8ed3"
+  },
+  "archive_bytes": 10102994,
+  "sha256": "a29bfb66b31156cbb22794035c2ab494b2c0d658c2516ad72eb148886ffeba6f",
+  "state": "packed-source-stable"
+}

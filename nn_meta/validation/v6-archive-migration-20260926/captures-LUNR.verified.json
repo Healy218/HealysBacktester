@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-LUNR",
+    "source": {
+      "files": 16024,
+      "directories": 3345,
+      "symlinks": 0,
+      "bytes": 47873728,
+      "metadata_sha256": "b449abd33da104d3bb7f30a9f77d0e8f9302ec75ab9eac7b59087f72de034537"
+    },
+    "archive_bytes": 38958946,
+    "sha256": "ee1ed0ce299c618baa46fdd34d420d95a7a64e58a011556afc3f043b7b382c78",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-LUNR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

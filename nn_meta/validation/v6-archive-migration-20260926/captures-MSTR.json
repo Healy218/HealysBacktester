@@ -1,0 +1,13 @@
+{
+  "id": "captures-MSTR",
+  "source": {
+    "files": 24014,
+    "directories": 5009,
+    "symlinks": 0,
+    "bytes": 273021630,
+    "metadata_sha256": "045e499e0590c6324917174082418ecfc23516003d702d624f868503d27636e0"
+  },
+  "archive_bytes": 260182339,
+  "sha256": "3d747fb8b309ebc59ada671b355b02155073ad1c2d0c884087711509db6f5911",
+  "state": "packed-source-stable"
+}

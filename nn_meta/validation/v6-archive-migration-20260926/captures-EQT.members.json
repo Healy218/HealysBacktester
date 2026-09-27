@@ -1,0 +1,10 @@
+{
+  "id": "captures-EQT",
+  "sha256": "38893644d42e4aeebb98cb56b82a6069d5c9a268540ff2cf031bc563fffff42c",
+  "members": {
+    "files": 25702,
+    "directories": 5367,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

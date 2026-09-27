@@ -1,0 +1,13 @@
+{
+  "id": "captures-RACE",
+  "source": {
+    "files": 16208,
+    "directories": 4693,
+    "symlinks": 0,
+    "bytes": 20788934,
+    "metadata_sha256": "55f8a9d4683676d7664f26da4cf3b3c89b022fe2dccb7c2064acea7ad720a1ce"
+  },
+  "archive_bytes": 12261400,
+  "sha256": "e87e2ed32848cb39e6456cbbfa798282e62d32876df1ceb44cae87d09f3c792a",
+  "state": "packed-source-stable"
+}

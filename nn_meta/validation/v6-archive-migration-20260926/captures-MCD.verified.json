@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-MCD",
+    "source": {
+      "files": 24128,
+      "directories": 5033,
+      "symlinks": 0,
+      "bytes": 72743903,
+      "metadata_sha256": "4fb11a9523baaa7568babdb0354f588274515ced258115f184ec3fc3a31e98cc"
+    },
+    "archive_bytes": 59380230,
+    "sha256": "47e68882bfd7de2134d9f603e9d2b4d7eb22137120bd6cc16a7cdb803401bea6",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-MCD.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

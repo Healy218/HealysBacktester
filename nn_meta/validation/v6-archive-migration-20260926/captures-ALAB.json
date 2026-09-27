@@ -1,0 +1,13 @@
+{
+  "id": "captures-ALAB",
+  "source": {
+    "files": 22720,
+    "directories": 5147,
+    "symlinks": 0,
+    "bytes": 65057400,
+    "metadata_sha256": "9b44105f9db98b158d5da1d1bb49eff1dad1f2e3918787c0fd20299d7983be74"
+  },
+  "archive_bytes": 52561691,
+  "sha256": "0e7cc9b849fe611c9852577e36c42991579459023232c2c1902759c459fba9ff",
+  "state": "packed-source-stable"
+}

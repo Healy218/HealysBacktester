@@ -1,0 +1,13 @@
+{
+  "id": "captures-EWZ",
+  "source": {
+    "files": 20694,
+    "directories": 4223,
+    "symlinks": 0,
+    "bytes": 42372896,
+    "metadata_sha256": "dae65bb4f8c1d78a933494e9dc19f544cd51992d8cc9c8eddab3d48b4b8838ab"
+  },
+  "archive_bytes": 30537453,
+  "sha256": "02684112ec7ca5272851c04bf255195b2500a7ad3a721ed4ab62c1fb0fb91d45",
+  "state": "packed-source-stable"
+}

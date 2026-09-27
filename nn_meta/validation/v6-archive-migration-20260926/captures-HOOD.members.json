@@ -1,0 +1,10 @@
+{
+  "id": "captures-HOOD",
+  "sha256": "bf534a85b17b4bda3cb46aea3a70ec19507d79b948bfd97c70df34487e217012",
+  "members": {
+    "files": 26958,
+    "directories": 5615,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

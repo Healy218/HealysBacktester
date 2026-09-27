@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-WDAY",
+    "source": {
+      "files": 25822,
+      "directories": 5383,
+      "symlinks": 0,
+      "bytes": 48753841,
+      "metadata_sha256": "b38b397fe9cbbf68b7d7a768567113673af24b061130132751d91ecf80fbecd4"
+    },
+    "archive_bytes": 33927178,
+    "sha256": "5ea1c5905ead3cc5a2a95fbe96f86a8a95db5b26227d5cbbd8d074fbe794c68b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-WDAY.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

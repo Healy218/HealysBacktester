@@ -1,0 +1,10 @@
+{
+  "id": "captures-FTAI",
+  "sha256": "9a1561a18cd053f2d79eabe05bd9e98346d96b32e9d9ab039f7b5ddf97a950b3",
+  "members": {
+    "files": 24012,
+    "directories": 5403,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

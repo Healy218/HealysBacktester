@@ -1,0 +1,10 @@
+{
+  "id": "captures-SOXX",
+  "sha256": "c7fd3179eca5b7bfb5e80c8ffa191919d682519dff3a3131e463e847ef3c4ffd",
+  "members": {
+    "files": 19610,
+    "directories": 4867,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

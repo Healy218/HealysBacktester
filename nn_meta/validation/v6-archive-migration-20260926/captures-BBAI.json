@@ -1,0 +1,13 @@
+{
+  "id": "captures-BBAI",
+  "source": {
+    "files": 24416,
+    "directories": 5441,
+    "symlinks": 0,
+    "bytes": 44312432,
+    "metadata_sha256": "3a329f38bdb4bdcefed36eddec0868727ecf26907d3acece7c448164a2b7ddc8"
+  },
+  "archive_bytes": 30928259,
+  "sha256": "a151b05cfb7e95b36be71eb545221aae73ad5cf1517721e17b34f0e9570cefe0",
+  "state": "packed-source-stable"
+}

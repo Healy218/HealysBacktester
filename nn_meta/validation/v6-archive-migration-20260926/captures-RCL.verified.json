@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-RCL",
+    "source": {
+      "files": 21690,
+      "directories": 4511,
+      "symlinks": 0,
+      "bytes": 63774260,
+      "metadata_sha256": "43e0cea33033a57e319e49ffafd8d1d861313bb0c4e174ceb3edce907106e765"
+    },
+    "archive_bytes": 51484498,
+    "sha256": "177ba70e8cbc7f9110b149f0a6dd71d5c6adf9d7285bdb238a64ecdc99a78e24",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-RCL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

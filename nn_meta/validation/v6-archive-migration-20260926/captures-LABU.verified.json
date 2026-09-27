@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-LABU",
+    "source": {
+      "files": 22786,
+      "directories": 4761,
+      "symlinks": 0,
+      "bytes": 40161807,
+      "metadata_sha256": "c78e1592c3b9d497119318bbbe013d01d07f46a02f07d4cf4e6b25535f173338"
+    },
+    "archive_bytes": 26888391,
+    "sha256": "7b75bc8bfa71e0f53063ca54c94889fe5fb85d6c822f5f4376e234751280f737",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-LABU.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

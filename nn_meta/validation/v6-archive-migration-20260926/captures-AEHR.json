@@ -1,0 +1,13 @@
+{
+  "id": "captures-AEHR",
+  "source": {
+    "files": 13706,
+    "directories": 4249,
+    "symlinks": 0,
+    "bytes": 19915380,
+    "metadata_sha256": "29b729b7ad1694e52befc53f0352f2c61c477ff0fbd318c160dcdf8c6abefa24"
+  },
+  "archive_bytes": 13021479,
+  "sha256": "c4050288d8152869523a5e5223ce5f5e3010618223925c75a01e6604a72075ba",
+  "state": "packed-source-stable"
+}

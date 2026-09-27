@@ -1,0 +1,13 @@
+{
+  "id": "captures-TSLA",
+  "source": {
+    "files": 24480,
+    "directories": 4541,
+    "symlinks": 0,
+    "bytes": 792860746,
+    "metadata_sha256": "59fb798095509f70511ac03de633d56207f699e5c1b7fa9b9ab2f64b357d9a0a"
+  },
+  "archive_bytes": 780015955,
+  "sha256": "1676a2e7887408615d0b49213e36369ac69854022e4f7c6321b6785409549d13",
+  "state": "packed-source-stable"
+}

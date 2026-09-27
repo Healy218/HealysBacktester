@@ -1,0 +1,10 @@
+{
+  "id": "captures-SPOT",
+  "sha256": "ea3157ca8b09331d924da3baa2f179479c4223687ae75161cc93d9ca683ff8aa",
+  "members": {
+    "files": 23238,
+    "directories": 4851,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-RIVN",
+  "sha256": "fda8c488fd478c32d23d52830732b4492aec87ba59610e3e1228344fafb4247e",
+  "members": {
+    "files": 14578,
+    "directories": 3039,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

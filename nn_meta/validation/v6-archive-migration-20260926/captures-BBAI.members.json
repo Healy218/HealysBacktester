@@ -1,0 +1,10 @@
+{
+  "id": "captures-BBAI",
+  "sha256": "a151b05cfb7e95b36be71eb545221aae73ad5cf1517721e17b34f0e9570cefe0",
+  "members": {
+    "files": 24416,
+    "directories": 5441,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-SRPT",
+  "source": {
+    "files": 25412,
+    "directories": 5311,
+    "symlinks": 0,
+    "bytes": 28314967,
+    "metadata_sha256": "80e6b103998a2eda4f91b9f37ee29c79c0594d0c461498c87dc691b1dcb2a4e6"
+  },
+  "archive_bytes": 13279298,
+  "sha256": "77808151d01428efad4f2c50799884745e9a96ddad4083f7bb561397754c9611",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-AMKR",
+  "sha256": "2a55d6ec93743eb639f1f11cdeeab1543622e5897a027e951be0602d10319bbc",
+  "members": {
+    "files": 12166,
+    "directories": 4027,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

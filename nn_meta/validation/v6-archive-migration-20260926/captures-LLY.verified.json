@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-LLY",
+    "source": {
+      "files": 22278,
+      "directories": 4657,
+      "symlinks": 0,
+      "bytes": 95318640,
+      "metadata_sha256": "b736748a77488a14c4755b4765138bbe7940223251330e12df6a597e5bf6de27"
+    },
+    "archive_bytes": 83048991,
+    "sha256": "2984be507e26937e07cbd6b52d52b9a16a5aeedb92562fe67c1493dd2fef3ad8",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-LLY.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

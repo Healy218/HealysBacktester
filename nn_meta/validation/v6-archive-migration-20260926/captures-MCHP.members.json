@@ -1,0 +1,10 @@
+{
+  "id": "captures-MCHP",
+  "sha256": "bae5b7e94aeda06adf4a909fc3f0825722dc6d6ab703672f4ed51cbf81952658",
+  "members": {
+    "files": 21674,
+    "directories": 4769,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

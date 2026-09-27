@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-APP",
+    "source": {
+      "files": 24182,
+      "directories": 5033,
+      "symlinks": 0,
+      "bytes": 96032928,
+      "metadata_sha256": "2cb3c92ce9c27fb5eb91ac72210cef2d817a944d7e8d605d768ba919e1a03059"
+    },
+    "archive_bytes": 82660596,
+    "sha256": "ea9f2106a522a23322b271c10979a177d42a72fd38351de04536fa502b74964a",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-APP.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

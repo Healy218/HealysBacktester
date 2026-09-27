@@ -1,0 +1,13 @@
+{
+  "id": "captures-DELL",
+  "source": {
+    "files": 22798,
+    "directories": 4763,
+    "symlinks": 0,
+    "bytes": 116925972,
+    "metadata_sha256": "2b3f48dc3d1f183c23cc5341d9ae6bf11c8340d4ac3d0e33256cb56538689afb"
+  },
+  "archive_bytes": 104310977,
+  "sha256": "5bf0a8ea73590aea65ee71d342e3218ded6fd4d10efde05da2bee779fe46c120",
+  "state": "packed-source-stable"
+}

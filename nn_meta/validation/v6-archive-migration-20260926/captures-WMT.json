@@ -1,0 +1,13 @@
+{
+  "id": "captures-WMT",
+  "source": {
+    "files": 22196,
+    "directories": 4633,
+    "symlinks": 0,
+    "bytes": 140971055,
+    "metadata_sha256": "4fecc26c0dbf64561dec7305b489708632275401851ef5a3badef86e63fb2291"
+  },
+  "archive_bytes": 129004861,
+  "sha256": "dcb5ed29aaa6a47c508f61373f80100f9a78ca8ba4707b9ad510c735539305cd",
+  "state": "packed-source-stable"
+}

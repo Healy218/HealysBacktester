@@ -1,0 +1,13 @@
+{
+  "id": "captures-RUN",
+  "source": {
+    "files": 19154,
+    "directories": 4005,
+    "symlinks": 0,
+    "bytes": 61231142,
+    "metadata_sha256": "31cffe08881f2fbb3c06f82483f710a12ffc1409e5e0853166872711a671f9cc"
+  },
+  "archive_bytes": 50535408,
+  "sha256": "9ace758d78a0464e640b490285fad2453ff6c8cd8e75abf2382be57afbd911fb",
+  "state": "packed-source-stable"
+}

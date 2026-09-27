@@ -1,0 +1,13 @@
+{
+  "id": "captures-ETSY",
+  "source": {
+    "files": 27210,
+    "directories": 5689,
+    "symlinks": 0,
+    "bytes": 81152952,
+    "metadata_sha256": "a5e477811330491773fc51f8a0581975de4b4d0689892e59c074d5bf346cfb98"
+  },
+  "archive_bytes": 65696965,
+  "sha256": "1ae3cfae1a791aaf85e72d6754fb502e32af94891a973cc26d32164705eba414",
+  "state": "packed-source-stable"
+}

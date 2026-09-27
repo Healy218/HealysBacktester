@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CIFR",
+    "source": {
+      "files": 28420,
+      "directories": 5909,
+      "symlinks": 0,
+      "bytes": 78918043,
+      "metadata_sha256": "8e54ed83a508f5a2e9ce0a77dd912ee99eb363ecfb5127cf0b4b047b9aba00aa"
+    },
+    "archive_bytes": 62858972,
+    "sha256": "e0ca148165a501e8f7de3979052bca724edfc991b0caedb8ed836b461ff4a5ab",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CIFR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

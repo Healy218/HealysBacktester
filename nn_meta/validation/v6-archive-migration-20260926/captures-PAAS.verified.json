@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-PAAS",
+    "source": {
+      "files": 16324,
+      "directories": 3399,
+      "symlinks": 0,
+      "bytes": 35339842,
+      "metadata_sha256": "58be2500d12e904d5fe5e718ef3a70c5e93162301ed5bd59f319880e9498e905"
+    },
+    "archive_bytes": 26017728,
+    "sha256": "be261766844896e2413b2d61c81753cd7abcae06af8ef824b80f1159ef9abd95",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-PAAS.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

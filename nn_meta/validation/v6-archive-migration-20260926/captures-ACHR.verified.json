@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ACHR",
+    "source": {
+      "files": 27806,
+      "directories": 5791,
+      "symlinks": 0,
+      "bytes": 75415665,
+      "metadata_sha256": "86b768a1f2e02ef13b0d282157c590108a9a18b140d6b757f8837ca0092858a1"
+    },
+    "archive_bytes": 59891329,
+    "sha256": "6b25404739f7ec2ffa93260487870d6c23a31ae707354b43fd2d58d13583b786",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ACHR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

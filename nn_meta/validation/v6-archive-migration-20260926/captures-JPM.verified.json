@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-JPM",
+    "source": {
+      "files": 20522,
+      "directories": 4269,
+      "symlinks": 0,
+      "bytes": 112822596,
+      "metadata_sha256": "103f80d044e3771dd07da0605266c1103343980bf3be2ded601f9b9ff1bec974"
+    },
+    "archive_bytes": 101665997,
+    "sha256": "b58adfefc67643e3afa872751dab11cfe3ac7ca5c280eea83d51e62a60b1fac2",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-JPM.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

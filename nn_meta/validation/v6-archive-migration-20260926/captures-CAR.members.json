@@ -1,0 +1,10 @@
+{
+  "id": "captures-CAR",
+  "sha256": "a91f84bf4daf0cab6c2d82a7d7dd188c2af4eeed7f6ce798e7241ccefb7e3546",
+  "members": {
+    "files": 25372,
+    "directories": 5293,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

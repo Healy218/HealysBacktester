@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-OKE",
+    "source": {
+      "files": 15348,
+      "directories": 5051,
+      "symlinks": 0,
+      "bytes": 20741731,
+      "metadata_sha256": "7f51975a1a48ccb09e5e34fea4c36b89e34d008610a31bb1645e1645c2aa8f6e"
+    },
+    "archive_bytes": 13330790,
+    "sha256": "b8a4b9210abaccba06314a083bf7631c2747b4714ab6a71cc494837e49e488a5",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-OKE.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

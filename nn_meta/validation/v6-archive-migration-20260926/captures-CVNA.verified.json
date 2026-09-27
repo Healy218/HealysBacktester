@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CVNA",
+    "source": {
+      "files": 23838,
+      "directories": 4969,
+      "symlinks": 0,
+      "bytes": 88153847,
+      "metadata_sha256": "287fb5788990d077390d7009f91e8683d1fde235e5078c014249d8ac39e8f6cf"
+    },
+    "archive_bytes": 74905117,
+    "sha256": "52acb9c0adfe39f690286950d0be3bc63d246c2edda65aa58fc1f3d2b6909726",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CVNA.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

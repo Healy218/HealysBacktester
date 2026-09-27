@@ -1,0 +1,10 @@
+{
+  "id": "captures-CCJ",
+  "sha256": "0f0464eb955086a8cd4950744f0e2390124a631345a0e3b4ce89d953b4d9a59b",
+  "members": {
+    "files": 23586,
+    "directories": 4915,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

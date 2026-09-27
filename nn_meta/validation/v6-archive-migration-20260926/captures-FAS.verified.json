@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-FAS",
+    "source": {
+      "files": 25322,
+      "directories": 5339,
+      "symlinks": 0,
+      "bytes": 42718073,
+      "metadata_sha256": "a9a0271bac9809c89bcf5012ea6cb9b75b5811167ebf7672d2d2270ebea3fd72"
+    },
+    "archive_bytes": 28002940,
+    "sha256": "ddef5f796b8c4b55298c0a8c1a95a56b7ebcbdcb4d91adff5409f091da84aeea",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-FAS.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

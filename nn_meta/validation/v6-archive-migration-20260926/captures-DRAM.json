@@ -1,0 +1,13 @@
+{
+  "id": "captures-DRAM",
+  "source": {
+    "files": 0,
+    "directories": 1,
+    "symlinks": 0,
+    "bytes": 0,
+    "metadata_sha256": "bbc627ff03e3553e12479bf372c4b4d0c6e641ab6b376d794924903cb5e43a46"
+  },
+  "archive_bytes": 216,
+  "sha256": "62558d9313f2bd6568f2fdd974faaf4f5aa7ec0219fe8e9d372f07d01ad657f0",
+  "state": "packed-source-stable"
+}

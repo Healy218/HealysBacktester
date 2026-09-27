@@ -1,0 +1,10 @@
+{
+  "id": "captures-CBRS",
+  "sha256": "01f1c4899392f0adb50e8cdeb89ffd8a1718c6e09f41ec2c535eeb24ab7a7d2d",
+  "members": {
+    "files": 0,
+    "directories": 1,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

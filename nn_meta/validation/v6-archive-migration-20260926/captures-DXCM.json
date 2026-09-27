@@ -1,0 +1,13 @@
+{
+  "id": "captures-DXCM",
+  "source": {
+    "files": 24916,
+    "directories": 5195,
+    "symlinks": 0,
+    "bytes": 38930912,
+    "metadata_sha256": "155f34ff3427262af2711a61e223244cd4765870c6df6b0395ff48fc0efeefce"
+  },
+  "archive_bytes": 24516523,
+  "sha256": "09ff5b5304154ed97f88c8a8a557a0092db33d35ca813dcf2c2cd355b7d9f993",
+  "state": "packed-source-stable"
+}

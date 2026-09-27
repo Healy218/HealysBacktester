@@ -1,0 +1,10 @@
+{
+  "id": "captures-BULL",
+  "sha256": "85ef00a8c43fb960d8e770a67fe700516237a03a095e3c279985807bb508423c",
+  "members": {
+    "files": 20616,
+    "directories": 4327,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

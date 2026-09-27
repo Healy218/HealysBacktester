@@ -1,0 +1,20 @@
+{
+  "files": [
+    {
+      "path": "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AA/a6eb54ea20b5f01703812d893f12b3e4524a1fe2bd1350f1dec8868a1ce16020/attempt-0000/AA240830P00034500.quotes.json.gz",
+      "sha256": "510bc0f10cd05fbf0311071cf316204ec60c414a08a664a2eacc6b55b4fb7867",
+      "bytes": 5382
+    },
+    {
+      "path": "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AA/a6eb54ea20b5f01703812d893f12b3e4524a1fe2bd1350f1dec8868a1ce16020/attempt-0000/AA240830P00034500.trades.json.gz",
+      "sha256": "1447bd3c0a7262ff5f28c93cd41cdabb5ec5e6eff28650c845ba827bb04a6502",
+      "bytes": 148
+    },
+    {
+      "path": "nn_meta/expanded_inputs/v6-local-20260906/full-run/captures/AA/a6eb54ea20b5f01703812d893f12b3e4524a1fe2bd1350f1dec8868a1ce16020/attempt-0000/manifest.json",
+      "sha256": "c2673a2c626e1956e80321b0a1b47408cd836095e20aa1a4761c3fca8b11450d",
+      "bytes": 6883
+    }
+  ],
+  "state": "restored-from-external-and-compared"
+}

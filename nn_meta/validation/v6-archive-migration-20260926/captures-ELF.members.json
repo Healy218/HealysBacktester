@@ -1,0 +1,10 @@
+{
+  "id": "captures-ELF",
+  "sha256": "450d162afcdab45bc79468b28d2e8c15f6ffcca03cabda31d4778952722f049b",
+  "members": {
+    "files": 27826,
+    "directories": 5803,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

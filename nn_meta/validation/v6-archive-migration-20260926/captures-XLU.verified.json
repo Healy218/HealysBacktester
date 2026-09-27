@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-XLU",
+    "source": {
+      "files": 24092,
+      "directories": 5033,
+      "symlinks": 0,
+      "bytes": 53879651,
+      "metadata_sha256": "8fa823f6ac1673ea1b0e4e01cc02495343ab73ad39f98705f893bea56e7f1467"
+    },
+    "archive_bytes": 40264908,
+    "sha256": "c7a5ba9d0d9affbf5e0618d8992da686fbb40f608fc3406301c20c6fe2388c2f",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-XLU.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

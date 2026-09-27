@@ -1,0 +1,13 @@
+{
+  "id": "captures-ABVX",
+  "source": {
+    "files": 9704,
+    "directories": 2259,
+    "symlinks": 0,
+    "bytes": 10944807,
+    "metadata_sha256": "e36df18cc279926674ebebb01f5eb6a126403bdb1be9a7e353ed01389133456e"
+  },
+  "archive_bytes": 5378948,
+  "sha256": "7a980944a8858f8141597d54e1252208f7c37af3bb23e7db06435ea6aef7a462",
+  "state": "packed-source-stable"
+}

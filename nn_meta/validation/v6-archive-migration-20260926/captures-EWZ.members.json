@@ -1,0 +1,10 @@
+{
+  "id": "captures-EWZ",
+  "sha256": "02684112ec7ca5272851c04bf255195b2500a7ad3a721ed4ab62c1fb0fb91d45",
+  "members": {
+    "files": 20694,
+    "directories": 4223,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

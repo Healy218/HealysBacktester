@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-KKR",
+    "source": {
+      "files": 20990,
+      "directories": 4381,
+      "symlinks": 0,
+      "bytes": 35070376,
+      "metadata_sha256": "e7a779025872f1516b41c1fc93b3ab8d10b5695019d396f2c926bbeaa274bbf3"
+    },
+    "archive_bytes": 22969706,
+    "sha256": "b2998bf65ad362d1d0e3cfe9a4e1a8f1d6be38126721d704f7b5d4bb5842b704",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-KKR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

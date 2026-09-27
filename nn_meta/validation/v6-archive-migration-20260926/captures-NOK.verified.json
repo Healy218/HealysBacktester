@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-NOK",
+    "source": {
+      "files": 22460,
+      "directories": 4661,
+      "symlinks": 0,
+      "bytes": 32017145,
+      "metadata_sha256": "054577ce53e9e1ae11763b85fd2ed1a93b8178351b7a77183a6c3f2f4e5ca5c9"
+    },
+    "archive_bytes": 18982644,
+    "sha256": "5bd985bcf81328cfee9b93b9e3b2c281fed381b9e48bb9e2ea9ad26288f2479e",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-NOK.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-SYM",
+  "sha256": "d8ad88c18fad85772df1403fed8343082023367f42aa646e9468266a41f4ac66",
+  "members": {
+    "files": 23198,
+    "directories": 4829,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

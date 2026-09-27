@@ -1,0 +1,13 @@
+{
+  "id": "captures-FIG",
+  "source": {
+    "files": 14138,
+    "directories": 2955,
+    "symlinks": 0,
+    "bytes": 43002053,
+    "metadata_sha256": "3ccdfc71dd34bc17b338a27fc4a5687e479314c4ec5e96f7fc98ff1ba4bcbda8"
+  },
+  "archive_bytes": 35187288,
+  "sha256": "71679adc4191c07165fc4ba656b4cc95ecef9d6ec6ac9518696c3dfbdff05116",
+  "state": "packed-source-stable"
+}

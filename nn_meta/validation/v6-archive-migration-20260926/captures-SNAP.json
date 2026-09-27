@@ -1,0 +1,13 @@
+{
+  "id": "captures-SNAP",
+  "source": {
+    "files": 15560,
+    "directories": 3233,
+    "symlinks": 0,
+    "bytes": 48790202,
+    "metadata_sha256": "bd1667c89879247abd2b894b992fa1c70414bf85f6350cc4fdc41d3ae04049ab"
+  },
+  "archive_bytes": 40249155,
+  "sha256": "582f0d9d8fa6e27aa73e710377a9edac2af0d728d9b61a914f776c3e497411cb",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-VKTX",
+    "source": {
+      "files": 13496,
+      "directories": 2815,
+      "symlinks": 0,
+      "bytes": 22437120,
+      "metadata_sha256": "ea4545b4a481688647782333f09bc6a9470d5018c0a9a2ed63746d93e416b3eb"
+    },
+    "archive_bytes": 14669956,
+    "sha256": "c572e52dace5189dd4821f2022a39a5bc8d1d472420c1ef16bc2d83835157d22",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-VKTX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

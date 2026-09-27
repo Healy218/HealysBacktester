@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-PBR",
+    "source": {
+      "files": 22952,
+      "directories": 4807,
+      "symlinks": 0,
+      "bytes": 32807337,
+      "metadata_sha256": "5644aa9c0a917c47310bcc8bd9a7552d55941d4c356cb00c7628f34affd26d6b"
+    },
+    "archive_bytes": 19665741,
+    "sha256": "85b76bdd2a495754fb85f8225645ffb824dcede96decb056fd44012bf71a42d0",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-PBR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-TMUS",
+  "source": {
+    "files": 22228,
+    "directories": 4637,
+    "symlinks": 0,
+    "bytes": 63817073,
+    "metadata_sha256": "6eb88f8ce9ea56281c3f33c3b05295bb2f0a567fe9ddbdd096e6c67e57c9d896"
+  },
+  "archive_bytes": 51155615,
+  "sha256": "e2e8da93231bcd1108cd8a5bf3990ea1b3fe6fbc27b8395ff505f7330c14a9b3",
+  "state": "packed-source-stable"
+}

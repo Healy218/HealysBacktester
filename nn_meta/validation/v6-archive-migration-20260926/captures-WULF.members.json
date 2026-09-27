@@ -1,0 +1,10 @@
+{
+  "id": "captures-WULF",
+  "sha256": "28658caf4e96184bccab4e83d69cfa3c9ec976f497942796a65cc106a4d05de2",
+  "members": {
+    "files": 14638,
+    "directories": 3059,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

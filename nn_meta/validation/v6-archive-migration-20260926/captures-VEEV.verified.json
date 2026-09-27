@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-VEEV",
+    "source": {
+      "files": 15570,
+      "directories": 5177,
+      "symlinks": 0,
+      "bytes": 15227742,
+      "metadata_sha256": "746cea0b8ace2bb01d7bef130a972aff425ea2cc25dfdf32ef0443f75095202c"
+    },
+    "archive_bytes": 7458192,
+    "sha256": "fc554c0c4bb0e409b78671f8cf7d4d2787add569fc4bb1182d8f647236619ddc",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-VEEV.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

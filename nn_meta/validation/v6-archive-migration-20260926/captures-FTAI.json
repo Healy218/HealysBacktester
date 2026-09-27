@@ -1,0 +1,13 @@
+{
+  "id": "captures-FTAI",
+  "source": {
+    "files": 24012,
+    "directories": 5403,
+    "symlinks": 0,
+    "bytes": 31253364,
+    "metadata_sha256": "1d604197f50831e41285a51102681a8acb26ce8039306d452652327f11972243"
+  },
+  "archive_bytes": 17446872,
+  "sha256": "9a1561a18cd053f2d79eabe05bd9e98346d96b32e9d9ab039f7b5ddf97a950b3",
+  "state": "packed-source-stable"
+}

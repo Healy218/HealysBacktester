@@ -1,0 +1,13 @@
+{
+  "id": "captures-XYZ",
+  "source": {
+    "files": 20270,
+    "directories": 4219,
+    "symlinks": 0,
+    "bytes": 83292263,
+    "metadata_sha256": "ad9de2df59811209eee394ba6fccc39ca3082022f37f432e2377cf7e5e1aab43"
+  },
+  "archive_bytes": 71988137,
+  "sha256": "90e68c8f80b5e4ff88717774f0c44da7b51b24fa164fb47f7a3e1b59e9904a65",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-U",
+  "source": {
+    "files": 18654,
+    "directories": 3895,
+    "symlinks": 0,
+    "bytes": 70556429,
+    "metadata_sha256": "35b6776ef64e4044e17a6b175fe2cc3702d90f4ffe952d77b06543a2db2c6155"
+  },
+  "archive_bytes": 60296208,
+  "sha256": "ebf7866e82262d2b76598135c2412cc6b6aee407d95a147e745e34ac0afc487b",
+  "state": "packed-source-stable"
+}

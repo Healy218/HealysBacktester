@@ -1,0 +1,13 @@
+{
+  "id": "captures-NVDL",
+  "source": {
+    "files": 20670,
+    "directories": 4313,
+    "symlinks": 0,
+    "bytes": 133045631,
+    "metadata_sha256": "dbb80fd428b7b033af6787881ffbfb517dca7008e73db202de9a0db8b57b84f8"
+  },
+  "archive_bytes": 121490393,
+  "sha256": "f15f6c38dbcf100c532bbc246bb8987549fc92e502208891870e3f06697bdb2b",
+  "state": "packed-source-stable"
+}

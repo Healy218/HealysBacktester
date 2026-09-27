@@ -1,0 +1,10 @@
+{
+  "id": "captures-PATH",
+  "sha256": "bd15fb5a6e64999503f3e5fb62b6a723eb3248aef0ba692574c0967666fca699",
+  "members": {
+    "files": 23558,
+    "directories": 4913,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

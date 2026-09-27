@@ -1,0 +1,13 @@
+{
+  "id": "captures-NKE",
+  "source": {
+    "files": 25696,
+    "directories": 5357,
+    "symlinks": 0,
+    "bytes": 126142892,
+    "metadata_sha256": "a9b2acd8159f84654dd184a2c50b3f6901a7739ceb1b015814f8efa322b21b4d"
+  },
+  "archive_bytes": 112135900,
+  "sha256": "1d912765152ab619e81cc58888dd19fb3ccc4e037d1d5ebb037cfc5212e0510c",
+  "state": "packed-source-stable"
+}

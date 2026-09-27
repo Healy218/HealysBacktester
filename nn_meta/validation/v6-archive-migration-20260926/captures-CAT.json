@@ -1,0 +1,13 @@
+{
+  "id": "captures-CAT",
+  "source": {
+    "files": 22214,
+    "directories": 4623,
+    "symlinks": 0,
+    "bytes": 79999423,
+    "metadata_sha256": "15b353496761f72c0edbd91be349bfe7feef30aaa7a65cfff2f177fecb075649"
+  },
+  "archive_bytes": 67633984,
+  "sha256": "fb0407556858f009601fae4770f062e9d2255e6cc43ff0651fd56df21b4de81d",
+  "state": "packed-source-stable"
+}

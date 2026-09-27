@@ -1,0 +1,10 @@
+{
+  "id": "captures-SOUN",
+  "sha256": "a9bdcce97b24a923091705b6363a0029cc84264ea4a3f8ccfa8284a05a83931c",
+  "members": {
+    "files": 27454,
+    "directories": 5731,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-NVO",
+  "sha256": "aceb926757b6ad6358dcf7eaba17e0034d468181f9fd61c12a5b38be24b55e4f",
+  "members": {
+    "files": 24764,
+    "directories": 5161,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-INTU",
+  "sha256": "9bf46fd991aaa875ff816b6f3d4ba99e86fe7410475f67cff77adde31f75bf13",
+  "members": {
+    "files": 23048,
+    "directories": 4809,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

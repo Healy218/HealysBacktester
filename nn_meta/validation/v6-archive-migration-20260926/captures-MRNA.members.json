@@ -1,0 +1,10 @@
+{
+  "id": "captures-MRNA",
+  "sha256": "d93b71f3bde1aa8b57ee71900a47cb9d916a3a4999abd178c731388650b389dd",
+  "members": {
+    "files": 25828,
+    "directories": 5367,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-CBRS",
+  "source": {
+    "files": 0,
+    "directories": 1,
+    "symlinks": 0,
+    "bytes": 0,
+    "metadata_sha256": "cd527874db0e27806c7dca319ff40588cadb9e6fdbb07dfcb0d044bed62dc861"
+  },
+  "archive_bytes": 216,
+  "sha256": "01f1c4899392f0adb50e8cdeb89ffd8a1718c6e09f41ec2c535eeb24ab7a7d2d",
+  "state": "packed-source-stable"
+}

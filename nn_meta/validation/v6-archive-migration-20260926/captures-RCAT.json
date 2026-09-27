@@ -1,0 +1,13 @@
+{
+  "id": "captures-RCAT",
+  "source": {
+    "files": 26570,
+    "directories": 5905,
+    "symlinks": 0,
+    "bytes": 53047756,
+    "metadata_sha256": "61988b1d001baac77e0a25fb702dc693959cb1a4e6be7e2add62f318f62993fa"
+  },
+  "archive_bytes": 38283960,
+  "sha256": "f395df759e3872d267e366c5626d59f88105ad59e2edadaea3cc703e85fab42e",
+  "state": "packed-source-stable"
+}

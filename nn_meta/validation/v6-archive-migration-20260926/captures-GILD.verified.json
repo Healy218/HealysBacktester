@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-GILD",
+    "source": {
+      "files": 22156,
+      "directories": 4619,
+      "symlinks": 0,
+      "bytes": 56615218,
+      "metadata_sha256": "3587315be3b74e187ae8c92e693cdbd201b5bb78032575c60241ccb3f9d34029"
+    },
+    "archive_bytes": 43995465,
+    "sha256": "d1c41fc6e23d42a3fc47b376b59fd1878425a0f60d2e891a10e5f495b23f28bb",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-GILD.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

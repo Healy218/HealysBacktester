@@ -1,0 +1,10 @@
+{
+  "id": "captures-XOM",
+  "sha256": "1782c949f034bd0d2b2ad11af97790f997d1b1c141b26a20c6dded9413fd72db",
+  "members": {
+    "files": 21182,
+    "directories": 4423,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

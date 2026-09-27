@@ -1,0 +1,13 @@
+{
+  "id": "captures-LULU",
+  "source": {
+    "files": 23498,
+    "directories": 4899,
+    "symlinks": 0,
+    "bytes": 62924398,
+    "metadata_sha256": "c934a5be54fe7f6aaf9b5a21c11d6841a8f5380ca56b94fa18942275782a4b61"
+  },
+  "archive_bytes": 49822104,
+  "sha256": "b533301d2c3d28ba756f4dea31675e09b33729dd32bc80c7fb9b55429bd82b14",
+  "state": "packed-source-stable"
+}

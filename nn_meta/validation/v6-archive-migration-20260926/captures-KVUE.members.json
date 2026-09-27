@@ -1,0 +1,10 @@
+{
+  "id": "captures-KVUE",
+  "sha256": "31b47ce570814969dd4066dcef5c6a795ddf3d287c7ff209119a61b1e2522377",
+  "members": {
+    "files": 23674,
+    "directories": 4935,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

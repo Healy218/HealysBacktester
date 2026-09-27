@@ -1,0 +1,13 @@
+{
+  "id": "captures-IAU",
+  "source": {
+    "files": 16852,
+    "directories": 4007,
+    "symlinks": 0,
+    "bytes": 34681113,
+    "metadata_sha256": "6246354030a54773106f24f29fd1d153a3be8522bba76e0c37c4c0c344414398"
+  },
+  "archive_bytes": 25239636,
+  "sha256": "538a7f85d1379b20a1c60c105b27a7f271ef85ac8f8cdfaf70ec83f00b469e89",
+  "state": "packed-source-stable"
+}

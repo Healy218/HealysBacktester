@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-XLY",
+    "source": {
+      "files": 22232,
+      "directories": 4645,
+      "symlinks": 0,
+      "bytes": 45385719,
+      "metadata_sha256": "41c82c38f28fcc76fa48627f755c11c1f097ca79380cce7a82339061e0cc5d85"
+    },
+    "archive_bytes": 32495824,
+    "sha256": "98f2f2385d3cb62764453493712b9fca05678dad5c30838364b0309c99d103e8",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-XLY.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

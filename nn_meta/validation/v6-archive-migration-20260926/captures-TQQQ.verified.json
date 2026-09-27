@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-TQQQ",
+    "source": {
+      "files": 19764,
+      "directories": 4111,
+      "symlinks": 0,
+      "bytes": 250237981,
+      "metadata_sha256": "422b9fc25806bea378c71d4cc532548292b7681db38c3f3b2d802d7d36e5bb2f"
+    },
+    "archive_bytes": 239636011,
+    "sha256": "5002a9aeda6d8505889651c3efe69625b34b4638d95fed9f0c2b873c760cee41",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-TQQQ.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

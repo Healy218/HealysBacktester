@@ -1,0 +1,13 @@
+{
+  "id": "captures-LVS",
+  "source": {
+    "files": 22188,
+    "directories": 4629,
+    "symlinks": 0,
+    "bytes": 53784199,
+    "metadata_sha256": "509fdae4d7e38186e604ca1f498a0cd9cfc48cff6ee605f7a0838fba80d4503a"
+  },
+  "archive_bytes": 41106811,
+  "sha256": "51ac761ec9c8cfea7cdc3678c5e5ad0206b04c06d1c5a03b64e32bdeed810052",
+  "state": "packed-source-stable"
+}

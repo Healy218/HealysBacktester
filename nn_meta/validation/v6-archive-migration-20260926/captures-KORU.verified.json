@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-KORU",
+    "source": {
+      "files": 13198,
+      "directories": 4511,
+      "symlinks": 0,
+      "bytes": 18353505,
+      "metadata_sha256": "5410fda772c11b508f62c17de76743c5705a5945ceee81bd39b16ff36f2af8ba"
+    },
+    "archive_bytes": 11685529,
+    "sha256": "44db0c0d51db2ec96087884c936cbeba30471233f35960c8de429d2a0d560a31",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-KORU.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-SHOP",
+  "source": {
+    "files": 23416,
+    "directories": 4893,
+    "symlinks": 0,
+    "bytes": 120708419,
+    "metadata_sha256": "5ca8c137c52b06a25cded96b1bb0e1223385d319ae0a5d359d04a84c51c0360b"
+  },
+  "archive_bytes": 107729535,
+  "sha256": "6497ff4ce831d5a9a77a17cb17f1ce5dc43067ca267a0b92c369732bd95389a1",
+  "state": "packed-source-stable"
+}

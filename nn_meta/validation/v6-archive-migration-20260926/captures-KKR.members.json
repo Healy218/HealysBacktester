@@ -1,0 +1,10 @@
+{
+  "id": "captures-KKR",
+  "sha256": "b2998bf65ad362d1d0e3cfe9a4e1a8f1d6be38126721d704f7b5d4bb5842b704",
+  "members": {
+    "files": 20990,
+    "directories": 4381,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

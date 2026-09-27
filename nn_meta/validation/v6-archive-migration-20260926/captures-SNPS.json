@@ -1,0 +1,13 @@
+{
+  "id": "captures-SNPS",
+  "source": {
+    "files": 23026,
+    "directories": 5785,
+    "symlinks": 0,
+    "bytes": 32157511,
+    "metadata_sha256": "eca91643dacefeb50943473b260d0bf519d9e6e9d2cd3aeb02906c02e3d7debf"
+  },
+  "archive_bytes": 19522361,
+  "sha256": "f1ff1dc04b5ba10b9f5418e3aec3c66fa3cda155afe84a98bf2305d8b1646602",
+  "state": "packed-source-stable"
+}

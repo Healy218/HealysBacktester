@@ -1,0 +1,13 @@
+{
+  "id": "captures-OPEN",
+  "source": {
+    "files": 21970,
+    "directories": 4577,
+    "symlinks": 0,
+    "bytes": 56773062,
+    "metadata_sha256": "de9b0b3e401501ad894a6390529a8509169a0198069a0acf1b2904dbe3476e78"
+  },
+  "archive_bytes": 44428713,
+  "sha256": "0082e66783295f4fb396961781139d30ef190810fbe871270ccfc6c04e6e63b3",
+  "state": "packed-source-stable"
+}

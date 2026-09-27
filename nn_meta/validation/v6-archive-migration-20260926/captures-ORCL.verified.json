@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ORCL",
+    "source": {
+      "files": 23550,
+      "directories": 4917,
+      "symlinks": 0,
+      "bytes": 222197555,
+      "metadata_sha256": "38e630a6ba6265f1f613eebdf00a46f682e7921c4aecf67157e37fe2fc49a8b7"
+    },
+    "archive_bytes": 209460326,
+    "sha256": "d959414da57b05a72f50508af770784773f396438cc22fad6c3dd87eaf635976",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ORCL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

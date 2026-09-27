@@ -1,0 +1,13 @@
+{
+  "id": "captures-BKNG",
+  "source": {
+    "files": 19670,
+    "directories": 4095,
+    "symlinks": 0,
+    "bytes": 39542178,
+    "metadata_sha256": "f7f00eb2877a2f750a07678b14278d2f5c0df44f403b4d91beeca6e59532260f"
+  },
+  "archive_bytes": 28184094,
+  "sha256": "1c9e11c1f65f6bc786878d6896ddf74d98426b0ff5b83984a172141a97429b07",
+  "state": "packed-source-stable"
+}

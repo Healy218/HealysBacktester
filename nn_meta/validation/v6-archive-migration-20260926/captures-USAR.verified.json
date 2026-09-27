@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-USAR",
+    "source": {
+      "files": 15802,
+      "directories": 3401,
+      "symlinks": 0,
+      "bytes": 36852230,
+      "metadata_sha256": "24fc3a21c2b54e732ccaeba4562b8091b77d384fa505787101b3d48362641152"
+    },
+    "archive_bytes": 28057268,
+    "sha256": "2b3b79497e76fa51c230b74ae63519ada71edbe8fb98c77ccc4a8ebd4ec12710",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-USAR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

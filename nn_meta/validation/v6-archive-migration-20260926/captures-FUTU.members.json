@@ -1,0 +1,10 @@
+{
+  "id": "captures-FUTU",
+  "sha256": "deaa5c93d952e7d4da4c93fc17871f219826b2a16c2be7e9cb3d1847b6397937",
+  "members": {
+    "files": 22662,
+    "directories": 4709,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

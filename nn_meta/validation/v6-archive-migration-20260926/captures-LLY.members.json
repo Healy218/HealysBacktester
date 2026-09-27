@@ -1,0 +1,10 @@
+{
+  "id": "captures-LLY",
+  "sha256": "2984be507e26937e07cbd6b52d52b9a16a5aeedb92562fe67c1493dd2fef3ad8",
+  "members": {
+    "files": 22278,
+    "directories": 4657,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

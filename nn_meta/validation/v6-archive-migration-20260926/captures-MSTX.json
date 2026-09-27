@@ -1,0 +1,13 @@
+{
+  "id": "captures-MSTX",
+  "source": {
+    "files": 23866,
+    "directories": 5233,
+    "symlinks": 0,
+    "bytes": 63239175,
+    "metadata_sha256": "efd718339f11f3535cea098e13bc53e81d0f444d2638eb2c040777e27cfcc99d"
+  },
+  "archive_bytes": 49848513,
+  "sha256": "18d9121dc48a8fae0af10d4a37e0bc5b0f4dab809a95e93fe5f7e5ddc55a18be",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-BIDU",
+    "source": {
+      "files": 20418,
+      "directories": 4249,
+      "symlinks": 0,
+      "bytes": 62981935,
+      "metadata_sha256": "1d305fe7dcb5825e6318f1018ec6aa87bb23a14e5563ae7a736aad9c074c0466"
+    },
+    "archive_bytes": 51476826,
+    "sha256": "b892639372547bce53c0b21a63b445e45a5accec13cc3359ceedf3316dbf1261",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-BIDU.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

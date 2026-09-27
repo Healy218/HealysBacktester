@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-GOOG",
+    "source": {
+      "files": 22220,
+      "directories": 4631,
+      "symlinks": 0,
+      "bytes": 311128517,
+      "metadata_sha256": "178d6d74a15686c6ff1f59ac3d3012faa2043877ddc5beadc5b518b7dd175203"
+    },
+    "archive_bytes": 299286843,
+    "sha256": "7ffb46e35ed5d8ed9e7d35c51bc8c64cb908605d3c1bb4c45da9fb8159f91819",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-GOOG.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

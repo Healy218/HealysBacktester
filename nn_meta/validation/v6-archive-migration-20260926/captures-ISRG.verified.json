@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ISRG",
+    "source": {
+      "files": 22600,
+      "directories": 4703,
+      "symlinks": 0,
+      "bytes": 49540194,
+      "metadata_sha256": "1fecdb459688dbff867b19bab86a02533712a067690978e614ed6be780296848"
+    },
+    "archive_bytes": 36555323,
+    "sha256": "34ee616f92bf3670328c098b817fa8fbeca964a80d51e3a88fa79b92c6207e8a",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ISRG.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

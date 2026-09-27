@@ -1,0 +1,13 @@
+{
+  "id": "captures-RIVN",
+  "source": {
+    "files": 14578,
+    "directories": 3039,
+    "symlinks": 0,
+    "bytes": 62395649,
+    "metadata_sha256": "db945a9ba91380599188f6bc433b0511a643039e0fb9a35ad44e9b03e3040a6a"
+  },
+  "archive_bytes": 54437199,
+  "sha256": "fda8c488fd478c32d23d52830732b4492aec87ba59610e3e1228344fafb4247e",
+  "state": "packed-source-stable"
+}

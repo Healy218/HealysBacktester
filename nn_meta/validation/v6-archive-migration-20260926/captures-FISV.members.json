@@ -1,0 +1,10 @@
+{
+  "id": "captures-FISV",
+  "sha256": "42911eed3e948c1ba8f89d821065306c7db758ac4852b7a998df9279ddf19349",
+  "members": {
+    "files": 10652,
+    "directories": 2381,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

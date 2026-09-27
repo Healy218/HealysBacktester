@@ -1,0 +1,10 @@
+{
+  "id": "captures-CAT",
+  "sha256": "fb0407556858f009601fae4770f062e9d2255e6cc43ff0651fd56df21b4de81d",
+  "members": {
+    "files": 22214,
+    "directories": 4623,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

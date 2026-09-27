@@ -1,0 +1,10 @@
+{
+  "id": "captures-ETHU",
+  "sha256": "05fb453369f6ea877fed22963e50fe9b7766f856b78411abe2aa2f29820ca3b9",
+  "members": {
+    "files": 19574,
+    "directories": 4409,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

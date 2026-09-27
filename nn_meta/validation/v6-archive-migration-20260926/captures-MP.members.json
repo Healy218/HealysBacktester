@@ -1,0 +1,10 @@
+{
+  "id": "captures-MP",
+  "sha256": "192c33d349a10a4f91cb6a209cadc95c4ddc72f46f989dae317c1ec406e4f245",
+  "members": {
+    "files": 19390,
+    "directories": 4681,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

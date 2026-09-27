@@ -1,0 +1,13 @@
+{
+  "id": "captures-AAPL",
+  "source": {
+    "files": 25972,
+    "directories": 4797,
+    "symlinks": 0,
+    "bytes": 493568172,
+    "metadata_sha256": "8eefd5a98d84cb3bd87e617e4d6ae8e5d8955b8cdaa5184db91e6535d945df8f"
+  },
+  "archive_bytes": 479534165,
+  "sha256": "31f79b33660acc76dfe81044bf431eda8f983d2ebd1e0125b8f9deff9533b548",
+  "state": "packed-source-stable"
+}

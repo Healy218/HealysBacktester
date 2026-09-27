@@ -1,0 +1,13 @@
+{
+  "id": "captures-FTNT",
+  "source": {
+    "files": 25178,
+    "directories": 5231,
+    "symlinks": 0,
+    "bytes": 86480500,
+    "metadata_sha256": "7645c6f670055550883ae3115813573a319fa99362e85c21e868d27eb8e2b304"
+  },
+  "archive_bytes": 72174552,
+  "sha256": "1b9857fe951aa84968e92c3b9c24bafab0f2fe1d1897f316788ec2457f1957f7",
+  "state": "packed-source-stable"
+}

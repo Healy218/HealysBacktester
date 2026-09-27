@@ -1,0 +1,10 @@
+{
+  "id": "captures-DIA",
+  "sha256": "c295dbd8f5e9c48a4afba390d143cbaa5013f85961115af8701a7abcf3316930",
+  "members": {
+    "files": 24154,
+    "directories": 4949,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

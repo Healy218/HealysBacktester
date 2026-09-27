@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-MRVL",
+    "source": {
+      "files": 23202,
+      "directories": 4841,
+      "symlinks": 0,
+      "bytes": 146749895,
+      "metadata_sha256": "c8cd133f7cf715dd36372c6ef12914c7010186212baa3e34b02fca7d9a1c35c2"
+    },
+    "archive_bytes": 134003205,
+    "sha256": "5fdc2aa464cac71dd09432a63d5f489db22e256246f9363900e0bb1144c8b1ba",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-MRVL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

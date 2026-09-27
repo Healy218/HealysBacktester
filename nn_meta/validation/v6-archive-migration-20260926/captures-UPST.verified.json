@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-UPST",
+    "source": {
+      "files": 24426,
+      "directories": 5089,
+      "symlinks": 0,
+      "bytes": 110139700,
+      "metadata_sha256": "b6c33072164b623075f7b3290c7b4ac0072db104f0409145ee26e8e3e0e05273"
+    },
+    "archive_bytes": 96505890,
+    "sha256": "aa996311f3ff2a8370444672366dc80809bfa3492fb28870922c96b0a0ec09df",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-UPST.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

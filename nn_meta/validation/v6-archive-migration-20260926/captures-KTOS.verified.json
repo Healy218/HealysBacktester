@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-KTOS",
+    "source": {
+      "files": 22540,
+      "directories": 5633,
+      "symlinks": 0,
+      "bytes": 36274262,
+      "metadata_sha256": "169b5b77c3631ebfa64240ae592dd659d23136373220bb10758faeb8172764e3"
+    },
+    "archive_bytes": 24033135,
+    "sha256": "9ff2a91add3d951dad6ef6b61e2d5657bed0f4478d889226d8010d52c4ff5d15",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-KTOS.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

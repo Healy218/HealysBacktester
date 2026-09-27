@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CCL",
+    "source": {
+      "files": 18662,
+      "directories": 3893,
+      "symlinks": 0,
+      "bytes": 85577305,
+      "metadata_sha256": "e0d83e6fa5c16c9d46ae872eda5be5feb33bb6806e4a73ddbffc8e693f834418"
+    },
+    "archive_bytes": 75311385,
+    "sha256": "45c6f380bd1b20e823e1274a37a99ab0c5de6b7e0cd6e13db734bde8893111f9",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CCL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

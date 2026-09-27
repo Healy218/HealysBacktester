@@ -1,0 +1,13 @@
+{
+  "id": "captures-SIL",
+  "source": {
+    "files": 14142,
+    "directories": 4683,
+    "symlinks": 0,
+    "bytes": 14539131,
+    "metadata_sha256": "222079e204192e19ca32bf4c83999cb746d0946be42c36c51956b5a8b5a1709a"
+  },
+  "archive_bytes": 7515126,
+  "sha256": "73747a9fa52e23202ff843029530edbe3d13cfca0f3e29ac94be83ef8e9e5c53",
+  "state": "packed-source-stable"
+}

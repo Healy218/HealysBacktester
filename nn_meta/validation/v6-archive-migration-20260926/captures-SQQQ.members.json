@@ -1,0 +1,10 @@
+{
+  "id": "captures-SQQQ",
+  "sha256": "b9e176f1b33cc6abfe9776596d470d26c16255353d951670cc2c2252eb69f6ee",
+  "members": {
+    "files": 20964,
+    "directories": 4383,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

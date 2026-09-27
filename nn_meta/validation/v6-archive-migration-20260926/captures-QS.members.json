@@ -1,0 +1,10 @@
+{
+  "id": "captures-QS",
+  "sha256": "b87e213c11e637cc83c46fabfcaa1962e7f956b835b79118ba4492f4a47f7c91",
+  "members": {
+    "files": 23276,
+    "directories": 4843,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-CHWY",
+  "sha256": "d56f595762bef814c2bf68337555fb7d2252401ad3c31769e3934b25423cbc5e",
+  "members": {
+    "files": 21622,
+    "directories": 4503,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

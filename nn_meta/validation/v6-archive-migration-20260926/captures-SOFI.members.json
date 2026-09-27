@@ -1,0 +1,10 @@
+{
+  "id": "captures-SOFI",
+  "sha256": "b6ec5a998a0183efcddbe827579c6b2c317ec9e8f6e3bf4b13c70df19064373d",
+  "members": {
+    "files": 25170,
+    "directories": 5251,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

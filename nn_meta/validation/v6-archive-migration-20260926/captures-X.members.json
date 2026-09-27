@@ -1,0 +1,10 @@
+{
+  "id": "captures-X",
+  "sha256": "dbb724b35707e8efcbc472846ee0caba8772440ed2fd3da4b72b802cd7926355",
+  "members": {
+    "files": 10636,
+    "directories": 2225,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

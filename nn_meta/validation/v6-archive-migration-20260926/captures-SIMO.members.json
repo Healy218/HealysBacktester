@@ -1,0 +1,10 @@
+{
+  "id": "captures-SIMO",
+  "sha256": "61fd75db0ff63fbe0ca3326bab73df41a9dd9bb401d76b4a442a78a1dce02dfb",
+  "members": {
+    "files": 14562,
+    "directories": 4879,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

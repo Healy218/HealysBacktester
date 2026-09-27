@@ -1,0 +1,13 @@
+{
+  "id": "captures-PWR",
+  "source": {
+    "files": 15472,
+    "directories": 5031,
+    "symlinks": 0,
+    "bytes": 20822026,
+    "metadata_sha256": "bd15571d2e37b5a75fcfd1ec8d455c4b9eb6bdeb569e1e2265afc4a36721e4ad"
+  },
+  "archive_bytes": 13150977,
+  "sha256": "2dae9484d7e3a725878eb5b8a48e4a7bcb256b3597a2c4c80493dc75001da312",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-JOBY",
+    "source": {
+      "files": 24794,
+      "directories": 5165,
+      "symlinks": 0,
+      "bytes": 45556706,
+      "metadata_sha256": "80670dd95e81fdca15da34b25d0b56a7dd93925388efe9abeb95223c82d2b0a6"
+    },
+    "archive_bytes": 31453194,
+    "sha256": "fa9baaf262496cc70cbbc0449a493f36dc39de548998a8014a34bbe51c9a655c",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-JOBY.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

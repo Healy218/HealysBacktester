@@ -1,0 +1,10 @@
+{
+  "id": "captures-FICO",
+  "sha256": "56d9db0df374aa6ed5e8c1aa842d59182dfc3812e4f93ce0e85d572338835b59",
+  "members": {
+    "files": 16722,
+    "directories": 5473,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

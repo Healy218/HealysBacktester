@@ -1,0 +1,13 @@
+{
+  "id": "captures-MMM",
+  "source": {
+    "files": 26566,
+    "directories": 5545,
+    "symlinks": 0,
+    "bytes": 69291658,
+    "metadata_sha256": "880def29abd62d0f8340403922d29408dff96ef3e2d26e75bc5d8e9c74a2f62c"
+  },
+  "archive_bytes": 54263382,
+  "sha256": "b1adb6fa08b25c116af6a7016e792ee387ae5606eb6183c43b6ff0cf795ac028",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,13 @@
+{
+  "id": "captures-EAT",
+  "source": {
+    "files": 14128,
+    "directories": 4631,
+    "symlinks": 0,
+    "bytes": 17579944,
+    "metadata_sha256": "233eee8ea1949962d9236579ccf00b62751b95fb3d40f2551e5cdd2086b7534d"
+  },
+  "archive_bytes": 10596342,
+  "sha256": "1fcc39acd17145e127c44f63d6a493487a588e8ccc1b8e738b06de6b9ea44f77",
+  "state": "packed-source-stable"
+}

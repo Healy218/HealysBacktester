@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-IONQ",
+    "source": {
+      "files": 25918,
+      "directories": 5397,
+      "symlinks": 0,
+      "bytes": 135650019,
+      "metadata_sha256": "f1220af9d65cf13cb994ddec1fa88486960b823ba875c547395135c1f7696a98"
+    },
+    "archive_bytes": 121373788,
+    "sha256": "5347541791b4f888cc7d490aea06568122858db3b0931fe202cd01da93457bb2",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-IONQ.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

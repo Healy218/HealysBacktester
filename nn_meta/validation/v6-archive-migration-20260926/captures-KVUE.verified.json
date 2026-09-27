@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-KVUE",
+    "source": {
+      "files": 23674,
+      "directories": 4935,
+      "symlinks": 0,
+      "bytes": 46958941,
+      "metadata_sha256": "830aabb310960821cf3c7288a582935fd30a3388059c7d4aaf29ad146ef15b4a"
+    },
+    "archive_bytes": 33146315,
+    "sha256": "31b47ce570814969dd4066dcef5c6a795ddf3d287c7ff209119a61b1e2522377",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-KVUE.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

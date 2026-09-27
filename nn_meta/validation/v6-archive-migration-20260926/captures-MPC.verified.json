@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-MPC",
+    "source": {
+      "files": 18300,
+      "directories": 4621,
+      "symlinks": 0,
+      "bytes": 39041099,
+      "metadata_sha256": "baedbadbd690bb69b2fc4cc114ec3b7dd14cdbe7e4e2c8d7d4711c6292da6730"
+    },
+    "archive_bytes": 29154328,
+    "sha256": "8e1b0718b3d4f100c6d9ddb9fd1060c2bbe869e709e74e5631b49f2c073e9018",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-MPC.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

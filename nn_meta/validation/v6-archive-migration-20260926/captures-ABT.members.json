@@ -1,0 +1,10 @@
+{
+  "id": "captures-ABT",
+  "sha256": "cc3de94a272ba319692e3cca93c76374fb0d0dd3e42bc16ad890c5d9764c5bb2",
+  "members": {
+    "files": 19216,
+    "directories": 4017,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

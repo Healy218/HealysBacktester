@@ -1,0 +1,13 @@
+{
+  "id": "captures-STX",
+  "source": {
+    "files": 22284,
+    "directories": 4657,
+    "symlinks": 0,
+    "bytes": 52656231,
+    "metadata_sha256": "370d20ac24a2752f217728256619c7b25cd440db6728aaf0188b4943440e7194"
+  },
+  "archive_bytes": 40018103,
+  "sha256": "d7e58c79a2d81b914776870c1340b885a8a8d9a228d34f2ee4c0c154af04c739",
+  "state": "packed-source-stable"
+}

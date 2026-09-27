@@ -1,0 +1,15 @@
+{
+  "schema": "v6-archive-migration-final-binding-v1",
+  "files": {
+    "plan.json": "93771351bc6563ce6033c5083a5da7cb4ba1cd9d0a90f8f906362d13a695dc2a",
+    "VERIFIED.json": "4fc6c6dc013a79250457eb4c33345efa9c33c7ae72f8e4e244bceeee70011a3b",
+    "MEMBERS-VERIFIED.json": "ac795733055c21e34280e49c83ada0f6a1f11a4a039e1c9bf62698b471414129",
+    "RETIRED.json": "624e7a829ddf47d8e9a33b49d0c33cc53ad37107b5661f99219a855fe471a822",
+    "retirement.jsonl": "f47b3b1dedb32d0cac52093aacd0308fad999b9174830942b51a67c40776f5f8",
+    "staging-cleanup.json": "0755df88c29af6cd0a8dd197acda3f45406a13f284721a6292beb539e090d761",
+    "restore-smoke.json": "8c5c165a26f72c6806b5e8f0038cfbc28187627f5e9ed820eed6294149f5f61d",
+    "restore-consumer-read.json": "08c862607c41629007fb01d21f9bfce38367bfcabe510e5fe75e0e966b1b8976",
+    "post-move-tests.json": "1987e23b1c7c044de10e85b6c403de619713f7f5905ff7b1180404ccab7a4c66"
+  },
+  "tool_sha256": "daeff60048e18d6b0efad74864e4c501f51fef818f97516f2805de6b72ed10ca"
+}

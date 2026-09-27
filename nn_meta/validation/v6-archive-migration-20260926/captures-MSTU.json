@@ -1,0 +1,13 @@
+{
+  "id": "captures-MSTU",
+  "source": {
+    "files": 23806,
+    "directories": 5157,
+    "symlinks": 0,
+    "bytes": 55719384,
+    "metadata_sha256": "8ead8151982672df6ebe4dd05b994f184543976cf9431bfe90a40938bcf3dfb3"
+  },
+  "archive_bytes": 42464162,
+  "sha256": "e0b49c3767bdd97780f50afa29f7a223d693bd60fe330ea690dff2098ea4c9b2",
+  "state": "packed-source-stable"
+}

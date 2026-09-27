@@ -1,0 +1,13 @@
+{
+  "id": "captures-IBM",
+  "source": {
+    "files": 22438,
+    "directories": 4671,
+    "symlinks": 0,
+    "bytes": 86586558,
+    "metadata_sha256": "f8efc2e5cb119a31d5dbf508b90047d5d556ed8325a51ed4d7f6c65201b0fff4"
+  },
+  "archive_bytes": 74213163,
+  "sha256": "8104b790568ced4143a615691af2d44b8238368d8d52bb1df063efddd0d78e91",
+  "state": "packed-source-stable"
+}

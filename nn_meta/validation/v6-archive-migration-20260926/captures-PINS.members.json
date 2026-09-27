@@ -1,0 +1,10 @@
+{
+  "id": "captures-PINS",
+  "sha256": "98ece565da68e80551c70dd437ad1bab96097debaa51f1dc72b23949c1be1a28",
+  "members": {
+    "files": 25686,
+    "directories": 5349,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

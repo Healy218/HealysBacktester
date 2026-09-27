@@ -1,0 +1,13 @@
+{
+  "id": "captures-RGTI",
+  "source": {
+    "files": 25638,
+    "directories": 5525,
+    "symlinks": 0,
+    "bytes": 142877833,
+    "metadata_sha256": "fd7386d8d77247946e2312ef882750a19afb09977bfe397a2edb1a761ae0e2f4"
+  },
+  "archive_bytes": 128951370,
+  "sha256": "53db39d3686461a14f18140dfaccaadabbbd9b5429e2d5fd72d8efc71604d7a9",
+  "state": "packed-source-stable"
+}

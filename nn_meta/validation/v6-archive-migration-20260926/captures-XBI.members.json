@@ -1,0 +1,10 @@
+{
+  "id": "captures-XBI",
+  "sha256": "c1600e747729405e80179aefa4fbfd071c5ba6faf395f7dce56850473bb6f813",
+  "members": {
+    "files": 20018,
+    "directories": 4189,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

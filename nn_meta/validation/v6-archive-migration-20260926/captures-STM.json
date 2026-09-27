@@ -1,0 +1,13 @@
+{
+  "id": "captures-STM",
+  "source": {
+    "files": 16646,
+    "directories": 5037,
+    "symlinks": 0,
+    "bytes": 24312454,
+    "metadata_sha256": "d155de714c4801c04c5bec6603b4e645670bb4a9e44908f1d4f22bfc92f2da57"
+  },
+  "archive_bytes": 15864859,
+  "sha256": "82b6a0baf0bf6809a51dff36361c763e18bbf53795fda7b2d6c38eef450994db",
+  "state": "packed-source-stable"
+}

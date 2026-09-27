@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-LRCX",
+    "source": {
+      "files": 20398,
+      "directories": 4245,
+      "symlinks": 0,
+      "bytes": 99733547,
+      "metadata_sha256": "c3ada04749de592718469b53df49b5e19273348c3065f327273115b7c0caa454"
+    },
+    "archive_bytes": 88318881,
+    "sha256": "9087b106c576c22857b3e2423525c6df4356ae9a607865bb9f171bacd8a6b464",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-LRCX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

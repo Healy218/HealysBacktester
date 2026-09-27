@@ -1,0 +1,10 @@
+{
+  "id": "captures-BIDU",
+  "sha256": "b892639372547bce53c0b21a63b445e45a5accec13cc3359ceedf3316dbf1261",
+  "members": {
+    "files": 20418,
+    "directories": 4249,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

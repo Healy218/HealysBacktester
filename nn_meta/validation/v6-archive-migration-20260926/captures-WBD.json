@@ -1,0 +1,13 @@
+{
+  "id": "captures-WBD",
+  "source": {
+    "files": 19816,
+    "directories": 4121,
+    "symlinks": 0,
+    "bytes": 38490970,
+    "metadata_sha256": "eb6765ecd1188fd1a59d09cb09fd7f3961ec966ccaa08ff93f04dc922aa9a8c2"
+  },
+  "archive_bytes": 27255052,
+  "sha256": "db50c852dc389c4ed233a64c5b237a0253e26e408ab11845eb89cb4bab2267ad",
+  "state": "packed-source-stable"
+}

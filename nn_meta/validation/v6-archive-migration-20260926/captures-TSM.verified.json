@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-TSM",
+    "source": {
+      "files": 24550,
+      "directories": 5113,
+      "symlinks": 0,
+      "bytes": 201694346,
+      "metadata_sha256": "34079425724d8f481c05be7aa224d249cada70ab43c187ac20878a63b3ccddbe"
+    },
+    "archive_bytes": 188466183,
+    "sha256": "d2fe830ef648a637296a30d9c863ee89396b4c1481bcb09564f072cd1158c093",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-TSM.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

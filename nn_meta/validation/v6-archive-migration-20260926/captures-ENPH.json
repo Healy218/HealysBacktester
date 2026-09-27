@@ -1,0 +1,13 @@
+{
+  "id": "captures-ENPH",
+  "source": {
+    "files": 22282,
+    "directories": 4651,
+    "symlinks": 0,
+    "bytes": 103176668,
+    "metadata_sha256": "9fb314b2d45279080958fe36274062f8761e47a2935a61e19df5b3f84dd4ebf9"
+  },
+  "archive_bytes": 90793540,
+  "sha256": "fa6b11baf064fc1300822fae20ccc358199597ae77e20aa75bc1bff60f517785",
+  "state": "packed-source-stable"
+}

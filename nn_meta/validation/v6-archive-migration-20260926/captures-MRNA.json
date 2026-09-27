@@ -1,0 +1,13 @@
+{
+  "id": "captures-MRNA",
+  "source": {
+    "files": 25828,
+    "directories": 5367,
+    "symlinks": 0,
+    "bytes": 83420638,
+    "metadata_sha256": "8d97129b4e9bd1703bc7f9374e933f8a431531455078e969ac120ec06eb183fa"
+  },
+  "archive_bytes": 69014314,
+  "sha256": "d93b71f3bde1aa8b57ee71900a47cb9d916a3a4999abd178c731388650b389dd",
+  "state": "packed-source-stable"
+}

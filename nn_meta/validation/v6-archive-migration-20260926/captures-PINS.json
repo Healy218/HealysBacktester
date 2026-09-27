@@ -1,0 +1,13 @@
+{
+  "id": "captures-PINS",
+  "source": {
+    "files": 25686,
+    "directories": 5349,
+    "symlinks": 0,
+    "bytes": 90623887,
+    "metadata_sha256": "95752c8aa780f8cbf18917afdab438753c48550368443ccf3fd55d76f4335395"
+  },
+  "archive_bytes": 76145533,
+  "sha256": "98ece565da68e80551c70dd437ad1bab96097debaa51f1dc72b23949c1be1a28",
+  "state": "packed-source-stable"
+}

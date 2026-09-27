@@ -1,0 +1,10 @@
+{
+  "id": "captures-TSLA",
+  "sha256": "1676a2e7887408615d0b49213e36369ac69854022e4f7c6321b6785409549d13",
+  "members": {
+    "files": 24480,
+    "directories": 4541,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

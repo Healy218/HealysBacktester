@@ -1,0 +1,13 @@
+{
+  "id": "captures-NVO",
+  "source": {
+    "files": 24764,
+    "directories": 5161,
+    "symlinks": 0,
+    "bytes": 61999236,
+    "metadata_sha256": "e856957384fa42d33e8e086a387da7a5edeb84143a9043a632500100367e6552"
+  },
+  "archive_bytes": 48287842,
+  "sha256": "aceb926757b6ad6358dcf7eaba17e0034d468181f9fd61c12a5b38be24b55e4f",
+  "state": "packed-source-stable"
+}

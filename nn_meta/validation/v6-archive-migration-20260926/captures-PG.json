@@ -1,0 +1,13 @@
+{
+  "id": "captures-PG",
+  "source": {
+    "files": 22360,
+    "directories": 4671,
+    "symlinks": 0,
+    "bytes": 87413915,
+    "metadata_sha256": "1cfe378dc49c10bc1f0845d9d24283b5c5083938a2fdca5da75302d97262a24f"
+  },
+  "archive_bytes": 75098799,
+  "sha256": "c19a6f5993cf0d0f351c13ead647ccd7a80dc293cb01400d267f74f8584bba46",
+  "state": "packed-source-stable"
+}

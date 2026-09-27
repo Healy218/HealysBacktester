@@ -1,0 +1,13 @@
+{
+  "id": "captures-ASTS",
+  "source": {
+    "files": 20794,
+    "directories": 4345,
+    "symlinks": 0,
+    "bytes": 100334153,
+    "metadata_sha256": "87f9fd1e997828e7893bae1fbfa3a63bdfb662c9d0d25e9a6f2606aad2db8e6c"
+  },
+  "archive_bytes": 88897551,
+  "sha256": "87b58d3622ea40b940d75e320d1b7072b2a68278e98d8004d1e4bd40b8efe704",
+  "state": "packed-source-stable"
+}

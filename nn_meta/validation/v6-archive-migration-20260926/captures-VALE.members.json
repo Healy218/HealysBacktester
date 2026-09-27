@@ -1,0 +1,10 @@
+{
+  "id": "captures-VALE",
+  "sha256": "0156f984ee09218b0108d37d6f435e8e51ea047769fae9a7d091c6d9ec363ba1",
+  "members": {
+    "files": 22448,
+    "directories": 4675,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

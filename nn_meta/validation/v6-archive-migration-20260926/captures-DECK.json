@@ -1,0 +1,13 @@
+{
+  "id": "captures-DECK",
+  "source": {
+    "files": 21736,
+    "directories": 4621,
+    "symlinks": 0,
+    "bytes": 30275451,
+    "metadata_sha256": "7f3d9821de19a101f52c86ae23865ce3b54933acf3283147f163a80e620653a7"
+  },
+  "archive_bytes": 17770648,
+  "sha256": "a73a2b3155048d6ecc064a8dad7b6a3155450a03e10da5652fd6aee5746775ed",
+  "state": "packed-source-stable"
+}

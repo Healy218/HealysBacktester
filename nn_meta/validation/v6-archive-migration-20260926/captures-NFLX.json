@@ -1,0 +1,13 @@
+{
+  "id": "captures-NFLX",
+  "source": {
+    "files": 22210,
+    "directories": 4627,
+    "symlinks": 0,
+    "bytes": 215815884,
+    "metadata_sha256": "2a8b48640f062c411f72b7173a457eee511465a361c54930788b72d515e5d710"
+  },
+  "archive_bytes": 203848843,
+  "sha256": "de2a01312bc7753bdf7013c9785438f9b44904dd7091552dcc79f02edc3f94e3",
+  "state": "packed-source-stable"
+}

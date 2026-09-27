@@ -1,0 +1,13 @@
+{
+  "id": "captures-T",
+  "source": {
+    "files": 23416,
+    "directories": 4881,
+    "symlinks": 0,
+    "bytes": 75761368,
+    "metadata_sha256": "2c9c8820720c78cf7dfe56cb7b95e1c581448356727d628ce39e6e5e4ac6643e"
+  },
+  "archive_bytes": 63068098,
+  "sha256": "03c2d601954cfbb2f6176973e095e560672a3e206f00ba1fcb7c42bc6177aa87",
+  "state": "packed-source-stable"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-AAPL",
+  "sha256": "31f79b33660acc76dfe81044bf431eda8f983d2ebd1e0125b8f9deff9533b548",
+  "members": {
+    "files": 25972,
+    "directories": 4797,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

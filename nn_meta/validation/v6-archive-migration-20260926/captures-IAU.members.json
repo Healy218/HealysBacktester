@@ -1,0 +1,10 @@
+{
+  "id": "captures-IAU",
+  "sha256": "538a7f85d1379b20a1c60c105b27a7f271ef85ac8f8cdfaf70ec83f00b469e89",
+  "members": {
+    "files": 16852,
+    "directories": 4007,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

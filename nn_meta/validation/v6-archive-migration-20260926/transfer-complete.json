@@ -1,0 +1,10 @@
+{
+  "stage": "transfer",
+  "archives": 454,
+  "plan_sha256": "93771351bc6563ce6033c5083a5da7cb4ba1cd9d0a90f8f906362d13a695dc2a",
+  "files": 9541723,
+  "directories": 2066117,
+  "source_bytes": 51534857599,
+  "compressed_bytes": 35106688686,
+  "symlinks": 0
+}

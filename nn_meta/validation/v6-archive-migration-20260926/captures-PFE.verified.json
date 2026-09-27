@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-PFE",
+    "source": {
+      "files": 23288,
+      "directories": 4877,
+      "symlinks": 0,
+      "bytes": 87569849,
+      "metadata_sha256": "d2f7780c87e482d311361c6cba6b19ae480db6ac85e2dfc49587d63bba492196"
+    },
+    "archive_bytes": 74954833,
+    "sha256": "9532cd1084cb23700a6fdc2ff59d41511c859623eb865a0032a83d219622a270",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-PFE.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

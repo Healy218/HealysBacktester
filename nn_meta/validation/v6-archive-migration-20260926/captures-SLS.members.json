@@ -1,0 +1,10 @@
+{
+  "id": "captures-SLS",
+  "sha256": "8c36a7a272abff2922c7c6aeb8136b4df260ff5e8e3227654faf8ca33ff24fab",
+  "members": {
+    "files": 11942,
+    "directories": 3317,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

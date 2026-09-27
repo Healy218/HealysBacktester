@@ -1,0 +1,13 @@
+{
+  "id": "captures-XLV",
+  "source": {
+    "files": 22988,
+    "directories": 4785,
+    "symlinks": 0,
+    "bytes": 54003978,
+    "metadata_sha256": "e3a62f0d92960d3086fa5054797be9651f28a2c904a4a33893a3ec591176667e"
+  },
+  "archive_bytes": 40889520,
+  "sha256": "0e5799546f5d55eeb6d5805f3a3de16bc6fb700c33a3e5c78699df80a06ddab7",
+  "state": "packed-source-stable"
+}

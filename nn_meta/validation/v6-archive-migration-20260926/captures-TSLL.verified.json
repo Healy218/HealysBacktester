@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-TSLL",
+    "source": {
+      "files": 24550,
+      "directories": 5127,
+      "symlinks": 0,
+      "bytes": 144148088,
+      "metadata_sha256": "aa014e82661614e360c57567d5a09f93e4c3b85d0f845f121135cebdf83914d3"
+    },
+    "archive_bytes": 130752334,
+    "sha256": "598d189463972a35170ccd7b2ad99d2c1039222da8c683559e82687e004b6c6f",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-TSLL.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

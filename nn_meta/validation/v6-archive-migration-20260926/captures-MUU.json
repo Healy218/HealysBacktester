@@ -1,0 +1,13 @@
+{
+  "id": "captures-MUU",
+  "source": {
+    "files": 3112,
+    "directories": 931,
+    "symlinks": 0,
+    "bytes": 6139394,
+    "metadata_sha256": "7db1fd69e9d1d4d00b167fd0945f0cdd8596cf7be6d6e43491748b8b9bf5cf22"
+  },
+  "archive_bytes": 4565609,
+  "sha256": "8ea0d9ea7faa6bfebae801b5b18ae6f7365ab1a149225f83a65304c655f8eb9f",
+  "state": "packed-source-stable"
+}

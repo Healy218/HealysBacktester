@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SIMO",
+    "source": {
+      "files": 14562,
+      "directories": 4879,
+      "symlinks": 0,
+      "bytes": 14058358,
+      "metadata_sha256": "a294f69627072d1c86a9c8d0beb4c91c57fb0e5e38eec8b44fdb006ccbb83b70"
+    },
+    "archive_bytes": 6674836,
+    "sha256": "61fd75db0ff63fbe0ca3326bab73df41a9dd9bb401d76b4a442a78a1dce02dfb",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SIMO.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

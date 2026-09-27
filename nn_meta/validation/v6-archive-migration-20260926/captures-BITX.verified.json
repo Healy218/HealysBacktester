@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-BITX",
+    "source": {
+      "files": 20722,
+      "directories": 4313,
+      "symlinks": 0,
+      "bytes": 48456524,
+      "metadata_sha256": "7ad829d23a19ad311479f8968cb981c01cf526b7faa217f314068f79870d8923"
+    },
+    "archive_bytes": 36740900,
+    "sha256": "0631673a1e885bf6943573f42b57f0f367202b274317d5ae67431c19b29dc7b7",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-BITX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

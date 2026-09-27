@@ -1,0 +1,10 @@
+{
+  "id": "captures-TMUS",
+  "sha256": "e2e8da93231bcd1108cd8a5bf3990ea1b3fe6fbc27b8395ff505f7330c14a9b3",
+  "members": {
+    "files": 22228,
+    "directories": 4637,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

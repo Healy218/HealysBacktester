@@ -1,0 +1,13 @@
+{
+  "id": "captures-ASHR",
+  "source": {
+    "files": 19112,
+    "directories": 3983,
+    "symlinks": 0,
+    "bytes": 24958985,
+    "metadata_sha256": "e916d1a05da6c0c874b66c9cc38a9db330426971b8928bb4ae74e0aed4c69f88"
+  },
+  "archive_bytes": 13659969,
+  "sha256": "6fc9c67e9a9b6e99f16814a3e9b4bb4416b832009a4214d3e6a1f82c64f8e90c",
+  "state": "packed-source-stable"
+}

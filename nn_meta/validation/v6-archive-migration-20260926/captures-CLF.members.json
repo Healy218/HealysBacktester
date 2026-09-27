@@ -1,0 +1,10 @@
+{
+  "id": "captures-CLF",
+  "sha256": "053754176a35bd2be1f36d16f8c226d46c9bdf3368ed227142ce4960ffe27de8",
+  "members": {
+    "files": 26904,
+    "directories": 5621,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

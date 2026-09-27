@@ -1,0 +1,13 @@
+{
+  "id": "captures-AMDL",
+  "source": {
+    "files": 16908,
+    "directories": 4283,
+    "symlinks": 0,
+    "bytes": 29335541,
+    "metadata_sha256": "d22459e0740c990feaab26247803e034250c187f558876e7bc6de88f2e043b06"
+  },
+  "archive_bytes": 20178492,
+  "sha256": "6c8c0f242f8740acab97e54746a8a413dea790ddfe896e8fcfa100000a694591",
+  "state": "packed-source-stable"
+}

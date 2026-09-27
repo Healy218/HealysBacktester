@@ -1,0 +1,10 @@
+{
+  "id": "captures-NNE",
+  "sha256": "4b461561f505a87a65f6d549cf85572129200514f67564302ff0a1b9f400fb59",
+  "members": {
+    "files": 19462,
+    "directories": 4089,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

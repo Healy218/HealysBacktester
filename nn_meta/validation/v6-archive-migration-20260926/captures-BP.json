@@ -1,0 +1,13 @@
+{
+  "id": "captures-BP",
+  "source": {
+    "files": 22054,
+    "directories": 4597,
+    "symlinks": 0,
+    "bytes": 47619846,
+    "metadata_sha256": "28ee4fa8855a65439c5a6abd15cc7bdca7e3cf5c636ccdee0c612ce5a8c7860c"
+  },
+  "archive_bytes": 35219169,
+  "sha256": "b671bb0b1bdc2959c970631eded6c17131d78ea9b89118e29d97d34ee0bdb746",
+  "state": "packed-source-stable"
+}

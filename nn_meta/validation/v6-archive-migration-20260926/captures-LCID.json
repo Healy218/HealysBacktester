@@ -1,0 +1,13 @@
+{
+  "id": "captures-LCID",
+  "source": {
+    "files": 23406,
+    "directories": 4891,
+    "symlinks": 0,
+    "bytes": 44455264,
+    "metadata_sha256": "8939f05cf9b3d3dc540805076391df2a0e6f86f2d9c90bd9b1598818e0c788ae"
+  },
+  "archive_bytes": 31348043,
+  "sha256": "00316a7bc5d1de83c7081d51090896c9b580a834f19be9ccba105931a18dcd5d",
+  "state": "packed-source-stable"
+}

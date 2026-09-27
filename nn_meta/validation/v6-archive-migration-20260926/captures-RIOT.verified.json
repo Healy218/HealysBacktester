@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-RIOT",
+    "source": {
+      "files": 18264,
+      "directories": 3813,
+      "symlinks": 0,
+      "bytes": 88569178,
+      "metadata_sha256": "f8d33bbecb0f8a0413fd106204d83b68e487657d05aaceaa17ee7969302eb4e3"
+    },
+    "archive_bytes": 78555874,
+    "sha256": "8c962fa424f080d25b020d8cb60607afe85390dc46eb0da00d27288d26dca766",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-RIOT.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

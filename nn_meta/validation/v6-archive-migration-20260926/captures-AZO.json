@@ -1,0 +1,13 @@
+{
+  "id": "captures-AZO",
+  "source": {
+    "files": 15358,
+    "directories": 5119,
+    "symlinks": 0,
+    "bytes": 19186250,
+    "metadata_sha256": "8a2a2183d0eca78a3f088f22072bc0a075055570203c25084ee30938da550913"
+  },
+  "archive_bytes": 11626970,
+  "sha256": "f281bbece0e1b02adb38a0f56e02067d64f5acc7ac696b6c9c6c7de0f559eba6",
+  "state": "packed-source-stable"
+}

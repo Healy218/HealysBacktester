@@ -1,0 +1,13 @@
+{
+  "id": "captures-SMH",
+  "source": {
+    "files": 19862,
+    "directories": 4061,
+    "symlinks": 0,
+    "bytes": 135994385,
+    "metadata_sha256": "1cc4083c181e8d9b9a5d5b56cad2895311c189cbc3f78b980d39f2260dbf1bf6"
+  },
+  "archive_bytes": 125071144,
+  "sha256": "2519010147a3952b674fcc875a54c1eb1b9580bf1c2ffb1f92e0231f2d913409",
+  "state": "packed-source-stable"
+}

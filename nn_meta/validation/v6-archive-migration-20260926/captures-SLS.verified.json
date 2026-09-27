@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SLS",
+    "source": {
+      "files": 11942,
+      "directories": 3317,
+      "symlinks": 0,
+      "bytes": 11670459,
+      "metadata_sha256": "65cc29ef18c88a38ec0c976c7ab57a6140d368c221d04732646e13b8ad496cc7"
+    },
+    "archive_bytes": 5095434,
+    "sha256": "8c36a7a272abff2922c7c6aeb8136b4df260ff5e8e3227654faf8ca33ff24fab",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SLS.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

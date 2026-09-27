@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-XBI",
+    "source": {
+      "files": 20018,
+      "directories": 4189,
+      "symlinks": 0,
+      "bytes": 51605390,
+      "metadata_sha256": "af651c16a386473c2f895b470251e7a39ae15b2af5d778149b842c4ed8dadaaf"
+    },
+    "archive_bytes": 40255711,
+    "sha256": "c1600e747729405e80179aefa4fbfd071c5ba6faf395f7dce56850473bb6f813",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-XBI.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

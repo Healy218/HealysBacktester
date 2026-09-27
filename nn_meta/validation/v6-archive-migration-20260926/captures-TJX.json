@@ -1,0 +1,13 @@
+{
+  "id": "captures-TJX",
+  "source": {
+    "files": 22976,
+    "directories": 4779,
+    "symlinks": 0,
+    "bytes": 69225130,
+    "metadata_sha256": "6fe5601ea60076e17b2116821889bd9bf886abeb72401a4d55820e5499caa256"
+  },
+  "archive_bytes": 56198780,
+  "sha256": "d34c6f238e77ae368a76c5cb21461e2cc113148253dfb30cd2d0346d1f6c3a3f",
+  "state": "packed-source-stable"
+}

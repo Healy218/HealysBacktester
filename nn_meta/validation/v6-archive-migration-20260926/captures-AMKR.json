@@ -1,0 +1,13 @@
+{
+  "id": "captures-AMKR",
+  "source": {
+    "files": 12166,
+    "directories": 4027,
+    "symlinks": 0,
+    "bytes": 13610469,
+    "metadata_sha256": "3294b336acf628fc11e5837e57419cfb27442aad7d26e17e6a8520a9ebaf120b"
+  },
+  "archive_bytes": 7518186,
+  "sha256": "2a55d6ec93743eb639f1f11cdeeab1543622e5897a027e951be0602d10319bbc",
+  "state": "packed-source-stable"
+}

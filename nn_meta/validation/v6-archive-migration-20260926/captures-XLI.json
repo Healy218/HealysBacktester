@@ -1,0 +1,13 @@
+{
+  "id": "captures-XLI",
+  "source": {
+    "files": 22808,
+    "directories": 4753,
+    "symlinks": 0,
+    "bytes": 67756505,
+    "metadata_sha256": "22a485c35dc14f63bb3bc6dff0eaf6735d6bb7dbedbabfe295af1663c745ca74"
+  },
+  "archive_bytes": 54674539,
+  "sha256": "18e32ae933ff50cdff798fa1eb21da23c4e2b7613e996d825eb12b201a097a72",
+  "state": "packed-source-stable"
+}

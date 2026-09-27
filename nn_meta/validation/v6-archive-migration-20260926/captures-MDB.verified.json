@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-MDB",
+    "source": {
+      "files": 15482,
+      "directories": 3233,
+      "symlinks": 0,
+      "bytes": 53812933,
+      "metadata_sha256": "a7b9f603755d556e1d0e43bf47bf6f6c6aae8b6bf9edf060365ee9894421bf96"
+    },
+    "archive_bytes": 45118798,
+    "sha256": "f1687bde96a5b188e5f8b2139836e8ac6111fb0217a56ec79f3e0716afb98465",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-MDB.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

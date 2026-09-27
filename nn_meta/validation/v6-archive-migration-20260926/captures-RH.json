@@ -1,0 +1,13 @@
+{
+  "id": "captures-RH",
+  "source": {
+    "files": 22914,
+    "directories": 4773,
+    "symlinks": 0,
+    "bytes": 33098854,
+    "metadata_sha256": "fffcb6918a3e07cc98f4d4965fd084a7037a8cc00bbaf5f22a85e0fed9525609"
+  },
+  "archive_bytes": 19996870,
+  "sha256": "2338e52e451b0af768a250a95912e0e8ebd3c44ddd7b15293bf0a20d5d32ce7a",
+  "state": "packed-source-stable"
+}

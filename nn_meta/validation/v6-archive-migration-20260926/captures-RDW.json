@@ -1,0 +1,13 @@
+{
+  "id": "captures-RDW",
+  "source": {
+    "files": 19408,
+    "directories": 4917,
+    "symlinks": 0,
+    "bytes": 30226139,
+    "metadata_sha256": "2d058c74f52561c7ee89fdc4880899c1a842aa96a31cac814a522b9805215c7b"
+  },
+  "archive_bytes": 19784807,
+  "sha256": "4062072184639ac245c8073e1e159f1c76ee12ec24dcffb64d469c66aec71deb",
+  "state": "packed-source-stable"
+}

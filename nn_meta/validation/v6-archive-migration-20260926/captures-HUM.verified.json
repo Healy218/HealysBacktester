@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-HUM",
+    "source": {
+      "files": 23796,
+      "directories": 4967,
+      "symlinks": 0,
+      "bytes": 34152783,
+      "metadata_sha256": "7d171348b88a8bc23766e62bc557d82435d49edee93c0bdca0ca89c8686cebea"
+    },
+    "archive_bytes": 20479695,
+    "sha256": "cc3ad2d406d0eecdc74a4251679eac46d6072c86c1e86cd5fb8962f6dc408ee9",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-HUM.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

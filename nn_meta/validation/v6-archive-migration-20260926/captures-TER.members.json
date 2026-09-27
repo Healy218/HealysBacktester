@@ -1,0 +1,10 @@
+{
+  "id": "captures-TER",
+  "sha256": "7d3a97bf6f644de773e18cf2ffd06a5d4a0cbe62072f660ad441edd0744d581a",
+  "members": {
+    "files": 13242,
+    "directories": 3625,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

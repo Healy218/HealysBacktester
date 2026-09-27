@@ -1,0 +1,10 @@
+{
+  "id": "captures-HIMS",
+  "sha256": "c69bafa958d2f9202b18883eccc96b50fb85bd9271bb4853f5d39c6792705757",
+  "members": {
+    "files": 24062,
+    "directories": 5033,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

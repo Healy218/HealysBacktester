@@ -1,0 +1,13 @@
+{
+  "id": "captures-INTU",
+  "source": {
+    "files": 23048,
+    "directories": 4809,
+    "symlinks": 0,
+    "bytes": 52437644,
+    "metadata_sha256": "d5ac27c2d897809c88401d7dce776c5907bfafd58d38970eef7db181d2f8dd6c"
+  },
+  "archive_bytes": 39213997,
+  "sha256": "9bf46fd991aaa875ff816b6f3d4ba99e86fe7410475f67cff77adde31f75bf13",
+  "state": "packed-source-stable"
+}

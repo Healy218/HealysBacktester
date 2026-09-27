@@ -1,0 +1,10 @@
+{
+  "id": "captures-MSTR",
+  "sha256": "3d747fb8b309ebc59ada671b355b02155073ad1c2d0c884087711509db6f5911",
+  "members": {
+    "files": 24014,
+    "directories": 5009,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-SWTX",
+  "sha256": "e01815f59e27ebb44d7b156475ce38b932297e6f41f3a7860fdf5c6b569b4b90",
+  "members": {
+    "files": 7166,
+    "directories": 2081,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

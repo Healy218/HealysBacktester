@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-PPLT",
+    "source": {
+      "files": 10176,
+      "directories": 3363,
+      "symlinks": 0,
+      "bytes": 9081722,
+      "metadata_sha256": "adbdc99c538edd9b8001ef2978316a2ae656c1330fc57d66a37b33743be26468"
+    },
+    "archive_bytes": 3837134,
+    "sha256": "543e173335cff1d56bcfd73dc5e6784230e32e4cf55248e5f102c12a5d41dcb2",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-PPLT.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

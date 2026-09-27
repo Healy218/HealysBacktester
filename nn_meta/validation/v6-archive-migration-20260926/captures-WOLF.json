@@ -1,0 +1,13 @@
+{
+  "id": "captures-WOLF",
+  "source": {
+    "files": 15912,
+    "directories": 3677,
+    "symlinks": 0,
+    "bytes": 26558323,
+    "metadata_sha256": "8b215326b28409e22dc3232b76bbb204e1e9f0aa3cb89e0c0ec7fda142c45f0c"
+  },
+  "archive_bytes": 17773031,
+  "sha256": "4d443dd9698794a17582f4f8506e3f899e7f58ca5f909aa2052641f23d0597cd",
+  "state": "packed-source-stable"
+}

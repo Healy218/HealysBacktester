@@ -1,0 +1,13 @@
+{
+  "id": "captures-INTC",
+  "source": {
+    "files": 22862,
+    "directories": 4735,
+    "symlinks": 0,
+    "bytes": 231310841,
+    "metadata_sha256": "a849a7f99a1d122d7653cc8d1dcbbe93c12daf2eabfe5ecab124d8bb34bfdce2"
+  },
+  "archive_bytes": 219040986,
+  "sha256": "cae16f0f0598487c50f03edaf0f9184c2ba854a1f99b5ea35806c686937d3bf0",
+  "state": "packed-source-stable"
+}

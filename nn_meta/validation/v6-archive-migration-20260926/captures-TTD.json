@@ -1,0 +1,13 @@
+{
+  "id": "captures-TTD",
+  "source": {
+    "files": 26590,
+    "directories": 5525,
+    "symlinks": 0,
+    "bytes": 105736967,
+    "metadata_sha256": "69018c276055dd450ba3ac93ff30a3fddd5ea333dc4ecb1c93fa403f688c0339"
+  },
+  "archive_bytes": 91011633,
+  "sha256": "5e466639886bcab465d7c8208db5ff7445de72d21058f209cca7a25dfec2b56e",
+  "state": "packed-source-stable"
+}

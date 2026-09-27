@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-XPEV",
+    "source": {
+      "files": 22754,
+      "directories": 4743,
+      "symlinks": 0,
+      "bytes": 72659711,
+      "metadata_sha256": "082dce6d0fd42016bf20c8cd84c4e0ef5bb3895dcb1766d73fa64d0139f232aa"
+    },
+    "archive_bytes": 59798772,
+    "sha256": "f7a2ef6930d212c1876c6dc7d12c996fe421eb354c0cc1102f242725d037a162",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-XPEV.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

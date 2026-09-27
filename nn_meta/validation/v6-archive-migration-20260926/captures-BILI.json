@@ -1,0 +1,13 @@
+{
+  "id": "captures-BILI",
+  "source": {
+    "files": 18144,
+    "directories": 3783,
+    "symlinks": 0,
+    "bytes": 49228415,
+    "metadata_sha256": "0153f66c93a1e68eb1b27e636b0c4b82f527d7764f6da87d98f3a21cd65684f9"
+  },
+  "archive_bytes": 38819578,
+  "sha256": "9674d9ed5d2410cad420d11bac81384a573d75552792713403929725a31bc26b",
+  "state": "packed-source-stable"
+}

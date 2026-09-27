@@ -1,0 +1,13 @@
+{
+  "id": "captures-ZS",
+  "source": {
+    "files": 19992,
+    "directories": 4167,
+    "symlinks": 0,
+    "bytes": 53712711,
+    "metadata_sha256": "912c8c6d11bf8d706b6b2ee4acc37ed0ed17e5a216525066f803bdc05c837dd2"
+  },
+  "archive_bytes": 42522548,
+  "sha256": "2b8af461c54880a180e397bffe07981883ec78fa00122c145be55cef602af595",
+  "state": "packed-source-stable"
+}

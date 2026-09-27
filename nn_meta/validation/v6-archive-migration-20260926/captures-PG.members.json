@@ -1,0 +1,10 @@
+{
+  "id": "captures-PG",
+  "sha256": "c19a6f5993cf0d0f351c13ead647ccd7a80dc293cb01400d267f74f8584bba46",
+  "members": {
+    "files": 22360,
+    "directories": 4671,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

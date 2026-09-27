@@ -1,0 +1,10 @@
+{
+  "id": "captures-ETSY",
+  "sha256": "1ae3cfae1a791aaf85e72d6754fb502e32af94891a973cc26d32164705eba414",
+  "members": {
+    "files": 27210,
+    "directories": 5689,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

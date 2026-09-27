@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-DASH",
+    "source": {
+      "files": 26042,
+      "directories": 5419,
+      "symlinks": 0,
+      "bytes": 72945984,
+      "metadata_sha256": "82288a5a34c5779de906b48c46436add10781f3f6b13558358042e76a9f20fcd"
+    },
+    "archive_bytes": 58150230,
+    "sha256": "6a4d202685ad46315de8f6802e8dc452bbf0023c95da2e60c2242accef3643d4",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-DASH.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

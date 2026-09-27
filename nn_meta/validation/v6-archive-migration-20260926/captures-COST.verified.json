@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-COST",
+    "source": {
+      "files": 23056,
+      "directories": 4801,
+      "symlinks": 0,
+      "bytes": 78026568,
+      "metadata_sha256": "29766b452ebd41229c4a38a5bc46db5daf4982847f8ec18d843989a164a2325f"
+    },
+    "archive_bytes": 65224336,
+    "sha256": "109e24ec12853126a6f222a1028477bf887d5ef005fb99ebcef78273ff153561",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-COST.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

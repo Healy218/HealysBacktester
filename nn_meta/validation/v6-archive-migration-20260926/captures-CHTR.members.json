@@ -1,0 +1,10 @@
+{
+  "id": "captures-CHTR",
+  "sha256": "3c6142988023e7f1befa23bee77aebcde485c39d68dc9211998f7152d100d45b",
+  "members": {
+    "files": 25774,
+    "directories": 5355,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-EOSE",
+    "source": {
+      "files": 14848,
+      "directories": 3191,
+      "symlinks": 0,
+      "bytes": 42931335,
+      "metadata_sha256": "2bbb8e91e3d83e8ce5f19495d49ee1602382f64811aa8427c7a32f42c47df57d"
+    },
+    "archive_bytes": 34686919,
+    "sha256": "6e0059b9514863773e2aed96db0b34f698895fddbf5c0f2d9c13b37f48d55f25",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-EOSE.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CMG",
+    "source": {
+      "files": 23076,
+      "directories": 4829,
+      "symlinks": 0,
+      "bytes": 84784528,
+      "metadata_sha256": "3bba7f7c6a411d83e578ae869a76c91b2a93ff45cdfc41b49069cdd70262bd75"
+    },
+    "archive_bytes": 72131159,
+    "sha256": "ffbe80d99dc48e3dc7884513f361ac25ffe61629b12ad7135ecc0bec9a978d71",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CMG.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

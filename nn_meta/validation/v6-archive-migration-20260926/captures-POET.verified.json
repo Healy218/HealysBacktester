@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-POET",
+    "source": {
+      "files": 23568,
+      "directories": 5023,
+      "symlinks": 0,
+      "bytes": 37844077,
+      "metadata_sha256": "c6957d553542413484998f27545939368c51c75c0bc904982eb3603db58c1d2a"
+    },
+    "archive_bytes": 24214119,
+    "sha256": "36c70bfa76401437ac7fc9c3e3a5250886944ee128768db46db4f1ba3a6eb33a",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-POET.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

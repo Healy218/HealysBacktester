@@ -1,0 +1,13 @@
+{
+  "id": "captures-DG",
+  "source": {
+    "files": 21658,
+    "directories": 4505,
+    "symlinks": 0,
+    "bytes": 59267748,
+    "metadata_sha256": "083eb40cd41dedd8ed5704a5521e91fe16e8cdfd4c51866bc2c79a0bded85025"
+  },
+  "archive_bytes": 47094929,
+  "sha256": "76252bbd193e53541b02c4adc4f0bf6bcaa89ae637aba5a5ad146d131b1edfac",
+  "state": "packed-source-stable"
+}

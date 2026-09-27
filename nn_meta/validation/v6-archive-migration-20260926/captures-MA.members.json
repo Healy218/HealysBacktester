@@ -1,0 +1,10 @@
+{
+  "id": "captures-MA",
+  "sha256": "32ae766c5e4e5391ec305153a584899dcedaccbdf7e7e8072dcefb0b0c2b1d74",
+  "members": {
+    "files": 23608,
+    "directories": 4927,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

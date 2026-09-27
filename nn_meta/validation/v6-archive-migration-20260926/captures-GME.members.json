@@ -1,0 +1,10 @@
+{
+  "id": "captures-GME",
+  "sha256": "1df7935076b4dd427b06a2591a1d45cfeae6a25be31e0a84756cb481908d9a6c",
+  "members": {
+    "files": 28510,
+    "directories": 5957,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

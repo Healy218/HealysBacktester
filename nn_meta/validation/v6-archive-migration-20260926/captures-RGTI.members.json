@@ -1,0 +1,10 @@
+{
+  "id": "captures-RGTI",
+  "sha256": "53db39d3686461a14f18140dfaccaadabbbd9b5429e2d5fd72d8efc71604d7a9",
+  "members": {
+    "files": 25638,
+    "directories": 5525,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

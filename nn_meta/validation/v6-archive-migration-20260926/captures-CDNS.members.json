@@ -1,0 +1,10 @@
+{
+  "id": "captures-CDNS",
+  "sha256": "984821c8a668f96cfe92b593eda386a277312091648011c9f7fdc086838df05a",
+  "members": {
+    "files": 18460,
+    "directories": 4629,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

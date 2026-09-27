@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-TER",
+    "source": {
+      "files": 13242,
+      "directories": 3625,
+      "symlinks": 0,
+      "bytes": 23234492,
+      "metadata_sha256": "10563bce1b503a912b730185c0f3dac7be0cf8a8a10cceffb370b2a4a60afb46"
+    },
+    "archive_bytes": 16291090,
+    "sha256": "7d3a97bf6f644de773e18cf2ffd06a5d4a0cbe62072f660ad441edd0744d581a",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-TER.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

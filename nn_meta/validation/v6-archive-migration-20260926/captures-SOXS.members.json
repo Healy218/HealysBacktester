@@ -1,0 +1,10 @@
+{
+  "id": "captures-SOXS",
+  "sha256": "f9d084cc87e0956983a3044f30f602751d26e08c98431613c611a1fe86f1d8a9",
+  "members": {
+    "files": 23768,
+    "directories": 4967,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

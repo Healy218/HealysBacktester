@@ -1,0 +1,13 @@
+{
+  "id": "captures-SOXS",
+  "source": {
+    "files": 23768,
+    "directories": 4967,
+    "symlinks": 0,
+    "bytes": 76440905,
+    "metadata_sha256": "81ff4bfe89b2d38a3268f91c586a701cd4eca9e3600f0461fb76c8d289d1c71f"
+  },
+  "archive_bytes": 63252255,
+  "sha256": "f9d084cc87e0956983a3044f30f602751d26e08c98431613c611a1fe86f1d8a9",
+  "state": "packed-source-stable"
+}

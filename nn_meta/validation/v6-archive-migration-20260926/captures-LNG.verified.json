@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-LNG",
+    "source": {
+      "files": 21928,
+      "directories": 5117,
+      "symlinks": 0,
+      "bytes": 33773796,
+      "metadata_sha256": "4e8871827e1e182757bfb36b2265b577a32b79354f6936935f8e75de389effe0"
+    },
+    "archive_bytes": 21576601,
+    "sha256": "569db0d1ec5dbff3b42ae6b74d8868807076cfe633b66db0f269c2993db7cd9b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-LNG.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

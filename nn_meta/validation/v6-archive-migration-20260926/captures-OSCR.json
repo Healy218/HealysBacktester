@@ -1,0 +1,13 @@
+{
+  "id": "captures-OSCR",
+  "source": {
+    "files": 20504,
+    "directories": 5027,
+    "symlinks": 0,
+    "bytes": 46472928,
+    "metadata_sha256": "571bc113681fbea309a90497aba3120452f3d30b09df6bcd40ae37da222bf029"
+  },
+  "archive_bytes": 35443421,
+  "sha256": "6add83c1b98d252fb5e5dc652b795157f9dac4967fb104fe2cb793b8d0fc1e8c",
+  "state": "packed-source-stable"
+}

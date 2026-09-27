@@ -1,0 +1,10 @@
+{
+  "id": "captures-SOXL",
+  "sha256": "fdd733a850b6f2f143b00915074bfdba7795a13f637e9ff290be166892845769",
+  "members": {
+    "files": 20620,
+    "directories": 4289,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

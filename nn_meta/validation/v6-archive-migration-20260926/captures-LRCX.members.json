@@ -1,0 +1,10 @@
+{
+  "id": "captures-LRCX",
+  "sha256": "9087b106c576c22857b3e2423525c6df4356ae9a607865bb9f171bacd8a6b464",
+  "members": {
+    "files": 20398,
+    "directories": 4245,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

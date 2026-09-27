@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ASST",
+    "source": {
+      "files": 7036,
+      "directories": 1559,
+      "symlinks": 0,
+      "bytes": 15555032,
+      "metadata_sha256": "f26c61991f29bf6dfad2dfec613bf90379ab78adee4a764df35b805e4d4548ec"
+    },
+    "archive_bytes": 11605395,
+    "sha256": "aef1200036a6f4225aed5a4f72023a9c33ba9be0000e3527e7bd9e9099537db8",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ASST.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

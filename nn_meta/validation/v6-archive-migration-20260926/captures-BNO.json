@@ -1,0 +1,13 @@
+{
+  "id": "captures-BNO",
+  "source": {
+    "files": 14004,
+    "directories": 4351,
+    "symlinks": 0,
+    "bytes": 14214043,
+    "metadata_sha256": "545ea8302714e8f16193d2c6279a6b6ada5f6f8f242fa43840022b42bc1798a6"
+  },
+  "archive_bytes": 6870501,
+  "sha256": "7c580bb6d410be06021ce83c325bff1cc3224d16b42d6e85e5f13bb993d2c9c7",
+  "state": "packed-source-stable"
+}

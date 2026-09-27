@@ -1,0 +1,10 @@
+{
+  "id": "captures-AKAM",
+  "sha256": "509ccdfdfd21b00e16b270b3ce48aea4bc68395c7c99073ba60218adef197a02",
+  "members": {
+    "files": 22816,
+    "directories": 5329,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-FANG",
+  "sha256": "c4c8e33cb56ca43db21619a62800d7b950900abeb2f1f2a16db9abb82eadca3b",
+  "members": {
+    "files": 18536,
+    "directories": 4717,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

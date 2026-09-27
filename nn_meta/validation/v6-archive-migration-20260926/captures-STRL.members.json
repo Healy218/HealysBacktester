@@ -1,0 +1,10 @@
+{
+  "id": "captures-STRL",
+  "sha256": "2df69a03197447af406f9fc5b20596df48d38c73f82a62613bc2bdc37c2d7ae9",
+  "members": {
+    "files": 14190,
+    "directories": 4717,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

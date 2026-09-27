@@ -1,0 +1,10 @@
+{
+  "id": "captures-WMT",
+  "sha256": "dcb5ed29aaa6a47c508f61373f80100f9a78ca8ba4707b9ad510c735539305cd",
+  "members": {
+    "files": 22196,
+    "directories": 4633,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

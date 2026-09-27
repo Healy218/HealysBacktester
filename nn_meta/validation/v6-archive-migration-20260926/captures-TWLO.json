@@ -1,0 +1,13 @@
+{
+  "id": "captures-TWLO",
+  "source": {
+    "files": 23100,
+    "directories": 4815,
+    "symlinks": 0,
+    "bytes": 52720107,
+    "metadata_sha256": "2f57e46bc220fc4c5c523c9b5cf6bb4335c43ccbaf54a889226e729e61d924a1"
+  },
+  "archive_bytes": 39439905,
+  "sha256": "840e72c9ca8614d96375b1aaac23856b4854d9016b7b4e475abc4391a95c1e7f",
+  "state": "packed-source-stable"
+}

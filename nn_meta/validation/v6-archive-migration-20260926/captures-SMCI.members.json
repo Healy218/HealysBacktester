@@ -1,0 +1,10 @@
+{
+  "id": "captures-SMCI",
+  "sha256": "302c2c97966f9d1fc6a1b4c865002cc6ec6aece4e7d7fb80986199e597b270d5",
+  "members": {
+    "files": 23052,
+    "directories": 4809,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

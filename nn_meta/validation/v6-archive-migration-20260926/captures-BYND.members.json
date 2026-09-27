@@ -1,0 +1,10 @@
+{
+  "id": "captures-BYND",
+  "sha256": "a0b5aeafe47b81095796412c7e3f63938b2d734a7f901b26f2a06119d685ef8c",
+  "members": {
+    "files": 21590,
+    "directories": 4517,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-BSX",
+  "sha256": "09c373ba69192e54847985cd1fb1627579cd6e25b107a9f9bdbab96761824d56",
+  "members": {
+    "files": 24842,
+    "directories": 5185,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

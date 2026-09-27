@@ -1,0 +1,13 @@
+{
+  "id": "captures-VLO",
+  "source": {
+    "files": 17592,
+    "directories": 3667,
+    "symlinks": 0,
+    "bytes": 45728253,
+    "metadata_sha256": "7395e3ac453d92c0791578f434e44ec284c2a4c5bfd676c777cc8dddb1d9f0b4"
+  },
+  "archive_bytes": 35754852,
+  "sha256": "30429702b2a238f7cd0326b2b5fc4d3a819e1fbad4ec5fa7860052c392c6348c",
+  "state": "packed-source-stable"
+}

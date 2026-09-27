@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-BLK",
+    "source": {
+      "files": 19948,
+      "directories": 4151,
+      "symlinks": 0,
+      "bytes": 31731367,
+      "metadata_sha256": "232f24f9ec96cab0dee6449767903e8815791bfa12cc93682f02d6476612e459"
+    },
+    "archive_bytes": 20209703,
+    "sha256": "bf75eb9389e8d70007ab859ab8d180ef9f6490358d968c16107a20ed3655a61c",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-BLK.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

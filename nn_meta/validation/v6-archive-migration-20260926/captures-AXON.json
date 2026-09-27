@@ -1,0 +1,13 @@
+{
+  "id": "captures-AXON",
+  "source": {
+    "files": 16616,
+    "directories": 4961,
+    "symlinks": 0,
+    "bytes": 22611555,
+    "metadata_sha256": "a2bbd876af8f1b70fbba6f42ac6b9b71d3ce07a8cb9947b313fb92796d220bae"
+  },
+  "archive_bytes": 14090306,
+  "sha256": "008bf9a414f5cdfeec46b570ebcd40023b653cbebbb7b833e646b8f3f180e61d",
+  "state": "packed-source-stable"
+}

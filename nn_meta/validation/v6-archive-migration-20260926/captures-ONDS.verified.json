@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ONDS",
+    "source": {
+      "files": 12226,
+      "directories": 2851,
+      "symlinks": 0,
+      "bytes": 29861141,
+      "metadata_sha256": "28deab5f6b47a33748d8ae746e858f49a8e6ac2e94433b9534d92be6ef0b88b3"
+    },
+    "archive_bytes": 23284502,
+    "sha256": "0ac1248eccc3977cad9c8ea938b8804a7031d29b074b10e7cde6187ec55a935e",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ONDS.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

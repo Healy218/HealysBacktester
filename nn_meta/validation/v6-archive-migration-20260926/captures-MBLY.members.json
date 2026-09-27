@@ -1,0 +1,10 @@
+{
+  "id": "captures-MBLY",
+  "sha256": "fdceb483e105d852fb736fb98adeb49a9421bbeabc387f3bf9f4b1d96ea09442",
+  "members": {
+    "files": 19738,
+    "directories": 4105,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

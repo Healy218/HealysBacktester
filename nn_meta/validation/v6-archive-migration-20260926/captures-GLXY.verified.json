@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-GLXY",
+    "source": {
+      "files": 17238,
+      "directories": 3599,
+      "symlinks": 0,
+      "bytes": 53200672,
+      "metadata_sha256": "14915f1c163ec34d9bf9fef3f705fed30b8c18a3adcc917b0e11bc8c0dc3cf36"
+    },
+    "archive_bytes": 43427494,
+    "sha256": "77306158692635ff0d6cc74f41a85c975e181f6837f6f24fa765c220c9b1d732",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-GLXY.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

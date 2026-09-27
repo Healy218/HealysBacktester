@@ -1,0 +1,2278 @@
+{
+  "state": "complete",
+  "archives_removed": 454,
+  "bytes_removed": 35106688686,
+  "files": [
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/context-and-stores.tar.zst",
+      "bytes": 1960247349,
+      "sha256": "3d152e20851e0c97a847d92d62010285b104588be5065a6c9ff0be7cd0fa3af5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AA.tar.zst",
+      "bytes": 54730701,
+      "sha256": "f477ed1fdf05ba29b136b855eebf5fa720efb366adc32e2726b870e534b9e2e2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AAL.tar.zst",
+      "bytes": 39394306,
+      "sha256": "bf6fdded8715c7209997e20016da0a5a519441f987993c9fef4ff3362abf98f8"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AAOI.tar.zst",
+      "bytes": 38448840,
+      "sha256": "310a056d5bcf862e3c79f58278ccff84aa46cb5ac96a9a9466af4dddffe96841"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AAPL.tar.zst",
+      "bytes": 479534165,
+      "sha256": "31f79b33660acc76dfe81044bf431eda8f983d2ebd1e0125b8f9deff9533b548"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ABBV.tar.zst",
+      "bytes": 66264556,
+      "sha256": "0098c9240a7cd7e0fed0d3d81a415d15b6ffbac42c712588e0158837d98fd1b4"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ABNB.tar.zst",
+      "bytes": 66654849,
+      "sha256": "5637d05b33094da67238f90bf1651b946a3376ee08d88be720f02cd31fd2381e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ABT.tar.zst",
+      "bytes": 44215015,
+      "sha256": "cc3de94a272ba319692e3cca93c76374fb0d0dd3e42bc16ad890c5d9764c5bb2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ABVX.tar.zst",
+      "bytes": 5378948,
+      "sha256": "7a980944a8858f8141597d54e1252208f7c37af3bb23e7db06435ea6aef7a462"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ACHR.tar.zst",
+      "bytes": 59891329,
+      "sha256": "6b25404739f7ec2ffa93260487870d6c23a31ae707354b43fd2d58d13583b786"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ACN.tar.zst",
+      "bytes": 31964389,
+      "sha256": "e61863fd4f7dbd1d05f38a2b2ce97364a15b096eb5d5cb63d2b219cf39a7e77a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ADBE.tar.zst",
+      "bytes": 88794294,
+      "sha256": "1e52e1a274796f8f9f1af75f44fc6ce9f9f9b1b13c3608d9c96aa0e1c811388c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ADI.tar.zst",
+      "bytes": 43237113,
+      "sha256": "3ca373fcb50cc56b44e021adf29b75d06ea907be618efcfb70afc51c847a7146"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AEHR.tar.zst",
+      "bytes": 13021479,
+      "sha256": "c4050288d8152869523a5e5223ce5f5e3010618223925c75a01e6604a72075ba"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AEM.tar.zst",
+      "bytes": 18488682,
+      "sha256": "5ff98c9781826f2172edf42ddb740c97fc2564c2fac344577d4c038d81179d45"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AFRM.tar.zst",
+      "bytes": 112914177,
+      "sha256": "f74bb6e4d9a70d13f6df2b11035ff6ac70b722af71849866a0fb2aacfb2c2b8b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AG.tar.zst",
+      "bytes": 40870363,
+      "sha256": "a07bb17fdd9a16341354d2ff7b7c6cfdbf5071d8bb55103df1f3ec69a2b9aeec"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AGQ.tar.zst",
+      "bytes": 35833759,
+      "sha256": "1e1b50a6fb93f7a19c193444b4e36231f76327aa6e8c2d161a6cb38640fcc825"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AI.tar.zst",
+      "bytes": 76630457,
+      "sha256": "3f965287d900f766e029a74e624e433165c27a733e8d66a2ea22f7764dce932b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AKAM.tar.zst",
+      "bytes": 17597939,
+      "sha256": "509ccdfdfd21b00e16b270b3ce48aea4bc68395c7c99073ba60218adef197a02"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ALAB.tar.zst",
+      "bytes": 52561691,
+      "sha256": "0e7cc9b849fe611c9852577e36c42991579459023232c2c1902759c459fba9ff"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ALB.tar.zst",
+      "bytes": 49445243,
+      "sha256": "ffdfd2f377fbb5e6c5ff493ed6e4b427d308545f2370a1d3750f1f2ed811e23f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AMAT.tar.zst",
+      "bytes": 88691459,
+      "sha256": "2fa052ac2ffbd0eb2def112a1484a084a13bfc0eb72b955a7d494c81a56466cb"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AMD.tar.zst",
+      "bytes": 437362527,
+      "sha256": "3c864ce07141eaf3230b33b234e56eac3204df41d6cfd22006228eda742a005e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AMDL.tar.zst",
+      "bytes": 20178492,
+      "sha256": "6c8c0f242f8740acab97e54746a8a413dea790ddfe896e8fcfa100000a694591"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AMGN.tar.zst",
+      "bytes": 43743886,
+      "sha256": "36f1c09b49be5679e8a0eca06558c5530f8a8ed439968e42502942caba52eae0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AMKR.tar.zst",
+      "bytes": 7518186,
+      "sha256": "2a55d6ec93743eb639f1f11cdeeab1543622e5897a027e951be0602d10319bbc"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AMPX.tar.zst",
+      "bytes": 12189616,
+      "sha256": "ed6a44255ecc90d4d25cbd104c821c3e78bd1c5b9ebd7d421824173bf614ee6f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AMZN.tar.zst",
+      "bytes": 519101370,
+      "sha256": "de4b6feb91eda557bb766af1dea53aad5efdbcbbb1f84c94cbfd8208e97a1f53"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ANET.tar.zst",
+      "bytes": 57642193,
+      "sha256": "8bda8b2dd750b4a283a0d953e4c9feda41f8f3c29de926b70d1df541be943e5c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ANF.tar.zst",
+      "bytes": 29240717,
+      "sha256": "f06d6ce8d5b5a1ba920e79d7ebc71fa67f3cc776fb880c92d3b9f23163060f77"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-APH.tar.zst",
+      "bytes": 17594844,
+      "sha256": "9cd7f524fd151721fedd67ce64f9fafdc756c4eae839b853ffc6b229f7c892ec"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-APLD.tar.zst",
+      "bytes": 63577258,
+      "sha256": "6165bdd9a454b9472923ee793cec744f62e0cfcd9eadc1edcc6b5e6fd76ae8b7"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-APO.tar.zst",
+      "bytes": 28826047,
+      "sha256": "9ae3c9c414a0856170f2e207cf1b1a1077b51c6c96ef059196c5d0837184ec76"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-APP.tar.zst",
+      "bytes": 82660596,
+      "sha256": "ea9f2106a522a23322b271c10979a177d42a72fd38351de04536fa502b74964a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ARKK.tar.zst",
+      "bytes": 79439469,
+      "sha256": "4da38a5f057ace91774df4bf0b061bcbfa32fd7bcd011b017f87cbdf4926c0bf"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ARM.tar.zst",
+      "bytes": 87733695,
+      "sha256": "31c7ecd918167989c70c33ad0daebdc7b581a5164798e6a6ba5af681b18488a7"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ASHR.tar.zst",
+      "bytes": 13659969,
+      "sha256": "6fc9c67e9a9b6e99f16814a3e9b4bb4416b832009a4214d3e6a1f82c64f8e90c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ASML.tar.zst",
+      "bytes": 69287425,
+      "sha256": "75d168e1c7493ae239e45c10790c1a9336e68bb6e5636ff6af4ad15bc9235d1b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ASST.tar.zst",
+      "bytes": 11605395,
+      "sha256": "aef1200036a6f4225aed5a4f72023a9c33ba9be0000e3527e7bd9e9099537db8"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ASTS.tar.zst",
+      "bytes": 88897551,
+      "sha256": "87b58d3622ea40b940d75e320d1b7072b2a68278e98d8004d1e4bd40b8efe704"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AVAV.tar.zst",
+      "bytes": 20324147,
+      "sha256": "8825acfbca1ca4a458941f8760e043c5de414761bf581212c516ab6e10006a59"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AVGO.tar.zst",
+      "bytes": 298255983,
+      "sha256": "4d45d2ef9087eb2f1992b2bc7015f9600c0696cc3b89c8c38e10729afad51182"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AXON.tar.zst",
+      "bytes": 14090306,
+      "sha256": "008bf9a414f5cdfeec46b570ebcd40023b653cbebbb7b833e646b8f3f180e61d"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AXP.tar.zst",
+      "bytes": 49873020,
+      "sha256": "6b51281904d26b86e24dee67c1e1933dd4b70fea6c8d20f5c3facd88bb3b1370"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AXTI.tar.zst",
+      "bytes": 10102994,
+      "sha256": "a29bfb66b31156cbb22794035c2ab494b2c0d658c2516ad72eb148886ffeba6f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-AZO.tar.zst",
+      "bytes": 11626970,
+      "sha256": "f281bbece0e1b02adb38a0f56e02067d64f5acc7ac696b6c9c6c7de0f559eba6"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-B.tar.zst",
+      "bytes": 32280110,
+      "sha256": "b036c23cc330286d036cdc9dbb2297d11347f6161bd895ad1373e57dc1f451ac"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BA.tar.zst",
+      "bytes": 100018472,
+      "sha256": "487a14ba5aa685ea0d600501b755f27f8e42ae00bc2540deb0262f32f8af5675"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BABA.tar.zst",
+      "bytes": 123257702,
+      "sha256": "b2c984a95f05e84ada5bc8405541f093120f3ba922f133ad5ca231926b1d560b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BAC.tar.zst",
+      "bytes": 220670911,
+      "sha256": "ca5d0027b68522418d5172c0b64e7d111c37abc655f3ec65acbe8509faa0f585"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BB.tar.zst",
+      "bytes": 21677607,
+      "sha256": "15b67ccb64020939a11968318c692c1c09a7a0736a3736845801e028bc3474cf"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BBAI.tar.zst",
+      "bytes": 30928259,
+      "sha256": "a151b05cfb7e95b36be71eb545221aae73ad5cf1517721e17b34f0e9570cefe0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BE.tar.zst",
+      "bytes": 56669157,
+      "sha256": "252a1191fd7c4a37ab4715ff87d6e33db68765f25f12d5a14e5c6098016e1745"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BIDU.tar.zst",
+      "bytes": 51476826,
+      "sha256": "b892639372547bce53c0b21a63b445e45a5accec13cc3359ceedf3316dbf1261"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BIIB.tar.zst",
+      "bytes": 17390383,
+      "sha256": "16c847329cfbc806a6fed37d2eb64aef0598b6a427c395291ed8fff5fad9cb31"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BILI.tar.zst",
+      "bytes": 38819578,
+      "sha256": "9674d9ed5d2410cad420d11bac81384a573d75552792713403929725a31bc26b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BITO.tar.zst",
+      "bytes": 30866340,
+      "sha256": "fad351f8e51102789be3efee8b479b8105f7326e2534cf2a4bb73131021a4d31"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BITX.tar.zst",
+      "bytes": 36740900,
+      "sha256": "0631673a1e885bf6943573f42b57f0f367202b274317d5ae67431c19b29dc7b7"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BKNG.tar.zst",
+      "bytes": 28184094,
+      "sha256": "1c9e11c1f65f6bc786878d6896ddf74d98426b0ff5b83984a172141a97429b07"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BLDR.tar.zst",
+      "bytes": 8852961,
+      "sha256": "cac0909177c0b520bbf7ac3448d911054b92bb0cb5e8a912dcdd44d8643d80d0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BLK.tar.zst",
+      "bytes": 20209703,
+      "sha256": "bf75eb9389e8d70007ab859ab8d180ef9f6490358d968c16107a20ed3655a61c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BMNR.tar.zst",
+      "bytes": 75959664,
+      "sha256": "32ed6933bef7959ac50a2655063c4ab7d0492b4d124ee7653e3b3d6e17520ee0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BMY.tar.zst",
+      "bytes": 74144132,
+      "sha256": "b7e84fd3df793cc2a2d092af32576bd56f28f0f576715cdce9a51c942684c27c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BNO.tar.zst",
+      "bytes": 6870501,
+      "sha256": "7c580bb6d410be06021ce83c325bff1cc3224d16b42d6e85e5f13bb993d2c9c7"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BOIL.tar.zst",
+      "bytes": 52480027,
+      "sha256": "5b2fff2ac7ddb4b5269e0239bfbd7b08c894925714c91e94ef93118bce49bb4a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BP.tar.zst",
+      "bytes": 35219169,
+      "sha256": "b671bb0b1bdc2959c970631eded6c17131d78ea9b89118e29d97d34ee0bdb746"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BRKB.tar.zst",
+      "bytes": 56106759,
+      "sha256": "9a20c24be025e986f83d315f407a5d63601fc8d102d61836ede4bec2555ab249"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BSX.tar.zst",
+      "bytes": 28401930,
+      "sha256": "09c373ba69192e54847985cd1fb1627579cd6e25b107a9f9bdbab96761824d56"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BTDR.tar.zst",
+      "bytes": 31217991,
+      "sha256": "942026916abc59daf9aee2c269e656492c4cef00ace01d36091bfadacfc37e78"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BULL.tar.zst",
+      "bytes": 38016046,
+      "sha256": "85ef00a8c43fb960d8e770a67fe700516237a03a095e3c279985807bb508423c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BX.tar.zst",
+      "bytes": 42879545,
+      "sha256": "d3ecfbe1b48d78ad4a6f0cebf51a55ed05445230a5abddb66ec2bde331d106e7"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-BYND.tar.zst",
+      "bytes": 17202079,
+      "sha256": "a0b5aeafe47b81095796412c7e3f63938b2d734a7f901b26f2a06119d685ef8c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-C.tar.zst",
+      "bytes": 135378876,
+      "sha256": "09f1bcae8b8f12f8ad61a11a4796945a8d18f0a10eef51cd0a69682dac062496"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CAR.tar.zst",
+      "bytes": 20732852,
+      "sha256": "a91f84bf4daf0cab6c2d82a7d7dd188c2af4eeed7f6ce798e7241ccefb7e3546"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CAT.tar.zst",
+      "bytes": 67633984,
+      "sha256": "fb0407556858f009601fae4770f062e9d2255e6cc43ff0651fd56df21b4de81d"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CAVA.tar.zst",
+      "bytes": 48339105,
+      "sha256": "3539c40f19c6e5c1c91b77e24dbcb43a181a13fa9c53a29e068453a5c6ca4405"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CBRS.tar.zst",
+      "bytes": 216,
+      "sha256": "01f1c4899392f0adb50e8cdeb89ffd8a1718c6e09f41ec2c535eeb24ab7a7d2d"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CCJ.tar.zst",
+      "bytes": 93521454,
+      "sha256": "0f0464eb955086a8cd4950744f0e2390124a631345a0e3b4ce89d953b4d9a59b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CCL.tar.zst",
+      "bytes": 75311385,
+      "sha256": "45c6f380bd1b20e823e1274a37a99ab0c5de6b7e0cd6e13db734bde8893111f9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CDE.tar.zst",
+      "bytes": 18112813,
+      "sha256": "9309050920d8795ac0364e5a3f789f82332ec44ece3fd838a2a953a185a84864"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CDNS.tar.zst",
+      "bytes": 13898147,
+      "sha256": "984821c8a668f96cfe92b593eda386a277312091648011c9f7fdc086838df05a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CEG.tar.zst",
+      "bytes": 41848432,
+      "sha256": "04ce11ad8eee4604c8e20acdcdb86e73a592d349863952b7f65b751ab96b85fd"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CELH.tar.zst",
+      "bytes": 80635846,
+      "sha256": "53b5647cdeb25cd8d7d197e56a980aab2f8b57297b66ae1fd41cacb2ba2d4b07"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CF.tar.zst",
+      "bytes": 22124186,
+      "sha256": "2c4f31c3d1e585561a4407fbac10eb6cf3c086339cd8620709dc37cba8f1ef4c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CHTR.tar.zst",
+      "bytes": 27765126,
+      "sha256": "3c6142988023e7f1befa23bee77aebcde485c39d68dc9211998f7152d100d45b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CHWY.tar.zst",
+      "bytes": 51954837,
+      "sha256": "d56f595762bef814c2bf68337555fb7d2252401ad3c31769e3934b25423cbc5e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CI.tar.zst",
+      "bytes": 22047961,
+      "sha256": "bd0a0a407d0c6790351f8825bfe8d4bc5e9eed5c6fa558e9d15dd2c086aa568f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CIEN.tar.zst",
+      "bytes": 18366061,
+      "sha256": "153e1292a4f0fb407c7187890361507c4cd36c9232b92d390b391d1d2fbb5965"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CIFR.tar.zst",
+      "bytes": 62858972,
+      "sha256": "e0ca148165a501e8f7de3979052bca724edfc991b0caedb8ed836b461ff4a5ab"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CLF.tar.zst",
+      "bytes": 50723904,
+      "sha256": "053754176a35bd2be1f36d16f8c226d46c9bdf3368ed227142ce4960ffe27de8"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CLS.tar.zst",
+      "bytes": 36114199,
+      "sha256": "bf088999fed07ee582642df400676f0e706fb7edf9b82d984a5b043435533c1e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CLSK.tar.zst",
+      "bytes": 74310884,
+      "sha256": "4859c60753202026ad4fbfab8ebbb575a0dd7f72455fa47298de64290eac3d5a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CMG.tar.zst",
+      "bytes": 72131159,
+      "sha256": "ffbe80d99dc48e3dc7884513f361ac25ffe61629b12ad7135ecc0bec9a978d71"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CNC.tar.zst",
+      "bytes": 19807841,
+      "sha256": "c3a4798e4d44d6fc2338e86b8f1a57b0c7cf85e405f53a34d254ca6ff609986b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-COF.tar.zst",
+      "bytes": 33758040,
+      "sha256": "ae9324c3974add4ff61c71ec8183733e6e5ee510a057a13b08c16f688f5964bd"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-COHR.tar.zst",
+      "bytes": 38355872,
+      "sha256": "6f657ed14838660520ee11f0d31c8892fa39f2542ec7cf28cd3f17e440132352"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-COIN.tar.zst",
+      "bytes": 214851452,
+      "sha256": "902574e3912898abaf8b9fa174fd5ef8618ca8e5f6dc463afc69993dcd83043c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CONL.tar.zst",
+      "bytes": 38762919,
+      "sha256": "f36b6fc187434ac34a8429d024810f0469385f27b18801515ad0850964471319"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-COP.tar.zst",
+      "bytes": 65479714,
+      "sha256": "7f4121fc1b0d935cfcbb9f9d670298c78e8500bf08a0d524282a42860d43da23"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-COPX.tar.zst",
+      "bytes": 7643200,
+      "sha256": "c08b5d0d8fb751345579ebb98dd6f181bb95aa5871701a13d7120a0848f03835"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CORZ.tar.zst",
+      "bytes": 52938178,
+      "sha256": "8964d917ba3848dae9e2dd846240258a352cdc8800892164123bba8900cfc72b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-COST.tar.zst",
+      "bytes": 65224336,
+      "sha256": "109e24ec12853126a6f222a1028477bf887d5ef005fb99ebcef78273ff153561"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CPRI.tar.zst",
+      "bytes": 31696993,
+      "sha256": "a56be325bfaf72ff7f3d6ffd170b24de919229c78efc0caeff02479feef46480"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CRCL.tar.zst",
+      "bytes": 84851148,
+      "sha256": "189c5d2185cea7c879618e3e456c34b1c3bd8d1a98cdf2df6dda6ba2f40b242e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CRDO.tar.zst",
+      "bytes": 31360642,
+      "sha256": "09c9edf8863b50c2783151e45bd81e9a53611581fee0e7231a70819533bdc36b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CRM.tar.zst",
+      "bytes": 98567287,
+      "sha256": "444c03964a2f8708f46a68b48c5130d5c9d140a0bd2805c8b6cf9469b02bdd74"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CROX.tar.zst",
+      "bytes": 24609155,
+      "sha256": "39dbf5e5acf48fcb821f646f96837958e850f2d1d208d8e2a2c3bb524517552c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CRSP.tar.zst",
+      "bytes": 18486913,
+      "sha256": "4e62b32f838bbef5e97f87dc1ff14f58f39c9342098d9c33cfccb101415deb1d"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CRWD.tar.zst",
+      "bytes": 118510567,
+      "sha256": "d89268fe8e477570b11ec3bd8e42b3e8b7a38c875024f0f5bfa8aa881088c6a6"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CRWV.tar.zst",
+      "bytes": 99269079,
+      "sha256": "7ec43aab23a37e379a1f8bcc7771df4a5460b7441c780744b324823ee27767e3"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CSCO.tar.zst",
+      "bytes": 66782358,
+      "sha256": "e5904b5dfcd096776479b2eb47e6f9341ae5b152b1402f9a3291f5b368c5b7e6"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CVNA.tar.zst",
+      "bytes": 74905117,
+      "sha256": "52acb9c0adfe39f690286950d0be3bc63d246c2edda65aa58fc1f3d2b6909726"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CVS.tar.zst",
+      "bytes": 67211838,
+      "sha256": "de39ea496dbc9fc67e821cec5baa01025c04699488bb7985efaeca262084e0a2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-CVX.tar.zst",
+      "bytes": 96384778,
+      "sha256": "1f19a7516c8896222f4a580aa6c2e2e8cc540e7dda99c4eaa5617de499ddec3e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DAL.tar.zst",
+      "bytes": 77083983,
+      "sha256": "843cf19e887c11720f2c3372b931fc24f0836bee373771304aba923a1b28e067"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DASH.tar.zst",
+      "bytes": 58150230,
+      "sha256": "6a4d202685ad46315de8f6802e8dc452bbf0023c95da2e60c2242accef3643d4"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DDOG.tar.zst",
+      "bytes": 73198812,
+      "sha256": "a443bd1fa1410f0138fc11d93cb9b31c2ee61bc28f21246d016c291b2c4fdeb8"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DE.tar.zst",
+      "bytes": 36121479,
+      "sha256": "95083801ded9388c34cda7b98d0779ae047410cc1400aa85af6aaa523fce9006"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DECK.tar.zst",
+      "bytes": 17770648,
+      "sha256": "a73a2b3155048d6ecc064a8dad7b6a3155450a03e10da5652fd6aee5746775ed"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DELL.tar.zst",
+      "bytes": 104310977,
+      "sha256": "5bf0a8ea73590aea65ee71d342e3218ded6fd4d10efde05da2bee779fe46c120"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DG.tar.zst",
+      "bytes": 47094929,
+      "sha256": "76252bbd193e53541b02c4adc4f0bf6bcaa89ae637aba5a5ad146d131b1edfac"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DHI.tar.zst",
+      "bytes": 33880074,
+      "sha256": "45524870609c9bad33035eac9183d2a3686014dbd781aab51ac8dd51d9b1f76e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DHR.tar.zst",
+      "bytes": 22408731,
+      "sha256": "d057cdda648bd5dc28425ea3783cc4951bb38b06045a411eeefee49e467a0325"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DIA.tar.zst",
+      "bytes": 150891200,
+      "sha256": "c295dbd8f5e9c48a4afba390d143cbaa5013f85961115af8701a7abcf3316930"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DIS.tar.zst",
+      "bytes": 84173486,
+      "sha256": "fc62f4dddabbbe8cb1d978a9ba393fd8e8754bd68702a5110ac0050d516229c6"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DJT.tar.zst",
+      "bytes": 56197080,
+      "sha256": "a38733a4f7b8fdf641a5f76c5121360f65b54522990d571b3a5e6f0b5cd7556c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DKNG.tar.zst",
+      "bytes": 101205050,
+      "sha256": "6b205c29a6d49eba6800a9aa016d0500de8f7fca443aac9631e01f4ef7407fba"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DKS.tar.zst",
+      "bytes": 21239323,
+      "sha256": "9b5bc9d44a61b7e4e617e5325fb80aa028be382aac51970819a088ad2396e839"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DLTR.tar.zst",
+      "bytes": 31129225,
+      "sha256": "ca8fe9aeb8906181626c0085a8fcc766c5f3b0238de66ab78cb61a4d5bddbd23"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DOCN.tar.zst",
+      "bytes": 11043627,
+      "sha256": "18a8c0f1e451b4763b7cca30ac90ec2b644d7cf5964366facb780a7a7ba330d1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DOW.tar.zst",
+      "bytes": 58028929,
+      "sha256": "9cd1a1c042ae2338db7916284688e5f619a29803092f7674c55f22872674372a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DPST.tar.zst",
+      "bytes": 29236598,
+      "sha256": "89b0552867e907b843c2201b87544bd65c63225e25240349d2ee4c223b2057ef"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DRAM.tar.zst",
+      "bytes": 216,
+      "sha256": "62558d9313f2bd6568f2fdd974faaf4f5aa7ec0219fe8e9d372f07d01ad657f0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DUOL.tar.zst",
+      "bytes": 18936082,
+      "sha256": "6148985461597cb0e211a2e23c89ca77167b6917ef34e28d01873dfdfd01eaed"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DVN.tar.zst",
+      "bytes": 70113575,
+      "sha256": "7c336f8cae6d5daabfc163024df898efcb29be99f4559eb1ff471816f30aef94"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-DXCM.tar.zst",
+      "bytes": 24516523,
+      "sha256": "09ff5b5304154ed97f88c8a8a557a0092db33d35ca813dcf2c2cd355b7d9f993"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-EAT.tar.zst",
+      "bytes": 10596342,
+      "sha256": "1fcc39acd17145e127c44f63d6a493487a588e8ccc1b8e738b06de6b9ea44f77"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-EEM.tar.zst",
+      "bytes": 31696986,
+      "sha256": "89818e1f8e34fee88fce737e47904fb5cc32a983da2d274a800cf3d9e251fd23"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-EFA.tar.zst",
+      "bytes": 32837303,
+      "sha256": "ee8736c26fc409bc7b8f1322f4eab0f3c2fc701ab9642c3acf03726cb2b99bc1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-EL.tar.zst",
+      "bytes": 39640558,
+      "sha256": "9bc366d843dbfc07ad943278417ff97267eba931808475b757021a6b8c5c9ccb"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ELF.tar.zst",
+      "bytes": 39334484,
+      "sha256": "450d162afcdab45bc79468b28d2e8c15f6ffcca03cabda31d4778952722f049b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ELV.tar.zst",
+      "bytes": 12119948,
+      "sha256": "29e2605aef1d1a5ae9ecea3b48514835540314ab0226cdd0ce497109fe986b68"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ENPH.tar.zst",
+      "bytes": 90793540,
+      "sha256": "fa6b11baf064fc1300822fae20ccc358199597ae77e20aa75bc1bff60f517785"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-EOSE.tar.zst",
+      "bytes": 34686919,
+      "sha256": "6e0059b9514863773e2aed96db0b34f698895fddbf5c0f2d9c13b37f48d55f25"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-EQT.tar.zst",
+      "bytes": 94870509,
+      "sha256": "38893644d42e4aeebb98cb56b82a6069d5c9a268540ff2cf031bc563fffff42c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ET.tar.zst",
+      "bytes": 31530518,
+      "sha256": "6db2279b9d23da9a7861c6c5429faccff6a55c578c51bf6013fa56c6fd11116a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ETHA.tar.zst",
+      "bytes": 37511466,
+      "sha256": "43963e7d3cf39ba4c475f3c9de2850c7828deec69466c851f973eeb014c9cd63"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ETHE.tar.zst",
+      "bytes": 10938463,
+      "sha256": "2f079ec22540c6a602fecb8081558a2f14a5010c90c0f0793cbe509184471d32"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ETHU.tar.zst",
+      "bytes": 13201890,
+      "sha256": "05fb453369f6ea877fed22963e50fe9b7766f856b78411abe2aa2f29820ca3b9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ETN.tar.zst",
+      "bytes": 20664397,
+      "sha256": "ad3c912c22ecdd19379280ee1fe38862d8226ebecdbf12a91b32e7fd5d8c5995"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ETSY.tar.zst",
+      "bytes": 65696965,
+      "sha256": "1ae3cfae1a791aaf85e72d6754fb502e32af94891a973cc26d32164705eba414"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-EWY.tar.zst",
+      "bytes": 18998838,
+      "sha256": "f13d6a765a39c91c00681a15f53e07bc63a3de7dda04c1a9f40bffedd7009a1f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-EWZ.tar.zst",
+      "bytes": 30537453,
+      "sha256": "02684112ec7ca5272851c04bf255195b2500a7ad3a721ed4ab62c1fb0fb91d45"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-F.tar.zst",
+      "bytes": 74694672,
+      "sha256": "4eea5b7a5a7d5ac08e7570838b078c07f00091d30f032d10293dee06669d2402"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FANG.tar.zst",
+      "bytes": 22388862,
+      "sha256": "c4c8e33cb56ca43db21619a62800d7b950900abeb2f1f2a16db9abb82eadca3b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FAS.tar.zst",
+      "bytes": 28002940,
+      "sha256": "ddef5f796b8c4b55298c0a8c1a95a56b7ebcbdcb4d91adff5409f091da84aeea"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FCEL.tar.zst",
+      "bytes": 18142089,
+      "sha256": "2e6ace78db3b4b7a85bf925b392f4f6a3108441d29a5c70d3b510ed32e12214d"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FCX.tar.zst",
+      "bytes": 79571992,
+      "sha256": "61a739e85f493f9f23464ab7671e890306866042cad947bf3d3778dcc501f395"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FDX.tar.zst",
+      "bytes": 48919641,
+      "sha256": "b731378a060d55a52861b0a47f73f69a2e8e00b06b4c7ecc072911209e1fba6b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FICO.tar.zst",
+      "bytes": 12604713,
+      "sha256": "56d9db0df374aa6ed5e8c1aa842d59182dfc3812e4f93ce0e85d572338835b59"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FIG.tar.zst",
+      "bytes": 35187288,
+      "sha256": "71679adc4191c07165fc4ba656b4cc95ecef9d6ec6ac9518696c3dfbdff05116"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FISV.tar.zst",
+      "bytes": 10461570,
+      "sha256": "42911eed3e948c1ba8f89d821065306c7db758ac4852b7a998df9279ddf19349"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FIX.tar.zst",
+      "bytes": 8625223,
+      "sha256": "e3ad231b9b59c6a0bf6153e68a534154f5ea6ca4c770b435597b19c8effe1c93"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FLEX.tar.zst",
+      "bytes": 8994296,
+      "sha256": "598bae9abe01a8d29120bfd32ae6da6110cc266f9ab80553252b45b7d28ff9a9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FLY.tar.zst",
+      "bytes": 13330185,
+      "sha256": "be216633328b9db8d6486dc8a61e9360ad0c2f04b98130370fc826e77e60497a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FSLR.tar.zst",
+      "bytes": 53489564,
+      "sha256": "9c3925a783e1fabdcf5fe072d9648e353d6efc3910794608e4d2651355778e57"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FSLY.tar.zst",
+      "bytes": 25377829,
+      "sha256": "04e06cfcba921bd913221dd0bc43b92e13fa5f1aff4d31fd8850dc18e9d02d63"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FTAI.tar.zst",
+      "bytes": 17446872,
+      "sha256": "9a1561a18cd053f2d79eabe05bd9e98346d96b32e9d9ab039f7b5ddf97a950b3"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FTNT.tar.zst",
+      "bytes": 72174552,
+      "sha256": "1b9857fe951aa84968e92c3b9c24bafab0f2fe1d1897f316788ec2457f1957f7"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FUTU.tar.zst",
+      "bytes": 46009606,
+      "sha256": "deaa5c93d952e7d4da4c93fc17871f219826b2a16c2be7e9cb3d1847b6397937"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-FXI.tar.zst",
+      "bytes": 33043803,
+      "sha256": "694c26e769fc24f8c9bb0652b52fa922ddd4da98e62162e3a3e7e5f4807402b2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GDX.tar.zst",
+      "bytes": 85977127,
+      "sha256": "1c7cd943e61b67e44e95ef8890ac11344648817c055216b4d241cf86a0ddaf39"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GDXJ.tar.zst",
+      "bytes": 50718590,
+      "sha256": "bf4108e3a24e70fc5b7f04e730978a9bbb3b6aaea41ec5ffae9592ed0e3e72a1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GE.tar.zst",
+      "bytes": 58469333,
+      "sha256": "b635f9fbfb3a2d6806262fed6fc82d9a9ffca61ad70244712fa1fc02a6d7195f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GEO.tar.zst",
+      "bytes": 17832786,
+      "sha256": "ac5051ce30c396267481d11ab370ade57ff0fecf004908558eb52f4a1c96a35b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GEV.tar.zst",
+      "bytes": 46719287,
+      "sha256": "85737c570a4bf3da0cee76e382c3deaf4e501996cbd087011a6593f7ce7ce9ac"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GILD.tar.zst",
+      "bytes": 43995465,
+      "sha256": "d1c41fc6e23d42a3fc47b376b59fd1878425a0f60d2e891a10e5f495b23f28bb"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GLD.tar.zst",
+      "bytes": 275164886,
+      "sha256": "7c1b2679a28c4235798a3c62188c5dadcdedeaffa7a4b2658f8b5b76ec08dcb8"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GLW.tar.zst",
+      "bytes": 46173568,
+      "sha256": "328fbc9c5b7f81ae1a91ead6256acbcce7b2efe5bcd12030125cf804549797c9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GLXY.tar.zst",
+      "bytes": 43427494,
+      "sha256": "77306158692635ff0d6cc74f41a85c975e181f6837f6f24fa765c220c9b1d732"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GM.tar.zst",
+      "bytes": 52719991,
+      "sha256": "aef70d5b1067f3ee97437d00026baec17c5772377732cd390cc41b417e6e0f7a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GME.tar.zst",
+      "bytes": 49357102,
+      "sha256": "1df7935076b4dd427b06a2591a1d45cfeae6a25be31e0a84756cb481908d9a6c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GOLD.tar.zst",
+      "bytes": 4243164,
+      "sha256": "a8d160ffa761b6c1e87bc2660c8e2b21a2c97758565518a70394d66fdc8ca43b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GOOG.tar.zst",
+      "bytes": 299286843,
+      "sha256": "7ffb46e35ed5d8ed9e7d35c51bc8c64cb908605d3c1bb4c45da9fb8159f91819"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GOOGL.tar.zst",
+      "bytes": 365852754,
+      "sha256": "6a24e7209cffbd754a63742a53eee31a6f180e98bb72c82349d92d97da648543"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GS.tar.zst",
+      "bytes": 73520544,
+      "sha256": "d1c6b0a09b8f7e4dadcf727a0758b63dfb55eaaebf218b8836e8e2eba57203b5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-GWW.tar.zst",
+      "bytes": 6724752,
+      "sha256": "5b6b5188dc4d5c8a45853c1f7d2beb03551cee28b60b4c1821abfdc77393c5c7"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HAL.tar.zst",
+      "bytes": 52195196,
+      "sha256": "10ce5a3cf8f08c43b8c3e024679d641bd4547e38294632c1ce79b26f4a9505f5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HD.tar.zst",
+      "bytes": 55203304,
+      "sha256": "9b059fc8c122bc9c11b93e8594d87e65bff63e96aadd39b2ff35de1ed8b5b7b2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HIMS.tar.zst",
+      "bytes": 137828531,
+      "sha256": "c69bafa958d2f9202b18883eccc96b50fb85bd9271bb4853f5d39c6792705757"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HL.tar.zst",
+      "bytes": 48125987,
+      "sha256": "6e7195457973fe25ce7b9362ffa36ee22a552143a6e40d0d8e13188ee31bd27a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HON.tar.zst",
+      "bytes": 23645428,
+      "sha256": "ec17e1402ff515955cb2c71c1624534dd12001fd2e7675f0bc98392405a09ef0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HOOD.tar.zst",
+      "bytes": 286243772,
+      "sha256": "bf534a85b17b4bda3cb46aea3a70ec19507d79b948bfd97c70df34487e217012"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HPE.tar.zst",
+      "bytes": 48228261,
+      "sha256": "f935c700d8fb0806dad7425264537195ffd77627ceabf21564a0ba9651e40db5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HSY.tar.zst",
+      "bytes": 17860023,
+      "sha256": "ae6c4f5847ac6e4e42312c6574facceb7bf416162818293592a927653d89fd1e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HUBS.tar.zst",
+      "bytes": 8748730,
+      "sha256": "cf8772605b0c06f49bfde02ea116ecc31c9e93e6bcf2b84aa9b5d2b77641b6da"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HUM.tar.zst",
+      "bytes": 20479695,
+      "sha256": "cc3ad2d406d0eecdc74a4251679eac46d6072c86c1e86cd5fb8962f6dc408ee9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HUT.tar.zst",
+      "bytes": 80443196,
+      "sha256": "d9362efcf15f60fa3834dcb95a4323cd930901eca6f95b4ddbc1b45b4efbd7a0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-HYG.tar.zst",
+      "bytes": 15367750,
+      "sha256": "232a110adf1b11281ddf4ae94f71fd7d25175fd98398d78b5c14417293fc6696"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-IAU.tar.zst",
+      "bytes": 25239636,
+      "sha256": "538a7f85d1379b20a1c60c105b27a7f271ef85ac8f8cdfaf70ec83f00b469e89"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-IBIT.tar.zst",
+      "bytes": 188513144,
+      "sha256": "8a64a59beac57ee0cfc94420173f4735bc722f6f94ba6d7422f18421220fba37"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-IBKR.tar.zst",
+      "bytes": 21372202,
+      "sha256": "11f0dac0d4f266477bf60a00e388b59696c1230ed898427ce3b44755a8b64e8e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-IBM.tar.zst",
+      "bytes": 74213163,
+      "sha256": "8104b790568ced4143a615691af2d44b8238368d8d52bb1df063efddd0d78e91"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-IGV.tar.zst",
+      "bytes": 19577321,
+      "sha256": "f7081e4f16513d3b3c16903138e052e59ed297339712611ed15fa17ec321131e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-INTC.tar.zst",
+      "bytes": 219040986,
+      "sha256": "cae16f0f0598487c50f03edaf0f9184c2ba854a1f99b5ea35806c686937d3bf0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-INTU.tar.zst",
+      "bytes": 39213997,
+      "sha256": "9bf46fd991aaa875ff816b6f3d4ba99e86fe7410475f67cff77adde31f75bf13"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-IONQ.tar.zst",
+      "bytes": 121373788,
+      "sha256": "5347541791b4f888cc7d490aea06568122858db3b0931fe202cd01da93457bb2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-IREN.tar.zst",
+      "bytes": 102229437,
+      "sha256": "16536e3443afff616250b6985d82cbed63d1e760e4882ee269fadac853198d15"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ISRG.tar.zst",
+      "bytes": 36555323,
+      "sha256": "34ee616f92bf3670328c098b817fa8fbeca964a80d51e3a88fa79b92c6207e8a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-IWM.tar.zst",
+      "bytes": 844414258,
+      "sha256": "78170a246fe82a0691d02336db9a71f700ef3edbecebe1c492a8032ae5c5f8b2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-JD.tar.zst",
+      "bytes": 60793015,
+      "sha256": "a5b2e7f7348b488668ae2e2b5f37e1d67451d4cf5b73052863c962ba8e35f249"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-JNJ.tar.zst",
+      "bytes": 59644181,
+      "sha256": "db56aeb246c62fc9ee8fe162a5275e1705db3241288996600364e5cecb5a21a3"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-JOBY.tar.zst",
+      "bytes": 31453194,
+      "sha256": "fa9baaf262496cc70cbbc0449a493f36dc39de548998a8014a34bbe51c9a655c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-JPM.tar.zst",
+      "bytes": 101665997,
+      "sha256": "b58adfefc67643e3afa872751dab11cfe3ac7ca5c280eea83d51e62a60b1fac2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-KKR.tar.zst",
+      "bytes": 22969706,
+      "sha256": "b2998bf65ad362d1d0e3cfe9a4e1a8f1d6be38126721d704f7b5d4bb5842b704"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-KLAC.tar.zst",
+      "bytes": 11958999,
+      "sha256": "f12e2cca40777768688734ecd3be472cefd65aff291c01aedf3af09270646112"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-KO.tar.zst",
+      "bytes": 80318987,
+      "sha256": "212d72762a9621fa521203e65468fe10ef7241e79d3df5e4d719101fbabf70ac"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-KORU.tar.zst",
+      "bytes": 11685529,
+      "sha256": "44db0c0d51db2ec96087884c936cbeba30471233f35960c8de429d2a0d560a31"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-KRE.tar.zst",
+      "bytes": 68998624,
+      "sha256": "55bd95c4a58f00c9c6321a08fe22d5ae5296fb82da39e92e840962f631981551"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-KTOS.tar.zst",
+      "bytes": 24033135,
+      "sha256": "9ff2a91add3d951dad6ef6b61e2d5657bed0f4478d889226d8010d52c4ff5d15"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-KVUE.tar.zst",
+      "bytes": 33146315,
+      "sha256": "31b47ce570814969dd4066dcef5c6a795ddf3d287c7ff209119a61b1e2522377"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-KWEB.tar.zst",
+      "bytes": 32871861,
+      "sha256": "641dd812b6b329e9f887bfd15071fbae1c5f8d607d782b70d5c2e36a713ef62f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LABU.tar.zst",
+      "bytes": 26888391,
+      "sha256": "7b75bc8bfa71e0f53063ca54c94889fe5fb85d6c822f5f4376e234751280f737"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LCID.tar.zst",
+      "bytes": 31348043,
+      "sha256": "00316a7bc5d1de83c7081d51090896c9b580a834f19be9ccba105931a18dcd5d"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LEN.tar.zst",
+      "bytes": 30180508,
+      "sha256": "3b3176f1ea50006fd86df6cbdc53e276139953a85ec2e4fb32a0f5e8b5cf8c09"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LEU.tar.zst",
+      "bytes": 12141811,
+      "sha256": "e37fe0e9610bec098a0e58022df12fdd7ca710d43c8c57fdc115e3bdc5899eaf"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LI.tar.zst",
+      "bytes": 51766028,
+      "sha256": "d64c8f35bba6e7af76213e08807520c3a5d2f1a9e0f6b9c6fe9df6765b765fb4"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LITE.tar.zst",
+      "bytes": 29941314,
+      "sha256": "1a2cf9fe03e048c1efc9eb9d6e570749436ca762196d5fc489531a894f9a1a8b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LLY.tar.zst",
+      "bytes": 83048991,
+      "sha256": "2984be507e26937e07cbd6b52d52b9a16a5aeedb92562fe67c1493dd2fef3ad8"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LMND.tar.zst",
+      "bytes": 32132946,
+      "sha256": "ca69406b5beaac053000ee6736a9778c742a72d3ab893d352af30617c1b799da"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LMT.tar.zst",
+      "bytes": 44782472,
+      "sha256": "04f83d885cfb56b7bd1bbcc8d53dbee6d66b34d00991ecc95dd71db2eaf6785b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LNG.tar.zst",
+      "bytes": 21576601,
+      "sha256": "569db0d1ec5dbff3b42ae6b74d8868807076cfe633b66db0f269c2993db7cd9b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LOW.tar.zst",
+      "bytes": 46010370,
+      "sha256": "cf90d0e8d622f3f309fc57558307cc910e3e84b2849dbdde721496a235d96716"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LQD.tar.zst",
+      "bytes": 17999777,
+      "sha256": "258d9f3c8d6fc7f650967073d27504960990341beb83de5c7a95d0244108bb19"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LRCX.tar.zst",
+      "bytes": 88318881,
+      "sha256": "9087b106c576c22857b3e2423525c6df4356ae9a607865bb9f171bacd8a6b464"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LULU.tar.zst",
+      "bytes": 49822104,
+      "sha256": "b533301d2c3d28ba756f4dea31675e09b33729dd32bc80c7fb9b55429bd82b14"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LUNR.tar.zst",
+      "bytes": 38958946,
+      "sha256": "ee1ed0ce299c618baa46fdd34d420d95a7a64e58a011556afc3f043b7b382c78"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LUV.tar.zst",
+      "bytes": 51188664,
+      "sha256": "8ccac15999dd13730b7d583de5d383c8a4a5a165dfaa3af2972c8b8a12c74bf2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LVS.tar.zst",
+      "bytes": 41106811,
+      "sha256": "51ac761ec9c8cfea7cdc3678c5e5ad0206b04c06d1c5a03b64e32bdeed810052"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-LYFT.tar.zst",
+      "bytes": 69421044,
+      "sha256": "235e451100540adfd06b43cab8a3a49e40382590879060b3817e915d751357a6"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MA.tar.zst",
+      "bytes": 38296193,
+      "sha256": "32ae766c5e4e5391ec305153a584899dcedaccbdf7e7e8072dcefb0b0c2b1d74"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MARA.tar.zst",
+      "bytes": 149139983,
+      "sha256": "0aba66124871871dd301eada7e9227d9eb0cba1402e4f33ababb42d169a4f2d1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MBLY.tar.zst",
+      "bytes": 30591841,
+      "sha256": "fdceb483e105d852fb736fb98adeb49a9421bbeabc387f3bf9f4b1d96ea09442"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MCD.tar.zst",
+      "bytes": 59380230,
+      "sha256": "47e68882bfd7de2134d9f603e9d2b4d7eb22137120bd6cc16a7cdb803401bea6"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MCHP.tar.zst",
+      "bytes": 31744931,
+      "sha256": "bae5b7e94aeda06adf4a909fc3f0825722dc6d6ab703672f4ed51cbf81952658"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MDB.tar.zst",
+      "bytes": 45118798,
+      "sha256": "f1687bde96a5b188e5f8b2139836e8ac6111fb0217a56ec79f3e0716afb98465"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MELI.tar.zst",
+      "bytes": 25336659,
+      "sha256": "1277e3a76c0e0cfd18b0ad602211093450d6f59eff03dfa9a6c25b7e99c77324"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-META.tar.zst",
+      "bytes": 243997511,
+      "sha256": "e5f3ea8f58b8c24769d58ee0a803ef02718199618e82ddb0da61e620527dbec2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MMM.tar.zst",
+      "bytes": 54263382,
+      "sha256": "b1adb6fa08b25c116af6a7016e792ee387ae5606eb6183c43b6ff0cf795ac028"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MO.tar.zst",
+      "bytes": 67143564,
+      "sha256": "6e33602c0a2ec6c98ee9774048fe47d97650a1cb87c140257e9fb6ebf3c7dcbb"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MP.tar.zst",
+      "bytes": 41208055,
+      "sha256": "192c33d349a10a4f91cb6a209cadc95c4ddc72f46f989dae317c1ec406e4f245"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MPC.tar.zst",
+      "bytes": 29154328,
+      "sha256": "8e1b0718b3d4f100c6d9ddb9fd1060c2bbe869e709e74e5631b49f2c073e9018"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MPWR.tar.zst",
+      "bytes": 8882611,
+      "sha256": "d5b2a4586b39a19a0c346092e5948fc7dc9f4ab0a1c1a4c6601a44f46214b96b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MRK.tar.zst",
+      "bytes": 73150603,
+      "sha256": "9bf3199cb398c7e015ce5fb536abbf6d8a87cd75840141ec50fb8b216d22c6ea"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MRNA.tar.zst",
+      "bytes": 69014314,
+      "sha256": "d93b71f3bde1aa8b57ee71900a47cb9d916a3a4999abd178c731388650b389dd"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MRVL.tar.zst",
+      "bytes": 134003205,
+      "sha256": "5fdc2aa464cac71dd09432a63d5f489db22e256246f9363900e0bb1144c8b1ba"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MS.tar.zst",
+      "bytes": 60357323,
+      "sha256": "5e9ef487869abd9db2002da688d51919894cb79da4c30df5a78a5419e6ddc05e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MSFT.tar.zst",
+      "bytes": 245554930,
+      "sha256": "619803a5574a83356cea5f5db7a34116de16d06d2afff0b8b6497e15c7b6c75d"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MSTR.tar.zst",
+      "bytes": 260182339,
+      "sha256": "3d747fb8b309ebc59ada671b355b02155073ad1c2d0c884087711509db6f5911"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MSTU.tar.zst",
+      "bytes": 42464162,
+      "sha256": "e0b49c3767bdd97780f50afa29f7a223d693bd60fe330ea690dff2098ea4c9b2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MSTX.tar.zst",
+      "bytes": 49848513,
+      "sha256": "18d9121dc48a8fae0af10d4a37e0bc5b0f4dab809a95e93fe5f7e5ddc55a18be"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MTUM.tar.zst",
+      "bytes": 6539123,
+      "sha256": "cca43b09bf7bf0a235d481c25746d8c5998d13195056478055b6a13a8b386223"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MU.tar.zst",
+      "bytes": 268991538,
+      "sha256": "600d8605cb68cf12c66e04e7a3f9d6e23a9b94987ffe54aef0383aa6bc4bfc7a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MULL.tar.zst",
+      "bytes": 5889112,
+      "sha256": "6bddd95f1442ab0924429d204bf1abf5cec048d3286542b4e4dd470d524022de"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MUU.tar.zst",
+      "bytes": 4565609,
+      "sha256": "8ea0d9ea7faa6bfebae801b5b18ae6f7365ab1a149225f83a65304c655f8eb9f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-MXL.tar.zst",
+      "bytes": 9305868,
+      "sha256": "2f4c4b260a07433addafd0a0098452008dcd96a2fa04967c8e6f41485e010c79"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NBIS.tar.zst",
+      "bytes": 91314747,
+      "sha256": "b9c0a9e92a4d6a7afee0a0367534f71cc91f3a895ad37b96863eaeeeccfa2b3e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NEE.tar.zst",
+      "bytes": 81755739,
+      "sha256": "5a4d9cf2cfcb5afb32372da17f8a8de004b521d623a84ce4a04a820501980641"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NEM.tar.zst",
+      "bytes": 75924702,
+      "sha256": "1bfe5e5012a113972cc2392985061c0b5f050871868805137347511a1c553a0e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NET.tar.zst",
+      "bytes": 70787051,
+      "sha256": "bc1a059664ae5f78b46ef64c1204ca34b585008445d180825ec6fa869cc0d076"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NFLX.tar.zst",
+      "bytes": 203848843,
+      "sha256": "de2a01312bc7753bdf7013c9785438f9b44904dd7091552dcc79f02edc3f94e3"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NIO.tar.zst",
+      "bytes": 45421213,
+      "sha256": "ac660920be0f07652b5c1fde090635cfc4aee0ae09ac3b8b3b2c602557904f45"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NKE.tar.zst",
+      "bytes": 112135900,
+      "sha256": "1d912765152ab619e81cc58888dd19fb3ccc4e037d1d5ebb037cfc5212e0510c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NNE.tar.zst",
+      "bytes": 29536623,
+      "sha256": "4b461561f505a87a65f6d549cf85572129200514f67564302ff0a1b9f400fb59"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NOK.tar.zst",
+      "bytes": 18982644,
+      "sha256": "5bd985bcf81328cfee9b93b9e3b2c281fed381b9e48bb9e2ea9ad26288f2479e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NOW.tar.zst",
+      "bytes": 74377999,
+      "sha256": "bcde9a80f5caf7dc8700bd07299d9f1173c67be98ebb6193ea6536ea4734e4b9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NU.tar.zst",
+      "bytes": 53923156,
+      "sha256": "beff8ed3fa22969a1173507ea88b8d25eb40fe9639abd8eb19b6a102904829cd"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NUE.tar.zst",
+      "bytes": 21533808,
+      "sha256": "bd33da772b761a63b3c6b258f1d9ae33a2e13da35dcd8b941591d63fa5c57c7b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NUGT.tar.zst",
+      "bytes": 22081789,
+      "sha256": "3db190f67dca6a99d69d2d25ef81a79e3e27b7a45c6c7af143a07f37a0b13195"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NVDA.tar.zst",
+      "bytes": 1046662172,
+      "sha256": "c737f4526b6f2cf62528269880577b0a4afb7b1826ff59da99f1cda6ef8d1548"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NVDL.tar.zst",
+      "bytes": 121490393,
+      "sha256": "f15f6c38dbcf100c532bbc246bb8987549fc92e502208891870e3f06697bdb2b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NVO.tar.zst",
+      "bytes": 48287842,
+      "sha256": "aceb926757b6ad6358dcf7eaba17e0034d468181f9fd61c12a5b38be24b55e4f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-NVTS.tar.zst",
+      "bytes": 20710794,
+      "sha256": "cdbc150ada9e3c7d957f837adc710cf7863a02e6ec912fa7615146157ead9ea9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-OKE.tar.zst",
+      "bytes": 13330790,
+      "sha256": "b8a4b9210abaccba06314a083bf7631c2747b4714ab6a71cc494837e49e488a5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-OKLO.tar.zst",
+      "bytes": 91684863,
+      "sha256": "503c54c185b1a33c5c7507d66b4d05050c117781b46728bbfed2ccc00dda70e1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-OKTA.tar.zst",
+      "bytes": 59117019,
+      "sha256": "9e49dd0f714b5f9195d4dd6a84b2b1660087992fd7ba8ff842e674864ccc2a92"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ON.tar.zst",
+      "bytes": 70312520,
+      "sha256": "705d0e727d19b96cf57b9fa9d60b2b00aa6b940c2873d3aa950a151d9884ee6f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ONDS.tar.zst",
+      "bytes": 23284502,
+      "sha256": "0ac1248eccc3977cad9c8ea938b8804a7031d29b074b10e7cde6187ec55a935e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-OPEN.tar.zst",
+      "bytes": 44428713,
+      "sha256": "0082e66783295f4fb396961781139d30ef190810fbe871270ccfc6c04e6e63b3"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ORCL.tar.zst",
+      "bytes": 209460326,
+      "sha256": "d959414da57b05a72f50508af770784773f396438cc22fad6c3dd87eaf635976"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-OSCR.tar.zst",
+      "bytes": 35443421,
+      "sha256": "6add83c1b98d252fb5e5dc652b795157f9dac4967fb104fe2cb793b8d0fc1e8c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-OXY.tar.zst",
+      "bytes": 94224779,
+      "sha256": "f55ec487d9c28849f72c18dc1c9d300deef72159ce6e7f433829a02fa6787b1c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PAAS.tar.zst",
+      "bytes": 26017728,
+      "sha256": "be261766844896e2413b2d61c81753cd7abcae06af8ef824b80f1159ef9abd95"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PANW.tar.zst",
+      "bytes": 82407293,
+      "sha256": "ea5dae47af0101f60da866a4ee859f65a9a16cb97241f541734ff0a8c57d588b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PATH.tar.zst",
+      "bytes": 48046011,
+      "sha256": "bd15fb5a6e64999503f3e5fb62b6a723eb3248aef0ba692574c0967666fca699"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PBR.tar.zst",
+      "bytes": 19665741,
+      "sha256": "85b76bdd2a495754fb85f8225645ffb824dcede96decb056fd44012bf71a42d0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PDD.tar.zst",
+      "bytes": 87924153,
+      "sha256": "f280f3d6a1a354269409893114df5b9a0452e273676ea75fdfceddda047e54ab"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PENG.tar.zst",
+      "bytes": 6526961,
+      "sha256": "e77ff3a7b1125ccb5bb9d5535646f4cb618f5ca5204c59c28c664b64550c4378"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PEP.tar.zst",
+      "bytes": 87456719,
+      "sha256": "2d1cee1073ef10071f0b82d111853b74cf3aae43a1aa7ff877156a3bca880a37"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PFE.tar.zst",
+      "bytes": 74954833,
+      "sha256": "9532cd1084cb23700a6fdc2ff59d41511c859623eb865a0032a83d219622a270"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PG.tar.zst",
+      "bytes": 75098799,
+      "sha256": "c19a6f5993cf0d0f351c13ead647ccd7a80dc293cb01400d267f74f8584bba46"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PINS.tar.zst",
+      "bytes": 76145533,
+      "sha256": "98ece565da68e80551c70dd437ad1bab96097debaa51f1dc72b23949c1be1a28"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PL.tar.zst",
+      "bytes": 26288202,
+      "sha256": "334eda2b1026fa439750baae6e66640f35c76bb6091bd38d62b43664ff889cb4"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PLTR.tar.zst",
+      "bytes": 418522865,
+      "sha256": "8706007606d13950682368d80fea7cbdbc423f5fb21af22bdef6c4b382486498"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PM.tar.zst",
+      "bytes": 40149256,
+      "sha256": "92966aa2ba512465144976beb08ab693b0754db0b36854dc31ce5c37d3294767"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-POET.tar.zst",
+      "bytes": 24214119,
+      "sha256": "36c70bfa76401437ac7fc9c3e3a5250886944ee128768db46db4f1ba3a6eb33a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PPLT.tar.zst",
+      "bytes": 3837134,
+      "sha256": "543e173335cff1d56bcfd73dc5e6784230e32e4cf55248e5f102c12a5d41dcb2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PTON.tar.zst",
+      "bytes": 28902983,
+      "sha256": "b3c61bef8b936941491fd19bb220def30f76abc8dc095539235b8361382cb352"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PWR.tar.zst",
+      "bytes": 13150977,
+      "sha256": "2dae9484d7e3a725878eb5b8a48e4a7bcb256b3597a2c4c80493dc75001da312"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-PYPL.tar.zst",
+      "bytes": 115514009,
+      "sha256": "89d784c4843e1eb1a9701697f671453776b6fc2f1d50eefaede1543e97657b66"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-QBTS.tar.zst",
+      "bytes": 75459421,
+      "sha256": "282343e5ce8af8c4e4cadcae3881e65a199ed227e80a8e31a14d73f9b2f46d5b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-QCOM.tar.zst",
+      "bytes": 91191398,
+      "sha256": "673b2c50063fd938bdccd8405c9de5c4457078e6245b14adae43820bf5b0ff47"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-QQQ.tar.zst",
+      "bytes": 1297778974,
+      "sha256": "c321e12121e5a74126e37ca14bbaa281f6fc78639ddad0e014ed99daed2e53e8"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-QS.tar.zst",
+      "bytes": 35490821,
+      "sha256": "b87e213c11e637cc83c46fabfcaa1962e7f956b835b79118ba4492f4a47f7c91"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-QUBT.tar.zst",
+      "bytes": 50724842,
+      "sha256": "3ac7b5c0ab5de90dac69e6454bb8458381f1305e8dd6b5c40b7b90d312cd096c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RACE.tar.zst",
+      "bytes": 12261400,
+      "sha256": "e87e2ed32848cb39e6456cbbfa798282e62d32876df1ceb44cae87d09f3c792a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RBLX.tar.zst",
+      "bytes": 119175904,
+      "sha256": "23d8a6f6c3af4f1d3595ecfac44d8ce7bf3b00644e8bc9523a85729cbe9971e0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RCAT.tar.zst",
+      "bytes": 38283960,
+      "sha256": "f395df759e3872d267e366c5626d59f88105ad59e2edadaea3cc703e85fab42e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RCL.tar.zst",
+      "bytes": 51484498,
+      "sha256": "177ba70e8cbc7f9110b149f0a6dd71d5c6adf9d7285bdb238a64ecdc99a78e24"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RDDT.tar.zst",
+      "bytes": 115061282,
+      "sha256": "9fe8fc3c35f282db43ebcc16c036d7b1a9699d29f03b3f75ad059a7187cf814a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RDW.tar.zst",
+      "bytes": 19784807,
+      "sha256": "4062072184639ac245c8073e1e159f1c76ee12ec24dcffb64d469c66aec71deb"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-REGN.tar.zst",
+      "bytes": 16023532,
+      "sha256": "622855ccb39ea0870d33ba5a9821a00f02968a07dd6b5abe148fb7bca7cb6ed5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RGTI.tar.zst",
+      "bytes": 128951370,
+      "sha256": "53db39d3686461a14f18140dfaccaadabbbd9b5429e2d5fd72d8efc71604d7a9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RH.tar.zst",
+      "bytes": 19996870,
+      "sha256": "2338e52e451b0af768a250a95912e0e8ebd3c44ddd7b15293bf0a20d5d32ce7a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RIOT.tar.zst",
+      "bytes": 78555874,
+      "sha256": "8c962fa424f080d25b020d8cb60607afe85390dc46eb0da00d27288d26dca766"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RIVN.tar.zst",
+      "bytes": 54437199,
+      "sha256": "fda8c488fd478c32d23d52830732b4492aec87ba59610e3e1228344fafb4247e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RKLB.tar.zst",
+      "bytes": 128573462,
+      "sha256": "d49bc15b23bab69cc71f846242f9dee2e1bb394c252453e3fa4ef5125890e7d5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RKT.tar.zst",
+      "bytes": 32567788,
+      "sha256": "8a091d38b1c7f22b105ba0787fe945911027f114bb0a3ea93f454137fb6f16a5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ROKU.tar.zst",
+      "bytes": 47113479,
+      "sha256": "a5dd824e7bcdb5c1d1baa49dbb2feb2b52a91c723b33c75c4655484d8d6e0ad8"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RTX.tar.zst",
+      "bytes": 58582843,
+      "sha256": "c7b76d2458ec7416c2a4cecb841ea53024e6296606ea0d742eee5b3ce46ca075"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-RUN.tar.zst",
+      "bytes": 50535408,
+      "sha256": "9ace758d78a0464e640b490285fad2453ff6c8cd8e75abf2382be57afbd911fb"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SATS.tar.zst",
+      "bytes": 12844860,
+      "sha256": "dd2ec8a4d07e851dda78a1b0f8d2530513274e0a156287721212f3d22a673a89"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SAVA.tar.zst",
+      "bytes": 10866361,
+      "sha256": "ce91e8e22f3e8548e11f828e8b99e86f52c2faa183b19377ff0153bb057fa687"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SBET.tar.zst",
+      "bytes": 29551672,
+      "sha256": "6f1451ca31395af4918c07d4c3fbb86e835415c06ada6ee2582be3533d844c71"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SBUX.tar.zst",
+      "bytes": 95539820,
+      "sha256": "63b5d85de0355c7886fe76ec923ccdc62a33cb2050c80abeebf3a41dd6e31321"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SCHW.tar.zst",
+      "bytes": 70059626,
+      "sha256": "99423a381681fcc98c26e2f35be31b6cf9657a8222349a79a8ab8e58d0837ce5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SE.tar.zst",
+      "bytes": 59009603,
+      "sha256": "87edb06b5f3b8350e03ea8d5736a754385e6aa10399d1b1374e696eb3e63b0bf"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SEDG.tar.zst",
+      "bytes": 46234129,
+      "sha256": "9ed52c2a9cb2a01046fbb623c41c958486f86f587a6aa0dd112d9a33f5e041dd"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SHOP.tar.zst",
+      "bytes": 107729535,
+      "sha256": "6497ff4ce831d5a9a77a17cb17f1ce5dc43067ca267a0b92c369732bd95389a1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SIL.tar.zst",
+      "bytes": 7515126,
+      "sha256": "73747a9fa52e23202ff843029530edbe3d13cfca0f3e29ac94be83ef8e9e5c53"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SILJ.tar.zst",
+      "bytes": 20193086,
+      "sha256": "37589a79bddc9f394359d16aae921b484788725b4341ac8e0ffb0a5dcfd8db2e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SIMO.tar.zst",
+      "bytes": 6674836,
+      "sha256": "61fd75db0ff63fbe0ca3326bab73df41a9dd9bb401d76b4a442a78a1dce02dfb"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SLB.tar.zst",
+      "bytes": 62642166,
+      "sha256": "982cbded42aaa7d7382dc4025205372e753f29f1a457407e85348ee1eaab1725"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SLS.tar.zst",
+      "bytes": 5095434,
+      "sha256": "8c36a7a272abff2922c7c6aeb8136b4df260ff5e8e3227654faf8ca33ff24fab"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SLV.tar.zst",
+      "bytes": 336808741,
+      "sha256": "5825dadd324b7e852b7446bd087a2904229c78a413017281bc24845c17a4c852"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SMCI.tar.zst",
+      "bytes": 258133084,
+      "sha256": "302c2c97966f9d1fc6a1b4c865002cc6ec6aece4e7d7fb80986199e597b270d5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SMH.tar.zst",
+      "bytes": 125071144,
+      "sha256": "2519010147a3952b674fcc875a54c1eb1b9580bf1c2ffb1f92e0231f2d913409"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SMR.tar.zst",
+      "bytes": 85824924,
+      "sha256": "89b2fef10e18120b286e1f54c7fed70a3b3eefbe1e4b06ed71b7bf7714739118"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SNAP.tar.zst",
+      "bytes": 40249155,
+      "sha256": "582f0d9d8fa6e27aa73e710377a9edac2af0d728d9b61a914f776c3e497411cb"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SNDK.tar.zst",
+      "bytes": 67398949,
+      "sha256": "dc1c7b9c127ea727f8960a08818da0b8b2e009cd75d75dd70aba71c5cabd3bab"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SNOW.tar.zst",
+      "bytes": 69196868,
+      "sha256": "b6c45262743a5d22c93482527ff4fa6a3493f0826893b4d0fffa01399de1f2c9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SNPS.tar.zst",
+      "bytes": 19522361,
+      "sha256": "f1ff1dc04b5ba10b9f5418e3aec3c66fa3cda155afe84a98bf2305d8b1646602"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SNXX.tar.zst",
+      "bytes": 216,
+      "sha256": "cfed89c90169a7246bb27d7fd82132b456bd66dcfedfa54b8a20af490b4dee44"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SOC.tar.zst",
+      "bytes": 15392861,
+      "sha256": "30e737b9ff9c391b469e43aca5dde962ac746432323b6b3e235e27dc52cbbb6e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SOFI.tar.zst",
+      "bytes": 178348009,
+      "sha256": "b6ec5a998a0183efcddbe827579c6b2c317ec9e8f6e3bf4b13c70df19064373d"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SOUN.tar.zst",
+      "bytes": 77810478,
+      "sha256": "a9bdcce97b24a923091705b6363a0029cc84264ea4a3f8ccfa8284a05a83931c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SOXL.tar.zst",
+      "bytes": 105803326,
+      "sha256": "fdd733a850b6f2f143b00915074bfdba7795a13f637e9ff290be166892845769"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SOXS.tar.zst",
+      "bytes": 63252255,
+      "sha256": "f9d084cc87e0956983a3044f30f602751d26e08c98431613c611a1fe86f1d8a9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SOXX.tar.zst",
+      "bytes": 38014590,
+      "sha256": "c7fd3179eca5b7bfb5e80c8ffa191919d682519dff3a3131e463e847ef3c4ffd"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SPOT.tar.zst",
+      "bytes": 54870970,
+      "sha256": "ea3157ca8b09331d924da3baa2f179479c4223687ae75161cc93d9ca683ff8aa"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SPXL.tar.zst",
+      "bytes": 35410082,
+      "sha256": "313e609befba052eca576be9b8ffdc915a29ef7cfa9a5bd09cd32c63b41885e3"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SPY.tar.zst",
+      "bytes": 1808421266,
+      "sha256": "1006fa739e25655e306fd392fef4ad007f3338c1ca33e6950c6ea1fb31f7baa3"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SQQQ.tar.zst",
+      "bytes": 115576345,
+      "sha256": "b9e176f1b33cc6abfe9776596d470d26c16255353d951670cc2c2252eb69f6ee"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SRPT.tar.zst",
+      "bytes": 13279298,
+      "sha256": "77808151d01428efad4f2c50799884745e9a96ddad4083f7bb561397754c9611"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-STM.tar.zst",
+      "bytes": 15864859,
+      "sha256": "82b6a0baf0bf6809a51dff36361c763e18bbf53795fda7b2d6c38eef450994db"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-STRL.tar.zst",
+      "bytes": 7742173,
+      "sha256": "2df69a03197447af406f9fc5b20596df48d38c73f82a62613bc2bdc37c2d7ae9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-STX.tar.zst",
+      "bytes": 40018103,
+      "sha256": "d7e58c79a2d81b914776870c1340b885a8a8d9a228d34f2ee4c0c154af04c739"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-STZ.tar.zst",
+      "bytes": 18457346,
+      "sha256": "7575e45050dacb1bbdf503e7b7f497a744603a64a6663f72a336cf773bc19eaf"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SWTX.tar.zst",
+      "bytes": 2072498,
+      "sha256": "e01815f59e27ebb44d7b156475ce38b932297e6f41f3a7860fdf5c6b569b4b90"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-SYM.tar.zst",
+      "bytes": 21831969,
+      "sha256": "d8ad88c18fad85772df1403fed8343082023367f42aa646e9468266a41f4ac66"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-T.tar.zst",
+      "bytes": 63068098,
+      "sha256": "03c2d601954cfbb2f6176973e095e560672a3e206f00ba1fcb7c42bc6177aa87"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TEAM.tar.zst",
+      "bytes": 31200445,
+      "sha256": "d03656786a415f3ce2552eaebefc00b51035fa173b22f8f5c5f6ed73a5e0ed79"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TECL.tar.zst",
+      "bytes": 12746335,
+      "sha256": "6f80a47f2454f2db79e2558552cb6b58223708dc4ee12186c217f3c430437a55"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TEM.tar.zst",
+      "bytes": 102686870,
+      "sha256": "7e3f7e00f36d6cd20a1360db84fefa0adbdea347fa0068c4f67a7d4ad83677bc"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TER.tar.zst",
+      "bytes": 16291090,
+      "sha256": "7d3a97bf6f644de773e18cf2ffd06a5d4a0cbe62072f660ad441edd0744d581a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TGT.tar.zst",
+      "bytes": 84563623,
+      "sha256": "1af6fcd66f39491f5dde6100472d2dd56a822af49c273a4df36aab1df9a5bfd6"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TJX.tar.zst",
+      "bytes": 56198780,
+      "sha256": "d34c6f238e77ae368a76c5cb21461e2cc113148253dfb30cd2d0346d1f6c3a3f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TLN.tar.zst",
+      "bytes": 14949475,
+      "sha256": "d348ef716b4e665f3e67ba51bfb2ddaa21359cd7525550e6d45400ccf802ba45"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TLT.tar.zst",
+      "bytes": 284573670,
+      "sha256": "bcf0dd83b492024dadf8cba7482354640b287ee0af6cb1b84cffb13b1404a43a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TMF.tar.zst",
+      "bytes": 40932303,
+      "sha256": "8a2872a09b4e5a605fd06a5cb0e7c8d99678c2925e91bf7407a0bf63b4228bf9"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TMO.tar.zst",
+      "bytes": 24236643,
+      "sha256": "059eec02debb26520f57e95e928c82801139878590b6430655a64ffa9f388a69"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TMUS.tar.zst",
+      "bytes": 51155615,
+      "sha256": "e2e8da93231bcd1108cd8a5bf3990ea1b3fe6fbc27b8395ff505f7330c14a9b3"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TNA.tar.zst",
+      "bytes": 87675077,
+      "sha256": "afa21f4a5b0a98780e3be71ea320476e9e8807b2598a15c2bdabbc44cb6f1c09"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TOST.tar.zst",
+      "bytes": 83429610,
+      "sha256": "db89865443914d361bdb21caef8c65e072c0c82f7d69505787740c8b068ea008"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TQQQ.tar.zst",
+      "bytes": 239636011,
+      "sha256": "5002a9aeda6d8505889651c3efe69625b34b4638d95fed9f0c2b873c760cee41"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TSEM.tar.zst",
+      "bytes": 8870316,
+      "sha256": "34971123d4c98bf40ea7c057a8f4b1aecd229da98c4d7edea6b71d94dddac7c5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TSLA.tar.zst",
+      "bytes": 780015955,
+      "sha256": "1676a2e7887408615d0b49213e36369ac69854022e4f7c6321b6785409549d13"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TSLL.tar.zst",
+      "bytes": 130752334,
+      "sha256": "598d189463972a35170ccd7b2ad99d2c1039222da8c683559e82687e004b6c6f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TSM.tar.zst",
+      "bytes": 188466183,
+      "sha256": "d2fe830ef648a637296a30d9c863ee89396b4c1481bcb09564f072cd1158c093"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TTD.tar.zst",
+      "bytes": 91011633,
+      "sha256": "5e466639886bcab465d7c8208db5ff7445de72d21058f209cca7a25dfec2b56e"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TTWO.tar.zst",
+      "bytes": 29053414,
+      "sha256": "c51bd06c034a7b786b4f490fe915501d3e733f39b73f99342607aea9e8cb2634"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TWLO.tar.zst",
+      "bytes": 39439905,
+      "sha256": "840e72c9ca8614d96375b1aaac23856b4854d9016b7b4e475abc4391a95c1e7f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-TXN.tar.zst",
+      "bytes": 54525199,
+      "sha256": "ebe4211b6e04e7d34bb0462662316874db105fd8d4f7e6e3ea4574dc3d1c62e1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-U.tar.zst",
+      "bytes": 60296208,
+      "sha256": "ebf7866e82262d2b76598135c2412cc6b6aee407d95a147e745e34ac0afc487b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-UAL.tar.zst",
+      "bytes": 81499024,
+      "sha256": "57f757a3021788f3452401fadcbbfd3dba712eab38b2256b4767c7eb12135f29"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-UBER.tar.zst",
+      "bytes": 104842906,
+      "sha256": "a615d551feab4b994a1b7f6ecb1820a3d9f8b7bb049ca67d81ef6bf363e8ba58"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-UCO.tar.zst",
+      "bytes": 17201260,
+      "sha256": "de17f98c1d19b04798ea933f40d0b20785301fdbcc12027b2fa2e586ad5c3ff5"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ULTA.tar.zst",
+      "bytes": 21285738,
+      "sha256": "8512cef6f4297dc7f3a6f3433c507207627c3c5cc1017f871dbbd01902c5630c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-UNH.tar.zst",
+      "bytes": 111806360,
+      "sha256": "f40b84bbd7e477ef4d2fbbcfe6bac0ad1c81f0107781965b336cbee89503dc4b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-UPRO.tar.zst",
+      "bytes": 29391269,
+      "sha256": "231af94fd603178e63897b773be140f12719ee6c44941643f522a2f770df5fd7"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-UPS.tar.zst",
+      "bytes": 71402600,
+      "sha256": "687848d938b880e3a6053bbe103f16a54f88ea03c4596b7380fb2b56e766dc46"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-UPST.tar.zst",
+      "bytes": 96505890,
+      "sha256": "aa996311f3ff2a8370444672366dc80809bfa3492fb28870922c96b0a0ec09df"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-URA.tar.zst",
+      "bytes": 22644478,
+      "sha256": "46002a4deec731a500a1ac7d46358251611a19e7c0b176aed2782f31aa5bd3b6"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-URI.tar.zst",
+      "bytes": 19513311,
+      "sha256": "f578c2d3fdccbb4d328dba4761e1bf019e6840976ca7c9e3a0d7c8ba7ef07de6"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-USAR.tar.zst",
+      "bytes": 28057268,
+      "sha256": "2b3b79497e76fa51c230b74ae63519ada71edbe8fb98c77ccc4a8ebd4ec12710"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-USO.tar.zst",
+      "bytes": 54403556,
+      "sha256": "1d673e09c373afce4da687c1bb85d8b948fadbf85304a86bb2e57221fc5fd060"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-UUUU.tar.zst",
+      "bytes": 39674857,
+      "sha256": "89c7cb98a579aa4a50981f67b4e09442a8d1b079c466a56956086334946b19a0"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-UVIX.tar.zst",
+      "bytes": 32081205,
+      "sha256": "f09004b1c9fbba7acd49ff3a5fa41034f17951135827bba097c6daa478681a2b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-UVXY.tar.zst",
+      "bytes": 39599822,
+      "sha256": "2f4073ed536418186b374ee250ee5a6d7c3f4512097c9d158d8b1ad426ae06dd"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-V.tar.zst",
+      "bytes": 55458010,
+      "sha256": "6c15bb6a9cfa7a074d323f09cc117f11f54e3464aa9fc3f31e30625bcb75793a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VALE.tar.zst",
+      "bytes": 18091735,
+      "sha256": "0156f984ee09218b0108d37d6f435e8e51ea047769fae9a7d091c6d9ec363ba1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VEEV.tar.zst",
+      "bytes": 7458192,
+      "sha256": "fc554c0c4bb0e409b78671f8cf7d4d2787add569fc4bb1182d8f647236619ddc"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VG.tar.zst",
+      "bytes": 15813692,
+      "sha256": "9186597c199ef5cd41a168cd1d1e72698eb8aaae0bb7641f0ffc9658552e6951"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VKTX.tar.zst",
+      "bytes": 14669956,
+      "sha256": "c572e52dace5189dd4821f2022a39a5bc8d1d472420c1ef16bc2d83835157d22"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VLO.tar.zst",
+      "bytes": 35754852,
+      "sha256": "30429702b2a238f7cd0326b2b5fc4d3a819e1fbad4ec5fa7860052c392c6348c"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VOO.tar.zst",
+      "bytes": 42013424,
+      "sha256": "fa6183afd499e74fc21bce804557ff64d079526be844772247b7e394eba1677f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VRT.tar.zst",
+      "bytes": 86758524,
+      "sha256": "21777c684e10e5a711df0b2f5ffbb7122f4f5a34e9d587f21b9a74623f816cb2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VRTX.tar.zst",
+      "bytes": 14891917,
+      "sha256": "d373e5621c5aca58a6066281c76c0fdcbdc43bb40d80f73d54b4ce512e41c7de"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VST.tar.zst",
+      "bytes": 89314939,
+      "sha256": "b580f5f75bf8c988ee0723bc960f70c1bbd9ff1e2cc652e601d56a1bb7afbada"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VXX.tar.zst",
+      "bytes": 32272212,
+      "sha256": "b8bbe72367c9bc773f2993af69e9170d3628696d646705119c81deaf81f114bc"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-VZ.tar.zst",
+      "bytes": 70691497,
+      "sha256": "dc162753ede94371e2de576014d6a0e3caaf17632dd10c3b64cef87e1f832536"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-W.tar.zst",
+      "bytes": 54455798,
+      "sha256": "30b5f6f61b90fb1363e172bb12ca400bf2cba4f985c2e94f77a1b938377d28d1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-WBA.tar.zst",
+      "bytes": 13634339,
+      "sha256": "2f060ce336c388a7b4f8f7c2d23af3d0d77bae2aff92e70f92b7a37fe53a0f3b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-WBD.tar.zst",
+      "bytes": 27255052,
+      "sha256": "db50c852dc389c4ed233a64c5b237a0253e26e408ab11845eb89cb4bab2267ad"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-WDAY.tar.zst",
+      "bytes": 33927178,
+      "sha256": "5ea1c5905ead3cc5a2a95fbe96f86a8a95db5b26227d5cbbd8d074fbe794c68b"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-WDC.tar.zst",
+      "bytes": 78137552,
+      "sha256": "42754a5a82348947c86fb74367442509208385e60c8527e36cd79190225d6fe1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-WFC.tar.zst",
+      "bytes": 101807366,
+      "sha256": "d40aa25777fcf673be5ad2bf97f5087910031c2ed920907a8cbdc3c63435ca54"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-WMT.tar.zst",
+      "bytes": 129004861,
+      "sha256": "dcb5ed29aaa6a47c508f61373f80100f9a78ca8ba4707b9ad510c735539305cd"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-WOLF.tar.zst",
+      "bytes": 17773031,
+      "sha256": "4d443dd9698794a17582f4f8506e3f899e7f58ca5f909aa2052641f23d0597cd"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-WPM.tar.zst",
+      "bytes": 21723741,
+      "sha256": "9e7d81e472bb8fecebb1c368f11f2725184b26fb871aa73ac70928a1a213ae04"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-WULF.tar.zst",
+      "bytes": 39859952,
+      "sha256": "28658caf4e96184bccab4e83d69cfa3c9ec976f497942796a65cc106a4d05de2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-WYNN.tar.zst",
+      "bytes": 34211111,
+      "sha256": "192af592b7084be72ab4a38fd0c3e1897c81c11186a2800e9c3cbcd76507118f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-X.tar.zst",
+      "bytes": 16612146,
+      "sha256": "dbb724b35707e8efcbc472846ee0caba8772440ed2fd3da4b72b802cd7926355"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XBI.tar.zst",
+      "bytes": 40255711,
+      "sha256": "c1600e747729405e80179aefa4fbfd071c5ba6faf395f7dce56850473bb6f813"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XHB.tar.zst",
+      "bytes": 29604965,
+      "sha256": "5b03e3e29596f4b01887d62098a9e9ccb17a178f41d7108efca16cb28c72795a"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XLE.tar.zst",
+      "bytes": 86762685,
+      "sha256": "08ee70ee24f68baf0a3109e57df9a4076a2cbde81fc88cb2baee14df517888c4"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XLF.tar.zst",
+      "bytes": 118688056,
+      "sha256": "ebf5bc7b5b7c7827b67c93559df7ab7a165c3dd99c3e4efebf55930407421f81"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XLI.tar.zst",
+      "bytes": 54674539,
+      "sha256": "18e32ae933ff50cdff798fa1eb21da23c4e2b7613e996d825eb12b201a097a72"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XLK.tar.zst",
+      "bytes": 55648789,
+      "sha256": "8984625295061576982b44ff0ebdc1699a128889db37e517f95f29e524a64cb4"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XLP.tar.zst",
+      "bytes": 37763470,
+      "sha256": "5999d4cdb9c837d98a0f63ba6b4057eb4b175a251aee94213afb5083ade19395"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XLU.tar.zst",
+      "bytes": 40264908,
+      "sha256": "c7a5ba9d0d9affbf5e0618d8992da686fbb40f608fc3406301c20c6fe2388c2f"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XLV.tar.zst",
+      "bytes": 40889520,
+      "sha256": "0e5799546f5d55eeb6d5805f3a3de16bc6fb700c33a3e5c78699df80a06ddab7"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XLY.tar.zst",
+      "bytes": 32495824,
+      "sha256": "98f2f2385d3cb62764453493712b9fca05678dad5c30838364b0309c99d103e8"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XOM.tar.zst",
+      "bytes": 117783737,
+      "sha256": "1782c949f034bd0d2b2ad11af97790f997d1b1c141b26a20c6dded9413fd72db"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XOP.tar.zst",
+      "bytes": 44196688,
+      "sha256": "d3806289276cf382ad18ec5be4e3515725967b5e13d1aaf1651984e7501aaae2"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XPEV.tar.zst",
+      "bytes": 59798772,
+      "sha256": "f7a2ef6930d212c1876c6dc7d12c996fe421eb354c0cc1102f242725d037a162"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XRT.tar.zst",
+      "bytes": 34171717,
+      "sha256": "ba77ae00d690866eb0dd0ef046941976e57b48b97dd77af95d81efcbb210b4d1"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-XYZ.tar.zst",
+      "bytes": 71988137,
+      "sha256": "90e68c8f80b5e4ff88717774f0c44da7b51b24fa164fb47f7a3e1b59e9904a65"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-YINN.tar.zst",
+      "bytes": 30551309,
+      "sha256": "f91a456e666cb439f59157413778d42ef294f8d0bc5f7fc1aaaec53bffeee7a4"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-Z.tar.zst",
+      "bytes": 49949417,
+      "sha256": "e7920ac1568be6cb1373399030edae0a6408454aa7d5a5fd189e2e6d7ae516cc"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ZIM.tar.zst",
+      "bytes": 29874922,
+      "sha256": "51dadaa0d71b56048005394e5a32e4c64020adbdda67b929b7ca3416c3ad7288"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ZM.tar.zst",
+      "bytes": 49678371,
+      "sha256": "26719a2df6bedab3466d8c0f6383dfd9fb3d12ee8215af64dd31f89998ec4d76"
+    },
+    {
+      "path": "nn_meta/validation/v6-archive-migration-20260926/captures-ZS.tar.zst",
+      "bytes": 42522548,
+      "sha256": "2b8af461c54880a180e397bffe07981883ec78fa00122c145be55cef602af595"
+    }
+  ],
+  "free_before": 269271261184
+}

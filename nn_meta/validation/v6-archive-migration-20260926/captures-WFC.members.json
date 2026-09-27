@@ -1,0 +1,10 @@
+{
+  "id": "captures-WFC",
+  "sha256": "d40aa25777fcf673be5ad2bf97f5087910031c2ed920907a8cbdc3c63435ca54",
+  "members": {
+    "files": 23112,
+    "directories": 4813,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

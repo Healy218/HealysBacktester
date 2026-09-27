@@ -1,0 +1,10 @@
+{
+  "id": "captures-OSCR",
+  "sha256": "6add83c1b98d252fb5e5dc652b795157f9dac4967fb104fe2cb793b8d0fc1e8c",
+  "members": {
+    "files": 20504,
+    "directories": 5027,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-SMR",
+  "sha256": "89b2fef10e18120b286e1f54c7fed70a3b3eefbe1e4b06ed71b7bf7714739118",
+  "members": {
+    "files": 26038,
+    "directories": 5417,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

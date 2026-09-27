@@ -1,0 +1,13 @@
+{
+  "id": "captures-WBA",
+  "source": {
+    "files": 11286,
+    "directories": 2365,
+    "symlinks": 0,
+    "bytes": 20145138,
+    "metadata_sha256": "e154dce0f2c77af1605bc548409367f143245d5b4daed5a49a7fa98f355f48df"
+  },
+  "archive_bytes": 13634339,
+  "sha256": "2f060ce336c388a7b4f8f7c2d23af3d0d77bae2aff92e70f92b7a37fe53a0f3b",
+  "state": "packed-source-stable"
+}

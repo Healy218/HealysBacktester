@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CHTR",
+    "source": {
+      "files": 25774,
+      "directories": 5355,
+      "symlinks": 0,
+      "bytes": 42752761,
+      "metadata_sha256": "27aae736c0faf3dfbbbde2b85a8324f8d58ff00ffc1779f9788293b14c2bdd9a"
+    },
+    "archive_bytes": 27765126,
+    "sha256": "3c6142988023e7f1befa23bee77aebcde485c39d68dc9211998f7152d100d45b",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CHTR.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

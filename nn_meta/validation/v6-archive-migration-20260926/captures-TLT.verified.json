@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-TLT",
+    "source": {
+      "files": 31476,
+      "directories": 4519,
+      "symlinks": 0,
+      "bytes": 303118280,
+      "metadata_sha256": "284527281d5662be6acf11362bf9ba21d34699d3a627ed5cc2b56fdb57274350"
+    },
+    "archive_bytes": 284573670,
+    "sha256": "bcf0dd83b492024dadf8cba7482354640b287ee0af6cb1b84cffb13b1404a43a",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-TLT.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

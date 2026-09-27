@@ -1,0 +1,10 @@
+{
+  "id": "captures-NET",
+  "sha256": "bc1a059664ae5f78b46ef64c1204ca34b585008445d180825ec6fa869cc0d076",
+  "members": {
+    "files": 26760,
+    "directories": 5587,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

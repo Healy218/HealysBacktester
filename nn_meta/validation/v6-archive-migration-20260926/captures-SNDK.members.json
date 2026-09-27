@@ -1,0 +1,10 @@
+{
+  "id": "captures-SNDK",
+  "sha256": "dc1c7b9c127ea727f8960a08818da0b8b2e009cd75d75dd70aba71c5cabd3bab",
+  "members": {
+    "files": 12144,
+    "directories": 2995,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

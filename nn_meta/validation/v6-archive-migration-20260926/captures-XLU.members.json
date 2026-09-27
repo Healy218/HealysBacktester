@@ -1,0 +1,10 @@
+{
+  "id": "captures-XLU",
+  "sha256": "c7a5ba9d0d9affbf5e0618d8992da686fbb40f608fc3406301c20c6fe2388c2f",
+  "members": {
+    "files": 24092,
+    "directories": 5033,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

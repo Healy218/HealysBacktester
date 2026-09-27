@@ -1,0 +1,10 @@
+{
+  "id": "captures-FSLY",
+  "sha256": "04e06cfcba921bd913221dd0bc43b92e13fa5f1aff4d31fd8850dc18e9d02d63",
+  "members": {
+    "files": 24998,
+    "directories": 5223,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

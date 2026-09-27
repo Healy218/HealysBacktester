@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-LMND",
+    "source": {
+      "files": 23644,
+      "directories": 4935,
+      "symlinks": 0,
+      "bytes": 45646823,
+      "metadata_sha256": "412bc763fcaff456ca16b26a63b64a288e6c4b8fd76e0d4d92c9d30c9920ebd0"
+    },
+    "archive_bytes": 32132946,
+    "sha256": "ca69406b5beaac053000ee6736a9778c742a72d3ab893d352af30617c1b799da",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-LMND.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

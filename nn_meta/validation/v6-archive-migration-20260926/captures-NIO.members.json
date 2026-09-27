@@ -1,0 +1,10 @@
+{
+  "id": "captures-NIO",
+  "sha256": "ac660920be0f07652b5c1fde090635cfc4aee0ae09ac3b8b3b2c602557904f45",
+  "members": {
+    "files": 24238,
+    "directories": 5041,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

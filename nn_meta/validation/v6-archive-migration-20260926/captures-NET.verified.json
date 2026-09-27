@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-NET",
+    "source": {
+      "files": 26760,
+      "directories": 5587,
+      "symlinks": 0,
+      "bytes": 85857146,
+      "metadata_sha256": "db93c121d869ea28d79ae444101a7c81b5ad36bc419853718c7a06c2ecd99997"
+    },
+    "archive_bytes": 70787051,
+    "sha256": "bc1a059664ae5f78b46ef64c1204ca34b585008445d180825ec6fa869cc0d076",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-NET.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

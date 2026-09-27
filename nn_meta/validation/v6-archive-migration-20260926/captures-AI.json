@@ -1,0 +1,13 @@
+{
+  "id": "captures-AI",
+  "source": {
+    "files": 26972,
+    "directories": 5615,
+    "symlinks": 0,
+    "bytes": 91537708,
+    "metadata_sha256": "adf12867a40beec8e5ed2bb08133f91b2e6ceb33a23c821e70de5049162c8be7"
+  },
+  "archive_bytes": 76630457,
+  "sha256": "3f965287d900f766e029a74e624e433165c27a733e8d66a2ea22f7764dce932b",
+  "state": "packed-source-stable"
+}

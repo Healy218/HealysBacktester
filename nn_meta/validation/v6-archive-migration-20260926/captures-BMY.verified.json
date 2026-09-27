@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-BMY",
+    "source": {
+      "files": 24442,
+      "directories": 5089,
+      "symlinks": 0,
+      "bytes": 87762939,
+      "metadata_sha256": "e34c1de06a77bbfb0ac9323bd1e4004a54efe6274ed5fa02c7e5a4bcd5f7ba86"
+    },
+    "archive_bytes": 74144132,
+    "sha256": "b7e84fd3df793cc2a2d092af32576bd56f28f0f576715cdce9a51c942684c27c",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-BMY.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

@@ -1,0 +1,10 @@
+{
+  "id": "captures-LYFT",
+  "sha256": "235e451100540adfd06b43cab8a3a49e40382590879060b3817e915d751357a6",
+  "members": {
+    "files": 23988,
+    "directories": 5007,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

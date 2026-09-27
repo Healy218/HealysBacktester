@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-ANET",
+    "source": {
+      "files": 22324,
+      "directories": 4649,
+      "symlinks": 0,
+      "bytes": 70157226,
+      "metadata_sha256": "5a5b69f825482730a27cc0eb2e0e7386bcc6f0ef9b00257d965bda7d7219ba9a"
+    },
+    "archive_bytes": 57642193,
+    "sha256": "8bda8b2dd750b4a283a0d953e4c9feda41f8f3c29de926b70d1df541be943e5c",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-ANET.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

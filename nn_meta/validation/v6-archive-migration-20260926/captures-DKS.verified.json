@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-DKS",
+    "source": {
+      "files": 19132,
+      "directories": 4477,
+      "symlinks": 0,
+      "bytes": 31885610,
+      "metadata_sha256": "1edfc558e93b718e6602b54da3237de0260be324fad4f7b37e9150ad303d6fdc"
+    },
+    "archive_bytes": 21239323,
+    "sha256": "9b5bc9d44a61b7e4e617e5325fb80aa028be382aac51970819a088ad2396e839",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-DKS.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

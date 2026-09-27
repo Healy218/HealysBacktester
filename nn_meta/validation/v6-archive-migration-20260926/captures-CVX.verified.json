@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-CVX",
+    "source": {
+      "files": 22382,
+      "directories": 4683,
+      "symlinks": 0,
+      "bytes": 108638365,
+      "metadata_sha256": "0883f2dfa471713c56498dc9bba62b641f726572d285a8228dc99d871faf1d7a"
+    },
+    "archive_bytes": 96384778,
+    "sha256": "1f19a7516c8896222f4a580aa6c2e2e8cc540e7dda99c4eaa5617de499ddec3e",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-CVX.tar.zst",
+  "drive_uuid": "62C9-C390"
+}

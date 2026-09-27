@@ -1,0 +1,10 @@
+{
+  "id": "captures-BKNG",
+  "sha256": "1c9e11c1f65f6bc786878d6896ddf74d98426b0ff5b83984a172141a97429b07",
+  "members": {
+    "files": 19670,
+    "directories": 4095,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

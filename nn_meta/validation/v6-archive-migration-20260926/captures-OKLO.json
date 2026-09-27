@@ -1,0 +1,13 @@
+{
+  "id": "captures-OKLO",
+  "source": {
+    "files": 20368,
+    "directories": 4349,
+    "symlinks": 0,
+    "bytes": 102788386,
+    "metadata_sha256": "361b0d0527e7108113ba381315b21ec9dcadfdbb68c28463218112a030bdd616"
+  },
+  "archive_bytes": 91684863,
+  "sha256": "503c54c185b1a33c5c7507d66b4d05050c117781b46728bbfed2ccc00dda70e1",
+  "state": "packed-source-stable"
+}

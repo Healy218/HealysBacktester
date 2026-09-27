@@ -1,0 +1,10 @@
+{
+  "id": "captures-BMNR",
+  "sha256": "32ed6933bef7959ac50a2655063c4ab7d0492b4d124ee7653e3b3d6e17520ee0",
+  "members": {
+    "files": 11784,
+    "directories": 2473,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

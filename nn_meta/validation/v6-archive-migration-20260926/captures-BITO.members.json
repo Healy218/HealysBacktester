@@ -1,0 +1,10 @@
+{
+  "id": "captures-BITO",
+  "sha256": "fad351f8e51102789be3efee8b479b8105f7326e2534cf2a4bb73131021a4d31",
+  "members": {
+    "files": 21086,
+    "directories": 4329,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

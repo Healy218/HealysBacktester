@@ -1,0 +1,10 @@
+{
+  "id": "captures-GEO",
+  "sha256": "ac5051ce30c396267481d11ab370ade57ff0fecf004908558eb52f4a1c96a35b",
+  "members": {
+    "files": 19404,
+    "directories": 4607,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

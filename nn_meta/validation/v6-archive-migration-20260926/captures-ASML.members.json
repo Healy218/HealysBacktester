@@ -1,0 +1,10 @@
+{
+  "id": "captures-ASML",
+  "sha256": "75d168e1c7493ae239e45c10790c1a9336e68bb6e5636ff6af4ad15bc9235d1b",
+  "members": {
+    "files": 21744,
+    "directories": 4513,
+    "symlinks": 0
+  },
+  "state": "actual-archive-member-counts-match-source"
+}

@@ -1,0 +1,18 @@
+{
+  "state": "external-hash-and-full-source-compare-passed",
+  "packed": {
+    "id": "captures-SEDG",
+    "source": {
+      "files": 24310,
+      "directories": 5075,
+      "symlinks": 0,
+      "bytes": 60124591,
+      "metadata_sha256": "5b19c2826ceb42fdea6002a7a1151ebb755a2f2373751bafb962b15312cd190f"
+    },
+    "archive_bytes": 46234129,
+    "sha256": "9ed52c2a9cb2a01046fbb623c41c958486f86f587a6aa0dd112d9a33f5e041dd",
+    "state": "packed-source-stable"
+  },
+  "destination": "/run/media/healy/MRHA/HealysBacktester/v6-archive-20260926/captures-SEDG.tar.zst",
+  "drive_uuid": "62C9-C390"
+}
