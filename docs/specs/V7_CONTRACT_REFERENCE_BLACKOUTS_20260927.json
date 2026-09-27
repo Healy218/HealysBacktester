@@ -1,0 +1,19 @@
+{
+  "schema": "v7-contract-date-blackouts-v1",
+  "policy_id": "v7-five-contract-reference-blackouts-20260927",
+  "authorization": "2026-09-27 user: can we just treat those days as a weekend for those 5 instances? Applied as exact contract/date data blackouts, excluding affected research paths while preserving actual sessions and accounting evidence.",
+  "scope": "exact_contract_date",
+  "treatment": "exclude_affected_research_path",
+  "automatic_extension": false,
+  "changes_exchange_calendar": false,
+  "rerank_or_replace_contract": false,
+  "creates_terms_or_outcomes": false,
+  "historically_known_eligibility": false,
+  "exclusions": [
+    {"contract": "CMA230630C00041000", "date": "2023-06-22"},
+    {"contract": "FANG220520P00130000", "date": "2022-05-18"},
+    {"contract": "MSTR230630P00320000", "date": "2023-06-27"},
+    {"contract": "RH230630P00290000", "date": "2023-06-22"},
+    {"contract": "VFC230630C00019000", "date": "2023-06-28"}
+  ]
+}

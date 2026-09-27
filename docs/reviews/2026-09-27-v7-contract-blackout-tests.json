@@ -1,0 +1,16 @@
+{
+  "command": "./venv/bin/python -m pytest tests/ -q",
+  "passed": 2448,
+  "subtests_passed": 18,
+  "skipped": 1,
+  "warnings": 20,
+  "seconds": 115.95,
+  "sources": {
+    "nn_meta/v7/contract_blackouts.py": "913e997d6fe3ef5aa40023c2401ead827cb194ba99c36696a2941a57f49b005b",
+    "scripts/compile_v7_contract_blackouts.py": "b2c43fa45b4252bd697b7d9ee10dedf7b5835f16e2e3c897a703a4d094216d76",
+    "scripts/build_v7_blackout_dataset.py": "bbd3ddbbfc138d7688b2526e26b108f3c735a9f870fb40cd9b528ea7820ba5a1",
+    "tests/test_v7_contract_blackouts.py": "6ea8e826877ad610c9d7d987d9b5148cba827d7625c4543d30d98eeecf970e60"
+  },
+  "log_sha256": "0c7cf91c51cb6fa66d99a82b37cecd91789167ea55ceb4860586b983a669e9c3",
+  "research_ready": false
+}

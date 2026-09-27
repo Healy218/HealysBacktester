@@ -122,12 +122,18 @@
   Entry plus reference planning allowance uses 175.69 GB at the three-SE
   sensitivity, leaving only 5.29 GB of acquisition capacity before additional
   execution paths/recovery. Project stress is 613.52 GB locally or 648.63 GB
-  including MRHA's historical archive, before assembly/training. Asked the user
-  whether MRHA counts within the unchanged 640 GB cap and whether to prepare
-  an explicit policy for missing-metadata paths; no answer is inferred.
+  including MRHA's historical archive, before assembly/training. The user permits
+  MRHA disk if needed; numerical caps remain unchanged. The user authorized
+  exact contract/date blackouts for the five missing references. The sealed
+  policy and actual feature/replay adapter exclude affected research paths,
+  retaining their census and partial ledgers without altering calendars/freezes.
+  Frozen entry impact is 12,970 proposal/target outcomes; full held-path impact
+  remains to be counted. All 720 sampled references now have explicit treatment:
+  715 standard, five blackouts. See
+  [finite reference blackouts](docs/reviews/2026-09-27-v7-contract-reference-blackouts.md).
   Bulk acquisition/training remain gated. Next: historical hours/reference gaps,
   full execution-path demand and its budget, then a resumable packed campaign.
-  Existing freezes remain unchanged. Full suite: 2,441 passed + 18 subtests,
+  Existing freezes remain unchanged. Full suite: 2,448 passed + 18 subtests,
   one skipped. See [packed forecast and remaining gates](docs/reviews/2026-09-27-v7-joined-packed-capture.md).
   See `docs/reviews/2026-09-25-v7-3-full-demand-launch.md`.
   Evidence: `docs/reviews/2026-09-25-v7-3-demand-scheduler.md`. Launch evidence: `nn_meta/validation/v7-3-launch-20260925`.

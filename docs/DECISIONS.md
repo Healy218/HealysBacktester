@@ -1638,3 +1638,21 @@ prevent a full readiness claim. Questions about counting MRHA in the 640 GB
 project cap and preparing a missing-reference exclusion policy are pending;
 no default terms, alternate contracts or implicit user approval are admitted.
 See [forecast, references and gates](../docs/reviews/2026-09-27-v7-joined-packed-capture.md).
+
+
+## 2026-09-27 — Five exact missing-reference research blackouts
+
+User: “can we just treat those days as a weekend for those 5 instances?”
+Authorize the five exact contract/date pairs in
+`docs/specs/V7_CONTRACT_REFERENCE_BLACKOUTS_20260927.json` as retrospective
+research-path exclusions, with retained exact 404 and same-date alternative
+probe evidence. No exchange-calendar change, stock-wide exclusion, automatic
+extension, standard-term assumption, replacement selection or invented return.
+Entry/held/roll paths touching the missing reference retain their audit census
+and legitimate partial ledger but cannot produce a training label. A path
+already closed beforehand is unchanged. Do not use hindsight exclusions to
+rerank shared-capital results. Sealed policy/entry census and tests are described
+in `docs/reviews/2026-09-27-v7-contract-reference-blackouts.md`.
+
+The user permits MRHA disk if needed. This establishes storage-location
+permission; the existing numerical acquisition/project limits are unchanged.

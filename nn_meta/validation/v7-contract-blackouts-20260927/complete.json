@@ -1,0 +1,12 @@
+{
+  "complete": true,
+  "exclusions": 5,
+  "files": {
+    "binding.json": "1509d8274f8edf769d2b17958d03419f4f292983137e56fdcb82a1dff49daa3c",
+    "declaration.json": "573ca4c114529c31b4e6617cf61a082e3a9f855bbfb3c5bf52fe65ebd20788fc",
+    "treatments.json": "731cfe18d009007ee9794eff525c8bab942530da00039c6fc3a43a3b26710a93"
+  },
+  "identity": "b7efcbf7d55ed5e5790d0fdd19f71ca20a69ff3131f04670183ceb7d3cd5843e",
+  "research_ready": false,
+  "schema": "v7-contract-date-blackouts-v1"
+}

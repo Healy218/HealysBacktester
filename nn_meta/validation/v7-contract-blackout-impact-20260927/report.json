@@ -1,0 +1,310 @@
+{
+  "calendar_changed": false,
+  "cases": [
+    {
+      "contract": "VFC230630C00019000",
+      "date": "2023-06-28",
+      "decision_clocks": 32,
+      "groups": [
+        {
+          "decision_rows": 28,
+          "minutes": 5,
+          "proposal_target_outcomes": 590,
+          "target_dte": 1
+        },
+        {
+          "decision_rows": 2,
+          "minutes": 15,
+          "proposal_target_outcomes": 62,
+          "target_dte": 1
+        },
+        {
+          "decision_rows": 8,
+          "minutes": 30,
+          "proposal_target_outcomes": 291,
+          "target_dte": 1
+        },
+        {
+          "decision_rows": 28,
+          "minutes": 5,
+          "proposal_target_outcomes": 590,
+          "target_dte": 2
+        },
+        {
+          "decision_rows": 2,
+          "minutes": 15,
+          "proposal_target_outcomes": 62,
+          "target_dte": 2
+        },
+        {
+          "decision_rows": 8,
+          "minutes": 30,
+          "proposal_target_outcomes": 291,
+          "target_dte": 2
+        },
+        {
+          "decision_rows": 28,
+          "minutes": 5,
+          "proposal_target_outcomes": 590,
+          "target_dte": 4
+        },
+        {
+          "decision_rows": 2,
+          "minutes": 15,
+          "proposal_target_outcomes": 62,
+          "target_dte": 4
+        },
+        {
+          "decision_rows": 8,
+          "minutes": 30,
+          "proposal_target_outcomes": 291,
+          "target_dte": 4
+        },
+        {
+          "decision_rows": 28,
+          "minutes": 5,
+          "proposal_target_outcomes": 590,
+          "target_dte": 5
+        },
+        {
+          "decision_rows": 2,
+          "minutes": 15,
+          "proposal_target_outcomes": 62,
+          "target_dte": 5
+        },
+        {
+          "decision_rows": 8,
+          "minutes": 30,
+          "proposal_target_outcomes": 291,
+          "target_dte": 5
+        }
+      ],
+      "original_requests_by_kind": {
+        "quotes": 38,
+        "trades": 38
+      },
+      "proposal_target_outcomes": 3772,
+      "security_id": "BBG000BWCKB6",
+      "selection_outcomes": 128,
+      "treatment_id": "438f2c58e8268821b23c83ec5d86e87b759ce4eabe11bad3cfb666feddbf99be"
+    },
+    {
+      "contract": "CMA230630C00041000",
+      "date": "2023-06-22",
+      "decision_clocks": 13,
+      "groups": [
+        {
+          "decision_rows": 13,
+          "minutes": 5,
+          "proposal_target_outcomes": 61,
+          "target_dte": 5
+        },
+        {
+          "decision_rows": 13,
+          "minutes": 5,
+          "proposal_target_outcomes": 61,
+          "target_dte": 7
+        }
+      ],
+      "original_requests_by_kind": {
+        "quotes": 13,
+        "trades": 13
+      },
+      "proposal_target_outcomes": 122,
+      "security_id": "BBG000C75N77",
+      "selection_outcomes": 26,
+      "treatment_id": "7d048f60d939824cece2552031402760e73f20bcb333efbab0bb9ea5656d6071"
+    },
+    {
+      "contract": "MSTR230630P00320000",
+      "date": "2023-06-27",
+      "decision_clocks": 3,
+      "groups": [
+        {
+          "decision_rows": 3,
+          "minutes": 30,
+          "proposal_target_outcomes": 62,
+          "target_dte": 1
+        },
+        {
+          "decision_rows": 3,
+          "minutes": 30,
+          "proposal_target_outcomes": 62,
+          "target_dte": 2
+        },
+        {
+          "decision_rows": 3,
+          "minutes": 30,
+          "proposal_target_outcomes": 62,
+          "target_dte": 4
+        },
+        {
+          "decision_rows": 3,
+          "minutes": 30,
+          "proposal_target_outcomes": 62,
+          "target_dte": 5
+        },
+        {
+          "decision_rows": 3,
+          "minutes": 30,
+          "proposal_target_outcomes": 62,
+          "target_dte": 7
+        }
+      ],
+      "original_requests_by_kind": {
+        "quotes": 3,
+        "trades": 3
+      },
+      "proposal_target_outcomes": 310,
+      "security_id": "BBG000GQJPZ0",
+      "selection_outcomes": 15,
+      "treatment_id": "719cff92f61b2119c55012dbf41514965a815372c83a65b5ed19609c0f9c050c"
+    },
+    {
+      "contract": "RH230630P00290000",
+      "date": "2023-06-22",
+      "decision_clocks": 10,
+      "groups": [
+        {
+          "decision_rows": 10,
+          "minutes": 5,
+          "proposal_target_outcomes": 123,
+          "target_dte": 5
+        },
+        {
+          "decision_rows": 10,
+          "minutes": 5,
+          "proposal_target_outcomes": 123,
+          "target_dte": 7
+        }
+      ],
+      "original_requests_by_kind": {
+        "quotes": 10,
+        "trades": 10
+      },
+      "proposal_target_outcomes": 246,
+      "security_id": "BBG002293PJ4",
+      "selection_outcomes": 20,
+      "treatment_id": "9eaf4bab985b1da972d41a78497e2823c3117c0bcb38f41de4180849595e6d82"
+    },
+    {
+      "contract": "FANG220520P00130000",
+      "date": "2022-05-18",
+      "decision_clocks": 21,
+      "groups": [
+        {
+          "decision_rows": 21,
+          "minutes": 5,
+          "proposal_target_outcomes": 915,
+          "target_dte": 1
+        },
+        {
+          "decision_rows": 7,
+          "minutes": 15,
+          "proposal_target_outcomes": 511,
+          "target_dte": 1
+        },
+        {
+          "decision_rows": 4,
+          "minutes": 30,
+          "proposal_target_outcomes": 278,
+          "target_dte": 1
+        },
+        {
+          "decision_rows": 21,
+          "minutes": 5,
+          "proposal_target_outcomes": 915,
+          "target_dte": 2
+        },
+        {
+          "decision_rows": 7,
+          "minutes": 15,
+          "proposal_target_outcomes": 511,
+          "target_dte": 2
+        },
+        {
+          "decision_rows": 4,
+          "minutes": 30,
+          "proposal_target_outcomes": 278,
+          "target_dte": 2
+        },
+        {
+          "decision_rows": 21,
+          "minutes": 5,
+          "proposal_target_outcomes": 915,
+          "target_dte": 4
+        },
+        {
+          "decision_rows": 7,
+          "minutes": 15,
+          "proposal_target_outcomes": 511,
+          "target_dte": 4
+        },
+        {
+          "decision_rows": 4,
+          "minutes": 30,
+          "proposal_target_outcomes": 278,
+          "target_dte": 4
+        },
+        {
+          "decision_rows": 21,
+          "minutes": 5,
+          "proposal_target_outcomes": 915,
+          "target_dte": 5
+        },
+        {
+          "decision_rows": 7,
+          "minutes": 15,
+          "proposal_target_outcomes": 511,
+          "target_dte": 5
+        },
+        {
+          "decision_rows": 4,
+          "minutes": 30,
+          "proposal_target_outcomes": 278,
+          "target_dte": 5
+        },
+        {
+          "decision_rows": 21,
+          "minutes": 5,
+          "proposal_target_outcomes": 915,
+          "target_dte": 7
+        },
+        {
+          "decision_rows": 7,
+          "minutes": 15,
+          "proposal_target_outcomes": 511,
+          "target_dte": 7
+        },
+        {
+          "decision_rows": 4,
+          "minutes": 30,
+          "proposal_target_outcomes": 278,
+          "target_dte": 7
+        }
+      ],
+      "original_requests_by_kind": {
+        "quotes": 32,
+        "trades": 32
+      },
+      "proposal_target_outcomes": 8520,
+      "security_id": "BBG002PHSYX9",
+      "selection_outcomes": 105,
+      "treatment_id": "bf86da9dc96c6e885571de2055b00433159303d6b9a1087ce6f413b651a71709"
+    }
+  ],
+  "exclusions": 5,
+  "full_execution_coverage": false,
+  "full_held_path_impact_counted": false,
+  "new_downloads": 0,
+  "original_requests": 192,
+  "originals_preserved": true,
+  "proposal_target_outcomes": 12970,
+  "research_ready": false,
+  "sampled_reference_treatments": {
+    "explicit_contract_date_blackout": 5,
+    "verified_standard": 715
+  },
+  "schema": "v7-contract-blackout-impact-v1",
+  "selection_outcomes": 294
+}

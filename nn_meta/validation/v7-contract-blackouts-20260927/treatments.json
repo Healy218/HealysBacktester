@@ -1,0 +1,82 @@
+[
+  {
+    "alternative_receipts": {
+      "false": "6945e1129ef1e19c85623d8e85c2a6eccbf9cde9afcac56b061c8cd21b0a1324",
+      "true": "2524a21dffa0239ec55f8929fcd1b18b69a58aaaa742f37510a934070634de24"
+    },
+    "changes_exchange_calendar": false,
+    "contract": "CMA230630C00041000",
+    "creates_terms_or_outcomes": false,
+    "date": "2023-06-22",
+    "missing_reference_sha256": "ae35ed8b783b0683b0dfa54920f51911ec59ff63841dd8d6a269993edca35a56",
+    "policy_id": "v7-five-contract-reference-blackouts-20260927",
+    "rerank_or_replace_contract": false,
+    "study_admitted": false,
+    "treatment": "exclude_affected_research_path",
+    "treatment_id": "7d048f60d939824cece2552031402760e73f20bcb333efbab0bb9ea5656d6071"
+  },
+  {
+    "alternative_receipts": {
+      "false": "4591efdc3806e57f005e95c4de23ba2a5c26d619dd015a67b4171fc783e30d8d",
+      "true": "80acda69617d0792a358728723678e78815fc8b0136d1a2bc57d5223114b6207"
+    },
+    "changes_exchange_calendar": false,
+    "contract": "FANG220520P00130000",
+    "creates_terms_or_outcomes": false,
+    "date": "2022-05-18",
+    "missing_reference_sha256": "4d8a76389059cbb0e22ae2dbd83695085856084229dc9741fc118a59e1e7100b",
+    "policy_id": "v7-five-contract-reference-blackouts-20260927",
+    "rerank_or_replace_contract": false,
+    "study_admitted": false,
+    "treatment": "exclude_affected_research_path",
+    "treatment_id": "bf86da9dc96c6e885571de2055b00433159303d6b9a1087ce6f413b651a71709"
+  },
+  {
+    "alternative_receipts": {
+      "false": "e500aeb00d4d2fce8170e0bf01a109ee325e5fd37f8c09c529ccf162d20cc130",
+      "true": "2650578b96c44f6270db53da9a4ef480ac595abb239995cbb96cd19586a40829"
+    },
+    "changes_exchange_calendar": false,
+    "contract": "MSTR230630P00320000",
+    "creates_terms_or_outcomes": false,
+    "date": "2023-06-27",
+    "missing_reference_sha256": "84be7c5dd443249fc783795330ee3f800015951ddbd413bb0e9fb3409c06ce51",
+    "policy_id": "v7-five-contract-reference-blackouts-20260927",
+    "rerank_or_replace_contract": false,
+    "study_admitted": false,
+    "treatment": "exclude_affected_research_path",
+    "treatment_id": "719cff92f61b2119c55012dbf41514965a815372c83a65b5ed19609c0f9c050c"
+  },
+  {
+    "alternative_receipts": {
+      "false": "e87725b4a5bef722fd6059f5698376b4dc755bf184f19199ccd5de0362ababa5",
+      "true": "3c80c50e37111536ec102da77afd4624ed053a15e9d679ac63749c8cb8dd7eb5"
+    },
+    "changes_exchange_calendar": false,
+    "contract": "RH230630P00290000",
+    "creates_terms_or_outcomes": false,
+    "date": "2023-06-22",
+    "missing_reference_sha256": "f5d20f7dda5628c29531d211347268ae89a60e51a60bd19d506b4c735fb5546d",
+    "policy_id": "v7-five-contract-reference-blackouts-20260927",
+    "rerank_or_replace_contract": false,
+    "study_admitted": false,
+    "treatment": "exclude_affected_research_path",
+    "treatment_id": "9eaf4bab985b1da972d41a78497e2823c3117c0bcb38f41de4180849595e6d82"
+  },
+  {
+    "alternative_receipts": {
+      "false": "f630572ea6f8ff39939a48ace8ac7dc21065e44aede6f8442e09ca7412524c48",
+      "true": "0f5a4f3c6cffbda36ce7624f599b6f5d40acea4f9ae81d6e8d1a5b979b25d9b2"
+    },
+    "changes_exchange_calendar": false,
+    "contract": "VFC230630C00019000",
+    "creates_terms_or_outcomes": false,
+    "date": "2023-06-28",
+    "missing_reference_sha256": "bd74c7a62a82fef570dbca944741c082f5989961349da9d8e167fe8b2e16fbac",
+    "policy_id": "v7-five-contract-reference-blackouts-20260927",
+    "rerank_or_replace_contract": false,
+    "study_admitted": false,
+    "treatment": "exclude_affected_research_path",
+    "treatment_id": "438f2c58e8268821b23c83ec5d86e87b759ce4eabe11bad3cfb666feddbf99be"
+  }
+]

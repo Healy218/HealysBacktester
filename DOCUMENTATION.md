@@ -1391,3 +1391,18 @@ scope question is pending. Forecast mean+3SE is a sensitivity, not a hard bound.
 Dated contract HTTP 404s and conflicting hours dates are unresolved inputs,
 not inferred standard deliverables or no-contract outcomes. See
 [measured storage and remaining gates](docs/reviews/2026-09-27-v7-joined-packed-capture.md).
+
+
+### V7 exact reference blackouts (2026-09-27)
+
+`nn_meta/v7/contract_blackouts.py` provides an additive, source-bound adapter
+for the five user-authorized missing dated contract references. Compile the
+finite declaration with `scripts/compile_v7_contract_blackouts.py`; use the
+sealed root via mandatory `--blackouts` in
+`scripts/build_v7_blackout_dataset.py`. Existing dataset/replay/feature producers
+and freezes remain intact. Exclusions retain outcome census and partial replay
+ledgers, omit numerical feature rows/labels, and never change calendars or
+replace contracts. They are retrospective data-quality exclusions, not historical
+eligibility for portfolio reranking. New missing references remain failures.
+See `docs/reviews/2026-09-27-v7-contract-reference-blackouts.md` for scope and
+remaining held-path/full-portfolio limits.
