@@ -7,6 +7,12 @@ Do not turn historical open items back into tasks after a later completion.
 
 ## Active: finish V7-3 option data
 
+[Receipt-level verification](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md)
+confirms completed preparation must be reused. Existing dated-reference stores
+cover 720 of 2,223,844 planned pairs; r12 has three specific held-quote gaps.
+Exit/roll/stock acquisition is conditional on actual replay requests, not a
+fresh blanket download or component-reimplementation task.
+
 - [ ] Finish the full-universe entry quote/trade download already running as
   `healys-v7-capture-20260927.service`. Monitor
   `nn_meta/validation/v7-entry-campaign-20260927/progress.json` and reuse every

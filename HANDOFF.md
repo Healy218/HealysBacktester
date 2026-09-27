@@ -1,11 +1,29 @@
-# Handoff — September 27, 2026 — V7-3 download health verified
+# Handoff — September 27, 2026 — remaining V7-3 inputs checked against receipts
 
 **Read TODO, then this file.** The user is clearing the session. Continue the
 running V7-3 download and finish its actual remaining inputs, then advance to
 training. Do not rebuild work completed yesterday or start another broad test
 campaign. The user explicitly authorized the needed downloads and MRHA use.
 
-## Latest health check — September 27, 11:26 CDT
+## User correction and receipt check — September 27, 11:31 CDT
+
+The user challenged repeated unfinished-work claims. Read the
+[receipt-level verification](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
+Preparation and execution/physical components are already complete and must be
+reused. The current dated-reference stores cover 720 planned pairs (715 valid,
+five blackouts); 2,223,124 planned pairs lack receipts in those stores. The older
+516 dated receipts add no current entry-plan coverage. The three r12 held-mark
+gaps are absent from both the r12 index and 362 completed new entry packs checked.
+Entry acquisition continues: 358 new + four reused batches at 16:31:39 UTC.
+
+Earlier wording about remaining exit/roll/stock data was too broad: capture only
+exact gaps encountered by existing replay after subtracting retained coverage.
+Do not restart completed plans, machinery or pilots. 7-4 integration may proceed
+alongside downloads; do not serialize all work behind repeated setup checks.
+No producer edits, tests, new downloads or replay campaigns ran in this check.
+TODO remains open only for actual unfinished acquisition/integration.
+
+## Previous health check — September 27, 11:26 CDT
 
 The entry service is active with all four workers. Two live meter reads advanced
 from 264 to 266 completed batches in this run (plus four reused batches), reaching
