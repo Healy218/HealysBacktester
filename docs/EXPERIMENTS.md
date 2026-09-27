@@ -1,5 +1,11 @@
 # EXPERIMENTS — every generation's verdict in one table
 
+Dated evidence ledger: each result applies to its stated artifact, scope and
+observation period. This file does not declare current runtime health or create
+a task queue. Consult [ROADMAP](../ROADMAP.md), [TODO](../TODO.md) and
+[CURRENT_STATE](CURRENT_STATE.md) for their respective current responsibilities.
+No new model verdict is added by documentation consolidation.
+
 ## September 27 — preparation results and running acquisition
 
 The full V7 entry-demand census, storage reclamation, lossless packed capture,

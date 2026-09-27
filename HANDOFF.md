@@ -1,151 +1,49 @@
-# Handoff — September 27, 2026 — V6 Alpaca paper activated for Monday
+# Handoff — September 27, 2026 — documentation consolidated
 
-Read TODO first. The user prioritized completing V6 Alpaca paper trading before
-Monday. **Activation is complete**; do not repeat it. Commit `f669d43` is pushed.
-[Deployment and operating notes](docs/reviews/2026-09-27-v6-alpaca-activation.md)
-and companion JSON contain exact verification and the Monday schedule.
+## Focus and stopping point
 
-- Fresh state `/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper`, activated
-  `2026-09-27T20:46:18.846408+00:00`. Scanner/submission flags true; paper only.
-  Both installed services started successfully; market closed, no orders sent.
-  Account ACTIVE, $100,000 options buying power, level 3, no positions/orders.
-- New scanner timer every 15 minutes, broker timer every 15 seconds. Next broker
-  08:00 / scanner 08:00:05 Chicago Monday; open 08:30, first closed-bar decision
-  08:45 if eligible. Current data through Friday September 25; existing daily
-  producer retained, next refresh Monday 04:00. Preview/reconciliation occurs
-  before every prospective submission. First actual broker fill awaits Monday.
-- SQLite triggers capture initial/roll entries transactionally. Bridge handles
-  pending/partial/canceled orders, confirmed-close-before-roll, sized exit slices,
-  idempotent POST recovery, actual-fill premium stops and calendar expiry exits.
-  Ambiguous/unexplained broker state stops submission for review; no stock
-  delivery or fill is fabricated. Current runtime hashes are activation-bound.
-- Old home forward/risk/relay/broker-ledger/session-update timers retired, old
-  Hetzner V6 watcher disabled. Old history preserved; no positions imported.
-  Old Stonks simulator projection remains historical, not actual Alpaca P/L.
-  Account monitor and after-close incubator now follow fresh paper state.
-- Full tests: 2,512 passed, 1 skipped, 18 subtests. Focused paper tests 18 passed;
-  final bridge/lifecycle rerun 10 passed. Real authenticated startup, unit/timer
-  checks passed. No need for repeat activation/testing without a new failure.
-- FA collects daily; monthly is cohort freezing. Jobs healthy, 300-symbol
-  enrichment, 960 labeled rows/six days. Needs 40 training/10 test days. First
-  monthly September 30 20:15 Chicago. FA work remains deferred at user request.
-- Friday incubator already verified: V5 6,985 predictions/26 passes; V6 974/three
-  late source passes, zero model failures. Earlier V6 candidate coverage reason
-  remains unresolved; outcome joins/scoring are still open. Monday incubator
-  consumes fresh paper scanner passes. Do not repeat Friday's successful replay.
-- V7 downloads/settings unchanged and progress still advancing after activation.
-  Broad unrelated dirty/untracked work remains untouched.
+The user authorized consolidating the six documentation recommendations while
+leaving V7-3 untouched. That documentation work is complete.
+**Research remains in Phase 7, gate 7-3.** No gate was advanced, no capture or
+training was launched, and no service, policy, artifact or runtime code changed.
 
-## Continuing V7 capture context (unchanged by this audit)
+## What changed
 
-Read TODO first. The user explicitly replaced the earlier allocation: leave
-10 GB free locally and use MRHA for whatever does not fit. They also requested
-as much download speed as possible with the training-size 14 GB RAM allocation.
-Both changes are deployed. Do not restart completed preparation or repeat the
-finished concurrency/overflow checks. Protect V6 and unrelated working changes.
+- AGENTS is the canonical instruction file; CLAUDE points to it.
+- ROADMAP again covers the whole lab, seven Phase 7 gates and future dependencies.
+- TODO is the current-phase checklist, with separate operating obligations.
+- CURRENT_STATE owns exact selected inputs, runtime pointers and dated observations.
+- README describes the lab; DOCUMENTATION holds durable procedures/traps;
+  GOALS contains assessment criteria and dated evidence, not current job status.
+- FA's separate planning files are pointers; detailed requirements remain in
+  the FA reference and milestones live in ROADMAP.
+- All original edited notes were archived before rewriting. Documentation
+  checks cover links, task IDs, archived hashes and unchanged non-document work.
 
-## Current running entry capture
+## Next session
 
-- Service: `healys-v7-capture-v5-20260927.service`.
-- Meter: `nn_meta/validation/v7-entry-campaign-v5-20260927/progress.json`.
-- Declaration/invocations/attempts/runs: same state root.
-- Launcher: `bash scripts/start_v7_capture_campaign_v5.sh 32`.
-- Logical packs remain `nn_meta/data_v7/entry-campaign-20260927/<security>/<key>`.
-- MRHA payload root: `HealysBacktester/v7-entry-campaign-20260927` on UUID
-  `62C9-C390`, currently mounted at `/run/media/healy/MRHA`.
-- Four autosized process workers, up to 32 I/O threads each (128 requests max).
-  Numerical libraries stay one thread per worker. Prefetch backs off at 6/8/10 GiB
-  live working-memory usage to drain buffers before reaching the hard limit.
-- MemoryHigh and MemoryMax are both 14 GiB; no swap. CPU burst quota 800%,
-  CPUWeight 50 and Nice 10. This removes the former 400% burst restriction.
-- SIGINT/SIGTERM drains current batches. All five campaign state locks are held,
-  preventing an older controller from overlapping the live queue.
+1. Read [TODO](TODO.md), then use the relevant sections of
+   [CURRENT_STATE](docs/CURRENT_STATE.md) for exact pointers.
+2. Resume the selected 7-3 work using existing completed preparation and the
+   existing capture. Inspect its live receipt before reporting progress; this
+   documentation-only session did not re-probe health or update the ETA.
+3. Preserve the partial 7-4 ledger selected in CURRENT_STATE; do not recreate
+   its components or substitute an older review's checkpoint.
+4. Keep the separate operating obligations visible: first prospective Alpaca
+   fills, incubator outcome/source-coverage work, and the October 2 provider
+   decision. Paper activation and Friday inference were already verified.
 
-All prior producers/declarations remain frozen and must not be edited. Version 5
-reuses their exact original pack bindings. The final resume verified 9,422 completed packs /
-301,248 ranges, including the four MRHA packs. Code commits a545b31 and 0a87eef are pushed. Version 5 code, helper,
-and policy are now frozen too: version any subsequent behavior change.
+## Constraints and evidence
 
-## Final memory-guard correction
+The user's current download allocation and frozen producer identities are in
+CURRENT_STATE. Do not launch a duplicate, edit a source-bound producer or
+repeat completed capture/overflow/preparation checks without a new defect.
+FA collects daily; its labeled evaluation dates are not total collection days.
+Further FA research remains deferred until selected in the main TODO.
 
-Version 4 counted clean file cache as buffer pressure after verifying old packs.
-Observed cgroup memory was about 10.98 GB, including 9.12 GB inactive file cache
-and only 1.73 GB anonymous memory. This unnecessarily reduced I/O concurrency.
-Version 5 subtracts only clean inactive file cache, retaining dirty/writeback
-pages, active cache, anonymous allocations and kernel/socket memory in its
-pressure calculation. The 14 GiB hard cgroup limit remains unchanged. Eight
-focused checks passed for this correction and its overflow/resume paths. All
-v4 packs are reused too; no real-data verification/download was discarded.
-Do not restore the cache-blind v4 prefetch guard. After correction, the new run
-sustained about 164 ranges/s over its first two minutes; the latest 30-second
-measurement is in the companion evidence. The user was told ~18 hours if that
-rate holds, with a provisional 24–48-hour planning allowance. That replaces the
-~three-day pre-fix extrapolation; none is an upper bound or a full 7-3 ETA.
-
-## Storage authorization — supersedes prior fixed caps
-
-Policy: `docs/specs/V7_CAPTURE_STORAGE_20260927.json`. The earlier 100 GB campaign,
-250 GB acquisition, 640 GB project caps and 20 GiB local reserve are superseded
-by the user's newer allocation. Keep **10,000,000,000 bytes free**, accounting
-for all pending payloads and local metadata before dispatch. Prefer local disk;
-route new payloads to verified MRHA when the local reserve would be breached.
-The external drive also retains 10 GB of headroom. Other MRHA files are untouched.
-At launch: approximately 279 GB local free and 744 GB external free, giving about
-269 GB local plus 734 GB external headroom. These are live, changing values.
-The shared quota limit was expanded to roughly 1.079 TB including already charged
-data, based on available space; it is not a dataset-size requirement.
-
-Keep the logical pack directories and binding/completion receipts local. Only
-`captures.sqlite3` is a file symlink to the immutable external payload. This
-preserves rglob discovery, hashes and existing packed/index readers; do not replace
-whole pack directories with symlinks. MRHA must stay connected for those payloads.
-The quota includes external physical data and local locator metadata, charged
-once. Do not blindly rerun the old quota initializer: a local-only tree scan
-would miss external partials or reset the newly authorized limit.
-
-## Verification and measurements — complete, do not repeat
-
-[Review and live evidence](docs/reviews/2026-09-27-v7-storage-and-memory.md), plus
-its companion JSON. Sixteen focused checks passed: routing at the reserve,
-in-flight accounting, wrong-drive rejection, locator/index reads, failed
-publication recovery without another API fetch/charge, prior binding rejection,
-and existing pagination/index checks. Bash syntax passed.
-
-Four real pending batches were captured on MRHA, then 40,886 records were read
-back through unchanged local packed/index readers. The proof index is
-`nn_meta/validation/v7-overflow-readback-20260927`; its sibling `-proof.json`
-records matching hashes. These are real completed inputs, not throwaway samples.
-The launch used `32 0 4` to validate four external batches; ordinary resumes use
-`32` and prefer local storage. Original v3 drained with no outstanding quota
-reservations before v4 started.
-
-The dense-data before/after 30-second observations were 10.66 and 22.39 ranges/s,
-respectively. New sample memory peaked at 10.40 GB, with no memory-limit/OOM
-counter increments, provider throttles or failed batches. CPU burst throttling
-fell to zero in that sample. Inputs differ, so do not promise a constant 2x gain.
-Earlier quiet-data 78 ranges/s and 38–48-hour estimates are not a reliable current
-full-campaign ETA; larger windows vary sharply in records and splitting cost.
-Keep measuring actual sustained work instead of multiplying concurrency counts.
-
-Entry acquisition alone does not complete 7-3. Dated-reference plan and five exact
-blackouts are done, but the retained reference stores cover only 720 of 2,223,844
-planned entry pairs. Acquire remaining references from that existing plan, and
-only actual additional held/exit/roll/stock gaps from existing replay frontiers.
-Reconcile actual coverage/storage before declaring completion. No new blanket
-first-leg envelope download or component reimplementation is required.
-
-## Preserve the latest 7-4 work
-
-Shared ledger: `nn_meta/validation/v7-integrated-execution-20260927-r2`.
-Quote index: `v7-integrated-quote-index-20260927-r2`; source discovery:
-`v7-execution-discovery-20260927-r13` (all validation roots). DIS and ABBV complete;
-NVDA remains open, cash $87,596.26474814238. All 1,466 prior ledger events, three
-decisions and 164 marks survived the last resume, which added one mark. Next
-NVDA240322C00910000 quote window is [1711038150000000000,1711038180000000001).
-VKTX/FUTU source gaps remain. No real physical exercise/stock liquidation occurred
-in that five-path run. Reuse the integration and its 58 focused checks; full 7-4
-is open. Later steps: 7-5 assembly/folds, 7-6 resource/recovery, 7-7 readiness/launch.
-
-V7 model training has not started. The October 2 Massive decision, Alpaca bridge
-and incubator tasks remain separate TODO items. Broad pre-existing dirty V6,
-assembly.py/dataset_inputs.py and other unrelated changes remain untouched.
+Broad pre-existing dirty/untracked implementation work remains in the checkout;
+do not revert or stage it wholesale. Prior document versions are preserved in
+the [snapshot](handoff-history/docs-2026-09-27-before-consolidation/ARCHIVE.md).
+[Consolidation review](docs/reviews/2026-09-27-documentation-consolidation.md)
+records ownership, scope and verification. Runtime observations remain dated
+in their own receipts; no paper fill or new model result was claimed here.

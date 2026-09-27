@@ -1,5 +1,11 @@
 # DECISIONS — dated, append-only
 
+Historical decision log: entries retain their original scope and dates and
+may be superseded by later decisions. The [roadmap](../ROADMAP.md) owns current
+gates, [TODO](../TODO.md) owns selected work, and [CURRENT_STATE](CURRENT_STATE.md)
+owns selected operational pointers. Do not execute an old continuation order
+solely because it appears in this log.
+
 ### 2026-09-18 — Close 6-1 with explicit noncash boundary exclusions
 
 The 234 remaining noncash provider records are resolved one-for-one as
@@ -1746,3 +1752,24 @@ Use persisted source-leg entries and broker-owned risk, with uncertain state
 blocked for review. First actual fill awaits a qualifying Monday signal; Sunday
 startup is not evidence of an exchange fill. FA remains daily collection with
 monthly cohort freezing. See [activation](reviews/2026-09-27-v6-alpaca-activation.md).
+
+## 2026-09-27 — Consolidate project documentation ownership
+
+The user approved all six documentation recommendations, explicitly leaving
+V7-3 untouched. The lab's mission remains open-ended, with finite phase gates.
+AGENTS owns project instructions; CLAUDE becomes a pointer. ROADMAP owns the
+whole lab and seven Phase 7 steps, TODO owns the selected phase, HANDOFF is
+rewritten fresh, and CURRENT_STATE owns exact selected runtime/artifact pointers.
+DOCUMENTATION holds durable procedures; GOALS holds dated assessments.
+
+FA milestone planning joins the main roadmap. Its three former planning files
+become pointers; detailed requirements remain in the FA reference. This replaces
+the earlier instruction to maintain a separate FA handoff. Existing collectors
+continue; no additional FA research, data acquisition or model admission is
+implied. Completed work can reopen only for a named defect or approved scope
+change affecting its evidence; test counts and historical unchecked boxes do
+not add requirements. Prior working documents were archived byte-for-byte.
+
+No runtime code, installed service, launch, capture setting, dataset, model,
+checkpoint or V7-3 scope was changed. See the
+[consolidation review](reviews/2026-09-27-documentation-consolidation.md).

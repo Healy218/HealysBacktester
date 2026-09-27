@@ -1,35 +1,14 @@
-# HealyLabs engineering goals — year-end 2026
+# HealyLabs maturity scorecard
 
-## September 27 — current research milestone
+This file owns dated assessments, their evidence and remaining uncertainty.
+[ROADMAP](ROADMAP.md) owns priorities; [TODO](TODO.md) owns selected work;
+[CURRENT_STATE](docs/CURRENT_STATE.md) owns runtime/artifact pointers.
+The lab is open-ended. The December 31, 2026 target is a checkpoint, not the
+end of the lab or a guaranteed trading outcome.
 
-V7-1/V7-2, full entry-demand planning, cleanup, packed storage and dated entry
-hours are complete. The real V7-3 entry download service is running; model
-training and performance evaluation have not started. This advances preparation,
-not demonstrated trading edge; numerical maturity scores remain unchanged.
-Use [TODO](TODO.md), [ROADMAP](ROADMAP.md) and
-[current downloads](docs/V7_CURRENT_STATE.md) for live state. Earlier assessment
-checkpoints below remain dated history, not instructions to rebuild passed work.
-
-## September 25 — V7 data and validation milestone
-
-V7-2 is complete with 591 securities, 1,773 audited proposal stores and 667,239
-causal daily rows. The saved-data audit includes 1,182 passing historical-prefix
-replays. V7-3 began with a real proposal-driven demand pilot. This strengthens
-the provenance and temporal-validation evidence for research infrastructure
-and testing. It does not establish trading edge, complete execution or improve
-the live-operations score by itself; the numerical maturity assessment is
-unchanged. The full regression suite passed 2,401 tests and 18 subtests.
-See [completion and remaining gates](docs/reviews/2026-09-25-v7-2-complete-and-v7-3-start.md).
-
-
-Established September 10, 2026. **Target: reach 7/10 or higher in every
-assessment area and overall by December 31, 2026.** Scores should follow
-measured results and demonstrated reliability, not feature count or deadlines.
-
-Continue the current [ROADMAP](ROADMAP.md) and [TODO](TODO.md): their corrected
-research, operational readiness, and execution work move us toward this goal.
-This document supplies the long-term scorecard; it does not replace their
-priorities, bypass promotion gates, or change the active v6 campaign.
+**Established September 10: aim for at least 7/10 in every assessment area.**
+Scores follow demonstrated behavior and evidence, not feature counts, total
+tests, elapsed time or deadlines. Documentation consolidation changes no score.
 
 ## Starting assessment
 
@@ -55,62 +34,38 @@ raising a score. One profitable week, sophisticated models, and a large test
 suite are not sufficient evidence of a durable edge. Honest negative results
 still improve research quality; they do not prove an edge.
 
-## Notes to carry forward
+## Assessment method
 
-Strengths include frozen inputs, provenance checks, point-in-time controls,
-purged temporal validation, baseline comparisons, persistent live state,
-retries, and useful regression tests. Newly deployed Taken tracking, exit
-watching, and broker fee estimates need operational history to establish their
-reliability; implementation and passing tests are only the starting evidence.
+At the user-selected end-of-week review, major operational/research milestones,
+and the year-end checkpoint:
 
-The central weakness is the gap between intended and demonstrated behavior.
-Recent work clarified exit semantics, connected option quotes to alerts,
-added actual taken-position tracking, and distinguished open simulator marks
-from real exits. Earlier audits found material correctness issues. Repairs
-must be followed by rebuilt artifacts and fresh evaluation; old performance
-claims do not become valid simply because the code was fixed. See the
-[audit remediation record](docs/reviews/2026-09-05-remediation.md).
+- Record the assessment date, observation window and exact model/account/runtime.
+- Compare with the dated baseline and link evaluated results, deployment,
+  incident and recovery evidence. Distinguish implementation from demonstration.
+- Review freshness, delivery, reconciliation, actual broker fills, failure
+  handling, interventions and reproducibility within their observed scope.
+- Evaluate prediction/performance evidence with baseline comparisons, costs,
+  calibration, drawdown, outlier dependence and uncertainty. Do not reinterpret
+  historical simulator returns as newly observed broker outcomes.
+- Record revised scores only when supported, and preserve prior assessments.
+  Put selected follow-up work in the main TODO under its roadmap milestone.
 
-The highest-value improvements identified in the assessment are:
+The historical first-week V6 checkpoint began with the September 14 paper-alert
+runtime. The September 27 Alpaca activation starts a distinct broker-execution
+observation period. Retain the earlier observations without treating them as a
+week of Alpaca fills. The original first-week notes remain in the archive below.
 
-1. Complete corrected v6 evaluation and state the boundaries of proposal
-   selection, training folds, and holdouts.
-2. Reconcile tracked positions, actual fills, fees, and exits against brokerage
-   records, without substituting quotes or simulated fills for actual fills.
-3. Demonstrate sustained operation and recovery from realistic failures.
-4. Consolidate research and production contracts so fewer assumptions live
-   only in scripts, branches, or handoffs.
-5. Gather sufficient forward evidence for calibration and net performance
-   across market conditions.
+## Assessment and evidence log
 
-## First checkpoint — after one week running v6
+| Date / checkpoint | Classification | Recorded conclusion |
+| --- | --- | --- |
+| September 10 | Baseline assessment | Scores above; approximately 6/10 overall, trading edge unproven |
+| September 14–22 | Historical operational observations | Experimental V6 simulator/paper alerts and dashboard repairs; no automatic numerical reassessment |
+| September 25 | Research evidence milestone | [V7-2 completion](docs/reviews/2026-09-25-v7-2-complete-and-v7-3-start.md) strengthens provenance/causal-validation evidence; numerical scores unchanged |
+| September 27 | Operational evidence milestone | [Alpaca startup](docs/reviews/2026-09-27-v6-alpaca-activation.md) verified; sustained operation and actual fills still need observation; numerical scores unchanged |
+| Next user-selected end-of-week review | Pending assessment | Use the actual evidence available at review time; do not promise a higher score |
+| December 31, 2026 | Target checkpoint | Assess each area honestly against its target and evidence requirements |
 
-**Reassess after v6 has actually been running for a week and more existing
-TODOs have been completed.** The clock starts with the operational v6 run,
-not the beginning of its freeze/build or the date this document was written.
-Record the start date and exposure mode (paper/manual/live) when that happens;
-do not assume the pending pipeline is already deployed.
-
-At that checkpoint:
-
-- Update each score with linked test, incident, deployment, and evaluation
-  evidence; identify what remains unknown.
-- Review feed freshness, alert delivery, taken-position/exit behavior,
-  recoveries, and manual interventions during the week.
-- Compare tracked positions and fee estimates with available broker records.
-- Review corrected v6 results and forward sample size. Treat the first week
-  as an operational checkpoint, not proof of durable profitability.
-- Map remaining gaps to the current TODOs and agree on the next priorities.
-
-Continue the existing plan until this review; do not start a separate broad
-rewrite solely to improve these ratings. Define measurable acceptance checks
-for remaining gaps at the checkpoint, then reassess at major milestones and
-at the December 31 year-end review.
-
-## Review log
-
-| Review | Status | Evidence / next action |
-|---|---|---|
-| September 10 baseline | Recorded | Scores and rationale above; main and isolated production branches represent different stages of the system. |
-| First week running v6 | Pending — start date not yet recorded | Run v6, complete more TODOs, then review operational evidence and remaining gaps. |
-| December 31, 2026 | Target | ≥7 in every area and overall, supported by evidence; record any shortfalls honestly. |
+[Archived detailed assessment notes](handoff-history/docs-2026-09-27-before-consolidation/GOALS.md)
+retain the original rationale and historical continuation wording. They do not
+create a separate current work queue.
