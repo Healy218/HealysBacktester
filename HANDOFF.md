@@ -1,9 +1,24 @@
-# Handoff — September 27, 2026 — V7-3 downloads running
+# Handoff — September 27, 2026 — V7-3 download health verified
 
 **Read TODO, then this file.** The user is clearing the session. Continue the
 running V7-3 download and finish its actual remaining inputs, then advance to
 training. Do not rebuild work completed yesterday or start another broad test
 campaign. The user explicitly authorized the needed downloads and MRHA use.
+
+## Latest health check — September 27, 11:26 CDT
+
+The entry service is active with all four workers. Two live meter reads advanced
+from 264 to 266 completed batches in this run (plus four reused batches), reaching
+8,512 ranges and 696,411,106 retained campaign bytes. Latest receipt at
+16:26:49 UTC had no error; status running, stop_reason null. Service memory was
+1.4 GiB (1.5 GiB peak), with 266 GiB filesystem space available. No restart or
+producer change was needed. This is a point-in-time check, not full coverage.
+
+The user asked for download health and a reminder of 7-4. That stage connects
+existing option execution, funded physical handling and shared-capital replay
+against real inputs, reconciling entries, stops, exits, rolls, expiry, settlement
+and stock liquidation. Full 7-3 still requires the reference and actual path
+captures below. No task was newly completed; no tests or campaigns were rerun.
 
 ## First actions in the next session
 
