@@ -54,6 +54,26 @@ for the full universe. Full V7-4 remains open; **no real physical exercise or
 stock liquidation occurred in this five-path run**. Unit tests cover those
 connections, but do not establish full real-data coverage.
 
+## Flat-file versus tick clarification
+
+The user asked why additional downloads are needed after option flat files were
+captured. Directly inspected a retained V7 daily aggregate gzip header:
+ticker, volume, open, close, high, low, window_start, transactions. It contains
+no bid/ask quotes. Legacy flat-file ingestion also retained 15-minute OHLCV
+partitions; these do not recover event-level quote/trade history. Existing bars
+remain inputs; the live capture adds exact quote/trade windows used by midpoint
+execution, premium stops and the current tick-feature contract.
+
+There is **no verified 300 GB additional-data requirement**. The existing packed
+entry estimate including routing is 142.389 GB, or 173.954 GB at mean plus three
+sample standard errors (not an upper bound). Dated references had a 1.739 GB
+planning allowance. The 250 GB figure is a shared acquisition cap including
+already retained data (about 72.44 GB at this check), not another 250 GB order.
+The live 100 GB dispatch allocation is also not a final size estimate. Actual
+additional held-path/assembly/training requirements remain to be measured.
+Do not confuse full aggregate history with complete bid/ask tick coverage, or
+present a budget as an estimated additional requirement. No job was changed.
+
 ## V7-3 live download and remaining inputs
 
 Service `healys-v7-capture-20260927.service` is still running. At 18:07:52 UTC:
