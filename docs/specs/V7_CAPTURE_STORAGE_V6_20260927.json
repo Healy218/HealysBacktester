@@ -1,0 +1,28 @@
+{
+  "schema": "v7-live-disk-capacity-v1",
+  "authorization": "2026-09-27 user: The allocation can be moved up to 10GB less than storage left on disk. We can also put whatever doesn't fit into MRHA external drive.",
+  "local_reserve_bytes": 10000000000,
+  "overflow_reserve_bytes": 10000000000,
+  "overflow_uuid": "62C9-C390",
+  "overflow_relative_root": "HealysBacktester/v7-entry-campaign-20260927",
+  "supersedes_fixed_limits": {
+    "campaign_bytes": 100000000000,
+    "acquisition_bytes": 250000000000,
+    "project_bytes": 640000000000,
+    "local_reserve_bytes": 21474836480
+  },
+  "routing": "Prefer local disk; reserve all in-flight payload/metadata writes; spill new payloads to verified MRHA when local space would breach the reserve.",
+  "preserve_completed_packs": true,
+  "preserve_other_external_files": true,
+  "numerical_threads_per_worker": 1,
+  "maximum_process_workers": 8,
+  "maximum_io_threads_per_worker": 32,
+  "memory_limit_gib": 14,
+  "prefetch_pressure_gib": [
+    6,
+    8,
+    10
+  ],
+  "speed_authorization": "2026-09-27 user authorized testing 192 concurrent requests (6 x 32), then 256 (8 x 32) if measured throughput improves; preserve the 14 GiB memory limit and completed packs.",
+  "supersedes_worker_policy": "docs/specs/V7_CAPTURE_STORAGE_20260927.json"
+}
