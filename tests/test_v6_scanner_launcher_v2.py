@@ -4,7 +4,7 @@ from pathlib import Path
 import subprocess
 
 
-@pytest.mark.parametrize('version,expected', [('v2', '4'), ('v3', '8'), ('v4', '8'), ('v5', '8')])
+@pytest.mark.parametrize('version,expected', [('v2', '4'), ('v3', '8'), ('v4', '8'), ('v5', '8'), ('v6', '8')])
 def test_numerical_thread_setting_does_not_force_serial_process_sizing(tmp_path,version,expected):
     cpu = tmp_path / 'nproc'
     cpu.write_text('#!/bin/sh\nif [ -n "${OMP_NUM_THREADS:-}" ]; then echo 1; else echo 16; fi\n')

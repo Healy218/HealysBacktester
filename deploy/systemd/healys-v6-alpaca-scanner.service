@@ -7,7 +7,7 @@ Type=oneshot
 WorkingDirectory=/home/healy/Coding/HealysBacktester
 Environment=OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 NUMBA_NUM_THREADS=1 TF_CPP_MIN_LOG_LEVEL=2 CUDA_VISIBLE_DEVICES=-1
 Environment=MPLCONFIGDIR=/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/matplotlib
-ExecStart="/usr/bin/bash" "/home/healy/Coding/HealysBacktester/scripts/run_v6_alpaca_scanner_v5.sh" "--state" "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper"
+ExecStart="/usr/bin/bash" "/home/healy/Coding/HealysBacktester/scripts/run_v6_alpaca_scanner_v6.sh" "--state" "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper"
 TimeoutStartSec=600
 MemoryHigh=12G
 MemoryMax=12G

@@ -11,10 +11,10 @@ import sys
 from scripts.run_v6_alpaca_runtime import ROOT,read,save,sha,clients
 from integrations.alpaca_paper.v6_runtime import install_leg_capture
 
-RUNTIME_FILES=['integrations/alpaca_paper/v6_source_reconcile_v2.py',
-               'scripts/run_v6_alpaca_scanner_v5.py','scripts/run_v6_alpaca_scanner_v5.sh','integrations/alpaca_paper/v6_bridge_v3.py',
+RUNTIME_FILES=['integrations/alpaca_paper/v6_step_slices.py','integrations/alpaca_paper/v6_source_reconcile_v2.py',
+               'scripts/run_v6_alpaca_scanner_v6.py','scripts/run_v6_alpaca_scanner_v6.sh','integrations/alpaca_paper/v6_bridge_v3.py',
                'integrations/alpaca_paper/v6_pricing_v3.py', 'integrations/alpaca_paper/v6_bridge_v2.py', 'integrations/alpaca_paper/v6_pricing_v2.py',
-               'scripts/run_v6_alpaca_runtime_v3.py','integrations/alpaca_paper/v6_bridge.py','integrations/alpaca_paper/v6_pricing.py',
+               'scripts/run_v6_alpaca_runtime_v4.py','integrations/alpaca_paper/v6_bridge.py','integrations/alpaca_paper/v6_pricing.py',
                'integrations/alpaca_paper/v6_runtime.py','scripts/run_v6_alpaca_runtime.py',
                'scripts/run_v6_alpaca_scanner_v3.sh','scripts/lib/autosize.sh',
                'nn_meta/session_calendar.py','nn_meta/live/v6_option_sessions.py',
@@ -30,10 +30,10 @@ def command(args):
 
 
 def units(state):
-    common=[ROOT/'venv/bin/python','-m','scripts.run_v6_alpaca_runtime_v3']
+    common=[ROOT/'venv/bin/python','-m','scripts.run_v6_alpaca_runtime_v4']
     result={}
     for name,cmd,memory,timeout,schedule in [
-        ('scanner',['/usr/bin/bash',ROOT/'scripts/run_v6_alpaca_scanner_v5.sh','--state',state],
+        ('scanner',['/usr/bin/bash',ROOT/'scripts/run_v6_alpaca_scanner_v6.sh','--state',state],
          '12G',600,'Mon..Fri *-*-* 09..16:00,15,30,45:05 America/New_York'),
         ('orders',[*common,'poll','--state',state], '1G',45,
          'Mon..Fri *-*-* 09..16:*:00,15,30,45 America/New_York')]:
@@ -127,7 +127,7 @@ ForwardPortfolio(sys.argv[2],scope=scope)
                    cwd=frozen,check=True)
     database.chmod(0o600);install_leg_capture(database)
     save(state/'paper-restart.json',m)
-    subprocess.run([sys.executable,'-m','scripts.run_v6_alpaca_runtime_v3','check','--state',str(state)],
+    subprocess.run([sys.executable,'-m','scripts.run_v6_alpaca_runtime_v4','check','--state',str(state)],
                    cwd=ROOT,check=True)
     unit_dir=Path.home()/'.config/systemd/user'
     backup=state/'retired-units';backup.mkdir(exist_ok=True)
