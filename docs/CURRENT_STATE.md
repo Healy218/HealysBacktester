@@ -200,12 +200,22 @@ paper selections. Research output root: `incubator/continual-v6/r1/`.
   newest candidate passing the research diagnostic gate. Neither deploys a model.
 - Service/timer: `healys-v6-continual.service` / `.timer`, 16:45 New York weekdays;
   05:15 and 07:15 New York Monday–Saturday retries. Units live in `deploy/systemd/`.
+  The service also requires successful completion of the selected V7 entry
+  download (campaign `8ea809659f0647dbbfef9682321a6828dc182ccac1bbbe9d3e2d5bfb4e99f568`).
+  A failed, paused or missing V7 receipt keeps V6 deferred. After completion, the
+  next normal timer opportunity can resume V6, subject to daily-input readiness.
   `journalctl --user -u healys-v6-continual.service` owns runtime logs.
 
 At 19:59 Central September 27, the service started a 449-symbol catch-up through
 September 25 with two workers, 8 GiB maximum memory and two-CPU quota. No full
 candidate freeze existed at that observation. Check the live receipts before
 inferring completion. [Implementation and measured pilot](reviews/2026-09-27-v6-continual-incubator.md).
+
+At the 20:18 Central September 27 hold receipt, V6 research had been stopped at
+user direction to prioritize the V7 download. All 273 completed feature batches
+and 1,628 completed outcome records verified intact. `upstream-hold.json` retains
+the pre-pause status; `latest-run.json` records the wait. The timer remains enabled
+with the V7 completion condition. [Hold evidence](reviews/2026-09-27-v6-v7-download-priority.md).
 
 The replay-only `healys-ai-incubator-after-close.timer` was disabled at activation.
 Its Friday inference receipts remain historical under `incubator/runs/after-close/`

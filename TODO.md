@@ -62,7 +62,8 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   [Evidence](docs/reviews/2026-09-27-v6-continual-incubator.md). No automatic deployment.
 - [ ] **OPS-INCUBATOR.OPS:** Replace replay-only scheduling with bounded continual
   research and verify restart, daily-input readiness and resource coexistence.
-  New timer installed and catch-up started; full scheduled-operation proof remains.
+  New timer installed; catch-up is now deferred until the selected V7 entry
+  download succeeds. Checkpoints retained; full scheduled-operation proof remains.
 - [ ] **OPS-INCUBATOR.PROOF:** Complete the initial catch-up and measure a full
   daily update through freeze before claiming next-trading-day readiness.
   [Current contract](docs/specs/AI_INCUBATOR.md). V5 paper scoring is superseded.

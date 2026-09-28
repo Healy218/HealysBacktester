@@ -1816,3 +1816,15 @@ daily update must be measured before promising next-session readiness.
 The unactivated trade-ledger-scoring draft from this session was discarded.
 No old freeze, deployed expert or V7 campaign is reopened by this scope change.
 See [AI_INCUBATOR](specs/AI_INCUBATOR.md) and the OPS-INCUBATOR tasks in main TODO.
+
+### 2026-09-27 — Prioritize V7 entry download over V6 continual catch-up
+
+The user directed waiting on V6 while V7 downloads. Stop only V6 continual
+research, preserve its completed artifacts and defer scheduled starts until the
+selected V7 campaign reports successful full entry coverage. A stopped/failed
+capture is not sufficient. V6 may resume at its next normal scheduled opportunity
+after completion and daily-input readiness; no extra immediate retraining run.
+The V6 paper account, daily input producer and V7 capture remain unchanged.
+The observed slowdown overlapped V6 but also involved denser market responses;
+this scheduling choice does not establish a causal performance finding.
+[Hold evidence](reviews/2026-09-27-v6-v7-download-priority.md).
