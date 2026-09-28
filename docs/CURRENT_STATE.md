@@ -160,7 +160,11 @@ Read SQLite evidence in read-only mode.
 - Scanner: `healys-v6-alpaca-scanner.timer` / `.service`, every 15 minutes in
   its configured window, dynamically sized workers (v3: up to eight), 12 GiB memory limit.
 - Broker: `healys-v6-alpaca-orders.timer` / `.service`, every 15 seconds in its
-  configured window; market/calendar checks govern execution.
+  configured window; market/calendar checks govern execution. Since September 28
+  12:01 Central, `scripts.run_v6_alpaca_runtime_v2` selects independent orders,
+  a 120-second timeout and midpoint × 1.02 buys / × 0.98 sells (up/down cent rounding).
+  Same-contract/position dependencies and pending-buy reservations remain enforced.
+  [Policy/deployment evidence](reviews/2026-09-28-v6-independent-orders.md).
 - Read-only monitor: `healys-v6-alpaca-paper-monitor.timer`; output
   `/tmp/v6-alpaca-paper-monitor-latest.json` (ephemeral observation).
 - Daily producer retained: `healys-v6-data.timer`; scanner reads the latest
@@ -180,7 +184,11 @@ Selected input snapshot is now
 The existing V6 data-index source points to it; the old snapshot/model remain intact.
 Scanner launcher: `scripts/run_v6_alpaca_scanner_v3.sh`. Activation lineage is
 retained under the paper state's `runtime-revisions/scanner-v3-20260928/`.
-Read current account/status receipts for subsequent holdings and health.
+The order-policy revision is retained at `runtime-revisions/orders-v2-20260928/`;
+paper manifest SHA `644f5c33c3da377d44adccb28209fa9d320f5db555fbd81c253466e5e2b5df3d`.
+The 12:01 Central V2 preview/poll succeeded with no holdings/pending orders;
+actual V2 fills remain unverified. Read current account/status receipts for
+subsequent holdings and health.
 
 Continual V6 incubator configuration: `deploy/incubator-continual-v6.json`.
 The anchored base is `nn_meta/campaigns/v6-cash-repair-20260913/v6/artifacts/meta_dataset.parquet`;

@@ -134,6 +134,10 @@ by information/label availability and preserve predeclared comparisons.
   new validated input snapshot; a same-date refresh may simply reuse the existing
   snapshot. Preserve the vintage guard and original artifacts. See the
   [September 28 repair](docs/reviews/2026-09-28-v6-paper-readiness.md).
+  Current execution uses the [versioned independent-order policy](docs/reviews/2026-09-28-v6-independent-orders.md):
+  broker policy changes require new source/manifest lineage; historical activation
+  prose does not override the selected execution policy. Keep marks, simulator
+  projections and actual adjusted-limit fills distinct.
   Do not rerun activation, reset its timestamp,
   erase the broker journal or import old simulator positions. Actual subsequent
   state lives under the pointers in CURRENT_STATE.

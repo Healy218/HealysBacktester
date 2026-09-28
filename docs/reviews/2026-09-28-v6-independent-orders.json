@@ -1,0 +1,108 @@
+{
+  "account_fingerprint": "805ca4b40b34fd4e2f9d258af45dec81bd71e88a5b3a074149abc57c8f61c4c9",
+  "added_sources": {
+    "integrations/alpaca_paper/v6_bridge_v2.py": "1be915c3785b646982219bf28b7623fb2bb20f0a3e36dddc485acbb1004a6ed4",
+    "integrations/alpaca_paper/v6_pricing_v2.py": "29eef1de410f17e8a320a2507cec1f23ebb0d102a7f781d572924623ee68feee",
+    "scripts/run_v6_alpaca_runtime_v2.py": "c9024aa7eb7af6b92fb0c4f6abd1292a16dbfa987718fdf1f42abf8f278cb45e"
+  },
+  "at": "2026-09-28T17:01:09.618704+00:00",
+  "cash": "100000",
+  "first_poll": {
+    "action": "poll",
+    "checked_at": "2026-09-28T17:01:10.973448+00:00",
+    "execution_policy": "midpoint-concession-2pct-120s-v2",
+    "options_buying_power": "100000",
+    "outcomes": [
+      {
+        "event_id": "v6|PDD|tv_sr|2026-09-28T15:15:00|leg-close|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|PDD|tv_sr|2026-09-28T15:15:00|entry|0",
+        "status": "superseded"
+      },
+      {
+        "event_id": "v6|UVXY|macd|2026-09-28T15:15:00|entry|0",
+        "reason": "entry event missed the five-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|ANF|squeeze|2026-09-28T15:45:00|entry|0",
+        "reason": "entry event missed the five-minute broker window",
+        "status": "blocked"
+      }
+    ],
+    "paper_only": true,
+    "positions_before": 0,
+    "status": "complete"
+  },
+  "new_manifest_sha256": "644f5c33c3da377d44adccb28209fa9d320f5db555fbd81c253466e5e2b5df3d",
+  "options_buying_power": "100000",
+  "pending_before": 0,
+  "policy": "midpoint-concession-2pct-120s-v2",
+  "positions_before": 0,
+  "preview": {
+    "action": "check",
+    "checked_at": "2026-09-28T17:01:09.778907+00:00",
+    "outcomes": [
+      {
+        "event_id": "v6|PDD|tv_sr|2026-09-28T15:15:00|leg-close|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|PDD|tv_sr|2026-09-28T15:15:00|entry|0",
+        "status": "superseded"
+      },
+      {
+        "event_id": "v6|UVXY|macd|2026-09-28T15:15:00|entry|0",
+        "reason": "entry event missed the five-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|ANF|squeeze|2026-09-28T15:45:00|entry|0",
+        "reason": "entry event missed the five-minute broker window",
+        "status": "blocked"
+      }
+    ],
+    "status": "preview"
+  },
+  "previous_manifest_sha256": "3784695c859a00677d370df205ade9a1053b0206409109c7202a463b4db94cef",
+  "service_properties": "Result=success\nExecMainStatus=0\nExecStart={ path=/home/healy/Coding/HealysBacktester/venv/bin/python ; argv[]=/home/healy/Coding/HealysBacktester/venv/bin/python -m scripts.run_v6_alpaca_runtime_v2 poll --state /home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper ; ignore_errors=no ; start_time=[Mon 2026-09-28 12:01:10 CDT] ; stop_time=[Mon 2026-09-28 12:01:12 CDT] ; pid=1801709 ; code=exited ; status=0 }\n",
+  "source_commit": "6e63358b5e8d49e123bc7ff6d4dc18b7b51e8991",
+  "timer_enabled": "enabled",
+  "unit_sha256": "b198cf28cb3ab12266463df0d79b710531668282f10547491e1002e57f385a1e",
+  "subsequent_poll": {
+    "action": "poll",
+    "checked_at": "2026-09-28T17:03:00.310453+00:00",
+    "execution_policy": "midpoint-concession-2pct-120s-v2",
+    "options_buying_power": "100000",
+    "outcomes": [
+      {
+        "event_id": "v6|PDD|tv_sr|2026-09-28T15:15:00|leg-close|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|PDD|tv_sr|2026-09-28T15:15:00|entry|0",
+        "status": "superseded"
+      },
+      {
+        "event_id": "v6|UVXY|macd|2026-09-28T15:15:00|entry|0",
+        "reason": "entry event missed the five-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|ANF|squeeze|2026-09-28T15:45:00|entry|0",
+        "reason": "entry event missed the five-minute broker window",
+        "status": "blocked"
+      }
+    ],
+    "paper_only": true,
+    "positions_before": 0,
+    "status": "complete"
+  },
+  "validation": {
+    "focused_tests_passed": 45,
+    "systemd_verify": "passed",
+    "actual_v2_fill": "pending prospective eligible signal"
+  }
+}

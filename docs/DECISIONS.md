@@ -1839,3 +1839,13 @@ Use the measured eight-worker/12-GiB scanner limit, still autosized to available
 resources. Prevent delayed research starts during the reserved paper-session
 window. Research lineage repair remains separate from operational readiness.
 [Repair and verification](reviews/2026-09-28-v6-paper-readiness.md).
+
+### 2026-09-28 — Independent paper orders with bounded midpoint concessions
+
+The user approved 120 seconds before cancellation, midpoint × 1.02 buys rounded
+up, midpoint × 0.98 sells rounded down, and independent order processing. Same
+contract/position dependencies and reserved buying power stay enforced. Use a
+new operational source/manifest version; preserve the frozen model and original
+activation. Execution limits are separate from valuation/risk marks and do not
+guarantee fills. Existing orders retain their journaled policy.
+[Selected policy](reviews/2026-09-28-v6-independent-orders.md).

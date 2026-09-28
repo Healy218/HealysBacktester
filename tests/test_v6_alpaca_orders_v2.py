@@ -198,3 +198,30 @@ def test_v2_dispatcher_refuses_unadmitted_policy(tmp_path):
         activated_at=NOW.isoformat(), scanner_enabled=True, bridge_runtime_sha256={})))
     with pytest.raises(ValueError,match='not admitted'):
         validate(tmp_path)
+
+
+def test_rejected_order_does_not_block_unrelated_order_or_retry(tmp_path):
+    j,b,d=setup(tmp_path)
+    submit=b.submit_order
+    def reject_first(order_data):
+        order=submit(order_data)
+        if b.posts==1:order.status='rejected'
+        return order
+    b.submit_order=reject_first
+    result=poll([entry(),other()],j,b,d)
+    assert [r['status'] for r in result]==['rejected','new']
+    poll([entry(),other()],j,b,d,seconds=15)
+    assert b.posts==2
+
+
+def test_stale_quote_blocks_only_affected_order(tmp_path):
+    j,b,d=setup(tmp_path)
+    snapshot=d.get_option_snapshot
+    def stale_first(request):
+        result=snapshot(request)
+        if request.symbol_or_symbols==entry()['contract']:
+            result[request.symbol_or_symbols].latest_quote.timestamp=NOW-timedelta(seconds=31)
+        return result
+    d.get_option_snapshot=stale_first
+    result=poll([entry(),other()],j,b,d)
+    assert [r['status'] for r in result]==['blocked','new'] and b.posts==1

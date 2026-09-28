@@ -847,3 +847,14 @@ A second source entry was withheld after its broker deadline. **Verdict:** one
 timely full scan and actual submit/cancel/reconciliation verified. First actual
 fill, sustained performance and continual-training readiness remain unproven.
 [Evidence](reviews/2026-09-28-v6-paper-readiness.md).
+
+### 2026-09-28 — Independent-order V2 deployment verification
+
+Forty-five focused tests passed for old/new lifecycle behavior, adjusted-price
+sizing, multiple pending orders, dependencies, cash reservations, partial fills,
+cancellation races and failure/restart handling. Systemd validation passed.
+Authenticated 12:01 Central preview and service polling succeeded after the
+versioned cutover; zero positions/pending orders were observed at preflight.
+**Verdict:** policy implemented and deployed; actual V2 fills and sustained
+performance remain unmeasured. Old expired signals were correctly withheld.
+[Evidence](reviews/2026-09-28-v6-independent-orders.md).
