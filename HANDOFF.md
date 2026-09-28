@@ -10,7 +10,7 @@ for **V6 only** tonight. V5 paper-outcome scoring is superseded. V7 remains at
 V6 catch-up started at 19:59 Central and was subsequently stopped at user request
 to prioritize the V7 entry download. The 20:18 hold receipt verified 273 completed
 feature batches and 1,628 outcome records intact. The V6 timer is completion-gated;
-morning retries run every 15 minutes, 04:00–07:45 Central, and resume only after
+overnight retries run every 15 minutes, midnight–07:45 Central, and resume only after
 V7 reports successful entry completion. The goal is a V6 update before the next
 trading day if time permits; no full updated ensemble or readiness claim exists.
 [Implementation/evidence](docs/reviews/2026-09-27-v6-continual-incubator.md).
@@ -43,10 +43,10 @@ trading day if time permits; no full updated ensemble or readiness claim exists.
 3. Data labels follow frozen historical V6 aggregate execution, independent of
    broker trades. Partial exit paths remain pending. Latest 40 observed dates are
    validation-only until outside the rolling tail; no untouched-performance claim.
-4. Existing V7 entry capture remains running. At 20:11 Central it was 31.06%
-   complete, with the 10–30-minute samples forecasting 04:00–06:16 Monday Central.
-   The slowest two-minute sample overlapped V6 but also had denser responses;
-   causality is unproven. Read the live meter before quoting present progress.
+4. Existing V7 entry capture remains running. At 21:24 Central it was 39.46%
+   complete; overall/10-minute rates projected 05:18–05:55 Monday Central, while
+   the slower 30-minute sample projected 09:40. These are entry-only forecasts,
+   not a guarantee. Read the live meter before quoting present progress.
 5. Continue selected 7-3 tasks without redoing completed preparation; observe the
    first prospective Alpaca fills, and retain the October 2 provider decision.
 

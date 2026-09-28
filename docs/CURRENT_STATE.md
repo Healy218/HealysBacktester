@@ -199,8 +199,8 @@ paper selections. Research output root: `incubator/continual-v6/r1/`.
 - `latest-candidate.json`: newest fully frozen candidate; `latest-accepted.json`:
   newest candidate passing the research diagnostic gate. Neither deploys a model.
 - Service/timer: `healys-v6-continual.service` / `.timer`, 16:45 New York weekdays;
-  every 15 minutes from 05:00 through 08:45 New York Monday–Saturday for morning
-  retries (04:00–07:45 Central). Units live in `deploy/systemd/`.
+  every 15 minutes from midnight through 07:45 Central Monday–Saturday for
+  overnight retries. Units live in `deploy/systemd/`.
   The service also requires successful completion of the selected V7 entry
   download (campaign `8ea809659f0647dbbfef9682321a6828dc182ccac1bbbe9d3e2d5bfb4e99f568`).
   A failed, paused or missing V7 receipt keeps V6 deferred. After completion, the

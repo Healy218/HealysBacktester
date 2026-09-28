@@ -16,8 +16,8 @@ stop reason. Missing/invalid, interrupted or other-campaign receipts defer V6.
 Seven targeted tests passed. Systemd condition validation and a real skip check
 confirm that the timer can remain enabled while V6 research stays inactive.
 The user confirmed the objective is to finish V6 before the next trading day if
-time permits. Morning retries now run every 15 minutes from 04:00 through 07:45
-Central, so V6 need not wait until the former 06:15 retry after an early finish.
+time permits. At the user’s follow-up, retries now begin at midnight Central,
+then every 15 minutes through 07:45, so an early download finish can be used.
 After V7 finishes, the next scheduled attempt resumes V6, subject to its existing
 daily-input condition and 08:00 Central cutoff. The initial catch-up plus roughly
 two hours of member training makes tomorrow readiness uncertain; this change
