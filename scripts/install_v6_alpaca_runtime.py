@@ -13,7 +13,7 @@ from integrations.alpaca_paper.v6_runtime import install_leg_capture
 
 RUNTIME_FILES=['integrations/alpaca_paper/v6_bridge.py','integrations/alpaca_paper/v6_pricing.py',
                'integrations/alpaca_paper/v6_runtime.py','scripts/run_v6_alpaca_runtime.py',
-               'scripts/run_v6_alpaca_scanner_v2.sh','scripts/lib/autosize.sh',
+               'scripts/run_v6_alpaca_scanner_v3.sh','scripts/lib/autosize.sh',
                'nn_meta/session_calendar.py','nn_meta/live/v6_option_sessions.py',
                'options/data/provider.py']
 OLD_TIMERS=['healys-v6-forward.timer','healys-v6-option-risk.timer',
@@ -30,8 +30,8 @@ def units(state):
     common=[ROOT/'venv/bin/python','-m','scripts.run_v6_alpaca_runtime']
     result={}
     for name,cmd,memory,timeout,schedule in [
-        ('scanner',['/usr/bin/bash',ROOT/'scripts/run_v6_alpaca_scanner_v2.sh','--state',state],
-         '10G',600,'Mon..Fri *-*-* 09..16:00,15,30,45:05 America/New_York'),
+        ('scanner',['/usr/bin/bash',ROOT/'scripts/run_v6_alpaca_scanner_v3.sh','--state',state],
+         '12G',600,'Mon..Fri *-*-* 09..16:00,15,30,45:05 America/New_York'),
         ('orders',[*common,'poll','--state',state], '1G',45,
          'Mon..Fri *-*-* 09..16:*:00,15,30,45 America/New_York')]:
         base='healys-v6-alpaca-'+name
