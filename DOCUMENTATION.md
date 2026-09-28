@@ -133,9 +133,12 @@ by information/label availability and preserve predeclared comparisons.
   for service controls and recovery. Do not rerun activation, reset its timestamp,
   erase the broker journal or import old simulator positions. Actual subsequent
   state lives under the pointers in CURRENT_STATE.
-- **Incubator:** prediction refresh, source coverage and outcome scoring are
-  separate checks. Replaying successful inference cannot recover source passes
-  that were never retained. Model admission remains a roadmap decision.
+- **Incubator:** the selected V6-only purpose is continual research/training,
+  independent of paper-trade selection. Append immutable candidate features and
+  matured simulated labels; an end-of-window mark is not a completed label.
+  Prediction replay is historical machinery, not a model update. New freezes
+  preserve their parents; research acceptance does not deploy a model. See the
+  [current contract](docs/specs/AI_INCUBATOR.md).
 - **FA:** the automation checkout owns deployed collection/evaluation receipts.
   Local skipped collectors may be covered by server/archive transfer; check the
   complete configured route. Daily capture does not imply a new monthly cohort.

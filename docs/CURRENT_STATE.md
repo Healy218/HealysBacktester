@@ -6,8 +6,9 @@ Pointer/configuration owner for the lab, reconciled September 27, 2026.
 runtime identities. Other current documents link here instead of copying them.
 
 **Evidence freshness:** the observations below come from the September 27
-capture/operations checks and retained receipts. Documentation consolidation
-performed no new service probe, capture, deployment or artifact mutation.
+capture/operations checks and retained receipts. The continual-incubator
+activation below was separately observed at 19:59 Central; other observations
+retain their original scopes and timestamps.
 Verify the indicated live receipts when asked for present health or progress.
 Never infer a current ETA from a historical throughput sample.
 
@@ -22,7 +23,7 @@ Never infer a current ETA from a historical throughput sample.
 | V6 fresh Alpaca PAPER | Home, V6 checkout | `nn_meta/live/v6_alpaca_paper/`; [activation receipt](reviews/2026-09-27-v6-alpaca-activation.json) |
 | V6 historical simulator | Home, V6 checkout | `nn_meta/live/v6_server/`; old portfolio history retained, execution/relay schedules retired; its data producer remains selected |
 | FA automation | Home, `/home/healy/Coding/HealysAutomation` | `deploy/fa-runtime.json`, `logs/job-health/`, `fa/archive/` and FA artifacts below; do not inspect stale copies in another checkout |
-| Incubator | Home, research checkout | `incubator/runs/after-close/`, `incubator/artifacts/daily/`; routing below |
+| Continual incubator | Home, research checkout | `deploy/incubator-continual-v6.json`, `incubator/continual-v6/r1/latest-run.json`; routing below |
 
 ## V7 acquisition runtime
 
@@ -186,15 +187,30 @@ prospective fill remained unverified at the activation checkpoint. Monday's
 configured schedule and exact account snapshot are in the deployment receipt;
 do not copy that snapshot as a present account balance.
 
-Incubator timer: `healys-ai-incubator-after-close.timer`, 15:30 Chicago on
-scheduled weekdays. Its V6 inputs now point to the fresh paper state's
-`passes/` and `data-index.json`; V5 capture remains separate.
-Friday evidence is `incubator/runs/after-close/close-20260925/` and
-`incubator/artifacts/daily/v5-20260925/`, `v6-20260925/`.
-Both model refreshes passed, but V6 had only three late source passes and
-both receipts awaited outcomes. [Audit](reviews/2026-09-27-incubator-fa-alpaca-readiness.md).
-That audit's earlier disabled-Alpaca finding is superseded by the activation
-receipt; its Friday inference observations remain valid.
+Continual V6 incubator configuration: `deploy/incubator-continual-v6.json`.
+The anchored base is `nn_meta/campaigns/v6-cash-repair-20260913/v6/artifacts/meta_dataset.parquet`;
+new candidates start August 25. Its input index remains
+`/home/healy/Coding/HealysV6/nn_meta/live/v6_server/data-index.json`, independent of
+paper selections. Research output root: `incubator/continual-v6/r1/`.
+
+- `latest-run.json` and `runs/<session>/status.json`: actual stage, failures and counts.
+- `features/`, `labels/`, `market/`: sealed incremental data and retained evidence.
+- `runs/<session>/symbols/`, `progress/`, `arrays/`, `candidate/`: checkpoints and models.
+- `latest-candidate.json`: newest fully frozen candidate; `latest-accepted.json`:
+  newest candidate passing the research diagnostic gate. Neither deploys a model.
+- Service/timer: `healys-v6-continual.service` / `.timer`, 16:45 New York weekdays;
+  05:15 and 07:15 New York Monday–Saturday retries. Units live in `deploy/systemd/`.
+  `journalctl --user -u healys-v6-continual.service` owns runtime logs.
+
+At 19:59 Central September 27, the service started a 449-symbol catch-up through
+September 25 with two workers, 8 GiB maximum memory and two-CPU quota. No full
+candidate freeze existed at that observation. Check the live receipts before
+inferring completion. [Implementation and measured pilot](reviews/2026-09-27-v6-continual-incubator.md).
+
+The replay-only `healys-ai-incubator-after-close.timer` was disabled at activation.
+Its Friday inference receipts remain historical under `incubator/runs/after-close/`
+and `incubator/artifacts/daily/`. [Historical audit](reviews/2026-09-27-incubator-fa-alpaca-readiness.md).
+V5 trade-outcome scoring is superseded by the continual-training scope.
 
 ## FA collection and evaluation
 

@@ -798,3 +798,22 @@ check both explicitly on the re-run:
    flagged top-decile inversion (decile 1 mean return +0.1265 vs decile 10
    +0.0602) while win rate still rises correctly. It is picking frequent small
    winners and missing the rare large ones in that regime.
+
+### 2026-09-27 — Continual V6 implementation and resource pilot
+
+The corrected SPY August 25–28 data pilot reconciled 160 candidates: 98 matured,
+54 pending and 8 unfilled in 127.26 seconds with captured inputs reused. Six
+partial exit paths from an earlier exploratory pilot were excluded by the final
+terminal-path rule; that earlier pilot is not training evidence.
+
+A full-size historical-base-plus-98-row training benchmark passed: 2,769,473
+training rows and 223,091 validation rows after purging; 12.19 seconds preparation,
+191.32 seconds for one classifier/magnitude member, 7.1 GiB cgroup peak. All 39
+focused tests passed. A final-source 16-candidate SPY smoke run also passed.
+
+**Verdict:** implementation/pilot compatibility and bounded member training are
+supported. The 449-symbol catch-up was started at 19:59 Central; full ensemble
+freeze, steady daily latency and next-session readiness remain unproven. This
+is not a trading-performance or promotion verdict. The initial validation tail
+overlaps the original incumbent's training history; compare it diagnostically.
+[Review and evidence](reviews/2026-09-27-v6-continual-incubator.md).

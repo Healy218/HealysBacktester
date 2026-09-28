@@ -18,7 +18,7 @@ checking the linked operational evidence.
 | Shared data and provenance | PIT identity/actions, frozen inputs, capture, replay and recovery components exist | Complete Phase 7's actual required coverage; retain immutable lineage for all researchers |
 | Model researchers: classification, EV and future generations | V5/V6 artifacts and evaluation machinery exist; V7 preparation is active | Finish Phase 7; evaluate its trained artifacts before any incubator or operational admission |
 | Paper execution and risk | Fresh V6 Alpaca runtime activated; prior simulator history retained | Observe real prospective fills/recovery; demonstrate sustained broker reconciliation separately from model quality |
-| AI artifact incubator | V5/V6 nightly inference is operational | Complete outcome joins/scoring and comparable forward evidence; V7 admission follows its own data/model gate |
+| Continual research/training incubator | V6-only continual pipeline implemented and activated September 27; SPY pilot and full-size member benchmark passed | Finish full-universe catch-up and candidate freeze; measure a complete daily overnight update; V7 admission follows its own gate |
 | FA discovery and context | Collection, rankings, enrichment snapshots and experimental evaluation exist | Complete the FA milestones below; no automatic admission into V7 or trading |
 | Pine/external indicator parity | Selected ports exist | Source/version/availability and numerical parity evidence before new proposals are admitted |
 | SPX0 / deeper index-options research | Earlier bounded-vertical studies did not earn a seat | Corrected deeper-history, liquidity/cost evidence and its existing drawdown gate; independent of V7-3 |
@@ -70,7 +70,7 @@ revision-specific commands belong in CURRENT_STATE or their dated receipts.
 | Full-universe entry capture controller, versioned concurrency and MRHA overflow | [Launch](docs/reviews/2026-09-27-v7-entry-campaign-started.md), [concurrency](docs/reviews/2026-09-27-v7-parallel-capture.md), [storage/memory](docs/reviews/2026-09-27-v7-storage-and-memory.md); active configuration has one pointer owner |
 | Execution/dataset/model components | Fills/marks/stops/rolls, physical ledger, causal features, factorized rows, purging, train-only preprocessing and finite trials exist; full integration/admission is separate |
 | V6 Alpaca paper activation | [Deployment](docs/reviews/2026-09-27-v6-alpaca-activation.md); startup verified, actual prospective fill observation still pending at that checkpoint |
-| V5/V6 nightly incubator activation and Friday inference | [Activation](docs/reviews/2026-09-25-incubator-nightly-activation.md), [Friday audit](docs/reviews/2026-09-27-incubator-fa-alpaca-readiness.md); outcome scoring and limited upstream V6 coverage remain separate |
+| V5/V6 nightly incubator activation and Friday inference | [Activation](docs/reviews/2026-09-25-incubator-nightly-activation.md), [Friday audit](docs/reviews/2026-09-27-incubator-fa-alpaca-readiness.md); historical replay scope superseded by [continual training](docs/reviews/2026-09-27-v6-continual-incubator.md), without invalidating the inference evidence |
 | Documentation consolidation | [Ownership and preservation review](docs/reviews/2026-09-27-documentation-consolidation.md); no research/runtime work performed |
 
 ## FA milestones — research deferred, collection continues

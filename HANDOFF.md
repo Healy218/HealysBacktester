@@ -1,53 +1,55 @@
-# Handoff — September 27, 2026 — ready for next session
+# Handoff — September 27, 2026 — continual incubator activated
 
 ## Focus and stopping point
 
-Session closeout is complete. Research remains in **Phase 7, gate 7-3**.
-The user-requested download speed increases are complete: the selected capture
-runs with twelve workers and a 384-request ceiling. A one-time ETA check is
-scheduled for **6:30 PM Central today**. Both were verified active at closeout.
-Exact runtime pointers and the dated snapshot belong to
-[CURRENT_STATE](docs/CURRENT_STATE.md), not historical reviews or handoffs.
+The user clarified the incubator's goal: continually build research data, train
+updated models and freeze new artifacts regardless of actual trades. Implemented
+for **V6 only** tonight. V5 paper-outcome scoring is superseded. V7 remains at
+**Phase 7, gate 7-3**; its existing capture continues without changes.
 
-## Completed this session — preserve and reuse
+The new service started at 19:59 Central for the August 25–September 25,
+449-symbol initial catch-up. It was producing features/labels at the subsequent
+check. No full updated ensemble or overnight-readiness claim exists yet.
+[Implementation/evidence](docs/reviews/2026-09-27-v6-continual-incubator.md).
 
-- Consolidated documentation ownership and navigation, including README.
-  [Consolidation review](docs/reviews/2026-09-27-documentation-consolidation.md).
-- Activated isolated V6 Alpaca paper trading for Monday; activation/startup were
-  verified earlier. Actual prospective order/fill observation remains pending.
-  [Activation evidence](docs/reviews/2026-09-27-v6-alpaca-activation.md).
-- Clarified FA raw archive history versus mature evaluation dates; daily
-  collection continues. Six eligible labeled dates did not mean six collection days.
-- Measured six/eight/twelve-worker acquisition and retained twelve workers.
-  Prior completed packs were reused, source-bound producers stayed frozen, and
-  the 14 GiB memory limit, CPU quota, disk reserves and overflow were preserved.
-  [Selected trial evidence](docs/reviews/2026-09-27-v7-twelve-worker-capture.md).
-- The ETA observer was dry-run and its one-time timer verified. It saves a local
-  report; it does not send a chat message or change the download.
+## Completed and preserved
 
-## Next session — start here
+- Incremental immutable candidate features and matured simulated labels, pending
+  and unfilled coverage, hash-bound resume and unchanged historical base/release.
+- Fixed 40-member LightGBM retraining, chronological purging/embargo, incumbent
+  and constant-baseline diagnostics, versioned candidate and accepted pointers.
+  Research acceptance does not promote or deploy a model.
+- New `healys-v6-continual.timer` enabled; old replay-only incubator timer disabled.
+  Bounded memory/CPU and morning deadline; completed checkpoints survive retries.
+- 39 targeted tests and unit validation passed. Corrected SPY pilot: 160 candidates,
+  98 matured / 54 pending / 8 unfilled. Full-size single-member benchmark: 191.32s,
+  7.1 GiB cgroup peak. Full pipeline latency and 40-member freeze are still open.
+- Rewrote the incubator contract and aligned owning notes. Historical replay
+  specification/evidence retained. Preserve unrelated dirty/untracked work.
 
-1. Read TODO, then this handoff; consult CURRENT_STATE for selected pointers.
-2. At or after 6:30 PM Central September 27, read the scheduled ETA report.
-   If absent, inspect the timer/service result before inferring it ran. Before
-   that time, leave the scheduled check in place.
-3. Inspect the existing download receipt. Do not launch a duplicate, repeat
-   completed preparation, or use an old capture launcher. ETA is for entry
-   acquisition only and varies with data density; remeasure before quoting it.
-4. Continue the existing 7-3 checklist and preserve the selected partial 7-4
-   ledger. No gate or training-readiness verdict was advanced in this session.
-5. Keep the separate TODO obligations: Monday's prospective Alpaca fills,
-   incubator outcome/source coverage, and the October 2 provider decision.
-   Paper activation and Friday inference need not be repeated.
+## Next actions
 
-## Verification and constraints
+1. Read TODO then this handoff. Inspect `incubator/continual-v6/r1/latest-run.json`,
+   per-symbol progress and service journal; use [CURRENT_STATE](docs/CURRENT_STATE.md)
+   for exact configuration, selected inputs, schedules and recovery pointers.
+2. Complete OPS-INCUBATOR.DATA/OPS/PROOF: initial full-universe catch-up, full model
+   freeze and one steady daily update. Preserve checkpoints; do not claim the
+   initial backlog fits tonight or that the nightly SLA is measured.
+3. Data labels follow frozen historical V6 aggregate execution, independent of
+   broker trades. Partial exit paths remain pending. Latest 40 observed dates are
+   validation-only until outside the rolling tail; no untouched-performance claim.
+4. Existing V7 entry capture remains running. The requested 18:30 Central report
+   was read: 20.16% then, with entry-only ETA 01:26–02:10 Monday Central. That is a
+   historical forecast; re-read the meter before quoting present progress/ETA.
+5. Continue selected 7-3 tasks without redoing completed preparation; observe the
+   first prospective Alpaca fills, and retain the October 2 provider decision.
 
-26 focused checks passed for the twelve-worker extension. The preceding full
-suite passed 2,514 tests plus 18 subtests (one skipped); that full run predates
-the twelve-worker extension. Closeout changed documentation only; links,
-archive preservation and scoped whitespace were checked without rerunning tests.
-Current producer versions are frozen; resume or reduce concurrency through the
-selected runner. The memory guard may lower effective concurrency on denser data.
-Preserve broad unrelated dirty/untracked work. README/ROADMAP/TODO and the
-existing decision/verdict logs remain authoritative for their assigned roles;
-no duplicate status ledger or new research queue was introduced.
+## Constraints
+
+Source/config changes require a new research lineage; never relabel old freezes.
+The continual contract includes pre-existing local V6 source work. A clean checkout
+of the new commit alone does not package all existing V6 runtime inputs. The
+operational frozen checkout and paper account were not modified by this work.
+Initial incumbent comparison overlaps its original training dates and is only a
+research diagnostic. Neither successful retraining nor a pointer advances an
+expert admission gate. Full validation/deployment/measurement remain distinct.

@@ -1796,3 +1796,23 @@ Version the runner/policy; autosize workers and allow 464 tasks. Lower concurren
 if warranted by later evidence, through the same new runner after a clean drain.
 This is an operational adjustment, not a new V7 gate or an ETA guarantee.
 [Measurement and preservation evidence](reviews/2026-09-27-v7-twelve-worker-capture.md).
+
+### 2026-09-27 — Incubator means continual research/training, initially V6 only
+
+The user clarified that the incubator must build on frozen research artifacts
+as daily data arrives, train updated models and freeze new versions regardless
+of which trades the operational experts selected. The earlier nightly V5/V6
+prediction-replay interpretation and V5 paper-outcome scoring queue are
+superseded. Preserve their historical evidence; they do not satisfy this goal.
+
+Start with V6's frozen strategy/feature/training contract and fixed LightGBM
+family. Reuse the historical base, append full-universe candidate features and
+matured simulated labels, validate candidate models and keep immutable parent
+lineage. Keep V5 out of the active update path; admit V7 only after its own gates.
+New candidate freezes and research acceptance remain separate from operational
+promotion. An overnight refresh is the target; initial catch-up and one full
+daily update must be measured before promising next-session readiness.
+
+The unactivated trade-ledger-scoring draft from this session was discarded.
+No old freeze, deployed expert or V7 campaign is reopened by this scope change.
+See [AI_INCUBATOR](specs/AI_INCUBATOR.md) and the OPS-INCUBATOR tasks in main TODO.

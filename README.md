@@ -9,7 +9,7 @@ there is no final model that ends the project.
 The shared research path is:
 
 **Point-in-time data → frozen strategy proposals → causal features and labels →
-chronological evaluation → frozen model artifacts → incubator observation →
+chronological evaluation → frozen model artifacts → continual dataset/model updates →
 gated paper/operational admission → measured feedback.**
 
 Researchers share infrastructure but retain their own inputs, state, evidence
@@ -35,7 +35,7 @@ a paper deployment and demonstrated trading performance are distinct results.
 | `signals/`, `indicators/`, `scanner/`, `portfolio/` | Strategy proposals, indicator research and vectorbt equity sweeps |
 | `nn_meta/`, `nn_options_signal/` | Feature/dataset construction, model training and chronological evaluation |
 | `nn_meta/live/`, `integrations/alpaca_paper/` | Expert operation, paper execution, broker reconciliation and risk checks |
-| `incubator/` | Retained model inference, comparable observations and outcome evaluation |
+| `incubator/` | Continual research data, model updates, evaluation and immutable candidate freezes |
 | `fa/` | Social/news/filing/fundamental collection, discovery and contextual research |
 | `scripts/`, `deploy/`, `tests/` | Reproducible operations, scheduling, recovery and verification |
 

@@ -51,9 +51,21 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
 - [ ] **OPS-PAPER:** Observe the first prospective Alpaca session and actual
   order/fill reconciliation. Activation is complete; use the current deployment
   receipt. Do not repeat activation or import old simulator positions.
-- [ ] **OPS-INCUBATOR:** Finish exact V5 outcome joins and paper scoring; resolve
-  the limited upstream Friday V6 candidate coverage. Successful inference is
-  already verified and need not be rerun as a repair for missing source passes.
+- [ ] **OPS-INCUBATOR.DATA:** Implement and validate V6-only continual candidate
+  features and matured simulated labels across the frozen universe, independent
+  of actual trades. Implementation and SPY pilot passed; finish the 449-symbol
+  catch-up. Preserve the base freeze and resumable daily extensions.
+- [x] **OPS-INCUBATOR.TRAIN:** Implement fixed-family retraining, temporal validation,
+  baseline comparisons and immutable candidate freezes; retain the previous
+  accepted model on rejection/failure/deadline. Targeted tests and a full-size
+  member benchmark passed; the full ensemble freeze remains under PROOF.
+  [Evidence](docs/reviews/2026-09-27-v6-continual-incubator.md). No automatic deployment.
+- [ ] **OPS-INCUBATOR.OPS:** Replace replay-only scheduling with bounded continual
+  research and verify restart, daily-input readiness and resource coexistence.
+  New timer installed and catch-up started; full scheduled-operation proof remains.
+- [ ] **OPS-INCUBATOR.PROOF:** Complete the initial catch-up and measure a full
+  daily update through freeze before claiming next-trading-day readiness.
+  [Current contract](docs/specs/AI_INCUBATOR.md). V5 paper scoring is superseded.
 - [ ] **OPS-PROVIDER, by October 2:** Give the user a source-backed Massive
   keep/cancel recommendation using pre-February-2024 V7 captures, representative
   SPX/NDX Alpaca history and V6 adapter/decision parity. If evidence is incomplete,

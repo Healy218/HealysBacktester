@@ -1,0 +1,128 @@
+{
+  "observed_at": "2026-09-28T01:01:47.951943+00:00",
+  "implementation_commit": "c478dbb",
+  "scope": "V6 continual research implementation, SPY data pilot, single-member full-size training benchmark, service activation",
+  "tests": {
+    "passed": 39,
+    "command": "./venv/bin/python -m pytest tests/test_v6_continual.py tests/test_ai_incubator.py tests/test_incubator_schedule.py -q"
+  },
+  "corrected_pilot": {
+    "contract_identity": "5ceda2a6f6303542615a125e51d9e2adb89ab03291bdd798867b7ae4e5636872",
+    "counts": {
+      "candidates": 160,
+      "matured": 98,
+      "new_features": 160,
+      "pending": 54,
+      "proposals": 20,
+      "unfilled": 8
+    },
+    "deployment_approved": false,
+    "elapsed_seconds": 127.2557377749763,
+    "errors": [],
+    "research_only": true,
+    "schema": "v6-continual-run-v1",
+    "scope": "pilot",
+    "stage": "done",
+    "started_at": "2026-09-28T00:36:23.889658+00:00",
+    "status": "pilot_complete",
+    "symbols_complete": 1,
+    "symbols_required": 1,
+    "through": "2026-08-28",
+    "training_started": false
+  },
+  "final_source_smoke": {
+    "contract_identity": "01cddd1e079859830680e4e2051250368b7d85534381a7915ada128ea65b46fc",
+    "counts": {
+      "candidates": 16,
+      "matured": 0,
+      "new_features": 16,
+      "pending": 16,
+      "proposals": 2,
+      "unfilled": 0
+    },
+    "deployment_approved": false,
+    "elapsed_seconds": 22.02850574598415,
+    "errors": [],
+    "research_only": true,
+    "schema": "v6-continual-run-v1",
+    "scope": "pilot",
+    "stage": "done",
+    "started_at": "2026-09-28T00:52:15.401210+00:00",
+    "status": "pilot_complete",
+    "symbols_complete": 1,
+    "symbols_required": 1,
+    "through": "2026-08-25",
+    "training_started": false
+  },
+  "benchmark": {
+    "scope": "full-size historical base plus 98-row SPY extension; training compatibility/resource benchmark only",
+    "delta_rows": 98,
+    "elapsed_seconds": 205.81327200497617,
+    "member_seconds": 191.31846743499045,
+    "peak_rss_kib": 6833776,
+    "preparation_seconds": 12.191801944980398,
+    "production_freeze": false
+  },
+  "arrays": {
+    "sizes": {
+      "train": 2769473,
+      "validation": 223091
+    },
+    "val_start": "2026-07-02T00:00:00"
+  },
+  "benchmark_cgroup_peak": "7.1G (systemd journal)",
+  "original_release_verified": true,
+  "release_sha256": "3bc974679fff04044002f833cbb4c9246f63fd4d9370c04985f5f6ca7597764f",
+  "activation_observation": {
+    "contract_identity": "01cddd1e079859830680e4e2051250368b7d85534381a7915ada128ea65b46fc",
+    "deployment_approved": false,
+    "elapsed_seconds": 0.12210613398929127,
+    "research_only": true,
+    "run_dir": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r1/runs/2026-09-25",
+    "schema": "v6-continual-run-v1",
+    "scope": "full_universe",
+    "stage": "candidates_and_labels",
+    "started_at": "2026-09-28T00:59:58.043412+00:00",
+    "status": "running",
+    "symbols_complete": 0,
+    "symbols_required": 449,
+    "through": "2026-09-25",
+    "training_started": false
+  },
+  "receipts": [
+    {
+      "path": "incubator/continual-v6/benchmark-20260927/report.json",
+      "sha256": "eb0b3a00a1c21e2ef50c3c0f3e8278640199ad7bb14388a580791f2b2539b011"
+    },
+    {
+      "path": "incubator/continual-v6/pilot-r2/runs/2026-08-28/status.json",
+      "sha256": "1f240e99216c0b76d4e1018043e03ea63c90d2a7a317a4e3bd9f866c5070d9d2"
+    },
+    {
+      "path": "incubator/continual-v6/pilot-r3/runs/2026-08-25/status.json",
+      "sha256": "7eff232195f3c017cd7151a3173ea1602b648c6fdd280545464d3ea5fe45751a"
+    },
+    {
+      "path": "incubator/continual-v6/r1/contract.json",
+      "sha256": "026ba773de949704c8fc9472d1ad2ce94c98b085822ae950f69dbc9d122444f3"
+    }
+  ],
+  "limitations": [
+    "Full 449-symbol catch-up and 40-member candidate freeze remain unvalidated",
+    "No measured full daily latency or next-session readiness SLA",
+    "Original incumbent trained on some dates in initial validation tail; diagnostic comparison only",
+    "Aggregate research labels do not establish broker premium-risk lifecycle parity",
+    "No operational model promotion or V7 admission"
+  ],
+  "activation_service_probe": {
+    "observed_at": "2026-09-28T01:06:00Z",
+    "approximate_time": true,
+    "service_state": "activating/start (oneshot running)",
+    "memory_current_bytes": 4635602944,
+    "memory_peak_bytes": 4704915456,
+    "cpu_quota": "2s per second",
+    "timer_enabled": true,
+    "legacy_timer": "inactive/disabled",
+    "v7_service": "active/running"
+  }
+}
