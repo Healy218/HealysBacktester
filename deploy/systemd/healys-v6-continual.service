@@ -1,0 +1,31 @@
+[Unit]
+Description=V6 continual research data, training and immutable candidate freeze
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecCondition=/usr/bin/bash -c '! /usr/bin/systemctl --user --quiet is-active healys-v6-data.service'
+ExecStart=/usr/bin/bash /home/healy/Coding/HealysBacktester/scripts/run_v6_continual.sh --max-seconds 28800
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=MPLCONFIGDIR=/home/healy/Coding/HealysBacktester/incubator/continual-v6/cache/matplotlib
+Environment=NUMBA_CACHE_DIR=/home/healy/Coding/HealysBacktester/incubator/continual-v6/cache/numba
+Environment=TF_CPP_MIN_LOG_LEVEL=2 CUDA_VISIBLE_DEVICES=-1
+TimeoutStartSec=9h
+TimeoutStopSec=45s
+KillMode=control-group
+MemoryHigh=7G
+MemoryMax=8G
+MemorySwapMax=0
+CPUQuota=200%
+TasksMax=128
+Nice=10
+UMask=0077
+PrivateTmp=true
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/home/healy/Coding/HealysBacktester/incubator/continual-v6 /home/healy/Coding/HealysBacktester/logs
+
+[Install]
+WantedBy=default.target
