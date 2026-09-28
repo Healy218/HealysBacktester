@@ -1,0 +1,46 @@
+{
+  "schema": "v7-exact-reference-rename-review-v1",
+  "automatic_extension": false,
+  "reviewed_at": "2026-09-28",
+  "groups": [
+    {
+      "old_symbol": "GPS",
+      "new_symbol": "GAP",
+      "published_date": "2024-08-21",
+      "effective_date": "2024-08-22",
+      "reference_date": "2024-08-23",
+      "expected_pairs": 5,
+      "evidence": "nn_meta/data_v7/option-rename-notices-20260928/box-gap-206676",
+      "evidence_sha256": "43b23b8f882b135077665b4ad0a785172be1d6e5be7ec0be1b895089c9f7cc16",
+      "url": "https://boxexchange.com/assets/BOXOnnMemo206676.pdf",
+      "terms_unchanged": true,
+      "deliverable_shares": 100
+    },
+    {
+      "old_symbol": "FI",
+      "new_symbol": "FISV",
+      "published_date": "2025-11-10",
+      "effective_date": "2025-11-11",
+      "reference_date": "2025-11-12",
+      "expected_pairs": 5,
+      "evidence": "nn_meta/data_v7/option-rename-notices-20260928/miax-fisv-57608",
+      "evidence_sha256": "3c0c650260d31d464eb0092dd4b8167a629a6b05bf0d2f68fdd1097a6d724221",
+      "url": "https://www.miaxglobal.com/sites/default/files/alert-files/FI__Symbol__Change_57608.pdf",
+      "terms_unchanged": true,
+      "deliverable_shares": 100
+    },
+    {
+      "old_symbol": "SQ",
+      "new_symbol": "XYZ",
+      "published_date": "2025-01-17",
+      "effective_date": "2025-01-21",
+      "reference_date": "2025-01-22",
+      "expected_pairs": 12,
+      "evidence": "nn_meta/data_v7/option-rename-notices-20260928/box-xyz-206943",
+      "evidence_sha256": "466033c86d3a5d5ff1228d316cc34ddf55597178356798655d6cf13ae9260ca8",
+      "url": "https://boxexchange.com/assets/BOXOnnMemo206943.pdf",
+      "terms_unchanged": true,
+      "deliverable_shares": 100
+    }
+  ]
+}
