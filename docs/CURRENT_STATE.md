@@ -158,7 +158,7 @@ The fresh state's `paper-restart.json` enables scanning and paper submission;
 Read SQLite evidence in read-only mode.
 
 - Scanner: `healys-v6-alpaca-scanner.timer` / `.service`, every 15 minutes in
-  its configured window, dynamically sized workers, 10 GiB memory limit.
+  its configured window, dynamically sized workers (v3: up to eight), 12 GiB memory limit.
 - Broker: `healys-v6-alpaca-orders.timer` / `.service`, every 15 seconds in its
   configured window; market/calendar checks govern execution.
 - Read-only monitor: `healys-v6-alpaca-paper-monitor.timer`; output
@@ -170,10 +170,17 @@ Read SQLite evidence in read-only mode.
   old server V6 watcher were retired. The old Stonks simulator projection is
   historical; it is not the new account's actual fill history.
 
-Startup was successful with no positions or orders. The first actual
-prospective fill remained unverified at the activation checkpoint. Monday's
-configured schedule and exact account snapshot are in the deployment receipt;
-do not copy that snapshot as a present account balance.
+At the September 28 readiness repair, a 10:30 Central scheduled full scan
+completed in 243.058 seconds with 281 candidate rows and no detection errors.
+One actual paper limit order was accepted, then canceled unfilled and reconciled;
+first-fill observation remains pending. [Readiness evidence](reviews/2026-09-28-v6-paper-readiness.md).
+Selected input snapshot is now
+`nn_meta/live/v6_server/data/2026-09-25-vintage-20260928/`, manifest SHA
+`fe2ab69e315faaa710fc95f108480354d919141841b88bbc46d6b2423b78a151`.
+The existing V6 data-index source points to it; the old snapshot/model remain intact.
+Scanner launcher: `scripts/run_v6_alpaca_scanner_v3.sh`. Activation lineage is
+retained under the paper state's `runtime-revisions/scanner-v3-20260928/`.
+Read current account/status receipts for subsequent holdings and health.
 
 Continual V6 incubator configuration: `deploy/incubator-continual-v6.json`.
 The anchored base is `nn_meta/campaigns/v6-cash-repair-20260913/v6/artifacts/meta_dataset.parquet`;
@@ -193,18 +200,19 @@ paper selections. Research output root: `incubator/continual-v6/r1/`.
   download (campaign `8ea809659f0647dbbfef9682321a6828dc182ccac1bbbe9d3e2d5bfb4e99f568`).
   A failed, paused or missing V7 receipt keeps V6 deferred. After completion, the
   next normal timer opportunity can resume V6, subject to daily-input readiness.
+  A calendar-aware condition also blocks starts between today’s open minus
+  30 minutes and close plus 15 minutes, including late persistent-timer starts.
   `journalctl --user -u healys-v6-continual.service` owns runtime logs.
 
-V6 was paused September 27 to prioritize V7 and retained its checkpoints.
-After V7 completed, the timer automatically started V6 at **05:00:27 Central
-September 28**. At the 06:17 service observation it was still building candidates
-and labels: four of 449 symbols complete, no model training yet and no candidate
-or accepted-model pointer. Completed symbols contained 2,042 matured labels.
-This is a dated observation, not a current heartbeat; per-symbol progress updates
-more often than the main status, which changes when a whole symbol completes.
-[Overnight evidence](reviews/2026-09-28-overnight-entry-completion.md) and
-[initial implementation/pilot](reviews/2026-09-27-v6-continual-incubator.md).
-The initial full-universe catch-up and full nightly latency remain unproven.
+V6 research resumed after V7 completion, but a delayed intraday restart was
+stopped during September 28 paper-readiness work. Its checkpoints remain under
+r1 and `latest-run.json` records `paused_for_paper_session`. The installed
+calendar condition was verified to reject another intraday start. The corrected
+paper data snapshot contains restated history, so r1 research continuation needs
+an explicit lineage review; do not overwrite its existing feature seals.
+Full-universe catch-up, full training and nightly latency remain unproven.
+[Readiness repair](reviews/2026-09-28-v6-paper-readiness.md) and
+[original implementation/pilot](reviews/2026-09-27-v6-continual-incubator.md).
 
 The replay-only `healys-ai-incubator-after-close.timer` was disabled at activation.
 Its Friday inference receipts remain historical under `incubator/runs/after-close/`

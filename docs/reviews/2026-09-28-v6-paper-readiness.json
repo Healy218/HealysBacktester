@@ -1,0 +1,257 @@
+{
+  "observed_at": "2026-09-28T15:40:16.711674+00:00",
+  "original_model_unchanged": true,
+  "source_audit": {
+    "source_mismatches": [],
+    "release_verified": true,
+    "release_sha256": "3bc974679fff04044002f833cbb4c9246f63fd4d9370c04985f5f6ca7597764f",
+    "scanner_enabled": true,
+    "paper_orders_enabled": true,
+    "paper_only": true,
+    "counts": {
+      "portfolio.sqlite3": {
+        "metadata": 2,
+        "cycles": 0,
+        "positions": 0,
+        "events": 0,
+        "outbox": 0,
+        "broker_source_entries": 0
+      },
+      "broker-orders.sqlite3": {
+        "orders": 0,
+        "observations": 0,
+        "risk_events": 0
+      }
+    }
+  },
+  "overlap_audit": {
+    "all": {
+      "captured_query": "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/stock-captures/20260928T150024700724Z.all.parquet",
+      "symbols_checked": 444,
+      "revised_overlap_symbols": []
+    },
+    "raw": {
+      "captured_query": "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/stock-captures/20260928T150024842593Z.raw.parquet",
+      "symbols_checked": 444,
+      "revised_overlap_symbols": []
+    }
+  },
+  "data_index": {
+    "path": "/home/healy/Coding/HealysBacktester/nn_meta/live/v6_server/data/2026-09-25-vintage-20260928",
+    "published_at": "2026-09-28T15:22:05.655348+00:00",
+    "release_sha256": "3bc974679fff04044002f833cbb4c9246f63fd4d9370c04985f5f6ca7597764f",
+    "schema": "v6-forward-data-index-v1",
+    "sha256": "fe2ab69e315faaa710fc95f108480354d919141841b88bbc46d6b2423b78a151",
+    "through": "2026-09-25"
+  },
+  "repaired_manifest_sha256": "fe2ab69e315faaa710fc95f108480354d919141841b88bbc46d6b2423b78a151",
+  "launcher_revisions": [
+    {
+      "at": "2026-09-28T15:05:27.091304+00:00",
+      "reason": "Separate process worker sizing from numerical thread limits; keep 10 GiB service cap",
+      "added_source": "scripts/run_v6_alpaca_scanner_v2.sh",
+      "sha256": "9ce13b660a08f462499071c5b1f8b63a10ef9771f0ffb8cf6492e9e2be3af826",
+      "previous_manifest_sha256": "3f9853c593113c9bf81dd693824c59ab2a24e0f5db314592f360a7b2c4a318de",
+      "new_manifest_sha256": "9f218749ac47cd1d5712284653dc372a67bd63792dc8ff309d85ca20ad192bc6"
+    },
+    {
+      "at": "2026-09-28T15:29:18.820752+00:00",
+      "reason": "Measured four-worker scan too slow for five-minute admission; autosize up to eight within revised 12 GiB cap",
+      "added_source": "scripts/run_v6_alpaca_scanner_v3.sh",
+      "sha256": "182866fbf3be4f390ab9a2c740f2593efb778341613fa2a086cc1b4643c39de9",
+      "previous_manifest_sha256": "9f218749ac47cd1d5712284653dc372a67bd63792dc8ff309d85ca20ad192bc6",
+      "new_manifest_sha256": "3784695c859a00677d370df205ade9a1053b0206409109c7202a463b4db94cef"
+    }
+  ],
+  "verified_option_context_reuse_sessions": 23,
+  "readiness": "operational_paper_scan_and_submit_cancel_reconciliation_verified",
+  "tests_passed": 21,
+  "scan": {
+    "alerts_enabled": false,
+    "allocation": {
+      "duplicate": false,
+      "opened": 2,
+      "selected": 5,
+      "unfilled": 3
+    },
+    "broker_orders": false,
+    "candidate_rows": 281,
+    "checked_at": "2026-09-28T15:30:05.607372+00:00",
+    "current_access": {
+      "checked_at": "2026-09-28T15:30:25.192311+00:00",
+      "contract": "SPY260929C00765000",
+      "latest_trade_sip_ns": 1790609423020923875,
+      "quote": {
+        "ask": 2.51,
+        "ask_size": 242,
+        "bid": 2.5,
+        "bid_size": 192,
+        "contract": "SPY260929C00765000",
+        "provider": "massive",
+        "receipt": {
+          "complete": true,
+          "page_sha256": [
+            "475fe8154f8ec2d6ea38864d67788cbd1ebab593c16ee7bc5ecb9eb44a330428",
+            "88a3a1e57ee433f6fea7ee4c8ae9a9acb1b598a4132a9d70327161b587a01571"
+          ],
+          "pages": 2,
+          "path": "/v3/quotes/O:SPY260929C00765000",
+          "provider": "massive",
+          "query": null,
+          "retrieved_at": "2026-09-28T15:30:24.988096+00:00"
+        },
+        "received_at": "2026-09-28T15:30:24.988226+00:00",
+        "sip_timestamp_ns": 1790609424318932556
+      },
+      "status": "passed",
+      "trade_receipt": {
+        "complete": true,
+        "page_sha256": [
+          "836cb67bf7796d6622352c30ca5b6842109502aedeb24a08d59340d590ac93db"
+        ],
+        "pages": 1,
+        "path": "/v3/trades/O:SPY260929C00765000",
+        "provider": "massive",
+        "query": {
+          "limit": 1000,
+          "order": "desc",
+          "sort": "timestamp",
+          "timestamp.gte": 1790609304425975000,
+          "timestamp.lt": 1790609424425975000
+        },
+        "retrieved_at": "2026-09-28T15:30:25.192235+00:00"
+      }
+    },
+    "data_through": "2026-09-25",
+    "detected": 444,
+    "detection_errors": [],
+    "elapsed_seconds": 243.058,
+    "errors": 0,
+    "evidence": "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/passes/20260928T153000Z",
+    "experimental": true,
+    "fresh_signals": 55,
+    "fresh_symbols": 48,
+    "model_sha256": "cdacbea1bf6a07e573af46b8d266b1d82b5e3bf736945a06b929e46050fdbd6c",
+    "no_current_bar": [
+      "SATS",
+      "SAVA",
+      "SWTX",
+      "WBA",
+      "X"
+    ],
+    "phase": "complete",
+    "portfolio": {
+      "cycles": 1,
+      "equity": 1.0,
+      "execution": "experimental fractional midpoint paper; 0.15% cost per side; completed legacy records preserved",
+      "outbox": {},
+      "positions": {
+        "open": 2
+      }
+    },
+    "replay": false,
+    "schema": "v6-forward-status-v1",
+    "signal_clock": "2026-09-28T15:30:05.694777+00:00",
+    "source_reuse": {
+      "hits": 316,
+      "misses": 2928
+    },
+    "status": "recorded",
+    "symbol_results": 444,
+    "universe": 449
+  },
+  "broker_status": {
+    "action": "poll",
+    "checked_at": "2026-09-28T15:40:00.312799+00:00",
+    "options_buying_power": "100000",
+    "outcomes": [
+      {
+        "event_id": "v6|PDD|tv_sr|2026-09-28T15:15:00|entry|0",
+        "status": "recorded"
+      },
+      {
+        "event_id": "v6|UVXY|macd|2026-09-28T15:15:00|entry|0",
+        "reason": "entry event missed the five-minute broker window",
+        "status": "blocked"
+      }
+    ],
+    "paper_only": true,
+    "positions_before": 0,
+    "status": "complete"
+  },
+  "broker_orders": [
+    {
+      "event_id": "v6|PDD|tv_sr|2026-09-28T15:15:00|entry|0",
+      "contract": "PDD261106C00079000",
+      "quantity": 31,
+      "state": "canceled",
+      "filled_qty": "0",
+      "filled_avg_price": null,
+      "created_at": "2026-09-28T15:34:17.546394+00:00",
+      "updated_at": "2026-09-28T15:35:46.049033+00:00"
+    }
+  ],
+  "account": {
+    "alpaca": {
+      "account_fingerprint": "805ca4b40b34fd4e2f9d258af45dec81bd71e88a5b3a074149abc57c8f61c4c9",
+      "account_status": "ACTIVE",
+      "cash_usd": "100000",
+      "contract_checks": [],
+      "equity_usd": "100000",
+      "long_option_entry_eligible": true,
+      "observed_at": "2026-09-28T15:36:16.759032+00:00",
+      "open_order_count": 0,
+      "open_orders": [],
+      "open_orders_may_be_truncated": false,
+      "option_positions": [],
+      "options_approved_level": 3,
+      "options_buying_power_usd": "100000",
+      "options_trading_level": 3,
+      "position_count": 0,
+      "source": "alpaca-paper-read-only",
+      "trading_blocked": false
+    },
+    "broker_orders_enabled": true,
+    "monitor_can_submit_orders": false,
+    "runtime": {
+      "action": "poll",
+      "checked_at": "2026-09-28T15:36:00.308948+00:00",
+      "options_buying_power": "100000",
+      "outcomes": [
+        {
+          "event_id": "v6|PDD|tv_sr|2026-09-28T15:15:00|entry|0",
+          "status": "recorded"
+        },
+        {
+          "event_id": "v6|UVXY|macd|2026-09-28T15:15:00|entry|0",
+          "reason": "stale or pre-decision quote",
+          "status": "blocked"
+        }
+      ],
+      "paper_only": true,
+      "positions_before": 0,
+      "status": "complete"
+    },
+    "scanner_enabled": true,
+    "schema": "v6-alpaca-paper-monitor-v1"
+  },
+  "active_data_index": {
+    "path": "/home/healy/Coding/HealysBacktester/nn_meta/live/v6_server/data/2026-09-25-vintage-20260928",
+    "published_at": "2026-09-28T15:22:05.655348+00:00",
+    "release_sha256": "3bc974679fff04044002f833cbb4c9246f63fd4d9370c04985f5f6ca7597764f",
+    "schema": "v6-forward-data-index-v1",
+    "sha256": "fe2ab69e315faaa710fc95f108480354d919141841b88bbc46d6b2423b78a151",
+    "through": "2026-09-25"
+  },
+  "release_still_verified": true,
+  "parent_data_manifest_unchanged": true,
+  "scanner_memory_peak_bytes": 7548436480,
+  "effective_workers": 8,
+  "scanner_memory_limit_gib": 12,
+  "research_intraday_start": "skipped by installed ExecCondition",
+  "first_actual_fill_verified": false,
+  "remaining": [
+    "First actual broker fill and sustained subsequent-session operation",
+    "Incubator updated-input lineage/catch-up and full nightly latency remain separate"
+  ]
+}

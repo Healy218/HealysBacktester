@@ -130,7 +130,11 @@ by information/label availability and preserve predeclared comparisons.
   Verify the specific checkout/revision and installed units. A main-branch push
   does not prove that the server has deployed it.
 - **V6 paper:** use the [activation runbook](docs/reviews/2026-09-27-v6-alpaca-activation.md)
-  for service controls and recovery. Do not rerun activation, reset its timestamp,
+  for service controls and recovery. A provider price-vintage error requires a
+  new validated input snapshot; a same-date refresh may simply reuse the existing
+  snapshot. Preserve the vintage guard and original artifacts. See the
+  [September 28 repair](docs/reviews/2026-09-28-v6-paper-readiness.md).
+  Do not rerun activation, reset its timestamp,
   erase the broker journal or import old simulator positions. Actual subsequent
   state lives under the pointers in CURRENT_STATE.
 - **Incubator:** the selected V6-only purpose is continual research/training,

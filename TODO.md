@@ -51,11 +51,15 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
 
 - [ ] **OPS-PAPER:** Observe the first prospective Alpaca session and actual
   order/fill reconciliation. Activation is complete; use the current deployment
-  receipt. Do not repeat activation or import old simulator positions.
+  receipt. September 28: timely full scan and accepted/canceled order reconciled;
+  first actual fill remains pending. [Readiness repair](docs/reviews/2026-09-28-v6-paper-readiness.md).
+  Do not repeat activation or import old simulator positions.
 - [ ] **OPS-INCUBATOR.DATA:** Implement and validate V6-only continual candidate
   features and matured simulated labels across the frozen universe, independent
   of actual trades. Implementation and SPY pilot passed; finish the 449-symbol
-  catch-up. Preserve the base freeze and resumable daily extensions.
+  catch-up. Corrected paper inputs now contain restated stock history: review a
+  compatible/new research lineage before resuming r1; never relabel prior features.
+  Preserve the base freeze and resumable daily extensions.
 - [x] **OPS-INCUBATOR.TRAIN:** Implement fixed-family retraining, temporal validation,
   baseline comparisons and immutable candidate freezes; retain the previous
   accepted model on rejection/failure/deadline. Targeted tests and a full-size

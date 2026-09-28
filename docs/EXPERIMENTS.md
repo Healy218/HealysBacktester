@@ -831,3 +831,19 @@ training had not started and no updated model freeze existed. Automatic dependen
 handoff is verified; full-universe build latency, nightly SLA and updated-model
 performance are not. Only the 7-3.entry task closes; overall 7-3 remains open.
 [Evidence](reviews/2026-09-28-overnight-entry-completion.md).
+
+### 2026-09-28 — V6 paper scan and submit/cancel readiness verified
+
+After immutable input-vintage repair and versioned process-sizing correction,
+the scheduled 10:30 Central scan completed in 243.058 seconds: 449 symbols
+accounted for, 444 with current bars, 281 candidates, zero processing errors.
+Eight workers peaked at about 7 GiB within a 12 GiB cap. Twenty-one focused
+tests and real service/price-overlap checks passed. The original model and
+prior data snapshot verified unchanged.
+
+Alpaca accepted a prospective 31-contract PDD option limit order; it remained
+unfilled, was automatically canceled and reconciled to zero broker holdings.
+A second source entry was withheld after its broker deadline. **Verdict:** one
+timely full scan and actual submit/cancel/reconciliation verified. First actual
+fill, sustained performance and continual-training readiness remain unproven.
+[Evidence](reviews/2026-09-28-v6-paper-readiness.md).

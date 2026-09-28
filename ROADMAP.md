@@ -17,7 +17,7 @@ checking the linked operational evidence.
 | --- | --- | --- |
 | Shared data and provenance | PIT identity/actions, frozen inputs, capture, replay and recovery components exist | Complete Phase 7's actual required coverage; retain immutable lineage for all researchers |
 | Model researchers: classification, EV and future generations | V5/V6 artifacts and evaluation machinery exist; V7 preparation is active | Finish Phase 7; evaluate its trained artifacts before any incubator or operational admission |
-| Paper execution and risk | Fresh V6 Alpaca runtime activated; prior simulator history retained | Observe real prospective fills/recovery; demonstrate sustained broker reconciliation separately from model quality |
+| Paper execution and risk | V6 full paper scan and submit/cancel reconciliation verified September 28; first actual fill pending | Observe real prospective fills/recovery; demonstrate sustained broker reconciliation separately from model quality |
 | Continual research/training incubator | V6-only continual pipeline implemented and activated September 27; SPY pilot and full-size member benchmark passed | Automatic post-V7 restart verified; finish catch-up and candidate freeze, then measure a full daily update; V7 admission follows its own gate |
 | FA discovery and context | Collection, rankings, enrichment snapshots and experimental evaluation exist | Complete the FA milestones below; no automatic admission into V7 or trading |
 | Pine/external indicator parity | Selected ports exist | Source/version/availability and numerical parity evidence before new proposals are admitted |

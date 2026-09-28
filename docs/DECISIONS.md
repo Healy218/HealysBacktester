@@ -1828,3 +1828,14 @@ The V6 paper account, daily input producer and V7 capture remain unchanged.
 The observed slowdown overlapped V6 but also involved denser market responses;
 this scheduling choice does not establish a causal performance finding.
 [Hold evidence](reviews/2026-09-27-v6-v7-download-priority.md).
+
+### 2026-09-28 — Restore paper readiness before continuing gate 7-3
+
+The user selected V6 paper readiness first, then remaining 7-3 work. Preserve the
+existing admitted paper model/account while repairing data and launcher defects.
+Provider-restated prices require a new validated data version, never relaxing the
+vintage guard. Process sizing must be independent of numerical OMP thread caps.
+Use the measured eight-worker/12-GiB scanner limit, still autosized to available
+resources. Prevent delayed research starts during the reserved paper-session
+window. Research lineage repair remains separate from operational readiness.
+[Repair and verification](reviews/2026-09-28-v6-paper-readiness.md).
