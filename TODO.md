@@ -18,8 +18,10 @@ The following scope is unchanged by the documentation consolidation.
 - [ ] **7-3.references:** Acquire remaining dated references from the completed
   demand plan, reuse captured coverage and apply the existing five exact
   blackouts. Actual held paths may add dates; account for new missing references.
-  Full-plan resumable acquisition launched September 28; new provider failures
-  remain unadmitted. [Capture/frontier evidence](docs/reviews/2026-09-28-v7-reference-capture-and-frontier.md).
+  Full-plan capture and independent census completed at 16:48 September 28.
+  A verified exact overlay resolves 22 rename mismatches; nine cash-deliverable
+  rows and 10,817 unapproved missing references remain unresolved.
+  [Completion/admission evidence](docs/reviews/2026-09-28-v7-reference-completion.md).
 - [ ] **7-3.paths:** Complete only actual held-mark, exit, roll and applicable
   stock-delivery gaps requested by the existing replay frontier. Preserve
   partial ledgers and count held blackout crossings. Potential first-leg
@@ -80,6 +82,8 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   research and verify restart, daily-input readiness and resource coexistence.
   Completion gate and automatic 05:00 restart verified September 28. Initial
   catch-up remains incomplete; full update/recovery/coexistence proof remains.
+  September 28 16:49: r1 was OOM-killed after revised-history errors, with no
+  immediate restart. Repair input lineage and memory before the midnight retry.
 - [ ] **OPS-INCUBATOR.PROOF:** Complete the initial catch-up and measure a full
   daily update through freeze before claiming next-trading-day readiness.
   [Current contract](docs/specs/AI_INCUBATOR.md). V5 paper scoring is superseded.

@@ -888,3 +888,18 @@ orders and returned market_closed. The actual journal had zero step chains and
 six legacy canceled orders. No prospective ladder fill or execution-quality
 claim follows from these checks.
 [Evidence and limits](reviews/2026-09-28-v6-step-orders.md).
+
+## 2026-09-28 — Full reference census and bounded exception repair
+
+The reference service completed at 16:48:10 Central; the full independent audit
+verified 2,223,844 planned pairs and no uncaptured pairs. Dispositions: 2,212,991
+standard, five existing blackouts, 10,817 other 404s and 31 strict rejections.
+Exchange-backed exact corrections admit 22 rename mismatches in a new consumer;
+all 22 passed actual readback and 19 focused tests passed. Nine cash-deliverable
+rows and unapproved 404s remain unresolved. Integrated r2 adds ten marks while
+preserving prior fills/decisions/marks/cash; still only five source paths.
+
+Separately, V6 continual research was OOM-killed at 16:49:07 (7.8-GB peak),
+after input-lineage failures. No automatic immediate restart occurred. Its stale
+progress JSON does not establish live health or a completed freeze.
+[Audit, sources and failure observation](reviews/2026-09-28-v7-reference-completion.md).

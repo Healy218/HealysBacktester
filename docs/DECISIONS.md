@@ -1870,3 +1870,13 @@ and confirms cancellation before replacing only the unfilled quantity. Successfu
 sell liquidity slices may continue to close remaining holdings; exhausted or
 failed ladders do not restart automatically. Legacy attempts retain their policy.
 [Selected policy and deployment](reviews/2026-09-28-v6-step-orders.md).
+
+## 2026-09-28 — Exact option-reference rename normalization
+
+The user selected exception repair alongside execution progress. Exchange notices
+support underlying-name normalization for 22 exact captured contract/date rows
+after GPS→GAP, FI→FISV and SQ→XYZ. A new reviewed consumer binds those rows and
+notices; raw metadata and the frozen strict validator remain intact. All other
+standard-deliverable checks remain mandatory. This does not extend blackouts,
+admit cash-deliverable contracts or supply missing references.
+[Scope and sources](reviews/2026-09-28-v7-reference-completion.md).

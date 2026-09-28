@@ -27,18 +27,24 @@ Never infer a current ETA from a historical throughput sample.
 
 ## V7 acquisition runtime
 
-### Dated references — launched September 28
+### Dated references — capture completed September 28
 
 - Service: `healys-v7-references-20260928.service`.
 - Declaration/progress/attempts: `nn_meta/validation/v7-reference-campaign-20260928/`.
 - Immutable batches: `nn_meta/data_v7/dated-reference-campaign-20260928/`.
 - Launcher: `bash scripts/start_v7_reference_campaign.sh 32`; selected 16 threads
   by autosizing, CPU quota 100%, MemoryHigh/Max 1/2 GiB, no swap.
-- Partial reconciled snapshot: `nn_meta/validation/v7-reference-reconciliation-20260928-partial-r0/`.
-  It verifies 399,118 planned pairs, including 1,883 missing references and ten
-  strict-validator rejections. These new failures are not approved exclusions.
-- [Evidence, failure probes and exact scope](reviews/2026-09-28-v7-reference-capture-and-frontier.md).
-  Inspect progress for live counts; completion of capture alone is not admission.
+- Completed successfully at 16:48:10 Central, with all 2,223,844 planned pairs.
+  Service exit was successful; 1-GB memory peak was not an OOM kill.
+- Full audit: `nn_meta/validation/v7-reference-reconciliation-20260928-full-r0/`.
+  It verifies 2,212,991 standard pairs, five existing blackouts, 10,817 other 404s
+  and 31 strict-validator rejections. Raw retained files total 2,120,051,077 bytes.
+- Exact rename overlay: `nn_meta/validation/v7-reference-rename-review-20260928/`;
+  consumer proof: `v7-reference-rename-consumer-check-20260928/`. Explicitly bind
+  `ReviewedContractReferences` to normalize the 22 reviewed underlying names.
+  Nine cash-deliverable rows and the unapproved 404s remain unresolved.
+- [Completion, exception evidence and separate V6 memory failure](reviews/2026-09-28-v7-reference-completion.md).
+  Reference capture is complete; admission and actual held-path coverage remain open.
 
 ### Completed entry campaign
 
@@ -128,11 +134,11 @@ and `option-hours-followup-20260927/`. Captured calendar:
 
 ## V7 input boundaries
 
-The dated-reference **plan** is finished; most full-scope reference **downloads**
-remain. The hours reconstruction is finished for the reviewed scope. The five
+The dated-reference **plan** is finished; the frozen full-scope reference **download** is complete, while
+exception admission remains open. The hours reconstruction is finished for the reviewed scope. The five
 blackouts are implemented; do not re-investigate or broaden them. The entry
-request plan/packing/cleanup and entry capture are complete; the reference
-service is acquiring the dated-reference plan. Replay machinery exists;
+request plan/packing/cleanup and entry capture are complete; the dated-reference
+campaign also completed. Replay machinery exists;
 actual remaining paths/captures and full dataset
 assembly still have to run. No full trained V7 artifact exists.
 
@@ -147,19 +153,19 @@ of rewriting freezes to turn that old report green.
 ## V7 execution continuation
 
 The versioned shared/physical runner is connected. Latest actual ledger:
-`nn_meta/validation/v7-integrated-execution-20260928-r1/`; quote snapshot:
-`v7-frontier-quote-index-20260928-r1`; retained source paths:
-`v7-execution-discovery-20260928-r1` (validation roots). Use these newer receipts
+`nn_meta/validation/v7-integrated-execution-20260928-r2/`; quote snapshot:
+`v7-frontier-quote-index-20260928-r2`; retained source paths:
+`v7-execution-discovery-20260928-r2` (validation roots). Use these newer receipts
 for integration; prior revisions remain valid evidence. The shared ledger completed
 DIS/ABBV, retains NVDA at its next exact missing mark, and has not reached real
 exercise/stock liquidation. Full V7-4 is still open. See the
 [integration review](reviews/2026-09-27-v7-integrated-execution.md) and the current
 three-argument `scripts/run_v7_integrated_execution.sh` launcher.
 
-The September 28 r1 ledger preserves 1,466 earlier events and three decisions,
-with 175 marks; cash was $87,596.26474814238 at that receipt.
+The September 28 r2 ledger preserves 1,466 earlier events and three decisions,
+with 185 marks; cash was $87,596.26474814238 at that receipt.
 Next NVDA240322C00910000 quote window:
-`[1711038750000000000,1711038780000000001)`.
+`[1711039350000000000,1711039380000000001)`.
 VKTX/FUTU source gaps remain. [Prefix preservation and continuation](reviews/2026-09-28-v7-reference-capture-and-frontier.md).
 This remains five-path evidence, not full-universe execution coverage.
 
@@ -244,12 +250,13 @@ paper selections. Research output root: `incubator/continual-v6/r1/`.
   30 minutes and close plus 15 minutes, including late persistent-timer starts.
   `journalctl --user -u healys-v6-continual.service` owns runtime logs.
 
-V6 research resumed after V7 completion, but a delayed intraday restart was
-stopped during September 28 paper-readiness work. Its checkpoints remain under
-r1 and `latest-run.json` records `paused_for_paper_session`. The installed
-calendar condition was verified to reject another intraday start. The corrected
-paper data snapshot contains restated history, so r1 research continuation needs
-an explicit lineage review; do not overwrite its existing feature seals.
+The September 28 15:45 research run failed at 16:49:07 with systemd-oomd's
+`oom-kill` result and a 7.8-GB peak (MemoryHigh 7 GiB / Max 8 GiB). At 17:53,
+Restart=no and NRestarts=0: it had not restarted; the next timer attempt was
+midnight September 29. Its last progress JSON says running but is stale after
+the kill and contains revised-history/new-lineage errors. Preserve r1 seals;
+compatible input lineage and bounded-memory recovery need repair before retry.
+[Observed failure and journals](reviews/2026-09-28-v7-reference-completion.md).
 Full-universe catch-up, full training and nightly latency remain unproven.
 [Readiness repair](reviews/2026-09-28-v6-paper-readiness.md) and
 [original implementation/pilot](reviews/2026-09-27-v6-continual-incubator.md).
