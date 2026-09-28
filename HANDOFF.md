@@ -1,53 +1,52 @@
-# Handoff — September 28, 2026 — references running; V6 scans restored
+# Handoff — September 28, 2026 — V6 step orders deployed
 
 ## Focus and stopping point
 
-Selected work remains gate 7-3. Entry capture is complete; the full dated-reference
-campaign is running. The user also asked why V6 stopped ordering after PDD and
-requested a clear simulation/trading boundary. Scanner v4 is deployed; its 14:30
-pass completed and submitted two independent paper orders.
+The user requested four-step buy/sell orders after the never-filled-source repair.
+The policy deployed at 14:52 Central; its final sell-slice adapter deployed at
+15:08. Authenticated checks passed; the market was closed at the final check.
+No prospective step-order chain has run yet. V7 gate 7-3 remains selected, with
+reference acquisition continuing independently.
 
 ## Changes and evidence
 
-- V7 packed-reference acquisition consumes the frozen 2,223,844-pair plan, reuses
-  exact captures and preserves raw receipts. Service and exact roots are in
-  [CURRENT_STATE](docs/CURRENT_STATE.md#v7-acquisition-runtime). Do not edit its
-  frozen sources or restart the completed entry campaign.
-- Partial audit verifies 399,118 pairs, including 1,883 missing references and ten
-  underlying/root mismatches. New failures remain unadmitted; the existing five
-  blackouts are unchanged. Seven representative paired list probes found no match.
-- Reused five entry packs; VKTX advanced 48 minutes without download. Subsequent
-  bounded held-window capture added ten integrated marks. Prior fills, decisions,
-  marks and balances are preserved. This is still five-case evidence.
-  [Reference/frontier review](docs/reviews/2026-09-28-v7-reference-capture-and-frontier.md).
-- V6 ANF's never-filled simulated projection required unavailable live marks and
-  blocked scans before detection. Scanner v4 authenticates broker reconciliation
-  and archives expired initial sources only when no holding/pending/uncertain/
-  ever-filled related order exists. No synthetic close or P&L is created.
-- Deployment preserved the old manifest/unit and full portfolio snapshot. The
-  14:30 scan finished in 254.253 seconds with 274 candidate rows, 53 fresh signals
-  and zero detection errors. IONQ/CRM orders were submitted at 14:34:30 and canceled
-  with zero fills by 14:37:01. Copied-database replay correctly retired both;
-  the next scheduled scan performs fresh authenticated reconciliation.
-  [Repair and mode limits](docs/reviews/2026-09-28-v6-unfilled-source-repair.md).
+- Buy limits: initial midpoint × 1.025/1.05/1.075/1.10; sell limits:
+  × .975/.95/.925/.90. Waits are 30/30/30/60 seconds, then cancel. Buys round up,
+  sells down to cents. Polling/cancel confirmation add wall-clock latency.
+- Cancel confirmation precedes replacement of only the unfilled remainder.
+  Initial midpoint stays fixed; fresh quote/eligibility checks still apply.
+  Buy sizing/reservations use the maximum step, including cancellation gaps.
+- Independent orders, pending/partial/unknown-state protections remain. New
+  step_chains journal state makes restarts and scanner protection explicit.
+  Legacy orders keep their original policy; exhausted ladders do not restart.
+- Successful displayed-size sell slices can continue closing real remaining
+  holdings through their own bounded ladders. Failed/canceled slices cannot
+  silently restart. A failed final sell leaves its actual residual holding.
+- New sources preserve all old source hashes and model/activation lineage.
+  Runtime is run_v6_alpaca_runtime_v4; scanner adapter is scanner_v6. Exact
+  manifest, backups and service pointers are in CURRENT_STATE.
+- 76 focused tests, shell and systemd checks passed. Final authenticated state:
+  zero holdings/pending orders, six legacy canceled orders, zero step chains.
+  [Policy/deployment evidence](docs/reviews/2026-09-28-v6-step-orders.md).
+- The earlier scanner repair was observed prospectively: the 14:45 scan archived
+  IONQ/CRM automatically after their zero-fill cancellations and completed in
+  256.738 seconds. It no longer stalled on those simulated projections.
 
 ## Next actions
 
-1. Read TODO, then exact pointers in CURRENT_STATE. Inspect current reference
-   progress; finish full capture, failure census and admission reconciliation.
-   Do not automatically broaden exclusions or treat 404 as valid contract terms.
-2. Continue actual held/exit/roll/reference/stock discovery and full-scope ledger
-   coverage. Selected paths/index/integrated roots now end in 20260928-r1.
-   Full-universe discovery is not established by the retained five cases.
-3. Observe new V6 order reconciliation and subsequent scans. The repair covers
-   expired initial entries; full broker-native roll/position lifecycle remains
-   distinct from simulation. Preserve pending/partial-fill protections.
+1. Observe prospective step-order fills/cancellations and subsequent scans.
+   Tests and successful deployment are not measured fill quality or profitability.
+2. Continue 7-3 references, failure census/admission and actual held/exit/roll/stock
+   discovery. Entry capture is complete; do not restart it or broaden the five
+   exact blackouts. Read current reference progress rather than old counters.
+3. Preserve the five-case execution frontier and integrated ledger ending in
+   20260928-r1; full-universe discovery remains distinct and incomplete.
 4. Incubator catch-up still needs compatible input-lineage review and full daily
-   freeze/training proof. Preserve checkpoints; do not restart during paper hours.
+   freeze/training proof. Preserve checkpoints and the paper-hours research guard.
 5. Keep the October 2 provider decision and existing FA schedules.
 
 ## Constraints
 
-Preserve unrelated dirty/untracked work and all prior freezes. Research, paper
-accounts and operational experts remain isolated. Model acceptance never implies
-deployment. Current dated observations are not future health assertions.
+Preserve unrelated dirty/untracked work. Never relabel frozen producers. Paper,
+research and operational models remain isolated. The scanner's broader simulated
+position/roll lifecycle is not yet a fully broker-native implementation.

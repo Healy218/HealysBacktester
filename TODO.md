@@ -54,11 +54,13 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
 - [ ] **OPS-PAPER:** Observe the first prospective Alpaca session and actual
   order/fill reconciliation. Activation is complete; use the current deployment
   receipt. September 28: timely full scan and accepted/canceled order reconciled;
-  first actual fill remains pending. V2 adjusted limits, 120-second timeout and
-  independent orders deployed at 12:01 Central; tests and authenticated polling
-  passed. Observe actual prospective V2 fills/reconciliation.
+  first actual fill remains pending. Independent orders remain enabled; V3's
+  user-requested four-step limits deployed at 14:52 Central, finalized at 15:08, with 76 focused tests
+  and authenticated polling passed. Observe prospective ladder fills/reconciliation.
+  [Step policy and deployment](docs/reviews/2026-09-28-v6-step-orders.md).
   Scanner v4 deployed at 14:21 after a never-filled ANF projection blocked scans;
-  14:30 full scan passed and two new orders were submitted at 14:34.
+  14:30 full scan passed and two new orders were submitted at 14:34, canceled
+  unfilled, then archived automatically at 14:45. The current scanner protects active ladders.
   [source reconciliation repair](docs/reviews/2026-09-28-v6-unfilled-source-repair.md).
   [Execution policy](docs/reviews/2026-09-28-v6-independent-orders.md).
   [Readiness repair](docs/reviews/2026-09-28-v6-paper-readiness.md).

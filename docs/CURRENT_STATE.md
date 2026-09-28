@@ -174,13 +174,14 @@ The fresh state's `paper-restart.json` enables scanning and paper submission;
 Read SQLite evidence in read-only mode.
 
 - Scanner: `healys-v6-alpaca-scanner.timer` / `.service`, every 15 minutes in
-  its configured window, dynamically sized workers (v4: up to eight), 12 GiB memory limit.
+  its configured window, dynamically sized workers (v6 adapter: up to eight), 12 GiB memory limit.
 - Broker: `healys-v6-alpaca-orders.timer` / `.service`, every 15 seconds in its
   configured window; market/calendar checks govern execution. Since September 28
-  12:01 Central, `scripts.run_v6_alpaca_runtime_v2` selects independent orders,
-  a 120-second timeout and midpoint × 1.02 buys / × 0.98 sells (up/down cent rounding).
-  Same-contract/position dependencies and pending-buy reservations remain enforced.
-  [Policy/deployment evidence](reviews/2026-09-28-v6-independent-orders.md).
+  15:08 Central, `scripts.run_v6_alpaca_runtime_v4` selects independent four-step
+  orders: fixed initial midpoint ±2.5/5/7.5/10%, waits 30/30/30/60 seconds,
+  buys rounded up and sells down. Cancel confirmation precedes replacement;
+  partial fills, ownership and maximum-step buy reservations remain enforced.
+  [Policy/deployment evidence](reviews/2026-09-28-v6-step-orders.md).
 - Read-only monitor: `healys-v6-alpaca-paper-monitor.timer`; output
   `/tmp/v6-alpaca-paper-monitor-latest.json` (ephemeral observation).
 - Daily producer retained: `healys-v6-data.timer`; scanner reads the latest
@@ -198,19 +199,26 @@ Selected input snapshot is now
 `nn_meta/live/v6_server/data/2026-09-25-vintage-20260928/`, manifest SHA
 `fe2ab69e315faaa710fc95f108480354d919141841b88bbc46d6b2423b78a151`.
 The existing V6 data-index source points to it; the old snapshot/model remain intact.
-Scanner launcher: `scripts/run_v6_alpaca_scanner_v4.sh`. Earlier activation lineage is
+Scanner launcher: `scripts/run_v6_alpaca_scanner_v6.sh`. Earlier activation lineage is
 retained under the paper state's `runtime-revisions/scanner-v3-20260928/`.
 Order-policy lineage remains at `runtime-revisions/orders-v2-20260928/`.
 At 14:21 Central, scanner v4 archived an expired, never-filled ANF projection
 after authenticated zero-holdings/zero-pending reconciliation. The database
 snapshot and previous manifest/unit are at `runtime-revisions/scanner-v4-20260928/`.
-Current paper-manifest SHA:
-`55296139aa80f9042f1b9d4cefffec39789ff65989873bccd511b6b04749334e`.
 [Repair and prospective scan evidence](reviews/2026-09-28-v6-unfilled-source-repair.md).
 The 14:30 scan completed in 254.253 seconds with 274 candidate rows and no
 detection errors; IONQ/CRM orders were submitted at 14:34:30 and confirmed
-canceled with zero fills by 14:37:01. A replay on copied databases correctly
-retired both expired sources; the next scheduled scan reconciles live state.
+canceled with zero fills by 14:37:01. The 14:45 scan archived both automatically
+and completed in 256.738 seconds. Scanner v6 now also protects active step chains
+during cancellation gaps; the original never-filled-entry protection remains.
+Current paper-manifest SHA:
+`f7467a569c5db625d480390d59dc048a66024690f73ff11ebc7ad7658a0a2898`.
+Prior manifest/services/databases: `runtime-revisions/step-orders-v3-20260928/`
+and `runtime-revisions/step-orders-slices-20260928/`.
+At the 14:52 cutover there were zero holdings/pending orders; authenticated V3
+preview and service polling passed. The final 15:08 adapter cutover likewise
+reconciled zero holdings/pending orders and correctly returned market_closed.
+A real prospective ladder is not yet observed.
 Per-pass source reconciliation: `scanner-source-reconciliation.json`. Read
 current scanner/broker receipts for subsequent holdings, fills and health.
 

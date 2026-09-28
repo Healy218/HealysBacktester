@@ -1859,3 +1859,14 @@ source history remains, with no synthetic close or equity adjustment. Pending,
 uncertain and partially filled orders remain protected. This is a bounded repair,
 not full replacement of the frozen simulator portfolio.
 [Implementation and limits](reviews/2026-09-28-v6-unfilled-source-repair.md).
+
+## 2026-09-28 — Four-step paper execution limits
+
+The user replaced the fixed ±2% / 120-second policy with buy concessions of
+2.5%, 5%, 7.5% and 10%, symmetric sell discounts, waits of 30/30/30/60 seconds
+and final cancellation. Implementation fixes the first validated midpoint as
+the anchor, preserves prior cent rounding, reserves buys at the maximum step
+and confirms cancellation before replacing only the unfilled quantity. Successful
+sell liquidity slices may continue to close remaining holdings; exhausted or
+failed ladders do not restart automatically. Legacy attempts retain their policy.
+[Selected policy and deployment](reviews/2026-09-28-v6-step-orders.md).

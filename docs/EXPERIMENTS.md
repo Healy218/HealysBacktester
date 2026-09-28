@@ -876,3 +876,15 @@ and zero detection errors; at 14:34:30 two independent IONQ/CRM orders received
 Alpaca IDs in pending_new state. This proves resumed scanning/submission, not
 fill quality, returns or complete simulation/broker lifecycle separation.
 [Recovery review](reviews/2026-09-28-v6-unfilled-source-repair.md).
+
+## 2026-09-28 — Paper step-order policy validation
+
+Seventy-six focused tests passed for four-step pricing, partial and cancellation
+races, restarts, unknown POSTs, reservations, initial entry deadlines, scanner
+protection across cancellation gaps, and complete sell liquidity slicing.
+Shell/unit checks passed. Authenticated preview/polling passed at the 14:52
+initial deployment; the final 15:08 adapter reconciled zero holdings/pending
+orders and returned market_closed. The actual journal had zero step chains and
+six legacy canceled orders. No prospective ladder fill or execution-quality
+claim follows from these checks.
+[Evidence and limits](reviews/2026-09-28-v6-step-orders.md).
