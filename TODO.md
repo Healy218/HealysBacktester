@@ -18,6 +18,8 @@ The following scope is unchanged by the documentation consolidation.
 - [ ] **7-3.references:** Acquire remaining dated references from the completed
   demand plan, reuse captured coverage and apply the existing five exact
   blackouts. Actual held paths may add dates; account for new missing references.
+  Full-plan resumable acquisition launched September 28; new provider failures
+  remain unadmitted. [Capture/frontier evidence](docs/reviews/2026-09-28-v7-reference-capture-and-frontier.md).
 - [ ] **7-3.paths:** Complete only actual held-mark, exit, roll and applicable
   stock-delivery gaps requested by the existing replay frontier. Preserve
   partial ledgers and count held blackout crossings. Potential first-leg
@@ -55,6 +57,9 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   first actual fill remains pending. V2 adjusted limits, 120-second timeout and
   independent orders deployed at 12:01 Central; tests and authenticated polling
   passed. Observe actual prospective V2 fills/reconciliation.
+  Scanner v4 deployed at 14:21 after a never-filled ANF projection blocked scans;
+  14:30 full scan passed and two new orders were submitted at 14:34.
+  [source reconciliation repair](docs/reviews/2026-09-28-v6-unfilled-source-repair.md).
   [Execution policy](docs/reviews/2026-09-28-v6-independent-orders.md).
   [Readiness repair](docs/reviews/2026-09-28-v6-paper-readiness.md).
   Do not repeat activation or import old simulator positions.

@@ -27,6 +27,21 @@ Never infer a current ETA from a historical throughput sample.
 
 ## V7 acquisition runtime
 
+### Dated references — launched September 28
+
+- Service: `healys-v7-references-20260928.service`.
+- Declaration/progress/attempts: `nn_meta/validation/v7-reference-campaign-20260928/`.
+- Immutable batches: `nn_meta/data_v7/dated-reference-campaign-20260928/`.
+- Launcher: `bash scripts/start_v7_reference_campaign.sh 32`; selected 16 threads
+  by autosizing, CPU quota 100%, MemoryHigh/Max 1/2 GiB, no swap.
+- Partial reconciled snapshot: `nn_meta/validation/v7-reference-reconciliation-20260928-partial-r0/`.
+  It verifies 399,118 planned pairs, including 1,883 missing references and ten
+  strict-validator rejections. These new failures are not approved exclusions.
+- [Evidence, failure probes and exact scope](reviews/2026-09-28-v7-reference-capture-and-frontier.md).
+  Inspect progress for live counts; completion of capture alone is not admission.
+
+### Completed entry campaign
+
 - Service: `healys-v7-capture-v7-20260927.service` (home box).
 - Live meter: `nn_meta/validation/v7-entry-campaign-v7-20260927/progress.json`.
 - Immutable launch: `nn_meta/validation/v7-entry-campaign-v7-20260927/declaration/`.
@@ -116,8 +131,9 @@ and `option-hours-followup-20260927/`. Captured calendar:
 The dated-reference **plan** is finished; most full-scope reference **downloads**
 remain. The hours reconstruction is finished for the reviewed scope. The five
 blackouts are implemented; do not re-investigate or broaden them. The entry
-request plan/packing/cleanup are complete; the live service is executing that
-plan. Replay machinery exists; actual remaining paths/captures and full dataset
+request plan/packing/cleanup and entry capture are complete; the reference
+service is acquiring the dated-reference plan. Replay machinery exists;
+actual remaining paths/captures and full dataset
 assembly still have to run. No full trained V7 artifact exists.
 
 Model history remains 2022-03-15 through 2026-09-14. Regular-hours rule coverage
@@ -131,21 +147,21 @@ of rewriting freezes to turn that old report green.
 ## V7 execution continuation
 
 The versioned shared/physical runner is connected. Latest actual ledger:
-`nn_meta/validation/v7-integrated-execution-20260927-r2/`; quote snapshot:
-`v7-integrated-quote-index-20260927-r2`; retained source paths:
-`v7-execution-discovery-20260927-r13` (validation roots). Use these newer receipts
-for integration; r12 remains valid original evidence. The shared ledger completed
+`nn_meta/validation/v7-integrated-execution-20260928-r1/`; quote snapshot:
+`v7-frontier-quote-index-20260928-r1`; retained source paths:
+`v7-execution-discovery-20260928-r1` (validation roots). Use these newer receipts
+for integration; prior revisions remain valid evidence. The shared ledger completed
 DIS/ABBV, retains NVDA at its next exact missing mark, and has not reached real
 exercise/stock liquidation. Full V7-4 is still open. See the
 [integration review](reviews/2026-09-27-v7-integrated-execution.md) and the current
 three-argument `scripts/run_v7_integrated_execution.sh` launcher.
 
-The retained r2 ledger has 1,466 earlier events, three decisions and 164 marks
-plus one subsequently added mark; cash was $87,596.26474814238 at that receipt.
+The September 28 r1 ledger preserves 1,466 earlier events and three decisions,
+with 175 marks; cash was $87,596.26474814238 at that receipt.
 Next NVDA240322C00910000 quote window:
-`[1711038150000000000,1711038180000000001)`.
-VKTX/FUTU source gaps remain. This is a dated continuation pointer, not a new
-request to capture during documentation work.
+`[1711038750000000000,1711038780000000001)`.
+VKTX/FUTU source gaps remain. [Prefix preservation and continuation](reviews/2026-09-28-v7-reference-capture-and-frontier.md).
+This remains five-path evidence, not full-universe execution coverage.
 
 ## V6 Alpaca paper and incubator
 
@@ -158,7 +174,7 @@ The fresh state's `paper-restart.json` enables scanning and paper submission;
 Read SQLite evidence in read-only mode.
 
 - Scanner: `healys-v6-alpaca-scanner.timer` / `.service`, every 15 minutes in
-  its configured window, dynamically sized workers (v3: up to eight), 12 GiB memory limit.
+  its configured window, dynamically sized workers (v4: up to eight), 12 GiB memory limit.
 - Broker: `healys-v6-alpaca-orders.timer` / `.service`, every 15 seconds in its
   configured window; market/calendar checks govern execution. Since September 28
   12:01 Central, `scripts.run_v6_alpaca_runtime_v2` selects independent orders,
@@ -182,13 +198,20 @@ Selected input snapshot is now
 `nn_meta/live/v6_server/data/2026-09-25-vintage-20260928/`, manifest SHA
 `fe2ab69e315faaa710fc95f108480354d919141841b88bbc46d6b2423b78a151`.
 The existing V6 data-index source points to it; the old snapshot/model remain intact.
-Scanner launcher: `scripts/run_v6_alpaca_scanner_v3.sh`. Activation lineage is
+Scanner launcher: `scripts/run_v6_alpaca_scanner_v4.sh`. Earlier activation lineage is
 retained under the paper state's `runtime-revisions/scanner-v3-20260928/`.
-The order-policy revision is retained at `runtime-revisions/orders-v2-20260928/`;
-paper manifest SHA `644f5c33c3da377d44adccb28209fa9d320f5db555fbd81c253466e5e2b5df3d`.
-The 12:01 Central V2 preview/poll succeeded with no holdings/pending orders;
-actual V2 fills remain unverified. Read current account/status receipts for
-subsequent holdings and health.
+Order-policy lineage remains at `runtime-revisions/orders-v2-20260928/`.
+At 14:21 Central, scanner v4 archived an expired, never-filled ANF projection
+after authenticated zero-holdings/zero-pending reconciliation. The database
+snapshot and previous manifest/unit are at `runtime-revisions/scanner-v4-20260928/`.
+Current paper-manifest SHA:
+`55296139aa80f9042f1b9d4cefffec39789ff65989873bccd511b6b04749334e`.
+[Repair and prospective scan evidence](reviews/2026-09-28-v6-unfilled-source-repair.md).
+The 14:30 scan completed in 254.253 seconds with 274 candidate rows and no
+detection errors; IONQ/CRM orders were submitted at 14:34:30 (`pending_new`
+at that observation, not yet a fill verdict).
+Per-pass source reconciliation: `scanner-source-reconciliation.json`. Read
+current scanner/broker receipts for subsequent holdings, fills and health.
 
 Continual V6 incubator configuration: `deploy/incubator-continual-v6.json`.
 The anchored base is `nn_meta/campaigns/v6-cash-repair-20260913/v6/artifacts/meta_dataset.parquet`;

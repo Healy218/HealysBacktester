@@ -1,50 +1,52 @@
-# Handoff — September 28, 2026 — V6 independent paper orders deployed
+# Handoff — September 28, 2026 — references running; V6 scans restored
 
 ## Focus and stopping point
 
-V6 paper readiness was restored, then the user approved two-minute order waits,
-±2% midpoint limits and independent order processing. V2 deployed at 12:01
-Central; authenticated preview and polling passed. No actual V2 fill has been
-observed at this checkpoint. Next selected work remains gate 7-3.
-[Policy/evidence](docs/reviews/2026-09-28-v6-independent-orders.md).
+Selected work remains gate 7-3. Entry capture is complete; the full dated-reference
+campaign is running. The user also asked why V6 stopped ordering after PDD and
+requested a clear simulation/trading boundary. Scanner v4 is deployed; its 14:30
+pass completed and submitted two independent paper orders.
 
-## Completed and preserved
+## Changes and evidence
 
-- New buys: midpoint × 1.02 rounded up to cents; sells: × 0.98 rounded down.
-  Price stays fixed; cancellation begins at 120 seconds. Fill is not guaranteed.
-- Unrelated broker orders proceed independently; each POST is journaled and
-  reconciled. Same-contract/position dependencies, pending-buy cash reservations,
-  partial holdings and ambiguous-response protections remain enforced.
-- New bridge/pricing/dispatcher files are hash-bound alongside original sources.
-  Prior manifest/service preserved at the paper state's
-  `runtime-revisions/orders-v2-20260928/`. Activation/account/journal unchanged.
-- Forty-five focused tests and systemd validation passed. Real service/timer
-  verified; preflight had no holdings or pending orders. Observe live receipts
-  for subsequent state rather than treating this snapshot as present health.
-- Earlier readiness repair published immutable restated-price inputs, retained
-  the frozen model and selected scanner v3 (up to eight workers / 12 GiB).
-  A full scan took 243.058 seconds; an original-policy order was accepted,
-  canceled unfilled and reconciled. [Repair](docs/reviews/2026-09-28-v6-paper-readiness.md).
-- V7 entry download completed at 04:58; V6 catch-up resumed at 05:00 but was
-  stopped for paper hours. A calendar guard now rejects intraday research starts.
+- V7 packed-reference acquisition consumes the frozen 2,223,844-pair plan, reuses
+  exact captures and preserves raw receipts. Service and exact roots are in
+  [CURRENT_STATE](docs/CURRENT_STATE.md#v7-acquisition-runtime). Do not edit its
+  frozen sources or restart the completed entry campaign.
+- Partial audit verifies 399,118 pairs, including 1,883 missing references and ten
+  underlying/root mismatches. New failures remain unadmitted; the existing five
+  blackouts are unchanged. Seven representative paired list probes found no match.
+- Reused five entry packs; VKTX advanced 48 minutes without download. Subsequent
+  bounded held-window capture added ten integrated marks. Prior fills, decisions,
+  marks and balances are preserved. This is still five-case evidence.
+  [Reference/frontier review](docs/reviews/2026-09-28-v7-reference-capture-and-frontier.md).
+- V6 ANF's never-filled simulated projection required unavailable live marks and
+  blocked scans before detection. Scanner v4 authenticates broker reconciliation
+  and archives expired initial sources only when no holding/pending/uncertain/
+  ever-filled related order exists. No synthetic close or P&L is created.
+- Deployment preserved the old manifest/unit and full portfolio snapshot. The
+  14:30 scan finished in 254.253 seconds with 274 candidate rows, 53 fresh signals
+  and zero detection errors. IONQ/CRM orders received pending_new acknowledgements
+  at 14:34:30; inspect broker receipts for subsequent fills/cancellations.
+  [Repair and mode limits](docs/reviews/2026-09-28-v6-unfilled-source-repair.md).
 
 ## Next actions
 
-1. Read TODO, then use [CURRENT_STATE](docs/CURRENT_STATE.md) for exact pointers.
-   Do not repeat activation, reset journals or rebind old source/artifact hashes.
-2. Return to 7-3 references, actual held/exit/roll/stock gaps and reconciliation.
-   Preserve partial 7-4 ledgers; entry capture is complete. Do not rebuild the
-   catalog, daily data, demand census or completed packing trial.
-3. Observe actual prospective V2 fills and sustained reconciliation. Tests and
-   successful startup do not establish fill quality or model performance.
-4. Incubator r1 requires compatible/new input-lineage review after provider
-   restatements, then catch-up/freeze/training. Checkpoints are preserved;
-   full nightly latency and an updated model remain unproven.
-5. Retain the October 2 provider decision and existing FA collection schedules.
+1. Read TODO, then exact pointers in CURRENT_STATE. Inspect current reference
+   progress; finish full capture, failure census and admission reconciliation.
+   Do not automatically broaden exclusions or treat 404 as valid contract terms.
+2. Continue actual held/exit/roll/reference/stock discovery and full-scope ledger
+   coverage. Selected paths/index/integrated roots now end in 20260928-r1.
+   Full-universe discovery is not established by the retained five cases.
+3. Observe new V6 order reconciliation and subsequent scans. The repair covers
+   expired initial entries; full broker-native roll/position lifecycle remains
+   distinct from simulation. Preserve pending/partial-fill protections.
+4. Incubator catch-up still needs compatible input-lineage review and full daily
+   freeze/training proof. Preserve checkpoints; do not restart during paper hours.
+5. Keep the October 2 provider decision and existing FA schedules.
 
 ## Constraints
 
-Preserve unrelated dirty/untracked work. Research, operational models and paper
-state remain isolated. Model promotion requires its own admission. Full-scope
-validation, deployment and measured outcomes are distinct. Selected operating
-policy is versioned; historical narratives are not live configuration.
+Preserve unrelated dirty/untracked work and all prior freezes. Research, paper
+accounts and operational experts remain isolated. Model acceptance never implies
+deployment. Current dated observations are not future health assertions.

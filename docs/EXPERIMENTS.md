@@ -858,3 +858,21 @@ versioned cutover; zero positions/pending orders were observed at preflight.
 **Verdict:** policy implemented and deployed; actual V2 fills and sustained
 performance remain unmeasured. Old expired signals were correctly withheld.
 [Evidence](reviews/2026-09-28-v6-independent-orders.md).
+
+## 2026-09-28 — Reference acquisition, frontier preservation and V6 recovery
+
+The V7 reference pilot retained 1,024 standard responses in 5.046 seconds and
+975,176 bytes, then resumed the full frozen plan. A sealed partial census verified
+399,118 pairs; 1,883 missing references and ten underlying/root mismatches remain
+unadmitted. Seven paired list probes found no matching reference. No exclusions
+were expanded. Five reused entry packs advanced VKTX by 48 minutes; bounded
+frontier capture added ten shared-ledger marks with prior events, decisions and
+marks preserved. This remains five-case execution evidence, not full-scope 7-3.
+[Reference/frontier review](reviews/2026-09-28-v7-reference-capture-and-frontier.md).
+
+V6 scanner v4 repaired a never-filled ANF projection that blocked new scans.
+The prospective 14:30 pass completed in 254.253 seconds with 274 candidate rows
+and zero detection errors; at 14:34:30 two independent IONQ/CRM orders received
+Alpaca IDs in pending_new state. This proves resumed scanning/submission, not
+fill quality, returns or complete simulation/broker lifecycle separation.
+[Recovery review](reviews/2026-09-28-v6-unfilled-source-repair.md).

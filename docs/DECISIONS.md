@@ -1849,3 +1849,13 @@ new operational source/manifest version; preserve the frozen model and original
 activation. Execution limits are separate from valuation/risk marks and do not
 guarantee fills. Existing orders retain their journaled policy.
 [Selected policy](reviews/2026-09-28-v6-independent-orders.md).
+
+## 2026-09-28 — Expired unfilled scanner projections do not own broker slots
+
+The user clarified that simulation and broker trading should be separate and an
+unfilled order must not stop future scans. Scanner v4 now archives only expired,
+never-filled initial projections after authenticated broker reconciliation;
+source history remains, with no synthetic close or equity adjustment. Pending,
+uncertain and partially filled orders remain protected. This is a bounded repair,
+not full replacement of the frozen simulator portfolio.
+[Implementation and limits](reviews/2026-09-28-v6-unfilled-source-repair.md).
