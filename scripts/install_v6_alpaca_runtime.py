@@ -11,7 +11,8 @@ import sys
 from scripts.run_v6_alpaca_runtime import ROOT,read,save,sha,clients
 from integrations.alpaca_paper.v6_runtime import install_leg_capture
 
-RUNTIME_FILES=['integrations/alpaca_paper/v6_bridge_v2.py',
+RUNTIME_FILES=['integrations/alpaca_paper/v6_source_reconcile.py',
+               'scripts/run_v6_alpaca_scanner_v4.py','scripts/run_v6_alpaca_scanner_v4.sh','integrations/alpaca_paper/v6_bridge_v2.py',
                'integrations/alpaca_paper/v6_pricing_v2.py',
                'scripts/run_v6_alpaca_runtime_v2.py','integrations/alpaca_paper/v6_bridge.py','integrations/alpaca_paper/v6_pricing.py',
                'integrations/alpaca_paper/v6_runtime.py','scripts/run_v6_alpaca_runtime.py',
@@ -32,7 +33,7 @@ def units(state):
     common=[ROOT/'venv/bin/python','-m','scripts.run_v6_alpaca_runtime_v2']
     result={}
     for name,cmd,memory,timeout,schedule in [
-        ('scanner',['/usr/bin/bash',ROOT/'scripts/run_v6_alpaca_scanner_v3.sh','--state',state],
+        ('scanner',['/usr/bin/bash',ROOT/'scripts/run_v6_alpaca_scanner_v4.sh','--state',state],
          '12G',600,'Mon..Fri *-*-* 09..16:00,15,30,45:05 America/New_York'),
         ('orders',[*common,'poll','--state',state], '1G',45,
          'Mon..Fri *-*-* 09..16:*:00,15,30,45 America/New_York')]:
@@ -111,6 +112,7 @@ def main():
     m.update(activated_at=datetime.now(timezone.utc).isoformat(),scanner_enabled=True,
              order_submission_enabled=False,bridge_runtime_sha256={r:sha(ROOT/r) for r in RUNTIME_FILES},
              execution_policy='midpoint-concession-2pct-120s-v2',
+             scanner_book_policy='archive-expired-never-filled-source-v1',
              activation_policy='prospective preview and reconciliation before each paper order',
              paper_only=True)
     # Construct ONLY schema/rules from the frozen portfolio implementation.
