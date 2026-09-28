@@ -10,8 +10,9 @@ for **V6 only** tonight. V5 paper-outcome scoring is superseded. V7 remains at
 V6 catch-up started at 19:59 Central and was subsequently stopped at user request
 to prioritize the V7 entry download. The 20:18 hold receipt verified 273 completed
 feature batches and 1,628 outcome records intact. The V6 timer is completion-gated;
-it can resume on a normal scheduled opportunity only after V7 reports successful
-entry completion. No full updated ensemble or overnight-readiness claim exists.
+morning retries run every 15 minutes, 04:00–07:45 Central, and resume only after
+V7 reports successful entry completion. The goal is a V6 update before the next
+trading day if time permits; no full updated ensemble or readiness claim exists.
 [Implementation/evidence](docs/reviews/2026-09-27-v6-continual-incubator.md).
 
 ## Completed and preserved

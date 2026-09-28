@@ -3,7 +3,7 @@ Description=V6 after-close continual research and bounded morning retries
 
 [Timer]
 OnCalendar=Mon..Fri *-*-* 16:45:00 America/New_York
-OnCalendar=Mon..Sat *-*-* 05,07:15:00 America/New_York
+OnCalendar=Mon..Sat *-*-* 05..08:00/15:00 America/New_York
 AccuracySec=1min
 Persistent=true
 Unit=healys-v6-continual.service
