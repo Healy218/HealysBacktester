@@ -1,6 +1,6 @@
 # Current state and artifact index
 
-Pointer/configuration owner for the lab, reconciled September 27, 2026.
+Pointer/configuration owner for the lab, reconciled September 28, 2026.
 [ROADMAP](../ROADMAP.md) owns milestone status and acceptance conditions;
 [TODO](../TODO.md) owns selected work. This page selects exact inputs and
 runtime identities. Other current documents link here instead of copying them.
@@ -33,8 +33,8 @@ Never infer a current ETA from a historical throughput sample.
 - New packs: `nn_meta/data_v7/entry-campaign-20260927/<security>/<batch-hash>/`.
 - Attempt journal: `nn_meta/validation/v7-entry-campaign-v7-20260927/attempts/`.
 - Shared acquisition accounting: `nn_meta/data_v7/quota.json`.
-- Launcher: `bash scripts/start_v7_capture_campaign_v7.sh 12 32`; do not start a duplicate
-  while the service is active. Existing batches are verified/reused on resume.
+- Historical launcher: `bash scripts/start_v7_capture_campaign_v7.sh 12 32`.
+  Entry capture is complete; do not relaunch without a specific new defect/scope.
 - [Concurrency upgrade](reviews/2026-09-27-v7-parallel-capture.md); original
   declaration and journals remain in `v7-entry-campaign-20260927/`.
 - [Original launch review](reviews/2026-09-27-v7-entry-campaign-started.md) and
@@ -64,29 +64,17 @@ Logical pack directories/receipts stay local, with only SQLite payload files
 linked to MRHA. Four real overflow batches passed existing-reader readback.
 Keep MRHA connected. Existing external files and completed local packs are intact.
 
-### Session-close observation — September 27, 2026
+### Completion observation — September 28, 2026
 
-At **2026-09-27T18:14:33.398487-05:00**, the selected capture service was active/running;
-its receipt showed **17.02%** of the original contiguous entry-range
-census completed/reused (1,862,262 / 10,941,828), with twelve workers.
-The local disk had **251.6 GB** free and mounted MRHA **743.7 GB** free;
-the 10 GB reserve on each still applies. This is an observation, not a completion
-claim or a persistent health guarantee. Range-count ETA samples were about
-7.4–8.9 hours remaining; those estimates apply only to entry capture and must be
-remeasured. [Read-only closeout snapshot](../nn_meta/validation/v7-eta-check-20260927/session-close.md)
-and the neighboring JSON retain the sample details.
-
-### One-time ETA check — September 27, 2026
-
-User-requested timer `healys-v7-eta-20260927-1830.timer` is scheduled for
-**2026-09-27 18:30 America/Chicago** (23:30 UTC), accuracy 1 second.
-It runs `nn_meta/validation/v7-eta-check-20260927/observe.py`, reads the live
-meter selected above at execution time, and writes `check-1830.json` and
-`check-1830.md` in that same directory. It reads only; it does not restart or
-change acquisition. This is a local report, not an automatic chat message.
-Timer activation/next-elapse were reverified active/waiting at session close; inspect its result
-and report after 18:30 rather than assuming it ran. `baseline-now.*` contains
-the immediate dry-run observation. Stopped/stale receipts produce no ETA.
+At **04:58:11 Central**, entry capture completed successfully with full entry
+coverage, no stop reason and zero pending tasks. The completed/reused queue count
+is **10,940,386**, reconciled against the original 10,941,828 joined ranges after
+subtracting earlier indexed captures (net 1,442 fewer queue entries).
+[Completion and automatic V6 handoff](reviews/2026-09-28-overnight-entry-completion.md).
+The final receipt recorded 144.35 GB retained campaign files, 144.15 GB local free
+and 743.72 GB MRHA free. References, held paths and remaining reconciliation still
+keep the overall 7-3 gate open. The earlier ETA observations, including the
+completed 18:30 check, are historical under `nn_meta/validation/v7-eta-check-20260927/`.
 
 ## V7 scope and selected inputs
 
@@ -207,16 +195,16 @@ paper selections. Research output root: `incubator/continual-v6/r1/`.
   next normal timer opportunity can resume V6, subject to daily-input readiness.
   `journalctl --user -u healys-v6-continual.service` owns runtime logs.
 
-At 19:59 Central September 27, the service started a 449-symbol catch-up through
-September 25 with two workers, 8 GiB maximum memory and two-CPU quota. No full
-candidate freeze existed at that observation. Check the live receipts before
-inferring completion. [Implementation and measured pilot](reviews/2026-09-27-v6-continual-incubator.md).
-
-At the 20:18 Central September 27 hold receipt, V6 research had been stopped at
-user direction to prioritize the V7 download. All 273 completed feature batches
-and 1,628 completed outcome records verified intact. `upstream-hold.json` retains
-the pre-pause status; `latest-run.json` records the wait. The timer remains enabled
-with the V7 completion condition. [Hold evidence](reviews/2026-09-27-v6-v7-download-priority.md).
+V6 was paused September 27 to prioritize V7 and retained its checkpoints.
+After V7 completed, the timer automatically started V6 at **05:00:27 Central
+September 28**. At the 06:17 service observation it was still building candidates
+and labels: four of 449 symbols complete, no model training yet and no candidate
+or accepted-model pointer. Completed symbols contained 2,042 matured labels.
+This is a dated observation, not a current heartbeat; per-symbol progress updates
+more often than the main status, which changes when a whole symbol completes.
+[Overnight evidence](reviews/2026-09-28-overnight-entry-completion.md) and
+[initial implementation/pilot](reviews/2026-09-27-v6-continual-incubator.md).
+The initial full-universe catch-up and full nightly latency remain unproven.
 
 The replay-only `healys-ai-incubator-after-close.timer` was disabled at activation.
 Its Friday inference receipts remain historical under `incubator/runs/after-close/`

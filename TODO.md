@@ -11,9 +11,10 @@ running-job locations; do not choose a different revision from an old review.
 Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
 The following scope is unchanged by the documentation consolidation.
 
-- [ ] **7-3.entry:** Finish the already-running full-universe entry quote/trade
-  capture, reusing completed packs. No new catalog, daily build, demand census
-  or packing trial. Inspect its existing progress receipt when status is needed.
+- [x] **7-3.entry:** Full-universe entry quote/trade capture completed September 28
+  at 04:58 Central. The final queue count reconciles with prior capture subtraction.
+  [Completion evidence](docs/reviews/2026-09-28-overnight-entry-completion.md).
+  Preserve completed packs; do not launch another entry campaign.
 - [ ] **7-3.references:** Acquire remaining dated references from the completed
   demand plan, reuse captured coverage and apply the existing five exact
   blackouts. Actual held paths may add dates; account for new missing references.
@@ -62,8 +63,8 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   [Evidence](docs/reviews/2026-09-27-v6-continual-incubator.md). No automatic deployment.
 - [ ] **OPS-INCUBATOR.OPS:** Replace replay-only scheduling with bounded continual
   research and verify restart, daily-input readiness and resource coexistence.
-  New timer installed; catch-up is now deferred until the selected V7 entry
-  download succeeds. Checkpoints retained; full scheduled-operation proof remains.
+  Completion gate and automatic 05:00 restart verified September 28. Initial
+  catch-up remains incomplete; full update/recovery/coexistence proof remains.
 - [ ] **OPS-INCUBATOR.PROOF:** Complete the initial catch-up and measure a full
   daily update through freeze before claiming next-trading-day readiness.
   [Current contract](docs/specs/AI_INCUBATOR.md). V5 paper scoring is superseded.

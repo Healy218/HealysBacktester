@@ -817,3 +817,17 @@ freeze, steady daily latency and next-session readiness remain unproven. This
 is not a trading-performance or promotion verdict. The initial validation tail
 overlaps the original incumbent's training history; compare it diagnostically.
 [Review and evidence](reviews/2026-09-27-v6-continual-incubator.md).
+
+### 2026-09-28 — V7 entry completion and automatic V6 restart
+
+The selected V7 entry controller completed at 04:58:11 Central with full coverage,
+zero pending work and successful service exit. Its 10,940,386 campaign ranges
+reconcile exactly to the 10,941,828 joined census after net subtraction of 1,442
+previously indexed ranges. Indexed reconciliation did not repeat full payload reads.
+
+The V6 timer automatically started at 05:00:27 after its 04:45 skip. At 06:17 it
+remained in data catch-up with four of 449 symbols complete and 2,042 matured labels;
+training had not started and no updated model freeze existed. Automatic dependency
+handoff is verified; full-universe build latency, nightly SLA and updated-model
+performance are not. Only the 7-3.entry task closes; overall 7-3 remains open.
+[Evidence](reviews/2026-09-28-overnight-entry-completion.md).

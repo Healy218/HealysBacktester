@@ -1,0 +1,114 @@
+{
+  "observed_at": "2026-09-28T11:20:37.396395+00:00",
+  "v7": {
+    "campaign_identity": "8ea809659f0647dbbfef9682321a6828dc182ccac1bbbe9d3e2d5bfb4e99f568",
+    "capacity_mode": "live_free_space_with_MRHA_overflow",
+    "capture_seconds": 40464.099274584994,
+    "completed_batches_this_run": 303511,
+    "disk_reserve_bytes": 10000000000,
+    "elapsed_seconds": 40542.780986753,
+    "external_batches_this_run": 0,
+    "full_entry_coverage": true,
+    "io_threads": 32,
+    "last": {
+      "bytes": 4264935,
+      "error": null,
+      "http": {
+        "http_requests": 44,
+        "http_seconds": 26.233640150050633,
+        "response_bytes": 117675869,
+        "retries": 0,
+        "throttles": 0
+      },
+      "io_threads": 32,
+      "pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG021DJBSP8/d1a56bcf7ed43ffaa7537609ae305150c2ad5bdff2f50759819ead8f2691f704",
+      "physical_pack": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927/BBG021DJBSP8/d1a56bcf7ed43ffaa7537609ae305150c2ad5bdff2f50759819ead8f2691f704",
+      "recovered_external_pack": false,
+      "requests": 32,
+      "seconds": 15.200547788001131,
+      "split_attempts": [
+        {
+          "capture_id": "08bab5c575cd2cf1d2652f0098b08f6d946120f10fa9b82eb4a048f10ac14766",
+          "depth": 0,
+          "reason": "page budget exhausted; capture incomplete"
+        },
+        {
+          "capture_id": "42e471c26a54b91b1c6de6403cb228cd79ac8abc7a2e8eaaeabfa39e76db5e6a",
+          "depth": 0,
+          "reason": "page budget exhausted; capture incomplete"
+        },
+        {
+          "capture_id": "b1c1d02a81c951a5a1c86cc8f6678dbfd9e59fcfb6ff046d254ad72000125f66",
+          "depth": 1,
+          "reason": "page budget exhausted; capture incomplete"
+        },
+        {
+          "capture_id": "e85d99fdb0dfd75017fb239cffb184f9d5c0eea953649bbb46e4a10461282ece",
+          "depth": 2,
+          "reason": "page budget exhausted; capture incomplete"
+        },
+        {
+          "capture_id": "f0e250d252cce101aa72fe89fdfe7403851ff10a712d03e88fa63ad03a6e038c",
+          "depth": 3,
+          "reason": "page budget exhausted; capture incomplete"
+        },
+        {
+          "capture_id": "5c26bd2e9721cf2692c7ea953179da2209db7a1b48dd0acf6b9dbdd6d6d1b60b",
+          "depth": 1,
+          "reason": "page budget exhausted; capture incomplete"
+        }
+      ],
+      "status": "completed",
+      "tier": "local"
+    },
+    "local_free_bytes": 144153853952,
+    "overflow_free_bytes": 743718256640,
+    "pending": 0,
+    "requests_this_run": 9704654,
+    "retained_campaign_bytes": 144353330134,
+    "reused_batches_this_run": 38646,
+    "reused_requests": 1235732,
+    "status": "entry_capture_complete",
+    "stop_reason": null,
+    "training_started": false,
+    "updated_at": "2026-09-28T09:58:11.414056+00:00",
+    "workers": 12
+  },
+  "count_reconciliation": {
+    "scope": "Indexed read-only reconciliation of pre-existing capture subtraction; not a new full pack audit",
+    "existing_captures": 1479,
+    "existing_contracts": 720,
+    "affected_joined_ranges": 1443,
+    "net_range_count_reduction": 1442,
+    "original_joined_ranges": 10941828,
+    "expected_campaign_ranges": 10940386,
+    "actual_campaign_ranges": 10940386,
+    "seconds": 3.3340577019844204,
+    "reconciled": true
+  },
+  "v6": {
+    "contract_identity": "01cddd1e079859830680e4e2051250368b7d85534381a7915ada128ea65b46fc",
+    "deployment_approved": false,
+    "elapsed_seconds": 735.9747020780051,
+    "errors": [],
+    "research_only": true,
+    "run_dir": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r1/runs/2026-09-25",
+    "schema": "v6-continual-run-v1",
+    "scope": "full_universe",
+    "stage": "candidates_and_labels",
+    "started_at": "2026-09-28T10:00:28.040520+00:00",
+    "status": "running",
+    "symbols_complete": 4,
+    "symbols_required": 449,
+    "through": "2026-09-25",
+    "training_started": false
+  },
+  "service_observation": {
+    "v7": "inactive/dead, Result=success",
+    "v6": "activating/start, Main started 05:00:27 Central, still running at observation",
+    "v6_memory_current_bytes": 8005308416,
+    "v6_memory_peak_bytes": 8016998400,
+    "v6_data": "06:00 Central run successful"
+  },
+  "scope": "Controller completion/count reconciliation and read-only service observation; no full post-download payload reaudit, new training or promotion"
+}

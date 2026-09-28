@@ -1,61 +1,48 @@
-# Handoff — September 27, 2026 — V7 download prioritized; incubator deferred
+# Handoff — September 28, 2026 — entry download complete; V6 catching up
 
-## Focus and stopping point
+## Stopping point
 
-The user clarified the incubator's goal: continually build research data, train
-updated models and freeze new artifacts regardless of actual trades. Implemented
-for **V6 only** tonight. V5 paper-outcome scoring is superseded. V7 remains at
-**Phase 7, gate 7-3**; its existing capture continues without changes.
+**7-3.entry is complete. Overall gate 7-3 remains open.** V7's selected entry
+capture completed successfully at 04:58:11 Central. V6's completion-gated timer
+then started its catch-up automatically at 05:00:27. At the 06:17 observation,
+V6 was still building data, with four of 449 symbols complete and no training.
+The initial catch-up will not produce a new model for this trading morning.
+[Evidence](docs/reviews/2026-09-28-overnight-entry-completion.md).
 
-V6 catch-up started at 19:59 Central and was subsequently stopped at user request
-to prioritize the V7 entry download. The 20:18 hold receipt verified 273 completed
-feature batches and 1,628 outcome records intact. The V6 timer is completion-gated;
-overnight retries run every 15 minutes, midnight–07:45 Central, and resume only after
-V7 reports successful entry completion. The goal is a V6 update before the next
-trading day if time permits; no full updated ensemble or readiness claim exists.
-[Implementation/evidence](docs/reviews/2026-09-27-v6-continual-incubator.md).
+## Verified results
 
-## Completed and preserved
-
-- Incremental immutable candidate features and matured simulated labels, pending
-  and unfilled coverage, hash-bound resume and unchanged historical base/release.
-- Fixed 40-member LightGBM retraining, chronological purging/embargo, incumbent
-  and constant-baseline diagnostics, versioned candidate and accepted pointers.
-  Research acceptance does not promote or deploy a model.
-- New `healys-v6-continual.timer` enabled with the V7 completion condition; old
-  replay-only incubator timer disabled. Seven completion-gate tests passed.
-  Bounded memory/CPU and morning deadline; completed checkpoints survive retries.
-- 39 targeted tests and unit validation passed. Corrected SPY pilot: 160 candidates,
-  98 matured / 54 pending / 8 unfilled. Full-size single-member benchmark: 191.32s,
-  7.1 GiB cgroup peak. Full pipeline latency and 40-member freeze are still open.
-- Rewrote the incubator contract and aligned owning notes. Historical replay
-  specification/evidence retained. Preserve unrelated dirty/untracked work.
+- V7: full entry coverage, zero pending work, no stop reason, successful service
+  exit. Final campaign count 10,940,386 exactly reconciles with 10,941,828 original
+  joined ranges minus a net 1,442 removed by prior indexed capture coverage.
+- The final receipt recorded 144.35 GB retained campaign files. Capture artifacts,
+  source-bound producers and all existing preparation remain frozen.
+- V6: automatic wait/restart worked. Four completed symbols contain 3,364 candidates:
+  2,042 matured, 707 pending and 615 unfilled. Other partial progress is checkpointed.
+  No candidate/accepted-model pointer exists. Full-universe build latency remains
+  unproven despite the successful single-member training benchmark.
+- Morning retries start at midnight Central, every 15 minutes through 07:45.
+  The existing 08:00 cutoff and old operational model remain in force.
 
 ## Next actions
 
-1. Read TODO then this handoff. Inspect `incubator/continual-v6/r1/latest-run.json`,
-   per-symbol progress and service journal; use [CURRENT_STATE](docs/CURRENT_STATE.md)
-   for exact configuration, selected inputs, schedules and recovery pointers.
-2. Keep V6 deferred until successful V7 entry completion; do not bypass the gate.
-   Then complete OPS-INCUBATOR.DATA/OPS/PROOF: full-universe catch-up, full model
-   freeze and one steady daily update. Preserve checkpoints; do not claim the
-   initial backlog fits tonight or that the nightly SLA is measured.
-3. Data labels follow frozen historical V6 aggregate execution, independent of
-   broker trades. Partial exit paths remain pending. Latest 40 observed dates are
-   validation-only until outside the rolling tail; no untouched-performance claim.
-4. Existing V7 entry capture remains running. At 21:24 Central it was 39.46%
-   complete; overall/10-minute rates projected 05:18–05:55 Monday Central, while
-   the slower 30-minute sample projected 09:40. These are entry-only forecasts,
-   not a guarantee. Read the live meter before quoting present progress.
-5. Continue selected 7-3 tasks without redoing completed preparation; observe the
-   first prospective Alpaca fills, and retain the October 2 provider decision.
+1. Read TODO, then inspect current V6 status, per-symbol progress and service log
+   via [CURRENT_STATE](docs/CURRENT_STATE.md). Main status advances on completed
+   symbols; it is not a frequent heartbeat. Do not infer a job is healthy from
+   this handoff's dated snapshot.
+2. Continue the existing 7-3 references/actual held-path gaps and reconciliation.
+   Do not repeat entry capture, catalog, daily build, demand census or packing.
+   Retain the selected partial 7-4 ledger and version any source changes.
+3. Finish V6 initial catch-up, full ensemble freeze and one measured daily update.
+   Its actual full-universe data build is the bottleneck to investigate; the
+   isolated 191-second member benchmark does not imply overnight readiness.
+4. Observe Monday's prospective Alpaca fills separately. Keep the October 2
+   provider decision. V6 data producer succeeded at 06:00; this does not establish
+   broker fills, model quality or readiness.
 
 ## Constraints
 
-Source/config changes require a new research lineage; never relabel old freezes.
-The continual contract includes pre-existing local V6 source work. A clean checkout
-of the new commit alone does not package all existing V6 runtime inputs. The
-operational frozen checkout and paper account were not modified by this work.
-Initial incumbent comparison overlaps its original training dates and is only a
-research diagnostic. Neither successful retraining nor a pointer advances an
-expert admission gate. Full validation/deployment/measurement remain distinct.
+V6 incumbent/parent freezes and broker state stay isolated from research. New
+source/config needs a new research lineage; do not relabel old checkpoints.
+Full-scope validation, deployment and measured outcomes remain separate.
+The diagnostic validation tail overlaps original incumbent training dates and
+is not an untouched performance test. Preserve unrelated dirty/untracked work.
