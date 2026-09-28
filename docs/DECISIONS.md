@@ -1880,3 +1880,13 @@ notices; raw metadata and the frozen strict validator remain intact. All other
 standard-deliverable checks remain mandatory. This does not extend blackouts,
 admit cash-deliverable contracts or supply missing references.
 [Scope and sources](reviews/2026-09-28-v7-reference-completion.md).
+
+## 2026-09-28 — Resume V6 full catch-up alongside V7-3
+
+The user requested V6's full continual update now that the V7 download is complete.
+Use a new r2 research lineage for the restated stock vintage; preserve the original
+base, r1 seals and paper model. Reuse captured provider evidence, bound numerical
+memoization to one entry, recycle symbol workers, and resume unfinished catch-up
+dates before advancing. Allocate 11/12-GiB high/max limits with a pre-market cutoff.
+No full-freeze or next-day completion claim follows from launch.
+[Recovery evidence](reviews/2026-09-28-v6-continual-recovery.md).

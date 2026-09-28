@@ -70,8 +70,9 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
 - [ ] **OPS-INCUBATOR.DATA:** Implement and validate V6-only continual candidate
   features and matured simulated labels across the frozen universe, independent
   of actual trades. Implementation and SPY pilot passed; finish the 449-symbol
-  catch-up. Corrected paper inputs now contain restated stock history: review a
-  compatible/new research lineage before resuming r1; never relabel prior features.
+  catch-up. Repaired r2 lineage started September 28 at 18:17 Central against
+  verified restated inputs, with per-entry cache release and worker recycling.
+  [Recovery evidence](docs/reviews/2026-09-28-v6-continual-recovery.md).
   Preserve the base freeze and resumable daily extensions.
 - [x] **OPS-INCUBATOR.TRAIN:** Implement fixed-family retraining, temporal validation,
   baseline comparisons and immutable candidate freezes; retain the previous
@@ -82,8 +83,8 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   research and verify restart, daily-input readiness and resource coexistence.
   Completion gate and automatic 05:00 restart verified September 28. Initial
   catch-up remains incomplete; full update/recovery/coexistence proof remains.
-  September 28 16:49: r1 was OOM-killed after revised-history errors, with no
-  immediate restart. Repair input lineage and memory before the midnight retry.
+  September 28: repaired r2 is running with 11/12-GiB limits. Retries retain an
+  unfinished catch-up date; verify full completion and sustained resource use.
 - [ ] **OPS-INCUBATOR.PROOF:** Complete the initial catch-up and measure a full
   daily update through freeze before claiming next-trading-day readiness.
   [Current contract](docs/specs/AI_INCUBATOR.md). V5 paper scoring is superseded.

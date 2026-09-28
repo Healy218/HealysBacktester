@@ -23,7 +23,7 @@ Never infer a current ETA from a historical throughput sample.
 | V6 fresh Alpaca PAPER | Home, V6 checkout | `nn_meta/live/v6_alpaca_paper/`; [activation receipt](reviews/2026-09-27-v6-alpaca-activation.json) |
 | V6 historical simulator | Home, V6 checkout | `nn_meta/live/v6_server/`; old portfolio history retained, execution/relay schedules retired; its data producer remains selected |
 | FA automation | Home, `/home/healy/Coding/HealysAutomation` | `deploy/fa-runtime.json`, `logs/job-health/`, `fa/archive/` and FA artifacts below; do not inspect stale copies in another checkout |
-| Continual incubator | Home, research checkout | `deploy/incubator-continual-v6.json`, `incubator/continual-v6/r1/latest-run.json`; routing below |
+| Continual incubator | Home, research checkout | `deploy/incubator-continual-v6-r2.json`, `incubator/continual-v6/r2/latest-run.json`; routing below |
 
 ## V7 acquisition runtime
 
@@ -153,9 +153,9 @@ of rewriting freezes to turn that old report green.
 ## V7 execution continuation
 
 The versioned shared/physical runner is connected. Latest actual ledger:
-`nn_meta/validation/v7-integrated-execution-20260928-r2/`; quote snapshot:
-`v7-frontier-quote-index-20260928-r2`; retained source paths:
-`v7-execution-discovery-20260928-r2` (validation roots). Use these newer receipts
+`nn_meta/validation/v7-integrated-execution-20260928-r3/`; quote snapshot:
+`v7-frontier-quote-index-20260928-r3`; retained source paths:
+`v7-execution-discovery-20260928-r3` (validation roots). Use these newer receipts
 for integration; prior revisions remain valid evidence. The shared ledger completed
 DIS/ABBV, retains NVDA at its next exact missing mark, and has not reached real
 exercise/stock liquidation. Full V7-4 is still open. See the
@@ -163,9 +163,9 @@ exercise/stock liquidation. Full V7-4 is still open. See the
 three-argument `scripts/run_v7_integrated_execution.sh` launcher.
 
 The September 28 r2 ledger preserves 1,466 earlier events and three decisions,
-with 185 marks; cash was $87,596.26474814238 at that receipt.
+with 195 marks; cash was $87,596.26474814238 at that receipt.
 Next NVDA240322C00910000 quote window:
-`[1711039350000000000,1711039380000000001)`.
+`[1711039950000000000,1711039980000000001)`.
 VKTX/FUTU source gaps remain. [Prefix preservation and continuation](reviews/2026-09-28-v7-reference-capture-and-frontier.md).
 This remains five-path evidence, not full-universe execution coverage.
 
@@ -228,11 +228,13 @@ A real prospective ladder is not yet observed.
 Per-pass source reconciliation: `scanner-source-reconciliation.json`. Read
 current scanner/broker receipts for subsequent holdings, fills and health.
 
-Continual V6 incubator configuration: `deploy/incubator-continual-v6.json`.
+Continual V6 incubator configuration: `deploy/incubator-continual-v6-r2.json`.
 The anchored base is `nn_meta/campaigns/v6-cash-repair-20260913/v6/artifacts/meta_dataset.parquet`;
 new candidates start August 25. Its input index remains
 `/home/healy/Coding/HealysV6/nn_meta/live/v6_server/data-index.json`, independent of
-paper selections. Research output root: `incubator/continual-v6/r1/`.
+paper selections. Research output root: `incubator/continual-v6/r2/`.
+Provider evidence is reused from `r1/market/`; prior r1 seals are retained.
+The initial September 28 snapshot is pinned by hash in the selected config.
 
 - `latest-run.json` and `runs/<session>/status.json`: actual stage, failures and counts.
 - `features/`, `labels/`, `market/`: sealed incremental data and retained evidence.
@@ -250,16 +252,19 @@ paper selections. Research output root: `incubator/continual-v6/r1/`.
   30 minutes and close plus 15 minutes, including late persistent-timer starts.
   `journalctl --user -u healys-v6-continual.service` owns runtime logs.
 
-The September 28 15:45 research run failed at 16:49:07 with systemd-oomd's
-`oom-kill` result and a 7.8-GB peak (MemoryHigh 7 GiB / Max 8 GiB). At 17:53,
-Restart=no and NRestarts=0: it had not restarted; the next timer attempt was
-midnight September 29. Its last progress JSON says running but is stale after
-the kill and contains revised-history/new-lineage errors. Preserve r1 seals;
-compatible input lineage and bounded-memory recovery need repair before retry.
-[Observed failure and journals](reviews/2026-09-28-v7-reference-completion.md).
+The repaired r2 full-universe run started September 28 at 18:17:38 Central.
+At approximately 18:22 it was building AA/AAL entries without revised-history
+errors; memory 1.46 GiB, peak 1.66 GiB. These are early observations, not completion.
+Selected code: `scripts/run_v6_continual_v2.py`, `incubator/continual/data_v2.py`;
+operational retry wrapper: `scripts/v6_continual_resume.py`. It resumes unfinished
+session dates before advancing. Limits: two autosized workers, CPU 200%, 11/12 GiB
+high/max, no swap, 12-hour budget capped before the next market session.
+`service-exit.json` records systemd termination separately from stale progress.
+[Recovery and validation](reviews/2026-09-28-v6-continual-recovery.md).
+The historical r1 OOM observation is retained in the
+[reference-completion review](reviews/2026-09-28-v7-reference-completion.md).
 Full-universe catch-up, full training and nightly latency remain unproven.
-[Readiness repair](reviews/2026-09-28-v6-paper-readiness.md) and
-[original implementation/pilot](reviews/2026-09-27-v6-continual-incubator.md).
+[Original implementation/pilot](reviews/2026-09-27-v6-continual-incubator.md).
 
 The replay-only `healys-ai-incubator-after-close.timer` was disabled at activation.
 Its Friday inference receipts remain historical under `incubator/runs/after-close/`
