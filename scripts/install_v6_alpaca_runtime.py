@@ -11,10 +11,10 @@ import sys
 from scripts.run_v6_alpaca_runtime import ROOT,read,save,sha,clients
 from integrations.alpaca_paper.v6_runtime import install_leg_capture
 
-RUNTIME_FILES=['integrations/alpaca_paper/v6_source_reconcile.py',
-               'scripts/run_v6_alpaca_scanner_v4.py','scripts/run_v6_alpaca_scanner_v4.sh','integrations/alpaca_paper/v6_bridge_v2.py',
-               'integrations/alpaca_paper/v6_pricing_v2.py',
-               'scripts/run_v6_alpaca_runtime_v2.py','integrations/alpaca_paper/v6_bridge.py','integrations/alpaca_paper/v6_pricing.py',
+RUNTIME_FILES=['integrations/alpaca_paper/v6_source_reconcile_v2.py',
+               'scripts/run_v6_alpaca_scanner_v5.py','scripts/run_v6_alpaca_scanner_v5.sh','integrations/alpaca_paper/v6_bridge_v3.py',
+               'integrations/alpaca_paper/v6_pricing_v3.py', 'integrations/alpaca_paper/v6_bridge_v2.py', 'integrations/alpaca_paper/v6_pricing_v2.py',
+               'scripts/run_v6_alpaca_runtime_v3.py','integrations/alpaca_paper/v6_bridge.py','integrations/alpaca_paper/v6_pricing.py',
                'integrations/alpaca_paper/v6_runtime.py','scripts/run_v6_alpaca_runtime.py',
                'scripts/run_v6_alpaca_scanner_v3.sh','scripts/lib/autosize.sh',
                'nn_meta/session_calendar.py','nn_meta/live/v6_option_sessions.py',
@@ -30,10 +30,10 @@ def command(args):
 
 
 def units(state):
-    common=[ROOT/'venv/bin/python','-m','scripts.run_v6_alpaca_runtime_v2']
+    common=[ROOT/'venv/bin/python','-m','scripts.run_v6_alpaca_runtime_v3']
     result={}
     for name,cmd,memory,timeout,schedule in [
-        ('scanner',['/usr/bin/bash',ROOT/'scripts/run_v6_alpaca_scanner_v4.sh','--state',state],
+        ('scanner',['/usr/bin/bash',ROOT/'scripts/run_v6_alpaca_scanner_v5.sh','--state',state],
          '12G',600,'Mon..Fri *-*-* 09..16:00,15,30,45:05 America/New_York'),
         ('orders',[*common,'poll','--state',state], '1G',45,
          'Mon..Fri *-*-* 09..16:*:00,15,30,45 America/New_York')]:
@@ -111,8 +111,8 @@ def main():
     if database.exists(): raise ValueError('activation requires fresh absent portfolio database')
     m.update(activated_at=datetime.now(timezone.utc).isoformat(),scanner_enabled=True,
              order_submission_enabled=False,bridge_runtime_sha256={r:sha(ROOT/r) for r in RUNTIME_FILES},
-             execution_policy='midpoint-concession-2pct-120s-v2',
-             scanner_book_policy='archive-expired-never-filled-source-v1',
+             execution_policy='midpoint-step-2.5-5-7.5-10pct-v3',
+             scanner_book_policy='archive-expired-never-filled-source-v2-step-aware',
              activation_policy='prospective preview and reconciliation before each paper order',
              paper_only=True)
     # Construct ONLY schema/rules from the frozen portfolio implementation.
@@ -127,7 +127,7 @@ ForwardPortfolio(sys.argv[2],scope=scope)
                    cwd=frozen,check=True)
     database.chmod(0o600);install_leg_capture(database)
     save(state/'paper-restart.json',m)
-    subprocess.run([sys.executable,'-m','scripts.run_v6_alpaca_runtime_v2','check','--state',str(state)],
+    subprocess.run([sys.executable,'-m','scripts.run_v6_alpaca_runtime_v3','check','--state',str(state)],
                    cwd=ROOT,check=True)
     unit_dir=Path.home()/'.config/systemd/user'
     backup=state/'retired-units';backup.mkdir(exist_ok=True)
