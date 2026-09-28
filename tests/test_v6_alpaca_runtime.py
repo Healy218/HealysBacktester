@@ -14,6 +14,16 @@ from integrations.alpaca_paper.v6_runtime import install_leg_capture, risk_event
 NOW = datetime(2026,9,28,14,0,tzinfo=timezone.utc)
 CONTRACT = 'AAPL261002C00200000'
 FP = hashlib.sha256(b'paper').hexdigest()
+CANCEL_SECONDS = 60
+
+
+@pytest.fixture(autouse=True, params=['v1', 'v2'])
+def bridge_version(request, monkeypatch):
+    if request.param == 'v2':
+        from integrations.alpaca_paper.v6_bridge_v2 import process_events as v2
+        monkeypatch.setattr(__import__(__name__, fromlist=['']), 'process_events', v2)
+        monkeypatch.setattr(__import__(__name__, fromlist=['']), 'CANCEL_SECONDS', 120)
+
 
 
 def entry(key='one', contract=CONTRACT, roll=0):
@@ -30,7 +40,7 @@ def close(e):
 class Broker:
     def __init__(self):
         self.account=NS(id='paper',status='ACTIVE',trading_blocked=False,account_blocked=False,
-                        options_trading_level=3,options_buying_power='100000')
+                        options_trading_level=3,options_buying_power='100000',cash='100000')
         self.orders={};self.positions={};self.posts=0;self.cancels=[]
     def get_account(self): return self.account
     def get_all_positions(self): return list(self.positions.values())
@@ -78,13 +88,13 @@ def test_partial_fill_cancel_then_close_and_restart_idempotency(tmp_path):
     poll([e],j,b,d);b.fill(3)
     assert poll([e],j,b,d)[0]['status']=='awaiting_broker'
     assert b.posts==1
-    poll([e],j,b,d,NOW+timedelta(seconds=61))
+    poll([e],j,b,d,NOW+timedelta(seconds=CANCEL_SECONDS+1))
     assert len(b.cancels)==1
     j=Journal(j.path)
-    poll([close(e),e],j,b,d,NOW+timedelta(seconds=62))
+    poll([close(e),e],j,b,d,NOW+timedelta(seconds=CANCEL_SECONDS+2))
     assert b.posts==2 and list(b.orders.values())[-1].qty=='3.0'
     b.fill()
-    poll([close(e),e],j,b,d,NOW+timedelta(seconds=63))
+    poll([close(e),e],j,b,d,NOW+timedelta(seconds=CANCEL_SECONDS+3))
     assert b.posts==2 and not b.positions
 
 
