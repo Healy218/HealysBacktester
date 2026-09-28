@@ -208,8 +208,9 @@ Current paper-manifest SHA:
 `55296139aa80f9042f1b9d4cefffec39789ff65989873bccd511b6b04749334e`.
 [Repair and prospective scan evidence](reviews/2026-09-28-v6-unfilled-source-repair.md).
 The 14:30 scan completed in 254.253 seconds with 274 candidate rows and no
-detection errors; IONQ/CRM orders were submitted at 14:34:30 (`pending_new`
-at that observation, not yet a fill verdict).
+detection errors; IONQ/CRM orders were submitted at 14:34:30 and confirmed
+canceled with zero fills by 14:37:01. A replay on copied databases correctly
+retired both expired sources; the next scheduled scan reconciles live state.
 Per-pass source reconciliation: `scanner-source-reconciliation.json`. Read
 current scanner/broker receipts for subsequent holdings, fills and health.
 

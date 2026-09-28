@@ -45,6 +45,14 @@ Alpaca order IDs. This verifies restored detection, scoring and independent
 submission; pending is not a fill. Preserved evidence:
 `nn_meta/validation/v6-scanner-source-repair-20260928/prospective-scan/`.
 
+By **14:37:01**, both new orders were confirmed canceled with zero fills after
+the configured wait; subsequent polling completed with no holdings and full
+$100,000 buying power. At 14:38:40, replaying the reconciliation rule on private
+copies of the actual portfolio/journal correctly archived both expired sources.
+The live portfolio was unchanged by this check; the next scheduled scan performs
+its own authenticated reconciliation. Evidence:
+`nn_meta/validation/v6-scanner-source-repair-20260928/unfilled-order-followup/`.
+
 ## Mode boundary
 
 Research simulation uses hypothetical fills and labels independent of broker

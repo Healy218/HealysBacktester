@@ -26,8 +26,9 @@ pass completed and submitted two independent paper orders.
   ever-filled related order exists. No synthetic close or P&L is created.
 - Deployment preserved the old manifest/unit and full portfolio snapshot. The
   14:30 scan finished in 254.253 seconds with 274 candidate rows, 53 fresh signals
-  and zero detection errors. IONQ/CRM orders received pending_new acknowledgements
-  at 14:34:30; inspect broker receipts for subsequent fills/cancellations.
+  and zero detection errors. IONQ/CRM orders were submitted at 14:34:30 and canceled
+  with zero fills by 14:37:01. Copied-database replay correctly retired both;
+  the next scheduled scan performs fresh authenticated reconciliation.
   [Repair and mode limits](docs/reviews/2026-09-28-v6-unfilled-source-repair.md).
 
 ## Next actions
