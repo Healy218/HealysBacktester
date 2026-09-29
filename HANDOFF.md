@@ -1,58 +1,63 @@
-# Handoff — September 29, 2026 — paper reconciled; V6 resumed
+# Handoff — September 29, 2026 — V7 evening recovery running
 
 ## Focus and result
 
-User selected steps 1–2 after outage review: Alpaca paper reconciliation and V6
-catch-up resumption. V7 steps 3–4 are deferred. Gate **7-3 stays selected/open**.
-[Reconciliation/restart evidence](docs/reviews/2026-09-29-paper-reconciliation-v6-resume.md),
-[receipts](docs/reviews/2026-09-29-paper-reconciliation-v6-resume.json).
+User selected steps 3–4 after completed paper reconciliation/V6 restart.
+V7 capture resumed; reference review and a new replay pilot passed. Bounded
+continuation is running, waiting for capture. Gate **7-3 remains selected/open**.
+[Review](docs/reviews/2026-09-29-v7-evening-continuation.md),
+[observation/hashes](docs/reviews/2026-09-29-v7-evening-continuation.json).
 
-## Paper account
+## Active work and exact pointers
 
-Authenticated reconciliation at 17:30 Central: all 48 broker orders match local
-journal status, fill quantity and price; zero open orders. Eight filled orders.
-Actual holdings match net fills: AXP puts ×7, QCOM puts ×5, SMCI puts ×18, VG puts
-×104. QUBT fully closed. No orders submitted/canceled by this investigation.
-OPS-PAPER's first prospective fill/reconciliation observation is complete.
+- Capture: `healys-v7-frontier-evening-20260929.service`, started 18:12:24 Central;
+  `nn_meta/validation/v7-frontier-capture-20260929-r0/progress.json`.
+  At 18:42: 86,424/109,825 windows, no failures in the resumed pass.
+- Supervisor: `healys-v7-evening-continuation-20260929.service`, started 18:30:47;
+  `nn_meta/validation/v7-evening-continuation-20260929-r0/progress.json`.
+  Waits for capture, retries missing batches, binds sealed index, runs pending
+  replay and then original discovery if budget remains. Five-hour total budget.
+  Read its `selected-replay.json` once published for exact selected outputs.
+- New references: `v7-reference-epoch-20260929-r0`; selected admission
+  `v7-held-reference-admission-20260929-r1`, under `nn_meta/validation/`.
+- User approved four exact missing held-reference exclusions; selected policy
+  `v7-contract-blackouts-20260929-held-approved` totals 10,835 pairs.
+  Two other missing records recovered via exact dated list responses.
+- Frozen pending replay plan: `v7-pending-replay-plan-20260929-r0`:
+  93 securities, 251,983 cohorts, 21,624,449 horizon-targets.
+- Pilot/parity: `v7-evening-replay-pilot-20260929-r0`,
+  `v7-evening-replay-parity-20260929-r0`; all 20 independent comparisons match.
+  All pilot outcomes still capture-incomplete. 37 focused tests passed.
 
-Intraday risk monitoring was interrupted. AXP's after-hours mark is -14.8% versus
-its fill price, beyond the 12.5% stop; it is not a fresh tradable quote. Existing
-runtime will check fresh quotes and prioritize risk exits in the next session.
-Observe that handling. Orders/monitor timers begin 08:00 Central, scanner 08:00:05;
-market guards remain. Backups and full audit: `nn_meta/validation/v6-post-outage-resume-20260929/`.
+## Recovery and constraints
 
-## V6 running observation
+Both interrupted original SQLite databases recovered under locks after preserving
+physical preimages/journals. Empty/stale progress files archived; ledgers retained.
+New code uses separate immutable epochs. Original bound capture/discovery/V6
+producers remain unchanged. Do not edit new bound producers in place either.
+User-authorized evening continuation supersedes the earlier daytime-only run
+for this bounded invocation. Capture: two autosized workers, max 2 GiB/CPU 100%.
+Supervisor/replay: one autosized worker, max 4 GiB/CPU 100%, no swap; reserve guards.
+Internal free ~86 GiB; MRHA ~693 GiB. No Steam files or bulk data moved.
 
-Started existing `healys-v6-continual.service` at **17:31:19 Central**. All 74 source
-hashes, runtime identity, pinned September 28 snapshot and 95 symbol receipts
-verified first. Actual process: three data workers, two training threads; CPU 400%,
-19/20-GiB high/max, no swap. Calendar guards and 12-hour budget unchanged.
-At 17:33: **96/449 complete**, zero reported errors, fresh worker progress; peak
-memory ~2.87 GiB. Running oneshot reports activating/start. Training/freeze not
-started. Read current receipts/journal for later health; do not restart blindly.
+## V6 and paper
 
-## Preserved V7 recovery and storage
-
-[Outage census](docs/reviews/2026-09-29-power-surge-recovery.md): 72,120/109,825 quote
-windows in 3,005 verified packs; 37,705 remain. No combined r5 index. All 84 held
-reference packs verified; six 404s and alternate admission still need review.
-Ninety-three discovery waves survive; both interrupted database copies recovered.
-Original journals remain untouched. V7 transient services remain absent/inactive.
-
-MRHA (`62C9-C390`) mounted at `/run/media/healy/MRHA`. About 87 GiB internal /
-693 GiB MRHA free. No data or Steam files moved. Preserve V6's 12-GB reserve and
-V7's 10-GB floor/write reserves. Frontier capture lacks newer entry overflow routing.
+V6 remains running from 17:31:19 Central, three data workers/two training threads.
+At 18:42: 114/449 complete, zero reported errors, training not started.
+Calendar cutoff and 12-hour budget unchanged. Read current receipts for later health.
+Paper reconciliation remains complete: 48 matching orders, eight fills, four
+matching positions, no open orders at 17:30. Observe next-session AXP stop handling;
+existing fresh-quote/risk policy governs. No orders submitted by recovery work.
+[Paper/V6 evidence](docs/reviews/2026-09-29-paper-reconciliation-v6-resume.md).
 
 ## Next actions
 
-1. Observe V6 completion/error/exit receipts and resource growth; preserve checkpoints.
-2. Observe next-session paper risk handling, particularly AXP; retain existing policy.
-3. When user proceeds with V7 steps 3–4, respect its daytime/V6 allocation boundary:
-   reconcile stale workers under locks, reuse packs, retry 37,705 missing windows,
-   seal combined quote index, review references, bind epochs and replay actual gaps.
-4. Reconcile held/provider/storage coverage before closing 7-3. Maintain October 2
-   provider decision and FA schedules.
+1. Observe capture/supervisor terminal receipts, selected index and replay progress;
+   inspect actual failures/resources before any retry. Do not restart active jobs.
+2. Reconcile new actual requests and reference/provider/storage coverage; no full
+   gate closure follows from this pilot or bounded replay.
+3. Observe V6 completion and next-session paper risk; preserve October 2 provider
+   decision and FA schedules. No training/freeze completion claim yet.
 
-[CURRENT_STATE](docs/CURRENT_STATE.md) owns exact service/root pointers. Preserve
-unrelated dirty work, frozen inputs, original entry packs and completed gates 7-1/7-2.
-Previous handoff archived before replacement; no code/configuration changed here.
+[CURRENT_STATE](docs/CURRENT_STATE.md) owns exact runtime pointers. Preserve all
+unrelated dirty work and completed gates. Previous handoff archived before replacement.

@@ -1,0 +1,118 @@
+{
+  "artifacts": {
+    "v7-contract-blackouts-20260929-held-approved": {
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-contract-blackouts-20260929-held-approved",
+      "sha256": "626f181f96333de8d94ecbc70ea956205aac0387325b0666b1de511fbdff6384"
+    },
+    "v7-evening-replay-parity-20260929-r0": {
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-evening-replay-parity-20260929-r0",
+      "sha256": "a39dbbb06a62cf10e01688728ed45490a8a57665c93bb5b41a50f60970d116d6"
+    },
+    "v7-frontier-quote-index-20260929-pilot-r0": {
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-frontier-quote-index-20260929-pilot-r0",
+      "sha256": "96692a58a539d2b1e0f848b0b9a328615deef75e58c490633f0ce66a1bd3f417"
+    },
+    "v7-held-reference-admission-20260929-r1": {
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-held-reference-admission-20260929-r1",
+      "sha256": "01bca13461260e28ddc19ef3c5d37181fae59aecce611c075d3d8a650e710fd4"
+    },
+    "v7-pending-replay-plan-20260929-r0": {
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-pending-replay-plan-20260929-r0",
+      "sha256": "95bbffb14a25b67df2f04f95419821b8b8c9f2be54c382efa5d47f1627bd07e3"
+    },
+    "v7-reference-epoch-20260929-r0": {
+      "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-reference-epoch-20260929-r0",
+      "sha256": "052f36d7d820e8462a03ce4cde5044588c5d1b959729c68ea7975f71d2d65684"
+    }
+  },
+  "capture": {
+    "active_batches": 1,
+    "capture_windows_complete": 87576,
+    "capture_windows_required": 109825,
+    "completed_packs": 3649,
+    "elapsed_seconds": 1939.0902869479987,
+    "error": null,
+    "failed_batches": [],
+    "full_execution_coverage": false,
+    "index_output": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-frontier-quote-index-20260929-evening-r0",
+    "queued_batches": 927,
+    "research_ready": false,
+    "snapshot": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-recovery-frontier-20260929-r0",
+    "status": "capturing",
+    "updated_at": "2026-09-29T23:44:50.347610+00:00",
+    "workers": 2
+  },
+  "continuation": {
+    "detail": "",
+    "full_execution_coverage": false,
+    "phase": "waiting_for_capture",
+    "updated_at": "2026-09-29T23:30:47.939507+00:00"
+  },
+  "exclusion_readback": {
+    "added": 4,
+    "all_prior_pairs_preserved": true,
+    "total": 10835
+  },
+  "focused_tests": {
+    "passed": 37
+  },
+  "full_execution_coverage": false,
+  "gate": "7-3",
+  "observed_at": "2026-09-29T23:44:54.321202+00:00",
+  "parity": {
+    "exact_parity": true,
+    "full_execution_coverage": false,
+    "independent_horizon_targets": 20
+  },
+  "pilot": {
+    "cohorts_discovered": 3,
+    "distinct_horizon_targets_covered": 20,
+    "elapsed_seconds": 7.917507156000283,
+    "exclusion_horizon_targets": {},
+    "exclusion_proposal_targets": {},
+    "execution_buckets": 15,
+    "full_execution_coverage": false,
+    "horizon_target_statuses": {
+      "capture_incomplete": 20
+    },
+    "pending_requests": 2,
+    "proposal_target_rows_covered": 25,
+    "proposal_target_statuses": {
+      "capture_incomplete": 25
+    },
+    "replay_scope": "Pending source cohorts/targets only",
+    "research_ready": false,
+    "retained_payloads": 3,
+    "securities_discovered": 0,
+    "securities_required": 1,
+    "security_id": "BBG000B9XRY4",
+    "status": "checkpointed",
+    "updated_at": "2026-09-29T23:24:43.512867+00:00"
+  },
+  "steam_files_moved": false,
+  "storage": {
+    "/home/healy/Coding/HealysBacktester": {
+      "free_bytes": 87632273408
+    },
+    "/run/media/healy/MRHA": {
+      "free_bytes": 743718256640
+    }
+  },
+  "v6": {
+    "contract_identity": "e909f7d19af28ee843d62e9e64199ce71610979f3f35fe7c0ea14834a2aac430",
+    "deployment_approved": false,
+    "elapsed_seconds": 4273.627349965001,
+    "errors": [],
+    "research_only": true,
+    "run_dir": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r3/runs/2026-09-28",
+    "schema": "v6-continual-run-v1",
+    "scope": "full_universe",
+    "stage": "candidates_and_labels",
+    "started_at": "2026-09-29T22:31:20.127879+00:00",
+    "status": "running",
+    "symbols_complete": 115,
+    "symbols_required": 449,
+    "through": "2026-09-28",
+    "training_started": false
+  }
+}

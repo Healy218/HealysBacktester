@@ -1912,3 +1912,18 @@ allocation. Daytime recovery stops dispatching at 15:00 Central before V6's
 15:45 timer; failures remain explicit and bounded retries reuse complete packs.
 No reference exclusions or gate acceptance criteria changed.
 [Implementation and evidence](reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
+
+## 2026-09-29 — Bounded evening V7 continuation and four held exclusions
+
+The user selected recovery steps 3–4 while V6 continues. This bounded evening
+invocation supersedes the earlier daytime-only scheduling for this run: reuse
+capture packs, bind new quote/reference epochs, replay actual pending cohorts,
+and continue original discovery within resource and duration limits. Preserve
+frozen producers and all original ledgers. No full-scope gate closure is implied.
+
+The user explicitly answered “Approve these four exact exclusions” for the four
+unrecovered held contract/date pairs. The hash-bound compiled policy preserves
+10,831 previous pairs and totals 10,835. Two exact GME list responses are separately
+admitted; GAP responses are not substituted for GPS contracts. No automatic
+extension, changed calendar, synthetic terms or numerical outcomes are authorized.
+[Evidence and exact approval](reviews/2026-09-29-v7-evening-continuation.md).

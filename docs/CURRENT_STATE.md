@@ -195,48 +195,42 @@ change, without waiting for catch-up/training. The original planner completed
 591/591 securities, 793,394,264 proposals and 328,386,847 horizons; its September 29
 service exited. Original wave worker/source contracts remain unchanged.
 
-Selected recovery launcher: `bash scripts/start_v7_recovery_20260929.sh` with
-`discovery`, `capture`, `references`, `retries` or `references-recover` modes.
-Do not blindly relaunch active services or completed acquisition scopes.
+Current evening continuation supersedes the earlier daytime-only invocation for
+this user-authorized bounded run. Historical recovery observations are retained in
+[the outage census](reviews/2026-09-29-power-surge-recovery.md) and
+[daytime recovery review](reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
 
 | Scope | Current location / service |
 | --- | --- |
-| Recovery controller | `v7-execution-recovery-20260929-r0/`; `healys-v7-execution-recovery-20260929.service` |
-| Mutable replay checkpoints | Original `v7-execution-campaign-20260928-r1/waves/`; original parent marked stopped with successor |
-| Frozen actual requests | `v7-recovery-frontier-20260929-r0/`: 109,825 quote windows plus 1,985 reference requests |
-| Quote capture progress | `v7-frontier-capture-20260929-r0/progress.json`; `healys-v7-frontier-capture-20260929.service` |
+| Frozen actual requests | `v7-recovery-frontier-20260929-r0/`: 109,825 quote windows and 1,985 reference requests |
+| Active quote capture | `v7-frontier-capture-20260929-r0/progress.json`; `healys-v7-frontier-evening-20260929.service` |
 | Raw quote packs | `nn_meta/data_v7/execution-recovery-20260929-r0/` |
-| Bounded missing-batch retries | `healys-v7-frontier-retry-20260929.service`; waits for capture exit, up to three passes before cutoff |
-| New quote index | Consume only sealed path/hash from `v7-frontier-capture-20260929-r0/index-receipt.json`; initial target ends `20260929-r5`, retry indexes include invocation/pass |
-| Held-reference capture / audit | `v7-held-reference-campaign-20260929-r0/`, `v7-held-reference-reconciliation-20260929-r0/` |
-| Held-reference alternate recovery | `v7-held-reference-recovery-20260929-r0/`; raw packs under `nn_meta/data_v7/held-reference-recovery-20260929-r0/` |
+| Bounded continuation | `v7-evening-continuation-20260929-r0/progress.json`; `healys-v7-evening-continuation-20260929.service` |
+| Selected replay inputs/output | Supervisor `selected-replay.json` once published; read exact verified quote index/policy/campaign from it |
+| Latest sealed capture index | `v7-frontier-capture-20260929-r0/index-receipt.json` once published; a target filename is not a completed index |
+| Combined held/base references | `v7-reference-epoch-20260929-r0/`; 2,225,829 original contract/date responses |
+| Exact alternate admission | `v7-held-reference-admission-20260929-r1/`; two exact dated-list recoveries |
+| Approved new replay policy | `v7-contract-blackouts-20260929-held-approved/`; 10,835 pairs including all prior exclusions |
+| Frozen actual-pending cohorts | `v7-pending-replay-plan-20260929-r0/`; 93 securities / 21,624,449 horizon-targets |
+| Independent replay pilot | `v7-evening-replay-pilot-20260929-r0/`, `v7-evening-replay-parity-20260929-r0/` |
+| Preserved original discovery | `v7-execution-campaign-20260928-r1/waves/`; controller `v7-execution-recovery-20260929-r0/`, original r4 inputs |
+| Database recovery preimages | `v7-pending-replay-plan-20260929-r0.recovery/`; initial incomplete planner transaction also preserved |
 
-Dated post-interruption observation, September 29 at 16:36–17:05 Central:
-all three transient V7 discovery/capture/retry services are absent/inactive.
-Progress JSON still says running/capturing; it is stale. Verified 3,005 packs /
-72,120 of 109,825 quote windows; 37,705 remain. The last controller had recorded
-290 HTTP-502 failures. No r5 combined index or index receipt was sealed.
-All 93 wave receipts survive: 28 discovered, 61 checkpointed, two previously
-interrupted, two stale-running. Copies of both interrupted workers' databases and
-rollback journals recovered and passed quick checks; originals remain untouched.
-Frozen snapshot and controller-bound source hashes pass. Full checked census:
-[power-interruption recovery](reviews/2026-09-29-power-surge-recovery.md).
-The 12:52 observation is retained in the earlier recovery review.
+September 29 at 18:42 Central: capture 86,424/109,825 windows, no failures in
+this resumed pass. Supervisor phase waiting for capture; starts retries, new
+pending replay, then original discovery if its five-hour budget remains.
+Capture: two autosized workers, 1.5/2-GiB high/max, CPU 100%, no swap.
+Supervisor/replay: one autosized worker, 3/4-GiB high/max, CPU 100%, no swap.
+Replay checks 6-GiB available-memory and 20-GB disk reserves. Capture retains
+its own quota/floor/write guards. Internal free ~86 GiB, MRHA ~693 GiB; no files moved.
 
-Two discovery workers: 5/6-GiB high/max, CPU 200%. Four quote workers: 5/6-GiB,
-CPU 200%. No swap. Both stop dispatching at 15:00 Central and drain; the retry
-wrapper also respects that cutoff before V6's 15:45 timer. Observe actual exits.
-The controller's discovered counter covers its current traversal; inspect all
-retained per-wave receipts for the global census during the incomplete traversal.
-
-All 1,985 held-reference requests were captured/audited: 1,979 standard, six detail
-404s. Both alternate-list queries for each missing pair completed, finding exact
-matches in two queries. Admission review and remaining unknown dispositions are
-open; no new exclusions were approved or activated. Existing 10,831-pair policy
-is unchanged. New references/quotes require new bound replay epochs; the current
-discovery still uses the frozen original r4 quote/reference inputs.
-[Recovery, tests and observation](reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
-Neither snapshot capture nor discovery completion closes 7-3 or later execution gates.
+Independent per-horizon comparison matches all 20 pilot results. All remain
+capture-incomplete with two further requests; this is not full replay acceptance.
+The user approved four exact new exclusions; two other detail 404s were recovered
+through exact list records without replacing raw provider evidence. Original
+source-bound producers/ledgers remain; fresh inputs bind separate epochs.
+[Evening evidence and approval](reviews/2026-09-29-v7-evening-continuation.md).
+Neither snapshot capture nor bounded discovery closes 7-3 or execution gates.
 
 ## V6 Alpaca paper and incubator
 
@@ -334,8 +328,8 @@ by hash-bound inheritance. The original repair evidence covers all 17 r2 errors.
 September 29: morning 93/449 checkpoint reached 95/449 after the 16:11 reboot,
 then stopped at 16:23. User-authorized restart at **17:31:19 Central** now runs the
 same September 28 snapshot with three data workers and two training threads.
-At 17:33: 96/449 complete, no reported errors, fresh worker progress, ~2.87-GiB
-memory peak. All 74 source hashes/runtime and 95 prior symbol receipts verified.
+At 18:42: 114/449 complete, no reported errors; last service readback showed
+~3.61-GiB memory peak. All 74 source hashes/runtime and 95 prior symbol receipts verified.
 Training/freeze have not started. A running oneshot shows `activating/start`;
 read current journal/receipts before inferring later health. The older TERM exit
 receipt belongs to the previous invocation, not this running one.
@@ -349,8 +343,8 @@ retry wrapper: `scripts/v6_continual_resume_v3.py --autosize-workers`. Original 
 stay pinned across retries. Installed allocation: up to four autosized data workers,
 4500 MiB each with 8192 MiB host reserve; CPU 400%, 19/20-GiB high/max, no swap.
 Training remains two threads. Current sizing returned three; startup determines
-actual concurrency. Worker increase applies on the next permitted invocation;
-the existing run was not restarted. The 12-hour budget and calendar cutoff remain.
+actual concurrency. The authorized 17:31 restart selected three workers;
+future starts autosize again. The 12-hour budget and calendar cutoff remain.
 `service-exit.json` records termination separately from stale progress.
 [Original r2 recovery](reviews/2026-09-28-v6-continual-recovery.md) and
 [r1 memory failure](reviews/2026-09-28-v7-reference-completion.md) are historical.

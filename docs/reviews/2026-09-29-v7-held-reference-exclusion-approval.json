@@ -1,0 +1,11 @@
+{
+  "count": 4,
+  "decision": "approve_exact_exclusions",
+  "observed_at": "2026-09-29T23:42:42.656500+00:00",
+  "policy_id": "v7-held-reference-exclusions-20260929-approved",
+  "proposal": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-held-reference-admission-20260929-r1/proposed-exclusions.json",
+  "proposal_sha256": "06d05ae4ec61ccebf5fbf65be7dfa52a61ad484c4343d84401e5fc626781af44",
+  "schema": "v7-exact-exclusion-authorization-v1",
+  "scope": "Four exact held contract/date pairs only; preserve existing exclusions and all captured evidence.",
+  "user_answer": "Approve these four exact exclusions"
+}

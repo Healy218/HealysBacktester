@@ -24,7 +24,10 @@ The following scope is unchanged by the documentation consolidation.
   cash-deliverable exclusions. The compiled finite policy preserves the old five.
   Known entry exceptions are adjudicated; actual held-date coverage remains open.
   September 29: captured/audited 1,985 actual held references (1,979 standard, six
-  detail 404s). Exact alternate queries are captured; matching rows need admission review.
+  detail 404s). Evening review admitted two exact list responses; the user approved
+  four remaining exact exclusions, preserving prior pairs (10,835 total). New
+  reference epoch is sealed; future actual held-date coverage remains open.
+  [Evening evidence](docs/reviews/2026-09-29-v7-evening-continuation.md).
   [Recovery, approval and full discovery](docs/reviews/2026-09-28-v7-full-execution-discovery.md).
   [Completion/admission evidence](docs/reviews/2026-09-28-v7-reference-completion.md).
 - [ ] **7-3.paths:** Complete only actual held-mark, exit, roll and applicable
@@ -37,7 +40,10 @@ The following scope is unchanged by the documentation consolidation.
   Power interruption around 13:14 Central: 72,120/109,825 windows verified in
   3,005 packs; 37,705 remain. Transient services are gone; original worker journals
   survive and recovered copies pass quick checks. No combined index was sealed.
-  Reconcile stale workers and resume missing batches in the permitted window.
+  Evening user-authorized resume reconciled stale workers under locks; capture
+  reached 86,424/109,825 windows at 18:42 with no new failures. Bounded retries,
+  new pending replay and original discovery are queued behind active capture.
+  New replay pilot: 20/20 independent comparisons match; full coverage remains open.
   [Recovery census and storage](docs/reviews/2026-09-29-power-surge-recovery.md).
   [Recovery and active services](docs/reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
 - [ ] **7-3.reconcile:** Reconcile required requests, captures, references,
