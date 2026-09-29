@@ -83,7 +83,12 @@ accounting for in-flight writes. New payloads overflow to MRHA (UUID 62C9-C390)
 under `HealysBacktester/v7-entry-campaign-20260927`, also leaving 10 GB there.
 Logical pack directories/receipts stay local, with only SQLite payload files
 linked to MRHA. Four real overflow batches passed existing-reader readback.
-Keep MRHA connected. Existing external files and completed local packs are intact.
+Keep MRHA connected. September 29 post-interruption: verified UUID 62C9-C390
+and remounted `/run/media/healy/MRHA`. All four existing entry payload symlinks
+resolve; three sampled packs pass checksums. About 87 GiB internal and 693 GiB
+MRHA free at inspection. No bulk migration performed. The frontier capture uses
+an older local worker/quota ledger; do not assume it inherits entry overflow routing.
+[Storage/recovery scope](reviews/2026-09-29-power-surge-recovery.md).
 
 ### Completion observation — September 28, 2026
 
@@ -206,14 +211,17 @@ Do not blindly relaunch active services or completed acquisition scopes.
 | Held-reference capture / audit | `v7-held-reference-campaign-20260929-r0/`, `v7-held-reference-reconciliation-20260929-r0/` |
 | Held-reference alternate recovery | `v7-held-reference-recovery-20260929-r0/`; raw packs under `nn_meta/data_v7/held-reference-recovery-20260929-r0/` |
 
-Dated observation, September 29 at 12:52 Central: quote capture had completed
-61,488/109,825 windows (2,562 packs), with 284 HTTP-502 batch failures retained
-for retries. Discovery had no recorded worker failures. Its aggregate 20-GB
-limit is replaced by a live 10-GB free-space floor plus reserved worker writes;
-original per-wave guards remain. Two zero-proposal/security-selection cases were
-verified; no quote index or numerical labels are fabricated for them. Original
-interrupted SQLite journals and progress were recovered under locks, retaining
-source-state provenance and the committed pending-request snapshot.
+Dated post-interruption observation, September 29 at 16:36–17:05 Central:
+all three transient V7 discovery/capture/retry services are absent/inactive.
+Progress JSON still says running/capturing; it is stale. Verified 3,005 packs /
+72,120 of 109,825 quote windows; 37,705 remain. The last controller had recorded
+290 HTTP-502 failures. No r5 combined index or index receipt was sealed.
+All 93 wave receipts survive: 28 discovered, 61 checkpointed, two previously
+interrupted, two stale-running. Copies of both interrupted workers' databases and
+rollback journals recovered and passed quick checks; originals remain untouched.
+Frozen snapshot and controller-bound source hashes pass. Full checked census:
+[power-interruption recovery](reviews/2026-09-29-power-surge-recovery.md).
+The 12:52 observation is retained in the earlier recovery review.
 
 Two discovery workers: 5/6-GiB high/max, CPU 200%. Four quote workers: 5/6-GiB,
 CPU 200%. No swap. Both stop dispatching at 15:00 Central and drain; the retry
@@ -286,6 +294,12 @@ At the 14:52 cutover there were zero holdings/pending orders; authenticated V3
 preview and service polling passed. The final 15:08 adapter cutover likewise
 reconciled zero holdings/pending orders and correctly returned market_closed.
 A real prospective ladder is not yet observed.
+September 29 post-interruption local observation: broker/portfolio SQLite quick
+checks pass; broker records contain eight filled orders (five entries, three closes).
+Last saved poll at 13:14:00 Central reports four positions. This supersedes the
+first-fill-pending observation, but actual post-outage broker reconciliation and
+missed management remain open. No current broker holdings were queried here.
+[Outage census](reviews/2026-09-29-power-surge-recovery.md).
 Per-pass source reconciliation: `scanner-source-reconciliation.json`. Read
 current scanner/broker receipts for subsequent holdings, fills and health.
 
@@ -315,13 +329,13 @@ The initial September 28 snapshot is pinned by hash in the selected config.
 
 The corrected r3 full-universe run started September 28 at 23:07:14 Central.
 It preserves 38 completed r2 symbols, 4,623 feature seals and 23,569 label seals
-by explicit hash-bound inheritance. Old r2 artifacts and source files remain intact.
-All 17 recorded r2 error cases passed targeted verification: duplicate proposal
-occurrences now have distinct identities and labels; transient tick errors have
-bounded retries with unchanged scope/completeness checks. September 29 around
-08:05 Central: 93/449 symbols complete. The prior invocation was draining queued
-deadline failures after the 08:00 cutoff; these are distinct from the repaired
-identity/provider errors. Training has not started; no new candidate exists.
+by hash-bound inheritance. The original repair evidence covers all 17 r2 errors.
+September 29 post-interruption observation: morning 93/449 checkpoint resumed
+through the persistent timer at 16:11:31, reached 95/449, then was terminated
+by orderly shutdown at 16:23:53. `service-exit.json` records TERM. Service inactive
+at inspection; next timer midnight September 30. The remaining running receipt is
+stale. Training has not started; no new candidate exists.
+[Power-interruption census](reviews/2026-09-29-power-surge-recovery.md).
 [Worker sizing and validation](reviews/2026-09-29-v6-worker-sizing.md),
 [retained repair evidence](reviews/2026-09-28-v6-continual-error-repair.md).
 Selected code: `scripts/run_v6_continual_v3.py`, `incubator/recovery_v6/`;

@@ -1,59 +1,57 @@
-# Handoff — September 29, 2026 — V7 resumed after V6 configuration
+# Handoff — September 29, 2026 — power interruption recovery census
 
-## Focus and changes
+## Focus and result
 
-User explicitly selected V7 resumption after the V6 worker configuration change,
-without waiting for V6 catch-up/training. V7 gate 7-3 remains selected/open.
-[Recovery evidence](docs/reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
+User requested reconstruction after the power interruption and flagged storage.
+Gate **7-3 remains selected/open**. No research campaign restarted.
+[Recovery evidence](docs/reviews/2026-09-29-power-surge-recovery.md),
+[checked counts](docs/reviews/2026-09-29-power-surge-recovery.json).
 
-V7 planner completed all 591 securities: 793,394,264 original proposals and
-328,386,847 distinct horizons. New recovery controller preserves unchanged wave
-workers/contracts and partial ledgers. Aggregate storage now follows live free
-space with a 10-GB floor and pending-write reserve. Both empty-index cases have
-verified zero proposals/selections; original interrupted progress/journals recovered.
+Pre-outage commit: `28bca08` at 12:59:53 Central. Journal ends 13:13:55;
+last sealed pack 13:14:07. First reboot 16:11; orderly second reboot 16:24.
+The estimated 13:30 outage is approximate; exact power-loss time is unknown.
 
-Frozen actual frontier: 109,825 missing quote windows plus 1,985 reference requests.
-At 12:52 Central, quotes were 61,488 complete in 2,562 packs; 284 batch attempts
-returned HTTP 502. Failures remain explicit. A retry service waits for the first
-capture to stop, then reuses successes and retries missing batches up to three times.
+## Surviving work and stopping point
 
-All 1,985 dated references were captured/audited: 1,979 standard, six detail 404s.
-Both alternate queries for each missing pair completed; two queries found matches.
-Admission review remains required; no exclusions added. Twenty-one focused tests,
-real empty-demand checks, snapshot validation and shell/Python checks passed.
+- Quotes: **72,120/109,825 windows in 3,005 checksum-verified packs**; 37,705 remain.
+  Stale progress says 72,000. Preserve packs and 294 partials. Last receipt lists
+  290 HTTP-502 failures. No final r5 index/receipt exists.
+- Discovery: 93 retained waves: 28 discovered, 61 checkpointed, two previously
+  interrupted, two stale-running. Both active database copies recovered and passed
+  quick checks, preserving 3,945/5,007 cohorts. Original journals remain untouched.
+- All 84 held-reference packs verified: 1,985 responses including six 404s.
+  Alternate matches remain unadmitted. Approved 10,831-pair policy unchanged.
+- V7 discovery/capture/retry transient services disappeared on reboot. Old running
+  receipts are stale. Bound input hashes and frozen snapshot pass.
+- V6 timer resumed at 16:11, saved 95/449 symbols, then stopped at 16:23 shutdown.
+  Exit receipt says TERM. Inactive at inspection; next retry midnight September 30.
+  Training/freeze not started; configuration/source contracts unchanged.
+- Paper databases pass read-only quick checks. Eight local filled-order records
+  exist. Last saved poll at 13:14 reported four positions. Post-outage broker
+  reconciliation remains outstanding; local receipts are not current holdings.
 
-## Active pointers and resource boundary
+## Storage
 
-[CURRENT_STATE](docs/CURRENT_STATE.md#v7-full-universe-execution-discovery) owns
-exact services and roots. Discovery controller: `v7-execution-recovery-20260929-r0`;
-original waves remain in `v7-execution-campaign-20260928-r1/waves` (validation roots).
-Capture controller: `v7-frontier-capture-20260929-r0`; raw quote output:
-`nn_meta/data_v7/execution-recovery-20260929-r0`. Frozen snapshot:
-`v7-recovery-frontier-20260929-r0`. Read the capture controller's `index-receipt.json`
-for an actually sealed new index; do not infer availability from a target name.
-
-Two discovery workers and four quote workers each have 5/6-GiB high/max, CPU 200%,
-no swap. Stop new work at 15:00 Central and drain before V6's 15:45 timer; verify
-actual exits. Retry waits consume no data workers. Dated observations are not
-proof of current health. Discovery counts its current traversal; retained global
-coverage must be reconciled across all per-wave receipts.
-
-V6 worker increase remains installed: up to four autosized data workers,
-CPU 400%, 19/20-GiB limits, two training threads. Original r3 config/root/snapshot
-and all 74 source hashes preserved. Morning catch-up stopped at 93/449 symbols;
-no new training/freeze. Calendar guards remain. [V6 change](docs/reviews/2026-09-29-v6-worker-sizing.md).
+MRHA (`62C9-C390`) was unmounted; remounted at `/run/media/healy/MRHA`.
+Four external entry payload links resolve; three packs checksum-verified.
+About 87 GiB internal / 693 GiB MRHA free at inspection. No bulk files moved.
+Keep the 10-GB floor and pending-write reserve. Frontier capture's older worker
+lacks newer entry-producer overflow routing. Catalog/scheduler stores are provenance
+inputs; migrate cold payloads only with verified copies and preserved locators.
 
 ## Next actions
 
-1. Observe V7 capture, discovery and retry receipts/exits; reconcile remaining
-   HTTP-502 batches and actual disk use. Do not count failed attempts as coverage.
-2. Review six unavailable held references and captured alternate matches. Preserve
-   the approved 10,831 exclusions; additional exclusions require specific approval.
-3. Bind completed quote/reference epochs, replay remaining paths and freeze/capture
-   subsequent actual gaps. Full 7-3 closure still needs held/provider/storage census.
-4. Observe the next allowed V6 autosized run; finish catch-up, 40 training members
-   and evaluation. Candidate acceptance never deploys it.
-5. Maintain first paper-fill observation, October 2 provider decision and FA schedules.
+1. Reconcile paper broker holdings/orders after the outage and missed management.
+2. Observe/resume V6 in its permitted window; preserve the 95-symbol checkpoint.
+3. In the permitted V7 window, reconcile stale worker receipts under locks; reuse
+   packs and retry 37,705 missing windows. Preserve original journals.
+4. Seal a quote index, review six held references/alternate matches, bind new epochs,
+   replay remaining paths and freeze subsequent actual gaps.
+5. Reconcile provider/storage/held coverage before 7-3 closure. Monitor capacity;
+   use MRHA for verified cold payload migration when further growth warrants it.
 
-Preserve unrelated dirty work, source hashes, original entry packs and completed
-gates 7-1/7-2. Keep execution/assembly/training milestones distinct.
+[CURRENT_STATE](docs/CURRENT_STATE.md#v7-full-universe-execution-discovery) owns exact
+roots/services. V7 launcher stops new work after 15:00 Central; preserve V6 evening
+allocation. Preserve unrelated dirty work, frozen sources, original entry packs,
+and completed gates 7-1/7-2. Maintain October 2 provider decision and FA schedules.
+Previous handoff archived under handoff-history before replacement.

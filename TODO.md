@@ -34,9 +34,11 @@ The following scope is unchanged by the documentation consolidation.
   implemented; 3,535-path cohort parity passed. September 29: planner completed
   all 591 securities. Repaired controller/storage handling and verified empty
   cases; resumed unchanged wave checkpoints and captured a frozen actual frontier.
-  At 12:52 Central: 61,488/109,825 quote windows complete; 284 HTTP-502 batch
-  failures retained for bounded retry. Observe discovery/capture exits and retries,
-  then bind new quote/reference epochs for replay. Gate remains open.
+  Power interruption around 13:14 Central: 72,120/109,825 windows verified in
+  3,005 packs; 37,705 remain. Transient services are gone; original worker journals
+  survive and recovered copies pass quick checks. No combined index was sealed.
+  Reconcile stale workers and resume missing batches in the permitted window.
+  [Recovery census and storage](docs/reviews/2026-09-29-power-surge-recovery.md).
   [Recovery and active services](docs/reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
 - [ ] **7-3.reconcile:** Reconcile required requests, captures, references,
   provider failures and measured storage for execution/assembly/recovery.
@@ -68,7 +70,9 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
 - [ ] **OPS-PAPER:** Observe the first prospective Alpaca session and actual
   order/fill reconciliation. Activation is complete; use the current deployment
   receipt. September 28: timely full scan and accepted/canceled order reconciled;
-  first actual fill remains pending. Independent orders remain enabled; V3's
+  September 29 local broker records now show eight filled orders; post-outage
+  broker reconciliation is pending (last saved poll: four positions at 13:14).
+  [Outage evidence](docs/reviews/2026-09-29-power-surge-recovery.md). Independent orders remain enabled; V3's
   user-requested four-step limits deployed at 14:52 Central, finalized at 15:08, with 76 focused tests
   and authenticated polling passed. Observe prospective ladder fills/reconciliation.
   [Step policy and deployment](docs/reviews/2026-09-28-v6-step-orders.md).
@@ -85,8 +89,9 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   catch-up. Corrected r3 resumed September 28 at 23:07 Central, preserving
   38 completed r2 symbols and partial feature/label seals. All 17 original error
   cases passed targeted checks: six identity collisions and eleven transient tick
-  failures. September 29 around 08:05 Central: 93/449 complete; the invocation is draining
-  calendar-deadline timeouts. All 17 formerly failing symbols remain complete. Finish the remaining catch-up;
+  failures. September 29: morning checkpoint 93/449; automatic 16:11 restart
+  saved 95/449 before the 16:23 shutdown. Now inactive; next retry midnight
+  September 30. All 17 formerly failing symbols remain complete. Finish the catch-up;
   training and freeze have not started. Respect the existing pre-market deadline.
   [Overnight observation](docs/reviews/2026-09-29-overnight-checkpoints.md).
   [Repair and current observation](docs/reviews/2026-09-28-v6-continual-error-repair.md).

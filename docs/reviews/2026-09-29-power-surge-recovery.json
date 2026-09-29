@@ -1,0 +1,221 @@
+{
+  "observed_at": "2026-09-29T21:57:58.227629+00:00",
+  "scope": "Read-only recovery census; no campaign restart or full-disk integrity claim",
+  "pack_audit": {
+    "observed_at": "2026-09-29T21:43:42.382435+00:00",
+    "packs": 3005,
+    "windows": 72120,
+    "bytes": 158704986,
+    "errors": [],
+    "immutable_checks": {
+      "v7-recovery-frontier-20260929-r0": "passed",
+      "v7-held-reference-reconciliation-20260929-r0": "passed",
+      "v7-frontier-capture-20260929-r0": [],
+      "v7-execution-recovery-20260929-r0": []
+    },
+    "remaining_windows": 37705
+  },
+  "additional_audit": {
+    "held-reference-campaign-20260929-r0": {
+      "packs_verified": 84,
+      "errors": []
+    },
+    "held-reference-recovery-20260929-r0": {
+      "packs_verified": 1,
+      "errors": []
+    },
+    "external_entry_payloads": {
+      "symlinks": 4,
+      "missing": 0,
+      "samples": [
+        {
+          "path": "nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/4b8525c0b94f4dff16e2afc79778e0c36fbb583ce4b00b3c0bbe8aef6879d9e6/captures.sqlite3",
+          "target": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/4b8525c0b94f4dff16e2afc79778e0c36fbb583ce4b00b3c0bbe8aef6879d9e6/captures.sqlite3",
+          "verified": true
+        },
+        {
+          "path": "nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/cfc11aa5b58f7f9853654c11693aa652570e7e44f1516569a74938058712523c/captures.sqlite3",
+          "target": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/cfc11aa5b58f7f9853654c11693aa652570e7e44f1516569a74938058712523c/captures.sqlite3",
+          "verified": true
+        },
+        {
+          "path": "nn_meta/data_v7/entry-campaign-20260927/BBG000BBJQV0/9131cd8e7eb78ff1cfb21fba64247910ca97bf554cbbda31ed36711f2078c135/captures.sqlite3",
+          "target": "/run/media/healy/MRHA/HealysBacktester/v7-entry-campaign-20260927/BBG000BBJQV0/9131cd8e7eb78ff1cfb21fba64247910ca97bf554cbbda31ed36711f2078c135/captures.sqlite3",
+          "verified": true
+        }
+      ]
+    },
+    "BBG000BFRF55": {
+      "cohorts": 3945,
+      "contents": 48577,
+      "buckets": 62453,
+      "pending": 1324,
+      "links": 17978
+    },
+    "BBG000BFT2L4": {
+      "cohorts": 5007,
+      "contents": 58838,
+      "buckets": 76344,
+      "pending": 1451,
+      "links": 18246
+    },
+    "paper_local_orders": {
+      "states": [
+        [
+          "canceled",
+          40
+        ],
+        [
+          "filled",
+          8
+        ]
+      ],
+      "filled_orders": [
+        [
+          "entry",
+          "QUBT261030P00008500",
+          "filled",
+          "117",
+          "2026-09-29T14:22:47.968573+00:00"
+        ],
+        [
+          "close",
+          "QUBT261030P00008500",
+          "filled",
+          "27",
+          "2026-09-29T15:18:32.307656+00:00"
+        ],
+        [
+          "close",
+          "QUBT261030P00008500",
+          "filled",
+          "65",
+          "2026-09-29T15:21:16.227304+00:00"
+        ],
+        [
+          "entry",
+          "AXP261106P00305000",
+          "filled",
+          "7",
+          "2026-09-29T15:21:17.905856+00:00"
+        ],
+        [
+          "close",
+          "QUBT261030P00008500",
+          "filled",
+          "25",
+          "2026-09-29T15:24:32.317543+00:00"
+        ],
+        [
+          "entry",
+          "QCOM261106P00185000",
+          "filled",
+          "5",
+          "2026-09-29T16:50:45.946446+00:00"
+        ],
+        [
+          "entry",
+          "SMCI261106P00041000",
+          "filled",
+          "18",
+          "2026-09-29T16:51:02.287723+00:00"
+        ],
+        [
+          "entry",
+          "VG261030P00012500",
+          "filled",
+          "104",
+          "2026-09-29T16:54:02.506457+00:00"
+        ]
+      ]
+    }
+  },
+  "wave_copy_quick_checks": [
+    {
+      "security_id": "BBG000BFRF55",
+      "quick_check": [
+        [
+          "ok"
+        ]
+      ],
+      "tables": [
+        [
+          "cohorts"
+        ],
+        [
+          "contents"
+        ],
+        [
+          "buckets"
+        ],
+        [
+          "exclusions"
+        ],
+        [
+          "pending"
+        ],
+        [
+          "links"
+        ]
+      ]
+    },
+    {
+      "security_id": "BBG000BFT2L4",
+      "quick_check": [
+        [
+          "ok"
+        ]
+      ],
+      "tables": [
+        [
+          "cohorts"
+        ],
+        [
+          "contents"
+        ],
+        [
+          "buckets"
+        ],
+        [
+          "exclusions"
+        ],
+        [
+          "pending"
+        ],
+        [
+          "links"
+        ]
+      ]
+    }
+  ],
+  "boot_timeline_central": {
+    "prior_journal_last": "2026-09-29T13:13:55-05:00",
+    "last_completed_pack_mtime": "2026-09-29T13:14:07.937111-05:00",
+    "first_reboot_journal": "2026-09-29T16:11:28-05:00",
+    "orderly_shutdown": "2026-09-29T16:23:54-05:00",
+    "current_boot_journal": "2026-09-29T16:24:29-05:00"
+  },
+  "services_observed": {
+    "v7_discovery": "not-found/inactive",
+    "v7_capture": "not-found/inactive",
+    "v7_retries": "not-found/inactive",
+    "v6_continual": "inactive; next timer 2026-09-30 00:00 Central"
+  },
+  "storage": {
+    "mrha_uuid": "62C9-C390",
+    "mount": "/run/media/healy/MRHA",
+    "remounted": true,
+    "internal_available_gib_rounded": 87,
+    "mrha_available_gib_rounded": 693,
+    "bulk_migration_performed": false
+  },
+  "sources": [
+    "journalctl --list-boots",
+    "journalctl --user -u healys-v7-execution-recovery-20260929.service -u healys-v7-frontier-capture-20260929.service -u healys-v7-frontier-retry-20260929.service",
+    "journalctl --user -u healys-v6-continual.service",
+    "systemctl --user show; systemctl --user list-timers",
+    "df -h; lsblk; udisksctl info",
+    "nn_meta/validation/v7-frontier-capture-20260929-r0/progress.json",
+    "nn_meta/validation/v7-execution-recovery-20260929-r0/progress.json"
+  ]
+}
