@@ -1,59 +1,48 @@
-# Handoff — September 29, 2026 — overnight checkpoints, session cleared
+# Handoff — September 29, 2026 — V6 worker capacity
 
-## Focus and stopping point
+## Focus and changes
 
-User requested a notes refresh before clearing the session. This turn changed
-only documentation; no jobs were restarted or limits changed. V6's recorded
-errors are resolved and catch-up continues. V7-3 remains selected and open.
+User requested additional V6 workers. Installed service now passes
+`--autosize-workers` to `scripts/v6_continual_resume_v3.py`: shared autosizing,
+4500 MiB/worker, 8192 MiB host reserve, maximum four data workers. Current sizing
+returned three. CPU quota 400%, MemoryHigh/Max 19/20 GiB, no swap; training remains
+two threads. Existing timer and market-window guards remain in force.
+[Evidence](docs/reviews/2026-09-29-v6-worker-sizing.md).
+
+All 74 frozen source hashes match. Saved contracts, September 28 snapshot,
+inherited r1/r2 seals and r3 checkpoints remain unchanged. Fifteen focused tests,
+argument/snapshot checks and systemd verification passed. The installed settings
+were read back; increased-worker execution and speedup have not been measured.
+
+## Stopping point
+
+Around 08:05 Central, the prior two-worker invocation remained active while
+queued tasks returned calendar-deadline failures after the 08:00 cutoff.
+93/449 symbols complete; all 17 original failure cases had completed earlier.
+No new training/freeze exists. No restart during the paper-session reserve window.
+The next regular after-close timer is 15:45 Central; inspect service-exit together
+with latest-run because progress can remain stale after an external stop.
+Selected config/root remain `deploy/incubator-continual-v6-r3.json` and
+`incubator/continual-v6/r3/`. [Exact state](docs/CURRENT_STATE.md).
+
+V7 gate 7-3 remains selected and open; no V7 changes this turn. Planner is
+checkpointed at 582/591 securities. Discovery stopped at its 20-GB generated-store
+cap; parent progress was stale. Two security workers failed empty quote indexes.
 [Overnight evidence](docs/reviews/2026-09-29-overnight-checkpoints.md).
-
-## V6 status and selected runtime
-
-At 07:33 Central: 90/449 symbols complete, zero recorded errors. All 17 formerly
-failing symbols now have full completion receipts. Training has not started;
-no new model freeze exists. Existing accepted model and paper runtime stay intact.
-Prior repair: stable duplicate-proposal identities, bounded transient tick retries,
-18 focused tests and exact feature parity; do not rework the original fixes.
-
-Config `deploy/incubator-continual-v6-r3.json`; root `incubator/continual-v6/r3/`.
-Service `healys-v6-continual.service` was executing at the preceding check. Read
-latest-run, per-symbol seals and service-exit together. Two autosized workers,
-CPU 200%, 11/12-GiB memory limits, no swap. Existing deadline is next open minus
-30 minutes; preserve market-hours guards and pinned unfinished date/snapshot.
-[Repair](docs/reviews/2026-09-28-v6-continual-error-repair.md).
-
-## V7 stopped checkpoints
-
-- Planner: 582/591 securities, 789,797,718 original proposals reconciled.
-  It checkpointed at its eight-hour deadline, 05:13 Central; nine securities remain.
-- Discovery stopped at 05:08:48 with `Execution working-store allocation reached`
-  (20-GB generated-state cap). Journal confirms exit-code failure; not OOM.
-  About 90 GB local free. Parent progress still says running, but the job is stopped.
-- Per-wave receipts: 25 discovered, 66 checkpointed, two interrupted/stale running;
-  30,462,620 horizon/target dispositions and 112,112 summed pending requests.
-  Discovery completion is not label completion or full execution coverage.
-- Two other workers failed quote-index construction: `BBG000BCQ6J8` and
-  `BBG000BF8TF5`, `No completed capture packs for selected security`.
-  Diagnose frozen selections/demand; do not assume entry capture must be repeated.
 
 ## Next actions
 
-1. Check V6's latest receipts and calendar cutoff; preserve successes and finish
-   the remaining initial catch-up, 40 training members and evaluation/freeze.
-   Full overnight latency is not proven; candidate acceptance never deploys it.
-2. Resume V7 queue's remaining nine securities from existing checkpoints. Repair
-   discovery storage handling, empty-index cases and truthful terminal reporting
-   before resuming discovery. Version bound source changes and retain partial data.
-3. Capture only actual missing inputs from stopped snapshots; bind new quote/
-   reference epochs, replay and reconcile held exclusions/storage/provider failures.
-   Close 7-3 only against full evidence; keep later execution/assembly gates separate.
-4. Keep paper-fill observation, October 2 provider decision and FA schedules.
+1. Observe V6 terminal receipt and next allowed autosized run; measure concurrency,
+   throughput and memory. Complete remaining catch-up, 40 members and evaluation.
+   Candidate acceptance never deploys it. Review combined memory if V7 resumes.
+2. Resume V7 planner's nine remaining securities. Repair discovery storage,
+   empty-index cases and terminal reporting before checkpointed resumption.
+3. Capture only actual missing held/exit/roll inputs, reconcile references,
+   provider failures and storage; close 7-3 only against full evidence.
+4. Keep first paper-fill observation, October 2 provider decision and FA schedules.
 
-## Pointers and constraints
+## Constraints
 
-[CURRENT_STATE](docs/CURRENT_STATE.md) owns exact services/inputs. Queue root:
-`nn_meta/validation/v7-full-execution-plan-20260928/`; discovery root:
-`nn_meta/validation/v7-execution-campaign-20260928-r1/`. Quote index ends `r4`;
-approved exclusions remain 10,831 pairs. Gates 7-1/7-2, entry capture, reviewed
-rename corrections and known exception adjudication remain complete.
-Preserve source hashes, audited stopped pilots, r1/r2 V6 seals and unrelated dirty work.
+Preserve source hashes, partial ledgers, existing captures and unrelated dirty
+work. Gates 7-1/7-2, entry capture and known reference adjudications stay complete.
+Keep later execution, assembly and training gates separate.

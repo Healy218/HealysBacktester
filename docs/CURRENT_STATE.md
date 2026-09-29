@@ -304,18 +304,21 @@ It preserves 38 completed r2 symbols, 4,623 feature seals and 23,569 label seals
 by explicit hash-bound inheritance. Old r2 artifacts and source files remain intact.
 All 17 recorded r2 error cases passed targeted verification: duplicate proposal
 occurrences now have distinct identities and labels; transient tick errors have
-bounded retries with unchanged scope/completeness checks. September 29 at 07:33
-Central: 90/449 symbols complete, zero recorded errors; all 17 formerly failing
-symbols have full completion receipts. The service was executing at the preceding
-check. Training has not started and no candidate pointer exists. Full catch-up
-has not completed overnight. [Current observation](reviews/2026-09-29-overnight-checkpoints.md),
+bounded retries with unchanged scope/completeness checks. September 29 around
+08:05 Central: 93/449 symbols complete. The prior invocation was draining queued
+deadline failures after the 08:00 cutoff; these are distinct from the repaired
+identity/provider errors. Training has not started; no new candidate exists.
+[Worker sizing and validation](reviews/2026-09-29-v6-worker-sizing.md),
 [retained repair evidence](reviews/2026-09-28-v6-continual-error-repair.md).
 Selected code: `scripts/run_v6_continual_v3.py`, `incubator/recovery_v6/`;
-retry wrapper: `scripts/v6_continual_resume_v3.py`. Original inheritance census:
+retry wrapper: `scripts/v6_continual_resume_v3.py --autosize-workers`. Original inheritance census:
 `incubator/continual-v6/r3/inherited-r2.json`; prior installed unit/exit receipt:
 `incubator/continual-v6/r3/runtime-revision/`. The unfinished date AND snapshot
-stay pinned across retries. Limits remain two autosized workers, CPU 200%,
-11/12-GiB high/max, no swap, 12-hour budget capped before the next market session.
+stay pinned across retries. Installed allocation: up to four autosized data workers,
+4500 MiB each with 8192 MiB host reserve; CPU 400%, 19/20-GiB high/max, no swap.
+Training remains two threads. Current sizing returned three; startup determines
+actual concurrency. Worker increase applies on the next permitted invocation;
+the existing run was not restarted. The 12-hour budget and calendar cutoff remain.
 `service-exit.json` records termination separately from stale progress.
 [Original r2 recovery](reviews/2026-09-28-v6-continual-recovery.md) and
 [r1 memory failure](reviews/2026-09-28-v7-reference-completion.md) are historical.

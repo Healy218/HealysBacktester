@@ -82,8 +82,8 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   catch-up. Corrected r3 resumed September 28 at 23:07 Central, preserving
   38 completed r2 symbols and partial feature/label seals. All 17 original error
   cases passed targeted checks: six identity collisions and eleven transient tick
-  failures. September 29 at 07:33 Central: 90/449 complete, zero recorded errors,
-  and all 17 formerly failing symbols fully complete. Finish the remaining catch-up;
+  failures. September 29 around 08:05 Central: 93/449 complete; the invocation is draining
+  calendar-deadline timeouts. All 17 formerly failing symbols remain complete. Finish the remaining catch-up;
   training and freeze have not started. Respect the existing pre-market deadline.
   [Overnight observation](docs/reviews/2026-09-29-overnight-checkpoints.md).
   [Repair and current observation](docs/reviews/2026-09-28-v6-continual-error-repair.md).
@@ -97,7 +97,9 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   research and verify restart, daily-input readiness and resource coexistence.
   Completion gate and automatic 05:00 restart verified September 28. Initial
   catch-up remains incomplete; full update/recovery/coexistence proof remains.
-  Corrected r3 retains 11/12-GiB limits and the calendar cutoff. Retries retain an
+  September 29: installed up to four autosized data workers, CPU 400%,
+  19/20-GiB limits for the next permitted run; the calendar cutoff remains.
+  [Sizing and verification](docs/reviews/2026-09-29-v6-worker-sizing.md). Retries retain an
   unfinished catch-up date; verify full completion and sustained resource use.
 - [ ] **OPS-INCUBATOR.PROOF:** Complete the initial catch-up and measure a full
   daily update through freeze before claiming next-trading-day readiness.

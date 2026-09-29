@@ -3,10 +3,21 @@
 import argparse
 import json
 import os
+import subprocess
 from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def data_workers():
+    """Fit prefix workers to available RAM and the deployed 20-GiB ceiling."""
+    count = subprocess.check_output(
+        ['/usr/bin/bash', '-c',
+         'source scripts/lib/autosize.sh; autosize_workers 4500 8192'],
+        cwd=ROOT, text=True,
+    )
+    return min(4, max(1, int(count.strip())))
 
 
 def unfinished_session(root):
@@ -37,6 +48,7 @@ def resume_config(config, through):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--record-exit', action='store_true')
+    parser.add_argument('--autosize-workers', action='store_true')
     args = parser.parse_args()
     config = json.loads((ROOT / 'deploy/incubator-continual-v6-r3.json').read_text())
     root = Path(config['root'])
@@ -66,6 +78,12 @@ def main():
         if not path.exists():
             write(path, resumed)
         command += ['--config', str(path)]
+    if args.autosize_workers:
+        workers = data_workers()
+        print(f'V6 r3 resource policy: {workers} data workers; 2 training threads; '
+              '4500 MiB/worker, 8192 MiB host reserve, ceiling 4', flush=True)
+        # The frozen launcher forwards these final CLI arguments unchanged.
+        command += ['--workers', str(workers), '--threads', '2']
     os.chdir(ROOT)
     os.execv(command[0], command)
 

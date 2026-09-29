@@ -9,7 +9,7 @@ WorkingDirectory=/home/healy/Coding/HealysBacktester
 ExecCondition=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/check_v6_research_window.py --data-index /home/healy/Coding/HealysV6/nn_meta/live/v6_server/data-index.json
 ExecCondition=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/check_v7_entry_complete.py --progress /home/healy/Coding/HealysBacktester/nn_meta/validation/v7-entry-campaign-v7-20260927/progress.json --campaign 8ea809659f0647dbbfef9682321a6828dc182ccac1bbbe9d3e2d5bfb4e99f568
 ExecCondition=/usr/bin/bash -c '! /usr/bin/systemctl --user --quiet is-active healys-v6-data.service'
-ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/v6_continual_resume_v3.py
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/v6_continual_resume_v3.py --autosize-workers
 ExecStopPost=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/v6_continual_resume_v3.py --record-exit
 Environment=PYTHONDONTWRITEBYTECODE=1
 Environment=MPLCONFIGDIR=/home/healy/Coding/HealysBacktester/incubator/continual-v6/cache/matplotlib
@@ -18,10 +18,10 @@ Environment=TF_CPP_MIN_LOG_LEVEL=2 CUDA_VISIBLE_DEVICES=-1
 TimeoutStartSec=13h
 TimeoutStopSec=45s
 KillMode=control-group
-MemoryHigh=11G
-MemoryMax=12G
+MemoryHigh=19G
+MemoryMax=20G
 MemorySwapMax=0
-CPUQuota=200%
+CPUQuota=400%
 TasksMax=128
 Nice=10
 UMask=0077
