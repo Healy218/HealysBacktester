@@ -1,0 +1,50 @@
+{
+  "observed_at": "2026-09-29T17:52:48.797297+00:00",
+  "v7-execution-recovery-20260929-r0": {
+    "active_securities": [
+      "BBG000BF0K17",
+      "BBG000BF6LY3"
+    ],
+    "elapsed_seconds": 7707.8467192269745,
+    "empty_securities": [
+      "BBG000BCQ6J8"
+    ],
+    "error": null,
+    "local_free_bytes": 83310796800,
+    "securities_required": 591,
+    "status": "running",
+    "failed_securities": {}
+  },
+  "v7-frontier-capture-20260929-r0": {
+    "capture_windows_complete": 61488,
+    "capture_windows_required": 109825,
+    "completed_packs": 2562,
+    "elapsed_seconds": 7711.974762861035,
+    "error": null,
+    "status": "capturing",
+    "workers": 4,
+    "failed_batches": 284,
+    "failure_reasons": {
+      "Massive ticks HTTP 502": 284
+    }
+  },
+  "v7-held-reference-campaign-20260929-r0": {
+    "elapsed_seconds": 91.34979444998316,
+    "full_reference_capture": true,
+    "local_free_bytes": 86265135104,
+    "nonstandard": 0,
+    "responses": 1985,
+    "standard": 1979,
+    "status": "complete",
+    "unavailable_404": 6,
+    "workers": 8
+  },
+  "v7-full-execution-plan-20260928": {
+    "distinct_horizons": 328386847,
+    "elapsed_seconds": 486.87531456601573,
+    "proposals_reconciled": 793394264,
+    "securities_complete": 591,
+    "securities_required": 591,
+    "status": "planned"
+  }
+}

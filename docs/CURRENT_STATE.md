@@ -185,36 +185,50 @@ This is separate from the retained five-path integrated ledger above.
 | Campaign progress / worker diagnostics | `progress.json`, `logs/<security>.log`, `waves/<security>/progress.json` beneath campaign |
 | Per-security outcomes and missing requests | `waves/<security>/securities/<security>/wave.sqlite3` |
 
-Planner: `healys-v7-execution-plan-20260928.service`, 1.5/2-GiB high/max,
-CPU 100%, no swap. Scratch compactor: `healys-v7-execution-scratch-20260928.service`,
-96/128-MiB high/max. Selected execution launcher:
-`bash scripts/start_v7_execution_campaign_v2.sh execution`; service
-`healys-v7-execution-campaign-20260928-r1.service`, two autosized workers,
-5/6-GiB high/max, CPU 200%, no swap, eight-hour deadline, resumable slices.
-Earlier campaign r0 is retained under its original five-pair policy; do not mix
-its checkpoints with r1. Source-bound scripts and policies must stay immutable.
+September 29 recovery: user selected resuming V7 after the V6 worker configuration
+change, without waiting for catch-up/training. The original planner completed
+591/591 securities, 793,394,264 proposals and 328,386,847 horizons; its September 29
+service exited. Original wave worker/source contracts remain unchanged.
 
-Dated observation, September 29 at 07:33 Central: planner is stopped/checkpointed
-at 582/591 securities, 789,797,718 proposals and 326,962,118 distinct horizons.
-It reached its eight-hour budget at 05:13 Central; nine securities remain.
-Discovery stopped at 05:08:48 Central on the 20-GB generated-state cap, with a
-journal-confirmed exit-code failure and 5G memory peak. Local free space was
-90.03 GB; this was not an OOM or full disk. Do not blindly restart the same cap.
+Selected recovery launcher: `bash scripts/start_v7_recovery_20260929.sh` with
+`discovery`, `capture`, `references`, `retries` or `references-recover` modes.
+Do not blindly relaunch active services or completed acquisition scopes.
 
-The r1 parent progress file still says running; that flag is stale. Per-wave
-receipts record 25 discovered securities, 66 checkpointed and two interrupted
-with stale running flags; 30,462,620 horizon/target dispositions and 112,112
-pending requests summed across those receipts. Two other security workers,
-`BBG000BCQ6J8` and `BBG000BF8TF5`, failed at quote-index construction with
-`No completed capture packs for selected security`. Logs are at the campaign
-`logs/<security>.log`; diagnose their exact demand before claiming a coverage defect.
-[Overnight evidence and snapshot](reviews/2026-09-29-overnight-checkpoints.md).
+| Scope | Current location / service |
+| --- | --- |
+| Recovery controller | `v7-execution-recovery-20260929-r0/`; `healys-v7-execution-recovery-20260929.service` |
+| Mutable replay checkpoints | Original `v7-execution-campaign-20260928-r1/waves/`; original parent marked stopped with successor |
+| Frozen actual requests | `v7-recovery-frontier-20260929-r0/`: 109,825 quote windows plus 1,985 reference requests |
+| Quote capture progress | `v7-frontier-capture-20260929-r0/progress.json`; `healys-v7-frontier-capture-20260929.service` |
+| Raw quote packs | `nn_meta/data_v7/execution-recovery-20260929-r0/` |
+| Bounded missing-batch retries | `healys-v7-frontier-retry-20260929.service`; waits for capture exit, up to three passes before cutoff |
+| New quote index | Consume only sealed path/hash from `v7-frontier-capture-20260929-r0/index-receipt.json`; initial target ends `20260929-r5`, retry indexes include invocation/pass |
+| Held-reference capture / audit | `v7-held-reference-campaign-20260929-r0/`, `v7-held-reference-reconciliation-20260929-r0/` |
+| Held-reference alternate recovery | `v7-held-reference-recovery-20260929-r0/`; raw packs under `nn_meta/data_v7/held-reference-recovery-20260929-r0/` |
 
-Retain all existing queue/wave data and frozen sources. Storage/empty-index recovery
-must preserve or explicitly inherit checkpoints under versioned source contracts.
-The controller discovers pending inputs; further bounded capture/replay epochs,
-held exclusion census and applicable stock/reference inputs remain required.
-[Implementation, measured parity and approval](reviews/2026-09-28-v7-full-execution-discovery.md).
+Dated observation, September 29 at 12:52 Central: quote capture had completed
+61,488/109,825 windows (2,562 packs), with 284 HTTP-502 batch failures retained
+for retries. Discovery had no recorded worker failures. Its aggregate 20-GB
+limit is replaced by a live 10-GB free-space floor plus reserved worker writes;
+original per-wave guards remain. Two zero-proposal/security-selection cases were
+verified; no quote index or numerical labels are fabricated for them. Original
+interrupted SQLite journals and progress were recovered under locks, retaining
+source-state provenance and the committed pending-request snapshot.
+
+Two discovery workers: 5/6-GiB high/max, CPU 200%. Four quote workers: 5/6-GiB,
+CPU 200%. No swap. Both stop dispatching at 15:00 Central and drain; the retry
+wrapper also respects that cutoff before V6's 15:45 timer. Observe actual exits.
+The controller's discovered counter covers its current traversal; inspect all
+retained per-wave receipts for the global census during the incomplete traversal.
+
+All 1,985 held-reference requests were captured/audited: 1,979 standard, six detail
+404s. Both alternate-list queries for each missing pair completed, finding exact
+matches in two queries. Admission review and remaining unknown dispositions are
+open; no new exclusions were approved or activated. Existing 10,831-pair policy
+is unchanged. New references/quotes require new bound replay epochs; the current
+discovery still uses the frozen original r4 quote/reference inputs.
+[Recovery, tests and observation](reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
+Neither snapshot capture nor discovery completion closes 7-3 or later execution gates.
 
 ## V6 Alpaca paper and incubator
 

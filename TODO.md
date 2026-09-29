@@ -23,18 +23,21 @@ The following scope is unchanged by the documentation consolidation.
   queries failed for all 10,817 missing pairs; the user approved those plus nine
   cash-deliverable exclusions. The compiled finite policy preserves the old five.
   Known entry exceptions are adjudicated; actual held-date coverage remains open.
+  September 29: captured/audited 1,985 actual held references (1,979 standard, six
+  detail 404s). Exact alternate queries are captured; matching rows need admission review.
   [Recovery, approval and full discovery](docs/reviews/2026-09-28-v7-full-execution-discovery.md).
   [Completion/admission evidence](docs/reviews/2026-09-28-v7-reference-completion.md).
 - [ ] **7-3.paths:** Complete only actual held-mark, exit, roll and applicable
   stock-delivery gaps requested by the existing replay frontier. Preserve
   partial ledgers and count held blackout crossings. Potential first-leg
   envelopes are not blanket download orders. Full-universe queue/discovery is
-  implemented; 3,535-path cohort parity passed. September 29: planner is
-  checkpointed at 582/591 after its time budget; resume the remaining nine.
-  Discovery stopped at its generated-storage cap. Repair storage handling and
-  the two empty-quote-index failures before resuming frozen checkpoints; publish
-  truthful stopped/failure state. Then continue bounded capture/replay epochs.
-  [Overnight evidence](docs/reviews/2026-09-29-overnight-checkpoints.md).
+  implemented; 3,535-path cohort parity passed. September 29: planner completed
+  all 591 securities. Repaired controller/storage handling and verified empty
+  cases; resumed unchanged wave checkpoints and captured a frozen actual frontier.
+  At 12:52 Central: 61,488/109,825 quote windows complete; 284 HTTP-502 batch
+  failures retained for bounded retry. Observe discovery/capture exits and retries,
+  then bind new quote/reference epochs for replay. Gate remains open.
+  [Recovery and active services](docs/reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
 - [ ] **7-3.reconcile:** Reconcile required requests, captures, references,
   provider failures and measured storage for execution/assembly/recovery.
   Use the already-authorized allocation in the current-state index.

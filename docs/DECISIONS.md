@@ -1902,3 +1902,13 @@ proposals, raw records and partial ledgers remain. No automatic extension,
 contract replacement, synthetic terms/returns or calendar changes are allowed.
 This resolves known entry exceptions without closing actual held-date coverage
 or gate 7-3. [Approval and evidence](reviews/2026-09-28-v7-full-execution-discovery.md).
+
+## 2026-09-29 — Resume V7 after V6 worker configuration
+
+The user clarified that V7 should resume after the worker configuration change,
+without waiting for V6 catch-up/training. Continue 7-3 using preserved replay
+checkpoints, actual missing-input snapshots and the authorized live free-space
+allocation. Daytime recovery stops dispatching at 15:00 Central before V6's
+15:45 timer; failures remain explicit and bounded retries reuse complete packs.
+No reference exclusions or gate acceptance criteria changed.
+[Implementation and evidence](reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
