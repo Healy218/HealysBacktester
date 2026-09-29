@@ -1,0 +1,11 @@
+{
+  "count": 10826,
+  "decision": "approve_exact_exclusions",
+  "observed_at": "2026-09-29T03:32:18.508794+00:00",
+  "policy_id": "v7-reference-exclusions-20260928-approved",
+  "proposal": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-reference-recovery-audit-20260928/proposed-exclusions.json",
+  "proposal_sha256": "f37988b5199f13fbae75e5bfa542e78491808a64a9ab7fe4ecb84adeec493614",
+  "schema": "v7-exact-exclusion-authorization-v1",
+  "scope": "10817 unrecoverable metadata pairs plus nine unsupported cash-deliverable pairs; exclude affected entry and held research paths, preserving original data.",
+  "user_answer": "Approve exact exclusions (recommended)"
+}
