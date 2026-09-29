@@ -294,12 +294,13 @@ At the 14:52 cutover there were zero holdings/pending orders; authenticated V3
 preview and service polling passed. The final 15:08 adapter cutover likewise
 reconciled zero holdings/pending orders and correctly returned market_closed.
 A real prospective ladder is not yet observed.
-September 29 post-interruption local observation: broker/portfolio SQLite quick
-checks pass; broker records contain eight filled orders (five entries, three closes).
-Last saved poll at 13:14:00 Central reports four positions. This supersedes the
-first-fill-pending observation, but actual post-outage broker reconciliation and
-missed management remain open. No current broker holdings were queried here.
-[Outage census](reviews/2026-09-29-power-surge-recovery.md).
+September 29 at 17:30 Central: authenticated broker reconciliation passed.
+All 48 broker orders match journal status/fill quantity/price; eight filled orders,
+zero open orders, four holdings matching net fills (AXP ×7, QCOM ×5, SMCI ×18,
+VG ×104 puts). OPS-PAPER's prospective fill/reconciliation observation is complete.
+AXP's after-hours mark was -14.8% versus fill; fresh quotes govern the existing
+12.5% stop at the next session. No new orders or risk instructions were created here.
+[Post-outage reconciliation](reviews/2026-09-29-paper-reconciliation-v6-resume.md).
 Per-pass source reconciliation: `scanner-source-reconciliation.json`. Read
 current scanner/broker receipts for subsequent holdings, fills and health.
 
@@ -330,12 +331,15 @@ The initial September 28 snapshot is pinned by hash in the selected config.
 The corrected r3 full-universe run started September 28 at 23:07:14 Central.
 It preserves 38 completed r2 symbols, 4,623 feature seals and 23,569 label seals
 by hash-bound inheritance. The original repair evidence covers all 17 r2 errors.
-September 29 post-interruption observation: morning 93/449 checkpoint resumed
-through the persistent timer at 16:11:31, reached 95/449, then was terminated
-by orderly shutdown at 16:23:53. `service-exit.json` records TERM. Service inactive
-at inspection; next timer midnight September 30. The remaining running receipt is
-stale. Training has not started; no new candidate exists.
-[Power-interruption census](reviews/2026-09-29-power-surge-recovery.md).
+September 29: morning 93/449 checkpoint reached 95/449 after the 16:11 reboot,
+then stopped at 16:23. User-authorized restart at **17:31:19 Central** now runs the
+same September 28 snapshot with three data workers and two training threads.
+At 17:33: 96/449 complete, no reported errors, fresh worker progress, ~2.87-GiB
+memory peak. All 74 source hashes/runtime and 95 prior symbol receipts verified.
+Training/freeze have not started. A running oneshot shows `activating/start`;
+read current journal/receipts before inferring later health. The older TERM exit
+receipt belongs to the previous invocation, not this running one.
+[Reconciliation/restart evidence](reviews/2026-09-29-paper-reconciliation-v6-resume.md).
 [Worker sizing and validation](reviews/2026-09-29-v6-worker-sizing.md),
 [retained repair evidence](reviews/2026-09-28-v6-continual-error-repair.md).
 Selected code: `scripts/run_v6_continual_v3.py`, `incubator/recovery_v6/`;

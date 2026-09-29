@@ -67,22 +67,14 @@ and its accepted amendments, indexed by [CURRENT_STATE](docs/CURRENT_STATE.md).
 
 These are explicit parallel obligations, not extra V7-3 completion conditions.
 
-- [ ] **OPS-PAPER:** Observe the first prospective Alpaca session and actual
-  order/fill reconciliation. Activation is complete; use the current deployment
-  receipt. September 28: timely full scan and accepted/canceled order reconciled;
-  September 29 local broker records now show eight filled orders; post-outage
-  broker reconciliation is pending (last saved poll: four positions at 13:14).
-  [Outage evidence](docs/reviews/2026-09-29-power-surge-recovery.md). Independent orders remain enabled; V3's
-  user-requested four-step limits deployed at 14:52 Central, finalized at 15:08, with 76 focused tests
-  and authenticated polling passed. Observe prospective ladder fills/reconciliation.
-  [Step policy and deployment](docs/reviews/2026-09-28-v6-step-orders.md).
-  Scanner v4 deployed at 14:21 after a never-filled ANF projection blocked scans;
-  14:30 full scan passed and two new orders were submitted at 14:34, canceled
-  unfilled, then archived automatically at 14:45. The current scanner protects active ladders.
-  [source reconciliation repair](docs/reviews/2026-09-28-v6-unfilled-source-repair.md).
-  [Execution policy](docs/reviews/2026-09-28-v6-independent-orders.md).
-  [Readiness repair](docs/reviews/2026-09-28-v6-paper-readiness.md).
-  Do not repeat activation or import old simulator positions.
+- [x] **OPS-PAPER:** First prospective actual-order/fill reconciliation observed.
+  September 29 at 17:30 Central: all 48 broker orders match the journal, eight
+  filled orders, four matching positions and zero open orders. No outage-recovery
+  orders submitted. [Evidence](docs/reviews/2026-09-29-paper-reconciliation-v6-resume.md).
+  Ongoing operation: observe next-session risk handling, especially AXP's
+  after-hours mark below the stop threshold; fresh quotes govern actual action.
+  Existing independent four-step policy remains enabled. Do not repeat activation
+  or import old simulator positions.
 - [ ] **OPS-INCUBATOR.DATA:** Implement and validate V6-only continual candidate
   features and matured simulated labels across the frozen universe, independent
   of actual trades. Implementation and SPY pilot passed; finish the 449-symbol
@@ -90,8 +82,9 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   38 completed r2 symbols and partial feature/label seals. All 17 original error
   cases passed targeted checks: six identity collisions and eleven transient tick
   failures. September 29: morning checkpoint 93/449; automatic 16:11 restart
-  saved 95/449 before the 16:23 shutdown. Now inactive; next retry midnight
-  September 30. All 17 formerly failing symbols remain complete. Finish the catch-up;
+  saved 95/449 before the 16:23 shutdown. User-authorized resume at 17:31 Central
+  uses three autosized workers; 96/449 at 17:33 with no reported errors. All 74
+  source hashes and 95 retained symbol receipts verified. Finish the catch-up;
   training and freeze have not started. Respect the existing pre-market deadline.
   [Overnight observation](docs/reviews/2026-09-29-overnight-checkpoints.md).
   [Repair and current observation](docs/reviews/2026-09-28-v6-continual-error-repair.md).
@@ -107,7 +100,9 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   catch-up remains incomplete; full update/recovery/coexistence proof remains.
   September 29: installed up to four autosized data workers, CPU 400%,
   19/20-GiB limits for the next permitted run; the calendar cutoff remains.
-  [Sizing and verification](docs/reviews/2026-09-29-v6-worker-sizing.md). Retries retain an
+  [Sizing and verification](docs/reviews/2026-09-29-v6-worker-sizing.md). Post-outage
+  restart and forward progress verified; full run/coexistence proof remains open.
+  [Restart evidence](docs/reviews/2026-09-29-paper-reconciliation-v6-resume.md). Retries retain an
   unfinished catch-up date; verify full completion and sustained resource use.
 - [ ] **OPS-INCUBATOR.PROOF:** Complete the initial catch-up and measure a full
   daily update through freeze before claiming next-trading-day readiness.

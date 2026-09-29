@@ -1,0 +1,146 @@
+{
+  "observed_at": "2026-09-29T22:36:22.669344+00:00",
+  "paper": {
+    "observed_at": "2026-09-29T22:30:19.543587+00:00",
+    "paper_only": true,
+    "account_fingerprint_matches": true,
+    "broker_history_orders": 48,
+    "journal_orders": 48,
+    "open_orders": 0,
+    "mismatches": [],
+    "positions": [
+      {
+        "contract": "AXP261106P00305000",
+        "qty": "7",
+        "avg_entry_price": "12.15",
+        "current_price": "10.35",
+        "unrealized_plpc": "-0.14815"
+      },
+      {
+        "contract": "QCOM261106P00185000",
+        "qty": "5",
+        "avg_entry_price": "13.3",
+        "current_price": "11.7",
+        "unrealized_plpc": "-0.1203"
+      },
+      {
+        "contract": "SMCI261106P00041000",
+        "qty": "18",
+        "avg_entry_price": "4.2",
+        "current_price": "4.1",
+        "unrealized_plpc": "-0.02381"
+      },
+      {
+        "contract": "VG261030P00012500",
+        "qty": "104",
+        "avg_entry_price": "0.85",
+        "current_price": "0.75",
+        "unrealized_plpc": "-0.11765"
+      }
+    ],
+    "orders_submitted": 0,
+    "orders_canceled": 0
+  },
+  "paper_full_receipt": {
+    "path": "nn_meta/validation/v6-post-outage-resume-20260929/account-reconciliation.json",
+    "sha256": "c388378af894634a7a8a400488e5b4eec1346ae48c0e0686e9840b4a7868e54b"
+  },
+  "preflight": {
+    "through": "2026-09-28",
+    "snapshot": {
+      "path": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r1/snapshots/2026-09-28",
+      "sha256": "fa9101265389bb204d97b9fbb4f3be715b167732035242f1f1a442d5012c1f27",
+      "through": "2026-09-28"
+    },
+    "sources_verified": 74,
+    "runtime_matches": true,
+    "sealed_symbols_verified": 95,
+    "autosized_workers": 3,
+    "disk_free_bytes": 92974374912
+  },
+  "restart": {
+    "observed_at": "2026-09-29T22:34:22.907963+00:00",
+    "service": "healys-v6-continual.service",
+    "started_central": "2026-09-29T17:31:19-05:00",
+    "latest_run": {
+      "contract_identity": "e909f7d19af28ee843d62e9e64199ce71610979f3f35fe7c0ea14834a2aac430",
+      "deployment_approved": false,
+      "elapsed_seconds": 40.869850096999926,
+      "errors": [],
+      "research_only": true,
+      "run_dir": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r3/runs/2026-09-28",
+      "schema": "v6-continual-run-v1",
+      "scope": "full_universe",
+      "stage": "candidates_and_labels",
+      "started_at": "2026-09-29T22:31:20.127879+00:00",
+      "status": "running",
+      "symbols_complete": 96,
+      "symbols_required": 449,
+      "through": "2026-09-28",
+      "training_started": false
+    },
+    "recent_progress": {
+      "COIN": {
+        "modified_at": "2026-09-29T22:34:16.590088+00:00",
+        "progress": {
+          "counts": {
+            "candidates": 795,
+            "matured": 480,
+            "new_features": 130,
+            "pending": 154,
+            "proposals": 164,
+            "unfilled": 161
+          },
+          "elapsed_seconds": 174.369435308,
+          "entry_ts": "2026-09-28T14:30:00",
+          "symbol": "COIN"
+        }
+      },
+      "CONL": {
+        "modified_at": "2026-09-29T22:34:18.709072+00:00",
+        "progress": {
+          "counts": {
+            "candidates": 975,
+            "matured": 575,
+            "new_features": 160,
+            "pending": 99,
+            "proposals": 208,
+            "unfilled": 301
+          },
+          "elapsed_seconds": 176.4880481119999,
+          "entry_ts": "2026-09-25T19:15:00",
+          "symbol": "CONL"
+        }
+      },
+      "COP": {
+        "modified_at": "2026-09-29T22:31:54.403383+00:00",
+        "progress": {
+          "counts": {
+            "candidates": 620,
+            "matured": 155,
+            "new_features": 15,
+            "pending": 244,
+            "proposals": 125,
+            "unfilled": 221
+          },
+          "elapsed_seconds": 32.18281198700015,
+          "entry_ts": "2026-09-28T19:30:00",
+          "symbol": "COP"
+        }
+      }
+    },
+    "disk_free_bytes": 93169823744,
+    "mrha_free_bytes": 743718256640
+  },
+  "service_readback": {
+    "main_pid": 154155,
+    "state": "activating/start (running oneshot)",
+    "actual_workers": 3,
+    "training_threads": 2,
+    "memory_peak_bytes": 3080073216,
+    "memory_max_bytes": 21474836480,
+    "cpu_quota_percent": 400,
+    "no_swap": true
+  },
+  "scope": "Authenticated paper reconciliation and V6 resumption only; V7 unchanged; no Steam files touched"
+}
