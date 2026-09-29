@@ -75,11 +75,11 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
 - [ ] **OPS-INCUBATOR.DATA:** Implement and validate V6-only continual candidate
   features and matured simulated labels across the frozen universe, independent
   of actual trades. Implementation and SPY pilot passed; finish the 449-symbol
-  catch-up. Repaired r2 lineage started September 28 at 18:17 Central against
-  verified restated inputs, with per-entry cache release and worker recycling.
-  At 22:38 Central: 37/449 complete, 11 HTTP-502 and six invalid-feature errors;
-  resolve failures before claiming a full freeze. Successful checkpoints remain.
-  [Recovery evidence](docs/reviews/2026-09-28-v6-continual-recovery.md).
+  catch-up. Corrected r3 resumed September 28 at 23:07 Central, preserving
+  38 completed r2 symbols and partial feature/label seals. All 17 original error
+  cases passed targeted checks: six identity collisions and eleven transient tick
+  failures. The full update continues without a completed freeze.
+  [Repair and current observation](docs/reviews/2026-09-28-v6-continual-error-repair.md).
   Preserve the base freeze and resumable daily extensions.
 - [x] **OPS-INCUBATOR.TRAIN:** Implement fixed-family retraining, temporal validation,
   baseline comparisons and immutable candidate freezes; retain the previous
@@ -90,7 +90,7 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   research and verify restart, daily-input readiness and resource coexistence.
   Completion gate and automatic 05:00 restart verified September 28. Initial
   catch-up remains incomplete; full update/recovery/coexistence proof remains.
-  September 28: repaired r2 is running with 11/12-GiB limits. Retries retain an
+  September 28: corrected r3 is running with 11/12-GiB limits. Retries retain an
   unfinished catch-up date; verify full completion and sustained resource use.
 - [ ] **OPS-INCUBATOR.PROOF:** Complete the initial catch-up and measure a full
   daily update through freeze before claiming next-trading-day readiness.

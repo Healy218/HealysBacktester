@@ -23,7 +23,7 @@ Never infer a current ETA from a historical throughput sample.
 | V6 fresh Alpaca PAPER | Home, V6 checkout | `nn_meta/live/v6_alpaca_paper/`; [activation receipt](reviews/2026-09-27-v6-alpaca-activation.json) |
 | V6 historical simulator | Home, V6 checkout | `nn_meta/live/v6_server/`; old portfolio history retained, execution/relay schedules retired; its data producer remains selected |
 | FA automation | Home, `/home/healy/Coding/HealysAutomation` | `deploy/fa-runtime.json`, `logs/job-health/`, `fa/archive/` and FA artifacts below; do not inspect stale copies in another checkout |
-| Continual incubator | Home, research checkout | `deploy/incubator-continual-v6-r2.json`, `incubator/continual-v6/r2/latest-run.json`; routing below |
+| Continual incubator | Home, research checkout | `deploy/incubator-continual-v6-r3.json`, `incubator/continual-v6/r3/latest-run.json`; routing below |
 
 ## V7 acquisition runtime
 
@@ -264,11 +264,11 @@ A real prospective ladder is not yet observed.
 Per-pass source reconciliation: `scanner-source-reconciliation.json`. Read
 current scanner/broker receipts for subsequent holdings, fills and health.
 
-Continual V6 incubator configuration: `deploy/incubator-continual-v6-r2.json`.
+Continual V6 incubator configuration: `deploy/incubator-continual-v6-r3.json`.
 The anchored base is `nn_meta/campaigns/v6-cash-repair-20260913/v6/artifacts/meta_dataset.parquet`;
 new candidates start August 25. Its input index remains
 `/home/healy/Coding/HealysV6/nn_meta/live/v6_server/data-index.json`, independent of
-paper selections. Research output root: `incubator/continual-v6/r2/`.
+paper selections. Research output root: `incubator/continual-v6/r3/`.
 Provider evidence is reused from `r1/market/`; prior r1 seals are retained.
 The initial September 28 snapshot is pinned by hash in the selected config.
 
@@ -288,19 +288,23 @@ The initial September 28 snapshot is pinned by hash in the selected config.
   30 minutes and close plus 15 minutes, including late persistent-timer starts.
   `journalctl --user -u healys-v6-continual.service` owns runtime logs.
 
-The repaired r2 full-universe run started September 28 at 18:17:38 Central.
-At 22:38 Central it had completed 37/449 symbols, with 11 provider HTTP-502
-and six invalid-candidate-feature errors. It continued processing other symbols;
-training had not started. Memory was 3.06 GB, peak 6.78 GB. These failures must
-be resolved before a full candidate freeze; successful checkpoints are retained.
-Selected code: `scripts/run_v6_continual_v2.py`, `incubator/continual/data_v2.py`;
-operational retry wrapper: `scripts/v6_continual_resume.py`. It resumes unfinished
-session dates before advancing. Limits: two autosized workers, CPU 200%, 11/12 GiB
-high/max, no swap, 12-hour budget capped before the next market session.
-`service-exit.json` records systemd termination separately from stale progress.
-[Recovery and validation](reviews/2026-09-28-v6-continual-recovery.md).
-The historical r1 OOM observation is retained in the
-[reference-completion review](reviews/2026-09-28-v7-reference-completion.md).
+The corrected r3 full-universe run started September 28 at 23:07:14 Central.
+It preserves 38 completed r2 symbols, 4,623 feature seals and 23,569 label seals
+by explicit hash-bound inheritance. Old r2 artifacts and source files remain intact.
+All 17 recorded r2 error cases passed targeted verification: duplicate proposal
+occurrences now have distinct identities and labels; transient tick errors have
+bounded retries with unchanged scope/completeness checks. At 23:44 Central,
+45/449 symbols were complete with no recorded errors; training had not started.
+[Repair and dated observation](reviews/2026-09-28-v6-continual-error-repair.md).
+Selected code: `scripts/run_v6_continual_v3.py`, `incubator/recovery_v6/`;
+retry wrapper: `scripts/v6_continual_resume_v3.py`. Original inheritance census:
+`incubator/continual-v6/r3/inherited-r2.json`; prior installed unit/exit receipt:
+`incubator/continual-v6/r3/runtime-revision/`. The unfinished date AND snapshot
+stay pinned across retries. Limits remain two autosized workers, CPU 200%,
+11/12-GiB high/max, no swap, 12-hour budget capped before the next market session.
+`service-exit.json` records termination separately from stale progress.
+[Original r2 recovery](reviews/2026-09-28-v6-continual-recovery.md) and
+[r1 memory failure](reviews/2026-09-28-v7-reference-completion.md) are historical.
 Full-universe catch-up, full training and nightly latency remain unproven.
 [Original implementation/pilot](reviews/2026-09-27-v6-continual-incubator.md).
 

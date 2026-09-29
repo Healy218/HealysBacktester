@@ -916,3 +916,14 @@ These are correctness/resource measurements, not model-performance results or
 full-universe completion. Forty-three actual missing quote windows were captured
 without changing previous coverage. Full queue and bounded discovery are running.
 [Evidence and limits](reviews/2026-09-28-v7-full-execution-discovery.md).
+
+## 2026-09-28 — V6 continual failure recovery verified
+
+All six duplicate-identity failure prefixes reproduced; 80 corrected candidate
+rows retain exact prior feature values with distinct identities and exit outcomes.
+All eleven original tick-502 prefixes completed with the versioned retry adapter
+and isolated verification cache writes. Eighteen focused tests passed, including
+separate collision-label joins and actual LightGBM train/resume. The full r3
+update reuses verified r2 checkpoints and continues; this is a repair verdict,
+not full catch-up completion or model-performance evidence.
+[Review](reviews/2026-09-28-v6-continual-error-repair.md).

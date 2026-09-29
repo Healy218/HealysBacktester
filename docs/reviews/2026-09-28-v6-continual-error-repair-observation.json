@@ -1,0 +1,36 @@
+{
+  "candidate_parity_sha256": "01492903ab9cf894f322fc80dc8888fb2fa826f64d23bbb1435c965922c41810",
+  "config_sha256": "0faa1dccd075ad3d092098315ec0dbe12d7a3ce425727d01e03f1820edbf6dfc",
+  "failed_symbols_now_complete": [
+    "ADBE",
+    "AEM",
+    "AG",
+    "AFRM",
+    "AI",
+    "ALAB",
+    "AKAM"
+  ],
+  "inheritance_sha256": "4b69a2b10478795aa3ba121f7adfa3e5448b69895fe34d00ac902864cc95fb05",
+  "observed_at": "2026-09-29T04:44:50.772303+00:00",
+  "original_failures": 17,
+  "service_unit_sha256": "397e468040fd0170993d36d736a4f98f3dcd26f1291b2b17f945e5549eb9360e",
+  "status": {
+    "contract_identity": "e909f7d19af28ee843d62e9e64199ce71610979f3f35fe7c0ea14834a2aac430",
+    "deployment_approved": false,
+    "elapsed_seconds": 2013.9625105309533,
+    "errors": [],
+    "research_only": true,
+    "run_dir": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r3/runs/2026-09-28",
+    "schema": "v6-continual-run-v1",
+    "scope": "full_universe",
+    "stage": "candidates_and_labels",
+    "started_at": "2026-09-29T04:07:15.159223+00:00",
+    "status": "running",
+    "symbols_complete": 45,
+    "symbols_required": 449,
+    "through": "2026-09-28",
+    "training_started": false
+  },
+  "targeted_cases_resolved": 17,
+  "tick_recovery_sha256": "5ed3ce3a5d05ab9e71fc8d300f2a4151341d82622ba5650fd74b85e0d2e92bc1"
+}
