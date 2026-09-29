@@ -1,0 +1,249 @@
+{
+  "campaign": {
+    "active_securities": [
+      "BBG000B9XRY4",
+      "BBG000B9YJ35"
+    ],
+    "campaign_identity": "e27adceda9935189479d116bc16845ec0110172f115e46e1fdde276c1c7e4ab2",
+    "elapsed_seconds": 290.0220956620178,
+    "failed_securities": {},
+    "full_execution_coverage": false,
+    "last": {
+      "cohorts_discovered": 3226,
+      "distinct_horizon_targets_covered": 300615,
+      "elapsed_seconds": 261.51418060902506,
+      "exclusion_horizon_targets": {},
+      "exclusion_proposal_targets": {},
+      "execution_buckets": 229340,
+      "full_execution_coverage": false,
+      "horizon_target_statuses": {
+        "capture_incomplete": 28960,
+        "no_contract": 221015,
+        "no_fresh_raw_spot": 210,
+        "observed_unfilled_entry": 18625,
+        "option_midpoint_stop": 28960,
+        "signal_exit": 2845
+      },
+      "pending_requests": 127,
+      "proposal_target_rows_covered": 684875,
+      "proposal_target_statuses": {
+        "capture_incomplete": 59430,
+        "no_contract": 523175,
+        "no_fresh_raw_spot": 660,
+        "observed_unfilled_entry": 36015,
+        "option_midpoint_stop": 60470,
+        "signal_exit": 5125
+      },
+      "research_ready": false,
+      "retained_payloads": 225628,
+      "securities_discovered": 1,
+      "securities_required": 1,
+      "security_id": "BBG000B9XYV2",
+      "status": "discovered",
+      "updated_at": "2026-09-29T03:37:58.491851+00:00"
+    },
+    "queued_securities": 588,
+    "research_ready": false,
+    "securities_discovered": 1,
+    "securities_required": 591,
+    "status": "running",
+    "updated_at": "2026-09-29T03:38:25.828842+00:00"
+  },
+  "observed_at": "2026-09-29T03:38:28.175936+00:00",
+  "plan": {
+    "campaign_identity": "3fbbe53c8faf48b28fa92520150312bfb327a440f21e798eeaecaa672984312d",
+    "distinct_horizons": 82346428,
+    "elapsed_seconds": 5046.184464388032,
+    "execution_complete": false,
+    "last": {
+      "batches": 1059,
+      "distinct_horizons": 992917,
+      "execution_complete": false,
+      "proposal_target_rows": 12110950,
+      "proposals": 2422190,
+      "research_ready": false,
+      "security_id": "BBG000BPH459",
+      "status": "planned"
+    },
+    "proposals_reconciled": 200081158,
+    "research_ready": false,
+    "securities_complete": 128,
+    "securities_required": 591,
+    "status": "running",
+    "updated_at": "2026-09-29T03:37:49.897646+00:00"
+  },
+  "v6": {
+    "errors": [
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "ADBE"
+      },
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "AEM"
+      },
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "AG"
+      },
+      {
+        "error": "ValueError: invalid candidate features",
+        "symbol": "AFRM"
+      },
+      {
+        "error": "ValueError: invalid candidate features",
+        "symbol": "AI"
+      },
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "ALAB"
+      },
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "AKAM"
+      },
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "AMAT"
+      },
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "AMD"
+      },
+      {
+        "error": "ValueError: invalid candidate features",
+        "symbol": "AMDL"
+      },
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "AMPX"
+      },
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "AMKR"
+      },
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "AMZN"
+      },
+      {
+        "error": "ValueError: invalid candidate features",
+        "symbol": "ANF"
+      },
+      {
+        "error": "TickDataError: Massive ticks HTTP 502",
+        "symbol": "ANET"
+      },
+      {
+        "error": "ValueError: invalid candidate features",
+        "symbol": "ARM"
+      },
+      {
+        "error": "ValueError: invalid candidate features",
+        "symbol": "BBAI"
+      }
+    ],
+    "status": "running",
+    "symbols_complete": 37,
+    "symbols_required": 449,
+    "training_started": false
+  },
+  "waves": [
+    {
+      "cohorts_discovered": 215,
+      "distinct_horizon_targets_covered": 14010,
+      "elapsed_seconds": 285.19793758698506,
+      "exclusion_horizon_targets": {},
+      "exclusion_proposal_targets": {},
+      "execution_buckets": 2483,
+      "full_execution_coverage": false,
+      "horizon_target_statuses": {
+        "capture_incomplete": 8139,
+        "observed_unfilled_entry": 270,
+        "option_midpoint_stop": 4233,
+        "signal_exit": 1368
+      },
+      "pending_requests": 80,
+      "proposal_target_rows_covered": 25690,
+      "proposal_target_statuses": {
+        "capture_incomplete": 15122,
+        "observed_unfilled_entry": 705,
+        "option_midpoint_stop": 7335,
+        "signal_exit": 2528
+      },
+      "research_ready": false,
+      "retained_payloads": 1807,
+      "securities_discovered": 0,
+      "securities_required": 1,
+      "security_id": "BBG000B9XRY4",
+      "status": "running",
+      "updated_at": "2026-09-29T03:38:22.164562+00:00"
+    },
+    {
+      "cohorts_discovered": 3226,
+      "distinct_horizon_targets_covered": 300615,
+      "elapsed_seconds": 261.51418060902506,
+      "exclusion_horizon_targets": {},
+      "exclusion_proposal_targets": {},
+      "execution_buckets": 229340,
+      "full_execution_coverage": false,
+      "horizon_target_statuses": {
+        "capture_incomplete": 28960,
+        "no_contract": 221015,
+        "no_fresh_raw_spot": 210,
+        "observed_unfilled_entry": 18625,
+        "option_midpoint_stop": 28960,
+        "signal_exit": 2845
+      },
+      "pending_requests": 127,
+      "proposal_target_rows_covered": 684875,
+      "proposal_target_statuses": {
+        "capture_incomplete": 59430,
+        "no_contract": 523175,
+        "no_fresh_raw_spot": 660,
+        "observed_unfilled_entry": 36015,
+        "option_midpoint_stop": 60470,
+        "signal_exit": 5125
+      },
+      "research_ready": false,
+      "retained_payloads": 225628,
+      "securities_discovered": 1,
+      "securities_required": 1,
+      "security_id": "BBG000B9XYV2",
+      "status": "discovered",
+      "updated_at": "2026-09-29T03:37:58.491851+00:00"
+    },
+    {
+      "cohorts_discovered": 325,
+      "distinct_horizon_targets_covered": 13170,
+      "elapsed_seconds": 15.035297931986861,
+      "exclusion_horizon_targets": {},
+      "exclusion_proposal_targets": {},
+      "execution_buckets": 9645,
+      "full_execution_coverage": false,
+      "horizon_target_statuses": {
+        "capture_incomplete": 2935,
+        "no_contract": 8720,
+        "observed_unfilled_entry": 1155,
+        "option_midpoint_stop": 240,
+        "signal_exit": 120
+      },
+      "pending_requests": 56,
+      "proposal_target_rows_covered": 28245,
+      "proposal_target_statuses": {
+        "capture_incomplete": 6115,
+        "no_contract": 18655,
+        "observed_unfilled_entry": 2895,
+        "option_midpoint_stop": 460,
+        "signal_exit": 120
+      },
+      "research_ready": false,
+      "retained_payloads": 9009,
+      "securities_discovered": 0,
+      "securities_required": 1,
+      "security_id": "BBG000B9YJ35",
+      "status": "running",
+      "updated_at": "2026-09-29T03:38:22.023446+00:00"
+    }
+  ]
+}

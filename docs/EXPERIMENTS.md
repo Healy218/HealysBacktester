@@ -903,3 +903,16 @@ Separately, V6 continual research was OOM-killed at 16:49:07 (7.8-GB peak),
 after input-lineage failures. No automatic immediate restart occurred. Its stale
 progress JSON does not establish live health or a completed freeze.
 [Audit, sources and failure observation](reviews/2026-09-28-v7-reference-completion.md).
+
+## 2026-09-28 — V7 full-queue replay equivalence and reference recovery
+
+All 21,634 exact alternate queries for 10,817 missing pairs were independently
+verified; zero matching references were recovered. The user subsequently
+approved those exact exceptions plus nine unsupported cash-deliverable pairs.
+A 5,000-path independent replay pilot completed 1,021 outcomes and retained
+55 observed unfilled entries. Cohort reconstruction reproduced all 3,535
+overlapping retained paths exactly, including fills, marks and missing inputs.
+These are correctness/resource measurements, not model-performance results or
+full-universe completion. Forty-three actual missing quote windows were captured
+without changing previous coverage. Full queue and bounded discovery are running.
+[Evidence and limits](reviews/2026-09-28-v7-full-execution-discovery.md).

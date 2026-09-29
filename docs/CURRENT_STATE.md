@@ -42,7 +42,8 @@ Never infer a current ETA from a historical throughput sample.
 - Exact rename overlay: `nn_meta/validation/v7-reference-rename-review-20260928/`;
   consumer proof: `v7-reference-rename-consumer-check-20260928/`. Explicitly bind
   `ReviewedContractReferences` to normalize the 22 reviewed underlying names.
-  Nine cash-deliverable rows and the unapproved 404s remain unresolved.
+  The nine cash-deliverable rows and 10,817 missing pairs were subsequently
+  adjudicated by explicit user approval; use the compiled finite policy below.
 - [Completion, exception evidence and separate V6 memory failure](reviews/2026-09-28-v7-reference-completion.md).
   Reference capture is complete; admission and actual held-path coverage remain open.
 
@@ -119,7 +120,7 @@ All shorthand roots below are under `nn_meta/validation/`.
 | Existing packed coverage used by live campaign | `v7-execution-sample-index-20260927-r12/` |
 | Dated reference demand | `v7-dated-reference-demand-20260927/` + sibling `.checkpoints/<security>/references.sqlite3` |
 | Dated regular option hours | `v7-dated-hours-20260927/`; audit `v7-dated-hours-audit-20260927/` |
-| Five exact reference blackouts | `v7-contract-blackouts-20260927/`; entry impact `v7-contract-blackout-impact-20260927/` |
+| Approved exact reference exclusions | `v7-contract-blackouts-20260928-approved/` (10,831 including the prior five); approval `docs/reviews/2026-09-28-v7-reference-exclusion-approval.json` |
 | First-leg conservative envelopes | `v7-execution-envelopes-20260927/` + sibling `.checkpoints/` |
 | Original five-path replay evidence (retained, superseded for continuation below) | `v7-execution-discovery-20260927-r12/` |
 | Replay restart audit | `v7-execution-pilot-audit-20260927/` |
@@ -135,8 +136,9 @@ and `option-hours-followup-20260927/`. Captured calendar:
 ## V7 input boundaries
 
 The dated-reference **plan** is finished; the frozen full-scope reference **download** is complete, while
-exception admission remains open. The hours reconstruction is finished for the reviewed scope. The five
-blackouts are implemented; do not re-investigate or broaden them. The entry
+known entry exceptions are adjudicated under the approved finite policy. Actual held-date
+admission remains open. The hours reconstruction is finished for the reviewed scope.
+Exact exclusions are implemented; do not broaden them automatically. The entry
 request plan/packing/cleanup and entry capture are complete; the dated-reference
 campaign also completed. Replay machinery exists;
 actual remaining paths/captures and full dataset
@@ -168,6 +170,40 @@ Next NVDA240322C00910000 quote window:
 `[1711039950000000000,1711039980000000001)`.
 VKTX/FUTU source gaps remain. [Prefix preservation and continuation](reviews/2026-09-28-v7-reference-capture-and-frontier.md).
 This remains five-path evidence, not full-universe execution coverage.
+
+## V7 full-universe execution discovery
+
+All roots here are under `nn_meta/validation/` unless specified otherwise.
+This is separate from the retained five-path integrated ledger above.
+
+| Scope | Selected location |
+| --- | --- |
+| Full immutable queue | `v7-full-execution-plan-20260928/jobs/<security>/`; live `progress.json` at plan root |
+| Approved exception policy | `v7-contract-blackouts-20260928-approved/`; total 10,831 exact pairs |
+| Recovery evidence / entry impact | `v7-reference-recovery-audit-20260928/`, `v7-reference-entry-impact-20260928/` |
+| Quote base for next wave | `v7-frontier-quote-index-20260928-r4/` |
+| Selected discovery campaign | `v7-execution-campaign-20260928-r1/` |
+| Campaign progress / worker diagnostics | `progress.json`, `logs/<security>.log`, `waves/<security>/progress.json` beneath campaign |
+| Per-security outcomes and missing requests | `waves/<security>/securities/<security>/wave.sqlite3` |
+
+Planner: `healys-v7-execution-plan-20260928.service`, 1.5/2-GiB high/max,
+CPU 100%, no swap. Scratch compactor: `healys-v7-execution-scratch-20260928.service`,
+96/128-MiB high/max. Selected execution launcher:
+`bash scripts/start_v7_execution_campaign_v2.sh execution`; service
+`healys-v7-execution-campaign-20260928-r1.service`, two autosized workers,
+5/6-GiB high/max, CPU 200%, no swap, eight-hour deadline, resumable slices.
+Earlier campaign r0 is retained under its original five-pair policy; do not mix
+its checkpoints with r1. Source-bound scripts and policies must stay immutable.
+
+Dated observation, September 28 at 22:38 Central: planner had reconciled
+200,081,158 proposals across 128/591 securities. Selected r1 discovery covered
+327,795 horizon/target paths with 263 pending requests and no worker failures.
+Discovery used 1.82 GB / 1.99-GB peak; planner 1.41/1.58 GB.
+[Snapshot](reviews/2026-09-28-v7-full-discovery-observation.json).
+These early measurements do not establish overnight full-scope completion.
+The controller discovers pending inputs; further bounded capture/replay epochs,
+held exclusion census and applicable stock/reference inputs remain required.
+[Implementation, measured parity and approval](reviews/2026-09-28-v7-full-execution-discovery.md).
 
 ## V6 Alpaca paper and incubator
 
@@ -253,8 +289,10 @@ The initial September 28 snapshot is pinned by hash in the selected config.
   `journalctl --user -u healys-v6-continual.service` owns runtime logs.
 
 The repaired r2 full-universe run started September 28 at 18:17:38 Central.
-At approximately 18:22 it was building AA/AAL entries without revised-history
-errors; memory 1.46 GiB, peak 1.66 GiB. These are early observations, not completion.
+At 22:38 Central it had completed 37/449 symbols, with 11 provider HTTP-502
+and six invalid-candidate-feature errors. It continued processing other symbols;
+training had not started. Memory was 3.06 GB, peak 6.78 GB. These failures must
+be resolved before a full candidate freeze; successful checkpoints are retained.
 Selected code: `scripts/run_v6_continual_v2.py`, `incubator/continual/data_v2.py`;
 operational retry wrapper: `scripts/v6_continual_resume.py`. It resumes unfinished
 session dates before advancing. Limits: two autosized workers, CPU 200%, 11/12 GiB

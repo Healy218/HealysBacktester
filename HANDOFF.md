@@ -1,55 +1,59 @@
-# Handoff — September 28, 2026 — V6 full catch-up resumed alongside 7-3
+# Handoff — September 28, 2026 — full V7 execution discovery running
 
 ## Focus and stopping point
 
-The user requested V6's full continual update now that V7 downloads are finished,
-while continuing gate 7-3. V6 r2 started at 18:17:38 Central and is building the
-449-symbol extension through September 28. Three symbols completed with no build
-errors at the 18:37 follow-up; no full freeze yet.
+User selected finishing 7-3 and explicitly approved the prepared 10,826 exact
+reference exceptions. Known entry exceptions are adjudicated; full held paths,
+new references/stock inputs and final reconciliation remain open. No V7 training
+or full execution completion is claimed. Original entry/reference captures stay complete.
 
-## Changes and validation
+## Completed changes and evidence
 
-- Preserved original base, r1 seals and original implementation. New r2 lineage
-  rebuilds features/labels against repaired stock history, reusing market captures.
-- Verified all 449 stock/context snapshot hashes and pinned the existing September
-  28 snapshot. Base dataset hash and active runtime binding remain unchanged.
-- Fixed accumulating numerical memo lifetime: one entry prefix, not whole symbol.
-  Workers recycle per symbol; two autosized workers, CPU 200%, 11/12-GiB high/max,
-  no swap, 12-hour budget capped at next-open-minus-30min.
-- Updated installed service. Overnight retries retain unfinished date AND original
-  snapshot before advancing to new data. Separate service-exit receipt distinguishes
-  external termination from stale progress. Existing timer/market-hours guards stay.
-- Twelve focused tests passed, including actual LightGBM training/resume, seals,
-  cache release and date/snapshot retry selection. Unit/shell checks passed.
-- First completed symbol AAL: 505 candidates, 347 matured, 126 pending, 32 unfilled,
-  424.35 seconds. Early service memory approximately 1.46 GiB, peak 1.66 GiB.
-  Neither observation proves full-universe runtime or next-day readiness.
-- [Recovery evidence](docs/reviews/2026-09-28-v6-continual-recovery.md).
+- All 21,634 alternate queries for 10,817 missing pairs captured and independently
+  audited, zero exact matches. Nine cash-deliverable pairs separately verified.
+- Approved finite policy totals 10,831 pairs including the old five. Explicit
+  authorization binds the exact list. Original raw data/calendars remain intact;
+  no synthetic terms, replacement contracts or numerical excluded outcomes.
+- Full 591-security queue groups identical execution horizons while preserving
+  all 793,394,264 original proposal multiplicities and target coverage.
+- Disk-backed references, reusable minute clocks and cohort replay preserve
+  source contracts. All 3,535 reconstructed pilot paths exactly match independent
+  replay; 46 focused tests passed. A real AAPL proposal proves approved exclusion.
+- Captured 43 actual missing quote windows; selected quote index ends `r4`.
+  Earlier five-path integrated ledger remains separately selected at `r3`.
+- [Review and limits](docs/reviews/2026-09-28-v7-full-execution-discovery.md).
+  [Approval](docs/reviews/2026-09-28-v7-reference-exclusion-approval.json).
 
-## V7 continuation
+## Running work and selected pointers
 
-Entry and dated-reference captures remain complete; do not restart them.
-Reference audit: 2,223,844 pairs, 22 reviewed rename corrections, nine unresolved
-cash-deliverable rows and 10,817 unapproved 404s. Bind the reviewed overlay explicitly.
-Three more bounded held-path windows added 40,735 bytes. Current path/index/integrated
-receipts end `20260928-r3`. Integrated marks rose 185→195, prior fills/decisions/cash
-preserved. Two of five source labels complete; full-universe paths remain open.
-[Exact pointers](docs/CURRENT_STATE.md), [reference review](docs/reviews/2026-09-28-v7-reference-completion.md).
+- Queue: `healys-v7-execution-plan-20260928.service`, state
+  `nn_meta/validation/v7-full-execution-plan-20260928/`, CPU 100%, 2-GiB max.
+- Discovery: `healys-v7-execution-campaign-20260928-r1.service`, state
+  `nn_meta/validation/v7-execution-campaign-20260928-r1/`, two autosized workers,
+  CPU 200%, 6-GiB max, no swap, eight-hour bounded run. Per-security waves retain
+  results, exact pending requests and separate entry/held exclusion counts.
+- Earlier campaign r0 stopped for the approved-policy revision; checkpoints stay.
+  Never mix epochs or edit their bound source files. Audited pilots stay stopped.
+- Scratch compactor runs separately; only verified duplicate working queues are
+  removed after immutable publication. Receipts remain at plan/scratch-compaction.
+- [Exact inputs and dated observations](docs/CURRENT_STATE.md#v7-full-universe-execution-discovery).
 
 ## Next actions
 
-1. Monitor V6 r2 service, per-symbol progress and latest-run together. Finish all
-   symbols, train/evaluate/freeze 40 members; then measure a one-session update.
-   No overnight completion guarantee or automatic paper deployment is established.
-2. Continue 7-3 reference exception recovery/adjudication and actual held/exit/roll
-   frontier work from r3. Full-universe discovery still needs implementation.
-3. Observe prospective V6 paper step-order fills/reconciliation. The deployed paper
-   runtime and model are unchanged by this research repair.
-4. Retain October 2 provider decision and existing FA collection schedules.
+1. Read current service and progress receipts. Finish queue and first discovery
+   pass. The controller does discovery only; further capture/replay epochs are
+   required. Export exact missing windows only from stopped checkpoints, retain
+   partial paths, capture bounded unions and bind a new index/epoch. Supplement
+   held-date reference and applicable stock inputs; do not blanket-download envelopes.
+2. Reconcile all original proposal/target dispositions, held exclusions, provider
+   failures and actual storage before closing 7-3. Keep 7-4/assembly gates separate.
+3. V6 r2 catch-up continues independently. At 22:38 Central: 37/449 symbols
+   complete, 11 provider 502 and six invalid-feature errors; training not started.
+   Diagnose/retry failures while retaining successes before any full-freeze claim.
+   Config remains `deploy/incubator-continual-v6-r2.json`; paper/model unchanged.
+4. Keep prospective V6 paper-fill observation and October 2 provider decision.
 
 ## Constraints
 
-Preserve unrelated dirty/untracked work, frozen source hashes and checkpoints.
-Selected continual config: `deploy/incubator-continual-v6-r2.json`; root
-`incubator/continual-v6/r2/`. Old r1 OOM details remain in the reference review.
-Never conflate implemented pipeline, running catch-up, frozen candidate and deployment.
+Preserve unrelated dirty/untracked work, frozen sources and checkpoints.
+Version source changes. Research completion never implies deployment.

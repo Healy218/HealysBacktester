@@ -1890,3 +1890,15 @@ memoization to one entry, recycle symbol workers, and resume unfinished catch-up
 dates before advancing. Allocate 11/12-GiB high/max limits with a pre-market cutoff.
 No full-freeze or next-day completion claim follows from launch.
 [Recovery evidence](reviews/2026-09-28-v6-continual-recovery.md).
+
+### 2026-09-28 — Approve exact V7 reference exceptions after full recovery
+
+The user explicitly approved the prepared 10,826 contract/date exclusions:
+10,817 metadata pairs unrecovered by both exact dated list queries, plus nine
+unsupported cash-deliverable pairs. The authorization binds the exact proposed
+list hash; the compiled policy preserves five prior pairs, totaling 10,831.
+Affected entry and held/roll research paths are excluded and counted; original
+proposals, raw records and partial ledgers remain. No automatic extension,
+contract replacement, synthetic terms/returns or calendar changes are allowed.
+This resolves known entry exceptions without closing actual held-date coverage
+or gate 7-3. [Approval and evidence](reviews/2026-09-28-v7-full-execution-discovery.md).
