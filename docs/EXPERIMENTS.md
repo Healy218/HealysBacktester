@@ -927,3 +927,14 @@ separate collision-label joins and actual LightGBM train/resume. The full r3
 update reuses verified r2 checkpoints and continues; this is a repair verdict,
 not full catch-up completion or model-performance evidence.
 [Review](reviews/2026-09-28-v6-continual-error-repair.md).
+
+## 2026-09-29 — Overnight bounded-run outcome
+
+V6 r3 reached 90/449 symbols with zero recorded errors; all 17 formerly failing
+symbols completed full catch-up. Full dataset/training/freeze remains incomplete.
+V7 planner checkpointed at its eight-hour budget with 582/591 securities prepared.
+Discovery stopped on its 20-GB generated-state cap after 6h35m, with 5G peak memory;
+this was not OOM. Retained receipts cover 30,462,620 horizon/target dispositions,
+25 fully discovered securities and partial others, plus two empty-index failures.
+This demonstrates retained partial progress and a storage/recovery limitation,
+not full coverage or gate closure. [Evidence](reviews/2026-09-29-overnight-checkpoints.md).

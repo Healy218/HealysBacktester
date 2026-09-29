@@ -16,8 +16,8 @@ The following scope is unchanged by the documentation consolidation.
   [Completion evidence](docs/reviews/2026-09-28-overnight-entry-completion.md).
   Preserve completed packs; do not launch another entry campaign.
 - [ ] **7-3.references:** Acquire remaining dated references from the completed
-  demand plan, reuse captured coverage and apply the existing five exact
-  blackouts. Actual held paths may add dates; account for new missing references.
+  demand plan, reuse captured coverage and apply the approved finite
+  contract/date exclusions (including the original five). Actual held paths may add dates; account for new missing references.
   Full-plan capture and independent census completed at 16:48 September 28.
   The 22 rename corrections are wired into discovery. Both exact alternate
   queries failed for all 10,817 missing pairs; the user approved those plus nine
@@ -29,8 +29,12 @@ The following scope is unchanged by the documentation consolidation.
   stock-delivery gaps requested by the existing replay frontier. Preserve
   partial ledgers and count held blackout crossings. Potential first-leg
   envelopes are not blanket download orders. Full-universe queue/discovery is
-  implemented and running; 3,535-path cohort parity passed. Continue bounded
-  capture/replay epochs from the selected campaign in CURRENT_STATE.
+  implemented; 3,535-path cohort parity passed. September 29: planner is
+  checkpointed at 582/591 after its time budget; resume the remaining nine.
+  Discovery stopped at its generated-storage cap. Repair storage handling and
+  the two empty-quote-index failures before resuming frozen checkpoints; publish
+  truthful stopped/failure state. Then continue bounded capture/replay epochs.
+  [Overnight evidence](docs/reviews/2026-09-29-overnight-checkpoints.md).
 - [ ] **7-3.reconcile:** Reconcile required requests, captures, references,
   provider failures and measured storage for execution/assembly/recovery.
   Use the already-authorized allocation in the current-state index.
@@ -78,7 +82,10 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   catch-up. Corrected r3 resumed September 28 at 23:07 Central, preserving
   38 completed r2 symbols and partial feature/label seals. All 17 original error
   cases passed targeted checks: six identity collisions and eleven transient tick
-  failures. The full update continues without a completed freeze.
+  failures. September 29 at 07:33 Central: 90/449 complete, zero recorded errors,
+  and all 17 formerly failing symbols fully complete. Finish the remaining catch-up;
+  training and freeze have not started. Respect the existing pre-market deadline.
+  [Overnight observation](docs/reviews/2026-09-29-overnight-checkpoints.md).
   [Repair and current observation](docs/reviews/2026-09-28-v6-continual-error-repair.md).
   Preserve the base freeze and resumable daily extensions.
 - [x] **OPS-INCUBATOR.TRAIN:** Implement fixed-family retraining, temporal validation,
@@ -90,7 +97,7 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   research and verify restart, daily-input readiness and resource coexistence.
   Completion gate and automatic 05:00 restart verified September 28. Initial
   catch-up remains incomplete; full update/recovery/coexistence proof remains.
-  September 28: corrected r3 is running with 11/12-GiB limits. Retries retain an
+  Corrected r3 retains 11/12-GiB limits and the calendar cutoff. Retries retain an
   unfinished catch-up date; verify full completion and sustained resource use.
 - [ ] **OPS-INCUBATOR.PROOF:** Complete the initial catch-up and measure a full
   daily update through freeze before claiming next-trading-day readiness.

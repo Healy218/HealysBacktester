@@ -54,6 +54,11 @@ Read the relevant entries before treating a script or cache as broken.
   listing. Process-name matching can match the watcher itself; anchor exact
   commands and use appropriate bracket patterns. Evidence means actual receipts,
   task state and outputs, not merely a process name or an exit banner.
+- **A stale running receipt is not live health.** Reconcile progress with the
+  exact service and its journal. A collected transient systemd unit can expose
+  default success fields after its failed process is gone; the retained exit
+  journal owns the failure reason. Preserve interrupted checkpoints and record
+  truthful terminal state before treating a controller as still active.
 - **Do not assume shell syntax.** Use arrays/explicit arguments and inspect each
   command's exit result. A wrong shell or partial command execution can resemble
   provider or permission failure.

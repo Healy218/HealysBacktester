@@ -1,56 +1,59 @@
-# Handoff — September 28, 2026 — V6 error repair verified, full update running
+# Handoff — September 29, 2026 — overnight checkpoints, session cleared
 
 ## Focus and stopping point
 
-User selected V6 error resolution before returning to the rest of 7-3.
-All 17 recorded failure cases now pass targeted checks. Corrected r3 is running
-its full 449-symbol catch-up; training/freezing remain incomplete. V7 jobs were
-left running under their existing bounds; no new V7 work was launched this turn.
+User requested a notes refresh before clearing the session. This turn changed
+only documentation; no jobs were restarted or limits changed. V6's recorded
+errors are resolved and catch-up continues. V7-3 remains selected and open.
+[Overnight evidence](docs/reviews/2026-09-29-overnight-checkpoints.md).
 
-## Changes and evidence
+## V6 status and selected runtime
 
-- Eleven HTTP 502 failures came from the tick client lacking transient retries.
-  The research adapter now retries transport/429/selected-5xx errors up to five
-  attempts within the build deadline. Pagination/raw integrity checks are unchanged.
-- Six `invalid candidate features` failures were identity collisions, not bad
-  numerical values: multiple frozen trade records shared strategy/entry time.
-  Stable occurrence ordinals preserve every row and independent exit horizon;
-  label lookup and training assembly consume the same keys. No deduplication.
-- Actual six-prefix parity: 80 rows, all previous feature values exactly equal,
-  unique corrected identities. All eleven original tick-error prefixes completed
-  in isolated verification caches. Eighteen focused tests passed, including
-  pagination retry, separate collision outcomes and actual LightGBM train/resume.
-- Explicit inheritance preserves 38 complete r2 symbols, 4,623 feature seals,
-  23,569 label seals and the frozen snapshot/base. Old artifacts keep old hashes.
-- [Repair review](docs/reviews/2026-09-28-v6-continual-error-repair.md),
-  [dated observation](docs/reviews/2026-09-28-v6-continual-error-repair-observation.json).
+At 07:33 Central: 90/449 symbols complete, zero recorded errors. All 17 formerly
+failing symbols now have full completion receipts. Training has not started;
+no new model freeze exists. Existing accepted model and paper runtime stay intact.
+Prior repair: stable duplicate-proposal identities, bounded transient tick retries,
+18 focused tests and exact feature parity; do not rework the original fixes.
 
-## Running V6 and continuation
+Config `deploy/incubator-continual-v6-r3.json`; root `incubator/continual-v6/r3/`.
+Service `healys-v6-continual.service` was executing at the preceding check. Read
+latest-run, per-symbol seals and service-exit together. Two autosized workers,
+CPU 200%, 11/12-GiB memory limits, no swap. Existing deadline is next open minus
+30 minutes; preserve market-hours guards and pinned unfinished date/snapshot.
+[Repair](docs/reviews/2026-09-28-v6-continual-error-repair.md).
 
-Selected config: `deploy/incubator-continual-v6-r3.json`; root:
-`incubator/continual-v6/r3/`. Service `healys-v6-continual.service` now uses
-`scripts/v6_continual_resume_v3.py`, then `run_v6_continual_v3.py` and
-`incubator/recovery_v6/`. Started at 23:07:14 Central. Existing timer, two autosized
-workers, CPU 200%, 11/12-GiB memory bounds, no swap and pre-market cutoff remain.
-At 23:44 Central: 45/449 complete, zero recorded errors; training not started.
-7 of the formerly failed symbols had completed full catch-up; all 17 original
-failure points were separately verified. Do not confuse that with full-universe completion.
+## V7 stopped checkpoints
 
-1. Read latest-run, progress, symbol seals and service-exit together. Finish the
-   remaining catch-up, all 40 training members and candidate evaluation/freeze.
-   Preserve accepted model on failure/rejection/deadline. No automatic deployment.
-2. Resume remaining 7-3 work from its existing selected state below. Known exact
-   reference exceptions are already approved; actual held/exit/roll/stock/reference
-   gaps and final full-scope reconciliation remain. Do not restart entry capture.
-3. Keep prospective V6 paper-fill observation and October 2 provider decision.
+- Planner: 582/591 securities, 789,797,718 original proposals reconciled.
+  It checkpointed at its eight-hour deadline, 05:13 Central; nine securities remain.
+- Discovery stopped at 05:08:48 with `Execution working-store allocation reached`
+  (20-GB generated-state cap). Journal confirms exit-code failure; not OOM.
+  About 90 GB local free. Parent progress still says running, but the job is stopped.
+- Per-wave receipts: 25 discovered, 66 checkpointed, two interrupted/stale running;
+  30,462,620 horizon/target dispositions and 112,112 summed pending requests.
+  Discovery completion is not label completion or full execution coverage.
+- Two other workers failed quote-index construction: `BBG000BCQ6J8` and
+  `BBG000BF8TF5`, `No completed capture packs for selected security`.
+  Diagnose frozen selections/demand; do not assume entry capture must be repeated.
 
-## V7 pointers and constraints
+## Next actions
 
-Queue: `nn_meta/validation/v7-full-execution-plan-20260928/`.
-Discovery: `nn_meta/validation/v7-execution-campaign-20260928-r1/` (eight-hour limit).
-Quote base: `v7-frontier-quote-index-20260928-r4`; approved finite policy:
-`v7-contract-blackouts-20260928-approved` (10,831 pairs including the original five).
-The discovery controller does not automatically finish capture/replay epochs.
-Audited pilots stay stopped; source-bound implementations stay immutable.
-[Exact pointers](docs/CURRENT_STATE.md), [V7 review](docs/reviews/2026-09-28-v7-full-execution-discovery.md).
-Preserve unrelated dirty/untracked work and the original V6 paper runtime/model.
+1. Check V6's latest receipts and calendar cutoff; preserve successes and finish
+   the remaining initial catch-up, 40 training members and evaluation/freeze.
+   Full overnight latency is not proven; candidate acceptance never deploys it.
+2. Resume V7 queue's remaining nine securities from existing checkpoints. Repair
+   discovery storage handling, empty-index cases and truthful terminal reporting
+   before resuming discovery. Version bound source changes and retain partial data.
+3. Capture only actual missing inputs from stopped snapshots; bind new quote/
+   reference epochs, replay and reconcile held exclusions/storage/provider failures.
+   Close 7-3 only against full evidence; keep later execution/assembly gates separate.
+4. Keep paper-fill observation, October 2 provider decision and FA schedules.
+
+## Pointers and constraints
+
+[CURRENT_STATE](docs/CURRENT_STATE.md) owns exact services/inputs. Queue root:
+`nn_meta/validation/v7-full-execution-plan-20260928/`; discovery root:
+`nn_meta/validation/v7-execution-campaign-20260928-r1/`. Quote index ends `r4`;
+approved exclusions remain 10,831 pairs. Gates 7-1/7-2, entry capture, reviewed
+rename corrections and known exception adjudication remain complete.
+Preserve source hashes, audited stopped pilots, r1/r2 V6 seals and unrelated dirty work.

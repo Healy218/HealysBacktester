@@ -1,0 +1,171 @@
+{
+  "journal_observation": {
+    "checked_on": "2026-09-29",
+    "error": "ValueError: Execution working-store allocation reached",
+    "exit_at_central": "2026-09-29T05:08:48-05:00",
+    "exit_status": "1/FAILURE",
+    "guard": "guard(a.state,max_bytes=20_000_000_000,reserve_bytes=20_000_000_000)",
+    "memory_peak": "5G",
+    "service": "healys-v7-execution-campaign-20260928-r1.service",
+    "source": "journalctl --user -u healys-v7-execution-campaign-20260928-r1.service -n 22 --no-pager",
+    "wall_time": "6h 35min 13.008s"
+  },
+  "local_free_bytes": 90030592000,
+  "observed_at": "2026-09-29T07:33:51.732374-05:00",
+  "receipts": {
+    "v6": {
+      "path": "incubator/continual-v6/r3/latest-run.json",
+      "sha256": "2b894822feca795cc891e35c7b84d7e2d06252651c973614b0239604d8536724",
+      "value": {
+        "contract_identity": "e909f7d19af28ee843d62e9e64199ce71610979f3f35fe7c0ea14834a2aac430",
+        "deployment_approved": false,
+        "elapsed_seconds": 30158.25150592398,
+        "errors": [],
+        "research_only": true,
+        "run_dir": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r3/runs/2026-09-28",
+        "schema": "v6-continual-run-v1",
+        "scope": "full_universe",
+        "stage": "candidates_and_labels",
+        "started_at": "2026-09-29T04:07:15.159223+00:00",
+        "status": "running",
+        "symbols_complete": 90,
+        "symbols_required": 449,
+        "through": "2026-09-28",
+        "training_started": false
+      }
+    },
+    "v7_discovery": {
+      "path": "nn_meta/validation/v7-execution-campaign-20260928-r1/progress.json",
+      "sha256": "6318bbbabc852c2c1a4d9dd7f13436fb78f8553be0119ca16f616bf2e2e2a1f4",
+      "value": {
+        "active_securities": [
+          "BBG000BKR1D6",
+          "BBG000BKTFN2"
+        ],
+        "campaign_identity": "e27adceda9935189479d116bc16845ec0110172f115e46e1fdde276c1c7e4ab2",
+        "elapsed_seconds": 23707.380654548993,
+        "failed_securities": {
+          "BBG000BCQ6J8": {
+            "exit_code": 1,
+            "log": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-campaign-20260928-r1/logs/BBG000BCQ6J8.log"
+          },
+          "BBG000BF8TF5": {
+            "exit_code": 1,
+            "log": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-campaign-20260928-r1/logs/BBG000BF8TF5.log"
+          }
+        },
+        "full_execution_coverage": false,
+        "last": {
+          "cohorts_discovered": 6785,
+          "distinct_horizon_targets_covered": 376950,
+          "elapsed_seconds": 503.4323889199877,
+          "exclusion_horizon_targets": {},
+          "exclusion_proposal_targets": {},
+          "execution_buckets": 41151,
+          "full_execution_coverage": false,
+          "horizon_target_statuses": {
+            "capture_incomplete": 271509,
+            "censored": 10,
+            "observed_unfilled_entry": 47065,
+            "option_midpoint_stop": 52663,
+            "signal_exit": 5703
+          },
+          "pending_requests": 4915,
+          "proposal_target_rows_covered": 907520,
+          "proposal_target_statuses": {
+            "capture_incomplete": 658734,
+            "censored": 325,
+            "observed_unfilled_entry": 115480,
+            "option_midpoint_stop": 122039,
+            "signal_exit": 10942
+          },
+          "research_ready": false,
+          "retained_payloads": 17004,
+          "securities_discovered": 1,
+          "securities_required": 1,
+          "security_id": "BBG000BKFZM4",
+          "status": "discovered",
+          "updated_at": "2026-09-29T10:05:45.041428+00:00"
+        },
+        "queued_securities": 562,
+        "research_ready": false,
+        "securities_discovered": 25,
+        "securities_required": 591,
+        "status": "running",
+        "updated_at": "2026-09-29T10:08:43.187402+00:00"
+      }
+    },
+    "v7_plan": {
+      "path": "nn_meta/validation/v7-full-execution-plan-20260928/progress.json",
+      "sha256": "6f62e05561e6d0237ac197529b6718196dc19e58891b10a0b7128bcd7a17a728",
+      "value": {
+        "campaign_identity": "3fbbe53c8faf48b28fa92520150312bfb327a440f21e798eeaecaa672984312d",
+        "distinct_horizons": 326962118,
+        "elapsed_seconds": 28800.003630134015,
+        "execution_complete": false,
+        "last": {
+          "batches_complete": 144,
+          "security_id": "BBG01QKK3377",
+          "status": "checkpointed"
+        },
+        "proposals_reconciled": 789797718,
+        "research_ready": false,
+        "securities_complete": 582,
+        "securities_required": 591,
+        "status": "checkpointed",
+        "updated_at": "2026-09-29T10:13:43.716813+00:00"
+      }
+    }
+  },
+  "service_observation": {
+    "checked_on": "2026-09-29",
+    "note": "Service observations from the immediately preceding status check; receipt snapshot timestamp is separate.",
+    "v6": "activating/start (oneshot build executing)",
+    "v6_memory_bytes": 3933487104,
+    "v6_peak_bytes": 6500691968,
+    "v7_discovery": "inactive/dead",
+    "v7_plan": "inactive/dead"
+  },
+  "v6_original_failures_completed": [
+    "ADBE",
+    "AEM",
+    "AG",
+    "AFRM",
+    "AI",
+    "ALAB",
+    "AKAM",
+    "AMAT",
+    "AMD",
+    "AMDL",
+    "AMPX",
+    "AMKR",
+    "AMZN",
+    "ANF",
+    "ANET",
+    "ARM",
+    "BBAI"
+  ],
+  "v7_failed_workers": {
+    "BBG000BCQ6J8": "Traceback (most recent call last):\n  File \"/home/healy/Coding/HealysBacktester/scripts/discover_v7_execution_wave_v2.py\", line 161, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/home/healy/Coding/HealysBacktester/scripts/discover_v7_execution_wave_v2.py\", line 73, in main\n    index=build_security_quote_index(job_binding['demand'],args.base_index,args.entry_root,args.output/'indexes'/sid)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/healy/Coding/HealysBacktester/nn_meta/v7/full_execution.py\", line 110, in build_security_quote_index\n    if not packs:raise ValueError('No completed capture packs for selected security')\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: No completed capture packs for selected security",
+    "BBG000BF8TF5": "Traceback (most recent call last):\n  File \"/home/healy/Coding/HealysBacktester/scripts/discover_v7_execution_wave_v2.py\", line 161, in <module>\n    if __name__=='__main__':main()\n                            ^^^^^^\n  File \"/home/healy/Coding/HealysBacktester/scripts/discover_v7_execution_wave_v2.py\", line 73, in main\n    index=build_security_quote_index(job_binding['demand'],args.base_index,args.entry_root,args.output/'indexes'/sid)\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/home/healy/Coding/HealysBacktester/nn_meta/v7/full_execution.py\", line 110, in build_security_quote_index\n    if not packs:raise ValueError('No completed capture packs for selected security')\n                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: No completed capture packs for selected security"
+  },
+  "v7_wave_observations": {
+    "horizon_target_statuses": {
+      "capture_incomplete": 15473253,
+      "censored": 210,
+      "excluded_contract_reference_blackout": 16692,
+      "no_contract": 3991065,
+      "no_fresh_raw_spot": 430210,
+      "observed_unfilled_entry": 4241581,
+      "option_midpoint_stop": 4763619,
+      "signal_exit": 1545990
+    },
+    "note": "Counters from last per-wave receipts; running flags on stopped workers are stale. Requests not globally deduplicated.",
+    "progress_file_states": {
+      "checkpointed": 66,
+      "discovered": 25,
+      "running": 2
+    },
+    "sum_pending_requests": 112112
+  }
+}

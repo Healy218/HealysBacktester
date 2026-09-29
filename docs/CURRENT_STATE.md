@@ -1,14 +1,13 @@
 # Current state and artifact index
 
-Pointer/configuration owner for the lab, reconciled September 28, 2026.
+Pointer/configuration owner for the lab, reconciled September 29, 2026.
 [ROADMAP](../ROADMAP.md) owns milestone status and acceptance conditions;
 [TODO](../TODO.md) owns selected work. This page selects exact inputs and
 runtime identities. Other current documents link here instead of copying them.
 
-**Evidence freshness:** the observations below come from the September 27
-capture/operations checks and retained receipts. The continual-incubator
-activation below was separately observed at 19:59 Central; other observations
-retain their original scopes and timestamps.
+**Evidence freshness:** V6 research and V7 queue/discovery were checked September
+29; the dated observation below distinguishes running processes from stopped jobs
+with stale progress. Other sections retain their own dated scopes and timestamps.
 Verify the indicated live receipts when asked for present health or progress.
 Never infer a current ETA from a historical throughput sample.
 
@@ -195,12 +194,24 @@ CPU 100%, no swap. Scratch compactor: `healys-v7-execution-scratch-20260928.serv
 Earlier campaign r0 is retained under its original five-pair policy; do not mix
 its checkpoints with r1. Source-bound scripts and policies must stay immutable.
 
-Dated observation, September 28 at 22:38 Central: planner had reconciled
-200,081,158 proposals across 128/591 securities. Selected r1 discovery covered
-327,795 horizon/target paths with 263 pending requests and no worker failures.
-Discovery used 1.82 GB / 1.99-GB peak; planner 1.41/1.58 GB.
-[Snapshot](reviews/2026-09-28-v7-full-discovery-observation.json).
-These early measurements do not establish overnight full-scope completion.
+Dated observation, September 29 at 07:33 Central: planner is stopped/checkpointed
+at 582/591 securities, 789,797,718 proposals and 326,962,118 distinct horizons.
+It reached its eight-hour budget at 05:13 Central; nine securities remain.
+Discovery stopped at 05:08:48 Central on the 20-GB generated-state cap, with a
+journal-confirmed exit-code failure and 5G memory peak. Local free space was
+90.03 GB; this was not an OOM or full disk. Do not blindly restart the same cap.
+
+The r1 parent progress file still says running; that flag is stale. Per-wave
+receipts record 25 discovered securities, 66 checkpointed and two interrupted
+with stale running flags; 30,462,620 horizon/target dispositions and 112,112
+pending requests summed across those receipts. Two other security workers,
+`BBG000BCQ6J8` and `BBG000BF8TF5`, failed at quote-index construction with
+`No completed capture packs for selected security`. Logs are at the campaign
+`logs/<security>.log`; diagnose their exact demand before claiming a coverage defect.
+[Overnight evidence and snapshot](reviews/2026-09-29-overnight-checkpoints.md).
+
+Retain all existing queue/wave data and frozen sources. Storage/empty-index recovery
+must preserve or explicitly inherit checkpoints under versioned source contracts.
 The controller discovers pending inputs; further bounded capture/replay epochs,
 held exclusion census and applicable stock/reference inputs remain required.
 [Implementation, measured parity and approval](reviews/2026-09-28-v7-full-execution-discovery.md).
@@ -293,9 +304,12 @@ It preserves 38 completed r2 symbols, 4,623 feature seals and 23,569 label seals
 by explicit hash-bound inheritance. Old r2 artifacts and source files remain intact.
 All 17 recorded r2 error cases passed targeted verification: duplicate proposal
 occurrences now have distinct identities and labels; transient tick errors have
-bounded retries with unchanged scope/completeness checks. At 23:44 Central,
-45/449 symbols were complete with no recorded errors; training had not started.
-[Repair and dated observation](reviews/2026-09-28-v6-continual-error-repair.md).
+bounded retries with unchanged scope/completeness checks. September 29 at 07:33
+Central: 90/449 symbols complete, zero recorded errors; all 17 formerly failing
+symbols have full completion receipts. The service was executing at the preceding
+check. Training has not started and no candidate pointer exists. Full catch-up
+has not completed overnight. [Current observation](reviews/2026-09-29-overnight-checkpoints.md),
+[retained repair evidence](reviews/2026-09-28-v6-continual-error-repair.md).
 Selected code: `scripts/run_v6_continual_v3.py`, `incubator/recovery_v6/`;
 retry wrapper: `scripts/v6_continual_resume_v3.py`. Original inheritance census:
 `incubator/continual-v6/r3/inherited-r2.json`; prior installed unit/exit receipt:
