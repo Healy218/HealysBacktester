@@ -318,6 +318,16 @@ Automatic restoration follows a verified completed candidate, including its
 evaluation; failure/incomplete/deadline keeps competing jobs paused for review.
 The next-morning research cutoff and all model/admission contracts remain.
 
+September 30 **16:33:47 Central worker revision**: selected service drop-in
+`healys-v6-focus-20260930.service.d/20-workers.conf` now invokes
+`scripts/v6_focus_workers_20260930.py --worker-mib 3584 --auto-restore`.
+Actual restart selected **five data workers** (five processes verified), keeping
+4096-MiB host/2048-MiB parent reserves and 25/26-GiB high/max. All **357** completed
+symbol seals were retained unchanged; catch-up/training method is unchanged.
+`nn_meta/validation/v6-focus-20260930/worker-revisions/r1/` owns prior-run and
+restart evidence. The earlier `service-exit.json` records the deliberate old-pool
+stop; compare its timestamp with the newer running receipt and live journal.
+
 Restored V7 uses the same supervisor names and checkpoint roots, with separately
 bound `scripts/resume_v7_compute_20260930.py`: up to two discovery workers,
 four quote workers and the existing one serial replay worker; 8/6-GiB service

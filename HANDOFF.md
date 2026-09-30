@@ -1,72 +1,64 @@
-# Handoff — September 30, 2026 — V6 handover and terminal update
+# Handoff — September 30, 2026 — dedicated V6 running with five workers
 
 ## Selected direction
 
-At **15:01 Central September 30**, pause competing local batch jobs and dedicate
-compute to finishing V6 incubator. After successful training/evaluation and a
-verified research candidate freeze, automatically restore paused jobs with as
-much supported concurrency as possible. This supersedes the 15:45 V6 start and
-uninterrupted V7 continuation for this interval. [TODO](TODO.md) owns the tasks.
+Finish V6 incubator catch-up, training and evaluation with local batch compute
+reserved for it; automatically restore paused jobs after a verified candidate
+freeze. User requested increased workers at 16:30. [TODO](TODO.md) owns tasks.
 
-## Installed scheduled handover
+## Actual handover and progress
 
-- `healys-v6-focus-20260930.timer` → `.service`, one-time 15:01 Central.
-  Installed and verified enabled/active/waiting; focus service still inactive.
-- `scripts/v6_focus_20260930.py --auto-restore` verifies clock/market close,
-  original V6 source bindings, completed-entry evidence and pinned snapshot.
-- Pause local V7 supervisors then capture/discovery/migration; temporarily
-  disable competing FA/transfer/backup/V6 data/context/scanner/continual timers.
-  Preserve basic broker order management, monitoring, dashboard and hourly reports.
-- Capture/migration drain checkpoints before V6 starts; allow up to 15 minutes.
-  Prior timer states and transient unit definitions are saved for restoration.
-- Exact scope and evidence: [review](docs/reviews/2026-09-30-v6-dedicated-compute.md).
+The 15:01 handover ran. V7 successor controllers stopped; initial quote capture,
+discovery and MRHA migration checkpointed cleanly. Drain finished 15:03:48; V6
+started 15:03:52 with four workers. The 15:05 report reached this terminal.
 
-## Requested terminal report
+- Migration stopped at 254,561/504,516 files and 200.127/229.378 GB logical.
+- Current V7 quote batch retained 40,992/126,719 windows; successor replay has
+  not started. Original discovery retained 46.665 million horizon-targets,
+  28 complete wave receipts across 93 started securities; per-pass count was 22.
+- V6 reached 357/449 complete before the worker revision; training had not started.
+  Subsequent counts belong to the live receipt, not this dated observation.
 
-`healys-v6-handover-update-20260930.timer` is installed/enabled, next event
-**15:05 Central today**. It targets this terminal's verified thread ending
-`0c111e8e2e28`, independently of the hourly updater's older thread.
-Report actual migration/V7 stopping totals and V6 startup from live receipts.
-`logs/v6-handover-update-20260930/{state,runtime}.json` and the matching service
-journal own dispatch evidence. Queue once; retry if busy; never interrupt a turn.
-The check cannot start/stop research jobs. Four delivery-state tests passed.
+## Current V6 runtime
 
-## V6 target and allocation
+Service: `healys-v6-focus-20260930.service`, installed drop-in
+`healys-v6-focus-20260930.service.d/20-workers.conf`, entry point
+`scripts/v6_focus_workers_20260930.py --worker-mib 3584 --auto-restore`.
+Restarted **16:33:47 Central**, same September 28 r3 input/snapshot. All 357
+completed symbol seals verified unchanged. Five worker processes independently
+verified after shared autosizing selected five; service-budget ceiling is six.
+Resource allowance is 3584 MiB/worker, 4096 MiB host reserve and 2048 MiB parent
+allowance inside 25/26-GiB high/max, no swap. No CPU quota; training gets 16
+available threads. Original bound scientific sources remain unchanged.
 
-Pinned catch-up: September 28, r3; **325/449** symbol seals were complete at
-preparation. Preserve the unfinished date, snapshot and partial feature/label
-seals. No training/freeze completion is claimed by preparation.
+The old SIGTERM exit/semaphore cleanup came from the requested pool restart.
+Prior receipts: `nn_meta/validation/v6-focus-20260930/worker-revisions/r1/`.
+`before.json`, `stopped-run.json`, `prior-service-exit.json` and `restart.json`
+retain identities and resource evidence. Read latest timestamps and the journal.
 
-Dedicated service: 25/26-GiB high/max, no swap, no CPU quota. Shared autosizer:
-4500 MiB per data worker, 4096 MiB host reserve, parent allowance. Four workers
-selected before pause; possibly five after competitors drain. Training uses all
-available CPU threads (16 observed). The frozen producer still applies its
-next-session opening-minus-30-minute deadline (08:00 Central).
+## Completion and restoration
 
-Automatic restoration requires successful producer exit plus verified candidate
-files after evaluation. A rejected evaluated candidate is still a finished run;
-it cannot replace the accepted model. Failure/incomplete/deadline leaves the
-other jobs paused for investigation. No automatic deployment.
+Finish all 449 symbols and data checks → train 40 ensemble members sequentially
+→ evaluate → freeze/verify candidate → automatically restore paused timers and
+V7/migration. No build-only flag. Rejected evaluation preserves the incumbent;
+it is still a completed candidate run. No automatic deployment.
 
-## Restoration and evidence
+Failure, incomplete data or deadline leaves competitors paused for review. The
+next-session opening-minus-30-minute cutoff (08:00 Central) is unchanged.
+Restore original timer states and V7 successor controllers; do not restart initial
+quote/discovery units. Resource wrapper `resume_v7_compute_20260930.py` admits
+up to two discovery, four capture and one serial replay worker; 8/6-GiB limits.
 
-State: `nn_meta/validation/v6-focus-20260930/`: `progress.json`, `pause-plan.json`,
-`units/`, `paused-services.json`, `incubator-result.json`, `restored-services.json`,
-`service-exit.json`. Read the exact systemd journal alongside these receipts.
-V6 actual stages remain in `incubator/continual-v6/r3/latest-run.json`.
+## Evidence and next inspection
 
-Restore prior timer states and V7 successor supervisors/migration. Do not restart
-initial quote/discovery units: successors reuse retained checkpoints with fresh
-sealed quote indexes. `scripts/resume_v7_compute_20260930.py` binds the resource
-revision separately: up to two discovery, four capture and one serial replay
-worker, 8/6-GiB service limits, CPU quotas removed, autosizing retained.
-Original source producers and artifact identities are unchanged.
+Main handover state: `nn_meta/validation/v6-focus-20260930/progress.json` and
+`pause-plan.json`. Actual V6 stages: `incubator/continual-v6/r3/latest-run.json`.
+Inspect service/journal alongside receipts; a stale running file is insufficient.
+Eleven focused worker/handover tests, real source/snapshot checks, preserved-seal
+comparison, unit verification and live five-worker readback passed. Throughput
+increase and full completion have not yet been measured.
+[Review](docs/reviews/2026-09-30-v6-dedicated-compute.md) · [State](docs/CURRENT_STATE.md).
 
-Fifteen focused tests, real-data source/snapshot/entry preflight and unit syntax
-checks passed. Scheduling/installation is separate from observed execution;
-verify the selected timer and post-15:01 receipts before claiming the switch ran.
-[Exact pointers](docs/CURRENT_STATE.md#september-30-1501-dedicated-v6-handover--scheduled).
-
-V7 gate 7-3 remains open; all completed entry/reference/capture/replay evidence
-remains valid. Keep MRHA mounted. Preserve unrelated dirty/untracked work.
-October 2 provider decision remains separate. Remote experts are unchanged.
+Keep MRHA mounted. Basic broker order management/monitoring remain enabled.
+Remote experts and unrelated dirty/untracked work remain untouched. V7-3 stays
+open with all completed evidence valid; October 2 provider decision is separate.

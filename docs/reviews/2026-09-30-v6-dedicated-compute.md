@@ -104,3 +104,36 @@ conversation history above the previous updater's 1-MiB client limit.
 Four targeted tests passed (read-only verification, target mismatch rejection,
 busy-thread deduplication and resume auto-consumption); unit verification passed.
 Timer installation is confirmed; report delivery remains a future runtime event.
+
+## 16:33 worker increase — measured restart
+
+The user requested more workers after observing memory use below one-third of
+the service limit. Before restart, the four active worker processes used roughly
+0.75–0.8 GiB RSS each; aggregate cgroup peak was 8,261,242,880 bytes (7.69 GiB),
+with no memory high/max/OOM events. Much of cgroup memory was file cache.
+This supports a cautious worker-budget reduction, not a maximum-memory guarantee.
+
+Versioned operational wrapper `scripts/v6_focus_workers_20260930.py` lowers the
+data-worker allowance from 4500 to 3584 MiB, retaining 4096 MiB host reserve,
+2048 MiB parent allowance and the 26-GiB hard service limit. Shared autosizing
+selected **five workers** from 25,064 MiB available at the actual restart; its
+service-budget ceiling is six. Five processes were independently observed.
+
+At **16:33:47 Central** the old pool was stopped and resumed from the same pinned
+September 28 snapshot. All **357 completed symbol seals** remained byte-identical;
+partial feature/label seals remain reusable. The old service's SIGTERM exit and
+semaphore-cleanup warning correspond to this deliberate stop, not a new provider
+failure. Prior status/exit receipts are archived in
+`nn_meta/validation/v6-focus-20260930/worker-revisions/r1/` (`before.json`,
+`stopped-run.json`, `prior-service-exit.json`, `restart.json`).
+
+Installed drop-in: `healys-v6-focus-20260930.service.d/20-workers.conf` selects
+the new wrapper with `--worker-mib 3584 --auto-restore`. Frozen producer files,
+scientific contracts, model family, pinned inputs and deadlines are unchanged.
+Data completion still proceeds automatically through all 40 training members,
+evaluation and verified candidate freeze, then restores the paused jobs.
+
+Eleven focused resource/checkpoint/handover tests passed; real source/snapshot
+preflight, prior-symbol hash comparison, installed unit verification and live
+five-process readback passed. This establishes increased concurrency and retained
+checkpoints, not a measured throughput gain or full-incubator completion.

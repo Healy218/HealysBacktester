@@ -6,6 +6,17 @@ gates, [TODO](../TODO.md) owns selected work, and [CURRENT_STATE](CURRENT_STATE.
 owns selected operational pointers. Do not execute an old continuation order
 solely because it appears in this log.
 
+### 2026-09-30 — Increase dedicated V6 data concurrency from measured headroom
+
+The user requested more workers after the four-worker run remained below 8 GiB
+aggregate memory. Reduce the operational worker allowance from 4500 to 3584 MiB
+while retaining 4096 MiB host reserve, 2048 MiB parent allowance and 26-GiB hard
+limit. Shared autosizing selected five workers at the 16:33:47 restart; all 357
+completed symbol seals were unchanged. Preserve frozen producers, pinned inputs,
+automatic training/evaluation and post-candidate restoration. This is a measured
+resource revision, not a new incubation method or demonstrated speedup.
+[Evidence](reviews/2026-09-30-v6-dedicated-compute.md).
+
 ### 2026-09-30 — Dedicate after-close compute to V6, then restore batch work
 
 The user selected a 15:01 Central one-time local compute handover today to finish
