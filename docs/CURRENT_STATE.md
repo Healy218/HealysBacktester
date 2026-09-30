@@ -90,6 +90,30 @@ MRHA free at inspection. No bulk migration performed. The frontier capture uses
 an older local worker/quota ledger; do not assume it inherits entry overflow routing.
 [Storage/recovery scope](reviews/2026-09-29-power-surge-recovery.md).
 
+### User-authorized completed-payload migration — September 29 evening
+
+Selected service: `healys-v7-mrha-migration-v2-20260929.service`.
+State: `nn_meta/validation/v7-mrha-payload-migration-20260929-r1/`:
+`plan.json` / `files.sqlite3` own the finite manifest; `progress.json` and
+`migration.jsonl` own measured progress/cutovers; `consumer-v2.json` binds recovery.
+Scope is 504,516 sealed V7 raw payloads, 229.38 GB logical / 204.49 GB unique
+content. Three SQLite-sidecar cases are excluded. Actual reclaimed space must be
+measured; shared extents and active readers can delay or reduce reclamation.
+
+Destination: `/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929/`.
+Keep UUID 62C9-C390 mounted; restore catalog/instructions accompany external objects.
+Original logical directories/receipts stay local; verified file links preserve
+reader paths. Active V6 inputs/working data, features, models, indexes and writable
+replay databases stay on the SSD. Do not reinitialize quota ledgers or subtract
+retained migrated data from logical capture usage. Steam unchanged.
+
+Sequential mover: CPU 100%, 768-MiB/1-GiB memory high/max, Nice 19, idle I/O,
+no swap; 20-GiB MRHA reserve. Original v1 safely stopped on a hardlink alias's
+ctime change; v2 binds the prior plan and checks that specific recovery case.
+Check current receipt and exact service; launch is not completion. This supersedes
+older observations saying no bulk migration had been performed.
+[Scope, verification and recovery](reviews/2026-09-29-mrha-payload-migration.md).
+
 ### Completion observation — September 28, 2026
 
 At **04:58:11 Central**, entry capture completed successfully with full entry

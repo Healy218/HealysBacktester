@@ -100,6 +100,9 @@ Read the relevant entries before treating a script or cache as broken.
   data. For active packed captures, keep local logical directories/receipts and
   payload-file symlinks; whole-directory symlinks change discovery behavior.
   Verify the drive identity and preserve external payloads used by local receipts.
+  The September 29 sealed-payload mover also retains content-addressed objects
+  under MRHA `HealysBacktester/sealed-v7-payloads-20260929`; its catalog/journal
+  map original file paths for restore. Do not reset quota usage after migration.
 - **Clean page cache is not the same as working buffers.** Preserve the deployed
   V7 memory-pressure calculation; do not restore a cache-blind guard because
   total cgroup memory alone appears high. Current policy is in the state index.

@@ -1,0 +1,134 @@
+{
+  "before": {
+    "external_free": 743327793152,
+    "local_free": 82390974464
+  },
+  "consumer": {
+    "consumer_sha256": "d6e57a86b7a9b3f534d0d051e81784c49c4870e4af1d13a80128e1824e5e89a3",
+    "original_plan_sha256": "d6b0f0ade02ee1bc96aac81a48e9fb96f8a44a29901bb60f26af7cb80beed06e",
+    "original_producer_sha256": "7f60b9bcc72704ff3c7082b44a8136fe2b1ea3c00d418d22c1a14bb0af0aca66",
+    "reason": "Explicit recovery for prior migrated hardlink aliases; original plan and producer remain unchanged."
+  },
+  "latest_observed_at": "2026-09-30T02:34:33.209125+00:00",
+  "latest_progress": {
+    "elapsed_seconds": 338.3457547750004,
+    "error": null,
+    "external_free": 729084461056,
+    "files_moved": 644,
+    "files_required": 504516,
+    "local_free": 94334136320,
+    "logical_bytes_moved": 14591200936,
+    "logical_bytes_required": 229378057319,
+    "status": "running",
+    "updated_at": "2026-09-30T02:34:26.981720+00:00"
+  },
+  "net_local_free_change_bytes": 11943161856,
+  "observed_at": "2026-09-30T02:31:00.018068+00:00",
+  "physical_savings_attribution": "Concurrent V6/V7 writes and shared extents affect free-space change; not identical to transferred logical bytes.",
+  "plan": {
+    "authorization": "User: lets move as much as we can.",
+    "created_at": "2026-09-30T01:56:13.000222+00:00",
+    "existing_links_skipped": 4,
+    "external": "/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929",
+    "files": 504516,
+    "logical_bytes": 229378057319,
+    "mount_uuid": "62C9-C390",
+    "producer_sha256": "7f60b9bcc72704ff3c7082b44a8136fe2b1ea3c00d418d22c1a14bb0af0aca66",
+    "schema": "v7-mrha-payload-migration-v1",
+    "scope": "Only checksum-bound completed V7 raw payloads; keep all logical directories, receipts and active working stores local.",
+    "source": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7",
+    "sqlite_sidecars_skipped": [
+      "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/execution-recovery-20260929-r0/df95d3607a51185507695026f8db7c0785ce207e608f4fe0a91cecfacf7435db-75661e3536d54b5b90f64f54e39ce0a1/captures.sqlite3",
+      "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/execution-recovery-20260929-r0/0a9678c767e42b1eaab34c02c86f21d1f34c45f71c9a51291476e5f89dfd3ebd-db9b59d889f14a0b9f071e5f14bd57bc/captures.sqlite3",
+      "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/execution-recovery-20260929-r0/cdbe9635ec59750f216430fc56829dd8b0327db0f040f8fd826b82e7d1d27f1e-514559773a85477c95a073025662889b/captures.sqlite3"
+    ],
+    "unique_bytes": 204487023318,
+    "unique_payloads": 474125
+  },
+  "progress": {
+    "elapsed_seconds": 124.12415792600223,
+    "error": null,
+    "external_free": 737807302656,
+    "files_moved": 210,
+    "files_required": 504516,
+    "local_free": 84648513536,
+    "logical_bytes_moved": 5586999605,
+    "logical_bytes_required": 229378057319,
+    "status": "running",
+    "updated_at": "2026-09-30T02:30:52.760124+00:00"
+  },
+  "sample_readback": [
+    {
+      "destination": "/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929/objects/d7/d761b6708eb98c31456f8aa1b1fa1a1868f0212a17208503031c5d7da13fcb8c",
+      "readback_passed": true,
+      "receipt_unchanged": true,
+      "sha256": "d761b6708eb98c31456f8aa1b1fa1a1868f0212a17208503031c5d7da13fcb8c",
+      "source": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/base-20260915r3/options/minute_aggs/2025-03-07/attempt-23965f39145a4347a3c5ca62f4c6d8f8/data.csv.gz"
+    },
+    {
+      "destination": "/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929/objects/db/db3b8451ba71bf59e1edfbaa3e30e39b2e1ff43a7f8c57883582141810c67eeb",
+      "readback_passed": true,
+      "receipt_unchanged": true,
+      "sha256": "db3b8451ba71bf59e1edfbaa3e30e39b2e1ff43a7f8c57883582141810c67eeb",
+      "source": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/base-20260915r3/options/minute_aggs/2026-02-09/attempt-62d927d6da734da7899f59985629754b/data.csv.gz"
+    },
+    {
+      "destination": "/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929/objects/1b/1b6971eaa6db9bd462c984a80f31f6fd19e62d98bac05b1326ceb19957911e2b",
+      "readback_passed": true,
+      "receipt_unchanged": true,
+      "sha256": "1b6971eaa6db9bd462c984a80f31f6fd19e62d98bac05b1326ceb19957911e2b",
+      "source": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/base-20260915r3/options/minute_aggs/2026-05-08/attempt-12a8b8401e6346fe88dd84044672acd3/data.csv.gz"
+    },
+    {
+      "destination": "/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929/objects/4e/4ec44f65e55d13d6784370fca827ac688d7ee547be7ec029ab4266d1f29b5962",
+      "readback_passed": true,
+      "receipt_unchanged": true,
+      "sha256": "4ec44f65e55d13d6784370fca827ac688d7ee547be7ec029ab4266d1f29b5962",
+      "source": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/base-20260915r3/options/minute_aggs/2026-06-09/attempt-b4d2b0a35010454db557e78afb80aa8b/data.csv.gz"
+    },
+    {
+      "destination": "/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929/objects/33/3315d68a81ab9a5c0d788f8e44f42af35d424e2f284ae681009b083f19518000",
+      "readback_passed": true,
+      "receipt_unchanged": true,
+      "sha256": "3315d68a81ab9a5c0d788f8e44f42af35d424e2f284ae681009b083f19518000",
+      "source": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/base-20260915r3/options/minute_aggs/2026-07-02/attempt-448c4b30c4cb459cb558f9b6cea67245/data.csv.gz"
+    }
+  ],
+  "steam_untouched": true,
+  "tests_passed": 13,
+  "v6": {
+    "contract_identity": "e909f7d19af28ee843d62e9e64199ce71610979f3f35fe7c0ea14834a2aac430",
+    "deployment_approved": false,
+    "elapsed_seconds": 14334.868822659999,
+    "errors": [],
+    "research_only": true,
+    "run_dir": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r3/runs/2026-09-28",
+    "schema": "v6-continual-run-v1",
+    "scope": "full_universe",
+    "stage": "candidates_and_labels",
+    "started_at": "2026-09-29T22:31:20.127879+00:00",
+    "status": "running",
+    "symbols_complete": 160,
+    "symbols_required": 449,
+    "through": "2026-09-28",
+    "training_started": false
+  },
+  "v7_replay": {
+    "active_security": "BBG000BCWCG1",
+    "elapsed_seconds": 7190.799788523998,
+    "failed": {},
+    "full_execution_coverage": false,
+    "queued": 82,
+    "securities_replayed": 10,
+    "securities_required": 93,
+    "status": "running",
+    "stop_reason": null,
+    "updated_at": "2026-09-30T02:30:55.338273+00:00"
+  },
+  "v7_supervisor": {
+    "detail": "nn_meta/validation/v7-pending-replay-campaign-20260929-20260929T233047Z",
+    "full_execution_coverage": false,
+    "phase": "pending_replay",
+    "updated_at": "2026-09-30T00:31:04.016953+00:00"
+  }
+}

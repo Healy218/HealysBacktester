@@ -1927,3 +1927,15 @@ unrecovered held contract/date pairs. The hash-bound compiled policy preserves
 admitted; GAP responses are not substituted for GPS contracts. No automatic
 extension, changed calendar, synthetic terms or numerical outcomes are authorized.
 [Evidence and exact approval](reviews/2026-09-29-v7-evening-continuation.md).
+
+## 2026-09-29 — Move completed raw data to MRHA while research continues
+
+After reviewing storage and continued training access, the user requested “lets
+move as much as we can.” Migrate the finite checksum-bound completed V7 raw-data
+manifest to verified MRHA storage, retain original logical paths through file
+links, and preserve receipts/provenance. Identical immutable payloads may share
+an external content object. Keep active V6 working stores, features/models,
+indexes and writable replay databases local; exclude SQLite-sidecar cases.
+Verify external copies before local replacement and retain 20 GiB on MRHA.
+This changes storage placement, not capture scope, quota accounting or gate status.
+[Scope and evidence](reviews/2026-09-29-mrha-payload-migration.md).

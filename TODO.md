@@ -48,7 +48,10 @@ The following scope is unchanged by the documentation consolidation.
   [Recovery and active services](docs/reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
 - [ ] **7-3.reconcile:** Reconcile required requests, captures, references,
   provider failures and measured storage for execution/assembly/recovery.
-  Use the already-authorized allocation in the current-state index.
+  Use the already-authorized allocation in the current-state index. September 29:
+  user-authorized MRHA migration of sealed raw payloads is in progress; verify
+  completion, reader continuity and measured space before marking storage reconciled.
+  [Migration evidence](docs/reviews/2026-09-29-mrha-payload-migration.md).
 - [ ] **7-3.close:** Record full completion against the roadmap gate and actual
   evidence. Entry capture alone does not close 7-3.
 

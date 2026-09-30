@@ -1,63 +1,60 @@
-# Handoff — September 29, 2026 — V7 evening recovery running
+# Handoff — September 29, 2026 — MRHA migration in progress
 
-## Focus and result
+## Selected task
 
-User selected steps 3–4 after completed paper reconciliation/V6 restart.
-V7 capture resumed; reference review and a new replay pilot passed. Bounded
-continuation is running, waiting for capture. Gate **7-3 remains selected/open**.
-[Review](docs/reviews/2026-09-29-v7-evening-continuation.md),
-[observation/hashes](docs/reviews/2026-09-29-v7-evening-continuation.json).
+User requested moving as much stock/ticker data to MRHA as safely possible.
+The verified raw-data migration is started, not complete. V6/V7 continue;
+gate **7-3 remains selected/open**. [Migration review](docs/reviews/2026-09-29-mrha-payload-migration.md)
+and [measured observations](docs/reviews/2026-09-29-mrha-payload-migration.json).
 
-## Active work and exact pointers
+## Migration runtime and frozen scope
 
-- Capture: `healys-v7-frontier-evening-20260929.service`, started 18:12:24 Central;
-  `nn_meta/validation/v7-frontier-capture-20260929-r0/progress.json`.
-  At 18:42: 86,424/109,825 windows, no failures in the resumed pass.
-- Supervisor: `healys-v7-evening-continuation-20260929.service`, started 18:30:47;
-  `nn_meta/validation/v7-evening-continuation-20260929-r0/progress.json`.
-  Waits for capture, retries missing batches, binds sealed index, runs pending
-  replay and then original discovery if budget remains. Five-hour total budget.
-  Read its `selected-replay.json` once published for exact selected outputs.
-- New references: `v7-reference-epoch-20260929-r0`; selected admission
-  `v7-held-reference-admission-20260929-r1`, under `nn_meta/validation/`.
-- User approved four exact missing held-reference exclusions; selected policy
-  `v7-contract-blackouts-20260929-held-approved` totals 10,835 pairs.
-  Two other missing records recovered via exact dated list responses.
-- Frozen pending replay plan: `v7-pending-replay-plan-20260929-r0`:
-  93 securities, 251,983 cohorts, 21,624,449 horizon-targets.
-- Pilot/parity: `v7-evening-replay-pilot-20260929-r0`,
-  `v7-evening-replay-parity-20260929-r0`; all 20 independent comparisons match.
-  All pilot outcomes still capture-incomplete. 37 focused tests passed.
+- Service: `healys-v7-mrha-migration-v2-20260929.service`.
+- State: `nn_meta/validation/v7-mrha-payload-migration-20260929-r1/`:
+  `plan.json`, `files.sqlite3`, `progress.json`, `migration.jsonl`, `consumer-v2.json`.
+- Scope: 504,516 completed V7 stock/option payload paths, 229.38 GB logical;
+  204.49 GB unique content before filesystem overhead. Not physical-savings promises.
+- Destination: `/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929/`;
+  verified drive UUID `62C9-C390`, external 20-GiB reserve.
+- Keeps local directories/receipts and atomically replaces only verified payloads
+  with file links. External catalog/journal/RESTORE.txt preserve restore details.
+- Three SQLite-sidecar cases stay local; four existing external links preserved.
+  V6 working data, models, features, indexes and writable replay databases stay local.
+  Steam untouched. Do not reset capture quota accounting after offload.
+- Nice 19, idle I/O, CPU 100%, 768-MiB/1-GiB memory high/max, no swap.
+  Process entire finite manifest unless capacity/evidence checks stop it.
 
-## Recovery and constraints
+## Recovery and validation
 
-Both interrupted original SQLite databases recovered under locks after preserving
-physical preimages/journals. Empty/stale progress files archived; ledgers retained.
-New code uses separate immutable epochs. Original bound capture/discovery/V6
-producers remain unchanged. Do not edit new bound producers in place either.
-User-authorized evening continuation supersedes the earlier daytime-only run
-for this bounded invocation. Capture: two autosized workers, max 2 GiB/CPU 100%.
-Supervisor/replay: one autosized worker, max 4 GiB/CPU 100%, no swap; reserve guards.
-Internal free ~86 GiB; MRHA ~693 GiB. No Steam files or bulk data moved.
+Original mover safely stopped at seven files: retiring a hardlink alias changed
+another alias's ctime. v2 permits only matching-inode/size/mtime changes explained
+by an already migrated verified alias; source bytes still fully rehashed.
+Original producer/manifest unchanged; v2 revision explicitly bound. Do not edit
+bound consumers in place. 13 tests pass, including hardlink recovery and corruption
+rejection. First three real external copies passed checksum/gzip readback.
+Read actual progress/journal and exact service before inferring later completion.
 
-## V6 and paper
+## V6/V7 continuation
 
-V6 remains running from 17:31:19 Central, three data workers/two training threads.
-At 18:42: 114/449 complete, zero reported errors, training not started.
-Calendar cutoff and 12-hour budget unchanged. Read current receipts for later health.
-Paper reconciliation remains complete: 48 matching orders, eight fills, four
-matching positions, no open orders at 17:30. Observe next-session AXP stop handling;
-existing fresh-quote/risk policy governs. No orders submitted by recovery work.
-[Paper/V6 evidence](docs/reviews/2026-09-29-paper-reconciliation-v6-resume.md).
+V6 remains on its pinned September 28 catch-up, from 17:31 Central; latest counts
+are in `incubator/continual-v6/r3/latest-run.json`. Training has not started in the
+last observation. Calendar cutoff remains; do not blindly restart an active run.
+V7 frozen-frontier capture completed **109,825/109,825** windows at 19:30 Central,
+4,577 packs, zero remaining batch failures; combined evening r0 index sealed.
+Supervisor `healys-v7-evening-continuation-20260929.service` advanced to replay;
+`v7-evening-continuation-20260929-r0/selected-replay.json` owns exact inputs/output.
+Larger replay remains incomplete. Supervisor then resumes original discovery if
+budget remains. Selected reference epoch and approved 10,835-pair policy unchanged.
+[Evening continuation evidence](docs/reviews/2026-09-29-v7-evening-continuation.md).
 
 ## Next actions
 
-1. Observe capture/supervisor terminal receipts, selected index and replay progress;
-   inspect actual failures/resources before any retry. Do not restart active jobs.
-2. Reconcile new actual requests and reference/provider/storage coverage; no full
-   gate closure follows from this pilot or bounded replay.
-3. Observe V6 completion and next-session paper risk; preserve October 2 provider
-   decision and FA schedules. No training/freeze completion claim yet.
+1. Observe migration progress/terminal receipt; verify external reads and actual
+   internal free-space change. Resume with v2 only after inspecting any failure.
+2. Observe V6 and V7 coexistence, exit receipts and further actual requests; full
+   capture/replay/training gates are not closed by this move.
+3. Observe next-session paper risk, especially AXP; retain existing fresh-quote
+   policy. Preserve October 2 provider decision and FA schedules.
 
-[CURRENT_STATE](docs/CURRENT_STATE.md) owns exact runtime pointers. Preserve all
-unrelated dirty work and completed gates. Previous handoff archived before replacement.
+[CURRENT_STATE](docs/CURRENT_STATE.md) owns selected runtime pointers. Keep MRHA
+connected. Preserve unrelated dirty work, all frozen sources and prior receipts.
