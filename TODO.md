@@ -40,10 +40,12 @@ The following scope is unchanged by the documentation consolidation.
   Power interruption around 13:14 Central: 72,120/109,825 windows verified in
   3,005 packs; 37,705 remain. Transient services are gone; original worker journals
   survive and recovered copies pass quick checks. No combined index was sealed.
-  Evening user-authorized resume reconciled stale workers under locks; capture
-  reached 86,424/109,825 windows at 18:42 with no new failures. Bounded retries,
-  new pending replay and original discovery are queued behind active capture.
-  New replay pilot: 20/20 independent comparisons match; full coverage remains open.
+  Evening capture completed all 109,825 windows at 19:30; combined index sealed.
+  Replay reached 5,021,957/21,624,449 horizon-targets before checkpointing.
+  User-authorized restart at 23:28 resumes the same ledgers; the user removed
+  the overall time cutoff. Automatic continuation runs until the selected replay
+  queue finishes, subject to resource/integrity guards. Further input gaps remain possible.
+  [No-cutoff continuation](docs/reviews/2026-09-29-v7-overnight-resume.md).
   [Recovery census and storage](docs/reviews/2026-09-29-power-surge-recovery.md).
   [Recovery and active services](docs/reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
 - [ ] **7-3.reconcile:** Reconcile required requests, captures, references,

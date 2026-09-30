@@ -227,11 +227,13 @@ this user-authorized bounded run. Historical recovery observations are retained 
 | Scope | Current location / service |
 | --- | --- |
 | Frozen actual requests | `v7-recovery-frontier-20260929-r0/`: 109,825 quote windows and 1,985 reference requests |
-| Active quote capture | `v7-frontier-capture-20260929-r0/progress.json`; `healys-v7-frontier-evening-20260929.service` |
+| Completed quote capture | `v7-frontier-capture-20260929-r0/progress.json`; `healys-v7-frontier-evening-20260929.service` |
 | Raw quote packs | `nn_meta/data_v7/execution-recovery-20260929-r0/` |
-| Bounded continuation | `v7-evening-continuation-20260929-r0/progress.json`; `healys-v7-evening-continuation-20260929.service` |
-| Selected replay inputs/output | Supervisor `selected-replay.json` once published; read exact verified quote index/policy/campaign from it |
-| Latest sealed capture index | `v7-frontier-capture-20260929-r0/index-receipt.json` once published; a target filename is not a completed index |
+| Prior evening continuation | `v7-evening-continuation-20260929-r0/progress.json`; checkpointed at 22:01 September 29 |
+| Current replay worker | `healys-v7-pending-overnight-20260929.service`; same selected campaign, restarted 23:28:20 |
+| No-cutoff continuation | `healys-v7-until-complete-20260929.service`; `v7-until-complete-20260929-r0/progress.json` |
+| Selected replay inputs/output | `v7-evening-continuation-20260929-r0/selected-replay.json`; same existing campaign checkpoint |
+| Latest sealed capture index | `v7-frontier-capture-20260929-r0/index-receipt.json`; sealed evening r0, all 109,825 windows |
 | Combined held/base references | `v7-reference-epoch-20260929-r0/`; 2,225,829 original contract/date responses |
 | Exact alternate admission | `v7-held-reference-admission-20260929-r1/`; two exact dated-list recoveries |
 | Approved new replay policy | `v7-contract-blackouts-20260929-held-approved/`; 10,835 pairs including all prior exclusions |
@@ -240,13 +242,20 @@ this user-authorized bounded run. Historical recovery observations are retained 
 | Preserved original discovery | `v7-execution-campaign-20260928-r1/waves/`; controller `v7-execution-recovery-20260929-r0/`, original r4 inputs |
 | Database recovery preimages | `v7-pending-replay-plan-20260929-r0.recovery/`; initial incomplete planner transaction also preserved |
 
-September 29 at 18:42 Central: capture 86,424/109,825 windows, no failures in
-this resumed pass. Supervisor phase waiting for capture; starts retries, new
-pending replay, then original discovery if its five-hour budget remains.
-Capture: two autosized workers, 1.5/2-GiB high/max, CPU 100%, no swap.
-Supervisor/replay: one autosized worker, 3/4-GiB high/max, CPU 100%, no swap.
-Replay checks 6-GiB available-memory and 20-GB disk reserves. Capture retains
-its own quota/floor/write guards. Internal free ~86 GiB, MRHA ~693 GiB; no files moved.
+September 29 at 23:28:20 Central: user-authorized pending replay resumed after
+clean scheduled checkpointing. Verified eight campaign anchors, all wave-bound
+sources and 31 SQLite quick checks; retained 5,021,957 horizon-target evaluations.
+Fresh progress increased. The user removed the overall cutoff: the separate
+supervisor waits for the active pass, then automatically continues checkpoint
+slices until all 93 selected securities finish. Initial completed-security counters
+rebuild each traversal; retained per-wave completion is authoritative.
+
+One autosized worker, 3/4-GiB memory high/max, CPU 100%, Nice 15, no swap.
+No overlapping replay workers. Keep 6-GiB available-memory / 20-GB disk guards;
+capacity waits retry, integrity failures remain explicit. Original discovery is
+checkpointed. Capture completed all 109,825 windows at 19:30 with zero remaining
+failures. V6 and MRHA migration remain independently active.
+[Preflight, exact services and no-cutoff continuation](reviews/2026-09-29-v7-overnight-resume.md).
 
 Independent per-horizon comparison matches all 20 pilot results. All remain
 capture-incomplete with two further requests; this is not full replay acceptance.

@@ -1,0 +1,206 @@
+{
+  "full_execution_coverage": false,
+  "launcher_hashes": {
+    "/home/healy/Coding/HealysBacktester/scripts/finish_v7_pending_20260929.py": "123ad2c357983952e0335626bd6ed99ee003d5918658d77f64fa9d90a22c0863",
+    "/home/healy/Coding/HealysBacktester/scripts/finish_v7_pending_20260929.sh": "ad1f20db73813485815f2501b7c0d154b3b259fb0ab16b2a0c761900accccbdd",
+    "/home/healy/Coding/HealysBacktester/scripts/resume_v7_pending_20260929.sh": "904b0e4de5be05ee0e8d745e5abb96dffadc3a39e95e5fcd63e6d799768ce2d7"
+  },
+  "observed_at": "2026-09-30T04:33:04.273042+00:00",
+  "overall_time_limit": null,
+  "preflight": {
+    "campaign": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-pending-replay-campaign-20260929-20260929T233047Z",
+    "full_execution_coverage": false,
+    "inputs_checked": 8,
+    "local_free_bytes": 134210490368,
+    "mount": {
+      "fstype": "exfat",
+      "options": "rw,nosuid,nodev,relatime,uid=1000,gid=1000,fmask=0022,dmask=0022,iocharset=utf8,errors=remount-ro",
+      "target": "/run/media/healy/MRHA",
+      "uuid": "62C9-C390"
+    },
+    "observed_at": "2026-09-30T04:26:12.034708+00:00",
+    "totals": {
+      "cohorts_discovered": 59278,
+      "distinct_horizon_targets_covered": 5021957
+    },
+    "waves": [
+      {
+        "quick_check": "ok",
+        "security": "BBG000B9XRY4",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000B9XYV2",
+        "status": "replayed_pending"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000B9YJ35",
+        "status": "replayed_pending"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000B9ZXB4",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BB07P9",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BB3080",
+        "status": "replayed_pending"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BB5006",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BB5BF6",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BB6G37",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BB6KF5",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BB6R33",
+        "status": "replayed_pending"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BB6WG8",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BBDZG3",
+        "status": "replayed_pending"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BBGGQ1",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BBJQV0",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BBL8V7",
+        "status": "replayed_pending"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BBPFB9",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BBQCY0",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BBS2Y0",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BBV9N3",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BBVJZ8",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BC9938",
+        "status": "replayed_pending"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BCG930",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BCJ161",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BCKGW7",
+        "status": "replayed_pending"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BCMBG4",
+        "status": "replayed_pending"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BCQZS4",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BCRJM5",
+        "status": "replayed_pending"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BCSST7",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BCTLF6",
+        "status": "checkpointed"
+      },
+      {
+        "quick_check": "ok",
+        "security": "BBG000BCWCG1",
+        "status": "checkpointed"
+      }
+    ]
+  },
+  "progress": {
+    "active_security": "BBG000B9XRY4",
+    "elapsed_seconds": 280.0232573249996,
+    "failed": {},
+    "full_execution_coverage": false,
+    "queued": 92,
+    "securities_replayed": 0,
+    "securities_required": 93,
+    "status": "running",
+    "stop_reason": null,
+    "updated_at": "2026-09-30T04:33:00.761009+00:00"
+  },
+  "retained_horizon_targets": 5042885,
+  "supervisor": {
+    "campaign": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-pending-replay-campaign-20260929-20260929T233047Z",
+    "continuation_passes": 0,
+    "error": null,
+    "full_execution_coverage": false,
+    "overall_time_limit": null,
+    "phase": "waiting_for_active_replay",
+    "updated_at": "2026-09-30T04:31:03.597526+00:00"
+  }
+}

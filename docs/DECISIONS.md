@@ -1939,3 +1939,13 @@ indexes and writable replay databases local; exclude SQLite-sidecar cases.
 Verify external copies before local replacement and retain 20 GiB on MRHA.
 This changes storage placement, not capture scope, quota accounting or gate status.
 [Scope and evidence](reviews/2026-09-29-mrha-payload-migration.md).
+
+## 2026-09-29 — Continue the selected V7 replay without an overall cutoff
+
+The user requested restarting V7 and explicitly said not to impose a time limit.
+Resume the verified existing pending-replay campaign and continue automatically
+across internal checkpoint slices until its 93-security frozen queue finishes.
+No overall wall-clock cutoff; retain memory/disk guards and explicit integrity
+failure handling. V6 and MRHA migration continue. This does not authorize changing
+frozen inputs, bypassing missing-data checks or declaring full V7 coverage.
+[Runtime and evidence](reviews/2026-09-29-v7-overnight-resume.md).
