@@ -6,6 +6,23 @@ gates, [TODO](../TODO.md) owns selected work, and [CURRENT_STATE](CURRENT_STATE.
 owns selected operational pointers. Do not execute an old continuation order
 solely because it appears in this log.
 
+### 2026-09-30 — Dedicate after-close compute to V6, then restore batch work
+
+The user selected a 15:01 Central one-time local compute handover today to finish
+the pinned V6 incubator catch-up, training and evaluation. Temporarily pause
+competing V7, migration, FA, backup, data and scanner workloads; retain basic
+order management/monitoring. This overrides the 15:45 scheduled V6 start and the
+previous uninterrupted-V7 direction for this interval. Preserve completed seals,
+source bindings and the next-morning cutoff. Use autosized data workers and all
+available CPU training threads within a 26-GiB service limit.
+
+The user explicitly selected automatic restoration after completion, with as
+much supported compute/concurrency as possible. Restoration requires a verified
+candidate freeze after evaluation; failures leave jobs paused for investigation.
+Restore timer states and V7/migration with versioned resource policy; current V7
+producer limits remain two discovery, four capture and one serial replay worker.
+No model promotion is implied. [Plan and verification](reviews/2026-09-30-v6-dedicated-compute.md).
+
 ### 2026-09-18 — Close 6-1 with explicit noncash boundary exclusions
 
 The 234 remaining noncash provider records are resolved one-for-one as

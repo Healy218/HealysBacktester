@@ -295,6 +295,35 @@ and `progress.json` together; a waiting service is not proof of advancing work.
 Only `closure_candidate_ready` reaches final evidence review, and it does not
 itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
 
+### September 30 15:01 dedicated V6 handover — scheduled
+
+The selected one-time timer is `healys-v6-focus-20260930.timer`, starting
+`healys-v6-focus-20260930.service` at **15:01 Central September 30**. This takes
+precedence over the preceding continuous-V7 observation and the normal 15:45
+V6 timer for this interval. Installed timer is enabled/active/waiting with the
+exact 15:01 next event; service was inactive at preparation. `schedule.json`
+retains installation/preflight hashes. Scheduling is not proof the handover ran.
+
+Runtime evidence: `nn_meta/validation/v6-focus-20260930/progress.json`,
+`pause-plan.json`, `paused-services.json`, `incubator-result.json`,
+`restored-services.json`, `service-exit.json` and the exact service journal.
+V6's actual pipeline receipt remains `incubator/continual-v6/r3/latest-run.json`.
+At handover, competing local V7/migration/FA/backup/data/scanner jobs are paused;
+basic order management/monitoring and hourly reporting continue. Actual V6
+startup follows checkpoint drain. Selected pinned catch-up remains September 28.
+
+V6 allocation: 25/26-GiB high/max, no swap, no CPU quota, all available training
+threads (16 observed), 4500-MiB data-worker budget with 4096-MiB host reserve.
+Automatic restoration follows a verified completed candidate, including its
+evaluation; failure/incomplete/deadline keeps competing jobs paused for review.
+The next-morning research cutoff and all model/admission contracts remain.
+
+Restored V7 uses the same supervisor names and checkpoint roots, with separately
+bound `scripts/resume_v7_compute_20260930.py`: up to two discovery workers,
+four quote workers and the existing one serial replay worker; 8/6-GiB service
+limits, CPU quotas removed. Actual worker counts remain memory-aware.
+[Scope, restart details and verification](reviews/2026-09-30-v6-dedicated-compute.md).
+
 ## V6 Alpaca paper and incubator
 
 Configuration and startup were verified at the September 27 activation:

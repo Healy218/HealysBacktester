@@ -1,0 +1,23 @@
+[Unit]
+Description=September 30 dedicated V6 incubator after-close compute handover
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python -u /home/healy/Coding/HealysBacktester/scripts/v6_focus_20260930.py --auto-restore
+ExecStopPost=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/v6_focus_20260930.py --record-exit
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=MPLCONFIGDIR=/home/healy/Coding/HealysBacktester/incubator/continual-v6/cache/matplotlib
+Environment=NUMBA_CACHE_DIR=/home/healy/Coding/HealysBacktester/incubator/continual-v6/cache/numba
+Environment=TF_CPP_MIN_LOG_LEVEL=2 CUDA_VISIBLE_DEVICES=-1
+TimeoutStartSec=18h
+TimeoutStopSec=60s
+KillMode=control-group
+MemoryHigh=25G
+MemoryMax=26G
+MemorySwapMax=0
+TasksMax=512
+Nice=0
+UMask=0077

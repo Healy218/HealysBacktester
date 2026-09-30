@@ -1,0 +1,12 @@
+[Unit]
+Description=One-time V6 compute handover September 30 at 15:01 Central
+
+[Timer]
+OnCalendar=2026-09-30 15:01:00 America/Chicago
+AccuracySec=1s
+RandomizedDelaySec=0
+Persistent=true
+Unit=healys-v6-focus-20260930.service
+
+[Install]
+WantedBy=timers.target

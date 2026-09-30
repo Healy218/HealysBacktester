@@ -11,14 +11,14 @@ running-job locations; do not choose a different revision from an old review.
 Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
 The following scope is unchanged by the documentation consolidation.
 
-**September 30 current direction:** User selected finishing all of 7-3 where
-possible, continuing across capture/replay checkpoints without an overall cutoff.
-The 129,873-row census is reconciled: 126,719 quote windows and 573 missing
-references. All 573 references are now captured/audited standard; the next quote
-capture and original discovery are running under continuous successor controllers.
-Finish full references, paths and storage/provider reconciliation before closure;
-preserve completed entry capture and frozen replay results. Observe the separate
-V6 15:45 Central resume. [Continuation evidence](docs/reviews/2026-09-30-v7-frontier-continuation.md).
+**September 30 revised direction:** At **15:01 Central**, pause competing local
+batch jobs and dedicate compute to **OPS-INCUBATOR.DATA/PROOF**. Until the handover,
+V7 continues normally. After a verified V6 candidate freeze/evaluation, restore
+paused jobs automatically with maximum supported memory-aware concurrency.
+Gate 7-3 remains open with its completed evidence preserved; no recapture of
+completed batches. The one-time handover supersedes the 15:45 V6 start and the
+previous uninterrupted-V7 instruction for this interval.
+[Scheduled handover and completion boundary](docs/reviews/2026-09-30-v6-dedicated-compute.md).
 
 - [x] **7-3.entry:** Full-universe entry quote/trade capture completed September 28
   at 04:58 Central. The final queue count reconciles with prior capture subtraction.
@@ -110,10 +110,10 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   cases passed targeted checks: six identity collisions and eleven transient tick
   failures. September 30: 325/449 completed; all 124 remaining entries report
   timeout/deadline at the 08:00 market-hours cutoff. Checkpoints are retained.
-  Resume is scheduled September 30 at **15:45 Central (3:45 p.m.)**. Next
-  session, verify the service journal and latest-run receipt after that time;
-  preserve the pinned catch-up and checkpoints. Training/freeze have not started;
-  respect the existing market-hours guard. [Observation](docs/reviews/2026-09-30-v6-step-policy-v4.md).
+  Dedicated handover is scheduled September 30 at **15:01 Central**. Verify
+  `healys-v6-focus-20260930.service` and its actual receipts; preserve the pinned
+  catch-up and checkpoints. Training/freeze have not started. This one-time
+  user-requested close-time exception leaves the normal market guard unchanged. [Observation](docs/reviews/2026-09-30-v6-step-policy-v4.md).
   [Overnight observation](docs/reviews/2026-09-29-overnight-checkpoints.md).
   [Repair and current observation](docs/reviews/2026-09-28-v6-continual-error-repair.md).
   Preserve the base freeze and resumable daily extensions.
@@ -128,7 +128,10 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   catch-up remains incomplete; full update/recovery/coexistence proof remains.
   September 29: installed up to four autosized data workers, CPU 400%,
   19/20-GiB limits for the next permitted run; the calendar cutoff remains.
-  [Sizing and verification](docs/reviews/2026-09-29-v6-worker-sizing.md). Post-outage
+  September 30: dedicated 26-GiB allocation, autosized data workers and all
+  available training CPU threads prepared for the 15:01 handover; measured
+  full-run results remain pending. [Dedicated schedule](docs/reviews/2026-09-30-v6-dedicated-compute.md).
+  [Prior sizing and verification](docs/reviews/2026-09-29-v6-worker-sizing.md). Post-outage
   restart and forward progress verified; full run/coexistence proof remains open.
   [Restart evidence](docs/reviews/2026-09-29-paper-reconciliation-v6-resume.md). Retries retain an
   unfinished catch-up date; verify full completion and sustained resource use.
@@ -141,6 +144,7 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   recommend retaining another month. The user decides cancellation.
   [Decision gate](docs/reviews/2026-09-24-v6-alpaca-paper-start.md).
 
-FA collection continues under its existing schedules. Additional FA research,
+FA collection is included in the temporary local 15:01 compute pause and
+automatic post-V6 restoration; its normal schedules otherwise remain selected. Additional FA research,
 SPX0, volatility, stacking, RL and panel expansion remain in the roadmap until
 selected; they do not get independent active TODOs or handoffs.
