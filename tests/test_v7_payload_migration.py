@@ -66,3 +66,24 @@ def test_identical_sources_share_external_content_without_changing_headers(tmp_p
         relocate(src, dst, digest(src), stamp(src))
     assert (tmp_path / 'first').resolve() == (tmp_path / 'second').resolve()
     assert len(list(dst.parent.iterdir())) == 1 and header.read_bytes() == before
+
+
+def test_known_hardlink_alias_ctime_change_recovers_but_unexplained_change_fails(tmp_path):
+    import os
+    from scripts.migrate_v7_payloads_mrha_v2 import alias_stamp
+    one = tmp_path / 'one'; two = tmp_path / 'two'
+    one.write_bytes(b'immutable'); os.link(one, two)
+    original = stamp(one); expected = digest(one)
+    db = sqlite3.connect(':memory:')
+    db.execute('CREATE TABLE files(source,sha,stamp,status)')
+    db.execute('INSERT INTO files VALUES(?,?,?,?)', (str(one),expected,json.dumps(original),'moved'))
+    relocate(one,tmp_path / 'external',expected,original)
+    current = alias_stamp(db,str(two),expected,original)
+    assert current[:4] == original[:4]
+    relocate(two,tmp_path / 'external',expected,current)
+    assert one.resolve() == two.resolve()
+    other = tmp_path / 'other'; other.write_bytes(b'immutable')
+    before = stamp(other); other.chmod(0o400)
+    with pytest.raises(ValueError,match='without a migrated'):
+        alias_stamp(db,str(other),expected,before)
+    db.close()
