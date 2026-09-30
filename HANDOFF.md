@@ -1,66 +1,62 @@
-# Handoff — September 30, 2026 — V6 steps deployed; V7 replay complete
+# Handoff — September 30, 2026 — session refresh; continue 7-3
 
-## User direction and result
+## Next-session focus
 
-User requested V6 buy steps 1.05/1.10/1.125 and sell steps 0.95/0.90/0.875,
-plus V6 update/V7 run status. Explicitly approved one new ladder each for
-exhausted AXP/VG exits. Three-step paper policy deployed at 10:33 Central;
-both approved retries filled at step 2. Gate **7-3 remains selected/open**.
-[Review](docs/reviews/2026-09-30-v6-step-policy-v4.md),
-[deployment/fill/research evidence](docs/reviews/2026-09-30-v6-step-policy-v4.json).
+User explicitly selected **7-3 — required option evidence** for the next session,
+with the aim of finishing it against its existing acceptance evidence. Start with
+[TODO](TODO.md), then this handoff and the relevant [ROADMAP gate](ROADMAP.md#phase-7--v7-data-execution-and-training).
+[CURRENT_STATE](docs/CURRENT_STATE.md) owns exact selected inputs and runtime pointers.
+7-3 remains open; the completed frozen replay is not full input/execution coverage.
 
-## V6 paper runtime
+## V7 stopping point and continuation
 
-- Code `4f9c02e`: pricing/bridge v4, slice adapter v2, runtime v5, scanner v7.
-  Policy `midpoint-step-5-10-12.5pct-v4`; waits 30/30/60 seconds.
-  Follow-up `1bbe651`: source cleanup v3/scanner v8, deployed 10:59.
-- Old sell steps were working: QCOM filled; AXP/VG exhausted all four old
-  prices. New status receipts explicitly surface exhausted exits.
-- At 10:40: AXP ×7 filled $9.75; VG ×104 filled $0.70, both second steps.
-  77 broker/journal orders match status/filled quantity; no open orders.
-  WFC ×26 remains. Retry IDs persist; do not rearm these again.
-- Both timers active, order service healthy. The 10:30/10:45 scans failed
-  on missing WFC/VG quotes. Cleanup v3 repairs a newer unfilled VG projection
-  wrongly protected by older same-contract fills; 11:00 retired that source.
-  The 11:00 scan completed in 256.537 seconds, 308 candidates, zero errors.
-- State: `/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/`.
-  Backups: `runtime-revisions/step-policy-v4-20260930/` and
-  `runtime-revisions/scanner-contract-reuse-v3-20260930/` below that state.
-  Receipt/scripts: `nn_meta/validation/v6-step-policy-v4-20260930/`.
-- Frozen model/source lineage preserved; existing chains retain saved policy.
-  Policy checks: 82 passed; follow-up cleanup/integration: 61 passed.
-  No live account, stop threshold or model changes.
+- At September 30 08:18 Central, the selected pending replay completed all
+  **93/93 securities and 21,624,449 horizon-target evaluations**, without failures.
+- The preceding **109,825-window capture** is also complete and sealed. Preserve
+  both completed results; do not restart entry capture or this same frozen replay.
+- Per-wave receipts total **129,873 pending input requests**, not deduplicated
+  capture windows. Original full-universe execution discovery is checkpointed.
+- Begin **7-3.paths/references** by reconciling those actual requests against
+  sealed quote/reference coverage; deduplicate the remaining capture frontier.
+  Continue original discovery and capture only actual held/exit/roll/stock gaps.
+- Preserve the selected reference epoch and approved **10,835 exact exclusions**;
+  do not infer additional exclusions or change frozen producer/source hashes.
+- Complete **7-3.reconcile** for requests, captures, references, provider failures
+  and measured storage. Close **7-3.close** only with the full declared evidence.
+  Do not claim 7-4 coverage or start training merely because a replay queue finished.
+- Campaign: `nn_meta/validation/v7-pending-replay-campaign-20260929-20260929T233047Z/`.
+  Supervisor: `nn_meta/validation/v7-until-complete-20260929-r0/` (completed).
+  [Latest completion/evidence](docs/reviews/2026-09-30-v6-step-policy-v4.md).
 
-## Research progress
+## Separate V6 obligation — 3:45 p.m. Central resume
 
-- V6 continual r3: **325/449 symbols**, 124 remaining deadline/timeout entries
-  at the 08:00 market-hours cutoff. Training/freeze have not started.
-  Next timer 15:45 Central; retained September 28 catch-up stays pinned.
-  Receipt `incubator/continual-v6/r3/latest-run.json`.
-- V7 completed **93/93 selected securities**, **21,624,449 horizon-target
-  evaluations**, at 08:18 Central; no failures, two continuation passes.
-  Supervisor `nn_meta/validation/v7-until-complete-20260929-r0/`.
-  Campaign `nn_meta/validation/v7-pending-replay-campaign-20260929-20260929T233047Z/`.
-- Per-wave receipts total **129,873 pending requests**, not a deduplicated
-  capture-window census. Further actual-input acquisition and original full
-  discovery remain. No V7 training started; 7-3/7-4 remain open.
-- Preserve completed 109,825-window capture and frozen replay; do not rerun
-  without new evidence. Selected inputs/exclusions unchanged (10,835 pairs).
+V6 continual r3 was **325/449 symbols complete** at the September 30 morning
+cutoff; the 124 unfinished entries report timeout/deadline. Successful checkpoints
+and the unfinished September 28 snapshot remain pinned. Training/freeze have not
+started. **Resume is scheduled September 30 at 15:45 Central (3:45 p.m.)** through
+`healys-v6-continual.timer`; continue observing this alongside 7-3.
+If the next session starts after that time, check the actual service journal and
+`incubator/continual-v6/r3/latest-run.json` for a successful resume and progress.
+A timer is not proof of execution. Preserve the calendar/data guards, autosizing
+and checkpoints; do not replace the run or deploy a new model automatically.
 
-## Storage and next actions
+## Completed V6 paper repair
 
-MRHA migration remains active: at 10:39, 182.484/229.378 GB logical moved,
-175,649/504,516 files, no error, about 198.7 GiB free locally. Service
-`healys-v7-mrha-migration-v2-20260929.service`; state
-`nn_meta/validation/v7-mrha-payload-migration-20260929-r1/`.
-Keep MRHA UUID 62C9-C390 connected. Working databases/models stay local;
-Steam unchanged.
+Three-step paper policy is deployed: midpoint buy 1.05/1.10/1.125, sell
+0.95/0.90/0.875, waits 30/30/60 seconds. Approved AXP/VG retries filled at step 2;
+do not rearm them. Source cleanup v3/scanner v8 fixes the stale unfilled VG signal.
+The 11:00 scan completed in 256.537 seconds, 308 candidates, zero detection errors.
+Code commits `4f9c02e`, `1bbe651`; evidence/notes `6f5868b`. Frozen model and risk
+thresholds are unchanged. [Deployment and verification](docs/reviews/2026-09-30-v6-step-policy-v4.json).
+Check current receipts for later health; no new paper repair is selected.
 
-1. Observe scheduled scanner and broker receipts; the 11:00 repair scan passed.
-2. Reconcile the new actual requests, then continue selected V7 acquisition/
-   discovery without reopening completed evidence or assuming full coverage.
-3. Observe V6's after-close resume and migration completion; retain October 2
-   provider decision and FA schedules. No new model deployment is authorized.
+## Storage and session constraints
 
-[CURRENT_STATE](docs/CURRENT_STATE.md) owns exact pointers. Preserve unrelated
-working changes, checkpoints and all frozen producer versions.
+MRHA migration was running at 10:39 Central: **182.484/229.378 GB logical**,
+175,649/504,516 files, no error; about 198.7 GiB free locally. Recheck its exact
+service/receipt before asserting current health or storage completion.
+[Migration and recovery](docs/reviews/2026-09-29-mrha-payload-migration.md).
+Keep MRHA UUID 62C9-C390 connected. Working databases/models remain local;
+Steam unchanged. Preserve unrelated working changes and all frozen artifacts.
+Retain the October 2 provider decision obligation and existing FA schedules.
+This refresh changed notes only; it did not launch or stop jobs.

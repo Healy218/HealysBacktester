@@ -11,6 +11,13 @@ running-job locations; do not choose a different revision from an old review.
 Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
 The following scope is unchanged by the documentation consolidation.
 
+**September 30 session-refresh direction:** Continue 7-3 next session, aiming to
+finish its declared evidence. Start by reconciling/deduplicating the 129,873
+pending request rows against sealed coverage, then continue actual-input capture
+and original discovery. Finish references, paths and storage/provider reconciliation
+before closing 7-3; preserve completed entry capture and frozen replay results.
+Observe the separate V6 15:45 Central resume alongside this work.
+
 - [x] **7-3.entry:** Full-universe entry quote/trade capture completed September 28
   at 04:58 Central. The final queue count reconciles with prior capture subtraction.
   [Completion evidence](docs/reviews/2026-09-28-overnight-entry-completion.md).
@@ -94,8 +101,10 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   cases passed targeted checks: six identity collisions and eleven transient tick
   failures. September 30: 325/449 completed; all 124 remaining entries report
   timeout/deadline at the 08:00 market-hours cutoff. Checkpoints are retained.
-  Next timer: 15:45 Central. Training/freeze have not started; respect the
-  existing market-hours guard. [Observation](docs/reviews/2026-09-30-v6-step-policy-v4.md).
+  Resume is scheduled September 30 at **15:45 Central (3:45 p.m.)**. Next
+  session, verify the service journal and latest-run receipt after that time;
+  preserve the pinned catch-up and checkpoints. Training/freeze have not started;
+  respect the existing market-hours guard. [Observation](docs/reviews/2026-09-30-v6-step-policy-v4.md).
   [Overnight observation](docs/reviews/2026-09-29-overnight-checkpoints.md).
   [Repair and current observation](docs/reviews/2026-09-28-v6-continual-error-repair.md).
   Preserve the base freeze and resumable daily extensions.
