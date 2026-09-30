@@ -260,6 +260,41 @@ source-bound producers/ledgers remain; fresh inputs bind separate epochs.
 [Evening evidence and approval](reviews/2026-09-29-v7-evening-continuation.md).
 Neither snapshot capture nor bounded discovery closes 7-3 or execution gates.
 
+### September 30 continuous required-input continuation
+
+User selected finishing all of 7-3 where possible, without an overall cutoff.
+This continuation supersedes the September 30 morning stopping point above.
+Original discovery keeps its original inputs; new pending replay consumes new
+sealed epochs. All roots below are under `nn_meta/validation/` unless stated.
+
+| Scope | Selected location/service |
+| --- | --- |
+| Reconciled completed replay frontier | `v7-recovery-frontier-20260930-r0/`: 129,873 requests, 126,719 quote windows, 573 dated references |
+| Current quote acquisition | `v7-frontier-capture-20260930-r0/`; initial service `healys-v7-frontier-20260930.service` |
+| Current raw quote packs | `nn_meta/data_v7/execution-recovery-20260930-r0/` |
+| Current sealed references | `v7-reference-epoch-20260930-r0/`; 2,226,402 original responses |
+| New reference admission evidence | `v7-held-reference-reconciliation-20260930-r0/`; all 573 new pairs standard |
+| Next frozen pending replay plan | `v7-pending-replay-plan-20260930-r0/`; 20,729,596 horizon-targets |
+| Original discovery continuation | `v7-execution-recovery-20260929-r0/`; initial service `healys-v7-discovery-20260930.service` |
+| Continuous discovery supervisor | `healys-v7-required-discovery-20260930.service`; `v7-required-inputs-20260930-r0/discovery/` |
+| Continuous acquisition/replay supervisor | `healys-v7-required-frontier-20260930.service`; `v7-required-inputs-20260930-r0/frontier/` |
+| Successive full-scope epoch receipts | `v7-required-inputs-20260930-r0/epochs/<ordinal>/` |
+| Reconciler real-data verification | `v7-frontier-reconciliation-pilot-20260930-r1/` |
+
+At 11:32 Central both supervisors were waiting for their exact initial services;
+quotes and original discovery were making progress without reported failures.
+The reference capture/audit completed at 11:21:57. The approved policy remains
+`v7-contract-blackouts-20260929-held-approved/` (10,835 exact pairs); the new epoch
+also preserves both prior exact-list admissions. No new exclusion was introduced.
+
+Each supervisor binds its scripts. Four-/six-hour child checkpoints are resumed;
+there is no overall cutoff. Existing completed captures/replays are not restarted.
+Resource waits retain checkpoints. Explicit failures and unsupported actual
+requests leave their precise evidence for investigation. Check service journals
+and `progress.json` together; a waiting service is not proof of advancing work.
+Only `closure_candidate_ready` reaches final evidence review, and it does not
+itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
+
 ## V6 Alpaca paper and incubator
 
 Configuration and startup were verified at the September 27 activation:

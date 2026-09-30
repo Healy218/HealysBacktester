@@ -1,62 +1,59 @@
-# Handoff — September 30, 2026 — session refresh; continue 7-3
+# Handoff — September 30, 2026 — finish all required V7 inputs
 
-## Next-session focus
+## User direction
 
-User explicitly selected **7-3 — required option evidence** for the next session,
-with the aim of finishing it against its existing acceptance evidence. Start with
-[TODO](TODO.md), then this handoff and the relevant [ROADMAP gate](ROADMAP.md#phase-7--v7-data-execution-and-training).
-[CURRENT_STATE](docs/CURRENT_STATE.md) owns exact selected inputs and runtime pointers.
-7-3 remains open; the completed frozen replay is not full input/execution coverage.
+User explicitly requested finishing **all of 7-3 where possible**, not ending
+work at another partial-capture status. Continuous controllers now carry the
+selected work across checkpoint slices with **no overall cutoff**. Use
+[TODO](TODO.md), the [roadmap gate](ROADMAP.md#phase-7--v7-data-execution-and-training)
+and [CURRENT_STATE](docs/CURRENT_STATE.md#september-30-continuous-required-input-continuation).
 
-## V7 stopping point and continuation
+## This session's completed evidence
 
-- At September 30 08:18 Central, the selected pending replay completed all
-  **93/93 securities and 21,624,449 horizon-target evaluations**, without failures.
-- The preceding **109,825-window capture** is also complete and sealed. Preserve
-  both completed results; do not restart entry capture or this same frozen replay.
-- Per-wave receipts total **129,873 pending input requests**, not deduplicated
-  capture windows. Original full-universe execution discovery is checkpointed.
-- Begin **7-3.paths/references** by reconciling those actual requests against
-  sealed quote/reference coverage; deduplicate the remaining capture frontier.
-  Continue original discovery and capture only actual held/exit/roll/stock gaps.
-- Preserve the selected reference epoch and approved **10,835 exact exclusions**;
-  do not infer additional exclusions or change frozen producer/source hashes.
-- Complete **7-3.reconcile** for requests, captures, references, provider failures
-  and measured storage. Close **7-3.close** only with the full declared evidence.
-  Do not claim 7-4 coverage or start training merely because a replay queue finished.
-- Campaign: `nn_meta/validation/v7-pending-replay-campaign-20260929-20260929T233047Z/`.
-  Supervisor: `nn_meta/validation/v7-until-complete-20260929-r0/` (completed).
-  [Latest completion/evidence](docs/reviews/2026-09-30-v6-step-policy-v4.md).
+- Reconciled all 129,873 pending rows from the completed 93-security replay:
+  129,300 quote requests → 126,719 uncovered union windows, plus 573 references.
+- All 573 dated references captured/audited standard at 11:21:57 Central.
+  New epoch `v7-reference-epoch-20260930-r0` has 2,226,402 original responses;
+  prior exact-list admissions and all 10,835 approved exclusions preserved.
+- New frozen pending plan `v7-pending-replay-plan-20260930-r0`: 93 securities,
+  241,944 cohorts and 20,729,596 horizon-target evaluations.
+- Added versioned cumulative coverage reconciliation and continuous supervisors.
+  Sixteen focused tests passed; real-data reconciliation and reader checks passed.
+- [Evidence, runtime limits and completion boundary](docs/reviews/2026-09-30-v7-frontier-continuation.md).
 
-## Separate V6 obligation — 3:45 p.m. Central resume
+## Active continuation — inspect actual receipts
 
-V6 continual r3 was **325/449 symbols complete** at the September 30 morning
-cutoff; the 124 unfinished entries report timeout/deadline. Successful checkpoints
-and the unfinished September 28 snapshot remain pinned. Training/freeze have not
-started. **Resume is scheduled September 30 at 15:45 Central (3:45 p.m.)** through
-`healys-v6-continual.timer`; continue observing this alongside 7-3.
-If the next session starts after that time, check the actual service journal and
-`incubator/continual-v6/r3/latest-run.json` for a successful resume and progress.
-A timer is not proof of execution. Preserve the calendar/data guards, autosizing
-and checkpoints; do not replace the run or deploy a new model automatically.
+- Initial quotes: `healys-v7-frontier-20260930.service`, state
+  `nn_meta/validation/v7-frontier-capture-20260930-r0/`; raw packs in
+  `nn_meta/data_v7/execution-recovery-20260930-r0/`.
+- Original discovery: `healys-v7-discovery-20260930.service`, unchanged recovery
+  `nn_meta/validation/v7-execution-recovery-20260929-r0/` and original waves.
+- Continuous successors started 11:32 Central:
+  `healys-v7-required-discovery-20260930.service` and
+  `healys-v7-required-frontier-20260930.service`. They initially wait for the
+  exact initial units before owning continuation; do not launch duplicates.
+- State: `nn_meta/validation/v7-required-inputs-20260930-r0/`:
+  `discovery/`, `frontier/`, then `epochs/<ordinal>/`.
+- The frontier controller follows the initial 93-security pending lineage,
+  then the completed full original 591-security discovery and its successors.
+  It reuses captured inputs and retains all source ledgers. New exceptions,
+  unsupported actual stock/calendar requests and failures require investigation;
+  they are never silently excluded. Source changes need a new bound revision.
+- `closure_candidate_ready` requires full discovery, no pending successor targets
+  and completed MRHA migration. Perform full request/provider/storage/conditional
+  physical-input evidence review before closing 7-3. It does not authorize training.
 
-## Completed V6 paper repair
+## Separate obligations and constraints
 
-Three-step paper policy is deployed: midpoint buy 1.05/1.10/1.125, sell
-0.95/0.90/0.875, waits 30/30/60 seconds. Approved AXP/VG retries filled at step 2;
-do not rearm them. Source cleanup v3/scanner v8 fixes the stale unfilled VG signal.
-The 11:00 scan completed in 256.537 seconds, 308 candidates, zero detection errors.
-Code commits `4f9c02e`, `1bbe651`; evidence/notes `6f5868b`. Frozen model and risk
-thresholds are unchanged. [Deployment and verification](docs/reviews/2026-09-30-v6-step-policy-v4.json).
-Check current receipts for later health; no new paper repair is selected.
+V6 remains pinned at 325/449 catch-up symbols; next timer September 30 **15:45
+Central**. Verify the real journal/latest-run after that time. Preserve calendar
+and daily-input guards, frozen model, risk thresholds and all successful seals.
+No new paper repair or retry is selected. October 2 provider decision remains.
 
-## Storage and session constraints
-
-MRHA migration was running at 10:39 Central: **182.484/229.378 GB logical**,
-175,649/504,516 files, no error; about 198.7 GiB free locally. Recheck its exact
-service/receipt before asserting current health or storage completion.
-[Migration and recovery](docs/reviews/2026-09-29-mrha-payload-migration.md).
-Keep MRHA UUID 62C9-C390 connected. Working databases/models remain local;
-Steam unchanged. Preserve unrelated working changes and all frozen artifacts.
-Retain the October 2 provider decision obligation and existing FA schedules.
-This refresh changed notes only; it did not launch or stop jobs.
+MRHA UUID 62C9-C390 verified mounted read/write. Existing migration continues:
+`healys-v7-mrha-migration-v2-20260929.service`, state
+`nn_meta/validation/v7-mrha-payload-migration-20260929-r1/`. Check current receipt
+before asserting completion; preserve catalogs, quota accounting and local
+working databases. Keep MRHA connected. FA schedules and Steam unchanged.
+Preserve unrelated dirty/untracked work. Do not modify frozen producers or
+bound supervisor scripts in place while their services are active.

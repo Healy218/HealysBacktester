@@ -1,0 +1,168 @@
+{
+  "anchors": {
+    "nn_meta/validation/v7-required-inputs-20260930-r0/discovery/binding.json": "7a560a69506628d86235ad1bf3831f78cbba85f254a8e9fd7e280688431f3667",
+    "nn_meta/validation/v7-required-inputs-20260930-r0/frontier/binding.json": "a5f45049454cdf27c86de19583e2f0a2f399c2813da6d1459ec1c207892a1195",
+    "v7-frontier-reconciliation-pilot-20260930-r1": "bf2bcdfed8f099a4d3ea4f57f0e5206c7462aa0f0ae716fe2999ec3b65369a53",
+    "v7-held-reference-demand-20260930-r0": "e0d4f50dbbc8a2f36a30dbf1e378cbce02967627a574e3cd8cdf631f6c825760",
+    "v7-held-reference-reconciliation-20260930-r0": "b857d7c5a793677e20ca24b689bb7ebad62d5026bdbc425c99102263f30829cb",
+    "v7-pending-replay-plan-20260930-r0": "598475bd0651d32c9486b146cbec010606a9a86536dbfb6097ff091d46d68f64",
+    "v7-recovery-frontier-20260930-r0": "01d10967bd3d79e51287c0e829275d9dd4539192a53ce4184a44d6769968d8c4",
+    "v7-reference-epoch-20260930-r0": "9b12736c6b245befb5746d4b33874ce0287b66745c08f590795bfeb40e163446"
+  },
+  "full_execution_coverage": false,
+  "gate_7_3_complete": false,
+  "independent_reconciliation": {
+    "capture_overlap_with_sealed_base": 0,
+    "purposes": {
+      "entry_purchase": 18143,
+      "exit_sale": 2553,
+      "held_mark": 108604,
+      "reference": 573
+    },
+    "quote_seconds": 2491957.408956907,
+    "quote_windows": 126719,
+    "reference_already_captured": 0
+  },
+  "next_replay_plan": {
+    "full_execution_coverage": false,
+    "horizon_targets": 20729596,
+    "scope": "Replay complete cohort/target memberships only where the preserved ledger emitted pending requests",
+    "securities": 93,
+    "selected_cohorts": 241944,
+    "selected_targets": 1091170
+  },
+  "observations": {
+    "v7-execution-recovery-20260929-r0": {
+      "active_securities": [
+        "BBG000BB07P9"
+      ],
+      "campaign_identity": "865384ac57b86a57f82e010a39c2aa5a37dcf89240f604ac910a5aee357bcb85",
+      "elapsed_seconds": 865.1002248260047,
+      "empty_securities": [],
+      "error": null,
+      "failed_securities": {},
+      "full_execution_coverage": false,
+      "local_free_bytes": 216670605312,
+      "queued_securities": 588,
+      "research_ready": false,
+      "securities_discovered": 2,
+      "securities_required": 591,
+      "status": "running",
+      "updated_at": "2026-09-30T16:35:44.348760+00:00"
+    },
+    "v7-frontier-capture-20260930-r0": {
+      "active_batches": 1,
+      "capture_windows_complete": 2976,
+      "capture_windows_required": 126719,
+      "completed_packs": 124,
+      "elapsed_seconds": 871.1970748390013,
+      "error": null,
+      "failed_batches": [],
+      "full_execution_coverage": false,
+      "index_output": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-frontier-quote-index-20260930-r0",
+      "queued_batches": 5155,
+      "research_ready": false,
+      "snapshot": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-recovery-frontier-20260930-r0",
+      "status": "capturing",
+      "updated_at": "2026-09-30T16:35:45.361048+00:00",
+      "workers": 1
+    },
+    "v7-mrha-payload-migration-20260929-r1": {
+      "elapsed_seconds": 50798.72587482601,
+      "error": null,
+      "external_free": 566866739200,
+      "files_moved": 190915,
+      "files_required": 504516,
+      "local_free": 216661291008,
+      "logical_bytes_moved": 186274104569,
+      "logical_bytes_required": 229378057319,
+      "status": "running",
+      "updated_at": "2026-09-30T16:35:27.361839+00:00"
+    },
+    "v7-required-inputs-20260930-r0/discovery": {
+      "gate_complete": false,
+      "overall_time_limit": null,
+      "phase": "waiting_for_existing_service",
+      "unit": "healys-v7-discovery-20260930.service",
+      "updated_at": "2026-09-30T16:32:22.993572+00:00"
+    },
+    "v7-required-inputs-20260930-r0/frontier": {
+      "gate_complete": false,
+      "overall_time_limit": null,
+      "phase": "waiting_for_existing_service",
+      "unit": "healys-v7-frontier-20260930.service",
+      "updated_at": "2026-09-30T16:32:29.859260+00:00"
+    }
+  },
+  "observed_at": "2026-09-30T16:24:49.354329+00:00",
+  "reconciliation_pilot": {
+    "capture_windows": 126719,
+    "distinct_requests": 129300,
+    "full_execution_coverage": false,
+    "original_pending_rows": 129873,
+    "pending_rows": 129300,
+    "reference_requests": 0,
+    "research_ready": false,
+    "reused_reference_links": 573,
+    "unsupported_requests": 0
+  },
+  "reference_audit": {
+    "admitted_under_existing_exclusions": true,
+    "counts": {
+      "standard": 573
+    },
+    "expected_contract_dates": 573,
+    "full_execution_coverage": false,
+    "full_planned_reference_capture": true,
+    "missing_contract_dates": 0,
+    "observed_contract_dates": 573,
+    "packs": 30,
+    "research_ready": false,
+    "retained_bytes": 797737,
+    "schema": "v7-reference-capture-reconciliation-v1",
+    "scope": "Actual replay-frontier dated-reference gaps only",
+    "unknown_failure_dates": {}
+  },
+  "reference_epoch": {
+    "counts": {
+      "approved_blackout": 5,
+      "nonstandard": 31,
+      "standard": 2215543,
+      "unavailable_404": 10823
+    },
+    "expected_contract_dates": 2226402,
+    "full_execution_coverage": false,
+    "full_planned_reference_capture": true,
+    "missing_contract_dates": 0,
+    "observed_contract_dates": 2226402,
+    "raw_responses_unchanged": true,
+    "schema": "v7-union-reference-epochs-v1",
+    "separately_admitted_exact_list_pairs": 2
+  },
+  "reference_readback": {
+    "new_standard_pairs": 573,
+    "preserved_alternate_pairs": 2
+  },
+  "services": {
+    "discovery": "healys-v7-discovery-20260930.service",
+    "quotes": "healys-v7-frontier-20260930.service",
+    "references": "healys-v7-held-references-20260930.service"
+  },
+  "snapshot": {
+    "capture_windows": 126719,
+    "distinct_requests": 129873,
+    "full_execution_coverage": false,
+    "kinds": {
+      "contract_reference": 573,
+      "quotes": 129300
+    },
+    "non_tick_requests": 573,
+    "observed_at": "2026-09-30T16:17:10.112432+00:00",
+    "pending_rows": 129873,
+    "waves": 93
+  },
+  "tests": {
+    "command": "./venv/bin/python -m pytest tests/test_v7_required_inputs.py tests/test_v7_finish_pending.py tests/test_v7_execution_recovery.py -q",
+    "passed": 16
+  }
+}

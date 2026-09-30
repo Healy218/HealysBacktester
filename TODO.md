@@ -11,12 +11,14 @@ running-job locations; do not choose a different revision from an old review.
 Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
 The following scope is unchanged by the documentation consolidation.
 
-**September 30 session-refresh direction:** Continue 7-3 next session, aiming to
-finish its declared evidence. Start by reconciling/deduplicating the 129,873
-pending request rows against sealed coverage, then continue actual-input capture
-and original discovery. Finish references, paths and storage/provider reconciliation
-before closing 7-3; preserve completed entry capture and frozen replay results.
-Observe the separate V6 15:45 Central resume alongside this work.
+**September 30 current direction:** User selected finishing all of 7-3 where
+possible, continuing across capture/replay checkpoints without an overall cutoff.
+The 129,873-row census is reconciled: 126,719 quote windows and 573 missing
+references. All 573 references are now captured/audited standard; the next quote
+capture and original discovery are running under continuous successor controllers.
+Finish full references, paths and storage/provider reconciliation before closure;
+preserve completed entry capture and frozen replay results. Observe the separate
+V6 15:45 Central resume. [Continuation evidence](docs/reviews/2026-09-30-v7-frontier-continuation.md).
 
 - [x] **7-3.entry:** Full-universe entry quote/trade capture completed September 28
   at 04:58 Central. The final queue count reconciles with prior capture subtraction.
@@ -34,6 +36,9 @@ Observe the separate V6 15:45 Central resume alongside this work.
   detail 404s). Evening review admitted two exact list responses; the user approved
   four remaining exact exclusions, preserving prior pairs (10,835 total). New
   reference epoch is sealed; future actual held-date coverage remains open.
+  September 30: 573 additional actual held-date pairs captured and independently
+  audited, all standard; epoch `v7-reference-epoch-20260930-r0` sealed with
+  2,226,402 original responses and unchanged finite exclusions.
   [Evening evidence](docs/reviews/2026-09-29-v7-evening-continuation.md).
   [Recovery, approval and full discovery](docs/reviews/2026-09-28-v7-full-execution-discovery.md).
   [Completion/admission evidence](docs/reviews/2026-09-28-v7-reference-completion.md).
@@ -49,6 +54,10 @@ Observe the separate V6 15:45 Central resume alongside this work.
   Per-wave receipts total 129,873 pending input requests; deduplication/capture
   census and further discovery remain. The 109,825-window capture and frozen
   replay queue are complete; neither closes full required-input coverage.
+  September 30 11:32: continuous controllers selected for full discovery and
+  successive actual capture/reference/replay epochs; no overall cutoff. The next
+  sealed pending plan covers 20,729,596 horizon-targets. Do not infer completion
+  from a controller launch; inspect exact receipts in CURRENT_STATE.
   [Overnight completion](docs/reviews/2026-09-30-v6-step-policy-v4.md).
   [No-cutoff continuation](docs/reviews/2026-09-29-v7-overnight-resume.md).
   [Recovery census and storage](docs/reviews/2026-09-29-power-surge-recovery.md).
