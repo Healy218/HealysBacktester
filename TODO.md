@@ -37,14 +37,12 @@ The following scope is unchanged by the documentation consolidation.
   implemented; 3,535-path cohort parity passed. September 29: planner completed
   all 591 securities. Repaired controller/storage handling and verified empty
   cases; resumed unchanged wave checkpoints and captured a frozen actual frontier.
-  Power interruption around 13:14 Central: 72,120/109,825 windows verified in
-  3,005 packs; 37,705 remain. Transient services are gone; original worker journals
-  survive and recovered copies pass quick checks. No combined index was sealed.
-  Evening capture completed all 109,825 windows at 19:30; combined index sealed.
-  Replay reached 5,021,957/21,624,449 horizon-targets before checkpointing.
-  User-authorized restart at 23:28 resumes the same ledgers; the user removed
-  the overall time cutoff. Automatic continuation runs until the selected replay
-  queue finishes, subject to resource/integrity guards. Further input gaps remain possible.
+  September 30 at 08:18 Central: all 93 selected pending-replay securities
+  completed, 21,624,449 horizon-target evaluations and no worker failures.
+  Per-wave receipts total 129,873 pending input requests; deduplication/capture
+  census and further discovery remain. The 109,825-window capture and frozen
+  replay queue are complete; neither closes full required-input coverage.
+  [Overnight completion](docs/reviews/2026-09-30-v6-step-policy-v4.md).
   [No-cutoff continuation](docs/reviews/2026-09-29-v7-overnight-resume.md).
   [Recovery census and storage](docs/reviews/2026-09-29-power-surge-recovery.md).
   [Recovery and active services](docs/reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
@@ -82,21 +80,22 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   September 29 at 17:30 Central: all 48 broker orders match the journal, eight
   filled orders, four matching positions and zero open orders. No outage-recovery
   orders submitted. [Evidence](docs/reviews/2026-09-29-paper-reconciliation-v6-resume.md).
-  Ongoing operation: observe next-session risk handling, especially AXP's
-  after-hours mark below the stop threshold; fresh quotes govern actual action.
-  Existing independent four-step policy remains enabled. Do not repeat activation
-  or import old simulator positions.
+  September 30: three-step policy deployed; user-approved one-time AXP/VG
+  retries filled at step 2. All 77 orders reconciled at 10:40; zero open orders.
+  Follow-up source cleanup v3 fixes a stale, unfilled VG projection protected
+  by earlier same-contract fills. Deployed 10:59; 11:00 scan retired that source.
+  The 11:00 scan completed in 256.537 seconds, 308 candidates, zero errors. [Policy and fills](docs/reviews/2026-09-30-v6-step-policy-v4.md).
+  Do not repeat activation or import old simulator positions.
 - [ ] **OPS-INCUBATOR.DATA:** Implement and validate V6-only continual candidate
   features and matured simulated labels across the frozen universe, independent
   of actual trades. Implementation and SPY pilot passed; finish the 449-symbol
   catch-up. Corrected r3 resumed September 28 at 23:07 Central, preserving
   38 completed r2 symbols and partial feature/label seals. All 17 original error
   cases passed targeted checks: six identity collisions and eleven transient tick
-  failures. September 29: morning checkpoint 93/449; automatic 16:11 restart
-  saved 95/449 before the 16:23 shutdown. User-authorized resume at 17:31 Central
-  uses three autosized workers; 96/449 at 17:33 with no reported errors. All 74
-  source hashes and 95 retained symbol receipts verified. Finish the catch-up;
-  training and freeze have not started. Respect the existing pre-market deadline.
+  failures. September 30: 325/449 completed; all 124 remaining entries report
+  timeout/deadline at the 08:00 market-hours cutoff. Checkpoints are retained.
+  Next timer: 15:45 Central. Training/freeze have not started; respect the
+  existing market-hours guard. [Observation](docs/reviews/2026-09-30-v6-step-policy-v4.md).
   [Overnight observation](docs/reviews/2026-09-29-overnight-checkpoints.md).
   [Repair and current observation](docs/reviews/2026-09-28-v6-continual-error-repair.md).
   Preserve the base freeze and resumable daily extensions.

@@ -1949,3 +1949,12 @@ No overall wall-clock cutoff; retain memory/disk guards and explicit integrity
 failure handling. V6 and MRHA migration continue. This does not authorize changing
 frozen inputs, bypassing missing-data checks or declaring full V7 coverage.
 [Runtime and evidence](reviews/2026-09-29-v7-overnight-resume.md).
+
+## 2026-09-30 — Three-step V6 paper execution and finite exit retries
+
+User selected initial-midpoint buy multipliers 1.05/1.10/1.125 and sell
+0.95/0.90/0.875, with 30/30/60-second waits; explicitly approved one new
+ladder each for the exhausted AXP/VG exits. Versioned policy v4 preserves
+legacy source hashes and chains; no automatic repeated retry or changed
+stop/model threshold. Deployed and both approved retries filled at step 2.
+[Evidence and scope](reviews/2026-09-30-v6-step-policy-v4.md).

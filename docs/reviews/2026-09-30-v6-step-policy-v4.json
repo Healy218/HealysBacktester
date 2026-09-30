@@ -1,0 +1,267 @@
+{
+  "deployment": {
+    "added_sources": {
+      "integrations/alpaca_paper/v6_bridge_v4.py": "6d44dd38282e8d33877ecc5bcf0fe30dd475f13edce7ffa9ddcdb62c56bd39a4",
+      "integrations/alpaca_paper/v6_pricing_v4.py": "4ea2b79c1f38581ce3585ae94a0fa2dc455843981aab1365379c1b76ea06099d",
+      "integrations/alpaca_paper/v6_step_slices_v2.py": "dec5d1341fe24431b11f498c3958d0f9bfc17869acef22b8e3940d3962c8e25c",
+      "scripts/run_v6_alpaca_runtime_v5.py": "ede81ca911d2aa47d2cb2474adb982d93ab9604b1ab56f579390067ae25c98ea",
+      "scripts/run_v6_alpaca_scanner_v7.py": "8f02a248eee6a25b39cd077df31db4c0e0731ee6ecb32e128d24c692bf155631",
+      "scripts/run_v6_alpaca_scanner_v7.sh": "4f121a26052f1a9e57646d2005e7b21dac1b97fdcda04cecf67615d3c5a0b961"
+    },
+    "at": "2026-09-30T15:33:22.024692+00:00",
+    "backup": "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/runtime-revisions/step-policy-v4-20260930",
+    "deployment_script_sha256": "3b174aaa0c969dbf3ddc823a5a860d51d0b9dae59523712ddfed487e6cd7b32d",
+    "new_manifest_sha256": "59b972e4c15daeca4f7951aca272a885eab275cd77b16570d0bcf560e24b61fe",
+    "pending_orders": 0,
+    "policy": "midpoint-step-5-10-12.5pct-v4",
+    "positions": [
+      {
+        "qty": "7",
+        "symbol": "AXP261106P00305000"
+      },
+      {
+        "qty": "104",
+        "symbol": "VG261030P00012500"
+      },
+      {
+        "qty": "26",
+        "symbol": "WFC261030P00080000"
+      }
+    ],
+    "previous_manifest_sha256": "f7467a569c5db625d480390d59dc048a66024690f73ff11ebc7ad7658a0a2898",
+    "retry_existing_exits": [
+      "v6|AXP|bbw_squeeze|2026-09-29T15:00:00|leg-close|1",
+      "v6|VG|rsi|2026-09-29T16:30:00|leg-close|1"
+    ],
+    "source_commit": "4f9c02ee95613048b6a24fcab0818960715eec96",
+    "validation": "runtime hashes and prior-session data verified"
+  },
+  "broker_observation": {
+    "at": "2026-09-30T15:40:02.276135+00:00",
+    "execution_policy": "midpoint-step-5-10-12.5pct-v4",
+    "broker_orders": 77,
+    "journal_orders": 77,
+    "mismatches": [],
+    "positions": [
+      {
+        "symbol": "WFC261030P00080000",
+        "qty": "26"
+      }
+    ],
+    "open_orders": [],
+    "retry_orders": [
+      {
+        "event_id": "v6|VG|rsi|2026-09-29T16:30:00|leg-close|1|retry|midpoint-step-5-10-12.5pct-v4|step|1",
+        "symbol": "VG261030P00012500",
+        "status": "filled",
+        "qty": "104",
+        "filled_qty": "104",
+        "filled_avg_price": "0.7",
+        "step": 2,
+        "limit_price": "0.69",
+        "midpoint": "0.775",
+        "step_limits": [
+          "0.73",
+          "0.69",
+          "0.67"
+        ]
+      },
+      {
+        "event_id": "v6|AXP|bbw_squeeze|2026-09-29T15:00:00|leg-close|1|retry|midpoint-step-5-10-12.5pct-v4|step|1",
+        "symbol": "AXP261106P00305000",
+        "status": "filled",
+        "qty": "7",
+        "filled_qty": "7",
+        "filled_avg_price": "9.75",
+        "step": 2,
+        "limit_price": "9.60",
+        "midpoint": "10.675",
+        "step_limits": [
+          "10.14",
+          "9.60",
+          "9.34"
+        ]
+      },
+      {
+        "event_id": "v6|VG|rsi|2026-09-29T16:30:00|leg-close|1|retry|midpoint-step-5-10-12.5pct-v4",
+        "symbol": "VG261030P00012500",
+        "status": "canceled",
+        "qty": "104",
+        "filled_qty": "0",
+        "filled_avg_price": "None",
+        "step": 1,
+        "limit_price": "0.73",
+        "midpoint": "0.775",
+        "step_limits": [
+          "0.73",
+          "0.69",
+          "0.67"
+        ]
+      },
+      {
+        "event_id": "v6|AXP|bbw_squeeze|2026-09-29T15:00:00|leg-close|1|retry|midpoint-step-5-10-12.5pct-v4",
+        "symbol": "AXP261106P00305000",
+        "status": "canceled",
+        "qty": "7",
+        "filled_qty": "0",
+        "filled_avg_price": "None",
+        "step": 1,
+        "limit_price": "10.14",
+        "midpoint": "10.675",
+        "step_limits": [
+          "10.14",
+          "9.60",
+          "9.34"
+        ]
+      }
+    ]
+  },
+  "research": {
+    "at": "2026-09-30T15:40:02.344596+00:00",
+    "v6": {
+      "symbols_complete": 325,
+      "symbols_required": 449,
+      "status": "blocked",
+      "stage": "candidates_and_labels",
+      "training_started": false,
+      "started_at": "2026-09-30T10:32:23.168972+00:00",
+      "elapsed_seconds": 8912.929709427,
+      "error": "ValueError: 124 symbol builds incomplete; preserved successful checkpoints"
+    },
+    "v7_supervisor": {
+      "campaign": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-pending-replay-campaign-20260929-20260929T233047Z",
+      "continuation_passes": 2,
+      "error": null,
+      "full_execution_coverage": false,
+      "overall_time_limit": null,
+      "phase": "complete",
+      "updated_at": "2026-09-30T13:18:00.533648+00:00"
+    },
+    "v7_campaign": {
+      "active_security": null,
+      "elapsed_seconds": 2975.442142120999,
+      "failed": {},
+      "full_execution_coverage": false,
+      "queued": 0,
+      "securities_replayed": 93,
+      "securities_required": 93,
+      "status": "replayed_pending",
+      "stop_reason": null,
+      "updated_at": "2026-09-30T13:18:00.514875+00:00"
+    },
+    "v7_wave_totals": {
+      "distinct_horizon_targets_covered": 21624449,
+      "pending_requests": 129873,
+      "cohorts_discovered": 251983
+    },
+    "migration": {
+      "elapsed_seconds": 47448.780133369,
+      "error": null,
+      "external_free": 570806370304,
+      "files_moved": 175649,
+      "files_required": 504516,
+      "local_free": 213367779328,
+      "logical_bytes_moved": 182484417030,
+      "logical_bytes_required": 229378057319,
+      "status": "running",
+      "updated_at": "2026-09-30T15:39:37.416098+00:00"
+    },
+    "local_disk_free_bytes": 213401907200
+  },
+  "data_index": {
+    "path": "/home/healy/Coding/HealysBacktester/nn_meta/live/v6_server/data/2026-09-29",
+    "published_at": "2026-09-30T12:00:02.946750+00:00",
+    "release_sha256": "3bc974679fff04044002f833cbb4c9246f63fd4d9370c04985f5f6ca7597764f",
+    "schema": "v6-forward-data-index-v1",
+    "sha256": "ac9a925ff336b119726c6d1ef8f16e456adf3718f83b8457e6e887b56d0df093",
+    "through": "2026-09-29"
+  },
+  "scanner_repair": {
+    "deployment": {
+      "added_sources": {
+        "integrations/alpaca_paper/v6_source_reconcile_v3.py": "6ffbeae0db3ab651303687e1376929f1dcee13354a4976e3a7ab8de2570864bc",
+        "scripts/run_v6_alpaca_scanner_v8.py": "43753a8513f7e1a721beb436b409115a45863a1a7b22c1509f7628fcb8bfdd7c",
+        "scripts/run_v6_alpaca_scanner_v8.sh": "24a598927279a1dd8beaabc3d734be614f4c6d8148091004de8ecfc2afa8601d"
+      },
+      "at": "2026-09-30T15:59:04.826223+00:00",
+      "backup": "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/runtime-revisions/scanner-contract-reuse-v3-20260930",
+      "deployment_script_sha256": "7568d1cbebcff3723967ee3b3db9618462005b859ceb707efff79c3a42bd8d41",
+      "new_manifest_sha256": "51e61f0bd400d6263bac362398e1bb03e9e5c271f0fa9fa6f11a4bd3baef3f8b",
+      "pending_orders": 0,
+      "policy": "midpoint-step-5-10-12.5pct-v4",
+      "positions": [
+        {
+          "qty": "26",
+          "symbol": "WFC261030P00080000"
+        }
+      ],
+      "previous_manifest_sha256": "59b972e4c15daeca4f7951aca272a885eab275cd77b16570d0bcf560e24b61fe",
+      "retry_existing_exits": [],
+      "scanner_book_policy": "archive-expired-never-filled-source-v3-contract-reuse",
+      "source_commit": "1bbe6518c5fb0485e3bd16a0d10424ae30920049",
+      "validation": "runtime hashes and prior-session data verified"
+    },
+    "copy-validation": {
+      "at": "2026-09-30T15:52:33.719635+00:00",
+      "scope": "offline copies; journal-derived net holdings",
+      "archived": [
+        {
+          "key": "v6|VG|rsi|2026-09-30T15:00:00",
+          "contract": "VG261030P00012500",
+          "reason": "expired_unfilled_source"
+        }
+      ],
+      "metadata_unchanged": true,
+      "broker_journal_unchanged": true
+    },
+    "first_scan": {
+      "action": "scan",
+      "alerts_enabled": false,
+      "allocation": {
+        "duplicate": false,
+        "opened": 3,
+        "selected": 4,
+        "unfilled": 1
+      },
+      "broker_orders": false,
+      "candidate_rows": 308,
+      "checked_at": "2026-09-30T16:00:06.653054+00:00",
+      "data_through": "2026-09-29",
+      "detected": 444,
+      "detection_errors": [],
+      "elapsed_seconds": 256.537,
+      "errors": 0,
+      "evidence": "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/passes/20260930T160000Z",
+      "experimental": true,
+      "fresh_signals": 61,
+      "fresh_symbols": 56,
+      "model_sha256": "cdacbea1bf6a07e573af46b8d266b1d82b5e3bf736945a06b929e46050fdbd6c",
+      "no_current_bar": [
+        "SATS",
+        "SAVA",
+        "SWTX",
+        "WBA",
+        "X"
+      ],
+      "phase": "complete",
+      "replay": false,
+      "retired_unfilled_sources": [
+        {
+          "contract": "VG261030P00012500",
+          "key": "v6|VG|rsi|2026-09-30T15:00:00",
+          "reason": "expired_unfilled_source"
+        }
+      ],
+      "scanner_book_policy": "archive-expired-never-filled-source-v3-contract-reuse",
+      "schema": "v6-forward-status-v1",
+      "signal_clock": "2026-09-30T16:00:06.750333+00:00",
+      "source_reuse": {
+        "hits": 372,
+        "misses": 2936
+      },
+      "status": "recorded",
+      "symbol_results": 444,
+      "universe": 449
+    }
+  }
+}

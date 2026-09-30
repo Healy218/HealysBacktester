@@ -1,12 +1,12 @@
 # Current state and artifact index
 
-Pointer/configuration owner for the lab, reconciled September 29, 2026.
+Pointer/configuration owner for the lab, reconciled September 30, 2026.
 [ROADMAP](../ROADMAP.md) owns milestone status and acceptance conditions;
 [TODO](../TODO.md) owns selected work. This page selects exact inputs and
 runtime identities. Other current documents link here instead of copying them.
 
-**Evidence freshness:** V6 research and V7 queue/discovery were checked September
-29; the dated observation below distinguishes running processes from stopped jobs
+**Evidence freshness:** V6 paper/research and V7 replay were checked September
+30; the dated observation below distinguishes running processes from stopped jobs
 with stale progress. Other sections retain their own dated scopes and timestamps.
 Verify the indicated live receipts when asked for present health or progress.
 Never infer a current ETA from a historical throughput sample.
@@ -219,8 +219,8 @@ change, without waiting for catch-up/training. The original planner completed
 591/591 securities, 793,394,264 proposals and 328,386,847 horizons; its September 29
 service exited. Original wave worker/source contracts remain unchanged.
 
-Current evening continuation supersedes the earlier daytime-only invocation for
-this user-authorized bounded run. Historical recovery observations are retained in
+The completed evening/overnight continuation superseded the earlier daytime
+invocation for the selected frozen replay queue. Historical recovery observations are retained in
 [the outage census](reviews/2026-09-29-power-surge-recovery.md) and
 [daytime recovery review](reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
 
@@ -230,8 +230,8 @@ this user-authorized bounded run. Historical recovery observations are retained 
 | Completed quote capture | `v7-frontier-capture-20260929-r0/progress.json`; `healys-v7-frontier-evening-20260929.service` |
 | Raw quote packs | `nn_meta/data_v7/execution-recovery-20260929-r0/` |
 | Prior evening continuation | `v7-evening-continuation-20260929-r0/progress.json`; checkpointed at 22:01 September 29 |
-| Current replay worker | `healys-v7-pending-overnight-20260929.service`; same selected campaign, restarted 23:28:20 |
-| No-cutoff continuation | `healys-v7-until-complete-20260929.service`; `v7-until-complete-20260929-r0/progress.json` |
+| Completed replay passes | `healys-v7-pending-overnight-20260929.service`; initial resumed pass, then supervisor continuation |
+| Completed no-cutoff supervisor | `healys-v7-until-complete-20260929.service`; `v7-until-complete-20260929-r0/progress.json`, complete September 30 08:18 |
 | Selected replay inputs/output | `v7-evening-continuation-20260929-r0/selected-replay.json`; same existing campaign checkpoint |
 | Latest sealed capture index | `v7-frontier-capture-20260929-r0/index-receipt.json`; sealed evening r0, all 109,825 windows |
 | Combined held/base references | `v7-reference-epoch-20260929-r0/`; 2,225,829 original contract/date responses |
@@ -242,19 +242,14 @@ this user-authorized bounded run. Historical recovery observations are retained 
 | Preserved original discovery | `v7-execution-campaign-20260928-r1/waves/`; controller `v7-execution-recovery-20260929-r0/`, original r4 inputs |
 | Database recovery preimages | `v7-pending-replay-plan-20260929-r0.recovery/`; initial incomplete planner transaction also preserved |
 
-September 29 at 23:28:20 Central: user-authorized pending replay resumed after
-clean scheduled checkpointing. Verified eight campaign anchors, all wave-bound
-sources and 31 SQLite quick checks; retained 5,021,957 horizon-target evaluations.
-Fresh progress increased. The user removed the overall cutoff: the separate
-supervisor waits for the active pass, then automatically continues checkpoint
-slices until all 93 selected securities finish. Initial completed-security counters
-rebuild each traversal; retained per-wave completion is authoritative.
-
-One autosized worker, 3/4-GiB memory high/max, CPU 100%, Nice 15, no swap.
-No overlapping replay workers. Keep 6-GiB available-memory / 20-GB disk guards;
-capacity waits retry, integrity failures remain explicit. Original discovery is
-checkpointed. Capture completed all 109,825 windows at 19:30 with zero remaining
-failures. V6 and MRHA migration remain independently active.
+September 30 at 08:18 Central: the no-cutoff supervisor completed after two
+continuation passes. All 93 selected securities finished, with 21,624,449
+horizon-target evaluations and no failures. Per-wave receipts sum to 129,873
+pending input requests (not a deduplicated capture-window count). Supervisor
+and campaign receipts now say complete/replayed_pending respectively.
+Original full-universe discovery remains checkpointed. The completed 109,825-window
+capture and frozen replay do not close full execution/input coverage or start training.
+[Completion and remaining scope](reviews/2026-09-30-v6-step-policy-v4.md).
 [Preflight, exact services and no-cutoff continuation](reviews/2026-09-29-v7-overnight-resume.md).
 
 Independent per-horizon comparison matches all 20 pilot results. All remain
@@ -276,14 +271,15 @@ The fresh state's `paper-restart.json` enables scanning and paper submission;
 Read SQLite evidence in read-only mode.
 
 - Scanner: `healys-v6-alpaca-scanner.timer` / `.service`, every 15 minutes in
-  its configured window, dynamically sized workers (v6 adapter: up to eight), 12 GiB memory limit.
+  its configured window, dynamically sized workers (v8 adapter: up to eight), 12 GiB memory limit.
 - Broker: `healys-v6-alpaca-orders.timer` / `.service`, every 15 seconds in its
-  configured window; market/calendar checks govern execution. Since September 28
-  15:08 Central, `scripts.run_v6_alpaca_runtime_v4` selects independent four-step
-  orders: fixed initial midpoint ±2.5/5/7.5/10%, waits 30/30/30/60 seconds,
-  buys rounded up and sells down. Cancel confirmation precedes replacement;
-  partial fills, ownership and maximum-step buy reservations remain enforced.
-  [Policy/deployment evidence](reviews/2026-09-28-v6-step-orders.md).
+  configured window; market/calendar checks govern execution. Since September 30
+  10:33 Central, `scripts.run_v6_alpaca_runtime_v5` selects three-step orders:
+  fixed initial midpoint buy 1.05/1.10/1.125, sell 0.95/0.90/0.875, waits
+  30/30/60 seconds, buys rounded up and sells down. Legacy chains retain their
+  saved policy. Cancel confirmation precedes replacement; partial fills,
+  ownership and maximum-step buy reservations remain enforced.
+  [Policy, deployment and actual retry fills](reviews/2026-09-30-v6-step-policy-v4.md).
 - Read-only monitor: `healys-v6-alpaca-paper-monitor.timer`; output
   `/tmp/v6-alpaca-paper-monitor-latest.json` (ephemeral observation).
 - Daily producer retained: `healys-v6-data.timer`; scanner reads the latest
@@ -293,41 +289,29 @@ Read SQLite evidence in read-only mode.
   old server V6 watcher were retired. The old Stonks simulator projection is
   historical; it is not the new account's actual fill history.
 
-At the September 28 readiness repair, a 10:30 Central scheduled full scan
-completed in 243.058 seconds with 281 candidate rows and no detection errors.
-One actual paper limit order was accepted, then canceled unfilled and reconciled;
-first-fill observation remains pending. [Readiness evidence](reviews/2026-09-28-v6-paper-readiness.md).
-Selected input snapshot is now
-`nn_meta/live/v6_server/data/2026-09-25-vintage-20260928/`, manifest SHA
-`fe2ab69e315faaa710fc95f108480354d919141841b88bbc46d6b2423b78a151`.
-The existing V6 data-index source points to it; the old snapshot/model remain intact.
-Scanner launcher: `scripts/run_v6_alpaca_scanner_v6.sh`. Earlier activation lineage is
-retained under the paper state's `runtime-revisions/scanner-v3-20260928/`.
-Order-policy lineage remains at `runtime-revisions/orders-v2-20260928/`.
-At 14:21 Central, scanner v4 archived an expired, never-filled ANF projection
-after authenticated zero-holdings/zero-pending reconciliation. The database
-snapshot and previous manifest/unit are at `runtime-revisions/scanner-v4-20260928/`.
-[Repair and prospective scan evidence](reviews/2026-09-28-v6-unfilled-source-repair.md).
-The 14:30 scan completed in 254.253 seconds with 274 candidate rows and no
-detection errors; IONQ/CRM orders were submitted at 14:34:30 and confirmed
-canceled with zero fills by 14:37:01. The 14:45 scan archived both automatically
-and completed in 256.738 seconds. Scanner v6 now also protects active step chains
-during cancellation gaps; the original never-filled-entry protection remains.
+Selected input snapshot: `nn_meta/live/v6_server/data/2026-09-29/`, published
+September 30 at 07:00 Central, manifest SHA
+`ac9a925ff336b119726c6d1ef8f16e456adf3718f83b8457e6e887b56d0df093`.
+The original V6 data-index source points to it; model/release remain unchanged.
+Scanner launcher: `scripts/run_v6_alpaca_scanner_v8.sh`; source reconciler v3
+protects active chains and distinguishes prior filled trades from new unfilled
+signals reusing their contract. It requires broker and journal flatness before archival.
 Current paper-manifest SHA:
-`f7467a569c5db625d480390d59dc048a66024690f73ff11ebc7ad7658a0a2898`.
-Prior manifest/services/databases: `runtime-revisions/step-orders-v3-20260928/`
-and `runtime-revisions/step-orders-slices-20260928/`.
-At the 14:52 cutover there were zero holdings/pending orders; authenticated V3
-preview and service polling passed. The final 15:08 adapter cutover likewise
-reconciled zero holdings/pending orders and correctly returned market_closed.
-A real prospective ladder is not yet observed.
-September 29 at 17:30 Central: authenticated broker reconciliation passed.
-All 48 broker orders match journal status/fill quantity/price; eight filled orders,
-zero open orders, four holdings matching net fills (AXP ×7, QCOM ×5, SMCI ×18,
-VG ×104 puts). OPS-PAPER's prospective fill/reconciliation observation is complete.
-AXP's after-hours mark was -14.8% versus fill; fresh quotes govern the existing
-12.5% stop at the next session. No new orders or risk instructions were created here.
-[Post-outage reconciliation](reviews/2026-09-29-paper-reconciliation-v6-resume.md).
+`51e61f0bd400d6263bac362398e1bb03e9e5c271f0fa9fa6f11a4bd3baef3f8b`.
+Previous manifest/services/databases: `runtime-revisions/scanner-contract-reuse-v3-20260930/`
+and `runtime-revisions/step-policy-v4-20260930/`.
+Older runtime lineage remains intact; historical readiness/activation evidence is
+linked from [the prior step-policy review](reviews/2026-09-28-v6-step-orders.md).
+
+September 30 at 10:40 Central: all 77 broker orders match journal status/fill
+quantity. Zero open orders; AXP ×7 and VG ×104 approved one-time retries filled
+at step 2 for $9.75 and $0.70 respectively. WFC ×26 remains. The 10:30 scanner
+failed before cutover on no fresh post-decision WFC quote. The 10:45 scan then
+blocked on an unfilled VG projection retained because of earlier same-contract
+fills. Reconciler v3 deployed 10:59; the 11:00 scan archived that exact VG source
+and completed in 256.537 seconds: 308 candidate rows, zero detection errors,
+444 symbol results and five without a current bar. Order service v5 is successful;
+both timers remain selected. [Dated observation](reviews/2026-09-30-v6-step-policy-v4.md).
 Per-pass source reconciliation: `scanner-source-reconciliation.json`. Read
 current scanner/broker receipts for subsequent holdings, fills and health.
 
@@ -358,15 +342,12 @@ The initial September 28 snapshot is pinned by hash in the selected config.
 The corrected r3 full-universe run started September 28 at 23:07:14 Central.
 It preserves 38 completed r2 symbols, 4,623 feature seals and 23,569 label seals
 by hash-bound inheritance. The original repair evidence covers all 17 r2 errors.
-September 29: morning 93/449 checkpoint reached 95/449 after the 16:11 reboot,
-then stopped at 16:23. User-authorized restart at **17:31:19 Central** now runs the
-same September 28 snapshot with three data workers and two training threads.
-At 18:42: 114/449 complete, no reported errors; last service readback showed
-~3.61-GiB memory peak. All 74 source hashes/runtime and 95 prior symbol receipts verified.
-Training/freeze have not started. A running oneshot shows `activating/start`;
-read current journal/receipts before inferring later health. The older TERM exit
-receipt belongs to the previous invocation, not this running one.
-[Reconciliation/restart evidence](reviews/2026-09-29-paper-reconciliation-v6-resume.md).
+September 30 observation: **325/449 complete**, with 124 remaining timeout/deadline
+entries at the 08:00 calendar cutoff. The 05:32 retry retained prior completed
+symbols. Service is inactive after its market-hours guard; next timer 15:45 Central.
+Training/freeze have not started. The unfinished September 28 snapshot stays pinned.
+[Latest observation](reviews/2026-09-30-v6-step-policy-v4.md),
+[prior restart evidence](reviews/2026-09-29-paper-reconciliation-v6-resume.md).
 [Worker sizing and validation](reviews/2026-09-29-v6-worker-sizing.md),
 [retained repair evidence](reviews/2026-09-28-v6-continual-error-repair.md).
 Selected code: `scripts/run_v6_continual_v3.py`, `incubator/recovery_v6/`;
