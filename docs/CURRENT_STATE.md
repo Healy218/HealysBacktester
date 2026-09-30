@@ -328,6 +328,13 @@ symbol seals were retained unchanged; catch-up/training method is unchanged.
 restart evidence. The earlier `service-exit.json` records the deliberate old-pool
 stop; compare its timestamp with the newer running receipt and live journal.
 
+Terminal viewer: `./venv/bin/python scripts/watch_v6_incubator.py --follow`.
+Reads the selected r3 `latest-run.json`, focus progress and live service memory;
+refreshes every five seconds across data, training and evaluation/final freeze.
+September 30 16:47:44 Central: separate Konsole viewer confirmed running,
+362/449 symbols complete, training pending, service memory 3.98/26 GiB.
+This is a dated observation, not a claim of continuing health.
+
 Restored V7 uses the same supervisor names and checkpoint roots, with separately
 bound `scripts/resume_v7_compute_20260930.py`: up to two discovery workers,
 four quote workers and the existing one serial replay worker; 8/6-GiB service

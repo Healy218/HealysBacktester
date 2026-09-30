@@ -1,10 +1,10 @@
-# Handoff — September 30, 2026 — dedicated V6 running with five workers
+# Handoff — September 30, 2026 — V6 terminal progress viewer active
 
 ## Selected direction
 
 Finish V6 incubator catch-up, training and evaluation with local batch compute
 reserved for it; automatically restore paused jobs after a verified candidate
-freeze. User requested increased workers at 16:30. [TODO](TODO.md) owns tasks.
+freeze. User requested a V6 terminal progress bar after the worker increase. [TODO](TODO.md) owns tasks.
 
 ## Actual handover and progress
 
@@ -16,8 +16,8 @@ started 15:03:52 with four workers. The 15:05 report reached this terminal.
 - Current V7 quote batch retained 40,992/126,719 windows; successor replay has
   not started. Original discovery retained 46.665 million horizon-targets,
   28 complete wave receipts across 93 started securities; per-pass count was 22.
-- V6 reached 357/449 complete before the worker revision; training had not started.
-  Subsequent counts belong to the live receipt, not this dated observation.
+- V6 was 362/449 complete at 16:47:44 Central; training had not started.
+  Read the live receipt for subsequent counts.
 
 ## Current V6 runtime
 
@@ -49,7 +49,12 @@ Restore original timer states and V7 successor controllers; do not restart initi
 quote/discovery units. Resource wrapper `resume_v7_compute_20260930.py` admits
 up to two discovery, four capture and one serial replay worker; 8/6-GiB limits.
 
-## Evidence and next inspection
+## Terminal viewer and next inspection
+
+Opened a separate Konsole running `./venv/bin/python scripts/watch_v6_incubator.py
+--follow`; refreshes every five seconds through data, training and evaluation/freeze.
+Four stage/stopped-state tests passed; host readback confirmed viewer PID 1701646.
+Ctrl-C closes only the viewer. Research-only; no runtime producer changes.
 
 Main handover state: `nn_meta/validation/v6-focus-20260930/progress.json` and
 `pause-plan.json`. Actual V6 stages: `incubator/continual-v6/r3/latest-run.json`.

@@ -137,3 +137,17 @@ Eleven focused resource/checkpoint/handover tests passed; real source/snapshot
 preflight, prior-symbol hash comparison, installed unit verification and live
 five-process readback passed. This establishes increased concurrency and retained
 checkpoints, not a measured throughput gain or full-incubator completion.
+
+## Read-only terminal viewer — September 30, 16:47 Central
+
+User requested the CLI progress bar follow the incubator. Opened a separate
+Konsole with `./venv/bin/python scripts/watch_v6_incubator.py --follow`; the
+viewer reads r3 receipts and the dedicated service every five seconds. It shows
+separate symbol and training-member progress, then evaluation/final freeze.
+It treats a stopped service's saved running receipt as stopped, leaves training
+pending after data completion until the producer reports it started, and does
+not infer an ETA or a successful candidate from checkpoint presence.
+
+Four focused tests passed. Host readback at 16:47:44 confirmed viewer PID 1701646,
+362/449 symbols, five selected workers, training pending and 3.98/26 GiB service
+memory including cache. No scientific producer or running job was changed.
