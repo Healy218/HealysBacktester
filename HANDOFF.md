@@ -1,4 +1,4 @@
-# Handoff — September 30, 2026 — scheduled dedicated V6 compute
+# Handoff — September 30, 2026 — V6 handover and terminal update
 
 ## Selected direction
 
@@ -20,6 +20,16 @@ uninterrupted V7 continuation for this interval. [TODO](TODO.md) owns the tasks.
 - Capture/migration drain checkpoints before V6 starts; allow up to 15 minutes.
   Prior timer states and transient unit definitions are saved for restoration.
 - Exact scope and evidence: [review](docs/reviews/2026-09-30-v6-dedicated-compute.md).
+
+## Requested terminal report
+
+`healys-v6-handover-update-20260930.timer` is installed/enabled, next event
+**15:05 Central today**. It targets this terminal's verified thread ending
+`0c111e8e2e28`, independently of the hourly updater's older thread.
+Report actual migration/V7 stopping totals and V6 startup from live receipts.
+`logs/v6-handover-update-20260930/{state,runtime}.json` and the matching service
+journal own dispatch evidence. Queue once; retry if busy; never interrupt a turn.
+The check cannot start/stop research jobs. Four delivery-state tests passed.
 
 ## V6 target and allocation
 

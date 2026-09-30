@@ -85,3 +85,22 @@ Installed/read back at **14:31 Central September 30**: timer enabled and active/
 next event exactly 15:01 Central; focus service inactive, CPU quota unlimited,
 25/26-GiB memory high/max. `schedule.json` records source hashes, resource sizing
 and preflight. V7 jobs remain running until the scheduled handover.
+
+## Requested 15:05 terminal report
+
+The user requested a one-time post-handover report in the current terminal.
+Installed/enabled `healys-v6-handover-update-20260930.timer` has the verified next
+event September 30 15:05 Central. Destination thread
+`01a0f343-c76a-7842-915b-0c111e8e2e28` was verified through local thread metadata
+without sending an early message. The older hourly updater is unchanged.
+
+The isolated dispatcher records host services/journals in
+`logs/v6-handover-update-20260930/runtime.json` and queues a read-only request
+covering migration totals, V7 retained progress and actual V6 startup. It uses
+one deterministic request identity, waits for an idle thread and retries busy
+or failed transport every 30 seconds. It does not interrupt a user turn or
+mutate research/trading jobs. Its 64-MiB response allowance accommodates resumed
+conversation history above the previous updater's 1-MiB client limit.
+Four targeted tests passed (read-only verification, target mismatch rejection,
+busy-thread deduplication and resume auto-consumption); unit verification passed.
+Timer installation is confirmed; report delivery remains a future runtime event.

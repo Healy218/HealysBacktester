@@ -1,0 +1,14 @@
+[Unit]
+Description=Requested 15:05 Central handover update in the selected terminal
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/v6_handover_update_20260930.py
+Restart=on-failure
+RestartSec=30s
+TimeoutStartSec=5min
+MemoryMax=512M
+Nice=15
+UMask=0077

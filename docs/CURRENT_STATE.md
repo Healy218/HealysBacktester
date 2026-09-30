@@ -324,6 +324,14 @@ four quote workers and the existing one serial replay worker; 8/6-GiB service
 limits, CPU quotas removed. Actual worker counts remain memory-aware.
 [Scope, restart details and verification](reviews/2026-09-30-v6-dedicated-compute.md).
 
+One-time terminal report: `healys-v6-handover-update-20260930.timer` / `.service`,
+installed/enabled for **15:05 Central September 30**. Verified target thread is
+`01a0f343-c76a-7842-915b-0c111e8e2e28`; the older hourly updater remains separately
+bound. `logs/v6-handover-update-20260930/{state,runtime}.json` records request
+submission and dispatch-time host observations. A submitted request is not proof
+of a completed report. Read-only update covers migration/V7 stopping totals and
+V6 actual startup; busy-thread retries do not interrupt user work.
+
 ## V6 Alpaca paper and incubator
 
 Configuration and startup were verified at the September 27 activation:
