@@ -16,6 +16,10 @@ User requested the prior dedicated allocation: pause competitors, preserve
 checkpoints, use up to five autosized workers/16 training threads and 26 GiB,
 then restore paused jobs after verified completion. Full results remain pending.
 [Two-day update](docs/reviews/2026-09-30-v6-two-day-update.md).
+Hourly checks in the current terminal are enabled from October 1 00:00 Central.
+Initial 23:36 host check found one CRSP inherited-proposal mismatch while other
+symbols continued; investigate before claiming training/freeze can complete.
+[Watcher and blocker](docs/CURRENT_STATE.md#hourly-terminal-health-watcher).
 
 Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
 The following scope is unchanged by the documentation consolidation.

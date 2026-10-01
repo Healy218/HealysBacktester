@@ -1,0 +1,12 @@
+[Unit]
+Description=Top-of-hour V6, V7 and storage health checks in America/Chicago
+
+[Timer]
+OnCalendar=*-*-* *:00:00 America/Chicago
+AccuracySec=1s
+RandomizedDelaySec=0
+Persistent=false
+Unit=healys-lab-hourly-watch.service
+
+[Install]
+WantedBy=timers.target

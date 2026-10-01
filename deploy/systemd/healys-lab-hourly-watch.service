@@ -1,0 +1,14 @@
+[Unit]
+Description=Requested hourly V6, V7 and storage health check in the selected terminal
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/lab_hourly_watch.py
+Restart=on-failure
+RestartSec=60s
+TimeoutStartSec=5min
+MemoryMax=512M
+Nice=15
+UMask=0077

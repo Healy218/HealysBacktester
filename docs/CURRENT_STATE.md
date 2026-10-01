@@ -321,6 +321,33 @@ support measurement. Full completion is pending; inspect current receipts.
 Watcher defaults now select r4/daily service; restart an old viewer to load them.
 [Scope and evidence](reviews/2026-09-30-v6-two-day-update.md).
 
+### Hourly terminal health watcher
+
+September 30 **23:36 Central**: `healys-lab-hourly-watch.timer` installed,
+enabled and active; next slot **October 1 00:00 America/Chicago**, then each :00.
+Service/producer: `healys-lab-hourly-watch.service` / `scripts/lab_hourly_watch.py`.
+Bound target verified without sending: `01a0f343-c76a-7842-915b-0c111e8e2e28`.
+Top-of-hour timer uses one-second accuracy/no jitter; busy delivery retries every
+minute and coalesces pending checks. Reports appear in this terminal. This is
+read-only health diagnosis; the dedicated V6 controller owns automatic sequencing
+and restoration. Prior older-conversation V7 updater was left unchanged.
+`logs/lab-hourly-watch/runtime-preflight.json` is the deployment host observation;
+`runtime-<UTC-slot-epoch>.json` preserves hourly evidence, `runtime.json` the
+latest host observation, and `state.json` records queued/started delivery (created
+at the first actual dispatch). Dispatch alone does not prove a completed report.
+Five focused dispatch tests and installed unit validation passed.
+
+The initial host snapshot at **23:36:47** found V6 active, 115/449 complete,
+with CRSP `Daily parent artifact inputs differ`; this is an actual unresolved
+build error, not an expected pause. Other workers continue, but errors prevent
+training/freeze and restoration after the pass. Read-only reproduction in
+`logs/lab-hourly-watch/crsp-input-mismatch.json` found unchanged stock prefix
+hashes but an additional `tv_rating` ordinal-1 occurrence at September 28 19:45
+when history is extended through September 30. The inherited batch has only
+ordinal 0 for that strategy, so exact declaration checking rejects reuse.
+No bound producer/artifact was changed and no research job was restarted.
+Do not infer successful overnight completion from the configured sequence.
+
 ### September 30 dedicated V6 handover — candidate completed and jobs restored
 
 **Completion observation, September 30 22:40:57 Central:** selected r3 run through

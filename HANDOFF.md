@@ -1,85 +1,65 @@
-# Handoff — September 30, 2026 — V6 r4 running with dedicated compute
+# Handoff — September 30, 2026 — hourly watcher armed; V6 build issue found
 
-## Selected user task
+## Selected task and automation
 
-Catch V6 completely up through September 30, adding September 29–30 after the
-completed September 28 freeze, and measure this two-session daily update.
-Keep each completed update and record regressions; do not discard its data/freeze.
-User subsequently requested the same dedicated compute as the prior run.
-Competing batch jobs are checkpoint-paused again, with automatic restoration
-after the September 30 candidate freeze; preserve the original 08:00 cutoff.
+Complete V6 r4 through September 30, then automatically restore V7 and storage.
+User is away overnight and requested a health check HERE every hour at :00 Central.
+`healys-lab-hourly-watch.timer` is enabled/active; first scheduled slot is
+**October 1 00:00 Central**, then hourly. Persistent=false, accuracy one second.
+`healys-lab-hourly-watch.service` runs `scripts/lab_hourly_watch.py`; busy chat
+retries every minute, without interrupting an active turn or accumulating reports.
+Exact verified thread: `01a0f343-c76a-7842-915b-0c111e8e2e28`.
+The older V7 hourly updater is bound to another conversation and was not changed.
 
-## Why a new lineage was necessary
+## Watcher evidence and boundaries
 
-Persistent-timer restoration had already started an r3 September 30 attempt at
-22:40:49. Refreshed provider data revised previously consumed bars; history
-checks correctly refused them. Stopped only V6 daily service/timer while fixing
-this transition. Preserved 25 completed symbols, 105 observed history errors and
-all earlier artifacts. This failed attempt is not a valid daily timing result.
+`logs/lab-hourly-watch/` contains host service/journal/storage snapshots and
+per-hour evidence; `state.json` records dispatch only after the first due run.
+`--check` verified the exact target without sending a message. Five dispatch
+checks passed (deduplication, busy chat, resume race, wrong target, cancellation).
+Installed units passed systemd verification. No research process was restarted.
+The watcher observes/diagnoses and reports here; it does not change frozen
+sources, restart research, trade, or send external messages. Set `stopped=true`
+in its state to cancel. Host evidence should avoid fresh overnight permissions.
 
-r4 preserves the exact September 28 frozen stock prefix and appends later bars.
-Provider revision audit: 343 symbols, primarily volume; 23,087 new raw bars.
-Verified 231,323 r3 parent seals; r2 ancestry remains referenced, never relabeled.
-The original r3 scientific source hashes and completed candidate are unchanged.
+## New specific build blocker — investigation remains
 
-## Original launch and requested resource revision
+At **23:36:47 Central**, host snapshot showed V6 running, 115/449 symbols complete,
+with CRSP error `ValueError: Daily parent artifact inputs differ`.
+Other symbols continue; after the pass, any symbol errors prevent training and
+keep competitors paused. Do not report the pipeline as healthy merely because
+its service is active. Successful checkpoints remain intact.
+Read `logs/lab-hourly-watch/crsp-input-mismatch.json`: a read-only reproduction
+found unchanged raw/adjusted prefix hashes at September 28 19:45, but extending
+through September 30 adds a second `tv_rating` proposal occurrence (ordinal 1)
+at that old timestamp. Parent batch contains ordinal 0 plus `tv_setup`; current
+batch adds that occurrence. The strict inherited batch declaration rejects it.
+No contract bypass, artifact relabeling, producer edit or restart was performed.
+Investigate a versioned repair preserving old candidate/label identities and
+completed symbols; do not mutate source-bound producers during this active run.
 
-`healys-v6-continual.service`, installed `40-daily-v4.conf` drop-in, runs
-`scripts/v6_continual_resume_v4.py --autosize-workers` and the r4 launcher.
+## Selected runtime and completion boundary
+
+`healys-v6-continual.service` runs `scripts/v6_daily_dedicated_20260930.py` via
+temporary runtime `90-dedicated-r4.conf`; dedicated restart was **23:18:23 Central**.
 Root `incubator/continual-v6/r4`; config `deploy/incubator-continual-v6-r4.json`.
-Actual full run started **23:04:36 Central**, through **2026-09-30**, 449 symbols.
-Three autosized data workers, two training threads, 20-GiB max, CPU quota 400%.
-That was the initial coexistence allocation; the dedicated revision supersedes it.
-The temporary dedicated revision pauses this timer while its one-time run works.
-The existing 08:00 Central cutoff remains. Avoid duplicate manual launchers.
+Five autosized data workers, 16 training threads, 25/26-GiB high/max, no CPU quota.
+Read `latest-run.json`/`resources.json` and run receipts for current status.
+Successful full build automatically prepares arrays, trains 40 members, evaluates,
+seals/verifies the candidate, removes the temporary override, restores timers and
+starts V7 discovery/frontier and MRHA migration. Diagnostic rejection retains the
+new freeze. No paper/live model deployment. Existing 08:00 Central cutoff remains.
+A failed/incomplete run keeps checkpoints and paused jobs for investigation.
+Evidence: `nn_meta/validation/v6-daily-update-20260930-r4/dedicated/`.
 
-An isolated ADBE preflight finished in 120.27s with 720 candidates, 85 new feature
-rows and zero errors. Pilot/full contract identities match. Twelve focused
-prefix/inheritance/proposal/schedule checks and nine prefix/inheritance/watcher
-checks passed. Full completion remains pending; do not infer it from launch.
+## Retained context and next checks
 
-## Dedicated revision
-
-`scripts/v6_daily_dedicated_20260930.py` preserves the pinned r4 invocation and
-completed symbol seals, uses shared autosizing capped by the prior selected five
-workers, 3584 MiB/worker, 4096 MiB host reserve and 2048 MiB parent allowance.
-Temporary runtime drop-in `90-dedicated-r4.conf` selects 25/26-GiB high/max,
-no CPU quota, 16 training threads, TasksMax 512. Actual restart **23:18:23
-Central** selected five workers. All 32 completed symbol seals remained unchanged;
-five distinct symbols had fresh progress at 23:18:50, with no new run errors.
-It retains `healys-v6-continual.service`, so the existing r4 viewer still follows it.
-
-Evidence root: `nn_meta/validation/v6-daily-update-20260930-r4/dedicated/`.
-Before/preserved seal hashes, stop receipts and saved timer/service states precede
-restart. Frontier controller hit its three-minute stop timeout/SIGKILL; retain
-its saved receipts and inspect resumed capture health. Discovery stopped cleanly;
-migration checkpointed at 268,618 files, 202,885,222,673 logical bytes.
-On a verified full candidate, remove only the temporary override and
-restore competing jobs/timers; failures retain checkpoints for review.
-Do not copy the temporary runtime override into persistent user configuration.
-
-## Evidence, progress and timing
-
-`incubator/continual-v6/r4/latest-run.json` and `resources.json` own live state.
-Stage start events are recorded in the run status for actual measured timings.
-`nn_meta/validation/v6-daily-update-20260930-r4/` contains preparation, failed-r3
-attempt/exit, pilot and launch receipts. Snapshot revision audit is under
-`r4/snapshots/2026-09-30/revision-audit.json`.
-
-Restart the CLI viewer to load its new defaults:
-`./venv/bin/python scripts/watch_v6_incubator.py --follow`.
-Already-open old viewer processes still observe r3. Ctrl-C affects only viewer.
-[Review](docs/reviews/2026-09-30-v6-two-day-update.md) · [State](docs/CURRENT_STATE.md).
-
-## Completion boundary and prior result
-
-New r4 data reconciles all frozen symbols and matured/pending outcomes, then
-trains 40 members, evaluates and freezes. Diagnostic comparison now uses the
-preceding completed update, initially the September 28 candidate, regardless of
-its diagnostic verdict. Evaluation does not discard a completed update.
-Preserve model family, chronological validation and point-in-time evidence.
-
-Prior September 28 candidate completed at 22:40:47, 122 verified files; training
-35m29s, evaluation/freeze 5m36s. Its return-MSE diagnostic failed, but its data and
-freeze remain. No paper/live deployment changed. OPS-INCUBATOR.PROOF remains open.
-Keep MRHA mounted and preserve unrelated dirty/untracked work.
+r4 preserves frozen September 28 stock prefixes, appends September 29–30 bars,
+and references 231,323 prior r3 seals plus r2 ancestry. Never repeat completed
+captures. Earlier r3 September 28 candidate completed at 22:40:47, 40 members,
+122 verified files; training 35m29s, evaluation/freeze 5m36s.
+V7 frontier's prior stop exceeded three minutes/SIGKILL: inspect health after
+restoration. Discovery stopped cleanly; migration checkpointed at 268,618 files,
+202,885,222,673 logical bytes. Keep MRHA mounted. Preserve unrelated dirty work.
+CLI: `./venv/bin/python scripts/watch_v6_incubator.py --follow`.
+[State](docs/CURRENT_STATE.md) · [Daily update](docs/reviews/2026-09-30-v6-two-day-update.md).
