@@ -335,6 +335,17 @@ September 30 16:47:44 Central: separate Konsole viewer confirmed running,
 362/449 symbols complete, training pending, service memory 3.98/26 GiB.
 This is a dated observation, not a claim of continuing health.
 
+September 30 **18:53:58 Central concurrent retry**: installed/started
+`healys-v6-symbol-retries-20260930.service`, entry point
+`scripts/v6_retry_failed_20260930.py`. Receipts/logs are under
+`nn_meta/validation/v6-focus-20260930/symbol-retries-r1/`. One extra
+3584-MiB-budgeted worker retries only terminal HTTP 502 futures, at most three
+attempts each. UCO recovered/verified at 18:59:34; ULTA retry then started.
+After the main pass exits, successful verified recovery of every failed symbol
+allows a fresh start of the same focus service, reusing all seals and proceeding
+to training. Main progress/errors retain their old values until that restart.
+Unresolved/non-502 errors or the original 08:00 cutoff require review.
+
 Restored V7 uses the same supervisor names and checkpoint roots, with separately
 bound `scripts/resume_v7_compute_20260930.py`: up to two discovery workers,
 four quote workers and the existing one serial replay worker; 8/6-GiB service

@@ -1,0 +1,22 @@
+[Unit]
+Description=Checkpoint-preserving retries for terminal V6 September 30 HTTP 502 symbols
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python -u /home/healy/Coding/HealysBacktester/scripts/v6_retry_failed_20260930.py
+Environment=PYTHONDONTWRITEBYTECODE=1
+Environment=MPLCONFIGDIR=/home/healy/Coding/HealysBacktester/incubator/continual-v6/cache/matplotlib
+Environment=NUMBA_CACHE_DIR=/home/healy/Coding/HealysBacktester/incubator/continual-v6/cache/numba
+Environment=TF_CPP_MIN_LOG_LEVEL=2 CUDA_VISIBLE_DEVICES=-1
+Environment=OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 NUMBA_NUM_THREADS=1
+TimeoutStartSec=14h
+TimeoutStopSec=60s
+KillMode=control-group
+MemoryHigh=3G
+MemoryMax=3584M
+MemorySwapMax=0
+TasksMax=64
+UMask=0077

@@ -151,3 +151,43 @@ not infer an ETA or a successful candidate from checkpoint presence.
 Four focused tests passed. Host readback at 16:47:44 confirmed viewer PID 1701646,
 362/449 symbols, five selected workers, training pending and 3.98/26 GiB service
 memory including cache. No scientific producer or running job was changed.
+
+## Concurrent provider-error recovery — September 30, 18:54 Central
+
+User requested retries while the main pass continues. At 18:51 the main receipt
+reported 403/449 symbols and ten terminal HTTP 502 failures. The frozen tick
+client already makes five short transport attempts. Later retries use a separate
+operational helper, `scripts/v6_retry_failed_20260930.py`, without changing any
+source-bound scientific producer. Its unit started at 18:53:58, main PID 1734139;
+UCO emitted new progress at 18:54:07. No symbol recovery is claimed yet.
+
+Eligibility is a terminal failed future in the current main invocation, with
+exact HTTP 502 error and matching frozen universe. Failed futures will not be
+submitted again by the existing main pass. The helper binds start time, run
+path/date, contract, snapshot and its own source, invokes the existing builder
+on the failed symbol only, and never writes the main status. Symbol feature,
+label, market, history and completion paths are separate from active symbols.
+A helper lock prevents duplicate retry controllers; no second full-run launcher
+is admitted while the main pass holds the root lock.
+
+One child is admitted by shared autosizing, explicit available-memory checks,
+and the planned main-plus-retry worker budget inside the 26-GiB allocation.
+The separate retry unit is limited to 3584 MiB with no swap. Each failed symbol
+gets at most three later attempts, with a two-minute delay before retrying it.
+The original October 1 08:00 Central cutoff remains effective.
+
+Main failures remain in its in-memory list even after side recovery. Once the
+main service exits, all failed symbols must have verified completion seals and
+all main errors must match HTTP 502 before a fresh focus-service start is
+requested. Prior run/focus/exit receipts are archived in the retry directory.
+The new supervisor verifies/reuses seals, then follows unchanged training,
+evaluation, freeze and restoration behavior. Unresolved failures stay visible.
+
+Four focused retry selection, invocation binding, resume gate and memory tests
+passed. Real frozen-source/snapshot preflight and systemd unit verification
+passed. Persistent service startup and live symbol activity are demonstrated;
+completed retries and automatic main-service resumption are not yet demonstrated.
+
+At 18:59:34 the UCO retry completed successfully; its completion payload was
+independently verified. ULTA then started. Remaining recovery and automatic
+supervisor resumption are still pending.

@@ -132,7 +132,10 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   available training CPU threads prepared for the 15:01 handover; measured
   full-run results remain pending. At 16:33:47, a user-requested resource
   revision resumed five data workers, preserving all 357 completed symbol seals;
-  automatic training and restoration remain. [Dedicated schedule](docs/reviews/2026-09-30-v6-dedicated-compute.md).
+  automatic training and restoration remain. At 18:53, a separate bounded worker
+  began retrying terminal HTTP 502 symbols while the main pass continued; verified
+  recovery schedules a checkpoint-preserving supervisor resume toward training.
+  Recovery completion remains pending. [Dedicated schedule](docs/reviews/2026-09-30-v6-dedicated-compute.md).
   [Prior sizing and verification](docs/reviews/2026-09-29-v6-worker-sizing.md). Post-outage
   restart and forward progress verified; full run/coexistence proof remains open.
   [Restart evidence](docs/reviews/2026-09-29-paper-reconciliation-v6-resume.md). Retries retain an
