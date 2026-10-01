@@ -1986,3 +1986,16 @@ ladder each for the exhausted AXP/VG exits. Versioned policy v4 preserves
 legacy source hashes and chains; no automatic repeated retry or changed
 stop/model threshold. Deployed and both approved retries filled at step 2.
 [Evidence and scope](reviews/2026-09-30-v6-step-policy-v4.md).
+
+### 2026-09-30 — Daily V6 freshness is distinct from a model diagnostic verdict
+
+The user reaffirmed the September 27 incubator goal: extend V6's historical
+freeze with new daily data and completed outcomes, train and preserve updated
+versioned freezes after close. Initial catch-up completion enables the daily
+cycle. A worse evaluation must be recorded, not described as discarding the
+update or preventing later updates. The completed September 28 freeze/data are
+retained even though the model diagnostic gate failed. Later training changes
+are separately versioned/evaluated. The next cycle must advance through the
+latest closed session (September 30), not claim the older freeze is current.
+This clarification does not request a paper/live deployment change; no such
+change or model-selection pointer rewrite was performed.

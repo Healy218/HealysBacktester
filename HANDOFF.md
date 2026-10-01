@@ -1,63 +1,67 @@
-# Handoff — September 30, 2026 — V6 resumed with 424 verified symbols
+# Handoff — September 30, 2026 — V6 initial candidate frozen; jobs restored
 
-## Selected direction
+## Completed milestone
 
-Finish the pinned V6 catch-up, training and evaluation; restore paused batch
-jobs automatically after a verified candidate freeze. User reported the CLI
-stopped with 35 missing symbols; investigated and resumed. [TODO](TODO.md) owns tasks.
+The September 28 V6 r3 catch-up finished all 449 symbols, trained all 40 ensemble
+members, evaluated and froze a research candidate at **22:40:47 Central**.
+All 122 candidate payload files were independently hash-verified at 22:40:57.
+Main service exited successfully at 22:40:49. No new run errors.
 
-## Resolved stopping point
+Training ran 21:59:42–22:35:11 (35m29s). Evaluation/freeze took **5m36s**.
+Data: 307,702 candidates, 111,958 matured labels, 92,723 pending and 103,021
+unfilled; training arrays: 2,905,632 training / 205,816 validation rows.
+OPS-INCUBATOR.DATA is complete for the pinned initial catch-up. A subsequent
+full daily update/coexistence proof remains under OPS-INCUBATOR.OPS/PROOF.
 
-The main pass stopped at 19:15:23 with 414/449 complete and 35 failures.
-The separate retry helper recovered all ten HTTP 502 symbols by 20:13:48,
-but did not admit 25 differently worded transport failures. Its strict HTTP
-502-only filter prevented automatic main resumption; it exited needs_review.
-Actual verified count was 424/449, not the old main receipt's 414/449.
+## Evaluated verdict
 
-Verified all 424 completion payloads and unchanged frozen sources/snapshot.
-Confirmed main failed and side retry inactive before starting the main service.
-At **20:47:50 Central**, the same focus service resumed, selecting five workers.
-At 20:48:12, fresh WFC/WMT/WPM/WULF/WYNN progress was observed; main receipt
-showed 424/449 (94.4%) with no new errors. Training remained pending.
-All 424 pre-resume completion seals remained byte-identical.
+**Diagnostic gate failed; updated V6 freeze retained.** Candidate return MSE
+5.325676 exceeds incumbent 5.323277 and zero-return baseline 5.310690.
+Classification Brier improved slightly (0.216986 vs 0.216994) but both acceptance
+conditions must pass. Research-only; no deployment approved or performed.
+This is purged temporal validation reused for daily selection, not an untouched
+performance test or proof of trading profitability.
 
-## Current runtime
+## Exact evidence
 
-`healys-v6-focus-20260930.service`, installed `20-workers.conf` drop-in;
-entry `scripts/v6_focus_workers_20260930.py --worker-mib 3584 --auto-restore`.
-Pinned root `incubator/continual-v6/r3`, through September 28. Sources, inputs,
-scientific method and next-open-minus-30-minute cutoff (08:00 Central) unchanged.
-Five autosized workers; 3584-MiB worker budget, 4096-MiB host reserve,
-2048-MiB parent allowance, 25/26-GiB service high/max, no swap. Training threads 16.
+Candidate: `incubator/continual-v6/r3/runs/2026-09-28/candidate/`.
+`evaluation.json`, `complete.json`, `ensemble_config.json`; seal SHA-256
+`4da950595e68f1db0d68431e85a1bbca22f8345c5472fae2dcaabe722e5f16d2`.
+Run: `incubator/continual-v6/r3/latest-run.json` (`candidate_frozen`, `done`).
+Focus: `nn_meta/validation/v6-focus-20260930/progress.json` (`restored`),
+`restored-services.json`, `service-exit.json` (success/0).
+Focus JSON retains old merged error/returncode fields from earlier failures;
+final candidate receipt, restored phase and fresh exit receipt resolve them.
 
-Finish missing data → checks/arrays → 40 sequential ensemble members → evaluation
-→ verified freeze → automatic paused-job restoration. No automatic deployment.
-Failure/deadline retains checkpoints and keeps competing jobs paused for review.
+## Automatic restoration
 
-## Evidence and monitor
+At 22:40:49 timers were restored and research starts requested. Restoration
+readback showed MRHA migration plus required-discovery/frontier services active.
+This establishes restoration at that time; inspect their live receipts for
+continued health/progress. Original discovery/capture units stay stopped;
+successor controllers own further work. V7-3 remains selected/open.
 
-Resume evidence: `nn_meta/validation/v6-focus-20260930/transport-resume-r1/`.
-`before.json` preserves 424 seal hashes; prior run/focus/exit/worker-restart
-receipts are archived there. `after.json` records resumed state and preservation.
-Main stage: `incubator/continual-v6/r3/latest-run.json`.
-Focus state: `nn_meta/validation/v6-focus-20260930/progress.json`.
-`./venv/bin/python scripts/watch_v6_incubator.py --follow` follows the new pass.
-Ctrl-C closes only the viewer. Compare receipts with fresh service/journal state.
-[State](docs/CURRENT_STATE.md) · [Review](docs/reviews/2026-09-30-v6-dedicated-compute.md).
+## User clarification and daily goal
 
-No scientific code changed in this recovery. Existing source/snapshot preflight,
-424 payload verifications, pre/post seal comparison and fresh symbol updates
-passed. Remaining completion and full training/freeze are not yet demonstrated.
+Keep V6's historical base plus new daily data in versioned updated freezes.
+A worse score is recorded; it does not erase the update or block future days.
+Tonight's completed freeze is through September 28, not September 30.
+The next cycle must select the latest fully closed session and add remaining
+new examples/outcomes. Existing daily timer is 15:45 Central weekdays, with
+midnight–07:45 quarter-hour retry opportunities; market-window guard remains.
+No model-selection pointer or paper deployment was changed by this clarification.
 
-## Prior retry helper and constraints
+## Next work and constraints
 
-`healys-v6-symbol-retries-20260930.service` finished; do not start its old helper
-again against this new invocation. Its plan is bound to the previous start time.
-Evidence retained under `symbol-retries-r1/` in the focus state directory.
+Follow [TODO](TODO.md) and [ROADMAP](ROADMAP.md); no further initial catch-up
+retraining or recapture is needed. Inspect restored V7/migration receipts and
+measure a subsequent daily V6 update before closing full-incubator proof.
+October 2 provider decision remains separate. Keep MRHA mounted.
 
-V7/migration remain checkpointed by the 15:01 handover. Migration retained
-254,561 files/200.127 GB logical; current quote batch retained 40,992 windows.
-Restore V7 successor controllers after verified V6 completion; do not restart
-original discovery/capture units. Keep MRHA mounted. Broker order management,
-monitoring and remote experts remain. Preserve unrelated dirty/untracked work.
-V7-3 and full-incubator proof remain open; October 2 provider decision is separate.
+The terminal viewer remains `./venv/bin/python scripts/watch_v6_incubator.py
+--follow`; a completed run and rejected verdict are consistent. Ctrl-C closes
+only the viewer. The old side-retry helper is finished and bound to the previous
+invocation; do not restart it as-is. Earlier resume/retry receipts are preserved.
+[State](docs/CURRENT_STATE.md) · [Experiment](docs/EXPERIMENTS.md) ·
+[Review](docs/reviews/2026-09-30-v6-dedicated-compute.md).
+Preserve unrelated dirty/untracked work and existing paper/live isolation.

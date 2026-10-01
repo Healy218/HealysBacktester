@@ -295,7 +295,24 @@ and `progress.json` together; a waiting service is not proof of advancing work.
 Only `closure_candidate_ready` reaches final evidence review, and it does not
 itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
 
-### September 30 15:01 dedicated V6 handover — scheduled
+### September 30 dedicated V6 handover — candidate completed and jobs restored
+
+**Completion observation, September 30 22:40:57 Central:** selected r3 run through
+September 28 is `candidate_frozen` / `done`, 449/449 symbols and 40/40 members.
+Candidate `incubator/continual-v6/r3/runs/2026-09-28/candidate/` has 122 verified
+payload files; verdict `rejected` (return MSE exceeds incumbent and baseline).
+Previous model retained; no deployment. Training took 35m29s, evaluation/freeze
+5m36s. Focus state is `restored`; success/0 exit at 22:40:49. Restoration readback
+showed migration and both V7 successor services active. Inspect current receipts
+for subsequent health. Old merged error fields in focus progress are historical;
+final candidate and exit receipts establish completion. The completed freeze remains through September 28; latest closed date is
+September 30. Daily freshness is therefore not yet current. The installed
+`healys-v6-continual.timer` schedules 15:45 Central weekdays plus overnight
+00:00–07:45 quarter-hour retry opportunities. Its original enabled/active state
+was included in the successful restoration. Subsequent live health needs readback.
+Diagnostic rejection retains both new data and the completed candidate freeze;
+it does not prevent subsequent daily updates. Details below describe the
+historical handover/recovery, not a still-running V6 catch-up.
 
 The selected one-time timer is `healys-v6-focus-20260930.timer`, starting
 `healys-v6-focus-20260930.service` at **15:01 Central September 30**. This takes

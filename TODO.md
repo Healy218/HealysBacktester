@@ -102,48 +102,26 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   by earlier same-contract fills. Deployed 10:59; 11:00 scan retired that source.
   The 11:00 scan completed in 256.537 seconds, 308 candidates, zero errors. [Policy and fills](docs/reviews/2026-09-30-v6-step-policy-v4.md).
   Do not repeat activation or import old simulator positions.
-- [ ] **OPS-INCUBATOR.DATA:** Implement and validate V6-only continual candidate
-  features and matured simulated labels across the frozen universe, independent
-  of actual trades. Implementation and SPY pilot passed; finish the 449-symbol
-  catch-up. Corrected r3 resumed September 28 at 23:07 Central, preserving
-  38 completed r2 symbols and partial feature/label seals. All 17 original error
-  cases passed targeted checks: six identity collisions and eleven transient tick
-  failures. September 30: 325/449 completed; all 124 remaining entries report
-  timeout/deadline at the 08:00 market-hours cutoff. Checkpoints are retained.
-  Dedicated handover is scheduled September 30 at **15:01 Central**. Verify
-  `healys-v6-focus-20260930.service` and its actual receipts; preserve the pinned
-  catch-up and checkpoints. Training/freeze have not started. This one-time
-  user-requested close-time exception leaves the normal market guard unchanged. [Observation](docs/reviews/2026-09-30-v6-step-policy-v4.md).
-  [Overnight observation](docs/reviews/2026-09-29-overnight-checkpoints.md).
-  [Repair and current observation](docs/reviews/2026-09-28-v6-continual-error-repair.md).
-  Preserve the base freeze and resumable daily extensions.
+- [x] **OPS-INCUBATOR.DATA:** Complete the frozen-universe V6 initial catch-up.
+  September 30 at 22:40:47: all 449 symbols, 40 training members and evaluated
+  candidate freeze completed; 122 candidate payload files verified. The candidate
+  was rejected by baseline comparisons, retaining the incumbent. Frozen inputs,
+  provenance and successful checkpoints preserved. [Evidence](docs/reviews/2026-09-30-v6-dedicated-compute.md).
 - [x] **OPS-INCUBATOR.TRAIN:** Implement fixed-family retraining, temporal validation,
   baseline comparisons and immutable candidate freezes; retain the previous
   accepted model on rejection/failure/deadline. Targeted tests and a full-size
-  member benchmark passed; the full ensemble freeze remains under PROOF.
+  member benchmark passed; full 40-member training/evaluation/freeze completed
+  September 30. A subsequent daily update remains under PROOF.
   [Evidence](docs/reviews/2026-09-27-v6-continual-incubator.md). No automatic deployment.
-- [ ] **OPS-INCUBATOR.OPS:** Replace replay-only scheduling with bounded continual
-  research and verify restart, daily-input readiness and resource coexistence.
-  Completion gate and automatic 05:00 restart verified September 28. Initial
-  catch-up remains incomplete; full update/recovery/coexistence proof remains.
-  September 29: installed up to four autosized data workers, CPU 400%,
-  19/20-GiB limits for the next permitted run; the calendar cutoff remains.
-  September 30: dedicated 26-GiB allocation, autosized data workers and all
-  available training CPU threads prepared for the 15:01 handover; measured
-  full-run results remain pending. At 16:33:47, a user-requested resource
-  revision resumed five data workers, preserving all 357 completed symbol seals;
-  automatic training and restoration remain. At 18:53, a separate bounded worker
-  began retrying terminal HTTP 502 symbols while the main pass continued; verified
-  recovery schedules a checkpoint-preserving supervisor resume toward training.
-  Ten 502 symbols recovered; 25 additional transport failures stopped the main
-  pass. At 20:47:50 the same service resumed from 424 verified checkpoints with
-  five workers; training remains pending. [Dedicated schedule](docs/reviews/2026-09-30-v6-dedicated-compute.md).
-  [Prior sizing and verification](docs/reviews/2026-09-29-v6-worker-sizing.md). Post-outage
-  restart and forward progress verified; full run/coexistence proof remains open.
-  [Restart evidence](docs/reviews/2026-09-29-paper-reconciliation-v6-resume.md). Retries retain an
-  unfinished catch-up date; verify full completion and sustained resource use.
-- [ ] **OPS-INCUBATOR.PROOF:** Complete the initial catch-up and measure a full
-  daily update through freeze before claiming next-trading-day readiness.
+- [ ] **OPS-INCUBATOR.OPS:** Verify daily-input readiness and sustained resource
+  coexistence. September 30 initial catch-up and candidate freeze completed;
+  rejection retained incumbent. At 22:40:49 automatic timer restoration and
+  research starts succeeded, with migration and both V7 successor controllers
+  active on readback. A subsequent daily update/coexistence proof remains.
+  [Evidence](docs/reviews/2026-09-30-v6-dedicated-compute.md).
+- [ ] **OPS-INCUBATOR.PROOF:** Initial catch-up/full freeze completed September 30;
+  measure a subsequent full daily update through freeze before claiming
+  next-trading-day readiness. No automatic deployment.
   [Current contract](docs/specs/AI_INCUBATOR.md). V5 paper scoring is superseded.
 - [ ] **OPS-PROVIDER, by October 2:** Give the user a source-backed Massive
   keep/cancel recommendation using pre-February-2024 V7 captures, representative

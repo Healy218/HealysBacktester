@@ -938,3 +938,17 @@ this was not OOM. Retained receipts cover 30,462,620 horizon/target dispositions
 25 fully discovered securities and partial others, plus two empty-index failures.
 This demonstrates retained partial progress and a storage/recovery limitation,
 not full coverage or gate closure. [Evidence](reviews/2026-09-29-overnight-checkpoints.md).
+
+## 2026-09-30 — V6 r3 first full candidate freeze
+
+All 449 symbols and 40 ensemble members completed for the pinned September 28
+run. Training took 35m29s; evaluation and final freeze took 5m36s, finishing
+22:40:47 Central. Candidate includes 122 independently hash-verified files.
+Training/validation sizes: 2,905,632 / 205,816 rows. Verdict **rejected**:
+candidate return MSE 5.325676 exceeds incumbent 5.323277 and zero-return baseline
+5.310690. Candidate Brier 0.216986 improves slightly over incumbent 0.216994,
+but the joint acceptance gate fails. Incumbent retained; no deployment approved.
+Purged temporal validation is reused for daily selection, not an untouched test.
+A subsequent full daily update/coexistence proof remains unmeasured.
+Evidence: `incubator/continual-v6/r3/runs/2026-09-28/candidate/`;
+[Completion review](reviews/2026-09-30-v6-dedicated-compute.md).

@@ -213,3 +213,22 @@ seals remained unchanged. No producer or scientific contract changed.
 The unchanged supervisor now retries the remaining 25 symbols, then proceeds to
 training/evaluation/freeze if data checks pass. The previous side helper remains
 finished and bound to its old invocation. Full completion remains unproven.
+
+## 2026-09-30 — V6 r3 first full candidate freeze
+
+All 449 symbols and 40 ensemble members completed for the pinned September 28
+run. Training took 35m29s; evaluation and final freeze took 5m36s, finishing
+22:40:47 Central. Candidate includes 122 independently hash-verified files.
+Training/validation sizes: 2,905,632 / 205,816 rows. Verdict **rejected**:
+candidate return MSE 5.325676 exceeds incumbent 5.323277 and zero-return baseline
+5.310690. Candidate Brier 0.216986 improves slightly over incumbent 0.216994,
+but the joint acceptance gate fails. Incumbent retained; no deployment approved.
+Purged temporal validation is reused for daily selection, not an untouched test.
+A subsequent full daily update/coexistence proof remains unmeasured.
+Evidence: `incubator/continual-v6/r3/runs/2026-09-28/candidate/`;
+`complete.json`, `evaluation.json` and `ensemble_config.json`.
+
+Focus restoration completed at 22:40:49; `restored-services.json` recorded MRHA
+migration and both V7 successor controllers active, and `service-exit.json`
+recorded success/0. This proves the requested restoration at that time, not
+continued future health. No further training/capture was launched by this audit.

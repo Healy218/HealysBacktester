@@ -14,6 +14,14 @@ threshold. V5 paper outcome joins are no longer an incubator prerequisite.
 Historical prediction refreshes remain valid inference evidence. Their
 [original contract](../reference/AI_INCUBATOR_REPLAY_LEGACY.md) is historical.
 
+September 30 clarification: the operational goal is to keep V6's research data
+and resulting freeze current after each close. The initial multi-session catch-up
+is followed by daily extensions. A worse diagnostic score does **not** discard
+the extension, remove the completed freeze, or prevent subsequent daily updates.
+Keep the new version and record the measured improvement/regression. Research
+model-selection diagnostics are a separate result from freshness/completion;
+any later training-method change must be versioned and evaluated.
+
 ## Incremental data, immutable freezes
 
 - Reuse V6's externally anchored release, frozen per-symbol strategy parameters,
