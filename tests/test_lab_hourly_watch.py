@@ -93,3 +93,13 @@ def test_broker_success_does_not_hide_scanner_failure(tmp_path, monkeypatch):
     assert 'TLT' in receipts['scanner-dispatch-status.json']['error']
     assert receipts['broker-status.json']['status'] == 'complete'
     assert 'observation_error' in receipts['status.json']
+
+
+def test_paper_receipts_include_concurrent_quote_recovery(tmp_path, monkeypatch):
+    monkeypatch.setattr(watch, 'PAPER', tmp_path)
+    attempts = [{'at': '2026-10-02T13:45:30Z', 'errors': [{'symbol': 'FLY', 'error': 'no fresh quote'}]}]
+    (tmp_path/'position-monitor-status.json').write_text(json.dumps(dict(
+        status='waiting_for_quote', checked_at='2026-10-02T13:45:30Z', attempts=attempts)))
+    receipt = watch.paper_receipts()['position-monitor-status.json']
+    assert receipt['status'] == 'waiting_for_quote'
+    assert receipt['attempt_count'] == 1 and receipt['last_attempt'] == attempts[0]

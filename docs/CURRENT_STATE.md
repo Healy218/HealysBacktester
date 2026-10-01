@@ -482,7 +482,7 @@ The fresh state's `paper-restart.json` enables scanning and paper submission;
 Read SQLite evidence in read-only mode.
 
 - Scanner: `healys-v6-alpaca-scanner.timer` / `.service`, every 15 minutes in
-  its configured window; v9 launcher with the unchanged v8 adapter, memory-aware
+  its configured window; v10 launcher/adapter and versioned quote-recovery consumer, memory-aware
   sizing up to 11 workers within a 16 GiB cap (14 GiB high, no swap).
 - Broker: `healys-v6-alpaca-orders.timer` / `.service`, every 15 seconds in its
   configured window; market/calendar checks govern execution. Since September 30
@@ -511,21 +511,27 @@ universe. Repair evidence: `nn_meta/validation/v6-paper-vintage-20261001-r0/incr
 [Repair and scanner verification](reviews/2026-10-01-v6-paper-vintage-repair.md).
 The hourly watcher now checks Alpaca scanner/broker receipts independently of
 the incubator, with paper service observations and a separate paper journal.
-Scanner launcher: `scripts/run_v6_alpaca_scanner_v9.sh`; source reconciler v3
-protects active chains and distinguishes prior filled trades from new unfilled
-signals reusing their contract. It requires broker and journal flatness before archival.
+Scanner launcher: `scripts/run_v6_alpaca_scanner_v10.sh`; source reconciler v3
+continues to protect active chains and distinguish prior fills from new unfilled
+signals reusing their contract. New consumer `scripts/run_v6_forward_resilient_v1.py`
+runs held monitoring alongside detection, retrying only empty fresh-quote errors.
+Allocation still requires successful monitoring and the frozen entry deadline.
+The model, feature modules, 30-second quote validation and broker policy are unchanged.
 Current paper-manifest SHA:
-`216d61365a3b65c5eccce28e5fe1da9eb408bebd2dc18c0eb47f3241aa77b890`.
-Resource revision: `healys-v6-alpaca-scanner.service.d/90-resource-v9.conf`,
-with prior manifest/unit saved under `runtime-revisions/scanner-resources-v9-20261001/`.
-Only the launcher/resource admission changed; model and execution policy did not.
-V9 completed five observed passes between 12:45 and 14:00 in 261–286 seconds,
-zero detection errors. A late 13:15 start missed its deadline. Actual UAL and FLY
-entries filled after the input repair. At 14:45 new entries were still withheld
-on missing fresh Massive FLY quotes. Alpaca broker polling succeeded at 14:46;
-26 FLY puts remained held, with zero open orders at the 14:35 account check.
-Intermittent Alpaca stale-quote polls also fail closed; no freshness guard changed.
-These are dated observations; current scanner/broker receipts own present health.
+`06459ec7cb58784cc35af07030c88f0685540a167074dd1c97fcb0a30e150f9c`.
+Current consumer admission: `healys-v6-alpaca-scanner.service.d/95-monitor-v10.conf`;
+resource limits remain selected by `90-resource-v9.conf`.
+Prior manifest/unit: paper `runtime-revisions/scanner-monitor-v10-20261001/`.
+`position-monitor-status.json` records quote attempts and completion/blocking;
+its timestamp must match the pass before drawing conclusions. It is absent on
+idle startup. The hourly watcher reads it with scanner and broker receipts.
+At October 1 15:32:54–15:32:57 Central, installed v10 exited successfully with
+all 449 symbols verified and `idle / outside_market_hours`; broker polling was
+`market_closed` at 15:34. Market-hours recovery/timing remains unverified.
+[Quote recovery evidence and acceptance](reviews/2026-10-01-v6-paper-quote-recovery.md).
+Earlier same-day TLT recovery, v9 scan timing and FLY quote failures remain in
+[the prior repair review](reviews/2026-10-01-v6-paper-vintage-repair.md).
+These are dated observations; current receipts own present health.
 Previous manifest/services/databases: `runtime-revisions/scanner-contract-reuse-v3-20260930/`
 and `runtime-revisions/step-policy-v4-20260930/`.
 Older runtime lineage remains intact; historical readiness/activation evidence is

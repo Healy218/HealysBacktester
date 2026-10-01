@@ -37,7 +37,7 @@ valid completion. No automatic paper/live model deployment is authorized.
 
 Check V6 Alpaca PAPER separately from its completed incubator. Use the snapshot's
 paper receipts and paper_journal, plus /home/healy/Coding/HealysV6/nn_meta/live/
-v6_alpaca_paper/{scanner-dispatch-status,status,broker-status}.json and the
+v6_alpaca_paper/{scanner-dispatch-status,status,broker-status,position-monitor-status}.json and the
 read-only /tmp/v6-alpaca-paper-monitor-latest.json. Report scanner failures even
 when broker polling succeeds; enabled timers alone do not prove successful scans.
 The October 1 TLT price-vintage repair evidence is under
@@ -85,12 +85,17 @@ PAPER = ROOT.parent / 'HealysV6/nn_meta/live/v6_alpaca_paper'
 
 def paper_receipts():
     result = {}
-    for name in ['scanner-dispatch-status.json', 'status.json', 'broker-status.json']:
+    for name in ['scanner-dispatch-status.json', 'status.json', 'broker-status.json',
+                 'position-monitor-status.json']:
         try:
             doc = json.loads((PAPER / name).read_text())
             result[name] = {k: doc[k] for k in ['status', 'checked_at', 'action',
                 'phase', 'error', 'expiry_fallback_errors', 'exhausted_exit_ladders',
-                'positions_before', 'data_through', 'elapsed_seconds'] if k in doc}
+                'positions_before', 'data_through', 'elapsed_seconds', 'candidate_rows',
+                'exit_errors', 'symbol_results', 'deadline'] if k in doc}
+            if isinstance(doc.get('attempts'), list):
+                result[name]['attempt_count'] = len(doc['attempts'])
+                result[name]['last_attempt'] = doc['attempts'][-1] if doc['attempts'] else None
         except (OSError, ValueError) as exc:
             result[name] = dict(observation_error=str(exc))
     return result

@@ -116,6 +116,12 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   active; preserve the freshness guard and observe subsequent provider receipts.
   [Recovery and timing evidence](docs/reviews/2026-10-01-v6-paper-vintage-repair.md).
   Do not repeat activation or import old simulator positions.
+- [ ] **OPS-PAPER.RELIABILITY:** October 1 quote-recovery consumer deployed and
+  verified after hours at 15:32 Central. Bounded held-quote retries overlap full
+  candidate computation; unresolved monitoring still blocks allocation. Verify
+  prospective recovery and timely completed scans next market session, plus
+  independent broker reconciliation. No guarantee of timing from idle startup.
+  [Repair and acceptance](docs/reviews/2026-10-01-v6-paper-quote-recovery.md).
 - [x] **OPS-INCUBATOR.DATA:** Complete the frozen-universe V6 initial catch-up.
   September 30 at 22:40:47: all 449 symbols, 40 training members and evaluated
   candidate freeze completed; 122 candidate payload files verified. The candidate
