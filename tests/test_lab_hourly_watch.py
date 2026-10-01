@@ -81,3 +81,15 @@ def test_stopped_watcher_does_not_connect(state, monkeypatch):
     monkeypatch.setattr(watch.sys, 'argv', ['watch'])
     monkeypatch.setattr(watch, 'Rpc', lambda: pytest.fail('stopped watcher connected'))
     watch.main()
+
+
+def test_broker_success_does_not_hide_scanner_failure(tmp_path, monkeypatch):
+    monkeypatch.setattr(watch, 'PAPER', tmp_path)
+    (tmp_path/'scanner-dispatch-status.json').write_text(json.dumps(
+        dict(status='blocked', error='TLT: price vintage changed')))
+    (tmp_path/'broker-status.json').write_text(json.dumps(dict(status='complete')))
+    receipts = watch.paper_receipts()
+    assert receipts['scanner-dispatch-status.json']['status'] == 'blocked'
+    assert 'TLT' in receipts['scanner-dispatch-status.json']['error']
+    assert receipts['broker-status.json']['status'] == 'complete'
+    assert 'observation_error' in receipts['status.json']

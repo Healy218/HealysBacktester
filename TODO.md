@@ -109,6 +109,12 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   Follow-up source cleanup v3 fixes a stale, unfilled VG projection protected
   by earlier same-contract fills. Deployed 10:59; 11:00 scan retired that source.
   The 11:00 scan completed in 256.537 seconds, 308 candidates, zero errors. [Policy and fills](docs/reviews/2026-09-30-v6-step-policy-v4.md).
+  October 1: TLT data-vintage repair published 10:45:53; actual UAL and FLY
+  entries subsequently filled. Resource-only v9 yielded five observed 261–286s
+  scans with zero detection errors. Late starts and missing fresh option quotes
+  still withhold entries; 14:45 FLY quote blocker persists. Broker polling remains
+  active; preserve the freshness guard and observe subsequent provider receipts.
+  [Recovery and timing evidence](docs/reviews/2026-10-01-v6-paper-vintage-repair.md).
   Do not repeat activation or import old simulator positions.
 - [x] **OPS-INCUBATOR.DATA:** Complete the frozen-universe V6 initial catch-up.
   September 30 at 22:40:47: all 449 symbols, 40 training members and evaluated

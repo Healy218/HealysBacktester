@@ -1,13 +1,13 @@
 # Current state and artifact index
 
-Pointer/configuration owner for the lab, reconciled September 30, 2026.
+Pointer/configuration owner for the lab; V6 pointers updated October 1, 2026.
 [ROADMAP](../ROADMAP.md) owns milestone status and acceptance conditions;
 [TODO](../TODO.md) owns selected work. This page selects exact inputs and
 runtime identities. Other current documents link here instead of copying them.
 
-**Evidence freshness:** V6 paper/research and V7 replay were checked September
-30; the dated observation below distinguishes running processes from stopped jobs
-with stale progress. Other sections retain their own dated scopes and timestamps.
+**Evidence freshness:** V6 paper recovery and the completed incubator have dated
+October 1 observations below. Other sections retain their own dated scopes and
+timestamps; old progress alone does not establish present service health.
 Verify the indicated live receipts when asked for present health or progress.
 Never infer a current ETA from a historical throughput sample.
 
@@ -482,7 +482,8 @@ The fresh state's `paper-restart.json` enables scanning and paper submission;
 Read SQLite evidence in read-only mode.
 
 - Scanner: `healys-v6-alpaca-scanner.timer` / `.service`, every 15 minutes in
-  its configured window, dynamically sized workers (v8 adapter: up to eight), 12 GiB memory limit.
+  its configured window; v9 launcher with the unchanged v8 adapter, memory-aware
+  sizing up to 11 workers within a 16 GiB cap (14 GiB high, no swap).
 - Broker: `healys-v6-alpaca-orders.timer` / `.service`, every 15 seconds in its
   configured window; market/calendar checks govern execution. Since September 30
   10:33 Central, `scripts.run_v6_alpaca_runtime_v5` selects three-step orders:
@@ -500,15 +501,31 @@ Read SQLite evidence in read-only mode.
   old server V6 watcher were retired. The old Stonks simulator projection is
   historical; it is not the new account's actual fill history.
 
-Selected input snapshot: `nn_meta/live/v6_server/data/2026-09-29/`, published
-September 30 at 07:00 Central, manifest SHA
-`ac9a925ff336b119726c6d1ef8f16e456adf3718f83b8457e6e887b56d0df093`.
+Selected input snapshot: `nn_meta/live/v6_server/data/2026-09-30-vintage-20261001-r1/`,
+published October 1 at **10:45:53 Central**, manifest SHA
+`535dde7c63a7bc226a9f34b21b0cda18b8cf051128bbf7611e54b163ab825441`.
 The original V6 data-index source points to it; model/release remain unchanged.
-Scanner launcher: `scripts/run_v6_alpaca_scanner_v8.sh`; source reconciler v3
+The prior September 30 snapshot is preserved. TLT adjusted history was restated;
+the new snapshot and fresh raw/adjusted overlap passed validation for the full
+universe. Repair evidence: `nn_meta/validation/v6-paper-vintage-20261001-r0/incremental/`.
+[Repair and scanner verification](reviews/2026-10-01-v6-paper-vintage-repair.md).
+The hourly watcher now checks Alpaca scanner/broker receipts independently of
+the incubator, with paper service observations and a separate paper journal.
+Scanner launcher: `scripts/run_v6_alpaca_scanner_v9.sh`; source reconciler v3
 protects active chains and distinguishes prior filled trades from new unfilled
 signals reusing their contract. It requires broker and journal flatness before archival.
 Current paper-manifest SHA:
-`51e61f0bd400d6263bac362398e1bb03e9e5c271f0fa9fa6f11a4bd3baef3f8b`.
+`216d61365a3b65c5eccce28e5fe1da9eb408bebd2dc18c0eb47f3241aa77b890`.
+Resource revision: `healys-v6-alpaca-scanner.service.d/90-resource-v9.conf`,
+with prior manifest/unit saved under `runtime-revisions/scanner-resources-v9-20261001/`.
+Only the launcher/resource admission changed; model and execution policy did not.
+V9 completed five observed passes between 12:45 and 14:00 in 261–286 seconds,
+zero detection errors. A late 13:15 start missed its deadline. Actual UAL and FLY
+entries filled after the input repair. At 14:45 new entries were still withheld
+on missing fresh Massive FLY quotes. Alpaca broker polling succeeded at 14:46;
+26 FLY puts remained held, with zero open orders at the 14:35 account check.
+Intermittent Alpaca stale-quote polls also fail closed; no freshness guard changed.
+These are dated observations; current scanner/broker receipts own present health.
 Previous manifest/services/databases: `runtime-revisions/scanner-contract-reuse-v3-20260930/`
 and `runtime-revisions/step-policy-v4-20260930/`.
 Older runtime lineage remains intact; historical readiness/activation evidence is

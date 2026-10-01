@@ -1,60 +1,63 @@
-# Handoff — October 1, 2026 — V6 current; V7 and storage resumed
+# Handoff — October 1, 2026 — V6 paper input repair and timing verification
 
-## Completed user task
+## Selected user task
 
-Fixed CRSP/MTUM, finished V6 through September 30, and resumed V7/storage.
-Final r5 candidate frozen **02:32:01 Central**, 449/449 symbols, 40/40 members,
-zero errors; 122 candidate files independently hash-verified.
-Full recovery run 56m22s, training 39m32s, evaluation/freeze 6m25s. This reuses
-447 earlier completed symbols; it is not a clean unattended daily benchmark.
-All 447 original symbol seals and both repaired symbols' old feature/completed
-label references remain unchanged. Prior failed attempts and parent artifacts retained.
+User asked to fix V6 so Alpaca paper trading can continue today.
+TLT input-vintage failure repaired; new immutable snapshot published 10:45:53.
+Actual paper trading resumed (UAL entry and later close verified), but some
+8-worker scans missed entry deadlines under shared load. Resource-only v9
+completed five observed scans in 261–286 seconds, zero detection errors.
+At 14:45 the scanner still withheld entries on missing fresh Massive FLY quotes.
+Alpaca broker polling succeeded at 14:46, with one position (26 FLY puts).
+This external quote-freshness blocker remains; do not claim all scans healthy.
+No change to frozen model, quote freshness, entry deadlines or order policy.
 
-## Selected artifacts and evaluation
+## Paper inputs and evidence
 
-Root `incubator/continual-v6/r5`; config `deploy/incubator-continual-v6-r5.json`.
-Candidate `r5/runs/2026-09-30/candidate`, complete hash
-`4d8693a739c3eb9169f73bb334ee6c11b7fba35c35872b17ef94b9a4093d9a08`.
-333,260 candidates: 120,249 matured, 100,167 pending, 112,844 unfilled.
-Training/validation arrays: 2,911,662 / 202,418 rows, 164 features.
-Diagnostic rejected: return MSE 5.335516 vs parent 5.335310 and zero baseline
-5.325535. Brier improved: 0.213463 vs parent 0.213882. These are reused temporal
-validation diagnostics, not untouched performance evidence. The new freeze/update
-is retained as requested. No paper/live deployment or accepted-research promotion.
+Selected snapshot: `nn_meta/live/v6_server/data/2026-09-30-vintage-20261001-r1/`.
+Manifest: `535dde7c63a7bc226a9f34b21b0cda18b8cf051128bbf7611e54b163ab825441`.
+All 449 symbol files verified; fresh raw/adjusted overlap passed for 444 available
+symbols, five previously unavailable symbols remain explicitly accounted for.
+TLT alone had newly restated adjusted history. Original snapshot and activation
+preserved. Incremental seed's 7,167,256 raw/adjusted rows each matched exactly.
+Historical option-root aliases retained after an unpublished surface-build failure.
+Evidence: `nn_meta/validation/v6-paper-vintage-20261001-r0/`, especially `incremental/`.
+[Repair, actual fills and timing review](docs/reviews/2026-10-01-v6-paper-vintage-repair.md).
 
-## Daily operation and restart evidence
+## Selected scanner and actual outcomes
 
-`healys-v6-continual.service`, persistent `50-daily-v5.conf`, selects
-`scripts/v6_continual_resume_v5.py`. Both temporary r4/r5 dedicated overrides
-were removed on success; ordinary daily resource policy and schedules restored.
-Subsequent same-date timer runs may report `candidate_already_frozen`; they do
-not repeat training. Use `incubator-result.json` below for the full completed run.
-Evidence: `nn_meta/validation/v6-daily-repair-20261001-r5/` includes preparation,
-pilot, completed-data audit, completion verification and restored-progress verification.
-CLI: `./venv/bin/python scripts/watch_v6_incubator.py --follow` (defaults r5).
+Service `healys-v6-alpaca-scanner.service`; unchanged quarter-hour timer.
+Launcher `scripts/run_v6_alpaca_scanner_v9.sh` delegates to unchanged v8 adapter.
+Autosizer selects 11 workers now, with 16 GiB maximum / 14 GiB high, no swap;
+worker numerical threads remain one. New persistent drop-in `90-resource-v9.conf`.
+Paper manifest: `216d61365a3b65c5eccce28e5fe1da9eb408bebd2dc18c0eb47f3241aa77b890`.
+Previous manifest/unit preserved in paper `runtime-revisions/scanner-resources-v9-20261001/`.
+Actual PYPL exit: 24 contracts at $2.62 in two fills at 10:46–10:47.
+Actual UAL entry: 10 at $7.30 at 11:20; exit: 10 at $6.15 at 12:07.
+11:45/12:15 scans withheld entries on unavailable fresh UAL option quotes.
+12:30 scan missed its entry deadline at 345.372 seconds; this predates v9.
+V9 also refused a late-started 13:15 scan; deadlines were not loosened.
+Actual FLY entry: 26 puts at $3.20 at 14:06:47. Account showed this position and
+zero open orders at 14:35. Missing FLY quotes blocked 14:15/14:30/14:45 scans.
+Evidence: `v9-scans.json`, `recovery-verification.json`, resource preservation audit.
+Do not infer new-entry readiness solely from successful broker polling.
 
-## V7 and migration are running again
+## Other workstreams
 
-Original discovery and MRHA migration restored automatically at 02:32.
-Frontier initially stopped on two retained HTTP 502 failures from the earlier
-interrupted capture. User's restart instruction was completed with a versioned,
-one-time transport recovery, retaining attempts and all completed packs.
-Selected frontier runtime override `98-transport-recovery.conf` invokes
-`scripts/resume_v7_frontier_transport_20261001.py`; original producer/resource
-bindings remain. Evidence `nn_meta/validation/v7-frontier-restart-20261001-r0/`.
-Restart **02:48:11 Central**. At 02:49, capture advanced to 64,584/126,719 windows,
-no failed batches; discovery had fresh active securities; migration advanced to
-275,575 files / 204,212,780,359 logical bytes. All three had active cgroup CPU.
-Per-pass discovery count 7 is not cumulative retained completion. Gate 7-3 stays
-open; completed entry capture remains complete. Continue existing controllers,
-not new captures of completed scope. Backup/archive/daily V6 timers restored.
+V6 incubator r5 through September 30 remains complete: 449 symbols, 40 members,
+evaluated freeze at 02:32:01, 122 verified files. Updated freeze retained with
+adverse return-MSE diagnostic recorded; no automatic model deployment.
+Normal daily timer is restored. Selected config `deploy/incubator-continual-v6-r5.json`.
+Clean one-session timing and sustained coexistence remain under OPS-INCUBATOR.PROOF/OPS.
+V7 original discovery, frontier replay and MRHA migration continue. At 12:37,
+migration had moved 431,970 files / 226,433,065,378 logical bytes. Replay counters
+can reset on a new pass; inspect retained waves separately. Gate 7-3 remains open.
 
-## Remaining proof and constraints
+## Monitoring and constraints
 
-The repaired two-session update is complete. A clean one-session timing and
-sustained resource coexistence remain under OPS-INCUBATOR.PROOF/OPS.
-Hourly read-only watcher continues each :00 Central in this terminal, bound to
-r5 and repair evidence. Pending reports wait behind active work; logs under
-`logs/lab-hourly-watch`. No frozen-source edits, artifact relabeling, paper/live
-promotion or external messaging. Keep MRHA mounted and preserve unrelated work.
-[Repair/completion review](docs/reviews/2026-10-01-v6-occurrence-repair.md) · [State](docs/CURRENT_STATE.md).
+Hourly watcher remains bound to this terminal; now includes Alpaca scanner/broker
+receipts, service/timer observations and separate paper journal. Six watcher tests
+and eight resource-sizing tests passed. Scheduled reports stay read-only.
+Preserve frozen artifacts, old attempts, positions and journal history. No
+paper/live model promotion, deadline weakening, or external messaging.
+[Selected pointers](docs/CURRENT_STATE.md) · [Current tasks](TODO.md).

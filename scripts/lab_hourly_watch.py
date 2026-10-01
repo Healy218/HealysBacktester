@@ -35,6 +35,14 @@ candidate -> restoration of paused V7/storage services and timers. An adverse
 diagnostic verdict does not discard the new freeze or block restoration after
 valid completion. No automatic paper/live model deployment is authorized.
 
+Check V6 Alpaca PAPER separately from its completed incubator. Use the snapshot's
+paper receipts and paper_journal, plus /home/healy/Coding/HealysV6/nn_meta/live/
+v6_alpaca_paper/{scanner-dispatch-status,status,broker-status}.json and the
+read-only /tmp/v6-alpaca-paper-monitor-latest.json. Report scanner failures even
+when broker polling succeeds; enabled timers alone do not prove successful scans.
+The October 1 TLT price-vintage repair evidence is under
+nn_meta/validation/v6-paper-vintage-20261001-r0. Do not modify trading state.
+
 While V6 is building/training, the paused V7/migration services are EXPECTED.
 After its verified freeze, check both healys-v7-required-discovery-20260930 and
 healys-v7-required-frontier-20260930 plus healys-v7-mrha-migration-v2-20260929.
@@ -68,7 +76,24 @@ UNITS = [
     'healys-v7-mrha-migration-v2-20260929.service',
     'healys-cache-backup.timer', 'healys-cache-backup.service',
     'healys-archive-pull.timer', 'healys-archive-pull.service',
+    'healys-v6-alpaca-scanner.service', 'healys-v6-alpaca-scanner.timer',
+    'healys-v6-alpaca-orders.service', 'healys-v6-alpaca-orders.timer',
+    'healys-v6-alpaca-paper-monitor.timer',
 ]
+PAPER = ROOT.parent / 'HealysV6/nn_meta/live/v6_alpaca_paper'
+
+
+def paper_receipts():
+    result = {}
+    for name in ['scanner-dispatch-status.json', 'status.json', 'broker-status.json']:
+        try:
+            doc = json.loads((PAPER / name).read_text())
+            result[name] = {k: doc[k] for k in ['status', 'checked_at', 'action',
+                'phase', 'error', 'expiry_fallback_errors', 'exhausted_exit_ladders',
+                'positions_before', 'data_through', 'elapsed_seconds'] if k in doc}
+        except (OSError, ValueError) as exc:
+            result[name] = dict(observation_error=str(exc))
+    return result
 
 
 def command(args, timeout=15):
@@ -91,6 +116,10 @@ def capture_runtime(slot):
     result['journal'] = command(['journalctl', '--user',
         *[a for u in UNITS if u.endswith('.service') for a in ('-u', u)],
         '--since', '-70 minutes', '-n', '100', '--no-pager'])
+    result['paper_journal'] = command(['journalctl', '--user',
+        '-u', 'healys-v6-alpaca-scanner.service', '-u', 'healys-v6-alpaca-orders.service',
+        '--since', '-70 minutes', '-n', '80', '--no-pager'])
+    result['paper_receipts'] = paper_receipts()
     result['storage'] = command(['df', '-B1', '--output=source,target,size,used,avail'])
     result['memory'] = Path('/proc/meminfo').read_text()
     receipts = [
