@@ -295,7 +295,34 @@ and `progress.json` together; a waiting service is not proof of advancing work.
 Only `closure_candidate_ready` reaches final evidence review, and it does not
 itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
 
-### September 30 23:04 V6 two-day update — selected r4
+### October 1 V6 occurrence repair — selected r5
+
+**01:35:39 Central full-run start:** `healys-v6-continual.service` now runs
+`scripts/v6_daily_repair_dedicated_v5.py` via temporary runtime `95-dedicated-r5.conf`.
+Persistent `50-daily-v5.conf` selects `scripts/v6_continual_resume_v5.py`.
+Root `incubator/continual-v6/r5`; config `deploy/incubator-continual-v6-r5.json`.
+Five autosized worker slots, 16 training threads, 25/26-GiB high/max, unlimited CPU
+quota. Actual new data work is only CRSP/MTUM after verifying/referencing the
+447 completed r4 symbols. Same frozen September 30 snapshot and fixed model family.
+
+The r4 attempt exited at 00:59:10 with two inherited-batch declaration errors.
+Both add a `tv_rating` ordinal-1 occurrence at a historical timestamp while stock
+prefixes and old proposals stay unchanged. r5 keeps original feature/label seals
+and places additions in separate immutable batches. Old producer files unchanged.
+The isolated two-symbol pilot completed in 86.77 seconds with zero errors.
+Pilot/full contract: `84452acaf5aefda625ca3d84a3558cee5606e1ebcf421f0dfbb0bfa4464ba6c0`.
+
+`nn_meta/validation/v6-daily-repair-20261001-r5/` owns preparation/census,
+447 preserved symbol seal hashes, diagnosis, pilot, bound operation and launch.
+Live status: r5 `latest-run.json`, `resources.json`, `service-exit.json`, and
+`runs/2026-09-30/` symbol/member/candidate receipts. Completion is still pending.
+After verified full freeze, the wrapper removes runtime 95-r5 and 90-r4 overrides
+and restores the r4 saved pause plan. Original cutoff and failure-review policy
+remain. Watcher defaults/dispatch snapshots now select r5.
+[Repair evidence and constraints](reviews/2026-10-01-v6-occurrence-repair.md).
+
+### September 30 23:04 V6 two-day update — historical r4 attempt
+
 
 **23:18:23 Central dedicated resource revision:** same daily service and r4 root,
 temporary runtime drop-in `90-dedicated-r4.conf` invoking
@@ -337,7 +364,7 @@ latest host observation, and `state.json` records queued/started delivery (creat
 at the first actual dispatch). Dispatch alone does not prove a completed report.
 Five focused dispatch tests and installed unit validation passed.
 
-The initial host snapshot at **23:36:47** found V6 active, 115/449 complete,
+Historical observation before the r5 repair: the initial host snapshot at **23:36:47** found V6 active, 115/449 complete,
 with CRSP `Daily parent artifact inputs differ`; this is an actual unresolved
 build error, not an expected pause. Other workers continue, but errors prevent
 training/freeze and restoration after the pass. Read-only reproduction in

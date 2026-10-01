@@ -8,18 +8,15 @@ running-job locations; do not choose a different revision from an old review.
 
 ## Active gate 7-3 — required option evidence
 
-**Late September 30 selected operating task:** Complete the immediate V6 update
-through September 30 (September 29–30 additions) and measure it through freeze.
-The r3 daily attempt exposed provider revisions to frozen bars; corrected r4
-launched at 23:04:36 with append-only frozen prefixes and inherited seals.
-User requested the prior dedicated allocation: pause competitors, preserve
-checkpoints, use up to five autosized workers/16 training threads and 26 GiB,
-then restore paused jobs after verified completion. Full results remain pending.
-[Two-day update](docs/reviews/2026-09-30-v6-two-day-update.md).
-Hourly checks in the current terminal are enabled from October 1 00:00 Central.
-Initial 23:36 host check found one CRSP inherited-proposal mismatch while other
-symbols continued; investigate before claiming training/freeze can complete.
-[Watcher and blocker](docs/CURRENT_STATE.md#hourly-terminal-health-watcher).
+**October 1 selected operating task:** Repair CRSP/MTUM and finish the immediate
+V6 update through September 30, then automatically restore V7/storage. The r4
+pass stopped at 447/449 after additional historical proposal occurrences failed
+whole-batch inheritance checks. r5 preserves those 447 completed symbols and all
+old feature/label seals, appending new occurrences separately. Both-symbol pilot
+passed; full run started 01:35:39 Central with five autosized worker slots,
+16 training threads and 26 GiB. Actual training/evaluation/freeze remains pending.
+Hourly checks here continue at :00 Central, now bound to r5.
+[Repair and evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md).
 
 Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
 The following scope is unchanged by the documentation consolidation.

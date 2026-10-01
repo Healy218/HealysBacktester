@@ -23,12 +23,13 @@ while away overnight. Read TODO.md, HANDOFF.md and the relevant CURRENT_STATE
 sections, then inspect current receipts. Report HERE concisely with observation
 time, progress since the preceding check, and specific errors or stalls.
 
-The selected V6 update is r4, through September 30 (adding September 29-30).
-Read incubator/continual-v6/r4/{latest-run,resources,service-exit}.json where
+The selected V6 update is r5, through September 30 (adding September 29-30).
+This supersedes failed r4: its 447 completed symbols are preserved; CRSP/MTUM
+were repaired by appending new occurrences without changing old seals.
+Read incubator/continual-v6/r5/{latest-run,resources,service-exit}.json where
 present, runs/2026-09-30/status.json, per-symbol progress, training-plan.json,
 member receipts and candidate/{evaluation,complete}.json when present. The
-dedicated controller evidence is nn_meta/validation/v6-daily-update-20260930-r4/
-dedicated/{progress,incubator-result,restored-services}.json. Verify the sequence
+dedicated controller evidence is nn_meta/validation/v6-daily-repair-20261001-r5/{progress,incubator-result,restored-services}.json. Verify the sequence
 build -> prepare arrays -> 40-member training -> evaluation -> final sealed
 candidate -> restoration of paused V7/storage services and timers. An adverse
 diagnostic verdict does not discard the new freeze or block restoration after
@@ -93,9 +94,9 @@ def capture_runtime(slot):
     result['storage'] = command(['df', '-B1', '--output=source,target,size,used,avail'])
     result['memory'] = Path('/proc/meminfo').read_text()
     receipts = [
-        'incubator/continual-v6/r4/latest-run.json',
-        'incubator/continual-v6/r4/resources.json',
-        'nn_meta/validation/v6-daily-update-20260930-r4/dedicated/progress.json',
+        'incubator/continual-v6/r5/latest-run.json',
+        'incubator/continual-v6/r5/resources.json',
+        'nn_meta/validation/v6-daily-repair-20261001-r5/progress.json',
         'nn_meta/validation/v7-required-inputs-20260930-r0/discovery/progress.json',
         'nn_meta/validation/v7-required-inputs-20260930-r0/frontier/progress.json',
         'nn_meta/validation/v7-mrha-payload-migration-20260929-r1/progress.json',

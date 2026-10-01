@@ -1,65 +1,67 @@
-# Handoff — September 30, 2026 — hourly watcher armed; V6 build issue found
+# Handoff — October 1, 2026 — V6 r5 occurrence repair running
 
-## Selected task and automation
+## Selected user task
 
-Complete V6 r4 through September 30, then automatically restore V7 and storage.
-User is away overnight and requested a health check HERE every hour at :00 Central.
-`healys-lab-hourly-watch.timer` is enabled/active; first scheduled slot is
-**October 1 00:00 Central**, then hourly. Persistent=false, accuracy one second.
-`healys-lab-hourly-watch.service` runs `scripts/lab_hourly_watch.py`; busy chat
-retries every minute, without interrupting an active turn or accumulating reports.
-Exact verified thread: `01a0f343-c76a-7842-915b-0c111e8e2e28`.
-The older V7 hourly updater is bound to another conversation and was not changed.
+Fix CRSP and MTUM, finish the September 29–30 V6 update through training,
+evaluation and final freeze, then start V7 and storage again. Preserve successful
+work and continue hourly health reports in this terminal. No paper/live deployment.
 
-## Watcher evidence and boundaries
+## Diagnosed failure and repair
 
-`logs/lab-hourly-watch/` contains host service/journal/storage snapshots and
-per-hour evidence; `state.json` records dispatch only after the first due run.
-`--check` verified the exact target without sending a message. Five dispatch
-checks passed (deduplication, busy chat, resume race, wrong target, cancellation).
-Installed units passed systemd verification. No research process was restarted.
-The watcher observes/diagnoses and reports here; it does not change frozen
-sources, restart research, trade, or send external messages. Set `stopped=true`
-in its state to cancel. Host evidence should avoid fresh overnight permissions.
+r4 stopped at 00:59:10 Central with 447/449 symbols complete. CRSP and MTUM had
+`Daily parent artifact inputs differ`. Both retain identical stock prefix hashes,
+but the longer simulation adds a `tv_rating` ordinal-1 occurrence at an existing
+September 28 entry timestamp (CRSP 19:45; MTUM 13:30). Whole-batch reuse rejected
+these additions. Old producers, completed inventories, features and labels remain.
 
-## New specific build blocker — investigation remains
+New r5 consumer `scripts/v6_daily_append_v5.py` preserves the original batch/seal
+for existing occurrences and creates separate sealed batches for additions.
+It rejects changes/removals of inherited proposals and prefixes, retains nonzero
+ordinals, and reconciles every old/new candidate. The 447 completed r4 symbols
+are referenced by unchanged symlinked inventories after input/contract/lineage
+verification, not relabeled. Their stock histories are copied with digest checks.
 
-At **23:36:47 Central**, host snapshot showed V6 running, 115/449 symbols complete,
-with CRSP error `ValueError: Daily parent artifact inputs differ`.
-Other symbols continue; after the pass, any symbol errors prevent training and
-keep competitors paused. Do not report the pipeline as healthy merely because
-its service is active. Successful checkpoints remain intact.
-Read `logs/lab-hourly-watch/crsp-input-mismatch.json`: a read-only reproduction
-found unchanged raw/adjusted prefix hashes at September 28 19:45, but extending
-through September 30 adds a second `tv_rating` proposal occurrence (ordinal 1)
-at that old timestamp. Parent batch contains ordinal 0 plus `tv_setup`; current
-batch adds that occurrence. The strict inherited batch declaration rejects it.
-No contract bypass, artifact relabeling, producer edit or restart was performed.
-Investigate a versioned repair preserving old candidate/label identities and
-completed symbols; do not mutate source-bound producers during this active run.
+Verified r4 census: 3,516 feature batches, 17,070 label seals, 447 completed symbols.
+Two-symbol real-data pilot succeeded in 86.77 seconds: 1,725 candidates,
+117 matured, 402 pending, 1,206 unfilled, 105 new feature rows, zero errors.
+Pilot/full scientific contract: `84452acaf5aefda625ca3d84a3558cee5606e1ebcf421f0dfbb0bfa4464ba6c0`.
+23 focused recovery/resource tests and nine CLI/hourly watcher tests passed.
+No complete model/evaluation result is claimed yet.
 
-## Selected runtime and completion boundary
+## Selected runtime and evidence
 
-`healys-v6-continual.service` runs `scripts/v6_daily_dedicated_20260930.py` via
-temporary runtime `90-dedicated-r4.conf`; dedicated restart was **23:18:23 Central**.
-Root `incubator/continual-v6/r4`; config `deploy/incubator-continual-v6-r4.json`.
-Five autosized data workers, 16 training threads, 25/26-GiB high/max, no CPU quota.
-Read `latest-run.json`/`resources.json` and run receipts for current status.
-Successful full build automatically prepares arrays, trains 40 members, evaluates,
-seals/verifies the candidate, removes the temporary override, restores timers and
-starts V7 discovery/frontier and MRHA migration. Diagnostic rejection retains the
-new freeze. No paper/live model deployment. Existing 08:00 Central cutoff remains.
-A failed/incomplete run keeps checkpoints and paused jobs for investigation.
-Evidence: `nn_meta/validation/v6-daily-update-20260930-r4/dedicated/`.
+`healys-v6-continual.service`; full r5 start **01:35:39 Central October 1**.
+Root `incubator/continual-v6/r5`; config `deploy/incubator-continual-v6-r5.json`.
+Reads the same frozen r4 September 30 snapshot and original fixed model family.
+`scripts/run_v6_continual_v5.py` retains array/training/evaluation/freeze sequencing.
+Original r4 producer hashes are unchanged; r5 additionally binds the new consumer.
+Five autosized data worker slots, 16 training threads, 25/26-GiB high/max, no CPU quota.
+Only the two incomplete symbols need new builds after inherited verification.
+Existing next-morning 08:00 Central cutoff remains.
 
-## Retained context and next checks
+Evidence root: `nn_meta/validation/v6-daily-repair-20261001-r5/`.
+`prepared.json` owns the 447 preserved seals; `bound.json` binds runtime and
+restoration code; pilot receipts/log, MTUM diagnosis, failed-r4 run and exit saved.
+Read r5 `latest-run.json`, `resources.json`, per-symbol/member receipts for health.
 
-r4 preserves frozen September 28 stock prefixes, appends September 29–30 bars,
-and references 231,323 prior r3 seals plus r2 ancestry. Never repeat completed
-captures. Earlier r3 September 28 candidate completed at 22:40:47, 40 members,
-122 verified files; training 35m29s, evaluation/freeze 5m36s.
-V7 frontier's prior stop exceeded three minutes/SIGKILL: inspect health after
-restoration. Discovery stopped cleanly; migration checkpointed at 268,618 files,
-202,885,222,673 logical bytes. Keep MRHA mounted. Preserve unrelated dirty work.
-CLI: `./venv/bin/python scripts/watch_v6_incubator.py --follow`.
-[State](docs/CURRENT_STATE.md) · [Daily update](docs/reviews/2026-09-30-v6-two-day-update.md).
+## Automatic completion and restoration
+
+Persistent `50-daily-v5.conf` selects `v6_continual_resume_v5.py`.
+Temporary runtime `95-dedicated-r5.conf` runs `v6_daily_repair_dedicated_v5.py`.
+After verified full candidate completion, it checks old seals, removes both
+runtime 95-r5 and superseded 90-r4 overrides, and restores the original r4 saved
+pause plan: V7 required discovery/frontier, MRHA migration and paused timers.
+Do not install temporary overrides persistently. Failures retain checkpoints and
+paused competitors for review. Diagnostic rejection does not discard the freeze.
+
+## Watchers and next action
+
+CLI: `./venv/bin/python scripts/watch_v6_incubator.py --follow`; defaults now r5.
+Already-open viewers need restarting or explicit r5 arguments.
+`healys-lab-hourly-watch.timer` continues each :00 America/Chicago, target thread
+`01a0f343-c76a-7842-915b-0c111e8e2e28`; its producer now observes r5 and repair evidence.
+Health reports are read-only and wait behind active user work; snapshots/logs
+under `logs/lab-hourly-watch`. Continue through actual freeze and verify restored
+V7/storage progress. Frontier's old stop timeout is historical, not new failure.
+Keep MRHA mounted. Preserve unrelated dirty/untracked work.
+[Repair review](docs/reviews/2026-10-01-v6-occurrence-repair.md) · [State](docs/CURRENT_STATE.md).

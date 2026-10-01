@@ -1,0 +1,117 @@
+{
+  "append_start": "2026-08-25",
+  "base_dataset": "/home/healy/Coding/HealysBacktester/nn_meta/campaigns/v6-cash-repair-20260913/v6/artifacts/meta_dataset.parquet",
+  "base_dataset_sha256": "dcf0003dafb8ac200af982cd342a838ea9b1d4ffa3da6405c84de19561a249e3",
+  "bootstrap_snapshot": {
+    "path": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r4/snapshots/2026-09-30",
+    "sha256": "92b2b51332a7824d030f4ef3da5fad37bdb47898507447d2afc68e2d342d245e",
+    "through": "2026-09-30"
+  },
+  "comparison_candidate": {
+    "path": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r3/runs/2026-09-28/candidate",
+    "sha256": "4da950595e68f1db0d68431e85a1bbca22f8345c5472fae2dcaabe722e5f16d2",
+    "through": "2026-09-28",
+    "verdict": "rejected"
+  },
+  "data_index": "/home/healy/Coding/HealysV6/nn_meta/live/v6_server/data-index.json",
+  "embargo_days": 1,
+  "frozen_training_contract": {
+    "DTE_GRID": [
+      1,
+      5,
+      10,
+      30,
+      45
+    ],
+    "DTE_GRID_WEEKLY": [
+      2,
+      4,
+      7
+    ],
+    "EV_WINSOR_QUANTILES": [
+      0.01,
+      0.99
+    ],
+    "EXEC_CONFIG": {
+      "DECISION_CHAIN_POLICY": "previous-date-raw-moneyness-v1",
+      "MAX_FILLS_PER_VARIANT": 100000,
+      "MAX_ROLLS_PER_TRADE": 60,
+      "MONEYNESS": 0.0,
+      "TARGET_DELTA": 0.5
+    },
+    "FEES_PERCENT": 0.001,
+    "INTERVAL": "15m",
+    "PROPOSAL_STRATEGIES": [
+      "ma",
+      "macd",
+      "rsi",
+      "squeeze",
+      "tv_rating",
+      "bbands",
+      "stoch",
+      "volume",
+      "supertrend",
+      "elliott",
+      "keltner",
+      "bbw_squeeze",
+      "tv_gaussian",
+      "tv_fibonacci",
+      "tv_uptrick",
+      "tv_msb",
+      "tv_sr",
+      "tv_rsi_probability",
+      "tv_amd",
+      "tv_setup"
+    ],
+    "SIM_CONFIG": {
+      "ATR_POSITION_SIZING": false,
+      "ATR_SL_MULTIPLIER": 2.0,
+      "ATR_SL_WINDOW": null,
+      "DEFAULT_FREQ": null,
+      "DEFAULT_SIZE": 0.9,
+      "DEFAULT_SIZE_TYPE": "percent",
+      "ENABLE_SHORTING": true,
+      "FEES_PERCENT": 0.001,
+      "INITIAL_CAPITAL": 100000.0,
+      "RISK_PER_TRADE": 0.01,
+      "SLIPPAGE_PERCENT": 0.0005,
+      "STOP_LOSS_PERCENT": 0.05,
+      "TAKE_PROFIT_PERCENT": 0.1,
+      "TREND_FILTER_WINDOW": 50,
+      "USE_STOP_LOSS": true,
+      "USE_TAKE_PROFIT": false,
+      "USE_TRAILING_STOP": false
+    },
+    "SLIPPAGE_PERCENT": 0.0005,
+    "WEEKLY_DTE_ENABLED": true,
+    "WINDOW_START": "2024-08-26"
+  },
+  "inherited_artifacts": {
+    "path": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r5/inherited-r4.json",
+    "sha256": "399b9048b98ef3830260a0506e91386e4920fb1f98534764bd117db14a063861"
+  },
+  "lineage": {
+    "previous_root": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r4",
+    "reason": "Append new historical proposal occurrences as separate immutable batches; reference unchanged r4 completed symbols and original feature/label seals.",
+    "revision": "r5"
+  },
+  "market_root": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r1/market",
+  "prefix_snapshot": {
+    "path": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r1/snapshots/2026-09-28",
+    "sha256": "fa9101265389bb204d97b9fbb4f3be715b167732035242f1f1a442d5012c1f27",
+    "through": "2026-09-28"
+  },
+  "release": "/home/healy/Coding/HealysBacktester/deploy/v6/releases/v6-cash-repair-20260913",
+  "release_sha256": "3bc974679fff04044002f833cbb4c9246f63fd4d9370c04985f5f6ca7597764f",
+  "repair_priority": [
+    "CRSP",
+    "MTUM"
+  ],
+  "reuse_contract": {
+    "path": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r4/contract.json",
+    "sha256": "b0bdd5913ad959ed901418da9d91420cd8518dd68cf8ff6c652640148ca68fa4"
+  },
+  "root": "/home/healy/Coding/HealysBacktester/incubator/continual-v6/r5",
+  "schema": "v6-continual-config-v1",
+  "validation_days": 40
+}
