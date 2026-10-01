@@ -2011,3 +2011,15 @@ Evaluate each new freeze against the preceding completed update to record the
 change over time regardless of that update's diagnostic verdict. No model-family
 change or paper/live deployment. Regular daily resource coexistence is measured;
 initial recovery/preparation overhead is separately labeled.
+
+### 2026-09-30 — Match prior dedicated V6 compute for the two-day update
+
+User requested the prior run's compute instead of three workers/two threads.
+Restore the same bounded dedicated allocation for this pinned September 30 run:
+up to five memory-autosized data workers, 16 available training threads, 26-GiB
+hard limit, no CPU quota. Pause competing batch jobs/timers with preserved
+checkpoints and restore their saved states after the candidate freeze verifies.
+Use a temporary runtime override; keep the frozen scientific producers and
+original morning cutoff unchanged. Actual restart at 23:18:23 preserved 32
+completed symbols. Timing must separate the initial coexistence interval and
+pause overhead from the dedicated interval.

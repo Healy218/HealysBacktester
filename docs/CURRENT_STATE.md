@@ -297,6 +297,17 @@ itself close 7-3 or authorize training. [Workflow and verification](reviews/2026
 
 ### September 30 23:04 V6 two-day update — selected r4
 
+**23:18:23 Central dedicated resource revision:** same daily service and r4 root,
+temporary runtime drop-in `90-dedicated-r4.conf` invoking
+`scripts/v6_daily_dedicated_20260930.py`. Actual five autosized data workers,
+16 training threads, 25/26-GiB high/max, no CPU quota. All 32 completed symbol
+seals unchanged; five fresh symbol updates at 23:18:50. Competitors/timers paused
+again; verified candidate completion removes the temporary override and restores
+them. Evidence: `nn_meta/validation/v6-daily-update-20260930-r4/dedicated/`.
+Frontier stop exceeded three minutes and used SIGKILL; its saved state is retained
+but resumed capture health must be checked. Migration checkpointed cleanly.
+The following launch observation describes the superseded coexistence allocation.
+
 Selected daily root: `incubator/continual-v6/r4/`; configuration
 `deploy/incubator-continual-v6-r4.json`; status `latest-run.json`, resources
 `resources.json`. `healys-v6-continual.service.d/40-daily-v4.conf` selects

@@ -62,3 +62,35 @@ threads, 20-GiB limit, CPU 400%. Installed daily drop-in and restored timer were
 verified. Full/pilot source contract matches
 `d949483533d06d804cce36a2ab02c226e138758a670e2f8fdb298f9c323b613f`.
 No full-update completion or daily SLA is claimed from this launch.
+
+## User-requested dedicated allocation
+
+The user requested the same compute used by the prior full run. A separate
+operational wrapper preserves r4 frozen sources and checkpoints, pauses competing
+batch services/timers using the established handover mechanism, then resumes the
+same September 30 invocation. Shared autosizing is capped by the prior selected
+five workers, at 3584 MiB per worker plus 4096 MiB host/2048 MiB parent reserve.
+A temporary runtime drop-in selects 25/26-GiB high/max, no CPU quota, 16 available
+training threads and 512 tasks. The existing daily service/viewer identity stays.
+
+The completion path verifies the candidate, removes the exact temporary override,
+and restores saved jobs/timers. Failure preserves checkpoints and leaves the
+pause visible for review. Source/snapshot preflight and 12 resource/handover tests
+passed. The initial 3-worker/2-thread interval and handover delay must be reported
+separately from the dedicated interval in the eventual timing result.
+
+Actual dedicated restart: **23:18:23 Central**, five selected data workers and
+16 training threads. Host unit readback established MemoryHigh=25 GiB,
+MemoryMax=26 GiB and CPU quota=infinity. All **32** completed symbol seal hashes
+remained unchanged; five fresh symbol updates appeared at 23:18:50. No new V6
+errors. The frozen launcher's preliminary autosize banner says three workers,
+but final command overrides, resources receipt and five fresh symbols establish
+that the dedicated selection is five.
+
+Pause caveat: V7 discovery stopped cleanly; frontier exceeded its three-minute
+stop timeout and was SIGKILLed at 23:17:02. Saved controller/capture receipts
+remain, but this is not a clean frontier checkpoint claim; inspect its recovery
+when restored. `dedicated/frontier-stop.log` retains the journal evidence.
+Migration checkpointed at 268,618 files / 202,885,222,673 logical bytes with no
+recorded error. Dedicated receipts preserve the stopped V6 invocation, all
+completed seals, resource plan, pause plan and restart evidence.

@@ -12,7 +12,9 @@ running-job locations; do not choose a different revision from an old review.
 through September 30 (September 29–30 additions) and measure it through freeze.
 The r3 daily attempt exposed provider revisions to frozen bars; corrected r4
 launched at 23:04:36 with append-only frozen prefixes and inherited seals.
-V7/migration coexist. Full completion and measured results remain pending.
+User requested the prior dedicated allocation: pause competitors, preserve
+checkpoints, use up to five autosized workers/16 training threads and 26 GiB,
+then restore paused jobs after verified completion. Full results remain pending.
 [Two-day update](docs/reviews/2026-09-30-v6-two-day-update.md).
 
 Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
