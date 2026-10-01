@@ -1,67 +1,60 @@
-# Handoff — October 1, 2026 — V6 r5 occurrence repair running
+# Handoff — October 1, 2026 — V6 current; V7 and storage resumed
 
-## Selected user task
+## Completed user task
 
-Fix CRSP and MTUM, finish the September 29–30 V6 update through training,
-evaluation and final freeze, then start V7 and storage again. Preserve successful
-work and continue hourly health reports in this terminal. No paper/live deployment.
+Fixed CRSP/MTUM, finished V6 through September 30, and resumed V7/storage.
+Final r5 candidate frozen **02:32:01 Central**, 449/449 symbols, 40/40 members,
+zero errors; 122 candidate files independently hash-verified.
+Full recovery run 56m22s, training 39m32s, evaluation/freeze 6m25s. This reuses
+447 earlier completed symbols; it is not a clean unattended daily benchmark.
+All 447 original symbol seals and both repaired symbols' old feature/completed
+label references remain unchanged. Prior failed attempts and parent artifacts retained.
 
-## Diagnosed failure and repair
+## Selected artifacts and evaluation
 
-r4 stopped at 00:59:10 Central with 447/449 symbols complete. CRSP and MTUM had
-`Daily parent artifact inputs differ`. Both retain identical stock prefix hashes,
-but the longer simulation adds a `tv_rating` ordinal-1 occurrence at an existing
-September 28 entry timestamp (CRSP 19:45; MTUM 13:30). Whole-batch reuse rejected
-these additions. Old producers, completed inventories, features and labels remain.
-
-New r5 consumer `scripts/v6_daily_append_v5.py` preserves the original batch/seal
-for existing occurrences and creates separate sealed batches for additions.
-It rejects changes/removals of inherited proposals and prefixes, retains nonzero
-ordinals, and reconciles every old/new candidate. The 447 completed r4 symbols
-are referenced by unchanged symlinked inventories after input/contract/lineage
-verification, not relabeled. Their stock histories are copied with digest checks.
-
-Verified r4 census: 3,516 feature batches, 17,070 label seals, 447 completed symbols.
-Two-symbol real-data pilot succeeded in 86.77 seconds: 1,725 candidates,
-117 matured, 402 pending, 1,206 unfilled, 105 new feature rows, zero errors.
-Pilot/full scientific contract: `84452acaf5aefda625ca3d84a3558cee5606e1ebcf421f0dfbb0bfa4464ba6c0`.
-23 focused recovery/resource tests and nine CLI/hourly watcher tests passed.
-No complete model/evaluation result is claimed yet.
-
-## Selected runtime and evidence
-
-`healys-v6-continual.service`; full r5 start **01:35:39 Central October 1**.
 Root `incubator/continual-v6/r5`; config `deploy/incubator-continual-v6-r5.json`.
-Reads the same frozen r4 September 30 snapshot and original fixed model family.
-`scripts/run_v6_continual_v5.py` retains array/training/evaluation/freeze sequencing.
-Original r4 producer hashes are unchanged; r5 additionally binds the new consumer.
-Five autosized data worker slots, 16 training threads, 25/26-GiB high/max, no CPU quota.
-Only the two incomplete symbols need new builds after inherited verification.
-Existing next-morning 08:00 Central cutoff remains.
+Candidate `r5/runs/2026-09-30/candidate`, complete hash
+`4d8693a739c3eb9169f73bb334ee6c11b7fba35c35872b17ef94b9a4093d9a08`.
+333,260 candidates: 120,249 matured, 100,167 pending, 112,844 unfilled.
+Training/validation arrays: 2,911,662 / 202,418 rows, 164 features.
+Diagnostic rejected: return MSE 5.335516 vs parent 5.335310 and zero baseline
+5.325535. Brier improved: 0.213463 vs parent 0.213882. These are reused temporal
+validation diagnostics, not untouched performance evidence. The new freeze/update
+is retained as requested. No paper/live deployment or accepted-research promotion.
 
-Evidence root: `nn_meta/validation/v6-daily-repair-20261001-r5/`.
-`prepared.json` owns the 447 preserved seals; `bound.json` binds runtime and
-restoration code; pilot receipts/log, MTUM diagnosis, failed-r4 run and exit saved.
-Read r5 `latest-run.json`, `resources.json`, per-symbol/member receipts for health.
+## Daily operation and restart evidence
 
-## Automatic completion and restoration
+`healys-v6-continual.service`, persistent `50-daily-v5.conf`, selects
+`scripts/v6_continual_resume_v5.py`. Both temporary r4/r5 dedicated overrides
+were removed on success; ordinary daily resource policy and schedules restored.
+Subsequent same-date timer runs may report `candidate_already_frozen`; they do
+not repeat training. Use `incubator-result.json` below for the full completed run.
+Evidence: `nn_meta/validation/v6-daily-repair-20261001-r5/` includes preparation,
+pilot, completed-data audit, completion verification and restored-progress verification.
+CLI: `./venv/bin/python scripts/watch_v6_incubator.py --follow` (defaults r5).
 
-Persistent `50-daily-v5.conf` selects `v6_continual_resume_v5.py`.
-Temporary runtime `95-dedicated-r5.conf` runs `v6_daily_repair_dedicated_v5.py`.
-After verified full candidate completion, it checks old seals, removes both
-runtime 95-r5 and superseded 90-r4 overrides, and restores the original r4 saved
-pause plan: V7 required discovery/frontier, MRHA migration and paused timers.
-Do not install temporary overrides persistently. Failures retain checkpoints and
-paused competitors for review. Diagnostic rejection does not discard the freeze.
+## V7 and migration are running again
 
-## Watchers and next action
+Original discovery and MRHA migration restored automatically at 02:32.
+Frontier initially stopped on two retained HTTP 502 failures from the earlier
+interrupted capture. User's restart instruction was completed with a versioned,
+one-time transport recovery, retaining attempts and all completed packs.
+Selected frontier runtime override `98-transport-recovery.conf` invokes
+`scripts/resume_v7_frontier_transport_20261001.py`; original producer/resource
+bindings remain. Evidence `nn_meta/validation/v7-frontier-restart-20261001-r0/`.
+Restart **02:48:11 Central**. At 02:49, capture advanced to 64,584/126,719 windows,
+no failed batches; discovery had fresh active securities; migration advanced to
+275,575 files / 204,212,780,359 logical bytes. All three had active cgroup CPU.
+Per-pass discovery count 7 is not cumulative retained completion. Gate 7-3 stays
+open; completed entry capture remains complete. Continue existing controllers,
+not new captures of completed scope. Backup/archive/daily V6 timers restored.
 
-CLI: `./venv/bin/python scripts/watch_v6_incubator.py --follow`; defaults now r5.
-Already-open viewers need restarting or explicit r5 arguments.
-`healys-lab-hourly-watch.timer` continues each :00 America/Chicago, target thread
-`01a0f343-c76a-7842-915b-0c111e8e2e28`; its producer now observes r5 and repair evidence.
-Health reports are read-only and wait behind active user work; snapshots/logs
-under `logs/lab-hourly-watch`. Continue through actual freeze and verify restored
-V7/storage progress. Frontier's old stop timeout is historical, not new failure.
-Keep MRHA mounted. Preserve unrelated dirty/untracked work.
-[Repair review](docs/reviews/2026-10-01-v6-occurrence-repair.md) · [State](docs/CURRENT_STATE.md).
+## Remaining proof and constraints
+
+The repaired two-session update is complete. A clean one-session timing and
+sustained resource coexistence remain under OPS-INCUBATOR.PROOF/OPS.
+Hourly read-only watcher continues each :00 Central in this terminal, bound to
+r5 and repair evidence. Pending reports wait behind active work; logs under
+`logs/lab-hourly-watch`. No frozen-source edits, artifact relabeling, paper/live
+promotion or external messaging. Keep MRHA mounted and preserve unrelated work.
+[Repair/completion review](docs/reviews/2026-10-01-v6-occurrence-repair.md) · [State](docs/CURRENT_STATE.md).

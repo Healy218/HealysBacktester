@@ -8,15 +8,13 @@ running-job locations; do not choose a different revision from an old review.
 
 ## Active gate 7-3 — required option evidence
 
-**October 1 selected operating task:** Repair CRSP/MTUM and finish the immediate
-V6 update through September 30, then automatically restore V7/storage. The r4
-pass stopped at 447/449 after additional historical proposal occurrences failed
-whole-batch inheritance checks. r5 preserves those 447 completed symbols and all
-old feature/label seals, appending new occurrences separately. Both-symbol pilot
-passed; full run started 01:35:39 Central with five autosized worker slots,
-16 training threads and 26 GiB. Actual training/evaluation/freeze remains pending.
-Hourly checks here continue at :00 Central, now bound to r5.
-[Repair and evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md).
+**October 1 completed operating task:** CRSP/MTUM repaired; V6 through September
+30 finished at 02:32 Central (449 symbols, 40 members, evaluated immutable freeze).
+All 447 prior symbol seals preserved. Diagnostic regression recorded; the new
+freeze is retained. V7 discovery/migration restored; capture needed an explicit
+retry of two retained HTTP 502 failures and was verified advancing after 02:48.
+The selected work returns to ongoing gate 7-3 controllers and storage migration.
+Hourly checks here remain active. [Completion and restart evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md).
 
 Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
 The following scope is unchanged by the documentation consolidation.
@@ -127,10 +125,12 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   coexistence. September 30 initial catch-up and candidate freeze completed;
   rejection retained incumbent. At 22:40:49 automatic timer restoration and
   research starts succeeded, with migration and both V7 successor controllers
-  active on readback. A subsequent daily update/coexistence proof remains.
+  active on readback. October 1 repaired two-session update and restoration
+  completed; clean daily timing and sustained coexistence remain.
   [Evidence](docs/reviews/2026-09-30-v6-dedicated-compute.md).
 - [ ] **OPS-INCUBATOR.PROOF:** Initial catch-up/full freeze completed September 30;
-  measure a subsequent full daily update through freeze before claiming
+  a repaired two-session update through September 30 also completed October 1.
+  Measure a clean one-session update through freeze before claiming sustained
   next-trading-day readiness. No automatic deployment.
   [Current contract](docs/specs/AI_INCUBATOR.md). V5 paper scoring is superseded.
 - [ ] **OPS-PROVIDER, by October 2:** Give the user a source-backed Massive

@@ -963,3 +963,16 @@ The versioned r4 path preserves the exact frozen September 28 prefix and appends
 120.27s with 85 new feature rows and zero errors. Full run launched 23:04:36;
 completion/timing verdict remains pending. No new trained-model result claimed.
 [Evidence](reviews/2026-09-30-v6-two-day-update.md).
+
+## 2026-10-01 — V6 September 29–30 update, repaired r5 completion
+
+All 449 symbols and 40 members completed; final freeze at 02:32:01 Central.
+Candidate has 122 verified files, SHA-256
+`4d8693a739c3eb9169f73bb334ee6c11b7fba35c35872b17ef94b9a4093d9a08`.
+On 202,418 current validation rows, candidate/parent Brier =
+0.2134633039 / 0.2138818870; return MSE = 5.3355164642 / 5.3353099292;
+zero-return baseline MSE = 5.3255352311. Diagnostic rejected on return MSE.
+Data/freeze retained, no accepted-research or paper/live promotion. Reused purged
+temporal validation is not an untouched performance test. Recovery reused 447
+symbols; its 56m22s (39m32s training, 6m25s evaluation/freeze) is not a clean
+unattended daily timing result. [Method, preservation audit and results](reviews/2026-10-01-v6-occurrence-repair.md).

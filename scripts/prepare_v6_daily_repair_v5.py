@@ -3,6 +3,7 @@
 from datetime import datetime, timezone
 import json
 from pathlib import Path
+import shutil
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -55,6 +56,15 @@ def main():
         config_sha256=sha(ROOT/'deploy/incubator-continual-v6-r5.json'),counts=counts,
         parent_symbol_seals={k:v for k,v in anchors.items() if k.startswith('runs/')},
         pause_plan=str(ROOT/'nn_meta/validation/v6-daily-update-20260930-r4/dedicated/pause-plan.json')))
+    # restore() resolves collected transient services beneath its own STATE.
+    old_units = ROOT/'nn_meta/validation/v6-daily-update-20260930-r4/dedicated/units'
+    unit_hashes = {}
+    for source in old_units.glob('*.service'):
+        target = state/'units'/source.name
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(source, target)
+        unit_hashes[source.name] = sha(target)
+    write(state/'restoration-unit-bindings.json',dict(source=str(old_units),files=unit_hashes))
     print(json.dumps(dict(prepared=True,root=str(newroot),counts=counts)),flush=True)
 
 

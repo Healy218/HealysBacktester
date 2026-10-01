@@ -295,31 +295,43 @@ and `progress.json` together; a waiting service is not proof of advancing work.
 Only `closure_candidate_ready` reaches final evidence review, and it does not
 itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
 
-### October 1 V6 occurrence repair — selected r5
+### October 1 V6 occurrence repair — completed r5, selected daily root
 
-**01:35:39 Central full-run start:** `healys-v6-continual.service` now runs
-`scripts/v6_daily_repair_dedicated_v5.py` via temporary runtime `95-dedicated-r5.conf`.
-Persistent `50-daily-v5.conf` selects `scripts/v6_continual_resume_v5.py`.
-Root `incubator/continual-v6/r5`; config `deploy/incubator-continual-v6-r5.json`.
-Five autosized worker slots, 16 training threads, 25/26-GiB high/max, unlimited CPU
-quota. Actual new data work is only CRSP/MTUM after verifying/referencing the
-447 completed r4 symbols. Same frozen September 30 snapshot and fixed model family.
+**02:32:01 Central:** r5 through September 30 completed all 449 symbols and 40
+training members, evaluated and froze 122 verified candidate payloads, zero errors.
+Candidate: `incubator/continual-v6/r5/runs/2026-09-30/candidate/`;
+complete SHA-256 `4d8693a739c3eb9169f73bb334ee6c11b7fba35c35872b17ef94b9a4093d9a08`.
+Recovery elapsed 56m22s, training 39m32s, evaluation/freeze 6m25s. Reused 447
+completed symbols; this is not a clean unattended daily timing result.
+All 447 seals plus CRSP/MTUM old feature and completed-label references preserved.
+333,260 candidates: 120,249 matured, 100,167 pending, 112,844 unfilled.
+Diagnostic rejected on return MSE (5.335516 vs parent 5.335310/zero 5.325535);
+Brier improved (0.213463 vs 0.213882). Updated freeze retained; no deployment.
 
-The r4 attempt exited at 00:59:10 with two inherited-batch declaration errors.
-Both add a `tv_rating` ordinal-1 occurrence at a historical timestamp while stock
-prefixes and old proposals stay unchanged. r5 keeps original feature/label seals
-and places additions in separate immutable batches. Old producer files unchanged.
-The isolated two-symbol pilot completed in 86.77 seconds with zero errors.
-Pilot/full contract: `84452acaf5aefda625ca3d84a3558cee5606e1ebcf421f0dfbb0bfa4464ba6c0`.
+Root/config: `incubator/continual-v6/r5`, `deploy/incubator-continual-v6-r5.json`.
+Persistent `healys-v6-continual.service.d/50-daily-v5.conf` selects
+`scripts/v6_continual_resume_v5.py`. Temporary 90-r4/95-r5 runtime overrides were
+removed; normal daily resource policy and timer restored. Subsequent same-date
+runs may report `candidate_already_frozen`; inspect original completed result.
+`nn_meta/validation/v6-daily-repair-20261001-r5/` owns `incubator-result.json`,
+`completed-data-audit.json`, `completion-verification.json`,
+`restored-services.json` and `restored-progress-verification.json`.
+CLI and hourly watcher select r5; existing open old viewers need restarting.
 
-`nn_meta/validation/v6-daily-repair-20261001-r5/` owns preparation/census,
-447 preserved symbol seal hashes, diagnosis, pilot, bound operation and launch.
-Live status: r5 `latest-run.json`, `resources.json`, `service-exit.json`, and
-`runs/2026-09-30/` symbol/member/candidate receipts. Completion is still pending.
-After verified full freeze, the wrapper removes runtime 95-r5 and 90-r4 overrides
-and restores the r4 saved pause plan. Original cutoff and failure-review policy
-remain. Watcher defaults/dispatch snapshots now select r5.
-[Repair evidence and constraints](reviews/2026-10-01-v6-occurrence-repair.md).
+Original discovery and migration restarted automatically at 02:32. Frontier
+initially failed on two prior HTTP 502 batch receipts. Versioned transport recovery
+restarted it **02:48:11** under the same service, via runtime
+`healys-v7-required-frontier-20260930.service.d/98-transport-recovery.conf` and
+`scripts/resume_v7_frontier_transport_20261001.py`. This admits only the exact
+archived stopped pass for one retry through the unchanged producer; all completed
+packs and failure receipts remain. It then returns to normal controller checks.
+Evidence: `nn_meta/validation/v7-frontier-restart-20261001-r0/`.
+At **02:49**, discovery had fresh active securities, capture reached
+64,584/126,719 windows with no current failed batches, and migration reached
+275,575 files / 204,212,780,359 logical bytes. All three had active cgroup CPU.
+Timers for daily V6, backup and archive were re-enabled by the saved restoration
+plan. These are dated observations; inspect current receipts for ongoing health.
+[Repair, diagnostics and restart evidence](reviews/2026-10-01-v6-occurrence-repair.md).
 
 ### September 30 23:04 V6 two-day update — historical r4 attempt
 

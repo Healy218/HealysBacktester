@@ -2023,3 +2023,13 @@ Use a temporary runtime override; keep the frozen scientific producers and
 original morning cutoff unchanged. Actual restart at 23:18:23 preserved 32
 completed symbols. Timing must separate the initial coexistence interval and
 pause overhead from the dedicated interval.
+
+## 2026-10-01 — Preserve daily occurrence shards and finish V6 before restoring V7
+
+User authorized repair of CRSP/MTUM, completion through September 30, then V7 and
+storage restart. Keep original feature/label seals and 447 completed symbols;
+append newly observed trade occurrences in a separately bound r5 consumer. Do not
+rewrite old batches or weaken prefix/proposal checks. Record adverse diagnostics
+while retaining the completed update. After full freeze, restore saved jobs;
+explicitly retry the exact stopped HTTP-502 frontier pass with immutable completed
+packs preserved. No paper/live promotion. [Evidence](reviews/2026-10-01-v6-occurrence-repair.md).
