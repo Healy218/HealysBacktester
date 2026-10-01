@@ -952,3 +952,14 @@ Purged temporal validation is reused for daily selection, not an untouched test.
 A subsequent full daily update/coexistence proof remains unmeasured.
 Evidence: `incubator/continual-v6/r3/runs/2026-09-28/candidate/`;
 [Completion review](reviews/2026-09-30-v6-dedicated-compute.md).
+
+## 2026-09-30 — V6 append-only daily transition preflight
+
+The existing September 30 r3 daily attempt exposed revised historical stock
+bars; it stopped with 25 completed symbols and 105 observed history errors.
+The versioned r4 path preserves the exact frozen September 28 prefix and appends
+23,087 new bars; 343 symbols' historical provider revisions are audited separately.
+231,323 parent seals verified. Isolated ADBE through September 30 completed in
+120.27s with 85 new feature rows and zero errors. Full run launched 23:04:36;
+completion/timing verdict remains pending. No new trained-model result claimed.
+[Evidence](reviews/2026-09-30-v6-two-day-update.md).

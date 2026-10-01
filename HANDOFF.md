@@ -1,67 +1,63 @@
-# Handoff — September 30, 2026 — V6 initial candidate frozen; jobs restored
+# Handoff — September 30, 2026 — V6 two-session update running in r4
 
-## Completed milestone
+## Selected user task
 
-The September 28 V6 r3 catch-up finished all 449 symbols, trained all 40 ensemble
-members, evaluated and froze a research candidate at **22:40:47 Central**.
-All 122 candidate payload files were independently hash-verified at 22:40:57.
-Main service exited successfully at 22:40:49. No new run errors.
+Catch V6 completely up through September 30, adding September 29–30 after the
+completed September 28 freeze, and measure this two-session daily update.
+Keep each completed update and record regressions; do not discard its data/freeze.
+V7 and migration continue under their restored resource allocations.
 
-Training ran 21:59:42–22:35:11 (35m29s). Evaluation/freeze took **5m36s**.
-Data: 307,702 candidates, 111,958 matured labels, 92,723 pending and 103,021
-unfilled; training arrays: 2,905,632 training / 205,816 validation rows.
-OPS-INCUBATOR.DATA is complete for the pinned initial catch-up. A subsequent
-full daily update/coexistence proof remains under OPS-INCUBATOR.OPS/PROOF.
+## Why a new lineage was necessary
 
-## Evaluated verdict
+Persistent-timer restoration had already started an r3 September 30 attempt at
+22:40:49. Refreshed provider data revised previously consumed bars; history
+checks correctly refused them. Stopped only V6 daily service/timer while fixing
+this transition. Preserved 25 completed symbols, 105 observed history errors and
+all earlier artifacts. This failed attempt is not a valid daily timing result.
 
-**Diagnostic gate failed; updated V6 freeze retained.** Candidate return MSE
-5.325676 exceeds incumbent 5.323277 and zero-return baseline 5.310690.
-Classification Brier improved slightly (0.216986 vs 0.216994) but both acceptance
-conditions must pass. Research-only; no deployment approved or performed.
-This is purged temporal validation reused for daily selection, not an untouched
-performance test or proof of trading profitability.
+r4 preserves the exact September 28 frozen stock prefix and appends later bars.
+Provider revision audit: 343 symbols, primarily volume; 23,087 new raw bars.
+Verified 231,323 r3 parent seals; r2 ancestry remains referenced, never relabeled.
+The original r3 scientific source hashes and completed candidate are unchanged.
 
-## Exact evidence
+## Current selected runtime
 
-Candidate: `incubator/continual-v6/r3/runs/2026-09-28/candidate/`.
-`evaluation.json`, `complete.json`, `ensemble_config.json`; seal SHA-256
-`4da950595e68f1db0d68431e85a1bbca22f8345c5472fae2dcaabe722e5f16d2`.
-Run: `incubator/continual-v6/r3/latest-run.json` (`candidate_frozen`, `done`).
-Focus: `nn_meta/validation/v6-focus-20260930/progress.json` (`restored`),
-`restored-services.json`, `service-exit.json` (success/0).
-Focus JSON retains old merged error/returncode fields from earlier failures;
-final candidate receipt, restored phase and fresh exit receipt resolve them.
+`healys-v6-continual.service`, installed `40-daily-v4.conf` drop-in, runs
+`scripts/v6_continual_resume_v4.py --autosize-workers` and the r4 launcher.
+Root `incubator/continual-v6/r4`; config `deploy/incubator-continual-v6-r4.json`.
+Actual full run started **23:04:36 Central**, through **2026-09-30**, 449 symbols.
+Three autosized data workers, two training threads, 20-GiB max, CPU quota 400%.
+This is the regular coexistence allocation, not the earlier dedicated 26-GiB run.
+Daily/retry timer restored; next retry opportunity observed 00:00 Central.
+The existing 08:00 Central cutoff remains. Avoid duplicate manual launchers.
 
-## Automatic restoration
+An isolated ADBE preflight finished in 120.27s with 720 candidates, 85 new feature
+rows and zero errors. Pilot/full contract identities match. Twelve focused
+prefix/inheritance/proposal/schedule checks and nine prefix/inheritance/watcher
+checks passed. Full completion remains pending; do not infer it from launch.
 
-At 22:40:49 timers were restored and research starts requested. Restoration
-readback showed MRHA migration plus required-discovery/frontier services active.
-This establishes restoration at that time; inspect their live receipts for
-continued health/progress. Original discovery/capture units stay stopped;
-successor controllers own further work. V7-3 remains selected/open.
+## Evidence, progress and timing
 
-## User clarification and daily goal
+`incubator/continual-v6/r4/latest-run.json` and `resources.json` own live state.
+Stage start events are recorded in the run status for actual measured timings.
+`nn_meta/validation/v6-daily-update-20260930-r4/` contains preparation, failed-r3
+attempt/exit, pilot and launch receipts. Snapshot revision audit is under
+`r4/snapshots/2026-09-30/revision-audit.json`.
 
-Keep V6's historical base plus new daily data in versioned updated freezes.
-A worse score is recorded; it does not erase the update or block future days.
-Tonight's completed freeze is through September 28, not September 30.
-The next cycle must select the latest fully closed session and add remaining
-new examples/outcomes. Existing daily timer is 15:45 Central weekdays, with
-midnight–07:45 quarter-hour retry opportunities; market-window guard remains.
-No model-selection pointer or paper deployment was changed by this clarification.
+Restart the CLI viewer to load its new defaults:
+`./venv/bin/python scripts/watch_v6_incubator.py --follow`.
+Already-open old viewer processes still observe r3. Ctrl-C affects only viewer.
+[Review](docs/reviews/2026-09-30-v6-two-day-update.md) · [State](docs/CURRENT_STATE.md).
 
-## Next work and constraints
+## Completion boundary and prior result
 
-Follow [TODO](TODO.md) and [ROADMAP](ROADMAP.md); no further initial catch-up
-retraining or recapture is needed. Inspect restored V7/migration receipts and
-measure a subsequent daily V6 update before closing full-incubator proof.
-October 2 provider decision remains separate. Keep MRHA mounted.
+New r4 data reconciles all frozen symbols and matured/pending outcomes, then
+trains 40 members, evaluates and freezes. Diagnostic comparison now uses the
+preceding completed update, initially the September 28 candidate, regardless of
+its diagnostic verdict. Evaluation does not discard a completed update.
+Preserve model family, chronological validation and point-in-time evidence.
 
-The terminal viewer remains `./venv/bin/python scripts/watch_v6_incubator.py
---follow`; a completed run and rejected verdict are consistent. Ctrl-C closes
-only the viewer. The old side-retry helper is finished and bound to the previous
-invocation; do not restart it as-is. Earlier resume/retry receipts are preserved.
-[State](docs/CURRENT_STATE.md) · [Experiment](docs/EXPERIMENTS.md) ·
-[Review](docs/reviews/2026-09-30-v6-dedicated-compute.md).
-Preserve unrelated dirty/untracked work and existing paper/live isolation.
+Prior September 28 candidate completed at 22:40:47, 122 verified files; training
+35m29s, evaluation/freeze 5m36s. Its return-MSE diagnostic failed, but its data and
+freeze remain. No paper/live deployment changed. OPS-INCUBATOR.PROOF remains open.
+Keep MRHA mounted and preserve unrelated dirty/untracked work.

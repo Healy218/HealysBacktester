@@ -1999,3 +1999,15 @@ are separately versioned/evaluated. The next cycle must advance through the
 latest closed session (September 30), not claim the older freeze is current.
 This clarification does not request a paper/live deployment change; no such
 change or model-selection pointer rewrite was performed.
+
+### 2026-09-30 — Preserve frozen prefixes during immediate two-day V6 update
+
+User requested immediate September 29–30 catch-up and timing. The existing daily
+r3 attempt encountered provider revisions to consumed stock bars. Preserve its
+receipts and all completed September 28 artifacts; use versioned r4 append-only
+snapshots, retaining the exact historical prefix and recording revised provider
+values separately. Reuse verified r3/r2 feature/label seals without relabeling.
+Evaluate each new freeze against the preceding completed update to record the
+change over time regardless of that update's diagnostic verdict. No model-family
+change or paper/live deployment. Regular daily resource coexistence is measured;
+initial recovery/preparation overhead is separately labeled.

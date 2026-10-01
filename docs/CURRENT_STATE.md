@@ -295,6 +295,21 @@ and `progress.json` together; a waiting service is not proof of advancing work.
 Only `closure_candidate_ready` reaches final evidence review, and it does not
 itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
 
+### September 30 23:04 V6 two-day update — selected r4
+
+Selected daily root: `incubator/continual-v6/r4/`; configuration
+`deploy/incubator-continual-v6-r4.json`; status `latest-run.json`, resources
+`resources.json`. `healys-v6-continual.service.d/40-daily-v4.conf` selects
+`scripts/v6_continual_resume_v4.py --autosize-workers`. Actual run started
+23:04:36 Central through September 30, three data workers/two training threads,
+20-GiB hard ceiling and 400% CPU. Timer restored; next opportunity 00:00 Central.
+`nn_meta/validation/v6-daily-update-20260930-r4/` owns preparation, failure archive,
+pilot and launch receipts. Frozen-prefix snapshots retain old bars and audit
+provider revisions; 231,323 prior seals verified by reference. Stage timestamps
+support measurement. Full completion is pending; inspect current receipts.
+Watcher defaults now select r4/daily service; restart an old viewer to load them.
+[Scope and evidence](reviews/2026-09-30-v6-two-day-update.md).
+
 ### September 30 dedicated V6 handover — candidate completed and jobs restored
 
 **Completion observation, September 30 22:40:57 Central:** selected r3 run through

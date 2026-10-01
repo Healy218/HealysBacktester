@@ -32,6 +32,9 @@ any later training-method change must be versioned and evaluated.
 - Reconstruct features from each signal's causal history and prior daily
   context, with the existing V6 SIP option-tick feature policy. Record historical
   reconstruction and retrieval time honestly; it is not prospective observation.
+- Daily snapshots preserve the exact preceding frozen stock prefix and append
+  only later bars. Record provider revisions separately; do not silently replace
+  consumed history. Version the continuation and bind reused feature/label seals.
 - Keep candidate features immutable. Hash-bound prior stock history must not
   change silently when extending a snapshot; revised history requires a new
   reviewed lineage.
@@ -58,8 +61,8 @@ any later training-method change must be versioned and evaluated.
    existing hyperparameters and seed identities; no nightly family sweep and no
    unvalidated warm-start shortcut. Use train-only magnitude winsor bounds.
 5. Use a chronological 40-observed-date validation tail with actual outcome-end
-   purging and a one-day embargo. Compare the new ensemble with its incumbent
-   and the zero-return baseline. Daily validation is reused for model selection;
+   purging and a one-day embargo. Compare the new ensemble with the preceding completed update
+   and the zero-return baseline. Preserve diagnostic outcomes even when worse. Daily validation is reused for model selection;
    it must not be presented as an untouched prospective test. The initial tail
    overlaps the original incumbent’s training history, so the comparison is a
    conservative diagnostic, not an independent head-to-head performance test.

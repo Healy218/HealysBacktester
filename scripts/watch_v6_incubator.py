@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Read-only live terminal progress for the dedicated V6 r3 incubator."""
+"""Read-only live terminal progress for the daily V6 r4 incubator."""
 from __future__ import annotations
 
 import argparse
@@ -11,9 +11,9 @@ import sys
 import time
 
 ROOT = Path(__file__).resolve().parents[1]
-DEFAULT_RUN = ROOT / 'incubator/continual-v6/r3/latest-run.json'
-DEFAULT_FOCUS = ROOT / 'nn_meta/validation/v6-focus-20260930/progress.json'
-DEFAULT_SERVICE = 'healys-v6-focus-20260930.service'
+DEFAULT_RUN = ROOT / 'incubator/continual-v6/r4/latest-run.json'
+DEFAULT_FOCUS = ROOT / 'incubator/continual-v6/r4/resources.json'
+DEFAULT_SERVICE = 'healys-v6-continual.service'
 
 
 def read(path):
