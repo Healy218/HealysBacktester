@@ -335,16 +335,18 @@ September 30 16:47:44 Central: separate Konsole viewer confirmed running,
 362/449 symbols complete, training pending, service memory 3.98/26 GiB.
 This is a dated observation, not a claim of continuing health.
 
-September 30 **18:53:58 Central concurrent retry**: installed/started
-`healys-v6-symbol-retries-20260930.service`, entry point
-`scripts/v6_retry_failed_20260930.py`. Receipts/logs are under
-`nn_meta/validation/v6-focus-20260930/symbol-retries-r1/`. One extra
-3584-MiB-budgeted worker retries only terminal HTTP 502 futures, at most three
-attempts each. UCO recovered/verified at 18:59:34; ULTA retry then started.
-After the main pass exits, successful verified recovery of every failed symbol
-allows a fresh start of the same focus service, reusing all seals and proceeding
-to training. Main progress/errors retain their old values until that restart.
-Unresolved/non-502 errors or the original 08:00 cutoff require review.
+September 30 **20:47:50 Central transport resume**: the main pass stopped at
+19:15 with 35 failures. The separate HTTP-502-only retry worker recovered ten
+symbols and exited `needs_review` at 20:13 because the other 25 had distinct
+transport-error messages. Verified actual completion was **424/449**.
+Resumed the same focus service after both workers/services had stopped, retaining
+all 424 seal hashes. Five autosized workers; at 20:48:12 fresh WFC/WMT/WPM/WULF/WYNN
+progress was observed, 424/449 main count, no new errors, training pending.
+`nn_meta/validation/v6-focus-20260930/transport-resume-r1/` owns before/after and
+archived failure receipts. The old `symbol-retries-r1/` remains historical;
+its helper is bound to the old invocation and must not be restarted as-is.
+Unchanged data checks lead automatically to training/evaluation/freeze;
+further failures still require review. This observation does not prove completion.
 
 Restored V7 uses the same supervisor names and checkpoint roots, with separately
 bound `scripts/resume_v7_compute_20260930.py`: up to two discovery workers,

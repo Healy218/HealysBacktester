@@ -191,3 +191,25 @@ completed retries and automatic main-service resumption are not yet demonstrated
 At 18:59:34 the UCO retry completed successfully; its completion payload was
 independently verified. ULTA then started. Remaining recovery and automatic
 supervisor resumption are still pending.
+
+## Transport resume — September 30, 20:48 Central
+
+User reported 35 missing symbols in the stopped CLI. The main service had
+failed at 19:15:23, with 414 successes and 35 transport/provider failures.
+The side helper subsequently recovered all ten HTTP 502 symbols by 20:13:48.
+Its intentionally narrow selector did not admit five `Massive tick transport
+failed` and twenty `MASSIVE transport failed` errors, so it exited needs_review
+without restarting the main service. The old main count omitted side recoveries.
+
+Verified all **424** completion payloads and the frozen source/snapshot binding.
+Archived main run/focus/exit and previous worker-restart receipts plus the 424
+seal hashes under `nn_meta/validation/v6-focus-20260930/transport-resume-r1/`.
+Host check confirmed main failed and helper inactive before requesting the
+existing focus service start. It resumed at **20:47:50**, selecting five workers.
+At **20:48:12**, fresh WFC/WMT/WPM/WULF/WYNN symbol updates were observed, the
+main count was 424/449, no new errors and training pending. All prior 424 symbol
+seals remained unchanged. No producer or scientific contract changed.
+
+The unchanged supervisor now retries the remaining 25 symbols, then proceeds to
+training/evaluation/freeze if data checks pass. The previous side helper remains
+finished and bound to its old invocation. Full completion remains unproven.

@@ -1,67 +1,63 @@
-# Handoff — September 30, 2026 — concurrent V6 retries running
+# Handoff — September 30, 2026 — V6 resumed with 424 verified symbols
 
 ## Selected direction
 
-Finish the pinned V6 catch-up, training and evaluation; automatically restore
-paused batch jobs after a verified candidate freeze. The user requested retries
-while the main pass keeps running. [TODO](TODO.md) owns phase tasks.
+Finish the pinned V6 catch-up, training and evaluation; restore paused batch
+jobs automatically after a verified candidate freeze. User reported the CLI
+stopped with 35 missing symbols; investigated and resumed. [TODO](TODO.md) owns tasks.
+
+## Resolved stopping point
+
+The main pass stopped at 19:15:23 with 414/449 complete and 35 failures.
+The separate retry helper recovered all ten HTTP 502 symbols by 20:13:48,
+but did not admit 25 differently worded transport failures. Its strict HTTP
+502-only filter prevented automatic main resumption; it exited needs_review.
+Actual verified count was 424/449, not the old main receipt's 414/449.
+
+Verified all 424 completion payloads and unchanged frozen sources/snapshot.
+Confirmed main failed and side retry inactive before starting the main service.
+At **20:47:50 Central**, the same focus service resumed, selecting five workers.
+At 20:48:12, fresh WFC/WMT/WPM/WULF/WYNN progress was observed; main receipt
+showed 424/449 (94.4%) with no new errors. Training remained pending.
+All 424 pre-resume completion seals remained byte-identical.
 
 ## Current runtime
 
-Main: `healys-v6-focus-20260930.service`, worker-revision drop-in
-`20-workers.conf`; wrapper `scripts/v6_focus_workers_20260930.py`.
-Five autosized data workers since 16:33:47 Central; 3584 MiB per worker,
-4096 MiB host reserve, 2048 MiB parent allowance, 25/26-GiB service high/max.
-Training selects 16 threads, with 40 members processed sequentially.
-Pinned root `incubator/continual-v6/r3`, through September 28, unchanged
-scientific sources and contract. All 357 prior symbol seals survived the restart.
+`healys-v6-focus-20260930.service`, installed `20-workers.conf` drop-in;
+entry `scripts/v6_focus_workers_20260930.py --worker-mib 3584 --auto-restore`.
+Pinned root `incubator/continual-v6/r3`, through September 28. Sources, inputs,
+scientific method and next-open-minus-30-minute cutoff (08:00 Central) unchanged.
+Five autosized workers; 3584-MiB worker budget, 4096-MiB host reserve,
+2048-MiB parent allowance, 25/26-GiB service high/max, no swap. Training threads 16.
 
-At 18:51 Central the main receipt showed 403/449 complete and ten terminal
-Massive HTTP 502 errors; training had not started. Those counts are dated.
-Individual HTTP requests already receive five short retries before failing.
+Finish missing data → checks/arrays → 40 sequential ensemble members → evaluation
+→ verified freeze → automatic paused-job restoration. No automatic deployment.
+Failure/deadline retains checkpoints and keeps competing jobs paused for review.
 
-## Concurrent recovery
+## Evidence and monitor
 
-Installed/started `healys-v6-symbol-retries-20260930.service` at 18:53:58 Central.
-Entry point `scripts/v6_retry_failed_20260930.py`; one extra worker at most,
-3584-MiB hard service limit, no swap. Shared autosizer plus explicit available
-memory and aggregate planned-worker budget checks gate admission.
-UCO completed/verified at 18:59:34; ULTA retry then started.
+Resume evidence: `nn_meta/validation/v6-focus-20260930/transport-resume-r1/`.
+`before.json` preserves 424 seal hashes; prior run/focus/exit/worker-restart
+receipts are archived there. `after.json` records resumed state and preservation.
+Main stage: `incubator/continual-v6/r3/latest-run.json`.
+Focus state: `nn_meta/validation/v6-focus-20260930/progress.json`.
+`./venv/bin/python scripts/watch_v6_incubator.py --follow` follows the new pass.
+Ctrl-C closes only the viewer. Compare receipts with fresh service/journal state.
+[State](docs/CURRENT_STATE.md) · [Review](docs/reviews/2026-09-30-v6-dedicated-compute.md).
 
-Only symbols listed as terminal HTTP 502 failures are eligible. Main futures
-for those symbols have exited; retry builds call the unchanged frozen builder
-with the same inputs, contract and symbol-specific checkpoint paths. Main
-invocation identity must remain unchanged. No competing full-run launcher.
-Up to three later attempts per failed symbol with a two-minute retry delay.
-Receipts/logs: `nn_meta/validation/v6-focus-20260930/symbol-retries-r1/`.
+No scientific code changed in this recovery. Existing source/snapshot preflight,
+424 payload verifications, pre/post seal comparison and fresh symbol updates
+passed. Remaining completion and full training/freeze are not yet demonstrated.
 
-The main supervisor retains failures in memory. Once its pass exits and every
-failed symbol is verified recovered, the retry helper archives its old receipts
-and requests a fresh start of the same focus service. That start verifies/reuses
-all seals, then continues training, evaluation and final candidate freeze.
-If failures remain, other errors appear or the 08:00 Central cutoff is reached,
-it reports review/deadline and does not bypass the data gate. No model deployment.
+## Prior retry helper and constraints
 
-## Monitor and stopping point
+`healys-v6-symbol-retries-20260930.service` finished; do not start its old helper
+again against this new invocation. Its plan is bound to the previous start time.
+Evidence retained under `symbol-retries-r1/` in the focus state directory.
 
-`./venv/bin/python scripts/watch_v6_incubator.py --follow` shows the main run.
-Its error list/main completed count will retain earlier failures until the new
-supervisor starts; inspect retry receipts separately for recovery progress.
-Ctrl-C closes only the viewer. Exact selected pointers: [State](docs/CURRENT_STATE.md).
-Main status: `incubator/continual-v6/r3/latest-run.json`; focus state under
-`nn_meta/validation/v6-focus-20260930/`. Compare receipts with live service health.
-
-Four retry-selection/binding/resume/resource tests passed; real source/snapshot
-preflight and unit verification passed. Service launch and fresh UCO progress
-were observed. UCO recovery is verified; remaining retries and automatic supervisor resume
-remain incomplete/unproven.
-[Review](docs/reviews/2026-09-30-v6-dedicated-compute.md).
-
-## Paused work and constraints
-
-The 15:01 handover checkpointed V7 and migration; V6 began 15:03:52. Migration
-retained 254,561 files/200.127 GB logical; quote capture retained 40,992 windows.
-V7 successor controllers resume after verified V6 completion; original discovery
-and quote units do not restart. Rejected evaluated candidates retain incumbent.
-Keep MRHA mounted; broker order management/monitoring and remote experts remain.
-Preserve unrelated dirty/untracked work. V7-3 and full-incubator proof stay open.
+V7/migration remain checkpointed by the 15:01 handover. Migration retained
+254,561 files/200.127 GB logical; current quote batch retained 40,992 windows.
+Restore V7 successor controllers after verified V6 completion; do not restart
+original discovery/capture units. Keep MRHA mounted. Broker order management,
+monitoring and remote experts remain. Preserve unrelated dirty/untracked work.
+V7-3 and full-incubator proof remain open; October 2 provider decision is separate.
