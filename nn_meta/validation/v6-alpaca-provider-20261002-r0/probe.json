@@ -1,0 +1,44 @@
+{
+  "observed_at": "2026-10-02T19:03:25.327280+00:00",
+  "paper_only": true,
+  "orders_submitted": false,
+  "quotes": [
+    {
+      "contract": "ALAB261113P00350000",
+      "status": "blocked",
+      "error": "no fresh post-decision option quote"
+    },
+    {
+      "contract": "RDW261113C00011000",
+      "status": "passed",
+      "quote": {
+        "contract": "RDW261113C00011000",
+        "bid": 1.15,
+        "ask": 1.45,
+        "bid_size": 320.0,
+        "ask_size": 1531.0,
+        "sip_timestamp_ns": 1790967790173445507,
+        "received_at": "2026-10-02T19:03:25.653198+00:00",
+        "provider": "alpaca",
+        "feed": "opra",
+        "receipt": {
+          "path": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v6-alpaca-provider-20261002-r0/observations/alpaca-opra-quotes/RDW261113C00011000-1790967805653198000-3c621331e1f7d33cfe3b8c0df20da51fc62555a9763f07649f6f0dfd4b455f44.json",
+          "sha256": "3c621331e1f7d33cfe3b8c0df20da51fc62555a9763f07649f6f0dfd4b455f44"
+        }
+      }
+    },
+    {
+      "contract": "TMUS261113C00165000",
+      "status": "blocked",
+      "error": "no fresh post-decision option quote"
+    }
+  ],
+  "historical_quotes": {
+    "status_code": 404,
+    "endpoint": "/v1beta1/options/quotes"
+  },
+  "historical_trades": {
+    "status_code": 400,
+    "endpoint": "/v1beta1/options/trades"
+  }
+}

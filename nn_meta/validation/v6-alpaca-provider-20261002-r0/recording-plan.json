@@ -1,0 +1,10 @@
+{
+  "scope": "transport_validation_only",
+  "model_admission": false,
+  "contracts": [
+    "ALAB261113P00350000",
+    "RDW261113C00011000",
+    "TMUS261113C00165000"
+  ],
+  "reason": "Current held contracts; validate OPRA recording without claiming full-universe coverage"
+}

@@ -177,11 +177,20 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   Measure a clean one-session update through freeze before claiming sustained
   next-trading-day readiness. No automatic deployment.
   [Current contract](docs/specs/AI_INCUBATOR.md). V5 paper scoring is superseded.
-- [ ] **OPS-PROVIDER, by October 2:** Give the user a source-backed Massive
-  keep/cancel recommendation using pre-February-2024 V7 captures, representative
-  SPX/NDX Alpaca history and V6 adapter/decision parity. If evidence is incomplete,
-  recommend retaining another month. The user decides cancellation.
-  [Decision gate](docs/reviews/2026-09-24-v6-alpaca-paper-start.md).
+- [x] **OPS-PROVIDER.DECISION:** October 2 user cancelled Massive options and
+  chose preserving V6 features and the full universe. The former keep/cancel
+  recommendation is superseded; provider equivalence is not established.
+- [x] **OPS-PAPER.ALPACA-QUOTES:** Scanner v12 deployed at 14:20:49 Central;
+  Alpaca held monitoring completed at 14:23:50 with zero errors. Massive option
+  requests removed from the paper scanner; broker policy unchanged.
+- [ ] **OPS-PAPER.ALPACA-COVERAGE:** Full-universe entries explicitly blocked,
+  as selected by the user. Read-only census already needs 2,434 contracts for
+  414 securities versus the documented 1,000-quote limit; 35 catalogues and
+  intraday strike headroom are additional. Actual capacity probe returned 405
+  (symbol limit exceeded). Resolve feed capacity, prospective
+  catalogues, complete preceding windows and feature/decision admission.
+  Bounded recorder transport tested; no full-universe recording/admission claim.
+  [Transition and remaining work](docs/reviews/2026-10-02-v6-alpaca-provider.md).
 
 FA collection is included in the temporary local 15:01 compute pause and
 automatic post-V6 restoration; its normal schedules otherwise remain selected. Additional FA research,

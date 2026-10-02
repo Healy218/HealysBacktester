@@ -1,0 +1,56 @@
+{
+  "scanner-dispatch-status.json": {
+    "action": "scan",
+    "alerts_enabled": false,
+    "broker_orders": false,
+    "checked_at": "2026-10-02T19:30:06.546389+00:00",
+    "data_through": "2026-10-01",
+    "elapsed_seconds": 43.287,
+    "error": "Full-universe Alpaca option feature coverage is not admitted",
+    "experimental": true,
+    "feature_blocker": "Alpaca full-universe recording capacity and quote-window validation pending",
+    "feature_provider_status": "awaiting_validated_alpaca_windows",
+    "massive_network_enabled": false,
+    "model_sha256": "cdacbea1bf6a07e573af46b8d266b1d82b5e3bf736945a06b929e46050fdbd6c",
+    "monitoring_receipt": "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/position-monitor-status.json",
+    "new_entries_blocked": true,
+    "option_quote_provider": "alpaca_opra",
+    "phase": "await_alpaca_feature_coverage",
+    "portfolio": {
+      "cycles": 45,
+      "equity": 0.968055087588333,
+      "execution": "experimental fractional midpoint paper; 0.15% cost per side; completed legacy records preserved",
+      "outbox": {},
+      "positions": {
+        "closed": 15,
+        "open": 1
+      }
+    },
+    "position_monitoring": "complete",
+    "replay": false,
+    "retired_unfilled_sources": [],
+    "scanner_book_policy": "archive-expired-never-filled-source-v4-ten-minute",
+    "schema": "v6-forward-status-v1",
+    "signal_clock": "2026-10-02T19:30:07.373559+00:00",
+    "status": "blocked",
+    "universe": 449
+  },
+  "position-monitor-status.json": {
+    "attempts": [
+      {
+        "at": "2026-10-02T19:30:49.833290+00:00",
+        "errors": []
+      }
+    ],
+    "checked_at": "2026-10-02T19:30:49.833333+00:00",
+    "deadline": "2026-10-02T19:32:45.214944+00:00",
+    "schema": "v6-held-monitor-retry-v1",
+    "status": "complete"
+  },
+  "broker-status.json": {
+    "action": "poll",
+    "checked_at": "2026-10-02T19:33:45.373822+00:00",
+    "error": "ValueError: stale or pre-decision quote",
+    "status": "blocked"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "observed_at_ns": 1790970903364695733,
+  "requested_quotes": 2434,
+  "status": "rejected",
+  "orders_submitted": false,
+  "provider": "alpaca",
+  "feed": "opra",
+  "error_code": 405,
+  "error_message": "symbol limit exceeded",
+  "source_sha256": "e85dcb038bac8a2217702e22ad5d9933c8049d1e882d23c377a2121bed8c2967"
+}

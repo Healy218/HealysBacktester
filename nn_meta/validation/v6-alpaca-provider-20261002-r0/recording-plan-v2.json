@@ -1,0 +1,11 @@
+{
+  "scope": "transport_validation_only",
+  "model_admission": false,
+  "contracts": [
+    "ALAB261113P00350000",
+    "RDW261113C00011000",
+    "SPY261005C00769000",
+    "TMUS261113C00165000"
+  ],
+  "reason": "Held contracts plus previously observed liquid SPY reference; bounded quote/trade transport verification"
+}

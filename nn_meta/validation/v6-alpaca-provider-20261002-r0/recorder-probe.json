@@ -1,0 +1,37 @@
+{
+  "contracts": [
+    "ALAB261113P00350000",
+    "RDW261113C00011000",
+    "TMUS261113C00165000"
+  ],
+  "coverage_complete": false,
+  "epoch": "b1e8d8d9f3a74b8fa53c891d8e457604",
+  "feed": "opra",
+  "journal": {
+    "appended_quotes": 33,
+    "appended_trades": 0,
+    "capture_id": "2ebf646cb40f42fbb4eac1173fc758d9",
+    "coverage_complete": false,
+    "daily_admitted_contracts": 3,
+    "daily_contract_limit": 3,
+    "fsynced_rows": 33,
+    "last_event_timestamp_ns": 1790968733568445727,
+    "last_fsync_at_ns": 1790968733707240369,
+    "last_received_at_ns": 1790968733701639567,
+    "normalization_errors": 0,
+    "receipt_basis": "sdk_handler_entry_after_decode",
+    "receipt_day": "2026-10-02",
+    "recording_contracts": 3,
+    "refused_daily_limit": 0,
+    "skipped_contract_ticks": 0
+  },
+  "model_admission": false,
+  "observed_at_ns": 1790968733707245319,
+  "plan_sha256": "f1fd83c970e0083099e548c7f7fb84237a20713a3b9fb886e6ffbc1981d52189",
+  "provider": "alpaca",
+  "schema": "v6-alpaca-recorder-v1",
+  "scope": "transport_validation_only",
+  "started_at_ns": 1790968703472778553,
+  "status": "finished",
+  "subscription_ack_ns": 1790968703932167624
+}

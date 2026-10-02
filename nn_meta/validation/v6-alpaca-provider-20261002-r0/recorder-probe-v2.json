@@ -1,0 +1,49 @@
+{
+  "contracts": [
+    "ALAB261113P00350000",
+    "RDW261113C00011000",
+    "SPY261005C00769000",
+    "TMUS261113C00165000"
+  ],
+  "coverage_complete": false,
+  "epoch": "7326858b6f0040ac8bec5b16d5b15f19",
+  "feed": "opra",
+  "journal": {
+    "appended_quotes": 4909,
+    "appended_trades": 83,
+    "capture_id": "a524354178b7446ea021cc7f3cac7013",
+    "coverage_complete": false,
+    "daily_admitted_contracts": 4,
+    "daily_contract_limit": 4,
+    "fsynced_rows": 4992,
+    "last_event_timestamp_ns": 1790969500758828563,
+    "last_fsync_at_ns": 1790969501127337315,
+    "last_received_at_ns": 1790969501117321651,
+    "normalization_errors": 0,
+    "receipt_basis": "websocket_handler_after_msgpack_decode",
+    "receipt_day": "2026-10-02",
+    "recording_contracts": 4,
+    "refused_daily_limit": 0,
+    "skipped_contract_ticks": 0
+  },
+  "model_admission": false,
+  "observed_at_ns": 1790969501127344785,
+  "plan_sha256": "7a8b8f5ecc4705cad547b86895835d1599edf9da45d4681742d12963ed831886",
+  "provider": "alpaca",
+  "schema": "v6-alpaca-recorder-v1",
+  "scope": "transport_validation_only",
+  "started_at_ns": 1790969411096976398,
+  "status": "finished",
+  "subscription_ack_ns": 1790969411449718227,
+  "source_sha256": {
+    "scripts/record_v6_alpaca_options_v1.py": "1e3e18765d40640dde93d27a6eae9fc2a5cb208cd4bfb2fecb5c25405facf5fe",
+    "scripts/v6_opra_journal_v1.py": "b89d4727dbe3db624c80e47d6795a5c973f2793ab56506092979a771685cc880",
+    "nn_meta/live/feeds/tick_journal.py": "676be3fa3a539d0a03fcbe38280f5125b05ab4756d262f03046f477cf5e245c5"
+  },
+  "files_sha256": {
+    "recordings-v2/7326858b6f0040ac8bec5b16d5b15f19/journal/2026-10-02/control.jsonl": "bda0917109eea5f5cb759688de8bf739d6990041c375c654cb94052d517f7310",
+    "recordings-v2/7326858b6f0040ac8bec5b16d5b15f19/journal/2026-10-02/contracts.jsonl": "f4fb90a95c8f5bddac60082ea902b5406fdd67398108d61fbcf6102844ef8a5b",
+    "recordings-v2/7326858b6f0040ac8bec5b16d5b15f19/journal/2026-10-02/quotes.jsonl": "ac59169ac5528556df6e0df06be6e67d9f708013e0d58317cc4f4ad353222bda",
+    "recordings-v2/7326858b6f0040ac8bec5b16d5b15f19/journal/2026-10-02/trades.jsonl": "3959a96972ab2b1e1fb82b218337bad365b8e6625e4aaf2fc3520499e6725e86"
+  }
+}

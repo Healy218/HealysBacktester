@@ -2079,3 +2079,12 @@ User requested raising actual discovery workers and measuring ETA. Resource-only
 v4 removes the inherited OMP/nproc one-worker cap and budgets resident memory
 once, up to twelve while retaining V6/replay/host reserves. Wave contracts and
 checkpoints are unchanged. [Decision/evidence](reviews/2026-10-02-v7-discovery-concurrency.md).
+
+## 2026-10-02 — V6 Alpaca recording with full universe preserved
+
+User cancelled Massive options, selected preserving quote-window features via
+Alpaca recording, and then selected keeping full-universe entry readiness blocked
+pending expanded feed capacity rather than reducing the universe. Deploy Alpaca
+held quotes, retain all frozen features/model, and record the new provider limit
+explicitly. No subscription purchase, model promotion or provider-equivalence
+claim. [Scope and evidence](reviews/2026-10-02-v6-alpaca-provider.md).

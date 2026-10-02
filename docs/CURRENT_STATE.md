@@ -1,12 +1,14 @@
 # Current state and artifact index
 
-Pointer/configuration owner for the lab; V6 pointers updated October 1, 2026.
+Pointer/configuration owner for the lab; V6 pointers updated October 2, 2026.
 [ROADMAP](../ROADMAP.md) owns milestone status and acceptance conditions;
 [TODO](../TODO.md) owns selected work. This page selects exact inputs and
 runtime identities. Other current documents link here instead of copying them.
 
-**Evidence freshness:** V6 paper recovery and the completed incubator have dated
-October 1 observations below. Other sections retain their own dated scopes and
+**Selected V6 paper:** [October 2 Alpaca transition](#october-2-v6-paper-alpaca-options-transition).
+Held quotes use Alpaca; full-universe entry features remain blocked.
+
+**Evidence freshness:** V6 paper and incubator observations below are dated. Other sections retain their own dated scopes and
 timestamps; old progress alone does not establish present service health.
 Verify the indicated live receipts when asked for present health or progress.
 Never infer a current ETA from a historical throughput sample.
@@ -761,3 +763,22 @@ it supersedes. Preserve old receipts and immutable declarations. Update the
 owning gate/task only if its status actually changes. Keep historical sample
 counts, transient rates and test totals in their dated reviews; do not make
 another running-status section in README, GOALS or DOCUMENTATION.
+
+## October 2 V6 paper Alpaca options transition
+
+Selected scanner v12: `scripts/run_v6_alpaca_scanner_v12.sh` / `.py`, consumer
+`scripts/run_v6_forward_resilient_v3.py`, adapter `scripts/v6_alpaca_market_v1.py`.
+Installed drop-in: `99z-alpaca-options-v12.conf`. At 14:20:49 Central, manifest
+`72dda355ea27c0e8d355949fc7185e4ce64e88bf2825d635936b7796137ff420` admitted
+Alpaca held quotes and blocked unvalidated full-universe entry features. At
+14:23:50 held monitoring completed with zero errors; scanner entry status remained
+blocked as intended. Old Massive-403 receipts are historical, not the selected path.
+
+Evidence: `nn_meta/validation/v6-alpaca-provider-20261002-r0/`; deployment,
+verification, stream census and bounded recorder probes. No full-universe recorder
+or feature adapter is admitted. Existing model/universe and frozen sources remain.
+[Transition, limits and remaining admission](reviews/2026-10-02-v6-alpaca-provider.md).
+
+At 14:55:03 Central, the account rejected the 2,434-contract quote subscription
+with 405 (symbol limit exceeded); `capacity-verification.json` preserves the
+actual entitlement failure. No full-universe recording is running.

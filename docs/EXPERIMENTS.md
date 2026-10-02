@@ -1008,3 +1008,14 @@ decision groups, 9.448M assessments/hour. Remaining original discovery at this
 short-window rate is 6.59 continuous days; no capture/replay/calendar ETA. No OOM
 or worker failures; paper was Massive-403 blocked, so full coexistence is unproven.
 [Measured evidence and limitations](reviews/2026-10-02-v7-discovery-concurrency.md).
+
+## 2026-10-02 — bounded V6 Alpaca provider transition
+
+Installed held monitoring completed 14:23:50 Central (32.687s, zero errors);
+scheduled 14:30 scan also completed monitoring (43.287s). Entries remain blocked
+for full-universe feature coverage. A 90-second four-contract OPRA probe durably
+recorded 4,909 quotes and 83 trades, zero normalization errors. This validates
+transport, not preceding-window completeness, feature parity or model admission.
+The census found 2,434 nearest-strike contracts across 414 securities; 35 missing
+catalogues and intraday headroom are extra, versus the documented 1,000 quote cap.
+[Evidence and boundaries](reviews/2026-10-02-v6-alpaca-provider.md).

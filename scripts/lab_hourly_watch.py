@@ -32,6 +32,11 @@ REPORTING SCOPE (user revised October 2):
    /home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/ and the read-only
    /tmp/v6-alpaca-paper-monitor-latest.json. Separate pending retries from terminal
    failures; enabled timers alone do not prove successful scans.
+   October 2: user cancelled Massive options and retained the full V6 universe.
+   Scanner v12 uses Alpaca held quotes; entries are deliberately blocked pending
+   full-universe streaming capacity and validated preceding quote windows. Do not
+   call that a successful scan or resurrect a Massive fallback. Read feature_blocker,
+   new_entries_blocked and option_quote_provider in current status. The recorder probes are bounded validation, not a running full-universe recorder.
 2. V7 gate 7-3: lead with cumulative work, using snapshot v7_work and its deltas.
    Show retained discovery cohorts and horizon-target assessments (plain language:
    decision groups processed and execution scenarios assessed), plus their change
@@ -212,7 +217,9 @@ def paper_receipts():
             result[name] = {k: doc[k] for k in ['status', 'checked_at', 'action',
                 'phase', 'error', 'expiry_fallback_errors', 'exhausted_exit_ladders',
                 'positions_before', 'data_through', 'elapsed_seconds', 'candidate_rows',
-                'exit_errors', 'symbol_results', 'deadline'] if k in doc}
+                'exit_errors', 'symbol_results', 'deadline', 'feature_blocker',
+                'feature_provider_status', 'new_entries_blocked', 'option_quote_provider',
+                'massive_network_enabled', 'position_monitoring'] if k in doc}
             if isinstance(doc.get('attempts'), list):
                 result[name]['attempt_count'] = len(doc['attempts'])
                 result[name]['last_attempt'] = doc['attempts'][-1] if doc['attempts'] else None
