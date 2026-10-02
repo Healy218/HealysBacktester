@@ -23,6 +23,13 @@ checkpoints. New selected root: `v7-required-inputs-20261002-perf-r0`.
   Hourly reporting follows the selected successor without resetting totals.
   Observe actual progression/resource waits; full required-input coverage remains open.
 
+- [x] **7-3.discovery-concurrency:** User requested maximum supported workers.
+  Resource policy v4 removes the inherited one-thread autosizer cap and accounts
+  for already resident workers. At 13:39:30 the corrected controller resumed;
+  nine active workers observed at 13:40. Same wave seals/checkpoints preserved.
+  Up to twelve subject to memory/CPU/V6 reserves; measure actual throughput.
+  [Policy and measured evidence](docs/reviews/2026-10-02-v7-discovery-concurrency.md).
+
 **October 1 completed operating task:** CRSP/MTUM repaired; V6 through September
 30 finished at 02:32 Central (449 symbols, 40 members, evaluated immutable freeze).
 All 447 prior symbol seals preserved. Diagnostic regression recorded; the new

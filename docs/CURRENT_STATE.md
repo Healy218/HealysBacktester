@@ -295,6 +295,27 @@ and `progress.json` together; a waiting service is not proof of advancing work.
 Only `closure_candidate_ready` reaches final evidence review, and it does not
 itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
 
+### October 2 discovery concurrency successor
+
+The user requested maximum supported discovery concurrency and a measured ETA.
+Resource policy v4 / scheduling controller v3 resumed at **13:39:30 Central**,
+superseding the earlier two/four-worker policy after a checkpoint drain. Nine
+workers were observed active at 13:40; consult fresh receipts for actual counts. Selected scientific campaign and wave
+paths remain unchanged. Exact transition evidence:
+`nn_meta/validation/v7-discovery-resources-20261002-r4/{before,stopped,deployment}.json`.
+`measurement.json` and `measurement-summary.json` record the production trial.
+
+Launcher: `scripts/finish_v7_discovery_resources_v4.py`; runtime override
+`zzzz-resources-v4.conf` on the same discovery service. Dynamic admission permits
+up to twelve workers, CPU threads minus two and available memory with owned
+anonymous/kernel memory added back once. Budget: 1 GiB/worker; preserve paper,
+incubator and host reserves. Service cap remains 14 GiB, new slices five minutes.
+The existing optimized campaign declaration and scientific worker seals remain
+unchanged; `discovery-campaign/resource-revision-v3.json` owns scheduler binding.
+Read `resource_policy` and `active_securities` from live campaign progress for
+actual admission; old dated two/four-worker counters are historical.
+[Policy, validation and ETA limits](reviews/2026-10-02-v7-discovery-concurrency.md).
+
 ### October 2 optimized V7 adoption (selected)
 
 User authorized adoption and resumption. Both existing services started at
@@ -542,6 +563,11 @@ bound. `logs/v6-handover-update-20260930/{state,runtime}.json` records request
 submission and dispatch-time host observations. A submitted request is not proof
 of a completed report. Read-only update covers migration/V7 stopping totals and
 V6 actual startup; busy-thread retries do not interrupt user work.
+
+Measured 13:39:30–13:54:30 Central: +2,362,080 assessments, 9.448M/hour,
+7–9 active workers; 1,493,431,400 remaining gives 6.59 continuous days at that
+rate for original discovery only. Paper was Massive-403 blocked; full scanner
+co-load and calendar completion are not established. See measurement-summary.json.
 
 ## V6 Alpaca paper and incubator
 

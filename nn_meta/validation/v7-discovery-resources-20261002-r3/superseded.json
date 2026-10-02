@@ -1,0 +1,6 @@
+{
+  "measurement_scope": "Intermediate/mixed observations; do not use as multiworker ETA evidence",
+  "observed_at": "2026-10-02T18:41:34.877556+00:00",
+  "reason": "Inherited OMP_NUM_THREADS=1 capped nproc/autosize at one; r4 fixes sizing environment",
+  "successor": "nn_meta/validation/v7-discovery-resources-20261002-r4"
+}

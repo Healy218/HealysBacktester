@@ -1000,3 +1000,11 @@ including interrupted import publication and cumulative watcher selection.
 This validates controller adoption on the tested checkpoints, not complete gate
 7-3 coverage, full-scope resource maxima or a model result.
 [Evidence and limits](reviews/2026-10-02-v7-performance-adoption.md).
+
+## 2026-10-02 — V7 discovery production concurrency observation
+
+13:39:30–13:54:30 Central: 7–9 workers added 2,362,080 assessments and 25,520
+decision groups, 9.448M assessments/hour. Remaining original discovery at this
+short-window rate is 6.59 continuous days; no capture/replay/calendar ETA. No OOM
+or worker failures; paper was Massive-403 blocked, so full coexistence is unproven.
+[Measured evidence and limitations](reviews/2026-10-02-v7-discovery-concurrency.md).

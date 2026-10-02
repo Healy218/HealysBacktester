@@ -50,6 +50,14 @@ runtimes and dated observations. Do not add running-job status blocks here.
 
 Read the relevant entries before treating a script or cache as broken.
 
+- **Separate pool sizing from numerical threads.** GNU `nproc` honors
+  `OMP_NUM_THREADS` and `OMP_THREAD_LIMIT`. A controller inheriting a value of one
+  can silently make the shared autosizer cap its entire process pool at one.
+  Clear those two variables only in the sizing subprocess environment; retain
+  per-worker numerical thread limits. Test the installed launcher's inherited
+  environment as well as direct shell invocations.
+  [Observed V7 repair](docs/reviews/2026-10-02-v7-discovery-concurrency.md).
+
 - **Bind watchers to submitted IDs.** Never select the newest job/image from a
   listing. Process-name matching can match the watcher itself; anchor exact
   commands and use appropriate bracket patterns. Evidence means actual receipts,

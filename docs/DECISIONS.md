@@ -2072,3 +2072,10 @@ overnight admission and single-worker replay alongside V6. The watcher selects
 one wave per security across the transition. Both services resumed 12:45:08 Central;
 this supersedes the 09:59 pause. No model promotion or paper-policy change.
 [Adoption evidence](reviews/2026-10-02-v7-performance-adoption.md).
+
+## 2026-10-02 — maximum supported V7 discovery concurrency
+
+User requested raising actual discovery workers and measuring ETA. Resource-only
+v4 removes the inherited OMP/nproc one-worker cap and budgets resident memory
+once, up to twelve while retaining V6/replay/host reserves. Wave contracts and
+checkpoints are unchanged. [Decision/evidence](reviews/2026-10-02-v7-discovery-concurrency.md).

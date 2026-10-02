@@ -60,10 +60,11 @@ Read logs/lab-hourly-watch/v7-selection.json for selected campaign paths;
 the optimized successor is v7-required-inputs-20261002-perf-r0. Historical parents remain under nn_meta/validation/
 v7-required-inputs-20260930-r0 and v7-execution-campaign-20260928-r1.
 Preserve completed captures and all
-checkpoints. The original discovery resource scheduler now has dynamic admission:
-up to four overnight, two weekdays 07:00-21:00 Central; zero new admissions is a
-memory-reserve wait, not lost work. Existing slices may still be active. Read
-actual resource receipts; do not reuse historical dedicated V6 worker counts.
+checkpoints. Discovery now uses resource policy v4: up to twelve workers,
+limited by actual available memory, owned anonymous memory, CPU capacity and
+reserved room for V6. Read resource_policy in the campaign progress receipt.
+Zero new admissions is a memory-reserve wait, not lost work; existing slices may
+still be active. Do not reuse historical two/four-worker or dedicated V6 counts.
 
 Use the supplied runtime snapshot if fresh; runtime.json may contain a newer
 observation if this request waited behind a user turn. Hourly snapshots live in
