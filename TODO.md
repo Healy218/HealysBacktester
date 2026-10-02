@@ -14,7 +14,9 @@ All 447 prior symbol seals preserved. Diagnostic regression recorded; the new
 freeze is retained. V7 discovery/migration restored; capture needed an explicit
 retry of two retained HTTP 502 failures and was verified advancing after 02:48.
 The selected work returns to ongoing gate 7-3 controllers and storage migration.
-Hourly checks here remain active. [Completion and restart evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md).
+Hourly checks here remain active. October 2 reporting now focuses on V6 paper
+and cumulative V7-3 work; completed storage and successful idle incubator runs
+are omitted. [Completion and restart evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md).
 
 Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
 The following scope is unchanged by the documentation consolidation.

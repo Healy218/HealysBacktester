@@ -382,6 +382,29 @@ Watcher defaults now select r4/daily service; restart an old viewer to load them
 
 ### Hourly terminal health watcher
 
+**October 2 reporting scope:** hourly messages focus on V6 Alpaca paper trading
+and V7 gate 7-3. Completed migration/storage summaries are omitted; storage is
+mentioned only for a new active-work blocker. V6 incubator appears while active
+or needing attention; a successfully sealed daily update is omitted even if its
+diagnostic verdict is adverse. Selected run comes from r5/latest-run.json.
+
+`scripts/lab_hourly_watch.py` now captures `v7_work`: cumulative discovery
+cohorts/decision groups and horizon-target assessments, outcome counts, finished
+and partially processed securities, plus separate per-round replay totals and
+frozen replay denominators. Pending-input outcomes are included in assessments;
+these are not final training labels. Never add discovery/replay rounds together
+as unique work. Full-discovery percentage remains unavailable without a matching
+verified denominator. Deltas compare the preceding saved hourly work snapshot,
+not the current pass or a same-slot refresh; the first new snapshot has no delta.
+`incubator_visibility` records whether a run should appear. A dedicated scanner
+journal prevents frequent broker logs from hiding scanner failures.
+Producer changes take effect on the next invocation of the existing service;
+no trading/research service restart. Both legacy/new queue prefixes deduplicate.
+12 focused watcher tests passed; live cumulative readback at 09:43 Central found
+1,527,621 discovery cohorts and 143,241,170 horizon-target assessments, including
+79,980,410 capture-incomplete assessments. These are dated work measurements.
+
+
 September 30 **23:36 Central**: `healys-lab-hourly-watch.timer` installed,
 enabled and active; next slot **October 1 00:00 America/Chicago**, then each :00.
 Service/producer: `healys-lab-hourly-watch.service` / `scripts/lab_hourly_watch.py`.

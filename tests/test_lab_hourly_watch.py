@@ -103,3 +103,67 @@ def test_paper_receipts_include_concurrent_quote_recovery(tmp_path, monkeypatch)
     receipt = watch.paper_receipts()['position-monitor-status.json']
     assert receipt['status'] == 'waiting_for_quote'
     assert receipt['attempt_count'] == 1 and receipt['last_attempt'] == attempts[0]
+
+
+def test_retained_work_includes_partial_waves_without_nested_double_counting(tmp_path):
+    for sid, status, cohorts, targets in [('A', 'discovered', 10, 100),
+                                           ('B', 'checkpointed', 8, 70)]:
+        root = tmp_path / sid
+        root.mkdir()
+        payload = dict(status=status, cohorts_discovered=cohorts,
+                       distinct_horizon_targets_covered=targets,
+                       horizon_target_statuses={'capture_incomplete': targets})
+        (root / 'progress.json').write_text(json.dumps(payload))
+        nested = root / 'securities' / sid
+        nested.mkdir(parents=True)
+        (nested / 'progress.json').write_text(json.dumps(payload))
+    current = watch.wave_work(tmp_path, 'discovered')
+    assert current['cohorts_processed'] == 18
+    assert current['horizon_targets_assessed'] == 170
+    assert current['horizon_target_outcomes']['capture_incomplete'] == 170
+    assert current['completed_securities'] == 1
+    assert current['partial_securities'] == 1
+    (tmp_path / 'B/progress.json').write_text(json.dumps(dict(
+        status='running', cohorts_discovered=12, distinct_horizon_targets_covered=90)))
+    newer = watch.wave_work(tmp_path, 'discovered')
+    assert watch.work_delta(newer, current) == dict(
+        cohorts_processed=4, horizon_targets_assessed=20, completed_securities=0)
+
+
+def test_missing_wave_observation_does_not_claim_zero_progress(tmp_path):
+    current = watch.wave_work(tmp_path / 'missing', 'discovered')
+    assert current['observation_errors']
+    assert watch.work_delta(current, {'cohorts_processed': 100}) is None
+
+
+def test_same_slot_refresh_keeps_previous_hour_as_delta_baseline(tmp_path, monkeypatch):
+    monkeypatch.setattr(watch, 'STATE', tmp_path)
+    for slot in [3600, 7200]:
+        (tmp_path / f'runtime-{slot}.json').write_text(json.dumps(
+            dict(observed_at=slot, v7_work={})))
+    assert watch.previous_observation(7200)['observed_at'] == 3600
+    assert watch.previous_observation(10800)['observed_at'] == 7200
+
+
+def test_successful_incubator_hidden_but_active_and_failure_visible(tmp_path):
+    candidate = tmp_path / 'candidate'
+    candidate.mkdir()
+    for name in ['complete', 'evaluation']:
+        (candidate / (name + '.json')).write_text('{"status":"rejected"}')
+    latest = dict(status='candidate_already_frozen', stage='done', run_dir=str(tmp_path))
+    service = dict(output='ActiveState=inactive\nResult=success\n')
+    snapshot = dict(receipts={'incubator/continual-v6/r5/latest-run.json': latest},
+                    services={'healys-v6-continual.service': service})
+    assert watch.incubator_visibility(snapshot)['show'] is False
+    latest.update(status='running', stage='training')
+    service['output'] = 'ActiveState=active\n'
+    assert watch.incubator_visibility(snapshot)['reason'] == 'incubating'
+    service['output'] = 'ActiveState=failed\n'
+    assert watch.incubator_visibility(snapshot)['reason'] == 'failure_needs_attention'
+
+
+def test_legacy_queued_check_is_still_deduplicated(state):
+    rpc = FakeRpc()
+    rpc.queue = [{'id': 'legacy', 'input': [{'text': watch.LEGACY_PREFIX}]}]
+    watch.dispatch(rpc, state, 7200)
+    assert 'thread/queue/add' not in rpc.calls

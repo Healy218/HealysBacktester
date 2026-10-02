@@ -16,71 +16,176 @@ from scripts.v6_handover_update_20260930 import Rpc, save
 
 THREAD = '01a0f343-c76a-7842-915b-0c111e8e2e28'
 STATE = ROOT / 'logs/lab-hourly-watch'
-PREFIX = '[Requested hourly V6, V7 and storage health check]'
+LEGACY_PREFIX = '[Requested hourly V6, V7 and storage health check]'
+PREFIX = '[Requested hourly V6 paper and V7-3 progress]'
 PROMPT = PREFIX + '''
-The user requested a watcher every hour at :00 America/Chicago in THIS terminal
-while away overnight. Read TODO.md, HANDOFF.md and the relevant CURRENT_STATE
-sections, then inspect current receipts. Report HERE concisely with observation
-time, progress since the preceding check, and specific errors or stalls.
+The user requested updates every hour at :00 America/Chicago in THIS terminal.
+Read TODO.md, HANDOFF.md and the relevant CURRENT_STATE sections, then inspect
+current receipts. Report concisely with observation time, changes since the
+preceding check, and specific failures or resource waits.
 
-The selected V6 update is r5, through September 30 (adding September 29-30).
-This supersedes failed r4: its 447 completed symbols are preserved; CRSP/MTUM
-were repaired by appending new occurrences without changing old seals.
-Read incubator/continual-v6/r5/{latest-run,resources,service-exit}.json where
-present, runs/2026-09-30/status.json, per-symbol progress, training-plan.json,
-member receipts and candidate/{evaluation,complete}.json when present. The
-dedicated controller evidence is nn_meta/validation/v6-daily-repair-20261001-r5/{progress,incubator-result,restored-services}.json. Verify the sequence
-build -> prepare arrays -> 40-member training -> evaluation -> final sealed
-candidate -> restoration of paused V7/storage services and timers. An adverse
-diagnostic verdict does not discard the new freeze or block restoration after
-valid completion. No automatic paper/live model deployment is authorized.
+REPORTING SCOPE (user revised October 2):
+1. V6 Alpaca PAPER: scanner completion, duration/deadline, held-quote monitoring,
+   broker/account observations and actual orders/fills when supported by receipts.
+   Report scanner failures even when broker polling succeeds. Read the snapshot's
+   paper_receipts, scanner_journal and paper_journal, plus the current receipts at
+   /home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/ and the read-only
+   /tmp/v6-alpaca-paper-monitor-latest.json. Separate pending retries from terminal
+   failures; enabled timers alone do not prove successful scans.
+2. V7 gate 7-3: lead with cumulative work, using snapshot v7_work and its deltas.
+   Show retained discovery cohorts and horizon-target assessments (plain language:
+   decision groups processed and execution scenarios assessed), plus their change
+   since the previous observation. Then show finished securities including
+   verified empty-demand cases, partially processed securities and workers.
+   These scenario counts INCLUDE pending-input outcomes; they are NOT completed
+   labels or proof of gate closure. Do not present a full-discovery percentage
+   without a verified matching denominator. Per-process pass counters reset and
+   must NEVER be the headline progress figure. Report current capture/replay stage
+   separately. Each replay re-evaluates a subset; NEVER add original discovery
+   and replay-round counts together as unique completed work. For a replay with
+   a frozen denominator, report assessed horizon-targets / required targets.
+3. V6 INCUBATOR: show only while actually building/preparing/training/evaluating/
+   freezing, or if failed/blocked/incomplete and needing attention. Use snapshot
+   incubator_visibility and current r5/latest-run.json's selected run directory,
+   its status, training-plan, member receipts and candidate evaluation/complete.
+   Once successfully frozen, omit routine completion updates entirely. An adverse
+   diagnostic verdict alone does not discard the freeze or constitute pipeline
+   failure. Do not repeat successful overnight completion every hour.
+4. Omit the completed storage migration and routine storage/free-space summaries.
+   Mention storage only for a NEW error or space constraint affecting active work.
 
-Check V6 Alpaca PAPER separately from its completed incubator. Use the snapshot's
-paper receipts and paper_journal, plus /home/healy/Coding/HealysV6/nn_meta/live/
-v6_alpaca_paper/{scanner-dispatch-status,status,broker-status,position-monitor-status}.json and the
-read-only /tmp/v6-alpaca-paper-monitor-latest.json. Report scanner failures even
-when broker polling succeeds; enabled timers alone do not prove successful scans.
-The October 1 TLT price-vintage repair evidence is under
-nn_meta/validation/v6-paper-vintage-20261001-r0. Do not modify trading state.
+Selected V7 controllers: healys-v7-required-discovery-20260930 and
+healys-v7-required-frontier-20260930. State under nn_meta/validation/:
+v7-required-inputs-20260930-r0/{discovery,frontier,epochs},
+v7-execution-recovery-20260929-r0 and
+v7-execution-campaign-20260928-r1/waves. Preserve completed captures and all
+checkpoints. The original discovery resource scheduler now has dynamic admission:
+up to four overnight, two weekdays 07:00-21:00 Central; zero new admissions is a
+memory-reserve wait, not lost work. Existing slices may still be active. Read
+actual resource receipts; do not reuse historical dedicated V6 worker counts.
 
-While V6 is building/training, the paused V7/migration services are EXPECTED.
-After its verified freeze, check both healys-v7-required-discovery-20260930 and
-healys-v7-required-frontier-20260930 plus healys-v7-mrha-migration-v2-20260929.
-Use nn_meta/validation/v7-required-inputs-20260930-r0/{discovery,frontier},
-v7-mrha-payload-migration-20260929-r1, v7-execution-campaign-20260928-r1/waves,
-v7-frontier-capture-20260930-r0 and v7-execution-recovery-20260929-r0 as relevant.
-Distinguish retained cumulative results from per-pass counts. Report migration
-files/bytes moved/remaining and actual storage. A completed job need not run.
-The frontier previously hit a stop timeout; check resumed health rather than
-mistaking its historical SIGKILL for a new failure. Preserve checkpoints.
+Use the supplied runtime snapshot if fresh; runtime.json may contain a newer
+observation if this request waited behind a user turn. Hourly snapshots live in
+logs/lab-hourly-watch. Check worker/member activity before calling a stall. Label
+observation times and delta baselines honestly; no invented percentage or ETA.
 
-Read the supplied dispatch-time runtime snapshot for host service/journal and
-storage observations; use it without new host permissions if sufficiently fresh.
-It and earlier hourly snapshots live in logs/lab-hourly-watch. Stale receipts
-alone do not prove health; check worker/member activity before calling a stall.
-Do not infer memory exhaustion from low CPU: build has five mostly single-thread
-workers, training 16 threads, service max 26 GiB; concurrency sizing is conservative.
-
-This watcher observes and diagnoses; it does not stop/restart jobs, change frozen
-sources, alter permissions/models, or submit trading orders. Automatic pipeline
-and restoration remain owned by the existing dedicated controller. If blocked,
-record the exact cause and report it here; do not claim a fix or completion.
-Do not send Slack/email/Telegram. If the user cancels this watcher, set
-stopped=true in logs/lab-hourly-watch/state.json. Otherwise keep hourly checks.
+This watcher observes and diagnoses. Do not stop/restart jobs, alter frozen
+sources, permissions/models, or submit trading orders. No automatic paper/live
+model deployment is authorized. If blocked, record the exact cause and report it;
+do not claim a fix or completion. Do not send Slack/email/Telegram. If cancelled,
+set stopped=true in logs/lab-hourly-watch/state.json; otherwise keep hourly checks.
 '''
 
 UNITS = [
     'healys-v6-continual.service', 'healys-v6-continual.timer',
     'healys-v7-required-discovery-20260930.service',
     'healys-v7-required-frontier-20260930.service',
-    'healys-v7-mrha-migration-v2-20260929.service',
-    'healys-cache-backup.timer', 'healys-cache-backup.service',
-    'healys-archive-pull.timer', 'healys-archive-pull.service',
     'healys-v6-alpaca-scanner.service', 'healys-v6-alpaca-scanner.timer',
     'healys-v6-alpaca-orders.service', 'healys-v6-alpaca-orders.timer',
     'healys-v6-alpaca-paper-monitor.timer',
 ]
 PAPER = ROOT.parent / 'HealysV6/nn_meta/live/v6_alpaca_paper'
+
+
+def read_receipt(path):
+    try:
+        return json.loads(Path(path).read_text())
+    except (OSError, ValueError) as exc:
+        return dict(observation_error=str(exc))
+
+
+def wave_work(root, terminal):
+    """One top-level receipt per security; never sum duplicate nested receipts."""
+    result = dict(status_counts={}, securities_with_receipts=0,
+                  completed_security_ids=[], cohorts_processed=0,
+                  horizon_targets_assessed=0, horizon_target_outcomes={},
+                  observation_errors=[])
+    if not root.exists():
+        result['observation_errors'].append(dict(path=str(root), error='Wave root missing'))
+    for path in sorted(root.glob('*/progress.json')):
+        doc = read_receipt(path)
+        if 'observation_error' in doc:
+            result['observation_errors'].append(dict(path=str(path), error=doc['observation_error']))
+            continue
+        result['securities_with_receipts'] += 1
+        status = doc.get('status', 'unknown')
+        result['status_counts'][status] = result['status_counts'].get(status, 0) + 1
+        if status == terminal:
+            result['completed_security_ids'].append(path.parent.name)
+        result['cohorts_processed'] += doc.get('cohorts_discovered', 0)
+        result['horizon_targets_assessed'] += doc.get('distinct_horizon_targets_covered', 0)
+        for outcome, count in doc.get('horizon_target_statuses', {}).items():
+            result['horizon_target_outcomes'][outcome] = result['horizon_target_outcomes'].get(outcome, 0) + count
+    result['completed_securities'] = len(result['completed_security_ids'])
+    result['partial_securities'] = result['securities_with_receipts'] - result['completed_securities']
+    return result
+
+
+def work_delta(current, previous):
+    if not previous or current.get('observation_errors') or previous.get('observation_errors'):
+        return None
+    # A negative delta stays visible for investigation, never silently clamped.
+    return {key: current[key] - previous[key] for key in
+            ['cohorts_processed', 'horizon_targets_assessed', 'completed_securities']}
+
+
+def v7_work(previous):
+    validation = ROOT / 'nn_meta/validation'
+    required = validation / 'v7-required-inputs-20260930-r0'
+    recovery = validation / 'v7-execution-recovery-20260929-r0'
+    original = wave_work(validation / 'v7-execution-campaign-20260928-r1/waves', 'discovered')
+    declaration = read_receipt(validation / 'v7-execution-campaign-20260928-r1/declaration.json')
+    original['securities_required'] = len(declaration['securities']) if 'securities' in declaration else None
+    empty = set()
+    for path in (recovery / 'empty').glob('*/report.json'):
+        doc = read_receipt(path)
+        if doc.get('status') == 'no_proposals' and (path.parent / 'complete.json').exists():
+            empty.add(path.parent.name)
+    original['verified_empty_securities'] = len(empty)
+    original['terminal_securities_including_empty'] = len(empty | set(original['completed_security_ids']))
+    original['runtime'] = read_receipt(recovery / 'progress.json')
+    old = previous.get('v7_work', {})
+    original['delta'] = work_delta(original, old.get('original_discovery'))
+    replays = {}
+    for key, root, plan in [('initial', required / 'initial-replay',
+                             validation / 'v7-pending-replay-plan-20260930-r0')]:
+        if (root / 'progress.json').exists():
+            replays[key] = (root, plan)
+    for epoch in sorted((required / 'epochs').glob('*')):
+        if (epoch / 'replay/progress.json').exists():
+            replays[epoch.name] = (epoch / 'replay', epoch / 'replay-plan')
+    replay_work = {}
+    for key, (root, plan) in replays.items():
+        summary = wave_work(root / 'waves', 'replayed_pending')
+        report = read_receipt(plan / 'report.json')
+        summary['required'] = {k: report[k] for k in ['securities', 'selected_cohorts', 'horizon_targets'] if k in report}
+        summary['runtime'] = read_receipt(root / 'progress.json')
+        summary['delta'] = work_delta(summary, old.get('replays', {}).get(key))
+        replay_work[key] = summary
+    captures = {}
+    for epoch in sorted((required / 'epochs').glob('*')):
+        if (epoch / 'capture/progress.json').exists():
+            captures[epoch.name] = read_receipt(epoch / 'capture/progress.json')
+    return dict(schema='v7-retained-work-v1', original_discovery=original,
+                replays=replay_work, captures=captures,
+                delta_baseline_at=previous.get('observed_at') if old else None,
+                accounting_note='Counts include pending-input outcomes. Never sum discovery and replay rounds as unique work.')
+
+
+def incubator_visibility(snapshot):
+    latest = snapshot['receipts']['incubator/continual-v6/r5/latest-run.json']
+    service = snapshot['services'].get('healys-v6-continual.service', {})
+    fields = dict(line.split('=', 1) for line in service.get('output', '').splitlines() if '=' in line)
+    if latest.get('error') or latest.get('errors') or fields.get('ActiveState') == 'failed':
+        return dict(show=True, reason='failure_needs_attention')
+    if latest.get('stage') != 'done' and fields.get('ActiveState') in ('active', 'activating'):
+        return dict(show=True, reason='incubating', run_dir=latest.get('run_dir'))
+    run = Path(latest.get('run_dir', '/nonexistent-incubator-run'))
+    if (latest.get('status') in ('candidate_frozen', 'candidate_already_frozen') and
+            (run / 'candidate/complete.json').exists() and
+            (run / 'candidate/evaluation.json').exists()):
+        return dict(show=False, reason='successful_freeze_omit_routine_update')
+    return dict(show=True, reason='incomplete_or_unverified_check_receipts')
 
 
 def paper_receipts():
@@ -109,6 +214,20 @@ def command(args, timeout=15):
         return dict(returncode=None, error='Observation command timed out')
 
 
+def previous_observation(slot):
+    # Same-slot refreshes must compare with the previous hour, not themselves.
+    current = int(slot) if str(slot).isdigit() else int(time.time()) // 3600 * 3600
+    candidates = sorted((int(p.stem.removeprefix('runtime-')), p)
+        for p in STATE.glob('runtime-*.json')
+        if p.stem.removeprefix('runtime-').isdigit() and
+        int(p.stem.removeprefix('runtime-')) < current)
+    for _, path in reversed(candidates):
+        doc = read_receipt(path)
+        if 'v7_work' in doc:
+            return doc
+    return {}
+
+
 def capture_runtime(slot):
     result = dict(observed_at=datetime.now(timezone.utc).isoformat(), services={})
     properties = ['ActiveState', 'SubState', 'Result', 'ExecMainStatus',
@@ -124,16 +243,19 @@ def capture_runtime(slot):
     result['paper_journal'] = command(['journalctl', '--user',
         '-u', 'healys-v6-alpaca-scanner.service', '-u', 'healys-v6-alpaca-orders.service',
         '--since', '-70 minutes', '-n', '80', '--no-pager'])
+    result['scanner_journal'] = command(['journalctl', '--user',
+        '-u', 'healys-v6-alpaca-scanner.service', '--since', '-70 minutes',
+        '-n', '100', '--no-pager'])
     result['paper_receipts'] = paper_receipts()
     result['storage'] = command(['df', '-B1', '--output=source,target,size,used,avail'])
     result['memory'] = Path('/proc/meminfo').read_text()
     receipts = [
         'incubator/continual-v6/r5/latest-run.json',
         'incubator/continual-v6/r5/resources.json',
-        'nn_meta/validation/v6-daily-repair-20261001-r5/progress.json',
+        'incubator/continual-v6/r5/service-exit.json',
         'nn_meta/validation/v7-required-inputs-20260930-r0/discovery/progress.json',
         'nn_meta/validation/v7-required-inputs-20260930-r0/frontier/progress.json',
-        'nn_meta/validation/v7-mrha-payload-migration-20260929-r1/progress.json',
+        'nn_meta/validation/v7-execution-recovery-20260929-r0/progress.json',
     ]
     result['receipts'] = {}
     for name in receipts:
@@ -141,6 +263,11 @@ def capture_runtime(slot):
             result['receipts'][name] = json.loads((ROOT / name).read_text())
         except (OSError, ValueError) as exc:
             result['receipts'][name] = dict(observation_error=str(exc))
+    previous = previous_observation(slot)
+    result['v7_work'] = v7_work(previous)
+    result['incubator_visibility'] = incubator_visibility(result)
+    result['reporting_scope'] = dict(paper=True, v7_cumulative_work=True,
+        completed_incubator=False, completed_storage=False)
     target = STATE / f'runtime-{slot}.json'
     save(target, result)
     save(STATE / 'runtime.json', result)
@@ -152,7 +279,7 @@ def dispatch(rpc, state, now, check=False):
     if thread['id'] != THREAD or thread['cwd'] != str(ROOT):
         raise ValueError('Refusing delivery to a different thread/project')
     queue = rpc.call('thread/queue/list', {'threadId': THREAD, 'limit': 100})['data']
-    ours = [q for q in queue if any(p.get('text', '').startswith(PREFIX) for p in q['input'])]
+    ours = [q for q in queue if any(p.get('text', '').startswith((PREFIX, LEGACY_PREFIX)) for p in q['input'])]
     if check:
         return dict(target_verified=True, thread_id=THREAD, status=thread['status'],
                     pending_updates=len(ours), message_sent=False)

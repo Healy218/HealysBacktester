@@ -1,54 +1,52 @@
-# Handoff — October 2, 2026 — V7 discovery concurrency
+# Handoff — October 2, 2026 — hourly progress reporting
 
-## Selected task and change
+## Selected task
 
-User asked whether discovery compute is optimized and whether more workers can
-be used. Replaced the two-worker scheduler with a versioned, memory-aware
-scheduler; scientific wave workers, inputs and their seals remain unchanged.
-Gate 7-3 remains open. No model/trading changes or fresh capture campaign.
+User requested hourly updates focus on V6 paper trading and V7-3 work. Omit
+completed storage and successful idle incubator completion announcements. Show
+substantial retained partial work, not only the completed-security count.
 
-## Deployment and stopping point
+## Implemented
 
-Installed October 2 at 08:00:11 Central on existing
-`healys-v7-required-discovery-20260930.service`.
-New launcher: `scripts/resume_v7_discovery_resources_v2.py`.
-New recovery: `scripts/run_v7_execution_recovery_v2.py`.
-Admission: `scripts/v7_discovery_resources_v2.py`, using shared autosizer.
-Ceiling four overnight; weekdays 07:00–21:00 Central ceiling two with a larger
-memory reserve for paper trading/daily V6. Admission recomputed before dispatch;
-active slices finish before concurrency declines. Low memory admits no new work.
-Service MemoryHigh 12 GiB, MemoryMax 14 GiB, no swap and no CPU quota.
-At 08:00:55: two workers active, no errors, no OOMs/throttling. This does not
-establish a measured four-worker throughput improvement.
+`scripts/lab_hourly_watch.py` now emits the revised scope and captures `v7_work`:
+retained discovery cohorts/decision groups, horizon-target assessments and outcome
+counts, completed/partial securities, verified empty-demand cases, separate replay
+round totals and frozen replay denominators. Original and replay rounds are not
+added together. Assessments include pending-input outcomes, not just final labels.
+Deltas compare the preceding saved hourly work snapshot; same-slot refreshes never
+replace that baseline. First new-format snapshot has no historical delta.
+Unreadable/missing observations are flagged rather than silently treated as zero.
 
-Prior controller stopped with status checkpointed, no errors. All 195 existing
-wave declarations verified unchanged across handover. Old controller declaration
-preserved; new scheduler has separate declaration-resource-v2.json and identity.
-The original progress path remains selected so frontier closure/watcher consumers
-continue to see the same campaign. Finished waves and committed cohorts are reused.
-Evidence: `nn_meta/validation/v7-discovery-resources-20261002-r0/`.
-[Configuration, measurements and limits](docs/reviews/2026-10-02-v7-discovery-resources.md).
-14 focused tests passed; actual handover/runtime verification recorded separately.
+`incubator_visibility` hides successfully frozen idle runs, including adverse
+research verdicts; active runs and failures/incomplete results remain visible.
+Storage services/migration removed from the routine reporting scope. Disk remains
+available diagnostically only for new active-work blockers. A separate scanner
+journal avoids drowning scanner failures in frequent broker polling messages.
+Legacy queued prefixes still deduplicate with the revised watcher prefix.
+Existing installed unit executes this script afresh; no service restart needed.
+12 watcher tests passed and live receipt aggregation read back successfully.
+Preview: `logs/lab-hourly-watch/reporting-scope-preview.json`.
 
-## Next checks
+## Last observation and evidence boundary
 
-Inspect admitted_workers, active_securities and per-wave cohort progress, plus
-cgroup CPU, memory events and I/O pressure. Compare useful work over time before
-claiming that extra workers accelerate discovery. The change raises concurrency,
-not the per-wave algorithm's efficiency. Preserve all frozen sources/checkpoints.
-Both V7 controllers remain selected. MRHA migration completed October 1; a
-stopped migration service is expected. Gate closure still needs full evidence.
+At 09:43 Central: 1,527,621 discovery decision groups and 143,241,170 execution
+horizon-target assessments; 79,980,410 were capture-incomplete outcomes. There
+are 60 finished waves plus seven verified empty-demand securities, and 133
+partially processed waves. These totals preserve work across pass resets.
+Current replay round: 14,374,015 / 20,015,688 assessments, 47/93 finished securities.
+These are dated observations, not a current health assertion or gate completion.
 
-## Operating obligations
+## Runtime context and next checks
 
-V6 October 1 daily run completed 20:50:20 Central: 449 symbols, 40 members,
-evaluated candidate, 122 payloads verified at the 21:00 check. Diagnostic rejected;
-updated freeze retained, no deployment. Daily service/timer remain selected r5.
-Paper scanner v10 quote-recovery repair still needs prospective market-hours
-verification. Read position-monitor-status.json and scanner receipts independently
-of broker polling; after-hours idle success is not market-hours acceptance.
-Preserve entry freshness/deadline guards, models, positions and journal history.
-Hourly checks continue in this terminal. Provider recommendation due October 2
-remains a separate TODO obligation; no cancellation authorized.
-[Previous paper handoff](handoff-history/HANDOFF-2026-10-02-before-discovery-resources-v2.md).
+Discovery resource revision installed at 08:00:11: memory-aware ceiling four
+outside weekday 07:00–21:00 Central, two during that window. Low capacity admits
+no new slices while active ones finish. Wave producers/seals remain unchanged.
+[Resource revision](docs/reviews/2026-10-02-v7-discovery-resources.md).
+V6 paper remains unreliable: 08:45 scan failed its five-minute entry deadline;
+09:00 failed unresolved fresh FLY monitoring. 09:15 monitoring recovered after
+21 attempts. Check later scanner completion and actual broker receipts; successful
+broker polling alone does not establish scanner health. No guards/models changed.
+V6 October 1 incubator freeze is retained; no automatic deployment authorized.
+Gate 7-3 remains open. Provider recommendation due October 2 is a separate TODO.
+Hourly checks continue here. Preserve checkpoints, source bindings and orders.
 [Current pointers](docs/CURRENT_STATE.md) · [Tasks](TODO.md).
