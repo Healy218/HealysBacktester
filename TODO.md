@@ -11,10 +11,14 @@ running-job locations; do not choose a different revision from an old review.
 **October 2 current direction — V7 paused for performance redesign.** Both
 selected controllers stopped at 09:59 Central with checkpoints preserved. No
 automatic resume is authorized. Intentional inactivity is not a watcher failure.
-- [ ] **7-3.performance:** Profile a bounded representative copy of discovery
-  and replay, optimize measured bottlenecks in a new revision, prove exact output
-  and restart parity, and report end-to-end throughput before requesting resume.
-  [Pause evidence and proposed benchmark](docs/reviews/2026-10-02-v7-performance-pause.md).
+- [x] **7-3.performance:** Bounded profiling, versioned optimization, exact
+  scientific-table and killed-process recovery parity, and worker scaling tested.
+  Six resumed discovery comparisons improved 1.59×; benchmark scaling and limits
+  are recorded in [the review](docs/reviews/2026-10-02-v7-performance-benchmark.md).
+  This is bounded validation, not full-scope deployment or gate closure.
+- [ ] **7-3.performance-adoption:** Integrate the validated producer into a new
+  controller/declaration lineage with retained-checkpoint inheritance and a
+  storage/resource plan. Keep the selected campaign paused pending user direction.
 
 **October 1 completed operating task:** CRSP/MTUM repaired; V6 through September
 30 finished at 02:32 Central (449 symbols, 40 members, evaluated immutable freeze).

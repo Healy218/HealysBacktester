@@ -310,6 +310,18 @@ At 10:02: 1,534,496 original discovery cohorts / 143,947,955 assessments retaine
 replay retains 47/93 complete and 14,520,464 assessments. These are pause totals.
 [Inspection and bounded optimization plan](reviews/2026-10-02-v7-performance-pause.md).
 
+### October 2 bounded performance candidate (not deployed)
+
+Validation root: `nn_meta/validation/v7-performance-20261002-r0/summary.json`.
+Discovery consumer v3 / pending-replay consumer v2 with transactional summaries,
+batched commits, safe resume cursor and indexed quote-window slicing passed
+bounded exact scientific-table and actual SIGKILL/recovery comparisons. Resumed
+discovery samples improved 1.59× in aggregate. Eight-task scaling: 81.10/49.50/37.98s
+at one/two/four workers. Original selected databases hash unchanged. Production
+controllers remain stopped and still select the preceding runtime; no broad
+adoption, full-scope completion or revised memory maximum is implied.
+[Methods, evidence and limits](reviews/2026-10-02-v7-performance-benchmark.md).
+
 ### October 2 discovery resource revision
 
 At **08:00:11 Central**, discovery switched to
@@ -553,11 +565,11 @@ The fresh state's `paper-restart.json` enables scanning and paper submission;
 Read SQLite evidence in read-only mode.
 
 - Scanner: `healys-v6-alpaca-scanner.timer` / `.service`, every 15 minutes in
-  its configured window; v10 launcher/adapter and versioned quote-recovery consumer, memory-aware
+  its configured window; v11 launcher/adapter and ten-minute consumer, memory-aware
   sizing up to 11 workers within a 16 GiB cap (14 GiB high, no swap).
 - Broker: `healys-v6-alpaca-orders.timer` / `.service`, every 15 seconds in its
   configured window; market/calendar checks govern execution. Since September 30
-  10:33 Central, `scripts.run_v6_alpaca_runtime_v5` selects three-step orders:
+  10:33 Central, `scripts.run_v6_alpaca_runtime_v6` now selects the retained three-step orders:
   fixed initial midpoint buy 1.05/1.10/1.125, sell 0.95/0.90/0.875, waits
   30/30/60 seconds, buys rounded up and sells down. Legacy chains retain their
   saved policy. Cancel confirmation precedes replacement; partial fills,
@@ -572,7 +584,8 @@ Read SQLite evidence in read-only mode.
   old server V6 watcher were retired. The old Stonks simulator projection is
   historical; it is not the new account's actual fill history.
 
-Selected input snapshot: `nn_meta/live/v6_server/data/2026-09-30-vintage-20261001-r1/`,
+October 1 repair snapshot (historical; current scans follow `data-index.json`):
+`nn_meta/live/v6_server/data/2026-09-30-vintage-20261001-r1/`,
 published October 1 at **10:45:53 Central**, manifest SHA
 `535dde7c63a7bc226a9f34b21b0cda18b8cf051128bbf7611e54b163ab825441`.
 The original V6 data-index source points to it; model/release remain unchanged.
@@ -582,15 +595,15 @@ universe. Repair evidence: `nn_meta/validation/v6-paper-vintage-20261001-r0/incr
 [Repair and scanner verification](reviews/2026-10-01-v6-paper-vintage-repair.md).
 The hourly watcher now checks Alpaca scanner/broker receipts independently of
 the incubator, with paper service observations and a separate paper journal.
-Scanner launcher: `scripts/run_v6_alpaca_scanner_v10.sh`; source reconciler v3
+October 1 predecessor launcher: `scripts/run_v6_alpaca_scanner_v10.sh`; source reconciler v3
 continues to protect active chains and distinguish prior fills from new unfilled
 signals reusing their contract. New consumer `scripts/run_v6_forward_resilient_v1.py`
 runs held monitoring alongside detection, retrying only empty fresh-quote errors.
 Allocation still requires successful monitoring and the frozen entry deadline.
 The model, feature modules, 30-second quote validation and broker policy are unchanged.
-Current paper-manifest SHA:
+October 1 predecessor manifest SHA:
 `06459ec7cb58784cc35af07030c88f0685540a167074dd1c97fcb0a30e150f9c`.
-Current consumer admission: `healys-v6-alpaca-scanner.service.d/95-monitor-v10.conf`;
+October 1 predecessor admission: `healys-v6-alpaca-scanner.service.d/95-monitor-v10.conf`;
 resource limits remain selected by `90-resource-v9.conf`.
 Prior manifest/unit: paper `runtime-revisions/scanner-monitor-v10-20261001/`.
 `position-monitor-status.json` records quote attempts and completion/blocking;

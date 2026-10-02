@@ -2052,3 +2052,12 @@ signal close. Scanner allocation, broker admission and source retention change
 together in new source-bound revisions. Quote age remains 30 seconds; existing
 ladder waits, models, features and sizing remain unchanged. No historical signal
 is redated. [Deployment and tests](reviews/2026-10-02-v6-ten-minute-window.md).
+
+## 2026-10-02 — Validate V7 performance on retained checkpoint copies
+
+User authorized the four-step optimization workflow following the V6 deadline
+change. Preserve selected paused waves, compare exact scientific outputs on
+bounded copies, and treat speed/resource measurements as sample evidence. New
+producer uses durable batches and transactional summaries; committed checkpoints
+remain authoritative. Successful validation does not automatically resume the
+campaign. [Evidence and adoption boundary](reviews/2026-10-02-v7-performance-benchmark.md).

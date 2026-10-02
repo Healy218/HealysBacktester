@@ -1,0 +1,397 @@
+{
+  "command": [
+    "/home/healy/Coding/HealysBacktester/venv/bin/python",
+    "-m",
+    "cProfile",
+    "-o",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-performance-20261002-r0/baseline/large.prof",
+    "/home/healy/Coding/HealysBacktester/scripts/discover_v7_execution_wave_v2.py",
+    "--base-index",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-frontier-quote-index-20260928-r4",
+    "--blackouts",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-contract-blackouts-20260928-approved",
+    "--entry-root",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927",
+    "--hours",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-dated-hours-20260927",
+    "--plan",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-full-execution-plan-20260928",
+    "--references",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-reference-reconciliation-20260928-full-r0",
+    "--review",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-reference-rename-review-20260928",
+    "--security",
+    "BBG000BB5006",
+    "--output",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-performance-20261002-r0/baseline/large",
+    "--max-seconds",
+    "300",
+    "--max-cohorts",
+    "40"
+  ],
+  "exit_code": 0,
+  "profile": true,
+  "progress": {
+    "cohorts_discovered": 37930,
+    "distinct_horizon_targets_covered": 3577915,
+    "elapsed_seconds": 16.874733493983513,
+    "exclusion_horizon_targets": {
+      "entry": 44332
+    },
+    "exclusion_proposal_targets": {
+      "entry": 97477
+    },
+    "execution_buckets": 431135,
+    "full_execution_coverage": false,
+    "horizon_target_statuses": {
+      "capture_incomplete": 2619958,
+      "excluded_contract_reference_blackout": 44332,
+      "no_fresh_raw_spot": 690,
+      "observed_unfilled_entry": 202125,
+      "option_midpoint_stop": 538851,
+      "signal_exit": 171959
+    },
+    "pending_requests": 16979,
+    "proposal_target_rows_covered": 8905185,
+    "proposal_target_statuses": {
+      "capture_incomplete": 6539582,
+      "excluded_contract_reference_blackout": 97477,
+      "no_fresh_raw_spot": 1770,
+      "observed_unfilled_entry": 533529,
+      "option_midpoint_stop": 1415320,
+      "signal_exit": 317507
+    },
+    "research_ready": false,
+    "retained_payloads": 298303,
+    "securities_discovered": 0,
+    "securities_required": 1,
+    "security_id": "BBG000BB5006",
+    "status": "checkpointed",
+    "updated_at": "2026-10-02T15:40:17.219367+00:00"
+  },
+  "top_cumulative": [
+    {
+      "calls": 952,
+      "cumulative_seconds": 18.499981684,
+      "file": "~",
+      "function": "<built-in method builtins.exec>",
+      "line": 0,
+      "self_seconds": 0.00523896
+    },
+    {
+      "calls": 1,
+      "cumulative_seconds": 18.499971074,
+      "file": "/home/healy/Coding/HealysBacktester/scripts/discover_v7_execution_wave_v2.py",
+      "function": "<module>",
+      "line": 1,
+      "self_seconds": 0.00428538
+    },
+    {
+      "calls": 1,
+      "cumulative_seconds": 18.489915989,
+      "file": "/home/healy/Coding/HealysBacktester/scripts/discover_v7_execution_wave_v2.py",
+      "function": "main",
+      "line": 17,
+      "self_seconds": 0.031864772
+    },
+    {
+      "calls": 820,
+      "cumulative_seconds": 12.737456987000002,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_cohorts.py",
+      "function": "cover_horizons",
+      "line": 24,
+      "self_seconds": 0.006101344000000001
+    },
+    {
+      "calls": 620,
+      "cumulative_seconds": 12.668597219,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_prefix_cache_v2.py",
+      "function": "run",
+      "line": 43,
+      "self_seconds": 0.002213175
+    },
+    {
+      "calls": 500,
+      "cumulative_seconds": 12.547607318,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/full_execution.py",
+      "function": "run",
+      "line": 68,
+      "self_seconds": 0.0020508740000000003
+    },
+    {
+      "calls": 500,
+      "cumulative_seconds": 12.214970337,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_frontier_v2.py",
+      "function": "discover_execution",
+      "line": 70,
+      "self_seconds": 0.002595104
+    },
+    {
+      "calls": 500,
+      "cumulative_seconds": 12.211141437,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/replay_stream.py",
+      "function": "replay",
+      "line": 14,
+      "self_seconds": 0.402566815
+    },
+    {
+      "calls": 16685,
+      "cumulative_seconds": 8.249962344,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/replay_stream.py",
+      "function": "observed_mark",
+      "line": 35,
+      "self_seconds": 0.030696822000000002
+    },
+    {
+      "calls": 16685,
+      "cumulative_seconds": 7.992287025,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_frontier_v2.py",
+      "function": "mark",
+      "line": 58,
+      "self_seconds": 0.013249763000000001
+    },
+    {
+      "calls": 16685,
+      "cumulative_seconds": 7.979037262,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/quote_archive.py",
+      "function": "mark",
+      "line": 87,
+      "self_seconds": 0.02743098
+    },
+    {
+      "calls": 68670,
+      "cumulative_seconds": 7.138949628000001,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_frontier_v2.py",
+      "function": "read",
+      "line": 25,
+      "self_seconds": 0.044894545
+    },
+    {
+      "calls": 7686600,
+      "cumulative_seconds": 5.22170573,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/copy.py",
+      "function": "deepcopy",
+      "line": 118,
+      "self_seconds": 2.762579927
+    },
+    {
+      "calls": 17552,
+      "cumulative_seconds": 5.080950742000001,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_frontier_v2.py",
+      "function": "window",
+      "line": 47,
+      "self_seconds": 0.014234719000000002
+    },
+    {
+      "calls": 17552,
+      "cumulative_seconds": 4.984049247000001,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_frontier_v2.py",
+      "function": "<lambda>",
+      "line": 50,
+      "self_seconds": 0.008524674000000001
+    },
+    {
+      "calls": 17552,
+      "cumulative_seconds": 4.975524573,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quote_index.py",
+      "function": "window",
+      "line": 80,
+      "self_seconds": 0.069170992
+    },
+    {
+      "calls": 458921,
+      "cumulative_seconds": 4.674059788,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/copy.py",
+      "function": "_deepcopy_dict",
+      "line": 217,
+      "self_seconds": 0.813865668
+    },
+    {
+      "calls": 17540,
+      "cumulative_seconds": 4.388272018,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quotes_v2.py",
+      "function": "window",
+      "line": 199,
+      "self_seconds": 0.058096666000000005
+    },
+    {
+      "calls": 60019,
+      "cumulative_seconds": 3.7589528580000002,
+      "file": "~",
+      "function": "<method 'extend' of 'list' objects>",
+      "line": 0,
+      "self_seconds": 0.026561108
+    },
+    {
+      "calls": 17476,
+      "cumulative_seconds": 3.737276102,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution.py",
+      "function": "__init__",
+      "line": 44,
+      "self_seconds": 0.07088134900000001
+    }
+  ],
+  "top_self": [
+    {
+      "calls": 7686600,
+      "cumulative_seconds": 5.22170573,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/copy.py",
+      "function": "deepcopy",
+      "line": 118,
+      "self_seconds": 2.762579927
+    },
+    {
+      "calls": 225747,
+      "cumulative_seconds": 3.727042281,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quotes_v2.py",
+      "function": "<genexpr>",
+      "line": 219,
+      "self_seconds": 1.353060224
+    },
+    {
+      "calls": 7688,
+      "cumulative_seconds": 1.362613153,
+      "file": "~",
+      "function": "<built-in method _io.open>",
+      "line": 0,
+      "self_seconds": 1.324238261
+    },
+    {
+      "calls": 4772,
+      "cumulative_seconds": 1.181271301,
+      "file": "~",
+      "function": "<method 'update' of '_hashlib.HASH' objects>",
+      "line": 0,
+      "self_seconds": 1.181271301
+    },
+    {
+      "calls": 9673,
+      "cumulative_seconds": 1.055608196,
+      "file": "~",
+      "function": "<method 'read' of '_io.BufferedReader' objects>",
+      "line": 0,
+      "self_seconds": 1.055608196
+    },
+    {
+      "calls": 16514023,
+      "cumulative_seconds": 0.879395331,
+      "file": "~",
+      "function": "<method 'get' of 'dict' objects>",
+      "line": 0,
+      "self_seconds": 0.879395331
+    },
+    {
+      "calls": 143109,
+      "cumulative_seconds": 0.843748024,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/json/encoder.py",
+      "function": "iterencode",
+      "line": 205,
+      "self_seconds": 0.843737064
+    },
+    {
+      "calls": 458921,
+      "cumulative_seconds": 4.674059788,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/copy.py",
+      "function": "_deepcopy_dict",
+      "line": 217,
+      "self_seconds": 0.813865668
+    },
+    {
+      "calls": 76661,
+      "cumulative_seconds": 0.731175423,
+      "file": "~",
+      "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+      "line": 0,
+      "self_seconds": 0.731175423
+    },
+    {
+      "calls": 43,
+      "cumulative_seconds": 0.5560908520000001,
+      "file": "~",
+      "function": "<method '__exit__' of 'sqlite3.Connection' objects>",
+      "line": 0,
+      "self_seconds": 0.5560908520000001
+    },
+    {
+      "calls": 37932,
+      "cumulative_seconds": 0.633330284,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_cohorts.py",
+      "function": "cohorts",
+      "line": 14,
+      "self_seconds": 0.530518801
+    },
+    {
+      "calls": 500,
+      "cumulative_seconds": 12.211141437,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/replay_stream.py",
+      "function": "replay",
+      "line": 14,
+      "self_seconds": 0.402566815
+    },
+    {
+      "calls": 8922332,
+      "cumulative_seconds": 0.37591820600000003,
+      "file": "~",
+      "function": "<built-in method builtins.id>",
+      "line": 0,
+      "self_seconds": 0.37591820600000003
+    },
+    {
+      "calls": 1,
+      "cumulative_seconds": 0.690385687,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/contract_blackouts.py",
+      "function": "__init__",
+      "line": 116,
+      "self_seconds": 0.368584638
+    },
+    {
+      "calls": 106130,
+      "cumulative_seconds": 0.632548996,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/_strptime.py",
+      "function": "_strptime",
+      "line": 392,
+      "self_seconds": 0.334896061
+    },
+    {
+      "calls": 7190815,
+      "cumulative_seconds": 0.24750591900000002,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/copy.py",
+      "function": "_deepcopy_atomic",
+      "line": 172,
+      "self_seconds": 0.24750591900000002
+    },
+    {
+      "calls": 2184453,
+      "cumulative_seconds": 0.37120689700000004,
+      "file": "~",
+      "function": "<built-in method builtins.isinstance>",
+      "line": 0,
+      "self_seconds": 0.16598383800000002
+    },
+    {
+      "calls": 2951,
+      "cumulative_seconds": 0.16713339900000002,
+      "file": "~",
+      "function": "<method 'read' of '_io.TextIOWrapper' objects>",
+      "line": 0,
+      "self_seconds": 0.161127857
+    },
+    {
+      "calls": 106130,
+      "cumulative_seconds": 0.9753575740000001,
+      "file": "/home/healy/Coding/HealysBacktester/options/data/provider.py",
+      "function": "parse_occ_symbol",
+      "line": 57,
+      "self_seconds": 0.141213618
+    },
+    {
+      "calls": 17506,
+      "cumulative_seconds": 0.9786138310000001,
+      "file": "/home/healy/Coding/HealysBacktester/options/data/massive_ticks.py",
+      "function": "verify_capture",
+      "line": 35,
+      "self_seconds": 0.137254167
+    }
+  ],
+  "wall_seconds": 18.58997739700135
+}

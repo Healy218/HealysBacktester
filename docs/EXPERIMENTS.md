@@ -976,3 +976,15 @@ Data/freeze retained, no accepted-research or paper/live promotion. Reused purge
 temporal validation is not an untouched performance test. Recovery reused 447
 symbols; its 56m22s (39m32s training, 6m25s evaluation/freeze) is not a clean
 unattended daily timing result. [Method, preservation audit and results](reviews/2026-10-01-v6-occurrence-repair.md).
+
+## 2026-10-02 — V7 bounded performance revision
+
+**Verdict: bounded performance/parity passed; production adoption pending.**
+Three discovery checkpoints, two reversed-order 200-cohort timing rounds: 94.62s
+old versus 59.45s optimized (1.59×); exact six-table equality after 440 new cohorts
+per case. Replay equality after 240 cohorts; resumed 200-cohort timing 15.86s old
+versus 13.04s new. Eight-task scaling: 81.10/49.50/37.98s with one/two/four workers.
+An actual SIGKILL after 64 committed cohorts plus 136-cohort recovery matched an
+uninterrupted 200-cohort result. Original database hashes unchanged. These are
+sample execution-engine results, not model quality, full-universe ETA or gate
+closure. [Methods and evidence](reviews/2026-10-02-v7-performance-benchmark.md).

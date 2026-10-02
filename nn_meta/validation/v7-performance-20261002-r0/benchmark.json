@@ -1,0 +1,138 @@
+{
+  "args": {
+    "base_index": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-frontier-quote-index-20260928-r4",
+    "blackouts": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-contract-blackouts-20260928-approved",
+    "entry_root": "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927",
+    "hours": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-dated-hours-20260927",
+    "plan": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-full-execution-plan-20260928",
+    "references": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-reference-reconciliation-20260928-full-r0",
+    "review": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-reference-rename-review-20260928"
+  },
+  "campaign": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-campaign-20260928-r1",
+  "cases": {
+    "large": {
+      "database_sha256": "6727ecca6b1ee86d5af3bd96cd7867ad199bd38043c187affa99e10e10afc5eb",
+      "progress": {
+        "cohorts_discovered": 37890,
+        "distinct_horizon_targets_covered": 3572620,
+        "elapsed_seconds": 303.8757602729893,
+        "exclusion_horizon_targets": {
+          "entry": 44332
+        },
+        "exclusion_proposal_targets": {
+          "entry": 97477
+        },
+        "execution_buckets": 430515,
+        "full_execution_coverage": false,
+        "horizon_target_statuses": {
+          "capture_incomplete": 2616495,
+          "excluded_contract_reference_blackout": 44332,
+          "no_fresh_raw_spot": 690,
+          "observed_unfilled_entry": 202125,
+          "option_midpoint_stop": 537386,
+          "signal_exit": 171592
+        },
+        "pending_requests": 16959,
+        "proposal_target_rows_covered": 8893970,
+        "proposal_target_statuses": {
+          "capture_incomplete": 6532090,
+          "excluded_contract_reference_blackout": 97477,
+          "no_fresh_raw_spot": 1770,
+          "observed_unfilled_entry": 533529,
+          "option_midpoint_stop": 1412146,
+          "signal_exit": 316958
+        },
+        "research_ready": false,
+        "retained_payloads": 297803,
+        "securities_discovered": 0,
+        "securities_required": 1,
+        "security_id": "BBG000BB5006",
+        "status": "checkpointed",
+        "updated_at": "2026-10-02T13:10:28.074837+00:00"
+      },
+      "security": "BBG000BB5006",
+      "seed": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-performance-20261002-r0/seeds/large",
+      "source": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-campaign-20260928-r1/waves/BBG000BB5006"
+    },
+    "large_database": {
+      "database_sha256": "a2f624c138c1ca84ab2fca47041063957dc97ce6ad706ffe86931a5b0fcda45e",
+      "progress": {
+        "cohorts_discovered": 18942,
+        "distinct_horizon_targets_covered": 1666730,
+        "elapsed_seconds": 304.0989522500022,
+        "exclusion_horizon_targets": {},
+        "exclusion_proposal_targets": {},
+        "execution_buckets": 853627,
+        "full_execution_coverage": false,
+        "horizon_target_statuses": {
+          "capture_incomplete": 448091,
+          "no_contract": 717700,
+          "no_fresh_raw_spot": 3925,
+          "observed_unfilled_entry": 139845,
+          "option_midpoint_stop": 290480,
+          "signal_exit": 66689
+        },
+        "pending_requests": 3357,
+        "proposal_target_rows_covered": 4196320,
+        "proposal_target_statuses": {
+          "capture_incomplete": 1102902,
+          "no_contract": 1869230,
+          "no_fresh_raw_spot": 9800,
+          "observed_unfilled_entry": 339059,
+          "option_midpoint_stop": 739812,
+          "signal_exit": 135517
+        },
+        "research_ready": false,
+        "retained_payloads": 810108,
+        "securities_discovered": 0,
+        "securities_required": 1,
+        "security_id": "BBG000BCMBG4",
+        "status": "checkpointed",
+        "updated_at": "2026-10-02T13:36:30.506938+00:00"
+      },
+      "security": "BBG000BCMBG4",
+      "seed": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-performance-20261002-r0/seeds/large_database",
+      "source": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-campaign-20260928-r1/waves/BBG000BCMBG4"
+    },
+    "small": {
+      "database_sha256": "c6e35255d9445b8e834663a2c0bf4a438a301fb617b37e8166e82d9147c22e99",
+      "progress": {
+        "cohorts_discovered": 473,
+        "distinct_horizon_targets_covered": 46425,
+        "elapsed_seconds": 182.60708964799414,
+        "exclusion_horizon_targets": {},
+        "exclusion_proposal_targets": {},
+        "execution_buckets": 25935,
+        "full_execution_coverage": false,
+        "horizon_target_statuses": {
+          "capture_incomplete": 10730,
+          "no_contract": 21760,
+          "observed_unfilled_entry": 3430,
+          "option_midpoint_stop": 7560,
+          "signal_exit": 2945
+        },
+        "pending_requests": 20,
+        "proposal_target_rows_covered": 127025,
+        "proposal_target_statuses": {
+          "capture_incomplete": 25475,
+          "no_contract": 64260,
+          "observed_unfilled_entry": 8410,
+          "option_midpoint_stop": 22120,
+          "signal_exit": 6760
+        },
+        "research_ready": false,
+        "retained_payloads": 25043,
+        "securities_discovered": 0,
+        "securities_required": 1,
+        "security_id": "BBG000C3HSR0",
+        "status": "checkpointed",
+        "updated_at": "2026-10-02T07:32:28.849996+00:00"
+      },
+      "security": "BBG000C3HSR0",
+      "seed": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-performance-20261002-r0/seeds/small",
+      "source": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-campaign-20260928-r1/waves/BBG000C3HSR0"
+    }
+  },
+  "matching_requirement": "Same inherited database and next 40 cohorts; timing includes startup and final input verification",
+  "max_cohorts": 40
+}

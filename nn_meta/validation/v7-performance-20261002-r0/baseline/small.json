@@ -1,0 +1,391 @@
+{
+  "command": [
+    "/home/healy/Coding/HealysBacktester/venv/bin/python",
+    "-m",
+    "cProfile",
+    "-o",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-performance-20261002-r0/baseline/small.prof",
+    "/home/healy/Coding/HealysBacktester/scripts/discover_v7_execution_wave_v2.py",
+    "--base-index",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-frontier-quote-index-20260928-r4",
+    "--blackouts",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-contract-blackouts-20260928-approved",
+    "--entry-root",
+    "/home/healy/Coding/HealysBacktester/nn_meta/data_v7/entry-campaign-20260927",
+    "--hours",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-dated-hours-20260927",
+    "--plan",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-full-execution-plan-20260928",
+    "--references",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-reference-reconciliation-20260928-full-r0",
+    "--review",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-reference-rename-review-20260928",
+    "--security",
+    "BBG000C3HSR0",
+    "--output",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-performance-20261002-r0/baseline/small",
+    "--max-seconds",
+    "300",
+    "--max-cohorts",
+    "40"
+  ],
+  "exit_code": 0,
+  "profile": true,
+  "progress": {
+    "cohorts_discovered": 513,
+    "distinct_horizon_targets_covered": 49545,
+    "elapsed_seconds": 7.46374656399712,
+    "exclusion_horizon_targets": {},
+    "exclusion_proposal_targets": {},
+    "execution_buckets": 26305,
+    "full_execution_coverage": false,
+    "horizon_target_statuses": {
+      "capture_incomplete": 12200,
+      "no_contract": 21760,
+      "observed_unfilled_entry": 3790,
+      "option_midpoint_stop": 8720,
+      "signal_exit": 3075
+    },
+    "pending_requests": 30,
+    "proposal_target_rows_covered": 135850,
+    "proposal_target_statuses": {
+      "capture_incomplete": 29590,
+      "no_contract": 64260,
+      "observed_unfilled_entry": 9250,
+      "option_midpoint_stop": 25550,
+      "signal_exit": 7200
+    },
+    "research_ready": false,
+    "retained_payloads": 25253,
+    "securities_discovered": 0,
+    "securities_required": 1,
+    "security_id": "BBG000C3HSR0",
+    "status": "checkpointed",
+    "updated_at": "2026-10-02T15:38:55.559081+00:00"
+  },
+  "top_cumulative": [
+    {
+      "calls": 952,
+      "cumulative_seconds": 9.391514828,
+      "file": "~",
+      "function": "<built-in method builtins.exec>",
+      "line": 0,
+      "self_seconds": 0.005198206
+    },
+    {
+      "calls": 1,
+      "cumulative_seconds": 9.391507218000001,
+      "file": "/home/healy/Coding/HealysBacktester/scripts/discover_v7_execution_wave_v2.py",
+      "function": "<module>",
+      "line": 1,
+      "self_seconds": 0.004200163000000001
+    },
+    {
+      "calls": 1,
+      "cumulative_seconds": 9.38244089,
+      "file": "/home/healy/Coding/HealysBacktester/scripts/discover_v7_execution_wave_v2.py",
+      "function": "main",
+      "line": 17,
+      "self_seconds": 0.004469502
+    },
+    {
+      "calls": 570,
+      "cumulative_seconds": 5.7459877520000004,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_cohorts.py",
+      "function": "cover_horizons",
+      "line": 24,
+      "self_seconds": 0.0035658530000000003
+    },
+    {
+      "calls": 370,
+      "cumulative_seconds": 5.707454601,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_prefix_cache_v2.py",
+      "function": "run",
+      "line": 43,
+      "self_seconds": 0.001358423
+    },
+    {
+      "calls": 210,
+      "cumulative_seconds": 5.648661789,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/full_execution.py",
+      "function": "run",
+      "line": 68,
+      "self_seconds": 0.000855093
+    },
+    {
+      "calls": 210,
+      "cumulative_seconds": 5.255403624,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_frontier_v2.py",
+      "function": "discover_execution",
+      "line": 70,
+      "self_seconds": 0.001069808
+    },
+    {
+      "calls": 210,
+      "cumulative_seconds": 5.25216114,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/replay_stream.py",
+      "function": "replay",
+      "line": 14,
+      "self_seconds": 0.060219916000000005
+    },
+    {
+      "calls": 1588,
+      "cumulative_seconds": 4.753236949000001,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/storage.py",
+      "function": "sha",
+      "line": 17,
+      "self_seconds": 0.0032502760000000003
+    },
+    {
+      "calls": 23,
+      "cumulative_seconds": 4.619135462,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/storage.py",
+      "function": "verify",
+      "line": 58,
+      "self_seconds": 0.000682228
+    },
+    {
+      "calls": 20221,
+      "cumulative_seconds": 4.154434408,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_frontier_v2.py",
+      "function": "read",
+      "line": 25,
+      "self_seconds": 0.013066551000000001
+    },
+    {
+      "calls": 210,
+      "cumulative_seconds": 3.198573912,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/replay_stream.py",
+      "function": "buy",
+      "line": 57,
+      "self_seconds": 0.002541602
+    },
+    {
+      "calls": 2870,
+      "cumulative_seconds": 2.8385219310000003,
+      "file": "~",
+      "function": "<built-in method _io.open>",
+      "line": 0,
+      "self_seconds": 2.825533645
+    },
+    {
+      "calls": 2267,
+      "cumulative_seconds": 2.8383390360000003,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/pathlib.py",
+      "function": "open",
+      "line": 1005,
+      "self_seconds": 0.000520185
+    },
+    {
+      "calls": 5201,
+      "cumulative_seconds": 2.6872072680000003,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_frontier_v2.py",
+      "function": "window",
+      "line": 47,
+      "self_seconds": 0.00406076
+    },
+    {
+      "calls": 5201,
+      "cumulative_seconds": 2.6593184890000003,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_frontier_v2.py",
+      "function": "<lambda>",
+      "line": 50,
+      "self_seconds": 0.0023159640000000002
+    },
+    {
+      "calls": 5201,
+      "cumulative_seconds": 2.6570025250000002,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quote_index.py",
+      "function": "window",
+      "line": 80,
+      "self_seconds": 0.019880420000000003
+    },
+    {
+      "calls": 338,
+      "cumulative_seconds": 1.9129233490000002,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/execution_frontier_v2.py",
+      "function": "first_fill",
+      "line": 52,
+      "self_seconds": 0.00046292200000000005
+    },
+    {
+      "calls": 338,
+      "cumulative_seconds": 1.912460427,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/quote_archive.py",
+      "function": "first_fill",
+      "line": 81,
+      "self_seconds": 0.0007027310000000001
+    },
+    {
+      "calls": 4863,
+      "cumulative_seconds": 1.689513956,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/replay_stream.py",
+      "function": "observed_mark",
+      "line": 35,
+      "self_seconds": 0.009208815
+    }
+  ],
+  "top_self": [
+    {
+      "calls": 2870,
+      "cumulative_seconds": 2.8385219310000003,
+      "file": "~",
+      "function": "<built-in method _io.open>",
+      "line": 0,
+      "self_seconds": 2.825533645
+    },
+    {
+      "calls": 4629,
+      "cumulative_seconds": 1.0626359330000001,
+      "file": "~",
+      "function": "<method 'read' of '_io.BufferedReader' objects>",
+      "line": 0,
+      "self_seconds": 1.0626359330000001
+    },
+    {
+      "calls": 2159,
+      "cumulative_seconds": 0.8967003250000001,
+      "file": "~",
+      "function": "<method 'update' of '_hashlib.HASH' objects>",
+      "line": 0,
+      "self_seconds": 0.8967003250000001
+    },
+    {
+      "calls": 1468436,
+      "cumulative_seconds": 1.028309924,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/copy.py",
+      "function": "deepcopy",
+      "line": 118,
+      "self_seconds": 0.543389401
+    },
+    {
+      "calls": 43,
+      "cumulative_seconds": 0.541013484,
+      "file": "~",
+      "function": "<method '__exit__' of 'sqlite3.Connection' objects>",
+      "line": 0,
+      "self_seconds": 0.541013484
+    },
+    {
+      "calls": 1,
+      "cumulative_seconds": 0.718415354,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/contract_blackouts.py",
+      "function": "__init__",
+      "line": 116,
+      "self_seconds": 0.369733807
+    },
+    {
+      "calls": 52406,
+      "cumulative_seconds": 0.22824279400000003,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/json/encoder.py",
+      "function": "iterencode",
+      "line": 205,
+      "self_seconds": 0.228236284
+    },
+    {
+      "calls": 42898,
+      "cumulative_seconds": 0.6530050420000001,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/packed_quotes_v2.py",
+      "function": "<genexpr>",
+      "line": 219,
+      "self_seconds": 0.212956364
+    },
+    {
+      "calls": 3362646,
+      "cumulative_seconds": 0.186888031,
+      "file": "~",
+      "function": "<method 'get' of 'dict' objects>",
+      "line": 0,
+      "self_seconds": 0.186888031
+    },
+    {
+      "calls": 88567,
+      "cumulative_seconds": 0.921314599,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/copy.py",
+      "function": "_deepcopy_dict",
+      "line": 217,
+      "self_seconds": 0.160944424
+    },
+    {
+      "calls": 46359,
+      "cumulative_seconds": 0.261785453,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/_strptime.py",
+      "function": "_strptime",
+      "line": 392,
+      "self_seconds": 0.138958458
+    },
+    {
+      "calls": 1,
+      "cumulative_seconds": 0.123406766,
+      "file": "~",
+      "function": "<method 'collect' of 'builtins.PyLazyFrame' objects>",
+      "line": 0,
+      "self_seconds": 0.123406766
+    },
+    {
+      "calls": 85,
+      "cumulative_seconds": 0.07621907900000001,
+      "file": "~",
+      "function": "<built-in method _imp.create_dynamic>",
+      "line": 0,
+      "self_seconds": 0.075652096
+    },
+    {
+      "calls": 1718491,
+      "cumulative_seconds": 0.07429914,
+      "file": "~",
+      "function": "<built-in method builtins.id>",
+      "line": 0,
+      "self_seconds": 0.07429914
+    },
+    {
+      "calls": 210,
+      "cumulative_seconds": 5.25216114,
+      "file": "/home/healy/Coding/HealysBacktester/nn_meta/v7/replay_stream.py",
+      "function": "replay",
+      "line": 14,
+      "self_seconds": 0.060219916000000005
+    },
+    {
+      "calls": 593,
+      "cumulative_seconds": 0.057944226,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/json/decoder.py",
+      "function": "raw_decode",
+      "line": 344,
+      "self_seconds": 0.057944226
+    },
+    {
+      "calls": 46359,
+      "cumulative_seconds": 0.401073061,
+      "file": "/home/healy/Coding/HealysBacktester/options/data/provider.py",
+      "function": "parse_occ_symbol",
+      "line": 57,
+      "self_seconds": 0.057321938
+    },
+    {
+      "calls": 746492,
+      "cumulative_seconds": 0.11722561000000001,
+      "file": "~",
+      "function": "<built-in method builtins.isinstance>",
+      "line": 0,
+      "self_seconds": 0.05506106
+    },
+    {
+      "calls": 1367875,
+      "cumulative_seconds": 0.048592388,
+      "file": "/home/healy/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/copy.py",
+      "function": "_deepcopy_atomic",
+      "line": 172,
+      "self_seconds": 0.048592388
+    },
+    {
+      "calls": 13006,
+      "cumulative_seconds": 0.046864072,
+      "file": "~",
+      "function": "<method 'execute' of 'sqlite3.Connection' objects>",
+      "line": 0,
+      "self_seconds": 0.046864072
+    }
+  ],
+  "wall_seconds": 9.466359412996098
+}

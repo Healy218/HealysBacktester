@@ -1,0 +1,57 @@
+{
+  "equal": true,
+  "tables": [
+    {
+      "buckets": {
+        "count": 107708,
+        "sha256": "c300e0859423fa20ebc2f7600ec793cccd68ed28eab8c870a248c12b26991697"
+      },
+      "cohorts": {
+        "count": 8899,
+        "sha256": "5c16dff6959960afea03c52d0b154db3155bb41dfa3501d8d5a123594f3d65f3"
+      },
+      "contents": {
+        "count": 78898,
+        "sha256": "d5170073c201cddd1fd1033c32c3258e0325ba8169f35723b8d8ed33a4e8e5c3"
+      },
+      "exclusions": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "links": {
+        "count": 47447,
+        "sha256": "ef0c292bb474b413e02b07154262307b5119c6fb179a576880192c40155018c6"
+      },
+      "pending": {
+        "count": 3377,
+        "sha256": "1010857926d66c0febd5a0fb1a54e16331ce871189b93a6b0613db95356d814b"
+      }
+    },
+    {
+      "buckets": {
+        "count": 107708,
+        "sha256": "c300e0859423fa20ebc2f7600ec793cccd68ed28eab8c870a248c12b26991697"
+      },
+      "cohorts": {
+        "count": 8899,
+        "sha256": "5c16dff6959960afea03c52d0b154db3155bb41dfa3501d8d5a123594f3d65f3"
+      },
+      "contents": {
+        "count": 78898,
+        "sha256": "d5170073c201cddd1fd1033c32c3258e0325ba8169f35723b8d8ed33a4e8e5c3"
+      },
+      "exclusions": {
+        "count": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "links": {
+        "count": 47447,
+        "sha256": "ef0c292bb474b413e02b07154262307b5119c6fb179a576880192c40155018c6"
+      },
+      "pending": {
+        "count": 3377,
+        "sha256": "1010857926d66c0febd5a0fb1a54e16331ce871189b93a6b0613db95356d814b"
+      }
+    }
+  ]
+}

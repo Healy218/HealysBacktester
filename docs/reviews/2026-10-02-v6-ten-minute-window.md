@@ -2,7 +2,8 @@
 
 User explicitly changed V6's broker entry deadline from five to ten minutes.
 Installed at 10:36:02 Central. Broker polls subsequently completed under the new
-manifest; the next scheduled scanner pass supplies prospective scan evidence.
+manifest. The 10:45 and 11:00 scans subsequently completed in 247.372s and
+251.968s with successful held monitoring and no detection errors.
 This is an execution timing change, not a model deployment or quote-age change.
 
 Scanner v11 / resilient consumer v2 use a versioned allocation override based on
