@@ -130,6 +130,9 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   active; preserve the freshness guard and observe subsequent provider receipts.
   [Recovery and timing evidence](docs/reviews/2026-10-01-v6-paper-vintage-repair.md).
   Do not repeat activation or import old simulator positions.
+- [x] **OPS-PAPER.WINDOW:** October 2 user-authorized ten-minute entry window
+  deployed across scanner, broker and unfilled-source retention; 101 focused tests
+  passed. [Evidence](docs/reviews/2026-10-02-v6-ten-minute-window.md).
 - [ ] **OPS-PAPER.RELIABILITY:** October 1 quote-recovery consumer deployed and
   verified after hours at 15:32 Central. Bounded held-quote retries overlap full
   candidate computation; unresolved monitoring still blocks allocation. Verify

@@ -2044,3 +2044,11 @@ focuses on bounded representative profiling, a versioned optimization, exact
 output/restart parity and a measured runtime estimate before a resume decision.
 No data scope, approved exclusion, frozen artifact or gate closure was changed.
 [Pause and optimization plan](reviews/2026-10-02-v7-performance-pause.md).
+
+## 2026-10-02 — V6 ten-minute entry window
+
+User explicitly widened V6 paper entry admission to ten minutes from the original
+signal close. Scanner allocation, broker admission and source retention change
+together in new source-bound revisions. Quote age remains 30 seconds; existing
+ladder waits, models, features and sizing remain unchanged. No historical signal
+is redated. [Deployment and tests](reviews/2026-10-02-v6-ten-minute-window.md).

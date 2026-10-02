@@ -1,0 +1,26 @@
+{
+  "added_sources": {
+    "integrations/alpaca_paper/v6_bridge_v5.py": "84c6c1446858fd45ad5bd8d998e7cedaa5f940efcf9f7537fb8dc69e570df2c1",
+    "integrations/alpaca_paper/v6_entry_window_v1.py": "322a241145339710293d61908224db6173868b701879347732c2b704f5bc0ba7",
+    "integrations/alpaca_paper/v6_source_reconcile_v4.py": "9b6d68acd9409c8282a65d1ab963ef1596632272ff74b50d42da2f8eaf9b24d5",
+    "integrations/alpaca_paper/v6_step_slices_v3.py": "632a40eff0ce9a19d733e4db96f3d701422f15065dd45a8826e9152f9a9aa2b2",
+    "scripts/run_v6_alpaca_runtime_v6.py": "0d6c79f8d236ab1aee5b7cf5b745dc9d592564bf43c752d809807139fe4474b2",
+    "scripts/run_v6_alpaca_scanner_v11.py": "1bbd8f67b39edc08c3ece9f59f233e9507b19962c11e4d344455417a58735709",
+    "scripts/run_v6_alpaca_scanner_v11.sh": "b8c5e906d2628bcf0e4c16f4e98b45d4670730fea29ce77f81f95bddac5d419b",
+    "scripts/run_v6_forward_resilient_v2.py": "f9613f9c2383c6804b08cc2819f87a2c55c6c62100a256109a9b08d70bde491f",
+    "scripts/v6_portfolio_ten_minute_v1.py": "a93912bb2f9587d68d6b793e1bc743f86a68188a01a873afd35c96baf58c6c78"
+  },
+  "backup": "/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/runtime-revisions/ten-minute-v1-20261002",
+  "entry_window_seconds": 600,
+  "installer_sha256": "ad1035ea52c88061811f72888129b4cb7dfe6302b8d63c4557708f7896c0246d",
+  "manifest_sha256": "e6d33229e249ffd4a0ba0f116cf73434b16fb97c91e834f71ad250c424f31c06",
+  "model_changed": false,
+  "observed_at": "2026-10-02T15:36:02.839880+00:00",
+  "order_ladder_seconds": 300,
+  "parent_manifest_sha256": "06459ec7cb58784cc35af07030c88f0685540a167074dd1c97fcb0a30e150f9c",
+  "quote_freshness_seconds": 30,
+  "units": {
+    "healys-v6-alpaca-orders.service": "# /home/healy/.config/systemd/user/healys-v6-alpaca-orders.service\n[Unit]\nDescription=V6 isolated Alpaca paper orders\nAfter=network-online.target\n\n[Service]\nType=oneshot\nWorkingDirectory=/home/healy/Coding/HealysBacktester\nEnvironment=OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 NUMBA_NUM_THREADS=1 TF_CPP_MIN_LOG_LEVEL=2 CUDA_VISIBLE_DEVICES=-1\nEnvironment=MPLCONFIGDIR=/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/matplotlib\nExecStart=\"/home/healy/Coding/HealysBacktester/venv/bin/python\" \"-m\" \"scripts.run_v6_alpaca_runtime_v5\" \"poll\" \"--state\" \"/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper\"\nTimeoutStartSec=45\nMemoryHigh=1G\nMemoryMax=1G\nMemorySwapMax=0\nNice=5\nUMask=0077\nNoNewPrivileges=true\n\n# /home/healy/.config/systemd/user/healys-v6-alpaca-orders.service.d/99-ten-minute-v6.conf\n[Service]\nExecStart=\nExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python -m scripts.run_v6_alpaca_runtime_v6 poll --state /home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper\n",
+    "healys-v6-alpaca-scanner.service": "# /home/healy/.config/systemd/user/healys-v6-alpaca-scanner.service\n[Unit]\nDescription=V6 isolated Alpaca paper scanner\nAfter=network-online.target\n\n[Service]\nType=oneshot\nWorkingDirectory=/home/healy/Coding/HealysBacktester\nEnvironment=OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1 NUMBA_NUM_THREADS=1 TF_CPP_MIN_LOG_LEVEL=2 CUDA_VISIBLE_DEVICES=-1\nEnvironment=MPLCONFIGDIR=/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper/matplotlib\nExecStart=\"/usr/bin/bash\" \"/home/healy/Coding/HealysBacktester/scripts/run_v6_alpaca_scanner_v8.sh\" \"--state\" \"/home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper\"\nTimeoutStartSec=600\nMemoryHigh=12G\nMemoryMax=12G\nMemorySwapMax=0\nNice=5\nUMask=0077\nNoNewPrivileges=true\n\n# /home/healy/.config/systemd/user/healys-v6-alpaca-scanner.service.d/90-resource-v9.conf\n[Service]\nExecStart=\nExecStart=/usr/bin/bash /home/healy/Coding/HealysBacktester/scripts/run_v6_alpaca_scanner_v9.sh --state /home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper\nMemoryHigh=14G\nMemoryMax=16G\nMemorySwapMax=0\n\n# /home/healy/.config/systemd/user/healys-v6-alpaca-scanner.service.d/95-monitor-v10.conf\n[Service]\nExecStart=\nExecStart=/usr/bin/bash /home/healy/Coding/HealysBacktester/scripts/run_v6_alpaca_scanner_v10.sh --state /home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper\n\n# /home/healy/.config/systemd/user/healys-v6-alpaca-scanner.service.d/99-ten-minute-v11.conf\n[Service]\nExecStart=\nExecStart=/usr/bin/bash /home/healy/Coding/HealysBacktester/scripts/run_v6_alpaca_scanner_v11.sh --state /home/healy/Coding/HealysV6/nn_meta/live/v6_alpaca_paper\nTimeoutStartSec=660\n"
+  }
+}

@@ -531,6 +531,19 @@ V6 actual startup; busy-thread retries do not interrupt user work.
 
 ## V6 Alpaca paper and incubator
 
+### October 2 ten-minute entry policy
+
+User-authorized cutover installed at 10:36:02 Central. Selected scanner is v11
+(`scripts/run_v6_alpaca_scanner_v11.sh`), consumer v2 and broker runtime v6.
+Entry admission/allocation/source retention use 600 seconds from signal close;
+quote freshness and order ladder pricing/waits are unchanged. Drop-ins
+`99-ten-minute-v11.conf` (scanner) and `99-ten-minute-v6.conf` (orders) supersede
+the earlier launchers below. Current manifest SHA:
+`e6d33229e249ffd4a0ba0f116cf73434b16fb97c91e834f71ad250c424f31c06`.
+[Change, tests and evidence](reviews/2026-10-02-v6-ten-minute-window.md).
+Earlier dated runtime descriptions below retain their historical scope.
+
+
 Configuration and startup were verified at the September 27 activation:
 [deployment/runbook](reviews/2026-09-27-v6-alpaca-activation.md) and
 [receipt](reviews/2026-09-27-v6-alpaca-activation.json).

@@ -1,52 +1,45 @@
-# Handoff — October 2, 2026 — V7 paused for optimization
+# Handoff — October 2, 2026 — V6 deadline and V7 optimization
 
-## Current user direction
+## User direction
 
-User explicitly requested pausing V7 and rethinking performance. Stop is complete.
-Do not resume discovery or frontier until a new user instruction authorizes it.
-Selected task is 7-3.performance: bounded profiling/optimization design; gate
-7-3 remains open and completed preparation remains complete.
-[Inspection and proposed work](docs/reviews/2026-10-02-v7-performance-pause.md).
+V6 broker deadline widened to ten minutes. User authorized the four-step V7
+optimization plan: benchmark, optimize measured costs, prove exact/restart parity,
+then measure worker scaling. V7 campaign remains paused; no broad resume yet.
 
-## Actual stopping point
+## V6 completed deployment
 
-At 09:59:06 Central, healys-v7-required-discovery-20260930.service stopped.
-At 09:59:13, healys-v7-required-frontier-20260930.service stopped.
-Supervisor receipts stopped; child campaigns checkpointed with no failures.
-Both cgroups gone, campaign/supervisor/current-replay locks released. Frozen
-sources, wave declarations and committed cohort checkpoints remain preserved.
-A last uncommitted interrupted cohort may need replay on eventual resume.
-Evidence: nn_meta/validation/v7-performance-pause-20261002-r0/pause.json.
-At 10:02: 1,534,496 discovery cohorts, 143,947,955 horizon-target assessments;
-60 finished waves plus seven verified empty cases and 133 partial waves. Current
-replay 47/93 finished, 172,783 cohorts / 14,520,464 assessments. No counters reset
-on disk to manufacture progress. Assessments include pending-input outcomes.
+Ten-minute policy installed 10:36:02 Central across scanner allocation, broker
+admission and unfilled-source retention. Original signal close remains the clock.
+New scanner v11, resilient consumer v2, broker runtime v6 and bridge v5; old files
+and manifest preserved. Quote age remains 30 seconds; ladder waits/prices unchanged.
+101 focused tests passed. Broker polling succeeded after deployment; observe the
+next scheduled scanner for prospective evidence. No manual order submission.
+[Change and evidence](docs/reviews/2026-10-02-v6-ten-minute-window.md).
 
-## Performance findings and next work
+## V7 in-progress work
 
-Verified total original plan: 1,641,934,235 horizon-target assessments. All 60
-finished wave totals match their per-job denominators. Rough overnight matched
-throughput 26.79 million assessments in ten hours; unchanged extrapolation about
-23 days remaining for original discovery only. This is not a completion promise.
+Both controllers intentionally stopped at 09:59, checkpoints retained. Retained
+original discovery 1,534,496 cohorts / 143,947,955 assessed horizon-targets;
+67 terminal securities including seven empty cases, 133 partial. Replay epoch
+00001 is separate: 47/93 complete, 14,520,464 / 20,015,688 assessments.
+[Pause evidence](docs/reviews/2026-10-02-v7-performance-pause.md).
 
-Code/EXPLAIN identified repeated five-minute initialization, ordered full-source
-traversal to skip completed cohorts, replay fetch-before-skip, grouped full-table
-progress scans, per-cohort durable commits and bounded quote caches. Existing
-prefix sharing already operates. Relative time costs remain unprofiled.
+Bounded validation root: nn_meta/validation/v7-performance-20261002-r0.
+Three copied checkpoints and next-40-cohort baselines profiled: small, long
+completed prefix and large database. Grouped progress scans cost ~6 of 17.6s in
+the large-database baseline. Other samples spend substantial time in immutable
+quote reads, verification and record copies. Timings are profiled short samples,
+not overall speedup or completion estimates.
 
-Benchmark small/large/I/O-heavy fixed cohorts in a NEW bounded validation copy.
-Profile phases, then optimize the dominant costs in a new bound revision. Likely
-candidates: persistent workers with durable checkpoints, indexed resume, earlier
-replay skipping and transactional counters. Prove output/membership/pending-input
-and restart parity before measuring scaling or requesting broad resume.
-Do not rewrite old source bindings, weaken integrity or replay the full campaign.
+New uncommitted performance revision under development: transactional summary
+counters and cursor, eight-cohort durable batches, indexed quote-window slicing,
+early replay skip. Initial small sample succeeds; exact comparison, larger samples,
+restart/gap tests, longer benchmarks and resource scaling are still required.
+Never edit original campaign bindings or checkpoints to adopt changed sources.
 
-## Other operations
+## Operational boundaries
 
-V6 paper and incubator were not stopped. Paper scanner reliability remains open;
-inspect actual scanner/monitor and independent broker receipts. Incubator through
-October 1 remains frozen and retained, with no automatic deployment authorized.
-Hourly watcher focuses on paper and cumulative V7 work; V7 pause is intentional.
-Completed storage/idle successful incubator should remain absent from routine
-reports. Provider keep/cancel recommendation is still a separate TODO obligation.
-[Current pointers](docs/CURRENT_STATE.md) · [Tasks](TODO.md).
+V6 model/features and selected scientific scope unchanged. Watcher continues here,
+reporting paper/V7; successful idle incubator and completed storage stay omitted.
+No automatic paper/live model promotion. Provider recommendation remains a separate
+TODO obligation. Preserve unrelated dirty/untracked work.

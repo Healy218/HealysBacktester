@@ -1,0 +1,207 @@
+{
+  "observed_at": "2026-10-02T15:39:46.515074+00:00",
+  "tests_passed": 101,
+  "frozen_import_verified": true,
+  "manifest_sha256": "e6d33229e249ffd4a0ba0f116cf73434b16fb97c91e834f71ad250c424f31c06",
+  "broker": {
+    "action": "poll",
+    "checked_at": "2026-10-02T15:39:30.778785+00:00",
+    "execution_policy": "midpoint-step-5-10-12.5pct-v4",
+    "exhausted_exit_ladders": [],
+    "options_buying_power": "84036.01",
+    "outcomes": [
+      {
+        "event_id": "v6|PDD|tv_sr|2026-09-28T15:15:00|leg-close|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|UVXY|macd|2026-09-28T15:15:00|leg-close|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|QUBT|tv_sr|2026-09-29T14:00:00|leg-close|1|slice|3",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|SMCI|bbw_squeeze|2026-09-29T16:30:00|entry|0|broker-risk|slice|2",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|AXP|bbw_squeeze|2026-09-29T15:00:00|leg-close|1|retry|midpoint-step-5-10-12.5pct-v4|slice|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|QCOM|bbw_squeeze|2026-09-29T16:30:00|leg-close|1|slice|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|SMCI|bbw_squeeze|2026-09-29T16:30:00|leg-close|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|VG|rsi|2026-09-29T16:30:00|leg-close|1|retry|midpoint-step-5-10-12.5pct-v4|slice|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|WFC|bbw_squeeze|2026-09-30T15:00:00|leg-close|1|slice|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|SOXL|squeeze|2026-09-30T16:15:00|leg-close|1|slice|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|BULL|bbands|2026-09-30T15:45:00|leg-close|1|slice|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|PYPL|keltner|2026-09-30T16:00:00|leg-close|1|slice|2",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|UAL|tv_setup|2026-10-01T16:00:00|entry|0|broker-risk|slice|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|UAL|tv_setup|2026-10-01T16:00:00|leg-close|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|FLY|macd|2026-10-01T18:45:00|entry|0|broker-risk|slice|1",
+        "status": "no_broker_position"
+      },
+      {
+        "event_id": "v6|UVXY|macd|2026-09-28T15:15:00|entry|0",
+        "status": "superseded"
+      },
+      {
+        "event_id": "v6|ANF|squeeze|2026-09-28T15:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|GLXY|macd|2026-09-29T13:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|VALE|squeeze|2026-09-29T13:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|URI|supertrend|2026-09-29T13:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|MRK|bbw_squeeze|2026-09-29T14:00:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|KRE|keltner|2026-09-29T15:00:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|ABVX|supertrend|2026-09-29T15:15:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|AXTI|bbw_squeeze|2026-09-30T14:15:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|RBLX|tv_rating|2026-09-30T14:30:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|VG|rsi|2026-09-30T15:00:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|BYND|rsi|2026-09-30T15:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|FUTU|tv_sr|2026-09-30T15:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|UUUU|squeeze|2026-10-01T15:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|VG|rsi|2026-10-01T16:00:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|MBLY|squeeze|2026-10-01T16:00:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|CONL|macd|2026-10-01T16:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|VG|supertrend|2026-10-01T17:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|JD|keltner|2026-10-01T17:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|DG|squeeze|2026-10-01T17:45:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|QUBT|tv_sr|2026-10-01T18:15:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|CONL|macd|2026-10-01T18:30:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|FLY|supertrend|2026-10-02T14:15:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|BOIL|supertrend|2026-10-02T14:15:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|TEM|tv_sr|2026-10-02T14:30:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      },
+      {
+        "event_id": "v6|AG|supertrend|2026-10-02T15:00:00|entry|0",
+        "reason": "entry event missed the ten-minute broker window",
+        "status": "blocked"
+      }
+    ],
+    "paper_only": true,
+    "positions_before": 0,
+    "status": "complete"
+  }
+}
