@@ -1,0 +1,24 @@
+{
+  "active_securities": [],
+  "campaign_identity": "865384ac57b86a57f82e010a39c2aa5a37dcf89240f604ac910a5aee357bcb85",
+  "elapsed_seconds": 19660.358222130017,
+  "empty_securities": [
+    "BBG000BCQ6J8",
+    "BBG000BF8TF5",
+    "BBG000BL5W86",
+    "BBG000BNGBW9",
+    "BBG000BQBKR3",
+    "BBG000C0LW92",
+    "BBG000C0RGY3"
+  ],
+  "error": null,
+  "failed_securities": {},
+  "full_execution_coverage": false,
+  "local_free_bytes": 127427067904,
+  "queued_securities": 523,
+  "research_ready": false,
+  "securities_discovered": 66,
+  "securities_required": 591,
+  "status": "checkpointed",
+  "updated_at": "2026-10-02T13:00:10.971383+00:00"
+}

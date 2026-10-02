@@ -1,0 +1,96 @@
+{
+  "observed_at": "2026-10-02T08:02:55.623994-05:00",
+  "recovery": {
+    "active_securities": [
+      "BBG000B9XRY4",
+      "BBG000B9ZXB4"
+    ],
+    "admitted_workers": 2,
+    "campaign_identity": "865384ac57b86a57f82e010a39c2aa5a37dcf89240f604ac910a5aee357bcb85",
+    "controller_identity": "8be51e0995424dc423e7edcf92d139112d17812550c322dab1f0d762eeb1a082",
+    "controller_revision": "/home/healy/Coding/HealysBacktester/scripts/run_v7_execution_recovery_v2.py",
+    "elapsed_seconds": 160.09816282900283,
+    "empty_securities": [],
+    "error": null,
+    "failed_securities": {},
+    "full_execution_coverage": false,
+    "local_free_bytes": 127208456192,
+    "queued_securities": 587,
+    "research_ready": false,
+    "securities_discovered": 2,
+    "securities_required": 591,
+    "status": "running",
+    "updated_at": "2026-10-02T13:02:51.808474+00:00",
+    "worker_ceiling": 4
+  },
+  "active_waves": {
+    "BBG000B9XRY4": {
+      "cohorts_discovered": 1974,
+      "distinct_horizon_targets_covered": 187780,
+      "elapsed_seconds": 149.59481569498894,
+      "exclusion_horizon_targets": {},
+      "exclusion_proposal_targets": {},
+      "execution_buckets": 30325,
+      "full_execution_coverage": false,
+      "horizon_target_statuses": {
+        "capture_incomplete": 97524,
+        "observed_unfilled_entry": 4650,
+        "option_midpoint_stop": 66574,
+        "signal_exit": 19032
+      },
+      "pending_requests": 495,
+      "proposal_target_rows_covered": 430955,
+      "proposal_target_statuses": {
+        "capture_incomplete": 216790,
+        "observed_unfilled_entry": 12805,
+        "option_midpoint_stop": 164686,
+        "signal_exit": 36674
+      },
+      "research_ready": false,
+      "retained_payloads": 23542,
+      "securities_discovered": 0,
+      "securities_required": 1,
+      "security_id": "BBG000B9XRY4",
+      "status": "running",
+      "updated_at": "2026-10-02T13:02:42.434898+00:00"
+    },
+    "BBG000B9ZXB4": {
+      "cohorts_discovered": 17859,
+      "distinct_horizon_targets_covered": 1923785,
+      "elapsed_seconds": 154.8122858540155,
+      "exclusion_horizon_targets": {},
+      "exclusion_proposal_targets": {},
+      "execution_buckets": 264676,
+      "full_execution_coverage": false,
+      "horizon_target_statuses": {
+        "capture_incomplete": 1139575,
+        "observed_unfilled_entry": 217433,
+        "option_midpoint_stop": 405860,
+        "signal_exit": 160917
+      },
+      "pending_requests": 5225,
+      "proposal_target_rows_covered": 4957645,
+      "proposal_target_statuses": {
+        "capture_incomplete": 2956041,
+        "observed_unfilled_entry": 568966,
+        "option_midpoint_stop": 1088281,
+        "signal_exit": 344357
+      },
+      "research_ready": false,
+      "retained_payloads": 202041,
+      "securities_discovered": 0,
+      "securities_required": 1,
+      "security_id": "BBG000B9ZXB4",
+      "status": "running",
+      "updated_at": "2026-10-02T13:02:47.649466+00:00"
+    }
+  },
+  "original_declarations_verified": 195,
+  "all_original_declarations_unchanged": true,
+  "resources": {
+    "cpu.stat": "usage_usec 254413317\nuser_usec 248643695\nsystem_usec 5769622\nnice_usec 247208398\ncore_sched.force_idle_usec 0\nnr_periods 0\nnr_throttled 0\nthrottled_usec 0\nnr_bursts 0\nburst_usec 0\n",
+    "memory.current": "2087436288\n",
+    "memory.events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+    "io.pressure": "some avg10=17.34 avg60=6.35 avg300=2.60 total=10857791\nfull avg10=17.19 avg60=6.31 avg300=2.58 total=10806351\n"
+  }
+}

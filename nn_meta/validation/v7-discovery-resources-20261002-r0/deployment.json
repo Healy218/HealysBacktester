@@ -1,0 +1,8 @@
+{
+  "before_sha256": "07f259b4fca48a841e0079c3e6cd01248286847a088e898291a1a8fec05c5895",
+  "dropin": "/run/user/1000/systemd/user/healys-v7-required-discovery-20260930.service.d/99-discovery-resources-v2.conf",
+  "dropin_sha256": "54f4b75c90bf9a9f3956e57ebffbd7e96ecda94d226a3586dea9f1935b663857",
+  "observed_at": "2026-10-02T13:00:11.145342+00:00",
+  "service": "ActiveState=active\nSubState=running\nExecStart={ path=/home/healy/Coding/HealysBacktester/venv/bin/python ; argv[]=/home/healy/Coding/HealysBacktester/venv/bin/python -u /home/healy/Coding/HealysBacktester/scripts/resume_v7_discovery_resources_v2.py ; ignore_errors=no ; start_time=[Fri 2026-10-02 08:00:11 CDT] ; stop_time=[n/a] ; pid=3322398 ; code=(null) ; status=0/0 }\nCPUQuotaPerSecUSec=infinity\nMemoryHigh=12884901888\nMemoryMax=15032385536\n",
+  "wave_declarations_preserved": true
+}

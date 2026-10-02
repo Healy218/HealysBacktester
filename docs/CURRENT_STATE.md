@@ -295,6 +295,26 @@ and `progress.json` together; a waiting service is not proof of advancing work.
 Only `closure_candidate_ready` reaches final evidence review, and it does not
 itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
 
+### October 2 discovery resource revision
+
+At **08:00:11 Central**, discovery switched to
+`scripts/resume_v7_discovery_resources_v2.py`, calling
+`scripts/run_v7_execution_recovery_v2.py`. Same selected service, recovery
+progress path and wave roots above. New source/resource anchors:
+`discovery/resource-revision-v2.json` and recovery
+`declaration-resource-v2.json`; original declarations remain unchanged.
+Drop-in: `99-discovery-resources-v2.conf` under the existing runtime service.
+Admission uses `scripts/lib/autosize.sh` through
+`scripts/v7_discovery_resources_v2.py`: ceiling four overnight, two weekdays
+07:00–21:00 Central; 3-GiB per-worker estimate and 12/18-GiB host available-memory
+reserve respectively. Recomputed before dispatch; no forced termination when
+capacity falls. Service high/max 12/14 GiB, no swap, no CPU quota.
+At **08:00:55**, two active workers, fresh progress, no errors or OOMs. The
+four-worker speedup remains unmeasured. All 195 existing wave declarations were
+verified unchanged after a clean checkpoint stop. Evidence:
+`nn_meta/validation/v7-discovery-resources-20261002-r0/`.
+[Resource revision and measurement limits](reviews/2026-10-02-v7-discovery-resources.md).
+
 ### October 1 V6 occurrence repair — completed r5, selected daily root
 
 **02:32:01 Central:** r5 through September 30 completed all 449 symbols and 40

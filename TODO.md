@@ -66,6 +66,10 @@ previous uninterrupted-V7 instruction for this interval.
   successive actual capture/reference/replay epochs; no overall cutoff. The next
   sealed pending plan covers 20,729,596 horizon-targets. Do not infer completion
   from a controller launch; inspect exact receipts in CURRENT_STATE.
+  October 2: discovery scheduler ceiling raised to four overnight with dynamic
+  memory admission; two during weekday paper/daily-V6 hours. At 08:00 two active,
+  checkpoints preserved; four-worker speedup still unmeasured.
+  [Resource revision](docs/reviews/2026-10-02-v7-discovery-resources.md).
   [Overnight completion](docs/reviews/2026-09-30-v6-step-policy-v4.md).
   [No-cutoff continuation](docs/reviews/2026-09-29-v7-overnight-resume.md).
   [Recovery census and storage](docs/reviews/2026-09-29-power-surge-recovery.md).
