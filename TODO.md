@@ -8,12 +8,20 @@ running-job locations; do not choose a different revision from an old review.
 
 ## Active gate 7-3 — required option evidence
 
+**October 2 current direction — V7 paused for performance redesign.** Both
+selected controllers stopped at 09:59 Central with checkpoints preserved. No
+automatic resume is authorized. Intentional inactivity is not a watcher failure.
+- [ ] **7-3.performance:** Profile a bounded representative copy of discovery
+  and replay, optimize measured bottlenecks in a new revision, prove exact output
+  and restart parity, and report end-to-end throughput before requesting resume.
+  [Pause evidence and proposed benchmark](docs/reviews/2026-10-02-v7-performance-pause.md).
+
 **October 1 completed operating task:** CRSP/MTUM repaired; V6 through September
 30 finished at 02:32 Central (449 symbols, 40 members, evaluated immutable freeze).
 All 447 prior symbol seals preserved. Diagnostic regression recorded; the new
 freeze is retained. V7 discovery/migration restored; capture needed an explicit
 retry of two retained HTTP 502 failures and was verified advancing after 02:48.
-The selected work returns to ongoing gate 7-3 controllers and storage migration.
+That restoration is historical; the October 2 pause above now owns execution.
 Hourly checks here remain active. October 2 reporting now focuses on V6 paper
 and cumulative V7-3 work; completed storage and successful idle incubator runs
 are omitted. [Completion and restart evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md).

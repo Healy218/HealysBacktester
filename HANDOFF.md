@@ -1,52 +1,52 @@
-# Handoff — October 2, 2026 — hourly progress reporting
+# Handoff — October 2, 2026 — V7 paused for optimization
 
-## Selected task
+## Current user direction
 
-User requested hourly updates focus on V6 paper trading and V7-3 work. Omit
-completed storage and successful idle incubator completion announcements. Show
-substantial retained partial work, not only the completed-security count.
+User explicitly requested pausing V7 and rethinking performance. Stop is complete.
+Do not resume discovery or frontier until a new user instruction authorizes it.
+Selected task is 7-3.performance: bounded profiling/optimization design; gate
+7-3 remains open and completed preparation remains complete.
+[Inspection and proposed work](docs/reviews/2026-10-02-v7-performance-pause.md).
 
-## Implemented
+## Actual stopping point
 
-`scripts/lab_hourly_watch.py` now emits the revised scope and captures `v7_work`:
-retained discovery cohorts/decision groups, horizon-target assessments and outcome
-counts, completed/partial securities, verified empty-demand cases, separate replay
-round totals and frozen replay denominators. Original and replay rounds are not
-added together. Assessments include pending-input outcomes, not just final labels.
-Deltas compare the preceding saved hourly work snapshot; same-slot refreshes never
-replace that baseline. First new-format snapshot has no historical delta.
-Unreadable/missing observations are flagged rather than silently treated as zero.
+At 09:59:06 Central, healys-v7-required-discovery-20260930.service stopped.
+At 09:59:13, healys-v7-required-frontier-20260930.service stopped.
+Supervisor receipts stopped; child campaigns checkpointed with no failures.
+Both cgroups gone, campaign/supervisor/current-replay locks released. Frozen
+sources, wave declarations and committed cohort checkpoints remain preserved.
+A last uncommitted interrupted cohort may need replay on eventual resume.
+Evidence: nn_meta/validation/v7-performance-pause-20261002-r0/pause.json.
+At 10:02: 1,534,496 discovery cohorts, 143,947,955 horizon-target assessments;
+60 finished waves plus seven verified empty cases and 133 partial waves. Current
+replay 47/93 finished, 172,783 cohorts / 14,520,464 assessments. No counters reset
+on disk to manufacture progress. Assessments include pending-input outcomes.
 
-`incubator_visibility` hides successfully frozen idle runs, including adverse
-research verdicts; active runs and failures/incomplete results remain visible.
-Storage services/migration removed from the routine reporting scope. Disk remains
-available diagnostically only for new active-work blockers. A separate scanner
-journal avoids drowning scanner failures in frequent broker polling messages.
-Legacy queued prefixes still deduplicate with the revised watcher prefix.
-Existing installed unit executes this script afresh; no service restart needed.
-12 watcher tests passed and live receipt aggregation read back successfully.
-Preview: `logs/lab-hourly-watch/reporting-scope-preview.json`.
+## Performance findings and next work
 
-## Last observation and evidence boundary
+Verified total original plan: 1,641,934,235 horizon-target assessments. All 60
+finished wave totals match their per-job denominators. Rough overnight matched
+throughput 26.79 million assessments in ten hours; unchanged extrapolation about
+23 days remaining for original discovery only. This is not a completion promise.
 
-At 09:43 Central: 1,527,621 discovery decision groups and 143,241,170 execution
-horizon-target assessments; 79,980,410 were capture-incomplete outcomes. There
-are 60 finished waves plus seven verified empty-demand securities, and 133
-partially processed waves. These totals preserve work across pass resets.
-Current replay round: 14,374,015 / 20,015,688 assessments, 47/93 finished securities.
-These are dated observations, not a current health assertion or gate completion.
+Code/EXPLAIN identified repeated five-minute initialization, ordered full-source
+traversal to skip completed cohorts, replay fetch-before-skip, grouped full-table
+progress scans, per-cohort durable commits and bounded quote caches. Existing
+prefix sharing already operates. Relative time costs remain unprofiled.
 
-## Runtime context and next checks
+Benchmark small/large/I/O-heavy fixed cohorts in a NEW bounded validation copy.
+Profile phases, then optimize the dominant costs in a new bound revision. Likely
+candidates: persistent workers with durable checkpoints, indexed resume, earlier
+replay skipping and transactional counters. Prove output/membership/pending-input
+and restart parity before measuring scaling or requesting broad resume.
+Do not rewrite old source bindings, weaken integrity or replay the full campaign.
 
-Discovery resource revision installed at 08:00:11: memory-aware ceiling four
-outside weekday 07:00–21:00 Central, two during that window. Low capacity admits
-no new slices while active ones finish. Wave producers/seals remain unchanged.
-[Resource revision](docs/reviews/2026-10-02-v7-discovery-resources.md).
-V6 paper remains unreliable: 08:45 scan failed its five-minute entry deadline;
-09:00 failed unresolved fresh FLY monitoring. 09:15 monitoring recovered after
-21 attempts. Check later scanner completion and actual broker receipts; successful
-broker polling alone does not establish scanner health. No guards/models changed.
-V6 October 1 incubator freeze is retained; no automatic deployment authorized.
-Gate 7-3 remains open. Provider recommendation due October 2 is a separate TODO.
-Hourly checks continue here. Preserve checkpoints, source bindings and orders.
+## Other operations
+
+V6 paper and incubator were not stopped. Paper scanner reliability remains open;
+inspect actual scanner/monitor and independent broker receipts. Incubator through
+October 1 remains frozen and retained, with no automatic deployment authorized.
+Hourly watcher focuses on paper and cumulative V7 work; V7 pause is intentional.
+Completed storage/idle successful incubator should remain absent from routine
+reports. Provider keep/cancel recommendation is still a separate TODO obligation.
 [Current pointers](docs/CURRENT_STATE.md) · [Tasks](TODO.md).

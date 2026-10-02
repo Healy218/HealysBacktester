@@ -2033,3 +2033,14 @@ rewrite old batches or weaken prefix/proposal checks. Record adverse diagnostics
 while retaining the completed update. After full freeze, restore saved jobs;
 explicitly retry the exact stopped HTTP-502 frontier pass with immutable completed
 packs preserved. No paper/live promotion. [Evidence](reviews/2026-10-01-v6-occurrence-repair.md).
+
+## 2026-10-02 — Pause V7-3 for measured performance redesign
+
+User requested stopping V7 discovery/frontier to rethink throughput. This
+supersedes the prior no-cutoff continuation direction; both controllers stopped
+at 09:59 Central with retained checkpoints. No automatic resume is authorized.
+V6 paper, daily incubation and the hourly watcher remain independent. Work now
+focuses on bounded representative profiling, a versioned optimization, exact
+output/restart parity and a measured runtime estimate before a resume decision.
+No data scope, approved exclusion, frozen artifact or gate closure was changed.
+[Pause and optimization plan](reviews/2026-10-02-v7-performance-pause.md).

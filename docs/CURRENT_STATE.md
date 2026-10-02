@@ -295,6 +295,21 @@ and `progress.json` together; a waiting service is not proof of advancing work.
 Only `closure_candidate_ready` reaches final evidence review, and it does not
 itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
 
+### October 2 V7 pause for performance redesign
+
+User explicitly paused V7 discovery and frontier at 09:59 Central. Services
+`healys-v7-required-discovery-20260930.service` and
+`healys-v7-required-frontier-20260930.service` stopped at 09:59:06/09:59:13;
+both campaign receipts are checkpointed with no failures and locks released.
+No automatic resume is authorized. All selected inputs/checkpoints stay selected;
+resource configuration below is installed but inactive. V6 paper/incubator and
+hourly watcher remain independent. Treat V7 inactivity as intentional.
+Receipt: `nn_meta/validation/v7-performance-pause-20261002-r0/pause.json`.
+At 10:02: 1,534,496 original discovery cohorts / 143,947,955 assessments retained;
+67 terminal securities including seven empty cases, 133 partial waves. Current
+replay retains 47/93 complete and 14,520,464 assessments. These are pause totals.
+[Inspection and bounded optimization plan](reviews/2026-10-02-v7-performance-pause.md).
+
 ### October 2 discovery resource revision
 
 At **08:00:11 Central**, discovery switched to
