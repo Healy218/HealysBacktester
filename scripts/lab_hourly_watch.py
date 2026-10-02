@@ -55,10 +55,11 @@ REPORTING SCOPE (user revised October 2):
    Mention storage only for a NEW error or space constraint affecting active work.
 
 Selected V7 controllers: healys-v7-required-discovery-20260930 and
-healys-v7-required-frontier-20260930. State under nn_meta/validation/:
-v7-required-inputs-20260930-r0/{discovery,frontier,epochs},
-v7-execution-recovery-20260929-r0 and
-v7-execution-campaign-20260928-r1/waves. Preserve completed captures and all
+healys-v7-required-frontier-20260930.
+Read logs/lab-hourly-watch/v7-selection.json for selected campaign paths;
+the optimized successor is v7-required-inputs-20261002-perf-r0. Historical parents remain under nn_meta/validation/
+v7-required-inputs-20260930-r0 and v7-execution-campaign-20260928-r1.
+Preserve completed captures and all
 checkpoints. The original discovery resource scheduler now has dynamic admission:
 up to four overnight, two weekdays 07:00-21:00 Central; zero new admissions is a
 memory-reserve wait, not lost work. Existing slices may still be active. Read
@@ -103,6 +104,8 @@ def wave_work(root, terminal):
     if not root.exists():
         result['observation_errors'].append(dict(path=str(root), error='Wave root missing'))
     for path in sorted(root.glob('*/progress.json')):
+        if path.parent.name.endswith('.next'):
+            continue  # Atomic selection staging link, not a second security.
         doc = read_receipt(path)
         if 'observation_error' in doc:
             result['observation_errors'].append(dict(path=str(path), error=doc['observation_error']))
@@ -129,12 +132,23 @@ def work_delta(current, previous):
             ['cohorts_processed', 'horizon_targets_assessed', 'completed_securities']}
 
 
+def v7_locations():
+    validation = ROOT / 'nn_meta/validation'
+    legacy = validation / 'v7-required-inputs-20260930-r0'
+    path = STATE / 'v7-selection.json'
+    if path.exists():
+        selection = read_receipt(path)
+        return (Path(selection['required']), Path(selection['discovery']),
+                Path(selection['discovery']), Path(selection['initial_replay']))
+    return (legacy, validation / 'v7-execution-recovery-20260929-r0',
+            validation / 'v7-execution-campaign-20260928-r1', legacy / 'initial-replay')
+
+
 def v7_work(previous):
     validation = ROOT / 'nn_meta/validation'
-    required = validation / 'v7-required-inputs-20260930-r0'
-    recovery = validation / 'v7-execution-recovery-20260929-r0'
-    original = wave_work(validation / 'v7-execution-campaign-20260928-r1/waves', 'discovered')
-    declaration = read_receipt(validation / 'v7-execution-campaign-20260928-r1/declaration.json')
+    required, recovery, campaign, initial = v7_locations()
+    original = wave_work(campaign / 'waves', 'discovered')
+    declaration = read_receipt(campaign / 'declaration.json')
     original['securities_required'] = len(declaration['securities']) if 'securities' in declaration else None
     empty = set()
     for path in (recovery / 'empty').glob('*/report.json'):
@@ -147,7 +161,7 @@ def v7_work(previous):
     old = previous.get('v7_work', {})
     original['delta'] = work_delta(original, old.get('original_discovery'))
     replays = {}
-    for key, root, plan in [('initial', required / 'initial-replay',
+    for key, root, plan in [('initial', initial,
                              validation / 'v7-pending-replay-plan-20260930-r0')]:
         if (root / 'progress.json').exists():
             replays[key] = (root, plan)
@@ -257,6 +271,8 @@ def capture_runtime(slot):
         'nn_meta/validation/v7-required-inputs-20260930-r0/frontier/progress.json',
         'nn_meta/validation/v7-execution-recovery-20260929-r0/progress.json',
     ]
+    required, recovery, _, _ = v7_locations()
+    receipts += [str(p.relative_to(ROOT)) for p in [required/'discovery/progress.json', required/'frontier/progress.json', recovery/'progress.json'] if p.is_relative_to(ROOT)]
     result['receipts'] = {}
     for name in receipts:
         try:

@@ -2061,3 +2061,14 @@ bounded copies, and treat speed/resource measurements as sample evidence. New
 producer uses durable batches and transactional summaries; committed checkpoints
 remain authoritative. Successful validation does not automatically resume the
 campaign. [Evidence and adoption boundary](reviews/2026-10-02-v7-performance-benchmark.md).
+
+
+### 2026-10-02 — Adopt optimized V7 controllers and resume retained work
+
+User authorized integration, verification and resumption after bounded optimization.
+Use new declarations and verified copy-on-write checkpoint inheritance; preserve
+all predecessors, captures and exclusions. Keep conservative memory-aware daytime/
+overnight admission and single-worker replay alongside V6. The watcher selects
+one wave per security across the transition. Both services resumed 12:45:08 Central;
+this supersedes the 09:59 pause. No model promotion or paper-policy change.
+[Adoption evidence](reviews/2026-10-02-v7-performance-adoption.md).

@@ -295,32 +295,34 @@ and `progress.json` together; a waiting service is not proof of advancing work.
 Only `closure_candidate_ready` reaches final evidence review, and it does not
 itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
 
-### October 2 V7 pause for performance redesign
+### October 2 optimized V7 adoption (selected)
 
-User explicitly paused V7 discovery and frontier at 09:59 Central. Services
-`healys-v7-required-discovery-20260930.service` and
-`healys-v7-required-frontier-20260930.service` stopped at 09:59:06/09:59:13;
-both campaign receipts are checkpointed with no failures and locks released.
-No automatic resume is authorized. All selected inputs/checkpoints stay selected;
-resource configuration below is installed but inactive. V6 paper/incubator and
-hourly watcher remain independent. Treat V7 inactivity as intentional.
-Receipt: `nn_meta/validation/v7-performance-pause-20261002-r0/pause.json`.
-At 10:02: 1,534,496 original discovery cohorts / 143,947,955 assessments retained;
-67 terminal securities including seven empty cases, 133 partial waves. Current
-replay retains 47/93 complete and 14,520,464 assessments. These are pause totals.
-[Inspection and bounded optimization plan](reviews/2026-10-02-v7-performance-pause.md).
+User authorized adoption and resumption. Both existing services started at
+**12:45:08 Central** using `scripts/finish_v7_optimized_inputs_v1.py`.
+New root: `nn_meta/validation/v7-required-inputs-20261002-perf-r0/`:
+- `discovery/progress.json`, `frontier/progress.json`: supervisor phases/errors.
+- `discovery-campaign/{declaration,progress}.json`: original 591-security scope.
+- `epochs/00001/replay/{declaration,progress}.json`: retained replay continuation.
+- `waves/<security>` in each campaign selects one predecessor/successor;
+  `revisions/<security>/inherited-checkpoint.json` owns import provenance.
+- `adoption.json`, `deployment.json`, `canary-validation/{complete,parity}.json`
+  and `verification.json` own deployment and observed results.
 
-### October 2 bounded performance candidate (not deployed)
+Watcher pointer: `logs/lab-hourly-watch/v7-selection.json`. Original parent
+campaigns and completed captures remain preserved; routine counts now come from
+this selected view. Runtime drop-ins: `zz-optimized-v1.conf` on the same
+`healys-v7-required-{discovery,frontier}-20260930.service` names. Stop drains
+bounded slices with a 30-minute service timeout. Dynamic daytime/overnight worker
+limits remain as below; actual progress receipts distinguish active workers from
+new admission capacity. This supersedes the 09:59 intentional pause.
 
-Validation root: `nn_meta/validation/v7-performance-20261002-r0/summary.json`.
-Discovery consumer v3 / pending-replay consumer v2 with transactional summaries,
-batched commits, safe resume cursor and indexed quote-window slicing passed
-bounded exact scientific-table and actual SIGKILL/recovery comparisons. Resumed
-discovery samples improved 1.59× in aggregate. Eight-task scaling: 81.10/49.50/37.98s
-at one/two/four workers. Original selected databases hash unchanged. Production
-controllers remain stopped and still select the preceding runtime; no broad
-adoption, full-scope completion or revised memory maximum is implied.
-[Methods, evidence and limits](reviews/2026-10-02-v7-performance-benchmark.md).
+The tested candidate's scientific methods are unchanged; new wave v4/replay v3
+add verified copy-on-write imports to avoid duplicating about 80.93 GB of partial
+checkpoints. A new campaign declaration preserves predecessor identities rather
+than rebinding old waves. [Adoption and evidence](reviews/2026-10-02-v7-performance-adoption.md).
+Original bounded comparison: `nn_meta/validation/v7-performance-20261002-r0/summary.json`;
+[benchmark limits](reviews/2026-10-02-v7-performance-benchmark.md). Full gate closure
+and whole-universe throughput are not established by adoption.
 
 ### October 2 discovery resource revision
 

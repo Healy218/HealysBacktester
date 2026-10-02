@@ -8,24 +8,27 @@ running-job locations; do not choose a different revision from an old review.
 
 ## Active gate 7-3 — required option evidence
 
-**October 2 current direction — V7 paused for performance redesign.** Both
-selected controllers stopped at 09:59 Central with checkpoints preserved. No
-automatic resume is authorized. Intentional inactivity is not a watcher failure.
+**October 2 current direction — optimized V7 resumed.** After the user authorized
+adoption, both selected controllers resumed at 12:45:08 Central with retained
+checkpoints. New selected root: `v7-required-inputs-20261002-perf-r0`.
+[Adoption and evidence](docs/reviews/2026-10-02-v7-performance-adoption.md).
 - [x] **7-3.performance:** Bounded profiling, versioned optimization, exact
   scientific-table and killed-process recovery parity, and worker scaling tested.
   Six resumed discovery comparisons improved 1.59×; benchmark scaling and limits
   are recorded in [the review](docs/reviews/2026-10-02-v7-performance-benchmark.md).
   This is bounded validation, not full-scope deployment or gate closure.
-- [ ] **7-3.performance-adoption:** Integrate the validated producer into a new
-  controller/declaration lineage with retained-checkpoint inheritance and a
-  storage/resource plan. Keep the selected campaign paused pending user direction.
+- [x] **7-3.performance-adoption:** New source-bound controller lineage deployed;
+  original checkpoints preserved with verified copy-on-write inheritance. Three
+  integrated canaries matched baseline results exactly; 35 focused tests passed.
+  Hourly reporting follows the selected successor without resetting totals.
+  Observe actual progression/resource waits; full required-input coverage remains open.
 
 **October 1 completed operating task:** CRSP/MTUM repaired; V6 through September
 30 finished at 02:32 Central (449 symbols, 40 members, evaluated immutable freeze).
 All 447 prior symbol seals preserved. Diagnostic regression recorded; the new
 freeze is retained. V7 discovery/migration restored; capture needed an explicit
 retry of two retained HTTP 502 failures and was verified advancing after 02:48.
-That restoration is historical; the October 2 pause above now owns execution.
+That restoration is historical; the October 2 optimized adoption above owns execution.
 Hourly checks here remain active. October 2 reporting now focuses on V6 paper
 and cumulative V7-3 work; completed storage and successful idle incubator runs
 are omitted. [Completion and restart evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md).
@@ -82,7 +85,8 @@ previous uninterrupted-V7 instruction for this interval.
   from a controller launch; inspect exact receipts in CURRENT_STATE.
   October 2: discovery scheduler ceiling raised to four overnight with dynamic
   memory admission; two during weekday paper/daily-V6 hours. At 08:00 two active,
-  checkpoints preserved; four-worker speedup still unmeasured.
+  checkpoints preserved. Later bounded tests measured four-worker scaling; the
+  optimized controller was adopted at 12:45 October 2 (see above).
   [Resource revision](docs/reviews/2026-10-02-v7-discovery-resources.md).
   [Overnight completion](docs/reviews/2026-09-30-v6-step-policy-v4.md).
   [No-cutoff continuation](docs/reviews/2026-09-29-v7-overnight-resume.md).

@@ -988,3 +988,15 @@ An actual SIGKILL after 64 committed cohorts plus 136-cohort recovery matched an
 uninterrupted 200-cohort result. Original database hashes unchanged. These are
 sample execution-engine results, not model quality, full-universe ETA or gate
 closure. [Methods and evidence](reviews/2026-10-02-v7-performance-benchmark.md).
+
+
+## 2026-10-02 — Optimized V7 controller adoption parity
+
+Two retained discovery checkpoints advanced 40 cohorts each and one replay
+checkpoint advanced 40 through the new controller. Independent unchanged baseline
+runs matched all six scientific tables exactly; original physical hashes remained
+unchanged. Copy-on-write clones use independent inodes. 35 focused tests passed,
+including interrupted import publication and cumulative watcher selection.
+This validates controller adoption on the tested checkpoints, not complete gate
+7-3 coverage, full-scope resource maxima or a model result.
+[Evidence and limits](reviews/2026-10-02-v7-performance-adoption.md).

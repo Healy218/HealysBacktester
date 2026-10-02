@@ -1,0 +1,26 @@
+{
+  "authorization": "2026-10-02 user: ok lets do it; integrate, verify and resume",
+  "checkpoint_policy": "reflink verified physical copies for unfinished waves; originals retained; completed waves reused",
+  "discovery_campaign": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-required-inputs-20261002-perf-r0/discovery-campaign",
+  "discovery_parent": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-campaign-20260928-r1",
+  "parent_declarations": {
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-execution-campaign-20260928-r1/declaration.json": "433a2e770b2462b6b9a1ac751050ef2d7f8c681d0fa351ddfe5512006ae0fb82",
+    "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-required-inputs-20260930-r0/epochs/00001/replay/declaration.json": "4b02308cc9ac34aa21c693ee70fb6738085d231e79857cf3fdd0d3064d61f6d4"
+  },
+  "predecessor": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-required-inputs-20260930-r0",
+  "replay_parent": "/home/healy/Coding/HealysBacktester/nn_meta/validation/v7-required-inputs-20260930-r0/epochs/00001/replay",
+  "schema": "v7-performance-adoption-v1",
+  "storage_policy": {
+    "clone": "reflink-always",
+    "fail_if_clone_unsupported": true,
+    "write_reserve_bytes": 20000000000
+  },
+  "worker_policy": {
+    "day_reserve_mib": 18432,
+    "discovery_day_max": 2,
+    "discovery_night_max": 4,
+    "night_reserve_mib": 12288,
+    "replay_max": 1,
+    "worker_mib": 3072
+  }
+}
