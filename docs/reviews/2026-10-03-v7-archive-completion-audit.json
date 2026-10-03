@@ -1,0 +1,83 @@
+{
+  "observed_at": "2026-10-03T17:12:57.190218-05:00",
+  "status": "passed",
+  "scope_roots": 564,
+  "groups": 2847,
+  "archive_bytes": 349646733250,
+  "member_counts": {
+    "files": 3949548,
+    "directories": 1206566,
+    "symlinks": 504883
+  },
+  "completion": {
+    "status": "complete",
+    "at": "2026-10-03T21:55:50Z",
+    "groups": 2847,
+    "plan_sha256": "634b2c777dddcadbde8d39a57107a2febf86b16dbd1171dcb9bd450fccc6d67f",
+    "archive_bytes": 349646733250,
+    "retired_files": 35031,
+    "consumer": "staged-v2",
+    "local_free": 557589487616,
+    "external_free": 156520153088
+  },
+  "matching_local_external_receipts": true,
+  "all_sizes_and_comparison_logs_passed": true,
+  "scope_and_frozen_source_bindings_passed": true,
+  "partial_files": 0,
+  "staging_files": 0,
+  "retired_files": 35031,
+  "retired_paths_absent": true,
+  "retirement_candidate_hashes_match_journal": true,
+  "restore_samples": [
+    {
+      "group": "00000",
+      "sha256": "bbaaa20b4a0f7359937c98cc761061baee99d7e509b0b12f8909da9d05932eb6",
+      "archive_bytes": 1354259,
+      "stream_restore_member_census": {
+        "files": 1168,
+        "directories": 51,
+        "symlinks": 0
+      },
+      "retired_file_contents_verified": 0
+    },
+    {
+      "group": "00001",
+      "sha256": "b0ecf4f1c0ba386a06dbf301af47cbe3e1af90e70b0c9e88fc22fbdeaf3ffc19",
+      "archive_bytes": 70227980,
+      "stream_restore_member_census": {
+        "files": 36,
+        "directories": 17,
+        "symlinks": 0
+      },
+      "retired_file_contents_verified": 19
+    },
+    {
+      "group": "02488",
+      "sha256": "9b012705d5c61c4d5f13e144907ece4a47daf2dec9e2f3111355f5d7133a099e",
+      "archive_bytes": 713,
+      "stream_restore_member_census": {
+        "files": 2,
+        "directories": 2,
+        "symlinks": 7
+      },
+      "retired_file_contents_verified": 0
+    },
+    {
+      "group": "02846",
+      "sha256": "236a6aeefa952ec212c77644a5981c66288080d68b8bce6aac141894102c4356",
+      "archive_bytes": 8672248,
+      "stream_restore_member_census": {
+        "files": 12,
+        "directories": 6,
+        "symlinks": 0
+      },
+      "retired_file_contents_verified": 0
+    }
+  ],
+  "verification_boundary": "All shards passed original full source comparison, member census and SHA256 before publication. This audit reconciles every receipt and size; fresh SHA256/decompression/streamed restoration was repeated only for the listed samples, not all archive bytes.",
+  "local_free_bytes": 557586485248,
+  "external_free_bytes": 156520022016,
+  "archive_service": "inactive/dead; Result=success; ExecMainStatus=0",
+  "cleanup_service": "inactive/dead; Result=success; ExecMainStatus=0",
+  "mounted_uuid": "62C9-C390"
+}

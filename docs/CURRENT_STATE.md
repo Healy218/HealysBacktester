@@ -26,8 +26,8 @@ a month boundary; exact first timestamp and complete quote coverage remain
 verification tasks. The specification records the quote-history gap.
 
 V7 pointers below remain predecessor/recovery references; its research is paused.
-Only the already-selected archive process continues. Exact current archival
-status comes from its receipts, not this dated observation.
+Archive completion was verified October 3; its exact completion receipts and
+audit are identified below. No V7 research resume is selected.
 
 ## October 2 late-evening V7 cold archive
 
@@ -43,14 +43,25 @@ Binding: `consumer-staged-v2.json`; original plan and checks retained. At most
 verification avoid concurrent HDD writeback contention. Oversized/external
 shards stream directly in a later serial phase. Shared autosizing budgets
 1.5 GiB/worker and 6 GiB host reserve; memory high/max 20/22 GiB, no swap.
-23:30:07 Central: staged-v2 started with 13 workers. At 23:37:54–23:38:24,
-four ten-second samples used 12.0–12.4 CPU cores; seven newly staged archives
-verified, MRHA busy time 19–62%, zero memory-cap/OOM events.
-[Measured samples](reviews/2026-10-02-v7-cold-archive-io-after.json).
-Earlier launch observations are retained in [the original review](reviews/2026-10-02-v7-cold-archive.md).
-[Diagnosis and I/O revision](reviews/2026-10-02-v7-cold-archive-io.md).
-`VERIFIED.json` proves all data shards verified; `COMPLETE.json` records finished
-reclamation. A started/idle service is not evidence of completion.
+October 3 at 16:55:50 Central: archive completed all **2,847 shards / 564 roots**,
+349,646,733,250 compressed bytes (325.63 GiB), with 35,031 retired local files.
+Local and MRHA `VERIFIED.json`, `COMPLETE.json`, `LOCAL_CLEANUP_COMPLETE.json`
+and `retired.jsonl` match. Both services observed inactive/dead with Result=success
+and ExecMainStatus=0 during the completion audit. Mounted UUID remained 62C9-C390.
+About 519 GiB internal and 146 GiB external free at the completion check.
+
+All archive sizes, per-shard receipts, member counts, zero-diagnostic source
+comparison logs, frozen scope/source bindings and cleanup records reconciled.
+No partial/staged files remained. Fresh checksums, decompression and streamed
+restoration of four sample shards passed, including all source-snapshot contents
+and reclaimed-file samples. This audit did not rehash every archive byte again.
+[Completion audit](reviews/2026-10-03-v7-archive-completion-audit.json).
+README and compressed notes are refreshed with closure and V7 restore ordering;
+`notes-receipt.json` records the latest verified notes snapshot.
+[Restore guide](reference/V7_COLD_ARCHIVE_README.md).
+Historical launch/throughput observations remain in
+[the original review](reviews/2026-10-02-v7-cold-archive.md) and
+[I/O revision](reviews/2026-10-02-v7-cold-archive-io.md).
 
 At 22:29 Central MRHA was mounted and no V7 workers were present. Both old
 `healys-v7-catalog-build.service` and `healys-v7-download-20260915-budget.service`
@@ -81,7 +92,8 @@ Local cleanup completed October 3 at 14:54:28 Central: all 35,031 eligible files
 removed. Local/MRHA completion receipts match; service exited successfully.
 At 15:06, internal free space was 519.3 GiB, versus about 20 GiB before cleanup.
 Completion audit reconciles frozen receipts, journal and absent retired paths.
-Full archive still lacked VERIFIED/COMPLETE receipts at this observation.
+That local-only milestone preceded full archive completion at 16:55:50 Central;
+see the final archive audit above.
 [Completion audit](reviews/2026-10-03-v7-local-cleanup-complete.json).
 [Historical launch receipt](reviews/2026-10-03-v7-verified-local-cleanup-launch.json).
 [Scope, tests and runtime boundary](reviews/2026-10-03-v7-verified-local-cleanup.md).

@@ -13,10 +13,10 @@ quotes are excluded, including archived V7 copies.
 [ETFE specification](docs/specs/ETFE.md). Date policy is confirmed; exact first
 provider timestamp and required quote coverage still need verification.
 
-V7 research stays paused with its original gates/evidence preserved. Its existing
-MRHA archive obligation continues independently. Local cleanup completed October 3
-at 14:54 Central; [completion audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
-The full archive requires its own VERIFIED/COMPLETE receipts.
+V7 research stays paused with its original gates/evidence preserved. MRHA archival
+completed October 3 at 16:55:50 Central with all 2,847 shards verified and final
+reclamation recorded. [Completion audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json).
+This closes storage task 7-3.archive, not the unfinished V7 scientific gate.
 Other research/update campaigns remain paused; ETFE selection does not resume them.
 [TODO](TODO.md) owns actionable tasks. [CURRENT_STATE](docs/CURRENT_STATE.md)
 owns selected inputs and runtime pointers. [GOALS](GOALS.md) owns the maturity
@@ -39,7 +39,7 @@ checking the linked operational evidence.
 | RL sizing and exits | Deferred, last in dependency order | Reliable execution ledger and demonstrable improvement over simple sizing/exits |
 | Platform, dashboards and journal | Deployment/monitoring and existing displays exist | Accurate artifact/account identity, recoverable operations and broker facts distinct from projections |
 
-Only ETFE documentation and existing V7 archive completion are selected.
+V7 archive completion is verified; ETFE documentation remains selected.
 Other research workstreams above remain paused.
 Their next milestones remain retained requirements, not active assignments.
 Actual installed-service state is recorded separately in CURRENT_STATE; work
@@ -97,6 +97,7 @@ revision-specific commands belong in CURRENT_STATE or their dated receipts.
 | --- | --- |
 | September 5–6 audit remediation and expanded V6 pipeline | [Remediation](docs/reviews/2026-09-05-remediation.md); historical artifacts retain their original contracts and verdict limits |
 | V6 training and frozen expert | Training/freeze completed; old simulator history retained. Abandoned short-DTE research is not an active queue |
+| V7 cold archive and verified local reclamation | October 3: all 2,847 shards/564 roots preserved on MRHA; 35,031 eligible local files removed; matching final receipts and sampled restore checks. [Audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json) |
 | V7-1 and V7-2 | Gate closures above; do not reopen old dividend lists, context builds or catalog freezes |
 | V7-3 demand scheduler, request census, exact union and lossless joining | [Demand/recovery](docs/reviews/2026-09-25-v7-3-crash-recovery.md), [union](docs/reviews/2026-09-26-v7-entry-union-and-first-capture.md), [joining](docs/reviews/2026-09-26-v7-capture-storage-forecast.md) |
 | Storage cleanup, packing and bounded packed readers | [Migration](docs/reviews/2026-09-26-authorized-storage-reclamation.md), [packed captures](docs/reviews/2026-09-27-v7-joined-packed-capture.md) |

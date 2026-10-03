@@ -142,8 +142,8 @@ V7's quote volume. Use bounded streaming, shared request deduplication and the
 project autosizer. Bind a storage budget to measured free space and keep recovery
 checkpoints. Do not reload the entire V7 archive to establish a new catalog.
 
-V7 remains preserved separately under MRHA/v7. Finish its already-authorized
-archive verification independently; its research gate 7-3 is not closed by
-ETFE's selection. The [archive README](../reference/V7_COLD_ARCHIVE_README.md)
+V7 remains preserved separately under MRHA/v7. Its archival task was verified
+complete October 3, 2026; the unfinished scientific gate 7-3 remains open.
+Archival completion and ETFE selection do not change that research verdict. The [archive README](../reference/V7_COLD_ARCHIVE_README.md)
 and [last V7 research handoff](../../handoff-history/HANDOFF-2026-10-02-before-v7-cold-archive.md)
 remain restoration references, not orders to resume V7.

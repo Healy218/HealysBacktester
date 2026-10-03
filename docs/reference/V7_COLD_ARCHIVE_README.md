@@ -12,6 +12,27 @@ Required option evidence (7-3) is incomplete. Execution integration, full datase
 assembly/folds, resource/recovery validation and training readiness (7-4 through
 7-7) remain open. Archiving changes storage, not these scientific verdicts.
 
+## Verified archive completion — October 3, 2026
+
+The planned V7 archive completed at **16:55:50 Central**: **2,847 data shards**
+covering **564 selected roots**, **349,646,733,250 compressed bytes (325.63 GiB)**.
+All shards passed full source comparison, member census and SHA256 verification
+before publication. Matching local/MRHA VERIFIED.json and COMPLETE.json record
+completion; all 35,031 eligible local files were removed after verification.
+About 519 GiB internal space remains free. Raw/shared inputs and external loose
+originals were deliberately retained; archival completion does not delete them.
+
+The completion audit, `docs/reviews/2026-10-03-v7-archive-completion-audit.json`
+in the extracted notes, reconciles all receipts, file sizes, scope and cleanup
+records and records fresh checksum/decompression/streamed-restore samples.
+The audit did not repeat a whole-archive byte scan. Use the full checksum helper
+below before a future restoration or after transporting/copying the archive.
+
+ETFE is a separate new expert. Its current planning notes may appear in the
+shared notes bundle; they do not replace the preserved V7 research handoff or
+change V7's old scientific contracts. Do not use this archive's Massive quotes
+as ETFE inputs.
+
 ## Folder contents and completion
 
 - `data/*.tar.zst`: lossless Zstandard level-22 archives of local V7 raw inputs,
@@ -55,8 +76,10 @@ Secrets in `.env` and the Python virtual environment are not archived.
 
    Read the extracted `HANDOFF.md`, then
    `handoff-history/HANDOFF-2026-10-02-before-v7-cold-archive.md` for the last
-   research handoff, followed by `TODO.md`, relevant `ROADMAP.md` gates and
-   `docs/CURRENT_STATE.md`. Historical commands are not restart orders.
+   research handoff, then `handoff-history/TODO-2026-10-03-before-etfe.md` for
+   the retained V7 checklist, the V7 gates in `ROADMAP.md` and the V7 pointers
+   in `docs/CURRENT_STATE.md`. Current `TODO.md` selects ETFE, not V7 restoration.
+   Historical commands are not restart orders.
 
 2. **Verify completeness and hashes before restoring data.** Require
    `VERIFIED.json` and every planned shard/receipt. Run the following from `v7`
@@ -166,5 +189,6 @@ Do not delete the journal, intent or owned-stop marker while either service runs
 October 3 milestone: the local cleanup subset completed at 14:54 Central. All
 35,031 eligible local files were verified and removed; about 519 GiB internal
 space was free at 15:06. Matching LOCAL_CLEANUP_COMPLETE receipts establish only
-that subset. MRHA-only compression continues until the full VERIFIED/COMPLETE
-receipts exist. Small metadata, raw/shared inputs and MRHA originals remain.
+that subset. The full archive subsequently completed at 16:55:50 Central,
+with VERIFIED/COMPLETE receipts present. Small metadata, raw/shared inputs and
+MRHA originals remain.

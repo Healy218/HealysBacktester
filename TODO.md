@@ -6,7 +6,7 @@ V7 strategy/timing specifications; 1/5/15-minute signals; Alpaca's earliest
 options history through October 2, 2026, inclusive. No Massive quotes. [Specification](docs/specs/ETFE.md),
 [roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert), [handoff](HANDOFF.md).
 This selection is documentation work; implementation and campaigns remain future
-milestones. V7 archival continues as the existing storage obligation below.
+milestones. V7 archival is verified complete; its closure is recorded below.
 
 ## Selected checklist — ETFE-0
 
@@ -30,16 +30,18 @@ V7's paused scientific checklist is preserved in
 [the pre-ETFE snapshot](handoff-history/TODO-2026-10-03-before-etfe.md);
 V7 gates remain in ROADMAP with their prior completion boundaries intact.
 
-## Existing storage obligation — finish V7 preservation
+## Completed storage obligation — V7 preservation
 
-- [ ] **7-3.archive:** Complete all MRHA shards, full verification and final
-  reclamation bookkeeping; require `VERIFIED.json` and `COMPLETE.json`.
-  [Archive scope](docs/reviews/2026-10-02-v7-cold-archive.md).
+- [x] **7-3.archive:** Completed October 3 at 16:55:50 Central. All 2,847 shards
+  verified, matching local/MRHA VERIFIED/COMPLETE receipts, no partial files,
+  35,031 eligible local files reclaimed. Independent receipt/census reconciliation
+  and four fresh streamed restore samples passed; README and compressed notes
+  refreshed. [Completion audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json).
 - [x] **7-3.archive-local:** All 35,031 eligible local files removed at 14:54 Central
   October 3 after verification; about 519 GiB internal free at 15:06.
   [Completion audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
 
-Refresh archive notes at its completion. Restoration is only on user direction,
+Archive notes record completion. Restoration is only on user direction,
 using the [README](docs/reference/V7_COLD_ARCHIVE_README.md); do not resume V7
 from historical checklist entries. New ETFE artifacts retain their own identity.
 
