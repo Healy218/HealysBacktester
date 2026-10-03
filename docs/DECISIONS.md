@@ -2176,3 +2176,20 @@ Required Alpaca historical quote coverage is not yet established. Record any
 missing observations and explicit methodology decision rather than inventing
 spreads, changing dates or assuming old features are fully supported.
 [ETFE contract](specs/ETFE.md). Documentation changes only in this session.
+
+### 2026-10-03 — Begin independent ETFE setup after verified V7 archival
+
+After V7 archival closure, the user authorized starting ETFE setup. Implemented
+an ETFE-only configuration/catalog and immutable setup manifest with separate
+identity, 1/5/15-minute scope, inherited strategy parameter grids and explicit
+Alpaca-only provider policy. The entrypoint selects NN_META_POOL=etfe and rejects
+unrelated campaign overrides. Source snapshots preserve the exact existing grid
+bytes without editing V7 producers or reading old model/checkpoint artifacts.
+
+Bounded read-only Alpaca capability/boundary probes are within this setup scope.
+They do not constitute bulk acquisition, training or model deployment. The
+October 2 end remains fixed. January 18 option observations returned by Alpaca
+supersede treating February as an exact earliest boundary; global earliest and
+complete coverage remain unverified. Historical quote requests returned 404, so
+midpoint execution/quote-feature admission remains open, with no Massive fallback
+or silent methodology change. [Evidence](reviews/2026-10-03-etfe-setup.md).

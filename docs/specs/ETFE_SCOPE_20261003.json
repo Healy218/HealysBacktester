@@ -1,0 +1,73 @@
+{
+  "schema": "etfe-research-scope-v1",
+  "expert": "etfe",
+  "name": "Exchange Traded Funds Expert",
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "VOO"
+  ],
+  "signal_minutes": [
+    1,
+    5,
+    15
+  ],
+  "execution_cadence_minutes": 1,
+  "options_provider": "alpaca",
+  "options_feed": "opra",
+  "allow_massive_quotes": false,
+  "reuse_model_weights": false,
+  "reuse_v7_checkpoints": false,
+  "history": {
+    "start_policy": "earliest_alpaca_options_history",
+    "provider_documented_start_month": "2024-02",
+    "verified_start_utc": null,
+    "end_date_inclusive": "2026-10-02",
+    "session_timezone": "America/New_York",
+    "start_boundary_status": "requires_provider_evidence",
+    "label_boundary_policy": "no_unobserved_outcomes_or_silent_end_extension"
+  },
+  "quote_policy": {
+    "latency_ns": 1000000000,
+    "entry_deadline_ns": 60000000000,
+    "max_mark_age_ns": 30000000000,
+    "fee": 0.001,
+    "slippage": 0.0005,
+    "multiplier": 100,
+    "min_reported_size": 1,
+    "option_price_basis": "option-arithmetic-midpoint-paper-v2"
+  },
+  "risk_policy": {
+    "premium_stop_fraction": 0.125,
+    "expiry_exit_before_close_minutes": 15,
+    "price_basis": "arithmetic_bid_ask_midpoint"
+  },
+  "actual_calendar_dte": [
+    1,
+    9
+  ],
+  "dte_targets": {
+    "default": [
+      1,
+      5
+    ],
+    "weekly_subset": [
+      2,
+      4,
+      7
+    ],
+    "eligibility": "retain_registered_family_eligibility"
+  },
+  "evaluation": {
+    "portfolio_slots": 5,
+    "equity_fraction": 0.1,
+    "embargo_sessions": 10,
+    "fold_dates": null,
+    "fit": "training_history_only",
+    "purge": "full_exit_roll_stock_settlement_horizons",
+    "previously_seen": "revalidation_not_untouched_holdout"
+  },
+  "feature_scope": "all inherited scopes; new ETFE schema and full availability audit required",
+  "ready_for_build": false,
+  "training_authorized": false
+}

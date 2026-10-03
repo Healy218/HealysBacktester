@@ -2,8 +2,8 @@
 
 A brand-new expert selected October 3, 2026, replacing V7 as the active research
 priority. It reuses V7 strategy/timing specifications, not V7 model identity,
-trained weights or checkpoints. Implementation, data admission and training
-remain open.
+trained weights or checkpoints. Initial configuration/catalog and bounded
+provider diagnostics are implemented; data admission and training remain open.
 [ROADMAP](../../ROADMAP.md#etfe--exchange-traded-funds-expert) owns the gates;
 [TODO](../../TODO.md) owns current actions.
 
@@ -128,12 +128,22 @@ methodology change must be explicit; trade bars do not establish observed
 spreads. Do not silently drop quote features, move the start or end, or claim
 that preserving V7 strategy/timing rules proves identical data availability.
 
-## Implementation boundary and resource plan
+## Initial implementation and resource plan
 
-This session sets up notes and docs. No ETFE data campaign, model training,
-paper deployment, subscription purchase or runtime switch is authorized by a
-documentation milestone. ETFE needs its own admission evidence; V7 component
-results may be referenced only within their demonstrated scope.
+The user authorized beginning ETFE setup after V7 archival verification.
+[Machine-readable scope](ETFE_SCOPE_20261003.json), independent catalog generation,
+immutable setup manifest, read-only Alpaca probes and an integrity checker now
+exist. [Setup evidence](../reviews/2026-10-03-etfe-setup.md) and
+[commands](../reference/ETFE_SETUP.md) distinguish this preparation from admission.
+All readiness flags remain false; no ETFE training or deployment has occurred.
+V7 component methods may be reused within their proven scope, but ETFE has its
+own inputs, artifacts and admission gates.
+
+Live October 3 probes returned January 18, 2024 option trades/bars for samples
+in all three ETFs, earlier than the published February overview. The exact
+provider-global earliest boundary remains open; retain the user's earliest-history
+policy. The October 2 stock session was verified. Historical bid/ask queries
+returned 404 for all three sampled contracts, leaving the quote requirement open.
 
 Before acquisition/build, inventory reusable inputs and run a bounded resource
 pilot. Measure one-minute event density, quote demand, peak memory and disk

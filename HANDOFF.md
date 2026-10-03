@@ -1,49 +1,56 @@
-# Handoff — October 3, 2026 — V7 archive verified complete
+# Handoff — October 3, 2026 — ETFE initial setup
 
-## Completed user request
+## Selected work and completed component
 
-User required verifying V7 preservation before ETFE implementation. V7 archive
-completed at 16:55:50 Central October 3; independent completion audit passed.
-**2,847 shards / 564 roots / 325.63 GiB compressed**, all planned scope present.
-**35,031 eligible local files removed**, about **519 GiB internal free**.
-[Audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json).
+User authorized starting ETFE after V7 archive verification. Implemented separate
+configuration, parameter catalog, immutable setup manifest, source snapshot,
+read-only Alpaca diagnostics and integrity verification. No training/deployment.
+[Scope](docs/specs/ETFE.md), [TODO](TODO.md), [review](docs/reviews/2026-10-03-etfe-setup.md).
 
-## Verification and archive location
+ETFE is a brand-new expert: SPY/QQQ/VOO, 1/5/15-minute signals, V7 strategy/timing
+specifications but no V7 weights/checkpoints or Massive quotes. Historical start
+is Alpaca's earliest options availability; end October 2, 2026 inclusive.
+Both date preferences are resolved. Verify the first timestamp, not a new choice.
 
-Destination: `/run/media/healy/MRHA/v7/`, mounted UUID `62C9-C390`.
-State: `nn_meta/validation/v7-cold-archive-20261002-r0/`.
-Matching local/external VERIFIED.json, COMPLETE.json, LOCAL_CLEANUP_COMPLETE.json
-and retired.jsonl; every planned archive/receipt present with expected size.
-Original per-shard full source comparisons, member censuses and SHA256 checks
-passed. Audit reconciled all receipts, empty comparison logs, frozen roots/source
-bindings, deletion candidates/journal hashes and actual retired-path absence.
-No partial archives or staged files remain. Both archive/cleanup services exited 0.
-Fresh checksum/decompression/streamed restore passed four sample shards, including
-source snapshot and reclaimed files. No second whole-archive byte scan performed.
+## Selected artifacts
 
-Plain README and compressed notes are refreshed for final closure. Notes passed
-full source comparison and checksum verification; notes-receipt.json records the
-current hash. Restore notes first, source next, external targets next, then local
-inputs/plans and checkpoints. [Guide](docs/reference/V7_COLD_ARCHIVE_README.md).
-Shared/raw inputs, small metadata and MRHA loose originals intentionally remain.
-No further deletion is needed for the authorized archive task.
+`nn_meta/validation/etfe-setup-20261003-r0/` owns scope.json, catalog.json,
+plan.json and PREPARED.json. Plan SHA256:
+`8e43d74e2d89d9b3aaaf58d2a65f2acbc713dfa44f19466ee95af5279aa8e707`.
+Exact producer/grid sources saved in source-snapshot/ with a hash receipt.
+Entry `scripts/prepare_etfe.py` requires NN_META_POOL=etfe and a fresh isolated
+output. Existing files are never overwritten. [Commands](docs/reference/ETFE_SETUP.md).
+Verify using `./venv/bin/python scripts/verify_etfe_setup.py --setup
+nn_meta/validation/etfe-setup-20261003-r0` (one line).
 
-## ETFE scope and next work
+All 20 families, 2,817 parameter variants/timeframe, 8,451 combinations/ticker,
+25,353 total. New IDs include ETFE; V7 5/15/30 catalog code remains unchanged.
+30 focused tests passed, plus actual source/artifact/probe hash reconciliation.
+Every build/training readiness flag remains false; PREPARED is not admission.
 
-ETFE is a brand-new expert; only its documentation has been prepared. V7 archive
-closure does not complete V7 research gate 7-3 or provide ETFE training evidence.
-[ETFE specification](docs/specs/ETFE.md), [TODO](TODO.md), [roadmap](ROADMAP.md).
+## Provider evidence and next steps
 
-- Exactly SPY, QQQ, VOO; signal bars 1/5/15 minutes.
-- V7 strategy/timing specifications, not V7 weights/checkpoints/model identity.
-- Alpaca's earliest historical options availability through October 2, 2026,
-  inclusive; no Massive quotes, including archived copies or fallback requests.
-- Verify exact first provider timestamp and required Alpaca historical quote,
-  contract and feature coverage before sealing executable ETFE inputs.
-- Record any missing quote coverage and explicit methodology decision; do not
-  fabricate bid/ask windows, change dates or silently discard inherited features.
-- New catalog/schema/fold manifests and measured resource pilots precede training.
+- `probe-r1/PROBE.json`: 22 successful-transport GETs, all three stock samples
+  and expired references accessible. Historical quotes endpoint returned 404
+  for all three examples. Sandbox-failed probe-r0 preserved separately.
+- `probe-boundary-r0/BOUNDARY.json`: 21 GETs; January 18, 2024 option trades/bars
+  observed in all three ETF samples, earlier than February in public docs.
+  Exact global boundary and complete data coverage remain unverified.
+- Calendar confirms October 2 stock session 09:30–16:00 New York; option-class
+  hours and historical contract/deliverable eligibility remain to be admitted.
+- Next ETFE-0 work: resolve historical quote-window availability/methodology
+  within Alpaca-only policy; no bars-to-spread substitution, feature dropping,
+  archived Massive reuse or silent start-date movement.
+- Then bind full input coverage, new ETFE row schema/folds/trials, causal
+  strategy/execution evidence and measured memory/disk/recovery before a campaign.
 
-The user's date choices are settled. Do not reopen them or resume V7 from old
-notes. Other research/update campaigns remain paused. Preserve unrelated dirty
-work, source-bound archives and .env. No ETFE implementation occurred this turn.
+Probe examples are not candidate selection or historical as-of chains; current
+expired-reference records and adjusted strikes need dated deliverable evidence.
+No subscriptions, broker orders, live streams or bulk capture were started.
+
+## Preserved work
+
+V7 archive is complete on MRHA/v7: 2,847 shards, 325.63 GiB, 35,031 files
+reclaimed. [Audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json).
+V7 research stays paused; archive Massive quotes are not ETFE inputs. Other
+research/update campaigns remain paused. Preserve unrelated dirty work and .env.

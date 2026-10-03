@@ -5,10 +5,18 @@ October 3 user direction selects a brand-new ETFE expert: exactly SPY, QQQ, VOO;
 V7 strategy/timing specifications; 1/5/15-minute signals; Alpaca's earliest
 options history through October 2, 2026, inclusive. No Massive quotes. [Specification](docs/specs/ETFE.md),
 [roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert), [handoff](HANDOFF.md).
-This selection is documentation work; implementation and campaigns remain future
-milestones. V7 archival is verified complete; its closure is recorded below.
+October 3 follow-up authorized initial setup. Independent configuration/catalog
+and bounded Alpaca diagnostics are implemented; input admission and expensive
+campaigns remain gated. V7 archival is verified complete.
 
 ## Selected checklist — ETFE-0
+
+- [x] **ETFE.setup:** Independent scope/configuration, 20-family 1/5/15-minute
+  catalog (25,353 ticker/variant combinations), source-bound setup and integrity
+  CLI. New artifacts only; 30 focused tests passed.
+- [x] **ETFE.provider-probe:** Bounded read-only Alpaca checks completed; 43 live
+  GETs, historical trades/bars observed for all three ETFs, quote endpoint 404.
+  [Evidence and limits](docs/reviews/2026-10-03-etfe-setup.md).
 
 - [x] **ETFE.scope:** Record the accepted universe, timeframes and V7 inheritance;
   preserve later midpoint/risk amendments and distinguish signal bars from quotes.
@@ -18,11 +26,15 @@ milestones. V7 archival is verified complete; its closure is recorded below.
 - [ ] **ETFE.history-boundary:** Verify the exact first Alpaca options timestamp
   and UTC boundaries for the fixed October 2 end; record missing feature/quote
   coverage separately rather than silently shortening the requested window.
+  January 18, 2024 observations exist in all three ETFs; sample evidence does
+  not establish the global first timestamp. October 2 stock hours are verified.
 - [ ] **ETFE.provider-contract:** Establish how required historical bid/ask windows,
   dated contracts and feature inputs will be supplied. Historical trades/bars
   alone do not satisfy inherited execution/quote features. Alpaca is the options
   provider; Massive quotes, including archived V7 copies, are excluded. Resolve
   any necessary methodology decision before freezing the executable ETFE plan.
+  Actual historical-quotes probes returned 404 for all three examples; historical
+  bars/trades and current expired-contract records do not close this contract.
 
 Later implementation, coverage, resource and training gates belong to the
 [ETFE roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert), not competing queues.
@@ -48,7 +60,7 @@ from historical checklist entries. New ETFE artifacts retain their own identity.
 ## Paused operating obligations — resume only on user direction
 
 Retained requirements and completed evidence below are not ETFE prerequisites or
-active parallel assignments. October 3 selects ETFE documentation; other campaigns
+active parallel assignments. October 3 selects ETFE setup; other campaigns
 remain paused unless the user selects them.
 
 - [x] **OPS-PAPER:** First prospective actual-order/fill reconciliation observed.

@@ -1,0 +1,458 @@
+{
+  "observed_at": "2026-10-03T17:57:04.168606-05:00",
+  "status": "setup_complete_data_admission_open",
+  "setup": "nn_meta/validation/etfe-setup-20261003-r0",
+  "integrity": {
+    "status": "setup_integrity_verified_not_admitted",
+    "expert": "etfe",
+    "plan_sha256": "8e43d74e2d89d9b3aaaf58d2a65f2acbc713dfa44f19466ee95af5279aa8e707",
+    "source_files": 9,
+    "families": 20,
+    "variants_per_symbol": 8451,
+    "ticker_variant_combinations": 25353,
+    "ready_for_build": false,
+    "ready_for_training": false
+  },
+  "preparation": {
+    "expert": "etfe",
+    "families": 20,
+    "files": {
+      "catalog.json": "12752f44fb85c076cbcbdbeaa76173115062cea435bb1a3f304251771695b77e",
+      "plan.json": "a071422d141d25f902df68eb0709f2e85f78a9f1c586a1734a670f47b815f89c",
+      "scope.json": "f814a96eee5061a1d91ae47ccf14663e1d3cd61dd482162c56e89525e99a546d"
+    },
+    "plan_sha256": "8e43d74e2d89d9b3aaaf58d2a65f2acbc713dfa44f19466ee95af5279aa8e707",
+    "ready_for_build": false,
+    "schema": "etfe-preparation-receipt-v1",
+    "status": "prepared_not_admitted",
+    "ticker_variant_combinations": 25353,
+    "variants_per_symbol": 8451
+  },
+  "source_snapshot_receipt_sha256": "cd6ce06bff22ea7c3efcfa6ef435789935ef77828cacd99198dd34389dcbb02f",
+  "probe": {
+    "boundary": "Sample responses only. Empty pages/errors are not no-trade evidence; first samples do not prove provider-global earliest coverage.",
+    "dated_contract_coverage_verified": false,
+    "expert": "etfe",
+    "feed_admission": "OPRA required; historical response feed provenance still requires verification",
+    "final_stock_session": {
+      "close": "16:00",
+      "date": "2026-10-02",
+      "open": "09:30",
+      "session_close": "2000",
+      "session_open": "0400",
+      "settlement_date": "2026-10-05"
+    },
+    "first_history_timestamp_verified": false,
+    "historical_quote_coverage_verified": false,
+    "observations": [
+      {
+        "first_sample": "2024-02-01T00:00:00Z",
+        "kind": "stock_minute_sample",
+        "status_code": 200,
+        "ticker": "SPY"
+      },
+      {
+        "contract": "SPY240201C00406000",
+        "kind": "historical_contract_example",
+        "point_in_time_chain_verified": false,
+        "status_code": 200,
+        "ticker": "SPY"
+      },
+      {
+        "contract": "SPY240201C00406000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": null,
+        "kind": "option_bars",
+        "requested_start": "2024-01-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "SPY"
+      },
+      {
+        "contract": "SPY240201C00406000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": null,
+        "kind": "option_bars",
+        "requested_start": "2024-02-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "SPY"
+      },
+      {
+        "contract": "SPY240201C00406000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": null,
+        "kind": "option_trades",
+        "requested_start": "2024-01-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "SPY"
+      },
+      {
+        "contract": "SPY240201C00406000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": null,
+        "kind": "option_trades",
+        "requested_start": "2024-02-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "SPY"
+      },
+      {
+        "coverage_complete": false,
+        "kind": "historical_quote_endpoint",
+        "status_code": 404,
+        "ticker": "SPY"
+      },
+      {
+        "first_sample": "2024-02-01T00:02:00Z",
+        "kind": "stock_minute_sample",
+        "status_code": 200,
+        "ticker": "QQQ"
+      },
+      {
+        "contract": "QQQ240201C00353000",
+        "kind": "historical_contract_example",
+        "point_in_time_chain_verified": false,
+        "status_code": 200,
+        "ticker": "QQQ"
+      },
+      {
+        "contract": "QQQ240201C00353000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": "2024-01-30T15:00:00Z",
+        "kind": "option_bars",
+        "requested_start": "2024-01-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "QQQ"
+      },
+      {
+        "contract": "QQQ240201C00353000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": "2024-02-01T19:40:00Z",
+        "kind": "option_bars",
+        "requested_start": "2024-02-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "QQQ"
+      },
+      {
+        "contract": "QQQ240201C00353000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": "2024-01-30T15:00:01.233036032Z",
+        "kind": "option_trades",
+        "requested_start": "2024-01-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "QQQ"
+      },
+      {
+        "contract": "QQQ240201C00353000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": "2024-02-01T19:40:30.270381312Z",
+        "kind": "option_trades",
+        "requested_start": "2024-02-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "QQQ"
+      },
+      {
+        "coverage_complete": false,
+        "kind": "historical_quote_endpoint",
+        "status_code": 404,
+        "ticker": "QQQ"
+      },
+      {
+        "first_sample": "2024-02-01T00:12:00Z",
+        "kind": "stock_minute_sample",
+        "status_code": 200,
+        "ticker": "VOO"
+      },
+      {
+        "contract": "VOO240216C00300000",
+        "kind": "historical_contract_example",
+        "point_in_time_chain_verified": false,
+        "status_code": 200,
+        "ticker": "VOO"
+      },
+      {
+        "contract": "VOO240216C00300000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": "2024-01-25T15:25:00Z",
+        "kind": "option_bars",
+        "requested_start": "2024-01-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "VOO"
+      },
+      {
+        "contract": "VOO240216C00300000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": null,
+        "kind": "option_bars",
+        "requested_start": "2024-02-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "VOO"
+      },
+      {
+        "contract": "VOO240216C00300000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": "2024-01-24T15:39:24.389411584Z",
+        "kind": "option_trades",
+        "requested_start": "2024-01-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "VOO"
+      },
+      {
+        "contract": "VOO240216C00300000",
+        "coverage_complete": false,
+        "feed_verified": false,
+        "first_sample": null,
+        "kind": "option_trades",
+        "requested_start": "2024-02-01T00:00:00Z",
+        "status_code": 200,
+        "ticker": "VOO"
+      },
+      {
+        "coverage_complete": false,
+        "kind": "historical_quote_endpoint",
+        "status_code": 404,
+        "ticker": "VOO"
+      }
+    ],
+    "observed_at": "2026-10-03T22:51:19.386035+00:00",
+    "ready_for_build": false,
+    "receipt_files": {
+      "000-calendar.body": "620742db05b20963ea75cf48f8c9d25ad1b6f29affa21cc275e50f81496f72db",
+      "000-calendar.json": "e29010aef2fb746588bd741b420c059f8e36c71bb6330c3d4f8f34639dc56bd1",
+      "001-stock_bars.body": "ac2ce2b89e5b94f91238eff498de9420645e521a3651f1a84f80cf2413733876",
+      "001-stock_bars.json": "e77072f2aadcccde174d44942d89dbed238be06d7b5debfe0237c49759c8c126",
+      "002-contracts.body": "b9513c380ff0d8bdc95320bbe230a3f92721add38ab09dcebee8e1472e08fd29",
+      "002-contracts.json": "f3db5308a4bd7f40464002dead0f0764058322386360954d5857d4e98c098db1",
+      "003-option_bars.body": "c700148960d500511ad0040f8b1c3c6ebbac07572176aff49cfc66b69eec9aee",
+      "003-option_bars.json": "fd62ab1da9f420af212fc28429112fc2c29ef4bc3c679774e757667147f2b8b5",
+      "004-option_bars.body": "c700148960d500511ad0040f8b1c3c6ebbac07572176aff49cfc66b69eec9aee",
+      "004-option_bars.json": "f9add05920ffdf71fdb239b36ed382dcf5fe6e6d5bd7f577c6089fd6997f212d",
+      "005-option_trades.body": "d7e3220c2f8fe6e76f2cc4b8b74c54e14da90d5028f56f49334652cd88f0b57b",
+      "005-option_trades.json": "f6aee735aa9adbadee1401757bfd7ac6cac3279c142ad0448542928b1eaaea6f",
+      "006-option_trades.body": "d7e3220c2f8fe6e76f2cc4b8b74c54e14da90d5028f56f49334652cd88f0b57b",
+      "006-option_trades.json": "f07822196c3f3589268105e7b136c9632dc7ae464f868b051033efbeedfcd650",
+      "007-historical_quotes.body": "8699bf1eda7e016dec3efeff8db5e3400183e9ebf6ce42355b97b843def2b035",
+      "007-historical_quotes.json": "c0bf14f6483f7dd45618919e93d026fac9b69b16926fd2331159d72847fa1c9f",
+      "008-stock_bars.body": "442dc1b4bd4ff658d2e3ae46f5e74156a4de11e1d41008e522583611e56b8add",
+      "008-stock_bars.json": "24a3eba41113a00c35487a24eaf817f2469980a38e1b3cf629ecfe8bd908c3e0",
+      "009-contracts.body": "54a6109dfb0adfcdfbd857e0500ade5b840c1eb2306ba87112bd510d37323707",
+      "009-contracts.json": "c2857867d66bfb63a7b990a4066fc9c4dbab7af2f8a4a377efdd6daa5164bb2b",
+      "010-option_bars.body": "64399d3e9c4686087810bd6c1fdc1e53db1fb83294ea2c63efbd410ac038f1b7",
+      "010-option_bars.json": "0ae335b7ec500539d4c8781fa8e470fc5c03ef211a77feeca58d3474d073b71a",
+      "011-option_bars.body": "1ee5c8097e39c00c33047d9067b8c9d87848ac7c74728ca430cbb0601b0d94b9",
+      "011-option_bars.json": "edd036ada5e94283038fe68caca359e514d9718781d2b4d0b71c311a89ea8dd5",
+      "012-option_trades.body": "383aff845ddabb3317000861414bba75d1a4379483d99f6177c8bfd42b191e0c",
+      "012-option_trades.json": "86c085d2ac7d67d2a3183f0240381f2b78733beef7c4e6e5066ed9cbedefa7f6",
+      "013-option_trades.body": "c69c76dd4846bdc89a504390106ecb8ddea3597fa9a6e8a44ba62b8ac2c8d35a",
+      "013-option_trades.json": "56e0a783fed9b26d6eee3b3393fd78d52a4a3431fd5d596b78fd11f73bc83d17",
+      "014-historical_quotes.body": "8699bf1eda7e016dec3efeff8db5e3400183e9ebf6ce42355b97b843def2b035",
+      "014-historical_quotes.json": "31121cf0ae39f38446f61163bc55c7cca4b246736b88823c72add4f45017bb7b",
+      "015-stock_bars.body": "db2aa56656455109f85720cf5d41ed1f9a2046de6cf6c35cd5b5adee079dc5b2",
+      "015-stock_bars.json": "cda8d78a6b396c14b2de775f53f7b27454041a48b09e64c4ac9f72104a802ae4",
+      "016-contracts.body": "7e36490444cf5b60b9daa073159ed85ffed62dbcd9b768ef190fe69571a7e41b",
+      "016-contracts.json": "c398d909acc1325c0c9dce1e4eeb3a4da9160247f3f90be10015d1df4327200d",
+      "017-option_bars.body": "7acd6a20502aa8d41dfb564dc92158a00911d8f994585b83a24b08e396991dea",
+      "017-option_bars.json": "119af76d80abcaf75b1222c8c65f3139f15c8d5c5803bfe0611e90daeb32b96c",
+      "018-option_bars.body": "c700148960d500511ad0040f8b1c3c6ebbac07572176aff49cfc66b69eec9aee",
+      "018-option_bars.json": "6ad08d660af418c8701dac985f8e34721c9c33539ce9336ddee8ed42ed755b1e",
+      "019-option_trades.body": "a8dbfe18654d41a3cf04684fdb1be554d0ce7c49c0bce571788974f8c40709a2",
+      "019-option_trades.json": "7e389c3ddf70c5ec2fb9ba65482cc9c928873c61a49b8d50244e7dc8083c55ec",
+      "020-option_trades.body": "d7e3220c2f8fe6e76f2cc4b8b74c54e14da90d5028f56f49334652cd88f0b57b",
+      "020-option_trades.json": "0afcc8cff3c92aa49286f7e014a33c2fe6a5a6499fc325e8b4f2641a6c211c9e",
+      "021-historical_quotes.body": "8699bf1eda7e016dec3efeff8db5e3400183e9ebf6ce42355b97b843def2b035",
+      "021-historical_quotes.json": "c90bf0bd9986f662cc3b130777eb12d499239eb48acb1316213bb940fb68ed75"
+    },
+    "requests": 22,
+    "schema": "etfe-alpaca-capability-probe-v1",
+    "setup_plan_file_sha256": "a071422d141d25f902df68eb0709f2e85f78a9f1c586a1734a670f47b815f89c",
+    "setup_plan_sha256": "8e43d74e2d89d9b3aaaf58d2a65f2acbc713dfa44f19466ee95af5279aa8e707",
+    "status": "bounded_probe_complete_not_admitted",
+    "transport_failures": 0
+  },
+  "boundary": {
+    "client_sha256": "8e3d60197d8e62d82ea103aa370707fb9994bb3fe376d6a32df4503ca60dc65e",
+    "examples": [
+      {
+        "contract": "SPY240119C00475000",
+        "first_returned_timestamp": "2024-01-18T14:30:00Z",
+        "kind": "option_bars",
+        "next_page_available": true,
+        "reference_stock_close": 474.93,
+        "status_code": 200,
+        "ticker": "SPY"
+      },
+      {
+        "contract": "SPY240119C00475000",
+        "first_returned_timestamp": "2024-01-18T14:30:00.009729024Z",
+        "kind": "option_trades",
+        "next_page_available": true,
+        "reference_stock_close": 474.93,
+        "status_code": 200,
+        "ticker": "SPY"
+      },
+      {
+        "contract": "SPY240216C00475000",
+        "first_returned_timestamp": "2024-01-18T14:30:00Z",
+        "kind": "option_bars",
+        "next_page_available": true,
+        "reference_stock_close": 474.93,
+        "status_code": 200,
+        "ticker": "SPY"
+      },
+      {
+        "contract": "SPY240216C00475000",
+        "first_returned_timestamp": "2024-01-18T14:30:00.190895104Z",
+        "kind": "option_trades",
+        "next_page_available": true,
+        "reference_stock_close": 474.93,
+        "status_code": 200,
+        "ticker": "SPY"
+      },
+      {
+        "contract": "QQQ240119C00409780",
+        "first_returned_timestamp": "2024-01-18T14:30:00Z",
+        "kind": "option_bars",
+        "next_page_available": true,
+        "reference_stock_close": 409.52,
+        "status_code": 200,
+        "ticker": "QQQ"
+      },
+      {
+        "contract": "QQQ240119C00409780",
+        "first_returned_timestamp": "2024-01-18T14:30:00.052821504Z",
+        "kind": "option_trades",
+        "next_page_available": true,
+        "reference_stock_close": 409.52,
+        "status_code": 200,
+        "ticker": "QQQ"
+      },
+      {
+        "contract": "QQQ240216C00409780",
+        "first_returned_timestamp": "2024-01-18T14:56:00Z",
+        "kind": "option_bars",
+        "next_page_available": true,
+        "reference_stock_close": 409.52,
+        "status_code": 200,
+        "ticker": "QQQ"
+      },
+      {
+        "contract": "QQQ240216C00409780",
+        "first_returned_timestamp": "2024-01-18T14:56:53.56533248Z",
+        "kind": "option_trades",
+        "next_page_available": true,
+        "reference_stock_close": 409.52,
+        "status_code": 200,
+        "ticker": "QQQ"
+      },
+      {
+        "contract": "VOO240119C00435000",
+        "first_returned_timestamp": "2024-01-18T14:30:00Z",
+        "kind": "option_bars",
+        "next_page_available": true,
+        "reference_stock_close": 436.5,
+        "status_code": 200,
+        "ticker": "VOO"
+      },
+      {
+        "contract": "VOO240119C00435000",
+        "first_returned_timestamp": "2024-01-18T14:30:10.584379392Z",
+        "kind": "option_trades",
+        "next_page_available": true,
+        "reference_stock_close": 436.5,
+        "status_code": 200,
+        "ticker": "VOO"
+      },
+      {
+        "contract": "VOO240216C00435000",
+        "first_returned_timestamp": "2024-01-18T14:42:00Z",
+        "kind": "option_bars",
+        "next_page_available": true,
+        "reference_stock_close": 436.5,
+        "status_code": 200,
+        "ticker": "VOO"
+      },
+      {
+        "contract": "VOO240216C00435000",
+        "first_returned_timestamp": "2024-01-18T14:42:46.339781376Z",
+        "kind": "option_trades",
+        "next_page_available": true,
+        "reference_stock_close": 436.5,
+        "status_code": 200,
+        "ticker": "VOO"
+      }
+    ],
+    "expert": "etfe",
+    "history_coverage_complete": false,
+    "observed_at": "2026-10-03T22:53:46.684072+00:00",
+    "provider_global_start_verified": false,
+    "ready_for_build": false,
+    "receipt_files": {
+      "000-stock_bars.body": "2ba9eaa698eb76f8d5b666fca704e9df3264c3ba7416f2b49390c3185bbfdc46",
+      "000-stock_bars.json": "7f43f22e913f0b7e6ed0fc2b5fcab6268d0bc18095cafc498a11b55569ad1783",
+      "001-contracts.body": "1f25ef8debb50786638e47777bfc8ee6d41038e0f95382112425889afea74010",
+      "001-contracts.json": "5c95d89c4ee9aea707a1467270c3ddf48fde929db49f684ab06c5a8b5eb592c7",
+      "002-option_bars.body": "e5a0bd8ccc987aa54e88c4de73eb30518d7e3401d44d0595ed6be9271e74c403",
+      "002-option_bars.json": "62b435a121adb9803dce67b14dd8305da9f70d1430355a6556a4054ec7a8f902",
+      "003-option_trades.body": "b4c79105026aac7a578d57ff605c6905f06c9c849d6b497f385a39203a397b11",
+      "003-option_trades.json": "95e8a8c4e95e9663e6b0e8770115a8de73ec891323963f3ae94e0e259ad2e253",
+      "004-contracts.body": "10366cebe8e8e95b12d93d901cfec0c00047a5fc04a25b099303fec01aed7523",
+      "004-contracts.json": "0e23e1c511c65a0c5a4c54af105da488c2ebb3e1884a3ca6938c9c7d86f690ed",
+      "005-option_bars.body": "dc3393a4db77b70bd285643a4421688a0ead689fee845a35206ee4624590017e",
+      "005-option_bars.json": "5c25c1a472e2e7207985ea4f0afa214389de3d1843f100d31c853c0de11e9b22",
+      "006-option_trades.body": "5d1f298f006e4ea023ac08c413938399159006c4c7360d5929f6ca9133cebee1",
+      "006-option_trades.json": "6c422d9b369452e2d039891be21a330a8bd13c889cfea4f5c54a4f469bcd5a33",
+      "007-stock_bars.body": "41cd733d72a15c89fa1d41584e535450a0fe3f5d781e3bfb18c06a1c83e703ea",
+      "007-stock_bars.json": "f9389529b1e7ab8d710a6d6160972f9eefc36e4523725cbe81e56d0de3ec2e4d",
+      "008-contracts.body": "1fe02995e05fe0f733852a16e29d33e240f22399dd2c7f4b42f33305b9c60937",
+      "008-contracts.json": "0565ec8921ea8cb5aadbe31959c65efc705a13ca98d5e3bdc633b4532bdb4ec0",
+      "009-option_bars.body": "95466c27695d67eb3a51c2a31c19f7edede41828549599bde7d30499e7281793",
+      "009-option_bars.json": "b43f7d2856ac4a0d393e914154ef95cd8677828edce8fad40e98e24a41f5442b",
+      "010-option_trades.body": "f9b5994153ce09084e6528bfa10f4c2cc6fb6863dbca85d076fc04067f1bd8c8",
+      "010-option_trades.json": "02f6f0137e6989bb4797104f85f15ee660d092fba1f34b0a9ab5ca90d3734afa",
+      "011-contracts.body": "9887546b289a71df8959db3f7d08e70ed256c6ff595fab3fec50fb570a77dac1",
+      "011-contracts.json": "bad492da7530926467de424767b334da573dd6c6dae1ccb39d7b4aff7b649a5e",
+      "012-option_bars.body": "f27e52a20289a3c1b962452fbea9ee28a4188f950b2511699e70792293ed317c",
+      "012-option_bars.json": "a93543fa060f914adb8b765d546743c91b8f81ab778d2638c3f754694d464cef",
+      "013-option_trades.body": "777a6847c797db276daf3604434a3c470d2af07f62f0e3f2c0b926d3de320b63",
+      "013-option_trades.json": "784a3c10a303ff2c0ec45e9869a3c285e48a63e7bbc9715532c5205435e41ee4",
+      "014-stock_bars.body": "6bdb16fdbccc434b0d6f72dc547658e3f32cd37db721046fc1b01e166926e82c",
+      "014-stock_bars.json": "f04c152277c1ef8910a57895a5765fb20455dd3f833a5322d5e8c6055e3fb90f",
+      "015-contracts.body": "affd8cc37f5b00d5a711f2661c1b8bc7ea42097098ac9743a4e68d26bd9ad8be",
+      "015-contracts.json": "d2a1aa64a9cda6c2816be3ca5334e667244f16d0f6d6d865fa18a927750dc4a5",
+      "016-option_bars.body": "3c6dc214b8d7ddf3f2d04d20397f8d620352d6f553f007afa87a0182e2080402",
+      "016-option_bars.json": "bece4198eb76f568a7ddf82a53d27e4caa9fa2d02728d519931cbb7dda028d12",
+      "017-option_trades.body": "952cfad53ca35ab8c3c18085b815cd1247e965dd6664fe41c780f059678ee203",
+      "017-option_trades.json": "364fb70bda48d0f2e8aafb04937d43cf449ef683ba4555e3ec3dfb23d7030056",
+      "018-contracts.body": "c57673dda061c5dc76fad07d041a08f78396db4446c823ddaaf11f1fe58f1ddf",
+      "018-contracts.json": "4b2c9e8fa59ef92bd1ddb745204f00de4b5dc9ed261a078102744bb7c54d061d",
+      "019-option_bars.body": "526ae52a0b5584f0e7267c5ada4ac9e50bbd0c0bd86646d8e66f390e2a6b938b",
+      "019-option_bars.json": "84b003b77f2742820bb502fd653a742d057520572d47e0f6496ff8b087edda5f",
+      "020-option_trades.body": "efb9900d57c5be84c8c8e3350da08ef02d9d8e24477c7b385cc2efeef29f4b00",
+      "020-option_trades.json": "683b70f9a669f4d9acbae9724a5283a1454d9fc2e62ecefba42471f24b7127fc"
+    },
+    "requests": 21,
+    "schema": "etfe-history-boundary-sample-v1",
+    "script_sha256": "5819eba0eb4b5f81f6a063ca908d307b212e7eec6f0e813e722dae7801c3dddb",
+    "selection": "Near the captured January 16 stock close, one returned call per ticker/expiry. Diagnostic examples only; not PIT candidate selection or a complete historical contract census.",
+    "setup_plan_sha256": "8e43d74e2d89d9b3aaaf58d2a65f2acbc713dfa44f19466ee95af5279aa8e707"
+  },
+  "focused_tests": {
+    "command": "./venv/bin/python -m pytest tests/test_etfe_setup.py tests/test_multitimeframe_catalog.py -q",
+    "passed": 30
+  },
+  "network_requests": 43,
+  "network_scope": "Read-only Alpaca market data and paper calendar/contract metadata; no orders or streams.",
+  "sandbox_attempt": "probe-r0 retained: seven transport failures; rerun outside sandbox as probe-r1.",
+  "local_free_bytes": 557575524352,
+  "artifact_bytes": 2510709,
+  "v7_archive_complete": true
+}
