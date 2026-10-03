@@ -434,6 +434,13 @@ Watcher defaults now select r4/daily service; restart an old viewer to load them
 
 ### Hourly terminal health watcher
 
+**October 2, approximately 16:43 Central — user pause:** V6 continual, data and
+context-retry timers and both lab/legacy V7 hourly timers are disabled/inactive.
+No model training process remains active; continual retains its preceding failed
+result with MainPID=0. Watcher state has `stopped=true`. No automatic restart
+time chosen; resume only on user direction. Existing seals/checkpoints retained.
+[Exact paused units and verification](reviews/2026-10-02-user-training-pause.md).
+
 **October 2 reporting scope:** hourly messages focus on V6 Alpaca paper trading
 and V7 gate 7-3. Completed migration/storage summaries are omitted; storage is
 mentioned only for a new active-work blocker. V6 incubator appears while active

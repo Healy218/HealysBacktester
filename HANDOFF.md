@@ -1,59 +1,42 @@
-# Handoff — October 2, 2026 — V6 Alpaca provider transition
+# Handoff — October 2, 2026 — user pause
 
-## User direction
+## Current direction
 
-User cancelled Massive options and requested removing it from V6 paper. They
-chose preserving all features and the full universe, then explicitly selected
-keeping entry readiness blocked pending expanded Alpaca feed capacity. No model
-promotion, universe reduction or subscription purchase is authorized.
+User paused all V6 updates and training until later tonight and stopped the
+hourly watcher. No automatic restart time selected. Wait for user direction to
+resume. [Pause verification](docs/reviews/2026-10-02-user-training-pause.md).
 
-## Deployed and verified
+## Applied and verified
 
-Scanner v12 / consumer v3 / `v6_alpaca_market_v1.py` deployed 14:20:49 Central.
-Drop-in: `99z-alpaca-options-v12.conf`. Source-bound paper manifest SHA:
-`72dda355ea27c0e8d355949fc7185e4ce64e88bf2825d635936b7796137ff420`.
-The existing broker runtime remains v6 with the ten-minute entry window.
+V6 continual/data/context-retry timers disabled and inactive; associated service
+MainPID values zero. Continual had already failed on provider errors before the
+stop and retains that result. No model training process remains active.
+Lab and legacy V7 hourly update timers disabled/inactive; lab watcher state
+`stopped=true`, `pending=false`. All seals/checkpoints retained.
+Paper runtime unchanged. V7 discovery controller remains running; its memory
+reservation policy was not changed and may still prevent worker admissions.
 
-14:23:50: Alpaca held monitoring completed with no errors, 32.687-second run.
-Scanner reports `blocked/await_alpaca_feature_coverage`; this is intentional,
-not completed new-entry scanning. No Massive network fallback. Historical model,
-features, prior catalogue captures and portfolio scope remain preserved. Broker
-polling completed at 14:30:02; earlier stale Alpaca quotes remain genuine errors.
+## Stopping point / blockers
 
-## Recorder and blocker
+October 2 V6 daily incubation still calls Massive despite paper's Alpaca switch;
+it failed during candidates/labels before training. Inspect r5 selected receipt
+and service-exit before any retry. Prior successful September 30 freeze preserved.
 
-Bounded raw OPRA recorder implemented and tested with quote/trade acknowledgments,
-append-only journals, nanosecond timestamps and interruption epochs. The corrected
-journal labels direct-WebSocket receipt time explicitly. Bounded probes are not
-full feature coverage, not a persistent production recorder and not model admission.
+V6 paper scanner v12 uses Alpaca held quotes. Full-universe entries deliberately
+blocked pending stream capacity and admitted preceding feature windows. Actual
+2,434-contract probe exceeded stream capacity; bounded recorder is not production.
+[Provider work](docs/reviews/2026-10-02-v6-alpaca-provider.md), commit `aae0c33`.
 
-A local census found 2,434 nearest-strike contracts for 414 of 449 securities;
-35 prior-date catalogues are absent and strike movement needs extra subscriptions.
-Alpaca documents a 1,000 quote-stream limit; the actual 2,434-contract request
-was rejected at 14:55:03 with 405 (symbol limit exceeded). No historical option quote endpoint
-was found; direct probe returned 404. Live OPRA quotes work. Do not silently
-truncate subscriptions, substitute snapshots or discard quote-window features.
+V7 selected `v7-required-inputs-20261002-perf-r0`, resource policy v4 up to twelve
+workers, preserved wave lineage. At 16:00: 1,838,826 decision groups and
+173,038,120 scenarios assessed; 74 terminal securities including eight empty,
+172 partial. Counts include pending inputs. Epoch 00001 replay assessed
+20,015,688/20,015,688 targets; epoch 00002 capture failed 0/84,407 windows with
+3,517 Massive HTTP 403 batches. Gate 7-3 remains open.
 
-Remaining: expanded confirmed capacity, prospective Alpaca catalogues, complete
-sealed preceding windows, source/condition/clock mapping and feature/decision
-validation, then a versioned entry-adapter admission. See
-[provider transition](docs/reviews/2026-10-02-v6-alpaca-provider.md).
-Evidence: `nn_meta/validation/v6-alpaca-provider-20261002-r0/`.
-47 focused tests and 12 watcher checks passed; corrected recorder tests rerun.
+## Next actions when user resumes
 
-## V7 continues
-
-Resource policy v4 resumed 13:39:30. Original wave seals/checkpoints unchanged.
-Selected campaign: `v7-required-inputs-20261002-perf-r0`; discovery supervisor
-`finish_v7_discovery_resources_v4.py`, scheduler `run_v7_optimized_campaign_v3.py`.
-Up to twelve with dynamic V6/replay/host memory reserves; 7–9 observed workers.
-
-13:39:30–13:54:30: +25,520 decision groups / +2,362,080 assessments, 9.448M/hour.
-Remaining original discovery at that short rate is 6.59 continuous days; capture,
-replay and incubation pauses are extra. Paper was provider-blocked, so full
-co-load remains unproven. [Evidence](docs/reviews/2026-10-02-v7-discovery-concurrency.md).
-Committed/pushed `8aaca65`. Gate 7-3 remains open; retain cumulative counts.
-
-Hourly watcher continues here, reporting the deliberate V6 feature block,
-held-monitor/broker health and cumulative V7 work. Idle completed incubation and
-storage remain omitted. Preserve unrelated dirty work and frozen sources.
+Resolve cancelled-provider scope for active research before retrying captures
+or incubation. Restore only explicitly selected schedules; watcher stays stopped
+until requested. No paper/live model promotion authorized. Preserve unrelated
+dirty work. Current gate checklist: TODO; exact pointers: docs/CURRENT_STATE.md.

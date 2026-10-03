@@ -8,6 +8,12 @@ running-job locations; do not choose a different revision from an old review.
 
 ## Active gate 7-3 — required option evidence
 
+**October 2 user pause:** V6 data updates, context retries and continual
+training are paused until the user resumes later tonight. Their timers are
+disabled; hourly lab and legacy V7 progress watchers are stopped. No automatic
+restart time was selected. V7 discovery remains selected; paper runtime remains
+unchanged. See [pause receipt](docs/reviews/2026-10-02-user-training-pause.md).
+
 **October 2 current direction — optimized V7 resumed.** After the user authorized
 adoption, both selected controllers resumed at 12:45:08 Central with retained
 checkpoints. New selected root: `v7-required-inputs-20261002-perf-r0`.
@@ -36,7 +42,7 @@ All 447 prior symbol seals preserved. Diagnostic regression recorded; the new
 freeze is retained. V7 discovery/migration restored; capture needed an explicit
 retry of two retained HTTP 502 failures and was verified advancing after 02:48.
 That restoration is historical; the October 2 optimized adoption above owns execution.
-Hourly checks here remain active. October 2 reporting now focuses on V6 paper
+Hourly checks were stopped by the user October 2. Their retained reporting scope focuses on V6 paper
 and cumulative V7-3 work; completed storage and successful idle incubator runs
 are omitted. [Completion and restart evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md).
 
