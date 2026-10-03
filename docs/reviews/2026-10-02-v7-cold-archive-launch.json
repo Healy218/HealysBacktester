@@ -1,0 +1,24 @@
+{
+  "observed_at": "2026-10-03T03:52:24.139878+00:00",
+  "service": "ActiveState=active\nSubState=running\nMainPID=52057\nExecMainStartTimestamp=Fri 2026-10-02 22:49:04 CDT\nMemoryCurrent=6406262784\n",
+  "progress": {
+    "status": "archiving",
+    "updated_at": "2026-10-03T03:51:53Z",
+    "group": "00005",
+    "members": [
+      "home/healy/Coding/HealysBacktester/nn_meta/validation/v7-2-compact-pilot-20260919"
+    ],
+    "completed_groups": 5,
+    "total_groups": 2847,
+    "threads": 3
+  },
+  "restore_smoke": {
+    "archive": "00000.tar.zst",
+    "state": "actual-external-extraction-matches-frozen-source",
+    "member": "home/healy/Coding/HealysBacktester/nn_meta/validation/v7-cold-archive-20261002-r0/source-snapshot/files/scripts/archive_v7_cold.py",
+    "sha256": "43b005cf3a1e28fa1606dfec067f4a20a00fc003d0efe56ee103fb6a355fd1ad"
+  },
+  "verified_shards": 5,
+  "all_archives_complete": false,
+  "local_retirement_started": false
+}

@@ -1,14 +1,31 @@
 # TODO — Phase 7: V7 data, execution and training
 
-**Current gate: 7-3.** 7-1 and 7-2 are complete. This is the selected phase's
+**Current gate: 7-3 — research paused for cold archival.** 7-1 and 7-2 are complete. This is the selected phase's
 checklist; the [ROADMAP](ROADMAP.md#phase-7--v7-data-execution-and-training)
 owns its gates and dependencies. [HANDOFF](HANDOFF.md) gives the session's
 stopping point. Use [CURRENT_STATE](docs/CURRENT_STATE.md) for exact inputs and
 running-job locations; do not choose a different revision from an old review.
 
-## Active gate 7-3 — required option evidence
+## Selected task — 7-3.archive: pause and preserve V7
 
-**October 2 session-close direction — V7 only:** Finish **7-3** first; all
+October 2 late-evening user direction supersedes the earlier finish-V7-now
+priority: archive all V7 data with strong lossless compression to **MRHA/v7**,
+include compressed notes/handoffs and restore instructions, then reclaim verified
+V7-only internal space. More storage is needed before research resumes.
+
+- [ ] **7-3.archive:** Complete all shards and external verification, then reclaim
+  eligible V7-only payloads; completion requires `COMPLETE.json`, not launch.
+- [ ] **7-3.archive-restore:** When resources and historical-provider access are
+  resolved and the user resumes V7, follow the archive README and preserved last
+  research handoff. Keep all scientific scope and completed evidence unchanged.
+
+[Archive review](docs/reviews/2026-10-02-v7-cold-archive.md),
+[restore README](docs/reference/V7_COLD_ARCHIVE_README.md).
+Non-V7 obligations remain paused; archival does not select another campaign.
+
+## Paused gate 7-3 — required option evidence
+
+**Earlier October 2 direction (superseded by cold archival) — V7 only:** Finish **7-3** first; all
 other work is paused until V7 is done. This supersedes resuming V6 later tonight.
 V6 updates/training and hourly watchers remain paused; do not reopen their work
 from old operating obligations. Preserve completed evidence and the full V7 scope.

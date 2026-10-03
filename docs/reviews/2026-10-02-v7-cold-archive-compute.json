@@ -1,0 +1,31 @@
+{
+  "observed_at": "2026-10-03T04:12:47.610088+00:00",
+  "service": "ActiveState=active\nSubState=running\nMainPID=81440\nExecMainStartTimestamp=Fri 2026-10-02 23:02:06 CDT\nMemoryCurrent=14684504064\n",
+  "compressors": "    PID NLWP %CPU   RSS     ELAPSED COMMAND\n 109105    4 98.6 1088432     01:11 zstd --ultra -22 -T1\n 110087    4 99.5 1033356     00:51 zstd --ultra -22 -T1\n 110362    4 97.5 1031288     00:46 zstd --ultra -22 -T1\n 110569    4 97.9 1057916     00:42 zstd --ultra -22 -T1\n 110581    4 98.4 1037440     00:42 zstd --ultra -22 -T1\n 111152    4 99.2 1000560     00:30 zstd --ultra -22 -T1\n 111162    4 98.1 1031264     00:30 zstd --ultra -22 -T1\n 111265    4 97.8 969668      00:28 zstd --ultra -22 -T1\n 112281    4 96.9 906284      00:06 zstd --ultra -22 -T1\n 112575    4 75.8 303720      00:01 zstd --ultra -22 -T1\n",
+  "progress": {
+    "status": "archiving",
+    "updated_at": "2026-10-03T04:12:45Z",
+    "consumer": "parallel-v1",
+    "active_groups": [
+      "00102",
+      "00105",
+      "00106",
+      "00107",
+      "00108",
+      "00110",
+      "00111",
+      "00112",
+      "00113",
+      "00114",
+      "00115",
+      "00116"
+    ],
+    "completed_groups": 105,
+    "total_groups": 2847,
+    "archive_workers": 12,
+    "threads_per_archive": 1
+  },
+  "verified_shards": 105,
+  "all_archives_complete": false,
+  "local_retirement_started": false
+}

@@ -13,6 +13,32 @@ timestamps; old progress alone does not establish present service health.
 Verify the indicated live receipts when asked for present health or progress.
 Never infer a current ETA from a historical throughput sample.
 
+## October 2 late-evening V7 cold archive
+
+V7 research is paused by user direction. Destination: `/run/media/healy/MRHA/v7`
+(UUID `62C9-C390`); `README.md`, compressed `notes/notes.tar.zst`, `data/` shards
+and `manifests/` receipts. Local archive state:
+`nn_meta/validation/v7-cold-archive-20261002-r0/{plan,progress}.json`.
+Archive service: `healys-v7-cold-archive.service`; source:
+`scripts/archive_v7_cold.py`; selected resource-only consumer
+`scripts/archive_v7_cold_parallel.py`, launcher `scripts/start_v7_cold_archive_fast.sh`.
+Parallel consumer binding: `consumer-parallel-v1.json`; original plan and checks
+retained. Shared autosizing budgets 1.5 GiB/local shard and 6 GiB host reserve;
+external-source shards stay sequential. Memory high/max 20/22 GiB, no swap.
+23:12:47 Central parallel readback: active, 105 of 2,847 shards verified, 12
+autosized shard workers and 14,684,504,064 bytes of service memory. Real external
+restore smoke passed; no retirement yet.
+[Compute observation](reviews/2026-10-02-v7-cold-archive-compute.json).
+`VERIFIED.json` proves all data shards verified; `COMPLETE.json` records finished
+reclamation. A started/idle service is not evidence of completion.
+
+At 22:29 Central MRHA was mounted and no V7 workers were present. Both old
+`healys-v7-catalog-build.service` and `healys-v7-download-20260915-budget.service`
+autostarts were subsequently disabled. Prior raw migration receipt is complete:
+504,516 payload paths moved, 229,378,057,319 logical bytes; originals remain on MRHA.
+Earlier acquisition/replay runtime selections below are restoration references,
+not currently running-work claims. [Archive evidence](reviews/2026-10-02-v7-cold-archive.md).
+
 ## Runtime identity and locations
 
 | Scope | Host / checkout | Authoritative state or evidence |

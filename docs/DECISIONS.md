@@ -2105,3 +2105,14 @@ pending expanded feed capacity rather than reducing the universe. Deploy Alpaca
 held quotes, retain all frozen features/model, and record the new provider limit
 explicitly. No subscription purchase, model promotion or provider-equivalence
 claim. [Scope and evidence](reviews/2026-10-02-v6-alpaca-provider.md).
+
+## 2026-10-02 — Pause V7 and preserve a restorable cold archive on MRHA
+
+User reports insufficient memory/storage to finish V7 and selects strong lossless
+compression to MRHA, subsequently authorizing verified V7-only internal-space
+reclamation. The destination folder is `v7`, with a plain README describing V7,
+ordered restore/resume instructions and compressed handoffs/notes in `notes/`.
+This supersedes immediate continuation of 7-3; no scientific gate is closed or
+reopened. Keep shared inputs, credentials, frozen producer identities and
+completed evidence intact. Non-V7 work is not automatically resumed.
+[Archive implementation and evidence](reviews/2026-10-02-v7-cold-archive.md).
