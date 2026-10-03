@@ -27,6 +27,14 @@ a paper deployment and demonstrated trading performance are distinct results.
 - [Documentation](DOCUMENTATION.md): environment, conventions, traps and runbooks.
 - [Maturity scorecard](GOALS.md): assessments supported by recorded evidence.
 
+## Research specifications
+
+- [ETFE — Exchange Traded Funds Expert](docs/specs/ETFE.md): SPY/QQQ/VOO
+  specialist inheriting V7 strategies and timing with 1/5/15-minute signals.
+- [V7 research](docs/specs/MULTITIMEFRAME_RESEARCH.md) and
+  [V7 archive/restore guide](docs/reference/V7_COLD_ARCHIVE_README.md): predecessor
+  contracts and reproducible restoration.
+
 ## Components
 
 | Component | Responsibility |

@@ -5,20 +5,18 @@ of options-trading model artifacts and specialist researchers. Progress means
 completed, reproducible milestones and measured outcomes. The end goal remains
 open-ended; each selected phase has bounded requirements and an exit condition.
 
-**Selected phase: 7 — V7 data, execution and training. Current gate: 7-3.**
-**October 2 late-evening priority:** pause V7 and complete verified cold archival
-to MRHA/v7 before resource/provider resolution and user-directed restoration.
-[Archive evidence](docs/reviews/2026-10-02-v7-cold-archive.md).
-**October 3 storage refinement:** reclaim independently verified local V7 files
-while MRHA-only compression finishes; retain separate local/full completion
-receipts. Local subset completed at 14:54 Central: all 35,031 eligible files
-removed; full MRHA archive remains in progress.
-[Completion audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
-[Scope](docs/reviews/2026-10-03-v7-verified-local-cleanup.md).
-Earlier direction: finish 7-3 first; all non-V7 work is paused until V7 is
-done. This supersedes the earlier V6 restart later tonight and parallel-work
-selection. Gate scope and completed evidence remain unchanged.
-[Decision](docs/DECISIONS.md#2026-10-02--v7-only-priority-finish-gate-7-3-first).
+**Selected work: ETFE — Exchange Traded Funds Expert. Current gate: ETFE-0.**
+October 3 user direction selects the V7 successor's documentation and scope:
+SPY/QQQ/VOO, all inherited strategy variants and timing rules, 1/5/15-minute
+signals, and a history boundary tied to Alpaca options availability.
+[ETFE specification](docs/specs/ETFE.md). Exact history dates and quote coverage
+remain unresolved; no implementation or training completion is implied.
+
+V7 research stays paused with its original gates/evidence preserved. Its existing
+MRHA archive obligation continues independently. Local cleanup completed October 3
+at 14:54 Central; [completion audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
+The full archive requires its own VERIFIED/COMPLETE receipts.
+Other research/update campaigns remain paused; ETFE selection does not resume them.
 [TODO](TODO.md) owns actionable tasks. [CURRENT_STATE](docs/CURRENT_STATE.md)
 owns selected inputs and runtime pointers. [GOALS](GOALS.md) owns the maturity
 scorecard. Status below is reconciled September 27, 2026; live health requires
@@ -28,8 +26,8 @@ checking the linked operational evidence.
 
 | Workstream | Established position | Next milestone and dependency |
 | --- | --- | --- |
-| Shared data and provenance | PIT identity/actions, frozen inputs, capture, replay and recovery components exist | Complete Phase 7's actual required coverage; retain immutable lineage for all researchers |
-| Model researchers: classification, EV and future generations | V5/V6 artifacts and evaluation machinery exist; V7 preparation is active | Finish Phase 7; evaluate its trained artifacts before any incubator or operational admission |
+| Shared data and provenance | PIT identity/actions, frozen inputs, capture, replay and recovery components exist | Establish ETFE provider/history coverage; retain immutable lineage for all researchers |
+| Model researchers: classification, EV and future generations | V5/V6 artifacts and evaluation machinery exist; V7 retained, ETFE scope selected | Pass ETFE gates and evaluate its own artifacts before incubator or operational admission |
 | Paper execution and risk | Prospective V6 paper fills/reconciliation observed; October 2 Alpaca held quotes deployed | Full-universe entry features blocked pending Alpaca recording capacity and validation; sustain broker risk/reconciliation ([transition](docs/reviews/2026-10-02-v6-alpaca-provider.md)) |
 | Continual research/training incubator | Initial catch-up and repaired two-session update through September 30 complete; both evaluated freezes retained, diagnostic regressions recorded; V7/storage restored ([October 1 evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md)) | Measure a clean one-session update and sustained coexistence; V7 admission follows its own gate |
 | FA discovery and context | Collection, rankings, enrichment snapshots and experimental evaluation exist | Complete the FA milestones below; no automatic admission into V7 or trading |
@@ -40,15 +38,36 @@ checking the linked operational evidence.
 | RL sizing and exits | Deferred, last in dependency order | Reliable execution ledger and demonstrable improvement over simple sizing/exits |
 | Platform, dashboards and journal | Deployment/monitoring and existing displays exist | Accurate artifact/account identity, recoverable operations and broker facts distinct from projections |
 
-All non-V7 workstreams above are paused by the October 2 user direction.
+Only ETFE documentation and existing V7 archive completion are selected.
+Other research workstreams above remain paused.
 Their next milestones remain retained requirements, not active assignments.
 Actual installed-service state is recorded separately in CURRENT_STATE; work
 selection does not itself prove service shutdown or authorize spending.
 
+## ETFE — Exchange Traded Funds Expert
+
+ETFE replaces active V7 research without relabeling its artifacts or closing its
+unfinished gates. [Specification](docs/specs/ETFE.md) owns technical inheritance.
+The current deliverable is documentation and a resolved scope/data contract.
+
+| ID | Position | Deliverable and acceptance condition |
+| --- | --- | --- |
+| **ETFE-0 — Scope and provider contract** | **Selected; scope documented, dates/quote coverage open** | Exact SPY/QQQ/VOO and 1/5/15-minute scope; inherited timing/risk; resolved start/end policy and feasible provenance-preserving source for required options observations |
+| **ETFE-1 — Frozen inputs** | Future implementation | ETFE identity, dated universe/contract/calendar bindings, verified underlying/options/feature coverage and a fixed history window; account entitlement and missingness evidence |
+| **ETFE-2 — Strategies and causal features** | Future implementation | All inherited variants on 1/5/15 minutes, rebuilt schema and causal/parity evidence; no silent feature or strategy removal |
+| **ETFE-3 — Execution and dataset** | Future implementation | Full selected coverage with inherited midpoint/stop/expiry/roll rules, funded ledger, labels through final settlement, frozen purged folds and trials |
+| **ETFE-4 — Resources and recovery** | Future implementation | Measured representative workload, bounded memory/disk and tested recovery; resource pilots begin before expensive acquisition/build |
+| **ETFE-5 — Training and evaluation** | Gated | Launch only after admitted inputs/execution/resources; evaluate against declared baselines and freeze accepted or rejected results; deployment is a separate decision |
+
+V7 evidence is reusable where its contract still matches, with explicit ETFE
+validation of changed universe, timeframes, provider and dates. Completion of
+ETFE-0 does not establish data availability or model readiness.
+
 ## Phase 7 — V7 data, execution and training
 
-The seven steps retain their existing scope and order. Partial later-stage
-implementation is preserved; it does not move the active gate past 7-3.
+Retained, paused predecessor. The seven steps keep their existing scope and order;
+7-1/7-2 remain complete and 7-3 remains open. ETFE selection does not resume V7.
+Partial later-stage implementation is preserved.
 Technical scope and accepted amendments are indexed in
 [CURRENT_STATE](docs/CURRENT_STATE.md#v7-scope-and-selected-inputs).
 
@@ -89,7 +108,7 @@ revision-specific commands belong in CURRENT_STATE or their dated receipts.
 | V5/V6 nightly incubator activation and Friday inference | [Activation](docs/reviews/2026-09-25-incubator-nightly-activation.md), [Friday audit](docs/reviews/2026-09-27-incubator-fa-alpaca-readiness.md); historical replay scope superseded by [continual training](docs/reviews/2026-09-27-v6-continual-incubator.md), without invalidating the inference evidence |
 | Documentation consolidation | [Ownership and preservation review](docs/reviews/2026-09-27-documentation-consolidation.md); no research/runtime work performed |
 
-## FA milestones — paused until V7 is done
+## FA milestones — paused pending user selection
 
 This is the sole FA milestone map. [FA context reference](docs/reference/FA_CONTEXT.md)
 retains the detailed requirements and distinctions between raw captures,

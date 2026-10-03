@@ -13,6 +13,20 @@ timestamps; old progress alone does not establish present service health.
 Verify the indicated live receipts when asked for present health or progress.
 Never infer a current ETA from a historical throughput sample.
 
+## October 3 ETFE documentation pointers
+
+Selected scope: [ETFE — Exchange Traded Funds Expert](specs/ETFE.md).
+Universe SPY/QQQ/VOO; signal bars 1/5/15 minutes; inherited V7 execution cadence
+and accepted timing/risk amendments. This is a documentation state: no selected
+ETFE runtime, frozen input manifest, model or completed admission evidence exists.
+History-start interpretation and end policy await resolution; provider docs give
+February 2024 as a historical-options month boundary, not complete quote coverage.
+The specification records sources and the quote-history gap for follow-up.
+
+V7 pointers below remain predecessor/recovery references; its research is paused.
+Only the already-selected archive process continues. Exact current archival
+status comes from its receipts, not this dated observation.
+
 ## October 2 late-evening V7 cold archive
 
 V7 research is paused by user direction. Destination: `/run/media/healy/MRHA/v7`
@@ -74,7 +88,7 @@ Full archive still lacked VERIFIED/COMPLETE receipts at this observation.
 
 | Scope | Host / checkout | Authoritative state or evidence |
 | --- | --- | --- |
-| Research/editing | Home, `/home/healy/Coding/HealysBacktester`, `main` | Main TODO and selected V7 inputs below |
+| Research/editing | Home, `/home/healy/Coding/HealysBacktester`, `main` | Main TODO and ETFE specification; V7 inputs below are retained |
 | V7 capture | Home, research checkout | V7 acquisition runtime below; capture `v5` is a controller revision, not the V5 model |
 | V5 expert | Hetzner, server checkout | Server scanner operation; retained [production review](reviews/2026-09-06-production-alert-review.md) is dated evidence, not a fresh health assertion |
 | V6 frozen scanner source | Home, `/home/healy/Coding/HealysV6` | Frozen release `deploy/v6/releases/v6-cash-repair-20260913`; original activation/source hashes remain enforced |

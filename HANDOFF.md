@@ -1,42 +1,54 @@
-# Handoff — October 3, 2026 — local V7 cleanup complete
+# Handoff — October 3, 2026 — ETFE successor scope
 
-## Priority and completed milestone
+## Selected work
 
-V7 research remains paused for cold archival. User asked when verified local
-files could be removed: the authorized local subset finished at 14:54 Central.
-All 35,031 eligible files removed; about 519 GiB internal free at 15:06, versus
-about 20 GiB before cleanup. TODO task 7-3.archive-local is complete.
-[Completion audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
-[Scope and safeguards](docs/reviews/2026-10-03-v7-verified-local-cleanup.md).
+User requested notes and docs for **ETFE — Exchange Traded Funds Expert**, which
+replaces active V7 research. Exactly SPY/QQQ/VOO; retain V7 strategies and timing;
+restore 1-minute signals and remove 30-minute signals, yielding 1/5/15 minutes.
+[Specification](docs/specs/ETFE.md), [TODO](TODO.md),
+[ETFE roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert).
 
-## Evidence and selected runtime
+## Changes and boundaries
 
-State: `nn_meta/validation/v7-cold-archive-20261002-r0/`.
+ETFE specification carries inherited strategies, DTE, execution timing, later
+midpoint/risk amendments, full features and evaluation discipline. V7 artifacts
+remain unchanged. ETFE needs a new catalog/schema/input/evaluation lineage.
+No capture, training, provider switch or paper deployment started this session.
+
+TODO now selects ETFE-0 and keeps V7 archive closure as a storage obligation.
+The old V7 scientific queue is preserved in
+[the TODO snapshot](handoff-history/TODO-2026-10-03-before-etfe.md).
+ROADMAP retains V7 gates, adds separate ETFE gates and preserves other workstreams.
+README/CURRENT_STATE provide navigation; DECISIONS records the scope change.
+
+## Outstanding user questions and evidence
+
+1. Does Alpaca's start mean its earliest historical options availability or our
+   own recording start? Provider documentation says February 2024; exact first
+   usable timestamps and complete dependency coverage have not been established.
+2. Should the end be the latest completed session at plan freeze or retain
+   September 14, 2026? Do not silently freeze an answer or move a running cutoff.
+3. Historical option trades/bars are documented; a historical quote-window API
+   is not established. V7's observed bid/ask execution and quote features still
+   require those observations. Resolve source/coverage before sealing ETFE inputs.
+
+Questions 1–2 were sent to the user; this revision leaves both unresolved.
+Read the next user reply as steering this scope. Documentation alone is not
+ETFE readiness. Re-declare chronological folds for the changed history and
+measure one-minute storage/memory before an expensive campaign.
+
+## V7 preservation obligation
+
+Archive state: `nn_meta/validation/v7-cold-archive-20261002-r0/`.
 Destination: `/run/media/healy/MRHA/v7/`, UUID `62C9-C390`.
-Matching local/external `LOCAL_CLEANUP_COMPLETE.json` receipts establish the
-local subset. Audit reconciles all 2,584 bound local receipts, eligible paths,
-the 35,031-entry journal and actual source absence. Cleanup service exited 0.
-Selected cleanup entry remains `scripts/reclaim_v7_verified_local_v2.py` over
-frozen v1; preserve all source bindings and the shared `retired.jsonl` journal.
+Archive service: `healys-v7-cold-archive.service`, staged-v2; inspect progress and
+VERIFIED/COMPLETE receipts before claiming full completion. Do not restart it
+or modify source bindings merely because ETFE is selected.
+Local subset complete October 3 at 14:54: all 35,031 eligible files removed;
+about 519 GiB free at 15:06. [Audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
+Refresh compressed notes and archive docs at full completion. Preserve the
+retirement journal, small metadata, shared/raw inputs and MRHA originals.
+[Restore guide](docs/reference/V7_COLD_ARCHIVE_README.md).
 
-Archive service `healys-v7-cold-archive.service` continues unchanged staged-v2
-external-only compression. At 15:06, 2,791/2,847 chunks verified; 56 remained.
-Read `progress.json` for current progress. This dated count is not live health.
-No full VERIFIED.json or COMPLETE.json existed at that observation.
-Earlier time estimates from shard counts were unreliable; avoid fixed ETA claims.
-
-## Remaining work
-
-1. Finish external-only compression and final archive verification. Keep MRHA
-   connected. Original final cleanup reuses the journal and skips removed files.
-2. Require VERIFIED.json and COMPLETE.json for full task 7-3.archive closure;
-   record measured space and refresh owning docs plus compressed notes then.
-3. Preserve small metadata, raw/shared inputs, source, plans, symlinks and MRHA
-   originals. No broader deletion was performed by this milestone.
-4. User-directed restoration follows the [README](docs/reference/V7_COLD_ARCHIVE_README.md)
-   and [last research handoff](handoff-history/HANDOFF-2026-10-02-before-v7-cold-archive.md).
-   Memory admission and historical-provider HTTP 403 blockers remain unresolved.
-
-README and compressed notes are refreshed for this local completion milestone.
-No scientific behavior changed; verification is receipt/journal reconciliation,
-not another training/capture campaign. Preserve unrelated dirty work and .env.
+Preserve unrelated dirty work and .env. Other research/update campaigns remain
+paused. This session changes documentation only; no new experiment verdict.

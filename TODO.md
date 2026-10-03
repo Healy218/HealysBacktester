@@ -1,177 +1,49 @@
-# TODO — Phase 7: V7 data, execution and training
+# TODO — ETFE scope and data contract
 
-**Current gate: 7-3 — research paused for cold archival.** 7-1 and 7-2 are complete. This is the selected phase's
-checklist; the [ROADMAP](ROADMAP.md#phase-7--v7-data-execution-and-training)
-owns its gates and dependencies. [HANDOFF](HANDOFF.md) gives the session's
-stopping point. Use [CURRENT_STATE](docs/CURRENT_STATE.md) for exact inputs and
-running-job locations; do not choose a different revision from an old review.
+**Selected work: ETFE — Exchange Traded Funds Expert. Current gate: ETFE-0.**
+October 3 user direction replaces active V7 research with ETFE planning: exactly
+SPY, QQQ, VOO; inherited V7 strategies/timing; 1/5/15-minute signals; history tied
+to Alpaca options availability. [Specification](docs/specs/ETFE.md),
+[roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert), [handoff](HANDOFF.md).
+This selection is documentation work; implementation and campaigns remain future
+milestones. V7 archival continues as the existing storage obligation below.
 
-## Selected task — 7-3.archive: pause and preserve V7
+## Selected checklist — ETFE-0
 
-October 2 late-evening user direction supersedes the earlier finish-V7-now
-priority: archive all V7 data with strong lossless compression to **MRHA/v7**,
-include compressed notes/handoffs and restore instructions, then reclaim verified
-V7-only internal space. More storage is needed before research resumes.
+- [x] **ETFE.scope:** Record the accepted universe, timeframes and V7 inheritance;
+  preserve later midpoint/risk amendments and distinguish signal bars from quotes.
+- [ ] **ETFE.dates:** Resolve historical-provider start versus our own recording
+  start, and latest completed-session end versus retained September 14 endpoint.
+  Alpaca documents February 2024, not an exact verified ETFE start timestamp.
+- [ ] **ETFE.provider-contract:** Establish how required historical bid/ask windows,
+  dated contracts and feature inputs will be supplied. Historical trades/bars
+  alone do not satisfy inherited execution/quote features. Record source decisions
+  before freezing the executable ETFE plan.
 
-- [ ] **7-3.archive:** Complete all shards and external verification plus remaining
-  reclamation; completion requires `COMPLETE.json`, not launch.
-  October 2 I/O revision: bounded SSD staging plus serialized MRHA publication
-  replaces contending direct HDD writes. [Evidence](docs/reviews/2026-10-02-v7-cold-archive-io.md).
-- [x] **7-3.archive-local:** October 3 user authorized reclaiming independently
-  verified local V7 files while external compression continues. All 2,584 local
-  shards verified; all 35,031 eligible files removed at 14:54 Central. Matching
-  local/MRHA `LOCAL_CLEANUP_COMPLETE.json` receipts; about 519 GiB internal free
-  at 15:06. [Completion audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
-  Full archive remains separate.
-  [Scope and coordination](docs/reviews/2026-10-03-v7-verified-local-cleanup.md).
-- [ ] **7-3.archive-restore:** When resources and historical-provider access are
-  resolved and the user resumes V7, follow the archive README and preserved last
-  research handoff. Keep all scientific scope and completed evidence unchanged.
+Later implementation, coverage, resource and training gates belong to the
+[ETFE roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert), not competing queues.
+V7's paused scientific checklist is preserved in
+[the pre-ETFE snapshot](handoff-history/TODO-2026-10-03-before-etfe.md);
+V7 gates remain in ROADMAP with their prior completion boundaries intact.
 
-[Archive review](docs/reviews/2026-10-02-v7-cold-archive.md),
-[restore README](docs/reference/V7_COLD_ARCHIVE_README.md).
-Non-V7 obligations remain paused; archival does not select another campaign.
+## Existing storage obligation — finish V7 preservation
 
-## Paused gate 7-3 — required option evidence
+- [ ] **7-3.archive:** Complete all MRHA shards, full verification and final
+  reclamation bookkeeping; require `VERIFIED.json` and `COMPLETE.json`.
+  [Archive scope](docs/reviews/2026-10-02-v7-cold-archive.md).
+- [x] **7-3.archive-local:** All 35,031 eligible local files removed at 14:54 Central
+  October 3 after verification; about 519 GiB internal free at 15:06.
+  [Completion audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
 
-**Earlier October 2 direction (superseded by cold archival) — V7 only:** Finish **7-3** first; all
-other work is paused until V7 is done. This supersedes resuming V6 later tonight.
-V6 updates/training and hourly watchers remain paused; do not reopen their work
-from old operating obligations. Preserve completed evidence and the full V7 scope.
-[Decision](docs/DECISIONS.md#2026-10-02--v7-only-priority-finish-gate-7-3-first);
-[verified runtime pause](docs/reviews/2026-10-02-user-training-pause.md).
+Refresh archive notes at its completion. Restoration is only on user direction,
+using the [README](docs/reference/V7_COLD_ARCHIVE_README.md); do not resume V7
+from historical checklist entries. New ETFE artifacts retain their own identity.
 
-Immediate next actions within the existing 7-3 gate:
-- [ ] **7-3.discovery-reserve:** Reconcile the scheduler's clock-based V6 memory
-  reservation with the user pause; validate any resource-only revision, preserve
-  scientific seals/checkpoints and verify actual resumed worker progress.
-- [ ] **7-3.provider-blocker:** Resolve remaining required-input access after
-  Massive options cancellation. Epoch 00002 capture returned HTTP 403. Preserve
-  completed packs; do not silently replace historical windows, expand exclusions,
-  buy a subscription or claim full coverage without evidence.
-- Continue **7-3.references/paths/reconcile/close** below after these blockers.
+## Paused operating obligations — resume only on user direction
 
-**October 2 deployment history — optimized V7 resumed.** After the user authorized
-adoption, both selected controllers resumed at 12:45:08 Central with retained
-checkpoints. New selected root: `v7-required-inputs-20261002-perf-r0`.
-[Adoption and evidence](docs/reviews/2026-10-02-v7-performance-adoption.md).
-- [x] **7-3.performance:** Bounded profiling, versioned optimization, exact
-  scientific-table and killed-process recovery parity, and worker scaling tested.
-  Six resumed discovery comparisons improved 1.59×; benchmark scaling and limits
-  are recorded in [the review](docs/reviews/2026-10-02-v7-performance-benchmark.md).
-  This is bounded validation, not full-scope deployment or gate closure.
-- [x] **7-3.performance-adoption:** New source-bound controller lineage deployed;
-  original checkpoints preserved with verified copy-on-write inheritance. Three
-  integrated canaries matched baseline results exactly; 35 focused tests passed.
-  Hourly reporting follows the selected successor without resetting totals.
-  Observe actual progression/resource waits; full required-input coverage remains open.
-
-- [x] **7-3.discovery-concurrency:** User requested maximum supported workers.
-  Resource policy v4 removes the inherited one-thread autosizer cap and accounts
-  for already resident workers. At 13:39:30 the corrected controller resumed;
-  nine active workers observed at 13:40. Same wave seals/checkpoints preserved.
-  Up to twelve subject to memory/CPU/V6 reserves; measure actual throughput.
-  [Policy and measured evidence](docs/reviews/2026-10-02-v7-discovery-concurrency.md).
-
-**October 1 completed operating task:** CRSP/MTUM repaired; V6 through September
-30 finished at 02:32 Central (449 symbols, 40 members, evaluated immutable freeze).
-All 447 prior symbol seals preserved. Diagnostic regression recorded; the new
-freeze is retained. V7 discovery/migration restored; capture needed an explicit
-retry of two retained HTTP 502 failures and was verified advancing after 02:48.
-That restoration is historical; the October 2 optimized adoption above owns execution.
-Hourly checks were stopped by the user October 2. Their retained reporting scope focuses on V6 paper
-and cumulative V7-3 work; completed storage and successful idle incubator runs
-are omitted. [Completion and restart evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md).
-
-Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
-The following scope is unchanged by the documentation consolidation.
-
-**September 30 historical direction (superseded by the V7-only priority):** At **15:01 Central**, pause competing local
-batch jobs and dedicate compute to **OPS-INCUBATOR.DATA/PROOF**. Until the handover,
-V7 continues normally. After a verified V6 candidate freeze/evaluation, restore
-paused jobs automatically with maximum supported memory-aware concurrency.
-Gate 7-3 remains open with its completed evidence preserved; no recapture of
-completed batches. The one-time handover supersedes the 15:45 V6 start and the
-previous uninterrupted-V7 instruction for this interval.
-[Scheduled handover and completion boundary](docs/reviews/2026-09-30-v6-dedicated-compute.md).
-
-- [x] **7-3.entry:** Full-universe entry quote/trade capture completed September 28
-  at 04:58 Central. The final queue count reconciles with prior capture subtraction.
-  [Completion evidence](docs/reviews/2026-09-28-overnight-entry-completion.md).
-  Preserve completed packs; do not launch another entry campaign.
-- [ ] **7-3.references:** Acquire remaining dated references from the completed
-  demand plan, reuse captured coverage and apply the approved finite
-  contract/date exclusions (including the original five). Actual held paths may add dates; account for new missing references.
-  Full-plan capture and independent census completed at 16:48 September 28.
-  The 22 rename corrections are wired into discovery. Both exact alternate
-  queries failed for all 10,817 missing pairs; the user approved those plus nine
-  cash-deliverable exclusions. The compiled finite policy preserves the old five.
-  Known entry exceptions are adjudicated; actual held-date coverage remains open.
-  September 29: captured/audited 1,985 actual held references (1,979 standard, six
-  detail 404s). Evening review admitted two exact list responses; the user approved
-  four remaining exact exclusions, preserving prior pairs (10,835 total). New
-  reference epoch is sealed; future actual held-date coverage remains open.
-  September 30: 573 additional actual held-date pairs captured and independently
-  audited, all standard; epoch `v7-reference-epoch-20260930-r0` sealed with
-  2,226,402 original responses and unchanged finite exclusions.
-  [Evening evidence](docs/reviews/2026-09-29-v7-evening-continuation.md).
-  [Recovery, approval and full discovery](docs/reviews/2026-09-28-v7-full-execution-discovery.md).
-  [Completion/admission evidence](docs/reviews/2026-09-28-v7-reference-completion.md).
-- [ ] **7-3.paths:** Complete only actual held-mark, exit, roll and applicable
-  stock-delivery gaps requested by the existing replay frontier. Preserve
-  partial ledgers and count held blackout crossings. Potential first-leg
-  envelopes are not blanket download orders. Full-universe queue/discovery is
-  implemented; 3,535-path cohort parity passed. September 29: planner completed
-  all 591 securities. Repaired controller/storage handling and verified empty
-  cases; resumed unchanged wave checkpoints and captured a frozen actual frontier.
-  September 30 at 08:18 Central: all 93 selected pending-replay securities
-  completed, 21,624,449 horizon-target evaluations and no worker failures.
-  Per-wave receipts total 129,873 pending input requests; deduplication/capture
-  census and further discovery remain. The 109,825-window capture and frozen
-  replay queue are complete; neither closes full required-input coverage.
-  September 30 11:32: continuous controllers selected for full discovery and
-  successive actual capture/reference/replay epochs; no overall cutoff. The next
-  sealed pending plan covers 20,729,596 horizon-targets. Do not infer completion
-  from a controller launch; inspect exact receipts in CURRENT_STATE.
-  October 2: discovery scheduler ceiling raised to four overnight with dynamic
-  memory admission; two during weekday paper/daily-V6 hours. At 08:00 two active,
-  checkpoints preserved. Later bounded tests measured four-worker scaling; the
-  optimized controller was adopted at 12:45 October 2 (see above).
-  [Resource revision](docs/reviews/2026-10-02-v7-discovery-resources.md).
-  [Overnight completion](docs/reviews/2026-09-30-v6-step-policy-v4.md).
-  [No-cutoff continuation](docs/reviews/2026-09-29-v7-overnight-resume.md).
-  [Recovery census and storage](docs/reviews/2026-09-29-power-surge-recovery.md).
-  [Recovery and active services](docs/reviews/2026-09-29-v7-resumed-discovery-and-capture.md).
-- [ ] **7-3.reconcile:** Reconcile required requests, captures, references,
-  provider failures and measured storage for execution/assembly/recovery.
-  Use the already-authorized allocation in the current-state index. September 29:
-  user-authorized MRHA migration of sealed raw payloads is in progress; verify
-  completion, reader continuity and measured space before marking storage reconciled.
-  [Migration evidence](docs/reviews/2026-09-29-mrha-payload-migration.md).
-- [ ] **7-3.close:** Record full completion against the roadmap gate and actual
-  evidence. Entry capture alone does not close 7-3.
-
-## Remaining steps in the selected phase
-
-- [ ] **7-4:** Complete integrated full-scope execution coverage from the selected
-  retained ledger. Reconcile actual expiry, settlement and stock liquidation
-  where applicable. Preserve completed components and existing integration.
-- [ ] **7-5:** Connect existing inputs to assembly/folds/trials; reconcile the
-  full agreed dataset, label horizons and predeclared purged folds.
-- [ ] **7-6:** Establish measured integrated build/training resources, restart
-  behavior and coexistence with operational experts. Reuse unchanged evidence.
-- [ ] **7-7:** Make readiness consume the current contracts and completion
-  receipts, then launch the predeclared training campaign after its gates pass.
-
-Dependencies may be connected while acquisition runs when selected by the user;
-this does not change the active gate or authorize reopening completed stages.
-Exact scope remains in the [V7 specification](docs/specs/MULTITIMEFRAME_RESEARCH.md)
-and its accepted amendments, indexed by [CURRENT_STATE](docs/CURRENT_STATE.md).
-
-## Paused operating obligations — resume after V7 on user direction
-
-Retained requirements and completed evidence below are not active parallel work
-or extra V7-3 completion conditions. The October 2 V7-only priority owns selection.
+Retained requirements and completed evidence below are not ETFE prerequisites or
+active parallel assignments. October 3 selects ETFE documentation; other campaigns
+remain paused unless the user selects them.
 
 - [x] **OPS-PAPER:** First prospective actual-order/fill reconciliation observed.
   September 29 at 17:30 Central: all 48 broker orders match the journal, eight
@@ -236,7 +108,7 @@ or extra V7-3 completion conditions. The October 2 V7-only priority owns selecti
   Bounded recorder transport tested; no full-universe recording/admission claim.
   [Transition and remaining work](docs/reviews/2026-10-02-v6-alpaca-provider.md).
 
-FA and all other non-V7 work are deferred until V7 is done. Their retained
+FA and other unselected work remain deferred. Their retained
 roadmap requirements do not authorize parallel campaigns or automatic resumption.
 The verified runtime pause is scoped in CURRENT_STATE; this work-selection note
 does not assert that unrelated installed services were stopped.

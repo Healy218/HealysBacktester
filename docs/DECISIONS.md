@@ -2128,3 +2128,30 @@ retain full `VERIFIED.json`/`COMPLETE.json` as separate overall completion gates
 This supersedes waiting for every external shard before local reclamation; no
 scientific gate or archive-integrity requirement is waived.
 [Evidence](reviews/2026-10-03-v7-verified-local-cleanup.md).
+
+### 2026-10-03 — Select ETFE as the V7 research successor
+
+The user selected **ETFE — Exchange Traded Funds Expert** to replace active V7
+research and requested notes/docs first. The tradable universe is exactly SPY,
+QQQ and VOO. Preserve all V7 strategy variants and accepted timing/risk rules;
+restore 1-minute signal bars, retain 5/15-minute bars and remove 30-minute bars.
+The one-minute execution cadence is unchanged. Later V7 midpoint/premium-stop/
+expiry amendments remain inherited; this does not restore superseded ask/bid
+pricing or import V6's different entry window.
+
+Tie the history boundary to Alpaca options availability. The user has been asked
+whether that means provider history or our own recording start, and whether the
+end should be the latest completed session at freeze or V7's September 14 date.
+Both remain open in this documentation revision. Alpaca documents history since
+February 2024 but not an exact usable ETFE start. Historical trades/bars do not
+establish historical quote windows; resolve that evidence gap before input seal.
+[Contract and source references](specs/ETFE.md).
+
+This selects ETFE scope documentation, not acquisition, training or deployment.
+V7 source-bound artifacts and completed gates remain preserved; its unfinished
+research is paused, and the already-authorized MRHA archive continues. Local
+cleanup is complete; full archival closure still requires its separate receipts.
+Other research/update campaigns remain paused pending explicit selection.
+Future ETFE implementation has separate manifests, causal validation, resource
+and model admission gates; a three-ticker universe does not waive inherited
+features, execution evidence or baseline comparisons.
