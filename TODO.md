@@ -17,6 +17,10 @@ campaigns remain gated. V7 archival is verified complete.
 - [x] **ETFE.provider-probe:** Bounded read-only Alpaca checks completed; 43 live
   GETs, historical trades/bars observed for all three ETFs, quote endpoint 404.
   [Evidence and limits](docs/reviews/2026-10-03-etfe-setup.md).
+- [x] **ETFE.quote-diagnosis:** Historical quote route is unsupported by Alpaca's
+  public API. Official staff confirmation and 13 live controls establish working
+  OPRA latest quotes for all three ETFs, working historical trades, and persistent
+  historical-route 404s. [Diagnosis](docs/reviews/2026-10-03-etfe-quote-404.md).
 
 - [x] **ETFE.scope:** Record the accepted universe, timeframes and V7 inheritance;
   preserve later midpoint/risk amendments and distinguish signal bars from quotes.
@@ -33,7 +37,9 @@ campaigns remain gated. V7 archival is verified complete.
   alone do not satisfy inherited execution/quote features. Alpaca is the options
   provider; Massive quotes, including archived V7 copies, are excluded. Resolve
   any necessary methodology decision before freezing the executable ETFE plan.
-  Actual historical-quotes probes returned 404 for all three examples; historical
+  The public historical-quotes endpoint does not exist; blind retries will not
+  resolve this. Next resolve evidenced alternative Alpaca historical delivery or
+  a user-approved methodology/scope change. Latest snapshots, historical
   bars/trades and current expired-contract records do not close this contract.
 
 Later implementation, coverage, resource and training gates belong to the

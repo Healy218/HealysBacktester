@@ -50,6 +50,13 @@ runtimes and dated observations. Do not add running-job status blocks here.
 
 Read the relevant entries before treating a script or cache as broken.
 
+- **Alpaca latest options quotes are not historical quotes.** The public
+  `/v1beta1/options/quotes/latest` route supplies the most recent observation;
+  `/v1beta1/options/quotes` is unsupported. A 404 is not an empty historical
+  window. Chain `updated_since` filters latest snapshots, not historical as-of
+  state. A Friday quote returned on Saturday does not establish quote replay.
+  [Dated provider evidence and controls](docs/reviews/2026-10-03-etfe-quote-404.md).
+
 - **Separate pool sizing from numerical threads.** GNU `nproc` honors
   `OMP_NUM_THREADS` and `OMP_THREAD_LIMIT`. A controller inheriting a value of one
   can silently make the shared autosizer cap its entire process pool at one.

@@ -29,6 +29,7 @@ No Massive quotes or old weights/checkpoints are selected.
 | Integrity command | `scripts/verify_etfe_setup.py --setup nn_meta/validation/etfe-setup-20261003-r0` |
 | Initial live capability probe | `probe-r1/PROBE.json`; initial sandbox-only `probe-r0` retained separately |
 | Earlier-history follow-up | `probe-boundary-r0/BOUNDARY.json` |
+| Quote-route diagnostic | `probe-quotes-r1/DIAGNOSTIC.json`; sandbox-only r0 retained separately |
 | Exact setup source bytes | `source-snapshot/`, bound by `source-snapshot-receipt.json` |
 | Operating instructions | [ETFE setup reference](reference/ETFE_SETUP.md) |
 
@@ -40,6 +41,14 @@ published February month boundary; the provider-global first timestamp remains
 unverified. Historical quote requests returned 404 in all three examples.
 October 2 stock regular hours confirmed 09:30–16:00 New York (13:30–20:00 UTC);
 option-class hours/deliverables still need their own evidence.
+
+At 18:41:55 Central October 3, 13 further live GETs isolated the quote 404s:
+three latest OPRA chains and three latest quote requests succeeded, as did a
+historical trade control; six historical-quote route variants returned 404.
+Official Alpaca staff confirms historical option quotes are not on the roadmap.
+The public API cannot supply the required historical quote windows; the provider
+contract remains unresolved. [Diagnosis](reviews/2026-10-03-etfe-quote-404.md),
+[portable receipts](reviews/2026-10-03-etfe-quote-404.json).
 
 The catalog contains all 20 families and 25,353 ticker/variant combinations.
 30 focused tests and source/artifact/probe hash verification passed. These are

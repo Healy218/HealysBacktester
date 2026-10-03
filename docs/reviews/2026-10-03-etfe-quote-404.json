@@ -1,0 +1,458 @@
+{
+  "diagnostic_root": "nn_meta/validation/etfe-setup-20261003-r0/probe-quotes-r1",
+  "diagnostic_sha256": "8e2736d2f1381988bd90459fc2567d0aa69ebb36913337d2652abf1653f3ad12",
+  "diagnostic_source_sha256": "e48edea9a3be70295b33d9650606bd0cc50e1714a19600314361e0b65517d226",
+  "findings": {
+    "complete_coverage_admitted": false,
+    "data_authentication": "successful_same_credentials",
+    "historical_quote_route": "unsupported_public_endpoint",
+    "historical_quotes_available": false,
+    "historical_trades": "successful_control",
+    "opra_latest_quote_access": "observed_all_three_ETFs",
+    "scope_changed": false
+  },
+  "limitations": [
+    "Dated controls do not promise future service availability.",
+    "No private or bespoke provider delivery was investigated.",
+    "No bid/ask history was reconstructed from trades or latest quotes.",
+    "No model experiment, input admission or provider-policy change."
+  ],
+  "observations": [
+    {
+      "body_bytes": 24,
+      "body_path": "000-history-no-params.body",
+      "body_sha256": "8699bf1eda7e016dec3efeff8db5e3400183e9ebf6ce42355b97b843def2b035",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "history-no-params",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:54.601711+00:00",
+      "params": {},
+      "response": {
+        "message": "Not Found"
+      },
+      "status_code": 404,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/quotes"
+    },
+    {
+      "body_bytes": 182,
+      "body_path": "001-known-historical-trade.body",
+      "body_sha256": "b4c79105026aac7a578d57ff605c6905f06c9c849d6b497f385a39203a397b11",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "known-historical-trade",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:54.833004+00:00",
+      "params": {
+        "end": "2024-01-18T14:31:00Z",
+        "limit": 1,
+        "sort": "asc",
+        "start": "2024-01-18T14:30:00Z",
+        "symbols": "SPY240119C00475000"
+      },
+      "response": {
+        "next_page_token": "U1BZMjQwMTE5QzAwNDc1MDAwfDE3MDU1ODgyMDAxNDA1NTU3NzZ8WHww",
+        "trades": {
+          "SPY240119C00475000": [
+            {
+              "c": "I",
+              "p": 1.13,
+              "s": 3,
+              "t": "2024-01-18T14:30:00.009729024Z",
+              "x": "I"
+            }
+          ]
+        }
+      },
+      "status_code": 200,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/trades"
+    },
+    {
+      "body_bytes": 628,
+      "body_path": "002-SPY-chain.body",
+      "body_sha256": "23822d334da08fc4a1176fd5cebbee5b88f6c57de6bf0e6defe7f88799dc0c1e",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "SPY-chain",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:54.902877+00:00",
+      "params": {
+        "expiration_date_gte": "2026-10-05",
+        "expiration_date_lte": "2026-10-16",
+        "feed": "opra",
+        "limit": 1,
+        "type": "call"
+      },
+      "response": {
+        "next_page_token": "U1BZMjYxMDA1QzAwNTUwMDAw",
+        "snapshots": {
+          "SPY261005C00550000": {
+            "dailyBar": {
+              "c": 219.09,
+              "h": 222.33,
+              "l": 217.8,
+              "n": 102,
+              "o": 221.26,
+              "t": "2026-10-02T04:00:00Z",
+              "v": 102,
+              "vw": 219.245196
+            },
+            "latestQuote": {
+              "ap": 220.39,
+              "as": 1,
+              "ax": "Q",
+              "bp": 218.48,
+              "bs": 1,
+              "bx": "Q",
+              "c": "A",
+              "t": "2026-10-02T19:59:59.980533375Z"
+            },
+            "latestTrade": {
+              "c": "a",
+              "p": 219.09,
+              "s": 1,
+              "t": "2026-10-02T18:36:36.744444891Z",
+              "x": "C"
+            },
+            "minuteBar": {
+              "c": 219.09,
+              "h": 219.16,
+              "l": 219.09,
+              "n": 2,
+              "o": 219.16,
+              "t": "2026-10-02T18:36:00Z",
+              "v": 2,
+              "vw": 219.125
+            },
+            "prevDailyBar": {
+              "c": 213.41,
+              "h": 215.95,
+              "l": 212.6,
+              "n": 18,
+              "o": 214.95,
+              "t": "2026-09-29T04:00:00Z",
+              "v": 18,
+              "vw": 214.023333
+            }
+          }
+        }
+      },
+      "status_code": 200,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/snapshots/SPY"
+    },
+    {
+      "body_bytes": 136,
+      "body_path": "003-SPY-latest.body",
+      "body_sha256": "e2f04dd4ab67560d27d2280d39a40d9d23abcc84ba2c855be7f721d28e2a2130",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "SPY-latest",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:54.971208+00:00",
+      "params": {
+        "feed": "opra",
+        "symbols": "SPY261005C00550000"
+      },
+      "response": {
+        "quotes": {
+          "SPY261005C00550000": {
+            "ap": 220.39,
+            "as": 1,
+            "ax": "Q",
+            "bp": 218.48,
+            "bs": 1,
+            "bx": "Q",
+            "c": "A",
+            "t": "2026-10-02T19:59:59.980533375Z"
+          }
+        }
+      },
+      "status_code": 200,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/quotes/latest"
+    },
+    {
+      "body_bytes": 24,
+      "body_path": "004-SPY-history-opra.body",
+      "body_sha256": "8699bf1eda7e016dec3efeff8db5e3400183e9ebf6ce42355b97b843def2b035",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "SPY-history-opra",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:55.037626+00:00",
+      "params": {
+        "end": "2026-10-02T20:00:00Z",
+        "feed": "opra",
+        "limit": 1,
+        "start": "2026-10-02T13:30:00Z",
+        "symbols": "SPY261005C00550000"
+      },
+      "response": {
+        "message": "Not Found"
+      },
+      "status_code": 404,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/quotes"
+    },
+    {
+      "body_bytes": 201,
+      "body_path": "005-QQQ-chain.body",
+      "body_sha256": "9a6174fb2c662b11f47211c4513649aec70d8bbec2468f6b6b1db6a6aff41cf4",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "QQQ-chain",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:55.098841+00:00",
+      "params": {
+        "expiration_date_gte": "2026-10-05",
+        "expiration_date_lte": "2026-10-16",
+        "feed": "opra",
+        "limit": 1,
+        "type": "call"
+      },
+      "response": {
+        "next_page_token": "UVFRMjYxMDA1QzAwNDUwMDAw",
+        "snapshots": {
+          "QQQ261005C00450000": {
+            "latestQuote": {
+              "ap": 301.16,
+              "as": 9,
+              "ax": "N",
+              "bp": 297.53,
+              "bs": 15,
+              "bx": "D",
+              "c": " ",
+              "t": "2026-10-02T19:59:54.676958819Z"
+            }
+          }
+        }
+      },
+      "status_code": 200,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/snapshots/QQQ"
+    },
+    {
+      "body_bytes": 137,
+      "body_path": "006-QQQ-latest.body",
+      "body_sha256": "af646f7de0ca6d4460980bc52c9dc60d7b3575f3ef33401f6f173be2b6385890",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "QQQ-latest",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:55.166532+00:00",
+      "params": {
+        "feed": "opra",
+        "symbols": "QQQ261005C00450000"
+      },
+      "response": {
+        "quotes": {
+          "QQQ261005C00450000": {
+            "ap": 301.16,
+            "as": 9,
+            "ax": "N",
+            "bp": 297.53,
+            "bs": 15,
+            "bx": "D",
+            "c": " ",
+            "t": "2026-10-02T19:59:54.676958819Z"
+          }
+        }
+      },
+      "status_code": 200,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/quotes/latest"
+    },
+    {
+      "body_bytes": 24,
+      "body_path": "007-QQQ-history-opra.body",
+      "body_sha256": "8699bf1eda7e016dec3efeff8db5e3400183e9ebf6ce42355b97b843def2b035",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "QQQ-history-opra",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:55.235209+00:00",
+      "params": {
+        "end": "2026-10-02T20:00:00Z",
+        "feed": "opra",
+        "limit": 1,
+        "start": "2026-10-02T13:30:00Z",
+        "symbols": "QQQ261005C00450000"
+      },
+      "response": {
+        "message": "Not Found"
+      },
+      "status_code": 404,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/quotes"
+    },
+    {
+      "body_bytes": 198,
+      "body_path": "008-VOO-chain.body",
+      "body_sha256": "e7891f98b849f4b631f58ef174b2ec353b2141f6fc579b6bc86c0408617e871c",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "VOO-chain",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:55.295862+00:00",
+      "params": {
+        "expiration_date_gte": "2026-10-05",
+        "expiration_date_lte": "2026-10-16",
+        "feed": "opra",
+        "limit": 1,
+        "type": "call"
+      },
+      "response": {
+        "next_page_token": "Vk9PMjYxMDA5QzAwNDU1MDAw",
+        "snapshots": {
+          "VOO261009C00455000": {
+            "latestQuote": {
+              "ap": 254.7,
+              "as": 1,
+              "ax": "H",
+              "bp": 250.8,
+              "bs": 1,
+              "bx": "J",
+              "c": " ",
+              "t": "2026-10-02T19:59:59.472702746Z"
+            }
+          }
+        }
+      },
+      "status_code": 200,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/snapshots/VOO"
+    },
+    {
+      "body_bytes": 134,
+      "body_path": "009-VOO-latest.body",
+      "body_sha256": "5d3272dd288e81566d70a33824ad7f1fa51a9790be5895e8a98dfc26516d7931",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "VOO-latest",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:55.362943+00:00",
+      "params": {
+        "feed": "opra",
+        "symbols": "VOO261009C00455000"
+      },
+      "response": {
+        "quotes": {
+          "VOO261009C00455000": {
+            "ap": 254.7,
+            "as": 1,
+            "ax": "H",
+            "bp": 250.8,
+            "bs": 1,
+            "bx": "J",
+            "c": " ",
+            "t": "2026-10-02T19:59:59.472702746Z"
+          }
+        }
+      },
+      "status_code": 200,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/quotes/latest"
+    },
+    {
+      "body_bytes": 24,
+      "body_path": "010-VOO-history-opra.body",
+      "body_sha256": "8699bf1eda7e016dec3efeff8db5e3400183e9ebf6ce42355b97b843def2b035",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "VOO-history-opra",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:55.424689+00:00",
+      "params": {
+        "end": "2026-10-02T20:00:00Z",
+        "feed": "opra",
+        "limit": 1,
+        "start": "2026-10-02T13:30:00Z",
+        "symbols": "VOO261009C00455000"
+      },
+      "response": {
+        "message": "Not Found"
+      },
+      "status_code": 404,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/quotes"
+    },
+    {
+      "body_bytes": 24,
+      "body_path": "011-history-no-feed.body",
+      "body_sha256": "8699bf1eda7e016dec3efeff8db5e3400183e9ebf6ce42355b97b843def2b035",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "history-no-feed",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:55.484312+00:00",
+      "params": {
+        "end": "2026-10-02T20:00:00Z",
+        "limit": 1,
+        "start": "2026-10-02T13:30:00Z",
+        "symbols": "SPY261005C00550000"
+      },
+      "response": {
+        "message": "Not Found"
+      },
+      "status_code": 404,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/quotes"
+    },
+    {
+      "body_bytes": 24,
+      "body_path": "012-history-indicative.body",
+      "body_sha256": "8699bf1eda7e016dec3efeff8db5e3400183e9ebf6ce42355b97b843def2b035",
+      "coverage_complete": false,
+      "credential_role": "data",
+      "label": "history-indicative",
+      "method": "GET",
+      "observed_at": "2026-10-03T23:41:55.552689+00:00",
+      "params": {
+        "end": "2026-10-02T20:00:00Z",
+        "feed": "indicative",
+        "limit": 1,
+        "start": "2026-10-02T13:30:00Z",
+        "symbols": "SPY261005C00550000"
+      },
+      "response": {
+        "message": "Not Found"
+      },
+      "status_code": 404,
+      "transport_error": null,
+      "url": "https://data.alpaca.markets/v1beta1/options/quotes"
+    }
+  ],
+  "observed_at": "2026-10-03T23:41:55.612689+00:00",
+  "official_sources": [
+    {
+      "author": "Gergely_Alpaca",
+      "finding": "Historical option quotes are not on the roadmap; staff directs users to another provider.",
+      "published": "2026-06-17",
+      "url": "https://forum.alpaca.markets/t/historical-option-quote-question/19029"
+    },
+    {
+      "finding": "Only latest bid/ask for each symbol; no historical start/end parameters.",
+      "url": "https://docs.alpaca.markets/us/reference/optionlatestquotes"
+    },
+    {
+      "finding": "Latest snapshots; updated_since is a freshness filter, not historical replay.",
+      "url": "https://docs.alpaca.markets/us/reference/optionchain"
+    }
+  ],
+  "requests": 13,
+  "schema": "etfe-quote-404-investigation-v1",
+  "sdk_option_methods": [
+    "get_option_bars",
+    "get_option_chain",
+    "get_option_exchange_codes",
+    "get_option_latest_quote",
+    "get_option_latest_trade",
+    "get_option_snapshot",
+    "get_option_trades"
+  ],
+  "sdk_version": "0.44.0",
+  "transport_failures": 0
+}
