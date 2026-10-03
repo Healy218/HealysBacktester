@@ -20,15 +20,19 @@ V7 research is paused by user direction. Destination: `/run/media/healy/MRHA/v7`
 and `manifests/` receipts. Local archive state:
 `nn_meta/validation/v7-cold-archive-20261002-r0/{plan,progress}.json`.
 Archive service: `healys-v7-cold-archive.service`; source:
-`scripts/archive_v7_cold.py`; selected resource-only consumer
-`scripts/archive_v7_cold_parallel.py`, launcher `scripts/start_v7_cold_archive_fast.sh`.
-Parallel consumer binding: `consumer-parallel-v1.json`; original plan and checks
-retained. Shared autosizing budgets 1.5 GiB/local shard and 6 GiB host reserve;
-external-source shards stay sequential. Memory high/max 20/22 GiB, no swap.
-23:12:47 Central parallel readback: active, 105 of 2,847 shards verified, 12
-autosized shard workers and 14,684,504,064 bytes of service memory. Real external
-restore smoke passed; no retirement yet.
-[Compute observation](reviews/2026-10-02-v7-cold-archive-compute.json).
+`scripts/archive_v7_cold.py`; selected I/O consumer
+`scripts/archive_v7_cold_staged.py`, launcher `scripts/start_v7_cold_archive_staged.sh`.
+Binding: `consumer-staged-v2.json`; original plan and checks retained. At most
+8 GiB SSD staging with a 10-GiB internal free-space guard; serial MRHA copy and
+verification avoid concurrent HDD writeback contention. Oversized/external
+shards stream directly in a later serial phase. Shared autosizing budgets
+1.5 GiB/worker and 6 GiB host reserve; memory high/max 20/22 GiB, no swap.
+23:30:07 Central: staged-v2 started with 13 workers. At 23:37:54–23:38:24,
+four ten-second samples used 12.0–12.4 CPU cores; seven newly staged archives
+verified, MRHA busy time 19–62%, zero memory-cap/OOM events.
+[Measured samples](reviews/2026-10-02-v7-cold-archive-io-after.json).
+Earlier launch observations are retained in [the original review](reviews/2026-10-02-v7-cold-archive.md).
+[Diagnosis and I/O revision](reviews/2026-10-02-v7-cold-archive-io.md).
 `VERIFIED.json` proves all data shards verified; `COMPLETE.json` records finished
 reclamation. A started/idle service is not evidence of completion.
 

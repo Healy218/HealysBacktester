@@ -4,7 +4,7 @@ Description=V7 lossless cold archive to MRHA with verified local reclamation
 [Service]
 Type=simple
 WorkingDirectory=/home/healy/Coding/HealysBacktester
-ExecStart=/usr/bin/bash /home/healy/Coding/HealysBacktester/scripts/start_v7_cold_archive_fast.sh
+ExecStart=/usr/bin/bash /home/healy/Coding/HealysBacktester/scripts/start_v7_cold_archive_staged.sh
 Nice=0
 IOWeight=100
 MemoryHigh=20G

@@ -25,6 +25,8 @@ def main():
     runtime = snapshot / 'archive-runtime'
     runtime.mkdir(exist_ok=True)
     for name in ('scripts/start_v7_cold_archive_fast.sh',
+                 'scripts/start_v7_cold_archive_staged.sh',
+                 'scripts/archive_v7_cold_staged.py',
                  'scripts/archive_v7_cold_parallel.py',
                  'scripts/package_v7_archive_notes.py',
                  'deploy/systemd/healys-v7-cold-archive.service'):

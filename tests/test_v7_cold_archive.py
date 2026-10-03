@@ -8,6 +8,7 @@ import pytest
 from scripts import archive_v7_cold as cold
 from scripts.verify_v7_cold_archive import verify
 from scripts import archive_v7_cold_parallel as parallel
+from scripts import archive_v7_cold_staged as staged
 
 
 @pytest.fixture
@@ -149,3 +150,55 @@ def test_parallel_failure_admits_no_later_work(sandbox, monkeypatch):
     with pytest.raises(ValueError, match='integrity failure'):
         parallel.execute_groups([{'id': 'first'}, {'id': 'second'}], 1)
     assert seen == ['first']
+
+
+def test_staged_archive_retains_original_verification_and_reclaims_only_later(sandbox, monkeypatch):
+    source, state, dest, group, plan = sandbox
+    monkeypatch.setattr(staged, 'LOCAL_RESERVE', 0)
+    budget = staged.Budget(64 * 1024**2)
+    result = staged.pack_staged(group, budget)
+    assert result['consumer'] == 'staged-v2'
+    assert result['members'] == dict(files=3, directories=1, symlinks=1)
+    assert not list((state / 'staging').iterdir())
+    assert budget.used == 0
+    assert (source / 'checkpoint.bin').exists()
+    authorize(state, dest)
+    assert cold.retire(plan) == 2
+
+
+def test_staged_copy_corruption_blocks_publication(sandbox, monkeypatch):
+    source, state, dest, group, plan = sandbox
+    monkeypatch.setattr(staged, 'LOCAL_RESERVE', 0)
+    original = staged.transfer
+    def corrupt(stage, partial):
+        original(stage, partial)
+        with partial.open('ab') as f:
+            f.write(b'bad')
+    monkeypatch.setattr(staged, 'transfer', corrupt)
+    budget = staged.Budget(64 * 1024**2)
+    with pytest.raises(ValueError, match='transfer checksum mismatch'):
+        staged.pack_staged(group, budget)
+    assert not (state / '00000.verified.json').exists()
+    assert not (dest / 'data/00000.tar.zst').exists()
+    assert (source / 'checkpoint.bin').exists()
+    assert budget.used == 0
+
+
+def test_staged_capacity_defers_without_changing_source(sandbox):
+    source, state, dest, group, plan = sandbox
+    assert staged.pack_staged(group, staged.Budget(1024)) is None
+    assert (source / 'checkpoint.bin').exists()
+    assert not (state / '00000.verified.json').exists()
+
+
+def test_staged_source_change_blocks_publication(sandbox, monkeypatch):
+    source, state, dest, group, plan = sandbox
+    monkeypatch.setattr(staged, 'LOCAL_RESERVE', 0)
+    original = staged.compress
+    def mutate(*args):
+        original(*args)
+        (source / 'receipt.json').write_text('changed')
+    monkeypatch.setattr(staged, 'compress', mutate)
+    with pytest.raises(ValueError, match='Source changed'):
+        staged.pack_staged(group, staged.Budget(64 * 1024**2))
+    assert not (state / '00000.verified.json').exists()

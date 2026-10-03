@@ -15,6 +15,8 @@ V7-only internal space. More storage is needed before research resumes.
 
 - [ ] **7-3.archive:** Complete all shards and external verification, then reclaim
   eligible V7-only payloads; completion requires `COMPLETE.json`, not launch.
+  October 2 I/O revision: bounded SSD staging plus serialized MRHA publication
+  replaces contending direct HDD writes. [Evidence](docs/reviews/2026-10-02-v7-cold-archive-io.md).
 - [ ] **7-3.archive-restore:** When resources and historical-provider access are
   resolved and the user resumes V7, follow the archive README and preserved last
   research handoff. Keep all scientific scope and completed evidence unchanged.

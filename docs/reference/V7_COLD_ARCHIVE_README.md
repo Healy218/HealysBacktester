@@ -136,13 +136,16 @@ original checkout using:
 systemctl --user start healys-v7-cold-archive.service
 ```
 
-If restoring from the source snapshot, first overlay the newer parallel archive
+If restoring from the source snapshot, first overlay the newer staged archive
 runtime saved in the compressed notes under `archive-runtime/` onto `scripts/`
 (and the service file onto `deploy/systemd/` if installing it). The original
 three-thread launcher remains available as a slower fallback.
 If the service is not installed, use
-`bash scripts/start_v7_cold_archive_fast.sh` from that checkout. Completed shards are
-rehash-verified and reused; incomplete shards are rebuilt. All shards must verify
+`bash scripts/start_v7_cold_archive_staged.sh` from that checkout. Completed shards are
+rehash-verified and reused; incomplete shards are rebuilt. The selected staged-v2
+runner compresses local shards into at most 8 GiB of SSD staging while guarding
+10 GiB internal free space, then serializes transfers and verification on MRHA.
+Oversized and external-source shards stream directly in a later serial phase. All shards must verify
 before any automatic local reclamation. The run stops on corruption, changed
 sources, insufficient external capacity or other failed checks. Completion is
 receipt-owned, never inferred from an idle service or a folder name.

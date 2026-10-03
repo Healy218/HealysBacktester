@@ -1,0 +1,20 @@
+{
+  "recorded_at": "2026-10-03T04:30:07.402646+00:00",
+  "scope": "initial five-second sample before staged-v2 deployment",
+  "MRHA_read_MiB_s": 1.047101788356844,
+  "MRHA_write_MiB_s": 12.298441446686036,
+  "MRHA_busy_percent": 100.01367879545498,
+  "MRHA_inflight": 20,
+  "SSD_busy_percent": 4.2197332985084985,
+  "archive_cpu_cores": 4.804265754069905,
+  "archive_memory_events": {
+    "high": 0,
+    "max": 0,
+    "oom": 0,
+    "oom_kill": 0
+  },
+  "io_pressure_full_avg10": 40.29,
+  "blocked_zstd_writer_wait": "balance_dirty_pages_ratelimited",
+  "usb_link": "UAS 5000M",
+  "interpretation": "Concurrent MRHA writes/verification caused device writeback stalls; not a CPU quota or RAM-cap event."
+}
