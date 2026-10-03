@@ -8,13 +8,24 @@ running-job locations; do not choose a different revision from an old review.
 
 ## Active gate 7-3 — required option evidence
 
-**October 2 user pause:** V6 data updates, context retries and continual
-training are paused until the user resumes later tonight. Their timers are
-disabled; hourly lab and legacy V7 progress watchers are stopped. No automatic
-restart time was selected. V7 discovery remains selected; paper runtime remains
-unchanged. See [pause receipt](docs/reviews/2026-10-02-user-training-pause.md).
+**October 2 session-close direction — V7 only:** Finish **7-3** first; all
+other work is paused until V7 is done. This supersedes resuming V6 later tonight.
+V6 updates/training and hourly watchers remain paused; do not reopen their work
+from old operating obligations. Preserve completed evidence and the full V7 scope.
+[Decision](docs/DECISIONS.md#2026-10-02--v7-only-priority-finish-gate-7-3-first);
+[verified runtime pause](docs/reviews/2026-10-02-user-training-pause.md).
 
-**October 2 current direction — optimized V7 resumed.** After the user authorized
+Immediate next actions within the existing 7-3 gate:
+- [ ] **7-3.discovery-reserve:** Reconcile the scheduler's clock-based V6 memory
+  reservation with the user pause; validate any resource-only revision, preserve
+  scientific seals/checkpoints and verify actual resumed worker progress.
+- [ ] **7-3.provider-blocker:** Resolve remaining required-input access after
+  Massive options cancellation. Epoch 00002 capture returned HTTP 403. Preserve
+  completed packs; do not silently replace historical windows, expand exclusions,
+  buy a subscription or claim full coverage without evidence.
+- Continue **7-3.references/paths/reconcile/close** below after these blockers.
+
+**October 2 deployment history — optimized V7 resumed.** After the user authorized
 adoption, both selected controllers resumed at 12:45:08 Central with retained
 checkpoints. New selected root: `v7-required-inputs-20261002-perf-r0`.
 [Adoption and evidence](docs/reviews/2026-10-02-v7-performance-adoption.md).
@@ -49,7 +60,7 @@ are omitted. [Completion and restart evidence](docs/reviews/2026-10-01-v6-occurr
 Reuse the [verified completed preparation](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md).
 The following scope is unchanged by the documentation consolidation.
 
-**September 30 revised direction:** At **15:01 Central**, pause competing local
+**September 30 historical direction (superseded by the V7-only priority):** At **15:01 Central**, pause competing local
 batch jobs and dedicate compute to **OPS-INCUBATOR.DATA/PROOF**. Until the handover,
 V7 continues normally. After a verified V6 candidate freeze/evaluation, restore
 paused jobs automatically with maximum supported memory-aware concurrency.
@@ -131,9 +142,10 @@ this does not change the active gate or authorize reopening completed stages.
 Exact scope remains in the [V7 specification](docs/specs/MULTITIMEFRAME_RESEARCH.md)
 and its accepted amendments, indexed by [CURRENT_STATE](docs/CURRENT_STATE.md).
 
-## Separate operating obligations
+## Paused operating obligations — resume after V7 on user direction
 
-These are explicit parallel obligations, not extra V7-3 completion conditions.
+Retained requirements and completed evidence below are not active parallel work
+or extra V7-3 completion conditions. The October 2 V7-only priority owns selection.
 
 - [x] **OPS-PAPER:** First prospective actual-order/fill reconciliation observed.
   September 29 at 17:30 Central: all 48 broker orders match the journal, eight
@@ -198,7 +210,7 @@ These are explicit parallel obligations, not extra V7-3 completion conditions.
   Bounded recorder transport tested; no full-universe recording/admission claim.
   [Transition and remaining work](docs/reviews/2026-10-02-v6-alpaca-provider.md).
 
-FA collection is included in the temporary local 15:01 compute pause and
-automatic post-V6 restoration; its normal schedules otherwise remain selected. Additional FA research,
-SPX0, volatility, stacking, RL and panel expansion remain in the roadmap until
-selected; they do not get independent active TODOs or handoffs.
+FA and all other non-V7 work are deferred until V7 is done. Their retained
+roadmap requirements do not authorize parallel campaigns or automatic resumption.
+The verified runtime pause is scoped in CURRENT_STATE; this work-selection note
+does not assert that unrelated installed services were stopped.

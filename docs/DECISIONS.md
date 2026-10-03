@@ -6,6 +6,23 @@ gates, [TODO](../TODO.md) owns selected work, and [CURRENT_STATE](CURRENT_STATE.
 owns selected operational pointers. Do not execute an old continuation order
 solely because it appears in this log.
 
+### 2026-10-02 — V7-only priority; finish gate 7-3 first
+
+At session close the user selected finishing 7-3 as the immediate priority and
+paused all other work until V7 is done. This supersedes the earlier intention to
+resume V6 updates/training later tonight and prior parallel-work directions.
+Keep non-V7 implementation, provider/recorder work, training and update campaigns
+paused; preserve completed evidence. Hourly watchers remain stopped.
+
+Close 7-3 against its existing required-input coverage and reconciliation gate;
+then follow the remaining Phase 7 dependencies. Finishing 7-3 alone does not end
+the broader non-V7 pause or authorize model deployment. No automatic V6 restart.
+The documentation handoff records work selection, not a claim that every
+previously installed background service was disabled. The actual verified pause
+covers V6 continual/data/context retries and both hourly progress timers; paper
+and other existing services were unchanged by that operation.
+[Pause evidence](reviews/2026-10-02-user-training-pause.md).
+
 ### 2026-09-30 — Increase dedicated V6 data concurrency from measured headroom
 
 The user requested more workers after the four-worker run remained below 8 GiB

@@ -1,42 +1,59 @@
-# Handoff — October 2, 2026 — user pause
+# Handoff — October 2, 2026 — finish V7 gate 7-3
 
-## Current direction
+## Priority and scope
 
-User paused all V6 updates and training until later tonight and stopped the
-hourly watcher. No automatic restart time selected. Wait for user direction to
-resume. [Pause verification](docs/reviews/2026-10-02-user-training-pause.md).
+Finish **7-3** next. **All other work is paused until V7 is done.** This latest
+user direction supersedes resuming V6 later tonight and prior parallel operating
+assignments. Keep hourly watchers stopped. Gate 7-3 closure does not itself end
+the broader pause; follow remaining Phase 7 dependencies. No model deployment.
+[TODO](TODO.md), [ROADMAP](ROADMAP.md), [decision](docs/DECISIONS.md#2026-10-02--v7-only-priority-finish-gate-7-3-first).
 
-## Applied and verified
+## Next session — selected 7-3 work
 
-V6 continual/data/context-retry timers disabled and inactive; associated service
-MainPID values zero. Continual had already failed on provider errors before the
-stop and retains that result. No model training process remains active.
-Lab and legacy V7 hourly update timers disabled/inactive; lab watcher state
-`stopped=true`, `pending=false`. All seals/checkpoints retained.
-Paper runtime unchanged. V7 discovery controller remains running; its memory
-reservation policy was not changed and may still prevent worker admissions.
+1. Inspect fresh selected receipts and actual workers. The 19:59:24 Central
+   discovery receipt still has zero active/admitted workers: clock-based daily
+   V6 reserve 25,600 MiB despite incubator memory zero. Reconcile this resource
+   policy with the user pause; preserve scientific identity/checkpoints and
+   verify progression after any validated resource-only change.
+2. Resolve required historical-input access: epoch 00002 capture failed on
+   Massive HTTP 403 after options cancellation. Do not blindly retry, substitute
+   snapshots for quote windows, widen exclusions or purchase service implicitly.
+3. Continue retained discovery and actual frontier capture/reference/replay;
+   reconcile all required inputs and provider failures against the declared
+   7-3 deliverable before closing it. Completed entry capture stays complete.
 
-## Stopping point / blockers
+## Selected artifacts and evidence
 
-October 2 V6 daily incubation still calls Massive despite paper's Alpaca switch;
-it failed during candidates/labels before training. Inspect r5 selected receipt
-and service-exit before any retry. Prior successful September 30 freeze preserved.
+Root: `nn_meta/validation/v7-required-inputs-20261002-perf-r0/`.
+Pointer: `logs/lab-hourly-watch/v7-selection.json`.
+Controllers: `healys-v7-required-discovery-20260930` and
+`healys-v7-required-frontier-20260930`. Resource v4 ceiling twelve; actual
+admission is receipt-owned. Discovery was running at last host read; frontier
+has a retained failure. No new host-health inference from filenames.
 
-V6 paper scanner v12 uses Alpaca held quotes. Full-universe entries deliberately
-blocked pending stream capacity and admitted preceding feature windows. Actual
-2,434-contract probe exceeded stream capacity; bounded recorder is not production.
-[Provider work](docs/reviews/2026-10-02-v6-alpaca-provider.md), commit `aae0c33`.
+16:00 Central retained discovery: 1,838,826 decision groups / 173,038,120 assessed
+scenarios; 74 terminal securities including eight empty, 172 partial. Assessments
+include pending inputs, not final labels. Separately, replay 00001 assessed
+20,015,688/20,015,688 targets. Capture 00002: 0/84,407 windows, 3,517 failed batches.
+Exact observations: [CURRENT_STATE](docs/CURRENT_STATE.md#october-2-session-close-receipts-and-pause-boundary).
 
-V7 selected `v7-required-inputs-20261002-perf-r0`, resource policy v4 up to twelve
-workers, preserved wave lineage. At 16:00: 1,838,826 decision groups and
-173,038,120 scenarios assessed; 74 terminal securities including eight empty,
-172 partial. Counts include pending inputs. Epoch 00001 replay assessed
-20,015,688/20,015,688 targets; epoch 00002 capture failed 0/84,407 windows with
-3,517 Massive HTTP 403 batches. Gate 7-3 remains open.
+## Session changes / paused work
 
-## Next actions when user resumes
+V6 continual/data/context-retry schedules and both hourly progress watchers were
+disabled and verified inactive; no active training. Watcher `stopped=true`.
+[Pause verification](docs/reviews/2026-10-02-user-training-pause.md), commit `9420cf0`.
+V6 daily run ended 16:24 blocked, 5/449 complete, 444 incomplete, no training;
+Massive-dependent build failed. Successful seals and prior r5 freeze preserved.
+V6 paper remains feature-blocked pending Alpaca capacity/windows; recorder/provider
+work is deferred. Actual pause did not stop existing paper or other background
+services; work-selection notes must not be mistaken for a fleet shutdown receipt.
 
-Resolve cancelled-provider scope for active research before retrying captures
-or incubation. Restore only explicitly selected schedules; watcher stays stopped
-until requested. No paper/live model promotion authorized. Preserve unrelated
-dirty work. Current gate checklist: TODO; exact pointers: docs/CURRENT_STATE.md.
+Screen 1 software toggle did not recover its 640x480 fallback. User power-cycled
+the monitor and confirmed recovery; display issue resolved, no follow-up needed.
+
+## Preservation
+
+Preserve unrelated dirty/untracked work, frozen artifacts and source contracts.
+No training reruns, captures of completed packs, hourly watcher restart or
+non-V7 task revival from historical instructions. Main branch, scoped commits
+and pushes; consult TODO then this handoff and only relevant state sections.

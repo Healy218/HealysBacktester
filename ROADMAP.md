@@ -6,6 +6,10 @@ completed, reproducible milestones and measured outcomes. The end goal remains
 open-ended; each selected phase has bounded requirements and an exit condition.
 
 **Selected phase: 7 — V7 data, execution and training. Current gate: 7-3.**
+**October 2 priority:** finish 7-3 first; all non-V7 work is paused until V7 is
+done. This supersedes the earlier V6 restart later tonight and parallel-work
+selection. Gate scope and completed evidence remain unchanged.
+[Decision](docs/DECISIONS.md#2026-10-02--v7-only-priority-finish-gate-7-3-first).
 [TODO](TODO.md) owns actionable tasks. [CURRENT_STATE](docs/CURRENT_STATE.md)
 owns selected inputs and runtime pointers. [GOALS](GOALS.md) owns the maturity
 scorecard. Status below is reconciled September 27, 2026; live health requires
@@ -27,9 +31,10 @@ checking the linked operational evidence.
 | RL sizing and exits | Deferred, last in dependency order | Reliable execution ledger and demonstrable improvement over simple sizing/exits |
 | Platform, dashboards and journal | Deployment/monitoring and existing displays exist | Accurate artifact/account identity, recoverable operations and broker facts distinct from projections |
 
-FA collection, operational monitoring and scheduled inference may continue
-while research is deferred. Additional work is selected through the main TODO;
-this map does not authorize a new campaign or spending decision.
+All non-V7 workstreams above are paused by the October 2 user direction.
+Their next milestones remain retained requirements, not active assignments.
+Actual installed-service state is recorded separately in CURRENT_STATE; work
+selection does not itself prove service shutdown or authorize spending.
 
 ## Phase 7 — V7 data, execution and training
 
@@ -42,7 +47,7 @@ Technical scope and accepted amendments are indexed in
 | --- | --- | --- | --- |
 | **7-1 — Identity and actions** | **Complete** | Source-bound identity/actions and explicit admitted held-boundary treatment | [Closure](docs/reviews/2026-09-18-v7-6-1-closure.md), [dividends](docs/reviews/2026-09-18-v7-dividends-complete.md); exclusions remain part of the admitted scope |
 | **7-2 — Causal context and proposals** | **Complete** | Full agreed catalog/context and retained causal-prefix/recovery evidence | [Completion](docs/reviews/2026-09-25-v7-2-complete-and-v7-3-start.md); selected receipts in CURRENT_STATE |
-| **7-3 — Required option evidence** | **Open: optimized continuation resumed; full paths remain** | Actual required entry/reference/held/exit/roll/stock inputs captured and coverage/provider failures/storage reconciled under the existing exclusions | Depends on completed demand/context; [remaining-input verification](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md). [Entry completion](docs/reviews/2026-09-28-overnight-entry-completion.md); [reference completion/admission](docs/reviews/2026-09-28-v7-reference-completion.md); [approved exceptions and full discovery](docs/reviews/2026-09-28-v7-full-execution-discovery.md); [resumed discovery and actual-input capture](docs/reviews/2026-09-29-v7-resumed-discovery-and-capture.md); [September 30 frozen replay completion](docs/reviews/2026-09-30-v6-step-policy-v4.md); [continuous full-scope input continuation](docs/reviews/2026-09-30-v7-frontier-continuation.md); [October 2 performance pause](docs/reviews/2026-10-02-v7-performance-pause.md); [bounded performance validation](docs/reviews/2026-10-02-v7-performance-benchmark.md), [optimized adoption and resumption](docs/reviews/2026-10-02-v7-performance-adoption.md); closure requires actual final coverage receipts |
+| **7-3 — Required option evidence** | **Open: selected priority; discovery reserve and provider access blockers** | Actual required entry/reference/held/exit/roll/stock inputs captured and coverage/provider failures/storage reconciled under the existing exclusions | Depends on completed demand/context; [remaining-input verification](docs/reviews/2026-09-27-v7-3-remaining-input-verification.md). [Entry completion](docs/reviews/2026-09-28-overnight-entry-completion.md); [reference completion/admission](docs/reviews/2026-09-28-v7-reference-completion.md); [approved exceptions and full discovery](docs/reviews/2026-09-28-v7-full-execution-discovery.md); [resumed discovery and actual-input capture](docs/reviews/2026-09-29-v7-resumed-discovery-and-capture.md); [September 30 frozen replay completion](docs/reviews/2026-09-30-v6-step-policy-v4.md); [continuous full-scope input continuation](docs/reviews/2026-09-30-v7-frontier-continuation.md); [October 2 performance pause](docs/reviews/2026-10-02-v7-performance-pause.md); [bounded performance validation](docs/reviews/2026-10-02-v7-performance-benchmark.md), [optimized adoption and resumption](docs/reviews/2026-10-02-v7-performance-adoption.md); closure requires actual final coverage receipts |
 | **7-4 — Integrated execution** | **Partial implementation; full gate open** | Integrated full-scope ledger with reconciled fills, marks, costs, expiry, settlement and applicable stock delivery/liquidation | Existing components and [retained integration](docs/reviews/2026-09-27-v7-integrated-execution.md); finish against required 7-3 inputs |
 | **7-5 — Assembly and folds** | **Upcoming; components exist** | Full agreed dataset, label horizons and predeclared purged folds/trials connected and reconciled | Depends on admitted inputs and execution labels; preserve existing assembly/fold components |
 | **7-6 — Resources and recovery** | **Upcoming; component evidence exists** | Measured integrated build/training footprint, bounded memory, restart and coexistence with operational experts | Depends on actual 7-5 workload; reuse unchanged resource/recovery proofs |
@@ -75,7 +80,7 @@ revision-specific commands belong in CURRENT_STATE or their dated receipts.
 | V5/V6 nightly incubator activation and Friday inference | [Activation](docs/reviews/2026-09-25-incubator-nightly-activation.md), [Friday audit](docs/reviews/2026-09-27-incubator-fa-alpaca-readiness.md); historical replay scope superseded by [continual training](docs/reviews/2026-09-27-v6-continual-incubator.md), without invalidating the inference evidence |
 | Documentation consolidation | [Ownership and preservation review](docs/reviews/2026-09-27-documentation-consolidation.md); no research/runtime work performed |
 
-## FA milestones — research deferred, collection continues
+## FA milestones — paused until V7 is done
 
 This is the sole FA milestone map. [FA context reference](docs/reference/FA_CONTEXT.md)
 retains the detailed requirements and distinctions between raw captures,

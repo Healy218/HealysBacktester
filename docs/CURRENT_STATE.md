@@ -297,6 +297,32 @@ and `progress.json` together; a waiting service is not proof of advancing work.
 Only `closure_candidate_ready` reaches final evidence review, and it does not
 itself close 7-3 or authorize training. [Workflow and verification](reviews/2026-09-30-v7-frontier-continuation.md).
 
+### October 2 session-close receipts and pause boundary
+
+Observation read at session close: selected discovery campaign receipt updated
+**October 2 19:59:24 Central** (`2026-10-03T00:59:24.515148Z`) still reports
+`running`, zero active/admitted workers and `resource_wait=memory reserve`.
+Resource policy v4 reserves 25,600 MiB with `daily_reservation=true` despite
+`incubator_mib=0`; worker ceiling is twelve. This is a scheduler wait, not lost
+checkpoints or evidence of OOM. Fresh receipts must establish the next run state.
+
+Original retained work at 16:00: 1,838,826 decision groups / 173,038,120 execution
+scenario assessments, 74 terminal securities (66 full plus eight verified empty),
+172 partial. Counts include pending-input outcomes. Epoch 00001 replay assessed
+20,015,688/20,015,688 targets separately. Epoch 00002 capture failed at 15:38:49:
+0/84,407 windows, 3,517 batches with Massive HTTP 403; frontier records
+`RuntimeError: capture_v7_recovery_frontier.py exited 1`. Provider cancellation
+is recorded; no replacement historical source or new exclusions admitted.
+Evidence: `logs/lab-hourly-watch/runtime-1790974800.json` and selected receipts.
+
+V6 October 2 r5 run ended **16:24:01 Central**, blocked at candidates/labels:
+5/449 symbols complete, 444 incomplete, `training_started=false`; service exit 1.
+Successful checkpoints retained. Earlier 16:03 counts were in-progress errors,
+not this final result. Update/retry and watcher timers were disabled at the
+subsequent user pause; [exact units](reviews/2026-10-02-user-training-pause.md).
+Paper and unrelated services were unchanged by that pause. The session-close
+V7-only work selection is owned by TODO/ROADMAP/DECISIONS, not inferred shutdown.
+
 ### October 2 discovery concurrency successor
 
 The user requested maximum supported discovery concurrency and a measured ETA.
@@ -438,7 +464,8 @@ Watcher defaults now select r4/daily service; restart an old viewer to load them
 context-retry timers and both lab/legacy V7 hourly timers are disabled/inactive.
 No model training process remains active; continual retains its preceding failed
 result with MainPID=0. Watcher state has `stopped=true`. No automatic restart
-time chosen; resume only on user direction. Existing seals/checkpoints retained.
+time chosen. Session-close direction subsequently deferred non-V7 work until V7
+is done; do not infer a tonight restart. Existing seals/checkpoints retained.
 [Exact paused units and verification](reviews/2026-10-02-user-training-pause.md).
 
 **October 2 reporting scope:** hourly messages focus on V6 Alpaca paper trading
