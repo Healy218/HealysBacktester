@@ -43,6 +43,29 @@ autostarts were subsequently disabled. Prior raw migration receipt is complete:
 Earlier acquisition/replay runtime selections below are restoration references,
 not currently running-work claims. [Archive evidence](reviews/2026-10-02-v7-cold-archive.md).
 
+## October 3 concurrent verified-local V7 reclamation
+
+Archive compressor and frozen plan remain unchanged. Selected cleanup service:
+`healys-v7-local-reclaim.service`; entrypoint
+`scripts/reclaim_v7_verified_local_v2.py` over the frozen v1 consumer.
+Same local state root: `nn_meta/validation/v7-cold-archive-20261002-r0/`.
+`early-cleanup-declaration.json` and `early-cleanup-consumer-v2.json` bind the
+local subset; `early-cleanup-progress.json` owns actual cleanup progress.
+`retired.jsonl`/`retire-intent.json` remain compatible with original final cleanup.
+`LOCAL_CLEANUP_COMPLETE.json` closes this subset only; full `COMPLETE.json` remains
+required for the entire archive. No completion claim from service startup.
+
+All 2,584 local shards have full receipts. 35,031 eligible files total 502.58 GiB
+logical, not promised physical space recovery. External/source SHA256 checks
+precede removal. The controller is briefly coordinated around journaled unlinks,
+while its compressor children continue; an owned-stop recovery hook prevents
+leaving it stopped on cleanup failure. Reads capped at 16 MiB/s, idle I/O,
+768-MiB/1-GiB memory high/max, no swap. Shared inputs and MRHA originals remain.
+Corrected cleanup started 11:11:48 Central; at 11:13, 544 files removed and
+about 22 GiB SSD free, while external compression continued.
+[Measured launch receipt](reviews/2026-10-03-v7-verified-local-cleanup-launch.json).
+[Scope, tests and runtime boundary](reviews/2026-10-03-v7-verified-local-cleanup.md).
+
 ## Runtime identity and locations
 
 | Scope | Host / checkout | Authoritative state or evidence |

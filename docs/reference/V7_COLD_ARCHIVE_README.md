@@ -28,6 +28,8 @@ assembly/folds, resource/recovery validation and training readiness (7-4 through
   complete source comparison and member census.
 - `COMPLETE.json`: exists only after the archive run finishes its selected
   reclamation stage. Without it, this is an in-progress/partial archive.
+- `LOCAL_CLEANUP_COMPLETE.json`: the independently verified local cleanup subset
+  is finished; remaining MRHA compression may still be running.
 - `retired.jsonl`: exact local files removed after verification. Small local
   receipts, links, raw inputs, code, shared inputs and external originals remain.
 
@@ -145,7 +147,18 @@ If the service is not installed, use
 rehash-verified and reused; incomplete shards are rebuilt. The selected staged-v2
 runner compresses local shards into at most 8 GiB of SSD staging while guarding
 10 GiB internal free space, then serializes transfers and verification on MRHA.
-Oversized and external-source shards stream directly in a later serial phase. All shards must verify
-before any automatic local reclamation. The run stops on corruption, changed
+Oversized and external-source shards stream directly in a later serial phase.
+October 3 user direction allows independently verified local files to be
+reclaimed while MRHA-only compression continues. Each affected archive and
+source file is rehashed before removal; this does not fabricate full completion. The run stops on corruption, changed
 sources, insufficient external capacity or other failed checks. Completion is
 receipt-owned, never inferred from an idle service or a folder name.
+
+
+The concurrent cleanup service is `healys-v7-local-reclaim.service`. Its progress
+is `early-cleanup-progress.json` beside archive progress. It preserves the original
+retirement journal so final cleanup skips files already removed. Reinstall its
+runtime from the extracted notes' `archive-runtime/` folder if needed. Inspect the compressor phase
+before resuming it: the early pass is for the external-only compression phase.
+An `ExecStopPost` hook recovers only a controller stop owned by this cleanup.
+Do not delete the journal, intent or owned-stop marker while either service runs.

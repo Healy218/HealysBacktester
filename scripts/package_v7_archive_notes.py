@@ -29,6 +29,9 @@ def main():
                  'scripts/archive_v7_cold_staged.py',
                  'scripts/archive_v7_cold_parallel.py',
                  'scripts/package_v7_archive_notes.py',
+                 'scripts/reclaim_v7_verified_local.py',
+                 'scripts/reclaim_v7_verified_local_v2.py',
+                 'deploy/systemd/healys-v7-local-reclaim.service',
                  'deploy/systemd/healys-v7-cold-archive.service'):
         shutil.copy2(ROOT / name, runtime / Path(name).name)
     for name in ('notes', 'data', 'manifests'):

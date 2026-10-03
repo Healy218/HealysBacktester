@@ -1,0 +1,31 @@
+{
+  "observed_at": "2026-10-03T16:15:13.190521+00:00",
+  "cleanup": {
+    "group": "00030",
+    "retired_files": 1193,
+    "logical_bytes_removed_this_pass": 4852599914,
+    "local_free": 25490042880,
+    "status": "checking-archive",
+    "at": "2026-10-03T16:15:09Z"
+  },
+  "compression": {
+    "status": "archiving",
+    "updated_at": "2026-10-03T16:13:22Z",
+    "consumer": "staged-v2",
+    "phase": "serial-direct",
+    "active_groups": [
+      "02688"
+    ],
+    "completed_groups": 2688,
+    "total_groups": 2847,
+    "threads_per_archive": 13
+  },
+  "journal_files": 1193,
+  "journal_unique_files": 1193,
+  "journal_logical_bytes": 5782249699,
+  "local_free": 25490042880,
+  "external_free": 269904642048,
+  "local_cleanup_complete": false,
+  "full_archive_complete": false,
+  "controller_pause_marker_present": false
+}

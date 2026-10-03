@@ -1,0 +1,16 @@
+[Unit]
+Description=Reclaim independently verified local V7 files while MRHA compression continues
+
+[Service]
+Type=simple
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/reclaim_v7_verified_local_v2.py --archive-read-mib 16
+ExecStopPost=/home/healy/Coding/HealysBacktester/venv/bin/python /home/healy/Coding/HealysBacktester/scripts/reclaim_v7_verified_local_v2.py --resume-controller
+Nice=19
+IOSchedulingClass=idle
+IOWeight=10
+MemoryHigh=768M
+MemoryMax=1G
+MemorySwapMax=0
+TimeoutStopSec=30
+Restart=no

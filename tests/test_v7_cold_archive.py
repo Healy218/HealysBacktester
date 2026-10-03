@@ -2,6 +2,10 @@ import json
 import os
 from pathlib import Path
 import subprocess
+import signal
+import sys
+import time
+from contextlib import nullcontext
 
 import pytest
 
@@ -9,6 +13,8 @@ from scripts import archive_v7_cold as cold
 from scripts.verify_v7_cold_archive import verify
 from scripts import archive_v7_cold_parallel as parallel
 from scripts import archive_v7_cold_staged as staged
+from scripts import reclaim_v7_verified_local as early
+from scripts import reclaim_v7_verified_local_v2 as early_v2
 
 
 @pytest.fixture
@@ -202,3 +208,101 @@ def test_staged_source_change_blocks_publication(sandbox, monkeypatch):
     with pytest.raises(ValueError, match='Source changed'):
         staged.pack_staged(group, staged.Budget(64 * 1024**2))
     assert not (state / '00000.verified.json').exists()
+
+
+@pytest.fixture
+def early_sandbox(sandbox, monkeypatch):
+    source, state, dest, group, plan = sandbox
+    cold.pack(group, 1)
+    plan['roots'] = [cold.relative(source)]
+    plan['groups'].append(dict(id='99999', members=['run/media/healy/MRHA/remaining'], shallow=[]))
+    cold.save(state / 'plan.json', plan)
+    cold.save(dest / 'manifests/plan.json', plan)
+    cold.save(state / 'progress.json', dict(status='archiving', phase='serial-direct', active_groups=['99999']))
+    monkeypatch.setattr(cold, 'validate_plan', lambda plan: None)
+    monkeypatch.setattr(early, 'status', early_v2.status)
+    class FakeController:
+        def __init__(self, pid):
+            pass
+        def pause(self):
+            return nullcontext()
+        def close(self):
+            pass
+    monkeypatch.setattr(early, 'Controller', FakeController)
+    monkeypatch.setattr(early.subprocess, 'check_output', lambda *a, **k: '123')
+    return sandbox
+
+
+def test_early_cleanup_does_not_require_or_fabricate_full_completion(early_sandbox):
+    source, state, dest, group, plan = early_sandbox
+    early.run(0)
+    assert not (source / 'checkpoint.bin').exists()
+    assert (source / 'receipt.json').is_file()
+    assert (source / 'link').is_symlink()
+    assert (state / 'LOCAL_CLEANUP_COMPLETE.json').exists()
+    assert not (state / 'VERIFIED.json').exists()
+    assert not (state / 'COMPLETE.json').exists()
+    assert len((state / 'retired.jsonl').read_text().splitlines()) == 2
+    # Later original final cleanup consumes exactly the same journal entries.
+    plan['groups'] = [group]
+    cold.save(state / 'plan.json', plan)
+    authorize(state, dest)
+    assert cold.retire(plan) == 2
+
+
+def test_early_cleanup_rejects_corrupt_external_copy(early_sandbox):
+    source, state, dest, group, plan = early_sandbox
+    with (dest / 'data/00000.tar.zst').open('ab') as f:
+        f.write(b'corrupted')
+    with pytest.raises(ValueError, match='External archive changed'):
+        early.run(0)
+    assert (source / 'checkpoint.bin').exists()
+
+
+def test_early_cleanup_hands_off_before_final_reclamation(early_sandbox):
+    source, state, dest, group, plan = early_sandbox
+    cold.save(state / 'VERIFIED.json', {})
+    with pytest.raises(early.FinalPhase):
+        early.phase_guard(plan)
+    assert (source / 'checkpoint.bin').exists()
+
+
+def test_early_cleanup_requires_all_local_receipts(early_sandbox):
+    source, state, dest, group, plan = early_sandbox
+    plan['groups'].append(dict(id='missing', members=[cold.relative(source.parent / 'v7-missing')], shallow=[]))
+    with pytest.raises(FileNotFoundError):
+        early.local_manifest(plan)
+
+
+def test_early_cleanup_preserves_frozen_root_files(early_sandbox):
+    source, state, dest, group, plan = early_sandbox
+    receipt = json.loads((state / '00000.verified.json').read_text())
+    item = receipt['retire_candidates'][0]
+    plan['roots'].append(item['path'])
+    assert early.candidate_path(item, group, plan) is None
+
+
+def test_controller_guard_and_crash_recovery(sandbox):
+    source, state, dest, group, plan = sandbox
+    child = subprocess.Popen([sys.executable, '-c', 'import time; time.sleep(60)'])
+    controller = early.Controller(child.pid, expected=None)
+    try:
+        with controller.pause():
+            assert early.identity(child.pid)['state'] == 'T'
+            assert early.marker().exists()
+        assert not early.marker().exists()
+        cold.save(early.marker(), early.identity(child.pid))
+        os.kill(child.pid, signal.SIGSTOP)
+        deadline = time.monotonic() + 5
+        while early.identity(child.pid)['state'] != 'T' and time.monotonic() < deadline:
+            time.sleep(.005)
+        assert early.identity(child.pid)['state'] == 'T'
+        early.recover_pause(expected=None)
+        assert not early.marker().exists()
+        # SIGCONT is asynchronous; allow acknowledgement before the next guard.
+        while early.identity(child.pid)['state'] == 'T' and time.monotonic() < deadline:
+            time.sleep(.005)
+        assert early.identity(child.pid)['state'] != 'T'
+    finally:
+        os.kill(child.pid, signal.SIGCONT)
+        child.terminate(); child.wait(); controller.close()

@@ -1,59 +1,59 @@
-# Handoff — October 2, 2026 — V7 archive I/O repair
+# Handoff — October 3, 2026 — concurrent verified-local V7 cleanup
 
 ## Priority
 
-V7 remains paused for a restorable MRHA/v7 cold archive. User authorized strong
-lossless compression and verified V7-only local reclamation, then requested
-maximum supported compute and reported low CPU use. Other work stays paused.
-[TODO](TODO.md), [I/O review](docs/reviews/2026-10-02-v7-cold-archive-io.md).
+User requested cleaning the verified local V7 data while the last MRHA chunks
+continue compressing. This supersedes waiting for the entire bundle before
+local reclamation. V7 research and other campaigns remain paused.
+[TODO](TODO.md), [scope and tests](docs/reviews/2026-10-03-v7-verified-local-cleanup.md).
 
-## Diagnosis and selected runtime
+## Selected runtime
 
-MRHA was 100% busy with 20 in-flight requests, about 12.3 MiB/s writes and
-1.05 MiB/s reads. Archive used 4.8 CPU cores; zstd writer threads blocked on
-disk writeback. No memory-cap/OOM events. Parallel direct HDD writes and
-verification competed. Preserve original archive plan and already verified shards.
+Archive: `healys-v7-cold-archive.service`, unchanged staged-v2 consumer and frozen
+plan. It is in external-only serial compression; do not restart it needlessly.
+Cleanup: `healys-v7-local-reclaim.service`, entrypoint
+`scripts/reclaim_v7_verified_local_v2.py` over the frozen v1 cleanup consumer.
+It reuses the existing deletion journal. Source-recovery binding is separate;
+no scientific checkpoint or old archive declaration was relabeled.
 
-Service: `healys-v7-cold-archive.service`.
-Consumer: `scripts/archive_v7_cold_staged.py`; launcher
-`scripts/start_v7_cold_archive_staged.sh`; binding `consumer-staged-v2.json`.
 State: `nn_meta/validation/v7-cold-archive-20261002-r0/`.
 Destination: `/run/media/healy/MRHA/v7/`, mounted UUID `62C9-C390`.
+`progress.json` owns compression; `early-cleanup-progress.json` owns cleanup.
+`early-cleanup-declaration.json` binds all local receipt hashes.
+`early-cleanup-consumer-v2.json` binds the completion-status repair.
+`retired.jsonl` and `retire-intent.json` are shared with original final cleanup.
 
-Local shards compress to at most 8 GiB SSD staging, with 10 GiB internal free
-space guarded. One serialized MRHA copy/verification pipeline prevents competing
-writes. Oversized and external-source shards defer to serial direct streaming.
-Compression stays zstd-22; all-shard verification precedes any source reclamation.
-Workers use shared autosizing; memory high/max 20/22 GiB, no swap.
+## Scope and coordination
 
-## Verification and observation
+All 2,584 local shards verified; 35,031 regular files >1 MiB eligible, 502.58 GiB
+logical. Keep small metadata, symlinks, raw/shared inputs, plans, source and MRHA
+originals. Fresh external-archive and local-source SHA256 checks precede deletion.
+Archive reads capped at 16 MiB/s, idle I/O, Nice 19, 1-GiB memory max, no swap.
+Only the Python controller is briefly coordinated around each journaled unlink;
+compressor children keep running. ExecStopPost recovers an owned controller stop.
+Early cleanup yields to original final cleanup once full verification is published.
 
-Thirteen focused tests passed, including staged corruption/source-mutation
-rejection, capacity deferral and prior restoration/reclamation/link coverage.
-Shell and host service checks passed. Service started 23:30:07 Central with
-13 workers. Startup rehashes existing archives before new compression; its
-pass counter is not the total persistent receipt count. No scientific progress
-or retained archives were reset. At 23:37:54–23:38:24, four ten-second samples
-used 12.0–12.4 CPU cores; seven new staged shards verified. MRHA busy time
-fell to 19–62%, no memory-cap/OOM events. Live `progress.json` owns later state.
-[Measured improvement](docs/reviews/2026-10-02-v7-cold-archive-io-after.json).
+## Verification and observations
+
+19 focused tests passed, including archive corruption/source-change rejection,
+all-local-receipt admission, journal compatibility and real process stop/recovery.
+Initial 112-file pass was preserved after fixing a completion-status keyword
+error in a separate v2 consumer. The corrected service started 11:11:48 Central.
+At 11:13, 544 files were removed; SSD free space was about 22 GiB versus about
+20 GiB before cleanup. MRHA compression continued. Later scoped observation:
+[launch receipt](docs/reviews/2026-10-03-v7-verified-local-cleanup-launch.json).
+No local or full completion claim is implied by those observations.
 
 ## Next actions
 
-1. Inspect the selected service and progress. Active staged compression was
-   verified; check for new failures and preserve the selected runtime.
-2. Keep MRHA connected. On failure preserve all sources and receipts; resume
-   the same bound consumer after diagnosis. Completed archives are reused.
-3. Require `VERIFIED.json` and then `COMPLETE.json` for full completion. Only
-   then measure free space, close 7-3.archive, refresh compressed notes and commit.
-4. Read [restore guide](docs/reference/V7_COLD_ARCHIVE_README.md) before eventual
-   user-directed V7 restoration. New archive runtime is saved in compressed notes.
-   Last research state remains [the pre-archive handoff](handoff-history/HANDOFF-2026-10-02-before-v7-cold-archive.md).
-   Resource admission and Massive historical-option HTTP 403 remain unresolved.
+1. Inspect both exact progress receipts/services; keep MRHA connected.
+2. `LOCAL_CLEANUP_COMPLETE.json` closes only the verified-local subset. Measure
+   actual free space and close 7-3.archive-local after that receipt passes review.
+3. `VERIFIED.json` and `COMPLETE.json` still own full archival/final reclamation.
+   Refresh compressed notes and owning docs after either completion milestone.
+4. On user-directed V7 restoration, follow [README](docs/reference/V7_COLD_ARCHIVE_README.md)
+   and [last research handoff](handoff-history/HANDOFF-2026-10-02-before-v7-cold-archive.md).
+   Memory admission and historical-provider HTTP 403 blockers remain unresolved.
 
-## Preservation
-
-Keep shared/non-V7 inputs, raw inputs, small local receipts, links, plans, source
-and MRHA original payloads. No gate closure, retraining, completed recapture,
-source relabeling or provider subscription purchase is implied. Preserve all
-unrelated dirty/untracked work and keep root `.env` out of archives.
+Preserve unrelated dirty work, frozen sources and credentials. No source reset,
+completed recapture, model promotion, subscription purchase or other-work resume.

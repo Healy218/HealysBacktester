@@ -2116,3 +2116,15 @@ This supersedes immediate continuation of 7-3; no scientific gate is closed or
 reopened. Keep shared inputs, credentials, frozen producer identities and
 completed evidence intact. Non-V7 work is not automatically resumed.
 [Archive implementation and evidence](reviews/2026-10-02-v7-cold-archive.md).
+
+## 2026-10-03 — Reclaim verified local V7 data during MRHA compression
+
+User explicitly requested local cleanup while the remaining external-only shards
+are compressed. Permit independent reclamation of the fully verified local
+subset, with fresh archive/source hashes and coordination with final cleanup.
+Preserve original plan/source identities, shared inputs, MRHA originals and
+compatible journals. Use `LOCAL_CLEANUP_COMPLETE.json` for local reclamation;
+retain full `VERIFIED.json`/`COMPLETE.json` as separate overall completion gates.
+This supersedes waiting for every external shard before local reclamation; no
+scientific gate or archive-integrity requirement is waived.
+[Evidence](reviews/2026-10-03-v7-verified-local-cleanup.md).

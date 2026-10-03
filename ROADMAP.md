@@ -9,6 +9,9 @@ open-ended; each selected phase has bounded requirements and an exit condition.
 **October 2 late-evening priority:** pause V7 and complete verified cold archival
 to MRHA/v7 before resource/provider resolution and user-directed restoration.
 [Archive evidence](docs/reviews/2026-10-02-v7-cold-archive.md).
+**October 3 storage refinement:** reclaim independently verified local V7 files
+while MRHA-only compression finishes; retain separate local/full completion
+receipts. [Evidence](docs/reviews/2026-10-03-v7-verified-local-cleanup.md).
 Earlier direction: finish 7-3 first; all non-V7 work is paused until V7 is
 done. This supersedes the earlier V6 restart later tonight and parallel-work
 selection. Gate scope and completed evidence remain unchanged.
