@@ -6,11 +6,12 @@ completed, reproducible milestones and measured outcomes. The end goal remains
 open-ended; each selected phase has bounded requirements and an exit condition.
 
 **Selected work: ETFE — Exchange Traded Funds Expert. Current gate: ETFE-0.**
-October 3 user direction selects the V7 successor's documentation and scope:
-SPY/QQQ/VOO, all inherited strategy variants and timing rules, 1/5/15-minute
-signals, and a history boundary tied to Alpaca options availability.
-[ETFE specification](docs/specs/ETFE.md). Exact history dates and quote coverage
-remain unresolved; no implementation or training completion is implied.
+October 3 user direction selects a brand-new expert's documentation and scope:
+SPY/QQQ/VOO, V7 strategy variants and timing rules, 1/5/15-minute signals, and
+Alpaca's earliest options history through October 2, 2026, inclusive. Massive
+quotes are excluded, including archived V7 copies.
+[ETFE specification](docs/specs/ETFE.md). Date policy is confirmed; exact first
+provider timestamp and required quote coverage still need verification.
 
 V7 research stays paused with its original gates/evidence preserved. Its existing
 MRHA archive obligation continues independently. Local cleanup completed October 3
@@ -46,21 +47,22 @@ selection does not itself prove service shutdown or authorize spending.
 
 ## ETFE — Exchange Traded Funds Expert
 
-ETFE replaces active V7 research without relabeling its artifacts or closing its
-unfinished gates. [Specification](docs/specs/ETFE.md) owns technical inheritance.
+ETFE is a brand-new expert replacing the active V7 research priority. It does
+not reuse V7 model weights/checkpoints, relabel artifacts or close V7's unfinished gates. [Specification](docs/specs/ETFE.md) owns technical inheritance.
 The current deliverable is documentation and a resolved scope/data contract.
 
 | ID | Position | Deliverable and acceptance condition |
 | --- | --- | --- |
-| **ETFE-0 — Scope and provider contract** | **Selected; scope documented, dates/quote coverage open** | Exact SPY/QQQ/VOO and 1/5/15-minute scope; inherited timing/risk; resolved start/end policy and feasible provenance-preserving source for required options observations |
+| **ETFE-0 — Scope and provider contract** | **Selected; scope/dates confirmed, Alpaca coverage open** | Exact SPY/QQQ/VOO and 1/5/15-minute scope; V7 timing/risk; verified Alpaca first-history timestamp through fixed October 2, 2026 end; feasible required observations without Massive quotes |
 | **ETFE-1 — Frozen inputs** | Future implementation | ETFE identity, dated universe/contract/calendar bindings, verified underlying/options/feature coverage and a fixed history window; account entitlement and missingness evidence |
 | **ETFE-2 — Strategies and causal features** | Future implementation | All inherited variants on 1/5/15 minutes, rebuilt schema and causal/parity evidence; no silent feature or strategy removal |
 | **ETFE-3 — Execution and dataset** | Future implementation | Full selected coverage with inherited midpoint/stop/expiry/roll rules, funded ledger, labels through final settlement, frozen purged folds and trials |
 | **ETFE-4 — Resources and recovery** | Future implementation | Measured representative workload, bounded memory/disk and tested recovery; resource pilots begin before expensive acquisition/build |
 | **ETFE-5 — Training and evaluation** | Gated | Launch only after admitted inputs/execution/resources; evaluate against declared baselines and freeze accepted or rejected results; deployment is a separate decision |
 
-V7 evidence is reusable where its contract still matches, with explicit ETFE
-validation of changed universe, timeframes, provider and dates. Completion of
+V7 component methods and tests may inform ETFE validation of changed universe,
+timeframes, provider and dates; Massive quotes and V7 weights/checkpoints are
+not ETFE inputs. Completion of
 ETFE-0 does not establish data availability or model readiness.
 
 ## Phase 7 — V7 data, execution and training

@@ -1,9 +1,9 @@
 # TODO — ETFE scope and data contract
 
 **Selected work: ETFE — Exchange Traded Funds Expert. Current gate: ETFE-0.**
-October 3 user direction replaces active V7 research with ETFE planning: exactly
-SPY, QQQ, VOO; inherited V7 strategies/timing; 1/5/15-minute signals; history tied
-to Alpaca options availability. [Specification](docs/specs/ETFE.md),
+October 3 user direction selects a brand-new ETFE expert: exactly SPY, QQQ, VOO;
+V7 strategy/timing specifications; 1/5/15-minute signals; Alpaca's earliest
+options history through October 2, 2026, inclusive. No Massive quotes. [Specification](docs/specs/ETFE.md),
 [roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert), [handoff](HANDOFF.md).
 This selection is documentation work; implementation and campaigns remain future
 milestones. V7 archival continues as the existing storage obligation below.
@@ -12,13 +12,17 @@ milestones. V7 archival continues as the existing storage obligation below.
 
 - [x] **ETFE.scope:** Record the accepted universe, timeframes and V7 inheritance;
   preserve later midpoint/risk amendments and distinguish signal bars from quotes.
-- [ ] **ETFE.dates:** Resolve historical-provider start versus our own recording
-  start, and latest completed-session end versus retained September 14 endpoint.
-  Alpaca documents February 2024, not an exact verified ETFE start timestamp.
+- [x] **ETFE.dates:** User confirmed Alpaca's earliest historical options
+  availability through October 2, 2026, inclusive. This is a fixed window, not
+  our recording start or a moving latest-session end.
+- [ ] **ETFE.history-boundary:** Verify the exact first Alpaca options timestamp
+  and UTC boundaries for the fixed October 2 end; record missing feature/quote
+  coverage separately rather than silently shortening the requested window.
 - [ ] **ETFE.provider-contract:** Establish how required historical bid/ask windows,
   dated contracts and feature inputs will be supplied. Historical trades/bars
-  alone do not satisfy inherited execution/quote features. Record source decisions
-  before freezing the executable ETFE plan.
+  alone do not satisfy inherited execution/quote features. Alpaca is the options
+  provider; Massive quotes, including archived V7 copies, are excluded. Resolve
+  any necessary methodology decision before freezing the executable ETFE plan.
 
 Later implementation, coverage, resource and training gates belong to the
 [ETFE roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert), not competing queues.

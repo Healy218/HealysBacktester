@@ -30,7 +30,8 @@ a paper deployment and demonstrated trading performance are distinct results.
 ## Research specifications
 
 - [ETFE — Exchange Traded Funds Expert](docs/specs/ETFE.md): SPY/QQQ/VOO
-  specialist inheriting V7 strategies and timing with 1/5/15-minute signals.
+  independent expert using V7 strategies and timing with 1/5/15-minute signals
+  and Alpaca options data.
 - [V7 research](docs/specs/MULTITIMEFRAME_RESEARCH.md) and
   [V7 archive/restore guide](docs/reference/V7_COLD_ARCHIVE_README.md): predecessor
   contracts and reproducible restoration.

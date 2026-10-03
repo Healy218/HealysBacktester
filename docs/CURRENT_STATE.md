@@ -19,9 +19,11 @@ Selected scope: [ETFE — Exchange Traded Funds Expert](specs/ETFE.md).
 Universe SPY/QQQ/VOO; signal bars 1/5/15 minutes; inherited V7 execution cadence
 and accepted timing/risk amendments. This is a documentation state: no selected
 ETFE runtime, frozen input manifest, model or completed admission evidence exists.
-History-start interpretation and end policy await resolution; provider docs give
-February 2024 as a historical-options month boundary, not complete quote coverage.
-The specification records sources and the quote-history gap for follow-up.
+User confirmed a brand-new expert using Alpaca's earliest historical options
+availability through October 2, 2026, inclusive. No Massive quotes, including
+archived V7 copies, are selected for ETFE. Provider docs give February 2024 as
+a month boundary; exact first timestamp and complete quote coverage remain
+verification tasks. The specification records the quote-history gap.
 
 V7 pointers below remain predecessor/recovery references; its research is paused.
 Only the already-selected archive process continues. Exact current archival

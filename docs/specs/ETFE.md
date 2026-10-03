@@ -1,7 +1,9 @@
 # ETFE — Exchange Traded Funds Expert
 
-User-selected successor to V7, October 3, 2026. This is the research scope and
-inheritance contract; implementation, data admission and training remain open.
+A brand-new expert selected October 3, 2026, replacing V7 as the active research
+priority. It reuses V7 strategy/timing specifications, not V7 model identity,
+trained weights or checkpoints. Implementation, data admission and training
+remain open.
 [ROADMAP](../../ROADMAP.md#etfe--exchange-traded-funds-expert) owns the gates;
 [TODO](../../TODO.md) owns current actions.
 
@@ -14,8 +16,9 @@ inheritance contract; implementation, data admission and training remain open.
 | Signal bars | **1, 5, 15 minutes**; restore 1-minute signals and remove 30-minute signals |
 | Execution observations | Retain V7's **one-minute** cadence and event-time quote chronology |
 | Timing and risk | Inherit V7's accepted entry, exit, DTE, roll and expiry rules below |
-| Historical start | Tie it to the beginning of available Alpaca options history; exact interpretation/date pending confirmation and coverage evidence |
-| Historical end | Pending selection: latest completed session at ETFE plan freeze, or retained September 14, 2026 endpoint |
+| Historical start | **Alpaca’s earliest historical options availability**; exact first timestamp to be verified from provider data, not our own recording start |
+| Historical end | **October 2, 2026, inclusive**, fixed by the user |
+| Options provider | **Alpaca only; no Massive quotes**, including archived quotes or fallback requests |
 | Research identity | New ETFE manifests, catalog, features, labels, folds, checkpoints and model artifacts |
 
 Here, the user's “1 minute ticks” and “30 minute ticks” mean signal-bar
@@ -93,26 +96,37 @@ window method. The project's [October 2 provider review](../reviews/2026-10-02-v
 also records a historical-quotes endpoint probe returning 404. This is an
 identified coverage gap, not proof that three tickers solve quote history.
 
-Before fixing executable start/end timestamps, record:
+The user confirmed both date choices: start at Alpaca's earliest options
+history and end October 2, 2026, inclusive. No date preference question remains.
+Before sealing executable timestamps, record:
 
-1. Whether the user's start means Alpaca's earliest historical availability or
-   the beginning of our own Alpaca recording. Do not silently replace one with
-   the other, or confuse this with an intraday session cutoff.
+1. Alpaca's exact first historical options timestamp from provider evidence.
+   This is a data-verification task, not permission to substitute our recording
+   start or a later date with easier feature coverage.
 2. Actual first usable timestamps and gap coverage for SPY/QQQ/VOO minute data,
    option trades, required bid/ask windows, dated contract metadata, calendars
    and all feature dependencies, with feed/entitlement and source receipts.
 3. The nominal history boundary separately from each feature's first eligible
    observation. Preserve the inherited causal warmup rule, with no fabricated
    pre-start labels. Earlier warmup history needs an explicit ETFE policy.
-4. A fixed end session and UTC timestamps derived from the captured exchange
-   calendar; do not advance the end silently during acquisition or training.
+4. The October 2, 2026 final session boundaries from the captured exchange
+   calendar and dated instrument hours, expressed in UTC. Include that session;
+   do not advance the end when the plan is frozen or while a campaign runs.
+   Labels still need complete observed exit/roll/settlement horizons: boundary
+   proposals whose outcomes require data after October 2 must be explicitly
+   censored or ineligible under the declared evaluation policy, never assigned
+   invented outcomes or used to extend the user's data window silently.
 
-If required historical quotes cannot be obtained through Alpaca, report the
-specific missing input and seek a source or methodology decision. Do not turn
-trade bars into spreads, drop quote features, move the start silently, or relabel
-retained Massive observations as Alpaca. Already archived V7 observations may
-be considered for verified reuse with their original provenance, but they do
-not by themselves satisfy a new Alpaca-only history requirement.
+Massive quotes are excluded by explicit user direction. Do not request new
+Massive quotes, read archived V7 Massive quotes into ETFE, blend them with Alpaca
+quotes, or offer them as an automatic fallback. V7 archives remain preservation
+artifacts for V7 only.
+
+If Alpaca cannot supply required historical bid/ask observations, record the
+specific gap under ETFE.provider-contract. Any necessary execution/feature
+methodology change must be explicit; trade bars do not establish observed
+spreads. Do not silently drop quote features, move the start or end, or claim
+that preserving V7 strategy/timing rules proves identical data availability.
 
 ## Implementation boundary and resource plan
 

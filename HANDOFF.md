@@ -1,54 +1,53 @@
-# Handoff — October 3, 2026 — ETFE successor scope
+# Handoff — October 3, 2026 — ETFE identity and dates confirmed
 
 ## Selected work
 
-User requested notes and docs for **ETFE — Exchange Traded Funds Expert**, which
-replaces active V7 research. Exactly SPY/QQQ/VOO; retain V7 strategies and timing;
-restore 1-minute signals and remove 30-minute signals, yielding 1/5/15 minutes.
+ETFE — Exchange Traded Funds Expert — is a brand-new expert. It replaces the
+active V7 research priority and uses V7 strategy/timing specifications, not V7
+model weights, checkpoints or model identity. Documentation is the selected work.
 [Specification](docs/specs/ETFE.md), [TODO](TODO.md),
-[ETFE roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert).
+[roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert).
 
-## Changes and boundaries
+## Confirmed contract
 
-ETFE specification carries inherited strategies, DTE, execution timing, later
-midpoint/risk amendments, full features and evaluation discipline. V7 artifacts
-remain unchanged. ETFE needs a new catalog/schema/input/evaluation lineage.
-No capture, training, provider switch or paper deployment started this session.
+- Tradable universe: exactly SPY, QQQ, VOO.
+- Signal timeframes: 1/5/15 minutes; no 30-minute signals.
+- Preserve accepted V7 strategy variants and execution/timing/risk rules.
+- Start: Alpaca's earliest historical options availability, not our own recording.
+- End: October 2, 2026, inclusive; fixed, not a moving latest-session endpoint.
+- Options provider: Alpaca. No Massive quotes, including archived V7 quotes,
+  blended quote histories or fallback requests.
 
-TODO now selects ETFE-0 and keeps V7 archive closure as a storage obligation.
-The old V7 scientific queue is preserved in
-[the TODO snapshot](handoff-history/TODO-2026-10-03-before-etfe.md).
-ROADMAP retains V7 gates, adds separate ETFE gates and preserves other workstreams.
-README/CURRENT_STATE provide navigation; DECISIONS records the scope change.
+The prior two user questions are answered; do not ask them again. ETFE.dates is
+closed as a scope decision. No capture, training or runtime changes occurred.
+README, specification, ROADMAP, TODO, CURRENT_STATE and DECISIONS agree.
 
-## Outstanding user questions and evidence
+## Next verification work
 
-1. Does Alpaca's start mean its earliest historical options availability or our
-   own recording start? Provider documentation says February 2024; exact first
-   usable timestamps and complete dependency coverage have not been established.
-2. Should the end be the latest completed session at plan freeze or retain
-   September 14, 2026? Do not silently freeze an answer or move a running cutoff.
-3. Historical option trades/bars are documented; a historical quote-window API
-   is not established. V7's observed bid/ask execution and quote features still
-   require those observations. Resolve source/coverage before sealing ETFE inputs.
+1. ETFE.history-boundary: verify Alpaca's exact first options timestamp and the
+   fixed end-session boundaries using provider/calendar evidence. Documentation
+   identifies February 2024, not a sealed exact starting timestamp.
+2. ETFE.provider-contract: historical trades/bars do not establish historical
+   bid/ask windows. Determine actual Alpaca coverage and document gaps; any
+   necessary methodology change must be explicit. Massive is not an option.
+3. Before implementation, bind new ETFE catalog/schema/input/fold manifests.
+   Preserve causal warmup and complete label horizons; explicitly handle final
+   boundary proposals without silently extending beyond October 2.
+4. Measure one-minute data/memory/storage demand before expensive campaigns.
+   ETFE has its own admission gates; no V7 completion receipt is relabeled.
 
-Questions 1–2 were sent to the user; this revision leaves both unresolved.
-Read the next user reply as steering this scope. Documentation alone is not
-ETFE readiness. Re-declare chronological folds for the changed history and
-measure one-minute storage/memory before an expensive campaign.
+## Separate V7 preservation obligation
 
-## V7 preservation obligation
-
-Archive state: `nn_meta/validation/v7-cold-archive-20261002-r0/`.
+State: `nn_meta/validation/v7-cold-archive-20261002-r0/`.
 Destination: `/run/media/healy/MRHA/v7/`, UUID `62C9-C390`.
-Archive service: `healys-v7-cold-archive.service`, staged-v2; inspect progress and
-VERIFIED/COMPLETE receipts before claiming full completion. Do not restart it
-or modify source bindings merely because ETFE is selected.
-Local subset complete October 3 at 14:54: all 35,031 eligible files removed;
-about 519 GiB free at 15:06. [Audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
-Refresh compressed notes and archive docs at full completion. Preserve the
-retirement journal, small metadata, shared/raw inputs and MRHA originals.
+Archive service: `healys-v7-cold-archive.service`, staged-v2. Inspect current
+progress and VERIFIED/COMPLETE receipts before claiming full completion.
+Preserve frozen sources and journal; ETFE selection does not restart V7 research.
+Local cleanup finished at 14:54 October 3: 35,031 eligible files removed and
+about 519 GiB internal free at 15:06.
+[Audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
+Refresh compressed archive notes at full completion; V7 remains preservation-only.
 [Restore guide](docs/reference/V7_COLD_ARCHIVE_README.md).
 
 Preserve unrelated dirty work and .env. Other research/update campaigns remain
-paused. This session changes documentation only; no new experiment verdict.
+paused. No new experiment verdict or model readiness claim from documentation.

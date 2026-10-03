@@ -2155,3 +2155,24 @@ Other research/update campaigns remain paused pending explicit selection.
 Future ETFE implementation has separate manifests, causal validation, resource
 and model admission gates; a three-ticker universe does not waive inherited
 features, execution evidence or baseline comparisons.
+
+### 2026-10-03 — Confirm independent ETFE identity, fixed dates and Alpaca-only options
+
+The user clarified that ETFE is a **brand-new expert**. V7 contributes its
+strategy and timing specifications; ETFE does not resume V7 training or reuse
+its trained weights/checkpoints. Universe SPY/QQQ/VOO and 1/5/15-minute signals
+remain unchanged.
+
+Both date choices are resolved: use **Alpaca's earliest historical options
+availability through October 2, 2026, inclusive**. Do not substitute our own
+recording start, September 14 or a moving latest-session endpoint. Exact first
+provider timestamp and instrument/calendar boundaries still require evidence;
+this is a verification task, not an unanswered preference question.
+
+**No Massive quotes** may be used by ETFE, including archived V7 copies,
+blended histories or network fallbacks. This supersedes the initial ETFE doc's
+suggestion to consider archived quote reuse. V7 preservation remains separate.
+Required Alpaca historical quote coverage is not yet established. Record any
+missing observations and explicit methodology decision rather than inventing
+spreads, changing dates or assuming old features are fully supported.
+[ETFE contract](specs/ETFE.md). Documentation changes only in this session.
