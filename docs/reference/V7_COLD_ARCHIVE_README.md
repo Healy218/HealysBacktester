@@ -162,3 +162,9 @@ runtime from the extracted notes' `archive-runtime/` folder if needed. Inspect t
 before resuming it: the early pass is for the external-only compression phase.
 An `ExecStopPost` hook recovers only a controller stop owned by this cleanup.
 Do not delete the journal, intent or owned-stop marker while either service runs.
+
+October 3 milestone: the local cleanup subset completed at 14:54 Central. All
+35,031 eligible local files were verified and removed; about 519 GiB internal
+space was free at 15:06. Matching LOCAL_CLEANUP_COMPLETE receipts establish only
+that subset. MRHA-only compression continues until the full VERIFIED/COMPLETE
+receipts exist. Small metadata, raw/shared inputs and MRHA originals remain.

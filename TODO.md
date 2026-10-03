@@ -17,10 +17,12 @@ V7-only internal space. More storage is needed before research resumes.
   reclamation; completion requires `COMPLETE.json`, not launch.
   October 2 I/O revision: bounded SSD staging plus serialized MRHA publication
   replaces contending direct HDD writes. [Evidence](docs/reviews/2026-10-02-v7-cold-archive-io.md).
-- [ ] **7-3.archive-local:** October 3 user authorized reclaiming independently
+- [x] **7-3.archive-local:** October 3 user authorized reclaiming independently
   verified local V7 files while external compression continues. All 2,584 local
-  shards verified; 35,031 files eligible. Require `LOCAL_CLEANUP_COMPLETE.json`
-  and measured free space for this subset; full archive remains separate.
+  shards verified; all 35,031 eligible files removed at 14:54 Central. Matching
+  local/MRHA `LOCAL_CLEANUP_COMPLETE.json` receipts; about 519 GiB internal free
+  at 15:06. [Completion audit](docs/reviews/2026-10-03-v7-local-cleanup-complete.json).
+  Full archive remains separate.
   [Scope and coordination](docs/reviews/2026-10-03-v7-verified-local-cleanup.md).
 - [ ] **7-3.archive-restore:** When resources and historical-provider access are
   resolved and the user resumes V7, follow the archive README and preserved last

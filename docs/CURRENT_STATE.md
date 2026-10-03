@@ -61,9 +61,13 @@ precede removal. The controller is briefly coordinated around journaled unlinks,
 while its compressor children continue; an owned-stop recovery hook prevents
 leaving it stopped on cleanup failure. Reads capped at 16 MiB/s, idle I/O,
 768-MiB/1-GiB memory high/max, no swap. Shared inputs and MRHA originals remain.
-Corrected cleanup started 11:11:48 Central; at 11:13, 544 files removed and
-about 22 GiB SSD free, while external compression continued.
-[Measured launch receipt](reviews/2026-10-03-v7-verified-local-cleanup-launch.json).
+Local cleanup completed October 3 at 14:54:28 Central: all 35,031 eligible files
+removed. Local/MRHA completion receipts match; service exited successfully.
+At 15:06, internal free space was 519.3 GiB, versus about 20 GiB before cleanup.
+Completion audit reconciles frozen receipts, journal and absent retired paths.
+Full archive still lacked VERIFIED/COMPLETE receipts at this observation.
+[Completion audit](reviews/2026-10-03-v7-local-cleanup-complete.json).
+[Historical launch receipt](reviews/2026-10-03-v7-verified-local-cleanup-launch.json).
 [Scope, tests and runtime boundary](reviews/2026-10-03-v7-verified-local-cleanup.md).
 
 ## Runtime identity and locations
