@@ -1,65 +1,68 @@
-# ETFE setup and integrity commands
+# ETFE setup and capture commands
 
-Use the [ETFE specification](../specs/ETFE.md) for scope and
-[CURRENT_STATE](../CURRENT_STATE.md#october-3-etfe-setup) for the selected root.
-These commands prepare or inspect a new expert; none launches training.
-The [first-run sequence](../../ROADMAP.md#etfe-first-run-sequence) and
-[acceptance contract](../specs/ETFE_FIRST_RUN.md) define the remaining work.
-Dataset-build, training, finalizer and expert-replay commands will be documented
-only after their ETFE consumers exist and have passed their gates; do not
-substitute V7 launch commands or infer launch permission from setup success.
+Use the [current-state index](../CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup)
+for selected roots, the [scope](../specs/ETFE_SCOPE_ALPACA_20261004.json),
+[five-DTE amendment](../specs/ETFE_DTE_20261004.md) and
+[fresh collection contract](../specs/ETFE_FRESH_ACQUISITION_20261003.md) for policy.
+The [roadmap sequence](../../ROADMAP.md#etfe-first-run-sequence) owns ordering.
+No command here deploys a model or starts training.
 
-From `/home/healy/Coding/HealysBacktester`, verify the selected setup:
+## Current setup
 
-```bash
-./venv/bin/python scripts/verify_etfe_vwap.py --setup nn_meta/validation/etfe-setup-20261003-vwap-r1
-```
-
-For an intentional new preparation revision, use a fresh output name:
+From the repository root, inspect the selected v3 setup:
 
 ```bash
-NN_META_POOL=etfe ./venv/bin/python scripts/prepare_etfe_vwap.py --predecessor nn_meta/validation/etfe-setup-20261003-r0 --output nn_meta/validation/etfe-setup-YYYYMMDD-vwap-rN
+./venv/bin/python scripts/prepare_etfe_current.py verify --root nn_meta/validation/etfe-setup-20261004-alpaca-r0
 ```
 
-The launcher rejects unrelated inherited campaign/research selectors. It uses
-the registered parameter grids but neither invokes old planners nor imports
-V7 model/checkpoint/data artifacts. Do not edit a saved plan or overwrite its
-output to bypass a mismatch. Keep prior source snapshots and probe evidence.
+For an intentional successor preparation, use `prepare` with a fresh direct
+`nn_meta/validation/etfe-*` root. Saved plans/source snapshots are immutable.
+The v3 scope retains strategy specifications but imports no old market data,
+features, labels or models. New entry/roll consumers must apply
+`purchase_policy.check_purchase` at the actual timezone-aware attempt and obey
+all other price/cash/identity/session guards; DTE eligibility alone is not a fill.
 
-The [VWAP amendment](../specs/ETFE_VWAP_20261003.md) owns the selected pricing
-semantics. `vwap_reference.reference_from_bar` consumes only provenance-checked
-1Min option bars; it does not select contracts, simulate fills or admit data.
-Verify the unchanged midpoint predecessor separately with
-`./venv/bin/python scripts/verify_etfe_setup.py --setup nn_meta/validation/etfe-setup-20261003-r0`.
-The old `prepare_etfe.py` and probes remain historical v1 consumers; do not use
-them to regenerate a VWAP plan or bind new observations to its v2 scope.
+## Fresh raw acquisition
 
-Provider diagnostics require root `.env` data credentials `ALPACA_API_KEY` and
-`ALPACA_API_SECRET`, and paper metadata credentials `ALPACA_PAPER_API_KEY` and
-`ALPACA_PAPER_API_SECRET`. Only these values are read; other `.env` selectors
-are not exported into the runtime. Never print or commit credentials.
-
-The live diagnostic results already exist under the predecessor. Do not repeat
-unsupported historical-quote requests. The following are historical v1 command
-references only; a VWAP acquisition consumer must bind the v2 plan and its own
-source/receipts before new capture:
+The CLI supports `prepare-bootstrap`, `prepare-options --parent ...`, `run`
+and `audit`, with `--root` required. Roots must be direct children of
+`nn_meta/data_cache_etfe/` named `alpaca-fresh-*`. Preparation requires a fresh
+root. `run` resumes an existing source-bound plan and never overwrites a page.
 
 ```bash
-./venv/bin/python scripts/probe_etfe_alpaca.py --plan nn_meta/validation/etfe-setup-YYYYMMDD-rN/plan.json --output nn_meta/validation/etfe-setup-YYYYMMDD-rN/probe-rN
-./venv/bin/python scripts/probe_etfe_history_boundary.py --setup nn_meta/validation/etfe-setup-YYYYMMDD-rN --output nn_meta/validation/etfe-setup-YYYYMMDD-rN/probe-boundary-rN
+./venv/bin/python scripts/acquire_etfe_alpaca.py audit --root nn_meta/data_cache_etfe/alpaca-fresh-20261004-options-r0
 ```
 
-Check HTTP results, transport errors, pagination and raw receipts. A 404 is not
-empty-but-complete history; an early trade sample is not a provider-global floor;
-today's expired-contract response is not a historical point-in-time catalogue.
-`PREPARED.json` is not admission: ready-for-build/training stays false until the
-ETFE gates have actual input, execution, feature and resource evidence.
+Use `run` on that selected root only when unfinished work is intended; completed
+partitions issue no new requests. `--request-budget` can reduce the plan's hard
+ceiling for controlled interruption. Nonzero exit means incomplete capture or a
+stop condition; inspect unique `runs/*.json` and failed `attempts/*/receipt.json`.
+Do not count request-budget exhaustion, HTTP errors or pending tokens as empty
+history. Preserve orphan attempts after interruption; only hash-verified page
+pointers are committed. A source change requires a successor root, not in-place
+rebinding. Respect persisted provider wait deadlines before resumption.
 
-## ETFE-0 contract verification
+`prepare-options` consumes only the fresh stock/discovery parent to select a
+fixed transport sample. It does not implement full demand or historical chain
+eligibility; same-day samples may be fetched but are not eligible purchases.
+`iter_records` retains exact native fields and a per-page occurrence identity.
+Typed normalization and full coverage are separate consumers still to implement.
 
-Run `./venv/bin/python scripts/verify_etfe_contract.py` to verify the versioned
-[declarations](../specs/ETFE_CONTRACT_20261003.md), source snapshot and boundary
-receipts. The portable evidence ZIP permits verification without local ignored
-validation directories. Success verifies definitions only; H1/R1/R2/P1 remain
-open and readiness remains false. The new bounded `probe_etfe_contract_boundary.py`
-is a v2-bound diagnostic consumer; its ten live results are already retained.
+Only root `.env` Alpaca pairs are loaded: data `ALPACA_API_KEY` /
+`ALPACA_API_SECRET`, discovery `ALPACA_PAPER_API_KEY` /
+`ALPACA_PAPER_API_SECRET`. No unrelated selectors are exported. Never print or
+commit credentials. This transport uses serial rate limiting; future parallel
+build workers must use the shared autosizer and measured memory budget.
+
+## Preserved earlier evidence
+
+The v1 midpoint and v2 VWAP preparations remain historical consumers. Verify
+with their own `verify_etfe_setup.py` / `verify_etfe_vwap.py` commands when needed;
+do not regenerate old plans or relabel their data as v3. The VWAP reference
+component remains valid as a reference, not a complete execution model.
+
+`./venv/bin/python scripts/verify_etfe_contract.py` verifies the original four
+component declarations and portable source evidence. Its H1/R1/R2/P1 output
+reports that historical revision, not the current collection authorization.
+Apply the fresh-acquisition and DTE successors for current work. Historical
+option quotes remain unsupported; do not repeat their diagnostics.

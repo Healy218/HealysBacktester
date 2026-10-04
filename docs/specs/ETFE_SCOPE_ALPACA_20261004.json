@@ -1,0 +1,111 @@
+{
+  "actual_calendar_dte": [
+    1,
+    5
+  ],
+  "allow_massive_quotes": false,
+  "context_calendar_dte": [
+    1,
+    45
+  ],
+  "data_policy": {
+    "fresh_downloads_required": true,
+    "legacy_data_inputs": [],
+    "option_bars_source": "alpaca_historical_options_bars_OPRA_statement",
+    "option_trades_source": "alpaca_historical_options_trades_no_feed_selector",
+    "raw_acquisition_may_precede_research_admission": true,
+    "stock_adjustment": "raw",
+    "stock_feed": "sip",
+    "stock_provider": "alpaca",
+    "trade_feed_provenance": "route_recorded_further_confirmation_pending"
+  },
+  "dte_targets": {
+    "default": [
+      1,
+      5
+    ],
+    "eligibility": "weekly_targets_only_with_dated_symbol_eligibility",
+    "weekly_subset": [
+      2,
+      4
+    ]
+  },
+  "evaluation": {
+    "embargo_sessions": 10,
+    "equity_fraction": 0.1,
+    "fit": "training_history_only",
+    "fold_dates": null,
+    "portfolio_slots": 5,
+    "previously_seen": "revalidation_not_untouched_holdout",
+    "purge": "full_exit_roll_stock_settlement_horizons"
+  },
+  "execution_cadence_minutes": 1,
+  "expert": "etfe",
+  "feature_overrides": {
+    "dte_frac": {
+      "denominator": 5,
+      "formula": "actual_calendar_DTE_at_decision/5",
+      "supersedes_formula": "actual_calendar_DTE_at_decision/9"
+    }
+  },
+  "feature_scope": {
+    "approval": "user authorized trade/bar methodology; individual replacement semantics still require audit",
+    "replacement": "versioned trade/bar features; no fabricated quotes or zero-filled old columns",
+    "retained": "all strategy families, parameters, signal timings and nonquote feature scopes",
+    "status": "declarations_retained_implementation_rebuilt_from_fresh_Alpaca",
+    "unavailable": "historical bid/ask, spread, quote sizes, quote age and quote-derived fields"
+  },
+  "history": {
+    "end_date_inclusive": "2026-10-02",
+    "label_boundary_policy": "no_unobserved_outcomes_or_silent_end_extension",
+    "provider_documented_start_month": "2024-02",
+    "session_timezone": "America/New_York",
+    "start_boundary_status": "scoped_ETFE_coverage_census_during_fresh_acquisition",
+    "start_policy": "earliest_alpaca_options_history_for_SPY_QQQ_VOO",
+    "verified_start_utc": null
+  },
+  "name": "Exchange Traded Funds Expert",
+  "options_feed": "opra",
+  "options_provider": "alpaca",
+  "pricing_policy": {
+    "availability_lag_seconds": 1,
+    "availability_model": "max(bar_end_plus_1s,captured_availability_if_present)",
+    "bar_minutes": 1,
+    "basis": "etfe-option-completed-1min-vwap-v1",
+    "entry_deadline_ns": 60000000000,
+    "execution_status": "reference_only_execution_model_requires_validation",
+    "fallback": null,
+    "fee": 0.001,
+    "field": "vw",
+    "historical_revision_timing": "unverified_requires_admission",
+    "latency_ns": 1000000000,
+    "max_bar_end_age_seconds": 60,
+    "minimum_trade_count": 1,
+    "minimum_volume_contracts": 1,
+    "missing_or_stale": "no_reference_no_fill_no_forward_fill",
+    "multiplier": 100,
+    "quote_age_and_size_rules": "superseded_by_bar_reference_rules",
+    "slippage": 0.0005
+  },
+  "ready_for_build": false,
+  "reuse_model_weights": false,
+  "reuse_v7_checkpoints": false,
+  "risk_policy": {
+    "expiry_exit_before_close_minutes": 15,
+    "premium_stop_fraction": 0.125,
+    "price_basis": "etfe-option-completed-1min-vwap-v1"
+  },
+  "schema": "etfe-research-scope-v3",
+  "signal_minutes": [
+    1,
+    5,
+    15
+  ],
+  "supersedes_scope_sha256": "e6f70e5da6976d59da475dbe7c44c03275eb80615ae139c43d8b3ce4b278908e",
+  "symbols": [
+    "SPY",
+    "QQQ",
+    "VOO"
+  ],
+  "training_authorized": false
+}

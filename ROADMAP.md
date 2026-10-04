@@ -5,7 +5,7 @@ of options-trading model artifacts and specialist researchers. Progress means
 completed, reproducible milestones and measured outcomes. The end goal remains
 open-ended; each selected phase has bounded requirements and an exit condition.
 
-**Selected work: ETFE — Exchange Traded Funds Expert. Current gate: ETFE-0.**
+**Selected work: ETFE — fresh Alpaca setup/acquisition; ETFE-0 admission open.**
 October 3 user direction selects a brand-new expert's setup and scope:
 SPY/QQQ/VOO, V7 strategy variants and timing rules, 1/5/15-minute signals, and
 Alpaca's earliest options history through October 2, 2026, inclusive. Massive
@@ -21,6 +21,14 @@ Subsequent [pull diagnosis](docs/reviews/2026-10-03-etfe-alpaca-pulls.md) verifi
 sample trade/bar reconciliation and pagination, isolates old metadata anomalies,
 and sources QQQ's adjustment and VOO's dated Nasdaq hours transition. The full
 source gate remains open; historical-trade feed selection is unsupported.
+October 4 user clarification prioritizes fresh Alpaca stock/option downloads
+and rebuilding ETFE inputs, features and models. Bounded raw collection proceeds
+while validation continues; old metadata repairs and provider-global history
+proof are no longer collection prerequisites. **Purchases and rolls: 1–5 calendar
+DTE**, targets 1/5 plus eligible 2/4; target 7 removed.
+[Fresh collection successor](docs/specs/ETFE_FRESH_ACQUISITION_20261003.md),
+[DTE successor](docs/specs/ETFE_DTE_20261004.md),
+[bootstrap evidence](docs/reviews/2026-10-04-etfe-fresh-acquisition.md).
 
 V7 research stays paused with its original gates/evidence preserved. MRHA archival
 completed October 3 at 16:55:50 Central with all 2,847 shards verified and final
@@ -66,8 +74,8 @@ owns technical deliverables. The current gate remains ETFE-0.
 
 | ID | Position | Deliverable and acceptance condition |
 | --- | --- | --- |
-| **ETFE-0 — Scope and provider contract** | **Selected; four definitions declared, source admission blocked H1/R1/R2/P1** | Exact SPY/QQQ/VOO and 1/5/15-minute scope; V7 timing/risk with [VWAP amendment](docs/specs/ETFE_VWAP_20261003.md); verified Alpaca first-history timestamp through fixed October 2, 2026 end; feasible required observations without Massive quotes |
-| **ETFE-1 — Frozen inputs** | Planned; depends on ETFE-0 and ETFE-4.pilot | Source-bound acquisition, complete required underlying/options/context coverage, dated contracts/calendars, explicit missingness, fixed dates and immutable input freeze |
+| **ETFE-0 — Scope and provider contract** | Four definitions declared; admission validation continues alongside fresh raw acquisition | Exact SPY/QQQ/VOO and 1/5/15-minute scope, 1–5 DTE purchases/rolls, VWAP method; scoped Alpaca coverage through fixed October 2, 2026 end; required provenance/eligibility/execution facts resolved before admission |
+| **ETFE-1 — Frozen inputs** | **Bootstrap complete; normalization/demand selected. Full freeze depends on ETFE-0 and ETFE-4.pilot** | Fresh source-bound acquisition, complete required underlying/options/context coverage, dated contracts/calendars, explicit missingness, fixed dates and immutable input freeze |
 | **ETFE-2 — Strategies and causal features** | Planned; full acceptance depends on ETFE-1 | All 20 families/25,353 ticker variants, thirteen TV scopes, explicit trade/bar feature mapping, new schema and causal/parity evidence |
 | **ETFE-3 — Execution and dataset** | Planned; depends on ETFE-1/2 and ETFE-4.pilot | Tested VWAP-based simulated ledger, stops/expiry/roll/settlement, complete build, purged folds/trials and immutable dataset/experiment freeze; ETFE-4.recovery required before full build |
 | **ETFE-4 — Resources and recovery** | Cross-cutting; early pilot before bulk work, final proof before training | ETFE-4.pilot measures capture/build/train/storage demand; ETFE-4.recovery proves restart; ETFE-4.admission binds full-build resource evidence to the training budget |
@@ -78,10 +86,14 @@ owns technical deliverables. The current gate remains ETFE-0.
 The order below preserves gate IDs; their numbers are ownership labels, not a
 reason to postpone resource checks until after a large build. Small fixtures may
 exercise later components early; that never closes full-coverage gates.
+October 4 clarification adds bounded raw bootstrap before source admission.
+This permits progress on actual Alpaca inputs without claiming source questions
+are resolved. All later freeze, scientific and integrated-resource gates remain.
 
 | Order / task ID | Work | Exit evidence before the next dependent step |
 | --- | --- | --- |
-| 1 — **ETFE-0.contract** | Verify earliest Alpaca history and fixed end, audit every feature, define trade/bar replacements, warmup, causal availability, dated contracts and complete VWAP execution semantics. Predeclare final-boundary exclusions, targets and selection policy. | Versioned source/feature/execution contract with no unresolved required input; precise history boundary and explicit eligibility/coverage rules. Existing samples do not close this. |
+| 0A — **ETFE-1.bootstrap** | Fresh bounded stock/option downloads, raw page lineage, resume and measured transport footprint. **Completed October 4**, 30 partitions. | Verified fresh page chains and recovery; no historical dataset or execution admission implied. Continue normalization and scoped demand census. |
+| 1 — **ETFE-0.contract** | Establish scoped ETFE history coverage and fixed end, audit every feature, define trade/bar replacements, warmup, causal availability, dated contracts and complete VWAP execution semantics under the 1–5 DTE cap. Predeclare final-boundary exclusions, targets and selection policy. | Versioned source/feature/execution contract with no unresolved required input for admission; explicit scoped coverage/eligibility rules. May proceed alongside bounded raw acquisition. |
 | 2 — **ETFE-4.pilot** | Run a bounded representative capture → feature → execution → dataset → training smoke pilot, including busy SPY/QQQ, sparse VOO, open/close, expiration, gaps and difficult contract cases. | Measured requests, disk including temporary/freezes, RAM per worker, throughput, model-fit peak and recovery checkpoint sizes. Declare local storage reserve, rate limits and autosized worker/thread budgets before bulk work. |
 | 3 — **ETFE-1.acquire / ETFE-1.freeze** | Implement the v2-bound Alpaca capture/normalization path; acquire required underlying 1m data, option VWAP bars/trades, dated contract/actions/calendar evidence and context. Reconcile pages, retries, duplicates, gaps and source provenance; seal the input inventory. | Complete required-input coverage census, explicit valid no-trade versus missing-provider cases, verified hashes/partitions and immutable input freeze. Adjustments/expiry/deliverables remain dated, not inferred from today's chain. |
 | 4 — **ETFE-2.features** | Generate all registered strategy variants on session-aligned 1/5/15m bars; build the approved option trade/bar features, all nonquote/context and thirteen TV scopes. Freeze schema/dtypes/availability rules. | Variant census, indicator/direction parity, prefix-invariance and no-future-data checks; documented warmup/missingness; no silent quote-column substitution. |
@@ -157,6 +169,7 @@ revision-specific commands belong in CURRENT_STATE or their dated receipts.
 | ETFE first-run plan and note reconciliation | October 3: full dependency sequence, build/input/dataset/model-freeze and expert-proof acceptance recorded; current-phase TODO and document owners reconciled. Documentation only, no future gate closed. [Review](docs/reviews/2026-10-03-etfe-first-run-plan.md) |
 | ETFE-0 component contracts | October 3: exhaustive feature map, execution/evaluation/acquisition definitions, 84-fit declaration and ten live controls. H1/R1/R2/P1 remain open; no pilot or gate closure. [Review](docs/reviews/2026-10-03-etfe-contract.md) |
 | ETFE Alpaca pull diagnosis | October 3: 40 live GETs, sample trade/bar and six-page equivalence, rejected feed parameter, historical metadata anomalies and dated QQQ/VOO explanations. Source gate remains open. [Review](docs/reviews/2026-10-03-etfe-alpaca-pulls.md) |
+| ETFE fresh download bootstrap and 5-DTE guard | October 4: isolated resumable Alpaca capture, 30 complete raw partitions, live checkpoint preservation, v3 setup and tested purchase/roll DTE guard. Full-history admission and integrated pilot remain open. [Review](docs/reviews/2026-10-04-etfe-fresh-acquisition.md) |
 | V7 cold archive and verified local reclamation | October 3: all 2,847 shards/564 roots preserved on MRHA; 35,031 eligible local files removed; matching final receipts and sampled restore checks. [Audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json) |
 | V7-1 and V7-2 | Gate closures above; do not reopen old dividend lists, context builds or catalog freezes |
 | V7-3 demand scheduler, request census, exact union and lossless joining | [Demand/recovery](docs/reviews/2026-09-25-v7-3-crash-recovery.md), [union](docs/reviews/2026-09-26-v7-entry-union-and-first-capture.md), [joining](docs/reviews/2026-09-26-v7-capture-storage-forecast.md) |

@@ -58,9 +58,10 @@ and quote-specific guards for ETFE; other later V7 risk amendments remain.
   ETFE has an expected 8,451 variant/timeframe combinations per ticker and 25,353
   across three tickers. This is planning arithmetic, excluding directions, DTE
   targets, contracts, events and model trials; the new catalog must verify it.
-- Retain actual **1–9 calendar DTE** at every purchase, targets **1/5** and the
-  declared weekly **2/4/7** subset. Zero DTE remains excluded. Preserve exact
-  family eligibility rather than applying every target to every family.
+- October 4 user amendment caps actual purchases and rolls at **1–5 calendar
+  DTE**. Targets remain **1/5** with conditionally eligible weekly **2/4**;
+  target 7 is removed. Zero DTE remains excluded. Apply dated symbol eligibility
+  across the registered families. [Current DTE contract](ETFE_DTE_20261004.md).
 - Signals become available at completed bar close; use session-aligned bars,
   actual calendars, DST and early closes. Revalidate 1-minute warmup and higher
   timeframe context; the old 5/15/30 schema is not an ETFE schema.

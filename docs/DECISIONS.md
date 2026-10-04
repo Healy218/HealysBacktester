@@ -2258,3 +2258,28 @@ timestamp or use current expired-contract fields as dated terms. H1/R1/R2/P1
 remain open; all build/training readiness flags stay false. Keep the v2 setup
 immutable and seal a successor after source evidence resolves. The integrated
 resource pilot remains next in ROADMAP only after ETFE-0 closes.
+
+### 2026-10-04 — Fresh Alpaca acquisition proceeds alongside admission validation
+
+The user clarifies ETFE starts from fresh Alpaca stock/option downloads and
+rebuilds features, labels and models; old project metadata is not a data source
+or repair dependency. Permit bounded raw capture before source admission closes.
+Replace provider-global history proof with the scoped SPY/QQQ/VOO coverage census;
+keep exact first/usable coverage and missingness unresolved where not yet proven.
+No claim that current discovery records are historical as-of state. Dated terms,
+hours and provenance remain checks at the feature/execution/admission boundary.
+Preserve original frozen declarations; use the explicit
+[collection successor](specs/ETFE_FRESH_ACQUISITION_20261003.md).
+The raw bootstrap is complete; integrated pilot/full-history/freeze are separate.
+
+### 2026-10-04 — Cap ETFE purchases and rolls at five calendar DTE
+
+The user requires traded options to be five DTE or less. Reduce actual purchase
+DTE from 1–9 to 1–5, retaining the existing one-day minimum and excluding 0DTE.
+Default targets remain 1/5; conditionally eligible weekly targets become 2/4,
+removing target 7 rather than clamping it. Recompute at each attempt in New York
+calendar dates, including rolls. Context-only surface demand remains 1–45 DTE.
+Explicitly rescale new-schema dte_frac to DTE/5; preserve the old frozen registry
+and all prior setup identities. [DTE amendment](specs/ETFE_DTE_20261004.md),
+[current scope](specs/ETFE_SCOPE_ALPACA_20261004.json),
+[engineering evidence](reviews/2026-10-04-etfe-fresh-acquisition.md).

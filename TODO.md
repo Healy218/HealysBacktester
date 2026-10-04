@@ -1,107 +1,67 @@
-# TODO — ETFE scope and data contract
+# TODO — ETFE fresh Alpaca acquisition
 
-**Selected work: ETFE — Exchange Traded Funds Expert. Current gate: ETFE-0.**
-October 3 user direction selects a brand-new ETFE expert: exactly SPY, QQQ, VOO;
-V7 strategy/timing specifications; 1/5/15-minute signals; Alpaca's earliest
-options history through October 2, 2026, inclusive. No Massive quotes. [Specification](docs/specs/ETFE.md),
-[roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert), [handoff](HANDOFF.md).
-October 3 follow-up authorized initial setup. Independent configuration/catalog
-and bounded Alpaca diagnostics are implemented; input admission and expensive
-campaigns remain gated. V7 archival is verified complete.
-The October 3 first-run plan now covers the full build, dataset/experiment
-freeze, finite training campaign, model freeze and clean-process expert proof.
+**Selected work: fresh Alpaca-only ETFE setup and acquisition.**
+User clarified that ETFE starts with new Alpaca stock/option downloads, then
+rebuilds its own features, labels and models. No old project data or metadata is
+an input. New entries and rolls use **1–5 calendar DTE**; target 7 is removed.
+SPY/QQQ/VOO, 1/5/15-minute signals, all twenty families and completed-minute
+option VWAP remain. [Current scope](docs/specs/ETFE_SCOPE_ALPACA_20261004.json),
+[DTE amendment](docs/specs/ETFE_DTE_20261004.md),
+[fresh acquisition contract](docs/specs/ETFE_FRESH_ACQUISITION_20261003.md).
+
+Raw download setup may proceed while source/coverage validation continues.
+Provider-global history proof and repairs to old project metadata are not
+collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
+history through the fresh coverage census; preserve the fixed October 2, 2026
+end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[acceptance contract](docs/specs/ETFE_FIRST_RUN.md). This checklist contains only
-the current contract phase; later tasks stay in ROADMAP until selected.
+[latest evidence](docs/reviews/2026-10-04-etfe-fresh-acquisition.md),
+[handoff](HANDOFF.md).
 
-October 3: four component definitions are declared. H1/R1/R2/P1 source evidence
-still blocks ETFE-0 closure. [Contract and blockers](docs/specs/ETFE_CONTRACT_20261003.md),
-[verification](docs/reviews/2026-10-03-etfe-contract.md). No integrated pilot or
-bulk campaign started.
-October 3 pull diagnostics: 40 live GETs establish working historical trades/bars,
-six-page equivalence and rejected historical-trade `feed` parameters. Dated OCC
-and Nasdaq notices explain the adjusted QQQ strike and VOO hours change. Old
-zero multipliers and exact history/feed provenance remain unresolved.
-[Diagnosis](docs/reviews/2026-10-03-etfe-alpaca-pulls.md).
+## Current checklist — ETFE setup / acquisition
 
-## Selected checklist — ETFE-0
+- [x] **ETFE.setup:** Independent strategy catalog remains twenty families and
+  25,353 ticker/variant combinations. Current v3 setup has fresh-source policy,
+  separate artifact identity and explicit 1–5 DTE guard; old setups preserved.
+- [x] **ETFE.provider-probe / quote-diagnosis / pull-diagnosis:** Alpaca stock
+  and option bar/trade routes verified. Historical option quotes unsupported;
+  historical trades reject `feed`. Earlier diagnostics remain dated evidence,
+  not data imported into the new capture roots.
+- [x] **ETFE.pricing-basis:** Completed one-minute option VWAP selected; causal
+  reference component implemented. Full execution validation remains separate.
+- [x] **ETFE-0.feature-map / execution-contract / experiment-contract /
+  acquisition-design:** Four definitions declared. Fresh-acquisition and 5-DTE
+  successors override collection ordering and purchase range, respectively.
+  Rebuild the implementation/schema from fresh inputs; do not reuse old arrays.
+- [x] **ETFE-1.bootstrap:** Resumable source-bound raw downloader and reader;
+  six stock, twelve discovery and twelve option bar/trade partitions captured.
+  36 live GETs, 50,106 stock bars, 2,284 option bars, 39,975 option trades and
+  2,084 fresh discovery records. Live resume preserved prior committed files.
+  This completes bounded download setup, not full acquisition or ETFE-4.pilot.
+- [x] **ETFE.purchase-dte:** Current scope and tested guard reject actual DTE
+  outside 1–5 at every new entry/roll. Default targets 1/5, conditional weekly
+  targets 2/4; target 7 removed. New `dte_frac` scale divides by five.
+- [ ] **ETFE-1.normalize:** Implement typed, bounded normalization and quality/
+  session/missingness reports over these fresh page chains. Preserve native
+  timestamp precision and no-ID trade occurrences; no synthetic zero bars.
+- [ ] **ETFE-1.demand:** Enumerate full underlying/context and option demand,
+  applying 1–5 DTE to purchases/rolls and retaining context-only surface scope.
+  Expand beyond bootstrap windows with measured request/storage budgets.
+- [ ] **ETFE.history-boundary:** Establish scoped first-observed and usable
+  SPY/QQQ/VOO coverage, including earlier discovery. January 18 is an observed
+  lead; bootstrap January 1 stock padding is not a verified options floor.
+- [ ] **ETFE.provider-contract:** Validate remaining route provenance and dated
+  eligibility/session/contract terms when needed by feature/execution admission.
+  R1/R2/P1 are not permission gates for raw collection. ETFE-0 admission remains
+  open; current expired listings are discovery records, not historical features.
+- [ ] **ETFE-4.pilot:** Integrate fresh capture → features → execution → dataset
+  → training smoke measurement and recovery. Reconcile full demand and resource
+  budgets before bulk work; final input/dataset freeze and training stay later.
 
-- [x] **ETFE.setup:** Independent scope/configuration, 20-family 1/5/15-minute
-  catalog (25,353 ticker/variant combinations), source-bound setup and integrity
-  CLI. New artifacts only; 30 focused tests passed.
-- [x] **ETFE.provider-probe:** Bounded read-only Alpaca checks completed; 43 live
-  GETs, historical trades/bars observed for all three ETFs, quote endpoint 404.
-  [Evidence and limits](docs/reviews/2026-10-03-etfe-setup.md).
-- [x] **ETFE.quote-diagnosis:** Historical quote route is unsupported by Alpaca's
-  public API. Official staff confirmation and 13 live controls establish working
-  OPRA latest quotes for all three ETFs, working historical trades, and persistent
-  historical-route 404s. [Diagnosis](docs/reviews/2026-10-03-etfe-quote-404.md).
-- [x] **ETFE.pricing-basis:** User authorized trade/bar methodology and delegated
-  VWAP versus high/low midpoint. Selected completed one-minute VWAP; implemented
-  causal reference component and immutable successor setup. 46 focused tests
-  passed. [Amendment](docs/specs/ETFE_VWAP_20261003.md).
-- [x] **ETFE.pull-diagnosis:** Trade/bar reconciliation and six-page retrieval
-  verified for the opening-minute sample. Historical trades reject `feed` with
-  HTTP 400. Older metadata anomalies are isolated; QQQ adjustment and dated VOO
-  transition explained. [Evidence](docs/reviews/2026-10-03-etfe-alpaca-pulls.md).
-
-- [x] **ETFE.scope:** Record the accepted universe, timeframes and V7 inheritance;
-  preserve later risk amendments and apply the subsequent ETFE VWAP pricing
-  amendment; distinguish signal bars from option reference bars.
-- [x] **ETFE.dates:** User confirmed Alpaca's earliest historical options
-  availability through October 2, 2026, inclusive. This is a fixed window, not
-  our recording start or a moving latest-session end.
-- [ ] **ETFE.history-boundary:** Verify the exact first Alpaca options timestamp
-  and UTC boundaries for the fixed October 2 end; record missing feature/bar/trade
-  coverage separately rather than silently shortening the requested window.
-  January 18, 2024 observations exist in all three ETFs; sample evidence does
-  not establish the global first timestamp. Six new empty controls cover only
-  three named contracts; H1 requires provider-global evidence. October 2 stock
-  UTC hours and civil end `2026-10-03T04:00:00Z` exclusive are verified.
-  Dated option-class hours remain separate under R2.
-- [x] **ETFE-0.feature-map:** Inventory every inherited feature and all thirteen
-  TV scopes. Declare retained/recomputed/replaced/unresolved fields, formulas,
-  sources, available-at timestamps, windows, warmup and missingness. Define the
-  new schema without fabricated quote values or silent loss of strategy scope.
-  [Declared registry](docs/specs/ETFE_FEATURE_MAP_20261003.json): 221 values plus
-  masks, thirteen pinned scopes. ETFE-2 implementation/admission remains open.
-- [x] **ETFE-0.execution-contract:** Finish VWAP reference-to-simulated-fill
-  semantics: size/participation limits, premium-stop denominator, timing, costs,
-  missing held marks/exits, dated expiry/roll/physical delivery and end-boundary
-  outcomes. Define pilot reconciliation and cost/lag/liquidity stress cases.
-  [Declared execution](docs/specs/ETFE_EXECUTION_20261003.md); validation and
-  dated R1/R2 inputs remain open.
-- [x] **ETFE-0.experiment-contract:** Declare target definitions, temporal fold
-  construction, full-horizon purging/ten-session embargo, train-only processing,
-  finite GBT/NN/constant trial design, baselines and model/decision acceptance
-  policy. Seal exact dates/parameters before outcome inspection/full fitting.
-  [Declaration](docs/specs/ETFE_EXPERIMENT_20261003.json): three folds and 84
-  required fits including final refits; dataset freeze comes later.
-- [x] **ETFE-0.acquisition-design:** Derive required underlying/context, option
-  bar/trade and dated-reference demand from those contracts; specify provenance,
-  pagination, missingness/corrections and resumable partition inventory. Prepare
-  the bounded ETFE-4.pilot workload and measurement/stop rules before bulk work.
-  [Declared design](docs/specs/ETFE_ACQUISITION_20261003.md); source feasibility
-  H1/R1/R2/P1 remains open and pilot execution has not begun.
-- [ ] **ETFE.provider-contract:** Close ETFE-0.contract with the above versioned
-  feature/execution/evaluation/acquisition contracts and feasible Alpaca sources,
-  including feed, bar publication/revision assumptions and dated contract inputs.
-  Four definitions are complete; **ETFE-0.contract is not closed**. Resolve H1
-  (global floor), R1 (dated discovery/contract terms), R2 (class/expiry hours;
-  VOO Nasdaq transition now sourced effective February 25, 2026), and P1
-  (historical trade provenance; unsupported feed selector diagnosed), then seal an
-  immutable contract successor.
-  Full coverage is subsequently demonstrated under ETFE-1, not by this plan.
-  The user-approved VWAP method supersedes historical bid/ask pricing and quote
-  age/size guards; do not retry unsupported quote history. Alpaca-only policy,
-  fixed dates and all strategy families remain. No Massive fallback or fabricated
-  quote features; current expired-contract records are not historical as-of chains.
-
-Later implementation, coverage, resource and training gates belong to the
-[ETFE roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert), not competing queues.
-V7's paused scientific checklist is preserved in
-[the pre-ETFE snapshot](handoff-history/TODO-2026-10-03-before-etfe.md);
-V7 gates remain in ROADMAP with their prior completion boundaries intact.
+Preserve all completed setup evidence, including the earlier contract verifier's
+historical gate status. [Prior phase checklist](handoff-history/TODO-2026-10-04-before-fresh-acquisition.md).
+Later gates remain in ROADMAP; neither raw download completion nor the DTE
+component closes full coverage, execution validation or model evaluation.
 
 ## Completed storage obligation — V7 preservation
 

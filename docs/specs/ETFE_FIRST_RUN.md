@@ -9,6 +9,12 @@ existing frozen configuration.
 The [October 3 declarations](ETFE_CONTRACT_20261003.md) now specify the four
 component contracts and [exact experiment design](ETFE_EXPERIMENT_20261003.json).
 They do not close the unresolved source gate or replace the later dataset freeze.
+The [fresh-Alpaca successor](ETFE_FRESH_ACQUISITION_20261003.md) permits bounded
+raw downloads while admission validation continues; provider-global history
+proof and old project metadata repairs are not collection prerequisites.
+The [October 4 DTE successor](ETFE_DTE_20261004.md) caps all purchases/rolls at
+1–5 calendar DTE and removes target 7. Both override the earlier declarations
+within their named scope, preserving the original frozen artifacts.
 
 ## Meaning of a working expert
 
@@ -20,7 +26,7 @@ dataset freezes, all required model fits, evaluation and trained-bundle freeze.
 It need not be attached to a broker to satisfy this milestone. A working research
 artifact is not automatically a profitable, accepted or deployed trading expert.
 
-## Contracts required before acquisition/admission
+## Contracts required for admission; bounded raw acquisition may precede closure
 
 | Contract | Required contents |
 | --- | --- |

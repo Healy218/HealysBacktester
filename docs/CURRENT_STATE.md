@@ -13,87 +13,65 @@ timestamps; old progress alone does not establish present service health.
 Verify the indicated live receipts when asked for present health or progress.
 Never infer a current ETA from a historical throughput sample.
 
-## October 3 ETFE setup
+<a id="october-3-etfe-setup"></a>
 
-Selected [scope](specs/ETFE.md), machine-readable configuration
-`docs/specs/ETFE_SCOPE_VWAP_20261003.json`. Brand-new expert, SPY/QQQ/VOO, 1/5/15-minute
-signals, Alpaca-only options, earliest provider history through October 2, 2026.
-No Massive quotes or old weights/checkpoints are selected.
+## October 4 ETFE fresh Alpaca setup
+
+Selected scope: [v3 fresh Alpaca / five-DTE scope](specs/ETFE_SCOPE_ALPACA_20261004.json).
+SPY/QQQ/VOO, 1/5/15-minute signals, all twenty strategy families, completed-minute
+option VWAP. New entries/rolls require actual 1–5 calendar DTE; targets 1/5 plus
+eligible weekly 2/4. Context-only surface demand remains 1–45 DTE. No old
+project market data, feature arrays, labels, weights or checkpoints are inputs.
 
 | Artifact / action | Selected location |
 | --- | --- |
-| Selected VWAP setup root | `nn_meta/validation/etfe-setup-20261003-vwap-r1/` |
-| Preserved midpoint predecessor / diagnostic root | `nn_meta/validation/etfe-setup-20261003-r0/`; provider probes below remain here |
-| Scope, catalog and bindings | `scope.json`, `catalog.json`, `plan.json`, `PREPARED.json` under the selected VWAP root |
-| Runtime selector | `NN_META_POOL=etfe`; independent output root, no live service |
-| Selected setup generator | `scripts/prepare_etfe_vwap.py`; package `nn_meta/etfe/` |
-| Selected integrity command | `scripts/verify_etfe_vwap.py --setup nn_meta/validation/etfe-setup-20261003-vwap-r1` |
-| Initial live capability probe | `probe-r1/PROBE.json`; initial sandbox-only `probe-r0` retained separately |
-| Earlier-history follow-up | `probe-boundary-r0/BOUNDARY.json` |
-| Quote-route diagnostic | `probe-quotes-r1/DIAGNOSTIC.json`; sandbox-only r0 retained separately |
-| Exact selected setup source bytes | `source-snapshot/`, bound by `PREPARED.json` and `plan.json` |
-| Operating instructions | [ETFE setup reference](reference/ETFE_SETUP.md) |
-| First-run sequence / technical acceptance | [ROADMAP](../ROADMAP.md#etfe-first-run-sequence), [first-run specification](specs/ETFE_FIRST_RUN.md) |
-| First-run planning record | [October 3 documentation review](reviews/2026-10-03-etfe-first-run-plan.md) |
-| ETFE-0 declarations | [Contract index](specs/ETFE_CONTRACT_20261003.md); linked feature/execution/evaluation/acquisition definitions |
-| Contract verification | `scripts/verify_etfe_contract.py`; [receipt](reviews/2026-10-03-etfe-contract.json) |
-| Formula snapshot | `nn_meta/validation/etfe-contract-20261003-r0/source-snapshot/`; portable `docs/reviews/2026-10-03-etfe-contract-evidence.zip` |
-| New boundary controls | `nn_meta/validation/etfe-contract-boundary-20261003-r1/REPORT.json`; sandbox-only r0 retained |
-| Pull diagnosis / follow-up | `nn_meta/validation/etfe-alpaca-pulls-20261003-r1/REPORT.json`, `etfe-alpaca-pulls-20261003-r2/REPORT.json`; sandbox r0 retained separately |
-| Portable pull evidence | [Receipt](reviews/2026-10-03-etfe-alpaca-pulls.json), [review](reviews/2026-10-03-etfe-alpaca-pulls.md), `reviews/2026-10-03-etfe-alpaca-pulls-evidence.zip` |
+| Current setup | `nn_meta/validation/etfe-setup-20261004-alpaca-r0/PLAN.json` |
+| Current machine scope / DTE guard | `docs/specs/ETFE_SCOPE_ALPACA_20261004.json`; `nn_meta/etfe/purchase_policy.py` |
+| Current setup integrity | `./venv/bin/python scripts/prepare_etfe_current.py verify --root nn_meta/validation/etfe-setup-20261004-alpaca-r0` |
+| Fresh stock / symbol-discovery capture | `nn_meta/data_cache_etfe/alpaca-fresh-20261003-bootstrap-r0/` |
+| Fresh option bar / trade capture | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-options-r0/` |
+| Capture entry point | `scripts/acquire_etfe_alpaca.py`; independent `nn_meta/etfe/acquisition.py` |
+| Capture inventory / immutable pages | `PLAN.json`, `jobs/*/page-*.json`, `attempts/*/{receipt,body}.json`, unique `runs/*.json` in each capture root |
+| Collection policy / DTE amendment | [Fresh collection](specs/ETFE_FRESH_ACQUISITION_20261003.md), [1–5 DTE](specs/ETFE_DTE_20261004.md) |
+| Latest evidence | [Review](reviews/2026-10-04-etfe-fresh-acquisition.md), [receipt](reviews/2026-10-04-etfe-fresh-acquisition.json), `reviews/2026-10-04-etfe-fresh-acquisition-evidence.zip` |
+| First-run sequence / acceptance | [ROADMAP](../ROADMAP.md#etfe-first-run-sequence), [acceptance](specs/ETFE_FIRST_RUN.md) |
+| Four component definitions | [Original contract index](specs/ETFE_CONTRACT_20261003.md); apply the two successors above |
+| Preserved predecessor setups | `nn_meta/validation/etfe-setup-20261003-vwap-r1/`, `nn_meta/validation/etfe-setup-20261003-r0/` |
 
-Selected VWAP plan SHA256:
-`3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64`.
-The completed-minute reference component and new setup pass 46 focused tests.
-Original midpoint plan preserved as
-`8e43d74e2d89d9b3aaaf58d2a65f2acbc713dfa44f19466ee95af5279aa8e707`;
-both original and successor integrity checks pass. [VWAP review](reviews/2026-10-03-etfe-vwap.md).
-At 17:51–17:53 Central October 3, 43 live Alpaca GETs recorded underlying samples,
-expired-contract examples and historical trades/bars. Representative contracts
-in all three ETFs returned January 18, 2024 observations, earlier than the
-published February month boundary; the provider-global first timestamp remains
-unverified. Historical quote requests returned 404 in all three examples.
-October 2 stock regular hours confirmed 09:30–16:00 New York (13:30–20:00 UTC);
-option-class hours/deliverables still need their own evidence.
+Current setup plan SHA256:
+`212b52b034190ea3dd5c5bf5b0f097897a09bcce241004afaa9db6220e94a136`.
+Stock/discovery capture plan:
+`8d704e646705ac49ade0025f7e0c75985ecef023e5da9d59994c3cb0cca604aa`.
+Option capture plan:
+`7e4562d4809b69369e52bb1c9d870297a894a536c0880ea9252a069bc401ea36`.
 
-At 18:41:55 Central October 3, 13 further live GETs isolated the quote 404s:
-three latest OPRA chains and three latest quote requests succeeded, as did a
-historical trade control; six historical-quote route variants returned 404.
-Official Alpaca staff confirms historical option quotes are not on the roadmap.
-The public API cannot supply historical quote windows. The subsequent accepted
-VWAP amendment supersedes that pricing requirement; bar coverage, publication
-assumptions, feature mapping and execution admission remain unresolved.
-[Diagnosis](reviews/2026-10-03-etfe-quote-404.md),
-[portable receipts](reviews/2026-10-03-etfe-quote-404.json).
+October 4 capture observation: 36 live GETs, all HTTP 200, complete page chains
+for 30 raw partitions. Separately retained one initial sandbox transport failure.
+Fresh data contains 50,106 SIP stock bars, 2,284 option minute bars, 39,975
+option trades and 2,084 Alpaca discovery records. Stock scope is January 2024
+plus October 1–2, 2026; option scope is twelve deterministic call/put transport
+samples for January 18, 2024 and October 2, 2026 (full-day bars/opening-30m trades).
+These are bounded bootstrap inputs, not the full requested historical dataset.
+Same-day October samples are transport data, not eligible 0-DTE purchases.
 
-The catalog contains all 20 families and 25,353 ticker/variant combinations.
-The original setup passed 30 focused tests and source/artifact/probe checks;
-the selected VWAP revision passed the 46-test suite described above. These are
-setup results: no ETFE data freeze, training artifact, runtime deployment or
-full historical coverage is admitted. All readiness flags remain false.
-October 3 documentation update: the first-run sequence and acceptance contract
-are recorded. Input freeze, dataset/experiment freeze, full-build receipt,
-training campaign, trained bundle and expert replay receipt do not yet have
-selected artifacts. No future artifact path or job is represented as existing.
-[Measured setup review](reviews/2026-10-03-etfe-setup.md),
-[receipts](reviews/2026-10-03-etfe-setup.json).
-V7 pointers below remain preservation/recovery references, not ETFE inputs.
+Raw capture/source/run files total about 9.55 MiB before packaging. Maximum
+reported process peak RSS was 835,710,976 bytes; capture calls completed in
+roughly 34 seconds combined, excluding permission/wait/preparation time. This
+is transport measurement, not a feature/build/train resource forecast. The
+live one-page stop/resume preserved all three prior committed file hashes.
+Seventy-three focused tests passed, including nine DTE tests and twelve capture
+tests. Old setup/contract artifacts remain intact; prior checks are historical
+integrity checks, not current scientific readiness.
 
-October 3 at 20:08:37 Central: ten live controls all returned HTTP 200. Six
-pre–January 18 windows were empty for three named contracts; this does not prove
-the global floor. Current January 2024 records returned size 100, multiplier 0
-and T+1 deliverables; no historical terms are inferred. Four ETFE-0 definitions
-now cover 221 values plus masks, thirteen source scopes and 84 future fits.
-H1/R1/R2/P1 admission remains open; no input/dataset freeze, integrated pilot or
-evaluated model exists. [Review](reviews/2026-10-03-etfe-contract.md).
-
-October 3 at 22:54:01/23:27:52 Central: 40 further GETs produced 37 HTTP 200
-and three deliberate HTTP 400 feed controls, zero transport failures. Opening
-minute trades reproduce three bars; six pages reproduce the single-page result.
-February/March samples retain multiplier 0 versus 100 in June and later samples.
-Dated sources explain QQQ's adjusted strike and VOO's February 25, 2026 Nasdaq
-close-time transition. H1/R1/R2/P1 remain open with these narrowed questions;
-no source readiness is inferred. [Diagnosis](reviews/2026-10-03-etfe-alpaca-pulls.md).
+No service/model is deployed for ETFE. The capture CLI does not import the old
+runtime configuration or data paths. Features/normalization, full scoped history,
+dated eligibility/execution, integrated pilot, freezes and model training remain
+unfinished. Source questions stay visible at admission without blocking raw
+collection. Earlier dated observations live in the
+[setup review](reviews/2026-10-03-etfe-setup.md),
+[VWAP review](reviews/2026-10-03-etfe-vwap.md),
+[contract review](reviews/2026-10-03-etfe-contract.md) and
+[pull diagnosis](reviews/2026-10-03-etfe-alpaca-pulls.md).
 
 ## October 2 late-evening V7 cold archive
 
