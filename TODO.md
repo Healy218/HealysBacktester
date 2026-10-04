@@ -3,10 +3,10 @@
 **Selected work: fresh Alpaca-only ETFE setup and acquisition.**
 User clarified that ETFE starts with new Alpaca stock/option downloads, then
 rebuilds its own features, labels and models. No old project data or metadata is
-an input. New entries and rolls use **1–5 calendar DTE**; target 7 is removed.
+an input. New entries and rolls use **0–5 calendar DTE**; target 7 is removed.
 SPY/QQQ/VOO, 1/5/15-minute signals, all twenty families and completed-minute
-option VWAP remain. [Current scope](docs/specs/ETFE_SCOPE_ALPACA_20261004.json),
-[DTE amendment](docs/specs/ETFE_DTE_20261004.md),
+option VWAP remain. [Current scope](docs/specs/ETFE_SCOPE_0DTE_20261004.json),
+[DTE amendment](docs/specs/ETFE_0DTE_NORMALIZATION_20261004.md),
 [fresh acquisition contract](docs/specs/ETFE_FRESH_ACQUISITION_20261003.md).
 
 Raw download setup may proceed while source/coverage validation continues.
@@ -15,14 +15,18 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-04-etfe-fresh-acquisition.md),
+[latest evidence](docs/reviews/2026-10-04-etfe-normalization-expansion.md),
 [handoff](HANDOFF.md).
+
+The latest user amendment explicitly enables 0DTE when signals qualify.
+Current normalized inputs and expanded stock/option strata are complete within
+their declared scope; 87 focused tests pass.
 
 ## Current checklist — ETFE setup / acquisition
 
 - [x] **ETFE.setup:** Independent strategy catalog remains twenty families and
-  25,353 ticker/variant combinations. Current v3 setup has fresh-source policy,
-  separate artifact identity and explicit 1–5 DTE guard; old setups preserved.
+  25,353 ticker/variant combinations. Current v4 setup has fresh-source policy,
+  separate artifact identity and explicit 0–5 DTE guard; old setups preserved.
 - [x] **ETFE.provider-probe / quote-diagnosis / pull-diagnosis:** Alpaca stock
   and option bar/trade routes verified. Historical option quotes unsupported;
   historical trades reject `feed`. Earlier diagnostics remain dated evidence,
@@ -30,7 +34,7 @@ end. No fabricated history, point-in-time admission or full coverage claim.
 - [x] **ETFE.pricing-basis:** Completed one-minute option VWAP selected; causal
   reference component implemented. Full execution validation remains separate.
 - [x] **ETFE-0.feature-map / execution-contract / experiment-contract /
-  acquisition-design:** Four definitions declared. Fresh-acquisition and 5-DTE
+  acquisition-design:** Four definitions declared. Fresh-acquisition and 0–5 DTE
   successors override collection ordering and purchase range, respectively.
   Rebuild the implementation/schema from fresh inputs; do not reuse old arrays.
 - [x] **ETFE-1.bootstrap:** Resumable source-bound raw downloader and reader;
@@ -39,14 +43,21 @@ end. No fabricated history, point-in-time admission or full coverage claim.
   2,084 fresh discovery records. Live resume preserved prior committed files.
   This completes bounded download setup, not full acquisition or ETFE-4.pilot.
 - [x] **ETFE.purchase-dte:** Current scope and tested guard reject actual DTE
-  outside 1–5 at every new entry/roll. Default targets 1/5, conditional weekly
-  targets 2/4; target 7 removed. New `dte_frac` scale divides by five.
-- [ ] **ETFE-1.normalize:** Implement typed, bounded normalization and quality/
-  session/missingness reports over these fresh page chains. Preserve native
-  timestamp precision and no-ID trade occurrences; no synthetic zero bars.
+  outside 0–5 at every new entry/roll. Default targets 0/1/5, conditional weekly
+  targets 2/4; target 7 removed. Qualifying signals and dated expiry cutoffs
+  remain required. `dte_frac` divides by five and permits zero.
+- [x] **ETFE-1.normalize:** Typed bounded Parquet, row quality and stock-session
+  gap reports complete for 186 selected raw partitions / 1,677,986 rows. Exact
+  timestamps, raw JSON and occurrence lineage retained; independent full-row
+  reconciliation and actual resume passed. No rows are fabricated or deduplicated.
+- [x] **ETFE-1.expand:** Remaining 96 stock-month partitions and 0–5 DTE option
+  discovery/transport strata captured and normalized; 254 new live GETs. Stock
+  requests span January 2024–October 2, 2026. SPY/QQQ have every expected regular
+  minute; 12 VOO gaps remain explicitly unresolved. Full option demand is separate.
 - [ ] **ETFE-1.demand:** Enumerate full underlying/context and option demand,
-  applying 1–5 DTE to purchases/rolls and retaining context-only surface scope.
-  Expand beyond bootstrap windows with measured request/storage budgets.
+  applying 0–5 DTE to purchases/rolls and retaining context-only surface scope.
+  Expand option/context coverage beyond the four sampled dates with measured
+  request/storage budgets; the stock-month expansion is complete.
 - [ ] **ETFE.history-boundary:** Establish scoped first-observed and usable
   SPY/QQQ/VOO coverage, including earlier discovery. January 18 is an observed
   lead; bootstrap January 1 stock padding is not a verified options floor.

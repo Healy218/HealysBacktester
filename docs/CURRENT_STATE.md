@@ -17,61 +17,61 @@ Never infer a current ETA from a historical throughput sample.
 
 ## October 4 ETFE fresh Alpaca setup
 
-Selected scope: [v3 fresh Alpaca / five-DTE scope](specs/ETFE_SCOPE_ALPACA_20261004.json).
-SPY/QQQ/VOO, 1/5/15-minute signals, all twenty strategy families, completed-minute
-option VWAP. New entries/rolls require actual 1–5 calendar DTE; targets 1/5 plus
-eligible weekly 2/4. Context-only surface demand remains 1–45 DTE. No old
-project market data, feature arrays, labels, weights or checkpoints are inputs.
+Selected [v4 scope](specs/ETFE_SCOPE_0DTE_20261004.json): SPY/QQQ/VOO, 1/5/15-minute
+signals, twenty strategy families, actual **0–5 calendar DTE** purchases/rolls.
+Default targets 0/1/5; conditional weekly 2/4; target 7 removed. 0DTE requires
+qualifying signals and a dated expiry cutoff. Context-only 1–45 DTE remains.
+No prior-project market data, features, labels or model artifacts are inputs.
 
 | Artifact / action | Selected location |
 | --- | --- |
-| Current setup | `nn_meta/validation/etfe-setup-20261004-alpaca-r0/PLAN.json` |
-| Current machine scope / DTE guard | `docs/specs/ETFE_SCOPE_ALPACA_20261004.json`; `nn_meta/etfe/purchase_policy.py` |
-| Current setup integrity | `./venv/bin/python scripts/prepare_etfe_current.py verify --root nn_meta/validation/etfe-setup-20261004-alpaca-r0` |
-| Fresh stock / symbol-discovery capture | `nn_meta/data_cache_etfe/alpaca-fresh-20261003-bootstrap-r0/` |
-| Fresh option bar / trade capture | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-options-r0/` |
-| Capture entry point | `scripts/acquire_etfe_alpaca.py`; independent `nn_meta/etfe/acquisition.py` |
-| Capture inventory / immutable pages | `PLAN.json`, `jobs/*/page-*.json`, `attempts/*/{receipt,body}.json`, unique `runs/*.json` in each capture root |
-| Collection policy / DTE amendment | [Fresh collection](specs/ETFE_FRESH_ACQUISITION_20261003.md), [1–5 DTE](specs/ETFE_DTE_20261004.md) |
-| Latest evidence | [Review](reviews/2026-10-04-etfe-fresh-acquisition.md), [receipt](reviews/2026-10-04-etfe-fresh-acquisition.json), `reviews/2026-10-04-etfe-fresh-acquisition-evidence.zip` |
-| First-run sequence / acceptance | [ROADMAP](../ROADMAP.md#etfe-first-run-sequence), [acceptance](specs/ETFE_FIRST_RUN.md) |
-| Four component definitions | [Original contract index](specs/ETFE_CONTRACT_20261003.md); apply the two successors above |
-| Preserved predecessor setups | `nn_meta/validation/etfe-setup-20261003-vwap-r1/`, `nn_meta/validation/etfe-setup-20261003-r0/` |
+| Current v4 setup | `nn_meta/validation/etfe-setup-20261004-0dte-r0/PLAN.json` |
+| Setup verification | `scripts/prepare_etfe_0dte.py verify --root nn_meta/validation/etfe-setup-20261004-0dte-r0` |
+| Purchase / signal / expiry guards | `nn_meta/etfe/purchase_policy_v2.py`; [0DTE successor](specs/ETFE_0DTE_NORMALIZATION_20261004.md) |
+| Preserved v3 / v2 setups | `nn_meta/validation/etfe-setup-20261004-alpaca-r0/`, `nn_meta/validation/etfe-setup-20261003-vwap-r1/` |
+| Fresh stock calendar | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-calendar-r1/CALENDAR.json`; failed sandbox r0 retained separately |
+| Original fresh raw capture | `nn_meta/data_cache_etfe/alpaca-fresh-20261003-bootstrap-r0/`, `alpaca-fresh-20261004-options-r0/` |
+| Expanded stock raw capture | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-stocks-r0/` |
+| Expanded discovery / options | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-discovery-r0/`, `alpaca-fresh-20261004-option-strata-r0/` |
+| Main normalized inputs | `nn_meta/data_cache_etfe/normalized-20261004-main-r0/` — 126 partitions / 1,633,433 rows |
+| Additional normalized strata | `nn_meta/data_cache_etfe/normalized-20261004-strata-r0/` — 60 partitions / 44,553 rows |
+| Normalization inventory / Parquet | `PLAN.json`, `NORMALIZED.json`, `partitions/*.json` point to checksummed `attempts/*.parquet` in each normalized root |
+| Independent raw-row reconciliation | `INDEPENDENT_AUDIT.json` in each normalized root; `scripts/audit_etfe_normalized.py` |
+| Expansion / normalization CLIs | `scripts/expand_etfe_alpaca.py`, `scripts/normalize_etfe.py`; [operating reference](reference/ETFE_SETUP.md) |
+| Current evidence | [Review](reviews/2026-10-04-etfe-normalization-expansion.md), [receipt](reviews/2026-10-04-etfe-normalization-expansion.json), `reviews/2026-10-04-etfe-normalization-expansion-evidence.zip` |
+| Roadmap / first-run acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [acceptance](specs/ETFE_FIRST_RUN.md) |
 
-Current setup plan SHA256:
-`212b52b034190ea3dd5c5bf5b0f097897a09bcce241004afaa9db6220e94a136`.
-Stock/discovery capture plan:
-`8d704e646705ac49ade0025f7e0c75985ecef023e5da9d59994c3cb0cca604aa`.
-Option capture plan:
-`7e4562d4809b69369e52bb1c9d870297a894a536c0880ea9252a069bc401ea36`.
+Current v4 setup SHA256:
+`39d2d8cf8129e26ec3be4299ff12e94a9d71f38796e3272f7d5681006694ad23`.
+Main normalization plan:
+`3e61af214bfb15e8b498bf7fb30873c3ae72e9f5a2d28bfbbbbbac1c269cea8d`.
+Additional-strata normalization plan:
+`3bf436ca2da493a30416e8410d8dca4d33cadce601da323908a5b8e35b8f502f`.
 
-October 4 capture observation: 36 live GETs, all HTTP 200, complete page chains
-for 30 raw partitions. Separately retained one initial sandbox transport failure.
-Fresh data contains 50,106 SIP stock bars, 2,284 option minute bars, 39,975
-option trades and 2,084 Alpaca discovery records. Stock scope is January 2024
-plus October 1–2, 2026; option scope is twelve deterministic call/put transport
-samples for January 18, 2024 and October 2, 2026 (full-day bars/opening-30m trades).
-These are bounded bootstrap inputs, not the full requested historical dataset.
-Same-day October samples are transport data, not eligible 0-DTE purchases.
+October 4 observation: 254 new successful live GETs (calendar 1, stock 192,
+discovery 48, option strata 13). All 186 selected raw partitions now normalize
+and reconcile to **1,677,986 rows**: 1,589,090 stock bars, 5,399 option bars,
+75,799 trades and 7,698 fresh discovery records. Stock requests span January 1,
+2024–October 2, 2026, including outside regular hours. Options remain four-date
+transport samples, not full option/context history or strategy-selected trades.
+The stock calendar covers 691 sessions. Expected regular minutes are 268,410
+per ETF: SPY/QQQ have all; VOO has 12 absent minutes across ten dates, retained
+as unresolved provider-gap/no-trade distinctions without imputation.
 
-Raw capture/source/run files total about 9.55 MiB before packaging. Maximum
-reported process peak RSS was 835,710,976 bytes; capture calls completed in
-roughly 34 seconds combined, excluding permission/wait/preparation time. This
-is transport measurement, not a feature/build/train resource forecast. The
-live one-page stop/resume preserved all three prior committed file hashes.
-Seventy-three focused tests passed, including nine DTE tests and twelve capture
-tests. Old setup/contract artifacts remain intact; prior checks are historical
-integrity checks, not current scientific readiness.
+No implemented row quality flags fired in these captures. Every raw occurrence
+sequence/count matches Parquet. Two actual normalized files remained unchanged
+through deliberate stop/resume. Combined normalized roots: about 164.4 MiB;
+peak normalization process RSS 208.2 MiB. 87 focused tests passed. These are
+normalization/transport observations, not full build or training measurements.
+Portable evidence indexes local payload hashes; the larger raw/Parquet payloads
+remain in these ETFE roots rather than in Git.
 
-No service/model is deployed for ETFE. The capture CLI does not import the old
-runtime configuration or data paths. Features/normalization, full scoped history,
-dated eligibility/execution, integrated pilot, freezes and model training remain
-unfinished. Source questions stay visible at admission without blocking raw
-collection. Earlier dated observations live in the
-[setup review](reviews/2026-10-03-etfe-setup.md),
-[VWAP review](reviews/2026-10-03-etfe-vwap.md),
-[contract review](reviews/2026-10-03-etfe-contract.md) and
-[pull diagnosis](reviews/2026-10-03-etfe-alpaca-pulls.md).
+No ETFE service/model is deployed. Scoped options floor, full option/context
+demand, dated execution eligibility/hours, causal features, integrated pilot,
+freezes and training remain unfinished. Prior frozen scope/contract evidence is
+preserved; the current 0DTE successor overrides only its named scope. Historical
+engineering observations remain in the [fresh bootstrap review](reviews/2026-10-04-etfe-fresh-acquisition.md)
+and [original declarations](reviews/2026-10-03-etfe-contract.md).
 
 ## October 2 late-evening V7 cold archive
 

@@ -1,25 +1,25 @@
 # ETFE setup and capture commands
 
 Use the [current-state index](../CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup)
-for selected roots, the [scope](../specs/ETFE_SCOPE_ALPACA_20261004.json),
-[five-DTE amendment](../specs/ETFE_DTE_20261004.md) and
+for selected roots, the [scope](../specs/ETFE_SCOPE_0DTE_20261004.json),
+[0DTE amendment](../specs/ETFE_0DTE_NORMALIZATION_20261004.md) and
 [fresh collection contract](../specs/ETFE_FRESH_ACQUISITION_20261003.md) for policy.
 The [roadmap sequence](../../ROADMAP.md#etfe-first-run-sequence) owns ordering.
 No command here deploys a model or starts training.
 
 ## Current setup
 
-From the repository root, inspect the selected v3 setup:
+From the repository root, inspect the selected v4 setup:
 
 ```bash
-./venv/bin/python scripts/prepare_etfe_current.py verify --root nn_meta/validation/etfe-setup-20261004-alpaca-r0
+./venv/bin/python scripts/prepare_etfe_0dte.py verify --root nn_meta/validation/etfe-setup-20261004-0dte-r0
 ```
 
 For an intentional successor preparation, use `prepare` with a fresh direct
 `nn_meta/validation/etfe-*` root. Saved plans/source snapshots are immutable.
-The v3 scope retains strategy specifications but imports no old market data,
+The v4 scope retains strategy specifications but imports no old market data,
 features, labels or models. New entry/roll consumers must apply
-`purchase_policy.check_purchase` at the actual timezone-aware attempt and obey
+`purchase_policy_v2.check_purchase / expiry_entry_gate` at the actual timezone-aware attempt and obey
 all other price/cash/identity/session guards; DTE eligibility alone is not a fill.
 
 ## Fresh raw acquisition
@@ -44,9 +44,10 @@ rebinding. Respect persisted provider wait deadlines before resumption.
 
 `prepare-options` consumes only the fresh stock/discovery parent to select a
 fixed transport sample. It does not implement full demand or historical chain
-eligibility; same-day samples may be fetched but are not eligible purchases.
+eligibility; same-day samples may be eligible under v4 only after signal, dated expiry and
+all other entry guards pass. A raw sample itself is not an eligible trade.
 `iter_records` retains exact native fields and a per-page occurrence identity.
-Typed normalization and full coverage are separate consumers still to implement.
+Typed normalization is implemented below; full option/context coverage remains separate.
 
 Only root `.env` Alpaca pairs are loaded: data `ALPACA_API_KEY` /
 `ALPACA_API_SECRET`, discovery `ALPACA_PAPER_API_KEY` /
@@ -58,7 +59,7 @@ build workers must use the shared autosizer and measured memory budget.
 
 The v1 midpoint and v2 VWAP preparations remain historical consumers. Verify
 with their own `verify_etfe_setup.py` / `verify_etfe_vwap.py` commands when needed;
-do not regenerate old plans or relabel their data as v3. The VWAP reference
+do not regenerate old plans or relabel their data as the current scope. The VWAP reference
 component remains valid as a reference, not a complete execution model.
 
 `./venv/bin/python scripts/verify_etfe_contract.py` verifies the original four
@@ -66,3 +67,29 @@ component declarations and portable source evidence. Its H1/R1/R2/P1 output
 reports that historical revision, not the current collection authorization.
 Apply the fresh-acquisition and DTE successors for current work. Historical
 option quotes remain unsupported; do not repeat their diagnostics.
+
+## Normalization and expanded acquisition
+
+`expand_etfe_alpaca.py` prepares/executes source-bound calendar, remaining-stock,
+discovery and option-stratum work. Use existing selected roots from CURRENT_STATE
+for resume; do not prepare duplicate stock months. The source-bound capture plan
+keeps per-invocation and root budgets; a budget stop must be resumed explicitly.
+Current expansion roots completed, so there is no unfinished background job.
+
+`normalize_etfe.py prepare --root ... --calendar ... --input ...` accepts one or
+more complete fresh capture roots and creates a new `normalized-*` output.
+`run --root ...` writes/checks typed partitions; `--max-partitions` permits a
+bounded interruption. A complete-root run verifies committed inputs/outputs and
+writes only a new run report. Sources/calendars and captured page hashes must
+match. Do not change a saved normalization plan or silently overwrite Parquet.
+
+```bash
+./venv/bin/python scripts/audit_etfe_normalized.py --root nn_meta/data_cache_etfe/normalized-20261004-main-r0 --output /tmp/etfe-normalized-audit-new.json
+```
+
+The independent audit requires a fresh output path and reconciles every raw row
+occurrence with normalized raw JSON in order, as well as counts/hashes/quality.
+Parquet files are found through `partitions/*.json`, not filename guessing.
+Keep all occurrences; filter only under an explicit downstream admission policy.
+Inspect `stock_session_coverage` for expected/observed/missing minutes. VOO's
+recorded gaps remain gaps, and stock-session labels do not define option hours.

@@ -12,8 +12,9 @@ They do not close the unresolved source gate or replace the later dataset freeze
 The [fresh-Alpaca successor](ETFE_FRESH_ACQUISITION_20261003.md) permits bounded
 raw downloads while admission validation continues; provider-global history
 proof and old project metadata repairs are not collection prerequisites.
-The [October 4 DTE successor](ETFE_DTE_20261004.md) caps all purchases/rolls at
-1–5 calendar DTE and removes target 7. Both override the earlier declarations
+The [October 4 0DTE successor](ETFE_0DTE_NORMALIZATION_20261004.md) caps all purchases/rolls at
+0–5 calendar DTE when signals qualify, preserves the dated expiry cutoff,
+and removes target 7. Both override the earlier declarations
 within their named scope, preserving the original frozen artifacts.
 
 ## Meaning of a working expert

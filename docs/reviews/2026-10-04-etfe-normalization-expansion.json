@@ -1,0 +1,337 @@
+{
+  "date_central": "2026-10-04",
+  "evidence_bundle": {
+    "bytes": 1314584,
+    "contents": "metadata, source snapshots, calendar, setup, reports, and index of local payloads; large raw/Parquet payloads excluded",
+    "indexed_payload_files": 476,
+    "members": 850,
+    "path": "docs/reviews/2026-10-04-etfe-normalization-expansion-evidence.zip",
+    "sha256": "1f8620474bcb62c200257f8db60d5e3312ea425e36b00861c1e2fd9fc68d4ee3"
+  },
+  "files": {
+    "docs/reviews/2026-10-04-etfe-normalization-expansion.md": "346d5d7eb0340e65cbaa505527943d0739d42bde1b66983e7878db09e1775912",
+    "docs/specs/ETFE_0DTE_NORMALIZATION_20261004.md": "dcf127ddb7fa571926c4f6bfc812090547497da5f950b585841f5733ae0ea7a2",
+    "docs/specs/ETFE_SCOPE_0DTE_20261004.json": "1dbe2fab3ab444d959708b4c5006591978458859b098e744a67253bc1c2f7a9f",
+    "nn_meta/etfe/expansion.py": "9b4f9e8941b84e80bff27cdb7e0dd3e97cc2a4ab179eadea6eb5e3d05080b06f",
+    "nn_meta/etfe/normalization.py": "fd16b779fc62c1745438f8f9e359f73e45aa87be9b7f699a217043cdb98a5498",
+    "nn_meta/etfe/purchase_policy_v2.py": "507231f5a173402e0219821f981883f78e996b0ded5cd1b5e7b3727f7fafaa81",
+    "scripts/audit_etfe_normalized.py": "a0337e045076cecd1620ccf54cee9f78e59ff35aa78ebfb53f68a45bddf17e35",
+    "scripts/expand_etfe_alpaca.py": "bd052ba17983ea03657bcf1d3eca85079922a334896649a4a979ca18ddf9ea1e",
+    "scripts/normalize_etfe.py": "d9374c23746da5d8dbd47414a620e16e49d935329a60b1d200094c95f3c9a198",
+    "scripts/prepare_etfe_0dte.py": "eb6e59c979792f9a847f5e43313631af29e76543b325de7adb6745889eaf603d",
+    "tests/test_etfe_0dte.py": "cf002e3d4167fc95fd14fdf384582e926319aba9fb1adb92fec8bc5ed70c2a84",
+    "tests/test_etfe_expansion.py": "b99f0e5ec2617745155e5a78849d9fb198a3e49deda1820fa20f7e45e4c5892c",
+    "tests/test_etfe_normalization.py": "fed2700011252124fa3f2f8e970533e290d050c99c9e6eeafb48db21ad683951"
+  },
+  "full_option_history_complete": false,
+  "new_live_gets": 254,
+  "new_live_statuses": {
+    "200": 254
+  },
+  "new_sandbox_transport_failures": 1,
+  "normalized_partitions": 186,
+  "normalized_rows": 1677986,
+  "observations": {
+    "normalization": [
+      {
+        "bytes": 168659384,
+        "elapsed_seconds": 39.47410223601037,
+        "partitions": 126,
+        "peak_rss_bytes": 218312704,
+        "plan_sha256": "3e61af214bfb15e8b498bf7fb30873c3ae72e9f5a2d28bfbbbbbac1c269cea8d",
+        "root": "nn_meta/data_cache_etfe/normalized-20261004-main-r0",
+        "rows": 1633433
+      },
+      {
+        "bytes": 3731764,
+        "elapsed_seconds": 1.5608242739981506,
+        "partitions": 60,
+        "peak_rss_bytes": 182005760,
+        "plan_sha256": "3bf436ca2da493a30416e8410d8dca4d33cadce601da323908a5b8e35b8f502f",
+        "root": "nn_meta/data_cache_etfe/normalized-20261004-strata-r0",
+        "rows": 44553
+      }
+    ],
+    "quality": {},
+    "raw": [
+      {
+        "bytes": 6931483,
+        "root": "nn_meta/data_cache_etfe/alpaca-fresh-20261003-bootstrap-r0",
+        "statuses": {
+          "200": 21,
+          "None": 1
+        }
+      },
+      {
+        "bytes": 3080380,
+        "root": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-options-r0",
+        "statuses": {
+          "200": 15
+        }
+      },
+      {
+        "bytes": 163201899,
+        "root": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-stocks-r0",
+        "statuses": {
+          "200": 192
+        }
+      },
+      {
+        "bytes": 4324173,
+        "root": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-discovery-r0",
+        "statuses": {
+          "200": 48
+        }
+      },
+      {
+        "bytes": 2896569,
+        "root": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-option-strata-r0",
+        "statuses": {
+          "200": 13
+        }
+      }
+    ],
+    "rows_by_route": {
+      "contracts": 7698,
+      "option_bars": 5399,
+      "option_trades": 75799,
+      "stock_bars": 1589090
+    },
+    "stock_coverage": {
+      "QQQ": {
+        "expected_minutes": 268410,
+        "invalid_observed_minutes": 0,
+        "missing_minutes": 0,
+        "observed_minutes": 268410
+      },
+      "SPY": {
+        "expected_minutes": 268410,
+        "invalid_observed_minutes": 0,
+        "missing_minutes": 0,
+        "observed_minutes": 268410
+      },
+      "VOO": {
+        "expected_minutes": 268410,
+        "invalid_observed_minutes": 0,
+        "missing_minutes": 12,
+        "observed_minutes": 268398
+      }
+    },
+    "voo_gaps": [
+      {
+        "date": "2024-05-22",
+        "expected_minutes": 390,
+        "invalid_observed_minutes": 0,
+        "missing_classification": "unresolved_provider_gap_or_no_trade",
+        "missing_minutes": 1,
+        "missing_ranges_ns": [
+          [
+            1716395940000000000,
+            1716395940000000000
+          ]
+        ],
+        "observed_minutes": 389,
+        "symbol": "VOO",
+        "valid_price_minutes": 389
+      },
+      {
+        "date": "2024-05-24",
+        "expected_minutes": 390,
+        "invalid_observed_minutes": 0,
+        "missing_classification": "unresolved_provider_gap_or_no_trade",
+        "missing_minutes": 1,
+        "missing_ranges_ns": [
+          [
+            1716571200000000000,
+            1716571200000000000
+          ]
+        ],
+        "observed_minutes": 389,
+        "symbol": "VOO",
+        "valid_price_minutes": 389
+      },
+      {
+        "date": "2024-09-13",
+        "expected_minutes": 390,
+        "invalid_observed_minutes": 0,
+        "missing_classification": "unresolved_provider_gap_or_no_trade",
+        "missing_minutes": 1,
+        "missing_ranges_ns": [
+          [
+            1726250160000000000,
+            1726250160000000000
+          ]
+        ],
+        "observed_minutes": 389,
+        "symbol": "VOO",
+        "valid_price_minutes": 389
+      },
+      {
+        "date": "2024-10-03",
+        "expected_minutes": 390,
+        "invalid_observed_minutes": 0,
+        "missing_classification": "unresolved_provider_gap_or_no_trade",
+        "missing_minutes": 1,
+        "missing_ranges_ns": [
+          [
+            1727970360000000000,
+            1727970360000000000
+          ]
+        ],
+        "observed_minutes": 389,
+        "symbol": "VOO",
+        "valid_price_minutes": 389
+      },
+      {
+        "date": "2024-10-08",
+        "expected_minutes": 390,
+        "invalid_observed_minutes": 0,
+        "missing_classification": "unresolved_provider_gap_or_no_trade",
+        "missing_minutes": 1,
+        "missing_ranges_ns": [
+          [
+            1728411840000000000,
+            1728411840000000000
+          ]
+        ],
+        "observed_minutes": 389,
+        "symbol": "VOO",
+        "valid_price_minutes": 389
+      },
+      {
+        "date": "2024-10-14",
+        "expected_minutes": 390,
+        "invalid_observed_minutes": 0,
+        "missing_classification": "unresolved_provider_gap_or_no_trade",
+        "missing_minutes": 3,
+        "missing_ranges_ns": [
+          [
+            1728924180000000000,
+            1728924180000000000
+          ],
+          [
+            1728927540000000000,
+            1728927540000000000
+          ],
+          [
+            1728931260000000000,
+            1728931260000000000
+          ]
+        ],
+        "observed_minutes": 387,
+        "symbol": "VOO",
+        "valid_price_minutes": 387
+      },
+      {
+        "date": "2024-10-22",
+        "expected_minutes": 390,
+        "invalid_observed_minutes": 0,
+        "missing_classification": "unresolved_provider_gap_or_no_trade",
+        "missing_minutes": 1,
+        "missing_ranges_ns": [
+          [
+            1729612560000000000,
+            1729612560000000000
+          ]
+        ],
+        "observed_minutes": 389,
+        "symbol": "VOO",
+        "valid_price_minutes": 389
+      },
+      {
+        "date": "2024-10-23",
+        "expected_minutes": 390,
+        "invalid_observed_minutes": 0,
+        "missing_classification": "unresolved_provider_gap_or_no_trade",
+        "missing_minutes": 1,
+        "missing_ranges_ns": [
+          [
+            1729698180000000000,
+            1729698180000000000
+          ]
+        ],
+        "observed_minutes": 389,
+        "symbol": "VOO",
+        "valid_price_minutes": 389
+      },
+      {
+        "date": "2024-10-30",
+        "expected_minutes": 390,
+        "invalid_observed_minutes": 0,
+        "missing_classification": "unresolved_provider_gap_or_no_trade",
+        "missing_minutes": 1,
+        "missing_ranges_ns": [
+          [
+            1730310900000000000,
+            1730310900000000000
+          ]
+        ],
+        "observed_minutes": 389,
+        "symbol": "VOO",
+        "valid_price_minutes": 389
+      },
+      {
+        "date": "2025-08-07",
+        "expected_minutes": 390,
+        "invalid_observed_minutes": 0,
+        "missing_classification": "unresolved_provider_gap_or_no_trade",
+        "missing_minutes": 1,
+        "missing_ranges_ns": [
+          [
+            1754583840000000000,
+            1754583840000000000
+          ]
+        ],
+        "observed_minutes": 389,
+        "symbol": "VOO",
+        "valid_price_minutes": 389
+      }
+    ]
+  },
+  "raw_occurrence_reconciliation": "all_selected_partitions_passed",
+  "ready_for_build": false,
+  "ready_for_training": false,
+  "resume_prior_normalized_files_unchanged": 2,
+  "roots": {
+    "bootstrap": "nn_meta/data_cache_etfe/alpaca-fresh-20261003-bootstrap-r0",
+    "calendar": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-calendar-r1",
+    "calendar_sandbox": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-calendar-r0",
+    "discovery_expanded": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-discovery-r0",
+    "normalized_main": "nn_meta/data_cache_etfe/normalized-20261004-main-r0",
+    "normalized_strata": "nn_meta/data_cache_etfe/normalized-20261004-strata-r0",
+    "options_bootstrap": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-options-r0",
+    "options_expanded": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-option-strata-r0",
+    "setup": "nn_meta/validation/etfe-setup-20261004-0dte-r0",
+    "stocks_expanded": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-stocks-r0"
+  },
+  "schema": "etfe-normalization-expansion-review-v1",
+  "scientific_admission": false,
+  "scope": {
+    "actual_calendar_dte": [
+      0,
+      5
+    ],
+    "plan_sha256": "39d2d8cf8129e26ec3be4299ff12e94a9d71f38796e3272f7d5681006694ad23",
+    "ready_for_build": false,
+    "ready_for_training": false,
+    "status": "current_setup_verified_not_admitted",
+    "targets": {
+      "default": [
+        0,
+        1,
+        5
+      ],
+      "eligibility": "weekly_targets_only_with_dated_symbol_eligibility",
+      "weekly_subset": [
+        2,
+        4
+      ]
+    }
+  },
+  "tests": {
+    "new_0dte": 7,
+    "new_expansion": 2,
+    "new_normalization": 5,
+    "passed": 87
+  }
+}

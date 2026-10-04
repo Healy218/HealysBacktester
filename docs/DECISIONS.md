@@ -2283,3 +2283,22 @@ Explicitly rescale new-schema dte_frac to DTE/5; preserve the old frozen registr
 and all prior setup identities. [DTE amendment](specs/ETFE_DTE_20261004.md),
 [current scope](specs/ETFE_SCOPE_ALPACA_20261004.json),
 [engineering evidence](reviews/2026-10-04-etfe-fresh-acquisition.md).
+
+### 2026-10-04 — Permit signal-qualified 0DTE and normalize expanded fresh inputs
+
+The user explicitly authorizes same-day options when signals qualify and asks
+for normalization and expanded acquisition. Supersede the prior one-day minimum:
+actual entry/roll range is 0–5 calendar DTE, default targets 0/1/5 with conditional
+weekly 2/4; no target 7. Keep the qualifying signal, dated expiry close and strict
+close-minus-15-minute entry cutoff. Unknown expiry clock withholds entry.
+Same-day IV timing uses positive remaining seconds to the verified expiry close,
+not zero or a substituted full day. The v4 setup/guard is a new immutable artifact;
+v3 scope, checks and earlier receipts retain their historical meaning.
+[Successor](specs/ETFE_0DTE_NORMALIZATION_20261004.md).
+
+Fresh acquisition expands the remaining stock months and two option transport
+strata. Typed Parquet preserves all raw row occurrences and reports missing
+stock minutes without imputation. Stock-calendar classifications are not option
+session rules, and successful request/normalization completion is not complete
+option coverage, point-in-time admission or an evaluated model. Full option
+and context demand remains separate. [Evidence](reviews/2026-10-04-etfe-normalization-expansion.md).
