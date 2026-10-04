@@ -17,6 +17,10 @@ bounded provider probes and the versioned VWAP reference component are implement
 [current component evidence](docs/reviews/2026-10-03-etfe-vwap.md).
 October 3: four ETFE-0 definitions are declared; H1/R1/R2/P1 source evidence
 still blocks closure. [Contract review](docs/reviews/2026-10-03-etfe-contract.md).
+Subsequent [pull diagnosis](docs/reviews/2026-10-03-etfe-alpaca-pulls.md) verifies
+sample trade/bar reconciliation and pagination, isolates old metadata anomalies,
+and sources QQQ's adjustment and VOO's dated Nasdaq hours transition. The full
+source gate remains open; historical-trade feed selection is unsupported.
 
 V7 research stays paused with its original gates/evidence preserved. MRHA archival
 completed October 3 at 16:55:50 Central with all 2,847 shards verified and final
@@ -152,6 +156,7 @@ revision-specific commands belong in CURRENT_STATE or their dated receipts.
 | ETFE VWAP reference amendment | October 3: user-approved trade/bar method; completed-minute VWAP selected, causal reference component and immutable successor setup implemented; 46 focused tests passed. Full execution/features not admitted. [Review](docs/reviews/2026-10-03-etfe-vwap.md) |
 | ETFE first-run plan and note reconciliation | October 3: full dependency sequence, build/input/dataset/model-freeze and expert-proof acceptance recorded; current-phase TODO and document owners reconciled. Documentation only, no future gate closed. [Review](docs/reviews/2026-10-03-etfe-first-run-plan.md) |
 | ETFE-0 component contracts | October 3: exhaustive feature map, execution/evaluation/acquisition definitions, 84-fit declaration and ten live controls. H1/R1/R2/P1 remain open; no pilot or gate closure. [Review](docs/reviews/2026-10-03-etfe-contract.md) |
+| ETFE Alpaca pull diagnosis | October 3: 40 live GETs, sample trade/bar and six-page equivalence, rejected feed parameter, historical metadata anomalies and dated QQQ/VOO explanations. Source gate remains open. [Review](docs/reviews/2026-10-03-etfe-alpaca-pulls.md) |
 | V7 cold archive and verified local reclamation | October 3: all 2,847 shards/564 roots preserved on MRHA; 35,031 eligible local files removed; matching final receipts and sampled restore checks. [Audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json) |
 | V7-1 and V7-2 | Gate closures above; do not reopen old dividend lists, context builds or catalog freezes |
 | V7-3 demand scheduler, request census, exact union and lossless joining | [Demand/recovery](docs/reviews/2026-09-25-v7-3-crash-recovery.md), [union](docs/reviews/2026-09-26-v7-entry-union-and-first-capture.md), [joining](docs/reviews/2026-09-26-v7-capture-storage-forecast.md) |

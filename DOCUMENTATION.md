@@ -92,6 +92,15 @@ Read the relevant entries before treating a script or cache as broken.
   Its reference is per option bar, not cumulative session VWAP or a guaranteed
   fill. Use the versioned VWAP consumer; old midpoint setup/probe sources remain frozen.
 
+- **Historical option trades reject the latest-data feed selector.** Omit
+  `feed` on `/v1beta1/options/trades`; explicit `opra` and `indicative` both
+  returned HTTP 400. Page limits apply across symbols; follow tokens even on
+  short/empty pages. Retain nanosecond timestamps and inclusive-end semantics.
+  Current expired-contract metadata is not historical as-of state: early 2024
+  samples report multiplier 0 with size/deliverables 100. Preserve the raw field
+  and source normalized premium scaling independently; neither silently multiply
+  by zero nor rewrite it to 100. [Controls and limits](docs/reviews/2026-10-03-etfe-alpaca-pulls.md).
+
 - **Separate pool sizing from numerical threads.** GNU `nproc` honors
   `OMP_NUM_THREADS` and `OMP_THREAD_LIMIT`. A controller inheriting a value of one
   can silently make the shared autosizer cap its entire process pool at one.

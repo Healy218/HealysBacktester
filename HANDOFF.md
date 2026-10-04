@@ -1,61 +1,59 @@
-# Handoff — October 3, 2026 — ETFE contracts and source blockers
+# Handoff — October 3, 2026 — ETFE Alpaca pull diagnosis
 
 ## Selected work and result
 
-User selected ETFE-0: resolve history boundary and complete feature, execution,
-evaluation and acquisition contracts in ROADMAP order. Four definitions are
-now declared. **ETFE-0.contract remains open** on source evidence H1/R1/R2/P1.
-[Contract index](docs/specs/ETFE_CONTRACT_20261003.md),
-[review](docs/reviews/2026-10-03-etfe-contract.md),
+User asked to investigate Alpaca pulls for ETFE data while ETFE-0 remains active.
+Historical trade/bar requests and multi-page retrieval work in the tested sample.
+Old contract metadata and source provenance remain unresolved; no bulk capture,
+integrated pilot, dataset build or training started. Four component contracts
+remain declared. **ETFE-0.contract is open** on H1/R1/R2/P1.
+[Diagnosis](docs/reviews/2026-10-03-etfe-alpaca-pulls.md),
+[contract index](docs/specs/ETFE_CONTRACT_20261003.md),
 [roadmap sequence](ROADMAP.md#etfe-first-run-sequence).
-No integrated pilot, bulk acquisition, dataset build or training was launched.
 
 ## Changes and evidence
 
-- Complete 221-field inherited inventory; thirteen source scopes and 442 model
-  inputs including missingness masks. Quote fields receive new trade/bar names.
-- Execution defines integer contracts, 1% participation, pre-cost 12.5% leg stop,
-  partial exits, missing valuation, settled-cash rolls and physical delivery.
-- Three temporal folds, ten-session embargo/full-horizon purge, 84 required fits
-  including final refits, fixed thresholds/baselines/acceptance and abstention.
-- Acquisition defines sources, resumable page chains, corrections/missingness,
-  full demand and a bounded resource-pilot workload with stop/reserve rules.
-- Ten live Alpaca GETs completed at 20:08:37 Central. Pre–January 18 samples
-  were empty only for three named contracts. Current January 2024 metadata
-  includes size 100, multiplier 0 and T+1; it is not dated settlement evidence.
-- Fixed civil end is 2026-10-03T04:00:00Z exclusive. October 2 stock session is
-  13:30–20:00 UTC. Dated option-class hours remain separately unverified.
+- 40 live GETs: 37 HTTP 200, three intentional HTTP 400 feed controls; no
+  transport failures, authentication failures or rate limits in these runs.
+- Historical trades reject `feed` itself, including opra and indicative.
+  Omit it on this route; latest-data feed selection is a separate interface.
+- Twelve Jan 18, 2024 opening-minute trades reproduce three ETF bars' OHLC,
+  volume/count and rounded VWAP. Six pages recover the same trade occurrences.
+- February/March metadata samples report multiplier 0, size/deliverables 100.
+  June 2024 and later samples report multiplier 100. Preserve raw anomalies.
+- OCC memo 53848 explains QQQ's adjusted strike and 100-share delivery.
+- Nasdaq alert 2026-10 establishes VOO's 16:00→16:15 ET close transition
+  effective February 25, 2026. Full dated session coverage remains open.
+- More pre-floor long-dated price samples are empty. Catalogue records can
+  predate available prices; neither result proves a provider-global floor.
 
 ## Stopping point and next actions
 
-TODO closes four definition tasks, not source admission. Resolve these before
-ETFE-4.pilot under the authoritative ROADMAP sequence:
+1. H1: obtain precise provider history floor/scope explaining January observations
+   versus published February coverage; do not shorten the requested date window.
+2. R1: resolve old zero multipliers and complete dated contract eligibility,
+   adjustments, delivery/exercise and availability evidence. Current expired
+   catalogue responses are not historical as-of chains.
+3. R2: incorporate VOO's sourced transition into complete dated class/expiration/
+   early-close rules. The named Nasdaq ambiguity is explained, not all R2.
+4. P1: obtain explicit historical-trade route provenance confirmation. Feed
+   selection is unsupported; sample agreement with OPRA bars is scoped evidence.
+5. Seal an immutable contract successor, then the bounded ETFE-4.pilot in ROADMAP
+   order. These API controls are not the integrated capture/build/train pilot.
 
-1. H1: authenticated provider-global first-history timestamp/scope, or complete
-   global inventory. January 18 first samples cannot establish that boundary.
-2. R1: feasible complete historical discovery and dated contract/adjustment,
-   multiplier/deliverable/exercise and weekly-eligibility evidence.
-3. R2: dated class/expiry/early-close hours. Current Nasdaq web/PDF lists differ
-   on VOO's 16:15 inclusion; do not choose a universal close from current text.
-4. P1: source confirmation for historical trades versus indicative feeds.
-   Trade conditions are mapped; no-ID samples retain page/row occurrence identity.
-5. Seal an immutable contract successor after resolution; then run the bounded
-   ETFE-4.pilot, preserving full strategy/universe/date scope and measured limits.
-
-No provider message has been sent. The remaining unknowns are source facts,
-not a request to pick a new date, remove features or restore Massive quotes.
+No provider message was sent; the review records concrete support questions.
+Historical quotes remain unsupported. Preserve the VWAP choice, all three ETFs,
+all strategy families and fixed October 2 end; no Massive fallback.
 
 ## Selected artifacts and verification
 
-Setup remains `nn_meta/validation/etfe-setup-20261003-vwap-r1/`, plan SHA256
+Setup: `nn_meta/validation/etfe-setup-20261003-vwap-r1/`; plan SHA256
 `3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64`.
-Contracts and machine registries live under `docs/specs/ETFE_*20261003.*`.
-[Portable receipt](docs/reviews/2026-10-03-etfe-contract.json) binds the evidence
-ZIP, 42 source snapshots, contracts and ten raw live controls. Verify with
-`./venv/bin/python scripts/verify_etfe_contract.py`; setup integrity is separate.
-[Exact pointers](docs/CURRENT_STATE.md#october-3-etfe-setup).
-
-Preserve unrelated dirty/untracked work and all previous setup artifacts.
-V7 archival stays complete; other workstreams stay paused. No EXPERIMENTS
-verdict or maturity increase. Previous handoff is archived
-[here](handoff-history/HANDOFF-2026-10-03-before-etfe-contract.md).
+Pull runs: `nn_meta/validation/etfe-alpaca-pulls-20261003-r1/` and `-r2/`;
+sandbox-only r0 retained. [Portable receipt](docs/reviews/2026-10-03-etfe-alpaca-pulls.json)
+binds 88 ZIP members, both source versions, reports and raw HTTP receipts.
+Six focused offline tests pass; existing portable contract verifier still passes
+with source gate open. Exact pointers: [CURRENT_STATE](docs/CURRENT_STATE.md#october-3-etfe-setup).
+Preserve unrelated dirty/untracked work and frozen predecessor artifacts.
+V7 archive remains complete; other campaigns remain paused. No experiment verdict
+or maturity increase. [Previous handoff](handoff-history/HANDOFF-2026-10-03-before-etfe-alpaca-pulls.md).

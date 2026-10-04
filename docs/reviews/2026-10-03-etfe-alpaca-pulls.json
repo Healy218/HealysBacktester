@@ -1,0 +1,55 @@
+{
+  "contract_successor_sealed": false,
+  "date_central": "2026-10-03",
+  "evidence_bundle": {
+    "members": 88,
+    "path": "docs/reviews/2026-10-03-etfe-alpaca-pulls-evidence.zip",
+    "sha256": "a71144ceaeca111c2fdd48e56fa3d160bf3b2f5620626c6ca553e119c75ee3e5"
+  },
+  "files": {
+    "docs/reviews/2026-10-03-etfe-alpaca-pulls.md": "b0d0f11a3362e501c1c64fe6cd1664b3a5442d28684a1f321518d693a2ffad8e",
+    "scripts/diagnose_etfe_alpaca_pulls.py": "8e53ebea699529abcba27324c01a2a833cb2534eea7e8ae426492954b72eb4ae",
+    "tests/test_etfe_pull_diagnosis.py": "2329ae1a079403cbee7e73f54fe9cc2ace9fae8fc3779d933ff350951a330e8e"
+  },
+  "http_status_counts": {
+    "200": 37,
+    "400": 3
+  },
+  "live_requests": 40,
+  "negative_controls": "Three unsupported historical-trade feed parameters",
+  "ready_for_build": false,
+  "ready_for_training": false,
+  "remaining": [
+    "H1 exact provider history floor",
+    "R1 dated discovery and contract terms; old zero multiplier",
+    "R2 complete dated class/expiry/early-close schedule",
+    "P1 historical trade route provenance"
+  ],
+  "reports": {
+    "r1": {
+      "member": "r1/REPORT.json",
+      "sha256": "92fdd1577cff91c91a76b662042ef7807e93f885af9e158f25880969fd8579d3"
+    },
+    "r2": {
+      "member": "r2/REPORT.json",
+      "sha256": "b95937bfa9c4b9f1a16796b53c82eca195d04e8b967e72d1346d48faf418454e"
+    }
+  },
+  "resolved_subquestions": [
+    "Historical trade feed selector unsupported",
+    "Six-page retrieval equals one-page sample",
+    "Sample trades reconcile with bars",
+    "QQQ adjusted strike explained by OCC 53848",
+    "VOO Nasdaq close transition effective 2026-02-25"
+  ],
+  "schema": "etfe-alpaca-pull-review-v1",
+  "setup_plan_sha256": "3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64",
+  "source_versions_preserved": true,
+  "transport_failures": 0,
+  "validation": {
+    "command": "./venv/bin/python -m pytest tests/test_etfe_pull_diagnosis.py -q",
+    "existing_contract_verifier": "passed; source gate open",
+    "offline_tests": 6,
+    "result": "passed"
+  }
+}

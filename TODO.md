@@ -18,6 +18,11 @@ October 3: four component definitions are declared. H1/R1/R2/P1 source evidence
 still blocks ETFE-0 closure. [Contract and blockers](docs/specs/ETFE_CONTRACT_20261003.md),
 [verification](docs/reviews/2026-10-03-etfe-contract.md). No integrated pilot or
 bulk campaign started.
+October 3 pull diagnostics: 40 live GETs establish working historical trades/bars,
+six-page equivalence and rejected historical-trade `feed` parameters. Dated OCC
+and Nasdaq notices explain the adjusted QQQ strike and VOO hours change. Old
+zero multipliers and exact history/feed provenance remain unresolved.
+[Diagnosis](docs/reviews/2026-10-03-etfe-alpaca-pulls.md).
 
 ## Selected checklist — ETFE-0
 
@@ -35,6 +40,10 @@ bulk campaign started.
   VWAP versus high/low midpoint. Selected completed one-minute VWAP; implemented
   causal reference component and immutable successor setup. 46 focused tests
   passed. [Amendment](docs/specs/ETFE_VWAP_20261003.md).
+- [x] **ETFE.pull-diagnosis:** Trade/bar reconciliation and six-page retrieval
+  verified for the opening-minute sample. Historical trades reject `feed` with
+  HTTP 400. Older metadata anomalies are isolated; QQQ adjustment and dated VOO
+  transition explained. [Evidence](docs/reviews/2026-10-03-etfe-alpaca-pulls.md).
 
 - [x] **ETFE.scope:** Record the accepted universe, timeframes and V7 inheritance;
   preserve later risk amendments and apply the subsequent ETFE VWAP pricing
@@ -78,8 +87,9 @@ bulk campaign started.
   feature/execution/evaluation/acquisition contracts and feasible Alpaca sources,
   including feed, bar publication/revision assumptions and dated contract inputs.
   Four definitions are complete; **ETFE-0.contract is not closed**. Resolve H1
-  (global floor), R1 (dated discovery/contract terms), R2 (class/expiry hours,
-  including the VOO list conflict), and P1 (historical trade feed), then seal an
+  (global floor), R1 (dated discovery/contract terms), R2 (class/expiry hours;
+  VOO Nasdaq transition now sourced effective February 25, 2026), and P1
+  (historical trade provenance; unsupported feed selector diagnosed), then seal an
   immutable contract successor.
   Full coverage is subsequently demonstrated under ETFE-1, not by this plan.
   The user-approved VWAP method supersedes historical bid/ask pricing and quote

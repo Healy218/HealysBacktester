@@ -39,6 +39,8 @@ No Massive quotes or old weights/checkpoints are selected.
 | Contract verification | `scripts/verify_etfe_contract.py`; [receipt](reviews/2026-10-03-etfe-contract.json) |
 | Formula snapshot | `nn_meta/validation/etfe-contract-20261003-r0/source-snapshot/`; portable `docs/reviews/2026-10-03-etfe-contract-evidence.zip` |
 | New boundary controls | `nn_meta/validation/etfe-contract-boundary-20261003-r1/REPORT.json`; sandbox-only r0 retained |
+| Pull diagnosis / follow-up | `nn_meta/validation/etfe-alpaca-pulls-20261003-r1/REPORT.json`, `etfe-alpaca-pulls-20261003-r2/REPORT.json`; sandbox r0 retained separately |
+| Portable pull evidence | [Receipt](reviews/2026-10-03-etfe-alpaca-pulls.json), [review](reviews/2026-10-03-etfe-alpaca-pulls.md), `reviews/2026-10-03-etfe-alpaca-pulls-evidence.zip` |
 
 Selected VWAP plan SHA256:
 `3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64`.
@@ -84,6 +86,14 @@ and T+1 deliverables; no historical terms are inferred. Four ETFE-0 definitions
 now cover 221 values plus masks, thirteen source scopes and 84 future fits.
 H1/R1/R2/P1 admission remains open; no input/dataset freeze, integrated pilot or
 evaluated model exists. [Review](reviews/2026-10-03-etfe-contract.md).
+
+October 3 at 22:54:01/23:27:52 Central: 40 further GETs produced 37 HTTP 200
+and three deliberate HTTP 400 feed controls, zero transport failures. Opening
+minute trades reproduce three bars; six pages reproduce the single-page result.
+February/March samples retain multiplier 0 versus 100 in June and later samples.
+Dated sources explain QQQ's adjusted strike and VOO's February 25, 2026 Nasdaq
+close-time transition. H1/R1/R2/P1 remain open with these narrowed questions;
+no source readiness is inferred. [Diagnosis](reviews/2026-10-03-etfe-alpaca-pulls.md).
 
 ## October 2 late-evening V7 cold archive
 
