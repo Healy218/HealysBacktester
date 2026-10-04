@@ -10,6 +10,9 @@ The [first-run roadmap](../../ROADMAP.md#etfe-first-run-sequence) carries the
 complete dependency order through build, dataset/experiment freeze, training,
 model freeze and offline expert proof. [Acceptance specification](ETFE_FIRST_RUN.md)
 defines the required evidence; a successful preparation is not a finished run.
+The October 3 [component contracts](ETFE_CONTRACT_20261003.md) declare the feature
+map, execution, evaluation and acquisition design. H1/R1/R2/P1 keep ETFE-0 open;
+existing setup scopes remain immutable.
 
 ## Accepted scope
 
@@ -134,9 +137,10 @@ quotes, or offer them as an automatic fallback. V7 archives remain preservation
 artifacts for V7 only.
 
 Historical bid/ask observations are unavailable through this public API. The
-user approved trade/bar methodology and VWAP is selected. Finish the explicit
-feature replacement and execution contracts under ETFE.provider-contract;
-trade bars do not establish observed spreads. Preserve the fixed history policy.
+user approved trade/bar methodology and VWAP is selected. The
+[component definitions](ETFE_CONTRACT_20261003.md) now specify feature replacement
+and execution; source admission under ETFE.provider-contract remains open.
+Trade bars do not establish observed spreads. Preserve the fixed history policy.
 
 ## Initial implementation and resource plan
 

@@ -54,3 +54,12 @@ empty-but-complete history; an early trade sample is not a provider-global floor
 today's expired-contract response is not a historical point-in-time catalogue.
 `PREPARED.json` is not admission: ready-for-build/training stays false until the
 ETFE gates have actual input, execution, feature and resource evidence.
+
+## ETFE-0 contract verification
+
+Run `./venv/bin/python scripts/verify_etfe_contract.py` to verify the versioned
+[declarations](../specs/ETFE_CONTRACT_20261003.md), source snapshot and boundary
+receipts. The portable evidence ZIP permits verification without local ignored
+validation directories. Success verifies definitions only; H1/R1/R2/P1 remain
+open and readiness remains false. The new bounded `probe_etfe_contract_boundary.py`
+is a v2-bound diagnostic consumer; its ten live results are already retained.

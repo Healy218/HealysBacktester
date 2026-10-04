@@ -1,0 +1,327 @@
+{
+  "acceptance": {
+    "bootstrap": {
+      "block_sessions": 20,
+      "method": "moving_block",
+      "replicates": 2000,
+      "seed": 20261003
+    },
+    "max_drawdown": 0.2,
+    "min_test_completed_positions": 100,
+    "positive_bootstrap_lower_95pct": true,
+    "positive_excess_vs_cash_and_best_baseline": true,
+    "required_stress": {
+      "cost_multiplier": 2,
+      "individually_and_combined": true,
+      "lag_seconds": 5,
+      "participation": 0.005
+    }
+  },
+  "calibration": "none",
+  "dataset_freeze_required": true,
+  "embargo_sessions": 10,
+  "feature_count": 442,
+  "feature_schema_sha256": "e85a64a15729fefbdab0d60433a88c2614b0c6282b27aeb1205cffc733d25f7b",
+  "final_refit": {
+    "all_21_required": true,
+    "id": "final",
+    "test_end": "2026-10-02",
+    "test_start": "2026-01-01",
+    "train_end": "2025-12-31"
+  },
+  "fit_ids": [
+    "2024h2/constant-win",
+    "2024h2/gbt-win-11",
+    "2024h2/gbt-win-29",
+    "2024h2/gbt-win-47",
+    "2024h2/nn-win-11",
+    "2024h2/nn-win-29",
+    "2024h2/nn-win-47",
+    "2024h2/constant-weighted_win",
+    "2024h2/gbt-weighted_win-11",
+    "2024h2/gbt-weighted_win-29",
+    "2024h2/gbt-weighted_win-47",
+    "2024h2/nn-weighted_win-11",
+    "2024h2/nn-weighted_win-29",
+    "2024h2/nn-weighted_win-47",
+    "2024h2/constant-return_huber",
+    "2024h2/gbt-return_huber-11",
+    "2024h2/gbt-return_huber-29",
+    "2024h2/gbt-return_huber-47",
+    "2024h2/nn-return_huber-11",
+    "2024h2/nn-return_huber-29",
+    "2024h2/nn-return_huber-47",
+    "2025h1/constant-win",
+    "2025h1/gbt-win-11",
+    "2025h1/gbt-win-29",
+    "2025h1/gbt-win-47",
+    "2025h1/nn-win-11",
+    "2025h1/nn-win-29",
+    "2025h1/nn-win-47",
+    "2025h1/constant-weighted_win",
+    "2025h1/gbt-weighted_win-11",
+    "2025h1/gbt-weighted_win-29",
+    "2025h1/gbt-weighted_win-47",
+    "2025h1/nn-weighted_win-11",
+    "2025h1/nn-weighted_win-29",
+    "2025h1/nn-weighted_win-47",
+    "2025h1/constant-return_huber",
+    "2025h1/gbt-return_huber-11",
+    "2025h1/gbt-return_huber-29",
+    "2025h1/gbt-return_huber-47",
+    "2025h1/nn-return_huber-11",
+    "2025h1/nn-return_huber-29",
+    "2025h1/nn-return_huber-47",
+    "2025h2/constant-win",
+    "2025h2/gbt-win-11",
+    "2025h2/gbt-win-29",
+    "2025h2/gbt-win-47",
+    "2025h2/nn-win-11",
+    "2025h2/nn-win-29",
+    "2025h2/nn-win-47",
+    "2025h2/constant-weighted_win",
+    "2025h2/gbt-weighted_win-11",
+    "2025h2/gbt-weighted_win-29",
+    "2025h2/gbt-weighted_win-47",
+    "2025h2/nn-weighted_win-11",
+    "2025h2/nn-weighted_win-29",
+    "2025h2/nn-weighted_win-47",
+    "2025h2/constant-return_huber",
+    "2025h2/gbt-return_huber-11",
+    "2025h2/gbt-return_huber-29",
+    "2025h2/gbt-return_huber-47",
+    "2025h2/nn-return_huber-11",
+    "2025h2/nn-return_huber-29",
+    "2025h2/nn-return_huber-47",
+    "final/constant-win",
+    "final/gbt-win-11",
+    "final/gbt-win-29",
+    "final/gbt-win-47",
+    "final/nn-win-11",
+    "final/nn-win-29",
+    "final/nn-win-47",
+    "final/constant-weighted_win",
+    "final/gbt-weighted_win-11",
+    "final/gbt-weighted_win-29",
+    "final/gbt-weighted_win-47",
+    "final/nn-weighted_win-11",
+    "final/nn-weighted_win-29",
+    "final/nn-weighted_win-47",
+    "final/constant-return_huber",
+    "final/gbt-return_huber-11",
+    "final/gbt-return_huber-29",
+    "final/gbt-return_huber-47",
+    "final/nn-return_huber-11",
+    "final/nn-return_huber-29",
+    "final/nn-return_huber-47"
+  ],
+  "folds": [
+    {
+      "id": "2024h2",
+      "train_end": "2024-06-30",
+      "validation_end": "2024-12-31",
+      "validation_start": "2024-07-01"
+    },
+    {
+      "id": "2025h1",
+      "train_end": "2024-12-31",
+      "validation_end": "2025-06-30",
+      "validation_start": "2025-01-01"
+    },
+    {
+      "id": "2025h2",
+      "train_end": "2025-06-30",
+      "validation_end": "2025-12-31",
+      "validation_start": "2025-07-01"
+    }
+  ],
+  "gbt": {
+    "huber_alpha": 0.9,
+    "learning_rate": 0.05,
+    "max_bin": 63,
+    "min_data_in_leaf": 20,
+    "num_leaves": 31,
+    "rounds": 200,
+    "subsampling": false,
+    "threads": 1
+  },
+  "history_end_inclusive": "2026-10-02",
+  "history_start": "provider_global_verified_start_pending_H1",
+  "nn": {
+    "activation": "relu",
+    "batch_size": 4096,
+    "dropout": 0,
+    "epochs": 10,
+    "hidden": [
+      64,
+      32
+    ],
+    "huber_delta": 1.0,
+    "learning_rate": 0.001,
+    "optimizer": "adam",
+    "shuffle": false
+  },
+  "numerical_replay": {
+    "atol": 1e-06,
+    "exact_decisions": true,
+    "rtol": 1e-05
+  },
+  "preprocessing": "train-only medians; zero for naturally all-NaN columns; NN training mean/population std, masks unscaled",
+  "purge": "decision and final cash settlement horizon strictly before tenth preceding session open",
+  "ready_for_training": false,
+  "required_fit_count": 84,
+  "schema": "etfe-experiment-declaration-v1",
+  "selection": "validation only; 100 completed positions, positive each fold, maxDD<=.20, excess>0 vs cash/best baseline; max mean fold excess, lower DD, lexical ID, lower threshold",
+  "status": "declared_not_dataset_frozen",
+  "targets": {
+    "return_huber": "P/A",
+    "weighted_win": "same win target; weight=clip(abs(P/A),.01,5)",
+    "win": "float(P/A>0)"
+  },
+  "thresholds": {
+    "return_huber": [
+      0,
+      0.01,
+      0.02
+    ],
+    "weighted_win": [
+      0.5,
+      0.55,
+      0.6
+    ],
+    "win": [
+      0.5,
+      0.55,
+      0.6
+    ]
+  },
+  "trial_tuning": "none",
+  "trials": [
+    {
+      "family": "constant",
+      "id": "constant-win",
+      "objective": "win",
+      "seed": 0
+    },
+    {
+      "family": "gbt",
+      "id": "gbt-win-11",
+      "objective": "win",
+      "seed": 11
+    },
+    {
+      "family": "gbt",
+      "id": "gbt-win-29",
+      "objective": "win",
+      "seed": 29
+    },
+    {
+      "family": "gbt",
+      "id": "gbt-win-47",
+      "objective": "win",
+      "seed": 47
+    },
+    {
+      "family": "nn",
+      "id": "nn-win-11",
+      "objective": "win",
+      "seed": 11
+    },
+    {
+      "family": "nn",
+      "id": "nn-win-29",
+      "objective": "win",
+      "seed": 29
+    },
+    {
+      "family": "nn",
+      "id": "nn-win-47",
+      "objective": "win",
+      "seed": 47
+    },
+    {
+      "family": "constant",
+      "id": "constant-weighted_win",
+      "objective": "weighted_win",
+      "seed": 0
+    },
+    {
+      "family": "gbt",
+      "id": "gbt-weighted_win-11",
+      "objective": "weighted_win",
+      "seed": 11
+    },
+    {
+      "family": "gbt",
+      "id": "gbt-weighted_win-29",
+      "objective": "weighted_win",
+      "seed": 29
+    },
+    {
+      "family": "gbt",
+      "id": "gbt-weighted_win-47",
+      "objective": "weighted_win",
+      "seed": 47
+    },
+    {
+      "family": "nn",
+      "id": "nn-weighted_win-11",
+      "objective": "weighted_win",
+      "seed": 11
+    },
+    {
+      "family": "nn",
+      "id": "nn-weighted_win-29",
+      "objective": "weighted_win",
+      "seed": 29
+    },
+    {
+      "family": "nn",
+      "id": "nn-weighted_win-47",
+      "objective": "weighted_win",
+      "seed": 47
+    },
+    {
+      "family": "constant",
+      "id": "constant-return_huber",
+      "objective": "return_huber",
+      "seed": 0
+    },
+    {
+      "family": "gbt",
+      "id": "gbt-return_huber-11",
+      "objective": "return_huber",
+      "seed": 11
+    },
+    {
+      "family": "gbt",
+      "id": "gbt-return_huber-29",
+      "objective": "return_huber",
+      "seed": 29
+    },
+    {
+      "family": "gbt",
+      "id": "gbt-return_huber-47",
+      "objective": "return_huber",
+      "seed": 47
+    },
+    {
+      "family": "nn",
+      "id": "nn-return_huber-11",
+      "objective": "return_huber",
+      "seed": 11
+    },
+    {
+      "family": "nn",
+      "id": "nn-return_huber-29",
+      "objective": "return_huber",
+      "seed": 29
+    },
+    {
+      "family": "nn",
+      "id": "nn-return_huber-47",
+      "objective": "return_huber",
+      "seed": 47
+    }
+  ]
+}

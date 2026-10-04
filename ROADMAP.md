@@ -15,6 +15,8 @@ provider timestamp and trade/bar coverage still need verification. Completed-min
 VWAP is the accepted option-price reference. Independent configuration/catalog,
 bounded provider probes and the versioned VWAP reference component are implemented;
 [current component evidence](docs/reviews/2026-10-03-etfe-vwap.md).
+October 3: four ETFE-0 definitions are declared; H1/R1/R2/P1 source evidence
+still blocks closure. [Contract review](docs/reviews/2026-10-03-etfe-contract.md).
 
 V7 research stays paused with its original gates/evidence preserved. MRHA archival
 completed October 3 at 16:55:50 Central with all 2,847 shards verified and final
@@ -60,7 +62,7 @@ owns technical deliverables. The current gate remains ETFE-0.
 
 | ID | Position | Deliverable and acceptance condition |
 | --- | --- | --- |
-| **ETFE-0 — Scope and provider contract** | **Selected; VWAP setup implemented, input/feature contract open** | Exact SPY/QQQ/VOO and 1/5/15-minute scope; V7 timing/risk with [VWAP amendment](docs/specs/ETFE_VWAP_20261003.md); verified Alpaca first-history timestamp through fixed October 2, 2026 end; feasible required observations without Massive quotes |
+| **ETFE-0 — Scope and provider contract** | **Selected; four definitions declared, source admission blocked H1/R1/R2/P1** | Exact SPY/QQQ/VOO and 1/5/15-minute scope; V7 timing/risk with [VWAP amendment](docs/specs/ETFE_VWAP_20261003.md); verified Alpaca first-history timestamp through fixed October 2, 2026 end; feasible required observations without Massive quotes |
 | **ETFE-1 — Frozen inputs** | Planned; depends on ETFE-0 and ETFE-4.pilot | Source-bound acquisition, complete required underlying/options/context coverage, dated contracts/calendars, explicit missingness, fixed dates and immutable input freeze |
 | **ETFE-2 — Strategies and causal features** | Planned; full acceptance depends on ETFE-1 | All 20 families/25,353 ticker variants, thirteen TV scopes, explicit trade/bar feature mapping, new schema and causal/parity evidence |
 | **ETFE-3 — Execution and dataset** | Planned; depends on ETFE-1/2 and ETFE-4.pilot | Tested VWAP-based simulated ledger, stops/expiry/roll/settlement, complete build, purged folds/trials and immutable dataset/experiment freeze; ETFE-4.recovery required before full build |
@@ -149,6 +151,7 @@ revision-specific commands belong in CURRENT_STATE or their dated receipts.
 | ETFE quote-route diagnosis | October 3: official staff confirmation plus 13 live controls establish unsupported public historical-quotes route; all three latest OPRA quote controls succeed. Provider contract remains open. [Evidence](docs/reviews/2026-10-03-etfe-quote-404.md) |
 | ETFE VWAP reference amendment | October 3: user-approved trade/bar method; completed-minute VWAP selected, causal reference component and immutable successor setup implemented; 46 focused tests passed. Full execution/features not admitted. [Review](docs/reviews/2026-10-03-etfe-vwap.md) |
 | ETFE first-run plan and note reconciliation | October 3: full dependency sequence, build/input/dataset/model-freeze and expert-proof acceptance recorded; current-phase TODO and document owners reconciled. Documentation only, no future gate closed. [Review](docs/reviews/2026-10-03-etfe-first-run-plan.md) |
+| ETFE-0 component contracts | October 3: exhaustive feature map, execution/evaluation/acquisition definitions, 84-fit declaration and ten live controls. H1/R1/R2/P1 remain open; no pilot or gate closure. [Review](docs/reviews/2026-10-03-etfe-contract.md) |
 | V7 cold archive and verified local reclamation | October 3: all 2,847 shards/564 roots preserved on MRHA; 35,031 eligible local files removed; matching final receipts and sampled restore checks. [Audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json) |
 | V7-1 and V7-2 | Gate closures above; do not reopen old dividend lists, context builds or catalog freezes |
 | V7-3 demand scheduler, request census, exact union and lossless joining | [Demand/recovery](docs/reviews/2026-09-25-v7-3-crash-recovery.md), [union](docs/reviews/2026-09-26-v7-entry-union-and-first-capture.md), [joining](docs/reviews/2026-09-26-v7-capture-storage-forecast.md) |

@@ -6,6 +6,9 @@ sequence/dependencies; [TODO](../../TODO.md) owns only the selected phase's task
 [ETFE scope](ETFE.md) and the [VWAP amendment](ETFE_VWAP_20261003.md) own trading
 semantics. This document does not create a second execution queue or change the
 existing frozen configuration.
+The [October 3 declarations](ETFE_CONTRACT_20261003.md) now specify the four
+component contracts and [exact experiment design](ETFE_EXPERIMENT_20261003.json).
+They do not close the unresolved source gate or replace the later dataset freeze.
 
 ## Meaning of a working expert
 

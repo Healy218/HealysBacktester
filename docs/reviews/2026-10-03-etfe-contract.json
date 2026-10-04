@@ -1,0 +1,276 @@
+{
+  "artifact_root": "nn_meta/validation/etfe-contract-20261003-r0",
+  "blockers": {
+    "H1": "Exact provider-global history floor not verified",
+    "P1": "Historical option trade-route feed confirmation outstanding",
+    "R1": "Historical discovery and dated contract/adjustment/deliverable/exercise coverage not established",
+    "R2": "Dated class/expiry/early-close hours not established; VOO current-list conflict"
+  },
+  "boundary_probe": {
+    "observations": [
+      {
+        "contract": "SPY240119C00475000",
+        "first_returned": null,
+        "next_page_available": false,
+        "route": "option_trades",
+        "scope": "named contract only; no global absence inference",
+        "status_code": 200
+      },
+      {
+        "contract": "SPY240119C00475000",
+        "first_returned": null,
+        "next_page_available": false,
+        "route": "option_bars",
+        "scope": "named contract only; no global absence inference",
+        "status_code": 200
+      },
+      {
+        "contract": "SPY240119C00475000",
+        "matches": [
+          {
+            "close_price": "7.47",
+            "close_price_date": "2024-01-19",
+            "deliverables": [
+              {
+                "allocation_percentage": "100",
+                "amount": "100",
+                "asset_id": "b28f4066-5c6d-479b-a2af-85dc1a8f16fb",
+                "delayed_settlement": false,
+                "settlement_method": "CCC",
+                "settlement_type": "T+1",
+                "symbol": "SPY",
+                "type": "equity"
+              }
+            ],
+            "expiration_date": "2024-01-19",
+            "id": "ede4de3c-6380-4c6c-8c78-c8b65b827ec7",
+            "multiplier": "0",
+            "name": "SPY Jan 19 2024 475 Call",
+            "open_interest": "0",
+            "open_interest_date": "2024-01-19",
+            "ppind": false,
+            "root_symbol": "SPY",
+            "size": "100",
+            "status": "inactive",
+            "strike_price": "475",
+            "style": "american",
+            "symbol": "SPY240119C00475000",
+            "tradable": false,
+            "type": "call",
+            "underlying_asset_id": "b28f4066-5c6d-479b-a2af-85dc1a8f16fb",
+            "underlying_symbol": "SPY"
+          }
+        ],
+        "route": "contracts",
+        "scope": "current metadata only; no historical availability assertion",
+        "status_code": 200
+      },
+      {
+        "contract": "QQQ240119C00409780",
+        "first_returned": null,
+        "next_page_available": false,
+        "route": "option_trades",
+        "scope": "named contract only; no global absence inference",
+        "status_code": 200
+      },
+      {
+        "contract": "QQQ240119C00409780",
+        "first_returned": null,
+        "next_page_available": false,
+        "route": "option_bars",
+        "scope": "named contract only; no global absence inference",
+        "status_code": 200
+      },
+      {
+        "contract": "QQQ240119C00409780",
+        "matches": [
+          {
+            "close_price": "11.8",
+            "close_price_date": "2024-01-19",
+            "deliverables": [
+              {
+                "allocation_percentage": "100",
+                "amount": "100",
+                "asset_id": "2d9e926c-e17c-47c3-ad8c-26c7a594e48f",
+                "delayed_settlement": false,
+                "settlement_method": "CCC",
+                "settlement_type": "T+1",
+                "symbol": "QQQ",
+                "type": "equity"
+              }
+            ],
+            "expiration_date": "2024-01-19",
+            "id": "34e173ad-2f68-4d7a-9e80-da1c1942e266",
+            "multiplier": "0",
+            "name": "QQQ Jan 19 2024 409.78 Call",
+            "open_interest": "0",
+            "open_interest_date": "2024-01-19",
+            "ppind": false,
+            "root_symbol": "QQQ",
+            "size": "100",
+            "status": "inactive",
+            "strike_price": "409.78",
+            "style": "american",
+            "symbol": "QQQ240119C00409780",
+            "tradable": false,
+            "type": "call",
+            "underlying_asset_id": "2d9e926c-e17c-47c3-ad8c-26c7a594e48f",
+            "underlying_symbol": "QQQ"
+          }
+        ],
+        "route": "contracts",
+        "scope": "current metadata only; no historical availability assertion",
+        "status_code": 200
+      },
+      {
+        "contract": "VOO240119C00435000",
+        "first_returned": null,
+        "next_page_available": false,
+        "route": "option_trades",
+        "scope": "named contract only; no global absence inference",
+        "status_code": 200
+      },
+      {
+        "contract": "VOO240119C00435000",
+        "first_returned": null,
+        "next_page_available": false,
+        "route": "option_bars",
+        "scope": "named contract only; no global absence inference",
+        "status_code": 200
+      },
+      {
+        "contract": "VOO240119C00435000",
+        "matches": [
+          {
+            "close_price": "8.2",
+            "close_price_date": "2024-01-19",
+            "deliverables": [
+              {
+                "allocation_percentage": "100",
+                "amount": "100",
+                "asset_id": "4f75ad35-b947-4717-87db-19aa3dbf637d",
+                "delayed_settlement": false,
+                "settlement_method": "CCC",
+                "settlement_type": "T+1",
+                "symbol": "VOO",
+                "type": "equity"
+              }
+            ],
+            "expiration_date": "2024-01-19",
+            "id": "b8e7182b-6bfa-4d23-8bbb-c55b4b47eed5",
+            "multiplier": "0",
+            "name": "VOO Jan 19 2024 435 Call",
+            "open_interest": "0",
+            "open_interest_date": "2024-01-19",
+            "ppind": false,
+            "root_symbol": "VOO",
+            "size": "100",
+            "status": "inactive",
+            "strike_price": "435",
+            "style": "american",
+            "symbol": "VOO240119C00435000",
+            "tradable": false,
+            "type": "call",
+            "underlying_asset_id": "4f75ad35-b947-4717-87db-19aa3dbf637d",
+            "underlying_symbol": "VOO"
+          }
+        ],
+        "route": "contracts",
+        "scope": "current metadata only; no historical availability assertion",
+        "status_code": 200
+      },
+      {
+        "route": "calendar",
+        "sessions": [
+          {
+            "close": "16:00",
+            "date": "2026-10-02",
+            "open": "09:30",
+            "session_close": "2000",
+            "session_open": "0400",
+            "settlement_date": "2026-10-05"
+          }
+        ],
+        "status_code": 200
+      }
+    ],
+    "observed_at": "2026-10-04T01:08:37.636516+00:00",
+    "provider_global_start_verified": false,
+    "ready_for_build": false,
+    "ready_for_training": false,
+    "receipt_files": {
+      "000-option_trades.body": "d7e3220c2f8fe6e76f2cc4b8b74c54e14da90d5028f56f49334652cd88f0b57b",
+      "000-option_trades.json": "70567f2e13fdcfa5370ea6bb87af3200390b19f376ed67453bc9c133ab8f5e35",
+      "001-option_bars.body": "c700148960d500511ad0040f8b1c3c6ebbac07572176aff49cfc66b69eec9aee",
+      "001-option_bars.json": "c3a427f6a142e86205fe66b512071e8e478722f15ef2762fcdf97c9e5916e09c",
+      "002-contracts.body": "de16369c027e7536323fac97b0f063191ac6cdbec7fc7c5170c8e0fda71f6e7d",
+      "002-contracts.json": "8025f18beb7de8401610109b8fa67a28a1e1b2a1b0a03336c184656100539372",
+      "003-option_trades.body": "d7e3220c2f8fe6e76f2cc4b8b74c54e14da90d5028f56f49334652cd88f0b57b",
+      "003-option_trades.json": "6e868aef7af138e3f81d7cda38fca9f4edb605b2cc6b0c366574b5b79ab04dc1",
+      "004-option_bars.body": "c700148960d500511ad0040f8b1c3c6ebbac07572176aff49cfc66b69eec9aee",
+      "004-option_bars.json": "acdb7eaa6d7bc1e510539134b0cd2d31f407b158c107f8be0644f30cef0af383",
+      "005-contracts.body": "48087342ee5949b16e693261f1b2bf271219bb5fe544bc3bf8b070c4c248d6d3",
+      "005-contracts.json": "891360bd554d1216b7ac4b81212201382107f7800aa2fb0f81b156278bc1ddfa",
+      "006-option_trades.body": "d7e3220c2f8fe6e76f2cc4b8b74c54e14da90d5028f56f49334652cd88f0b57b",
+      "006-option_trades.json": "4bc17ee7bc5d76b4e0bb9e055867e5c744a568b469775ec2f0ae4cc6a6b5ad4f",
+      "007-option_bars.body": "c700148960d500511ad0040f8b1c3c6ebbac07572176aff49cfc66b69eec9aee",
+      "007-option_bars.json": "06a098798b86a0094d826a9a49fc0c0a5c17027a3f2cd45d67cb98c005009a39",
+      "008-contracts.body": "799137b6ee319a715a1e3b6da7fc0878b7207774a5f9f7ce1a11ee76df3ce49c",
+      "008-contracts.json": "986fce56a1bb0b4eef6d456b21ef742bb8664d910058b20a7cd8d593941aa52d",
+      "009-calendar.body": "40c22798106094f296fcb4558d5c55cc005ab8548bb342b439685434711c7220",
+      "009-calendar.json": "88d2c09ab8e1cbcae09d3a74cf2eefcebe5952aee413e81bbfdd7a0f55183238"
+    },
+    "requests": 10,
+    "schema": "etfe-contract-boundary-controls-v1",
+    "setup_plan_sha256": "3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64",
+    "source_bindings": {
+      "nn_meta/etfe/alpaca_probe.py": "8e3d60197d8e62d82ea103aa370707fb9994bb3fe376d6a32df4503ca60dc65e",
+      "scripts/probe_etfe_contract_boundary.py": "b34e632d55910813b0797d508e0c13e76af3e7f02e95fda430370abc6bb0377d"
+    },
+    "transport_failures": 0
+  },
+  "boundary_probe_root": "nn_meta/validation/etfe-contract-boundary-20261003-r1",
+  "contract_files": {
+    "docs/specs/ETFE_ACQUISITION_20261003.md": "7b3052ff3d37285dc29b48aa93b9de52a5faa432b19efe38b19ebecebf592afe",
+    "docs/specs/ETFE_CONTRACT_20261003.md": "e65f6e731c063a33fecd949cae6532de531367996dd372e5d246736b1b06f562",
+    "docs/specs/ETFE_EVALUATION_20261003.md": "31978fe6ccf95bf5cb5dd12536bb2af02b7d4b120d85fc7d8f4602b82469a3db",
+    "docs/specs/ETFE_EXECUTION_20261003.md": "57742ebd548a85ffba72dc59564a1ccf8ebdef62eaa9a86148905bc2f3bfd74d",
+    "docs/specs/ETFE_EXPERIMENT_20261003.json": "c6d4e2120d87a3888c9160bc2f7b943002b9aedd15bf50e13937c91be5473450",
+    "docs/specs/ETFE_FEATURES_20261003.md": "95283ca0221824ba17a8f5e7cdddda7356d3a71581c8f981ea0e3648f3d6f2cd",
+    "docs/specs/ETFE_FEATURE_MAP_20261003.json": "e85a64a15729fefbdab0d60433a88c2614b0c6282b27aeb1205cffc733d25f7b",
+    "scripts/probe_etfe_contract_boundary.py": "b34e632d55910813b0797d508e0c13e76af3e7f02e95fda430370abc6bb0377d",
+    "scripts/verify_etfe_contract.py": "9dd4071659f06fdb910d7fdee20a6cd575b371f82d8c5e7397f7103de9bcd88d"
+  },
+  "declared_date_central": "2026-10-03",
+  "evidence_bundle": {
+    "bytes": 158405,
+    "path": "docs/reviews/2026-10-03-etfe-contract-evidence.zip",
+    "sha256": "1120a77fb54da9aaadc9008b2d78aa3e96e75446d4e669eb191f39868cd083ba"
+  },
+  "feature_fields": 221,
+  "gate_closed": false,
+  "model_inputs": 442,
+  "ready_for_build": false,
+  "ready_for_training": false,
+  "required_future_fits": 84,
+  "schema": "etfe-contract-declaration-review-v1",
+  "setup_plan_sha256": "3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64",
+  "status": "four_definitions_declared_source_gate_open",
+  "tv_scopes": 13,
+  "validation": {
+    "broad_tests": "not_run_no_changed_execution_or_training_behavior",
+    "checks_pending": false,
+    "contract_inventory": "passed",
+    "inherited_registry_matches_current_rows": true,
+    "local_links": "passed",
+    "local_links_checked": 223,
+    "missing_field_rejected": true,
+    "portable_without_validation_dirs": "passed",
+    "predecessor_setup_integrity": "passed",
+    "premature_readiness_rejected": true,
+    "source_snapshot_count": 42,
+    "syntax": "passed",
+    "tampered_contract_rejected": true,
+    "vwap_setup_integrity": "passed"
+  }
+}

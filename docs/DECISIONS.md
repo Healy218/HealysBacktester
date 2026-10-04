@@ -2240,3 +2240,21 @@ readiness change or campaign launch follows from documenting the plan.
 [Sequence](../ROADMAP.md#etfe-first-run-sequence),
 [acceptance](specs/ETFE_FIRST_RUN.md),
 [documentation review](reviews/2026-10-03-etfe-first-run-plan.md).
+
+### 2026-10-03 — Declare ETFE contracts while preserving the source gate
+
+ETFE-0 work now declares the exhaustive feature replacement map, execution,
+evaluation and acquisition contracts under the user-selected trade/bar scope.
+Research choices include lagged causal option-feature windows, whole option
+contracts, 1% minute-volume participation, settled-cash rolls, explicit
+physical-delivery liabilities, 442 model inputs including masks, and a finite
+84-fit experiment with fixed validation/test dates and thresholds. These are
+engineering declarations, not measured execution or performance claims.
+[Contract](specs/ETFE_CONTRACT_20261003.md),
+[review](reviews/2026-10-03-etfe-contract.md).
+
+Do not substitute January 18 sample timestamps for the provider-global first
+timestamp or use current expired-contract fields as dated terms. H1/R1/R2/P1
+remain open; all build/training readiness flags stay false. Keep the v2 setup
+immutable and seal a successor after source evidence resolves. The integrated
+resource pilot remains next in ROADMAP only after ETFE-0 closes.

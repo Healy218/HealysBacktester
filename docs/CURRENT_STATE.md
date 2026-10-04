@@ -35,6 +35,10 @@ No Massive quotes or old weights/checkpoints are selected.
 | Operating instructions | [ETFE setup reference](reference/ETFE_SETUP.md) |
 | First-run sequence / technical acceptance | [ROADMAP](../ROADMAP.md#etfe-first-run-sequence), [first-run specification](specs/ETFE_FIRST_RUN.md) |
 | First-run planning record | [October 3 documentation review](reviews/2026-10-03-etfe-first-run-plan.md) |
+| ETFE-0 declarations | [Contract index](specs/ETFE_CONTRACT_20261003.md); linked feature/execution/evaluation/acquisition definitions |
+| Contract verification | `scripts/verify_etfe_contract.py`; [receipt](reviews/2026-10-03-etfe-contract.json) |
+| Formula snapshot | `nn_meta/validation/etfe-contract-20261003-r0/source-snapshot/`; portable `docs/reviews/2026-10-03-etfe-contract-evidence.zip` |
+| New boundary controls | `nn_meta/validation/etfe-contract-boundary-20261003-r1/REPORT.json`; sandbox-only r0 retained |
 
 Selected VWAP plan SHA256:
 `3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64`.
@@ -72,6 +76,14 @@ selected artifacts. No future artifact path or job is represented as existing.
 [Measured setup review](reviews/2026-10-03-etfe-setup.md),
 [receipts](reviews/2026-10-03-etfe-setup.json).
 V7 pointers below remain preservation/recovery references, not ETFE inputs.
+
+October 3 at 20:08:37 Central: ten live controls all returned HTTP 200. Six
+pre–January 18 windows were empty for three named contracts; this does not prove
+the global floor. Current January 2024 records returned size 100, multiplier 0
+and T+1 deliverables; no historical terms are inferred. Four ETFE-0 definitions
+now cover 221 values plus masks, thirteen source scopes and 84 future fits.
+H1/R1/R2/P1 admission remains open; no input/dataset freeze, integrated pilot or
+evaluated model exists. [Review](reviews/2026-10-03-etfe-contract.md).
 
 ## October 2 late-evening V7 cold archive
 

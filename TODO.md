@@ -14,6 +14,11 @@ freeze, finite training campaign, model freeze and clean-process expert proof.
 [acceptance contract](docs/specs/ETFE_FIRST_RUN.md). This checklist contains only
 the current contract phase; later tasks stay in ROADMAP until selected.
 
+October 3: four component definitions are declared. H1/R1/R2/P1 source evidence
+still blocks ETFE-0 closure. [Contract and blockers](docs/specs/ETFE_CONTRACT_20261003.md),
+[verification](docs/reviews/2026-10-03-etfe-contract.md). No integrated pilot or
+bulk campaign started.
+
 ## Selected checklist — ETFE-0
 
 - [x] **ETFE.setup:** Independent scope/configuration, 20-family 1/5/15-minute
@@ -41,26 +46,41 @@ the current contract phase; later tasks stay in ROADMAP until selected.
   and UTC boundaries for the fixed October 2 end; record missing feature/bar/trade
   coverage separately rather than silently shortening the requested window.
   January 18, 2024 observations exist in all three ETFs; sample evidence does
-  not establish the global first timestamp. October 2 stock hours are verified.
-- [ ] **ETFE-0.feature-map:** Inventory every inherited feature and all thirteen
+  not establish the global first timestamp. Six new empty controls cover only
+  three named contracts; H1 requires provider-global evidence. October 2 stock
+  UTC hours and civil end `2026-10-03T04:00:00Z` exclusive are verified.
+  Dated option-class hours remain separate under R2.
+- [x] **ETFE-0.feature-map:** Inventory every inherited feature and all thirteen
   TV scopes. Declare retained/recomputed/replaced/unresolved fields, formulas,
   sources, available-at timestamps, windows, warmup and missingness. Define the
   new schema without fabricated quote values or silent loss of strategy scope.
-- [ ] **ETFE-0.execution-contract:** Finish VWAP reference-to-simulated-fill
+  [Declared registry](docs/specs/ETFE_FEATURE_MAP_20261003.json): 221 values plus
+  masks, thirteen pinned scopes. ETFE-2 implementation/admission remains open.
+- [x] **ETFE-0.execution-contract:** Finish VWAP reference-to-simulated-fill
   semantics: size/participation limits, premium-stop denominator, timing, costs,
   missing held marks/exits, dated expiry/roll/physical delivery and end-boundary
   outcomes. Define pilot reconciliation and cost/lag/liquidity stress cases.
-- [ ] **ETFE-0.experiment-contract:** Declare target definitions, temporal fold
+  [Declared execution](docs/specs/ETFE_EXECUTION_20261003.md); validation and
+  dated R1/R2 inputs remain open.
+- [x] **ETFE-0.experiment-contract:** Declare target definitions, temporal fold
   construction, full-horizon purging/ten-session embargo, train-only processing,
   finite GBT/NN/constant trial design, baselines and model/decision acceptance
   policy. Seal exact dates/parameters before outcome inspection/full fitting.
-- [ ] **ETFE-0.acquisition-design:** Derive required underlying/context, option
+  [Declaration](docs/specs/ETFE_EXPERIMENT_20261003.json): three folds and 84
+  required fits including final refits; dataset freeze comes later.
+- [x] **ETFE-0.acquisition-design:** Derive required underlying/context, option
   bar/trade and dated-reference demand from those contracts; specify provenance,
   pagination, missingness/corrections and resumable partition inventory. Prepare
   the bounded ETFE-4.pilot workload and measurement/stop rules before bulk work.
+  [Declared design](docs/specs/ETFE_ACQUISITION_20261003.md); source feasibility
+  H1/R1/R2/P1 remains open and pilot execution has not begun.
 - [ ] **ETFE.provider-contract:** Close ETFE-0.contract with the above versioned
   feature/execution/evaluation/acquisition contracts and feasible Alpaca sources,
   including feed, bar publication/revision assumptions and dated contract inputs.
+  Four definitions are complete; **ETFE-0.contract is not closed**. Resolve H1
+  (global floor), R1 (dated discovery/contract terms), R2 (class/expiry hours,
+  including the VOO list conflict), and P1 (historical trade feed), then seal an
+  immutable contract successor.
   Full coverage is subsequently demonstrated under ETFE-1, not by this plan.
   The user-approved VWAP method supersedes historical bid/ask pricing and quote
   age/size guards; do not retry unsupported quote history. Alpaca-only policy,
