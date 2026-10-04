@@ -8,6 +8,11 @@ options history through October 2, 2026, inclusive. No Massive quotes. [Specific
 October 3 follow-up authorized initial setup. Independent configuration/catalog
 and bounded Alpaca diagnostics are implemented; input admission and expensive
 campaigns remain gated. V7 archival is verified complete.
+The October 3 first-run plan now covers the full build, dataset/experiment
+freeze, finite training campaign, model freeze and clean-process expert proof.
+[Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
+[acceptance contract](docs/specs/ETFE_FIRST_RUN.md). This checklist contains only
+the current contract phase; later tasks stay in ROADMAP until selected.
 
 ## Selected checklist — ETFE-0
 
@@ -33,14 +38,30 @@ campaigns remain gated. V7 archival is verified complete.
   availability through October 2, 2026, inclusive. This is a fixed window, not
   our recording start or a moving latest-session end.
 - [ ] **ETFE.history-boundary:** Verify the exact first Alpaca options timestamp
-  and UTC boundaries for the fixed October 2 end; record missing feature/quote
+  and UTC boundaries for the fixed October 2 end; record missing feature/bar/trade
   coverage separately rather than silently shortening the requested window.
   January 18, 2024 observations exist in all three ETFs; sample evidence does
   not establish the global first timestamp. October 2 stock hours are verified.
-- [ ] **ETFE.provider-contract:** Admit one-minute VWAP/trade coverage, feed and
-  bar publication/revision assumptions, dated contracts and feature inputs.
-  Next define an explicit trade/bar replacement map for quote-dependent features
-  and validate causal execution, costs, liquidity and missing observations.
+- [ ] **ETFE-0.feature-map:** Inventory every inherited feature and all thirteen
+  TV scopes. Declare retained/recomputed/replaced/unresolved fields, formulas,
+  sources, available-at timestamps, windows, warmup and missingness. Define the
+  new schema without fabricated quote values or silent loss of strategy scope.
+- [ ] **ETFE-0.execution-contract:** Finish VWAP reference-to-simulated-fill
+  semantics: size/participation limits, premium-stop denominator, timing, costs,
+  missing held marks/exits, dated expiry/roll/physical delivery and end-boundary
+  outcomes. Define pilot reconciliation and cost/lag/liquidity stress cases.
+- [ ] **ETFE-0.experiment-contract:** Declare target definitions, temporal fold
+  construction, full-horizon purging/ten-session embargo, train-only processing,
+  finite GBT/NN/constant trial design, baselines and model/decision acceptance
+  policy. Seal exact dates/parameters before outcome inspection/full fitting.
+- [ ] **ETFE-0.acquisition-design:** Derive required underlying/context, option
+  bar/trade and dated-reference demand from those contracts; specify provenance,
+  pagination, missingness/corrections and resumable partition inventory. Prepare
+  the bounded ETFE-4.pilot workload and measurement/stop rules before bulk work.
+- [ ] **ETFE.provider-contract:** Close ETFE-0.contract with the above versioned
+  feature/execution/evaluation/acquisition contracts and feasible Alpaca sources,
+  including feed, bar publication/revision assumptions and dated contract inputs.
+  Full coverage is subsequently demonstrated under ETFE-1, not by this plan.
   The user-approved VWAP method supersedes historical bid/ask pricing and quote
   age/size guards; do not retry unsupported quote history. Alpaca-only policy,
   fixed dates and all strategy families remain. No Massive fallback or fabricated

@@ -52,18 +52,61 @@ selection does not itself prove service shutdown or authorize spending.
 
 ETFE is a brand-new expert replacing the active V7 research priority. It does
 not reuse V7 model weights/checkpoints, relabel artifacts or close V7's unfinished gates. [Specification](docs/specs/ETFE.md) owns technical inheritance.
-Initial configuration/catalog and read-only provider diagnostics are implemented.
-Completed-minute VWAP is the selected pricing amendment. The current gate still
-needs bar/trade coverage, feature mapping, data-contract and boundary evidence.
+Initial configuration/catalog, provider diagnostics and the completed-minute
+VWAP reference component are implemented. October 3 user direction requests
+the complete plan through a working research expert's first build/freeze/train
+run. This section owns that sequence; [first-run acceptance](docs/specs/ETFE_FIRST_RUN.md)
+owns technical deliverables. The current gate remains ETFE-0.
 
 | ID | Position | Deliverable and acceptance condition |
 | --- | --- | --- |
 | **ETFE-0 — Scope and provider contract** | **Selected; VWAP setup implemented, input/feature contract open** | Exact SPY/QQQ/VOO and 1/5/15-minute scope; V7 timing/risk with [VWAP amendment](docs/specs/ETFE_VWAP_20261003.md); verified Alpaca first-history timestamp through fixed October 2, 2026 end; feasible required observations without Massive quotes |
-| **ETFE-1 — Frozen inputs** | Future implementation | ETFE identity, dated universe/contract/calendar bindings, verified underlying/options/feature coverage and a fixed history window; account entitlement and missingness evidence |
-| **ETFE-2 — Strategies and causal features** | Future implementation | All inherited variants on 1/5/15 minutes, rebuilt schema and causal/parity evidence; no silent feature or strategy removal |
-| **ETFE-3 — Execution and dataset** | Future implementation | Full selected coverage with amended VWAP reference/execution rules and inherited stop/expiry/roll rules, funded ledger, labels through final settlement, frozen purged folds and trials |
-| **ETFE-4 — Resources and recovery** | Future implementation | Measured representative workload, bounded memory/disk and tested recovery; resource pilots begin before expensive acquisition/build |
-| **ETFE-5 — Training and evaluation** | Gated | Launch only after admitted inputs/execution/resources; evaluate against declared baselines and freeze accepted or rejected results; deployment is a separate decision |
+| **ETFE-1 — Frozen inputs** | Planned; depends on ETFE-0 and ETFE-4.pilot | Source-bound acquisition, complete required underlying/options/context coverage, dated contracts/calendars, explicit missingness, fixed dates and immutable input freeze |
+| **ETFE-2 — Strategies and causal features** | Planned; full acceptance depends on ETFE-1 | All 20 families/25,353 ticker variants, thirteen TV scopes, explicit trade/bar feature mapping, new schema and causal/parity evidence |
+| **ETFE-3 — Execution and dataset** | Planned; depends on ETFE-1/2 and ETFE-4.pilot | Tested VWAP-based simulated ledger, stops/expiry/roll/settlement, complete build, purged folds/trials and immutable dataset/experiment freeze; ETFE-4.recovery required before full build |
+| **ETFE-4 — Resources and recovery** | Cross-cutting; early pilot before bulk work, final proof before training | ETFE-4.pilot measures capture/build/train/storage demand; ETFE-4.recovery proves restart; ETFE-4.admission binds full-build resource evidence to the training budget |
+| **ETFE-5 — Training and evaluation** | Gated; depends on ETFE-0 through ETFE-4 | All predeclared trials completed, baseline/out-of-sample evaluation, trained artifact freeze, clean-process inference/replay and honest accepted/rejected verdict; no automatic deployment |
+
+### ETFE first-run sequence
+
+The order below preserves gate IDs; their numbers are ownership labels, not a
+reason to postpone resource checks until after a large build. Small fixtures may
+exercise later components early; that never closes full-coverage gates.
+
+| Order / task ID | Work | Exit evidence before the next dependent step |
+| --- | --- | --- |
+| 1 — **ETFE-0.contract** | Verify earliest Alpaca history and fixed end, audit every feature, define trade/bar replacements, warmup, causal availability, dated contracts and complete VWAP execution semantics. Predeclare final-boundary exclusions, targets and selection policy. | Versioned source/feature/execution contract with no unresolved required input; precise history boundary and explicit eligibility/coverage rules. Existing samples do not close this. |
+| 2 — **ETFE-4.pilot** | Run a bounded representative capture → feature → execution → dataset → training smoke pilot, including busy SPY/QQQ, sparse VOO, open/close, expiration, gaps and difficult contract cases. | Measured requests, disk including temporary/freezes, RAM per worker, throughput, model-fit peak and recovery checkpoint sizes. Declare local storage reserve, rate limits and autosized worker/thread budgets before bulk work. |
+| 3 — **ETFE-1.acquire / ETFE-1.freeze** | Implement the v2-bound Alpaca capture/normalization path; acquire required underlying 1m data, option VWAP bars/trades, dated contract/actions/calendar evidence and context. Reconcile pages, retries, duplicates, gaps and source provenance; seal the input inventory. | Complete required-input coverage census, explicit valid no-trade versus missing-provider cases, verified hashes/partitions and immutable input freeze. Adjustments/expiry/deliverables remain dated, not inferred from today's chain. |
+| 4 — **ETFE-2.features** | Generate all registered strategy variants on session-aligned 1/5/15m bars; build the approved option trade/bar features, all nonquote/context and thirteen TV scopes. Freeze schema/dtypes/availability rules. | Variant census, indicator/direction parity, prefix-invariance and no-future-data checks; documented warmup/missingness; no silent quote-column substitution. |
+| 5 — **ETFE-3.execution** | Complete simulated entries, marks, costs, quantities, stops, strategy exits, expiry exits, OTM rolls and funded physical delivery/stock liquidation. Implement shared five-slot/10%-equity accounting and terminal labels. | Hand-worked and real-data ledger reconciliation, causality, boundary/missing-mark/size stress, no implicit margin or invented fills; all unresolved outcomes accounted for. VWAP reference alone is insufficient. |
+| 6 — **ETFE-4.recovery / ETFE-3.build** | Prove bounded streaming/sharding and interrupted restart on the integrated pilot, then execute the complete scoped dataset build with resumable receipts. | Restart matches uninterrupted output; full candidate/eligible/excluded/unresolved census, row/label/source alignment, complete scope and measured peak RAM/disk. A smoke sample or successful process exit is not a full build. |
+| 7 — **ETFE-3.freeze / ETFE-4.admission** | Seal dataset partitions, schema, execution/input/source hashes, temporal folds, preprocessing rules, finite trials and evaluation/selection policy. Reconcile actual full-build resource use with the training allocation. | Independently verified immutable dataset + experiment freeze; no row/horizon leakage, ten-session embargo, training-only fitting and sufficient resources/recovery. No in-place changes after sealing. |
+| 8 — **ETFE-5.train** | Train from the frozen dataset under the predeclared finite trial plan. Initial design carries forward constant baselines plus GBT and neural-network families for win, weighted-win and robust return objectives; new ETFE manifests/weights only. | Every required fold/trial has completed fit, model, logs, seeds, preprocessing hashes and predictions. Failed or abandoned required fits mean the campaign is incomplete. Small training smoke runs do not count. |
+| 9 — **ETFE-5.evaluate / ETFE-5.freeze** | Compare all trials and model-driven decisions with predeclared baselines on identical rows, costs and shared-capital ledger. Evaluate chronologically held-out results and stress assumptions; freeze models, predictions and verdicts. | Complete net-return/risk and prediction metrics, trial accounting, selected-or-abstain decision, immutable trained-artifact bundle and acceptance/rejection receipt. Profitability is not assumed. |
+| 10 — **ETFE-5.expert-proof** | Load the frozen bundle in a clean process, replay an untouched-by-fitting input slice with the production-style feature/decision interface, and verify deterministic restart/restore and schema rejection. | Functional offline expert emits auditable scores and eligible decisions/abstentions; replay matches frozen predictions within declared tolerances; manifest→input→row→model lineage and restore test pass. First research run is then complete. |
+
+**First-run definition of done:** all ETFE-0 through ETFE-5 acceptance evidence
+exists, the full build and all declared training trials finished, the dataset
+and trained bundle are separately frozen and verified, and clean-process expert
+inference/replay succeeds. A candidate can complete this engineering milestone
+and still fail the performance gate; retain its negative verdict and withhold
+promotion. A material data/causality failure prevents technical completion.
+Paper/live deployment, continuous updates and incubator integration are subsequent
+milestones, not implied by a finished training run.
+
+**Forecast discipline:** no reliable wall-clock completion estimate exists yet.
+Publish capture/build/train/storage estimates with measured workload counts and
+uncertainty after ETFE-4.pilot; refresh against full-build throughput. Reuse verified
+inputs/components and deduplicate demand, but never restore all V7 to start ETFE.
+If measured storage does not fit, resolve placement/capacity before bulk capture;
+do not assume MRHA headroom, auto-delete frozen inputs or narrow the scope silently.
+
+This is the requested implementation plan, not a claim of a launched campaign.
+The current frozen setup retains false readiness flags. Future readiness is a
+new evidence-bound artifact, never an edit to its preparation receipt. Once
+implementation is selected, routine work proceeds within scope; only genuine
+unresolved user choices/resource authorization require clarification.
 
 V7 component methods and tests may inform ETFE validation of changed universe,
 timeframes, provider and dates; Massive quotes and V7 weights/checkpoints are
@@ -105,6 +148,7 @@ revision-specific commands belong in CURRENT_STATE or their dated receipts.
 | ETFE initial setup and bounded Alpaca probes | October 3: independent scope, 20-family 1/5/15 catalog, immutable manifests/integrity checks and live read-only probes. Data admission remains open. [Evidence](docs/reviews/2026-10-03-etfe-setup.md) |
 | ETFE quote-route diagnosis | October 3: official staff confirmation plus 13 live controls establish unsupported public historical-quotes route; all three latest OPRA quote controls succeed. Provider contract remains open. [Evidence](docs/reviews/2026-10-03-etfe-quote-404.md) |
 | ETFE VWAP reference amendment | October 3: user-approved trade/bar method; completed-minute VWAP selected, causal reference component and immutable successor setup implemented; 46 focused tests passed. Full execution/features not admitted. [Review](docs/reviews/2026-10-03-etfe-vwap.md) |
+| ETFE first-run plan and note reconciliation | October 3: full dependency sequence, build/input/dataset/model-freeze and expert-proof acceptance recorded; current-phase TODO and document owners reconciled. Documentation only, no future gate closed. [Review](docs/reviews/2026-10-03-etfe-first-run-plan.md) |
 | V7 cold archive and verified local reclamation | October 3: all 2,847 shards/564 roots preserved on MRHA; 35,031 eligible local files removed; matching final receipts and sampled restore checks. [Audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json) |
 | V7-1 and V7-2 | Gate closures above; do not reopen old dividend lists, context builds or catalog freezes |
 | V7-3 demand scheduler, request census, exact union and lossless joining | [Demand/recovery](docs/reviews/2026-09-25-v7-3-crash-recovery.md), [union](docs/reviews/2026-09-26-v7-entry-union-and-first-capture.md), [joining](docs/reviews/2026-09-26-v7-capture-storage-forecast.md) |

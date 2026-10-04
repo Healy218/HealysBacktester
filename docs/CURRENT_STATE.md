@@ -24,7 +24,7 @@ No Massive quotes or old weights/checkpoints are selected.
 | --- | --- |
 | Selected VWAP setup root | `nn_meta/validation/etfe-setup-20261003-vwap-r1/` |
 | Preserved midpoint predecessor / diagnostic root | `nn_meta/validation/etfe-setup-20261003-r0/`; provider probes below remain here |
-| Scope, catalog and bindings | `scope.json`, `catalog.json`, `plan.json`, `PREPARED.json` under that root |
+| Scope, catalog and bindings | `scope.json`, `catalog.json`, `plan.json`, `PREPARED.json` under the selected VWAP root |
 | Runtime selector | `NN_META_POOL=etfe`; independent output root, no live service |
 | Selected setup generator | `scripts/prepare_etfe_vwap.py`; package `nn_meta/etfe/` |
 | Selected integrity command | `scripts/verify_etfe_vwap.py --setup nn_meta/validation/etfe-setup-20261003-vwap-r1` |
@@ -33,6 +33,8 @@ No Massive quotes or old weights/checkpoints are selected.
 | Quote-route diagnostic | `probe-quotes-r1/DIAGNOSTIC.json`; sandbox-only r0 retained separately |
 | Exact selected setup source bytes | `source-snapshot/`, bound by `PREPARED.json` and `plan.json` |
 | Operating instructions | [ETFE setup reference](reference/ETFE_SETUP.md) |
+| First-run sequence / technical acceptance | [ROADMAP](../ROADMAP.md#etfe-first-run-sequence), [first-run specification](specs/ETFE_FIRST_RUN.md) |
+| First-run planning record | [October 3 documentation review](reviews/2026-10-03-etfe-first-run-plan.md) |
 
 Selected VWAP plan SHA256:
 `3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64`.
@@ -63,6 +65,10 @@ The original setup passed 30 focused tests and source/artifact/probe checks;
 the selected VWAP revision passed the 46-test suite described above. These are
 setup results: no ETFE data freeze, training artifact, runtime deployment or
 full historical coverage is admitted. All readiness flags remain false.
+October 3 documentation update: the first-run sequence and acceptance contract
+are recorded. Input freeze, dataset/experiment freeze, full-build receipt,
+training campaign, trained bundle and expert replay receipt do not yet have
+selected artifacts. No future artifact path or job is represented as existing.
 [Measured setup review](reviews/2026-10-03-etfe-setup.md),
 [receipts](reviews/2026-10-03-etfe-setup.json).
 V7 pointers below remain preservation/recovery references, not ETFE inputs.

@@ -3,6 +3,11 @@
 Use the [ETFE specification](../specs/ETFE.md) for scope and
 [CURRENT_STATE](../CURRENT_STATE.md#october-3-etfe-setup) for the selected root.
 These commands prepare or inspect a new expert; none launches training.
+The [first-run sequence](../../ROADMAP.md#etfe-first-run-sequence) and
+[acceptance contract](../specs/ETFE_FIRST_RUN.md) define the remaining work.
+Dataset-build, training, finalizer and expert-replay commands will be documented
+only after their ETFE consumers exist and have passed their gates; do not
+substitute V7 launch commands or infer launch permission from setup success.
 
 From `/home/healy/Coding/HealysBacktester`, verify the selected setup:
 

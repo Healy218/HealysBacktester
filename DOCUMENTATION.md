@@ -46,6 +46,38 @@ runtimes and dated observations. Do not add running-job status blocks here.
 - Statistical or storage forecasts are estimates, not guarantees. State the
   workload, observation interval, units and exclusions when reporting them.
 
+## Research build and freeze lifecycle
+
+Use the owning roadmap gate and specialist acceptance specification; ETFE's
+first-run contract is [here](docs/specs/ETFE_FIRST_RUN.md). Distinguish:
+
+1. **Preparation:** frozen scope/source/configuration; not data admission.
+2. **Input freeze:** reconciled source inventory, provenance and coverage.
+3. **Dataset/experiment freeze:** full build, schema/labels, folds, trials and
+   evaluation policy sealed before full training or final-test inspection.
+4. **Trained-bundle freeze:** completed fits, model/preprocessing, predictions,
+   metrics and explicit acceptance/rejection verdict bound to the dataset.
+5. **Expert proof:** clean-process load/inference/replay and verified restore.
+
+For each freeze, write to a new isolated root, bind sources/environment and all
+payload hashes, reconcile the file/row/trial census, and verify before publishing
+a terminal completion receipt. Keep partial and rejected artifacts distinguishable.
+Resume only against identical bound inputs; a method/source/schema change creates
+a new version or explicit compatibility-tested consumer. Never edit a preparation
+receipt's false readiness flags to simulate later admission.
+
+Measure storage for source data, normalized copies, working shards, temporary
+output, checkpoints and verification/backup copies before bulk capture. Measure
+RAM per worker and numerical threads together; use the shared autosizer and
+current host reserves, not a historical concurrency count. An interrupted build
+or fit must resume without duplicated rows/orders, lost liabilities or changed
+results. Persist logs, resource observations and exact continuation commands.
+
+Technical completion, evaluated acceptance and deployment are distinct receipt
+fields. Record actual verdicts in EXPERIMENTS only after evaluation; a roadmap or
+successful smoke test is not an experiment result. Update TODO/ROADMAP closure,
+CURRENT_STATE pointers and the cross-project HANDOFF together at actual milestones.
+
 ## Traps
 
 Read the relevant entries before treating a script or cache as broken.

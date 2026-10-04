@@ -1,57 +1,59 @@
-# Handoff — October 3, 2026 — ETFE completed-minute VWAP
+# Handoff — October 3, 2026 — ETFE first-run plan
 
-## Selected work and outcome
+## Selected work and result
 
-User approved option trade/bar methodology and delegated choosing high/low
-midpoint or VWAP. Selected completed one-minute **VWAP**, with no fallback.
-Implemented the causal reference component, v2 scope, independent preparation
-consumer, new source snapshots and integrity verifier. No full execution engine,
-training or deployment. [Contract](docs/specs/ETFE_VWAP_20261003.md),
-[review](docs/reviews/2026-10-03-etfe-vwap.md), [TODO](TODO.md).
+User requested the full plan through a working ETFE expert that completes a
+build/freeze/train run, plus notes updated under document ownership rules.
+Documentation completed; no acquisition/build/training campaign launched.
+[Full sequence](ROADMAP.md#etfe-first-run-sequence),
+[technical acceptance](docs/specs/ETFE_FIRST_RUN.md),
+[documentation review](docs/reviews/2026-10-03-etfe-first-run-plan.md).
 
-`ETFE.pricing-basis` is complete. ETFE-0 remains open for data/feature contracts
-and boundary evidence. The historical quote acquisition requirement for pricing
-is superseded; do not retry the unsupported route or reopen the user choice.
+ROADMAP owns all stages and dependencies. TODO owns current ETFE-0 actions only.
+The sequence is contract → measured resource pilot → acquisition/input freeze →
+causal strategies/features → execution/labels → full build/recovery → dataset and
+experiment freeze → all declared fits → evaluation/model freeze → expert proof.
+Resources are measured before bulk work, with final admission before training.
 
-## Selected artifacts
+## Current implementation and artifacts
 
-- Selected: `nn_meta/validation/etfe-setup-20261003-vwap-r1/`.
-- Plan SHA256: `3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64`.
-- Scope: `docs/specs/ETFE_SCOPE_VWAP_20261003.json`.
-- Preparation/verification: `scripts/prepare_etfe_vwap.py` and
-  `scripts/verify_etfe_vwap.py`; [commands](docs/reference/ETFE_SETUP.md).
-- Price helper: `nn_meta/etfe/vwap_reference.py`. Reference observation only,
-  not a fill. Validate contract/session/1Min/feed provenance in its consumer.
-- Preserved predecessor: `nn_meta/validation/etfe-setup-20261003-r0/`.
-  Original integrity verifier still passes; old sources/specs were not edited.
-  Historical probes and quote diagnosis remain bound to that original setup.
+Selected setup: `nn_meta/validation/etfe-setup-20261003-vwap-r1/`.
+Plan SHA256: `3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64`.
+Current scope: `docs/specs/ETFE_SCOPE_VWAP_20261003.json`.
+[State pointers](docs/CURRENT_STATE.md#october-3-etfe-setup),
+[existing commands](docs/reference/ETFE_SETUP.md).
 
-46 focused tests passed; both setup integrity checks, source snapshots, catalog
-byte identity and overwrite refusal passed. Six existing Alpaca 1Min samples
-returned their actual VWAP through the component; no new provider calls.
-All 20 families/25,353 ticker variants retained. Readiness remains false.
+The completed-minute VWAP reference and immutable setup are implemented; prior
+46 focused tests and six saved Alpaca sample checks passed. Both predecessor and
+VWAP integrity checks pass. All 20 families/25,353 ticker variants are retained.
+Full acquisition, feature replacement, execution, dataset and training are open.
+No ETFE input/dataset/model freeze or full-build/training receipt exists yet.
 
-## Timing and next action
+## Next selected phase — ETFE-0
 
-Use only completed bars: modeled availability at end + 1s, or later captured
-availability. Maximum reference age 60s from bar end, positive VWAP/volume/count.
-No within-bar lookahead, high/low fallback, fabricated spread or forward filling
-across missing minutes. Historical revision/publication timing is still unverified.
-The 1s entry latency, 60s deadline, fees/slippage and 12.5% premium stop remain.
+1. Verify exact earliest provider timestamp and fixed-window boundaries.
+2. Complete inherited feature inventory and explicit trade/bar replacement map.
+3. Declare full VWAP execution/missingness/liquidity and end-boundary contracts.
+4. Declare targets, folds, finite trials, baselines and acceptance/decision policy.
+5. Derive required capture demand and representative bounded resource-pilot plan;
+   close the source/feature/execution contract before dependent bulk work.
 
-Next: explicit trade/bar replacement map for quote-dependent features, source
-coverage and timestamp/revision evidence, then causal execution/liquidity/cost
-validation. Missing held marks cannot erase liabilities or imply successful exits.
-Preserve all nonquote feature scope, strategy families and parameters, dated DTE,
-expiry/roll/stock-delivery rules and portfolio/evaluation requirements.
+Use TODO for the task details. Do not move later roadmap work into a competing
+queue or reopen the already accepted VWAP choice. Definition of done includes
+separate dataset and model freezes, all fits completed, evaluated verdict and
+clean-process inference/replay/restore. A rejected model can finish a valid
+experiment; it cannot be promoted. Data/causality failure blocks completion.
 
-Dates remain earliest Alpaca options history through October 2, 2026 inclusive;
-exact global first timestamp remains open (January 18, 2024 sampled in all ETFs).
-SPY/QQQ/VOO only, signal bars 1/5/15m, option reference bars 1m, Alpaca only.
-No Massive inputs, V7 weights/checkpoints, bulk capture or expensive campaign.
+## Constraints and preservation
 
-## Preserved work
+SPY/QQQ/VOO only; 1/5/15m signals; one-minute completed option VWAP references;
+Alpaca-only options, earliest history through October 2, 2026 inclusive.
+No Massive inputs, old model weights, invented quotes, silent date changes,
+within-bar lookahead or automatic deployment. Existing readiness flags stay false.
+Memory/storage/ETA await measured workload; do not assume MRHA capacity.
 
-[Prior handoff](handoff-history/HANDOFF-2026-10-03-before-vwap-amendment.md).
-V7 archive remains verified complete on MRHA/v7; research stays paused.
-Other unselected campaigns stay paused. Preserve unrelated dirty work and .env.
+[Previous handoff](handoff-history/HANDOFF-2026-10-03-before-etfe-first-run-plan.md)
+and [previous TODO](handoff-history/TODO-2026-10-03-before-etfe-first-run-plan.md)
+are archived. V7 archive remains complete; V7 and unselected campaigns stay paused.
+Preserve unrelated dirty work and .env. Planning adds no EXPERIMENTS verdict or
+maturity score increase. Next implementation starts with the current ETFE-0 tasks.

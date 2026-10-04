@@ -31,7 +31,10 @@ a paper deployment and demonstrated trading performance are distinct results.
 
 - [ETFE — Exchange Traded Funds Expert](docs/specs/ETFE.md): SPY/QQQ/VOO
   independent expert using V7 strategies and timing with 1/5/15-minute signals
-  and Alpaca options data. [Setup and verification](docs/reference/ETFE_SETUP.md).
+  and Alpaca options data with completed-minute VWAP references.
+  [First-run roadmap](ROADMAP.md#etfe-first-run-sequence),
+  [build/freeze/train acceptance](docs/specs/ETFE_FIRST_RUN.md),
+  [setup and verification](docs/reference/ETFE_SETUP.md).
 - [V7 research](docs/specs/MULTITIMEFRAME_RESEARCH.md) and
   [V7 archive/restore guide](docs/reference/V7_COLD_ARCHIVE_README.md): predecessor
   contracts and reproducible restoration.

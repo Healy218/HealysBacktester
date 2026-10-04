@@ -6,6 +6,10 @@ trained weights or checkpoints. Initial configuration/catalog and bounded
 provider diagnostics are implemented; data admission and training remain open.
 [ROADMAP](../../ROADMAP.md#etfe--exchange-traded-funds-expert) owns the gates;
 [TODO](../../TODO.md) owns current actions.
+The [first-run roadmap](../../ROADMAP.md#etfe-first-run-sequence) carries the
+complete dependency order through build, dataset/experiment freeze, training,
+model freeze and offline expert proof. [Acceptance specification](ETFE_FIRST_RUN.md)
+defines the required evidence; a successful preparation is not a finished run.
 
 ## Accepted scope
 

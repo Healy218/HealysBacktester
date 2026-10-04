@@ -63,6 +63,7 @@ week of Alpaca fills. The original first-week notes remain in the archive below.
 | September 14–22 | Historical operational observations | Experimental V6 simulator/paper alerts and dashboard repairs; no automatic numerical reassessment |
 | September 25 | Research evidence milestone | [V7-2 completion](docs/reviews/2026-09-25-v7-2-complete-and-v7-3-start.md) strengthens provenance/causal-validation evidence; numerical scores unchanged |
 | September 27 | Operational evidence milestone | [Alpaca startup](docs/reviews/2026-09-27-v6-alpaca-activation.md) verified; sustained operation and actual fills still need observation; numerical scores unchanged |
+| October 3 | ETFE component evidence / first-run assessment criteria | [VWAP setup/reference](docs/reviews/2026-10-03-etfe-vwap.md) implemented and tested; no full ETFE build/train/evaluation yet. [First-run acceptance](docs/specs/ETFE_FIRST_RUN.md) defines future evidence; planning adds no measured outcome or score increase. Trading edge remains unproven |
 | Next user-selected end-of-week review | Pending assessment | Use the actual evidence available at review time; do not promise a higher score |
 | December 31, 2026 | Target checkpoint | Assess each area honestly against its target and evidence requirements |
 

@@ -2216,3 +2216,27 @@ The original scope/setup remain immutable; a new v2 scope and VWAP setup bind
 this choice and preserve the unchanged strategy catalog. No Massive data, V7
 model reuse, training or deployment. [Amendment](specs/ETFE_VWAP_20261003.md),
 [component evidence](reviews/2026-10-03-etfe-vwap.md).
+
+### 2026-10-03 — ETFE first-run milestone and documentation ownership
+
+The user requested the complete plan through a working expert with a finished
+build/freeze/train run, with all notes reconciled under AGENTS ownership rules.
+ROADMAP owns the ordered ETFE-0 through ETFE-5 sequence and dependencies; TODO
+contains only the current contract phase. The first-run specification owns
+technical acceptance, not a competing task queue.
+
+Define completion as a full scoped build, immutable input and dataset/experiment
+freezes, all predeclared fits, chronological baseline evaluation, a trained-bundle
+freeze and verified clean-process inference/replay/restore. The resource pilot
+must precede bulk acquisition; integrated recovery and training admission remain
+later evidence gates. Initial training design carries forward finite constant,
+GBT and neural-network comparisons into new ETFE manifests, never old weights.
+
+A working offline research expert is the completion boundary for this plan;
+performance acceptance, paper/live deployment and continual updates are separate
+outcomes. A valid rejected experiment is retained without promotion; unresolved
+causality or data defects prevent completion. No deadline, profitability claim,
+readiness change or campaign launch follows from documenting the plan.
+[Sequence](../ROADMAP.md#etfe-first-run-sequence),
+[acceptance](specs/ETFE_FIRST_RUN.md),
+[documentation review](reviews/2026-10-03-etfe-first-run-plan.md).
