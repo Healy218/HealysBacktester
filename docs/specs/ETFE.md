@@ -14,7 +14,7 @@ provider diagnostics are implemented; data admission and training remain open.
 | Tradable underlying universe | Exactly **SPY, QQQ, VOO**, including their eligible option contracts |
 | Strategies | All V7 strategy families and parameter variants; no winner-only selection |
 | Signal bars | **1, 5, 15 minutes**; restore 1-minute signals and remove 30-minute signals |
-| Execution observations | Retain V7's **one-minute** cadence and event-time quote chronology |
+| Execution observations | **One-minute completed option-bar VWAP** references; causal availability under the [VWAP amendment](ETFE_VWAP_20261003.md) |
 | Timing and risk | Inherit V7's accepted entry, exit, DTE, roll and expiry rules below |
 | Historical start | **Alpaca’s earliest historical options availability**; exact first timestamp to be verified from provider data, not our own recording start |
 | Historical end | **October 2, 2026, inclusive**, fixed by the user |
@@ -22,9 +22,10 @@ provider diagnostics are implemented; data admission and training remain open.
 | Research identity | New ETFE manifests, catalog, features, labels, folds, checkpoints and model artifacts |
 
 Here, the user's “1 minute ticks” and “30 minute ticks” mean signal-bar
-timeframes. Event-level option quotes/trades remain separate required inputs;
-one-minute bars do not reconstruct those events. Other V7 settings remain
-inherited unless an explicit ETFE decision changes them.
+timeframes. Option reference bars remain one minute for all signal timeframes.
+October 3's [accepted VWAP amendment](ETFE_VWAP_20261003.md) replaces inherited
+quote pricing with trade/bar references; bars do not reconstruct quote events.
+Other V7 settings remain inherited unless explicitly amended.
 
 The fixed three-ETF universe is a user-selected research scope, not a claim of
 market-wide representativeness. Market/context instruments required by inherited
@@ -37,8 +38,10 @@ capital rules. Do not assume identical option listings or liquidity.
 Use the [V7 scope](MULTITIMEFRAME_RESEARCH.md) together with its accepted
 amendments. The base document's original ask/bid execution description is
 superseded by the [arithmetic-midpoint/risk amendment](V7_OPTION_RISK_20260916.json).
-ETFE changes the universe, signal timeframes, provider/history boundary and
-research identity; it does not revert later accepted V7 execution rules.
+ETFE changes the universe, signal timeframes, provider/history boundary,
+research identity and, by the subsequent October 3 user decision, option pricing.
+The [VWAP amendment](ETFE_VWAP_20261003.md) now supersedes bid/ask-midpoint pricing
+and quote-specific guards for ETFE; other later V7 risk amendments remain.
 
 - Keep all 20 families: `bbands`, `bbw_squeeze`, `elliott`, `keltner`, `ma`,
   `macd`, `rsi`, `squeeze`, `stoch`, `supertrend`, `tv_amd`, `tv_fibonacci`,
@@ -54,11 +57,13 @@ research identity; it does not revert later accepted V7 execution rules.
 - Signals become available at completed bar close; use session-aligned bars,
   actual calendars, DST and early closes. Revalidate 1-minute warmup and higher
   timeframe context; the old 5/15/30 schema is not an ETFE schema.
-- Retain **1-second latency**, **60-second entry deadline**, **30-second quote
-  maximum age**, positive valid bid/ask and minimum reported size of one.
-- Simulated option buys, sells and marks use **(bid + ask) / 2** from a valid
-  fresh quote. Keep **0.10% fee + 0.05% slippage per side**. A simulated midpoint
-  is not a guaranteed broker fill; last trades and OHLCV are not quote substitutes.
+- Retain **1-second latency** and **60-second entry deadline**. Use eligible
+  completed one-minute VWAP references, available no earlier than bar end + 1s,
+  with at most 60s age from bar end and positive trade volume/count. These
+  explicitly replace the old quote-age and bid/ask-size guards for ETFE.
+- The selected reference for modeled option buys, sells and marks is **VWAP**.
+  Keep **0.10% fee + 0.05% slippage per side** separately. No high/low midpoint
+  fallback. A reference is not a guaranteed fill; execution validation is open.
 - Retain the **12.5% option-premium stop** per purchased leg and underlying
   strategy exits; do not restore the superseded generic 5% underlying stop.
 - Retain ITM expiry exit **15 minutes before the dated option-class regular
@@ -66,9 +71,10 @@ research identity; it does not revert later accepted V7 execution rules.
   [funded physical exercise/stock liquidation](V7_PHYSICAL_EXPIRY_20260915.md).
   Bind actual dated hours for these ETF option classes; do not assume a universal
   close or substitute V6's later ten-minute entry window.
-- Preserve full features, including all thirteen TradingView scopes and option
-  quote/trade fields. Audit ETF applicability and availability; any change to
-  feature semantics needs an explicit decision and a new schema.
+- Preserve all thirteen TradingView scopes and nonquote feature scope. The
+  accepted trade/bar methodology requires an explicit replacement map and new
+  schema for unavailable quote-dependent fields; do not fabricate spreads/sizes
+  or retain old quote meanings with zero-filled values. Audit all dependencies.
 - Preserve the [evaluation policy](V7_EVALUATION_20220315_PHYSICAL.json): shared
   five-slot portfolio, 10% equity fraction, chronological walk-forward evaluation,
   complete exit/roll/stock-settlement horizon purging, ten-session embargo,
@@ -87,14 +93,15 @@ Checked October 3, 2026: Alpaca's
 states availability since **February 2024**, without an exact first timestamp.
 That month is a provider-history lead, not a sealed February 1 start date.
 The same documentation distinguishes subscribed OPRA observations from the
-indicative feed; indicative values do not establish the inherited observed-quote
-contract.
+indicative feed; indicative values are not an automatic substitute for OPRA.
 
 The [documented options client](https://alpaca.markets/sdks/python/api_reference/data/option/historical.html)
 lists historical trades/bars and latest quotes/snapshots, but no historical quote
 window method. The project's [October 2 provider review](../reviews/2026-10-02-v6-alpaca-provider.md)
-also records a historical-quotes endpoint probe returning 404. This is an
-identified coverage gap, not proof that three tickers solve quote history.
+also records a historical-quotes endpoint probe returning 404. The later
+[diagnosis](../reviews/2026-10-03-etfe-quote-404.md) establishes an unsupported
+public API route. The accepted VWAP method resolves the pricing choice without
+requiring historical quote acquisition; quote-derived features need remapping.
 
 The user confirmed both date choices: start at Alpaca's earliest options
 history and end October 2, 2026, inclusive. No date preference question remains.
@@ -104,7 +111,7 @@ Before sealing executable timestamps, record:
    This is a data-verification task, not permission to substitute our recording
    start or a later date with easier feature coverage.
 2. Actual first usable timestamps and gap coverage for SPY/QQQ/VOO minute data,
-   option trades, required bid/ask windows, dated contract metadata, calendars
+   option trades and VWAP bars, dated contract metadata, calendars
    and all feature dependencies, with feed/entitlement and source receipts.
 3. The nominal history boundary separately from each feature's first eligible
    observation. Preserve the inherited causal warmup rule, with no fabricated
@@ -122,16 +129,15 @@ Massive quotes, read archived V7 Massive quotes into ETFE, blend them with Alpac
 quotes, or offer them as an automatic fallback. V7 archives remain preservation
 artifacts for V7 only.
 
-If Alpaca cannot supply required historical bid/ask observations, record the
-specific gap under ETFE.provider-contract. Any necessary execution/feature
-methodology change must be explicit; trade bars do not establish observed
-spreads. Do not silently drop quote features, move the start or end, or claim
-that preserving V7 strategy/timing rules proves identical data availability.
+Historical bid/ask observations are unavailable through this public API. The
+user approved trade/bar methodology and VWAP is selected. Finish the explicit
+feature replacement and execution contracts under ETFE.provider-contract;
+trade bars do not establish observed spreads. Preserve the fixed history policy.
 
 ## Initial implementation and resource plan
 
 The user authorized beginning ETFE setup after V7 archival verification.
-[Machine-readable scope](ETFE_SCOPE_20261003.json), independent catalog generation,
+[Selected machine-readable scope](ETFE_SCOPE_VWAP_20261003.json), independent catalog generation,
 immutable setup manifest, read-only Alpaca probes and an integrity checker now
 exist. [Setup evidence](../reviews/2026-10-03-etfe-setup.md) and
 [commands](../reference/ETFE_SETUP.md) distinguish this preparation from admission.
@@ -143,12 +149,13 @@ Live October 3 probes returned January 18, 2024 option trades/bars for samples
 in all three ETFs, earlier than the published February overview. The exact
 provider-global earliest boundary remains open; retain the user's earliest-history
 policy. The October 2 stock session was verified. Historical bid/ask queries
-returned 404 for all three sampled contracts, leaving the quote requirement open.
+returned 404; the subsequent approved VWAP revision supersedes that pricing
+requirement. The original midpoint setup remains immutable historical evidence.
 
 Before acquisition/build, inventory reusable inputs and run a bounded resource
-pilot. Measure one-minute event density, quote demand, peak memory and disk
+pilot. Measure one-minute event density, bar/trade demand, peak memory and disk
 growth, including the busiest ticker; three ETFs do not imply one-hundredth of
-V7's quote volume. Use bounded streaming, shared request deduplication and the
+V7's workload. Use bounded streaming, shared request deduplication and the
 project autosizer. Bind a storage budget to measured free space and keep recovery
 checkpoints. Do not reload the entire V7 archive to establish a new catalog.
 

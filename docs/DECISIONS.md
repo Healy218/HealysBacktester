@@ -2193,3 +2193,26 @@ supersede treating February as an exact earliest boundary; global earliest and
 complete coverage remain unverified. Historical quote requests returned 404, so
 midpoint execution/quote-feature admission remains open, with no Massive fallback
 or silent methodology change. [Evidence](reviews/2026-10-03-etfe-setup.md).
+
+### 2026-10-03 — ETFE selects completed-minute option VWAP
+
+The user authorized replacing quote-dependent option pricing with trade/bar
+methodology and delegated the choice between high/low midpoint and VWAP. Choose
+Alpaca's per-contract one-minute VWAP (`vw`), weighted by traded quantity; no
+high/low midpoint fallback. This supersedes the initial ETFE bid/ask-midpoint
+price basis and quote-specific age/size guards, not V7's preserved contract.
+
+Only completed bars may supply references: modeled bar end + 1 second minimum
+availability, honor later captured availability, maximum 60 seconds age measured
+from bar end, positive finite VWAP and positive volume/trade count. This lag and
+freshness are declared model assumptions, not provider publication evidence.
+Keep the 1-second entry latency, 60-second deadline, costs, premium-stop fraction,
+expiry/roll rules, all strategies and the fixed history/universe/timeframe scope.
+
+A VWAP reference is not a guaranteed fill. Require an explicit trade/bar feature
+replacement map and new schema; do not fabricate historical quotes or silently
+zero-fill old columns. Validate execution/coverage/resources before admission.
+The original scope/setup remain immutable; a new v2 scope and VWAP setup bind
+this choice and preserve the unchanged strategy catalog. No Massive data, V7
+model reuse, training or deployment. [Amendment](specs/ETFE_VWAP_20261003.md),
+[component evidence](reviews/2026-10-03-etfe-vwap.md).

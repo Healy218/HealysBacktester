@@ -16,24 +16,30 @@ Never infer a current ETA from a historical throughput sample.
 ## October 3 ETFE setup
 
 Selected [scope](specs/ETFE.md), machine-readable configuration
-`docs/specs/ETFE_SCOPE_20261003.json`. Brand-new expert, SPY/QQQ/VOO, 1/5/15-minute
+`docs/specs/ETFE_SCOPE_VWAP_20261003.json`. Brand-new expert, SPY/QQQ/VOO, 1/5/15-minute
 signals, Alpaca-only options, earliest provider history through October 2, 2026.
 No Massive quotes or old weights/checkpoints are selected.
 
 | Artifact / action | Selected location |
 | --- | --- |
-| Setup root | `nn_meta/validation/etfe-setup-20261003-r0/` |
+| Selected VWAP setup root | `nn_meta/validation/etfe-setup-20261003-vwap-r1/` |
+| Preserved midpoint predecessor / diagnostic root | `nn_meta/validation/etfe-setup-20261003-r0/`; provider probes below remain here |
 | Scope, catalog and bindings | `scope.json`, `catalog.json`, `plan.json`, `PREPARED.json` under that root |
 | Runtime selector | `NN_META_POOL=etfe`; independent output root, no live service |
-| Setup generator | `scripts/prepare_etfe.py`; package `nn_meta/etfe/` |
-| Integrity command | `scripts/verify_etfe_setup.py --setup nn_meta/validation/etfe-setup-20261003-r0` |
+| Selected setup generator | `scripts/prepare_etfe_vwap.py`; package `nn_meta/etfe/` |
+| Selected integrity command | `scripts/verify_etfe_vwap.py --setup nn_meta/validation/etfe-setup-20261003-vwap-r1` |
 | Initial live capability probe | `probe-r1/PROBE.json`; initial sandbox-only `probe-r0` retained separately |
 | Earlier-history follow-up | `probe-boundary-r0/BOUNDARY.json` |
 | Quote-route diagnostic | `probe-quotes-r1/DIAGNOSTIC.json`; sandbox-only r0 retained separately |
-| Exact setup source bytes | `source-snapshot/`, bound by `source-snapshot-receipt.json` |
+| Exact selected setup source bytes | `source-snapshot/`, bound by `PREPARED.json` and `plan.json` |
 | Operating instructions | [ETFE setup reference](reference/ETFE_SETUP.md) |
 
-Plan SHA256: `8e43d74e2d89d9b3aaaf58d2a65f2acbc713dfa44f19466ee95af5279aa8e707`.
+Selected VWAP plan SHA256:
+`3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64`.
+The completed-minute reference component and new setup pass 46 focused tests.
+Original midpoint plan preserved as
+`8e43d74e2d89d9b3aaaf58d2a65f2acbc713dfa44f19466ee95af5279aa8e707`;
+both original and successor integrity checks pass. [VWAP review](reviews/2026-10-03-etfe-vwap.md).
 At 17:51–17:53 Central October 3, 43 live Alpaca GETs recorded underlying samples,
 expired-contract examples and historical trades/bars. Representative contracts
 in all three ETFs returned January 18, 2024 observations, earlier than the
@@ -46,12 +52,15 @@ At 18:41:55 Central October 3, 13 further live GETs isolated the quote 404s:
 three latest OPRA chains and three latest quote requests succeeded, as did a
 historical trade control; six historical-quote route variants returned 404.
 Official Alpaca staff confirms historical option quotes are not on the roadmap.
-The public API cannot supply the required historical quote windows; the provider
-contract remains unresolved. [Diagnosis](reviews/2026-10-03-etfe-quote-404.md),
+The public API cannot supply historical quote windows. The subsequent accepted
+VWAP amendment supersedes that pricing requirement; bar coverage, publication
+assumptions, feature mapping and execution admission remain unresolved.
+[Diagnosis](reviews/2026-10-03-etfe-quote-404.md),
 [portable receipts](reviews/2026-10-03-etfe-quote-404.json).
 
 The catalog contains all 20 families and 25,353 ticker/variant combinations.
-30 focused tests and source/artifact/probe hash verification passed. These are
+The original setup passed 30 focused tests and source/artifact/probe checks;
+the selected VWAP revision passed the 46-test suite described above. These are
 setup results: no ETFE data freeze, training artifact, runtime deployment or
 full historical coverage is admitted. All readiness flags remain false.
 [Measured setup review](reviews/2026-10-03-etfe-setup.md),

@@ -21,9 +21,14 @@ campaigns remain gated. V7 archival is verified complete.
   public API. Official staff confirmation and 13 live controls establish working
   OPRA latest quotes for all three ETFs, working historical trades, and persistent
   historical-route 404s. [Diagnosis](docs/reviews/2026-10-03-etfe-quote-404.md).
+- [x] **ETFE.pricing-basis:** User authorized trade/bar methodology and delegated
+  VWAP versus high/low midpoint. Selected completed one-minute VWAP; implemented
+  causal reference component and immutable successor setup. 46 focused tests
+  passed. [Amendment](docs/specs/ETFE_VWAP_20261003.md).
 
 - [x] **ETFE.scope:** Record the accepted universe, timeframes and V7 inheritance;
-  preserve later midpoint/risk amendments and distinguish signal bars from quotes.
+  preserve later risk amendments and apply the subsequent ETFE VWAP pricing
+  amendment; distinguish signal bars from option reference bars.
 - [x] **ETFE.dates:** User confirmed Alpaca's earliest historical options
   availability through October 2, 2026, inclusive. This is a fixed window, not
   our recording start or a moving latest-session end.
@@ -32,15 +37,14 @@ campaigns remain gated. V7 archival is verified complete.
   coverage separately rather than silently shortening the requested window.
   January 18, 2024 observations exist in all three ETFs; sample evidence does
   not establish the global first timestamp. October 2 stock hours are verified.
-- [ ] **ETFE.provider-contract:** Establish how required historical bid/ask windows,
-  dated contracts and feature inputs will be supplied. Historical trades/bars
-  alone do not satisfy inherited execution/quote features. Alpaca is the options
-  provider; Massive quotes, including archived V7 copies, are excluded. Resolve
-  any necessary methodology decision before freezing the executable ETFE plan.
-  The public historical-quotes endpoint does not exist; blind retries will not
-  resolve this. Next resolve evidenced alternative Alpaca historical delivery or
-  a user-approved methodology/scope change. Latest snapshots, historical
-  bars/trades and current expired-contract records do not close this contract.
+- [ ] **ETFE.provider-contract:** Admit one-minute VWAP/trade coverage, feed and
+  bar publication/revision assumptions, dated contracts and feature inputs.
+  Next define an explicit trade/bar replacement map for quote-dependent features
+  and validate causal execution, costs, liquidity and missing observations.
+  The user-approved VWAP method supersedes historical bid/ask pricing and quote
+  age/size guards; do not retry unsupported quote history. Alpaca-only policy,
+  fixed dates and all strategy families remain. No Massive fallback or fabricated
+  quote features; current expired-contract records are not historical as-of chains.
 
 Later implementation, coverage, resource and training gates belong to the
 [ETFE roadmap](ROADMAP.md#etfe--exchange-traded-funds-expert), not competing queues.

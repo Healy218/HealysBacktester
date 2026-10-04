@@ -1,53 +1,57 @@
-# Handoff — October 3, 2026 — ETFE quote 404 diagnosis
+# Handoff — October 3, 2026 — ETFE completed-minute VWAP
 
 ## Selected work and outcome
 
-User asked to investigate the Alpaca historical option quote 404s.
-Diagnosis complete: the public historical-quotes route is unsupported.
-Alpaca staff explicitly confirmed this limitation; 13 live GET controls showed
-working historical trades and latest OPRA quotes for SPY, QQQ and VOO, while
-six historical-route variants returned 404. Credentials/latest OPRA access work.
-[Review](docs/reviews/2026-10-03-etfe-quote-404.md),
-[portable evidence](docs/reviews/2026-10-03-etfe-quote-404.json).
+User approved option trade/bar methodology and delegated choosing high/low
+midpoint or VWAP. Selected completed one-minute **VWAP**, with no fallback.
+Implemented the causal reference component, v2 scope, independent preparation
+consumer, new source snapshots and integrity verifier. No full execution engine,
+training or deployment. [Contract](docs/specs/ETFE_VWAP_20261003.md),
+[review](docs/reviews/2026-10-03-etfe-vwap.md), [TODO](TODO.md).
 
-ETFE-0 remains selected and open. The unresolved provider contract is an actual
-historical quote-supply gap, not a request-format repair. No methodology changed.
+`ETFE.pricing-basis` is complete. ETFE-0 remains open for data/feature contracts
+and boundary evidence. The historical quote acquisition requirement for pricing
+is superseded; do not retry the unsupported route or reopen the user choice.
 
-## Selected artifacts and verification
+## Selected artifacts
 
-- Setup: `nn_meta/validation/etfe-setup-20261003-r0/`.
-- Plan SHA256: `8e43d74e2d89d9b3aaaf58d2a65f2acbc713dfa44f19466ee95af5279aa8e707`.
-- New evidence: `probe-quotes-r1/DIAGNOSTIC.json`, per-request JSON and raw bodies.
-  13 live requests, zero transport failures, all receipt/body/source hashes checked.
-  Sandbox-only failed `probe-quotes-r0` retained; not provider evidence.
-- New independent consumer: `scripts/diagnose_etfe_quotes.py`. Fixed allowlist,
-  GET only, 13-request ceiling, fresh outputs, size limits and credential protection.
-  Frozen setup producers remain unchanged; integrity verifier still passes.
-- Original evidence: `probe-r1/PROBE.json` and `probe-boundary-r0/BOUNDARY.json`.
-  All-three ETF samples reach January 18, 2024; global first timestamp unverified.
-- Setup retains all 20 families and 25,353 ticker/variant combinations. Prior
-  30 focused setup tests passed. Readiness remains false; no build/training launch.
+- Selected: `nn_meta/validation/etfe-setup-20261003-vwap-r1/`.
+- Plan SHA256: `3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64`.
+- Scope: `docs/specs/ETFE_SCOPE_VWAP_20261003.json`.
+- Preparation/verification: `scripts/prepare_etfe_vwap.py` and
+  `scripts/verify_etfe_vwap.py`; [commands](docs/reference/ETFE_SETUP.md).
+- Price helper: `nn_meta/etfe/vwap_reference.py`. Reference observation only,
+  not a fill. Validate contract/session/1Min/feed provenance in its consumer.
+- Preserved predecessor: `nn_meta/validation/etfe-setup-20261003-r0/`.
+  Original integrity verifier still passes; old sources/specs were not edited.
+  Historical probes and quote diagnosis remain bound to that original setup.
 
-## Next action and constraints
+46 focused tests passed; both setup integrity checks, source snapshots, catalog
+byte identity and overwrite refusal passed. Six existing Alpaca 1Min samples
+returned their actual VWAP through the component; no new provider calls.
+All 20 families/25,353 ticker variants retained. Readiness remains false.
 
-Resolve `ETFE.provider-contract`: evidenced Alpaca historical delivery outside
-this public API, or an explicit user-approved methodology/scope change. Do not
-repeat unsupported-route probes without new evidence. Latest snapshots and
-prospective quote recording cannot backfill the fixed historical window.
-Historical trade/bar modeling changes the inherited execution/feature contract.
+## Timing and next action
 
-ETFE is a brand-new expert: SPY/QQQ/VOO, 1/5/15-minute signals; V7 strategy/timing
-specifications with the later midpoint/risk amendments. No V7 weights/checkpoints.
-Start remains Alpaca's earliest options history, end October 2, 2026 inclusive.
-No Massive quotes, including archived V7 copies. No synthetic spreads, feature
-removal or silent date movement. Complete quote/contract/feature coverage and
-causal execution/resource evidence are required before an expensive campaign.
+Use only completed bars: modeled availability at end + 1s, or later captured
+availability. Maximum reference age 60s from bar end, positive VWAP/volume/count.
+No within-bar lookahead, high/low fallback, fabricated spread or forward filling
+across missing minutes. Historical revision/publication timing is still unverified.
+The 1s entry latency, 60s deadline, fees/slippage and 12.5% premium stop remain.
+
+Next: explicit trade/bar replacement map for quote-dependent features, source
+coverage and timestamp/revision evidence, then causal execution/liquidity/cost
+validation. Missing held marks cannot erase liabilities or imply successful exits.
+Preserve all nonquote feature scope, strategy families and parameters, dated DTE,
+expiry/roll/stock-delivery rules and portfolio/evaluation requirements.
+
+Dates remain earliest Alpaca options history through October 2, 2026 inclusive;
+exact global first timestamp remains open (January 18, 2024 sampled in all ETFs).
+SPY/QQQ/VOO only, signal bars 1/5/15m, option reference bars 1m, Alpaca only.
+No Massive inputs, V7 weights/checkpoints, bulk capture or expensive campaign.
 
 ## Preserved work
 
-Previous handoff: [setup snapshot](handoff-history/HANDOFF-2026-10-03-before-quote-diagnosis.md).
-V7 archive is verified complete on MRHA/v7: 2,847 shards, 325.63 GiB and 35,031
-eligible local files reclaimed. [Audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json).
-V7 research and other unselected campaigns remain paused. No orders,
-subscriptions, messages to Alpaca, streaming captures or deployments this turn.
-Preserve unrelated dirty work and the secret root .env.
+[Prior handoff](handoff-history/HANDOFF-2026-10-03-before-vwap-amendment.md).
+V7 archive remains verified complete on MRHA/v7; research stays paused.
+Other unselected campaigns stay paused. Preserve unrelated dirty work and .env.

@@ -56,6 +56,9 @@ Read the relevant entries before treating a script or cache as broken.
   window. Chain `updated_since` filters latest snapshots, not historical as-of
   state. A Friday quote returned on Saturday does not establish quote replay.
   [Dated provider evidence and controls](docs/reviews/2026-10-03-etfe-quote-404.md).
+  ETFE now explicitly selects [completed-minute VWAP](docs/specs/ETFE_VWAP_20261003.md).
+  Its reference is per option bar, not cumulative session VWAP or a guaranteed
+  fill. Use the versioned VWAP consumer; old midpoint setup/probe sources remain frozen.
 
 - **Separate pool sizing from numerical threads.** GNU `nproc` honors
   `OMP_NUM_THREADS` and `OMP_THREAD_LIMIT`. A controller inheriting a value of one

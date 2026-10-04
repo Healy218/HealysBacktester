@@ -1,0 +1,171 @@
+{
+  "catalog_bytes_unchanged": true,
+  "execution_validated": false,
+  "features_remapped": false,
+  "new_file_hashes": {
+    "PREPARED.json": "12ff5309ab52e492ae129aa89be8cb6c7cfd956b5bbeb50431deedf8ca6c385b",
+    "catalog.json": "12752f44fb85c076cbcbdbeaa76173115062cea435bb1a3f304251771695b77e",
+    "plan.json": "5b70379477f94cfbcf1aa423e6e2ad5f8a0e017ac21cb985903e71e82ec62eac",
+    "scope.json": "e6f70e5da6976d59da475dbe7c44c03275eb80615ae139c43d8b3ce4b278908e"
+  },
+  "observed_at": "2026-10-04T00:07:24.516425+00:00",
+  "overwrite_guard": "passed_without_file_changes",
+  "performance_evaluated": false,
+  "predecessor_file_hashes": {
+    "PREPARED.json": "1604fc18e7ff2df50ca47328b46d7b14a227d402eacf46c82f60019611b34bab",
+    "catalog.json": "12752f44fb85c076cbcbdbeaa76173115062cea435bb1a3f304251771695b77e",
+    "plan.json": "a071422d141d25f902df68eb0709f2e85f78a9f1c586a1734a670f47b815f89c",
+    "scope.json": "f814a96eee5061a1d91ae47ccf14663e1d3cd61dd482162c56e89525e99a546d"
+  },
+  "predecessor_integrity": {
+    "expert": "etfe",
+    "families": 20,
+    "plan_sha256": "8e43d74e2d89d9b3aaaf58d2a65f2acbc713dfa44f19466ee95af5279aa8e707",
+    "ready_for_build": false,
+    "ready_for_training": false,
+    "source_files": 9,
+    "status": "setup_integrity_verified_not_admitted",
+    "ticker_variant_combinations": 25353,
+    "variants_per_symbol": 8451
+  },
+  "provider_bar_component_examples": [
+    {
+      "boundary": "Historical response replay; availability time is modeled, not observed.",
+      "contract": "SPY240119C00475000",
+      "input_body": "nn_meta/validation/etfe-setup-20261003-r0/probe-boundary-r0/002-option_bars.body",
+      "input_sha256": "e5a0bd8ccc987aa54e88c4de73eb30518d7e3401d44d0595ed6be9271e74c403",
+      "reference": {
+        "as_of": "2024-01-18T14:31:01+00:00",
+        "availability_basis": "modeled_end_plus_1s",
+        "available_at": "2024-01-18T14:31:01+00:00",
+        "bar_end": "2024-01-18T14:31:00+00:00",
+        "bar_end_age_seconds": 1.0,
+        "bar_start": "2024-01-18T14:30:00+00:00",
+        "basis": "etfe-option-completed-1min-vwap-v1",
+        "executable_fill_verified": false,
+        "original_revision_timing_verified": false,
+        "price": 1.143252,
+        "trade_count": 9,
+        "volume": 123
+      }
+    },
+    {
+      "boundary": "Historical response replay; availability time is modeled, not observed.",
+      "contract": "SPY240216C00475000",
+      "input_body": "nn_meta/validation/etfe-setup-20261003-r0/probe-boundary-r0/005-option_bars.body",
+      "input_sha256": "dc3393a4db77b70bd285643a4421688a0ead689fee845a35206ee4624590017e",
+      "reference": {
+        "as_of": "2024-01-18T14:31:01+00:00",
+        "availability_basis": "modeled_end_plus_1s",
+        "available_at": "2024-01-18T14:31:01+00:00",
+        "bar_end": "2024-01-18T14:31:00+00:00",
+        "bar_end_age_seconds": 1.0,
+        "bar_start": "2024-01-18T14:30:00+00:00",
+        "basis": "etfe-option-completed-1min-vwap-v1",
+        "executable_fill_verified": false,
+        "original_revision_timing_verified": false,
+        "price": 7.134,
+        "trade_count": 2,
+        "volume": 10
+      }
+    },
+    {
+      "boundary": "Historical response replay; availability time is modeled, not observed.",
+      "contract": "QQQ240119C00409780",
+      "input_body": "nn_meta/validation/etfe-setup-20261003-r0/probe-boundary-r0/009-option_bars.body",
+      "input_sha256": "95466c27695d67eb3a51c2a31c19f7edede41828549599bde7d30499e7281793",
+      "reference": {
+        "as_of": "2024-01-18T14:31:01+00:00",
+        "availability_basis": "modeled_end_plus_1s",
+        "available_at": "2024-01-18T14:31:01+00:00",
+        "bar_end": "2024-01-18T14:31:00+00:00",
+        "bar_end_age_seconds": 1.0,
+        "bar_start": "2024-01-18T14:30:00+00:00",
+        "basis": "etfe-option-completed-1min-vwap-v1",
+        "executable_fill_verified": false,
+        "original_revision_timing_verified": false,
+        "price": 2.27,
+        "trade_count": 1,
+        "volume": 10
+      }
+    },
+    {
+      "boundary": "Historical response replay; availability time is modeled, not observed.",
+      "contract": "QQQ240216C00409780",
+      "input_body": "nn_meta/validation/etfe-setup-20261003-r0/probe-boundary-r0/012-option_bars.body",
+      "input_sha256": "f27e52a20289a3c1b962452fbea9ee28a4188f950b2511699e70792293ed317c",
+      "reference": {
+        "as_of": "2024-01-18T14:57:01+00:00",
+        "availability_basis": "modeled_end_plus_1s",
+        "available_at": "2024-01-18T14:57:01+00:00",
+        "bar_end": "2024-01-18T14:57:00+00:00",
+        "bar_end_age_seconds": 1.0,
+        "bar_start": "2024-01-18T14:56:00+00:00",
+        "basis": "etfe-option-completed-1min-vwap-v1",
+        "executable_fill_verified": false,
+        "original_revision_timing_verified": false,
+        "price": 9.6,
+        "trade_count": 1,
+        "volume": 3
+      }
+    },
+    {
+      "boundary": "Historical response replay; availability time is modeled, not observed.",
+      "contract": "VOO240119C00435000",
+      "input_body": "nn_meta/validation/etfe-setup-20261003-r0/probe-boundary-r0/016-option_bars.body",
+      "input_sha256": "3c6dc214b8d7ddf3f2d04d20397f8d620352d6f553f007afa87a0182e2080402",
+      "reference": {
+        "as_of": "2024-01-18T14:31:01+00:00",
+        "availability_basis": "modeled_end_plus_1s",
+        "available_at": "2024-01-18T14:31:01+00:00",
+        "bar_end": "2024-01-18T14:31:00+00:00",
+        "bar_end_age_seconds": 1.0,
+        "bar_start": "2024-01-18T14:30:00+00:00",
+        "basis": "etfe-option-completed-1min-vwap-v1",
+        "executable_fill_verified": false,
+        "original_revision_timing_verified": false,
+        "price": 1.845,
+        "trade_count": 2,
+        "volume": 2
+      }
+    },
+    {
+      "boundary": "Historical response replay; availability time is modeled, not observed.",
+      "contract": "VOO240216C00435000",
+      "input_body": "nn_meta/validation/etfe-setup-20261003-r0/probe-boundary-r0/019-option_bars.body",
+      "input_sha256": "526ae52a0b5584f0e7267c5ada4ac9e50bbd0c0bd86646d8e66f390e2a6b938b",
+      "reference": {
+        "as_of": "2024-01-18T14:43:01+00:00",
+        "availability_basis": "modeled_end_plus_1s",
+        "available_at": "2024-01-18T14:43:01+00:00",
+        "bar_end": "2024-01-18T14:43:00+00:00",
+        "bar_end_age_seconds": 1.0,
+        "bar_start": "2024-01-18T14:42:00+00:00",
+        "basis": "etfe-option-completed-1min-vwap-v1",
+        "executable_fill_verified": false,
+        "original_revision_timing_verified": false,
+        "price": 7.35,
+        "trade_count": 1,
+        "volume": 1
+      }
+    }
+  ],
+  "provider_requests_this_revision": 0,
+  "ready_for_build": false,
+  "ready_for_training": false,
+  "schema": "etfe-vwap-component-review-v1",
+  "setup_integrity": {
+    "basis": "etfe-option-completed-1min-vwap-v1",
+    "expert": "etfe",
+    "plan_sha256": "3995e19af4462e24f7e570ba8f39923ae2cedc8b4d3f1cdd35b1a2a70169ac64",
+    "ready_for_build": false,
+    "ready_for_training": false,
+    "status": "vwap_setup_integrity_verified_not_admitted",
+    "ticker_variant_combinations": 25353
+  },
+  "setup_root": "nn_meta/validation/etfe-setup-20261003-vwap-r1",
+  "tests": {
+    "command": "./venv/bin/python -m pytest tests/test_etfe_vwap.py tests/test_etfe_setup.py -q",
+    "passed": 46
+  }
+}

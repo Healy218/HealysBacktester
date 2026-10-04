@@ -11,9 +11,10 @@ SPY/QQQ/VOO, V7 strategy variants and timing rules, 1/5/15-minute signals, and
 Alpaca's earliest options history through October 2, 2026, inclusive. Massive
 quotes are excluded, including archived V7 copies.
 [ETFE specification](docs/specs/ETFE.md). Date policy is confirmed; exact first
-provider timestamp and required quote coverage still need verification. Independent
-configuration/catalog and bounded provider probes are implemented;
-[setup evidence](docs/reviews/2026-10-03-etfe-setup.md).
+provider timestamp and trade/bar coverage still need verification. Completed-minute
+VWAP is the accepted option-price reference. Independent configuration/catalog,
+bounded provider probes and the versioned VWAP reference component are implemented;
+[current component evidence](docs/reviews/2026-10-03-etfe-vwap.md).
 
 V7 research stays paused with its original gates/evidence preserved. MRHA archival
 completed October 3 at 16:55:50 Central with all 2,847 shards verified and final
@@ -52,14 +53,15 @@ selection does not itself prove service shutdown or authorize spending.
 ETFE is a brand-new expert replacing the active V7 research priority. It does
 not reuse V7 model weights/checkpoints, relabel artifacts or close V7's unfinished gates. [Specification](docs/specs/ETFE.md) owns technical inheritance.
 Initial configuration/catalog and read-only provider diagnostics are implemented.
-The current gate still needs a resolved data contract and boundary evidence.
+Completed-minute VWAP is the selected pricing amendment. The current gate still
+needs bar/trade coverage, feature mapping, data-contract and boundary evidence.
 
 | ID | Position | Deliverable and acceptance condition |
 | --- | --- | --- |
-| **ETFE-0 — Scope and provider contract** | **Selected; setup implemented, historical quote supply unresolved** | Exact SPY/QQQ/VOO and 1/5/15-minute scope; V7 timing/risk; verified Alpaca first-history timestamp through fixed October 2, 2026 end; feasible required observations without Massive quotes |
+| **ETFE-0 — Scope and provider contract** | **Selected; VWAP setup implemented, input/feature contract open** | Exact SPY/QQQ/VOO and 1/5/15-minute scope; V7 timing/risk with [VWAP amendment](docs/specs/ETFE_VWAP_20261003.md); verified Alpaca first-history timestamp through fixed October 2, 2026 end; feasible required observations without Massive quotes |
 | **ETFE-1 — Frozen inputs** | Future implementation | ETFE identity, dated universe/contract/calendar bindings, verified underlying/options/feature coverage and a fixed history window; account entitlement and missingness evidence |
 | **ETFE-2 — Strategies and causal features** | Future implementation | All inherited variants on 1/5/15 minutes, rebuilt schema and causal/parity evidence; no silent feature or strategy removal |
-| **ETFE-3 — Execution and dataset** | Future implementation | Full selected coverage with inherited midpoint/stop/expiry/roll rules, funded ledger, labels through final settlement, frozen purged folds and trials |
+| **ETFE-3 — Execution and dataset** | Future implementation | Full selected coverage with amended VWAP reference/execution rules and inherited stop/expiry/roll rules, funded ledger, labels through final settlement, frozen purged folds and trials |
 | **ETFE-4 — Resources and recovery** | Future implementation | Measured representative workload, bounded memory/disk and tested recovery; resource pilots begin before expensive acquisition/build |
 | **ETFE-5 — Training and evaluation** | Gated | Launch only after admitted inputs/execution/resources; evaluate against declared baselines and freeze accepted or rejected results; deployment is a separate decision |
 
@@ -102,6 +104,7 @@ revision-specific commands belong in CURRENT_STATE or their dated receipts.
 | V6 training and frozen expert | Training/freeze completed; old simulator history retained. Abandoned short-DTE research is not an active queue |
 | ETFE initial setup and bounded Alpaca probes | October 3: independent scope, 20-family 1/5/15 catalog, immutable manifests/integrity checks and live read-only probes. Data admission remains open. [Evidence](docs/reviews/2026-10-03-etfe-setup.md) |
 | ETFE quote-route diagnosis | October 3: official staff confirmation plus 13 live controls establish unsupported public historical-quotes route; all three latest OPRA quote controls succeed. Provider contract remains open. [Evidence](docs/reviews/2026-10-03-etfe-quote-404.md) |
+| ETFE VWAP reference amendment | October 3: user-approved trade/bar method; completed-minute VWAP selected, causal reference component and immutable successor setup implemented; 46 focused tests passed. Full execution/features not admitted. [Review](docs/reviews/2026-10-03-etfe-vwap.md) |
 | V7 cold archive and verified local reclamation | October 3: all 2,847 shards/564 roots preserved on MRHA; 35,031 eligible local files removed; matching final receipts and sampled restore checks. [Audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json) |
 | V7-1 and V7-2 | Gate closures above; do not reopen old dividend lists, context builds or catalog freezes |
 | V7-3 demand scheduler, request census, exact union and lossless joining | [Demand/recovery](docs/reviews/2026-09-25-v7-3-crash-recovery.md), [union](docs/reviews/2026-09-26-v7-entry-union-and-first-capture.md), [joining](docs/reviews/2026-09-26-v7-capture-storage-forecast.md) |

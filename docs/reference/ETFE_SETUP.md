@@ -7,13 +7,13 @@ These commands prepare or inspect a new expert; none launches training.
 From `/home/healy/Coding/HealysBacktester`, verify the selected setup:
 
 ```bash
-./venv/bin/python scripts/verify_etfe_setup.py --setup nn_meta/validation/etfe-setup-20261003-r0
+./venv/bin/python scripts/verify_etfe_vwap.py --setup nn_meta/validation/etfe-setup-20261003-vwap-r1
 ```
 
 For an intentional new preparation revision, use a fresh output name:
 
 ```bash
-NN_META_POOL=etfe ./venv/bin/python scripts/prepare_etfe.py --output nn_meta/validation/etfe-setup-YYYYMMDD-rN
+NN_META_POOL=etfe ./venv/bin/python scripts/prepare_etfe_vwap.py --predecessor nn_meta/validation/etfe-setup-20261003-r0 --output nn_meta/validation/etfe-setup-YYYYMMDD-vwap-rN
 ```
 
 The launcher rejects unrelated inherited campaign/research selectors. It uses
@@ -21,14 +21,23 @@ the registered parameter grids but neither invokes old planners nor imports
 V7 model/checkpoint/data artifacts. Do not edit a saved plan or overwrite its
 output to bypass a mismatch. Keep prior source snapshots and probe evidence.
 
+The [VWAP amendment](../specs/ETFE_VWAP_20261003.md) owns the selected pricing
+semantics. `vwap_reference.reference_from_bar` consumes only provenance-checked
+1Min option bars; it does not select contracts, simulate fills or admit data.
+Verify the unchanged midpoint predecessor separately with
+`./venv/bin/python scripts/verify_etfe_setup.py --setup nn_meta/validation/etfe-setup-20261003-r0`.
+The old `prepare_etfe.py` and probes remain historical v1 consumers; do not use
+them to regenerate a VWAP plan or bind new observations to its v2 scope.
+
 Provider diagnostics require root `.env` data credentials `ALPACA_API_KEY` and
 `ALPACA_API_SECRET`, and paper metadata credentials `ALPACA_PAPER_API_KEY` and
 `ALPACA_PAPER_API_SECRET`. Only these values are read; other `.env` selectors
 are not exported into the runtime. Never print or commit credentials.
 
-The selected live results already exist; do not repeat them unless investigating
-a change or unresolved question. For a new bounded observation, choose a fresh
-`probe-*` child beside the selected `plan.json`:
+The live diagnostic results already exist under the predecessor. Do not repeat
+unsupported historical-quote requests. The following are historical v1 command
+references only; a VWAP acquisition consumer must bind the v2 plan and its own
+source/receipts before new capture:
 
 ```bash
 ./venv/bin/python scripts/probe_etfe_alpaca.py --plan nn_meta/validation/etfe-setup-YYYYMMDD-rN/plan.json --output nn_meta/validation/etfe-setup-YYYYMMDD-rN/probe-rN
