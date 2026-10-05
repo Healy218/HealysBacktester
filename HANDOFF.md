@@ -1,60 +1,59 @@
-# Handoff — October 5, 2026 — Fresh action evidence
+# Handoff — October 5, 2026 — Action replay / freeze gap
 
 ## Focus and completed result
 
-Continued fresh Alpaca-only ETFE with actual 0–5 DTE including qualifying 0DTE.
-Completed **ETFE.provider-actions** within bounded capture/inspection scope.
-[Review](docs/reviews/2026-10-05-etfe-action-evidence.md),
-[machine receipt](docs/reviews/2026-10-05-etfe-action-evidence.json).
+User asked how close ETFE is to freeze/train and to keep going. Feature assembly
+is implemented, but input admission/full coverage, execution/labels, integrated
+pilot and full dataset build remain. Completed **ETFE.provider-action-replay**
+within four-day transport scope, without closing action timing or training gates.
+[Review / critical path](docs/reviews/2026-10-05-etfe-action-replay.md),
+[machine receipt](docs/reviews/2026-10-05-etfe-action-replay.json).
 
-- Fourteen live GETs: twelve REST pages, two finite corporate-action stream probes.
-- Captured 35 cash-dividend records; 33 effective inside the fixed price window,
-  two earlier records retained explicitly. Original capture had 33 records.
-- Found process-date filtering misses September SPY/QQQ actions processed in
-  October. A separate October 3–December 31 reference tail recovered both.
-- Fixed stock/option price cutoff remains October 2; no later prices requested.
-- October stream contains 19,132 complete US mutations before the 8 MiB cap;
-  retained 15 ETF updates for two IDs matching tail records. Unparsed tail 292 bytes.
-- January 18–19 stream returned only a welcome comment. Both probes HTTP 200;
-  neither establishes historical completeness, absence or original publication.
-- Independent raw normalization and separate tail/SSE audits pass. Actual
-  one-page stop/resume preserved three files. All 196 focused ETFE tests pass.
-- Capture elapsed 12.26s; roots 8,470,004 / 83,277 bytes. No training/deployment.
+- Four fixed UTC days reached EOF in selected r1. March 14, 2024 / March 20,
+  2025 / March 19, 2026 returned welcome-only responses; retention stays unknown.
+- September 17, 2026: 41,730 unique events, 45,559 occurrences, 3,829 exact overlaps.
+- Five SPY mutations match its September 18 dividend. First provider insert at
+  September 17 21:59:24.391802 UTC, rate 1.888834, before ex-date.
+- One of 35 fresh action records has a matching pre-effective witness. Original
+  announcement and complete latest-as-of revision history remain unverified.
+- R0 rejected provider events before a submillisecond continuation cursor.
+  Preserve its source/partial data/REJECTION. R1 rounds continuation down to the
+  whole second and keeps strict request bounds, all overlaps and raw fragments.
+- Independent line-oriented event/witness audit and actual twelve-file resume
+  pass. All 210 focused ETFE tests pass. Existing predecessors still verify.
+- Selected capture 13 GETs / 15.63s / 20,043,029 bytes; 20 GETs including r0.
 
 ## Evidence boundary and stopping point
 
-Current REST actions contain process/ex/record/payable dates but no verified
-historical availability. October update clocks are later than the September
-ex-dates; do not backdate them as original announcements. Every normalized
-availability remains unknown (-1) and model admission false. No historical
-price adjustment was applied. A finite process-date tail is not full coverage.
-
-No ETFE capture remains running. Existing market partitions and joined feature
-artifacts are unchanged and still verify. Usable history remains null.
+Transport EOF is not a retention or no-action certificate. One timing witness
+cannot admit all action-adjusted historical inputs. No new feature arrays,
+market-price dates, labels, training or deployment. Model admission stays false.
+No replay process remains running. Usable history remains null.
 
 ## Next work
 
-1. **ETFE.provider-action-timing:** establish mutation-history retention and
-   original/revision availability around required actions. The all-US replay is
-   large; use measured volume and a separate bounded plan before expansion.
-2. **ETFE.provider-contract / ETFE.history-boundary:** continue dated option
-   terms/sector/sessions and trade-source evidence; preserve unresolved coverage.
-3. **ETFE-1.demand:** finish full phase-B/C demand and resource budgets, then
-   integrated **ETFE-4.pilot** execution/dataset/training smoke and recovery.
+1. **ETFE-3.execution-components:** implement the bounded VWAP ledger supporting
+   ETFE-4.pilot: funded integer entry, shared participation, partial sells/latched
+   stop, settlement and explicit unresolved/boundary outcomes. Synthetic dated
+   fixtures can test mechanics; real path admission still needs real evidence.
+2. **ETFE.provider-action-timing / provider-contract:** retain unresolved action
+   revision/retention and option terms/sector/session/trade-source facts. Do not
+   repeat the same empty controls or broaden replay without a measured plan.
+3. **ETFE-1.demand / ETFE-4.pilot:** full phase-B/C acquisition demand and budgets,
+   then integrated capture/features/execution/dataset/training smoke and recovery.
+   Full build and independently verified dataset freeze must precede training.
 
 ## Artifacts and constraints
 
-Selected under `nn_meta/data_cache_etfe/`:
-`alpaca-fresh-actions-20261005-r0/` and `alpaca-fresh-actions-tail-20261005-r0/`.
-Plans, respectively:
-`688be0b5d23f66c02ee437caabc82542a4a206ce905dfb0b0b0a069f8d70680c`,
-`daaa5b54f1fa1e5d3a5ebe8dc6ef6a41e6cb51c09e23c53d5ff8225775dbb78d`.
-Main ACTIONS/NORMALIZED/independent/resume receipts; tail OBSERVATIONS/INSPECTION/
-independent receipts. Evidence ZIP: 54 metadata/source members, 15 payload hashes.
-Market census remains 1,249 partitions / 1,955,680 rows; action evidence is separate.
+Selected: `nn_meta/data_cache_etfe/alpaca-fresh-action-replay-20261005-r1/`.
+Plan: `50655f2359307cf90f5f087d66021fac139ba774724578e90ab20825dbdc65e2`.
+PLAN/COMPLETE, day pages, ETF_MUTATIONS/RECONCILED, independent/resume receipts.
+Original rejected r0 retained alongside. Evidence ZIP: 68 metadata/source/audit
+members and 20 raw payload hashes. Joined diagnostic and other inputs unchanged.
 [State](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
-[commands](docs/reference/ETFE_SETUP.md#fresh-corporate-action-evidence).
+[commands](docs/reference/ETFE_SETUP.md#bounded-historical-action-replay),
+[successor contract](docs/specs/ETFE_ACTION_REPLAY_V2_20261005.md).
 
-All source-bound consumers/roots remain immutable; use successors for changes.
+Source-bound consumers remain immutable; use successors for behavioral changes.
 Preserve unrelated dirty work, including DECISIONS/EXPERIMENTS additions.
-[Previous handoff](handoff-history/HANDOFF-2026-10-05-before-action-evidence.md).
+[Previous handoff](handoff-history/HANDOFF-2026-10-05-before-action-replay.md).

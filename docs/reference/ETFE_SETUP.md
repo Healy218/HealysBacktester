@@ -280,3 +280,24 @@ occurrences and complete SSE events with a line-oriented parser. No original
 publication time or revision history is inferred from a later mutation. Empty
 or capped probes stay incomplete evidence. Do not repeat completed captures;
 expanded replay requires its own measured request/storage plan.
+
+### Bounded historical action replay
+
+Use `./venv/bin/python scripts/replay_etfe_actions_v2.py` with `prepare`, `run`,
+`reconcile` or read-only `verify`; selected root is in CURRENT_STATE. The original
+unsuffixed consumer belongs to rejected r0 and must stay immutable. R1 uses four
+fixed UTC control days and the documented cash-dividend event-type filter.
+`run --request-budget 4` exercises an actual stop on the first capped September
+page. Resume verifies all committed pages and starts from the beginning of the
+last complete event's second. Preserve overlaps, compare repeated IDs exactly,
+and retain partial trailing blocks in raw bodies. Never advance one nanosecond
+past an event to avoid duplicates: equal-time events could be skipped.
+
+The earlier precise restart returned events before its submillisecond cursor.
+Whole-second overlap addresses that observation while retaining strict bounds.
+Repeated zero-progress pages, conflicting IDs or exhausted byte/time budgets stop
+the study. EOF is a transport fact; retention/history coverage stays separate.
+`scripts/audit_etfe_action_replay_v2.py --root ...` independently reconciles every
+event and ETF link and compares witnesses with all 35 selected REST actions.
+Completed receipts are immutable. Do not rerun controls without a specific new
+question or source/implementation change.

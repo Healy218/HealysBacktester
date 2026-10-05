@@ -48,8 +48,10 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Joined diagnostic schema | `nn_meta/validation/etfe-joined-20261005-r0/`; PLAN/COMPLETE, 96 chunk receipts, matrix/reasons/availability/rows Parquets, INDEPENDENT_AUDIT/RESUME_AUDIT and PAYLOAD_INDEX |
 | Fresh action records | `nn_meta/data_cache_etfe/alpaca-fresh-actions-20261005-r0/`; PLAN/COMPLETE, raw attempts/page pointers, ACTIONS.parquet, NORMALIZED/INDEPENDENT_AUDIT and RESUME_AUDIT |
 | Action process-date tail / mutation inspection | `nn_meta/data_cache_etfe/alpaca-fresh-actions-tail-20261005-r0/`; PLAN/COMPLETE, raw tail pages, OBSERVATIONS/INSPECTION and INDEPENDENT_AUDIT |
+| Selected action replay | `nn_meta/data_cache_etfe/alpaca-fresh-action-replay-20261005-r1/`; PLAN/COMPLETE, day page pointers, ETF_MUTATIONS/RECONCILED, INDEPENDENT_AUDIT and RESUME_AUDIT |
+| Rejected replay predecessor | `nn_meta/data_cache_etfe/alpaca-fresh-action-replay-20261005-r0/REJECTION.json`; exact-cursor rejection, partial pages and source snapshots preserved |
 | Current feature binding amendment | `docs/specs/ETFE_FEATURE_BINDINGS_20261005.json`; numeric Setup parameters and approved DTE/5, frozen parent retained |
-| Current evidence | [Action evidence](reviews/2026-10-05-etfe-action-evidence.md), [receipt](reviews/2026-10-05-etfe-action-evidence.json), `reviews/2026-10-05-etfe-action-evidence.zip`; [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
+| Current evidence | [Action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [receipt](reviews/2026-10-05-etfe-action-replay.json), `reviews/2026-10-05-etfe-action-replay-evidence.zip`; [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -61,6 +63,20 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `d84ebb5bad67768eec45074996e324b112900d253e83f0b9ab2c0bd00065f1ad`,
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
+
+October 5 selected replay: four fixed UTC days reach transport EOF. March 14,
+2024 / March 20, 2025 / March 19, 2026 returned welcome-only responses; their
+history coverage is unknown. September 17, 2026 has **41,730 unique events**,
+45,559 occurrences including **3,829 exact overlaps**, and five SPY mutations.
+First matching emission: September 17 21:59:24.391802 UTC, before the September
+18 ex-date. One of 35 action records has a matching pre-effective witness;
+original publication and latest-as-of revision completeness remain unverified.
+Selected plan SHA256:
+`50655f2359307cf90f5f087d66021fac139ba774724578e90ab20825dbdc65e2`.
+Independent raw audit, twelve-file actual resume and **210 tests** pass.
+Thirteen selected GETs, 15.63s capture, 20,043,029-byte root. No replay remains
+running. R0's submillisecond cursor rejection is preserved. No new price data,
+feature admission, execution labels or training; earlier roots remain unchanged.
 
 October 5 action evidence: **14 successful GET responses**, twelve terminal REST
 pages and two bounded stream probes. Main capture: 33 dividends; process-date

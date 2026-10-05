@@ -1,0 +1,67 @@
+{
+  "action_inventory": 35,
+  "actions_with_pre_effective_witness": 1,
+  "all_events_links_and_witnesses_exact": true,
+  "days": [
+    {
+      "bytes": 32,
+      "day": "2024-03-14",
+      "event_occurrences": 0,
+      "history_coverage_verified": false,
+      "pages": 1,
+      "transport_eof": true,
+      "unique_events": 0
+    },
+    {
+      "bytes": 32,
+      "day": "2025-03-20",
+      "event_occurrences": 0,
+      "history_coverage_verified": false,
+      "pages": 1,
+      "transport_eof": true,
+      "unique_events": 0
+    },
+    {
+      "bytes": 32,
+      "day": "2026-03-19",
+      "event_occurrences": 0,
+      "history_coverage_verified": false,
+      "pages": 1,
+      "transport_eof": true,
+      "unique_events": 0
+    },
+    {
+      "bytes": 19938832,
+      "day": "2026-09-17",
+      "event_occurrences": 45559,
+      "history_coverage_verified": false,
+      "pages": 10,
+      "transport_eof": true,
+      "unique_events": 41730
+    }
+  ],
+  "etf_mutations": 5,
+  "evidence": {
+    "bytes": 80143,
+    "indexed_payloads": 20,
+    "members": 68,
+    "path": "docs/reviews/2026-10-05-etfe-action-replay-evidence.zip",
+    "sha256": "6b2c8c66a84b4b91564b8b8357dacdb7e6f9ac5c2a506bc7d892f5705c0063e6"
+  },
+  "focused_tests": 210,
+  "full_history_complete": false,
+  "model_feature_admitted": false,
+  "overlap_occurrences": 3829,
+  "plan_sha256": "50655f2359307cf90f5f087d66021fac139ba774724578e90ab20825dbdc65e2",
+  "ready_for_training": false,
+  "rejected_root": "nn_meta/data_cache_etfe/alpaca-fresh-action-replay-20261005-r0",
+  "resume_preserved_files": 12,
+  "retention_verified": false,
+  "root": "nn_meta/data_cache_etfe/alpaca-fresh-action-replay-20261005-r1",
+  "schema": "etfe-action-replay-review-v1",
+  "selected_capture_seconds": 15.631352358002914,
+  "selected_gets": 13,
+  "selected_root_bytes": 20043029,
+  "total_gets_including_rejection": 20,
+  "unique_events": 41730
+}

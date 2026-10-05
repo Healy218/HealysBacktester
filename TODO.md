@@ -15,19 +15,23 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-05-etfe-action-evidence.md),
+[latest evidence](docs/reviews/2026-10-05-etfe-action-replay.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-196 focused tests pass. All 221 registered fields are joined with 221 masks
+210 focused tests pass. All 221 registered fields are joined with 221 masks
 for every one of the 458,133 pilot events; independent value/lineage audit and
 actual resume pass. Real diagnostics and synthetic-only evidence remain
 separate. Dated inputs, usable history and scientific admission remain open.
 Fresh action evidence now includes 35 records and a bounded mutation replay;
 process-date tail queries recovered two September actions omitted by the initial
 date filter. Historical publication and complete action coverage remain open.
+The four-day replay successor now verifies one pre-effective SPY action witness;
+three earlier controls returned no events. This does not establish retention or
+complete timing. Freeze still requires admitted inputs/full coverage, execution
+and labels, integrated pilot/recovery, and the full dataset build.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -126,10 +130,25 @@ date filter. Historical publication and complete action coverage remain open.
   retains 15 ETF updates from 19,132 complete events before the byte cap.
   Independent audits and 196 tests pass. No original-publication or complete
   history claim. [Evidence](docs/reviews/2026-10-05-etfe-action-evidence.md).
+- [x] **ETFE.provider-action-replay:** Four fixed days reached transport EOF in
+  selected r1. September 17 has 41,730 unique events / 3,829 exact overlaps and
+  five SPY mutations before its September 18 ex-date. Earlier controls are empty,
+  with history coverage unknown. Original r0 stopped on submillisecond cursor
+  behavior; preserved, superseded by whole-second overlap without relaxing bounds.
+  Independent audit, twelve-file actual resume and 210 tests pass.
+  [Evidence and freeze gap](docs/reviews/2026-10-05-etfe-action-replay.md).
+- [ ] **ETFE-3.execution-components:** Implement and hand-reconcile the bounded
+  VWAP execution ledger: funded integer entry, shared participation, partial
+  exit/latched stop, settlement and explicit unresolved/boundary outcomes. Use
+  synthetic dated references for mechanics where real admission is unresolved;
+  integrate real paths only with validated evidence. This supports ETFE-4.pilot
+  and does not depend on pretending the current inputs are admitted.
 - [ ] **ETFE.provider-action-timing:** Establish mutation-history retention and
   dated original/revision availability for required actions. January's welcome-only
   stream and October's capped replay do not prove coverage. Budget any expanded
   replay using measured volume; do not apply current observations to past inputs.
+  The new complete-day transport yields only one matched pre-effective action
+  witness among 35 records, not full original/revision availability.
 - [ ] **ETFE-1.demand:** Complete symbol/session surfaces after discovery,
   full-window causal signal/feature/trade demand (phase B), and holding/roll/
   physical-stock paths (phase C). Current calendar inventory is not the full
