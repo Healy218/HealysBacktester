@@ -15,15 +15,15 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-04-etfe-option-features.md),
+[latest evidence](docs/reviews/2026-10-05-etfe-tv-features.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-129 focused tests pass. Causal session diagnostics, the full-catalog January
-phase-B pilot, its trade capture and ten option trade/bar diagnostic components
-are complete. Usable history and scientific admission remain open.
+143 focused tests pass. Causal session diagnostics, the full-catalog January
+phase-B pilot, its trade capture, ten option trade/bar diagnostics and all 96 TV
+projections across thirteen sources are complete within the bounded pilot. Usable history and scientific admission remain open.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -92,6 +92,17 @@ are complete. Usable history and scientific admission remain open.
   VWAP rounding tolerance; preserved and superseded with stable accumulation,
   without relaxing tolerance. [Evidence](docs/reviews/2026-10-04-etfe-option-features.md).
   Model-feature admission remains false; full schema and integrated pilot open.
+- [x] **ETFE-2.tv-components:** All 96 registered projections across thirteen
+  numerical sources implemented from fresh stock bars. January pilot retains
+  2,964 observations / all 458,133 logical event links, with explicit readiness,
+  masks and reasons. Independent projection/membership audit, eighteen real
+  prefix/future checks, actual resume and 143 focused tests pass.
+  [Evidence](docs/reviews/2026-10-05-etfe-tv-features.md). External Pine parity,
+  model-feature admission and full schema remain open.
+- [ ] **ETFE-2.remaining-components:** Implement remaining daily stock/option
+  context, event/contract/sector/parameter fields and variant projections from
+  the registered formulas, using fresh inputs and dated availability. Preserve
+  missingness and frozen predecessors; integrate only after component checks.
 - [ ] **ETFE-1.demand:** Complete symbol/session surfaces after discovery,
   full-window causal signal/feature/trade demand (phase B), and holding/roll/
   physical-stock paths (phase C). Current calendar inventory is not the full

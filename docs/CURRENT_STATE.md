@@ -43,7 +43,8 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Pilot trade normalization | `nn_meta/data_cache_etfe/normalized-20261004-trade-windows-r0/`; PLAN/NORMALIZED/INDEPENDENT_AUDIT/DEMAND_AUDIT/TIMESTAMP_AUDIT, DEMANDED_MINUTES.parquet and OBSERVATION_EXCEPTIONS |
 | Option-feature component | `nn_meta/validation/etfe-option-features-20261004-r1/`; PLAN/COMPLETE, nine scope receipts, INDEPENDENT_AUDIT/RESUME_AUDIT and payload index |
 | Rejected option-feature predecessor | `nn_meta/validation/etfe-option-features-20261004-r0/AUDIT_REJECTION.json`; source snapshots and outputs preserved, not selected |
-| Current evidence | [Option-feature review](reviews/2026-10-04-etfe-option-features.md), [receipt](reviews/2026-10-04-etfe-option-features.json), `reviews/2026-10-04-etfe-option-features-evidence.zip`; [trade capture](reviews/2026-10-04-etfe-trade-windows.md) |
+| TV-feature component | `nn_meta/validation/etfe-tv-features-20261005-r0/`; PLAN/COMPLETE, nine scope receipts, INDEPENDENT_AUDIT/RESUME_AUDIT, native/projection/link Parquets and PAYLOAD_INDEX |
+| Current evidence | [TV-feature review](reviews/2026-10-05-etfe-tv-features.md), [receipt](reviews/2026-10-05-etfe-tv-features.json), `reviews/2026-10-05-etfe-tv-features-evidence.zip`; [option diagnostics](reviews/2026-10-04-etfe-option-features.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -55,6 +56,17 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `d84ebb5bad67768eec45074996e324b112900d253e83f0b9ab2c0bd00065f1ad`,
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
+
+October 5 TV-feature component completion: all **96 registered projections /
+13 numerical sources**, **2,964 January closed-bar observations / 458,133 event
+links**. Of 284,544 cells, 256,822 are finite and 27,722 explicitly missing.
+Every model-feature admission flag remains false. Independent scalar projection,
+mask/reason/membership audit, eighteen real prefix/future checks, actual resume
+(four files preserved) and **143 focused tests** passed. Native external Pine
+parity and the full schema remain open. Compute: 76.14 seconds; peak RSS
+1,010,085,888 bytes; root 11,186,177 bytes. No TV-feature job remains running.
+Plan SHA256: `796a24e7a3a659513f8317fbdd89f65d6c9f28afbf5e40f527cd6f369c438bab`.
+The selected normalized market inputs and earlier component artifacts are unchanged.
 
 October 4 option-feature component completion: ten registered formulas now have
 explicit diagnostic values, masks and reasons. Selected r1 covers all **4,739

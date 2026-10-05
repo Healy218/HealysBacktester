@@ -181,3 +181,25 @@ once. Its real-data assertions are deliberately limited to this pilot's actual
 condition/ID/availability observations; synthetic tests cover other cases.
 Rejected roots remain immutable, including their original source snapshots and
 rejection receipts. A changed consumer requires a new root, not altered receipts.
+
+
+## Thirteen-source TV feature component
+
+`scripts/pilot_etfe_tv_features.py prepare --root nn_meta/validation/etfe-tv-features-...`
+binds the 96 registered formulas, thirteen parameter scopes, explicit readiness
+predicates, fresh inputs, numerical source snapshots and package versions.
+`run --root ... [--max-scopes 1]` computes serial ticker/timeframe scopes; a scope
+limit exits with status 2 to indicate deliberate incompleteness. Resume validates
+existing receipt/payload hashes. `verify --root ...` is read-only. Invoke all
+commands with `./venv/bin/python`. The selected completed root is in CURRENT_STATE.
+
+Each scope retains diagnostic values/masks/reasons, required native columns and
+original-event-ordinal links. Full-prefix recurrence starts at the fixed January
+origin; observation slicing never resets indicator history or calendar anchors.
+The legacy acceleration environment flag must not select alternative kernels.
+
+`scripts/audit_etfe_tv_features.py --root ...` independently recomputes scalar
+projections, ATR, prerequisite decisions and logical membership and writes
+INDEPENDENT_AUDIT once. It does not independently reimplement native kernels or
+prove exported Pine parity. All outputs remain unadmitted diagnostics. Completed
+studies are immutable; source changes require successor roots and fresh evidence.

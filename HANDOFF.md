@@ -1,64 +1,60 @@
-# Handoff — October 5, 2026 — Option trade/bar components
+# Handoff — October 5, 2026 — Thirteen-source TV features
 
 ## Focus and completed result
 
-Continued fresh Alpaca-only ETFE with 0–5 DTE, including qualifying 0DTE.
-Completed **ETFE-2.option-trade-bar-components** on the captured January pilot.
-Measured runs completed October 4; their original study dates/IDs are retained.
-[Review](docs/reviews/2026-10-04-etfe-option-features.md),
-[machine receipt](docs/reviews/2026-10-04-etfe-option-features.json).
+Continued fresh Alpaca-only ETFE, actual 0–5 DTE including qualifying 0DTE.
+Completed **ETFE-2.tv-components**: all 96 registered projections across thirteen
+numerical sources, on SPY/QQQ/VOO at 1/5/15 minutes.
+[Review](docs/reviews/2026-10-05-etfe-tv-features.md),
+[machine receipt](docs/reviews/2026-10-05-etfe-tv-features.json).
 
-- Implemented all ten registered option trade/bar formulas, condition filtering,
-  completed-window availability, field-level missingness and order handling.
-- Preserved all 458,133 original logical events. 195,435 candidate links factor
-  into 4,739 distinct windows; 262,698 still have no prior-date candidate.
-- 1,803 windows have all ten diagnostic values, 192 partial, 2,744 all missing.
-  Fully populated windows serve 68,862 links; none is model-feature admitted.
-- Unknown equal-time ordering masks signed/classified features in 189 windows /
-  8,065 links. Thirty windows / 3,387 links stay outside stock-session scope.
-- Every real calculated window passed input reversal and extreme future-record
-  injection. Independent recomputation matched every value, mask, reason and
-  logical membership at unchanged rtol=atol=1e-12. 129 focused tests passed.
-- Actual one-scope stop/resume preserved three files and computed eight remaining
-  scopes. Successor compute 2.26 seconds, 0.67 GiB peak RSS, 4.38 MB root.
-- No new downloads, simulation, labels, model fitting or deployment.
+- Rebuilt January 2–19 stock prefixes from fresh normalized minutes; observed
+  every January 18–19 closed bar: 2,964 observations, all 458,133 event links.
+- 256,822 finite value cells / 27,722 explicit missing cells; field-specific
+  readiness, float64 diagnostics, uint8 masks and reasons. Admission is false.
+- Calendar-anchored HTF groups, causal minute ORB/HLC3 VWAP, gap taint and no
+  initialized-state zeros before prerequisites. No old data/metadata inputs.
+- Independent scalar projection/ATR/mask/reason/membership reconciliation passed.
+  This does not independently reimplement kernels or establish Pine parity.
+- Eighteen real prefix boundaries and future perturbations passed at unchanged
+  rtol=atol=1e-12. All 143 focused ETFE tests passed, including fourteen new tests.
+- Actual one-scope stop/resume preserved four receipt/payload files; eight more
+  scopes completed. Compute 76.14 seconds, peak RSS 0.94 GiB, root 11.19 MB.
+- No downloads, simulated execution, labels, training or deployment this session.
 
-## Rejected first run and stopping point
+## Option-window clarification and stopping point
 
-Initial r0 independently failed a VWAP-minus-last rounding case: about -1.46e-12
-bps versus zero, outside the declared tolerance. Replaced vector dot-product
-accumulation with a stable weighted sum and added a constant-price regression.
-Preserved r0 plan/source/output/AUDIT_REJECTION; selected new r1 passed the same
-tolerance. Prior capture, normalization and causal milestones remain complete.
+The earlier ten option diagnostics remain complete and unchanged: 1,803 of
+4,739 windows have all ten. The 2,936 incomplete windows comprise 2,714 with
+unresolved observations, 30 outside stock-session scope, 189 with ambiguous
+trade ordering, and three with trades but missing bars. The last two groups
+retain partial features; missing observations are not confirmed zero activity.
 
-No ETFE job remains running. Full feature schema/admission and integrated pilot
-remain open; a finite diagnostic value does not establish historical eligibility.
+No ETFE process remains running. Full feature schema/admission and integrated
+ETFE-4.pilot remain open. Finite diagnostics do not establish eligible entries.
 
 ## Next work
 
-1. Continue the registered feature map with remaining TV/context/other components
-   on fresh inputs, retaining explicit source availability and missingness.
-   The fifteen shared stock and ten option diagnostics are not the full schema.
-2. Resolve dated selection/actions/option sessions/condition/publication evidence
-   before admitting features; usable history remains null. Empty captures still
-   do not establish valid no-trade minutes. Preserve the three missing-bar cases.
-3. Complete full-window phase-B and holding/roll/physical-stock phase-C demand,
-   and the integrated capture/features/execution/dataset/training smoke/resource
-   and recovery pilot before bulk work, dataset freezes or model training.
+1. **ETFE-2.remaining-components:** daily stock/option context, event/contract/
+   sector/parameter fields and variant projections from the frozen feature map.
+   Check formulas against the 0–5 DTE successor; do not reuse stale /9 scaling.
+2. Resolve dated actions/selection/option sessions/terms/publication evidence
+   before admission. Usable history remains null; preserve all absence cases.
+3. Complete full phase-B and holding/roll/physical-stock phase-C demand, then
+   integrated capture/features/execution/dataset/training smoke and resource/
+   recovery checks before bulk build, final freezes or training.
 
 ## Artifacts and constraints
 
-Selected: `nn_meta/validation/etfe-option-features-20261004-r1/`.
-Plan SHA256: `808c721bf5bb6583e84e0b9b104f06961b6ed9ab03f161f72d05dcdb4f9c4183`.
-PLAN/COMPLETE, per-scope window/link files, INDEPENDENT_AUDIT and RESUME_AUDIT
-are local; evidence ZIP retains metadata/source and hashes for 36 Parquets
-across r0/r1. Current code matches r1; r0 retains its original source snapshot.
-Selected capture and normalization roots remain unchanged (1,249 partitions /
-1,955,680 normalized rows). Diagnostic outputs are separate from this raw count.
+Selected root: `nn_meta/validation/etfe-tv-features-20261005-r0/`.
+Plan SHA256: `796a24e7a3a659513f8317fbdd89f65d6c9f28afbf5e40f527cd6f369c438bab`.
+PLAN/COMPLETE, nine receipts, INDEPENDENT_AUDIT/RESUME_AUDIT and 27 Parquets
+are local. Evidence ZIP contains 58 metadata/source members and payload hashes.
+Selected normalized inputs remain 1,249 partitions / 1,955,680 market rows.
 [Exact state](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
-[commands](docs/reference/ETFE_SETUP.md#option-tradebar-feature-component),
-[study](docs/specs/ETFE_OPTION_FEATURE_PILOT_20261004.md).
+[commands](docs/reference/ETFE_SETUP.md#thirteen-source-tv-feature-component),
+[study](docs/specs/ETFE_TV_FEATURE_PILOT_20261005.md).
 
-Source-bound artifacts are immutable; changed consumers require successor roots.
-Preserve unrelated dirty work, including pre-existing DECISIONS additions.
-[Previous handoff](handoff-history/HANDOFF-2026-10-04-before-option-features.md).
+Source-bound consumers/artifacts are immutable; use successor roots for changes.
+Preserve unrelated dirty work, including pre-existing DECISIONS/EXPERIMENTS edits.
+[Previous handoff](handoff-history/HANDOFF-2026-10-05-before-tv-features.md).

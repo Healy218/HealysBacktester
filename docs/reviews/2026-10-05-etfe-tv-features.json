@@ -1,0 +1,34 @@
+{
+  "evidence": {
+    "bytes": 170242,
+    "indexed_payloads": 27,
+    "members": 58,
+    "path": "docs/reviews/2026-10-05-etfe-tv-features-evidence.zip",
+    "sha256": "0ad7b9d3b1c6fcc95d2e17e44b02db34ad1fb6a281e325b5272c2b92f3461172"
+  },
+  "external_pine_parity": false,
+  "fields": 96,
+  "focused_tests": 143,
+  "full_feature_schema_complete": false,
+  "independent_native_kernel_reimplementation": false,
+  "independent_projection_audit": true,
+  "logical_rows": 458133,
+  "metrics": {
+    "compute_seconds": 76.13550611297251,
+    "payload_bytes": 10547061,
+    "peak_rss_bytes": 1010085888,
+    "root_bytes": 11186177
+  },
+  "missing_values": 27722,
+  "model_feature_admitted": false,
+  "native_scopes": 13,
+  "nonmissing_values": 256822,
+  "observations": 2964,
+  "plan_sha256": "796a24e7a3a659513f8317fbdd89f65d6c9f28afbf5e40f527cd6f369c438bab",
+  "ready_for_training": false,
+  "real_future_perturbations": 18,
+  "real_prefix_boundaries": 18,
+  "resume_preserved_files": 4,
+  "schema": "etfe-tv-feature-component-review-v1",
+  "study_root": "nn_meta/validation/etfe-tv-features-20261005-r0"
+}
