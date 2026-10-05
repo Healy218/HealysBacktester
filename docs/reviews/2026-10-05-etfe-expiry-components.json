@@ -1,0 +1,219 @@
+{
+  "schema": "etfe-expiry-component-review-v1",
+  "task": "ETFE-3.expiry-components",
+  "date": "2026-10-05",
+  "scope": "synthetic expiry/roll/delivery continuation only",
+  "selected_root": "nn_meta/validation/etfe-expiry-components-20261005-r0",
+  "plan_sha256": "437c0cb2a32eedd37d436e8768b64252925b7cf41eab59b71e9e05707a513a66",
+  "tests": {
+    "command": "./venv/bin/python -m pytest tests/test_etfe_*.py -q",
+    "passed": 265,
+    "new_lifecycle_checks": 31,
+    "warnings": 2
+  },
+  "independent_audit": {
+    "cases": 4,
+    "checks": [
+      "manual_expected_outcomes",
+      "decimal_fills_costs_rounding",
+      "cash_and_share_conservation",
+      "option_and_quote_capacity",
+      "dated_settlement_expectations",
+      "every_saved_prefix"
+    ],
+    "prefixes": 13,
+    "results": {
+      "competing-calls": {
+        "available_cash_cents": 3879820,
+        "cash_cents": 9879820,
+        "last_processed_at": "2024-05-24T20:00:00+00:00",
+        "option_positions": {
+          "A": {
+            "entry_vwap": 2.0,
+            "exit_intent": null,
+            "last_mark_audit_only": 2.0,
+            "mark": null,
+            "proposal_id": "A",
+            "quantity": 3
+          }
+        },
+        "pending_deliveries": [
+          {
+            "contract": "B",
+            "credit_cents": 0,
+            "debit_cents": 6000000,
+            "due": "2024-05-29T09:30:00-04:00",
+            "exercise_fee_cents": 0,
+            "mark": null,
+            "proposal_id": "B",
+            "quantity": 3,
+            "right": "C",
+            "settled": false,
+            "shares": 300,
+            "symbol": "QQQ"
+          }
+        ],
+        "pending_input_reasons": {},
+        "receivable_cents": 0,
+        "rolls": {},
+        "slots": [
+          "A",
+          "B"
+        ],
+        "status": "funding_unresolved",
+        "stocks": {},
+        "training_admitted": false,
+        "unresolved": [
+          {
+            "contract": "A",
+            "kind": "funding_unresolved",
+            "reason": "exercise_cash_or_settled_shares_insufficient"
+          }
+        ]
+      },
+      "funded-call": {
+        "available_cash_cents": 10250430,
+        "cash_cents": 10250430,
+        "last_processed_at": "2024-05-30T13:30:00+00:00",
+        "option_positions": {},
+        "pending_deliveries": [],
+        "pending_input_reasons": {},
+        "receivable_cents": 0,
+        "rolls": {},
+        "slots": [],
+        "status": "settled",
+        "stocks": {
+          "A": {
+            "intent_at": "2024-05-29T09:30:00-04:00",
+            "mark": null,
+            "origin_contract": "A",
+            "shares": 0,
+            "symbol": "SPY"
+          }
+        },
+        "training_admitted": false,
+        "unresolved": []
+      },
+      "settled-proceeds-roll": {
+        "available_cash_cents": 9956764,
+        "cash_cents": 9956764,
+        "last_processed_at": "2024-05-28T13:31:01+00:00",
+        "option_positions": {
+          "N": {
+            "entry_vwap": 2.0,
+            "exit_intent": null,
+            "last_mark_audit_only": 2.0,
+            "mark": 2.0,
+            "proposal_id": "A",
+            "quantity": 2
+          }
+        },
+        "pending_deliveries": [],
+        "pending_input_reasons": {},
+        "receivable_cents": 0,
+        "rolls": {},
+        "slots": [
+          "A"
+        ],
+        "status": "open",
+        "stocks": {},
+        "training_admitted": false,
+        "unresolved": []
+      },
+      "unfunded-put": {
+        "available_cash_cents": 9939910,
+        "cash_cents": 9939910,
+        "last_processed_at": "2024-05-24T20:00:00+00:00",
+        "option_positions": {
+          "A": {
+            "entry_vwap": 2.0,
+            "exit_intent": null,
+            "last_mark_audit_only": 2.0,
+            "mark": null,
+            "proposal_id": "A",
+            "quantity": 3
+          }
+        },
+        "pending_deliveries": [],
+        "pending_input_reasons": {},
+        "receivable_cents": 0,
+        "rolls": {},
+        "slots": [
+          "A"
+        ],
+        "status": "funding_unresolved",
+        "stocks": {},
+        "training_admitted": false,
+        "unresolved": [
+          {
+            "contract": "A",
+            "kind": "funding_unresolved",
+            "reason": "exercise_cash_or_settled_shares_insufficient"
+          }
+        ]
+      }
+    },
+    "schema": "etfe-expiry-independent-audit-v1",
+    "training_admitted": false
+  },
+  "resume": {
+    "complete": true,
+    "restored_checkpoints": 2,
+    "unchanged": {
+      "funded-call-1.json": "966bc9ebc9f037c2bf563998b443ac67e8306d251b04769ef74d23f4584a9646",
+      "funded-call-2.json": "36ead84b1acf57711eb37feb0bb61171a8795b423a75a7641ba03bf712d18043"
+    }
+  },
+  "artifact_hashes": {
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/COMPLETE.json": "fe425cea6e6bf7513a5485f6bf4b58997fd595c2caf041664c8137b5e62596a8",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/INDEPENDENT_AUDIT.json": "77aa5d95e642dcf536a61793d41205e8f264991ef78af320fec91d2aff7a9712",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/PLAN.json": "437c0cb2a32eedd37d436e8768b64252925b7cf41eab59b71e9e05707a513a66",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/RESUME-2.json": "edebab06864c1b1b406a3f02169d007ee13ccacdfce256b7f556fad56a1e080a",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/competing-calls-1.json": "7ff70f6dfd7d656db96d9e85cf0af6ab7ae98a192e2c494a4172e36c4575e256",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/competing-calls-1.sha256.json": "0fb17524038b9cfc47bd754793b9c6323ca0beb3b87cd6d7c99775a14bb13195",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-1.json": "966bc9ebc9f037c2bf563998b443ac67e8306d251b04769ef74d23f4584a9646",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-1.sha256.json": "0e0caca535caed80d5bb5fc86bb5ab34a898de6b1366965b06071af863196074",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-2.json": "36ead84b1acf57711eb37feb0bb61171a8795b423a75a7641ba03bf712d18043",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-2.sha256.json": "f60d91cefc1a0a254be44bd29c31a65fbaa728ad6333587412a6cd96f1c519f8",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-3.json": "bb1aec05da94766049c5857a38895650c5ab943d8afc20baf81113003b0c606d",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-3.sha256.json": "9a3de234a963848e7b59fde3420c97598b683c01ff6906e87b15dd2819ddafc7",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-4.json": "8579496e155d12df0e9e191091493fa54f38ac738d093c2c61f767b4c26ee6b6",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-4.sha256.json": "3bc38a556eebcf33c19b7b1f2e8a679f55f31f753d6de8ade79441ccced8d228",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-5.json": "3da6385898d0c3163bd57505e23f565ce8b6f05a37dba76e2d968df9c009e268",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-5.sha256.json": "5d2423f095f765a5572855df7235411abb1776dac4a92ea46285b5d622294d9f",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-6.json": "8f4e726537b6aead177630f61e254e40de72a53a2e5f94105a4d4607130089fe",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-6.sha256.json": "04e5ffced5ed0559e2c83f5a1e5f4510ca466e37b3f058223fb4d7233f6c6d61",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-7.json": "a7050fd15595a3a3d1765be48734785169c017d89819a0e014da5b09e203588c",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/funded-call-7.sha256.json": "f2f45df4ff178374a23a60691688d921771538b326e67982a58d2d37424b0072",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/settled-proceeds-roll-1.json": "fd04a966886110e6e87d33537d42caa406f1ae6e8a59da7e0702f108e8e9487b",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/settled-proceeds-roll-1.sha256.json": "4e21bfe074d7898996ee282e08913084e83a521d4acc8a2b8bbb1cdfc7938476",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/settled-proceeds-roll-2.json": "66181ed5eb8da624a58ab280b20d4b083f294163564b26475c228740947fabef",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/settled-proceeds-roll-2.sha256.json": "09729a0a10195a186663435bf2608a3ed5c40a9794cf4af3f0c81067a46dce2d",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/settled-proceeds-roll-3.json": "6438656c7be49b12a96f02c096576ddf0e853409a6f36f982a6bbe68ad9b407e",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/settled-proceeds-roll-3.sha256.json": "c485c0eb8cbadfabe63ced80ee1888c8c61df215d508ec36e36a45a80546003c",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/settled-proceeds-roll-4.json": "2be57fdd83927d81999ed3ec033db2f256cf9703b6fab1f31e351f923973d290",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/settled-proceeds-roll-4.sha256.json": "9f384d7f87079ae6692369a9fa5ed61b92ef3b91bd2c711810c03d0eb3d990a0",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/docs/specs/ETFE_0DTE_NORMALIZATION_20261004.md": "dcf127ddb7fa571926c4f6bfc812090547497da5f950b585841f5733ae0ea7a2",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/docs/specs/ETFE_EXECUTION_20261003.md": "57742ebd548a85ffba72dc59564a1ccf8ebdef62eaa9a86148905bc2f3bfd74d",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/docs/specs/ETFE_EXPIRY_COMPONENTS_20261005.md": "69efd3a724d43542c4abb7bd27b5beef9a2060353ec20b0b73cad80a1c4f842a",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/docs/specs/ETFE_EXPIRY_HAND_FIXTURES_20261005.json": "7c9cad65043f3e7e894363631c10322c948e831833d2909d806ae80f88329bf8",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/docs/specs/ETFE_SCOPE_0DTE_20261004.json": "1dbe2fab3ab444d959708b4c5006591978458859b098e744a67253bc1c2f7a9f",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/nn_meta/etfe/acquisition.py": "9485abfebc95d0dd6a6682e9591ddeb4fa12b9604a79557d9f7805f507ce434e",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/nn_meta/etfe/execution_ledger.py": "a5efb3461e50d2e675ab092af3c87f33c33b161c8c7b5bb0456695bfb93cb043",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/nn_meta/etfe/expiry_ledger.py": "045e3cf5d565182a56c08af8a842e5c757f8e72c8e4205bb3ff074551fa59cae",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/nn_meta/etfe/purchase_policy_v2.py": "507231f5a173402e0219821f981883f78e996b0ded5cd1b5e7b3727f7fafaa81",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/nn_meta/etfe/vwap_reference.py": "6bccb48207a1c1b3e14603aad8ade21101a7cf83d77719830f66999ed119b46e",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/scripts/pilot_etfe_expiry.py": "ea20f1ef681410030b0c46186acdf9c55383315ac56edc4a23189b558bfd1d87",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/sources/tests/test_etfe_expiry_ledger.py": "59068b5452668637d149d7e97267b2f003319b55dc48d89aa83413a5dd447711",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/unfunded-put-1.json": "3b93f16343468b216a16c72c81312f2a788cf5f9f04fc6af3482174ce63f3579",
+    "nn_meta/validation/etfe-expiry-components-20261005-r0/unfunded-put-1.sha256.json": "30a2b939439e6eb97e50fb5d65a7a3a11369c3522d793d56042dae9dd03d9e66"
+  },
+  "evidence_zip": {
+    "path": "docs/reviews/2026-10-05-etfe-expiry-components-evidence.zip",
+    "sha256": "5a0229364c3386908cb3ce6b87a898365e38d1d91840375210c2bd91912ef1ca",
+    "members": 43,
+    "bytes": 91053
+  },
+  "training_admitted": false,
+  "full_execution_gate_complete": false
+}

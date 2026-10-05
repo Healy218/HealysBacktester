@@ -1,58 +1,60 @@
-# Handoff — October 5, 2026 — Option execution component
+# Handoff — October 5, 2026 — Expiry and physical delivery
 
 ## Focus and completed result
 
-User asked to keep going. Completed **ETFE-3.execution-components** in the
-selected bounded synthetic scope. Full real execution, dataset freeze and
-training remain open. [Review](docs/reviews/2026-10-05-etfe-execution-components.md),
-[machine receipt](docs/reviews/2026-10-05-etfe-execution-components.json).
+User asked to keep going. Completed **ETFE-3.expiry-components** in bounded
+synthetic scope. Full real execution, labels, dataset freeze and training remain
+open. [Review](docs/reviews/2026-10-05-etfe-expiry-components.md),
+[machine receipt](docs/reviews/2026-10-05-etfe-expiry-components.json).
 
-- New option ledger: whole-contract funded entry, actual 0–5 DTE and timing
-  guards, shared bar participation, cash/slot limits and deterministic ordering.
-- Partial stops latch through price recovery; missing marks block new risk.
-  Completed-minute VWAP references remain modeled, not broker fills.
-- Option sale proceeds stay unspendable until dated settlement. Missing calendar
-  and unsupported expiry/roll/physical paths retain explicit unresolved liability.
-- Hand example: $2,003.00 debit, $678.98 and $1,258.11 sale receivables, final
-  settled cash $99,934.09. The $65.91 loss is synthetic arithmetic only.
-- Independent Decimal cash/quantity/capacity audit and all five prefix replays
-  pass. Actual separate-process resume restored a partial stop after event two
-  and preserved both previous checkpoint files.
-- All 234 focused ETFE tests pass, including 24 new execution checks. No old
-  source-bound consumers changed; no real inputs, labels or training admitted.
+- New source-bound lifecycle continuation verifies the frozen option-prefix
+  snapshot and preserves its identity; unresolved prefixes are rejected.
+- Fresh SIP quote expiry classification; actual 0–5 DTE rolls with old settled
+  proceeds, reserved slot/cash, cancellation and 60-roll bound.
+- Official-reference exercise/nonexercise, competing cash/share reservations,
+  explicit funding failures, dated delivery and partial stock bid liquidation.
+- Integer adjusted share/cash deliverables require an explicit exercise basis;
+  unresolved fractional cash-in-lieu blocks the affected path.
+- Four hand cases: funded call ends at $102,504.30; unfunded put retains its
+  liability; QQQ reserves $60,000 before competing SPY; $569.14 old proceeds
+  fund two new contracts, leaving $99,567.64 cash and an open rolled position.
+  These are synthetic arithmetic results, not measured strategy performance.
+- Independent Decimal cash/share/cost/date audit and all thirteen saved-prefix
+  replays pass. Actual new-process resume preserved two prior checkpoints.
+- All 265 focused ETFE tests pass, including 31 lifecycle checks. Previous
+  option/feature/action bound sources and artifacts are unchanged.
 
 ## Evidence boundary and stopping point
 
-This kernel accepts synthetic fixtures only. Caller supplies every observation,
-dated session and settlement mapping; full historical scheduler is not built.
-No funding classification, physical exercise, stock liquidation, OTM roll,
-learned ranking, full stress suite or real-data reconciliation is claimed.
-No capture/training/deployment or ongoing process started this session.
+Synthetic fixtures only. Caller still owns every observation, dated session,
+reference and settlement-calendar coverage assertion. Ordinary new entries after
+continuation are not integrated. Funded-put inventory paths, complete scheduler,
+full stress suite, scientific label horizons and real admission remain open.
+No market capture, training, orders, deployment or ongoing process this session.
 
 ## Next work
 
-1. **ETFE-3.expiry-components:** dated stock-quote expiry classification,
-   OTM roll reservations and settled-proceeds budget, physical delivery and
-   stock liquidation. Hand-reconcile funded calls, unfunded puts, competing
-   reservations, historical settlement transition and terminal liabilities.
-   Use successor modules; keep this component and its bound sources immutable.
-2. **ETFE.provider-action-timing / provider-contract:** resolve action revision
-   history and required option terms/sector/session/source evidence. Preserve
-   the four-day replay's limited witness; don't repeat empty controls without
-   a measured plan. All 221-field real diagnostics remain unadmitted.
-3. **ETFE-1.demand / ETFE-4.pilot:** complete phase-B/C demand and budgets;
-   integrate capture/features/execution/dataset/training smoke and recovery.
+1. **ETFE-3.integration-components:** connect ordinary entries and lifecycle
+   events into a shared observation scheduler; settlement-extended terminal
+   horizons, complete input/funding/boundary census, mixed paths and stress
+   cases. Preserve existing bound sources through successor modules/studies.
+2. **ETFE.provider-action-timing / provider-contract:** resolve required action
+   revision and option terms/sector/session/source evidence. Four-day replay
+   retains one limited action witness; do not repeat empty controls unbudgeted.
+   All 221-field real diagnostics remain unadmitted.
+3. **ETFE-1.demand / ETFE-4.pilot:** complete phase-B/C demand and budgets,
+   integrate fresh capture/features/execution/dataset/training smoke/recovery.
    Full build and independently verified dataset freeze precede training.
 
 ## Artifacts and constraints
 
-Selected: `nn_meta/validation/etfe-execution-components-20261005-r0/`.
-PLAN binds eleven files; five checkpoint/hash pairs, COMPLETE, RESUME-2-5,
-INDEPENDENT_AUDIT. Small full evidence ZIP is linked in the review.
+Selected: `nn_meta/validation/etfe-expiry-components-20261005-r0/`.
+PLAN binds twelve files; thirteen checkpoint/hash pairs, COMPLETE, RESUME-2,
+INDEPENDENT_AUDIT. Full small evidence ZIP is linked in the review.
 [State](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
-[commands](docs/reference/ETFE_SETUP.md#bounded-synthetic-option-execution),
-[component contract](docs/specs/ETFE_EXECUTION_COMPONENTS_20261005.md).
+[commands](docs/reference/ETFE_SETUP.md#bounded-synthetic-expiry-and-delivery),
+[contract](docs/specs/ETFE_EXPIRY_COMPONENTS_20261005.md).
 
-Fresh Alpaca only; no old project data/metadata/models. No 7-DTE purchases.
+Fresh Alpaca only; no old project data/metadata/models. Purchases/rolls 0–5 DTE.
 Preserve unrelated dirty work, including DECISIONS/EXPERIMENTS additions.
-[Previous handoff](handoff-history/HANDOFF-2026-10-05-before-execution-components.md).
+[Previous handoff](handoff-history/HANDOFF-2026-10-05-before-expiry-components.md).

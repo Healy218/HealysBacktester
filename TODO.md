@@ -15,13 +15,13 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-05-etfe-execution-components.md),
+[latest evidence](docs/reviews/2026-10-05-etfe-expiry-components.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-234 focused tests pass. All 221 registered fields are joined with 221 masks
+265 focused tests pass. All 221 registered fields are joined with 221 masks
 for every one of the 458,133 pilot events; independent value/lineage audit and
 actual resume pass. Real diagnostics and synthetic-only evidence remain
 separate. Dated inputs, usable history and scientific admission remain open.
@@ -34,7 +34,10 @@ complete timing. Freeze still requires admitted inputs/full coverage, execution
 and labels, integrated pilot/recovery, and the full dataset build.
 The bounded synthetic option ledger now reconciles cash, integer participation,
 partial stops and T+1 cash settlement, including a separate-process restart.
-Expiry/roll/physical delivery and admitted real execution remain open.
+The synthetic lifecycle continuation now covers expiry classification, settled
+roll budgets, exercise reservations, physical call delivery and stock liquidation.
+Four hand cases, thirteen saved prefixes and separate-process restart reconcile.
+Full scheduling, label horizons/stresses and admitted real execution remain open.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -146,12 +149,20 @@ Expiry/roll/physical delivery and admitted real execution remain open.
   independent Decimal audit, five-prefix replay and separate-process restart
   pass; 234 focused tests. [Evidence](docs/reviews/2026-10-05-etfe-execution-components.md).
   No real-data execution, label admission or full ETFE-3 closure implied.
-- [ ] **ETFE-3.expiry-components:** Add dated stock-quote expiry classification,
-  OTM roll reservations/settled-proceeds budgets, and physical exercise/delivery
-  with explicit funding failures and stock liquidation. Hand-reconcile funded
-  calls, unfunded puts, competing reservations, historical settlement transition
-  and terminal liabilities. Use synthetic references while real admission is
-  unresolved; preserve the source-bound option component and its evidence.
+- [x] **ETFE-3.expiry-components:** Synthetic lifecycle continuation implements
+  quote-based expiry, OTM roll reservations/settled budgets, exercise funding,
+  call delivery and partial stock liquidation. Funded call, unfunded put,
+  competing calls and roll hand cases reconcile; transition/holiday, missing
+  inputs, adjusted integer deliverables and boundary tests pass. Thirteen-prefix
+  independent audit and actual resume pass; 265 focused tests.
+  [Evidence](docs/reviews/2026-10-05-etfe-expiry-components.md). Full execution,
+  real admission and funded-put inventory integration remain separate.
+- [ ] **ETFE-3.integration-components:** Connect ordinary entries and lifecycle
+  continuation into a complete shared observation scheduler with settlement-
+  extended terminal horizons, input/funding/boundary census and declared stress
+  cases. Preserve immutable predecessor components; hand-reconcile mixed paths
+  and recovery before real-path integration. Scientific labels still require
+  admitted dated inputs and complete coverage.
 - [ ] **ETFE.provider-action-timing:** Establish mutation-history retention and
   dated original/revision availability for required actions. January's welcome-only
   stream and October's capped replay do not prove coverage. Budget any expanded

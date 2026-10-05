@@ -321,3 +321,23 @@ Unknown settlement dates retain receivables; unsupported expiry/roll/physical
 paths remain unresolved. The caller owns complete observation scheduling.
 Any bound-source behavioral change requires a successor module/study root;
 do not overwrite this evidence or retrofit real-data admission into it.
+
+## Bounded synthetic expiry and delivery
+
+Selected root: `nn_meta/validation/etfe-expiry-components-20261005-r0/`.
+The new continuation verifies an unchanged option-prefix snapshot and binds
+separate synthetic terms, official references, quotes and settlement calendars.
+[Scope](../specs/ETFE_EXPIRY_COMPONENTS_20261005.md),
+[four hand cases](../reviews/2026-10-05-etfe-expiry-components.md).
+
+```bash
+./venv/bin/python scripts/pilot_etfe_expiry.py audit --root nn_meta/validation/etfe-expiry-components-20261005-r0
+```
+
+The recorded run used `run --max-steps 2`, then `run` in a new process. It
+restored exercise reservations before delivery and completed all four cases.
+Thirteen immutable checkpoint/hash pairs reconcile against uninterrupted replay;
+an independent Decimal audit checks cash, shares, fees, capacities and dates.
+Ordinary entries after continuation and full observation scheduling remain
+separate. Real source admission, labels and training stay false. Preserve source
+snapshots and use successor modules/roots for behavior changes.
