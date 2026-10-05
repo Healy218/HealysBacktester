@@ -101,6 +101,16 @@ Read the relevant entries before treating a script or cache as broken.
   and source normalized premium scaling independently; neither silently multiply
   by zero nor rewrite it to 100. [Controls and limits](docs/reviews/2026-10-03-etfe-alpaca-pulls.md).
 
+- **Alpaca action process dates are not ex-dates.** The corporate-action REST
+  interval filters `process_date`; a fixed market-price end can miss actions
+  already effective but processed later. ETFE's fresh October 5 tail recovered
+  September SPY/QQQ dividends with October process dates. Keep reference-query
+  bounds separate from the immutable price window and retain outside-window
+  records explicitly. The mutation route can return large US-wide replays;
+  parse only complete SSE blocks and retain capped tails as incomplete. A later
+  update timestamp or welcome-only response does not establish original
+  publication or history coverage. [Evidence](docs/reviews/2026-10-05-etfe-action-evidence.md).
+
 - **Separate pool sizing from numerical threads.** GNU `nproc` honors
   `OMP_NUM_THREADS` and `OMP_THREAD_LIMIT`. A controller inheriting a value of one
   can silently make the shared autosizer cap its entire process pool at one.

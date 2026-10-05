@@ -252,3 +252,31 @@ It writes INDEPENDENT_AUDIT once and does not recompute native indicators.
 Run-time changed-batch-boundary checks and a recorded one-chunk stop/resume supply
 separate recovery evidence. Model admission remains false. Source-bound consumers
 and existing study roots are immutable; changes require a successor study.
+
+
+## Fresh corporate-action evidence
+
+Use `./venv/bin/python scripts/capture_etfe_actions.py` with `prepare`, `run`,
+`normalize` or read-only `verify`, and a direct
+`nn_meta/data_cache_etfe/alpaca-fresh-actions-*` root. `run --request-budget 1`
+supports deliberate interruption; status 2 means incomplete/stopped. It captures
+all-type/all-quality SPY/QQQ/VOO action pages and two finite route probes. Native
+REST fields and exact raw JSON survive normalization; historical availability
+remains unknown. `scripts/audit_etfe_actions.py --root ...` writes an independent
+raw-occurrence audit once. Selected completed roots live in CURRENT_STATE.
+
+The fixed price window must not be used as an effective-date completeness claim
+for the REST process-date filter. The source-bound
+`scripts/extend_etfe_action_evidence.py` successor captures the October 3–December
+31 process-date tail in a separate root, without requesting later prices. Commands
+are `prepare`, `run`, `inspect`, and read-only `verify`; `run` preserves failed
+attempts and stops for explicit retry after any provider cooldown. Tail roots
+must be named `alpaca-fresh-actions-tail-*` and retain every native occurrence.
+
+`inspect` parses already-captured SSE blocks, preserves emitted timestamps,
+insert/update/delete kinds and ETF lineage, and reports unparsed trailing bytes.
+`scripts/audit_etfe_action_tail.py --root ...` independently reconciles REST
+occurrences and complete SSE events with a line-oriented parser. No original
+publication time or revision history is inferred from a later mutation. Empty
+or capped probes stay incomplete evidence. Do not repeat completed captures;
+expanded replay requires its own measured request/storage plan.

@@ -46,8 +46,10 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | TV-feature component | `nn_meta/validation/etfe-tv-features-20261005-r0/`; PLAN/COMPLETE, nine scope receipts, INDEPENDENT_AUDIT/RESUME_AUDIT, native/projection/link Parquets and PAYLOAD_INDEX |
 | Remaining-feature component | `nn_meta/validation/etfe-remaining-features-20261005-r0/`; PLAN/COMPLETE, SHARED, nine scope receipts, INDEPENDENT_AUDIT/DAILY_INPUT_AUDIT/RESUME_AUDIT and PAYLOAD_INDEX |
 | Joined diagnostic schema | `nn_meta/validation/etfe-joined-20261005-r0/`; PLAN/COMPLETE, 96 chunk receipts, matrix/reasons/availability/rows Parquets, INDEPENDENT_AUDIT/RESUME_AUDIT and PAYLOAD_INDEX |
+| Fresh action records | `nn_meta/data_cache_etfe/alpaca-fresh-actions-20261005-r0/`; PLAN/COMPLETE, raw attempts/page pointers, ACTIONS.parquet, NORMALIZED/INDEPENDENT_AUDIT and RESUME_AUDIT |
+| Action process-date tail / mutation inspection | `nn_meta/data_cache_etfe/alpaca-fresh-actions-tail-20261005-r0/`; PLAN/COMPLETE, raw tail pages, OBSERVATIONS/INSPECTION and INDEPENDENT_AUDIT |
 | Current feature binding amendment | `docs/specs/ETFE_FEATURE_BINDINGS_20261005.json`; numeric Setup parameters and approved DTE/5, frozen parent retained |
-| Current evidence | [Joined-schema review](reviews/2026-10-05-etfe-joined-schema.md), [receipt](reviews/2026-10-05-etfe-joined-schema.json), `reviews/2026-10-05-etfe-joined-schema-evidence.zip`; [remaining components](reviews/2026-10-05-etfe-remaining-features.md) |
+| Current evidence | [Action evidence](reviews/2026-10-05-etfe-action-evidence.md), [receipt](reviews/2026-10-05-etfe-action-evidence.json), `reviews/2026-10-05-etfe-action-evidence.zip`; [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -59,6 +61,22 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `d84ebb5bad67768eec45074996e324b112900d253e83f0b9ab2c0bd00065f1ad`,
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
+
+October 5 action evidence: **14 successful GET responses**, twelve terminal REST
+pages and two bounded stream probes. Main capture: 33 dividends; process-date
+tail: two additional September SPY/QQQ dividends. Of 35 retained records, 33 have
+effective dates inside the price window and two predate it. No current action
+record supplies verified original-publication timing. October stream inspection:
+19,132 complete US mutations / 15 ETF updates / two native action IDs matching
+the tail; 292 trailing bytes unparsed after the 8 MiB cap. January stream returned
+only its welcome comment. Neither probe proves historical replay coverage.
+Independent raw audits, three-file actual resume and **196 focused tests** pass.
+Capture elapsed 12.26s; main root 8,470,004 bytes, tail root 83,277 bytes.
+Plans, main / tail:
+`688be0b5d23f66c02ee437caabc82542a4a206ce905dfb0b0b0a069f8d70680c`,
+`daaa5b54f1fa1e5d3a5ebe8dc6ef6a41e6cb51c09e23c53d5ff8225775dbb78d`.
+No action capture remains running. Action observations are separate from the
+unchanged market-partition census; no feature/action/history admission follows.
 
 October 5 joined-schema completion: **458,133 rows × 442 columns**, preserving
 all original signal/target identities across nine ticker/timeframe scopes.

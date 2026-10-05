@@ -1,0 +1,44 @@
+{
+  "capture_elapsed_seconds": 12.256663898035185,
+  "complete_effective_date_history": false,
+  "effective_before_price_window": 2,
+  "effective_in_price_window": 33,
+  "event_probes": 2,
+  "evidence": {
+    "bytes": 64373,
+    "indexed_payloads": 15,
+    "members": 54,
+    "path": "docs/reviews/2026-10-05-etfe-action-evidence.zip",
+    "sha256": "12ee5795be86f3a3caf43aafda2d01b1d54707ee837fd19b677b723ec407b7b0"
+  },
+  "fixed_price_end": "2026-10-02",
+  "focused_tests": 196,
+  "historical_availability_verified": false,
+  "independent_raw_reconciliation": true,
+  "live_gets": 14,
+  "model_feature_admitted": false,
+  "original_action_rows": 33,
+  "original_process_date_filter_missed_in_window_actions": 2,
+  "ready_for_training": false,
+  "rest_pages": 12,
+  "resume_preserved_files": 3,
+  "roots": {
+    "alpaca-fresh-actions-20261005-r0": {
+      "path": "nn_meta/data_cache_etfe/alpaca-fresh-actions-20261005-r0",
+      "plan_sha256": "688be0b5d23f66c02ee437caabc82542a4a206ce905dfb0b0b0a069f8d70680c",
+      "root_bytes": 8470004
+    },
+    "alpaca-fresh-actions-tail-20261005-r0": {
+      "path": "nn_meta/data_cache_etfe/alpaca-fresh-actions-tail-20261005-r0",
+      "plan_sha256": "daaa5b54f1fa1e5d3a5ebe8dc6ef6a41e6cb51c09e23c53d5ff8225775dbb78d",
+      "root_bytes": 83277
+    }
+  },
+  "schema": "etfe-action-evidence-review-v1",
+  "stream_complete_events": 19132,
+  "stream_etf_mutations": 15,
+  "stream_partial_trailing_bytes": 292,
+  "stream_unique_etf_action_ids": 2,
+  "tail_action_rows": 2,
+  "total_action_occurrences": 35
+}
