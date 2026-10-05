@@ -15,13 +15,13 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-05-etfe-integration-components.md),
+[latest evidence](docs/reviews/2026-10-05-etfe-demand-frontier.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-289 focused tests pass. All 221 registered fields are joined with 221 masks
+294 focused tests pass. All 221 registered fields are joined with 221 masks
 for every one of the 458,133 pilot events; independent value/lineage audit and
 actual resume pass. Real diagnostics and synthetic-only evidence remain
 separate. Dated inputs, usable history and scientific admission remain open.
@@ -42,7 +42,10 @@ clocks, settlement-extended diagnostic horizons and all 27 declared synthetic
 stress profiles across six tapes. All 162 combinations / 189 proposal outcomes
 reconcile; three stressed paths retain missing quote/exercise inputs explicitly.
 Scientific labels, full-history execution and real admission remain open.
-**Next selected work is ETFE-1.demand:** full phase-B/C acquisition census and
+The measured full-calendar frontier and one bounded March discovery continuation
+now cover 558 / 6,300 calendar queries; 5,742 remain. Known-symbol envelopes and
+route payload measurements are independently reconciled; full phase-B/C budgets
+remain unknown. **Continue ETFE-1.demand:** full phase-B/C acquisition census and
 measured request/storage budgets, including holding/roll/exercise paths exposed
 by the integrated diagnostics, before expanded capture and the real pilot.
 
@@ -172,6 +175,13 @@ by the integrated diagnostics, before expanded capture and the real pilot.
   binding and 289 focused tests pass. [Evidence](docs/reviews/2026-10-05-etfe-integration-components.md).
   Scientific isolated labels, full-history scheduling/resource validation,
   real-source integration and full ETFE-3 acceptance remain open.
+- [x] **ETFE-1.demand-frontier:** Full-calendar known-symbol envelope, explicit
+  hold/roll/exercise input requirements and measured route payload scenarios.
+  One bounded March 5–25 discovery batch added 8,462 records / 126 partitions;
+  raw-row audits and zero-request restart pass. Both frontier inventories
+  reconcile independently across 2,073 ticker-sessions; 294 focused tests pass.
+  Exact phase-B/C counts, missing-source measurements and full budgets remain
+  open. [Evidence](docs/reviews/2026-10-05-etfe-demand-frontier.md).
 - [ ] **ETFE.provider-action-timing:** Establish mutation-history retention and
   dated original/revision availability for required actions. January's welcome-only
   stream and October's capped replay do not prove coverage. Budget any expanded

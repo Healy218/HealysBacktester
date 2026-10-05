@@ -366,3 +366,29 @@ not real input admission, isolated scientific labels or full-history resource
 validation. Snapshot tape/source/cursor identities are mandatory; uncommitted
 payloads recover a missing hash receipt only after deterministic replay.
 Future changes use new source versions and study roots.
+
+## Measured demand frontier and bounded discovery
+
+Selected frontier: `nn_meta/validation/etfe-demand-frontier-20261005-r1/`.
+[Contract](../specs/ETFE_DEMAND_FRONTIER_20261005.md),
+[capture and independent evidence](../reviews/2026-10-05-etfe-demand-frontier.md).
+`scripts/etfe_demand_frontier.py build` takes a new validation `--root`, the
+original calendar `--inventory`, and every explicitly selected complete raw
+`--input`. It verifies page chains and measures route payloads, then counts
+returned-symbol surfaces and unknown discovery queries separately. The r1
+FRONTIER lists the exact ten selected input roots and next 126 discovery jobs.
+
+For a selected finite continuation, use `prepare --root <new-alpaca-fresh-root>
+--frontier <selected-frontier-root>`, then `run --root <same-root>
+--request-budget 128`. At most 256 total attempts are reserved durably before
+networking; pagination/errors consume that budget. Exhaustion requires a new
+reviewed successor, not resetting receipts or an automatic capture loop.
+
+The completed March batch has a zero-request restart receipt. Normalize new
+complete captures using the existing `normalize_etfe.py prepare/run` commands
+and `audit_etfe_normalized.py`. Refresh into a new frontier root with the new
+raw input included. `audit_etfe_demand_frontier.py --root <frontier-root>` writes
+an immutable INDEPENDENT_AUDIT once; use a new root for changed evidence.
+The selected r0/r1 audits already exist. Full phase-B/C budgets stay null until
+exact signals/paths and missing-route measurements support them; envelope
+counts must not be relabeled as full demand or historical eligibility.

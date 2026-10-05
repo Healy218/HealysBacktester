@@ -1,60 +1,60 @@
-# Handoff — October 5, 2026 — Shared scheduler and stress matrix
+# Handoff — October 5, 2026 — Measured frontier and March discovery
 
 ## Focus and completed result
 
-User asked to keep going. Completed **ETFE-3.integration-components** in bounded
-synthetic scope. Real input admission, scientific labels, full execution and
-freeze/train remain open. [Review](docs/reviews/2026-10-05-etfe-integration-components.md),
-[machine receipt](docs/reviews/2026-10-05-etfe-integration-components.json).
+User asked to keep going. Completed **ETFE-1.demand-frontier** within measured
+acquisition-envelope and bounded discovery scope. Full **ETFE-1.demand**, input
+admission and freeze/train remain open. [Review](docs/reviews/2026-10-05-etfe-demand-frontier.md),
+[machine receipt](docs/reviews/2026-10-05-etfe-demand-frontier.json).
 
-- One shared ledger now handles ordinary entries, expiry/roll/delivery and
-  settlement. Scheduler generates entry retries, regular/availability/expiry
-  clocks, stock latency and settlement; no caller-supplied observation gaps.
-- Cash/slot reservations constrain new entries. Consecutive roll windows
-  preserve the old deadline before the next regular observation starts one.
-- Terminal diagnostic horizons include final cash settlement; short fixture
-  ends stay open, while a completed fixed-end tape can right-censor liabilities.
-- Six tapes × 27 profiles = 162 complete combinations / 189 proposal outcomes:
-  95 settled, 24 observed-unfilled, 20 open, 3 input-unresolved, 23 funding-
-  unresolved and 24 right-censored. Synthetic arithmetic only; targets all null.
-- Three stress paths need a later roll quote or an official exercise reference
-  absent from their tape. Retained explicitly as acquisition-demand evidence.
-- All 289 focused ETFE tests pass, including 24 integration checks. Independent
-  Decimal cash/share/contract/cost/census audit and every final state replay pass.
-- Actual new-process restart preserved event-20 checkpoint and completed all
-  combinations. Missing receipt recovery and corrupted inputs are also tested.
+- New frontier verifies all selected fresh page chains, measures payloads by
+  route, and counts returned symbols / unknown queries across 2,073 ticker-days.
+- March 5–25 civil expiries: 126 successful GETs, 8,462 new discovery records,
+  126 normalized partitions. Both statuses, all three ETFs, both rights/strikes.
+  Ninety-five empty queries remain unknown historical coverage. One sandbox
+  transport failure is separate; successful live capture took 125.14 seconds.
+- Discovery now completes 558 / 6,300 calendar queries; 5,742 remain. Six
+  January 1 padding queries are outside that denominator. 38,126 symbols known.
+- Gross known-symbol envelope: 963,898 symbol/session edges, 156,122 at 0–5 DTE,
+  9,888 grouped requests before reuse/pagination. This is not exact causal demand.
+- Phase-C requirements explicitly include roll-retry quotes, official exercise
+  references, dated deliverables, settlement calendars and sized stock quotes.
+  Full phase-B/C request/storage budgets remain null, pending actual inputs.
+- Both frontier inventories independently reconcile; all raw-to-normalized
+  occurrences pass. Separate-process restart made zero GETs, preserving 510 files.
+  All 294 focused ETFE tests pass, including five new frontier/budget tests.
 
 ## Evidence boundary and stopping point
 
-Synthetic miniature sessions only, not full-history/real execution validation.
-Model admission remains false. Isolated scientific proposal labels, temporal
-fold purging, real inputs and resource-scale integration remain open. Cash-only
-single-underlying policy does not establish a funded-put inventory path.
-No market capture, training, orders, deployment or ongoing process this session.
-Previous bound option/expiry/feature/action sources and evidence are unchanged.
+Selected normalized data: 1,375 partitions / 1,964,142 rows. Discovery records
+are not historical eligibility or option market observations. Usable history,
+dated terms/actions and all real-feature admission remain unresolved. Original
+January market coverage and synthetic scheduler evidence are unchanged.
+No process remains running. No training, orders or deployment occurred.
 
 ## Next selected work
 
-1. **ETFE-1.demand:** finish full phase-B/C acquisition census and measured
-   request/storage budgets. Include holding, roll, physical-stock and stress-
-   contingent quote/exercise paths; this is next before broader capture.
-2. **ETFE.provider-action-timing / provider-contract / history-boundary:**
-   resolve required dated action revisions, terms/sector/session/source facts
-   and usable coverage. Do not repeat empty action controls without a budgeted
-   new question. All 221-field real diagnostics remain unadmitted.
-3. **ETFE-4.pilot:** integrate fresh capture/features/execution/isolated labels/
-   dataset/training smoke and recovery, with measured resources. Full build and
-   independently verified dataset/experiment freeze precede training.
+1. Continue **ETFE-1.demand**: selected r1 lists the next 126 missing discovery
+   queries. Measure missing quote/exercise sources and derive exact full-window
+   signal/feature/trade and holding/roll/physical-stock demand. Reconcile full
+   resource budgets before bulk acquisition; envelopes do not close this gate.
+2. **ETFE.provider-contract / provider-action-timing / history-boundary**:
+   establish dated eligibility, terms/hours/actions and scoped usable coverage.
+   Do not repeat empty action controls without a budgeted new question.
+3. **ETFE-4.pilot**: real capture/features/execution/isolated-label/dataset/training
+   smoke and recovery, then full build and independent freeze before training.
 
 ## Artifacts and constraints
 
-Selected: `nn_meta/validation/etfe-integration-components-20261005-r0/`.
-PLAN binds thirteen files; 162 hashed results, event-20 checkpoint, COMPLETE,
-RESUME-1 and INDEPENDENT_AUDIT. Full small ZIP linked in the review.
+Frontier: `nn_meta/validation/etfe-demand-frontier-20261005-r1/` (r0 preserved).
+Raw: `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r0/`.
+Typed: `nn_meta/data_cache_etfe/normalized-20261005-discovery-r0/`.
 [State](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
-[commands](docs/reference/ETFE_SETUP.md#bounded-shared-scheduler-and-stress-matrix),
-[contract](docs/specs/ETFE_INTEGRATION_COMPONENTS_20261005.md).
-
-Fresh Alpaca only; actual 0–5 DTE purchases/rolls. Bound sources stay immutable;
+[commands](docs/reference/ETFE_SETUP.md#measured-demand-frontier-and-bounded-discovery),
+[contract](docs/specs/ETFE_DEMAND_FRONTIER_20261005.md).
+Evidence ZIP preserves metadata/source snapshots and hashes all 793 local files.
+The finite capture caps attempts at 128/run, 256/study, with durable reservations
+before networking, 512 MiB/root and existing reserve guards. No automatic loop.
+Fresh Alpaca only, actual 0–5 DTE entries/rolls. Bound sources stay immutable;
 use successors. Preserve unrelated dirty work, including DECISIONS/EXPERIMENTS.
-[Previous handoff](handoff-history/HANDOFF-2026-10-05-before-integration-components.md).
+[Previous handoff](handoff-history/HANDOFF-2026-10-05-before-demand-frontier.md).

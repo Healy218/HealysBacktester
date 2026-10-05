@@ -1,0 +1,78 @@
+{
+  "capture_plan_sha256": "35dd8266ca99071996daa70033aed07e739e3bc9ffb95f48389668474f10a7cf",
+  "capture_root": "nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r0",
+  "date_central": "2026-10-05",
+  "discovery_and_surface_census": {
+    "captured_discovery_queries": 558,
+    "discovered_symbols": 38126,
+    "gross_surface_requests": 9888,
+    "missing_discovery_queries": 5742,
+    "possible_stock_quote_regular_minutes": 805230,
+    "possible_stock_quote_session_windows": 2073,
+    "regular_bar_scenario_rows": 375538620,
+    "required_discovery_queries": 6300,
+    "returned_purchase_symbol_session_edges": 156122,
+    "returned_symbol_session_edges": 963898,
+    "ticker_sessions": 2073
+  },
+  "discovery_budget_scenarios": {
+    "empirical_mean_payload_scenario_bytes": 276473870,
+    "full_phase_B_C_request_budget": null,
+    "full_phase_B_C_storage_budget": null,
+    "minimum_remaining_discovery_gets": 5742,
+    "normalization_and_temporary_bytes_not_in_payload": true,
+    "observed_max_query_page_scenario_gets": 5742,
+    "observed_max_query_payload_scenario_bytes": 2563510158,
+    "scenario_is_not_a_bound": true
+  },
+  "empty_discovery_queries": 95,
+  "evidence_bundle": {
+    "bytes": 657414,
+    "indexed_files": 793,
+    "path": "docs/reviews/2026-10-05-etfe-demand-frontier-evidence.zip",
+    "sha256": "d84f43e39f8e1e31fbf8c11dfdcad3627501dc280e903747d452ce928fbe5899"
+  },
+  "focused_tests_passed": 294,
+  "frontier_sha256": "1c085d76a524754aef976852c092b1a5f7afe2cb4247bf98b0905764a26204e4",
+  "full_demand_complete": false,
+  "independent_frontier_audits": [
+    {
+      "all_payload_measurements_match": true,
+      "all_surface_counts_match": true,
+      "audit_source_sha256": "e7439c49ca3175a8ebb410ea3aa855b5b1f625529c1823fbf2ae95f003b51151",
+      "frontier_sha256": "ac0d40e4245e600a6cf359a59647d076a88fe3656fd53a3cdb5a5d1119b0f29f",
+      "next_batch_independently_reconciled": true,
+      "verified_ticker_sessions": 2073
+    },
+    {
+      "all_payload_measurements_match": true,
+      "all_surface_counts_match": true,
+      "audit_source_sha256": "e7439c49ca3175a8ebb410ea3aa855b5b1f625529c1823fbf2ae95f003b51151",
+      "frontier_sha256": "1c085d76a524754aef976852c092b1a5f7afe2cb4247bf98b0905764a26204e4",
+      "next_batch_independently_reconciled": true,
+      "verified_ticker_sessions": 2073
+    }
+  ],
+  "last_received_at": "2026-10-05T23:26:13.069002+00:00",
+  "new_normalized_partitions": 126,
+  "new_normalized_rows": 8462,
+  "normalization_plan_sha256": "621c56a85a028b1c935ac4949519d1bd1965feb33996913ef219863d61bf95f9",
+  "normalized_root": "nn_meta/data_cache_etfe/normalized-20261005-discovery-r0",
+  "normalized_root_bytes": 1607963,
+  "raw_occurrence_audit_sha256": "e6d18b3ee304e816834a5b6e02876bed01957bc53613f069ec1bc78103b27453",
+  "raw_response_bytes": 6028348,
+  "raw_resume": {
+    "files_preserved": 510,
+    "zero_request_restart": true
+  },
+  "raw_root_bytes": 7378772,
+  "ready_for_build": false,
+  "ready_for_training": false,
+  "sandbox_transport_failures": 1,
+  "selected_frontier": "nn_meta/validation/etfe-demand-frontier-20261005-r1",
+  "successful_capture_seconds": 125.14013351500034,
+  "successful_gets": 126,
+  "task": "ETFE-1.demand-frontier",
+  "total_selected_normalized_partitions": 1375,
+  "total_selected_normalized_rows": 1964142
+}

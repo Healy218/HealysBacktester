@@ -28,6 +28,9 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Current setup and guard | `nn_meta/validation/etfe-setup-20261004-0dte-r0/PLAN.json`; `nn_meta/etfe/purchase_policy_v2.py` |
 | Verify selected setup | `scripts/prepare_etfe_0dte.py verify --root nn_meta/validation/etfe-setup-20261004-0dte-r0` |
 | Calendar-level demand | `nn_meta/validation/etfe-demand-20261004-r0/DEMAND.json`; source snapshots alongside |
+| Selected measured demand frontier | `nn_meta/validation/etfe-demand-frontier-20261005-r1/`; FRONTIER/INDEPENDENT_AUDIT/source. Pre-capture r0 retained. |
+| March discovery continuation | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r0/`; PLAN/COVERAGE/RESUME_AUDIT, pages and durable request reservations |
+| March discovery normalization | `nn_meta/data_cache_etfe/normalized-20261005-discovery-r0/`; PLAN/NORMALIZED/INDEPENDENT_AUDIT, 126 partitions / 8,462 rows |
 | Fresh stock calendar | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-calendar-r1/CALENDAR.json` |
 | Earlier raw roots | `nn_meta/data_cache_etfe/alpaca-fresh-20261003-bootstrap-r0/`, `alpaca-fresh-20261004-options-r0/`, `alpaca-fresh-20261004-stocks-r0/`, `alpaca-fresh-20261004-discovery-r0/`, `alpaca-fresh-20261004-option-strata-r0/` |
 | January raw discovery / bars | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-january-discovery-r0/`, `alpaca-fresh-20261004-january-boundary-r0/`, `alpaca-fresh-20261004-january-surfaces-r0/`; each has PLAN/PREFLIGHT/COVERAGE and immutable pages/runs |
@@ -66,6 +69,14 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `d84ebb5bad67768eec45074996e324b112900d253e83f0b9ab2c0bd00065f1ad`,
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
+
+October 5 at 23:26:13 UTC: March discovery continuation completed 126 successful
+GETs / 8,462 records; one sandbox transport failure is separate. Selected frontier
+r1 counts 558 / 6,300 calendar queries captured, 5,742 remaining, 38,126 returned
+symbols and 963,898 gross known-symbol/session edges. Full phase-B/C demand and
+budgets remain unresolved. Both frontier audits and every normalized occurrence
+pass; zero-request restart preserved 510 files, and 294 focused tests pass.
+No acquisition process remains running. [Review and resource measurements](reviews/2026-10-05-etfe-demand-frontier.md).
 
 October 5 selected replay: four fixed UTC days reach transport EOF. March 14,
 2024 / March 20, 2025 / March 19, 2026 returned welcome-only responses; their
@@ -180,9 +191,9 @@ full strategy/holding demand. The new 960 live GETs all returned HTTP 200; one
 sandbox failure is retained. Capture consumed about 959.3 seconds active time.
 The original wall-clock deadline deviation and successor are recorded explicitly.
 
-All **1,249 selected normalized partitions / 1,955,680 rows** reconcile to their
+All **1,375 selected normalized partitions / 1,964,142 rows** reconcile to their
 raw occurrence sequences: 1,589,090 stock bars, 184,070 option bars, 152,856
-option trades and 29,664 discovery records. No implemented normalization quality
+option trades and 38,126 discovery records. No implemented normalization quality
 flags fired. The two January days have 34,660 requested symbol/day windows;
 6,865 have bars and 27,795 retain unresolved absence. Including six reused
 windows gives 179,242 bars, without duplicating their 571 previously captured rows.
