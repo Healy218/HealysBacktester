@@ -160,3 +160,24 @@ membership and retains every demanded minute, including unresolved absence.
 Do not overwrite these outputs or edit the pilot's original GLOBAL_DEMAND to
 relabel old evidence. The successor demand audit records transport closure.
 The minute census is diagnostic, not an admitted model feature table.
+
+
+## Option trade/bar feature component
+
+`scripts/pilot_etfe_option_features.py prepare --root nn_meta/validation/etfe-option-features-...`
+binds the ten-field registry, selected fresh inputs, source snapshots and package
+versions. `run --root ... [--max-scopes 1]` computes nine serial scopes, preserving
+existing scope hashes on resume. `verify --root ...` is read-only. The selected
+completed successor is listed in CURRENT_STATE; do not repeat it without cause.
+
+Each scope has a diagnostic window table and an ordinal-to-window link table.
+The original event Parquet owns the variant/direction/target fields and is bound
+by hash. A null window ID preserves a missing acquisition candidate. Every row
+keeps model-feature admission false, including rows with all ten finite values.
+
+`scripts/audit_etfe_option_features.py --root ...` independently recomputes all
+real-window values/masks/reasons and membership, then writes INDEPENDENT_AUDIT
+once. Its real-data assertions are deliberately limited to this pilot's actual
+condition/ID/availability observations; synthetic tests cover other cases.
+Rejected roots remain immutable, including their original source snapshots and
+rejection receipts. A changed consumer requires a new root, not altered receipts.

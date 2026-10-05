@@ -41,7 +41,9 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Causal commands | `scripts/pilot_etfe_causal.py verify --root nn_meta/validation/etfe-causal-20261004-r0`; `scripts/audit_etfe_causal.py` writes new audit artifacts once |
 | Pilot trade capture | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-trade-windows-r0/`; PLAN/COVERAGE/RESUME_AUDIT and committed raw pages |
 | Pilot trade normalization | `nn_meta/data_cache_etfe/normalized-20261004-trade-windows-r0/`; PLAN/NORMALIZED/INDEPENDENT_AUDIT/DEMAND_AUDIT/TIMESTAMP_AUDIT, DEMANDED_MINUTES.parquet and OBSERVATION_EXCEPTIONS |
-| Current evidence | [Trade-window review](reviews/2026-10-04-etfe-trade-windows.md), [receipt](reviews/2026-10-04-etfe-trade-windows.json), `reviews/2026-10-04-etfe-trade-windows-evidence.zip`; [causal component review](reviews/2026-10-04-etfe-causal-pilot.md) |
+| Option-feature component | `nn_meta/validation/etfe-option-features-20261004-r1/`; PLAN/COMPLETE, nine scope receipts, INDEPENDENT_AUDIT/RESUME_AUDIT and payload index |
+| Rejected option-feature predecessor | `nn_meta/validation/etfe-option-features-20261004-r0/AUDIT_REJECTION.json`; source snapshots and outputs preserved, not selected |
+| Current evidence | [Option-feature review](reviews/2026-10-04-etfe-option-features.md), [receipt](reviews/2026-10-04-etfe-option-features.json), `reviews/2026-10-04-etfe-option-features-evidence.zip`; [trade capture](reviews/2026-10-04-etfe-trade-windows.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -54,7 +56,22 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
 
-October 4 trade-window completion: **225 intervals / 103 queries / 105 HTTP
+October 4 option-feature component completion: ten registered formulas now have
+explicit diagnostic values, masks and reasons. Selected r1 covers all **4,739
+windows / 195,435 candidate links / 458,133 logical events**. Of those windows,
+1,803 have all ten values, 192 partial values and 2,744 all missing. Equal-time
+ordering masks signed/classified fields for 189 windows / 8,065 links. Thirty
+windows remain outside stock-session scope with option hours unresolved.
+Independent all-value/mask/reason/membership audit, real order/future checks,
+actual stop/resume and **129 focused tests** passed. Model-feature admission is
+false for every output. Component compute: 2.26 seconds, 0.67 GiB peak RSS and
+4,384,713 bytes. No option-feature process remains running.
+Selected plan SHA256: `808c721bf5bb6583e84e0b9b104f06961b6ed9ab03f161f72d05dcdb4f9c4183`.
+Initial r0 failed independent VWAP rounding tolerance; its rejection and original
+sources are preserved. r1 uses stable summation without relaxing the tolerance.
+The prior capture/causal milestones and selected normalized inputs are unchanged.
+
+Earlier October 4 trade-window completion: **225 intervals / 103 queries / 105 HTTP
 200 responses**, 77,057 new trades, 103 normalized partitions. All raw rows,
 nanosecond timestamps, logical edges and captured page hashes reconcile; actual
 resume preserved three committed files. The 4,626-minute census has 2,200 minutes

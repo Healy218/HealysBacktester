@@ -15,15 +15,15 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-04-etfe-trade-windows.md),
+[latest evidence](docs/reviews/2026-10-04-etfe-option-features.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-116 focused tests pass. Causal session diagnostics, the full-catalog January
-phase-B component pilot and its 225 trade-window captures are complete. Usable
-history and scientific admission remain open.
+129 focused tests pass. Causal session diagnostics, the full-catalog January
+phase-B pilot, its trade capture and ten option trade/bar diagnostic components
+are complete. Usable history and scientific admission remain open.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -82,9 +82,16 @@ history and scientific admission remain open.
   trade occurrences; raw-row, timestamp, edge and 4,626-minute audits pass.
   Actual capture resume preserved prior committed files. Fifty-four empty
   intervals and three trade-without-bar minutes remain unresolved observations.
-  [Evidence](docs/reviews/2026-10-04-etfe-trade-windows.md). Implement the trade/bar
-  feature consumer with explicit conditions, availability and equal-time ordering;
-  capture completion does not admit features or execution.
+  [Evidence](docs/reviews/2026-10-04-etfe-trade-windows.md). Capture completion
+  does not admit features or execution.
+- [x] **ETFE-2.option-trade-bar-components:** All ten registered formulas,
+  conditions, availability, missingness and ambiguous-order rules implemented.
+  Selected r1 reconciles all 4,739 windows / 458,133 logical memberships; 1,803
+  windows have all diagnostic values. Independent numerical/mask/reason audit,
+  real future/order checks and actual resume passed. Initial r0 failed a tiny
+  VWAP rounding tolerance; preserved and superseded with stable accumulation,
+  without relaxing tolerance. [Evidence](docs/reviews/2026-10-04-etfe-option-features.md).
+  Model-feature admission remains false; full schema and integrated pilot open.
 - [ ] **ETFE-1.demand:** Complete symbol/session surfaces after discovery,
   full-window causal signal/feature/trade demand (phase B), and holding/roll/
   physical-stock paths (phase C). Current calendar inventory is not the full

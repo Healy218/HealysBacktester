@@ -1,62 +1,64 @@
-# Handoff — October 4, 2026 — Pilot trade windows captured
+# Handoff — October 5, 2026 — Option trade/bar components
 
 ## Focus and completed result
 
-Continued fresh Alpaca-only ETFE, 0–5 DTE including signal-qualified 0DTE.
-Completed **ETFE-1.trade-window-capture**, the next bounded acquisition step.
-[Review](docs/reviews/2026-10-04-etfe-trade-windows.md),
-[machine receipt](docs/reviews/2026-10-04-etfe-trade-windows.json).
+Continued fresh Alpaca-only ETFE with 0–5 DTE, including qualifying 0DTE.
+Completed **ETFE-2.option-trade-bar-components** on the captured January pilot.
+Measured runs completed October 4; their original study dates/IDs are retained.
+[Review](docs/reviews/2026-10-04-etfe-option-features.md),
+[machine receipt](docs/reviews/2026-10-04-etfe-option-features.json).
 
-- All 225 missing pilot trade intervals captured for 68 contracts. Exact
-  start/end batching produced 103 queries; all 105 GETs returned HTTP 200.
-- Two invocations / 103.94 active seconds; first stopped after one request,
-  resume preserved its three committed files and completed every page chain.
-- Added 77,057 trade occurrences in 103 normalized partitions. Independent
-  ordered raw-row, exact nanosecond, interval and logical-membership audits pass.
-- Demanded-minute census: 4,626 rows; 2,200 have trades and bars, three trades
-  only, 2,423 neither. Fifty-four whole intervals are empty; absence is unresolved.
-- Seven observed trades lack corresponding bars in three SPY January 24-expiry
-  contract-minutes. Exact keys and occurrences are in OBSERVATION_EXCEPTIONS.
-- All 77,057 trades lack native IDs. 166 additional equal-time records occur
-  in 130 minutes; preserve occurrence identity without inventing native order.
-- Zero normalization quality flags; 116 focused tests pass. Raw 5.80 MB,
-  normalized/audit 6.75 MB. No feature/execution/training admission claimed.
-- Selected normalized total: 1,249 partitions / 1,955,680 rows, including
-  152,856 option trades. Earlier stocks/options and causal pilot remain unchanged.
+- Implemented all ten registered option trade/bar formulas, condition filtering,
+  completed-window availability, field-level missingness and order handling.
+- Preserved all 458,133 original logical events. 195,435 candidate links factor
+  into 4,739 distinct windows; 262,698 still have no prior-date candidate.
+- 1,803 windows have all ten diagnostic values, 192 partial, 2,744 all missing.
+  Fully populated windows serve 68,862 links; none is model-feature admitted.
+- Unknown equal-time ordering masks signed/classified features in 189 windows /
+  8,065 links. Thirty windows / 3,387 links stay outside stock-session scope.
+- Every real calculated window passed input reversal and extreme future-record
+  injection. Independent recomputation matched every value, mask, reason and
+  logical membership at unchanged rtol=atol=1e-12. 129 focused tests passed.
+- Actual one-scope stop/resume preserved three files and computed eight remaining
+  scopes. Successor compute 2.26 seconds, 0.67 GiB peak RSS, 4.38 MB root.
+- No new downloads, simulation, labels, model fitting or deployment.
 
-## Stopping point and next work
+## Rejected first run and stopping point
 
-No ETFE job remains running. The pilot has zero remaining trade transport
-intervals; full demand/history/admission and integrated ETFE-4.pilot stay open.
+Initial r0 independently failed a VWAP-minus-last rounding case: about -1.46e-12
+bps versus zero, outside the declared tolerance. Replaced vector dot-product
+accumulation with a stable weighted sum and added a constant-price regression.
+Preserved r0 plan/source/output/AUDIT_REJECTION; selected new r1 passed the same
+tolerance. Prior capture, normalization and causal milestones remain complete.
 
-1. Implement the registered option trade/bar feature consumer from the selected
-   fresh normalized data, preserving conditions, completed-window availability,
-   missingness and ambiguous equal-time ordering. A captured empty response does
-   not establish a valid zero-trade feature. Do not replace missing bars with fills.
-2. Complete remaining option/context/TV components and full-window phase-B demand;
-   holding/roll/physical-stock phase C remains. Resolve out-of-stock-RTH windows
-   using dated option hours, not assumptions from stock-session labels.
-3. Resolve historical listing/terms/actions, expiry close, trade-condition and
-   publication provenance at admission. Usable history start remains null.
-4. Complete the integrated capture/features/execution/dataset/training smoke and
-   recovery/resource pilot before bulk work, freezes or model training.
+No ETFE job remains running. Full feature schema/admission and integrated pilot
+remain open; a finite diagnostic value does not establish historical eligibility.
 
-## Pointers and constraints
+## Next work
 
-Raw: `nn_meta/data_cache_etfe/alpaca-fresh-20261004-trade-windows-r0/`.
-Normalized: `nn_meta/data_cache_etfe/normalized-20261004-trade-windows-r0/`.
-Evidence: `nn_meta/validation/etfe-trade-windows-20261004-r0/`.
-Raw plan SHA256: `e4eb9897d58af3ea9ea9596d0e7bf913b05b1fffc8e3cde26582b38d9ee40b4b`.
-Normalized plan SHA256: `53ec002bc63e2a9ec291e98e859f23fe53a9272026705b593364fa8542012e47`.
-Normalized root includes INDEPENDENT_AUDIT, DEMAND_AUDIT, TIMESTAMP_AUDIT,
-DEMANDED_MINUTES.parquet and OBSERVATION_EXCEPTIONS. Raw root has RESUME_AUDIT.
-The ZIP preserves metadata/sources and hashes for 209 local body/Parquet files.
+1. Continue the registered feature map with remaining TV/context/other components
+   on fresh inputs, retaining explicit source availability and missingness.
+   The fifteen shared stock and ten option diagnostics are not the full schema.
+2. Resolve dated selection/actions/option sessions/condition/publication evidence
+   before admitting features; usable history remains null. Empty captures still
+   do not establish valid no-trade minutes. Preserve the three missing-bar cases.
+3. Complete full-window phase-B and holding/roll/physical-stock phase-C demand,
+   and the integrated capture/features/execution/dataset/training smoke/resource
+   and recovery pilot before bulk work, dataset freezes or model training.
 
-Original `etfe-causal-20261004-r0/GLOBAL_DEMAND.json` stays immutable; the new
-DEMAND_AUDIT records its captured successor status. Frozen sources require new
-roots if changed. All market data is newly captured from Alpaca; no old inputs.
+## Artifacts and constraints
+
+Selected: `nn_meta/validation/etfe-option-features-20261004-r1/`.
+Plan SHA256: `808c721bf5bb6583e84e0b9b104f06961b6ed9ab03f161f72d05dcdb4f9c4183`.
+PLAN/COMPLETE, per-scope window/link files, INDEPENDENT_AUDIT and RESUME_AUDIT
+are local; evidence ZIP retains metadata/source and hashes for 36 Parquets
+across r0/r1. Current code matches r1; r0 retains its original source snapshot.
+Selected capture and normalization roots remain unchanged (1,249 partitions /
+1,955,680 normalized rows). Diagnostic outputs are separate from this raw count.
 [Exact state](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
-[commands](docs/reference/ETFE_SETUP.md#bounded-pilot-trade-capture),
-[study](docs/specs/ETFE_TRADE_CAPTURE_20261004.md).
-Preserve unrelated dirty work. No deployment, model training or economic verdict.
-[Previous handoff](handoff-history/HANDOFF-2026-10-04-before-trade-windows.md).
+[commands](docs/reference/ETFE_SETUP.md#option-tradebar-feature-component),
+[study](docs/specs/ETFE_OPTION_FEATURE_PILOT_20261004.md).
+
+Source-bound artifacts are immutable; changed consumers require successor roots.
+Preserve unrelated dirty work, including pre-existing DECISIONS additions.
+[Previous handoff](handoff-history/HANDOFF-2026-10-04-before-option-features.md).

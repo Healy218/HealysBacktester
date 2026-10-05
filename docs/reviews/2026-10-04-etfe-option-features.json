@@ -1,0 +1,152 @@
+{
+  "actual_resume_files_preserved": 3,
+  "all_missing_windows": 2744,
+  "all_numerical_masks_reasons_memberships_reconciled": true,
+  "ambiguous_order_links": 8065,
+  "ambiguous_order_windows": 189,
+  "audit_sha256": "87874f90b8e238861b824309722b88ac6fb87b6edddd4e2904c07ee7476fefc7",
+  "candidate_links": 195435,
+  "complete_diagnostic_links": 68862,
+  "complete_diagnostic_windows": 1803,
+  "date_central": "2026-10-04",
+  "elapsed_component_seconds": 2.256316989019979,
+  "evidence_bundle": {
+    "bytes": 108658,
+    "indexed_payload_files": 36,
+    "members": 50,
+    "path": "docs/reviews/2026-10-04-etfe-option-features-evidence.zip",
+    "sha256": "7fdb06ad8806097867e2e35b80c1b70359d2727ea0bc761ae5acb13f58a39654"
+  },
+  "exact_registered_fields": 10,
+  "focused_tests_passed": 129,
+  "logical_reasons": {
+    "etfe_option_bar_end_age_seconds": {
+      "no_prior_date_observed_candidate": 262698,
+      "observed_diagnostic": 76927,
+      "outside_stock_session_option_hours_unresolved": 3387,
+      "unresolved_absence": 115121
+    },
+    "etfe_option_tickrule_classified_volume_fraction": {
+      "ambiguous_order": 8065,
+      "no_prior_date_observed_candidate": 262698,
+      "observed_diagnostic": 68909,
+      "outside_stock_session_option_hours_unresolved": 3387,
+      "unresolved_absence": 115074
+    },
+    "etfe_option_tickrule_signed_volume_fraction": {
+      "ambiguous_order": 8065,
+      "no_prior_date_observed_candidate": 262698,
+      "observed_diagnostic": 68909,
+      "outside_stock_session_option_hours_unresolved": 3387,
+      "unresolved_absence": 115074
+    },
+    "etfe_option_trade_count_per_second": {
+      "no_prior_date_observed_candidate": 262698,
+      "observed_diagnostic": 76974,
+      "outside_stock_session_option_hours_unresolved": 3387,
+      "unresolved_absence": 115074
+    },
+    "etfe_option_trade_range_bps": {
+      "no_prior_date_observed_candidate": 262698,
+      "observed_diagnostic": 76974,
+      "outside_stock_session_option_hours_unresolved": 3387,
+      "unresolved_absence": 115074
+    },
+    "etfe_option_trade_size_cv": {
+      "no_prior_date_observed_candidate": 262698,
+      "observed_diagnostic": 76974,
+      "outside_stock_session_option_hours_unresolved": 3387,
+      "unresolved_absence": 115074
+    },
+    "etfe_option_trade_volume_per_second": {
+      "no_prior_date_observed_candidate": 262698,
+      "observed_diagnostic": 76974,
+      "outside_stock_session_option_hours_unresolved": 3387,
+      "unresolved_absence": 115074
+    },
+    "etfe_option_traded_bar_fraction": {
+      "no_prior_date_observed_candidate": 262698,
+      "observed_diagnostic": 76927,
+      "outside_stock_session_option_hours_unresolved": 3387,
+      "unresolved_absence": 115121
+    },
+    "etfe_option_traded_bars_per_second": {
+      "no_prior_date_observed_candidate": 262698,
+      "observed_diagnostic": 76927,
+      "outside_stock_session_option_hours_unresolved": 3387,
+      "unresolved_absence": 115121
+    },
+    "etfe_option_vwap_last_bps": {
+      "no_prior_date_observed_candidate": 262698,
+      "observed_diagnostic": 76974,
+      "outside_stock_session_option_hours_unresolved": 3387,
+      "unresolved_absence": 115074
+    }
+  },
+  "logical_rows": 458133,
+  "model_feature_admitted": false,
+  "new_network_requests": 0,
+  "outside_stock_session_windows": 30,
+  "partial_windows": 192,
+  "peak_rss_bytes": 716591104,
+  "physical_reasons": {
+    "etfe_option_bar_end_age_seconds": {
+      "observed_diagnostic": 1992,
+      "outside_stock_session_option_hours_unresolved": 30,
+      "unresolved_absence": 2717
+    },
+    "etfe_option_tickrule_classified_volume_fraction": {
+      "ambiguous_order": 189,
+      "observed_diagnostic": 1806,
+      "outside_stock_session_option_hours_unresolved": 30,
+      "unresolved_absence": 2714
+    },
+    "etfe_option_tickrule_signed_volume_fraction": {
+      "ambiguous_order": 189,
+      "observed_diagnostic": 1806,
+      "outside_stock_session_option_hours_unresolved": 30,
+      "unresolved_absence": 2714
+    },
+    "etfe_option_trade_count_per_second": {
+      "observed_diagnostic": 1995,
+      "outside_stock_session_option_hours_unresolved": 30,
+      "unresolved_absence": 2714
+    },
+    "etfe_option_trade_range_bps": {
+      "observed_diagnostic": 1995,
+      "outside_stock_session_option_hours_unresolved": 30,
+      "unresolved_absence": 2714
+    },
+    "etfe_option_trade_size_cv": {
+      "observed_diagnostic": 1995,
+      "outside_stock_session_option_hours_unresolved": 30,
+      "unresolved_absence": 2714
+    },
+    "etfe_option_trade_volume_per_second": {
+      "observed_diagnostic": 1995,
+      "outside_stock_session_option_hours_unresolved": 30,
+      "unresolved_absence": 2714
+    },
+    "etfe_option_traded_bar_fraction": {
+      "observed_diagnostic": 1992,
+      "outside_stock_session_option_hours_unresolved": 30,
+      "unresolved_absence": 2717
+    },
+    "etfe_option_traded_bars_per_second": {
+      "observed_diagnostic": 1992,
+      "outside_stock_session_option_hours_unresolved": 30,
+      "unresolved_absence": 2717
+    },
+    "etfe_option_vwap_last_bps": {
+      "observed_diagnostic": 1995,
+      "outside_stock_session_option_hours_unresolved": 30,
+      "unresolved_absence": 2714
+    }
+  },
+  "plan_sha256": "808c721bf5bb6583e84e0b9b104f06961b6ed9ab03f161f72d05dcdb4f9c4183",
+  "ready_for_training": false,
+  "rejected_root": "nn_meta/validation/etfe-option-features-20261004-r0",
+  "root": "nn_meta/validation/etfe-option-features-20261004-r1",
+  "root_bytes": 4384713,
+  "unique_windows": 4739
+}
