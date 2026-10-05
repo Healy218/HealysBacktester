@@ -116,3 +116,27 @@ symbols from no trading and first observed timestamps from usable history.
 Full-day data can serve multiple downstream purposes; its download does not
 establish complete historical listings or admit a context surface. Normalization
 and independent reconciliation use the same commands as above.
+
+
+## Causal component pilot
+
+`scripts/pilot_etfe_causal.py prepare --root nn_meta/validation/etfe-causal-...`
+creates a new source/input/package-bound component plan. `run --root ...` executes
+nine serial ticker/timeframe scopes; `--max-scopes 1` provides a bounded stop.
+Resume verifies completed scope hashes and skips their computation. `verify`
+checks plan, source snapshots, package versions and bound input receipts.
+Use the selected completed root from CURRENT_STATE; do not repeat the study
+without a relevant change. Source edits require a new successor root.
+
+`scripts/audit_etfe_causal.py --root ...` requires COMPLETE and creates immutable
+GLOBAL_DEMAND and INDEPENDENT_AUDIT once. It independently checks candidate ranking,
+event counts, feature masks, logical membership, physical unions and overlapping
+raw request chains. An audit rerun needs a new evidence destination/workflow;
+it does not overwrite the previous receipt. Transport coverage is not evidence
+of a valid no-trade minute or historical contract eligibility.
+
+The fifteen `raw__` fields are unadjusted engineering diagnostics, with explicit
+missing masks. New adapters consume the frozen ETFE catalog and pure mathematical
+kernels, never old runtime selectors or market/feature/model artifacts. Option
+acquisition candidates remain separate from dated selection and entry approval.
+This command performs no capture, execution, dataset freeze or model training.

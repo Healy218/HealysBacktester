@@ -1,66 +1,61 @@
-# Handoff — October 4, 2026 — Calendar demand and January options coverage
+# Handoff — October 4, 2026 — Causal components and phase-B pilot
 
 ## Focus and completed result
 
-Continued fresh Alpaca-only ETFE acquisition. Current v4 scope stays **0–5 DTE**,
-including signal-qualified 0DTE; context-only 1–45 DTE remains separate.
-No old project data/features/labels/models; no training or deployment.
-[Latest review](docs/reviews/2026-10-04-etfe-demand-boundary.md),
-[machine receipt](docs/reviews/2026-10-04-etfe-demand-boundary.json).
+Fresh Alpaca-only ETFE, SPY/QQQ/VOO × 1/5/15m, all twenty families.
+Purchases/rolls remain **0–5 calendar DTE**, including qualifying 0DTE.
+[Review](docs/reviews/2026-10-04-etfe-causal-pilot.md),
+[machine receipt](docs/reviews/2026-10-04-etfe-causal-pilot.json).
 
-- Phase-A calendar inventory: 691 sessions, 2,073 ticker-sessions, 190,716 logical
-  expiry/status edges factored into 6,300 physical discovery queries. Every civil
-  expiry retained, including non-session and post-observation-boundary dates.
-- 960 successful new GETs: discovery 378, earlier bars 233, daily bars 349.
-  One sandbox failure retained. Every requested page chain completed.
-- January discovery plus reused listings yields 23,176 symbols, all returned
-  strikes/rights. January 1–17 returns zero bars for all those symbols.
-- January 18/19 adds 178,671 bars. First observed is January 18 at 09:30 Eastern
-  for all three ETFs. This is an observed boundary, not a verified usable floor.
-- All 34,660 surface symbol/day edges reconcile to new/reused requests: 6,865
-  observed, 27,795 unresolved absence. Six reused windows add 571 prior bars to
-  the two-day census without recapture or double normalization.
-- Added 960 normalized partitions / 200,637 rows; independent complete raw-row
-  sequence audits passed. Total selected inputs: 1,146 partitions / 1,878,623 rows.
-  No implemented quality flags fired. 95 focused tests and v4 setup verification pass.
-- 432 of the full inventory's discovery queries now have receipts; 5,868 remain.
-  Six extra January 1 padding queries are outside the calendar inventory.
+- Completed ETFE-2.causal-components / ETFE-1.demand-pilot: new session grid,
+  fifteen raw technical diagnostics/masks and all-family catalog adapters.
+- Full captured stock calendar yields 1,019,958 bins. Twelve VOO source minute
+  gaps remain null at each timeframe; no missing clock compression or fill.
+- January 18–19 signal census uses January 2 engineering padding: every one
+  of 25,353 ticker/variant combinations, including zero-event variants.
+- All four signal channels matched shorter-prefix recomputation for every
+  variant, also changing consumer batch width. Actual scope stop/resume preserved
+  four completed files and computed eight remaining scopes. 109 tests passed.
+- Retained 458,133 logical signal/target links. 195,435 acquisition candidates;
+  262,698 lack prior-date observed candidates. No selected/eligible entries.
+- Independent audit checked 13,746 distinct candidate rankings and every
+  logical-to-physical link: 68 contracts, 179 bar and 225 trade intervals.
+- All bar intervals already captured. Trade intervals remain uncaptured:
+  4,626 contract-minutes. This study made zero network requests.
+- Compute: 110.37 seconds, 1.20 GiB peak RSS, 121.16 MiB local footprint.
+  Fifteen raw diagnostics are not the final adjusted 221-field model schema.
 
 ## Stopping point and next work
 
-No ETFE capture or normalization job remains running. Calendar demand and this
-bounded January expansion are complete; ETFE-1.demand as a whole remains open.
+No ETFE job remains running. Full ETFE-1/2 and integrated ETFE-4.pilot remain open.
 
-1. Consume fresh normalized stock inputs in causal session-aligned 1/5/15-minute
-   components, then registered signal/feature demand (phase B). Preserve native
-   warmup, missingness and all twenty families; no old feature arrays.
-2. Expand symbol/session context discovery and coverage under measured budgets;
-   derive exact trade/entry demand, then holding/roll/physical-stock paths (C).
-   Calendar queries alone are not the complete strategy demand inventory.
-3. Resolve scoped usable history, pre-January/longer-expiry coverage, omitted
-   historical listings and dated terms/session/provenance at consumer admission.
-4. Complete integrated ETFE-4.pilot before bulk acquisition/build/freezes/training
-   in ROADMAP order. Earlier stock capture is complete with twelve VOO minute gaps.
+1. Use GLOBAL_DEMAND to prepare bounded capture of the 225 missing trade
+   intervals, normalize and reconcile them before option trade/bar features.
+   Preserve logical membership and account for windows outside stock RTH;
+   dated option hours remain unresolved rather than assumed from stock hours.
+2. Complete remaining option/context/TV features and full-window phase-B demand;
+   phase-C holding/roll/physical-stock paths remain. Do not count the component
+   study as the integrated execution/dataset/training resource pilot.
+3. Resolve dated actions, terms/multipliers/expiry close, historical discovery
+   and publication provenance before model-input/selection admission. Usable
+   history start remains null; prior January boundary evidence is unchanged.
+4. Follow ROADMAP's integrated pilot → acquisition/freeze → complete features /
+   execution/build/recovery → dataset freeze/training/evaluation sequence.
 
-## Pointers and exceptional constraints
+## Selected artifacts and constraints
 
-Current setup unchanged: `nn_meta/validation/etfe-setup-20261004-0dte-r0/`.
-Demand: `nn_meta/validation/etfe-demand-20261004-r0/DEMAND.json`; SHA256
-`f98a92ce1454e9a05f444f3abf1df93b1cb0da6cd38c0a3cd805d4f327302ee0`.
-New raw roots under `nn_meta/data_cache_etfe/`:
-`alpaca-fresh-20261004-january-{discovery,boundary,surfaces}-r0/`.
-New normalized roots: `normalized-20261004-january-{discovery,boundary,surfaces}-r0/`.
-Each normalized root has PLAN/NORMALIZED/INDEPENDENT_AUDIT receipts.
-Surface raw root also has EDGE_AUDIT; exact hashes in the current-state index.
+Study: `nn_meta/validation/etfe-causal-20261004-r0/` with PLAN/COMPLETE,
+per-scope receipts, GLOBAL_DEMAND, INDEPENDENT_AUDIT, RESUME_AUDIT and PAYLOAD_INDEX.
+Plan SHA256: `79b7f75d7d66a00adfe81cc31720659a944da2d3e744490f459fba3dd5fb86c2`.
+GLOBAL_DEMAND SHA256: `44fd73587ed8e2d503a5d7b7354d8cc8770034a96785aa8d2ab23104eccfc689`.
+The evidence ZIP contains source/metadata and hashes for eighteen local Parquets.
+Current v4 setup and selected fresh normalized input roots are unchanged.
+[Exact inputs](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
+[commands](docs/reference/ETFE_SETUP.md#causal-component-pilot),
+[study contract](docs/specs/ETFE_CAUSAL_PILOT_20261004.md).
 
-The initial one-hour wall budget elapsed during approval waits, and the second
-live discovery invocation started after its deadline. This deviation is recorded.
-The explicit [successor](docs/specs/ETFE_DEMAND_CONTINUATION_20261004.md) permits
-one hour of accumulated active capture time, excluding idle/approval waits;
-actual total was 959.3 seconds. Request/storage/invocation caps stayed unchanged.
-Original plans/receipts are preserved; do not relabel or silently extend ceilings.
-
-[Current state](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
-[commands](docs/reference/ETFE_SETUP.md). ZIP contains metadata/reports and local
-payload hashes, not the raw/Parquet payloads. Preserve unrelated dirty work.
-[Previous handoff](handoff-history/HANDOFF-2026-10-04-before-demand-boundary.md).
+Source-bound snapshots are immutable; changed code requires a successor study.
+Only pure mathematical kernels are reused; no old data/metadata/configuration/
+feature/model artifact enters ETFE. No training, deployment or economic verdict.
+Preserve unrelated dirty work, including the pre-existing DECISIONS additions.
+[Previous handoff](handoff-history/HANDOFF-2026-10-04-before-causal-pilot.md).

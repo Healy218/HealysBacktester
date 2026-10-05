@@ -15,14 +15,15 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-04-etfe-demand-boundary.md),
+[latest evidence](docs/reviews/2026-10-04-etfe-causal-pilot.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-95 focused tests pass. First-observed January coverage is broader, while usable
-history and scientific admission remain open.
+109 focused tests pass. Causal session diagnostics and the full-catalog January
+phase-B component pilot are complete; usable history and scientific admission
+remain open.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -68,8 +69,16 @@ history and scientific admission remain open.
   200,637 normalized records in 960 partitions; every raw occurrence and all
   34,660 surface symbol/day edges independently reconciled. Empty windows remain
   unresolved. [Evidence](docs/reviews/2026-10-04-etfe-demand-boundary.md).
+- [x] **ETFE-2.causal-components / ETFE-1.demand-pilot:** Fresh session grids
+  at 1/5/15 minutes and fifteen raw technical diagnostics; all twenty families /
+  25,353 ticker variants exercised on January 18–19 with January 2 padding.
+  All-variant prefix/batch checks, actual scope resume and logical/physical audit
+  pass. 458,133 signal/target links retained; no historical selection or entry
+  admitted. [Evidence](docs/reviews/2026-10-04-etfe-causal-pilot.md).
+  Full 221-field schema, dated action adjustment, full phase-B demand and the
+  integrated ETFE-4.pilot remain separate.
 - [ ] **ETFE-1.demand:** Complete symbol/session surfaces after discovery,
-  registered causal signal/feature/trade windows (phase B), and holding/roll/
+  full-window causal signal/feature/trade demand (phase B), and holding/roll/
   physical-stock paths (phase C). Current calendar inventory is not the full
   strategy demand census. Reconcile measured request/storage budgets before
   bulk capture; the stock-month expansion is complete.

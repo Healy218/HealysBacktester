@@ -1,0 +1,181 @@
+{
+  "actual_resume_files_preserved": 4,
+  "audit": {
+    "all_candidate_rankings_checked": true,
+    "auditor_sha256": "416dd7decb9abafeb26eadf041fc1a807891374debc453a86a4c50f1bbbfcf16",
+    "candidate_rows": 195435,
+    "complete_sha256": "dd894207bd74604f1426c270a2dd82e38fab91dab44961af76ee0263ce47cf24",
+    "full_demand_complete": false,
+    "full_feature_schema_complete": false,
+    "global_demand_sha256": "44fd73587ed8e2d503a5d7b7354d8cc8770034a96785aa8d2ab23104eccfc689",
+    "hashes_verified": true,
+    "logical_rows": 458133,
+    "logical_to_physical_reconciliation": true,
+    "no_eligible_entries": true,
+    "physical_intervals": {
+      "option_bars": 179,
+      "option_trades": 225
+    },
+    "physical_keys": 136,
+    "plan_sha256": "79b7f75d7d66a00adfe81cc31720659a944da2d3e744490f459fba3dd5fb86c2",
+    "ready_for_build": false,
+    "ready_for_training": false,
+    "reasons": {
+      "historical_discovery_unresolved": 195435,
+      "no_prior_date_observed_candidate": 262698
+    },
+    "schema": "etfe-causal-independent-audit-v1",
+    "scopes": [
+      {
+        "calendar_bins": 268410,
+        "families": 20,
+        "invalid_bins": 0,
+        "logical_rows": 112638,
+        "physical_intervals": 430,
+        "scope": {
+          "minutes": 1,
+          "ticker": "QQQ"
+        },
+        "variants": 2817
+      },
+      {
+        "calendar_bins": 17894,
+        "families": 20,
+        "invalid_bins": 0,
+        "logical_rows": 12423,
+        "physical_intervals": 108,
+        "scope": {
+          "minutes": 15,
+          "ticker": "QQQ"
+        },
+        "variants": 2817
+      },
+      {
+        "calendar_bins": 53682,
+        "families": 20,
+        "invalid_bins": 0,
+        "logical_rows": 19950,
+        "physical_intervals": 224,
+        "scope": {
+          "minutes": 5,
+          "ticker": "QQQ"
+        },
+        "variants": 2817
+      },
+      {
+        "calendar_bins": 268410,
+        "families": 20,
+        "invalid_bins": 0,
+        "logical_rows": 121899,
+        "physical_intervals": 218,
+        "scope": {
+          "minutes": 1,
+          "ticker": "SPY"
+        },
+        "variants": 2817
+      },
+      {
+        "calendar_bins": 17894,
+        "families": 20,
+        "invalid_bins": 0,
+        "logical_rows": 12060,
+        "physical_intervals": 74,
+        "scope": {
+          "minutes": 15,
+          "ticker": "SPY"
+        },
+        "variants": 2817
+      },
+      {
+        "calendar_bins": 53682,
+        "families": 20,
+        "invalid_bins": 0,
+        "logical_rows": 23061,
+        "physical_intervals": 130,
+        "scope": {
+          "minutes": 5,
+          "ticker": "SPY"
+        },
+        "variants": 2817
+      },
+      {
+        "calendar_bins": 268410,
+        "families": 20,
+        "invalid_bins": 12,
+        "logical_rows": 121512,
+        "physical_intervals": 32,
+        "scope": {
+          "minutes": 1,
+          "ticker": "VOO"
+        },
+        "variants": 2817
+      },
+      {
+        "calendar_bins": 17894,
+        "families": 20,
+        "invalid_bins": 12,
+        "logical_rows": 12027,
+        "physical_intervals": 6,
+        "scope": {
+          "minutes": 15,
+          "ticker": "VOO"
+        },
+        "variants": 2817
+      },
+      {
+        "calendar_bins": 53682,
+        "families": 20,
+        "invalid_bins": 12,
+        "logical_rows": 22563,
+        "physical_intervals": 24,
+        "scope": {
+          "minutes": 5,
+          "ticker": "VOO"
+        },
+        "variants": 2817
+      }
+    ],
+    "ticker_variant_combinations": 25353,
+    "uncaptured_intervals": {
+      "option_bars": 0,
+      "option_trades": 225
+    },
+    "unique_decision_checks": 13746
+  },
+  "calendar_bins": 1019958,
+  "candidate_dte_link_counts": {
+    "0": 152957,
+    "5": 42478
+  },
+  "date_central": "2026-10-04",
+  "elapsed_compute_seconds": 110.36621663896949,
+  "evidence_bundle": {
+    "bytes": 2528224,
+    "contents": "metadata/source/reports with Parquet hashes; payloads remain local",
+    "members": 71,
+    "path": "docs/reviews/2026-10-04-etfe-causal-pilot-evidence.zip",
+    "payload_files_indexed": 18,
+    "sha256": "83404136d31432da45ec2cce541824936c6879b4bf00a3ac0d7fd143bfae36ee"
+  },
+  "focused_tests_passed": 109,
+  "full_model_fields": 221,
+  "invalid_bins": 36,
+  "local_root_bytes": 127045740,
+  "network_requests_this_study": 0,
+  "outside_stock_rth_feature_links": {
+    "all": 8109,
+    "with_candidate": 3387
+  },
+  "peak_rss_bytes": 1290022912,
+  "physical_symbols": 68,
+  "plan_sha256": "79b7f75d7d66a00adfe81cc31720659a944da2d3e744490f459fba3dd5fb86c2",
+  "raw_transport_jobs_reused": 10,
+  "ready_for_build": false,
+  "ready_for_training": false,
+  "root": "nn_meta/validation/etfe-causal-20261004-r0",
+  "scope": "causal_components_and_bounded_phase_B_demand",
+  "scopes": 9,
+  "shared_raw_diagnostics": 15,
+  "uncaptured_trade_contract_minutes": 4626,
+  "unique_source_minute_gaps": 12
+}

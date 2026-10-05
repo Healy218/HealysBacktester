@@ -2326,3 +2326,18 @@ ceilings using at most one hour of accumulated active capture time, excluding
 idle/approval waits; per-invocation wall caps remain enforced. This is an explicit
 [budget successor](specs/ETFE_DEMAND_CONTINUATION_20261004.md), not relabeling of
 old receipts or retrospective proof that the original deadline was enforced.
+
+
+## 2026-10-04 — ETFE raw causal component evidence stays separate from admission
+
+Build session grids and a bounded all-family phase-B demand pilot from fresh
+Alpaca inputs while dated actions/contract references remain unresolved. Name
+outputs `raw__` diagnostics and retain masks; do not silently treat raw prices
+as the adjusted model schema. Reuse only hash-bound pure mathematical kernels
+with the new ETFE catalog/context, never old runtime selectors or data artifacts.
+An earlier price observation supports an acquisition candidate, not historical
+eligibility. Unknown priority contract terms must not cause fallback to a
+convenient alternative. Zero admitted selections is an explicit component
+result, not a failed or losing backtest. Full feature and integrated-pilot gates
+remain open. [Definition](specs/ETFE_CAUSAL_PILOT_20261004.md),
+[evidence](reviews/2026-10-04-etfe-causal-pilot.md).

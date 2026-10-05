@@ -37,7 +37,9 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Surface logical/physical audit | `alpaca-fresh-20261004-january-surfaces-r0/EDGE_AUDIT.json` under the ETFE cache; all 34,660 edges and reuse links reconciled |
 | Time-budget continuation | `alpaca-fresh-20261004-january-discovery-r0/CONTINUATION.json`; [explicit revision](specs/ETFE_DEMAND_CONTINUATION_20261004.md) |
 | CLIs / procedures | `scripts/etfe_demand.py`, `scripts/normalize_etfe.py`, `scripts/audit_etfe_normalized.py`; [reference](reference/ETFE_SETUP.md) |
-| Current evidence | [Review](reviews/2026-10-04-etfe-demand-boundary.md), [receipt](reviews/2026-10-04-etfe-demand-boundary.json), `reviews/2026-10-04-etfe-demand-boundary-evidence.zip` |
+| Causal component study | `nn_meta/validation/etfe-causal-20261004-r0/`; PLAN/COMPLETE, nine scope receipts, GLOBAL_DEMAND, INDEPENDENT_AUDIT and RESUME_AUDIT |
+| Causal commands | `scripts/pilot_etfe_causal.py verify --root nn_meta/validation/etfe-causal-20261004-r0`; `scripts/audit_etfe_causal.py` writes new audit artifacts once |
+| Current evidence | [Component review](reviews/2026-10-04-etfe-causal-pilot.md), [receipt](reviews/2026-10-04-etfe-causal-pilot.json), `reviews/2026-10-04-etfe-causal-pilot-evidence.zip`; [acquisition review](reviews/2026-10-04-etfe-demand-boundary.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -50,7 +52,25 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
 
-October 4 completed observation: the calendar inventory factors 190,716 logical
+October 4 causal component observation: all nine scopes completed, **25,353
+ticker/variant combinations** and **458,133 logical signal/target links**.
+All-variant prefix/batch checks and actual scope resume passed; the independent
+audit checked 13,746 distinct candidate rankings. Full stock grids contain
+1,019,958 bins; VOO's twelve source minute gaps produce twelve null bins at each
+timeframe. Fifteen raw diagnostics plus missing masks are engineering outputs,
+not the admitted 221-field model schema. **109 focused tests passed**.
+
+Demand unions contain 404 intervals across 68 contracts: 179 bar intervals have
+verified captured requests; 225 trade intervals / 4,626 contract-minutes remain.
+GLOBAL_DEMAND retains links to every logical event file. Candidate links count
+195,435; 262,698 links have no prior-date observed candidate. Zero selections or
+entries are admitted. Raw adjustments, historical discovery, dated terms/hours
+and provenance remain unresolved. The component used 110.37 seconds compute,
+1.20 GiB peak RSS and 121.16 MiB local storage. No component job remains running.
+Plan SHA256: `79b7f75d7d66a00adfe81cc31720659a944da2d3e744490f459fba3dd5fb86c2`.
+GLOBAL_DEMAND SHA256: `44fd73587ed8e2d503a5d7b7354d8cc8770034a96785aa8d2ab23104eccfc689`.
+
+Earlier October 4 acquisition observation: the calendar inventory factors 190,716 logical
 expiry/status edges into 6,300 discovery queries. Initial reuse was 60; after
 January acquisition, 432 match captured queries and 5,868 remain, plus six
 captured January 1 padding queries outside the calendar inventory. This is not
@@ -64,7 +84,7 @@ option trades and 29,664 discovery records. No implemented normalization quality
 flags fired. The two January days have 34,660 requested symbol/day windows;
 6,865 have bars and 27,795 retain unresolved absence. Including six reused
 windows gives 179,242 bars, without duplicating their 571 previously captured rows.
-95 focused tests pass, plus independent real-data row and edge audits.
+The acquisition milestone passed 95 focused tests and independent raw-row/edge audits.
 
 January 1–17 returned zero bars across all 23,176 discovered symbols in the
 January–March 4 expiry grid. First observed on January 18 is 09:30 Eastern for
