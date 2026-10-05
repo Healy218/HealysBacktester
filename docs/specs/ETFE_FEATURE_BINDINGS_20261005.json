@@ -1,0 +1,13 @@
+{
+  "schema": "etfe-feature-binding-amendment-v2",
+  "parent": "docs/specs/ETFE_FEATURE_MAP_20261003.json",
+  "parent_sha256": "e85a64a15729fefbdab0d60433a88c2614b0c6282b27aeb1205cffc733d25f7b",
+  "changes": {
+    "dte_frac": "actual_calendar_DTE_at_decision/5; range 0 through 5 inclusive; dated selected contract required",
+    "param_setup_max_bars": "float(variant.params['setup_max_bars']); NaN when structurally absent",
+    "param_setup_stop_atr": "float(variant.params['setup_stop_atr']); NaN when structurally absent"
+  },
+  "setup_category_missingness": "Six param_setup_<identity> flags are structural NaN outside tv_setup; exactly one is 1 within tv_setup.",
+  "reason": "Two previously unimplemented numeric Setup parameters were misclassified as category comparisons. DTE/5 restates the approved 0DTE successor. Existing component fields and source-bound artifacts remain unchanged.",
+  "model_feature_admitted": false
+}
