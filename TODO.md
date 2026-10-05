@@ -15,13 +15,13 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-05-etfe-action-replay.md),
+[latest evidence](docs/reviews/2026-10-05-etfe-execution-components.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-210 focused tests pass. All 221 registered fields are joined with 221 masks
+234 focused tests pass. All 221 registered fields are joined with 221 masks
 for every one of the 458,133 pilot events; independent value/lineage audit and
 actual resume pass. Real diagnostics and synthetic-only evidence remain
 separate. Dated inputs, usable history and scientific admission remain open.
@@ -32,6 +32,9 @@ The four-day replay successor now verifies one pre-effective SPY action witness;
 three earlier controls returned no events. This does not establish retention or
 complete timing. Freeze still requires admitted inputs/full coverage, execution
 and labels, integrated pilot/recovery, and the full dataset build.
+The bounded synthetic option ledger now reconciles cash, integer participation,
+partial stops and T+1 cash settlement, including a separate-process restart.
+Expiry/roll/physical delivery and admitted real execution remain open.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -137,12 +140,18 @@ and labels, integrated pilot/recovery, and the full dataset build.
   behavior; preserved, superseded by whole-second overlap without relaxing bounds.
   Independent audit, twelve-file actual resume and 210 tests pass.
   [Evidence and freeze gap](docs/reviews/2026-10-05-etfe-action-replay.md).
-- [ ] **ETFE-3.execution-components:** Implement and hand-reconcile the bounded
-  VWAP execution ledger: funded integer entry, shared participation, partial
-  exit/latched stop, settlement and explicit unresolved/boundary outcomes. Use
-  synthetic dated references for mechanics where real admission is unresolved;
-  integrate real paths only with validated evidence. This supports ETFE-4.pilot
-  and does not depend on pretending the current inputs are admitted.
+- [x] **ETFE-3.execution-components:** Bounded synthetic VWAP ledger implemented:
+  funded integer entry, shared participation, partial exit/latched stop, option
+  cash settlement and explicit unresolved/boundary outcomes. Hand arithmetic,
+  independent Decimal audit, five-prefix replay and separate-process restart
+  pass; 234 focused tests. [Evidence](docs/reviews/2026-10-05-etfe-execution-components.md).
+  No real-data execution, label admission or full ETFE-3 closure implied.
+- [ ] **ETFE-3.expiry-components:** Add dated stock-quote expiry classification,
+  OTM roll reservations/settled-proceeds budgets, and physical exercise/delivery
+  with explicit funding failures and stock liquidation. Hand-reconcile funded
+  calls, unfunded puts, competing reservations, historical settlement transition
+  and terminal liabilities. Use synthetic references while real admission is
+  unresolved; preserve the source-bound option component and its evidence.
 - [ ] **ETFE.provider-action-timing:** Establish mutation-history retention and
   dated original/revision availability for required actions. January's welcome-only
   stream and October's capped replay do not prove coverage. Budget any expanded

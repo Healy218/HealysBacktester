@@ -301,3 +301,23 @@ the study. EOF is a transport fact; retention/history coverage stays separate.
 event and ETF link and compares witnesses with all 35 selected REST actions.
 Completed receipts are immutable. Do not rerun controls without a specific new
 question or source/implementation change.
+
+## Bounded synthetic option execution
+
+Selected root: `nn_meta/validation/etfe-execution-components-20261005-r0/`.
+This study consumes synthetic dated fixtures only; it does not admit market
+paths or emit labels. [Component boundary](../specs/ETFE_EXECUTION_COMPONENTS_20261005.md),
+[hand reconciliation](../reviews/2026-10-05-etfe-execution-components.md).
+
+```bash
+./venv/bin/python scripts/pilot_etfe_execution.py audit --root nn_meta/validation/etfe-execution-components-20261005-r0
+```
+
+The recorded run used `run --stop-after 2`, then `run` in a separate process.
+Resume checks source and checkpoint hashes and preserves earlier files. The
+audit replays every prefix and independently reconciles cash, quantity, fees,
+slippage, cent rounding and shared bar capacity using Decimal arithmetic.
+Unknown settlement dates retain receivables; unsupported expiry/roll/physical
+paths remain unresolved. The caller owns complete observation scheduling.
+Any bound-source behavioral change requires a successor module/study root;
+do not overwrite this evidence or retrofit real-data admission into it.

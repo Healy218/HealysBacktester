@@ -1,0 +1,86 @@
+{
+  "schema": "etfe-execution-component-review-v1",
+  "task": "ETFE-3.execution-components",
+  "date": "2026-10-05",
+  "scope": "synthetic option mechanics only",
+  "selected_root": "nn_meta/validation/etfe-execution-components-20261005-r0",
+  "plan_sha256": "f3b97f1ea32e0a39e66745fb5b62616fc887591fe622d20f259563ffbcbec4af",
+  "tests": {
+    "command": "./venv/bin/python -m pytest tests/test_etfe_*.py -q",
+    "passed": 234,
+    "new_execution_checks": 24,
+    "warnings": 2
+  },
+  "independent_audit": {
+    "cashflows_cents": [
+      200300,
+      67898,
+      125811
+    ],
+    "checkpoints": 5,
+    "checks": [
+      "all_prefixes_replayed",
+      "cash_and_quantity_conservation",
+      "decimal_fee_slippage_rounding",
+      "shared_bar_capacity",
+      "hand_expected_cashflows"
+    ],
+    "complete_sha256": "6cfecbff10b4cddc658fa1913a996da7f37b285da2fafabc7f97e7e2fd841016",
+    "evidence_kind": "synthetic",
+    "fills": 3,
+    "final_cash_cents": 9993409,
+    "pnl_cents": -6591,
+    "schema": "etfe-execution-independent-audit-v1",
+    "training_admitted": false
+  },
+  "resume": {
+    "complete": true,
+    "prior_files_unchanged": [
+      {
+        "path": "checkpoint-1.json",
+        "sha256": "28d9217c7b00d4d870d37a90db78910f47ff95fb4a32889516f325550ac8fe4d"
+      },
+      {
+        "path": "checkpoint-2.json",
+        "sha256": "5f517a7909e1ef65d178e6637a0f67eae54dd129bdd16c753c7c6ac8deadcef7"
+      }
+    ],
+    "restored_checkpoint": 2,
+    "source_bound": true
+  },
+  "artifact_hashes": {
+    "nn_meta/validation/etfe-execution-components-20261005-r0/COMPLETE.json": "6cfecbff10b4cddc658fa1913a996da7f37b285da2fafabc7f97e7e2fd841016",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/INDEPENDENT_AUDIT.json": "ffadd9949c94cc98bf1270618c648a78c562d5f10c395b8758460ffba80f199c",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/PLAN.json": "f3b97f1ea32e0a39e66745fb5b62616fc887591fe622d20f259563ffbcbec4af",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/RESUME-2-5.json": "0c563ba53044751870de2f8704a3ea7e618583b6fd8c418a66e8abce152aa51a",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/checkpoint-1.json": "28d9217c7b00d4d870d37a90db78910f47ff95fb4a32889516f325550ac8fe4d",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/checkpoint-1.sha256.json": "6613c41106c960d01a078da1b294a6d51af9c42ec8abf2ce5d789585e2bcbf90",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/checkpoint-2.json": "5f517a7909e1ef65d178e6637a0f67eae54dd129bdd16c753c7c6ac8deadcef7",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/checkpoint-2.sha256.json": "fe3706620f331f36b36933f0945013429c2cd8ad443319a14a4310452726fb84",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/checkpoint-3.json": "d4f43e43b868fc3b195662ff0a9c879c5e8336cee563df3e8736d6fc8c77b965",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/checkpoint-3.sha256.json": "2fe8a29d4b0c59cc0c983cd86617226e9f7ed0727edb213307df20ad9d365ed8",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/checkpoint-4.json": "3ceb0fcf8d0be1f15104aae463faa25324caf237a663269edfaf0ea343a49440",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/checkpoint-4.sha256.json": "133611c7863ddb192490864c3e45671882dbd998f1b17629ec1cacfb01c035e7",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/checkpoint-5.json": "5cdd9e68642f3d08552a90106ac35a8ffad7590bb9338c9885066370b8a0b33b",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/checkpoint-5.sha256.json": "763e5375df5fb509cbfbe0cfa7ca35786199862bbfde01d0e588d92c3fdc0498",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/docs/specs/ETFE_0DTE_NORMALIZATION_20261004.md": "dcf127ddb7fa571926c4f6bfc812090547497da5f950b585841f5733ae0ea7a2",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/docs/specs/ETFE_EXECUTION_20261003.md": "57742ebd548a85ffba72dc59564a1ccf8ebdef62eaa9a86148905bc2f3bfd74d",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/docs/specs/ETFE_EXECUTION_COMPONENTS_20261005.md": "5d557986239cc1c7f1fe039b37dc3e499f6ab11a158af440071c7391c96fb156",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/docs/specs/ETFE_EXECUTION_HAND_FIXTURE_20261005.json": "a33454d8c707c01f0526f6d74111d1e50133ef02b4d2bbc9ae7c71633b4eb966",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/docs/specs/ETFE_SCOPE_0DTE_20261004.json": "1dbe2fab3ab444d959708b4c5006591978458859b098e744a67253bc1c2f7a9f",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/nn_meta/etfe/acquisition.py": "9485abfebc95d0dd6a6682e9591ddeb4fa12b9604a79557d9f7805f507ce434e",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/nn_meta/etfe/execution_ledger.py": "a5efb3461e50d2e675ab092af3c87f33c33b161c8c7b5bb0456695bfb93cb043",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/nn_meta/etfe/purchase_policy_v2.py": "507231f5a173402e0219821f981883f78e996b0ded5cd1b5e7b3727f7fafaa81",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/nn_meta/etfe/vwap_reference.py": "6bccb48207a1c1b3e14603aad8ade21101a7cf83d77719830f66999ed119b46e",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/scripts/pilot_etfe_execution.py": "8d9ac69b522cd174c1896252794b7c22531f6aea8895fccf71ca9be1c5a1f2ca",
+    "nn_meta/validation/etfe-execution-components-20261005-r0/sources/tests/test_etfe_execution_ledger.py": "c5c8278d1a74c400f54ceb2f518d22599080d9cdab765536987622f16cf24eed"
+  },
+  "evidence_zip": {
+    "path": "docs/reviews/2026-10-05-etfe-execution-components-evidence.zip",
+    "sha256": "9896a894c656f70894e2b5e03f328e1cbb75f597c2709df01a1a13324d2377a9",
+    "members": 26,
+    "bytes": 47299
+  },
+  "training_admitted": false,
+  "full_execution_gate_complete": false
+}

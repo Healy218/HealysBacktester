@@ -50,8 +50,9 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Action process-date tail / mutation inspection | `nn_meta/data_cache_etfe/alpaca-fresh-actions-tail-20261005-r0/`; PLAN/COMPLETE, raw tail pages, OBSERVATIONS/INSPECTION and INDEPENDENT_AUDIT |
 | Selected action replay | `nn_meta/data_cache_etfe/alpaca-fresh-action-replay-20261005-r1/`; PLAN/COMPLETE, day page pointers, ETF_MUTATIONS/RECONCILED, INDEPENDENT_AUDIT and RESUME_AUDIT |
 | Rejected replay predecessor | `nn_meta/data_cache_etfe/alpaca-fresh-action-replay-20261005-r0/REJECTION.json`; exact-cursor rejection, partial pages and source snapshots preserved |
+| Synthetic option execution component | `nn_meta/validation/etfe-execution-components-20261005-r0/`; PLAN, five hashed checkpoints, COMPLETE, RESUME-2-5 and INDEPENDENT_AUDIT; [scope](specs/ETFE_EXECUTION_COMPONENTS_20261005.md) |
 | Current feature binding amendment | `docs/specs/ETFE_FEATURE_BINDINGS_20261005.json`; numeric Setup parameters and approved DTE/5, frozen parent retained |
-| Current evidence | [Action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [receipt](reviews/2026-10-05-etfe-action-replay.json), `reviews/2026-10-05-etfe-action-replay-evidence.zip`; [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
+| Current evidence | [Synthetic execution component](reviews/2026-10-05-etfe-execution-components.md), [receipt](reviews/2026-10-05-etfe-execution-components.json), `reviews/2026-10-05-etfe-execution-components-evidence.zip`; [action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
