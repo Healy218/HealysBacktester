@@ -44,7 +44,9 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Option-feature component | `nn_meta/validation/etfe-option-features-20261004-r1/`; PLAN/COMPLETE, nine scope receipts, INDEPENDENT_AUDIT/RESUME_AUDIT and payload index |
 | Rejected option-feature predecessor | `nn_meta/validation/etfe-option-features-20261004-r0/AUDIT_REJECTION.json`; source snapshots and outputs preserved, not selected |
 | TV-feature component | `nn_meta/validation/etfe-tv-features-20261005-r0/`; PLAN/COMPLETE, nine scope receipts, INDEPENDENT_AUDIT/RESUME_AUDIT, native/projection/link Parquets and PAYLOAD_INDEX |
-| Current evidence | [TV-feature review](reviews/2026-10-05-etfe-tv-features.md), [receipt](reviews/2026-10-05-etfe-tv-features.json), `reviews/2026-10-05-etfe-tv-features-evidence.zip`; [option diagnostics](reviews/2026-10-04-etfe-option-features.md) |
+| Remaining-feature component | `nn_meta/validation/etfe-remaining-features-20261005-r0/`; PLAN/COMPLETE, SHARED, nine scope receipts, INDEPENDENT_AUDIT/DAILY_INPUT_AUDIT/RESUME_AUDIT and PAYLOAD_INDEX |
+| Current feature binding amendment | `docs/specs/ETFE_FEATURE_BINDINGS_20261005.json`; numeric Setup parameters and approved DTE/5, frozen parent retained |
+| Current evidence | [Remaining-feature review](reviews/2026-10-05-etfe-remaining-features.md), [receipt](reviews/2026-10-05-etfe-remaining-features.json), `reviews/2026-10-05-etfe-remaining-features-evidence.zip`; [TV projections](reviews/2026-10-05-etfe-tv-features.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -56,6 +58,20 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `d84ebb5bad67768eec45074996e324b112900d253e83f0b9ab2c0bd00065f1ad`,
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
+
+October 5 remaining-feature completion: **100 fields** plus per-variant MA
+projections; 8,451 static variants, 152,711 signals / 458,133 original event
+links, and 2,073 daily-context rows. **35,378 signals** retain a previous signal
+before the observation window. Daily values: 5,588 finite, 15,142 missing;
+ten VOO daily closes invalidated by the twelve preserved minute gaps. All
+seven option-context and eleven dated contract/sector fields remain withheld
+on real data. Their formula/identity APIs have synthetic evidence only.
+Independent value/mask/reason/link and raw-daily-input audits, real prefix/batch
+checks, nine-file actual resume and **157 focused tests** passed. All 221
+registered names have component implementations; joined schema/admission stays
+open. Compute 51.32 seconds; peak RSS 1,387,171,840 bytes; root 18,252,538 bytes.
+Plan SHA256: `8fe1d85439c8458cbe86d166f6b70ec23be4f4a5baca66cd2e04b94885445145`.
+No remaining-feature process is running. Selected market inputs are unchanged.
 
 October 5 TV-feature component completion: all **96 registered projections /
 13 numerical sources**, **2,964 January closed-bar observations / 458,133 event

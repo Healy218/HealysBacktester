@@ -203,3 +203,27 @@ projections, ATR, prerequisite decisions and logical membership and writes
 INDEPENDENT_AUDIT once. It does not independently reimplement native kernels or
 prove exported Pine parity. All outputs remain unadmitted diagnostics. Completed
 studies are immutable; source changes require successor roots and fresh evidence.
+
+
+## Remaining feature components
+
+`scripts/pilot_etfe_remaining_features.py prepare --root nn_meta/validation/etfe-remaining-features-...`
+binds fresh predecessors, the ETFE catalog, original registry and versioned
+numeric-Setup/DTE binding amendment. Run with `./venv/bin/python`.
+`run --root ... [--max-scopes 1]` preserves shared and completed scope files;
+the scope limit returns status 2 for deliberate incompleteness. `verify` is
+read-only. Do not repeat completed studies without a relevant change.
+
+SHARED points to the 77-field variant table, daily context and daily input audit
+source. Each scope has signal diagnostics, original-event-ordinal links and
+compressed full-prefix native signal positions. Target replicas share the same
+signal ordinal. Missing dated contract/sector fields are explicit in every link.
+The per-signal MA fields override the shared 10/30 projections for MA variants.
+
+`scripts/audit_etfe_remaining_features.py --root ...` checks static values,
+scalar daily rolling calculations, age/MA projections and every membership.
+`scripts/audit_etfe_remaining_daily_inputs.py --root ...` separately reconciles
+daily closes and missingness to original minute grids, retaining its own source
+snapshot/hash. Both create immutable receipts once. Seven daily option-context
+formulas have synthetic complete-surface checks; current real values are missing
+pending dated coverage/terms evidence. These outputs do not admit a model schema.

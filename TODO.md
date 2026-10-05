@@ -15,15 +15,16 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-05-etfe-tv-features.md),
+[latest evidence](docs/reviews/2026-10-05-etfe-remaining-features.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-143 focused tests pass. Causal session diagnostics, the full-catalog January
-phase-B pilot, its trade capture, ten option trade/bar diagnostics and all 96 TV
-projections across thirteen sources are complete within the bounded pilot. Usable history and scientific admission remain open.
+157 focused tests pass. All 221 registered field names now have component
+implementations; real diagnostics and synthetic-only evidence remain explicitly
+separated. Joined schema, dated inputs, usable history and scientific admission
+remain open.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -99,10 +100,19 @@ projections across thirteen sources are complete within the bounded pilot. Usabl
   prefix/future checks, actual resume and 143 focused tests pass.
   [Evidence](docs/reviews/2026-10-05-etfe-tv-features.md). External Pine parity,
   model-feature admission and full schema remain open.
-- [ ] **ETFE-2.remaining-components:** Implement remaining daily stock/option
-  context, event/contract/sector/parameter fields and variant projections from
-  the registered formulas, using fresh inputs and dated availability. Preserve
-  missingness and frozen predecessors; integrate only after component checks.
+- [x] **ETFE-2.remaining-components:** Implemented the remaining 100 fields
+  and variant MA projections. All 8,451 catalog records, 152,711 signals /
+  458,133 event links and 2,073 daily-context rows reconciled; full-prefix signal
+  age, next-open availability, real prefix/batch checks and actual resume pass.
+  157 focused tests pass. Two unimplemented Setup formula errors corrected by
+  versioned amendment; predecessors preserved. Dated contract/sector and seven
+  option-context fields remain missing on real data, with synthetic API/formula
+  tests only. [Evidence](docs/reviews/2026-10-05-etfe-remaining-features.md).
+- [ ] **ETFE-2.joined-schema:** Join the verified components into the registered
+  221-value/221-mask order; check every original row, variant override, source
+  availability, missing reason and provenance. Keep diagnostics unadmitted until
+  dated actions, identities, option surfaces/sessions and publication evidence
+  are complete. Component formula coverage is not an admitted dataset.
 - [ ] **ETFE-1.demand:** Complete symbol/session surfaces after discovery,
   full-window causal signal/feature/trade demand (phase B), and holding/roll/
   physical-stock paths (phase C). Current calendar inventory is not the full

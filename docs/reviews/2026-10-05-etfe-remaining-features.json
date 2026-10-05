@@ -1,0 +1,39 @@
+{
+  "all_component_field_census": 221,
+  "all_independent_checks_passed": true,
+  "daily_finite": 5588,
+  "daily_missing": 15142,
+  "daily_rows": 2073,
+  "dated_contract_sector_values_available": false,
+  "evidence": {
+    "bytes": 158624,
+    "indexed_parquets": 21,
+    "indexed_signal_position_payloads": 9,
+    "members": 69,
+    "path": "docs/reviews/2026-10-05-etfe-remaining-features-evidence.zip",
+    "sha256": "2719ed0327d22dd3d264277bae9cabdc50df7fbad9d5ba99946a4752fc906fe8"
+  },
+  "focused_tests": 157,
+  "full_feature_schema_complete": false,
+  "implemented_remaining_fields": 100,
+  "invalid_daily_closes": 10,
+  "logical_rows": 458133,
+  "metrics": {
+    "compute_seconds": 51.318972947017755,
+    "peak_rss_bytes": 1387171840,
+    "root_bytes": 18252538
+  },
+  "model_feature_admitted": false,
+  "option_context_real_values_available": false,
+  "plan_sha256": "8fe1d85439c8458cbe86d166f6b70ec23be4f4a5baca66cd2e04b94885445145",
+  "ready_for_training": false,
+  "resume_preserved_files": 9,
+  "root": "nn_meta/validation/etfe-remaining-features-20261005-r0",
+  "schema": "etfe-remaining-feature-review-v1",
+  "signal_prefix_batch_scopes": 9,
+  "signals": 152711,
+  "signals_with_pre_pilot_prior": 35378,
+  "static_cells": 650727,
+  "static_variants": 8451,
+  "stock_context_prefix_future_scopes": 3
+}

@@ -2341,3 +2341,22 @@ convenient alternative. Zero admitted selections is an explicit component
 result, not a failed or losing backtest. Full feature and integrated-pilot gates
 remain open. [Definition](specs/ETFE_CAUSAL_PILOT_20261004.md),
 [evidence](reviews/2026-10-04-etfe-causal-pilot.md).
+
+
+### 2026-10-05 — Correct unimplemented ETFE Setup parameter formulas
+
+The frozen feature registry accidentally described `param_setup_max_bars` and
+`param_setup_stop_atr` as Setup identity comparisons. The actual fresh ETFE
+catalog holds numeric values 60 and 1.2. The versioned
+[amendment](specs/ETFE_FEATURE_BINDINGS_20261005.json) restores numeric parameter
+projection and restates the approved actual 0–5 DTE fraction divided by five.
+Six Setup category flags remain structurally missing outside the Setup family.
+The correction affects previously unimplemented fields only; earlier completed
+stock, option and TV component evidence remains valid and unchanged.
+
+Remaining context/identity implementation distinguishes tested formulas from
+real input availability. Acquisition candidates do not supply dated selected
+contract or sector fields, and raw option capture does not establish complete
+historical surface terms. Keep those fields missing until dated evidence is
+supplied. Use the complete January signal prefix for signal age, independent of
+target replication. [Definition](specs/ETFE_REMAINING_FEATURES_20261005.md).
