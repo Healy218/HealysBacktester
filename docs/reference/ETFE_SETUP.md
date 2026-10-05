@@ -341,3 +341,28 @@ an independent Decimal audit checks cash, shares, fees, capacities and dates.
 Ordinary entries after continuation and full observation scheduling remain
 separate. Real source admission, labels and training stay false. Preserve source
 snapshots and use successor modules/roots for behavior changes.
+
+## Bounded shared scheduler and stress matrix
+
+Selected root: `nn_meta/validation/etfe-integration-components-20261005-r0/`.
+[Contract](../specs/ETFE_INTEGRATION_COMPONENTS_20261005.md),
+[evidence and limits](../reviews/2026-10-05-etfe-integration-components.md).
+
+```bash
+./venv/bin/python scripts/pilot_etfe_integration.py audit --root nn_meta/validation/etfe-integration-components-20261005-r0
+```
+
+The recorded `run --max-events 20` stopped within the first ordinary path;
+`run` in a new process resumed and completed six tapes × 27 finite profiles.
+All 162 reports/states and the saved prefix reconcile against fresh replay.
+Independent Decimal checks cover cash, shares/contracts, costs, participation,
+reservations and the complete 189-path census. Three stressed paths require
+additional quote/exercise observations; no missing outcome is discarded.
+
+The scheduler generates all required clocks inside each declared synthetic
+interval, including settlement and stock latency. Short fixture ends stay open;
+only a completed fixed-end tape may censor. Model targets remain null. This is
+not real input admission, isolated scientific labels or full-history resource
+validation. Snapshot tape/source/cursor identities are mandatory; uncommitted
+payloads recover a missing hash receipt only after deterministic replay.
+Future changes use new source versions and study roots.

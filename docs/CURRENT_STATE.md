@@ -52,8 +52,9 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Rejected replay predecessor | `nn_meta/data_cache_etfe/alpaca-fresh-action-replay-20261005-r0/REJECTION.json`; exact-cursor rejection, partial pages and source snapshots preserved |
 | Synthetic option execution component | `nn_meta/validation/etfe-execution-components-20261005-r0/`; PLAN, five hashed checkpoints, COMPLETE, RESUME-2-5 and INDEPENDENT_AUDIT; [scope](specs/ETFE_EXECUTION_COMPONENTS_20261005.md) |
 | Synthetic expiry/delivery continuation | `nn_meta/validation/etfe-expiry-components-20261005-r0/`; PLAN, thirteen hashed checkpoints, COMPLETE, RESUME-2 and INDEPENDENT_AUDIT; [scope](specs/ETFE_EXPIRY_COMPONENTS_20261005.md) |
+| Synthetic shared scheduler / stress matrix | `nn_meta/validation/etfe-integration-components-20261005-r0/`; PLAN, 162 hashed results, event-20 checkpoint, COMPLETE, RESUME-1 and INDEPENDENT_AUDIT; [scope](specs/ETFE_INTEGRATION_COMPONENTS_20261005.md) |
 | Current feature binding amendment | `docs/specs/ETFE_FEATURE_BINDINGS_20261005.json`; numeric Setup parameters and approved DTE/5, frozen parent retained |
-| Current evidence | [Synthetic expiry/delivery](reviews/2026-10-05-etfe-expiry-components.md), [receipt](reviews/2026-10-05-etfe-expiry-components.json), `reviews/2026-10-05-etfe-expiry-components-evidence.zip`; [option component](reviews/2026-10-05-etfe-execution-components.md), [action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
+| Current evidence | [Shared scheduler / stress matrix](reviews/2026-10-05-etfe-integration-components.md), [receipt](reviews/2026-10-05-etfe-integration-components.json), `reviews/2026-10-05-etfe-integration-components-evidence.zip`; [expiry/delivery](reviews/2026-10-05-etfe-expiry-components.md), [action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:

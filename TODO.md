@@ -15,13 +15,13 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-05-etfe-expiry-components.md),
+[latest evidence](docs/reviews/2026-10-05-etfe-integration-components.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-265 focused tests pass. All 221 registered fields are joined with 221 masks
+289 focused tests pass. All 221 registered fields are joined with 221 masks
 for every one of the 458,133 pilot events; independent value/lineage audit and
 actual resume pass. Real diagnostics and synthetic-only evidence remain
 separate. Dated inputs, usable history and scientific admission remain open.
@@ -37,7 +37,14 @@ partial stops and T+1 cash settlement, including a separate-process restart.
 The synthetic lifecycle continuation now covers expiry classification, settled
 roll budgets, exercise reservations, physical call delivery and stock liquidation.
 Four hand cases, thirteen saved prefixes and separate-process restart reconcile.
-Full scheduling, label horizons/stresses and admitted real execution remain open.
+The bounded shared scheduler now integrates ordinary entries and lifecycle
+clocks, settlement-extended diagnostic horizons and all 27 declared synthetic
+stress profiles across six tapes. All 162 combinations / 189 proposal outcomes
+reconcile; three stressed paths retain missing quote/exercise inputs explicitly.
+Scientific labels, full-history execution and real admission remain open.
+**Next selected work is ETFE-1.demand:** full phase-B/C acquisition census and
+measured request/storage budgets, including holding/roll/exercise paths exposed
+by the integrated diagnostics, before expanded capture and the real pilot.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -157,12 +164,14 @@ Full scheduling, label horizons/stresses and admitted real execution remain open
   independent audit and actual resume pass; 265 focused tests.
   [Evidence](docs/reviews/2026-10-05-etfe-expiry-components.md). Full execution,
   real admission and funded-put inventory integration remain separate.
-- [ ] **ETFE-3.integration-components:** Connect ordinary entries and lifecycle
-  continuation into a complete shared observation scheduler with settlement-
-  extended terminal horizons, input/funding/boundary census and declared stress
-  cases. Preserve immutable predecessor components; hand-reconcile mixed paths
-  and recovery before real-path integration. Scientific labels still require
-  admitted dated inputs and complete coverage.
+- [x] **ETFE-3.integration-components:** Bounded synthetic shared scheduler
+  connects ordinary entries, expiry/roll/delivery and cash settlement; generates
+  observation/retry clocks and diagnostic terminal horizons. All 162 combinations
+  across six tapes / 27 profiles reconcile independently, including 189 outcome
+  records and three unresolved stressed paths. Actual restart, input/source
+  binding and 289 focused tests pass. [Evidence](docs/reviews/2026-10-05-etfe-integration-components.md).
+  Scientific isolated labels, full-history scheduling/resource validation,
+  real-source integration and full ETFE-3 acceptance remain open.
 - [ ] **ETFE.provider-action-timing:** Establish mutation-history retention and
   dated original/revision availability for required actions. January's welcome-only
   stream and October's capped replay do not prove coverage. Budget any expanded
