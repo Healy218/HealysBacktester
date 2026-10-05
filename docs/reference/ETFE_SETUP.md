@@ -93,3 +93,26 @@ Parquet files are found through `partitions/*.json`, not filename guessing.
 Keep all occurrences; filter only under an explicit downstream admission policy.
 Inspect `stock_session_coverage` for expected/observed/missing minutes. VOO's
 recorded gaps remain gaps, and stock-session labels do not define option hours.
+
+## Demand inventory and January coverage
+
+`scripts/etfe_demand.py inventory` requires `--calendar`, `--setup`, repeatable
+`--input` fresh capture roots, and a new `nn_meta/validation/etfe-demand-*` root.
+It factors all civil expiry/status edges over the collected calendar. `DEMAND.json`
+binds the mathematical catalog and every reuse link; it explicitly lists later
+signal, holding, reference and history frontiers instead of counting them as zero.
+
+`discovery --inventory ... --root ...` prepares the bounded January expiry grid.
+`boundary` and `surfaces` additionally require the full discovery and selected
+reuse roots via `--input`. They verify the complete discovery grid before
+enumerating every returned symbol, batch at most 100, and record symbol/window
+edges plus reused capture links. Use `run` to resume the selected source-bound
+root and `report` once complete to create immutable `COVERAGE.json`.
+
+Honor the [study's total ceilings](../specs/ETFE_DEMAND_20261004.md) and the
+[active-time successor](../specs/ETFE_DEMAND_CONTINUATION_20261004.md), not
+just each invocation's 128-request cap. Plans and reports distinguish absent
+symbols from no trading and first observed timestamps from usable history.
+Full-day data can serve multiple downstream purposes; its download does not
+establish complete historical listings or admit a context surface. Normalization
+and independent reconciliation use the same commands as above.

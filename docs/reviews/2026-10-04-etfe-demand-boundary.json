@@ -1,0 +1,229 @@
+{
+  "active_capture_seconds": 959.3386041859922,
+  "calendar_demand": {
+    "logical_expiry_status_edges": 190716,
+    "physical_discovery_queries": 6300,
+    "reused_queries": 60,
+    "sessions": 691,
+    "ticker_sessions": 2073
+  },
+  "calendar_discovery_reconciliation": {
+    "captured_queries": 432,
+    "january_padding_queries_outside_inventory": 6,
+    "remaining_queries": 5868
+  },
+  "complete_history": false,
+  "date_central": "2026-10-04",
+  "demand_sha256": "f98a92ce1454e9a05f444f3abf1df93b1cb0da6cd38c0a3cd805d4f327302ee0",
+  "evidence_bundle": {
+    "bytes": 12966932,
+    "contents": "metadata/source/report bundle; raw bodies and Parquet remain local and are hash-indexed",
+    "indexed_payload_files": 1921,
+    "members": 2977,
+    "path": "docs/reviews/2026-10-04-etfe-demand-boundary-evidence.zip",
+    "sha256": "f2df0a3f2c2b048cde7d19db64b46d072dc2718ae52415006c43eb37edbac022"
+  },
+  "full_demand_complete": false,
+  "new_live_gets": 960,
+  "new_partitions": 960,
+  "new_rows": 200637,
+  "normalized": {
+    "boundary": {
+      "bytes": 1163262,
+      "partitions": 233,
+      "plan_sha256": "d84ebb5bad67768eec45074996e324b112900d253e83f0b9ab2c0bd00065f1ad",
+      "quality_counts": {},
+      "root": "nn_meta/data_cache_etfe/normalized-20261004-january-boundary-r0",
+      "rows": 0
+    },
+    "discovery": {
+      "bytes": 4293026,
+      "partitions": 378,
+      "plan_sha256": "94f7a569ee594ab5ad6b2ec501abefcf1d10a6e3bcc9bf0bc5ccb2c062ca8928",
+      "quality_counts": {},
+      "root": "nn_meta/data_cache_etfe/normalized-20261004-january-discovery-r0",
+      "rows": 21966
+    },
+    "surfaces": {
+      "bytes": 16413427,
+      "partitions": 349,
+      "plan_sha256": "f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f",
+      "quality_counts": {},
+      "root": "nn_meta/data_cache_etfe/normalized-20261004-january-surfaces-r0",
+      "rows": 178671
+    }
+  },
+  "raw": {
+    "boundary": {
+      "absent_symbol_windows": 23176,
+      "active_seconds": 231.4449983679806,
+      "by_ticker": {
+        "QQQ": {
+          "complete_history": false,
+          "first_observed_utc": null,
+          "verified_usable_start": null
+        },
+        "SPY": {
+          "complete_history": false,
+          "first_observed_utc": null,
+          "verified_usable_start": null
+        },
+        "VOO": {
+          "complete_history": false,
+          "first_observed_utc": null,
+          "verified_usable_start": null
+        }
+      },
+      "bytes": 22348417,
+      "invocations": 2,
+      "partitions": 233,
+      "plan_sha256": "569b9a2cce77732dcaae5c3b5f4f6466dc66c0fb1c6498c583aa86e1487aa749",
+      "requests": 233,
+      "reused_symbol_windows": 0,
+      "root": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-january-boundary-r0",
+      "rows": 0,
+      "statuses": {
+        "200": 233
+      },
+      "symbols_observed": 0
+    },
+    "discovery": {
+      "absent_symbol_windows": 0,
+      "active_seconds": 376.7373774530133,
+      "by_ticker": {
+        "QQQ": {
+          "complete_history": false,
+          "first_observed_utc": null,
+          "verified_usable_start": null
+        },
+        "SPY": {
+          "complete_history": false,
+          "first_observed_utc": null,
+          "verified_usable_start": null
+        },
+        "VOO": {
+          "complete_history": false,
+          "first_observed_utc": null,
+          "verified_usable_start": null
+        }
+      },
+      "bytes": 21431655,
+      "invocations": 4,
+      "partitions": 378,
+      "plan_sha256": "768ee4a4a0d1761fa0ec9d2309832ee19fee2e910bc62912051abf69f996429b",
+      "requests": 379,
+      "reused_symbol_windows": 0,
+      "root": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-january-discovery-r0",
+      "rows": 21966,
+      "statuses": {
+        "200": 378,
+        "None": 1
+      },
+      "symbols_observed": 21966
+    },
+    "surfaces": {
+      "absent_symbol_windows": 27795,
+      "active_seconds": 351.15622836499824,
+      "by_ticker": {
+        "QQQ": {
+          "complete_history": false,
+          "first_observed_utc": "2024-01-18T14:30:00+00:00",
+          "verified_usable_start": null
+        },
+        "SPY": {
+          "complete_history": false,
+          "first_observed_utc": "2024-01-18T14:30:00+00:00",
+          "verified_usable_start": null
+        },
+        "VOO": {
+          "complete_history": false,
+          "first_observed_utc": "2024-01-18T14:30:00+00:00",
+          "verified_usable_start": null
+        }
+      },
+      "bytes": 50268514,
+      "invocations": 3,
+      "partitions": 349,
+      "plan_sha256": "b7fcca953f34218de2b54aad9cd4764756c908905fcc22de603f96d1451e51e6",
+      "requests": 349,
+      "reused_symbol_windows": 6,
+      "root": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-january-surfaces-r0",
+      "rows": 178671,
+      "statuses": {
+        "200": 349
+      },
+      "symbols_observed": 4265
+    }
+  },
+  "ready_for_build": false,
+  "ready_for_training": false,
+  "requests": 961,
+  "schema": "etfe-demand-boundary-evidence-v1",
+  "source_files": {
+    "docs/reviews/2026-10-04-etfe-demand-boundary.md": "9ed78a7a46b941a395e8cd7dcc06aaadeca9398e40bb851a3fa8c0e76651bc87",
+    "docs/specs/ETFE_DEMAND_20261004.md": "7cde76275df83ce44275112b1dab486ed6358e29211defe94454ed7c04e1bca3",
+    "docs/specs/ETFE_DEMAND_CONTINUATION_20261004.md": "6aae66bbe1ffad5acd24d602cb2174393f1285bd43b2842aa4a0e6112d26e5ac",
+    "nn_meta/etfe/demand.py": "2bdf4cceb48fa0081367a981fee7a1c66e4ecac502f8705ba59876943c1d2071",
+    "scripts/etfe_demand.py": "59b67abb463d34b80461f965d805d7ec386112b9a6cbd0ffae0ed949df619694",
+    "tests/test_etfe_demand.py": "3164dd6667e0da32d577054e41f3ecd731c33ded0c72c827d3081dd041360a25"
+  },
+  "surface_edge_audit": {
+    "absence": "unresolved_not_no_trade",
+    "all_physical_jobs_and_reuse_links_reconciled": true,
+    "audit_source_sha256": "0f3dd8e118cd9853089f12483e294fef6d69fa5135b95bd08bceb7e0c907d496",
+    "by_ticker_day": {
+      "2024-01-18/QQQ": {
+        "absent_symbol_windows": 7912,
+        "expected_symbol_windows": 9328,
+        "observed_symbol_windows": 1416,
+        "rows": 20471
+      },
+      "2024-01-18/SPY": {
+        "absent_symbol_windows": 6216,
+        "expected_symbol_windows": 7692,
+        "observed_symbol_windows": 1476,
+        "rows": 31699
+      },
+      "2024-01-18/VOO": {
+        "absent_symbol_windows": 255,
+        "expected_symbol_windows": 292,
+        "observed_symbol_windows": 37,
+        "rows": 240
+      },
+      "2024-01-19/QQQ": {
+        "absent_symbol_windows": 7413,
+        "expected_symbol_windows": 9348,
+        "observed_symbol_windows": 1935,
+        "rows": 53096
+      },
+      "2024-01-19/SPY": {
+        "absent_symbol_windows": 5767,
+        "expected_symbol_windows": 7708,
+        "observed_symbol_windows": 1941,
+        "rows": 73128
+      },
+      "2024-01-19/VOO": {
+        "absent_symbol_windows": 232,
+        "expected_symbol_windows": 292,
+        "observed_symbol_windows": 60,
+        "rows": 608
+      }
+    },
+    "expected_symbol_windows": 34660,
+    "historical_listings_complete": false,
+    "plan_sha256": "b7fcca953f34218de2b54aad9cd4764756c908905fcc22de603f96d1451e51e6",
+    "ready_for_build": false,
+    "schema": "etfe-surface-edge-audit-v1",
+    "totals": {
+      "absent_symbol_windows": 27795,
+      "new_rows": 178671,
+      "observed_symbol_windows": 6865,
+      "reused_rows": 571,
+      "reused_symbol_windows": 6
+    }
+  },
+  "tests": {
+    "command": "./venv/bin/python -m pytest tests/test_etfe_setup.py tests/test_etfe_vwap.py tests/test_etfe_pull_diagnosis.py tests/test_etfe_acquisition.py tests/test_etfe_purchase_policy.py tests/test_etfe_0dte.py tests/test_etfe_expansion.py tests/test_etfe_normalization.py tests/test_etfe_demand.py -q",
+    "passed": 95
+  }
+}

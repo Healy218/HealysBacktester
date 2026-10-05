@@ -15,12 +15,14 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-04-etfe-normalization-expansion.md),
+[latest evidence](docs/reviews/2026-10-04-etfe-demand-boundary.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
-Current normalized inputs and expanded stock/option strata are complete within
-their declared scope; 87 focused tests pass.
+Selected normalized inputs and bounded January option coverage are complete
+within their declared scope. Calendar-level phase-A demand is enumerated;
+95 focused tests pass. First-observed January coverage is broader, while usable
+history and scientific admission remain open.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -54,13 +56,28 @@ their declared scope; 87 focused tests pass.
   discovery/transport strata captured and normalized; 254 new live GETs. Stock
   requests span January 2024–October 2, 2026. SPY/QQQ have every expected regular
   minute; 12 VOO gaps remain explicitly unresolved. Full option demand is separate.
-- [ ] **ETFE-1.demand:** Enumerate full underlying/context and option demand,
-  applying 0–5 DTE to purchases/rolls and retaining context-only surface scope.
-  Expand option/context coverage beyond the four sampled dates with measured
-  request/storage budgets; the stock-month expansion is complete.
-- [ ] **ETFE.history-boundary:** Establish scoped first-observed and usable
-  SPY/QQQ/VOO coverage, including earlier discovery. January 18 is an observed
-  lead; bootstrap January 1 stock padding is not a verified options floor.
+- [x] **ETFE-1.demand-calendar:** Full collection-window calendar inventory:
+  691 sessions, 2,073 ticker-sessions, 190,716 expiry/status edges factored into
+  6,300 discovery queries. Includes every civil expiry at 0–5 DTE for purchases
+  and 1–45 DTE for context; 60 exact completed queries reused. Catalog and
+  feature/execution definitions bound; no additional context ticker required.
+  [Bounded study](docs/specs/ETFE_DEMAND_20261004.md),
+  [active-time budget successor](docs/specs/ETFE_DEMAND_CONTINUATION_20261004.md).
+- [x] **ETFE-1.expand-january:** 960 successful live GETs; January expiry discovery,
+  all-returned-symbol January 1–17 bar check, full January 18/19 surfaces. Added
+  200,637 normalized records in 960 partitions; every raw occurrence and all
+  34,660 surface symbol/day edges independently reconciled. Empty windows remain
+  unresolved. [Evidence](docs/reviews/2026-10-04-etfe-demand-boundary.md).
+- [ ] **ETFE-1.demand:** Complete symbol/session surfaces after discovery,
+  registered causal signal/feature/trade windows (phase B), and holding/roll/
+  physical-stock paths (phase C). Current calendar inventory is not the full
+  strategy demand census. Reconcile measured request/storage budgets before
+  bulk capture; the stock-month expansion is complete.
+- [ ] **ETFE.history-boundary:** January 1–17 returned no bars for all 23,176
+  discovered symbols in the January–March 4 expiry grid; January 18 09:30 ET is
+  first observed for all three ETFs. Establish usable/complete coverage;
+  pre-January intervals, longer expiries and omitted historical listings remain
+  outside this proof. January stock padding is not an admitted research start.
 - [ ] **ETFE.provider-contract:** Validate remaining route provenance and dated
   eligibility/session/contract terms when needed by feature/execution admission.
   R1/R2/P1 are not permission gates for raw collection. ETFE-0 admission remains

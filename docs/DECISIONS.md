@@ -2302,3 +2302,27 @@ stock minutes without imputation. Stock-calendar classifications are not option
 session rules, and successful request/normalization completion is not complete
 option coverage, point-in-time admission or an evaluated model. Full option
 and context demand remains separate. [Evidence](reviews/2026-10-04-etfe-normalization-expansion.md).
+
+### 2026-10-04 — Factor ETFE calendar demand and test earlier January history
+
+Continue fresh Alpaca acquisition under the user's 0–5 DTE purchase direction.
+Enumerate every civil expiry/status needed by all collected sessions: purchase
+0–5 DTE and context-only 1–45 DTE. Do not use the stock calendar to exclude
+weekend/holiday expiries or omit post-boundary expiries from historical context.
+Reuse only verified exact fresh query identities, preserving their original
+receipts and linking each new logical purpose. Calendar-level demand is phase A;
+registered signal/feature demand and holding/roll/stock paths remain phases B/C.
+[Definition](specs/ETFE_DEMAND_20261004.md).
+
+Earlier-expiry current listings justify a bounded all-returned-symbol price
+census, not historical eligibility or a proven provider floor. Full-day January
+18/19 captures include all returned strikes within the purchase/context union;
+no selection by closing premium or outcomes. Empty bars remain unresolved.
+
+The original one-hour wall-clock study limit elapsed during approval waits;
+the second live discovery invocation started after that deadline. Preserve and
+report this orchestration deviation. Continue within unchanged request/storage
+ceilings using at most one hour of accumulated active capture time, excluding
+idle/approval waits; per-invocation wall caps remain enforced. This is an explicit
+[budget successor](specs/ETFE_DEMAND_CONTINUATION_20261004.md), not relabeling of
+old receipts or retrospective proof that the original deadline was enforced.
