@@ -15,16 +15,16 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-05-etfe-remaining-features.md),
+[latest evidence](docs/reviews/2026-10-05-etfe-joined-schema.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-157 focused tests pass. All 221 registered field names now have component
-implementations; real diagnostics and synthetic-only evidence remain explicitly
-separated. Joined schema, dated inputs, usable history and scientific admission
-remain open.
+173 focused tests pass. All 221 registered fields are joined with 221 masks
+for every one of the 458,133 pilot events; independent value/lineage audit and
+actual resume pass. Real diagnostics and synthetic-only evidence remain
+separate. Dated inputs, usable history and scientific admission remain open.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -108,11 +108,14 @@ remain open.
   versioned amendment; predecessors preserved. Dated contract/sector and seven
   option-context fields remain missing on real data, with synthetic API/formula
   tests only. [Evidence](docs/reviews/2026-10-05-etfe-remaining-features.md).
-- [ ] **ETFE-2.joined-schema:** Join the verified components into the registered
-  221-value/221-mask order; check every original row, variant override, source
-  availability, missing reason and provenance. Keep diagnostics unadmitted until
-  dated actions, identities, option surfaces/sessions and publication evidence
-  are complete. Component formula coverage is not an admitted dataset.
+- [x] **ETFE-2.joined-schema:** Registered 221-value/221-mask diagnostic matrix
+  complete for all 458,133 original events in 96 bounded chunks. Independent
+  natural-key audit checks all values, masks, reasons, modeled availability,
+  row identities, variant overrides and provenance. Every chunk passed changed
+  batch-boundary checks; actual resume preserved five files. 173 focused tests
+  pass. [Evidence](docs/reviews/2026-10-05-etfe-joined-schema.md).
+  Dated actions, identities, option surfaces/sessions and publication evidence
+  remain unresolved; all diagnostics stay unadmitted.
 - [ ] **ETFE-1.demand:** Complete symbol/session surfaces after discovery,
   full-window causal signal/feature/trade demand (phase B), and holding/roll/
   physical-stock paths (phase C). Current calendar inventory is not the full

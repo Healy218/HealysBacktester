@@ -1,63 +1,59 @@
-# Handoff — October 5, 2026 — Remaining feature components
+# Handoff — October 5, 2026 — Joined diagnostic schema
 
 ## Focus and completed result
 
 Continued fresh Alpaca-only ETFE with actual 0–5 DTE including qualifying 0DTE.
-Completed **ETFE-2.remaining-components** within its real/synthetic evidence scope.
-[Review](docs/reviews/2026-10-05-etfe-remaining-features.md),
-[machine receipt](docs/reviews/2026-10-05-etfe-remaining-features.json).
+Completed **ETFE-2.joined-schema** within its bounded diagnostic scope.
+[Review](docs/reviews/2026-10-05-etfe-joined-schema.md),
+[machine receipt](docs/reviews/2026-10-05-etfe-joined-schema.json).
 
-- Implemented the remaining 100 fields; all 221 registered component names
-  reconcile. Full joined schema and input admission remain separate.
-- 77 static fields for all 8,451 catalog variants; all 25,353 ticker combinations
-  replayed. 152,711 signals preserve every one of 458,133 original event links.
-- Signal age uses the full January 2 prefix: 35,378 signals have a preceding
-  signal before January 18. Target replicas do not advance the age counter.
-- Added per-event MA fast/slow overrides and 2,073 daily-context rows spanning
-  all 691 stock sessions. Next-open availability and calendar gaps preserved.
-- Ten VOO days have invalid closes from twelve missing minutes. Daily table:
-  5,588 finite raw-stock values, 15,142 missing cells, no forward-fill.
-- Corrected two previously unimplemented Setup numeric formulas in a versioned
-  binding amendment. Existing registry and completed artifacts remain unchanged.
-- Independent static/daily/signal/MA/missingness/membership and minute-to-daily
-  audits pass. All-variant prefix/batch checks and 157 focused tests pass.
-- Actual one-scope stop/resume preserved nine completed files; compute 51.32s,
-  peak RSS 1.29 GiB, root 18.25 MB. No downloads, simulation or training.
+- Joined all 221 registered values plus 221 masks for every one of the original
+  458,133 pilot events across nine ticker/timeframe scopes.
+- Kept per-variant MA overrides, original event/target identities and lineage.
+  Matrix, reasons, modeled availability and row metadata are separate Parquets.
+- Independent natural-key audit reconciles all 101,247,393 value cells and every
+  mask, reason, clock, original event field and row/source link exactly.
+- 59,917,288 values are finite; 41,330,105 missing. Missingness includes structural
+  parameters, insufficient history and unresolved inputs; no imputation.
+- Every one of 96 chunks passed changed-batch-boundary checks. Actual one-chunk
+  stop/resume preserved five files and wrote the remaining 95 chunks.
+- 173 focused ETFE tests passed, including 16 new join guard/recovery tests.
+- Join compute 35.15s, peak RSS 1.00 GiB, root 193.14 MB. No new capture,
+  execution simulation, labels, training or deployment.
 
 ## Evidence boundary and stopping point
 
-Seven daily option-context formulas have synthetic complete-surface evidence;
-all real values remain missing pending dated complete catalog/capture/terms.
-Actual selected-contract DTE/moneyness and nine dated sector fields also remain
-missing on every pilot link. API tests cover evidence clocks and 0/5 DTE bounds.
-Acquisition candidates and today's expired listings are not dated selections.
-Raw stock context still needs dated action reconstruction before admission.
+All outputs remain diagnostic and unadmitted. Each row has 75–100 missing
+fields; schema completeness does not establish complete historical inputs.
+Seven option-context and eleven dated contract/sector fields remain missing.
+Selected contract and actual DTE are unknown; acquisition candidates/target DTE
+never substitute for historical selections. Modeled clocks do not prove dated
+provider publication. Raw stock values still need dated action reconstruction.
 
-No ETFE process remains running. Usable history remains null; no dataset/model
-freeze, model-ready feature schema, training verdict or deployment is implied.
+No ETFE process remains running. Usable history remains null. Full-history
+feature validation, dataset admission, training and integrated pilot stay open.
 
 ## Next work
 
-1. **ETFE-2.joined-schema:** join verified components in the 221-value/221-mask
-   order, apply per-variant MA overrides, and verify all original row identities,
-   availability clocks, missing reasons, links and provenance. Keep unadmitted.
-2. Resolve dated actions/contract/sector/surface/session/publication evidence.
-   Preserve explicit absence, the three option trade-without-bar cases, and
-   ambiguous equal-time order; do not repair gaps with synthetic observations.
-3. Finish full phase-B/C demand and integrated ETFE-4 capture/features/execution/
-   dataset/training smoke and resource/recovery checks before bulk work/freezes.
+1. **ETFE.provider-contract / ETFE.history-boundary:** resolve dated actions,
+   contract/sector identities, complete option surfaces, session and publication
+   evidence. Preserve empty/ambiguous observations and all known minute gaps.
+2. **ETFE-1.demand:** finish full phase-B/C signal/feature/holding/roll demand,
+   reconciling request/storage budgets before bulk capture.
+3. **ETFE-4.pilot:** integrate capture → features → execution → dataset → training
+   smoke, with resource/recovery evidence before full builds or freezes.
 
 ## Artifacts and constraints
 
-Selected: `nn_meta/validation/etfe-remaining-features-20261005-r0/`.
-Plan SHA256: `8fe1d85439c8458cbe86d166f6b70ec23be4f4a5baca66cd2e04b94885445145`.
-SHARED, nine scopes, independent/raw-daily/resume receipts and payload index are
-local. Evidence ZIP: 69 metadata/source members, hashes for 21 Parquets and nine
-compressed native-position payloads. Market inputs remain 1,249 partitions /
-1,955,680 rows. [State](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
-[commands](docs/reference/ETFE_SETUP.md#remaining-feature-components),
-[binding amendment](docs/specs/ETFE_FEATURE_BINDINGS_20261005.json).
+Selected: `nn_meta/validation/etfe-joined-20261005-r0/`.
+Plan SHA256: `2395d11076c481cc697cd6848f3682cd18a8866bbbcd9b79b18f37525e08213c`.
+PLAN/COMPLETE, 96 chunk receipts, 384 payloads, independent/resume audits and
+payload index are local. Evidence ZIP contains 111 metadata/source/audit members
+and payload hashes. Market inputs remain 1,249 partitions / 1,955,680 rows.
+[State](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
+[commands](docs/reference/ETFE_SETUP.md#joined-diagnostic-schema),
+[contract](docs/specs/ETFE_JOINED_SCHEMA_20261005.md).
 
 Source-bound consumers are immutable: change them only in successor studies.
 Preserve unrelated dirty work, including DECISIONS/EXPERIMENTS additions.
-[Previous handoff](handoff-history/HANDOFF-2026-10-05-before-remaining-features.md).
+[Previous handoff](handoff-history/HANDOFF-2026-10-05-before-joined-schema.md).

@@ -1,0 +1,47 @@
+{
+  "all_chunks_batch_invariant": true,
+  "all_logical_rows_and_lineage_reconciled": true,
+  "all_values_masks_reasons_availability_exact": true,
+  "chunks": 96,
+  "evidence": {
+    "bytes": 2338669,
+    "indexed_parquets": 384,
+    "members": 111,
+    "path": "docs/reviews/2026-10-05-etfe-joined-schema-evidence.zip",
+    "sha256": "edb1c16ed9359e2f613e5b87138869645cd087d63713ae1ce6a75562aa8a3aca"
+  },
+  "feature_schema_sha256": "5bfd1b73c85f3e43ce9f76190c12eb0a34e070acb394dbb8513100ba97f42d61",
+  "finite_cells": 59917288,
+  "focused_tests": 173,
+  "joined_diagnostic_schema_complete": true,
+  "mask_fields": 221,
+  "max_missing_fields_per_row": 100,
+  "metrics": {
+    "compute_seconds": 35.14631476299837,
+    "peak_rss_bytes": 1071894528,
+    "root_bytes": 193144184
+  },
+  "min_missing_fields_per_row": 75,
+  "missing_cells": 41330105,
+  "model_feature_admitted": false,
+  "parent_numerical_components_recomputed": false,
+  "parquet_payloads": 384,
+  "plan_sha256": "2395d11076c481cc697cd6848f3682cd18a8866bbbcd9b79b18f37525e08213c",
+  "ready_for_training": false,
+  "receipt_hashes": {
+    "COMPLETE.json": "d967b0d0b329b4e46cae48c2ce40373bd31f2270dc4c9695c85951958fa276e7",
+    "INDEPENDENT_AUDIT.json": "26828efa1b2a5a334e94e6b88615d3f636d02f3bbc253cc55aecd4ab3d52ec8e",
+    "PAYLOAD_INDEX.json": "f90be66180d52b618f1e5e5510762615c01d544e6466600a79049caad7c80060",
+    "PLAN.json": "349a3cfda0c7aad838d883098e1e923b79226bb4349f14d6cd9bcd36db13722e",
+    "RESUME_AUDIT.json": "1e4a4075e7f30c0cd97108069286407f5e7591fa5c276258546de728150fa73a"
+  },
+  "resume_preserved_files": 5,
+  "resume_remaining_chunks": 95,
+  "root": "nn_meta/validation/etfe-joined-20261005-r0",
+  "rows": 458133,
+  "schema": "etfe-joined-schema-review-v1",
+  "scopes": 9,
+  "usable_history_start": null,
+  "value_cells": 101247393,
+  "value_fields": 221
+}

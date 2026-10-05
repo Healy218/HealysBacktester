@@ -227,3 +227,28 @@ daily closes and missingness to original minute grids, retaining its own source
 snapshot/hash. Both create immutable receipts once. Seven daily option-context
 formulas have synthetic complete-surface checks; current real values are missing
 pending dated coverage/terms evidence. These outputs do not admit a model schema.
+
+
+## Joined diagnostic schema
+
+`scripts/pilot_etfe_joined.py prepare --root nn_meta/validation/etfe-joined-...`
+binds all four verified component roots, their receipts/payloads, the registry,
+binding amendment, join/audit source and package versions. Invoke with
+`./venv/bin/python`. `run --root ... [--max-chunks 1]` uses bounded 5,000-row
+chunks and returns status 2 for deliberate incompleteness. Resume verifies all
+committed file hashes; `verify --root ...` is read-only. Selected root and
+completed evidence live in CURRENT_STATE; do not repeat completed runs casually.
+
+Each chunk receipt commits four Parquets: 221 float64 values followed by 221
+uint8 masks in `matrix`, field-level `reasons`, modeled nanosecond `availability`
+(-1 for missing values), and original identity/provenance in `rows`. The container
+is explicitly diagnostic despite canonical matrix names. Selected contract stays
+null; acquisition candidates never establish eligibility. Variant MA overrides
+come from the remaining component; target replicas preserve distinct row IDs.
+
+`scripts/audit_etfe_joined.py --root ...` independently aligns sources by natural
+keys and checks every value/mask/reason/clock and logical row against predecessors.
+It writes INDEPENDENT_AUDIT once and does not recompute native indicators.
+Run-time changed-batch-boundary checks and a recorded one-chunk stop/resume supply
+separate recovery evidence. Model admission remains false. Source-bound consumers
+and existing study roots are immutable; changes require a successor study.

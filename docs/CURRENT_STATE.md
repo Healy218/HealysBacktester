@@ -45,8 +45,9 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Rejected option-feature predecessor | `nn_meta/validation/etfe-option-features-20261004-r0/AUDIT_REJECTION.json`; source snapshots and outputs preserved, not selected |
 | TV-feature component | `nn_meta/validation/etfe-tv-features-20261005-r0/`; PLAN/COMPLETE, nine scope receipts, INDEPENDENT_AUDIT/RESUME_AUDIT, native/projection/link Parquets and PAYLOAD_INDEX |
 | Remaining-feature component | `nn_meta/validation/etfe-remaining-features-20261005-r0/`; PLAN/COMPLETE, SHARED, nine scope receipts, INDEPENDENT_AUDIT/DAILY_INPUT_AUDIT/RESUME_AUDIT and PAYLOAD_INDEX |
+| Joined diagnostic schema | `nn_meta/validation/etfe-joined-20261005-r0/`; PLAN/COMPLETE, 96 chunk receipts, matrix/reasons/availability/rows Parquets, INDEPENDENT_AUDIT/RESUME_AUDIT and PAYLOAD_INDEX |
 | Current feature binding amendment | `docs/specs/ETFE_FEATURE_BINDINGS_20261005.json`; numeric Setup parameters and approved DTE/5, frozen parent retained |
-| Current evidence | [Remaining-feature review](reviews/2026-10-05-etfe-remaining-features.md), [receipt](reviews/2026-10-05-etfe-remaining-features.json), `reviews/2026-10-05-etfe-remaining-features-evidence.zip`; [TV projections](reviews/2026-10-05-etfe-tv-features.md) |
+| Current evidence | [Joined-schema review](reviews/2026-10-05-etfe-joined-schema.md), [receipt](reviews/2026-10-05-etfe-joined-schema.json), `reviews/2026-10-05-etfe-joined-schema-evidence.zip`; [remaining components](reviews/2026-10-05-etfe-remaining-features.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -59,19 +60,21 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
 
-October 5 remaining-feature completion: **100 fields** plus per-variant MA
-projections; 8,451 static variants, 152,711 signals / 458,133 original event
-links, and 2,073 daily-context rows. **35,378 signals** retain a previous signal
-before the observation window. Daily values: 5,588 finite, 15,142 missing;
-ten VOO daily closes invalidated by the twelve preserved minute gaps. All
-seven option-context and eleven dated contract/sector fields remain withheld
-on real data. Their formula/identity APIs have synthetic evidence only.
-Independent value/mask/reason/link and raw-daily-input audits, real prefix/batch
-checks, nine-file actual resume and **157 focused tests** passed. All 221
-registered names have component implementations; joined schema/admission stays
-open. Compute 51.32 seconds; peak RSS 1,387,171,840 bytes; root 18,252,538 bytes.
-Plan SHA256: `8fe1d85439c8458cbe86d166f6b70ec23be4f4a5baca66cd2e04b94885445145`.
-No remaining-feature process is running. Selected market inputs are unchanged.
+October 5 joined-schema completion: **458,133 rows × 442 columns**, preserving
+all original signal/target identities across nine ticker/timeframe scopes.
+**96 chunks / 384 Parquets** retain matrix, missing reasons, modeled clocks and
+row provenance separately. Independent natural-key audit reconciles 101,247,393
+value cells (59,917,288 finite; 41,330,105 missing), plus every mask, reason,
+clock and row link. Missingness includes inapplicable parameters and unresolved
+inputs; no imputation. Every chunk passed changed-batch-boundary checks;
+actual resume preserved five files and completed the remaining 95 chunks.
+**173 focused tests** passed. Compute 35.15 seconds, peak RSS 1,071,894,528 bytes,
+root 193,144,184 bytes. Plan SHA256:
+`2395d11076c481cc697cd6848f3682cd18a8866bbbcd9b79b18f37525e08213c`.
+No joined-schema process remains running. These are unadmitted diagnostics;
+dated inputs, usable history and model-ready dataset admission remain open.
+Selected market inputs are unchanged. Earlier component observations are retained
+in their [remaining-feature review](reviews/2026-10-05-etfe-remaining-features.md).
 
 October 5 TV-feature component completion: all **96 registered projections /
 13 numerical sources**, **2,964 January closed-bar observations / 458,133 event
@@ -79,7 +82,7 @@ links**. Of 284,544 cells, 256,822 are finite and 27,722 explicitly missing.
 Every model-feature admission flag remains false. Independent scalar projection,
 mask/reason/membership audit, eighteen real prefix/future checks, actual resume
 (four files preserved) and **143 focused tests** passed. Native external Pine
-parity and the full schema remain open. Compute: 76.14 seconds; peak RSS
+parity remains open; the subsequent diagnostic join is recorded above. Compute: 76.14 seconds; peak RSS
 1,010,085,888 bytes; root 11,186,177 bytes. No TV-feature job remains running.
 Plan SHA256: `796a24e7a3a659513f8317fbdd89f65d6c9f28afbf5e40f527cd6f369c438bab`.
 The selected normalized market inputs and earlier component artifacts are unchanged.
