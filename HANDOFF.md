@@ -1,61 +1,62 @@
-# Handoff — October 4, 2026 — Causal components and phase-B pilot
+# Handoff — October 4, 2026 — Pilot trade windows captured
 
 ## Focus and completed result
 
-Fresh Alpaca-only ETFE, SPY/QQQ/VOO × 1/5/15m, all twenty families.
-Purchases/rolls remain **0–5 calendar DTE**, including qualifying 0DTE.
-[Review](docs/reviews/2026-10-04-etfe-causal-pilot.md),
-[machine receipt](docs/reviews/2026-10-04-etfe-causal-pilot.json).
+Continued fresh Alpaca-only ETFE, 0–5 DTE including signal-qualified 0DTE.
+Completed **ETFE-1.trade-window-capture**, the next bounded acquisition step.
+[Review](docs/reviews/2026-10-04-etfe-trade-windows.md),
+[machine receipt](docs/reviews/2026-10-04-etfe-trade-windows.json).
 
-- Completed ETFE-2.causal-components / ETFE-1.demand-pilot: new session grid,
-  fifteen raw technical diagnostics/masks and all-family catalog adapters.
-- Full captured stock calendar yields 1,019,958 bins. Twelve VOO source minute
-  gaps remain null at each timeframe; no missing clock compression or fill.
-- January 18–19 signal census uses January 2 engineering padding: every one
-  of 25,353 ticker/variant combinations, including zero-event variants.
-- All four signal channels matched shorter-prefix recomputation for every
-  variant, also changing consumer batch width. Actual scope stop/resume preserved
-  four completed files and computed eight remaining scopes. 109 tests passed.
-- Retained 458,133 logical signal/target links. 195,435 acquisition candidates;
-  262,698 lack prior-date observed candidates. No selected/eligible entries.
-- Independent audit checked 13,746 distinct candidate rankings and every
-  logical-to-physical link: 68 contracts, 179 bar and 225 trade intervals.
-- All bar intervals already captured. Trade intervals remain uncaptured:
-  4,626 contract-minutes. This study made zero network requests.
-- Compute: 110.37 seconds, 1.20 GiB peak RSS, 121.16 MiB local footprint.
-  Fifteen raw diagnostics are not the final adjusted 221-field model schema.
+- All 225 missing pilot trade intervals captured for 68 contracts. Exact
+  start/end batching produced 103 queries; all 105 GETs returned HTTP 200.
+- Two invocations / 103.94 active seconds; first stopped after one request,
+  resume preserved its three committed files and completed every page chain.
+- Added 77,057 trade occurrences in 103 normalized partitions. Independent
+  ordered raw-row, exact nanosecond, interval and logical-membership audits pass.
+- Demanded-minute census: 4,626 rows; 2,200 have trades and bars, three trades
+  only, 2,423 neither. Fifty-four whole intervals are empty; absence is unresolved.
+- Seven observed trades lack corresponding bars in three SPY January 24-expiry
+  contract-minutes. Exact keys and occurrences are in OBSERVATION_EXCEPTIONS.
+- All 77,057 trades lack native IDs. 166 additional equal-time records occur
+  in 130 minutes; preserve occurrence identity without inventing native order.
+- Zero normalization quality flags; 116 focused tests pass. Raw 5.80 MB,
+  normalized/audit 6.75 MB. No feature/execution/training admission claimed.
+- Selected normalized total: 1,249 partitions / 1,955,680 rows, including
+  152,856 option trades. Earlier stocks/options and causal pilot remain unchanged.
 
 ## Stopping point and next work
 
-No ETFE job remains running. Full ETFE-1/2 and integrated ETFE-4.pilot remain open.
+No ETFE job remains running. The pilot has zero remaining trade transport
+intervals; full demand/history/admission and integrated ETFE-4.pilot stay open.
 
-1. Use GLOBAL_DEMAND to prepare bounded capture of the 225 missing trade
-   intervals, normalize and reconcile them before option trade/bar features.
-   Preserve logical membership and account for windows outside stock RTH;
-   dated option hours remain unresolved rather than assumed from stock hours.
-2. Complete remaining option/context/TV features and full-window phase-B demand;
-   phase-C holding/roll/physical-stock paths remain. Do not count the component
-   study as the integrated execution/dataset/training resource pilot.
-3. Resolve dated actions, terms/multipliers/expiry close, historical discovery
-   and publication provenance before model-input/selection admission. Usable
-   history start remains null; prior January boundary evidence is unchanged.
-4. Follow ROADMAP's integrated pilot → acquisition/freeze → complete features /
-   execution/build/recovery → dataset freeze/training/evaluation sequence.
+1. Implement the registered option trade/bar feature consumer from the selected
+   fresh normalized data, preserving conditions, completed-window availability,
+   missingness and ambiguous equal-time ordering. A captured empty response does
+   not establish a valid zero-trade feature. Do not replace missing bars with fills.
+2. Complete remaining option/context/TV components and full-window phase-B demand;
+   holding/roll/physical-stock phase C remains. Resolve out-of-stock-RTH windows
+   using dated option hours, not assumptions from stock-session labels.
+3. Resolve historical listing/terms/actions, expiry close, trade-condition and
+   publication provenance at admission. Usable history start remains null.
+4. Complete the integrated capture/features/execution/dataset/training smoke and
+   recovery/resource pilot before bulk work, freezes or model training.
 
-## Selected artifacts and constraints
+## Pointers and constraints
 
-Study: `nn_meta/validation/etfe-causal-20261004-r0/` with PLAN/COMPLETE,
-per-scope receipts, GLOBAL_DEMAND, INDEPENDENT_AUDIT, RESUME_AUDIT and PAYLOAD_INDEX.
-Plan SHA256: `79b7f75d7d66a00adfe81cc31720659a944da2d3e744490f459fba3dd5fb86c2`.
-GLOBAL_DEMAND SHA256: `44fd73587ed8e2d503a5d7b7354d8cc8770034a96785aa8d2ab23104eccfc689`.
-The evidence ZIP contains source/metadata and hashes for eighteen local Parquets.
-Current v4 setup and selected fresh normalized input roots are unchanged.
-[Exact inputs](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
-[commands](docs/reference/ETFE_SETUP.md#causal-component-pilot),
-[study contract](docs/specs/ETFE_CAUSAL_PILOT_20261004.md).
+Raw: `nn_meta/data_cache_etfe/alpaca-fresh-20261004-trade-windows-r0/`.
+Normalized: `nn_meta/data_cache_etfe/normalized-20261004-trade-windows-r0/`.
+Evidence: `nn_meta/validation/etfe-trade-windows-20261004-r0/`.
+Raw plan SHA256: `e4eb9897d58af3ea9ea9596d0e7bf913b05b1fffc8e3cde26582b38d9ee40b4b`.
+Normalized plan SHA256: `53ec002bc63e2a9ec291e98e859f23fe53a9272026705b593364fa8542012e47`.
+Normalized root includes INDEPENDENT_AUDIT, DEMAND_AUDIT, TIMESTAMP_AUDIT,
+DEMANDED_MINUTES.parquet and OBSERVATION_EXCEPTIONS. Raw root has RESUME_AUDIT.
+The ZIP preserves metadata/sources and hashes for 209 local body/Parquet files.
 
-Source-bound snapshots are immutable; changed code requires a successor study.
-Only pure mathematical kernels are reused; no old data/metadata/configuration/
-feature/model artifact enters ETFE. No training, deployment or economic verdict.
-Preserve unrelated dirty work, including the pre-existing DECISIONS additions.
-[Previous handoff](handoff-history/HANDOFF-2026-10-04-before-causal-pilot.md).
+Original `etfe-causal-20261004-r0/GLOBAL_DEMAND.json` stays immutable; the new
+DEMAND_AUDIT records its captured successor status. Frozen sources require new
+roots if changed. All market data is newly captured from Alpaca; no old inputs.
+[Exact state](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
+[commands](docs/reference/ETFE_SETUP.md#bounded-pilot-trade-capture),
+[study](docs/specs/ETFE_TRADE_CAPTURE_20261004.md).
+Preserve unrelated dirty work. No deployment, model training or economic verdict.
+[Previous handoff](handoff-history/HANDOFF-2026-10-04-before-trade-windows.md).

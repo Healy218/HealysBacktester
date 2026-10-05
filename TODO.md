@@ -15,15 +15,15 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-04-etfe-causal-pilot.md),
+[latest evidence](docs/reviews/2026-10-04-etfe-trade-windows.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-109 focused tests pass. Causal session diagnostics and the full-catalog January
-phase-B component pilot are complete; usable history and scientific admission
-remain open.
+116 focused tests pass. Causal session diagnostics, the full-catalog January
+phase-B component pilot and its 225 trade-window captures are complete. Usable
+history and scientific admission remain open.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -77,6 +77,14 @@ remain open.
   admitted. [Evidence](docs/reviews/2026-10-04-etfe-causal-pilot.md).
   Full 221-field schema, dated action adjustment, full phase-B demand and the
   integrated ETFE-4.pilot remain separate.
+- [x] **ETFE-1.trade-window-capture:** All 225 pilot trade intervals captured
+  through 103 exact-window queries / 105 successful GETs. Added 77,057 normalized
+  trade occurrences; raw-row, timestamp, edge and 4,626-minute audits pass.
+  Actual capture resume preserved prior committed files. Fifty-four empty
+  intervals and three trade-without-bar minutes remain unresolved observations.
+  [Evidence](docs/reviews/2026-10-04-etfe-trade-windows.md). Implement the trade/bar
+  feature consumer with explicit conditions, availability and equal-time ordering;
+  capture completion does not admit features or execution.
 - [ ] **ETFE-1.demand:** Complete symbol/session surfaces after discovery,
   full-window causal signal/feature/trade demand (phase B), and holding/roll/
   physical-stock paths (phase C). Current calendar inventory is not the full

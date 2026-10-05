@@ -39,7 +39,9 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | CLIs / procedures | `scripts/etfe_demand.py`, `scripts/normalize_etfe.py`, `scripts/audit_etfe_normalized.py`; [reference](reference/ETFE_SETUP.md) |
 | Causal component study | `nn_meta/validation/etfe-causal-20261004-r0/`; PLAN/COMPLETE, nine scope receipts, GLOBAL_DEMAND, INDEPENDENT_AUDIT and RESUME_AUDIT |
 | Causal commands | `scripts/pilot_etfe_causal.py verify --root nn_meta/validation/etfe-causal-20261004-r0`; `scripts/audit_etfe_causal.py` writes new audit artifacts once |
-| Current evidence | [Component review](reviews/2026-10-04-etfe-causal-pilot.md), [receipt](reviews/2026-10-04-etfe-causal-pilot.json), `reviews/2026-10-04-etfe-causal-pilot-evidence.zip`; [acquisition review](reviews/2026-10-04-etfe-demand-boundary.md) |
+| Pilot trade capture | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-trade-windows-r0/`; PLAN/COVERAGE/RESUME_AUDIT and committed raw pages |
+| Pilot trade normalization | `nn_meta/data_cache_etfe/normalized-20261004-trade-windows-r0/`; PLAN/NORMALIZED/INDEPENDENT_AUDIT/DEMAND_AUDIT/TIMESTAMP_AUDIT, DEMANDED_MINUTES.parquet and OBSERVATION_EXCEPTIONS |
+| Current evidence | [Trade-window review](reviews/2026-10-04-etfe-trade-windows.md), [receipt](reviews/2026-10-04-etfe-trade-windows.json), `reviews/2026-10-04-etfe-trade-windows-evidence.zip`; [causal component review](reviews/2026-10-04-etfe-causal-pilot.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -52,7 +54,21 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
 
-October 4 causal component observation: all nine scopes completed, **25,353
+October 4 trade-window completion: **225 intervals / 103 queries / 105 HTTP
+200 responses**, 77,057 new trades, 103 normalized partitions. All raw rows,
+nanosecond timestamps, logical edges and captured page hashes reconcile; actual
+resume preserved three committed files. The 4,626-minute census has 2,200 minutes
+with trades and bars, three with trades only, and 2,423 with neither. Fifty-four
+intervals are empty; absence remains unresolved. All trade IDs are missing;
+166 additional equal-time records occur in 130 minutes, with ordering unverified.
+DEMAND_AUDIT closes the pilot's 225 missing transport intervals without changing
+its original GLOBAL_DEMAND. **116 focused tests passed**. No capture job remains.
+Capture consumed 103.94 active seconds; raw bytes 5,803,732, normalized/audit bytes
+6,751,973. Source/feature/execution admission and usable history remain open.
+Capture plan SHA256: `e4eb9897d58af3ea9ea9596d0e7bf913b05b1fffc8e3cde26582b38d9ee40b4b`.
+Normalization plan SHA256: `53ec002bc63e2a9ec291e98e859f23fe53a9272026705b593364fa8542012e47`.
+
+Earlier October 4 causal component observation: all nine scopes completed, **25,353
 ticker/variant combinations** and **458,133 logical signal/target links**.
 All-variant prefix/batch checks and actual scope resume passed; the independent
 audit checked 13,746 distinct candidate rankings. Full stock grids contain
@@ -61,7 +77,8 @@ timeframe. Fifteen raw diagnostics plus missing masks are engineering outputs,
 not the admitted 221-field model schema. **109 focused tests passed**.
 
 Demand unions contain 404 intervals across 68 contracts: 179 bar intervals have
-verified captured requests; 225 trade intervals / 4,626 contract-minutes remain.
+verified captured requests; 225 trade intervals / 4,626 contract-minutes were then
+uncaptured and are now resolved by the trade-window receipts above.
 GLOBAL_DEMAND retains links to every logical event file. Candidate links count
 195,435; 262,698 links have no prior-date observed candidate. Zero selections or
 entries are admitted. Raw adjustments, historical discovery, dated terms/hours
@@ -78,8 +95,8 @@ full strategy/holding demand. The new 960 live GETs all returned HTTP 200; one
 sandbox failure is retained. Capture consumed about 959.3 seconds active time.
 The original wall-clock deadline deviation and successor are recorded explicitly.
 
-All **1,146 selected normalized partitions / 1,878,623 rows** reconcile to their
-raw occurrence sequences: 1,589,090 stock bars, 184,070 option bars, 75,799
+All **1,249 selected normalized partitions / 1,955,680 rows** reconcile to their
+raw occurrence sequences: 1,589,090 stock bars, 184,070 option bars, 152,856
 option trades and 29,664 discovery records. No implemented normalization quality
 flags fired. The two January days have 34,660 requested symbol/day windows;
 6,865 have bars and 27,795 retain unresolved absence. Including six reused

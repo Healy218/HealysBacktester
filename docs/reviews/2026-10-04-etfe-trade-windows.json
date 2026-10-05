@@ -1,0 +1,58 @@
+{
+  "active_capture_seconds": 103.93780270501156,
+  "all_raw_occurrence_sequences_preserved": true,
+  "capture_invocations": 2,
+  "capture_plan_sha256": "e4eb9897d58af3ea9ea9596d0e7bf913b05b1fffc8e3cde26582b38d9ee40b4b",
+  "complete_history": false,
+  "date_central": "2026-10-04",
+  "demand_audit_sha256": "969c94aec0faab4577e227c0893ad990d3b61d15793a30b9a559ea9b3dd31070",
+  "empty_edges": 54,
+  "equal_timestamp_extra_occurrences": 166,
+  "evidence_bundle": {
+    "bytes": 411068,
+    "members": 349,
+    "path": "docs/reviews/2026-10-04-etfe-trade-windows-evidence.zip",
+    "payload_files_indexed": 209,
+    "sha256": "ce3f224b72c1c96e5475b4e7874180bfa5967cd4fc7fe0b18e229d333945df56"
+  },
+  "evidence_root": "nn_meta/validation/etfe-trade-windows-20261004-r0",
+  "exact_timestamp_rows": 77057,
+  "focused_tests_passed": 116,
+  "intervals": 225,
+  "minute_census": {
+    "path": "nn_meta/data_cache_etfe/normalized-20261004-trade-windows-r0/DEMANDED_MINUTES.parquet",
+    "rows": 4626,
+    "sha256": "a72a2d28b546d74aab10e8bb0f7c98704a5a12a49d75a794236ff7e3db0e4560"
+  },
+  "minutes_with_equal_timestamp_records": 130,
+  "missing_native_ids": 77057,
+  "missing_pilot_trade_transport_intervals": 0,
+  "new_normalized_partitions": 103,
+  "new_requests": 105,
+  "new_trade_occurrences": 77057,
+  "normalization_plan_sha256": "53ec002bc63e2a9ec291e98e859f23fe53a9272026705b593364fa8542012e47",
+  "normalized_bytes": 6751973,
+  "normalized_root": "nn_meta/data_cache_etfe/normalized-20261004-trade-windows-r0",
+  "observed_minute_states": {
+    "bar_without_trades": 0,
+    "neither_observed": 2423,
+    "trades_and_bar": 2200,
+    "trades_without_bar": 3
+  },
+  "peak_capture_rss_bytes": 835710976,
+  "physical_queries": 103,
+  "quality_counts": {},
+  "raw_bytes": 5803732,
+  "raw_resume_files_preserved": 3,
+  "raw_root": "nn_meta/data_cache_etfe/alpaca-fresh-20261004-trade-windows-r0",
+  "ready_for_build": false,
+  "ready_for_training": false,
+  "statuses": {
+    "200": 105
+  },
+  "symbols": 68,
+  "total_selected_normalized_partitions": 1249,
+  "total_selected_normalized_rows": 1955680,
+  "total_selected_option_trades": 152856,
+  "valid_no_trade_admitted": false
+}

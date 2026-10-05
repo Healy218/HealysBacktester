@@ -140,3 +140,23 @@ missing masks. New adapters consume the frozen ETFE catalog and pure mathematica
 kernels, never old runtime selectors or market/feature/model artifacts. Option
 acquisition candidates remain separate from dated selection and entry approval.
 This command performs no capture, execution, dataset freeze or model training.
+
+
+## Bounded pilot trade capture
+
+`scripts/capture_etfe_trade_demand.py prepare --root ... --pilot ...` binds the
+completed pilot's audited GLOBAL_DEMAND, source code and measured trade-density
+preflight. The selected study is deliberately limited to 225 intervals / 103
+queries; a changed demand inventory requires a new study definition and root.
+`run --root ... [--request-budget N]` applies cumulative study limits in addition
+to the underlying capture caps; `verify` is read-only, and `report` publishes
+COVERAGE once after every page chain terminates. Use the wrapper so cumulative
+request/active-time/invocation ceilings are checked. Credentials stay in `.env`.
+
+Normalize the completed raw root using the existing normalize/audit commands.
+Then `scripts/audit_etfe_trade_windows.py --raw ... --normalized ...` publishes
+DEMANDED_MINUTES.parquet and DEMAND_AUDIT once. It checks exact half-open request
+membership and retains every demanded minute, including unresolved absence.
+Do not overwrite these outputs or edit the pilot's original GLOBAL_DEMAND to
+relabel old evidence. The successor demand audit records transport closure.
+The minute census is diagnostic, not an admitted model feature table.
