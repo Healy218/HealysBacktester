@@ -1,0 +1,101 @@
+{
+  "date_central": "2026-10-05",
+  "density_is_nonrepresentative_scenario_not_bound": true,
+  "discovery_empty_queries": 98,
+  "discovery_expiry_end": "2024-04-15",
+  "discovery_expiry_start": "2024-03-26",
+  "discovery_resume": {
+    "files_preserved": 507,
+    "zero_request_restart": true
+  },
+  "discovery_root": "nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r1",
+  "discovery_rows": 7344,
+  "discovery_successful_gets": 126,
+  "evidence_bundle": {
+    "bytes": 1289046,
+    "indexed_files": 2095,
+    "path": "docs/reviews/2026-10-05-etfe-stock-quotes-evidence.zip",
+    "sha256": "7aaad048e5c57e3f55d3bae2709c7f1e66cad61ea418a84e8c9d77b6fc2e4043"
+  },
+  "focused_tests_passed": 304,
+  "frontier_sha256": "8729bc75b543e08a5806ab8e5c479ce2772756002c15b41a8855b627ac6a4343",
+  "frontier_summary": {
+    "captured_discovery_queries": 684,
+    "discovered_symbols": 45470,
+    "gross_surface_requests": 12232,
+    "missing_discovery_queries": 5616,
+    "possible_stock_quote_regular_minutes": 805230,
+    "possible_stock_quote_session_windows": 2073,
+    "regular_bar_scenario_rows": 466465560,
+    "required_discovery_queries": 6300,
+    "returned_purchase_symbol_session_edges": 185222,
+    "returned_symbol_session_edges": 1197044,
+    "ticker_sessions": 2073
+  },
+  "full_demand_complete": false,
+  "normalization_audit_sha256": "b3d1155d97a5074779df21af92eefc05147ca1acaf3eb88a389fc88b6c230bf3",
+  "normalization_root": "nn_meta/data_cache_etfe/normalized-20261005-discovery-r1",
+  "official_exercise_reference_admitted": false,
+  "prior_schema_normalized_partitions": 1501,
+  "prior_schema_normalized_rows": 1971486,
+  "quote_audit_sha256": "0d5a86948d239b6a44834e8f339e223e1f7fcfb6c180cb1154af987659afac2c",
+  "quote_capture_seconds": 241.59686661002343,
+  "quote_empty_windows": 0,
+  "quote_full_regular_window_mean_density_scenario_bytes": 1319440101911,
+  "quote_last_received_at": "2026-10-05T23:53:13.006897+00:00",
+  "quote_max_window": {
+    "disposition": "observed",
+    "job_id": "92001be62c8d46a3104cc5df71978a4621ca42f2579117cb06d200478cb06f60",
+    "minutes": 2.5,
+    "pages": 12,
+    "payload_bytes": 12580030,
+    "purpose": "quote_density:2025-04-04:open:QQQ",
+    "rows": 111643,
+    "rows_per_minute": 44657.2,
+    "symbol": "QQQ"
+  },
+  "quote_plan_sha256": "3ce1657d80d56eed55459081d0e1ad1cd2d2e31a8b22abb84737bd905c99db83",
+  "quote_quality_counts": {
+    "crossed_quote": 1991
+  },
+  "quote_raw_payload_bytes": 221209361,
+  "quote_resume": {
+    "files_preserved": 868,
+    "prefix_files_preserved": 8,
+    "zero_request_restart": true
+  },
+  "quote_root": "nn_meta/data_cache_etfe/alpaca-fresh-20261005-stock-quotes-r0",
+  "quote_root_bytes": 352271006,
+  "quote_rows": 1943472,
+  "quote_rows_by_symbol": {
+    "QQQ": {
+      "pages": 98,
+      "payload_bytes": 102664017,
+      "rows": 901706
+    },
+    "SPY": {
+      "pages": 83,
+      "payload_bytes": 85295904,
+      "rows": 748933
+    },
+    "VOO": {
+      "pages": 35,
+      "payload_bytes": 33249440,
+      "rows": 292833
+    }
+  },
+  "quote_successful_gets": 216,
+  "quote_typed_bytes": 130440798,
+  "quote_window_minutes": 135.0,
+  "quote_windows": 54,
+  "ready_for_build": false,
+  "ready_for_training": false,
+  "selected_frontier": "nn_meta/validation/etfe-demand-frontier-20261005-r2",
+  "shares_conversion_admitted": false,
+  "task": "ETFE-1.stock-quote-pilot",
+  "universe": [
+    "SPY",
+    "QQQ",
+    "VOO"
+  ]
+}

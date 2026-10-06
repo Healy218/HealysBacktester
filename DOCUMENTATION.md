@@ -101,6 +101,16 @@ Read the relevant entries before treating a script or cache as broken.
   and source normalized premium scaling independently; neither silently multiply
   by zero nor rewrite it to 100. [Controls and limits](docs/reviews/2026-10-03-etfe-alpaca-pulls.md).
 
+- **SIP is a stock data feed, not an additional ETF or an option quote route.**
+  ETFE's historical SIP stock quotes concern only its SPY/QQQ/VOO underlyings.
+  Alpaca [announced a quote-size change](https://docs.alpaca.markets/us/v1.1/changelog/marketdata-bid-and-ask-size-display-change)
+  from round lots to shares on November 3, 2025. Preserve raw bid/ask sizes;
+  the notice alone does not establish whether old historical responses were
+  rewritten. Do not universally multiply by 100 or infer units from divisibility.
+  Dated size representation must be verified before simulated share capacity.
+  Quote midpoint for expiry classification is also separate from the official
+  closing price required by the declared exercise policy.
+
 - **Alpaca action process dates are not ex-dates.** The corporate-action REST
   interval filters `process_date`; a fixed market-price end can miss actions
   already effective but processed later. ETFE's fresh October 5 tail recovered

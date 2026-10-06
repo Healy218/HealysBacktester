@@ -28,9 +28,11 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Current setup and guard | `nn_meta/validation/etfe-setup-20261004-0dte-r0/PLAN.json`; `nn_meta/etfe/purchase_policy_v2.py` |
 | Verify selected setup | `scripts/prepare_etfe_0dte.py verify --root nn_meta/validation/etfe-setup-20261004-0dte-r0` |
 | Calendar-level demand | `nn_meta/validation/etfe-demand-20261004-r0/DEMAND.json`; source snapshots alongside |
-| Selected measured demand frontier | `nn_meta/validation/etfe-demand-frontier-20261005-r1/`; FRONTIER/INDEPENDENT_AUDIT/source. Pre-capture r0 retained. |
+| Selected measured demand frontier | `nn_meta/validation/etfe-demand-frontier-20261005-r2/`; FRONTIER/INDEPENDENT_AUDIT/source. Earlier r0/r1 retained. |
 | March discovery continuation | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r0/`; PLAN/COVERAGE/RESUME_AUDIT, pages and durable request reservations |
 | March discovery normalization | `nn_meta/data_cache_etfe/normalized-20261005-discovery-r0/`; PLAN/NORMALIZED/INDEPENDENT_AUDIT, 126 partitions / 8,462 rows |
+| March–April discovery continuation | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r1/`; typed counterpart `normalized-20261005-discovery-r1/`, 126 partitions / 7,344 rows, independent audit and raw resume |
+| Underlying quote pilot | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-stock-quotes-r0/`; PLAN/NORMALIZED/INDEPENDENT_AUDIT/RESUME_AUDIT, 54 windows / 216 quote Parquets; separate quote schema |
 | Fresh stock calendar | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-calendar-r1/CALENDAR.json` |
 | Earlier raw roots | `nn_meta/data_cache_etfe/alpaca-fresh-20261003-bootstrap-r0/`, `alpaca-fresh-20261004-options-r0/`, `alpaca-fresh-20261004-stocks-r0/`, `alpaca-fresh-20261004-discovery-r0/`, `alpaca-fresh-20261004-option-strata-r0/` |
 | January raw discovery / bars | `nn_meta/data_cache_etfe/alpaca-fresh-20261004-january-discovery-r0/`, `alpaca-fresh-20261004-january-boundary-r0/`, `alpaca-fresh-20261004-january-surfaces-r0/`; each has PLAN/PREFLIGHT/COVERAGE and immutable pages/runs |
@@ -57,7 +59,7 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Synthetic expiry/delivery continuation | `nn_meta/validation/etfe-expiry-components-20261005-r0/`; PLAN, thirteen hashed checkpoints, COMPLETE, RESUME-2 and INDEPENDENT_AUDIT; [scope](specs/ETFE_EXPIRY_COMPONENTS_20261005.md) |
 | Synthetic shared scheduler / stress matrix | `nn_meta/validation/etfe-integration-components-20261005-r0/`; PLAN, 162 hashed results, event-20 checkpoint, COMPLETE, RESUME-1 and INDEPENDENT_AUDIT; [scope](specs/ETFE_INTEGRATION_COMPONENTS_20261005.md) |
 | Current feature binding amendment | `docs/specs/ETFE_FEATURE_BINDINGS_20261005.json`; numeric Setup parameters and approved DTE/5, frozen parent retained |
-| Current evidence | [Shared scheduler / stress matrix](reviews/2026-10-05-etfe-integration-components.md), [receipt](reviews/2026-10-05-etfe-integration-components.json), `reviews/2026-10-05-etfe-integration-components-evidence.zip`; [expiry/delivery](reviews/2026-10-05-etfe-expiry-components.md), [action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
+| Current evidence | [Underlying quote pilot / discovery](reviews/2026-10-05-etfe-stock-quotes.md), [receipt](reviews/2026-10-05-etfe-stock-quotes.json); [Shared scheduler / stress matrix](reviews/2026-10-05-etfe-integration-components.md), [receipt](reviews/2026-10-05-etfe-integration-components.json), `reviews/2026-10-05-etfe-integration-components-evidence.zip`; [expiry/delivery](reviews/2026-10-05-etfe-expiry-components.md), [action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -70,13 +72,18 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
 
-October 5 at 23:26:13 UTC: March discovery continuation completed 126 successful
-GETs / 8,462 records; one sandbox transport failure is separate. Selected frontier
-r1 counts 558 / 6,300 calendar queries captured, 5,742 remaining, 38,126 returned
-symbols and 963,898 gross known-symbol/session edges. Full phase-B/C demand and
-budgets remain unresolved. Both frontier audits and every normalized occurrence
-pass; zero-request restart preserved 510 files, and 294 focused tests pass.
-No acquisition process remains running. [Review and resource measurements](reviews/2026-10-05-etfe-demand-frontier.md).
+October 5 at 23:53:13 UTC: the underlying quote pilot completed 54 windows /
+216 successful GETs / 1,943,472 occurrences for SPY/QQQ/VOO. Raw payloads occupy
+221,209,361 bytes; the typed/audited root occupies 352,271,006 bytes. All
+occurrences and diagnostic values reconcile; 1,991 crossed quotes stay flagged.
+Raw sizes stay unconverted; official exercise references are not supplied by
+quotes. Actual restart preserved 868 files with zero GETs; 304 focused tests pass.
+The second discovery continuation added 7,344 records / 126 complete queries.
+Selected frontier r2 counts 684 / 6,300 calendar queries captured, 5,616 remaining,
+45,470 returned symbols and 1,197,044 gross known-symbol/session edges. Full
+phase-B/C demand and budgets remain unresolved. No process remains running.
+[Current review](reviews/2026-10-05-etfe-stock-quotes.md),
+[previous frontier observation](reviews/2026-10-05-etfe-demand-frontier.md).
 
 October 5 selected replay: four fixed UTC days reach transport EOF. March 14,
 2024 / March 20, 2025 / March 19, 2026 returned welcome-only responses; their
@@ -191,10 +198,11 @@ full strategy/holding demand. The new 960 live GETs all returned HTTP 200; one
 sandbox failure is retained. Capture consumed about 959.3 seconds active time.
 The original wall-clock deadline deviation and successor are recorded explicitly.
 
-All **1,375 selected normalized partitions / 1,964,142 rows** reconcile to their
+All **1,501 selected original-schema normalized partitions / 1,971,486 rows** reconcile to their
 raw occurrence sequences: 1,589,090 stock bars, 184,070 option bars, 152,856
-option trades and 38,126 discovery records. No implemented normalization quality
-flags fired. The two January days have 34,660 requested symbol/day windows;
+option trades and 45,470 discovery records. No implemented quality flags fired
+in this schema. The separate quote schema/root is counted above. The two January
+days have 34,660 requested symbol/day windows;
 6,865 have bars and 27,795 retain unresolved absence. Including six reused
 windows gives 179,242 bars, without duplicating their 571 previously captured rows.
 The acquisition milestone passed 95 focused tests and independent raw-row/edge audits.

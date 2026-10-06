@@ -369,14 +369,16 @@ Future changes use new source versions and study roots.
 
 ## Measured demand frontier and bounded discovery
 
-Selected frontier: `nn_meta/validation/etfe-demand-frontier-20261005-r1/`.
+Selected frontier: `nn_meta/validation/etfe-demand-frontier-20261005-r2/`.
 [Contract](../specs/ETFE_DEMAND_FRONTIER_20261005.md),
 [capture and independent evidence](../reviews/2026-10-05-etfe-demand-frontier.md).
 `scripts/etfe_demand_frontier.py build` takes a new validation `--root`, the
 original calendar `--inventory`, and every explicitly selected complete raw
 `--input`. It verifies page chains and measures route payloads, then counts
-returned-symbol surfaces and unknown discovery queries separately. The r1
-FRONTIER lists the exact ten selected input roots and next 126 discovery jobs.
+returned-symbol surfaces and unknown discovery queries separately. The r2
+FRONTIER lists eleven selected original-schema input roots and next 126 discovery
+jobs. The quote pilot has a separate transport/schema and is not a discovery
+frontier input; its density evidence informs the eventual phase-C window budget.
 
 For a selected finite continuation, use `prepare --root <new-alpaca-fresh-root>
 --frontier <selected-frontier-root>`, then `run --root <same-root>
@@ -389,6 +391,28 @@ complete captures using the existing `normalize_etfe.py prepare/run` commands
 and `audit_etfe_normalized.py`. Refresh into a new frontier root with the new
 raw input included. `audit_etfe_demand_frontier.py --root <frontier-root>` writes
 an immutable INDEPENDENT_AUDIT once; use a new root for changed evidence.
-The selected r0/r1 audits already exist. Full phase-B/C budgets stay null until
+The r0/r1/r2 audits already exist. Full phase-B/C budgets stay null until
 exact signals/paths and missing-route measurements support them; envelope
 counts must not be relabeled as full demand or historical eligibility.
+
+## Bounded underlying quote pilot
+
+Root: `nn_meta/data_cache_etfe/alpaca-fresh-20261005-stock-quotes-r0/`.
+[Contract](../specs/ETFE_STOCK_QUOTES_20261005.md),
+[density and audit evidence](../reviews/2026-10-05-etfe-stock-quotes.md).
+`scripts/capture_etfe_stock_quotes.py` has `prepare`, `run`, `normalize` and
+`audit` commands. Prepare requires a new `--root` and the fresh `--calendar`;
+the other commands use that root. Do not repeat the completed capture/audit.
+
+The recorded capture used budgets 1, 128, then 127; the final invocation needed
+only 87 GETs. A new process then made zero requests. Plans cap the complete
+study at 256 requests and bind the 54 short windows/source/calendar. Typed
+page files are immutable; normalization verifies deterministic existing files
+and can recover a missing receipt. Audit preserves raw occurrence identity and
+independently checks prices, midpoint eligibility and unconverted sizes.
+
+SIP describes the ETF stock quote feed. It does not expand the SPY/QQQ/VOO
+universe or change completed-minute option VWAP pricing. Share conversion stays
+unadmitted pending historical size representation; official exercise references
+are separate required inputs. Later quote acquisition must use measured, exact
+holding/roll/exercise demand rather than the entire calendar envelope.

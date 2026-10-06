@@ -15,13 +15,13 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-05-etfe-demand-frontier.md),
+[latest evidence](docs/reviews/2026-10-05-etfe-stock-quotes.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-294 focused tests pass. All 221 registered fields are joined with 221 masks
+304 focused tests pass. All 221 registered fields are joined with 221 masks
 for every one of the 458,133 pilot events; independent value/lineage audit and
 actual resume pass. Real diagnostics and synthetic-only evidence remain
 separate. Dated inputs, usable history and scientific admission remain open.
@@ -42,10 +42,12 @@ clocks, settlement-extended diagnostic horizons and all 27 declared synthetic
 stress profiles across six tapes. All 162 combinations / 189 proposal outcomes
 reconcile; three stressed paths retain missing quote/exercise inputs explicitly.
 Scientific labels, full-history execution and real admission remain open.
-The measured full-calendar frontier and one bounded March discovery continuation
-now cover 558 / 6,300 calendar queries; 5,742 remain. Known-symbol envelopes and
+The measured full-calendar frontier and two bounded discovery continuations
+now cover 684 / 6,300 calendar queries; 5,616 remain. Known-symbol envelopes and
 route payload measurements are independently reconciled; full phase-B/C budgets
-remain unknown. **Continue ETFE-1.demand:** full phase-B/C acquisition census and
+remain unknown. A finite underlying quote pilot captured 54 windows / 1,943,472
+occurrences for the same three ETFs. Historical size units and official exercise
+references remain unadmitted. **Continue ETFE-1.demand:** full phase-B/C acquisition census and
 measured request/storage budgets, including holding/roll/exercise paths exposed
 by the integrated diagnostics, before expanded capture and the real pilot.
 
@@ -182,6 +184,13 @@ by the integrated diagnostics, before expanded capture and the real pilot.
   reconcile independently across 2,073 ticker-sessions; 294 focused tests pass.
   Exact phase-B/C counts, missing-source measurements and full budgets remain
   open. [Evidence](docs/reviews/2026-10-05-etfe-demand-frontier.md).
+- [x] **ETFE-1.stock-quote-pilot:** Captured/normalized/audited 54 bounded SIP
+  quote windows for SPY/QQQ/VOO only: 216 successful pages / 1,943,472 occurrences.
+  Ten new tests and actual capture restarts pass; raw sizes stay unconverted,
+  1,991 crossed quotes stay flagged. A second discovery batch adds 7,344 records
+  and frontier r2 reconciles independently. Exact path/window demand, dated
+  size representation and official exercise references remain open.
+  [Evidence](docs/reviews/2026-10-05-etfe-stock-quotes.md).
 - [ ] **ETFE.provider-action-timing:** Establish mutation-history retention and
   dated original/revision availability for required actions. January's welcome-only
   stream and October's capped replay do not prove coverage. Budget any expanded

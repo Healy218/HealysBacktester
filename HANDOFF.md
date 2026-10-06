@@ -1,60 +1,63 @@
-# Handoff — October 5, 2026 — Measured frontier and March discovery
+# Handoff — October 5, 2026 — Underlying quotes and discovery continuation
 
 ## Focus and completed result
 
-User asked to keep going. Completed **ETFE-1.demand-frontier** within measured
-acquisition-envelope and bounded discovery scope. Full **ETFE-1.demand**, input
-admission and freeze/train remain open. [Review](docs/reviews/2026-10-05-etfe-demand-frontier.md),
-[machine receipt](docs/reviews/2026-10-05-etfe-demand-frontier.json).
+User asked to continue, then clarified the small ETF universe/SIP terminology.
+Universe remains **SPY, QQQ, VOO**. SIP is the underlying stock quote feed;
+option entries/exits still use completed-minute VWAP. No extra ticker or strategy.
+Completed **ETFE-1.stock-quote-pilot** within finite capture/diagnostic scope,
+plus a second discovery batch. [Review](docs/reviews/2026-10-05-etfe-stock-quotes.md),
+[machine receipt](docs/reviews/2026-10-05-etfe-stock-quotes.json).
 
-- New frontier verifies all selected fresh page chains, measures payloads by
-  route, and counts returned symbols / unknown queries across 2,073 ticker-days.
-- March 5–25 civil expiries: 126 successful GETs, 8,462 new discovery records,
-  126 normalized partitions. Both statuses, all three ETFs, both rights/strikes.
-  Ninety-five empty queries remain unknown historical coverage. One sandbox
-  transport failure is separate; successful live capture took 125.14 seconds.
-- Discovery now completes 558 / 6,300 calendar queries; 5,742 remain. Six
-  January 1 padding queries are outside that denominator. 38,126 symbols known.
-- Gross known-symbol envelope: 963,898 symbol/session edges, 156,122 at 0–5 DTE,
-  9,888 grouped requests before reuse/pagination. This is not exact causal demand.
-- Phase-C requirements explicitly include roll-retry quotes, official exercise
-  references, dated deliverables, settlement calendars and sized stock quotes.
-  Full phase-B/C request/storage budgets remain null, pending actual inputs.
-- Both frontier inventories independently reconcile; all raw-to-normalized
-  occurrences pass. Separate-process restart made zero GETs, preserving 510 files.
-  All 294 focused ETFE tests pass, including five new frontier/budget tests.
+- Stock quotes: all 54 short windows across six dates, including early close,
+  busy session, size-unit transition and fixed-end day. 216 successful GETs /
+  1,943,472 occurrences; 221,209,361 raw payload bytes, 352,271,006-byte root.
+- Every quote occurrence, raw size, nanosecond timestamp and diagnostic value
+  reconciles. 1,991 crossed quotes retained/flagged; their midpoint is null.
+  First-page resume preserved eight files; final zero-request restart 868 files.
+- Alpaca announced round-lot to share sizes beginning November 3, 2025. The
+  announcement does not prove historical backfill representation. Raw sizes
+  stay unchanged; normalized share quantities and capacity admission stay null.
+- Quotes do not supply the official underlying close required for exercise.
+  Dated exercise references, deliverables, option hours and admission remain open.
+- March 26–April 15 expiry discovery: 126 successful GETs / 7,344 records, all
+  normalized and audited. Zero-request restart preserved 507 files. Ninety-eight
+  empty queries do not prove historical nonexistence.
+- Frontier r2 independently reconciles 684 / 6,300 queries captured, 5,616
+  remaining, 45,470 returned symbols and 1,197,044 gross symbol/session edges.
+- All 304 focused tests pass, including ten new quote transport/normalization
+  checks. Prior bound sources/artifacts remain unchanged; quote engine is separate.
 
 ## Evidence boundary and stopping point
 
-Selected normalized data: 1,375 partitions / 1,964,142 rows. Discovery records
-are not historical eligibility or option market observations. Usable history,
-dated terms/actions and all real-feature admission remain unresolved. Original
-January market coverage and synthetic scheduler evidence are unchanged.
-No process remains running. No training, orders or deployment occurred.
+Original schema: 1,501 normalized partitions / 1,971,486 records. Quotes have a
+separate schema/root with 216 Parquets / 1,943,472 records. No real execution,
+scientific label or feature admission follows. January usable history stays open.
+Quote density projected over the entire calendar gives a nonrepresentative
+1.32 TB raw scenario before typed data/copies, not a forecast or upper bound.
+Full phase-B/C budgets require actual demand. No process remains running.
+No training, orders, deployment or change to the 0–5 DTE rule occurred.
 
 ## Next selected work
 
-1. Continue **ETFE-1.demand**: selected r1 lists the next 126 missing discovery
-   queries. Measure missing quote/exercise sources and derive exact full-window
-   signal/feature/trade and holding/roll/physical-stock demand. Reconcile full
-   resource budgets before bulk acquisition; envelopes do not close this gate.
-2. **ETFE.provider-contract / provider-action-timing / history-boundary**:
-   establish dated eligibility, terms/hours/actions and scoped usable coverage.
-   Do not repeat empty action controls without a budgeted new question.
-3. **ETFE-4.pilot**: real capture/features/execution/isolated-label/dataset/training
-   smoke and recovery, then full build and independent freeze before training.
+1. **ETFE-1.demand:** continue measured contract discovery and derive exact
+   full-window signal/feature/trade and holding/roll/exercise window unions.
+   Use quote density to constrain budgets; do not launch a whole-calendar quote
+   pull or treat gross returned-symbol envelopes as exact required demand.
+2. **ETFE.provider-contract / action-timing / history-boundary:** establish dated
+   quote-size representation, official exercise references, option hours/terms,
+   action revision availability and scoped usable coverage. Keep raw data intact.
+3. **ETFE-4.pilot:** real feature/execution/isolated-label/dataset/training smoke
+   with resource and recovery evidence, followed by full build/freeze gates.
 
-## Artifacts and constraints
+## Selected artifacts
 
-Frontier: `nn_meta/validation/etfe-demand-frontier-20261005-r1/` (r0 preserved).
-Raw: `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r0/`.
-Typed: `nn_meta/data_cache_etfe/normalized-20261005-discovery-r0/`.
+`nn_meta/validation/etfe-demand-frontier-20261005-r2/` (r0/r1 retained).
+`nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r1/` and
+`nn_meta/data_cache_etfe/normalized-20261005-discovery-r1/`.
+`nn_meta/data_cache_etfe/alpaca-fresh-20261005-stock-quotes-r0/`.
 [State](docs/CURRENT_STATE.md#october-4-etfe-fresh-alpaca-setup),
-[commands](docs/reference/ETFE_SETUP.md#measured-demand-frontier-and-bounded-discovery),
-[contract](docs/specs/ETFE_DEMAND_FRONTIER_20261005.md).
-Evidence ZIP preserves metadata/source snapshots and hashes all 793 local files.
-The finite capture caps attempts at 128/run, 256/study, with durable reservations
-before networking, 512 MiB/root and existing reserve guards. No automatic loop.
-Fresh Alpaca only, actual 0–5 DTE entries/rolls. Bound sources stay immutable;
-use successors. Preserve unrelated dirty work, including DECISIONS/EXPERIMENTS.
-[Previous handoff](handoff-history/HANDOFF-2026-10-05-before-demand-frontier.md).
+[commands](docs/reference/ETFE_SETUP.md#bounded-underlying-quote-pilot),
+[contract](docs/specs/ETFE_STOCK_QUOTES_20261005.md).
+Evidence ZIP indexes 2,095 files. Bound sources stay immutable; use successors.
+Preserve unrelated dirty work. [Previous handoff](handoff-history/HANDOFF-2026-10-05-before-stock-quotes.md).
