@@ -2376,3 +2376,15 @@ minute instead of filling. Rejected alternatives: keeping the items unresolved
 ex-date-only action knowledge, dropping VOO's suffix and forward-filling.
 Exercise reference price, quote size, P1, R1/R2 and action revisions remain
 open. [Policy](specs/ETFE_DATED_INPUT_POLICY_20261006.md).
+
+### 2026-10-06 — ETFE exercise reference, pin handling and quote-size units
+
+User selections completing the dated-input policy: the exercise reference is the
+listing venue's official closing-auction price captured from fresh SIP trades
+(not the 15:59 bar or quotes); OCC's strict $0.01 rule applies and contracts
+within $0.05 are reported as pins, not excluded; SIP quote sizes are round lots
+(×100) before 2025-11-03 and shares from then on, matching the observed step
+change. Rejected: last-minute-bar reference, bar fallback, a ±$0.05 unresolved
+or worst-case band, always-shares and no size cap. Extraction v2 adds the
+listing-venue closing cross when `M` is absent and Nasdaq's `T` venue alias;
+QQQ 2026-08-20 stays unresolved. [Policy](specs/ETFE_DATED_INPUT_POLICY_20261006.md).

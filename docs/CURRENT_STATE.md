@@ -36,6 +36,7 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | VOO minute gap and option density check | `nn_meta/data_cache_etfe/alpaca-fresh-window-checks-20261006-r0/`; 36 bounded requests, WINDOW_CHECK_AUDIT, no missing minute recovered |
 | Exact-option window acquisition | `nn_meta/data_cache_etfe/alpaca-fresh-exact-options-20261006-r0/`; 3,036-job PLAN, all terminal (observed 2026-10-06); typed in `normalized-20261006-exact-options-r0/`, 3,036 partitions / 2,275,130 rows, FULL_CAPTURE_INDEPENDENT_AUDIT (512-partition TRANCHE_INDEPENDENT_AUDIT retained) |
 | Dated-input policy v1 | `nn_meta/validation/etfe-dated-policy-20261006-r0/`; CONTRACTS.parquet, ACTIONS, VOO_GAPS, RESOLUTION and INDEPENDENT_AUDIT (observed 2026-10-06) |
+| Exercise references | `nn_meta/validation/etfe-exercise-references-20261006-r0/`; REFERENCES.parquet, SUMMARY, INDEPENDENT_AUDIT; captures `alpaca-fresh-closing-auction-{2024,2025,2026}-20261006-r0/` plus probe root (observed 2026-10-06) |
 | QQQ payable retrospective term | `nn_meta/data_cache_etfe/issuer-fresh-invesco-20261006-r0/`; official workbook and selected-cell `QQQ_RESOLUTION.json`; April 30, 2024, no prior-availability admission |
 | Announcement controls | `nn_meta/data_cache_etfe/alpaca-fresh-announcement-controls-20261005-r0/`; six successful dated controls |
 | March discovery continuation | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r0/`; PLAN/COVERAGE/RESUME_AUDIT, pages and durable request reservations |

@@ -243,6 +243,12 @@ Freeze/train remain later in the first-run sequence.
   knowledge, QQQ payable from Invesco, 2024-01-18 start and VOO re-warm. All
   227,529 exact-window candidate rows are available by entry start. Independent
   audit and 7 tests pass. [Policy](docs/specs/ETFE_DATED_INPUT_POLICY_20261006.md).
+- [x] **ETFE-0.exercise-reference / quote-size:** User-selected closing-auction
+  reference captured fresh (1,487 expiry sessions, three yearly roots); v2
+  extraction resolves 1,486 (QQQ 2026-08-20 unresolved), strict $0.01 rule with
+  330 reported pins, independent recomputation matches. Quote sizes ×100 before
+  2025-11-03, shares after (verified step change).
+  [Policy](docs/specs/ETFE_DATED_INPUT_POLICY_20261006.md).
 - [ ] **ETFE.history-boundary:** January 1–17 returned no bars for all 23,176
   discovered symbols in the January–March 4 expiry grid; January 18 09:30 ET is
   first observed for all three ETFs. Establish usable/complete coverage;

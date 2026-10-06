@@ -28,6 +28,8 @@ BAR_NS=60_000_000_000
 # Provider settlement dates that differ from the regulatory business-day rule, with cause.
 SETTLEMENT_EXCEPTIONS={'2025-01-08':'NYSE closed 2025-01-09 (national day of mourning); banks/DTC settled'}
 QQQ_PAYABLE_OVERRIDE=('QQQ','2024-03-18')
+# Alpaca SIP stock quote sizes: round lots before this session, shares from it on (verified step change).
+SIZE_SHARES_FROM=dt.date(2025,11,3)
 
 SOURCES=dict(
     census=ROOT/'nn_meta/validation/etfe-full-coverage-20261005-r0',
@@ -83,6 +85,13 @@ def known_from_session(declaration_date,trading_days):
 
 def contract_available(first_available_ns,decision_ns):
     return first_available_ns is not None and first_available_ns<=decision_ns
+
+
+def quote_size_shares(raw_size,session_date):
+    """Convert a raw SIP stock quote size to shares under the dated unit switch."""
+    size=int(raw_size)
+    if size<0:raise ValueError('Negative quote size')
+    return size if session_date>=SIZE_SHARES_FROM else size*100
 
 
 def rewarm_mask(bar_ns,gap_ns,warmup_bars):

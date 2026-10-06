@@ -54,3 +54,9 @@ def test_rewarm_mask_excludes_bars_after_each_gap_without_filling():
     mask=d.rewarm_mask(bars,[3,8],2)
     assert mask.tolist()==[False,False,False,True,True,False,False,True,True]
     assert d.rewarm_mask(bars,[],5).sum()==0
+
+
+def test_quote_size_switches_from_lots_to_shares():
+    assert d.quote_size_shares('3',dt.date(2025,10,31))==300
+    assert d.quote_size_shares('240',dt.date(2025,11,3))==240
+    assert d.quote_size_shares(0,dt.date(2024,1,19))==0
