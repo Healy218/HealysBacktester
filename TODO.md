@@ -228,11 +228,14 @@ Freeze/train remain later in the first-run sequence.
   computable stock states. A 24-window density pilot returned 513 option bars
   and 8,409 trades, including two empty trade windows; full-campaign sizing and
   resource admission remain open.
-- [ ] **ETFE-1.exact-window-capture:** Source-bound grouped plan: 3,036 requests
-  (1,369 option bars / 1,667 option trades). Four 128-GET resumable runs have
-  completed 512 bar requests / 27,073 normalized occurrences; raw-to-Parquet
-  tranche audit passes. The remaining 857 bar and 1,667 trade requests are not
-  yet captured. [Review](docs/reviews/2026-10-06-etfe-window-demand.md).
+- [x] **ETFE-1.exact-window-capture:** Source-bound grouped plan: 3,036 requests
+  (1,369 option bars / 1,667 option trades), all terminal across 3,116 committed
+  pages (80 pagination). 2,275,130 normalized occurrences (70,354 bars /
+  2,204,776 trades); 194 bar and 112 trade windows returned no rows. Independent
+  full audit reconciles every raw occurrence to Parquet and proves the captured
+  windows equal the pending physical union minus the density pilot.
+  `FULL_CAPTURE_INDEPENDENT_AUDIT.json` in the normalized root. Captured known-
+  candidate windows, not realized paths or admitted inputs.
 - [ ] **ETFE.history-boundary:** January 1–17 returned no bars for all 23,176
   discovered symbols in the January–March 4 expiry grid; January 18 09:30 ET is
   first observed for all three ETFs. Establish usable/complete coverage;
