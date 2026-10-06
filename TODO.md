@@ -48,10 +48,13 @@ symbol/session surfaces counted. This is complete discovery transport, not full
 market-window coverage or historical listing completeness. Dated-input checks
 flag 43,720 invalid/zero multipliers and 53,634 pre-transition expiries reporting
 T+1. Full-window announcements supply 33 declaration dates, but original/revision
-availability and a QQQ March-2024 payable-date conflict remain unresolved.
-**Continue ETFE-1.demand:** exact full-window signal/context/trade and holding/
-roll/exercise window unions and measured budgets. Resolve the dated-input
-failures before admission; freeze/train remains later in the first-run sequence.
+availability remains unresolved. Invesco's official 2024 QQQ tax file
+retrospectively resolves the March 18 payable date to April 30; it does not
+establish what was available before the event. **Continue ETFE-0/ETFE-1:** exact
+windows are enumerated over the computable signal scope; unresolved dated
+selection and execution prevent realized holding paths and complete strategy
+demand. Resolve the history boundary and dated-input failures before admission.
+Freeze/train remain later in the first-run sequence.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -208,17 +211,37 @@ failures before admission; freeze/train remains later in the first-run sequence.
   The new complete-day transport yields only one matched pre-effective action
   witness among 35 records, not full original/revision availability. The complete
   announcement snapshot adds declaration dates for 33 in-window actions, but
-  no revision timeline; resolve QQQ 2024-03-18 payable April 30 versus May 1.
-- [ ] **ETFE-1.demand:** Discovery/symbol-session census is complete; derive exact
-  full-window causal signal/feature/trade demand (phase B), and holding/roll/
-  physical-stock paths (phase C). Current calendar inventory is not the full
-  strategy demand census. Reconcile measured request/storage budgets before
-  bulk capture; the stock-month expansion is complete.
+  no revision timeline. Official Invesco evidence resolves QQQ's March 2024
+  payable date retrospectively to April 30; prior decision availability stays
+  unknown. [Window review](docs/reviews/2026-10-06-etfe-window-demand.md).
+- [x] **ETFE-1.exact-window-demand:** Full collected-history signal census:
+  180 checkpoints / 25,353 variants, with 137,080 context batches / 13,609,133
+  contract-session memberships. Factored 4,311,060 decision clocks across
+  151,005,384 logical 0/1/5-DTE links; exact known-candidate physical union has
+  2,857 option-bar and 3,446 trade intervals before subtracting verified captures.
+  Independent timing/count audit and zero-GET computational restart pass.
+  [Review](docs/reviews/2026-10-06-etfe-window-demand.md). No dated selection,
+  execution, or realized holding paths are admitted.
+- [ ] **ETFE-1.path-demand:** Continue from dated eligible selection and actual
+  execution receipts through holding, exits, rolls, exercise and settlement.
+  Current exact windows depend on today's observed symbol inventory and
+  computable stock states. A 24-window density pilot returned 513 option bars
+  and 8,409 trades, including two empty trade windows; full-campaign sizing and
+  resource admission remain open.
+- [ ] **ETFE-1.exact-window-capture:** Source-bound grouped plan: 3,036 requests
+  (1,369 option bars / 1,667 option trades). Four 128-GET resumable runs have
+  completed 512 bar requests / 27,073 normalized occurrences; raw-to-Parquet
+  tranche audit passes. The remaining 857 bar and 1,667 trade requests are not
+  yet captured. [Review](docs/reviews/2026-10-06-etfe-window-demand.md).
 - [ ] **ETFE.history-boundary:** January 1–17 returned no bars for all 23,176
   discovered symbols in the January–March 4 expiry grid; January 18 09:30 ET is
   first observed for all three ETFs. Establish usable/complete coverage;
   pre-January intervals, longer expiries and omitted historical listings remain
   outside this proof. January stock padding is not an admitted research start.
+- [ ] **ETFE-1.VOO-gaps:** Rechecked all twelve missing VOO SIP minutes with
+  neighboring-minute controls; none of the requested minutes were returned.
+  Keep the affected VOO recursive signal suffix explicitly unresolved pending
+  valid evidence that restores state under the declared indicator contract.
 - [ ] **ETFE.provider-contract:** Validate remaining route provenance and dated
   eligibility/session/contract terms when needed by feature/execution admission.
   R1/R2/P1 are not permission gates for raw collection. ETFE-0 admission remains

@@ -32,6 +32,10 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Selected full discovery transport | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-full-discovery-r0/`; PLAN/COVERAGE, six complete page chains, 455 GETs |
 | Selected full discovery census / typed data | `nn_meta/validation/etfe-full-coverage-20261005-r0/`; PLAN/CENSUS/INDEPENDENT_AUDIT/RESUME, 455 typed Parquets |
 | Full-window action announcements | `nn_meta/data_cache_etfe/alpaca-fresh-full-announcements-20261006-r1/`; PLAN/RESULT/RECONCILIATION/RESUME, 36 HTTP 200 queries; r0 retained as rejected request evidence |
+| Exact signal/context/entry window census | `nn_meta/validation/etfe-window-demand-20261006-r0/`; PLAN/CONTEXT_AUDIT/SIGNALS and 180 family receipts; `etfe-exact-windows-20261006-r0/`; nine scope outputs, DEMAND and INDEPENDENT_AUDIT |
+| VOO minute gap and option density check | `nn_meta/data_cache_etfe/alpaca-fresh-window-checks-20261006-r0/`; 36 bounded requests, WINDOW_CHECK_AUDIT, no missing minute recovered |
+| Exact-option window acquisition | `nn_meta/data_cache_etfe/alpaca-fresh-exact-options-20261006-r0/`; 3,036-job PLAN, 512 terminal bar jobs / 27,073 rows; typed prefix in `normalized-20261006-exact-options-r0/`, 512 partitions and TRANCHE_INDEPENDENT_AUDIT |
+| QQQ payable retrospective term | `nn_meta/data_cache_etfe/issuer-fresh-invesco-20261006-r0/`; official workbook and selected-cell `QQQ_RESOLUTION.json`; April 30, 2024, no prior-availability admission |
 | Announcement controls | `nn_meta/data_cache_etfe/alpaca-fresh-announcement-controls-20261005-r0/`; six successful dated controls |
 | March discovery continuation | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r0/`; PLAN/COVERAGE/RESUME_AUDIT, pages and durable request reservations |
 | March discovery normalization | `nn_meta/data_cache_etfe/normalized-20261005-discovery-r0/`; PLAN/NORMALIZED/INDEPENDENT_AUDIT, 126 partitions / 8,462 rows |
@@ -63,7 +67,7 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Synthetic expiry/delivery continuation | `nn_meta/validation/etfe-expiry-components-20261005-r0/`; PLAN, thirteen hashed checkpoints, COMPLETE, RESUME-2 and INDEPENDENT_AUDIT; [scope](specs/ETFE_EXPIRY_COMPONENTS_20261005.md) |
 | Synthetic shared scheduler / stress matrix | `nn_meta/validation/etfe-integration-components-20261005-r0/`; PLAN, 162 hashed results, event-20 checkpoint, COMPLETE, RESUME-1 and INDEPENDENT_AUDIT; [scope](specs/ETFE_INTEGRATION_COMPONENTS_20261005.md) |
 | Current feature binding amendment | `docs/specs/ETFE_FEATURE_BINDINGS_20261005.json`; numeric Setup parameters and approved DTE/5, frozen parent retained |
-| Current evidence | [Full discovery / dated validation](reviews/2026-10-06-etfe-full-coverage.md), [receipt](reviews/2026-10-06-etfe-full-coverage.json); [Underlying quote pilot / discovery](reviews/2026-10-05-etfe-stock-quotes.md), [receipt](reviews/2026-10-05-etfe-stock-quotes.json); [Shared scheduler / stress matrix](reviews/2026-10-05-etfe-integration-components.md), [receipt](reviews/2026-10-05-etfe-integration-components.json), `reviews/2026-10-05-etfe-integration-components-evidence.zip`; [expiry/delivery](reviews/2026-10-05-etfe-expiry-components.md), [action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
+| Current evidence | [Exact window / history checks](reviews/2026-10-06-etfe-window-demand.md), [receipt](reviews/2026-10-06-etfe-window-demand.json), [evidence bundle](reviews/2026-10-06-etfe-window-demand-evidence.zip); [Full discovery / dated validation](reviews/2026-10-06-etfe-full-coverage.md), [receipt](reviews/2026-10-06-etfe-full-coverage.json); [Underlying quote pilot / discovery](reviews/2026-10-05-etfe-stock-quotes.md), [receipt](reviews/2026-10-05-etfe-stock-quotes.json); [Shared scheduler / stress matrix](reviews/2026-10-05-etfe-integration-components.md), [receipt](reviews/2026-10-05-etfe-integration-components.json), `reviews/2026-10-05-etfe-integration-components-evidence.zip`; [expiry/delivery](reviews/2026-10-05-etfe-expiry-components.md), [action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -91,6 +95,22 @@ dates (eleven per ETF) and match all prior in-window actions, with a QQQ March
 2024 payable conflict. No historical input admission follows. All 320 focused
 tests pass. No capture remains running; full phase-B/C demand, budgets, input
 freeze and training remain open. [Review](reviews/2026-10-06-etfe-full-coverage.md).
+October 6 successor: packed signal/context/decision-window inventory computes
+all 25,353 variants over collected stock history and emits 4,311,060 decision
+clocks / 151,005,384 logical target links. The independent time-bound audit
+passes. Known-candidate union leaves 2,678 option-bar / 3,221 trade intervals
+pending after verified reuse. Twelve VOO SIP minute rechecks returned neighboring
+bars but none of the requested minutes. The 24-window option density pilot
+returned 513 bars / 8,409 trades and two empty windows; it is rank-selected and
+cannot size full acquisition. No dated contract selection, entry or realized
+holding path is admitted. Invesco's 2024 report resolves QQQ's payable date to
+April 30 retrospectively but gives no March 2024 prior-availability proof.
+[Review and evidence bundle](reviews/2026-10-06-etfe-window-demand.md).
+Exact option acquisition has advanced through four source-bound 128-GET runs:
+512 bar jobs / 27,073 occurrences, all independently reconciled to typed
+partitions. The next 857 bar and 1,667 trade jobs remain. No trade job has yet
+been captured from this plan; the separate rank-selected density pilot remains
+the only new full-history trade sample. No process remains running.
 The [prior quote/frontier observation](reviews/2026-10-05-etfe-stock-quotes.md)
 retains the 54-window density measurements and previous partial discovery counts.
 
