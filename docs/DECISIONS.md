@@ -2360,3 +2360,19 @@ contract or sector fields, and raw option capture does not establish complete
 historical surface terms. Keep those fields missing until dated evidence is
 supplied. Use the complete January signal prefix for signal age, independent of
 target replication. [Definition](specs/ETFE_REMAINING_FEATURES_20261005.md).
+
+### 2026-10-06 — ETFE-0 dated-input policy v1 replaces four unresolvable verdicts
+
+Alpaca publishes no point-in-time contract terms, so further downloads cannot
+close the dated-input findings. The user selected declared, conservative rules:
+deliverable-based economics (overriding 43,720 zero multipliers; five adjusted
+contracts excluded); first-seen observation as contract availability; provider
+calendar settlement cross-checked against the SEC trade-date T+2/T+1 rule with
+one declared exception (2025-01-08); actions known from the session after
+declaration, with QQQ's March 2024 payable date taken from Invesco; research
+start 2024-01-18 09:30 ET; VOO recursive indicators re-warm after each missing
+minute instead of filling. Rejected alternatives: keeping the items unresolved
+(blocks ETFE-0 indefinitely), assuming listing before first decision, always-T+2,
+ex-date-only action knowledge, dropping VOO's suffix and forward-filling.
+Exercise reference price, quote size, P1, R1/R2 and action revisions remain
+open. [Policy](specs/ETFE_DATED_INPUT_POLICY_20261006.md).

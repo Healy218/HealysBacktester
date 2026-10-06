@@ -1,49 +1,55 @@
-# Handoff — October 6, 2026 — ETFE exact-option capture complete
+# Handoff — October 6, 2026 — ETFE exact capture and dated-input policy v1
 
 ## Focus and result
 
-Resumed and finished `alpaca-fresh-exact-options-20261006-r0` in 128-GET
-tranches (1-second pacing, 512 MiB root and free-space guards), normalizing in
-128-partition increments after each tranche. Scope is unchanged: SPY/QQQ/VOO,
-fresh Alpaca, 0–5 DTE entries/rolls, 1–45 DTE daily context, October 2, 2026 end.
+1. **Exact-option capture completed** (`alpaca-fresh-exact-options-20261006-r0`):
+   3,036/3,036 jobs, 2,275,130 normalized occurrences; full independent audit
+   (`FULL_CAPTURE_INDEPENDENT_AUDIT.json`) reconciles raw-to-Parquet and
+   capture-to-union. 194 bar / 112 trade windows returned no rows.
+2. **ETFE-0 dated-input policy v1.** Alpaca has no point-in-time contract terms,
+   so the user selected declared rules
+   ([spec](docs/specs/ETFE_DATED_INPUT_POLICY_20261006.md)):
+   - Economics from the deliverable. All 43,720 `multiplier=0` records are
+     standard 100-share contracts expiring Jan–Apr 2024. Five adjusted `1SPY`
+     contracts are excluded. 452,342 of 452,347 are admitted.
+   - Availability = first fresh observation (bar end or trade) at or before the
+     decision. All 227,529 exact-window candidate rows pass by entry start.
+   - Settlement from the provider calendar, cross-checked with the SEC trade-date
+     rule (T+2 before 2024-05-28, T+1 after, bank holidays skipped): 689/690
+     match. Declared exception: 2025-01-08 (Carter mourning day).
+   - Actions known from the session after declaration (33/33 before ex-date).
+     QQQ's 2024-03-18 payable date comes from Invesco (April 30).
+   - Research start 2024-01-18 09:30 ET. VOO recursive indicators re-warm after
+     each of the 12 missing minutes (`rewarm_mask`), with no filling.
+   - Independent audit recomputes every output by a different route; all match.
+     7 new tests; 335 ETFE tests pass.
 
-- Capture: all **3,036 / 3,036** jobs terminal (1,369 bar / 1,667 trade) across
-  3,116 committed pages (80 pagination pages). Raw root 221 MB.
-- Normalization: 3,036 partitions, **2,275,130 occurrences** (70,354 bars /
-  2,204,776 trades), no quality flags; typed root 202 MB.
-- Empty windows: 194 bar and 112 trade requests returned zero rows (completed
-  responses, not failures).
-- New `scripts/audit_etfe_exact_option_capture.py` (full scope; the 512-only
-  tranche auditor and its evidence are untouched) writes
-  `FULL_CAPTURE_INDEPENDENT_AUDIT.json`. It reconciles every raw page/occurrence
-  to Parquet by hash and independently proves the captured windows equal the
-  DEMAND pending union minus the density-pilot windows over 754 route/symbol
-  pairs (11,899,020 s·symbol captured + 155,400 s·symbol pilot reuse).
-- Loop note: both `acquire_etfe_alpaca.py run` and `normalize_etfe.py run` exit 2
-  whenever work remains; that is not a failure.
+Both auditor failures during development were auditor bugs (symbol length,
+float64 nanosecond loss), not resolver defects. Exit code 2 from
+`acquire_etfe_alpaca.py run` and `normalize_etfe.py run` means "work remains".
 
 ## Next actions
 
-1. Keep the VOO gaps, dated terms/action issues and January 18 observed option
-   boundary explicit. Derive holding windows only from dated eligible selections
-   and actual execution receipts; this capture covers known-candidate windows,
-   not realized paths or full strategy demand/resource admission.
-2. Continue ETFE-0 dated-input admission and ETFE-1.path-demand. ETFE-4.pilot,
-   freeze, build, training and evaluation remain later sequence gates.
-3. Optional: fold the full-capture audit into the window-demand review package
-   (`package_etfe_window_review.py`) if a sealed review ZIP is wanted.
+1. **Remaining ETFE-0 decisions** (user's call): official exercise/expiry
+   reference price (candidate: underlying's final regular-session SIP minute
+   close) and SIP quote size representation. P1, R1/R2 and action revisions stay
+   documented as unmodeled unless the user wants them pursued.
+2. **ETFE-1.path-demand:** with v1, the `dated_selection_unresolved` candidate
+   rows can become policy-eligible selections. Next, run the existing synthetic
+   execution/expiry/integration ledgers on real selections to produce execution
+   receipts and holding/roll/exercise windows, then size the path capture.
+3. Apply `rewarm_mask` with each variant's declared warmup in the ETFE-2 feature
+   build. ETFE-4.pilot, freeze, build, training and evaluation remain later.
 
 ## Selected artifacts
 
-Capture: `nn_meta/data_cache_etfe/alpaca-fresh-exact-options-20261006-r0/`,
-plan `422da8d5b5419ce2f1bf119fde720804d1d5a69552f7e8be551bbd041e9f8aea`.
-Typed: `nn_meta/data_cache_etfe/normalized-20261006-exact-options-r0/`,
-plan `a7c14a96876c88dd47127130a4534fd7b58e2747dd1cdf64effa15e4e180788c`,
-full audit `FULL_CAPTURE_INDEPENDENT_AUDIT.json`.
-Window demand and review: `nn_meta/validation/etfe-exact-windows-20261006-r0/`,
-`docs/reviews/2026-10-06-etfe-window-demand.md`.
+Policy: `nn_meta/validation/etfe-dated-policy-20261006-r0/` (RESOLUTION,
+CONTRACTS.parquet, ACTIONS, VOO_GAPS, INDEPENDENT_AUDIT).
+Capture: `nn_meta/data_cache_etfe/alpaca-fresh-exact-options-20261006-r0/`;
+typed `normalized-20261006-exact-options-r0/`.
+Window demand: `nn_meta/validation/etfe-exact-windows-20261006-r0/`.
 
-No historical eligibility, ETFE-0 closure, real execution or training is
-implied. Preserve unrelated dirty V6/V7 work.
+No ETFE-0 closure, feature/execution admission, build or training is implied.
+Preserve unrelated dirty V6/V7 work, including uncommitted DECISIONS hunks.
 
-[Previous handoff](handoff-history/HANDOFF-2026-10-06-before-exact-capture.md).
+[Previous handoff](handoff-history/HANDOFF-2026-10-06-before-dated-policy.md).

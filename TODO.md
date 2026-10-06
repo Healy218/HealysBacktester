@@ -236,6 +236,13 @@ Freeze/train remain later in the first-run sequence.
   windows equal the pending physical union minus the density pilot.
   `FULL_CAPTURE_INDEPENDENT_AUDIT.json` in the normalized root. Captured known-
   candidate windows, not realized paths or admitted inputs.
+- [x] **ETFE-0.dated-policy:** User-selected v1 policy applied to fresh inputs:
+  deliverable economics (452,342 admitted, 43,720 zero-multiplier overrides,
+  5 adjusted excluded), first-seen availability, provider-calendar settlement
+  with SEC-rule cross-check (one declared exception), next-session action
+  knowledge, QQQ payable from Invesco, 2024-01-18 start and VOO re-warm. All
+  227,529 exact-window candidate rows are available by entry start. Independent
+  audit and 7 tests pass. [Policy](docs/specs/ETFE_DATED_INPUT_POLICY_20261006.md).
 - [ ] **ETFE.history-boundary:** January 1–17 returned no bars for all 23,176
   discovered symbols in the January–March 4 expiry grid; January 18 09:30 ET is
   first observed for all three ETFs. Establish usable/complete coverage;
