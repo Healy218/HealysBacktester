@@ -121,6 +121,16 @@ Read the relevant entries before treating a script or cache as broken.
   update timestamp or welcome-only response does not establish original
   publication or history coverage. [Evidence](docs/reviews/2026-10-05-etfe-action-evidence.md).
 
+- **Alpaca declaration dates are useful observations, not a revision timeline.**
+  The deprecated announcement endpoint still returned all 33 in-window ETF
+  dividends in October 2026, but disagreed with the newer action endpoint on
+  QQQ's March-2024 payable date. Preserve both observations. Its documented
+  `Reorg` type returned HTTP 422; the live route accepted dividend, merger,
+  spinoff and split. Non-200 is never empty coverage. Full-range contract discovery
+  also returns adjusted roots such as `1SPY`; preserve unparsed identities and
+  raw terms instead of silently dropping or standardizing them.
+  [Full-window evidence](docs/reviews/2026-10-06-etfe-full-coverage.md).
+
 - **Separate pool sizing from numerical threads.** GNU `nproc` honors
   `OMP_NUM_THREADS` and `OMP_THREAD_LIMIT`. A controller inheriting a value of one
   can silently make the shared autosizer cap its entire process pool at one.

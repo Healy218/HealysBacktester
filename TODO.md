@@ -15,13 +15,13 @@ collection prerequisites. Establish the earliest available **SPY/QQQ/VOO**
 history through the fresh coverage census; preserve the fixed October 2, 2026
 end. No fabricated history, point-in-time admission or full coverage claim.
 [Authoritative sequence](ROADMAP.md#etfe-first-run-sequence),
-[latest evidence](docs/reviews/2026-10-05-etfe-stock-quotes.md),
+[latest evidence](docs/reviews/2026-10-06-etfe-full-coverage.md),
 [handoff](HANDOFF.md).
 
 The latest user amendment explicitly enables 0DTE when signals qualify.
 Selected normalized inputs and bounded January option coverage are complete
 within their declared scope. Calendar-level phase-A demand is enumerated;
-304 focused tests pass. All 221 registered fields are joined with 221 masks
+320 focused tests pass. All 221 registered fields are joined with 221 masks
 for every one of the 458,133 pilot events; independent value/lineage audit and
 actual resume pass. Real diagnostics and synthetic-only evidence remain
 separate. Dated inputs, usable history and scientific admission remain open.
@@ -42,14 +42,16 @@ clocks, settlement-extended diagnostic horizons and all 27 declared synthetic
 stress profiles across six tapes. All 162 combinations / 189 proposal outcomes
 reconcile; three stressed paths retain missing quote/exercise inputs explicitly.
 Scientific labels, full-history execution and real admission remain open.
-The measured full-calendar frontier and two bounded discovery continuations
-now cover 684 / 6,300 calendar queries; 5,616 remain. Known-symbol envelopes and
-route payload measurements are independently reconciled; full phase-B/C budgets
-remain unknown. A finite underlying quote pilot captured 54 windows / 1,943,472
-occurrences for the same three ETFs. Historical size units and official exercise
-references remain unadmitted. **Continue ETFE-1.demand:** full phase-B/C acquisition census and
-measured request/storage budgets, including holding/roll/exercise paths exposed
-by the integrated diagnostics, before expanded capture and the real pilot.
+Full-range discovery now covers **6,300 / 6,300** calendar expiry/status queries:
+452,347 unique contracts, all 45,470 prior symbols reconciled, and 2,073
+symbol/session surfaces counted. This is complete discovery transport, not full
+market-window coverage or historical listing completeness. Dated-input checks
+flag 43,720 invalid/zero multipliers and 53,634 pre-transition expiries reporting
+T+1. Full-window announcements supply 33 declaration dates, but original/revision
+availability and a QQQ March-2024 payable-date conflict remain unresolved.
+**Continue ETFE-1.demand:** exact full-window signal/context/trade and holding/
+roll/exercise window unions and measured budgets. Resolve the dated-input
+failures before admission; freeze/train remains later in the first-run sequence.
 
 ## Current checklist — ETFE setup / acquisition
 
@@ -191,13 +193,23 @@ by the integrated diagnostics, before expanded capture and the real pilot.
   and frontier r2 reconciles independently. Exact path/window demand, dated
   size representation and official exercise references remain open.
   [Evidence](docs/reviews/2026-10-05-etfe-stock-quotes.md).
+- [x] **ETFE-1.full-discovery:** All six range queries / 455 successful pages
+  normalized and independently audited; 452,347 unique symbols, all 6,300
+  calendar partitions and 2,073 ticker-sessions reconciled. Actual raw/typed
+  restarts preserve hashes. Full-window action announcements: 36 successful
+  queries, 33 records matched to previous in-window actions; one payable conflict.
+  Dated validation records missing clocks and contradictory current terms;
+  historical/full-market admission remains open. 320 tests pass.
+  [Evidence](docs/reviews/2026-10-06-etfe-full-coverage.md).
 - [ ] **ETFE.provider-action-timing:** Establish mutation-history retention and
   dated original/revision availability for required actions. January's welcome-only
   stream and October's capped replay do not prove coverage. Budget any expanded
   replay using measured volume; do not apply current observations to past inputs.
   The new complete-day transport yields only one matched pre-effective action
-  witness among 35 records, not full original/revision availability.
-- [ ] **ETFE-1.demand:** Complete symbol/session surfaces after discovery,
+  witness among 35 records, not full original/revision availability. The complete
+  announcement snapshot adds declaration dates for 33 in-window actions, but
+  no revision timeline; resolve QQQ 2024-03-18 payable April 30 versus May 1.
+- [ ] **ETFE-1.demand:** Discovery/symbol-session census is complete; derive exact
   full-window causal signal/feature/trade demand (phase B), and holding/roll/
   physical-stock paths (phase C). Current calendar inventory is not the full
   strategy demand census. Reconcile measured request/storage budgets before

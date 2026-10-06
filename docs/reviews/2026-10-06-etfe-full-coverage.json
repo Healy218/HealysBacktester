@@ -1,0 +1,129 @@
+{
+  "announcement_reconciliation": {
+    "additional_announcements": [],
+    "audit_source_sha256": "2ea202e8bc9d3151ab570ae01128624cc8c241ca4941fb74beb166316772224a",
+    "by_symbol": {
+      "QQQ": 11,
+      "SPY": 11,
+      "VOO": 11
+    },
+    "by_type": {
+      "dividend": 33
+    },
+    "declaration_before_ex_date": 33,
+    "declaration_date_present": 33,
+    "historical_available_at_admitted": false,
+    "missing_prior_actions": [],
+    "occurrences": 33,
+    "plan_sha256": "900e5d4fbcfc3836f7ce4bfe2791dd3713276aea6dd8ec0c325a73ee2929716c",
+    "prior_in_window_actions": 33,
+    "queries": 36,
+    "revision_history_admitted": false,
+    "schema": "etfe-full-announcement-reconciliation-v1",
+    "source_hashes": {
+      "nn_meta/data_cache_etfe/alpaca-fresh-actions-20261005-r0/ACTIONS.parquet": "7e9cbc93cd45f6c0f5c428b47452c13fda4e53d2f4e3161c4d6fdd474a71d8c6",
+      "nn_meta/data_cache_etfe/alpaca-fresh-actions-tail-20261005-r0/OBSERVATIONS.json": "7fb0ee4b1019beb340ced9e9096a1a96558418d06fd9935b7ef39d72233c0c79"
+    },
+    "term_conflicts": [
+      [
+        "QQQ",
+        "2024-03-18"
+      ]
+    ],
+    "transport_complete": true
+  },
+  "announcement_requests": {
+    "controls": 6,
+    "rejected_v1": 36,
+    "successful_v2": 36
+  },
+  "announcement_resume": {
+    "all_prefix_hashes_preserved": true,
+    "files_preserved": 76,
+    "zero_requests": true
+  },
+  "announcement_root": "nn_meta/data_cache_etfe/alpaca-fresh-full-announcements-20261006-r1",
+  "audit_root": "nn_meta/validation/etfe-full-coverage-20261005-r0",
+  "capture_successful_requests": 455,
+  "dated_reason_counts": {
+    "current_T1_delivery_on_pre_transition_expiry": 53634,
+    "current_snapshot_not_dated_contract_terms": 452347,
+    "nonpositive_or_invalid_raw_multiplier": 43720,
+    "terms_available_at_absent": 452347,
+    "terms_effective_at_absent": 452347
+  },
+  "discovery_resume": {
+    "all_prefix_hashes_preserved": true,
+    "first_page_prefix_files": 7,
+    "normalization_resume_seconds": 18.352608843008056,
+    "raw_complete_prefix_files": 1828,
+    "typed_complete_prefix_files": 917,
+    "zero_new_requests": true
+  },
+  "discovery_summary": {
+    "calendar_queries": 6300,
+    "calendar_transport_complete": 6300,
+    "duplicate_symbols": 0,
+    "gross_bar_queries": 141489,
+    "historical_complete_queries": 0,
+    "prior_identity_conflicts": 0,
+    "prior_missing_symbols": 0,
+    "prior_symbols": 45470,
+    "purchase_symbol_session_edges": 1832006,
+    "regular_minute_scenario_rows": 5460024840,
+    "returned_occurrences": 452347,
+    "symbol_session_edges": 14049776,
+    "ticker_sessions": 2073,
+    "unique_symbols": 452347
+  },
+  "empty_expiry_status_partitions": 4756,
+  "evidence_bundle": {
+    "bytes": 2805973,
+    "indexed_files": 2915,
+    "path": "docs/reviews/2026-10-06-etfe-full-coverage-evidence.zip",
+    "sha256": "4586a1a5f077d593c3e17d1b52169179a04bce97c9ec84dcd946acf377de4a91"
+  },
+  "focused_tests_passed": 320,
+  "full_market_coverage_complete": false,
+  "independent_audit": {
+    "audit_source_sha256": "c6eb89bdd2008be8ae402020a89bacf903602590d9c0076fb75a868ff10ca275",
+    "calendar_queries": 6300,
+    "census_sha256": "ac5c052a4a2abcba4272579f65d8aca01dc27941fcf871a52549e011712d1d69",
+    "dated_reason_counts": {
+      "current_T1_delivery_on_pre_transition_expiry": 53634,
+      "current_snapshot_not_dated_contract_terms": 452347,
+      "nonpositive_or_invalid_raw_multiplier": 43720,
+      "terms_available_at_absent": 452347,
+      "terms_effective_at_absent": 452347
+    },
+    "independent_calendar_counts_reconciled": true,
+    "occurrences": 452347,
+    "partitions": 455,
+    "plan_sha256": "e55c6a0e7a06b4c79c98cdf14eee0e0a18115a274b1823abef9b0ee0f977b057",
+    "quality_counts": {
+      "contract_identity_mismatch": 5,
+      "unparsed_option_identity": 5
+    },
+    "raw_typed_occurrences_reconciled": true,
+    "ready_for_build": false,
+    "ready_for_training": false,
+    "schema": "etfe-independent-full-coverage-v1",
+    "ticker_sessions": 2073,
+    "unique_symbols": 452347
+  },
+  "observed_at": "2026-10-06T13:11:58.603435+00:00",
+  "raw_payload_bytes": 321293281,
+  "raw_root": "nn_meta/data_cache_etfe/alpaca-fresh-20261005-full-discovery-r0",
+  "raw_root_bytes": 366739081,
+  "ready_for_build": false,
+  "ready_for_training": false,
+  "roots": [
+    "nn_meta/data_cache_etfe/alpaca-fresh-20261005-full-discovery-r0",
+    "nn_meta/validation/etfe-full-coverage-20261005-r0",
+    "nn_meta/data_cache_etfe/alpaca-fresh-full-announcements-20261006-r1",
+    "nn_meta/data_cache_etfe/alpaca-fresh-announcement-controls-20261005-r0",
+    "nn_meta/data_cache_etfe/alpaca-fresh-full-announcements-20261006-r0"
+  ],
+  "task": "ETFE-1.full-discovery / ETFE.dated-input-validation",
+  "typed_bytes": 41203637
+}

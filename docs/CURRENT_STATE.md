@@ -28,7 +28,11 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Current setup and guard | `nn_meta/validation/etfe-setup-20261004-0dte-r0/PLAN.json`; `nn_meta/etfe/purchase_policy_v2.py` |
 | Verify selected setup | `scripts/prepare_etfe_0dte.py verify --root nn_meta/validation/etfe-setup-20261004-0dte-r0` |
 | Calendar-level demand | `nn_meta/validation/etfe-demand-20261004-r0/DEMAND.json`; source snapshots alongside |
-| Selected measured demand frontier | `nn_meta/validation/etfe-demand-frontier-20261005-r2/`; FRONTIER/INDEPENDENT_AUDIT/source. Earlier r0/r1 retained. |
+| Prior measured frontier / density baseline | `nn_meta/validation/etfe-demand-frontier-20261005-r2/`; FRONTIER/INDEPENDENT_AUDIT/source. Earlier r0/r1 retained. |
+| Selected full discovery transport | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-full-discovery-r0/`; PLAN/COVERAGE, six complete page chains, 455 GETs |
+| Selected full discovery census / typed data | `nn_meta/validation/etfe-full-coverage-20261005-r0/`; PLAN/CENSUS/INDEPENDENT_AUDIT/RESUME, 455 typed Parquets |
+| Full-window action announcements | `nn_meta/data_cache_etfe/alpaca-fresh-full-announcements-20261006-r1/`; PLAN/RESULT/RECONCILIATION/RESUME, 36 HTTP 200 queries; r0 retained as rejected request evidence |
+| Announcement controls | `nn_meta/data_cache_etfe/alpaca-fresh-announcement-controls-20261005-r0/`; six successful dated controls |
 | March discovery continuation | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r0/`; PLAN/COVERAGE/RESUME_AUDIT, pages and durable request reservations |
 | March discovery normalization | `nn_meta/data_cache_etfe/normalized-20261005-discovery-r0/`; PLAN/NORMALIZED/INDEPENDENT_AUDIT, 126 partitions / 8,462 rows |
 | March–April discovery continuation | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r1/`; typed counterpart `normalized-20261005-discovery-r1/`, 126 partitions / 7,344 rows, independent audit and raw resume |
@@ -59,7 +63,7 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Synthetic expiry/delivery continuation | `nn_meta/validation/etfe-expiry-components-20261005-r0/`; PLAN, thirteen hashed checkpoints, COMPLETE, RESUME-2 and INDEPENDENT_AUDIT; [scope](specs/ETFE_EXPIRY_COMPONENTS_20261005.md) |
 | Synthetic shared scheduler / stress matrix | `nn_meta/validation/etfe-integration-components-20261005-r0/`; PLAN, 162 hashed results, event-20 checkpoint, COMPLETE, RESUME-1 and INDEPENDENT_AUDIT; [scope](specs/ETFE_INTEGRATION_COMPONENTS_20261005.md) |
 | Current feature binding amendment | `docs/specs/ETFE_FEATURE_BINDINGS_20261005.json`; numeric Setup parameters and approved DTE/5, frozen parent retained |
-| Current evidence | [Underlying quote pilot / discovery](reviews/2026-10-05-etfe-stock-quotes.md), [receipt](reviews/2026-10-05-etfe-stock-quotes.json); [Shared scheduler / stress matrix](reviews/2026-10-05-etfe-integration-components.md), [receipt](reviews/2026-10-05-etfe-integration-components.json), `reviews/2026-10-05-etfe-integration-components-evidence.zip`; [expiry/delivery](reviews/2026-10-05-etfe-expiry-components.md), [action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
+| Current evidence | [Full discovery / dated validation](reviews/2026-10-06-etfe-full-coverage.md), [receipt](reviews/2026-10-06-etfe-full-coverage.json); [Underlying quote pilot / discovery](reviews/2026-10-05-etfe-stock-quotes.md), [receipt](reviews/2026-10-05-etfe-stock-quotes.json); [Shared scheduler / stress matrix](reviews/2026-10-05-etfe-integration-components.md), [receipt](reviews/2026-10-05-etfe-integration-components.json), `reviews/2026-10-05-etfe-integration-components-evidence.zip`; [expiry/delivery](reviews/2026-10-05-etfe-expiry-components.md), [action replay / freeze gap](reviews/2026-10-05-etfe-action-replay.md), [joined schema](reviews/2026-10-05-etfe-joined-schema.md) |
 | Roadmap / acceptance | [Sequence](../ROADMAP.md#etfe-first-run-sequence), [first-run acceptance](specs/ETFE_FIRST_RUN.md) |
 
 Selected setup SHA256:
@@ -72,18 +76,23 @@ January normalization plan SHAs, discovery / boundary / surfaces:
 `f3475bce2068938eb76541aa2f60688d409a2ab0b2f99ab903579a125a68651f`.
 Other root identities are in the machine receipt and earlier normalization review.
 
-October 5 at 23:53:13 UTC: the underlying quote pilot completed 54 windows /
-216 successful GETs / 1,943,472 occurrences for SPY/QQQ/VOO. Raw payloads occupy
-221,209,361 bytes; the typed/audited root occupies 352,271,006 bytes. All
-occurrences and diagnostic values reconcile; 1,991 crossed quotes stay flagged.
-Raw sizes stay unconverted; official exercise references are not supplied by
-quotes. Actual restart preserved 868 files with zero GETs; 304 focused tests pass.
-The second discovery continuation added 7,344 records / 126 complete queries.
-Selected frontier r2 counts 684 / 6,300 calendar queries captured, 5,616 remaining,
-45,470 returned symbols and 1,197,044 gross known-symbol/session edges. Full
-phase-B/C demand and budgets remain unresolved. No process remains running.
-[Current review](reviews/2026-10-05-etfe-stock-quotes.md),
-[previous frontier observation](reviews/2026-10-05-etfe-demand-frontier.md).
+October 6 completion observation: full range discovery has **452,347 unique
+contracts / 455 complete pages**, covering **6,300 / 6,300** calendar partitions.
+All 45,470 prior symbols match; 4,756 empty partitions retain unknown historical
+listing completeness. The 2,073 ticker-session census counts 14,049,776 gross
+symbol/session pairs, including 1,832,006 purchase pairs. Independent occurrence,
+typed-field and calendar audits pass; actual raw/typed restart preserves hashes.
+Raw payload 321,293,281 bytes; typed payload 41,203,637 bytes. Source-bound
+census SHA256: `ac5c052a4a2abcba4272579f65d8aca01dc27941fcf871a52549e011712d1d69`.
+Five adjusted identities retain explicit missing parsed fields. Current terms lack
+both historical clocks throughout; 43,720 raw multipliers are invalid/zero and
+53,634 pre-transition expiries report T+1. Full announcements have 33 declaration
+dates (eleven per ETF) and match all prior in-window actions, with a QQQ March
+2024 payable conflict. No historical input admission follows. All 320 focused
+tests pass. No capture remains running; full phase-B/C demand, budgets, input
+freeze and training remain open. [Review](reviews/2026-10-06-etfe-full-coverage.md).
+The [prior quote/frontier observation](reviews/2026-10-05-etfe-stock-quotes.md)
+retains the 54-window density measurements and previous partial discovery counts.
 
 October 5 selected replay: four fixed UTC days reach transport EOF. March 14,
 2024 / March 20, 2025 / March 19, 2026 returned welcome-only responses; their

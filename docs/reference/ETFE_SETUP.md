@@ -416,3 +416,31 @@ universe or change completed-minute option VWAP pricing. Share conversion stays
 unadmitted pending historical size representation; official exercise references
 are separate required inputs. Later quote acquisition must use measured, exact
 holding/roll/exercise demand rather than the entire calendar envelope.
+
+
+## Full discovery and dated-input census
+
+[Scope](../specs/ETFE_FULL_COVERAGE_20261005.md),
+[completed result](../reviews/2026-10-06-etfe-full-coverage.md).
+Selected roots are in CURRENT_STATE. All six range chains and full-window action
+announcement queries are complete; do not repeat networking. Earlier frontier r2
+remains a provenance/density baseline, not the selected discovery coverage count.
+
+- `capture_etfe_full_discovery.py`: prepare/run/audit; six explicit expiry-range
+  queries, 2,048 durable total reservations, 1,024 GETs and 30 minutes/run.
+- `audit_etfe_full_coverage.py`: prepare/run; source-bound raw normalization,
+  old-symbol reconciliation, full calendar census and dated-terms rejection counts.
+- `verify_etfe_full_coverage.py --root ROOT`: independent raw/typed/calendar audit;
+  writes INDEPENDENT_AUDIT once. Five adjusted identities stay explicitly missing.
+- `capture_etfe_full_announcements_v2.py`: prepare/run; 36 disjoint full-window
+  ex-date queries, four API-accepted action types, non-200 stops immediately.
+- `audit_etfe_full_announcements.py --root ROOT`: verifies all request/body
+  identities and compares fresh announcement amounts/dates with main/tail actions.
+
+All paths above are under `scripts/`; use `./venv/bin/python`. Sources already
+bound to plans cannot be edited; prepare successor code/roots for new behavior.
+Current declarations may describe revisions; they do not define intraday original
+availability. The QQQ March-2024 payable-date conflict remains explicit. Current
+T+1 metadata, multiplier zero or symbol parsing failures cannot be repaired by
+backdating or defaulting. Full phase-B/C request windows still need enumeration
+and measured budgets before market-data expansion.
