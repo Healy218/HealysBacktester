@@ -249,6 +249,23 @@ Freeze/train remain later in the first-run sequence.
   330 reported pins, independent recomputation matches. Quote sizes ×100 before
   2025-11-03, shares after (verified step change).
   [Policy](docs/specs/ETFE_DATED_INPUT_POLICY_20261006.md).
+- [x] **ETFE-1.existence-census / selection-v2:** Fresh daily-bar existence for
+  439,606 contracts (5,162 GETs, 3.5M rows); selection v2 picks a contract for
+  6,650,729 of 6,993,352 decision clocks (95.1%; VOO about 21%), with weekly
+  targets 2/4 admitted for SPY/QQQ.
+  [Census](docs/specs/ETFE_EXISTENCE_CENSUS_20261006.md).
+- [x] **ETFE-1.envelope-capture:** Bars-only envelope. 1,381 option minute-bar
+  jobs / 40,646,087 bars and 2,712 SIP quote windows / 45,954,878 quotes
+  (expiry ITM checks and liquidation opens) captured, normalized and
+  independently reconciled. 13,580 roll legs included. Option trades not captured
+  (user). [Envelope](docs/specs/ETFE_ENVELOPE_CAPTURE_20261006.md).
+- [ ] **ETFE-3.label-kernel:** Vectorized isolated-path label kernel over
+  decision-clock rows with earliest firing-variant exit
+  ([amendment](docs/specs/ETFE_ROW_UNIT_AMENDMENT_20261007.md)), parity-tested
+  against the synthetic `Scheduler` and hand-worked real paths. Then stresses.
+- [ ] **ETFE-1.context:** Size and decide option-context (1–45 DTE) acquisition
+  for the seven context fields; use a successor engine with a cached root-size
+  counter (the current per-request guard slows large roots about 4×).
 - [ ] **ETFE.history-boundary:** January 1–17 returned no bars for all 23,176
   discovered symbols in the January–March 4 expiry grid; January 18 09:30 ET is
   first observed for all three ETFs. Establish usable/complete coverage;

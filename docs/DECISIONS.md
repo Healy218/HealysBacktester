@@ -2406,3 +2406,13 @@ to move to a later expiry. Rejected: keeping the 5.3% coverage, full minute
 surfaces for existence, deferring weekly targets, full trade capture and a
 trade sample. [Envelope](specs/ETFE_ENVELOPE_CAPTURE_20261006.md),
 [census](specs/ETFE_EXISTENCE_CENSUS_20261006.md).
+
+### 2026-10-07 — ETFE first-run rows are decision clocks with earliest-variant exit
+
+Variant-level rows (233,055,707) would need about 412 GB of features and about
+103 GB of binned GBT memory on a 30 GiB host. User selected decision-clock rows
+(6,650,729) with per-family variant-firing summary features. Each row exits at
+the earliest exit signal among the variants that fired its entry, in addition
+to the stop and the expiry cutoff. Rejected: a reduced default-parameter
+catalog, sharded variant rows, stop-plus-expiry only and majority-variant exit.
+[Amendment](specs/ETFE_ROW_UNIT_AMENDMENT_20261007.md).
