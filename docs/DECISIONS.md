@@ -2483,3 +2483,11 @@ intrinsic value (official close vs strike, less costs, T+1). Rejected:
 do-not-exercise (zero) and keeping them unresolved. Chosen after seeing
 validation, so the untouched 2026 test decides v4.
 [Amendment](specs/ETFE_ITM_EXPIRY_AMENDMENT_20261007.md).
+
+### 2026-10-07 — Close ETFE v5 as failed; keep the 2026 test unspent
+
+v5's single validation pass came entirely from intrinsic-value expiry closes;
+every other exit lost money in every fold (see EXPERIMENTS). User selected
+recording v5 as failed without running the 2026 test. Rejected: running the
+2026 test on v5; amending the intrinsic price to bid/participation limits and
+relabelling; re-defining the acceptance rule around non-intrinsic exits.

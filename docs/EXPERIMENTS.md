@@ -1052,3 +1052,20 @@ loss of premium makes all of them negative (best −0.04% / −3.99% / +3.55%).
 **Verdict: v4 does not pass the declared rule; its edge hinges on an
 unspecified ITM-expiry resolution policy.** The 2026 test is untouched by v4
 evaluation.
+
+## 2026-10-07 — ETFE v5 validation replay (intrinsic expiry): pass is an artifact of the expiry rule
+
+Training v5 (`etfe-training-v5-20261007-r0`): 82 / 84 fits; all 63 validation
+fits complete, `final/nn-return_huber-29` and `-47` OOM-killed at the 20G cap.
+Replay approximation: one configuration of 54 passes (gbt-weighted_win-29 at
+0.6: +44% / +63% / +209% per half-year, mean excess over baseline +1.7 points).
+The no-model all-eligible baseline is +119% / +80% / +112% (v3: −85 to −91%).
+Attribution by `exit_kind`: closes at intrinsic value (41 / 36 / 45 baseline
+trades, 92–96% winners, 117 of 123 calls, all 0DTE) earn +$142k / +$94k /
++$145k; every other exit loses (−$23k / −$14k / −$32k). Each of those rows was
+`funding_unresolved` under labels v3. ITM positions sold within the 1%
+participation cap win only 17–29%. The selected configuration follows the same
+split (intrinsic +$47k / +$51k / +$219k, rest −$3k / +$12k / −$10k). **Verdict:
+v5 fails as evidence of model edge. The profit is fair-value credit for
+unsellable deep-ITM calls in a 2024–2025 rally, not skill on exits the model
+controls. The 2026 test was not run and remains unspent.**
