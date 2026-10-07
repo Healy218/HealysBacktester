@@ -2428,3 +2428,16 @@ census and reporting. Dated term: per OCC, options listed to expire 2025-01-09
 prices. This was announced by 2025-01-02, before any 0–5 DTE entry, so the
 kernel trades, cuts off and exercises them on the Jan 8 session.
 [NYSE notice](https://nyse.com/publicdocs/nyse/markets/american-options/rule-interpretations/2025/National_Day_of_Mourning_20250102.pdf).
+
+### 2026-10-07 — ETFE features for decision-clock rows
+
+User selections: signal-group fields aggregate the firing variants (MA-family
+median gap, bars since the previous same-right decision bar); option-context IV
+comes from the existence census's daily bars (daily close, next-open
+availability, masked where census expiries cannot cover the tenor); `param_*`
+fields are masked with reason `row_unit_amendment`, and family firing fractions
+replace the strategy one-hots. Declared alongside: bar-derived trade
+count/volume, trade-only fields masked, captured-window completeness as
+no-trade evidence, SPY/QQQ static sector `idx_etf`. Rejected: masking the signal
+fields, a new context capture, median parameter values.
+[Amendment](specs/ETFE_FEATURE_AMENDMENT_20261007.md).

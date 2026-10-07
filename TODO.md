@@ -276,7 +276,16 @@ Freeze/train remain later in the first-run sequence.
   −2.6%; combined −3.8% / −7.0%; bar-removal profiles robust. r0 was rejected:
   an exit at the entry clock did not block the entry (the reference latches
   strategy_off first), which distorted the lag-60 profile.
-- [ ] **ETFE-1.context:** Size and decide option-context (1–45 DTE) acquisition
+- [x] **ETFE-2.features (v1):** 221 values + 221 masks for all 6,589,460
+  SPY/QQQ decision-clock rows (`etfe-features-v1-20261007-r0`, 723 MB), per the
+  [feature amendment](docs/specs/ETFE_FEATURE_AMENDMENT_20261007.md). 147 fields
+  are >= 95% filled; declared masks: 54 param, 5 trade-only; structural: 6 ICT
+  overnight-session fields. Option context comes from census daily bars (the
+  ETFE-1.context capture is no longer needed for run one). The independent audit
+  passes: census, masks, prefix causality at two cuts per scope, and sampled
+  recomputation. Peak RSS 8.3–8.5 GiB per ticker process; 1-minute scopes about
+  12.5 min.
+- [ ] **ETFE-1.context:** Superseded for run one by census daily-bar context; Size and decide option-context (1–45 DTE) acquisition
   for the seven context fields; use a successor engine with a cached root-size
   counter (the current per-request guard slows large roots about 4×).
 - [ ] **ETFE.history-boundary:** January 1–17 returned no bars for all 23,176
