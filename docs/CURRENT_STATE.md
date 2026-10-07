@@ -40,6 +40,7 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Existence census / selection v2 | `nn_meta/data_cache_etfe/alpaca-fresh-existence-20261006-r0/`; `nn_meta/validation/etfe-selection-v2-20261006-r0/` (SELECTION.json, 9 scope Parquets) |
 | Envelope demand and capture | `nn_meta/validation/etfe-envelope-demand-20261006-r0/DEMAND.json`; raw `alpaca-fresh-envelope-{bars,quotes}-20261006-r0/`; typed `normalized-20261006-envelope-{bars,quotes}-r0/` with NORMALIZED and INDEPENDENT_AUDIT (observed 2026-10-07) |
 | Labels (kernel v1, baseline) | `nn_meta/validation/etfe-labels-v1-20261007-r2/` (9 scope Parquets, per-ticker JSON, INDEPENDENT_AUDIT); r0 rejected (cost rounding order), r1 superseded (Jan 9, 2025 expiry override, post-end censoring, liquidation completion fix) |
+| Label stress profiles | `nn_meta/validation/etfe-label-stress-20261007-r1/` (27 profile dirs, per-ticker JSON); r0 rejected (strategy-off entry parity) |
 | QQQ payable retrospective term | `nn_meta/data_cache_etfe/issuer-fresh-invesco-20261006-r0/`; official workbook and selected-cell `QQQ_RESOLUTION.json`; April 30, 2024, no prior-availability admission |
 | Announcement controls | `nn_meta/data_cache_etfe/alpaca-fresh-announcement-controls-20261005-r0/`; six successful dated controls |
 | March discovery continuation | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r0/`; PLAN/COVERAGE/RESUME_AUDIT, pages and durable request reservations |

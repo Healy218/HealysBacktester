@@ -268,7 +268,14 @@ Freeze/train remain later in the first-run sequence.
   differently on half-cent boundaries); r1 mirrors the reference operation order.
   VOO yields only 18 settled rows. r2 adds the OCC Jan 9, 2025 expiry override,
   post-end censoring and a liquidation completion fix: 2,625,092 settled, 147
-  input-unresolved. Training scope: SPY/QQQ (user). Stress profiles running.
+  input-unresolved. Training scope: SPY/QQQ (user).
+- [x] **ETFE-3.label-stress:** All 27 declared profiles
+  (`etfe-label-stress-20261007-r1`). The baseline profile equals r2 row for row
+  (6,650,729 rows, 0 mismatches). Pooled settled R: baseline SPY +0.30% / QQQ
+  +0.11%; cost x2 about 0 to −0.2%; x3 −0.3 to −0.5%; participation 0.1% −1.1% /
+  −2.6%; combined −3.8% / −7.0%; bar-removal profiles robust. r0 was rejected:
+  an exit at the entry clock did not block the entry (the reference latches
+  strategy_off first), which distorted the lag-60 profile.
 - [ ] **ETFE-1.context:** Size and decide option-context (1–45 DTE) acquisition
   for the seven context fields; use a successor engine with a cached root-size
   counter (the current per-request guard slows large roots about 4×).

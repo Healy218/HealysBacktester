@@ -207,6 +207,8 @@ class Kernel:
         reason=self.gate(symbol,attempt,target)
         if reason:  # reference finish_entry: only liquidity/eligibility reasons are observed_unfilled
             path.status='observed_unfilled' if reason in LIQUIDITY else 'input_unresolved';path.reason=reason;return path
+        if exit_ns is not None and exit_ns<=attempt:  # reference: strategy_off latches before entries
+            path.status='observed_unfilled';path.reason='strategy_off_before_entry';return path
         if not self.covered(bars,attempt):
             path.status='input_unresolved';path.reason='entry_bars_uncaptured';return path
         i=self.ref(bars,attempt)

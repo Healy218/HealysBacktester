@@ -136,3 +136,14 @@ def test_stressed_bars_remove_tenth_and_edge_blocks_chronologically():
     assert set(starts)-set(first.start)=={starts[i] for i in range(5,10)}
     last=b.stressed_bars(mk,dict(remove_every_tenth=False,remove_edge_blocks=[['last',0]]))['X']
     assert set(starts)-set(last.start)=={starts[i] for i in range(360,365)}
+
+
+def test_exit_at_or_before_entry_attempt_blocks_entry():
+    day=dt.date(2024,5,24);op,cl=ns('2024-05-24T13:30Z'),ns('2024-05-24T20:00Z')
+    starts=np.array([op+i*k.MINUTE for i in range(60)],np.int64);n=len(starts)
+    mk=k.Market({'X':k.Bars(starts,np.ones(n),np.full(n,10000,np.int64),np.ones(n,np.int64),op,cl)},{},
+        {'X':('SPY','call',day,500.0,dt.date(2024,5,20))},{},{day:(op,cl)},{},[day],{},set())
+    signal=op+10*k.MINUTE
+    lagged=k.Kernel(mk,dict(lag_seconds=60))
+    assert lagged.run('X',signal,signal+k.MINUTE,0).reason=='strategy_off_before_entry'
+    assert k.Kernel(mk).run('X',signal,signal+k.MINUTE,0).quantity>0
