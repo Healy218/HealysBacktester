@@ -266,7 +266,9 @@ Freeze/train remain later in the first-run sequence.
   all six fixture tapes; the independent audit reconciles 2,099,457 filled
   entries against raw bars. r0 was rejected (fused cost factor rounded
   differently on half-cent boundaries); r1 mirrors the reference operation order.
-  VOO yields only 18 settled rows. Stress profiles remain.
+  VOO yields only 18 settled rows. r2 adds the OCC Jan 9, 2025 expiry override,
+  post-end censoring and a liquidation completion fix: 2,625,092 settled, 147
+  input-unresolved. Training scope: SPY/QQQ (user). Stress profiles running.
 - [ ] **ETFE-1.context:** Size and decide option-context (1–45 DTE) acquisition
   for the seven context fields; use a successor engine with a cached root-size
   counter (the current per-request guard slows large roots about 4×).

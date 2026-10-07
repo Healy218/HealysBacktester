@@ -68,7 +68,7 @@ def test_kernel_matches_scheduler_per_proposal(case):
         assert fills,'reference never entered'
         contract=fills[0]['contract']
         exits=[ns(e['at']) for e in one['strategy_exits']]
-        kernel=k.Kernel(market_from_tape(one),dict(lag_seconds=1,end_ns=ns(tape['end'])))
+        kernel=k.Kernel(market_from_tape(one),dict(lag_seconds=1,quote_lag_seconds=0,end_ns=ns(tape['end'])))
         got=kernel.run(contract,ns(p['signal_at']),min(exits) if exits else None,p['target'])
         expected={'open':'right_censored_end'}.get(ref['status'],ref['status'])
         assert got.status==expected,(case['id'],got.status,got.reason,ref)
@@ -111,3 +111,28 @@ def test_fill_rounding_follows_reference_operation_order():
 def cents_ref(x):
     from nn_meta.etfe.execution_ledger import cents
     return cents(x)
+
+
+def test_expiry_override_moves_close_and_reference():
+    d8,d9=dt.date(2025,1,8),dt.date(2025,1,9)
+    mk=k.Market(bars={},quotes={},contracts={'X':('SPY','call',d9,500.0,dt.date(2025,1,2))},by_expiry={},
+        sessions={d8:(ns('2025-01-08T14:30Z'),ns('2025-01-08T21:00Z'))},equity_settle={d8:d9},settle_days=[d8,d9],
+        references={('SPY',d8):501.0},weekly=set(),expiry_overrides={d9:d8})
+    kern=k.Kernel(mk)
+    assert kern.expiry_close(d9)==ns('2025-01-08T21:00Z')
+    assert kern.gate('X',ns('2025-01-08T20:45Z'),1)=='expiry_exit_cutoff_reached'
+    assert kern.gate('X',ns('2025-01-08T15:00Z'),1) is None
+
+
+def test_stressed_bars_remove_tenth_and_edge_blocks_chronologically():
+    from nn_meta.etfe import label_build as b
+    day=dt.date(2024,5,24);op,cl=ns('2024-05-24T13:30Z'),ns('2024-05-24T20:00Z')
+    starts=np.array([op+i*k.MINUTE for i in range(390)],np.int64);n=len(starts)
+    bars={'X':k.Bars(starts,np.ones(n),np.full(n,10,np.int64),np.ones(n,np.int64),op,cl)}
+    mk=k.Market(bars,{}, {}, {}, {day:(op,cl)},{},[],{},set())
+    tenth=b.stressed_bars(mk,dict(remove_every_tenth=True,remove_edge_blocks=[]))['X']
+    assert len(tenth.start)==390-39 and starts[9] not in set(tenth.start) and starts[10] in set(tenth.start)
+    first=b.stressed_bars(mk,dict(remove_every_tenth=False,remove_edge_blocks=[['first',1]]))['X']
+    assert set(starts)-set(first.start)=={starts[i] for i in range(5,10)}
+    last=b.stressed_bars(mk,dict(remove_every_tenth=False,remove_edge_blocks=[['last',0]]))['X']
+    assert set(starts)-set(last.start)=={starts[i] for i in range(360,365)}

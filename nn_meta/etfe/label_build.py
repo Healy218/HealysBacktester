@@ -71,7 +71,8 @@ def market(ticker):
     for r in pq.read_table(REFERENCES).to_pylist():
         if r['symbol']==ticker:refs[ticker,r['session_date']]=r['reference']
     return k.Market(bars=bars,quotes=quotes,contracts=contracts,by_expiry={x:sorted(v) for x,v in by_expiry.items()},
-        sessions=sessions,equity_settle=equity,settle_days=[x for x in days if x not in hol],references=refs,weekly={'SPY','QQQ'})
+        sessions=sessions,equity_settle=equity,settle_days=[x for x in days if x not in hol],references=refs,weekly={'SPY','QQQ'},
+        expiry_overrides=EXPIRY_OVERRIDES)
 
 
 def earliest_exits(tag):
@@ -95,6 +96,11 @@ def earliest_exits(tag):
     return out
 
 
+# OCC: options listed to expire 2025-01-09 (national day of mourning, markets closed) expired on
+# 2025-01-08 closing prices; announced by 2025-01-02, before any 0-5 DTE entry into them.
+EXPIRY_OVERRIDES={dt.date(2025,1,9):dt.date(2025,1,8)}
+
+
 COLUMNS=['ticker','minutes','chart_row','signal_at_ns','session_date','right','target_dte','logical_memberships','candidate']
 
 
@@ -116,3 +122,53 @@ def run_ticker(ticker,out,policy=None):
         summary[tag]=dict(rows=len(records),unique_paths=len(cache),status=dict(counts),data_sha256=m.sha(dest.read_bytes()))
         print(json.dumps(dict(scope=tag,**summary[tag])),flush=True)
     return dict(ticker=ticker,scopes=summary,elapsed_seconds=time.monotonic()-started)
+
+
+def stress_profiles():
+    """The reference's 27 declared profiles (integration_ledger.stress_profiles), unchanged."""
+    from nn_meta.etfe.integration_ledger import stress_profiles as reference
+    return reference()
+
+
+def stressed_bars(mk,policy):
+    """Chronological bar removal per contract/session, mirroring integration_ledger.stressed_bars."""
+    if not policy.get('remove_every_tenth') and not policy.get('remove_edge_blocks'):return mk.bars
+    dates=sorted(mk.sessions);opens=np.array([mk.sessions[x][0] for x in dates]);closes=np.array([mk.sessions[x][1] for x in dates])
+    out={}
+    for sym,b in mk.bars.items():
+        if not len(b.start):out[sym]=b;continue
+        j=np.searchsorted(opens,b.start,side='right')-1;inside=(j>=0)&(b.start<closes[np.maximum(j,0)])
+        keep=inside.copy()
+        eligible=inside&(b.vwap>0)&(b.volume>0)&(b.count>0)
+        if policy.get('remove_every_tenth'):
+            rank=pd.Series(eligible.astype(int)).groupby(j).cumsum().to_numpy()
+            keep&=~(eligible&(rank%10==0))
+        for side,block in policy.get('remove_edge_blocks',[]):
+            anchor=opens[np.maximum(j,0)]+5*block*k.MINUTE if side=='first' else closes[np.maximum(j,0)]-(30-5*block)*k.MINUTE
+            keep&=~((b.start>=anchor)&(b.start<anchor+5*k.MINUTE))
+        out[sym]=k.Bars(b.start[keep],b.vwap[keep],b.volume[keep],b.count[keep],b.lo,b.hi)
+    return out
+
+
+def run_stress(ticker,out,names=None):
+    """All declared profiles for one ticker; minimal per-row outcome columns per profile."""
+    out=Path(out);base=market(ticker);profiles=stress_profiles();summary={}
+    for name,policy in profiles.items():
+        if names and name not in names:continue
+        started=time.monotonic();mk=k.Market(**{**base.__dict__,'bars':stressed_bars(base,policy)})
+        kern=k.Kernel(mk,{x:v for x,v in policy.items() if x not in ('remove_every_tenth','remove_edge_blocks')})
+        dest=out/name;dest.mkdir(parents=True,exist_ok=True);counts=defaultdict(int);pnl=0;debit=0
+        for path in sorted(SELECTION.glob(f'{ticker}-*.parquet')):
+            tag=path.stem;exits=earliest_exits(tag);rows=[]
+            t=pq.read_table(path,columns=COLUMNS).to_pandas();t=t[t.candidate!='']
+            for r in t.itertuples(index=False):
+                x=int(exits[r.right][r.chart_row]);x=None if x<0 else x
+                p=kern.run(r.candidate,int(r.signal_at_ns),x,int(r.target_dte));counts[p.status]+=1
+                if p.status=='settled':pnl+=p.pnl;debit+=p.debit
+                rows.append((r.chart_row,r.signal_at_ns,r.right,r.target_dte,p.status,p.debit,p.pnl))
+            pq.write_table(pa.Table.from_pylist([dict(chart_row=a,signal_at_ns=b_,right=c,target_dte=d_,status=e,debit_cents=f,pnl_cents=g)
+                for a,b_,c,d_,e,f,g in rows]),dest/f'{tag}.parquet',compression='zstd')
+        summary[name]=dict(policy=policy,status=dict(counts),settled_pnl_cents=pnl,settled_debit_cents=debit,
+            elapsed_seconds=time.monotonic()-started)
+        print(json.dumps(dict(ticker=ticker,profile=name,status=dict(counts),pooled_R=pnl/debit if debit else None)),flush=True)
+    return summary

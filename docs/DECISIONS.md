@@ -2416,3 +2416,15 @@ the earliest exit signal among the variants that fired its entry, in addition
 to the stop and the expiry cutoff. Rejected: a reduced default-parameter
 catalog, sharded variant rows, stop-plus-expiry only and majority-variant exit.
 [Amendment](specs/ETFE_ROW_UNIT_AMENDMENT_20261007.md).
+
+### 2026-10-07 — ETFE labels keep 1% participation; train SPY/QQQ; Jan 9, 2025 expiry override
+
+Baseline labels leave 3.26M of 6.65M decision clocks size-ineligible under the
+predeclared 1% entry-minute participation cap, and VOO yields only 18 settled
+rows. The user kept the cap (2.6M settled labels remain; stresses tighten it
+further) and limited first-run training to SPY/QQQ, with VOO retained in the
+census and reporting. Dated term: per OCC, options listed to expire 2025-01-09
+(national day of mourning, markets closed) expired on 2025-01-08 closing
+prices. This was announced by 2025-01-02, before any 0–5 DTE entry, so the
+kernel trades, cuts off and exercises them on the Jan 8 session.
+[NYSE notice](https://nyse.com/publicdocs/nyse/markets/american-options/rule-interpretations/2025/National_Day_of_Mourning_20250102.pdf).

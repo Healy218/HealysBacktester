@@ -31,7 +31,7 @@ CASH0=10_000_000  # cents
 MULT=100
 END_NS=int(datetime.fromisoformat('2026-10-03T04:00:00+00:00').timestamp())*NS
 LIQUIDITY={'outside_0_to_5_calendar_dte','target_not_enabled','expiry_exit_cutoff_reached'}
-BASELINE=dict(lag_seconds=1,participation=.01,cost_multiplier=1,min_volume=1,min_trades=1,exercise_fee=0.0)
+BASELINE=dict(lag_seconds=1,participation=.01,cost_multiplier=1,min_volume=1,min_count=1,exercise_fee=0.0,quote_lag_seconds=1)
 
 
 def latest(credits,*extra):
@@ -78,6 +78,7 @@ class Market:
     settle_days:list          # sorted bank/market settlement dates
     references:dict           # (ticker, expiry date) -> official close price or None
     weekly:set                # tickers with weekly targets 2/4
+    expiry_overrides:dict=field(default_factory=dict)  # listed expiry -> dated effective expiry session
 
 
 @dataclass
@@ -101,14 +102,14 @@ class Kernel:
     def __init__(self,market,policy=None):
         self.m=market;self.p=dict(BASELINE,**(policy or {}))
         self.lag=int(self.p['lag_seconds']*NS);self.cm=self.p['cost_multiplier'];self.cost=.0015*self.cm  # sizing unit, as reference
-        self.end=int(self.p.get('end_ns',END_NS))
+        self.end=int(self.p.get('end_ns',END_NS));self.qlag=int(self.p['quote_lag_seconds']*NS)  # publication-lag stress applies to bars only
 
     # ---- references -------------------------------------------------------------------------
     def ref(self,bars,now):
         """Index of the newest bar known at `now` if fresh and valid, else None (no backward search)."""
         i=bisect.bisect_right(bars.start,now-MINUTE-self.lag)-1
         if i<0 or now>bars.start[i]+2*MINUTE:return None
-        if not (bars.vwap[i]>0 and bars.volume[i]>=self.p['min_volume'] and bars.count[i]>=self.p['min_trades']):return None
+        if not (bars.vwap[i]>0 and bars.volume[i]>=self.p['min_volume'] and bars.count[i]>=self.p['min_count']):return None
         return i
 
     def covered(self,bars,now):
@@ -123,7 +124,7 @@ class Kernel:
         """
         q=self.m.quotes.get(ticker)
         if q is None:return None,'quote_uncaptured'
-        known=now-self.lag;win=[lo for lo,hi in q.windows if lo<=known<hi]
+        known=now-self.qlag;win=[lo for lo,hi in q.windows if lo<=known<hi]
         if not win:return None,'quote_uncaptured'
         lo=win[0]
         i=bisect.bisect_right(q.t,known)-1 if q.available is None else bisect.bisect_right(q.available,now)-1
@@ -152,8 +153,11 @@ class Kernel:
         from zoneinfo import ZoneInfo
         return int(datetime(day.year,day.month,day.day,9,30,tzinfo=ZoneInfo('America/New_York')).timestamp())*NS
 
+    def effective(self,expiry):
+        return self.m.expiry_overrides.get(expiry,expiry)
+
     def expiry_close(self,expiry):
-        s=self.m.sessions.get(expiry)
+        s=self.m.sessions.get(self.effective(expiry))
         return None if s is None else s[1]
 
     # ---- gates ------------------------------------------------------------------------------
@@ -239,10 +243,9 @@ class Kernel:
     def hold(self,path,sym,qty,entry_vwap,used,held_from,exit_ns,target,cash):
         """Hold one leg; returns (credits, debits, next roll leg or None, last event ns) or None on terminal failure."""
         bars=self.m.bars[sym];ticker,right,expiry,strike,_=self.m.contracts[sym]
-        close=self.expiry_close(expiry)
-        if close is None:close=self.end  # expiry after the fixed end: no observation past END
+        close=self.expiry_close(expiry);due=self.option_due
+        if close is None:return self.hold_past_end(path,bars,used,qty,entry_vwap,held_from,exit_ns)
         cutoff=close-15*MINUTE
-        due=self.option_due
         # First stop clock: first bar known after the hold began with VWAP <= 0.875 x entry VWAP.
         k=bisect.bisect_right(bars.start,held_from-MINUTE-self.lag)
         stop_ns=None
@@ -275,10 +278,26 @@ class Kernel:
         if not roll:return credits,[],None,last
         return self.roll(path,ticker,right,target,credits,[],last,exit_ns)
 
+    def hold_past_end(self,path,bars,used,qty,entry_vwap,held_from,exit_ns):
+        """Expiry after the fixed end: observe through the last session close only; no expiry logic."""
+        horizon=max(c for _,c in self.m.sessions.values() if c<=self.end)
+        if bars.hi<horizon:path.status='input_unresolved';path.reason='held_bars_uncaptured';return None
+        k=bisect.bisect_right(bars.start,held_from-MINUTE-self.lag);stop_ns=None
+        for h in np.flatnonzero(bars.vwap[k:]<=.875*entry_vwap):
+            at=int(bars.start[k+h])+MINUTE+self.lag
+            if at>=horizon:break
+            if self.ref(bars,at)==k+h:stop_ns=at;break
+        cands=[x for x in (stop_ns,exit_ns if exit_ns is not None and exit_ns>held_from else None) if x is not None and x<horizon]
+        if not cands:path.status='right_censored_end';path.reason='open_at_end';return None
+        intent=min(cands);path.exit_kind='premium_stop' if intent==stop_ns else 'strategy_exit'
+        rest,credits=self.sell(path,bars,used,qty,int(intent),horizon,self.option_due)
+        if rest:path.status='right_censored_end';path.reason='unsold_at_end';return None
+        return credits,[],None,latest(credits,int(intent))
+
     def expire(self,path,sym,qty,credits,_):
         """Unsold quantity at the option close: OCC exercise-by-exception at the official close."""
         ticker,right,expiry,strike,_=self.m.contracts[sym];close=self.expiry_close(expiry)
-        ref=self.m.references.get((ticker,expiry))
+        ref=self.m.references.get((ticker,self.effective(expiry)))
         if ref is None:path.status='input_unresolved';path.reason='dated_exercise_reference_missing';return None
         from nn_meta.etfe.closing_reference import exercise_outcome
         o=exercise_outcome('C' if right=='call' else 'P',strike,ref);path.pin=path.pin or o['pin']
@@ -286,7 +305,7 @@ class Kernel:
         if not o['exercised']:
             path.events.append(('nonexercise',close,qty,ref));return credits,[],None,last
         if right=='put':path.status='funding_unresolved';path.reason='put_exercise_without_settled_shares';return None
-        due=self.equity_due(expiry)
+        due=self.equity_due(self.effective(expiry))
         if due is None:path.status='input_unresolved';path.reason='exercise_settlement_calendar_missing';return None
         strike_cash=cents(qty*MULT*strike)+cents(qty*self.p['exercise_fee'])
         spendable=CASH0-path.spent+sum(a for a,d in path.prior+credits if d is not None and d<=due)
@@ -312,9 +331,10 @@ class Kernel:
                 sale_due=self.equity_due(self.ny_date(clock))
                 if sale_due is None:path.status='input_unresolved';path.reason='stock_settlement_calendar_missing';return None,None,None
                 credits.append((amount,sale_due));last=max(last,sale_due);path.events.append(('stock_sell',clock,sold,float(q.bid[i])))
-            nxt=bisect.bisect_right(q.t,clock-self.lag)
+            if shares==0:break  # sold out on the last captured quote: complete, not exhausted
+            nxt=bisect.bisect_right(q.t,clock-self.qlag)
             if nxt>=len(q.t):path.status='input_unresolved';path.reason='liquidation_quotes_exhausted';return None,None,None
-            clock=max(clock+1,int(q.t[nxt])+self.lag)
+            clock=max(clock+1,int(q.t[nxt])+self.qlag)
         return True,credits,last
 
     def roll(self,path,ticker,right,target,credits,debits,last,exit_ns):
@@ -335,7 +355,7 @@ class Kernel:
                 later=[d for d in self.m.sessions if d>day]
                 if not later:path.status='right_censored_end';path.reason='roll_pending_at_end';return None
                 clock=self.m.sessions[min(later)][0];continue
-            if clock-self.lag<s[0]:clock+=MINUTE;continue  # no regular quote known yet
+            if clock-self.qlag<s[0]:clock+=MINUTE;continue  # no regular quote known yet
             qi,why=self.quote(ticker,clock,regular_start=True)
             if qi is None:path.status='input_unresolved';path.reason='roll_'+why;return None
             qt=self.m.quotes[ticker];spot=(qt.bid[qi]+qt.ask[qi])/2
