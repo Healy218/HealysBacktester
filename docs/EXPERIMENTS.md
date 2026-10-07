@@ -1072,7 +1072,7 @@ controls. The 2026 test was not run and remains unspent.**
 
 ## 2026-10-07 — ETFE signal-edge diagnostic on the underlying (2024–2025; 2026 excluded)
 
-Do ETFE signals predict SPY/QQQ direction at all, with no options? 961,831
+Do ETFE signals predict SPY/QQQ direction at all, with no options? 943,831
 unique signal clocks (dataset v4, sessions 2024-01-19 to 2025-12-31). Entry is the
 typical price of the 1-minute bar opening at the signal clock. Return is signed by
 direction (call long, put short) minus the all-minute mean for the same year,
