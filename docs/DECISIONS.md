@@ -2388,3 +2388,21 @@ change. Rejected: last-minute-bar reference, bar fallback, a ±$0.05 unresolved
 or worst-case band, always-shares and no size cap. Extraction v2 adds the
 listing-venue closing cross when `M` is absent and Nasdaq's `T` venue alias;
 QQQ 2026-08-20 stays unresolved. [Policy](specs/ETFE_DATED_INPUT_POLICY_20261006.md).
+
+### 2026-10-06 — ETFE path demand: census existence, weekly 2/4, bars-only envelope
+
+The exact-window census could select a contract for only 5.3% of 4,311,060
+decision clocks, because existence evidence came from earlier bounded captures.
+User selections: (1) a fresh daily-bar existence census of 439,606 admitted
+contracts, with a contract selectable from the session after its first traded
+day (strictly earlier date), lifting selection to 95.1% of 6,993,352 clocks;
+(2) admit weekly targets 2/4 for SPY/QQQ on census evidence of an expiry every
+session (VOO stays 0/1/5; VOO selection is about 21%); (3) envelope capture of
+all path observations rather than an iterative frontier; (4) a bars-only first
+run, since 673M option trades (~19 h, ~100 GB) feed only about five trade-only
+fields, which are masked, while bar-countable trade fields are recomputed from
+bars; (5) expiry cutoff 15:45 ET (12:45 on early closes), with rolls required
+to move to a later expiry. Rejected: keeping the 5.3% coverage, full minute
+surfaces for existence, deferring weekly targets, full trade capture and a
+trade sample. [Envelope](specs/ETFE_ENVELOPE_CAPTURE_20261006.md),
+[census](specs/ETFE_EXISTENCE_CENSUS_20261006.md).
