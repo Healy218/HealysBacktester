@@ -1069,3 +1069,23 @@ split (intrinsic +$47k / +$51k / +$219k, rest −$3k / +$12k / −$10k). **Verdi
 v5 fails as evidence of model edge. The profit is fair-value credit for
 unsellable deep-ITM calls in a 2024–2025 rally, not skill on exits the model
 controls. The 2026 test was not run and remains unspent.**
+
+## 2026-10-07 — ETFE signal-edge diagnostic on the underlying (2024–2025; 2026 excluded)
+
+Do ETFE signals predict SPY/QQQ direction at all, with no options? 961,831
+unique signal clocks (dataset v4, sessions 2024-01-19 to 2025-12-31). Entry is the
+typical price of the 1-minute bar opening at the signal clock. Return is signed by
+direction (call long, put short) minus the all-minute mean for the same year,
+ticker and 30-minute slot. Horizons: +5 / +15 / +60 minutes, session close and the
+strategy's own exit. t-statistics use day-level means across 240 / 250 sessions.
+**Pooled, there is no edge:** every year × direction cell is within ±0.6 bp
+(|t| ≤ 0.3) at every horizon. The strategy exit fires after a median 1–2 bars,
+so a signal's own trade is an almost immediate round trip. By family, all
+20 families, 5 horizons and 2 years give 200 correlated tests, of which 14 have
+|t| > 2 (about 10 expected by chance). Only the TradingView-derived trend families
+(tv_gaussian, tv_msb, tv_sr, tv_uptrick) are positive at 60 minutes in both
+years, at +0.3 to +2.1 bp (t up to 2.9). That is too small to cover 0DTE premium
+decay at ~0.5 delta. **Verdict: the pooled ETFE signal set carries no directional
+information on the underlying, so option labelling cannot rescue it.** The
+TV-trend 60-minute pattern is a hypothesis only. It was found on validation
+years, so only the unspent 2026 window could test it. Script was scratch-only.
