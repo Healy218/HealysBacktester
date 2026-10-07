@@ -45,6 +45,7 @@ inputs are fresh Alpaca captures; no prior-project data/features/labels/models.
 | Frozen dataset v1 / experiment v2 | `nn_meta/validation/etfe-dataset-v1-20261007-r0/` (6 partitions, MANIFEST, VERIFY); `docs/specs/ETFE_EXPERIMENT_V2_20261007.json` |
 | Training v2 (84 fits) | `nn_meta/validation/etfe-training-v2-20261007-r0/` (models, predictions, receipts); smoke `etfe-training-smoke-20261007-r0` |
 | Labels v2 / dataset v2 / experiment v3 (next-minute VWAP fills) | `nn_meta/validation/etfe-labels-v2-20261007-r0/` (INDEPENDENT_AUDIT); `etfe-dataset-v2-20261007-r0/` (MANIFEST 3986e725…, VERIFY); `docs/specs/ETFE_EXPERIMENT_V3_20261007.json` (8663cddb…). v1/v2 artifacts superseded for edge assessment |
+| v4 (no stop): labels v3 / dataset v3 / experiment v4 / training v4 | `nn_meta/validation/etfe-labels-v3-20261007-r0/`, `etfe-dataset-v3-20261007-r0/` (742d2cf6…), `docs/specs/ETFE_EXPERIMENT_V4_20261007.json` (e0b404c4…), `etfe-training-v4-20261007-r0/` (84 fits, EVALUATION_VALIDATION.json) |
 | QQQ payable retrospective term | `nn_meta/data_cache_etfe/issuer-fresh-invesco-20261006-r0/`; official workbook and selected-cell `QQQ_RESOLUTION.json`; April 30, 2024, no prior-availability admission |
 | Announcement controls | `nn_meta/data_cache_etfe/alpaca-fresh-announcement-controls-20261005-r0/`; six successful dated controls |
 | March discovery continuation | `nn_meta/data_cache_etfe/alpaca-fresh-20261005-discovery-r0/`; PLAN/COVERAGE/RESUME_AUDIT, pages and durable request reservations |

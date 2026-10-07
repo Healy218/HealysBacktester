@@ -1036,3 +1036,19 @@ in every fold (−0.9% to −1.8%), against −5.0% to −5.8% for all labeled r
 realistic fills and costs.** Test-fold slices (e.g. 15-minute calls, +0.44%) are
 not selectable evidence.
 [Fill amendment](specs/ETFE_FILL_RULE_AMENDMENT_20261007.md).
+
+## 2026-10-07 — ETFE v4 validation replay (no stop): positive only if blocked expiries resolve favorably
+
+Portfolio-replay approximation (`scripts/evaluate_etfe.py`): one position per
+underlying, 10% sizing, each path's dollar P&L scaled down when equity cannot
+afford its quantity and never up. An earlier R × 10%-of-equity replay overstated
+compounding. v3 (stop): no configuration passes; the all-eligible baseline loses
+85–91% per half-year. v4 (pre-registered, no stop): several GBT configurations
+are positive in all three validation folds with at least 100 trades and drawdowns
+under 10% (best mean +9.97% per half-year, worst fold +8.04%), but every one has
+50–100 blocked selections (funding/input-unresolved, mostly ITM expiries the
+isolated account cannot settle). Counting every blocked selection as a total
+loss of premium makes all of them negative (best −0.04% / −3.99% / +3.55%).
+**Verdict: v4 does not pass the declared rule; its edge hinges on an
+unspecified ITM-expiry resolution policy.** The 2026 test is untouched by v4
+evaluation.
