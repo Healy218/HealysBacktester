@@ -21,6 +21,25 @@
 - Training runs under `systemd-run --user --scope -p MemoryMax=20G` with per-fold
   streaming (a whole-dataset load crashed the session on Oct 7).
 
+## Status at session end (Oct 7, evening)
+
+The ITM-expiry amendment was selected (close at intrinsic value;
+[amendment](docs/specs/ETFE_ITM_EXPIRY_AMENDMENT_20261007.md)) and its chain
+launched: labels v4 (no stop + intrinsic) audited and passing (2,670,507
+settled); dataset v4 frozen (`etfe-dataset-v4-20261007-r0`, e777af58…);
+experiment v5 frozen (`docs/specs/ETFE_EXPERIMENT_V5_20261007.json`,
+c64c828b…). Training v5 was at **52/84 fits** when the session ended. It may
+have been stopped. Resume (completed receipts are skipped):
+
+    systemd-run --user --scope -p MemoryMax=20G -p MemorySwapMax=0 ./venv/bin/python scripts/train_etfe.py \
+      --root nn_meta/validation/etfe-training-v5-20261007-r0 --experiment docs/specs/ETFE_EXPERIMENT_V5_20261007.json
+
+Then run `scripts/evaluate_etfe.py` with the same root and experiment
+(validation replay, reference only). The 2026 test is the arbiter for v5.
+
+The user decided to leave the 92 swept-in EXPERIMENTS lines in commit 8715581's
+history; do not rewrite `main`.
+
 ## Next actions
 
 1. **User decision:** ITM-expiry resolution for positions that cannot be sold
