@@ -259,10 +259,14 @@ Freeze/train remain later in the first-run sequence.
   (expiry ITM checks and liquidation opens) captured, normalized and
   independently reconciled. 13,580 roll legs included. Option trades not captured
   (user). [Envelope](docs/specs/ETFE_ENVELOPE_CAPTURE_20261006.md).
-- [ ] **ETFE-3.label-kernel:** Vectorized isolated-path label kernel over
-  decision-clock rows with earliest firing-variant exit
-  ([amendment](docs/specs/ETFE_ROW_UNIT_AMENDMENT_20261007.md)), parity-tested
-  against the synthetic `Scheduler` and hand-worked real paths. Then stresses.
+- [x] **ETFE-3.label-kernel (baseline):** `nn_meta/etfe/label_kernel.py` labels
+  all 6,650,729 decision-clock rows in ~2 min (15 µs/row): 2,624,443 settled,
+  3,257,346 size-ineligible (1% participation), 756,738 unfilled, 5,598 input,
+  2,825 funding, 3,779 censored. Exact parity with the per-second `Scheduler` on
+  all six fixture tapes; the independent audit reconciles 2,099,457 filled
+  entries against raw bars. r0 was rejected (fused cost factor rounded
+  differently on half-cent boundaries); r1 mirrors the reference operation order.
+  VOO yields only 18 settled rows. Stress profiles remain.
 - [ ] **ETFE-1.context:** Size and decide option-context (1–45 DTE) acquisition
   for the seven context fields; use a successor engine with a cached root-size
   counter (the current per-request guard slows large roots about 4×).
