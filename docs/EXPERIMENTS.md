@@ -1110,3 +1110,23 @@ cost persistence: every decile still loses after costs. **Verdict: within ETFE's
 scope (SPY/QQQ, 1/5/15-minute, 2024–2025), parameter tuning selects noise; no
 selection beats buy-and-hold.** This does not cover the earlier multi-symbol,
 longer-horizon vectorBT/meta-model work. Scripts were scratch-only.
+
+## 2026-10-07 — Server expert forward record: V118 (v4) and V5 alerts, scored from Alpaca option bars
+
+Source: read-only copies of the server's `.alert_batches.sqlite3` (alerts from
+Sep 8), its pre-retirement copy, and `.v4/.v5_paper_ledger.json`. **Neither
+paper ledger ever recorded an exit** (v4 1,512 and v5 10,494 entries, 0 closed),
+so no realized forward P&L existed. V118 sent 1 alert from Sep 8 until its last
+entry on Sep 18; its probability threshold suppressed the other 1,399 candidates.
+V5 sent 593 alerts from Sep 8 to Oct 7 (~45 DTE, near the money; 304 puts, 245
+calls; 169 symbols). 526 carry a contract and 415 could be scored from Alpaca
+daily option bars. Entry is the alert-day close, or the next traded day for 23%
+of alerts. Option return per alert: +5 trading days mean −6.5% (median −8.4%,
+34% winners, n=300); +10 days mean −3.9% (median −15.9%, n=221); marked at the
+Oct 7 close mean −6.4% (median −8.9%, 34% winners, n=415). Calls −20.7% and puts
++6.2% at the latest mark. The model score does not rank outcomes: by score
+tercile (low/mid/high) the mean is −1.4% / −14.7% / −3.2%. The 3 trades actually
+taken (PTON v5, TQQQ v31, ORCL v3) are too few to judge. Caveats: last-trade
+closes on often illiquid contracts, only a month of data, positions mostly still
+open, strategy exits not modelled. **Verdict: no forward evidence of edge for V5;
+results are consistent with time decay on randomly chosen near-the-money options.**
