@@ -288,8 +288,16 @@ Freeze/train remain later in the first-run sequence.
 - [x] **ETFE-3.freeze / experiment v2:** Dataset v1 sealed (6,589,460 rows,
   2,625,074 labeled; manifest e09e564a…; verification passes) and experiment v2
   frozen (ecca0499…; 84 fits unchanged).
-- [ ] **ETFE-4.pilot (training smoke):** one fold of GBT/NN fits to measure peak
-  RAM and time, plus interrupted-restart recovery; then size workers.
+- [x] **ETFE-4.pilot / ETFE-5.train:** The smoke run passed (fold 2024h2 peak
+  6.1–6.8 GiB; restart skips receipts). All 84 declared fits are complete
+  (`etfe-training-v2-20261007-r0`, 656 MB, ~25 min of fitting) under a 20 GiB
+  systemd cap. The first attempt loaded the whole dataset and crashed the Claude
+  session; the loader is now per fold with streaming, and NN fits clear the TF
+  session (each leaked ~3 GiB). Diagnostic only: GBT win AUC 0.685–0.702 per
+  fold; top-decile mean isolated R +5.3 to +5.9% vs ~0% for all rows.
+- [ ] **ETFE-5.evaluate:** leakage review; then the shared-ledger decision policy
+  (thresholds, 5 slots, 10% sizing) vs. cash, constant and all-eligible
+  baselines; selection on validation folds; final test; bootstrap; stresses.
 - [ ] **ETFE-1.context:** Superseded for run one by census daily-bar context; Size and decide option-context (1–45 DTE) acquisition
   for the seven context fields; use a successor engine with a cached root-size
   counter (the current per-request guard slows large roots about 4×).
