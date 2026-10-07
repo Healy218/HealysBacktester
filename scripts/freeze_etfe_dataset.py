@@ -12,7 +12,8 @@ from nn_meta.etfe import dataset_freeze as d
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('command',choices=['freeze','verify']);parser.add_argument('--root',type=Path,required=True)
+    parser.add_argument('--labels',type=Path,default=d.LABELS)
     args=parser.parse_args();root=args.root.resolve()
     if root.parent!=ROOT/'nn_meta/validation' or not root.name.startswith('etfe-dataset-'):
         parser.error('Direct nn_meta/validation/etfe-dataset-* root required')
-    print(json.dumps((d.freeze if args.command=='freeze' else d.verify)(root),indent=2,default=str))
+    print(json.dumps(d.freeze(root,args.labels.resolve()) if args.command=='freeze' else d.verify(root),indent=2,default=str))

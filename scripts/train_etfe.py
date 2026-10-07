@@ -21,11 +21,11 @@ from nn_meta.etfe import train as t
 if __name__=='__main__':
     parser=argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root',type=Path,required=True);parser.add_argument('--fit',action='append',help='fit id; default all 84')
-    parser.add_argument('--worker',type=int,default=0);parser.add_argument('--workers',type=int,default=1)
+    parser.add_argument('--experiment',type=Path,default=t.EXPERIMENT);parser.add_argument('--worker',type=int,default=0);parser.add_argument('--workers',type=int,default=1)
     args=parser.parse_args();root=args.root.resolve()
     if root.parent!=ROOT/'nn_meta/validation' or not root.name.startswith('etfe-training-'):
         parser.error('Direct nn_meta/validation/etfe-training-* root required')
-    root.mkdir(exist_ok=True);e,m=t.load_experiment()
+    root.mkdir(exist_ok=True);e,m=t.load_experiment(args.experiment.resolve())
     fits=args.fit or e['fit_ids'];fits=[f for i,f in enumerate(fits) if i%args.workers==args.worker]
     by_fold=defaultdict(list)
     for f in fits:by_fold[f.split('/')[0]].append(f)

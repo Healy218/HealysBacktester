@@ -23,8 +23,8 @@ ROOT=Path(__file__).resolve().parents[2]
 EXPERIMENT=ROOT/'docs/specs/ETFE_EXPERIMENT_V2_20261007.json'
 
 
-def load_experiment():
-    e=json.loads(EXPERIMENT.read_text())
+def load_experiment(path=EXPERIMENT):
+    e=json.loads(Path(path).read_text())
     if a.digest({k:v for k,v in e.items() if k!='sha256'})!=e['sha256'] or e['status']!='frozen':raise ValueError('Experiment drift')
     m=json.loads((ROOT/e['dataset_manifest']).read_text())
     if m['sha256']!=e['dataset_manifest_sha256']:raise ValueError('Dataset manifest drift')

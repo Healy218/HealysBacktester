@@ -295,6 +295,10 @@ Freeze/train remain later in the first-run sequence.
   session; the loader is now per fold with streaming, and NN fits clear the TF
   session (each leaked ~3 GiB). Diagnostic only: GBT win AUC 0.685–0.702 per
   fold; top-decile mean isolated R +5.3 to +5.9% vs ~0% for all rows.
+- [x] **ETFE leakage fix:** v2 fits exploited signal-bar VWAP fills; user
+  selected next-minute VWAP fills ([amendment](docs/specs/ETFE_FILL_RULE_AMENDMENT_20261007.md)).
+  Labels v2 audited (2,627,937 settled), dataset v2 frozen and verified
+  (2,627,916 labeled), experiment v3 frozen; training v3 is running.
 - [ ] **ETFE-5.evaluate:** leakage review; then the shared-ledger decision policy
   (thresholds, 5 slots, 10% sizing) vs. cash, constant and all-eligible
   baselines; selection on validation folds; final test; bootstrap; stresses.

@@ -27,8 +27,8 @@ def feature_schema_sha256():
         amendments={p:a.sha((ROOT/p).read_bytes()) for p in AMENDMENTS}))
 
 
-def build_partition(tag):
-    lab=pq.read_table(LABELS/f'{tag}.parquet').to_pandas()
+def build_partition(tag,labels=LABELS):
+    lab=pq.read_table(labels/f'{tag}.parquet').to_pandas()
     feat=pq.read_table(FEATURES/f'{tag}.parquet')
     keys=feat.select(KEYS).to_pandas()
     lab=lab.rename(columns={'contract':'contract'})
@@ -51,21 +51,22 @@ def build_partition(tag):
     return out
 
 
-def freeze(root):
-    root=Path(root);root.mkdir(parents=True,exist_ok=False);parts={};census={}
+def freeze(root,labels=LABELS):
+    root=Path(root);labels=Path(labels);root.mkdir(parents=True,exist_ok=False);parts={};census={}
     for tag in SCOPES:
-        t=build_partition(tag);path=root/f'{tag}.parquet'
+        t=build_partition(tag,labels);path=root/f'{tag}.parquet'
         tmp=root/f'.{tag}.tmp';pq.write_table(t,tmp,compression='zstd',row_group_size=200000)
         a.write_new(path,tmp.read_bytes());tmp.unlink()
         st=pd.Series(t['status'].to_numpy()).value_counts().to_dict()
         parts[tag]=dict(path=path.name,sha256=a.sha(path.read_bytes()),rows=t.num_rows,labeled=int(np.sum(t['labeled'].to_numpy())))
         census[tag]={k:int(v) for k,v in st.items()}
     inputs={}
-    for base in (LABELS,FEATURES):
+    for base in (labels,FEATURES):
         for p in sorted(base.glob('*')):
             if p.is_file():inputs[str(p.relative_to(ROOT))]=a.sha(p.read_bytes())
     sessions=sorted({s for tag in SCOPES for s in pq.read_table(root/f'{tag}.parquet',columns=['session_date'])['session_date'].to_pylist()})
-    manifest=dict(schema='etfe-dataset-v1',feature_schema_sha256=feature_schema_sha256(),scopes=SCOPES,partitions=parts,census=census,
+    fill_rule=json.loads((labels/'SPY.json').read_text()).get('kernel_policy',{}).get('fill_rule','signal_bar_vwap')
+    manifest=dict(schema='etfe-dataset-v1',labels_root=str(labels.relative_to(ROOT)),fill_rule=fill_rule,feature_schema_sha256=feature_schema_sha256(),scopes=SCOPES,partitions=parts,census=census,
         rows=sum(p['rows'] for p in parts.values()),labeled_rows=sum(p['labeled'] for p in parts.values()),
         sessions=sessions,history_start='2024-01-18',history_end_inclusive='2026-10-02',
         row_identity=['ticker','minutes']+KEYS,targets=dict(return_huber='P/A',win='float(P/A>0)',weighted_win_weight='clip(abs(P/A),.01,5)'),
