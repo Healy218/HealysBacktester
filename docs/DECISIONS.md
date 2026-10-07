@@ -2463,3 +2463,14 @@ the same bar; signal-bar close. Labels v2 remove the artifact (SPY-1 correlation
 +0.251 → −0.017; mean settled R +0.66% → −7.63%). Dataset v1, experiment v2 and
 training v2 are superseded for edge assessment; successors follow.
 [Amendment](specs/ETFE_FILL_RULE_AMENDMENT_20261007.md).
+
+### 2026-10-07 — Pre-register ETFE v4: no premium stop, earliest exit
+
+v3 models ranked trades but no top decile was profitable. A 2024-only design
+scan showed that holding longer was worse and that the 12.5% premium stop drove
+1-minute losses. User selected v4: earliest firing-variant exit, no premium
+stop, all timeframes, next-minute fills, unchanged features and fit design.
+Verdict on the 2026 test with disclosure (viewed once under v3's design),
+confirmed by forward paper data. Rejected: keeping the stop on 5/15-minute
+signals only; two parallel arms; forward-only verdict.
+[Pre-registration](specs/ETFE_V4_PREREGISTRATION_20261007.md).

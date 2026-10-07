@@ -33,7 +33,7 @@ END_NS=int(datetime.fromisoformat('2026-10-03T04:00:00+00:00').timestamp())*NS
 LIQUIDITY={'outside_0_to_5_calendar_dte','target_not_enabled','expiry_exit_cutoff_reached'}
 # fill_rule: 'next_bar_vwap' (amendment 2026-10-07, default) or 'signal_bar_vwap' (reference-ledger parity).
 BASELINE=dict(lag_seconds=1,participation=.01,cost_multiplier=1,min_volume=1,min_count=1,exercise_fee=0.0,quote_lag_seconds=1,
-    fill_rule='next_bar_vwap')
+    fill_rule='next_bar_vwap',stop_fraction=.875)
 
 
 def latest(credits,*extra):
@@ -282,7 +282,7 @@ class Kernel:
         # First stop clock: first bar known after the hold began with VWAP <= 0.875 x entry VWAP.
         k=bisect.bisect_right(bars.start,held_from-MINUTE-self.lag)
         stop_ns=None
-        hit=np.flatnonzero(bars.vwap[k:]<=.875*entry_vwap)
+        hit=np.flatnonzero(bars.vwap[k:]<=self.p['stop_fraction']*entry_vwap) if self.p['stop_fraction'] else []
         for h in hit:
             at=int(bars.start[k+h])+MINUTE+self.lag
             if at>=close:break
@@ -316,7 +316,7 @@ class Kernel:
         horizon=max(c for _,c in self.m.sessions.values() if c<=self.end)
         if bars.hi<horizon:path.status='input_unresolved';path.reason='held_bars_uncaptured';return None
         k=bisect.bisect_right(bars.start,held_from-MINUTE-self.lag);stop_ns=None
-        for h in np.flatnonzero(bars.vwap[k:]<=.875*entry_vwap):
+        for h in (np.flatnonzero(bars.vwap[k:]<=self.p['stop_fraction']*entry_vwap) if self.p['stop_fraction'] else []):
             at=int(bars.start[k+h])+MINUTE+self.lag
             if at>=horizon:break
             if self.ref(bars,at)==k+h:stop_ns=at;break

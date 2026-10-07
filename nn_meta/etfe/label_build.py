@@ -75,6 +75,28 @@ def market(ticker):
         expiry_overrides=EXPIRY_OVERRIDES)
 
 
+def latest_exits(tag):
+    """Per chart row: LATEST next-exit bar end (ns) among variants entering there (-1 if any never exits)."""
+    folder=s.SIGNALS/tag;chart=pq.read_table(folder/'chart.parquet',columns=['bar_end']).to_pandas()
+    ends=chart.bar_end.astype('int64').to_numpy();n=len(ends);never=np.iinfo(np.int64).max
+    best={'call':np.full(n,-1,np.int64),'put':np.full(n,-1,np.int64)}
+    for path in sorted(folder.glob('*.npz')):
+        if path.name.endswith('-union.npz'):continue
+        with np.load(path,allow_pickle=False) as z:
+            rows=int(z['rows'][0]);bits=np.unpackbits(z['packed'],axis=0,count=rows)
+        for v in range(bits.shape[2]):
+            for right,(ein,eout) in (('call',(0,1)),('put',(2,3))):
+                entries=np.flatnonzero(bits[:,ein,v])
+                if not len(entries):continue
+                exits=np.flatnonzero(bits[:,eout,v]);j=np.searchsorted(exits,entries,side='right')
+                nxt=np.where(j<len(exits),exits[np.minimum(j,max(len(exits)-1,0))] if len(exits) else never,never)
+                np.maximum.at(best[right],entries,nxt)
+    out={}
+    for right in best:
+        b=best[right];o=np.full(n,-1,np.int64);ok=(b>=0)&(b<never);o[ok]=ends[b[ok]];out[right]=o
+    return out
+
+
 def earliest_exits(tag):
     """Per chart row: earliest exit bar end (ns) among variants entering there, for calls and puts."""
     folder=s.SIGNALS/tag;chart=pq.read_table(folder/'chart.parquet',columns=['bar_end']).to_pandas()
