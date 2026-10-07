@@ -121,7 +121,7 @@ def run_ticker(ticker,out,policy=None):
         table=pa.Table.from_pylist(records);dest=out/f'{tag}.parquet';pq.write_table(table,dest,compression='zstd')
         summary[tag]=dict(rows=len(records),unique_paths=len(cache),status=dict(counts),data_sha256=m.sha(dest.read_bytes()))
         print(json.dumps(dict(scope=tag,**summary[tag])),flush=True)
-    return dict(ticker=ticker,scopes=summary,elapsed_seconds=time.monotonic()-started)
+    return dict(ticker=ticker,scopes=summary,kernel_policy=kernel.p,elapsed_seconds=time.monotonic()-started)
 
 
 def stress_profiles():

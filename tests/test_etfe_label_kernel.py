@@ -68,7 +68,7 @@ def test_kernel_matches_scheduler_per_proposal(case):
         assert fills,'reference never entered'
         contract=fills[0]['contract']
         exits=[ns(e['at']) for e in one['strategy_exits']]
-        kernel=k.Kernel(market_from_tape(one),dict(lag_seconds=1,quote_lag_seconds=0,end_ns=ns(tape['end'])))
+        kernel=k.Kernel(market_from_tape(one),dict(lag_seconds=1,quote_lag_seconds=0,end_ns=ns(tape['end']),fill_rule='signal_bar_vwap'))
         got=kernel.run(contract,ns(p['signal_at']),min(exits) if exits else None,p['target'])
         expected={'open':'right_censored_end'}.get(ref['status'],ref['status'])
         assert got.status==expected,(case['id'],got.status,got.reason,ref)
@@ -147,3 +147,36 @@ def test_exit_at_or_before_entry_attempt_blocks_entry():
     lagged=k.Kernel(mk,dict(lag_seconds=60))
     assert lagged.run('X',signal,signal+k.MINUTE,0).reason=='strategy_off_before_entry'
     assert k.Kernel(mk).run('X',signal,signal+k.MINUTE,0).quantity>0
+
+
+def _tape(vwaps,day=dt.date(2024,5,24)):
+    op,cl=ns('2024-05-24T13:30Z'),ns('2024-05-24T20:00Z');n=len(vwaps)
+    starts=np.array([op+i*k.MINUTE for i in range(n)],np.int64)
+    mk=k.Market({'X':k.Bars(starts,np.array(vwaps,float),np.full(n,100000,np.int64),np.full(n,50,np.int64),op,cl)},{},
+        {'X':('SPY','call',day,500.0,dt.date(2024,5,20))},{},
+        {day:(op,cl),dt.date(2024,5,28):(ns('2024-05-28T13:30Z'),ns('2024-05-28T20:00Z'))},{},[day,dt.date(2024,5,28)],{('SPY',day):400.0},set())
+    return mk,starts
+
+
+def test_next_bar_entry_and_exit_use_bars_after_the_decision():
+    vw=[2.0]*20;vw[9]=0.5;vw[16]=4.0
+    mk,starts=_tape(vw);kern=k.Kernel(mk)
+    p=kern.run('X',int(starts[10]),int(starts[16]),0)   # signal closes at start of bar 10
+    assert p.entry_vwap==2.0                            # bar [t, t+60): not the signal bar (index 9)
+    assert [e for e in p.events if e[0]=='sell'][0][3]==4.0  # exit at t_exit sells bar starting at t_exit
+
+
+def test_next_bar_missing_means_unfilled():
+    mk,starts=_tape([1.0]*20);kern=k.Kernel(mk)
+    gap=k.Bars(np.delete(mk.bars['X'].start,10),np.delete(mk.bars['X'].vwap,10),np.delete(mk.bars['X'].volume,10),
+        np.delete(mk.bars['X'].count,10),mk.bars['X'].lo,mk.bars['X'].hi)
+    mk.bars['X']=gap
+    assert k.Kernel(mk).run('X',int(starts[10]),None,0).reason=='next_bar_missing'
+
+
+def test_stop_detected_on_bar_sells_from_the_following_bar():
+    vw=[1.0]*20;vw[12]=0.80;vw[13]=0.70;vw[14]=0.60
+    mk,starts=_tape(vw);p=k.Kernel(mk).run('X',int(starts[10]),None,0)
+    assert p.exit_kind=='premium_stop'
+    # Detected when bar 12 is known (bar 13 start + 1 s); bar 13 began before that, so bar 14 is the first fill bar.
+    assert [e for e in p.events if e[0]=='sell'][0][3]==0.60

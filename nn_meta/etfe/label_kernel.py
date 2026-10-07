@@ -31,7 +31,9 @@ CASH0=10_000_000  # cents
 MULT=100
 END_NS=int(datetime.fromisoformat('2026-10-03T04:00:00+00:00').timestamp())*NS
 LIQUIDITY={'outside_0_to_5_calendar_dte','target_not_enabled','expiry_exit_cutoff_reached'}
-BASELINE=dict(lag_seconds=1,participation=.01,cost_multiplier=1,min_volume=1,min_count=1,exercise_fee=0.0,quote_lag_seconds=1)
+# fill_rule: 'next_bar_vwap' (amendment 2026-10-07, default) or 'signal_bar_vwap' (reference-ledger parity).
+BASELINE=dict(lag_seconds=1,participation=.01,cost_multiplier=1,min_volume=1,min_count=1,exercise_fee=0.0,quote_lag_seconds=1,
+    fill_rule='next_bar_vwap')
 
 
 def latest(credits,*extra):
@@ -103,6 +105,8 @@ class Kernel:
         self.m=market;self.p=dict(BASELINE,**(policy or {}))
         self.lag=int(self.p['lag_seconds']*NS);self.cm=self.p['cost_multiplier'];self.cost=.0015*self.cm  # sizing unit, as reference
         self.end=int(self.p.get('end_ns',END_NS));self.qlag=int(self.p['quote_lag_seconds']*NS)  # publication-lag stress applies to bars only
+        if self.p['fill_rule'] not in ('next_bar_vwap','signal_bar_vwap'):raise ValueError('Unknown fill rule')
+        self.next_bar=self.p['fill_rule']=='next_bar_vwap'
 
     # ---- references -------------------------------------------------------------------------
     def ref(self,bars,now):
@@ -181,8 +185,26 @@ class Kernel:
         if side=='buy':path.spent+=amount
         return amount
 
+    def valid_bar(self,bars,i):
+        return bars.vwap[i]>0 and bars.volume[i]>=self.p['min_volume'] and bars.count[i]>=self.p['min_count']
+
     def sell(self,path,bars,used,qty,start_ns,stop_ns,due_by_day):
-        """Sell `qty` from the first clock >= start_ns until stop_ns; returns (remaining, credits)."""
+        """Sell `qty` from the first clock >= start_ns until stop_ns; returns (remaining, credits).
+
+        next_bar_vwap: fill at the VWAP of each bar that STARTS at or after the decision (its trades all
+        follow the decision), bar by bar under the participation cap, while the bar starts before stop_ns.
+        """
+        if self.next_bar:
+            credits=[];j=bisect.bisect_left(bars.start,start_ns)
+            while qty>0 and j<len(bars.start) and bars.start[j]<stop_ns:
+                if self.valid_bar(bars,j):
+                    q=min(qty,max(0,math.floor(self.p['participation']*bars.volume[j])-used.get(j,0)))
+                    if q>0:
+                        used[j]=used.get(j,0)+q;qty-=q;at=int(bars.start[j])
+                        amount=self.fill(path,'sell',q,bars.vwap[j]);credits.append((amount,due_by_day(self.ny_date(at))))
+                        path.events.append(('sell',at,q,float(bars.vwap[j])))
+                j+=1
+            return qty,credits
         credits=[];clock=start_ns
         while qty>0:
             i=self.ref(bars,clock)
@@ -211,9 +233,18 @@ class Kernel:
             path.status='observed_unfilled';path.reason='strategy_off_before_entry';return path
         if not self.covered(bars,attempt):
             path.status='input_unresolved';path.reason='entry_bars_uncaptured';return path
-        i=self.ref(bars,attempt)
-        if i is None or attempt>signal_ns+MINUTE:
-            path.status='observed_unfilled';path.reason='reference_missing_or_stale';return path
+        if self.next_bar:
+            # The fill minute is [t, t+60 s): every trade in it follows the decision at signal close t.
+            if not self.covered(bars,signal_ns+MINUTE-1):
+                path.status='input_unresolved';path.reason='entry_bars_uncaptured';return path
+            i=bisect.bisect_left(bars.start,signal_ns)
+            if i>=len(bars.start) or bars.start[i]!=signal_ns or not self.valid_bar(bars,i):
+                path.status='observed_unfilled';path.reason='next_bar_missing';return path
+            attempt=signal_ns+MINUTE+self.lag  # fill known after the fill bar completes
+        else:
+            i=self.ref(bars,attempt)
+            if i is None or attempt>signal_ns+MINUTE:
+                path.status='observed_unfilled';path.reason='reference_missing_or_stale';return path
         price=float(bars.vwap[i]);unit=MULT*price*(1+self.cost)
         q=min(math.floor(min(cash/100,.1*CASH0/100)/unit),math.floor(self.p['participation']*bars.volume[i]))
         if q<=0:
@@ -365,7 +396,11 @@ class Kernel:
             if sym is not None:
                 bars=self.m.bars.get(sym);attempt=clock+self.lag
                 if not self.covered(bars,attempt):path.status='input_unresolved';path.reason='roll_leg_bars_uncaptured';return None
-                i=self.ref(bars,attempt)
+                if self.next_bar:  # fill minute [M, M+60 s) follows the roll decision at M
+                    i=bisect.bisect_left(bars.start,clock)
+                    i=i if i<len(bars.start) and bars.start[i]==clock and self.valid_bar(bars,i) else None
+                    attempt=clock+MINUTE+self.lag
+                else:i=self.ref(bars,attempt)
                 if i is not None:
                     price=float(bars.vwap[i]);unit=MULT*price*(1+self.cost)
                     q=min(math.floor(budget/100/unit),math.floor(self.p['participation']*bars.volume[i]))

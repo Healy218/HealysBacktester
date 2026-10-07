@@ -2452,3 +2452,14 @@ independent verification passes. Experiment v2
 with the amended feature schema hash, history start 2024-01-18, SPY/QQQ scope
 and decision-clock row identity. Folds, 84 fits, hyperparameters, thresholds,
 acceptance and stresses are unchanged. Neither artifact may be edited in place.
+
+### 2026-10-07 — ETFE fills move to the next minute's VWAP (leakage fix)
+
+The 84 experiment-v2 fits learned the signal-bar VWAP fill: top-decile entries
+averaged an option close 4.9% above the VWAP they filled at. User selected
+next-minute VWAP fills for every entry, exit, stop, roll and expiry sale, so
+every fill's trades follow its decision. Rejected: worse-of VWAP and close on
+the same bar; signal-bar close. Labels v2 remove the artifact (SPY-1 correlation
++0.251 → −0.017; mean settled R +0.66% → −7.63%). Dataset v1, experiment v2 and
+training v2 are superseded for edge assessment; successors follow.
+[Amendment](specs/ETFE_FILL_RULE_AMENDMENT_20261007.md).
