@@ -180,3 +180,16 @@ def test_stop_detected_on_bar_sells_from_the_following_bar():
     assert p.exit_kind=='premium_stop'
     # Detected when bar 12 is known (bar 13 start + 1 s); bar 13 began before that, so bar 14 is the first fill bar.
     assert [e for e in p.events if e[0]=='sell'][0][3]==0.60
+
+
+def test_unfunded_itm_put_closes_at_intrinsic_when_enabled():
+    day=dt.date(2024,5,24);op,cl=ns('2024-05-24T13:30Z'),ns('2024-05-24T20:00Z')
+    n=390;starts=np.array([op+i*k.MINUTE for i in range(n)],np.int64);vol=np.full(n,100000,np.int64);vol[11:]=0
+    bars=k.Bars(starts,np.full(n,1.0),vol,np.full(n,50,np.int64),op,cl)
+    nxt=dt.date(2024,5,28)
+    mk=k.Market({'X':bars},{},{'X':('SPY','put',day,500.0,dt.date(2024,5,20))},{},{day:(op,cl),nxt:(ns('2024-05-28T13:30Z'),ns('2024-05-28T20:00Z'))},
+        {day:nxt},[day,nxt],{('SPY',day):490.0},set())
+    c=cl-15*k.MINUTE;mk.quotes['SPY']=k.Quotes(np.array([c-10*k.NS],np.int64),np.array([489.9]),np.array([490.1]),np.array([5]),np.array([5]),[(c-30*k.NS,c)])
+    assert k.Kernel(mk,dict(stop_fraction=None)).run('X',int(starts[10]),None,0).status=='funding_unresolved'
+    p=k.Kernel(mk,dict(stop_fraction=None,unfunded_itm='intrinsic')).run('X',int(starts[10]),None,0)
+    assert p.status=='settled' and any(e[0]=='close_at_intrinsic' and e[3]==10.0 for e in p.events)

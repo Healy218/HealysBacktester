@@ -2474,3 +2474,12 @@ Verdict on the 2026 test with disclosure (viewed once under v3's design),
 confirmed by forward paper data. Rejected: keeping the stop on 5/15-minute
 signals only; two parallel arms; forward-only verdict.
 [Pre-registration](specs/ETFE_V4_PREREGISTRATION_20261007.md).
+
+### 2026-10-07 — ETFE unsellable, unfunded ITM expiries close at intrinsic value
+
+v4's validation edge depended on 50–100 blocked selections per configuration:
+ITM expiries that could not be sold or funded. User selected closing them at
+intrinsic value (official close vs strike, less costs, T+1). Rejected:
+do-not-exercise (zero) and keeping them unresolved. Chosen after seeing
+validation, so the untouched 2026 test decides v4.
+[Amendment](specs/ETFE_ITM_EXPIRY_AMENDMENT_20261007.md).

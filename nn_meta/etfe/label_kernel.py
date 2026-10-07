@@ -33,7 +33,7 @@ END_NS=int(datetime.fromisoformat('2026-10-03T04:00:00+00:00').timestamp())*NS
 LIQUIDITY={'outside_0_to_5_calendar_dte','target_not_enabled','expiry_exit_cutoff_reached'}
 # fill_rule: 'next_bar_vwap' (amendment 2026-10-07, default) or 'signal_bar_vwap' (reference-ledger parity).
 BASELINE=dict(lag_seconds=1,participation=.01,cost_multiplier=1,min_volume=1,min_count=1,exercise_fee=0.0,quote_lag_seconds=1,
-    fill_rule='next_bar_vwap',stop_fraction=.875)
+    fill_rule='next_bar_vwap',stop_fraction=.875,unfunded_itm='unresolved')
 
 
 def latest(credits,*extra):
@@ -337,16 +337,28 @@ class Kernel:
         last=latest(credits,close)
         if not o['exercised']:
             path.events.append(('nonexercise',close,qty,ref));return credits,[],None,last
-        if right=='put':path.status='funding_unresolved';path.reason='put_exercise_without_settled_shares';return None
+        if right=='put':
+            if self.p['unfunded_itm']=='intrinsic':return self.close_at_intrinsic(path,o,qty,expiry,credits,last)
+            path.status='funding_unresolved';path.reason='put_exercise_without_settled_shares';return None
         due=self.equity_due(self.effective(expiry))
         if due is None:path.status='input_unresolved';path.reason='exercise_settlement_calendar_missing';return None
         strike_cash=cents(qty*MULT*strike)+cents(qty*self.p['exercise_fee'])
         spendable=CASH0-path.spent+sum(a for a,d in path.prior+credits if d is not None and d<=due)
-        if strike_cash>spendable:path.status='funding_unresolved';path.reason='exercise_cash_insufficient';return None
+        if strike_cash>spendable:
+            if self.p['unfunded_itm']=='intrinsic':return self.close_at_intrinsic(path,o,qty,expiry,credits,last)
+            path.status='funding_unresolved';path.reason='exercise_cash_insufficient';return None
         path.events.append(('exercise',close,qty,ref))
         sold,stock_credits,last_sale=self.liquidate(path,ticker,qty*MULT,due)
         if sold is None:return None
         return credits+stock_credits,[(strike_cash,due)],None,max(last,last_sale)
+
+    def close_at_intrinsic(self,path,o,qty,expiry,credits,last):
+        """Amendment 2026-10-07: an ITM position that cannot be sold or funded closes at intrinsic value
+        (official close vs strike) x 100 per contract, less fee and slippage, settled like an option sale."""
+        gross=float(qty*MULT*o['intrinsic']);amount=cents(gross-gross*.001*self.cm-gross*.0005*self.cm)
+        due=self.option_due(self.effective(expiry));path.events.append(('close_at_intrinsic',self.expiry_close(expiry),qty,o['intrinsic']))
+        path.exit_kind=path.exit_kind+'+intrinsic_close'
+        return credits+[(amount,due)],[],None,max(last,due or last)
 
     def liquidate(self,path,ticker,shares,due):
         """Sell delivered shares at fresh SIP bids from settlement + 1 s latency; new quote per retry."""
