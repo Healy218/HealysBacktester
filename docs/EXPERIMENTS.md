@@ -1089,3 +1089,24 @@ decay at ~0.5 delta. **Verdict: the pooled ETFE signal set carries no directiona
 information on the underlying, so option labelling cannot rescue it.** The
 TV-trend 60-minute pattern is a hypothesis only. It was found on validation
 years, so only the unspent 2026 window could test it. Script was scratch-only.
+
+## 2026-10-07 — ETFE tuned-variant walk-forward on the underlying (2024–2025; 2026 excluded)
+
+All 2,817 catalog variants × SPY/QQQ × 1/5/15-minute charts (16,902 backtests)
+were run on the underlying with a vectorBT `from_signals`-style engine: each
+variant's own long/short entries and exits, next-bar-open fills, flips allowed,
+1 bp per side. Two modes: holding overnight, or flat at each session close. The
+engine matched hand-computed toy cases exactly. Walk-forward with an expanding
+window (train from 2024-01, test 2024h2 / 2025h1 / 2025h2) selects variants by
+in-sample Sharpe (≥ 20 trades) within each chart. **Tuning does not carry
+forward.** The top in-sample variant (in-sample Sharpe 1.7–2.4 on 5/15-minute
+charts) averages out-of-sample Sharpe −1.1 to +0.6. Its average half-year log
+return is −9.0% to +0.9%, against buy-and-hold +8.1% per half-year in every
+mode. Top-10 and best-per-family selections are no better. On 5/15-minute charts
+the rank correlation between in-sample and out-of-sample Sharpe across variants
+is −0.36 to +0.40 (mostly near 0), and the top in-sample decile is no better
+out of sample than the middle deciles. The 1-minute correlation (0.6–0.76) is
+cost persistence: every decile still loses after costs. **Verdict: within ETFE's
+scope (SPY/QQQ, 1/5/15-minute, 2024–2025), parameter tuning selects noise; no
+selection beats buy-and-hold.** This does not cover the earlier multi-symbol,
+longer-horizon vectorBT/meta-model work. Scripts were scratch-only.
