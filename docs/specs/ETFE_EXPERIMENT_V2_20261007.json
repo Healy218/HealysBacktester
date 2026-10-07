@@ -1,0 +1,371 @@
+{
+ "acceptance": {
+  "bootstrap": {
+   "block_sessions": 20,
+   "method": "moving_block",
+   "replicates": 2000,
+   "seed": 20261003
+  },
+  "max_drawdown": 0.2,
+  "min_test_completed_positions": 100,
+  "positive_bootstrap_lower_95pct": true,
+  "positive_excess_vs_cash_and_best_baseline": true,
+  "required_stress": {
+   "cost_multiplier": 2,
+   "individually_and_combined": true,
+   "lag_seconds": 5,
+   "participation": 0.005
+  }
+ },
+ "calibration": "none",
+ "changes_from_v1": [
+  "feature schema hash for the decision-clock feature amendment",
+  "history_start resolved to 2024-01-18 (dated policy v1)",
+  "training scope SPY/QQQ (VOO census only)",
+  "row identity: decision clock (ticker, minutes, chart_row, signal_at_ns, right, target_dte, contract)"
+ ],
+ "dataset_freeze_required": true,
+ "dataset_manifest": "nn_meta/validation/etfe-dataset-v1-20261007-r0/MANIFEST.json",
+ "dataset_manifest_sha256": "e09e564a8c8a461b0c5ad2d236b93700b2752124c6b74ea081383c7a7b94b0ce",
+ "embargo_sessions": 10,
+ "feature_count": 442,
+ "feature_schema_sha256": "f892d4e35378ec622aa458b8eadab5c943d7bac8fecd21df6796355e27e58e66",
+ "final_refit": {
+  "all_21_required": true,
+  "id": "final",
+  "test_end": "2026-10-02",
+  "test_start": "2026-01-01",
+  "train_end": "2025-12-31"
+ },
+ "fit_ids": [
+  "2024h2/constant-win",
+  "2024h2/gbt-win-11",
+  "2024h2/gbt-win-29",
+  "2024h2/gbt-win-47",
+  "2024h2/nn-win-11",
+  "2024h2/nn-win-29",
+  "2024h2/nn-win-47",
+  "2024h2/constant-weighted_win",
+  "2024h2/gbt-weighted_win-11",
+  "2024h2/gbt-weighted_win-29",
+  "2024h2/gbt-weighted_win-47",
+  "2024h2/nn-weighted_win-11",
+  "2024h2/nn-weighted_win-29",
+  "2024h2/nn-weighted_win-47",
+  "2024h2/constant-return_huber",
+  "2024h2/gbt-return_huber-11",
+  "2024h2/gbt-return_huber-29",
+  "2024h2/gbt-return_huber-47",
+  "2024h2/nn-return_huber-11",
+  "2024h2/nn-return_huber-29",
+  "2024h2/nn-return_huber-47",
+  "2025h1/constant-win",
+  "2025h1/gbt-win-11",
+  "2025h1/gbt-win-29",
+  "2025h1/gbt-win-47",
+  "2025h1/nn-win-11",
+  "2025h1/nn-win-29",
+  "2025h1/nn-win-47",
+  "2025h1/constant-weighted_win",
+  "2025h1/gbt-weighted_win-11",
+  "2025h1/gbt-weighted_win-29",
+  "2025h1/gbt-weighted_win-47",
+  "2025h1/nn-weighted_win-11",
+  "2025h1/nn-weighted_win-29",
+  "2025h1/nn-weighted_win-47",
+  "2025h1/constant-return_huber",
+  "2025h1/gbt-return_huber-11",
+  "2025h1/gbt-return_huber-29",
+  "2025h1/gbt-return_huber-47",
+  "2025h1/nn-return_huber-11",
+  "2025h1/nn-return_huber-29",
+  "2025h1/nn-return_huber-47",
+  "2025h2/constant-win",
+  "2025h2/gbt-win-11",
+  "2025h2/gbt-win-29",
+  "2025h2/gbt-win-47",
+  "2025h2/nn-win-11",
+  "2025h2/nn-win-29",
+  "2025h2/nn-win-47",
+  "2025h2/constant-weighted_win",
+  "2025h2/gbt-weighted_win-11",
+  "2025h2/gbt-weighted_win-29",
+  "2025h2/gbt-weighted_win-47",
+  "2025h2/nn-weighted_win-11",
+  "2025h2/nn-weighted_win-29",
+  "2025h2/nn-weighted_win-47",
+  "2025h2/constant-return_huber",
+  "2025h2/gbt-return_huber-11",
+  "2025h2/gbt-return_huber-29",
+  "2025h2/gbt-return_huber-47",
+  "2025h2/nn-return_huber-11",
+  "2025h2/nn-return_huber-29",
+  "2025h2/nn-return_huber-47",
+  "final/constant-win",
+  "final/gbt-win-11",
+  "final/gbt-win-29",
+  "final/gbt-win-47",
+  "final/nn-win-11",
+  "final/nn-win-29",
+  "final/nn-win-47",
+  "final/constant-weighted_win",
+  "final/gbt-weighted_win-11",
+  "final/gbt-weighted_win-29",
+  "final/gbt-weighted_win-47",
+  "final/nn-weighted_win-11",
+  "final/nn-weighted_win-29",
+  "final/nn-weighted_win-47",
+  "final/constant-return_huber",
+  "final/gbt-return_huber-11",
+  "final/gbt-return_huber-29",
+  "final/gbt-return_huber-47",
+  "final/nn-return_huber-11",
+  "final/nn-return_huber-29",
+  "final/nn-return_huber-47"
+ ],
+ "folds": [
+  {
+   "id": "2024h2",
+   "train_end": "2024-06-30",
+   "validation_end": "2024-12-31",
+   "validation_start": "2024-07-01"
+  },
+  {
+   "id": "2025h1",
+   "train_end": "2024-12-31",
+   "validation_end": "2025-06-30",
+   "validation_start": "2025-01-01"
+  },
+  {
+   "id": "2025h2",
+   "train_end": "2025-06-30",
+   "validation_end": "2025-12-31",
+   "validation_start": "2025-07-01"
+  }
+ ],
+ "gbt": {
+  "huber_alpha": 0.9,
+  "learning_rate": 0.05,
+  "max_bin": 63,
+  "min_data_in_leaf": 20,
+  "num_leaves": 31,
+  "rounds": 200,
+  "subsampling": false,
+  "threads": 1
+ },
+ "history_end_inclusive": "2026-10-02",
+ "history_start": "2024-01-18",
+ "labeled_rows": 2625074,
+ "nn": {
+  "activation": "relu",
+  "batch_size": 4096,
+  "dropout": 0,
+  "epochs": 10,
+  "hidden": [
+   64,
+   32
+  ],
+  "huber_delta": 1.0,
+  "learning_rate": 0.001,
+  "optimizer": "adam",
+  "shuffle": false
+ },
+ "numerical_replay": {
+  "atol": 1e-06,
+  "exact_decisions": true,
+  "rtol": 1e-05
+ },
+ "parent": "docs/specs/ETFE_EXPERIMENT_20261003.json",
+ "parent_sha256": "c6d4e2120d87a3888c9160bc2f7b943002b9aedd15bf50e13937c91be5473450",
+ "preprocessing": "train-only medians; zero for naturally all-NaN columns; NN training mean/population std, masks unscaled",
+ "purge": "decision and final cash settlement horizon strictly before tenth preceding session open",
+ "ready_for_training": true,
+ "required_fit_count": 84,
+ "row_identity": [
+  "ticker",
+  "minutes",
+  "chart_row",
+  "signal_at_ns",
+  "right",
+  "target_dte",
+  "contract"
+ ],
+ "schema": "etfe-experiment-declaration-v2",
+ "selection": "validation only; 100 completed positions, positive each fold, maxDD<=.20, excess>0 vs cash/best baseline; max mean fold excess, lower DD, lexical ID, lower threshold",
+ "sha256": "ecca0499d5b3feb5c8519f6bde555b3d7ff04398e2f8a4515603ac1332cbace5",
+ "status": "frozen",
+ "targets": {
+  "return_huber": "P/A",
+  "weighted_win": "same win target; weight=clip(abs(P/A),.01,5)",
+  "win": "float(P/A>0)"
+ },
+ "thresholds": {
+  "return_huber": [
+   0,
+   0.01,
+   0.02
+  ],
+  "weighted_win": [
+   0.5,
+   0.55,
+   0.6
+  ],
+  "win": [
+   0.5,
+   0.55,
+   0.6
+  ]
+ },
+ "training_scope": [
+  "SPY",
+  "QQQ"
+ ],
+ "trial_tuning": "none",
+ "trials": [
+  {
+   "family": "constant",
+   "id": "constant-win",
+   "objective": "win",
+   "seed": 0
+  },
+  {
+   "family": "gbt",
+   "id": "gbt-win-11",
+   "objective": "win",
+   "seed": 11
+  },
+  {
+   "family": "gbt",
+   "id": "gbt-win-29",
+   "objective": "win",
+   "seed": 29
+  },
+  {
+   "family": "gbt",
+   "id": "gbt-win-47",
+   "objective": "win",
+   "seed": 47
+  },
+  {
+   "family": "nn",
+   "id": "nn-win-11",
+   "objective": "win",
+   "seed": 11
+  },
+  {
+   "family": "nn",
+   "id": "nn-win-29",
+   "objective": "win",
+   "seed": 29
+  },
+  {
+   "family": "nn",
+   "id": "nn-win-47",
+   "objective": "win",
+   "seed": 47
+  },
+  {
+   "family": "constant",
+   "id": "constant-weighted_win",
+   "objective": "weighted_win",
+   "seed": 0
+  },
+  {
+   "family": "gbt",
+   "id": "gbt-weighted_win-11",
+   "objective": "weighted_win",
+   "seed": 11
+  },
+  {
+   "family": "gbt",
+   "id": "gbt-weighted_win-29",
+   "objective": "weighted_win",
+   "seed": 29
+  },
+  {
+   "family": "gbt",
+   "id": "gbt-weighted_win-47",
+   "objective": "weighted_win",
+   "seed": 47
+  },
+  {
+   "family": "nn",
+   "id": "nn-weighted_win-11",
+   "objective": "weighted_win",
+   "seed": 11
+  },
+  {
+   "family": "nn",
+   "id": "nn-weighted_win-29",
+   "objective": "weighted_win",
+   "seed": 29
+  },
+  {
+   "family": "nn",
+   "id": "nn-weighted_win-47",
+   "objective": "weighted_win",
+   "seed": 47
+  },
+  {
+   "family": "constant",
+   "id": "constant-return_huber",
+   "objective": "return_huber",
+   "seed": 0
+  },
+  {
+   "family": "gbt",
+   "id": "gbt-return_huber-11",
+   "objective": "return_huber",
+   "seed": 11
+  },
+  {
+   "family": "gbt",
+   "id": "gbt-return_huber-29",
+   "objective": "return_huber",
+   "seed": 29
+  },
+  {
+   "family": "gbt",
+   "id": "gbt-return_huber-47",
+   "objective": "return_huber",
+   "seed": 47
+  },
+  {
+   "family": "nn",
+   "id": "nn-return_huber-11",
+   "objective": "return_huber",
+   "seed": 11
+  },
+  {
+   "family": "nn",
+   "id": "nn-return_huber-29",
+   "objective": "return_huber",
+   "seed": 29
+  },
+  {
+   "family": "nn",
+   "id": "nn-return_huber-47",
+   "objective": "return_huber",
+   "seed": 47
+  }
+ ],
+ "unchanged_from_v1": [
+  "folds",
+  "final_refit",
+  "trials",
+  "fit_ids",
+  "required_fit_count",
+  "gbt",
+  "nn",
+  "thresholds",
+  "targets",
+  "preprocessing",
+  "purge",
+  "embargo_sessions",
+  "selection",
+  "acceptance",
+  "calibration",
+  "trial_tuning",
+  "numerical_replay"
+ ]
+}

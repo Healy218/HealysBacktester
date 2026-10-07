@@ -2441,3 +2441,14 @@ count/volume, trade-only fields masked, captured-window completeness as
 no-trade evidence, SPY/QQQ static sector `idx_etf`. Rejected: masking the signal
 fields, a new context capture, median parameter values.
 [Amendment](specs/ETFE_FEATURE_AMENDMENT_20261007.md).
+
+### 2026-10-07 — Freeze ETFE dataset v1 and experiment v2
+
+User approved the freeze. Dataset v1 (`nn_meta/validation/etfe-dataset-v1-20261007-r0`,
+manifest e09e564a…) joins audited features v1 and labels r2 for SPY/QQQ:
+6,589,460 rows, 2,625,074 labeled, with purge horizons and a full census;
+independent verification passes. Experiment v2
+([declaration](specs/ETFE_EXPERIMENT_V2_20261007.json), ecca0499…) succeeds v1
+with the amended feature schema hash, history start 2024-01-18, SPY/QQQ scope
+and decision-clock row identity. Folds, 84 fits, hyperparameters, thresholds,
+acceptance and stresses are unchanged. Neither artifact may be edited in place.

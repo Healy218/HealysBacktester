@@ -285,6 +285,11 @@ Freeze/train remain later in the first-run sequence.
   passes: census, masks, prefix causality at two cuts per scope, and sampled
   recomputation. Peak RSS 8.3–8.5 GiB per ticker process; 1-minute scopes about
   12.5 min.
+- [x] **ETFE-3.freeze / experiment v2:** Dataset v1 sealed (6,589,460 rows,
+  2,625,074 labeled; manifest e09e564a…; verification passes) and experiment v2
+  frozen (ecca0499…; 84 fits unchanged).
+- [ ] **ETFE-4.pilot (training smoke):** one fold of GBT/NN fits to measure peak
+  RAM and time, plus interrupted-restart recovery; then size workers.
 - [ ] **ETFE-1.context:** Superseded for run one by census daily-bar context; Size and decide option-context (1–45 DTE) acquisition
   for the seven context fields; use a successor engine with a cached root-size
   counter (the current per-request guard slows large roots about 4×).
