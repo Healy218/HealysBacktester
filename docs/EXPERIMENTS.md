@@ -1352,3 +1352,21 @@ but megacap tails in 2022–2025 outweighed it for short structures even before 
 straddles averaged ≈ 0 before compounding. The forecast ratio did not time either side.
 **Verdict: V8 found no edge on the underlying (stage 1) or in IV-vs-forecast
 volatility trading (stage 2) under realistic costs. Next step is the user's decision.**
+
+## 2026-10-08 — V8 events backfill: free point-in-time FA/event history 2021–2025 (data only)
+
+Earlier FA work stalled on "not enough history" because the collectors only archive
+forward (EDGAR index since 2026-07, fundamentals since 2026-09). Free sources cover
+2021–2025 point-in-time; backfilled for the V8 pool under
+`nn_meta/validation/v8-events-20261008-r0/` (raw captures kept with retrieval time):
+
+| Source | Script | Result |
+|---|---|---|
+| SEC XBRL company facts + full filing history | `scripts/build_v8_sec.py` | 162 tech names (delisted included; GOOG/GOOGL share a CIK); 263,520 filings with acceptance times, 1.61M as-filed facts; 2,650 earnings 8-Ks (Item 2.02) for 144 names. Foreign 6-K filers (TSM, BABA, ARM, NOK, STM, …) have no 8-K earnings items |
+| SEC Form 3/4/5 bulk 2021q1–2025q4 | `scripts/build_v8_events.py --source insider` | 172,856 transactions, 144 issuers, all acceptance-timed; only 1,644 open-market purchases (112 names) |
+| FINRA daily short volume | `--source finra` | 1,255 days, 177 tickers, 99.95% of ok bar-days |
+| Alpaca news (free tier) | `--source news` | ~225k articles, 177 tickers, median 146–202 per name-year; queried under each identity span's symbol (FB before META) |
+
+Availability rule (tested): SEC filings are public at acceptance if accepted 06:00–
+17:30 ET on a business day, else 06:00 ET the next business day; FINRA next day
+06:00 ET; news at creation. No signal-return relationship was examined.

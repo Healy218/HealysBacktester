@@ -66,7 +66,12 @@ per symbol/day; full in-memory loads have crashed this box.
   2/6 folds; PBO 0.84). First run invalidated by a split-settlement bug, fixed and rerun.
   [Evidence](docs/EXPERIMENTS.md).
 
-**Next: the user decides V8's direction** (stage 1 and stage 2 both failed).
+## Events / FA history (user direction 2026-10-08)
+
+- [x] **V8-EV-data:** free PIT backfill 2021–2025 (SEC facts/filings, insider, FINRA
+  short volume, news). [Evidence](docs/EXPERIMENTS.md).
+- [ ] **V8-EV-prereg (next):** 3–4 literature-backed hypotheses; user sign-off first.
+- [ ] **V8-EV-walkforward / -verdict** on the V8 engine and frozen costs.
 
 ## Parallel / later (not started)
 
