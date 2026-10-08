@@ -12,11 +12,9 @@ worker pools and vectorized code by default.
 
 - [x] **OEE-0:** event table — 1,354 earnings 8-Ks, 1,330 usable (2026-10-08;
   [state](docs/CURRENT_STATE.md#v9-plan-october-8)). Coverage only.
-- [ ] **OEE-1 (next): user sign-off** on the
-  [draft pre-registration](docs/specs/V9_OEE1_PREREG_DRAFT_20261008.json) (8 variants:
-  direction H1a–d, IV run-up H2a–b, cheap move H3a–b). On approval: freeze it under a
-  non-draft name, then implement and run OEE-2 once.
-- [ ] **OEE-2:** walk-forward (dev 2022-03 → 2025-12), then a 2026 confirmation.
+- [x] **OEE-1:** pre-registration approved by the user and frozen 2026-10-08:
+  [V9_OEE1_PREREG_20261008.json](docs/specs/V9_OEE1_PREREG_20261008.json) (8 variants).
+- [ ] **OEE-2 (next):** walk-forward (dev 2022-03 → 2025-12), then a 2026 confirmation.
 - [ ] **OEE-3:** paper forward test with half-Kelly and the drawdown brake.
 
 ## OVE — Options Volume Expert

@@ -1,6 +1,7 @@
 {
  "schema": "v9-oee1-prereg-v1",
- "status": "DRAFT, awaiting user sign-off; not frozen. No signal-to-return relationship has been examined (OEE-0 reported coverage only).",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08, variants approved as written, before any signal-to-return relationship was examined",
  "drafted_at": "2026-10-08",
  "plan": "docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md",
  "events": {
@@ -70,5 +71,16 @@
   "8-K acceptance can trail the press release; 10 events with an entry-day IV crush are excluded",
   "XYZ (Square) before 2025 has no chain (old root SQ); foreign filers (6-K) have no events",
   "no early exits: every trade is held from entry close to reaction close"
- ]
+ ],
+ "implementation_clarifications": {
+  "note": "fixed at freeze, before any result, to make the approved text executable",
+  "burn_in": "trades are counted from 2023-01-01 (the six folds); 2022 events supply trailing terciles and per-ticker histories only",
+  "trailing_window": "events with entry days in [entry - 365 calendar days, entry), i.e. same-day events excluded; tercile cut points are the 1/3 and 2/3 quantiles; top = above the 2/3 quantile, bottom = below the 1/3 quantile",
+  "h1a_score": "each component's percentile within its own trailing window minus 0.5, averaged over the components present (>= 2); the score then takes its own trailing terciles",
+  "revenue_accel_sequence": "the previous quarter is the previous first-reported 80-100 day revenue fact of that ticker (10-K years lack a standalone Q4); YoY growth needs the fact ending 365 +/- 20 days earlier",
+  "costs_lookup": "moneyness otm = ln(K/S) for calls and -ln(K/S) for puts, S = the underlying's raw close that day; DTE below 1 uses the [1,3) bucket and above 30 the [8,31) bucket; otm beyond +/-0.1 uses the edge bucket; a missing cell uses the widest median among cells with the same DTE and moneyness buckets",
+  "missing_exit": "a trade whose exit price is missing (not traded on the reaction day and not expiring) is dropped and counted in the report",
+  "h2b_wings": "wings are the call strike nearest K + implied move x S above K and the put strike nearest K - implied move x S below K, each traded on the entry day (volume > 0); maximum loss = max(call wing - K, K - put wing) - net credit, per share",
+  "clustered_t": "cluster-robust standard error of the mean by reaction day; one-sided p from Student t with (clusters - 1) degrees of freedom"
+ }
 }

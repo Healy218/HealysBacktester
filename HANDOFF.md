@@ -17,8 +17,8 @@
   `healys-v9-oi-recorder.timer` installed and enabled (Mon–Fri 08:00 / 18:00 ET) →
   `nn_meta/data_cache_v9/open_interest/`. First run 2026-10-08 19:09 ET: 138,784
   contracts, 126/126 underlyings.
-- **OEE-1 drafted, not frozen:**
-  [V9_OEE1_PREREG_DRAFT_20261008.json](docs/specs/V9_OEE1_PREREG_DRAFT_20261008.json).
+- **OEE-1 approved and frozen:**
+  [V9_OEE1_PREREG_20261008.json](docs/specs/V9_OEE1_PREREG_20261008.json).
   Eight variants: H1a–d direction (combined / SUE / momentum / skew → 0.5-delta call or
   put), H2a–b IV run-up (low → long straddle; high → short iron butterfly; the dev
   move-to-implied ratio must decrease across terciles), H3a–b cheap implied move vs own
