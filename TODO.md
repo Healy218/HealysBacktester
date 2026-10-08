@@ -10,11 +10,9 @@ worker pools and vectorized code by default.
 
 ## OEE — Options Earnings Expert
 
-- [ ] **OEE-0 (next):** event table for every earnings 8-K (Item 2.02) 2022-03 → 2026-09:
-  entry/exit days by release time, front-expiry ATM straddle and 0.5-delta call/put
-  prices before and after, implied move, ATM IV over the 5 prior days (run-up), skew,
-  realized move, coverage report. Coverage only — no outcome analysis.
-- [ ] **OEE-1:** pre-registration (direction score from prior SUE / revenue trend /
+- [x] **OEE-0:** event table — 1,354 earnings 8-Ks, 1,330 usable (2026-10-08;
+  [state](docs/CURRENT_STATE.md#v9-plan-october-8)). Coverage only.
+- [ ] **OEE-1 (next):** pre-registration (direction score from prior SUE / revenue trend /
   momentum / skew; IV run-up vs move size — the user's observation; implied move vs
   own earnings history); user sign-off.
 - [ ] **OEE-2:** walk-forward (dev 2022-03 → 2025-12), then a 2026 confirmation.

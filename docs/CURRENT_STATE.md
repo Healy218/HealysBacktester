@@ -1152,6 +1152,17 @@ actual entitlement failure. No full-universe recording is running.
 [V9_OPTIONS_EXPERTS_PLAN_20261008.md](specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md): OEE
 (Options Earnings Expert) then OVE (Options Volume Expert), reusing the V8 inputs below.
 
+- OEE-0 event table (2026-10-08, coverage only): `nn_meta/v9_oee.py`,
+  `scripts/build_v9_oee_events.py` → `nn_meta/validation/v9-oee0-20261008-r0/`
+  (`events.parquet`, `report.json`; about 11 s). 1,354 Item 2.02 8-Ks by pool tech
+  names with entry days 2022-03-01 → 2026-09-14 (126 tickers; 8 repeats within 5
+  trading days dropped); 1,343 with chains, 1,330 usable (straddle exit priced, no
+  split, no IV crush on the entry day), 1,287 of them with a front expiry ≤ 7 days after
+  the reaction day. Sessions: 1,146 after close, 100 pre-market, 108 intraday (8-K
+  acceptance, which can trail the press release; 10 events flagged by an entry-day IV
+  crush). Known gap: XYZ (Square) before 2025 has no chain (old root SQ not aliased in
+  the V8 chain build; 11 events). Option prices are last-trade closes, not mids.
+
 ## V8 data sources (October 7)
 
 - Spec: [V8_DESIGN_20261007.md](specs/V8_DESIGN_20261007.md); frozen pool:

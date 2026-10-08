@@ -52,8 +52,8 @@ results, measured 0–15 DTE spreads, Kelly only from out-of-sample statistics.
 
 | Gate | Deliverable | Status |
 |---|---|---|
-| **OEE-0 — Earnings event table** | Per earnings release: pre/post option prices, implied move, IV run-up, skew, realized move; coverage only | Next |
-| **OEE-1 — Pre-registration** | Direction score (FA/TA/skew), IV run-up vs move size (user's observation), cheap implied move; user sign-off | After OEE-0 |
+| **OEE-0 — Earnings event table** | Per earnings release: pre/post option prices, implied move, IV run-up, skew, realized move; coverage only | Done 2026-10-08 (1,330 usable events; [state](docs/CURRENT_STATE.md#v9-plan-october-8)) |
+| **OEE-1 — Pre-registration** | Direction score (FA/TA/skew), IV run-up vs move size (user's observation), cheap implied move; user sign-off | Next |
 | **OEE-2 — Walk-forward + 2026 confirmation** | Dev 2022-03 → 2025-12, six folds, pass rules, 1.5× costs | After OEE-1 |
 | **OEE-3 — Paper with Kelly** | Forward test with half-Kelly and drawdown brake | After a pass |
 | **OVE-0 — Live-data check + OI recorder** | Free per-contract volume/OI going forward; daily open-interest capture | Early (cheap; data accrues) |
