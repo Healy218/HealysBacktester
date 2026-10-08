@@ -1,0 +1,86 @@
+{
+ "schema": "v8-stage2-prereg-v1",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08, before any stage-2 signal or return was examined",
+ "contract": "docs/specs/V8_CONTRACT_20261008.json (verify() before any run)",
+ "question": "Does trading implied vol against a HAR forecast of realized vol, with defined-risk option structures, beat an always-on version of the same structure and cash after realistic option costs, out of sample?",
+ "inputs": {
+  "vol_panel": "nn_meta/validation/v8-stage2-20261008-r0/vol_panel.parquet (IV30, PIT 21-day HAR forecast)",
+  "chains": "nn_meta/validation/v8-stage2-20261008-r0/chains (OPRA daily aggregates; last-trade close prices)",
+  "truncate_after": "2025-12-31",
+  "start": "2022-03-01 (HAR forecasts need a year of history)"
+ },
+ "universe": "each calendar month, the 12 V8-pool names (tech members of that month or the fixed ETFs) with the largest PIT 63-day median option dollar volume score from the latest PIT freeze available before the month (nn_meta/validation/v8-pit-20261007-r0/membership.parquet)",
+ "signal": {
+  "ratio": "iv30 / har_vol on trading day t (both known at t's close)",
+  "short_vol": "ratio >= theta_high, theta_high in [1.1, 1.2, 1.3, 1.5]",
+  "long_vol": "ratio <= theta_low, theta_low in [0.8, 0.9, 1.0]",
+  "one_open_trade_per_name": true
+ },
+ "execution": {
+  "timing": "a signal on day t trades at day t+1's closing prices (the next trading day)",
+  "expiry": "the listed expiry with DTE closest to 30 within 21-45 calendar days",
+  "forward_and_move": "F = put-call-parity forward of that expiry on the entry day; expected move EM = S x iv30 x sqrt(DTE/365) (entry-day iv30)",
+  "strikes": "nearest listed strike to each target",
+  "contract_filter": "every leg traded that day (volume >= 1) with close >= $0.50; otherwise no trade",
+  "price": "leg close +/- k x half-spread, half-spread = median spread % of mid / 2 from nn_meta/validation/v8-spreads-option-20261008-r0/model.json bucket table (price x DTE x OTM; missing cell -> that price bucket's median), plus $0.05 per contract per leg at entry; k = 1.0 primary, 1.5 stress",
+  "exit": "held to expiry, settled at intrinsic value from the underlying's raw close on the last trading day on or before expiry; no early assignment modelled; trades whose expiry falls after 2025-12-31 are not entered, so no holdout price is read"
+ },
+ "structures": {
+  "ib_w1.0": "short ATM call + put at the strike nearest F; long call/put nearest F +/- 1.0 EM",
+  "ib_w1.5": "short ATM call + put; long wings nearest F +/- 1.5 EM",
+  "ic_1.0_1.5": "short call nearest F + 1.0 EM, short put nearest F - 1.0 EM; long wings nearest F +/- 1.5 EM",
+  "straddle": "long ATM call + put (long vol only)"
+ },
+ "variants": "12 short-vol (3 structures x 4 theta_high) + 3 long-vol (straddle x 3 theta_low) = 15",
+ "sizing": "each trade risks 2% of current equity at its maximum loss (wing width minus credit; straddle: debit), fractional units; P&L booked at expiry; Kelly out of scope",
+ "evaluation": {
+  "returns": "daily equity (cash basis, P&L at settlement) from 2022-03-01",
+  "folds": [
+   [
+    "2023-01-01",
+    "2023-06-30"
+   ],
+   [
+    "2023-07-01",
+    "2023-12-31"
+   ],
+   [
+    "2024-01-01",
+    "2024-06-30"
+   ],
+   [
+    "2024-07-01",
+    "2024-12-31"
+   ],
+   [
+    "2025-01-01",
+    "2025-06-30"
+   ],
+   [
+    "2025-07-01",
+    "2025-12-31"
+   ]
+  ],
+  "in_sample": "expanding from 2022-03-01 to the day before each fold",
+  "selection": "highest in-sample annualized Sharpe among the 15 variants with >= 30 in-sample trades (by entry date)",
+  "benchmarks": [
+   "always-on: the selected variant's structure entered whenever a universe name is flat (no signal), same sizing and costs",
+   "cash (0%)",
+   "SPY buy-and-hold (context only)"
+  ]
+ },
+ "pass_rules_all_required": {
+  "beat_benchmarks": "selected variant's fold return exceeds both its always-on benchmark and 0 in >= 4 of 6 folds at k = 1.0",
+  "rank_persistence": "Spearman(in-sample Sharpe, out-of-sample Sharpe) across eligible variants positive in >= 4 of 6 folds, median >= 0.10",
+  "deflated_sharpe": "probability >= 0.95 for the concatenated selected out-of-sample daily returns, N = 15",
+  "pbo": "CSCV PBO < 0.5 over 2022-03-01..2025-12-31 daily returns of the 15 variants, 16 blocks",
+  "cost_stress": "beat_benchmarks still holds when rerun at k = 1.5"
+ },
+ "limitations": [
+  "Prices are daily last trades, not quotes; the bucket spread model sets costs.",
+  "European-style settlement at intrinsic; early assignment and pin risk not modelled.",
+  "Cash-basis P&L understates interim drawdowns of open trades."
+ ],
+ "if_nothing_passes": "Record the verdict; V8 has then found no edge in direction or volatility, and the next step is decided with the user."
+}
