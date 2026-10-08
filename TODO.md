@@ -20,13 +20,17 @@ worker pools and vectorized code by default.
 
 ## OVE — Options Volume Expert
 
-- [ ] **OVE-0:** confirm free per-contract daily volume and open interest from Alpaca;
-  start a daily open-interest recorder (forward-only data, so start early).
+- [x] **OVE-0:** Alpaca free tier confirmed (contract OI with its as-of date, daily option
+  bars with volume/trades, indicative snapshots); OI recorder timer running from
+  2026-10-08 (08:00 and 18:00 ET).
 - [ ] **OVE-1..3:** noise-filtered unusual options buying (abnormal volume, block size,
   short-dated OTM premium, no event, clustering) and DIX-direction off-exchange flow;
   pre-register; walk-forward.
 
 ## Running
+
+- **OI recorder** `healys-v9-oi-recorder.timer` → `nn_meta/data_cache_v9/open_interest/`
+  (`journalctl --user -u healys-v9-oi-recorder`); a failed run loses that snapshot.
 
 - **V8 H1 paper test** in "stonks bot 2" (PA3U9D8Q8GQX): stock + ~45 DTE call per
   earnings-drift signal; timers 09:45 / 10:31 / 16:20 ET from 2026-10-09. Review after

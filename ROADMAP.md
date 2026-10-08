@@ -56,7 +56,7 @@ results, measured 0–15 DTE spreads, Kelly only from out-of-sample statistics.
 | **OEE-1 — Pre-registration** | Direction score (FA/TA/skew), IV run-up vs move size (user's observation), cheap implied move; user sign-off | Next |
 | **OEE-2 — Walk-forward + 2026 confirmation** | Dev 2022-03 → 2025-12, six folds, pass rules, 1.5× costs | After OEE-1 |
 | **OEE-3 — Paper with Kelly** | Forward test with half-Kelly and drawdown brake | After a pass |
-| **OVE-0 — Live-data check + OI recorder** | Free per-contract volume/OI going forward; daily open-interest capture | Early (cheap; data accrues) |
+| **OVE-0 — Live-data check + OI recorder** | Free per-contract volume/OI going forward; daily open-interest capture | Done 2026-10-08; recorder running ([state](docs/CURRENT_STATE.md#v9-plan-october-8)) |
 | **OVE-1..3 — Flow + dark pool** | Noise-filtered unusual options buying; DIX-direction off-exchange flow; pre-registered walk-forward | After OEE-2 |
 | **OVE-4 — Paper** | Forward test | After a pass |
 

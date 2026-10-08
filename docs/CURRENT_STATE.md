@@ -1162,6 +1162,13 @@ actual entitlement failure. No full-universe recording is running.
   acceptance, which can trail the press release; 10 events flagged by an entry-day IV
   crush). Known gap: XYZ (Square) before 2025 has no chain (old root SQ not aliased in
   the V8 chain build; 11 events). Option prices are last-trade closes, not mids.
+- OVE-0 open-interest recorder (installed and enabled 2026-10-08):
+  `scripts/record_v9_open_interest.py`, units `deploy/systemd/healys-v9-oi-recorder.*`
+  (Mon–Fri 08:00 and 18:00 ET, `Persistent=true`) → `nn_meta/data_cache_v9/open_interest/<ET
+  date>/<HHMM ET>.parquet`. 2026-10-08 19:09 ET first run: 138,784 contracts (expiries ≤ 60
+  days), 126/126 underlyings; open interest as of 2026-10-06 (the endpoint lags about two
+  trading days, so dedupe on symbol + `open_interest_date`). Keys: the retired V6 paper
+  account's `ALPACA_PAPER_*` (read-only reference data; keeps the H1 runner's rate budget).
 
 ## V8 data sources (October 7)
 

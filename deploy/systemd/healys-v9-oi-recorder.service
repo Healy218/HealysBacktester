@@ -1,0 +1,14 @@
+[Unit]
+Description=V9 OVE-0: Alpaca option open-interest snapshot for the V8 pool
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python scripts/record_v9_open_interest.py
+TimeoutStartSec=600
+MemoryMax=2G
+MemorySwapMax=0
+Nice=5
+UMask=0077
+NoNewPrivileges=true
