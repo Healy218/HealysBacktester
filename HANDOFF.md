@@ -19,7 +19,7 @@
 
 ## Status at session end
 
-No jobs running. V6 paper retired Oct 8: account archived (`nn_meta/validation/v6-paper-archive-20261008/`), V6 Alpaca timers disabled; the user is resetting the paper account for the H1 forward test. The 2026 holdout has not
+No jobs running. V6 paper retired Oct 8: account archived (`nn_meta/validation/v6-paper-archive-20261008/`), V6 Alpaca timers disabled (re-enabling pending the user); the H1 test uses a new paper account "stonks bot 2" (keys `ALPACA_V8_PAPER_*`, pending). The 2026 holdout has not
 been read by any stage-1 code.
 
 ## Next action

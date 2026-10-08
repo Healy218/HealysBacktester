@@ -13,7 +13,8 @@
 Orders are placed only with --live and only in the Alpaca paper account
 (paper-api.alpaca.markets); the default is a dry run that prints the plan.
 Client order IDs are deterministic, so a rerun cannot double-order.
-Universe: the V8 pool's tech members frozen at 2026-08 (the PIT universe
+Account: the dedicated "stonks bot 2" paper account (ALPACA_V8_PAPER_* keys;
+the runner refuses V6's account). Universe: the V8 pool's tech members frozen at 2026-08 (the PIT universe
 cannot be refreshed without OPRA data). Books start at $50,000 each.
 """
 from __future__ import annotations
@@ -64,9 +65,19 @@ def env() -> dict:
     return out
 
 
+V6_ACCOUNT = "PA3WD22T4IM7"      # the V6 paper account; this test must never touch it
+
+
 def alpaca_headers() -> dict:
+    """Keys of the dedicated "stonks bot 2" paper account (ALPACA_V8_PAPER_*)."""
     e = env()
-    return {"APCA-API-KEY-ID": e["ALPACA_PAPER_API_KEY"], "APCA-API-SECRET-KEY": e["ALPACA_PAPER_API_SECRET"]}
+    if not e.get("ALPACA_V8_PAPER_API_KEY") or not e.get("ALPACA_V8_PAPER_API_SECRET"):
+        raise SystemExit("set ALPACA_V8_PAPER_API_KEY / ALPACA_V8_PAPER_API_SECRET in .env")
+    h = {"APCA-API-KEY-ID": e["ALPACA_V8_PAPER_API_KEY"], "APCA-API-SECRET-KEY": e["ALPACA_V8_PAPER_API_SECRET"]}
+    acct = get(f"{TRADE}/account", headers=h)
+    if acct.get("account_number") == V6_ACCOUNT:
+        raise SystemExit("refusing: these keys belong to the V6 paper account")
+    return h
 
 
 def get(url, params=None, headers=None):
@@ -358,7 +369,7 @@ def status() -> None:
 
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("command", choices=["signals", "trade", "reconcile", "status"])
+    ap.add_argument("command", choices=["signals", "trade", "reconcile", "status", "verify"])
     ap.add_argument("--live", action="store_true", help="place paper orders (default: dry run)")
     ap.add_argument("--force", action="store_true", help="ignore market-hours checks (dry rehearsal)")
     a = ap.parse_args()
@@ -367,6 +378,13 @@ def main() -> None:
         s = compute_signals(alpaca_headers())
         recent = s[s["signal"]].sort_values("exec_day").tail(10)
         print(recent[["ticker", "tau", "exec_day", "sue", "tradeable"]].to_string(index=False))
+    elif a.command == "verify":
+        h = alpaca_headers()
+        acct = get(f"{TRADE}/account", headers=h)
+        print({k: acct.get(k) for k in ("account_number", "status", "equity", "cash", "options_trading_level",
+                                        "options_approved_level", "created_at")})
+        print("positions:", len(get(f"{TRADE}/positions", headers=h)),
+              "open orders:", len(get(f"{TRADE}/orders", {"status": "open"}, h)))
     elif a.command == "trade":
         trade(a.live, a.force)
     elif a.command == "reconcile":
