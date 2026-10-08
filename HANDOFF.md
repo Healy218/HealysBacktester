@@ -27,7 +27,8 @@ been read by any stage-1 code.
 **H1 earnings drift is the first V8 strategy confirmed on unseen data** (stock form,
 2026 holdout: +22.2%, Sharpe 1.31 vs QQQ 1.12, alpha +13.8%/yr; [evidence](docs/EXPERIMENTS.md)).
 The calls form failed its pessimistic-cost dev test (t = 1.84): option costs are
-unknown, not disproven. The user approved an Alpaca paper forward test and prefers
+unknown, not disproven. The short side (short stock, long-short, puts) failed in dev
+outright (short −36%, puts −96%): the edge is long-only. The user approved an Alpaca paper forward test and prefers
 options over stocks. Next: agree the paper design with the user (calls vs stock or
 both side by side; live SUE pipeline from SEC submissions/companyfacts polling;
 entries at 10:30 ET), then build it. The 2026 holdout has been used once; do not

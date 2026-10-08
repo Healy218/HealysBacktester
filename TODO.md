@@ -80,6 +80,8 @@ per symbol/day; full in-memory loads have crashed this box.
   A (stock, 2026 holdout): **PASS** — +22.2%, Sharpe 1.31 vs QQQ 1.12, alpha +13.8%/yr.
   B (calls at pessimistic 6% spread, 2021–2025): FAIL (t = 1.84, 3/6 folds) — option
   costs unknown, not disproven. [Evidence](docs/EXPERIMENTS.md).
+- [x] **V8-H1-short:** short, long-short and puts all FAIL in dev ([prereg](docs/specs/V8_H1_SHORT_PREREG_20261008.json));
+  the edge is long-only. [Evidence](docs/EXPERIMENTS.md).
 - [ ] **V8-H1-paper (next, user-approved "both"):** Alpaca paper forward test; options
   instrument vs stock to be decided with the user (real option fills resolve test B).
 

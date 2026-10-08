@@ -1423,3 +1423,22 @@ no historical option quotes.
 **Status:** H1 is the first V8 strategy confirmed on unseen data (stock form). The
 options form is plausible but unproven; resolving it needs real option quotes (forward
 paper trading or a data subscription).
+
+## 2026-10-08 — H1 short side, long-short and puts: FAIL (the drift is one-sided here)
+
+First V8 test with shorting. Pre-registered ([V8_H1_SHORT_PREREG_20261008.json](specs/V8_H1_SHORT_PREREG_20261008.json),
+`fa7193c`; runner fix `df1227d` after a crash that produced no output), single run,
+`scripts/run_v8_h1_short.py` → `nn_meta/validation/v8-events-20261008-r0/h1_short/report.json`.
+New `nn_meta.v8_engine.simulate_short` (sell cost on entry, buy cost on cover, daily
+borrow 1%/yr liquid ≥ $20, else 5%/yr; 55% of signals paid 5%).
+
+| Dev 2021-05 → 2025-12 | Total | Folds | 2023–25 Sharpe | Alpha / beta | Verdict |
+|---|---|---|---|---|---|
+| H1-short (bottom-tercile SUE, 253 round trips, 44% wins) | −36.0% | −16.6, −8.2, +0.2, −6.0, −16.7, −8.3% | −1.09 | −4.8%/yr, −0.40 | FAIL |
+| H1 long-short (equal capital) | +23.7% | 4/6 positive | 0.58 (QQQ 1.54) | +4.0%/yr, 0.01 | FAIL |
+| H1 puts (~45 DTE, Δ −0.60, 6% spread) | −96.4% | 0/6 | — | mean trade −19%, t −4.1 | FAIL |
+
+No 2026 runs (dev failed). **Verdict: in this universe and period, negative earnings
+surprises did not keep drifting down; shorting them or buying puts lost money beyond
+costs, and the short leg dilutes the long side (H1 long alone: Sharpe 1.65). V8's
+confirmed edge is long-only.**

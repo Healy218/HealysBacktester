@@ -1192,5 +1192,7 @@ actual entitlement failure. No full-universe recording is running.
 - H1 confirmation (2026-10-08): prereg [V8_H1_CONFIRM_PREREG_20261008.json](specs/V8_H1_CONFIRM_PREREG_20261008.json);
   `scripts/run_v8_h1_confirm.py`, `nn_meta/v8_h1_calls.py` → `h1_confirm/report.json`,
   `h1_confirm/call_candidates.parquet`. The 2026 holdout has now been used once (H1 stock).
+- H1 short side (2026-10-08, FAIL in dev): prereg [V8_H1_SHORT_PREREG_20261008.json](specs/V8_H1_SHORT_PREREG_20261008.json);
+  `scripts/run_v8_h1_short.py`, `nn_meta.v8_engine.simulate_short` → `h1_short/report.json`.
 - V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
 - Data plans: none paid. Alpaca free tier works for stock and option bars.
