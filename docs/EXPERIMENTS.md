@@ -1130,3 +1130,39 @@ taken (PTON v5, TQQQ v31, ORCL v3) are too few to judge. Caveats: last-trade
 closes on often illiquid contracts, only a month of data, positions mostly still
 open, strategy exits not modelled. **Verdict: no forward evidence of edge for V5;
 results are consistent with time decay on randomly chosen near-the-money options.**
+
+## 2026-10-07 — V6 paper diagnosis and realistic-fill re-evaluation (step 1)
+
+**Paper diagnosis.** All 13 closed Alpaca paper round trips lost (−3.8% to −25%;
+−$14,839 realized, the whole −14.5% account drawdown). The average −15.1% per trade
+splits into −2.8% from the option midpoint moving and −13.2% from execution: −6.2%
+entry and −7.0% exit against a 13.7% mean entry spread. The broker stop
+(`integrations/alpaca_paper/v6_runtime.py`: midpoint ≤ 0.875 × fill price) uses
+the fill price, which already sits above the midpoint, so it fired within minutes
+on wide quotes (8 of 13 exits).
+
+**Re-evaluation.** V6's labels price fills at the bid/ask midpoint plus Robinhood
+fees (median 0.28% round trip); the measured decision-time spread has a median of
+11.5% (half-spread 5.7%). `nn_meta/validation/v6-fillcost-20261007-r0/` rebuilds the
+`v6-cash-repair-20260913` dataset and marks so each fill pays k × the trade's own
+half-spread, adds an optional first-leg premium stop, recomputes labels, and
+re-runs the identical 3-fold post-freeze `v4_evaluate` (retrained). The
+reproduction at k=0 matched the original report exactly. Winner test return per
+fold (all folds, trades kept / deflated Sharpe, take-all baseline):
+
+| variant | fold 1 | fold 2 | fold 3 | baseline |
+|---|---|---|---|---|
+| midpoint (original) | +1.2% (28) | +194.4% (137) | +59.5% (156) | +116% / +1% / −17% |
+| full half-spread, no stop | −32.5% (136) | −57.7% (18) | −55.8% (36) | −83% to −98% |
+| full half-spread, 7.5% stop | −1.6% (50) | −1.5% (21) | −9.0% (38) | −98% to −99% |
+| full half-spread, 20% stop | no eligible policy | +6.6% (23) | +1.6% (107) | −95% to −98% |
+| half of half-spread, 20% stop | −7.3% (11) | +20.5% (150) | −27.1% (57) | −75% to −88% |
+
+Deflated Sharpe is 0.00–0.06 in every realistic-fill fold. The 20% stop folds
+were selected despite negative validation returns (−11%, −3%). By spread bucket
+(validation and test, full half-spread): midpoint mean net return rises with
+spread (+1.6% below 2% to +9.2% above 20%), but the realistic mean falls from
+−0.1% / −0.6% (spreads under 2% / 2–4%) to −33% (above 20%). 66% of rows have
+spreads over 10%. **Verdict: V6's backtested edge came from midpoint pricing of
+illiquid contracts; with realistic fills no configuration or spread bucket is
+profitable. A 20% stop loses less than 7.5% or none but is not an edge.**
