@@ -1,0 +1,9 @@
+[Unit]
+Description=V8 H1 paper: SEC earnings signals (timer)
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 09:45:00 America/New_York
+Persistent=false
+
+[Install]
+WantedBy=timers.target

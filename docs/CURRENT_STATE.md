@@ -12,6 +12,9 @@ for the V8 H1 forward test). Account PA3WD22T4IM7 archived before reset to
 36 fills, open TMUS261113C00165000 x9, equity $87,549.90). Timers
 `healys-v6-alpaca-{orders,scanner,paper-monitor}.timer` disabled (re-enable with
 `systemctl --user enable --now …`). Reset is done by the user in the Alpaca dashboard.
+V8 H1 paper runner: `scripts/run_v8_h1_paper.py` (ledger `nn_meta/validation/v8-paper-h1/ledger.sqlite3`),
+units `deploy/systemd/healys-v8-h1-*` — not installed or enabled as of Oct 8 (awaiting the
+reset). Universe frozen at the 2026-08 pool; books $50k stock / $50k calls.
 Held quotes use Alpaca; full-universe entry features remain blocked.
 
 **Evidence freshness:** V6 paper and incubator observations below are dated. Other sections retain their own dated scopes and

@@ -84,8 +84,10 @@ per symbol/day; full in-memory loads have crashed this box.
   the edge is long-only. [Evidence](docs/EXPERIMENTS.md).
 - [ ] **V8-H1-paper (next):** Alpaca paper forward test, stock and ~45 DTE / 0.60 delta call
   side by side on every H1 signal (user decision Oct 8) in a reset paper account (V6 history
-  archived, V6 timers disabled). Build: live SEC SUE pipeline, 10:30 ET entries, 20-day
-  exits, ledger, systemd timer.
+  archived, V6 timers disabled). Built: `scripts/run_v8_h1_paper.py` (signals / trade /
+  reconcile / status; dry run unless `--live`; idempotent order IDs), `nn_meta/v8_paper.py`,
+  units `deploy/systemd/healys-v8-h1-{signals,trade,reconcile}.{service,timer}` (09:45 /
+  10:31 / 16:20 ET). **Not enabled until the reset account is verified.**
 
 ## Parallel / later (not started)
 

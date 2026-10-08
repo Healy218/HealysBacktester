@@ -1,0 +1,9 @@
+[Unit]
+Description=V8 H1 paper: 10:30 ET exits and entries (stock + call) (timer)
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 10:31:00 America/New_York
+Persistent=false
+
+[Install]
+WantedBy=timers.target

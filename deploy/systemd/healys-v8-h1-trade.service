@@ -1,0 +1,14 @@
+[Unit]
+Description=V8 H1 paper: 10:30 ET exits and entries (stock + call)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python scripts/run_v8_h1_paper.py trade --live
+TimeoutStartSec=900
+MemoryMax=4G
+MemorySwapMax=0
+Nice=5
+UMask=0077
+NoNewPrivileges=true

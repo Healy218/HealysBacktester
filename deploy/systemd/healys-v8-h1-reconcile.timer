@@ -1,0 +1,9 @@
+[Unit]
+Description=V8 H1 paper: fills, positions, book marks (timer)
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 16:20:00 America/New_York
+Persistent=false
+
+[Install]
+WantedBy=timers.target
