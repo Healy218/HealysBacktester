@@ -1283,3 +1283,31 @@ model. Coverage: 127,349 needed symbol-days, 127,125 ok, 83 partial, 3 missing,
 before 10:00 ET, no returns across breaks or non-ok days, every fill priced by
 `nn_meta.v8_fills` at 1.0× and 1.5×. `nn_meta.v8_contract.verify()` refuses a run if
 any pinned artifact is missing or changed. **Stage 0 (V8.0) is complete.**
+
+## 2026-10-08 — V8.1 stage-1 walk-forward: FAIL (no tuned long-only edge)
+
+Run exactly as pre-registered ([V8_STAGE1_PREREG_20261008.json](specs/V8_STAGE1_PREREG_20261008.json),
+committed `d5cd2ad` before results) on the frozen stage-0 contract: 5,680 long-only
+variants (12 catalog families + 4 volume families × 1h/1d), 177 pool symbols through
+2025-12-31, 10-slot equal-weight portfolio, measured costs. Output
+`nn_meta/validation/v8-stage1-20261008-r0/report.json` (`scripts/run_v8_stage1.py`).
+
+| Fold | Top in-sample pick (IS Sharpe) | OOS return | QQQ | SPY | EW universe |
+|---|---|---|---|---|---|
+| 2023 H1 | squeeze 1h (0.98) | +1.3% | +39.2% | +16.8% | +34.2% |
+| 2023 H2 | keltner 1h (1.00) | +1.8% | +11.2% | +8.0% | +14.3% |
+| 2024 H1 | squeeze 1h (1.10) | −1.5% | +17.3% | +15.2% | +11.4% |
+| 2024 H2 | ma 88/102 1h (1.29) | +7.1% | +7.1% | +8.4% | +12.6% |
+| 2025 H1 | ma 88/102 1h (1.20) | −22.9% | +8.2% | +6.1% | +14.9% |
+| 2025 H2 | keltner 1h (1.17) | −2.3% | +11.6% | +11.0% | +14.3% |
+
+Pass rules (all required), every one failed: beat all benchmarks 0/6 folds (1.0×)
+and 0/6 (1.5×); rank persistence positive in 3/6 folds, median Spearman −0.06;
+deflated Sharpe probability 0.05 (concatenated OOS annual Sharpe −0.23; N = 5,680);
+CSCV PBO 0.89 (12,870 combinations). Top-10 averages also lose to every benchmark
+in 5/6 folds. Not evidence (selected after seeing results): best-per-family picks for
+obv_trend/1d and volume/1d beat all benchmarks in 4/6 folds, which is within what 32
+family/timeframe draws produce by chance. **Verdict: no tuned long-only strategy on
+the V8 universe beats owning QQQ/SPY or the universe itself after realistic costs;
+in-sample tuning selects noise.** Per the pre-registration, stage 2 (volatility) is
+next, not a meta-model; it needs the user's go-ahead.

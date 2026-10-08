@@ -1171,5 +1171,9 @@ actual entitlement failure. No full-universe recording is running.
   `scripts/build_v8_cost_table.py`.
 - V8 stage-0 contract (2026-10-08): [V8_CONTRACT_20261008.json](specs/V8_CONTRACT_20261008.json);
   verify with `./venv/bin/python scripts/freeze_v8_contract.py --verify`.
+- V8 stage 1 (2026-10-08, FAIL): prereg [V8_STAGE1_PREREG_20261008.json](specs/V8_STAGE1_PREREG_20261008.json);
+  signals `scripts/build_v8_stage1_signals.py` → `nn_meta/validation/v8-stage1-20261008-r0/signals/`;
+  engine `nn_meta/v8_engine.py`; run `scripts/run_v8_stage1.py` → `report.json`,
+  `returns_1.0.npz`, `returns_1.5.npz` (about 15 s end to end).
 - V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
 - Data plans: none paid. Alpaca free tier works for stock and option bars.

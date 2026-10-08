@@ -48,13 +48,16 @@ per symbol/day; full in-memory loads have crashed this box.
 
 ## Stage 1 — edge on the underlying
 
-- [ ] **V8.1-prereg (next):** pre-register families, horizons (1h/1d), folds, costs and pass
+- [x] **V8.1-prereg:** pre-register families, horizons (1h/1d), folds, costs and pass
   rules (benchmark-beating out of sample, rank persistence, deflated Sharpe, PBO
   < 0.5, 1.5× cost stress). Development window ends 2025-12-31.
-- [ ] **V8.1-walkforward:** tuned-variant walk-forward on admitted symbols, expanding
+- [x] **V8.1-walkforward:** tuned-variant walk-forward on admitted symbols, expanding
   window, realistic costs. Benchmarks QQQ/XLK (tech) and SPY (book).
-- [ ] **V8.1-verdict:** record in EXPERIMENTS. If nothing passes, stage 2
+- [x] **V8.1-verdict: FAIL** (all five rules; [evidence](docs/EXPERIMENTS.md)). record in EXPERIMENTS. If nothing passes, stage 2
   (volatility) is next, not a meta-model.
+
+**Next (needs the user's go-ahead):** V8.2 volatility, per the pre-registration;
+no meta-model on signals without edge.
 
 ## Parallel / later (not started)
 
