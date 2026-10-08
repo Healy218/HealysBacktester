@@ -1366,7 +1366,9 @@ forward (EDGAR index since 2026-07, fundamentals since 2026-09). Free sources co
 | SEC Form 3/4/5 bulk 2021q1–2025q4 | `scripts/build_v8_events.py --source insider` | 172,856 transactions, 144 issuers, all acceptance-timed; only 1,644 open-market purchases (112 names) |
 | FINRA daily short volume | `--source finra` | 1,255 days, 177 tickers, 99.95% of ok bar-days |
 | Alpaca news (free tier) | `--source news` | ~225k articles, 177 tickers, median 146–202 per name-year; queried under each identity span's symbol (FB before META) |
+| Wikipedia daily page views (user agent) | `--source wiki` | 142 of 161 issuers: Wikidata by SEC CIK (107), NASDAQ/NYSE ticker qualifier (22; TE→TECO Energy rejected), 13 verified manual titles; summed over each article's redirects (Facebook titles before Meta Platforms); NFLX sums the split "Netflix" article; LITE excluded (history only from late 2025). Google Trends rejected: no official API and values are resampled on every pull (not point-in-time) |
 
 Availability rule (tested): SEC filings are public at acceptance if accepted 06:00–
 17:30 ET on a business day, else 06:00 ET the next business day; FINRA next day
-06:00 ET; news at creation. No signal-return relationship was examined.
+06:00 ET; news at creation; a UTC day's page views 06:00 ET the next business day.
+No signal-return relationship was examined.

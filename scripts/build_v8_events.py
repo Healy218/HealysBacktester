@@ -13,6 +13,12 @@ kept with retrieval time; parsed tables under nn_meta/validation/v8-events-*):
   --source news     Alpaca news (free tier) per pool ticker, queried under the
                     bar source symbol of each identity span (FB before
                     META, …); available at created_at.
+  --source wiki     English Wikipedia daily page views (agent=user) per pool
+                    tech name: article from Wikidata by SEC CIK (P5531),
+                    summed over the article and every article-namespace
+                    redirect to it (page views do not follow redirects, e.g.
+                    "Facebook, Inc." before Meta Platforms); a UTC day's
+                    views are available at 06:00 ET the next business day.
 
 Network-bound work runs in thread pools under shared rate limiters.
 """
@@ -247,13 +253,130 @@ def news(threads: int) -> None:
           f"{df['ticker'].nunique()} tickers", flush=True)
 
 
+# ── Wikipedia page views ─────────────────────────────────────────────────────
+
+# Titles for names Wikidata cannot map, each verified 2026-10-08 to exist, not
+# be a disambiguation page and describe the company (or its eponymous product).
+MANUAL_TITLES = {"CRSR": "Corsair Gaming", "CRWV": "CoreWeave", "DBX": "Dropbox", "DUOL": "Duolingo",
+                 "FIG": "Figma", "PDD": "Pinduoduo", "PENG": "Penguin Solutions",
+                 "PINS": "Pinterest", "PYPL": "PayPal", "RDDT": "Reddit", "SST": "System1",
+                 "U": "Unity Technologies"}
+# Symbol matches rejected on review: TE matched TECO Energy (NYSE: TE before
+# 2016); in the V8 window TE is T1 Energy.
+REJECT_SYMBOL = {"TE"}
+# Lumentum (LITE) has page views only from late 2025: excluded. "Netflix, Inc."
+# was split from "Netflix", which held the company's traffic before (111
+# zero-view days in 2021): both titles are summed for NFLX.
+EXTRA_TITLES = {"NFLX": ["Netflix"]}
+
+def wiki(threads: int) -> None:
+    out = ROOT / "wiki"; (out / "raw").mkdir(parents=True, exist_ok=True)
+    pool = json.loads(POOL.read_text())
+    tech = set().union(*(set(v["tech"]) for v in pool["months"].values()))
+    sic = json.loads(SIC.read_text())
+    cik2t: dict[str, list[str]] = {}
+    for t in sorted(tech):
+        if sic.get(t, {}).get("cik"):
+            cik2t.setdefault(f"{int(sic[t]['cik']):010d}", []).append(t)
+    lim = RateLimiter(40 * 60)
+    q = ("SELECT ?cik ?article WHERE { VALUES ?cik {" + " ".join(f'"{c}"' for c in cik2t)
+         + "} ?item wdt:P5531 ?cik . ?article schema:about ?item ; "
+           "schema:isPartOf <https://en.wikipedia.org/> . }")
+    j = _get("https://query.wikidata.org/sparql", headers=UA, params={"query": q, "format": "json"}, limiter=lim)
+    articles: dict[str, str] = {}
+    for b in j["results"]["bindings"]:
+        title = requests.utils.unquote(b["article"]["value"].rsplit("/wiki/", 1)[1]).replace("_", " ")
+        articles.setdefault(b["cik"]["value"], title)
+    # fallback: ticker symbol qualifier (P249) on a NASDAQ/NYSE listing (P414)
+    todo = {ts[0]: c for c, ts in cik2t.items() if c not in articles}
+    exch = "wd:Q82059 wd:Q13677"            # NASDAQ, New York Stock Exchange
+    q2 = ("SELECT ?sym ?article WHERE { VALUES ?sym {" + " ".join(f'"{t}"' for t in todo)
+          + "} VALUES ?ex {" + exch + "} ?item p:P414 ?st . ?st ps:P414 ?ex ; pq:P249 ?sym . "
+            "?article schema:about ?item ; schema:isPartOf <https://en.wikipedia.org/> . }")
+    j2 = _get("https://query.wikidata.org/sparql", headers=UA, params={"query": q2, "format": "json"}, limiter=lim)
+    by_symbol: dict[str, set] = {}
+    for b in j2["results"]["bindings"]:
+        title = requests.utils.unquote(b["article"]["value"].rsplit("/wiki/", 1)[1]).replace("_", " ")
+        by_symbol.setdefault(b["sym"]["value"], set()).add(title)
+    via_symbol = {}
+    for t, c in todo.items():
+        if t in REJECT_SYMBOL:
+            continue
+        if len(by_symbol.get(t, ())) == 1:          # ambiguous symbols are left unmapped
+            articles[c] = next(iter(by_symbol[t])); via_symbol[t] = articles[c]
+    manual = {}
+    for t, title in MANUAL_TITLES.items():
+        c = next((c for c, ts in cik2t.items() if t in ts), None)
+        if c and c not in articles:
+            articles[c] = title; manual[t] = title
+    (out / "mapping.json").write_text(json.dumps(
+        {"via_cik": {cik2t[c][0]: a for c, a in articles.items()
+                     if cik2t[c][0] not in via_symbol and cik2t[c][0] not in manual},
+         "via_symbol": via_symbol, "manual": manual, "rejected_symbol": sorted(REJECT_SYMBOL)},
+        indent=1, sort_keys=True) + "\n")
+    unmapped = sorted(t for c, ts in cik2t.items() if c not in articles for t in ts)
+    print(f"wiki: {len(articles)} of {len(cik2t)} CIKs mapped ({len(via_symbol)} via ticker symbol); "
+          f"unmapped {unmapped}", flush=True)
+
+    def titles_for(title):
+        out_t, cont = [title], {}
+        while True:
+            r = _get("https://en.wikipedia.org/w/api.php", headers=UA, limiter=lim,
+                     params={"action": "query", "titles": title, "prop": "redirects", "rdlimit": "max",
+                             "rdnamespace": 0, "format": "json", **cont})
+            for pg in r["query"]["pages"].values():
+                out_t += [x["title"] for x in pg.get("redirects", [])]
+            if "continue" not in r:
+                return out_t
+            cont = r["continue"]
+
+    def views(title):
+        u = ("https://wikimedia.org/api/rest_v1/metrics/pageviews/per-article/en.wikipedia/all-access/user/"
+             + requests.utils.quote(title.replace(" ", "_"), safe="") + "/daily/20210101/20251231")
+        j = _get(u, headers=UA, limiter=lim)
+        return [(it["timestamp"][:8], it["views"]) for it in (j or {}).get("items", [])]
+
+    def per_cik(cik):
+        p = out / "raw" / f"{cik}.json.gz"
+        if p.exists():
+            return cik, "done"
+        ts = titles_for(articles[cik])
+        for t in cik2t[cik]:
+            for extra in EXTRA_TITLES.get(t, []):
+                ts += [x for x in titles_for(extra) if x not in ts]
+        series = {t: views(t) for t in ts}
+        with gzip.open(p, "wt") as f:
+            json.dump({"retrieved_at": datetime.now(timezone.utc).isoformat(), "article": articles[cik],
+                       "titles": ts, "views": series}, f)
+        return cik, len(ts)
+    with ThreadPoolExecutor(threads) as ex:
+        for i, (c, n) in enumerate(ex.map(per_cik, sorted(articles))):
+            if (i + 1) % 25 == 0:
+                print(f"  wiki {i + 1}/{len(articles)}", flush=True)
+    rows = []
+    for c in sorted(articles):
+        d = json.load(gzip.open(out / "raw" / f"{c}.json.gz", "rt"))
+        tot: dict[str, int] = {}
+        main: dict[str, int] = dict(d["views"].get(d["article"], []))
+        for series in d["views"].values():
+            for day, v in series:
+                tot[day] = tot.get(day, 0) + v
+        for t in cik2t[c]:
+            for day, v in tot.items():
+                rows.append((t, d["article"], f"{day[:4]}-{day[4:6]}-{day[6:]}", v, main.get(day, 0)))
+    df = pd.DataFrame(rows, columns=["ticker", "article", "date", "views", "views_main_title"])
+    df["available_at_utc"] = _next_day_6am_utc(df["date"])
+    df.to_parquet(out / "pageviews.parquet", index=False)
+    print(f"wiki: {len(df)} rows, {df['ticker'].nunique()} tickers", flush=True)
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--source", choices=["insider", "finra", "news"], required=True)
+    ap.add_argument("--source", choices=["insider", "finra", "news", "wiki"], required=True)
     ap.add_argument("--threads", type=int, default=8)
     args = ap.parse_args()
-    {"insider": insider, "finra": finra, "news": news}[args.source](args.threads)
+    {"insider": insider, "finra": finra, "news": news, "wiki": wiki}[args.source](args.threads)
 
 
 if __name__ == "__main__":

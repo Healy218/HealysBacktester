@@ -1184,7 +1184,7 @@ actual entitlement failure. No full-universe recording is running.
   `equity_<k>.npz`, `report.json` (the `*_INVALID_split_bug.*` files are the voided first run).
 - V8 events backfill (2026-10-08): `nn_meta/validation/v8-events-20261008-r0/` —
   `sec/{facts,filings}.parquet` (`scripts/build_v8_sec.py`), `insider/insider.parquet`,
-  `finra/short_volume.parquet`, `news/news.parquet` (`scripts/build_v8_events.py
-  --source insider|finra|news`); every row has `available_at_utc`.
+  `finra/short_volume.parquet`, `news/news.parquet`, `wiki/pageviews.parquet` + `wiki/mapping.json` (`scripts/build_v8_events.py
+  --source insider|finra|news|wiki`); every row has `available_at_utc`.
 - V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
 - Data plans: none paid. Alpaca free tier works for stock and option bars.
