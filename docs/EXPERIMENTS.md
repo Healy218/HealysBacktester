@@ -1213,3 +1213,39 @@ free-tier 30-minute SIP bars for 22 (19 tech names, XLB, XLC, XLRE).
 
 Verdict: **V8.0-data passes.** Consumers must skip `partial`/`missing` days and must
 not compute returns across `events.json` breaks.
+
+## 2026-10-08 — V8.0-spreads: measured stock and option spreads
+
+**Stock (decision input for V8.0-liquidity).** `scripts/sample_v8_stock_spreads.py`
+sampled Alpaca free-tier SIP NBBO quotes: 3 seeded days per month 2021-01 → 2026-09
+(207 days), 13 snapshots per day (09:45 … 15:45 ET), every pool symbol with a bar
+that day, queried under its bar source ticker. 432,302 symbol-snapshots, 99.5%
+quoted (11% needed the 5-minute fallback window). Output
+`nn_meta/validation/v8-spreads-stock-20261008-r0/`.
+
+| Measure | Median quoted spread (bps of mid) |
+|---|---|
+| All samples (p10 / p50 / p90 / p99) | 1.2 / 7.2 / 31.9 / 144 |
+| ETFs | SPY 0.25, QQQ 0.35, IWM 0.55, XLK 0.73, SMH 1.3, XLF 2.5, XLRE 2.4 |
+| Tech names (median of per-name medians) | 8.9; 25% of names ≤ 5, 57% ≤ 10, 82% ≤ 20 |
+| Time of day | 13.9 at 09:45 falling to 4.7 at 15:45 |
+| Price bucket | ≤ $5: 44.5; $5–10: 15.7; $10–20: 8.6; $20–50: 5.0; $50–100: 3.8 |
+
+34% of snapshots sit at a one-cent spread (tick-bound), which is why low-priced
+names are expensive in basis points.
+
+**Cross-check (Abdi–Ranaldo from daily bars):** not informative at this liquidity.
+Correctly implemented (monthly mean floored at zero), it puts 1–3 bp names at ~20 bp
+and rank-correlates 0.16 with measured spreads (symbol level 0.20); only the most
+illiquid decile separates. A first version that floored daily terms ranked better
+(0.75) only because it measured volatility, not spread. Verdict: measured quotes are
+the spread input; the bar estimator is not used.
+
+**Options (stage 3 input).** `scripts/build_v8_option_spreads.py` decoded a
+deterministic 3% sample of the V7 entry-campaign NBBO captures (10,332 packs,
+2022-03-15 → 2026-09-14) into 1,434,371 five-minute snapshots, 478,264 on 139 pool
+symbols with an underlying bar. Median spread 7.1% of mid (p10 2.3%, p90 23%).
+Near-the-money (|log moneyness| < 0.05), mid ≥ $1, 3–45 DTE: 35% of snapshots ≤ 3%,
+56% ≤ 5%; SPY 0.55%, QQQ 0.78%, TSLA/AMD/NVDA/AMZN/AAPL ~1.3–1.6%. 1–3 DTE runs
+6–10%. Linear model R² 0.14, so the bucket-median table in `model.json` is the
+usable output. Caveat: V7 chose which contracts and times to capture.

@@ -1157,5 +1157,11 @@ actual entitlement failure. No full-universe recording is running.
   `nn_meta/validation/v8-data-20261008-r0/` (`bars_1h.parquet`, `bars_1d.parquet`,
   `coverage.parquet` with status ok/partial/missing/delisted, `coverage_summary.json`,
   `spans.json` source per span, `events.json` identity overrides and series breaks).
+- V8 spreads (2026-10-08): stock NBBO sample `scripts/sample_v8_stock_spreads.py` →
+  `nn_meta/validation/v8-spreads-stock-20261008-r0/` (`quotes.parquet`,
+  `crosscheck.json`); option NBBO snapshots `scripts/build_v8_option_spreads.py` →
+  `nn_meta/validation/v8-spreads-option-20261008-r0/` (`snapshots.parquet`,
+  `model.json` bucket medians, `report.json`). Worker sizing and the shared Alpaca
+  rate limiter: `nn_meta/v8_parallel.py`.
 - V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
 - Data plans: none paid. Alpaca free tier works for stock and option bars.

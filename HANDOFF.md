@@ -1,4 +1,4 @@
-# Handoff — October 8, 2026 — V8.0-data done; V8.0-spreads next
+# Handoff — October 8, 2026 — V8.0-data and -spreads done; V8.0-liquidity next
 
 ## Where things stand
 
@@ -34,13 +34,16 @@ No jobs running. V6 paper services paused by user choice; one V6 paper position
 
 ## Next action
 
-**V8.0-spreads:** decode V7 option quote windows (`entry-campaign-20260927/<FIGI>/…/
-captures.sqlite3`, decoder `nn_meta/v7/packed_quotes_v3.py`; 5–10% sample) and fit
-the option spread model. Stage 1 is stock-only, so also decide the stock-side
-spread input for V8.0-liquidity: the bar store has no stock quotes. Options:
-a bar-based estimator (e.g. Abdi–Ranaldo) or a sampled Alpaca stock-quote pull.
-Bring that choice to the user. Then -liquidity, -fills, -contract, and stage-1
-pre-registration.
+**V8.0-liquidity:** choose the decision-time admission cutoffs from the measured
+data and freeze them before any stage-1 result. Stock side: spread (bps of mid,
+from `v8-spreads-stock-20261008-r0`) and dollar-volume floors (from the bars),
+plus a price floor (≤ $5 names median 44 bp). Option side (stage 3): spread ≤ 3–5%
+of mid, open interest, volume, price floor. Bring the cutoff options to the user.
+Then -fills, -contract, and stage-1 pre-registration.
+
+Also done October 8: V8.0-spreads ([evidence](docs/EXPERIMENTS.md)); parallel
+builders (`nn_meta/v8_parallel.py`, user preference: worker pools and vectorized
+code by default).
 
 Constraints: stream under `systemd-run --user --scope -p MemoryMax=…`; keep the
 local footprint to a few GB; stage only your own hunks (other dirty V6/V7 work,

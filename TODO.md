@@ -28,9 +28,12 @@ per symbol/day; full in-memory loads have crashed this box.
   Identity follows the PIT roots plus verified overrides; coverage 127,125 complete,
   83 partial (upstream feed gaps), 3 missing, 138 post-delisting.
   [Evidence](docs/EXPERIMENTS.md).
-- [ ] **V8.0-spreads (next):** decode V7 option quote windows; fit the spread model
-  (symbol, moneyness, DTE, price, time of day, date).
-- [ ] **V8.0-liquidity:** decision-time liquidity rule (stock spread/volume; option
+- [x] **V8.0-spreads:** stock NBBO spreads measured from a seeded Alpaca free-tier
+  sample (207 days × 13 snapshots × all pool symbols; median 7.2 bp, SPY 0.25 bp,
+  tech names median 8.9 bp); Abdi–Ranaldo cross-check not informative at this
+  liquidity. Option spreads from a 3% sample of V7 NBBO captures (median 7.1% of
+  mid; 56% of near-the-money, mid ≥ $1 snapshots ≤ 5%). [Evidence](docs/EXPERIMENTS.md).
+- [ ] **V8.0-liquidity (next):** decision-time liquidity rule (stock spread/volume; option
   spread ≤ 3–5% of mid, open interest, volume, price floor). Choose the cutoff
   from data and freeze it before any stage-1 result.
 - [ ] **V8.0-fills:** fill model (stock touch + slippage; options mid ± k × half-spread,
