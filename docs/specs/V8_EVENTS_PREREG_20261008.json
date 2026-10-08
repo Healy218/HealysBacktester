@@ -1,0 +1,61 @@
+{
+ "schema": "v8-events-prereg-v1",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08, before any event signal-return relationship was examined",
+ "contract": "docs/specs/V8_CONTRACT_20261008.json (verify() before any run); event inputs nn_meta/validation/v8-events-20261008-r0 (every row has available_at_utc)",
+ "question": "Do literature-backed event/attention signals, traded long-only on the V8 universe with realistic costs, beat QQQ, XLK, SPY and the equal-weight universe out of sample?",
+ "engine": "nn_meta.v8_engine daily timeframe (stage-1 rules): 10 slots, each entry 1/10 of equity, execution at the next trading day's 10:30 ET bar open, admission panel, forced exits, nn_meta.v8_fills costs at 1.0x and 1.5x. Entry priority adv20 except H3 (lowest short-pressure z first).",
+ "timing": {
+  "event_signal_bar": "for an event public at time tau: the signal bar is the trading day before the first trading day whose 10:00 ET is at or after tau (so it executes at that day's 10:30)",
+  "reaction_day": "H1: first trading day whose 16:00 ET close is after tau; the signal bar is that day",
+  "holding": "exit signal when H bars have passed since the most recent entry signal for that name (a newer signal extends the hold); an exit signal also cancels a not-yet-filled entry"
+ },
+ "abnormal_return": "adjusted close-to-close return minus the equal-weight admitted-universe return of the same day",
+ "hypotheses": {
+  "H1_post_earnings_drift": {
+   "support": "Bernard & Thomas (1989); Chan, Jegadeesh & Lakonishok (1996); weakening reported since",
+   "events": "8-K with Item 2.02 (144 names; foreign 6-K filers excluded)",
+   "H1a_reaction": "abnormal return on the reaction day in the top tercile of all earnings reactions with reaction day in the prior 365 days (>= 30 such events, else no signal); hold H in {20, 60}",
+   "H1b_sue": "first-reported quarterly diluted EPS (us-gaap EarningsPerShareDiluted, 80-100 day duration) from XBRL facts; SUE = (EPS_q - EPS_q-4) / std of the prior 8 such year-over-year changes (>= 4); event time = availability of the first report of EPS_q; SUE in the top tercile of SUEs available in the prior 365 days (>= 30); hold H in {20, 60}",
+   "variants": 4
+  },
+  "H2_insider_cluster": {
+   "support": "Lakonishok & Lee (2001); Cohen, Malloy & Pomorski (2012)",
+   "events": "open-market purchases (transaction code P, acquired) not flagged as Rule 10b5-1 plans",
+   "signal": "when a qualifying filing becomes public and >= k distinct reporting owners have such purchases with transaction dates in the prior 30 calendar days (counting only filings already public); k in {2, 3}; hold H in {21, 63}",
+   "variants": 4,
+   "caveat": "expected only ~100-200 events"
+  },
+  "H3_low_short_pressure": {
+   "support": "Boehmer, Jones & Zhang (2008) (long side only)",
+   "data": "FINRA daily short volume / total volume; day d usable for the next day's 10:30 execution",
+   "signal": "on the last trading day of each week, z = (mean ratio over the last w days - mean over the prior 60 days) / std over the prior 60 days, admitted names only; entry signal for the 10 lowest z; exit signal for held names not among the M lowest; w in {5, 10}, M in {10, 20}; entry priority lowest z",
+   "variants": 4
+  },
+  "H4_attention": {
+   "H4a_news_continuation": "support Chan (2003): abnormal return on day d / std of the prior 60 days of abnormal returns >= theta, return > 0, and >= 1 Alpaca news article created between the prior close and d's close; theta in {2, 3}; hold 21",
+   "H4b_wikipedia_spike": "support Da, Engelberg & Gao (2011): page views of day d / median of the prior 20 days >= m with that median >= 100 views; m in {3, 5}; hold 10",
+   "variants": 4
+  }
+ },
+ "evaluation": {
+  "returns": "daily equity from 2021-05-03",
+  "folds": [["2023-01-01", "2023-06-30"], ["2023-07-01", "2023-12-31"], ["2024-01-01", "2024-06-30"], ["2024-07-01", "2024-12-31"], ["2025-01-01", "2025-06-30"], ["2025-07-01", "2025-12-31"]],
+  "selection": "within each hypothesis, the variant with the highest in-sample annualized Sharpe and >= 30 in-sample round trips (none eligible: the fold counts as not beating)",
+  "benchmarks": ["QQQ", "XLK", "SPY", "equal-weight admitted universe"]
+ },
+ "pass_rules": {
+  "per_hypothesis_all_required": {
+   "beat_benchmarks": "selected variant's fold return exceeds every benchmark in >= 4 of 6 folds at cost 1.0x",
+   "deflated_sharpe": "probability >= 0.95 for its concatenated out-of-sample daily returns, N = 16 (all variants)",
+   "cost_stress": "beat_benchmarks still holds at cost 1.5x"
+  },
+  "shared_gates_all_16_variants": {
+   "rank_persistence": "Spearman(in-sample, out-of-sample Sharpe) across eligible variants positive in >= 4 of 6 folds and median >= 0.10",
+   "pbo": "CSCV PBO < 0.5 over 2021-05-03..2025-12-31 daily returns, 16 blocks"
+  },
+  "verdict": "a hypothesis passes only if its own rules and both shared gates pass"
+ },
+ "holdout": "2026 is not read. A passing hypothesis gets one confirmation run on 2026 only if the user approves spending it.",
+ "inputs_truncated_after": "2025-12-31"
+}

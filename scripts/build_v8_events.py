@@ -114,6 +114,7 @@ def insider(threads: int) -> None:
         own = own[own["ACCESSION_NUMBER"].isin(sub["ACCESSION_NUMBER"])]
         own = own.groupby("ACCESSION_NUMBER").agg(
             owners=("RPTOWNERCIK", "nunique"),
+            owner_ciks=("RPTOWNERCIK", lambda s: ",".join(sorted(set(s.dropna())))),
             relationship=("RPTOWNER_RELATIONSHIP", lambda s: ",".join(sorted(set(s.dropna())))),
             title=("RPTOWNER_TITLE", lambda s: ",".join(sorted(set(s.dropna()))))).reset_index()
         keep = ["ACCESSION_NUMBER", "FILING_DATE", "DOCUMENT_TYPE", "ISSUERCIK", "ISSUERTRADINGSYMBOL"]
