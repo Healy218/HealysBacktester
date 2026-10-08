@@ -1,0 +1,49 @@
+{
+ "schema": "v8-stage1-prereg-v1",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08, before any stage-1 result",
+ "contract": "docs/specs/V8_CONTRACT_20261008.json (verify() must pass before any run)",
+ "question": "Does any tuned long-only stock/ETF strategy, selected only on past data, beat simply owning the benchmarks after realistic costs, out of sample?",
+ "inputs": {
+  "bars": "contract bars_1h and bars_1d, adjusted OHLCV for signals, raw prices for costs",
+  "truncate_after": "2025-12-31",
+  "holdout": "2026-01-01 onward is not read by any stage-1 code (stage 5)"
+ },
+ "strategies": {
+  "direction": "long only (user decision 2026-10-08; shorts and bearish puts are a later, separate test)",
+  "timeframes": ["1h (09:30-anchored session bars)", "1d"],
+  "families_catalog": "nn_meta.multitimeframe_catalog legacy families with their registered grids: ma 2485, rsi 100, macd 51, volume 48, elliott 24, keltner 25, bbands 20, supertrend 15, stoch 12, squeeze 9, bbw_squeeze 9, tv_rating 6 (2,804 variants)",
+  "families_new_volume": "nn_meta.v8_signals: rvol_surge, obv_trend, vwap_reclaim (rolling bar VWAP), adl_breakout (small grids, listed in code)",
+  "excluded": "The 13 TradingView-source variants (tv_setup, tv_amd, tv_fibonacci, tv_gaussian, tv_msb, tv_rsi_probability, tv_sr, tv_uptrick) depend on intraday session context (VWAP/opening observations, higher-timeframe flags) with no defined hourly/daily semantics; excluded rather than reinterpreted.",
+  "signal_timing": "a signal computed on bar t's close executes at the next execution point"
+ },
+ "execution": {
+  "1h": "next bar's open; entries only at bars opening at or after 10:00 ET (i.e. not the 09:30 bar); exits allowed at any bar",
+  "1d": "next trading day at the 10:30 ET hourly bar's open (entries and exits)",
+  "admission": "entries only on admitted (ticker, date) rows of the contract admission panel",
+  "forced_exits": "at the last bar before a missing day, delisting or events.json break (at that bar's close, with sell costs)",
+  "costs": "nn_meta.v8_fills stock half-spread x name factor + 1 bp slippage per side, sell fees; cost multiplier 1.0 primary, 1.5 stress"
+ },
+ "portfolio": {
+  "slots": 10,
+  "sizing": "each entry takes 1/10 of current equity (capped by cash); no leverage; idle cash earns 0",
+  "entry_priority": "when entries exceed free slots: higher trailing 20-day median dollar volume first (adv20 from the admission panel), ticker as tie-break",
+  "kelly": "out of scope for the edge test; half-Kelly sizing with per-position and gross caps is defined later for the paper simulator using out-of-sample fold statistics only"
+ },
+ "evaluation": {
+  "returns": "daily portfolio returns from 2021-05-03 (first admitted day)",
+  "folds": [["2023-01-01", "2023-06-30"], ["2023-07-01", "2023-12-31"], ["2024-01-01", "2024-06-30"], ["2024-07-01", "2024-12-31"], ["2025-01-01", "2025-06-30"], ["2025-07-01", "2025-12-31"]],
+  "in_sample": "expanding: 2021-05-03 up to the day before each fold",
+  "selection": "highest in-sample annualized Sharpe among variants with >= 30 in-sample round trips; pooled across both timeframes",
+  "reported_selections": ["top-1 (primary)", "top-10 equal-weight", "best per family"],
+  "benchmarks": ["QQQ", "XLK", "SPY", "equal-weight admitted universe (daily rebalanced, close to close, no costs)"]
+ },
+ "pass_rules_all_required": {
+  "beat_benchmarks": "top-1 out-of-sample fold return exceeds every benchmark's fold return in >= 4 of 6 folds, at cost multiplier 1.0",
+  "rank_persistence": "Spearman(in-sample Sharpe, out-of-sample Sharpe) across eligible variants is positive in >= 4 of 6 folds and its median >= 0.10",
+  "deflated_sharpe": "probability >= 0.95 for the concatenated top-1 out-of-sample daily returns, N = all variants evaluated (both timeframes), Bailey & Lopez de Prado (2014)",
+  "pbo": "CSCV probability of backtest overfitting < 0.5 over 2021-05-03..2025-12-31 daily returns of all variants, 16 contiguous blocks",
+  "cost_stress": "beat_benchmarks still holds when the whole procedure is rerun at cost multiplier 1.5"
+ },
+ "if_nothing_passes": "Record the verdict in EXPERIMENTS; stage 2 (volatility) is next, not a meta-model."
+}
