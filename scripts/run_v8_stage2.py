@@ -72,11 +72,11 @@ def _cand_month(path: str) -> pd.DataFrame:
     if ch.empty:
         return pd.DataFrame()
     vol = pd.read_parquet(STAGE2 / "vol_panel.parquet", columns=["ticker", "date", "iv30"])
-    px = pd.read_parquet(BARS / "bars_1d.parquet", columns=["ticker", "date", "close"])
+    px = pd.read_parquet(BARS / "bars_1d.parquet", columns=["ticker", "date", "close", "adj_close"])
     px = px[px["date"] <= END]
     tick = set(_UNIVERSE_TICKERS)
     ch = ch[ch["ticker"].isin(tick)]
-    spot = px.rename(columns={"close": "S"}).merge(vol, on=["ticker", "date"])
+    spot = px[["ticker", "date", "close"]].rename(columns={"close": "S"}).merge(vol, on=["ticker", "date"])
     spot = spot[spot["date"].isin(ch["date"].unique())]
     return vt.build_candidates(ch, spot, px[px["ticker"].isin(tick)], vt.spread_table())
 

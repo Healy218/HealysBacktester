@@ -64,8 +64,12 @@ def half_spread(price, dte, otm, table) -> np.ndarray:
 def build_candidates(ch: pd.DataFrame, spot: pd.DataFrame, settle_px: pd.DataFrame,
                      table) -> pd.DataFrame:
     """ch: one month of chains (date, ticker, expiry, cp, strike, close, volume);
-    spot: (ticker, date, S, iv30); settle_px: (ticker, date, close) raw daily
-    closes through END for settlement lookups."""
+    spot: (ticker, date, S, iv30); settle_px: (ticker, date, close[, adj_close])
+    daily closes through END for settlement lookups.
+
+    Settlement is in the contract's own terms: OCC adjusts strikes on a split,
+    so when raw/adjusted moves by > 10% between entry and settlement (a split,
+    not a dividend) the raw settlement close is scaled back to pre-split units."""
     ch = ch[(ch["volume"] >= 1) & (ch["close"] > 0)].merge(spot, on=["ticker", "date"])
     ch = ch[np.isfinite(ch["iv30"])]
     ch["dte"] = (pd.to_datetime(ch["expiry"]) - pd.to_datetime(ch["date"])).dt.days
@@ -84,6 +88,10 @@ def build_candidates(ch: pd.DataFrame, spot: pd.DataFrame, settle_px: pd.DataFra
     pv = pv.sort_values(["ticker", "date", "dist"])
     fwd = pv.groupby(["ticker", "date"]).head(3).groupby(["ticker", "date"])["fk"].median().rename("F")
     settle_idx = settle_px.set_index(["ticker", "date"])["close"]
+    if "adj_close" in settle_px:
+        ratio_idx = (settle_px["close"] / settle_px["adj_close"]).set_axis(settle_idx.index)
+    else:
+        ratio_idx = None
     days_by_t = {t: g["date"].to_numpy() for t, g in settle_px.groupby("ticker")}
     rows = []
     for (t, d), g in ch.groupby(["ticker", "date"], sort=False):
@@ -100,6 +108,10 @@ def build_candidates(ch: pd.DataFrame, spot: pd.DataFrame, settle_px: pd.DataFra
             continue
         settle_date = tdays[j]
         ST = float(settle_idx.loc[(t, settle_date)])
+        if ratio_idx is not None:
+            f = float(ratio_idx.loc[(t, settle_date)] / ratio_idx.loc[(t, d)])
+            if abs(math.log(f)) > 0.1:                  # split inside the trade
+                ST = ST / f
         by_cp = {cp: gg.set_index("strike")["close"] for cp, gg in g.groupby("cp")}
         for name, legs in STRUCTURES.items():
             chosen = []

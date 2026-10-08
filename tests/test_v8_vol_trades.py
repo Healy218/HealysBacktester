@@ -45,3 +45,14 @@ def test_simulate_one_open_trade_and_risk_fraction():
     eq, n = vt.simulate(days, cand, sig, {d: {"X"} for d in days})
     assert list(n) == [1, 0, 0, 0]                   # d2 blocked while d1's trade is open
     assert np.isclose(eq[2], 1.0 + 0.02 * 0.5)
+
+
+def test_settlement_undoes_a_split_inside_the_trade():
+    prices = {("C", 100.0): 3.0, ("P", 100.0): 3.0, ("C", 106.0): 1.0, ("P", 94.0): 1.0}
+    spot = pd.DataFrame({"ticker": ["X"], "date": ["2024-01-02"], "S": [100.0], "iv30": [0.2]})
+    # 10:1 split: raw settles at 10.3, adjusted stays continuous (103)
+    settle = pd.DataFrame({"ticker": "X", "date": ["2024-01-02", "2024-02-01"],
+                           "close": [100.0, 10.3], "adj_close": [100.0, 103.0]})
+    st = vt.build_candidates(_chain(prices), spot, settle, NO_COST)
+    st = st[st["structure"] == "straddle"].iloc[0]
+    assert np.isclose(st["S_T"], 103.0)
