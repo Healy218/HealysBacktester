@@ -1175,5 +1175,9 @@ actual entitlement failure. No full-universe recording is running.
   signals `scripts/build_v8_stage1_signals.py` → `nn_meta/validation/v8-stage1-20261008-r0/signals/`;
   engine `nn_meta/v8_engine.py`; run `scripts/run_v8_stage1.py` → `report.json`,
   `returns_1.0.npz`, `returns_1.5.npz` (about 15 s end to end).
+- V8 stage 2 inputs (2026-10-08): chains `scripts/build_v8_option_chains.py` →
+  `nn_meta/validation/v8-stage2-20261008-r0/chains/<yyyy-mm>.parquet` (includes 2026 on
+  disk; stage-2 code truncates at 2025-12-31); vol panel `scripts/build_v8_vol_panel.py`
+  (`nn_meta/v8_vol.py`) → `vol_panel.parquet`, `vol_summary.json`.
 - V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
 - Data plans: none paid. Alpaca free tier works for stock and option bars.

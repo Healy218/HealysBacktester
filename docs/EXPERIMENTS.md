@@ -1311,3 +1311,17 @@ family/timeframe draws produce by chance. **Verdict: no tuned long-only strategy
 the V8 universe beats owning QQQ/SPY or the universe itself after realistic costs;
 in-sample tuning selects noise.** Per the pre-registration, stage 2 (volatility) is
 next, not a meta-model; it needs the user's go-ahead.
+
+## 2026-10-08 — V8.2 data: option chains, IV30 and HAR forecasts (setup, no verdict)
+
+Stage 2 approved by the user after the V8.1 failure. `scripts/build_v8_option_chains.py`
+extracted daily per-contract OPRA aggregates for all pool names (17 ETFs + every
+pool tech name, PIT identity) from the sealed V7 day files (2 min 40 s, 1.1 GB,
+`nn_meta/validation/v8-stage2-20261008-r0/chains/`). `scripts/build_v8_vol_panel.py`
+(`nn_meta/v8_vol.py`) built through 2025-12-31: 30-day ATM implied vol from
+put-call-parity forwards and Black-76 (172,000 ticker-days, 177 tickers; 78%
+bracketed interpolation), realized variance from hourly bars, and a point-in-time
+direct 21-day HAR forecast (refit monthly; available from ~2022-03, needing a year
+of history). Sanity: SPY IV30 median 23% in 2022 and 12% in 2024; 42% on
+2025-04-08 and 25% on 2024-08-05 (VIX ~52 and ~38, which include skew). Median
+IV30 / later-realized vol 1.05. No signal or trading result was examined.

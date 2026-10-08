@@ -56,8 +56,14 @@ per symbol/day; full in-memory loads have crashed this box.
 - [x] **V8.1-verdict: FAIL** (all five rules; [evidence](docs/EXPERIMENTS.md)). record in EXPERIMENTS. If nothing passes, stage 2
   (volatility) is next, not a meta-model.
 
-**Next (needs the user's go-ahead):** V8.2 volatility, per the pre-registration;
-no meta-model on signals without edge.
+## Stage 2 — volatility (approved by the user 2026-10-08)
+
+- [x] **V8.2-data:** daily option chains for the pool from V7 day aggregates.
+- [x] **V8.2-iv / -forecast:** IV30 (ATM, parity forward) and PIT 21-day HAR forecast,
+  `vol_panel.parquet`. [Evidence](docs/EXPERIMENTS.md).
+- [ ] **V8.2-prereg (next):** structures, signal thresholds, universe, sizing, folds,
+  pass rules; user sign-off before any test.
+- [ ] **V8.2-walkforward / -verdict.**
 
 ## Parallel / later (not started)
 
