@@ -9,9 +9,10 @@ realistic-fill re-evaluation found no edge.
 
 ## Stage 0 — tradable universe and cost model
 
-- [ ] **V8.0-pool:** freeze the tech candidate pool and ETF list from information
-  available at the development-window start (market cap, option volume); record
-  listing dates. No hindsight selection.
+- [x] **V8.0-pool:** frozen in [V8_POOL_20261007.json](docs/specs/V8_POOL_20261007.json):
+  monthly PIT option-activity members (survivorship-free) with technology SEC SIC
+  codes plus 9 declared tech-adjacent platforms; 73–107 tech names per month (124
+  total) and all 17 ETFs every month. Membership covers 2024-11 to 2026-07.
 - [ ] **V8.0-data:** stock bars for the pool (Alpaca); option quotes from Massive
   flat files for spreads; coverage report per symbol and day.
 - [ ] **V8.0-liquidity:** decision-time liquidity rule (stock spread/volume; option
