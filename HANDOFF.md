@@ -1,4 +1,4 @@
-# Handoff — October 8, 2026 — H1 earnings drift confirmed on 2026 holdout; paper forward test next
+# Handoff — October 8, 2026 — H1 paper test live; next phase: options-native, high-risk, Kelly-sized
 
 ## Where things stand
 
@@ -19,20 +19,20 @@
 
 ## Status at session end
 
-No jobs running. V6 paper retired Oct 8: account archived (`nn_meta/validation/v6-paper-archive-20261008/`), V6 Alpaca timers disabled (re-enabling pending the user); the H1 paper test runs in "stonks bot 2" (PA3U9D8Q8GQX); its timers are enabled from 2026-10-09. The 2026 holdout has not
+No jobs running. V6 paper retired Oct 8: account archived (`nn_meta/validation/v6-paper-archive-20261008/`), V6 retired for good by the user (needed the cancelled paid feed), timers disabled; the H1 paper test runs in "stonks bot 2" (PA3U9D8Q8GQX); its timers are enabled from 2026-10-09. The 2026 holdout has not
 been read by any stage-1 code.
 
 ## Next action
 
-**H1 earnings drift is the first V8 strategy confirmed on unseen data** (stock form,
-2026 holdout: +22.2%, Sharpe 1.31 vs QQQ 1.12, alpha +13.8%/yr; [evidence](docs/EXPERIMENTS.md)).
-The calls form failed its pessimistic-cost dev test (t = 1.84): option costs are
-unknown, not disproven. The short side (short stock, long-short, puts) failed in dev
-outright (short −36%, puts −96%): the edge is long-only. The user approved an Alpaca paper forward test and prefers
-options over stocks. Next: agree the paper design with the user (calls vs stock or
-both side by side; live SUE pipeline from SEC submissions/companyfacts polling;
-entries at 10:30 ET), then build it. The 2026 holdout has been used once; do not
-re-tune H1 on it.
+The H1 paper test is live in "stonks bot 2" (first runs 2026-10-09; first signals with
+mid/late-October earnings). Review it after the first earnings wave.
+
+**User direction for the next phase (Oct 8):** options-native, short-term,
+high-risk/high-reward, fractional-Kelly sizing with 10–20% downside caps
+([DECISIONS](docs/DECISIONS.md)). Agree the research plan with the user before building:
+candidates include options-flow signals from the OPRA day aggregates we already hold
+(2021–2026), H1 expressed through calls with Kelly sizing once paper fills exist, and a
+Kelly/risk module fed only by out-of-sample trade statistics.
 
 Tools ready for reuse: `nn_meta/v8_engine.py` (numba slot simulator, ~5 ms per hourly
 variant), `nn_meta/v8_fills.py`, `nn_meta/v8_contract.verify()`,

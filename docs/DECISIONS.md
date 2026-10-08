@@ -2549,3 +2549,18 @@ liquid, so dollar-volume floors of $100M–$250M dropped 6–20% of names while 
 the median spread only from 6.1 to 5.2–5.7 bp. Option cutoffs wait for stage 3.
 Rejected: a heavy $250M floor (loses names, little cost benefit); the Abdi–Ranaldo
 bar estimate as a spread input (uninformative at this liquidity).
+
+### 2026-10-08 — V6 paper stays retired; next phase targets options-native, high-risk/high-reward
+
+The user decided V6 paper stays off: it streamed 450+ stocks and options through the
+cancelled Alpaca paid feed and cannot run on the free tier. Its account (PA3WD22T4IM7,
+TMUS position) is left as is; its timers stay disabled; history archived in
+`nn_meta/validation/v6-paper-archive-20261008/`. The V8 H1 paper test (stock + call per
+signal) runs in the separate "stonks bot 2" account.
+
+Direction for the next phase (user, Oct 8): build something that actually trades
+options, short-term and high-risk/high-reward, sized with (fractional) Kelly to
+maximize growth while capping downside at 10–20%. V8 is judged a sound but
+conservative "analyst"; the next phase should be options-native. Constraints carried
+forward: no paid data unless evidence justifies it, pre-registration before results,
+measured costs, and Kelly only from out-of-sample trade statistics.

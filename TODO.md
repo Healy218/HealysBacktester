@@ -90,9 +90,14 @@ per symbol/day; full in-memory loads have crashed this box.
   10:31 / 16:20 ET). **Live in "stonks bot 2" (PA3U9D8Q8GQX) from 2026-10-09.** Review after the
   first earnings wave (mid/late October): fills vs decision quotes, call vs stock per signal.
 
+## Next phase (user direction 2026-10-08; plan to be agreed)
+
+- [ ] **Options-native research plan:** short-term, high-risk/high-reward options strategies
+  with fractional-Kelly sizing and 10–20% downside caps; pre-registered, measured costs,
+  free data first. Agree scope with the user before building.
+
 ## Parallel / later (not started)
 
 - FA fundamentals point-in-time backfill for the V8 universe (filing/acceptance
   dated), as candidate features; FA attention remains forward-only (FA-3).
-- V6 paper runtime: paused; a 20% premium stop measured on the entry midpoint is
-  available as a versioned deployment if the user wants it as a live lab.
+- V6 paper runtime: retired by the user 2026-10-08 (needed the cancelled paid feed).

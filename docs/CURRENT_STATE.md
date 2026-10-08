@@ -13,7 +13,8 @@ for the V8 H1 forward test). Account PA3WD22T4IM7 archived before reset to
 `healys-v6-alpaca-{orders,scanner,paper-monitor}.timer` disabled (re-enable with
 `systemctl --user enable --now …`). Update: the user created a separate paper account
 "stonks bot 2" for the H1 test instead of resetting; the V6 account (and its TMUS position)
-remains as it was. Whether to re-enable the V6 timers is pending the user's answer.
+remains as it was. The user decided V6 stays retired (it depended on the cancelled paid
+Alpaca streaming feed); its timers stay disabled.
 V8 H1 paper runner: `scripts/run_v8_h1_paper.py` (ledger `nn_meta/validation/v8-paper-h1/ledger.sqlite3`),
 units `deploy/systemd/healys-v8-h1-*`, **installed and enabled 2026-10-08** (first runs Fri
 2026-10-09 09:45 / 10:31 / 16:20 ET). Account "stonks bot 2" PA3U9D8Q8GQX ($100,000, options
