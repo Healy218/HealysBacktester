@@ -1258,3 +1258,16 @@ symbol-day (`nn_meta/validation/v8-liquidity-20261008-r0/admission.parquet`):
 127,349 member symbol-days, 126,462 admitted (99.3%); rejections: price 335, dollar
 volume 328, bar status 224 (partial, missing, post-delisting). 67–126 symbols
 admitted per day (median 93), 2021-05-03 → 2026-09-14.
+
+## 2026-10-08 — V8.0-fills: stock/option fill model and frozen cost table
+
+`nn_meta/v8_fills.py` (vectorized) with the table frozen by
+`scripts/build_v8_cost_table.py` in [V8_COSTS_20261008.json](specs/V8_COSTS_20261008.json):
+468 half-spread cells (6 price buckets × 13 snapshots × 6 years, none borrowed) and
+179 shrunk per-name factors (SPY 0.05×, NVDA 0.29×, META 0.40×, ONDS 1.7×). Stock fill
+= bar price ± multiplier × (half-spread + 1 bp slippage); sells pay 0.3 bp + FINRA TAF;
+options = mid ± k × half-spread + $0.05/contract. In-sample calibration: per-ticker
+predicted vs measured median spread Spearman 0.994, median ratio 0.995;
+per-snapshot median |log error| 0.33. Hand-case unit tests pass. Caveat: the table
+uses the full 2021–2026 sample (within-year cells), so costs see later quotes; costs
+are not signals, and stage 1 also requires survival at 1.5×.

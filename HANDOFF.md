@@ -1,4 +1,4 @@
-# Handoff — October 8, 2026 — V8.0-data, -spreads, -liquidity done; V8.0-fills next
+# Handoff — October 8, 2026 — V8.0 data through fills done; V8.0-contract next
 
 ## Where things stand
 
@@ -34,12 +34,11 @@ No jobs running. V6 paper services paused by user choice; one V6 paper position
 
 ## Next action
 
-**V8.0-fills:** stock fill model: fill at mid ± measured half-spread (table by price
-bucket × time of day × year from `v8-spreads-stock-20261008-r0`, times a per-name
-factor), plus slippage allowance and fees; option fills mid ± k × half-spread (k = 1.0
-primary, 0.5 sensitivity) for stage 3. Unit tests on hand cases. Then -contract and
-stage-1 pre-registration. V8.0-liquidity is done (user-approved rule frozen in
-[V8_LIQUIDITY_20261008.json](docs/specs/V8_LIQUIDITY_20261008.json)).
+**V8.0-contract:** one frozen contract and coverage report tying together the pool,
+bars, admission rule and cost table (paths + sha256 of each artifact), then
+**V8.1-prereg** (families, 1h/1d horizons, folds, costs, pass rules; development
+window ends 2025-12-31) for the user's review before any stage-1 run.
+V8.0-fills is done (`nn_meta/v8_fills.py`, [V8_COSTS_20261008.json](docs/specs/V8_COSTS_20261008.json)).
 
 Also done October 8: V8.0-spreads ([evidence](docs/EXPERIMENTS.md)); parallel
 builders (`nn_meta/v8_parallel.py`, user preference: worker pools and vectorized

@@ -1166,5 +1166,8 @@ actual entitlement failure. No full-universe recording is running.
 - V8 liquidity (2026-10-08): rule [V8_LIQUIDITY_20261008.json](specs/V8_LIQUIDITY_20261008.json);
   `scripts/build_v8_admission.py` → `nn_meta/validation/v8-liquidity-20261008-r0/`
   (`admission.parquet` per symbol-day with reason, `summary.json`).
+- V8 fills (2026-10-08): `nn_meta/v8_fills.py`; frozen table
+  [V8_COSTS_20261008.json](specs/V8_COSTS_20261008.json) built by
+  `scripts/build_v8_cost_table.py`.
 - V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
 - Data plans: none paid. Alpaca free tier works for stock and option bars.

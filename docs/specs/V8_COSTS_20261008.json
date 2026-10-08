@@ -1,0 +1,3497 @@
+{
+ "schema": "v8-costs-v1",
+ "frozen_at": "2026-10-08",
+ "source": "nn_meta/validation/v8-spreads-stock-20261008-r0/quotes.parquet",
+ "source_sha256": "de20d5e626da31101bcc0470175e581896bf69c34c57d927dd0e015be43add7b",
+ "price_edges_usd": [
+  0,
+  5,
+  10,
+  20,
+  50,
+  100,
+  null
+ ],
+ "snap_minutes_et": [
+  585,
+  615,
+  645,
+  675,
+  705,
+  735,
+  765,
+  795,
+  825,
+  855,
+  885,
+  915,
+  945
+ ],
+ "slippage_bps": 1.0,
+ "sell_reg_bps": 0.3,
+ "taf_per_share": 0.000166,
+ "taf_cap": 8.3,
+ "option_fee_per_contract": 0.05,
+ "min_cell": 30,
+ "shrink_n": 200,
+ "borrowed_cells": 0,
+ "cells": [
+  {
+   "price_bucket": 0,
+   "snap": 0,
+   "year": 2021,
+   "half_spread_bps": 34.6922,
+   "n": 79
+  },
+  {
+   "price_bucket": 0,
+   "snap": 0,
+   "year": 2022,
+   "half_spread_bps": 29.8507,
+   "n": 439
+  },
+  {
+   "price_bucket": 0,
+   "snap": 0,
+   "year": 2023,
+   "half_spread_bps": 24.9872,
+   "n": 713
+  },
+  {
+   "price_bucket": 0,
+   "snap": 0,
+   "year": 2024,
+   "half_spread_bps": 27.1003,
+   "n": 724
+  },
+  {
+   "price_bucket": 0,
+   "snap": 0,
+   "year": 2025,
+   "half_spread_bps": 25.9083,
+   "n": 400
+  },
+  {
+   "price_bucket": 0,
+   "snap": 0,
+   "year": 2026,
+   "half_spread_bps": 24.6063,
+   "n": 206
+  },
+  {
+   "price_bucket": 0,
+   "snap": 1,
+   "year": 2021,
+   "half_spread_bps": 29.5255,
+   "n": 78
+  },
+  {
+   "price_bucket": 0,
+   "snap": 1,
+   "year": 2022,
+   "half_spread_bps": 25.5574,
+   "n": 441
+  },
+  {
+   "price_bucket": 0,
+   "snap": 1,
+   "year": 2023,
+   "half_spread_bps": 23.31,
+   "n": 705
+  },
+  {
+   "price_bucket": 0,
+   "snap": 1,
+   "year": 2024,
+   "half_spread_bps": 23.0947,
+   "n": 715
+  },
+  {
+   "price_bucket": 0,
+   "snap": 1,
+   "year": 2025,
+   "half_spread_bps": 22.6757,
+   "n": 404
+  },
+  {
+   "price_bucket": 0,
+   "snap": 1,
+   "year": 2026,
+   "half_spread_bps": 20.5119,
+   "n": 205
+  },
+  {
+   "price_bucket": 0,
+   "snap": 2,
+   "year": 2021,
+   "half_spread_bps": 24.9595,
+   "n": 78
+  },
+  {
+   "price_bucket": 0,
+   "snap": 2,
+   "year": 2022,
+   "half_spread_bps": 23.8663,
+   "n": 423
+  },
+  {
+   "price_bucket": 0,
+   "snap": 2,
+   "year": 2023,
+   "half_spread_bps": 21.9602,
+   "n": 692
+  },
+  {
+   "price_bucket": 0,
+   "snap": 2,
+   "year": 2024,
+   "half_spread_bps": 23.6968,
+   "n": 722
+  },
+  {
+   "price_bucket": 0,
+   "snap": 2,
+   "year": 2025,
+   "half_spread_bps": 22.6406,
+   "n": 401
+  },
+  {
+   "price_bucket": 0,
+   "snap": 2,
+   "year": 2026,
+   "half_spread_bps": 18.7864,
+   "n": 205
+  },
+  {
+   "price_bucket": 0,
+   "snap": 3,
+   "year": 2021,
+   "half_spread_bps": 24.4149,
+   "n": 72
+  },
+  {
+   "price_bucket": 0,
+   "snap": 3,
+   "year": 2022,
+   "half_spread_bps": 23.5294,
+   "n": 424
+  },
+  {
+   "price_bucket": 0,
+   "snap": 3,
+   "year": 2023,
+   "half_spread_bps": 22.1729,
+   "n": 697
+  },
+  {
+   "price_bucket": 0,
+   "snap": 3,
+   "year": 2024,
+   "half_spread_bps": 23.31,
+   "n": 716
+  },
+  {
+   "price_bucket": 0,
+   "snap": 3,
+   "year": 2025,
+   "half_spread_bps": 21.978,
+   "n": 401
+  },
+  {
+   "price_bucket": 0,
+   "snap": 3,
+   "year": 2026,
+   "half_spread_bps": 19.8153,
+   "n": 206
+  },
+  {
+   "price_bucket": 0,
+   "snap": 4,
+   "year": 2021,
+   "half_spread_bps": 24.3309,
+   "n": 75
+  },
+  {
+   "price_bucket": 0,
+   "snap": 4,
+   "year": 2022,
+   "half_spread_bps": 22.4719,
+   "n": 419
+  },
+  {
+   "price_bucket": 0,
+   "snap": 4,
+   "year": 2023,
+   "half_spread_bps": 20.9644,
+   "n": 678
+  },
+  {
+   "price_bucket": 0,
+   "snap": 4,
+   "year": 2024,
+   "half_spread_bps": 22.9885,
+   "n": 705
+  },
+  {
+   "price_bucket": 0,
+   "snap": 4,
+   "year": 2025,
+   "half_spread_bps": 21.692,
+   "n": 399
+  },
+  {
+   "price_bucket": 0,
+   "snap": 4,
+   "year": 2026,
+   "half_spread_bps": 19.2308,
+   "n": 206
+  },
+  {
+   "price_bucket": 0,
+   "snap": 5,
+   "year": 2021,
+   "half_spread_bps": 24.5399,
+   "n": 76
+  },
+  {
+   "price_bucket": 0,
+   "snap": 5,
+   "year": 2022,
+   "half_spread_bps": 21.5058,
+   "n": 416
+  },
+  {
+   "price_bucket": 0,
+   "snap": 5,
+   "year": 2023,
+   "half_spread_bps": 21.322,
+   "n": 681
+  },
+  {
+   "price_bucket": 0,
+   "snap": 5,
+   "year": 2024,
+   "half_spread_bps": 22.8833,
+   "n": 706
+  },
+  {
+   "price_bucket": 0,
+   "snap": 5,
+   "year": 2025,
+   "half_spread_bps": 22.3908,
+   "n": 400
+  },
+  {
+   "price_bucket": 0,
+   "snap": 5,
+   "year": 2026,
+   "half_spread_bps": 19.5313,
+   "n": 206
+  },
+  {
+   "price_bucket": 0,
+   "snap": 6,
+   "year": 2021,
+   "half_spread_bps": 24.3243,
+   "n": 72
+  },
+  {
+   "price_bucket": 0,
+   "snap": 6,
+   "year": 2022,
+   "half_spread_bps": 20.79,
+   "n": 408
+  },
+  {
+   "price_bucket": 0,
+   "snap": 6,
+   "year": 2023,
+   "half_spread_bps": 20.7039,
+   "n": 677
+  },
+  {
+   "price_bucket": 0,
+   "snap": 6,
+   "year": 2024,
+   "half_spread_bps": 22.779,
+   "n": 715
+  },
+  {
+   "price_bucket": 0,
+   "snap": 6,
+   "year": 2025,
+   "half_spread_bps": 22.2545,
+   "n": 399
+  },
+  {
+   "price_bucket": 0,
+   "snap": 6,
+   "year": 2026,
+   "half_spread_bps": 19.2678,
+   "n": 205
+  },
+  {
+   "price_bucket": 0,
+   "snap": 7,
+   "year": 2021,
+   "half_spread_bps": 21.4705,
+   "n": 70
+  },
+  {
+   "price_bucket": 0,
+   "snap": 7,
+   "year": 2022,
+   "half_spread_bps": 21.0979,
+   "n": 412
+  },
+  {
+   "price_bucket": 0,
+   "snap": 7,
+   "year": 2023,
+   "half_spread_bps": 21.2314,
+   "n": 681
+  },
+  {
+   "price_bucket": 0,
+   "snap": 7,
+   "year": 2024,
+   "half_spread_bps": 22.5734,
+   "n": 709
+  },
+  {
+   "price_bucket": 0,
+   "snap": 7,
+   "year": 2025,
+   "half_spread_bps": 22.4719,
+   "n": 399
+  },
+  {
+   "price_bucket": 0,
+   "snap": 7,
+   "year": 2026,
+   "half_spread_bps": 19.6097,
+   "n": 206
+  },
+  {
+   "price_bucket": 0,
+   "snap": 8,
+   "year": 2021,
+   "half_spread_bps": 22.5902,
+   "n": 73
+  },
+  {
+   "price_bucket": 0,
+   "snap": 8,
+   "year": 2022,
+   "half_spread_bps": 20.9206,
+   "n": 412
+  },
+  {
+   "price_bucket": 0,
+   "snap": 8,
+   "year": 2023,
+   "half_spread_bps": 20.8744,
+   "n": 685
+  },
+  {
+   "price_bucket": 0,
+   "snap": 8,
+   "year": 2024,
+   "half_spread_bps": 22.4719,
+   "n": 707
+  },
+  {
+   "price_bucket": 0,
+   "snap": 8,
+   "year": 2025,
+   "half_spread_bps": 22.2223,
+   "n": 398
+  },
+  {
+   "price_bucket": 0,
+   "snap": 8,
+   "year": 2026,
+   "half_spread_bps": 18.5531,
+   "n": 208
+  },
+  {
+   "price_bucket": 0,
+   "snap": 9,
+   "year": 2021,
+   "half_spread_bps": 22.5952,
+   "n": 68
+  },
+  {
+   "price_bucket": 0,
+   "snap": 9,
+   "year": 2022,
+   "half_spread_bps": 20.6186,
+   "n": 404
+  },
+  {
+   "price_bucket": 0,
+   "snap": 9,
+   "year": 2023,
+   "half_spread_bps": 21.4613,
+   "n": 690
+  },
+  {
+   "price_bucket": 0,
+   "snap": 9,
+   "year": 2024,
+   "half_spread_bps": 22.5734,
+   "n": 707
+  },
+  {
+   "price_bucket": 0,
+   "snap": 9,
+   "year": 2025,
+   "half_spread_bps": 22.1729,
+   "n": 401
+  },
+  {
+   "price_bucket": 0,
+   "snap": 9,
+   "year": 2026,
+   "half_spread_bps": 18.622,
+   "n": 207
+  },
+  {
+   "price_bucket": 0,
+   "snap": 10,
+   "year": 2021,
+   "half_spread_bps": 23.9808,
+   "n": 77
+  },
+  {
+   "price_bucket": 0,
+   "snap": 10,
+   "year": 2022,
+   "half_spread_bps": 21.4399,
+   "n": 410
+  },
+  {
+   "price_bucket": 0,
+   "snap": 10,
+   "year": 2023,
+   "half_spread_bps": 21.6411,
+   "n": 685
+  },
+  {
+   "price_bucket": 0,
+   "snap": 10,
+   "year": 2024,
+   "half_spread_bps": 22.7159,
+   "n": 716
+  },
+  {
+   "price_bucket": 0,
+   "snap": 10,
+   "year": 2025,
+   "half_spread_bps": 22.124,
+   "n": 400
+  },
+  {
+   "price_bucket": 0,
+   "snap": 10,
+   "year": 2026,
+   "half_spread_bps": 18.9764,
+   "n": 206
+  },
+  {
+   "price_bucket": 0,
+   "snap": 11,
+   "year": 2021,
+   "half_spread_bps": 23.729,
+   "n": 74
+  },
+  {
+   "price_bucket": 0,
+   "snap": 11,
+   "year": 2022,
+   "half_spread_bps": 20.9644,
+   "n": 411
+  },
+  {
+   "price_bucket": 0,
+   "snap": 11,
+   "year": 2023,
+   "half_spread_bps": 21.4133,
+   "n": 692
+  },
+  {
+   "price_bucket": 0,
+   "snap": 11,
+   "year": 2024,
+   "half_spread_bps": 22.3714,
+   "n": 720
+  },
+  {
+   "price_bucket": 0,
+   "snap": 11,
+   "year": 2025,
+   "half_spread_bps": 20.6722,
+   "n": 400
+  },
+  {
+   "price_bucket": 0,
+   "snap": 11,
+   "year": 2026,
+   "half_spread_bps": 18.9395,
+   "n": 204
+  },
+  {
+   "price_bucket": 0,
+   "snap": 12,
+   "year": 2021,
+   "half_spread_bps": 24.1,
+   "n": 82
+  },
+  {
+   "price_bucket": 0,
+   "snap": 12,
+   "year": 2022,
+   "half_spread_bps": 20.7039,
+   "n": 420
+  },
+  {
+   "price_bucket": 0,
+   "snap": 12,
+   "year": 2023,
+   "half_spread_bps": 21.0716,
+   "n": 711
+  },
+  {
+   "price_bucket": 0,
+   "snap": 12,
+   "year": 2024,
+   "half_spread_bps": 21.978,
+   "n": 724
+  },
+  {
+   "price_bucket": 0,
+   "snap": 12,
+   "year": 2025,
+   "half_spread_bps": 21.6451,
+   "n": 402
+  },
+  {
+   "price_bucket": 0,
+   "snap": 12,
+   "year": 2026,
+   "half_spread_bps": 19.2678,
+   "n": 203
+  },
+  {
+   "price_bucket": 1,
+   "snap": 0,
+   "year": 2021,
+   "half_spread_bps": 10.5374,
+   "n": 229
+  },
+  {
+   "price_bucket": 1,
+   "snap": 0,
+   "year": 2022,
+   "half_spread_bps": 10.1969,
+   "n": 392
+  },
+  {
+   "price_bucket": 1,
+   "snap": 0,
+   "year": 2023,
+   "half_spread_bps": 7.6523,
+   "n": 216
+  },
+  {
+   "price_bucket": 1,
+   "snap": 0,
+   "year": 2024,
+   "half_spread_bps": 9.3265,
+   "n": 184
+  },
+  {
+   "price_bucket": 1,
+   "snap": 0,
+   "year": 2025,
+   "half_spread_bps": 9.4967,
+   "n": 367
+  },
+  {
+   "price_bucket": 1,
+   "snap": 0,
+   "year": 2026,
+   "half_spread_bps": 7.6765,
+   "n": 318
+  },
+  {
+   "price_bucket": 1,
+   "snap": 1,
+   "year": 2021,
+   "half_spread_bps": 9.8656,
+   "n": 231
+  },
+  {
+   "price_bucket": 1,
+   "snap": 1,
+   "year": 2022,
+   "half_spread_bps": 9.4073,
+   "n": 389
+  },
+  {
+   "price_bucket": 1,
+   "snap": 1,
+   "year": 2023,
+   "half_spread_bps": 7.4239,
+   "n": 213
+  },
+  {
+   "price_bucket": 1,
+   "snap": 1,
+   "year": 2024,
+   "half_spread_bps": 8.0853,
+   "n": 186
+  },
+  {
+   "price_bucket": 1,
+   "snap": 1,
+   "year": 2025,
+   "half_spread_bps": 8.0451,
+   "n": 365
+  },
+  {
+   "price_bucket": 1,
+   "snap": 1,
+   "year": 2026,
+   "half_spread_bps": 6.5812,
+   "n": 316
+  },
+  {
+   "price_bucket": 1,
+   "snap": 2,
+   "year": 2021,
+   "half_spread_bps": 8.9976,
+   "n": 226
+  },
+  {
+   "price_bucket": 1,
+   "snap": 2,
+   "year": 2022,
+   "half_spread_bps": 9.3659,
+   "n": 390
+  },
+  {
+   "price_bucket": 1,
+   "snap": 2,
+   "year": 2023,
+   "half_spread_bps": 7.3368,
+   "n": 219
+  },
+  {
+   "price_bucket": 1,
+   "snap": 2,
+   "year": 2024,
+   "half_spread_bps": 7.4782,
+   "n": 184
+  },
+  {
+   "price_bucket": 1,
+   "snap": 2,
+   "year": 2025,
+   "half_spread_bps": 8.0321,
+   "n": 367
+  },
+  {
+   "price_bucket": 1,
+   "snap": 2,
+   "year": 2026,
+   "half_spread_bps": 6.4893,
+   "n": 315
+  },
+  {
+   "price_bucket": 1,
+   "snap": 3,
+   "year": 2021,
+   "half_spread_bps": 8.8889,
+   "n": 229
+  },
+  {
+   "price_bucket": 1,
+   "snap": 3,
+   "year": 2022,
+   "half_spread_bps": 9.4074,
+   "n": 398
+  },
+  {
+   "price_bucket": 1,
+   "snap": 3,
+   "year": 2023,
+   "half_spread_bps": 7.4518,
+   "n": 214
+  },
+  {
+   "price_bucket": 1,
+   "snap": 3,
+   "year": 2024,
+   "half_spread_bps": 7.4269,
+   "n": 184
+  },
+  {
+   "price_bucket": 1,
+   "snap": 3,
+   "year": 2025,
+   "half_spread_bps": 7.8267,
+   "n": 367
+  },
+  {
+   "price_bucket": 1,
+   "snap": 3,
+   "year": 2026,
+   "half_spread_bps": 6.4607,
+   "n": 316
+  },
+  {
+   "price_bucket": 1,
+   "snap": 4,
+   "year": 2021,
+   "half_spread_bps": 8.8107,
+   "n": 232
+  },
+  {
+   "price_bucket": 1,
+   "snap": 4,
+   "year": 2022,
+   "half_spread_bps": 9.1491,
+   "n": 395
+  },
+  {
+   "price_bucket": 1,
+   "snap": 4,
+   "year": 2023,
+   "half_spread_bps": 7.1531,
+   "n": 214
+  },
+  {
+   "price_bucket": 1,
+   "snap": 4,
+   "year": 2024,
+   "half_spread_bps": 7.1276,
+   "n": 189
+  },
+  {
+   "price_bucket": 1,
+   "snap": 4,
+   "year": 2025,
+   "half_spread_bps": 7.7821,
+   "n": 369
+  },
+  {
+   "price_bucket": 1,
+   "snap": 4,
+   "year": 2026,
+   "half_spread_bps": 6.4144,
+   "n": 316
+  },
+  {
+   "price_bucket": 1,
+   "snap": 5,
+   "year": 2021,
+   "half_spread_bps": 8.673,
+   "n": 227
+  },
+  {
+   "price_bucket": 1,
+   "snap": 5,
+   "year": 2022,
+   "half_spread_bps": 9.0992,
+   "n": 393
+  },
+  {
+   "price_bucket": 1,
+   "snap": 5,
+   "year": 2023,
+   "half_spread_bps": 7.236,
+   "n": 212
+  },
+  {
+   "price_bucket": 1,
+   "snap": 5,
+   "year": 2024,
+   "half_spread_bps": 7.1175,
+   "n": 188
+  },
+  {
+   "price_bucket": 1,
+   "snap": 5,
+   "year": 2025,
+   "half_spread_bps": 7.7761,
+   "n": 370
+  },
+  {
+   "price_bucket": 1,
+   "snap": 5,
+   "year": 2026,
+   "half_spread_bps": 6.4475,
+   "n": 316
+  },
+  {
+   "price_bucket": 1,
+   "snap": 6,
+   "year": 2021,
+   "half_spread_bps": 8.5625,
+   "n": 227
+  },
+  {
+   "price_bucket": 1,
+   "snap": 6,
+   "year": 2022,
+   "half_spread_bps": 9.1158,
+   "n": 389
+  },
+  {
+   "price_bucket": 1,
+   "snap": 6,
+   "year": 2023,
+   "half_spread_bps": 7.2128,
+   "n": 212
+  },
+  {
+   "price_bucket": 1,
+   "snap": 6,
+   "year": 2024,
+   "half_spread_bps": 7.1974,
+   "n": 186
+  },
+  {
+   "price_bucket": 1,
+   "snap": 6,
+   "year": 2025,
+   "half_spread_bps": 7.6748,
+   "n": 368
+  },
+  {
+   "price_bucket": 1,
+   "snap": 6,
+   "year": 2026,
+   "half_spread_bps": 6.402,
+   "n": 320
+  },
+  {
+   "price_bucket": 1,
+   "snap": 7,
+   "year": 2021,
+   "half_spread_bps": 8.5985,
+   "n": 228
+  },
+  {
+   "price_bucket": 1,
+   "snap": 7,
+   "year": 2022,
+   "half_spread_bps": 9.0541,
+   "n": 375
+  },
+  {
+   "price_bucket": 1,
+   "snap": 7,
+   "year": 2023,
+   "half_spread_bps": 7.2572,
+   "n": 214
+  },
+  {
+   "price_bucket": 1,
+   "snap": 7,
+   "year": 2024,
+   "half_spread_bps": 7.1378,
+   "n": 185
+  },
+  {
+   "price_bucket": 1,
+   "snap": 7,
+   "year": 2025,
+   "half_spread_bps": 7.7001,
+   "n": 370
+  },
+  {
+   "price_bucket": 1,
+   "snap": 7,
+   "year": 2026,
+   "half_spread_bps": 6.398,
+   "n": 317
+  },
+  {
+   "price_bucket": 1,
+   "snap": 8,
+   "year": 2021,
+   "half_spread_bps": 8.658,
+   "n": 225
+  },
+  {
+   "price_bucket": 1,
+   "snap": 8,
+   "year": 2022,
+   "half_spread_bps": 9.1324,
+   "n": 384
+  },
+  {
+   "price_bucket": 1,
+   "snap": 8,
+   "year": 2023,
+   "half_spread_bps": 6.9891,
+   "n": 207
+  },
+  {
+   "price_bucket": 1,
+   "snap": 8,
+   "year": 2024,
+   "half_spread_bps": 7.1994,
+   "n": 185
+  },
+  {
+   "price_bucket": 1,
+   "snap": 8,
+   "year": 2025,
+   "half_spread_bps": 7.7101,
+   "n": 373
+  },
+  {
+   "price_bucket": 1,
+   "snap": 8,
+   "year": 2026,
+   "half_spread_bps": 6.4309,
+   "n": 315
+  },
+  {
+   "price_bucket": 1,
+   "snap": 9,
+   "year": 2021,
+   "half_spread_bps": 8.5422,
+   "n": 224
+  },
+  {
+   "price_bucket": 1,
+   "snap": 9,
+   "year": 2022,
+   "half_spread_bps": 9.0827,
+   "n": 385
+  },
+  {
+   "price_bucket": 1,
+   "snap": 9,
+   "year": 2023,
+   "half_spread_bps": 7.0525,
+   "n": 217
+  },
+  {
+   "price_bucket": 1,
+   "snap": 9,
+   "year": 2024,
+   "half_spread_bps": 7.0316,
+   "n": 186
+  },
+  {
+   "price_bucket": 1,
+   "snap": 9,
+   "year": 2025,
+   "half_spread_bps": 7.5701,
+   "n": 370
+  },
+  {
+   "price_bucket": 1,
+   "snap": 9,
+   "year": 2026,
+   "half_spread_bps": 6.3611,
+   "n": 318
+  },
+  {
+   "price_bucket": 1,
+   "snap": 10,
+   "year": 2021,
+   "half_spread_bps": 8.4674,
+   "n": 220
+  },
+  {
+   "price_bucket": 1,
+   "snap": 10,
+   "year": 2022,
+   "half_spread_bps": 8.9928,
+   "n": 386
+  },
+  {
+   "price_bucket": 1,
+   "snap": 10,
+   "year": 2023,
+   "half_spread_bps": 7.1472,
+   "n": 217
+  },
+  {
+   "price_bucket": 1,
+   "snap": 10,
+   "year": 2024,
+   "half_spread_bps": 7.158,
+   "n": 184
+  },
+  {
+   "price_bucket": 1,
+   "snap": 10,
+   "year": 2025,
+   "half_spread_bps": 7.6278,
+   "n": 371
+  },
+  {
+   "price_bucket": 1,
+   "snap": 10,
+   "year": 2026,
+   "half_spread_bps": 6.4144,
+   "n": 321
+  },
+  {
+   "price_bucket": 1,
+   "snap": 11,
+   "year": 2021,
+   "half_spread_bps": 8.4301,
+   "n": 224
+  },
+  {
+   "price_bucket": 1,
+   "snap": 11,
+   "year": 2022,
+   "half_spread_bps": 8.9526,
+   "n": 385
+  },
+  {
+   "price_bucket": 1,
+   "snap": 11,
+   "year": 2023,
+   "half_spread_bps": 7.1685,
+   "n": 216
+  },
+  {
+   "price_bucket": 1,
+   "snap": 11,
+   "year": 2024,
+   "half_spread_bps": 7.0972,
+   "n": 185
+  },
+  {
+   "price_bucket": 1,
+   "snap": 11,
+   "year": 2025,
+   "half_spread_bps": 7.5359,
+   "n": 368
+  },
+  {
+   "price_bucket": 1,
+   "snap": 11,
+   "year": 2026,
+   "half_spread_bps": 6.4641,
+   "n": 321
+  },
+  {
+   "price_bucket": 1,
+   "snap": 12,
+   "year": 2021,
+   "half_spread_bps": 7.9177,
+   "n": 222
+  },
+  {
+   "price_bucket": 1,
+   "snap": 12,
+   "year": 2022,
+   "half_spread_bps": 8.8106,
+   "n": 393
+  },
+  {
+   "price_bucket": 1,
+   "snap": 12,
+   "year": 2023,
+   "half_spread_bps": 6.9686,
+   "n": 217
+  },
+  {
+   "price_bucket": 1,
+   "snap": 12,
+   "year": 2024,
+   "half_spread_bps": 6.9881,
+   "n": 185
+  },
+  {
+   "price_bucket": 1,
+   "snap": 12,
+   "year": 2025,
+   "half_spread_bps": 7.4571,
+   "n": 366
+  },
+  {
+   "price_bucket": 1,
+   "snap": 12,
+   "year": 2026,
+   "half_spread_bps": 6.4092,
+   "n": 322
+  },
+  {
+   "price_bucket": 2,
+   "snap": 0,
+   "year": 2021,
+   "half_spread_bps": 7.0542,
+   "n": 267
+  },
+  {
+   "price_bucket": 2,
+   "snap": 0,
+   "year": 2022,
+   "half_spread_bps": 6.9735,
+   "n": 506
+  },
+  {
+   "price_bucket": 2,
+   "snap": 0,
+   "year": 2023,
+   "half_spread_bps": 3.9952,
+   "n": 467
+  },
+  {
+   "price_bucket": 2,
+   "snap": 0,
+   "year": 2024,
+   "half_spread_bps": 6.4977,
+   "n": 440
+  },
+  {
+   "price_bucket": 2,
+   "snap": 0,
+   "year": 2025,
+   "half_spread_bps": 9.0443,
+   "n": 532
+  },
+  {
+   "price_bucket": 2,
+   "snap": 0,
+   "year": 2026,
+   "half_spread_bps": 6.4863,
+   "n": 334
+  },
+  {
+   "price_bucket": 2,
+   "snap": 1,
+   "year": 2021,
+   "half_spread_bps": 5.2417,
+   "n": 269
+  },
+  {
+   "price_bucket": 2,
+   "snap": 1,
+   "year": 2022,
+   "half_spread_bps": 5.0381,
+   "n": 508
+  },
+  {
+   "price_bucket": 2,
+   "snap": 1,
+   "year": 2023,
+   "half_spread_bps": 3.6323,
+   "n": 464
+  },
+  {
+   "price_bucket": 2,
+   "snap": 1,
+   "year": 2024,
+   "half_spread_bps": 4.6019,
+   "n": 439
+  },
+  {
+   "price_bucket": 2,
+   "snap": 1,
+   "year": 2025,
+   "half_spread_bps": 4.8886,
+   "n": 529
+  },
+  {
+   "price_bucket": 2,
+   "snap": 1,
+   "year": 2026,
+   "half_spread_bps": 4.7005,
+   "n": 341
+  },
+  {
+   "price_bucket": 2,
+   "snap": 2,
+   "year": 2021,
+   "half_spread_bps": 4.9383,
+   "n": 273
+  },
+  {
+   "price_bucket": 2,
+   "snap": 2,
+   "year": 2022,
+   "half_spread_bps": 4.7015,
+   "n": 503
+  },
+  {
+   "price_bucket": 2,
+   "snap": 2,
+   "year": 2023,
+   "half_spread_bps": 3.6019,
+   "n": 466
+  },
+  {
+   "price_bucket": 2,
+   "snap": 2,
+   "year": 2024,
+   "half_spread_bps": 4.4571,
+   "n": 439
+  },
+  {
+   "price_bucket": 2,
+   "snap": 2,
+   "year": 2025,
+   "half_spread_bps": 4.7081,
+   "n": 528
+  },
+  {
+   "price_bucket": 2,
+   "snap": 2,
+   "year": 2026,
+   "half_spread_bps": 4.6279,
+   "n": 338
+  },
+  {
+   "price_bucket": 2,
+   "snap": 3,
+   "year": 2021,
+   "half_spread_bps": 4.817,
+   "n": 270
+  },
+  {
+   "price_bucket": 2,
+   "snap": 3,
+   "year": 2022,
+   "half_spread_bps": 4.4984,
+   "n": 507
+  },
+  {
+   "price_bucket": 2,
+   "snap": 3,
+   "year": 2023,
+   "half_spread_bps": 3.5323,
+   "n": 467
+  },
+  {
+   "price_bucket": 2,
+   "snap": 3,
+   "year": 2024,
+   "half_spread_bps": 4.4072,
+   "n": 441
+  },
+  {
+   "price_bucket": 2,
+   "snap": 3,
+   "year": 2025,
+   "half_spread_bps": 4.5168,
+   "n": 522
+  },
+  {
+   "price_bucket": 2,
+   "snap": 3,
+   "year": 2026,
+   "half_spread_bps": 4.567,
+   "n": 340
+  },
+  {
+   "price_bucket": 2,
+   "snap": 4,
+   "year": 2021,
+   "half_spread_bps": 4.7235,
+   "n": 271
+  },
+  {
+   "price_bucket": 2,
+   "snap": 4,
+   "year": 2022,
+   "half_spread_bps": 4.4917,
+   "n": 504
+  },
+  {
+   "price_bucket": 2,
+   "snap": 4,
+   "year": 2023,
+   "half_spread_bps": 3.4956,
+   "n": 465
+  },
+  {
+   "price_bucket": 2,
+   "snap": 4,
+   "year": 2024,
+   "half_spread_bps": 4.2709,
+   "n": 433
+  },
+  {
+   "price_bucket": 2,
+   "snap": 4,
+   "year": 2025,
+   "half_spread_bps": 4.4836,
+   "n": 523
+  },
+  {
+   "price_bucket": 2,
+   "snap": 4,
+   "year": 2026,
+   "half_spread_bps": 4.4703,
+   "n": 337
+  },
+  {
+   "price_bucket": 2,
+   "snap": 5,
+   "year": 2021,
+   "half_spread_bps": 4.661,
+   "n": 271
+  },
+  {
+   "price_bucket": 2,
+   "snap": 5,
+   "year": 2022,
+   "half_spread_bps": 4.4664,
+   "n": 506
+  },
+  {
+   "price_bucket": 2,
+   "snap": 5,
+   "year": 2023,
+   "half_spread_bps": 3.4696,
+   "n": 468
+  },
+  {
+   "price_bucket": 2,
+   "snap": 5,
+   "year": 2024,
+   "half_spread_bps": 4.2248,
+   "n": 434
+  },
+  {
+   "price_bucket": 2,
+   "snap": 5,
+   "year": 2025,
+   "half_spread_bps": 4.4175,
+   "n": 521
+  },
+  {
+   "price_bucket": 2,
+   "snap": 5,
+   "year": 2026,
+   "half_spread_bps": 4.4757,
+   "n": 336
+  },
+  {
+   "price_bucket": 2,
+   "snap": 6,
+   "year": 2021,
+   "half_spread_bps": 4.7192,
+   "n": 272
+  },
+  {
+   "price_bucket": 2,
+   "snap": 6,
+   "year": 2022,
+   "half_spread_bps": 4.3917,
+   "n": 505
+  },
+  {
+   "price_bucket": 2,
+   "snap": 6,
+   "year": 2023,
+   "half_spread_bps": 3.4674,
+   "n": 470
+  },
+  {
+   "price_bucket": 2,
+   "snap": 6,
+   "year": 2024,
+   "half_spread_bps": 4.2535,
+   "n": 437
+  },
+  {
+   "price_bucket": 2,
+   "snap": 6,
+   "year": 2025,
+   "half_spread_bps": 4.43,
+   "n": 525
+  },
+  {
+   "price_bucket": 2,
+   "snap": 6,
+   "year": 2026,
+   "half_spread_bps": 4.4385,
+   "n": 335
+  },
+  {
+   "price_bucket": 2,
+   "snap": 7,
+   "year": 2021,
+   "half_spread_bps": 4.5402,
+   "n": 271
+  },
+  {
+   "price_bucket": 2,
+   "snap": 7,
+   "year": 2022,
+   "half_spread_bps": 4.4683,
+   "n": 504
+  },
+  {
+   "price_bucket": 2,
+   "snap": 7,
+   "year": 2023,
+   "half_spread_bps": 3.4823,
+   "n": 469
+  },
+  {
+   "price_bucket": 2,
+   "snap": 7,
+   "year": 2024,
+   "half_spread_bps": 4.228,
+   "n": 435
+  },
+  {
+   "price_bucket": 2,
+   "snap": 7,
+   "year": 2025,
+   "half_spread_bps": 4.4743,
+   "n": 525
+  },
+  {
+   "price_bucket": 2,
+   "snap": 7,
+   "year": 2026,
+   "half_spread_bps": 4.4189,
+   "n": 337
+  },
+  {
+   "price_bucket": 2,
+   "snap": 8,
+   "year": 2021,
+   "half_spread_bps": 4.6496,
+   "n": 273
+  },
+  {
+   "price_bucket": 2,
+   "snap": 8,
+   "year": 2022,
+   "half_spread_bps": 4.4464,
+   "n": 496
+  },
+  {
+   "price_bucket": 2,
+   "snap": 8,
+   "year": 2023,
+   "half_spread_bps": 3.486,
+   "n": 467
+  },
+  {
+   "price_bucket": 2,
+   "snap": 8,
+   "year": 2024,
+   "half_spread_bps": 4.1615,
+   "n": 435
+  },
+  {
+   "price_bucket": 2,
+   "snap": 8,
+   "year": 2025,
+   "half_spread_bps": 4.3346,
+   "n": 523
+  },
+  {
+   "price_bucket": 2,
+   "snap": 8,
+   "year": 2026,
+   "half_spread_bps": 4.3764,
+   "n": 341
+  },
+  {
+   "price_bucket": 2,
+   "snap": 9,
+   "year": 2021,
+   "half_spread_bps": 4.5475,
+   "n": 272
+  },
+  {
+   "price_bucket": 2,
+   "snap": 9,
+   "year": 2022,
+   "half_spread_bps": 4.4129,
+   "n": 493
+  },
+  {
+   "price_bucket": 2,
+   "snap": 9,
+   "year": 2023,
+   "half_spread_bps": 3.4188,
+   "n": 465
+  },
+  {
+   "price_bucket": 2,
+   "snap": 9,
+   "year": 2024,
+   "half_spread_bps": 4.0923,
+   "n": 434
+  },
+  {
+   "price_bucket": 2,
+   "snap": 9,
+   "year": 2025,
+   "half_spread_bps": 4.3034,
+   "n": 527
+  },
+  {
+   "price_bucket": 2,
+   "snap": 9,
+   "year": 2026,
+   "half_spread_bps": 4.363,
+   "n": 338
+  },
+  {
+   "price_bucket": 2,
+   "snap": 10,
+   "year": 2021,
+   "half_spread_bps": 4.5123,
+   "n": 276
+  },
+  {
+   "price_bucket": 2,
+   "snap": 10,
+   "year": 2022,
+   "half_spread_bps": 4.268,
+   "n": 493
+  },
+  {
+   "price_bucket": 2,
+   "snap": 10,
+   "year": 2023,
+   "half_spread_bps": 3.4211,
+   "n": 465
+  },
+  {
+   "price_bucket": 2,
+   "snap": 10,
+   "year": 2024,
+   "half_spread_bps": 4.0933,
+   "n": 435
+  },
+  {
+   "price_bucket": 2,
+   "snap": 10,
+   "year": 2025,
+   "half_spread_bps": 4.3043,
+   "n": 528
+  },
+  {
+   "price_bucket": 2,
+   "snap": 10,
+   "year": 2026,
+   "half_spread_bps": 4.3011,
+   "n": 337
+  },
+  {
+   "price_bucket": 2,
+   "snap": 11,
+   "year": 2021,
+   "half_spread_bps": 4.4605,
+   "n": 278
+  },
+  {
+   "price_bucket": 2,
+   "snap": 11,
+   "year": 2022,
+   "half_spread_bps": 4.2267,
+   "n": 494
+  },
+  {
+   "price_bucket": 2,
+   "snap": 11,
+   "year": 2023,
+   "half_spread_bps": 3.4291,
+   "n": 471
+  },
+  {
+   "price_bucket": 2,
+   "snap": 11,
+   "year": 2024,
+   "half_spread_bps": 4.0306,
+   "n": 437
+  },
+  {
+   "price_bucket": 2,
+   "snap": 11,
+   "year": 2025,
+   "half_spread_bps": 4.1894,
+   "n": 527
+  },
+  {
+   "price_bucket": 2,
+   "snap": 11,
+   "year": 2026,
+   "half_spread_bps": 4.3234,
+   "n": 337
+  },
+  {
+   "price_bucket": 2,
+   "snap": 12,
+   "year": 2021,
+   "half_spread_bps": 4.2717,
+   "n": 275
+  },
+  {
+   "price_bucket": 2,
+   "snap": 12,
+   "year": 2022,
+   "half_spread_bps": 3.9173,
+   "n": 492
+  },
+  {
+   "price_bucket": 2,
+   "snap": 12,
+   "year": 2023,
+   "half_spread_bps": 3.3535,
+   "n": 470
+  },
+  {
+   "price_bucket": 2,
+   "snap": 12,
+   "year": 2024,
+   "half_spread_bps": 3.882,
+   "n": 436
+  },
+  {
+   "price_bucket": 2,
+   "snap": 12,
+   "year": 2025,
+   "half_spread_bps": 4.0075,
+   "n": 532
+  },
+  {
+   "price_bucket": 2,
+   "snap": 12,
+   "year": 2026,
+   "half_spread_bps": 4.1338,
+   "n": 336
+  },
+  {
+   "price_bucket": 3,
+   "snap": 0,
+   "year": 2021,
+   "half_spread_bps": 7.9857,
+   "n": 765
+  },
+  {
+   "price_bucket": 3,
+   "snap": 0,
+   "year": 2022,
+   "half_spread_bps": 5.4924,
+   "n": 962
+  },
+  {
+   "price_bucket": 3,
+   "snap": 0,
+   "year": 2023,
+   "half_spread_bps": 4.2583,
+   "n": 1127
+  },
+  {
+   "price_bucket": 3,
+   "snap": 0,
+   "year": 2024,
+   "half_spread_bps": 5.425,
+   "n": 922
+  },
+  {
+   "price_bucket": 3,
+   "snap": 0,
+   "year": 2025,
+   "half_spread_bps": 6.5574,
+   "n": 911
+  },
+  {
+   "price_bucket": 3,
+   "snap": 0,
+   "year": 2026,
+   "half_spread_bps": 5.9308,
+   "n": 672
+  },
+  {
+   "price_bucket": 3,
+   "snap": 1,
+   "year": 2021,
+   "half_spread_bps": 6.0654,
+   "n": 764
+  },
+  {
+   "price_bucket": 3,
+   "snap": 1,
+   "year": 2022,
+   "half_spread_bps": 3.5269,
+   "n": 967
+  },
+  {
+   "price_bucket": 3,
+   "snap": 1,
+   "year": 2023,
+   "half_spread_bps": 2.7345,
+   "n": 1128
+  },
+  {
+   "price_bucket": 3,
+   "snap": 1,
+   "year": 2024,
+   "half_spread_bps": 3.2572,
+   "n": 924
+  },
+  {
+   "price_bucket": 3,
+   "snap": 1,
+   "year": 2025,
+   "half_spread_bps": 4.4145,
+   "n": 914
+  },
+  {
+   "price_bucket": 3,
+   "snap": 1,
+   "year": 2026,
+   "half_spread_bps": 3.7234,
+   "n": 668
+  },
+  {
+   "price_bucket": 3,
+   "snap": 2,
+   "year": 2021,
+   "half_spread_bps": 4.6071,
+   "n": 760
+  },
+  {
+   "price_bucket": 3,
+   "snap": 2,
+   "year": 2022,
+   "half_spread_bps": 2.9518,
+   "n": 970
+  },
+  {
+   "price_bucket": 3,
+   "snap": 2,
+   "year": 2023,
+   "half_spread_bps": 2.368,
+   "n": 1123
+  },
+  {
+   "price_bucket": 3,
+   "snap": 2,
+   "year": 2024,
+   "half_spread_bps": 2.9437,
+   "n": 922
+  },
+  {
+   "price_bucket": 3,
+   "snap": 2,
+   "year": 2025,
+   "half_spread_bps": 3.8113,
+   "n": 915
+  },
+  {
+   "price_bucket": 3,
+   "snap": 2,
+   "year": 2026,
+   "half_spread_bps": 3.1711,
+   "n": 671
+  },
+  {
+   "price_bucket": 3,
+   "snap": 3,
+   "year": 2021,
+   "half_spread_bps": 3.9725,
+   "n": 758
+  },
+  {
+   "price_bucket": 3,
+   "snap": 3,
+   "year": 2022,
+   "half_spread_bps": 2.6536,
+   "n": 964
+  },
+  {
+   "price_bucket": 3,
+   "snap": 3,
+   "year": 2023,
+   "half_spread_bps": 2.3191,
+   "n": 1124
+  },
+  {
+   "price_bucket": 3,
+   "snap": 3,
+   "year": 2024,
+   "half_spread_bps": 2.6261,
+   "n": 921
+  },
+  {
+   "price_bucket": 3,
+   "snap": 3,
+   "year": 2025,
+   "half_spread_bps": 3.3675,
+   "n": 923
+  },
+  {
+   "price_bucket": 3,
+   "snap": 3,
+   "year": 2026,
+   "half_spread_bps": 2.9179,
+   "n": 668
+  },
+  {
+   "price_bucket": 3,
+   "snap": 4,
+   "year": 2021,
+   "half_spread_bps": 3.8683,
+   "n": 761
+  },
+  {
+   "price_bucket": 3,
+   "snap": 4,
+   "year": 2022,
+   "half_spread_bps": 2.4576,
+   "n": 963
+  },
+  {
+   "price_bucket": 3,
+   "snap": 4,
+   "year": 2023,
+   "half_spread_bps": 2.2904,
+   "n": 1121
+  },
+  {
+   "price_bucket": 3,
+   "snap": 4,
+   "year": 2024,
+   "half_spread_bps": 2.5044,
+   "n": 928
+  },
+  {
+   "price_bucket": 3,
+   "snap": 4,
+   "year": 2025,
+   "half_spread_bps": 3.2062,
+   "n": 925
+  },
+  {
+   "price_bucket": 3,
+   "snap": 4,
+   "year": 2026,
+   "half_spread_bps": 2.7563,
+   "n": 671
+  },
+  {
+   "price_bucket": 3,
+   "snap": 5,
+   "year": 2021,
+   "half_spread_bps": 3.4486,
+   "n": 761
+  },
+  {
+   "price_bucket": 3,
+   "snap": 5,
+   "year": 2022,
+   "half_spread_bps": 2.3979,
+   "n": 965
+  },
+  {
+   "price_bucket": 3,
+   "snap": 5,
+   "year": 2023,
+   "half_spread_bps": 2.279,
+   "n": 1119
+  },
+  {
+   "price_bucket": 3,
+   "snap": 5,
+   "year": 2024,
+   "half_spread_bps": 2.4588,
+   "n": 927
+  },
+  {
+   "price_bucket": 3,
+   "snap": 5,
+   "year": 2025,
+   "half_spread_bps": 3.161,
+   "n": 922
+  },
+  {
+   "price_bucket": 3,
+   "snap": 5,
+   "year": 2026,
+   "half_spread_bps": 2.4788,
+   "n": 670
+  },
+  {
+   "price_bucket": 3,
+   "snap": 6,
+   "year": 2021,
+   "half_spread_bps": 3.2795,
+   "n": 758
+  },
+  {
+   "price_bucket": 3,
+   "snap": 6,
+   "year": 2022,
+   "half_spread_bps": 2.315,
+   "n": 963
+  },
+  {
+   "price_bucket": 3,
+   "snap": 6,
+   "year": 2023,
+   "half_spread_bps": 2.2921,
+   "n": 1117
+  },
+  {
+   "price_bucket": 3,
+   "snap": 6,
+   "year": 2024,
+   "half_spread_bps": 2.4114,
+   "n": 927
+  },
+  {
+   "price_bucket": 3,
+   "snap": 6,
+   "year": 2025,
+   "half_spread_bps": 3.0294,
+   "n": 919
+  },
+  {
+   "price_bucket": 3,
+   "snap": 6,
+   "year": 2026,
+   "half_spread_bps": 2.4659,
+   "n": 668
+  },
+  {
+   "price_bucket": 3,
+   "snap": 7,
+   "year": 2021,
+   "half_spread_bps": 2.9112,
+   "n": 758
+  },
+  {
+   "price_bucket": 3,
+   "snap": 7,
+   "year": 2022,
+   "half_spread_bps": 2.3537,
+   "n": 954
+  },
+  {
+   "price_bucket": 3,
+   "snap": 7,
+   "year": 2023,
+   "half_spread_bps": 2.2201,
+   "n": 1118
+  },
+  {
+   "price_bucket": 3,
+   "snap": 7,
+   "year": 2024,
+   "half_spread_bps": 2.3831,
+   "n": 927
+  },
+  {
+   "price_bucket": 3,
+   "snap": 7,
+   "year": 2025,
+   "half_spread_bps": 2.9876,
+   "n": 920
+  },
+  {
+   "price_bucket": 3,
+   "snap": 7,
+   "year": 2026,
+   "half_spread_bps": 2.471,
+   "n": 667
+  },
+  {
+   "price_bucket": 3,
+   "snap": 8,
+   "year": 2021,
+   "half_spread_bps": 3.1021,
+   "n": 758
+  },
+  {
+   "price_bucket": 3,
+   "snap": 8,
+   "year": 2022,
+   "half_spread_bps": 2.3481,
+   "n": 946
+  },
+  {
+   "price_bucket": 3,
+   "snap": 8,
+   "year": 2023,
+   "half_spread_bps": 2.1882,
+   "n": 1119
+  },
+  {
+   "price_bucket": 3,
+   "snap": 8,
+   "year": 2024,
+   "half_spread_bps": 2.2962,
+   "n": 927
+  },
+  {
+   "price_bucket": 3,
+   "snap": 8,
+   "year": 2025,
+   "half_spread_bps": 2.9507,
+   "n": 922
+  },
+  {
+   "price_bucket": 3,
+   "snap": 8,
+   "year": 2026,
+   "half_spread_bps": 2.3923,
+   "n": 665
+  },
+  {
+   "price_bucket": 3,
+   "snap": 9,
+   "year": 2021,
+   "half_spread_bps": 2.9943,
+   "n": 755
+  },
+  {
+   "price_bucket": 3,
+   "snap": 9,
+   "year": 2022,
+   "half_spread_bps": 2.3669,
+   "n": 941
+  },
+  {
+   "price_bucket": 3,
+   "snap": 9,
+   "year": 2023,
+   "half_spread_bps": 2.1612,
+   "n": 1122
+  },
+  {
+   "price_bucket": 3,
+   "snap": 9,
+   "year": 2024,
+   "half_spread_bps": 2.3661,
+   "n": 930
+  },
+  {
+   "price_bucket": 3,
+   "snap": 9,
+   "year": 2025,
+   "half_spread_bps": 2.7801,
+   "n": 918
+  },
+  {
+   "price_bucket": 3,
+   "snap": 9,
+   "year": 2026,
+   "half_spread_bps": 2.2878,
+   "n": 664
+  },
+  {
+   "price_bucket": 3,
+   "snap": 10,
+   "year": 2021,
+   "half_spread_bps": 2.767,
+   "n": 755
+  },
+  {
+   "price_bucket": 3,
+   "snap": 10,
+   "year": 2022,
+   "half_spread_bps": 2.3496,
+   "n": 941
+  },
+  {
+   "price_bucket": 3,
+   "snap": 10,
+   "year": 2023,
+   "half_spread_bps": 2.1362,
+   "n": 1118
+  },
+  {
+   "price_bucket": 3,
+   "snap": 10,
+   "year": 2024,
+   "half_spread_bps": 2.2945,
+   "n": 930
+  },
+  {
+   "price_bucket": 3,
+   "snap": 10,
+   "year": 2025,
+   "half_spread_bps": 2.5815,
+   "n": 919
+  },
+  {
+   "price_bucket": 3,
+   "snap": 10,
+   "year": 2026,
+   "half_spread_bps": 2.3431,
+   "n": 666
+  },
+  {
+   "price_bucket": 3,
+   "snap": 11,
+   "year": 2021,
+   "half_spread_bps": 2.4717,
+   "n": 753
+  },
+  {
+   "price_bucket": 3,
+   "snap": 11,
+   "year": 2022,
+   "half_spread_bps": 2.2019,
+   "n": 939
+  },
+  {
+   "price_bucket": 3,
+   "snap": 11,
+   "year": 2023,
+   "half_spread_bps": 2.0379,
+   "n": 1119
+  },
+  {
+   "price_bucket": 3,
+   "snap": 11,
+   "year": 2024,
+   "half_spread_bps": 2.2164,
+   "n": 927
+  },
+  {
+   "price_bucket": 3,
+   "snap": 11,
+   "year": 2025,
+   "half_spread_bps": 2.4408,
+   "n": 921
+  },
+  {
+   "price_bucket": 3,
+   "snap": 11,
+   "year": 2026,
+   "half_spread_bps": 2.2599,
+   "n": 666
+  },
+  {
+   "price_bucket": 3,
+   "snap": 12,
+   "year": 2021,
+   "half_spread_bps": 2.1896,
+   "n": 757
+  },
+  {
+   "price_bucket": 3,
+   "snap": 12,
+   "year": 2022,
+   "half_spread_bps": 1.9902,
+   "n": 938
+  },
+  {
+   "price_bucket": 3,
+   "snap": 12,
+   "year": 2023,
+   "half_spread_bps": 1.8936,
+   "n": 1117
+  },
+  {
+   "price_bucket": 3,
+   "snap": 12,
+   "year": 2024,
+   "half_spread_bps": 2.0732,
+   "n": 925
+  },
+  {
+   "price_bucket": 3,
+   "snap": 12,
+   "year": 2025,
+   "half_spread_bps": 2.2443,
+   "n": 920
+  },
+  {
+   "price_bucket": 3,
+   "snap": 12,
+   "year": 2026,
+   "half_spread_bps": 2.101,
+   "n": 666
+  },
+  {
+   "price_bucket": 4,
+   "snap": 0,
+   "year": 2021,
+   "half_spread_bps": 4.5524,
+   "n": 1133
+  },
+  {
+   "price_bucket": 4,
+   "snap": 0,
+   "year": 2022,
+   "half_spread_bps": 4.9737,
+   "n": 1286
+  },
+  {
+   "price_bucket": 4,
+   "snap": 0,
+   "year": 2023,
+   "half_spread_bps": 2.9566,
+   "n": 1171
+  },
+  {
+   "price_bucket": 4,
+   "snap": 0,
+   "year": 2024,
+   "half_spread_bps": 4.2692,
+   "n": 1159
+  },
+  {
+   "price_bucket": 4,
+   "snap": 0,
+   "year": 2025,
+   "half_spread_bps": 5.3035,
+   "n": 1090
+  },
+  {
+   "price_bucket": 4,
+   "snap": 0,
+   "year": 2026,
+   "half_spread_bps": 4.8083,
+   "n": 641
+  },
+  {
+   "price_bucket": 4,
+   "snap": 1,
+   "year": 2021,
+   "half_spread_bps": 2.7216,
+   "n": 1131
+  },
+  {
+   "price_bucket": 4,
+   "snap": 1,
+   "year": 2022,
+   "half_spread_bps": 3.3485,
+   "n": 1279
+  },
+  {
+   "price_bucket": 4,
+   "snap": 1,
+   "year": 2023,
+   "half_spread_bps": 1.9273,
+   "n": 1172
+  },
+  {
+   "price_bucket": 4,
+   "snap": 1,
+   "year": 2024,
+   "half_spread_bps": 2.8949,
+   "n": 1160
+  },
+  {
+   "price_bucket": 4,
+   "snap": 1,
+   "year": 2025,
+   "half_spread_bps": 3.4754,
+   "n": 1087
+  },
+  {
+   "price_bucket": 4,
+   "snap": 1,
+   "year": 2026,
+   "half_spread_bps": 3.5795,
+   "n": 640
+  },
+  {
+   "price_bucket": 4,
+   "snap": 2,
+   "year": 2021,
+   "half_spread_bps": 2.5372,
+   "n": 1131
+  },
+  {
+   "price_bucket": 4,
+   "snap": 2,
+   "year": 2022,
+   "half_spread_bps": 2.575,
+   "n": 1279
+  },
+  {
+   "price_bucket": 4,
+   "snap": 2,
+   "year": 2023,
+   "half_spread_bps": 1.6224,
+   "n": 1174
+  },
+  {
+   "price_bucket": 4,
+   "snap": 2,
+   "year": 2024,
+   "half_spread_bps": 2.4514,
+   "n": 1169
+  },
+  {
+   "price_bucket": 4,
+   "snap": 2,
+   "year": 2025,
+   "half_spread_bps": 2.9068,
+   "n": 1089
+  },
+  {
+   "price_bucket": 4,
+   "snap": 2,
+   "year": 2026,
+   "half_spread_bps": 2.7901,
+   "n": 637
+  },
+  {
+   "price_bucket": 4,
+   "snap": 3,
+   "year": 2021,
+   "half_spread_bps": 2.2474,
+   "n": 1133
+  },
+  {
+   "price_bucket": 4,
+   "snap": 3,
+   "year": 2022,
+   "half_spread_bps": 2.4327,
+   "n": 1283
+  },
+  {
+   "price_bucket": 4,
+   "snap": 3,
+   "year": 2023,
+   "half_spread_bps": 1.5043,
+   "n": 1173
+  },
+  {
+   "price_bucket": 4,
+   "snap": 3,
+   "year": 2024,
+   "half_spread_bps": 2.172,
+   "n": 1163
+  },
+  {
+   "price_bucket": 4,
+   "snap": 3,
+   "year": 2025,
+   "half_spread_bps": 2.6004,
+   "n": 1088
+  },
+  {
+   "price_bucket": 4,
+   "snap": 3,
+   "year": 2026,
+   "half_spread_bps": 2.4406,
+   "n": 637
+  },
+  {
+   "price_bucket": 4,
+   "snap": 4,
+   "year": 2021,
+   "half_spread_bps": 2.0846,
+   "n": 1136
+  },
+  {
+   "price_bucket": 4,
+   "snap": 4,
+   "year": 2022,
+   "half_spread_bps": 2.2714,
+   "n": 1286
+  },
+  {
+   "price_bucket": 4,
+   "snap": 4,
+   "year": 2023,
+   "half_spread_bps": 1.4411,
+   "n": 1173
+  },
+  {
+   "price_bucket": 4,
+   "snap": 4,
+   "year": 2024,
+   "half_spread_bps": 2.0411,
+   "n": 1160
+  },
+  {
+   "price_bucket": 4,
+   "snap": 4,
+   "year": 2025,
+   "half_spread_bps": 2.5856,
+   "n": 1086
+  },
+  {
+   "price_bucket": 4,
+   "snap": 4,
+   "year": 2026,
+   "half_spread_bps": 2.3982,
+   "n": 638
+  },
+  {
+   "price_bucket": 4,
+   "snap": 5,
+   "year": 2021,
+   "half_spread_bps": 1.9686,
+   "n": 1131
+  },
+  {
+   "price_bucket": 4,
+   "snap": 5,
+   "year": 2022,
+   "half_spread_bps": 2.1089,
+   "n": 1278
+  },
+  {
+   "price_bucket": 4,
+   "snap": 5,
+   "year": 2023,
+   "half_spread_bps": 1.3301,
+   "n": 1178
+  },
+  {
+   "price_bucket": 4,
+   "snap": 5,
+   "year": 2024,
+   "half_spread_bps": 1.8936,
+   "n": 1159
+  },
+  {
+   "price_bucket": 4,
+   "snap": 5,
+   "year": 2025,
+   "half_spread_bps": 2.3319,
+   "n": 1083
+  },
+  {
+   "price_bucket": 4,
+   "snap": 5,
+   "year": 2026,
+   "half_spread_bps": 2.2155,
+   "n": 640
+  },
+  {
+   "price_bucket": 4,
+   "snap": 6,
+   "year": 2021,
+   "half_spread_bps": 1.8564,
+   "n": 1131
+  },
+  {
+   "price_bucket": 4,
+   "snap": 6,
+   "year": 2022,
+   "half_spread_bps": 2.0215,
+   "n": 1289
+  },
+  {
+   "price_bucket": 4,
+   "snap": 6,
+   "year": 2023,
+   "half_spread_bps": 1.2587,
+   "n": 1178
+  },
+  {
+   "price_bucket": 4,
+   "snap": 6,
+   "year": 2024,
+   "half_spread_bps": 1.8111,
+   "n": 1161
+  },
+  {
+   "price_bucket": 4,
+   "snap": 6,
+   "year": 2025,
+   "half_spread_bps": 2.3011,
+   "n": 1084
+  },
+  {
+   "price_bucket": 4,
+   "snap": 6,
+   "year": 2026,
+   "half_spread_bps": 2.0832,
+   "n": 638
+  },
+  {
+   "price_bucket": 4,
+   "snap": 7,
+   "year": 2021,
+   "half_spread_bps": 1.7615,
+   "n": 1131
+  },
+  {
+   "price_bucket": 4,
+   "snap": 7,
+   "year": 2022,
+   "half_spread_bps": 2.0782,
+   "n": 1276
+  },
+  {
+   "price_bucket": 4,
+   "snap": 7,
+   "year": 2023,
+   "half_spread_bps": 1.3066,
+   "n": 1182
+  },
+  {
+   "price_bucket": 4,
+   "snap": 7,
+   "year": 2024,
+   "half_spread_bps": 1.7331,
+   "n": 1163
+  },
+  {
+   "price_bucket": 4,
+   "snap": 7,
+   "year": 2025,
+   "half_spread_bps": 2.3638,
+   "n": 1085
+  },
+  {
+   "price_bucket": 4,
+   "snap": 7,
+   "year": 2026,
+   "half_spread_bps": 2.0025,
+   "n": 640
+  },
+  {
+   "price_bucket": 4,
+   "snap": 8,
+   "year": 2021,
+   "half_spread_bps": 1.7559,
+   "n": 1131
+  },
+  {
+   "price_bucket": 4,
+   "snap": 8,
+   "year": 2022,
+   "half_spread_bps": 1.8893,
+   "n": 1275
+  },
+  {
+   "price_bucket": 4,
+   "snap": 8,
+   "year": 2023,
+   "half_spread_bps": 1.3034,
+   "n": 1180
+  },
+  {
+   "price_bucket": 4,
+   "snap": 8,
+   "year": 2024,
+   "half_spread_bps": 1.6288,
+   "n": 1164
+  },
+  {
+   "price_bucket": 4,
+   "snap": 8,
+   "year": 2025,
+   "half_spread_bps": 2.2235,
+   "n": 1086
+  },
+  {
+   "price_bucket": 4,
+   "snap": 8,
+   "year": 2026,
+   "half_spread_bps": 2.0202,
+   "n": 643
+  },
+  {
+   "price_bucket": 4,
+   "snap": 9,
+   "year": 2021,
+   "half_spread_bps": 1.6028,
+   "n": 1133
+  },
+  {
+   "price_bucket": 4,
+   "snap": 9,
+   "year": 2022,
+   "half_spread_bps": 1.9774,
+   "n": 1269
+  },
+  {
+   "price_bucket": 4,
+   "snap": 9,
+   "year": 2023,
+   "half_spread_bps": 1.258,
+   "n": 1176
+  },
+  {
+   "price_bucket": 4,
+   "snap": 9,
+   "year": 2024,
+   "half_spread_bps": 1.6376,
+   "n": 1162
+  },
+  {
+   "price_bucket": 4,
+   "snap": 9,
+   "year": 2025,
+   "half_spread_bps": 2.0971,
+   "n": 1088
+  },
+  {
+   "price_bucket": 4,
+   "snap": 9,
+   "year": 2026,
+   "half_spread_bps": 1.7864,
+   "n": 643
+  },
+  {
+   "price_bucket": 4,
+   "snap": 10,
+   "year": 2021,
+   "half_spread_bps": 1.611,
+   "n": 1134
+  },
+  {
+   "price_bucket": 4,
+   "snap": 10,
+   "year": 2022,
+   "half_spread_bps": 1.8588,
+   "n": 1265
+  },
+  {
+   "price_bucket": 4,
+   "snap": 10,
+   "year": 2023,
+   "half_spread_bps": 1.1934,
+   "n": 1178
+  },
+  {
+   "price_bucket": 4,
+   "snap": 10,
+   "year": 2024,
+   "half_spread_bps": 1.6294,
+   "n": 1163
+  },
+  {
+   "price_bucket": 4,
+   "snap": 10,
+   "year": 2025,
+   "half_spread_bps": 1.9517,
+   "n": 1084
+  },
+  {
+   "price_bucket": 4,
+   "snap": 10,
+   "year": 2026,
+   "half_spread_bps": 1.8132,
+   "n": 639
+  },
+  {
+   "price_bucket": 4,
+   "snap": 11,
+   "year": 2021,
+   "half_spread_bps": 1.4158,
+   "n": 1137
+  },
+  {
+   "price_bucket": 4,
+   "snap": 11,
+   "year": 2022,
+   "half_spread_bps": 1.6376,
+   "n": 1264
+  },
+  {
+   "price_bucket": 4,
+   "snap": 11,
+   "year": 2023,
+   "half_spread_bps": 1.0841,
+   "n": 1176
+  },
+  {
+   "price_bucket": 4,
+   "snap": 11,
+   "year": 2024,
+   "half_spread_bps": 1.4605,
+   "n": 1162
+  },
+  {
+   "price_bucket": 4,
+   "snap": 11,
+   "year": 2025,
+   "half_spread_bps": 1.6571,
+   "n": 1085
+  },
+  {
+   "price_bucket": 4,
+   "snap": 11,
+   "year": 2026,
+   "half_spread_bps": 1.655,
+   "n": 643
+  },
+  {
+   "price_bucket": 4,
+   "snap": 12,
+   "year": 2021,
+   "half_spread_bps": 1.0492,
+   "n": 1133
+  },
+  {
+   "price_bucket": 4,
+   "snap": 12,
+   "year": 2022,
+   "half_spread_bps": 1.2756,
+   "n": 1263
+  },
+  {
+   "price_bucket": 4,
+   "snap": 12,
+   "year": 2023,
+   "half_spread_bps": 0.9512,
+   "n": 1176
+  },
+  {
+   "price_bucket": 4,
+   "snap": 12,
+   "year": 2024,
+   "half_spread_bps": 1.1555,
+   "n": 1163
+  },
+  {
+   "price_bucket": 4,
+   "snap": 12,
+   "year": 2025,
+   "half_spread_bps": 1.4474,
+   "n": 1087
+  },
+  {
+   "price_bucket": 4,
+   "snap": 12,
+   "year": 2026,
+   "half_spread_bps": 1.3731,
+   "n": 645
+  },
+  {
+   "price_bucket": 5,
+   "snap": 0,
+   "year": 2021,
+   "half_spread_bps": 6.5006,
+   "n": 2884
+  },
+  {
+   "price_bucket": 5,
+   "snap": 0,
+   "year": 2022,
+   "half_spread_bps": 7.2639,
+   "n": 2236
+  },
+  {
+   "price_bucket": 5,
+   "snap": 0,
+   "year": 2023,
+   "half_spread_bps": 5.1658,
+   "n": 2106
+  },
+  {
+   "price_bucket": 5,
+   "snap": 0,
+   "year": 2024,
+   "half_spread_bps": 5.931,
+   "n": 2342
+  },
+  {
+   "price_bucket": 5,
+   "snap": 0,
+   "year": 2025,
+   "half_spread_bps": 6.2218,
+   "n": 2640
+  },
+  {
+   "price_bucket": 5,
+   "snap": 0,
+   "year": 2026,
+   "half_spread_bps": 7.0685,
+   "n": 2320
+  },
+  {
+   "price_bucket": 5,
+   "snap": 1,
+   "year": 2021,
+   "half_spread_bps": 4.4334,
+   "n": 2887
+  },
+  {
+   "price_bucket": 5,
+   "snap": 1,
+   "year": 2022,
+   "half_spread_bps": 5.167,
+   "n": 2238
+  },
+  {
+   "price_bucket": 5,
+   "snap": 1,
+   "year": 2023,
+   "half_spread_bps": 3.5602,
+   "n": 2106
+  },
+  {
+   "price_bucket": 5,
+   "snap": 1,
+   "year": 2024,
+   "half_spread_bps": 4.0513,
+   "n": 2340
+  },
+  {
+   "price_bucket": 5,
+   "snap": 1,
+   "year": 2025,
+   "half_spread_bps": 4.6958,
+   "n": 2642
+  },
+  {
+   "price_bucket": 5,
+   "snap": 1,
+   "year": 2026,
+   "half_spread_bps": 5.5471,
+   "n": 2321
+  },
+  {
+   "price_bucket": 5,
+   "snap": 2,
+   "year": 2021,
+   "half_spread_bps": 3.8324,
+   "n": 2887
+  },
+  {
+   "price_bucket": 5,
+   "snap": 2,
+   "year": 2022,
+   "half_spread_bps": 4.1643,
+   "n": 2240
+  },
+  {
+   "price_bucket": 5,
+   "snap": 2,
+   "year": 2023,
+   "half_spread_bps": 3.0164,
+   "n": 2108
+  },
+  {
+   "price_bucket": 5,
+   "snap": 2,
+   "year": 2024,
+   "half_spread_bps": 3.6425,
+   "n": 2333
+  },
+  {
+   "price_bucket": 5,
+   "snap": 2,
+   "year": 2025,
+   "half_spread_bps": 4.2534,
+   "n": 2639
+  },
+  {
+   "price_bucket": 5,
+   "snap": 2,
+   "year": 2026,
+   "half_spread_bps": 4.8223,
+   "n": 2324
+  },
+  {
+   "price_bucket": 5,
+   "snap": 3,
+   "year": 2021,
+   "half_spread_bps": 3.3721,
+   "n": 2888
+  },
+  {
+   "price_bucket": 5,
+   "snap": 3,
+   "year": 2022,
+   "half_spread_bps": 3.9788,
+   "n": 2238
+  },
+  {
+   "price_bucket": 5,
+   "snap": 3,
+   "year": 2023,
+   "half_spread_bps": 2.8436,
+   "n": 2110
+  },
+  {
+   "price_bucket": 5,
+   "snap": 3,
+   "year": 2024,
+   "half_spread_bps": 3.2437,
+   "n": 2338
+  },
+  {
+   "price_bucket": 5,
+   "snap": 3,
+   "year": 2025,
+   "half_spread_bps": 3.7887,
+   "n": 2638
+  },
+  {
+   "price_bucket": 5,
+   "snap": 3,
+   "year": 2026,
+   "half_spread_bps": 4.3291,
+   "n": 2324
+  },
+  {
+   "price_bucket": 5,
+   "snap": 4,
+   "year": 2021,
+   "half_spread_bps": 3.3352,
+   "n": 2882
+  },
+  {
+   "price_bucket": 5,
+   "snap": 4,
+   "year": 2022,
+   "half_spread_bps": 3.4826,
+   "n": 2236
+  },
+  {
+   "price_bucket": 5,
+   "snap": 4,
+   "year": 2023,
+   "half_spread_bps": 2.6344,
+   "n": 2112
+  },
+  {
+   "price_bucket": 5,
+   "snap": 4,
+   "year": 2024,
+   "half_spread_bps": 2.9847,
+   "n": 2340
+  },
+  {
+   "price_bucket": 5,
+   "snap": 4,
+   "year": 2025,
+   "half_spread_bps": 3.6296,
+   "n": 2637
+  },
+  {
+   "price_bucket": 5,
+   "snap": 4,
+   "year": 2026,
+   "half_spread_bps": 4.0882,
+   "n": 2323
+  },
+  {
+   "price_bucket": 5,
+   "snap": 5,
+   "year": 2021,
+   "half_spread_bps": 3.0046,
+   "n": 2887
+  },
+  {
+   "price_bucket": 5,
+   "snap": 5,
+   "year": 2022,
+   "half_spread_bps": 3.3352,
+   "n": 2243
+  },
+  {
+   "price_bucket": 5,
+   "snap": 5,
+   "year": 2023,
+   "half_spread_bps": 2.5574,
+   "n": 2108
+  },
+  {
+   "price_bucket": 5,
+   "snap": 5,
+   "year": 2024,
+   "half_spread_bps": 2.9402,
+   "n": 2340
+  },
+  {
+   "price_bucket": 5,
+   "snap": 5,
+   "year": 2025,
+   "half_spread_bps": 3.3811,
+   "n": 2643
+  },
+  {
+   "price_bucket": 5,
+   "snap": 5,
+   "year": 2026,
+   "half_spread_bps": 3.8711,
+   "n": 2323
+  },
+  {
+   "price_bucket": 5,
+   "snap": 6,
+   "year": 2021,
+   "half_spread_bps": 2.8529,
+   "n": 2889
+  },
+  {
+   "price_bucket": 5,
+   "snap": 6,
+   "year": 2022,
+   "half_spread_bps": 3.136,
+   "n": 2235
+  },
+  {
+   "price_bucket": 5,
+   "snap": 6,
+   "year": 2023,
+   "half_spread_bps": 2.4509,
+   "n": 2109
+  },
+  {
+   "price_bucket": 5,
+   "snap": 6,
+   "year": 2024,
+   "half_spread_bps": 2.6967,
+   "n": 2338
+  },
+  {
+   "price_bucket": 5,
+   "snap": 6,
+   "year": 2025,
+   "half_spread_bps": 3.4079,
+   "n": 2638
+  },
+  {
+   "price_bucket": 5,
+   "snap": 6,
+   "year": 2026,
+   "half_spread_bps": 3.6544,
+   "n": 2325
+  },
+  {
+   "price_bucket": 5,
+   "snap": 7,
+   "year": 2021,
+   "half_spread_bps": 2.7569,
+   "n": 2889
+  },
+  {
+   "price_bucket": 5,
+   "snap": 7,
+   "year": 2022,
+   "half_spread_bps": 3.2539,
+   "n": 2229
+  },
+  {
+   "price_bucket": 5,
+   "snap": 7,
+   "year": 2023,
+   "half_spread_bps": 2.4265,
+   "n": 2105
+  },
+  {
+   "price_bucket": 5,
+   "snap": 7,
+   "year": 2024,
+   "half_spread_bps": 2.6149,
+   "n": 2337
+  },
+  {
+   "price_bucket": 5,
+   "snap": 7,
+   "year": 2025,
+   "half_spread_bps": 3.3571,
+   "n": 2638
+  },
+  {
+   "price_bucket": 5,
+   "snap": 7,
+   "year": 2026,
+   "half_spread_bps": 3.5525,
+   "n": 2323
+  },
+  {
+   "price_bucket": 5,
+   "snap": 8,
+   "year": 2021,
+   "half_spread_bps": 2.7056,
+   "n": 2891
+  },
+  {
+   "price_bucket": 5,
+   "snap": 8,
+   "year": 2022,
+   "half_spread_bps": 3.1398,
+   "n": 2208
+  },
+  {
+   "price_bucket": 5,
+   "snap": 8,
+   "year": 2023,
+   "half_spread_bps": 2.3342,
+   "n": 2105
+  },
+  {
+   "price_bucket": 5,
+   "snap": 8,
+   "year": 2024,
+   "half_spread_bps": 2.4509,
+   "n": 2337
+  },
+  {
+   "price_bucket": 5,
+   "snap": 8,
+   "year": 2025,
+   "half_spread_bps": 3.1213,
+   "n": 2636
+  },
+  {
+   "price_bucket": 5,
+   "snap": 8,
+   "year": 2026,
+   "half_spread_bps": 3.3832,
+   "n": 2319
+  },
+  {
+   "price_bucket": 5,
+   "snap": 9,
+   "year": 2021,
+   "half_spread_bps": 2.5775,
+   "n": 2891
+  },
+  {
+   "price_bucket": 5,
+   "snap": 9,
+   "year": 2022,
+   "half_spread_bps": 3.0495,
+   "n": 2203
+  },
+  {
+   "price_bucket": 5,
+   "snap": 9,
+   "year": 2023,
+   "half_spread_bps": 2.3268,
+   "n": 2107
+  },
+  {
+   "price_bucket": 5,
+   "snap": 9,
+   "year": 2024,
+   "half_spread_bps": 2.4469,
+   "n": 2339
+  },
+  {
+   "price_bucket": 5,
+   "snap": 9,
+   "year": 2025,
+   "half_spread_bps": 2.9056,
+   "n": 2637
+  },
+  {
+   "price_bucket": 5,
+   "snap": 9,
+   "year": 2026,
+   "half_spread_bps": 3.1228,
+   "n": 2321
+  },
+  {
+   "price_bucket": 5,
+   "snap": 10,
+   "year": 2021,
+   "half_spread_bps": 2.5699,
+   "n": 2892
+  },
+  {
+   "price_bucket": 5,
+   "snap": 10,
+   "year": 2022,
+   "half_spread_bps": 2.8813,
+   "n": 2203
+  },
+  {
+   "price_bucket": 5,
+   "snap": 10,
+   "year": 2023,
+   "half_spread_bps": 2.2094,
+   "n": 2106
+  },
+  {
+   "price_bucket": 5,
+   "snap": 10,
+   "year": 2024,
+   "half_spread_bps": 2.3464,
+   "n": 2339
+  },
+  {
+   "price_bucket": 5,
+   "snap": 10,
+   "year": 2025,
+   "half_spread_bps": 2.7903,
+   "n": 2638
+  },
+  {
+   "price_bucket": 5,
+   "snap": 10,
+   "year": 2026,
+   "half_spread_bps": 2.948,
+   "n": 2322
+  },
+  {
+   "price_bucket": 5,
+   "snap": 11,
+   "year": 2021,
+   "half_spread_bps": 2.2838,
+   "n": 2890
+  },
+  {
+   "price_bucket": 5,
+   "snap": 11,
+   "year": 2022,
+   "half_spread_bps": 2.6444,
+   "n": 2208
+  },
+  {
+   "price_bucket": 5,
+   "snap": 11,
+   "year": 2023,
+   "half_spread_bps": 2.0314,
+   "n": 2107
+  },
+  {
+   "price_bucket": 5,
+   "snap": 11,
+   "year": 2024,
+   "half_spread_bps": 2.1036,
+   "n": 2340
+  },
+  {
+   "price_bucket": 5,
+   "snap": 11,
+   "year": 2025,
+   "half_spread_bps": 2.3283,
+   "n": 2636
+  },
+  {
+   "price_bucket": 5,
+   "snap": 11,
+   "year": 2026,
+   "half_spread_bps": 2.9169,
+   "n": 2319
+  },
+  {
+   "price_bucket": 5,
+   "snap": 12,
+   "year": 2021,
+   "half_spread_bps": 1.8213,
+   "n": 2892
+  },
+  {
+   "price_bucket": 5,
+   "snap": 12,
+   "year": 2022,
+   "half_spread_bps": 2.0842,
+   "n": 2202
+  },
+  {
+   "price_bucket": 5,
+   "snap": 12,
+   "year": 2023,
+   "half_spread_bps": 1.4761,
+   "n": 2108
+  },
+  {
+   "price_bucket": 5,
+   "snap": 12,
+   "year": 2024,
+   "half_spread_bps": 1.5995,
+   "n": 2342
+  },
+  {
+   "price_bucket": 5,
+   "snap": 12,
+   "year": 2025,
+   "half_spread_bps": 1.8688,
+   "n": 2635
+  },
+  {
+   "price_bucket": 5,
+   "snap": 12,
+   "year": 2026,
+   "half_spread_bps": 2.2461,
+   "n": 2318
+  }
+ ],
+ "name_factor": {
+  "AAOI": 1.7618,
+  "AAPL": 0.141,
+  "ADBE": 0.935,
+  "ADI": 0.831,
+  "ADSK": 1.3902,
+  "AEHR": 3.2382,
+  "AI": 1.3606,
+  "ALAB": 2.7969,
+  "AMAT": 0.6866,
+  "AMD": 0.3549,
+  "AMKR": 1.4373,
+  "AMZN": 0.2826,
+  "ANET": 1.2751,
+  "APH": 0.7505,
+  "APLD": 0.9537,
+  "APP": 1.8937,
+  "ARM": 1.5211,
+  "ARQQ": 4.2621,
+  "ASAN": 1.4329,
+  "ATVI": 0.4849,
+  "AVGO": 0.8821,
+  "AXTI": 1.5703,
+  "BABA": 0.381,
+  "BB": 0.7518,
+  "BBAI": 1.2776,
+  "BIDU": 1.0567,
+  "BILI": 0.9841,
+  "BILL": 2.4707,
+  "CBRS": 1.4868,
+  "CDNS": 1.2136,
+  "CIEN": 1.5482,
+  "CLS": 1.3009,
+  "COHR": 1.9225,
+  "COUP": 1.8503,
+  "CRDO": 1.8515,
+  "CRM": 0.6246,
+  "CRSR": 1.4567,
+  "CRWD": 1.3412,
+  "CRWV": 1.242,
+  "CSCO": 0.4345,
+  "DASH": 1.6117,
+  "DBX": 0.7467,
+  "DDD": 0.9897,
+  "DDOG": 1.4766,
+  "DELL": 0.9234,
+  "DIA": 0.1126,
+  "DJT": 2.4225,
+  "DOCN": 3.0869,
+  "DOCS": 1.9827,
+  "DOCU": 1.4717,
+  "DQ": 3.2447,
+  "DUOL": 4.3852,
+  "EA": 0.6112,
+  "ENPH": 1.7603,
+  "FIG": 1.1962,
+  "FLEX": 0.8829,
+  "FSLR": 2.0333,
+  "FSLY": 1.1053,
+  "FTNT": 1.0206,
+  "GOOG": 0.3226,
+  "GOOGL": 0.3062,
+  "GTM": 1.159,
+  "HPE": 0.7669,
+  "HUBS": 3.3932,
+  "IBM": 0.4773,
+  "IGV": 0.3982,
+  "INTC": 0.5508,
+  "INTU": 1.36,
+  "IONQ": 0.9745,
+  "IRNT": 1.0817,
+  "IWM": 0.1072,
+  "KLAC": 1.8057,
+  "LITE": 2.4659,
+  "MBLY": 1.4273,
+  "MCHP": 0.8672,
+  "MDB": 2.5646,
+  "MELI": 3.1759,
+  "META": 0.3992,
+  "MGNI": 1.2076,
+  "MPWR": 3.4206,
+  "MRVL": 0.6767,
+  "MSFT": 0.1939,
+  "MTCH": 0.9922,
+  "MTTR": 0.856,
+  "MU": 0.5049,
+  "MVIS": 0.9703,
+  "MXL": 2.5877,
+  "NBIS": 1.6788,
+  "NCR": 1.3044,
+  "NET": 2.0126,
+  "NFLX": 0.7863,
+  "NNDM": 0.9729,
+  "NOK": 0.7186,
+  "NOW": 1.5052,
+  "NVDA": 0.2891,
+  "NVTS": 0.9591,
+  "NXPI": 1.39,
+  "OKTA": 2.0468,
+  "ON": 0.8457,
+  "ONDS": 1.6678,
+  "ORCL": 0.4821,
+  "PANW": 1.2121,
+  "PATH": 1.009,
+  "PAYC": 2.8812,
+  "PDD": 0.7464,
+  "PENG": 2.3653,
+  "PINS": 0.7512,
+  "PL": 0.9178,
+  "PLTR": 0.5743,
+  "POET": 1.8011,
+  "PYPL": 0.5149,
+  "QBTS": 1.2134,
+  "QCOM": 0.4974,
+  "QQQ": 0.0698,
+  "QUBT": 1.5036,
+  "RBLX": 1.002,
+  "RCAT": 1.3577,
+  "RDDT": 2.1994,
+  "RGTI": 1.042,
+  "RNG": 2.1272,
+  "SEDG": 2.8811,
+  "SHOP": 1.033,
+  "SIMO": 5.6877,
+  "SKLZ": 1.8244,
+  "SMCI": 1.8368,
+  "SMH": 0.2392,
+  "SNAP": 0.8934,
+  "SNDK": 1.6979,
+  "SNOW": 1.2945,
+  "SNPS": 1.7261,
+  "SOUN": 1.0035,
+  "SPCX": 0.6725,
+  "SPLK": 1.0728,
+  "SPRT": 1.3884,
+  "SPY": 0.0529,
+  "SST": 3.8383,
+  "STEM": 1.6569,
+  "STM": 0.541,
+  "STX": 1.5032,
+  "SWKS": 1.3013,
+  "TE": 1.1224,
+  "TEAM": 1.968,
+  "TEM": 2.6549,
+  "TER": 1.4909,
+  "TOST": 1.022,
+  "TRIP": 0.9548,
+  "TSEM": 2.1004,
+  "TSLA": 0.3646,
+  "TSM": 0.3967,
+  "TTD": 1.3901,
+  "TTWO": 1.2855,
+  "TWLO": 1.7958,
+  "TWTR": 0.5932,
+  "TXN": 0.5769,
+  "U": 1.076,
+  "UBER": 0.5434,
+  "VEEV": 1.8978,
+  "VMW": 1.1345,
+  "VRT": 1.0816,
+  "VUZI": 1.072,
+  "WDAY": 1.3514,
+  "WDC": 0.9533,
+  "WOLF": 2.2561,
+  "XLB": 0.3473,
+  "XLC": 0.314,
+  "XLE": 0.3561,
+  "XLF": 0.4837,
+  "XLI": 0.1817,
+  "XLK": 0.1405,
+  "XLNX": 0.9706,
+  "XLP": 0.3578,
+  "XLRE": 0.4599,
+  "XLU": 0.3972,
+  "XLV": 0.1424,
+  "XLY": 0.1456,
+  "XYZ": 0.9911,
+  "ZEN": 1.1812,
+  "ZM": 1.2604,
+  "ZS": 1.7171
+ }
+}

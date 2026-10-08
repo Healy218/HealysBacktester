@@ -38,9 +38,11 @@ per symbol/day; full in-memory loads have crashed this box.
   ≥ $5, 20-day median $ volume ≥ $25M, bar status ok, no entries before 10:00 ET;
   costs carry the spread). Admission panel: 99.3% of member symbol-days, median 93
   symbols/day. Option cutoffs deferred to stage 3. [Decision](docs/DECISIONS.md).
-- [ ] **V8.0-fills (next):** fill model (stock touch + slippage; options mid ± k × half-spread,
-  k = 1.0 primary, 0.5 sensitivity; Robinhood fees). Unit tests on hand cases.
-- [ ] **V8.0-contract:** freeze the universe/cost contract and coverage report.
+- [x] **V8.0-fills:** `nn_meta/v8_fills.py` + frozen
+  [V8_COSTS_20261008.json](docs/specs/V8_COSTS_20261008.json): stock fills at bar price
+  ± (measured half-spread × name factor + 1 bp), sell-side regulatory fees; options
+  mid ± k × half-spread (k = 1.0 / 0.5) + $0.05/contract. Hand-case tests pass.
+- [ ] **V8.0-contract (next):** freeze the universe/cost contract and coverage report.
 
 ## Stage 1 — edge on the underlying
 
