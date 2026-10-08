@@ -1169,6 +1169,10 @@ actual entitlement failure. No full-universe recording is running.
   days), 126/126 underlyings; open interest as of 2026-10-06 (the endpoint lags about two
   trading days, so dedupe on symbol + `open_interest_date`). Keys: the retired V6 paper
   account's `ALPACA_PAPER_*` (read-only reference data; keeps the H1 runner's rate budget).
+- OEE-2 (2026-10-08, FAIL): prereg [V9_OEE1_PREREG_20261008.json](specs/V9_OEE1_PREREG_20261008.json);
+  `nn_meta/v9_oee_eval.py`, `scripts/run_v9_oee2.py` → `nn_meta/validation/v9-oee2-20261008-r0/`
+  (`report.json`, `trades.parquet`, `features.parquet`; `*_INVALID_expiry_pricing.*` is the
+  voided first run). The runner refuses to overwrite an existing report.
 
 ## V8 data sources (October 7)
 

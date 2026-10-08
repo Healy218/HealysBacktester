@@ -1442,3 +1442,41 @@ No 2026 runs (dev failed). **Verdict: in this universe and period, negative earn
 surprises did not keep drifting down; shorting them or buying puts lost money beyond
 costs, and the short leg dilutes the long side (H1 long alone: Sharpe 1.65). V8's
 confirmed edge is long-only.**
+
+## 2026-10-08 — V9 OEE-2 earnings options walk-forward: FAIL (all 8 variants)
+
+Pre-registration [V9_OEE1_PREREG_20261008.json](specs/V9_OEE1_PREREG_20261008.json)
+(approved by the user before any outcome was examined); runner `scripts/run_v9_oee2.py`,
+`nn_meta/v9_oee_eval.py` → `nn_meta/validation/v9-oee2-20261008-r0/` (`report.json`,
+`trades.parquet`, `features.parquet`). Dev = entries 2023-01-01 → 2025-12-31 (2022 burn-in),
+1,265 admitted events in all years; entry at the last close before the 8-K, exit at the
+reaction-day close; measured spread-model costs (k = 1.0, stress 1.5), clustered by reaction day.
+
+**Voided first run:** it priced contracts expiring on the reaction day at that day's last
+trade instead of intrinsic value as pre-registered; outputs kept as
+`*_INVALID_expiry_pricing.*`, fixed in commit 4dc8701, then rerun once. Results barely moved.
+
+| Variant | Trades | Mean net return (k=1) | Clustered t | Folds + | Mean at k=1.5 |
+|---|---|---|---|---|---|
+| H1a combined direction (0.5Δ call/put) | 556 | −13.7% | −2.53 | 0/6 | −19.6% |
+| H1b prior SUE | 485 | −13.7% | −2.35 | 0/6 | −19.4% |
+| H1c momentum | 554 | −9.0% | −1.48 | 2/6 | −15.2% |
+| H1d skew | 552 | −9.4% | −1.52 | 0/6 | −15.6% |
+| H2a low IV run-up → long straddle | 280 | −2.7% | −0.57 | 3/6 | −8.5% |
+| H2b high IV run-up → short iron fly (on max loss) | 259 | −58.3% | −8.26 | 0/6 | −78.1% |
+| H3a cheap implied move (tercile) → long straddle | 191 | −6.6% | −1.17 | 2/6 | −13.1% |
+| H3b implied < 0.8 × own history → long straddle | 94 | +4.3% | +0.42 | 4/6 | −2.8% |
+
+Holm-adjusted p = 1.0 for all; no variant passed, so the 2026 confirmation was not run
+(the 2026 window remains as before). **The user's IV run-up observation is not supported:**
+dev mean |realized move| ÷ implied move by run-up tercile was 0.99 / 0.97 / 1.00 (low / mid /
+high) — the monotone requirement failed; implied moves were on average fair regardless of
+the run-up. Post-run diagnostic (not a test): the short fly lost only −5% of max loss before
+costs; spreads on four legs entering and exiting cost 53 points because max loss is ~0.4×
+the credit. Direction scores did not pick the side well enough to overcome the
+premium lost to the IV crush (hit rates 32–34%). H3b, the one positive point estimate, has
+94 trades and t = 0.42.
+
+**Reading:** with free data and daily closes, front-week earnings options in this pool are
+priced fairly before costs, and measured costs make every pre-registered structure lose.
+Evidence boundary: last-trade closes (not quotes), bucket-median spreads, one-night holds.

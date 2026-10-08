@@ -14,8 +14,10 @@ worker pools and vectorized code by default.
   [state](docs/CURRENT_STATE.md#v9-plan-october-8)). Coverage only.
 - [x] **OEE-1:** pre-registration approved by the user and frozen 2026-10-08:
   [V9_OEE1_PREREG_20261008.json](docs/specs/V9_OEE1_PREREG_20261008.json) (8 variants).
-- [ ] **OEE-2 (next):** walk-forward (dev 2022-03 → 2025-12), then a 2026 confirmation.
-- [ ] **OEE-3:** paper forward test with half-Kelly and the drawdown brake.
+- [x] **OEE-2:** FAIL, all 8 variants (2026-10-08;
+  [EXPERIMENTS](docs/EXPERIMENTS.md)). IV run-up did not predict move vs implied;
+  2026 confirmation not run.
+- [ ] ~~OEE-3~~ not reached (no pass). Next OEE step is the user's call: see HANDOFF.
 
 ## OVE — Options Volume Expert
 
