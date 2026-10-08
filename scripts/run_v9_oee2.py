@@ -94,6 +94,29 @@ def leg(sm, price, cp, K, S, dte):
     return price, sm.half_spread(price, dte, ev_.otm(cp, K, S))
 
 
+def expiry_day_intrinsic(a: pd.DataFrame, wings: pd.DataFrame) -> tuple[pd.DataFrame, pd.DataFrame]:
+    """Prereg pricing: contracts expiring on the reaction day exit at intrinsic
+    value from the underlying's raw reaction-day close, not that day's last trade."""
+    a, wings = a.copy(), wings.copy()
+    exp = a["front_expiry"] == a["reaction_day"]
+    S = a["S_reaction"]
+    call = lambda K: np.maximum(S - K, 0.0)          # noqa: E731
+    put = lambda K: np.maximum(K - S, 0.0)           # noqa: E731
+    for col, val in (("call_atm_reaction", call(a["straddle_strike"])),
+                     ("put_atm_reaction", put(a["straddle_strike"])),
+                     ("call50_reaction", call(a["call50_strike"])),
+                     ("put50_reaction", put(a["put50_strike"]))):
+        a[col] = np.where(exp, val, a[col])
+    if len(wings):
+        j = a.loc[wings.index]
+        e = (j["front_expiry"] == j["reaction_day"]).to_numpy()
+        wings["wing_C_reaction"] = np.where(e, np.maximum(j["S_reaction"] - wings["wing_C_strike"], 0.0),
+                                            wings["wing_C_reaction"])
+        wings["wing_P_reaction"] = np.where(e, np.maximum(wings["wing_P_strike"] - j["S_reaction"], 0.0),
+                                            wings["wing_P_reaction"])
+    return a, wings
+
+
 def trades_for(a: pd.DataFrame, variant: str, side: pd.Series, sm, wings: pd.DataFrame | None):
     rows = []
     for key, s in side.dropna().items():
@@ -165,7 +188,7 @@ def window_stats(t: pd.DataFrame, k: float, days, folds: bool) -> dict:
     r = t[f"ret_{k}"].to_numpy()
     out = ev_.clustered_t(r, t["reaction_day"].to_numpy())
     if len(r):
-        out.update(hit_rate=float((r > 0).mean()),
+        out.update(hit_rate=float((r > 0).mean()), n_below_minus_1=int((r < -1).sum()),
                    quantiles={q: float(np.quantile(r, q)) for q in (0.05, 0.25, 0.5, 0.75, 0.95)},
                    book_1pct=book(t, k, days),
                    by_session=t.groupby("session")[f"ret_{k}"].agg(["size", "mean"]).to_dict("index"))
@@ -233,10 +256,11 @@ def main() -> None:
     fly_keys = side["H2b_high_runup_short_fly"].dropna().index
     wc = a.loc[fly_keys].reset_index()
     wings = wing_prices(wc, days, args.workers).set_index("key")
+    a_px, wings = expiry_day_intrinsic(a, wings)
     sm = ev_.SpreadModel(SPREADS)
     rows = []
     for v in VARIANTS:
-        rows += trades_for(a, v, side[v], sm, wings)
+        rows += trades_for(a_px, v, side[v], sm, wings)
     tr = pd.DataFrame(rows).merge(a[["session"]], left_on="key", right_index=True)
     tr.to_parquet(args.out / "trades.parquet", index=False)
 

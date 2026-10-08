@@ -48,3 +48,21 @@ def test_spread_model_lookup():
     assert 0 < h < 0.2
     assert sm.half_spread(3.0, 0, 0.0) == h          # DTE < 1 clamps to [1,3)
     assert sm.half_spread(3.0, 2, 0.5) == sm.half_spread(3.0, 2, 0.2)
+
+
+def test_runner_prices_expiry_day_exits_at_intrinsic():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("run_v9_oee2", "scripts/run_v9_oee2.py")
+    r = importlib.util.module_from_spec(spec); spec.loader.exec_module(r)
+    a = pd.DataFrame({"front_expiry": ["2024-05-17", "2024-05-24"],
+                      "reaction_day": ["2024-05-17", "2024-05-17"],
+                      "S_reaction": [90.0, 90.0], "straddle_strike": [100.0, 100.0],
+                      "call50_strike": [100.0, 100.0], "put50_strike": [100.0, 100.0],
+                      "call_atm_reaction": [0.05, 1.0], "put_atm_reaction": [12.0, 11.0],
+                      "call50_reaction": [0.05, 1.0], "put50_reaction": [12.0, 11.0]})
+    w = pd.DataFrame({"wing_C_strike": [110.0], "wing_C_reaction": [0.02],
+                      "wing_P_strike": [95.0], "wing_P_reaction": [3.0]}, index=[0])
+    a2, w2 = r.expiry_day_intrinsic(a, w)
+    assert a2.loc[0, "put_atm_reaction"] == 10.0 and a2.loc[0, "call_atm_reaction"] == 0.0
+    assert a2.loc[1, "put_atm_reaction"] == 11.0                  # not expiring: unchanged
+    assert w2.loc[0, "wing_P_reaction"] == 5.0 and w2.loc[0, "wing_C_reaction"] == 0.0
