@@ -56,7 +56,7 @@ Owned data only: V7 raw inputs read in place, plus Alpaca's free tier.
 | Gate | Deliverable | Status |
 | --- | --- | --- |
 | **V8.0 — Universe and cost contract** | PIT pool, bars, spreads, liquidity rule, fill model; [frozen contract](docs/specs/V8_CONTRACT_20261008.json) | **Done 2026-10-08** |
-| **V8.1 — Edge on the underlying** | Pre-registered walk-forward, benchmark-beating after costs, deflated Sharpe, PBO < 0.5, 1.5× cost stress | Authorized |
+| **V8.1 — Edge on the underlying** | Pre-registered walk-forward, benchmark-beating after costs, deflated Sharpe, PBO < 0.5, 1.5× cost stress | Authorized; pre-registration next |
 | **V8.2 — Volatility** | Candidate if V8.1 fails | Needs go-ahead |
 | **V8.3 — Instrument mapping (options)** | Only after a proven edge | Needs go-ahead |
 | **V8.4 — Meta-model** | Only if V8.1 or V8.2 passes | Needs go-ahead |
