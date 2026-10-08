@@ -5,11 +5,12 @@ of options-trading model artifacts and specialist researchers. Progress means
 completed, reproducible milestones and measured outcomes. The end goal remains
 open-ended; each selected phase has bounded requirements and an exit condition.
 
-**Selected work: [V8](#v8--edge-first-on-liquid-stocks-and-etfs) — stages 0 and 1.**
-October 7 user direction: prove an edge on liquid stocks and ETFs under realistic
-bid/ask fills before any options or meta-model work. ETFE closed October 7 (v5
-failed; the 2026 test stays unspent); its section below is retained as history.
-[Decision](docs/DECISIONS.md), [evidence](docs/EXPERIMENTS.md) (October 7 entries).
+**Selected work: [V9 — options experts](#v9--options-experts-oee-and-ove), OEE first.**
+October 8 user direction: options-native, short-term, high-risk/high-reward trading
+with fractional-Kelly sizing and 10–20% downside caps. V8 is complete: its one confirmed
+edge (H1 earnings drift, long-only) runs as a paper forward test (stock + call per
+signal). [Plan](docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md),
+[decision](docs/DECISIONS.md), [evidence](docs/EXPERIMENTS.md).
 
 V7 research stays paused with its original gates/evidence preserved. MRHA archival
 completed October 3 at 16:55:50 Central with all 2,847 shards verified and final
@@ -42,6 +43,22 @@ Other research workstreams above remain paused.
 Their next milestones remain retained requirements, not active assignments.
 Actual installed-service state is recorded separately in CURRENT_STATE; work
 selection does not itself prove service shutdown or authorize spending.
+
+## V9 — Options experts (OEE and OVE)
+
+Planned October 8, 2026 ([plan](docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md)). Two
+options-native experts on V8's data, costs and discipline: pre-registration before
+results, measured 0–15 DTE spreads, Kelly only from out-of-sample statistics.
+
+| Gate | Deliverable | Status |
+|---|---|---|
+| **OEE-0 — Earnings event table** | Per earnings release: pre/post option prices, implied move, IV run-up, skew, realized move; coverage only | Next |
+| **OEE-1 — Pre-registration** | Direction score (FA/TA/skew), IV run-up vs move size (user's observation), cheap implied move; user sign-off | After OEE-0 |
+| **OEE-2 — Walk-forward + 2026 confirmation** | Dev 2022-03 → 2025-12, six folds, pass rules, 1.5× costs | After OEE-1 |
+| **OEE-3 — Paper with Kelly** | Forward test with half-Kelly and drawdown brake | After a pass |
+| **OVE-0 — Live-data check + OI recorder** | Free per-contract volume/OI going forward; daily open-interest capture | Early (cheap; data accrues) |
+| **OVE-1..3 — Flow + dark pool** | Noise-filtered unusual options buying; DIX-direction off-exchange flow; pre-registered walk-forward | After OEE-2 |
+| **OVE-4 — Paper** | Forward test | After a pass |
 
 ## V8 — edge first on liquid stocks and ETFs
 

@@ -1,103 +1,49 @@
-# TODO — V8 stages 0 and 1
+# TODO — V9 options experts (OEE first)
 
-**Selected work: [V8 design](docs/specs/V8_DESIGN_20261007.md), stages 0 and 1 only.**
-Prove an edge on cheap, liquid instruments under realistic fills before any model
-or options. Universe: mostly technology names plus SPDR sector and broad ETFs.
-[Decision](docs/DECISIONS.md), [evidence](docs/EXPERIMENTS.md) (October 7 entries).
-ETFE is closed (v5 failed; 2026 ETFE test unspent). V6 paper is paused; its
-realistic-fill re-evaluation found no edge. **No paid data:** read V7 raw inputs
-in place on MRHA (never unpack); Alpaca free tier for anything else. Keep the
-local footprint to a few GB and write nothing to MRHA ([data plan](docs/specs/V8_DESIGN_20261007.md#budget-data-and-storage-user-direction-2026-10-07)).
-Run large reads under `systemd-run --user --scope -p MemoryMax=…` and stream
-per symbol/day; full in-memory loads have crashed this box.
+**Selected work: [V9 plan](docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md)** (user
+direction 2026-10-08): options-native, short-term, high-risk/high-reward; fractional
+Kelly with 10–20% downside caps. Rules carried from V8: pre-register before examining
+any signal-return relationship; measured option costs (0–15 DTE spreads 4–6% of mid);
+Kelly only from out-of-sample trade statistics; no paid data unless paper evidence
+justifies it. Run large jobs under `systemd-run --user --scope -p MemoryMax=…`, with
+worker pools and vectorized code by default.
 
-## Stage 0 — tradable universe and cost model
+## OEE — Options Earnings Expert
 
-- [x] **V8.0-pool:** first freeze (superseded by V8.0-pit) in [V8_POOL_20261007.json](docs/specs/V8_POOL_20261007.json):
-  monthly PIT option-activity members (survivorship-free) with technology SEC SIC
-  codes plus 9 declared tech-adjacent platforms; 73–107 tech names per month (124
-  total) and all 17 ETFs every month. Membership covers 2024-11 to 2026-07.
-- [x] **V8.0-pit:** rebuilt from the V7 option day aggregates with the same
-  parameters: 65 monthlies 2021-04 → 2026-08, identical V3 rank/score on the overlap,
-  delisting canaries pass, OPRA test roots and renames fixed V8-locally. Pool
-  re-frozen in [V8_POOL_PIT2021_20261007.json](docs/specs/V8_POOL_PIT2021_20261007.json)
-  (66–109 tech names per month, 162 distinct, plus 17 ETFs); it supersedes the
-  first pool. [Evidence](docs/EXPERIMENTS.md).
-- [x] **V8.0-data:** hourly/daily regular-session bars (raw + adjusted) for all 179
-  pool symbols, 2021 → 2026-09-14: V7 store for 157, Alpaca free tier for 22.
-  Identity follows the PIT roots plus verified overrides; coverage 127,125 complete,
-  83 partial (upstream feed gaps), 3 missing, 138 post-delisting.
-  [Evidence](docs/EXPERIMENTS.md).
-- [x] **V8.0-spreads:** stock NBBO spreads measured from a seeded Alpaca free-tier
-  sample (207 days × 13 snapshots × all pool symbols; median 7.2 bp, SPY 0.25 bp,
-  tech names median 8.9 bp); Abdi–Ranaldo cross-check not informative at this
-  liquidity. Option spreads from a 3% sample of V7 NBBO captures (median 7.1% of
-  mid; 56% of near-the-money, mid ≥ $1 snapshots ≤ 5%). [Evidence](docs/EXPERIMENTS.md).
-- [x] **V8.0-liquidity:** user-approved rule frozen in
-  [V8_LIQUIDITY_20261008.json](docs/specs/V8_LIQUIDITY_20261008.json) (prior close
-  ≥ $5, 20-day median $ volume ≥ $25M, bar status ok, no entries before 10:00 ET;
-  costs carry the spread). Admission panel: 99.3% of member symbol-days, median 93
-  symbols/day. Option cutoffs deferred to stage 3. [Decision](docs/DECISIONS.md).
-- [x] **V8.0-fills:** `nn_meta/v8_fills.py` + frozen
-  [V8_COSTS_20261008.json](docs/specs/V8_COSTS_20261008.json): stock fills at bar price
-  ± (measured half-spread × name factor + 1 bp), sell-side regulatory fees; options
-  mid ± k × half-spread (k = 1.0 / 0.5) + $0.05/contract. Hand-case tests pass.
-- [x] **V8.0-contract:** [V8_CONTRACT_20261008.json](docs/specs/V8_CONTRACT_20261008.json)
-  pins 13 artifacts + 10 code files by sha256; `nn_meta.v8_contract.verify()` gates
-  stage-1 runs. **Stage 0 complete.**
+- [ ] **OEE-0 (next):** event table for every earnings 8-K (Item 2.02) 2022-03 → 2026-09:
+  entry/exit days by release time, front-expiry ATM straddle and 0.5-delta call/put
+  prices before and after, implied move, ATM IV over the 5 prior days (run-up), skew,
+  realized move, coverage report. Coverage only — no outcome analysis.
+- [ ] **OEE-1:** pre-registration (direction score from prior SUE / revenue trend /
+  momentum / skew; IV run-up vs move size — the user's observation; implied move vs
+  own earnings history); user sign-off.
+- [ ] **OEE-2:** walk-forward (dev 2022-03 → 2025-12), then a 2026 confirmation.
+- [ ] **OEE-3:** paper forward test with half-Kelly and the drawdown brake.
 
-## Stage 1 — edge on the underlying
+## OVE — Options Volume Expert
 
-- [x] **V8.1-prereg:** pre-register families, horizons (1h/1d), folds, costs and pass
-  rules (benchmark-beating out of sample, rank persistence, deflated Sharpe, PBO
-  < 0.5, 1.5× cost stress). Development window ends 2025-12-31.
-- [x] **V8.1-walkforward:** tuned-variant walk-forward on admitted symbols, expanding
-  window, realistic costs. Benchmarks QQQ/XLK (tech) and SPY (book).
-- [x] **V8.1-verdict: FAIL** (all five rules; [evidence](docs/EXPERIMENTS.md)). record in EXPERIMENTS. If nothing passes, stage 2
-  (volatility) is next, not a meta-model.
+- [ ] **OVE-0:** confirm free per-contract daily volume and open interest from Alpaca;
+  start a daily open-interest recorder (forward-only data, so start early).
+- [ ] **OVE-1..3:** noise-filtered unusual options buying (abnormal volume, block size,
+  short-dated OTM premium, no event, clustering) and DIX-direction off-exchange flow;
+  pre-register; walk-forward.
 
-## Stage 2 — volatility (approved by the user 2026-10-08)
+## Running
 
-- [x] **V8.2-data:** daily option chains for the pool from V7 day aggregates.
-- [x] **V8.2-iv / -forecast:** IV30 (ATM, parity forward) and PIT 21-day HAR forecast,
-  `vol_panel.parquet`. [Evidence](docs/EXPERIMENTS.md).
-- [x] **V8.2-prereg:** user-approved, [frozen](docs/specs/V8_STAGE2_PREREG_20261008.json).
-- [x] **V8.2-walkforward / -verdict: FAIL** (all variants and always-on structures lose;
-  2/6 folds; PBO 0.84). First run invalidated by a split-settlement bug, fixed and rerun.
-  [Evidence](docs/EXPERIMENTS.md).
+- **V8 H1 paper test** in "stonks bot 2" (PA3U9D8Q8GQX): stock + ~45 DTE call per
+  earnings-drift signal; timers 09:45 / 10:31 / 16:20 ET from 2026-10-09. Review after
+  the first earnings wave (fills vs decision quotes; call vs stock per signal):
+  `./venv/bin/python scripts/run_v8_h1_paper.py status`.
 
-## Events / FA history (user direction 2026-10-08)
+## V8 outcome (complete; details in [EXPERIMENTS](docs/EXPERIMENTS.md))
 
-- [x] **V8-EV-data:** free PIT backfill 2021–2025 (SEC facts/filings, insider, FINRA
-  short volume, news). [Evidence](docs/EXPERIMENTS.md).
-- [x] **V8-EV-prereg:** four hypotheses, 16 variants, [frozen](docs/specs/V8_EVENTS_PREREG_20261008.json).
-- [x] **V8-EV-walkforward / -verdict: FAIL** for all four; shared gates passed (rank
-  0.41, PBO 0.14); H1 earnings drift (SUE, 20-day) is a near-miss: positive in all 6
-  folds, OOS Sharpe 1.65, deflated Sharpe 0.92, but beat fully invested benchmarks in
-  only 2/6. [Evidence](docs/EXPERIMENTS.md).
-
-- [x] **V8-H1-confirm:** [prereg](docs/specs/V8_H1_CONFIRM_PREREG_20261008.json).
-  A (stock, 2026 holdout): **PASS** — +22.2%, Sharpe 1.31 vs QQQ 1.12, alpha +13.8%/yr.
-  B (calls at pessimistic 6% spread, 2021–2025): FAIL (t = 1.84, 3/6 folds) — option
-  costs unknown, not disproven. [Evidence](docs/EXPERIMENTS.md).
-- [x] **V8-H1-short:** short, long-short and puts all FAIL in dev ([prereg](docs/specs/V8_H1_SHORT_PREREG_20261008.json));
-  the edge is long-only. [Evidence](docs/EXPERIMENTS.md).
-- [ ] **V8-H1-paper (next):** Alpaca paper forward test, stock and ~45 DTE / 0.60 delta call
-  side by side on every H1 signal (user decision Oct 8) in a reset paper account (V6 history
-  archived, V6 timers disabled). Built: `scripts/run_v8_h1_paper.py` (signals / trade /
-  reconcile / status; dry run unless `--live`; idempotent order IDs), `nn_meta/v8_paper.py`,
-  units `deploy/systemd/healys-v8-h1-{signals,trade,reconcile}.{service,timer}` (09:45 /
-  10:31 / 16:20 ET). **Live in "stonks bot 2" (PA3U9D8Q8GQX) from 2026-10-09.** Review after the
-  first earnings wave (mid/late October): fills vs decision quotes, call vs stock per signal.
-
-## Next phase (user direction 2026-10-08; plan to be agreed)
-
-- [ ] **Options-native research plan:** short-term, high-risk/high-reward options strategies
-  with fractional-Kelly sizing and 10–20% downside caps; pre-registered, measured costs,
-  free data first. Agree scope with the user before building.
+Stage 0 contract frozen; stage 1 (5,680 long-only price variants) and stage 2 (vol
+timing) failed; event hypotheses failed except H1 earnings drift (SUE, 20-day, long),
+which passed the 2026 holdout in stock form; its calls form was inconclusive at
+pessimistic costs; the short side, long-short and puts failed.
 
 ## Parallel / later (not started)
 
-- FA fundamentals point-in-time backfill for the V8 universe (filing/acceptance
-  dated), as candidate features; FA attention remains forward-only (FA-3).
+- FA fundamentals point-in-time features beyond EPS (the V8 events backfill has all
+  as-filed XBRL facts 2019+).
 - V6 paper runtime: retired by the user 2026-10-08 (needed the cancelled paid feed).

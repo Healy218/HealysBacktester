@@ -2564,3 +2564,17 @@ maximize growth while capping downside at 10–20%. V8 is judged a sound but
 conservative "analyst"; the next phase should be options-native. Constraints carried
 forward: no paid data unless evidence justifies it, pre-registration before results,
 measured costs, and Kelly only from out-of-sample trade statistics.
+
+### 2026-10-08 — V9: two options experts, OEE then OVE
+
+The user and Claude planned V9 ([plan](specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md)) as
+two experts in the repo's expert naming (as ETFE): **OEE**, the Options Earnings Expert
+(the user's own practice: trade options into earnings because the biggest moves come
+when unknowns become known; test whether an FA/TA/skew direction score should tilt
+calls vs puts, the user's observation that a large IV run-up before earnings precedes
+a flatter move, and whether the implied move is cheap vs the stock's own history), and
+**OVE**, the Options Volume Expert (noise-filtered unusual options buying, plus
+off-exchange/dark-pool flow in the DIX direction). OEE goes first because its data is
+complete in hand; OVE's open-interest filter is forward-only, so its recorder starts
+early. Rejected: testing ideas descriptively before pre-registration; Google Trends;
+paid flow feeds.

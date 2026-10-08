@@ -1,44 +1,48 @@
-# Handoff — October 8, 2026 — H1 paper test live; next phase: options-native, high-risk, Kelly-sized
+# Handoff — October 8, 2026 — V8 complete; V9 options experts planned (OEE first)
 
 ## Where things stand
 
-- **V8** ([ROADMAP](ROADMAP.md#v8--edge-first-on-liquid-stocks-and-etfs),
-  [spec](docs/specs/V8_DESIGN_20261007.md), [TODO](TODO.md)): prove an edge on liquid
-  stocks/ETFs under realistic fills before any model or options.
-- **Stage 0 complete:** frozen [contract](docs/specs/V8_CONTRACT_20261008.json) (pool
-  with delisted names, hourly/daily bars, measured stock/option spreads, user-approved
-  [liquidity rule](docs/specs/V8_LIQUIDITY_20261008.json), [cost table](docs/specs/V8_COSTS_20261008.json)).
-- **Stage 1 FAILED** (pre-registered, committed `d5cd2ad` before results): 5,680
-  long-only variants (1h/1d), 10-slot equal weight, six half-year folds 2023–2025.
-  The top in-sample pick beat every benchmark in 0/6 folds; rank persistence ~0;
-  deflated Sharpe 0.05; PBO 0.89. [Evidence](docs/EXPERIMENTS.md).
-- **User decisions (Oct 8):** keep delisted names in history; long-only first (shorts
-  and puts later); broker path Alpaca paper → Alpaca live → Robinhood much later;
-  half-Kelly sizing belongs to the paper simulator after an edge passes, not the test;
-  worker pools and vectorized code by default.
+- **V9 is the selected work** ([plan](docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md),
+  [TODO](TODO.md), [ROADMAP](ROADMAP.md#v9--options-experts-oee-and-ove)). User goal:
+  options-native, short-term, high-risk/high-reward, fractional Kelly with 10–20%
+  downside caps. Two experts: **OEE** (Options Earnings Expert, first) and **OVE**
+  (Options Volume Expert).
+- **V8 is complete** ([EXPERIMENTS](docs/EXPERIMENTS.md), October 8 entries). Only H1
+  earnings drift (first-reported EPS SUE top tercile, long, 20-day hold) survived: it
+  passed the 2026 holdout in stock form (+22.2%, Sharpe 1.31 vs QQQ 1.12). Its call form
+  was inconclusive at a pessimistic 6% spread; short stock, long-short and puts failed.
+  Stage 1 (price patterns) and stage 2 (vol timing) failed.
+- **User decisions to respect:** delisted names stay in histories; no paid data unless
+  evidence justifies it; pre-register before looking; worker pools + vectorized code by
+  default; Kelly only from out-of-sample stats; V6 stays retired (needed the cancelled
+  paid feed).
 
-## Status at session end
+## Running now
 
-No jobs running. V6 paper retired Oct 8: account archived (`nn_meta/validation/v6-paper-archive-20261008/`), V6 retired for good by the user (needed the cancelled paid feed), timers disabled; the H1 paper test runs in "stonks bot 2" (PA3U9D8Q8GQX); its timers are enabled from 2026-10-09. The 2026 holdout has not
-been read by any stage-1 code.
+- **V8 H1 paper test** in the "stonks bot 2" paper account (PA3U9D8Q8GQX, $100k, options
+  level 3; keys `ALPACA_V8_PAPER_*`): stock + ~45 DTE / 0.60-delta call per signal;
+  timers `healys-v8-h1-{signals,trade,reconcile}` at 09:45 / 10:31 / 16:20 ET from
+  2026-10-09. First signals expected with mid/late-October earnings. Check:
+  `./venv/bin/python scripts/run_v8_h1_paper.py status`, `journalctl --user -u healys-v8-h1-trade`.
+- V6 paper account PA3WD22T4IM7 is untouched (TMUS calls open), timers disabled; history
+  archived in `nn_meta/validation/v6-paper-archive-20261008/`.
 
 ## Next action
 
-The H1 paper test is live in "stonks bot 2" (first runs 2026-10-09; first signals with
-mid/late-October earnings). Review it after the first earnings wave.
+**OEE-0:** build the earnings event table (every 8-K Item 2.02, 2022-03 → 2026-09):
+entry at the last close before the release, exit at the reaction-day close;
+front-expiry ATM straddle and ~0.5-delta call/put prices before and after; implied
+move; ATM IV for the 5 prior days (the user's IV run-up idea); skew; realized move;
+coverage report. **Coverage only** — then draft OEE-1 for the user's sign-off. Early
+and cheap: OVE-0 open-interest recorder (forward-only data).
 
-**User direction for the next phase (Oct 8):** options-native, short-term,
-high-risk/high-reward, fractional-Kelly sizing with 10–20% downside caps
-([DECISIONS](docs/DECISIONS.md)). Agree the research plan with the user before building:
-candidates include options-flow signals from the OPRA day aggregates we already hold
-(2021–2026), H1 expressed through calls with Kelly sizing once paper fills exist, and a
-Kelly/risk module fed only by out-of-sample trade statistics.
+Inputs (paths in [CURRENT_STATE](docs/CURRENT_STATE.md)): option chains
+`nn_meta/validation/v8-stage2-20261008-r0/chains/`, events backfill
+`nn_meta/validation/v8-events-20261008-r0/` (8-K acceptance times, XBRL facts),
+bars/admission (V8 contract), option spread table, `nn_meta/v8_vol.py`,
+`nn_meta/v8_h1_calls.py`, `nn_meta/v8_engine.py`.
 
-Tools ready for reuse: `nn_meta/v8_engine.py` (numba slot simulator, ~5 ms per hourly
-variant), `nn_meta/v8_fills.py`, `nn_meta/v8_contract.verify()`,
-`nn_meta/v8_parallel.py`.
+Constraints: memory caps on big jobs; stage only your own hunks (other dirty V6/V7
+work in the tree is not yours); the 2026 holdout was used once (H1 stock).
 
-Constraints: run under `systemd-run --user --scope -p MemoryMax=…`; local footprint a
-few GB; stage only your own hunks (other dirty V6/V7 work is not yours).
-
-[Previous handoff](handoff-history/HANDOFF-2026-10-08-before-v8-stage1-verdict.md).
+[Previous handoff](handoff-history/HANDOFF-2026-10-08-before-v9.md).

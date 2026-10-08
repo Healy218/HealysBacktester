@@ -1147,6 +1147,11 @@ At 14:55:03 Central, the account rejected the 2,434-contract quote subscription
 with 405 (symbol limit exceeded); `capacity-verification.json` preserves the
 actual entitlement failure. No full-universe recording is running.
 
+## V9 plan (October 8)
+
+[V9_OPTIONS_EXPERTS_PLAN_20261008.md](specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md): OEE
+(Options Earnings Expert) then OVE (Options Volume Expert), reusing the V8 inputs below.
+
 ## V8 data sources (October 7)
 
 - Spec: [V8_DESIGN_20261007.md](specs/V8_DESIGN_20261007.md); frozen pool:
