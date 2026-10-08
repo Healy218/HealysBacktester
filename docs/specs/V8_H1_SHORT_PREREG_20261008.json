@@ -1,0 +1,40 @@
+{
+ "schema": "v8-h1-short-prereg-v1",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08, before any short-side or put result was examined",
+ "context": "All earlier V8 tests were long-only. H1 (SUE earnings drift) long was confirmed on the 2026 holdout (docs/specs/V8_H1_CONFIRM_PREREG_20261008.json). This tests its mirror. The 2026 holdout has been used once (long side); the short leg trades different events, so it can still confirm, but the period is no longer untouched.",
+ "strategies": {
+  "H1_short": "exact mirror of H1b_sue_h20: SUE in the bottom tercile of the prior 365 days (>= 30 events); short at the next 10:30 ET bar; cover 20 bars after the latest signal; 10 slots, adv20 priority, admission panel, forced covers; nn_meta.v8_engine.simulate_short",
+  "H1_long_short": "the H1 long book (H1b_sue_h20) and the H1 short book with equal capital, rebalanced daily (daily return = mean of the two books' returns)",
+  "H1_puts": "mirror of the calls test B: one put per short signal, ~45 DTE (35-60), strike nearest delta -0.60, same exits, fixed 6% spread (half 3%, stress 4.5%), $0.05/contract, 5% of equity premium, <= 10 open"
+ },
+ "short_costs": {
+  "spread_and_fees": "nn_meta.v8_fills: entry pays the sell cost (half-spread x name factor + slippage + sell fees), cover pays the buy cost; cost multiplier 1.0 and 1.5",
+  "borrow": "annual 1% when the prior close >= $20 and adv20 >= $250M, else 5%; accrued every day on the short's current value. Availability assumed (flatters hard-to-borrow names)."
+ },
+ "dev_window": "2021-05-03 .. 2025-12-31 (folds 2023H1..2025H2 as before)",
+ "dev_pass_all_required": {
+  "H1_short": {
+   "positive": "total return > 0 at 1.0x",
+   "folds_positive": ">= 4 of 6 folds positive",
+   "alpha": "intercept of daily OLS on the equal-weight admitted universe > 0 (annualized)",
+   "deflated_sharpe": ">= 0.95 over 2023-2025 daily returns, N = 18 (16 event variants + 2 here)",
+   "cost_stress": "positive and folds_positive hold at 1.5x"
+  },
+  "H1_long_short": {
+   "sharpe_vs_qqq": "2023-2025 annualized Sharpe > QQQ's",
+   "alpha": "> 0",
+   "folds_positive": ">= 4 of 6",
+   "deflated_sharpe": ">= 0.95, N = 18",
+   "cost_stress": "sharpe_vs_qqq and alpha hold at 1.5x"
+  },
+  "H1_puts": "same as calls: total > 0, >= 4/6 folds positive, mean trade > 0 with t >= 2, and total/mean/t at half-spread 4.5%"
+ },
+ "holdout_2026": {
+  "run_only_if_dev_passes": true,
+  "H1_short": "return > 0 and alpha > 0 at 1.0x and 1.5x",
+  "H1_long_short": "Sharpe > QQQ's and alpha > 0 at 1.0x and 1.5x",
+  "H1_puts": "total > 0 and mean trade > 0 with t >= 1 at half-spread 3%"
+ },
+ "single_run": "one run, reported whatever the outcome"
+}

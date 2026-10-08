@@ -238,3 +238,113 @@ def run_variant(panel: dict, E, X, v: int, mult: float):
                     p["entry_ok"], p["cost_buy"], p["cost_sell"], p["cost_close"],
                     p["force"], p["prio"], p["day_last_bar"], len(p["days"]),
                     float(mult), SLOTS)
+
+
+@nb.njit(nogil=True, cache=True)
+def simulate_short(Ebits, Xbits, v, P, M, has_exec, has_mark, entry_ok, cost_buy,
+                   cost_sell, cost_close, force, prio, day_last_bar, n_days, mult, slots,
+                   borrow_daily):
+    """Short-side twin of simulate(): an entry sells short shares worth
+    min(equity / slots, cash) as collateral, paying the sell cost; positions
+    mark additively (gain when price falls); each bar accrues borrow on the
+    short's current value (borrow_daily = annual rate / 252 per bar); exits
+    and forced exits buy to cover. Same signal, slot and priority rules."""
+    S, T = P.shape
+    cash = 1.0
+    held = np.zeros(S, np.bool_)
+    val = np.zeros(S)
+    qty = np.zeros(S)
+    lastm = np.zeros(S)
+    basis = np.zeros(S)
+    pend_e = np.zeros(S, np.bool_)
+    pend_x = np.zeros(S, np.bool_)
+    n_open = 0
+    eq_bar = np.zeros(T)
+    trades_bar = np.zeros(T, np.int32)
+    wins_bar = np.zeros(T, np.int32)
+    cand = np.empty(S, np.int64)
+    for t in range(T):
+        for s in range(S):                                   # 1. cover pending exits
+            if held[s] and pend_x[s] and has_exec[s, t]:
+                val[s] += qty[s] * (lastm[s] - P[s, t])
+                proceeds = val[s] - qty[s] * P[s, t] * mult * cost_buy[s, t] / 1e4
+                cash += proceeds
+                trades_bar[t] += 1
+                if proceeds > basis[s]:
+                    wins_bar[t] += 1
+                held[s] = False; pend_x[s] = False; val[s] = 0.0; qty[s] = 0.0; n_open -= 1
+        free = slots - n_open                                # 2. new shorts
+        if free > 0:
+            nc = 0
+            for s in range(S):
+                if pend_e[s] and (not held[s]) and entry_ok[s, t]:
+                    cand[nc] = s; nc += 1
+            if nc > 0:
+                equity = cash
+                for s in range(S):
+                    if held[s]:
+                        equity += val[s]
+                for k in range(min(free, nc)):
+                    best = -1; bp = -np.inf
+                    for j in range(nc):
+                        s = cand[j]
+                        if s >= 0 and prio[s, t] > bp:
+                            bp = prio[s, t]; best = j
+                    if best < 0:
+                        break
+                    s = cand[best]; cand[best] = -1
+                    alloc = min(equity / slots, cash)
+                    if alloc <= 1e-12:
+                        break
+                    cash -= alloc
+                    basis[s] = alloc
+                    qty[s] = alloc / P[s, t]
+                    val[s] = alloc - alloc * mult * cost_sell[s, t] / 1e4
+                    lastm[s] = P[s, t]
+                    held[s] = True; pend_e[s] = False; n_open += 1
+        for s in range(S):                                   # 3. mark + borrow
+            if held[s] and has_mark[s, t]:
+                val[s] += qty[s] * (lastm[s] - M[s, t])
+                lastm[s] = M[s, t]
+                val[s] -= qty[s] * M[s, t] * borrow_daily[s, t]
+        for s in range(S):                                   # 4. forced covers at the close
+            if held[s] and force[s, t]:
+                proceeds = val[s] - qty[s] * lastm[s] * mult * cost_close[s, t] / 1e4
+                cash += proceeds
+                trades_bar[t] += 1
+                if proceeds > basis[s]:
+                    wins_bar[t] += 1
+                held[s] = False; pend_x[s] = False; val[s] = 0.0; qty[s] = 0.0; n_open -= 1
+        for s in range(S):                                   # 5. signals
+            if has_mark[s, t]:
+                if _bit(Xbits, s, v, t):
+                    pend_e[s] = False
+                    if held[s]:
+                        pend_x[s] = True
+                elif _bit(Ebits, s, v, t) and not held[s]:
+                    pend_e[s] = True
+        e = cash
+        for s in range(S):
+            if held[s]:
+                e += val[s]
+        eq_bar[t] = e
+    eq_day = np.zeros(n_days)
+    tr_day = np.zeros(n_days, np.int32)
+    win_day = np.zeros(n_days, np.int32)
+    prev = -1
+    for d in range(n_days):
+        last = day_last_bar[d]
+        eq_day[d] = eq_bar[last]
+        for t in range(prev + 1, last + 1):
+            tr_day[d] += trades_bar[t]
+            win_day[d] += wins_bar[t]
+        prev = last
+    return eq_day, tr_day, win_day
+
+
+def run_variant_short(panel: dict, E, X, v: int, mult: float, borrow_annual: np.ndarray):
+    p = panel
+    return simulate_short(E, X, v, p["P"], p["M"], p["has_exec"], p["has_mark"],
+                          p["entry_ok"], p["cost_buy"], p["cost_sell"], p["cost_close"],
+                          p["force"], p["prio"], p["day_last_bar"], len(p["days"]),
+                          float(mult), SLOTS, borrow_annual / 252.0)

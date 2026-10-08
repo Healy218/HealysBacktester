@@ -57,9 +57,10 @@ def _place(S: int, T: int, rows: np.ndarray, cols: np.ndarray) -> np.ndarray:
 
 
 def trailing_tercile_flag(bars: np.ndarray, values: np.ndarray, days: list[str],
-                          min_n: int = 30) -> np.ndarray:
-    """values[i] is in the top tercile of all values whose bar is in the prior
-    365 calendar days (strictly earlier bars), with >= min_n of them."""
+                          min_n: int = 30, bottom: bool = False) -> np.ndarray:
+    """values[i] is in the top (or, with bottom=True, the bottom) tercile of all
+    values whose bar is in the prior 365 calendar days (strictly earlier bars),
+    with >= min_n of them."""
     d = pd.to_datetime(np.array(days))[np.clip(bars, 0, None)]
     order = np.argsort(bars, kind="stable")
     flag = np.zeros(len(bars), bool)
@@ -72,7 +73,8 @@ def trailing_tercile_flag(bars: np.ndarray, values: np.ndarray, days: list[str],
         hist = v_sorted[lo:hi]
         hist = hist[np.isfinite(hist)]
         if len(hist) >= min_n:
-            flag[i] = values[i] >= np.quantile(hist, 2 / 3)
+            flag[i] = (values[i] <= np.quantile(hist, 1 / 3)) if bottom else \
+                      (values[i] >= np.quantile(hist, 2 / 3))
     return flag
 
 
@@ -86,21 +88,9 @@ def abnormal_returns(adj_close: np.ndarray, admitted: np.ndarray) -> np.ndarray:
     return r - ew[None, :]
 
 
-def h1(ctx: dict) -> dict:
-    tickers, days, S, T = ctx["tickers"], ctx["days"], ctx["S"], ctx["T"]
-    tix = {t: i for i, t in enumerate(tickers)}
-    out = {}
-    fl = ctx["filings"]
-    e = fl[(fl["form"] == "8-K") & fl["items"].fillna("").str.contains("2.02") & fl["ticker"].isin(tix)]
-    e = e.drop_duplicates(["ticker", "available_at_utc"])
-    rb = reaction_bar(e["available_at_utc"], days)
-    rows = e["ticker"].map(tix).to_numpy()
-    ar = np.array([ctx["abn"][r, b] if b >= 0 else np.nan for r, b in zip(rows, rb)])
-    flag = trailing_tercile_flag(rb, ar, days)
-    E = _place(S, T, np.where(flag, rows, -1), rb)
-    for H in (20, 60):
-        out[f"H1a_reaction_h{H}"] = (E, holding_exits(E, H))
-    # SUE from first-reported quarterly diluted EPS
+def sue_table(ctx: dict) -> pd.DataFrame:
+    """First-reported quarterly diluted EPS SUE per (ticker, public time)."""
+    tix = {t: i for i, t in enumerate(ctx["tickers"])}
     f = ctx["facts"]
     f = f[(f["tag"] == "EarningsPerShareDiluted") & (f["unit"] == "USD/shares") & f["start"].notna()
           & f["ticker"].isin(tix)].copy()
@@ -122,6 +112,34 @@ def h1(ctx: dict) -> dict:
             if np.isfinite(yoy[i]) and len(hist) >= 4 and hist.std(ddof=1) > 0:
                 recs.append((t, g["available_at_utc"].iloc[i], yoy[i] / hist.std(ddof=1)))
     sue = pd.DataFrame(recs, columns=["ticker", "tau", "sue"])
+    return sue
+
+
+def h1_short(ctx: dict) -> tuple[np.ndarray, np.ndarray]:
+    """Mirror of H1b_sue_h20: bottom-tercile SUE, exit 20 bars after the latest signal."""
+    tix = {t: i for i, t in enumerate(ctx["tickers"])}
+    sue = sue_table(ctx)
+    sb = event_signal_bar(sue["tau"], ctx["days"])
+    flag = trailing_tercile_flag(sb, sue["sue"].to_numpy(), ctx["days"], bottom=True)
+    E = _place(ctx["S"], ctx["T"], np.where(flag, sue["ticker"].map(tix).to_numpy(), -1), sb)
+    return E, holding_exits(E, 20)
+
+
+def h1(ctx: dict) -> dict:
+    tickers, days, S, T = ctx["tickers"], ctx["days"], ctx["S"], ctx["T"]
+    tix = {t: i for i, t in enumerate(tickers)}
+    out = {}
+    fl = ctx["filings"]
+    e = fl[(fl["form"] == "8-K") & fl["items"].fillna("").str.contains("2.02") & fl["ticker"].isin(tix)]
+    e = e.drop_duplicates(["ticker", "available_at_utc"])
+    rb = reaction_bar(e["available_at_utc"], days)
+    rows = e["ticker"].map(tix).to_numpy()
+    ar = np.array([ctx["abn"][r, b] if b >= 0 else np.nan for r, b in zip(rows, rb)])
+    flag = trailing_tercile_flag(rb, ar, days)
+    E = _place(S, T, np.where(flag, rows, -1), rb)
+    for H in (20, 60):
+        out[f"H1a_reaction_h{H}"] = (E, holding_exits(E, H))
+    sue = sue_table(ctx)
     sb = event_signal_bar(sue["tau"], days)
     flag = trailing_tercile_flag(sb, sue["sue"].to_numpy(), days)
     E = _place(S, T, np.where(flag, sue["ticker"].map(tix).to_numpy(), -1), sb)

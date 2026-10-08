@@ -46,3 +46,13 @@ def test_simulate_sizes_premium_and_books_at_exit():
     ret = (3.0 - 0.0005) / (2.0 + 0.0005) - 1
     assert np.isclose(taken["ret"].iloc[0], ret)
     assert np.isclose(eq[1], 1.0) and np.isclose(eq[2], 1.0 + 0.05 * ret)
+
+
+def test_pick_put_and_put_intrinsic():
+    day = "2024-01-02"
+    ch = pd.concat([_chain(day, "2024-02-16")])
+    p = hc.pick_call(ch, day, 100.0, cp="P")
+    assert p["strike"] == 105.0 and abs(p["delta"] + 0.6) < 0.1
+    days = [f"d{i:02d}" for i in range(30)]
+    raw = {d: 90.0 for d in days}
+    assert hc.exit_price({}, days, 0, 105.0, "d99", raw, lambda d: 1.0, cp="P") == ("d20", 15.0, "intrinsic")

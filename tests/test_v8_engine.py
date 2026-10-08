@@ -71,3 +71,32 @@ def test_priority_below_minus_two_still_ranks():
     prio = np.array([[-5.0] * 3, [-3.0] * 3])            # symbol 1 ranks first
     eq, _, _ = _run(E, X, P, M, prio=prio, slots=1)
     assert np.isclose(eq[-1], 1.0)
+
+
+def _run_short(E, X, P, M, *, cost=0.0, borrow=0.0, slots=1):
+    S, T = P.shape
+    ok = np.ones((S, T), bool)
+    return en.simulate_short(_bits(E), _bits(X), 0, P, M, ok, ok, ok,
+                             np.full((S, T), cost), np.full((S, T), cost), np.full((S, T), cost),
+                             np.zeros((S, T), bool), np.zeros((S, T)), np.arange(T), T, 1.0, slots,
+                             np.full((S, T), borrow))
+
+
+def test_short_gains_when_price_falls_with_costs_and_borrow():
+    P = np.array([[100., 100., 90., 80.]]); M = np.array([[100., 95., 90., 80.]])
+    E = np.zeros((1, 1, 4), bool); E[0, 0, 0] = True
+    X = np.zeros((1, 1, 4), bool); X[0, 0, 2] = True
+    eq, tr, w = _run_short(E, X, P, M, cost=10.0)
+    # short 0.01 shares... alloc 1.0 at 100 (q = 0.01), sell cost 10 bp; mark 95; cover at 80
+    assert np.isclose(eq[1], 1.0 - 0.001 + 0.01 * 5)
+    assert np.isclose(eq[3], 1.0 - 0.001 + 0.01 * 20 - 0.01 * 80 * 0.001)
+    assert tr.sum() == 1 and w.sum() == 1
+
+
+def test_short_borrow_accrues_per_bar():
+    P = np.ones((1, 4)) * 50; M = P.copy()
+    E = np.zeros((1, 1, 4), bool); E[0, 0, 0] = True
+    X = np.zeros((1, 1, 4), bool)
+    eq, _, _ = _run_short(E, X, P, M, borrow=0.001)
+    # 3 marked bars after entry at bar 1 (bars 1,2,3): 3 x 0.001 x position value 1.0
+    assert np.isclose(eq[-1], 1.0 - 3 * 0.001)
