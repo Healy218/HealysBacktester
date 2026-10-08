@@ -1,4 +1,4 @@
-# Handoff — October 8, 2026 — V8.0 data through fills done; V8.0-contract next
+# Handoff — October 8, 2026 — stage 0 complete; V8.1 pre-registration next
 
 ## Where things stand
 
@@ -34,11 +34,12 @@ No jobs running. V6 paper services paused by user choice; one V6 paper position
 
 ## Next action
 
-**V8.0-contract:** one frozen contract and coverage report tying together the pool,
-bars, admission rule and cost table (paths + sha256 of each artifact), then
-**V8.1-prereg** (families, 1h/1d horizons, folds, costs, pass rules; development
-window ends 2025-12-31) for the user's review before any stage-1 run.
-V8.0-fills is done (`nn_meta/v8_fills.py`, [V8_COSTS_20261008.json](docs/specs/V8_COSTS_20261008.json)).
+**V8.1-prereg:** draft the stage-1 pre-registration (strategy families, 1h/1d
+horizons, expanding-window folds inside 2021-05 → 2025-12, benchmarks QQQ/XLK and
+SPY, costs at 1.0×/1.5×, pass rules: OOS benchmark-beating in most folds, rank
+persistence, deflated Sharpe, PBO < 0.5) and get the user's sign-off before any
+stage-1 run. Every stage-1 run calls `nn_meta.v8_contract.verify()` first.
+Stage 0 is complete ([contract](docs/specs/V8_CONTRACT_20261008.json)).
 
 Also done October 8: V8.0-spreads ([evidence](docs/EXPERIMENTS.md)); parallel
 builders (`nn_meta/v8_parallel.py`, user preference: worker pools and vectorized

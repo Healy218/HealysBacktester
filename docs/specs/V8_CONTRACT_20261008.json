@@ -1,0 +1,165 @@
+{
+ "schema": "v8-contract-v1",
+ "frozen_at": "2026-10-08T17:18:05+00:00",
+ "stage": "V8.0 universe and cost contract",
+ "window": {
+  "bars": [
+   "2021-01-04",
+   "2026-09-14"
+  ],
+  "first_admitted_day": "2021-05-03",
+  "development_end": "2025-12-31",
+  "holdout": "2026-01-01 onward (stage 5; not used in stage 1)"
+ },
+ "universe": {
+  "symbols": 179,
+  "tech_and_etfs": "162 tech (incl. delisted) + 17 ETFs"
+ },
+ "coverage": {
+  "needed_days": 127349,
+  "ok": 127125,
+  "partial": 83,
+  "missing": 3,
+  "delisted": 138,
+  "prelisting": 0
+ },
+ "admission": {
+  "admitted_share": 0.993,
+  "admitted_per_day": {
+   "min": 67,
+   "median": 93.0,
+   "max": 126
+  },
+  "rejections": {
+   "price": 335,
+   "adv20": 328,
+   "bar_status": 224
+  }
+ },
+ "consumer_rules": [
+  "Trade only admitted (ticker, date) rows of the admission panel.",
+  "No entries before 10:00 ET.",
+  "Never compute a return across an events.json break or a non-ok bar day.",
+  "Price every fill with nn_meta.v8_fills at cost_mult 1.0 and 1.5; midpoint-only results never count.",
+  "Use adjusted prices for returns and raw prices for fills/costs."
+ ],
+ "artifacts": {
+  "pool": {
+   "path": "docs/specs/V8_POOL_PIT2021_20261007.json",
+   "sha256": "c0e7921823df4fc66e57d6572902f00ea190498b62d099c2d8beee4ebed04dd0",
+   "bytes": 79933
+  },
+  "liquidity_rule": {
+   "path": "docs/specs/V8_LIQUIDITY_20261008.json",
+   "sha256": "b6c98c18b071bd8507443a6418e310fdd8f54766fa3f10c0d84fca59836a95de",
+   "bytes": 1586
+  },
+  "cost_table": {
+   "path": "docs/specs/V8_COSTS_20261008.json",
+   "sha256": "ba1d07de2b131b697154093d75549324f72439bad2b6aa6ad7f2f1903a364a61",
+   "bytes": 52701
+  },
+  "pit_report": {
+   "path": "nn_meta/validation/v8-pit-20261007-r0/report.json",
+   "sha256": "314100b6675f26cffe2b0780d029a92dafbd98820e5687ba7ca812f3785c5151",
+   "bytes": 28733
+  },
+  "pit_membership": {
+   "path": "nn_meta/validation/v8-pit-20261007-r0/membership.parquet",
+   "sha256": "60743245674a2a0746c3aae5f94dd7fd5acfbcf6af5d3f7e47f2b69f0d0ce14d",
+   "bytes": 195232
+  },
+  "bars_1h": {
+   "path": "nn_meta/validation/v8-data-20261008-r0/bars_1h.parquet",
+   "sha256": "b7fd0c9bc630988ad57bc781ed62a00e344a6bc69da89d37408241c7c7668336",
+   "bytes": 66548534
+  },
+  "bars_1d": {
+   "path": "nn_meta/validation/v8-data-20261008-r0/bars_1d.parquet",
+   "sha256": "42a97c6b9d4bee1371a6f256edf3cf8e3be087da02cfdb9f8132a133426b2d07",
+   "bytes": 9983752
+  },
+  "coverage": {
+   "path": "nn_meta/validation/v8-data-20261008-r0/coverage.parquet",
+   "sha256": "9aa3491b38fa11127f964ac25e801aef908472c952c570b01d145b78f5261a1d",
+   "bytes": 1900326
+  },
+  "bar_spans": {
+   "path": "nn_meta/validation/v8-data-20261008-r0/spans.json",
+   "sha256": "1a76895e09fa8e63e88bb77b70b5528bf37ae5dcf0fbb2f61f0858f8b5dd794a",
+   "bytes": 28479
+  },
+  "events": {
+   "path": "nn_meta/validation/v8-data-20261008-r0/events.json",
+   "sha256": "f2a7bfbf905edd7fbd2bdd620efb38d05326f5f3515700de81e3a732cd5b29c6",
+   "bytes": 393
+  },
+  "admission": {
+   "path": "nn_meta/validation/v8-liquidity-20261008-r0/admission.parquet",
+   "sha256": "bca945a7a1302b353012c64a982425575cb2762fc685708bb09a7ffe837eeb7b",
+   "bytes": 2297753
+  },
+  "stock_quotes": {
+   "path": "nn_meta/validation/v8-spreads-stock-20261008-r0/quotes.parquet",
+   "sha256": "de20d5e626da31101bcc0470175e581896bf69c34c57d927dd0e015be43add7b",
+   "bytes": 14979739
+  },
+  "option_spreads": {
+   "path": "nn_meta/validation/v8-spreads-option-20261008-r0/model.json",
+   "sha256": "7827eae1008ac5bf71c91c3a295ab1bc709008a1425c9f0d27b953b9f289a1a6",
+   "bytes": 6611
+  }
+ },
+ "code": {
+  "nn_meta/universe_pit.py": {
+   "path": "nn_meta/universe_pit.py",
+   "sha256": "da53e960673bba83d2b8408d87394e1d40a25076ab13db9962ef6c8f82080faa",
+   "bytes": 18907
+  },
+  "nn_meta/v8_fills.py": {
+   "path": "nn_meta/v8_fills.py",
+   "sha256": "3959484e00efa8e69ec4001f9a6860a36ad1cc6a08b9e5d890cf51327f695425",
+   "bytes": 4552
+  },
+  "nn_meta/v8_parallel.py": {
+   "path": "nn_meta/v8_parallel.py",
+   "sha256": "79a2db0261f43c0119b72392a084f56b578136643771b44f062e78a8f63ecac9",
+   "bytes": 1856
+  },
+  "scripts/build_v8_universe_pit.py": {
+   "path": "scripts/build_v8_universe_pit.py",
+   "sha256": "5162189a78c72202e5aeffd307cff3f01fdff122bb54ef8d4a67408818205bae",
+   "bytes": 11607
+  },
+  "scripts/freeze_v8_pool.py": {
+   "path": "scripts/freeze_v8_pool.py",
+   "sha256": "4d6804c90006b61dbef55d79dbf6f3abac8904892e07c5ab0478a9b9351f3807",
+   "bytes": 10150
+  },
+  "scripts/build_v8_bars.py": {
+   "path": "scripts/build_v8_bars.py",
+   "sha256": "71909be5f97843236d5ddbd1cd7e54d2b98975a7698e35a717392fa529df7805",
+   "bytes": 22136
+  },
+  "scripts/sample_v8_stock_spreads.py": {
+   "path": "scripts/sample_v8_stock_spreads.py",
+   "sha256": "ed2f62f31b2a89c31ae56c735ffec51f3c48424eb2b84ec1b185263eb06d32a6",
+   "bytes": 10673
+  },
+  "scripts/build_v8_option_spreads.py": {
+   "path": "scripts/build_v8_option_spreads.py",
+   "sha256": "1ab85c9acce28d34ad42323d1ab75414c42c068affc249df1af9ea0c992ec908",
+   "bytes": 8952
+  },
+  "scripts/build_v8_admission.py": {
+   "path": "scripts/build_v8_admission.py",
+   "sha256": "5934fd4a3e64f4335709e51bd2b9e752f8dfc1f00a98e071f4b7a4927c753cf3",
+   "bytes": 3826
+  },
+  "scripts/build_v8_cost_table.py": {
+   "path": "scripts/build_v8_cost_table.py",
+   "sha256": "1266bebcf7c0be9259ef306841e50bac0a74925a525b72916896d3676d025997",
+   "bytes": 3496
+  }
+ }
+}

@@ -1271,3 +1271,15 @@ predicted vs measured median spread Spearman 0.994, median ratio 0.995;
 per-snapshot median |log error| 0.33. Hand-case unit tests pass. Caveat: the table
 uses the full 2021–2026 sample (within-year cells), so costs see later quotes; costs
 are not signals, and stage 1 also requires survival at 1.5×.
+
+## 2026-10-08 — V8.0-contract: stage 0 complete
+
+[V8_CONTRACT_20261008.json](specs/V8_CONTRACT_20261008.json) (write-once,
+`scripts/freeze_v8_contract.py`) pins 13 stage-0 artifacts and 10 code files by
+sha256: pool, liquidity rule, cost table, PIT report/membership, hourly/daily bars,
+coverage, spans, events, admission panel, stock quote sample and option spread
+model. Coverage: 127,349 needed symbol-days, 127,125 ok, 83 partial, 3 missing,
+138 post-delisting; 99.3% admitted. Consumer rules: admitted rows only, no entries
+before 10:00 ET, no returns across breaks or non-ok days, every fill priced by
+`nn_meta.v8_fills` at 1.0× and 1.5×. `nn_meta.v8_contract.verify()` refuses a run if
+any pinned artifact is missing or changed. **Stage 0 (V8.0) is complete.**

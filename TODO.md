@@ -42,11 +42,13 @@ per symbol/day; full in-memory loads have crashed this box.
   [V8_COSTS_20261008.json](docs/specs/V8_COSTS_20261008.json): stock fills at bar price
   ± (measured half-spread × name factor + 1 bp), sell-side regulatory fees; options
   mid ± k × half-spread (k = 1.0 / 0.5) + $0.05/contract. Hand-case tests pass.
-- [ ] **V8.0-contract (next):** freeze the universe/cost contract and coverage report.
+- [x] **V8.0-contract:** [V8_CONTRACT_20261008.json](docs/specs/V8_CONTRACT_20261008.json)
+  pins 13 artifacts + 10 code files by sha256; `nn_meta.v8_contract.verify()` gates
+  stage-1 runs. **Stage 0 complete.**
 
 ## Stage 1 — edge on the underlying
 
-- [ ] **V8.1-prereg:** pre-register families, horizons (1h/1d), folds, costs and pass
+- [ ] **V8.1-prereg (next):** pre-register families, horizons (1h/1d), folds, costs and pass
   rules (benchmark-beating out of sample, rank persistence, deflated Sharpe, PBO
   < 0.5, 1.5× cost stress). Development window ends 2025-12-31.
 - [ ] **V8.1-walkforward:** tuned-variant walk-forward on admitted symbols, expanding
