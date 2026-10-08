@@ -43,6 +43,13 @@ FOLDS = cf.FOLDS
 N_TRIALS = 18
 
 
+def _chain_month(job):
+    """Top-level (picklable) twin of run_v8_h1_confirm._chain_month."""
+    path, pairs = job
+    ch = pd.read_parquet(path, columns=["date", "ticker", "expiry", "cp", "strike", "close", "volume"])
+    return ch[(ch["ticker"] + "|" + ch["date"]).isin(pairs)]
+
+
 def borrow_matrix(px: pd.DataFrame, tickers, days, adv20: np.ndarray) -> np.ndarray:
     raw = px.pivot(index="ticker", columns="date", values="close").reindex(index=tickers, columns=days).to_numpy()
     prev = np.full(raw.shape, np.nan); prev[:, 1:] = raw[:, :-1]
@@ -144,7 +151,7 @@ def main() -> None:
     months = sorted({p.split("|")[1][:7] for p in need})
     workers, _ = autosize_workers(per_worker_mb=3000)
     with ProcessPoolExecutor(workers) as exe:
-        chains = pd.concat(list(exe.map(cf._chain_month, [(str(cf.CHAINS / f"{m}.parquet"), need) for m in months])),
+        chains = pd.concat(list(exe.map(_chain_month, [(str(cf.CHAINS / f"{m}.parquet"), need) for m in months])),
                            ignore_index=True)
     by_td = {k: g for k, g in chains.groupby(["ticker", "date"])}
     rawc = px.pivot(index="date", columns="ticker", values="close")
