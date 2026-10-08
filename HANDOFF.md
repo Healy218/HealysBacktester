@@ -1,4 +1,4 @@
-# Handoff — October 8, 2026 — V8 stage 1 FAILED; stage 2 inputs built, pre-registration next
+# Handoff — October 8, 2026 — V8 stages 1 and 2 FAILED; next step is the user's decision
 
 ## Where things stand
 
@@ -24,11 +24,12 @@ been read by any stage-1 code.
 
 ## Next action
 
-**V8.2-prereg:** stage 2 was approved by the user (Oct 8). Inputs are built (chains,
-IV30, PIT HAR forecast; [evidence](docs/EXPERIMENTS.md)). Bring the pre-registration
-(universe rule, defined-risk structures, IV/HAR thresholds, sizing, folds, pass rules)
-to the user for sign-off before any test. Do not look at signal/return relationships
-before it is frozen.
+**Stage 2 FAILED** ([evidence](docs/EXPERIMENTS.md)): all 15 volatility variants and
+all always-on structures lost over 2022–2025; PBO 0.84. (The first run was voided by a
+split-settlement bug, fixed in `aa5edab`.) With stage 1 also failed, V8 has found no
+edge in direction or in IV-vs-forecast vol timing under realistic costs. **Ask the
+user what V8 does next**; do not start a new search, re-test failed families on the
+same window, or touch the 2026 holdout without that decision.
 
 Tools ready for reuse: `nn_meta/v8_engine.py` (numba slot simulator, ~5 ms per hourly
 variant), `nn_meta/v8_fills.py`, `nn_meta/v8_contract.verify()`,

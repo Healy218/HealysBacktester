@@ -61,9 +61,12 @@ per symbol/day; full in-memory loads have crashed this box.
 - [x] **V8.2-data:** daily option chains for the pool from V7 day aggregates.
 - [x] **V8.2-iv / -forecast:** IV30 (ATM, parity forward) and PIT 21-day HAR forecast,
   `vol_panel.parquet`. [Evidence](docs/EXPERIMENTS.md).
-- [ ] **V8.2-prereg (next):** structures, signal thresholds, universe, sizing, folds,
-  pass rules; user sign-off before any test.
-- [ ] **V8.2-walkforward / -verdict.**
+- [x] **V8.2-prereg:** user-approved, [frozen](docs/specs/V8_STAGE2_PREREG_20261008.json).
+- [x] **V8.2-walkforward / -verdict: FAIL** (all variants and always-on structures lose;
+  2/6 folds; PBO 0.84). First run invalidated by a split-settlement bug, fixed and rerun.
+  [Evidence](docs/EXPERIMENTS.md).
+
+**Next: the user decides V8's direction** (stage 1 and stage 2 both failed).
 
 ## Parallel / later (not started)
 

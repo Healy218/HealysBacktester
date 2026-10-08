@@ -1325,3 +1325,30 @@ direct 21-day HAR forecast (refit monthly; available from ~2022-03, needing a ye
 of history). Sanity: SPY IV30 median 23% in 2022 and 12% in 2024; 42% on
 2025-04-08 and 25% on 2024-08-05 (VIX ~52 and ~38, which include skew). Median
 IV30 / later-realized vol 1.05. No signal or trading result was examined.
+
+## 2026-10-08 — V8.2 stage-2 volatility walk-forward: FAIL
+
+Run as pre-registered ([V8_STAGE2_PREREG_20261008.json](specs/V8_STAGE2_PREREG_20261008.json),
+committed `31ba9c6` before results): monthly PIT top-12 option-volume names (21
+tickers over time: SPY, QQQ, IWM and tech megacaps), signal IV30/HAR, 15 variants
+(iron butterflies ±1.0/±1.5 EM, iron condor 1.0/1.5 EM when the ratio ≥ 1.1–1.5;
+long straddle when ≤ 0.8–1.0), ~30 DTE, next-day close ± modelled half-spread, held to
+expiry, 2% risk per trade, 56,507 candidate trades 2022-03 → 2025-12.
+
+**First run invalid (bug):** settlement used the raw post-split close against
+pre-split strikes for 619 split-spanning trades (straddles credited ~7× risk). Fixed
+in `aa5edab` (settle in contract terms) with no other change; the invalid output is
+kept as `report_INVALID_split_bug.json`.
+
+Corrected result (`nn_meta/validation/v8-stage2-20261008-r0/report.json`): every
+variant and every always-on structure lost over 2022–2025 (always-on: iron butterfly
+±1.0 −55%, ±1.5 −31%, condor −28%, straddle −58%; best variant ib±1.0 at ratio ≥ 1.5,
+−0.9% on 22 trades). The selected variant (straddle at ratio ≤ 0.9 in every fold) beat
+always-on and cash in 2/6 folds (2/6 at k = 1.5); rank persistence median −0.02;
+deflated Sharpe 0.12; PBO 0.84. **All rules fail.** Diagnostics: the variance premium
+exists in the median (median |move| 0.71 expected moves vs ~0.8 straddle breakeven),
+but megacap tails in 2022–2025 outweighed it for short structures even before costs
+(iron butterfly ±1.0 mean −0.12 of risk per trade, of which ~0.05 is cost); long
+straddles averaged ≈ 0 before compounding. The forecast ratio did not time either side.
+**Verdict: V8 found no edge on the underlying (stage 1) or in IV-vs-forecast
+volatility trading (stage 2) under realistic costs. Next step is the user's decision.**

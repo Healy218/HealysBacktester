@@ -1179,5 +1179,8 @@ actual entitlement failure. No full-universe recording is running.
   `nn_meta/validation/v8-stage2-20261008-r0/chains/<yyyy-mm>.parquet` (includes 2026 on
   disk; stage-2 code truncates at 2025-12-31); vol panel `scripts/build_v8_vol_panel.py`
   (`nn_meta/v8_vol.py`) → `vol_panel.parquet`, `vol_summary.json`.
+- V8 stage 2 (2026-10-08, FAIL): prereg [V8_STAGE2_PREREG_20261008.json](specs/V8_STAGE2_PREREG_20261008.json);
+  `nn_meta/v8_vol_trades.py`, `scripts/run_v8_stage2.py` → `candidates.parquet`,
+  `equity_<k>.npz`, `report.json` (the `*_INVALID_split_bug.*` files are the voided first run).
 - V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
 - Data plans: none paid. Alpaca free tier works for stock and option bars.
