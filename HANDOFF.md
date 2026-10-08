@@ -32,16 +32,16 @@
 ## Status at session end
 
 No jobs running. V6 paper services remain paused by user choice; one V6 paper
-position (TMUS) is open. ROADMAP has no V8 workstream section yet (V8 lives in the
-spec, TODO and DECISIONS); add one if the user wants V8 tracked there.
+position (TMUS) is open. October 8: the user confirmed delisted names stay in the
+historical test, and ROADMAP now has the V8 gate table (ETFE marked closed).
 
 ## Next action
 
 **V8.0-data:** 1-minute stock bars for the new pool (162 tech + 17 ETFs, 2021+)
 from the V7 payload store (`*/stock_1m/{raw,all}/<SYM>/<YEAR>/…/bars.parquet` via
 `files.sqlite3`), XLB/XLC/XLRE from Alpaca free tier, coverage report per symbol
-and day. The new pool includes dead and 2021-era names that the V7 bar store
-(624 securities) may lack; list those first. Then -spreads, -liquidity, -fills,
+and day. The V7 bar store (624 securities) is only a source, not the universe;
+first list pool names it lacks (some delisted or 2021-era names may be missing). Then -spreads, -liquidity, -fills,
 -contract, and stage-1 pre-registration.
 
 Constraints: stream per symbol/day under `systemd-run --user --scope -p

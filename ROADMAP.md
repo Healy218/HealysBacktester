@@ -5,37 +5,17 @@ of options-trading model artifacts and specialist researchers. Progress means
 completed, reproducible milestones and measured outcomes. The end goal remains
 open-ended; each selected phase has bounded requirements and an exit condition.
 
-**Selected work: ETFE — fresh Alpaca setup/acquisition; ETFE-0 admission open.**
-October 3 user direction selects a brand-new expert's setup and scope:
-SPY/QQQ/VOO, V7 strategy variants and timing rules, 1/5/15-minute signals, and
-Alpaca's earliest options history through October 2, 2026, inclusive. Massive
-quotes are excluded, including archived V7 copies.
-[ETFE specification](docs/specs/ETFE.md). Date policy is confirmed; exact first
-provider timestamp and trade/bar coverage still need verification. Completed-minute
-VWAP is the accepted option-price reference. Independent configuration/catalog,
-bounded provider probes and the versioned VWAP reference component are implemented;
-[current component evidence](docs/reviews/2026-10-03-etfe-vwap.md).
-October 3: four ETFE-0 definitions are declared; H1/R1/R2/P1 source evidence
-still blocks closure. [Contract review](docs/reviews/2026-10-03-etfe-contract.md).
-Subsequent [pull diagnosis](docs/reviews/2026-10-03-etfe-alpaca-pulls.md) verifies
-sample trade/bar reconciliation and pagination, isolates old metadata anomalies,
-and sources QQQ's adjustment and VOO's dated Nasdaq hours transition. The full
-source gate remains open; historical-trade feed selection is unsupported.
-October 4 user clarification prioritizes fresh Alpaca stock/option downloads
-and rebuilding ETFE inputs, features and models. Bounded raw collection proceeds
-while validation continues; old metadata repairs and provider-global history
-proof are no longer collection prerequisites. **Purchases and rolls: 0–5 calendar
-DTE** after the follow-up expressly enables 0DTE when signals qualify. Targets
-0/1/5 plus eligible 2/4; target 7 remains removed.
-[Fresh collection successor](docs/specs/ETFE_FRESH_ACQUISITION_20261003.md),
-[Current 0DTE successor](docs/specs/ETFE_0DTE_NORMALIZATION_20261004.md),
-[bootstrap evidence](docs/reviews/2026-10-04-etfe-fresh-acquisition.md).
+**Selected work: [V8](#v8--edge-first-on-liquid-stocks-and-etfs) — stages 0 and 1.**
+October 7 user direction: prove an edge on liquid stocks and ETFs under realistic
+bid/ask fills before any options or meta-model work. ETFE closed October 7 (v5
+failed; the 2026 test stays unspent); its section below is retained as history.
+[Decision](docs/DECISIONS.md), [evidence](docs/EXPERIMENTS.md) (October 7 entries).
 
 V7 research stays paused with its original gates/evidence preserved. MRHA archival
 completed October 3 at 16:55:50 Central with all 2,847 shards verified and final
 reclamation recorded. [Completion audit](docs/reviews/2026-10-03-v7-archive-completion-audit.json).
 This closes storage task 7-3.archive, not the unfinished V7 scientific gate.
-Other research/update campaigns remain paused; ETFE selection does not resume them.
+Other research/update campaigns remain paused; V8 selection does not resume them.
 [TODO](TODO.md) owns actionable tasks. [CURRENT_STATE](docs/CURRENT_STATE.md)
 owns selected inputs and runtime pointers. [GOALS](GOALS.md) owns the maturity
 scorecard. Status below is reconciled September 27, 2026; live health requires
@@ -45,8 +25,8 @@ checking the linked operational evidence.
 
 | Workstream | Established position | Next milestone and dependency |
 | --- | --- | --- |
-| Shared data and provenance | PIT identity/actions, frozen inputs, capture, replay and recovery components exist | Establish ETFE provider/history coverage; retain immutable lineage for all researchers |
-| Model researchers: classification, EV and future generations | V5/V6 artifacts and evaluation machinery exist; V7 retained, ETFE scope selected | Pass ETFE gates and evaluate its own artifacts before incubator or operational admission |
+| Shared data and provenance | PIT identity/actions, frozen inputs, capture, replay and recovery components exist | V8.0: PIT pool done; bar coverage, spread, liquidity and fill models next; retain immutable lineage for all researchers |
+| Model researchers: classification, EV and future generations | V5/V6 artifacts and evaluation machinery exist; V7 retained; ETFE closed October 7; V8 selected | V8.1 verdict on the underlying before any model or options work |
 | Paper execution and risk | Prospective V6 paper fills/reconciliation observed; October 2 Alpaca held quotes deployed | Full-universe entry features blocked pending Alpaca recording capacity and validation; sustain broker risk/reconciliation ([transition](docs/reviews/2026-10-02-v6-alpaca-provider.md)) |
 | Continual research/training incubator | Initial catch-up and repaired two-session update through September 30 complete; both evaluated freezes retained, diagnostic regressions recorded; V7/storage restored ([October 1 evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md)) | Measure a clean one-session update and sustained coexistence; V7 admission follows its own gate |
 | FA discovery and context | Collection, rankings, enrichment snapshots and experimental evaluation exist | Complete the FA milestones below; no automatic admission into V7 or trading |
@@ -57,13 +37,37 @@ checking the linked operational evidence.
 | RL sizing and exits | Deferred, last in dependency order | Reliable execution ledger and demonstrable improvement over simple sizing/exits |
 | Platform, dashboards and journal | Deployment/monitoring and existing displays exist | Accurate artifact/account identity, recoverable operations and broker facts distinct from projections |
 
-V7 archive completion is verified; ETFE setup remains selected.
+V7 archive completion is verified; V8 is selected (ETFE closed).
 Other research workstreams above remain paused.
 Their next milestones remain retained requirements, not active assignments.
 Actual installed-service state is recorded separately in CURRENT_STATE; work
 selection does not itself prove service shutdown or authorize spending.
 
+## V8 — edge first on liquid stocks and ETFs
+
+Selected October 7, 2026. Prove an edge under realistic bid/ask fills before any
+options or meta-model work. Universe: point-in-time technology names plus SPDR
+sector and broad ETFs. Delisted names stay in the historical test while they were
+members (survivorship-free); live and paper trading only ever see current members.
+Owned data only: V7 raw inputs read in place, plus Alpaca's free tier.
+[Specification](docs/specs/V8_DESIGN_20261007.md) owns technical requirements;
+[TODO](TODO.md) owns the stage 0–1 checklist.
+
+| Gate | Deliverable | Status |
+| --- | --- | --- |
+| **V8.0 — Universe and cost contract** | PIT pool ([done](docs/specs/V8_POOL_PIT2021_20261007.json)), bar coverage, spread model, liquidity rule, fill model, frozen contract | In progress |
+| **V8.1 — Edge on the underlying** | Pre-registered walk-forward, benchmark-beating after costs, deflated Sharpe, PBO < 0.5, 1.5× cost stress | Authorized |
+| **V8.2 — Volatility** | Candidate if V8.1 fails | Needs go-ahead |
+| **V8.3 — Instrument mapping (options)** | Only after a proven edge | Needs go-ahead |
+| **V8.4 — Meta-model** | Only if V8.1 or V8.2 passes | Needs go-ahead |
+| **V8.5 — Holdout and forward evidence** | 2026 holdout, paper trading | Needs go-ahead |
+
+Exit: a V8.1 verdict recorded in [EXPERIMENTS](docs/EXPERIMENTS.md). If nothing
+passes, V8.2 is next, not a meta-model.
+
 ## ETFE — Exchange Traded Funds Expert
+
+**Closed October 7, 2026** (v5 failed; 2026 test unspent). Retained as history.
 
 ETFE is a brand-new expert replacing the active V7 research priority. It does
 not reuse V7 model weights/checkpoints, relabel artifacts or close V7's unfinished gates. [Specification](docs/specs/ETFE.md) owns technical inheritance.

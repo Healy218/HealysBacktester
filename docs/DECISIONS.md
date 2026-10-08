@@ -2527,3 +2527,12 @@ ETF history, map renames to the current ticker) rather than editing the shared
 [V8_POOL_20261007.json](specs/V8_POOL_20261007.json) under the same rule. Dead
 issuers keep their filing-time SIC; live issuers use current SIC.
 Rejected: patching the V3 artifacts (write-once; would change V5's frozen inputs).
+
+### 2026-10-08 — V8 keeps delisted names in the historical test; ROADMAP tracks V8
+
+The user confirmed that delisted names (e.g. TWTR, XLNX, SPLK) stay in V8's
+historical pool for the months they were members, so stage-1 results are
+survivorship-free; live and paper trading only see current members. The V7
+stock-bar archive (624 securities) is a data source, not V8's universe.
+ROADMAP now carries the V8 gate table (V8.0–V8.5) and marks ETFE closed.
+Rejected: a current-listings-only history (survivorship-biased).
