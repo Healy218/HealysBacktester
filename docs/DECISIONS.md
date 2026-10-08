@@ -2578,3 +2578,13 @@ off-exchange/dark-pool flow in the DIX direction). OEE goes first because its da
 complete in hand; OVE's open-interest filter is forward-only, so its recorder starts
 early. Rejected: testing ideas descriptively before pre-registration; Google Trends;
 paid flow feeds.
+
+### 2026-10-08 — OEE-1 approved as written; per-day premium cap 25%
+
+The user approved the eight OEE-1 variants as drafted
+([prereg](specs/V9_OEE1_PREREG_20261008.json)), then raised the post-pass sizing cap on
+total premium at risk across one day's earnings events from 10% to 25% of equity.
+Earnings trades are held overnight through the release, so a P/L stop cannot cap the loss
+(the open gaps past it); the premium at risk is the loss budget. Per-position cap 2%, half
+Kelly from out-of-sample returns, and the −15%/−20% drawdown brake are unchanged. Sizing is
+not part of the pass rules; the change was made before any result.

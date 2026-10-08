@@ -65,7 +65,7 @@
   "confirmation": "2026-01-02 .. 2026-09-14 (holdout partially used by V8 H1 stock; OEE trades different instruments on different dates); run only the variants that pass dev; pass = mean net per-trade return > 0 with clustered t >= 1 at k = 1.0",
   "single_run": "dev runs once and is reported whatever the outcome; no re-tuning after seeing results"
  },
- "sizing_after_pass": "OEE-3 only, from out-of-sample per-trade returns: half Kelly (f = 0.5 x mean / variance of return on premium), at most 2% of equity premium per position and 10% total premium at risk on any one day's events (worst case for the day: -10%); drawdown brake halves sizing at -15% and stops new entries at -20%",
+ "sizing_after_pass": "OEE-3 only, from out-of-sample per-trade returns: half Kelly (f = 0.5 x mean / variance of return on premium), at most 2% of equity premium per position and 25% total premium at risk on any one day's events (user decision 2026-10-08, replacing the drafted 10%; worst case for the day: -25%, because overnight earnings gaps jump past any stop, so premium at risk is the loss budget); drawdown brake halves sizing at -15% and stops new entries at -20%",
  "limitations": [
   "last-trade closes can be minutes stale relative to the 16:00 stock close; entry-day spreads before earnings are likely wider than the bucket medians (k = 1.5 stress, and V8 H1 paper fills will calibrate)",
   "8-K acceptance can trail the press release; 10 events with an entry-day IV crush are excluded",
@@ -82,5 +82,8 @@
   "missing_exit": "a trade whose exit price is missing (not traded on the reaction day and not expiring) is dropped and counted in the report",
   "h2b_wings": "wings are the call strike nearest K + implied move x S above K and the put strike nearest K - implied move x S below K, each traded on the entry day (volume > 0); maximum loss = max(call wing - K, K - put wing) - net credit, per share",
   "clustered_t": "cluster-robust standard error of the mean by reaction day; one-sided p from Student t with (clusters - 1) degrees of freedom"
- }
+ },
+ "sizing_change_log": [
+  "2026-10-08: per-day premium cap 10% -> 25% by the user, after freeze and before any result; sizing is not part of the pass rules"
+ ]
 }
