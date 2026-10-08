@@ -70,8 +70,14 @@ per symbol/day; full in-memory loads have crashed this box.
 
 - [x] **V8-EV-data:** free PIT backfill 2021–2025 (SEC facts/filings, insider, FINRA
   short volume, news). [Evidence](docs/EXPERIMENTS.md).
-- [ ] **V8-EV-prereg (next):** 3–4 literature-backed hypotheses; user sign-off first.
-- [ ] **V8-EV-walkforward / -verdict** on the V8 engine and frozen costs.
+- [x] **V8-EV-prereg:** four hypotheses, 16 variants, [frozen](docs/specs/V8_EVENTS_PREREG_20261008.json).
+- [x] **V8-EV-walkforward / -verdict: FAIL** for all four; shared gates passed (rank
+  0.41, PBO 0.14); H1 earnings drift (SUE, 20-day) is a near-miss: positive in all 6
+  folds, OOS Sharpe 1.65, deflated Sharpe 0.92, but beat fully invested benchmarks in
+  only 2/6. [Evidence](docs/EXPERIMENTS.md).
+
+**Next: user decision** — accept, or confirm H1 under a newly pre-registered rule on
+fresh data (2026 holdout and/or Alpaca paper forward test).
 
 ## Parallel / later (not started)
 

@@ -122,7 +122,7 @@ def main() -> None:
                 sel = max(idx, key=lambda i: is_sr[i])
                 oos = float(np.prod(1 + r[sel, a:b]) - 1)
                 ok = oos > bret.max()
-                beats[h] += ok
+                beats[h] += int(ok)
                 concat[h].append(r[sel, a:b])
                 fold["hypotheses"][h] = {"selected": names[sel], "is_sharpe": float(is_sr[sel]),
                                          "is_trades": int(is_tr[sel]), "oos_return": oos,

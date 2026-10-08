@@ -1186,5 +1186,8 @@ actual entitlement failure. No full-universe recording is running.
   `sec/{facts,filings}.parquet` (`scripts/build_v8_sec.py`), `insider/insider.parquet`,
   `finra/short_volume.parquet`, `news/news.parquet`, `wiki/pageviews.parquet` + `wiki/mapping.json` (`scripts/build_v8_events.py
   --source insider|finra|news|wiki`); every row has `available_at_utc`.
+- V8 event hypotheses (2026-10-08, FAIL; H1 near-miss): prereg
+  [V8_EVENTS_PREREG_20261008.json](specs/V8_EVENTS_PREREG_20261008.json);
+  `nn_meta/v8_event_signals.py`, `scripts/run_v8_events.py` → `report.json`, `equity_<mult>.npz`.
 - V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
 - Data plans: none paid. Alpaca free tier works for stock and option bars.

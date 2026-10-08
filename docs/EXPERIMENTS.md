@@ -1372,3 +1372,31 @@ Availability rule (tested): SEC filings are public at acceptance if accepted 06:
 17:30 ET on a business day, else 06:00 ET the next business day; FINRA next day
 06:00 ET; news at creation; a UTC day's page views 06:00 ET the next business day.
 No signal-return relationship was examined.
+
+## 2026-10-08 — V8 event/attention hypotheses: FAIL as pre-registered; earnings drift is a near-miss
+
+Run as pre-registered ([V8_EVENTS_PREREG_20261008.json](specs/V8_EVENTS_PREREG_20261008.json),
+committed `41b0cb3` before results) on the daily V8 engine with frozen costs; 16
+variants, 177 symbols, 2021-05 → 2025-12 (`nn_meta/validation/v8-events-20261008-r0/report.json`,
+`scripts/run_v8_events.py`). Two code fixes before any result was read: an engine
+segfault when entry priorities fall below −2 (`9654653`; stage-1 equity re-simulated
+bit-identically) and a JSON print error.
+
+| Hypothesis | Selected OOS | Folds beating all benchmarks (1.0× / 1.5×) | Deflated Sharpe | Verdict |
+|---|---|---|---|---|
+| H1 earnings drift | SUE, 20-day hold in every fold; OOS +9.3, +18.8, +15.5, +10.3, +28.8, +0.6% | 2 / 2 | 0.92 (OOS annual Sharpe 1.65) | FAIL |
+| H2 insider clusters | too few events (≤ 31 round trips) for selection in most folds | 0 / 0 | 0.16 | FAIL |
+| H3 low short pressure | mixed (−2.6% to +27.1%) | 3 / 3 | 0.52 | FAIL |
+| H4 news / Wikipedia attention | mixed (−8.7% to +16.0%) | 0 / 0 | 0.25 | FAIL |
+
+Shared gates passed for the first time in V8: rank persistence positive in 5/6 folds
+(median 0.41) and CSCV PBO 0.14.
+
+Post-hoc diagnostic (not a pass criterion): over 2023–2025 the H1 selection returned
++114% with Sharpe 1.65 and 12% max drawdown at beta 0.3–0.6 to the universe, versus QQQ
++135% / 1.54 / 23%, the EW universe +153% / 1.33 / 29% and SPY +86% / 1.46 / 19%. It
+trails fully invested benchmarks in strong bull halves because it is partly in cash;
+risk-adjusted it is the strongest V8 result. **Verdict stands as FAIL under the
+pre-registered rule.** Any test with a different (e.g. risk-adjusted) rule needs a new
+pre-registration and fresh data (the 2026 holdout or forward paper trading); that is
+the user's decision.

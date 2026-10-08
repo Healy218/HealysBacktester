@@ -1,4 +1,4 @@
-# Handoff — October 8, 2026 — V8 stages 1 and 2 FAILED; event/FA backfill built, hypotheses next
+# Handoff — October 8, 2026 — V8 stages 1-2 and event hypotheses FAILED; earnings drift near-miss, user decision
 
 ## Where things stand
 
@@ -24,12 +24,14 @@ been read by any stage-1 code.
 
 ## Next action
 
-Stages 1 and 2 failed. The user chose event-driven/FA history next (Oct 8): free PIT
-backfill 2021–2025 is built (SEC facts/filings, insider, FINRA short volume, news;
-[evidence](docs/EXPERIMENTS.md)). **Next: V8-EV-prereg** — bring 3–4 literature-backed
-hypotheses (e.g. post-earnings drift, insider cluster buying, short-volume ratio,
-news-driven continuation) to the user for sign-off before examining any
-signal-return relationship.
+Event hypotheses ran as pre-registered and **all four FAIL**, but shared gates passed
+for the first time (rank 0.41, PBO 0.14). **H1 earnings drift (SUE, 20-day hold) is a
+near-miss:** positive OOS in all 6 folds, Sharpe 1.65, max drawdown 12%, deflated
+Sharpe 0.92; it beat fully invested benchmarks in only 2/6 folds because it is partly
+in cash ([evidence](docs/EXPERIMENTS.md)). The verdict stands. **Ask the user** whether
+to confirm H1 under a newly pre-registered (e.g. risk-adjusted) rule on fresh data:
+the 2026 holdout (Jan–Sep, ~9 months) and/or an Alpaca paper forward test. Do not
+re-tune H1 on 2021–2025.
 
 Tools ready for reuse: `nn_meta/v8_engine.py` (numba slot simulator, ~5 ms per hourly
 variant), `nn_meta/v8_fills.py`, `nn_meta/v8_contract.verify()`,
