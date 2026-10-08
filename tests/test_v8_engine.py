@@ -61,3 +61,13 @@ def test_forced_exit_at_close():
     force = np.array([[False, True, False]])
     eq, tr, _ = _run(E, X, P, M, force=force, slots=1, cost=0.0)
     assert np.isclose(eq[1], 1.2) and np.isclose(eq[2], 1.2) and tr.sum() == 1
+
+
+def test_priority_below_minus_two_still_ranks():
+    # stage-1 priorities were >= -1; event hypotheses use -z, which can be < -2
+    P = np.ones((2, 3)) * 50; M = P.copy()
+    E = np.zeros((2, 1, 3), bool); E[:, 0, 0] = True
+    X = np.zeros((2, 1, 3), bool)
+    prio = np.array([[-5.0] * 3, [-3.0] * 3])            # symbol 1 ranks first
+    eq, _, _ = _run(E, X, P, M, prio=prio, slots=1)
+    assert np.isclose(eq[-1], 1.0)

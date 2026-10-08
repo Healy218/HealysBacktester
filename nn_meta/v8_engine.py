@@ -165,7 +165,7 @@ def simulate(Ebits, Xbits, v, P, M, has_exec, has_mark, entry_ok, cost_buy,
                     if held[s]:
                         equity += val[s]
                 for k in range(min(free, nc)):
-                    best = -1; bp = -2.0
+                    best = -1; bp = -np.inf
                     for j in range(nc):
                         s = cand[j]
                         if s >= 0 and prio[s, t] > bp:
