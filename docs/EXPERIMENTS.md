@@ -1166,3 +1166,30 @@ spread (+1.6% below 2% to +9.2% above 20%), but the realistic mean falls from
 spreads over 10%. **Verdict: V6's backtested edge came from midpoint pricing of
 illiquid contracts; with realistic fills no configuration or spread bucket is
 profitable. A 20% stop loses less than 7.5% or none but is not an edge.**
+
+## 2026-10-07 — V8.0-pit: PIT universe rebuilt from 2021 (survivorship-free)
+
+`scripts/build_v8_universe_pit.py` read all 1,430 V7 option day-aggregate files
+(2021-01-04 → 2026-09-14) in place from MRHA (sha-verified, nothing written there)
+and reduced them with the unchanged `universe_pit` code and parameters (enter 270 /
+exit 330, 63-day median, ≥50 active days) into
+`nn_meta/validation/v8-pit-20261007-r0/`. **65 monthlies, 2021-04 → 2026-08**,
+270–309 members per month, 665 distinct tickers.
+
+| Check | Result |
+|---|---|
+| Calendar | 56 weekday gaps, all NYSE holidays (incl. 2025-01-09); no capture holes |
+| Source parity | Before V8 hygiene: every V3 member-row (6,311, 2024-11 → 2026-07) has identical rank and score; membership identical from 2025-06 on; earlier V3 months lack only V8's warm-start carry-ins |
+| Delisting canaries | PASS: TWTR 2022-11, XLNX 2022-03, ATVI 2023-11, SPLK 2024-04, X 2025-07, SWTX 2025-07, WBA 2025-09; churn gate passes |
+| OPRA test roots | 11 (ATEST, NTEST, ZJZZT, …) were members 2021-12 → 2022-06 at ranks 116–213; now dropped (none in V3's window) |
+| Renames | FB→META left META out in 2022-06/07; similar gaps for VIAC→PARA, DISCA→WBD, DWAC→DJT, GOLD→B (also in V3's 2025-05/07 artifacts) and others. Fixed with V8-local aliases (to the current ticker) |
+
+After hygiene the V3 overlap differs only by B/PSKY (renamed continuations) and
+four names displaced at the rank-330 margin (EAT, LEN, UPRO, GLXY). SEC SIC resolves
+for all equities in the tech ranges; dead tickers are resolved via EDGAR full-text
+search (XBRL filename prefix) or a verified name search, listed in `sic.json`.
+**Pool re-frozen:** [V8_POOL_PIT2021_20261007.json](specs/V8_POOL_PIT2021_20261007.json),
+66–109 tech names per month (162 distinct, including dead TWTR, XLNX, SPLK, VMW,
+ATVI, ZEN, COUP) plus the 17 ETFs. On 2024-11 → 2026-07 it equals the previous pool
+except ADI/CDNS/OKTA carried in during 2024-11 → 2025-01. Verdict: **V8.0-pit
+passes; the survivorship-free development window now starts 2021-04.**

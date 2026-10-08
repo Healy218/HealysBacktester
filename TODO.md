@@ -13,19 +13,17 @@ per symbol/day; full in-memory loads have crashed this box.
 
 ## Stage 0 — tradable universe and cost model
 
-- [x] **V8.0-pool:** frozen in [V8_POOL_20261007.json](docs/specs/V8_POOL_20261007.json):
+- [x] **V8.0-pool:** first freeze (superseded by V8.0-pit) in [V8_POOL_20261007.json](docs/specs/V8_POOL_20261007.json):
   monthly PIT option-activity members (survivorship-free) with technology SEC SIC
   codes plus 9 declared tech-adjacent platforms; 73–107 tech names per month (124
   total) and all 17 ETFs every month. Membership covers 2024-11 to 2026-07.
-- [ ] **V8.0-pit (next):** rebuild `universe_pit` monthly membership from the V7 option
-  day aggregates (2021-01 → 2026-09-14) with the same parameters (enter 270 / exit
-  330, 63-day median, ≥50 active days). Reuse `nn_meta/universe_pit.py`
-  (`daily_rows_from_day_aggs`, `monthly_membership`, canary gates); write new
-  monthly artifacts to a V8 root, not over `v3/artifacts/universe_pit/`. Check the
-  overlap months 2024-11 → 2026-07 against the existing artifacts, then re-freeze
-  the pool from ~2021-04 under the same SIC rule (`fetch_sic.py` in the V8 root;
-  refetch for new names). Delisting canaries must pass.
-- [ ] **V8.0-data:** stock bars for the pool from the V7 payload store (2021+);
+- [x] **V8.0-pit:** rebuilt from the V7 option day aggregates with the same
+  parameters: 65 monthlies 2021-04 → 2026-08, identical V3 rank/score on the overlap,
+  delisting canaries pass, OPRA test roots and renames fixed V8-locally. Pool
+  re-frozen in [V8_POOL_PIT2021_20261007.json](docs/specs/V8_POOL_PIT2021_20261007.json)
+  (66–109 tech names per month, 162 distinct, plus 17 ETFs); it supersedes the
+  first pool. [Evidence](docs/EXPERIMENTS.md).
+- [ ] **V8.0-data (next):** stock bars for the pool from the V7 payload store (2021+);
   XLB/XLC/XLRE from Alpaca; coverage report per symbol and day.
 - [ ] **V8.0-spreads:** decode V7 option quote windows; fit the spread model
   (symbol, moneyness, DTE, price, time of day, date).

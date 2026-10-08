@@ -2515,3 +2515,15 @@ trading would need a subscription again and is decided only on evidence. The
 stage-1 development window becomes ~2021-04 → 2025-12 after rebuilding the PIT
 universe from 2021. Rejected: resuming V7 (too large); a survivorship-biased
 pre-2024 fallback (no longer needed).
+
+### 2026-10-07 — V8 PIT root hygiene stays V8-local; new pool supersedes the first
+
+The 2021 rebuild found OPRA test symbols and unaliased ticker renames that also
+affect the committed V3 monthlies. V8 fixes them inside its own driver
+(`scripts/build_v8_universe_pit.py`: drop test roots, rekey META's pre-2022-06-09
+ETF history, map renames to the current ticker) rather than editing the shared
+`TICKER_ALIASES` or the write-once V3 artifacts, whose consumers (V5) are frozen.
+[V8_POOL_PIT2021_20261007.json](specs/V8_POOL_PIT2021_20261007.json) supersedes
+[V8_POOL_20261007.json](specs/V8_POOL_20261007.json) under the same rule. Dead
+issuers keep their filing-time SIC; live issuers use current SIC.
+Rejected: patching the V3 artifacts (write-once; would change V5's frozen inputs).
