@@ -5,7 +5,11 @@ Prove an edge on cheap, liquid instruments under realistic fills before any mode
 or options. Universe: mostly technology names plus SPDR sector and broad ETFs.
 [Decision](docs/DECISIONS.md), [evidence](docs/EXPERIMENTS.md) (October 7 entries).
 ETFE is closed (v5 failed; 2026 ETFE test unspent). V6 paper is paused; its
-realistic-fill re-evaluation found no edge.
+realistic-fill re-evaluation found no edge. **No paid data:** read V7 raw inputs
+in place on MRHA (never unpack); Alpaca free tier for anything else. Keep the
+local footprint to a few GB and write nothing to MRHA ([data plan](docs/specs/V8_DESIGN_20261007.md#budget-data-and-storage-user-direction-2026-10-07)).
+Run large reads under `systemd-run --user --scope -p MemoryMax=…` and stream
+per symbol/day; full in-memory loads have crashed this box.
 
 ## Stage 0 — tradable universe and cost model
 
@@ -13,9 +17,14 @@ realistic-fill re-evaluation found no edge.
   monthly PIT option-activity members (survivorship-free) with technology SEC SIC
   codes plus 9 declared tech-adjacent platforms; 73–107 tech names per month (124
   total) and all 17 ETFs every month. Membership covers 2024-11 to 2026-07.
-- [ ] **V8.0-pit:** rebuild `universe_pit` monthly membership from the V7 option day
-  aggregates (2021-01 → 2026-09) with the same parameters; re-freeze the pool from
-  ~2021-04 under the same SIC rule. Delisting canaries must pass.
+- [ ] **V8.0-pit (next):** rebuild `universe_pit` monthly membership from the V7 option
+  day aggregates (2021-01 → 2026-09-14) with the same parameters (enter 270 / exit
+  330, 63-day median, ≥50 active days). Reuse `nn_meta/universe_pit.py`
+  (`daily_rows_from_day_aggs`, `monthly_membership`, canary gates); write new
+  monthly artifacts to a V8 root, not over `v3/artifacts/universe_pit/`. Check the
+  overlap months 2024-11 → 2026-07 against the existing artifacts, then re-freeze
+  the pool from ~2021-04 under the same SIC rule (`fetch_sic.py` in the V8 root;
+  refetch for new names). Delisting canaries must pass.
 - [ ] **V8.0-data:** stock bars for the pool from the V7 payload store (2021+);
   XLB/XLC/XLRE from Alpaca; coverage report per symbol and day.
 - [ ] **V8.0-spreads:** decode V7 option quote windows; fit the spread model

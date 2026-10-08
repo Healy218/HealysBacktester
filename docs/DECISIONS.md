@@ -2504,3 +2504,14 @@ by liquidity. FA joins as a forward-only attention overlay and, after a
 point-in-time backfill, as candidate fundamental features; it does not gate V8.
 Rejected: rescuing V6 (its edge was midpoint pricing of illiquid options);
 deploying the 20% V6 stop as a fix (loses less, still no edge).
+
+### 2026-10-07 — V8 runs on owned data with no paid subscriptions
+
+The user cancelled the Massive and Alpaca paid plans (about $300/month) because
+they funded work without results. V8 uses the V7 raw inputs on MRHA, read in place
+without unpacking (2021+ option day aggregates, 1-minute stock bars, 2022+ option
+quote windows), plus Alpaca's free tier. Stocks/ETFs come first; live options
+trading would need a subscription again and is decided only on evidence. The
+stage-1 development window becomes ~2021-04 → 2025-12 after rebuilding the PIT
+universe from 2021. Rejected: resuming V7 (too large); a survivorship-biased
+pre-2024 fallback (no longer needed).

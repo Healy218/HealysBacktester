@@ -1132,3 +1132,20 @@ or feature adapter is admitted. Existing model/universe and frozen sources remai
 At 14:55:03 Central, the account rejected the 2,434-contract quote subscription
 with 405 (symbol limit exceeded); `capacity-verification.json` preserves the
 actual entitlement failure. No full-universe recording is running.
+
+## V8 data sources (October 7)
+
+- Spec: [V8_DESIGN_20261007.md](specs/V8_DESIGN_20261007.md); frozen pool:
+  [V8_POOL_20261007.json](specs/V8_POOL_20261007.json) (to be re-frozen from 2021).
+- V7 raw store (read in place, never unpack): MRHA
+  `/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929/`;
+  index `files.sqlite3`, table `files(source, sha, size, …, destination)`, where
+  `source` is the original `nn_meta/data_v7/...` path and `destination` the object
+  file. Datasets: `base-20260915r4/options/day_aggs/<date>/…/data.csv.gz` (also
+  `start-20220315/options/day_aggs` for 2021), `*/stock_1m/{raw,all}/<SYM>/<YEAR>/…/bars.parquet`,
+  `entry-campaign-20260927/<FIGI>/<hash>/captures.sqlite3` (table `captures`,
+  zstd payloads; decoder `nn_meta/v7/packed_quotes_v3.py`).
+- PIT universe code: `nn_meta/universe_pit.py`; current artifacts
+  `v3/artifacts/universe_pit/2024-11.json` → `2026-07.json`.
+- V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
+- Data plans: none paid. Alpaca free tier works for stock and option bars.
