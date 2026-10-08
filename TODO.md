@@ -13,8 +13,13 @@ realistic-fill re-evaluation found no edge.
   monthly PIT option-activity members (survivorship-free) with technology SEC SIC
   codes plus 9 declared tech-adjacent platforms; 73–107 tech names per month (124
   total) and all 17 ETFs every month. Membership covers 2024-11 to 2026-07.
-- [ ] **V8.0-data:** stock bars for the pool (Alpaca); option quotes from Massive
-  flat files for spreads; coverage report per symbol and day.
+- [ ] **V8.0-pit:** rebuild `universe_pit` monthly membership from the V7 option day
+  aggregates (2021-01 → 2026-09) with the same parameters; re-freeze the pool from
+  ~2021-04 under the same SIC rule. Delisting canaries must pass.
+- [ ] **V8.0-data:** stock bars for the pool from the V7 payload store (2021+);
+  XLB/XLC/XLRE from Alpaca; coverage report per symbol and day.
+- [ ] **V8.0-spreads:** decode V7 option quote windows; fit the spread model
+  (symbol, moneyness, DTE, price, time of day, date).
 - [ ] **V8.0-liquidity:** decision-time liquidity rule (stock spread/volume; option
   spread ≤ 3–5% of mid, open interest, volume, price floor). Choose the cutoff
   from data and freeze it before any stage-1 result.
