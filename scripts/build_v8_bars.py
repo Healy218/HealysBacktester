@@ -40,6 +40,7 @@ import sqlite3
 import sys
 import time
 from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import pandas as pd
@@ -49,6 +50,7 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
 from nn_meta import universe_pit as up  # noqa: E402
+from nn_meta.v8_parallel import RateLimiter, autosize_workers  # noqa: E402
 
 STORE = Path("/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929")
 PIT_ROOT = REPO / "nn_meta" / "validation" / "v8-pit-20261007-r0"
@@ -187,6 +189,10 @@ def _alpaca_headers() -> dict:
             "APCA-API-SECRET-KEY": env["ALPACA_API_SECRET"]}
 
 
+# Per-process Alpaca budget; main() splits the account's 200/min across workers.
+_LIMITER = [RateLimiter(180)]
+
+
 def _alpaca_bars(headers, sym: str, start: str, end: str, adjustment: str) -> pd.DataFrame:
     rows, token = [], None
     while True:
@@ -196,6 +202,7 @@ def _alpaca_bars(headers, sym: str, start: str, end: str, adjustment: str) -> pd
         if token:
             params["page_token"] = token
         for attempt in range(5):
+            _LIMITER[0].acquire()
             r = requests.get("https://data.alpaca.markets/v2/stocks/bars",
                              headers=headers, params=params, timeout=60)
             if r.status_code == 429:
@@ -208,7 +215,6 @@ def _alpaca_bars(headers, sym: str, start: str, end: str, adjustment: str) -> pd
         j = r.json()
         rows += (j.get("bars") or {}).get(sym, [])
         token = j.get("next_page_token")
-        time.sleep(0.35)
         if not token:
             break
     if not rows:
@@ -366,11 +372,33 @@ def needed_days(pool_json: dict, days: list[str]) -> dict[str, set[str]]:
     return need
 
 
+_WORKER: dict = {}
+
+
+def _init_worker(workers: int) -> None:
+    """Each process opens the store index once and takes its share of the
+    Alpaca budget (190/min across all workers)."""
+    _WORKER["index"] = store_index()
+    _WORKER["headers"] = _alpaca_headers()
+    _LIMITER[0] = RateLimiter(190 / workers)
+
+
+def _build_and_write(job: tuple) -> tuple[str, list]:
+    t, by_date, parts, _ = job
+    tl: list = []
+    h, d = build_ticker(t, by_date, _WORKER["index"], _WORKER["headers"], tl)
+    h.to_parquet(Path(parts) / f"{t}.1h.parquet", index=False)
+    d.to_parquet(Path(parts) / f"{t}.1d.parquet", index=False)
+    return t, tl
+
+
 def main() -> None:
     ap = argparse.ArgumentParser(description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     ap.add_argument("--only", default="", help="comma list of tickers (debug)")
+    ap.add_argument("--workers", type=int, default=None,
+                    help="cap on memory-sized worker count")
     args = ap.parse_args()
     pool_json = json.loads(POOL.read_text())
     etfs = pool_json["rule"]["etfs_every_month"]
@@ -390,24 +418,23 @@ def main() -> None:
                     del sources[t][day]
                 else:
                     sources[t][day] = src
-    index = store_index()
-    headers = _alpaca_headers()
     parts = args.out / "parts"
     parts.mkdir(parents=True, exist_ok=True)
     log_path = args.out / "spans.json"
     log = json.loads(log_path.read_text()) if log_path.exists() else []
     done = {e["ticker"] for e in log}
-    for t in pool:
-        if t in done and (parts / f"{t}.1d.parquet").exists():
-            continue
-        tl: list = []
-        h, d = build_ticker(t, sources[t], index, headers, tl)
-        h.to_parquet(parts / f"{t}.1h.parquet", index=False)
-        d.to_parquet(parts / f"{t}.1d.parquet", index=False)
-        log = [e for e in log if e["ticker"] != t] + tl
-        log_path.write_text(json.dumps(log, indent=1) + "\n")
-        print(t, [(e["source"], e["first"], e["last"], e["vendor"], e["rth_rows"])
-                  for e in tl], flush=True)
+    todo = [t for t in pool
+            if not (t in done and (parts / f"{t}.1d.parquet").exists())]
+    workers, why = autosize_workers(per_worker_mb=2000, cap=args.workers)
+    print(f"{len(todo)} tickers to build: {why}", flush=True)
+    jobs = [(t, sources[t], str(parts), workers) for t in todo]
+    with ProcessPoolExecutor(workers, initializer=_init_worker,
+                             initargs=(workers,)) as ex:
+        for t, tl in ex.map(_build_and_write, jobs):
+            log = [e for e in log if e["ticker"] != t] + tl
+            log_path.write_text(json.dumps(log, indent=1) + "\n")
+            print(t, [(e["source"], e["first"], e["last"], e["vendor"], e["rth_rows"])
+                      for e in tl], flush=True)
     h = pd.concat([pd.read_parquet(p) for p in sorted(parts.glob("*.1h.parquet"))],
                   ignore_index=True)
     d = pd.concat([pd.read_parquet(p) for p in sorted(parts.glob("*.1d.parquet"))],

@@ -28,6 +28,7 @@ import re
 import sqlite3
 import sys
 from collections import defaultdict
+from concurrent.futures import ProcessPoolExecutor
 from pathlib import Path
 
 import pandas as pd
@@ -36,6 +37,7 @@ REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
 from nn_meta import universe_pit as up  # noqa: E402
+from nn_meta.v8_parallel import autosize_workers  # noqa: E402
 
 STORE = Path("/run/media/healy/MRHA/HealysBacktester/sealed-v7-payloads-20260929")
 DEFAULT_ROOT = REPO / "nn_meta" / "validation" / "v8-pit-20261007-r0"
@@ -77,34 +79,41 @@ def _sha256(path: Path) -> str:
     return h.hexdigest()
 
 
-def stage_daily(root: Path, verify_sha: bool) -> None:
+def _reduce_month(job: tuple) -> tuple[str, int, int, dict]:
+    """Worker: reduce one month's sealed day files to its parquet."""
+    month, mdays, out, verify_sha = job
+    frames, manifest = [], {}
+    for day, sha, obj in mdays:
+        if verify_sha and _sha256(obj) != sha:
+            raise SystemExit(f"{day}: sealed object sha mismatch {obj}")
+        with gzip.open(obj, "rb") as f:
+            raw = pd.read_csv(f, usecols=["ticker", "close", "volume",
+                                          "transactions"])
+        frames.append(up.daily_rows_from_day_aggs(raw, day))
+        manifest[day] = sha
+    rows = pd.concat(frames, ignore_index=True).sort_values(
+        ["date", "root"], ignore_index=True)
+    tmp = out.with_suffix(".tmp")
+    rows.to_parquet(tmp, index=False)
+    tmp.replace(out)
+    return month, len(mdays), len(rows), manifest
+
+
+def stage_daily(root: Path, verify_sha: bool, workers: int) -> None:
     days = sealed_day_files()
     out_dir = root / "universe_daily"
     out_dir.mkdir(parents=True, exist_ok=True)
-    months: dict[str, list[str]] = defaultdict(list)
-    for day in days:
-        months[day[:7]].append(day)
+    months: dict[str, list] = defaultdict(list)
+    for day, (sha, obj) in days.items():
+        months[day[:7]].append((day, sha, obj))
+    jobs = [(m, md, out_dir / f"{m}.parquet", verify_sha)
+            for m, md in sorted(months.items())
+            if not (out_dir / f"{m}.parquet").exists()]
     manifest = {}
-    for month, mdays in sorted(months.items()):
-        out = out_dir / f"{month}.parquet"
-        if out.exists():
-            continue
-        frames = []
-        for day in mdays:
-            sha, obj = days[day]
-            if verify_sha and _sha256(obj) != sha:
-                raise SystemExit(f"{day}: sealed object sha mismatch {obj}")
-            with gzip.open(obj, "rb") as f:
-                raw = pd.read_csv(f, usecols=["ticker", "close", "volume",
-                                              "transactions"])
-            frames.append(up.daily_rows_from_day_aggs(raw, day))
-            manifest[day] = sha
-        rows = pd.concat(frames, ignore_index=True).sort_values(
-            ["date", "root"], ignore_index=True)
-        tmp = out.with_suffix(".tmp")
-        rows.to_parquet(tmp, index=False)
-        tmp.replace(out)
-        print(f"{month}: {len(mdays)} days, {len(rows)} root-days", flush=True)
+    with ProcessPoolExecutor(workers) as ex:
+        for month, n_days, n_rows, man in ex.map(_reduce_month, jobs):
+            manifest.update(man)
+            print(f"{month}: {n_days} days, {n_rows} root-days", flush=True)
     man_path = root / "daily_manifest.json"
     old = json.loads(man_path.read_text()) if man_path.exists() else {}
     old.update(manifest)
@@ -229,9 +238,13 @@ def main() -> None:
                     help="ROOT:YYYY-MM-DD:NEW[,...] rows of ROOT before the "
                          "date belong to another issuer, keyed NEW")
     ap.add_argument("--freeze", action="store_true")
+    ap.add_argument("--workers", type=int, default=None,
+                    help="cap on memory-sized worker count")
     args = ap.parse_args()
     if args.stage == "daily":
-        stage_daily(args.root, args.verify_sha)
+        workers, why = autosize_workers(per_worker_mb=1500, cap=args.workers)
+        print(f"stage A: {why}", flush=True)
+        stage_daily(args.root, args.verify_sha, workers)
         return
     if not args.canary:
         raise SystemExit("--canary is required for the report stage")
