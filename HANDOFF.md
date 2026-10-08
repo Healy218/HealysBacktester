@@ -1,37 +1,38 @@
-# Handoff — October 7, 2026 — ETFE v5 closed as failed; 2026 test unspent
+# Handoff — October 7, 2026 — V8 selected after the realistic-execution review
 
 ## Focus and result
 
-- **v5 training** (`etfe-training-v5-20261007-r0`): 82 / 84 fits. All 63
-  validation fits are complete. `final/nn-return_huber-29` and `-47` were
-  OOM-killed at the 20G cap; they are not needed now that v5 is closed.
-- **v5 validation replay:** 1 of 54 configurations passed, but the attribution
-  shows the profit comes entirely from intrinsic-value expiry closes (unsellable
-  deep-ITM 0DTE calls). Every other exit loses in every fold, for the baseline
-  and for the selected configuration alike.
-  [EXPERIMENTS](docs/EXPERIMENTS.md) has the numbers.
-- **User decision:** record v5 as failed and do not run the 2026 test
-  ([DECISIONS](docs/DECISIONS.md)). The 2026 window remains unspent for a
-  future pre-registered design.
+- **ETFE closed:** v5 failed (its validation pass came from intrinsic-value
+  expiry credit). Signal-edge and tuned-variant walk-forward diagnostics found no
+  edge on SPY/QQQ intraday. The 2026 ETFE test is unspent.
+- **Server experts:** read-only copies of the server alert database and ledgers
+  showed neither paper ledger ever recorded exits. V118 (v4) sent 1 alert from
+  Sep 8. V5's 415 scorable alerts averaged −6.4% from Alpaca option bars.
+- **V6:** all 13 paper round trips lost (−$14,839); about 85% of the loss was
+  spread. Realistic-fill re-evaluation (`nn_meta/validation/v6-fillcost-20261007-r0/`,
+  reproduction matched exactly) found no profitable configuration; the backtest
+  edge was midpoint pricing of illiquid contracts.
+- **Overnight V6 incubator:** never deployed a model (no accepted candidate). Its
+  gate scores prediction error, not tradable P&L.
+- **User decision:** start [V8](docs/specs/V8_DESIGN_20261007.md). Edge first on
+  the underlying, realistic fills, and a mostly-tech plus sector-ETF universe.
+  FA is a forward-only overlay plus backfilled candidate features. Stages 0–1
+  authorized. All evidence is in [EXPERIMENTS](docs/EXPERIMENTS.md) (October 7).
 
 ## Status at session end
 
-No ETFE jobs running. Attribution script and per-trade logs were scratch-only
-(not committed); the method is reproducible from `exit_kind` in the dataset v4
-labels plus `nn_meta/etfe/eval_portfolio.py`.
+No research jobs running. V6 paper services remain paused by user choice: the
+scanner fails each run on stale daily data (expected while
+`healys-v6-data.timer` is disabled). One V6 paper position (TMUS) is open. The
+server is reachable by the user's own `ssh mrhea@62.238.20.66`; the agent is
+blocked from production reads unless a permission rule is added.
 
 ## Next actions
 
-1. **User decision:** the next ETFE direction, or a return to other work. Across
-   v3–v5, no model selection is profitable on exits it controls (strategy,
-   OTM and sellable-ITM exits). Any successor must be a new pre-registered
-   design that prices expiry within liquidity limits from the start.
-2. Commit hygiene: never use a path-limited `git commit -- file` on files with
-   others' uncommitted hunks; stage only your own hunks (`git apply --cached`).
+1. Work [TODO](TODO.md) stage 0: freeze the pool without hindsight, gather data,
+   derive and freeze the liquidity cutoff and fill model.
+2. Then stage 1 pre-registration and the tuned-variant walk-forward.
+3. Commit hygiene: stage only your own hunks (`git apply --cached`); other dirty
+   V6/V7 work in the tree is not yours.
 
-## Selected artifacts
-
-[CURRENT_STATE](docs/CURRENT_STATE.md); labels v4, dataset v4, experiment v5 and
-training v5 roots under `nn_meta/validation/`. Preserve unrelated dirty V6/V7 work.
-
-[Previous handoff](handoff-history/HANDOFF-2026-10-07-before-v5-verdict.md).
+[Previous handoff](handoff-history/HANDOFF-2026-10-07-before-v8.md).

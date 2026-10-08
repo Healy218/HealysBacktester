@@ -2491,3 +2491,16 @@ every other exit lost money in every fold (see EXPERIMENTS). User selected
 recording v5 as failed without running the 2026 test. Rejected: running the
 2026 test on v5; amending the intrinsic price to bid/participation limits and
 relabelling; re-defining the acceptance rule around non-intrinsic exits.
+
+### 2026-10-07 — Start V8: edge first, realistic fills, tech plus sector-ETF universe
+
+After the October 7 findings (no generation's edge survived realistic execution or
+direct tests), the user selected a new stage-gated design,
+[V8](specs/V8_DESIGN_20261007.md). Stages 0 (tradable universe and bid/ask cost
+model) and 1 (tuned-variant walk-forward on the underlying, daily and multi-day)
+are authorized. Later stages need their own go-ahead. Universe: mostly technology
+names plus SPDR sector and broad ETFs, fixed without hindsight and admitted daily
+by liquidity. FA joins as a forward-only attention overlay and, after a
+point-in-time backfill, as candidate fundamental features; it does not gate V8.
+Rejected: rescuing V6 (its edge was midpoint pricing of illiquid options);
+deploying the 20% V6 stop as a fix (loses less, still no edge).
