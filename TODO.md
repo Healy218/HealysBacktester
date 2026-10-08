@@ -82,8 +82,10 @@ per symbol/day; full in-memory loads have crashed this box.
   costs unknown, not disproven. [Evidence](docs/EXPERIMENTS.md).
 - [x] **V8-H1-short:** short, long-short and puts all FAIL in dev ([prereg](docs/specs/V8_H1_SHORT_PREREG_20261008.json));
   the edge is long-only. [Evidence](docs/EXPERIMENTS.md).
-- [ ] **V8-H1-paper (next, user-approved "both"):** Alpaca paper forward test; options
-  instrument vs stock to be decided with the user (real option fills resolve test B).
+- [ ] **V8-H1-paper (next):** Alpaca paper forward test, stock and ~45 DTE / 0.60 delta call
+  side by side on every H1 signal (user decision Oct 8) in a reset paper account (V6 history
+  archived, V6 timers disabled). Build: live SEC SUE pipeline, 10:30 ET entries, 20-day
+  exits, ledger, systemd timer.
 
 ## Parallel / later (not started)
 

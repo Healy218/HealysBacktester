@@ -6,6 +6,12 @@ Pointer/configuration owner for the lab; V6 pointers updated October 2, 2026.
 runtime identities. Other current documents link here instead of copying them.
 
 **Selected V6 paper:** [October 2 Alpaca transition](#october-2-v6-paper-alpaca-options-transition).
+**October 8:** V6 paper retired from the Alpaca paper account (user direction, to reset it
+for the V8 H1 forward test). Account PA3WD22T4IM7 archived before reset to
+`nn_meta/validation/v6-paper-archive-20261008/snapshot.json` (166 orders, 89 activities,
+36 fills, open TMUS261113C00165000 x9, equity $87,549.90). Timers
+`healys-v6-alpaca-{orders,scanner,paper-monitor}.timer` disabled (re-enable with
+`systemctl --user enable --now …`). Reset is done by the user in the Alpaca dashboard.
 Held quotes use Alpaca; full-universe entry features remain blocked.
 
 **Evidence freshness:** V6 paper and incubator observations below are dated. Other sections retain their own dated scopes and
