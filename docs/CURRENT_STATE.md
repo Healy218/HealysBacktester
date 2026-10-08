@@ -15,8 +15,10 @@ for the V8 H1 forward test). Account PA3WD22T4IM7 archived before reset to
 "stonks bot 2" for the H1 test instead of resetting; the V6 account (and its TMUS position)
 remains as it was. Whether to re-enable the V6 timers is pending the user's answer.
 V8 H1 paper runner: `scripts/run_v8_h1_paper.py` (ledger `nn_meta/validation/v8-paper-h1/ledger.sqlite3`),
-units `deploy/systemd/healys-v8-h1-*` — not installed or enabled as of Oct 8 (awaiting the
-"stonks bot 2" keys as `ALPACA_V8_PAPER_API_KEY/SECRET`; the runner refuses V6's account). Universe frozen at the 2026-08 pool; books $50k stock / $50k calls.
+units `deploy/systemd/healys-v8-h1-*`, **installed and enabled 2026-10-08** (first runs Fri
+2026-10-09 09:45 / 10:31 / 16:20 ET). Account "stonks bot 2" PA3U9D8Q8GQX ($100,000, options
+level 3, verified empty) via `ALPACA_V8_PAPER_API_KEY/SECRET`; the runner refuses V6's account.
+Check with `./venv/bin/python scripts/run_v8_h1_paper.py status` and `journalctl --user -u healys-v8-h1-trade`. Universe frozen at the 2026-08 pool; books $50k stock / $50k calls.
 Held quotes use Alpaca; full-universe entry features remain blocked.
 
 **Evidence freshness:** V6 paper and incubator observations below are dated. Other sections retain their own dated scopes and

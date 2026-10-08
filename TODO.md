@@ -87,7 +87,8 @@ per symbol/day; full in-memory loads have crashed this box.
   archived, V6 timers disabled). Built: `scripts/run_v8_h1_paper.py` (signals / trade /
   reconcile / status; dry run unless `--live`; idempotent order IDs), `nn_meta/v8_paper.py`,
   units `deploy/systemd/healys-v8-h1-{signals,trade,reconcile}.{service,timer}` (09:45 /
-  10:31 / 16:20 ET). **Not enabled until the reset account is verified.**
+  10:31 / 16:20 ET). **Live in "stonks bot 2" (PA3U9D8Q8GQX) from 2026-10-09.** Review after the
+  first earnings wave (mid/late October): fills vs decision quotes, call vs stock per signal.
 
 ## Parallel / later (not started)
 
