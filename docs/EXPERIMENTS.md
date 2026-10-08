@@ -1480,3 +1480,39 @@ premium lost to the IV crush (hit rates 32–34%). H3b, the one positive point e
 **Reading:** with free data and daily closes, front-week earnings options in this pool are
 priced fairly before costs, and measured costs make every pre-registered structure lose.
 Evidence boundary: last-trade closes (not quotes), bucket-median spreads, one-night holds.
+
+## 2026-10-08 — V9 OEE-H4 out-of-the-money earnings options: FAIL (13 variants), lottery-shaped
+
+Pre-registration [V9_OEE_H4_PREREG_20261008.json](specs/V9_OEE_H4_PREREG_20261008.json)
+(user-approved; the H4f cutoff ladder registered up front because the user's 10% cutoff
+removed nothing on entry prices); runner `scripts/run_v9_oee_h4.py` →
+`nn_meta/validation/v9-oee-h4-20261008-r0/` (`legs.parquet`, `trades.parquet`, `report.json`).
+Same events, timing, costs and pass rules as OEE-2; dev 2023–2025.
+
+| Variant | Trades | Mean (k=1) | t | Hit | Folds + | 1%-per-trade book: total / Sharpe / max DD |
+|---|---|---|---|---|---|---|
+| H4a strangle ±1× implied | 796 | −4.8% | −0.77 | 31% | 2 | −0.38 / −0.45 / −51% |
+| H4b strangle ±1.5× implied | 788 | +1.0% | +0.09 | 21% | 5 | +0.08 / +0.05 / −48% |
+| H4c directional OTM leg | 551 | −16.5% | −1.61 | 20% | 1 | −0.91 / −0.94 / −92% |
+| H4d H4a when move cheap | 94 | +26.4% | +0.98 | 37% | 4 | +0.25 / +0.58 / −15% |
+| H4e5 5% OTM strangle | 794 | −4.5% | −0.64 | 34% | 2 | −0.36 / −0.37 / −54% |
+| H4e10 10% OTM strangle | 790 | +17.9% | +0.76 | 26% | 3 | +1.41 / +0.45 / −29% |
+| H4e20 20% OTM strangle | 708 | +60.6% | +0.94 | 12% | 4 | +4.29 / +0.55 / −56% |
+| H4f 10% legs ≤ 10% of S | 803 | +18.5% | +0.81 | 26% | 3 | +1.49 / +0.47 / −28% |
+| H4f ≤ 5% | 785 | +20.4% | +0.87 | 26% | 4 | +1.60 / +0.51 / −26% |
+| H4f ≤ 2% | 608 | +31.0% | +1.02 | 23% | 3 | +1.89 / +0.60 / −21% |
+| H4f ≤ 1% | 411 | +48.0% | +1.08 | 20% | 3 | +1.97 / +0.63 / −24% |
+| H4f ≤ 0.5% | 252 | +107.7% | +1.48 | 18% | 3 | +2.71 / +0.86 / −30% |
+| H4g 10% strangle cheap vs own history | 84 | +203.6% | +1.10 | 31% | 4 | +1.71 / +0.65 / −12% |
+
+No variant reached t ≥ 2 (best Holm p 0.92); none passed; no 2026 confirmation was run.
+
+**Shape (post-run diagnostic, not a test):** the further out of the money and the cheaper the
+leg, the higher the mean — the user's direction — but the means are carried by a handful of
+real earnings shocks: SMCI 2024-01-18 (+35%; the 20% call went $0.04 → $48), SNPS
+2025-09-09 (−36%), ORCL 2025-09-09 (+36%), SEDG 2023-10-19, AI 2025-08-08. Excluding each
+variant's top five trades, every OTM variant averages −17% to −35% per trade; SMCI alone is
+89% of H4e20's summed return. H4e20 also dropped 51 dev trades with no reaction-day trade
+(likely worthless; excluding them flatters it). Sample sizes of 3 years cannot separate a
+real fat-tail premium from a few lucky draws; a positive mean with t ≈ 1 is what both look
+like. Evidence boundary as OEE-2, plus: far-OTM costs use the 3–10% OTM spread bucket.

@@ -19,6 +19,11 @@
   - No 2026 confirmation was run.
   - The first run was voided: it priced expiry-day exits at the last trade instead of
     the pre-registered intrinsic value (`*_INVALID_expiry_pricing.*`; fix 4dc8701).
+- **OEE-H4 FAIL, 13 OTM variants** (the user's thesis: OTM strikes near the post-move
+  price; prereg [V9_OEE_H4_PREREG_20261008.json](docs/specs/V9_OEE_H4_PREREG_20261008.json)).
+  Means rise the further and cheaper OTM (20% strangle +61%, 10% legs ≤ 0.5% of spot
+  +108%), but t ≤ 1.5. A few real shocks carry them (SMCI Jan 2024, SNPS/ORCL Sep 2025).
+  Without each variant's top 5 trades, all are −17% to −35%.
 - **OVE-0 done:** `healys-v9-oi-recorder.timer` snapshots Alpaca open interest twice
   each weekday → `nn_meta/data_cache_v9/open_interest/`.
 
@@ -30,7 +35,7 @@
 
 ## Next action (user's call)
 
-The OEE pre-registration is spent; do not re-tune it on these results. Options:
+Both OEE pre-registrations (ATM and OTM) are spent; do not re-tune them on these results. Options:
 1. **OVE-1:** flow and dark-pool tables (coverage only), using OPRA daily aggregates in
    the V8 chains (volume, trades, premium dollars) plus the FINRA off-exchange volume
    history. Then pre-register OVE-2.

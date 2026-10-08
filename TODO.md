@@ -17,6 +17,8 @@ worker pools and vectorized code by default.
 - [x] **OEE-2:** FAIL, all 8 variants (2026-10-08;
   [EXPERIMENTS](docs/EXPERIMENTS.md)). IV run-up did not predict move vs implied;
   2026 confirmation not run.
+- [x] **OEE-H4** (OTM options, user's thesis): FAIL, 13 variants, lottery-shaped: cheaper/further
+  OTM had higher means carried by a few real shocks, t ≤ 1.5 (2026-10-08; [EXPERIMENTS](docs/EXPERIMENTS.md)).
 - [ ] ~~OEE-3~~ not reached (no pass). Next OEE step is the user's call: see HANDOFF.
 
 ## OVE — Options Volume Expert

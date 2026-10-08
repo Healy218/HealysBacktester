@@ -54,7 +54,7 @@ results, measured 0–15 DTE spreads, Kelly only from out-of-sample statistics.
 |---|---|---|
 | **OEE-0 — Earnings event table** | Per earnings release: pre/post option prices, implied move, IV run-up, skew, realized move; coverage only | Done 2026-10-08 (1,330 usable events; [state](docs/CURRENT_STATE.md#v9-plan-october-8)) |
 | **OEE-1 — Pre-registration** | Direction score (FA/TA/skew), IV run-up vs move size (user's observation), cheap implied move; user sign-off | Frozen 2026-10-08 ([prereg](docs/specs/V9_OEE1_PREREG_20261008.json)) |
-| **OEE-2 — Walk-forward + 2026 confirmation** | Dev 2022-03 → 2025-12, six folds, pass rules, 1.5× costs | FAIL 2026-10-08, all 8 variants ([EXPERIMENTS](docs/EXPERIMENTS.md)) |
+| **OEE-2 — Walk-forward + 2026 confirmation** | Dev 2022-03 → 2025-12, six folds, pass rules, 1.5× costs | FAIL 2026-10-08, all 8 ATM variants; OTM follow-up OEE-H4 FAIL, 13 variants ([EXPERIMENTS](docs/EXPERIMENTS.md)) |
 | **OEE-3 — Paper with Kelly** | Forward test with half-Kelly and drawdown brake | Not reached |
 | **OVE-0 — Live-data check + OI recorder** | Free per-contract volume/OI going forward; daily open-interest capture | Done 2026-10-08; recorder running ([state](docs/CURRENT_STATE.md#v9-plan-october-8)) |
 | **OVE-1..3 — Flow + dark pool** | Noise-filtered unusual options buying; DIX-direction off-exchange flow; pre-registered walk-forward | After OEE-2 |

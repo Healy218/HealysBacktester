@@ -1173,6 +1173,9 @@ actual entitlement failure. No full-universe recording is running.
   `nn_meta/v9_oee_eval.py`, `scripts/run_v9_oee2.py` → `nn_meta/validation/v9-oee2-20261008-r0/`
   (`report.json`, `trades.parquet`, `features.parquet`; `*_INVALID_expiry_pricing.*` is the
   voided first run). The runner refuses to overwrite an existing report.
+- OEE-H4 (2026-10-08, FAIL): prereg [V9_OEE_H4_PREREG_20261008.json](specs/V9_OEE_H4_PREREG_20261008.json);
+  `scripts/run_v9_oee_h4.py` → `nn_meta/validation/v9-oee-h4-20261008-r0/` (`legs.parquet` has every
+  OTM leg's entry/exit per admitted event, `trades.parquet`, `report.json`).
 
 ## V8 data sources (October 7)
 
