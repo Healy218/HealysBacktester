@@ -1163,5 +1163,8 @@ actual entitlement failure. No full-universe recording is running.
   `nn_meta/validation/v8-spreads-option-20261008-r0/` (`snapshots.parquet`,
   `model.json` bucket medians, `report.json`). Worker sizing and the shared Alpaca
   rate limiter: `nn_meta/v8_parallel.py`.
+- V8 liquidity (2026-10-08): rule [V8_LIQUIDITY_20261008.json](specs/V8_LIQUIDITY_20261008.json);
+  `scripts/build_v8_admission.py` → `nn_meta/validation/v8-liquidity-20261008-r0/`
+  (`admission.parquet` per symbol-day with reason, `summary.json`).
 - V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
 - Data plans: none paid. Alpaca free tier works for stock and option bars.

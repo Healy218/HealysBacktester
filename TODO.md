@@ -33,10 +33,12 @@ per symbol/day; full in-memory loads have crashed this box.
   tech names median 8.9 bp); Abdi–Ranaldo cross-check not informative at this
   liquidity. Option spreads from a 3% sample of V7 NBBO captures (median 7.1% of
   mid; 56% of near-the-money, mid ≥ $1 snapshots ≤ 5%). [Evidence](docs/EXPERIMENTS.md).
-- [ ] **V8.0-liquidity (next):** decision-time liquidity rule (stock spread/volume; option
-  spread ≤ 3–5% of mid, open interest, volume, price floor). Choose the cutoff
-  from data and freeze it before any stage-1 result.
-- [ ] **V8.0-fills:** fill model (stock touch + slippage; options mid ± k × half-spread,
+- [x] **V8.0-liquidity:** user-approved rule frozen in
+  [V8_LIQUIDITY_20261008.json](docs/specs/V8_LIQUIDITY_20261008.json) (prior close
+  ≥ $5, 20-day median $ volume ≥ $25M, bar status ok, no entries before 10:00 ET;
+  costs carry the spread). Admission panel: 99.3% of member symbol-days, median 93
+  symbols/day. Option cutoffs deferred to stage 3. [Decision](docs/DECISIONS.md).
+- [ ] **V8.0-fills (next):** fill model (stock touch + slippage; options mid ± k × half-spread,
   k = 1.0 primary, 0.5 sensitivity; Robinhood fees). Unit tests on hand cases.
 - [ ] **V8.0-contract:** freeze the universe/cost contract and coverage report.
 

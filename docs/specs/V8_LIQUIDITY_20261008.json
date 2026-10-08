@@ -1,0 +1,23 @@
+{
+ "schema": "v8-liquidity-v1",
+ "frozen_at": "2026-10-08",
+ "decided_by": "user, 2026-10-08, before any stage-1 result",
+ "evidence": "docs/EXPERIMENTS.md (2026-10-08 V8.0-spreads)",
+ "admission": {
+  "description": "A pool symbol may be entered on trading day D only if every condition holds, using information available before D's open.",
+  "pool_member": "symbol is in the V8 pool usable on D (docs/specs/V8_POOL_PIT2021_20261007.json: tech members of the latest month whose available_at <= D, or a fixed ETF)",
+  "min_prev_close_usd": 5.0,
+  "min_adv20_usd": 25000000,
+  "adv20_definition": "median of regular-session dollar volume (raw close x raw volume) over the 20 trading days before D; at least 10 of those days must have bars",
+  "bar_status": "D's bar coverage status is 'ok' (not partial, missing or post-delisting)",
+  "events": "no position may be held across a series break in nn_meta/validation/v8-data-20261008-r0/events.json; the break date is not admitted"
+ },
+ "execution": {
+  "no_entries_before_et": "10:00",
+  "note": "Opening half-hour spreads run about 2x the midday level (13.9 bp at 09:45 vs 5-7 bp after 11:00)."
+ },
+ "costs": {
+  "description": "Every simulated stock fill pays half the measured quoted spread (by price bucket, time of day and year, times a per-name factor) from nn_meta/validation/v8-spreads-stock-20261008-r0; V8.0-fills defines the table. Stage-1 pass rules also require survival at 1.5x costs."
+ },
+ "options": "Option admission cutoffs (spread cap 3-5% of mid, open interest, volume, price floor) are frozen at stage 3, not here."
+}

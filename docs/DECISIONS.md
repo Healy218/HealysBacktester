@@ -2536,3 +2536,16 @@ survivorship-free; live and paper trading only see current members. The V7
 stock-bar archive (624 securities) is a data source, not V8's universe.
 ROADMAP now carries the V8 gate table (V8.0–V8.5) and marks ETFE closed.
 Rejected: a current-listings-only history (survivorship-biased).
+
+### 2026-10-08 — V8 stock liquidity rule: light admission, realistic costs
+
+Before any stage-1 result, the user approved the stock admission rule frozen in
+[V8_LIQUIDITY_20261008.json](specs/V8_LIQUIDITY_20261008.json): pool member on the
+day, prior close ≥ $5, 20-day median dollar volume ≥ $25M (≥ 10 days of history),
+bar status ok, no event break; no entries before 10:00 ET. Costs, not admission,
+carry the spread: every fill pays the measured half-spread (price bucket, time of
+day, year, per-name factor), stress-tested at 1.5×. Rationale: the pool is already
+liquid, so dollar-volume floors of $100M–$250M dropped 6–20% of names while cutting
+the median spread only from 6.1 to 5.2–5.7 bp. Option cutoffs wait for stage 3.
+Rejected: a heavy $250M floor (loses names, little cost benefit); the Abdi–Ranaldo
+bar estimate as a spread input (uninformative at this liquidity).

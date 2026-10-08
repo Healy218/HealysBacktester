@@ -1249,3 +1249,12 @@ Near-the-money (|log moneyness| < 0.05), mid ≥ $1, 3–45 DTE: 35% of snapshot
 56% ≤ 5%; SPY 0.55%, QQQ 0.78%, TSLA/AMD/NVDA/AMZN/AAPL ~1.3–1.6%. 1–3 DTE runs
 6–10%. Linear model R² 0.14, so the bucket-median table in `model.json` is the
 usable output. Caveat: V7 chose which contracts and times to capture.
+
+## 2026-10-08 — V8.0-liquidity: admission panel under the frozen rule
+
+`scripts/build_v8_admission.py` applied
+[V8_LIQUIDITY_20261008.json](specs/V8_LIQUIDITY_20261008.json) to every pool
+symbol-day (`nn_meta/validation/v8-liquidity-20261008-r0/admission.parquet`):
+127,349 member symbol-days, 126,462 admitted (99.3%); rejections: price 335, dollar
+volume 328, bar status 224 (partial, missing, post-delisting). 67–126 symbols
+admitted per day (median 93), 2021-05-03 → 2026-09-14.

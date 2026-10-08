@@ -1,4 +1,4 @@
-# Handoff — October 8, 2026 — V8.0-data and -spreads done; V8.0-liquidity next
+# Handoff — October 8, 2026 — V8.0-data, -spreads, -liquidity done; V8.0-fills next
 
 ## Where things stand
 
@@ -34,12 +34,12 @@ No jobs running. V6 paper services paused by user choice; one V6 paper position
 
 ## Next action
 
-**V8.0-liquidity:** choose the decision-time admission cutoffs from the measured
-data and freeze them before any stage-1 result. Stock side: spread (bps of mid,
-from `v8-spreads-stock-20261008-r0`) and dollar-volume floors (from the bars),
-plus a price floor (≤ $5 names median 44 bp). Option side (stage 3): spread ≤ 3–5%
-of mid, open interest, volume, price floor. Bring the cutoff options to the user.
-Then -fills, -contract, and stage-1 pre-registration.
+**V8.0-fills:** stock fill model: fill at mid ± measured half-spread (table by price
+bucket × time of day × year from `v8-spreads-stock-20261008-r0`, times a per-name
+factor), plus slippage allowance and fees; option fills mid ± k × half-spread (k = 1.0
+primary, 0.5 sensitivity) for stage 3. Unit tests on hand cases. Then -contract and
+stage-1 pre-registration. V8.0-liquidity is done (user-approved rule frozen in
+[V8_LIQUIDITY_20261008.json](docs/specs/V8_LIQUIDITY_20261008.json)).
 
 Also done October 8: V8.0-spreads ([evidence](docs/EXPERIMENTS.md)); parallel
 builders (`nn_meta/v8_parallel.py`, user preference: worker pools and vectorized
