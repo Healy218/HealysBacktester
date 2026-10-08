@@ -1,0 +1,37 @@
+{
+ "schema": "v9-oee-h4-prereg-v1",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08: H4a-d as proposed, H4e strikes 5/10/20% OTM, H4f cheap-leg filter with each leg qualifying on its own, H4g included; before any OTM outcome was examined",
+ "basis": "OEE-2 (docs/specs/V9_OEE1_PREREG_20261008.json) tested only at-the-money structures and failed; the user's thesis is that out-of-the-money options near the post-release price are where earnings pay. Entry-day prices and prior events' moves were used for coverage counts before freezing; no exit prices of OTM options were read.",
+ "inherits": "everything in docs/specs/V9_OEE1_PREREG_20261008.json not stated here: events and admission, timing (entry close before the 8-K, exit reaction-day close), pricing (last-trade closes, spread-model half-spreads per leg at k = 1.0 and 1.5, $0.05 per contract per side, reaction-day expiries at intrinsic value), trailing terciles, dev window 2023-01-01 .. 2025-12-31 with 2022 burn-in, the six half-year folds, day-clustered t, the confirmation rule, implementation_clarifications",
+ "legs": {
+  "strike_rule": "front expiry; the call strike nearest the target above spot and the put strike nearest the target below spot, among contracts traded on the entry day (volume > 0, close > 0); the chosen strike must be within 2% of the target strike, otherwise that leg is unavailable",
+  "exit": "the same contract's reaction-day close; intrinsic value from the raw reaction-day close if it expires that day; otherwise missing (trade dropped and counted)",
+  "return": "net P&L / premium paid across the legs bought"
+ },
+ "variants": {
+  "H4a_strangle_1x": "buy call at spot x (1 + implied move) and put at spot x (1 - implied move); both legs required",
+  "H4b_strangle_1.5x": "as H4a at 1.5 x implied move",
+  "H4c_directional_otm": "one leg at 1 x implied move on the side of the OEE-2 H1a combined-score tercile (top: call, bottom: put; middle: no trade)",
+  "H4d_strangle_1x_cheap_move": "H4a only when the OEE-2 move ratio (implied move / median |realized move| of the previous 4-8 admitted events) < 0.8",
+  "H4e5_strangle_5pct": "call at spot x 1.05, put at spot x 0.95; both legs required",
+  "H4e10_strangle_10pct": "call at spot x 1.10, put at spot x 0.90; both legs required",
+  "H4e20_strangle_20pct": "call at spot x 1.20, put at spot x 0.80; both legs required",
+  "H4f_cheap_leg_10pct_cut{c}": "the H4e10 legs, each bought on its own when its entry close <= c x spot (one or both legs; no trade if neither qualifies); cutoffs c = 10%, 5%, 2%, 1%, 0.5% are five variants. The user chose 10% and intended to lower it if it eliminated little; entry-day coverage showed 10% keeps 100% of legs, so the ladder is registered now instead of chosen after results (dev legs kept: 100%, 97%, 72%, 47%, 28%)",
+  "H4g_strangle_10pct_cheap_vs_history": "the H4e10 strangle only when its entry cost (closes, before costs) < the median intrinsic payoff of the same strikes under the ticker's previous 4-8 admitted events' realized moves applied to today's spot (payoff_j = max(S e^m_j - Kc, 0) + max(Kp - S e^m_j, 0)); coverage at freeze: 87 of 645 eligible dev events"
+ },
+ "variant_family": "13 variants: H4a, H4b, H4c, H4d, H4e5, H4e10, H4e20, H4f x 5 cutoffs, H4g; Holm across these 13. OEE-2's eight variants are a separate, already-reported family",
+ "pass_all_required_in_dev": {
+  "edge": "mean net per-trade return > 0 at k = 1.0 with day-clustered t >= 2",
+  "multiple_testing": "Holm-adjusted one-sided p < 0.05 across the 13",
+  "folds": "mean positive in >= 4 of the 6 folds",
+  "cost_stress": "mean > 0 with clustered t >= 2 at k = 1.5"
+ },
+ "confirmation": "2026-01-02 .. 2026-09-14 for dev passes only; pass = mean > 0 with clustered t >= 1 at k = 1.0",
+ "sizing_after_pass": "as OEE-1 (half Kelly from OOS returns, 2% per position, 25% total premium per day, -15%/-20% brake)",
+ "limitations": [
+  "the spread model's widest moneyness bucket is 3-10% OTM; 20% OTM legs use it and costs may be understated there",
+  "OTM options priced at a few cents have last-trade closes that can be stale; a one-cent tick is a large return"
+ ],
+ "single_run": "runs once and is reported whatever the outcome"
+}
