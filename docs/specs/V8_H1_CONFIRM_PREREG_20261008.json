@@ -1,0 +1,33 @@
+{
+ "schema": "v8-h1-confirm-prereg-v1",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08, before any 2026 data or any H1 option result was examined",
+ "basis": "V8 event hypotheses (docs/specs/V8_EVENTS_PREREG_20261008.json): H1b_sue_h20 was selected in every fold and failed only the absolute benchmark rule; post-hoc diagnostics in docs/EXPERIMENTS.md",
+ "strategy_fixed": "H1b_sue_h20 exactly as in the events pre-registration: first-reported quarterly diluted EPS SUE in the top tercile of the prior 365 days (>= 30 events), signal at public availability, entry at the next 10:30 ET bar, exit 20 bars after the latest signal, 10 slots, adv20 priority, admission panel, nn_meta.v8_fills costs",
+ "test_A_stock_holdout": {
+  "window": "2026-01-02 .. 2026-09-14 (all available holdout data; positions carried from the continuous run)",
+  "pass_all_required": {
+   "positive": "total return > 0 at cost 1.0x",
+   "sharpe_vs_qqq": "annualized daily Sharpe > QQQ's over the same window",
+   "alpha": "intercept of daily OLS on the equal-weight admitted universe > 0 (annualized)",
+   "cost_stress": "all three hold at cost 1.5x"
+  },
+  "caveat": "~9 months; a pass is suggestive, not proof; forward paper trading follows"
+ },
+ "test_B_calls": {
+  "instrument": "one call per H1 entry signal, on the execution day (signal bar + 1) at that day's closing trade price: expiry with DTE closest to 45 within 35-60 calendar days; strike whose Black-76 delta (IV from that contract's close, put-call-parity forward) is nearest 0.60; contract traded that day (volume >= 1) with close >= $1.00",
+  "exit": "close on the 20th trading day after entry; if no trade that day, the next day with a trade within 5 trading days; otherwise intrinsic value from the underlying's raw close (no time value). Splits: the OCC-adjusted contract (strike / f, value x f).",
+  "costs": "pessimistic fixed spread of 6% of the traded price (half-spread 3%) on entry and exit, the widest measured near-the-money median (0-3 DTE); stress 1.5x (half-spread 4.5%); $0.05 per contract per side",
+  "sizing": "premium of 5% of current cash-basis equity per entry, at most 10 open positions, one per name, adv20 priority; P&L booked at exit (cash basis)",
+  "dev_window": "entries 2021-05-03 .. 2025-12-31 with exits by 2025-12-31",
+  "dev_pass_all_required": {
+   "positive_total": "total return > 0 at half-spread 3%",
+   "folds_positive": ">= 4 of the 6 half-year folds (2023H1..2025H2, by exit date) positive",
+   "trade_edge": "mean per-trade return on premium > 0 with t-stat >= 2",
+   "cost_stress": "positive_total and trade_edge still hold at half-spread 4.5%"
+  },
+  "holdout": "run on 2026 entries with exits by 2026-09-14 only if dev passes; pass = total return > 0 and mean per-trade return > 0 with t-stat >= 1 at half-spread 3%",
+  "interpretation": "a dev failure means option costs are unknown, not that calls cannot work; real spreads need real quotes"
+ },
+ "single_run": "each test runs once and is reported whatever the outcome"
+}
