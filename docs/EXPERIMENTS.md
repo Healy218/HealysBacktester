@@ -1193,3 +1193,23 @@ search (XBRL filename prefix) or a verified name search, listed in `sic.json`.
 ATVI, ZEN, COUP) plus the 17 ETFs. On 2024-11 → 2026-07 it equals the previous pool
 except ADI/CDNS/OKTA carried in during 2024-11 → 2025-01. Verdict: **V8.0-pit
 passes; the survivorship-free development window now starts 2021-04.**
+
+## 2026-10-08 — V8.0-data: hourly/daily bars for the V8 pool, coverage report
+
+`scripts/build_v8_bars.py` built regular-session hourly (anchored 09:30 ET) and
+daily bars, raw plus split/dividend-adjusted, for all 179 pool symbols (162 tech +
+17 ETFs), 2021-01-04 → 2026-09-14, into `nn_meta/validation/v8-data-20261008-r0/`
+(190 MB). Sources: V7 1-minute bars read in place on MRHA for 157 symbols; Alpaca
+free-tier 30-minute SIP bars for 22 (19 tech names, XLB, XLC, XLRE).
+
+| Check | Result |
+|---|---|
+| Identity | Bars follow the PIT option-root identity per date (META←FB, XYZ←SQ, DJT←DWAC, GTM←ZI, STEM←STPK) plus verified overrides: COHR←IIVI before 2022-09-08, WOLF←CREE before 2021-10-04, no bars for SPCX before 2026-06-12 or FIG before 2025-07-31 (other securities held those tickers) |
+| Seams | Raw prices continuous across renames; adjusted series rebased at seams (STPK ×20 for STEM's later reverse split) |
+| Vendor parity | Alpaca vs V7 hourly bars (NVDA, SPY, TWTR, March 2022): identical closes and volume |
+| Coverage | 127,349 needed ticker-days: 127,125 complete, 83 partial, 3 missing (BILL, PLTR, SNOW on 2022-03-08), 138 after delisting |
+| Partial days | Thin days on liquid names (mostly 2021-04-19, 2021-10-25, 2022-01-24, 2022-03-08) are the same in Alpaca, i.e. upstream feed gaps; flagged `partial`, not repaired |
+| Corporate actions | All 40 adjusted-vs-raw return disagreements are splits/reverse splits; WOLF 2025-09-29 (Chapter 11 emergence) recorded in `events.json` as a series break |
+
+Verdict: **V8.0-data passes.** Consumers must skip `partial`/`missing` days and must
+not compute returns across `events.json` breaks.

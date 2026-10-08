@@ -1,52 +1,49 @@
-# Handoff — October 7, 2026 — V8.0-pit done; V8.0-data next
+# Handoff — October 8, 2026 — V8.0-data done; V8.0-spreads next
 
 ## Where things stand
 
-- **V8 is the selected work** ([spec](docs/specs/V8_DESIGN_20261007.md), [TODO](TODO.md)):
-  prove an edge on liquid stocks/ETFs under realistic fills before any model or
-  options. Stages 0–1 are authorized; later stages need the user's go-ahead.
-- **No paid data.** V8 reads V7's raw inputs in place on MRHA and uses Alpaca's
-  free tier for gaps (XLB, XLC, XLRE). Paths: [CURRENT_STATE](docs/CURRENT_STATE.md)
-  "V8 data sources". Never unpack `v7/data/*.tar.zst`; write nothing to MRHA.
+- **V8 is the selected work** ([ROADMAP](ROADMAP.md#v8--edge-first-on-liquid-stocks-and-etfs),
+  [spec](docs/specs/V8_DESIGN_20261007.md), [TODO](TODO.md)): prove an edge on liquid
+  stocks/ETFs under realistic fills before any model or options. Stages 0–1 are
+  authorized; later stages need the user's go-ahead.
+- **User decisions (October 8):** delisted names stay in the historical test while
+  they were members (survivorship-free); live/paper only see current members. The
+  V7 bar archive (624 securities) is a data source, not V8's universe.
+- **No paid data.** V7 raw inputs read in place on MRHA (never unpacked, never
+  written) plus Alpaca's free tier. Paths: [CURRENT_STATE](docs/CURRENT_STATE.md)
+  "V8 data sources".
 
-## This session: V8.0-pit (passed)
+## Done so far (V8.0)
 
-- `scripts/build_v8_universe_pit.py` reduced all 1,430 sealed day-aggregate files
-  (2021-01-04 → 2026-09-14) with the unchanged `universe_pit` code and parameters
-  into `nn_meta/validation/v8-pit-20261007-r0/` (117 MB): 65 monthlies, 2021-04 →
-  2026-08. Every V3 member-row on 2024-11 → 2026-07 had identical rank/score
-  before hygiene; seven delisting canaries pass; all calendar gaps are holidays.
-- Found and fixed **V8-locally**: 11 OPRA test roots that were members in
-  2021-12 → 2022-06, and ticker renames that dropped names for ~3 months (FB→META,
-  VIAC→PARA→PSKY, GOLD→B, DISCA→WBD, DWAC→DJT, …). The committed V3 artifacts
-  have the same GOLD→B gap (2025-05/07); left untouched (write-once, V5 inputs).
-- `scripts/freeze_v8_pool.py` resolved SEC SIC for all members (dead tickers via
-  EDGAR full-text search on XBRL filename prefixes plus 10 verified manual CIKs)
-  and froze [V8_POOL_PIT2021_20261007.json](docs/specs/V8_POOL_PIT2021_20261007.json):
-  66–109 tech names per month, 162 distinct (incl. TWTR, XLNX, SPLK, VMW, ATVI), plus
-  17 ETFs. It supersedes `V8_POOL_20261007.json`.
-- Evidence: [EXPERIMENTS](docs/EXPERIMENTS.md) "V8.0-pit"; decision:
-  [DECISIONS](docs/DECISIONS.md) "V8 PIT root hygiene". Tests:
-  `tests/test_v8_universe_pit.py` (with `test_universe_pit.py`, 22 pass).
+- **V8.0-pit** (Oct 7): 65 PIT monthlies 2021-04 → 2026-08; pool
+  [V8_POOL_PIT2021_20261007.json](docs/specs/V8_POOL_PIT2021_20261007.json), 162 tech
+  names (incl. delisted) + 17 ETFs.
+- **V8.0-data** (Oct 8): `scripts/build_v8_bars.py` →
+  `nn_meta/validation/v8-data-20261008-r0/` (190 MB): hourly (09:30-anchored) and
+  daily regular-session bars, raw + adjusted, all 179 symbols. Bars follow the PIT
+  identity (META←FB, XYZ←SQ, …) plus overrides for reused tickers (COHR←IIVI,
+  WOLF←CREE, SPCX/FIG cut at listing). Coverage: 127,125 complete, 83 partial
+  (upstream feed gaps, same in Alpaca), 3 missing (2022-03-08), 138 post-delisting.
+  WOLF 2025-09-29 reorganization is a series break in `events.json`.
+  [Evidence](docs/EXPERIMENTS.md). Tests: `tests/test_v8_bars.py`.
 
 ## Status at session end
 
-No jobs running. V6 paper services remain paused by user choice; one V6 paper
-position (TMUS) is open. October 8: the user confirmed delisted names stay in the
-historical test, and ROADMAP now has the V8 gate table (ETFE marked closed).
+No jobs running. V6 paper services paused by user choice; one V6 paper position
+(TMUS) open.
 
 ## Next action
 
-**V8.0-data:** 1-minute stock bars for the new pool (162 tech + 17 ETFs, 2021+)
-from the V7 payload store (`*/stock_1m/{raw,all}/<SYM>/<YEAR>/…/bars.parquet` via
-`files.sqlite3`), XLB/XLC/XLRE from Alpaca free tier, coverage report per symbol
-and day. The V7 bar store (624 securities) is only a source, not the universe;
-first list pool names it lacks (some delisted or 2021-era names may be missing). Then -spreads, -liquidity, -fills,
--contract, and stage-1 pre-registration.
+**V8.0-spreads:** decode V7 option quote windows (`entry-campaign-20260927/<FIGI>/…/
+captures.sqlite3`, decoder `nn_meta/v7/packed_quotes_v3.py`; 5–10% sample) and fit
+the option spread model. Stage 1 is stock-only, so also decide the stock-side
+spread input for V8.0-liquidity: the bar store has no stock quotes. Options:
+a bar-based estimator (e.g. Abdi–Ranaldo) or a sampled Alpaca stock-quote pull.
+Bring that choice to the user. Then -liquidity, -fills, -contract, and stage-1
+pre-registration.
 
-Constraints: stream per symbol/day under `systemd-run --user --scope -p
-MemoryMax=…`; keep the local footprint to a few GB; stage only your own hunks
-(other dirty V6/V7 work in the tree, including in DECISIONS/EXPERIMENTS, is not
-yours).
+Constraints: stream under `systemd-run --user --scope -p MemoryMax=…`; keep the
+local footprint to a few GB; stage only your own hunks (other dirty V6/V7 work,
+including in DECISIONS/EXPERIMENTS, is not yours).
 
-[Previous handoff](handoff-history/HANDOFF-2026-10-07-before-v8-pit.md).
+[Previous handoff](handoff-history/HANDOFF-2026-10-08-before-v8-data.md).

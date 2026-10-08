@@ -1153,5 +1153,9 @@ actual entitlement failure. No full-universe recording is running.
   are recorded in `report.json`) → `nn_meta/validation/v8-pit-20261007-r0/` (`universe_daily/`,
   `universe_pit/` 2021-04 → 2026-08, `membership.parquet`, `report.json`,
   `sic.json`). Pool: `scripts/freeze_v8_pool.py`.
+- V8 bars (2026-10-08): `scripts/build_v8_bars.py` →
+  `nn_meta/validation/v8-data-20261008-r0/` (`bars_1h.parquet`, `bars_1d.parquet`,
+  `coverage.parquet` with status ok/partial/missing/delisted, `coverage_summary.json`,
+  `spans.json` source per span, `events.json` identity overrides and series breaks).
 - V8 working root: `nn_meta/validation/v8-stage0-20261007-r0/` (SEC SIC cache).
 - Data plans: none paid. Alpaca free tier works for stock and option bars.

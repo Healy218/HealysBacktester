@@ -23,9 +23,12 @@ per symbol/day; full in-memory loads have crashed this box.
   re-frozen in [V8_POOL_PIT2021_20261007.json](docs/specs/V8_POOL_PIT2021_20261007.json)
   (66–109 tech names per month, 162 distinct, plus 17 ETFs); it supersedes the
   first pool. [Evidence](docs/EXPERIMENTS.md).
-- [ ] **V8.0-data (next):** stock bars for the pool from the V7 payload store (2021+);
-  XLB/XLC/XLRE from Alpaca; coverage report per symbol and day.
-- [ ] **V8.0-spreads:** decode V7 option quote windows; fit the spread model
+- [x] **V8.0-data:** hourly/daily regular-session bars (raw + adjusted) for all 179
+  pool symbols, 2021 → 2026-09-14: V7 store for 157, Alpaca free tier for 22.
+  Identity follows the PIT roots plus verified overrides; coverage 127,125 complete,
+  83 partial (upstream feed gaps), 3 missing, 138 post-delisting.
+  [Evidence](docs/EXPERIMENTS.md).
+- [ ] **V8.0-spreads (next):** decode V7 option quote windows; fit the spread model
   (symbol, moneyness, DTE, price, time of day, date).
 - [ ] **V8.0-liquidity:** decision-time liquidity rule (stock spread/volume; option
   spread ≤ 3–5% of mid, open interest, volume, price floor). Choose the cutoff

@@ -25,7 +25,7 @@ checking the linked operational evidence.
 
 | Workstream | Established position | Next milestone and dependency |
 | --- | --- | --- |
-| Shared data and provenance | PIT identity/actions, frozen inputs, capture, replay and recovery components exist | V8.0: PIT pool done; bar coverage, spread, liquidity and fill models next; retain immutable lineage for all researchers |
+| Shared data and provenance | PIT identity/actions, frozen inputs, capture, replay and recovery components exist | V8.0: PIT pool and bars done; spread, liquidity and fill models next; retain immutable lineage for all researchers |
 | Model researchers: classification, EV and future generations | V5/V6 artifacts and evaluation machinery exist; V7 retained; ETFE closed October 7; V8 selected | V8.1 verdict on the underlying before any model or options work |
 | Paper execution and risk | Prospective V6 paper fills/reconciliation observed; October 2 Alpaca held quotes deployed | Full-universe entry features blocked pending Alpaca recording capacity and validation; sustain broker risk/reconciliation ([transition](docs/reviews/2026-10-02-v6-alpaca-provider.md)) |
 | Continual research/training incubator | Initial catch-up and repaired two-session update through September 30 complete; both evaluated freezes retained, diagnostic regressions recorded; V7/storage restored ([October 1 evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md)) | Measure a clean one-session update and sustained coexistence; V7 admission follows its own gate |
@@ -55,7 +55,7 @@ Owned data only: V7 raw inputs read in place, plus Alpaca's free tier.
 
 | Gate | Deliverable | Status |
 | --- | --- | --- |
-| **V8.0 — Universe and cost contract** | PIT pool ([done](docs/specs/V8_POOL_PIT2021_20261007.json)), bar coverage, spread model, liquidity rule, fill model, frozen contract | In progress |
+| **V8.0 — Universe and cost contract** | PIT pool ([done](docs/specs/V8_POOL_PIT2021_20261007.json)), bar coverage (done), spread model, liquidity rule, fill model, frozen contract | In progress |
 | **V8.1 — Edge on the underlying** | Pre-registered walk-forward, benchmark-beating after costs, deflated Sharpe, PBO < 0.5, 1.5× cost stress | Authorized |
 | **V8.2 — Volatility** | Candidate if V8.1 fails | Needs go-ahead |
 | **V8.3 — Instrument mapping (options)** | Only after a proven edge | Needs go-ahead |
