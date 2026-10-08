@@ -25,7 +25,7 @@ checking the linked operational evidence.
 
 | Workstream | Established position | Next milestone and dependency |
 | --- | --- | --- |
-| Shared data and provenance | PIT identity/actions, frozen inputs, capture, replay and recovery components exist | V8.0 complete; V8.1, V8.2 and event hypotheses failed as pre-registered (earnings drift a near-miss); next step is the user's decision; retain immutable lineage for all researchers |
+| Shared data and provenance | PIT identity/actions, frozen inputs, capture, replay and recovery components exist | V8.0 complete; V8.1/V8.2 failed; earnings drift (H1) confirmed on the 2026 holdout (stock form); paper forward test next; retain immutable lineage for all researchers |
 | Model researchers: classification, EV and future generations | V5/V6 artifacts and evaluation machinery exist; V7 retained; ETFE closed October 7; V8 selected | V8.1 verdict on the underlying before any model or options work |
 | Paper execution and risk | Prospective V6 paper fills/reconciliation observed; October 2 Alpaca held quotes deployed | Full-universe entry features blocked pending Alpaca recording capacity and validation; sustain broker risk/reconciliation ([transition](docs/reviews/2026-10-02-v6-alpaca-provider.md)) |
 | Continual research/training incubator | Initial catch-up and repaired two-session update through September 30 complete; both evaluated freezes retained, diagnostic regressions recorded; V7/storage restored ([October 1 evidence](docs/reviews/2026-10-01-v6-occurrence-repair.md)) | Measure a clean one-session update and sustained coexistence; V7 admission follows its own gate |
@@ -60,7 +60,7 @@ Owned data only: V7 raw inputs read in place, plus Alpaca's free tier.
 | **V8.2 — Volatility** | Candidate if V8.1 fails | **Failed 2026-10-08** (all variants lose; PBO 0.84) |
 | **V8.3 — Instrument mapping (options)** | Only after a proven edge | Needs go-ahead |
 | **V8.4 — Meta-model** | Only if V8.1 or V8.2 passes | Needs go-ahead |
-| **V8.5 — Holdout and forward evidence** | 2026 holdout, paper trading | Needs go-ahead |
+| **V8.5 — Holdout and forward evidence** | 2026 holdout, paper trading | H1 stock holdout PASS 2026-10-08; paper forward test approved |
 
 Exit: a V8.1 verdict recorded in [EXPERIMENTS](docs/EXPERIMENTS.md). If nothing
 passes, V8.2 is next, not a meta-model.

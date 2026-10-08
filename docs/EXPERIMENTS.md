@@ -1400,3 +1400,26 @@ risk-adjusted it is the strongest V8 result. **Verdict stands as FAIL under the
 pre-registered rule.** Any test with a different (e.g. risk-adjusted) rule needs a new
 pre-registration and fresh data (the 2026 holdout or forward paper trading); that is
 the user's decision.
+
+## 2026-10-08 — H1 earnings drift confirmation: 2026 stock holdout PASS; calls inconclusive
+
+Pre-registered ([V8_H1_CONFIRM_PREREG_20261008.json](specs/V8_H1_CONFIRM_PREREG_20261008.json),
+committed `c9eaa94` before any 2026 data or H1 option result was read); single run,
+`scripts/run_v8_h1_confirm.py` → `nn_meta/validation/v8-events-20261008-r0/h1_confirm/report.json`.
+
+**A — stock, holdout 2026-01-02 → 2026-09-14 (first use of the holdout): PASS, all rules.**
+H1b_sue_h20 unchanged (109 entry signals, 72 round trips): +22.2%, Sharpe 1.31, alpha
+vs the equal-weight universe +13.8%/yr at beta 0.58; QQQ +15.7% (Sharpe 1.12), EW
+universe +20.2%. At 1.5× costs: +21.7%, Sharpe 1.28, alpha +13.2%. Caveat: ~9 months.
+
+**B — calls (~45 DTE, 0.60 delta) at a pessimistic fixed 6% spread, dev 2021–2025: FAIL
+as pre-registered** (2026 calls not run). 584 priced candidates, 283 taken: +48% total,
+mean trade +12.3% on premium but median −20%, win rate 43.5%, t = 1.84 (bar 2); folds
++24, −16, +21, +60, −14, −19% (3/6 positive); at a 4.5% half-spread −0.6% total
+(t = 1.39). Per the pre-registration this means real option costs are unknown, not
+that calls cannot work: no measured spreads exist beyond 15 DTE and the free tier has
+no historical option quotes.
+
+**Status:** H1 is the first V8 strategy confirmed on unseen data (stock form). The
+options form is plausible but unproven; resolving it needs real option quotes (forward
+paper trading or a data subscription).

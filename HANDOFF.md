@@ -1,4 +1,4 @@
-# Handoff — October 8, 2026 — V8 stages 1-2 and event hypotheses FAILED; earnings drift near-miss, user decision
+# Handoff — October 8, 2026 — H1 earnings drift confirmed on 2026 holdout; paper forward test next
 
 ## Where things stand
 
@@ -24,14 +24,14 @@ been read by any stage-1 code.
 
 ## Next action
 
-Event hypotheses ran as pre-registered and **all four FAIL**, but shared gates passed
-for the first time (rank 0.41, PBO 0.14). **H1 earnings drift (SUE, 20-day hold) is a
-near-miss:** positive OOS in all 6 folds, Sharpe 1.65, max drawdown 12%, deflated
-Sharpe 0.92; it beat fully invested benchmarks in only 2/6 folds because it is partly
-in cash ([evidence](docs/EXPERIMENTS.md)). The verdict stands. **Ask the user** whether
-to confirm H1 under a newly pre-registered (e.g. risk-adjusted) rule on fresh data:
-the 2026 holdout (Jan–Sep, ~9 months) and/or an Alpaca paper forward test. Do not
-re-tune H1 on 2021–2025.
+**H1 earnings drift is the first V8 strategy confirmed on unseen data** (stock form,
+2026 holdout: +22.2%, Sharpe 1.31 vs QQQ 1.12, alpha +13.8%/yr; [evidence](docs/EXPERIMENTS.md)).
+The calls form failed its pessimistic-cost dev test (t = 1.84): option costs are
+unknown, not disproven. The user approved an Alpaca paper forward test and prefers
+options over stocks. Next: agree the paper design with the user (calls vs stock or
+both side by side; live SUE pipeline from SEC submissions/companyfacts polling;
+entries at 10:30 ET), then build it. The 2026 holdout has been used once; do not
+re-tune H1 on it.
 
 Tools ready for reuse: `nn_meta/v8_engine.py` (numba slot simulator, ~5 ms per hourly
 variant), `nn_meta/v8_fills.py`, `nn_meta/v8_contract.verify()`,
