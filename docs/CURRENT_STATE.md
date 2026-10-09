@@ -1188,6 +1188,15 @@ actual entitlement failure. No full-universe recording is running.
 - OVE-3 (2026-10-08, FAIL): prereg [V9_OVE2_PREREG_20261008.json](specs/V9_OVE2_PREREG_20261008.json);
   `scripts/run_v9_ove3.py` → `nn_meta/validation/v9-ove3-20261008-r0/` (`signals.parquet` has the A/B
   flags per ticker-day, `e_scores.parquet` the pre-earnings imbalance, `trades.parquet`, `report.json`).
+- OTM payoff out of sample (2026-10-08, FAIL): prereg [V9_OTM_OOS_PREREG_20261008.json](specs/V9_OTM_OOS_PREREG_20261008.json);
+  `scripts/run_v9_otm_oos.py` → `nn_meta/validation/v9-otm-oos-20261008-r0/` (`*_INVALID_preannouncements.*` = voided
+  first run); early events `nn_meta/validation/v9-oee0-early-20261008-r0/` (entries 2021-04 → 2022-02). Unscheduled
+  pre-announcements: `nn_meta.v9_oee.preannouncement_flags` (73 of 1,621 events).
+- ALT-0 alternative-data features (2026-10-08, coverage only): `nn_meta/v9_alt.py` (headline parsers),
+  `scripts/build_v9_alt_features.py` → `nn_meta/validation/v9-alt0-20261008-r0/` (`features.parquet` per event:
+  analyst actions 30/90 days, price-target upside, prior EPS/sales surprise vs consensus, beat streak, insider
+  open-market net, Wikipedia attention, pre-announcement flag; `post_release.parquet` = outcomes, not summarized).
+  1,533 scheduled events; 2021–2025 coverage 80–99%; 2026 sparse (news, insider and Wikipedia archives end 2025-12-31).
 
 ## V8 data sources (October 7)
 

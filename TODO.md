@@ -40,9 +40,9 @@ worker pools and vectorized code by default.
 ## ALT — alternative data for earnings direction (user direction 2026-10-08)
 
 Notes and source survey: [V9 findings and alt-data plan](docs/reviews/2026-10-08-v9-findings-and-alt-data.md).
-- [ ] **ALT-0 (next, on approval):** per-event PIT features (analyst actions and consensus from
-  Benzinga headlines, Alpha Vantage consensus, insider, short interest, attention); coverage only.
-- [ ] **ALT-1:** pre-registration (direction: revision momentum / beat persistence; magnitude:
+- [x] **ALT-0:** per-event features built, coverage only (2026-10-08; [state](docs/CURRENT_STATE.md#v9-plan-october-8)).
+  To do: extend news/insider/Wikipedia through 2026-09 for a 2026 confirmation; Alpha Vantage pull.
+- [ ] **ALT-1 (next):** pre-registration (direction: revision momentum / beat persistence; magnitude:
   attention for OTM strangles); user sign-off; then one dev run.
 
 ## Running
