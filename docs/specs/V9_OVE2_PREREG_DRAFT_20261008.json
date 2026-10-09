@@ -1,0 +1,49 @@
+{
+ "schema": "v9-ove2-prereg-v1",
+ "status": "DRAFT, awaiting user sign-off; not frozen. OVE-1 reported coverage only; no forward return has been computed from the flow table.",
+ "drafted_at": "2026-10-08",
+ "plan": "docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md (OVE)",
+ "inputs": "nn_meta/validation/v9-ove1-20261008-r0/flow.parquet (scripts/build_v9_ove_flow.py); V8 bars and admission (V8_CONTRACT_20261008.json); V8 option chains; OEE-0 events and OEE-H4 legs for the earnings family",
+ "signal_timing": "flow is the day's OPRA aggregate, known after the close of day t. Stock trades enter at the open of t+1 (V8 stock fill model, nn_meta.v8_fills, 09:30 snapshot cell); option trades enter at the close of t+1 (a one-day lag, conservative)",
+ "normalization": "abnormal(x)_t = (ln(1 + x_t) - mean) / std of ln(1 + x) over the ticker's previous 20 trading days (t-20 .. t-1); NaN with fewer than 15 days or zero std",
+ "noise_filters": "applied to every non-earnings variant: stock tech names only (no ETFs); admitted by the V8 liquidity rule on day t; |stock return on t| < 3%; no earnings reaction within the last 2 or next 5 trading days; flow day t has >= 50 option prints",
+ "family_A_unusual_flow": {
+  "A1_otm_call_buying_stock": "abnormal(st_otm_call_prem) >= 2 and st_otm_call_prem / (st_otm_call_prem + st_otm_put_prem) >= 0.65 → long stock, exit at the close of t+5",
+  "A2_otm_call_buying_call": "A1's signal → buy the 0.5-delta call of the nearest expiry with 5-21 DTE at the close of t+1 (traded that day), exit at the close of t+5 (the contract's close; intrinsic if it expired; otherwise dropped and counted)",
+  "A3_otm_put_buying_put": "mirror of A1 with puts (abnormal(st_otm_put_prem) >= 2, put share >= 0.65) → buy the 0.5-delta put as in A2",
+  "A4_aggressive_block_calls_stock": "abnormal(block_call_vol) >= 2 and st_otm_call_prem_at_high / st_otm_call_prem >= 0.5 → long stock to the close of t+5"
+ },
+ "family_B_dark_pool": {
+  "B1_dix_long": "finra_short_ratio on day t in the top decile of the ticker's previous 60 trading days (the DIX reading: high off-exchange short volume = dealers filling buyers) → long stock to the close of t+5",
+  "B2_flow_plus_dix": "A1's signal with B1 also true on t or t-1 → long stock to the close of t+5"
+ },
+ "family_E_earnings_flow": {
+  "question": "Does options buying in the week before earnings point the reaction's direction (informed pre-earnings trading)?",
+  "feature": "imbalance = (sum st_otm_call_prem - sum st_otm_put_prem) / (sum of both) over the 5 trading days ending the OEE entry day (E-4 .. E), using flow known by E's close; trailing terciles as OEE",
+  "E1_flow_atm_option": "OEE events (admission and pricing as V9_OEE1_PREREG_20261008.json): top tercile → buy the 0.5-delta call, bottom → the 0.5-delta put (exactly the H1 trade with this score)",
+  "E2_flow_otm_leg": "same sides on the 10% OTM leg (OEE-H4 legs, pricing as V9_OEE_H4_PREREG_20261008.json)",
+  "E3_flow_stock": "top tercile → long stock from the entry close to the reaction close; bottom → no trade (V8 shorts failed); V8 stock fill model"
+ },
+ "costs": "stock: nn_meta.v8_fills (m = 1.0, stress 1.5); options: half the V8 spread-model bucket median per leg (k = 1.0, stress 1.5) + $0.05 per contract per side",
+ "overlap": "per-trade evaluation; a ticker cannot re-enter the same variant while its previous trade is open",
+ "evaluation": {
+  "dev": "signal days 2022-03-01 .. 2025-12-31 for families A and B (2021-2022 Q1 supplies the trailing windows); family E as OEE (2023-01-01 .. 2025-12-31)",
+  "folds": "half-years by signal day: A/B 2022H1 (from March) .. 2025H2 (8 folds); E the OEE six folds",
+  "variant_family": "9 variants (A1-A4, B1-B2, E1-E3); Holm across the 9",
+  "pass_all_required_in_dev": {
+   "edge": "mean net per-trade return > 0 at cost 1.0 with t >= 2, standard errors clustered by signal day",
+   "multiple_testing": "Holm-adjusted one-sided p < 0.05 across the 9",
+   "folds": "mean positive in >= 2/3 of the folds",
+   "cost_stress": "mean > 0 with clustered t >= 2 at cost 1.5"
+  },
+  "reported_not_gating": "trade counts, hit rate, payoff quantiles, return vs the equal-weight admitted universe over the same days (stock variants), E-family sign accuracy",
+  "confirmation": "2026-01-02 .. 2026-09-14 for dev passes only (B family needs FINRA 2026 fetched first); pass = mean > 0 with clustered t >= 1 at cost 1.0",
+  "single_run": "dev runs once and is reported whatever the outcome"
+ },
+ "forward_data": "the OVE-0 open-interest recorder (from 2026-10-08) is not used here; opening-vs-closing OI tests need months of forward data and get their own pre-registration",
+ "limitations": [
+  "daily aggregates cannot tell buyer- from seller-initiated volume; 'closing near the high' is a proxy",
+  "premium dollars use last-trade closes, not trade-weighted prices",
+  "FINRA short volume includes market-maker hedging; the DIX reading is a hypothesis, not a fact"
+ ]
+}

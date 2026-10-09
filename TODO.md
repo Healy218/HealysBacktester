@@ -31,9 +31,6 @@ worker pools and vectorized code by default.
 - [x] **OVE-1:** flow + dark-pool table, coverage only (2026-10-08;
   [state](docs/CURRENT_STATE.md#v9-plan-october-8)).
 - [ ] **OVE-2 (next):** pre-registration, user sign-off; then OVE-3 walk-forward.
-- [ ] ~~OVE-1..3~~ (original line): noise-filtered unusual options buying (abnormal volume, block size,
-  short-dated OTM premium, no event, clustering) and DIX-direction off-exchange flow;
-  pre-register; walk-forward.
 
 ## Running
 
