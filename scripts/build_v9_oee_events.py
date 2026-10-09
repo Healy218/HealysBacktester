@@ -39,7 +39,7 @@ START, END = "2022-03-01", "2026-09-14"
 DEDUP_DAYS = 5
 
 
-def load_events(days: list[str]) -> pd.DataFrame:
+def load_events(days: list[str], start: str = START, end: str = END) -> pd.DataFrame:
     fl = pd.read_parquet(FILINGS)
     e = fl[(fl["form"] == "8-K") & fl["items"].fillna("").str.contains("2.02", regex=False)].copy()
     e["tau_utc"] = pd.to_datetime(e["acceptance_utc"], utc=True)
@@ -47,7 +47,7 @@ def load_events(days: list[str]) -> pd.DataFrame:
     e["e"], e["r"] = v9_oee.event_days(e["tau_utc"], days)
     e = e[e["r"] >= 0]
     e["entry_day"] = [days[i] for i in e["e"]]
-    e = e[(e["entry_day"] >= START) & (e["entry_day"] <= END)]
+    e = e[(e["entry_day"] >= start) & (e["entry_day"] <= end)]
     pool = json.loads(POOL.read_text())["months"]
     months = sorted(pool)
 
@@ -98,10 +98,12 @@ def main() -> None:
     ap.add_argument("--out", type=Path, default=DEFAULT_OUT)
     ap.add_argument("--workers", type=int, default=None)
     ap.add_argument("--limit-tickers", nargs="*", help="smoke test on these tickers")
+    ap.add_argument("--start", default=START, help="first entry day (default %(default)s)")
+    ap.add_argument("--end", default=END, help="last entry day (default %(default)s)")
     args = ap.parse_args()
     args.out.mkdir(parents=True, exist_ok=True)
     days = sorted(pd.read_parquet(BARS, columns=["date"])["date"].unique())
-    ev, n_dup = load_events(days)
+    ev, n_dup = load_events(days, args.start, args.end)
     if args.limit_tickers:
         ev = ev[ev["ticker"].isin(args.limit_tickers)]
     have = {p.stem for p in CHAINS.glob("*.parquet")}
@@ -123,8 +125,10 @@ def main() -> None:
     df = pd.DataFrame(rows).sort_values(["entry_day", "ticker"]).reset_index(drop=True)
     df["tau_utc"] = pd.to_datetime(df["tau_utc"], utc=True)
     df.to_parquet(args.out / "events.parquet", index=False)
-    (args.out / "report.json").write_text(json.dumps(report(df, n_dup), indent=1, default=str))
-    print(json.dumps(report(df, n_dup)["coverage"], indent=1))
+    rep = report(df, n_dup)
+    rep["scope"].update(start=args.start, end=args.end)
+    (args.out / "report.json").write_text(json.dumps(rep, indent=1, default=str))
+    print(json.dumps(rep["coverage"], indent=1))
 
 
 def report(df: pd.DataFrame, n_dup: int) -> dict:

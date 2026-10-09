@@ -1,0 +1,26 @@
+{
+ "schema": "v9-otm-oos-prereg-v1",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08 ('lets do all 3'): out-of-sample test of 20% OTM earnings legs, both sides, half Kelly, on 2021-22 and 2026, before any of those windows' OTM outcomes were computed",
+ "thesis": "the user's: the payoff structure is the edge. With no direction information (50%), cheap 20% OTM legs bought on both sides of every earnings release, sized by half Kelly, grow capital because the market underprices rare earnings shocks. In 2023-2025 (already reported, OEE-H4) the per-leg mean was +153% but fell to -17.5% without the top 3 events; this test asks whether the shocks recur in windows the OTM tests never used.",
+ "inherits": "docs/specs/V9_OEE_H4_PREREG_20261008.json (events, admission, timing, leg selection within 2% of the target strike, pricing, spread-model costs at k = 1.0 and 1.5, $0.05 per contract per side, reaction-day expiries at intrinsic)",
+ "windows": {
+  "oos_early": "entry days 2021-04-01 .. 2022-02-28 (new OEE-0 table nn_meta/validation/v9-oee0-early-20261008-r0; before the OEE dev window; never used for any OEE outcome)",
+  "oos_2026": "entry days 2026-01-02 .. 2026-09-14 (the confirmation window; never used for OTM or any OEE outcome; previously used once for V8 H1 stock)"
+ },
+ "bet": "each available 20% OTM leg (call at spot x 1.20, put at spot x 0.80) is one bet; return = net P&L / premium",
+ "pass_all_required_pooled_oos": {
+  "positive": "mean net per-leg return > 0 at k = 1.0",
+  "cost_stress": "mean > 0 at k = 1.5",
+  "not_one_shock": "mean at k = 1.0 > 0 after removing both legs of the single event with the largest summed leg return"
+ },
+ "reported_not_gating": [
+  "each window separately; win rate; payoff quantiles; top-5 concentration",
+  "full and half Kelly fractions and log growth per bet (OOS only, and pooled 2021-2026 with the 2023-2025 dev legs)",
+  "bootstrap probability that the mean is > 0 (4,000 resamples of legs)",
+  "penny-cost sensitivity: an extra $0.01 per share on entry and exit",
+  "the same statistics for 10% OTM legs"
+ ],
+ "interpretation": "a pass supports forward paper trading at half Kelly (it does not prove the edge: rare-event payoffs need years); a fail with no shocks in the windows means the 2023-2025 result was carried by events that did not recur",
+ "single_run": "runs once and is reported whatever the outcome"
+}
