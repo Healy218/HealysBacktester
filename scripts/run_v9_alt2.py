@@ -66,8 +66,8 @@ def load_events() -> pd.DataFrame:
 
 def scores(a: pd.DataFrame) -> pd.DataFrame:
     f = pd.read_parquet(FEATURES)
-    x = a[["table", "accession", "entry_day"]].merge(f.drop(columns=["entry_day", "ticker"]),
-                                                     on=["table", "accession"], how="left")
+    x = a[["table", "accession", "ticker", "entry_day"]].merge(f.drop(columns=["entry_day"]),
+                                                               on=["table", "accession", "ticker"], how="left")
     assert len(x) == len(a)
     sc = pd.DataFrame(index=a.index)
 
