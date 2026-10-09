@@ -34,6 +34,14 @@ worker pools and vectorized code by default.
 - [x] **OVE-3:** FAIL, 9 variants (2026-10-08; [EXPERIMENTS](docs/EXPERIMENTS.md)). Near-miss B1
   (DIX long, t 2.48, Holm 0.061) is market beta: −0.12% vs the equal-weight universe.
 
+## ALT — alternative data for earnings direction (user direction 2026-10-08)
+
+Notes and source survey: [V9 findings and alt-data plan](docs/reviews/2026-10-08-v9-findings-and-alt-data.md).
+- [ ] **ALT-0 (next, on approval):** per-event PIT features (analyst actions and consensus from
+  Benzinga headlines, Alpha Vantage consensus, insider, short interest, attention); coverage only.
+- [ ] **ALT-1:** pre-registration (direction: revision momentum / beat persistence; magnitude:
+  attention for OTM strangles); user sign-off; then one dev run.
+
 ## Running
 
 - **OI recorder** `healys-v9-oi-recorder.timer` → `nn_meta/data_cache_v9/open_interest/`

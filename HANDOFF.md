@@ -32,7 +32,15 @@
 - OI recorder `healys-v9-oi-recorder.timer` (Mon–Fri 08:00 / 18:00 ET) →
   `nn_meta/data_cache_v9/open_interest/`; `journalctl --user -u healys-v9-oi-recorder`.
 
-## Next action (user's call)
+## Next action
+
+The user wants to keep pursuing earnings direction with **alternative data** (notes and source
+survey: [docs/reviews/2026-10-08-v9-findings-and-alt-data.md](docs/reviews/2026-10-08-v9-findings-and-alt-data.md)).
+Next is ALT-0 (coverage-only feature table) once approved: analyst actions and consensus are
+already in the Benzinga headlines on disk; Alpha Vantage gives consensus history at 25
+requests/day.
+
+Earlier options, still open:
 
 All V9 pre-registrations are spent; do not re-tune them on these results. Remaining options:
 1. Forward paper observation of one cheap-OTM earnings rule at small fixed size (not a
