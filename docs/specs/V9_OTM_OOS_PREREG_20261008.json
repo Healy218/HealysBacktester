@@ -22,5 +22,11 @@
   "the same statistics for 10% OTM legs"
  ],
  "interpretation": "a pass supports forward paper trading at half Kelly (it does not prove the edge: rare-event payoffs need years); a fail with no shocks in the windows means the 2023-2025 result was carried by events that did not recur",
- "single_run": "runs once and is reported whatever the outcome"
+ "single_run": "runs once and is reported whatever the outcome",
+ "amendment_2026-10-08_preannouncements": {
+  "defect": "the event table includes unscheduled Item 2.02 pre-announcements (and non-earnings 2.02 filings such as Tesla's quarterly deliveries) whose dates nobody knew in advance, violating the inherited assumption that release dates are known >= 5 trading days ahead. Found while checking the first run's top event (IBM 2026-07-14 pre-announcement, -25%).",
+  "rule": "exclude any event whose 8-K is followed by another Item 2.02 8-K from the same ticker within 30 calendar days (nn_meta.v9_oee.preannouncement_flags); filing dates only, no prices. Flags 11 of 267 early-window and 62 of 1,354 main-table events.",
+  "first_run": "voided; outputs kept as nn_meta/validation/v9-otm-oos-20261008-r0/*_INVALID_preannouncements.*",
+  "scope_of_defect": "also affects the already-reported OEE-2, OEE-H4, OEE-J and OVE-3 E-family results, which all failed; recorded in docs/EXPERIMENTS.md"
+ }
 }

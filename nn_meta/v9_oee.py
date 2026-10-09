@@ -213,3 +213,20 @@ def event_row(ev: dict, ch: pd.DataFrame, days: list[str], px: pd.DataFrame) -> 
     out["iv_crush_day_before"] = bool(np.isfinite(d_e) and np.isfinite(d_r)
                                       and d_e < -CRUSH and d_e < d_r)
     return out
+
+
+def preannouncement_flags(ev: pd.DataFrame, filings: pd.DataFrame, days: int = 30) -> np.ndarray:
+    """True for an Item 2.02 8-K followed by another Item 2.02 8-K from the same
+    ticker within `days` calendar days: an unscheduled pre-announcement (or a
+    non-earnings 2.02 such as quarterly deliveries), whose date nobody knew in
+    advance. Uses filing dates only, never prices."""
+    f = filings[(filings["form"] == "8-K")
+                & filings["items"].fillna("").str.contains("2.02", regex=False)]
+    t = pd.to_datetime(f["acceptance_utc"], utc=True)
+    by = {k: pd.DatetimeIndex(g.sort_values()) for k, g in t.groupby(f["ticker"])}
+    out = np.zeros(len(ev), bool)
+    for j, (tk, tau) in enumerate(zip(ev["ticker"], pd.to_datetime(ev["tau_utc"], utc=True))):
+        later = by.get(tk, pd.DatetimeIndex([], tz="UTC"))
+        later = later[later > tau]
+        out[j] = len(later) > 0 and (later[0] - tau) <= pd.Timedelta(days=days)
+    return out

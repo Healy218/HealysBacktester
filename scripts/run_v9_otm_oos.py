@@ -20,6 +20,7 @@ import pandas as pd
 REPO = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO))
 
+from nn_meta import v9_oee as oee  # noqa: E402
 from nn_meta import v9_oee_eval as ev_  # noqa: E402
 
 _spec = importlib.util.spec_from_file_location("run_v9_oee_h4", REPO / "scripts" / "run_v9_oee_h4.py")
@@ -32,15 +33,23 @@ PREREG = REPO / "docs" / "specs" / "V9_OTM_OOS_PREREG_20261008.json"
 EARLY = r2.V / "v9-oee0-early-20261008-r0" / "events.parquet"
 DEV_LEGS = r2.V / "v9-oee-h4-20261008-r0" / "legs.parquet"
 DEFAULT_OUT = r2.V / "v9-otm-oos-20261008-r0"
+FILINGS = r2.V / "v8-events-20261008-r0" / "sec" / "filings.parquet"
 WINDOWS = {"oos_early": ("2021-04-01", "2022-02-28"), "oos_2026": ("2026-01-02", "2026-09-14"),
            "dev_2023_2025": ("2023-01-01", "2025-12-31")}
 PENNY = 0.01
 
 
 def admitted(path: Path) -> pd.DataFrame:
+    """Admitted events in the OEE key order (keys match the H4 leg table)."""
     a = ev_.admit(pd.read_parquet(path)).sort_values(["entry_day", "ticker"]).reset_index(drop=True)
     a.index.name = "key"
     return a
+
+
+def scheduled(a: pd.DataFrame) -> pd.DataFrame:
+    """Amendment 2026-10-08: drop unscheduled pre-announcements."""
+    pre = oee.preannouncement_flags(a, pd.read_parquet(FILINGS))
+    return a[~pre]
 
 
 def leg_returns(legs: pd.DataFrame, a: pd.DataFrame, sm, penny: float = 0.0) -> pd.DataFrame:
@@ -105,10 +114,11 @@ def main() -> None:
     sm = ev_.SpreadModel(r2.SPREADS)
     rng = np.random.default_rng(20261008)
 
-    early = admitted(EARLY)
-    main_a = admitted(r2.EVENTS)
+    early = scheduled(admitted(EARLY))
+    main_a = scheduled(admitted(r2.EVENTS))
     legs_early = h4.leg_table(early, args.workers)
     legs_main = pd.read_parquet(DEV_LEGS)
+    legs_main = legs_main[legs_main["key"].isin(main_a.index)]
     frames = []
     for name, a, legs in (("early", early, legs_early), ("main", main_a, legs_main)):
         for penny in (0.0, PENNY):

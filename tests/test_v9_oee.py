@@ -72,3 +72,12 @@ def test_crush_on_entry_day_is_flagged():
     ev = {"e": DAYS.index("2024-05-21"), "r": DAYS.index("2024-05-22")}
     out = v9_oee.event_row(ev, pd.DataFrame(rows), DAYS, px)
     assert out["iv_crush_day_before"] is True
+
+
+def test_preannouncement_flags_use_the_next_filing():
+    f = pd.DataFrame({"ticker": ["X", "X", "X"], "form": "8-K", "items": ["2.02", "2.02,9.01", "2.02"],
+                      "acceptance_utc": ["2024-01-18T21:00:00Z", "2024-01-29T21:00:00Z",
+                                         "2024-04-30T21:00:00Z"]})
+    ev = pd.DataFrame({"ticker": ["X", "X", "X"],
+                       "tau_utc": pd.to_datetime(f["acceptance_utc"], utc=True)})
+    assert v9_oee.preannouncement_flags(ev, f).tolist() == [True, False, False]
