@@ -1,6 +1,7 @@
 {
  "schema": "v9-ove2-prereg-v1",
- "status": "DRAFT, awaiting user sign-off; not frozen. OVE-1 reported coverage only; no forward return has been computed from the flow table.",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08 ('Approved lets test it'), as drafted, before any flow-to-return relationship was examined",
  "drafted_at": "2026-10-08",
  "plan": "docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md (OVE)",
  "inputs": "nn_meta/validation/v9-ove1-20261008-r0/flow.parquet (scripts/build_v9_ove_flow.py); V8 bars and admission (V8_CONTRACT_20261008.json); V8 option chains; OEE-0 events and OEE-H4 legs for the earnings family",
@@ -45,5 +46,13 @@
   "daily aggregates cannot tell buyer- from seller-initiated volume; 'closing near the high' is a proxy",
   "premium dollars use last-trade closes, not trade-weighted prices",
   "FINRA short volume includes market-maker hedging; the DIX reading is a hypothesis, not a fact"
- ]
+ ],
+ "implementation_clarifications": {
+  "note": "fixed at freeze, before any result",
+  "folds_pass": "A/B: >= 6 of the 8 half-year folds (2/3 rounded up); E: >= 4 of 6",
+  "e_family_cluster": "the E family's signal day is the OEE entry day",
+  "option_expiry_before_exit": "an A2/A3 contract that expires before t+5 exits at intrinsic value from the raw close on its expiry day",
+  "e1_pricing": "E1 reuses OEE-2's call50/put50 legs with reaction-day expiries at intrinsic (scripts/run_v9_oee2.py expiry_day_intrinsic)",
+  "stock_fills": "entry at the open uses the 09:45 cost cell, exits at the close use the 15:45 cell (nn_meta.v8_fills.stock_half_spread_bps); sells pay 0.3 bp fees"
+ }
 }

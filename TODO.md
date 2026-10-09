@@ -30,7 +30,8 @@ worker pools and vectorized code by default.
   2026-10-08 (08:00 and 18:00 ET).
 - [x] **OVE-1:** flow + dark-pool table, coverage only (2026-10-08;
   [state](docs/CURRENT_STATE.md#v9-plan-october-8)).
-- [ ] **OVE-2 (next):** pre-registration, user sign-off; then OVE-3 walk-forward.
+- [x] **OVE-2:** pre-registration approved and frozen: [V9_OVE2_PREREG_20261008.json](docs/specs/V9_OVE2_PREREG_20261008.json) (9 variants).
+- [ ] **OVE-3 (next):** run the walk-forward once.
 
 ## Running
 
