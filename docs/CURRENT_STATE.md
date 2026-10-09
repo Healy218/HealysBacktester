@@ -1179,6 +1179,12 @@ actual entitlement failure. No full-universe recording is running.
 - OEE-J (2026-10-08, FAIL): prereg [V9_OEE_J_PREREG_20261008.json](specs/V9_OEE_J_PREREG_20261008.json);
   `scripts/run_v9_oee_j.py` → `nn_meta/validation/v9-oee-j-20261008-r0/` (`scores.parquet` has T, F, D
   per admitted dev event; the stage-1 signals end 2025-12-31).
+- OVE-1 flow table (2026-10-08, coverage only): `scripts/build_v9_ove_flow.py` →
+  `nn_meta/validation/v9-ove1-20261008-r0/` (`flow.parquet`, `report.json`; about 15 s). 226,230
+  ticker-days, 179 tickers, 2021-01-04 → 2026-09-14: call/put volume, prints, premium dollars,
+  short-dated (≤ 14 DTE) 0–15% OTM premium, block-size volume (≥ 20 contracts per print),
+  OTM premium closing near the day's high, raw close, FINRA short ratio (87% of rows; FINRA
+  ends 2025-12-31), trading days to/from earnings reactions.
 
 ## V8 data sources (October 7)
 
