@@ -1197,6 +1197,14 @@ actual entitlement failure. No full-universe recording is running.
   analyst actions 30/90 days, price-target upside, prior EPS/sales surprise vs consensus, beat streak, insider
   open-market net, Wikipedia attention, pre-announcement flag; `post_release.parquet` = outcomes, not summarized).
   1,533 scheduled events; 2021–2025 coverage 80–99%; 2026 sparse (news, insider and Wikipedia archives end 2025-12-31).
+- Alpha Vantage consensus pull (installed and enabled 2026-10-08): `scripts/fetch_v9_alphavantage.py`, units
+  `deploy/systemd/healys-v9-alphavantage.*` (daily 07:00 ET, 24 tickers/run, free tier 25/day) →
+  `nn_meta/data_cache_v9/alphavantage/<TICKER>.json`. 2026-10-08: 23/162 tickers; complete in about 7 days.
+- V9 OTM paper observation (built 2026-10-08, **not installed**): `scripts/run_v9_otm_paper.py`
+  (plan/trade/reconcile/status; dry run unless `--live`), units `deploy/systemd/healys-v9-otm-*`. Needs a new, empty
+  Alpaca paper account with keys `ALPACA_V9_PAPER_API_KEY/_SECRET`; refuses the V6 and V8 H1 accounts. Ledger
+  `nn_meta/validation/v9-paper-otm/ledger.sqlite3`. A read-only check on 2026-10-08 quoted the NFLX 20% OTM call at
+  $0.19 / $0.34 (spread about 56% of mid), far wider than the backtest's cost model.
 
 ## V8 data sources (October 7)
 

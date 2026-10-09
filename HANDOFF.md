@@ -34,20 +34,21 @@
 
 ## Next action
 
-The user wants to keep pursuing earnings direction with **alternative data** (notes and source
-survey: [docs/reviews/2026-10-08-v9-findings-and-alt-data.md](docs/reviews/2026-10-08-v9-findings-and-alt-data.md)).
-Next is ALT-0 (coverage-only feature table) once approved: analyst actions and consensus are
-already in the Benzinga headlines on disk; Alpha Vantage gives consensus history at 25
-requests/day.
+The user chose all three follow-ups on 2026-10-08:
+1. **OTM payoff out of sample: FAIL**, done. The first run's pass was voided: its top event,
+   IBM 2026-07-14, was an unscheduled pre-announcement. Scheduled releases only: pooled OOS
+   +1.3% per leg, −7.4% at 1.5× costs. SMCI, SEDG, AI and IBM were all pre-announcements.
+   The user needs to know that this weakens the lottery thesis.
+2. **Paper observation runner** is built and dry-run tested, but not installed. Waiting for
+   the user to create a new paper account and add `ALPACA_V9_PAPER_API_KEY/_SECRET`. Then:
+   `run_v9_otm_paper.py plan`, then a dry `trade`, then install `healys-v9-otm-*` timers.
+3. **ALT-0 done; ALT-1 draft awaiting sign-off**
+   ([draft](docs/specs/V9_ALT1_PREREG_DRAFT_20261008.json)). On approval: freeze, write the
+   runner, commit, run once. For a 2026 confirmation, extend news/insider/Wikipedia to a
+   separate 2026 output first (the V8 builders end 2025-12-31).
 
-Earlier options, still open:
-
-All V9 pre-registrations are spent; do not re-tune them on these results. Remaining options:
-1. Forward paper observation of one cheap-OTM earnings rule at small fixed size (not a
-   validated edge; the only way to learn whether fat-tail payoffs repeat).
-2. After a few months of the OI recorder: a new pre-registration on opening-vs-closing open
-   interest (data a daily-aggregate backtest cannot see).
-3. Review the V8 H1 paper fills after the first earnings wave (real option spreads).
+Alpha Vantage pull runs daily until all 162 tickers are on disk; it is a cross-check for the
+headline consensus.
 
 Constraints: memory caps on big jobs; stage only your own hunks (other dirty V6/V7 work,
 including `docs/DECISIONS.md` and `docs/EXPERIMENTS.md`, is not yours; this session

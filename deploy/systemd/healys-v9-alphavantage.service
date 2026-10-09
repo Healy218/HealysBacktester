@@ -1,0 +1,13 @@
+[Unit]
+Description=V9 ALT: Alpha Vantage earnings consensus pull (25 requests/day)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python scripts/fetch_v9_alphavantage.py
+TimeoutStartSec=300
+MemoryMax=1G
+Nice=5
+UMask=0077
+NoNewPrivileges=true

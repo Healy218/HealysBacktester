@@ -42,10 +42,14 @@ worker pools and vectorized code by default.
 Notes and source survey: [V9 findings and alt-data plan](docs/reviews/2026-10-08-v9-findings-and-alt-data.md).
 - [x] **ALT-0:** per-event features built, coverage only (2026-10-08; [state](docs/CURRENT_STATE.md#v9-plan-october-8)).
   To do: extend news/insider/Wikipedia through 2026-09 for a 2026 confirmation; Alpha Vantage pull.
-- [ ] **ALT-1 (next):** pre-registration (direction: revision momentum / beat persistence; magnitude:
+- [ ] **ALT-1 (next): user sign-off** on the [draft](docs/specs/V9_ALT1_PREREG_DRAFT_20261008.json)
+  (8 variants: D1–D6 direction, M1–M2 big-move strangles). Original line: pre-registration (direction: revision momentum / beat persistence; magnitude:
   attention for OTM strangles); user sign-off; then one dev run.
 
 ## Running
+
+- **Alpha Vantage consensus pull** `healys-v9-alphavantage.timer` (daily, ~7 days to complete).
+- **OTM paper observation:** runner built, waiting for a dedicated paper account (`ALPACA_V9_PAPER_*`).
 
 - **OI recorder** `healys-v9-oi-recorder.timer` → `nn_meta/data_cache_v9/open_interest/`
   (`journalctl --user -u healys-v9-oi-recorder`); a failed run loses that snapshot.
