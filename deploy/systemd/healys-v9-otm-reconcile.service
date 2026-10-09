@@ -1,0 +1,14 @@
+[Unit]
+Description=V9 OTM earnings paper observation: reconcile
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python scripts/run_v9_otm_paper.py reconcile
+TimeoutStartSec=600
+MemoryMax=2G
+MemorySwapMax=0
+Nice=5
+UMask=0077
+NoNewPrivileges=true

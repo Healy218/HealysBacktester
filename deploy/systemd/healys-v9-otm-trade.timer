@@ -1,0 +1,9 @@
+[Unit]
+Description=V9 OTM earnings paper observation: trade (timer)
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 15:45:00 America/New_York
+Persistent=false
+
+[Install]
+WantedBy=timers.target
