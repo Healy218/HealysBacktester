@@ -1,6 +1,7 @@
 {
  "schema": "v9-alt1-prereg-v1",
- "status": "DRAFT, awaiting user sign-off; not frozen. ALT-0 reported coverage only; post_release.parquet (outcomes) has not been read.",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08 ('Approve ALT-1 as written'), before post_release.parquet or any feature-to-return relationship was examined",
  "drafted_at": "2026-10-08",
  "question": "Do analyst revisions, consensus-beat history and insider buying before an earnings release predict the direction of the reaction, and does pre-release attention predict a big move?",
  "inputs": "nn_meta/validation/v9-alt0-20261008-r0/features.parquet (scripts/build_v9_alt_features.py); OEE-0 event tables (early 2021-04 → 2022-02 and main); OEE pricing and legs",
@@ -40,5 +41,12 @@
  "honesty_notes": [
   "the 2021-2025 events were used by earlier OEE tests with other features; these features are new to this test",
   "the strangle variants revisit OTM after the payoff-only test failed; they ask whether attention selects the big movers"
- ]
+ ],
+ "implementation_clarifications": {
+  "note": "fixed at freeze, before any result",
+  "trailing_pool": "percentiles and terciles use the admitted scheduled events of both tables together, ordered by entry day",
+  "score_terciles": "S2 and S4 (combined scores) take their own trailing terciles, as OEE H1a; S1, S3 and the M features use the raw feature's trailing terciles",
+  "strangle_legs": "10% OTM legs from nn_meta/validation/v9-otm-oos-20261008-r0/legs.parquet (no penny add-on); both legs required",
+  "short_stock": "sell at the entry close (15:45 cost cell), buy back at the reaction close; return = (entry fill - exit fill) / entry fill less the 0.3 bp sell fee"
+ }
 }

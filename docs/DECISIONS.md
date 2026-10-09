@@ -2588,3 +2588,11 @@ Earnings trades are held overnight through the release, so a P/L stop cannot cap
 (the open gaps past it); the premium at risk is the loss budget. Per-position cap 2%, half
 Kelly from out-of-sample returns, and the −15%/−20% drawdown brake are unchanged. Sizing is
 not part of the pass rules; the change was made before any result.
+
+### 2026-10-08 — No forward paper observation of the OTM payoff; ALT-1 approved
+
+After the out-of-sample test of 20% OTM earnings legs failed (scheduled releases only;
+[EXPERIMENTS](EXPERIMENTS.md)), the user decided not to run the forward paper observation.
+`scripts/run_v9_otm_paper.py` and `deploy/systemd/healys-v9-otm-*` stay in the repository
+uninstalled; no V9 paper account is needed. The user approved the ALT-1 pre-registration as
+written ([V9_ALT1_PREREG_20261008.json](specs/V9_ALT1_PREREG_20261008.json)).
