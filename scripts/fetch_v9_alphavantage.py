@@ -44,7 +44,7 @@ def main() -> None:
                          params={"function": "EARNINGS", "symbol": t, "apikey": k}, timeout=60)
         j = r.json()
         if "Information" in j or "Note" in j:
-            print(f"rate limited after {done}: {str(j)[:120]}")
+            print(f"rate limited after {done} (provider message withheld: it echoes the API key)")
             break
         j["_retrieved_utc"] = datetime.now(timezone.utc).isoformat()
         tmp = OUT / f"{t}.json.tmp"

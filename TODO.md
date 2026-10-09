@@ -1,4 +1,12 @@
-# TODO — V9 options experts (OEE first)
+# TODO — next: model the user's own market view (V9 closed, no edge)
+
+## NEXT — the user's market view (Monday 2026-10-12)
+
+- [ ] Interview the user about the edges they have won on (setups, signals, sizing, exits,
+  decay); write a dated spec; split testable rules from judgment calls
+  ([HANDOFF](HANDOFF.md)).
+- [ ] Pre-register the testable rules (V8/V9 discipline), then model the judgment calls.
+
 
 **Selected work: [V9 plan](docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md)** (user
 direction 2026-10-08): options-native, short-term, high-risk/high-reward; fractional
