@@ -1516,3 +1516,29 @@ variant's top five trades, every OTM variant averages −17% to −35% per trade
 (likely worthless; excluding them flatters it). Sample sizes of 3 years cannot separate a
 real fat-tail premium from a few lucky draws; a positive mean with t ≈ 1 is what both look
 like. Evidence boundary as OEE-2, plus: far-OTM costs use the 3–10% OTM spread bucket.
+
+## 2026-10-08 — V9 OEE-J FA score + TA-pool agreement on OTM legs: FAIL (6 variants)
+
+Pre-registration [V9_OEE_J_PREREG_20261008.json](specs/V9_OEE_J_PREREG_20261008.json)
+(user-approved); runner `scripts/run_v9_oee_j.py` → `nn_meta/validation/v9-oee-j-20261008-r0/`
+(`scores.parquet`, `trades.parquet`, `report.json`). T = agreement of the V8 stage-1 TA pool
+(16 families, 2,840 variants, 1d + 1h) over the 5 days before entry; F = prior SUE and
+revenue acceleration; dev 2023–2025 on the OEE-H4 10%/20% OTM legs.
+
+| Variant | Trades | Mean (k=1) | t | Hit | Folds + | Holm p |
+|---|---|---|---|---|---|---|
+| J1 agree → one leg, 10% | 71 | +25.2% | +0.39 | 20% | 2 | 0.77 |
+| J2 tilted strangle, 10% | 790 | +16.9% | +0.81 | 24% | 3 | 0.77 |
+| J3 hybrid, 10% | 790 | +20.9% | +0.87 | 25% | 3 | 0.77 |
+| J1 agree → one leg, 20% | 67 | +114.5% | +0.66 | 10% | 2 | 0.77 |
+| J2 tilted strangle, 20% | 708 | +162.2% | +1.31 | 12% | 3 | 0.58 |
+| J3 hybrid, 20% | 710 | +72.1% | +1.09 | 12% | 4 | 0.69 |
+
+None passed; no confirmation (it would need the stage-1 signals regenerated through 2026).
+Sign accuracy on the reaction (dev, reported not gating): T 49.0% (810), F 49.6% (796),
+D 49.0%; J1 fired 76 times with 59.2% (about 1.6 standard errors from 50%). The means are
+again carried by SNPS 2025-09-09, SMCI 2024-01-18 and AI 2025-08-08: without each variant's
+top five trades they average −19% to −85%. Design weakness disclosed before approval: with
+exits read as bearish, the mostly long-only pool sits "out" most days, so T is skewed
+negative (mean −0.26, 75th percentile −0.08) and the tilt leans to puts; a centered T would
+be a new pre-registration. Cumulative OEE record: 27 pre-registered variants, none passing.

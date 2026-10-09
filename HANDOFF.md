@@ -24,6 +24,11 @@
   Means rise the further and cheaper OTM (20% strangle +61%, 10% legs ≤ 0.5% of spot
   +108%), but t ≤ 1.5. A few real shocks carry them (SMCI Jan 2024, SNPS/ORCL Sep 2025).
   Without each variant's top 5 trades, all are −17% to −35%.
+- **OEE-J FAIL, 6 variants** (FA score + agreement of the old TA strategy pool choosing or
+  tilting the 10%/20% OTM legs; [prereg](docs/specs/V9_OEE_J_PREREG_20261008.json)). The TA
+  vote called direction 49% of the time and FA 50%; the same few shocks carry the averages.
+  Known weakness: long-only strategies are "out" most days, so T is skewed bearish.
+  Cumulative OEE record: 27 pre-registered variants, none passing.
 - **OVE-0 done:** `healys-v9-oi-recorder.timer` snapshots Alpaca open interest twice
   each weekday → `nn_meta/data_cache_v9/open_interest/`.
 
@@ -35,7 +40,7 @@
 
 ## Next action (user's call)
 
-Both OEE pre-registrations (ATM and OTM) are spent; do not re-tune them on these results. Options:
+All three OEE pre-registrations (ATM, OTM, FA+TA) are spent; do not re-tune them on these results. Options:
 1. **OVE-1:** flow and dark-pool tables (coverage only), using OPRA daily aggregates in
    the V8 chains (volume, trades, premium dollars) plus the FINRA off-exchange volume
    history. Then pre-register OVE-2.

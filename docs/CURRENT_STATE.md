@@ -1176,6 +1176,9 @@ actual entitlement failure. No full-universe recording is running.
 - OEE-H4 (2026-10-08, FAIL): prereg [V9_OEE_H4_PREREG_20261008.json](specs/V9_OEE_H4_PREREG_20261008.json);
   `scripts/run_v9_oee_h4.py` → `nn_meta/validation/v9-oee-h4-20261008-r0/` (`legs.parquet` has every
   OTM leg's entry/exit per admitted event, `trades.parquet`, `report.json`).
+- OEE-J (2026-10-08, FAIL): prereg [V9_OEE_J_PREREG_20261008.json](specs/V9_OEE_J_PREREG_20261008.json);
+  `scripts/run_v9_oee_j.py` → `nn_meta/validation/v9-oee-j-20261008-r0/` (`scores.parquet` has T, F, D
+  per admitted dev event; the stage-1 signals end 2025-12-31).
 
 ## V8 data sources (October 7)
 
