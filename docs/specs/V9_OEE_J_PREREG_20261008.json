@@ -1,0 +1,31 @@
+{
+ "schema": "v9-oee-j-prereg-v1",
+ "frozen_at": "2026-10-08",
+ "approved_by": "user, 2026-10-08 ('Let's try it!'), as proposed, before any TA-pool agreement outcome was examined",
+ "basis": "OEE-2 and OEE-H4 failed; the user's idea: an FA score and the agreement of the project's older TA strategy pool in the week before earnings choose or tilt the side of out-of-the-money options. FA direction components already showed ~50% sign accuracy on 2023-2025 in a post-run diagnostic (docs/EXPERIMENTS.md); the TA-pool agreement is new. This family is reported alongside the 21 earlier failed OEE variants.",
+ "inherits": "docs/specs/V9_OEE_H4_PREREG_20261008.json and through it docs/specs/V9_OEE1_PREREG_20261008.json: events, admission, timing, pricing and costs, leg selection (10% and 20% OTM legs within 2% of target, H4 legs.parquet), dev 2023-01-01 .. 2025-12-31 with 2022 burn-in, folds, day-clustered t, confirmation rule",
+ "ta_score_T": {
+  "pool": "the V8 stage-1 signal set (nn_meta/validation/v8-stage1-20261008-r0/signals/, scripts/build_v8_stage1_signals.py): 16 families (ma, macd, rsi, bbands, keltner, squeeze, bbw_squeeze, stoch, supertrend, elliott, tv_rating, volume, obv_trend, vwap_reclaim, adl_breakout, mfi), 2,840 variants, each on 1d and 1h bars",
+  "variant_state": "+1 if the variant's most recent signal at or before the bar was an entry, -1 if an exit; 0 before its first signal or when both fall on the same bar",
+  "family_vote": "mean state of the family's variants, per timeframe (each family counts once whatever its variant count)",
+  "daily_T": "mean of the 32 family-timeframe votes at the close of a trading day (1h: the day's last bar)",
+  "T": "mean of daily_T over the 5 trading days ending the day before the entry day (strictly before the entry close)",
+  "convention_note": "an exit is read as bearish; natural for trend families, a simplification for mean-reversion families"
+ },
+ "fa_score_F": "mean over available components of (2 x trailing percentile - 1) for prior SUE and revenue acceleration (definitions and trailing windows as OEE-1); F = 0 when neither is available",
+ "variants": {
+  "J1_agree_one_leg_{10,20}pct": "if sign(F) = sign(T) != 0, |F| >= 1/3 and |T| is in the top trailing tercile of |T|: buy the OTM leg on that side (call if positive, put if negative); otherwise no trade",
+  "J2_tilted_strangle_{10,20}pct": "both legs required; D = (F + T) / 2; premium split w = 0.5 + 0.5 D into the call and 1 - w into the put; trade return = w x call leg net return + (1 - w) x put leg net return",
+  "J3_hybrid_{10,20}pct": "J1's single leg when J1 fires, otherwise the plain strangle (one contract each, as H4e)"
+ },
+ "variant_family": "6 variants (J1, J2, J3 x 10% and 20% OTM); Holm across these 6",
+ "pass_all_required_in_dev": {
+  "edge": "mean net per-trade return > 0 at k = 1.0 with day-clustered t >= 2",
+  "multiple_testing": "Holm-adjusted one-sided p < 0.05 across the 6",
+  "folds": "mean positive in >= 4 of the 6 folds",
+  "cost_stress": "mean > 0 with clustered t >= 2 at k = 1.5"
+ },
+ "confirmation": "2026-01-02 .. 2026-09-14 for dev passes only, after regenerating the stage-1 signals through 2026-09-14 with the same code; pass = mean > 0 with clustered t >= 1 at k = 1.0",
+ "reported_not_gating": "sign accuracy of T, F and D on the reaction; J1 fire count",
+ "single_run": "runs once and is reported whatever the outcome"
+}
