@@ -1185,6 +1185,9 @@ actual entitlement failure. No full-universe recording is running.
   short-dated (≤ 14 DTE) 0–15% OTM premium, block-size volume (≥ 20 contracts per print),
   OTM premium closing near the day's high, raw close, FINRA short ratio (87% of rows; FINRA
   ends 2025-12-31), trading days to/from earnings reactions.
+- OVE-3 (2026-10-08, FAIL): prereg [V9_OVE2_PREREG_20261008.json](specs/V9_OVE2_PREREG_20261008.json);
+  `scripts/run_v9_ove3.py` → `nn_meta/validation/v9-ove3-20261008-r0/` (`signals.parquet` has the A/B
+  flags per ticker-day, `e_scores.parquet` the pre-earnings imbalance, `trades.parquet`, `report.json`).
 
 ## V8 data sources (October 7)
 

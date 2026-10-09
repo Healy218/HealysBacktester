@@ -1542,3 +1542,35 @@ top five trades they average −19% to −85%. Design weakness disclosed before 
 exits read as bearish, the mostly long-only pool sits "out" most days, so T is skewed
 negative (mean −0.26, 75th percentile −0.08) and the tilt leans to puts; a centered T would
 be a new pre-registration. Cumulative OEE record: 27 pre-registered variants, none passing.
+
+## 2026-10-08 — V9 OVE-3 options-flow and dark-pool walk-forward: FAIL (9 variants)
+
+Pre-registration [V9_OVE2_PREREG_20261008.json](specs/V9_OVE2_PREREG_20261008.json)
+(user-approved); flow table `scripts/build_v9_ove_flow.py` (OVE-1); runner
+`scripts/run_v9_ove3.py` → `nn_meta/validation/v9-ove3-20261008-r0/` (`signals.parquet`,
+`e_scores.parquet`, `trades.parquet`, `report.json`). A/B dev signal days 2022-03 → 2025-12
+(8 folds, need 6); E on the OEE events 2023–2025 (6 folds, need 4); Holm across 9.
+
+| Variant | Trades | Mean (cost 1.0) | t | Hit | Folds + | Holm p | Excess vs EW admitted tech |
+|---|---|---|---|---|---|---|---|
+| A1 OTM call buying → stock 5d | 826 | +0.03% | +0.10 | 51% | 2/8 | 1.0 | −0.27% (t −1.36) |
+| A2 OTM call buying → 0.5Δ call | 804 | −9.7% | −2.57 | 37% | 1/8 | 1.0 | — |
+| A3 OTM put buying → 0.5Δ put | 316 | −19.0% | −3.68 | 25% | 2/8 | 1.0 | — |
+| A4 aggressive block calls → stock | 97 | −0.59% | −0.77 | 45% | 4/8 | 1.0 | −0.02% |
+| **B1 high off-exchange short ratio (DIX) → stock** | 3,262 | **+0.46%** | **+2.48** | 52% | **6/8** | **0.061** | **−0.12% (t −1.36)** |
+| B2 A1 + B1 → stock | 174 | −0.37% | −0.75 | 48% | 4/8 | 1.0 | −0.55% |
+| E1 pre-earnings flow imbalance → 0.5Δ option | 553 | −10.6% | −1.68 | 30% | 1/6 | 1.0 | — |
+| E2 same → 10% OTM leg | 544 | +33.5% | +0.79 | 17% | 2/6 | 1.0 | — |
+| E3 same, top tercile → stock through release | 313 | −0.31% | −0.44 | 45% | 3/6 | 1.0 | — |
+
+None passed; no confirmation was run. **B1 was the only near-miss** (edge, folds and 1.5× cost
+rules met; Holm p 0.061), but the pre-registered benchmark comparison (reported, not gating;
+computed after the run because the runner omitted it) shows it is market exposure: the
+equal-weight admitted tech universe returned +0.58% over the same open→close windows, so
+B1's excess was −0.12% per trade. Pre-earnings OTM flow imbalance called the reaction's sign
+47.9% of the time (553 events). Bought options after unusual buying lost (A2 −9.7%, A3 −19%):
+by the next close the flow's information, if any, is priced. E2's mean is again carried by a
+few shocks (−28% per trade without its top five).
+
+Evidence boundary: daily OPRA aggregates (no trade direction, last-trade prices), next-day
+entries, 5-day holds. Cumulative V9 record: 36 pre-registered variants (OEE 27, OVE 9), none passing.

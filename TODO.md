@@ -31,7 +31,8 @@ worker pools and vectorized code by default.
 - [x] **OVE-1:** flow + dark-pool table, coverage only (2026-10-08;
   [state](docs/CURRENT_STATE.md#v9-plan-october-8)).
 - [x] **OVE-2:** pre-registration approved and frozen: [V9_OVE2_PREREG_20261008.json](docs/specs/V9_OVE2_PREREG_20261008.json) (9 variants).
-- [ ] **OVE-3 (next):** run the walk-forward once.
+- [x] **OVE-3:** FAIL, 9 variants (2026-10-08; [EXPERIMENTS](docs/EXPERIMENTS.md)). Near-miss B1
+  (DIX long, t 2.48, Holm 0.061) is market beta: −0.12% vs the equal-weight universe.
 
 ## Running
 
