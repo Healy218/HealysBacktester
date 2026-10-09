@@ -34,6 +34,9 @@ worker pools and vectorized code by default.
 - [x] **OVE-3:** FAIL, 9 variants (2026-10-08; [EXPERIMENTS](docs/EXPERIMENTS.md)). Near-miss B1
   (DIX long, t 2.48, Holm 0.061) is market beta: −0.12% vs the equal-weight universe.
 
+- [x] **OTM payoff out of sample** (user thesis): FAIL after excluding unscheduled pre-announcements
+  (pooled OOS +1.3%/leg, −7.4% at 1.5×) (2026-10-08; [EXPERIMENTS](docs/EXPERIMENTS.md)).
+
 ## ALT — alternative data for earnings direction (user direction 2026-10-08)
 
 Notes and source survey: [V9 findings and alt-data plan](docs/reviews/2026-10-08-v9-findings-and-alt-data.md).

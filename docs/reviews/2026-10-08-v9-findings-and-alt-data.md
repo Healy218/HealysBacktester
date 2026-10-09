@@ -34,6 +34,18 @@ drift** (stock form passed the 2026 holdout; paper test from 2026-10-09).
 - **Copying unusual options buyers a day late loses** (−10% to −19% per trade): the
   information, if any, is priced by the next close.
 
+## 2b. Correction (same day): the lottery wins were largely pre-announcements
+
+The out-of-sample test of the user's payoff thesis (20% OTM legs, both sides, half Kelly)
+first passed, then a check of its top event found IBM 2026-07-14, an unscheduled
+pre-announcement. Many of the biggest OTM winners were such pre-announcements:
+SMCI 2024-01-18, SEDG 2023-10-19, AI 2025-08-08 and IBM 2026-07-14. You cannot know their dates
+ahead, so they are not tradeable. With them removed, the pooled out-of-sample mean is +1.3% per
+leg (−7.4% at 1.5× costs, −9.6% without the best event): **FAIL**. 10% legs lose everywhere.
+Details: [EXPERIMENTS](../EXPERIMENTS.md), last entry. Implication: the payoff structure alone
+is not an edge on scheduled earnings; a direction or magnitude signal is required, which keeps
+the alternative-data plan below as the main path.
+
 ## 3. Why there is no edge in this data (the professionals' advantages)
 
 1. **Information.** Free daily data is what everyone has, so it is priced. Funds buy signed

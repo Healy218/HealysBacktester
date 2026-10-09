@@ -1574,3 +1574,43 @@ few shocks (−28% per trade without its top five).
 
 Evidence boundary: daily OPRA aggregates (no trade direction, last-trade prices), next-day
 entries, 5-day holds. Cumulative V9 record: 36 pre-registered variants (OEE 27, OVE 9), none passing.
+
+## 2026-10-08 — V9 20% OTM payoff edge, out of sample: FAIL; earlier OTM wins were largely pre-announcements
+
+Pre-registration [V9_OTM_OOS_PREREG_20261008.json](specs/V9_OTM_OOS_PREREG_20261008.json)
+(user-approved; the user's thesis that the payoff structure is the edge at 50% direction,
+sized by half Kelly). Runner `scripts/run_v9_otm_oos.py` → `nn_meta/validation/v9-otm-oos-20261008-r0/`;
+new early event table `v9-oee0-early-20261008-r0` (entries 2021-04 → 2022-02, 267 events).
+Bets: every 20% OTM leg (both sides) of each admitted earnings event; windows 2021-04 → 2022-02
+and 2026-01 → 2026-09-14, never used for OTM.
+
+**Defect found and corrected (amendment in the prereg):** the first run PASSED (pooled OOS
++140% per leg) but its top event was IBM 2026-07-14, an unscheduled pre-announcement
+(−25%; IBM's scheduled release was 07-22). The inherited timing assumption (release dates
+known ≥ 5 trading days ahead) excludes such events. Rule fixed from filing dates only: drop an
+Item 2.02 8-K followed by another within 30 days (`nn_meta.v9_oee.preannouncement_flags`;
+73 of 1,621 events, including Tesla delivery filings and SMCI 2024-01-18, SEDG 2023-10-19,
+AI 2025-08-08, IBM 2026-07-14). The first run is kept as `*_INVALID_preannouncements.*`.
+
+Corrected run (scheduled releases only):
+
+| 20% OTM legs | Bets | Win | Mean (k=1) | k=1.5 | Without top event | Half Kelly |
+|---|---|---|---|---|---|---|
+| OOS 2021-04 → 2022-02 | 398 | 7.3% | +15.3% | +4.6% | −8.8% | 0.20% |
+| OOS 2026 | 478 | 13.0% | −10.4% | −17.4% | −15.9% | 0 |
+| **OOS pooled (gating)** | 876 | 10.4% | **+1.3%** | **−7.4%** | **−9.6%** | 0.03% |
+| Dev 2023–2025 (reported) | 1,444 | 8.2% | +86.4% | +69.6% | −15.7% (SNPS removed) | 0.12% |
+
+Rules: positive ✓, cost stress ✗, not-one-shock ✗ → **FAIL**. 10% OTM legs are negative in
+every window (pooled OOS −4.1%). With an extra $0.01 per side the OOS 20% mean is −6.4%.
+
+**Reading.** On scheduled earnings, cheap OTM options are close to fairly priced; the rare
+winners (SNPS 2025-09-09, DOCU 2021-12-02) do not recur often enough to pay for the
+premium. Much of the apparent lottery edge in OEE-H4 came from untradeable
+pre-announcements.
+
+**Scope of the defect in earlier entries:** OEE-2, OEE-H4, OEE-J and the OVE-3 E family used
+the same event table, including these 73 events. All four failed; excluding the events
+removes several of their largest winners (SMCI, SEDG, AI), so the corrections can only
+strengthen those FAIL verdicts for the OTM variants. The OEE-H4 means and top-trade lists
+above overstate the tradeable payoff.
