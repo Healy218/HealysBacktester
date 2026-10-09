@@ -16,4 +16,3 @@ def test_parse_earnings_with_negative_and_units():
     e = A.parse_earnings("Okta Q1 Adj. EPS $(0.10) Beats $(0.20) Estimate, Sales $251.00M Beat $238.31M Estimate")
     assert e == {"eps_act": -0.1, "eps_est": -0.2, "sales_act": 251e6, "sales_est": 238.31e6}
     assert abs(A.surprise(e["eps_act"], e["eps_est"]) - 0.5) < 1e-12
-    assert A.parse_earnings("Fortinet Sees FY21 Adj. EPS $3.65-$3.80 vs $3.72 Estimate") is None or True

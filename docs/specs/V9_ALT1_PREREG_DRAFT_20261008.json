@@ -1,0 +1,44 @@
+{
+ "schema": "v9-alt1-prereg-v1",
+ "status": "DRAFT, awaiting user sign-off; not frozen. ALT-0 reported coverage only; post_release.parquet (outcomes) has not been read.",
+ "drafted_at": "2026-10-08",
+ "question": "Do analyst revisions, consensus-beat history and insider buying before an earnings release predict the direction of the reaction, and does pre-release attention predict a big move?",
+ "inputs": "nn_meta/validation/v9-alt0-20261008-r0/features.parquet (scripts/build_v9_alt_features.py); OEE-0 event tables (early 2021-04 → 2022-02 and main); OEE pricing and legs",
+ "events": "OEE admission (V9_OEE1_PREREG_20261008.json) on both event tables, excluding unscheduled pre-announcements (nn_meta.v9_oee.preannouncement_flags)",
+ "scores": {
+  "rule": "each component becomes 2 x trailing percentile - 1 against admitted events in the prior 365 days (>= 30), as OEE; terciles are trailing as OEE",
+  "S1_revisions": "an90_net_pt: (price-target raises - cuts) / (raises + cuts) over 90 days",
+  "S2_beat_history": "mean of the percentile scores of prior_eps_surprise and beats_last4 (>= 1 present)",
+  "S3_sales_surprise": "prior_sales_surprise",
+  "S4_combined": "mean of the percentile scores of an90_net_pt, an90_net_rating, an90_pt_upside, prior_eps_surprise, prior_sales_surprise, beats_last4, ins90_net (>= 3 present)",
+  "M_attention": "wiki_abn (pre-release page-view abnormality)",
+  "M_analyst_activity": "an30_n (analyst actions in the last 30 days)"
+ },
+ "variants": {
+  "D1_revisions_option": "S1 top tercile: buy the 0.5-delta call; bottom: the 0.5-delta put (front expiry; OEE-2 pricing with expiry-day intrinsic)",
+  "D2_beats_option": "S2, same trade",
+  "D3_sales_option": "S3, same trade",
+  "D4_combined_option": "S4, same trade",
+  "D5_revisions_stock": "S1 top tercile long stock, bottom tercile short stock, entry close → reaction close (V8 stock fills; short borrow cost ignored and stated)",
+  "D6_combined_stock": "S4, same stock trade",
+  "M1_attention_strangle": "wiki_abn top tercile: buy the 10% OTM strangle (OEE-H4 legs and pricing)",
+  "M2_activity_strangle": "an30_n top tercile: buy the 10% OTM strangle"
+ },
+ "evaluation": {
+  "dev": "entries 2021-07-01 .. 2025-12-31 (2021-04 .. 06 supplies trailing history); folds = nine half-years 2021H2 .. 2025H2 by entry date",
+  "variant_family": "8 variants; Holm across the 8",
+  "pass_all_required_in_dev": {
+   "edge": "mean net per-trade return > 0 at cost 1.0 with t >= 2 clustered by reaction day",
+   "multiple_testing": "Holm-adjusted one-sided p < 0.05",
+   "folds": "mean positive in >= 6 of the 9 folds",
+   "cost_stress": "mean > 0 with clustered t >= 2 at cost 1.5"
+  },
+  "reported_not_gating": "sign accuracy of S1-S4 on the reaction (all dev events with a score), win rates, top-5 concentration, mean without the top event",
+  "confirmation": "2026-01-02 .. 2026-09-14 for dev passes only, after extending the news, insider and Wikipedia archives through 2026-09-14 with the same code; pass = mean > 0 with clustered t >= 1",
+  "single_run": "dev runs once and is reported whatever the outcome"
+ },
+ "honesty_notes": [
+  "the 2021-2025 events were used by earlier OEE tests with other features; these features are new to this test",
+  "the strangle variants revisit OTM after the payoff-only test failed; they ask whether attention selects the big movers"
+ ]
+}
