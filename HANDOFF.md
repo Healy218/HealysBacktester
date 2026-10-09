@@ -32,23 +32,21 @@
 - OI recorder `healys-v9-oi-recorder.timer` (Mon–Fri 08:00 / 18:00 ET) →
   `nn_meta/data_cache_v9/open_interest/`; `journalctl --user -u healys-v9-oi-recorder`.
 
-## Next action
+## Next action (user's call)
 
-The user chose all three follow-ups on 2026-10-08:
-1. **OTM payoff out of sample: FAIL**, done. The first run's pass was voided: its top event,
-   IBM 2026-07-14, was an unscheduled pre-announcement. Scheduled releases only: pooled OOS
-   +1.3% per leg, −7.4% at 1.5× costs. SMCI, SEDG, AI and IBM were all pre-announcements.
-   The user needs to know that this weakens the lottery thesis.
-2. **Paper observation runner** is built and dry-run tested, but not installed. Waiting for
-   the user to create a new paper account and add `ALPACA_V9_PAPER_API_KEY/_SECRET`. Then:
-   `run_v9_otm_paper.py plan`, then a dry `trade`, then install `healys-v9-otm-*` timers.
-3. **ALT-0 done; ALT-1 draft awaiting sign-off**
-   ([draft](docs/specs/V9_ALT1_PREREG_DRAFT_20261008.json)). On approval: freeze, write the
-   runner, commit, run once. For a 2026 confirmation, extend news/insider/Wikipedia to a
-   separate 2026 output first (the V8 builders end 2025-12-31).
+The 2026-10-08 follow-ups are complete:
+- **OTM payoff out of sample:** FAIL once pre-announcements are excluded. The user declined the
+  forward paper observation; its runner and units stay uninstalled ([DECISIONS](docs/DECISIONS.md)).
+- **ALT-2 (alternative data):** FAIL, 8 variants. Direction accuracy was 46.8–49.7%.
 
-Alpha Vantage pull runs daily until all 162 tickers are on disk; it is a cross-check for the
-headline consensus.
+Notes: [V9 findings and alt-data review](docs/reviews/2026-10-08-v9-findings-and-alt-data.md).
+Remaining open routes:
+- paid data, only if the user wants to spend;
+- a new pre-registration on the open-interest recorder's data after a few months;
+- the V8 H1 paper test, still the only edge that passed a holdout.
+
+The Alpha Vantage pull keeps running daily until complete. It can be stopped if no further
+consensus work is planned (`systemctl --user disable --now healys-v9-alphavantage.timer`).
 
 Constraints: memory caps on big jobs; stage only your own hunks (other dirty V6/V7 work,
 including `docs/DECISIONS.md` and `docs/EXPERIMENTS.md`, is not yours; this session

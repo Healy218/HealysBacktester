@@ -43,7 +43,7 @@ Notes and source survey: [V9 findings and alt-data plan](docs/reviews/2026-10-08
 - [x] **ALT-0:** per-event features built, coverage only (2026-10-08; [state](docs/CURRENT_STATE.md#v9-plan-october-8)).
   To do: extend news/insider/Wikipedia through 2026-09 for a 2026 confirmation; Alpha Vantage pull.
 - [x] **ALT-1:** pre-registration approved and frozen: [V9_ALT1_PREREG_20261008.json](docs/specs/V9_ALT1_PREREG_20261008.json).
-- [ ] **ALT-2 (next):** run the dev test once.
+- [x] **ALT-2:** FAIL, 8 variants; direction accuracy 46.8–49.7% (2026-10-08; [EXPERIMENTS](docs/EXPERIMENTS.md)).
 
 ## Running
 

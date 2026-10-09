@@ -103,3 +103,17 @@ backtest), not just today's values.
   Dev 2023–2025 as before; 2026 confirmation after fetching 2026 news.
 - In parallel: an Alpha Vantage daily job (25 tickers/day) to pull consensus history for
   the pool, and a Stocktwits forward recorder if the user wants crowd sentiment going forward.
+
+## 6. Outcome of the plan (same day)
+
+The OTM payoff out-of-sample test failed once pre-announcements were excluded (section 2b),
+and the user decided against the forward paper observation. ALT-1 was approved and run as
+ALT-2: **FAIL, 8 variants**.
+- Analyst revisions, consensus beat history, prior sales surprise and the combined score called
+  the reaction's sign 46.8–49.7% of the time.
+- Buying 0.5-delta options on their side lost 16–21% per trade.
+- Attention and analyst activity did not pick out the big movers.
+
+Free alternative data on disk does not predict earnings direction for these names. The
+remaining routes to the information the market lacks are paid data (card spending, app and web
+traffic) or forward-only data (the open-interest recorder).

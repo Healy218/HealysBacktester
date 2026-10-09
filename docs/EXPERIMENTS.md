@@ -1614,3 +1614,35 @@ the same event table, including these 73 events. All four failed; excluding the 
 removes several of their largest winners (SMCI, SEDG, AI), so the corrections can only
 strengthen those FAIL verdicts for the OTM variants. The OEE-H4 means and top-trade lists
 above overstate the tradeable payoff.
+
+## 2026-10-08 — V9 ALT-2 alternative data (analyst revisions, consensus beats, insider, attention): FAIL (8 variants)
+
+Pre-registration [V9_ALT1_PREREG_20261008.json](specs/V9_ALT1_PREREG_20261008.json)
+(user-approved); features `scripts/build_v9_alt_features.py` (ALT-0: Benzinga analyst actions
+and consensus parsed from the Alpaca news archive, Form 4, Wikipedia); runner
+`scripts/run_v9_alt2.py` → `nn_meta/validation/v9-alt2-20261008-r0/`. Scheduled releases only
+(pre-announcements excluded), dev entries 2021-07 → 2025-12, nine half-year folds (need 6),
+Holm across 8. The first invocation crashed before output (GOOG/GOOGL share SEC accessions; join
+fixed in b815a37).
+
+| Variant | Trades | Mean (k=1) | t | Hit | Folds + | Without top event |
+|---|---|---|---|---|---|---|
+| D1 revisions → 0.5Δ call/put | 457 | −17.1% | −3.20 | 31% | 0/9 | −18.2% |
+| D2 beat history → option | 689 | −17.0% | −3.83 | 33% | 1/9 | −17.8% |
+| D3 prior sales surprise → option | 687 | −15.8% | −3.58 | 31% | 1/9 | −16.6% |
+| D4 combined → option | 753 | −21.0% | −5.25 | 30% | 0/9 | −21.8% |
+| D5 revisions → stock long/short | 457 | −0.41% | −0.74 | 47% | 2/9 | −0.50% |
+| D6 combined → stock long/short | 753 | −0.80% | −1.88 | 47% | 1/9 | −0.85% |
+| M1 high attention → 10% OTM strangle | 370 | −13.5% | −1.54 | 25% | 2/9 | −15.8% |
+| M2 high analyst activity → 10% strangle | 353 | −23.2% | −2.51 | 22% | 2/9 | −27.6% |
+
+None passed (all Holm p = 1.0). Sign accuracy on the reaction (dev, reported): revisions 49.7%
+(1,072), beat history 49.7%, prior sales surprise 46.8% (1,053), combined 48.4%; tercile
+extremes 47.3–48.6%. Big-move rate (|move| > implied) by attention tercile 37.9% / 40.8% / 42.7%
+and by analyst-activity tercile 40.7% / 42.8% / 37.8%: no useful separation.
+
+**Reading.** Free analyst-revision, consensus and insider information is priced before the
+release; if anything the extremes lean slightly against the obvious direction (good news raises
+the bar), but no reading reaches significance after the family's correction. A contrarian
+version would be a new hypothesis and would need its own pre-registration and fresh data.
+Cumulative V9 record: 44 pre-registered variants plus the OTM payoff test, none passing.

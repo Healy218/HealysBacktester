@@ -1205,6 +1205,9 @@ actual entitlement failure. No full-universe recording is running.
   Alpaca paper account with keys `ALPACA_V9_PAPER_API_KEY/_SECRET`; refuses the V6 and V8 H1 accounts. Ledger
   `nn_meta/validation/v9-paper-otm/ledger.sqlite3`. A read-only check on 2026-10-08 quoted the NFLX 20% OTM call at
   $0.19 / $0.34 (spread about 56% of mid), far wider than the backtest's cost model.
+  Not deployed by user decision 2026-10-08 ([DECISIONS](DECISIONS.md)).
+- ALT-2 (2026-10-08, FAIL): prereg [V9_ALT1_PREREG_20261008.json](specs/V9_ALT1_PREREG_20261008.json);
+  `scripts/run_v9_alt2.py` → `nn_meta/validation/v9-alt2-20261008-r0/` (`scores.parquet`, `trades.parquet`, `report.json`).
 
 ## V8 data sources (October 7)
 
