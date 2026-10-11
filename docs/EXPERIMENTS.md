@@ -1673,3 +1673,25 @@ The underlying move from 11:30 to 13:30 is unrelated to the morning direction (g
 before costs. The user's prior that Mondays would fail was not borne out: Monday was among the
 least negative cells, but no weekday was profitable. The mirror (momentum) would be a new
 hypothesis; its gross is about +1 bp per two hours, below even stock costs.
+
+## 2026-10-11 — UV2 one-hour scan, every entry minute (user direction): FAIL
+
+Spec [UV2_HOUR_SCAN_PREREG_20261011.json](specs/UV2_HOUR_SCAN_PREREG_20261011.json) (frozen
+before the scan; reading rule = 200-permutation family-wise maximum t per instrument); runner
+`scripts/run_uv2_hour_scan.py` (1464259), which reproduces every UV1 stock and option trade
+exactly when set to UV1's clock. Output `nn_meta/validation/uv2-hour-scan-20261011-r0/`.
+UV1's rule (|m| ≥ 1% skips; signals A and B; first-OTM 0DTE at mid × 1.05 / × 0.95, or stock at
+1 bp per side) with a 1-hour hold at every entry minute 09:45–14:59 ET, fade and follow, SPY/QQQ,
+by weekday: 15,120 cells per instrument.
+
+| | Cells t ≥ 2 (chance mean / 95th) | Max t (chance median / 95th) | Candidate | 2026 confirmation |
+|---|---|---|---|---|
+| Stock (2016–2025) | 17 (8 / 20), p 0.105 | 3.43 (2.50 / 3.10), p 0.010 | B fade QQQ Wed 14:33 ET, +9.3 bp, n 398 | n 37, −5.7 bp, t −1.30: FAIL |
+| Options (2024-01-18 → 2025) | 2 (0 / 1), p 0.015 | 2.22 (1.69 / 2.11), p 0.025 | B follow QQQ Fri 10:06 ET, +24.4%, n 90 | n 37, −13.3%, t −0.66: FAIL |
+
+**Verdict: nothing survives.** The stock scan's count of t ≥ 2 cells is within chance; its single
+outlier (one minute on Wednesdays, neighbours at 14:31/14:32 weaker) reversed in 2026. The option
+scan's only structure is a Friday 10:00–10:08 ET follow cluster (both tickers, +12% to +24% per
+trade, t 1.4–2.2, about 90 trades each); its best cell lost in 2026 on 37 trades. That small
+sample neither confirms nor strongly refutes it, but the cluster is now spent as evidence and
+could only be revisited with fresh forward data.

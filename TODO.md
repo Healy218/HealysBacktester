@@ -10,6 +10,9 @@
   SPY/QQQ with first-OTM 0DTE options or stock, hold 2 hours, by weekday. FAIL, 48 variants, no
   positive cell; no midday reversal (gross −0.6 to −1.3 bp) ([spec](docs/specs/UV1_MIDDAY_FADE_PREREG_20261011.json);
   [EXPERIMENTS](docs/EXPERIMENTS.md)).
+- [x] **UV2 one-hour scan** (user direction 2026-10-11): UV1's rule at every entry minute,
+  fade and follow, by weekday (30,240 cells, permutation null). FAIL: both family-wise outliers
+  lost in 2026 ([spec](docs/specs/UV2_HOUR_SCAN_PREREG_20261011.json); [EXPERIMENTS](docs/EXPERIMENTS.md)).
 
 
 **Selected work: [V9 plan](docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md)** (user
