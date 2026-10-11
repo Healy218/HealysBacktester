@@ -1,0 +1,14 @@
+[Unit]
+Description=UV1 forward log: record the 10:30 CT midday-fade rule's SPY/QQQ option results (no orders)
+After=network-online.target
+
+[Service]
+Type=oneshot
+WorkingDirectory=/home/healy/Coding/HealysBacktester
+ExecStart=/home/healy/Coding/HealysBacktester/venv/bin/python scripts/record_uv1_forward.py
+TimeoutStartSec=600
+MemoryMax=2G
+MemorySwapMax=0
+Nice=5
+UMask=0077
+NoNewPrivileges=true

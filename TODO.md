@@ -67,6 +67,10 @@ Notes and source survey: [V9 findings and alt-data plan](docs/reviews/2026-10-08
 
 ## Running
 
+- **UV1 forward log** `healys-uv1-forward.timer` (Mon–Fri 14:05 ET, from 2026-10-12; no orders) →
+  `nn_meta/data_cache_uv1/forward/uv1_forward.csv`: the 10:30 CT rule's call and put results each day,
+  fresh out-of-sample evidence for the recent good run (user request 2026-10-11).
+
 - **Alpha Vantage consensus pull** `healys-v9-alphavantage.timer` (daily, ~7 days to complete).
 
 - **OI recorder** `healys-v9-oi-recorder.timer` → `nn_meta/data_cache_v9/open_interest/`

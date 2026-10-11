@@ -1,0 +1,9 @@
+[Unit]
+Description=UV1 forward log (timer)
+
+[Timer]
+OnCalendar=Mon..Fri *-*-* 14:05:00 America/New_York
+Persistent=true
+
+[Install]
+WantedBy=timers.target

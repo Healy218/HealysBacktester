@@ -50,6 +50,8 @@ for candidates. UV2/UV3 use a 200-permutation family-wise null (shuffle days' si
 
 ## Running (not re-verified this session)
 
+UV1 forward log `healys-uv1-forward.timer` (new 2026-10-11; first run Mon 2026-10-12 14:05 ET; verified on 2026-10-09
+against the UV1 trades) → `nn_meta/data_cache_uv1/forward/uv1_forward.csv`.
 V8 H1 paper test ("stonks bot 2"), OI recorder and Alpha Vantage timers as in [TODO](TODO.md#running).
 Constraints: stage only your own hunks (other V6/V7 work is dirty in the tree; EXPERIMENTS entries were
 appended via the index); memory caps on big jobs.
