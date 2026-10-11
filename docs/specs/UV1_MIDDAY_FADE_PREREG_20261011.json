@@ -1,0 +1,69 @@
+{
+ "schema": "uv1-midday-fade-prereg-v1",
+ "status": "FROZEN",
+ "drafted_at": "2026-10-11",
+ "frozen_at": "2026-10-11",
+ "approved_by": "user, 2026-10-11 ('Yes let's do it'), before any UV1 data was fetched or any signal-return relationship examined",
+ "origin": "user idea 2026-10-11 (first test of the user's own market view): the first two hours are not worth trading; at 10:30 Central fade the morning move unless the market has already chosen a direction (|move| >= 1%); hold 2 hours. User choices 2026-10-11: move measured from today's open; 0DTE ATM contract; 2026 held out for confirmation; option cost 5% of mid each side; slightly OTM = first strike out of the money; extra experiment = direction from the 10:30 Central bar only.",
+ "question": "When SPY or QQQ has moved less than 1% from the open by 11:30 ET (10:30 Central), does betting against the move at 11:30 ET and selling at 13:30 ET make money, on any weekday? Second signal: bet against the 10:30 Central 15-minute bar instead of the move from the open.",
+ "clock": {
+  "decision": "11:30 ET (10:30 Central), using the close of the 11:29 ET 1-minute bar (last completed minute)",
+  "entry_fill": "VWAP of the 11:30 ET 1-minute bar",
+  "exit_fill": "VWAP of the 13:30 ET 1-minute bar (12:30 Central)",
+  "sessions": "regular full sessions only; early-close sessions (13:00 ET close) are excluded because the exit falls after the close"
+ },
+ "signal": {
+  "filter": "m = close(11:29 ET bar) / open(09:30 ET bar) - 1 per ticker per session (SIP 1-minute bars); |m| >= 1% means the market has chosen a direction: skip the session. Applies to both signals",
+  "A_open": "direction = sign of m: 0 < m < +1% bets down (put / short stock); -1% < m < 0 bets up (call / long stock); m = 0 skips",
+  "B_bar": "direction = sign of b = close(11:29 ET bar) / open(11:15 ET bar) - 1, the 15-minute bar ending at 10:30 Central; b > 0 bets down, b < 0 bets up, b = 0 skips; same |m| < 1% filter",
+  "parameters": "threshold 1%, the 15-minute bar, times and hold are fixed as stated; no other thresholds, bars, times or holds are tested"
+ },
+ "instruments": {
+  "option": {
+   "contract": "same-day expiry (0DTE) on the bet's side; first strike out of the money at the decision spot: calls take the lowest listed strike strictly above spot, puts the highest strictly below",
+   "entry": "11:30 bar VWAP; if that contract has no trade in the 11:30 bar, the first minute with a trade through 11:35; none: no entry (counted)",
+   "exit": "13:30 bar VWAP; if no trade in the 13:30 bar, the first minute with a trade through 13:35; none: last trade 13:25-13:35; none at all: value 0",
+   "costs_base": "user 2026-10-11: buy at mid x 1.05, sell at mid x 0.95 (5% of mid each side, 10% round trip), plus $0.05 per contract per side in fees",
+   "costs_stress": "none: the user's 5%-of-mid-each-side base is the strict case (user 2026-10-11)",
+   "return": "(exit credit - entry debit) / entry debit, per trade",
+   "no_expiry": "a session with no same-day expiry for that ticker is skipped and counted",
+   "mid_proxy": "Alpaca keeps no historical option quotes, so the backtest midpoint is the fill-minute trade VWAP (entry/exit rules above); live or paper use the quoted bid/ask midpoint"
+  },
+  "stock": {
+   "trade": "long (up bet) or short (down bet) the ETF itself at the same fills",
+   "costs_base": "1 bp per side (SPY measured median quoted spread 0.25 bp, QQQ 0.35 bp; V8.0-spreads)",
+   "costs_stress": "2 bp per side",
+   "return": "signed (exit - entry) / entry less costs; short borrow ignored and stated"
+  }
+ },
+ "variants": {
+  "rule": "instrument x signal x ticker x day: {option, stock} x {A_open, B_bar} x {SPY, QQQ} x {Mon, Tue, Wed, Thu, Fri, all days}",
+  "count": 48,
+  "names": "{O,S}_{A,B}_{SPY,QQQ}_{Mon,Tue,Wed,Thu,Fri,All}, e.g. O_A_SPY_Mon"
+ },
+ "evaluation": {
+  "dev": {
+   "stock": "sessions 2016-01-04 .. 2025-12-31; folds = twenty half-years 2016H1 .. 2025H2",
+   "option": "first session with Alpaca option bars (expected February 2024) .. 2025-12-31; folds = half-years 2024H1 (partial) .. 2025H2"
+  },
+  "variant_family": "48 variants; Holm across all 48",
+  "pass_all_required_in_dev": {
+   "edge": "mean net per-trade return > 0 at base cost with t >= 2 (one trade per ticker per session; plain t across trades)",
+   "multiple_testing": "Holm-adjusted one-sided p < 0.05 across the 48",
+   "folds": "mean positive in at least two thirds of the folds (stock >= 14 of 20; option >= 3 of 4)",
+   "cost_stress": "stock only: mean > 0 with t >= 2 at 2 bp each side; options have no separate stress (base is already 5% of mid each side)"
+  },
+  "reported_not_gating": "trade counts and skip counts by reason (|m| >= 1%, m = 0, no expiry, no entry trade, early close); hit rate; mean and median; mean without the best trade; top-5 share of total P&L; dollars per contract; the same tables split by up-bet vs down-bet",
+  "confirmation": "2026-01-02 .. 2026-10-09 for dev passes only; pass = mean > 0 at base cost with t >= 1",
+  "single_run": "dev runs once and is reported whatever the outcome"
+ },
+ "honesty_notes": [
+  "the user's prior, recorded before any data: Mondays will not work; possibly only one weekday works. The by-day table reports this; the user's prior does not change the gate",
+  "picking the best of 48 cells after the fact is the failure mode this gate exists to block; a lone day that fails Holm is not evidence",
+  "0DTE ETF option spreads have not been measured in this project; the user set a deliberately strict 5%-of-mid-per-side cost (above the 4-6% full spreads measured on 0-15 DTE stock options) in place of a stress multiple. Any pass is followed by a live quote sample at 11:30 and 13:30 ET before any paper trade",
+  "time decay is the main headwind: an at-the-money 0DTE option loses roughly a quarter of its value from 11:30 to 13:30 ET if the underlying does not move",
+  "the 2016-2025 SPY/QQQ minute history was used by earlier ETFE work (2024-2025) with other signals; this signal has not been tested in this project",
+  "2026 has been used by V8 H1 and the V9 OTM test, not by this signal",
+  "signals A and B often agree (a morning drift and its last 15 minutes usually share a sign), so the 48 tests are correlated; Holm stays conservative under that"
+ ]
+}
