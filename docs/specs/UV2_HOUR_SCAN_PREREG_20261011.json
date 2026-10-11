@@ -1,0 +1,35 @@
+{
+ "schema": "uv2-hour-scan-prereg-v1",
+ "status": "FROZEN",
+ "drafted_at": "2026-10-11",
+ "frozen_at": "2026-10-11",
+ "approved_by": "user direction 2026-10-11 ('Keep the same test but change the timing, holding an hour, vectorize the entire 1 hour hold on either direction for any time of day. Then see if there is a t>=2 anywhere'); reading rule fixed here before the scan ran. UV1 results (11:30 ET, 2-hour hold) were seen first",
+ "question": "Using UV1's rule with a 1-hour hold, is there any entry minute, direction (fade or follow), signal, ticker or weekday where SPY/QQQ stock or 0DTE first-OTM options make money beyond what chance produces in a scan this size?",
+ "inherits": "UV1_MIDDAY_FADE_PREREG_20261011.json: |m| >= 1% from the 09:30 open skips; signals A (move from the open) and B (last 15-minute bar); fills at minute VWAP; options first strike OTM, same-day expiry, buy mid x 1.05, sell mid x 0.95, $0.05/contract/side; stock 1 bp per side; full sessions only",
+ "grid": {
+  "entry_minutes": "every minute 09:45 .. 14:59 ET (315); decision on the close of the previous minute; exit at the VWAP of the minute 60 later",
+  "signal_A": "m_t = close(t-1) / open(09:30) - 1",
+  "signal_B": "b_t = close(t-1) / open(t-15) - 1",
+  "filter": "|m_t| >= 1% skips (the market has chosen a direction as of the decision)",
+  "direction": "fade bets against the signal sign; follow bets with it",
+  "option_fallbacks": "entry: first traded minute t .. t+5 of the selected contract, none: no trade; exit: first traded minute t+60 .. t+65, else last trade t+55 .. t+65, else 0",
+  "cells": "{stock, option} x {A, B} x {fade, follow} x {SPY, QQQ} x {Mon .. Fri, All} x 315 minutes = 30,240; a cell needs n >= 30 trades"
+ },
+ "windows": {
+  "dev_stock": "2016-01-04 .. 2025-12-31",
+  "dev_option": "2024-01-18 (first option session) .. 2025-12-31",
+  "confirmation": "2026-01-02 .. 2026-10-09"
+ },
+ "reading_rule": {
+  "null": "200 permutations per instrument: session rows of the signal matrix are shuffled (seed 20261011), breaking only the signal-outcome link; returns, filters, weekdays and contracts' unconditional drift are kept",
+  "gate": "a dev cell is a candidate when its t >= 2 and its t exceeds the 95th percentile of the permutation maximum t across all cells of its instrument (family-wise 5%)",
+  "reported": "count of cells with t >= 2 against the permutation mean and 95th percentile of that count; the observed maximum t against the permutation distribution; top 20 cells per instrument",
+  "confirmation": "candidates only: 2026 mean > 0 at base cost with t >= 1",
+  "single_run": "the scan runs once and is reported whatever the outcome"
+ },
+ "honesty_notes": [
+  "adjacent minutes overlap heavily (59 of 60 minutes shared), so cells are strongly correlated; the permutation maximum handles that, a raw t >= 2 count does not",
+  "for stock, follow is fade with the sign flipped (net of the same costs), so only one of each pair can be positive",
+  "UV1 already showed no 11:30 ET 2-hour reversal; this scan is broader exploration, and any candidate needs the 2026 confirmation and a paper period"
+ ]
+}
