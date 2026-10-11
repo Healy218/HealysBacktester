@@ -13,6 +13,11 @@
 - [x] **UV2 one-hour scan** (user direction 2026-10-11): UV1's rule at every entry minute,
   fade and follow, by weekday (30,240 cells, permutation null). FAIL: both family-wise outliers
   lost in 2026 ([spec](docs/specs/UV2_HOUR_SCAN_PREREG_20261011.json); [EXPERIMENTS](docs/EXPERIMENTS.md)).
+- [x] **UV3 full grid** (user direction 2026-10-11): move buckets ±0.25–2.5% × call/put (stock buys)
+  × stops 5–50% × targets 10–200% × holds 30–240 min × entries every 5 min. FAIL: stock shows weak
+  intraday momentum but no cell clears the family-wise bar; the 4 option candidates (one QQQ put
+  20%-target trade set) lost −24% to −27% in 2026 ([spec](docs/specs/UV3_FULL_GRID_PREREG_20261011.json);
+  [EXPERIMENTS](docs/EXPERIMENTS.md)). User reviewing UV1–UV3 on 2026-10-12.
 
 
 **Selected work: [V9 plan](docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md)** (user

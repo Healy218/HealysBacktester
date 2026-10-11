@@ -1695,3 +1695,29 @@ scan's only structure is a Friday 10:00–10:08 ET follow cluster (both tickers,
 trade, t 1.4–2.2, about 90 trades each); its best cell lost in 2026 on 37 trades. That small
 sample neither confirms nor strongly refutes it, but the cluster is now spent as evidence and
 could only be revisited with fresh forward data.
+
+## 2026-10-11 — UV3 full grid (user direction): FAIL
+
+Spec [UV3_FULL_GRID_PREREG_20261011.json](specs/UV3_FULL_GRID_PREREG_20261011.json) (frozen before
+the run); runner `scripts/run_uv3_full_grid.py` (d6de472; reproduces UV2's no-stop 1-hour returns,
+stop/target exits toy-checked). Output `nn_meta/validation/uv3-full-grid-20261011-r0/`
+(`cells_S.parquet`, `cells_O.parquet`: every cell with n ≥ 30). Grid: move from the open in 0.25%
+buckets (±0.25 … ±2.5%), call and put in every bucket (stock buys only), stops none/5–50%, targets
+none/10–200%, holds 30–240 minutes, entries every 5 minutes from 09:45 ET, SPY/QQQ, by weekday.
+
+| | Cells (n ≥ 30) | t ≥ 2 observed (chance mean / 95th) | Max t (chance median / 95th) | Candidates → 2026 |
+|---|---|---|---|---|
+| Stock buys (2016–2025) | 29,258 | 483 (321 / 420), p 0.005 | 4.24 (3.94 / 4.67), p 0.23 | none |
+| Options (2024-01-18 → 2025) | 2,394,546 | 276 (203 / 633), p 0.21 | 7.74 (2.81 / 4.33), p < 0.005 | 4, all FAIL |
+
+**Stock:** more t ≥ 2 cells than chance, but no single cell clears the family-wise bar. The excess
+is intraday momentum: buying after a modest up morning (up 0.25–1.0%, entries 11:00–13:00 ET,
+best Tuesday up 0.50–0.75%, +0.1% to +0.2% per trade) is positive, buying after a down morning is
+strongly negative (2,016 cells at t ≤ −2, 1,236 of them down buckets).
+**Options:** the four candidates are one trade set with different holds: QQQ put at 09:55 ET after
+a 0.50–0.75% down morning with a 20% profit target, no stop (n = 30, +18.1%, t 7.74; 29 of 30
+trades touched +20% before the hold ended). In 2026 the same rule lost −24% to −27% per trade on
+17 trades (t not computed: the n ≥ 30 floor was also applied to confirmation; the negative means
+decide the verdict either way). **Verdict: no rule in the grid survives.** High-hit-rate target
+rules on 0DTE options have small frequent wins and rare total losses; with 30 trades and no total
+loss the t-statistic is meaningless, which is what the 2026 losses show.
