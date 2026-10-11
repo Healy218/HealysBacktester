@@ -1646,3 +1646,30 @@ release; if anything the extremes lean slightly against the obvious direction (g
 the bar), but no reading reaches significance after the family's correction. A contrarian
 version would be a new hypothesis and would need its own pre-registration and fresh data.
 Cumulative V9 record: 44 pre-registered variants plus the OTM payoff test, none passing.
+
+## 2026-10-11 — UV1 midday fade (user's idea): FAIL, 48 variants
+
+Pre-registration [UV1_MIDDAY_FADE_PREREG_20261011.json](specs/UV1_MIDDAY_FADE_PREREG_20261011.json)
+(user-approved and frozen before any data was fetched); runner `scripts/run_uv1_midday_fade.py`
+(fcb630c, empty-page fetch fix f8fec10); output `nn_meta/validation/uv1-midday-fade-20261011-r0/`.
+Rule: at 11:30 ET (10:30 Central), skip if SPY/QQQ has moved ≥ 1% from the open; otherwise bet
+against signal A (the move from the open) or signal B (the 11:15–11:29 bar), buying the first-OTM
+0DTE put/call at the 11:30 minute VWAP and selling at the 13:30 minute VWAP (mid × 1.05 / × 0.95,
+the user's cost), or the ETF itself (1 bp per side). Stock dev 2016-01 → 2025-12 (20 folds), options
+2024-01-18 → 2025-12 (4 folds). 2,687 full sessions; 21 early closes excluded; 1 SPY and 3 QQQ
+sessions lacked a decision bar; ≥ 1% skips: SPY 148, QQQ 384.
+
+| Family | Trades (All cell) | Net mean per trade | Mid-to-mid, no cost | Hit | Best weekday cell |
+|---|---|---|---|---|---|
+| Options, A (vs open), SPY / QQQ | 459 / 427 | −18.2% / −19.4% | −9.4% / −10.9% (median −36%) | 29–30% | Wed SPY −7.9% (t −0.76) |
+| Options, B (vs 15-min bar), SPY / QQQ | 456 / 428 | −17.5% / −16.0% | −8.7% / −7.0% | 30–31% | Mon SPY −3.8% (t −0.46) |
+| Stock, A, SPY / QQQ | 2,343 / 2,129 | −2.6 bp / −2.6 bp | −0.6 / −0.6 bp (t −0.8 / −0.7) | 45–46% | Mon QQQ 0.0 bp |
+| Stock, B, SPY / QQQ | 2,334 / 2,109 | −3.3 bp / −3.3 bp | −1.3 / −1.3 bp (t −1.8 / −1.4) | 45–46% | — |
+
+All 48 Holm p = 1.0; no cell had a positive mean; 2026 confirmation not run. Option exits:
+1,768 at the 13:30 VWAP, 2 valued at zero. **Verdict: no midday reversal exists to trade.**
+The underlying move from 11:30 to 13:30 is unrelated to the morning direction (gross −0.6 to
+−1.3 bp, |t| < 2), so the 0DTE options lose to time decay (median −29% to −37% mid-to-mid)
+before costs. The user's prior that Mondays would fail was not borne out: Monday was among the
+least negative cells, but no weekday was profitable. The mirror (momentum) would be a new
+hypothesis; its gross is about +1 bp per two hours, below even stock costs.

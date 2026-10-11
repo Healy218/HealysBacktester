@@ -6,6 +6,10 @@
   decay); write a dated spec; split testable rules from judgment calls
   ([HANDOFF](HANDOFF.md)).
 - [ ] Pre-register the testable rules (V8/V9 discipline), then model the judgment calls.
+- [x] **UV1 midday fade** (user idea 2026-10-11): at 10:30 Central fade a < 1% morning move in
+  SPY/QQQ with first-OTM 0DTE options or stock, hold 2 hours, by weekday. FAIL, 48 variants, no
+  positive cell; no midday reversal (gross −0.6 to −1.3 bp) ([spec](docs/specs/UV1_MIDDAY_FADE_PREREG_20261011.json);
+  [EXPERIMENTS](docs/EXPERIMENTS.md)).
 
 
 **Selected work: [V9 plan](docs/specs/V9_OPTIONS_EXPERTS_PLAN_20261008.md)** (user
