@@ -1,0 +1,43 @@
+{
+ "schema": "uv3-full-grid-prereg-v1",
+ "status": "FROZEN",
+ "drafted_at": "2026-10-11",
+ "frozen_at": "2026-10-11",
+ "approved_by": "user direction 2026-10-11: move increments +/-0.25 .. 2.5% in both directions, calls and puts for every increment (stock buys only), stop-losses 5 .. 50%, profit targets 10 .. 200%, holds 30 minutes .. 4 hours, every variant, SPY/QQQ. Reading rule fixed here before the run. UV1 and UV2 results were seen first",
+ "question": "Over every combination of morning-move bucket, call or put, stop-loss, profit target, hold length, entry time, ticker and weekday, does any SPY/QQQ 0DTE option (or stock-buy) rule make money beyond what chance produces in a grid this size?",
+ "grid": {
+  "move": "m = close(t-1) / open(09:30 ET) - 1 at the entry minute t (UV1 signal A)",
+  "buckets": "20: up (0, 0.25%], (0.25, 0.50%], ..., (2.25, 2.50%]; down mirrored [-0.25%, 0), ..., [-2.50%, -2.25%); m = 0 or |m| > 2.5% trades nothing",
+  "entry_minutes": "every 5 minutes from 09:45 ET (09:45, 09:50, ...) while entry + hold <= 15:59",
+  "holds_minutes": [30, 60, 90, 120, 150, 180, 210, 240],
+  "option": {
+   "rights": "call and put in every bucket",
+   "contract": "first strike OTM at the entry decision, same-day expiry (UV1/UV2 rule)",
+   "entry": "first traded minute t .. t+5 (VWAP); none: no trade",
+   "stops": "none, 5%, 10%, ..., 50% below the entry mid (11 levels)",
+   "targets": "none, 10%, 20%, ..., 200% above the entry mid (21 levels)",
+   "monitoring": "each traded minute's VWAP after the entry minute, relative to the entry mid; a stop or target triggers on the first minute that crosses it and exits at the VWAP of the next traded minute (the trigger minute's VWAP if none follows)",
+   "time_exit": "if nothing triggers before t + hold: first traded minute t+hold .. t+hold+5, else last trade t+hold-5 .. t+hold+5, else 0",
+   "costs": "buy mid x 1.05, sell mid x 0.95, $0.05/contract/side (user rule); mid = minute trade VWAP"
+  },
+  "stock": "buy only, entry VWAP at t, exit VWAP at t + hold, 1 bp per side; no stops or targets (a 5-50% move in SPY/QQQ within 4 hours essentially never occurs)",
+  "cells": "option: 2 tickers x 6 day groups (Mon..Fri, All) x 20 buckets x 2 rights x 11 stops x 21 targets x 8 holds x valid entry minutes; stock: the same without rights, stops and targets. A cell needs n >= 30 trades"
+ },
+ "windows": {
+  "dev_stock": "2016-01-04 .. 2025-12-31",
+  "dev_option": "2024-01-18 .. 2025-12-31",
+  "confirmation": "2026-01-02 .. 2026-10-09"
+ },
+ "reading_rule": {
+  "null": "200 permutations per instrument (seed 20261011): session rows of the move matrix are shuffled (same shuffle for both tickers), reassigning buckets across days while keeping every return path, contract and weekday",
+  "gate": "a dev cell is a candidate when t >= 2 and t exceeds the 95th percentile of the permutation maximum t over all cells of its instrument (family-wise 5%)",
+  "reported": "count of cells with t >= 2 vs the permutation mean and 95th percentile; observed maximum t vs its permutation distribution; top cells; every cell with n >= 30 saved",
+  "confirmation": "candidates only: 2026 mean > 0 at base cost with t >= 1",
+  "single_run": "runs once and is reported whatever the outcome"
+ },
+ "honesty_notes": [
+  "neighbouring cells (adjacent stops, targets, buckets, holds and entry times) share most of their trades, so cells are strongly correlated; the permutation maximum accounts for that",
+  "option history is two years (about 480 dev sessions); weekday x bucket cells are thin and many fall under n = 30",
+  "stop and target fills at the next traded minute's VWAP are a modelling choice; real stop orders on 0DTE options can fill worse in fast markets"
+ ]
+}
