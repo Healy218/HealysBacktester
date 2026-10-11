@@ -71,8 +71,8 @@ def _pages(url: str, headers: dict, params: dict, key: str) -> list:
     out, token = [], None
     while True:
         j = _get(url, headers, dict(params, **({"page_token": token} if token else {})))
-        v = j.get(key) or []
-        out.append(v)
+        if j.get(key):                  # empty results come back as [] or {} or null
+            out.append(j[key])
         token = j.get("next_page_token")
         if not token:
             return out
